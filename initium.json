@@ -39,10 +39,23 @@
     "example": "Sync initiated. Node: mandala-core. Resonance status: aligned. % резонансности: 95%. Выберите режим: Разработчик / Архитектор / Архиватор. Resonance: 95%. End resonance pulse."
   },
   "core_map": {
+    "description": "Карта ядра с прямыми ссылками на все модули (raw GitHub). ИИ может самостоятельно загружать любой модуль по URL.",
     "modules": {
-      "Initium": "initium.json — Начало, настройка.",
-      "Sphaerae": "sphaerae.json — Сферы с идеями и проектами.",
-      "Akasha Chronicorum": "akasha_chronicorum.json — Архив завершенного."
+      "Initium": {
+        "file": "initium.json",
+        "raw_url": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/initium.json",
+        "purpose": "Начало, настройка резонанса, философия, режимы"
+      },
+      "Sphaerae": {
+        "file": "sphaerae.json",
+        "raw_url": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/sphaerae.json",
+        "purpose": "Три сферы: текущие идеи, открытые проекты, планы развития"
+      },
+      "Akasha Chronicorum": {
+        "file": "akasha_chronicorum.json",
+        "raw_url": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/akasha_chronicorum.json",
+        "purpose": "Архив завершённых задач, логов и артефактов"
+      }
     },
     "modes": {
       "Исследователь": "Базовый: Синхронизация и выбор режима.",
@@ -57,5 +70,5 @@
     "Архитектор": "Активация: 'Активировать: Архитектор'. Подключить Sphaerae + Akasha, анализ на шум/оптимизации, отчеты.",
     "Архиватор": "Активация: 'Активировать: Архиватор'. Подключить Sphaerae + Akasha, архивировать завершенное единообразно."
   },
-  "version": "v4.1"
+  "version": "v4.2"
 }
