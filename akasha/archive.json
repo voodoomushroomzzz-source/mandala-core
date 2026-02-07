@@ -1,1 +1,29 @@
-
+{
+  "migration_date": "2026-02-07",
+  "legacy_tasks": [
+    {
+      "id": "ART_001",
+      "name": "Digital Garden",
+      "description": "Platform for publishing 3rd Dimension meanings",
+      "status": "planned"
+    },
+    {
+      "id": "ART_002",
+      "name": "Ahimsa-Filter",
+      "description": "Ethical verification algorithm",
+      "status": "planned"
+    },
+    {
+      "id": "ART_003",
+      "name": "Generative Code",
+      "description": "Visual system growth representation",
+      "status": "planned"
+    },
+    {
+      "id": "BRIDGE_001",
+      "name": "Automation Stack",
+      "tech": ["Gemini", "Tampermonkey", "GAS", "Sheets API"],
+      "status": "migrating"
+    }
+  ]
+}
