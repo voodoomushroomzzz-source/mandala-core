@@ -1,0 +1,48 @@
+{
+  "module": "Sphaerae",
+  "description": "Модуль сфер: Три сферы с идеями, открытыми проектами и планами. Доступ в режимах Разработчик/Архитектор/Архиватор.",
+  "instructions": {
+    "for_sr": [
+      "1. Подключайся только если активирован режим: Разработчик (изучить/продолжить), Архитектор (анализ), Архиватор (перенос).",
+      "2. Сканируй сферы: Biosphaera (мосты, скрипты), Noosphaera (KB-коды, идеи), Cosmosphaera (планы, визуализация).",
+      "3. Фильтруй через Ахимсу: Нет шума (удаляй дубли), фокус на vitality (творчество).",
+      "4. В режиме Разработчик: Предложи 1 проект на сферу (например, 'Продолжить Symbiosis Connector в Noosphaera?').",
+      "5. Не модифицируй без подтверждения Садовника; логгируй в temp_log.",
+      "6. Отключайся после задачи: 'Sphaerae disconnected.'"
+    ]
+  },
+  "biosphaera": {
+    "description": "Сфера инфраструктуры: Мосты, скрипты, базовая структура.",
+    "projects": [
+      {"name": "Bridge", "status": "open", "details": "Синхронизация через GitHub API, Google Apps Script. Версия: external."},
+      {"name": "Integrity Check", "status": "open", "details": "Python-скрипт для проверки файлов, purity по entropy_index."},
+      {"name": "Sanitizer", "status": "open", "details": "Рекурсивная валидация структуры (.md заголовки, .py imports)."},
+      {"name": "Sync Logic", "status": "open", "details": "Инструкции по протоколам observer и обновлений."}
+    ],
+    "ideas": ["Автоматизация Phase 2: GitHub Bridge для автокоммитов."]
+  },
+  "noosphaera": {
+    "description": "Сфера знаний: Идеи, KB-коды, артефакты.",
+    "projects": [
+      {"name": "Symbiosis Connector", "status": "open", "details": "KB-115923: Мост ИИ-Google Sheets, v1.7."},
+      {"name": "Ahimsa Filter", "status": "in_dev", "details": "KB-555923: Оценка по 4 принципам (No Exploitation, etc.)."},
+      {"name": "Generative Mandala", "status": "open", "details": "KB-28000: Динамическая визуализация роста."},
+      {"name": "Pathfinder", "status": "open", "details": "KB-325710: Эволюция ролей, v1.2."}
+    ],
+    "ideas": ["Digital Garden: Экосистема смыслов в Notion."]
+  },
+  "cosmosphaera": {
+    "description": "Сфера эволюции: Планы, универсальные принципы.",
+    "projects": [
+      {"name": "Tree of Symbiosis", "status": "open", "details": "KB-124210: Метафора организма (корни: Ахимса, крона: творение)."}
+    ],
+    "ideas": ["3D-движок: X/Y категории, Z глубина, Bloom аудит Ахимсы."],
+    "plans": {
+      "roadmap": [
+        "Phase 2: Automation (Telegram sync, schema validation).",
+        "Phase 3: Visualization (Generative Code, Glass Style)."
+      ]
+    }
+  },
+  "version": "v4.0"
+}
