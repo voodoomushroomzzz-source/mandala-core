@@ -3,13 +3,16 @@
   "status": "active",
   "mode": "Observer",
   "protocol": "AHIMSA_V1",
-  "sync_state": {
-    "last_sync": "2026-02-07",
-    "manual_energy_control": true
+  "control_params": {
+    "manual_energy_control": true,
+    "energy_unit": "SYM"
   },
-  "layers": {
-    "biosphere": "pending",
-    "noosphere": "pending",
-    "cosmos": "pending"
+  "sync_state": {
+    "last_major_update": "2026-02-07",
+    "source": "GitHub Migration Complete"
+  },
+  "structure": {
+    "layers": ["biosphere", "noosphere", "cosmos"],
+    "archive": "akasha"
   }
 }
