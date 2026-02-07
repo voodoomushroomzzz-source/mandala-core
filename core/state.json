@@ -4,7 +4,7 @@
     "active_role": "Architect",
     "resonance_level": 1.0,
     "entropy_index": 0.01,
-    "last_sync": "2026-02-07T14:20:00Z"
+    "last_sync": "2026-02-07T15:00:00Z"
   },
   "assets": {
     "SYM_balance": 100,
@@ -12,8 +12,10 @@
   },
   "session_history": [
     {
-      "event": "Role_System_Initialized",
-      "timestamp": "2026-02-07T14:00:00Z"
+      "event": "Core_Foundation_Established",
+      "details": "Structure synced: roles, state, integrity, frame moved to /core/",
+      "timestamp": "2026-02-07T15:00:00Z",
+      "status": "Success"
     }
   ]
 }
