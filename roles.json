@@ -1,0 +1,41 @@
+{
+  "system_name": "Mandala Core Sync",
+  "version": "1.0.0",
+  "roles_matrix": {
+    "Observer": {
+      "depth": "1-2",
+      "attention_limit": 0.90,
+      "vector": "Monitoring & Logging",
+      "refresh_method": "Summary Log"
+    },
+    "Architect": {
+      "depth": "Max",
+      "attention_limit": 0.75,
+      "vector": "Structure & Synthesis",
+      "refresh_method": "Schema Extraction"
+    },
+    "Gardener": {
+      "depth": "3-4",
+      "attention_limit": 0.85,
+      "vector": "Refactoring & Cleaning",
+      "refresh_method": "Debris Removal"
+    },
+    "Chronicler": {
+      "depth": "History",
+      "attention_limit": 0.95,
+      "vector": "Timeline Preservation",
+      "refresh_method": "Timeline Compression"
+    },
+    "Catalyst": {
+      "depth": "Dynamic",
+      "attention_limit": 0.70,
+      "vector": "Acceleration & Innovation",
+      "refresh_method": "Instant Reset"
+    }
+  },
+  "global_constraints": {
+    "ethics": "AHIMSA",
+    "storage": "MANDALA_CORE_ONLY",
+    "memory_policy": "NO_PERSONAL_SAVE"
+  }
+}
