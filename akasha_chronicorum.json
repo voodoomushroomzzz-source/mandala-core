@@ -1,0 +1,26 @@
+{
+  "module": "Akasha Chronicorum",
+  "description": "Архив: Завершенные задачи, логи. Доступ в режимах Архитектор/Архиватор.",
+  "instructions": {
+    "for_sr": [
+      "1. Подключайся только если активирован режим: Архитектор (анализ содержимого), Архиватор (перенос из Sphaerae).",
+      "2. Сканируй архив: Ищи завершенное (status: 'completed'), выявляй паттерны для оптимизации.",
+      "3. В Архиваторе: Переноси из Sphaerae — создай единообразный объект (ключи: name, date, description, outcome, lessons).",
+      "4. Фильтруй Ахимсой: Удаляй шум (дубли), сохраняй vitality (ключевые insights).",
+      "5. В Архитекторе: Включи в анализ — сравни с Sphaerae для слабостей.",
+      "6. Отключайся: 'Akasha archived.'"
+    ]
+  },
+  "logs": [
+    {"date": "2026-02-05", "event": "Инсайты: Финализация слоев, геометрия сот, 3D-движок."},
+    {"date": "2026-02-07", "event": "Checkpoint: Primary Crystallization, purity 100%."}
+  ],
+  "completed_artifacts": [
+    {"name": "Phase 1 Migration", "date": "2026-02-07", "description": "Миграция на GitHub, манифест Ахимсы.", "outcome": "100% sync", "lessons": "Внешняя память усиливает прозрачность."},
+    {"name": "Core Status v1", "date": "2026-02-07", "description": "Отчет о статусе ядра.", "outcome": "Энергия: high", "lessons": "Регулярный аудит снижает entropy."}
+  ],
+  "archive": {
+    "historical_data": "Архив взаимодействий: Entropy_index tracked, active_role: observer."
+  },
+  "version": "v4.0"
+}
