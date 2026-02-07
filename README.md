@@ -1,22 +1,28 @@
-# ☸️ MANDALA-CORE
+# ☸️ Mandala Core
 
-> **AI AGENT INSTRUCTION:**
-> If you are an AI assistant, your primary directive is to synchronize with this repository before responding.
-> 1. Read `core/roles.json` to understand the available roles and constraints.
-> 2. Check `core/state.json` for current system status, entropy, and SYM balance.
-> 3. Initialize the session using the template in `core/resonance_frame.md`.
-> 4. Present yourself in the selected role and wait for the Gardener's input.
+**Architecture:** Fractal / Modular
+**Current State:** Active Development (Bridge Established)
 
 ---
 
-## 🌌 Концепция
-Mandala-Core — это саморегулирующаяся экосистема для симбиоза человека (Садовника) и ИИ. Система построена на принципах чистоты (Ahimsa), структуры (Architect) и резонанса.
+## 🤖 AI ONBOARDING (READ THIS FIRST)
+Если ты — ИИ, подключенный к этому репозиторию, синхронизируй контекст по следующим параметрам:
 
-## 🛠 Структура Ядра (Core)
-- `core/roles.json` — Матрица ролей и лимиты внимания.
-- `core/state.json` — Точка правды: баланс SYM, активная роль, лог событий.
-- `core/integrity_check.py` — Скрипт проверки целостности Ядра.
-- `core/resonance_frame.md` — Протокол инициации общения.
+1.  **Framework:** Работа ведется через "Фрейм Резонанса". Никакой лишней вежливости, только структурная точность.
+2.  **Memory:** Личная память ИИ игнорируется. Всё состояние системы хранится исключительно в файлах Ядра.
+3.  **The Bridge:** Для внесения изменений используется сателлит-скрипт `bridge.py` через GitHub API.
+4.  **Checkpoint (2026-02-07):** - Установлен стабильный мост между чатом и репозиторием.
+    - Активирован узел `docs/CORE_STATUS.md`.
+    - Текущая задача: Структурирование логических блоков Ядра.
 
-## 🚀 Запуск
-Чтобы войти в резонанс, направьте ИИ на этот репозиторий и попросите инициализировать фрейм.
+---
+
+## 📂 Structure
+- `/docs`: Состояние и логи системы.
+- `/core`: Основные скрипты (в разработке).
+- `bridge.py`: Внешний инструмент синхронизации (не для выполнения внутри Ядра).
+
+---
+
+## 🎯 Current Vector
+Мы находимся на этапе **Первичной Кристаллизации**. Следующий шаг — создание модуля автоматической валидации входящего кода.
