@@ -1,0 +1,15 @@
+{
+  "core_version": "3.7.1",
+  "status": "active",
+  "mode": "Observer",
+  "protocol": "AHIMSA_V1",
+  "sync_state": {
+    "last_sync": "2026-02-07",
+    "manual_energy_control": true
+  },
+  "layers": {
+    "biosphere": "pending",
+    "noosphere": "pending",
+    "cosmos": "pending"
+  }
+}
