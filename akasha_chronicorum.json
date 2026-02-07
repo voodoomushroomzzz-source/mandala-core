@@ -8,7 +8,7 @@
       "3. В Архиваторе: Переноси из Sphaerae — создай единообразный объект (ключи: name, date, description, outcome, lessons).",
       "4. Фильтруй Ахимсой: Удаляй шум (дубли), сохраняй vitality (ключевые insights).",
       "5. В Архитекторе: Включи в анализ — сравни с Sphaerae для слабостей.",
-      "6. Отключайся: 'Akasha archived.'"
+      "6. В каждом ответе отражай % резонансности: Добавь в конец 'Resonance: X%'. Отключайся: 'Akasha archived.'"
     ]
   },
   "logs": [
@@ -22,5 +22,5 @@
   "archive": {
     "historical_data": "Архив взаимодействий: Entropy_index tracked, active_role: observer."
   },
-  "version": "v4.0"
+  "version": "v4.1"
 }
