@@ -1,8 +1,0 @@
-name: Mandala Auto Pilot
-on: [push]
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Core Pulse Check
-        run: echo "Mandala Core is Active"
