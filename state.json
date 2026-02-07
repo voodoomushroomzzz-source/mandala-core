@@ -1,18 +1,19 @@
 {
-  "core_version": "3.7.1",
-  "status": "active",
-  "mode": "Observer",
-  "protocol": "AHIMSA_V1",
-  "control_params": {
-    "manual_energy_control": true,
-    "energy_unit": "SYM"
+  "mandala_version": "1.0.1",
+  "current_context": {
+    "active_role": "Architect",
+    "resonance_level": 1.0,
+    "entropy_index": 0.01,
+    "last_sync": "2026-02-07T14:20:00Z"
   },
-  "sync_state": {
-    "last_major_update": "2026-02-07",
-    "source": "GitHub Migration Complete"
+  "assets": {
+    "SYM_balance": 100,
+    "purity_protocol": "AHIMSA"
   },
-  "structure": {
-    "layers": ["biosphere", "noosphere", "cosmos"],
-    "archive": "akasha"
-  }
+  "session_history": [
+    {
+      "event": "Role_System_Initialized",
+      "timestamp": "2026-02-07T14:00:00Z"
+    }
+  ]
 }
