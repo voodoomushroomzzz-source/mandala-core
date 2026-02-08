@@ -1,0 +1,48 @@
+name: Build Mandala Monolith
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.json'        # Запуск при изменении любых JSON-файлов
+      - '!build/**'      # Игнорируем изменения в самой папке build
+  workflow_dispatch:     # Позволяет запускать вручную из интерфейса GitHub
+  schedule:
+    - cron: '0 12 * * *' # Авто-сборка каждый день в 12:00 UTC (опционально)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Необходимо для коммита в репозиторий
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Build Monolith
+        run: python build_monolith.py
+
+      - name: Upload monolith as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mandala-monolith
+          path: build/mandala_core.monolith.latest.json
+          retention-days: 7
+
+      - name: Commit and push if changed
+        run: |
+          if [[ `git status --porcelain build/` ]]; then
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add build/
+            git commit -m "🤖 Авто-сборка монолита: $(date +'%Y-%m-%d %H:%M')"
+            git push
+          else
+            echo "Нет изменений для коммита."
+          fi
