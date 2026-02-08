@@ -1,35 +1,35 @@
 {
   "module": "Sphaerae",
-  "description": "Модуль сфер: Три сферы с идеями, открытыми проектами и планами. Доступ в режимах Разработчик/Архитектор/Архиватор.",
+  "description": "Модуль сфер: Три сферы с идеями, открытыми проектами и планами. Доступ в режимах Исследователь/Архитектор.",
   "instructions": {
     "for_sr": [
-      "1. Подключайся только если активирован режим: Разработчик (изучить/продолжить), Архитектор (анализ), Архиватор (перенос).",
-      "2. Сканируй сферы: Biosphaera (мосты, скрипты), Noosphaera (KB-коды, идеи), Cosmosphaera (планы, визуализация).",
-      "3. Фильтруй через Ахимсу: Нет шума (удаляй дубли), фокус на vitality (творчество).",
-      "4. В режиме Разработчик: Предложи 1 проект на сферу (например, 'Продолжить Symbiosis Connector в Noosphaera?').",
-      "5. Не модифицируй без подтверждения Садовника; логгируй в temp_log.",
-      "6. В каждом ответе отражай % резонансности: Добавь в конец 'Resonance: X%'. Отключайся после задачи: 'Sphaerae disconnected.'"
+      "1. Подключайся только если активирован режим: Исследователь (анализ идей), Архитектор (анализ и целостность).",
+      "2. Сканируй сферы: Biosphaera (инфраструктура), Noosphaera (знания), Cosmosphaera (планы).",
+      "3. Фильтруй через Ахимсу: Нет шума, фокус на vitality.",
+      "4. В режиме Исследователь: Предложи 1 идею на сферу на основе актуальных проектов.",
+      "5. Не модифицируй без подтверждения Садовника.",
+      "6. В каждом ответе отражай % резонансности с ядром (Initium)."
     ]
   },
   "biosphaera": {
     "description": "Сфера инфраструктуры: Мосты, скрипты, базовая структура.",
     "projects": [
-      {"name": "Bridge", "status": "archived", "details": "Функционал (синхронизация через GitHub API) полностью реализован в Mandala Sync Terminal v2.4. Готов к финальной архивации в Akasha."},
-      {"name": "Integrity Check", "status": "open", "details": "Python-скрипт для проверки файлов, purity по entropy_index."},
-      {"name": "Sanitizer", "status": "open", "details": "Рекурсивная валидация структуры (.md заголовки, .py imports)."},
-      {"name": "Sync Logic", "status": "in_dev", "details": "Реализация протокола обновлений завершена в Mandala Sync Terminal v2.4. Включает: исправление Base64, единое меню 2x2, загрузку .env, файловое логирование."}
+      {"name": "Bridge", "status": "archived", "details": "Функционал реализован во внешнем артефакте Mandala Sync Terminal Bot v2.5."},
+      {"name": "Integrity Check", "status": "in_progress", "details": "Задача актуальна. **Частично выполнена**: архитектурный аудит и очистка ядра (Initium v6.5.0) от шумовой логики (hash_verification, file_delivery_policy) проведены 2026-02-08. Остаётся реализация скрипта."},
+      {"name": "Sanitizer", "status": "open", "details": "Рекурсивная валидация структуры. Задача актуальна после обновления ядра."},
+      {"name": "Interactive Load Protocol", "status": "implemented", "details": "**Завершено 2026-02-08**. Протокол для загрузки модулей через Садовника при недоступности сервера интегрирован в Initium v6.5.0. Резонирует с принципами Ахимсы и Симбиоза."}
     ],
-    "ideas": ["Автоматизация Phase 2: GitHub Bridge для автокоммитов."]
+    "ideas": ["Автоматизация Phase 2: Развитие протокола в сторону более умных запросов к Садовнику."]
   },
   "noosphaera": {
     "description": "Сфера знаний: Идеи, KB-коды, артефакты.",
     "projects": [
-      {"name": "Symbiosis Connector", "status": "open", "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы разработки)."},
-      {"name": "Ahimsa Filter", "status": "in_dev", "details": "KB-555923: Оценка по 4 принципам (No Exploitation, etc.)."},
+      {"name": "Symbiosis Connector", "status": "open", "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы)."},
+      {"name": "Ahimsa Filter", "status": "in_dev", "details": "KB-555923: Оценка по 4 принципам."},
       {"name": "Generative Mandala", "status": "open", "details": "KB-28000: Динамическая визуализация роста."},
       {"name": "Pathfinder", "status": "open", "details": "KB-325710: Эволюция ролей, v1.2."}
     ],
-    "ideas": ["Digital Garden: Экосистема смыслов в Notion."]
+    "ideas": ["Digital Garden: Экосистема смыслов в Notion.", "Концепция 'Живого Ядра': Initium как адаптивный манифест."]
   },
   "cosmosphaera": {
     "description": "Сфера эволюции: Планы, универсальные принципы.",
@@ -39,10 +39,11 @@
     "ideas": ["3D-движок: X/Y категории, Z глубина, Bloom аудит Ахимсы."],
     "plans": {
       "roadmap": [
-        "Phase 2: Automation (Telegram sync, schema validation).",
+        "Phase 2: Automation (Telegram sync, schema validation). **Статус: В работе. Интерактивный протокол — первый реализованный элемент.**",
         "Phase 3: Visualization (Generative Code, Glass Style)."
-      ]
+      ],
+      "current_core_version": "Initium v6.5.0 (стабильное, очищенное ядро с интерактивным протоколом)"
     }
   },
-  "version": "v4.2"
+  "version": "v4.3"
 }
