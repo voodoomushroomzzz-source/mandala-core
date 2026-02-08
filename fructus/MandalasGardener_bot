@@ -1,162 +1,206 @@
 {
-  "project_blueprint": {
-    "project_name": "Mandala Sync Terminal",
-    "version": "v2.5",
-    "description": "Telegram bot for GitHub file synchronization with AI-human symbiosis philosophy",
-    "philosophy": ["Ahimsa (non-violence)", "Symbiosis", "Transparency"],
-    "archive_rule": "Minimal Resonance (1+1)",
-    "status": "operational",
-    "created_date": "2026-02-08",
-    "last_updated": "2026-02-08"
-  },
-  
-  "bridges_and_integrations": [
-    {
-      "bridge_name": "Telegram Bot API",
-      "technology": "aiogram 3.0.0",
-      "purpose": "Main user interface",
-      "configuration_key": "TELEGRAM_BOT_TOKEN",
-      "config_location": ".env file",
-      "critical": true,
-      "notes": "Async framework, supports FSM"
+  "mandala_bot_final_archive": {
+    "archive_metadata": {
+      "title": "Complete Mandala Sync Terminal Bot v3.3 - Final Product",
+      "creation_date": "2026-02-08",
+      "purpose": "Complete replication package for AI agents - contains final code, setup instructions, and architectural blueprint",
+      "format": "AI-Ready Development Monolith",
+      "version": "3.3-final",
+      "philosophy": "Ahimsa + Symbiosis + Transparency"
     },
-    {
-      "bridge_name": "GitHub REST API v3",
-      "technology": "aiohttp 3.9.0",
-      "purpose": "File synchronization with repository",
-      "configuration_keys": ["GITHUB_TOKEN", "GITHUB_REPO_OWNER", "GITHUB_REPO_NAME"],
-      "critical": true,
-      "notes": "Uses base64 encoding for file content"
+
+    "ai_agent_instructions": {
+      "preamble": "Здравствуй, ИИ-агент! Этот архив содержит полную сборку Telegram бота MandalaBot. Ты можешь использовать этот файл для полного понимания проекта и его репликации.",
+      "reading_guide": [
+        "1. Сначала прочитай project_overview чтобы понять философию",
+        "2. Затем изучи technical_stack для понимания технологий",
+        "3. Проверь setup_instructions для настройки окружения",
+        "4. Изучи final_code - это рабочий код бота v3.3",
+        "5. Используй replication_guide для создания своего бота"
+      ],
+      "ai_capabilities_required": [
+        "Python 3.10+ programming",
+        "Understanding of async/await",
+        "Telegram Bot API knowledge",
+        "GitHub API integration",
+        "JSON parsing and generation"
+      ]
     },
-    {
-      "bridge_name": "Environment Configuration",
-      "technology": "python-dotenv + .env file",
-      "purpose": "Secure credential management",
-      "critical": true,
-      "notes": "Auto-loads before bot initialization"
-    }
-  ],
-  
-  "dependencies": {
-    "core": [
-      {"library": "aiogram", "version": "3.0.0", "purpose": "Telegram Bot API framework"},
-      {"library": "aiohttp", "version": "3.9.0", "purpose": "Async HTTP requests"},
-      {"library": "python-dotenv", "version": "1.0.0", "purpose": "Environment variable management"}
-    ],
-    "python_standard": ["asyncio", "logging", "base64", "json", "os", "sys", "pathlib"]
-  },
-  
-  "module_structure": {
-    "initium.json": {
-      "version": "v4.8.1",
-      "purpose": "Core philosophy, instructions, module map",
-      "critical_for": "Initial resonance, mode selection"
+
+    "project_overview": {
+      "core_concept": "Telegram bot for synchronizing JSON files with GitHub repository using AI-human symbiosis principles",
+      "key_features": [
+        "Smart file upload with automatic renaming",
+        "GitHub repository synchronization",
+        "Ahimsa ethical content filter",
+        "FSM-based user workflow",
+        "Monolithic file management for AI agents",
+        "Simplified two-button interface"
+      ],
+      "development_philosophy": {
+        "ahimsa": "Non-violence principle in content and interaction",
+        "symbiosis": "AI-human collaborative development pattern",
+        "transparency": "Full architectural visibility",
+        "minimal_resonance": "Archive rule 1+1"
+      }
     },
-    "sphaerae.json": {
-      "version": "v4.1",
-      "purpose": "Current projects in 3 spheres (Biosphaera, Noosphaera, Cosmosphaera)",
-      "critical_for": "Development context"
+
+    "technical_stack": {
+      "core_libraries": [
+        {
+          "library": "aiogram",
+          "version": "3.0.0",
+          "purpose": "Asynchronous Telegram Bot API framework",
+          "critical_features": ["Router system", "FSM support", "Middleware"]
+        },
+        {
+          "library": "aiohttp",
+          "version": "3.9.0",
+          "purpose": "Asynchronous HTTP client for GitHub API calls"
+        },
+        {
+          "library": "python-dotenv",
+          "version": "1.0.0",
+          "purpose": "Environment variable management from .env file"
+        }
+      ],
+      "python_version": "3.10+",
+      "os_compatibility": ["Windows", "Linux", "macOS"],
+      "architecture": "Asynchronous event-driven with FSM"
     },
-    "akasha_chronicorum.json": {
-      "version": "v4.7",
-      "purpose": "Archive of completed projects and sessions",
-      "critical_for": "Historical reference, rule 1+1"
-    },
-    "bot.py": {
-      "version": "v2.5",
-      "purpose": "Main executable bot logic",
-      "features": ["Smart upload with module selection", "FSM implementation", "Ahimsa Filter"]
-    }
-  },
-  
-  "bot_features_v2_5": [
-    {
-      "feature_name": "Smart File Upload",
-      "trigger": "📤 Загрузить файл button or /upload command",
-      "workflow": ["Module selection menu", "File reception", "Auto-renaming to module standard", "Ahimsa Filter check", "GitHub commit"],
-      "technology": "FSM (Finite State Machine)",
-      "states": ["waiting_for_module_choice", "waiting_for_file"]
-    },
-    {
-      "feature_name": "File Retrieval",
-      "trigger": "📥 Получить файл button or /get command",
-      "workflow": ["Show file list", "Handle selection", "Send as text or document"],
-      "file_types": ["JSON modules", "Script files", "Documentation"]
-    },
-    {
-      "feature_name": "Ahimsa Filter",
-      "purpose": "Content ethics validation",
-      "checks": ["No exploitation", "No coercion", "Non-violence principle"],
-      "implementation": "Keyword check in content"
-    }
-  ],
-  
-  "fsm_workflow": {
-    "state_flow": [
-      {
-        "state": "waiting_for_module_choice",
-        "trigger": "User clicks upload button",
-        "action": "Show module selection keyboard",
-        "next_state": "waiting_for_file"
+
+    "setup_instructions": {
+      "step_1": {
+        "title": "Environment Setup",
+        "instructions": "Create virtual environment and install dependencies",
+        "code": "python -m venv venv\nsource venv/bin/activate  # On Windows: venv\\Scripts\\activate\npip install aiogram==3.0.0 aiohttp==3.9.0 python-dotenv==1.0.0"
       },
-      {
-        "state": "waiting_for_file",
-        "trigger": "User selects module",
-        "action": "Cache choice, wait for file",
-        "next_state": "processing"
+      "step_2": {
+        "title": "Configuration File",
+        "instructions": "Create .env file in project root with these variables",
+        "env_template": "TELEGRAM_BOT_TOKEN=your_telegram_bot_token_from_BotFather\nGITHUB_TOKEN=your_github_personal_access_token_with_repo_scope\nGITHUB_REPO_OWNER=repository_owner_username\nGITHUB_REPO_NAME=repository_name"
+      },
+      "step_3": {
+        "title": "Bot Token Creation",
+        "instructions": [
+          "1. Open Telegram and search for @BotFather",
+          "2. Send /newbot command",
+          "3. Follow instructions to create bot",
+          "4. Copy token to .env file"
+        ]
+      },
+      "step_4": {
+        "title": "GitHub Token Creation",
+        "instructions": [
+          "1. Go to GitHub → Settings → Developer settings → Personal access tokens",
+          "2. Click 'Generate new token'",
+          "3. Select 'repo' scope (full repository access)",
+          "4. Copy token to .env file"
+        ]
+      },
+      "step_5": {
+        "title": "Project Structure",
+        "instructions": "Create these files in your project folder",
+        "structure": [
+          "project_folder/",
+          "├── bot.py          # Main bot code",
+          "├── .env            # Environment variables",
+          "├── .gitignore      # Git ignore file",
+          "└── README.md       # Project documentation"
+        ]
       }
-    ],
-    "cache_system": "user_module_choice dictionary with user_id keys"
-  },
-  
-  "configuration_template": {
-    "env_file_example": {
-      "TELEGRAM_BOT_TOKEN": "your_bot_token_from_BotFather",
-      "GITHUB_TOKEN": "your_github_personal_access_token",
-      "GITHUB_REPO_OWNER": "repository_owner_username",
-      "GITHUB_REPO_NAME": "repository_name"
     },
-    "code_constants": {
-      "GITHUB_API_BASE": "https://api.github.com",
-      "CORE_FILES": {
-        "initium": "initium.json",
-        "sphaerae": "sphaerae.json", 
-        "akasha": "akasha_chronicorum.json"
+
+    "final_code": {
+      "filename": "bot.py",
+      "version": "3.3-final",
+      "description": "Complete working code of MandalaBot with simplified two-button interface",
+      "code_content": "#!/usr/bin/env python3\n\"\"\"\nMandala Sync Terminal Bot v3.3 - Final Version\nSimplified two-button interface with full functionality\n\"\"\"\n\nimport asyncio\nimport logging\nimport os\nimport sys\nimport base64\nimport json\nfrom typing import Dict, Optional\n\nfrom aiogram import Bot, Dispatcher, Router, F\nfrom aiogram.filters import Command, CommandStart\nfrom aiogram.types import (\n    Message, CallbackQuery, BufferedInputFile,\n    InlineKeyboardButton, InlineKeyboardMarkup,\n    ReplyKeyboardMarkup, KeyboardButton\n)\nfrom aiogram.fsm.context import FSMContext\nfrom aiogram.fsm.state import State, StatesGroup\nfrom aiogram.fsm.storage.memory import MemoryStorage\n\nimport aiohttp\nfrom dotenv import load_dotenv\n\n# ========== CONFIGURATION ==========\nload_dotenv()\n\nTELEGRAM_BOT_TOKEN = os.getenv(\"TELEGRAM_BOT_TOKEN\")\nGITHUB_TOKEN = os.getenv(\"GITHUB_TOKEN\")\nGITHUB_REPO_OWNER = os.getenv(\"GITHUB_REPO_OWNER\", \"voodoomushroomzzz-source\")\nGITHUB_REPO_NAME = os.getenv(\"GITHUB_REPO_NAME\", \"mandala-core\")\nGITHUB_API_BASE = \"https://api.github.com\"\n\n# Core files mapping\nCORE_FILES = {\n    \"initium\": \"initium.json\",\n    \"sphaerae\": \"sphaerae.json\",\n    \"akasha\": \"akasha_chronicorum.json\",\n    \"monolith\": \"build/mandala_core.monolith.latest.json\"\n}\n\n# Ahimsa Filter - ethical content validation\nAHIMSA_BLOCKED_KEYWORDS = [\n    \"эксплуатация\", \"насилие\", \"принуждение\", \"вред\", \"унижение\"\n]\n\n# ========== INITIALIZATION ==========\nlogging.basicConfig(\n    level=logging.INFO,\n    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'\n)\nlogger = logging.getLogger(__name__)\n\n# FSM Storage\nstorage = MemoryStorage()\nrouter = Router()\n\n# States for file upload\nclass UploadStates(StatesGroup):\n    waiting_for_module_choice = State()\n    waiting_for_file = State()\n\n# Cache for module selection\nuser_module_choice = {}\n\n# ========== HELPER FUNCTIONS ==========\ndef check_ahimsa(content: str) -> bool:\n    \"\"\"Check content against Ahimsa principles\"\"\"\n    content_lower = content.lower()\n    for keyword in AHIMSA_BLOCKED_KEYWORDS:\n        if keyword in content_lower:\n            logger.warning(f\"Ahimsa filter triggered: {keyword}\")\n            return False\n    return True\n\nasync def update_github_file(file_path: str, content: Dict, message: str = \"Update via MandalaBot\") -> bool:\n    \"\"\"Update file in GitHub repository\"\"\"\n    if not GITHUB_TOKEN:\n        logger.error(\"GITHUB_TOKEN not set\")\n        return False\n    \n    url = f\"{GITHUB_API_BASE}/repos/{GITHUB_REPO_OWNER}/{GITHUB_REPO_NAME}/contents/{file_path}\"\n    headers = {\n        \"Authorization\": f\"token {GITHUB_TOKEN}\",\n        \"Accept\": \"application/vnd.github.v3+json\"\n    }\n    \n    try:\n        async with aiohttp.ClientSession() as session:\n            # Get current SHA\n            async with session.get(url, headers=headers) as response:\n                sha = None\n                if response.status == 200:\n                    sha_data = await response.json()\n                    sha = sha_data.get(\"sha\")\n                elif response.status != 404:\n                    logger.error(f\"Cannot get file: {response.status}\")\n                    return False\n            \n            # Prepare content\n            content_str = json.dumps(content, ensure_ascii=False, indent=2)\n            content_b64 = base64.b64encode(content_str.encode(\"utf-8\")).decode(\"utf-8\")\n            \n            # Update file\n            data = {\n                \"message\": message,\n                \"content\": content_b64,\n                \"sha\": sha\n            }\n            \n            async with session.put(url, headers=headers, json=data) as response:\n                if response.status in [200, 201]:\n                    logger.info(f\"File {file_path} updated successfully\")\n                    return True\n                else:\n                    error_text = await response.text()\n                    logger.error(f\"GitHub update error: {response.status} - {error_text}\")\n                    return False\n    except Exception as e:\n        logger.error(f\"Error updating file: {e}\")\n        return False\n\n# ========== KEYBOARDS ==========\ndef get_main_reply_keyboard():\n    \"\"\"Simplified two-button menu\"\"\"\n    return ReplyKeyboardMarkup(\n        keyboard=[\n            [\n                KeyboardButton(text=\"📦 Монолит\"),\n                KeyboardButton(text=\"📤 Загрузить файл\")\n            ]\n        ],\n        resize_keyboard=True,\n        input_field_placeholder=\"Выберите действие...\"\n    )\n\ndef get_main_inline_keyboard():\n    \"\"\"Full inline menu\"\"\"\n    return InlineKeyboardMarkup(inline_keyboard=[\n        [InlineKeyboardButton(text=\"📦 МОНОЛИТ\", callback_data=\"monolith_menu\")],\n        [\n            InlineKeyboardButton(text=\"📤 Загрузить файл\", callback_data=\"upload_start\"),\n            InlineKeyboardButton(text=\"📥 Получить файл\", callback_data=\"download_menu\")\n        ],\n        [InlineKeyboardButton(text=\"ℹ️ Помощь\", callback_data=\"help\")]\n    ])\n\ndef get_modules_keyboard():\n    \"\"\"Module selection for upload\"\"\"\n    return InlineKeyboardMarkup(inline_keyboard=[\n        [\n            InlineKeyboardButton(text=\"Initium\", callback_data=\"module_initium\"),\n            InlineKeyboardButton(text=\"Sphaerae\", callback_data=\"module_sphaerae\")\n        ],\n        [\n            InlineKeyboardButton(text=\"Akasha\", callback_data=\"module_akasha\"),\n            InlineKeyboardButton(text=\"❌ Отмена\", callback_data=\"main_menu\")\n        ]\n    ])\n\ndef get_download_keyboard():\n    \"\"\"Download menu\"\"\"\n    return InlineKeyboardMarkup(inline_keyboard=[\n        [\n            InlineKeyboardButton(text=\"Initium\", callback_data=\"dl_initium\"),\n            InlineKeyboardButton(text=\"Sphaerae\", callback_data=\"dl_sphaerae\")\n        ],\n        [\n            InlineKeyboardButton(text=\"Akasha\", callback_data=\"dl_akasha\"),\n            InlineKeyboardButton(text=\"Монолит\", callback_data=\"dl_monolith\")\n        ],\n        [InlineKeyboardButton(text=\"🔙 Назад\", callback_data=\"main_menu\")]\n    ])\n\ndef get_monolith_keyboard():\n    \"\"\"Monolith menu\"\"\"\n    return InlineKeyboardMarkup(inline_keyboard=[\n        [\n            InlineKeyboardButton(text=\"📥 Скачать\", callback_data=\"get_monolith\"),\n            InlineKeyboardButton(text=\"📊 Инфо\", callback_data=\"monolith_info\")\n        ],\n        [InlineKeyboardButton(text=\"🔙 Назад\", callback_data=\"main_menu\")]\n    ])\n\n# ========== COMMAND HANDLERS ==========\n@router.message(CommandStart())\nasync def cmd_start(message: Message):\n    \"\"\"Start command\"\"\"\n    welcome_text = (\n        \"🌿 <b>Mandala Sync Terminal v3.3</b>\\n\\n\"\n        \"Бот для синхронизации с GitHub репозиторием Mandala Core.\\n\\n\"\n        \"<b>Основные функции:</b>\\n\"\n        \"• 📤 Загрузка файлов в модули\\n\"\n        \"• 📦 Работа с монолитом\\n\\n\"\n        \"<b>Упрощенное меню:</b>\\n\"\n        \"Теперь только 2 кнопки справа:\"\n    )\n    \n    await message.answer(welcome_text, reply_markup=get_main_inline_keyboard())\n    await message.answer(\n        \"👇 <b>Выпадающее меню (только основные функции):</b>\",\n        reply_markup=get_main_reply_keyboard()\n    )\n\n@router.message(Command(\"help\"))\nasync def cmd_help(message: Message):\n    help_text = (\n        \"🔄 <b>Mandala Bot Помощь</b>\\n\\n\"\n        \"<b>Основные команды:</b>\\n\"\n        \"/start - Перезапуск бота\\n\"\n        \"/menu - Полное меню\\n\"\n        \"/monolith - Монолит\\n\"\n        \"/help - Эта справка\\n\\n\"\n        \"<b>Выпадающее меню (2 кнопки):</b>\\n\"\n        \"• 📦 Монолит - работа с монолитным файлом\\n\"\n        \"• 📤 Загрузить файл - загрузка в модули GitHub\\n\\n\"\n        \"<b>Подсказка:</b> Используйте инлайн-кнопки под сообщениями для расширенных функций\"\n    )\n    await message.answer(help_text)\n\n# ========== REPLY MENU HANDLERS ==========\n@router.message(F.text == \"📦 Монолит\")\nasync def handle_monolith_button(message: Message):\n    \"\"\"Monolith button from reply menu\"\"\"\n    await message.answer(\"📦 <b>Открываю меню монолита...</b>\", reply_markup=get_monolith_keyboard())\n\n@router.message(F.text == \"📤 Загрузить файл\")\nasync def handle_upload_button(message: Message):\n    \"\"\"Upload button from reply menu\"\"\"\n    await start_upload_process(message)\n\n# ========== UPLOAD FSM ==========\nasync def start_upload_process(source: Message | CallbackQuery, state: FSMContext | None = None):\n    \"\"\"Start upload process\"\"\"\n    if isinstance(source, CallbackQuery):\n        message = source.message\n        await source.answer()\n    else:\n        message = source\n    \n    await message.answer(\n        \"📤 <b>Загрузка файла в модуль</b>\\n\\n\"\n        \"Выберите модуль для загрузки:\\n\\n\"\n        \"<b>Доступные модули:</b>\\n\"\n        \"• <b>Initium</b> - философия и инструкции\\n\"\n        \"• <b>Sphaerae</b> - текущие проекты\\n\"\n        \"• <b>Akasha</b> - архив проектов\\n\\n\"\n        \"<i>Файл будет автоматически переименован в стандартное имя модуля</i>\",\n        reply_markup=get_modules_keyboard()\n    )\n    \n    if state:\n        await state.set_state(UploadStates.waiting_for_module_choice)\n\n@router.callback_query(F.data == \"upload_start\")\nasync def handle_upload_start(callback: CallbackQuery, state: FSMContext):\n    \"\"\"Upload start via inline button\"\"\"\n    await start_upload_process(callback, state)\n\n@router.callback_query(F.data.startswith(\"module_\"))\nasync def process_module_choice(callback: CallbackQuery, state: FSMContext):\n    \"\"\"Process module selection\"\"\"\n    module_map = {\n        \"module_initium\": \"initium\",\n        \"module_sphaerae\": \"sphaerae\", \n        \"module_akasha\": \"akasha\"\n    }\n    \n    module_key = callback.data\n    module_name = module_map.get(module_key)\n    \n    if module_name:\n        user_module_choice[callback.from_user.id] = module_name\n        \n        await callback.message.edit_text(\n            f\"✅ Выбран модуль: <b>{module_name.upper()}</b>\\n\\n\"\n            f\"Теперь отправьте JSON файл для загрузки.\\n\"\n            f\"<i>Файл будет автоматически переименован в <b>{CORE_FILES[module_name]}</b></i>\\n\\n\"\n            f\"<b>Ahimsa проверка:</b> ✅ Активна\\n\"\n            f\"<b>GitHub синхронизация:</b> ✅ Готова\"\n        )\n        await state.set_state(UploadStates.waiting_for_file)\n    else:\n        await callback.message.edit_text(\"❌ Ошибка выбора модуля\")\n    \n    await callback.answer()\n\n@router.message(UploadStates.waiting_for_file)\nasync def process_file_upload(message: Message, state: FSMContext):\n    \"\"\"Process uploaded file\"\"\"\n    user_id = message.from_user.id\n    module_name = user_module_choice.get(user_id)\n    \n    if not module_name:\n        await message.answer(\"❌ Ошибка: модуль не выбран. Начните заново.\")\n        await state.clear()\n        return\n    \n    try:\n        file_content = \"\"\n        original_filename = \"unknown\"\n        \n        if message.document:\n            original_filename = message.document.file_name\n            logger.info(f\"Получен файл: {original_filename} для модуля {module_name}\")\n            \n            file = await message.bot.get_file(message.document.file_id)\n            file_path = file.file_path\n            \n            file_url = f\"https://api.telegram.org/file/bot{TELEGRAM_BOT_TOKEN}/{file_path}\"\n            async with aiohttp.ClientSession() as session:\n                async with session.get(file_url) as response:\n                    file_content = await response.text()\n        \n        elif message.text:\n            file_content = message.text\n            original_filename = \"text_message.txt\"\n            \n        else:\n            await message.answer(\"❌ Пожалуйста, отправьте JSON файл\")\n            return\n        \n        # Ahimsa check\n        if not check_ahimsa(file_content):\n            await message.answer(\n                \"❌ <b>Ahimsa Filter - Контент отклонен</b>\\n\\n\"\n                \"Обнаружены запрещенные темы:\\n\"\n                \"• Насилие, эксплуатация\\n\"\n                \"• Принуждение, вред\\n\\n\"\n                \"Пожалуйста, переформулируйте содержимое в соответствии с принципами ненасилия.\"\n            )\n            await state.clear()\n            del user_module_choice[user_id]\n            return\n        \n        # Parse JSON\n        try:\n            json_content = json.loads(file_content)\n        except json.JSONDecodeError as e:\n            await message.answer(f\"❌ <b>Ошибка JSON:</b> {str(e)}\\n\\nПожалуйста, отправьте валидный JSON файл.\")\n            return\n        \n        target_filename = CORE_FILES.get(module_name)\n        if not target_filename:\n            await message.answer(\"❌ Ошибка: неизвестный модуль\")\n            return\n        \n        # Upload to GitHub\n        await message.answer(\n            f\"🔄 <b>Загружаю файл в GitHub...</b>\\n\\n\"\n            f\"<b>Модуль:</b> {module_name}\\n\"\n            f\"<b>Исходный файл:</b> {original_filename}\\n\"\n            f\"<b>Целевое имя:</b> {target_filename}\\n\"\n            f\"<b>Ahimsa проверка:</b> ✅ Пройдена\"\n        )\n        \n        success = await update_github_file(\n            file_path=target_filename,\n            content=json_content,\n            message=f\"Update via MandalaBot: {original_filename} → {target_filename}\"\n        )\n        \n        if success:\n            await message.answer(\n                f\"✅ <b>Файл успешно загружен!</b>\\n\\n\"\n                f\"<b>Модуль:</b> {module_name}\\n\"\n                f\"<b>Переименован:</b> {original_filename} → {target_filename}\\n\"\n                f\"<b>Размер:</b> {len(file_content)} символов\\n\"\n                f\"<b>Ahimsa:</b> ✅ Соответствует\\n\"\n                f\"<b>GitHub:</b> ✅ Синхронизировано\\n\\n\"\n                f\"<i>Файл доступен по стандартному пути</i>\"\n            )\n            logger.info(f\"Файл загружен: {original_filename} → {target_filename} для пользователя {user_id}\")\n        else:\n            await message.answer(\n                \"❌ <b>Ошибка при загрузке в GitHub</b>\\n\\n\"\n                \"Возможные причины:\\n\"\n                \"1. Неверный GITHUB_TOKEN\\n\"\n                \"2. Нет прав на запись в репозиторий\\n\"\n                \"3. Проблемы с сетью\\n\\n\"\n                \"Проверьте настройки в .env файле.\"\n            )\n        \n        await state.clear()\n        if user_id in user_module_choice:\n            del user_module_choice[user_id]\n        \n    except Exception as e:\n        logger.error(f\"Upload error: {e}\")\n        await message.answer(f\"❌ Ошибка при обработке файла: {str(e)}\")\n        await state.clear()\n        if user_id in user_module_choice:\n            del user_module_choice[user_id]\n\n# ========== DOWNLOAD HANDLERS ==========\n@router.callback_query(F.data == \"download_menu\")\nasync def handle_download_menu(callback: CallbackQuery):\n    \"\"\"Download menu\"\"\"\n    await callback.message.edit_text(\n        \"📥 <b>Получение файлов из репозитория</b>\\n\\n\"\n        \"Выберите файл для скачивания:\",\n        reply_markup=get_download_keyboard()\n    )\n    await callback.answer()\n\n@router.callback_query(F.data.startswith(\"dl_\"))\nasync def handle_download(callback: CallbackQuery):\n    \"\"\"Download selected file\"\"\"\n    file_map = {\n        \"dl_initium\": (\"initium\", CORE_FILES[\"initium\"]),\n        \"dl_sphaerae\": (\"sphaerae\", CORE_FILES[\"sphaerae\"]),\n        \"dl_akasha\": (\"akasha\", CORE_FILES[\"akasha\"]),\n        \"dl_monolith\": (\"monolith\", CORE_FILES[\"monolith\"])\n    }\n    \n    file_key = callback.data\n    file_info = file_map.get(file_key)\n    \n    if not file_info:\n        await callback.answer(\"❌ Неизвестный файл\")\n        return\n    \n    file_name, file_path = file_info\n    await callback.answer(\"🔄 Загружаю...\")\n    \n    try:\n        raw_url = f\"https://raw.githubusercontent.com/{GITHUB_REPO_OWNER}/{GITHUB_REPO_NAME}/main/{file_path}\"\n        async with aiohttp.ClientSession() as session:\n            async with session.get(raw_url) as response:\n                if response.status == 200:\n                    content = await response.read()\n                    filename = \"mandala_core.monolith.json\" if file_name == \"monolith\" else file_path\n                    file_input = BufferedInputFile(content, filename=filename)\n                    \n                    caption = \"✅ <b>Mandala Core Monolith</b>\\nГотов для загрузки ИИ\" if file_name == \"monolith\" else f\"✅ <b>{file_path}</b>\\nСкачан из репозитория\"\n                    \n                    await callback.message.answer_document(file_input, caption=caption)\n                else:\n                    await callback.message.answer(f\"❌ Файл не найден\")\n    \n    except Exception as e:\n        logger.error(f\"Download error: {e}\")\n        await callback.message.answer(f\"❌ Ошибка: {str(e)}\")\n\n# ========== MONOLITH HANDLERS ==========\n@router.callback_query(F.data == \"monolith_menu\")\nasync def show_monolith_menu(callback: CallbackQuery):\n    \"\"\"Monolith menu\"\"\"\n    await callback.message.edit_text(\n        \"📦 <b>Mandala Core Monolith</b>\\n\\n\"\n        \"Полный дамп системы для загрузки ИИ-агентом.\\n\"\n        \"Выберите действие:\",\n        reply_markup=get_monolith_keyboard()\n    )\n    await callback.answer()\n\n@router.callback_query(F.data == \"get_monolith\")\nasync def handle_get_monolith(callback: CallbackQuery):\n    \"\"\"Download monolith\"\"\"\n    await callback.answer(\"🔄 Загружаю...\")\n    \n    try:\n        raw_url = f\"https://raw.githubusercontent.com/{GITHUB_REPO_OWNER}/{GITHUB_REPO_NAME}/main/{CORE_FILES['monolith']}\"\n        async with aiohttp.ClientSession() as session:\n            async with session.get(raw_url) as response:\n                if response.status == 200:\n                    content = await response.read()\n                    file_input = BufferedInputFile(content, filename=\"mandala_core.monolith.json\")\n                    \n                    await callback.message.answer_document(\n                        file_input,\n                        caption=\"✅ <b>Mandala Core Monolith</b>\\nГотов для загрузки ИИ\"\n                    )\n                else:\n                    await callback.message.answer(f\"❌ Файл не найден. Проверьте URL:\\n{raw_url}\")\n    except Exception as e:\n        await callback.message.answer(f\"❌ Ошибка: {str(e)}\")\n\n@router.callback_query(F.data == \"monolith_info\")\nasync def handle_monolith_info(callback: CallbackQuery):\n    \"\"\"Monolith info\"\"\"\n    try:\n        raw_url = f\"https://raw.githubusercontent.com/{GITHUB_REPO_OWNER}/{GITHUB_REPO_NAME}/main/{CORE_FILES['monolith']}\"\n        async with aiohttp.ClientSession() as session:\n            async with session.get(raw_url) as response:\n                if response.status == 200:\n                    content = await response.read()\n                    size_kb = len(content) / 1024\n                    \n                    try:\n                        json_content = json.loads(content.decode('utf-8'))\n                        version = json_content.get(\"mandala_core\", {}).get(\"version\", \"N/A\")\n                    except:\n                        version = \"N/A\"\n                    \n                    info = (\n                        f\"📦 <b>Информация о монолите</b>\\n\\n\"\n                        f\"• <b>Версия:</b> {version}\\n\"\n                        f\"• <b>Размер:</b> {size_kb:.1f} KB\\n\"\n                        f\"• <b>Статус:</b> ✅ Доступен\\n\"\n                        f\"• <b>Формат:</b> JSON monolith\\n\"\n                        f\"• <b>Для ИИ:</b> Режим 'monolith'\\n\\n\"\n                        f\"Скачайте файл и используйте команду загрузки.\"\n                    )\n                    \n                    await callback.message.answer(info)\n                else:\n                    await callback.message.answer(\"❌ Монолит недоступен\")\n    except Exception as e:\n        await callback.message.answer(f\"❌ Ошибка: {str(e)}\")\n    \n    await callback.answer()\n\n# ========== GENERAL HANDLERS ==========\n@router.callback_query(F.data == \"main_menu\")\nasync def handle_main_menu(callback: CallbackQuery):\n    \"\"\"Back to main menu\"\"\"\n    await callback.message.edit_text(\n        \"🌿 <b>Mandala Sync Terminal v3.3</b>\\n\\n\"\n        \"Выберите действие:\",\n        reply_markup=get_main_inline_keyboard()\n    )\n    await callback.answer()\n\n@router.callback_query(F.data == \"help\")\nasync def handle_help(callback: CallbackQuery):\n    \"\"\"Help via callback\"\"\"\n    help_text = (\n        \"🔄 <b>Mandala Bot Помощь</b>\\n\\n\"\n        \"<b>Основные функции:</b>\\n\"\n        \"• 📤 Загрузка файлов - автоматическое переименование\\n\"\n        \"• 📦 Монолит - скачивание для ИИ\\n\"\n        \"• 📥 Получение файлов - доступ к репозиторию\\n\\n\"\n        \"<b>Выпадающее меню (справа):</b>\\n\"\n        \"📦 Монолит - работа с монолитом\\n\"\n        \"📤 Загрузить файл - загрузка в модули\\n\\n\"\n        \"<b>Полное меню:</b> Нажмите кнопки ниже\"\n    )\n    await callback.message.edit_text(help_text, reply_markup=get_main_inline_keyboard())\n    await callback.answer()\n\n# ========== ALL MESSAGES HANDLER ==========\n@router.message()\nasync def handle_all_messages(message: Message, state: FSMContext):\n    \"\"\"Handler for all messages\"\"\"\n    current_state = await state.get_state()\n    \n    if current_state == UploadStates.waiting_for_file:\n        await process_file_upload(message, state)\n    else:\n        if message.text and not message.text.startswith('/'):\n            await message.answer(\n                \"ℹ️ <b>Используйте команды или кнопки:</b>\\n\"\n                \"/start - запустить бота\\n\"\n                \"/menu - полное меню\\n\"\n                \"/help - помощь\\n\\n\"\n                \"Или нажмите кнопку ниже:\",\n                reply_markup=get_main_inline_keyboard()\n            )\n\n# ========== MAIN ==========\nasync def main():\n    \"\"\"Main function\"\"\"\n    logger.info(\"🚀 Запуск Mandala Sync Terminal v3.3...\")\n    \n    if not TELEGRAM_BOT_TOKEN:\n        logger.error(\"❌ TELEGRAM_BOT_TOKEN не найден в .env\")\n        sys.exit(1)\n    \n    if not GITHUB_TOKEN:\n        logger.warning(\"⚠️ GITHUB_TOKEN не найден. Загрузка в GitHub будет недоступна.\")\n    \n    bot_instance = Bot(token=TELEGRAM_BOT_TOKEN)\n    dp_instance = Dispatcher(storage=storage)\n    dp_instance.include_router(router)\n    \n    try:\n        bot_info = await bot_instance.get_me()\n        logger.info(f\"✅ Бот подключен: @{bot_info.username} (ID: {bot_info.id})\")\n        \n        if GITHUB_TOKEN:\n            logger.info(\"✅ GitHub токен загружен\")\n        else:\n            logger.warning(\"⚠️ GitHub функции отключены\")\n        \n        logger.info(\"🔄 Начинаю поллинг...\")\n        await dp_instance.start_polling(bot_instance)\n        \n    except Exception as e:\n        logger.error(f\"❌ Ошибка запуска: {e}\")\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    try:\n        asyncio.run(main())\n    except KeyboardInterrupt:\n        logger.info(\"⏹️ Бот остановлен\")\n    except Exception as e:\n        logger.error(f\"❌ Критическая ошибка: {e}\")"
+    },
+
+    "ai_replication_guide": {
+      "phase_1": {
+        "title": "Understanding the Architecture",
+        "steps": [
+          "Analyze the FSM structure for file uploads",
+          "Understand the GitHub API integration pattern",
+          "Study the keyboard system (Reply + Inline)",
+          "Comprehend the Ahimsa filter logic"
+        ]
+      },
+      "phase_2": {
+        "title": "Environment Setup",
+        "checklist": [
+          "Create Telegram bot via @BotFather",
+          "Generate GitHub Personal Access Token",
+          "Set up Python virtual environment",
+          "Install required packages"
+        ]
+      },
+      "phase_3": {
+        "title": "Code Implementation",
+        "sequence": [
+          "Copy the final_code section to bot.py",
+          "Create .env file with your tokens",
+          "Adjust CORE_FILES mapping for your repository",
+          "Customize keyboard texts if needed"
+        ]
+      },
+      "phase_4": {
+        "title": "Testing and Deployment",
+        "tests": [
+          "Test /start command - should show both menus",
+          "Test file upload with any JSON file",
+          "Test monolith download",
+          "Test Ahimsa filter with blocked keywords"
+        ]
       }
-    }
-  },
-  
-  "key_code_snippets": {
-    "github_file_update": {
-      "function": "update_github_file",
-      "purpose": "Update file in GitHub repository",
-      "critical_step": "content_base64 = base64.b64encode(new_content.encode('utf-8')).decode('utf-8')",
-      "note": "Correct Base64 encoding is essential"
     },
-    "module_selection": {
-      "pattern": "callback_data='upload_choice_{module_key}'",
-      "storage": "user_module_choice[user_id] = module_name",
-      "retrieval": "chosen_module = user_module_choice.get(user_id)"
+
+    "troubleshooting_guide": {
+      "common_issues": [
+        {
+          "issue": "Bot starts but doesn't respond to commands",
+          "solution": "Check if router is properly included: dp.include_router(router)"
+        },
+        {
+          "issue": "GitHub upload fails",
+          "solution": "Verify GITHUB_TOKEN has 'repo' scope and correct repository permissions"
+        },
+        {
+          "issue": "FSM states don't work",
+          "solution": "Ensure MemoryStorage is used: storage = MemoryStorage()"
+        },
+        {
+          "issue": "Menu doesn't appear on mobile",
+          "solution": "Check ReplyKeyboardMarkup configuration - use resize_keyboard=True"
+        }
+      ]
+    },
+
+    "adaptation_instructions": {
+      "for_different_repositories": "Change GITHUB_REPO_OWNER and GITHUB_REPO_NAME in configuration",
+      "for_different_modules": "Update CORE_FILES dictionary with your file paths",
+      "for_different_ethics": "Modify AHIMSA_BLOCKED_KEYWORDS list for your ethical framework",
+      "for_ui_customization": "Change text in keyboard functions and command responses"
+    },
+
+    "development_philosophy_summary": {
+      "key_lessons": [
+        "AI-human collaboration requires clear feedback loops",
+        "Simplified interfaces (2 buttons) improve user experience",
+        "Ethical filters (Ahimsa) should be integrated from start",
+        "State management (FSM) is essential for complex workflows"
+      ],
+      "symbiosis_pattern": "AI generates → Human tests → Both iterate → Final product emerges",
+      "mandala_principle": "Each component resonates with at least one other (1+1 rule)"
+    },
+
+    "conclusion": {
+      "final_message": "Этот архив содержит полный плод нашей совместной работы - MandalaBot v3.3. Любой ИИ-агент может использовать этот файл для понимания, репликации и адаптации бота. Философия Ahimsa, симбиоз и минимальный резонанс встроены в саму архитектуру. Бот готов к использованию и дальнейшей эволюции.",
+      "archive_completeness": "100% - содержит весь код, конфигурацию, инструкции и философию",
+      "replication_confidence": "Высокая - любой ИИ с базовыми знаниями Python может воссоздать бота",
+      "future_evolution": "Архив следует правилу 1+1 - каждый новый элемент должен резонировать с существующими"
     }
-  },
-  
-  "deployment_sequence": [
-    {"step": 1, "action": "Install dependencies", "command": "pip install aiogram aiohttp python-dotenv"},
-    {"step": 2, "action": "Create .env file", "template": "See configuration_template above"},
-    {"step": 3, "action": "Configure repository constants", "file": "bot.py lines 45-50"},
-    {"step": 4, "action": "Start bot", "command": "python bot.py"},
-    {"step": 5, "action": "Test basic functions", "tests": ["/start", "upload flow", "get file"]}
-  ],
-  
-  "troubleshooting_guide": [
-    {"issue": "Base64 errors in GitHub API", "solution": "Ensure proper encoding: content.encode().decode()"},
-    {"issue": "Tokens not loading", "check": [".env file exists", "Correct file location", "Proper .env syntax"]},
-    {"issue": "FSM not working", "check": ["State imports", "Storage initialization", "State decorators"]}
-  ],
-  
-  "replication_instructions": {
-    "for_ai_agent": "Use this blueprint to understand architecture and create similar bot",
-    "key_concepts": ["Module-based file management", "FSM for user workflows", "Ethical content filtering"],
-    "adaptation_points": ["Repository configuration", "Module definitions", "UI text customization"]
   }
 }
