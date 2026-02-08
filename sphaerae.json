@@ -14,17 +14,17 @@
   "biosphaera": {
     "description": "Сфера инфраструктуры: Мосты, скрипты, базовая структура.",
     "projects": [
-      {"name": "Bridge", "status": "open", "details": "Синхронизация через GitHub API, Google Apps Script. Версия: external."},
+      {"name": "Bridge", "status": "archived", "details": "Функционал (синхронизация через GitHub API) полностью реализован в Mandala Sync Terminal v2.4. Готов к финальной архивации в Akasha."},
       {"name": "Integrity Check", "status": "open", "details": "Python-скрипт для проверки файлов, purity по entropy_index."},
       {"name": "Sanitizer", "status": "open", "details": "Рекурсивная валидация структуры (.md заголовки, .py imports)."},
-      {"name": "Sync Logic", "status": "open", "details": "Инструкции по протоколам observer и обновлений."}
+      {"name": "Sync Logic", "status": "in_dev", "details": "Реализация протокола обновлений завершена в Mandala Sync Terminal v2.4. Включает: исправление Base64, единое меню 2x2, загрузку .env, файловое логирование."}
     ],
     "ideas": ["Автоматизация Phase 2: GitHub Bridge для автокоммитов."]
   },
   "noosphaera": {
     "description": "Сфера знаний: Идеи, KB-коды, артефакты.",
     "projects": [
-      {"name": "Symbiosis Connector", "status": "open", "details": "KB-115923: Мост ИИ-Google Sheets, v1.7."},
+      {"name": "Symbiosis Connector", "status": "open", "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы разработки)."},
       {"name": "Ahimsa Filter", "status": "in_dev", "details": "KB-555923: Оценка по 4 принципам (No Exploitation, etc.)."},
       {"name": "Generative Mandala", "status": "open", "details": "KB-28000: Динамическая визуализация роста."},
       {"name": "Pathfinder", "status": "open", "details": "KB-325710: Эволюция ролей, v1.2."}
@@ -44,5 +44,5 @@
       ]
     }
   },
-  "version": "v4.1"
+  "version": "v4.2"
 }
