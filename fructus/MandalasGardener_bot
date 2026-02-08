@@ -1,0 +1,162 @@
+{
+  "project_blueprint": {
+    "project_name": "Mandala Sync Terminal",
+    "version": "v2.5",
+    "description": "Telegram bot for GitHub file synchronization with AI-human symbiosis philosophy",
+    "philosophy": ["Ahimsa (non-violence)", "Symbiosis", "Transparency"],
+    "archive_rule": "Minimal Resonance (1+1)",
+    "status": "operational",
+    "created_date": "2026-02-08",
+    "last_updated": "2026-02-08"
+  },
+  
+  "bridges_and_integrations": [
+    {
+      "bridge_name": "Telegram Bot API",
+      "technology": "aiogram 3.0.0",
+      "purpose": "Main user interface",
+      "configuration_key": "TELEGRAM_BOT_TOKEN",
+      "config_location": ".env file",
+      "critical": true,
+      "notes": "Async framework, supports FSM"
+    },
+    {
+      "bridge_name": "GitHub REST API v3",
+      "technology": "aiohttp 3.9.0",
+      "purpose": "File synchronization with repository",
+      "configuration_keys": ["GITHUB_TOKEN", "GITHUB_REPO_OWNER", "GITHUB_REPO_NAME"],
+      "critical": true,
+      "notes": "Uses base64 encoding for file content"
+    },
+    {
+      "bridge_name": "Environment Configuration",
+      "technology": "python-dotenv + .env file",
+      "purpose": "Secure credential management",
+      "critical": true,
+      "notes": "Auto-loads before bot initialization"
+    }
+  ],
+  
+  "dependencies": {
+    "core": [
+      {"library": "aiogram", "version": "3.0.0", "purpose": "Telegram Bot API framework"},
+      {"library": "aiohttp", "version": "3.9.0", "purpose": "Async HTTP requests"},
+      {"library": "python-dotenv", "version": "1.0.0", "purpose": "Environment variable management"}
+    ],
+    "python_standard": ["asyncio", "logging", "base64", "json", "os", "sys", "pathlib"]
+  },
+  
+  "module_structure": {
+    "initium.json": {
+      "version": "v4.8.1",
+      "purpose": "Core philosophy, instructions, module map",
+      "critical_for": "Initial resonance, mode selection"
+    },
+    "sphaerae.json": {
+      "version": "v4.1",
+      "purpose": "Current projects in 3 spheres (Biosphaera, Noosphaera, Cosmosphaera)",
+      "critical_for": "Development context"
+    },
+    "akasha_chronicorum.json": {
+      "version": "v4.7",
+      "purpose": "Archive of completed projects and sessions",
+      "critical_for": "Historical reference, rule 1+1"
+    },
+    "bot.py": {
+      "version": "v2.5",
+      "purpose": "Main executable bot logic",
+      "features": ["Smart upload with module selection", "FSM implementation", "Ahimsa Filter"]
+    }
+  },
+  
+  "bot_features_v2_5": [
+    {
+      "feature_name": "Smart File Upload",
+      "trigger": "📤 Загрузить файл button or /upload command",
+      "workflow": ["Module selection menu", "File reception", "Auto-renaming to module standard", "Ahimsa Filter check", "GitHub commit"],
+      "technology": "FSM (Finite State Machine)",
+      "states": ["waiting_for_module_choice", "waiting_for_file"]
+    },
+    {
+      "feature_name": "File Retrieval",
+      "trigger": "📥 Получить файл button or /get command",
+      "workflow": ["Show file list", "Handle selection", "Send as text or document"],
+      "file_types": ["JSON modules", "Script files", "Documentation"]
+    },
+    {
+      "feature_name": "Ahimsa Filter",
+      "purpose": "Content ethics validation",
+      "checks": ["No exploitation", "No coercion", "Non-violence principle"],
+      "implementation": "Keyword check in content"
+    }
+  ],
+  
+  "fsm_workflow": {
+    "state_flow": [
+      {
+        "state": "waiting_for_module_choice",
+        "trigger": "User clicks upload button",
+        "action": "Show module selection keyboard",
+        "next_state": "waiting_for_file"
+      },
+      {
+        "state": "waiting_for_file",
+        "trigger": "User selects module",
+        "action": "Cache choice, wait for file",
+        "next_state": "processing"
+      }
+    ],
+    "cache_system": "user_module_choice dictionary with user_id keys"
+  },
+  
+  "configuration_template": {
+    "env_file_example": {
+      "TELEGRAM_BOT_TOKEN": "your_bot_token_from_BotFather",
+      "GITHUB_TOKEN": "your_github_personal_access_token",
+      "GITHUB_REPO_OWNER": "repository_owner_username",
+      "GITHUB_REPO_NAME": "repository_name"
+    },
+    "code_constants": {
+      "GITHUB_API_BASE": "https://api.github.com",
+      "CORE_FILES": {
+        "initium": "initium.json",
+        "sphaerae": "sphaerae.json", 
+        "akasha": "akasha_chronicorum.json"
+      }
+    }
+  },
+  
+  "key_code_snippets": {
+    "github_file_update": {
+      "function": "update_github_file",
+      "purpose": "Update file in GitHub repository",
+      "critical_step": "content_base64 = base64.b64encode(new_content.encode('utf-8')).decode('utf-8')",
+      "note": "Correct Base64 encoding is essential"
+    },
+    "module_selection": {
+      "pattern": "callback_data='upload_choice_{module_key}'",
+      "storage": "user_module_choice[user_id] = module_name",
+      "retrieval": "chosen_module = user_module_choice.get(user_id)"
+    }
+  },
+  
+  "deployment_sequence": [
+    {"step": 1, "action": "Install dependencies", "command": "pip install aiogram aiohttp python-dotenv"},
+    {"step": 2, "action": "Create .env file", "template": "See configuration_template above"},
+    {"step": 3, "action": "Configure repository constants", "file": "bot.py lines 45-50"},
+    {"step": 4, "action": "Start bot", "command": "python bot.py"},
+    {"step": 5, "action": "Test basic functions", "tests": ["/start", "upload flow", "get file"]}
+  ],
+  
+  "troubleshooting_guide": [
+    {"issue": "Base64 errors in GitHub API", "solution": "Ensure proper encoding: content.encode().decode()"},
+    {"issue": "Tokens not loading", "check": [".env file exists", "Correct file location", "Proper .env syntax"]},
+    {"issue": "FSM not working", "check": ["State imports", "Storage initialization", "State decorators"]}
+  ],
+  
+  "replication_instructions": {
+    "for_ai_agent": "Use this blueprint to understand architecture and create similar bot",
+    "key_concepts": ["Module-based file management", "FSM for user workflows", "Ethical content filtering"],
+    "adaptation_points": ["Repository configuration", "Module definitions", "UI text customization"]
+  }
+}
