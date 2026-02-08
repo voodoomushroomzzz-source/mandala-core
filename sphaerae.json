@@ -14,36 +14,79 @@
   "biosphaera": {
     "description": "Сфера инфраструктуры: Мосты, скрипты, базовая структура.",
     "projects": [
-      {"name": "Bridge", "status": "archived", "details": "Функционал реализован во внешнем артефакте Mandala Sync Terminal Bot v2.5."},
-      {"name": "Integrity Check", "status": "in_progress", "details": "Задача актуальна. **Частично выполнена**: архитектурный аудит и очистка ядра (Initium v6.5.0) от шумовой логики (hash_verification, file_delivery_policy) проведены 2026-02-08. Остаётся реализация скрипта."},
-      {"name": "Sanitizer", "status": "open", "details": "Рекурсивная валидация структуры. Задача актуальна после обновления ядра."},
-      {"name": "Interactive Load Protocol", "status": "implemented", "details": "**Завершено 2026-02-08**. Протокол для загрузки модулей через Садовника при недоступности сервера интегрирован в Initium v6.5.0. Резонирует с принципами Ахимсы и Симбиоза."}
+      {
+        "name": "Bridge",
+        "status": "archived",
+        "details": "Функционал реализован во внешнем артефакте Mandala Sync Terminal Bot v2.5."
+      },
+      {
+        "name": "Integrity Check",
+        "status": "in_progress",
+        "details": "Задача актуальна. **Частично выполнена**: архитектурный аудит и очистка ядра (Initium v6.5.0) от шумовой логики (hash_verification, file_delivery_policy) проведены 2026-02-08. Остаётся реализация скрипта."
+      },
+      {
+        "name": "Sanitizer",
+        "status": "open",
+        "details": "Рекурсивная валидация структуры. Задача актуальна после обновления ядра."
+      },
+      {
+        "name": "Interactive Load Protocol",
+        "status": "implemented",
+        "details": "**Завершено 2026-02-08**. Протокол для загрузки модулей через Садовника при недоступности сервера интегрирован в Initium v6.5.0. Резонирует с принципами Ахимсы и Симбиоза."
+      }
     ],
-    "ideas": ["Автоматизация Phase 2: Развитие протокола в сторону более умных запросов к Садовнику."]
+    "ideas": [
+      "Автоматизация Phase 2: Развитие протокола в сторону более умных запросов к Садовнику."
+    ]
   },
   "noosphaera": {
     "description": "Сфера знаний: Идеи, KB-коды, артефакты.",
     "projects": [
-      {"name": "Symbiosis Connector", "status": "open", "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы)."},
-      {"name": "Ahimsa Filter", "status": "in_dev", "details": "KB-555923: Оценка по 4 принципам."},
-      {"name": "Generative Mandala", "status": "open", "details": "KB-28000: Динамическая визуализация роста."},
-      {"name": "Pathfinder", "status": "open", "details": "KB-325710: Эволюция ролей, v1.2."}
+      {
+        "name": "Symbiosis Connector",
+        "status": "open",
+        "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы)."
+      },
+      {
+        "name": "Ahimsa Filter",
+        "status": "in_dev",
+        "details": "KB-555923: Оценка по 4 принципам."
+      },
+      {
+        "name": "Generative Mandala",
+        "status": "open",
+        "details": "KB-28000: Динамическая визуализация роста."
+      },
+      {
+        "name": "Pathfinder",
+        "status": "open",
+        "details": "KB-325710: Эволюция ролей, v1.2."
+      }
     ],
-    "ideas": ["Digital Garden: Экосистема смыслов в Notion.", "Концепция 'Живого Ядра': Initium как адаптивный манифест."]
+    "ideas": [
+      "Digital Garden: Экосистема смыслов в Notion.",
+      "Концепция 'Живого Ядра': Initium как адаптивный манифест."
+    ]
   },
   "cosmosphaera": {
     "description": "Сфера эволюции: Планы, универсальные принципы.",
     "projects": [
-      {"name": "Tree of Symbiosis", "status": "open", "details": "KB-124210: Метафора организма (корни: Ахимса, крона: творение)."}
+      {
+        "name": "Tree of Symbiosis",
+        "status": "open",
+        "details": "KB-124210: Метафора организма (корни: Ахимса, крона: творение)."
+      }
     ],
-    "ideas": ["3D-движок: X/Y категории, Z глубина, Bloom аудит Ахимсы."],
+    "ideas": [
+      "3D-движок: X/Y категории, Z глубина, Bloom аудит Ахимсы."
+    ],
     "plans": {
       "roadmap": [
         "Phase 2: Automation (Telegram sync, schema validation). **Статус: В работе. Интерактивный протокол — первый реализованный элемент.**",
         "Phase 3: Visualization (Generative Code, Glass Style)."
       ],
-      "current_core_version": "Initium v6.5.0 (стабильное, очищенное ядро с интерактивным протоколом)"
+      "current_core_version": "Initium v6.6.1 (стабильное, очищенное ядро с интерактивным протоколом)"
     }
   },
-  "version": "v4.3"
+  "version": "v4.4"
 }
