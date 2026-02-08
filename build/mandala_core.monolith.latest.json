@@ -2,8 +2,8 @@
   "module": "Mandala Core Monolith",
   "version": "monolith-v6.6.1",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-08T13:07:49.718278+00:00",
-  "build_source": "e343aa205941d1ede3c30a17129fa390735806ca",
+  "build_timestamp": "2026-02-08T13:23:43.302178+00:00",
+  "build_source": "0415325f7110d08b8cb67fa15c0de06384f1d073",
   "source_initium": {
     "module": "Initium",
     "description": "Загрузочный модуль: Перенастройка, философия, контекст, конституция, карта. ИИ начинает здесь для резонанса. Определяет четыре онтологические роли.",
@@ -296,10 +296,10 @@
             "Phase 2: Automation (Telegram sync, schema validation). **Статус: В работе. Интерактивный протокол — первый реализованный элемент.**",
             "Phase 3: Visualization (Generative Code, Glass Style)."
           ],
-          "current_core_version": "Initium v6.5.0 (стабильное, очищенное ядро с интерактивным протоколом)"
+          "current_core_version": "Initium v6.6.1 (стабильное, очищенное ядро с интерактивным протоколом)"
         }
       },
-      "version": "v4.3"
+      "version": "v4.4"
     },
     "Akasha Chronicorum": {
       "artifact_id": "KB-BOT-MANDALA-SYNC-EVOLUTION",
