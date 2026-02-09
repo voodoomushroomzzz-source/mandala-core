@@ -4,63 +4,103 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'initium.json'        # Только при изменении ключевых файлов
+      - 'initium.json'
       - 'sphaerae.json'
       - 'akasha_chronicorum.json'
-      - 'build_monolith.py'   # И скрипта сборки
+      - 'build_monolith.py'
       - '.github/workflows/build-monolith.yml'
-  workflow_dispatch:          # Ручной запуск
+  workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *'      # Ежедневная сборка в 12:00 UTC
+    - cron: '0 12 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write         # Для коммита изменений
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0      # Полная история для git diff
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-          cache: 'pip'        # Кэширование пакетов
+          cache: 'pip'
 
-      - name: Install dependencies (если понадобятся)
+      - name: List repository files (debug)
         run: |
-          pip install --upgrade pip
+          echo "📁 Содержимое репозитория:"
+          ls -la
 
       - name: Build Monolith
         id: build
         run: |
-          echo "Сборка монолита..."
+          echo "🔄 Сборка монолита..."
           python build_monolith.py
           
-          # Проверяем, что файл создан
+          # Проверка наличия файла
           if [ ! -f "build/mandala_core.monolith.latest.json" ]; then
             echo "❌ Файл монолита не создан!"
+            echo "Содержимое папки build/:"
+            ls -la build/ 2>/dev/null || echo "Папка build/ не существует"
             exit 1
           fi
+          
+          echo "✅ Файл монолита создан"
 
       - name: Validate JSON
         run: |
-          echo "Проверка валидности JSON..."
-          python -m json.tool build/mandala_core.monolith.latest.json > /dev/null
-          echo "✅ JSON валиден"
+          echo "🔍 Проверка валидности JSON..."
           
-          # Проверка минимального размера (чтобы не был пустым)
+          # Проверяем, что это валидный JSON
+          python -c "
+          import json, sys
+          try:
+              with open('build/mandala_core.monolith.latest.json', 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+              print('✅ JSON валиден')
+              
+              # Проверяем обязательные поля
+              required = ['module', 'version', 'runtime_mode', 'embedded_modules']
+              for field in required:
+                  if field not in data:
+                      print(f'❌ Отсутствует обязательное поле: {field}')
+                      sys.exit(1)
+              
+              # Проверяем, что загружены ключевые модули
+              embedded = data.get('embedded_modules', {})
+              required_modules = ['Sphaerae', 'Akasha Chronicorum']
+              for mod in required_modules:
+                  if mod not in embedded:
+                      print(f'❌ В монолите отсутствует ключевой модуль: {mod}')
+                      sys.exit(1)
+                  elif '_error' in embedded[mod]:
+                      print(f'❌ Ошибка загрузки модуля {mod}: {embedded[mod]['_error']}')
+                      sys.exit(1)
+              
+              print(f'✅ Ключевые модули загружены: {list(embedded.keys())}')
+              
+          except json.JSONDecodeError as e:
+              print(f'❌ Ошибка JSON: {e}')
+              sys.exit(1)
+          except Exception as e:
+              print(f'❌ Ошибка при проверке: {e}')
+              sys.exit(1)
+          "
+          
+          # Проверка размера
           FILESIZE=$(stat -f%z "build/mandala_core.monolith.latest.json" 2>/dev/null || stat -c%s "build/mandala_core.monolith.latest.json")
-          if [ "$FILESIZE" -lt 1000 ]; then
+          echo "📏 Размер файла: $FILESIZE байт"
+          
+          if [ "$FILESIZE" -lt 5000 ]; then
             echo "❌ Файл монолита слишком мал ($FILESIZE байт)"
             exit 1
           fi
-          echo "📏 Размер файла: $FILESIZE байт"
 
       - name: Check for changes
         id: git-check
@@ -68,7 +108,10 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
-          # Проверяем изменения ТОЛЬКО в build/
+          # Создаем папку build, если её нет (для первого запуска)
+          mkdir -p build
+          
+          # Проверяем изменения
           if git diff --quiet HEAD -- build/; then
             echo "✅ Нет изменений в папке build/"
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -90,18 +133,38 @@ jobs:
         run: |
           echo "🚀 Коммит и пуш изменений..."
           
-          # Добавляем ТОЛЬКО файлы в build/
+          # Добавляем папку build
           git add build/
           
-          # Создаём осмысленное сообщение коммита
+          # Создаём сообщение коммита
           COMMIT_MSG="🤖 Авто-сборка монолита"
           COMMIT_MSG+="\n\nВерсия: $(date +'%Y-%m-%d %H:%M:%S UTC')"
           COMMIT_MSG+="\nSHA: ${{ github.sha }}"
           COMMIT_MSG+="\nWorkflow: ${{ github.workflow }}"
           
-          git commit -m "$COMMIT_MSG"
+          # Информация о загруженных модулях
+          if [ -f "build/mandala_core.monolith.latest.json" ]; then
+            MODULES=$(python -c "
+            import json
+            try:
+                with open('build/mandala_core.monolith.latest.json', 'r') as f:
+                    data = json.load(f)
+                modules = data.get('embedded_modules', {})
+                print(f'Загружено модулей: {len(modules)}')
+                for name, mod in modules.items():
+                    if '_error' in mod:
+                        print(f'  ❌ {name}: Ошибка')
+                    elif '_type' in mod and mod['_type'] == 'directory':
+                        print(f'  📁 {name}: папка')
+                    else:
+                        print(f'  ✅ {name}: успешно')
+            except:
+                print('Не удалось проанализировать монолит')
+            ")
+            COMMIT_MSG+="\n\n$MODULES"
+          fi
           
-          # Безопасный пуш с токеном
+          git commit -m "$COMMIT_MSG"
           git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
