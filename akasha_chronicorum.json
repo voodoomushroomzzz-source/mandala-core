@@ -128,10 +128,10 @@
         "solution": "Использовать raw.githubusercontent.com URL вместо blob URL. Логика преобразования: github.com → raw.githubusercontent.com, /blob/ → /",
         "code_example": "def github_to_raw_url(github_url):\n    return github_url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')",
         "ai_checklist": [
-          "✓ Проверить, используются ли raw.githubusercontent.com URL",
-          "✓ Убедиться, что файлы существуют локально в репозитории",
-          "✓ Проверить права доступа и токены GitHub",
-          "✓ Добавить принудительное обновление версии монолита"
+          "✔ Проверить, используются ли raw.githubusercontent.com URL",
+          "✔ Убедиться, что файлы существуют локально в репозитории",
+          "✔ Проверить права доступа и токены GitHub",
+          "✔ Добавить принудительное обновление версии монолита"
         ],
         "date_encountered": "2026-02-09",
         "date_solved": "2026-02-09",
@@ -140,7 +140,7 @@
         "preventive_measures": "Всегда использовать raw.githubusercontent.com при работе с GitHub API в CI/CD"
       }
     ],
-    "last_updated": "2026-02-09T23:50:00Z"
+    "last_updated": "2026-02-09T23:55:00Z"
   },
   "link_standards": {
     "artifact": "artifact://{module}/{id}/{version}",
@@ -150,13 +150,13 @@
     "directive": "directive://{id}"
   },
   "integrity_check": {
-    "last_run": "2026-02-09T23:50:00Z",
+    "last_run": "2026-02-09T23:55:00Z",
     "issues_found": 0,
     "modules_linked": 3,
     "cross_references": 15,
     "validation_status": "passed"
   },
-  "version": "v2.3",
-  "last_updated": "2026-02-09T23:50:00Z",
-  "update_purpose": "Добавлен раздел external_services_insights с решением проблемы автосборки монолита"
+  "version": "v2.3.1",
+  "last_updated": "2026-02-09T23:55:00Z",
+  "update_purpose": "Исправление символов в ai_checklist для корректной работы сборки монолита"
 }
