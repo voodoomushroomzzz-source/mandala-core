@@ -6,7 +6,8 @@
       "1. Только Архитектор может модифицировать этот модуль.",
       "2. Artifacts — готовые решения (фрукты). Roadmap — контекст 3 последних сессий.",
       "3. При обновлении удаляй устаревшие артефакты (оставляй только актуальные).",
-      "4. Roadmap должен содержать кристаллы — самые ценные инсайты без шума."
+      "4. Roadmap должен содержать кристаллы — самые ценные инсайты без шума.",
+      "5. Новые артефакты добавлять с полным соответствием формату фруктов."
     ]
   },
   "artifacts": [
@@ -19,8 +20,67 @@
         "fructus/bot_upgrade_guide_3.3_to_3.4_20250209_123456.json"
       ],
       "description": "Добавлена возможность загрузки артефактов в папку fructus. Функции: уникальные имена файлов, метаданные, автоматическая классификация, Ahimsa-проверка. Обновлённый код готов к деплою."
+    },
+    {
+      "id": "MANDALA-BOT-V3.13-FRUCTUS",
+      "name": "MandalaBot v3.13 - Фрукт интеллектуальной Ахимсы",
+      "type": "mandala_bot_complete",
+      "created": "2026-02-09",
+      "files": [
+        "fructus/mandala_bot_v3.13_complete_fruit_20250209_221523.json"
+      ],
+      "description": "Полный фрукт бота v3.13 с интеллектуальным Ahimsa-фильтром. Ключевые улучшения: фильтр игнорирует код, проверяет только текстовый контент, исправлены все ошибки, гибридное меню. Готов к деплою.",
+      "resonance_score": 99,
+      "status": "актуальный"
     }
   ],
+  "fructus_packaging_guide": {
+    "purpose": "Стандартизация формата фруктов для единообразия и удобства работы ИИ",
+    "required_sections": [
+      "_fructus_metadata",
+      "fruit_identity",
+      "philosophical_context",
+      "problem_solution_matrix",
+      "technical_specifications",
+      "complete_source_code (если применимо)",
+      "deployment_instructions",
+      "test_scenarios",
+      "ahimsa_compliance_report",
+      "evolutionary_context",
+      "ai_replication_guide",
+      "mandala_core_integration",
+      "quality_metrics",
+      "final_verification",
+      "closing_manifesto"
+    ],
+    "metadata_requirements": {
+      "original_filename": "строка",
+      "generated_filename": "строка с timestamp",
+      "file_type": "тип артефакта (mandala_bot, module_update, core_patch и т.д.)",
+      "upload_timestamp": "ISO 8601",
+      "uploaded_by": "источник создания",
+      "purpose": "краткое описание назначения",
+      "ai_readability_score": "число 0-100",
+      "resonance_with_core": "число 0-100"
+    },
+    "quality_standards": {
+      "ai_readability_min": 85,
+      "resonance_min": 90,
+      "structure_completeness": "все обязательные разделы заполнены",
+      "test_coverage": "минимум 3 тестовых сценария",
+      "ahimsa_compliance": "полное соответствие или детальный отчет о проверке"
+    },
+    "packaging_process": [
+      "1. Собрать все компоненты артефакта (код, документация, тесты)",
+      "2. Проверить через линзу Ахимсы",
+      "3. Заполнить все обязательные разделы",
+      "4. Убедиться в соответствии quality_standards",
+      "5. Сгенерировать уникальное имя файла с timestamp",
+      "6. Сохранить в формате JSON с отступами 2 пробела",
+      "7. Добавить запись в Akasha Chronicorum artifacts"
+    ],
+    "example": "См. fructus/mandala_bot_v3.13_complete_fruit_20250209_221523.json"
+  },
   "roadmap": [
     {
       "date": "2026-02-07",
@@ -28,7 +88,7 @@
       "context_gems": [
         "Критическое уточнение GD-03 для предотвращения авто-генерации кода",
         "Введение GD-04 (Принцип сжатой коммуникации) для снижения когнитивной нагрузки",
-        "Адаптация формулировок для однозначного понимания ИИ"
+        "Адаптация формулировок для одноз начного понимания ИИ"
       ],
       "checkpoints": [
         "Обновлён Initium до v6.6.3",
@@ -54,20 +114,20 @@
     },
     {
       "date": "2026-02-09",
-      "focus": "бот v3.4 & fructus",
+      "focus": "бот v3.13 & стандартизация фруктов",
       "context_gems": [
-        "Добавление поддержки fructus — папки для артефактов",
-        "Чёткое разделение: Sphaerae (проекты) vs Akasha (готовые артефакты)",
-        "Оптимизация структур для ИИ-восприятия (кристаллы вместо шума)"
+        "Разработка интеллектуального Ahimsa-фильтра (игнорирует код, проверяет контекст)",
+        "Создание стандарта упаковки фруктов для единообразия",
+        "Интеграция умной проверки в рабочий процесс"
       ],
       "checkpoints": [
-        "Обновлён MandalaBot до v3.4 с поддержкой fructus",
-        "Добавлена папка fructus в core_map Initium",
-        "Переименован проект в Sphaerae: Kortix → MandalaBot_Deepseek_Kortex_Gardener",
-        "Обновлена структура Akasha Chronicorum (artifacts + roadmap)"
+        "Создан MandalaBot v3.13 с интеллектуальным Ahimsa-фильтром",
+        "Разработан стандарт упаковки фруктов",
+        "Добавлен фрукт в архив (Fructus)",
+        "Обновлён Akasha Chronicorum с инструкцией по упаковке"
       ],
-      "next_perspective": "Интеграция AI Worker и автоматизация проактивного управления"
+      "next_perspective": "Автоматизация создания фруктов через бота"
     }
   ],
-  "version": "v2.0"
+  "version": "v2.1"
 }
