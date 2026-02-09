@@ -1,9 +1,9 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-v6.6.5-436b3ea5",
+  "version": "monolith-v6.6.5-bddd5411",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-09T22:32:04.617517+00:00",
-  "build_source": "ba4f7dda43d99bc0a71a9793c312e3f23ab18f3b",
+  "build_timestamp": "2026-02-09T22:45:57.470692+00:00",
+  "build_source": "71c253304391a1385952b4847e7177eb8a026b85",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -516,14 +516,15 @@
     },
     "Akasha Chronicorum": {
       "module": "Akasha Chronicorum",
-      "description": "Архив готовых артефактов (фруктов) и руководств по упаковке. Хранит только завершённые проекты (фрукты) и стандарты.",
+      "description": "Архив готовых артефактов (фруктов), стандартов упаковки и инсайтов о внешних сервисах. Хранит только завершённые проекты и решения сложных проблем.",
       "instructions": {
         "for_sr": [
           "1. Только Архитектор может модифицировать этот модуль.",
           "2. Artifacts — готовые решения (фрукты).",
           "3. При обновлении удаляй устаревшие артефакты (оставляй только актуальные).",
           "4. Новые артефакты добавлять с полным соответствием формату фруктов (fructus_packaging_guide).",
-          "5. Кристаллы и roadmap теперь находятся в Sphaerae (раздел session_crystals)."
+          "5. Кристаллы и roadmap теперь находятся в Sphaerae (раздел session_crystals).",
+          "6. Раздел external_services_insights содержит решения проблем с внешними сервисами. Используй его при аналогичных проблемах."
         ]
       },
       "artifact_lifecycle": {
@@ -626,6 +627,37 @@
         },
         "validation_script": "check_fructus_compliance.py (в разработке)"
       },
+      "external_services_insights": {
+        "purpose": "Сборник решений сложных проблем с внешними сервисами, на которые потрачено >5 запросов. Для использования ИИ при аналогичных проблемах.",
+        "ai_instructions": "При столкновении с проблемой внешнего сервиса (GitHub Actions, API, интеграции) проверь этот раздел. Если проблема похожа, примени готовое решение. Если нет — решай и добавь новую запись.",
+        "entries": [
+          {
+            "id": "ESI-001",
+            "service": "GitHub Actions + GitHub API",
+            "problem": "Автосборка монолита не работает: скрипт не может загрузить модули из GitHub URL",
+            "symptoms": [
+              "Workflow проходит, но монолит не обновляется",
+              "Скрипт не находит файлы по blob URL",
+              "Ошибка: 'No file matched' при кэшировании pip"
+            ],
+            "root_cause": "В GitHub Actions окружении нужно использовать raw.githubusercontent.com для загрузки файлов или работать с локальной копией репозитория",
+            "solution": "Использовать raw.githubusercontent.com URL вместо blob URL. Логика преобразования: github.com → raw.githubusercontent.com, /blob/ → /",
+            "code_example": "def github_to_raw_url(github_url):\n    return github_url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')",
+            "ai_checklist": [
+              "✔ Проверить, используются ли raw.githubusercontent.com URL",
+              "✔ Убедиться, что файлы существуют локально в репозитории",
+              "✔ Проверить права доступа и токены GitHub",
+              "✔ Добавить принудительное обновление версии монолита"
+            ],
+            "date_encountered": "2026-02-09",
+            "date_solved": "2026-02-09",
+            "complexity_level": "medium",
+            "requests_spent": 7,
+            "preventive_measures": "Всегда использовать raw.githubusercontent.com при работе с GitHub API в CI/CD"
+          }
+        ],
+        "last_updated": "2026-02-09T23:55:00Z"
+      },
       "link_standards": {
         "artifact": "artifact://{module}/{id}/{version}",
         "project": "project://{sphere}/{name}",
@@ -634,15 +666,15 @@
         "directive": "directive://{id}"
       },
       "integrity_check": {
-        "last_run": "2026-02-09T23:15:00Z",
+        "last_run": "2026-02-09T23:55:00Z",
         "issues_found": 0,
         "modules_linked": 3,
         "cross_references": 15,
         "validation_status": "passed"
       },
-      "version": "v2.2.1",
-      "last_updated": "2026-02-09T23:15:00Z",
-      "update_purpose": "Очистка: удалён раздел roadmap, оставлены только артефакты и руководства. Кристаллы перенесены в Sphaerae.session_crystals."
+      "version": "v2.3.1",
+      "last_updated": "2026-02-09T23:55:00Z",
+      "update_purpose": "Исправление символов в ai_checklist для корректной работы сборки монолита"
     }
   },
   "build_info": {
@@ -652,8 +684,7 @@
       "Akasha Chronicorum"
     ],
     "failed_modules": [],
-    "total_modules": 3,
-    "required_modules_loaded": true
+    "required_modules_ok": true
   },
-  "runtime_instruction": "Система загружена из монолита. Все модули доступны в embedded_modules."
+  "runtime_instruction": "Система загружена из монолита."
 }
