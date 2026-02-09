@@ -1,13 +1,13 @@
 {
   "module": "Akasha Chronicorum",
-  "description": "Архив готовых артефактов (фруктов) и краткий roadmap последних сессий. Файлы артефактов хранятся в папке fructus/.",
+  "description": "Архив готовых артефактов (фруктов) и руководств по упаковке. Хранит только завершённые проекты (фрукты) и стандарты.",
   "instructions": {
     "for_sr": [
       "1. Только Архитектор может модифицировать этот модуль.",
-      "2. Artifacts — готовые решения (фрукты). Roadmap — контекст 3 последних сессий.",
+      "2. Artifacts — готовые решения (фрукты).",
       "3. При обновлении удаляй устаревшие артефакты (оставляй только актуальные).",
-      "4. Roadmap должен содержать кристаллы — самые ценные инсайты без шума.",
-      "5. Новые артефакты добавлять с полным соответствием формату фруктов."
+      "4. Новые артефакты добавлять с полным соответствием формату фруктов (fructus_packaging_guide).",
+      "5. Кристаллы и roadmap теперь находятся в Sphaerae (раздел session_crystals)."
     ]
   },
   "artifact_lifecycle": {
@@ -110,34 +110,6 @@
     },
     "validation_script": "check_fructus_compliance.py (в разработке)"
   },
-  "roadmap": {
-    "generation_method": "auto_from_sphaerae",
-    "last_generated": "2026-02-09T22:45:00Z",
-    "crystals": [
-      {
-        "date": "2026-02-07",
-        "insight": "Критическое уточнение GD-03 предотвращает авто-генерацию кода без явного запроса",
-        "impact": "повышение безопасности и контроля"
-      },
-      {
-        "date": "2026-02-08",
-        "insight": "Интерактивный протокол загрузки реализует симбиоз ИИ-человек",
-        "impact": "усиление резонанса и взаимопонимания"
-      },
-      {
-        "date": "2026-02-09",
-        "insight": "Интеллектуальный Ahimsa-фильтр игнорирует код, проверяя только контекст",
-        "impact": "повышение эффективности проверок"
-      }
-    ],
-    "progress_metrics": {
-      "phase2_automation": 75,
-      "modules_standardized": 3,
-      "artifacts_published": 1,
-      "integrity_score": 92
-    },
-    "next_automatic_update": "2026-02-10T12:00:00Z"
-  },
   "link_standards": {
     "artifact": "artifact://{module}/{id}/{version}",
     "project": "project://{sphere}/{name}",
@@ -146,13 +118,13 @@
     "directive": "directive://{id}"
   },
   "integrity_check": {
-    "last_run": "2026-02-09T22:45:00Z",
+    "last_run": "2026-02-09T23:15:00Z",
     "issues_found": 0,
     "modules_linked": 3,
     "cross_references": 15,
     "validation_status": "passed"
   },
-  "version": "v2.2",
-  "last_updated": "2026-02-09T22:45:00Z",
-  "update_purpose": "Полная оптимизация: стандартизация, автоматизация roadmap, система версионирования"
+  "version": "v2.2.1",
+  "last_updated": "2026-02-09T23:15:00Z",
+  "update_purpose": "Очистка: удалён раздел roadmap, оставлены только артефакты и руководства. Кристаллы перенесены в Sphaerae.session_crystals."
 }
