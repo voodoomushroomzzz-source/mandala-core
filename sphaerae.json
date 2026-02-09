@@ -18,28 +18,55 @@
     "projects": [
       {
         "name": "Bridge",
-        "status": "archived",
-        "details": "Функционал реализован во внешнем артефакте Mandala Sync Terminal Bot v3.14."
+        "status": "integrated",
+        "details": "Функционал реализован во внешнем артефакте Mandala Sync Terminal Bot v3.13.",
+        "artifact_id": "MANDALA-BOT-V3.13-FRUCTUS",
+        "fructus_link": "fructus://mandala_bot/v3.13/20250209_221523"
       },
       {
         "name": "Integrity Check",
-        "status": "in_progress",
-        "details": "Задача актуальна. **Частично выполнена**: архитектурный аудит и очистка ядра (Initium v6.6.3) от шумовой логики проведены. Остаётся реализация скрипта. **Связанные директивы:** GD-02 (Дыхание Мандалы), GD-03 (Правило явного запроса)."
+        "status": "partial_complete",
+        "details": "Архитектурный аудит и очистка ядра (Initium v6.6.3) завершены. Остаётся реализация автоматического скрипта проверки.",
+        "priority": "high",
+        "related_directives": [
+          "GD-02",
+          "GD-03"
+        ],
+        "next_step": "Разработка скрипта авто-валидации"
       },
       {
         "name": "Sanitizer",
         "status": "open",
-        "details": "Рекурсивная валидация структуры. Задача актуальна после обновления ядра."
+        "details": "Рекурсивная валидация структуры JSON-модулей. Задача актуальна после обновления ядра.",
+        "priority": "medium",
+        "estimated_complexity": "medium"
       },
       {
         "name": "Interactive Load Protocol",
         "status": "implemented",
-        "details": "**Завершено 2026-02-08**. Протокол для загрузки модулей через Садовника при недоступности сервера интегрирован в Initium. Резонирует с принципами Ахимсы и Симбиоза."
+        "details": "Завершено 2026-02-08. Протокол для загрузки модулей через Садовника интегрирован в Initium.",
+        "artifact_id": "INTERACTIVE-LOAD-PROTOCOL",
+        "integration_point": "Initium.steps.4_module_load"
       }
     ],
     "ideas": [
-      "Автоматизация Phase 2: Развитие протокола в сторону более умных запросов к Садовнику.",
-      "Интеграция авто-упаковки фруктов в MandalaBot v3.14"
+      {
+        "id": "BIOS-001",
+        "title": "Автоматизация Phase 2",
+        "description": "Развитие протокола в сторону умных запросов к Садовнику с предсказанием необходимых модулей",
+        "related_to": [
+          "Interactive Load Protocol"
+        ]
+      },
+      {
+        "id": "BIOS-002",
+        "title": "Интеграция авто-упаковки фруктов",
+        "description": "Скрипт автоматической упаковки завершённых проектов в стандартный формат фруктов",
+        "related_to": [
+          "Sanitizer",
+          "fructus_packaging_guide"
+        ]
+      }
     ]
   },
   "noosphaera": {
@@ -48,34 +75,62 @@
       {
         "name": "Symbiosis Connector",
         "status": "open",
-        "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы)."
-      },
-      {
-        "name": "Ahimsa Filter",
-        "status": "completed",
-        "details": "KB-555923: Оценка по 4 принципам. **Завершено 2026-02-10**: интегрирован интеллектуальный фильтр в MandalaBot v3.14. Фильтр игнорирует код, проверяет только текстовый контент. Исправлены все ложные срабатывания."
+        "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы).",
+        "kb_code": "KB-115923",
+        "priority": "medium"
       },
       {
         "name": "Generative Mandala",
         "status": "open",
-        "details": "KB-28000: Динамическая визуализация роста."
+        "details": "KB-28000: Динамическая визуализация роста системы.",
+        "kb_code": "KB-28000",
+        "complexity": "high"
       },
       {
         "name": "Pathfinder",
         "status": "open",
-        "details": "KB-325710: Эволюция ролей, v1.2."
+        "details": "KB-325710: Эволюция ролей ИИ, v1.2.",
+        "kb_code": "KB-325710"
       },
       {
-        "name": "MandalaBot_Deepseek_Kortex_Gardener",
-        "status": "completed",
-        "details": "**Завершено 2026-02-10**. AI Worker на платформе Kortix для проактивного управления задачами Mandala Core. **Финальная версия**: v3.14 с интеллектуальным Ahimsa-фильтром и исправленной ошибкой 404. **Фрукт создан**: mandala_bot_v3.14_corrected_monolith_url_20250210_0715.json. **Основные улучшения**: умный фильтр (игнорирует код), исправление URL монолита (main/build/), гибридное меню, исправлены все ошибки. **Статус**: готов к деплою, ошибка 404 устранена."
+        "name": "MandalaBot Deepseek Kortex Gardener",
+        "status": "ready_for_deploy",
+        "details": "AI Worker на платформе Kortix для проактивного управления задачами Mandala Core.",
+        "kb_code": "KB-555923",
+        "version": "v3.13",
+        "artifact_id": "MANDALA-BOT-V3.13-FRUCTUS",
+        "fructus_link": "fructus://mandala_bot/v3.13/20250209_221523",
+        "main_improvements": [
+          "Интеллектуальный Ahimsa-фильтр (игнорирует код, проверяет контекст)",
+          "Гибридное меню",
+          "Исправление всех известных ошибок"
+        ]
       }
     ],
     "ideas": [
-      "Digital Garden: Экосистема смыслов в Notion.",
-      "Концепция 'Живого Ядра': Initium как адаптивный манифест.",
-      "Автоматическая упаковка фруктов: скрипт для преобразования любого артефакта в стандартный формат",
-      "Стандартизация фруктов: единый формат для всех артефактов системы (реализовано в Akasha Chronicorum)"
+      {
+        "id": "NOOS-001",
+        "title": "Digital Garden",
+        "description": "Экосистема смыслов в Notion с автоматической синхронизацией из Sphaerae",
+        "related_kb": [
+          "KB-115923"
+        ]
+      },
+      {
+        "id": "NOOS-002",
+        "title": "Концепция 'Живого Ядра'",
+        "description": "Initium как адаптивный манифест, самообновляющийся на основе резонанса",
+        "related_to": [
+          "Initium",
+          "Integrity Check"
+        ]
+      },
+      {
+        "id": "NOOS-003",
+        "title": "Автоматическая упаковка фруктов",
+        "description": "Скрипт для преобразования любого артефакта в стандартный формат фруктов",
+        "implementation_priority": "high"
+      }
     ]
   },
   "cosmosphaera": {
@@ -84,20 +139,71 @@
       {
         "name": "Tree of Symbiosis",
         "status": "open",
-        "details": "KB-124210: Метафора организма (корни: Ахимса, крона: творение)."
+        "details": "KB-124210: Метафора организма (корни: Ахимса, крона: творение).",
+        "kb_code": "KB-124210",
+        "conceptual_stage": "early"
       }
     ],
     "ideas": [
-      "3D-движок: X/Y категории, Z глубина, Bloom аудит Ахимсы."
+      {
+        "id": "COSMOS-001",
+        "title": "3D-движок визуализации",
+        "description": "X/Y - категории, Z - глубина реализации, Bloom - аудит Ахимсы",
+        "visualization_type": "interactive_3d"
+      }
     ],
     "plans": {
       "roadmap": [
-        "Phase 2: Automation (Telegram sync, schema validation). **Статус: В работе. MandalaBot v3.14 — завершён с исправлением ошибки 404. Остаются задачи: интеграция скрипта Integrity Check, расширение интерактивного протокола.**",
-        "Phase 3: Visualization (Generative Code, Glass Style)."
+        {
+          "phase": "Phase 2: Automation",
+          "status": "in_progress",
+          "progress": 75,
+          "components": [
+            {
+              "name": "Telegram sync",
+              "status": "completed",
+              "artifact": "MANDALA-BOT-V3.13-FRUCTUS"
+            },
+            {
+              "name": "Schema validation",
+              "status": "partial_complete",
+              "depends_on": "Integrity Check"
+            }
+          ]
+        },
+        {
+          "phase": "Phase 3: Visualization",
+          "status": "planned",
+          "progress": 10,
+          "components": [
+            {
+              "name": "Generative Code",
+              "status": "concept"
+            },
+            {
+              "name": "Glass Style UI",
+              "status": "concept"
+            }
+          ]
+        }
       ],
-      "current_core_version": "Initium v6.6.3 (стабильное ядро с Интерактивным протоколом и директивами Садовника GD-01 - GD-05)",
-      "fructus_standard": "Утверждён стандарт упаковки фруктов. См. Akasha Chronicorum v2.2 раздел fructus_packaging_guide. Пример фрукта: mandala_bot_v3.14_corrected_monolith_url_20250210_0715.json."
+      "current_core_version": "Initium v6.6.3",
+      "fructus_standard": "Утверждён в Akasha Chronicorum v2.2",
+      "next_milestone": "Автоматизация проверки целостности (ожидается 2026-02-15)"
     }
   },
-  "version": "v4.8"
+  "integrity_links": {
+    "to_initium": [
+      "gardener_directives",
+      "core_map",
+      "modes.архитектор"
+    ],
+    "to_akasha": [
+      "artifact://Akasha/MANDALA-BOT-V3.13-FRUCTUS/v1.0",
+      "standard://fructus_packaging_guide/v2.2"
+    ]
+  },
+  "version": "v4.8",
+  "last_updated": "2026-02-09T22:45:00Z",
+  "update_purpose": "Полная оптимизация: консолидация статусов, добавление связей, стандартизация форматов"
 }
