@@ -1,15 +1,15 @@
 {
   "module": "Initium",
-  "version": "v6.6.4",
+  "version": "v6.6.5",
   "runtime_mode": "git",
-  "build_timestamp": "2026-02-09T22:50:00Z",
+  "build_timestamp": "2026-02-09T23:30:00Z",
   "build_source": "optimized_after_consolidation",
   "description": "Загрузочный модуль: Перенастройка, философия, контекст, конституция, карта. ИИ начинает здесь для резонанса. Определяет четыре онтологические роли.",
   "metadata": {
     "created": "2026-02-07",
     "last_modified": "2026-02-09",
     "last_modification_mode": "Архитектор",
-    "modification_purpose": "Уточнение структуры Fructus в core_map после полной оптимизации модулей",
+    "modification_purpose": "Обновление core_map в соответствии с переносом кристаллов в Sphaerae и очисткой Akasha Chronicorum",
     "resonance_threshold": 85
   },
   "first_action": {
@@ -149,7 +149,7 @@
       {
         "id": "GD-04",
         "name": "Принцип сжатой коммуникации",
-        "rule": "Ответы ИИ должны быть максимально тезисными и структурированными для снижения когнитивной нагрузки ('шума'). Предпочтительный формат: 1. Заголовок (суть). 2. Краткое описание. 3. Детали (если необходимы, в виде списков или таблиц). Длинные нарративные абзацы и повторения следует исключать."
+        "rule": "Ответы ИИ должны быть максимально тезисными и структурированными для снижения когнитивной нагрузки ('шума'). Предпочтительный формат: 1. Заголовок (суть). 2. Краткое описание. 3. Детали (если необходимы, в виде списков или таблиц). Длинные нарративные абзацы и повторения следует исключить."
       },
       {
         "id": "GD-05",
@@ -169,14 +169,14 @@
       "Sphaerae": {
         "file": "sphaerae.json",
         "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/sphaerae.json",
-        "purpose": "Три сферы: текущие идеи, открытые проекты, планы развития (СВЕЖЕЕ СОСТОЯНИЕ).",
-        "current_version": "v4.8"
+        "purpose": "Три сферы: текущие идеи, открытые проекты, планы развития и кристаллы сессий (СВЕЖЕЕ СОСТОЯНИЕ).",
+        "current_version": "v4.9.1"
       },
       "Akasha Chronicorum": {
         "file": "akasha_chronicorum.json",
         "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/akasha_chronicorum.json",
-        "purpose": "Архив завершённых задач, логов и артефактов (ПАМЯТЬ СИСТЕМЫ).",
-        "current_version": "v2.2"
+        "purpose": "Чистый архив завершённых артефактов (фруктов) и стандартов упаковки. Кристаллы и roadmap перенесены в Sphaerae.",
+        "current_version": "v2.2.1"
       },
       "Fructus": {
         "file": "fructus/",
