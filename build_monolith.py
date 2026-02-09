@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Mandala Core Monolith Builder (стабильная версия).
-С улучшенной обработкой ошибок и отладкой.
+Mandala Core Monolith Builder (исправленная версия 2.0).
+С упрощённой логикой извлечения путей и принудительным обновлением версии.
 """
 
 import json
 import os
 import sys
+import hashlib
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,20 +29,29 @@ def log(message: str, level: str = "INFO"):
 def extract_relative_path(github_url: str) -> Optional[str]:
     """
     Извлекает относительный путь из GitHub URL.
-    Обрабатывает форматы: /blob/main/, /tree/main/, /raw/main/
+    Упрощённая логика для URL формата GitHub.
     """
-    patterns = ["/blob/main/", "/tree/main/", "/raw/main/"]
+    # Пример URL: https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/sphaerae.json
+    
+    if "github.com" not in github_url:
+        return None
+    
+    # Ищем паттерн /blob/main/ или /tree/main/
+    patterns = ["/blob/main/", "/tree/main/"]
     
     for pattern in patterns:
         if pattern in github_url:
-            return github_url.split(pattern)[-1]
+            path = github_url.split(pattern)[-1]
+            # Если это папка, убедимся, что путь заканчивается на /
+            if pattern == "/tree/main/" and not path.endswith('/'):
+                path += '/'
+            return path
     
-    # Пробуем извлечь путь после имени репозитория
-    if "github.com" in github_url:
-        parts = github_url.split("github.com/")[-1].split("/")
-        if len(parts) >= 3:
-            # Пропускаем user/repo
-            return "/".join(parts[2:])
+    # Если паттерны не найдены, пробуем извлечь путь после репозитория
+    parts = github_url.split("github.com/")[-1].split("/")
+    if len(parts) >= 3:
+        # Пропускаем user/repo (первые две части)
+        return "/".join(parts[2:])
     
     return None
 
@@ -68,7 +78,7 @@ def load_json_from_repo(relative_path: str) -> Dict[str, Any]:
 def fetch_url_content(url: str) -> str:
     """Загружает содержимое по URL (для внешних ресурсов)."""
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'MandalaCoreBuilder/1.1'})
+        req = urllib.request.Request(url, headers={'User-Agent': 'MandalaCoreBuilder/2.0'})
         with urllib.request.urlopen(req, timeout=20) as response:
             return response.read().decode('utf-8')
     except Exception as e:
@@ -83,6 +93,9 @@ def build_monolith() -> Dict[str, Any]:
     initium_path = REPO_ROOT / "initium.json"
     if not initium_path.exists():
         raise FileNotFoundError("Файл initium.json не найден в корне репозитория")
+    
+    log(f"Рабочая директория: {REPO_ROOT}")
+    log(f"Файлы в корне: {list(REPO_ROOT.glob('*.json'))}")
     
     # Загружаем ядро
     initium = load_json_from_repo("initium.json")
@@ -105,6 +118,8 @@ def build_monolith() -> Dict[str, Any]:
         
         if "github_url" in info:
             github_url = info["github_url"]
+            log(f"  URL: {github_url}")
+            
             relative_path = extract_relative_path(github_url)
             
             if not relative_path:
@@ -114,9 +129,11 @@ def build_monolith() -> Dict[str, Any]:
                 failed_modules.append(name)
                 continue
             
+            log(f"  Относительный путь: {relative_path}")
+            
             # Если это папка
             if relative_path.endswith('/'):
-                log(f"Модуль {name} - это папка: {relative_path}")
+                log(f"  Модуль {name} - это папка")
                 embedded_modules[name] = {
                     "_type": "directory",
                     "_path": relative_path,
@@ -128,10 +145,10 @@ def build_monolith() -> Dict[str, Any]:
             try:
                 module_data = load_json_from_repo(relative_path)
                 embedded_modules[name] = module_data
-                log(f"Модуль {name} успешно загружен из {relative_path}")
+                log(f"  Модуль {name} успешно загружен")
             except Exception as e:
                 error_msg = str(e)
-                log(f"Ошибка загрузки модуля {name}: {error_msg}", "ERROR")
+                log(f"  Ошибка загрузки модуля {name}: {error_msg}", "ERROR")
                 embedded_modules[name] = {
                     "_error": error_msg,
                     "_url": github_url,
@@ -160,10 +177,13 @@ def build_monolith() -> Dict[str, Any]:
     if failed_modules:
         log(f"Модулей с ошибками: {len(failed_modules)}: {failed_modules}", "WARNING")
     
-    # Формируем монолит
+    # Формируем монолит с уникальной версией
+    current_time = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+    version_hash = hashlib.md5(current_time.encode()).hexdigest()[:8]
+    
     monolith = {
         "module": "Mandala Core Monolith",
-        "version": f"monolith-{initium.get('version', 'unknown')}",
+        "version": f"monolith-{initium.get('version', 'unknown')}-{version_hash}",
         "runtime_mode": "monolith",
         "build_timestamp": datetime.now(timezone.utc).isoformat(),
         "build_source": os.getenv("GITHUB_SHA", "local"),
@@ -172,7 +192,8 @@ def build_monolith() -> Dict[str, Any]:
         "build_info": {
             "successful_modules": [name for name in embedded_modules if "_error" not in embedded_modules[name]],
             "failed_modules": failed_modules,
-            "total_modules": len(embedded_modules)
+            "total_modules": len(embedded_modules),
+            "required_modules_loaded": all(mod in embedded_modules and "_error" not in embedded_modules[mod] for mod in REQUIRED_MODULES)
         },
         "runtime_instruction": "Система загружена из монолита. Все модули доступны в embedded_modules. Предлагая изменения, ссылайся на исходные файлы из source_initium.core_map."
     }
@@ -184,8 +205,6 @@ def main():
     try:
         # Создаем папку build
         BUILD_DIR.mkdir(exist_ok=True)
-        log(f"Рабочая директория: {REPO_ROOT}")
-        log(f"Файлы в корне: {list(REPO_ROOT.glob('*.json'))}")
         
         # Сборка
         monolith = build_monolith()
@@ -205,6 +224,7 @@ def main():
         build_info = monolith.get("build_info", {})
         print(f"✅ Успешных модулей: {len(build_info.get('successful_modules', []))}")
         print(f"⚠️  Модулей с ошибками: {len(build_info.get('failed_modules', []))}")
+        print(f"🔑 Ключевые модули загружены: {build_info.get('required_modules_loaded', False)}")
         
         if build_info.get("failed_modules"):
             print("\n❌ Модули с ошибками:")
@@ -213,6 +233,7 @@ def main():
                 print(f"  - {mod}: {error}")
         
         print(f"\n📦 Всего модулей: {build_info.get('total_modules', 0)}")
+        print(f"🏷️  Версия монолита: {monolith.get('version')}")
         print("="*50)
         
     except Exception as e:
