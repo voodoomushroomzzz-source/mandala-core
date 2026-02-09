@@ -4,45 +4,108 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '**.json'        # Запуск при изменении любых JSON-файлов
-      - '!build/**'      # Игнорируем изменения в самой папке build
-  workflow_dispatch:     # Позволяет запускать вручную из интерфейса GitHub
+      - 'initium.json'        # Только при изменении ключевых файлов
+      - 'sphaerae.json'
+      - 'akasha_chronicorum.json'
+      - 'build_monolith.py'   # И скрипта сборки
+      - '.github/workflows/build-monolith.yml'
+  workflow_dispatch:          # Ручной запуск
   schedule:
-    - cron: '0 12 * * *' # Авто-сборка каждый день в 12:00 UTC (опционально)
+    - cron: '0 12 * * *'      # Ежедневная сборка в 12:00 UTC
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write    # Необходимо для коммита в репозиторий
+      contents: write         # Для коммита изменений
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # Полная история для git diff
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+          cache: 'pip'        # Кэширование пакетов
+
+      - name: Install dependencies (если понадобятся)
+        run: |
+          pip install --upgrade pip
 
       - name: Build Monolith
-        run: python build_monolith.py
+        id: build
+        run: |
+          echo "Сборка монолита..."
+          python build_monolith.py
+          
+          # Проверяем, что файл создан
+          if [ ! -f "build/mandala_core.monolith.latest.json" ]; then
+            echo "❌ Файл монолита не создан!"
+            exit 1
+          fi
+
+      - name: Validate JSON
+        run: |
+          echo "Проверка валидности JSON..."
+          python -m json.tool build/mandala_core.monolith.latest.json > /dev/null
+          echo "✅ JSON валиден"
+          
+          # Проверка минимального размера (чтобы не был пустым)
+          FILESIZE=$(stat -f%z "build/mandala_core.monolith.latest.json" 2>/dev/null || stat -c%s "build/mandala_core.monolith.latest.json")
+          if [ "$FILESIZE" -lt 1000 ]; then
+            echo "❌ Файл монолита слишком мал ($FILESIZE байт)"
+            exit 1
+          fi
+          echo "📏 Размер файла: $FILESIZE байт"
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # Проверяем изменения ТОЛЬКО в build/
+          if git diff --quiet HEAD -- build/; then
+            echo "✅ Нет изменений в папке build/"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "📝 Обнаружены изменения в build/"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload monolith as artifact
+        if: steps.git-check.outputs.changed == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: mandala-monolith
+          name: mandala-monolith-${{ github.sha }}
           path: build/mandala_core.monolith.latest.json
-          retention-days: 7
+          retention-days: 30
 
-      - name: Commit and push if changed
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
         run: |
-          if [[ `git status --porcelain build/` ]]; then
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git config --local user.name "github-actions[bot]"
-            git add build/
-            git commit -m "🤖 Авто-сборка монолита: $(date +'%Y-%m-%d %H:%M')"
-            git push
-          else
-            echo "Нет изменений для коммита."
-          fi
+          echo "🚀 Коммит и пуш изменений..."
+          
+          # Добавляем ТОЛЬКО файлы в build/
+          git add build/
+          
+          # Создаём осмысленное сообщение коммита
+          COMMIT_MSG="🤖 Авто-сборка монолита"
+          COMMIT_MSG+="\n\nВерсия: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+          COMMIT_MSG+="\nSHA: ${{ github.sha }}"
+          COMMIT_MSG+="\nWorkflow: ${{ github.workflow }}"
+          
+          git commit -m "$COMMIT_MSG"
+          
+          # Безопасный пуш с токеном
+          git push origin HEAD:main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Skip commit (no changes)
+        if: steps.git-check.outputs.changed == 'false'
+        run: echo "⏭️ Изменений нет, коммит не требуется"
