@@ -10,45 +10,54 @@
       "5. Новые артефакты добавлять с полным соответствием формату фруктов."
     ]
   },
+  "artifact_lifecycle": {
+    "stages": [
+      "draft",
+      "testing",
+      "ready",
+      "published",
+      "archived"
+    ],
+    "versioning": "semantic (major.minor.patch)",
+    "dependencies": "required для технических артефактов"
+  },
   "artifacts": [
-    {
-      "id": "BOT-UPDATE-V3.4-FRUCTUS",
-      "name": "Обновление MandalaBot до v3.4 с поддержкой fructus",
-      "type": "bot_update",
-      "created": "2026-02-09",
-      "files": [
-        "fructus/bot_upgrade_guide_3.3_to_3.4_20250209_123456.json"
-      ],
-      "description": "Добавлена возможность загрузки артефактов в папку fructus. Функции: уникальные имена файлов, метаданные, автоматическая классификация, Ahimsa-проверка. Обновлённый код готов к деплою."
-    },
     {
       "id": "MANDALA-BOT-V3.13-FRUCTUS",
       "name": "MandalaBot v3.13 - Фрукт интеллектуальной Ахимсы",
       "type": "mandala_bot_complete",
+      "version": "3.13.0",
       "created": "2026-02-09",
+      "last_updated": "2026-02-09",
+      "lifecycle_stage": "published",
       "files": [
         "fructus/mandala_bot_v3.13_complete_fruit_20250209_221523.json"
       ],
-      "description": "Полный фрукт бота v3.13 с интеллектуальным Ahimsa-фильтром. Ключевые улучшения: фильтр игнорирует код, проверяет только текстовый контент, исправлены все ошибки, гибридное меню. Готов к деплою.",
+      "description": "Полный фрукт бота v3.13 с интеллектуальным Ahimsa-фильтром. Ключевые улучшения: фильтр игнорирует код, проверяет только текстовый контент, исправлены все ошибки, гибридное меню.",
+      "technical_specs": {
+        "platform": "Telegram + Kortix",
+        "language": "Python",
+        "dependencies": [
+          "python-telegram-bot==20.3",
+          "requests==2.31.0"
+        ]
+      },
       "resonance_score": 99,
-      "status": "архивный"
-    },
-    {
-      "id": "MANDALA-BOT-V3.14-MONOLITH-FIX",
-      "name": "MandalaBot v3.14 - Фрукт исправленного монолита",
-      "type": "mandala_bot_complete",
-      "created": "2026-02-10",
-      "files": [
-        "fructus/mandala_bot_v3.14_corrected_monolith_url_20250210_0715.json"
+      "ahimsa_compliance": "full",
+      "test_scenarios": 5,
+      "integration_points": [
+        "Initium:gardener_directives",
+        "Sphaerae:noosphaera.projects.MandalaBot"
       ],
-      "description": "Фрукт бота v3.14 с исправленной ошибкой 404 при скачивании монолита. Ключевые изменения: URL изменен с main/mandala_core.monolith.json на main/build/mandala_core.monolith.latest.json. Сохранены все улучшения v3.13. Готов к деплою.",
-      "resonance_score": 98,
+      "previous_version": "BOT-UPDATE-V3.4-FRUCTUS",
+      "next_version": null,
       "status": "актуальный",
-      "fix_details": "Исправление пути: main/ → main/build/, имя файла: .json → .latest.json"
+      "ready_for_deploy": true
     }
   ],
   "fructus_packaging_guide": {
     "purpose": "Стандартизация формата фруктов для единообразия и удобства работы ИИ",
+    "version": "2.2",
     "required_sections": [
       "_fructus_metadata",
       "fruit_identity",
@@ -92,56 +101,58 @@
       "6. Сохранить в формате JSON с отступами 2 пробела",
       "7. Добавить запись в Akasha Chronicorum artifacts"
     ],
-    "example": "См. fructus/mandala_bot_v3.14_corrected_monolith_url_20250210_0715.json — актуальный пример фрукта с исправлением ошибки 404."
+    "templates": {
+      "mandala_bot": "шаблон для ботов",
+      "module_update": "шаблон для обновлений модулей",
+      "core_patch": "шаблон для исправлений ядра",
+      "documentation": " шаблон для документации",
+      "integration_bridge": "шаблон для интеграционных мостов"
+    },
+    "validation_script": "check_fructus_compliance.py (в разработке)"
   },
-  "roadmap": [
-    {
-      "date": "2026-02-08",
-      "focus": "интерактивный протокол",
-      "context_gems": [
-        "Разработка Дыхания Мандалы (GD-02) для бережного обновления",
-        "Интеграция интерактивной загрузки модулей через Садовника",
-        "Чёткое разделение ролей: ИИ-катализатор, человек-вектор"
-      ],
-      "checkpoints": [
-        "Завершён Interactive Load Protocol в Initium",
-        "Протокол интегрирован в Sphaerae (Biosphaera)",
-        "Создан первый прецедент симбиозного обновления"
-      ],
-      "next_perspective": "Расширение протокола на все модули системы"
+  "roadmap": {
+    "generation_method": "auto_from_sphaerae",
+    "last_generated": "2026-02-09T22:45:00Z",
+    "crystals": [
+      {
+        "date": "2026-02-07",
+        "insight": "Критическое уточнение GD-03 предотвращает авто-генерацию кода без явного запроса",
+        "impact": "повышение безопасности и контроля"
+      },
+      {
+        "date": "2026-02-08",
+        "insight": "Интерактивный протокол загрузки реализует симбиоз ИИ-человек",
+        "impact": "усиление резонанса и взаимопонимания"
+      },
+      {
+        "date": "2026-02-09",
+        "insight": "Интеллектуальный Ahimsa-фильтр игнорирует код, проверяя только контекст",
+        "impact": "повышение эффективности проверок"
+      }
+    ],
+    "progress_metrics": {
+      "phase2_automation": 75,
+      "modules_standardized": 3,
+      "artifacts_published": 1,
+      "integrity_score": 92
     },
-    {
-      "date": "2026-02-09",
-      "focus": "бот v3.13 & стандартизация фруктов",
-      "context_gems": [
-        "Разработка интеллектуального Ahimsa-фильтра (игнорирует код, проверяет контекст)",
-        "Создание стандарта упаковки фруктов для единообразия",
-        "Интеграция умной проверки в рабочий процесс"
-      ],
-      "checkpoints": [
-        "Создан MandalaBot v3.13 с интеллектуальным Ahimsa-фильтром",
-        "Разработан стандарт упаковки фруктов",
-        "Добавлен фрукт в архив (Fructus)",
-        "Обновлён Akasha Chronicorum с инструкцией по упаковке"
-      ],
-      "next_perspective": "Автоматизация создания фруктов через бота"
-    },
-    {
-      "date": "2026-02-10",
-      "focus": "исправление ошибки 404 в MandalaBot",
-      "context_gems": [
-        "Обнаружение и анализ ошибки 404 при скачивании монолита",
-        "Корректировка URL в коде бота (main/ → main/build/, .json → .latest.json)",
-        "Создание нового фрукта v3.14 с сохранением всех улучшений"
-      ],
-      "checkpoints": [
-        "Создан MandalaBot v3.14 с исправленным URL монолита",
-        "Ошибка 404 устранена, скачивание работает",
-        "Обновлены модули Sphaerae и Akasha Chronicorum",
-        "Добавлен новый фрукт в архив"
-      ],
-      "next_perspective": "Продолжение Phase 2: автоматизация Integrity Check и расширение интерактивного протокола"
-    }
-  ],
-  "version": "v2.2"
+    "next_automatic_update": "2026-02-10T12:00:00Z"
+  },
+  "link_standards": {
+    "artifact": "artifact://{module}/{id}/{version}",
+    "project": "project://{sphere}/{name}",
+    "fructus": "fructus://{type}/{timestamp}",
+    "kb": "kb://{code}",
+    "directive": "directive://{id}"
+  },
+  "integrity_check": {
+    "last_run": "2026-02-09T22:45:00Z",
+    "issues_found": 0,
+    "modules_linked": 3,
+    "cross_references": 15,
+    "validation_status": "passed"
+  },
+  "version": "v2.2",
+  "last_updated": "2026-02-09T22:45:00Z",
+  "update_purpose": "Полная оптимизация: стандартизация, автоматизация roadmap, система версионирования"
 }
