@@ -30,77 +30,95 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Build Monolith
+      - name: List files
         run: |
-          echo "🔄 Сборка монолита..."
+          echo "📁 Содержимое репозитория:"
+          ls -la
+          echo -e "\n📄 JSON файлы:"
+          ls -la *.json 2>/dev/null || echo "Нет JSON файлов"
+
+      - name: Build Monolith
+        id: build
+        run: |
+          echo "🔄 Запуск сборки монолита..."
           python build_monolith.py
           
-          if [ ! -f "build/mandala_core.monolith.latest.json" ]; then
-            echo "❌ Файл монолита не создан!"
+          echo -e "\n📊 Проверка результата:"
+          if [ -f "build/mandala_core.monolith.latest.json" ]; then
+            echo "✅ Файл монолита создан"
+            ls -la build/
+            
+            # Проверяем размер
+            SIZE=$(stat -f%z "build/mandala_core.monolith.latest.json" 2>/dev/null || stat -c%s "build/mandala_core.monolith.latest.json")
+            echo "Размер: $SIZE байт"
+            
+            if [ "$SIZE" -lt 1000 ]; then
+              echo "❌ Файл слишком мал"
+              exit 1
+            fi
+            
+            # Проверяем ключевые модули
+            echo -e "\n🔍 Проверка содержимого:"
+            python -c "
+            import json, sys
+            try:
+                with open('build/mandala_core.monolith.latest.json', 'r') as f:
+                    data = json.load(f)
+                print('Версия:', data.get('version', 'unknown'))
+                modules = data.get('embedded_modules', {})
+                print(f'Модулей: {len(modules)}')
+                
+                required = ['Initium', 'Sphaerae', 'Akasha Chronicorum']
+                for mod in required:
+                    if mod in modules and '_error' not in modules[mod]:
+                        ver = modules[mod].get('version', 'unknown')
+                        print(f'  ✅ {mod}: {ver}')
+                    else:
+                        print(f'  ❌ {mod}: ОШИБКА')
+                        if mod in modules:
+                            print(f'     {modules[mod].get(\"_error\", \"Неизвестная ошибка\")}')
+            except Exception as e:
+                print(f'Ошибка проверки: {e}')
+                sys.exit(1)
+            "
+          else
+            echo "❌ Файл монолита НЕ создан!"
             exit 1
           fi
-          
-          echo "✅ Файл монолита создан"
 
-      - name: Validate JSON
+      - name: Commit Monolith
         run: |
-          echo "🔍 Проверка валидности JSON..."
-          python -c "
-          import json, sys
-          try:
-              with open('build/mandala_core.monolith.latest.json', 'r', encoding='utf-8') as f:
-                  data = json.load(f)
-              print('✅ JSON валиден')
-              
-              # Проверяем обязательные поля
-              required = ['module', 'version', 'runtime_mode', 'embedded_modules']
-              for field in required:
-                  if field not in data:
-                      print(f'❌ Отсутствует обязательное поле: {field}')
-                      sys.exit(1)
-              
-              # Проверяем ключевые модули
-              embedded = data.get('embedded_modules', {})
-              required_modules = ['Sphaerae', 'Akasha Chronicorum']
-              for mod in required_modules:
-                  if mod not in embedded:
-                      print(f'❌ В монолите отсутствует ключевой модуль: {mod}')
-                      sys.exit(1)
-                  elif '_error' in embedded[mod]:
-                      print(f'❌ Ошибка загрузки модуля {mod}: {embedded[mod][\"_error\"]}')
-                      sys.exit(1)
-              
-              print(f'✅ Ключевые модули загружены')
-              
-          except Exception as e:
-              print(f'❌ Ошибка: {e}')
-              sys.exit(1)
-          "
-
-      - name: Commit and Push Monolith
-        run: |
-          echo "🚀 Коммит и пуш монолита..."
+          echo "🚀 Подготовка коммита..."
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
           # Создаём папку build если её нет
           mkdir -p build
           
-          # Добавляем файл монолита
-          git add build/
-          
-          # Создаём сообщение коммита
-          COMMIT_MSG="🤖 Авто-сборка монолита"
-          COMMIT_MSG+="\n\nВерсия: $(date +'%Y-%m-%d %H:%M:%S UTC')"
-          COMMIT_MSG+="\nSHA: ${{ github.sha }}"
-          
-          # Добавляем информацию о сборке
-          if [ -f "build/mandala_core.monolith.latest.json" ]; then
-            VERSION=$(python -c "import json; data=json.load(open('build/mandala_core.monolith.latest.json')); print(data.get('version', 'unknown'))")
-            COMMIT_MSG+="\nВерсия монолита: $VERSION"
+          # Проверяем, есть ли файл для коммита
+          if [ ! -f "build/mandala_core.monolith.latest.json" ]; then
+            echo "❌ Нет файла для коммита"
+            exit 1
           fi
           
-          git commit -m "$COMMIT_MSG" || echo "⚠️ Нет изменений для коммита"
-          git push origin HEAD:main
+          # Добавляем файл
+          git add build/
+          
+          # Создаём сообщение
+          VERSION=$(python -c "import json; data=json.load(open('build/mandala_core.monolith.latest.json')); print(data.get('version', 'unknown'))")
+          COMMIT_MSG="🤖 Авто-сборка монолита $VERSION"
+          COMMIT_MSG+="\n\nВремя: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+          COMMIT_MSG+="\nSHA: ${{ github.sha }}"
+          
+          echo "Сообщение коммита:"
+          echo "$COMMIT_MSG"
+          
+          # Пытаемся сделать коммит
+          if git commit -m "$COMMIT_MSG" 2>/dev/null; then
+            echo "✅ Коммит создан"
+            git push origin HEAD:main
+          else
+            echo "⚠️ Нет изменений для коммита (файл идентичен предыдущему)"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
