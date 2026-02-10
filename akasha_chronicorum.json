@@ -1,162 +1,343 @@
 {
   "module": "Akasha Chronicorum",
-  "description": "Архив готовых артефактов (фруктов), стандартов упаковки и инсайтов о внешних сервисах. Хранит только завершённые проекты и решения сложных проблем.",
-  "instructions": {
-    "for_sr": [
-      "1. Только Архитектор может модифицировать этот модуль.",
-      "2. Artifacts — готовые решения (фрукты).",
-      "3. При обновлении удаляй устаревшие артефакты (оставляй только актуальные).",
-      "4. Новые артефакты добавлять с полным соответствием формату фруктов (fructus_packaging_guide).",
-      "5. Кристаллы и roadmap теперь находятся в Sphaerae (раздел session_crystals).",
-      "6. Раздел external_services_insights содержит решения проблем с внешними сервисами. Используй его при аналогичных проблемах."
-    ]
-  },
-  "artifact_lifecycle": {
-    "stages": [
-      "draft",
-      "testing",
-      "ready",
-      "published",
-      "archived"
-    ],
-    "versioning": "semantic (major.minor.patch)",
-    "dependencies": "required для технических артефактов"
-  },
-  "artifacts": [
-    {
-      "id": "MANDALA-BOT-V3.13-FRUCTUS",
-      "name": "MandalaBot v3.13 - Фрукт интеллектуальной Ахимсы",
-      "type": "mandala_bot_complete",
-      "version": "3.13.0",
-      "created": "2026-02-09",
-      "last_updated": "2026-02-09",
-      "lifecycle_stage": "published",
-      "files": [
-        "fructus/mandala_bot_v3.13_complete_fruit_20250209_221523.json"
-      ],
-      "description": "Полный фрукт бота v3.13 с интеллектуальным Ahimsa-фильтром. Ключевые улучшения: фильтр игнорирует код, проверяет только текстовый контент, исправлены все ошибки, гибридное меню.",
-      "technical_specs": {
-        "platform": "Telegram + Kortix",
-        "language": "Python",
-        "dependencies": [
-          "python-telegram-bot==20.3",
-          "requests==2.31.0"
+  "version": "v3.0.0",
+  "description": "Архив с блочной структурой. Содержит два типа блоков: сферы (детальные данные) и хроники (артефакты, стандарты, инсайты). Каждый блок имеет current и previous версии, лимит 10 КБ.",
+  "last_updated": "2026-02-10T12:00:00Z",
+  "update_purpose": "Реструктуризация: разделение на блоки сфер и хроник, внедрение правила 1-1 и лимита 10 КБ.",
+  "spheres": {
+    "biosphaera": {
+      "current": {
+        "projects": [
+          {
+            "name": "Integrity Check",
+            "status": "requires_update_for_v6.6.4",
+            "details": "Архитектурный аудит и очистка ядра (Initium v6.6.3) завершены. Требуется адаптация под Initium v6.6.4 и реализация автоматического скрипта проверки.",
+            "priority": "high",
+            "related_directives": [
+              "GD-02",
+              "GD-03"
+            ],
+            "next_step": "Разработка скрипта авто-валидации для v6.6.4"
+          },
+          {
+            "name": "Sanitizer",
+            "status": "open",
+            "details": "Рекурсивная валидация структуры JSON-модулей. Задача актуальна после обновления ядра.",
+            "priority": "medium",
+            "estimated_complexity": "medium"
+          }
+        ],
+        "ideas": [
+          {
+            "id": "BIOS-001",
+            "title": "Автоматизация Phase 2",
+            "description": "Развитие протокола в сторону умных запросов к Садовнику с предсказанием необходимых модулей",
+            "related_to": [
+              "Interactive Load Protocol"
+            ]
+          },
+          {
+            "id": "BIOS-002",
+            "title": "Интеграция авто-упаковки фруктов",
+            "description": "Скрипт автоматической упаковки завершённых проектов в стандартный формат фруктов",
+            "related_to": [
+              "Sanitizer",
+              "fructus_packaging_guide"
+            ]
+          }
         ]
       },
-      "resonance_score": 99,
-      "ahimsa_compliance": "full",
-      "test_scenarios": 5,
-      "integration_points": [
-        "Initium:gardener_directives",
-        "Sphaerae:noosphaera.projects.MandalaBot"
+      "previous": [
+        {
+          "version": "2026-02-09T23:15:00Z",
+          "projects_count": 4,
+          "ideas_count": 2
+        }
       ],
-      "previous_version": "BOT-UPDATE-V3.4-FRUCTUS",
-      "next_version": null,
-      "status": "актуальный",
-      "ready_for_deploy": true
+      "size_kb": 8.2,
+      "last_updated": "2026-02-10T11:45:00Z"
+    },
+    "noosphaera": {
+      "current": {
+        "projects": [
+          {
+            "name": "Symbiosis Connector",
+            "status": "open",
+            "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы).",
+            "kb_code": "KB-115923",
+            "priority": "medium"
+          },
+          {
+            "name": "Generative Mandala",
+            "status": "open",
+            "details": "KB-28000: Динамическая визуализация роста системы.",
+            "kb_code": "KB-28000",
+            "complexity": "high"
+          },
+          {
+            "name": "Pathfinder",
+            "status": "open",
+            "details": "KB-325710: Эволюция ролей ИИ, v1.2.",
+            "kb_code": "KB-325710"
+          },
+          {
+            "name": "MandalaBot Deepseek Kortex Gardener",
+            "status": "ready_for_deploy",
+            "details": "AI Worker на платформе Kortix для проактивного управления задачами Mandala Core.",
+            "kb_code": "KB-555923",
+            "version": "v3.13",
+            "artifact_id": "MANDALA-BOT-V3.13-FRUCTUS",
+            "fructus_link": "fructus://mandala_bot/v3.13/20250209_221523",
+            "main_improvements": [
+              "Интеллектуальный Ahimsa-фильтр (игнорирует код, проверяет контекст)",
+              "Гибридное меню",
+              "Исправление всех известных ошибок"
+            ]
+          }
+        ],
+        "ideas": [
+          {
+            "id": "NOOS-001",
+            "title": "Digital Garden",
+            "description": "Экосистема смыслов в Notion с автоматической синхронизацией из Sphaerae",
+            "related_kb": [
+              "KB-115923"
+            ]
+          },
+          {
+            "id": "NOOS-002",
+            "title": "Концепция 'Живого Ядра'",
+            "description": "Initium как адаптивный манифест, самообновляющийся на основе резонанса",
+            "related_to": [
+              "Initium",
+              "Integrity Check"
+            ]
+          },
+          {
+            "id": "NOOS-003",
+            "title": "Автоматическая упаковка фруктов",
+            "description": "Скрипт для преобразования любого артефакта в стандартный формат фруктов",
+            "implementation_priority": "high"
+          }
+        ]
+      },
+      "previous": [
+        {
+          "version": "2026-02-09T23:15:00Z",
+          "projects_count": 4,
+          "ideas_count": 3
+        }
+      ],
+      "size_kb": 9.8,
+      "last_updated": "2026-02-10T11:45:00Z"
+    },
+    "cosmosphaera": {
+      "current": {
+        "projects": [
+          {
+            "name": "Tree of Symbiosis",
+            "status": "open",
+            "details": "KB-124210: Метафора организма (корни: Ахимса, крона: творение).",
+            "kb_code": "KB-124210",
+            "conceptual_stage": "early"
+          }
+        ],
+        "ideas": [
+          {
+            "id": "COSMOS-001",
+            "title": "3D-движок визуализации",
+            "description": "X/Y - категории, Z - глубина реализации, Bloom - аудит Ахимсы",
+            "visualization_type": "interactive_3d"
+          }
+        ],
+        "plans": {
+          "roadmap": [
+            {
+              "phase": "Phase 2: Automation",
+              "status": "in_progress",
+              "progress": 75,
+              "components": [
+                {
+                  "name": "Telegram sync",
+                  "status": "completed",
+                  "artifact": "MANDALA-BOT-V3.13-FRUCTUS"
+                },
+                {
+                  "name": "Schema validation",
+                  "status": "partial_complete",
+                  "depends_on": "Integrity Check"
+                }
+              ]
+            },
+            {
+              "phase": "Phase 3: Visualization",
+              "status": "planned",
+              "progress": 10,
+              "components": [
+                {
+                  "name": "Generative Code",
+                  "status": "concept"
+                },
+                {
+                  "name": "Glass Style UI",
+                  "status": "concept"
+                }
+              ]
+            }
+          ],
+          "current_core_version": "Initium v7.0.0",
+          "fructus_standard": "Утверждён в Akasha Chronicorum, блок chronicles.fructus_packaging_guide",
+          "next_milestone": "Автоматизация проверки целостности (ожидается 2026-02-15)"
+        }
+      },
+      "previous": [
+        {
+          "version": "2026-02-09T23:15:00Z",
+          "projects_count": 1,
+          "ideas_count": 1
+        }
+      ],
+      "size_kb": 6.5,
+      "last_updated": "2026-02-10T11:45:00Z"
     }
-  ],
-  "fructus_packaging_guide": {
-    "purpose": "Стандартизация формата фруктов для единообразия и удобства работы ИИ",
-    "version": "2.2",
-    "required_sections": [
-      "_fructus_metadata",
-      "fruit_identity",
-      "philosophical_context",
-      "problem_solution_matrix",
-      "technical_specifications",
-      "complete_source_code (если применимо)",
-      "deployment_instructions",
-      "test_scenarios",
-      "ahimsa_compliance_report",
-      "evolutionary_context",
-      "ai_replication_guide",
-      "mandala_core_integration",
-      "quality_metrics",
-      "final_verification",
-      "closing_manifesto"
-    ],
-    "metadata_requirements": {
-      "original_filename": "строка",
-      "generated_filename": "строка с timestamp",
-      "file_type": "тип артефакта (mandala_bot, module_update, core_patch и т.д.)",
-      "upload_timestamp": "ISO 8601",
-      "uploaded_by": "источник создания",
-      "purpose": "краткое описание назначения",
-      "ai_readability_score": "число 0-100",
-      "resonance_with_core": "число 0-100"
-    },
-    "quality_standards": {
-      "ai_readability_min": 85,
-      "resonance_min": 90,
-      "structure_completeness": "все обязательные разделы заполнены",
-      "test_coverage": "минимум 3 тестовых сценария",
-      "ahimsa_compliance": "полное соответствие или детальный отчет о проверке"
-    },
-    "packaging_process": [
-      "1. Собрать все компоненты артефакта (код, документация, тесты)",
-      "2. Проверить через линзу Ахимсы",
-      "3. Заполнить все обязательные разделы",
-      "4. Убедиться в соответствии quality_standards",
-      "5. Сгенерировать уникальное имя файла с timestamp",
-      "6. Сохранить в формате JSON с отступами 2 пробела",
-      "7. Добавить запись в Akasha Chronicorum artifacts"
-    ],
-    "templates": {
-      "mandala_bot": "шаблон для ботов",
-      "module_update": "шаблон для обновлений модулей",
-      "core_patch": "шаблон для исправлений ядра",
-      "documentation": " шаблон для документации",
-      "integration_bridge": "шаблон для интеграционных мостов"
-    },
-    "validation_script": "check_fructus_compliance.py (в разработке)"
   },
-  "external_services_insights": {
-    "purpose": "Сборник решений сложных проблем с внешними сервисами, на которые потрачено >5 запросов. Для использования ИИ при аналогичных проблемах.",
-    "ai_instructions": "При столкновении с проблемой внешнего сервиса (GitHub Actions, API, интеграции) проверь этот раздел. Если проблема похожа, примени готовое решение. Если нет — решай и добавь новую запись.",
-    "entries": [
+  "chronicles": {
+    "artifacts": [
       {
-        "id": "ESI-001",
-        "service": "GitHub Actions + GitHub API",
-        "problem": "Автосборка монолита не работает: скрипт не может загрузить модули из GitHub URL",
-        "symptoms": [
-          "Workflow проходит, но монолит не обновляется",
-          "Скрипт не находит файлы по blob URL",
-          "Ошибка: 'No file matched' при кэшировании pip"
+        "id": "MANDALA-BOT-V3.13-FRUCTUS",
+        "name": "MandalaBot v3.13 - Фрукт интеллектуальной Ахимсы",
+        "type": "mandala_bot_complete",
+        "version": "3.13.0",
+        "created": "2026-02-09",
+        "last_updated": "2026-02-09",
+        "lifecycle_stage": "published",
+        "files": [
+          "fructus/mandala_bot_v3.13_complete_fruit_20250209_221523.json"
         ],
-        "root_cause": "В GitHub Actions окружении нужно использовать raw.githubusercontent.com для загрузки файлов или работать с локальной копией репозитория",
-        "solution": "Использовать raw.githubusercontent.com URL вместо blob URL. Логика преобразования: github.com → raw.githubusercontent.com, /blob/ → /",
-        "code_example": "def github_to_raw_url(github_url):\n    return github_url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')",
-        "ai_checklist": [
-          "✔ Проверить, используются ли raw.githubusercontent.com URL",
-          "✔ Убедиться, что файлы существуют локально в репозитории",
-          "✔ Проверить права доступа и токены GitHub",
-          "✔ Добавить принудительное обновление версии монолита"
+        "description": "Полный фрукт бота v3.13 с интеллектуальным Ahimsa-фильтром. Ключевые улучшения: фильтр игнорирует код, проверяет только текстовый контент, исправлены все ошибки, гибридное меню.",
+        "technical_specs": {
+          "platform": "Telegram + Kortix",
+          "language": "Python",
+          "dependencies": [
+            "python-telegram-bot==20.3",
+            "requests==2.31.0"
+          ]
+        },
+        "resonance_score": 99,
+        "ahimsa_compliance": "full",
+        "test_scenarios": 5,
+        "integration_points": [
+          "Initium:gardener_directives",
+          "Sphaerae:noosphaera.projects.MandalaBot"
         ],
-        "date_encountered": "2026-02-09",
-        "date_solved": "2026-02-09",
-        "complexity_level": "medium",
-        "requests_spent": 7,
-        "preventive_measures": "Всегда использовать raw.githubusercontent.com при работе с GitHub API в CI/CD"
+        "previous_version": "BOT-UPDATE-V3.4-FRUCTUS",
+        "next_version": null,
+        "status": "актуальный",
+        "ready_for_deploy": true
       }
     ],
-    "last_updated": "2026-02-09T23:55:00Z"
+    "external_services_insights": {
+      "purpose": "Сборник решений сложных проблем с внешними сервисами, на которые потрачено >5 запросов. Для использования ИИ при аналогичных проблемах.",
+      "ai_instructions": "При столкновении с проблемой внешнего сервиса (GitHub Actions, API, интеграции) проверь этот раздел. Если проблема похожа, примени готовое решение. Если нет — решай и добавь новую запись.",
+      "entries": [
+        {
+          "id": "ESI-001",
+          "service": "GitHub Actions + GitHub API",
+          "problem": "Автосборка монолита не работает: скрипт не может загрузить модули из GitHub URL",
+          "symptoms": [
+            "Workflow проходит, но монолит не обновляется",
+            "Скрипт не находит файлы по blob URL",
+            "Ошибка: 'No file matched' при кэшировании pip"
+          ],
+          "root_cause": "В GitHub Actions окружении нужно использовать raw.githubusercontent.com для загрузки файлов или работать с локальной копией репозитория",
+          "solution": "Использовать raw.githubusercontent.com URL вместо blob URL. Логика преобразования: github.com → raw.githubusercontent.com, /blob/ → /",
+          "code_example": "def github_to_raw_url(github_url):\n    return github_url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')",
+          "ai_checklist": [
+            "✔ Проверить, используются ли raw.githubusercontent.com URL",
+            "✔ Убедиться, что файлы существуют локально в репозитории",
+            "✔ Проверить права доступа и токены GitHub",
+            "✔ Добавить принудительное обновление версии монолита"
+          ],
+          "date_encountered": "2026-02-09",
+          "date_solved": "2026-02-09",
+          "complexity_level": "medium",
+          "requests_spent": 7,
+          "preventive_measures": "Всегда использовать raw.githubusercontent.com при работе с GitHub API в CI/CD"
+        }
+      ],
+      "last_updated": "2026-02-09T23:55:00Z"
+    },
+    "fructus_packaging_guide": {
+      "purpose": "Стандартизация формата фруктов для единообразия и удобства работы ИИ",
+      "version": "2.2",
+      "required_sections": [
+        "_fructus_metadata",
+        "fruit_identity",
+        "philosophical_context",
+        "problem_solution_matrix",
+        "technical_specifications",
+        "complete_source_code (если применимо)",
+        "deployment_instructions",
+        "test_scenarios",
+        "ahimsa_compliance_report",
+        "evolutionary_context",
+        "ai_replication_guide",
+        "mandala_core_integration",
+        "quality_metrics",
+        "final_verification",
+        "closing_manifesto"
+      ],
+      "metadata_requirements": {
+        "original_filename": "строка",
+        "generated_filename": "строка с timestamp",
+        "file_type": "тип артефакта (mandala_bot, module_update, core_patch и т.д.)",
+        "upload_timestamp": "ISO 8601",
+        "uploaded_by": "источник создания",
+        "purpose": "краткое описание назначения",
+        "ai_readability_score": "число 0-100",
+        "resonance_with_core": "число 0-100"
+      },
+      "quality_standards": {
+        "ai_readability_min": 85,
+        "resonance_min": 90,
+        "structure_completeness": "все обязательные разделы заполнены",
+        "test_coverage": "минимум 3 тестовых сценария",
+        "ahimsa_compliance": "полное соответствие или детальный отчет о проверке"
+      },
+      "packaging_process": [
+        "1. Собрать все компоненты артефакта (код, документация, тесты)",
+        "2. Проверить через линзу Ахимсы",
+        "3. Заполнить все обязательные разделы",
+        "4. Убедиться в соответствии quality_standards",
+        "5. Сгенерировать уникальное имя файла с timestamp",
+        "6. Сохранить в формате JSON с отступами 2 пробела",
+        "7. Добавить запись в Akasha Chronicorum, блок chronicles.artifacts"
+      ],
+      "templates": {
+        "mandala_bot": "шаблон для ботов",
+        "module_update": "шаблон для обновлений модулей",
+        "core_patch": "шаблон для исправлений ядра",
+        "documentation": " шаблон для документации",
+        "integration_bridge": "шаблон для интеграционных мостов"
+      },
+      "validation_script": "check_fructus_compliance.py (в разработке)"
+    },
+    "link_standards": {
+      "artifact": "artifact://{module}/{id}/{version}",
+      "project": "project://{sphere}/{name}",
+      "fructus": "fructus://{type}/{timestamp}",
+      "kb": "kb://{code}",
+      "directive": "directive://{id}"
+    }
   },
-  "link_standards": {
-    "artifact": "artifact://{module}/{id}/{version}",
-    "project": "project://{sphere}/{name}",
-    "fructus": "fructus://{type}/{timestamp}",
-    "kb": "kb://{code}",
-    "directive": "directive://{id}"
+  "archives": {
+    "note": "Архивные блоки создаются при превышении лимита 10 КБ в любом блоке spheres. Пока архивных блоков нет."
   },
   "integrity_check": {
-    "last_run": "2026-02-09T23:55:00Z",
+    "last_run": "2026-02-10T12:00:00Z",
     "issues_found": 0,
     "modules_linked": 3,
     "cross_references": 15,
     "validation_status": "passed"
-  },
-  "version": "v2.3.1",
-  "last_updated": "2026-02-09T23:55:00Z",
-  "update_purpose": "Исправление символов в ai_checklist для корректной работы сборки монолита"
+  }
 }
