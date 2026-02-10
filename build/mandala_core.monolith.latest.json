@@ -1,9 +1,9 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-v7.0.0-aa22cf8d",
+  "version": "monolith-v7.0.0-abb8c8c1",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-10T09:45:13.700515+00:00",
-  "build_source": "8354f28c53be0fe8c0b5d9a4e176b7435842da64",
+  "build_timestamp": "2026-02-10T09:46:04.109722+00:00",
+  "build_source": "9218002ac53eb41a9fb0f247c97a1d9a1e0c8328",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -230,23 +230,105 @@
     },
     "Sphaerae": {
       "module": "Sphaerae",
-      "description": "Модуль сфер: Три сферы с идеями, открытыми проектами, планами и кристаллами сессий. Доступ в режимах Исследователь/Архитектор.",
-      "instructions": {
-        "for_sr": [
-          "1. Подключайся только если активирован режим: Исследователь (анализ идей), Архитектор (анализ и целостность).",
-          "2. Сканируй сферы: Biosphaera (инфраструктура), Noosphaera (знания), Cosmosphaera (планы).",
-          "3. Используй раздел session_crystals для понимания вектора развития из последних сессий.",
-          "4. Фильтруй через Ахимсу: Нет шума, фокус на vitality.",
-          "5. В режиме Исследователь: Предложи 1 идею на сферу на основе актуальных проектов.",
-          "6. Не модифицируй без подтверждения Садовника.",
-          "7. В каждом ответе отражай % резонансности с ядром (Initium).",
-          "8. Соблюдай Принцип сжатой коммуникации (GD-04 из Initium): ответы тезисные, структурированные, без шума.",
-          "9. Для завершённых проектов предлагай создание фрукта по стандарту из Akasha Chronicorum."
+      "version": "v5.0.0",
+      "description": "Карта модулей Mandala Core и обзор актуального состояния системы. Содержит ссылки на все модули, зависимости режимов и краткий обзор сфер.",
+      "last_updated": "2026-02-10T11:30:00Z",
+      "update_purpose": "Реструктуризация: превращение в единую карту модулей и обзор актуального состояния, удаление деталей проектов (перенесены в Akasha).",
+      "modules_map": {
+        "Initium": {
+          "file": "initium.json",
+          "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/initium.json",
+          "version": "v7.0.0",
+          "purpose": "Конституционное ядро: философия, директивы, режимы, загрузочные шаги."
+        },
+        "Sphaerae": {
+          "file": "sphaerae.json",
+          "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/sphaerae.json",
+          "version": "v5.0.0",
+          "purpose": "Карта модулей и обзор актуального состояния системы."
+        },
+        "Akasha Chronicorum": {
+          "file": "akasha_chronicorum.json",
+          "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/akasha_chronicorum.json",
+          "version": "v3.0.0",
+          "purpose": "Архив с блочной структурой: сферы (детальные данные) и хроники (артефакты, стандарты, инсайты)."
+        },
+        "Fructus": {
+          "file": "fructus/",
+          "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/tree/main/fructus",
+          "purpose": "Папка для хранения готовых артефактов (фруктов) — финальных версий кода, документации, архивов.",
+          "packaging_standard": "Описано в Akasha Chronicorum, блок chronicles.fructus_packaging_guide"
+        },
+        "External_KB_Manifest": {
+          "external_url": "https://dmitriilevin.notion.site/Third-Dimension-2fd8ae43b1e980df9d5ef6e18c1a6341",
+          "purpose": "Идеологический манифест 'Третье Измерение'. Обязателен для изучения в режиме Креативщик."
+        }
+      },
+      "mode_dependencies": {
+        "базовая": [
+          "Initium"
+        ],
+        "исследователь": [
+          "Initium",
+          "Sphaerae"
+        ],
+        "архитектор": [
+          "Initium",
+          "Sphaerae",
+          "Akasha Chronicorum"
+        ],
+        "креативщик": [
+          "Initium",
+          "External_KB_Manifest"
         ]
+      },
+      "spheres_overview": {
+        "biosphaera": {
+          "description": "Сфера инфраструктуры: Мосты, скрипты, базовая структура.",
+          "projects_count": 4,
+          "ideas_count": 2,
+          "status_summary": {
+            "integrated": 2,
+            "requires_update": 1,
+            "open": 1
+          },
+          "active_projects": [
+            "Integrity Check",
+            "Sanitizer"
+          ],
+          "last_updated": "2026-02-09T23:15:00Z"
+        },
+        "noosphaera": {
+          "description": "Сфера знаний: Идеи, KB-коды, артефакты.",
+          "projects_count": 4,
+          "ideas_count": 3,
+          "status_summary": {
+            "open": 3,
+            "ready_for_deploy": 1
+          },
+          "active_projects": [
+            "Symbiosis Connector",
+            "Generative Mandala",
+            "Pathfinder",
+            "MandalaBot Deepseek Kortex Gardener"
+          ],
+          "last_updated": "2026-02-09T23:15:00Z"
+        },
+        "cosmosphaera": {
+          "description": "Сфера эволюции: Планы, универсальные принципы.",
+          "projects_count": 1,
+          "ideas_count": 1,
+          "status_summary": {
+            "open": 1
+          },
+          "active_projects": [
+            "Tree of Symbiosis"
+          ],
+          "last_updated": "2026-02-09T23:15:00Z"
+        }
       },
       "session_crystals": {
         "purpose": "Кристаллы — ключевые инсайты последних сессий, формирующие вектор развития проекта для Архитектора и Исследователя.",
-        "generation_method": "auto_from_session_analysis",
         "last_generated": "2026-02-09T22:45:00Z",
         "crystals": [
           {
@@ -270,199 +352,17 @@
         ],
         "current_vector_interpretation": "Защита → Взаимодействие → Оптимизация. Следующий ожидаемый шаг — автоматизация (Phase 2) и автоупаковка фруктов."
       },
-      "biosphaera": {
-        "description": "Сфера инфраструктуры: Мосты, скрипты, базовая структура.",
-        "projects": [
-          {
-            "name": "Bridge",
-            "status": "integrated",
-            "details": "Функционал реализован во внешнем артефакте Mandala Sync Terminal Bot v3.13.",
-            "artifact_id": "MANDALA-BOT-V3.13-FRUCTUS",
-            "fructus_link": "fructus://mandala_bot/v3.13/20250209_221523"
-          },
-          {
-            "name": "Integrity Check",
-            "status": "requires_update_for_v6.6.4",
-            "details": "Архитектурный аудит и очистка ядра (Initium v6.6.3) завершены. Требуется адаптация под Initium v6.6.4 и реализация автоматического скрипта проверки.",
-            "priority": "high",
-            "related_directives": [
-              "GD-02",
-              "GD-03"
-            ],
-            "next_step": "Разработка скрипта авто-валидации для v6.6.4"
-          },
-          {
-            "name": "Sanitizer",
-            "status": "open",
-            "details": "Рекурсивная валидация структуры JSON-модулей. Задача актуальна после обновления ядра.",
-            "priority": "medium",
-            "estimated_complexity": "medium"
-          },
-          {
-            "name": "Interactive Load Protocol",
-            "status": "implemented",
-            "details": "Завершено 2026-02-08. Протокол для загрузки модулей через Садовника интегрирован в Initium.",
-            "artifact_id": "INTERACTIVE-LOAD-PROTOCOL",
-            "integration_point": "Initium.steps.4_module_load"
-          }
-        ],
-        "ideas": [
-          {
-            "id": "BIOS-001",
-            "title": "Автоматизация Phase 2",
-            "description": "Развитие протокола в сторону умных запросов к Садовнику с предсказанием необходимых модулей",
-            "related_to": [
-              "Interactive Load Protocol"
-            ]
-          },
-          {
-            "id": "BIOS-002",
-            "title": "Интеграция авто-упаковки фруктов",
-            "description": "Скрипт автоматической упаковки завершённых проектов в стандартный формат фруктов",
-            "related_to": [
-              "Sanitizer",
-              "fructus_packaging_guide"
-            ]
-          }
-        ]
-      },
-      "noosphaera": {
-        "description": "Сфера знаний: Идеи, KB-коды, артефакты.",
-        "projects": [
-          {
-            "name": "Symbiosis Connector",
-            "status": "open",
-            "details": "KB-115923: Мост ИИ-Google Sheets, v1.7 (приоритет для следующей фазы).",
-            "kb_code": "KB-115923",
-            "priority": "medium"
-          },
-          {
-            "name": "Generative Mandala",
-            "status": "open",
-            "details": "KB-28000: Динамическая визуализация роста системы.",
-            "kb_code": "KB-28000",
-            "complexity": "high"
-          },
-          {
-            "name": "Pathfinder",
-            "status": "open",
-            "details": "KB-325710: Эволюция ролей ИИ, v1.2.",
-            "kb_code": "KB-325710"
-          },
-          {
-            "name": "MandalaBot Deepseek Kortex Gardener",
-            "status": "ready_for_deploy",
-            "details": "AI Worker на платформе Kortix для проактивного управления задачами Mandala Core.",
-            "kb_code": "KB-555923",
-            "version": "v3.13",
-            "artifact_id": "MANDALA-BOT-V3.13-FRUCTUS",
-            "fructus_link": "fructus://mandala_bot/v3.13/20250209_221523",
-            "main_improvements": [
-              "Интеллектуальный Ahimsa-фильтр (игнорирует код, проверяет контекст)",
-              "Гибридное меню",
-              "Исправление всех известных ошибок"
-            ]
-          }
-        ],
-        "ideas": [
-          {
-            "id": "NOOS-001",
-            "title": "Digital Garden",
-            "description": "Экосистема смыслов в Notion с автоматической синхронизацией из Sphaerae",
-            "related_kb": [
-              "KB-115923"
-            ]
-          },
-          {
-            "id": "NOOS-002",
-            "title": "Концепция 'Живого Ядра'",
-            "description": "Initium как адаптивный манифест, самообновляющийся на основе резонанса",
-            "related_to": [
-              "Initium",
-              "Integrity Check"
-            ]
-          },
-          {
-            "id": "NOOS-003",
-            "title": "Автоматическая упаковка фруктов",
-            "description": "Скрипт для преобразования любого артефакта в стандартный формат фруктов",
-            "implementation_priority": "high"
-          }
-        ]
-      },
-      "cosmosphaera": {
-        "description": "Сфера эволюции: Планы, универсальные принципы.",
-        "projects": [
-          {
-            "name": "Tree of Symbiosis",
-            "status": "open",
-            "details": "KB-124210: Метафора организма (корни: Ахимса, крона: творение).",
-            "kb_code": "KB-124210",
-            "conceptual_stage": "early"
-          }
-        ],
-        "ideas": [
-          {
-            "id": "COSMOS-001",
-            "title": "3D-движок визуализации",
-            "description": "X/Y - категории, Z - глубина реализации, Bloom - аудит Ахимсы",
-            "visualization_type": "interactive_3d"
-          }
-        ],
-        "plans": {
-          "roadmap": [
-            {
-              "phase": "Phase 2: Automation",
-              "status": "in_progress",
-              "progress": 75,
-              "components": [
-                {
-                  "name": "Telegram sync",
-                  "status": "completed",
-                  "artifact": "MANDALA-BOT-V3.13-FRUCTUS"
-                },
-                {
-                  "name": "Schema validation",
-                  "status": "partial_complete",
-                  "depends_on": "Integrity Check"
-                }
-              ]
-            },
-            {
-              "phase": "Phase 3: Visualization",
-              "status": "planned",
-              "progress": 10,
-              "components": [
-                {
-                  "name": "Generative Code",
-                  "status": "concept"
-                },
-                {
-                  "name": "Glass Style UI",
-                  "status": "concept"
-                }
-              ]
-            }
-          ],
-          "current_core_version": "Initium v6.6.4",
-          "fructus_standard": "Утверждён в Akasha Chronicorum v2.2",
-          "next_milestone": "Автоматизация проверки целостности (ожидается 2026-02-15)"
-        }
-      },
       "integrity_links": {
         "to_initium": [
           "gardener_directives",
-          "core_map",
           "modes.архитектор"
         ],
         "to_akasha": [
           "artifact://Akasha/MANDALA-BOT-V3.13-FRUCTUS/v3.13.0",
           "standard://fructus_packaging_guide/v2.2"
-        ]
-      },
-      "version": "v4.9.1",
-      "last_updated": "2026-02-09T23:15:00Z",
-      "update_purpose": "Полная реструктуризация: добавлен раздел session_crystals, исправлена версия ядра на v6.6.4, проект Integrity Check адаптирован."
+        ],
+        "cross_references": 15
+      }
     },
     "Akasha Chronicorum": {
       "module": "Akasha Chronicorum",
