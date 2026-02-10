@@ -1,9 +1,9 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-v7.2.1-b4b901bf",
+  "version": "monolith-v7.2.1-93c5ba65",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-10T15:48:05.032933+00:00",
-  "build_source": "81eb697adc9439bfbb6c93db7892652ee97fcf7d",
+  "build_timestamp": "2026-02-10T21:45:39.318163+00:00",
+  "build_source": "682a85201bb6c81fbf480d14d6e59cd93bded636",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
