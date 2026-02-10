@@ -1,20 +1,20 @@
 {
   "module": "Sphaerae",
-  "version": "v5.0.0",
+  "version": "v5.1.0",
   "description": "Карта модулей Mandala Core и обзор актуального состояния системы. Содержит ссылки на все модули, зависимости режимов и краткий обзор сфер.",
-  "last_updated": "2026-02-10T11:30:00Z",
-  "update_purpose": "Реструктуризация: превращение в единую карту модулей и обзор актуального состояния, удаление деталей проектов (перенесены в Akasha).",
+  "last_updated": "2026-02-10T13:00:00Z",
+  "update_purpose": "Добавление модуля Philosophia, обновление зависимостей режимов",
   "modules_map": {
     "Initium": {
       "file": "initium.json",
       "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/initium.json",
-      "version": "v7.0.0",
+      "version": "v7.1.0",
       "purpose": "Конституционное ядро: философия, директивы, режимы, загрузочные шаги."
     },
     "Sphaerae": {
       "file": "sphaerae.json",
       "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/sphaerae.json",
-      "version": "v5.0.0",
+      "version": "v5.1.0",
       "purpose": "Карта модулей и обзор актуального состояния системы."
     },
     "Akasha Chronicorum": {
@@ -22,6 +22,12 @@
       "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/akasha_chronicorum.json",
       "version": "v3.0.0",
       "purpose": "Архив с блочной структурой: сферы (детальные данные) и хроники (артефакты, стандарты, инсайты)."
+    },
+    "Philosophia": {
+      "file": "philosophia.json",
+      "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/philosophia.json",
+      "version": "v1.0.0",
+      "purpose": "Глубокая философия Mandala Core: развернутые концепции для глубокого понимания системы. Содержит методологию ответов ИИ."
     },
     "Fructus": {
       "file": "fructus/",
@@ -38,9 +44,14 @@
     "базовая": [
       "Initium"
     ],
+    "философия": [
+      "Initium",
+      "Philosophia"
+    ],
     "исследователь": [
       "Initium",
-      "Sphaerae"
+      "Sphaerae",
+      "Philosophia"
     ],
     "архитектор": [
       "Initium",
@@ -49,7 +60,8 @@
     ],
     "креативщик": [
       "Initium",
-      "External_KB_Manifest"
+      "External_KB_Manifest",
+      "Philosophia"
     ]
   },
   "spheres_overview": {
@@ -99,7 +111,7 @@
   },
   "session_crystals": {
     "purpose": "Кристаллы — ключевые инсайты последних сессий, формирующие вектор развития проекта для Архитектора и Исследователя.",
-    "last_generated": "2026-02-09T22:45:00Z",
+    "last_generated": "2026-02-10T13:00:00Z",
     "crystals": [
       {
         "date": "2026-02-07",
@@ -118,19 +130,30 @@
         "insight": "Интеллектуальный Ahimsa-фильтр игнорирует код, проверяя только контекст",
         "impact": "повышение эффективности проверок",
         "vector": "Эффективность → Интеллектуальная Ахимса"
+      },
+      {
+        "date": "2026-02-10",
+        "insight": "Создание модуля Philosophia для глубокого философского понимания системы",
+        "impact": "усиление концептуальной целостности и вдохновения",
+        "vector": "Глубина → Философское ядро как источник смысла"
       }
     ],
-    "current_vector_interpretation": "Защита → Взаимодействие → Оптимизация. Следующий ожидаемый шаг — автоматизация (Phase 2) и автоупаковка фруктов."
+    "current_vector_interpretation": "Защита → Взаимодействие → Оптимизация → Глубина. Следующий ожидаемый шаг — интеграция философского модуля в рабочие процессы."
   },
   "integrity_links": {
     "to_initium": [
       "gardener_directives",
-      "modes.архитектор"
+      "modes.философия",
+      "modes.исследователь",
+      "modes.креативщик"
+    ],
+    "to_philosophia": [
+      "philosophy_deep_dive_url"
     ],
     "to_akasha": [
       "artifact://Akasha/MANDALA-BOT-V3.13-FRUCTUS/v3.13.0",
       "standard://fructus_packaging_guide/v2.2"
     ],
-    "cross_references": 15
+    "cross_references": 18
   }
 }
