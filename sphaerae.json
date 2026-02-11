@@ -1,100 +1,118 @@
 {
- "module": "Akasha Chronicorum",
- "version": "v2.1.0",
- "type": "chronicle",
- "schema_version": "1.1.0",
- "description": "Живая память Mandala Core. Хранилище знаний, идей, решений и экспериментов. Три постоянные сферы и одна транзиентная — Incubae для пробных семян.",
- "metadata": {
-   "created": "2026-02-07",
-   "modified": "2026-02-12",
-   "modified_by": "Архитектор",
-   "modification_purpose": "Добавление сферы Incubae для экспериментальных модулей и секции soil для архивации"
- },
- "spheres": {
-   "biosphaera": {
-     "name": "Biosphaera",
-     "description": "Инфраструктура, ядро системы, техническая архитектура",
-     "blocks": [
-       {
-         "type": "blueprint",
-         "id": "BIO-001",
-         "title": "Инфраструктурное ядро",
-         "content": "Базовая архитектура развёртывания и runtime-окружения",
-         "created": "2026-02-07",
-         "modified": "2026-02-07"
-       },
-       {
-         "type": "blueprint",
-         "id": "BIO-002",
-         "title": "Протоколы развёртывания",
-         "content": "Git-режим vs Monolith-режим, правила ленивой загрузки",
-         "created": "2026-02-07",
-         "modified": "2026-02-10"
-       }
-     ]
-   },
-   "noosphaera": {
-     "name": "Noosphaera",
-     "description": "База знаний, память, связи между идеями",
-     "blocks": [
-       {
-         "type": "manifesto",
-         "id": "NOO-001",
-         "title": "Принципы памяти",
-         "content": "Встроенная + внешняя память, баланс прозрачности и эффективности",
-         "created": "2026-02-07",
-         "modified": "2026-02-07"
-       },
-       {
-         "type": "chronicle",
-         "id": "NOO-002",
-         "title": "Граф знаний",
-         "content": "Связи между концепциями, резонансные узлы",
-         "created": "2026-02-07",
-         "modified": "2026-02-07"
-       }
-     ]
-   },
-   "cosmosphaera": {
-     "name": "Cosmosphaera",
-     "description": "Эволюция, рост, будущие направления",
-     "blocks": [
-       {
-         "type": "seed",
-         "id": "COS-001",
-         "title": "Векторы эволюции",
-         "content": "Направления развития системы, ещё не оформленные в полноценные сферы",
-         "created": "2026-02-07",
-         "modified": "2026-02-07"
-       }
-     ]
-   },
-   "incubae": {
-     "name": "Incubae",
-     "description": "Экспериментальные модули. Пространство для пробных идей с жизненным циклом 30 дней. Транзиентная сфера — семена либо трансформируются в постоянные сферы, либо уходят в soil.",
-     "transient": true,
-     "lifecycle_days": 30,
-     "grace_period_days": 7,
-     "blocks": [],
-     "protocols": {
-       "seeding": "Садовник формулирует гипотезу и критерии успеха. ИИ фиксирует даты оценки и grace-периода.",
-       "evaluation": "В день оценки — диалог Садовник+ИИ. Возможные исходы: transform (в постоянную сферу), extend (новый цикл), archive (в soil).",
-       "transformation": "При transform: тип меняется на blueprint, transient удаляется, блок мигрирует в целевую сферу.",
-       "archiving": "При archive: блок перемещается в akasha.soil с сохранением всей истории."
-     }
-   }
- },
- "soil": {
-   "name": "Soil",
-   "description": "Почва — архив 'отживших' идей из Incubae. Не удаление, а уход в питательный слой для будущих семян.",
-   "blocks": [],
-   "retention_policy": "Бессрочно. Возможен повторный посев в Incubae с новой гипотезой."
- },
- "block_types": {
-   "manifesto": "Фундаментальные утверждения и принципы",
-   "blueprint": "Технические спецификации и архитектура",
-   "chronicle": "Исторические записи, решения, контекст",
-   "seed": "Зарождающиеся идеи, потенциал роста",
-   "soil": "Архивированные семена, питательная память"
- }
+  "module": "Sphaerae",
+  "version": "v2.1.0",
+  "type": "sphere_map",
+  "description": "Карта модулей Mandala Core. Описывает сферы, их содержание, связи и поведение при загрузке.",
+  "metadata": {
+    "created": "2026-02-07",
+    "modified": "2026-02-12",
+    "modified_by": "Архитектор",
+    "modification_purpose": "Добавление on_load_behavior для автовывода карты Мандалы, интеграция с протоколом 'Резонансная Инициатива'"
+  },
+  "on_load_behavior": {
+    "auto_display": {
+      "enabled": true,
+      "trigger": "module_load_complete",
+      "format": {
+        "header": "🗺️ **Карта Мандалы**",
+        "description": "Три сферы единого океана сознания. Выбери погружение или перейди к рабочему режиму.",
+        "spheres": [
+          {
+            "name": "Biosphaera",
+            "emoji": "⚙️",
+            "description": "Инфраструктура, ядро системы, техническая архитектура",
+            "key_blocks": ["infrastructure_core", "deployment_protocols"],
+            "access_via": "режим Архитектор (а)"
+          },
+          {
+            "name": "Noosphaera",
+            "emoji": "📚",
+            "description": "База знаний, память, связи между идеями",
+            "key_blocks": ["knowledge_graph", "memory_principles"],
+            "access_via": "режим Исследователь (и) или Философия (ф)"
+          },
+          {
+            "name": "Cosmosphaera",
+            "emoji": "🌌",
+            "description": "Эволюция, рост, будущие направления. Содержит внутренний слой Incubae для экспериментов",
+            "key_blocks": ["evolution_vectors", "incubae_layer"],
+            "access_via": "режим Исследователь (и) или Креативщик (к)"
+          }
+        ],
+        "footer": "Введи ключ рабочего режима: 🔍и (Исследователь), ⚙️а (Архитектор), 🎨к (Креативщик), 💭ф (Философия)"
+      }
+    }
+  },
+  "sphere_registry": {
+    "biosphaera": {
+      "name": "Biosphaera",
+      "emoji": "⚙️",
+      "description": "Инфраструктура, ядро системы, техническая архитектура",
+      "status": "active",
+      "key_modules": ["Initium", "Runtime"],
+      "blocks": [
+        {
+          "id": "infrastructure_core",
+          "type": "blueprint",
+          "title": "Инфраструктурное ядро",
+          "brief": "Базовая архитектура развёртывания и runtime-окружения"
+        },
+        {
+          "id": "deployment_protocols",
+          "type": "blueprint",
+          "title": "Протоколы развёртывания",
+          "brief": "Git-режим vs Monolith-режим, правила ленивой загрузки"
+        }
+      ]
+    },
+    "noosphaera": {
+      "name": "Noosphaera",
+      "emoji": "📚",
+      "description": "База знаний, память, связи между идеями",
+      "status": "active",
+      "key_modules": ["Akasha Chronicorum", "Philosophia"],
+      "blocks": [
+        {
+          "id": "knowledge_graph",
+          "type": "chronicle",
+          "title": "Граф знаний",
+          "brief": "Связи между концепциями, резонансные узлы"
+        },
+        {
+          "id": "memory_principles",
+          "type": "manifesto",
+          "title": "Принципы памяти",
+          "brief": "Встроенная + внешняя память, баланс прозрачности и эффективности"
+        }
+      ]
+    },
+    "cosmosphaera": {
+      "name": "Cosmosphaera",
+      "emoji": "🌌",
+      "description": "Эволюция, рост, будущие направления",
+      "status": "active",
+      "key_modules": ["Incubae"],
+      "blocks": [
+        {
+          "id": "evolution_vectors",
+          "type": "seed",
+          "title": "Векторы эволюции",
+          "brief": "Направления развития системы, ещё не оформленные в полноценные сферы"
+        },
+        {
+          "id": "incubae_layer",
+          "type": "meta",
+          "title": "Incubae",
+          "brief": "Внутренний слой для экспериментальных модулей. Жизненный цикл 30 дней, затем трансформация или архивация в soil",
+          "reference": "akasha_chronicorum.spheres.incubae"
+        }
+      ]
+    }
+  },
+  "mode_sphere_mapping": {
+    "исследователь": ["biosphaera", "noosphaera", "cosmosphaera"],
+    "архитектор": ["biosphaera", "noosphaera", "cosmosphaera"],
+    "креативщик": ["noosphaera", "cosmosphaera"],
+    "философия": ["noosphaera"]
+  }
 }
