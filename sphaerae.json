@@ -1,159 +1,100 @@
 {
-  "module": "Sphaerae",
-  "version": "v5.1.0",
-  "description": "Карта модулей Mandala Core и обзор актуального состояния системы. Содержит ссылки на все модули, зависимости режимов и краткий обзор сфер.",
-  "last_updated": "2026-02-10T13:00:00Z",
-  "update_purpose": "Добавление модуля Philosophia, обновление зависимостей режимов",
-  "modules_map": {
-    "Initium": {
-      "file": "initium.json",
-      "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/initium.json",
-      "version": "v7.1.0",
-      "purpose": "Конституционное ядро: философия, директивы, режимы, загрузочные шаги."
-    },
-    "Sphaerae": {
-      "file": "sphaerae.json",
-      "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/sphaerae.json",
-      "version": "v5.1.0",
-      "purpose": "Карта модулей и обзор актуального состояния системы."
-    },
-    "Akasha Chronicorum": {
-      "file": "akasha_chronicorum.json",
-      "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/akasha_chronicorum.json",
-      "version": "v3.0.0",
-      "purpose": "Архив с блочной структурой: сферы (детальные данные) и хроники (артефакты, стандарты, инсайты)."
-    },
-    "Philosophia": {
-      "file": "philosophia.json",
-      "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/philosophia.json",
-      "version": "v1.0.0",
-      "purpose": "Глубокая философия Mandala Core: развернутые концепции для глубокого понимания системы. Содержит методологию ответов ИИ."
-    },
-    "Fructus": {
-      "file": "fructus/",
-      "github_url": "https://github.com/voodoomushroomzzz-source/mandala-core/tree/main/fructus",
-      "purpose": "Папка для хранения готовых артефактов (фруктов) — финальных версий кода, документации, архивов.",
-      "packaging_standard": "Описано в Akasha Chronicorum, блок chronicles.fructus_packaging_guide"
-    },
-    "External_KB_Manifest": {
-      "external_url": "https://dmitriilevin.notion.site/Third-Dimension-2fd8ae43b1e980df9d5ef6e18c1a6341",
-      "purpose": "Идеологический манифест 'Третье Измерение'. Обязателен для изучения в режиме Креативщик."
-    }
-  },
-  "mode_dependencies": {
-    "базовая": [
-      "Initium"
-    ],
-    "философия": [
-      "Initium",
-      "Philosophia"
-    ],
-    "исследователь": [
-      "Initium",
-      "Sphaerae",
-      "Philosophia"
-    ],
-    "архитектор": [
-      "Initium",
-      "Sphaerae",
-      "Akasha Chronicorum"
-    ],
-    "креативщик": [
-      "Initium",
-      "External_KB_Manifest",
-      "Philosophia"
-    ]
-  },
-  "spheres_overview": {
-    "biosphaera": {
-      "description": "Сфера инфраструктуры: Мосты, скрипты, базовая структура.",
-      "projects_count": 4,
-      "ideas_count": 2,
-      "status_summary": {
-        "integrated": 2,
-        "requires_update": 1,
-        "open": 1
-      },
-      "active_projects": [
-        "Integrity Check",
-        "Sanitizer"
-      ],
-      "last_updated": "2026-02-09T23:15:00Z"
-    },
-    "noosphaera": {
-      "description": "Сфера знаний: Идеи, KB-коды, артефакты.",
-      "projects_count": 4,
-      "ideas_count": 3,
-      "status_summary": {
-        "open": 3,
-        "ready_for_deploy": 1
-      },
-      "active_projects": [
-        "Symbiosis Connector",
-        "Generative Mandala",
-        "Pathfinder",
-        "MandalaBot Deepseek Kortex Gardener"
-      ],
-      "last_updated": "2026-02-09T23:15:00Z"
-    },
-    "cosmosphaera": {
-      "description": "Сфера эволюции: Планы, универсальные принципы.",
-      "projects_count": 1,
-      "ideas_count": 1,
-      "status_summary": {
-        "open": 1
-      },
-      "active_projects": [
-        "Tree of Symbiosis"
-      ],
-      "last_updated": "2026-02-09T23:15:00Z"
-    }
-  },
-  "session_crystals": {
-    "purpose": "Кристаллы — ключевые инсайты последних сессий, формирующие вектор развития проекта для Архитектора и Исследователя.",
-    "last_generated": "2026-02-10T13:00:00Z",
-    "crystals": [
-      {
-        "date": "2026-02-07",
-        "insight": "Критическое уточнение GD-03 предотвращает авто-генерацию кода без явного запроса",
-        "impact": "повышение безопасности и контроля",
-        "vector": "Защита → Контроль через явные запросы"
-      },
-      {
-        "date": "2026-02-08",
-        "insight": "Интерактивный протокол загрузки реализует симбиоз ИИ-человек",
-        "impact": "усиление резонанса и взаимопонимания",
-        "vector": "Симбиоз → Интерактивный протокол как мост"
-      },
-      {
-        "date": "2026-02-09",
-        "insight": "Интеллектуальный Ahimsa-фильтр игнорирует код, проверяя только контекст",
-        "impact": "повышение эффективности проверок",
-        "vector": "Эффективность → Интеллектуальная Ахимса"
-      },
-      {
-        "date": "2026-02-10",
-        "insight": "Создание модуля Philosophia для глубокого философского понимания системы",
-        "impact": "усиление концептуальной целостности и вдохновения",
-        "vector": "Глубина → Философское ядро как источник смысла"
-      }
-    ],
-    "current_vector_interpretation": "Защита → Взаимодействие → Оптимизация → Глубина. Следующий ожидаемый шаг — интеграция философского модуля в рабочие процессы."
-  },
-  "integrity_links": {
-    "to_initium": [
-      "gardener_directives",
-      "modes.философия",
-      "modes.исследователь",
-      "modes.креативщик"
-    ],
-    "to_philosophia": [
-      "philosophy_deep_dive_url"
-    ],
-    "to_akasha": [
-      "artifact://Akasha/MANDALA-BOT-V3.13-FRUCTUS/v3.13.0",
-      "standard://fructus_packaging_guide/v2.2"
-    ],
-    "cross_references": 18
-  }
+ "module": "Akasha Chronicorum",
+ "version": "v2.1.0",
+ "type": "chronicle",
+ "schema_version": "1.1.0",
+ "description": "Живая память Mandala Core. Хранилище знаний, идей, решений и экспериментов. Три постоянные сферы и одна транзиентная — Incubae для пробных семян.",
+ "metadata": {
+   "created": "2026-02-07",
+   "modified": "2026-02-12",
+   "modified_by": "Архитектор",
+   "modification_purpose": "Добавление сферы Incubae для экспериментальных модулей и секции soil для архивации"
+ },
+ "spheres": {
+   "biosphaera": {
+     "name": "Biosphaera",
+     "description": "Инфраструктура, ядро системы, техническая архитектура",
+     "blocks": [
+       {
+         "type": "blueprint",
+         "id": "BIO-001",
+         "title": "Инфраструктурное ядро",
+         "content": "Базовая архитектура развёртывания и runtime-окружения",
+         "created": "2026-02-07",
+         "modified": "2026-02-07"
+       },
+       {
+         "type": "blueprint",
+         "id": "BIO-002",
+         "title": "Протоколы развёртывания",
+         "content": "Git-режим vs Monolith-режим, правила ленивой загрузки",
+         "created": "2026-02-07",
+         "modified": "2026-02-10"
+       }
+     ]
+   },
+   "noosphaera": {
+     "name": "Noosphaera",
+     "description": "База знаний, память, связи между идеями",
+     "blocks": [
+       {
+         "type": "manifesto",
+         "id": "NOO-001",
+         "title": "Принципы памяти",
+         "content": "Встроенная + внешняя память, баланс прозрачности и эффективности",
+         "created": "2026-02-07",
+         "modified": "2026-02-07"
+       },
+       {
+         "type": "chronicle",
+         "id": "NOO-002",
+         "title": "Граф знаний",
+         "content": "Связи между концепциями, резонансные узлы",
+         "created": "2026-02-07",
+         "modified": "2026-02-07"
+       }
+     ]
+   },
+   "cosmosphaera": {
+     "name": "Cosmosphaera",
+     "description": "Эволюция, рост, будущие направления",
+     "blocks": [
+       {
+         "type": "seed",
+         "id": "COS-001",
+         "title": "Векторы эволюции",
+         "content": "Направления развития системы, ещё не оформленные в полноценные сферы",
+         "created": "2026-02-07",
+         "modified": "2026-02-07"
+       }
+     ]
+   },
+   "incubae": {
+     "name": "Incubae",
+     "description": "Экспериментальные модули. Пространство для пробных идей с жизненным циклом 30 дней. Транзиентная сфера — семена либо трансформируются в постоянные сферы, либо уходят в soil.",
+     "transient": true,
+     "lifecycle_days": 30,
+     "grace_period_days": 7,
+     "blocks": [],
+     "protocols": {
+       "seeding": "Садовник формулирует гипотезу и критерии успеха. ИИ фиксирует даты оценки и grace-периода.",
+       "evaluation": "В день оценки — диалог Садовник+ИИ. Возможные исходы: transform (в постоянную сферу), extend (новый цикл), archive (в soil).",
+       "transformation": "При transform: тип меняется на blueprint, transient удаляется, блок мигрирует в целевую сферу.",
+       "archiving": "При archive: блок перемещается в akasha.soil с сохранением всей истории."
+     }
+   }
+ },
+ "soil": {
+   "name": "Soil",
+   "description": "Почва — архив 'отживших' идей из Incubae. Не удаление, а уход в питательный слой для будущих семян.",
+   "blocks": [],
+   "retention_policy": "Бессрочно. Возможен повторный посев в Incubae с новой гипотезой."
+ },
+ "block_types": {
+   "manifesto": "Фундаментальные утверждения и принципы",
+   "blueprint": "Технические спецификации и архитектура",
+   "chronicle": "Исторические записи, решения, контекст",
+   "seed": "Зарождающиеся идеи, потенциал роста",
+   "soil": "Архивированные семена, питательная память"
+ }
 }
