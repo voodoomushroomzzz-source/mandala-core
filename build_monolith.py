@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Mandala Core Monolith Builder (версия 4.0 с полной обработкой ошибок).
+Mandala Core Monolith Builder (версия 4.1 с поддержкой Philosophia).
 """
 
 import json
@@ -15,7 +15,9 @@ from typing import Dict, Any, Optional
 REPO_ROOT = Path(os.getenv("GITHUB_WORKSPACE", "."))
 BUILD_DIR = REPO_ROOT / "build"
 OUTPUT_FILE = BUILD_DIR / "mandala_core.monolith.latest.json"
-REQUIRED_MODULES = ["Sphaerae", "Akasha Chronicorum"]
+
+# ⚡ ИЗМЕНЕНО: добавлен Philosophia в список обязательных модулей
+REQUIRED_MODULES = ["Sphaerae", "Akasha Chronicorum", "Philosophia"]
 
 def log(message: str, level: str = "INFO"):
     timestamp = datetime.now().strftime("%H:%M:%S")
@@ -36,7 +38,7 @@ def load_local_json(file_path: Path) -> Dict[str, Any]:
 def load_json_from_url(url: str) -> Dict[str, Any]:
     """Загружает JSON по URL."""
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'MandalaCoreBuilder/4.0'})
+        req = urllib.request.Request(url, headers={'User-Agent': 'MandalaCoreBuilder/4.1'})
         with urllib.request.urlopen(req, timeout=30) as response:
             content = response.read().decode('utf-8')
             return json.loads(content)
@@ -45,21 +47,22 @@ def load_json_from_url(url: str) -> Dict[str, Any]:
 
 def build_monolith() -> Dict[str, Any]:
     """Основная функция сборки монолита."""
-    log("Начало сборки Mandala Core Monolith v4.0")
-    
-    # Список файлов для загрузки
+    log("Начало сборки Mandala Core Monolith v4.1")
+
+    # ⚡ ИЗМЕНЕНО: добавлен Philosophia
     files_to_load = [
         ("Initium", "initium.json"),
         ("Sphaerae", "sphaerae.json"),
-        ("Akasha Chronicorum", "akasha_chronicorum.json")
+        ("Akasha Chronicorum", "akasha_chronicorum.json"),
+        ("Philosophia", "philosophia.json")   # ⚡ ДОБАВЛЕНО
     ]
-    
+
     embedded_modules = {}
     failed_modules = []
-    
+
     for module_name, filename in files_to_load:
         log(f"Загрузка {module_name}")
-        
+
         # Пробуем локальный файл
         file_path = REPO_ROOT / filename
         if file_path.exists():
@@ -82,18 +85,18 @@ def build_monolith() -> Dict[str, Any]:
                 log(f"  ❌ Ошибка URL: {e}", "ERROR")
                 embedded_modules[module_name] = {"_error": str(e)}
                 failed_modules.append(module_name)
-    
-    # Проверяем ключевые модули
+
+    # Проверяем ключевые модули (теперь включая Philosophia)
     for mod_name in REQUIRED_MODULES:
         if mod_name not in embedded_modules:
             raise ValueError(f"Ключевой модуль {mod_name} отсутствует")
         if "_error" in embedded_modules[mod_name]:
             raise ValueError(f"Ключевой модуль {mod_name} с ошибкой")
-    
+
     # Формируем монолит
     current_time = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
     version_hash = hashlib.md5(current_time.encode()).hexdigest()[:8]
-    
+
     monolith = {
         "module": "Mandala Core Monolith",
         "version": f"monolith-{embedded_modules.get('Initium', {}).get('version', 'unknown')}-{version_hash}",
@@ -108,7 +111,7 @@ def build_monolith() -> Dict[str, Any]:
         },
         "runtime_instruction": "Система загружена из монолита."
     }
-    
+
     return monolith
 
 def main():
@@ -116,29 +119,29 @@ def main():
     try:
         BUILD_DIR.mkdir(exist_ok=True)
         log(f"Рабочая директория: {REPO_ROOT}")
-        
+
         monolith = build_monolith()
-        
+
         with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
             json.dump(monolith, f, indent=2, ensure_ascii=False)
-        
+
         log(f"Монолит сохранён: {OUTPUT_FILE}")
         log(f"Размер: {os.path.getsize(OUTPUT_FILE)} байт")
-        
+
         # Валидация
         print("\n" + "="*60)
         print("ПРОВЕРКА:")
         print("="*60)
-        
+
         with open(OUTPUT_FILE, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        
+
         print(f"✅ JSON валиден")
         print(f"🏷️  Версия: {data.get('version')}")
         print(f"📦 Модулей: {len(data.get('embedded_modules', {}))}")
-        
+
         print("\n🔍 Ключевые модули:")
-        for mod in ["Initium", "Sphaerae", "Akasha Chronicorum"]:
+        for mod in ["Initium", "Sphaerae", "Akasha Chronicorum", "Philosophia"]:   # ⚡ ИЗМЕНЕНО
             if mod in data["embedded_modules"]:
                 if "_error" not in data["embedded_modules"][mod]:
                     ver = data["embedded_modules"][mod].get("version", "unknown")
@@ -147,9 +150,9 @@ def main():
                     print(f"  ❌ {mod}: ОШИБКА")
             else:
                 print(f"  ❌ {mod}: ОТСУТСТВУЕТ")
-        
+
         print("="*60)
-        
+
     except Exception as e:
         log(f"Критическая ошибка: {e}", "ERROR")
         sys.exit(1)
