@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.14
-🍇 Fructus + 💭 Philosophia + Гибридное меню + Умный Ahimsa-фильтр
+Mandala Sync Terminal Bot v3.16
+Render Web Service + Webhook (Aiogram 3)
+Полный монолит. Работает 24/7 с бесплатным пингом.
 """
 
 import os
@@ -15,51 +16,8 @@ from datetime import datetime
 from typing import Dict, List, Tuple
 from pathlib import Path
 
-# ============================================================================
-# 1. НАСТРОЙКА ЛОГИРОВАНИЯ
-# ============================================================================
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler("mandala_bot.log", encoding='utf-8')
-    ]
-)
-logger = logging.getLogger(__name__)
-
-# ============================================================================
-# 2. ЗАГРУЗКА ПЕРЕМЕННЫХ ОКРУЖЕНИЯ
-# ============================================================================
-
-from dotenv import load_dotenv
-
-current_dir = Path(__file__).parent
-env_path = current_dir / '.env'
-
-if env_path.exists():
-    load_dotenv(dotenv_path=env_path)
-    logger.info(f"📁 .env файл загружен из: {env_path}")
-else:
-    load_dotenv()
-    logger.info("📁 .env файл загружен из стандартного расположения")
-
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-REPO_NAME = os.getenv("REPO_NAME", "voodoomushroomzzz-source/mandala-core")
-
-if not BOT_TOKEN:
-    logger.error("❌ BOT_TOKEN не найден в .env файле")
-    sys.exit(1)
-
-if not GITHUB_TOKEN:
-    logger.warning("⚠️ GITHUB_TOKEN не найден, GitHub функции будут недоступны")
-
-# ============================================================================
-# 3. ИМПОРТЫ AIOGRAM И ИНИЦИАЛИЗАЦИЯ БОТА
-# ============================================================================
-
+# ========== ВЕБ-ФРЕЙМВОРК И TELEGRAM ==========
+from aiohttp import web
 from aiogram import Bot, Dispatcher, Router, F
 from aiogram.enums import ParseMode
 from aiogram.filters import Command, StateFilter
@@ -67,53 +25,71 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import (
     Message, ReplyKeyboardMarkup, KeyboardButton,
-    ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton,
+    InlineKeyboardMarkup, InlineKeyboardButton,
     BufferedInputFile, CallbackQuery
 )
 from aiogram.client.default import DefaultBotProperties
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
 import aiohttp
+from dotenv import load_dotenv
 
-logger.info(f"🔑 BOT_TOKEN: {'Установлен' if BOT_TOKEN else 'Нет'}")
-logger.info(f"🔑 GITHUB_TOKEN: {'Установлен' if GITHUB_TOKEN else 'Нет'}")
+# ========== ЛОГИРОВАНИЕ ==========
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger(__name__)
 
-try:
-    bot = Bot(
-        token=BOT_TOKEN,
-        default=DefaultBotProperties(parse_mode=ParseMode.HTML)
-    )
-    logger.info("✅ Бот инициализирован")
-except Exception as e:
-    logger.error(f"❌ Ошибка инициализации бота: {e}")
+# ========== ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ==========
+load_dotenv()
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_NAME = os.getenv("REPO_NAME", "voodoomushroomzzz-source/mandala-core")
+
+# Render автоматически подставит эти переменные
+RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
+PORT = int(os.getenv("PORT", 8000))
+WEBHOOK_PATH = "/webhook"
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "mandala-secret")
+
+if not BOT_TOKEN:
+    logger.error("❌ BOT_TOKEN не найден")
     sys.exit(1)
 
+if not RENDER_EXTERNAL_URL:
+    logger.error("❌ RENDER_EXTERNAL_URL не задан (Render сам его ставит)")
+    sys.exit(1)
+
+WEBHOOK_URL = f"{RENDER_EXTERNAL_URL}{WEBHOOK_PATH}"
+
+# ========== ИНИЦИАЛИЗАЦИЯ БОТА ==========
+bot = Bot(
+    token=BOT_TOKEN,
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+)
 dp = Dispatcher()
 router = Router()
 dp.include_router(router)
 
-# ============================================================================
-# 4. СОСТОЯНИЯ FSM И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-# ============================================================================
-
+# ========== FSM И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
 class UploadStates(StatesGroup):
     waiting_for_module_choice = State()
     waiting_for_file = State()
 
-# ⚡ ИЗМЕНЕНИЕ: добавлен Philosophia, удалён Fructus (теперь отдельный пункт меню)
 CORE_FILES = {
     "initium": "initium.json",
     "sphaerae": "sphaerae.json",
     "akasha": "akasha_chronicorum.json",
-    "philosophia": "philosophia.json",   # ⚡ ДОБАВЛЕНО
+    "philosophia": "philosophia.json",
     "monolith": "mandala_core.monolith.json"
 }
 
 user_module_choice = {}
 
-# ============================================================================
-# 5. ГИБРИДНАЯ СИСТЕМА МЕНЮ
-# ============================================================================
-
+# ========== 5. ГИБРИДНАЯ СИСТЕМА МЕНЮ ==========
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     """Главное меню - основные действия (всегда видимое)"""
     keyboard = [
@@ -152,7 +128,6 @@ def get_monolith_inline_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
 
-# ⚡ ИЗМЕНЕНИЕ: убрана кнопка Fructus, добавлена кнопка Philosophia
 def get_modules_inline_keyboard() -> InlineKeyboardMarkup:
     """Инлайн меню выбора модуля (только core-модули)"""
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -162,7 +137,7 @@ def get_modules_inline_keyboard() -> InlineKeyboardMarkup:
         ],
         [
             InlineKeyboardButton(text="📜 Akasha", callback_data="module_akasha"),
-            InlineKeyboardButton(text="💭 Philosophia", callback_data="module_philosophia")  # ⚡ ДОБАВЛЕНО
+            InlineKeyboardButton(text="💭 Philosophia", callback_data="module_philosophia")
         ],
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
@@ -177,39 +152,30 @@ def get_fructus_inline_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
 
-# ============================================================================
-# 6. УМНЫЙ AHIMSA-ФИЛЬТР (ИГНОРИРУЕТ КОД)
-# ============================================================================
-
+# ========== 6. УМНЫЙ AHIMSA-ФИЛЬТР ==========
 async def check_ahimsa_smart(content: Dict) -> Tuple[bool, str, List[Tuple[str, str]]]:
     """Умная проверка Ahimsa, которая игнорирует поля с кодом"""
     try:
-        # Поля, содержащие код - пропускаем проверку полностью
         code_fields = [
             "complete_source_code", "source_code", "code",
             "content", "technical_specifications", "deployment_instructions",
             "test_scenarios", "ai_replication_guide", "final_verification"
         ]
 
-        # Создаем копию без полей с кодом
         text_only_content = {}
         for key, value in content.items():
             if key not in code_fields:
                 if isinstance(value, (dict, list)):
-                    # Для вложенных структур проверяем рекурсивно
                     text_only_content[key] = value
                 else:
                     text_only_content[key] = value
 
-        # Если после фильтрации не осталось текстового контента
         if not text_only_content:
             return True, "✅ Контент содержит только код/технические данные - проверка не требуется", []
 
-        # Преобразуем в строку для анализа
         content_str = json.dumps(text_only_content, ensure_ascii=False)
         content_lower = content_str.lower()
 
-        # Только фразы, которые явно указывают на проблемы
         problem_phrases = [
             "применение насилия",
             "физическое воздействие",
@@ -223,7 +189,6 @@ async def check_ahimsa_smart(content: Dict) -> Tuple[bool, str, List[Tuple[str, 
         ]
 
         found_issues = []
-
         for phrase in problem_phrases:
             if phrase in content_lower:
                 idx = content_lower.find(phrase)
@@ -231,7 +196,6 @@ async def check_ahimsa_smart(content: Dict) -> Tuple[bool, str, List[Tuple[str, 
                 end = min(len(content_str), idx + len(phrase) + 50)
                 context = content_str[start:end].replace('\n', ' ').replace('\r', ' ')
                 context = ' '.join(context.split())
-
                 found_issues.append(("Потенциальное нарушение", f"Фраза '{phrase}' в контексте: ...{context}..."))
 
         if found_issues:
@@ -243,10 +207,7 @@ async def check_ahimsa_smart(content: Dict) -> Tuple[bool, str, List[Tuple[str, 
         logger.error(f"Ошибка при умной проверке Ahimsa: {e}")
         return True, f"⚠️ Проверка пропущена (ошибка: {str(e)[:50]})", []
 
-# ============================================================================
-# 7. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-# ============================================================================
-
+# ========== 7. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
 async def update_github_file(file_path: str, content: Dict, message: str) -> bool:
     """Обновление файла в GitHub"""
     try:
@@ -326,7 +287,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
                 "file_type": file_type,
                 "upload_timestamp": datetime.now().isoformat(),
                 "uploaded_by": f"user_{user_id}",
-                "source": "mandala_bot_v3.14"
+                "source": "mandala_bot_v3.16"
             }
 
         success = await update_github_file(
@@ -365,10 +326,7 @@ async def download_monolith_file() -> Tuple[bool, bytes, str]:
         logger.error(f"Ошибка в download_monolith_file: {e}")
         return False, b"", str(e)
 
-# ============================================================================
-# 8. ОСНОВНЫЕ ОБРАБОТЧИКИ КОМАНД
-# ============================================================================
-
+# ========== 8. ОСНОВНЫЕ ОБРАБОТЧИКИ КОМАНД ==========
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
     """Старт бота - показывает главное меню"""
@@ -379,8 +337,9 @@ async def cmd_start(message: Message, state: FSMContext):
         del user_module_choice[user_id]
 
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.14</b>\n\n"  # ⚡ версия обновлена
+        "🌀 <b>Mandala Sync Terminal v3.16</b>\n\n"
         "<b>Улучшения:</b>\n"
+        "✅ Полный монолит для Render Web Service\n"
         "✅ Добавлен модуль Philosophia\n"
         "✅ Fructus выведен в отдельный пункт меню\n"
         "✅ Умный Ahimsa-фильтр (игнорирует код)\n"
@@ -413,7 +372,6 @@ async def handle_upload_start(message: Message, state: FSMContext):
     if user_id in user_module_choice:
         del user_module_choice[user_id]
 
-    # ⚡ ИЗМЕНЕНИЕ: убран Fructus, добавлен Philosophia
     await message.answer(
         "📤 <b>Выберите модуль для загрузки файла:</b>\n\n"
         "<b>Доступные модули:</b>\n"
@@ -451,7 +409,7 @@ async def handle_fructus_menu(message: Message):
 async def handle_help(message: Message):
     """Помощь"""
     await message.answer(
-        "📚 <b>Mandala Sync Terminal v3.14</b>\n\n"
+        "📚 <b>Mandala Sync Terminal v3.16</b>\n\n"
         "<b>Основные функции:</b>\n"
         "• 📤 Загрузить файл — выбор модуля (Initium, Sphaerae, Akasha, Philosophia)\n"
         "• 📦 Монолит — скачать/информация о монолите\n"
@@ -467,18 +425,16 @@ async def handle_help(message: Message):
         "2. Выберите '📤 Загрузить'\n"
         "3. Отправьте JSON файл\n"
         "4. Файл сохранится с уникальным именем в папку fructus/\n\n"
-        "<b>Улучшения в v3.14:</b>\n"
-        "✅ Добавлен модуль Philosophia\n"
+        "<b>Улучшения в v3.16:</b>\n"
+        "✅ Полная поддержка Render Web Service (вебхуки)\n"
+        "✅ Модуль Philosophia интегрирован\n"
         "✅ Fructus выведен в отдельное меню\n"
         "✅ Умный Ahimsa-фильтр\n"
-        "✅ Стабильная работа",
+        "✅ Стабильная работа 24/7",
         reply_markup=get_main_keyboard()
     )
 
-# ============================================================================
-# 9. ОБРАБОТЧИКИ ИНЛАЙН-МЕНЮ (МОНОЛИТ)
-# ============================================================================
-
+# ========== 9. ОБРАБОТЧИКИ ИНЛАЙН-МЕНЮ (МОНОЛИТ) ==========
 @router.callback_query(F.data == "download_monolith")
 async def handle_download_monolith(callback_query: CallbackQuery):
     """Скачивание и отправка монолита"""
@@ -525,19 +481,15 @@ async def handle_info_monolith(callback_query: CallbackQuery):
     )
     await callback_query.answer()
 
-# ============================================================================
-# 10. ОБРАБОТЧИКИ ВЫБОРА МОДУЛЯ
-# ============================================================================
-
+# ========== 10. ОБРАБОТЧИКИ ВЫБОРА МОДУЛЯ ==========
 @router.callback_query(F.data.startswith("module_"))
 async def handle_module_selection(callback_query: CallbackQuery, state: FSMContext):
     """Выбор модуля через инлайн-меню"""
-    # ⚡ ИЗМЕНЕНИЕ: добавлен philosophia, убран fructus
     module_map = {
         "module_initium": "initium",
         "module_sphaerae": "sphaerae",
         "module_akasha": "akasha",
-        "module_philosophia": "philosophia"   # ⚡ ДОБАВЛЕНО
+        "module_philosophia": "philosophia"
     }
 
     callback_data = callback_query.data
@@ -549,7 +501,6 @@ async def handle_module_selection(callback_query: CallbackQuery, state: FSMConte
 
     user_module_choice[callback_query.from_user.id] = module_name
 
-    # ⚡ ИЗМЕНЕНИЕ: добавлен philosophia
     module_display = {
         "initium": "🌀 INITIUM",
         "sphaerae": "🌐 SPHAERAE",
@@ -574,10 +525,7 @@ async def handle_module_selection(callback_query: CallbackQuery, state: FSMConte
     )
     await callback_query.answer()
 
-# ============================================================================
-# 11. ОБРАБОТЧИКИ FRUCTUS (ОТДЕЛЬНЫЙ ПУНКТ)
-# ============================================================================
-
+# ========== 11. ОБРАБОТЧИКИ FRUCTUS ==========
 @router.callback_query(F.data == "fructus_info")
 async def handle_fructus_info(callback_query: CallbackQuery):
     """Информация о Fructus"""
@@ -621,10 +569,7 @@ async def handle_fructus_upload(callback_query: CallbackQuery, state: FSMContext
     )
     await callback_query.answer()
 
-# ============================================================================
-# 12. ОБРАБОТЧИК ОТМЕНЫ
-# ============================================================================
-
+# ========== 12. ОБРАБОТЧИК ОТМЕНЫ ==========
 @router.callback_query(F.data == "cancel")
 async def handle_cancel_inline(callback_query: CallbackQuery, state: FSMContext):
     """Отмена через инлайн-меню"""
@@ -642,10 +587,7 @@ async def handle_cancel_inline(callback_query: CallbackQuery, state: FSMContext)
         reply_markup=get_main_keyboard()
     )
 
-# ============================================================================
-# 13. ОБРАБОТКА ЗАГРУЗКИ ФАЙЛОВ
-# ============================================================================
-
+# ========== 13. ОБРАБОТКА ЗАГРУЗКИ ФАЙЛОВ ==========
 @router.message(StateFilter(UploadStates.waiting_for_file))
 async def process_file_upload(message: Message, state: FSMContext):
     """Обработка загруженного файла"""
@@ -720,7 +662,6 @@ async def process_file_upload(message: Message, state: FSMContext):
             reply_markup=get_upload_mode_keyboard()
         )
 
-        # ⚡ ИЗМЕНЕНИЕ: fructus обрабатывается отдельно, но больше не входит в CORE_FILES
         if module_name == "fructus":
             await message.answer(
                 f"🔄 <b>Загружаю артефакт в fructus...</b>",
@@ -758,7 +699,6 @@ async def process_file_upload(message: Message, state: FSMContext):
             )
             return
 
-        # Для core-модулей (initium, sphaerae, akasha, philosophia)
         target_filename = CORE_FILES.get(module_name)
         if not target_filename:
             await message.answer(
@@ -776,7 +716,7 @@ async def process_file_upload(message: Message, state: FSMContext):
         success = await update_github_file(
             file_path=target_filename,
             content=json_content,
-            message=f"Обновление {target_filename} через Mandala Bot v3.14"
+            message=f"Обновление {target_filename} через Mandala Bot v3.16"
         )
 
         if success:
@@ -814,10 +754,7 @@ async def process_file_upload(message: Message, state: FSMContext):
         if user_id in user_module_choice:
             del user_module_choice[user_id]
 
-# ============================================================================
-# 14. ОБРАБОТКА КНОПКИ "🔄 Сменить модуль"
-# ============================================================================
-
+# ========== 14. ОБРАБОТКА КНОПКИ "🔄 Сменить модуль" ==========
 @router.message(F.text == "🔄 Сменить модуль")
 async def handle_change_module(message: Message, state: FSMContext):
     """Смена модуля во время загрузки"""
@@ -831,10 +768,7 @@ async def handle_change_module(message: Message, state: FSMContext):
         reply_markup=get_modules_inline_keyboard()
     )
 
-# ============================================================================
-# 15. ОБРАБОТКА ЛЮБЫХ ДРУГИХ СООБЩЕНИЙ
-# ============================================================================
-
+# ========== 15. ОБРАБОТКА ЛЮБЫХ ДРУГИХ СООБЩЕНИЙ ==========
 @router.message()
 async def handle_other_messages(message: Message, state: FSMContext):
     """Обработка любых других сообщений"""
@@ -860,31 +794,49 @@ async def handle_other_messages(message: Message, state: FSMContext):
             reply_markup=get_main_keyboard()
         )
 
-# ============================================================================
-# 16. ЗАПУСК БОТА
-# ============================================================================
+# ========== 16. WEBHOOK ЗАПУСК ==========
+async def on_startup() -> None:
+    """Установка веб-хука при старте"""
+    await bot.set_webhook(
+        WEBHOOK_URL,
+        secret_token=WEBHOOK_SECRET,
+        allowed_updates=dp.resolve_used_update_types(),
+        drop_pending_updates=True
+    )
+    logger.info(f"✅ Webhook установлен: {WEBHOOK_URL}")
 
-async def main():
-    """Основная функция запуска бота"""
-    logger.info("=" * 60)
-    logger.info("🚀 Запуск Mandala Sync Terminal v3.14")
-    logger.info("📦 Монолит: скачивание ВКЛЮЧЕНО")
-    logger.info("📤 Загрузка файлов: Initium, Sphaerae, Akasha, Philosophia")
-    logger.info("🍇 Fructus: отдельный пункт меню")
-    logger.info("🌿 Ahimsa проверка: УМНАЯ (игнорирует код)")
-    logger.info("=" * 60)
+async def on_shutdown() -> None:
+    """Удаление веб-хука при остановке"""
+    await bot.delete_webhook()
+    logger.info("❌ Webhook удалён")
 
-    if not env_path.exists():
-        logger.warning("⚠️ Файл .env не найден")
-        logger.info("Создайте .env файл с BOT_TOKEN и GITHUB_TOKEN")
+def main():
+    """Запуск aiohttp сервера с веб-хуками"""
+    app = web.Application()
 
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
+    # Обработчик веб-хука от Telegram
+    SimpleRequestHandler(
+        dispatcher=dp,
+        bot=bot,
+        secret_token=WEBHOOK_SECRET
+    ).register(app, path=WEBHOOK_PATH)
+
+    # Healthcheck для Render (обязательно!)
+    async def health(_):
+        return web.Response(text="OK")
+    app.router.add_get("/healthcheck", health)
+
+    # Корневой маршрут — просто заглушка
+    async def index(_):
+        return web.Response(text="Mandala Bot is running")
+    app.router.add_get("/", index)
+
+    setup_application(app, dp, bot=bot)
+
+    logger.info(f"🚀 Запуск сервера на порту {PORT}")
+    web.run_app(app, host="0.0.0.0", port=PORT)
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        logger.info("👋 Бот остановлен")
-    except Exception as e:
-        logger.error(f"❌ Критическая ошибка: {e}")
+    dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
+    main()
