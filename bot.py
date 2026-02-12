@@ -834,7 +834,7 @@ def main():
     setup_application(app, dp, bot=bot)
 
     logger.info(f"🚀 Запуск сервера на порту {PORT}")
-    web.run_app(app, host="0.0.0.0", port=PORT)
+    web.run_app(app, host="0.0.0.0", port=10000)
 
 if __name__ == "__main__":
     dp.startup.register(on_startup)
