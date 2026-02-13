@@ -10,6 +10,7 @@ on:
       - 'philosophia.json'
       - 'geometria_sacra.json'
       - 'incubae.json'
+      - 'tectosphaera.json'
       - 'build_monolith.py'
   workflow_dispatch:
   schedule:
@@ -42,7 +43,7 @@ jobs:
       - name: Build Monolith
         id: build
         run: |
-          echo "🔄 Запуск сборщика v5.1..."
+          echo "🔄 Запуск сборщика v5.2..."
           python build_monolith.py
           
           if [ ! -f "build/mandala_core.monolith.latest.json" ]; then
