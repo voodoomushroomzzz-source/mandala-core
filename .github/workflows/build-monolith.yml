@@ -4,56 +4,123 @@ on:
   push:
     branches: [ main ]
     paths:
+      # Ядро конституции
       - 'initium.json'
+      # Карта и память
       - 'sphaerae.json'
       - 'akasha_chronicorum.json'
-      - 'philosophia.json'          # ⚡ ДОБАВЛЕНО
+      # Философия и язык
+      - 'philosophia.json'
+      - 'geometria_sacra.json'      # 🔺 ДОБАВЛЕНО
+      # Семена и реестр
+      - 'incubae.json'              # 🌱 ДОБАВЛЕНО
+      # Сборщик
       - 'build_monolith.py'
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '0 12 * * *'  # Ежедневная сборка для актуализации
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: read
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Нет внешних зависимостей, только стандартная библиотека
 
       - name: Build Monolith
+        id: build
         run: |
-          echo "🔄 Запуск сборки..."
+          echo "🔄 Запуск сборщика v5.0..."
           python build_monolith.py
           
           if [ ! -f "build/mandala_core.monolith.latest.json" ]; then
-            echo "❌ Файл не создан"
+            echo "❌ КРИТИЧЕСКАЯ ОШИБКА: файл монолита не создан"
             exit 1
           fi
           
-          echo "✅ Файл создан"
-          ls -la build/
+          echo "✅ Монолит успешно собран"
+          echo "version=$(python -c "import json; data=json.load(open('build/mandala_core.monolith.latest.json')); print(data.get('version', 'unknown'))")" >> $GITHUB_OUTPUT
+          
+          # Показываем статистику сборки
+          echo "📊 Статистика сборки:"
+          python -c "
+import json
+data = json.load(open('build/mandala_core.monolith.latest.json'))
+info = data['build_info']
+print(f'  Успешно: {len(info[\"successful_modules\"])}/{info[\"total_modules\"]}')
+print(f'  Критические модули: {\"✅\" if info[\"critical_modules_ok\"] else \"❌\"}')
+if info[\"failed_modules\"]:
+    print(f'  Ошибки: {info[\"failed_modules\"]}')
+          "
 
-      - name: Commit Monolith
+      - name: Upload Monolith as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mandala-core-monolith
+          path: build/mandala_core.monolith.latest.json
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Commit and Push Monolith
         run: |
-          echo "🚀 Коммит..."
+          echo "🚀 Подготовка коммита..."
+          
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
+          # Убеждаемся, что директория build существует
           mkdir -p build
-          git add build/
           
-          VERSION=$(python -c "import json; data=json.load(open('build/mandala_core.monolith.latest.json')); print(data.get('version', 'unknown'))")
-          git commit -m "🤖 Авто-сборка $VERSION" || echo "⚠️ Нет изменений"
-          git push origin HEAD:main
+          # Добавляем файл в индекс
+          git add build/mandala_core.monolith.latest.json
+          
+          # Проверяем, есть ли изменения
+          if git diff --staged --quiet; then
+            echo "⚠️ Нет изменений в монолите"
+          else
+            VERSION="${{ steps.build.outputs.version }}"
+            git commit -m "🤖 Авто-сборка монолита $VERSION"
+            
+            # Пытаемся запушить, игнорируем ошибки конкурентности
+            git pull --rebase origin main
+            git push origin HEAD:main || echo "⚠️ Не удалось запушить (конкурентный коммит?)"
+            echo "✅ Монолит запушен в репозиторий"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release Tag (optional)
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, 'geometria_sacra') || contains(github.event.head_commit.message, 'incubae')
+        run: |
+          VERSION="${{ steps.build.outputs.version }}"
+          TAG="monolith-$(date +'%Y%m%d')"
+          
+          git tag -f "$TAG"
+          git push -f origin "$TAG" || echo "⚠️ Не удалось создать тег"
+          echo "✅ Создан тег: $TAG"
+
+      - name: Summary
+        run: |
+          echo "## ✅ Mandala Core Monolith Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Версия:** ${{ steps.build.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Модули:** Initium, Sphaerae, Akasha, Philosophia, Geometria Sacra, Incubae" >> $GITHUB_STEP_SUMMARY
+          echo "**Время сборки:** $(date)" >> $GITHUB_STEP_SUMMARY
