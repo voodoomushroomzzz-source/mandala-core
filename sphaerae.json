@@ -1,14 +1,14 @@
 {
   "module": "Sphaerae",
-  "version": "v2.2.0",
+  "version": "v2.3.0",
   "type": "sphere_map",
   "description": "Карта модулей Mandala Core. Описывает сферы, их содержание, связи и поведение при загрузке. Актуальный реестр семян — в модуле Incubae.",
   "metadata": {
     "created": "2026-02-07",
-    "modified": "2026-02-13T23:00:00Z",
+    "modified": "2026-02-13T16:00:00Z",
     "modified_by": "Архитектор",
-    "modification_purpose": "Устранение дублирования списков семян. Перенос ответственности за реестр активных семян в модуль Incubae. Обновление ссылок и футера.",
-    "based_on_initiative": "RI-2026-005 (косвенная)",
+    "modification_purpose": "Активация Tectosphaera: удалено '(в проекции)' из biosphaera.key_modules",
+    "based_on_initiative": "RI-2026-012",
     "gardener_approval": "в процессе"
   },
   "on_load_behavior": {
@@ -50,7 +50,7 @@
             "access_via": "режим Стратег (с) или Маркетолог (м)"
           }
         ],
-        "footer": "🌱 **Incubae:** единый реестр всех семян — модуль `Incubae` (команда: `incubae list`).\nВведи ключ рабочего режима: 🧭с, ⚙️а, 🌐м, 💭ф, 🗺️к"
+        "footer": "🌱 **Incubae:** единый реестр всех семян — модуль `Incubae` (команда: `incubae list`).\n🛡️ **Tectosphaera:** тело заботы — модуль `Tectosphaera` (команда: `tecto status`).\nВведи ключ рабочего режима: 🧭с, ⚙️а, 🌐м, 💭ф, 🗺️к"
       }
     }
   },
@@ -63,7 +63,7 @@
       "key_modules": [
         "Initium",
         "Runtime",
-        "Tectosphaera (в проекции)"
+        "Tectosphaera"
       ],
       "blocks": [
         {
@@ -156,16 +156,12 @@
     ]
   },
   "changes": {
-    "version": "v2.1.2 → v2.2.0",
-    "summary": "Устранение дублирования списков семян, перенос ответственности за реестр в модуль Incubae",
+    "version": "v2.2.0 → v2.3.0",
+    "summary": "Активация Tectosphaera: удалено '(в проекции)'",
     "details": [
-      "Обновлён footer: удалён ручной список семян, добавлена команда `incubae list`",
-      "Обновлён incubae_layer.brief: удалено перечисление RI, добавлена ссылка на модуль Incubae",
-      "Добавлено поле reference в incubae_layer с указанием модуля, версии и команды",
-      "Обновлён список key_modules в noosphaera: добавлен Geometria_Sacra",
-      "Обновлён список key_modules в biosphaera: добавлен Tectosphaera (в проекции)",
-      "Исправлены ключи доступа к сферам в соответствии с ролями v7.4.0+",
-      "Модуль Incubae теперь единственный источник истины о семенах"
+      "Обновлён biosphaera.key_modules: 'Tectosphaera (в проекции)' → 'Tectosphaera'",
+      "Добавлена строка о Tectosphaera в footer визуализации",
+      "Модуль Tectosphaera теперь официально часть Biosphaera"
     ]
   }
 }
