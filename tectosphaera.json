@@ -13,7 +13,10 @@
     "gardener_approval": "подтверждено в диалоге",
     "guardian_lock": {
       "rule": "Принципы защиты как ухода не могут быть изменены на принципы защиты как сопротивления без явного подтверждения Садовника.",
-      "applies_to": ["core_principles", "layers"]
+      "applies_to": [
+        "core_principles",
+        "layers"
+      ]
     }
   },
   "core_principles": [
