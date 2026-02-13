@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.17
+Mandala Sync Terminal Bot v3.18
 Render Web Service + Webhook (Aiogram 3)
-СТАБИЛЬНАЯ ВЕРСИЯ:
-- Порт принудительно 10000 (Render не перезапускает)
-- Webhook не удаляется при shutdown
-- RENDER_EXTERNAL_URL можно задать вручную
-- Ahimsa-фильтр, Fructus, все модули
+АРХИТЕКТУРНОЕ ОБНОВЛЕНИЕ:
+- Добавлены модули Geometria Sacra и Incubae
+- Полная синхронизация с новой структурой Мандалы
+- Поддержка единого реестра семян
 """
 
 import os
@@ -84,11 +83,14 @@ class UploadStates(StatesGroup):
     waiting_for_module_choice = State()
     waiting_for_file = State()
 
+# ========== 🔴 ОБНОВЛЕНО: ПОЛНЫЙ СПИСОК МОДУЛЕЙ МАНДАЛЫ ==========
 CORE_FILES = {
     "initium": "initium.json",
     "sphaerae": "sphaerae.json",
     "akasha": "akasha_chronicorum.json",
     "philosophia": "philosophia.json",
+    "geometria_sacra": "geometria_sacra.json",    # 🔺 НОВЫЙ МОДУЛЬ
+    "incubae": "incubae.json",                    # 🌱 НОВЫЙ МОДУЛЬ
     "monolith": "mandala_core.monolith.json"
 }
 
@@ -130,6 +132,7 @@ def get_monolith_inline_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
 
+# ========== 🔴 ОБНОВЛЕНО: РАСШИРЕННАЯ КЛАВИАТУРА МОДУЛЕЙ ==========
 def get_modules_inline_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [
@@ -139,6 +142,10 @@ def get_modules_inline_keyboard() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(text="📜 Akasha", callback_data="module_akasha"),
             InlineKeyboardButton(text="💭 Philosophia", callback_data="module_philosophia")
+        ],
+        [
+            InlineKeyboardButton(text="🔺 Geometria Sacra", callback_data="module_geometria_sacra"),
+            InlineKeyboardButton(text="🌱 Incubae", callback_data="module_incubae")
         ],
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
@@ -152,7 +159,7 @@ def get_fructus_inline_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
 
-# ========== AHIMSA-ФИЛЬТР ==========
+# ========== AHIMSA-ФИЛЬТР (БЕЗ ИЗМЕНЕНИЙ) ==========
 async def check_ahimsa_smart(content: Dict) -> Tuple[bool, str, List[Tuple[str, str]]]:
     try:
         code_fields = [
@@ -199,7 +206,7 @@ async def check_ahimsa_smart(content: Dict) -> Tuple[bool, str, List[Tuple[str, 
         logger.error(f"Ошибка при умной проверке Ahimsa: {e}")
         return True, f"⚠️ Проверка пропущена (ошибка: {str(e)[:50]})", []
 
-# ========== GITHUB ФУНКЦИИ ==========
+# ========== GITHUB ФУНКЦИИ (БЕЗ ИЗМЕНЕНИЙ) ==========
 async def update_github_file(file_path: str, content: Dict, message: str) -> bool:
     try:
         url = f"https://api.github.com/repos/{REPO_NAME}/contents/{file_path}"
@@ -257,6 +264,10 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             file_type = "log"
         elif "export" in original_filename.lower() or "data" in original_filename.lower():
             file_type = "export"
+        elif "seed" in original_filename.lower() or "incubae" in original_filename.lower():
+            file_type = "seed"  # 🌱 Новый тип для семян
+        elif "geometria" in original_filename.lower() or "sacra" in original_filename.lower():
+            file_type = "geometry"  # 🔺 Новый тип для геометрии
 
         target_filename = generate_fructus_filename(original_filename, file_type)
         full_path = f"fructus/{target_filename}"
@@ -269,7 +280,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
                 "file_type": file_type,
                 "upload_timestamp": datetime.now().isoformat(),
                 "uploaded_by": f"user_{user_id}",
-                "source": "mandala_bot_v3.17"
+                "source": "mandala_bot_v3.18"
             }
 
         success = await update_github_file(
@@ -307,11 +318,11 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_module_choice:
         del user_module_choice[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.17</b>\n\n"
-        "<b>Стабильная версия:</b>\n"
-        "✅ Порт 10000 фиксирован\n"
-        "✅ Webhook не удаляется при перезапуске\n"
-        "✅ Пинг корневого URL будит надёжно\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.18</b>\n\n"
+        "<b>Архитектурное обновление:</b>\n"
+        "✅ Geometria Sacra — Язык Света\n"
+        "✅ Incubae — Единый реестр семян\n"
+        "✅ Полная синхронизация с Мандалой\n\n"
         "<b>Выберите действие:</b>",
         reply_markup=get_main_keyboard()
     )
@@ -332,7 +343,8 @@ async def handle_upload_start(message: Message, state: FSMContext):
         del user_module_choice[user_id]
     await message.answer(
         "📤 <b>Выберите модуль:</b>\n"
-        "🌀 Initium • 🌐 Sphaerae • 📜 Akasha • 💭 Philosophia",
+        "🌀 Initium • 🌐 Sphaerae • 📜 Akasha\n"
+        "💭 Philosophia • 🔺 Geometria Sacra • 🌱 Incubae",
         reply_markup=get_modules_inline_keyboard()
     )
     await state.set_state(UploadStates.waiting_for_module_choice)
@@ -347,15 +359,18 @@ async def handle_monolith_menu(message: Message):
 @router.message(F.text == "🍇 Fructus")
 async def handle_fructus_menu(message: Message):
     await message.answer(
-        "🍇 <b>Fructus - система артефактов</b>",
+        "🍇 <b>Fructus - система артефактов</b>\n"
+        "📦 Хранилище: seeds, geometry, artifacts",
         reply_markup=get_fructus_inline_keyboard()
     )
 
 @router.message(F.text == "ℹ️ Помощь")
 async def handle_help(message: Message):
     await message.answer(
-        "📚 <b>Mandala Sync Terminal v3.17</b>\n\n"
-        "📤 Загрузить файл – модули в корень\n"
+        "📚 <b>Mandala Sync Terminal v3.18</b>\n\n"
+        "📤 Загрузить файл – модули в корень:\n"
+        "• Initium • Sphaerae • Akasha\n"
+        "• Philosophia • Geometria Sacra • Incubae\n\n"
         "🍇 Fructus – артефакты в /fructus\n"
         "📦 Монолит – скачать сборку\n\n"
         "🌿 Ahimsa-фильтр: игнорирует код, ищет фразы насилия\n"
@@ -363,7 +378,7 @@ async def handle_help(message: Message):
         reply_markup=get_main_keyboard()
     )
 
-# ========== ОБРАБОТЧИКИ КОЛБЭКОВ ==========
+# ========== 🔴 ОБНОВЛЕНО: РАСШИРЕННАЯ ОБРАБОТКА МОДУЛЕЙ ==========
 @router.callback_query(F.data == "download_monolith")
 async def handle_download_monolith(callback_query: CallbackQuery):
     await callback_query.message.edit_text("📦 Скачиваю монолит...")
@@ -382,7 +397,8 @@ async def handle_download_monolith(callback_query: CallbackQuery):
 async def handle_info_monolith(callback_query: CallbackQuery):
     await callback_query.message.edit_text(
         "📋 <b>Монолит</b> – все модули в одном файле\n"
-        "• Initium\n• Sphaerae\n• Akasha\n• Philosophia\n\n"
+        "• Initium\n• Sphaerae\n• Akasha\n"
+        "• Philosophia\n• Geometria Sacra\n• Incubae\n\n"
         "Собирается автоматически при пуше",
         reply_markup=get_monolith_inline_keyboard()
     )
@@ -394,7 +410,9 @@ async def handle_module_selection(callback_query: CallbackQuery, state: FSMConte
         "module_initium": "initium",
         "module_sphaerae": "sphaerae",
         "module_akasha": "akasha",
-        "module_philosophia": "philosophia"
+        "module_philosophia": "philosophia",
+        "module_geometria_sacra": "geometria_sacra",  # 🔺 НОВЫЙ МОДУЛЬ
+        "module_incubae": "incubae"                   # 🌱 НОВЫЙ МОДУЛЬ
     }
     module_name = module_map.get(callback_query.data)
     if not module_name:
@@ -402,11 +420,15 @@ async def handle_module_selection(callback_query: CallbackQuery, state: FSMConte
         return
 
     user_module_choice[callback_query.from_user.id] = module_name
+    
+    # ========== 🔴 ОБНОВЛЕНО: ОТОБРАЖЕНИЕ ВСЕХ 6 МОДУЛЕЙ ==========
     module_display = {
         "initium": "🌀 INITIUM",
         "sphaerae": "🌐 SPHAERAE",
-        "akasha": "📜 AKASHA",
-        "philosophia": "💭 PHILOSOPHIA"
+        "akasha": "📜 AKASHA CHRONICORUM",
+        "philosophia": "💭 PHILOSOPHIA",
+        "geometria_sacra": "🔺 GEOMETRIA SACRA",
+        "incubae": "🌱 INCUBAE"
     }
 
     await state.set_state(UploadStates.waiting_for_file)
@@ -425,9 +447,11 @@ async def handle_module_selection(callback_query: CallbackQuery, state: FSMConte
 async def handle_fructus_info(callback_query: CallbackQuery):
     await callback_query.message.edit_text(
         "📋 <b>Fructus</b> – хранилище артефактов\n"
-        "• Уникальные имена\n"
-        "• Метаданные\n"
-        "• Путь: /fructus/",
+        "• seeds — семена Incubae\n"
+        "• geometry — паттерны Geometria Sacra\n"
+        "• artifacts — общие артефакты\n"
+        "• logs, exports, reports\n\n"
+        "Путь: /fructus/",
         reply_markup=get_fructus_inline_keyboard()
     )
     await callback_query.answer()
@@ -450,7 +474,7 @@ async def handle_cancel_inline(callback_query: CallbackQuery, state: FSMContext)
     await callback_query.answer()
     await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
 
-# ========== ОБРАБОТКА ФАЙЛОВ ==========
+# ========== ОБРАБОТКА ФАЙЛОВ (БЕЗ ИЗМЕНЕНИЙ) ==========
 @router.message(StateFilter(UploadStates.waiting_for_file))
 async def process_file_upload(message: Message, state: FSMContext):
     user_id = message.from_user.id
@@ -500,7 +524,7 @@ async def process_file_upload(message: Message, state: FSMContext):
 
             success = await update_github_file(
                 target, json_content,
-                f"Обновление {target} через бот v3.17"
+                f"Обновление {target} через бот v3.18"
             )
             if success:
                 await message.answer(f"✅ {module_name.upper()} обновлён", reply_markup=get_main_keyboard())
@@ -536,7 +560,7 @@ async def handle_other_messages(message: Message, state: FSMContext):
     else:
         await message.answer("ℹ️ Используйте /start или меню", reply_markup=get_main_keyboard())
 
-# ========== WEBHOOK ==========
+# ========== WEBHOOK (БЕЗ ИЗМЕНЕНИЙ) ==========
 async def on_startup() -> None:
     await bot.set_webhook(
         WEBHOOK_URL,
@@ -564,7 +588,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot is running")
+        return web.Response(text="Mandala Bot v3.18 is running")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
