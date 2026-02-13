@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Mandala Core Monolith Builder (версия 5.1)
+Mandala Core Monolith Builder (версия 5.2)
 ПОЛНАЯ АРХИТЕКТУРА С GRACEFUL FALLBACK:
 - Initium, Sphaerae, Akasha Chronicorum, Philosophia — КРИТИЧЕСКИЕ
-- Geometria Sacra, Incubae — ОПЦИОНАЛЬНЫЕ (логируются, но не валят сборку)
+- Geometria Sacra, Incubae, Tectosphaera — ОПЦИОНАЛЬНЫЕ (логируются, но не валят сборку)
 - Монолит собирается всегда, даже если новых модулей ещё нет
 """
 
@@ -27,11 +27,12 @@ ALL_MODULES = [
     ("Akasha Chronicorum", "akasha_chronicorum.json"),
     ("Philosophia", "philosophia.json"),
     ("Geometria Sacra", "geometria_sacra.json"),      # 🔺 Опциональный
-    ("Incubae", "incubae.json")                       # 🌱 Опциональный
+    ("Incubae", "incubae.json"),                       # 🌱 Опциональный
+    ("Tectosphaera", "tectosphaera.json")              # 🛡️ Опциональный
 ]
 
 # ========== 🔴 ТОЛЬКО 4 КРИТИЧЕСКИХ МОДУЛЯ ==========
-# Без них монолит бессмыслен. Без Geometria/Incubae — можно жить.
+# Без них монолит бессмыслен. Без Geometria/Incubae/Tectosphaera — можно жить.
 CRITICAL_MODULES = [
     "Initium",
     "Philosophia",
@@ -63,7 +64,7 @@ def load_local_json(file_path: Path) -> Optional[Dict[str, Any]]:
 def load_json_from_url(url: str, module_name: str) -> Optional[Dict[str, Any]]:
     """Загружает JSON по URL. Возвращает None при ошибке."""
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'MandalaCoreBuilder/5.1'})
+        req = urllib.request.Request(url, headers={'User-Agent': 'MandalaCoreBuilder/5.2'})
         with urllib.request.urlopen(req, timeout=10) as response:
             content = response.read().decode('utf-8')
             data = json.loads(content)
@@ -76,7 +77,7 @@ def load_json_from_url(url: str, module_name: str) -> Optional[Dict[str, Any]]:
 def build_monolith() -> Dict[str, Any]:
     """Основная функция сборки монолита."""
     log("=" * 60)
-    log("🌀 Mandala Core Monolith Builder v5.1 (graceful fallback)")
+    log("🌀 Mandala Core Monolith Builder v5.2 (graceful fallback)")
     log("=" * 60)
 
     embedded_modules = {}
@@ -158,7 +159,7 @@ def build_monolith() -> Dict[str, Any]:
         "embedded_modules": embedded_modules,
         "build_info": {
             "timestamp": current_time.isoformat(),
-            "builder_version": "5.1",
+            "builder_version": "5.2",
             "successful_modules": [name for name in embedded_modules if "_error" not in embedded_modules[name]],
             "failed_modules": failed_modules,
             "missing_optional_modules": missing_optional,
