@@ -1,9 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-monolith-v7.4.1-36e61743-33b466b7",
+  "version": "monolith-vmonolith-v7.4.1-36e61743-c96c3d93",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-13T09:03:51.287832+00:00",
-  "build_source": "b8a5a4da042aabb2121f879d6b91966b08e295f2",
+  "build_timestamp": "2026-02-13T09:58:01.248297+00:00",
+  "build_source": "faaef349fdc3d16060e9ee979c2e3454ac9f4c40",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/faaef349fdc3d16060e9ee979c2e3454ac9f4c40",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -574,7 +575,7 @@
     },
     "Akasha Chronicorum": {
       "module": "Akasha Chronicorum",
-      "version": "v2.4.0",
+      "version": "v2.4.1",
       "type": "chronicle",
       "schema_version": "1.2.0",
       "description": "Живая память Mandala Core. Хранилище знаний, идей, решений, экспериментов и резонансных инициатив. Три постоянные сферы, одна транзиентная (Incubae — вынесена в отдельный модуль) и архив (soil).",
@@ -864,17 +865,60 @@
           "Статус: kernel_module, guardian_lock сохранён"
         ]
       }
+    },
+    "Geometria Sacra": {
+      "_error": "Module not found locally or via URL",
+      "_status": "missing",
+      "_module": "Geometria Sacra",
+      "_filename": "geometria_sacra.json",
+      "_critical": false
+    },
+    "Incubae": {
+      "_error": "Module not found locally or via URL",
+      "_status": "missing",
+      "_module": "Incubae",
+      "_filename": "incubae.json",
+      "_critical": false
     }
   },
   "build_info": {
+    "timestamp": "2026-02-13T09:58:01.248297+00:00",
+    "builder_version": "5.1",
     "successful_modules": [
       "Initium",
       "Sphaerae",
       "Akasha Chronicorum",
       "Philosophia"
     ],
-    "failed_modules": [],
-    "required_modules_ok": true
+    "failed_modules": [
+      "Geometria Sacra",
+      "Incubae"
+    ],
+    "missing_optional_modules": [
+      "Geometria Sacra",
+      "Incubae"
+    ],
+    "total_modules": 6,
+    "loaded_modules": 4,
+    "critical_modules_ok": true
   },
-  "runtime_instruction": "Система загружена из монолита."
+  "runtime_instruction": "Система загружена из монолита.",
+  "manifest": {
+    "description": "Mandala Core Monolith",
+    "modules": [
+      "Initium",
+      "Sphaerae",
+      "Akasha Chronicorum",
+      "Philosophia",
+      "Geometria Sacra",
+      "Incubae"
+    ],
+    "critical_modules": [
+      "Initium",
+      "Philosophia",
+      "Sphaerae",
+      "Akasha Chronicorum"
+    ],
+    "built_at": "2026-02-13 09:58:01 UTC"
+  }
 }
