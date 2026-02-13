@@ -5,7 +5,7 @@ Render Web Service + Webhook (Aiogram 3)
 СТАБИЛЬНАЯ ВЕРСИЯ С ПОЛНОЙ ЗАЩИТОЙ:
 - Никогда не падает (все исключения перехвачены)
 - Подробное логирование GitHub API
-- Поддержка Geometria Sacra, Incubae, инфраструктуры
+- Поддержка Geometria Sacra, Incubae, Tectosphaera, инфраструктуры
 - Graceful fallback при любых ошибках
 """
 
@@ -135,6 +135,13 @@ MANDALA_MODULES = {
         "path": "incubae.json",
         "description": "Единый реестр семян",
         "category": "module"
+    },
+    "tectosphaera": {
+        "name": "🛡️ Tectosphaera",
+        "filename": "tectosphaera.json",
+        "path": "tectosphaera.json",
+        "description": "Тело заботы, защита как уход",
+        "category": "module"
     }
 }
 
@@ -205,6 +212,9 @@ def get_modules_keyboard() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(text="🔺 Geometria", callback_data="target_geometria_sacra"),
             InlineKeyboardButton(text="🌱 Incubae", callback_data="target_incubae")
+        ],
+        [
+            InlineKeyboardButton(text="🛡️ Tectosphaera", callback_data="target_tectosphaera")
         ],
         [InlineKeyboardButton(text="◀️ Назад к категориям", callback_data="back_to_categories")]
     ])
@@ -543,7 +553,7 @@ async def cmd_start(message: Message, state: FSMContext):
         "<b>Стабильная версия с полной защитой:</b>\n"
         "✅ Никогда не падает\n"
         "✅ Подробное логирование GitHub\n"
-        "✅ Поддержка Geometria Sacra и Incubae\n"
+        "✅ Поддержка Geometria Sacra, Incubae, Tectosphaera\n"
         "✅ Поддержка инфраструктуры сборки\n\n"
         "<b>Выберите действие:</b>",
         reply_markup=get_main_keyboard()
@@ -674,7 +684,7 @@ async def handle_info_monolith(callback_query: CallbackQuery):
     await callback_query.message.edit_text(
         "📋 <b>Монолит</b> – все модули в одном файле\n"
         "• Initium • Sphaerae • Akasha\n"
-        "• Philosophia • Geometria Sacra • Incubae\n\n"
+        "• Philosophia • Geometria Sacra • Incubae • Tectosphaera\n\n"
         "Собирается автоматически при пуше",
         reply_markup=get_monolith_inline_keyboard()
     )
