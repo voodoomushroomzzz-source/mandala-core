@@ -1,13 +1,10 @@
 name: Kortix Automation
 
 on:
-  workflow_dispatch:
-    inputs:
-      instruction_file:
-        description: 'Path to instruction file'
-        required: true
-        default: 'updates/test.json'
-        type: string
+  # Автоматический запуск при новом файле в updates/
+  push:
+    paths:
+      - 'updates/*.json'
 
 jobs:
   apply:
@@ -23,10 +20,14 @@ jobs:
       - name: Install PyGithub
         run: pip install PyGithub
       
+      - name: Get latest instruction file
+        run: |
+          FILE=$(ls -t updates/*.json | head -1)
+          echo "FILE=$FILE" >> $GITHUB_ENV
+          echo "Found instruction file: $FILE"
+      
       - name: Run Kortix
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Running automation..."
-          ls -la scripts/
-          cat scripts/config.json
+          INSTRUCTION_FILE: ${{ env.FILE }}
+        run: python scripts/github_kortix.py -f $INSTRUCTION_FILE
