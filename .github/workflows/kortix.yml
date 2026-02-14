@@ -49,4 +49,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INSTRUCTION_FILE: ${{ env.FILE }}
         run: |
-          python scripts/github_kortix.py -f ../$INSTRUCTION_FILE
+          python scripts/github_kortix.py -f $INSTRUCTION_FILE
