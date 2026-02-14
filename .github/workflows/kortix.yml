@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       instruction_file:
-        description: 'Путь к файлу инструкции'
+        description: 'Path to instruction file'
         required: true
-        default: 'updates/'
+        default: 'updates/test.json'
         type: string
 
 permissions:
@@ -35,30 +35,11 @@ jobs:
       - name: Get instruction file
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            # При ручном запуске используем указанный файл
-            if [ "${{ github.event.inputs.instruction_file }}" == "updates/" ]; then
-              # Если выбрана папка, берём самый новый файл
-              FILE=$(ls -t updates/*.json 2>/dev/null | head -1)
-              if [ -z "$FILE" ]; then
-                echo "❌ Нет JSON файлов в папке updates/"
-                exit 1
-              fi
-              echo "📁 Выбрана папка, берём самый новый: $FILE"
-            else
-              FILE="${{ github.event.inputs.instruction_file }}"
-              echo "📁 Ручной режим: $FILE"
-            fi
+            echo "FILE=${{ github.event.inputs.instruction_file }}" >> $GITHUB_ENV
           else
-            # При автоматическом запуске берём САМЫЙ НОВЫЙ файл
-            FILE=$(ls -t updates/*.json 2>/dev/null | head -1)
-            if [ -z "$FILE" ]; then
-              echo "❌ Нет JSON файлов в папке updates/"
-              exit 0  # Не ошибка, просто нечего делать
-            fi
-            echo "📁 Авто режим (самый новый): $FILE"
+            echo "FILE=$(ls -t updates/*.json | head -1)" >> $GITHUB_ENV
           fi
-          echo "FILE=$FILE" >> $GITHUB_ENV
-          echo "Selected file: $FILE"
+          echo "Found: $FILE"
           cat $FILE
       
       - name: Run Kortix
@@ -66,4 +47,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INSTRUCTION_FILE: ${{ env.FILE }}
         run: |
-          python scripts/github_kortix.py -f $INSTRUCTION_FILE
+          cd scripts
+          python github_kortix.py -f ../$INSTRUCTION_FILE
+      
+      - name: Auto-merge PR
+        env:
+          PR_URL: ${{ env.PR_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge --auto --merge $PR_URL || echo "Auto-merge not enabled"
