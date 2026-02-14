@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "update_id": "YYYY-MM-DD_opisanie",
+  "initiated_by": "Садовник",
+  "resonance_check_required": true,
+  
+  "operations": [
+    {
+      "type": "add_object_to_array",
+      "module": "Incubae",
+      "file": "incubae/registry.json",
+      "target_path": "$.seeds",
+      "new_object": {
+        "id": "RI-2026-XXX",
+        "title": "Название семени",
+        "status": "active",
+        "added": "YYYY-MM-DD",
+        "expiry": "YYYY-MM-DD",
+        "type": "resonant_initiative",
+        "initiator": "СР/Садовник",
+        "content_summary": "Краткое описание"
+      },
+      "validation": {
+        "must_not_exist": "RI-2026-XXX"
+      }
+    },
+    {
+      "type": "add_object_to_array",
+      "module": "Akasha",
+      "file": "akasha/chronicorum.json",
+      "target_path": "$.spheres.noosphaera.blocks",
+      "new_object": {
+        "type": "seed_reference",
+        "id": "RI-2026-XXX",
+        "title": "Название семени"
+      }
+    }
+  ],
+  
+  "commit_message": "🌱 Добавлено семя RI-2026-XXX",
+  "branch_name": "feature/ri-2026-XXX",
+  "pr_title": "🌱 Новое семя: RI-2026-XXX",
+  "pr_description": "Добавлено резонансное семя ..."
+}
