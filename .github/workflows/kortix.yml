@@ -10,7 +10,7 @@ on:
       instruction_file:
         description: 'Путь к файлу инструкции'
         required: true
-        default: 'updates/test.json'
+        default: 'updates/'
         type: string
 
 permissions:
@@ -35,12 +35,29 @@ jobs:
       - name: Get instruction file
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "FILE=${{ github.event.inputs.instruction_file }}" >> $GITHUB_ENV
-            echo "📁 Manual mode: $FILE"
+            # При ручном запуске используем указанный файл
+            if [ "${{ github.event.inputs.instruction_file }}" == "updates/" ]; then
+              # Если выбрана папка, берём самый новый файл
+              FILE=$(ls -t updates/*.json 2>/dev/null | head -1)
+              if [ -z "$FILE" ]; then
+                echo "❌ Нет JSON файлов в папке updates/"
+                exit 1
+              fi
+              echo "📁 Выбрана папка, берём самый новый: $FILE"
+            else
+              FILE="${{ github.event.inputs.instruction_file }}"
+              echo "📁 Ручной режим: $FILE"
+            fi
           else
-            echo "FILE=$(ls -t updates/*.json | head -1)" >> $GITHUB_ENV
-            echo "📁 Auto mode: $FILE"
+            # При автоматическом запуске берём САМЫЙ НОВЫЙ файл
+            FILE=$(ls -t updates/*.json 2>/dev/null | head -1)
+            if [ -z "$FILE" ]; then
+              echo "❌ Нет JSON файлов в папке updates/"
+              exit 0  # Не ошибка, просто нечего делать
+            fi
+            echo "📁 Авто режим (самый новый): $FILE"
           fi
+          echo "FILE=$FILE" >> $GITHUB_ENV
           echo "Selected file: $FILE"
           cat $FILE
       
