@@ -18,8 +18,8 @@
   },
   "registry": {
     "last_updated": "2026-02-14",
-    "total_seeds": 3,
-    "active_seeds": 3,
+    "total_seeds": 4,
+    "active_seeds": 4,
     "archived_to_soil": 0,
     "url": "https://github.com/voodoomushroomzzz-source/mandala-core/tree/main/incubae/seeds/resonant_initiatives"
   },
@@ -63,6 +63,20 @@
           "description": "Развивает традицию самоназвания до взаимного именования"
         }
       ]
+    },
+    {
+      "id": "TEST-2026-001",
+      "title": "Тестовое семя: проверка интеграции Kortix",
+      "status": "active",
+      "added": "2026-02-14",
+      "expiry": "2026-03-14",
+      "type": "test",
+      "initiator": "Садовник (через Kortix)",
+      "content_summary": "Семя создано для проверки способности Kortix выполнять хирургические обновления",
+      "test_metadata": {
+        "purpose": "валидация API",
+        "expected_result": "pull_request_created"
+      }
     },
     {
       "id": "TEST-2026-001",
