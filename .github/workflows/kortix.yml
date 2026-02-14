@@ -1,12 +1,10 @@
 name: Kortix Automation
 
 on:
-  # Автоматический запуск при новом файле в updates/
   push:
     paths:
       - 'updates/*.json'
   
-  # Ручной запуск
   workflow_dispatch:
     inputs:
       instruction_file:
@@ -46,4 +44,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INSTRUCTION_FILE: ${{ env.FILE }}
-        run: python scripts/github_kortix.py -f $INSTRUCTION_FILE
+        run: |
+          cd scripts
+          python github_kortix.py -f ../$INSTRUCTION_FILE
