@@ -1,0 +1,27 @@
+{
+  "github": {
+    "token": "${GITHUB_TOKEN}",
+    "owner": "voodoomushroomzzz-source",
+    "repo": "mandala-core"
+  },
+  "paths": {
+    "repo_root": ".."
+  },
+  "defaults": {
+    "branch_prefix": "kortix",
+    "create_pr": true
+  }
+}{
+  "github": {
+    "token": "${GITHUB_TOKEN}",
+    "owner": "voodoomushroomzzz-source",
+    "repo": "mandala-core"
+  },
+  "paths": {
+    "repo_root": ".."
+  },
+  "defaults": {
+    "branch_prefix": "kortix",
+    "create_pr": true
+  }
+}
