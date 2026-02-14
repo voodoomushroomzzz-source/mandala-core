@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "update_id": "UPD-2026-003",
+  "operations": [
+    {
+      "type": "update_field",
+      "file": "testlab/testisphaera_v0.1.json",
+      "target_path": "$.elements[?(@.id=='alpha')].value",
+      "new_value": "обновлено_через_Kortix_успешно"
+    }
+  ],
+  "branch_name": "kortix-update-alpha",
+  "commit_message": "test: хирургическое обновление alpha.value через Kortix",
+  "pr_title": "[Kortix] Тест: обновление alpha.value",
+  "pr_description": "Проверка точности JSONPath-операции.\n\nОжидается:\n- У элемента с id='alpha' поле value изменено на 'обновлено_через_Kortix_успешно'\n- Элемент beta и все остальные поля нетронуты"
+}
