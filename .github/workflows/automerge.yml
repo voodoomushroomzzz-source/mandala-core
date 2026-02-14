@@ -32,7 +32,7 @@ jobs:
         uses: pascalgn/automerge-action@v0.16.4
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_LABELS: "kortix-auto,!wip,!do-not-merge"
+          MERGE_LABELS: "kortix-auto"
           MERGE_REMOVE_LABELS: "kortix-auto"
           MERGE_METHOD: "squash"
           MERGE_COMMIT_MESSAGE: "pull-request-description"
