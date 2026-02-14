@@ -1,0 +1,22 @@
+{
+  "module": "Testisphaera",
+  "version": "v0.1",
+  "status": "experimental",
+  "description": "Песочница для тестирования Kortix",
+  "elements": [
+    {
+      "id": "alpha",
+      "value": "исходное_значение_alpha",
+      "note": "Этот элемент будет изменен"
+    },
+    {
+      "id": "beta",
+      "value": ["список", "для", "проверки"],
+      "note": "Этот элемент останется неизменным"
+    }
+  ],
+  "metadata": {
+    "created": "2026-02-14",
+    "purpose": "валидация CI/CD пайплайна"
+  }
+}
