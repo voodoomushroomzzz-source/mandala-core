@@ -13,6 +13,10 @@ on:
         default: 'updates/test.json'
         type: string
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   apply:
     runs-on: ubuntu-latest
