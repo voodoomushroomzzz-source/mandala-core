@@ -1,16 +1,30 @@
 {
   "schema_version": "1.0",
-  "update_id": "UPD-2026-003",
+  "update_id": "2026-02-14_kortix-test",
+  "initiated_by": "Садовник",
   "operations": [
     {
-      "type": "update_field",
-      "file": "testlab/testisphaera_v0.1.json",
-      "target_path": "$.elements[?(@.id=='alpha')].value",
-      "new_value": "обновлено_через_Kortix_успешно"
+      "type": "add_object_to_array",
+      "module": "Incubae",
+      "file": "incubae/registry.json",
+      "target_path": "$.seeds",
+      "new_object": {
+        "id": "RI-2026-TEST-001",
+        "title": "Тестовое семя Kortix",
+        "status": "active",
+        "added": "2026-02-14",
+        "expiry": "2027-02-14",
+        "type": "resonant_initiative",
+        "initiator": "Садовник",
+        "content_summary": "Проверка работы системы"
+      },
+      "validation": {
+        "must_not_exist": "RI-2026-TEST-001"
+      }
     }
   ],
-  "branch_name": "kortix-update-alpha",
-  "commit_message": "test: хирургическое обновление alpha.value через Kortix",
-  "pr_title": "[Kortix] Тест: обновление alpha.value",
-  "pr_description": "Проверка точности JSONPath-операции.\n\nОжидается:\n- У элемента с id='alpha' поле value изменено на 'обновлено_через_Kortix_успешно'\n- Элемент beta и все остальные поля нетронуты"
+  "commit_message": "🧪 Тест Kortix",
+  "branch_name": "kortix/test-001",
+  "pr_title": "🧪 Тест хирургических обновлений",
+  "pr_description": "Добавление тестового семени через Kortix"
 }
