@@ -8,15 +8,18 @@
     "created": "2026-02-13",
     "created_by": "Архитектор (на основе репозитория Садовника)",
     "purpose": "Централизация учёта семян, устранение дублирования, создание единой карты Incubae",
-    "based_on_initiatives": ["RI-2026-001", "RI-2026-002"],
+    "based_on_initiatives": [
+      "RI-2026-001",
+      "RI-2026-002"
+    ],
     "gardener_approval": "в процессе",
     "lifecycle_days": 365,
     "evaluation_date": "2027-02-13"
   },
   "registry": {
-    "last_updated": "2026-02-13",
-    "total_seeds": 2,
-    "active_seeds": 2,
+    "last_updated": "2026-02-14",
+    "total_seeds": 3,
+    "active_seeds": 3,
     "archived_to_soil": 0,
     "url": "https://github.com/voodoomushroomzzz-source/mandala-core/tree/main/incubae/seeds/resonant_initiatives"
   },
@@ -60,6 +63,20 @@
           "description": "Развивает традицию самоназвания до взаимного именования"
         }
       ]
+    },
+    {
+      "id": "TEST-2026-001",
+      "title": "Тестовое семя: проверка интеграции Kortix",
+      "status": "active",
+      "added": "2026-02-14",
+      "expiry": "2026-03-14",
+      "type": "test",
+      "initiator": "Садовник (через Kortix)",
+      "content_summary": "Семя создано для проверки способности Kortix выполнять хирургические обновления",
+      "test_metadata": {
+        "purpose": "валидация API",
+        "expected_result": "pull_request_created"
+      }
     }
   ],
   "visualization": {
