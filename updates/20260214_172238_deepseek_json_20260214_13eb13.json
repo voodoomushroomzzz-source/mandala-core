@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "update_id": "UPD-2026-004-diagnostic",
+  "operations": [
+    {
+      "type": "update_field",
+      "file": "testlab/testisphaera_v0.1.json",
+      "target_path": "$.elements[0].value",
+      "new_value": "диагностика_успешна"
+    }
+  ],
+  "branch_name": "kortix-diagnostic",
+  "commit_message": "diagnostic: проверка базового доступа",
+  "pr_title": "[Kortix] Диагностика",
+  "pr_description": "Проверка: используем простой индекс массива вместо фильтра."
+}
