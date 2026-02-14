@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "update_id": "2026-02-14_testisphaera-cleanup",
+  "initiated_by": "Садовник",
+  "operations": [
+    {
+      "type": "update_field",
+      "file": "testlab/testisphaera_v0.1.json",
+      "target_path": "$.$",
+      "value": null
+    }
+  ],
+  "commit_message": "🧹 Очистка: удаление лишней секции $",
+  "branch_name": "kortix/testisphaera-cleanup",
+  "pr_title": "🧹 Очистка Testisphaera: удаление $",
+  "pr_description": "Удаляет лишнюю секцию $",
+  "labels": [
+    "kortix-auto"
+  ]
+}
