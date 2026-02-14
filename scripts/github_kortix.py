@@ -10,7 +10,7 @@ import os
 import sys
 import argparse
 from datetime import datetime
-from github import Github, GithubException
+from github import Github, GithubException, Auth
 from pathlib import Path
 import shutil
 import tempfile
@@ -22,10 +22,11 @@ class GitHubKortix:
     def __init__(self, config_path: str = "config.json"):
         """Initialize with config file."""
         self.config = self._load_config(config_path)
-        self.github = Github(
-            self.config["github"]["token"],
-            per_page=100
-        )
+        
+        # Use modern authentication
+        auth = Auth.Token(self.config["github"]["token"])
+        self.github = Github(auth=auth, per_page=100)
+        
         self.repo = self.github.get_repo(
             f"{self.config['github']['owner']}/{self.config['github']['repo']}"
         )
@@ -170,7 +171,6 @@ class GitHubKortix:
         """Apply a single operation to the repository."""
         op_type = operation.get("type")
         file_path = operation.get("file", "")
-        full_path = self.repo_root / file_path
         
         result = {
             "type": op_type,
@@ -180,7 +180,7 @@ class GitHubKortix:
         
         try:
             # Get file content
-            content, sha = self._get_file_content(str(full_path), branch_name)
+            content, sha = self._get_file_content(file_path, branch_name)
             
             # Apply operation based on type
             if op_type == "add_object_to_array":
@@ -202,7 +202,7 @@ class GitHubKortix:
             if new_content != content:
                 self.changes_made = True
                 if not dry_run:
-                    self._update_file(str(full_path), new_content, sha, branch_name, op_type)
+                    self._update_file(file_path, new_content, sha, branch_name, op_type)
                 print(f"  ✅ Applied {op_type} to {file_path}")
             else:
                 print(f"  ⏭️  No changes needed for {file_path}")
@@ -222,15 +222,18 @@ class GitHubKortix:
     
     def _get_file_content(self, file_path: str, branch_name: str) -> tuple:
         """Get file content from repository."""
+        # 🔧 FIX: Убираем ведущий слеш, если он есть
+        clean_path = file_path.lstrip('/')
+        
         try:
             # Try to get from branch
-            file_content = self.repo.get_contents(file_path, ref=branch_name)
+            file_content = self.repo.get_contents(clean_path, ref=branch_name)
             content = file_content.decoded_content.decode('utf-8')
             sha = file_content.sha
         except GithubException:
             try:
                 # Try to get from default branch
-                file_content = self.repo.get_contents(file_path, ref=self.repo.default_branch)
+                file_content = self.repo.get_contents(clean_path, ref=self.repo.default_branch)
                 content = file_content.decoded_content.decode('utf-8')
                 sha = None  # Will create new file on branch
             except GithubException:
@@ -242,9 +245,12 @@ class GitHubKortix:
     
     def _update_file(self, file_path: str, content: str, sha: str, branch_name: str, op_type: str):
         """Update or create file on branch."""
+        # 🔧 FIX: Убираем ведущий слеш, если он есть
+        clean_path = file_path.lstrip('/')
+        
         if sha:
             self.repo.update_file(
-                path=file_path,
+                path=clean_path,
                 message=f"Kortix: {op_type} in {os.path.basename(file_path)}",
                 content=content,
                 sha=sha,
@@ -252,7 +258,7 @@ class GitHubKortix:
             )
         else:
             self.repo.create_file(
-                path=file_path,
+                path=clean_path,
                 message=f"Kortix: create {os.path.basename(file_path)}",
                 content=content,
                 branch=branch_name
