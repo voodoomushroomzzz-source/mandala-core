@@ -5,10 +5,20 @@ on:
   push:
     paths:
       - 'updates/*.json'
+  
+  # Ручной запуск
+  workflow_dispatch:
+    inputs:
+      instruction_file:
+        description: 'Путь к файлу инструкции'
+        required: true
+        default: 'updates/test.json'
+        type: string
 
 jobs:
   apply:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
       
@@ -20,11 +30,17 @@ jobs:
       - name: Install PyGithub
         run: pip install PyGithub
       
-      - name: Get latest instruction file
+      - name: Get instruction file
         run: |
-          FILE=$(ls -t updates/*.json | head -1)
-          echo "FILE=$FILE" >> $GITHUB_ENV
-          echo "Found instruction file: $FILE"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "FILE=${{ github.event.inputs.instruction_file }}" >> $GITHUB_ENV
+            echo "📁 Manual mode: $FILE"
+          else
+            echo "FILE=$(ls -t updates/*.json | head -1)" >> $GITHUB_ENV
+            echo "📁 Auto mode: $FILE"
+          fi
+          echo "Selected file: $FILE"
+          cat $FILE
       
       - name: Run Kortix
         env:
