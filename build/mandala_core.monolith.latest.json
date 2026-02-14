@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.4.2-55dec571",
+  "version": "monolith-vv7.4.2-7f7080fb",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-14T13:56:41.294674+00:00",
-  "build_source": "4df2e0338ce97cb411841cc9cebe2ef89420ccbf",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/4df2e0338ce97cb411841cc9cebe2ef89420ccbf",
+  "build_timestamp": "2026-02-14T16:26:05.472842+00:00",
+  "build_source": "14dd4df1d6bcccc0d71e5c72d69cbea4092164ee",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/14dd4df1d6bcccc0d71e5c72d69cbea4092164ee",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1228,7 +1228,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-14T13:56:41.294674+00:00",
+    "timestamp": "2026-02-14T16:26:05.472842+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1263,6 +1263,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-14 13:56:41 UTC"
+    "built_at": "2026-02-14 16:26:05 UTC"
   }
 }
