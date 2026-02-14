@@ -1,0 +1,38 @@
+name: Kortix Automation
+
+on:
+  # Запуск вручную (кнопка в GitHub)
+  workflow_dispatch:
+    inputs:
+      instruction_file:
+        description: 'Путь к файлу инструкции'
+        required: true
+        default: 'updates/instruction.json'
+  
+  # Запуск по webhook (можно настроить с Telegram)
+  repository_dispatch:
+    types: [kortix_update]
+
+jobs:
+  apply_instruction:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd scripts
+          pip install -r requirements.txt
+      
+      - name: Apply instruction
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python github_kortix.py -f ${{ github.event.inputs.instruction_file || github.event.client_payload.file }}
