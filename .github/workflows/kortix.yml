@@ -48,7 +48,7 @@ jobs:
           INSTRUCTION_FILE: ${{ env.FILE }}
         run: |
           cd scripts
-          python github_kortix.py -f ../$INSTRUCTION_FILE
+          python github_kortix.py -f ../$INSTRUCTION_FILE --config ../config.json
       
       - name: Auto-merge PR
         env:
