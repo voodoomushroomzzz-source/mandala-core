@@ -1,41 +1,41 @@
 {
   "schema_version": "1.0",
-  "update_id": "test-update-2026-02-15-v3",
+  "update_id": "test-update-2026-02-15-v4",
   "initiated_by": "Садовник",
-  "commit_message": "🧪 Тестовое обновление Testisphaera через Kortix (v3) — проверка кэширования SHA",
-  "branch_name": "kortix/test-update-v3",
-  "pr_title": "Kortix: тестовое обновление Testisphaera (v3)",
-  "pr_description": "Проверка исправления с кэшированием SHA: несколько операций над одним файлом.",
+  "commit_message": "🧪 Финальное тестовое обновление Testisphaera (v4) — проверка исправления SHA",
+  "branch_name": "kortix/test-update-v4",
+  "pr_title": "Kortix: тестовое обновление Testisphaera (v4)",
+  "pr_description": "Проверка окончательного исправления с обновлением SHA после каждой операции.",
   "operations": [
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "version",
-      "value": "v0.4"
+      "value": "v0.5"
     },
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "status",
-      "value": "tested-v3"
+      "value": "tested-v4"
     },
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "elements[0].value",
-      "value": "alpha_updated_by_kortix_v3"
+      "value": "alpha_updated_by_kortix_v4"
     },
     {
       "type": "add_object_to_array",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "elements",
       "new_object": {
-        "id": "delta",
-        "value": "new_delta_value",
-        "note": "Добавлен через Kortix (v3) для проверки множественных операций"
+        "id": "epsilon",
+        "value": "new_epsilon_value",
+        "note": "Добавлен через Kortix (v4) для финальной проверки"
       },
       "validation": {
-        "must_not_exist": "delta"
+        "must_not_exist": "epsilon"
       }
     }
   ]
