@@ -1,41 +1,41 @@
 {
   "schema_version": "1.0",
-  "update_id": "test-update-2026-02-15-v2",
+  "update_id": "test-update-2026-02-15-v3",
   "initiated_by": "Садовник",
-  "commit_message": "🧪 Повторное тестовое обновление Testisphaera через Kortix (v2)",
-  "branch_name": "kortix/test-update-v2",
-  "pr_title": "Kortix: повторное тестовое обновление Testisphaera",
-  "pr_description": "Проверка работы CI/CD после исправления пути к config.json. Изменение версии, обновление alpha, добавление gamma.",
+  "commit_message": "🧪 Тестовое обновление Testisphaera через Kortix (v3) — проверка кэширования SHA",
+  "branch_name": "kortix/test-update-v3",
+  "pr_title": "Kortix: тестовое обновление Testisphaera (v3)",
+  "pr_description": "Проверка исправления с кэшированием SHA: несколько операций над одним файлом.",
   "operations": [
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "version",
-      "value": "v0.3"
+      "value": "v0.4"
     },
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "status",
-      "value": "tested-v2"
+      "value": "tested-v3"
     },
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "elements[0].value",
-      "value": "alpha_updated_by_kortix_v2"
+      "value": "alpha_updated_by_kortix_v3"
     },
     {
       "type": "add_object_to_array",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "elements",
       "new_object": {
-        "id": "gamma",
-        "value": "new_gamma_value_v2",
-        "note": "Добавлен через Kortix (повторно)"
+        "id": "delta",
+        "value": "new_delta_value",
+        "note": "Добавлен через Kortix (v3) для проверки множественных операций"
       },
       "validation": {
-        "must_not_exist": "gamma"
+        "must_not_exist": "delta"
       }
     }
   ]
