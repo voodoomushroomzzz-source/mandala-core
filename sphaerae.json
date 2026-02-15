@@ -132,6 +132,17 @@
             "command": "incubae list",
             "url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/incubae"
           }
+        },
+        {
+          "id": "testisphaera_layer",
+          "type": "seed",
+          "title": "Testisphaera — песочница",
+          "brief": "Экспериментальная среда для тестирования новых идей. Безопасное место для проб перед внесением в ядро.",
+          "status": "experimental",
+          "location": "testlab/testisphaera_v0.1.json",
+          "version": "v0.1",
+          "access_via": "бот: 📤 Загрузить файл → Модули Мандалы → Testisphaera",
+          "note": "Семена, протестированные здесь, могут переходить в Incubae или напрямую в модули"
         }
       ]
     }
