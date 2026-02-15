@@ -6,6 +6,7 @@ Render Web Service + Webhook (Aiogram 3)
 - Поддержка папки /updates для Kortix
 - Валидация JSON-схемы инструкций
 - Новая категория загрузки
+- 🔧 Фикс: инструкции всегда сохраняются как current_instruction.json (перезапись)
 """
 
 import os
@@ -90,7 +91,7 @@ class UploadCategory:
     MODULE = "module"
     INFRA = "infra"
     FRUCTUS = "fructus"
-    KORTIX = "kortix"  # 🔥 NEW
+    KORTIX = "kortix"
 
 # ========== ПОЛНЫЙ СПИСОК ЦЕЛЕВЫХ ФАЙЛОВ ==========
 MANDALA_MODULES = {
@@ -162,21 +163,21 @@ INFRASTRUCTURE_FILES = {
     }
 }
 
-# 🔥 NEW: Kortix updates target
+# 🔥 Kortix updates target
 KORTIX_UPDATES = {
     "kortix_update": {
         "name": "🚀 Kortix инструкция",
-        "filename": None,  # динамическое имя
-        "path": "updates/",  # папка назначения
+        "filename": "current_instruction.json",  # фиксированное имя
+        "path": "updates/current_instruction.json",  # путь с именем
         "description": "JSON-инструкция для хирургического обновления через Kortix",
         "category": "kortix"
     }
 }
 
-ALL_UPLOAD_TARGETS = {**MANDALA_MODULES, **INFRASTRUCTURE_FILES, **KORTIX_UPDATES}  # 🔥 NEW
+ALL_UPLOAD_TARGETS = {**MANDALA_MODULES, **INFRASTRUCTURE_FILES, **KORTIX_UPDATES}
 user_upload_target = {}
 
-# 🔥 NEW: Схема валидации для Kortix инструкций
+# Схема валидации для Kortix инструкций
 KORTIX_SCHEMA = {
     "required": ["schema_version", "update_id", "operations"],
     "optional": ["initiated_by", "resonance_check_required", "commit_message", 
@@ -249,11 +250,11 @@ def get_upload_mode_keyboard() -> ReplyKeyboardMarkup:
         selective=True
     )
 
-def get_category_keyboard() -> InlineKeyboardMarkup:  # 🔥 NEW: добавлена кнопка Kortix
+def get_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🧩 Модули Мандалы", callback_data="category_modules")],
         [InlineKeyboardButton(text="⚙️ Инфраструктура сборки", callback_data="category_infra")],
-        [InlineKeyboardButton(text="🚀 Kortix Updates", callback_data="category_kortix")],  # 🔥 NEW
+        [InlineKeyboardButton(text="🚀 Kortix Updates", callback_data="category_kortix")],
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
 
@@ -286,7 +287,7 @@ def get_infra_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="◀️ Назад к категориям", callback_data="back_to_categories")]
     ])
 
-# 🔥 NEW: клавиатура для Kortix
+# клавиатура для Kortix
 def get_kortix_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="📤 Загрузить инструкцию", callback_data="target_kortix_update")],
@@ -482,7 +483,7 @@ async def handle_upload_start(message: Message, state: FSMContext):
         "📤 <b>Выберите категорию:</b>\n\n"
         "🧩 <b>Модули Мандалы</b> — JSON-кристаллы системы\n"
         "⚙️ <b>Инфраструктура сборки</b> — скрипты и GitHub Actions\n"
-        "🚀 <b>Kortix Updates</b> — инструкции для хирургического обновления",  # 🔥 NEW
+        "🚀 <b>Kortix Updates</b> — инструкции для хирургического обновления",
         reply_markup=get_category_keyboard()
     )
     await state.set_state(UploadStates.waiting_for_category)
@@ -521,20 +522,20 @@ async def handle_change_category(message: Message, state: FSMContext):
     await state.set_state(UploadStates.waiting_for_category)
     await message.answer("🔄 Выберите категорию:", reply_markup=get_category_keyboard())
 
-# ========== НОВЫЕ ОБРАБОТЧИКИ КОЛБЭКОВ ДЛЯ KORTIX ==========
-@router.callback_query(F.data == "category_kortix")  # 🔥 NEW
+# ========== ОБРАБОТЧИКИ КОЛБЭКОВ ==========
+@router.callback_query(F.data == "category_kortix")
 async def handle_category_kortix(callback_query: CallbackQuery, state: FSMContext):
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "🚀 <b>Kortix Updates</b>\n\n"
         "Загрузите JSON-инструкцию для хирургического обновления модулей.\n"
-        "Файл будет сохранён в папку <code>/updates</code> и обработан Kortix.\n\n"
+        "Файл будет сохранён в папку <code>/updates/current_instruction.json</code> (перезапись).\n\n"
         "Формат: см. <code>updates/template.json</code> в репозитории.",
         reply_markup=get_kortix_keyboard()
     )
     await callback_query.answer()
 
-@router.callback_query(F.data == "target_kortix_update")  # 🔥 NEW
+@router.callback_query(F.data == "target_kortix_update")
 async def handle_target_kortix(callback_query: CallbackQuery, state: FSMContext):
     target_key = "kortix_update"
     user_upload_target[callback_query.from_user.id] = target_key
@@ -542,7 +543,7 @@ async def handle_target_kortix(callback_query: CallbackQuery, state: FSMContext)
     
     await callback_query.message.edit_text(
         f"✅ Выбран: Kortix инструкция\n"
-        f"📁 Целевая папка: <b>/updates/</b>\n\n"
+        f"📁 Целевой файл: <b>updates/current_instruction.json</b> (перезапись)\n\n"
         f"📎 Отправьте JSON-файл с инструкцией"
     )
     await callback_query.message.answer(
@@ -551,23 +552,21 @@ async def handle_target_kortix(callback_query: CallbackQuery, state: FSMContext)
     )
     await callback_query.answer()
 
-@router.callback_query(F.data == "kortix_info")  # 🔥 NEW
+@router.callback_query(F.data == "kortix_info")
 async def handle_kortix_info(callback_query: CallbackQuery):
     await callback_query.message.edit_text(
         "📋 <b>О Kortix</b>\n\n"
         "Kortix — автономный ИИ-работник, выполняющий хирургические обновления JSON-файлов в репозитории.\n\n"
         "<b>Как это работает:</b>\n"
-        "1. Вы загружаете JSON-инструкцию в папку /updates\n"
-        "2. Kortix автоматически читает инструкцию\n"
-        "3. Выполняет изменения (add/update/delete)\n"
-        "4. Создаёт Pull Request для проверки\n\n"
+        "1. Вы загружаете JSON-инструкцию → она сохраняется как <code>updates/current_instruction.json</code>\n"
+        "2. GitHub Actions автоматически запускается при изменении этого файла\n"
+        "3. Kortix читает инструкцию, выполняет изменения и создаёт Pull Request\n\n"
         "<b>Пример инструкции:</b>\n"
         "<code>updates/template.json</code> в репозитории",
         reply_markup=get_kortix_keyboard()
     )
     await callback_query.answer()
 
-# ========== СУЩЕСТВУЮЩИЕ ОБРАБОТЧИКИ КОЛБЭКОВ ==========
 @router.callback_query(F.data == "category_modules")
 async def handle_category_modules(callback_query: CallbackQuery, state: FSMContext):
     await state.set_state(UploadStates.waiting_for_module)
@@ -691,7 +690,7 @@ async def process_file_upload(message: Message, state: FSMContext):
             await handle_fructus_upload_file(message, state, user_id)
             return
         
-        # 🔥 NEW: обработка Kortix инструкций
+        # 🔥 обработка Kortix инструкций
         if target_key == "kortix_update":
             await handle_kortix_upload_file(message, state, user_id)
             return
@@ -789,9 +788,9 @@ async def process_file_upload(message: Message, state: FSMContext):
         if user_id in user_upload_target:
             del user_upload_target[user_id]
 
-# 🔥 NEW: Обработчик загрузки Kortix инструкций
+# 🔥 Обработчик загрузки Kortix инструкций (обновлён)
 async def handle_kortix_upload_file(message: Message, state: FSMContext, user_id: int):
-    """Обработка загрузки инструкции для Kortix в папку /updates"""
+    """Обработка загрузки инструкции для Kortix в папку /updates (всегда current_instruction.json)"""
     try:
         if not message.document:
             await message.answer("⚠️ Отправьте JSON файл", reply_markup=get_upload_mode_keyboard())
@@ -829,15 +828,8 @@ async def handle_kortix_upload_file(message: Message, state: FSMContext, user_id
         
         await message.answer(f"✅ {validation_message}")
         
-        # Генерируем имя файла с временной меткой
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        original_name = message.document.file_name
-        if original_name.endswith('.json'):
-            base_name = original_name[:-5]  # убираем .json
-        else:
-            base_name = "instruction"
-        
-        target_filename = f"{timestamp}_{base_name}.json"
+        # 🔁 Всегда сохраняем под одним именем (замена существующего)
+        target_filename = "current_instruction.json"
         target_path = f"updates/{target_filename}"
         
         # Ahimsa проверка
@@ -849,11 +841,11 @@ async def handle_kortix_upload_file(message: Message, state: FSMContext, user_id
                                reply_markup=get_upload_mode_keyboard())
             return
         
-        # Сохраняем в GitHub
+        # Сохраняем в GitHub (перезапись)
         success = await update_github_file(
             file_path=target_path,
             content=json_content,
-            message=f"📥 Kortix инструкция: {target_filename}"
+            message=f"📥 Kortix инструкция обновлена: {target_filename}"
         )
         
         if success:
@@ -861,10 +853,9 @@ async def handle_kortix_upload_file(message: Message, state: FSMContext, user_id
             file_url = f"https://github.com/{REPO_NAME}/blob/main/{target_path}"
             
             await message.answer(
-                f"✅ Инструкция сохранена!\n\n"
-                f"📁 <code>{target_path}</code>\n"
+                f"✅ Инструкция сохранена как `{target_path}`\n\n"
                 f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>\n\n"
-                f"🚀 Kortix обработает её автоматически и создаст Pull Request.",
+                f"🚀 GitHub Actions автоматически запустится и Kortix обработает изменения.",
                 reply_markup=get_main_keyboard(),
                 parse_mode=ParseMode.HTML,
                 disable_web_page_preview=True
