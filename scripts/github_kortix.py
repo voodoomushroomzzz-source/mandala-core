@@ -34,8 +34,8 @@ class GitHubKortix:
         self.temp_dir = None
         self.changes_made = False
         
-        # 🔧 Кэш для хранения актуального содержимого и SHA файлов в рамках сессии
-        # Ключ: f"{branch_name}:{clean_path}"
+        # Cache for storing current content and SHA of files within a session
+        # Key: f"{branch_name}:{clean_path}"
         self.file_sha_cache = {}
     
     def _load_config(self, path: str) -> dict:
@@ -207,13 +207,6 @@ class GitHubKortix:
                 self.changes_made = True
                 if not dry_run:
                     self._update_file(file_path, new_content, sha, branch_name, op_type)
-                    # 🔧 Обновляем кэш содержимого для последующих операций
-                    cache_key = f"{branch_name}:{file_path.lstrip('/')}"
-                    # SHA обновится в _update_file, но содержимое мы уже знаем
-                    # Можно сразу сохранить новое содержимое в кэш, но SHA получим из ответа API
-                    # Для простоты перезапросим при следующем обращении, но чтобы избежать лишних запросов,
-                    # мы могли бы сразу обновить кэш. Однако _update_file сам обновит кэш с правильным SHA.
-                    # Поэтому здесь ничего не делаем.
                 print(f"  ✅ Applied {op_type} to {file_path}")
             else:
                 print(f"  ⏭️  No changes needed for {file_path}")
@@ -236,7 +229,7 @@ class GitHubKortix:
         clean_path = file_path.lstrip('/')
         cache_key = f"{branch_name}:{clean_path}"
         
-        # 🔧 Проверяем кэш
+        # Check cache
         if cache_key in self.file_sha_cache:
             cached = self.file_sha_cache[cache_key]
             print(f"  🔍 Using cached content for {clean_path} (SHA: {cached['sha'][:7]})")
@@ -247,7 +240,7 @@ class GitHubKortix:
             file_content = self.repo.get_contents(clean_path, ref=branch_name)
             content = file_content.decoded_content.decode('utf-8')
             sha = file_content.sha
-            # 🔧 Сохраняем в кэш
+            # Save to cache
             self.file_sha_cache[cache_key] = {"content": content, "sha": sha}
             return content, sha
         except GithubException:
@@ -256,7 +249,6 @@ class GitHubKortix:
                 file_content = self.repo.get_contents(clean_path, ref=self.repo.default_branch)
                 content = file_content.decoded_content.decode('utf-8')
                 sha = None  # Will create new file on branch
-                # 🔧 Для нового файла на ветке SHA будет получен при создании, пока не кэшируем
                 return content, sha
             except GithubException:
                 # File doesn't exist
@@ -269,27 +261,40 @@ class GitHubKortix:
         clean_path = file_path.lstrip('/')
         cache_key = f"{branch_name}:{clean_path}"
         
-        if sha:
-            result = self.repo.update_file(
-                path=clean_path,
-                message=f"Kortix: {op_type} in {os.path.basename(file_path)}",
-                content=content,
-                sha=sha,
-                branch=branch_name
-            )
-        else:
-            result = self.repo.create_file(
-                path=clean_path,
-                message=f"Kortix: create {os.path.basename(file_path)}",
-                content=content,
-                branch=branch_name
-            )
-        
-        # 🔧 После успешного обновления получаем новый SHA из результата и обновляем кэш
-        if result and hasattr(result, 'content') and result.content:
-            new_sha = result.content.sha
-            self.file_sha_cache[cache_key] = {"content": content, "sha": new_sha}
-            print(f"  ✅ Updated cache for {clean_path} (new SHA: {new_sha[:7]})")
+        try:
+            if sha:
+                # Update existing file
+                result = self.repo.update_file(
+                    path=clean_path,
+                    message=f"Kortix: {op_type} in {os.path.basename(file_path)}",
+                    content=content,
+                    sha=sha,
+                    branch=branch_name
+                )
+            else:
+                # Create new file
+                result = self.repo.create_file(
+                    path=clean_path,
+                    message=f"Kortix: create {os.path.basename(file_path)}",
+                    content=content,
+                    branch=branch_name
+                )
+            
+            # 🔧 Correctly extract new SHA from result
+            # result is a tuple (content, commit)
+            if result and len(result) >= 1 and hasattr(result[0], 'sha'):
+                new_sha = result[0].sha
+                self.file_sha_cache[cache_key] = {"content": content, "sha": new_sha}
+                print(f"  ✅ Updated cache for {clean_path} (new SHA: {new_sha[:7]})")
+            else:
+                # If we couldn't get the SHA, invalidate cache to force re-read next time
+                if cache_key in self.file_sha_cache:
+                    del self.file_sha_cache[cache_key]
+                print(f"  ⚠️ Could not get new SHA, cache invalidated for {clean_path}")
+                
+        except Exception as e:
+            print(f"  ❌ Error updating file: {e}")
+            raise
     
     def _add_to_array(self, content: str, operation: dict) -> str:
         """Add an object to a JSON array with validation."""
