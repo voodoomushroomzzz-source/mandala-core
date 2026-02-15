@@ -1,29 +1,29 @@
 {
   "schema_version": "1.0",
-  "update_id": "test-update-2026-02-15",
+  "update_id": "test-update-2026-02-15-v2",
   "initiated_by": "Садовник",
-  "commit_message": "🧪 Тестовое обновление Testisphaera через Kortix",
-  "branch_name": "kortix/test-update",
-  "pr_title": "Kortix: тестовое обновление Testisphaera",
-  "pr_description": "Проверка работы CI/CD: изменение версии, обновление alpha, добавление gamma.",
+  "commit_message": "🧪 Повторное тестовое обновление Testisphaera через Kortix (v2)",
+  "branch_name": "kortix/test-update-v2",
+  "pr_title": "Kortix: повторное тестовое обновление Testisphaera",
+  "pr_description": "Проверка работы CI/CD после исправления пути к config.json. Изменение версии, обновление alpha, добавление gamma.",
   "operations": [
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "version",
-      "value": "v0.2"
+      "value": "v0.3"
     },
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "status",
-      "value": "tested"
+      "value": "tested-v2"
     },
     {
       "type": "update_field",
       "file": "testlab/testisphaera_v0.1.json",
       "target_path": "elements[0].value",
-      "value": "alpha_updated_by_kortix"
+      "value": "alpha_updated_by_kortix_v2"
     },
     {
       "type": "add_object_to_array",
@@ -31,8 +31,8 @@
       "target_path": "elements",
       "new_object": {
         "id": "gamma",
-        "value": "new_gamma_value",
-        "note": "Добавлен через Kortix"
+        "value": "new_gamma_value_v2",
+        "note": "Добавлен через Kortix (повторно)"
       },
       "validation": {
         "must_not_exist": "gamma"
