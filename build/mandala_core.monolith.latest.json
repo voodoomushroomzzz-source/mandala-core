@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.4.3-491d2b7c",
+  "version": "monolith-vv7.4.3-d060e58b",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-15T18:48:33.443408+00:00",
-  "build_source": "0ac8890e9a34dc5ab1fa1cd886116d701a6c245e",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/0ac8890e9a34dc5ab1fa1cd886116d701a6c245e",
+  "build_timestamp": "2026-02-15T18:52:18.028752+00:00",
+  "build_source": "59bced95bcad8267f94b8934b8f70ea7430d8b2e",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/59bced95bcad8267f94b8934b8f70ea7430d8b2e",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -561,6 +561,17 @@
                 "command": "incubae list",
                 "url": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/incubae"
               }
+            },
+            {
+              "id": "testisphaera_layer",
+              "type": "seed",
+              "title": "Testisphaera — песочница",
+              "brief": "Экспериментальная среда для тестирования новых идей. Безопасное место для проб перед внесением в ядро.",
+              "status": "experimental",
+              "location": "testlab/testisphaera_v0.1.json",
+              "version": "v0.1",
+              "access_via": "бот: 📤 Загрузить файл → Модули Мандалы → Testisphaera",
+              "note": "Семена, протестированные здесь, могут переходить в Incubae или напрямую в модули"
             }
           ]
         }
@@ -1333,7 +1344,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-15T18:48:33.443408+00:00",
+    "timestamp": "2026-02-15T18:52:18.028752+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1368,6 +1379,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-15 18:48:33 UTC"
+    "built_at": "2026-02-15 18:52:18 UTC"
   }
 }
