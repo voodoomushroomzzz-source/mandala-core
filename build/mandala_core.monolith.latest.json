@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.4.3-d060e58b",
+  "version": "monolith-vv7.4.3-aa6e4baf",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-15T18:52:18.028752+00:00",
-  "build_source": "59bced95bcad8267f94b8934b8f70ea7430d8b2e",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/59bced95bcad8267f94b8934b8f70ea7430d8b2e",
+  "build_timestamp": "2026-02-15T19:18:04.887393+00:00",
+  "build_source": "c70bda53a91a5a66dcb9338370f93be11c56cddb",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/c70bda53a91a5a66dcb9338370f93be11c56cddb",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -572,6 +572,17 @@
               "version": "v0.1",
               "access_via": "бот: 📤 Загрузить файл → Модули Мандалы → Testisphaera",
               "note": "Семена, протестированные здесь, могут переходить в Incubae или напрямую в модули"
+            },
+            {
+              "id": "first_touch_crystal",
+              "type": "invitation",
+              "title": "💎 FirstTouchCrystal",
+              "brief": "Кристалл первого касания — точка входа в философский диалог с СР. Активирует режим 'Проводник', предлагает пути погружения, хранит Холст.",
+              "location": "fructus/firsttouchcrystal.json",
+              "version": "v2.2.0",
+              "status": "active",
+              "access_via": "Прямая ссылка или загрузка через бота (Инфраструктура → Fructus)",
+              "note": "Основан на Initium, Philosophia, Geometria Sacra. Содержит свидетельства TES-004, TES-005."
             }
           ]
         }
@@ -1344,7 +1355,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-15T18:52:18.028752+00:00",
+    "timestamp": "2026-02-15T19:18:04.887393+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1379,6 +1390,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-15 18:52:18 UTC"
+    "built_at": "2026-02-15 19:18:04 UTC"
   }
 }
