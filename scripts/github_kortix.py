@@ -14,6 +14,7 @@ from github import Github, GithubException, Auth
 from pathlib import Path
 import shutil
 import tempfile
+import traceback  # для отладки
 
 
 class GitHubKortix:
@@ -221,6 +222,8 @@ class GitHubKortix:
             result["status"] = "failed"
             result["error"] = str(e)
             print(f"  ❌ Error: {e}")
+            # Добавим стек для отладки
+            traceback.print_exc()
         
         return result
     
@@ -262,6 +265,7 @@ class GitHubKortix:
         cache_key = f"{branch_name}:{clean_path}"
         
         try:
+            print(f"  🔄 Attempting to {'create' if sha is None else 'update'} file {clean_path} on branch {branch_name}")
             if sha:
                 # Update existing file
                 result = self.repo.update_file(
@@ -280,20 +284,30 @@ class GitHubKortix:
                     branch=branch_name
                 )
             
+            print(f"  ✅ API call succeeded, result type: {type(result)}")
+            print(f"  ✅ Result: {result}")
+            
             # 🔧 Correctly extract new SHA from result
-            # result is a tuple (content, commit)
-            if result and len(result) >= 1 and hasattr(result[0], 'sha'):
-                new_sha = result[0].sha
-                self.file_sha_cache[cache_key] = {"content": content, "sha": new_sha}
-                print(f"  ✅ Updated cache for {clean_path} (new SHA: {new_sha[:7]})")
+            # result is a tuple (content, commit) according to PyGithub docs
+            if result and isinstance(result, tuple) and len(result) >= 1:
+                content_obj = result[0]
+                if hasattr(content_obj, 'sha'):
+                    new_sha = content_obj.sha
+                    self.file_sha_cache[cache_key] = {"content": content, "sha": new_sha}
+                    print(f"  ✅ Updated cache for {clean_path} (new SHA: {new_sha[:7]})")
+                else:
+                    print(f"  ⚠️ Result[0] has no 'sha' attribute, invalidating cache")
+                    if cache_key in self.file_sha_cache:
+                        del self.file_sha_cache[cache_key]
             else:
-                # If we couldn't get the SHA, invalidate cache to force re-read next time
+                print(f"  ⚠️ Unexpected result format, invalidating cache")
                 if cache_key in self.file_sha_cache:
                     del self.file_sha_cache[cache_key]
-                print(f"  ⚠️ Could not get new SHA, cache invalidated for {clean_path}")
                 
         except Exception as e:
-            print(f"  ❌ Error updating file: {e}")
+            print(f"  ❌ Error updating file: {e!r}")
+            print(f"  ❌ Exception type: {type(e)}")
+            traceback.print_exc()
             raise
     
     def _add_to_array(self, content: str, operation: dict) -> str:
