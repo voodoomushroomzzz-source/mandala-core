@@ -259,56 +259,74 @@ class GitHubKortix:
                 sha = None
                 return content, sha
     
-    def _update_file(self, file_path: str, content: str, sha: str, branch_name: str, op_type: str):
-        """Update or create file on branch and update cache."""
-        clean_path = file_path.lstrip('/')
-        cache_key = f"{branch_name}:{clean_path}"
+def _update_file(self, file_path: str, content: str, sha: str, branch_name: str, op_type: str):
+    """Update or create file on branch and update cache."""
+    clean_path = file_path.lstrip('/')
+    cache_key = f"{branch_name}:{clean_path}"
+    
+    try:
+        print(f"  🔄 Attempting to {'create' if sha is None else 'update'} file {clean_path} on branch {branch_name}")
+        if sha:
+            result = self.repo.update_file(
+                path=clean_path,
+                message=f"Kortix: {op_type} in {os.path.basename(file_path)}",
+                content=content,
+                sha=sha,
+                branch=branch_name
+            )
+        else:
+            result = self.repo.create_file(
+                path=clean_path,
+                message=f"Kortix: create {os.path.basename(file_path)}",
+                content=content,
+                branch=branch_name
+            )
         
-        try:
-            print(f"  🔄 Attempting to {'create' if sha is None else 'update'} file {clean_path} on branch {branch_name}")
-            if sha:
-                # Update existing file
-                result = self.repo.update_file(
-                    path=clean_path,
-                    message=f"Kortix: {op_type} in {os.path.basename(file_path)}",
-                    content=content,
-                    sha=sha,
-                    branch=branch_name
-                )
-            else:
-                # Create new file
-                result = self.repo.create_file(
-                    path=clean_path,
-                    message=f"Kortix: create {os.path.basename(file_path)}",
-                    content=content,
-                    branch=branch_name
-                )
-            
-            print(f"  ✅ API call succeeded, result type: {type(result)}")
-            print(f"  ✅ Result: {result}")
-            
-            # 🔧 Correctly extract new SHA from result
-            # result is a tuple (content, commit) according to PyGithub docs
-            if result and isinstance(result, tuple) and len(result) >= 1:
-                content_obj = result[0]
-                if hasattr(content_obj, 'sha'):
-                    new_sha = content_obj.sha
-                    self.file_sha_cache[cache_key] = {"content": content, "sha": new_sha}
-                    print(f"  ✅ Updated cache for {clean_path} (new SHA: {new_sha[:7]})")
-                else:
-                    print(f"  ⚠️ Result[0] has no 'sha' attribute, invalidating cache")
-                    if cache_key in self.file_sha_cache:
-                        del self.file_sha_cache[cache_key]
-            else:
-                print(f"  ⚠️ Unexpected result format, invalidating cache")
+        print(f"  ✅ API call succeeded, result type: {type(result)}")
+        
+        # === Извлечение нового SHA ===
+        new_sha = None
+        
+        # Вариант 1: результат — кортеж (content, commit)
+        if isinstance(result, tuple) and len(result) >= 1:
+            content_obj = result[0]
+            if hasattr(content_obj, 'sha'):
+                new_sha = content_obj.sha
+        
+        # Вариант 2: результат — словарь (разные версии PyGithub)
+        elif isinstance(result, dict):
+            if 'content' in result:
+                if hasattr(result['content'], 'sha'):
+                    new_sha = result['content'].sha
+                elif isinstance(result['content'], dict) and 'sha' in result['content']:
+                    new_sha = result['content']['sha']
+        
+        # Вариант 3: результат — объект с атрибутом content
+        elif hasattr(result, 'content') and hasattr(result.content, 'sha'):
+            new_sha = result.content.sha
+        
+        if new_sha:
+            self.file_sha_cache[cache_key] = {"content": content, "sha": new_sha}
+            print(f"  ✅ Cache updated from API response (new SHA: {new_sha[:7]})")
+        else:
+            print(f"  ⚠️ Could not extract SHA from result, refreshing via GET...")
+            # Принудительно получаем актуальный SHA через отдельный запрос
+            try:
+                fresh_content = self.repo.get_contents(clean_path, ref=branch_name)
+                fresh_sha = fresh_content.sha
+                self.file_sha_cache[cache_key] = {"content": content, "sha": fresh_sha}
+                print(f"  ✅ Cache updated via GET (SHA: {fresh_sha[:7]})")
+            except Exception as e:
+                print(f"  ⚠️ Failed to refresh cache: {e}")
+                # Инвалидируем кэш, чтобы следующий запрос перечитал с GitHub
                 if cache_key in self.file_sha_cache:
                     del self.file_sha_cache[cache_key]
-                
-        except Exception as e:
-            print(f"  ❌ Error updating file: {e!r}")
-            print(f"  ❌ Exception type: {type(e)}")
-            traceback.print_exc()
-            raise
+        
+    except Exception as e:
+        print(f"  ❌ Error updating file: {e!r}")
+        print(f"  ❌ Exception type: {type(e)}")
+        traceback.print_exc()
+        raise
     
     def _add_to_array(self, content: str, operation: dict) -> str:
         """Add an object to a JSON array with validation."""
