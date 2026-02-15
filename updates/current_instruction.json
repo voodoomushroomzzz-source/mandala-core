@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "update_id": "test-update-2026-02-15",
+  "initiated_by": "Садовник",
+  "commit_message": "🧪 Тестовое обновление Testisphaera через Kortix",
+  "branch_name": "kortix/test-update",
+  "pr_title": "Kortix: тестовое обновление Testisphaera",
+  "pr_description": "Проверка работы CI/CD: изменение версии, обновление alpha, добавление gamma.",
+  "operations": [
+    {
+      "type": "update_field",
+      "file": "testlab/testisphaera_v0.1.json",
+      "target_path": "version",
+      "value": "v0.2"
+    },
+    {
+      "type": "update_field",
+      "file": "testlab/testisphaera_v0.1.json",
+      "target_path": "status",
+      "value": "tested"
+    },
+    {
+      "type": "update_field",
+      "file": "testlab/testisphaera_v0.1.json",
+      "target_path": "elements[0].value",
+      "value": "alpha_updated_by_kortix"
+    },
+    {
+      "type": "add_object_to_array",
+      "file": "testlab/testisphaera_v0.1.json",
+      "target_path": "elements",
+      "new_object": {
+        "id": "gamma",
+        "value": "new_gamma_value",
+        "note": "Добавлен через Kortix"
+      },
+      "validation": {
+        "must_not_exist": "gamma"
+      }
+    }
+  ]
+}
