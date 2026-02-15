@@ -1,7 +1,7 @@
 {
   "module": "Testisphaera",
-  "version": "v0.5",
-  "status": "tested-v4",
+  "version": "v0.6",
+  "status": "auto-tested-v5",
   "description": "Песочница для тестирования Kortix",
   "elements": [
     {
@@ -22,6 +22,11 @@
       "id": "epsilon",
       "value": "new_epsilon_value",
       "note": "Добавлен через Kortix (v4) для финальной проверки"
+    },
+    {
+      "id": "zeta",
+      "value": "new_zeta_value",
+      "note": "Добавлен через автоматический Kortix"
     }
   ],
   "metadata": {
@@ -42,6 +47,6 @@
     "$": null
   },
   "elements[0]": {
-    "value": "alpha_updated_by_kortix_v4"
+    "value": "alpha_updated_by_kortix_v5"
   }
 }
