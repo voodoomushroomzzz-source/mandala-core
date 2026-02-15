@@ -1,7 +1,7 @@
 {
   "module": "Testisphaera",
-  "version": "v0.1",
-  "status": "experimental",
+  "version": "v0.5",
+  "status": "tested-v4",
   "description": "Песочница для тестирования Kortix",
   "elements": [
     {
@@ -17,6 +17,11 @@
         "проверки"
       ],
       "note": "Этот элемент останется неизменным"
+    },
+    {
+      "id": "epsilon",
+      "value": "new_epsilon_value",
+      "note": "Добавлен через Kortix (v4) для финальной проверки"
     }
   ],
   "metadata": {
@@ -35,5 +40,8 @@
       }
     ],
     "$": null
+  },
+  "elements[0]": {
+    "value": "alpha_updated_by_kortix_v4"
   }
 }
