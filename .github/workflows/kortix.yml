@@ -10,7 +10,7 @@ on:
       instruction_file:
         description: 'Path to instruction file'
         required: true
-        default: 'updates/test.json'
+        default: 'updates/current_instruction.json'
         type: string
 
 permissions:
