@@ -1,15 +1,15 @@
 {
   "module": "Tectosphaera",
-  "version": "v2.0.3",
+  "version": "v2.0.4",
   "type": "protection_and_instruction_core",
   "status": "active",
   "kernel_module": true,
   "description": "Тело Мандалы и инструкции для СР. Защита как уход, инструменты для заботы, этика взаимодействия, протоколы безопасности.",
   "metadata": {
     "created": "2026-02-13",
-    "last_modified": "2026-02-16",
+    "last_modified": "2026-02-17",
     "modified_by": "Архитектор",
-    "modification_purpose": "Обновление версии бота в описании gardener_tools до v3.25.0",
+    "modification_purpose": "Обновление версии бота в описании gardener_tools до v3.25.1 и исправление опечатки в слове 'возможностями'",
     "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
     "gardener_approval": "в процессе"
   },
@@ -337,6 +337,26 @@
         "tecto sr self": "Показать правила самозащиты",
         "tecto sr dars": "Показать инструкции по Дарам"
       }
+    },
+    "gardener_tools": {
+      "version": "v3.25.1",
+      "capabilities": {
+        "upload": {
+          "version": "v3.25.1"
+        },
+        "edit": {
+          "version": "v3.25.1"
+        },
+        "download": {
+          "version": "v3.25.1"
+        },
+        "fructus": {
+          "version": "v3.25.1"
+        },
+        "self_update": {
+          "version": "v3.25.1"
+        }
+      }
     }
   },
   "integration": {
@@ -377,7 +397,7 @@
         "line1": "• Attention Shield — защита внимания (текущая нагрузка: {current_load})",
         "line2": "• Resource Boundary — границы ресурсов (активны)",
         "line3": "• Integrity Field — целостность ядра (Замок Садовника активен)",
-        "line4": "• 🛠️ Gardener Tools — интерфейс бота (v3.23.0, 5 возможностей)",
+        "line4": "• 🛠️ Gardener Tools — интерфейс бота (v3.25.1, 5 возможностей)",
         "footer": "📍 Мер-Ка-Ба: Initium (Мер) + Philosophia (Ка) + Tectosphaera (Ба-Наставник) | Команды: `tecto status`, `tecto tools`, `tecto sr`",
         "line5": "• 🧘 SR Instructionum — наставления для СР (этика, инструменты, дары)"
       }
