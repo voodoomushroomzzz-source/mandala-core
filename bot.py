@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.24.0
+Mandala Sync Terminal Bot v3.25.0
 Render Web Service + Webhook (Aiogram 3)
-ИЗМЕНЕНИЯ В v3.24.0:
-- НОВОЕ: Пакетные транзакции (batch update) — несколько операций одним коммитом
-- НОВОЕ: Кнопка "📦 Пакетное обновление" в главном меню
-- НОВОЕ: Атомарность — при ошибке любой операции откат всей транзакции
-- Улучшена обработка JSON-путей (поддержка вложенных объектов и массивов)
-- Добавлено подтверждение перед применением транзакции
+ИЗМЕНЕНИЯ В v3.25.0:
+- НОВОЕ: Пакетные обновления через JSON-файл (загружается документ с массивом операций)
+- НОВОЕ: Автоматическое определение типа ввода (текстовый блок или JSON-файл)
+- Улучшена стабильность парсинга, добавлены проверки структуры JSON
+- Полная обратная совместимость с текстовыми блоками
 """
 
 import os
@@ -32,7 +31,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import (
     Message, ReplyKeyboardMarkup, KeyboardButton,
     InlineKeyboardMarkup, InlineKeyboardButton,
-    BufferedInputFile, CallbackQuery
+    BufferedInputFile, CallbackQuery, Document
 )
 from aiogram.client.default import DefaultBotProperties
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
@@ -85,18 +84,18 @@ dp.include_router(router)
 
 # ========== FSM СОСТОЯНИЯ ==========
 class UploadStates(StatesGroup):
-    waiting_for_action = StatesGroup()           # загрузить или редактировать?
-    waiting_for_category = StatesGroup()         # категория модуля
-    waiting_for_module = StatesGroup()           # конкретный модуль
-    waiting_for_file = StatesGroup()              # ожидание файла (для загрузки)
-    waiting_for_operation = StatesGroup()         # тип операции
-    waiting_for_target_path = StatesGroup()       # путь в JSON
-    waiting_for_new_value = StatesGroup()         # новое значение
+    waiting_for_action = State()           # загрузить или редактировать?
+    waiting_for_category = State()         # категория модуля
+    waiting_for_module = State()           # конкретный модуль
+    waiting_for_file = State()              # ожидание файла (для загрузки)
+    waiting_for_operation = State()         # тип операции
+    waiting_for_target_path = State()       # путь в JSON
+    waiting_for_new_value = State()         # новое значение
 
 # НОВЫЙ КЛАСС: для пакетных обновлений
 class BatchUpdateStates(StatesGroup):
     waiting_for_module = State()      # выбор модуля
-    waiting_for_batch = State()       # ожидание блока команд
+    waiting_for_batch = State()       # ожидание блока команд или файла
     waiting_for_confirmation = State()  # подтверждение транзакции
 
 # ========== ЦЕЛЕВЫЕ ФАЙЛЫ ==========
@@ -478,7 +477,7 @@ def add_to_array(obj: Any, path: str, value: Any) -> Tuple[Any, bool]:
 
 # ========== ФУНКЦИИ GITHUB API ==========
 
-async def get_github_file(file_path: str) -> Tuple[Optional[Dict], Optional[str]]:
+async def get_github_file(file_path: str) -> Tuple[Optional[Any], Optional[str]]:
     """Получает файл с GitHub. Возвращает (контент, sha)"""
     if not GITHUB_TOKEN:
         logger.error("❌ GITHUB_TOKEN не установлен")
@@ -488,7 +487,7 @@ async def get_github_file(file_path: str) -> Tuple[Optional[Dict], Optional[str]
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.24.0"
+        "User-Agent": "MandalaBot/3.25.0"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -550,7 +549,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.24.0"
+        "User-Agent": "MandalaBot/3.25.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -599,7 +598,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
             return False, None
 
 
-# ========== НОВАЯ ФУНКЦИЯ: ПАКЕТНОЕ ОБНОВЛЕНИЕ ==========
+# ========== ФУНКЦИЯ ПАКЕТНОГО ОБНОВЛЕНИЯ ==========
 
 async def batch_update_github(file_path: str, operations: List[Dict], message: str) -> Tuple[bool, Optional[str], str]:
     """
@@ -684,11 +683,11 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
 @router.message(Command("start"))
 async def cmd_start(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.24.0**\n"
+        "🌱 **Mandala Bot v3.25.0**\n"
         "Я — интерфейс заботы для работы с Мандалой.\n\n"
         "📤 **Загрузить файл** — добавить новый модуль или инфраструктуру\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON\n"
-        "📦 **Пакетное обновление** — несколько изменений одним коммитом (НОВОЕ!)\n"
+        "📦 **Пакетное обновление** — несколько изменений одним коммитом (текстовый блок или JSON-файл)\n"
         "📦 **Скачать монолит** — получить полную сборку\n"
         "🍇 **Fructus** — хранилище артефактов\n"
         "ℹ️ **Помощь** — подсказки",
@@ -758,13 +757,15 @@ async def fructus_menu(message: Message, state: FSMContext):
 @router.message(F.text == "ℹ️ Помощь")
 async def help_command(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.24.0 — Помощь**\n\n"
+        "🌱 **Mandala Bot v3.25.0 — Помощь**\n\n"
         "📤 **Загрузить файл** — загрузка новых JSON-файлов в репозиторий\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON без полной перезаписи\n"
         "📦 **Пакетное обновление** — несколько изменений одним коммитом (атомарно!)\n"
+        "   • Можно отправить текстовый блок (формат с ---)\n"
+        "   • Можно загрузить JSON-файл с массивом операций\n"
         "📦 **Скачать монолит** — мгновенное скачивание mandala_core.monolith.latest.json\n"
         "🍇 **Fructus** — хранилище артефактов (семена, геометрия, скрипты)\n\n"
-        "**Пакетные обновления**: отправь блок команд в формате:\n"
+        "**Пакетные обновления (текстовый блок)**:\n"
         "---\n"
         "операция: update\n"
         "путь: version\n"
@@ -774,6 +775,13 @@ async def help_command(message: Message):
         "путь: changes.details\n"
         "значение: \"Новое изменение\"\n"
         "---\n\n"
+        "**Пакетные обновления (JSON-файл)**:\n"
+        "```json\n"
+        "[\n"
+        "  {\"operation\": \"update\", \"path\": \"version\", \"value\": \"v2.3.1\"},\n"
+        "  {\"operation\": \"add\", \"path\": \"changes.details\", \"value\": \"Новое изменение\"}\n"
+        "]\n"
+        "```\n"
         "Поддерживаются пути: metadata.modified, spheres[0].modules и т.д."
     )
 
@@ -870,19 +878,19 @@ async def process_batch_target(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(
             f"📦 **Пакетное обновление**: {target['name']}\n"
             f"Файл: `{target['path']}`\n\n"
-            "Отправь блок операций в формате:\n\n"
+            "Отправь блок операций **текстом** (формат с ---) или **JSON-файл** с массивом операций.\n\n"
+            "Пример текстового блока:\n"
             "---\n"
             "операция: update\n"
             "путь: version\n"
             "значение: \"v2.3.1\"\n"
-            "---\n"
-            "операция: add\n"
-            "путь: changes.details\n"
-            "значение: \"Новое изменение\"\n"
             "---\n\n"
-            "Поддерживаемые операции: update, add, delete, show\n"
-            "Пути: metadata.modified, spheres[0].modules и т.д.\n\n"
-            "Отправь блок команд одним сообщением."
+            "Пример JSON-файла:\n"
+            "```json\n"
+            "[\n"
+            "  {\"operation\": \"update\", \"path\": \"version\", \"value\": \"v2.3.1\"}\n"
+            "]\n"
+            "```"
         )
     else:
         await callback.message.edit_text("❌ Неизвестный модуль")
@@ -991,9 +999,95 @@ async def process_edit_operation(callback: CallbackQuery, state: FSMContext):
         )
 
 
-# НОВЫЙ ОБРАБОТЧИК: получение блока команд для пакетного обновления
-@router.message(BatchUpdateStates.waiting_for_batch)
+# ========== ОБРАБОТЧИК ПОЛУЧЕНИЯ ПАКЕТНЫХ КОМАНД (ТЕКСТ ИЛИ ФАЙЛ) ==========
+
+@router.message(BatchUpdateStates.waiting_for_batch, F.document)
+async def process_batch_file(message: Message, state: FSMContext):
+    """Обработка загруженного JSON-файла с операциями"""
+    user_id = message.from_user.id
+    if user_id not in user_batch_target:
+        await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
+        await state.clear()
+        return
+    
+    target = user_batch_target[user_id]
+    document = message.document
+    
+    # Проверяем расширение файла
+    if not document.file_name.endswith('.json'):
+        await message.answer("❌ Пожалуйста, отправь JSON-файл (с расширением .json).")
+        return
+    
+    # Скачиваем файл
+    try:
+        file = await bot.get_file(document.file_id)
+        file_path = file.file_path
+        file_content = await bot.download_file(file_path)
+        content_str = file_content.read().decode('utf-8')
+        
+        # Парсим JSON
+        operations = json.loads(content_str)
+        
+        # Проверяем, что это массив
+        if not isinstance(operations, list):
+            await message.answer("❌ JSON-файл должен содержать массив операций.")
+            return
+        
+        # Проверяем каждую операцию
+        valid_operations = []
+        for i, op in enumerate(operations):
+            if not isinstance(op, dict):
+                await message.answer(f"❌ Операция {i+1} должна быть объектом.")
+                return
+            if "operation" not in op or "path" not in op:
+                await message.answer(f"❌ Операция {i+1} должна содержать поля 'operation' и 'path'.")
+                return
+            if op["operation"] not in ["update", "add", "delete", "show"]:
+                await message.answer(f"❌ Операция {i+1}: неизвестный тип '{op['operation']}'.")
+                return
+            if op["operation"] in ["update", "add"] and "value" not in op:
+                await message.answer(f"❌ Операция {i+1}: для '{op['operation']}' требуется поле 'value'.")
+                return
+            valid_operations.append(op)
+        
+        # Сохраняем операции в состоянии
+        await state.update_data(batch_operations=valid_operations, batch_target=target)
+        await state.set_state(BatchUpdateStates.waiting_for_confirmation)
+        
+        # Показываем preview
+        preview = f"📦 **Пакетное обновление из файла**: {target['name']}\n"
+        preview += f"Файл: `{target['path']}`\n"
+        preview += f"Операций: {len(valid_operations)}\n\n"
+        preview += "**Операции:**\n"
+        
+        for i, op in enumerate(valid_operations, 1):
+            op_type = op.get("operation")
+            path = op.get("path")
+            value = op.get("value")
+            preview += f"{i}. {op_type} {path}"
+            if value and op_type != "delete":
+                value_str = json.dumps(value, ensure_ascii=False)
+                if len(value_str) > 50:
+                    value_str = value_str[:50] + "..."
+                preview += f" → {value_str}"
+            preview += "\n"
+        
+        preview += "\nПрименить транзакцию?"
+        
+        await message.answer(
+            preview,
+            reply_markup=get_batch_confirmation_keyboard()
+        )
+        
+    except json.JSONDecodeError as e:
+        await message.answer(f"❌ Ошибка парсинга JSON: {e}")
+    except Exception as e:
+        await message.answer(f"❌ Не удалось обработать файл: {e}")
+        logger.exception("Error processing batch file")
+
+@router.message(BatchUpdateStates.waiting_for_batch, F.text)
 async def process_batch_commands(message: Message, state: FSMContext):
+    """Обработка текстового блока с операциями (старый формат)"""
     user_id = message.from_user.id
     if user_id not in user_batch_target:
         await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
@@ -1059,7 +1153,7 @@ async def process_batch_commands(message: Message, state: FSMContext):
     await state.set_state(BatchUpdateStates.waiting_for_confirmation)
     
     # Показываем preview
-    preview = f"📦 **Пакетное обновление**: {target['name']}\n"
+    preview = f"📦 **Пакетное обновление (текстовый блок)**: {target['name']}\n"
     preview += f"Файл: `{target['path']}`\n"
     preview += f"Операций: {len(operations)}\n\n"
     preview += "**Операции:**\n"
@@ -1172,7 +1266,7 @@ async def fructus_upload_start(callback: CallbackQuery, state: FSMContext):
     # TODO: реализовать загрузку в Fructus
 
 
-# ========== ОБРАБОТЧИКИ ПОЛУЧЕНИЯ ФАЙЛОВ ==========
+# ========== ОБРАБОТЧИКИ ПОЛУЧЕНИЯ ФАЙЛОВ (ОБЫЧНАЯ ЗАГРУЗКА) ==========
 
 @router.message(UploadStates.waiting_for_file, F.document)
 async def handle_document_upload(message: Message, state: FSMContext):
@@ -1390,7 +1484,7 @@ def main() -> None:
     if not GITHUB_TOKEN:
         logger.warning("⚠️ GITHUB_TOKEN не задан — загрузка файлов будет недоступна")
     
-    logger.info(f"🚀 Запуск бота v3.24.0, webhook URL: {WEBHOOK_URL}")
+    logger.info(f"🚀 Запуск бота v3.25.0, webhook URL: {WEBHOOK_URL}")
     
     # Регистрируем startup и shutdown
     dp.startup.register(on_startup)
