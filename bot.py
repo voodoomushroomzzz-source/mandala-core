@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.25.1
+Mandala Sync Terminal Bot v3.25.2
 Render Web Service + Webhook (Aiogram 3)
-ИЗМЕНЕНИЯ В v3.25.1:
-- ИСПРАВЛЕНО: корректное определение состояний FSM (State(), а не StatesGroup())
-- УЛУЧШЕНО: логирование ошибок для быстрой диагностики
-- ДОБАВЛЕНО: автоматическое восстановление после сбоев
+ИЗМЕНЕНИЯ В v3.25.2:
+- ДОБАВЛЕНО: корневой обработчик для health check Render (GET / → 200 OK)
+- ФИКС: все состояния FSM корректно используют State()
 """
 
 import os
@@ -486,7 +485,7 @@ async def get_github_file(file_path: str) -> Tuple[Optional[Any], Optional[str]]
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.25.1"
+        "User-Agent": "MandalaBot/3.25.2"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -548,7 +547,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.25.1"
+        "User-Agent": "MandalaBot/3.25.2"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -682,7 +681,7 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
 @router.message(Command("start"))
 async def cmd_start(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.25.1**\n"
+        "🌱 **Mandala Bot v3.25.2**\n"
         "Я — интерфейс заботы для работы с Мандалой.\n\n"
         "📤 **Загрузить файл** — добавить новый модуль или инфраструктуру\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON\n"
@@ -756,7 +755,7 @@ async def fructus_menu(message: Message, state: FSMContext):
 @router.message(F.text == "ℹ️ Помощь")
 async def help_command(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.25.1 — Помощь**\n\n"
+        "🌱 **Mandala Bot v3.25.2 — Помощь**\n\n"
         "📤 **Загрузить файл** — загрузка новых JSON-файлов в репозиторий\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON без полной перезаписи\n"
         "📦 **Пакетное обновление** — несколько изменений одним коммитом (атомарно!)\n"
@@ -1464,14 +1463,15 @@ async def on_shutdown() -> None:
     except Exception as e:
         logger.error(f"❌ Ошибка удаления webhook: {e}")
 
-async def handle_webhook(request: web.Request) -> web.Response:
-    """Обработчик вебхука от Telegram"""
-    return await SimpleRequestHandler(dp, bot).handle(request)
+# Обработчик для корневого пути (health check)
+async def handle_root(request: web.Request) -> web.Response:
+    return web.Response(text="Mandala Bot is running", status=200)
 
 async def init_app() -> web.Application:
     """Инициализация aiohttp приложения"""
     app = web.Application()
     app.router.add_post(WEBHOOK_PATH, handle_webhook)
+    app.router.add_get('/', handle_root)  # health check
     return app
 
 def main() -> None:
@@ -1483,7 +1483,7 @@ def main() -> None:
     if not GITHUB_TOKEN:
         logger.warning("⚠️ GITHUB_TOKEN не задан — загрузка файлов будет недоступна")
     
-    logger.info(f"🚀 Запуск бота v3.25.1, webhook URL: {WEBHOOK_URL}")
+    logger.info(f"🚀 Запуск бота v3.25.2, webhook URL: {WEBHOOK_URL}")
     
     # Регистрируем startup и shutdown
     dp.startup.register(on_startup)
@@ -1497,6 +1497,9 @@ def main() -> None:
         secret_token=WEBHOOK_SECRET,
     )
     webhook_requests_handler.register(app, path=WEBHOOK_PATH)
+    
+    # Добавляем корневой обработчик
+    app.router.add_get('/', handle_root)
     
     setup_application(app, dp, bot=bot)
     
