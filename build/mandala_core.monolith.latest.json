@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.4.5-432e11dd",
+  "version": "monolith-vv7.4.5-029a8362",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-16T17:14:29.841748+00:00",
-  "build_source": "deee44098b18d48ac8ec4f6a8c997f7f5246cd1f",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/deee44098b18d48ac8ec4f6a8c997f7f5246cd1f",
+  "build_timestamp": "2026-02-16T17:17:25.816962+00:00",
+  "build_source": "6df84b3fd1d20dbc45c0ba38e8e8248a3c188488",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/6df84b3fd1d20dbc45c0ba38e8e8248a3c188488",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -938,7 +938,7 @@
     },
     "Tectosphaera": {
       "module": "Tectosphaera",
-      "version": "v2.0.2",
+      "version": "v2.0.3",
       "type": "protection_and_instruction_core",
       "status": "active",
       "kernel_module": true,
@@ -947,7 +947,7 @@
         "created": "2026-02-13",
         "last_modified": "2026-02-16",
         "modified_by": "Архитектор",
-        "modification_purpose": "Актуализация инструкции под бот v3.25.0 (автовозврат в меню, безопасное удаление)",
+        "modification_purpose": "Обновление версии бота в описании gardener_tools до v3.25.0",
         "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
         "gardener_approval": "в процессе"
       },
@@ -996,7 +996,7 @@
         },
         "⚙️ НОВЫЙ СЛОЙ: gardener_tools": {
           "name": "Инструменты Садовника",
-          "description": "Telegram-бот v3.23.0 как интерфейс заботы и управления",
+          "description": "Telegram-бот v3.25.0 как интерфейс заботы и управления",
           "purpose": "Предоставить безопасные, прозрачные инструменты для работы с Мандалой",
           "capabilities": {
             "upload": {
@@ -1322,19 +1322,17 @@
         }
       },
       "changes": {
-        "version": "v2.0.1 → v2.0.2",
-        "summary": "Обновление инструкции по работе с ботом до v3.25.0",
+        "version": "v2.0.2 → v2.0.3",
+        "summary": "Актуализация версии бота в описании gardener_tools",
         "details": [
-          "В SR-TOOL-002 (работа с ботом) отражён автовозврат в главное меню.",
-          "В important_rules SR-TOOL-001 добавлено правило о безопасном удалении в v3.25.0.",
-          "В troubleshooting SR-TOOL-001 добавлен пункт для предупреждения об отсутствующем поле.",
-          "Обновлена версия модуля до v2.0.2."
+          "В описании слоя gardener_tools версия бота изменена с v3.23.0 на v3.25.0.",
+          "Обновлена версия модуля до v2.0.3."
         ]
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-16T17:14:29.841748+00:00",
+    "timestamp": "2026-02-16T17:17:25.816962+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1369,6 +1367,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-16 17:14:29 UTC"
+    "built_at": "2026-02-16 17:17:25 UTC"
   }
 }
