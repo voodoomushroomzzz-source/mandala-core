@@ -810,21 +810,21 @@ def main() -> None:
 
     logger.info(f"🚀 Запуск бота v3.25.4, webhook URL: {WEBHOOK_URL}")
     
-    # Регистрируем startup и shutdown
+    # Регистрируем startup и shutdown (они будут вызваны автоматически)
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
     
     # Запускаем aiohttp приложение
     app = web.Application()
     
-    # РЕГИСТРИРУЕМ ОБРАБОТЧИК ВЕБХУКА (ЭТО ВАЖНО!)
+    # Регистрируем обработчик вебхука
     SimpleRequestHandler(
         dispatcher=dp,
         bot=bot,
         secret_token=WEBHOOK_SECRET
     ).register(app, path=WEBHOOK_PATH)
 
-    # ---- ДОПОЛНИТЕЛЬНЫЕ МАРШРУТЫ ----
+    # Дополнительные маршруты
     async def health_check(request: web.Request) -> web.Response:
         return web.Response(text="OK")
     app.router.add_get("/", health_check)
@@ -834,6 +834,9 @@ def main() -> None:
     app.router.add_get("/status", status_page)
 
     logger.info(f"🚀 Запуск на порту {PORT}")
+    
+    # Убираем лишний finally с ручным вызовом on_shutdown
+    web.run_app(app, host="0.0.0.0", port=PORT)
     
     # Правильная обработка сигналов для корректного shutdown
     try:
