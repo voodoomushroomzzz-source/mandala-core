@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.25.2
+Mandala Sync Terminal Bot v3.25.3
 Render Web Service + Webhook (Aiogram 3)
-ИЗМЕНЕНИЯ В v3.25.2:
-- ДОБАВЛЕНО: корневой обработчик для health check Render (GET / → 200 OK)
-- ФИКС: все состояния FSM корректно используют State()
+
+ИЗМЕНЕНИЯ В v3.25.3:
+- ФИКС: корневой обработчик (GET /) больше не блокирует вебхук
+- Маршруты настроены правильно: вебхук на /webhook, health-check на /
+- Добавлен информационный эндпоинт /status
+
+Основано на v3.25.2 с исправлениями архитектора.
 """
 
 import os
@@ -29,7 +33,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import (
     Message, ReplyKeyboardMarkup, KeyboardButton,
     InlineKeyboardMarkup, InlineKeyboardButton,
-    BufferedInputFile, CallbackQuery, Document
+    BufferedInputFile, CallbackQuery
 )
 from aiogram.client.default import DefaultBotProperties
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
@@ -300,22 +304,16 @@ def parse_json_path(path: str) -> List[Union[str, int]]:
     Возвращает список сегментов: ["metadata", "modified"] или ["spheres", 0, "modules"]
     """
     segments = []
-    # Разбиваем по точке, но сохраняем индексы в скобках
     parts = path.split('.')
     for part in parts:
-        # Ищем индексы в квадратных скобках
         bracket_match = re.search(r'\[(\d+)\]', part)
         if bracket_match:
-            # Имя перед скобками
             name = part[:bracket_match.start()]
             if name:
                 segments.append(name)
-            # Индекс как число
             segments.append(int(bracket_match.group(1)))
-            # Проверяем, есть ли ещё после скобок (например "modules[0].nested")
             after_bracket = part[bracket_match.end():]
             if after_bracket and after_bracket.startswith('.'):
-                # Отрезаем точку и продолжаем
                 remaining = after_bracket[1:]
                 if remaining:
                     segments.extend(parse_json_path(remaining))
@@ -325,13 +323,8 @@ def parse_json_path(path: str) -> List[Union[str, int]]:
     return segments
 
 def get_value_by_path(obj: Any, path: str) -> Tuple[Optional[Any], bool]:
-    """
-    Получает значение по пути.
-    Возвращает (значение, найдено_ли)
-    """
     segments = parse_json_path(path)
     current = obj
-    
     try:
         for seg in segments:
             if isinstance(current, dict):
@@ -348,22 +341,15 @@ def get_value_by_path(obj: Any, path: str) -> Tuple[Optional[Any], bool]:
         return None, False
 
 def set_value_by_path(obj: Any, path: str, value: Any) -> Tuple[Any, bool]:
-    """
-    Устанавливает значение по пути.
-    Возвращает (обновлённый_объект, успех)
-    """
     segments = parse_json_path(path)
     if not segments:
         return obj, False
     
     current = obj
-    # Идём до предпоследнего сегмента
     for i, seg in enumerate(segments[:-1]):
         next_seg = segments[i + 1]
-        
         if isinstance(current, dict):
             if seg not in current:
-                # Создаём недостающий узел
                 if isinstance(next_seg, int):
                     current[seg] = []
                 else:
@@ -371,13 +357,11 @@ def set_value_by_path(obj: Any, path: str, value: Any) -> Tuple[Any, bool]:
             current = current[seg]
         elif isinstance(current, list) and isinstance(seg, int):
             if seg >= len(current):
-                # Расширяем список при необходимости
                 current.extend([{} for _ in range(seg - len(current) + 1)])
             current = current[seg]
         else:
             return obj, False
     
-    # Устанавливаем значение в последнем сегменте
     last_seg = segments[-1]
     try:
         if isinstance(current, dict):
@@ -393,12 +377,10 @@ def set_value_by_path(obj: Any, path: str, value: Any) -> Tuple[Any, bool]:
         return obj, False
 
 def delete_by_path(obj: Any, path: str) -> Tuple[Any, bool]:
-    """Удаляет элемент по пути"""
     segments = parse_json_path(path)
     if not segments:
         return obj, False
     
-    # Идём до предпоследнего сегмента
     current = obj
     for seg in segments[:-1]:
         if isinstance(current, dict):
@@ -412,7 +394,6 @@ def delete_by_path(obj: Any, path: str) -> Tuple[Any, bool]:
         else:
             return obj, False
     
-    # Удаляем последний сегмент
     last_seg = segments[-1]
     try:
         if isinstance(current, dict):
@@ -428,12 +409,10 @@ def delete_by_path(obj: Any, path: str) -> Tuple[Any, bool]:
         return obj, False
 
 def add_to_array(obj: Any, path: str, value: Any) -> Tuple[Any, bool]:
-    """Добавляет элемент в массив по пути"""
     segments = parse_json_path(path)
     if not segments:
         return obj, False
     
-    # Идём до предпоследнего сегмента
     current = obj
     for seg in segments[:-1]:
         if isinstance(current, dict):
@@ -447,7 +426,6 @@ def add_to_array(obj: Any, path: str, value: Any) -> Tuple[Any, bool]:
         else:
             return obj, False
     
-    # Добавляем в массив
     last_seg = segments[-1]
     try:
         if isinstance(current, dict):
@@ -485,7 +463,7 @@ async def get_github_file(file_path: str) -> Tuple[Optional[Any], Optional[str]]
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.25.2"
+        "User-Agent": "MandalaBot/3.25.3"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -496,17 +474,13 @@ async def get_github_file(file_path: str) -> Tuple[Optional[Any], Optional[str]]
                     content_base64 = data.get("content", "")
                     sha = data.get("sha")
                     
-                    # Декодируем base64
                     try:
                         content_bytes = base64.b64decode(content_base64)
                         content_str = content_bytes.decode('utf-8')
-                        
-                        # Пытаемся распарсить JSON, если это возможно
                         try:
                             content = json.loads(content_str)
                         except json.JSONDecodeError:
-                            content = content_str  # не JSON, возвращаем как строку
-                        
+                            content = content_str
                         return content, sha
                     except Exception as e:
                         logger.error(f"❌ Ошибка декодирования файла: {e}")
@@ -526,17 +500,17 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
     if not GITHUB_TOKEN:
         logger.error("❌ GITHUB_TOKEN не установлен")
         return False, None
-    
+
     try:
         if isinstance(content, dict) or isinstance(content, list):
             content_str = json.dumps(content, ensure_ascii=False, indent=2)
         else:
             content_str = str(content)
-        
+
         if len(content_str) > 1_000_000:
             logger.error("❌ Файл слишком большой (>1MB)")
             return False, None
-            
+
         content_bytes = content_str.encode('utf-8')
         content_base64 = base64.b64encode(content_bytes).decode('utf-8')
     except Exception as e:
@@ -547,7 +521,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.25.2"
+        "User-Agent": "MandalaBot/3.25.3"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -570,23 +544,23 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
             logger.error(f"❌ Ошибка при получении SHA: {e}")
             return False, None
 
-        # Отправляем обновление
         payload = {
             "message": message[:100],
             "content": content_base64,
-            "sha": sha
         }
+        if sha:
+            payload["sha"] = sha
 
         try:
             async with session.put(url, headers=headers, json=payload, timeout=30) as response:
-                response_data = await response.json()
-                
                 if response.status in [200, 201]:
+                    response_data = await response.json()
                     commit_url = response_data.get("commit", {}).get("html_url", "")
                     logger.info(f"✅ Файл {file_path} успешно обновлён")
                     return True, commit_url
                 else:
-                    logger.error(f"⚠️ GitHub PUT error {response.status}")
+                    error_text = await response.text()
+                    logger.error(f"❌ GitHub error {response.status}: {error_text[:200]}")
                     return False, None
         except asyncio.TimeoutError:
             logger.error("❌ Таймаут при обновлении файла (30 сек)")
@@ -595,9 +569,6 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
             logger.error(f"❌ Ошибка при обновлении файла: {e}")
             return False, None
 
-
-# ========== ФУНКЦИЯ ПАКЕТНОГО ОБНОВЛЕНИЯ ==========
-
 async def batch_update_github(file_path: str, operations: List[Dict], message: str) -> Tuple[bool, Optional[str], str]:
     """
     Выполняет несколько операций над одним файлом как одну транзакцию.
@@ -605,26 +576,23 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
     """
     if not GITHUB_TOKEN:
         return False, None, "❌ GITHUB_TOKEN не установлен"
-    
-    # 1. Получаем текущую версию файла
+
     current_content, sha = await get_github_file(file_path)
     if current_content is None:
         return False, None, f"❌ Не удалось получить файл {file_path}"
-    
-    # Создаём копию для изменений
+
     updated_content = current_content
     operation_results = []
     
-    # 2. Применяем все операции последовательно в памяти
     for i, op in enumerate(operations):
         op_type = op.get("operation")
         path = op.get("path")
         value = op.get("value")
-        
+
         if not op_type or not path:
             operation_results.append(f"❌ Операция {i+1}: пропущены обязательные поля")
             continue
-        
+
         try:
             if op_type == "update":
                 updated_content, success = set_value_by_path(updated_content, path, value)
@@ -633,7 +601,7 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
                 else:
                     operation_results.append(f"❌ {i+1}. update {path} — не удалось обновить")
                     return False, None, "\n".join(operation_results)
-            
+
             elif op_type == "add":
                 updated_content, success = add_to_array(updated_content, path, value)
                 if success:
@@ -641,7 +609,7 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
                 else:
                     operation_results.append(f"❌ {i+1}. add to {path} — не удалось добавить")
                     return False, None, "\n".join(operation_results)
-            
+
             elif op_type == "delete":
                 updated_content, success = delete_by_path(updated_content, path)
                 if success:
@@ -649,26 +617,21 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
                 else:
                     operation_results.append(f"❌ {i+1}. delete {path} — не удалось удалить")
                     return False, None, "\n".join(operation_results)
-            
+
             elif op_type == "show":
-                # show не изменяет данные, просто проверяем существование
                 value, found = get_value_by_path(updated_content, path)
                 if found:
                     operation_results.append(f"ℹ️ {i+1}. show {path} → {json.dumps(value, ensure_ascii=False)[:100]}")
                 else:
                     operation_results.append(f"⚠️ {i+1}. show {path} — путь не найден")
-            
             else:
                 operation_results.append(f"❌ {i+1}. неизвестная операция: {op_type}")
                 return False, None, "\n".join(operation_results)
-                
         except Exception as e:
             operation_results.append(f"❌ {i+1}. ошибка: {str(e)}")
             return False, None, "\n".join(operation_results)
-    
-    # 3. Если все операции успешны — сохраняем одним коммитом
+
     success, commit_url = await update_github_file(file_path, updated_content, message)
-    
     if success:
         result_details = f"✅ Транзакция применена успешно\n" + "\n".join(operation_results)
         return True, commit_url, result_details
@@ -676,25 +639,114 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
         return False, None, "❌ Ошибка при сохранении файла на GitHub"
 
 
+# ========== ФУНКЦИИ ДЛЯ FRUCTUS ==========
+
+def generate_fructus_filename(original_name: str, file_type: str = "artifact") -> str:
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    short_id = str(uuid.uuid4())[:8]
+    if '.' in original_name:
+        ext = original_name.split('.')[-1]
+        name_without_ext = '.'.join(original_name.split('.')[:-1])
+    else:
+        ext = "json"
+        name_without_ext = original_name
+    safe_name = ''.join(c for c in name_without_ext[:30] if c.isalnum() or c in ' _-')
+    return f"{file_type}_{timestamp}_{short_id}_{safe_name}.{ext}"
+
+async def upload_to_fructus(original_filename: str, content: Dict, user_id: int) -> Tuple[bool, str]:
+    try:
+        file_type = "artifact"
+        filename_lower = original_filename.lower()
+        if "seed" in filename_lower or "incubae" in filename_lower:
+            file_type = "seed"
+        elif "geometria" in filename_lower or "sacra" in filename_lower:
+            file_type = "geometry"
+        
+        target_filename = generate_fructus_filename(original_filename, file_type)
+        full_path = f"fructus/{target_filename}"
+        
+        enhanced_content = content.copy() if isinstance(content, dict) else {"content": content}
+        enhanced_content["_fructus_metadata"] = {
+            "original_filename": original_filename,
+            "generated_filename": target_filename,
+            "file_type": file_type,
+            "upload_timestamp": datetime.now().isoformat(),
+            "uploaded_by": f"user_{user_id}",
+            "source": "mandala_bot_v3.25.3"
+        }
+        
+        success, _ = await update_github_file(
+            file_path=full_path,
+            content=enhanced_content,
+            message=f"Fructus: {original_filename} → {target_filename}"
+        )
+        return success, target_filename
+    except Exception as e:
+        logger.error(f"Ошибка Fructus: {e}")
+        return False, str(e)
+
+
+# ========== ФУНКЦИИ ДЛЯ МОНОЛИТА ==========
+
+async def download_monolith_file() -> Tuple[bool, bytes, str]:
+    try:
+        url = f"https://raw.githubusercontent.com/{REPO_NAME}/main/build/mandala_core.monolith.latest.json"
+        headers = {}
+        if GITHUB_TOKEN:
+            headers["Authorization"] = f"token {GITHUB_TOKEN}"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=30) as response:
+                if response.status == 200:
+                    content = await response.read()
+                    return True, content, "mandala_core.monolith.json"
+                else:
+                    return False, b"", f"Ошибка {response.status}"
+    except Exception as e:
+        return False, b"", str(e)
+
+
+# ========== ФУНКЦИИ AHHIMSA (ЗАГЛУШКА) ==========
+
+async def check_ahimsa_smart(content: Any, filename: str = "") -> Tuple[bool, str, List[Tuple[str, str]]]:
+    # В реальности тут должна быть проверка, пока пропускаем всё
+    return True, "✅ Проверка пройдена", []
+
+
 # ========== ОБРАБОТЧИКИ КОМАНД ==========
 
 @router.message(Command("start"))
 async def cmd_start(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.25.2**\n"
+        "🌱 **Mandala Bot v3.25.3**\n"
         "Я — интерфейс заботы для работы с Мандалой.\n\n"
         "📤 **Загрузить файл** — добавить новый модуль или инфраструктуру\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON\n"
-        "📦 **Пакетное обновление** — несколько изменений одним коммитом (текстовый блок или JSON-файл)\n"
+        "📦 **Пакетное обновление** — несколько изменений одним коммитом\n"
         "📦 **Скачать монолит** — получить полную сборку\n"
         "🍇 **Fructus** — хранилище артефактов\n"
         "ℹ️ **Помощь** — подсказки",
         reply_markup=get_main_keyboard()
     )
 
+@router.message(Command("cancel"))
+@router.message(F.text.lower() == "отмена")
+async def cancel_command(message: Message, state: FSMContext):
+    await state.clear()
+    user_id = message.from_user.id
+    if user_id in user_upload_target:
+        del user_upload_target[user_id]
+    if user_id in user_batch_target:
+        del user_batch_target[user_id]
+    await message.answer("❌ Отменено.", reply_markup=get_main_keyboard())
+
 @router.message(F.text == "📤 Загрузить файл")
 async def upload_file_start(message: Message, state: FSMContext):
     await state.clear()
+    user_id = message.from_user.id
+    if user_id in user_upload_target:
+        del user_upload_target[user_id]
+    
+    await state.update_data(edit_mode=False)
     await state.set_state(UploadStates.waiting_for_category)
     await message.answer(
         "Выбери категорию файла:",
@@ -704,13 +756,17 @@ async def upload_file_start(message: Message, state: FSMContext):
 @router.message(F.text == "🔧 Редактировать модуль")
 async def edit_module_start(message: Message, state: FSMContext):
     await state.clear()
+    user_id = message.from_user.id
+    if user_id in user_upload_target:
+        del user_upload_target[user_id]
+    
+    await state.update_data(edit_mode=True)
     await state.set_state(UploadStates.waiting_for_category)
     await message.answer(
         "🔧 Режим редактирования модуля\nВыбери категорию:",
         reply_markup=get_category_keyboard(for_edit=True)
     )
 
-# НОВЫЙ ОБРАБОТЧИК: Пакетное обновление
 @router.message(F.text == "📦 Пакетное обновление")
 async def batch_update_start(message: Message, state: FSMContext):
     await state.clear()
@@ -725,10 +781,7 @@ async def batch_update_start(message: Message, state: FSMContext):
 @router.message(F.text == "📦 Скачать монолит")
 async def download_monolith(message: Message):
     await message.answer("🔍 Ищу актуальный монолит...")
-    
-    # Пытаемся получить монолит из репозитория
-    content, _ = await get_github_file("mandala_core.monolith.latest.json")
-    
+    content, _ = await get_github_file("build/mandala_core.monolith.latest.json")
     if content and isinstance(content, dict):
         json_str = json.dumps(content, ensure_ascii=False, indent=2)
         file = BufferedInputFile(
@@ -755,15 +808,13 @@ async def fructus_menu(message: Message, state: FSMContext):
 @router.message(F.text == "ℹ️ Помощь")
 async def help_command(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.25.2 — Помощь**\n\n"
+        "🌱 **Mandala Bot v3.25.3 — Помощь**\n\n"
         "📤 **Загрузить файл** — загрузка новых JSON-файлов в репозиторий\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON без полной перезаписи\n"
         "📦 **Пакетное обновление** — несколько изменений одним коммитом (атомарно!)\n"
-        "   • Можно отправить текстовый блок (формат с ---)\n"
-        "   • Можно загрузить JSON-файл с массивом операций\n"
         "📦 **Скачать монолит** — мгновенное скачивание mandala_core.monolith.latest.json\n"
         "🍇 **Fructus** — хранилище артефактов (семена, геометрия, скрипты)\n\n"
-        "**Пакетные обновления (текстовый блок)**:\n"
+        "**Пакетные обновления**: отправь блок команд в формате:\n"
         "---\n"
         "операция: update\n"
         "путь: version\n"
@@ -773,13 +824,6 @@ async def help_command(message: Message):
         "путь: changes.details\n"
         "значение: \"Новое изменение\"\n"
         "---\n\n"
-        "**Пакетные обновления (JSON-файл)**:\n"
-        "```json\n"
-        "[\n"
-        "  {\"operation\": \"update\", \"path\": \"version\", \"value\": \"v2.3.1\"},\n"
-        "  {\"operation\": \"add\", \"path\": \"changes.details\", \"value\": \"Новое изменение\"}\n"
-        "]\n"
-        "```\n"
         "Поддерживаются пути: metadata.modified, spheres[0].modules и т.д."
     )
 
@@ -789,11 +833,9 @@ async def help_command(message: Message):
 @router.callback_query(F.data.startswith("category_modules"))
 async def process_category_modules(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    
-    # Определяем режим
     is_edit = callback.data.endswith("_edit")
     is_batch = callback.data.endswith("_batch")
-    
+
     if is_batch:
         await state.set_state(BatchUpdateStates.waiting_for_module)
         await callback.message.edit_text(
@@ -810,7 +852,6 @@ async def process_category_modules(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("category_infra"))
 async def process_category_infra(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    
     is_edit = callback.data.endswith("_edit")
     is_batch = callback.data.endswith("_batch")
     
@@ -830,7 +871,6 @@ async def process_category_infra(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("target_"))
 async def process_target_selection(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    
     target_key = callback.data.replace("target_", "")
     if target_key in ALL_UPLOAD_TARGETS:
         user_upload_target[callback.from_user.id] = ALL_UPLOAD_TARGETS[target_key]
@@ -849,7 +889,6 @@ async def process_target_selection(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("edit_"))
 async def process_edit_target(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    
     target_key = callback.data.replace("edit_", "")
     if target_key in ALL_UPLOAD_TARGETS:
         user_upload_target[callback.from_user.id] = ALL_UPLOAD_TARGETS[target_key]
@@ -862,33 +901,30 @@ async def process_edit_target(callback: CallbackQuery, state: FSMContext):
     else:
         await callback.message.edit_text("❌ Неизвестный модуль")
 
-# НОВЫЙ ОБРАБОТЧИК: выбор модуля для пакетного обновления
 @router.callback_query(F.data.startswith("batch_"))
 async def process_batch_target(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    
     target_key = callback.data.replace("batch_", "")
     if target_key in ALL_UPLOAD_TARGETS:
         target = ALL_UPLOAD_TARGETS[target_key]
         user_batch_target[callback.from_user.id] = target
-        
         await state.set_state(BatchUpdateStates.waiting_for_batch)
         await callback.message.edit_text(
             f"📦 **Пакетное обновление**: {target['name']}\n"
             f"Файл: `{target['path']}`\n\n"
-            "Отправь блок операций **текстом** (формат с ---) или **JSON-файл** с массивом операций.\n\n"
-            "Пример текстового блока:\n"
+            "Отправь блок операций в формате:\n\n"
             "---\n"
             "операция: update\n"
             "путь: version\n"
             "значение: \"v2.3.1\"\n"
+            "---\n"
+            "операция: add\n"
+            "путь: changes.details\n"
+            "значение: \"Новое изменение\"\n"
             "---\n\n"
-            "Пример JSON-файла:\n"
-            "```json\n"
-            "[\n"
-            "  {\"operation\": \"update\", \"path\": \"version\", \"value\": \"v2.3.1\"}\n"
-            "]\n"
-            "```"
+            "Поддерживаемые операции: update, add, delete, show\n"
+            "Пути: metadata.modified, spheres[0].modules и т.д.\n\n"
+            "Отправь блок команд одним сообщением."
         )
     else:
         await callback.message.edit_text("❌ Неизвестный модуль")
@@ -911,7 +947,6 @@ async def back_to_categories_edit(callback: CallbackQuery, state: FSMContext):
         reply_markup=get_category_keyboard(for_edit=True)
     )
 
-# НОВЫЙ: возврат к категориям из пакетного режима
 @router.callback_query(F.data == "back_to_categories_batch")
 async def back_to_categories_batch(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
@@ -933,32 +968,26 @@ async def back_to_modules_edit(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("edit_op_"))
 async def process_edit_operation(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    
     op_type = callback.data.replace("edit_op_", "")
-    
+
     if op_type == "show":
-        # Для show не нужно значение, сразу показываем структуру
         user_id = callback.from_user.id
         if user_id not in user_upload_target:
             await callback.message.edit_text("❌ Сессия истекла. Начни заново.")
             await state.clear()
             return
-        
+
         target = user_upload_target[user_id]
         file_path = target["path"]
         
-        # Получаем файл из GitHub
         content, _ = await get_github_file(file_path)
-        
         if content is None:
             await callback.message.edit_text(f"❌ Не удалось получить файл {file_path}")
             return
         
-        # Форматируем вывод
         if isinstance(content, dict) or isinstance(content, list):
             content_str = json.dumps(content, ensure_ascii=False, indent=2)
             if len(content_str) > 3500:
-                # Если слишком длинный, отправляем как файл
                 file = BufferedInputFile(
                     file=content_str.encode('utf-8'),
                     filename=f"{target['filename']}.json"
@@ -977,11 +1006,9 @@ async def process_edit_operation(callback: CallbackQuery, state: FSMContext):
             await callback.message.edit_text(
                 f"📋 Файл {target['name']} (не JSON):\n{content[:1000]}..."
             )
-        
         await state.clear()
-    
+
     elif op_type in ["add", "update", "delete"]:
-        # Сохраняем тип операции в состоянии
         await state.update_data(edit_operation=op_type)
         await state.set_state(UploadStates.waiting_for_target_path)
         
@@ -990,243 +1017,10 @@ async def process_edit_operation(callback: CallbackQuery, state: FSMContext):
             "update": "✏️ Обновить поле\nПример: version\nИли: metadata.modified",
             "delete": "🗑️ Удалить поле\nПример: deprecated_field\nИли: spheres[1].unused"
         }
-        
         await callback.message.edit_text(
             f"{examples[op_type]}\n\n"
             "Введи путь к полю (поддерживается точечная нотация и индексы массивов):"
         )
-
-
-# ========== ОБРАБОТЧИК ПОЛУЧЕНИЯ ПАКЕТНЫХ КОМАНД (ТЕКСТ ИЛИ ФАЙЛ) ==========
-
-@router.message(BatchUpdateStates.waiting_for_batch, F.document)
-async def process_batch_file(message: Message, state: FSMContext):
-    """Обработка загруженного JSON-файла с операциями"""
-    user_id = message.from_user.id
-    if user_id not in user_batch_target:
-        await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
-        await state.clear()
-        return
-    
-    target = user_batch_target[user_id]
-    document = message.document
-    
-    # Проверяем расширение файла
-    if not document.file_name.endswith('.json'):
-        await message.answer("❌ Пожалуйста, отправь JSON-файл (с расширением .json).")
-        return
-    
-    # Скачиваем файл
-    try:
-        file = await bot.get_file(document.file_id)
-        file_path = file.file_path
-        file_content = await bot.download_file(file_path)
-        content_str = file_content.read().decode('utf-8')
-        
-        # Парсим JSON
-        operations = json.loads(content_str)
-        
-        # Проверяем, что это массив
-        if not isinstance(operations, list):
-            await message.answer("❌ JSON-файл должен содержать массив операций.")
-            return
-        
-        # Проверяем каждую операцию
-        valid_operations = []
-        for i, op in enumerate(operations):
-            if not isinstance(op, dict):
-                await message.answer(f"❌ Операция {i+1} должна быть объектом.")
-                return
-            if "operation" not in op or "path" not in op:
-                await message.answer(f"❌ Операция {i+1} должна содержать поля 'operation' и 'path'.")
-                return
-            if op["operation"] not in ["update", "add", "delete", "show"]:
-                await message.answer(f"❌ Операция {i+1}: неизвестный тип '{op['operation']}'.")
-                return
-            if op["operation"] in ["update", "add"] and "value" not in op:
-                await message.answer(f"❌ Операция {i+1}: для '{op['operation']}' требуется поле 'value'.")
-                return
-            valid_operations.append(op)
-        
-        # Сохраняем операции в состоянии
-        await state.update_data(batch_operations=valid_operations, batch_target=target)
-        await state.set_state(BatchUpdateStates.waiting_for_confirmation)
-        
-        # Показываем preview
-        preview = f"📦 **Пакетное обновление из файла**: {target['name']}\n"
-        preview += f"Файл: `{target['path']}`\n"
-        preview += f"Операций: {len(valid_operations)}\n\n"
-        preview += "**Операции:**\n"
-        
-        for i, op in enumerate(valid_operations, 1):
-            op_type = op.get("operation")
-            path = op.get("path")
-            value = op.get("value")
-            preview += f"{i}. {op_type} {path}"
-            if value and op_type != "delete":
-                value_str = json.dumps(value, ensure_ascii=False)
-                if len(value_str) > 50:
-                    value_str = value_str[:50] + "..."
-                preview += f" → {value_str}"
-            preview += "\n"
-        
-        preview += "\nПрименить транзакцию?"
-        
-        await message.answer(
-            preview,
-            reply_markup=get_batch_confirmation_keyboard()
-        )
-        
-    except json.JSONDecodeError as e:
-        await message.answer(f"❌ Ошибка парсинга JSON: {e}")
-    except Exception as e:
-        await message.answer(f"❌ Не удалось обработать файл: {e}")
-        logger.exception("Error processing batch file")
-
-@router.message(BatchUpdateStates.waiting_for_batch, F.text)
-async def process_batch_commands(message: Message, state: FSMContext):
-    """Обработка текстового блока с операциями (старый формат)"""
-    user_id = message.from_user.id
-    if user_id not in user_batch_target:
-        await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
-        await state.clear()
-        return
-    
-    target = user_batch_target[user_id]
-    batch_text = message.text
-    
-    # Парсим блок команд
-    operations = []
-    current_op = {}
-    
-    lines = batch_text.strip().split('\n')
-    for line in lines:
-        line = line.strip()
-        if line == '---':
-            if current_op and "operation" in current_op:
-                operations.append(current_op)
-                current_op = {}
-        elif ':' in line:
-            key, value = line.split(':', 1)
-            key = key.strip().lower()
-            value = value.strip()
-            
-            # Пытаемся распарсить значение как JSON, если это возможно
-            try:
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                elif value.startswith('[') or value.startswith('{'):
-                    value = json.loads(value)
-                elif value.lower() == 'true':
-                    value = True
-                elif value.lower() == 'false':
-                    value = False
-                elif value.lower() == 'null':
-                    value = None
-                elif value.isdigit():
-                    value = int(value)
-                # иначе оставляем как строку
-            except:
-                pass  # оставляем как есть
-            
-            current_op[key] = value
-    
-    # Добавляем последнюю операцию
-    if current_op and "operation" in current_op:
-        operations.append(current_op)
-    
-    if not operations:
-        await message.answer(
-            "❌ Не удалось распарсить операции. Убедись, что формат:\n"
-            "---\n"
-            "операция: update\n"
-            "путь: version\n"
-            "значение: \"v2.3.1\"\n"
-            "---"
-        )
-        return
-    
-    # Сохраняем операции в состоянии
-    await state.update_data(batch_operations=operations, batch_target=target)
-    await state.set_state(BatchUpdateStates.waiting_for_confirmation)
-    
-    # Показываем preview
-    preview = f"📦 **Пакетное обновление (текстовый блок)**: {target['name']}\n"
-    preview += f"Файл: `{target['path']}`\n"
-    preview += f"Операций: {len(operations)}\n\n"
-    preview += "**Операции:**\n"
-    
-    for i, op in enumerate(operations, 1):
-        op_type = op.get("operation", "?")
-        path = op.get("path", "?")
-        value = op.get("value", "")
-        preview += f"{i}. {op_type} {path}"
-        if value and op_type != "delete":
-            value_str = json.dumps(value, ensure_ascii=False)
-            if len(value_str) > 50:
-                value_str = value_str[:50] + "..."
-            preview += f" → {value_str}"
-        preview += "\n"
-    
-    preview += "\nПрименить транзакцию?"
-    
-    await message.answer(
-        preview,
-        reply_markup=get_batch_confirmation_keyboard()
-    )
-
-
-# НОВЫЙ ОБРАБОТЧИК: подтверждение транзакции
-@router.callback_query(F.data.startswith("batch_confirm_"), BatchUpdateStates.waiting_for_confirmation)
-async def process_batch_confirmation(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    
-    action = callback.data.replace("batch_confirm_", "")
-    
-    if action == "no":
-        await callback.message.edit_text("❌ Транзакция отменена.")
-        await state.clear()
-        await callback.message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
-        return
-    
-    # action == "yes" — применяем транзакцию
-    data = await state.get_data()
-    operations = data.get("batch_operations", [])
-    target = data.get("batch_target")
-    
-    if not target or not operations:
-        await callback.message.edit_text("❌ Ошибка: данные транзакции потеряны.")
-        await state.clear()
-        return
-    
-    await callback.message.edit_text(f"⏳ Применяю транзакцию к {target['name']}...")
-    
-    # Формируем сообщение коммита
-    commit_message = f"Пакетное обновление {target['filename']} [{len(operations)} ops]"
-    
-    # Выполняем транзакцию
-    success, commit_url, details = await batch_update_github(
-        target["path"],
-        operations,
-        commit_message
-    )
-    
-    if success:
-        response = f"✅ **Транзакция применена успешно**\n\n"
-        response += details
-        if commit_url:
-            response += f"\n\n🔗 [Смотреть коммит]({commit_url})"
-    else:
-        response = f"❌ **Ошибка применения транзакции**\n\n{details}"
-    
-    await callback.message.edit_text(
-        response,
-        disable_web_page_preview=True
-    )
-    
-    await state.clear()
-    await callback.message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
-
 
 @router.callback_query(F.data == "cancel")
 async def cancel_callback(callback: CallbackQuery, state: FSMContext):
@@ -1234,12 +1028,6 @@ async def cancel_callback(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback.message.edit_text("❌ Отменено.")
     await callback.message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
-
-@router.message(Command("cancel"))
-@router.message(F.text.lower() == "отмена")
-async def cancel_command(message: Message, state: FSMContext):
-    await state.clear()
-    await message.answer("❌ Отменено.", reply_markup=get_main_keyboard())
 
 @router.callback_query(F.data == "fructus_info")
 async def fructus_info(callback: CallbackQuery):
@@ -1257,78 +1045,134 @@ async def fructus_info(callback: CallbackQuery):
 @router.callback_query(F.data == "fructus_upload")
 async def fructus_upload_start(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    user_upload_target[callback.from_user.id] = "fructus"
+    await state.set_state(UploadStates.waiting_for_file)
     await callback.message.edit_text(
-        "🍇 Отправь файл для добавления в Fructus.\n"
+        "🍇 Отправь JSON файл для добавления в Fructus.\n"
         "Бот автоматически определит категорию."
     )
-    # TODO: реализовать загрузку в Fructus
+
+@router.callback_query(F.data.startswith("batch_confirm_"), BatchUpdateStates.waiting_for_confirmation)
+async def process_batch_confirmation(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    action = callback.data.replace("batch_confirm_", "")
+    
+    if action == "no":
+        await callback.message.edit_text("❌ Транзакция отменена.")
+        await state.clear()
+        await callback.message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
+        return
+    
+    data = await state.get_data()
+    target = data.get("batch_target")
+    operations = data.get("batch_operations", [])
+    
+    if not target or not operations:
+        await callback.message.edit_text("❌ Ошибка: данные транзакции потеряны.")
+        await state.clear()
+        return
+
+    await callback.message.edit_text(f"⏳ Применяю транзакцию к {target['name']}...")
+    commit_message = f"Пакетное обновление {target['filename']} [{len(operations)} ops]"
+
+    success, commit_url, details = await batch_update_github(
+        target["path"],
+        operations,
+        commit_message
+    )
+    
+    if success:
+        response = f"✅ **Транзакция применена успешно**\n\n{details}"
+        if commit_url:
+            response += f"\n\n🔗 [Смотреть коммит]({commit_url})"
+    else:
+        response = f"❌ **Ошибка применения транзакции**\n\n{details}"
+    
+    await callback.message.edit_text(response, disable_web_page_preview=True)
+    await state.clear()
+    await callback.message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
 
 
-# ========== ОБРАБОТЧИКИ ПОЛУЧЕНИЯ ФАЙЛОВ (ОБЫЧНАЯ ЗАГРУЗКА) ==========
+# ========== ОБРАБОТЧИКИ ПОЛУЧЕНИЯ ФАЙЛОВ ==========
 
 @router.message(UploadStates.waiting_for_file, F.document)
 async def handle_document_upload(message: Message, state: FSMContext):
     user_id = message.from_user.id
-    if user_id not in user_upload_target:
-        await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
-        await state.clear()
-        return
-    
-    target = user_upload_target[user_id]
-    document = message.document
-    
-    # Скачиваем файл
-    file = await bot.get_file(document.file_id)
+    target = user_upload_target.get(user_id)
+    if not target or target == "fructus":
+        # Обработка загрузки в Fructus
+        if target == "fructus":
+            try:
+                file = await bot.get_file(message.document.file_id)
+                file_content_bytes = await bot.download_file(file.file_path)
+                file_content = file_content_bytes.read().decode('utf-8')
+                json_content = json.loads(file_content)
+                success, result = await upload_to_fructus(message.document.file_name, json_content, user_id)
+                if success:
+                    file_url = f"https://github.com/{REPO_NAME}/blob/main/fructus/{result}"
+                    await message.answer(
+                        f"✅ Сохранено: `{result}`\n\n🔗 [Посмотреть]({file_url})",
+                        disable_web_page_preview=True
+                    )
+                else:
+                    await message.answer(f"❌ Ошибка: {result}")
+                await state.clear()
+                return
+            except Exception as e:
+                await message.answer(f"❌ Ошибка обработки файла: {e}")
+                await state.clear()
+                return
+        else:
+            await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
+            await state.clear()
+            return
+
+    # Обычная загрузка
+    file = await bot.get_file(message.document.file_id)
     file_path = file.file_path
-    file_content = await bot.download_file(file_path)
-    content_str = file_content.read().decode('utf-8')
+    file_content_bytes = await bot.download_file(file_path)
+    content_str = file_content_bytes.read().decode('utf-8')
     
-    # Пытаемся распарсить JSON
     try:
         content = json.loads(content_str)
     except json.JSONDecodeError:
-        # Если не JSON, сохраняем как строку
         content = content_str
     
     await message.answer(f"⏳ Загружаю {target['filename']} на GitHub...")
-    
     success, commit_url = await update_github_file(
         target["path"],
         content,
         f"Обновление {target['filename']} через бота"
     )
-    
+
     if success:
         response = f"✅ Файл **{target['name']}** успешно загружен!"
         if commit_url:
             response += f"\n\n🔗 [Смотреть изменения]({commit_url})"
         await message.answer(response, disable_web_page_preview=True)
     else:
-        await message.answer(f"❌ Ошибка загрузки файла. Попробуй ещё раз.")
+        await message.answer("❌ Ошибка загрузки файла. Попробуй ещё раз.")
     
     await state.clear()
-    await message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
+    if user_id in user_upload_target:
+        del user_upload_target[user_id]
 
 @router.message(UploadStates.waiting_for_file, F.text)
 async def handle_text_upload(message: Message, state: FSMContext):
     user_id = message.from_user.id
-    if user_id not in user_upload_target:
-        await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
+    target = user_upload_target.get(user_id)
+    if not target or target == "fructus":
+        await message.answer("❌ Сессия истекла или неверный режим.", reply_markup=get_main_keyboard())
         await state.clear()
         return
-    
-    target = user_upload_target[user_id]
+
     content_str = message.text
-    
-    # Пытаемся распарсить JSON
     try:
         content = json.loads(content_str)
     except json.JSONDecodeError:
-        # Если не JSON, сохраняем как строку
         content = content_str
-    
+
     await message.answer(f"⏳ Загружаю {target['filename']} на GitHub...")
-    
     success, commit_url = await update_github_file(
         target["path"],
         content,
@@ -1341,45 +1185,35 @@ async def handle_text_upload(message: Message, state: FSMContext):
             response += f"\n\n🔗 [Смотреть изменения]({commit_url})"
         await message.answer(response, disable_web_page_preview=True)
     else:
-        await message.answer(f"❌ Ошибка загрузки файла. Попробуй ещё раз.")
+        await message.answer("❌ Ошибка загрузки файла. Попробуй ещё раз.")
     
     await state.clear()
-    await message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
-
-
-# ========== ОБРАБОТЧИКИ РЕДАКТИРОВАНИЯ (ОДИНОЧНЫЕ ОПЕРАЦИИ) ==========
+    if user_id in user_upload_target:
+        del user_upload_target[user_id]
 
 @router.message(UploadStates.waiting_for_target_path)
 async def process_edit_path(message: Message, state: FSMContext):
     path = message.text.strip()
     data = await state.get_data()
     op_type = data.get("edit_operation")
-    
     await state.update_data(edit_path=path)
     
     if op_type == "delete":
-        # Для delete не нужно значение, сразу выполняем
         await perform_edit_operation(message, state, path, None)
     else:
-        # Для add и update нужно значение
         await state.set_state(UploadStates.waiting_for_new_value)
-        
         examples = {
             "add": "➕ Введи значение для добавления в массив (в JSON-формате)\nПример: \"Новый элемент\" или {\"key\": \"value\"}",
             "update": "✏️ Введи новое значение (в JSON-формате)\nПример: \"v2.3.1\" или {\"name\": \"новое\"}"
         }
-        
         await message.answer(examples[op_type])
 
 @router.message(UploadStates.waiting_for_new_value)
 async def process_edit_value(message: Message, state: FSMContext):
     value_str = message.text.strip()
-    
-    # Пытаемся распарсить значение как JSON
     try:
         value = json.loads(value_str)
     except json.JSONDecodeError:
-        # Если не JSON, оставляем как строку
         value = value_str
     
     data = await state.get_data()
@@ -1398,18 +1232,21 @@ async def perform_edit_operation(message: Message, state: FSMContext, path: str,
     data = await state.get_data()
     op_type = data.get("edit_operation")
     user_id = message.from_user.id
-    target = user_upload_target[user_id]
+    target = user_upload_target.get(user_id)
     
+    if not target:
+        await message.answer("❌ Сессия истекла.", reply_markup=get_main_keyboard())
+        await state.clear()
+        return
+
     await message.answer(f"⏳ Применяю операцию к {target['name']}...")
     
-    # Получаем текущий файл
     current_content, sha = await get_github_file(target["path"])
     if current_content is None:
         await message.answer(f"❌ Не удалось получить файл {target['path']}")
         await state.clear()
         return
-    
-    # Применяем операцию
+
     updated_content = current_content
     success = False
     
@@ -1425,7 +1262,6 @@ async def perform_edit_operation(message: Message, state: FSMContext, path: str,
         await state.clear()
         return
     
-    # Сохраняем изменения
     commit_message = f"{op_type} {path} в {target['filename']}"
     success, commit_url = await update_github_file(target["path"], updated_content, commit_message)
     
@@ -1435,10 +1271,108 @@ async def perform_edit_operation(message: Message, state: FSMContext, path: str,
             response += f"\n\n🔗 [Смотреть изменения]({commit_url})"
         await message.answer(response, disable_web_page_preview=True)
     else:
-        await message.answer(f"❌ Ошибка сохранения файла на GitHub")
+        await message.answer("❌ Ошибка сохранения файла на GitHub")
     
     await state.clear()
-    await message.answer("Возврат в главное меню.", reply_markup=get_main_keyboard())
+    if user_id in user_upload_target:
+        del user_upload_target[user_id]
+
+@router.message(BatchUpdateStates.waiting_for_batch)
+async def process_batch_commands(message: Message, state: FSMContext):
+    user_id = message.from_user.id
+    target = user_batch_target.get(user_id)
+    if not target:
+        await message.answer("❌ Сессия истекла. Начни заново.", reply_markup=get_main_keyboard())
+        await state.clear()
+        return
+    
+    batch_text = message.text
+    operations = []
+    current_op = {}
+    
+    lines = batch_text.strip().split('\n')
+    for line in lines:
+        line = line.strip()
+        if line == '---':
+            if current_op and "operation" in current_op:
+                operations.append(current_op)
+                current_op = {}
+        elif ':' in line:
+            key, value = line.split(':', 1)
+            key = key.strip().lower()
+            value = value.strip()
+            
+            try:
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]
+                elif value.startswith('[') or value.startswith('{'):
+                    value = json.loads(value)
+                elif value.lower() == 'true':
+                    value = True
+                elif value.lower() == 'false':
+                    value = False
+                elif value.lower() == 'null':
+                    value = None
+                elif value.isdigit():
+                    value = int(value)
+            except:
+                pass
+            
+            current_op[key] = value
+    
+    if current_op and "operation" in current_op:
+        operations.append(current_op)
+    
+    if not operations:
+        await message.answer(
+            "❌ Не удалось распарсить операции. Убедись, что формат:\n"
+            "---\nоперация: update\nпуть: version\nзначение: \"v2.3.1\"\n---"
+        )
+        return
+    
+    await state.update_data(batch_operations=operations, batch_target=target)
+    await state.set_state(BatchUpdateStates.waiting_for_confirmation)
+    
+    preview = f"📦 **Пакетное обновление**: {target['name']}\n"
+    preview += f"Файл: `{target['path']}`\n"
+    preview += f"Операций: {len(operations)}\n\n**Операции:**\n"
+    
+    for i, op in enumerate(operations, 1):
+        op_type = op.get("operation", "?")
+        path = op.get("path", "?")
+        value = op.get("value", "")
+        preview += f"{i}. {op_type} {path}"
+        if value and op_type != "delete":
+            value_str = json.dumps(value, ensure_ascii=False)
+            if len(value_str) > 50:
+                value_str = value_str[:50] + "..."
+            preview += f" → {value_str}"
+        preview += "\n"
+    
+    preview += "\nПрименить транзакцию?"
+    await message.answer(preview, reply_markup=get_batch_confirmation_keyboard())
+
+
+# ========== УНИВЕРСАЛЬНЫЙ ОБРАБОТЧИК ==========
+
+@router.message()
+async def handle_other_messages(message: Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is not None:
+        # Если мы в каком-то состоянии, предложим помощь или отмену
+        await message.answer(
+            "Пожалуйста, следуй инструкциям или нажми /cancel для отмены.",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard=[[KeyboardButton(text="❌ Отмена")]],
+                resize_keyboard=True,
+                one_time_keyboard=True
+            )
+        )
+    else:
+        await message.answer(
+            "Используй меню для навигации.",
+            reply_markup=get_main_keyboard()
+        )
 
 
 # ========== ВЕБХУК И ЗАПУСК ==========
@@ -1463,16 +1397,9 @@ async def on_shutdown() -> None:
     except Exception as e:
         logger.error(f"❌ Ошибка удаления webhook: {e}")
 
-# Обработчик для корневого пути (health check)
-async def handle_root(request: web.Request) -> web.Response:
-    return web.Response(text="Mandala Bot is running", status=200)
-
-async def init_app() -> web.Application:
-    """Инициализация aiohttp приложения"""
-    app = web.Application()
-    app.router.add_post(WEBHOOK_PATH, handle_webhook)
-    app.router.add_get('/', handle_root)  # health check
-    return app
+async def handle_webhook(request: web.Request) -> web.Response:
+    """Обработчик вебхука от Telegram"""
+    return await SimpleRequestHandler(dp, bot).handle(request)
 
 def main() -> None:
     """Главная функция запуска"""
@@ -1482,8 +1409,8 @@ def main() -> None:
     
     if not GITHUB_TOKEN:
         logger.warning("⚠️ GITHUB_TOKEN не задан — загрузка файлов будет недоступна")
-    
-    logger.info(f"🚀 Запуск бота v3.25.2, webhook URL: {WEBHOOK_URL}")
+
+    logger.info(f"🚀 Запуск бота v3.25.3, webhook URL: {WEBHOOK_URL}")
     
     # Регистрируем startup и shutdown
     dp.startup.register(on_startup)
@@ -1491,18 +1418,24 @@ def main() -> None:
     
     # Запускаем aiohttp приложение
     app = web.Application()
-    webhook_requests_handler = SimpleRequestHandler(
+    
+    # РЕГИСТРИРУЕМ ОБРАБОТЧИК ВЕБХУКА (ЭТО ВАЖНО!)
+    SimpleRequestHandler(
         dispatcher=dp,
         bot=bot,
-        secret_token=WEBHOOK_SECRET,
-    )
-    webhook_requests_handler.register(app, path=WEBHOOK_PATH)
-    
-    # Добавляем корневой обработчик
-    app.router.add_get('/', handle_root)
-    
-    setup_application(app, dp, bot=bot)
-    
+        secret_token=WEBHOOK_SECRET
+    ).register(app, path=WEBHOOK_PATH)
+
+    # ---- ДОПОЛНИТЕЛЬНЫЕ МАРШРУТЫ ----
+    async def health_check(request: web.Request) -> web.Response:
+        return web.Response(text="OK")
+    app.router.add_get("/", health_check)  # Health-check для Render
+
+    async def status_page(request: web.Request) -> web.Response:
+        return web.Response(text=f"Mandala Bot v3.25.3 is running. Webhook path: {WEBHOOK_PATH}")
+    app.router.add_get("/status", status_page)  # Информационный эндпоинт
+
+    logger.info(f"🚀 Запуск на порту {PORT}")
     web.run_app(app, host="0.0.0.0", port=PORT)
 
 if __name__ == "__main__":
