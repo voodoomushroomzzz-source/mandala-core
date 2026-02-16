@@ -8,7 +8,10 @@
     "created": "2026-02-13",
     "created_by": "Архитектор (на основе репозитория Садовника)",
     "purpose": "Централизация учёта семян, устранение дублирования, создание единой карты Incubae",
-    "based_on_initiatives": ["RI-2026-001", "RI-2026-002"],
+    "based_on_initiatives": [
+      "RI-2026-001",
+      "RI-2026-002"
+    ],
     "gardener_approval": "в процессе",
     "lifecycle_days": 365,
     "evaluation_date": "2027-02-13"
@@ -122,6 +125,21 @@
       "Созданы протоколы seeding, evaluation, archiving",
       "Добавлены команды incubae list / incubae show",
       "Интегрирована визуализация при загрузке"
+    ]
+  },
+  "/version": "v1.0.1",
+  "/metadata/modified": "2026-02-17",
+  "/metadata/modification_purpose": "Удалены семена RI-2026-001 и RI-2026-002 (перенесены в Philosophia как свидетельства)",
+  "/registry/total_seeds": 0,
+  "/registry/active_seeds": 0,
+  "/registry/last_updated": "2026-02-17",
+  "/seeds": [],
+  "/changes": {
+    "version": "v1.0.0 → v1.0.1",
+    "summary": "Удаление семян RI-2026-001 и RI-2026-002",
+    "details": [
+      "Удалены семена RI-2026-001 и RI-2026-002 (перенесены в Philosophia как свидетельства TES-007 и TES-008)",
+      "Реестр семян теперь пуст"
     ]
   }
 }
