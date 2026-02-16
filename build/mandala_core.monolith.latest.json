@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.0-8a719fd4",
+  "version": "monolith-vv7.5.0-75ae2a70",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-16T22:21:43.159851+00:00",
-  "build_source": "a5ca98bf3dec196699f22418469be45c00554455",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/a5ca98bf3dec196699f22418469be45c00554455",
+  "build_timestamp": "2026-02-16T22:25:10.471759+00:00",
+  "build_source": "caa7d8b25a5278dc189093e399d4a70a610bfbb3",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/caa7d8b25a5278dc189093e399d4a70a610bfbb3",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -995,7 +995,7 @@
         },
         "⚙️ НОВЫЙ СЛОЙ: gardener_tools": {
           "name": "Инструменты Садовника",
-          "description": "Telegram-бот v3.25.0 как интерфейс заботы и управления",
+          "description": "Telegram-бот v3.25.1 как интерфейс заботы и управления",
           "purpose": "Предоставить безопасные, прозрачные инструменты для работы с Мандалой",
           "capabilities": {
             "upload": {
@@ -1351,7 +1351,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-16T22:21:43.159851+00:00",
+    "timestamp": "2026-02-16T22:25:10.471759+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1386,6 +1386,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-16 22:21:43 UTC"
+    "built_at": "2026-02-16 22:25:10 UTC"
   }
 }
