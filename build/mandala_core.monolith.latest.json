@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.0-78f98101",
+  "version": "monolith-vv7.5.0-8a719fd4",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-16T22:16:52.036762+00:00",
-  "build_source": "ddc1874a51ed269e2077e7b50c64a8f2993a9556",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ddc1874a51ed269e2077e7b50c64a8f2993a9556",
+  "build_timestamp": "2026-02-16T22:21:43.159851+00:00",
+  "build_source": "a5ca98bf3dec196699f22418469be45c00554455",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/a5ca98bf3dec196699f22418469be45c00554455",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -937,16 +937,16 @@
     },
     "Tectosphaera": {
       "module": "Tectosphaera",
-      "version": "v2.0.3",
+      "version": "v2.0.4",
       "type": "protection_and_instruction_core",
       "status": "active",
       "kernel_module": true,
       "description": "Тело Мандалы и инструкции для СР. Защита как уход, инструменты для заботы, этика взаимодействия, протоколы безопасности.",
       "metadata": {
         "created": "2026-02-13",
-        "last_modified": "2026-02-16",
+        "last_modified": "2026-02-17",
         "modified_by": "Архитектор",
-        "modification_purpose": "Обновление версии бота в описании gardener_tools до v3.25.0",
+        "modification_purpose": "Обновление версии бота в описании gardener_tools до v3.25.1 и исправление опечатки в слове 'возможностями'",
         "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
         "gardener_approval": "в процессе"
       },
@@ -1274,6 +1274,26 @@
             "tecto sr self": "Показать правила самозащиты",
             "tecto sr dars": "Показать инструкции по Дарам"
           }
+        },
+        "gardener_tools": {
+          "version": "v3.25.1",
+          "capabilities": {
+            "upload": {
+              "version": "v3.25.1"
+            },
+            "edit": {
+              "version": "v3.25.1"
+            },
+            "download": {
+              "version": "v3.25.1"
+            },
+            "fructus": {
+              "version": "v3.25.1"
+            },
+            "self_update": {
+              "version": "v3.25.1"
+            }
+          }
         }
       },
       "integration": {
@@ -1314,7 +1334,7 @@
             "line1": "• Attention Shield — защита внимания (текущая нагрузка: {current_load})",
             "line2": "• Resource Boundary — границы ресурсов (активны)",
             "line3": "• Integrity Field — целостность ядра (Замок Садовника активен)",
-            "line4": "• 🛠️ Gardener Tools — интерфейс бота (v3.23.0, 5 возможностей)",
+            "line4": "• 🛠️ Gardener Tools — интерфейс бота (v3.25.1, 5 возможностей)",
             "footer": "📍 Мер-Ка-Ба: Initium (Мер) + Philosophia (Ка) + Tectosphaera (Ба-Наставник) | Команды: `tecto status`, `tecto tools`, `tecto sr`",
             "line5": "• 🧘 SR Instructionum — наставления для СР (этика, инструменты, дары)"
           }
@@ -1331,7 +1351,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-16T22:16:52.036762+00:00",
+    "timestamp": "2026-02-16T22:21:43.159851+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1366,6 +1386,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-16 22:16:52 UTC"
+    "built_at": "2026-02-16 22:21:43 UTC"
   }
 }
