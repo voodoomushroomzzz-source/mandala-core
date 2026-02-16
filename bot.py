@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.24.0
+Mandala Sync Terminal Bot v3.25.0
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.24.0:
-- 📦 Пакетное обновление модулей (batch patch)
-- Загрузка JSON с любым именем файла
-- Множественные операции в одном файле (update/add/delete/replace/merge)
-- Предпросмотр изменений перед применением
-- Атомарное применение (всё или ничего)
-- Детальный отчёт о применённых операциях
-- Ахимса-фильтр итогового состояния
+НОВОЕ В v3.25.0:
+- 🧹 После применения пакетного обновления автоматически возвращает в главное меню.
+- 🗑️ Операция delete теперь безопасна: если поле не существует, она считается успешной (без ошибки).
+- 📦 Все остальные возможности v3.24.0 сохранены.
 """
 
 import os
@@ -96,7 +92,6 @@ class UploadStates(StatesGroup):
     waiting_for_operation = State()
     waiting_for_target_path = State()
     waiting_for_new_value = State()
-    # НОВЫЕ СОСТОЯНИЯ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ
     waiting_for_patch_file = State()
     waiting_for_patch_confirmation = State()
 
@@ -195,11 +190,10 @@ user_upload_target = {}
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню с новой кнопкой пакетного обновления"""
     keyboard = [
         [KeyboardButton(text="📤 Загрузить файл")],
         [KeyboardButton(text="🔧 Редактировать модуль")],
-        [KeyboardButton(text="📦 Пакетное обновление")],  # НОВАЯ КНОПКА
+        [KeyboardButton(text="📦 Пакетное обновление")],
         [KeyboardButton(text="📦 Скачать монолит")],
         [KeyboardButton(text="🍇 Fructus")],
         [KeyboardButton(text="ℹ️ Помощь")]
@@ -224,7 +218,6 @@ def get_upload_mode_keyboard() -> ReplyKeyboardMarkup:
     )
 
 def get_category_keyboard(for_edit: bool = False) -> InlineKeyboardMarkup:
-    """Категории файлов"""
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🧩 Модули Мандалы", 
                             callback_data="category_modules_edit" if for_edit else "category_modules")],
@@ -234,7 +227,6 @@ def get_category_keyboard(for_edit: bool = False) -> InlineKeyboardMarkup:
     ])
 
 def get_modules_keyboard(for_edit: bool = False) -> InlineKeyboardMarkup:
-    """Все модули Мандалы"""
     prefix = "edit_" if for_edit else "target_"
     return InlineKeyboardMarkup(inline_keyboard=[
         [
@@ -258,7 +250,6 @@ def get_modules_keyboard(for_edit: bool = False) -> InlineKeyboardMarkup:
     ])
 
 def get_infra_keyboard(for_edit: bool = False) -> InlineKeyboardMarkup:
-    """Инфраструктурные файлы + бот"""
     prefix = "edit_" if for_edit else "target_"
     return InlineKeyboardMarkup(inline_keyboard=[
         [
@@ -299,7 +290,6 @@ def get_fructus_inline_keyboard() -> InlineKeyboardMarkup:
 # ========== ФУНКЦИИ GITHUB API ==========
 
 async def update_github_file(file_path: str, content: Any, message: str) -> bool:
-    """Обновление файла на GitHub с таймаутом 30 секунд"""
     if not GITHUB_TOKEN:
         logger.error("❌ GITHUB_TOKEN не установлен")
         return False
@@ -324,7 +314,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.24.0"
+        "User-Agent": "MandalaBot/3.25.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -375,7 +365,6 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
 
 
 async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], Optional[str]]:
-    """Получить содержимое файла из GitHub"""
     if not GITHUB_TOKEN:
         return False, None, "GITHUB_TOKEN не настроен"
     
@@ -383,7 +372,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.24.0"
+        "User-Agent": "MandalaBot/3.25.0"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -412,7 +401,7 @@ async def apply_json_operation(
     target_path: str,
     new_value: Any = None
 ) -> Tuple[bool, Optional[Dict], str]:
-    """Применить операцию к JSON"""
+    """Применить операцию к JSON. Для delete_field, если поле не найдено, возвращаем успех."""
     try:
         array_match = re.match(r"(.+?)\[(\d+)\](.*)", target_path)
         
@@ -478,7 +467,8 @@ async def apply_json_operation(
                     del current[last_part]
                     return True, content, f"✅ Поле {last_part} удалено"
                 else:
-                    return False, None, f"Поле {last_part} не найдено"
+                    # Поле уже отсутствует — считаем успехом
+                    return True, content, f"⚠️ Поле {last_part} уже отсутствует, удаление не требуется"
             
             elif operation_type == "add_to_array":
                 if last_part not in current:
@@ -505,7 +495,6 @@ async def apply_json_operation(
 # ========== НОВЫЕ ФУНКЦИИ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ ==========
 
 def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
-    """Проверка структуры пакетного файла"""
     if not isinstance(patch_data, dict):
         return False, "Патч должен быть объектом JSON"
     
@@ -543,7 +532,6 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
 
 
 def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, str]:
-    """Специальная обработка для replace (замена элемента в массиве по индексу)"""
     try:
         array_match = re.match(r"(.+)\[(\d+)\]$", path)
         if not array_match:
@@ -573,7 +561,6 @@ def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, st
 
 
 def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str]:
-    """Слияние объектов"""
     try:
         parts = path.split('.')
         current = content
@@ -592,7 +579,6 @@ def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str
         if not isinstance(current[last_part], dict) or not isinstance(value, dict):
             return False, content, "Merge работает только с объектами"
         
-        # Глубокое слияние
         def deep_merge(a, b):
             for key in b:
                 if key in a and isinstance(a[key], dict) and isinstance(b[key], dict):
@@ -608,7 +594,6 @@ def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str
 
 
 def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
-    """Упрощённая генерация diff для предпросмотра"""
     diff = []
     
     def compare_dicts(a, b, path=""):
@@ -641,11 +626,10 @@ def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
                 diff.append(f"{path}: {str(a)[:30]} → {str(b)[:30]}")
     
     compare_dicts(original, modified)
-    return diff[:10]  # Ограничиваем до 10 строк для предпросмотра
+    return diff[:10]
 
 
 async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
-    """Тестовое применение всех изменений (без сохранения)"""
     test_content = copy.deepcopy(original)
     applied = []
     failed = []
@@ -696,7 +680,6 @@ async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
 
 
 def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
-    """Форматирование предпросмотра изменений"""
     lines = []
     lines.append(f"🎯 <b>Целевой модуль:</b> {patch_data['target_module']}")
     
@@ -735,7 +718,6 @@ def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
 # ========== ФУНКЦИЯ СОХРАНЕНИЯ ИЗМЕНЕНИЙ ==========
 
 async def save_edit_changes(message: Message, state: FSMContext):
-    """Сразу сохраняет изменения без лишнего предпросмотра"""
     data = await state.get_data()
     module_name = data.get("edit_module_name")
     module_path = data.get("edit_module_path")
@@ -745,7 +727,6 @@ async def save_edit_changes(message: Message, state: FSMContext):
     
     status_msg = await message.answer("🔄 Обновляю...")
     
-    # Получаем текущее содержимое
     success, content, error = await get_github_file_content(module_path)
     
     if not success or not content:
@@ -755,7 +736,6 @@ async def save_edit_changes(message: Message, state: FSMContext):
             del user_upload_target[message.from_user.id]
         return
     
-    # Для bot.py (не JSON) нужна особая обработка
     if module_path == "bot.py":
         if operation == "update_field" and target_path == "full":
             save_success = await update_github_file(
@@ -779,7 +759,6 @@ async def save_edit_changes(message: Message, state: FSMContext):
             await state.clear()
             return
     
-    # Для JSON-файлов - применяем операцию
     content_copy = copy.deepcopy(content)
     
     op_success, new_content, op_msg = await apply_json_operation(
@@ -793,7 +772,6 @@ async def save_edit_changes(message: Message, state: FSMContext):
         await status_msg.edit_text(f"❌ Ошибка: {op_msg}")
         return
     
-    # Сохраняем в GitHub
     save_success = await update_github_file(
         file_path=module_path,
         content=new_content,
@@ -855,7 +833,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.24.0"
+            "source": "mandala_bot_v3.25.0"
         }
         
         success = await update_github_file(
@@ -891,7 +869,6 @@ async def download_monolith_file() -> Tuple[bool, bytes, str]:
 # ========== ФУНКЦИИ AHHIMSA ==========
 
 async def check_ahimsa_smart(content: Any, filename: str = "") -> Tuple[bool, str, List[Tuple[str, str]]]:
-    """Базовая проверка Ахимсы (можно расширить)"""
     return True, "✅ Проверка пройдена", []
 
 
@@ -904,13 +881,15 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.24.0</b>\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.25.0</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
         "🔧 <b>Редактировать модуль</b> — точечные изменения JSON\n"
-        "📦 <b>Пакетное обновление</b> — множество изменений одним файлом (НОВОЕ!)\n"
+        "📦 <b>Пакетное обновление</b> — множество изменений одним файлом\n"
         "📦 <b>Скачать монолит</b> — готовый файл\n"
         "🍇 <b>Fructus</b> — хранилище артефактов\n\n"
-        "🤖 <b>Новое в v3.24.0:</b> пакетные обновления модулей\n"
+        "🤖 <b>Новое в v3.25.0:</b>\n"
+        "• После применения патча автоматически возвращаю в главное меню\n"
+        "• Удаление несуществующих полей больше не вызывает ошибку\n"
         "🌿 Ahimsa-фильтр активен",
         reply_markup=get_main_keyboard()
     )
@@ -927,7 +906,6 @@ async def handle_cancel_button(message: Message, state: FSMContext):
 
 @router.message(F.text == "📤 Загрузить файл")
 async def handle_upload_start(message: Message, state: FSMContext):
-    """Загрузка нового файла"""
     await state.clear()
     user_id = message.from_user.id
     if user_id in user_upload_target:
@@ -943,7 +921,6 @@ async def handle_upload_start(message: Message, state: FSMContext):
 
 @router.message(F.text == "🔧 Редактировать модуль")
 async def handle_edit_start(message: Message, state: FSMContext):
-    """Редактирование существующего модуля"""
     await state.clear()
     user_id = message.from_user.id
     if user_id in user_upload_target:
@@ -959,7 +936,6 @@ async def handle_edit_start(message: Message, state: FSMContext):
 
 @router.message(F.text == "📦 Пакетное обновление")
 async def handle_batch_update_start(message: Message, state: FSMContext):
-    """Начало пакетного обновления модуля"""
     await state.clear()
     await state.update_data(upload_mode="batch_patch")
     await state.set_state(UploadStates.waiting_for_patch_file)
@@ -1013,14 +989,14 @@ async def handle_fructus_menu(message: Message):
 @router.message(F.text == "ℹ️ Помощь")
 async def handle_help(message: Message):
     await message.answer(
-        "📚 <b>Mandala Sync Terminal v3.24.0</b>\n\n"
+        "📚 <b>Mandala Sync Terminal v3.25.0</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
         "🔧 <b>Редактировать модуль</b> — точечные изменения:\n"
         "• Добавить в массив\n"
         "• Обновить поле\n"
         "• Удалить поле\n"
         "• Показать структуру\n\n"
-        "📦 <b>Пакетное обновление (НОВОЕ)</b> — множество изменений одним файлом:\n"
+        "📦 <b>Пакетное обновление</b> — множество изменений одним файлом:\n"
         "• Любое имя файла\n"
         "• Операции: update, add, delete, replace, merge\n"
         "• Предпросмотр перед применением\n"
@@ -1055,7 +1031,6 @@ async def handle_change_category(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "category_modules", StateFilter(UploadStates.waiting_for_category))
 async def handle_category_modules(callback_query: CallbackQuery, state: FSMContext):
-    """Категория модулей для загрузки"""
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "🧩 <b>Выберите модуль для загрузки:</b>",
@@ -1066,7 +1041,6 @@ async def handle_category_modules(callback_query: CallbackQuery, state: FSMConte
 
 @router.callback_query(F.data == "category_modules_edit", StateFilter(UploadStates.waiting_for_category))
 async def handle_category_modules_edit(callback_query: CallbackQuery, state: FSMContext):
-    """Категория модулей для редактирования"""
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "🔧 <b>Выберите модуль для редактирования:</b>",
@@ -1077,7 +1051,6 @@ async def handle_category_modules_edit(callback_query: CallbackQuery, state: FSM
 
 @router.callback_query(F.data == "category_infra", StateFilter(UploadStates.waiting_for_category))
 async def handle_category_infra(callback_query: CallbackQuery, state: FSMContext):
-    """Категория инфраструктуры для загрузки"""
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "⚙️ <b>Выберите компонент для загрузки:</b>",
@@ -1088,7 +1061,6 @@ async def handle_category_infra(callback_query: CallbackQuery, state: FSMContext
 
 @router.callback_query(F.data == "category_infra_edit", StateFilter(UploadStates.waiting_for_category))
 async def handle_category_infra_edit(callback_query: CallbackQuery, state: FSMContext):
-    """Категория инфраструктуры для редактирования"""
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "🔧 <b>Выберите компонент для редактирования:</b>",
@@ -1099,7 +1071,6 @@ async def handle_category_infra_edit(callback_query: CallbackQuery, state: FSMCo
 
 @router.callback_query(F.data.startswith("back_to_categories"))
 async def handle_back_to_categories(callback_query: CallbackQuery, state: FSMContext):
-    """Назад к категориям"""
     edit_mode = "edit" in callback_query.data
     await state.set_state(UploadStates.waiting_for_category)
     await callback_query.message.edit_text(
@@ -1111,7 +1082,6 @@ async def handle_back_to_categories(callback_query: CallbackQuery, state: FSMCon
 
 @router.callback_query(F.data.startswith(("target_", "edit_")), StateFilter(UploadStates.waiting_for_module))
 async def handle_target_selection(callback_query: CallbackQuery, state: FSMContext):
-    """Выбран конкретный файл/модуль"""
     is_edit = callback_query.data.startswith("edit_")
     target_key = callback_query.data.replace("edit_", "").replace("target_", "")
     
@@ -1123,7 +1093,6 @@ async def handle_target_selection(callback_query: CallbackQuery, state: FSMConte
     user_upload_target[callback_query.from_user.id] = target_key
     
     if is_edit:
-        # Режим редактирования
         await state.update_data(
             edit_module=target_key,
             edit_module_path=target_info["path"],
@@ -1151,7 +1120,6 @@ async def handle_target_selection(callback_query: CallbackQuery, state: FSMConte
                 reply_markup=get_edit_operations_keyboard()
             )
     else:
-        # Режим загрузки
         await state.set_state(UploadStates.waiting_for_file)
         await state.update_data(upload_mode="module")
         await callback_query.message.edit_text(
@@ -1169,7 +1137,6 @@ async def handle_target_selection(callback_query: CallbackQuery, state: FSMConte
 
 @router.callback_query(F.data == "back_to_modules_edit", StateFilter(UploadStates.waiting_for_operation))
 async def handle_back_to_modules_edit(callback_query: CallbackQuery, state: FSMContext):
-    """Назад к выбору модуля (из операций)"""
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "🔧 <b>Выберите модуль:</b>",
@@ -1314,30 +1281,25 @@ async def handle_new_value(message: Message, state: FSMContext):
 
 @router.message(StateFilter(UploadStates.waiting_for_patch_file), F.document)
 async def process_batch_patch_file(message: Message, state: FSMContext):
-    """Обработка загруженного пакетного файла"""
     user_id = message.from_user.id
     status_msg = await message.answer("📥 Анализирую пакет обновлений...")
     
     try:
-        # Скачиваем файл
         file = await bot.get_file(message.document.file_id)
         file_content_bytes = await bot.download_file(file.file_path)
         file_content = file_content_bytes.read().decode('utf-8')
         
-        # Парсим JSON
         try:
             patch_data = json.loads(file_content)
         except json.JSONDecodeError as e:
             await status_msg.edit_text(f"❌ Невалидный JSON: {str(e)}")
             return
         
-        # Валидация структуры
         is_valid, error_msg = validate_patch_structure(patch_data)
         if not is_valid:
             await status_msg.edit_text(f"❌ Ошибка в структуре патча: {error_msg}")
             return
         
-        # Проверяем существование целевого модуля
         target_module = patch_data.get("target_module")
         if target_module not in MANDALA_MODULES:
             await status_msg.edit_text(
@@ -1346,7 +1308,6 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
             )
             return
         
-        # Загружаем текущее содержимое модуля
         module_info = MANDALA_MODULES[target_module]
         success, current_content, error = await get_github_file_content(module_info["path"])
         
@@ -1354,7 +1315,6 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
             await status_msg.edit_text(f"❌ Не удалось загрузить модуль: {error}")
             return
         
-        # Применяем все операции в тестовом режиме (dry run)
         test_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
         
         if not test_result["success"]:
@@ -1365,10 +1325,8 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
             )
             return
         
-        # Показываем предпросмотр изменений
         preview_text = format_patch_preview(test_result["diff"], patch_data)
         
-        # Сохраняем данные в state
         await state.update_data(
             patch_data=patch_data,
             patch_filename=message.document.file_name,
@@ -1379,7 +1337,6 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
             test_result=test_result
         )
         
-        # Запрашиваем подтверждение
         await state.set_state(UploadStates.waiting_for_patch_confirmation)
         
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
@@ -1408,7 +1365,6 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "patch_apply", StateFilter(UploadStates.waiting_for_patch_confirmation))
 async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
-    """Применение подтверждённого патча"""
     data = await state.get_data()
     patch_data = data.get("patch_data")
     current_content = data.get("current_content")
@@ -1418,16 +1374,16 @@ async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
     
     await callback_query.message.edit_text("🔄 Применяю изменения...")
     
-    # Применяем все операции
     apply_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
     
     if not apply_result["success"]:
         error_msg = apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
         await callback_query.message.edit_text(f"❌ Ошибка при применении: {error_msg}")
         await state.clear()
+        # Возвращаем в главное меню
+        await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
         return
     
-    # Ахимса-проверка итогового контента
     ahimsa_ok, ahimsa_msg, _ = await check_ahimsa_smart(
         apply_result["result_content"], 
         f"batch_patch_{module_key}"
@@ -1436,9 +1392,9 @@ async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
     if not ahimsa_ok:
         await callback_query.message.edit_text(f"🔶 {ahimsa_msg}")
         await state.clear()
+        await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
         return
     
-    # Сохраняем в GitHub
     commit_message = f"📦 Пакетное обновление {module_name}"
     if patch_data.get("patch_id"):
         commit_message += f" [{patch_data['patch_id']}]"
@@ -1454,7 +1410,6 @@ async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
     if save_success:
         file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_path}"
         
-        # Составляем отчёт о применённых операциях
         ops_report = []
         for op in apply_result["applied"][:10]:
             ops_report.append(f"  {op['op']}: {op['path']}")
@@ -1479,6 +1434,9 @@ async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
     await state.clear()
     if callback_query.from_user.id in user_upload_target:
         del user_upload_target[callback_query.from_user.id]
+    
+    # Возвращаем в главное меню
+    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
 
 
 @router.callback_query(F.data == "patch_cancel", StateFilter(UploadStates.waiting_for_patch_confirmation))
@@ -1492,7 +1450,6 @@ async def handle_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "patch_details", StateFilter(UploadStates.waiting_for_patch_confirmation))
 async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext):
-    """Показать детальную информацию о патче"""
     data = await state.get_data()
     patch_data = data.get("patch_data")
     test_result = data.get("test_result")
@@ -1537,7 +1494,6 @@ async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext)
 
 @router.callback_query(F.data == "back_to_patch_confirm")
 async def back_to_patch_confirm(callback_query: CallbackQuery, state: FSMContext):
-    """Вернуться к подтверждению"""
     data = await state.get_data()
     patch_data = data.get("patch_data")
     test_result = data.get("test_result")
@@ -1670,7 +1626,6 @@ async def handle_fructus_upload(callback_query: CallbackQuery, state: FSMContext
 
 
 async def handle_fructus_upload_file_logic(message: Message, state: FSMContext, user_id: int):
-    """Логика загрузки в Fructus"""
     if not message.document or not message.document.file_name.lower().endswith('.json'):
         await message.answer("⚠️ Нужен JSON", reply_markup=get_upload_mode_keyboard())
         return
@@ -1767,7 +1722,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.24.0")
+        return web.Response(text="Mandala Bot v3.25.0")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
