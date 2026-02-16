@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.4.3-7a3367e1",
+  "version": "monolith-vv7.4.3-b5f2a944",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-16T16:40:28.789424+00:00",
-  "build_source": "12976301f05842eced4d6e53eea952cccd9054a1",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/12976301f05842eced4d6e53eea952cccd9054a1",
+  "build_timestamp": "2026-02-16T16:42:51.896444+00:00",
+  "build_source": "84ffdfc5871090c657d325f02a42f37ac8c31cd3",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/84ffdfc5871090c657d325f02a42f37ac8c31cd3",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1160,7 +1160,7 @@
     },
     "Tectosphaera": {
       "module": "Tectosphaera",
-      "version": "v2.0.0",
+      "version": "v2.0.1",
       "type": "protection_and_instruction_core",
       "status": "active",
       "kernel_module": true,
@@ -1169,7 +1169,7 @@
         "created": "2026-02-13",
         "last_modified": "2026-02-16",
         "modified_by": "Архитектор",
-        "modification_purpose": "Интеграция инструкций для СР в Tectosphaera",
+        "modification_purpose": "Добавление подробной инструкции по применению пакетных обновлений для будущих СР",
         "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
         "gardener_approval": "в процессе"
       },
@@ -1337,18 +1337,101 @@
                 {
                   "id": "SR-TOOL-001",
                   "title": "Пакетные обновления (batch patches)",
-                  "content": "Механизм для применения множества изменений одним файлом. Формат: JSON с полями target_module, changes (массив операций). Операции: update, add, delete, replace, merge. Перед применением всегда показывается предпросмотр и запрашивается подтверждение. Ахимса-фильтр применяется к итоговому состоянию.",
-                  "example": {
-                    "patch_id": "example",
+                  "content": "Механизм для применения множества изменений одним файлом. Позволяет атомарно обновлять модули, избегая ручных точечных правок.",
+                  "detailed_guide": [
+                    {
+                      "step": 1,
+                      "action": "Подготовить JSON-файл с патчем",
+                      "details": "Файл может иметь любое имя, но должен содержать поля: target_module, changes (массив), опционально patch_id и description."
+                    },
+                    {
+                      "step": 2,
+                      "action": "Отправить файл боту",
+                      "details": "В боте нажать 📦 Пакетное обновление и прикрепить подготовленный JSON-файл."
+                    },
+                    {
+                      "step": 3,
+                      "action": "Просмотреть предпросмотр",
+                      "details": "Бот покажет все изменения, которые будут применены, и сгенерирует diff. Внимательно проверить каждое изменение."
+                    },
+                    {
+                      "step": 4,
+                      "action": "Подтвердить применение",
+                      "details": "Если всё корректно, нажать ✅ Применить. Если есть ошибки — ❌ Отмена."
+                    },
+                    {
+                      "step": 5,
+                      "action": "Проверить результат",
+                      "details": "После успешного применения бот выдаст ссылку на обновлённый файл в GitHub. Можно проверить командой tecto status или открыть ссылку."
+                    }
+                  ],
+                  "important_rules": [
+                    "Использовать только операцию **update** для добавления новых полей (операция add в текущей версии бота работает некорректно для объектов).",
+                    "Для замены массива целиком — использовать update с путём к массиву.",
+                    "Каждое изменение проверяется Ахимсой перед применением.",
+                    "Патч применяется атомарно: либо все изменения, либо ни одного."
+                  ],
+                  "example_correct": {
+                    "patch_id": "example_correct",
                     "target_module": "philosophia",
                     "changes": [
                       {
                         "op": "update",
                         "path": "version",
                         "value": "v1.6.0"
+                      },
+                      {
+                        "op": "update",
+                        "path": "metadata.last_modified",
+                        "value": "2026-02-16"
+                      },
+                      {
+                        "op": "update",
+                        "path": "symbiosis_principles",
+                        "value": [
+                          {
+                            "name": "принцип 1"
+                          },
+                          {
+                            "name": "принцип 2"
+                          }
+                        ]
                       }
                     ]
-                  }
+                  },
+                  "example_to_avoid": {
+                    "patch_id": "example_bad",
+                    "target_module": "philosophia",
+                    "changes": [
+                      {
+                        "op": "add",
+                        "path": "new_field",
+                        "value": "test"
+                      }
+                    ],
+                    "why": "Операция add для нового поля вызовет ошибку, так как бот ожидает add_field. Вместо этого нужно использовать update."
+                  },
+                  "troubleshooting": [
+                    {
+                      "error": "❌ Ошибка в структуре патча: Изменение #0: недопустимая операция '...'",
+                      "solution": "Проверить, что операция входит в список: update, add, delete, replace, merge. Для добавления новых полей использовать update."
+                    },
+                    {
+                      "error": "❌ Ошибка при применении изменений: Неизвестный тип операции",
+                      "solution": "Та же причина — использовать только разрешённые операции."
+                    },
+                    {
+                      "error": "❌ Модуль '...' не найден",
+                      "solution": "Проверить target_module — он должен точно соответствовать ключу в MANDALA_MODULES (initium, sphaerae, akasha, philosophia, geometria_sacra, incubae, tectosphaera, testisphaera)."
+                    },
+                    {
+                      "error": "❌ Невалидный JSON",
+                      "solution": "Проверить синтаксис JSON через любой валидатор. Особенно внимательно к кавычкам и запятым."
+                    }
+                  ],
+                  "ahimsa_note": "Перед подтверждением всегда оценивать, не нарушает ли патч принципы ненасилия, не создаёт ли шум, не эксплуатирует ли внимание.",
+                  "added_in": "v2.0.1",
+                  "added_by": "Архитектор (диалог с Садовником, 2026-02-16)"
                 },
                 {
                   "id": "SR-TOOL-002",
@@ -1456,19 +1539,22 @@
         }
       },
       "changes": {
-        "version": "v1.1.0 → v2.0.0",
-        "summary": "Интеграция инструкций для СР в Tectosphaera",
+        "version": "v2.0.0 → v2.0.1",
+        "summary": "Добавлена подробная инструкция по пакетным обновлениям для СР",
         "details": [
-          "Добавлен новый слой 'sr_instructionum' с четырьмя разделами",
-          "Добавлены команды доступа: tecto sr*",
-          "Обновлена визуализация при загрузке",
-          "Добавлен новый принцип: 'СР должен знать, как защищать себя и систему'"
+          "В SR-TOOL-001 добавлены:",
+          "  • Пошаговое руководство (5 шагов)",
+          "  • Важные правила (использовать update, не использовать add)",
+          "  • Корректный и ошибочный примеры",
+          "  • Таблица с частыми ошибками и решениями",
+          "  • Примечание по Ахимсе",
+          "Обновлена версия до v2.0.1"
         ]
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-16T16:40:28.789424+00:00",
+    "timestamp": "2026-02-16T16:42:51.896444+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1503,6 +1589,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-16 16:40:28 UTC"
+    "built_at": "2026-02-16 16:42:51 UTC"
   }
 }
