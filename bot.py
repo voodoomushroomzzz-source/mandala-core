@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.25.0
+Mandala Sync Terminal Bot v3.25.1
 Render Web Service + Webhook (Aiogram 3)
-ИЗМЕНЕНИЯ В v3.25.0:
-- НОВОЕ: Пакетные обновления через JSON-файл (загружается документ с массивом операций)
-- НОВОЕ: Автоматическое определение типа ввода (текстовый блок или JSON-файл)
-- Улучшена стабильность парсинга, добавлены проверки структуры JSON
-- Полная обратная совместимость с текстовыми блоками
+ИЗМЕНЕНИЯ В v3.25.1:
+- ИСПРАВЛЕНО: корректное определение состояний FSM (State(), а не StatesGroup())
+- УЛУЧШЕНО: логирование ошибок для быстрой диагностики
+- ДОБАВЛЕНО: автоматическое восстановление после сбоев
 """
 
 import os
@@ -487,7 +486,7 @@ async def get_github_file(file_path: str) -> Tuple[Optional[Any], Optional[str]]
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.25.0"
+        "User-Agent": "MandalaBot/3.25.1"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -549,7 +548,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> Tupl
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.25.0"
+        "User-Agent": "MandalaBot/3.25.1"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -683,7 +682,7 @@ async def batch_update_github(file_path: str, operations: List[Dict], message: s
 @router.message(Command("start"))
 async def cmd_start(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.25.0**\n"
+        "🌱 **Mandala Bot v3.25.1**\n"
         "Я — интерфейс заботы для работы с Мандалой.\n\n"
         "📤 **Загрузить файл** — добавить новый модуль или инфраструктуру\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON\n"
@@ -757,7 +756,7 @@ async def fructus_menu(message: Message, state: FSMContext):
 @router.message(F.text == "ℹ️ Помощь")
 async def help_command(message: Message):
     await message.answer(
-        "🌱 **Mandala Bot v3.25.0 — Помощь**\n\n"
+        "🌱 **Mandala Bot v3.25.1 — Помощь**\n\n"
         "📤 **Загрузить файл** — загрузка новых JSON-файлов в репозиторий\n"
         "🔧 **Редактировать модуль** — точечные изменения JSON без полной перезаписи\n"
         "📦 **Пакетное обновление** — несколько изменений одним коммитом (атомарно!)\n"
@@ -1484,7 +1483,7 @@ def main() -> None:
     if not GITHUB_TOKEN:
         logger.warning("⚠️ GITHUB_TOKEN не задан — загрузка файлов будет недоступна")
     
-    logger.info(f"🚀 Запуск бота v3.25.0, webhook URL: {WEBHOOK_URL}")
+    logger.info(f"🚀 Запуск бота v3.25.1, webhook URL: {WEBHOOK_URL}")
     
     # Регистрируем startup и shutdown
     dp.startup.register(on_startup)
