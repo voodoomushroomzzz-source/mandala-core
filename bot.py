@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.27.0
+Mandala Sync Terminal Bot v3.28.0
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.27.0:
-- 📦 Мульти-патчи: поддержка массива patches для обновления нескольких модулей одним файлом
-- 📊 Сводный отчёт после применения мульти-патча
-- 🔄 Полная обратная совместимость с одиночными патчами
+НОВОЕ В v3.28.0:
+- Интеграция с СР (облачный агент Yandex GPT)
+- Команда /menu для возврата в главное меню
+- Обычные сообщения пересылаются в СР
 """
 
 import os
@@ -60,6 +60,9 @@ PORT = 10000
 WEBHOOK_PATH = "/webhook"
 WEBHOOK_SECRET = "mandala-secret"
 
+# URL нашей облачной функции СР
+SR_FUNCTION_URL = "https://functions.yandexcloud.net/d4en8kkgifqjhadrc84i"
+
 # ========== ПРОВЕРКА КРИТИЧЕСКИХ ПЕРЕМЕННЫХ ==========
 if not BOT_TOKEN:
     logger.error("❌ BOT_TOKEN не найден")
@@ -91,7 +94,7 @@ class UploadStates(StatesGroup):
     waiting_for_file = State()
     waiting_for_patch_file = State()
     waiting_for_patch_confirmation = State()
-    waiting_for_multi_patch_confirmation = State()  # новое состояние для мульти-патча
+    waiting_for_multi_patch_confirmation = State()
 
 # ========== ЦЕЛЕВЫЕ ФАЙЛЫ ==========
 MANDALA_MODULES = {
@@ -181,10 +184,28 @@ ALL_UPLOAD_TARGETS = {**MANDALA_MODULES, **INFRASTRUCTURE_FILES}
 user_upload_target = {}
 
 
+# ========== ФУНКЦИЯ ВЫЗОВА СР ==========
+
+async def call_sr(chat_id: str, text: str) -> Optional[str]:
+    """Вызывает облачную функцию СР и возвращает ответ."""
+    async with aiohttp.ClientSession() as session:
+        try:
+            payload = {"chat_id": chat_id, "message": text}
+            async with session.post(SR_FUNCTION_URL, json=payload, timeout=30) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    return data.get("response")
+                else:
+                    logger.error(f"SR function returned {resp.status}")
+                    return None
+        except Exception as e:
+            logger.error(f"Error calling SR function: {e}")
+            return None
+
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.27.0)"""
+    """Главное меню (v3.28.0)"""
     keyboard = [
         [KeyboardButton(text="📤 Загрузить файл")],
         [KeyboardButton(text="📦 Пакетное обновление")],
@@ -297,7 +318,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.27.0"
+        "User-Agent": "MandalaBot/3.28.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -355,7 +376,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.27.0"
+        "User-Agent": "MandalaBot/3.28.0"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -376,14 +397,13 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
             return False, None, str(e)
 
 
-# ========== ФУНКЦИИ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ (ОДИНОЧНЫХ И МУЛЬТИ) ==========
+# ========== ФУНКЦИИ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ ==========
 
 def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
     """Валидация структуры патча (одиночного или мульти)"""
     if not isinstance(patch_data, dict):
         return False, "Патч должен быть объектом JSON"
     
-    # Определяем тип патча
     if "patches" in patch_data:
         # Мульти-патч
         if not isinstance(patch_data["patches"], list):
@@ -401,7 +421,6 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
             if not isinstance(subpatch["changes"], list):
                 return False, f"Подпатч #{i}: 'changes' должен быть массивом"
             
-            # Проверяем операции в changes
             valid_ops = ["update", "add", "delete", "replace", "merge"]
             for j, change in enumerate(subpatch["changes"]):
                 if not isinstance(change, dict):
@@ -418,7 +437,7 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
         return True, "Мульти-патч корректен"
     
     else:
-        # Одиночный патч (старый формат)
+        # Одиночный патч
         if "target_module" not in patch_data:
             return False, "Отсутствует поле 'target_module'"
         if "changes" not in patch_data:
@@ -451,7 +470,6 @@ async def apply_json_operation(
     new_value: Any = None
 ) -> Tuple[bool, Optional[Dict], str]:
     """Применить операцию к JSON (без изменений)"""
-    # (функция полностью идентична предыдущей версии, оставляем без изменений)
     try:
         array_match = re.match(r"(.+?)\[(\d+)\](.*)", target_path)
         
@@ -796,7 +814,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.27.0"
+            "source": "mandala_bot_v3.28.0"
         }
         
         success = await update_github_file(
@@ -845,17 +863,26 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.27.0</b>\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.28.0</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
-        "📦 <b>Пакетное обновление</b> — одиночные или мульти-патчи (несколько модулей одним файлом)\n"
+        "📦 <b>Пакетное обновление</b> — одиночные или мульти-патчи\n"
         "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
         "🍇 <b>Fructus</b> — хранилище артефактов\n\n"
-        "🤖 <b>Новое в v3.27.0:</b>\n"
-        "• Поддержка мульти-патчей (массив patches)\n"
-        "• Детальный отчёт после применения\n"
+        "🤖 <b>Новое в v3.28.0:</b>\n"
+        "• Интеграция с СР (облачный агент)\n"
+        "• Просто пиши сообщения — СР ответит\n"
+        "• Команда /menu — вернуться в меню\n"
         "🌿 Ahimsa-фильтр активен",
         reply_markup=get_main_keyboard()
     )
+
+@router.message(Command("menu"))
+async def cmd_menu(message: Message, state: FSMContext):
+    await state.clear()
+    user_id = message.from_user.id
+    if user_id in user_upload_target:
+        del user_upload_target[user_id]
+    await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
 
 
 @router.message(F.text == "❌ Отмена")
@@ -942,15 +969,14 @@ async def handle_fructus_menu(message: Message):
 @router.message(F.text == "ℹ️ Помощь")
 async def handle_help(message: Message):
     await message.answer(
-        "📚 <b>Mandala Sync Terminal v3.27.0</b>\n\n"
+        "📚 <b>Mandala Sync Terminal v3.28.0</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
         "📦 <b>Пакетное обновление</b> — одиночные или мульти-патчи\n"
         "💾 <b>Скачать монолит</b> — mandala_core.monolith.latest.json\n"
         "🍇 <b>Fructus</b> — seeds, geometry, builders\n\n"
-        "📦 <b>Мульти-патчи:</b>\n"
-        "• Поле 'patches' содержит массив подпатчей\n"
-        "• Каждый подпатч: target_module + changes\n"
-        "• Применяются последовательно\n\n"
+        "🤖 <b>Общение с СР:</b>\n"
+        "• Просто пиши сообщения — СР ответит\n"
+        "• /menu — вернуться в меню\n\n"
         "🌿 Ahimsa-фильтр активен",
         reply_markup=get_main_keyboard()
     )
@@ -1094,12 +1120,11 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
             await status_msg.edit_text(f"❌ Ошибка в структуре патча: {error_msg}")
             return
         
-        # Определяем тип патча
         if "patches" in patch_data:
             # Мульти-патч
             await process_multi_patch(message, state, patch_data, status_msg, user_id)
         else:
-            # Одиночный патч (старая логика)
+            # Одиночный патч
             await process_single_patch(message, state, patch_data, status_msg, user_id)
         
     except Exception as e:
@@ -1111,7 +1136,7 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
 
 
 async def process_single_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
-    """Обработка одиночного патча (старая логика, немного модифицирована для единообразия)"""
+    """Обработка одиночного патча"""
     target_module = patch_data.get("target_module")
     if target_module not in MANDALA_MODULES:
         await status_msg.edit_text(
@@ -1209,7 +1234,6 @@ async def process_multi_patch(message: Message, state: FSMContext, patch_data: D
             all_valid = False
     
     if not all_valid:
-        # Формируем сообщение об ошибках
         error_lines = ["❌ Некоторые подпатчи содержат ошибки:\n"]
         for preview in subpatch_previews:
             if preview.get("error"):
@@ -1217,7 +1241,6 @@ async def process_multi_patch(message: Message, state: FSMContext, patch_data: D
         await status_msg.edit_text("\n".join(error_lines))
         return
     
-    # Всё валидно, сохраняем данные и переходим к подтверждению
     await state.update_data(
         patch_type="multi",
         patch_data=patch_data,
@@ -1391,8 +1414,6 @@ async def back_to_patch_confirm(callback_query: CallbackQuery, state: FSMContext
     await callback_query.answer()
 
 
-# ========== ОБРАБОТЧИКИ МУЛЬТИ-ПАТЧЕЙ ==========
-
 @router.callback_query(F.data == "multi_patch_apply", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
 async def handle_multi_patch_apply(callback_query: CallbackQuery, state: FSMContext):
     data = await state.get_data()
@@ -1457,11 +1478,10 @@ async def handle_multi_patch_apply(callback_query: CallbackQuery, state: FSMCont
             })
             all_success = False
     
-    # Формируем отчёт
     report_lines = ["📊 <b>Результаты мульти-патча</b>\n"]
     for res in results:
         if res["success"]:
-            report_lines.append(f"✅ {res['module']}: {res['applied']} операций — <a href='{res['url']}>файл</a>")
+            report_lines.append(f"✅ {res['module']}: {res['applied']} операций — <a href='{res['url']}'>файл</a>")
         else:
             report_lines.append(f"❌ {res['module']}: {res['error']}")
     
@@ -1576,7 +1596,6 @@ async def process_file_upload(message: Message, state: FSMContext):
             file_content_bytes = await bot.download_file(file.file_path)
             file_content = file_content_bytes.read().decode('utf-8')
             
-            # Для bot.py сохраняем как есть, для остальных проверяем JSON
             if target_key == "bot_script":
                 content_to_save = file_content
             else:
@@ -1617,7 +1636,6 @@ async def process_file_upload(message: Message, state: FSMContext):
         if user_id in user_upload_target:
             del user_upload_target[user_id]
         
-        # Возвращаем в главное меню
         await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
             
     except Exception as e:
@@ -1654,22 +1672,40 @@ async def handle_fructus_upload_file_logic(message: Message, state: FSMContext, 
         await status_msg.edit_text(f"🔶 Ошибка: {result}")
 
 
-# ========== ОБРАБОТЧИК ВСЕГО ОСТАЛЬНОГО ==========
+# ========== ОБРАБОТЧИК ВСЕХ ОСТАЛЬНЫХ СООБЩЕНИЙ (ТЕПЕРЬ С СР) ==========
 
 @router.message()
 async def handle_other_messages(message: Message, state: FSMContext):
     current = await state.get_state()
     
-    if current == UploadStates.waiting_for_file:
-        await message.answer("📎 Ожидаю файл", reply_markup=get_upload_mode_keyboard())
-    elif current == UploadStates.waiting_for_patch_file:
-        await message.answer("📎 Ожидаю JSON-файл с патчем", reply_markup=get_upload_mode_keyboard())
-    elif current == UploadStates.waiting_for_module:
-        await message.answer("🔘 Выберите категорию кнопками", reply_markup=get_category_keyboard())
-    elif current == UploadStates.waiting_for_category:
-        await message.answer("🔘 Выберите категорию", reply_markup=get_category_keyboard())
+    # Если есть активное состояние - обрабатываем как раньше
+    if current:
+        if current == UploadStates.waiting_for_file:
+            await message.answer("📎 Ожидаю файл", reply_markup=get_upload_mode_keyboard())
+        elif current == UploadStates.waiting_for_patch_file:
+            await message.answer("📎 Ожидаю JSON-файл с патчем", reply_markup=get_upload_mode_keyboard())
+        elif current == UploadStates.waiting_for_module:
+            await message.answer("🔘 Выберите категорию кнопками", reply_markup=get_category_keyboard())
+        elif current == UploadStates.waiting_for_category:
+            await message.answer("🔘 Выберите категорию", reply_markup=get_category_keyboard())
+        else:
+            await message.answer("⚠️ Неизвестное состояние")
+        return
+    
+    # Если сообщение начинается с / - игнорируем (команды обработаны отдельно)
+    if message.text and message.text.startswith('/'):
+        return
+    
+    # Обычное сообщение - отправляем СР
+    await message.answer_chat_action("typing")
+    response = await call_sr(str(message.from_user.id), message.text)
+    if response:
+        await message.answer(response, parse_mode=ParseMode.HTML)
     else:
-        await message.answer("ℹ️ Используйте меню", reply_markup=get_main_keyboard())
+        await message.answer(
+            "😔 СР временно недоступен. Попробуйте позже или воспользуйтесь меню.",
+            reply_markup=get_main_keyboard()
+        )
 
 
 # ========== WEBHOOK ==========
@@ -1700,7 +1736,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.27.0")
+        return web.Response(text="Mandala Bot v3.28.0")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
