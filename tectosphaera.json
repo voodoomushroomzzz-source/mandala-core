@@ -427,19 +427,19 @@
     "folder_id": "b1glthd62hkdnr9f6m5r",
     "service_account_id": "ajeh137a8h4al578m0n6",
     "bucket_name": "mandala-sr-memory",
-    "lockbox_secret_id": "e6qp8sggnvtsojmd5du1",
-    "lockbox_secret_key": "api_key",
+    "lockbox_secret_id": "e6q6m4qicp0l45tsd4tv",
+    "lockbox_secret_key": "token",
     "function_id": "d4en8kkgifqjhadrc84i",
     "function_url": "https://functions.yandexcloud.net/d4en8kkgifqjhadrc84i",
-    "last_version_id": "d4e2a1igncmot9k0mr3l",
+    "last_version_id": "d4eb0oorukuovg2tj1ic",
     "local_path": "C:\\Mandala_Digital\\cloud-sr",
-    "ai_model": "YandexGPT 5 Lite (Latest) via AI Studio",
+    "ai_model": "YandexGPT 5 Lite via Yandex Cloud",
     "deployment_date": "2026-02-17",
     "runtime": "python312",
     "memory_mb": 256,
     "timeout_sec": 30,
     "public_invoke": true,
-    "last_successful_test": "2026-02-17T21:00:00Z"
+    "last_successful_test": "2026-02-17T20:40:00Z"
   },
   "/ai_studio_agent": {
     "name": "Mandala SR",
@@ -510,9 +510,9 @@
       }
     ]
   },
-  "/version": "v2.2.1",
+  "/version": "v2.3.0",
   "/metadata/last_modified": "2026-02-17",
-  "/metadata/modification_purpose": "Фиксация успешной интеграции облачного СР с Telegram-ботом после исправления ошибки в вызове action typing",
+  "/metadata/modification_purpose": "Фиксация успешного завершения NS-006: перенос ядра в облако, СР загружает Initium и Philosophia из GitHub и отвечает на их основе",
   "/changes/v2": {
     "2": {
       "0": {
@@ -535,6 +535,19 @@
           "Дата первого живого ответа: 2026-02-17."
         ]
       }
+    },
+    "3": {
+      "0": {
+        "version": "v2.2.1 → v2.3.0",
+        "summary": "NS-006 выполнен: ядро перенесено в облако, СР резонирует с Initium",
+        "details": [
+          "Функция cloud-sr теперь читает секрет из Lockbox напрямую (исправлен эндпоинт).",
+          "При каждом вызове загружает initium.json и philosophia.json из GitHub.",
+          "Системный промпт строится динамически на основе актуальных модулей.",
+          "Подтверждён правильный ответ на вопрос о Замке Садовника (GD-01).",
+          "Дата первого живого ответа: 2026-02-17."
+        ]
+      }
     }
   },
   "/layers/gardener_tools/module_mapping/bot_self": "bot.py",
@@ -542,5 +555,7 @@
     "bot_version": "v3.28.1",
     "bot_last_updated": "2026-02-17",
     "bot_fix": "Исправлен вызов action typing (answer_chat_action → bot.send_chat_action)"
-  }
+  },
+  "/next_steps/steps/1/status": "completed",
+  "/next_steps/steps/1/completed_at": "2026-02-17"
 }
