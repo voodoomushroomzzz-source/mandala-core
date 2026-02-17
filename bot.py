@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.26.0
+Mandala Sync Terminal Bot v3.27.0
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.26.0:
-- 🧹 Из главного меню убран пункт "🔧 Редактировать модуль" (теперь только пакетные обновления)
-- 💾 Скачать монолит теперь с эмодзи сохранения (отличие от пакетного обновления)
-- 🔄 После загрузки файла или применения патча автоматический возврат в главное меню
-- 🛠️ Все операции пакетных обновлений (update, add, delete, replace, merge) работают стабильно
-- 🗑️ Удаление несуществующих полей считается успешным (без ошибок)
+НОВОЕ В v3.27.0:
+- 📦 Мульти-патчи: поддержка массива patches для обновления нескольких модулей одним файлом
+- 📊 Сводный отчёт после применения мульти-патча
+- 🔄 Полная обратная совместимость с одиночными патчами
 """
 
 import os
@@ -93,7 +91,7 @@ class UploadStates(StatesGroup):
     waiting_for_file = State()
     waiting_for_patch_file = State()
     waiting_for_patch_confirmation = State()
-
+    waiting_for_multi_patch_confirmation = State()  # новое состояние для мульти-патча
 
 # ========== ЦЕЛЕВЫЕ ФАЙЛЫ ==========
 MANDALA_MODULES = {
@@ -186,7 +184,7 @@ user_upload_target = {}
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.26.0)"""
+    """Главное меню (v3.27.0)"""
     keyboard = [
         [KeyboardButton(text="📤 Загрузить файл")],
         [KeyboardButton(text="📦 Пакетное обновление")],
@@ -202,9 +200,7 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
     )
 
 def get_upload_mode_keyboard() -> ReplyKeyboardMarkup:
-    keyboard = [
-        [KeyboardButton(text="❌ Отмена")]
-    ]
+    keyboard = [[KeyboardButton(text="❌ Отмена")]]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,
@@ -262,9 +258,15 @@ def get_fructus_inline_keyboard() -> InlineKeyboardMarkup:
     ])
 
 def get_return_home_keyboard() -> InlineKeyboardMarkup:
-    """Клавиатура для возврата в главное меню после операций"""
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🏠 Главное меню", callback_data="return_home")]
+    ])
+
+def get_multi_patch_confirm_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Применить все", callback_data="multi_patch_apply")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="multi_patch_cancel")],
+        [InlineKeyboardButton(text="📋 Детали", callback_data="multi_patch_details")]
     ])
 
 
@@ -295,7 +297,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.26.0"
+        "User-Agent": "MandalaBot/3.27.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -353,7 +355,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.26.0"
+        "User-Agent": "MandalaBot/3.27.0"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -374,43 +376,72 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
             return False, None, str(e)
 
 
-# ========== ФУНКЦИИ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ ==========
+# ========== ФУНКЦИИ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ (ОДИНОЧНЫХ И МУЛЬТИ) ==========
 
 def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
+    """Валидация структуры патча (одиночного или мульти)"""
     if not isinstance(patch_data, dict):
         return False, "Патч должен быть объектом JSON"
     
-    if "target_module" not in patch_data:
-        return False, "Отсутствует поле 'target_module'"
-    
-    if "changes" not in patch_data:
-        return False, "Отсутствует поле 'changes'"
-    
-    if not isinstance(patch_data["changes"], list):
-        return False, "'changes' должен быть массивом"
-    
-    if len(patch_data["changes"]) == 0:
-        return False, "Массив изменений пуст"
-    
-    valid_ops = ["update", "add", "delete", "replace", "merge"]
-    
-    for i, change in enumerate(patch_data["changes"]):
-        if not isinstance(change, dict):
-            return False, f"Изменение #{i} должно быть объектом"
+    # Определяем тип патча
+    if "patches" in patch_data:
+        # Мульти-патч
+        if not isinstance(patch_data["patches"], list):
+            return False, "Поле 'patches' должно быть массивом"
+        if len(patch_data["patches"]) == 0:
+            return False, "Массив patches пуст"
         
-        if "op" not in change:
-            return False, f"Изменение #{i}: отсутствует 'op'"
+        for i, subpatch in enumerate(patch_data["patches"]):
+            if not isinstance(subpatch, dict):
+                return False, f"Подпатч #{i} должен быть объектом"
+            if "target_module" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'target_module'"
+            if "changes" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'changes'"
+            if not isinstance(subpatch["changes"], list):
+                return False, f"Подпатч #{i}: 'changes' должен быть массивом"
+            
+            # Проверяем операции в changes
+            valid_ops = ["update", "add", "delete", "replace", "merge"]
+            for j, change in enumerate(subpatch["changes"]):
+                if not isinstance(change, dict):
+                    return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
+                if "op" not in change:
+                    return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
+                if change["op"] not in valid_ops:
+                    return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
+                if "path" not in change:
+                    return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
+                if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
+                    return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
         
-        if change["op"] not in valid_ops:
-            return False, f"Изменение #{i}: недопустимая операция '{change['op']}'"
-        
-        if "path" not in change:
-            return False, f"Изменение #{i}: отсутствует 'path'"
-        
-        if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-            return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
+        return True, "Мульти-патч корректен"
     
-    return True, "OK"
+    else:
+        # Одиночный патч (старый формат)
+        if "target_module" not in patch_data:
+            return False, "Отсутствует поле 'target_module'"
+        if "changes" not in patch_data:
+            return False, "Отсутствует поле 'changes'"
+        if not isinstance(patch_data["changes"], list):
+            return False, "'changes' должен быть массивом"
+        if len(patch_data["changes"]) == 0:
+            return False, "Массив изменений пуст"
+        
+        valid_ops = ["update", "add", "delete", "replace", "merge"]
+        for i, change in enumerate(patch_data["changes"]):
+            if not isinstance(change, dict):
+                return False, f"Изменение #{i} должно быть объектом"
+            if "op" not in change:
+                return False, f"Изменение #{i}: отсутствует 'op'"
+            if change["op"] not in valid_ops:
+                return False, f"Изменение #{i}: недопустимая операция '{change['op']}'"
+            if "path" not in change:
+                return False, f"Изменение #{i}: отсутствует 'path'"
+            if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
+                return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
+        
+        return True, "Одиночный патч корректен"
 
 
 async def apply_json_operation(
@@ -419,7 +450,8 @@ async def apply_json_operation(
     target_path: str,
     new_value: Any = None
 ) -> Tuple[bool, Optional[Dict], str]:
-    """Применить операцию к JSON. Для delete_field, если поле не найдено, возвращаем успех."""
+    """Применить операцию к JSON (без изменений)"""
+    # (функция полностью идентична предыдущей версии, оставляем без изменений)
     try:
         array_match = re.match(r"(.+?)\[(\d+)\](.*)", target_path)
         
@@ -609,7 +641,7 @@ def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
                 diff.append(f"{path}: {a_str} → {b_str}")
     
     compare_dicts(original, modified)
-    return diff[:15]  # Ограничим вывод
+    return diff[:15]
 
 
 async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
@@ -665,7 +697,7 @@ async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
 
 
 def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
-    """Форматирование предпросмотра патча"""
+    """Форматирование предпросмотра одиночного патча"""
     lines = []
     lines.append(f"🎯 <b>Целевой модуль:</b> {patch_data['target_module']}")
     
@@ -697,6 +729,35 @@ def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
         lines.append(f"\n📊 <b>Примеры изменений:</b>")
         for d in diff[:5]:
             lines.append(f"  {d}")
+    
+    return "\n".join(lines)
+
+
+def format_multi_patch_preview(patch_data: Dict, subpatch_previews: List[Dict]) -> str:
+    """Форматирование предпросмотра мульти-патча"""
+    lines = []
+    lines.append(f"📦 <b>Мульти-патч</b>")
+    
+    if patch_data.get("patch_id"):
+        lines.append(f"📄 <b>ID:</b> {patch_data['patch_id']}")
+    
+    if patch_data.get("description"):
+        lines.append(f"📝 <b>Описание:</b> {patch_data['description']}")
+    
+    lines.append(f"\n🧩 <b>Будет обновлено модулей: {len(patch_data['patches'])}</b>\n")
+    
+    for i, (subpatch, preview) in enumerate(zip(patch_data["patches"], subpatch_previews)):
+        lines.append(f"--- {i+1}. {subpatch['target_module']} ---")
+        if preview.get("failed") and len(preview["failed"]) > 0:
+            lines.append(f"❌ Ошибка в тесте: {preview['failed'][0]['error']}")
+        else:
+            lines.append(f"✅ Операций: {len(subpatch['changes'])}")
+            if preview.get("diff"):
+                for d in preview["diff"][:3]:
+                    lines.append(f"  {d}")
+                if len(preview["diff"]) > 3:
+                    lines.append(f"  ... и ещё {len(preview['diff'])-3} изменений")
+        lines.append("")
     
     return "\n".join(lines)
 
@@ -735,7 +796,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.26.0"
+            "source": "mandala_bot_v3.27.0"
         }
         
         success = await update_github_file(
@@ -784,15 +845,14 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.26.0</b>\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.27.0</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
-        "📦 <b>Пакетное обновление</b> — множество изменений одним файлом\n"
+        "📦 <b>Пакетное обновление</b> — одиночные или мульти-патчи (несколько модулей одним файлом)\n"
         "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
         "🍇 <b>Fructus</b> — хранилище артефактов\n\n"
-        "🤖 <b>Новое в v3.26.0:</b>\n"
-        "• Убрано отдельное редактирование — только пакетные обновления\n"
-        "• После операций автоматический возврат в главное меню\n"
-        "• 💾 для скачивания монолита\n"
+        "🤖 <b>Новое в v3.27.0:</b>\n"
+        "• Поддержка мульти-патчей (массив patches)\n"
+        "• Детальный отчёт после применения\n"
         "🌿 Ahimsa-фильтр активен",
         reply_markup=get_main_keyboard()
     )
@@ -828,25 +888,27 @@ async def handle_batch_update_start(message: Message, state: FSMContext):
     await state.update_data(upload_mode="batch_patch")
     await state.set_state(UploadStates.waiting_for_patch_file)
     await message.answer(
-        "📦 <b>Пакетное обновление модуля</b>\n\n"
+        "📦 <b>Пакетное обновление</b>\n\n"
         "Отправьте JSON-файл с набором изменений.\n\n"
-        "Формат:\n"
+        "Для одного модуля (старый формат):\n"
         "```json\n"
         "{\n"
-        "  \"patch_id\": \"optional_id\",\n"
-        "  \"description\": \"описание\",\n"
         "  \"target_module\": \"sphaerae\",\n"
-        "  \"changes\": [\n"
-        "    {\"op\": \"update\", \"path\": \"version\", \"value\": \"v2.3.1\"},\n"
-        "    {\"op\": \"add\", \"path\": \"tags\", \"value\": [\"core\"]},\n"
-        "    {\"op\": \"delete\", \"path\": \"metadata.deprecated\"},\n"
-        "    {\"op\": \"replace\", \"path\": \"elements[0]\", \"value\": {\"new\": true}},\n"
-        "    {\"op\": \"merge\", \"path\": \"config\", \"value\": {\"new\": \"field\"}}\n"
+        "  \"changes\": [...]\n"
+        "}\n"
+        "```\n\n"
+        "Для нескольких модулей (новый формат):\n"
+        "```json\n"
+        "{\n"
+        "  \"patch_id\": \"multi_update\",\n"
+        "  \"description\": \"...\",\n"
+        "  \"patches\": [\n"
+        "    {\"target_module\": \"initium\", \"changes\": [...]},\n"
+        "    {\"target_module\": \"philosophia\", \"changes\": [...]}\n"
         "  ]\n"
         "}\n"
         "```\n\n"
-        "📎 Просто прикрепите файл — я покажу, что изменится, и запрошу подтверждение.\n\n"
-        "Поддерживаемые операции: update, add, delete, replace, merge",
+        "📎 Просто прикрепите файл — я покажу, что изменится, и запрошу подтверждение.",
         reply_markup=ReplyKeyboardMarkup(
             keyboard=[[KeyboardButton(text="❌ Отмена")]],
             resize_keyboard=True
@@ -863,7 +925,6 @@ async def handle_download_monolith_direct(message: Message):
             document=BufferedInputFile(content, filename=filename),
             caption="📦 Монолит Mandala Core"
         )
-        # Возвращаем в главное меню
         await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
     else:
         await message.answer(f"❌ Ошибка: {filename}")
@@ -881,18 +942,15 @@ async def handle_fructus_menu(message: Message):
 @router.message(F.text == "ℹ️ Помощь")
 async def handle_help(message: Message):
     await message.answer(
-        "📚 <b>Mandala Sync Terminal v3.26.0</b>\n\n"
+        "📚 <b>Mandala Sync Terminal v3.27.0</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
-        "📦 <b>Пакетное обновление</b> — множественные изменения через JSON-патч\n"
+        "📦 <b>Пакетное обновление</b> — одиночные или мульти-патчи\n"
         "💾 <b>Скачать монолит</b> — mandala_core.monolith.latest.json\n"
         "🍇 <b>Fructus</b> — seeds, geometry, builders\n\n"
-        "📦 <b>Пакетное обновление (подробно):</b>\n"
-        "• update — обновить поле\n"
-        "• add — добавить в массив\n"
-        "• delete — удалить поле/элемент\n"
-        "• replace — заменить элемент массива\n"
-        "• merge — объединить объекты\n\n"
-        "🤖 <b>Обновление бота</b> — в категории Инфраструктура\n"
+        "📦 <b>Мульти-патчи:</b>\n"
+        "• Поле 'patches' содержит массив подпатчей\n"
+        "• Каждый подпатч: target_module + changes\n"
+        "• Применяются последовательно\n\n"
         "🌿 Ahimsa-фильтр активен",
         reply_markup=get_main_keyboard()
     )
@@ -1036,58 +1094,13 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
             await status_msg.edit_text(f"❌ Ошибка в структуре патча: {error_msg}")
             return
         
-        target_module = patch_data.get("target_module")
-        if target_module not in MANDALA_MODULES:
-            await status_msg.edit_text(
-                f"❌ Модуль '{target_module}' не найден.\n"
-                f"Доступные: {', '.join(MANDALA_MODULES.keys())}"
-            )
-            return
-        
-        module_info = MANDALA_MODULES[target_module]
-        success, current_content, error = await get_github_file_content(module_info["path"])
-        
-        if not success:
-            await status_msg.edit_text(f"❌ Не удалось загрузить модуль: {error}")
-            return
-        
-        test_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
-        
-        if not test_result["success"]:
-            error_msg = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
-            await status_msg.edit_text(
-                f"❌ Ошибка при применении изменений:\n"
-                f"{error_msg}"
-            )
-            return
-        
-        preview_text = format_patch_preview(test_result["diff"], patch_data)
-        
-        await state.update_data(
-            patch_data=patch_data,
-            patch_filename=message.document.file_name,
-            current_content=current_content,
-            module_path=module_info["path"],
-            module_name=module_info["name"],
-            module_key=target_module,
-            test_result=test_result
-        )
-        
-        await state.set_state(UploadStates.waiting_for_patch_confirmation)
-        
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✅ Применить", callback_data="patch_apply")],
-            [InlineKeyboardButton(text="❌ Отмена", callback_data="patch_cancel")],
-            [InlineKeyboardButton(text="📋 Детали", callback_data="patch_details")]
-        ])
-        
-        await status_msg.edit_text(
-            f"📦 <b>Пакет обновлений готов к применению</b>\n\n"
-            f"{preview_text}\n\n"
-            f"Применить изменения?",
-            reply_markup=keyboard,
-            parse_mode=ParseMode.HTML
-        )
+        # Определяем тип патча
+        if "patches" in patch_data:
+            # Мульти-патч
+            await process_multi_patch(message, state, patch_data, status_msg, user_id)
+        else:
+            # Одиночный патч (старая логика)
+            await process_single_patch(message, state, patch_data, status_msg, user_id)
         
     except Exception as e:
         logger.error(f"Ошибка обработки патча: {e}", exc_info=True)
@@ -1095,6 +1108,134 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
         await state.clear()
         if user_id in user_upload_target:
             del user_upload_target[user_id]
+
+
+async def process_single_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
+    """Обработка одиночного патча (старая логика, немного модифицирована для единообразия)"""
+    target_module = patch_data.get("target_module")
+    if target_module not in MANDALA_MODULES:
+        await status_msg.edit_text(
+            f"❌ Модуль '{target_module}' не найден.\n"
+            f"Доступные: {', '.join(MANDALA_MODULES.keys())}"
+        )
+        return
+    
+    module_info = MANDALA_MODULES[target_module]
+    success, current_content, error = await get_github_file_content(module_info["path"])
+    
+    if not success:
+        await status_msg.edit_text(f"❌ Не удалось загрузить модуль: {error}")
+        return
+    
+    test_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
+    
+    if not test_result["success"]:
+        error_msg = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
+        await status_msg.edit_text(
+            f"❌ Ошибка при применении изменений:\n{error_msg}"
+        )
+        return
+    
+    preview_text = format_patch_preview(test_result["diff"], patch_data)
+    
+    await state.update_data(
+        patch_type="single",
+        patch_data=patch_data,
+        patch_filename=message.document.file_name,
+        current_content=current_content,
+        module_path=module_info["path"],
+        module_name=module_info["name"],
+        module_key=target_module,
+        test_result=test_result
+    )
+    
+    await state.set_state(UploadStates.waiting_for_patch_confirmation)
+    
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Применить", callback_data="patch_apply")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="patch_cancel")],
+        [InlineKeyboardButton(text="📋 Детали", callback_data="patch_details")]
+    ])
+    
+    await status_msg.edit_text(
+        f"📦 <b>Пакет обновлений готов к применению</b>\n\n"
+        f"{preview_text}\n\n"
+        f"Применить изменения?",
+        reply_markup=keyboard,
+        parse_mode=ParseMode.HTML
+    )
+
+
+async def process_multi_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
+    """Обработка мульти-патча"""
+    subpatch_previews = []
+    all_valid = True
+    
+    for idx, subpatch in enumerate(patch_data["patches"]):
+        target_module = subpatch["target_module"]
+        if target_module not in MANDALA_MODULES:
+            subpatch_previews.append({
+                "index": idx,
+                "target_module": target_module,
+                "error": f"Модуль '{target_module}' не найден"
+            })
+            all_valid = False
+            continue
+        
+        module_info = MANDALA_MODULES[target_module]
+        success, current_content, error = await get_github_file_content(module_info["path"])
+        
+        if not success:
+            subpatch_previews.append({
+                "index": idx,
+                "target_module": target_module,
+                "error": f"Не удалось загрузить модуль: {error}"
+            })
+            all_valid = False
+            continue
+        
+        test_result = await apply_batch_patch_dry_run(current_content, subpatch["changes"])
+        
+        subpatch_previews.append({
+            "index": idx,
+            "target_module": target_module,
+            "module_info": module_info,
+            "current_content": current_content,
+            "test_result": test_result,
+            "error": None if test_result["success"] else (test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка")
+        })
+        
+        if not test_result["success"]:
+            all_valid = False
+    
+    if not all_valid:
+        # Формируем сообщение об ошибках
+        error_lines = ["❌ Некоторые подпатчи содержат ошибки:\n"]
+        for preview in subpatch_previews:
+            if preview.get("error"):
+                error_lines.append(f"• {preview['target_module']}: {preview['error']}")
+        await status_msg.edit_text("\n".join(error_lines))
+        return
+    
+    # Всё валидно, сохраняем данные и переходим к подтверждению
+    await state.update_data(
+        patch_type="multi",
+        patch_data=patch_data,
+        patch_filename=message.document.file_name,
+        subpatch_previews=subpatch_previews
+    )
+    
+    await state.set_state(UploadStates.waiting_for_multi_patch_confirmation)
+    
+    preview_text = format_multi_patch_preview(patch_data, subpatch_previews)
+    
+    await status_msg.edit_text(
+        f"📦 <b>Мульти-патч готов к применению</b>\n\n"
+        f"{preview_text}\n\n"
+        f"Применить все изменения?",
+        reply_markup=get_multi_patch_confirm_keyboard(),
+        parse_mode=ParseMode.HTML
+    )
 
 
 @router.callback_query(F.data == "patch_apply", StateFilter(UploadStates.waiting_for_patch_confirmation))
@@ -1168,7 +1309,6 @@ async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
     if callback_query.from_user.id in user_upload_target:
         del user_upload_target[callback_query.from_user.id]
     
-    # Возвращаем в главное меню
     await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
 
 
@@ -1246,6 +1386,156 @@ async def back_to_patch_confirm(callback_query: CallbackQuery, state: FSMContext
         f"{preview_text}\n\n"
         f"Применить изменения?",
         reply_markup=keyboard,
+        parse_mode=ParseMode.HTML
+    )
+    await callback_query.answer()
+
+
+# ========== ОБРАБОТЧИКИ МУЛЬТИ-ПАТЧЕЙ ==========
+
+@router.callback_query(F.data == "multi_patch_apply", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
+async def handle_multi_patch_apply(callback_query: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    patch_data = data.get("patch_data")
+    subpatch_previews = data.get("subpatch_previews")
+    
+    await callback_query.message.edit_text("🔄 Применяю мульти-патч...")
+    
+    results = []
+    all_success = True
+    
+    for preview in subpatch_previews:
+        target_module = preview["target_module"]
+        module_info = preview["module_info"]
+        current_content = preview["current_content"]
+        changes = next((sp["changes"] for sp in patch_data["patches"] if sp["target_module"] == target_module), [])
+        
+        apply_result = await apply_batch_patch_dry_run(current_content, changes)
+        
+        if not apply_result["success"]:
+            results.append({
+                "module": target_module,
+                "success": False,
+                "error": apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
+            })
+            all_success = False
+            continue
+        
+        ahimsa_ok, _, _ = await check_ahimsa_smart(apply_result["result_content"], f"multi_{target_module}")
+        if not ahimsa_ok:
+            results.append({
+                "module": target_module,
+                "success": False,
+                "error": "Не прошёл проверку Ахимсы"
+            })
+            all_success = False
+            continue
+        
+        commit_message = f"📦 Мульти-патч: {target_module}"
+        if patch_data.get("patch_id"):
+            commit_message += f" [{patch_data['patch_id']}]"
+        
+        save_success = await update_github_file(
+            file_path=module_info["path"],
+            content=apply_result["result_content"],
+            message=commit_message
+        )
+        
+        if save_success:
+            file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_info['path']}"
+            results.append({
+                "module": target_module,
+                "success": True,
+                "applied": len(apply_result["applied"]),
+                "url": file_url
+            })
+        else:
+            results.append({
+                "module": target_module,
+                "success": False,
+                "error": "Ошибка сохранения в GitHub"
+            })
+            all_success = False
+    
+    # Формируем отчёт
+    report_lines = ["📊 <b>Результаты мульти-патча</b>\n"]
+    for res in results:
+        if res["success"]:
+            report_lines.append(f"✅ {res['module']}: {res['applied']} операций — <a href='{res['url']}>файл</a>")
+        else:
+            report_lines.append(f"❌ {res['module']}: {res['error']}")
+    
+    report_lines.append("\n" + ("✅ Все изменения применены" if all_success else "⚠️ Некоторые изменения не удались"))
+    
+    await callback_query.message.edit_text(
+        "\n".join(report_lines),
+        parse_mode=ParseMode.HTML,
+        disable_web_page_preview=True
+    )
+    
+    await state.clear()
+    if callback_query.from_user.id in user_upload_target:
+        del user_upload_target[callback_query.from_user.id]
+    
+    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+
+
+@router.callback_query(F.data == "multi_patch_cancel", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
+async def handle_multi_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
+    await state.clear()
+    if callback_query.from_user.id in user_upload_target:
+        del user_upload_target[callback_query.from_user.id]
+    await callback_query.message.edit_text("🚫 Мульти-патч отменён")
+    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+
+
+@router.callback_query(F.data == "multi_patch_details", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
+async def handle_multi_patch_details(callback_query: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    patch_data = data.get("patch_data")
+    subpatch_previews = data.get("subpatch_previews")
+    
+    details = []
+    details.append(f"📦 <b>Мульти-патч: {patch_data.get('patch_id', 'без ID')}</b>")
+    details.append(f"📝 Описание: {patch_data.get('description', '—')}")
+    details.append(f"🧩 Модулей: {len(patch_data['patches'])}\n")
+    
+    for preview in subpatch_previews:
+        target = preview["target_module"]
+        details.append(f"--- {target} ---")
+        test_result = preview["test_result"]
+        if test_result:
+            for d in test_result["diff"][:10]:
+                details.append(f"  {d}")
+            if len(test_result["diff"]) > 10:
+                details.append(f"  ... и ещё {len(test_result['diff']) - 10}")
+        details.append("")
+    
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="◀️ Назад", callback_data="back_to_multi_patch_confirm")]
+    ])
+    
+    await callback_query.message.edit_text(
+        "\n".join(details),
+        reply_markup=keyboard,
+        parse_mode=ParseMode.HTML
+    )
+    await callback_query.answer()
+
+
+@router.callback_query(F.data == "back_to_multi_patch_confirm")
+async def back_to_multi_patch_confirm(callback_query: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    patch_data = data.get("patch_data")
+    subpatch_previews = data.get("subpatch_previews")
+    
+    preview_text = format_multi_patch_preview(patch_data, subpatch_previews)
+    
+    await callback_query.message.edit_text(
+        f"📦 <b>Мульти-патч готов к применению</b>\n\n"
+        f"{preview_text}\n\n"
+        f"Применить все изменения?",
+        reply_markup=get_multi_patch_confirm_keyboard(),
         parse_mode=ParseMode.HTML
     )
     await callback_query.answer()
@@ -1410,7 +1700,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.26.0")
+        return web.Response(text="Mandala Bot v3.27.0")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
