@@ -404,5 +404,23 @@
       "Обновлена metadata.modification_purpose.",
       "Версия модуля повышена до v2.0.6."
     ]
+  },
+  "/infrastructure_state": {
+    "cloud_sr": {
+      "folder_id": "b1glthd62hkdnr9f6m5r",
+      "service_account_id": "ajeh137a8h4al578m0n6",
+      "bucket_name": "mandala-sr-memory",
+      "lockbox_secret_id": "e6qp8sggnvtsojmd5du1",
+      "lockbox_secret_key": "api_key",
+      "function_id": "d4en8kkgifqjhadrc84i",
+      "function_url": "https://functions.yandexcloud.net/d4en8kkgifqjhadrc84i",
+      "last_version_id": "d4e4qrlrgm6um611qj3m",
+      "local_path": "C:\\Mandala_Digital\\cloud-sr",
+      "ai_model": "gpt-oss-120b (via SiliconFlow)",
+      "deployment_date": "2026-02-17",
+      "runtime": "python312",
+      "memory_mb": 256,
+      "timeout_sec": 30
+    }
   }
 }
