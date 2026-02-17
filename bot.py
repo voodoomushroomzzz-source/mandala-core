@@ -1697,7 +1697,7 @@ async def handle_other_messages(message: Message, state: FSMContext):
         return
     
     # Обычное сообщение - отправляем СР
-    await message.answer_chat_action("typing")
+    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
     response = await call_sr(str(message.from_user.id), message.text)
     if response:
         await message.answer(response, parse_mode=ParseMode.HTML)
