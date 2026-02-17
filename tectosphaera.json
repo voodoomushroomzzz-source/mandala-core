@@ -437,7 +437,9 @@
     "deployment_date": "2026-02-17",
     "runtime": "python312",
     "memory_mb": 256,
-    "timeout_sec": 30
+    "timeout_sec": 30,
+    "public_invoke": true,
+    "last_successful_test": "2026-02-17T21:00:00Z"
   },
   "/ai_studio_agent": {
     "name": "Mandala SR",
@@ -508,9 +510,9 @@
       }
     ]
   },
-  "/version": "v2.2.0",
+  "/version": "v2.2.1",
   "/metadata/last_modified": "2026-02-17",
-  "/metadata/modification_purpose": "Фиксация состояния облачного СР, агента AI Studio и плана дальнейших шагов после успешной интеграции с Telegram-ботом",
+  "/metadata/modification_purpose": "Фиксация успешной интеграции облачного СР с Telegram-ботом после исправления ошибки в вызове action typing",
   "/changes/v2": {
     "2": {
       "0": {
@@ -522,7 +524,23 @@
           "Добавлен блок next_steps с планом дальнейших улучшений (память, инициативность, мониторинг и др.).",
           "Обновлена метадата и версия модуля до v2.2.0."
         ]
+      },
+      "1": {
+        "version": "v2.2.0 → v2.2.1",
+        "summary": "Зафиксирован успешный запуск интеграции: функция публична, бот отвечает",
+        "details": [
+          "В infrastructure_state.cloud_sr добавлены поля public_invoke и last_successful_test.",
+          "В gardener_tools добавлен блок version_info с актуальной версией бота и описанием исправления.",
+          "Обновлена метадата и версия модуля до v2.2.1.",
+          "Дата первого живого ответа: 2026-02-17."
+        ]
       }
     }
+  },
+  "/layers/gardener_tools/module_mapping/bot_self": "bot.py",
+  "/layers/gardener_tools/version_info": {
+    "bot_version": "v3.28.1",
+    "bot_last_updated": "2026-02-17",
+    "bot_fix": "Исправлен вызов action typing (answer_chat_action → bot.send_chat_action)"
   }
 }
