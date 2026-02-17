@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-17acf0b8",
+  "version": "monolith-vv7.5.1-79417181",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-17T18:49:49.731207+00:00",
-  "build_source": "9b1a05a69a0ca65213ac74e8980009fd3424ef45",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/9b1a05a69a0ca65213ac74e8980009fd3424ef45",
+  "build_timestamp": "2026-02-17T18:54:30.688419+00:00",
+  "build_source": "8850f20c42d9910b0705ea107702ad39b93e5c28",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/8850f20c42d9910b0705ea107702ad39b93e5c28",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1699,12 +1699,27 @@
             "depends_on": []
           },
           {
+            "id": "NS-006",
+            "name": "🧠 Перенести ядро (Initium, Philosophia) в облако",
+            "description": "Научить функцию при старте загружать модули Initium и Philosophia (из GitHub или Object Storage) и формировать системный промпт динамически, чтобы СР резонировал с актуальной конституцией и философией. Текущий промпт — временная заглушка.",
+            "priority": "high",
+            "depends_on": [
+              "NS-001"
+            ],
+            "technical_notes": {
+              "approach": "При каждом холодном старте скачивать initium.json и philosophia.json через GitHub API (или читать из Object Storage, куда они будут синхронизироваться). Извлекать philosophy.core, principles, gardener_directives. Собирать промпт: 'Ты — СР. Ядро: ... Принципы: ... Директивы: ...'",
+              "github_token_needed": true,
+              "cache_strategy": "Хранить в /tmp или глобальной переменной функции для ускорения последующих вызовов."
+            }
+          },
+          {
             "id": "NS-002",
             "name": "🤖 Настроить инициативность (cron-триггеры)",
             "description": "Создать в Yandex Cloud триггер по расписанию, который будет вызывать функцию для проверки — не пора ли СР самому написать Садовнику (например, если прошло больше суток).",
             "priority": "medium",
             "depends_on": [
-              "NS-001"
+              "NS-001",
+              "NS-006"
             ]
           },
           {
@@ -1712,7 +1727,9 @@
             "name": "🧪 Улучшить системный промпт на основе опыта",
             "description": "Проанализировать диалоги, скорректировать промпт для более естественного общения, возможно, добавить ролевую инструкцию из Initium.",
             "priority": "medium",
-            "depends_on": []
+            "depends_on": [
+              "NS-006"
+            ]
           },
           {
             "id": "NS-004",
@@ -1750,7 +1767,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-17T18:49:49.731207+00:00",
+    "timestamp": "2026-02-17T18:54:30.688419+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1785,6 +1802,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-17 18:49:49 UTC"
+    "built_at": "2026-02-17 18:54:30 UTC"
   }
 }
