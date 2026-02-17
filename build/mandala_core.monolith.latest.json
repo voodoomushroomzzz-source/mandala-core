@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-46e430a5",
+  "version": "monolith-vv7.5.1-27309868",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-17T20:27:45.639165+00:00",
-  "build_source": "2574fe01a58bcd29a4b65e13a9a10ecb301e9b17",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/2574fe01a58bcd29a4b65e13a9a10ecb301e9b17",
+  "build_timestamp": "2026-02-17T21:06:52.913459+00:00",
+  "build_source": "2fa3f8b807a49561c4b7a0f7296f8ec3390bd892",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/2fa3f8b807a49561c4b7a0f7296f8ec3390bd892",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1749,7 +1749,7 @@
           }
         ]
       },
-      "/version": "v2.3.0",
+      "/version": "v2.6.0",
       "/metadata/last_modified": "2026-02-17",
       "/metadata/modification_purpose": "Фиксация успешного завершения NS-006: перенос ядра в облако, СР загружает Initium и Philosophia из GitHub и отвечает на их основе",
       "/changes/v2": {
@@ -1787,6 +1787,18 @@
               "Дата первого живого ответа: 2026-02-17."
             ]
           }
+        },
+        "6": {
+          "0": {
+            "version": "v2.5.0 → v2.6.0",
+            "summary": "NS-001 выполнен: добавлена память в Object Storage",
+            "details": [
+              "СР теперь сохраняет историю диалога в бакете mandala-sr-memory.",
+              "Используются статические ключи из Lockbox (секрет s3-keys).",
+              "Нагрузка контекста рассчитывается на основе реальной истории.",
+              "Память работает между сессиями."
+            ]
+          }
         }
       },
       "/layers/gardener_tools/module_mapping/bot_self": "bot.py",
@@ -1796,11 +1808,15 @@
         "bot_fix": "Исправлен вызов action typing (answer_chat_action → bot.send_chat_action)"
       },
       "/next_steps/steps/1/status": "completed",
-      "/next_steps/steps/1/completed_at": "2026-02-17"
+      "/next_steps/steps/1/completed_at": "2026-02-17",
+      "/infrastructure_state/cloud_sr/features/memory": true,
+      "/infrastructure_state/cloud_sr/last_version_id": "последний_ID_версии",
+      "/next_steps/steps/0/status": "completed",
+      "/next_steps/steps/0/completed_at": "2026-02-17"
     }
   },
   "build_info": {
-    "timestamp": "2026-02-17T20:27:45.639165+00:00",
+    "timestamp": "2026-02-17T21:06:52.913459+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1835,6 +1851,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-17 20:27:45 UTC"
+    "built_at": "2026-02-17 21:06:52 UTC"
   }
 }
