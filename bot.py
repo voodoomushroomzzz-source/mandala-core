@@ -1678,7 +1678,6 @@ async def handle_fructus_upload_file_logic(message: Message, state: FSMContext, 
 async def handle_other_messages(message: Message, state: FSMContext):
     current = await state.get_state()
     
-    # Если есть активное состояние - обрабатываем как раньше
     if current:
         if current == UploadStates.waiting_for_file:
             await message.answer("📎 Ожидаю файл", reply_markup=get_upload_mode_keyboard())
@@ -1692,15 +1691,23 @@ async def handle_other_messages(message: Message, state: FSMContext):
             await message.answer("⚠️ Неизвестное состояние")
         return
     
-    # Если сообщение начинается с / - игнорируем (команды обработаны отдельно)
     if message.text and message.text.startswith('/'):
         return
     
-    # Обычное сообщение - отправляем СР
+    # Отправляем действие "печатает"
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+    
+    # Вызываем СР
     response = await call_sr(str(message.from_user.id), message.text)
+    
     if response:
-        await message.answer(response, parse_mode=ParseMode.HTML)
+        # Убираем клавиатуру, отправляя ReplyKeyboardRemove
+        from aiogram.types import ReplyKeyboardRemove
+        await message.answer(
+            response,
+            parse_mode=ParseMode.HTML,
+            reply_markup=ReplyKeyboardRemove()
+        )
     else:
         await message.answer(
             "😔 СР временно недоступен. Попробуйте позже или воспользуйтесь меню.",
