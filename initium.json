@@ -102,7 +102,8 @@
         "metadata": {
           "vestibulum_added_in": "v7.5.1",
           "vestibulum_freed_in": "v7.5.2"
-        }
+        },
+        "based_on_artifact": "ART-CRYSTAL-001"
       },
       "metadata": {
         "vestibulum_added_in": "v7.5.1"
