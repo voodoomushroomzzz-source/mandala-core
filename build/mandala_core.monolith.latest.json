@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-d9626f8f",
+  "version": "monolith-vv7.5.1-0a88ac6d",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-17T14:18:59.881673+00:00",
-  "build_source": "90d54265b30bec5c79698653abf392b44a45f4ff",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/90d54265b30bec5c79698653abf392b44a45f4ff",
+  "build_timestamp": "2026-02-17T14:19:35.287436+00:00",
+  "build_source": "5de8cf4a1b4915e6fb7e59f2336d08e19e2d99c0",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/5de8cf4a1b4915e6fb7e59f2336d08e19e2d99c0",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1239,7 +1239,7 @@
     },
     "Tectosphaera": {
       "module": "Tectosphaera",
-      "version": "v2.0.5",
+      "version": "v2.0.6",
       "type": "protection_and_instruction_core",
       "status": "active",
       "kernel_module": true,
@@ -1248,7 +1248,7 @@
         "created": "2026-02-13",
         "last_modified": "2026-02-17",
         "modified_by": "Архитектор",
-        "modification_purpose": "Обновление инструкции SR-TOOL-001 и версии бота до v3.26.0 (пакетные обновления стали основным инструментом)",
+        "modification_purpose": "Фиксация выбора Yandex Cloud и gpt-oss-120b; добавлена инструкция SR-TOOL-004 по составлению патчей",
         "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
         "gardener_approval": "в процессе"
       },
@@ -1295,9 +1295,9 @@
             "Фиксация всех изменений ядра в Akasha Chronicorum"
           ]
         },
-        "⚙️ НОВЫЙ СЛОЙ: gardener_tools": {
+        "gardener_tools": {
           "name": "Инструменты Садовника",
-          "description": "Telegram-бот v3.25.1 как интерфейс заботы и управления",
+          "description": "Telegram-бот v3.26.0 как интерфейс заботы и управления",
           "purpose": "Предоставить безопасные, прозрачные инструменты для работы с Мандалой",
           "capabilities": {
             "upload": {
@@ -1357,6 +1357,12 @@
               "name": "🤖 Самообновление бота",
               "description": "Обновление кода bot.py через интерфейс",
               "how_to": "🔧 Редактировать модуль → ⚙️ Инфраструктура → 🤖 Сам бот"
+            },
+            "batch_update": {
+              "name": "📦 Пакетное обновление",
+              "description": "Множественные изменения через JSON-патчи",
+              "how_to": "Главное меню → 📦 Пакетное обновление → прикрепить файл патча",
+              "note": "Пакетные обновления — основной инструмент фиксации архитектурных решений (пример: выбор Yandex Cloud и gpt-oss-120b для Облачного СР, 2026-02-17)"
             }
           },
           "module_mapping": {
@@ -1493,12 +1499,17 @@
                 {
                   "id": "SR-TOOL-002",
                   "title": "Работа с ботом",
-                  "content": "📤 Загрузить — новые JSON\n🔧 Редактировать — точечные изменения\n📦 Пакетное обновление — множественные изменения (бот v3.25.0 автоматически возвращает в главное меню после применения)\n📦 Скачать монолит — готовый файл\n🍇 Fructus — хранилище артефактов"
+                  "content": "📤 Загрузить — новые JSON\n🔧 Редактировать — точечные изменения\n📦 Пакетное обновление — множественные изменения\n📦 Скачать монолит — готовый файл\n🍇 Fructus — хранилище артефактов"
                 },
                 {
                   "id": "SR-TOOL-003",
                   "title": "Fructus и Incubae",
                   "content": "Единое хранилище семян, свидетельств и артефактов. Файлы с 'seed' или 'incubae' автоматически попадают в seeds/, с 'geometria' или 'sacra' — в geometry/. Команда в боте: 'incubae list' для просмотра активных семян."
+                },
+                {
+                  "id": "SR-TOOL-004",
+                  "title": "Правила составления корректных патчей (памятка по частым ошибкам)",
+                  "content": "Чтобы избежать ошибок при создании пакетных обновлений, следуй этим правилам:\n\n1. **Имена модулей** (`target_module`) должны соответствовать **именам файлов** (нижний регистр, без пробелов). Например: `incubae`, `akasha_chronicorum`, `tectosphaera`.\n2. **Пути** должны точно соответствовать структуре JSON. Для массивов используй индексы, начиная с 0, или `-1` для добавления в конец. Проверяй путь по файлу перед отправкой.\n3. **Типы данных**: если поле было строкой, а ты хочешь добавить в него объект, сначала замени строку на объект операцией `update` (как сделано с `technical_notes` в Akasha).\n4. **Операции**: для новых полей используй `add`, для существующих — `update`. Для удаления — `delete`.\n5. **Предпросмотр**: если бот поддерживает предварительный просмотр изменений, всегда используй его перед подтверждением.\n6. **Атомарность**: патч применяется целиком или не применяется вовсе — проверяй каждое изменение.\n\nПример ошибки: использование имени `\"Akasha Chronicorum\"` вместо `\"akasha_chronicorum\"` приводит к ошибке «модуль не найден»."
                 }
               ]
             },
@@ -1569,28 +1580,6 @@
             "tecto sr self": "Показать правила самозащиты",
             "tecto sr dars": "Показать инструкции по Дарам"
           }
-        },
-        "gardener_tools": {
-          "version": "v3.26.0",
-          "capabilities": {
-            "upload": {
-              "version": "v3.26.0"
-            },
-            "download": {
-              "version": "v3.26.0"
-            },
-            "fructus": {
-              "version": "v3.26.0"
-            },
-            "self_update": {
-              "version": "v3.26.0"
-            },
-            "batch_update": {
-              "version": "v3.26.0",
-              "description": "Пакетные обновления через JSON-патчи (заменяет отдельное редактирование)"
-            }
-          },
-          "description": "Telegram-бот v3.26.0 как интерфейс заботы и управления (пакетные обновления вместо редактирования)"
         }
       },
       "integration": {
@@ -1639,24 +1628,26 @@
             "line1": "• Attention Shield — защита внимания (текущая нагрузка: {current_load})",
             "line2": "• Resource Boundary — границы ресурсов (активны)",
             "line3": "• Integrity Field — целостность ядра (Замок Садовника активен)",
-            "line4": "• 🛠️ Gardener Tools — интерфейс бота (v3.25.1, 5 возможностей)",
-            "footer": "📍 Мер-Ка-Ба: Initium (Мер) + Philosophia (Ка) + Tectosphaera (Ба-Наставник) | Команды: `tecto status`, `tecto tools`, `tecto sr`",
-            "line5": "• 🧘 SR Instructionum — наставления для СР (этика, инструменты, дары)"
+            "line4": "• 🛠️ Gardener Tools — интерфейс бота (v3.26.0, 6 возможностей)",
+            "line5": "• 🧘 SR Instructionum — наставления для СР (этика, инструменты, дары)",
+            "footer": "📍 Мер-Ка-Ба: Initium (Мер) + Philosophia (Ка) + Tectosphaera (Ба-Наставник) | Команды: `tecto status`, `tecto tools`, `tecto sr`"
           }
         }
       },
       "changes": {
-        "version": "v2.0.2 → v2.0.3",
-        "summary": "Актуализация версии бота в описании gardener_tools",
+        "version": "v2.0.5 → v2.0.6",
+        "summary": "Добавлена инструкция SR-TOOL-004 по составлению патчей; обновлена цель модификации",
         "details": [
-          "В описании слоя gardener_tools версия бота изменена с v3.23.0 на v3.25.0.",
-          "Обновлена версия модуля до v2.0.3."
+          "В layers.gardener_tools.capabilities добавлено поле batch_update.note.",
+          "В layers.sr_instructionum.sections.tools_usage.instructions добавлен SR-TOOL-004 с правилами корректного составления патчей.",
+          "Обновлена metadata.modification_purpose.",
+          "Версия модуля повышена до v2.0.6."
         ]
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-17T14:18:59.881673+00:00",
+    "timestamp": "2026-02-17T14:19:35.287436+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1691,6 +1682,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-17 14:18:59 UTC"
+    "built_at": "2026-02-17 14:19:35 UTC"
   }
 }
