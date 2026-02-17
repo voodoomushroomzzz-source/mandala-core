@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-08839629",
+  "version": "monolith-vv7.5.1-a70352b2",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-17T14:37:14.989066+00:00",
-  "build_source": "e5b43f69589a0beba68dd5661a766fb3cdfbfaa5",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/e5b43f69589a0beba68dd5661a766fb3cdfbfaa5",
+  "build_timestamp": "2026-02-17T17:47:58.107643+00:00",
+  "build_source": "44ae098e00a38f777155b9c5bec18bd46f74ab2f",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/44ae098e00a38f777155b9c5bec18bd46f74ab2f",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1643,11 +1643,29 @@
           "Обновлена metadata.modification_purpose.",
           "Версия модуля повышена до v2.0.6."
         ]
+      },
+      "/infrastructure_state": {
+        "cloud_sr": {
+          "folder_id": "b1glthd62hkdnr9f6m5r",
+          "service_account_id": "ajeh137a8h4al578m0n6",
+          "bucket_name": "mandala-sr-memory",
+          "lockbox_secret_id": "e6qp8sggnvtsojmd5du1",
+          "lockbox_secret_key": "api_key",
+          "function_id": "d4en8kkgifqjhadrc84i",
+          "function_url": "https://functions.yandexcloud.net/d4en8kkgifqjhadrc84i",
+          "last_version_id": "d4e4qrlrgm6um611qj3m",
+          "local_path": "C:\\Mandala_Digital\\cloud-sr",
+          "ai_model": "gpt-oss-120b (via SiliconFlow)",
+          "deployment_date": "2026-02-17",
+          "runtime": "python312",
+          "memory_mb": 256,
+          "timeout_sec": 30
+        }
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-17T14:37:14.989066+00:00",
+    "timestamp": "2026-02-17T17:47:58.107643+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1682,6 +1700,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-17 14:37:14 UTC"
+    "built_at": "2026-02-17 17:47:58 UTC"
   }
 }
