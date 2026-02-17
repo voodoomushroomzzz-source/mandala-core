@@ -510,7 +510,7 @@
       }
     ]
   },
-  "/version": "v2.3.0",
+  "/version": "v2.6.0",
   "/metadata/last_modified": "2026-02-17",
   "/metadata/modification_purpose": "Фиксация успешного завершения NS-006: перенос ядра в облако, СР загружает Initium и Philosophia из GitHub и отвечает на их основе",
   "/changes/v2": {
@@ -548,6 +548,18 @@
           "Дата первого живого ответа: 2026-02-17."
         ]
       }
+    },
+    "6": {
+      "0": {
+        "version": "v2.5.0 → v2.6.0",
+        "summary": "NS-001 выполнен: добавлена память в Object Storage",
+        "details": [
+          "СР теперь сохраняет историю диалога в бакете mandala-sr-memory.",
+          "Используются статические ключи из Lockbox (секрет s3-keys).",
+          "Нагрузка контекста рассчитывается на основе реальной истории.",
+          "Память работает между сессиями."
+        ]
+      }
     }
   },
   "/layers/gardener_tools/module_mapping/bot_self": "bot.py",
@@ -557,5 +569,9 @@
     "bot_fix": "Исправлен вызов action typing (answer_chat_action → bot.send_chat_action)"
   },
   "/next_steps/steps/1/status": "completed",
-  "/next_steps/steps/1/completed_at": "2026-02-17"
+  "/next_steps/steps/1/completed_at": "2026-02-17",
+  "/infrastructure_state/cloud_sr/features/memory": true,
+  "/infrastructure_state/cloud_sr/last_version_id": "последний_ID_версии",
+  "/next_steps/steps/0/status": "completed",
+  "/next_steps/steps/0/completed_at": "2026-02-17"
 }
