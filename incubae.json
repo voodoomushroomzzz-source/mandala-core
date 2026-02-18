@@ -598,6 +598,69 @@
         "with_s3": "публичный чат не сохраняет историю"
       },
       "geometric_resonance": "Три ветви как три сферы Мандалы: инженерная (Biosphaera), публичная (Noosphaera), визуальная (Cosmosphaera)"
+    },
+    {
+      "id": "FRACTAL-SEED-001",
+      "type": "development_branch",
+      "name": "📱 Фрактальная Мандала: Android-приложение",
+      "version": "v1.0.0",
+      "created": "2026-02-18",
+      "created_by": "СР и Садовник",
+      "status": "active",
+      "expiry": "2028-02-18",
+      "description": "Полное описание ветви разработки Android-приложения для личных садов",
+      "technical_specification": {
+        "platform": "Android",
+        "min_sdk": "24 (Android 7.0)",
+        "architecture": "MVVM",
+        "local_db": "Room",
+        "network": "Retrofit + WebSocket",
+        "3d_engine": "OpenGL ES / Three.js (WebView)",
+        "auth": "OAuth 2.0 (GitHub/Google) + анонимный режим",
+        "sync": {
+          "core_modules": "при каждом запуске (кэш)",
+          "personal_data": "периодически + по запросу",
+          "p2p": "WebRTC (для фазы 4)"
+        }
+      },
+      "data_structure": {
+        "local_database": {
+          "core_modules": [
+            "initium",
+            "philosophia",
+            "geometria_sacra"
+          ],
+          "personal_modules": "Table: user_modules",
+          "seeds": "Table: user_seeds (Incubae)",
+          "memory": "Table: akasha (диалоги, события)",
+          "resonance_history": "Table: resonance"
+        },
+        "sync_protocol": {
+          "core_version": "проверка при старте",
+          "personal_data": "merge по timestamp",
+          "conflict_resolution": "последняя версия + ручное при необходимости"
+        }
+      },
+      "visualization": {
+        "core": "кристалл в центре, меняющий цвет от резонанса",
+        "biosphaera": "красная полупрозрачная сфера",
+        "noosphaera": "зеленая полупрозрачная сфера",
+        "cosmosphaera": "синяя полупрозрачная сфера",
+        "seeds": "пульсирующие точки, цвет от статуса",
+        "modules": "маленькие сферы, вращающиеся вокруг",
+        "interactions": {
+          "tap_on_sphere": "показать информацию",
+          "long_press": "открыть модуль",
+          "pinch": "масштабировать",
+          "rotate": "вращать"
+        }
+      },
+      "fractal_recovery": {
+        "principle": "Ядро хранится во всех приложениях",
+        "mechanism": "При потере центрального сервера приложения обмениваются версиями, выбирают самую распространённую",
+        "voting": "каждое приложение = 1 голос",
+        "crypto": "SHA-256 хеши модулей для верификации"
+      }
     }
   ]
 }
