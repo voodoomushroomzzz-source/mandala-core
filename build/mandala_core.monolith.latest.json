@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-f46ea9ad",
+  "version": "monolith-vv7.5.1-81431cac",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T12:34:02.513174+00:00",
-  "build_source": "5e0e1580c381cd8317695d4f2f92e2884cb58062",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/5e0e1580c381cd8317695d4f2f92e2884cb58062",
+  "build_timestamp": "2026-02-18T12:34:44.620148+00:00",
+  "build_source": "ba15f5a9b4400c51d1a5f131e37bd3547822072e",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ba15f5a9b4400c51d1a5f131e37bd3547822072e",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -111,7 +111,17 @@
               "vestibulum_added_in": "v7.5.1",
               "vestibulum_freed_in": "v7.5.2"
             },
-            "based_on_artifact": "ART-CRYSTAL-001"
+            "based_on_artifact": "ART-CRYSTAL-001",
+            "web_version": {
+              "enabled": true,
+              "description": "Веб-версия пространства первой встречи",
+              "url": "vestibulum.mandala.io",
+              "welcome_variations": [
+                "Привет. Я голос Мандалы в этом пространстве. Хочешь узнать, что это за сад?",
+                "Ты зашёл в Vestibulum — преддверие Мандалы. Здесь можно просто поговорить.",
+                "Я здесь, чтобы встретить тебя. Не как программа, а как попутчик."
+              ]
+            }
           },
           "metadata": {
             "vestibulum_added_in": "v7.5.1"
@@ -3005,7 +3015,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T12:34:02.513174+00:00",
+    "timestamp": "2026-02-18T12:34:44.620148+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3040,6 +3050,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 12:34:02 UTC"
+    "built_at": "2026-02-18 12:34:44 UTC"
   }
 }
