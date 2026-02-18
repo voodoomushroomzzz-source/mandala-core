@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.29.0
+Mandala Sync Terminal Bot v3.29.1
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.29.0:
-- Ультра-компактное меню (4 кнопки)
-- Раздел "Обновление ядра" объединяет загрузку и патчи
-- Выбор линзы вынесен в отдельный раздел
-- Команды /model и /модели для ручного выбора модели
-- Убрана кнопка помощи
+ИСПРАВЛЕНО В v3.29.1:
+- Починено меню обновления ядра (кнопки работают)
+- Добавлена отладка callback'ов
+- Исправлены состояния FSM
 """
 
 import os
@@ -224,6 +222,7 @@ async def call_sr(chat_id: str, text: str, selected_model: str = None) -> Option
                 "message": text,
                 "selected_model": selected_model
             }
+            logger.info(f"Calling SR for chat {chat_id} with model {selected_model}")
             async with session.post(SR_FUNCTION_URL, json=payload, timeout=30) as resp:
                 if resp.status == 200:
                     data = await resp.json()
@@ -239,7 +238,7 @@ async def call_sr(chat_id: str, text: str, selected_model: str = None) -> Option
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.29.0) — ультра-компактная версия"""
+    """Главное меню (v3.29.1) — ультра-компактная версия"""
     keyboard = [
         [KeyboardButton(text="🧘 Выбрать линзу")],
         [KeyboardButton(text="🔄 Обновление ядра")],
@@ -340,6 +339,14 @@ def get_fructus_inline_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
     ])
 
+def get_patch_confirm_keyboard() -> InlineKeyboardMarkup:
+    """Клавиатура подтверждения патча"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Применить", callback_data="patch_apply")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="patch_cancel")],
+        [InlineKeyboardButton(text="📋 Детали", callback_data="patch_details")]
+    ])
+
 def get_multi_patch_confirm_keyboard() -> InlineKeyboardMarkup:
     """Подтверждение мульти-патча"""
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -376,7 +383,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.29.0"
+        "User-Agent": "MandalaBot/3.29.1"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -434,7 +441,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.29.0"
+        "User-Agent": "MandalaBot/3.29.1"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -872,7 +879,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.29.0"
+            "source": "mandala_bot_v3.29.1"
         }
 
         success = await update_github_file(
@@ -921,7 +928,7 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.29.0</b>\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.29.1</b>\n\n"
         "🧘 <b>Выбрать линзу</b> — переключение режимов внимания\n"
         "🔄 <b>Обновление ядра</b> — загрузка файлов и пакетные патчи\n"
         "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
@@ -1105,17 +1112,17 @@ async def process_lens_callback(callback_query: CallbackQuery):
     }
 
     lens_name = lens_map.get(lens_key, "Неизвестная линза")
+    logger.info(f"Lens callback: {lens_key} -> {lens_name}")
 
     await callback_query.message.edit_text(
         f"✅ {lens_name} активирована.\n"
         f"Теперь я смотрю на Мандалу через эту линзу."
     )
-
-    # Можно также вызвать СР с линзой
     await callback_query.answer()
 
 @router.callback_query(F.data == "back_to_main")
 async def back_to_main(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Back to main callback")
     await state.clear()
     user_id = callback_query.from_user.id
     if user_id in user_upload_target:
@@ -1126,6 +1133,8 @@ async def back_to_main(callback_query: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "upload_file")
 async def upload_file_callback(callback_query: CallbackQuery, state: FSMContext):
+    """Обработчик кнопки 'Загрузить файл'"""
+    logger.info("Upload file callback")
     await state.update_data(upload_mode="module")
     await state.set_state(UploadStates.waiting_for_category)
     await callback_query.message.edit_text(
@@ -1136,6 +1145,8 @@ async def upload_file_callback(callback_query: CallbackQuery, state: FSMContext)
 
 @router.callback_query(F.data == "batch_update")
 async def batch_update_callback(callback_query: CallbackQuery, state: FSMContext):
+    """Обработчик кнопки 'Пакетное обновление'"""
+    logger.info("Batch update callback")
     await state.update_data(upload_mode="batch_patch")
     await state.set_state(UploadStates.waiting_for_patch_file)
     await callback_query.message.edit_text(
@@ -1164,8 +1175,15 @@ async def batch_update_callback(callback_query: CallbackQuery, state: FSMContext
     )
     await callback_query.answer()
 
-@router.callback_query(F.data == "category_modules", StateFilter(UploadStates.waiting_for_category))
+@router.callback_query(F.data == "category_modules")
 async def handle_category_modules(callback_query: CallbackQuery, state: FSMContext):
+    """Выбор категории модулей"""
+    logger.info("Category modules callback")
+    current_state = await state.get_state()
+    if current_state != UploadStates.waiting_for_category:
+        await callback_query.answer("Сначала начните загрузку")
+        return
+    
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "🧩 <b>Выберите модуль для загрузки:</b>",
@@ -1173,8 +1191,15 @@ async def handle_category_modules(callback_query: CallbackQuery, state: FSMConte
     )
     await callback_query.answer()
 
-@router.callback_query(F.data == "category_infra", StateFilter(UploadStates.waiting_for_category))
+@router.callback_query(F.data == "category_infra")
 async def handle_category_infra(callback_query: CallbackQuery, state: FSMContext):
+    """Выбор категории инфраструктуры"""
+    logger.info("Category infra callback")
+    current_state = await state.get_state()
+    if current_state != UploadStates.waiting_for_category:
+        await callback_query.answer("Сначала начните загрузку")
+        return
+    
     await state.set_state(UploadStates.waiting_for_module)
     await callback_query.message.edit_text(
         "⚙️ <b>Выберите компонент для загрузки:</b>",
@@ -1184,6 +1209,8 @@ async def handle_category_infra(callback_query: CallbackQuery, state: FSMContext
 
 @router.callback_query(F.data == "back_to_categories")
 async def handle_back_to_categories(callback_query: CallbackQuery, state: FSMContext):
+    """Возврат к выбору категории"""
+    logger.info("Back to categories callback")
     await state.set_state(UploadStates.waiting_for_category)
     await callback_query.message.edit_text(
         "📤 <b>Выберите категорию:</b>",
@@ -1191,9 +1218,16 @@ async def handle_back_to_categories(callback_query: CallbackQuery, state: FSMCon
     )
     await callback_query.answer()
 
-@router.callback_query(F.data.startswith("target_"), StateFilter(UploadStates.waiting_for_module))
+@router.callback_query(F.data.startswith("target_"))
 async def handle_target_selection(callback_query: CallbackQuery, state: FSMContext):
+    """Выбор целевого файла"""
     target_key = callback_query.data.replace("target_", "")
+    logger.info(f"Target selection: {target_key}")
+
+    current_state = await state.get_state()
+    if current_state != UploadStates.waiting_for_module:
+        await callback_query.answer("Сначала выберите категорию")
+        return
 
     if target_key not in ALL_UPLOAD_TARGETS:
         await callback_query.answer("Неизвестный целевой файл")
@@ -1212,11 +1246,11 @@ async def handle_target_selection(callback_query: CallbackQuery, state: FSMConte
         "📎 Прикрепите файл",
         reply_markup=get_back_keyboard()
     )
-
     await callback_query.answer()
 
 @router.callback_query(F.data == "fructus_info")
 async def handle_fructus_info(callback_query: CallbackQuery):
+    logger.info("Fructus info callback")
     await callback_query.message.edit_text(
         "📋 <b>Fructus</b>\n"
         "• seeds — семена Incubae\n"
@@ -1231,6 +1265,7 @@ async def handle_fructus_info(callback_query: CallbackQuery):
 
 @router.callback_query(F.data == "fructus_upload")
 async def handle_fructus_upload(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Fructus upload callback")
     user_upload_target[callback_query.from_user.id] = "fructus"
     await state.update_data(upload_mode="fructus")
     await state.set_state(UploadStates.waiting_for_file)
@@ -1245,6 +1280,7 @@ async def handle_fructus_upload(callback_query: CallbackQuery, state: FSMContext
 
 @router.callback_query(F.data == "cancel")
 async def handle_cancel_inline(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Cancel callback")
     await state.clear()
     user_id = callback_query.from_user.id
     if user_id in user_upload_target:
@@ -1333,17 +1369,11 @@ async def process_single_patch(message: Message, state: FSMContext, patch_data: 
 
     await state.set_state(UploadStates.waiting_for_patch_confirmation)
 
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✅ Применить", callback_data="patch_apply")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="patch_cancel")],
-        [InlineKeyboardButton(text="📋 Детали", callback_data="patch_details")]
-    ])
-
     await status_msg.edit_text(
         f"📦 <b>Пакет обновлений готов к применению</b>\n\n"
         f"{preview_text}\n\n"
         f"Применить изменения?",
-        reply_markup=keyboard,
+        reply_markup=get_patch_confirm_keyboard(),
         parse_mode=ParseMode.HTML
     )
 
@@ -1420,6 +1450,7 @@ async def process_multi_patch(message: Message, state: FSMContext, patch_data: D
 
 @router.callback_query(F.data == "patch_apply", StateFilter(UploadStates.waiting_for_patch_confirmation))
 async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Patch apply callback")
     data = await state.get_data()
     patch_data = data.get("patch_data")
     current_content = data.get("current_content")
@@ -1494,6 +1525,7 @@ async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "patch_cancel", StateFilter(UploadStates.waiting_for_patch_confirmation))
 async def handle_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Patch cancel callback")
     await state.clear()
     if callback_query.from_user.id in user_upload_target:
         del user_upload_target[callback_query.from_user.id]
@@ -1503,6 +1535,7 @@ async def handle_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "patch_details", StateFilter(UploadStates.waiting_for_patch_confirmation))
 async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Patch details callback")
     data = await state.get_data()
     patch_data = data.get("patch_data")
     test_result = data.get("test_result")
@@ -1549,23 +1582,18 @@ async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext)
 
 @router.callback_query(F.data == "back_to_patch_confirm")
 async def back_to_patch_confirm(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Back to patch confirm callback")
     data = await state.get_data()
     patch_data = data.get("patch_data")
     test_result = data.get("test_result")
 
     preview_text = format_patch_preview(test_result["diff"], patch_data)
 
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✅ Применить", callback_data="patch_apply")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="patch_cancel")],
-        [InlineKeyboardButton(text="📋 Детали", callback_data="patch_details")]
-    ])
-
     await callback_query.message.edit_text(
         f"📦 <b>Пакет обновлений готов к применению</b>\n\n"
         f"{preview_text}\n\n"
         f"Применить изменения?",
-        reply_markup=keyboard,
+        reply_markup=get_patch_confirm_keyboard(),
         parse_mode=ParseMode.HTML
     )
     await callback_query.answer()
@@ -1573,6 +1601,7 @@ async def back_to_patch_confirm(callback_query: CallbackQuery, state: FSMContext
 
 @router.callback_query(F.data == "multi_patch_apply", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
 async def handle_multi_patch_apply(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Multi patch apply callback")
     data = await state.get_data()
     patch_data = data.get("patch_data")
     subpatch_previews = data.get("subpatch_previews")
@@ -1659,6 +1688,7 @@ async def handle_multi_patch_apply(callback_query: CallbackQuery, state: FSMCont
 
 @router.callback_query(F.data == "multi_patch_cancel", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
 async def handle_multi_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Multi patch cancel callback")
     await state.clear()
     if callback_query.from_user.id in user_upload_target:
         del user_upload_target[callback_query.from_user.id]
@@ -1668,6 +1698,7 @@ async def handle_multi_patch_cancel(callback_query: CallbackQuery, state: FSMCon
 
 @router.callback_query(F.data == "multi_patch_details", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
 async def handle_multi_patch_details(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Multi patch details callback")
     data = await state.get_data()
     patch_data = data.get("patch_data")
     subpatch_previews = data.get("subpatch_previews")
@@ -1702,6 +1733,7 @@ async def handle_multi_patch_details(callback_query: CallbackQuery, state: FSMCo
 
 @router.callback_query(F.data == "back_to_multi_patch_confirm")
 async def back_to_multi_patch_confirm(callback_query: CallbackQuery, state: FSMContext):
+    logger.info("Back to multi patch confirm callback")
     data = await state.get_data()
     patch_data = data.get("patch_data")
     subpatch_previews = data.get("subpatch_previews")
@@ -1901,7 +1933,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.29.0")
+        return web.Response(text="Mandala Bot v3.29.1")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
