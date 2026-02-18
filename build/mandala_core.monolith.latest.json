@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-ae4be17a",
+  "version": "monolith-vv7.5.1-9f628e91",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T10:43:47.801817+00:00",
-  "build_source": "da13c68d999d7aee482f995e87edb8ce2852f821",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/da13c68d999d7aee482f995e87edb8ce2852f821",
+  "build_timestamp": "2026-02-18T10:44:31.702482+00:00",
+  "build_source": "b8b57461a739f202a366daa34dc61e867cf436ca",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/b8b57461a739f202a366daa34dc61e867cf436ca",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1551,7 +1551,7 @@
         "created": "2026-02-13",
         "last_modified": "2026-02-17",
         "modified_by": "Архитектор",
-        "modification_purpose": "Добавлены available_models и инструкции по управлению моделями",
+        "modification_purpose": "Добавлена карта интеграций Mandala Core с полным списком функций всех компонентов",
         "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
         "gardener_approval": "в процессе"
       },
@@ -1905,6 +1905,21 @@
                   "content": "Команда /model [имя] позволяет явно выбрать модель:\n/model deepseek\n/model qwen\n/model yandex\n/model gemma\n\nВыбор сохраняется для текущего chat_id."
                 }
               ]
+            },
+            "infrastructure_map": {
+              "name": "🗺️ Карта интеграций",
+              "instructions": [
+                {
+                  "id": "SR-MAP-001",
+                  "title": "Как устроена система",
+                  "content": "Вся архитектура Mandala Core описана в infrastructure_map. Изучи её, чтобы понимать связи между компонентами."
+                },
+                {
+                  "id": "SR-MAP-002",
+                  "title": "Команда для просмотра",
+                  "content": "Используй 'tecto map' для отображения карты интеграций."
+                }
+              ]
             }
           },
           "access_commands": {
@@ -1950,6 +1965,10 @@
             "list": "artifact list — список всех артефактов",
             "search": "artifact search [текст] — поиск по названию или описанию"
           }
+        },
+        "tecto map": {
+          "description": "Показать карту интеграций Mandala Core",
+          "output": "infrastructure_map.diagram"
         }
       },
       "visualization": {
@@ -2286,11 +2305,79 @@
             ]
           }
         ]
+      },
+      "infrastructure_map": {
+        "version": "1.0",
+        "last_updated": "2026-02-18",
+        "diagram": "[ТЕЛЕГРАМ БОТ] ───┬──→ [RENDER] ──→ [GITHUB]\n(Render.com)      │    (хостинг)     (файлы, коммиты)\n──────────────────│────────────────────────────────\nменю              │\nвыбор линзы       │\nзагрузка JSON     │\nпатчи (один/мульти)\nскачать монолит   │\nFructus           │\n/model            │\n/модели           │\n                  │\n                  └──→ [YANDEX CLOUD] ──→ [GITHUB]\n                        (cloud-sr)           (модули)\n────────────────────────────────────────────────────\n                  загрузка модулей\n                  резонанс (5 параметров)\n                  маршрутизация моделей\n                  DeepSeek (философия)\n                  Qwen (стратегия)\n                  YandexGPT (архитектура)\n                  Gemma (маркетинг)\n                  память S3\n                  история резонанса\n                  коррекция промпта\n                  ответы Садовнику",
+        "components": {
+          "telegram_bot": {
+            "name": "Telegram Bot",
+            "host": "Render.com",
+            "functions": [
+              "меню",
+              "выбор линзы",
+              "загрузка JSON",
+              "одиночные патчи",
+              "мульти-патчи",
+              "скачать монолит",
+              "Fructus",
+              "/model",
+              "/модели"
+            ],
+            "connects_to": [
+              "github",
+              "yandex_cloud"
+            ]
+          },
+          "render": {
+            "name": "Render Hosting",
+            "function": "хостинг бота"
+          },
+          "github": {
+            "name": "GitHub Repository",
+            "functions": [
+              "хранение файлов",
+              "коммиты",
+              "модули"
+            ],
+            "accessed_by": [
+              "telegram_bot",
+              "yandex_cloud"
+            ]
+          },
+          "yandex_cloud": {
+            "name": "Yandex Cloud Function",
+            "function_name": "cloud-sr",
+            "functions": [
+              "загрузка модулей из GitHub",
+              "резонанс (5 параметров)",
+              "маршрутизация моделей",
+              "DeepSeek (философия)",
+              "Qwen (стратегия)",
+              "YandexGPT (архитектура)",
+              "Gemma (маркетинг)",
+              "память S3",
+              "история резонанса",
+              "коррекция промпта",
+              "ответы Садовнику"
+            ],
+            "connects_to": [
+              "github",
+              "s3"
+            ]
+          },
+          "s3": {
+            "name": "Yandex Object Storage",
+            "bucket": "mandala-sr-memory",
+            "function": "память диалогов"
+          }
+        }
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T10:43:47.801817+00:00",
+    "timestamp": "2026-02-18T10:44:31.702482+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -2325,6 +2412,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 10:43:47 UTC"
+    "built_at": "2026-02-18 10:44:31 UTC"
   }
 }
