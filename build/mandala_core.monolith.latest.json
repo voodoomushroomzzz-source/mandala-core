@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-451f6d5d",
+  "version": "monolith-vv7.5.1-d53dfe37",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T12:04:38.943677+00:00",
-  "build_source": "f2c0bb9232047c924a4b02f8bd7cc442d896f41f",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/f2c0bb9232047c924a4b02f8bd7cc442d896f41f",
+  "build_timestamp": "2026-02-18T12:32:08.238605+00:00",
+  "build_source": "fcfe96b5dbbf24a39c5504faf51b6483aae2ff18",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/fcfe96b5dbbf24a39c5504faf51b6483aae2ff18",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -827,6 +827,90 @@
                     "status": "planned"
                   }
                 ]
+              }
+            },
+            {
+              "type": "roadmap",
+              "id": "COS-008",
+              "title": "🌐 Ветвь развития: СР на сайте",
+              "created": "2026-02-18",
+              "status": "active",
+              "vision": "Создать веб-интерфейс для Мандалы с тремя ключевыми разделами: закрытый инженерный чат, публичный Vestibulum, интерактивная 3D Мандала",
+              "roadmap": {
+                "description": "Три направления развития веб-присутствия Мандалы",
+                "branches": [
+                  {
+                    "id": "WEB-001",
+                    "name": "🔒 Инженерный чат",
+                    "description": "Закрытый чат для разработчиков ядра с прямым доступом к GitHub",
+                    "features": [
+                      "Авторизация через GitHub (только участники репозитория)",
+                      "Постоянное WebSocket-соединение",
+                      "Прямое обновление модулей без скачивания файлов",
+                      "Команды: /update, /patch, /create-module",
+                      "Предпросмотр изменений (diff)",
+                      "Подтверждение перед коммитом",
+                      "История действий в Akasha"
+                    ],
+                    "technical_requirements": [
+                      "Yandex Cloud Function с расширенными правами",
+                      "GitHub API (write access)",
+                      "WebSocket сервер",
+                      "Отдельная инстанция СР (мощная модель)"
+                    ],
+                    "priority": "high",
+                    "status": "planned"
+                  },
+                  {
+                    "id": "WEB-002",
+                    "name": "🌱 Публичный Vestibulum",
+                    "description": "Открытый чат для первого знакомства с философией Мандалы",
+                    "features": [
+                      "Без авторизации",
+                      "Модель: DeepSeek-R1 (философская)",
+                      "Линза: Проводник / Философия",
+                      "Запрет на генерацию кода и JSON",
+                      "Поиск в интернете с фильтром Ахимсы",
+                      "Приветствие из Initium.vestibulum",
+                      "Сессионная память (не сохраняется между визитами)",
+                      "Красивый холст с эмодзи"
+                    ],
+                    "technical_requirements": [
+                      "Та же облачная функция, но с ограничениями",
+                      "Интеграция с поисковым API (DuckDuckGo/Tavily)",
+                      "Фильтр контента по принципам Ахимсы"
+                    ],
+                    "priority": "high",
+                    "status": "planned"
+                  },
+                  {
+                    "id": "WEB-003",
+                    "name": "🌀 3D Мандала",
+                    "description": "Интерактивная визуализация структуры Мандалы",
+                    "features": [
+                      "Три сферы: Biosphaera, Noosphaera, Cosmosphaera",
+                      "Ядро в центре (Initium)",
+                      "Семена Incubae как пульсирующие точки",
+                      "При наведении: название, краткое описание",
+                      "При клике: раскрытие содержимого модуля",
+                      "Вращение мышкой",
+                      "Подсветка по поиску",
+                      "Данные из актуального монолита"
+                    ],
+                    "technical_requirements": [
+                      "Three.js / Babylon.js",
+                      "API для получения данных из монолита",
+                      "Хостинг в Yandex Cloud Object Storage"
+                    ],
+                    "priority": "medium",
+                    "status": "planned"
+                  }
+                ],
+                "integration": {
+                  "with_telegram": "Общий СР, разные интерфейсы",
+                  "with_github": "Прямая запись из инженерного чата",
+                  "with_monolith": "Визуализация из актуальных данных"
+                }
               }
             }
           ]
@@ -2757,7 +2841,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T12:04:38.943677+00:00",
+    "timestamp": "2026-02-18T12:32:08.238605+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -2792,6 +2876,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 12:04:38 UTC"
+    "built_at": "2026-02-18 12:32:08 UTC"
   }
 }
