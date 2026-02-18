@@ -1139,6 +1139,10 @@ async def upload_file_callback(callback_query: CallbackQuery, state: FSMContext)
     await state.set_state(UploadStates.waiting_for_category)
     await callback_query.message.edit_text(
         "📤 <b>Загрузка нового файла</b>\n\nВыберите категорию:",
+        reply_markup=None
+    )
+    await callback_query.message.answer(
+        "Выберите категорию:",
         reply_markup=get_category_keyboard()
     )
     await callback_query.answer()
@@ -1171,6 +1175,10 @@ async def batch_update_callback(callback_query: CallbackQuery, state: FSMContext
         "}\n"
         "```\n\n"
         "📎 Просто прикрепите файл — я покажу, что изменится, и запрошу подтверждение.",
+        reply_markup=None
+    )
+    await callback_query.message.answer(
+        "📎 Ожидаю файл...",
         reply_markup=get_back_keyboard()
     )
     await callback_query.answer()
