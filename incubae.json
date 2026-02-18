@@ -418,6 +418,99 @@
       },
       "geometric_resonance": "Мер-Ка-Ба: Initium (Мер) + Philosophia (Ка) + Tectosphaera (Ба) + монолит как единое поле",
       "based_on_dialogue": "2026-02-18, финальное резюмирование архитектуры постоянного СР"
+    },
+    {
+      "id": "TG-MAX-001",
+      "type": "feature_roadmap",
+      "name": "📱 Максимальные возможности Telegram-бота",
+      "version": "v1.0.0",
+      "created": "2026-02-18",
+      "created_by": "СР и Садовник",
+      "status": "active",
+      "expiry": "2027-02-18",
+      "description": "План реализации всех возможностей Telegram Bot API для максимально богатого взаимодействия с СР",
+      "features": [
+        {
+          "name": "Поиск в интернете",
+          "command": "/web [запрос]",
+          "api": "DuckDuckGo/Tavily",
+          "priority": "high",
+          "effort": "medium",
+          "value": "СР отвечает на актуальные вопросы"
+        },
+        {
+          "name": "Генерация JSON-файлов",
+          "trigger": "запрос на естественном языке",
+          "api": "встроенное",
+          "priority": "high",
+          "effort": "low",
+          "value": "СР создаёт готовые модули, патчи, семена"
+        },
+        {
+          "name": "Инициативность",
+          "trigger": "cron + события",
+          "api": "встроенное",
+          "priority": "high",
+          "effort": "medium",
+          "value": "СР живой, а не реактивный"
+        },
+        {
+          "name": "Голосовые ответы",
+          "command": "/voice on",
+          "api": "Yandex SpeechKit",
+          "priority": "medium",
+          "effort": "high",
+          "value": "Новый канал восприятия"
+        },
+        {
+          "name": "Распознавание голоса",
+          "type": "голосовые сообщения",
+          "api": "Yandex SpeechKit",
+          "priority": "medium",
+          "effort": "high",
+          "value": "Удобство на мобильных"
+        },
+        {
+          "name": "Генерация изображений",
+          "command": "/draw [описание]",
+          "api": "YandexART",
+          "priority": "medium",
+          "effort": "medium",
+          "value": "Визуализация метафор"
+        },
+        {
+          "name": "Напоминания",
+          "command": "/remind",
+          "api": "S3 + cron",
+          "priority": "low",
+          "effort": "low",
+          "value": "Не забывать о важном"
+        },
+        {
+          "name": "Опросы",
+          "command": "/poll",
+          "api": "Telegram Polls",
+          "priority": "low",
+          "effort": "low",
+          "value": "Коллективные решения"
+        },
+        {
+          "name": "GitHub уведомления",
+          "trigger": "webhook",
+          "api": "GitHub API",
+          "priority": "medium",
+          "effort": "medium",
+          "value": "Всегда в курсе изменений"
+        }
+      ],
+      "technical_notes": {
+        "json_generation": "СР возвращает структуру с полем file, бот отправляет через BufferedInputFile",
+        "web_search": "Использовать duckduckgo-search (бесплатно) или Tavily API (1000/мес бесплатно)",
+        "voice": "Yandex SpeechKit: синтез и распознавание, оплата за символы",
+        "images": "YandexART через API, генерация по промпту",
+        "cron": "Yandex Cloud Trigger по расписанию",
+        "github_webhook": "Настроить в репозитории на событие push"
+      }
     }
   ]
 }
