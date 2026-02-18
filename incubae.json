@@ -330,6 +330,27 @@
         "low": "⚠️🔱 0-49%"
       },
       "based_on_dialogue": "2026-02-18, запрос Садовника о реальном резонансе и минималистичном холсте"
+    },
+    {
+      "id": "MODEL-ROUTER-001",
+      "type": "architecture_blueprint",
+      "name": "🤖 Маршрутизатор моделей",
+      "version": "v1.0.0",
+      "created": "2026-02-18",
+      "created_by": "СР и Садовник",
+      "status": "active",
+      "expiry": "2027-02-18",
+      "description": "Система выбора оптимальной модели Yandex Cloud под каждую линзу Мандалы",
+      "core_essence": "Одна функция, много моделей. Линза определяет, какой 'мозг' включить.",
+      "technical_details": {
+        "implementation": "В function.py добавлен словарь AVAILABLE_MODELS и функция route_by_lens()",
+        "models": {
+          "deepseek-r1-32b": "Для глубины и метафор",
+          "qwen3-235b": "Для анализа и стратегии",
+          "yandexgpt-pro": "Для JSON и структуры",
+          "gemma-3-27b": "Для креатива"
+        }
+      }
     }
   ]
 }
