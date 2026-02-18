@@ -9,7 +9,7 @@
     "created": "2026-02-13",
     "last_modified": "2026-02-17",
     "modified_by": "Архитектор",
-    "modification_purpose": "Фиксация выбора Yandex Cloud и gpt-oss-120b; добавлена инструкция SR-TOOL-004 по составлению патчей",
+    "modification_purpose": "Фиксация стратегической дорожной карты эволюции облачного СР (маршрутизация по линзам, поддержка множества моделей)",
     "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
     "gardener_approval": "в процессе"
   },
@@ -573,5 +573,94 @@
   "/infrastructure_state/cloud_sr/features/memory": true,
   "/infrastructure_state/cloud_sr/last_version_id": "последний_ID_версии",
   "/next_steps/steps/0/status": "completed",
-  "/next_steps/steps/0/completed_at": "2026-02-17"
+  "/next_steps/steps/0/completed_at": "2026-02-17",
+  "next_steps": {
+    "description": "План дальнейшего развития облачного СР и интеграции с Мандалой (актуализировано 2026-02-18)",
+    "steps": [
+      {
+        "id": "NS-001",
+        "name": "🌩️ Память в Object Storage",
+        "description": "СР сохраняет историю диалога в бакете mandala-sr-memory. (Выполнено)",
+        "priority": "high",
+        "status": "completed",
+        "completed_at": "2026-02-17"
+      },
+      {
+        "id": "NS-006",
+        "name": "🧠 Перенос ядра (Initium, Philosophia) в облако",
+        "description": "Функция загружает модули из GitHub и строит промпт динамически. (Выполнено)",
+        "priority": "high",
+        "status": "completed",
+        "completed_at": "2026-02-17"
+      },
+      {
+        "id": "NS-007",
+        "name": "📦 Поддержка множества моделей",
+        "description": "Добавление словаря URI для DeepSeek-R1, Qwen3, YandexGPT Pro, Gemma 3.",
+        "priority": "high",
+        "status": "pending",
+        "depends_on": []
+      },
+      {
+        "id": "NS-008",
+        "name": "🧭 Маршрутизация по линзам",
+        "description": "Автоматический выбор модели в зависимости от активной линзы.",
+        "priority": "high",
+        "status": "pending",
+        "depends_on": [
+          "NS-007"
+        ]
+      },
+      {
+        "id": "NS-009",
+        "name": "🤖 Команда /model",
+        "description": "Явный выбор модели через команду в чате.",
+        "priority": "medium",
+        "status": "pending",
+        "depends_on": [
+          "NS-008"
+        ]
+      },
+      {
+        "id": "NS-010",
+        "name": "🔄 Передача монолита из бота",
+        "description": "Оптимизация загрузки контекста через передачу готового монолита.",
+        "priority": "medium",
+        "status": "pending",
+        "depends_on": [
+          "NS-008"
+        ]
+      },
+      {
+        "id": "NS-011",
+        "name": "🌐 Веб-интерфейс",
+        "description": "Создание веб-версии чата для визуализации Мандалы.",
+        "priority": "low",
+        "status": "pending",
+        "depends_on": [
+          "NS-010"
+        ]
+      },
+      {
+        "id": "NS-002",
+        "name": "🤖 Инициативность (cron-триггеры)",
+        "description": "СР сам пишет Садовнику по расписанию.",
+        "priority": "medium",
+        "status": "pending",
+        "depends_on": [
+          "NS-008"
+        ]
+      },
+      {
+        "id": "NS-003",
+        "name": "🧪 Улучшение системного промпта",
+        "description": "Корректировка промпта на основе опыта.",
+        "priority": "medium",
+        "status": "pending",
+        "depends_on": [
+          "NS-008"
+        ]
+      }
+    ]
+  }
 }
