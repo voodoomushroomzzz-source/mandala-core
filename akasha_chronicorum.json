@@ -6,9 +6,9 @@
   "description": "Живая память Mandala Core. Хранилище знаний, идей, решений, экспериментов и резонансных инициатив. Три постоянные сферы, одна транзиентная (Incubae — вынесена в отдельный модуль) и архив (soil).",
   "metadata": {
     "created": "2026-02-07",
-    "modified": "2026-02-18T20:30:00Z",
+    "modified": "2026-02-18T21:00:00Z",
     "modified_by": "Архитектор (по инициативе Садовника)",
-    "modification_purpose": "Фиксация milestone COS-004: обновление облачного СР с реальным резонансом"
+    "modification_purpose": "Фиксация milestone COS-005: маршрутизация по моделям"
   },
   "spheres": {
     "biosphaera": {
@@ -234,6 +234,25 @@
             "commands_used": [
               "Compress-Archive -Path function.py, requirements.txt -DestinationPath function.zip -Force",
               "yc serverless function version create --function-name cloud-sr --runtime python312 --entrypoint function.handler --memory 256m --execution-timeout 30s --service-account-id ajeh137a8h4al578m0n6 --source-path ./function.zip --folder-id b1glthd62hkdnr9f6m5r"
+            ]
+          }
+        },
+        {
+          "type": "milestone",
+          "id": "COS-005",
+          "title": "🤖 Маршрутизация по моделям",
+          "date": "2026-02-18",
+          "description": "Облачный СР теперь выбирает модель в зависимости от линзы",
+          "details": {
+            "mapping": {
+              "Проводник/Философия": "DeepSeek-R1",
+              "Архитектор": "YandexGPT Pro",
+              "Стратег": "Qwen3 235B",
+              "Маркетолог": "Gemma 3"
+            },
+            "new_features": [
+              "Автоматический выбор модели под линзу",
+              "Ручное переключение через /model"
             ]
           }
         }
