@@ -804,6 +804,54 @@
       ],
       "based_on_dialogue": "2026-02-18, проектирование инженерного чата и выбор модели",
       "gardener_approval": "получен в диалоге"
+    },
+    {
+      "id": "INFRA-IDS-001",
+      "type": "infrastructure_seed",
+      "name": "☁️ Yandex Cloud ресурсы для инженерного чата",
+      "version": "v1.0.0",
+      "created": "2026-02-18",
+      "created_by": "Садовник и СР",
+      "status": "active",
+      "expiry": "2027-02-18",
+      "description": "Зафиксированные ID созданных ресурсов в Yandex Cloud для инженерного чата с Kimi K2",
+      "resources": {
+        "service_account": {
+          "id": "ajedi18k6aul693ej1pf",
+          "name": "kimi-engineer-sa",
+          "roles": [
+            "lockbox.payloadViewer",
+            "serverless.functions.invoker"
+          ]
+        },
+        "lockbox_secret": {
+          "id": "e6qmpbr8ascfnpgs4o1r",
+          "name": "kimi-api-key",
+          "description": "API key for Kimi K2 model",
+          "key_name": "api_key"
+        },
+        "folder": {
+          "id": "b1glthd62hkdnr9f6m5r",
+          "name": "default"
+        }
+      },
+      "env_variables_for_function": {
+        "KIMI_SECRET_ID": "e6qmpbr8ascfnpgs4o1r",
+        "FOLDER_ID": "b1glthd62hkdnr9f6m5r"
+      },
+      "commands_for_reference": {
+        "check_service_account": "yc iam service-account get kimi-engineer-sa --format json",
+        "check_secret": "yc lockbox secret get e6qmpbr8ascfnpgs4o1r --format json",
+        "get_secret_payload": "yc lockbox payload get e6qmpbr8ascfnpgs4o1r --format json"
+      },
+      "next_steps": [
+        "Создать папку C:\\Mandala_Digital\\kimi-function",
+        "Создать function.py с кодом WebSocket-обработчика",
+        "Создать requirements.txt с зависимостями",
+        "Задеплоить функцию через yc serverless function version create",
+        "Создать API Gateway для WebSocket"
+      ],
+      "based_on_session": "2026-02-18, развёртывание Фазы 2 инженерного чата"
     }
   ]
 }
