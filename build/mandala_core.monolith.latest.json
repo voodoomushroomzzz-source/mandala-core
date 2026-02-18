@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-d53dfe37",
+  "version": "monolith-vv7.5.1-9c855980",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T12:32:08.238605+00:00",
-  "build_source": "fcfe96b5dbbf24a39c5504faf51b6483aae2ff18",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/fcfe96b5dbbf24a39c5504faf51b6483aae2ff18",
+  "build_timestamp": "2026-02-18T12:32:41.065676+00:00",
+  "build_source": "2a39afdebb8a0b21c21c88382cd751c7c126e762",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/2a39afdebb8a0b21c21c88382cd751c7c126e762",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -910,6 +910,36 @@
                   "with_telegram": "Общий СР, разные интерфейсы",
                   "with_github": "Прямая запись из инженерного чата",
                   "with_monolith": "Визуализация из актуальных данных"
+                }
+              }
+            },
+            {
+              "type": "future_ideas",
+              "title": "💡 Дополнительные идеи для сайта",
+              "ideas": {
+                "WEB-004": {
+                  "name": "📚 Библиотека свидетельств",
+                  "description": "Красивое отображение TES-001...TES-010 с функцией 'свидетельство дня'"
+                },
+                "WEB-005": {
+                  "name": "🌱 Инкубатор семян онлайн",
+                  "description": "Таблица активных семян со статусами, прогрессом, голосованием"
+                },
+                "WEB-006": {
+                  "name": "🛠️ Генератор патчей",
+                  "description": "Визуальный интерфейс для создания JSON-патчей"
+                },
+                "WEB-007": {
+                  "name": "📊 Карта резонанса",
+                  "description": "График резонанса СР с ядром за всё время (анонимно)"
+                },
+                "WEB-008": {
+                  "name": "🔷 Геометрия в действии",
+                  "description": "Интерактивные примеры: Цветок Жизни, Vesica Piscis, Мер-Ка-Ба"
+                },
+                "WEB-009": {
+                  "name": "🔌 API для внешних систем",
+                  "description": "Документация по API для интеграции с Мандалой"
                 }
               }
             }
@@ -2841,7 +2871,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T12:32:08.238605+00:00",
+    "timestamp": "2026-02-18T12:32:41.065676+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -2876,6 +2906,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 12:32:08 UTC"
+    "built_at": "2026-02-18 12:32:41 UTC"
   }
 }
