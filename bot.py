@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.28.0
+Mandala Sync Terminal Bot v3.28.1
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.28.0:
-- Интеграция с СР (облачный агент Yandex GPT)
-- Команда /menu для возврата в главное меню
-- Обычные сообщения пересылаются в СР
+ИСПРАВЛЕНО В v3.28.1:
+- Имена модулей приведены в соответствие с ядром (akasha → akasha_chronicorum)
+- Меню больше не исчезает после ответа СР (убран ReplyKeyboardRemove)
+- Все ключи модулей теперь совпадают с именами в ядре Мандалы
 """
 
 import os
@@ -97,6 +97,7 @@ class UploadStates(StatesGroup):
     waiting_for_multi_patch_confirmation = State()
 
 # ========== ЦЕЛЕВЫЕ ФАЙЛЫ ==========
+# ИСПРАВЛЕНО: ключи модулей приведены в соответствие с именами в ядре
 MANDALA_MODULES = {
     "initium": {
         "name": "🌀 Initium",
@@ -112,7 +113,7 @@ MANDALA_MODULES = {
         "description": "Карта Мандалы",
         "category": "module"
     },
-    "akasha": {
+    "akasha_chronicorum": {  # <-- ИСПРАВЛЕНО: было "akasha", стало "akasha_chronicorum"
         "name": "📜 Akasha Chronicorum",
         "filename": "akasha_chronicorum.json",
         "path": "akasha_chronicorum.json",
@@ -205,7 +206,7 @@ async def call_sr(chat_id: str, text: str) -> Optional[str]:
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.28.0)"""
+    """Главное меню (v3.28.1)"""
     keyboard = [
         [KeyboardButton(text="📤 Загрузить файл")],
         [KeyboardButton(text="📦 Пакетное обновление")],
@@ -243,7 +244,7 @@ def get_modules_keyboard() -> InlineKeyboardMarkup:
             InlineKeyboardButton(text="🌐 Sphaerae", callback_data="target_sphaerae")
         ],
         [
-            InlineKeyboardButton(text="📜 Akasha", callback_data="target_akasha"),
+            InlineKeyboardButton(text="📜 Akasha", callback_data="target_akasha_chronicorum"),  # <-- ИСПРАВЛЕНО
             InlineKeyboardButton(text="💭 Philosophia", callback_data="target_philosophia")
         ],
         [
@@ -318,7 +319,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.28.0"
+        "User-Agent": "MandalaBot/3.28.1"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -376,7 +377,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.28.0"
+        "User-Agent": "MandalaBot/3.28.1"
     }
     
     async with aiohttp.ClientSession() as session:
@@ -814,7 +815,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.28.0"
+            "source": "mandala_bot_v3.28.1"
         }
         
         success = await update_github_file(
@@ -863,14 +864,14 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.28.0</b>\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.28.1</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
         "📦 <b>Пакетное обновление</b> — одиночные или мульти-патчи\n"
         "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
         "🍇 <b>Fructus</b> — хранилище артефактов\n\n"
-        "🤖 <b>Новое в v3.28.0:</b>\n"
-        "• Интеграция с СР (облачный агент)\n"
-        "• Просто пиши сообщения — СР ответит\n"
+        "🤖 <b>Новое в v3.28.1:</b>\n"
+        "• Имена модулей синхронизированы с ядром\n"
+        "• Меню больше не исчезает после ответа СР\n"
         "• Команда /menu — вернуться в меню\n"
         "🌿 Ahimsa-фильтр активен",
         reply_markup=get_main_keyboard()
@@ -969,7 +970,7 @@ async def handle_fructus_menu(message: Message):
 @router.message(F.text == "ℹ️ Помощь")
 async def handle_help(message: Message):
     await message.answer(
-        "📚 <b>Mandala Sync Terminal v3.28.0</b>\n\n"
+        "📚 <b>Mandala Sync Terminal v3.28.1</b>\n\n"
         "📤 <b>Загрузить файл</b> — новый JSON в репозиторий\n"
         "📦 <b>Пакетное обновление</b> — одиночные или мульти-патчи\n"
         "💾 <b>Скачать монолит</b> — mandala_core.monolith.latest.json\n"
@@ -1672,7 +1673,7 @@ async def handle_fructus_upload_file_logic(message: Message, state: FSMContext, 
         await status_msg.edit_text(f"🔶 Ошибка: {result}")
 
 
-# ========== ОБРАБОТЧИК ВСЕХ ОСТАЛЬНЫХ СООБЩЕНИЙ (ТЕПЕРЬ С СР) ==========
+# ========== ОБРАБОТЧИК ВСЕХ ОСТАЛЬНЫХ СООБЩЕНИЙ (ТЕПЕРЬ МЕНЮ ВСЕГДА ВИДНО) ==========
 
 @router.message()
 async def handle_other_messages(message: Message, state: FSMContext):
@@ -1701,12 +1702,11 @@ async def handle_other_messages(message: Message, state: FSMContext):
     response = await call_sr(str(message.from_user.id), message.text)
     
     if response:
-        # Убираем клавиатуру, отправляя ReplyKeyboardRemove
-        from aiogram.types import ReplyKeyboardRemove
+        # ИСПРАВЛЕНО: убрали ReplyKeyboardRemove, меню остаётся видимым
         await message.answer(
             response,
-            parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardRemove()
+            parse_mode=ParseMode.HTML
+            # reply_markup=ReplyKeyboardRemove()  # <-- УДАЛЕНО — меню всегда на месте
         )
     else:
         await message.answer(
@@ -1743,7 +1743,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.28.0")
+        return web.Response(text="Mandala Bot v3.28.1")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
