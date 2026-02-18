@@ -9,7 +9,7 @@
     "created": "2026-02-13",
     "last_modified": "2026-02-17",
     "modified_by": "Архитектор",
-    "modification_purpose": "Добавлены инструкции по деплою облачной функции через Yandex Cloud CLI",
+    "modification_purpose": "Добавлены available_models и инструкции по управлению моделями",
     "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
     "gardener_approval": "в процессе"
   },
@@ -348,6 +348,21 @@
               "content": "- В архиве ДОЛЖНЫ быть только function.py и requirements.txt\n- Никаких тестовых JSON файлов в архиве\n- После деплоя новая версия становится $latest автоматически\n- Для отката можно использовать предыдущую версию через консоль"
             }
           ]
+        },
+        "model_management": {
+          "name": "🤖 Управление моделями",
+          "instructions": [
+            {
+              "id": "SR-MODEL-001",
+              "title": "Как работает маршрутизация",
+              "content": "В зависимости от активной линзы автоматически выбирается модель:\n- Проводник/Философия → DeepSeek-R1\n- Архитектор → YandexGPT Pro\n- Стратег → Qwen3 235B\n- Маркетолог → Gemma 3"
+            },
+            {
+              "id": "SR-MODEL-002",
+              "title": "Ручной выбор модели",
+              "content": "Команда /model [имя] позволяет явно выбрать модель:\n/model deepseek\n/model qwen\n/model yandex\n/model gemma\n\nВыбор сохраняется для текущего chat_id."
+            }
+          ]
         }
       },
       "access_commands": {
@@ -448,6 +463,45 @@
           "Файлы: function.py, requirements.txt в папке проекта"
         ],
         "notes": "Архив должен содержать только function.py и requirements.txt. Никаких JSON или тестовых файлов."
+      },
+      "available_models": {
+        "deepseek-r1-32b": {
+          "name": "DeepSeek-R1 Distill Qwen 32B",
+          "uri": "gpt://{folder_id}/deepseek-r1-distill-qwen-32b",
+          "temperature": 0.65,
+          "lenses": [
+            "п",
+            "ф"
+          ],
+          "description": "Глубокие рассуждения, метафоры, философия"
+        },
+        "qwen3-235b": {
+          "name": "Qwen3 235B",
+          "uri": "gpt://{folder_id}/qwen3-235b-a22b",
+          "temperature": 0.7,
+          "lenses": [
+            "с"
+          ],
+          "description": "Мощный анализ, стратегия, большие контексты"
+        },
+        "yandexgpt-pro": {
+          "name": "YandexGPT Pro",
+          "uri": "gpt://{folder_id}/yandexgpt/latest",
+          "temperature": 0.75,
+          "lenses": [
+            "а"
+          ],
+          "description": "Точность, JSON, structured output"
+        },
+        "gemma-3-27b": {
+          "name": "Gemma 3 27B",
+          "uri": "gpt://{folder_id}/gemma-3-27b-it",
+          "temperature": 0.8,
+          "lenses": [
+            "м"
+          ],
+          "description": "Креатив, маркетинг, внешние коммуникации"
+        }
       }
     }
   },
