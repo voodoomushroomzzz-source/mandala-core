@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-93c630aa",
+  "version": "monolith-vv7.5.1-6d0ab5dc",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T18:31:23.054430+00:00",
-  "build_source": "b6281034312604e9cc46dcb6383fba4ba3b07355",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/b6281034312604e9cc46dcb6383fba4ba3b07355",
+  "build_timestamp": "2026-02-18T19:34:00.700102+00:00",
+  "build_source": "af161eb6d69b347e162c883b3c5b671927f897bd",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/af161eb6d69b347e162c883b3c5b671927f897bd",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -2541,6 +2541,101 @@
             "Создать API Gateway для WebSocket"
           ],
           "based_on_session": "2026-02-18, развёртывание Фазы 2 инженерного чата"
+        },
+        {
+          "id": "ENG-STATUS-001",
+          "type": "status_report",
+          "name": "🔧 Инженерный чат: состояние и следующий шаг",
+          "version": "v1.0.0",
+          "created": "2026-02-18",
+          "created_by": "Садовник и СР",
+          "status": "active",
+          "expiry": "2027-02-18",
+          "description": "Текущее состояние развёртывания инженерного чата и план перехода на OpenRouter",
+          "current_state": {
+            "infrastructure": {
+              "folder_id": "b1glthd62hkdnr9f6m5r",
+              "service_account": {
+                "id": "ajedi18k6aul693ej1pf",
+                "name": "kimi-engineer-sa"
+              },
+              "function": {
+                "id": "d4ec1ljm3mno1tdmhipg",
+                "name": "kimi-engineer",
+                "last_version": "d4ekdre7m1ela3vmi8hi",
+                "status": "ACTIVE"
+              },
+              "api_gateway": {
+                "id": "d5dfq82vupdk3b8tnjkp",
+                "name": "kimi-engineer-ws",
+                "domain": "d5dfq82vupdk3b8tnjkp.y5sm01em.apigw.yandexcloud.net",
+                "status": "ACTIVE"
+              }
+            },
+            "test_results": {
+              "direct_invoke": "504 Gateway Timeout - функция не успевает ответить за 30с",
+              "lockbox_access": "UNAVAILABLE - функция не может подключиться к Lockbox",
+              "kimi_api_access": "предположительно заблокирован из инфраструктуры Yandex Cloud"
+            }
+          },
+          "problem_analysis": {
+            "root_cause": "Kimi API (Moonshot) недоступен из сети Yandex Cloud — таймауты соединения",
+            "lockbox_issue": "gRPC соединение с Lockbox также нестабильно (Socket closed)",
+            "conclusion": "Прямой доступ к Moonshot из облака Yandex невозможен или крайне нестабилен"
+          },
+          "next_step": {
+            "strategy": "Переход на OpenRouter как прокси-слой",
+            "reason": "OpenRouter стабильно работает из РФ, предоставляет доступ к той же модели Kimi K2",
+            "estimated_time": "30-40 минут",
+            "steps": [
+              {
+                "step": 1,
+                "action": "Зарегистрироваться на openrouter.ai (получить бонус $1)",
+                "details": "https://openrouter.ai"
+              },
+              {
+                "step": 2,
+                "action": "Создать API ключ в разделе Keys",
+                "details": "Сохранить ключ (начинается с sk-or-v1-)"
+              },
+              {
+                "step": 3,
+                "action": "Обновить function.py для работы с OpenRouter",
+                "code_snippet": "client = OpenAI(api_key='sk-or-v1-...', base_url='https://openrouter.ai/api/v1', default_headers={'HTTP-Referer': 'https://mandala.io', 'X-Title': 'Mandala Core'})"
+              },
+              {
+                "step": 4,
+                "action": "Изменить model на 'moonshotai/kimi-k2-thinking'",
+                "details": "В вызове chat.completions.create"
+              },
+              {
+                "step": 5,
+                "action": "Передеплоить функцию (без Lockbox, ключ в переменных или прямо в коде для теста)",
+                "command": "yc serverless function version create --function-name kimi-engineer --runtime python312 --entrypoint function.handler --memory 256m --execution-timeout 60s --service-account-id ajedi18k6aul693ej1pf --environment OPENROUTER_KEY=<ключ> --source-path ./function.zip --folder-id b1glthd62hkdnr9f6m5r"
+              },
+              {
+                "step": 6,
+                "action": "Протестировать прямой вызов функции",
+                "test_command": "yc serverless function invoke d4ec1ljm3mno1tdmhipg --folder-id b1glthd62hkdnr9f6m5r -d '{\"requestContext\": {\"eventType\": \"MESSAGE\"}, \"body\": \"{\\\"message\\\":\\\"привет\\\"}\"}'"
+              },
+              {
+                "step": 7,
+                "action": "Проверить WebSocket через HTML-клиент",
+                "url": "wss://d5dfq82vupdk3b8tnjkp.y5sm01em.apigw.yandexcloud.net/"
+              }
+            ],
+            "expected_result": "✅ Функция отвечает, WebSocket работает, Kimi присылает патчи"
+          },
+          "resources_for_next_session": {
+            "openrouter_site": "https://openrouter.ai",
+            "openrouter_docs": "https://openrouter.ai/docs",
+            "model_name": "moonshotai/kimi-k2-thinking",
+            "working_directory": "C:\\Mandala_Digital\\kimi-function-fresh",
+            "function_id": "d4ec1ljm3mno1tdmhipg",
+            "gateway_domain": "d5dfq82vupdk3b8tnjkp.y5sm01em.apigw.yandexcloud.net"
+          },
+          "notes": "Lockbox пока откладываем — разберёмся после того, как заработает основной сценарий через OpenRouter",
+          "based_on_session": "2026-02-18, вечерняя сессия развёртывания инженерного чата"
         }
       ]
     },
@@ -3631,7 +3726,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T18:31:23.054430+00:00",
+    "timestamp": "2026-02-18T19:34:00.700102+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3666,6 +3761,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 18:31:23 UTC"
+    "built_at": "2026-02-18 19:34:00 UTC"
   }
 }
