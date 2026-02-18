@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-cb5e1911",
+  "version": "monolith-vv7.5.1-ae4be17a",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T09:56:00.399460+00:00",
-  "build_source": "54d734f14d1ad56f1be8925523fe5c50fc418470",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/54d734f14d1ad56f1be8925523fe5c50fc418470",
+  "build_timestamp": "2026-02-18T10:43:47.801817+00:00",
+  "build_source": "da13c68d999d7aee482f995e87edb8ce2852f821",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/da13c68d999d7aee482f995e87edb8ce2852f821",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -396,7 +396,7 @@
       "metadata": {
         "modified": "2026-02-16T20:00:00Z",
         "modified_by": "Архитектор",
-        "modification_purpose": "Актуализация под Tectosphaera v2.0.1 (тело+наставления)"
+        "modification_purpose": "Добавлена карта модулей Mandala Core (module_map) с полной структурой и связями"
       },
       "changes": {
         "v2": {
@@ -412,6 +412,76 @@
               ]
             }
           }
+        }
+      },
+      "module_map": {
+        "version": "1.0",
+        "last_updated": "2026-02-18",
+        "diagram": "┌─────────────────────────────────────────────────────────────┐\n│                    МАНДАЛА: 7 МОДУЛЕЙ                       │\n└─────────────────────────────────────────────────────────────┘\n\n┌─────────────────────────────────────────────────────────────────┐\n│                         ЯДРО (kernel_modules)                    │\n├─────────────────────────────────────────────────────────────────┤\n│                                                                   │\n│  ┌───────────────┐    ┌───────────────┐    ┌───────────────┐    │\n│  │   INITIUM     │───▶│  PHILOSOPHIA  │───▶│ GEOMETRIA     │    │\n│  │   (ядро)      │    │  (философия)  │    │   SACRA       │    │\n│  │               │    │               │    │  (геометрия)  │    │\n│  │• конституция  │    │• свидетельства│    │• цветок жизни │    │\n│  │• директивы    │    │• принципы     │    │• мер-ка-ба    │    │\n│  │• линзы        │    │• симбиоз      │    │• резонанс     │    │\n│  └───────────────┘    └───────────────┘    └───────────────┘    │\n│         │                      │                      │          │\n│         └──────────────────────┼──────────────────────┘          │\n│                                ▼                                  │\n│                    ┌───────────────────────┐                     │\n│                    │     SPHAERAE          │                     │\n│                    │   (карта сфер)        │                     │\n│                    │ • Biosphaera          │                     │\n│                    │ • Noosphaera          │                     │\n│                    │ • Cosmosphaera        │                     │\n│                    │ • module_map (новая)  │                     │\n│                    └───────────────────────┘                     │\n│                                │                                  │\n└─────────────────────────────────────────────────────────────────┘\n                                │\n         ┌──────────────────────┼──────────────────────┐\n         ▼                      ▼                      ▼\n┌───────────────┐      ┌───────────────┐      ┌───────────────┐\n│    AKASHA     │      │   INCUBAE     │      │ TECTOSPHAERA  │\n│  CHRONICORUM  │      │   (семена)    │      │  (защита)     │\n│   (память)    │      │               │      │               │\n│               │      │ • активные    │      │ • инструкции  │\n│ • roadmap     │      │   семена      │      │ • инфраструк- │\n│ • артефакты   │      │ • soil (архив)│      │   тура        │\n│ • milestones  │      │               │      │ • команды     │\n└───────────────┘      └───────────────┘      └───────────────┘",
+        "kernel_modules": [
+          "Initium",
+          "Philosophia",
+          "Geometria Sacra",
+          "Sphaerae"
+        ],
+        "periphery_modules": [
+          "Akasha Chronicorum",
+          "Incubae",
+          "Tectosphaera"
+        ],
+        "module_functions": {
+          "Initium": [
+            "конституция",
+            "директивы",
+            "линзы",
+            "unified_entry"
+          ],
+          "Philosophia": [
+            "философия",
+            "принципы",
+            "свидетельства",
+            "мер-ка-ба"
+          ],
+          "Geometria Sacra": [
+            "цветок жизни",
+            "везика писцис",
+            "мер-ка-ба",
+            "резонанс"
+          ],
+          "Sphaerae": [
+            "Biosphaera",
+            "Noosphaera",
+            "Cosmosphaera",
+            "module_map"
+          ],
+          "Akasha Chronicorum": [
+            "roadmap",
+            "артефакты",
+            "milestones",
+            "память"
+          ],
+          "Incubae": [
+            "активные семена",
+            "soil (архив)",
+            "транзиентная сфера"
+          ],
+          "Tectosphaera": [
+            "защита",
+            "инструкции СР",
+            "инфраструктура",
+            "команды"
+          ]
+        },
+        "relationships": {
+          "ядро → карта": "Initium, Philosophia, Geometria Sacra питают Sphaerae",
+          "карта → периферия": "Sphaerae описывает структуру, в которой живут Akasha, Incubae, Tectosphaera",
+          "внешний мир ← Tectosphaera": "через Telegram Bot и Yandex Cloud"
+        }
+      },
+      "commands": {
+        "module_map": {
+          "description": "Показать карту модулей Мандалы",
+          "output": "module_map.diagram"
         }
       }
     },
@@ -2220,7 +2290,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T09:56:00.399460+00:00",
+    "timestamp": "2026-02-18T10:43:47.801817+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -2255,6 +2325,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 09:56:00 UTC"
+    "built_at": "2026-02-18 10:43:47 UTC"
   }
 }
