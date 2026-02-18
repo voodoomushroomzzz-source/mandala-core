@@ -512,6 +512,31 @@
               "content": "Я буду сообщать, когда кто-то обновляет модули Мандалы."
             }
           ]
+        },
+        "web_branch": {
+          "name": "🌐 Ветвь разработки: СР на сайте",
+          "instructions": [
+            {
+              "id": "SR-WEB-001",
+              "title": "Общая архитектура",
+              "content": "СР на сайте — это не замена Telegram, а дополнительный интерфейс. Ядро одно (монолит), интерфейсов много. Три ветви:\n1. 🔒 Инженерный чат — для разработчиков ядра\n2. 🌱 Публичный Vestibulum — для знакомства с философией\n3. 🌀 3D Мандала — для визуального погружения"
+            },
+            {
+              "id": "SR-WEB-002",
+              "title": "Инженерный чат",
+              "content": "Права: запись в GitHub (с подтверждением). Команды:\n- /update module [name] [path] [value]\n- /patch create\n- /create-module [name]\n- /diff\n- /approve\nВсе изменения проходят проверку Ахимсой и требуют подтверждения."
+            },
+            {
+              "id": "SR-WEB-003",
+              "title": "Публичный Vestibulum",
+              "content": "Это лицо Мандалы для внешнего мира. Здесь я:\n- Говорю метафорами\n- Не пишу код\n- Могу искать в интернете (с фильтром Ахимсы)\n- Не запоминаю посетителей между сессиями\n- Использую приветствия из Initium.vestibulum"
+            },
+            {
+              "id": "SR-WEB-004",
+              "title": "3D Мандала",
+              "content": "Визуализация структуры. При наведении на сферу я могу рассказывать о ней. При клике — показывать содержимое модуля. Данные берутся из актуального монолита."
+            }
+          ]
         }
       },
       "access_commands": {
@@ -676,6 +701,28 @@
         "📊 Опросы",
         "🔔 GitHub уведомления"
       ]
+    },
+    "web_branch": {
+      "status": "planned",
+      "components": {
+        "engineering_chat": {
+          "domain": "engineering.mandala.io",
+          "auth": "GitHub OAuth",
+          "tech": "WebSocket + Yandex Cloud Function",
+          "sr_model": "deepseek-r1-70b (максимальная мощность)"
+        },
+        "public_chat": {
+          "domain": "vestibulum.mandala.io",
+          "auth": "none",
+          "tech": "Server-Sent Events + Yandex Cloud Function",
+          "sr_model": "deepseek-r1-32b (философская)"
+        },
+        "visualization": {
+          "domain": "mandala.io",
+          "tech": "Three.js + Yandex Cloud Object Storage",
+          "api": "api.mandala.io"
+        }
+      }
     }
   },
   "/infrastructure_state/cloud_sr": {
