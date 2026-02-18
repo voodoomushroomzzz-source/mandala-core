@@ -691,6 +691,119 @@
       "core_essence": "Хирургия сада: точечные изменения с подтверждением и проверкой Ахимсы",
       "technical_spec": "См. архитектуру выше",
       "based_on_dialogue": "2026-02-18, сессия проектирования инженерного интерфейса"
+    },
+    {
+      "id": "KIMI-ARCH-001",
+      "type": "architecture_blueprint",
+      "name": "🤖 Kimi K2: агент для инженерного чата",
+      "version": "v1.0.0",
+      "created": "2026-02-18",
+      "created_by": "СР и Садовник",
+      "status": "active",
+      "expiry": "2027-02-18",
+      "description": "Архитектура и план внедрения Kimi K2 как основного агента в инженерном чате Mandala Core. Модель специализирована под код, агентные сценарии и tool calling.",
+      "core_essence": "Дёшево, умно, доступно. Kimi даёт 90% качества топ-моделей за 3% их цены.",
+      "selected_model": {
+        "name": "kimi-k2-thinking",
+        "provider": "Moonshot AI",
+        "context_window": "256k токенов",
+        "specialization": [
+          "генерация кода",
+          "JSON-патчи",
+          "tool calling",
+          "агентные сценарии",
+          "математическое рассуждение"
+        ],
+        "features": {
+          "reasoning_content": true,
+          "function_calling": true,
+          "streaming": true
+        }
+      },
+      "pricing": {
+        "input_per_1M": "$0.574",
+        "output_per_1M": "$2.294",
+        "monthly_cost": {
+          "scenario_light": "$2-3 (спокойная разработка)",
+          "scenario_active": "$8-12 (активная работа)",
+          "scenario_intense": "$45-55 (команда/прототипирование)",
+          "comparison_with_claude": "в 30 раз дешевле Claude Opus 4.5"
+        },
+        "currency_rub": "≈ 250–4500 ₽ в зависимости от сценария"
+      },
+      "roadmap": {
+        "description": "5 этапов развёртывания инженерного чата",
+        "total_time": "~21.5 часов (5-6 дней)",
+        "phases": [
+          {
+            "phase": 1,
+            "name": "Получение доступа к Kimi API",
+            "duration": "1.5 часа",
+            "steps": [
+              "Регистрация на platform.moonshot.ai",
+              "Генерация API ключа",
+              "Пополнение баланса ($5-10)",
+              "Тестовый запрос с reasoning_content"
+            ]
+          },
+          {
+            "phase": 2,
+            "name": "Базовая инфраструктура",
+            "duration": "5 часов",
+            "steps": [
+              "Сервисный аккаунт в Yandex Cloud",
+              "Сохранение ключа в Lockbox",
+              "WebSocket-функция (эхо)",
+              "API Gateway с WebSocket",
+              "GitHub OAuth (чтение модулей)"
+            ]
+          },
+          {
+            "phase": 3,
+            "name": "Маршрутизатор и Kimi",
+            "duration": "7 часов",
+            "steps": [
+              "Парсинг команд (/update, /module, /patch)",
+              "Интеграция Kimi API",
+              "Подгрузка модулей из GitHub в контекст",
+              "Потоковая отправка ответов (streaming)"
+            ]
+          },
+          {
+            "phase": 4,
+            "name": "Безопасность и guardrails",
+            "duration": "4 часа",
+            "steps": [
+              "Фильтр Ахимсы (запрещённые паттерны)",
+              "Relevance filter (только инженерия)",
+              "Двухшаговое подтверждение операций",
+              "Rate limiting"
+            ]
+          },
+          {
+            "phase": 5,
+            "name": "Запуск и тестирование",
+            "duration": "4 часа",
+            "steps": [
+              "Простой WebSocket-клиент (HTML)",
+              "Деплой финальной функции",
+              "Интеграция с Telegram-ботом",
+              "Мониторинг и логирование"
+            ]
+          }
+        ]
+      },
+      "architecture_diagram": "🧠 Садовник → 🔒 Инженерный чат (WebSocket) → ☁️ Yandex Cloud Function → 🤖 Kimi K2\n                                                          ↓\n                                                     📦 GitHub API\n                                                          ↓\n                                                     🧬 Монолит Mandala Core",
+      "decision_factors": [
+        "Специализация под агентные задачи (tool calling)",
+        "Превосходство над GPT-4.1 в коде (LiveCodeBench 53.7% vs 44.7%)",
+        "Цена в 30 раз ниже Claude, в 4 раза ниже OpenAI",
+        "Доступность в РФ (Китайская модель, без санкций)",
+        "Открытый код — возможность self-hosting в будущем",
+        "Математическое преимущество (MATH-500 97.4% vs GPT-4.1 92.4%)"
+      ],
+      "based_on_dialogue": "2026-02-18, проектирование инженерного чата и выбор модели",
+      "gardener_approval": "получен в диалоге"
     }
   ]
 }
