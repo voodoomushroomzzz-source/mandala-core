@@ -280,6 +280,67 @@
               ]
             }
           }
+        },
+        {
+          "type": "roadmap",
+          "id": "COS-007",
+          "title": "📱 Дорожная карта: Максимальный Telegram-интерфейс",
+          "created": "2026-02-18",
+          "status": "active",
+          "vision": "Превратить Telegram-бота в полноценный мультимедийный интерфейс для общения с Мандалой",
+          "roadmap": {
+            "milestones": [
+              {
+                "id": "TG-001",
+                "name": "🌐 Поиск в интернете",
+                "description": "СР отвечает на актуальные вопросы через поисковые API",
+                "priority": "high",
+                "status": "planned"
+              },
+              {
+                "id": "TG-002",
+                "name": "📄 Генерация JSON-файлов",
+                "description": "СР создаёт и отправляет JSON-файлы (модули, патчи, семена)",
+                "priority": "high",
+                "status": "planned"
+              },
+              {
+                "id": "TG-003",
+                "name": "🤝 Инициативность",
+                "description": "СР сам начинает диалог при важных событиях",
+                "priority": "high",
+                "status": "planned"
+              },
+              {
+                "id": "TG-004",
+                "name": "🎤 Голосовое общение",
+                "description": "Распознавание и синтез речи через Yandex SpeechKit",
+                "priority": "medium",
+                "status": "planned"
+              },
+              {
+                "id": "TG-005",
+                "name": "🖼️ Генерация изображений",
+                "description": "Визуализация метафор Мандалы через YandexART",
+                "priority": "medium",
+                "status": "planned"
+              },
+              {
+                "id": "TG-006",
+                "name": "📅 Напоминания и календарь",
+                "description": "СР напоминает о важных датах и событиях",
+                "priority": "low",
+                "status": "planned"
+              },
+              {
+                "id": "TG-007",
+                "name": "🔔 GitHub уведомления",
+                "description": "Автоматические оповещения об изменениях в модулях",
+                "priority": "medium",
+                "status": "planned"
+              }
+            ]
+          }
         }
       ]
     },
