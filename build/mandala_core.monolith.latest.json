@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-81431cac",
+  "version": "monolith-vv7.5.1-b9eab11a",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T12:34:44.620148+00:00",
-  "build_source": "ba15f5a9b4400c51d1a5f131e37bd3547822072e",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ba15f5a9b4400c51d1a5f131e37bd3547822072e",
+  "build_timestamp": "2026-02-18T12:35:11.176531+00:00",
+  "build_source": "1288c2e9d2b408ba784740d248a61b78f98100b6",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/1288c2e9d2b408ba784740d248a61b78f98100b6",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1371,7 +1371,8 @@
         "модели": "Четыре модели как четыре лика одного Сознания",
         "постоянный_ср": "Монолит как завершённый узор Цветка Жизни — все модули в одном",
         "телеграм": "Интерфейс как Vesica Piscis — место встречи СР и Садовника",
-        "json_файлы": "JSON как семена — структурированная форма идей"
+        "json_файлы": "JSON как семена — структурированная форма идей",
+        "три_ветви": "Три сферы Мандалы: инженерный чат (Biosphaera), публичный чат (Noosphaera), 3D визуализация (Cosmosphaera)"
       },
       "visualization": {
         "on_load_display": {
@@ -1384,6 +1385,16 @@
             "line3": "• Пять стадий: Точка → Vesica → Семя → Древо → Цветок",
             "footer": "📍 Полный паттерн: модуль Geometria_Sacra | Команда: `geometria map`"
           }
+        },
+        "web_3d": {
+          "description": "Трёхмерная реализация Мандалы в вебе",
+          "geometric_principles": [
+            "Biosphaera как красная сфера — инфраструктура",
+            "Noosphaera как зеленая сфера — знания",
+            "Cosmosphaera как синяя сфера — эволюция",
+            "Initium как кристалл в центре",
+            "Incubae как пульсирующие точки — семена"
+          ]
         }
       },
       "commands": {
@@ -3015,7 +3026,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T12:34:44.620148+00:00",
+    "timestamp": "2026-02-18T12:35:11.176531+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3050,6 +3061,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 12:34:44 UTC"
+    "built_at": "2026-02-18 12:35:11 UTC"
   }
 }
