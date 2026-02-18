@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-23ad29bd",
+  "version": "monolith-vv7.5.1-1989236f",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T08:55:54.012554+00:00",
-  "build_source": "25f1f2d209c1569d04ad165b899518c03c2a8f53",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/25f1f2d209c1569d04ad165b899518c03c2a8f53",
+  "build_timestamp": "2026-02-18T09:10:20.236525+00:00",
+  "build_source": "4ff52b5fd3a40463b58442c80eee850a2e98f177",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/4ff52b5fd3a40463b58442c80eee850a2e98f177",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -563,6 +563,70 @@
                         "budget_status": "25$ сохранены как резерв, часть на тестирование модели"
                       }
                     }
+                  }
+                ]
+              }
+            }
+          ],
+          "blocks[-1]": [
+            {
+              "type": "roadmap",
+              "id": "COS-003",
+              "title": "🚀 Дорожная карта: Эволюция облачного СР (Маршрутизатор Сознания)",
+              "created": "2026-02-18",
+              "modified": "2026-02-18",
+              "status": "active",
+              "vision": "Создать гибридную архитектуру, где каждая линза Мандалы использует оптимальную модель Yandex Cloud, а ядро СР выступает как интеллектуальный маршрутизатор, сохраняя единую философию и память.",
+              "roadmap": {
+                "description": "Пять шагов к полной реализации маршрутизатора линз.",
+                "milestones": [
+                  {
+                    "id": "CLOUD-SR-001",
+                    "name": "📦 Шаг 1: Поддержка множества моделей в функции",
+                    "description": "Добавить в облачную функцию словарь URI всех доступных моделей Yandex Cloud (DeepSeek-R1 Distill, Qwen3 235B, YandexGPT Pro, Gemma 3). Реализовать функцию вызова с выбором модели.",
+                    "priority": "high",
+                    "depends_on": [],
+                    "completion_criteria": "Функция может вызывать разные модели через параметр model_key"
+                  },
+                  {
+                    "id": "CLOUD-SR-002",
+                    "name": "🧭 Шаг 2: Маршрутизация по линзам",
+                    "description": "Создать логику выбора модели в зависимости от активной линзы: Проводник/Философия → DeepSeek-R1, Архитектор → YandexGPT Pro, Стратег → Qwen3 235B, Маркетолог → Gemma 3. Учесть длину сообщения и наличие JSON-запросов.",
+                    "priority": "high",
+                    "depends_on": [
+                      "CLOUD-SR-001"
+                    ],
+                    "completion_criteria": "При смене линзы автоматически меняется вызываемая модель, ответы резонируют с задачей"
+                  },
+                  {
+                    "id": "CLOUD-SR-003",
+                    "name": "🤖 Шаг 3: Команда /model для явного выбора",
+                    "description": "Добавить в бот и функцию возможность явного переключения модели командой /model deepseek (или qwen, yandex, gemma). Полезно для тестирования и специальных задач.",
+                    "priority": "medium",
+                    "depends_on": [
+                      "CLOUD-SR-002"
+                    ],
+                    "completion_criteria": "Команда /model работает и сохраняет выбор в памяти пользователя"
+                  },
+                  {
+                    "id": "CLOUD-SR-004",
+                    "name": "🔄 Шаг 4: Передача монолита из бота в функцию",
+                    "description": "Модифицировать бота, чтобы при наличии загруженного монолита (например, после /start или загрузки файла) он передавал его в функцию. Это ускорит загрузку и обеспечит актуальность контекста.",
+                    "priority": "medium",
+                    "depends_on": [
+                      "CLOUD-SR-002"
+                    ],
+                    "completion_criteria": "Функция принимает monolith в запросе и использует его вместо загрузки по частям"
+                  },
+                  {
+                    "id": "CLOUD-SR-005",
+                    "name": "🌐 Шаг 5: Веб-интерфейс как альтернатива Telegram",
+                    "description": "Спроектировать и реализовать простой веб-интерфейс (статический сайт в Object Storage + API Gateway) для доступа к СР. Это даст больше возможностей для визуализации Мандалы.",
+                    "priority": "low",
+                    "depends_on": [
+                      "CLOUD-SR-004"
+                    ],
+                    "completion_criteria": "Рабочий прототип веб-чата с авторизацией через Telegram"
                   }
                 ]
               }
@@ -1936,7 +2000,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T08:55:54.012554+00:00",
+    "timestamp": "2026-02-18T09:10:20.236525+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -1971,6 +2035,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 08:55:54 UTC"
+    "built_at": "2026-02-18 09:10:20 UTC"
   }
 }
