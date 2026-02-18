@@ -6,9 +6,9 @@
   "description": "Живая память Mandala Core. Хранилище знаний, идей, решений, экспериментов и резонансных инициатив. Три постоянные сферы, одна транзиентная (Incubae — вынесена в отдельный модуль) и архив (soil).",
   "metadata": {
     "created": "2026-02-07",
-    "modified": "2026-02-17T23:30:00Z",
+    "modified": "2026-02-18T20:30:00Z",
     "modified_by": "Архитектор (по инициативе Садовника)",
-    "modification_purpose": "Добавление milestone FUT-SR-CLOUD-005 в дорожную карту COS-002 с фиксацией выбора Yandex Cloud и gpt-oss-120b"
+    "modification_purpose": "Фиксация milestone COS-004: обновление облачного СР с реальным резонансом"
   },
   "spheres": {
     "biosphaera": {
@@ -211,6 +211,29 @@
                 ],
                 "completion_criteria": "Рабочий прототип веб-чата с авторизацией через Telegram"
               }
+            ]
+          }
+        },
+        {
+          "type": "milestone",
+          "id": "COS-004",
+          "title": "✨ Реальный резонанс в облачном СР",
+          "date": "2026-02-18",
+          "description": "Функция cloud-sr обновлена до версии с реальным вычислением резонанса",
+          "details": {
+            "what_changed": [
+              "Добавлен класс ResonanceCalculator для анализа ответов",
+              "Резонанс вычисляется на основе: нарушений, метафор, принципов, инициативности, контекста",
+              "Минималистичный холст: только 🔱 с процентом",
+              "История резонанса сохраняется в памяти S3",
+              "При падении резонанса в промпт добавляется напоминание"
+            ],
+            "files_updated": [
+              "function.py"
+            ],
+            "commands_used": [
+              "Compress-Archive -Path function.py, requirements.txt -DestinationPath function.zip -Force",
+              "yc serverless function version create --function-name cloud-sr --runtime python312 --entrypoint function.handler --memory 256m --execution-timeout 30s --service-account-id ajeh137a8h4al578m0n6 --source-path ./function.zip --folder-id b1glthd62hkdnr9f6m5r"
             ]
           }
         }
