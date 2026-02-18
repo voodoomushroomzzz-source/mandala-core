@@ -9,7 +9,7 @@
     "created": "2026-02-13",
     "last_modified": "2026-02-17",
     "modified_by": "Архитектор",
-    "modification_purpose": "Фиксация стратегической дорожной карты эволюции облачного СР (маршрутизация по линзам, поддержка множества моделей)",
+    "modification_purpose": "Добавлены инструкции по деплою облачной функции через Yandex Cloud CLI",
     "resonance_with_geometria": "Ба — тело в Мер-Ка-Ба, теперь ещё и наставник",
     "gardener_approval": "в процессе"
   },
@@ -333,6 +333,21 @@
               "content": "Формат: `artifact get ART-CRYSTAL-001`. Ответ: полное описание из реестра. Команда работает в любом режиме."
             }
           ]
+        },
+        "infrastructure": {
+          "name": "☁️ Работа с облачной инфраструктурой",
+          "instructions": [
+            {
+              "id": "SR-INFRA-001",
+              "title": "Обновление облачной функции",
+              "content": "Для обновления функции cloud-sr используй команды:\n\n1. Создать архив:\n```powershell\nCompress-Archive -Path function.py, requirements.txt -DestinationPath function.zip -Force\n```\n\n2. Загрузить новую версию:\n```powershell\nyc serverless function version create --function-name cloud-sr --runtime python312 --entrypoint function.handler --memory 256m --execution-timeout 30s --service-account-id ajeh137a8h4al578m0n6 --source-path ./function.zip --folder-id b1glthd62hkdnr9f6m5r\n```\n\n3. Проверить:\n```powershell\nyc serverless function invoke cloud-sr -d '{\"chat_id\": \"test\", \"message\": \"тест\"}'\n```"
+            },
+            {
+              "id": "SR-INFRA-002",
+              "title": "Важные правила",
+              "content": "- В архиве ДОЛЖНЫ быть только function.py и requirements.txt\n- Никаких тестовых JSON файлов в архиве\n- После деплоя новая версия становится $latest автоматически\n- Для отката можно использовать предыдущую версию через консоль"
+            }
+          ]
         }
       },
       "access_commands": {
@@ -420,7 +435,20 @@
       "deployment_date": "2026-02-17",
       "runtime": "python312",
       "memory_mb": 256,
-      "timeout_sec": 30
+      "timeout_sec": 30,
+      "deployment_instructions": {
+        "cli_commands": {
+          "create_archive": "Compress-Archive -Path function.py, requirements.txt -DestinationPath function.zip -Force",
+          "deploy_function": "yc serverless function version create --function-name cloud-sr --runtime python312 --entrypoint function.handler --memory 256m --execution-timeout 30s --service-account-id ajeh137a8h4al578m0n6 --source-path ./function.zip --folder-id b1glthd62hkdnr9f6m5r",
+          "test_function": "yc serverless function invoke cloud-sr -d '{\"chat_id\": \"test\", \"message\": \"тест\"}'"
+        },
+        "requirements": [
+          "Yandex Cloud CLI установлен",
+          "Авторизация выполнена (yc init)",
+          "Файлы: function.py, requirements.txt в папке проекта"
+        ],
+        "notes": "Архив должен содержать только function.py и requirements.txt. Никаких JSON или тестовых файлов."
+      }
     }
   },
   "/infrastructure_state/cloud_sr": {
