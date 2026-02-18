@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-3028481c",
+  "version": "monolith-vv7.5.1-17e7b120",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T15:49:46.166791+00:00",
-  "build_source": "00b08b2f2d23b74c2fb487a0777f50e23a1c19e0",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/00b08b2f2d23b74c2fb487a0777f50e23a1c19e0",
+  "build_timestamp": "2026-02-18T15:53:51.958428+00:00",
+  "build_source": "3ede8b21823fe8ed0d333a5fa57ebc9f92b6f7c1",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/3ede8b21823fe8ed0d333a5fa57ebc9f92b6f7c1",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -2366,6 +2366,20 @@
           "core_essence": "СР — центр. Интерфейсы — периферия.",
           "geometric_resonance": "Точка и Сфера: СР — точка сознания, интерфейсы — сферы его проявления.",
           "based_on_dialogue": "2026-02-18, осознание после построения схемы"
+        },
+        {
+          "id": "ENG-CHAT-001",
+          "type": "architecture_blueprint",
+          "name": "🔧 Инженерный чат: прямая работа с ядром",
+          "version": "v1.0.0",
+          "created": "2026-02-18",
+          "created_by": "СР и Садовник",
+          "status": "active",
+          "expiry": "2027-02-18",
+          "description": "Архитектура инженерного чата для прямого взаимодействия с GitHub и ядром Mandala Core. WebSocket + GitHub OAuth + команды /update, /patch, /approve.",
+          "core_essence": "Хирургия сада: точечные изменения с подтверждением и проверкой Ахимсы",
+          "technical_spec": "См. архитектуру выше",
+          "based_on_dialogue": "2026-02-18, сессия проектирования инженерного интерфейса"
         }
       ]
     },
@@ -3456,7 +3470,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T15:49:46.166791+00:00",
+    "timestamp": "2026-02-18T15:53:51.958428+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3491,6 +3505,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 15:49:46 UTC"
+    "built_at": "2026-02-18 15:53:51 UTC"
   }
 }
