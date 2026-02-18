@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-41f5c17c",
+  "version": "monolith-vv7.5.1-93c630aa",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T16:08:46.128497+00:00",
-  "build_source": "559eac1f97070485df146747f999ea6acfc32bc7",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/559eac1f97070485df146747f999ea6acfc32bc7",
+  "build_timestamp": "2026-02-18T18:31:23.054430+00:00",
+  "build_source": "b6281034312604e9cc46dcb6383fba4ba3b07355",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/b6281034312604e9cc46dcb6383fba4ba3b07355",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -2493,6 +2493,54 @@
           ],
           "based_on_dialogue": "2026-02-18, проектирование инженерного чата и выбор модели",
           "gardener_approval": "получен в диалоге"
+        },
+        {
+          "id": "INFRA-IDS-001",
+          "type": "infrastructure_seed",
+          "name": "☁️ Yandex Cloud ресурсы для инженерного чата",
+          "version": "v1.0.0",
+          "created": "2026-02-18",
+          "created_by": "Садовник и СР",
+          "status": "active",
+          "expiry": "2027-02-18",
+          "description": "Зафиксированные ID созданных ресурсов в Yandex Cloud для инженерного чата с Kimi K2",
+          "resources": {
+            "service_account": {
+              "id": "ajedi18k6aul693ej1pf",
+              "name": "kimi-engineer-sa",
+              "roles": [
+                "lockbox.payloadViewer",
+                "serverless.functions.invoker"
+              ]
+            },
+            "lockbox_secret": {
+              "id": "e6qmpbr8ascfnpgs4o1r",
+              "name": "kimi-api-key",
+              "description": "API key for Kimi K2 model",
+              "key_name": "api_key"
+            },
+            "folder": {
+              "id": "b1glthd62hkdnr9f6m5r",
+              "name": "default"
+            }
+          },
+          "env_variables_for_function": {
+            "KIMI_SECRET_ID": "e6qmpbr8ascfnpgs4o1r",
+            "FOLDER_ID": "b1glthd62hkdnr9f6m5r"
+          },
+          "commands_for_reference": {
+            "check_service_account": "yc iam service-account get kimi-engineer-sa --format json",
+            "check_secret": "yc lockbox secret get e6qmpbr8ascfnpgs4o1r --format json",
+            "get_secret_payload": "yc lockbox payload get e6qmpbr8ascfnpgs4o1r --format json"
+          },
+          "next_steps": [
+            "Создать папку C:\\Mandala_Digital\\kimi-function",
+            "Создать function.py с кодом WebSocket-обработчика",
+            "Создать requirements.txt с зависимостями",
+            "Задеплоить функцию через yc serverless function version create",
+            "Создать API Gateway для WebSocket"
+          ],
+          "based_on_session": "2026-02-18, развёртывание Фазы 2 инженерного чата"
         }
       ]
     },
@@ -3583,7 +3631,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T16:08:46.128497+00:00",
+    "timestamp": "2026-02-18T18:31:23.054430+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3618,6 +3666,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 16:08:46 UTC"
+    "built_at": "2026-02-18 18:31:23 UTC"
   }
 }
