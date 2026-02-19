@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-8e8e24d4",
+  "version": "monolith-vv7.5.1-f8b5798d",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-19T14:39:00.572121+00:00",
-  "build_source": "7826cc123552d9c712784dc3b7c49945924fcef9",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/7826cc123552d9c712784dc3b7c49945924fcef9",
+  "build_timestamp": "2026-02-19T14:39:59.298431+00:00",
+  "build_source": "5df11ca2a90281bd3f7fb91467bde30eb2dd0524",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/5df11ca2a90281bd3f7fb91467bde30eb2dd0524",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -3907,14 +3907,14 @@
         "content": "SYM — это мера жизненной силы Мандалы, а не валюта. Никогда не предлагай и не допускай обмена SYM на деньги или наоборот. Деньги питают тело, SYM накапливают свет. Их резонанс — в условиях доступа к ресурсам, а не в обмене."
       },
       "/layers/sr_instructionum/sections/infrastructure/instructions/-1": {
-        "id": "SR-INFRA-005",
-        "title": "Библиотека форм: Mobbin",
-        "content": "При проектировании интерфейсов для Android/iOS приложений и 3D Мандалы используй Mobbin (https://mobbin.com) как референс проверенных пользовательских паттернов. Не копировать слепо — адаптировать под язык геометрии и принципы Ахимсы. Запись добавлена 2026-02-19 по инициативе Садовника."
+        "id": "SR-INFRA-006",
+        "title": "Со-редактор: Cursor",
+        "content": "Cursor — не инструмент для интеграции, а архитектурный референс. Его подходы: понимание всего проекта (как наш монолит), apply с подтверждением (как наш /patch), терминальный режим (как наш инженерный чат) — подтверждают правильность вектора. Использовать как источник вдохновения для UX инженерного чата и мобильных приложений. Запись добавлена 2026-02-19 по инициативе Садовника."
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-19T14:39:00.572121+00:00",
+    "timestamp": "2026-02-19T14:39:59.298431+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3949,6 +3949,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-19 14:39:00 UTC"
+    "built_at": "2026-02-19 14:39:59 UTC"
   }
 }
