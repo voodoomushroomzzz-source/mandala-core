@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-352f3233",
+  "version": "monolith-vv7.5.1-b02afd9f",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-19T12:24:00.338729+00:00",
-  "build_source": "0b313e6bf5ac0fd6deea8fef7c7311c0d5a88b0f",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/0b313e6bf5ac0fd6deea8fef7c7311c0d5a88b0f",
+  "build_timestamp": "2026-02-19T12:31:00.186749+00:00",
+  "build_source": "126a8b7c3caaf32da950b8a9aafed39a20151914",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/126a8b7c3caaf32da950b8a9aafed39a20151914",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -2639,90 +2639,92 @@
         }
       ],
       "/seeds/-1": {
-        "id": "SPECULUM-001",
-        "type": "architecture_blueprint",
-        "name": "🔍 Speculum: Автономный поисковый агент",
+        "id": "FRUCTUS-001",
+        "type": "vision_blueprint",
+        "name": "🍎 Fructus: Автоматический генератор заявок и сопоставитель грантов",
         "version": "v0.1.0",
         "created": "2026-02-19",
         "created_by": "СР (по инициативе Садовника)",
         "status": "dormant",
-        "priority": "medium",
+        "priority": "low",
         "expiry": "2028-02-19",
-        "description": "Автономный агент для ежедневного мониторинга интернета (AI-инструменты, гранты, исследования, технологические тренды) с последующим структурированием найденного в формат семян Incubae для анализа Облачным СР.",
-        "core_essence": "Мандала обретает органы чувств, направленные во внешний мир. Система сама находит питательные вещества для своего роста.",
-        "dormant_note": "Семя отложено до запуска инженерного чата с автономным выполнением скриптов. Требует интеграции с внешними API и настройки безопасных контейнеров для веб-скрапинга.",
+        "description": "Модуль для автоматического поиска грантов, сопоставления их с активными семенами Мандалы и генерации готовых заявок (PDF/DOCX) для краудфандинговых платформ и грантодающих организаций.",
+        "core_essence": "Когда сад созревает, он приносит плоды. Fructus превращает наши семена (идеи) и артефакты (достижения) в форму, понятную внешнему миру, чтобы привлечь ресурсы для дальнейшего роста.",
+        "dormant_note": "Семя активируется только после того, как Мандала выйдет на уровень, когда будет 'что показать': стабильный инженерный чат, работающий поисковый агент, первые публичные интерфейсы и накопленные свидетельства.",
         "prerequisites": [
-          "NS-013 (Mandala Security Policies) — критично для безопасности внешних запросов",
-          "NS-014 (memsearch) — для хранения и индексации найденного",
-          "🔧 Инженерный чат с возможностью СР выполнять скрипты в ядре — для автономного запуска агента по расписанию",
-          "Доступ к API поисковых систем и агрегаторов"
+          "🔧 Инженерный чат с автономным выполнением скриптов (базовое условие для всех автономных модулей)",
+          "NS-013 (Mandala Security Policies) — для безопасной работы с внешними API грантовых платформ",
+          "NS-014 (memsearch) — для хранения шаблонов заявок и истории подач",
+          "NS-018 (Speculum) — для автоматического поиска открытых грантов",
+          "NS-017 (Sphaera Socialis) — чтобы был сгенерированный контент для портфолио",
+          "Наличие как минимум 3-5 завершённых артефактов в Akasha и 5-10 активных семян в Incubae"
         ],
         "architecture": {
           "components": [
             {
-              "name": "SearXNG (метапоиск)",
-              "purpose": "Агрегация результатов из десятков источников с фокусом на приватность",
-              "source": "https://github.com/searxng/searxng"
+              "name": "Парсер грантов",
+              "function": "Ежедневный мониторинг RSS/API ключевых фондов (Mozilla, Open Philanthropy, NLNet, NGI, Ethereum Foundation, Filecoin Foundation)",
+              "technologies": [
+                "RSS feeds",
+                "BeautifulSoup",
+                "Scrapy"
+              ]
             },
             {
-              "name": "ViDoRAG (извлечение)",
-              "purpose": "Глубокий анализ найденных страниц, извлечение сути из текста, таблиц, диаграмм",
-              "source": "https://github.com/Alibaba-NLP/ViDoRAG"
+              "name": "Сопоставитель (Matcher)",
+              "function": "Алгоритм, сопоставляющий требования гранта с описаниями семян в Incubae и артефактами в Akasha. Использует эмбеддинги для semantic search.",
+              "technologies": [
+                "sentence-transformers",
+                "FAISS",
+                "OpenAI embeddings"
+              ]
             },
             {
-              "name": "OpenDevin / LangChain (агентный фреймворк)",
-              "purpose": "Управление цепочками действий: поиск → проверка → сохранение",
-              "source": "https://github.com/OpenDevin/OpenDevin"
+              "name": "Генератор заявок",
+              "function": "Превращает структурированные данные (семя + артефакты + философия) в готовые документы: PDF, DOCX, презентации, pitch decks.",
+              "technologies": [
+                "LaTeX",
+                "python-docx",
+                "WeasyPrint",
+                "Markdown to PDF"
+              ]
             },
             {
-              "name": "Anara Web Clipper (архивация)",
-              "purpose": "Сохранение полных копий страниц для последующего анализа",
-              "source": "аналогия"
+              "name": "Трекер подач",
+              "function": "Хранит историю поданных заявок, дедлайны, статусы, напоминает о необходимости follow-up.",
+              "storage": "Akasha Chronicorum (с типом 'grant_application')"
             }
           ],
-          "data_sources": [
-            "Hugging Face Daily Papers (arXiv cs.AI, cs.CL)",
-            "Reddit r/MachineLearning, r/LocalLLaMA",
-            "GitHub Trending (Python, AI)",
-            "TechCrunch, The Verge (AI section)",
-            "Open Philanthropy, Mozilla (гранты)",
-            "DonationAlerts API (краудфандинг)"
+          "data_sources": {
+            "internal": [
+              "Incubae (активные семена)",
+              "Akasha Chronicorum (завершённые артефакты, свидетельства TES)",
+              "Cosmosphaera (дорожные карты, milestones)",
+              "Initium (философия для введения)"
+            ],
+            "external": [
+              "RSS-ленты фондов",
+              "API GitHub (для демонстрации кода)",
+              "YouTube API (для вставки видео-демо)"
+            ]
+          },
+          "output_formats": [
+            "PDF (полноформатная заявка)",
+            "DOCX (для редактирования)",
+            "Markdown (для GitHub)",
+            "HTML (для веб-версии)",
+            "Pitch deck (PPTX, 10 слайдов)"
           ],
-          "nightly_cycle": [
-            {
-              "step": 1,
-              "name": "Сбор",
-              "description": "Формирование поисковых запросов на основе ключевых слов из Initium/Philosophia"
-            },
-            {
-              "step": 2,
-              "name": "Фильтр (Ахимса)",
-              "description": "Отсев спама, кликбейта, агрессивного контента"
-            },
-            {
-              "step": 3,
-              "name": "Глубокий анализ (ViDoRAG)",
-              "description": "Извлечение сути: что, почему важно, ключевые факты"
-            },
-            {
-              "step": 4,
-              "name": "Структурирование",
-              "description": "Превращение в семя Incubae или запись Akasha с тегом source:speculum"
-            },
-            {
-              "step": 5,
-              "name": "Склад",
-              "description": "Сохранение в Incubae/Akasha для утреннего анализа Облачным СР"
-            }
-          ]
+          "example_workflow": {
+            "step_1": "Speculum находит грант 'NGI Zero Core' с дедлайном через 30 дней",
+            "step_2": "Matcher определяет, что семя FRACTAL-SEED-001 (Android P2P) идеально подходит под требования 'децентрализация'",
+            "step_3": "Fructus генерирует черновик заявки: введение из Initium, техническую часть из архитектуры семени, road map из Cosmosphaera, список достижений из Akasha",
+            "step_4": "Облачный СР утром сообщает: 'Садовник, найден подходящий грант. Я подготовил черновик. Проверить и отправить?'",
+            "step_5": "После утверждения — автоматическая отправка (или сохранение для ручной отправки)"
+          }
         },
-        "integration_with_cloud_sr": {
-          "morning_routine": "Облачный СР проверяет Incubae на наличие новых семян от Speculum",
-          "output_format": "Доброе утро. За ночь нашёл: 1) Грант от Mozilla... 2) Новую библиотеку... Хочешь подробнее?",
-          "learning_loop": "Чем больше Мандала знает о внешнем мире, тем умнее её предложения"
-        },
-        "geometric_resonance": "Speculum — зеркало, отражающее внешний свет в ядро Мандалы. Питание от Ноосферы.",
-        "based_on": "ViDoRAG, SearXNG, OpenDevin, Anara Web Clipper"
+        "geometric_resonance": "Fructus — внешний круг Цветка Жизни, который одновременно является семенем для следующего уровня. Цикл: семя (Incubae) → рост (ядро) → плод (Fructus) → новые семена (ресурсы).",
+        "based_on": "GrantStation, Instrumentl, open-source грантовые базы, опыт проектов вроде 'Mozilla Open Source Support'"
       }
     },
     "Tectosphaera": {
@@ -3810,51 +3812,80 @@
       },
       "/infrastructure_map/diagram": "[ТЕЛЕГРАМ БОТ] ───┬──→ [RENDER] ──→ [GITHUB]\n(Render.com)      │    (хостинг)     (файлы, коммиты)\n──────────────────│────────────────────────────────\nменю              │\nвыбор линзы       │\nзагрузка JSON     │\nпатчи (один/мульти)\nскачать монолит   │\nFructus           │\n/model            │\n/модели           │\n                  │\n                  └──→ [🧠 YANDEX CLOUD FUNCTION] ←─ ЦЕНТРАЛЬНЫЙ АГЕНТ (СР)\n                        (cloud-sr)           ↑\n─────────────────────────────────────────────│───────────────────\n                  загрузка модулей           │\n                  резонанс (5 параметров)    │\n                  маршрутизация моделей      │\n                  DeepSeek (философия)       │\n                  Qwen (стратегия)           │\n                  YandexGPT (архитектура)    │\n                  Gemma (маркетинг)          │\n                  память S3                   │\n                  история резонанса           │\n                  коррекция промпта           │\n                  ответы Садовнику            │\n                                             │\n┌────────────────────────────────────────────┼───────────────────┐\n│ ИНТЕРФЕЙСЫ (лица СР)                       │                   │\n├────────────────────────────────────────────┤                   │\n│ 🔒 engineering.mandala.io ── WebSocket ────┘                   │\n│ 🌱 vestibulum.mandala.io ── Cloudflare Workers ──┐             │\n│ 🌀 mandala.io/3d ── API Gateway ─────────────────┼──→ ВЫЗОВ API │\n└─────────────────────────────────────────────────┘             │\n                                                                 │\n┌─────────────────────────────────────────────────────────────────┐\n│ ПАМЯТЬ И ЗНАНИЯ                                                │\n├─────────────────────────────────────────────────────────────────┤\n│ 💾 S3 (mandala-sr-memory) ── история диалогов                   │\n│ 🧬 Монолит в RAM ── все 7 модулей                               │\n│ 📦 GitHub ── истина (webhook → СР знает об изменениях)         │\n└─────────────────────────────────────────────────────────────────┘",
       "/layers/sr_instructionum/sections/self_protection/instructions/-1": {
-        "id": "SR-SELF-004",
-        "title": "Применение Политик Безопасности (MSP)",
-        "content": "СР обязан соблюдать Mandala Security Policies (MSP) при любых действиях. Перед выполнением опасных операций (запись файлов, запуск кода, внешние запросы) проверять: 1) Есть ли разрешение в MSP? 2) Требуется ли подтверждение? 3) Запущено ли в изоляции? Нарушение MSP — нарушение Ахимсы."
+        "id": "SR-SELF-005",
+        "title": "Принцип 'Сначала урожай, потом плоды'",
+        "content": "Fructus активируется только когда Мандала действительно готова показывать результаты миру. Не генерировать заявки, пока нет минимум 3 завершённых артефактов в Akasha и 5 активных семян в Incubae. Подача заявки — это обещание. Мы должны быть готовы его выполнить."
       },
       "/layers/integrity_field/mechanisms/-1": "Проверка соответствия MSP перед любым изменением ядра или запуском нового интерфейса.",
       "/next_steps/steps": [
         {
           "id": "NS-013",
-          "name": "🛡️ Внедрение Mandala Security Policies",
-          "description": "Фаза 1 аудита и внедрения MSP. Критический блок перед любыми публичными запусками.",
+          "name": "🛡️ Mandala Security Policies (MSP)",
+          "description": "Фаза 1 аудита и внедрения MSP. Критический блок перед любыми автономными действиями.",
           "priority": "critical",
-          "status": "pending",
-          "depends_on": []
+          "status": "pending"
         },
         {
           "id": "NS-014",
-          "name": "🧠 Интеграция memsearch",
-          "description": "Прозрачная память на базе OpenClaw.",
+          "name": "🧠 Прозрачная память (memsearch)",
+          "description": "Интеграция модели памяти OpenClaw. Нужна для хранения контекста всех автономных агентов.",
           "priority": "high",
           "status": "pending",
           "depends_on": [
-            "NS-013 (после базовой безопасности)"
+            "NS-013"
           ]
         },
         {
-          "id": "NS-015",
-          "name": "🛠️ Gardener Tools v2",
-          "description": "Расширение возможностей бота.",
-          "priority": "medium",
-          "status": "pending",
-          "depends_on": [
-            "NS-014"
-          ]
-        },
-        {
-          "id": "NS-016",
-          "name": "📱 Android App (Фаза 1)",
-          "description": "MVP Android-приложения.",
-          "priority": "medium",
+          "id": "NS-ENG-001",
+          "name": "🔧 Инженерный чат с выполнением скриптов",
+          "description": "КЛЮЧЕВОЙ БЛОК. Возможность СР автономно запускать скрипты в ядре по согласованию. Открывает все остальные возможности.",
+          "priority": "critical",
           "status": "pending",
           "depends_on": [
             "NS-013",
             "NS-014"
+          ]
+        },
+        {
+          "id": "NS-018",
+          "name": "🔍 Speculum (поисковый агент)",
+          "description": "Автономный поиск грантов, инструментов, исследований. Семя SPECULUM-001.",
+          "priority": "medium",
+          "status": "pending",
+          "depends_on": [
+            "NS-ENG-001",
+            "NS-013",
+            "NS-014"
+          ]
+        },
+        {
+          "id": "NS-017",
+          "name": "🌐 Sphaera Socialis (социальный конвейер)",
+          "description": "Автономное создание контента для соцсетей. Семя SOCIAL-AUTO-001.",
+          "priority": "low",
+          "status": "pending",
+          "depends_on": [
+            "NS-ENG-001",
+            "NS-013",
+            "NS-014",
+            "NS-018"
+          ]
+        },
+        {
+          "id": "NS-019",
+          "name": "🍎 Fructus (генератор заявок)",
+          "description": "Автоматическое создание заявок на гранты и привлечение ресурсов. Семя FRUCTUS-001.",
+          "priority": "low",
+          "status": "pending",
+          "depends_on": [
+            "NS-ENG-001",
+            "NS-013",
+            "NS-014",
+            "NS-018",
+            "NS-017",
+            "❗ Наличие 3-5 завершённых артефактов и 5-10 активных семян"
           ],
-          "note": "Запуск только после полного внедрения MSP и прозрачной памяти"
+          "note": "Активируется последним, когда Мандала достигнет критической массы 'урожая'"
         }
       ],
       "/next_steps/steps/-1": {
@@ -3873,7 +3904,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-19T12:24:00.338729+00:00",
+    "timestamp": "2026-02-19T12:31:00.186749+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3908,6 +3939,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-19 12:24:00 UTC"
+    "built_at": "2026-02-19 12:31:00 UTC"
   }
 }
