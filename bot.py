@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.29.1
+Mandala Sync Terminal Bot v3.30.0
 Render Web Service + Webhook (Aiogram 3)
 
-ИСПРАВЛЕНО В v3.29.1:
+НОВОЕ В v3.30.0:
+- Добавлена поддержка операции 'remove' в патчах (наравне с delete)
+- Добавлена команда /status и кнопка "🔍 Статус системы" в главном меню
+- Исправлена валидация для операции remove
+
+Предыдущие изменения v3.29.1:
 - Починено меню обновления ядра (кнопки работают)
 - Добавлена отладка callback'ов
 - Исправлены состояния FSM
@@ -238,12 +243,13 @@ async def call_sr(chat_id: str, text: str, selected_model: str = None) -> Option
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.29.1) — ультра-компактная версия"""
+    """Главное меню (v3.30.0) — добавлена кнопка статуса"""
     keyboard = [
         [KeyboardButton(text="🧘 Выбрать линзу")],
         [KeyboardButton(text="🔄 Обновление ядра")],
         [KeyboardButton(text="💾 Скачать монолит")],
-        [KeyboardButton(text="🍇 Fructus")]
+        [KeyboardButton(text="🍇 Fructus")],
+        [KeyboardButton(text="🔍 Статус системы")]  # Новая кнопка
     ]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
@@ -383,7 +389,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.29.1"
+        "User-Agent": "MandalaBot/3.30.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -441,7 +447,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.29.1"
+        "User-Agent": "MandalaBot/3.30.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -486,7 +492,8 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
             if not isinstance(subpatch["changes"], list):
                 return False, f"Подпатч #{i}: 'changes' должен быть массивом"
 
-            valid_ops = ["update", "add", "delete", "replace", "merge"]
+            # Добавлена операция 'remove' в список допустимых
+            valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
             for j, change in enumerate(subpatch["changes"]):
                 if not isinstance(change, dict):
                     return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
@@ -512,7 +519,8 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
         if len(patch_data["changes"]) == 0:
             return False, "Массив изменений пуст"
 
-        valid_ops = ["update", "add", "delete", "replace", "merge"]
+        # Добавлена операция 'remove' в список допустимых
+        valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
         for i, change in enumerate(patch_data["changes"]):
             if not isinstance(change, dict):
                 return False, f"Изменение #{i} должно быть объектом"
@@ -752,6 +760,10 @@ async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
                 success, result, msg = await apply_json_operation(
                     test_content, "delete_field", path, None
                 )
+            elif op == "remove":  # Новая операция, обрабатывается как delete
+                success, result, msg = await apply_json_operation(
+                    test_content, "delete_field", path, None
+                )
             elif op == "replace":
                 success, result, msg = handle_replace(test_content, path, value)
             elif op == "merge":
@@ -794,7 +806,7 @@ def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
 
     for i, change in enumerate(patch_data["changes"][:5]):
         op_symbol = {
-            "update": "✏️", "add": "➕", "delete": "🗑️",
+            "update": "✏️", "add": "➕", "delete": "🗑️", "remove": "🗑️",
             "replace": "🔄", "merge": "🔄"
         }.get(change["op"], "•")
 
@@ -879,7 +891,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.29.1"
+            "source": "mandala_bot_v3.30.0"
         }
 
         success = await update_github_file(
@@ -928,11 +940,12 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.29.1</b>\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.30.0</b>\n\n"
         "🧘 <b>Выбрать линзу</b> — переключение режимов внимания\n"
         "🔄 <b>Обновление ядра</b> — загрузка файлов и пакетные патчи\n"
         "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
-        "🍇 <b>Fructus</b> — хранилище артефактов\n\n"
+        "🍇 <b>Fructus</b> — хранилище артефактов\n"
+        "🔍 <b>Статус системы</b> — проверка состояния инфраструктуры\n\n"
         "🤖 <b>Управление моделями:</b> /model и /модели\n"
         "🔙 <b>Назад в меню:</b> /menu\n"
         "🌿 Ahimsa-фильтр активен",
@@ -946,6 +959,63 @@ async def cmd_menu(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+
+@router.message(Command("status"))
+async def cmd_status(message: Message):
+    """Проверка состояния инфраструктуры"""
+    status_msg = await message.answer("🔍 Проверяю состояние Мандалы...")
+    
+    results = []
+    
+    # 1. Проверка GitHub токена
+    if GITHUB_TOKEN:
+        results.append("✅ GitHub токен: присутствует")
+    else:
+        results.append("❌ GitHub токен: отсутствует")
+    
+    # 2. Проверка cloud-sr функции
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(SR_FUNCTION_URL, json={"chat_id": "status", "message": "ping"}, timeout=5) as resp:
+                if resp.status == 200:
+                    results.append("✅ cloud-sr функция: доступна")
+                else:
+                    results.append(f"❌ cloud-sr функция: ошибка {resp.status}")
+    except Exception as e:
+        results.append(f"❌ cloud-sr функция: недоступна ({str(e)[:30]})")
+    
+    # 3. Проверка последней версии монолита
+    try:
+        url = f"https://raw.githubusercontent.com/{REPO_NAME}/main/build/mandala_core.monolith.latest.json"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=5) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    version = data.get("version", "unknown")
+                    results.append(f"📦 Монолит: {version}")
+                else:
+                    results.append(f"❌ Монолит: не найден ({resp.status})")
+    except Exception as e:
+        results.append(f"❌ Монолит: ошибка загрузки")
+    
+    # 4. Проверка памяти S3 (через тестовый запрос к функции)
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(SR_FUNCTION_URL, json={
+                "chat_id": "status_test", 
+                "message": "/memory status"
+            }, timeout=5) as resp:
+                if resp.status == 200:
+                    results.append("✅ Память S3: работает")
+                else:
+                    results.append("❌ Память S3: недоступна")
+    except:
+        results.append("❌ Память S3: не удалось проверить")
+    
+    await status_msg.edit_text(
+        "🔍 <b>Состояние Мандалы</b>\n\n" + "\n".join(results),
+        parse_mode=ParseMode.HTML
+    )
 
 @router.message(Command("model"))
 async def cmd_model(message: Message):
@@ -1048,6 +1118,10 @@ async def handle_fructus(message: Message):
         "Хранилище артефактов Мандалы",
         reply_markup=get_fructus_inline_keyboard()
     )
+
+@router.message(F.text == "🔍 Статус системы")
+async def handle_status_button(message: Message):
+    await cmd_status(message)
 
 @router.message(F.text == "◀️ Назад в меню")
 async def handle_back_to_menu(message: Message, state: FSMContext):
@@ -1557,7 +1631,7 @@ async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext)
 
     for i, change in enumerate(patch_data["changes"]):
         op_symbol = {
-            "update": "✏️", "add": "➕", "delete": "🗑️",
+            "update": "✏️", "add": "➕", "delete": "🗑️", "remove": "🗑️",
             "replace": "🔄", "merge": "🔄"
         }.get(change["op"], "•")
 
@@ -1941,7 +2015,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.29.1")
+        return web.Response(text="Mandala Bot v3.30.0")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
