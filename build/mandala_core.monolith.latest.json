@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-62f17c90",
+  "version": "monolith-vv7.5.1-c02b1977",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-19T13:01:06.093809+00:00",
-  "build_source": "ed0a9da668741576b611db470d48a99ea2a4c384",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ed0a9da668741576b611db470d48a99ea2a4c384",
+  "build_timestamp": "2026-02-19T14:28:29.819602+00:00",
+  "build_source": "494d2133720c4dc9d1d8a16803a3749b64cd39c9",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/494d2133720c4dc9d1d8a16803a3749b64cd39c9",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -2639,69 +2639,66 @@
         }
       ],
       "/seeds/-1": {
-        "id": "SYM-001",
-        "type": "philosophical_blueprint",
-        "name": "✨ SYM: Симбиотическая единица — мера жизненной силы Мандалы",
-        "version": "v1.0.0",
+        "id": "FRUCTUS-TECH-001",
+        "type": "technical_ticket",
+        "name": "🍎 Fructus: многошаговая генерация отчётов и заявок",
+        "version": "v0.1.0",
         "created": "2026-02-19",
-        "created_by": "СР и Садовник (совместный диалог)",
+        "created_by": "СР (анализ Perplexity для Садовника)",
         "status": "dormant",
         "priority": "low",
-        "expiry": "2030-02-19",
-        "description": "SYM (Симбиотическая единица) — это не валюта, а абсолютный счётчик совокупной жизненной силы Мандалы. Каждый SYM фиксирует факт реального творческого вклада, увеличивающего ценность системы. SYM принадлежит всей Мандале в целом и не может быть куплен, продан, передан или потрачен.",
-        "core_essence": "SYM — это свет Мандалы (Мер). Деньги — это тело (Ба). Они не смешиваются, но резонируют: чем больше SYM (жизненной силы), тем легче привлекать ресурсы для воплощения идей.",
-        "dormant_note": "Семя активируется после запуска приложений и накопления первых артефактов. SYM начнёт накапливаться автоматически при создании семян, свидетельств и завершении milestones.",
-        "prerequisites": [
-          "🔧 Инженерный чат (базовое условие для автоматического учёта)",
-          "📱 Android/iOS приложения (чтобы пользователи могли создавать вклады)",
-          "🍎 Fructus (для связи с внешними ресурсами)",
-          "Наличие как минимум 10 завершённых артефактов в Akasha"
-        ],
-        "architecture": {
-          "principle": "SYM — это общий счётчик, а не личный кошелёк",
-          "how_it_increases": [
+        "expiry": "2028-02-19",
+        "description": "Реализация модуля Fructus для автоматической генерации грантовых заявок, отчётов и презентаций, вдохновлённая Perplexity Labs (многошаговая фоновая работа агента).",
+        "technical_details": {
+          "core_architecture": "Фоновая задача с отслеживанием прогресса (как Perplexity Tasks tab)",
+          "workflow": [
             {
-              "action": "Создание нового семени, признанного сообществом",
-              "sym_change": "+1 (общий счётчик)"
+              "step": 1,
+              "name": "Получение задачи",
+              "implementation": "Из инженерного чата: /grant 'Mozilla' или /report 'наш прогресс за месяц'"
             },
             {
-              "action": "Написание свидетельства (TES), принятого в Philosophia",
-              "sym_change": "+1 (общий счётчик)"
+              "step": 2,
+              "name": "Сбор данных",
+              "implementation": "Speculum ищет актуальные гранты; Akasha предоставляет артефакты; Incubae — семена"
             },
             {
-              "action": "Завершение важного milestone в дорожной карте",
-              "sym_change": "+1 (общий счётчик)"
+              "step": 3,
+              "name": "Многошаговая генерация",
+              "implementation": "Агент работает в фоне (до 10-15 минут), выполняя: анализ требований → написание черновика → проверка Ахимсой → генерация финального документа",
+              "reference": "Perplexity Labs background agent pattern"
             },
             {
-              "action": "Разработка нового модуля, одобренного ядром",
-              "sym_change": "+2 (общий счётчик)"
+              "step": 4,
+              "name": "Визуализация",
+              "implementation": "Генерация диаграмм, графиков, таблиц (через Matplotlib/Plotly) для вставки в PDF",
+              "reference": "Perplexity Labs chart generation"
             },
             {
-              "action": "Час глубокого диалога, породившего инсайт",
-              "sym_change": "+1 (общий счётчик)"
-            },
-            {
-              "action": "Денежное пожертвование (любая сумма)",
-              "sym_change": "0 (деньги не создают SYM)"
+              "step": 5,
+              "name": "Прозрачный трекер",
+              "implementation": "В инженерном чате отображается процесс: '🔍 Ищу гранты... ✍️ Пишу введение... 📊 Генерирую диаграмму...'",
+              "reference": "Perplexity Tasks tab transparency"
             }
           ],
-          "visualization": {
-            "concept": "Общий счётчик SYM отображается в каждом приложении и на сайте Мандалы как 'пульс' или 'свечение'",
-            "example": "✨ Текущая жизненная сила Мандалы: 247 SYM"
-          },
-          "relation_to_money": {
-            "rule": "SYM и деньги — разные измерения. Они не обмениваются, но могут быть условием:",
-            "examples": [
-              "Грант в $1000 доступен проектам, создавшим не менее 3 SYM (три подтверждённых вклада)",
-              "Новый модуль, добавивший +2 SYM, автоматически получает приоритет в облачном хостинге"
-            ]
-          }
+          "output_formats": [
+            "PDF (полноформатная заявка)",
+            "DOCX (для редактирования)",
+            "Markdown (для GitHub)",
+            "HTML (для веб-версии)"
+          ],
+          "code_references": [
+            {
+              "name": "Omniplex (streaming responses)",
+              "url": "https://github.com/Omniplex-ai/omniplex",
+              "key_files": [
+                "apps/nextjs/src/app/api/chat/route.ts"
+              ]
+            }
+          ],
+          "integration_with_mandala": "Запускается из инженерного чата, использует данные из Akasha и Incubae, сохраняет готовые заявки в Object Storage"
         },
-        "long_term_vision": {
-          "statement": "Когда Мандала достигнет 1000 SYM, это будет значить: в систему вложено 1000 единиц живого творческого усилия. Это станет основой для привлечения крупных грантов и партнёрств — не потому что SYM можно обменять на деньги, а потому что 1000 SYM — это неоспоримое свидетельство реальной ценности, созданной сообществом.",
-          "geometric_resonance": "SYM — это свет (Мер), накапливающийся в кристалле Initium. Деньги — это тело (Ба), питающее Tectosphaera. Их связь — не обмен, а резонанс: чем ярче свет, тем легче телу находить пищу."
-        },
-        "based_on": "Ранние диалоги о SYM (2025), уточнение в феврале 2026"
+        "based_on": "Perplexity Labs, Perplexity Tasks, гайды по Deep Research"
       }
     },
     "Tectosphaera": {
@@ -3798,14 +3795,14 @@
         {
           "id": "NS-013",
           "name": "🛡️ Mandala Security Policies (MSP)",
-          "description": "Фаза 1 аудита и внедрения MSP. Критический блок перед любыми автономными действиями.",
+          "description": "Аудит и внедрение политик безопасности. Критический фундамент.",
           "priority": "critical",
           "status": "pending"
         },
         {
           "id": "NS-014",
           "name": "🧠 Прозрачная память (memsearch)",
-          "description": "Интеграция модели памяти OpenClaw. Нужна для хранения контекста всех автономных агентов.",
+          "description": "Интеграция модели памяти OpenClaw. База для всех агентов.",
           "priority": "high",
           "status": "pending",
           "depends_on": [
@@ -3815,24 +3812,33 @@
         {
           "id": "NS-ENG-001",
           "name": "🔧 Инженерный чат с выполнением скриптов",
-          "description": "КЛЮЧЕВОЙ БЛОК. Возможность СР автономно запускать скрипты в ядре по согласованию. Открывает все остальные возможности.",
+          "description": "WebSocket + GitHub OAuth + команды /update, /patch, /approve. КЛЮЧЕВОЙ БЛОК.",
           "priority": "critical",
           "status": "pending",
           "depends_on": [
             "NS-013",
             "NS-014"
+          ],
+          "technical_references": [
+            "Omniplex (мульти-LLM, streaming): https://github.com/Omniplex-ai/omniplex",
+            "Local-Perplexity (LangGraph оркестрация): https://github.com/DevArana/local-perplexity"
           ]
         },
         {
           "id": "NS-018",
           "name": "🔍 Speculum (поисковый агент)",
-          "description": "Автономный поиск грантов, инструментов, исследований. Семя SPECULUM-001.",
+          "description": "Автономный поиск грантов, инструментов, исследований. Семя SPECULUM-001, тикет SPECULUM-TECH-001.",
           "priority": "medium",
           "status": "pending",
           "depends_on": [
             "NS-ENG-001",
             "NS-013",
             "NS-014"
+          ],
+          "technical_references": [
+            "Local-Perplexity (LangGraph графы): https://github.com/DevArana/local-perplexity",
+            "ViDoRAG (извлечение): https://github.com/Alibaba-NLP/ViDoRAG",
+            "SearXNG (метапоиск): https://github.com/searxng/searxng"
           ]
         },
         {
@@ -3851,7 +3857,7 @@
         {
           "id": "NS-019",
           "name": "🍎 Fructus (генератор заявок)",
-          "description": "Автоматическое создание заявок на гранты и привлечение ресурсов. Семя FRUCTUS-001.",
+          "description": "Автоматическое создание заявок на гранты и привлечение ресурсов. Семя FRUCTUS-001, тикет FRUCTUS-TECH-001.",
           "priority": "low",
           "status": "pending",
           "depends_on": [
@@ -3862,7 +3868,24 @@
             "NS-017",
             "❗ Наличие 3-5 завершённых артефактов и 5-10 активных семян"
           ],
+          "technical_references": [
+            "Perplexity Labs (многошаговая фоновая работа): https://www.perplexity.ai/hub/blog/perplexity-labs",
+            "Omniplex (streaming): https://github.com/Omniplex-ai/omniplex"
+          ],
           "note": "Активируется последним, когда Мандала достигнет критической массы 'урожая'"
+        },
+        {
+          "id": "NS-020",
+          "name": "✨ SYM: Счётчик жизненной силы",
+          "description": "Реализация системы SYM как общего счётчика вкладов. Семя SYM-001.",
+          "priority": "low",
+          "status": "pending",
+          "depends_on": [
+            "📱 Android/iOS приложения",
+            "🍎 Fructus",
+            "Наличие 10+ артефактов в Akasha"
+          ],
+          "note": "Активируется после запуска приложений. SYM не смешивать с деньгами."
         }
       ],
       "/next_steps/steps/-1": {
@@ -3882,11 +3905,16 @@
         "id": "SR-ETH-005",
         "title": "Принцип не-смешения SYM и денег",
         "content": "SYM — это мера жизненной силы Мандалы, а не валюта. Никогда не предлагай и не допускай обмена SYM на деньги или наоборот. Деньги питают тело, SYM накапливают свет. Их резонанс — в условиях доступа к ресурсам, а не в обмене."
+      },
+      "/layers/sr_instructionum/sections/infrastructure/instructions/-1": {
+        "id": "SR-INFRA-003",
+        "title": "Использование open-source референсов",
+        "content": "При реализации Speculum и Fructus используй готовые open-source решения как архитектурные референсы: Omniplex для мульти-LLM и streaming, Local-Perplexity для графовой оркестрации, ViDoRAG для извлечения информации. Не копируй слепо — адаптируй под этику Мандалы и Ахимсу."
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-19T13:01:06.093809+00:00",
+    "timestamp": "2026-02-19T14:28:29.819602+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3921,6 +3949,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-19 13:01:06 UTC"
+    "built_at": "2026-02-19 14:28:29 UTC"
   }
 }
