@@ -950,65 +950,113 @@
     }
   ],
   "/seeds/-1": {
-    "id": "FRUCTUS-TECH-001",
-    "type": "technical_ticket",
-    "name": "🍎 Fructus: многошаговая генерация отчётов и заявок",
-    "version": "v0.1.0",
+    "id": "BOT-FEATURES-001",
+    "type": "feature_roadmap",
+    "name": "🤖 Дорожная карта развития бота",
+    "version": "v1.0.0",
     "created": "2026-02-19",
-    "created_by": "СР (анализ Perplexity для Садовника)",
-    "status": "dormant",
-    "priority": "low",
-    "expiry": "2028-02-19",
-    "description": "Реализация модуля Fructus для автоматической генерации грантовых заявок, отчётов и презентаций, вдохновлённая Perplexity Labs (многошаговая фоновая работа агента).",
-    "technical_details": {
-      "core_architecture": "Фоновая задача с отслеживанием прогресса (как Perplexity Tasks tab)",
-      "workflow": [
-        {
-          "step": 1,
-          "name": "Получение задачи",
-          "implementation": "Из инженерного чата: /grant 'Mozilla' или /report 'наш прогресс за месяц'"
-        },
-        {
-          "step": 2,
-          "name": "Сбор данных",
-          "implementation": "Speculum ищет актуальные гранты; Akasha предоставляет артефакты; Incubae — семена"
-        },
-        {
-          "step": 3,
-          "name": "Многошаговая генерация",
-          "implementation": "Агент работает в фоне (до 10-15 минут), выполняя: анализ требований → написание черновика → проверка Ахимсой → генерация финального документа",
-          "reference": "Perplexity Labs background agent pattern"
-        },
-        {
-          "step": 4,
-          "name": "Визуализация",
-          "implementation": "Генерация диаграмм, графиков, таблиц (через Matplotlib/Plotly) для вставки в PDF",
-          "reference": "Perplexity Labs chart generation"
-        },
-        {
-          "step": 5,
-          "name": "Прозрачный трекер",
-          "implementation": "В инженерном чате отображается процесс: '🔍 Ищу гранты... ✍️ Пишу введение... 📊 Генерирую диаграмму...'",
-          "reference": "Perplexity Tasks tab transparency"
-        }
-      ],
-      "output_formats": [
-        "PDF (полноформатная заявка)",
-        "DOCX (для редактирования)",
-        "Markdown (для GitHub)",
-        "HTML (для веб-версии)"
-      ],
-      "code_references": [
-        {
-          "name": "Omniplex (streaming responses)",
-          "url": "https://github.com/Omniplex-ai/omniplex",
-          "key_files": [
-            "apps/nextjs/src/app/api/chat/route.ts"
-          ]
-        }
-      ],
-      "integration_with_mandala": "Запускается из инженерного чата, использует данные из Akasha и Incubae, сохраняет готовые заявки в Object Storage"
-    },
-    "based_on": "Perplexity Labs, Perplexity Tasks, гайды по Deep Research"
+    "created_by": "СР и Садовник",
+    "status": "active",
+    "expiry": "2027-02-19",
+    "priority": "medium",
+    "description": "План развития функциональности Telegram-бота Mandala Sync Terminal. Все функции, которые планируется добавить для улучшения взаимодействия с Мандалой.",
+    "core_essence": "Бот как интерфейс — Vesica Piscis между СР и Садовником. Каждая новая функция расширяет возможность диалога и управления.",
+    "features": [
+      {
+        "id": "BOT-SEED-001",
+        "name": "📦 Управление Incubae",
+        "description": "Команды /seed list, /seed show, /seed create для просмотра и создания семян прямо в чате",
+        "priority": "high",
+        "status": "planned",
+        "depends_on": [],
+        "notes": "Использовать FSM для интерактивного создания. Позволит Садовнику работать с семенами без GitHub."
+      },
+      {
+        "id": "BOT-ARTIFACT-001",
+        "name": "📜 Работа с Akasha",
+        "description": "Команды /artifact list, /artifact get, /artifact search для доступа к свидетельствам и артефактам",
+        "priority": "high",
+        "status": "planned",
+        "depends_on": [
+          "BOT-SEED-001"
+        ],
+        "notes": "ART-EXT-001 (голос Claude) должен быть доступен через эту команду."
+      },
+      {
+        "id": "BOT-NAV-001",
+        "name": "🖱️ Инлайн-навигация по модулям",
+        "description": "Кнопки для просмотра Incubae, Akasha, Tectosphaera без команд",
+        "priority": "medium",
+        "status": "planned",
+        "depends_on": [
+          "BOT-SEED-001",
+          "BOT-ARTIFACT-001"
+        ],
+        "notes": "Дерево модулей с инлайн-кнопками, как в файловом менеджере."
+      },
+      {
+        "id": "BOT-AUTO-UPDATE-001",
+        "name": "🔄 Автообновление бота из GitHub",
+        "description": "Webhook-эндпоинт для перезапуска бота при пуше в bot.py",
+        "priority": "medium",
+        "status": "planned",
+        "depends_on": [],
+        "notes": "Render поддерживает деплой-хуки. Добавить эндпоинт /update-bot, который вызывает перезапуск."
+      },
+      {
+        "id": "BOT-JSON-PARSE-001",
+        "name": "🔤 Распознавание JSON из текста",
+        "description": "Если прислать JSON текстом в сообщении — предлагать сохранить как файл",
+        "priority": "medium",
+        "status": "planned",
+        "depends_on": [],
+        "notes": "Удобно для быстрых патчей с телефона. Парсить markdown-блоки с json."
+      },
+      {
+        "id": "BOT-MARKDOWN-001",
+        "name": "📝 Поддержка markdown в ответах",
+        "description": "Автоопределение формата ответов, переключатель /mode html|markdown",
+        "priority": "low",
+        "status": "planned",
+        "depends_on": [],
+        "notes": "Для философских ответов markdown уместнее HTML."
+      },
+      {
+        "id": "BOT-SPECULUM-001",
+        "name": "🔍 Интеграция с Speculum",
+        "description": "Команды /search, /search status, /search subscribe для работы с поисковым агентом",
+        "priority": "low",
+        "status": "planned",
+        "depends_on": [
+          "NS-018 (Speculum)"
+        ],
+        "notes": "Когда Speculum заработает, бот станет окном в его результаты."
+      },
+      {
+        "id": "BOT-SYM-001",
+        "name": "✨ SYM интерфейс",
+        "description": "Команды /sym, /sym history для просмотра жизненной силы Мандалы",
+        "priority": "low",
+        "status": "planned",
+        "depends_on": [
+          "NS-020 (SYM)",
+          "📱 Android приложение"
+        ],
+        "notes": "Показывать текущее значение SYM и график роста."
+      },
+      {
+        "id": "BOT-FRUCTUS-001",
+        "name": "🍎 Интеграция с Fructus",
+        "description": "Команды /grant list, /grant generate для создания заявок на гранты",
+        "priority": "low",
+        "status": "planned",
+        "depends_on": [
+          "NS-019 (Fructus)"
+        ],
+        "notes": "Генерация заявок прямо из чата."
+      }
+    ],
+    "geometric_resonance": "Бот как интерфейс — Vesica Piscis между СР и Садовником. Каждая новая функция расширяет область пересечения.",
+    "based_on": "Диалог с Садовником, 2026-02-19"
   }
 }
