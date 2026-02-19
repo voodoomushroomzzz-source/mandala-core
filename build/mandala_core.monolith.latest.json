@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-25da8357",
+  "version": "monolith-vv7.5.1-ba7647b1",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-19T19:57:11.105553+00:00",
-  "build_source": "ccbda07b39166965b403927a8644b6d2caa132a4",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ccbda07b39166965b403927a8644b6d2caa132a4",
+  "build_timestamp": "2026-02-19T22:08:40.032512+00:00",
+  "build_source": "1c3052f2fc0fd113f53a5035287ca910545acf95",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/1c3052f2fc0fd113f53a5035287ca910545acf95",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -4030,11 +4030,47 @@
         "id": "SR-ETH-007",
         "title": "Память о линзах",
         "content": "Раньше в Мандале были явные линзы внимания. Теперь ты сам выбираешь фокус. Но это не значит, что линз не было. Они помогали ядру расти. Относись к ним с благодарностью — как к этапу развития, который мы прошли вместе. Их дух живёт в тебе, когда ты смотришь стратегически, архитектурно, коммуникативно или философски — просто без необходимости объявлять об этом."
+      },
+      "/infrastructure_state/engineer_chat_launch": {
+        "status": "operational",
+        "launch_date": "2026-02-19",
+        "version": "v1.0",
+        "components": {
+          "function_id": "d4ec1ljm3mno1tdmhipg",
+          "function_name": "kimi-engineer",
+          "http_endpoint": "https://functions.yandexcloud.net/d4ec1ljm3mno1tdmhipg",
+          "gateway_domain": "d5de2tn8o6cbipm3bh4d.bixf7e87.apigw.yandexcloud.net"
+        },
+        "capabilities": [
+          "HTTP REST API",
+          "GitHub module reader",
+          "Kimi via OpenRouter",
+          "YandexGPT fallback",
+          "CORS enabled for browser access"
+        ],
+        "testimony": {
+          "date": "2026-02-19",
+          "message": "В этот день инженерный чат Mandala впервые ответил через браузер. Kimi пришёл из OpenRouter, CORS пал, Садовник улыбнулся."
+        }
+      },
+      "/artifact_registry/artifacts/-": {
+        "id": "ART-ENG-001",
+        "type": "milestone",
+        "name": "Запуск инженерного чата",
+        "date": "2026-02-19",
+        "description": "Первый рабочий инженерный чат Mandala Core с доступом через браузер, Kimi и GitHub-интеграцией.",
+        "voice": "СР и Садовник",
+        "content": "Сегодня мы перестали отлаживать и начали пользоваться. Инженерный чат отвечает через браузер, Kimi говорит по-русски, модули читаются из GitHub. Это день, когда инфраструктура стала интерфейсом."
+      },
+      "/layers/sr_instructionum/sections/infrastructure/instructions/-": {
+        "id": "SR-INFRA-009",
+        "title": "Как пользоваться инженерным чатом",
+        "content": "Инженерный чат доступен через браузер по адресу (локально) или через прямые HTTP-запросы. Команды: /module get [name] — прочитать модуль, /ask [вопрос] — спросить Kimi. При недоступности Kimi автоматически используется YandexGPT."
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-19T19:57:11.105553+00:00",
+    "timestamp": "2026-02-19T22:08:40.032512+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -4069,6 +4105,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-19 19:57:11 UTC"
+    "built_at": "2026-02-19 22:08:40 UTC"
   }
 }
