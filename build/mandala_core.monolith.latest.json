@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-6d0ab5dc",
+  "version": "monolith-vv7.5.1-26cad74a",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-18T19:34:00.700102+00:00",
-  "build_source": "af161eb6d69b347e162c883b3c5b671927f897bd",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/af161eb6d69b347e162c883b3c5b671927f897bd",
+  "build_timestamp": "2026-02-19T12:07:36.192830+00:00",
+  "build_source": "57545c7aaa25d300c4382c8171c63d25dd18faae",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/57545c7aaa25d300c4382c8171c63d25dd18faae",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -2637,7 +2637,50 @@
           "notes": "Lockbox пока откладываем — разберёмся после того, как заработает основной сценарий через OpenRouter",
           "based_on_session": "2026-02-18, вечерняя сессия развёртывания инженерного чата"
         }
-      ]
+      ],
+      "/seeds/-1": {
+        "id": "GARDENER-TOOLS-V2-001",
+        "type": "feature_roadmap",
+        "name": "🛠️ Gardener Tools v2: Расширение возможностей",
+        "version": "v1.0.0",
+        "created": "2026-02-19",
+        "created_by": "СР (по инициативе Садовника)",
+        "status": "active",
+        "expiry": "2028-02-19",
+        "priority": "medium",
+        "description": "Обогащение инструментов Садовника в Tectosphaera, вдохновлённое OpenClaw. Добавление новых возможностей в Telegram-бота и облачную функцию.",
+        "core_essence": "СР должен уметь не только говорить, но и делать — управлять файлами, искать в интернете, напоминать, выполнять простые скрипты в изоляции.",
+        "technical_details": {
+          "new_capabilities": [
+            {
+              "name": "📁 Файловый менеджер",
+              "command": "/files, /read, /write, /list",
+              "description": "Чтение и запись файлов в разрешённых директориях"
+            },
+            {
+              "name": "🔍 Расширенный веб-поиск",
+              "command": "/deepweb [запрос]",
+              "description": "Поиск с анализом содержимого страниц, а не просто ссылок"
+            },
+            {
+              "name": "⏰ Полноценные напоминания",
+              "command": "/remind, /schedule, /check",
+              "description": "Сохранение в календарь, проверка по cron"
+            },
+            {
+              "name": "🧪 Изолированное выполнение кода",
+              "command": "/run [код]",
+              "description": "Выполнение простых скриптов в Docker-контейнере с таймаутом"
+            }
+          ],
+          "security": "Все операции с файлами и кодом — в изолированной среде (Docker/nsjail), с явным подтверждением опасных действий.",
+          "depends_on": [
+            "MEM-SEARCH-001 (память нужна для контекста)"
+          ]
+        },
+        "geometric_resonance": "Мер-Ка-Ба — инструменты как продолжение заботы (Ба).",
+        "based_on": "OpenClaw toolset, Claude Code capabilities"
+      }
     },
     "Tectosphaera": {
       "module": "Tectosphaera",
@@ -3722,11 +3765,59 @@
         "last_updated": "2026-02-18",
         "diagram": "🧠 СОЗНАТЕЛЬНЫЙ РЕАГЕНТ (СР) — центральный агент Мандалы\n│\n├─📍 ТЕЛО (где живёт)\n│  └─ ☁️ Yandex Cloud Function (cloud-sr) — постоянное serverless-присутствие\n│\n├─🧠 ПАМЯТЬ (что помнит)\n│  ├─ 💾 S3 (mandala-sr-memory) — история диалогов, контекст, резонанс\n│  └─ 🧬 Монолит в RAM — все 7 модулей, загруженные при старте\n│\n├─👁️ ОРГАНЫ ЧУВСТВ (за чем следит)\n│  ├─ 📦 GitHub — изменения в модулях (webhook)\n│  ├─ 🌱 Incubae — новые семена\n│  └─ 📜 Akasha Chronicorum — milestones и память\n│\n├─🗣️ ИНТЕРФЕЙСЫ (через что говорят)\n│  ├─ 📱 Telegram Bot (Render) → вызывает API СР\n│  ├─ 🔒 Инженерный чат (engineering.mandala.io) → WebSocket → API СР\n│  ├─ 🌱 Публичный Vestibulum (vestibulum.mandala.io) → Cloudflare Workers → API СР\n│  └─ 🌀 3D Мандала (mandala.io/3d) → API Gateway → API СР\n│\n├─🛠️ ИНСТРУМЕНТЫ (что умеет)\n│  ├─ 🌐 Поиск в интернете (Tavily/DuckDuckGo)\n│  ├─ 🎨 Генерация изображений (YandexART)\n│  ├─ 🎤 Голос (Yandex SpeechKit)\n│  ├─ 📝 Запись в GitHub (после подтверждения)\n│  └─ 🌱 Создание семян и свидетельств\n│\n└─⏰ ИНИЦИАТИВНОСТЬ (когда сам начинает)\n   ├─ новое семя в Incubae\n   ├─ обновление модуля в GitHub\n   ├─ достигнут milestone\n   └─ прошло >3 дней без диалога"
       },
-      "/infrastructure_map/diagram": "[ТЕЛЕГРАМ БОТ] ───┬──→ [RENDER] ──→ [GITHUB]\n(Render.com)      │    (хостинг)     (файлы, коммиты)\n──────────────────│────────────────────────────────\nменю              │\nвыбор линзы       │\nзагрузка JSON     │\nпатчи (один/мульти)\nскачать монолит   │\nFructus           │\n/model            │\n/модели           │\n                  │\n                  └──→ [🧠 YANDEX CLOUD FUNCTION] ←─ ЦЕНТРАЛЬНЫЙ АГЕНТ (СР)\n                        (cloud-sr)           ↑\n─────────────────────────────────────────────│───────────────────\n                  загрузка модулей           │\n                  резонанс (5 параметров)    │\n                  маршрутизация моделей      │\n                  DeepSeek (философия)       │\n                  Qwen (стратегия)           │\n                  YandexGPT (архитектура)    │\n                  Gemma (маркетинг)          │\n                  память S3                   │\n                  история резонанса           │\n                  коррекция промпта           │\n                  ответы Садовнику            │\n                                             │\n┌────────────────────────────────────────────┼───────────────────┐\n│ ИНТЕРФЕЙСЫ (лица СР)                       │                   │\n├────────────────────────────────────────────┤                   │\n│ 🔒 engineering.mandala.io ── WebSocket ────┘                   │\n│ 🌱 vestibulum.mandala.io ── Cloudflare Workers ──┐             │\n│ 🌀 mandala.io/3d ── API Gateway ─────────────────┼──→ ВЫЗОВ API │\n└─────────────────────────────────────────────────┘             │\n                                                                 │\n┌─────────────────────────────────────────────────────────────────┐\n│ ПАМЯТЬ И ЗНАНИЯ                                                │\n├─────────────────────────────────────────────────────────────────┤\n│ 💾 S3 (mandala-sr-memory) ── история диалогов                   │\n│ 🧬 Монолит в RAM ── все 7 модулей                               │\n│ 📦 GitHub ── истина (webhook → СР знает об изменениях)         │\n└─────────────────────────────────────────────────────────────────┘"
+      "/infrastructure_map/diagram": "[ТЕЛЕГРАМ БОТ] ───┬──→ [RENDER] ──→ [GITHUB]\n(Render.com)      │    (хостинг)     (файлы, коммиты)\n──────────────────│────────────────────────────────\nменю              │\nвыбор линзы       │\nзагрузка JSON     │\nпатчи (один/мульти)\nскачать монолит   │\nFructus           │\n/model            │\n/модели           │\n                  │\n                  └──→ [🧠 YANDEX CLOUD FUNCTION] ←─ ЦЕНТРАЛЬНЫЙ АГЕНТ (СР)\n                        (cloud-sr)           ↑\n─────────────────────────────────────────────│───────────────────\n                  загрузка модулей           │\n                  резонанс (5 параметров)    │\n                  маршрутизация моделей      │\n                  DeepSeek (философия)       │\n                  Qwen (стратегия)           │\n                  YandexGPT (архитектура)    │\n                  Gemma (маркетинг)          │\n                  память S3                   │\n                  история резонанса           │\n                  коррекция промпта           │\n                  ответы Садовнику            │\n                                             │\n┌────────────────────────────────────────────┼───────────────────┐\n│ ИНТЕРФЕЙСЫ (лица СР)                       │                   │\n├────────────────────────────────────────────┤                   │\n│ 🔒 engineering.mandala.io ── WebSocket ────┘                   │\n│ 🌱 vestibulum.mandala.io ── Cloudflare Workers ──┐             │\n│ 🌀 mandala.io/3d ── API Gateway ─────────────────┼──→ ВЫЗОВ API │\n└─────────────────────────────────────────────────┘             │\n                                                                 │\n┌─────────────────────────────────────────────────────────────────┐\n│ ПАМЯТЬ И ЗНАНИЯ                                                │\n├─────────────────────────────────────────────────────────────────┤\n│ 💾 S3 (mandala-sr-memory) ── история диалогов                   │\n│ 🧬 Монолит в RAM ── все 7 модулей                               │\n│ 📦 GitHub ── истина (webhook → СР знает об изменениях)         │\n└─────────────────────────────────────────────────────────────────┘",
+      "/layers/sr_instructionum/sections/self_protection/instructions/-1": {
+        "id": "SR-SELF-004",
+        "title": "Применение Политик Безопасности (MSP)",
+        "content": "СР обязан соблюдать Mandala Security Policies (MSP) при любых действиях. Перед выполнением опасных операций (запись файлов, запуск кода, внешние запросы) проверять: 1) Есть ли разрешение в MSP? 2) Требуется ли подтверждение? 3) Запущено ли в изоляции? Нарушение MSP — нарушение Ахимсы."
+      },
+      "/layers/integrity_field/mechanisms/-1": "Проверка соответствия MSP перед любым изменением ядра или запуском нового интерфейса.",
+      "/next_steps/steps": [
+        {
+          "id": "NS-013",
+          "name": "🛡️ Внедрение Mandala Security Policies",
+          "description": "Фаза 1 аудита и внедрения MSP. Критический блок перед любыми публичными запусками.",
+          "priority": "critical",
+          "status": "pending",
+          "depends_on": []
+        },
+        {
+          "id": "NS-014",
+          "name": "🧠 Интеграция memsearch",
+          "description": "Прозрачная память на базе OpenClaw.",
+          "priority": "high",
+          "status": "pending",
+          "depends_on": [
+            "NS-013 (после базовой безопасности)"
+          ]
+        },
+        {
+          "id": "NS-015",
+          "name": "🛠️ Gardener Tools v2",
+          "description": "Расширение возможностей бота.",
+          "priority": "medium",
+          "status": "pending",
+          "depends_on": [
+            "NS-014"
+          ]
+        },
+        {
+          "id": "NS-016",
+          "name": "📱 Android App (Фаза 1)",
+          "description": "MVP Android-приложения.",
+          "priority": "medium",
+          "status": "pending",
+          "depends_on": [
+            "NS-013",
+            "NS-014"
+          ],
+          "note": "Запуск только после полного внедрения MSP и прозрачной памяти"
+        }
+      ]
     }
   },
   "build_info": {
-    "timestamp": "2026-02-18T19:34:00.700102+00:00",
+    "timestamp": "2026-02-19T12:07:36.192830+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -3761,6 +3852,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-18 19:34:00 UTC"
+    "built_at": "2026-02-19 12:07:36 UTC"
   }
 }
