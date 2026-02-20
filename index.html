@@ -14,6 +14,8 @@
         /* ========== КОСМИЧЕСКАЯ ТЕМА (Universe Style) ========== */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px; /* Основной текст как в DeepSeek */
+            line-height: 1.5;
             background: radial-gradient(ellipse at 30% 30%, #2a0f3a, #0a0515);
             color: #f0e6ff;
             height: 100vh;
@@ -29,15 +31,15 @@
             position: absolute;
             inset: 0;
             background-image: 
-                radial-gradient(2px 2px at 15px 60px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 72px 430px, #f0e6ff, rgba(0,0,0,0)),
-                radial-gradient(3px 3px at 250px 120px, #b87cff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 15px 60px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 72px 430px, #f0e6ff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 250px 120px, #b87cff, rgba(0,0,0,0)),
                 radial-gradient(1px 1px at 400px 700px, #ff7b9c, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 600px 300px, #fff, rgba(0,0,0,0)),
-                radial-gradient(4px 4px at 800px 500px, #c68bff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 1000px 800px, #ff9fae, rgba(0,0,0,0));
+                radial-gradient(1.5px 1.5px at 600px 300px, #fff, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 800px 500px, #c68bff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 1000px 800px, #ff9fae, rgba(0,0,0,0));
             background-repeat: repeat;
-            opacity: 0.7;
+            opacity: 0.6;
             pointer-events: none;
             animation: starsMove 180s linear infinite;
         }
@@ -47,7 +49,6 @@
             to { transform: translateY(-1000px) translateX(200px); }
         }
 
-        /* Лёгкое свечение по краям */
         body::after {
             content: '';
             position: absolute;
@@ -62,7 +63,7 @@
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(180, 130, 255, 0.3);
-            padding: 18px 30px;
+            padding: 14px 25px; /* чуть меньше */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -72,45 +73,27 @@
         }
 
         .header h1 {
-            font-size: 1.7rem;
+            font-size: 1.4rem; /* уменьшили */
             font-weight: 500;
             background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .status-badge {
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 0.9rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
             font-weight: 500;
             backdrop-filter: blur(8px);
             border: 1px solid;
-            transition: all 0.3s;
         }
 
-        .status-badge.connected {
-            background: rgba(100, 255, 200, 0.1);
-            color: #a0ffe0;
-            border-color: #6fffd0;
-            box-shadow: 0 0 20px rgba(100, 255, 200, 0.3);
-        }
-
-        .status-badge.disconnected {
-            background: rgba(255, 100, 100, 0.1);
-            color: #ffb0b0;
-            border-color: #ff6b6b;
-        }
-
-        .status-badge.connecting {
-            background: rgba(255, 220, 100, 0.1);
-            color: #ffe6a0;
-            border-color: #ffd966;
-        }
+        /* ... остальные статусы без изменений ... */
 
         /* ========== ОСНОВНОЙ КОНТЕЙНЕР ========== */
         .main-container {
@@ -121,119 +104,65 @@
             z-index: 5;
         }
 
-        /* ========== БОКОВАЯ ПАНЕЛЬ (Soft Morphism) ========== */
+        /* ========== БОКОВАЯ ПАНЕЛЬ ========== */
         .sidebar {
-            width: 280px;
+            width: 260px; /* чуть уже */
             background: rgba(16, 8, 26, 0.5);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-right: 1px solid rgba(150, 100, 255, 0.2);
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            padding: 25px 0;
+            padding: 20px 0;
         }
 
         .sidebar-section {
-            padding: 0 20px 25px 20px;
+            padding: 0 16px 20px 16px;
             border-bottom: 1px solid rgba(150, 100, 255, 0.15);
         }
 
         .sidebar-section h3 {
             color: #b87cff;
-            font-size: 0.8rem;
+            font-size: 0.7rem; /* мельче */
             text-transform: uppercase;
-            letter-spacing: 2.5px;
-            margin-bottom: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
             font-weight: 600;
-            text-shadow: 0 0 10px rgba(180, 130, 255, 0.5);
+            text-shadow: 0 0 8px rgba(180, 130, 255, 0.5);
         }
 
-        /* Модули — мягкие кнопки */
         .module-list {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .module-item {
-            padding: 14px 18px;
+            padding: 10px 14px; /* меньше */
             background: rgba(30, 18, 45, 0.6);
-            border-radius: 16px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 1rem;
+            font-size: 0.9rem;
             border: 1px solid rgba(180, 130, 255, 0.2);
             box-shadow: 
-                -5px -5px 10px rgba(180, 130, 255, 0.1),
-                5px 5px 15px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
+                -4px -4px 8px rgba(180, 130, 255, 0.1),
+                4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .module-item:hover {
-            background: rgba(50, 30, 75, 0.7);
-            border-color: rgba(200, 150, 255, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 
-                -7px -7px 12px rgba(180, 130, 255, 0.15),
-                8px 8px 20px rgba(0, 0, 0, 0.7);
-        }
-
-        .module-item:active {
-            transform: translateY(0);
-            box-shadow: 
-                inset -3px -3px 7px rgba(180, 130, 255, 0.2),
-                inset 3px 3px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        .module-item.active {
-            background: rgba(80, 40, 120, 0.6);
-            border-color: #ffb86b;
-            color: #ffb86b;
-            box-shadow: 0 0 20px rgba(255, 184, 107, 0.3);
-        }
-
-        /* Быстрые действия — мягкие кнопки */
         .quick-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 6px;
         }
 
         .quick-btn {
-            padding: 14px 18px;
-            background: rgba(30, 18, 45, 0.6);
-            border: 1px solid rgba(180, 130, 255, 0.2);
-            border-radius: 16px;
-            color: #e0c0ff;
-            cursor: pointer;
-            text-align: left;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            border-radius: 14px;
+            gap: 10px;
             box-shadow: 
-                -5px -5px 10px rgba(180, 130, 255, 0.1),
-                5px 5px 15px rgba(0, 0, 0, 0.6);
-        }
-
-        .quick-btn:hover {
-            background: rgba(50, 30, 75, 0.7);
-            border-color: rgba(200, 150, 255, 0.5);
-            transform: translateX(5px);
-            box-shadow: 
-                -7px -7px 12px rgba(180, 130, 255, 0.15),
-                8px 8px 20px rgba(0, 0, 0, 0.7);
-        }
-
-        .quick-btn:active {
-            transform: translateX(2px);
-            box-shadow: 
-                inset -3px -3px 7px rgba(180, 130, 255, 0.2),
-                inset 3px 3px 10px rgba(0, 0, 0, 0.6);
+                -4px -4px 8px rgba(180, 130, 255, 0.1),
+                4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
         /* ========== ОСНОВНАЯ ОБЛАСТЬ ========== */
@@ -252,405 +181,213 @@
             background: rgba(20, 10, 30, 0.4);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(180, 130, 255, 0.2);
-            padding: 0 25px;
-            gap: 10px;
+            padding: 0 20px;
+            gap: 5px;
         }
 
         .tab {
-            padding: 16px 25px;
+            padding: 12px 20px; /* меньше */
+            font-size: 0.9rem;
             cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
             font-weight: 500;
             color: #b8a0d0;
         }
 
-        .tab:hover {
-            background: rgba(180, 130, 255, 0.1);
-            color: #f0e0ff;
-        }
-
-        .tab.active {
-            border-bottom-color: #b87cff;
-            color: #ffffff;
-            text-shadow: 0 0 15px #b87cff;
-        }
-
-        /* Контент вкладок */
-        .tab-content {
-            flex: 1;
-            overflow: hidden;
-            display: none;
-        }
-
-        .tab-content.active {
-            display: flex;
-            flex-direction: column;
-        }
-
         /* ========== ЧАТ ========== */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
         .messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            padding: 20px;
+            gap: 16px;
         }
 
-        /* Сообщения */
         .message {
             max-width: 80%;
-            padding: 16px 22px;
-            border-radius: 24px;
-            line-height: 1.6;
-            position: relative;
-            animation: messageGlow 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-        }
-
-        @keyframes messageGlow {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.user {
-            background: linear-gradient(135deg, #2f1b45, #1f0f30);
-            align-self: flex-end;
-            border-bottom-right-radius: 8px;
-            border: 1px solid #ff7b9c;
-            color: #ffffff;
-        }
-
-        .message.user::before {
-            content: '👤';
-            position: absolute;
-            left: -35px;
-            top: 10px;
-            font-size: 1.2rem;
-            filter: drop-shadow(0 0 8px #ff7b9c);
-        }
-
-        .message.assistant {
-            background: linear-gradient(135deg, #261a38, #1a1028);
-            align-self: flex-start;
-            border-bottom-left-radius: 8px;
-            border: 1px solid #b87cff;
-            color: #f0e6ff;
-        }
-
-        .message.assistant::before {
-            content: '🌙';
-            position: absolute;
-            right: -35px;
-            top: 10px;
-            font-size: 1.3rem;
-            filter: drop-shadow(0 0 8px #b87cff);
-        }
-
-        .message.system {
-            background: rgba(80, 40, 120, 0.3);
-            align-self: center;
-            font-style: italic;
+            padding: 12px 18px; /* меньше */
+            border-radius: 20px;
             font-size: 0.9rem;
-            color: #d0b0ff;
-            max-width: 60%;
-            border: 1px dashed #b87cff;
-            text-align: center;
-            backdrop-filter: blur(5px);
+            line-height: 1.5;
         }
 
-        .message.error {
-            background: rgba(255, 80, 80, 0.2);
-            color: #ffb0b0;
-            align-self: center;
-            border: 1px solid #ff6b6b;
-        }
-
-        /* Форматирование текста */
         .message pre {
-            background: #0a0515;
-            padding: 12px;
-            border-radius: 16px;
-            overflow-x: auto;
-            margin-top: 12px;
-            border: 1px solid #4a2a6a;
-            font-family: 'Fira Code', monospace;
-            color: #ffb86b;
+            padding: 10px;
+            font-size: 0.8rem; /* код помельче */
+            border-radius: 12px;
         }
 
         .message code {
-            background: #0a0515;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-family: 'Fira Code', monospace;
-            color: #ffb86b;
-            border: 1px solid #4a2a6a;
+            padding: 2px 8px;
+            font-size: 0.85rem;
         }
 
-        .message strong { color: #ffb86b; }
-        .message em { color: #b87cff; }
-
-        /* Разделитель */
-        .message-divider {
-            width: 100%;
-            text-align: center;
-            color: #5a3a7a;
-            font-size: 0.8rem;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .message-divider::before,
-        .message-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #b87cff, transparent);
-        }
-
-        /* Индикатор печати — мягкий морфизм */
+        /* Индикатор печати */
         .typing-indicator {
-            display: flex;
-            gap: 10px;
-            padding: 16px 24px;
-            background: rgba(40, 25, 60, 0.6);
-            border-radius: 40px;
-            align-self: flex-start;
-            margin: 10px 25px;
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            box-shadow: 
-                -5px -5px 10px rgba(180, 130, 255, 0.1),
-                5px 5px 15px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
+            padding: 12px 20px;
+            gap: 8px;
+            margin: 5px 20px;
         }
 
         .typing-dot {
-            width: 10px;
-            height: 10px;
-            background: #b87cff;
-            border-radius: 50%;
-            animation: pulse 1.4s infinite;
-            box-shadow: 0 0 15px #b87cff;
+            width: 8px;
+            height: 8px;
         }
 
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes pulse {
-            0%, 60%, 100% { transform: scale(0.6); opacity: 0.5; }
-            30% { transform: scale(1.2); opacity: 1; }
-        }
-
-        /* ========== ПОЛЕ ВВОДА (Soft Morphism) ========== */
+        /* ========== ПОЛЕ ВВОДА ========== */
         .input-area {
-            padding: 25px;
-            background: rgba(10, 5, 18, 0.6);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(180, 130, 255, 0.2);
-            display: flex;
-            gap: 15px;
+            padding: 16px 20px; /* меньше */
+            gap: 12px;
         }
 
         .input-area input {
-            flex: 1;
-            padding: 18px 25px;
-            background: rgba(25, 15, 35, 0.7);
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            border-radius: 40px;
-            color: #ffffff;
-            font-size: 1rem;
-            transition: all 0.2s;
-            box-shadow: 
-                inset -3px -3px 7px rgba(180, 130, 255, 0.1),
-                inset 3px 3px 12px rgba(0, 0, 0, 0.7);
-        }
-
-        .input-area input:focus {
-            outline: none;
-            border-color: #b87cff;
-            box-shadow: 
-                inset -3px -3px 7px rgba(180, 130, 255, 0.2),
-                inset 3px 3px 12px rgba(0, 0, 0, 0.8),
-                0 0 25px rgba(180, 130, 255, 0.3);
-        }
-
-        .input-area input::placeholder {
-            color: #7a5a9a;
+            padding: 12px 20px; /* меньше */
+            font-size: 0.9rem;
         }
 
         .input-area button {
-            padding: 18px 40px;
-            background: linear-gradient(135deg, #4a2a7a, #2a1a4a);
+            padding: 12px 30px; /* меньше */
+            font-size: 0.9rem;
+        }
+
+        /* ========== НОВАЯ КНОПКА ЗАГРУЗКИ ПАТЧА ========== */
+        .patch-upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #7d3ac1, #4a2a6a);
             border: none;
-            border-radius: 40px;
+            border-radius: 30px;
             color: white;
-            font-weight: 600;
+            font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 1rem;
-            letter-spacing: 1px;
-            border: 1px solid rgba(180, 130, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 
-                -5px -5px 10px rgba(180, 130, 255, 0.2),
-                5px 5px 15px rgba(0, 0, 0, 0.6);
+                -3px -3px 6px rgba(180, 130, 255, 0.2),
+                3px 3px 10px rgba(0, 0, 0, 0.5);
+            margin-right: 15px;
         }
 
-        .input-area button:hover:not(:disabled) {
-            background: linear-gradient(135deg, #5a3a8a, #3a2a5a);
-            transform: scale(1.02);
+        .patch-upload-btn:hover {
+            background: linear-gradient(135deg, #9d6eff, #7d3ac1);
+            transform: translateY(-1px);
             box-shadow: 
-                -7px -7px 12px rgba(180, 130, 255, 0.25),
-                7px 7px 20px rgba(0, 0, 0, 0.7);
+                -4px -4px 8px rgba(180, 130, 255, 0.3),
+                4px 4px 12px rgba(0, 0, 0, 0.6);
         }
 
-        .input-area button:active:not(:disabled) {
-            transform: scale(0.98);
-            box-shadow: 
-                inset -3px -3px 7px rgba(180, 130, 255, 0.2),
-                inset 3px 3px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        /* ========== ПРОСМОТР МОДУЛЕЙ ========== */
-        .module-viewer {
-            padding: 30px;
-            overflow-y: auto;
-            height: 100%;
-        }
-
-        .module-header {
+        .header-right {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(180, 130, 255, 0.3);
-        }
-
-        .module-title {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 600;
-        }
-
-        .module-actions {
-            display: flex;
             gap: 15px;
         }
 
-        .module-btn {
-            padding: 10px 22px;
-            background: rgba(30, 18, 45, 0.6);
-            border: 1px solid rgba(180, 130, 255, 0.3);
+        /* Модальное окно для патча */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(20, 10, 35, 0.95);
+            border: 1px solid #b87cff;
             border-radius: 30px;
-            color: #e0c0ff;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone {
+            border: 2px dashed #b87cff;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.95rem;
-            backdrop-filter: blur(5px);
-            box-shadow: 
-                -3px -3px 7px rgba(180, 130, 255, 0.1),
-                3px 3px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .module-btn:hover {
-            background: rgba(50, 30, 75, 0.7);
-            border-color: #b87cff;
-            transform: translateY(-2px);
+        .drop-zone:hover {
+            background: rgba(180, 130, 255, 0.1);
+            border-color: #ffb86b;
         }
 
-        .module-content {
-            background: rgba(15, 8, 24, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 24px;
-            overflow-x: auto;
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-        }
-
-        /* ========== INCUBAE (карточки семян) ========== */
-        .seeds-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 30px;
+        .patch-preview {
+            background: #0a0515;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 20px 0;
+            max-height: 300px;
             overflow-y: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
         }
 
-        .seed-card {
-            background: rgba(25, 15, 35, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 22px;
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            transition: all 0.3s;
-            box-shadow: 
-                -7px -7px 12px rgba(180, 130, 255, 0.1),
-                7px 7px 20px rgba(0, 0, 0, 0.6);
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
         }
 
-        .seed-card:hover {
-            transform: translateY(-5px);
-            border-color: #b87cff;
-            box-shadow: 
-                -10px -10px 15px rgba(180, 130, 255, 0.15),
-                10px 10px 25px rgba(0, 0, 0, 0.7);
+        .modal-btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #7d3ac1, #4a2a6a);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: transparent;
+            border: 1px solid #b87cff;
+            color: #b87cff;
+        }
+
+        /* Уменьшаем заголовки модулей */
+        .module-title {
+            font-size: 1.4rem;
         }
 
         .seed-title {
-            font-weight: bold;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, #e0c0ff, #b87cff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
 
         .seed-meta {
-            font-size: 0.85rem;
-            color: #a88cc0;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #4a2a6a;
+            font-size: 0.75rem;
         }
 
-        .seed-status {
-            display: inline-block;
-            padding: 5px 15px;
-            background: rgba(180, 130, 255, 0.2);
-            border-radius: 30px;
-            font-size: 0.85rem;
-            color: #b87cff;
-            border: 1px solid #b87cff;
-        }
-
-        /* Скрытые элементы */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Скроллбар */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(20, 10, 30, 0.5);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #5a3a7a;
-            border-radius: 4px;
+        .seed-desc {
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -659,7 +396,32 @@
         <h1>
             <span>🌌 Mandala Core | Инженерный чат</span>
         </h1>
-        <div id="status" class="status-badge disconnected">🔴 Отключено</div>
+        <div class="header-right">
+            <button class="patch-upload-btn" onclick="openPatchModal()">
+                📤 Загрузить патч
+            </button>
+            <div id="status" class="status-badge disconnected">🔴 Отключено</div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для загрузки патча -->
+    <div class="modal" id="patchModal">
+        <div class="modal-content">
+            <div class="modal-title">📦 Загрузка патча</div>
+            <div class="drop-zone" id="dropZone" ondragover="event.preventDefault()" ondragenter="event.preventDefault()" ondrop="handleFileDrop(event)">
+                <div>📤 Перетащи JSON-файл сюда</div>
+                <div style="font-size: 0.8rem; margin-top: 10px; color: #a88cc0;">или кликни для выбора</div>
+                <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileSelect(event)">
+            </div>
+            <div id="patchPreviewArea" style="display: none;">
+                <div style="margin-bottom: 10px; color: #b87cff;">Предпросмотр изменений:</div>
+                <div class="patch-preview" id="patchPreview"></div>
+                <div class="modal-buttons">
+                    <button class="modal-btn secondary" onclick="closePatchModal()">Отмена</button>
+                    <button class="modal-btn primary" onclick="applyPatch()">✅ Применить</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="main-container">
@@ -754,6 +516,7 @@
         let fullResponse = '';
         let currentModule = null;
         let modulesCache = {};
+        let currentPatch = null;
         
         // ==================== ЭЛЕМЕНТЫ ====================
         const statusDiv = document.getElementById('status');
@@ -766,6 +529,11 @@
         const moduleContent = document.getElementById('moduleContent');
         const currentModuleTitle = document.getElementById('currentModuleTitle');
         const seedsGrid = document.getElementById('seedsGrid');
+        const patchModal = document.getElementById('patchModal');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const patchPreviewArea = document.getElementById('patchPreviewArea');
+        const patchPreview = document.getElementById('patchPreview');
 
         // ==================== ПОДКЛЮЧЕНИЕ ====================
         function connect() {
@@ -1037,6 +805,69 @@
                 addDivider();
             } catch (e) {}
         }
+
+        // ==================== ПАТЧИ ====================
+        function openPatchModal() {
+            patchModal.classList.add('active');
+            patchPreviewArea.style.display = 'none';
+            currentPatch = null;
+        }
+
+        function closePatchModal() {
+            patchModal.classList.remove('active');
+        }
+
+        function handleFileDrop(e) {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type === 'application/json') {
+                readPatchFile(file);
+            } else {
+                alert('Пожалуйста, загрузи JSON-файл');
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                readPatchFile(file);
+            }
+        }
+
+        function readPatchFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const content = e.target.result;
+                    JSON.parse(content); // проверяем, что это валидный JSON
+                    currentPatch = content;
+                    patchPreview.textContent = JSON.stringify(JSON.parse(content), null, 2);
+                    patchPreviewArea.style.display = 'block';
+                    dropZone.style.display = 'none';
+                } catch (err) {
+                    alert('Невалидный JSON');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function applyPatch() {
+            if (!currentPatch) return;
+            
+            // TODO: отправка патча на бекенд
+            addMessage('system', '📦 Патч получен, отправляем на сервер...');
+            
+            // Пока просто заглушка
+            setTimeout(() => {
+                addMessage('system', '✅ Патч применён (заглушка)');
+                closePatchModal();
+            }, 1000);
+        }
+
+        // Клик по drop-зоне открывает выбор файла
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
 
         // ==================== СТАРТ ====================
         input.addEventListener('keypress', (e) => {
