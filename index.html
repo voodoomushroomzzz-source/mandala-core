@@ -811,7 +811,9 @@
 
     <script>
         // ==================== КОНФИГУРАЦИЯ ====================
+        // ИСПРАВЛЕНО: правильный URL Render-сервиса
         const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
+        const BASE_URL = 'https://mandala-engineer-chat.onrender.com';
         
         // ==================== СОСТОЯНИЕ ====================
         let ws = null;
@@ -1106,15 +1108,17 @@
             }
         }
 
-        // ==================== СТАТУС ЯДРА ====================
+        // ==================== СТАТУС ЯДРА (ИСПРАВЛЕНО) ====================
         async function fetchKernelStatus() {
             try {
-                const response = await fetch('/kernel');
+                const response = await fetch(`${BASE_URL}/kernel`);
                 if (!response.ok) return;
                 const data = await response.json();
                 addMessage('system', `🔱 **Ядро**\n• Initium: ${data.initium_loaded ? '✅' : '❌'}\n• Philosophia: ${data.philosophia_loaded ? '✅' : '❌'}\n• Принципов: ${data.principles_count}`);
                 addDivider();
-            } catch (e) {}
+            } catch (e) {
+                console.log('Статус ядра временно недоступен');
+            }
         }
 
         // ==================== ПАТЧИ ====================
