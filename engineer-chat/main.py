@@ -208,7 +208,6 @@ class ConnectionManager:
         self.active_connections: List[WebSocket] = []
     
     async def connect(self, websocket: WebSocket, session_id: str):
-        await websocket.accept()
         self.active_connections.append(websocket)
         session = get_session(session_id)
         msg_count = len(session.get("messages", []))
@@ -283,17 +282,10 @@ async def websocket_endpoint(websocket: WebSocket):
             "modules_loaded": list(kernel.modules.keys())
         })
         
-        # Основной цикл...
-        
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-    except Exception as e:
-        logger.error(f"WebSocket error: {e}")
-        try:
-            await websocket.close()
-        except:
-            pass
-        manager.disconnect(websocket)
+        # Основной цикл
+        while True:
+            data = await websocket.receive_text()
+            message = json.loads(data)
             
             # Добавляем session_id если нет
             if "session_id" not in message:
