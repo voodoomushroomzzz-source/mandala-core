@@ -260,7 +260,10 @@ async def websocket_endpoint(websocket: WebSocket):
     session_id = "unknown"
     
     try:
-        # Ждём инициализацию
+        # СНАЧАЛА accept — всегда!
+        await websocket.accept()
+        
+        # ТЕПЕРЬ читаем инициализацию
         init_data = await websocket.receive_text()
         init_msg = json.loads(init_data)
         
@@ -269,6 +272,8 @@ async def websocket_endpoint(websocket: WebSocket):
             return
         
         session_id = init_msg.get("session_id", "anon_" + str(id(websocket)))
+        
+        # Регистрируем в менеджере
         await manager.connect(websocket, session_id)
         
         # Подтверждение
@@ -278,10 +283,17 @@ async def websocket_endpoint(websocket: WebSocket):
             "modules_loaded": list(kernel.modules.keys())
         })
         
-        # Основной цикл
-        while True:
-            data = await websocket.receive_text()
-            message = json.loads(data)
+        # Основной цикл...
+        
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception as e:
+        logger.error(f"WebSocket error: {e}")
+        try:
+            await websocket.close()
+        except:
+            pass
+        manager.disconnect(websocket)
             
             # Добавляем session_id если нет
             if "session_id" not in message:
