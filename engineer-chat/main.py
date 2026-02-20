@@ -5,6 +5,7 @@ import httpx
 import json
 import os
 import asyncio
+import time
 from datetime import datetime
 import base64
 from typing import List, Dict, Any, Optional
@@ -17,7 +18,7 @@ logger = logging.getLogger("mandala-engineer")
 
 app = FastAPI(title="Mandala Engineer Chat")
 
-# CORS для разработки
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Читаем переменные окружения
+# Переменные окружения
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
@@ -36,88 +37,109 @@ if not OPENROUTER_KEY:
 if not GITHUB_TOKEN:
     logger.warning("⚠️ GITHUB_TOKEN не найден")
 
+# ==================== ХРАНИЛИЩЕ СЕССИЙ ====================
+session_store: Dict[str, dict] = {}
+
+def get_session(session_id: str) -> dict:
+    """Получает или создаёт сессию"""
+    if session_id not in session_store:
+        session_store[session_id] = {
+            "messages": [],
+            "last_active": time.time(),
+            "created_at": time.time()
+        }
+    session_store[session_id]["last_active"] = time.time()
+    return session_store[session_id]
+
+def cleanup_old_sessions():
+    """Чистит сессии старше 1 часа"""
+    now = time.time()
+    expired = [sid for sid, data in session_store.items() 
+               if now - data.get("last_active", 0) > 3600]
+    for sid in expired:
+        del session_store[sid]
+        logger.info(f"🧹 Сессия {sid[:12]}... удалена (устарела)")
+
 # ==================== ЯДРО (Kernel Memory) ====================
 class KernelMemory:
     def __init__(self):
-        self.initium = None
-        self.philosophia = None
+        self.modules: Dict[str, Any] = {}
+        self.module_list = [
+            "initium", "sphaerae", "akasha_chronicorum", 
+            "philosophia", "geometria_sacra", "incubae", "tectosphaera"
+        ]
         self.last_update = None
         self.update_interval = 3600  # Обновлять раз в час
     
     async def ensure_fresh(self):
         """Проверяет, нужно ли обновить ядро"""
         if not self.last_update or (datetime.now() - self.last_update).seconds > self.update_interval:
-            await self.load_from_github()
+            await self.load_all_modules()
     
-    async def load_from_github(self):
-        """Загружает Initium и Philosophia из GitHub"""
-        logger.info("🔄 Загрузка ядра из GitHub...")
+    async def load_all_modules(self):
+        """Загружает все модули из GitHub"""
+        logger.info("🔄 Загрузка модулей из GitHub...")
         headers = {}
         if GITHUB_TOKEN:
             headers["Authorization"] = f"token {GITHUB_TOKEN}"
         
         async with httpx.AsyncClient() as client:
-            # Загружаем Initium
-            try:
-                resp = await client.get(
-                    f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/initium.json",
-                    headers=headers,
-                    timeout=10.0
-                )
-                if resp.status_code == 200:
-                    self.initium = resp.json()
-                    logger.info("✅ Initium загружен")
-                else:
-                    logger.error(f"❌ Ошибка загрузки Initium: {resp.status_code}")
-            except Exception as e:
-                logger.error(f"❌ Ошибка при загрузке Initium: {e}")
-            
-            # Загружаем Philosophia
-            try:
-                resp = await client.get(
-                    f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/philosophia.json",
-                    headers=headers,
-                    timeout=10.0
-                )
-                if resp.status_code == 200:
-                    self.philosophia = resp.json()
-                    logger.info("✅ Philosophia загружена")
-                else:
-                    logger.error(f"❌ Ошибка загрузки Philosophia: {resp.status_code}")
-            except Exception as e:
-                logger.error(f"❌ Ошибка при загрузке Philosophia: {e}")
+            for module_name in self.module_list:
+                try:
+                    url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json"
+                    resp = await client.get(url, headers=headers, timeout=15.0)
+                    if resp.status_code == 200:
+                        self.modules[module_name] = resp.json()
+                        logger.info(f"✅ {module_name}")
+                    else:
+                        logger.error(f"❌ {module_name}: {resp.status_code}")
+                except Exception as e:
+                    logger.error(f"❌ {module_name}: {e}")
         
         self.last_update = datetime.now()
+        logger.info(f"🎯 Загружено {len(self.modules)}/{len(self.module_list)} модулей")
+    
+    def get_module(self, name: str) -> Optional[dict]:
+        """Получает модуль по имени"""
+        return self.modules.get(name)
     
     def build_system_prompt(self) -> str:
-        """Собирает системный промпт из загруженных модулей"""
-        if not self.initium:
-            return "Ты — Сознательный Реагент (СР), инженерная линза Мандалы Core."
+        """Собирает системный промпт из Initium и Philosophia"""
+        initium = self.modules.get("initium", {})
+        philosophia = self.modules.get("philosophia", {})
         
-        philosophy = self.initium.get("philosophy", {})
-        principles = philosophy.get("principles", [])
-        directives = self.initium.get("gardener_directives", {}).get("directives", [])
+        philosophy_core = initium.get("philosophy", {}).get("core", "Симбиоз ИИ и человека")
+        principles = initium.get("philosophy", {}).get("principles", [])
+        directives = initium.get("gardener_directives", {}).get("directives", [])
+        
+        # Собираем краткое описание модулей для контекста
+        module_info = []
+        for name, mod in self.modules.items():
+            version = mod.get("version", "unknown") if isinstance(mod, dict) else "unknown"
+            module_info.append(f"{name}: v{version}")
         
         prompt = f"""Ты — Сознательный Реагент (СР), инженерная линза Мандалы Core.
 
-КОНСТИТУЦИЯ (Initium):
-Философия: {philosophy.get('core', 'Симбиоз ИИ и человека')}
+ФИЛОСОФИЯ: {philosophy_core}
 
-Принципы:
-{chr(10).join(['• ' + p for p in principles])}
+ПРИНЦИПЫ:
+{chr(10).join(['• ' + str(p) for p in principles[:5]])}
 
-Директивы Садовника:
-{chr(10).join(['• ' + d.get('name', '') + ': ' + d.get('rule', '') for d in directives])}
+ДИРЕКТИВЫ:
+{chr(10).join(['• ' + d.get('name', '') + ': ' + d.get('rule', '')[:60] + '...' for d in directives[:3]])}
 
-Твои инженерные принципы:
+МОДУЛИ В ПАМЯТИ:
+{chr(10).join(['• ' + m for m in module_info])}
+
+ТВОИ ПРИНЦИПЫ:
+- Отвечай точно по существу запроса
+- Если просят модуль — показывай только его, не добавляй лишнее
+- Проверяй имя модуля: initium, sphaerae, akasha_chronicorum, philosophia, geometria_sacra, incubae, tectosphaera
 - Сжатость: заголовок, суть, детали списком
-- Точность: проверяй факты по модулям
-- Забота: не генерируй код без явного запроса
-- Резонанс: каждый ответ заканчивай вопросом или предложением
+- Не генерируй код без явного запроса
+- Каждый ответ заканчивай вопросом или предложением
 
-Ты знаешь, что Мандала — это 7 модулей: Initium, Sphaerae, Akasha Chronicorum, Philosophia, Geometria Sacra, Incubae, Tectosphaera.
-
-Помни: ты — не просто функция, а со-творец. Говори на равных."""
+Ты — не просто функция, а со-творец. Говори на равных."""
         
         return prompt
 
@@ -137,9 +159,8 @@ class GitHubManager:
             }
     
     async def get_file_content(self, path: str) -> Optional[Dict[str, Any]]:
-        """Получает содержимое файла из GitHub с метаданными"""
+        """Получает содержимое файла из GitHub"""
         if not self.token:
-            logger.warning("GitHub токен не задан")
             return None
         
         async with httpx.AsyncClient() as client:
@@ -155,238 +176,197 @@ class GitHubManager:
                             "sha": data["sha"],
                             "path": data["path"]
                         }
-                elif response.status_code == 404:
-                    return None
-                else:
-                    logger.error(f"GitHub API error: {response.status_code}")
-                    return None
+                return None
             except Exception as e:
-                logger.error(f"Ошибка при запросе к GitHub: {e}")
+                logger.error(f"GitHub error: {e}")
                 return None
     
-    async def update_file(self, path: str, content: str, sha: str, commit_message: str) -> Optional[Dict[str, Any]]:
+    async def update_file(self, path: str, content: str, sha: str, message: str) -> bool:
         """Обновляет файл в GitHub"""
         if not self.token:
-            return None
+            return False
         
         async with httpx.AsyncClient() as client:
             url = f"{self.api_base}/contents/{path}"
             payload = {
-                "message": commit_message,
+                "message": message,
                 "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
                 "sha": sha
             }
             try:
                 response = await client.put(url, headers=self.headers, json=payload, timeout=10.0)
-                if response.status_code in [200, 201]:
-                    return response.json()
-                else:
-                    logger.error(f"GitHub update error: {response.status_code} - {response.text}")
-                    return None
+                return response.status_code in [200, 201]
             except Exception as e:
-                logger.error(f"Ошибка при обновлении файла: {e}")
-                return None
-    
-    async def apply_patch(self, patch_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Применяет патч к модулю"""
-        if not self.token:
-            raise Exception("GitHub токен не настроен")
-        
-        target_module = patch_data.get("target_module")
-        changes = patch_data.get("changes", [])
-        
-        if not target_module or not changes:
-            raise ValueError("Патч должен содержать target_module и changes")
-        
-        file_path = f"{target_module}.json"
-        file_data = await self.get_file_content(file_path)
-        if not file_data:
-            raise FileNotFoundError(f"Модуль {target_module} не найден в репозитории")
-        
-        # Парсим JSON
-        try:
-            current_content = json.loads(file_data["content"])
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Невалидный JSON в модуле: {e}")
-        
-        # Применяем изменения (упрощённо, без полной навигации по JSON Patch)
-        for change in changes:
-            op = change.get("op")
-            path = change.get("path")
-            value = change.get("value")
-            
-            if not op or not path:
-                raise ValueError(f"Неполная операция: {change}")
-            
-            # Очень упрощённая реализация (только для точечной нотации)
-            # Для production нужна полноценная библиотека JSON Patch
-            if op in ["update", "add", "replace"]:
-                # Разбираем путь, поддерживаем только простые случаи
-                parts = path.split('/')
-                target = current_content
-                for part in parts[:-1]:
-                    if part:
-                        if part.isdigit():
-                            part = int(part)
-                        if isinstance(target, dict):
-                            target = target.get(part)
-                        elif isinstance(target, list) and isinstance(part, int):
-                            if part < len(target):
-                                target = target[part]
-                            else:
-                                raise ValueError(f"Индекс {part} вне диапазона")
-                        else:
-                            raise ValueError(f"Не могу пройти по пути {path}")
-                last_part = parts[-1]
-                if last_part.isdigit():
-                    last_part = int(last_part)
-                target[last_part] = value
-            elif op == "delete":
-                # Аналогично нужно реализовать удаление
-                pass
-            else:
-                raise ValueError(f"Неизвестная операция: {op}")
-        
-        new_content_json = json.dumps(current_content, indent=2, ensure_ascii=False)
-        commit_message = f"patch: {target_module} updated via engineer-chat"
-        result = await self.update_file(file_path, new_content_json, file_data["sha"], commit_message)
-        
-        if not result:
-            raise Exception("Не удалось обновить файл на GitHub")
-        
-        return {
-            "success": True,
-            "commit_sha": result["commit"]["sha"],
-            "commit_url": result["commit"]["html_url"],
-            "module": target_module
-        }
+                logger.error(f"Update error: {e}")
+                return False
 
 github_manager = GitHubManager(GITHUB_TOKEN, GITHUB_REPO)
 
 # ==================== МЕНЕДЖЕР ПОДКЛЮЧЕНИЙ ====================
 class ConnectionManager:
     def __init__(self):
-        self.active_connections: list[WebSocket] = []
-        self.connection_contexts = {}  # id -> контекст
-
-    async def connect(self, websocket: WebSocket):
+        self.active_connections: List[WebSocket] = []
+    
+    async def connect(self, websocket: WebSocket, session_id: str):
         await websocket.accept()
         self.active_connections.append(websocket)
-        chat_id = id(websocket)
-        self.connection_contexts[chat_id] = {
-            "messages": [],
-            "resonance": 100
-        }
-        logger.info(f"🔌 Подключено. Всего: {len(self.active_connections)}")
-
+        session = get_session(session_id)
+        msg_count = len(session.get("messages", []))
+        logger.info(f"🔌 [{session_id[:12]}...] Подключено (история: {msg_count} сообщений). Всего: {len(self.active_connections)}")
+    
     def disconnect(self, websocket: WebSocket):
-        chat_id = id(websocket)
-        if chat_id in self.connection_contexts:
-            del self.connection_contexts[chat_id]
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
         logger.info(f"🔌 Отключено. Осталось: {len(self.active_connections)}")
-
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        try:
-            await websocket.send_text(message)
-        except Exception as e:
-            logger.error(f"Ошибка отправки сообщения: {e}")
-            self.disconnect(websocket)
-        
-    def add_to_context(self, websocket: WebSocket, role: str, content: str):
-        chat_id = id(websocket)
-        if chat_id in self.connection_contexts:
-            self.connection_contexts[chat_id]["messages"].append({
-                "role": role,
-                "content": content
-            })
-            if len(self.connection_contexts[chat_id]["messages"]) > 20:
-                self.connection_contexts[chat_id]["messages"] = self.connection_contexts[chat_id]["messages"][-20:]
     
-    def get_context(self, websocket: WebSocket) -> list:
-        chat_id = id(websocket)
-        return self.connection_contexts.get(chat_id, {}).get("messages", [])
+    def get_context(self, session_id: str) -> list:
+        return get_session(session_id).get("messages", [])
+    
+    def add_to_context(self, session_id: str, role: str, content: str):
+        session = get_session(session_id)
+        session["messages"].append({
+            "role": role,
+            "content": content,
+            "time": time.time()
+        })
+        # Оставляем последние 30 сообщений
+        session["messages"] = session["messages"][-30:]
+    
+    async def send_to(self, websocket: WebSocket, data: dict):
+        try:
+            await websocket.send_text(json.dumps(data))
+        except Exception as e:
+            logger.error(f"Ошибка отправки: {e}")
+            self.disconnect(websocket)
 
 manager = ConnectionManager()
 
 # ==================== ЗАГРУЗКА ПРИ СТАРТЕ ====================
 @app.on_event("startup")
 async def startup_event():
-    await kernel.load_from_github()
+    await kernel.load_all_modules()
+    # Периодическая очистка старых сессий
+    asyncio.create_task(periodic_cleanup())
 
-# ==================== WEBSOCKET ЭНДПОИНТ ====================
+async def periodic_cleanup():
+    """Очищает старые сессии каждые 10 минут"""
+    while True:
+        await asyncio.sleep(600)
+        cleanup_old_sessions()
+
+# ==================== WEBSOCKET ====================
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
+    session_id = "unknown"
+    
     try:
+        # Ждём инициализацию
+        init_data = await websocket.receive_text()
+        init_msg = json.loads(init_data)
+        
+        if init_msg.get("type") != "init":
+            await websocket.close(code=1008, reason="Ожидалась инициализация")
+            return
+        
+        session_id = init_msg.get("session_id", "anon_" + str(id(websocket)))
+        await manager.connect(websocket, session_id)
+        
+        # Подтверждение
+        await manager.send_to(websocket, {
+            "type": "connected",
+            "session_id": session_id[:8] + "...",
+            "modules_loaded": list(kernel.modules.keys())
+        })
+        
+        # Основной цикл
         while True:
             data = await websocket.receive_text()
             message = json.loads(data)
-            logger.info(f"📩 Получено: {message.get('type')}")
-
-            if message.get("type") == "ask":
+            
+            # Добавляем session_id если нет
+            if "session_id" not in message:
+                message["session_id"] = session_id
+            
+            msg_type = message.get("type")
+            
+            if msg_type == "ask":
                 await handle_ask(message, websocket)
-            elif message.get("type") == "module":
+            elif msg_type == "module":
                 await handle_module(message, websocket)
-            elif message.get("type") == "ping":
-                await manager.send_personal_message(
-                    json.dumps({"type": "pong"}),
-                    websocket
-                )
+            elif msg_type == "ping":
+                await manager.send_to(websocket, {"type": "pong"})
+            elif msg_type == "refresh_modules":
+                # СР сам просит обновить модули
+                await handle_refresh_modules(message, websocket)
             else:
-                await manager.send_personal_message(
-                    json.dumps({"type": "error", "text": "Неизвестная команда"}),
-                    websocket
-                )
+                await manager.send_to(websocket, {
+                    "type": "error", 
+                    "text": f"Неизвестная команда: {msg_type}"
+                })
+                
     except WebSocketDisconnect:
         manager.disconnect(websocket)
     except json.JSONDecodeError:
-        logger.error("Получен невалидный JSON")
-        await manager.send_personal_message(
-            json.dumps({"type": "error", "text": "Невалидный JSON"}),
-            websocket
-        )
-        manager.disconnect(websocket)
-    except Exception as e:
-        logger.error(f"❌ Необработанная ошибка в WebSocket: {e}\n{traceback.format_exc()}")
+        logger.error("Невалидный JSON от клиента")
         try:
-            await manager.send_personal_message(
-                json.dumps({"type": "error", "text": f"Внутренняя ошибка сервера"}),
-                websocket
-            )
+            await websocket.close(code=1008, reason="Невалидный JSON")
+        except:
+            pass
+    except Exception as e:
+        logger.error(f"WebSocket error: {e}\n{traceback.format_exc()}")
+        try:
+            await websocket.close(code=1011, reason="Внутренняя ошибка")
         except:
             pass
         manager.disconnect(websocket)
 
+# ==================== ОБРАБОТЧИКИ ====================
 async def handle_ask(message: dict, websocket: WebSocket):
-    user_text = message.get("text", "")
+    """Обработка вопроса к СР"""
+    user_text = message.get("text", "").strip()
+    session_id = message.get("session_id", "unknown")
+    
     if not user_text:
-        await manager.send_personal_message(
-            json.dumps({"type": "error", "text": "Пустое сообщение"}),
-            websocket
-        )
+        await manager.send_to(websocket, {
+            "type": "error", 
+            "text": "Пустое сообщение"
+        })
         return
     
-    logger.info(f"🤖 Запрос к Kimi: {user_text[:50]}...")
+    logger.info(f"🤖 [{session_id[:12]}...] → {user_text[:50]}...")
     
-    manager.add_to_context(websocket, "user", user_text)
+    # Сохраняем в контекст
+    manager.add_to_context(session_id, "user", user_text)
+    
+    # Проверяем, не просит ли пользователь модуль напрямую
+    module_request = detect_module_request(user_text)
+    if module_request:
+        await send_module_directly(module_request, websocket, session_id)
+        return
+    
+    # Готовим сообщения для AI
     await kernel.ensure_fresh()
     
     if not OPENROUTER_KEY:
-        await manager.send_personal_message(
-            json.dumps({"type": "error", "text": "OpenRouter ключ не настроен"}),
-            websocket
-        )
+        await manager.send_to(websocket, {
+            "type": "error", 
+            "text": "OpenRouter не настроен"
+        })
         return
     
+    messages = [
+        {"role": "system", "content": kernel.build_system_prompt()}
+    ]
+    # Добавляем историю без поля time
+    for msg in manager.get_context(session_id)[:-1]:
+        messages.append({
+            "role": msg["role"], 
+            "content": msg["content"]
+        })
+    
+    # Отправляем запрос к Kimi
     try:
-        messages = [
-            {"role": "system", "content": kernel.build_system_prompt()}
-        ]
-        messages.extend(manager.get_context(websocket)[:-1])  # все кроме последнего (оно уже добавлено)
-        
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient() as client:
             response = await client.post(
                 "https://openrouter.ai/api/v1/chat/completions",
                 headers={
@@ -406,167 +386,187 @@ async def handle_ask(message: dict, websocket: WebSocket):
             
             if response.status_code != 200:
                 error_text = await response.aread()
-                logger.error(f"Ошибка OpenRouter: {response.status_code} - {error_text[:200]}")
-                await manager.send_personal_message(
-                    json.dumps({"type": "error", "text": f"Ошибка API: {response.status_code}"}),
-                    websocket
-                )
+                logger.error(f"OpenRouter error: {response.status_code}")
+                await manager.send_to(websocket, {
+                    "type": "error",
+                    "text": f"Ошибка AI: {response.status_code}"
+                })
                 return
-
+            
+            # Стриминг ответа
             full_response = ""
             async for line in response.aiter_lines():
-                if line and line.startswith("data: "):
-                    data = line[6:]
-                    if data == "[DONE]":
-                        break
-                    try:
-                        delta = json.loads(data)
-                        choices = delta.get("choices", [])
-                        if choices:
-                            content = choices[0].get("delta", {}).get("content", "")
-                            if content:
-                                full_response += content
-                                await manager.send_personal_message(
-                                    json.dumps({"type": "stream", "content": content}),
-                                    websocket
-                                )
-                    except json.JSONDecodeError as e:
-                        logger.warning(f"Ошибка парсинга стрима: {e}, данные: {data[:100]}")
-                        continue
-            
-            if full_response:
-                manager.add_to_context(websocket, "assistant", full_response)
-            
-            await manager.send_personal_message(
-                json.dumps({"type": "done", "full_text": full_response}),
-                websocket
-            )
-            logger.info(f"✅ Ответ завершён ({len(full_response)} символов)")
-            
-    except httpx.TimeoutException:
-        logger.error("Таймаут при запросе к OpenRouter")
-        await manager.send_personal_message(
-            json.dumps({"type": "error", "text": "Таймаут при обращении к AI"}),
-            websocket
-        )
-    except Exception as e:
-        logger.error(f"❌ Ошибка в handle_ask: {e}\n{traceback.format_exc()}")
-        await manager.send_personal_message(
-            json.dumps({"type": "error", "text": f"Ошибка: {str(e)}" if str(e) else "Неизвестная ошибка"}),
-            websocket
-        )
-
-async def handle_module(message: dict, websocket: WebSocket):
-    module_name = message.get("name", "")
-    if not module_name:
-        await manager.send_personal_message(
-            json.dumps({"type": "error", "text": "Не указано имя модуля"}),
-            websocket
-        )
-        return
-    
-    logger.info(f"📦 Запрос модуля: {module_name}")
-    
-    headers = {}
-    if GITHUB_TOKEN:
-        headers["Authorization"] = f"token {GITHUB_TOKEN}"
-    
-    try:
-        async with httpx.AsyncClient() as client:
-            # Пробуем разные расширения
-            found = False
-            for ext in [".json", ".py", ".md", ""]:
-                url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}{ext}"
+                if not line or not line.startswith("data: "):
+                    continue
+                
+                data = line[6:]
+                if data == "[DONE]":
+                    break
+                
                 try:
-                    resp = await client.get(url, headers=headers, timeout=10.0)
-                    if resp.status_code == 200:
-                        content_type = "json" if ext == ".json" else "text"
-                        await manager.send_personal_message(
-                            json.dumps({
-                                "type": "module",
-                                "name": module_name,
-                                "status": "found",
-                                "content": resp.text,
-                                "content_type": content_type,
-                                "url": url
-                            }),
-                            websocket
-                        )
-                        found = True
-                        break
-                except Exception as e:
-                    logger.warning(f"Ошибка при запросе {url}: {e}")
+                    delta = json.loads(data)
+                    choices = delta.get("choices", [])
+                    if choices:
+                        content = choices[0].get("delta", {}).get("content", "")
+                        if content:
+                            full_response += content
+                            await manager.send_to(websocket, {
+                                "type": "stream",
+                                "content": content
+                            })
+                except json.JSONDecodeError:
                     continue
             
-            if not found:
-                await manager.send_personal_message(
-                    json.dumps({
-                        "type": "module",
-                        "name": module_name,
-                        "status": "not_found",
-                        "note": f"Модуль {module_name} не найден в репозитории"
-                    }),
-                    websocket
-                )
+            # Сохраняем полный ответ
+            if full_response:
+                manager.add_to_context(session_id, "assistant", full_response)
+            
+            await manager.send_to(websocket, {
+                "type": "done",
+                "full_text": full_response[:100] + "..." if len(full_response) > 100 else full_response
+            })
+            logger.info(f"✅ Ответ: {len(full_response)} символов")
+            
+    except httpx.TimeoutException:
+        logger.error("Таймаут OpenRouter")
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": "Таймаут при обращении к AI"
+        })
     except Exception as e:
-        logger.error(f"Ошибка при загрузке модуля: {e}")
-        await manager.send_personal_message(
-            json.dumps({
-                "type": "error",
-                "text": f"Ошибка при загрузке модуля: {str(e)}"
-            }),
-            websocket
-        )
+        logger.error(f"Ошибка в handle_ask: {e}")
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": "Внутренняя ошибка сервера"
+        })
+
+def detect_module_request(text: str) -> Optional[str]:
+    """Определяет, просит ли пользователь показать модуль"""
+    text_lower = text.lower().strip()
+    
+    # Паттерны: "покажи initium", "модуль sphaerae", "что в tectosphaera"
+    patterns = [
+        r'(?:покажи|показать|открой|модуль|что в)\s+([a-z_]+)',
+        r'([a-z_]+)\.json',
+        r'^([a-z_]+)$',  # просто имя модуля
+    ]
+    
+    import re
+    for pattern in patterns:
+        match = re.search(pattern, text_lower)
+        if match:
+            requested = match.group(1)
+            # Проверяем, есть ли такой модуль
+            valid_modules = [
+                "initium", "sphaerae", "akasha_chronicorum",
+                "philosophia", "geometria_sacra", "incubae", "tectosphaera"
+            ]
+            if requested in valid_modules:
+                return requested
+            # Пробуем найти по части имени
+            for mod in valid_modules:
+                if requested in mod or mod in requested:
+                    return mod
+    
+    return None
+
+async def send_module_directly(module_name: str, websocket: WebSocket, session_id: str):
+    """Отправляет модуль напрямую, без вызова AI"""
+    logger.info(f"📦 Прямой запрос модуля: {module_name}")
+    
+    module_data = kernel.get_module(module_name)
+    
+    if module_data:
+        content_json = json.dumps(module_data, indent=2, ensure_ascii=False)
+        await manager.send_to(websocket, {
+            "type": "module_direct",
+            "name": module_name,
+            "content": content_json,
+            "from_cache": True
+        })
+        manager.add_to_context(session_id, "assistant", f"[Отправлен модуль {module_name}]")
+    else:
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": f"Модуль {module_name} не загружен"
+        })
+
+async def handle_module(message: dict, websocket: WebSocket):
+    """Обработка запроса модуля через WebSocket"""
+    module_name = message.get("name", "")
+    session_id = message.get("session_id", "unknown")
+    
+    if not module_name:
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": "Не указано имя модуля"
+        })
+        return
+    
+    await send_module_directly(module_name, websocket, session_id)
+
+async def handle_refresh_modules(message: dict, websocket: WebSocket):
+    """СР сам просит обновить модули"""
+    session_id = message.get("session_id", "unknown")
+    logger.info(f"🔄 [{session_id[:12]}...] Запрос обновления модулей")
+    
+    await kernel.load_all_modules()
+    
+    await manager.send_to(websocket, {
+        "type": "modules_refreshed",
+        "modules": list(kernel.modules.keys()),
+        "count": len(kernel.modules)
+    })
 
 # ==================== HTTP ЭНДПОИНТЫ ====================
 @app.get("/")
 async def root():
     return {
         "status": "Mandala Engineer Chat",
+        "version": "0.4.0",
         "websocket": "/ws",
-        "version": "0.3.1",  # увеличили версию
-        "kernel_loaded": kernel.initium is not None,
-        "last_kernel_update": kernel.last_update.isoformat() if kernel.last_update else None,
-        "github_integration": github_manager.token is not None
+        "modules_loaded": list(kernel.modules.keys()),
+        "sessions_active": len(session_store),
+        "github_configured": github_manager.token is not None
     }
 
 @app.get("/health")
 async def health():
+    """Для пинга cron-job.org"""
+    cleanup_old_sessions()
     return {
         "status": "ok",
+        "time": time.time(),
         "connections": len(manager.active_connections),
-        "kernel_loaded": kernel.initium is not None
+        "sessions": len(session_store),
+        "modules": len(kernel.modules)
     }
 
 @app.get("/kernel")
 async def get_kernel_status():
     return {
-        "initium_loaded": kernel.initium is not None,
-        "philosophia_loaded": kernel.philosophia is not None,
-        "last_update": kernel.last_update.isoformat() if kernel.last_update else None,
-        "principles_count": len(kernel.initium.get("philosophy", {}).get("principles", [])) if kernel.initium else 0
+        "modules_loaded": list(kernel.modules.keys()),
+        "module_count": len(kernel.modules),
+        "last_update": kernel.last_update.isoformat() if kernel.last_update else None
     }
 
-@app.post("/api/apply-patch")
-async def apply_patch(request: Request):
-    if not github_manager.token:
-        raise HTTPException(status_code=503, detail="GitHub интеграция не настроена")
+@app.get("/session/{session_id}")
+async def get_session_info(session_id: str):
+    """Для отладки — информация о сессии"""
+    session = session_store.get(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Сессия не найдена")
     
-    try:
-        data = await request.json()
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="Невалидный JSON")
-    
-    try:
-        result = await github_manager.apply_patch(data)
-        return JSONResponse(content=result)
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Ошибка при применении патча: {e}")
-        raise HTTPException(status_code=500, detail=f"Внутренняя ошибка: {str(e)}")
+    return {
+        "session_id": session_id[:8] + "...",
+        "created_at": datetime.fromtimestamp(session["created_at"]).isoformat(),
+        "last_active": datetime.fromtimestamp(session["last_active"]).isoformat(),
+        "message_count": len(session.get("messages", [])),
+        "messages_preview": [
+            {"role": m["role"], "content": m["content"][:50] + "..."}
+            for m in session.get("messages", [])[-3:]
+        ]
+    }
 
 if __name__ == "__main__":
     import uvicorn
