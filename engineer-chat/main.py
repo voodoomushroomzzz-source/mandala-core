@@ -369,6 +369,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
         })
     
     # Отправляем запрос к Kimi
+    full_response = ""
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -390,55 +391,84 @@ async def handle_ask(message: dict, websocket: WebSocket):
             
             if response.status_code != 200:
                 error_text = await response.aread()
-                logger.error(f"OpenRouter error: {response.status_code}")
+                logger.error(f"OpenRouter error: {response.status_code} - {error_text[:200]}")
                 await manager.send_to(websocket, {
                     "type": "error",
                     "text": f"Ошибка AI: {response.status_code}"
                 })
                 return
             
-            # Стриминг ответа
-            full_response = ""
+            # Стриминг ответа — исправленная обработка
+            chunk_count = 0
             async for line in response.aiter_lines():
-                if not line or not line.startswith("data: "):
+                line = line.strip()
+                if not line:
                     continue
                 
-                data = line[6:]
-                if data == "[DONE]":
+                if line == "data: [DONE]":
                     break
                 
-                try:
-                    delta = json.loads(data)
-                    choices = delta.get("choices", [])
-                    if choices:
-                        content = choices[0].get("delta", {}).get("content", "")
-                        if content:
-                            full_response += content
-                            await manager.send_to(websocket, {
-                                "type": "stream",
-                                "content": content
-                            })
-                except json.JSONDecodeError:
+                if not line.startswith("data: "):
                     continue
+                
+                data_str = line[6:]  # убираем "data: "
+                
+                try:
+                    data = json.loads(data_str)
+                except json.JSONDecodeError:
+                    continue  # пропускаем невалидный JSON
+                
+                # Проверяем структуру ответа
+                choices = data.get("choices")
+                if not choices or not isinstance(choices, list):
+                    continue
+                
+                delta = choices[0].get("delta", {})
+                if not delta:
+                    continue
+                
+                content = delta.get("content")
+                if not content:  # пропускаем пустые чанки
+                    continue
+                
+                # Отправляем клиенту
+                full_response += content
+                chunk_count += 1
+                
+                try:
+                    await manager.send_to(websocket, {
+                        "type": "stream",
+                        "content": content
+                    })
+                except Exception as e:
+                    logger.error(f"Ошибка отправки чанка: {e}")
+                    break  # клиент отключился
+            
+            logger.info(f"📦 Получено {chunk_count} чанков, {len(full_response)} символов")
             
             # Сохраняем полный ответ
             if full_response:
                 manager.add_to_context(session_id, "assistant", full_response)
-            
-            await manager.send_to(websocket, {
-                "type": "done",
-                "full_text": full_response[:100] + "..." if len(full_response) > 100 else full_response
-            })
-            logger.info(f"✅ Ответ: {len(full_response)} символов")
+                await manager.send_to(websocket, {
+                    "type": "done",
+                    "full_text": full_response[:200] + "..." if len(full_response) > 200 else full_response
+                })
+                logger.info(f"✅ Ответ завершён: {len(full_response)} символов")
+            else:
+                logger.warning("⚠️ Пустой ответ от AI")
+                await manager.send_to(websocket, {
+                    "type": "error",
+                    "text": "Пустой ответ от AI. Попробуйте ещё раз."
+                })
             
     except httpx.TimeoutException:
         logger.error("Таймаут OpenRouter")
         await manager.send_to(websocket, {
             "type": "error",
-            "text": "Таймаут при обращении к AI"
+            "text": "Таймаут при обращении к AI (60 сек)"
         })
     except Exception as e:
-        logger.error(f"Ошибка в handle_ask: {e}")
+        logger.error(f"Ошибка в handle_ask: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {
             "type": "error",
             "text": "Внутренняя ошибка сервера"
