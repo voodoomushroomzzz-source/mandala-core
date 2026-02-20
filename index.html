@@ -3,9 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌌 Mandala Core | Инженерный чат</title>
+    <title>Mandala — Инженерный чат</title>
     <style>
-        /* ========== КОСМИЧЕСКАЯ ТЕМА ========== */
+        /* ===== MINIMAL MODERN DESIGN ===== */
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #252533;
+            --text: #e8e8f0;
+            --text-muted: #6b6b7b;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --success: #22c55e;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            
+            --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,260 +33,246 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: var(--font-sans);
             font-size: 14px;
             line-height: 1.5;
-            background: radial-gradient(ellipse at 30% 30%, #2a0f3a, #0a0515);
-            color: #f0e6ff;
+            background: var(--bg);
+            color: var(--text);
             height: 100vh;
             display: flex;
             flex-direction: column;
-            position: relative;
             overflow: hidden;
         }
 
-        /* Звёздное поле */
-        body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: 
-                radial-gradient(1.5px 1.5px at 15px 60px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1.5px 1.5px at 72px 430px, #f0e6ff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 250px 120px, #b87cff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 400px 700px, #ff7b9c, rgba(0,0,0,0)),
-                radial-gradient(1.5px 1.5px at 600px 300px, #fff, rgba(0,0,0,0)),
-                radial-gradient(3px 3px at 800px 500px, #c68bff, rgba(0,0,0,0)),
-                radial-gradient(1.5px 1.5px at 1000px 800px, #ff9fae, rgba(0,0,0,0));
-            background-repeat: repeat;
-            opacity: 0.6;
-            pointer-events: none;
-            animation: starsMove 180s linear infinite;
-        }
-
-        @keyframes starsMove {
-            from { transform: translateY(0) translateX(0); }
-            to { transform: translateY(-1000px) translateX(200px); }
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 50%, transparent 40%, #0a0515 90%);
-            pointer-events: none;
-        }
-
-        /* Шапка */
+        /* ===== HEADER ===== */
         .header {
-            background: rgba(20, 10, 30, 0.5);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(180, 130, 255, 0.3);
-            padding: 14px 25px;
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 0 20px;
+            flex-shrink: 0;
         }
 
-        .header h1 {
-            font-size: 1.4rem;
-            font-weight: 500;
-            background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            backdrop-filter: blur(8px);
-            border: 1px solid;
-        }
-
-        .status-badge.connected {
-            background: rgba(100, 255, 200, 0.1);
-            color: #a0ffe0;
-            border-color: #6fffd0;
-        }
-
-        .status-badge.disconnected {
-            background: rgba(255, 100, 100, 0.1);
-            color: #ffb0b0;
-            border-color: #ff6b6b;
-        }
-
-        .status-badge.connecting {
-            background: rgba(255, 220, 100, 0.1);
-            color: #ffe6a0;
-            border-color: #ffd966;
-        }
-
-        /* Основной контейнер */
-        .main-container {
+        .logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border-radius: var(--radius-sm);
             display: flex;
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-            z-index: 5;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
         }
 
-        /* Боковая панель */
+        .header-title {
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: -0.3px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            background: var(--bg);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .status.connected .status-dot { background: var(--success); }
+        .status.connecting .status-dot { background: var(--warning); animation: pulse 1.5s infinite; }
+        .status.error .status-dot { background: var(--error); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .btn-icon:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR ===== */
         .sidebar {
-            width: 260px;
-            background: rgba(16, 8, 26, 0.5);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(150, 100, 255, 0.2);
+            width: 240px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            padding: 20px 0;
+            flex-shrink: 0;
         }
 
         .sidebar-section {
-            padding: 0 16px 20px 16px;
-            border-bottom: 1px solid rgba(150, 100, 255, 0.15);
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .sidebar-section h3 {
-            color: #b87cff;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 14px;
+        .sidebar-title {
+            font-size: 11px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
         }
 
         .module-list {
-            list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .module-item {
-            padding: 10px 14px;
-            background: rgba(30, 18, 45, 0.6);
-            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-            border: 1px solid rgba(180, 130, 255, 0.2);
-            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.1), 4px 4px 12px rgba(0, 0, 0, 0.5);
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: all 0.15s;
         }
 
         .module-item:hover {
-            background: rgba(50, 30, 75, 0.7);
-            border-color: rgba(200, 150, 255, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .module-item:active {
-            transform: translateY(0);
-            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 10px rgba(0, 0, 0, 0.6);
+            background: var(--surface-hover);
+            color: var(--text);
         }
 
         .module-item.active {
-            background: rgba(80, 40, 120, 0.6);
-            border-color: #ffb86b;
-            color: #ffb86b;
+            background: var(--accent);
+            color: white;
+        }
+
+        .module-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
         }
 
         .quick-actions {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .quick-btn {
-            padding: 10px 14px;
-            background: rgba(30, 18, 45, 0.6);
-            border: 1px solid rgba(180, 130, 255, 0.2);
-            border-radius: 14px;
-            color: #e0c0ff;
-            cursor: pointer;
-            text-align: left;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            backdrop-filter: blur(5px);
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.1), 4px 4px 12px rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            text-align: left;
+            transition: all 0.15s;
         }
 
         .quick-btn:hover {
-            background: rgba(50, 30, 75, 0.7);
-            border-color: rgba(200, 150, 255, 0.5);
-            transform: translateX(5px);
+            background: var(--surface-hover);
+            color: var(--text);
         }
 
-        .quick-btn:active {
-            transform: translateX(2px);
-            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Основная область */
-        .content-area {
+        /* ===== CONTENT ===== */
+        .content {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: rgba(5, 2, 10, 0.3);
-            backdrop-filter: blur(8px);
         }
 
+        /* ===== TABS ===== */
         .tabs {
+            height: 44px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             display: flex;
-            background: rgba(20, 10, 30, 0.4);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(180, 130, 255, 0.2);
-            padding: 0 20px;
-            gap: 5px;
+            align-items: center;
+            padding: 0 16px;
+            gap: 4px;
+            flex-shrink: 0;
         }
 
         .tab {
-            padding: 12px 20px;
-            font-size: 0.9rem;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            border-bottom: 2px solid transparent;
-            font-weight: 500;
-            color: #b8a0d0;
+            font-size: 13px;
+            color: var(--text-muted);
+            border: none;
+            background: transparent;
+            transition: all 0.15s;
         }
 
         .tab:hover {
-            background: rgba(180, 130, 255, 0.1);
-            color: #f0e0ff;
+            color: var(--text);
+            background: var(--surface-hover);
         }
 
         .tab.active {
-            border-bottom-color: #b87cff;
-            color: #ffffff;
+            color: var(--text);
+            background: var(--bg);
         }
 
-        .tab-content {
-            flex: 1;
-            overflow: hidden;
-            display: none;
-        }
-
-        .tab-content.active {
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Чат */
+        /* ===== CHAT ===== */
         .chat-container {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            overflow: hidden;
         }
 
         .messages {
@@ -279,583 +285,752 @@
         }
 
         .message {
-            max-width: 80%;
-            padding: 12px 18px;
-            border-radius: 20px;
-            line-height: 1.5;
-            position: relative;
-            animation: messageGlow 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            max-width: 85%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        @keyframes messageGlow {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            line-height: 1.6;
+            font-size: 14px;
         }
 
         .message.user {
-            background: linear-gradient(135deg, #2f1b45, #1f0f30);
             align-self: flex-end;
-            border-bottom-right-radius: 8px;
-            border: 1px solid #ff7b9c;
-            color: #ffffff;
         }
 
-        .message.user::before {
-            content: '👤';
-            position: absolute;
-            left: -30px;
-            top: 10px;
-            font-size: 1.1rem;
+        .message.user .message-bubble {
+            background: var(--accent);
+            color: white;
+            border-bottom-right-radius: 4px;
         }
 
         .message.assistant {
-            background: linear-gradient(135deg, #261a38, #1a1028);
             align-self: flex-start;
-            border-bottom-left-radius: 8px;
-            border: 1px solid #b87cff;
-            color: #f0e6ff;
         }
 
-        .message.assistant::before {
-            content: '🌙';
-            position: absolute;
-            right: -30px;
-            top: 10px;
-            font-size: 1.2rem;
+        .message.assistant .message-bubble {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
         }
 
         .message.system {
-            background: rgba(80, 40, 120, 0.3);
             align-self: center;
-            font-style: italic;
-            font-size: 0.9rem;
-            color: #d0b0ff;
             max-width: 60%;
-            border: 1px dashed #b87cff;
+        }
+
+        .message.system .message-bubble {
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 12px;
             text-align: center;
+            padding: 8px;
         }
 
-        .message.error {
-            background: rgba(255, 80, 80, 0.2);
-            color: #ffb0b0;
-            align-self: center;
-            border: 1px solid #ff6b6b;
+        .message.error .message-bubble {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
         }
 
+        /* Code in messages */
         .message pre {
-            background: #0a0515;
-            padding: 10px;
-            border-radius: 12px;
+            background: var(--bg);
+            padding: 12px;
+            border-radius: var(--radius-sm);
             overflow-x: auto;
-            margin-top: 10px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            color: #ffb86b;
+            margin-top: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.4;
         }
 
         .message code {
-            background: #0a0515;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            background: var(--bg);
             padding: 2px 6px;
-            border-radius: 6px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: #ffb86b;
+            border-radius: 4px;
         }
 
-        .message strong { color: #ffb86b; }
-        .message em { color: #b87cff; }
+        /* ===== INPUT ===== */
+        .input-area {
+            padding: 16px 20px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+        }
 
-        .message-divider {
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .message-input {
             width: 100%;
-            text-align: center;
-            color: #5a3a7a;
-            font-size: 0.8rem;
-            margin: 10px 0;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.15s;
+        }
+
+        .message-input:focus {
+            border-color: var(--accent);
+        }
+
+        .message-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 6px;
         }
 
-        .message-divider::before,
-        .message-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #b87cff, transparent);
+        .send-btn:hover:not(:disabled) {
+            background: var(--accent-hover);
         }
 
-        .typing-indicator {
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== TYPING ===== */
+        .typing {
             display: flex;
+            align-items: center;
             gap: 8px;
-            padding: 12px 20px;
-            background: rgba(40, 25, 60, 0.6);
-            border-radius: 30px;
-            align-self: flex-start;
-            margin: 5px 20px;
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.1), 4px 4px 12px rgba(0, 0, 0, 0.5);
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
         }
 
         .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #b87cff;
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
             border-radius: 50%;
-            animation: pulse 1.4s infinite;
+            animation: typing 1.4s infinite;
         }
 
         .typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
-        @keyframes pulse {
-            0%, 60%, 100% { transform: scale(0.6); opacity: 0.5; }
-            30% { transform: scale(1.2); opacity: 1; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-4px); }
         }
 
-        .input-area {
-            padding: 16px 20px;
-            background: rgba(10, 5, 18, 0.6);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(180, 130, 255, 0.2);
-            display: flex;
-            gap: 12px;
-        }
-
-        .input-area input {
+        /* ===== MODULE VIEWER ===== */
+        .module-viewer {
             flex: 1;
-            padding: 12px 20px;
-            background: rgba(25, 15, 35, 0.7);
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            border-radius: 30px;
-            color: #ffffff;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.1), inset 3px 3px 12px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        .input-area input:focus {
-            outline: none;
-            border-color: #b87cff;
-            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(180, 130, 255, 0.3);
+        .module-toolbar {
+            height: 48px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            flex-shrink: 0;
         }
 
-        .input-area input:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .input-area button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #4a2a7a, #2a1a4a);
-            border: none;
-            border-radius: 30px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-            border: 1px solid rgba(180, 130, 255, 0.5);
-            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.2), 4px 4px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        .input-area button:hover:not(:disabled) {
-            background: linear-gradient(135deg, #5a3a8a, #3a2a5a);
-            transform: scale(1.02);
-        }
-
-        .input-area button:active:not(:disabled) {
-            transform: scale(0.98);
-            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        .input-area button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .patch-upload-btn {
+        .module-name {
+            font-size: 14px;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: linear-gradient(135deg, #7d3ac1, #4a2a6a);
-            border: none;
-            border-radius: 30px;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: -3px -3px 6px rgba(180, 130, 255, 0.2), 3px 3px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .patch-upload-btn:hover {
-            background: linear-gradient(135deg, #9d6eff, #7d3ac1);
-            transform: translateY(-1px);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: rgba(20, 10, 35, 0.95);
-            border: 1px solid #b87cff;
-            border-radius: 30px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-        }
-
-        .drop-zone {
-            border: 2px dashed #b87cff;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .drop-zone:hover {
-            background: rgba(180, 130, 255, 0.1);
-            border-color: #ffb86b;
-        }
-
-        .patch-preview {
-            background: #0a0515;
-            border-radius: 16px;
-            padding: 16px;
-            margin: 20px 0;
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-        }
-
-        .modal-btn {
-            padding: 10px 22px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .modal-btn.primary {
-            background: linear-gradient(135deg, #7d3ac1, #4a2a6a);
-            color: white;
-            border: 1px solid #b87cff;
-        }
-
-        .modal-btn.secondary {
-            background: transparent;
-            border: 1px solid #b87cff;
-            color: #b87cff;
-        }
-
-        .module-viewer {
-            padding: 25px;
-            overflow-y: auto;
-            height: 100%;
-        }
-
-        .module-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(180, 130, 255, 0.3);
-        }
-
-        .module-title {
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .module-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .module-btn {
-            padding: 8px 18px;
-            background: rgba(30, 18, 45, 0.6);
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            border-radius: 20px;
-            color: #e0c0ff;
+        .btn-sm {
+            padding: 6px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 12px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
+            transition: all 0.15s;
         }
 
-        .module-btn:hover {
-            background: rgba(50, 30, 75, 0.7);
-            border-color: #b87cff;
+        .btn-sm:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent);
         }
 
         .module-content {
-            background: rgba(15, 8, 24, 0.6);
-            backdrop-filter: blur(10px);
+            flex: 1;
+            overflow: auto;
             padding: 20px;
-            border-radius: 20px;
-            overflow-x: auto;
-            border: 1px solid rgba(180, 130, 255, 0.3);
+            background: var(--bg);
         }
 
         .module-content pre {
-            background: #0a0515;
-            padding: 15px;
-            border-radius: 12px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: #ffb86b;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            gap: 12px;
+        }
+
+        .empty-state-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        /* ===== SEEDS GRID ===== */
+        .seeds-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .seeds-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 25px;
-            overflow-y: auto;
+            gap: 16px;
         }
 
         .seed-card {
-            background: rgba(20, 10, 30, 0.7);
-            backdrop-filter: blur(5px);
-            border-radius: 20px;
-            padding: 18px;
-            border: 1px solid rgba(180, 130, 255, 0.3);
-            transition: all 0.3s;
-            box-shadow: -5px -5px 10px rgba(180, 130, 255, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.5);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            transition: all 0.15s;
         }
 
         .seed-card:hover {
-            transform: translateY(-3px);
-            border-color: #b87cff;
+            border-color: var(--accent);
         }
 
-        .seed-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            background: linear-gradient(135deg, #e0c0ff, #b87cff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .seed-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
             margin-bottom: 8px;
         }
 
-        .seed-meta {
-            font-size: 0.75rem;
-            color: #a88cc0;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed #4a2a6a;
+        .seed-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .seed-id {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
         }
 
         .seed-desc {
-            font-size: 0.9rem;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
             margin-bottom: 12px;
-            color: #d0c0e0;
         }
 
-        .seed-status {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(180, 130, 255, 0.2);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #b87cff;
+        .seed-meta {
+            display: flex;
+            gap: 8px;
+            font-size: 11px;
         }
 
-        .hidden {
-            display: none !important;
+        .seed-badge {
+            padding: 4px 8px;
+            background: var(--bg);
+            border-radius: 4px;
+            color: var(--text-muted);
         }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 480px;
+            max-height: 80vh;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .dropzone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .dropzone:hover {
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .dropzone.active {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .patch-preview {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 16px;
+            max-height: 200px;
+            overflow: auto;
+        }
+
+        .patch-preview pre {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ===== UTILITIES ===== */
+        .hidden { display: none !important; }
+        
+        .tab-content {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 13px;
+            z-index: 200;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--error); }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🌌 Mandala Core | Инженерный чат</h1>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">◈</div>
+            <div class="header-title">Mandala Engineer</div>
+        </div>
         <div class="header-right">
-            <button class="patch-upload-btn" onclick="openPatchModal()">📤 Загрузить патч</button>
-            <div id="status" class="status-badge disconnected">🔴 Отключено</div>
-        </div>
-    </div>
-
-    <div class="modal" id="patchModal">
-        <div class="modal-content">
-            <div class="modal-title">📦 Загрузка патча</div>
-            <div class="drop-zone" id="dropZone" ondragover="event.preventDefault()" ondrop="handleFileDrop(event)">
-                📤 Перетащи JSON-файл сюда<br><span style="font-size:0.8rem;">или кликни для выбора</span>
-                <input type="file" id="fileInput" accept=".json" style="display:none;" onchange="handleFileSelect(event)">
+            <button class="btn-icon" onclick="openPatchModal()" title="Загрузить патч">↑</button>
+            <button class="btn-icon" onclick="refreshModules()" title="Обновить модули">↻</button>
+            <div class="status" id="status">
+                <span class="status-dot"></span>
+                <span id="statusText">Офлайн</span>
             </div>
-            <div id="patchPreviewArea" style="display:none;">
-                <div style="margin-bottom:10px; color:#b87cff;">Предпросмотр:</div>
-                <div class="patch-preview" id="patchPreview"></div>
-                <div class="modal-buttons">
-                    <button class="modal-btn secondary" onclick="closePatchModal()">Отмена</button>
-                    <button class="modal-btn primary" onclick="applyPatch()">✅ Применить</button>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <div class="main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Модули</div>
+                <div class="module-list" id="moduleList">
+                    <div class="module-item" data-module="initium">
+                        <span class="module-icon">⚡</span>
+                        <span>Initium</span>
+                    </div>
+                    <div class="module-item" data-module="sphaerae">
+                        <span class="module-icon">◉</span>
+                        <span>Sphaerae</span>
+                    </div>
+                    <div class="module-item" data-module="akasha_chronicorum">
+                        <span class="module-icon">◈</span>
+                        <span>Akasha</span>
+                    </div>
+                    <div class="module-item" data-module="philosophia">
+                        <span class="module-icon">◇</span>
+                        <span>Philosophia</span>
+                    </div>
+                    <div class="module-item" data-module="geometria_sacra">
+                        <span class="module-icon">△</span>
+                        <span>Geometria</span>
+                    </div>
+                    <div class="module-item" data-module="incubae">
+                        <span class="module-icon">○</span>
+                        <span>Incubae</span>
+                    </div>
+                    <div class="module-item" data-module="tectosphaera">
+                        <span class="module-icon">□</span>
+                        <span>Tectosphaera</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="main-container">
-        <div class="sidebar">
+            
             <div class="sidebar-section">
-                <h3>📦 Модули ядра</h3>
-                <ul class="module-list" id="moduleList">
-                    <li class="module-item" data-module="initium">⚡ Initium</li>
-                    <li class="module-item" data-module="sphaerae">🗺️ Sphaerae</li>
-                    <li class="module-item" data-module="akasha_chronicorum">📜 Akasha Chronicorum</li>
-                    <li class="module-item" data-module="philosophia">💭 Philosophia</li>
-                    <li class="module-item" data-module="geometria_sacra">🔺 Geometria Sacra</li>
-                    <li class="module-item" data-module="incubae">🌱 Incubae</li>
-                    <li class="module-item" data-module="tectosphaera">🛡️ Tectosphaera</li>
-                </ul>
-            </div>
-            <div class="sidebar-section">
-                <h3>⚡ Быстрые действия</h3>
+                <div class="sidebar-title">Быстрые действия</div>
                 <div class="quick-actions">
-                    <button class="quick-btn" onclick="quickAction('seeds')">🌱 Семена Incubae</button>
-                    <button class="quick-btn" onclick="quickAction('milestones')">🎯 Последние milestones</button>
-                    <button class="quick-btn" onclick="quickAction('resonance')">📊 Статус резонанса</button>
-                    <button class="quick-btn" onclick="quickAction('kernel')">🔱 Ядро Мандалы</button>
+                    <button class="quick-btn" onclick="quickAction('seeds')">
+                        <span>○</span>
+                        <span>Семена</span>
+                    </button>
+                    <button class="quick-btn" onclick="quickAction('milestones')">
+                        <span>◈</span>
+                        <span>Milestones</span>
+                    </button>
+                    <button class="quick-btn" onclick="quickAction('status')">
+                        <span>◉</span>
+                        <span>Статус</span>
+                    </button>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <div class="content-area">
+        <!-- Content -->
+        <main class="content">
+            <!-- Tabs -->
             <div class="tabs">
-                <div class="tab active" data-tab="chat">💬 Чат</div>
-                <div class="tab" data-tab="modules">📁 Модули</div>
-                <div class="tab" data-tab="incubae">🌱 Incubae</div>
+                <button class="tab active" data-tab="chat">Чат</button>
+                <button class="tab" data-tab="modules">Модуль</button>
+                <button class="tab" data-tab="incubae">Incubae</button>
             </div>
 
+            <!-- Chat Tab -->
             <div class="tab-content active" id="tab-chat">
                 <div class="chat-container">
                     <div class="messages" id="messages">
-                        <div class="message-divider"><span>✨ Добро пожаловать в Мандалу ✨</span></div>
-                    </div>
-                    <div id="typingIndicator" class="typing-indicator hidden">
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                    </div>
-                    <div class="input-area">
-                        <input type="text" id="messageInput" placeholder="Напиши сообщение..." disabled>
-                        <button id="sendBtn" onclick="sendMessage()" disabled>Отправить</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-content" id="tab-modules">
-                <div class="module-viewer">
-                    <div class="module-header">
-                        <div class="module-title" id="currentModuleTitle">🌙 Выберите модуль</div>
-                        <div class="module-actions">
-                            <button class="module-btn" onclick="downloadCurrentModule()">💾 Скачать</button>
-                            <button class="module-btn" onclick="copyModuleContent()">📋 Копировать</button>
+                        <div class="message system">
+                            <div class="message-bubble">
+                                Добро пожаловать. Соединение устанавливается...
+                            </div>
                         </div>
                     </div>
-                    <div class="module-content" id="moduleContent"><pre>⚡ Нажми на модуль слева</pre></div>
+                    
+                    <div class="typing hidden" id="typing">
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <span>СР печатает...</span>
+                    </div>
+                    
+                    <div class="input-area">
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                class="message-input" 
+                                id="messageInput" 
+                                placeholder="Напишите сообщение... (или 'модуль initium')"
+                                disabled
+                            >
+                        </div>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                            <span>→</span>
+                            <span>Отправить</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Module Tab -->
+            <div class="tab-content" id="tab-modules">
+                <div class="module-viewer">
+                    <div class="module-toolbar">
+                        <div class="module-name" id="moduleName">
+                            <span>◈</span>
+                            <span>Выберите модуль</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-sm" onclick="downloadModule()">Скачать</button>
+                            <button class="btn-sm" onclick="copyModule()">Копировать</button>
+                        </div>
+                    </div>
+                    <div class="module-content" id="moduleContent">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">◈</div>
+                            <div>Выберите модуль из списка слева</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incubae Tab -->
             <div class="tab-content" id="tab-incubae">
-                <div class="seeds-grid" id="seedsGrid"></div>
+                <div class="seeds-container">
+                    <div class="seeds-grid" id="seedsGrid">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">○</div>
+                            <div>Загрузка семян...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Patch Modal -->
+    <div class="modal-overlay" id="patchModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Загрузка патча</div>
+                <button class="modal-close" onclick="closePatchModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                    <div>Перетащите JSON-файл или нажмите для выбора</div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        Поддерживаются одиночные и мульти-патчи
+                    </div>
+                    <input type="file" id="fileInput" accept=".json" hidden onchange="handleFileSelect(event)">
+                </div>
+                <div class="patch-preview hidden" id="patchPreview">
+                    <pre id="patchContent"></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePatchModal()">Отмена</button>
+                <button class="btn btn-primary hidden" id="applyPatchBtn" onclick="applyPatch()">Применить</button>
             </div>
         </div>
     </div>
 
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- JavaScript -->
     <script>
-        // ==================== КОНФИГУРАЦИЯ ====================
-        // ИСПРАВЛЕНО: правильный URL Render-сервиса
+        // ===== CONFIG =====
         const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
-        const BASE_URL = 'https://mandala-engineer-chat.onrender.com';
+        const API_URL = 'https://mandala-engineer-chat.onrender.com';
         
-        // ==================== СОСТОЯНИЕ ====================
+        // Session ID — сохраняется навсегда
+        const SESSION_ID = localStorage.getItem('mc_session') || (() => {
+            const id = 'mc_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+            localStorage.setItem('mc_session', id);
+            return id;
+        })();
+
+        // ===== STATE =====
         let ws = null;
-        let currentMessageDiv = null;
-        let fullResponse = '';
         let currentModule = null;
         let modulesCache = {};
         let currentPatch = null;
-        
-        // ==================== ЭЛЕМЕНТЫ ====================
-        const statusDiv = document.getElementById('status');
-        const messagesDiv = document.getElementById('messages');
-        const input = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const typingIndicator = document.getElementById('typingIndicator');
-        const moduleItems = document.querySelectorAll('.module-item');
-        const tabs = document.querySelectorAll('.tab');
-        const moduleContent = document.getElementById('moduleContent');
-        const currentModuleTitle = document.getElementById('currentModuleTitle');
-        const seedsGrid = document.getElementById('seedsGrid');
-        const patchModal = document.getElementById('patchModal');
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const patchPreviewArea = document.getElementById('patchPreviewArea');
-        const patchPreview = document.getElementById('patchPreview');
+        let messageBuffer = '';
+        let currentMessageDiv = null;
 
-        // ==================== ПОДКЛЮЧЕНИЕ ====================
+        // ===== DOM =====
+        const statusEl = document.getElementById('status');
+        const statusText = document.getElementById('statusText');
+        const messagesEl = document.getElementById('messages');
+        const inputEl = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingEl = document.getElementById('typing');
+        const moduleContentEl = document.getElementById('moduleContent');
+        const moduleNameEl = document.getElementById('moduleName');
+
+        // ===== INITIALIZATION =====
+        function init() {
+            connect();
+            setupTabs();
+            setupModules();
+            setupKeyboard();
+            setupDragDrop();
+        }
+
+        // ===== WEBSOCKET =====
         function connect() {
-            statusDiv.className = 'status-badge connecting';
-            statusDiv.textContent = '🟡 Подключение...';
+            updateStatus('connecting', 'Подключение...');
             
             ws = new WebSocket(WS_URL);
             
             ws.onopen = () => {
-                statusDiv.className = 'status-badge connected';
-                statusDiv.textContent = '🟢 Подключено к СР';
-                input.disabled = false;
-                sendBtn.disabled = false;
-                input.focus();
-                addMessage('system', '🔮 Соединение с Мандалой установлено');
-                fetchKernelStatus();
-                addDivider();
+                // Отправляем инициализацию с session_id
+                ws.send(JSON.stringify({
+                    type: 'init',
+                    session_id: SESSION_ID
+                }));
             };
             
             ws.onmessage = (event) => {
@@ -863,170 +1038,255 @@
                     const data = JSON.parse(event.data);
                     handleMessage(data);
                 } catch (e) {
-                    console.error('Ошибка парсинга сообщения:', e);
+                    console.error('Parse error:', e);
                 }
             };
             
             ws.onclose = () => {
-                statusDiv.className = 'status-badge disconnected';
-                statusDiv.textContent = '🔴 Отключено';
-                input.disabled = true;
-                sendBtn.disabled = true;
-                addMessage('error', '🌌 Соединение разорвано');
+                updateStatus('error', 'Отключено');
+                disableInput();
+                showToast('Соединение разорвано. Переподключение...', 'error');
+                setTimeout(connect, 3000);
             };
             
-            ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
-                statusDiv.className = 'status-badge disconnected';
-                statusDiv.textContent = '❌ Ошибка';
+            ws.onerror = (e) => {
+                console.error('WebSocket error:', e);
+                updateStatus('error', 'Ошибка');
             };
         }
 
-        // ==================== ОБРАБОТКА СООБЩЕНИЙ ====================
         function handleMessage(data) {
-            typingIndicator.classList.add('hidden');
-            
-            if (data.type === 'stream') {
-                if (!currentMessageDiv) {
-                    currentMessageDiv = document.createElement('div');
-                    currentMessageDiv.className = 'message assistant';
-                    messagesDiv.appendChild(currentMessageDiv);
-                }
-                fullResponse += data.content;
-                currentMessageDiv.innerHTML = formatMessage(fullResponse);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                
-            } else if (data.type === 'done') {
-                currentMessageDiv = null;
-                fullResponse = '';
-                addDivider();
-                
-            } else if (data.type === 'error') {
-                addMessage('error', '❌ ' + data.text);
-                currentMessageDiv = null;
-                fullResponse = '';
-                addDivider();
-                
-            } else if (data.type === 'module') {
-                if (data.status === 'found') {
-                    addMessage('system', `📦 Модуль **${data.name}** загружен`);
-                    modulesCache[data.name] = data.content;
-                    if (currentModule === data.name) {
-                        displayModuleContent(data.name, data.content);
-                    }
+            switch (data.type) {
+                case 'connected':
+                    updateStatus('connected', 'На связи');
+                    enableInput();
+                    addSystemMessage(`Соединение установлено [${data.session_id}]`);
+                    addSystemMessage(`Загружено модулей: ${data.modules_loaded?.length || 0}`);
+                    break;
                     
-                    try {
-                        const parsed = JSON.parse(data.content);
-                        const pretty = JSON.stringify(parsed, null, 2);
-                        addMessage('assistant', `📄 **${data.name}**\n\`\`\`json\n${pretty}\n\`\`\``);
-                    } catch {
-                        addMessage('assistant', `📄 **${data.name}**\n\`\`\`\n${data.content}\n\`\`\``);
-                    }
-                    addDivider();
-                } else {
-                    addMessage('error', `❌ Модуль **${data.name}** не найден`);
-                    addDivider();
-                }
-            } else if (data.type === 'pong') {
-                // игнорируем, это keep-alive
-            } else {
-                console.log('Неизвестный тип сообщения:', data.type);
+                case 'stream':
+                    handleStream(data.content);
+                    break;
+                    
+                case 'done':
+                    finishMessage();
+                    break;
+                    
+                case 'error':
+                    showToast(data.text, 'error');
+                    hideTyping();
+                    break;
+                    
+                case 'module_direct':
+                    displayModule(data.name, data.content);
+                    addSystemMessage(`Модуль ${data.name} получен`);
+                    break;
+                    
+                case 'modules_refreshed':
+                    showToast(`Обновлено ${data.count} модулей`, 'success');
+                    break;
+                    
+                case 'pong':
+                    // keep-alive
+                    break;
             }
         }
 
+        // ===== MESSAGING =====
+        function sendMessage() {
+            const text = inputEl.value.trim();
+            if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+            
+            addUserMessage(text);
+            inputEl.value = '';
+            showTyping();
+            
+            ws.send(JSON.stringify({
+                type: 'ask',
+                text: text,
+                session_id: SESSION_ID
+            }));
+        }
+
+        function handleStream(content) {
+            if (!currentMessageDiv) {
+                currentMessageDiv = createMessageElement('assistant');
+                messagesEl.appendChild(currentMessageDiv);
+            }
+            
+            messageBuffer += content;
+            currentMessageDiv.querySelector('.message-bubble').innerHTML = formatMessage(messageBuffer);
+            scrollToBottom();
+        }
+
+        function finishMessage() {
+            hideTyping();
+            currentMessageDiv = null;
+            messageBuffer = '';
+        }
+
+        // ===== UI HELPERS =====
+        function createMessageElement(role) {
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            div.innerHTML = `
+                <div class="message-header">${role === 'user' ? 'Вы' : 'СР'}</div>
+                <div class="message-bubble"></div>
+            `;
+            return div;
+        }
+
+        function addUserMessage(text) {
+            const div = createMessageElement('user');
+            div.querySelector('.message-bubble').textContent = text;
+            messagesEl.appendChild(div);
+            scrollToBottom();
+        }
+
+        function addSystemMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'message system';
+            div.innerHTML = `<div class="message-bubble">${text}</div>`;
+            messagesEl.appendChild(div);
+            scrollToBottom();
+        }
+
         function formatMessage(text) {
-            let escaped = text
+            // Экранируем HTML
+            let html = text
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
             
-            return escaped
-                .replace(/```json\n([\s\S]*?)\n```/g, '<pre>$1</pre>')
-                .replace(/```([\s\S]*?)```/g, '<pre>$1</pre>')
+            // Форматируем
+            return html
+                .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*([^*]+)\*/g, '<em>$1</em>')
                 .replace(/\n/g, '<br>');
         }
 
-        function addMessage(type, text) {
-            const div = document.createElement('div');
-            div.className = 'message ' + type;
-            div.innerHTML = formatMessage(text);
-            messagesDiv.appendChild(div);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        function showTyping() {
+            typingEl.classList.remove('hidden');
+            scrollToBottom();
         }
 
-        function addDivider() {
-            const divider = document.createElement('div');
-            divider.className = 'message-divider';
-            divider.innerHTML = '<span>🌙</span>';
-            messagesDiv.appendChild(divider);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        function hideTyping() {
+            typingEl.classList.add('hidden');
         }
 
-        // ==================== ОТПРАВКА ====================
-        function sendMessage() {
-            const text = input.value.trim();
-            if (!text || !ws) return;
-            
-            typingIndicator.classList.remove('hidden');
-            
-            let message = {};
-            if (text.startsWith('модуль ') || text.startsWith('module ')) {
-                const name = text.split(' ')[1];
-                message = { type: 'module', name: name };
-                addMessage('user', `📦 **Запрос модуля:** ${name}`);
-            } else {
-                message = { type: 'ask', text: text };
-                addMessage('user', text);
-            }
-            
-            ws.send(JSON.stringify(message));
-            input.value = '';
-            currentMessageDiv = null;
-            fullResponse = '';
+        function scrollToBottom() {
+            messagesEl.scrollTop = messagesEl.scrollHeight;
         }
 
-        // ==================== МОДУЛИ ====================
-        moduleItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const name = item.dataset.module;
-                moduleItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                switchTab('modules');
-                loadModule(name);
+        // ===== STATUS =====
+        function updateStatus(state, text) {
+            statusEl.className = 'status ' + state;
+            statusText.textContent = text;
+        }
+
+        function enableInput() {
+            inputEl.disabled = false;
+            sendBtn.disabled = false;
+            inputEl.focus();
+        }
+
+        function disableInput() {
+            inputEl.disabled = true;
+            sendBtn.disabled = true;
+        }
+
+        // ===== TABS =====
+        function setupTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`tab-${tabName}`).classList.add('active');
+                    
+                    if (tabName === 'incubae') loadSeeds();
+                });
             });
-        });
+        }
 
-        function loadModule(name) {
+        // ===== MODULES =====
+        function setupModules() {
+            document.querySelectorAll('.module-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.module-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    const name = item.dataset.module;
+                    requestModule(name);
+                    
+                    // Переключаем на вкладку модуля
+                    document.querySelector('.tab[data-tab="modules"]').click();
+                });
+            });
+        }
+
+        function requestModule(name) {
             currentModule = name;
-            moduleContent.innerHTML = '<pre>⏳ Загрузка...</pre>';
-            currentModuleTitle.textContent = name;
             
             if (modulesCache[name]) {
-                displayModuleContent(name, modulesCache[name]);
+                displayModule(name, modulesCache[name]);
                 return;
             }
             
             if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({ type: 'module', name: name }));
+                ws.send(JSON.stringify({
+                    type: 'module',
+                    name: name,
+                    session_id: SESSION_ID
+                }));
             }
         }
 
-        function displayModuleContent(name, content) {
+        function displayModule(name, content) {
+            modulesCache[name] = content;
+            currentModule = name;
+            
+            // Обновляем заголовок
+            moduleNameEl.innerHTML = `
+                <span>${getModuleIcon(name)}</span>
+                <span>${name}</span>
+            `;
+            
+            // Форматируем JSON
+            let displayContent;
             try {
                 const parsed = JSON.parse(content);
-                const pretty = JSON.stringify(parsed, null, 2);
-                moduleContent.innerHTML = `<pre>${pretty}</pre>`;
+                displayContent = JSON.stringify(parsed, null, 2);
             } catch {
-                moduleContent.innerHTML = `<pre>${content}</pre>`;
+                displayContent = content;
             }
-            currentModuleTitle.textContent = name;
+            
+            moduleContentEl.innerHTML = `<pre>${escapeHtml(displayContent)}</pre>`;
         }
 
-        function downloadCurrentModule() {
-            if (!currentModule || !modulesCache[currentModule]) return;
+        function getModuleIcon(name) {
+            const icons = {
+                initium: '⚡',
+                sphaerae: '◉',
+                akasha_chronicorum: '◈',
+                philosophia: '◇',
+                geometria_sacra: '△',
+                incubae: '○',
+                tectosphaera: '□'
+            };
+            return icons[name] || '◈';
+        }
+
+        function downloadModule() {
+            if (!currentModule || !modulesCache[currentModule]) {
+                showToast('Сначала выберите модуль', 'error');
+                return;
+            }
+            
             const blob = new Blob([modulesCache[currentModule]], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1034,161 +1294,214 @@
             a.download = `${currentModule}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            addMessage('system', `💾 **${currentModule}** скачан`);
+            
+            showToast(`${currentModule}.json скачан`, 'success');
         }
 
-        function copyModuleContent() {
-            if (!currentModule || !modulesCache[currentModule]) return;
+        function copyModule() {
+            if (!currentModule || !modulesCache[currentModule]) {
+                showToast('Сначала выберите модуль', 'error');
+                return;
+            }
+            
             navigator.clipboard.writeText(modulesCache[currentModule]);
-            addMessage('system', `📋 **${currentModule}** скопирован`);
+            showToast('Скопировано в буфер', 'success');
         }
 
-        // ==================== ВКЛАДКИ ====================
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabName = tab.dataset.tab;
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                document.getElementById(`tab-${tabName}`).classList.add('active');
-                if (tabName === 'incubae') loadSeeds();
-            });
-        });
-
-        function switchTab(tabName) {
-            document.querySelector(`.tab[data-tab="${tabName}"]`).click();
-        }
-
-        // ==================== INCUBAE ====================
+        // ===== SEEDS =====
         async function loadSeeds() {
-            seedsGrid.innerHTML = '<div style="padding:20px;">⏳ Загрузка...</div>';
+            const grid = document.getElementById('seedsGrid');
+            grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>Загрузка...</div></div>';
+            
             try {
                 const response = await fetch('https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/incubae.json');
                 if (!response.ok) throw new Error('Ошибка загрузки');
+                
                 const data = await response.json();
                 const seeds = data.seeds || [];
+                
                 if (!seeds.length) {
-                    seedsGrid.innerHTML = '<div style="padding:20px;">🌱 Нет активных семян</div>';
+                    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>Нет активных семян</div></div>';
                     return;
                 }
-                seedsGrid.innerHTML = '';
-                seeds.forEach(seed => {
-                    const card = document.createElement('div');
-                    card.className = 'seed-card';
-                    card.innerHTML = `
-                        <div class="seed-title">${seed.name || 'Без названия'}</div>
-                        <div class="seed-meta">🆔 ${seed.id} | v${seed.version || '1.0'}</div>
-                        <div class="seed-desc">${seed.description || ''}</div>
-                        <span class="seed-status">${seed.status || 'active'}</span>
-                    `;
-                    seedsGrid.appendChild(card);
-                });
-            } catch (error) {
-                seedsGrid.innerHTML = `<div style="padding:20px; color:#ff6b6b;">❌ Ошибка: ${error.message}</div>`;
+                
+                grid.innerHTML = seeds.map(seed => `
+                    <div class="seed-card">
+                        <div class="seed-header">
+                            <div class="seed-title">${escapeHtml(seed.name || 'Без названия')}</div>
+                            <div class="seed-id">${seed.id}</div>
+                        </div>
+                        <div class="seed-desc">${escapeHtml(seed.description || '')}</div>
+                        <div class="seed-meta">
+                            <span class="seed-badge">v${seed.version || '1.0'}</span>
+                            <span class="seed-badge">${seed.status || 'active'}</span>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (err) {
+                grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
             }
         }
 
-        // ==================== БЫСТРЫЕ ДЕЙСТВИЯ ====================
-        function quickAction(action) {
-            switch(action) {
-                case 'seeds':
-                    switchTab('incubae');
-                    break;
-                case 'milestones':
-                    addMessage('user', '🎯 Покажи последние milestones');
-                    ws.send(JSON.stringify({ type: 'ask', text: 'Покажи последние milestones из Akasha Chronicorum' }));
-                    break;
-                case 'resonance':
-                    addMessage('user', '📊 Статус резонанса');
-                    ws.send(JSON.stringify({ type: 'ask', text: 'Какой сейчас резонанс с ядром?' }));
-                    break;
-                case 'kernel':
-                    fetchKernelStatus();
-                    break;
-            }
-        }
-
-        // ==================== СТАТУС ЯДРА (ИСПРАВЛЕНО) ====================
-        async function fetchKernelStatus() {
-            try {
-                const response = await fetch(`${BASE_URL}/kernel`);
-                if (!response.ok) return;
-                const data = await response.json();
-                addMessage('system', `🔱 **Ядро**\n• Initium: ${data.initium_loaded ? '✅' : '❌'}\n• Philosophia: ${data.philosophia_loaded ? '✅' : '❌'}\n• Принципов: ${data.principles_count}`);
-                addDivider();
-            } catch (e) {
-                console.log('Статус ядра временно недоступен');
-            }
-        }
-
-        // ==================== ПАТЧИ ====================
+        // ===== PATCH MODAL =====
         function openPatchModal() {
-            patchModal.classList.add('active');
-            patchPreviewArea.style.display = 'none';
+            document.getElementById('patchModal').classList.add('active');
+            document.getElementById('patchPreview').classList.add('hidden');
+            document.getElementById('applyPatchBtn').classList.add('hidden');
             currentPatch = null;
         }
 
         function closePatchModal() {
-            patchModal.classList.remove('active');
+            document.getElementById('patchModal').classList.remove('active');
         }
 
-        function handleFileDrop(e) {
-            e.preventDefault();
-            const file = e.dataTransfer.files[0];
-            if (file && file.type === 'application/json') {
-                readPatchFile(file);
-            } else {
-                alert('Пожалуйста, загрузи JSON-файл');
-            }
+        function setupDragDrop() {
+            const dropzone = document.getElementById('dropzone');
+            
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('active');
+            });
+            
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('active');
+            });
+            
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('active');
+                const file = e.dataTransfer.files[0];
+                if (file) readFile(file);
+            });
         }
 
         function handleFileSelect(e) {
             const file = e.target.files[0];
-            if (file) readPatchFile(file);
+            if (file) readFile(file);
         }
 
-        function readPatchFile(file) {
+        function readFile(file) {
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                showToast('Требуется JSON-файл', 'error');
+                return;
+            }
+            
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
                     const content = e.target.result;
-                    JSON.parse(content); // проверка
+                    const parsed = JSON.parse(content);
                     currentPatch = content;
-                    patchPreview.textContent = JSON.stringify(JSON.parse(content), null, 2);
-                    patchPreviewArea.style.display = 'block';
-                    dropZone.style.display = 'none';
+                    
+                    // Показываем превью
+                    document.getElementById('patchContent').textContent = JSON.stringify(parsed, null, 2);
+                    document.getElementById('patchPreview').classList.remove('hidden');
+                    document.getElementById('applyPatchBtn').classList.remove('hidden');
                 } catch (err) {
-                    alert('Невалидный JSON');
+                    showToast('Невалидный JSON: ' + err.message, 'error');
                 }
             };
             reader.readAsText(file);
         }
 
-        function applyPatch() {
+        async function applyPatch() {
             if (!currentPatch) return;
-            addMessage('system', '📦 Патч отправлен на сервер...');
-            // Здесь будет реальный POST запрос, пока заглушка
-            setTimeout(() => {
-                addMessage('system', '✅ Патч применён (заглушка)');
-                closePatchModal();
-            }, 1000);
+            
+            closePatchModal();
+            showToast('Применение патча...', 'success');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/apply-patch`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: currentPatch
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showToast(`Патч применён: ${result.commit_sha?.slice(0, 7) || 'успешно'}`, 'success');
+                    // Обновляем модули
+                    refreshModules();
+                } else {
+                    showToast(result.detail || 'Ошибка применения', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка сети: ' + err.message, 'error');
+            }
         }
 
-        dropZone.addEventListener('click', () => fileInput.click());
-
-        // ==================== СТАРТ ====================
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        // Пинг каждые 4 минуты, чтобы сервер не засыпал
-        setInterval(() => {
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({ type: 'ping' }));
+        // ===== QUICK ACTIONS =====
+        function quickAction(action) {
+            switch(action) {
+                case 'seeds':
+                    document.querySelector('.tab[data-tab="incubae"]').click();
+                    break;
+                case 'milestones':
+                    sendDirectMessage('Покажи последние milestones из Akasha');
+                    break;
+                case 'status':
+                    sendDirectMessage('Статус системы');
+                    break;
             }
-        }, 240000);
+        }
 
-        connect();
+        function sendDirectMessage(text) {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('Нет соединения', 'error');
+                return;
+            }
+            addUserMessage(text);
+            showTyping();
+            ws.send(JSON.stringify({
+                type: 'ask',
+                text: text,
+                session_id: SESSION_ID
+            }));
+        }
+
+        function refreshModules() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('Нет соединения', 'error');
+                return;
+            }
+            ws.send(JSON.stringify({
+                type: 'refresh_modules',
+                session_id: SESSION_ID
+            }));
+            showToast('Запрос на обновление модулей отправлен', 'success');
+        }
+
+        // ===== KEYBOARD =====
+        function setupKeyboard() {
+            inputEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        // ===== UTILITIES =====
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ===== START =====
+        init();
     </script>
 </body>
 </html>
