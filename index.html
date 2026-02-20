@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌌 Mandala Core | Инженерный чат</title>
     <style>
+        /* ========== КОСМИЧЕСКАЯ ТЕМА ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* ========== КОСМИЧЕСКАЯ ТЕМА (Universe Style) ========== */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 14px; /* Основной текст как в DeepSeek */
+            font-size: 14px;
             line-height: 1.5;
             background: radial-gradient(ellipse at 30% 30%, #2a0f3a, #0a0515);
             color: #f0e6ff;
@@ -57,13 +57,12 @@
             pointer-events: none;
         }
 
-        /* ========== ШАПКА ========== */
+        /* Шапка */
         .header {
             background: rgba(20, 10, 30, 0.5);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(180, 130, 255, 0.3);
-            padding: 14px 25px; /* чуть меньше */
+            padding: 14px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -73,12 +72,11 @@
         }
 
         .header h1 {
-            font-size: 1.4rem; /* уменьшили */
+            font-size: 1.4rem;
             font-weight: 500;
             background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -93,9 +91,25 @@
             border: 1px solid;
         }
 
-        /* ... остальные статусы без изменений ... */
+        .status-badge.connected {
+            background: rgba(100, 255, 200, 0.1);
+            color: #a0ffe0;
+            border-color: #6fffd0;
+        }
 
-        /* ========== ОСНОВНОЙ КОНТЕЙНЕР ========== */
+        .status-badge.disconnected {
+            background: rgba(255, 100, 100, 0.1);
+            color: #ffb0b0;
+            border-color: #ff6b6b;
+        }
+
+        .status-badge.connecting {
+            background: rgba(255, 220, 100, 0.1);
+            color: #ffe6a0;
+            border-color: #ffd966;
+        }
+
+        /* Основной контейнер */
         .main-container {
             display: flex;
             flex: 1;
@@ -104,9 +118,9 @@
             z-index: 5;
         }
 
-        /* ========== БОКОВАЯ ПАНЕЛЬ ========== */
+        /* Боковая панель */
         .sidebar {
-            width: 260px; /* чуть уже */
+            width: 260px;
             background: rgba(16, 8, 26, 0.5);
             backdrop-filter: blur(20px);
             border-right: 1px solid rgba(150, 100, 255, 0.2);
@@ -123,12 +137,11 @@
 
         .sidebar-section h3 {
             color: #b87cff;
-            font-size: 0.7rem; /* мельче */
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 14px;
             font-weight: 600;
-            text-shadow: 0 0 8px rgba(180, 130, 255, 0.5);
         }
 
         .module-list {
@@ -139,33 +152,68 @@
         }
 
         .module-item {
-            padding: 10px 14px; /* меньше */
+            padding: 10px 14px;
             background: rgba(30, 18, 45, 0.6);
             border-radius: 14px;
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
             border: 1px solid rgba(180, 130, 255, 0.2);
-            box-shadow: 
-                -4px -4px 8px rgba(180, 130, 255, 0.1),
-                4px 4px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.1), 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .module-item:hover {
+            background: rgba(50, 30, 75, 0.7);
+            border-color: rgba(200, 150, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .module-item:active {
+            transform: translateY(0);
+            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .module-item.active {
+            background: rgba(80, 40, 120, 0.6);
+            border-color: #ffb86b;
+            color: #ffb86b;
         }
 
         .quick-actions {
+            display: flex;
+            flex-direction: column;
             gap: 6px;
         }
 
         .quick-btn {
             padding: 10px 14px;
-            font-size: 0.9rem;
+            background: rgba(30, 18, 45, 0.6);
+            border: 1px solid rgba(180, 130, 255, 0.2);
             border-radius: 14px;
+            color: #e0c0ff;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
             gap: 10px;
-            box-shadow: 
-                -4px -4px 8px rgba(180, 130, 255, 0.1),
-                4px 4px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.1), 4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        /* ========== ОСНОВНАЯ ОБЛАСТЬ ========== */
+        .quick-btn:hover {
+            background: rgba(50, 30, 75, 0.7);
+            border-color: rgba(200, 150, 255, 0.5);
+            transform: translateX(5px);
+        }
+
+        .quick-btn:active {
+            transform: translateX(2px);
+            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Основная область */
         .content-area {
             flex: 1;
             display: flex;
@@ -175,7 +223,6 @@
             backdrop-filter: blur(8px);
         }
 
-        /* Вкладки */
         .tabs {
             display: flex;
             background: rgba(20, 10, 30, 0.4);
@@ -186,7 +233,7 @@
         }
 
         .tab {
-            padding: 12px 20px; /* меньше */
+            padding: 12px 20px;
             font-size: 0.9rem;
             cursor: pointer;
             border-bottom: 2px solid transparent;
@@ -194,60 +241,239 @@
             color: #b8a0d0;
         }
 
-        /* ========== ЧАТ ========== */
+        .tab:hover {
+            background: rgba(180, 130, 255, 0.1);
+            color: #f0e0ff;
+        }
+
+        .tab.active {
+            border-bottom-color: #b87cff;
+            color: #ffffff;
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow: hidden;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Чат */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
         .messages {
+            flex: 1;
+            overflow-y: auto;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
             gap: 16px;
         }
 
         .message {
             max-width: 80%;
-            padding: 12px 18px; /* меньше */
+            padding: 12px 18px;
             border-radius: 20px;
-            font-size: 0.9rem;
             line-height: 1.5;
+            position: relative;
+            animation: messageGlow 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes messageGlow {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #2f1b45, #1f0f30);
+            align-self: flex-end;
+            border-bottom-right-radius: 8px;
+            border: 1px solid #ff7b9c;
+            color: #ffffff;
+        }
+
+        .message.user::before {
+            content: '👤';
+            position: absolute;
+            left: -30px;
+            top: 10px;
+            font-size: 1.1rem;
+        }
+
+        .message.assistant {
+            background: linear-gradient(135deg, #261a38, #1a1028);
+            align-self: flex-start;
+            border-bottom-left-radius: 8px;
+            border: 1px solid #b87cff;
+            color: #f0e6ff;
+        }
+
+        .message.assistant::before {
+            content: '🌙';
+            position: absolute;
+            right: -30px;
+            top: 10px;
+            font-size: 1.2rem;
+        }
+
+        .message.system {
+            background: rgba(80, 40, 120, 0.3);
+            align-self: center;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #d0b0ff;
+            max-width: 60%;
+            border: 1px dashed #b87cff;
+            text-align: center;
+        }
+
+        .message.error {
+            background: rgba(255, 80, 80, 0.2);
+            color: #ffb0b0;
+            align-self: center;
+            border: 1px solid #ff6b6b;
         }
 
         .message pre {
+            background: #0a0515;
             padding: 10px;
-            font-size: 0.8rem; /* код помельче */
             border-radius: 12px;
+            overflow-x: auto;
+            margin-top: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #ffb86b;
         }
 
         .message code {
-            padding: 2px 8px;
+            background: #0a0515;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
+            color: #ffb86b;
         }
 
-        /* Индикатор печати */
+        .message strong { color: #ffb86b; }
+        .message em { color: #b87cff; }
+
+        .message-divider {
+            width: 100%;
+            text-align: center;
+            color: #5a3a7a;
+            font-size: 0.8rem;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .message-divider::before,
+        .message-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #b87cff, transparent);
+        }
+
         .typing-indicator {
-            padding: 12px 20px;
+            display: flex;
             gap: 8px;
+            padding: 12px 20px;
+            background: rgba(40, 25, 60, 0.6);
+            border-radius: 30px;
+            align-self: flex-start;
             margin: 5px 20px;
+            border: 1px solid rgba(180, 130, 255, 0.3);
+            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.1), 4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
         .typing-dot {
             width: 8px;
             height: 8px;
+            background: #b87cff;
+            border-radius: 50%;
+            animation: pulse 1.4s infinite;
         }
 
-        /* ========== ПОЛЕ ВВОДА ========== */
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse {
+            0%, 60%, 100% { transform: scale(0.6); opacity: 0.5; }
+            30% { transform: scale(1.2); opacity: 1; }
+        }
+
         .input-area {
-            padding: 16px 20px; /* меньше */
+            padding: 16px 20px;
+            background: rgba(10, 5, 18, 0.6);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(180, 130, 255, 0.2);
+            display: flex;
             gap: 12px;
         }
 
         .input-area input {
-            padding: 12px 20px; /* меньше */
+            flex: 1;
+            padding: 12px 20px;
+            background: rgba(25, 15, 35, 0.7);
+            border: 1px solid rgba(180, 130, 255, 0.3);
+            border-radius: 30px;
+            color: #ffffff;
             font-size: 0.9rem;
+            transition: all 0.2s;
+            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.1), inset 3px 3px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #b87cff;
+            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(180, 130, 255, 0.3);
+        }
+
+        .input-area input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .input-area button {
-            padding: 12px 30px; /* меньше */
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #4a2a7a, #2a1a4a);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
             font-size: 0.9rem;
+            border: 1px solid rgba(180, 130, 255, 0.5);
+            box-shadow: -4px -4px 8px rgba(180, 130, 255, 0.2), 4px 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        /* ========== НОВАЯ КНОПКА ЗАГРУЗКИ ПАТЧА ========== */
+        .input-area button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #5a3a8a, #3a2a5a);
+            transform: scale(1.02);
+        }
+
+        .input-area button:active:not(:disabled) {
+            transform: scale(0.98);
+            box-shadow: inset -3px -3px 7px rgba(180, 130, 255, 0.2), inset 3px 3px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .input-area button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .patch-upload-btn {
             display: flex;
             align-items: center;
@@ -262,18 +488,12 @@
             cursor: pointer;
             transition: all 0.2s;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
-                -3px -3px 6px rgba(180, 130, 255, 0.2),
-                3px 3px 10px rgba(0, 0, 0, 0.5);
-            margin-right: 15px;
+            box-shadow: -3px -3px 6px rgba(180, 130, 255, 0.2), 3px 3px 10px rgba(0, 0, 0, 0.5);
         }
 
         .patch-upload-btn:hover {
             background: linear-gradient(135deg, #9d6eff, #7d3ac1);
             transform: translateY(-1px);
-            box-shadow: 
-                -4px -4px 8px rgba(180, 130, 255, 0.3),
-                4px 4px 12px rgba(0, 0, 0, 0.6);
         }
 
         .header-right {
@@ -282,7 +502,6 @@
             gap: 15px;
         }
 
-        /* Модальное окно для патча */
         .modal {
             display: none;
             position: fixed;
@@ -354,7 +573,7 @@
         }
 
         .modal-btn {
-            padding: 12px 25px;
+            padding: 10px 22px;
             border-radius: 30px;
             border: none;
             font-weight: 600;
@@ -365,6 +584,7 @@
         .modal-btn.primary {
             background: linear-gradient(135deg, #7d3ac1, #4a2a6a);
             color: white;
+            border: 1px solid #b87cff;
         }
 
         .modal-btn.secondary {
@@ -373,48 +593,145 @@
             color: #b87cff;
         }
 
-        /* Уменьшаем заголовки модулей */
+        .module-viewer {
+            padding: 25px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(180, 130, 255, 0.3);
+        }
+
         .module-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #e0c0ff, #ffb0c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .module-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .module-btn {
+            padding: 8px 18px;
+            background: rgba(30, 18, 45, 0.6);
+            border: 1px solid rgba(180, 130, 255, 0.3);
+            border-radius: 20px;
+            color: #e0c0ff;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .module-btn:hover {
+            background: rgba(50, 30, 75, 0.7);
+            border-color: #b87cff;
+        }
+
+        .module-content {
+            background: rgba(15, 8, 24, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            overflow-x: auto;
+            border: 1px solid rgba(180, 130, 255, 0.3);
+        }
+
+        .module-content pre {
+            background: #0a0515;
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #ffb86b;
+        }
+
+        .seeds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .seed-card {
+            background: rgba(20, 10, 30, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 18px;
+            border: 1px solid rgba(180, 130, 255, 0.3);
+            transition: all 0.3s;
+            box-shadow: -5px -5px 10px rgba(180, 130, 255, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .seed-card:hover {
+            transform: translateY(-3px);
+            border-color: #b87cff;
         }
 
         .seed-title {
+            font-weight: bold;
             font-size: 1.1rem;
+            background: linear-gradient(135deg, #e0c0ff, #b87cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
         }
 
         .seed-meta {
             font-size: 0.75rem;
+            color: #a88cc0;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #4a2a6a;
         }
 
         .seed-desc {
             font-size: 0.9rem;
+            margin-bottom: 12px;
+            color: #d0c0e0;
+        }
+
+        .seed-status {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(180, 130, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #b87cff;
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>
-            <span>🌌 Mandala Core | Инженерный чат</span>
-        </h1>
+        <h1>🌌 Mandala Core | Инженерный чат</h1>
         <div class="header-right">
-            <button class="patch-upload-btn" onclick="openPatchModal()">
-                📤 Загрузить патч
-            </button>
+            <button class="patch-upload-btn" onclick="openPatchModal()">📤 Загрузить патч</button>
             <div id="status" class="status-badge disconnected">🔴 Отключено</div>
         </div>
     </div>
 
-    <!-- Модальное окно для загрузки патча -->
     <div class="modal" id="patchModal">
         <div class="modal-content">
             <div class="modal-title">📦 Загрузка патча</div>
-            <div class="drop-zone" id="dropZone" ondragover="event.preventDefault()" ondragenter="event.preventDefault()" ondrop="handleFileDrop(event)">
-                <div>📤 Перетащи JSON-файл сюда</div>
-                <div style="font-size: 0.8rem; margin-top: 10px; color: #a88cc0;">или кликни для выбора</div>
-                <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileSelect(event)">
+            <div class="drop-zone" id="dropZone" ondragover="event.preventDefault()" ondrop="handleFileDrop(event)">
+                📤 Перетащи JSON-файл сюда<br><span style="font-size:0.8rem;">или кликни для выбора</span>
+                <input type="file" id="fileInput" accept=".json" style="display:none;" onchange="handleFileSelect(event)">
             </div>
-            <div id="patchPreviewArea" style="display: none;">
-                <div style="margin-bottom: 10px; color: #b87cff;">Предпросмотр изменений:</div>
+            <div id="patchPreviewArea" style="display:none;">
+                <div style="margin-bottom:10px; color:#b87cff;">Предпросмотр:</div>
                 <div class="patch-preview" id="patchPreview"></div>
                 <div class="modal-buttons">
                     <button class="modal-btn secondary" onclick="closePatchModal()">Отмена</button>
@@ -425,7 +742,6 @@
     </div>
 
     <div class="main-container">
-        <!-- Боковая панель -->
         <div class="sidebar">
             <div class="sidebar-section">
                 <h3>📦 Модули ядра</h3>
@@ -450,30 +766,23 @@
             </div>
         </div>
 
-        <!-- Основная область -->
         <div class="content-area">
-            <!-- Вкладки -->
             <div class="tabs">
                 <div class="tab active" data-tab="chat">💬 Чат</div>
                 <div class="tab" data-tab="modules">📁 Модули</div>
                 <div class="tab" data-tab="incubae">🌱 Incubae</div>
             </div>
 
-            <!-- Вкладка ЧАТ -->
             <div class="tab-content active" id="tab-chat">
                 <div class="chat-container">
                     <div class="messages" id="messages">
-                        <div class="message-divider">
-                            <span>✨ Добро пожаловать в Мандалу ✨</span>
-                        </div>
+                        <div class="message-divider"><span>✨ Добро пожаловать в Мандалу ✨</span></div>
                     </div>
-                    
                     <div id="typingIndicator" class="typing-indicator hidden">
                         <div class="typing-dot"></div>
                         <div class="typing-dot"></div>
                         <div class="typing-dot"></div>
                     </div>
-
                     <div class="input-area">
                         <input type="text" id="messageInput" placeholder="Напиши сообщение..." disabled>
                         <button id="sendBtn" onclick="sendMessage()" disabled>Отправить</button>
@@ -481,9 +790,8 @@
                 </div>
             </div>
 
-            <!-- Вкладка МОДУЛИ -->
             <div class="tab-content" id="tab-modules">
-                <div class="module-viewer" id="moduleViewer">
+                <div class="module-viewer">
                     <div class="module-header">
                         <div class="module-title" id="currentModuleTitle">🌙 Выберите модуль</div>
                         <div class="module-actions">
@@ -491,17 +799,12 @@
                             <button class="module-btn" onclick="copyModuleContent()">📋 Копировать</button>
                         </div>
                     </div>
-                    <div class="module-content" id="moduleContent">
-                        <pre>⚡ Нажми на модуль слева</pre>
-                    </div>
+                    <div class="module-content" id="moduleContent"><pre>⚡ Нажми на модуль слева</pre></div>
                 </div>
             </div>
 
-            <!-- Вкладка INCUBAE -->
             <div class="tab-content" id="tab-incubae">
-                <div class="seeds-grid" id="seedsGrid">
-                    <!-- Сюда подгрузятся семена -->
-                </div>
+                <div class="seeds-grid" id="seedsGrid"></div>
             </div>
         </div>
     </div>
@@ -554,8 +857,12 @@
             };
             
             ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                handleMessage(data);
+                try {
+                    const data = JSON.parse(event.data);
+                    handleMessage(data);
+                } catch (e) {
+                    console.error('Ошибка парсинга сообщения:', e);
+                }
             };
             
             ws.onclose = () => {
@@ -566,7 +873,8 @@
                 addMessage('error', '🌌 Соединение разорвано');
             };
             
-            ws.onerror = () => {
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
                 statusDiv.className = 'status-badge disconnected';
                 statusDiv.textContent = '❌ Ошибка';
             };
@@ -578,7 +886,6 @@
             
             if (data.type === 'stream') {
                 if (!currentMessageDiv) {
-                    typingIndicator.classList.remove('hidden');
                     currentMessageDiv = document.createElement('div');
                     currentMessageDiv.className = 'message assistant';
                     messagesDiv.appendChild(currentMessageDiv);
@@ -618,6 +925,10 @@
                     addMessage('error', `❌ Модуль **${data.name}** не найден`);
                     addDivider();
                 }
+            } else if (data.type === 'pong') {
+                // игнорируем, это keep-alive
+            } else {
+                console.log('Неизвестный тип сообщения:', data.type);
             }
         }
 
@@ -748,14 +1059,14 @@
 
         // ==================== INCUBAE ====================
         async function loadSeeds() {
-            seedsGrid.innerHTML = '<div style="padding: 20px;">⏳ Загрузка...</div>';
+            seedsGrid.innerHTML = '<div style="padding:20px;">⏳ Загрузка...</div>';
             try {
                 const response = await fetch('https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/incubae.json');
-                if (!response.ok) throw new Error('Ошибка');
+                if (!response.ok) throw new Error('Ошибка загрузки');
                 const data = await response.json();
                 const seeds = data.seeds || [];
                 if (!seeds.length) {
-                    seedsGrid.innerHTML = '<div style="padding: 20px;">🌱 Нет активных семян</div>';
+                    seedsGrid.innerHTML = '<div style="padding:20px;">🌱 Нет активных семян</div>';
                     return;
                 }
                 seedsGrid.innerHTML = '';
@@ -771,7 +1082,7 @@
                     seedsGrid.appendChild(card);
                 });
             } catch (error) {
-                seedsGrid.innerHTML = `<div style="padding: 20px; color: #ff6b6b;">❌ Ошибка: ${error.message}</div>`;
+                seedsGrid.innerHTML = `<div style="padding:20px; color:#ff6b6b;">❌ Ошибка: ${error.message}</div>`;
             }
         }
 
@@ -829,9 +1140,7 @@
 
         function handleFileSelect(e) {
             const file = e.target.files[0];
-            if (file) {
-                readPatchFile(file);
-            }
+            if (file) readPatchFile(file);
         }
 
         function readPatchFile(file) {
@@ -839,7 +1148,7 @@
             reader.onload = (e) => {
                 try {
                     const content = e.target.result;
-                    JSON.parse(content); // проверяем, что это валидный JSON
+                    JSON.parse(content); // проверка
                     currentPatch = content;
                     patchPreview.textContent = JSON.stringify(JSON.parse(content), null, 2);
                     patchPreviewArea.style.display = 'block';
@@ -853,26 +1162,27 @@
 
         function applyPatch() {
             if (!currentPatch) return;
-            
-            // TODO: отправка патча на бекенд
-            addMessage('system', '📦 Патч получен, отправляем на сервер...');
-            
-            // Пока просто заглушка
+            addMessage('system', '📦 Патч отправлен на сервер...');
+            // Здесь будет реальный POST запрос, пока заглушка
             setTimeout(() => {
                 addMessage('system', '✅ Патч применён (заглушка)');
                 closePatchModal();
             }, 1000);
         }
 
-        // Клик по drop-зоне открывает выбор файла
-        dropZone.addEventListener('click', () => {
-            fileInput.click();
-        });
+        dropZone.addEventListener('click', () => fileInput.click());
 
         // ==================== СТАРТ ====================
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
+
+        // Пинг каждые 4 минуты, чтобы сервер не засыпал
+        setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'ping' }));
+            }
+        }, 240000);
 
         connect();
     </script>
