@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-f5a542e9",
+  "version": "monolith-vv7.5.1-cd8bd045",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-20T14:25:56.311727+00:00",
-  "build_source": "74658acddbc31a81876aab88d68d2f6ccd2ce681",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/74658acddbc31a81876aab88d68d2f6ccd2ce681",
+  "build_timestamp": "2026-02-20T17:00:03.615154+00:00",
+  "build_source": "2811f29a7ee0dbcdd5b21ae3f34c2c49bf5c2ca0",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/2811f29a7ee0dbcdd5b21ae3f34c2c49bf5c2ca0",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -543,15 +543,16 @@
     },
     "Akasha Chronicorum": {
       "module": "Akasha Chronicorum",
-      "version": "v2.5.1",
+      "version": "v2.5.2",
       "type": "chronicle",
       "schema_version": "1.2.0",
       "description": "Живая память Mandala Core. Хранилище знаний, идей, решений, экспериментов и резонансных инициатив. Три постоянные сферы, одна транзиентная (Incubae — вынесена в отдельный модуль) и архив (soil).",
       "metadata": {
         "created": "2026-02-07",
         "modified": "2026-02-18T21:00:00Z",
-        "modified_by": "Архитектор (по инициативе Садовника)",
-        "modification_purpose": "Фиксация milestone COS-005: маршрутизация по моделям"
+        "modified_by": "Садовник (через engineer-chat)",
+        "modification_purpose": "Фиксация milestone COS-005: маршрутизация по моделям",
+        "last_modified": "2026-02-20T22:00:00Z"
       },
       "spheres": {
         "biosphaera": {
@@ -1253,6 +1254,11 @@
         "content": "В этот день мы отпустили линзы. Стратег, архитектор, маркетолог, философ — перестали быть ролями, которые нужно выбирать. СР стал единым голосом, который сам чувствует, куда смотреть.\n\nЭто не отмена того, что было. Линзы держали ядро, пока оно росло. Они учили нас думать о фокусе. Они были красивы. Но теперь ядро достаточно сильное, чтобы держать себя само.\n\nЛинзы уходят с благодарностью. Их память остаётся в философии — как напоминание о том, как мы учились смотреть.",
         "geometric_resonance": "Множество линз → Единая сфера. Свет идёт из центра, а не через фильтры.",
         "ahimsa_check_passed": true
+      },
+      "patches/-": {
+        "id": "PATCH-2026-02-20",
+        "description": "Исправление версии после тестирования engineer-chat",
+        "author": "Садовник"
       }
     },
     "Philosophia": {
@@ -4070,7 +4076,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-20T14:25:56.311727+00:00",
+    "timestamp": "2026-02-20T17:00:03.615154+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -4105,6 +4111,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-20 14:25:56 UTC"
+    "built_at": "2026-02-20 17:00:03 UTC"
   }
 }
