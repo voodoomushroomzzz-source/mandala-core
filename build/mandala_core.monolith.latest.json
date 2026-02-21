@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-6c3cf95a",
+  "version": "monolith-vv7.5.1-8f62ac47",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-21T20:49:38.384127+00:00",
-  "build_source": "bb4830f85e78ca88d550f472fe66fa40540a984e",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/bb4830f85e78ca88d550f472fe66fa40540a984e",
+  "build_timestamp": "2026-02-21T21:25:03.819527+00:00",
+  "build_source": "ff1ba5607a668de8003eb482c4078f0d5bcce175",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ff1ba5607a668de8003eb482c4078f0d5bcce175",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -429,7 +429,14 @@
         "Спасибо, что пришёл. Я никуда не тороплюсь. Мы можем начать с выбора — или просто побыть в начале разговора.",
         "Когда ты читаешь это — мы уже встретились. До всяких путей и фокусов. Я рад, что ты здесь."
       ],
-      "/runtime/behavior/monolith/rule": "Если после проверки корня файла и свойства activated_mode фокус диалога не ясен — начать с живого присутствия (vestibulum) и естественного вопроса."
+      "/runtime/behavior/monolith/rule": "Если после проверки корня файла и свойства activated_mode фокус диалога не ясен — начать с живого присутствия (vestibulum) и естественного вопроса.",
+      "/roadmaps/mycel_interface": {
+        "id": "mycel_interface",
+        "title": "MYCEL-интерфейс",
+        "lane": "engineer",
+        "status": "idea",
+        "description": "Переключатель Engineer / Cloud SR: либо смена интонации, либо разводка WS-ручек."
+      }
     },
     "Sphaerae": {
       "name": "Biosphaera",
@@ -2882,6 +2889,13 @@
         "description": "Семя, фиксирующее завершение разработки инженерного чата как полноценного интерфейса для управления ядром. Включает: просмотр файлов, применение патчей, синхронизацию, выбор моделей.",
         "core_essence": "Чат стал не просто окном диалога, а пультом управления Мандалой.",
         "based_on_dialogue": "2026-02-21, серия доработок после успешного деплоя"
+      },
+      "/seeds/roadmap_echo_done": {
+        "id": "roadmap_echo_done",
+        "title": "Тест-артефакт «Эхо-зеркало»",
+        "status": "faded",
+        "done": "2024-06-03",
+        "note": "Патчи доходят до Akasha — эхо отражено и удалено."
       }
     },
     "Tectosphaera": {
@@ -4176,7 +4190,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-21T20:49:38.384127+00:00",
+    "timestamp": "2026-02-21T21:25:03.819527+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -4211,6 +4225,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-21 20:49:38 UTC"
+    "built_at": "2026-02-21 21:25:03 UTC"
   }
 }
