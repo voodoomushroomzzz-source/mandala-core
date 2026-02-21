@@ -27,8 +27,8 @@
             --text-3: #254535;
             --mono: 'Fira Mono', monospace;
             --sans: 'Nunito', sans-serif;
-            --copy: #10b981;      /* зелёный для кнопок копирования */
-            --download: #3b82f6;   /* синий для скачивания */
+            --copy: #10b981;
+            --download: #3b82f6;
             --radius: 8px;
             --radius-sm: 4px;
         }
@@ -70,19 +70,23 @@
             to { transform: scale(1.15) translate(-20px, 15px); }
         }
 
-        /* Flower of Life background */
+        /* Flower of Life background — ярче */
         .bg-flower {
             position: fixed;
             right: -220px; top: 50%;
             transform: translateY(-50%);
             width: 700px; height: 700px;
-            opacity: 0.035;
+            opacity: 0.07;
             pointer-events: none;
             animation: flower-breathe 8s ease-in-out infinite alternate;
         }
+        .bg-flower circle {
+            stroke: #10b981;
+            stroke-width: 0.6;
+        }
         @keyframes flower-breathe {
-            from { opacity: 0.025; transform: translateY(-50%) scale(1); }
-            to { opacity: 0.05; transform: translateY(-50%) scale(1.03); }
+            from { opacity: 0.05; transform: translateY(-50%) scale(1); }
+            to { opacity: 0.09; transform: translateY(-50%) scale(1.03); }
         }
 
         /* ===== HEADER ===== */
@@ -97,8 +101,6 @@
             position: relative;
             z-index: 10;
         }
-
-        /* Bottom glow line */
         .header::after {
             content: '';
             position: absolute;
@@ -273,7 +275,6 @@
         .sidebar.collapsed .nav-title,
         .sidebar.collapsed .nav-item span:not(.nicon) { display: none; }
 
-        /* Left mycelium accent */
         .sidebar::before {
             content: '';
             position: absolute;
@@ -325,7 +326,8 @@
         .nav-title {
             font-family: var(--mono); font-size: 7px;
             letter-spacing: 3px; text-transform: uppercase;
-            color: var(--text-3); margin-bottom: 14px;
+            color: var(--green-bright); /* ярче */
+            margin-bottom: 14px;
         }
 
         .nav-item {
@@ -504,25 +506,39 @@
             white-space: pre;
         }
 
-        /* ===== TYPING ===== */
-        .typing {
+        /* ===== THINKING (новый блок) ===== */
+        .thinking {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             padding: 4px 22px 10px;
-            display: flex; align-items: center; gap: 10px;
-            font-family: var(--mono); font-size: 8px;
-            letter-spacing: 2px; text-transform: uppercase;
-            color: var(--text-3);
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--green-bright);
         }
-        .tdots { display: flex; gap: 5px; align-items: center; }
-        .td {
-            width: 5px; height: 5px; border-radius: 50%;
-            animation: tda 1.6s ease-in-out infinite both;
+        .thinking .logo {
+            width: 18px;
+            height: 18px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNCAzNCI+PHJlY3Qgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIGZpbGw9Im5vbmUiIC8+PGNpcmNsZSBjeD0iMTciIGN5PSIxMCIgcj0iNyIgc3Ryb2tlPSIjMTBiOTgxIiBzdHJva2Utd2lkdGg9IjAuOCIgb3BhY2l0eT0iMC42IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMjQiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIyMy4wNiIgY3k9IjEzLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIyMy4wNiIgY3k9IjIwLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxMC45NCIgY3k9IjEzLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxMC45NCIgY3k9IjIwLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxNyIgY3k9IjE3IiByPSIxNiIgc3Ryb2tlPSIjMDU5NjY5IiBzdHJva2Utd2lkdGg9IjAuNSIgb3BhY2l0eT0iMC40IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjIiIGZpbGw9IiMzNGQzOTkiIG9wYWNpdHk9IjAuOSIgLz48L3N2Zz4=') center/contain no-repeat;
+            animation: spin 1.2s linear infinite;
         }
-        .td:nth-child(1) { background: var(--green-2); }
-        .td:nth-child(2) { background: var(--violet-soft); animation-delay: 0.22s; }
-        .td:nth-child(3) { background: var(--indigo-soft); animation-delay: 0.44s; }
-        @keyframes tda {
-            0%,80%,100% { transform: scale(0.4); opacity: 0.2; }
-            40% { transform: scale(1); opacity: 1; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .dots {
+            display: inline-block;
+        }
+        .dots::after {
+            content: '';
+            display: inline-block;
+            width: 2ch;
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
         }
 
         /* ===== INPUT ===== */
@@ -574,13 +590,7 @@
             box-shadow: 0 4px 30px rgba(16,185,129,0.55);
             transform: translateY(-1px);
         }
-
-        .ihint {
-            margin-top: 7px; text-align: center;
-            font-family: var(--mono); font-size: 8px;
-            letter-spacing: 1.5px; text-transform: uppercase;
-            color: var(--text-3);
-        }
+        .isend:disabled { opacity: 0.4; cursor: not-allowed; }
 
         /* ===== FILE PREVIEW ===== */
         .file-attachment {
@@ -679,9 +689,9 @@
     <div class="glow-pool gp-1"></div>
     <div class="glow-pool gp-2"></div>
 
-    <!-- Flower of Life SVG background -->
+    <!-- Flower of Life SVG background (ярче) -->
     <svg class="bg-flower" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g stroke="white" stroke-width="0.5">
+        <g stroke="#10b981" stroke-width="0.6">
             <circle cx="250" cy="250" r="80"/>
             <circle cx="250" cy="170" r="80"/>
             <circle cx="250" cy="330" r="80"/>
@@ -767,13 +777,10 @@
             <div class="tab-content active" id="tab-chat">
                 <div class="chat-container" style="display: flex; flex-direction: column; height: 100%;">
                     <div class="messages" id="messages"></div>
-                    <div class="typing hidden" id="typing">
-                        <div class="tdots">
-                            <div class="td"></div>
-                            <div class="td"></div>
-                            <div class="td"></div>
-                        </div>
-                        СР печатает
+                    <!-- Новый блок "СР думает" -->
+                    <div class="thinking hidden" id="thinking">
+                        <span class="logo"></span>
+                        <span>СР думает<span class="dots"></span></span>
                     </div>
                     <div id="filePreview" class="hidden file-attachment" style="margin: 0 22px 8px;">
                         <span>📎</span><span id="fileName">file.json</span><span class="remove" onclick="clearFile()">×</span>
@@ -781,10 +788,10 @@
                     <div class="input-area">
                         <div class="irow">
                             <button class="ibtn" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
-                            <textarea class="ifield" id="messageInput" placeholder="Впиши волну… Shift+Enter — новая строка" rows="1" disabled></textarea>
+                            <textarea class="ifield" id="messageInput" placeholder="Впиши волну…" rows="1" disabled></textarea>
                             <button class="ibtn isend" id="sendBtn" onclick="sendMessage()" disabled>➤</button>
                         </div>
-                        <div class="ihint">shift + enter → новая строка</div>
+                        <!-- Подсказка убрана -->
                     </div>
                 </div>
             </div>
@@ -825,7 +832,7 @@
         const messagesEl = document.getElementById('messages');
         const inputEl = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
-        const typingEl = document.getElementById('typing');
+        const thinkingEl = document.getElementById('thinking');
         const seedsGrid = document.getElementById('seedsGrid');
         const filePreview = document.getElementById('filePreview');
         const fileNameEl = document.getElementById('fileName');
@@ -851,7 +858,6 @@
                 modelLabel.textContent = value;
                 modelMenu.classList.remove('open');
                 modelTrigger.classList.remove('open');
-                // Отправляем команду смены модели
                 changeModel(value);
             });
         });
@@ -916,7 +922,7 @@
                 case 'system': addSystemMessage(data.text); break;
                 case 'stream': handleStream(data.content); break;
                 case 'done': finishMessage(); break;
-                case 'error': showToast(data.text,'error'); hideTyping(); finishMessage(); break;
+                case 'error': showToast(data.text,'error'); hideThinking(); finishMessage(); break;
                 case 'module_direct': showToast(`◈ модуль ${data.name} получен`,'success'); break;
                 case 'modules_refreshed': showToast(`◈ обновлено ${data.count} модулей`,'success'); break;
                 case 'file_processed': addSystemMessage(data.summary); break;
@@ -989,7 +995,7 @@
             scrollToBottom();
         }
 
-        function finishMessage() { hideTyping(); currentMessageDiv = null; messageBuffer = ''; }
+        function finishMessage() { hideThinking(); currentMessageDiv = null; messageBuffer = ''; }
 
         function renderCodeBlock(lang, code, complete) {
             const copyBtnClass = 'code-btn copy';
@@ -1035,14 +1041,14 @@
             const text = inputEl.value.trim();
             if(pendingFile) { sendFile(pendingFile, text); clearFile(); inputEl.value = ''; autoHeight(); return; }
             if(!text || !ws || ws.readyState !== WebSocket.OPEN) return;
-            addUserMessage(text); inputEl.value = ''; autoHeight(); showTyping();
+            addUserMessage(text); inputEl.value = ''; autoHeight(); showThinking();
             ws.send(JSON.stringify({type:'ask', text:text, session_id:SESSION_ID}));
         }
 
         function sendFile(file, caption='') {
             if(!ws || ws.readyState !== WebSocket.OPEN) { showToast('◈ нет соединения','error'); return; }
             if(caption.trim()) addUserMessage(caption);
-            showTyping();
+            showThinking();
             const reader = new FileReader();
             reader.onload = function(e) {
                 ws.send(JSON.stringify({
@@ -1073,8 +1079,8 @@
         function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
         function enableInput() { inputEl.disabled = false; sendBtn.disabled = false; inputEl.focus(); }
         function disableInput() { inputEl.disabled = true; sendBtn.disabled = true; }
-        function showTyping() { typingEl.classList.remove('hidden'); scrollToBottom(); }
-        function hideTyping() { typingEl.classList.add('hidden'); }
+        function showThinking() { thinkingEl.classList.remove('hidden'); scrollToBottom(); }
+        function hideThinking() { thinkingEl.classList.add('hidden'); }
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
         function autoHeight() { inputEl.style.height = 'auto'; inputEl.style.height = inputEl.scrollHeight + 'px'; }
 
@@ -1140,7 +1146,7 @@
 
         function sendDirectMessage(text) {
             if(!ws || ws.readyState !== WebSocket.OPEN) { showToast('◈ нет соединения','error'); return; }
-            addUserMessage(text); showTyping(); ws.send(JSON.stringify({type:'ask', text:text, session_id:SESSION_ID}));
+            addUserMessage(text); showThinking(); ws.send(JSON.stringify({type:'ask', text:text, session_id:SESSION_ID}));
         }
 
         function changeModel(model) {
