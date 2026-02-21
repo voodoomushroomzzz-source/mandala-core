@@ -91,6 +91,38 @@
             gap: 8px;
         }
 
+        /* Навигация в хедере */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: none;
+            color: var(--border-glow);
+            font-size: 11px;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.15s ease;
+        }
+
+        .nav-btn:hover {
+            color: var(--star);
+            background: var(--surface);
+        }
+
+        .nav-btn.active {
+            color: var(--nebula-glow);
+            background: var(--surface);
+            box-shadow: inset 0 -2px 0 var(--nebula);
+        }
+
         /* Индикатор — просто светящаяся точка */
         .status-dot {
             width: 8px;
@@ -99,6 +131,7 @@
             background: var(--border);
             box-shadow: 0 0 4px currentColor;
             transition: all 0.3s ease;
+            margin-left: 12px;
         }
 
         .status-dot.connected {
@@ -216,33 +249,6 @@
             font-size: 10px;
         }
 
-        .quick-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .quick-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 12px;
-            color: var(--border-glow);
-            background: transparent;
-            border: none;
-            text-align: left;
-            transition: all 0.15s ease;
-            font-family: var(--font-mono);
-        }
-
-        .quick-btn:hover {
-            background: var(--surface);
-            color: var(--star);
-        }
-
         /* ===== CONTENT ===== */
         .content {
             flex: 1;
@@ -250,43 +256,6 @@
             flex-direction: column;
             overflow: hidden;
             background: var(--void);
-        }
-
-        /* ===== TABS ===== */
-        .tabs {
-            height: 36px;
-            background: var(--deep);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-
-        .tab {
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 12px;
-            color: var(--border-glow);
-            border: none;
-            background: transparent;
-            transition: all 0.15s ease;
-            font-family: var(--font-mono);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .tab:hover {
-            color: var(--star);
-            background: var(--surface);
-        }
-
-        .tab.active {
-            color: var(--nebula-glow);
-            background: var(--surface);
-            box-shadow: inset 0 -2px 0 var(--nebula);
         }
 
         /* ===== CHAT ===== */
@@ -959,6 +928,14 @@
             <div class="header-title">MANDALA ENGINEER</div>
         </div>
         <div class="header-right">
+            <!-- Навигация в хедере вместо отдельной секции -->
+            <nav class="header-nav">
+                <button class="nav-btn active" data-tab="chat">◈ чат</button>
+                <button class="nav-btn" data-tab="modules">◈ модули</button>
+                <button class="nav-btn" data-tab="incubae">◈ семена</button>
+                <button class="nav-btn" onclick="quickAction('milestones')">◈ вехи</button>
+                <button class="nav-btn" onclick="quickAction('status')">◉ статус</button>
+            </nav>
             <button class="btn-geo" onclick="refreshModules()" title="Обновить">↻</button>
             <button class="btn-geo" onclick="openPatchModal()" title="Патч">△</button>
             <div class="status-dot" id="statusDot" title="Статус"></div>
@@ -967,29 +944,29 @@
 
     <!-- Main -->
     <div class="main">
-        <!-- Sidebar -->
+        <!-- Sidebar — только модули -->
         <aside class="sidebar">
             <div class="sidebar-section">
                 <div class="sidebar-title">◈ Модули</div>
                 <div class="module-list" id="moduleList">
                     <div class="module-item" data-module="initium">
-                        <span class="module-icon">⚡</span>
+                        <span class="module-icon">○</span>
                         <span>initium</span>
                     </div>
                     <div class="module-item" data-module="sphaerae">
-                        <span class="module-icon">◉</span>
+                        <span class="module-icon">○</span>
                         <span>sphaerae</span>
                     </div>
                     <div class="module-item" data-module="akasha_chronicorum">
-                        <span class="module-icon">◈</span>
+                        <span class="module-icon">○</span>
                         <span>akasha</span>
                     </div>
                     <div class="module-item" data-module="philosophia">
-                        <span class="module-icon">◇</span>
+                        <span class="module-icon">○</span>
                         <span>philosophia</span>
                     </div>
                     <div class="module-item" data-module="geometria_sacra">
-                        <span class="module-icon">△</span>
+                        <span class="module-icon">○</span>
                         <span>geometria</span>
                     </div>
                     <div class="module-item" data-module="incubae">
@@ -997,40 +974,15 @@
                         <span>incubae</span>
                     </div>
                     <div class="module-item" data-module="tectosphaera">
-                        <span class="module-icon">□</span>
+                        <span class="module-icon">○</span>
                         <span>tectosphaera</span>
                     </div>
-                </div>
-            </div>
-            
-            <div class="sidebar-section">
-                <div class="sidebar-title">◈ Навигация</div>
-                <div class="quick-actions">
-                    <button class="quick-btn" onclick="quickAction('seeds')">
-                        <span>○</span>
-                        <span>семена</span>
-                    </button>
-                    <button class="quick-btn" onclick="quickAction('milestones')">
-                        <span>◈</span>
-                        <span>вехи</span>
-                    </button>
-                    <button class="quick-btn" onclick="quickAction('status')">
-                        <span>◉</span>
-                        <span>статус</span>
-                    </button>
                 </div>
             </div>
         </aside>
 
         <!-- Content -->
         <main class="content">
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab active" data-tab="chat">◈ чат</button>
-                <button class="tab" data-tab="modules">◈ модуль</button>
-                <button class="tab" data-tab="incubae">◈ семена</button>
-            </div>
-
             <!-- Chat Tab -->
             <div class="tab-content active" id="tab-chat">
                 <div class="chat-container">
@@ -1081,7 +1033,7 @@
                 <div class="module-viewer">
                     <div class="module-toolbar">
                         <div class="module-name" id="moduleName">
-                            <span>◈</span>
+                            <span>○</span>
                             <span>выберите модуль</span>
                         </div>
                         <div class="module-actions">
@@ -1091,7 +1043,7 @@
                     </div>
                     <div class="module-content" id="moduleContent">
                         <div class="empty-state">
-                            <div class="empty-state-icon">◈</div>
+                            <div class="empty-state-icon">○</div>
                             <div>выберите модуль из списка</div>
                         </div>
                     </div>
@@ -1593,12 +1545,13 @@
 
         // ===== TABS =====
         function setupTabs() {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.dataset.tab;
+            // Хедер-навигация
+            document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabName = btn.dataset.tab;
                     
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
+                    document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
                     
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
@@ -1617,7 +1570,8 @@
                     
                     const name = item.dataset.module;
                     requestModule(name);
-                    document.querySelector('.tab[data-tab="modules"]').click();
+                    // Переключаем на вкладку модулей
+                    document.querySelector('.nav-btn[data-tab="modules"]').click();
                 });
             });
         }
@@ -1643,12 +1597,7 @@
             modulesCache[name] = content;
             currentModule = name;
             
-            const icons = {
-                initium: '⚡', sphaerae: '◉', akasha_chronicorum: '◈',
-                philosophia: '◇', geometria_sacra: '△', incubae: '○', tectosphaera: '□'
-            };
-            
-            moduleNameEl.innerHTML = `<span>${icons[name] || '◈'}</span><span>${name}</span>`;
+            moduleNameEl.innerHTML = `<span>○</span><span>${name}</span>`;
             
             let displayContent;
             try {
@@ -1726,6 +1675,8 @@
 
         window.askAboutSeed = function(seedId) {
             sendDirectMessage(`Расскажи о семени ${seedId}`);
+            // Возвращаемся в чат
+            document.querySelector('.nav-btn[data-tab="chat"]').click();
         };
 
         // ===== PATCH MODAL =====
