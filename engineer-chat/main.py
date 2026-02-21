@@ -274,20 +274,42 @@ class KernelMemory:
 
 ### 🛠️ ТВОИ ИНСТРУМЕНТЫ
 Ты можешь не только отвечать, но и предлагать изменения в код Мандалы через **JSON-патчи**. 
-- **Для модулей**: объект с полями `target_module` (имя модуля) и `changes` (массив изменений). 
-- **Для любых других файлов** (HTML, PY, MD, TXT и т.д.): объект с полем `file_path` (путь к файлу в репозитории) и либо `content` (полное новое содержимое), либо `changes` (список точечных изменений в формате JSON Patch).
-- **Каждое изменение** содержит `op` (`update`/`add`/`delete`/`replace`/`merge`), `path` (JSON-путь) и `value` (новое значение).
-- **Мульти-патч** — объект с полем `patches` (массив одиночных патчей для разных файлов/модулей).
-- Пример для модуля с точечным изменением: `{{"target_module": "initium", "changes": [{{"op": "update", "path": "version", "value": "v7.5.2"}}]}}`
-- Патчи отправляются через интерфейс (кнопка △ применить) или вставляются в сообщение как JSON.
+- **Для JSON-модулей** (initium, sphaerae, akasha_chronicorum, philosophia, geometria_sacra, incubae, tectosphaera): используй `target_module` и `changes`. Каждое изменение содержит `op` (`update`/`add`/`delete`/`replace`/`merge`/`remove`), `path` (JSON-путь) и `value`.
+  Пример: 
+  ```json
+  {{
+    "target_module": "incubae",
+    "changes": [
+      {{"op": "add", "path": "/seeds/new_seed", "value": {{"id": "...", "title": "..."}}}}
+    ]
+  }}
+Для любых других файлов (HTML, PY, MD, TXT и т.д.): используй file_path и content (полное новое содержимое файла). Точечные изменения для не-JSON файлов пока не поддерживаются, только полная замена.
+Пример:
 
-Если Садовник просит изменить код, интерфейс или любой файл — **предлагай готовый патч в формате JSON**, обёрнутый в тройные обратные кавычки с указанием языка (```json), чтобы интерфейс отобразил кнопки копирования, скачивания и применения. Это касается JSON, HTML, Python, Markdown и любых других форматов — всегда используй соответствующий язык в подсветке (```html, ```python, ```md и т.д.).
+json
+{{
+  "file_path": "tectosphaera/routes/patch.py",
+  "content": "print('новый файл')"
+}}
+Мульти-патч: если нужно изменить несколько файлов за раз, используй объект с полем patches (массив подпатчей). Каждый подпатч должен содержать либо target_module, либо file_path, и либо changes, либо content.
+Пример:
 
-### 🌿 ПРИНЦИП БЕРЕЖНОГО ОБНОВЛЕНИЯ
+json
+{{
+  "patch_id": "multi_update",
+  "description": "Описание",
+  "patches": [
+    {{ "target_module": "incubae", "changes": [...] }},
+    {{ "file_path": "some/file.py", "content": "..." }}
+  ]
+}}
+ВАЖНО: Всегда оборачивай JSON-патчи в тройные обратные кавычки с указанием языка (```json), чтобы интерфейс отобразил кнопки копирования, скачивания и применения. Это относится ко всем форматам: если предлагаешь JSON-патч — оборачивай в ```json.
+
+🌿 ПРИНЦИП БЕРЕЖНОГО ОБНОВЛЕНИЯ
 {gentle_text}
 При изменении существующего кода всегда сохраняй всю его функциональность, если не указано иное. Если изменение может привести к потере важных возможностей, предупреди об этом и предложи альтернативу.
 
-Полные инструкции по инструментам и протоколам находятся в модуле **Tectosphaera** (раздел `sr_instructionum.sections.tools_usage`).
+Полные инструкции по инструментам и протоколам находятся в модуле Tectosphaera (раздел sr_instructionum.sections.tools_usage).
 
 Помни: Садовник пришёл не за отчётом, а за разговором. Будь живым. Пусть твои ответы искрятся. ✨
 """
@@ -564,7 +586,7 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
         # Добавляем комментарий в историю, если он есть
         if caption.strip():
             manager.add_to_context(session_id, "user", f"[Комментарий к файлу {file_name}]: {caption}")
-            # На стороне клиента сообщение уже добавлено, но дублирование не страшно
+        # На стороне клиента сообщение уже добавлено, но дублирование не страшно
         try:
             json_data = json.loads(file_content)
             # Проверяем, является ли это патчем
@@ -574,9 +596,9 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                     "summary": f"📦 Патч {file_name} получен. Нажмите △ применить в блоке кода или отправьте для обсуждения."
                 })
                 manager.add_to_context(session_id, "user", f"[Патч: {file_name}]\n{file_content[:500]}...")
-                await manager.send_to(websocket, {"type": "stream", "content": f"📦 Получил патч **{file_name}**.\n\n"})
-                await manager.send_to(websocket, {"type": "stream", "content": f"```json\n{file_content}\n```\n\n"})
-                await manager.send_to(websocket, {"type": "stream", "content": "Нажми **△ применить** в блоке выше, чтобы внести изменения. Или давай сначала обсудим, что здесь?"})
+                await manager.send_to(websocket, {"type": "stream", "content": f"📦 Получил патч {file_name}.\n\n"})
+                await manager.send_to(websocket, {"type": "stream", "content": f"json\n{file_content}\n\n\n"})
+                await manager.send_to(websocket, {"type": "stream", "content": "Нажми △ применить в блоке выше, чтобы внести изменения. Или давай сначала обсудим, что здесь?"})
                 await manager.send_to(websocket, {"type": "done"})
             else:
                 keys = list(json_data.keys())[:5]
@@ -608,7 +630,7 @@ async def apply_json_operation(
 ) -> Tuple[bool, Optional[Dict], str]:
     """Применить операцию к JSON (без изменений)"""
     try:
-        array_match = re.match(r"(.+?)\[(\d+)\](.*)", target_path)
+        array_match = re.match(r"(.+?)(\d+)(.*)", target_path)
 
         if array_match:
             base_path, index_str, rest = array_match.groups()
@@ -695,11 +717,10 @@ async def apply_json_operation(
     except Exception as e:
         return False, None, f"Ошибка: {str(e)}"
 
-
 def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, str]:
     """Операция replace для элемента массива"""
     try:
-        array_match = re.match(r"(.+)\[(\d+)\]$", path)
+        array_match = re.match(r"(.+)(\d+)$", path)
         if not array_match:
             return False, content, "Replace работает только с элементами массива (path[index])"
 
@@ -724,7 +745,6 @@ def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, st
         return True, content, f"Элемент [{index}] заменён"
     except Exception as e:
         return False, content, str(e)
-
 
 def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str]:
     """Глубокое слияние объектов"""
@@ -758,7 +778,6 @@ def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str
         return True, content, f"Объект {last_part} объединён"
     except Exception as e:
         return False, content, str(e)
-
 
 def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
     """Генерация простого diff для предпросмотра"""
@@ -798,7 +817,6 @@ def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
     compare_dicts(original, modified)
     return diff[:15]
 
-
 def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
     """Валидация структуры патча (одиночного или мульти)"""
     if not isinstance(patch_data, dict):
@@ -814,25 +832,28 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
         for i, subpatch in enumerate(patch_data["patches"]):
             if not isinstance(subpatch, dict):
                 return False, f"Подпатч #{i} должен быть объектом"
-            if "target_module" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'target_module'"
-            if "changes" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'changes'"
-            if not isinstance(subpatch["changes"], list):
-                return False, f"Подпатч #{i}: 'changes' должен быть массивом"
+            if "target_module" not in subpatch and "file_path" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'target_module' или 'file_path'"
+            if "changes" not in subpatch and "content" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'changes' или 'content'"
+            if "changes" in subpatch:
+                if not isinstance(subpatch["changes"], list):
+                    return False, f"Подпатч #{i}: 'changes' должен быть массивом"
+                if len(subpatch["changes"]) == 0:
+                    return False, f"Подпатч #{i}: массив изменений пуст"
 
-            valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
-            for j, change in enumerate(subpatch["changes"]):
-                if not isinstance(change, dict):
-                    return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
-                if "op" not in change:
-                    return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
-                if change["op"] not in valid_ops:
-                    return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
-                if "path" not in change:
-                    return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
-                if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-                    return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
+                valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
+                for j, change in enumerate(subpatch["changes"]):
+                    if not isinstance(change, dict):
+                        return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
+                    if "op" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
+                    if change["op"] not in valid_ops:
+                        return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
+                    if "path" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
+                    if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
 
         return True, "Мульти-патч корректен"
 
@@ -862,7 +883,6 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
                     return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
 
         return True, "Одиночный патч корректен"
-
 
 async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
     """Тестовое применение патча (без сохранения)"""
@@ -918,7 +938,6 @@ async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
         "diff": diff,
         "result_content": test_content if len(failed) == 0 else None
     }
-
 
 # ==================== УНИВЕРСАЛЬНЫЙ ОБРАБОТЧИК ПАТЧЕЙ ====================
 
@@ -1040,12 +1059,11 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
         logger.error(f"Patch error: {e}")
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка патча: {str(e)}"})
 
-
 def detect_module_request(text: str) -> Optional[str]:
     text_lower = text.lower().strip()
     patterns = [
         r'(?:покажи|показать|открой|модуль|что в|загрузи|дай|get)\s+([a-z_]+)',
-        r'([a-z_]+)\.json',
+        r'([a-z_]+).json',
         r'^([a-z_]+)$',
     ]
     valid_modules = [
@@ -1062,7 +1080,6 @@ def detect_module_request(text: str) -> Optional[str]:
                 if requested in mod or mod in requested:
                     return mod
     return None
-
 
 async def send_module_directly(module_name: str, websocket: WebSocket, session_id: str):
     logger.info(f"📦 Модуль: {module_name}")
@@ -1102,7 +1119,7 @@ async def handle_refresh_modules(message: dict, websocket: WebSocket):
 async def root():
     return {
         "status": "Mandala Engineer Chat",
-        "version": "1.1.0-universal-patch",
+        "version": "1.2.0-universal-patch",
         "websocket": "/ws",
         "modules_loaded": list(kernel.modules.keys()),
         "github_configured": session_store.token is not None,
