@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "Покажи последние milestones из Akasha",
-      "time": 1771680234.3468962
-    },
-    {
       "role": "assistant",
       "content": "**akasha_chronicorum → последние вехи**  \n(семантический порог ≥ 0,82, desc)\n\n1. **2024-06-09 11:18** — `#yubikey-age-tunnel`  \n   Установлен reverse-proxy с age-клиентом; при подъёме WebSocket туннель шифруется ключом Садовника, после `CLOSE` RAM-образы стираются.  \n   vitality: +0,15  \n   status: DONE\n\n2. **2024-06-08 09:41** — `#websocket-draft-00`  \n   Первое рукопожатие WebSocket (`Sec-WebSocket-Protocol: mandala-v1`), локальный проход vitality-отклика.  \n   status: DONE\n\n3. **2024-06-07 14:03** — `#incubae-auto-hatch`  \n   Сканер поднимает инкубы автоматически при семантическом пересечении > 0,82.  \n   status: DONE\n\n4. **2024-06-06 09:17** — `#vitality-dashboard-v1`  \n   Цифровая панель vitality-графа за 30 сессий.  \n   status: DONE\n\n5. **2024-06-05 10:12** — `#quiet-filter-merge`  \n   Фильтры `--quiet / --silent` в `auto-changelog`.  \n   status: DONE\n\n6. **2024-06-04 18:44** — `#tectosphaera-breathe-tags`  \n   Скрытые `<!-- wave-hash -->` в экспортируемых артефактах.  \n   status: DONE\n\n**Итого:** 6 вех, 5 DONE, 0 PROTOTYPE.  \nСледующий кирпичик: «ротация старых волн» или «cloud-sr-зерно» (CLOUD-SR-001).",
       "time": 1771680241.724096
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "/tree",
       "time": 1771690728.3851452
+    },
+    {
+      "role": "user",
+      "content": "/sync",
+      "time": 1771690742.6447456
     }
   ],
-  "last_active": 1771690728.3851492,
+  "last_active": 1771690742.6447482,
   "created_at": 1771619386.437258
 }
