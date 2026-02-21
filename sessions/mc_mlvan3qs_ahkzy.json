@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "[Файл: pyproject.toml]\n[build-system]\nrequires = [\"setuptools&gt;=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi&gt;=0.104\",\n    \"uvicorn[standard]&gt;=0.24\",\n    \"httpx&gt;=0.25\",\n    \"pydantic[email]&gt;=2\",\n    \"structlog&gt;=23\",\n]...",
-      "time": 1771699221.5214155
-    },
-    {
-      "role": "user",
       "content": "Я загрузил файл pyproject.toml. Вот содержимое:\n\n[build-system]\nrequires = [\"setuptools&gt;=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi&gt;=0.104\",\n    \"uvicorn[standard]&gt;=0.24\",\n    \"httpx&gt;=0.25\",\n    \"pydantic[email]&gt;=2\",\n    \"structlog&gt;=23\",\n]\nrequires-python = \"&gt;=3.11\"\n\n[project.optional-dependencies]\ndev = [\n    \"mypy&gt;=1.7\",\n    \"ruff&gt;=0.1\",\n    \"pytest&gt;=7\",\n    \"pytest-asyncio&gt;=0.21\",\n]\n\n[tool.mypy]\npython_version = \"3.11\"\nwarn_return_any = true\ndisallow_untyped_defs = true\nignore_missing_imports = true\n\n[tool.ruff]\ntarget-version = \"py311\"\nselect = [\"E\", \"F\", \"I\", \"N\", \"W\", \"UP\"]\n\n\nвот он можешь сам посмотреть",
       "time": 1771699221.5214608
     },
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "[Патч: 2 файлов]",
       "time": 1771701418.0928223
+    },
+    {
+      "role": "user",
+      "content": "Skip to content\nvoodoomushroomzzz-source\nmandala-core\nRepository navigation\nCode\nIssues\nPull requests\nActions\nProjects\nWiki\nSecurity\nInsights\nSettings\nCI\n💾 mc_mlvan3qs_ | 50 msgs | 19:17 #86\nAll jobs\nRun details\nAnnotations\n1 error\nlint-test\nfailed 1 minute ago in 13s\nSearch logs\n1s\n0s\n1s\n10s\n0s\n73 | |\n74 | |     async def get_sha(self, path: str, ref: str = \"main\") -&gt; Optional[str]:\n75 | |         \"\"Получить SHA файла.\"\"\"\n   | |________________________________^\n76 |           url = f\"{self.api_base}/contents/{path}\"\n77 |           params = {\"ref\": ref}\n   |\n\nE501 Line too long (91 > 88)\n  --> tectosphaera/services/github_client.py:70:89\n   |\n68 |         if sha:\n69 |             data[\"sha\"] = sha\n70 |         resp = await self._client.put(url, headers=self.headers, json=data)  # type: ignore\n   |                                                                                         ^^^\n71 |         resp.raise_for_status()\n72 |         return resp.json()\n   |\n\ninvalid-syntax: Expected a statement\n  --> tectosphaera/services/github_client.py:85:18\n   |\n83 |             if e.response.status_code == 404:\n84 |                 return None\n85 |             raise\n   |                  ^\n   |\n\nW292 No newline at end of file\n  --> tectosphaera/services/github_client.py:85:18\n   |\n83 |             if e.response.status_code == 404:\n84 |                 return None\n85 |             raise\n   |                  ^\n   |\nhelp: Add trailing newline\n\nFound 191 errors (91 fixed, 100 remaining).\nNo fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).\nError: Process completed with exit code 1.\n0s\n0s\n0s\n0s\n0s",
+      "time": 1771701541.2630997
     }
   ],
-  "last_active": 1771701418.0928245,
+  "last_active": 1771701541.2631028,
   "created_at": 1771619386.437258
 }
