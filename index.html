@@ -76,7 +76,7 @@
             right: -220px; top: 50%;
             transform: translateY(-50%);
             width: 700px; height: 700px;
-            opacity: 0.07;
+            opacity: 0.2; /* увеличено с 0.07 */
             pointer-events: none;
             animation: flower-breathe 8s ease-in-out infinite alternate;
         }
@@ -85,8 +85,8 @@
             stroke-width: 0.6;
         }
         @keyframes flower-breathe {
-            from { opacity: 0.05; transform: translateY(-50%) scale(1); }
-            to { opacity: 0.09; transform: translateY(-50%) scale(1.03); }
+            from { opacity: 0.15; transform: translateY(-50%) scale(1); }
+            to { opacity: 0.25; transform: translateY(-50%) scale(1.03); }
         }
 
         /* ===== HEADER ===== */
@@ -122,12 +122,12 @@
             font-family: var(--mono);
             font-size: 11px; font-weight: 400;
             letter-spacing: 2.5px; text-transform: uppercase;
-            color: var(--text);
+            color: #ffffff; /* ярче */
         }
         .brand-sub {
             font-family: var(--mono);
             font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
-            color: var(--text-3);
+            color: #6ee7b7; /* ярче */
         }
 
         .h-right { display: flex; align-items: center; gap: 12px; }
@@ -141,17 +141,17 @@
             display: flex; align-items: center; gap: 7px;
             font-family: var(--mono); font-size: 9px;
             letter-spacing: 1.5px; text-transform: uppercase;
-            color: var(--text-2);
+            color: #a7f3d0; /* ярче */
             background: transparent;
-            border: 1px solid var(--line-2);
+            border: 1px solid #2d5a4a;
             padding: 5px 10px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
             white-space: nowrap;
         }
-        .model-trigger:hover { color: var(--green-bright); border-color: rgba(16,185,129,0.3); }
-        .model-trigger.open { color: var(--green-bright); border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.05); }
+        .model-trigger:hover { color: #6ee7b7; border-color: rgba(16,185,129,0.5); }
+        .model-trigger.open { color: #6ee7b7; border-color: rgba(16,185,129,0.6); background: rgba(16,185,129,0.1); }
 
         .model-trigger .mt-arrow {
             font-size: 7px;
@@ -217,11 +217,11 @@
         .mo-name {
             font-family: var(--mono); font-size: 10px;
             letter-spacing: 0.5px;
-            color: var(--text-2);
+            color: #a7f3d0;
             transition: color 0.12s;
         }
-        .model-option:hover .mo-name { color: var(--green-neon); }
-        .model-option.active .mo-name { color: var(--green-bright); }
+        .model-option:hover .mo-name { color: #6ee7b7; }
+        .model-option.active .mo-name { color: #6ee7b7; }
 
         .vsep { width: 1px; height: 18px; background: var(--line); }
 
@@ -252,7 +252,8 @@
         .orb-label {
             font-family: var(--mono); font-size: 8px;
             letter-spacing: 1.5px; text-transform: uppercase;
-            color: var(--green-bright);
+            color: #6ee7b7; /* ярче */
+            text-shadow: 0 0 8px #10b981;
         }
 
         /* ===== LAYOUT ===== */
@@ -326,7 +327,8 @@
         .nav-title {
             font-family: var(--mono); font-size: 7px;
             letter-spacing: 3px; text-transform: uppercase;
-            color: var(--green-bright); /* ярче */
+            color: #6ee7b7; /* ярче */
+            text-shadow: 0 0 5px rgba(16,185,129,0.3);
             margin-bottom: 14px;
         }
 
@@ -334,14 +336,15 @@
             display: flex; align-items: center; gap: 10px;
             padding: 9px 10px;
             width: 100%; background: transparent; border: none;
-            color: var(--text-2); font-family: var(--sans);
+            color: #a7f3d0; /* ярче */
+            font-family: var(--sans);
             font-size: 12px; font-weight: 300;
             cursor: pointer; text-align: left;
             border-radius: 8px; margin-bottom: 2px;
             transition: all 0.15s;
         }
         .nav-item:hover {
-            color: var(--green-neon);
+            color: #ffffff;
             background: var(--green-glow);
         }
 
@@ -368,13 +371,17 @@
         .tab {
             font-family: var(--mono); font-size: 9px;
             letter-spacing: 2px; text-transform: uppercase;
-            color: var(--text-3); background: transparent; border: none;
+            color: #5a8a6a; /* ярче */
+            background: transparent; border: none;
             cursor: pointer; padding: 0 16px; height: 100%;
             display: flex; align-items: center;
             transition: color 0.15s; position: relative;
         }
-        .tab:hover { color: var(--text-2); }
-        .tab.active { color: var(--green-bright); }
+        .tab:hover { color: #a7f3d0; }
+        .tab.active {
+            color: #6ee7b7;
+            text-shadow: 0 0 5px #10b981;
+        }
         .tab.active::after {
             content: '';
             position: absolute;
@@ -519,8 +526,8 @@
             color: var(--green-bright);
         }
         .thinking .logo {
-            width: 18px;
-            height: 18px;
+            width: 28px; /* увеличено с 18px */
+            height: 28px;
             background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNCAzNCI+PHJlY3Qgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIGZpbGw9Im5vbmUiIC8+PGNpcmNsZSBjeD0iMTciIGN5PSIxMCIgcj0iNyIgc3Ryb2tlPSIjMTBiOTgxIiBzdHJva2Utd2lkdGg9IjAuOCIgb3BhY2l0eT0iMC42IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMjQiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIyMy4wNiIgY3k9IjEzLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIyMy4wNiIgY3k9IjIwLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxMC45NCIgY3k9IjEzLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxMC45NCIgY3k9IjIwLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxNyIgY3k9IjE3IiByPSIxNiIgc3Ryb2tlPSIjMDU5NjY5IiBzdHJva2Utd2lkdGg9IjAuNSIgb3BhY2l0eT0iMC40IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjIiIGZpbGw9IiMzNGQzOTkiIG9wYWNpdHk9IjAuOSIgLz48L3N2Zz4=') center/contain no-repeat;
             animation: spin 1.2s linear infinite;
         }
@@ -783,7 +790,7 @@
                         <span>СР думает<span class="dots"></span></span>
                     </div>
                     <div id="filePreview" class="hidden file-attachment" style="margin: 0 22px 8px;">
-                        <span>📎</span><span id="fileName">file.json</span><span class="remove" onclick="clearFile()">×</span>
+                        <span>📎</span><span id="fileName"></span><span class="remove" onclick="clearFiles()">×</span>
                     </div>
                     <div class="input-area">
                         <div class="irow">
@@ -791,7 +798,6 @@
                             <textarea class="ifield" id="messageInput" placeholder="Впиши волну…" rows="1" disabled></textarea>
                             <button class="ibtn isend" id="sendBtn" onclick="sendMessage()" disabled>➤</button>
                         </div>
-                        <!-- Подсказка убрана -->
                     </div>
                 </div>
             </div>
@@ -813,7 +819,7 @@
         </div>
     </div>
 
-    <input type="file" id="fileInput" accept=".json,.txt,.md,.html,.py,.js,.css" style="display: none" onchange="handleFileSelect(event)">
+    <input type="file" id="fileInput" accept=".json,.txt,.md,.html,.py,.js,.css" style="display: none" onchange="handleFileSelect(event)" multiple>
 
     <div class="toast" id="toast"></div>
 
@@ -824,7 +830,8 @@
             localStorage.setItem('mc_session', id); return id;
         })();
 
-        let ws = null, currentModule = null, modulesCache = {}, currentPatch = null, pendingFile = null;
+        let ws = null, currentModule = null, modulesCache = {}, currentPatch = null;
+        let pendingFiles = []; // массив файлов вместо одного
         let sidebarCollapsed = localStorage.getItem('mc_sidebar_collapsed') === 'true';
         let messageBuffer = '', currentMessageDiv = null;
 
@@ -1016,63 +1023,157 @@
             `;
         }
 
+        // Декодирование HTML-сущностей
+        function decodeHtmlEntities(text) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = text;
+            return textarea.value;
+        }
+
+        // Копирование с декодированием
         window.copyCodeFromBlock = function(btn) {
-            const code = btn.closest('.code-block').querySelector('.code-content').textContent;
-            navigator.clipboard.writeText(code); showToast('◈ код скопирован', 'success');
+            const codeElement = btn.closest('.code-block').querySelector('.code-content');
+            const rawCode = codeElement.textContent;
+            const decodedCode = decodeHtmlEntities(rawCode);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(decodedCode).then(() => {
+                    showToast('◈ код скопирован', 'success');
+                }).catch(() => fallbackCopy(decodedCode));
+            } else {
+                fallbackCopy(decodedCode);
+            }
         };
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('◈ код скопирован', 'success');
+            } catch (err) {
+                showToast('◈ ошибка копирования', 'error');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Скачивание с декодированием
         window.downloadCodeFromBlock = function(btn) {
             const block = btn.closest('.code-block');
-            const code = block.querySelector('.code-content').textContent;
+            const rawCode = block.querySelector('.code-content').textContent;
+            const decodedCode = decodeHtmlEntities(rawCode);
             const lang = block.querySelector('.code-lang').textContent || 'txt';
-            const blob = new Blob([code], {type:'text/plain'}); const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `code.${lang}`; a.click(); URL.revokeObjectURL(url);
+            const blob = new Blob([decodedCode], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `code.${lang}`;
+            a.click();
+            URL.revokeObjectURL(url);
             showToast('◈ файл скачан', 'success');
         };
+
+        // Подготовка патча с декодированием
         window.preparePatchFromBlock = function(btn) {
-            const code = btn.closest('.code-block').querySelector('.code-content').textContent;
-            try { JSON.parse(code); currentPatch = code;
-                document.getElementById('patchPreviewContent').textContent = code;
+            const codeElement = btn.closest('.code-block').querySelector('.code-content');
+            const rawCode = codeElement.textContent;
+            const decodedCode = decodeHtmlEntities(rawCode);
+            try {
+                JSON.parse(decodedCode);
+                currentPatch = decodedCode;
+                document.getElementById('patchPreviewContent').textContent = decodedCode;
                 document.getElementById('confirmPatchBtn').disabled = false;
-                openPatchModal(); showToast('◈ патч подготовлен','success');
-            } catch(e) { showToast('◈ невалидный JSON','error'); }
+                openPatchModal();
+                showToast('◈ патч подготовлен', 'success');
+            } catch(e) {
+                showToast('◈ невалидный JSON: ' + e.message, 'error');
+            }
         };
 
         function sendMessage() {
             const text = inputEl.value.trim();
-            if(pendingFile) { sendFile(pendingFile, text); clearFile(); inputEl.value = ''; autoHeight(); return; }
-            if(!text || !ws || ws.readyState !== WebSocket.OPEN) return;
-            addUserMessage(text); inputEl.value = ''; autoHeight(); showThinking();
+            if (pendingFiles.length > 0) {
+                sendFiles(pendingFiles, text);
+                clearFiles();
+                inputEl.value = '';
+                autoHeight();
+                return;
+            }
+            if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+            addUserMessage(text);
+            inputEl.value = '';
+            autoHeight();
+            showThinking();
             ws.send(JSON.stringify({type:'ask', text:text, session_id:SESSION_ID}));
         }
 
-        function sendFile(file, caption='') {
-            if(!ws || ws.readyState !== WebSocket.OPEN) { showToast('◈ нет соединения','error'); return; }
-            if(caption.trim()) addUserMessage(caption);
+        async function sendFiles(files, caption) {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('◈ нет соединения', 'error');
+                return;
+            }
+            if (caption.trim()) addUserMessage(caption);
             showThinking();
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                ws.send(JSON.stringify({
-                    type:'file', name:file.name, content:e.target.result.split(',')[1],
-                    file_type:file.type||'application/octet-stream', caption:caption, session_id:SESSION_ID
-                }));
-                addSystemMessage(`◈ файл ${file.name} отправлен`);
-            };
-            reader.readAsDataURL(file);
+            for (const file of files) {
+                await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        ws.send(JSON.stringify({
+                            type: 'file',
+                            name: file.name,
+                            content: e.target.result.split(',')[1],
+                            file_type: file.type || 'application/octet-stream',
+                            caption: '',
+                            session_id: SESSION_ID
+                        }));
+                        addSystemMessage(`◈ файл ${file.name} отправлен`);
+                        resolve();
+                    };
+                    reader.readAsDataURL(file);
+                });
+                // небольшая задержка, чтобы не перегрузить сокет
+                await new Promise(r => setTimeout(r, 100));
+            }
         }
 
         function handleFileSelect(e) {
-            const file = e.target.files[0]; if(!file) return;
-            pendingFile = file; fileNameEl.textContent = file.name; filePreview.classList.remove('hidden'); inputEl.focus();
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+            pendingFiles = files;
+            updateFilePreview();
+            inputEl.focus();
         }
-        function clearFile() { pendingFile = null; filePreview.classList.add('hidden'); document.getElementById('fileInput').value = ''; }
+
+        function updateFilePreview() {
+            if (pendingFiles.length === 0) {
+                filePreview.classList.add('hidden');
+                return;
+            }
+            const names = pendingFiles.map(f => f.name).join(', ');
+            fileNameEl.textContent = `📎 ${pendingFiles.length} файл(ов): ${names}`;
+            filePreview.classList.remove('hidden');
+        }
+
+        function clearFiles() {
+            pendingFiles = [];
+            filePreview.classList.add('hidden');
+            document.getElementById('fileInput').value = '';
+        }
 
         function setupDragDrop() {
             document.addEventListener('dragover', e => { e.preventDefault(); document.body.style.boxShadow = 'inset 0 0 50px var(--violet-dim)'; });
             document.addEventListener('dragleave', e => { if(e.target===document.body) document.body.style.boxShadow = ''; });
             document.addEventListener('drop', e => {
                 e.preventDefault(); document.body.style.boxShadow = '';
-                const files = e.dataTransfer.files;
-                if(files.length>0) { pendingFile = files[0]; fileNameEl.textContent = pendingFile.name; filePreview.classList.remove('hidden'); inputEl.focus(); }
+                const files = Array.from(e.dataTransfer.files);
+                if(files.length>0) {
+                    pendingFiles = files;
+                    updateFilePreview();
+                    inputEl.focus();
+                }
             });
         }
 
