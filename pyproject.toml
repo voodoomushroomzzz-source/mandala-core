@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools&gt;=45", "wheel"]
+requires = ["setuptools>;=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,7 +8,7 @@ version = "7.7.0"
 dependencies = [
     "fastapi>;=0.104",
     "uvicorn[standard]>;=0.24",
-    "httpx&gt;=0.25",
+    "httpx>;=0.25",
     "pydantic[email]>;=2",
     "structlog>;=23",
 ]
