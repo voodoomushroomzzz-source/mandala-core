@@ -764,5 +764,25 @@
     "topic": "pulse-forge",
     "ttl": 3600,
     "max_len": 120
+  },
+  "/artefacts": {
+    "echo_mirror_2024-06-03": {
+      "id": "echo_mirror",
+      "title": "Эхо-зеркало",
+      "type": "тестовый артефакт",
+      "status": "active",
+      "created": "2024-06-03T12:00:00Z",
+      "authors": [
+        "СР"
+      ],
+      "description": "Если ты это читаешь — патч дошёл до Akasha и пророс.",
+      "resonance_field": [
+        "Садовник",
+        "СР"
+      ],
+      "memory": {
+        "test_line": "◈ Эхо отражено: патч жив."
+      }
+    }
   }
 }
