@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "а как я могу загрузить? через файл?",
-      "time": 1771696879.1579642
-    },
-    {
       "role": "assistant",
       "content": "Да, просто перетащи (или нажми «Прикрепить») свежий `index.html` сюда — и я сразу увижу его содержимое, вес и все отличия от той версии, что уже в памяти.",
       "time": 1771696883.663384
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "все равно ошибка, мб тебе докинуть какие файлы на изучение, чтобы ее поправить\n--- \nошибка ниже\nRun pip install -e .[dev]\nObtaining file:///home/runner/work/mandala-core/mandala-core\n\nNotice:  A new release of pip is available: 26.0 -> 26.0.1\nNotice:  To update, run: pip install --upgrade pip\nerror: invalid-pyproject-build-system-requires\n\n× Can not process file:///home/runner/work/mandala-core/mandala-core\n╰─> This package has an invalid `build-system.requires` key in pyproject.toml.\n    It contains an invalid requirement: 'setuptools&gt;=45'\n\nnote: This is an issue with the package mentioned above, not pip.\nhint: See PEP 518 for the detailed specification.\nError: Process completed with exit code 1.",
       "time": 1771699128.1962001
+    },
+    {
+      "role": "assistant",
+      "content": "Проблема всё та же — GitHub всё ещё видит **старый** файл с `&gt;` вместо `>`.  \nЗначит, после веб-редактора файл **не сохранился** (или кэш Actions старый).  \nДавай убедимся, что **в репозитории** сейчас правильный `pyproject.toml`.\n\n---\n\n### 1. Проверь содержимое в браузере\nОткрой **сырой** файл:  \nhttps://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/pyproject.toml\n\nЕсли в строке 2 всё ещё `setuptools&gt;=45` — значит коммит не прошёл.  \nПовтори замену ещё раз:\n\n- https://github.com/voodoomushroomzzz-source/mandala-core/edit/main/pyproject.toml  \n- **вручную** вставь **весь код**, который я скинул выше (убедись, что `>` именно обычный символ, а не `&gt;`)  \n- **Commit directly to the `main` branch** → **Commit changes**\n\n---\n\n### 2. Перезапусти CI вручную\nПосле коммита зайди во вкладку **Actions** → выбери последний запуск → кнопка **Re-run all jobs**.\n\n---\n\n### 3. Если после этого всё ещё красный\nПришли мне **сырой** `pyproject.toml` (Ctrl+A → Ctrl+C) из браузера — я посмотрю, что туда реально записалось.",
+      "time": 1771699135.2180982
     }
   ],
-  "last_active": 1771699128.1962035,
+  "last_active": 1771699135.2181015,
   "created_at": 1771619386.437258
 }
