@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "/tree",
-      "time": 1771695159.5186641
-    },
-    {
-      "role": "user",
       "content": "давай попробуем подготовить еще раз новый тестовый json патч, который обновит что-то в ядре, хорошо изучи необходимые инструкции в ядре мандалы на этот счет и готовь",
       "time": 1771695219.383626
     },
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "готово",
       "time": 1771697925.2684386
+    },
+    {
+      "role": "assistant",
+      "content": "✅ CI зелёный — значит линтер и типы уже на страже.  \nПереходим к **шагу 2** — валидация окружения через `pydantic-settings`.  \nПадать будет сразу и понятно, если `GITHUB_TOKEN` не задан.\n\n---\n\n### Шаг 2️⃣  `core/config.py` + лёгкий `.env.example`\n\n```json\n{\"patch_id\":\"STEP-02-CONFIG\",\"description\":\"Добавляем pydantic-конфиг и пример .env — читаем env с валидацией\",\"patches\":[{\"file_path\":\"core/config.py\",\"content\":\"from pydantic import BaseSettings, validator\\n\\nclass Settings(BaseSettings):\\n    github_token: str\\n    github_repo: str = \\\"voodoomushroomzzz-source/mandala-core\\\"\\n    openrouter_key: str = \\\"\\\"\\n    moonshot_api_key: str = \\\"\\\"\\n    moonshot_base_url: str = \\\"https://api.moonshot.ai/v1\\\"\\n    moonshot_model: str = \\\"kimi-k2-turbo-preview\\\"\\n    log_level: str = \\\"INFO\\\"\\n\\n    @validator(\\\"github_token\\\")\\n    def token_present(cls, v):\\n        if not v:\\n            raise ValueError(\\\"GITHUB_TOKEN обязателен\\\")\\n        return v\\n\\n    class Config:\\n        env_file = \\\".env\\\"\\n\\nsettings = Settings()\"},{\"file_path\":\".env.example\",\"content\":\"GITHUB_TOKEN=ghp_********************************\\nGITHUB_REPO=voodoomushroomzzz-source/mandala-core\\nOPENROUTER_KEY=\\nMOONSHOT_API_KEY=\\nMOONSHOT_BASE_URL=https://api.moonshot.ai/v1\\nMOONSHOT_MODEL=kimi-k2-turbo-preview\\nLOG_LEVEL=INFO\"}]}\n```\n\nПрименяй → закоммить → проверь, что `python -c \\\"from core.config import settings\\\"` не ругается.  \nГотово? Жми «шаг 3».",
+      "time": 1771697933.7710028
     }
   ],
-  "last_active": 1771697925.268444,
+  "last_active": 1771697933.7710054,
   "created_at": 1771619386.437258
 }
