@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "assistant",
-      "content": "[Модуль akasha_chronicorum]",
-      "time": 1771695130.8590822
-    },
-    {
       "role": "user",
       "content": "Статус системы",
       "time": 1771695139.533322
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "так давай выкатывай мне по порядку патчи, я буду их применять, а то я уже запутался",
       "time": 1771697838.0034928
+    },
+    {
+      "role": "assistant",
+      "content": "Итак, пошаговая дорожка — ровно 6 патчей, каждый можно применять сразу и проверять (`/sync`).  \nНачинаем с самого безопасного: **линтер + CI** → сразу видим, где грязь.\n\n---\n\n### Шаг 1️⃣  `pyproject.toml` + GitHub-CI  \n(ничего не ломает, только проверяет код)\n\n```json\n{\"patch_id\":\"STEP-01-CI\",\"description\":\"Создаём pyproject.toml и CI-пайплайн: ruff + mypy + pytest\",\"patches\":[{\"file_path\":\"pyproject.toml\",\"content\":\"[build-system]\\nrequires = [\\\"setuptools>=45\\\", \\\"wheel\\\"]\\nbuild-backend = \\\"setuptools.build_meta\\\"\\n\\n[project]\\nname = \\\"mandala-core\\\"\\nversion = \\\"7.7.0\\\"\\ndependencies = [\\n    \\\"fastapi>=0.104\\\",\\n    \\\"uvicorn[standard]>=0.24\\\",\\n    \\\"httpx>=0.25\\\",\\n    \\\"pydantic[email]>=2\\\",\\n    \\\"structlog>=23\\\",\\n]\\nrequires-python = \\\">=3.11\\\"\\n\\n[project.optional-dependencies]\\ndev = [\\n    \\\"mypy>=1.7\\\",\\n    \\\"ruff>=0.1\\\",\\n    \\\"pytest>=7\\\",\\n    \\\"pytest-asyncio>=0.21\\\",\\n]\\n\\n[tool.mypy]\\npython_version = \\\"3.11\\\"\\nwarn_return_any = true\\ndisallow_untyped_defs = true\\nignore_missing_imports = true\\n\\n[tool.ruff]\\ntarget-version = \\\"py311\\\"\\nselect = [\\\"E\\\", \\\"F\\\", \\\"I\\\", \\\"N\\\", \\\"W\\\", \\\"UP\\\"]\"},{\"file_path\":\".github/workflows/ci.yml\",\"content\":\"name: core-ci\\non: [push, pull_request]\\njobs:\\n  lint-test:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - uses: actions/setup-python@v4\\n        with:\\n          python-version: \\\"3.11\\\"\\n      - run: pip install -e .[dev]\\n      - run: ruff check .\\n      - run: mypy tectosphaera akasha_chronicorum\\n      - run: pytest --asyncio-mode=auto\"}]}\n```\n\nПрименяй → `git add . && git commit -m \\\"STEP-01-CI: lint + type-check\\\"` → смотри, чтобы CI зелёный.  \nКак только ✅ — скажи «шаг 2» и я выдам следующий патч.",
+      "time": 1771697846.6934738
     }
   ],
-  "last_active": 1771697838.003496,
+  "last_active": 1771697846.6934764,
   "created_at": 1771619386.437258
 }
