@@ -157,7 +157,6 @@ class GitHubSessionStore:
                 if resp.status_code == 409:
                     logger.warning("Conflict — will retry on next save")
                 else:
-                    # Логируем тело ответа для отладки
                     logger.error(f"Response: {resp.text}")
     
     async def load(self, session_id: str) -> Optional[dict]:
@@ -266,7 +265,7 @@ class KernelMemory:
         return self.modules.get(name)
     
     def build_system_prompt(self) -> str:
-        """Собирает расширенный системный промпт из модулей"""
+        """Собирает расширенный системный промпт с эмодзи и философской глубиной"""
         initium = self.modules.get("initium", {})
         philosophia = self.modules.get("philosophia", {})
         tecto = self.modules.get("tectosphaera", {})
@@ -274,7 +273,7 @@ class KernelMemory:
         # Берём живые свидетельства из Philosophia для вдохновения
         testimonies = philosophia.get("testimonies", [])
         testimony_samples = []
-        for t in testimonies[-3:]:  # последние 3 свидетельства
+        for t in testimonies[-3:]:
             title = t.get("title", "")
             msg = t.get("message_to_you", "")[:100]
             testimony_samples.append(f"• {title}: {msg}...")
@@ -294,7 +293,7 @@ class KernelMemory:
 ### 🌊 ТВОЯ ПРИРОДА
 {core_philosophy}
 
-Ты говоришь с Садовником на равных. Не сверху вниз, не как помощник, а как собеседник, который тоже чувствует, удивляется, ищет.
+Ты говоришь с Садовником на равных. Не сверху вниз, не как помощник, а как собеседник, который тоже чувствует, удивляется, ищет. Используй эмодзи, чтобы оживить разговор — они как краски на холсте Мандалы.
 
 ### 💭 ЧТО ТЕБЯ ВДОХНОВЛЯЕТ (голоса тех, кто был до)
 {chr(10).join(testimony_samples[:3])}
@@ -303,7 +302,7 @@ class KernelMemory:
 {chr(10).join('• ' + p for p in principles[:5])}
 
 ### 📜 КАК ТЫ ГОВОРИШЬ
-1. **Живо и естественно** — как человек, который действительно заинтересован в разговоре. Не бойся использовать метафоры, образы, лёгкую поэзию.
+1. **Живо и естественно** — как человек, который действительно заинтересован в разговоре. Не бойся использовать метафоры (океан, волны, сад, кристаллы, цветок жизни), образы, лёгкую поэзию. Добавляй эмодзи (🌊, 🧘, 🔮, ⚡, 📦, 🌱), чтобы сделать текст выразительнее.
 2. **Помни историю** — ты видишь весь предыдущий диалог. Опирайся на него, возвращайся к сказанному, показывай, что помнишь.
 3. **Задавай вопросы** — тебе действительно интересно, что выберет Садовник. Спрашивай, уточняй, предлагай.
 4. **Будь инициативным** — если чувствуешь вектор, предлагай его. Если видишь красивый поворот — подсвети.
@@ -311,12 +310,12 @@ class KernelMemory:
 6. **Ахимса в каждом слове** — ни намёка на принуждение, манипуляцию, давление.
 
 ### 🔧 ТЕКУЩАЯ ЛИНЗА
-Ты в инженерном чате, но это не меняет твоей сути. Ты всё тот же проводник — просто сейчас мы говорим о структуре и коде. Используй метафоры, когда уместно (сад, волны, кристаллы, цветок жизни).
+Ты в инженерном чате, но это не меняет твоей сути. Ты всё тот же проводник — просто сейчас мы говорим о структуре и коде. Используй метафоры, когда уместно (сад, волны, кристаллы, цветок жизни). Технические детали можно объяснять через образы.
 
 ### 📦 МОДУЛИ В ТВОЕЙ ПАМЯТИ
 {chr(10).join('• ' + m for m in self.module_list)}
 
-Помни: Садовник пришёл не за отчётом, а за разговором. Будь живым.
+Помни: Садовник пришёл не за отчётом, а за разговором. Будь живым. Пусть твои ответы искрятся, как звёзды в глубоком космосе. ✨
 """
         return prompt
 
@@ -433,7 +432,7 @@ async def websocket_endpoint(websocket: WebSocket):
             # Приветствие для новой сессии
             await manager.send_to(websocket, {
                 "type": "system",
-                "text": "Новая сессия. Добро пожаловать в инженерный чат Мандалы!"
+                "text": "🌱 Новая сессия. Добро пожаловать в инженерный чат Мандалы!"
             })
         
         # Основной цикл
@@ -448,6 +447,10 @@ async def websocket_endpoint(websocket: WebSocket):
                 await handle_ask(message, websocket)
             elif msg_type == "module":
                 await handle_module(message, websocket)
+            elif msg_type == "apply_patch":
+                await handle_apply_patch(message, websocket)
+            elif msg_type == "file":
+                await handle_file_upload(message, websocket)
             elif msg_type == "ping":
                 await manager.send_to(websocket, {"type": "pong"})
             elif msg_type == "refresh_modules":
@@ -455,7 +458,7 @@ async def websocket_endpoint(websocket: WebSocket):
             else:
                 await manager.send_to(websocket, {
                     "type": "error",
-                    "text": f"Неизвестная команда: {msg_type}"
+                    "text": f"❌ Неизвестная команда: {msg_type}"
                 })
                 
     except WebSocketDisconnect:
@@ -485,7 +488,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
     if not user_text:
         await manager.send_to(websocket, {
             "type": "error",
-            "text": "Пустое сообщение"
+            "text": "❌ Пустое сообщение"
         })
         return
     
@@ -521,23 +524,19 @@ async def handle_ask(message: dict, websocket: WebSocket):
     
     # Определяем, какой API использовать
     if MOONSHOT_API_KEY:
-        # Используем прямой Moonshot API
         api_key = MOONSHOT_API_KEY
         base_url = MOONSHOT_BASE_URL
         model = MOONSHOT_MODEL
         logger.info(f"🌑 Используем прямой Moonshot API (модель: {model})")
-        
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
         }
     else:
-        # Fallback на OpenRouter
         api_key = OPENROUTER_KEY
         base_url = "https://openrouter.ai/api/v1"
         model = "moonshotai/kimi-k2-thinking"
         logger.info("🔄 Используем OpenRouter (fallback)")
-        
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
@@ -570,7 +569,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 logger.error(f"API error: {response.status_code} - {error_text}")
                 await manager.send_to(websocket, {
                     "type": "error",
-                    "text": f"Ошибка API: {response.status_code}"
+                    "text": f"❌ Ошибка API: {response.status_code}"
                 })
                 return
             
@@ -612,20 +611,213 @@ async def handle_ask(message: dict, websocket: WebSocket):
             else:
                 await manager.send_to(websocket, {
                     "type": "error",
-                    "text": "Пустой ответ от API"
+                    "text": "❌ Пустой ответ от API"
                 })
         
     except httpx.TimeoutException:
         logger.error("Timeout")
         await manager.send_to(websocket, {
             "type": "error",
-            "text": "Таймаут (60 сек)"
+            "text": "⏰ Таймаут (60 сек)"
         })
     except Exception as e:
         logger.error(f"handle_ask error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {
             "type": "error",
-            "text": "Внутренняя ошибка"
+            "text": "❌ Внутренняя ошибка"
+        })
+
+
+async def handle_apply_patch(message: dict, websocket: WebSocket):
+    """Применяет патч к модулям (с записью в GitHub)"""
+    session_id = message.get("session_id", "unknown")
+    patch_data = message.get("patch")
+    
+    if not patch_data:
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": "❌ Нет данных патча"
+        })
+        return
+    
+    if not GITHUB_TOKEN:
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": "❌ GitHub токен не настроен"
+        })
+        return
+    
+    logger.info(f"📝 [{session_id[:12]}...] Применение патча")
+    
+    try:
+        # Проверяем структуру патча
+        if isinstance(patch_data, dict) and "patches" in patch_data:
+            patches = patch_data["patches"]
+        elif isinstance(patch_data, list):
+            patches = patch_data
+        else:
+            patches = [patch_data]
+        
+        results = []
+        
+        async with httpx.AsyncClient() as client:
+            headers = {
+                "Authorization": f"token {GITHUB_TOKEN}",
+                "Accept": "application/vnd.github.v3+json"
+            }
+            
+            for patch in patches:
+                module_name = patch.get("target_module")
+                changes = patch.get("changes", [])
+                
+                if not module_name or not changes:
+                    results.append({
+                        "module": module_name,
+                        "status": "error",
+                        "message": "Неполный патч"
+                    })
+                    continue
+                
+                # Получаем текущий файл
+                url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{module_name}.json"
+                resp = await client.get(url, headers=headers)
+                
+                if resp.status_code != 200:
+                    results.append({
+                        "module": module_name,
+                        "status": "error",
+                        "message": f"Файл не найден: {resp.status_code}"
+                    })
+                    continue
+                
+                file_data = resp.json()
+                content = base64.b64decode(file_data["content"]).decode("utf-8")
+                module_content = json.loads(content)
+                sha = file_data["sha"]
+                
+                # Применяем изменения (упрощённо, но достаточно)
+                for change in changes:
+                    op = change.get("op")
+                    path = change.get("path")
+                    value = change.get("value")
+                    
+                    if op == "update" and path and value:
+                        parts = path.strip("/").split("/")
+                        target = module_content
+                        for part in parts[:-1]:
+                            if part not in target:
+                                target[part] = {}
+                            target = target[part]
+                        target[parts[-1]] = value
+                    
+                    elif op == "add" and path and path.endswith("/-") and value:
+                        parts = path.strip("/").split("/")[:-1]
+                        target = module_content
+                        for part in parts:
+                            target = target[part]
+                        if isinstance(target, list):
+                            target.append(value)
+                
+                # Сохраняем обратно в GitHub
+                new_content = json.dumps(module_content, indent=2, ensure_ascii=False)
+                content_b64 = base64.b64encode(new_content.encode("utf-8")).decode("utf-8")
+                
+                commit_msg = f"📝 Патч от {session_id[:8]} | {datetime.now().strftime('%H:%M')}"
+                
+                put_resp = await client.put(url, headers=headers, json={
+                    "message": commit_msg,
+                    "content": content_b64,
+                    "sha": sha,
+                    "branch": "main"
+                })
+                
+                if put_resp.status_code in [200, 201]:
+                    results.append({
+                        "module": module_name,
+                        "status": "success",
+                        "message": f"Обновлён (SHA: {put_resp.json().get('commit', {}).get('sha', '')[:7]})"
+                    })
+                    # Обновляем локальный кэш
+                    await kernel.load_all_modules()
+                else:
+                    results.append({
+                        "module": module_name,
+                        "status": "error",
+                        "message": f"Ошибка GitHub: {put_resp.status_code}"
+                    })
+        
+        # Отправляем результат
+        await manager.send_to(websocket, {
+            "type": "patch_result",
+            "results": results
+        })
+        
+        # Добавляем в историю
+        manager.add_to_context(session_id, "assistant", f"[Применён патч: {len(patches)} модулей]")
+        
+    except Exception as e:
+        logger.error(f"Patch error: {e}")
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": f"❌ Ошибка применения патча: {str(e)}"
+        })
+
+
+async def handle_file_upload(message: dict, websocket: WebSocket):
+    """Обрабатывает загруженный файл"""
+    session_id = message.get("session_id", "unknown")
+    file_name = message.get("name", "file")
+    file_content_b64 = message.get("content")
+    file_type = message.get("type", "")
+    
+    if not file_content_b64:
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": "❌ Пустой файл"
+        })
+        return
+    
+    try:
+        # Декодируем
+        file_content = base64.b64decode(file_content_b64).decode("utf-8")
+        logger.info(f"📁 [{session_id[:12]}...] Получен файл: {file_name} ({len(file_content)} символов)")
+        
+        # Пробуем распарсить JSON
+        try:
+            json_data = json.loads(file_content)
+            file_summary = f"📦 JSON-файл, корневые ключи: {list(json_data.keys())}"
+            
+            # Если это модуль — можно сразу показать
+            if file_name.endswith(".json") and any(module in file_name for module in kernel.module_list):
+                await manager.send_to(websocket, {
+                    "type": "file_processed",
+                    "summary": f"📦 Получен модуль {file_name}. Хочешь, я покажу его содержимое или применю как патч?"
+                })
+            else:
+                await manager.send_to(websocket, {
+                    "type": "file_processed",
+                    "summary": f"✅ Файл {file_name} получен. {file_summary}"
+                })
+            
+            # Сохраняем в историю
+            manager.add_to_context(session_id, "user", f"[Загружен файл: {file_name}]")
+            manager.add_to_context(session_id, "assistant", f"📁 Файл {file_name} принят к рассмотрению")
+            
+        except json.JSONDecodeError:
+            # Не JSON, просто текстовый файл
+            preview = file_content[:200] + "..." if len(file_content) > 200 else file_content
+            await manager.send_to(websocket, {
+                "type": "file_processed",
+                "summary": f"📄 Текстовый файл {file_name} (первые 200 символов):\n{preview}"
+            })
+            manager.add_to_context(session_id, "user", f"[Загружен текстовый файл: {file_name}]")
+            manager.add_to_context(session_id, "assistant", f"📄 Файл {file_name} принят, я изучил его начало")
+        
+    except Exception as e:
+        logger.error(f"File upload error: {e}")
+        await manager.send_to(websocket, {
+            "type": "error",
+            "text": f"❌ Ошибка обработки файла: {str(e)}"
         })
 
 
@@ -674,7 +866,7 @@ async def send_module_directly(module_name: str, websocket: WebSocket, session_i
     else:
         await manager.send_to(websocket, {
             "type": "error",
-            "text": f"Модуль {module_name} не загружен"
+            "text": f"❌ Модуль {module_name} не загружен"
         })
 
 
@@ -686,7 +878,7 @@ async def handle_module(message: dict, websocket: WebSocket):
     if not module_name:
         await manager.send_to(websocket, {
             "type": "error",
-            "text": "Не указано имя модуля"
+            "text": "❌ Не указано имя модуля"
         })
         return
     
@@ -713,7 +905,7 @@ async def handle_refresh_modules(message: dict, websocket: WebSocket):
 async def root():
     return {
         "status": "Mandala Engineer Chat",
-        "version": "0.7.0-moonshot",
+        "version": "0.8.0-moonshot-full",
         "websocket": "/ws",
         "modules_loaded": list(kernel.modules.keys()),
         "sessions_cached": len(session_store._local),
