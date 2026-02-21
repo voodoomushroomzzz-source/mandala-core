@@ -3,31 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mandala — инженерный чат</title>
+    <title>Mandala — Инженерный чат</title>
     <style>
-        /* ===== ГЕОМЕТРИЧЕСКИЙ МИНИМАЛИЗМ ===== */
+        /* ===== MINIMAL MODERN DESIGN ===== */
         :root {
-            --bg-deep: #0a0c10;
-            --bg-surface: #11131f;
-            --bg-surface-hover: #1a1b2e;
-            --border-subtle: #252842;
-            --border-glow: #3e4a7a;
-            --accent-primary: #6b4f8c;
-            --accent-secondary: #4a3a6b;
-            --text-primary: #e0e0ff;
-            --text-muted: #7a7ab3;
-            --success: #5fbb7a;
-            --warning: #c99b5f;
-            --error: #bf5f6f;
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #252533;
+            --text: #e8e8f0;
+            --text-muted: #6b6b7b;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --success: #22c55e;
+            --error: #ef4444;
+            --warning: #f59e0b;
             
-            --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
-            --font-sans: 'Inter', -apple-system, 'SF Pro Display', system-ui, sans-serif;
+            --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 16px;
-            
-            --shadow-glow: 0 0 15px rgba(107, 79, 140, 0.15);
+            --radius: 12px;
+            --radius-sm: 8px;
         }
 
         * {
@@ -40,194 +36,238 @@
             font-family: var(--font-sans);
             font-size: 14px;
             line-height: 1.5;
-            background: var(--bg-deep);
-            color: var(--text-primary);
+            background: var(--bg);
+            color: var(--text);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            letter-spacing: 0.2px;
-            font-weight: 400;
-            transition: opacity 0.2s;
         }
 
-        /* ===== ХЕДЕР ===== */
+        /* ===== HEADER ===== */
         .header {
-            height: 60px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border-subtle);
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
+            padding: 0 20px;
             flex-shrink: 0;
-            position: relative;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 10%;
-            width: 80%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 12px;
         }
 
         .logo {
             width: 32px;
             height: 32px;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            color: var(--accent-primary);
-            border: 1px solid var(--border-glow);
-            border-radius: 2px;
-            transform: rotate(45deg);
-        }
-
-        .logo span {
-            transform: rotate(-45deg);
+            font-size: 16px;
         }
 
         .header-title {
-            font-weight: 400;
-            font-size: 16px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: -0.3px;
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .status {
-            width: 12px;
-            height: 12px;
-            border-radius: 0;
-            background: var(--text-muted);
-            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            background: var(--bg);
+            border-radius: 20px;
+            border: 1px solid var(--border);
         }
 
-        .status.connected { 
-            background: var(--success);
-            box-shadow: 0 0 10px var(--success);
-            border-radius: 0;
-            transform: rotate(45deg);
-        }
-        
-        .status.connecting { 
-            background: var(--warning);
-            animation: pulse 1.5s infinite;
+        .status-dot {
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
+            background: var(--text-muted);
         }
-        
-        .status.error { 
-            background: var(--error);
-            border-radius: 50%;
-        }
+
+        .status.connected .status-dot { background: var(--success); }
+        .status.connecting .status-dot { background: var(--warning); animation: pulse 1.5s infinite; }
+        .status.error .status-dot { background: var(--error); }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
 
         .btn-icon {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border: none;
             background: transparent;
             color: var(--text-muted);
+            border-radius: var(--radius-sm);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            font-size: 18px;
-            border: 1px solid transparent;
+            transition: all 0.15s;
         }
 
         .btn-icon:hover {
-            color: var(--text-primary);
-            border-color: var(--border-glow);
-            background: var(--bg-surface-hover);
+            background: var(--surface-hover);
+            color: var(--text);
         }
 
-        /* ===== ПАНЕЛЬ КОМАНД (СВЕРХУ) ===== */
-        .commands-panel {
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 12px 24px;
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            flex-shrink: 0;
-        }
-
-        .command-card {
-            background: var(--bg-deep);
-            border: 1px solid var(--border-subtle);
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-width: 120px;
-        }
-
-        .command-card:hover {
-            border-color: var(--border-glow);
-            background: var(--bg-surface-hover);
-        }
-
-        .command-icon {
-            font-size: 18px;
-            color: var(--accent-primary);
-        }
-
-        .command-info {
-            flex: 1;
-        }
-
-        .command-name {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .command-key {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-        }
-
-        /* ===== ОСНОВНОЙ ЛЭЙАУТ ===== */
+        /* ===== MAIN LAYOUT ===== */
         .main {
             flex: 1;
             display: flex;
             overflow: hidden;
         }
 
-        /* ===== ЦЕНТРАЛЬНАЯ ЧАСТЬ (ЧАТ) ===== */
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 240px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .module-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .module-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: all 0.15s;
+        }
+
+        .module-item:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .module-item.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .module-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .quick-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            text-align: left;
+            transition: all 0.15s;
+        }
+
+        .quick-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        /* ===== CONTENT ===== */
         .content {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: var(--bg-deep);
         }
 
+        /* ===== TABS ===== */
+        .tabs {
+            height: 44px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-muted);
+            border: none;
+            background: transparent;
+            transition: all 0.15s;
+        }
+
+        .tab:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        .tab.active {
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* ===== CHAT ===== */
         .chat-container {
             flex: 1;
             display: flex;
@@ -238,14 +278,14 @@
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 24px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .message {
-            max-width: 80%;
+            max-width: 85%;
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -255,17 +295,15 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-muted);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
         }
 
         .message-bubble {
-            padding: 12px 18px;
+            padding: 12px 16px;
+            border-radius: var(--radius);
             line-height: 1.6;
             font-size: 14px;
-            position: relative;
         }
 
         .message.user {
@@ -273,18 +311,9 @@
         }
 
         .message.user .message-bubble {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-glow);
-            color: var(--text-primary);
-        }
-
-        .message.user .message-bubble::after {
-            content: '◈';
-            position: absolute;
-            bottom: -8px;
-            right: 12px;
-            color: var(--border-glow);
-            font-size: 12px;
+            background: var(--accent);
+            color: white;
+            border-bottom-right-radius: 4px;
         }
 
         .message.assistant {
@@ -292,18 +321,9 @@
         }
 
         .message.assistant .message-bubble {
-            background: transparent;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-        }
-
-        .message.assistant .message-bubble::before {
-            content: '△';
-            position: absolute;
-            top: -8px;
-            left: 12px;
-            color: var(--border-subtle);
-            font-size: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
         }
 
         .message.system {
@@ -317,106 +337,42 @@
             font-size: 12px;
             text-align: center;
             padding: 8px;
-            border: none;
-            font-style: italic;
         }
 
-        /* Код в сообщениях */
-        .code-block {
-            margin-top: 12px;
-            border: 1px solid var(--border-subtle);
-            background: var(--bg-deep);
+        .message.error .message-bubble {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
         }
 
-        .code-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 12px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border-subtle);
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .code-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .code-action {
-            background: transparent;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-muted);
-            padding: 4px 8px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: var(--font-sans);
-        }
-
-        .code-action:hover {
-            border-color: var(--border-glow);
-            color: var(--text-primary);
-            background: var(--bg-surface-hover);
-        }
-
-        .code-content {
+        /* Code in messages */
+        .message pre {
+            background: var(--bg);
             padding: 12px;
+            border-radius: var(--radius-sm);
             overflow-x: auto;
+            margin-top: 8px;
             font-family: var(--font-mono);
             font-size: 12px;
-            line-height: 1.5;
-            background: var(--bg-deep);
-            white-space: pre-wrap;
+            line-height: 1.4;
         }
 
-        /* Таблицы */
-        .message table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 12px 0;
-            border: 1px solid var(--border-subtle);
+        .message code {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
-        .message th {
-            background: var(--bg-surface);
-            padding: 8px 12px;
-            text-align: left;
-            font-weight: 500;
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-glow);
-        }
-
-        .message td {
-            padding: 6px 12px;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .message tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* ===== ОБЛАСТЬ ВВОДА ===== */
+        /* ===== INPUT ===== */
         .input-area {
-            padding: 16px 24px;
-            background: var(--bg-surface);
-            border-top: 1px solid var(--border-subtle);
+            padding: 16px 20px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
             display: flex;
             gap: 12px;
             flex-shrink: 0;
-            position: relative;
-        }
-
-        .input-area::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 10%;
-            width: 80%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
         }
 
         .input-wrapper {
@@ -426,240 +382,406 @@
 
         .message-input {
             width: 100%;
-            padding: 12px 18px;
-            background: var(--bg-deep);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
             font-size: 14px;
             outline: none;
-            transition: all 0.2s;
-            font-family: var(--font-sans);
+            transition: all 0.15s;
         }
 
         .message-input:focus {
-            border-color: var(--border-glow);
-            box-shadow: var(--shadow-glow);
+            border-color: var(--accent);
         }
 
         .message-input::placeholder {
             color: var(--text-muted);
-            opacity: 0.5;
-        }
-
-        .input-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            width: 44px;
-            height: 44px;
-            background: transparent;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            font-size: 18px;
-        }
-
-        .action-btn:hover {
-            border-color: var(--border-glow);
-            color: var(--accent-primary);
-            background: var(--bg-surface-hover);
         }
 
         .send-btn {
-            width: 44px;
-            height: 44px;
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid var(--border-subtle);
-            font-size: 20px;
+            padding: 12px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
         }
 
         .send-btn:hover:not(:disabled) {
-            border-color: var(--border-glow);
-            color: var(--accent-primary);
-            background: var(--bg-surface-hover);
+            background: var(--accent-hover);
         }
 
         .send-btn:disabled {
-            opacity: 0.3;
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
-        /* ===== ПРАВАЯ ПАНЕЛЬ МОДУЛЕЙ ===== */
-        .modules-panel {
-            width: 280px;
-            background: var(--bg-surface);
-            border-left: 1px solid var(--border-subtle);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            overflow-y: auto;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        .modules-panel-title {
-            font-size: 12px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .module-card {
-            background: var(--bg-deep);
-            border: 1px solid var(--border-subtle);
-            padding: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .module-card:hover {
-            border-color: var(--border-glow);
-            background: var(--bg-surface-hover);
-        }
-
-        .module-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .module-card-icon {
-            font-size: 20px;
-            color: var(--accent-primary);
-        }
-
-        .module-card-name {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .module-card-blocks {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .module-block-item {
-            font-size: 12px;
-            padding: 6px 10px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-muted);
-        }
-
-        .module-block-item:hover {
-            border-color: var(--border-glow);
-            color: var(--text-primary);
-        }
-
-        /* ===== КАРТОЧКИ ДАННЫХ (ДЛЯ КОМАНД) ===== */
-        .data-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 16px;
-            padding: 20px;
-            overflow-y: auto;
-            background: var(--bg-deep);
-        }
-
-        .data-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            padding: 16px;
-            transition: all 0.2s;
-        }
-
-        .data-card:hover {
-            border-color: var(--border-glow);
-        }
-
-        .data-card-title {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .data-card-content {
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .data-card-meta {
-            margin-top: 12px;
-            font-size: 11px;
-            color: var(--text-muted);
-            display: flex;
-            gap: 8px;
-            border-top: 1px solid var(--border-subtle);
-            padding-top: 8px;
-        }
-
-        /* ===== ТИПИНГ ===== */
+        /* ===== TYPING ===== */
         .typing {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 24px;
+            gap: 8px;
+            padding: 12px 16px;
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .typing-dots {
             display: flex;
-            gap: 6px;
+            gap: 4px;
         }
 
         .typing-dot {
             width: 6px;
             height: 6px;
             background: var(--text-muted);
+            border-radius: 50%;
             animation: typing 1.4s infinite;
         }
 
-        .typing-dot:nth-child(1) { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
-        .typing-dot:nth-child(2) { clip-path: circle(50% at 50% 50%); animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); transform: rotate(180deg); animation-delay: 0.4s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
         @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-            30% { transform: translateY(-6px); opacity: 1; }
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-4px); }
         }
 
-        /* ===== ТОСТЫ ===== */
+        /* ===== MODULE VIEWER ===== */
+        .module-viewer {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .module-toolbar {
+            height: 48px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            flex-shrink: 0;
+        }
+
+        .module-name {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-sm:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent);
+        }
+
+        .module-content {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            background: var(--bg);
+        }
+
+        .module-content pre {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            gap: 12px;
+        }
+
+        .empty-state-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        /* ===== SEEDS GRID ===== */
+        .seeds-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .seeds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .seed-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            transition: all 0.15s;
+        }
+
+        .seed-card:hover {
+            border-color: var(--accent);
+        }
+
+        .seed-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .seed-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .seed-id {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .seed-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .seed-meta {
+            display: flex;
+            gap: 8px;
+            font-size: 11px;
+        }
+
+        .seed-badge {
+            padding: 4px 8px;
+            background: var(--bg);
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 480px;
+            max-height: 80vh;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .dropzone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .dropzone:hover {
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .dropzone.active {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .patch-preview {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 16px;
+            max-height: 200px;
+            overflow: auto;
+        }
+
+        .patch-preview pre {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ===== UTILITIES ===== */
+        .hidden { display: none !important; }
+        
+        .tab-content {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Toast notifications */
         .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
             padding: 12px 20px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-glow);
-            color: var(--text-primary);
-            font-size: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 13px;
             z-index: 200;
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s;
-            letter-spacing: 0.5px;
         }
 
         .toast.show {
@@ -669,174 +791,242 @@
 
         .toast.success { border-color: var(--success); }
         .toast.error { border-color: var(--error); }
-
-        /* ===== СКРОЛЛБАР ===== */
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-subtle);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--border-glow);
-        }
-
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
-    <!-- Хедер -->
+    <!-- Header -->
     <header class="header">
         <div class="header-left">
-            <div class="logo"><span>◈</span></div>
-            <div class="header-title">/engineer</div>
+            <div class="logo">◈</div>
+            <div class="header-title">Mandala Engineer</div>
         </div>
         <div class="header-right">
-            <button class="btn-icon" onclick="refreshModules()" title="обновить модули">↻</button>
-            <div class="status" id="status"></div>
+            <button class="btn-icon" onclick="openPatchModal()" title="Загрузить патч">↑</button>
+            <button class="btn-icon" onclick="refreshModules()" title="Обновить модули">↻</button>
+            <div class="status" id="status">
+                <span class="status-dot"></span>
+                <span id="statusText">Офлайн</span>
+            </div>
         </div>
     </header>
 
-    <!-- Панель команд (сверху) -->
-    <div class="commands-panel">
-        <div class="command-card" onclick="showSeeds()">
-            <span class="command-icon">○</span>
-            <div class="command-info">
-                <div class="command-name">семена</div>
-                <div class="command-key">/seeds</div>
-            </div>
-        </div>
-        <div class="command-card" onclick="showMilestones()">
-            <span class="command-icon">◈</span>
-            <div class="command-info">
-                <div class="command-name">вехи</div>
-                <div class="command-key">/milestones</div>
-            </div>
-        </div>
-        <div class="command-card" onclick="showStatus()">
-            <span class="command-icon">◉</span>
-            <div class="command-info">
-                <div class="command-name">статус</div>
-                <div class="command-key">/status</div>
-            </div>
-        </div>
-        <div class="command-card" onclick="showModulesList()">
-            <span class="command-icon">□</span>
-            <div class="command-info">
-                <div class="command-name">модули</div>
-                <div class="command-key">/modules</div>
-            </div>
-        </div>
-        <div class="command-card" onclick="showHelp()">
-            <span class="command-icon">?</span>
-            <div class="command-info">
-                <div class="command-name">помощь</div>
-                <div class="command-key">/help</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Основная часть -->
+    <!-- Main -->
     <div class="main">
-        <!-- Чат (центр) -->
-        <div class="content">
-            <div class="chat-container">
-                <div class="messages" id="messages">
-                    <div class="message system">
-                        <div class="message-bubble">
-                            установка соединения...
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Модули</div>
+                <div class="module-list" id="moduleList">
+                    <div class="module-item" data-module="initium">
+                        <span class="module-icon">⚡</span>
+                        <span>Initium</span>
+                    </div>
+                    <div class="module-item" data-module="sphaerae">
+                        <span class="module-icon">◉</span>
+                        <span>Sphaerae</span>
+                    </div>
+                    <div class="module-item" data-module="akasha_chronicorum">
+                        <span class="module-icon">◈</span>
+                        <span>Akasha</span>
+                    </div>
+                    <div class="module-item" data-module="philosophia">
+                        <span class="module-icon">◇</span>
+                        <span>Philosophia</span>
+                    </div>
+                    <div class="module-item" data-module="geometria_sacra">
+                        <span class="module-icon">△</span>
+                        <span>Geometria</span>
+                    </div>
+                    <div class="module-item" data-module="incubae">
+                        <span class="module-icon">○</span>
+                        <span>Incubae</span>
+                    </div>
+                    <div class="module-item" data-module="tectosphaera">
+                        <span class="module-icon">□</span>
+                        <span>Tectosphaera</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Быстрые действия</div>
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="quickAction('seeds')">
+                        <span>○</span>
+                        <span>Семена</span>
+                    </button>
+                    <button class="quick-btn" onclick="quickAction('milestones')">
+                        <span>◈</span>
+                        <span>Milestones</span>
+                    </button>
+                    <button class="quick-btn" onclick="quickAction('status')">
+                        <span>◉</span>
+                        <span>Статус</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="chat">Чат</button>
+                <button class="tab" data-tab="modules">Модуль</button>
+                <button class="tab" data-tab="incubae">Incubae</button>
+            </div>
+
+            <!-- Chat Tab -->
+            <div class="tab-content active" id="tab-chat">
+                <div class="chat-container">
+                    <div class="messages" id="messages">
+                        <div class="message system">
+                            <div class="message-bubble">
+                                Добро пожаловать. Соединение устанавливается...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="typing hidden" id="typing">
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <span>СР печатает...</span>
+                    </div>
+                    
+                    <div class="input-area">
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                class="message-input" 
+                                id="messageInput" 
+                                placeholder="Напишите сообщение... (или 'модуль initium')"
+                                disabled
+                            >
+                        </div>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                            <span>→</span>
+                            <span>Отправить</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module Tab -->
+            <div class="tab-content" id="tab-modules">
+                <div class="module-viewer">
+                    <div class="module-toolbar">
+                        <div class="module-name" id="moduleName">
+                            <span>◈</span>
+                            <span>Выберите модуль</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-sm" onclick="downloadModule()">Скачать</button>
+                            <button class="btn-sm" onclick="copyModule()">Копировать</button>
+                        </div>
+                    </div>
+                    <div class="module-content" id="moduleContent">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">◈</div>
+                            <div>Выберите модуль из списка слева</div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="typing hidden" id="typing">
-                    <div class="typing-dots">
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                    </div>
-                    <span>ср печатает</span>
-                </div>
-                
-                <div class="input-area">
-                    <div class="input-wrapper">
-                        <input 
-                            type="text" 
-                            class="message-input" 
-                            id="messageInput" 
-                            placeholder="сообщение..."
-                            disabled
-                        >
-                    </div>
-                    <div class="input-actions">
-                        <button class="action-btn" onclick="document.getElementById('fileUpload').click()" title="загрузить файл">📎</button>
-                        <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>→</button>
+            </div>
+
+            <!-- Incubae Tab -->
+            <div class="tab-content" id="tab-incubae">
+                <div class="seeds-container">
+                    <div class="seeds-grid" id="seedsGrid">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">○</div>
+                            <div>Загрузка семян...</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Правая панель модулей -->
-        <div class="modules-panel" id="modulesPanel">
-            <div class="modules-panel-title">модули</div>
-            <div id="modulesList"></div>
-            <!-- Сюда будут подгружаться карточки модулей -->
-        </div>
+        </main>
     </div>
 
-    <!-- Скрытый input для загрузки файлов -->
-    <input type="file" id="fileUpload" style="display: none" onchange="uploadFile(this)">
+    <!-- Patch Modal -->
+    <div class="modal-overlay" id="patchModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Загрузка патча</div>
+                <button class="modal-close" onclick="closePatchModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                    <div>Перетащите JSON-файл или нажмите для выбора</div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                        Поддерживаются одиночные и мульти-патчи
+                    </div>
+                    <input type="file" id="fileInput" accept=".json" hidden onchange="handleFileSelect(event)">
+                </div>
+                <div class="patch-preview hidden" id="patchPreview">
+                    <pre id="patchContent"></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePatchModal()">Отмена</button>
+                <button class="btn btn-primary hidden" id="applyPatchBtn" onclick="applyPatch()">Применить</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
+    <!-- JavaScript -->
     <script>
-        // ===== КОНФИГУРАЦИЯ =====
+        // ===== CONFIG =====
         const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
         const API_URL = 'https://mandala-engineer-chat.onrender.com';
-        const GITHUB_RAW = 'https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main';
         
+        // Session ID — сохраняется навсегда
         const SESSION_ID = localStorage.getItem('mc_session') || (() => {
             const id = 'mc_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
             localStorage.setItem('mc_session', id);
             return id;
         })();
 
-        // ===== СОСТОЯНИЕ =====
+        // ===== STATE =====
         let ws = null;
+        let currentModule = null;
         let modulesCache = {};
-        let currentMessageDiv = null;
+        let currentPatch = null;
         let messageBuffer = '';
+        let currentMessageDiv = null;
 
         // ===== DOM =====
         const statusEl = document.getElementById('status');
+        const statusText = document.getElementById('statusText');
         const messagesEl = document.getElementById('messages');
         const inputEl = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingEl = document.getElementById('typing');
-        const modulesPanelEl = document.getElementById('modulesPanel');
+        const moduleContentEl = document.getElementById('moduleContent');
+        const moduleNameEl = document.getElementById('moduleName');
 
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        // ===== INITIALIZATION =====
         function init() {
             connect();
-            setupModulesPanel();
-            setupDragAndDrop();
+            setupTabs();
+            setupModules();
+            setupKeyboard();
+            setupDragDrop();
         }
 
         // ===== WEBSOCKET =====
         function connect() {
-            updateStatus('connecting');
+            updateStatus('connecting', 'Подключение...');
             
             ws = new WebSocket(WS_URL);
             
             ws.onopen = () => {
+                // Отправляем инициализацию с session_id
                 ws.send(JSON.stringify({
                     type: 'init',
                     session_id: SESSION_ID
@@ -853,38 +1043,42 @@
             };
             
             ws.onclose = () => {
-                updateStatus('error');
+                updateStatus('error', 'Отключено');
                 disableInput();
-                showToast('соединение разорвано', 'error');
+                showToast('Соединение разорвано. Переподключение...', 'error');
                 setTimeout(connect, 3000);
             };
             
-            ws.onerror = () => {
-                updateStatus('error');
+            ws.onerror = (e) => {
+                console.error('WebSocket error:', e);
+                updateStatus('error', 'Ошибка');
             };
         }
 
         function handleMessage(data) {
             switch (data.type) {
                 case 'connected':
-                    updateStatus('connected');
+                    updateStatus('connected', 'На связи');
                     enableInput();
-                    addSystemMessage(`соединение установлено [${data.session_id}]`);
-                    addSystemMessage(`модулей: ${data.modules_loaded?.length || 0}`);
+                    addSystemMessage(`Соединение установлено [${data.session_id}]`);
+                    addSystemMessage(`Загружено модулей: ${data.modules_loaded?.length || 0}`);
                     break;
                     
                 case 'history':
+                    // Очищаем все сообщения (кроме возможно системных, но проще очистить полностью)
                     messagesEl.innerHTML = '';
                     if (data.messages && data.messages.length > 0) {
                         data.messages.forEach(msg => {
                             if (msg.role === 'user') {
                                 addUserMessage(msg.content);
                             } else if (msg.role === 'assistant') {
-                                appendAssistantMessage(msg.content);
+                                const div = createMessageElement('assistant');
+                                div.querySelector('.message-bubble').textContent = msg.content;
+                                messagesEl.appendChild(div);
                             }
                         });
                     } else {
-                        addSystemMessage('новая сессия');
+                        addSystemMessage('Новая сессия. Добро пожаловать!');
                     }
                     scrollToBottom();
                     break;
@@ -907,24 +1101,21 @@
                     break;
                     
                 case 'module_direct':
-                    // Показываем модуль в чате (но можно и в панель, но пока оставим)
-                    appendAssistantMessage(`📦 модуль ${data.name}:\n\`\`\`json\n${data.content}\n\`\`\``);
+                    displayModule(data.name, data.content);
+                    addSystemMessage(`Модуль ${data.name} получен`);
                     break;
                     
                 case 'modules_refreshed':
-                    showToast(`обновлено ${data.count} модулей`, 'success');
-                    break;
-                    
-                case 'file_processed':
-                    addSystemMessage(data.summary);
+                    showToast(`Обновлено ${data.count} модулей`, 'success');
                     break;
                     
                 case 'pong':
+                    // keep-alive
                     break;
             }
         }
 
-        // ===== СООБЩЕНИЯ =====
+        // ===== MESSAGING =====
         function sendMessage() {
             const text = inputEl.value.trim();
             if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
@@ -942,12 +1133,7 @@
 
         function handleStream(content) {
             if (!currentMessageDiv) {
-                currentMessageDiv = document.createElement('div');
-                currentMessageDiv.className = 'message assistant';
-                currentMessageDiv.innerHTML = `
-                    <div class="message-header">ср</div>
-                    <div class="message-bubble"></div>
-                `;
+                currentMessageDiv = createMessageElement('assistant');
                 messagesEl.appendChild(currentMessageDiv);
             }
             
@@ -958,33 +1144,24 @@
 
         function finishMessage() {
             hideTyping();
-            // Пост-обработка: ищем блоки кода и заменяем на карточки с кнопками
-            if (currentMessageDiv) {
-                enhanceCodeBlocks(currentMessageDiv);
-            }
             currentMessageDiv = null;
             messageBuffer = '';
         }
 
-        function appendAssistantMessage(text) {
+        // ===== UI HELPERS =====
+        function createMessageElement(role) {
             const div = document.createElement('div');
-            div.className = 'message assistant';
+            div.className = `message ${role}`;
             div.innerHTML = `
-                <div class="message-header">ср</div>
-                <div class="message-bubble">${formatMessage(text)}</div>
+                <div class="message-header">${role === 'user' ? 'Вы' : 'СР'}</div>
+                <div class="message-bubble"></div>
             `;
-            messagesEl.appendChild(div);
-            enhanceCodeBlocks(div);
-            scrollToBottom();
+            return div;
         }
 
         function addUserMessage(text) {
-            const div = document.createElement('div');
-            div.className = 'message user';
-            div.innerHTML = `
-                <div class="message-header">садовник</div>
-                <div class="message-bubble">${escapeHtml(text)}</div>
-            `;
+            const div = createMessageElement('user');
+            div.querySelector('.message-bubble').textContent = text;
             messagesEl.appendChild(div);
             scrollToBottom();
         }
@@ -992,361 +1169,24 @@
         function addSystemMessage(text) {
             const div = document.createElement('div');
             div.className = 'message system';
-            div.innerHTML = `<div class="message-bubble">${escapeHtml(text)}</div>`;
+            div.innerHTML = `<div class="message-bubble">${text}</div>`;
             messagesEl.appendChild(div);
             scrollToBottom();
         }
 
-        // Форматирование текста с эмодзи, таблицами и кодом
         function formatMessage(text) {
-            let html = escapeHtml(text)
-                .replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
-                    return `<div class="code-block" data-code="${encodeURIComponent(code)}" data-lang="${lang}">
-                        <div class="code-header">
-                            <span>${lang || 'code'}</span>
-                            <div class="code-actions">
-                                <button class="code-action" onclick="copyCode(this)">копировать</button>
-                                <button class="code-action" onclick="downloadCode(this)">скачать</button>
-                                ${lang === 'json' ? '<button class="code-action" onclick="applyCode(this)">применить</button>' : ''}
-                            </div>
-                        </div>
-                        <pre class="code-content">${escapeHtml(code)}</pre>
-                    </div>`;
-                })
+            // Экранируем HTML
+            let html = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            
+            // Форматируем
+            return html
+                .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n/g, '<br>');
-            
-            // Простая замена эмодзи-текста на символы (можно расширить)
-            html = html.replace(/:-?\)/g, '😊')
-                       .replace(/:-?\(/g, '😢')
-                       .replace(/;;/g, '😉');
-            
-            return html;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Обработка кодовых блоков после вставки
-        function enhanceCodeBlocks(container) {
-            // Уже обработано в formatMessage, но нужно добавить data-атрибуты
-        }
-
-        // Копирование кода
-        window.copyCode = function(btn) {
-            const block = btn.closest('.code-block');
-            const code = decodeURIComponent(block.dataset.code);
-            navigator.clipboard.writeText(code);
-            showToast('код скопирован', 'success');
-        };
-
-        // Скачивание кода
-        window.downloadCode = function(btn) {
-            const block = btn.closest('.code-block');
-            const code = decodeURIComponent(block.dataset.code);
-            const lang = block.dataset.lang || 'txt';
-            const blob = new Blob([code], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `code.${lang}`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('файл скачан', 'success');
-        };
-
-        // Применение кода (отправка как патч, если JSON)
-        window.applyCode = function(btn) {
-            const block = btn.closest('.code-block');
-            const code = decodeURIComponent(block.dataset.code);
-            try {
-                const json = JSON.parse(code);
-                // Отправляем как патч
-                if (ws && ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({
-                        type: 'apply_patch',
-                        patch: json,
-                        session_id: SESSION_ID
-                    }));
-                    addSystemMessage('🔄 патч отправлен на применение');
-                } else {
-                    showToast('нет соединения', 'error');
-                }
-            } catch (e) {
-                showToast('это не JSON, нельзя применить', 'error');
-            }
-        };
-
-        // ===== ЗАГРУЗКА ФАЙЛОВ =====
-        function uploadFile(input) {
-            const file = input.files[0];
-            if (!file) return;
-            
-            if (!ws || ws.readyState !== WebSocket.OPEN) {
-                showToast('❌ нет соединения', 'error');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result.split(',')[1];
-                ws.send(JSON.stringify({
-                    type: 'file',
-                    name: file.name,
-                    content: content,
-                    type: file.type,
-                    session_id: SESSION_ID
-                }));
-                addSystemMessage(`📁 файл ${file.name} отправлен`);
-            };
-            reader.readAsDataURL(file);
-            input.value = '';
-        }
-
-        // ===== DRAG AND DROP =====
-        function setupDragAndDrop() {
-            document.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                document.body.style.opacity = '0.8';
-            });
-
-            document.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                document.body.style.opacity = '1';
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    uploadFileFromDrop(files[0]);
-                }
-            });
-        }
-
-        function uploadFileFromDrop(file) {
-            if (!ws || ws.readyState !== WebSocket.OPEN) {
-                showToast('❌ нет соединения', 'error');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result.split(',')[1];
-                ws.send(JSON.stringify({
-                    type: 'file',
-                    name: file.name,
-                    content: content,
-                    type: file.type,
-                    session_id: SESSION_ID
-                }));
-                addSystemMessage(`📁 файл ${file.name} отправлен`);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // ===== ПАНЕЛЬ МОДУЛЕЙ =====
-        const modulesData = [
-            { name: 'initium', icon: '⚡', blocks: ['конституция', 'директивы', 'линзы', 'unified_entry'] },
-            { name: 'sphaerae', icon: '◉', blocks: ['biosphaera', 'noosphaera', 'cosmosphaera', 'module_map'] },
-            { name: 'akasha_chronicorum', icon: '◈', blocks: ['biosphaera', 'noosphaera', 'cosmosphaera', 'artifact_registry'] },
-            { name: 'philosophia', icon: '◇', blocks: ['онтология', 'принципы', 'свидетельства', 'методология'] },
-            { name: 'geometria_sacra', icon: '△', blocks: ['цветок жизни', 'меркаба', 'резонанс', 'визуализация'] },
-            { name: 'incubae', icon: '○', blocks: ['активные семена', 'архив', 'протоколы'] },
-            { name: 'tectosphaera', icon: '□', blocks: ['защита', 'инструменты', 'наставления', 'инфраструктура'] }
-        ];
-
-        function setupModulesPanel() {
-            renderModulesList();
-        }
-
-        function renderModulesList() {
-            const html = modulesData.map(module => `
-                <div class="module-card" data-module="${module.name}">
-                    <div class="module-card-header">
-                        <span class="module-card-icon">${module.icon}</span>
-                        <span class="module-card-name">${module.name}</span>
-                    </div>
-                    <div class="module-card-blocks">
-                        ${module.blocks.map(block => `
-                            <div class="module-block-item" onclick="event.stopPropagation(); requestModuleBlock('${module.name}', '${block}')">${block}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('modulesList').innerHTML = html;
-            
-            // Добавляем обработчик клика на всю карточку (показать модуль целиком)
-            document.querySelectorAll('.module-card').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('module-block-item')) {
-                        const moduleName = card.dataset.module;
-                        requestModule(moduleName);
-                    }
-                });
-            });
-        }
-
-        function requestModule(moduleName) {
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({
-                    type: 'module',
-                    name: moduleName,
-                    session_id: SESSION_ID
-                }));
-            } else {
-                showToast('нет соединения', 'error');
-            }
-        }
-
-        function requestModuleBlock(moduleName, block) {
-            // Отправляем запрос на раскрытие блока
-            const text = `расскажи подробнее о блоке ${block} в модуле ${moduleName}`;
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                addUserMessage(text);
-                showTyping();
-                ws.send(JSON.stringify({
-                    type: 'ask',
-                    text: text,
-                    session_id: SESSION_ID
-                }));
-            }
-        }
-
-        // ===== КОМАНДЫ (КАРТОЧКИ) =====
-        async function showSeeds() {
-            // Показываем карточки семян
-            showDataCards('seeds');
-        }
-
-        async function showMilestones() {
-            showDataCards('milestones');
-        }
-
-        async function showStatus() {
-            // Показываем статус системы
-            try {
-                const response = await fetch(`${API_URL}/health`);
-                const data = await response.json();
-                const statusHtml = `
-                    <div class="data-cards">
-                        <div class="data-card">
-                            <div class="data-card-title">🔌 соединение</div>
-                            <div class="data-card-content">подключений: ${data.connections}</div>
-                            <div class="data-card-meta">статус: ${data.status}</div>
-                        </div>
-                        <div class="data-card">
-                            <div class="data-card-title">📦 модули</div>
-                            <div class="data-card-content">загружено: ${data.modules}</div>
-                            <div class="data-card-meta">github: ${data.github_token}</div>
-                        </div>
-                        <div class="data-card">
-                            <div class="data-card-title">💾 сессии</div>
-                            <div class="data-card-content">в кэше: ${data.sessions_cached}</div>
-                            <div class="data-card-meta">moonshot: ${data.moonshot_api}</div>
-                        </div>
-                    </div>
-                `;
-                showOverlay(statusHtml);
-            } catch (e) {
-                showToast('ошибка загрузки статуса', 'error');
-            }
-        }
-
-        async function showModulesList() {
-            // Показываем список модулей
-            try {
-                const response = await fetch(`${API_URL}/kernel`);
-                const data = await response.json();
-                const modulesHtml = `
-                    <div class="data-cards">
-                        ${data.modules_loaded.map(m => `
-                            <div class="data-card" onclick="requestModule('${m}')">
-                                <div class="data-card-title">📦 ${m}</div>
-                                <div class="data-card-meta">версия: ...</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                showOverlay(modulesHtml);
-            } catch (e) {
-                showToast('ошибка загрузки модулей', 'error');
-            }
-        }
-
-        function showHelp() {
-            const helpHtml = `
-                <div class="data-cards">
-                    <div class="data-card">
-                        <div class="data-card-title">○ семена</div>
-                        <div class="data-card-content">/seeds — список активных семян</div>
-                    </div>
-                    <div class="data-card">
-                        <div class="data-card-title">◈ вехи</div>
-                        <div class="data-card-content">/milestones — последние достижения</div>
-                    </div>
-                    <div class="data-card">
-                        <div class="data-card-title">◉ статус</div>
-                        <div class="data-card-content">/status — состояние системы</div>
-                    </div>
-                    <div class="data-card">
-                        <div class="data-card-title">□ модули</div>
-                        <div class="data-card-content">/modules — список модулей</div>
-                    </div>
-                    <div class="data-card">
-                        <div class="data-card-title">? помощь</div>
-                        <div class="data-card-content">/help — это сообщение</div>
-                    </div>
-                </div>
-            `;
-            showOverlay(helpHtml);
-        }
-
-        // Временное отображение карточек поверх чата (просто добавим в чат как системное сообщение)
-        function showDataCards(type) {
-            // Для простоты пока отправим запрос СР, а он вернёт данные
-            let query = '';
-            if (type === 'seeds') query = 'покажи активные семена из incubae';
-            else if (type === 'milestones') query = 'покажи последние вехи из akasha';
-            
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                addUserMessage(query);
-                showTyping();
-                ws.send(JSON.stringify({
-                    type: 'ask',
-                    text: query,
-                    session_id: SESSION_ID
-                }));
-            }
-        }
-
-        function showOverlay(html) {
-            // Просто добавляем в чат как системное сообщение с карточками
-            const div = document.createElement('div');
-            div.className = 'message system';
-            div.innerHTML = `<div class="message-bubble">${html}</div>`;
-            messagesEl.appendChild(div);
-            scrollToBottom();
-        }
-
-        // ===== СТАТУС =====
-        function updateStatus(state) {
-            statusEl.className = 'status ' + state;
-        }
-
-        function enableInput() {
-            inputEl.disabled = false;
-            sendBtn.disabled = false;
-            inputEl.focus();
-        }
-
-        function disableInput() {
-            inputEl.disabled = true;
-            sendBtn.disabled = true;
         }
 
         function showTyping() {
@@ -1362,34 +1202,328 @@
             messagesEl.scrollTop = messagesEl.scrollHeight;
         }
 
-        function refreshModules() {
+        // ===== STATUS =====
+        function updateStatus(state, text) {
+            statusEl.className = 'status ' + state;
+            statusText.textContent = text;
+        }
+
+        function enableInput() {
+            inputEl.disabled = false;
+            sendBtn.disabled = false;
+            inputEl.focus();
+        }
+
+        function disableInput() {
+            inputEl.disabled = true;
+            sendBtn.disabled = true;
+        }
+
+        // ===== TABS =====
+        function setupTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`tab-${tabName}`).classList.add('active');
+                    
+                    if (tabName === 'incubae') loadSeeds();
+                });
+            });
+        }
+
+        // ===== MODULES =====
+        function setupModules() {
+            document.querySelectorAll('.module-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.module-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    const name = item.dataset.module;
+                    requestModule(name);
+                    
+                    // Переключаем на вкладку модуля
+                    document.querySelector('.tab[data-tab="modules"]').click();
+                });
+            });
+        }
+
+        function requestModule(name) {
+            currentModule = name;
+            
+            if (modulesCache[name]) {
+                displayModule(name, modulesCache[name]);
+                return;
+            }
+            
             if (ws && ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify({
-                    type: 'refresh_modules',
+                    type: 'module',
+                    name: name,
                     session_id: SESSION_ID
                 }));
-                showToast('обновление модулей...', 'success');
             }
+        }
+
+        function displayModule(name, content) {
+            modulesCache[name] = content;
+            currentModule = name;
+            
+            // Обновляем заголовок
+            moduleNameEl.innerHTML = `
+                <span>${getModuleIcon(name)}</span>
+                <span>${name}</span>
+            `;
+            
+            // Форматируем JSON
+            let displayContent;
+            try {
+                const parsed = JSON.parse(content);
+                displayContent = JSON.stringify(parsed, null, 2);
+            } catch {
+                displayContent = content;
+            }
+            
+            moduleContentEl.innerHTML = `<pre>${escapeHtml(displayContent)}</pre>`;
+        }
+
+        function getModuleIcon(name) {
+            const icons = {
+                initium: '⚡',
+                sphaerae: '◉',
+                akasha_chronicorum: '◈',
+                philosophia: '◇',
+                geometria_sacra: '△',
+                incubae: '○',
+                tectosphaera: '□'
+            };
+            return icons[name] || '◈';
+        }
+
+        function downloadModule() {
+            if (!currentModule || !modulesCache[currentModule]) {
+                showToast('Сначала выберите модуль', 'error');
+                return;
+            }
+            
+            const blob = new Blob([modulesCache[currentModule]], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentModule}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast(`${currentModule}.json скачан`, 'success');
+        }
+
+        function copyModule() {
+            if (!currentModule || !modulesCache[currentModule]) {
+                showToast('Сначала выберите модуль', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(modulesCache[currentModule]);
+            showToast('Скопировано в буфер', 'success');
+        }
+
+        // ===== SEEDS =====
+        async function loadSeeds() {
+            const grid = document.getElementById('seedsGrid');
+            grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>Загрузка...</div></div>';
+            
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/incubae.json');
+                if (!response.ok) throw new Error('Ошибка загрузки');
+                
+                const data = await response.json();
+                const seeds = data.seeds || [];
+                
+                if (!seeds.length) {
+                    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>Нет активных семян</div></div>';
+                    return;
+                }
+                
+                grid.innerHTML = seeds.map(seed => `
+                    <div class="seed-card">
+                        <div class="seed-header">
+                            <div class="seed-title">${escapeHtml(seed.name || 'Без названия')}</div>
+                            <div class="seed-id">${seed.id}</div>
+                        </div>
+                        <div class="seed-desc">${escapeHtml(seed.description || '')}</div>
+                        <div class="seed-meta">
+                            <span class="seed-badge">v${seed.version || '1.0'}</span>
+                            <span class="seed-badge">${seed.status || 'active'}</span>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (err) {
+                grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
+            }
+        }
+
+        // ===== PATCH MODAL =====
+        function openPatchModal() {
+            document.getElementById('patchModal').classList.add('active');
+            document.getElementById('patchPreview').classList.add('hidden');
+            document.getElementById('applyPatchBtn').classList.add('hidden');
+            currentPatch = null;
+        }
+
+        function closePatchModal() {
+            document.getElementById('patchModal').classList.remove('active');
+        }
+
+        function setupDragDrop() {
+            const dropzone = document.getElementById('dropzone');
+            
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('active');
+            });
+            
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('active');
+            });
+            
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('active');
+                const file = e.dataTransfer.files[0];
+                if (file) readFile(file);
+            });
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) readFile(file);
+        }
+
+        function readFile(file) {
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                showToast('Требуется JSON-файл', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const content = e.target.result;
+                    const parsed = JSON.parse(content);
+                    currentPatch = content;
+                    
+                    // Показываем превью
+                    document.getElementById('patchContent').textContent = JSON.stringify(parsed, null, 2);
+                    document.getElementById('patchPreview').classList.remove('hidden');
+                    document.getElementById('applyPatchBtn').classList.remove('hidden');
+                } catch (err) {
+                    showToast('Невалидный JSON: ' + err.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        async function applyPatch() {
+            if (!currentPatch) return;
+            
+            closePatchModal();
+            showToast('Применение патча...', 'success');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/apply-patch`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: currentPatch
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showToast(`Патч применён: ${result.commit_sha?.slice(0, 7) || 'успешно'}`, 'success');
+                    // Обновляем модули
+                    refreshModules();
+                } else {
+                    showToast(result.detail || 'Ошибка применения', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка сети: ' + err.message, 'error');
+            }
+        }
+
+        // ===== QUICK ACTIONS =====
+        function quickAction(action) {
+            switch(action) {
+                case 'seeds':
+                    document.querySelector('.tab[data-tab="incubae"]').click();
+                    break;
+                case 'milestones':
+                    sendDirectMessage('Покажи последние milestones из Akasha');
+                    break;
+                case 'status':
+                    sendDirectMessage('Статус системы');
+                    break;
+            }
+        }
+
+        function sendDirectMessage(text) {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('Нет соединения', 'error');
+                return;
+            }
+            addUserMessage(text);
+            showTyping();
+            ws.send(JSON.stringify({
+                type: 'ask',
+                text: text,
+                session_id: SESSION_ID
+            }));
+        }
+
+        function refreshModules() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('Нет соединения', 'error');
+                return;
+            }
+            ws.send(JSON.stringify({
+                type: 'refresh_modules',
+                session_id: SESSION_ID
+            }));
+            showToast('Запрос на обновление модулей отправлен', 'success');
+        }
+
+        // ===== KEYBOARD =====
+        function setupKeyboard() {
+            inputEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        // ===== UTILITIES =====
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.className = `toast ${type} show`;
+            
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
         }
 
-        // ===== KEYBOARD =====
-        inputEl.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        // ===== СТАРТ =====
+        // ===== START =====
         init();
     </script>
 </body>
