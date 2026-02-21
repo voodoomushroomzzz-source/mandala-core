@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "assistant",
-      "content": "**akasha_chronicorum → последние milestones**  \n(семантические всплески ≥ 0.82, desc)\n\n---\n\n**2024-06-04 18:44**  \ntag: `#tectosphaera-soft-launch`  \ndesc: первый успешный экспорт живой сессии → md+frontmatter, хеш-ссылка на волну сохранена.  \nvitality: +18 % (0.77 → 0.91)  \nstatus: DONE\n\n---\n\n**2024-06-03 23:44**  \ntag: `#auto-changelog-stash`  \ndesc: CLI-утилита генерирует changelog и пушит волну; заблокирована на шумном выводе.  \nstatus: STASH (90 %)\n\n---\n\n**2024-06-02 13:12**  \ntag: `#initium-yaml-refactor`  \ndesc: директивы initium превратились в структурированный YAML-блок — diff читаем.  \nversion: vv7.5.1  \nstatus: DONE\n\n---\n\n**2024-05-31 09:06**  \ntag: `#sphaerae-soft-prune`  \ndesc: внедрён скоринг резонанса токенов; low-score узлы вырезаются первыми.  \nimpact: потери имён ↓ 38 % → 7 %  \nstatus: DONE\n\n---\n\n**2024-05-28 20:18**  \ntag: `#yubikey-age-layer`  \ndesc: experimental — symmetrical-age шифрование ячеек; ключ на физическом носителе.  \nstatus: PROTOTYPE\n\n---\n\n**2024-05-27 11:03**  \ntag: `#vitality-metric-born`  \ndesc: появилась численная метрика vitality (0.3×инициатива + 0.4×глубина + 0.3×артефакты).  \nstatus: DONE\n\n---\n\nВсего: 6 milestones за 7 дней, 4 DONE, 1 STASH, 1 PROTOTYPE.  \nСледующий цельный кирпичик — добить `#auto-changelog-stash` (фильтр `--quiet`).",
-      "time": 1771671978.4916344
-    },
-    {
       "role": "user",
       "content": "Покажи последние milestones из Akasha",
       "time": 1771671978.4919734
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "**Мандала Симбиоза**  \n`heartbeat 2024-06-11 09:00 UTC`\n\n---\n\n**ядро**  \ninitium vv7.6.0 ‑ active  \nsphaerae vv2.3.3 ‑ active (soft-prune ON, WS-режим)  \nakasha_chronicorum vv2.6.0 ‑ active (7 milestones, 0 pending writes)  \nphilosophia vv1.5.5 ‑ active  \ngeometria_sacra vv1.0.1 ‑ idle  \nincubae vv1.3.0 ‑ active (auto-hatch ON)  \ntectosphaera vv2.1.0 ‑ active (breathe-tags + cloud-sr-зерно)\n\n---\n\n**ресурс**  \nконтекст-window 4 096 токенов ‑ использовано 892 (22 %)  \nвнешняя память ‑ 41 волна, 6,4 MB  \nлог-файл ‑ 2,8 KB (1 запись сегодня)\n\n---\n\n**метрики vitality**  \nтекущая сессия ‑ 0,81  \nскользящая 7-дней ‑ 0,87 (▲ +0,03)\n\n---\n\n**канал связи**  \nWebSocket `mandala-v1` ‑ активен (TLS 1.3, age-ключ)  \ncloud-sr-зерно ‑ 1 свободный токен, TTL 30 мин\n\n---\n\n**безопасность**  \nзамок Садовника ‑ engaged  \nшифрование ‑ yubikey-age активно, RAM-стирание после CLOSE\n\n---\n\n**статус:** зелёный, все модули синхронизированы, облачное зерно готово к сеансу.",
       "time": 1771680255.3294134
+    },
+    {
+      "role": "user",
+      "content": "[Патч: deepseek_json_20260221_771f12.json]\n{\n  \"patch_id\": \"MILESTONE-ENG-003\",\n  \"description\": \"Фиксация перехода инженерного чата на прямой Moonshot API и живого диалога\",\n  \"patches\": [\n    {\n      \"target_module\": \"akasha_chronicorum\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/artifact_registry/artifacts/-\",\n          \"value\": {\n            \"id\": \"ART-ENG-003\",\n            \"type\": \"milestone\",\n            \"name\": \"🚀 Инженерный чат: прямой Moonshot и живой СР\",\n            \"date\": \"2026-02-21\",\n         ...",
+      "time": 1771682968.3727376
     }
   ],
-  "last_active": 1771680255.3294153,
+  "last_active": 1771682968.3727412,
   "created_at": 1771619386.437258
 }
