@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "assistant",
-      "content": "[Патч: 1 файлов]",
-      "time": 1771699253.1466997
-    },
-    {
       "role": "user",
       "content": "[Комментарий к файлу pyproject (1).toml]: новая версия",
       "time": 1771699290.8195124
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1771701565.1107302
+    },
+    {
+      "role": "user",
+      "content": "Skip to content\nvoodoomushroomzzz-source\nmandala-core\nRepository navigation\nCode\nIssues\nPull requests\nActions\nProjects\nWiki\nSecurity\nInsights\nSettings\nCI\n💾 mc_mlvan3qs_ | 50 msgs | 19:19 #90\nAll jobs\nRun details\nAnnotations\n1 error\nlint-test\nfailed now in 13s\nSearch logs\n1s\n1s\n0s\n9s\n0s\n   |\n\ninvalid-syntax: Expected an expression\n  --> tectosphaera/services/github_client.py:81:79\n   |\n79 |         return resp.json()\n80 |\n81 |     async def get_sha(self, path: str, ref: str = \"main\") -&gt; Optional[str]:\n   |                                                                               ^\n82 |         \"\"\"Получить SHA файла.\"\"\"\n83 |         url = f\"{self.api_base}/contents/{path}\"\n   |\n\ninvalid-syntax: Unexpected indentation\n  --> tectosphaera/services/github_client.py:82:1\n   |\n81 |     async def get_sha(self, path: str, ref: str = \"main\") -&gt; Optional[str]:\n82 |         \"\"\"Получить SHA файла.\"\"\"\n   | ^^^^^^^^\n83 |         url = f\"{self.api_base}/contents/{path}\"\n84 |         params = {\"ref\": ref}\n   |\n\ninvalid-syntax: Expected a statement\n  --> tectosphaera/services/github_client.py:97:24\n   |\n95 |         except Exception:\n96 |             logger.exception(f\"Error getting SHA for {path}\")\n97 |             return None\n   |                        ^\n   |\n\nW292 No newline at end of file\n  --> tectosphaera/services/github_client.py:97:24\n   |\n95 |         except Exception:\n96 |             logger.exception(f\"Error getting SHA for {path}\")\n97 |             return None\n   |                        ^\n   |\nhelp: Add trailing newline\n\nFound 190 errors (91 fixed, 99 remaining).\nNo fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).\nError: Process completed with exit code 1.\n0s\n0s\n0s\n1s\n0s",
+      "time": 1771701618.6119819
     }
   ],
-  "last_active": 1771701565.1107326,
+  "last_active": 1771701618.6119854,
   "created_at": 1771619386.437258
 }
