@@ -3,146 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>◈ Mandala Engineer</title>
+    <title>◈ Mandala Engineer — MYCEL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@300;400;500&family=Nunito:wght@200;300;400&display=swap" rel="stylesheet">
     <style>
-        /* ===== COSMIC GEOMETRY — ЧИСТЫЙ ФИОЛЕТ ===== */
         :root {
-            --void: #050508;
-            --deep: #0a0a0f;
-            --surface: #12121a;
-            --surface-hover: #1a1a25;
-            --border: #252533;
-            --border-glow: #3a3a55;
-            --star: #e8e8f0;
-            --nebula: #a855f7;
-            --nebula-dim: #7c3aed;
-            --nebula-glow: #c084fc;
-            --pulse: #22d3ee;
-            --copy: #10b981;      /* зелёный */
-            --download: #3b82f6;   /* синий */
-            --font-mono: 'JetBrains Mono', Monaco, monospace;
-            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --bg: #030d09;
+            --surface: #071209;
+            --surface-2: #0a1a10;
+            --line: #0f2518;
+            --line-2: #193a26;
+            --green: #059669;
+            --green-2: #10b981;
+            --green-bright: #34d399;
+            --green-neon: #6ee7b7;
+            --green-glow: rgba(16,185,129,0.12);
+            --violet: #7c3aed;
+            --violet-soft: #a78bfa;
+            --violet-dim: rgba(124,58,237,0.12);
+            --indigo: #3730a3;
+            --indigo-soft: #818cf8;
+            --text: #dcfce7;
+            --text-2: #5a8a6a;
+            --text-3: #254535;
+            --mono: 'Fira Mono', monospace;
+            --sans: 'Nunito', sans-serif;
+            --copy: #10b981;      /* зелёный для кнопок копирования */
+            --download: #3b82f6;   /* синий для скачивания */
             --radius: 8px;
             --radius-sm: 4px;
-            --sidebar-width: 200px;
-            --sidebar-collapsed: 48px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: var(--font-sans);
-            font-size: 14px;
-            line-height: 1.5;
-            background: var(--void);
-            color: var(--star);
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-weight: 300;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* Bioluminescent glow pools */
+        .glow-pool {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+        .gp-1 {
+            width: 600px; height: 400px;
+            top: -100px; right: -200px;
+            background: radial-gradient(ellipse, rgba(16,185,129,0.1) 0%, transparent 70%);
+            animation: pool-drift 20s ease-in-out infinite alternate;
+        }
+        .gp-2 {
+            width: 400px; height: 400px;
+            bottom: -100px; left: -100px;
+            background: radial-gradient(ellipse, rgba(124,58,237,0.08) 0%, transparent 70%);
+        }
+        @keyframes pool-drift {
+            from { transform: scale(1) translate(0, 0); }
+            to { transform: scale(1.15) translate(-20px, 15px); }
+        }
+
+        /* Flower of Life background */
+        .bg-flower {
+            position: fixed;
+            right: -220px; top: 50%;
+            transform: translateY(-50%);
+            width: 700px; height: 700px;
+            opacity: 0.035;
+            pointer-events: none;
+            animation: flower-breathe 8s ease-in-out infinite alternate;
+        }
+        @keyframes flower-breathe {
+            from { opacity: 0.025; transform: translateY(-50%) scale(1); }
+            to { opacity: 0.05; transform: translateY(-50%) scale(1.03); }
         }
 
         /* ===== HEADER ===== */
         .header {
-            height: 48px;
-            background: var(--deep);
-            border-bottom: 1px solid var(--border);
+            height: 52px;
+            border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
+            padding: 0 22px;
             flex-shrink: 0;
-        }
-
-        .header-left { display: flex; align-items: center; gap: 12px; }
-
-        .logo {
-            width: 28px; height: 28px;
-            background: var(--nebula);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: var(--void);
-            box-shadow: 0 0 12px var(--nebula-dim);
-        }
-
-        .header-title { font-weight: 500; font-size: 14px; letter-spacing: 0.5px; color: var(--star); }
-
-        .header-right { display: flex; align-items: center; gap: 8px; }
-
-        .status-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--border);
-            box-shadow: 0 0 4px currentColor;
-            transition: all 0.3s ease;
-        }
-        .status-dot.connected { background: var(--nebula-glow); box-shadow: 0 0 12px var(--nebula-glow); animation: pulse-glow 2s infinite; }
-        .status-dot.connecting { background: var(--nebula-dim); box-shadow: 0 0 8px var(--nebula-dim); animation: pulse-glow 1s infinite; }
-        .status-dot.error { background: #f43f5e; box-shadow: 0 0 12px #f43f5e; }
-
-        @keyframes pulse-glow {
-            0%,100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.9); }
-        }
-
-        /* Геометрические кнопки (включая селект моделей) */
-        .btn-geo {
-            width: 32px; height: 32px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--star);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-        .btn-geo:hover {
-            color: var(--nebula-glow);
-            border-color: var(--nebula-dim);
-            background: var(--surface-hover);
-            box-shadow: 0 0 12px var(--nebula-dim);
-        }
-
-        /* Стилизация селекта как кнопки с треугольником */
-        select.btn-geo {
-            width: auto;
-            padding: 0 20px 0 8px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 4px center;
-            background-size: 14px;
-        }
-
-        /* ===== MAIN ===== */
-        .main { flex: 1; display: flex; overflow: hidden; }
-
-        /* ===== SIDEBAR (только навигация) ===== */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--deep);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            transition: width 0.3s ease;
             position: relative;
+            z-index: 10;
         }
-        .sidebar.collapsed { width: var(--sidebar-collapsed); }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 15%; right: 15%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--green), transparent);
+            opacity: 0.3;
+        }
+
+        .h-left { display: flex; align-items: center; gap: 14px; }
+
+        .logo-mark { width: 34px; height: 34px; }
+        .logo-mark svg { width: 34px; height: 34px; }
+
+        .brand-text {
+            display: flex; flex-direction: column; gap: 1px;
+        }
+        .brand-name {
+            font-family: var(--mono);
+            font-size: 11px; font-weight: 400;
+            letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--text);
+        }
+        .brand-sub {
+            font-family: var(--mono);
+            font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-3);
+        }
+
+        .h-right { display: flex; align-items: center; gap: 12px; }
+
+        .msel {
+            font-family: var(--mono); font-size: 9px;
+            background: transparent; border: none;
+            color: var(--text-2); cursor: pointer;
+            letter-spacing: 1px; text-transform: uppercase;
+            outline: none; appearance: none;
+            transition: color 0.2s;
+            padding: 0 12px 0 4px; /* для стрелки */
+        }
+        .msel:hover { color: var(--green-bright); }
+
+        .vsep { width: 1px; height: 18px; background: var(--line); }
+
+        .hbtn {
+            width: 28px; height: 28px;
+            background: transparent; border: none;
+            color: var(--text-3); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .hbtn:hover { color: var(--green-bright); background: var(--green-glow); }
+
+        .status-orb {
+            display: flex; align-items: center; gap: 6px;
+        }
+        .orb-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--green-2);
+            box-shadow: 0 0 10px var(--green-2), 0 0 20px rgba(16,185,129,0.3);
+            animation: orb-pulse 3s ease-in-out infinite;
+        }
+        @keyframes orb-pulse {
+            0%,100% { box-shadow: 0 0 10px var(--green-2), 0 0 20px rgba(16,185,129,0.3); }
+            50% { box-shadow: 0 0 6px var(--green-2), 0 0 10px rgba(16,185,129,0.15); }
+        }
+        .orb-label {
+            font-family: var(--mono); font-size: 8px;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--green-bright);
+        }
+
+        /* ===== LAYOUT ===== */
+        .layout { flex: 1; display: flex; overflow: hidden; position: relative; z-index: 1; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 188px;
+            border-right: 1px solid var(--line);
+            display: flex; flex-direction: column;
+            padding: 22px 0;
+            flex-shrink: 0;
+            position: relative;
+            transition: width 0.3s ease;
+        }
+        .sidebar.collapsed { width: 48px; }
+        .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); }
+        .sidebar.collapsed .nav-wrap,
+        .sidebar.collapsed .logo-mini { display: flex; } /* logo-mini показываем при сворачивании */
+        .sidebar.collapsed .nav-title,
+        .sidebar.collapsed .nav-item span:not(.nicon) { display: none; }
+
+        /* Left mycelium accent */
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom,
+                transparent,
+                var(--green) 40%,
+                var(--violet) 70%,
+                transparent);
+            opacity: 0.3;
+        }
+
         .sidebar-toggle {
             position: absolute; right: -12px; top: 12px;
             width: 24px; height: 24px;
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 1px solid var(--line-2);
             border-radius: 50%;
-            color: var(--border-glow);
+            color: var(--text-3);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -152,244 +221,324 @@
             transition: all 0.2s ease;
         }
         .sidebar-toggle:hover {
-            border-color: var(--nebula);
-            color: var(--nebula-glow);
+            border-color: var(--green-2);
+            color: var(--green-bright);
             transform: scale(1.1);
         }
-        .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); }
-        .sidebar.collapsed .sidebar-section,
-        .sidebar.collapsed .quick-actions { opacity: 0; pointer-events: none; }
 
-        .sidebar-section {
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-            transition: opacity 0.2s ease;
-        }
-        .sidebar-title {
-            font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            color: var(--border-glow); margin-bottom: 8px; padding-left: 8px;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .sidebar-title::before {
-            content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--nebula);
+        .logo-mini {
+            display: none;
+            width: 28px; height: 28px;
+            margin: 12px auto;
+            background: var(--green);
+            border-radius: var(--radius-sm);
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--bg);
         }
 
-        .quick-actions { display: flex; flex-direction: column; gap: 2px; transition: opacity 0.2s ease; }
+        .nav-wrap { padding: 0 14px; transition: opacity 0.2s ease; }
+
+        .nav-title {
+            font-family: var(--mono); font-size: 7px;
+            letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-3); margin-bottom: 14px;
+        }
+
         .quick-btn {
-            display: flex; align-items: center; gap: 10px; padding: 8px 10px;
-            border-radius: var(--radius-sm); cursor: pointer; font-size: 12px;
-            color: var(--border-glow); background: transparent; border: none; text-align: left;
-            transition: all 0.15s ease; font-family: var(--font-mono);
-            border-left: 2px solid transparent;
-            opacity: 0.9;  /* чуть ярче, чем было */
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 10px;
+            width: 100%; background: transparent; border: none;
+            color: var(--text-2); font-family: var(--sans);
+            font-size: 12px; font-weight: 300;
+            cursor: pointer; text-align: left;
+            border-radius: 8px; margin-bottom: 2px;
+            transition: all 0.15s;
         }
         .quick-btn:hover {
-            background: var(--surface); border-left-color: var(--border-glow);
-            color: var(--star); opacity: 1;
+            color: var(--green-neon);
+            background: var(--green-glow);
         }
-        .quick-btn span:first-child { color: var(--border-glow); transition: all 0.2s ease; }
-        .quick-btn:hover span:first-child { color: var(--star); }
+
+        .nicon {
+            font-size: 9px; width: 14px; text-align: center;
+            color: var(--text-3); transition: all 0.2s;
+        }
+        .quick-btn:hover .nicon {
+            color: var(--green-2);
+            text-shadow: 0 0 8px var(--green-2);
+        }
 
         /* ===== CONTENT ===== */
-        .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--void); }
+        .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
         /* ===== TABS ===== */
         .tabs {
-            height: 36px; background: var(--deep); border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; padding: 0 12px; gap: 4px; flex-shrink: 0;
+            height: 42px;
+            border-bottom: 1px solid var(--line);
+            display: flex; align-items: center;
+            padding: 0 22px;
+            flex-shrink: 0;
         }
         .tab {
-            padding: 6px 14px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px;
-            color: var(--border-glow); border: none; background: transparent;
-            transition: all 0.15s ease; font-family: var(--font-mono); text-transform: uppercase;
-            letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;
-            opacity: 0.85; /* чуть ярче */
+            font-family: var(--mono); font-size: 9px;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-3); background: transparent; border: none;
+            cursor: pointer; padding: 0 16px; height: 100%;
+            display: flex; align-items: center;
+            transition: color 0.15s; position: relative;
         }
-        .tab:hover { color: var(--star); background: var(--surface); opacity: 1; }
-        .tab.active { color: var(--nebula-glow); background: var(--surface); box-shadow: inset 0 -2px 0 var(--nebula); opacity: 1; }
-        .tab::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+        .tab:hover { color: var(--text-2); }
+        .tab.active { color: var(--green-bright); }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 8px; right: 8px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--green-2), transparent);
+        }
 
-        /* ===== CHAT ===== */
-        .chat-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        /* ===== MESSAGES ===== */
         .messages {
-            flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+            flex: 1; overflow-y: auto;
+            padding: 28px 22px;
+            display: flex; flex-direction: column; gap: 20px;
         }
-        .message { max-width: 90%; display: flex; flex-direction: column; gap: 4px; animation: fade-in 0.3s ease; }
-        @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .message-header {
-            display: flex; align-items: center; gap: 8px; font-size: 11px;
-            color: var(--border-glow); font-family: var(--font-mono);
-        }
-        .message-bubble { padding: 12px 14px; border-radius: var(--radius); line-height: 1.6; font-size: 14px; white-space: pre-wrap; }
-        .message.user { align-self: flex-end; }
-        .message.user .message-bubble { background: var(--surface); border: 1px solid var(--border); color: var(--star); border-bottom-right-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .message.assistant { align-self: flex-start; }
-        .message.assistant .message-bubble { background: var(--deep); border: 1px solid var(--border); border-bottom-left-radius: 2px; }
-        .message.system { align-self: center; max-width: 80%; }
-        .message.system .message-bubble { background: transparent; color: var(--border-glow); font-size: 11px; text-align: center; font-family: var(--font-mono); letter-spacing: 0.5px; }
 
-        /* ===== КОД-БЛОКИ (универсальные) ===== */
+        .message {
+            display: flex; gap: 13px;
+            max-width: 82%;
+            animation: mup 0.28s ease;
+        }
+        @keyframes mup {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+        .message.system { align-self: center; max-width: 90%; }
+
+        .av { width: 30px; height: 30px; flex-shrink: 0; margin-top: 3px; }
+        .av svg { width: 30px; height: 30px; }
+
+        .mbody { display: flex; flex-direction: column; gap: 4px; }
+        .mname {
+            font-family: var(--mono); font-size: 8px;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-3);
+        }
+        .message.user .mname { text-align: right; }
+
+        .bub {
+            padding: 12px 16px;
+            font-size: 13.5px; line-height: 1.7; font-weight: 300;
+        }
+        .message.assistant .bub {
+            background: var(--surface-2);
+            border: 1px solid var(--line);
+            border-radius: 2px 12px 12px 12px;
+            border-left: 1px solid rgba(16,185,129,0.2);
+        }
+        .message.user .bub {
+            background: rgba(124,58,237,0.07);
+            border: 1px solid rgba(124,58,237,0.18);
+            border-radius: 12px 2px 12px 12px;
+        }
+        .message.system .bub {
+            background: transparent; border: none;
+            color: var(--text-3); font-family: var(--mono);
+            font-size: 9px; letter-spacing: 1.5px; text-align: center;
+        }
+
+        /* ===== КОД-БЛОКИ ===== */
         .code-block {
-            margin: 12px 0; border: 1px solid var(--border); border-radius: var(--radius);
-            overflow: hidden; background: var(--deep); box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin: 12px 0; border: 1px solid var(--line-2); border-radius: var(--radius);
+            overflow: hidden; background: var(--surface); box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             position: relative;
         }
         .code-header {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 6px 12px; background: var(--surface); border-bottom: 1px solid var(--border);
+            padding: 6px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line-2);
         }
         .code-lang {
-            font-family: var(--font-mono); font-size: 11px; color: var(--nebula-glow);
+            font-family: var(--mono); font-size: 11px; color: var(--green-bright);
             text-transform: uppercase; letter-spacing: 1px;
         }
-        .code-actions { display: flex; gap: 2px; } /* плотно */
+        .code-actions { display: flex; gap: 2px; }
         .code-btn {
-            padding: 4px 8px; background: var(--deep); border: 1px solid var(--border);
+            padding: 4px 8px; background: var(--surface); border: 1px solid var(--line-2);
             border-radius: var(--radius-sm); font-size: 11px;
-            font-family: var(--font-mono); cursor: pointer; transition: all 0.15s ease;
+            font-family: var(--mono); cursor: pointer; transition: all 0.15s ease;
             display: flex; align-items: center; justify-content: center;
             line-height: 1; min-width: 28px;
         }
         .code-btn.copy { color: var(--copy); border-color: var(--copy); }
-        .code-btn.copy:hover { background: var(--copy); color: var(--void); box-shadow: 0 0 8px var(--copy); }
+        .code-btn.copy:hover { background: var(--copy); color: var(--bg); box-shadow: 0 0 8px var(--copy); }
         .code-btn.download { color: var(--download); border-color: var(--download); }
-        .code-btn.download:hover { background: var(--download); color: var(--void); box-shadow: 0 0 8px var(--download); }
-        .code-btn.apply { color: var(--nebula-glow); border-color: var(--nebula-dim); }
-        .code-btn.apply:hover { background: var(--nebula-dim); color: var(--void); box-shadow: 0 0 8px var(--nebula-glow); }
+        .code-btn.download:hover { background: var(--download); color: var(--bg); box-shadow: 0 0 8px var(--download); }
+        .code-btn.apply { color: var(--violet-soft); border-color: var(--violet-soft); }
+        .code-btn.apply:hover { background: var(--violet-soft); color: var(--bg); box-shadow: 0 0 8px var(--violet-soft); }
 
         .code-content {
-            padding: 12px; overflow-x: auto; background: var(--deep);
-            font-family: var(--font-mono); font-size: 12px; line-height: 1.6;
-            color: var(--star); max-height: 400px; overflow-y: auto;
+            padding: 12px; overflow-x: auto; background: var(--surface);
+            font-family: var(--mono); font-size: 12px; line-height: 1.6;
+            color: var(--text); max-height: 400px; overflow-y: auto;
         }
-        .code-content .key { color: var(--nebula-glow); }
-        .code-content .string { color: var(--pulse); }
-        .code-content .number { color: #fbbf24; }
-        .code-content .bool { color: #f43f5e; }
-        .code-content .null { color: #6b7280; }
-
-        /* ===== INPUT AREA ===== */
-        .input-area {
-            padding: 12px 16px; background: var(--deep); border-top: 1px solid var(--border);
-            display: flex; gap: 8px; flex-shrink: 0;
-        }
-        .input-wrapper { flex: 1; position: relative; }
-        .message-input {
-            width: 100%; padding: 10px 14px; background: var(--surface);
-            border: 1px solid var(--border); border-radius: var(--radius); color: var(--star);
-            font-size: 14px; outline: none; transition: all 0.15s ease;
-            font-family: var(--font-sans); resize: none; max-height: 120px; overflow-y: auto;
-        }
-        .message-input:focus { border-color: var(--nebula); box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.1); }
-        .message-input::placeholder { color: var(--border-glow); }
-        .message-input:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-attach {
-            width: 36px; height: 36px; background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius); color: var(--star); cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 18px;
-            transition: all 0.15s ease;
-        }
-        .btn-attach:hover { border-color: var(--nebula); color: var(--nebula-glow); }
-        .btn-send {
-            width: 36px; height: 36px; background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius); color: var(--star); cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 16px;
-            transition: all 0.15s ease;
-        }
-        .btn-send:hover:not(:disabled) { border-color: var(--nebula); color: var(--nebula-glow); background: var(--surface-hover); box-shadow: 0 0 12px var(--nebula-dim); }
-        .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
 
         /* ===== TYPING ===== */
         .typing {
-            display: flex; align-items: center; gap: 8px; padding: 8px 16px;
-            color: var(--nebula-glow); font-size: 12px; font-family: var(--font-mono);
+            padding: 4px 22px 10px;
+            display: flex; align-items: center; gap: 10px;
+            font-family: var(--mono); font-size: 8px;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-3);
         }
-        .typing-dots { display: flex; gap: 4px; }
-        .typing-dot {
-            width: 6px; height: 6px; background: var(--nebula); border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out both; box-shadow: 0 0 8px var(--nebula);
+        .tdots { display: flex; gap: 5px; align-items: center; }
+        .td {
+            width: 5px; height: 5px; border-radius: 50%;
+            animation: tda 1.6s ease-in-out infinite both;
         }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing {
-            0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+        .td:nth-child(1) { background: var(--green-2); }
+        .td:nth-child(2) { background: var(--violet-soft); animation-delay: 0.22s; }
+        .td:nth-child(3) { background: var(--indigo-soft); animation-delay: 0.44s; }
+        @keyframes tda {
+            0%,80%,100% { transform: scale(0.4); opacity: 0.2; }
             40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== INPUT AREA ===== */
+        .input-area {
+            padding: 14px 22px 18px;
+            border-top: 1px solid var(--line);
+            flex-shrink: 0;
+        }
+        .irow { display: flex; align-items: flex-end; gap: 10px; }
+
+        .ibtn {
+            width: 38px; height: 38px;
+            background: transparent;
+            border: 1px solid var(--line-2);
+            color: var(--text-3); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; flex-shrink: 0; border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .ibtn:hover { color: var(--green-bright); border-color: rgba(16,185,129,0.3); }
+
+        .ifield {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: var(--sans); font-weight: 300; font-size: 14px;
+            padding: 10px 15px; outline: none;
+            resize: none; max-height: 120px; line-height: 1.5;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .ifield:focus {
+            border-color: rgba(16,185,129,0.35);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.06);
+        }
+        .ifield::placeholder { color: var(--text-3); }
+
+        .isend {
+            background: var(--green);
+            border-color: var(--green);
+            color: var(--bg);
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(5,150,105,0.4);
+        }
+        .isend:hover {
+            background: var(--green-2);
+            border-color: var(--green-2);
+            box-shadow: 0 4px 30px rgba(16,185,129,0.55);
+            transform: translateY(-1px);
+        }
+        .isend:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .ihint {
+            margin-top: 7px; text-align: center;
+            font-family: var(--mono); font-size: 8px;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-3);
         }
 
         /* ===== FILE PREVIEW ===== */
         .file-attachment {
             display: flex; align-items: center; gap: 8px; padding: 8px 12px;
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 12px; color: var(--star);
+            background: var(--surface); border: 1px solid var(--line-2);
+            border-radius: var(--radius-sm); margin: 0 22px 8px; font-size: 12px; color: var(--text);
         }
-        .file-attachment .remove { margin-left: auto; cursor: pointer; color: var(--border-glow); }
+        .file-attachment .remove { margin-left: auto; cursor: pointer; color: var(--text-3); }
         .file-attachment .remove:hover { color: #f43f5e; }
 
         /* ===== MODAL ===== */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(5,5,8,0.9); backdrop-filter: blur(4px);
+            position: fixed; inset: 0; background: rgba(3,13,9,0.9); backdrop-filter: blur(4px);
             display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;
         }
         .modal-overlay.active { display: flex; }
         .modal {
-            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--radius);
             width: 100%; max-width: 500px; max-height: 80vh; overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
         .modal-header {
-            padding: 16px; border-bottom: 1px solid var(--border);
+            padding: 16px; border-bottom: 1px solid var(--line-2);
             display: flex; align-items: center; justify-content: space-between;
         }
-        .modal-title { font-size: 14px; font-weight: 500; color: var(--nebula-glow); font-family: var(--font-mono); }
+        .modal-title { font-size: 14px; font-weight: 500; color: var(--green-bright); font-family: var(--mono); }
         .modal-close {
-            width: 28px; height: 28px; border: none; background: transparent; color: var(--border-glow);
+            width: 28px; height: 28px; border: none; background: transparent; color: var(--text-3);
             cursor: pointer; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px;
         }
-        .modal-close:hover { color: var(--star); background: var(--deep); }
+        .modal-close:hover { color: var(--text); background: var(--surface-2); }
         .modal-body { padding: 16px; overflow-y: auto; }
         .patch-preview-box {
-            background: var(--deep); border: 1px solid var(--border); border-radius: var(--radius-sm);
+            background: var(--surface-2); border: 1px solid var(--line-2); border-radius: var(--radius-sm);
             padding: 12px; max-height: 200px; overflow: auto;
         }
-        .patch-preview-box pre { font-family: var(--font-mono); font-size: 11px; line-height: 1.5; color: var(--star); margin: 0; }
+        .patch-preview-box pre { font-family: var(--mono); font-size: 11px; line-height: 1.5; color: var(--text); margin: 0; }
         .modal-footer {
-            padding: 16px; border-top: 1px solid var(--border);
+            padding: 16px; border-top: 1px solid var(--line-2);
             display: flex; justify-content: flex-end; gap: 10px;
         }
         .btn {
             padding: 8px 16px; border-radius: var(--radius-sm); font-size: 12px; cursor: pointer;
-            transition: all 0.15s ease; border: none; font-family: var(--font-mono);
+            transition: all 0.15s ease; border: none; font-family: var(--mono);
             text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .btn-secondary { background: var(--deep); color: var(--border-glow); border: 1px solid var(--border); }
-        .btn-secondary:hover { border-color: var(--nebula); color: var(--star); }
-        .btn-primary { background: var(--surface); color: var(--nebula-glow); border: 1px solid var(--nebula-dim); }
-        .btn-primary:hover { background: var(--nebula-dim); color: var(--void); box-shadow: 0 4px 15px var(--nebula-glow); }
+        .btn-secondary { background: var(--surface-2); color: var(--text-3); border: 1px solid var(--line-2); }
+        .btn-secondary:hover { border-color: var(--green); color: var(--text); }
+        .btn-primary { background: var(--surface); color: var(--green-bright); border: 1px solid var(--green); }
+        .btn-primary:hover { background: var(--green); color: var(--bg); box-shadow: 0 4px 15px var(--green); }
 
         /* ===== SEEDS ===== */
         .seeds-container { flex: 1; overflow-y: auto; padding: 16px; }
         .seeds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
         .seed-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--radius);
             padding: 14px; transition: all 0.15s ease; cursor: pointer;
         }
-        .seed-card:hover { border-color: var(--nebula); box-shadow: 0 4px 20px rgba(168,85,247,0.1); }
+        .seed-card:hover { border-color: var(--green-2); box-shadow: 0 4px 20px rgba(16,185,129,0.1); }
         .seed-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
-        .seed-title { font-size: 13px; font-weight: 500; color: var(--star); }
-        .seed-id { font-size: 10px; color: var(--border-glow); font-family: var(--font-mono); }
-        .seed-desc { font-size: 12px; color: var(--border-glow); line-height: 1.5; margin-bottom: 10px; }
+        .seed-title { font-size: 13px; font-weight: 500; color: var(--text); }
+        .seed-id { font-size: 10px; color: var(--text-3); font-family: var(--mono); }
+        .seed-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; margin-bottom: 10px; }
         .seed-meta { display: flex; gap: 6px; font-size: 10px; }
-        .seed-badge { padding: 3px 8px; background: var(--deep); border-radius: var(--radius-sm); color: var(--border-glow); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.5px; }
+        .seed-badge { padding: 3px 8px; background: var(--surface-2); border-radius: var(--radius-sm); color: var(--text-2); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.5px; }
 
         /* ===== TOAST ===== */
         .toast {
             position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; background: var(--surface);
-            border: 1px solid var(--border); border-radius: var(--radius); color: var(--star);
+            border: 1px solid var(--line-2); border-radius: var(--radius); color: var(--text);
             font-size: 12px; z-index: 200; transform: translateY(100px); opacity: 0;
-            transition: all 0.3s ease; font-family: var(--font-mono); box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s ease; font-family: var(--mono); box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
         .toast.show { transform: translateY(0); opacity: 1; }
-        .toast.success { border-color: var(--nebula); color: var(--nebula-glow); }
+        .toast.success { border-color: var(--green-2); color: var(--green-bright); }
         .toast.error { border-color: #f43f5e; color: #f43f5e; }
 
         /* ===== UTILITIES ===== */
@@ -397,79 +546,118 @@
         .tab-content { display: none; flex: 1; overflow: hidden; }
         .tab-content.active { display: flex; flex-direction: column; }
         code {
-            font-family: var(--font-mono); font-size: 12px; background: var(--deep);
-            padding: 2px 6px; border-radius: var(--radius-sm); color: var(--nebula-glow);
-        }
-        .sidebar.collapsed .logo-mini { display: flex; }
-        .logo-mini {
-            display: none; width: 28px; height: 28px; margin: 12px auto;
-            background: var(--nebula); border-radius: var(--radius-sm);
-            align-items: center; justify-content: center; font-size: 12px; color: var(--void);
+            font-family: var(--mono); font-size: 12px; background: var(--surface-2);
+            padding: 2px 6px; border-radius: var(--radius-sm); color: var(--green-bright);
         }
 
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
+        ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--green); }
     </style>
 </head>
 <body>
+
+    <div class="glow-pool gp-1"></div>
+    <div class="glow-pool gp-2"></div>
+
+    <!-- Flower of Life SVG background -->
+    <svg class="bg-flower" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="white" stroke-width="0.5">
+            <circle cx="250" cy="250" r="80"/>
+            <circle cx="250" cy="170" r="80"/>
+            <circle cx="250" cy="330" r="80"/>
+            <circle cx="319.28" cy="210" r="80"/>
+            <circle cx="319.28" cy="290" r="80"/>
+            <circle cx="180.72" cy="210" r="80"/>
+            <circle cx="180.72" cy="290" r="80"/>
+            <circle cx="250" cy="90"  r="80"/>
+            <circle cx="250" cy="410" r="80"/>
+            <circle cx="388.56" cy="170" r="80"/>
+            <circle cx="388.56" cy="330" r="80"/>
+            <circle cx="111.44" cy="170" r="80"/>
+            <circle cx="111.44" cy="330" r="80"/>
+            <circle cx="250" cy="250" r="160"/>
+            <circle cx="250" cy="250" r="240"/>
+            <circle cx="250" cy="250" r="40"/>
+        </g>
+    </svg>
+
     <header class="header">
-        <div class="header-left">
-            <div class="logo">◈</div>
-            <div class="header-title">MANDALA ENGINEER</div>
+        <div class="h-left">
+            <div class="logo-mark">
+                <svg viewBox="0 0 34 34" fill="none">
+                    <circle cx="17" cy="17" r="7" stroke="#10b981" stroke-width="0.8"/>
+                    <circle cx="17" cy="10" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="17" cy="24" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="23.06" cy="13.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="23.06" cy="20.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="10.94" cy="13.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="10.94" cy="20.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="17" cy="17" r="16" stroke="#059669" stroke-width="0.5" opacity="0.4"/>
+                    <circle cx="17" cy="17" r="2" fill="#34d399" opacity="0.9"/>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">Mandala</span>
+                <span class="brand-sub">engineer · mycel</span>
+            </div>
         </div>
-        <div class="header-right">
-            <!-- Селект моделей: только Kimi и DeepSeek -->
-            <select id="modelSelect" class="btn-geo" onchange="changeModel(this.value)">
+        <div class="h-right">
+            <select id="modelSelect" class="msel" onchange="changeModel(this.value)">
                 <option value="kimi">M kimi</option>
                 <option value="deepseek">M deepseek</option>
             </select>
-            <div class="status-dot" id="statusDot" title="Статус соединения"></div>
+            <div class="vsep"></div>
+            <div class="status-orb">
+                <div id="statusDot" class="orb-dot"></div>
+                <span class="orb-label">live</span>
+            </div>
         </div>
     </header>
 
-    <div class="main">
+    <div class="layout">
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-toggle" onclick="toggleSidebar()" title="Свернуть/развернуть">◀</button>
             <div class="logo-mini">◈</div>
-            <div class="sidebar-section">
-                <div class="sidebar-title">◈ Навигация</div>
-                <div class="quick-actions">
-                    <button class="quick-btn" onclick="quickAction('seeds')"><span>○</span><span>семена</span></button>
-                    <button class="quick-btn" onclick="quickAction('milestones')"><span>◈</span><span>вехи</span></button>
-                    <button class="quick-btn" onclick="quickAction('status')"><span>◉</span><span>статус</span></button>
-                    <button class="quick-btn" onclick="quickAction('sync')"><span>↻</span><span>синхронизация</span></button>
-                    <button class="quick-btn" onclick="quickAction('files')"><span>⊞</span><span>файлы</span></button>
-                </div>
+            <div class="nav-wrap">
+                <div class="nav-title">система</div>
+                <button class="quick-btn" onclick="quickAction('seeds')"><span class="nicon">○</span><span>семена</span></button>
+                <button class="quick-btn" onclick="quickAction('milestones')"><span class="nicon">◈</span><span>вехи</span></button>
+                <button class="quick-btn" onclick="quickAction('status')"><span class="nicon">◉</span><span>статус</span></button>
+                <button class="quick-btn" onclick="quickAction('sync')"><span class="nicon">↻</span><span>синхронизация</span></button>
+                <button class="quick-btn" onclick="quickAction('files')"><span class="nicon">⊞</span><span>файлы</span></button>
             </div>
         </aside>
 
-        <main class="content">
+        <div class="content">
             <div class="tabs">
                 <button class="tab active" data-tab="chat">◈ чат</button>
                 <button class="tab" data-tab="incubae">◈ семена</button>
             </div>
 
             <div class="tab-content active" id="tab-chat">
-                <div class="chat-container">
-                    <div class="messages" id="messages">
-                        <div class="message system"><div class="message-bubble">◈ соединение устанавливается...</div></div>
-                    </div>
+                <div class="chat-container" style="display: flex; flex-direction: column; height: 100%;">
+                    <div class="messages" id="messages"></div>
                     <div class="typing hidden" id="typing">
-                        <div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
-                        <span>СР печатает</span>
+                        <div class="tdots">
+                            <div class="td"></div>
+                            <div class="td"></div>
+                            <div class="td"></div>
+                        </div>
+                        СР печатает
                     </div>
-                    <div id="filePreview" class="hidden" style="padding: 0 16px;">
-                        <div class="file-attachment"><span>📎</span><span id="fileName">file.json</span><span class="remove" onclick="clearFile()">×</span></div>
+                    <div id="filePreview" class="hidden file-attachment" style="margin: 0 22px 8px;">
+                        <span>📎</span><span id="fileName">file.json</span><span class="remove" onclick="clearFile()">×</span>
                     </div>
                     <div class="input-area">
-                        <button class="btn-attach" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
-                        <div class="input-wrapper">
-                            <textarea class="message-input" id="messageInput" placeholder="Впиши волну… Shift+Enter — новая строка" rows="1" disabled></textarea>
+                        <div class="irow">
+                            <button class="ibtn" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
+                            <textarea class="ifield" id="messageInput" placeholder="Впиши волну… Shift+Enter — новая строка" rows="1" disabled></textarea>
+                            <button class="ibtn isend" id="sendBtn" onclick="sendMessage()" disabled>➤</button>
                         </div>
-                        <button class="btn-send" id="sendBtn" onclick="sendMessage()" disabled>➤</button>
+                        <div class="ihint">shift + enter → новая строка</div>
                     </div>
                 </div>
             </div>
@@ -479,9 +667,10 @@
                     <div class="seeds-grid" id="seedsGrid"><div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка семян...</div></div></div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
+    <!-- Модальное окно для патчей -->
     <div class="modal-overlay" id="patchModal">
         <div class="modal">
             <div class="modal-header"><div class="modal-title">◈ ПРИМЕНИТЬ ПАТЧ</div><button class="modal-close" onclick="closePatchModal()">×</button></div>
@@ -539,6 +728,21 @@
             ws.onerror = () => updateStatus('error');
         }
 
+        function updateStatus(state) {
+            // statusDot — это orb-dot, меняем его класс для анимации/цвета
+            statusDot.className = 'orb-dot';
+            if (state === 'connected') {
+                statusDot.style.background = 'var(--green-2)';
+                statusDot.style.boxShadow = '0 0 10px var(--green-2), 0 0 20px rgba(16,185,129,0.3)';
+            } else if (state === 'connecting') {
+                statusDot.style.background = 'var(--violet-soft)';
+                statusDot.style.boxShadow = '0 0 8px var(--violet-soft)';
+            } else {
+                statusDot.style.background = '#f43f5e';
+                statusDot.style.boxShadow = '0 0 12px #f43f5e';
+            }
+        }
+
         function handleMessage(data) {
             switch(data.type) {
                 case 'connected':
@@ -566,32 +770,73 @@
             }
         }
 
+        function createMessageElement(role) {
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            const iconSvg = role === 'user' 
+                ? '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>'
+                : '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="7" stroke="#10b981" stroke-width="0.8"/><circle cx="15" cy="8"  r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="15" cy="22" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="21.06" cy="11.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="21.06" cy="18.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="8.94" cy="11.5"  r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="8.94" cy="18.5"  r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="15" cy="15" r="2" fill="#34d399" opacity="0.9"/></svg>';
+            const name = role === 'user' ? 'вы' : 'СР';
+            div.innerHTML = `
+                <div class="av">${iconSvg}</div>
+                <div class="mbody">
+                    <div class="mname">${name}</div>
+                    <div class="bub"></div>
+                </div>
+            `;
+            return div;
+        }
+
+        function addUserMessage(text) {
+            const div = createMessageElement('user');
+            div.querySelector('.bub').textContent = text;
+            messagesEl.appendChild(div);
+            scrollToBottom();
+        }
+
+        function addSystemMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'message system';
+            div.innerHTML = `<div class="bub">${text}</div>`;
+            messagesEl.appendChild(div);
+            scrollToBottom();
+        }
+
+        function appendFullMessage(text) {
+            const div = createMessageElement('assistant');
+            let html = escapeHtml(text);
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--green-bright);">$1</strong>');
+            html = html.replace(/\n/g, '<br>');
+            div.querySelector('.bub').innerHTML = html;
+            messagesEl.appendChild(div);
+            scrollToBottom();
+        }
+
         function handleStream(content) {
             if(!currentMessageDiv) {
                 currentMessageDiv = createMessageElement('assistant');
                 messagesEl.appendChild(currentMessageDiv);
             }
             messageBuffer += content;
-            currentMessageDiv.querySelector('.message-bubble').innerHTML = parseStreamingContent(messageBuffer);
-            scrollToBottom();
-        }
-
-        function parseStreamingContent(text) {
-            let html = escapeHtml(text);
-            // Подсветка блоков кода с любым языком
+            const bub = currentMessageDiv.querySelector('.bub');
+            let html = escapeHtml(messageBuffer);
             html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
             html = html.replace(/```(\w*)\n([\s\S]*)$/, (match, lang, code) => {
-                if(!text.includes('```', text.lastIndexOf('```')+3)) return renderCodeBlock(lang, code, false);
+                if(!messageBuffer.includes('```', messageBuffer.lastIndexOf('```')+3)) return renderCodeBlock(lang, code, false);
                 return match;
             });
             html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--nebula-glow);">$1</strong>');
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--green-bright);">$1</strong>');
             html = html.replace(/\n/g, '<br>');
-            return html;
+            bub.innerHTML = html;
+            scrollToBottom();
         }
 
+        function finishMessage() { hideTyping(); currentMessageDiv = null; messageBuffer = ''; }
+
         function renderCodeBlock(lang, code, complete) {
-            // Определяем классы для кнопок
             const copyBtnClass = 'code-btn copy';
             const downloadBtnClass = 'code-btn download';
             const applyBtnClass = 'code-btn apply';
@@ -608,19 +853,6 @@
                     <pre class="code-content">${escapeHtml(code)}</pre>
                 </div>
             `;
-        }
-
-        function finishMessage() { hideTyping(); currentMessageDiv = null; messageBuffer = ''; }
-
-        function appendFullMessage(text) {
-            const div = createMessageElement('assistant');
-            let html = escapeHtml(text);
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--nebula-glow);">$1</strong>');
-            html = html.replace(/\n/g, '<br>');
-            div.querySelector('.message-bubble').innerHTML = html;
-            messagesEl.appendChild(div); scrollToBottom();
         }
 
         window.copyCodeFromBlock = function(btn) {
@@ -654,7 +886,7 @@
 
         function sendFile(file, caption='') {
             if(!ws || ws.readyState !== WebSocket.OPEN) { showToast('◈ нет соединения','error'); return; }
-            if(caption.trim()) addUserMessage(caption); // добавляем комментарий в историю
+            if(caption.trim()) addUserMessage(caption);
             showTyping();
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -674,7 +906,7 @@
         function clearFile() { pendingFile = null; filePreview.classList.add('hidden'); document.getElementById('fileInput').value = ''; }
 
         function setupDragDrop() {
-            document.addEventListener('dragover', e => { e.preventDefault(); document.body.style.boxShadow = 'inset 0 0 50px var(--nebula-dim)'; });
+            document.addEventListener('dragover', e => { e.preventDefault(); document.body.style.boxShadow = 'inset 0 0 50px var(--violet-dim)'; });
             document.addEventListener('dragleave', e => { if(e.target===document.body) document.body.style.boxShadow = ''; });
             document.addEventListener('drop', e => {
                 e.preventDefault(); document.body.style.boxShadow = '';
@@ -683,16 +915,7 @@
             });
         }
 
-        function createMessageElement(role) {
-            const div = document.createElement('div'); div.className = `message ${role}`;
-            const icon = role==='user'?'◉':role==='assistant'?'◈':'○';
-            div.innerHTML = `<div class="message-header">${icon} ${role==='user'?'вы':role==='assistant'?'СР':'система'}</div><div class="message-bubble"></div>`;
-            return div;
-        }
-        function addUserMessage(text) { const div = createMessageElement('user'); div.querySelector('.message-bubble').textContent = text; messagesEl.appendChild(div); scrollToBottom(); }
-        function addSystemMessage(text) { const div = document.createElement('div'); div.className = 'message system'; div.innerHTML = `<div class="message-bubble">${text}</div>`; messagesEl.appendChild(div); scrollToBottom(); }
         function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-        function updateStatus(state) { statusDot.className = 'status-dot ' + state; }
         function enableInput() { inputEl.disabled = false; sendBtn.disabled = false; inputEl.focus(); }
         function disableInput() { inputEl.disabled = true; sendBtn.disabled = true; }
         function showTyping() { typingEl.classList.remove('hidden'); scrollToBottom(); }
