@@ -1,0 +1,14 @@
+name: core-ci
+on: [push, pull_request]
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - run: pip install -e .[dev]
+      - run: ruff check .
+      - run: mypy tectosphaera akasha_chronicorum
+      - run: pytest --asyncio-mode=auto
