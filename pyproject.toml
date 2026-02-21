@@ -22,6 +22,10 @@ dev = [
     "pytest-asyncio>=0.21",
 ]
 
+[tool.setuptools.packages.find]
+include = ["core", "fructus", "sessions", "tectosphaera", "akasha_chronicorum"]
+exclude = ["tests*"]
+
 [tool.mypy]
 python_version = "3.11"
 warn_return_any = true
