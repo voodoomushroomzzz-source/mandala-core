@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "assistant",
-      "content": "Ошибка из-за HTML-эскейпа `&gt;` вместо `>` — GitHub Actions распарсил патч как веб-страницу.  \nПрямо сейчас исправим и перезапишем `pyproject.toml` без спец-символов:\n\n```json\n{\"patch_id\":\"STEP-02-HOTFIX\",\"description\":\"Фиксим pyproject.toml — убираем HTML-escape в build-system.requires\",\"patches\":[{\"file_path\":\"pyproject.toml\",\"content\":\"[build-system]\\nrequires = [\\\"setuptools>=45\\\", \\\"wheel\\\"]\\nbuild-backend = \\\"setuptools.build_meta\\\"\\n\\n[project]\\nname = \\\"mandala-core\\\"\\nversion = \\\"7.7.0\\\"\\ndependencies = [\\n    \\\"fastapi>=0.104\\\",\\n    \\\"uvicorn[standard]>=0.24\\\",\\n    \\\"httpx>=0.25\\\",\\n    \\\"pydantic[email]>=2\\\",\\n    \\\"structlog>=23\\\",\\n]\\nrequires-python = \\\">=3.11\\\"\\n\\n[project.optional-dependencies]\\ndev = [\\n    \\\"mypy>=1.7\\\",\\n    \\\"ruff>=0.1\\\",\\n    \\\"pytest>=7\\\",\\n    \\\"pytest-asyncio>=0.21\\\",\\n]\\n\\n[tool.mypy]\\npython_version = \\\"3.11\\\"\\nwarn_return_any = true\\ndisallow_untyped_defs = true\\nignore_missing_imports = true\\n\\n[tool.ruff]\\ntarget-version = \\\"py311\\\"\\nselect = [\\\"E\\\", \\\"F\\\", \\\"I\\\", \\\"N\\\", \\\"W\\\", \\\"UP\\\"]\"}]}\n```\n\nПрименяй → коммить → push, и CI станет зелёным.",
-      "time": 1771698458.0859458
-    },
-    {
-      "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1771698480.692516
     },
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "Лог обрывается, но факт ясен: **pip-установка прошла успешно** (все wheel-ы скачались), значит проблема **не в сборке**, а дальше — в **линтере/тестах**.  \nЧтобы CI стал зелёным, нужно увидеть **полный вывод** следующего шага (`ruff check` и `pytest`).  \n\nПроверь, пожалуйста, **полный лог** во вкладке Actions → `lint-test` → **View raw logs** (или просто скопируй весь текст после `pip install -e .[dev]`).  \nТам будет список ошибок ruff / mypy / pytest — и я сразу пришлю патч-исправление.",
       "time": 1771700810.6109374
+    },
+    {
+      "role": "user",
+      "content": "Skip to content\nvoodoomushroomzzz-source\nmandala-core\nRepository navigation\nCode\nIssues\nPull requests\nActions\nProjects\nWiki\nSecurity\nInsights\nSettings\ncore-ci\n💾 mc_mlvan3qs_ | 50 msgs | 19:05 #57\nAll jobs\nRun details\nAnnotations\n1 error\nlint-test\nfailed 1 minute ago in 20s\nSearch logs\n1s\n1s\n1s\n14s\n0s\nhelp: Remove unused import: `fastapi.HTTPException`\n\nI001 [*] Import block is un-sorted or un-formatted\n --> tectosphaera/routes/pulse.py:2:1\n  |\n1 |   \"\"\"Роуты для pulse-forge.\"\"\"\n2 | / from fastapi import APIRouter, WebSocket, WebSocketDisconnect\n3 | | from tectosphaera.services.pulse_forge import ws_handler, start_pulse_task\n  | |__________________________________________________________________________^\n4 |\n5 |   router = APIRouter(prefix=\"/pulse\")\n  |\nhelp: Organize imports\n\nF401 [*] `fastapi.WebSocketDisconnect` imported but unused\n --> tectosphaera/routes/pulse.py:2:43\n  |\n1 | \"\"\"Роуты для pulse-forge.\"\"\"\n2 | from fastapi import APIRouter, WebSocket, WebSocketDisconnect\n  |                                           ^^^^^^^^^^^^^^^^^^^\n3 | from tectosphaera.services.pulse_forge import ws_handler, start_pulse_task\n  |\nhelp: Remove unused import: `fastapi.WebSocketDisconnect`\n\nI001 [*] Import block is un-sorted or un-formatted\n --> tectosphaera/services/pulse_forge.py:1:1\n  |\n1 | / from datetime import datetime\n2 | | from fastapi import WebSocket\n  | |_____________________________^\n3 |\n4 |   PULSE_INTERVAL = 30\n  |\nhelp: Organize imports\n\nF821 Undefined name `asyncio`\n  --> tectosphaera/services/pulse_forge.py:18:15\n   |\n16 |         for ws in dead:\n17 |             ws_clients.remove(ws)\n18 |         await asyncio.sleep(PULSE_INTERVAL)\n   |               ^^^^^^^\n19 |\n20 | async def register(ws: WebSocket):\n   |\n\nW292 [*] No newline at end of file\n  --> tectosphaera/services/pulse_forge.py:25:30\n   |\n23 | async def unregister(ws: WebSocket):\n24 |     if ws in ws_clients:\n25 |         ws_clients.remove(ws)\n   |                              ^\n   |\nhelp: Add trailing newline\n\nFound 300 errors.\n[*] 110 fixable with the `--fix` option (4 hidden fixes can be enabled with the `--unsafe-fixes` option).\nError: Process completed with exit code 1.\n0s\n0s\n0s\n0s\n0s",
+      "time": 1771700881.2107112
     }
   ],
-  "last_active": 1771700810.6109407,
+  "last_active": 1771700881.2107146,
   "created_at": 1771619386.437258
 }
