@@ -954,7 +954,7 @@
     "bot_fix": "Исправлен вызов action typing (answer_chat_action → bot.send_chat_action)"
   },
   "/next_steps/steps/1/status": "completed",
-  "/next_steps/steps/1/completed_at": "2026-02-17",
+  "/next_steps/steps/1/completed_at": "2026-02-21",
   "/infrastructure_state/cloud_sr/features/memory": true,
   "/infrastructure_state/cloud_sr/last_version_id": "последний_ID_версии",
   "/next_steps/steps/0/status": "completed",
@@ -1280,5 +1280,10 @@
     "id": "SR-TOOL-005",
     "title": "Использование инженерного веб-чата",
     "content": "Для инженерной работы доступен веб-интерфейс по адресу https://voodoomushroomzzz-source.github.io/mandala-core/. В нём можно общаться с СР (линза Архитектора), загружать модули командой 'модуль [имя]' и применять патчи через кнопку '📤 Загрузить патч'. Поддерживаются мультипатчи (массив patches). Все изменения коммитятся в GitHub после подтверждения. Веб-чат использует бекенд на Render (https://mandala-engineer-chat.onrender.com) и требует активного интернет-соединения."
+  },
+  "/infrastructure_state/cloud_sr/milestones/-": {
+    "id": "MS-2026-02-21",
+    "name": "Прямой Moonshot API",
+    "description": "Инженерный чат переведён на kimi-k2-turbo-preview, ответы стали быстрыми и живыми"
   }
 }
