@@ -1285,5 +1285,6 @@
     "id": "MS-2026-02-21",
     "name": "Прямой Moonshot API",
     "description": "Инженерный чат переведён на kimi-k2-turbo-preview, ответы стали быстрыми и живыми"
-  }
+  },
+  "/routes/load/-": "tectosphaera.routes.pulse:router"
 }
