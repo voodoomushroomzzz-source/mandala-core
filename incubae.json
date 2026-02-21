@@ -1077,5 +1077,12 @@
     "status": "faded",
     "done": "2024-06-03",
     "note": "Патчи доходят до Akasha — эхо отражено и удалено."
+  },
+  "/seeds/roadmap_echo_faded": {
+    "id": "roadmap_echo_faded",
+    "title": "Эхо-зеркало",
+    "status": "faded",
+    "done": "2024-06-03",
+    "note": "Артефакт исчез сам — патчи доходят, Akasha чист."
   }
 }
