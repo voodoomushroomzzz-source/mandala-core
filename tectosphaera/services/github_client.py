@@ -1,8 +1,6 @@
 import asyncio
 import base64
-import json
 import logging
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 import httpx
@@ -40,9 +38,7 @@ class GitHubClient:
         url = f"{self.api_base}/contents/{path}"
         params = {"ref": ref}
         try:
-            resp = await self._client.get(  # type: ignore
-                url, headers=self.headers, params=params
-            )
+            resp = await self._client.get(url, headers=self.headers, params=params)  # type: ignore
             resp.raise_for_status()
             data = resp.json()
             if data.get("encoding") == "base64":
@@ -83,9 +79,7 @@ class GitHubClient:
         url = f"{self.api_base}/contents/{path}"
         params = {"ref": ref}
         try:
-            resp = await self._client.get(  # type: ignore
-                url, headers=self.headers, params=params
-            )
+            resp = await self._client.get(url, headers=self.headers, params=params)  # type: ignore
             resp.raise_for_status()
             return resp.json()["sha"]
         except httpx.HTTPStatusError as e:
