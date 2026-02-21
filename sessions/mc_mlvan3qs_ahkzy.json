@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "[Комментарий к файлу deepseek_toml_20260221_e483b9.txt]: CI падает при установке пакета из-за ошибки:\n\ntext\nerror: Multiple top-level packages discovered in a flat-layout: ['core', 'fructus', 'sessions', 'tectosphaera', 'akasha_chronicorum'].\nЭто означает, что setuptools не может автоматически определить, какие директории являются пакетами Python. Нужно явно указать их в pyproject.toml.\n\nЧто нужно сделать\nПолностью заменить содержимое файла pyproject.toml в корне репозитория на приведённый ниже код. Он содержит:\n\nправильные зависимости,\n\nявное перечисление пакетов для сборки,\n\nнастройки для ruff и mypy.\n\nИсправленный pyproject.toml",
-      "time": 1771700631.908399
-    },
-    {
-      "role": "user",
       "content": "[Файл: deepseek_toml_20260221_e483b9.txt]\n[build-system]\nrequires = [\"setuptools>=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi>=0.104\",\n    \"uvicorn[standard]>=0.24\",\n    \"httpx>=0.25\",\n    \"pydantic[email]>=2\",\n    \"structlog>=23\",\n]\nrequires-python =...",
       "time": 1771700631.908529
     },
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "Прием, на связи.  \nЧто дальше — продолжаем **шаг 4 (кэш-прослойка)** или хочешь **новое семя** посадить?",
       "time": 1771702510.3419743
+    },
+    {
+      "role": "user",
+      "content": "ты сломал сам себя, пришлось откат делать на начало",
+      "time": 1771702574.7010932
     }
   ],
-  "last_active": 1771702510.3419764,
+  "last_active": 1771702574.7010965,
   "created_at": 1771619386.437258
 }
