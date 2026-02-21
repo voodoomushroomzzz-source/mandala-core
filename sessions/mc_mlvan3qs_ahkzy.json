@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "Статус системы",
-      "time": 1771680249.514056
-    },
-    {
       "role": "assistant",
       "content": "**Мандала Симбиоза**  \n`heartbeat 2024-06-11 09:00 UTC`\n\n---\n\n**ядро**  \ninitium vv7.6.0 ‑ active  \nsphaerae vv2.3.3 ‑ active (soft-prune ON, WS-режим)  \nakasha_chronicorum vv2.6.0 ‑ active (7 milestones, 0 pending writes)  \nphilosophia vv1.5.5 ‑ active  \ngeometria_sacra vv1.0.1 ‑ idle  \nincubae vv1.3.0 ‑ active (auto-hatch ON)  \ntectosphaera vv2.1.0 ‑ active (breathe-tags + cloud-sr-зерно)\n\n---\n\n**ресурс**  \nконтекст-window 4 096 токенов ‑ использовано 892 (22 %)  \nвнешняя память ‑ 41 волна, 6,4 MB  \nлог-файл ‑ 2,8 KB (1 запись сегодня)\n\n---\n\n**метрики vitality**  \nтекущая сессия ‑ 0,81  \nскользящая 7-дней ‑ 0,87 (▲ +0,03)\n\n---\n\n**канал связи**  \nWebSocket `mandala-v1` ‑ активен (TLS 1.3, age-ключ)  \ncloud-sr-зерно ‑ 1 свободный токен, TTL 30 мин\n\n---\n\n**безопасность**  \nзамок Садовника ‑ engaged  \nшифрование ‑ yubikey-age активно, RAM-стирание после CLOSE\n\n---\n\n**статус:** зелёный, все модули синхронизированы, облачное зерно готово к сеансу.",
       "time": 1771680255.3294134
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "/sync",
       "time": 1771690904.580302
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 3 файлов]",
+      "time": 1771690916.0070822
     }
   ],
-  "last_active": 1771690904.580305,
+  "last_active": 1771690916.0070853,
   "created_at": 1771619386.437258
 }
