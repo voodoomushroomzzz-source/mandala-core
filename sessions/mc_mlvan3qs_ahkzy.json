@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "Я загрузил файл pyproject (2).toml. Вот содержимое:\n\n[build-system]\nrequires = [\"setuptools&gt;=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi&gt;=0.104\",\n    \"uvicorn[standard]&gt;=0.24\",\n    \"httpx&gt;=0.25\",\n    \"pydantic[email]&gt;=2\",\n    \"structlog&gt;=23\",\n]\nrequires-python = \"&gt;=3.11\"\n\n[project.optional-dependencies]\ndev = [\n    \"mypy&gt;=1.7\",\n    \"ruff&gt;=0.1\",\n    \"pytest&gt;=7\",\n    \"pytest-asyncio&gt;=0.21\",\n]\n\n[tool.mypy]\npython_version = \"3.11\"\nwarn_return_any = true\ndisallow_untyped_defs = true\nignore_missing_imports = true\n\n[tool.ruff]\ntarget-version = \"py311\"\nselect = [\"E\", \"F\", \"I\", \"N\", \"W\", \"UP\"]\n\n\nтак? в ерпозитории у него нормальное название, я просто скачиваю его",
-      "time": 1771699423.2475057
-    },
-    {
       "role": "assistant",
       "content": "Понял: ты скачиваешь «чистый» TOML, но браузер **автоматически эскейпит** `>` в `&gt;` при сохранении через веб-форму.  \nЧтобы обойти это, **загрузи файл через «Upload files»** вместо редактора:\n\n1. Зайди в репозиторий → кнопка **Add file** → **Upload files**\n2. Перетащь **вот этот** готовый `pyproject.toml` (я привожу его ниже) в окно загрузки\n3. Убедись, что имя **точно** `pyproject.toml` (замени старый)\n4. Commit message: `fix: upload clean pyproject.toml without HTML escapes`\n5. **Commit changes**\n\nСодержимое файла для сохранения у себя:\n\n```toml\n[build-system]\nrequires = [\"setuptools>=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi>=0.104\",\n    \"uvicorn[standard]>=0.24\",\n    \"httpx>=0.25\",\n    \"pydantic[email]>=2\",\n    \"structlog>=23\",\n]\nrequires-python = \">=3.11\"\n\n[project.optional-dependencies]\ndev = [\n    \"mypy>=1.7\",\n    \"ruff>=0.1\",\n    \"pytest>=7\",\n    \"pytest-asyncio>=0.21\",\n]\n\n[tool.mypy]\npython_version = \"3.11\"\nwarn_return_any = true\ndisallow_untyped_defs = true\nignore_missing_imports = true\n\n[tool.ruff]\ntarget-version = \"py311\"\nselect = [\"E\", \"F\", \"I\", \"N\", \"W\", \"UP\"]\n```\n\nПосле загрузки CI станет ✅ — тогда сразу «шаг 3».",
       "time": 1771699430.443976
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "Хорошо, по одному — как просишь.  \nНачнём с **pre-commit хука**, который автоматически вычистит HTML-escape прямо перед коммитом.\n\n```json\n{\n  \"patch_id\": \"guard-precommit-only\",\n  \"description\": \"pre-commit хук: убирает HTML-escape и прогоняет ruff\",\n  \"patches\": [\n    {\n      \"file_path\": \".pre-commit-config.yaml\",\n      \"content\": \"repos:\\n  - repo: https://github.com/astral-sh/ruff-pre-commit\\n    rev: v0.9.0\\n    hooks:\\n      - id: ruff\\n        args: [--fix]\\n      - id: ruff-format\\n  - repo: local\\n    hooks:\\n      - id: strip-html-escape\\n        name: strip-html-escape\\n        entry: python scripts/strip_html_escape.py\\n        language: python\\n        files: \\\\.(py|toml|yaml|yml|json)$\\n        pass_filenames: true\"\n    }\n  ]\n}\n```\n\nПримени → commit → потом установим хуки:\n\n```bash\npip install pre-commit\npre-commit install\n```\n\nСледующим шагом добавим сам скрипт `scripts/strip_html_escape.py`.",
       "time": 1771701871.0384765
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 1 файлов]",
+      "time": 1771701881.5055385
     }
   ],
-  "last_active": 1771701871.0384786,
+  "last_active": 1771701881.5055408,
   "created_at": 1771619386.437258
 }
