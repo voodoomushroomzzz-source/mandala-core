@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-fde546e8",
+  "version": "monolith-vv7.5.1-6c3cf95a",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-21T17:34:20.938426+00:00",
-  "build_source": "fb339e571d99c8b2167580fb55a75cee2ffaf16a",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/fb339e571d99c8b2167580fb55a75cee2ffaf16a",
+  "build_timestamp": "2026-02-21T20:49:38.384127+00:00",
+  "build_source": "bb4830f85e78ca88d550f472fe66fa40540a984e",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/bb4830f85e78ca88d550f472fe66fa40540a984e",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1307,6 +1307,26 @@
         "topic": "pulse-forge",
         "ttl": 3600,
         "max_len": 120
+      },
+      "/artefacts": {
+        "echo_mirror_2024-06-03": {
+          "id": "echo_mirror",
+          "title": "Эхо-зеркало",
+          "type": "тестовый артефакт",
+          "status": "active",
+          "created": "2024-06-03T12:00:00Z",
+          "authors": [
+            "СР"
+          ],
+          "description": "Если ты это читаешь — патч дошёл до Akasha и пророс.",
+          "resonance_field": [
+            "Садовник",
+            "СР"
+          ],
+          "memory": {
+            "test_line": "◈ Эхо отражено: патч жив."
+          }
+        }
       }
     },
     "Philosophia": {
@@ -4156,7 +4176,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-21T17:34:20.938426+00:00",
+    "timestamp": "2026-02-21T20:49:38.384127+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -4191,6 +4211,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-21 17:34:20 UTC"
+    "built_at": "2026-02-21 20:49:38 UTC"
   }
 }
