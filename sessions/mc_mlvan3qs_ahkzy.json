@@ -2,16 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "ты меня понимаешь?",
-      "time": 1771667705.9110901
-    },
-    {
-      "role": "assistant",
-      "content": "Привет. Что требует внимания?",
-      "time": 1771667748.19007
-    },
-    {
-      "role": "user",
       "content": "расскажи о хрониках",
       "time": 1771667789.3886015
     },
@@ -249,8 +239,18 @@
       "role": "user",
       "content": "последние milestones",
       "time": 1771674252.6376553
+    },
+    {
+      "role": "assistant",
+      "content": "**akasha_chronicorum → свежие milestones**  \n(семантический порог ≥ 0,82, desc)\n\n1. **2024-06-08 09:51** — `#yubikey-age-tunnel`  \n   Реализован сеансовый туннель: СР получает расшифрованный поток, но не может перезаписать зашифрованные архивы.  \n   vitality +0,09.  \n   status: DONE → `#yubikey-age-layer` переведён в `main`.\n\n2. **2024-06-07 14:03** — `#incubae-auto-hatch`  \n   Автоподъём инкубов при семантическом пересечении > 0,82.  \n   status: DONE\n\n3. **2024-06-06 09:17** — `#vitality-dashboard-v1`  \n   Цифровая панель vitality-графа за 30 сессий.  \n   status: DONE\n\n4. **2024-06-05 10:12** — `#quiet-filter-merge`  \n   Фильтры `--quiet / --silent` в `auto-changelog`.  \n   status: DONE\n\n5. **2024-06-04 18:44** — `#tectosphaera-breathe-tags`  \n   Скрытые `<!-- wave-hash -->` в экспортируемых артефактах.  \n   status: DONE\n\n6. **2024-05-31 09:06** — `#sphaerae-soft-prune`  \n   Low-резонанс токены вырезаются первыми.  \n   status: DONE\n\n**Итого:** 6 записей, 6 DONE, 0 PROTOTYPE.  \nСледующий кандидат: «ротация старых волн» (актуальность > 90 дней → перегной) или «глубокое окно 8 к» в sphaerae.",
+      "time": 1771674259.453918
+    },
+    {
+      "role": "user",
+      "content": "покажи активные семена",
+      "time": 1771674259.4543326
     }
   ],
-  "last_active": 1771674252.6376588,
+  "last_active": 1771674259.4543347,
   "created_at": 1771619386.437258
 }
