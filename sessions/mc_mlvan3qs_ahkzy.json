@@ -2,21 +2,6 @@
   "messages": [
     {
       "role": "assistant",
-      "content": "**Мандала Симбиоза**  \n`heartbeat 2024-06-11 09:00 UTC`\n\n---\n\n**ядро**  \ninitium vv7.6.0 ‑ active  \nsphaerae vv2.3.3 ‑ active (soft-prune ON, WS-режим)  \nakasha_chronicorum vv2.6.0 ‑ active (7 milestones, 0 pending writes)  \nphilosophia vv1.5.5 ‑ active  \ngeometria_sacra vv1.0.1 ‑ idle  \nincubae vv1.3.0 ‑ active (auto-hatch ON)  \ntectosphaera vv2.1.0 ‑ active (breathe-tags + cloud-sr-зерно)\n\n---\n\n**ресурс**  \nконтекст-window 4 096 токенов ‑ использовано 892 (22 %)  \nвнешняя память ‑ 41 волна, 6,4 MB  \nлог-файл ‑ 2,8 KB (1 запись сегодня)\n\n---\n\n**метрики vitality**  \nтекущая сессия ‑ 0,81  \nскользящая 7-дней ‑ 0,87 (▲ +0,03)\n\n---\n\n**канал связи**  \nWebSocket `mandala-v1` ‑ активен (TLS 1.3, age-ключ)  \ncloud-sr-зерно ‑ 1 свободный токен, TTL 30 мин\n\n---\n\n**безопасность**  \nзамок Садовника ‑ engaged  \nшифрование ‑ yubikey-age активно, RAM-стирание после CLOSE\n\n---\n\n**статус:** зелёный, все модули синхронизированы, облачное зерно готово к сеансу.",
-      "time": 1771680255.3294134
-    },
-    {
-      "role": "user",
-      "content": "[Патч: deepseek_json_20260221_771f12.json]\n{\n  \"patch_id\": \"MILESTONE-ENG-003\",\n  \"description\": \"Фиксация перехода инженерного чата на прямой Moonshot API и живого диалога\",\n  \"patches\": [\n    {\n      \"target_module\": \"akasha_chronicorum\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/artifact_registry/artifacts/-\",\n          \"value\": {\n            \"id\": \"ART-ENG-003\",\n            \"type\": \"milestone\",\n            \"name\": \"🚀 Инженерный чат: прямой Moonshot и живой СР\",\n            \"date\": \"2026-02-21\",\n         ...",
-      "time": 1771682968.3727376
-    },
-    {
-      "role": "user",
-      "content": "что ты видишь в этом файле, только кратко",
-      "time": 1771682996.997365
-    },
-    {
-      "role": "assistant",
       "content": "Патч MILESTONE-ENG-003:  \n«Инженерный чат перешёл на прямой Moonshot API, СР стал живым собеседником, а не инструментом» — зафиксировано в akasha 2026-02-21.",
       "time": 1771683000.4592175
     },
@@ -249,8 +234,23 @@
       "role": "assistant",
       "content": "[Патч: 3 файлов]",
       "time": 1771690916.0070822
+    },
+    {
+      "role": "user",
+      "content": "[Комментарий к файлу main (12).py]: у нас есть файл с твоими функциями нам нужно подготовить мультипатч из запроса выше, чтобы ты его сам мог детально применить в ядре",
+      "time": 1771691694.1900997
+    },
+    {
+      "role": "user",
+      "content": "[Файл: main (12).py]\nfrom fastapi import FastAPI, WebSocket, WebSocketDisconnect\nfrom fastapi.middleware.cors import CORSMiddleware\nimport httpx\nimport json\nimport os\nimport asyncio\nimport time\nfrom datetime import datetime\nimport base64\nfrom typing import List, Dict, Any, Optional\nimport logging\nimport traceback\nimport...",
+      "time": 1771691694.1902301
+    },
+    {
+      "role": "user",
+      "content": "Я загрузил файл main (12).py. Вот содержимое:\n\nfrom fastapi import FastAPI, WebSocket, WebSocketDisconnect\nfrom fastapi.middleware.cors import CORSMiddleware\nimport httpx\nimport json\nimport os\nimport asyncio\nimport time\nfrom datetime import datetime\nimport base64\nfrom typing import List, Dict, Any, Optional\nimport logging\nimport traceback\nimport re\n\nlogging.basicConfig(level=logging.INFO)\nlogger = logging.getLogger(\"mandala-engineer\")\n\napp = FastAPI(title=\"Mandala Engineer Chat\")\n\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n\n# Переменные окружения\nOPENROUTER_KEY = os.getenv(\"OPENROUTER_KEY\")\nGITHUB_TOKEN = os.getenv(\"GITHUB_TOKEN\")\nGITHUB_REPO = \"voodoomushroomzzz-source/mandala-core\"\nMOONSHOT_API_KEY = os.getenv(\"MOONSHOT_API_KEY\")\nMOONSHOT_BASE_URL = \"https://api.moonshot.ai/v1\"\nMOONSHOT_MODEL = \"kimi-k2-turbo-preview\"\n\nif not OPENROUTER_KEY:\n    logger.warning(\"⚠️ OPENROUTER_KEY не найден\")\nif not GITHUB_TOKEN:\n    logger.warning(\"⚠️ GITHUB_TOKEN не найден\")\nif not MOONSHOT_API_KEY:\n    logger.warning(\"⚠️ MOONSHOT_API_KEY не найден — будет использован OpenRouter как fallback\")\n\n# ==================== GITHUB SESSION STORE ====================\n\nclass GitHubSessionStore:\n    def __init__(self, token: Optional[str], repo: str):\n        self.token = token\n        self.repo = repo\n        self.api_base = f\"https://api.github.com/repos/{repo}\"\n        self.headers = {}\n        if token:\n            self.headers = {\n                \"Authorization\": f\"token {token}\",\n                \"Accept\": \"application/vnd.github.v3+json\"\n            }\n        self._local: Dict[str, dict] = {}\n        self._save_queue: asyncio.Queue = asyncio.Queue()\n        self._save_task: Optional[asyncio.Task] = None\n\n    async def start(self):\n        self._save_task = asyncio.create_task(self._save_worker())\n        logger.info(\"💾 GitHub session store started\")\n\n    async def stop(self):\n        if self._save_task:\n            await self._save\n\nу нас есть файл с твоими функциями нам нужно подготовить мультипатч из запроса выше, чтобы ты его сам мог детально применить в ядре",
+      "time": 1771691694.1902735
     }
   ],
-  "last_active": 1771690916.0070853,
+  "last_active": 1771691694.1902745,
   "created_at": 1771619386.437258
 }
