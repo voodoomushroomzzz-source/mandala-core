@@ -345,7 +345,58 @@
             color: var(--error);
         }
 
-        /* Code in messages */
+        /* Стили для кода с кнопками */
+        .code-block {
+            margin-top: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 12px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .code-action {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .code-action:hover {
+            border-color: var(--accent);
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        .code-content {
+            padding: 12px;
+            overflow-x: auto;
+            background: var(--bg);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
         .message pre {
             background: var(--bg);
             padding: 12px;
@@ -371,7 +422,7 @@
             background: var(--surface);
             border-top: 1px solid var(--border);
             display: flex;
-            gap: 12px;
+            gap: 8px;
             flex-shrink: 0;
         }
 
@@ -398,6 +449,27 @@
 
         .message-input::placeholder {
             color: var(--text-muted);
+        }
+
+        .action-btn {
+            width: 44px;
+            height: 44px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            font-size: 18px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+            background: var(--surface-hover);
         }
 
         .send-btn {
@@ -906,6 +978,7 @@
                                 disabled
                             >
                         </div>
+                        <button class="action-btn" onclick="document.getElementById('fileUpload').click()" title="Загрузить файл">📎</button>
                         <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
                             <span>→</span>
                             <span>Отправить</span>
@@ -976,6 +1049,9 @@
         </div>
     </div>
 
+    <!-- Скрытый input для загрузки файлов -->
+    <input type="file" id="fileUpload" style="display: none" onchange="uploadFile(this)">
+
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
@@ -1016,7 +1092,7 @@
             setupTabs();
             setupModules();
             setupKeyboard();
-            setupDragDrop();
+            setupDragDrop(); // добавим глобальный drag-and-drop
         }
 
         // ===== WEBSOCKET =====
@@ -1026,7 +1102,6 @@
             ws = new WebSocket(WS_URL);
             
             ws.onopen = () => {
-                // Отправляем инициализацию с session_id
                 ws.send(JSON.stringify({
                     type: 'init',
                     session_id: SESSION_ID
@@ -1065,16 +1140,13 @@
                     break;
                     
                 case 'history':
-                    // Очищаем все сообщения (кроме возможно системных, но проще очистить полностью)
                     messagesEl.innerHTML = '';
                     if (data.messages && data.messages.length > 0) {
                         data.messages.forEach(msg => {
                             if (msg.role === 'user') {
                                 addUserMessage(msg.content);
                             } else if (msg.role === 'assistant') {
-                                const div = createMessageElement('assistant');
-                                div.querySelector('.message-bubble').textContent = msg.content;
-                                messagesEl.appendChild(div);
+                                appendAssistantMessage(msg.content);
                             }
                         });
                     } else {
@@ -1107,6 +1179,10 @@
                     
                 case 'modules_refreshed':
                     showToast(`Обновлено ${data.count} модулей`, 'success');
+                    break;
+                    
+                case 'file_processed':
+                    addSystemMessage(data.summary);
                     break;
                     
                 case 'pong':
@@ -1144,8 +1220,17 @@
 
         function finishMessage() {
             hideTyping();
+            enhanceCodeBlocks(currentMessageDiv);
             currentMessageDiv = null;
             messageBuffer = '';
+        }
+
+        function appendAssistantMessage(text) {
+            const div = createMessageElement('assistant');
+            div.querySelector('.message-bubble').innerHTML = formatMessage(text);
+            messagesEl.appendChild(div);
+            enhanceCodeBlocks(div);
+            scrollToBottom();
         }
 
         // ===== UI HELPERS =====
@@ -1181,14 +1266,150 @@
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
             
-            // Форматируем
-            return html
-                .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+            // Заменяем код с ``` на блоки
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+                return `<div class="code-block" data-code="${encodeURIComponent(code)}" data-lang="${lang}">
+                    <div class="code-header">
+                        <span>${lang || 'code'}</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)">копировать</button>
+                            <button class="code-action" onclick="downloadCode(this)">скачать</button>
+                            ${lang === 'json' ? '<button class="code-action" onclick="applyCode(this)">применить</button>' : ''}
+                        </div>
+                    </div>
+                    <pre class="code-content">${escapeHtml(code)}</pre>
+                </div>`;
+            });
+            
+            // Прочие украшательства
+            html = html
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n/g, '<br>');
+            
+            return html;
         }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Функции для кода
+        window.copyCode = function(btn) {
+            const block = btn.closest('.code-block');
+            const code = decodeURIComponent(block.dataset.code);
+            navigator.clipboard.writeText(code);
+            showToast('код скопирован', 'success');
+        };
+
+        window.downloadCode = function(btn) {
+            const block = btn.closest('.code-block');
+            const code = decodeURIComponent(block.dataset.code);
+            const lang = block.dataset.lang || 'txt';
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `code.${lang}`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('файл скачан', 'success');
+        };
+
+        window.applyCode = function(btn) {
+            const block = btn.closest('.code-block');
+            const code = decodeURIComponent(block.dataset.code);
+            try {
+                const json = JSON.parse(code);
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        type: 'apply_patch',
+                        patch: json,
+                        session_id: SESSION_ID
+                    }));
+                    addSystemMessage('🔄 патч отправлен на применение');
+                } else {
+                    showToast('нет соединения', 'error');
+                }
+            } catch (e) {
+                showToast('это не JSON, нельзя применить', 'error');
+            }
+        };
+
+        function enhanceCodeBlocks(container) {
+            // Функция ничего не делает, но оставлена для совместимости
+        }
+
+        // ===== ЗАГРУЗКА ФАЙЛОВ =====
+        function uploadFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('❌ нет соединения', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result.split(',')[1];
+                ws.send(JSON.stringify({
+                    type: 'file',
+                    name: file.name,
+                    content: content,
+                    type: file.type,
+                    session_id: SESSION_ID
+                }));
+                addSystemMessage(`📁 файл ${file.name} отправлен`);
+            };
+            reader.readAsDataURL(file);
+            input.value = '';
+        }
+
+        // ===== DRAG AND DROP =====
+        function setupDragDrop() {
+            document.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                document.body.style.opacity = '0.8';
+            });
+
+            document.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                document.body.style.opacity = '1';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    uploadFileFromDrop(files[0]);
+                }
+            });
+        }
+
+        function uploadFileFromDrop(file) {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('❌ нет соединения', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result.split(',')[1];
+                ws.send(JSON.stringify({
+                    type: 'file',
+                    name: file.name,
+                    content: content,
+                    type: file.type,
+                    session_id: SESSION_ID
+                }));
+                addSystemMessage(`📁 файл ${file.name} отправлен`);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ===== TYPING =====
         function showTyping() {
             typingEl.classList.remove('hidden');
             scrollToBottom();
@@ -1273,13 +1494,11 @@
             modulesCache[name] = content;
             currentModule = name;
             
-            // Обновляем заголовок
             moduleNameEl.innerHTML = `
                 <span>${getModuleIcon(name)}</span>
                 <span>${name}</span>
             `;
             
-            // Форматируем JSON
             let displayContent;
             try {
                 const parsed = JSON.parse(content);
@@ -1417,7 +1636,6 @@
                     const parsed = JSON.parse(content);
                     currentPatch = content;
                     
-                    // Показываем превью
                     document.getElementById('patchContent').textContent = JSON.stringify(parsed, null, 2);
                     document.getElementById('patchPreview').classList.remove('hidden');
                     document.getElementById('applyPatchBtn').classList.remove('hidden');
@@ -1445,7 +1663,6 @@
                 
                 if (response.ok) {
                     showToast(`Патч применён: ${result.commit_sha?.slice(0, 7) || 'успешно'}`, 'success');
-                    // Обновляем модули
                     refreshModules();
                 } else {
                     showToast(result.detail || 'Ошибка применения', 'error');
@@ -1459,7 +1676,7 @@
         function quickAction(action) {
             switch(action) {
                 case 'seeds':
-                    document.querySelector('.tab[data-tab="incubae"]').click();
+                    sendDirectMessage('Покажи активные семена из incubae');
                     break;
                 case 'milestones':
                     sendDirectMessage('Покажи последние milestones из Akasha');
