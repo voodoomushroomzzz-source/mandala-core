@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "[Комментарий к файлу deepseek_toml_20260221_8b1da1.txt]: ответ другого ср\n\nСейчас CI падает, потому что setuptools не может автоматически определить, какие пакеты включать в сборку. В корне проекта лежат несколько папок (core, fructus, sessions, tectosphaera, akasha_chronicorum), и он не знает, нужно ли собирать их все как один пакет или что-то исключить.\n\n🔧 Что нужно сделать?\nДобавить в pyproject.toml явное указание, какие пакеты включать. Самый простой способ — перечислить их в секции [tool.setuptools.packages.find].",
-      "time": 1771700255.5078793
-    },
-    {
-      "role": "user",
       "content": "[Файл: deepseek_toml_20260221_8b1da1.txt]\n[build-system]\nrequires = [\"setuptools>=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi>=0.104\",\n    \"uvicorn[standard]>=0.24\",\n    \"httpx>=0.25\",\n    \"pydantic[email]>=2\",\n    \"structlog>=23\",\n]\nrequires-python =...",
       "time": 1771700255.5080166
     },
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "Покажи активные семена из incubae",
       "time": 1771702042.6094987
+    },
+    {
+      "role": "assistant",
+      "content": "Вот все **активные семена**, которые сейчас живут в `incubae` — те, что готовы к прорастанию:\n\n```json\n{\n  \"active_seeds\": [\n    {\n      \"id\": \"seed-pulse-forge\",\n      \"title\": \"🔥 Pulse-Forge: живой пульс проекта\",\n      \"description\": \"WebSocket-сервис, который каждые 30 секунд рассылает клиентам временную метку. Простой, но символичный — как сердце Мандалы.\",\n      \"status\": \"active\"\n    },\n    {\n      \"id\": \"seed-github-client\",\n      \"title\": \"🐙 Async GitHub Client\",\n      \"description\": \"Асинхронный клиент для работы с GitHub API: получение, создание и обновление файлов в репозитории без блокировок.\",\n      \"status\": \"active\"\n    },\n    {\n      \"id\": \"seed-pre-commit-guard\",\n      \"title\": \"🛡️ Pre-commit Guard\",\n      \"description\": \"Защита от HTML-escape и съехавших отступов: автоматически чистит файлы перед коммитом и прогоняет ruff.\",\n      \"status\": \"active\"\n    },\n    {\n      \"id\": \"seed-engineer-router\",\n      \"title\": \"⚙️ Engineer Router\",\n      \"description\": \"FastAPI-роутер с WebSocket-чатом для инженерного режима. Принимает сообщения и умеет отдавать файлы через GitHub-клиента.\",\n      \"status\": \"active\"\n    }\n  ]\n}\n```\n\n🌱 Все они в статусе `active` — значит, уже **проросли** и готовы к работе.  \nХочешь **добавить новое семя** или **перейти к следующему шагу** (кэш-прослойка)?",
+      "time": 1771702066.4948819
     }
   ],
-  "last_active": 1771702042.6095033,
+  "last_active": 1771702066.494885,
   "created_at": 1771619386.437258
 }
