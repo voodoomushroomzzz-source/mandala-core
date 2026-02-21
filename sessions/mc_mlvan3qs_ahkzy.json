@@ -144,8 +144,13 @@
       "role": "assistant",
       "content": "[Модуль tectosphaera]",
       "time": 1771671944.2818506
+    },
+    {
+      "role": "user",
+      "content": "Покажи последние milestones из Akasha",
+      "time": 1771671965.3628407
     }
   ],
-  "last_active": 1771671944.2818527,
+  "last_active": 1771671965.3628433,
   "created_at": 1771619386.437258
 }
