@@ -1,6 +1,4 @@
-# Создаю обновленный main.py с исправленной обработкой файлов и стримингом
-
-main_content = '''from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import httpx
@@ -451,7 +449,7 @@ async def websocket_endpoint(websocket: WebSocket):
         except:
             pass
     except Exception as e:
-        logger.error(f"WebSocket error: {e}\\n{traceback.format_exc()}")
+        logger.error(f"WebSocket error: {e}\n{traceback.format_exc()}")
         try:
             await websocket.close(code=1011, reason="Internal error")
         except:
@@ -602,7 +600,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
             "text": "⏰ Таймаут (60 сек)"
         })
     except Exception as e:
-        logger.error(f"handle_ask error: {e}\\n{traceback.format_exc()}")
+        logger.error(f"handle_ask error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {
             "type": "error",
             "text": "❌ Внутренняя ошибка"
@@ -643,16 +641,16 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                 })
                 
                 # Добавляем в контекст как сообщение от пользователя
-                manager.add_to_context(session_id, "user", f"[Патч: {file_name}]\\n{file_content[:500]}...")
+                manager.add_to_context(session_id, "user", f"[Патч: {file_name}]\n{file_content[:500]}...")
                 
                 # Автоматически не применяем — ждём подтверждения через кнопку
                 await manager.send_to(websocket, {
                     "type": "stream",
-                    "content": f"📦 Получил патч **{file_name}**.\\n\\n"
+                    "content": f"📦 Получил патч **{file_name}**.\n\n"
                 })
                 await manager.send_to(websocket, {
                     "type": "stream", 
-                    "content": f"```json\\n{file_content}\\n```\\n\\n"
+                    "content": f"```json\n{file_content}\n```\n\n"
                 })
                 await manager.send_to(websocket, {
                     "type": "stream",
@@ -667,11 +665,11 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                     "type": "file_processed",
                     "summary": f"✅ JSON {file_name}, ключи: {keys}"
                 })
-                manager.add_to_context(session_id, "user", f"[Файл: {file_name}]\\n{file_content[:500]}...")
+                manager.add_to_context(session_id, "user", f"[Файл: {file_name}]\n{file_content[:500]}...")
                 
                 # Отвечаем на файл
                 await handle_ask({
-                    "text": f"Я загрузил файл {file_name}. Вот его содержимое:\\n\\n{file_content[:2000]}\\n\\n{caption}",
+                    "text": f"Я загрузил файл {file_name}. Вот его содержимое:\n\n{file_content[:2000]}\n\n{caption}",
                     "session_id": session_id
                 }, websocket)
                 
@@ -682,16 +680,16 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                 "type": "file_processed",
                 "summary": f"📄 {file_name} ({len(file_content)} символов)"
             })
-            manager.add_to_context(session_id, "user", f"[Файл: {file_name}]\\n{preview}")
+            manager.add_to_context(session_id, "user", f"[Файл: {file_name}]\n{preview}")
             
             # Отвечаем на файл
             await handle_ask({
-                "text": f"Я загрузил файл {file_name}. Вот содержимое:\\n\\n{file_content[:2000]}\\n\\n{caption}",
+                "text": f"Я загрузил файл {file_name}. Вот содержимое:\n\n{file_content[:2000]}\n\n{caption}",
                 "session_id": session_id
             }, websocket)
         
     except Exception as e:
-        logger.error(f"File upload error: {e}\\n{traceback.format_exc()}")
+        logger.error(f"File upload error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {
             "type": "error",
             "text": f"❌ Ошибка: {str(e)}"
@@ -852,8 +850,8 @@ def detect_module_request(text: str) -> Optional[str]:
     text_lower = text.lower().strip()
     
     patterns = [
-        r'(?:покажи|показать|открой|модуль|что в|загрузи|дай|get)\\s+([a-z_]+)',
-        r'([a-z_]+)\\.json',
+        r'(?:покажи|показать|открой|модуль|что в|загрузи|дай|get)\s+([a-z_]+)',
+        r'([a-z_]+)\.json',
         r'^([a-z_]+)$',
     ]
     
@@ -954,18 +952,3 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
-'''
-
-# Сохраняю файл
-with open('/mnt/kimi/output/main_cosmic.py', 'w', encoding='utf-8') as f:
-    f.write(main_content)
-
-print("✅ Космический main.py создан")
-print(f"📦 Размер: {len(main_content)} символов")
-print("\n🔮 Ключевые улучшения:")
-print("  • Исправлена обработка файлов (base64 → текст)")
-print("  • Автоопределение патчей в загруженных файлах")
-print("  • Inline-предложение применить патч через кнопку")
-print("  • Улучшенный стриминг для Kimi")
-print("  • Поддержка caption к файлам")
-print("  • Drag & drop обработка на бекенде")
