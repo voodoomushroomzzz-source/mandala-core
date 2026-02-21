@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "как потом сделать чтобы эти проблемы не возникали?",
-      "time": 1771699609.9784846
-    },
-    {
       "role": "assistant",
       "content": "Простые правила, которые уберут «эскейп-головную боль» навсегда:\n\n1. **никогда не пользуйся встроенным редактором GitHub** для TOML / YAML / JSON  \n   → только «Upload files» или `git push` из локального репо.\n\n2. **работай через локальный git** (одна команда):\n   ```bash\n   git clone https://github.com/voodoomushroomzzz-source/mandala-core.git\n   # правишь файлы обычным редактором\n   git add .\n   git commit -m \"...\"\n   git push origin main\n   ```\n   Локальный редактор не эскейпит.\n\n3. **если нужен браузер** — используй «Raw»-режим:\n   - открой `raw.githubusercontent.com/.../pyproject.toml`\n   - Save-As → получаешь чистый файл → правишь → загружаешь обратно через «Upload files».\n\n4. **CI-страховка**:  \n   добавь в workflow одну строчку-валидатор:\n   ```yaml\n   - run: python -m pip install --dry-run --no-deps -e .\n   ```\n   Если TOML синтаксически кривой — упадёт ещё до установки зависимостей.\n\nСледующий патч — **шаг 3** — уже без этой проблемы.",
       "time": 1771699616.1878848
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "применил, далее",
       "time": 1771701888.8357458
+    },
+    {
+      "role": "assistant",
+      "content": "Теперь добавим **скрипт**, который будет чистить HTML-escape (`&gt;`, `&lt;`, `&amp;`) из файлов перед коммитом.\n\n```json\n{\n  \"patch_id\": \"guard-strip-script\",\n  \"description\": \"Скрипт scripts/strip_html_escape.py для pre-commit хука\",\n  \"patches\": [\n    {\n      \"file_path\": \"scripts/strip_html_escape.py\",\n      \"content\": \"#!/usr/bin/env python3\\n\\\"\\\"\\\"Убирает HTML-escape (&gt; &lt; &amp;) из файлов перед коммитом.\\\"\\\"\\\"\\nimport sys\\nfrom pathlib import Path\\n\\ndef strip_file(path: Path) -> bool:\\n    text = path.read_text(encoding=\\\"utf-8\\\")\\n    cleaned = text.replace(\\\"&gt;\\\", \\\">\\\").replace(\\\"&lt;\\\", \\\"<\\\").replace(\\\"&amp;\\\", \\\"&\\\")\\n    if cleaned != text:\\n        path.write_text(cleaned, encoding=\\\"utf-8\\\")\\n        print(f\\\"[strip-html-escape] cleaned: {path}\\\")\\n        return True\\n    return False\\n\\nif __name__ == \\\"__main__\\\":\\n    changed = 0\\n    for file in sys.argv[1:]:\\n        if strip_file(Path(file)):\\n            changed += 1\\n    sys.exit(changed)  # 0 = success, >0 = changed files\"\n    }\n  ]\n}\n```\n\nПримени → **Commit changes**  \n→ скрипту сразу делаем `chmod +x scripts/strip_html_escape.py` (pre-commit сам поставит флаг при запуске).  \n\nСледующим шагом добавим **CLI-утилиту `mandala-patch`**, чтобы СР мог быстро применять патчи без браузера.",
+      "time": 1771701907.4665174
     }
   ],
-  "last_active": 1771701888.8357503,
+  "last_active": 1771701907.4665205,
   "created_at": 1771619386.437258
 }
