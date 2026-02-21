@@ -1,7 +1,7 @@
 """Роуты для pulse-forge."""
 from fastapi import APIRouter, WebSocket
 
-from tectosphaera.services.pulse_forge import start_pulse_task, ws_handler
+from tectosphaera.services.pulse_forge import ws_handler
 
 router = APIRouter(prefix="/pulse")
 
