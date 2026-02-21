@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import json
 import logging
 from pathlib import Path
@@ -35,15 +36,16 @@ class GitHubClient:
             await self._client.aclose()
 
     async def get_file(self, path: str, ref: str = "main") -&gt; Optional[str]:
-        ""Получить содержимое файла."""
+        """Получить содержимое файла."""
         url = f"{self.api_base}/contents/{path}"
         params = {"ref": ref}
         try:
-            resp = await self._client.get(url, headers=self.headers, params=params)  # type: ignore
+            resp = await self._client.get(  # type: ignore
+                url, headers=self.headers, params=params
+            )
             resp.raise_for_status()
             data = resp.json()
             if data.get("encoding") == "base64":
-                import base64
                 return base64.b64decode(data["content"]).decode("utf-8")
             return data["content"]
         except httpx.HTTPStatusError as e:
@@ -56,7 +58,12 @@ class GitHubClient:
             return None
 
     async def create_or_update_file(
-        self, path: str, message: str, content: str, sha: Optional[str] = None, branch: str = "main"
+        self,
+        path: str,
+        message: str,
+        content: str,
+        sha: Optional[str] = None,
+        branch: str = "main",
     ) -&gt; Dict[str, Any]:
         """Создать или обновить файл."""
         url = f"{self.api_base}/contents/{path}"
@@ -72,14 +79,19 @@ class GitHubClient:
         return resp.json()
 
     async def get_sha(self, path: str, ref: str = "main") -&gt; Optional[str]:
-        ""Получить SHA файла."""
+        """Получить SHA файла."""
         url = f"{self.api_base}/contents/{path}"
         params = {"ref": ref}
         try:
-            resp = await self._client.get(url, headers=self.headers, params=params)  # type: ignore
+            resp = await self._client.get(  # type: ignore
+                url, headers=self.headers, params=params
+            )
             resp.raise_for_status()
             return resp.json()["sha"]
         except httpx.HTTPStatusError as e:
             if e.response.status_code == 404:
                 return None
             raise
+        except Exception:
+            logger.exception(f"Error getting SHA for {path}")
+            return None
