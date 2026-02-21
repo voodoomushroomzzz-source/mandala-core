@@ -128,16 +128,35 @@
 
         .h-right { display: flex; align-items: center; gap: 12px; }
 
+        /* Стилизованный селект моделей */
         .msel {
             font-family: var(--mono); font-size: 9px;
-            background: transparent; border: none;
-            color: var(--text-2); cursor: pointer;
-            letter-spacing: 1px; text-transform: uppercase;
-            outline: none; appearance: none;
+            background: transparent; 
+            border: none;
+            color: var(--text-2); 
+            cursor: pointer;
+            letter-spacing: 1px; 
+            text-transform: uppercase;
+            outline: none; 
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 24px; /* место под кастомную стрелку */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 4px center;
+            background-size: 14px;
             transition: color 0.2s;
-            padding: 0 12px 0 4px; /* для стрелки */
         }
         .msel:hover { color: var(--green-bright); }
+        /* Тёмное выпадающее меню */
+        .msel option {
+            background: var(--surface-2);
+            color: var(--text);
+            border: none;
+            font-family: var(--mono);
+            font-size: 9px;
+        }
 
         .vsep { width: 1px; height: 18px; background: var(--line); }
 
@@ -189,7 +208,7 @@
         .sidebar.collapsed .nav-wrap,
         .sidebar.collapsed .logo-mini { display: flex; } /* logo-mini показываем при сворачивании */
         .sidebar.collapsed .nav-title,
-        .sidebar.collapsed .nav-item span:not(.nicon) { display: none; }
+        .sidebar.collapsed .quick-btn span:not(.nicon) { display: none; }
 
         /* Left mycelium accent */
         .sidebar::before {
@@ -333,6 +352,8 @@
         .bub {
             padding: 12px 16px;
             font-size: 13.5px; line-height: 1.7; font-weight: 300;
+            word-wrap: break-word; /* перенос длинных слов */
+            overflow-wrap: break-word;
         }
         .message.assistant .bub {
             background: var(--surface-2);
@@ -353,25 +374,50 @@
 
         /* ===== КОД-БЛОКИ ===== */
         .code-block {
-            margin: 12px 0; border: 1px solid var(--line-2); border-radius: var(--radius);
-            overflow: hidden; background: var(--surface); box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            position: relative;
+            margin: 12px 0; 
+            border: 1px solid var(--line-2); 
+            border-radius: var(--radius);
+            overflow: hidden; 
+            background: var(--surface); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 100%;      /* не вылезает за пределы */
+            width: 100%;
+            box-sizing: border-box;
         }
         .code-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 6px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line-2);
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            padding: 6px 12px; 
+            background: var(--surface-2); 
+            border-bottom: 1px solid var(--line-2);
         }
         .code-lang {
-            font-family: var(--mono); font-size: 11px; color: var(--green-bright);
-            text-transform: uppercase; letter-spacing: 1px;
+            font-family: var(--mono); 
+            font-size: 11px; 
+            color: var(--green-bright);
+            text-transform: uppercase; 
+            letter-spacing: 1px;
         }
-        .code-actions { display: flex; gap: 2px; }
+        .code-actions { 
+            display: flex; 
+            gap: 2px; 
+            flex-shrink: 0; /* не сжимаем кнопки */
+        }
         .code-btn {
-            padding: 4px 8px; background: var(--surface); border: 1px solid var(--line-2);
-            border-radius: var(--radius-sm); font-size: 11px;
-            font-family: var(--mono); cursor: pointer; transition: all 0.15s ease;
-            display: flex; align-items: center; justify-content: center;
-            line-height: 1; min-width: 28px;
+            padding: 4px 8px; 
+            background: var(--surface); 
+            border: 1px solid var(--line-2);
+            border-radius: var(--radius-sm); 
+            font-size: 11px;
+            font-family: var(--mono); 
+            cursor: pointer; 
+            transition: all 0.15s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            line-height: 1; 
+            min-width: 28px;
         }
         .code-btn.copy { color: var(--copy); border-color: var(--copy); }
         .code-btn.copy:hover { background: var(--copy); color: var(--bg); box-shadow: 0 0 8px var(--copy); }
@@ -381,9 +427,16 @@
         .code-btn.apply:hover { background: var(--violet-soft); color: var(--bg); box-shadow: 0 0 8px var(--violet-soft); }
 
         .code-content {
-            padding: 12px; overflow-x: auto; background: var(--surface);
-            font-family: var(--mono); font-size: 12px; line-height: 1.6;
-            color: var(--text); max-height: 400px; overflow-y: auto;
+            padding: 12px; 
+            overflow-x: auto; 
+            overflow-y: auto;
+            background: var(--surface);
+            font-family: var(--mono); 
+            font-size: 12px; 
+            line-height: 1.6;
+            color: var(--text); 
+            max-height: 400px; 
+            white-space: pre;      /* сохраняем форматирование, длинные строки скроллятся */
         }
 
         /* ===== TYPING ===== */
@@ -729,7 +782,6 @@
         }
 
         function updateStatus(state) {
-            // statusDot — это orb-dot, меняем его класс для анимации/цвета
             statusDot.className = 'orb-dot';
             if (state === 'connected') {
                 statusDot.style.background = 'var(--green-2)';
