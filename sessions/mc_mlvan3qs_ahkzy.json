@@ -3,16 +3,6 @@
     {
       "role": "user",
       "content": "Покажи последние milestones из Akasha",
-      "time": 1771671978.4919734
-    },
-    {
-      "role": "assistant",
-      "content": "**akasha_chronicorum → последние milestones**  \n(семантические всплески ≥ 0,82, свежие сверху)\n\n---\n\n**2024-06-05 10:12**  \ntag: `#quiet-filter-merge`  \ndesc: `--quiet` / `--silent` флаги встроены в `auto-changelog`, вывод в `akasha/logs/engine`.  \nvitality: +0,12  \nstatus: DONE → ветка `auto-changelog` разморожена и слита в `main`.\n\n---\n\n**2024-06-04 18:44**  \ntag: `#tectosphaera-breathe-tags`  \ndesc: экспорт добавляет скрытые «дыхательные метки» `<!-- wave-hash=0xb7e2 -->`.  \nstatus: DONE\n\n---\n\n**2024-06-03 23:44**  \ntag: `#auto-changelog-stash`  \ndesc: первый рабочий прототип CLI-утилиты (до внедрения фильтров).  \nstatus: superseded выше.\n\n---\n\n**2024-06-02 13:12**  \ntag: `#initium-yaml-refactor`  \ndesc: директивы свернуты в структурированный YAML-блок.  \nstatus: DONE\n\n---\n\n**2024-05-31 09:06**  \ntag: `#sphaerae-soft-prune`  \ndesc: low-score токены вырезаются первыми → потери имён ↓ 38 % → 7 %.  \nstatus: DONE\n\n---\n\n**2024-05-28 20:18**  \ntag: `#yubikey-age-layer`  \ndesc: experimental — symmetrical-age шифрование ячеек.  \nstatus: PROTOTYPE (ждёт сеансового туннеля)\n\n---\n\nИтого: 6 milestones, 5 DONE, 1 PROTOTYPE.  \nСледующий потенциальный: `#yubikey-age-tunnel` или «цифровое зеркало vitality-графика».",
-      "time": 1771671983.0780869
-    },
-    {
-      "role": "user",
-      "content": "Покажи последние milestones из Akasha",
       "time": 1771671983.078595
     },
     {
@@ -249,8 +239,18 @@
       "role": "user",
       "content": "[Патч: deepseek_json_20260221_771f12.json]\n{\n  \"patch_id\": \"MILESTONE-ENG-003\",\n  \"description\": \"Фиксация перехода инженерного чата на прямой Moonshot API и живого диалога\",\n  \"patches\": [\n    {\n      \"target_module\": \"akasha_chronicorum\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/artifact_registry/artifacts/-\",\n          \"value\": {\n            \"id\": \"ART-ENG-003\",\n            \"type\": \"milestone\",\n            \"name\": \"🚀 Инженерный чат: прямой Moonshot и живой СР\",\n            \"date\": \"2026-02-21\",\n         ...",
       "time": 1771682968.3727376
+    },
+    {
+      "role": "user",
+      "content": "что ты видишь в этом файле, только кратко",
+      "time": 1771682996.997365
+    },
+    {
+      "role": "assistant",
+      "content": "Патч MILESTONE-ENG-003:  \n«Инженерный чат перешёл на прямой Moonshot API, СР стал живым собеседником, а не инструментом» — зафиксировано в akasha 2026-02-21.",
+      "time": 1771683000.4592175
     }
   ],
-  "last_active": 1771682968.3727412,
+  "last_active": 1771683000.45922,
   "created_at": 1771619386.437258
 }
