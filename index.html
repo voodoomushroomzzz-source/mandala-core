@@ -18,6 +18,8 @@
             --nebula-dim: #7c3aed;
             --nebula-glow: #c084fc;
             --pulse: #22d3ee;
+            --copy: #10b981;      /* зелёный */
+            --download: #3b82f6;   /* синий */
             --font-mono: 'JetBrains Mono', Monaco, monospace;
             --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             --radius: 8px;
@@ -85,6 +87,7 @@
             50% { opacity: 0.6; transform: scale(0.9); }
         }
 
+        /* Геометрические кнопки (включая селект моделей) */
         .btn-geo {
             width: 32px; height: 32px;
             border: 1px solid var(--border);
@@ -97,12 +100,25 @@
             justify-content: center;
             font-size: 14px;
             transition: all 0.2s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
         .btn-geo:hover {
             color: var(--nebula-glow);
             border-color: var(--nebula-dim);
             background: var(--surface-hover);
             box-shadow: 0 0 12px var(--nebula-dim);
+        }
+
+        /* Стилизация селекта как кнопки с треугольником */
+        select.btn-geo {
+            width: auto;
+            padding: 0 20px 0 8px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 4px center;
+            background-size: 14px;
         }
 
         /* ===== MAIN ===== */
@@ -152,7 +168,7 @@
         .sidebar-title {
             font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
             color: var(--border-glow); margin-bottom: 8px; padding-left: 8px;
-            display: flex; align-items: center; gap: 6px; opacity: 1;
+            display: flex; align-items: center; gap: 6px;
         }
         .sidebar-title::before {
             content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--nebula);
@@ -164,7 +180,8 @@
             border-radius: var(--radius-sm); cursor: pointer; font-size: 12px;
             color: var(--border-glow); background: transparent; border: none; text-align: left;
             transition: all 0.15s ease; font-family: var(--font-mono);
-            border-left: 2px solid transparent; opacity: 0.95;
+            border-left: 2px solid transparent;
+            opacity: 0.9;  /* чуть ярче, чем было */
         }
         .quick-btn:hover {
             background: var(--surface); border-left-color: var(--border-glow);
@@ -185,7 +202,8 @@
             padding: 6px 14px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px;
             color: var(--border-glow); border: none; background: transparent;
             transition: all 0.15s ease; font-family: var(--font-mono); text-transform: uppercase;
-            letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; opacity: 0.9;
+            letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;
+            opacity: 0.85; /* чуть ярче */
         }
         .tab:hover { color: var(--star); background: var(--surface); opacity: 1; }
         .tab.active { color: var(--nebula-glow); background: var(--surface); box-shadow: inset 0 -2px 0 var(--nebula); opacity: 1; }
@@ -224,18 +242,21 @@
             font-family: var(--font-mono); font-size: 11px; color: var(--nebula-glow);
             text-transform: uppercase; letter-spacing: 1px;
         }
-        .code-actions { display: flex; gap: 4px; }
+        .code-actions { display: flex; gap: 2px; } /* плотно */
         .code-btn {
             padding: 4px 8px; background: var(--deep); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); color: var(--border-glow); font-size: 11px;
+            border-radius: var(--radius-sm); font-size: 11px;
             font-family: var(--font-mono); cursor: pointer; transition: all 0.15s ease;
-            display: flex; align-items: center; gap: 4px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            line-height: 1; min-width: 28px;
         }
-        .code-btn:hover {
-            border-color: var(--nebula); color: var(--nebula-glow); background: var(--surface-hover);
-        }
-        .code-btn.apply { border-color: var(--nebula-dim); color: var(--nebula-glow); }
-        .code-btn.apply:hover { background: var(--nebula-dim); color: var(--void); box-shadow: 0 0 12px var(--nebula-glow); }
+        .code-btn.copy { color: var(--copy); border-color: var(--copy); }
+        .code-btn.copy:hover { background: var(--copy); color: var(--void); box-shadow: 0 0 8px var(--copy); }
+        .code-btn.download { color: var(--download); border-color: var(--download); }
+        .code-btn.download:hover { background: var(--download); color: var(--void); box-shadow: 0 0 8px var(--download); }
+        .code-btn.apply { color: var(--nebula-glow); border-color: var(--nebula-dim); }
+        .code-btn.apply:hover { background: var(--nebula-dim); color: var(--void); box-shadow: 0 0 8px var(--nebula-glow); }
+
         .code-content {
             padding: 12px; overflow-x: auto; background: var(--deep);
             font-family: var(--font-mono); font-size: 12px; line-height: 1.6;
@@ -400,13 +421,11 @@
             <div class="header-title">MANDALA ENGINEER</div>
         </div>
         <div class="header-right">
-            <select id="modelSelect" class="btn-geo" style="width: auto; padding: 0 8px; background: var(--surface); color: var(--star); border: 1px solid var(--border);" onchange="changeModel(this.value)">
-                <option value="auto">M авто</option>
-                <option value="deepseek">M deepseek</option>
+            <!-- Селект моделей: только Kimi и DeepSeek -->
+            <select id="modelSelect" class="btn-geo" onchange="changeModel(this.value)">
                 <option value="kimi">M kimi</option>
-                <option value="yandex">M yandex</option>
+                <option value="deepseek">M deepseek</option>
             </select>
-            <button class="btn-geo" onclick="openPatchModal()" title="Применить патч">△</button>
             <div class="status-dot" id="statusDot" title="Статус соединения"></div>
         </div>
     </header>
@@ -422,6 +441,7 @@
                     <button class="quick-btn" onclick="quickAction('milestones')"><span>◈</span><span>вехи</span></button>
                     <button class="quick-btn" onclick="quickAction('status')"><span>◉</span><span>статус</span></button>
                     <button class="quick-btn" onclick="quickAction('sync')"><span>↻</span><span>синхронизация</span></button>
+                    <button class="quick-btn" onclick="quickAction('files')"><span>⊞</span><span>файлы</span></button>
                 </div>
             </div>
         </aside>
@@ -571,11 +591,15 @@
         }
 
         function renderCodeBlock(lang, code, complete) {
+            // Определяем классы для кнопок
+            const copyBtnClass = 'code-btn copy';
+            const downloadBtnClass = 'code-btn download';
+            const applyBtnClass = 'code-btn apply';
             const actions = complete ? `
                 <div class="code-actions">
-                    <button class="code-btn" onclick="copyCodeFromBlock(this)" title="Копировать">⎘</button>
-                    <button class="code-btn" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
-                    ${lang === 'json' ? '<button class="code-btn apply" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>' : ''}
+                    <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">⎘</button>
+                    <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
+                    ${lang === 'json' ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
                 </div>
             ` : '';
             return `
@@ -733,6 +757,7 @@
             else if(action==='milestones') sendDirectMessage('Покажи последние milestones из Akasha');
             else if(action==='status') sendDirectMessage('Статус системы');
             else if(action==='sync') sendDirectMessage('/sync');
+            else if(action==='files') sendDirectMessage('/tree');
         }
 
         function sendDirectMessage(text) {
@@ -743,12 +768,6 @@
         function changeModel(model) {
             if(!ws || ws.readyState !== WebSocket.OPEN) { showToast('◈ нет соединения','error'); return; }
             sendDirectMessage(`/model ${model}`);
-        }
-
-        function refreshModules() {
-            if(!ws || ws.readyState !== WebSocket.OPEN) { showToast('◈ нет соединения','error'); return; }
-            ws.send(JSON.stringify({type:'refresh_modules', session_id:SESSION_ID}));
-            showToast('◈ обновление модулей','success');
         }
 
         function showToast(msg,type='success') {
