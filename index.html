@@ -1092,7 +1092,7 @@
             setupTabs();
             setupModules();
             setupKeyboard();
-            setupDragDrop(); // добавим глобальный drag-and-drop
+            setupGlobalDragDrop(); // глобальный drag-and-drop
         }
 
         // ===== WEBSOCKET =====
@@ -1339,7 +1339,7 @@
         };
 
         function enhanceCodeBlocks(container) {
-            // Функция ничего не делает, но оставлена для совместимости
+            // Дополнительная обработка не требуется
         }
 
         // ===== ЗАГРУЗКА ФАЙЛОВ =====
@@ -1354,22 +1354,24 @@
             
             const reader = new FileReader();
             reader.onload = function(e) {
-                const content = e.target.result.split(',')[1];
-                ws.send(JSON.stringify({
+                const content = e.target.result.split(',')[1]; // base64
+                const message = {
                     type: 'file',
                     name: file.name,
                     content: content,
                     type: file.type,
                     session_id: SESSION_ID
-                }));
+                };
+                console.log('📤 Отправка файла:', message); // отладка
+                ws.send(JSON.stringify(message));
                 addSystemMessage(`📁 файл ${file.name} отправлен`);
             };
             reader.readAsDataURL(file);
             input.value = '';
         }
 
-        // ===== DRAG AND DROP =====
-        function setupDragDrop() {
+        // ===== ГЛОБАЛЬНЫЙ DRAG-AND-DROP =====
+        function setupGlobalDragDrop() {
             document.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1397,13 +1399,15 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const content = e.target.result.split(',')[1];
-                ws.send(JSON.stringify({
+                const message = {
                     type: 'file',
                     name: file.name,
                     content: content,
                     type: file.type,
                     session_id: SESSION_ID
-                }));
+                };
+                console.log('📤 Отправка файла (drop):', message);
+                ws.send(JSON.stringify(message));
                 addSystemMessage(`📁 файл ${file.name} отправлен`);
             };
             reader.readAsDataURL(file);
