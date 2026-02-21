@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "assistant",
-      "content": "Вот буквальная последовательность для терминала (в корне репо):\n\n```bash\n# 1. Подготовить файлы к коммиту\ngit add core/config.py .env.example\n\n# 2. Сделать коммит\ngit commit -m \"STEP-02-CONFIG: pydantic-settings + .env.example\"\n\n# 3. Отправить в GitHub (ветка master, если у тебя она по-умолчанию)\ngit push origin master\n```\n\nГотово — CI сам запустится и покажет ✅.  \nКогда видишь зелёный значок (или `All jobs passed`), пиши «шаг 3» и выдам следующий патч.",
-      "time": 1771697990.2892098
-    },
-    {
       "role": "user",
       "content": "более детально инструкцию напиши, я не очень шарю",
       "time": 1771698233.6289735
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "Я загрузил файл deepseek_toml_20260221_e483b9.txt. Вот содержимое:\n\n[build-system]\nrequires = [\"setuptools>=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi>=0.104\",\n    \"uvicorn[standard]>=0.24\",\n    \"httpx>=0.25\",\n    \"pydantic[email]>=2\",\n    \"structlog>=23\",\n]\nrequires-python = \">=3.11\"\n\n[project.optional-dependencies]\ndev = [\n    \"mypy>=1.7\",\n    \"ruff>=0.1\",\n    \"pytest>=7\",\n    \"pytest-asyncio>=0.21\",\n]\n\n# Явное указание пакетов для сборки\n[tool.setuptools.packages.find]\ninclude = [\"core\", \"fructus\", \"sessions\", \"tectosphaera\", \"akasha_chronicorum\"]\nexclude = [\"tests*\"]\n\n[tool.mypy]\npython_version = \"3.11\"\nwarn_return_any = true\ndisallow_untyped_defs = true\nignore_missing_imports = true\n\n[tool.ruff]\ntarget-version = \"py311\"\nselect = [\"E\", \"F\", \"I\", \"N\", \"W\", \"UP\"]\n\nCI падает при установке пакета из-за ошибки:\n\ntext\nerror: Multiple top-level packages discovered in a flat-layout: ['core', 'fructus', 'sessions', 'tectosphaera', 'akasha_chronicorum'].\nЭто означает, что setuptools не может автоматически определить, какие директории являются пакетами Python. Нужно явно указать их в pyproject.toml.\n\nЧто нужно сделать\nПолностью заменить содержимое файла pyproject.toml в корне репозитория на приведённый ниже код. Он содержит:\n\nправильные зависимости,\n\nявное перечисление пакетов для сборки,\n\nнастройки для ruff и mypy.\n\nИсправленный pyproject.toml",
       "time": 1771700631.9085882
+    },
+    {
+      "role": "assistant",
+      "content": "Понял: setuptools ругается, потому что **плоская структура** (flat-layout) и **несколько top-level-пакетов** — он не знает, какие именно считать частью дистрибутива.  \nРешение — явно объявить `packages` вместо `packages.find`, чтобы не полагаться на автоматику.\n\n```json\n{\"patch_id\":\"STEP-02-FLAT-LAYOUT\",\"description\":\"Убираем flat-layout-проблему: вместо packages.find явно перечисляем packages\",\"patches\":[{\"file_path\":\"pyproject.toml\",\"content\":\"[build-system]\\nrequires = [\\\"setuptools>=45\\\", \\\"wheel\\\"]\\nbuild-backend = \\\"setuptools.build_meta\\\"\\n\\n[project]\\nname = \\\"mandala-core\\\"\\nversion = \\\"7.7.0\\\"\\ndependencies = [\\n    \\\"fastapi>=0.104\\\",\\n    \\\"uvicorn[standard]>=0.24\\\",\\n    \\\"httpx>=0.25\\\",\\n    \\\"pydantic[email]>=2\\\",\\n    \\\"structlog>=23\\\",\\n]\\nrequires-python = \\\">=3.11\\\"\\n\\n[project.optional-dependencies]\\ndev = [\\n    \\\"mypy>=1.7\\\",\\n    \\\"ruff>=0.1\\\",\\n    \\\"pytest>=7\\\",\\n    \\\"pytest-asyncio>=0.21\\\",\\n]\\n\\n[tool.setuptools]\\npackages = [\\\"core\\\", \\\"fructus\\\", \\\"sessions\\\", \\\"tectosphaera\\\", \\\"akasha_chronicorum\\\"]\\n\\n[tool.mypy]\\npython_version = \\\"3.11\\\"\\nwarn_return_any = true\\ndisallow_untyped_defs = true\\nignore_missing_imports = true\\n\\n[tool.ruff]\\ntarget-version = \\\"py311\\\"\\nselect = [\\\"E\\\", \\\"F\\\", \\\"I\\\", \\\"N\\\", \\\"W\\\", \\\"UP\\\"]\"}]}\n```\n\nПрименяй → **Commit changes** → CI станет ✅.",
+      "time": 1771700639.6132882
     }
   ],
-  "last_active": 1771700631.9085894,
+  "last_active": 1771700639.61329,
   "created_at": 1771619386.437258
 }
