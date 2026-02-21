@@ -531,12 +531,13 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     "X-Title": "Mandala Engineer",
                     "Content-Type": "application/json"
                 },
-                json={
-                    "model": "moonshotai/kimi-k2-thinking",
-                    "messages": messages,
-                    "stream": True,
-                    "temperature": 0.7
-                },
+                jjson={
+    "model": "moonshotai/kimi-k2-thinking",
+    "messages": messages,
+    "stream": True,
+    "temperature": 0.85,
+    "top_p": 0.95
+},
                 timeout=60.0
             )
             
