@@ -1064,6 +1064,29 @@
                     addSystemMessage(`Загружено модулей: ${data.modules_loaded?.length || 0}`);
                     break;
                     
+                case 'history':
+                    // Очищаем все сообщения (кроме возможно системных, но проще очистить полностью)
+                    messagesEl.innerHTML = '';
+                    if (data.messages && data.messages.length > 0) {
+                        data.messages.forEach(msg => {
+                            if (msg.role === 'user') {
+                                addUserMessage(msg.content);
+                            } else if (msg.role === 'assistant') {
+                                const div = createMessageElement('assistant');
+                                div.querySelector('.message-bubble').textContent = msg.content;
+                                messagesEl.appendChild(div);
+                            }
+                        });
+                    } else {
+                        addSystemMessage('Новая сессия. Добро пожаловать!');
+                    }
+                    scrollToBottom();
+                    break;
+                    
+                case 'system':
+                    addSystemMessage(data.text);
+                    break;
+                    
                 case 'stream':
                     handleStream(data.content);
                     break;
