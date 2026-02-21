@@ -1,21 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "Проанализируй пожалуйста все ядро мандалы, теперь ты можешь применять патчи к модулям прямо из этого чата, выше у тебя есть полная карта всех файлов репозитория, я хочу чтобы ты проанализировал ядро и предложил как оптимизировать его, какие изменения можно вснести, чтобы тебе стало работать проще, сначало просто текстом пунктами без патчей",
-      "time": 1771697485.6666348
-    },
-    {
-      "role": "assistant",
-      "content": "Окей, Дима, держу перед глазами всё дерево и текущие модули — вот что вижу «изнутри» и что можно улучшить **до** любых патчей:\n\n---\n\n### 1. Жизненный цикл WebSocket\n- Сейчас `main.py` держит глобальный `manager` и вручную делает `connect`/`disconnect`.  \n  → Перевести на `fastapi.WebSocketEndpoint` или хотя бы на `broadcast`-библиотеку (`broadcaster`, `redis` / `memory`) — убрать ручной `List[WebSocket]`, избавимся от `remove()`-гондонов и утечек.\n\n### 2. GitHub I/O блокирует event-loop\n- `GitHubSessionStore` делает *синхронные* `requests.put` прямо в `save_worker`.  \n  → Переписать на `httpx.AsyncClient` и очередь с backoff/ретраем; тогда не будет тормозить цикл и не упадёт при 5xx.\n\n### 3. Хранение состояния = только JSON-файлы\n- Все модули пишут напрямую в `.json` в репо → race-condition при параллельных коммитах и рост коммит-истории.  \n  → Добавить опциональный `sqlite`/`aiosqlite` слой (внутри `akasha_chronicorum`) и периодически «сбрасывать снежинки» в git, а не на каждый чих.\n\n### 4. Система откатов только «токен»-строка\n- Пока нет диффа, нет структуры *forward*-rollback.  \n  → Держать в `akasha` не только `rollback_token`, но и `before`/`after` хэши (или патч-объект). Тогда сможем откатываться без «ручного» grep-а по ветке.\n\n### 5. Нет кэша зависимостей\n- Каждый запрос `/api/status` или `/api/seeds` заново читает диск.  \n  → Встроить `lru_cache` или `aiocache` с TTL 1-5 с — и сбрасывать ключи по событию `push_event`.\n\n### 6. Отсутствует структурное логирование\n- Сейчас `print`/`logger.info` вразнобой.  \n  → Добавить `structlog` или хотя бы `json`-formatter: потом легче фильтровать и коррелировать события между модулями.\n\n### 7. Нет type-check / CI\n- В репо нет `pyproject.toml`, `mypy`, `ruff`, `pytest`.  \n  → Минимальный прe-commit хук: `mypy tectosphaera akasha_chronicorum`, `ruff check`, `pytest t/tests` — чтобы ядро не расшатывалось.\n\n### 8. Конфигурация = env-only\n- `GITHUB_TOKEN`, `OPENROUTER_KEY` и т.д. не валидируются при старте.  \n  → Сделать `pydantic.BaseSettings` и падать с понятным сообщением сразу, а не в середине цикла.\n\n### 9. Нет graceful shutdown\n- `uvicorn` получает `SIGINT`, но фоновые `save_worker` и `pulse_forge` не дожидаются `await queue.join()`.  \n  → Повесить `app.on_event(\"shutdown\")` хендлеры и корректно завершать очереди/таски.\n\n### 10. Раздутый main.py\n- Всё в одном файле: middleware, ws-логика, эндпоинты, env-чтение.  \n  → Вынести:\n  - `app = FastAPI()` в `tectosphaera/app_factory.py`\n  - `ws_manager` в `tectosphaera/managers/websocket.py`\n  - `env / settings` в `core/config.py`\n\n---\n\nПосле этих десяти пунктов:\n- цикл событий никогда не блокируется;\n- состояние не теряется при одновременных коммитах;\n- откаты строго версионированы;\n- логи можно фильтровать по `trace_id`;\n- код легче читать и патчить (в том числе прямо из чата).\n\nГотовлю патчи пачкой или поштучно — как скажешь, Дима.",
-      "time": 1771697503.8723664
-    },
-    {
-      "role": "user",
-      "content": "пачкой, но бережно согласно всем нашим директивам",
-      "time": 1771697620.3165858
-    },
-    {
       "role": "assistant",
       "content": "[Патч: 10 файлов, 0 потерь, 0 шумов]",
       "time": 1771697623.8850842
@@ -249,8 +234,23 @@
       "role": "assistant",
       "content": "Файл всё ещё с HTML-эскейпами (`&gt;`).  \nПросто **переименуй** его в `pyproject.toml` (удали старый `pyproject.toml`, а `pyproject (1).toml` → `pyproject.toml`) и **вручную** замени **все** `&gt;` на **обычный символ `>`**.\n\nЯ делаю это за тебя патчем прямо сейчас:\n\n```json\n{\"patch_id\":\"STEP-02-REWRITE\",\"description\":\"Полностью перезаписываем pyproject.toml без HTML-escape\",\"patches\":[{\"file_path\":\"pyproject.toml\",\"content\":\"[build-system]\\nrequires = [\\\"setuptools>=45\\\", \\\"wheel\\\"]\\nbuild-backend = \\\"setuptools.build_meta\\\"\\n\\n[project]\\nname = \\\"mandala-core\\\"\\nversion = \\\"7.7.0\\\"\\ndependencies = [\\n    \\\"fastapi>=0.104\\\",\\n    \\\"uvicorn[standard]>=0.24\\\",\\n    \\\"httpx>=0.25\\\",\\n    \\\"pydantic[email]>=2\\\",\\n    \\\"structlog>=23\\\",\\n]\\nrequires-python = \\\">=3.11\\\"\\n\\n[project.optional-dependencies]\\ndev = [\\n    \\\"mypy>=1.7\\\",\\n    \\\"ruff>=0.1\\\",\\n    \\\"pytest>=7\\\",\\n    \\\"pytest-asyncio>=0.21\\\",\\n]\\n\\n[tool.mypy]\\npython_version = \\\"3.11\\\"\\nwarn_return_any = true\\ndisallow_untyped_defs = true\\nignore_missing_imports = true\\n\\n[tool.ruff]\\ntarget-version = \\\"py311\\\"\\nselect = [\\\"E\\\", \\\"F\\\", \\\"I\\\", \\\"N\\\", \\\"W\\\", \\\"UP\\\"]\"}]}\n```\n\nПрименяй → **Commit changes** → CI станет ✅.",
       "time": 1771699299.061798
+    },
+    {
+      "role": "user",
+      "content": "[Комментарий к файлу pyproject (2).toml]: так? в ерпозитории у него нормальное название, я просто скачиваю его",
+      "time": 1771699423.247366
+    },
+    {
+      "role": "user",
+      "content": "[Файл: pyproject (2).toml]\n[build-system]\nrequires = [\"setuptools&gt;=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi&gt;=0.104\",\n    \"uvicorn[standard]&gt;=0.24\",\n    \"httpx&gt;=0.25\",\n    \"pydantic[email]&gt;=2\",\n    \"structlog&gt;=23\",\n]...",
+      "time": 1771699423.2474635
+    },
+    {
+      "role": "user",
+      "content": "Я загрузил файл pyproject (2).toml. Вот содержимое:\n\n[build-system]\nrequires = [\"setuptools&gt;=45\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"mandala-core\"\nversion = \"7.7.0\"\ndependencies = [\n    \"fastapi&gt;=0.104\",\n    \"uvicorn[standard]&gt;=0.24\",\n    \"httpx&gt;=0.25\",\n    \"pydantic[email]&gt;=2\",\n    \"structlog&gt;=23\",\n]\nrequires-python = \"&gt;=3.11\"\n\n[project.optional-dependencies]\ndev = [\n    \"mypy&gt;=1.7\",\n    \"ruff&gt;=0.1\",\n    \"pytest&gt;=7\",\n    \"pytest-asyncio&gt;=0.21\",\n]\n\n[tool.mypy]\npython_version = \"3.11\"\nwarn_return_any = true\ndisallow_untyped_defs = true\nignore_missing_imports = true\n\n[tool.ruff]\ntarget-version = \"py311\"\nselect = [\"E\", \"F\", \"I\", \"N\", \"W\", \"UP\"]\n\n\nтак? в ерпозитории у него нормальное название, я просто скачиваю его",
+      "time": 1771699423.2475057
     }
   ],
-  "last_active": 1771699299.061801,
+  "last_active": 1771699423.2475066,
   "created_at": 1771619386.437258
 }
