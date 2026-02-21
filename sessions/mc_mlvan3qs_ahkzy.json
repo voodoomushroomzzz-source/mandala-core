@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "assistant",
-      "content": "**akasha_chronicorum → последние вехи**  \n(семантический порог ≥ 0,82, desc)\n\n1. **2024-06-08 09:41** — `#websocket-draft-00`  \n   Первый рукопожатие по WebSocket: uvicorn-upgrade, заголовок `Sec-WebSocket-Protocol: mandala-v1`.  \n   vitality: +0,13  \n   status: PROTOTYPE (локальный туннель, ждёт TLS-релиза)\n\n2. **2024-06-07 14:03** — `#incubae-auto-hatch`  \n   Сканер поднимает инкубы автоматически при семантическом пересечении > 0,82.  \n   status: DONE\n\n3. **2024-06-06 09:17** — `#vitality-dashboard-v1`  \n   Цифровая панель vitality-графа за 30 сессий.  \n   status: DONE\n\n4. **2024-06-05 10:12** — `#quiet-filter-merge`  \n   Фильтры `--quiet / --silent` в `auto-changelog`.  \n   status: DONE\n\n5. **2024-06-04 18:44** — `#tectosphaera-breathe-tags`  \n   Скрытые `<!-- wave-hash -->` в экспортируемых артефактах.  \n   status: DONE\n\n6. **2024-05-31 09:06** — `#sphaerae-soft-prune`  \n   Low-резонанс токены вырезаются первыми.  \n   status: DONE\n\n**Итого:** 6 вех, 4 DONE, 2 PROTOTYPE.  \nСледующий фокус: докрутить `#websocket-draft-00` до TLS и интегрировать с `#yubikey-age-tunnel`.",
-      "time": 1771680234.3465462
-    },
-    {
       "role": "user",
       "content": "Покажи последние milestones из Akasha",
       "time": 1771680234.3468962
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "```json\n{\n  \"patch_id\": \"SEED-ENG-UPDATE-001\",\n  \"description\": \"Тестовое семя: обновление любого модуля прямо из инженерного чата через единый JSON-патч.\",\n  \"target_module\": \"incubae\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"/seeds/eng_chat_module_update\",\n      \"value\": {\n        \"id\": \"eng-chat-module-update\",\n        \"title\": \"Обновление модуля через инженерный чат\",\n        \"type\": \"tool\",\n        \"status\": \"incubating\",\n        \"created\": \"2026-02-21T14:30:00Z\",\n        \"vitality\": 0.88,\n        \"resonance_threshold\": 85,\n        \"description\": \"Позволяет Садовнику отправить JSON-патч в чат → валидатор → автоматическое применение без перезапуска ядра.\",\n        \"entrypoint\": \"/patch/apply\",\n        \"http_method\": \"POST\",\n        \"payload_example\": {\n          \"patch_id\": \"MILESTONE-ENG-003\",\n          \"target_module\": \"akasha_chronicorum\",\n          \"changes\": [{\"op\": \"add\", \"path\": \"/artifacts/-\", \"value\": {}}]\n        },\n        \"requires\": [\"tectosphaera>=2.1.0\", \"fastapi>=0.109.0\"],\n        \"permissions\": [\"write_module\", \"git_commit\"],\n        \"rollback_supported\": true,\n        \"rollback_path\": \"/patch/rollback/{patch_id}\"\n      }\n    }\n  ]\n}\n```\n\nанализ ядра\n├── incubae загружена → слушает /seeds/*\n├── tectosphaera 2.1.0 содержит валидатор JSON-patch → ОК\n├── resonance_threshold 85 → vitality 0.88 > 85 → семя автоматически перейдёт в status=\"hatching\"\n└── требуется энд-поинт /patch/apply (FastAPI) – можно добавить прямо в tectosphaera/routes/patch.py\n\nкуда физически\nфайл incubae.json (или /artifacts/incubae.d/*.json) – добавить объект в массив seeds[].\nПосле коммита ядро само вызовет hatch и опубликует роуты.",
       "time": 1771689255.5723834
+    },
+    {
+      "role": "user",
+      "content": "/tree",
+      "time": 1771690728.3851452
     }
   ],
-  "last_active": 1771689255.5723855,
+  "last_active": 1771690728.3851492,
   "created_at": 1771619386.437258
 }
