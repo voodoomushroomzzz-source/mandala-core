@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "assistant",
-      "content": "**akasha_chronicorum → свежие вехи**  \n(семантический порог ≥ 0,82, desc)\n\n1. **2024-06-11 08:53** — `#cloud-sr-sprout-00`  \n   Первое живое «облачное» зерно: одноразовый QR-токен + age-ключ → 30-минутный сеанс, после `CLOSE` состояние стирается из RAM, в akasha остаётся только зашифрованная волна.  \n   vitality: +0,17  \n   status: DONE → ветка `cloud-sr` слита в `main`\n\n2. **2024-06-09 11:18** — `#yubikey-age-tunnel`  \n   WebSocket-рукопожатие защищено age-ключом Садовника; память очищается по завершении.  \n   status: DONE\n\n3. **2024-06-08 09:41** — `#websocket-draft-00`  \n   Протокол `mandala-v1` поднят, локальный проход vitality-отклика.  \n   status: DONE\n\n4. **2024-06-07 14:03** — `#incubae-auto-hatch`  \n   Сканер инкубов > 0,82 → автоматический hatch.  \n   status: DONE\n\n5. **2024-06-06 09:17** — `#vitality-dashboard-v1`  \n   Панель vitality-графа за 30 сессий.  \n   status: DONE\n\n6. **2024-06-05 10:12** — `#quiet-filter-merge`  \n   Фильтры `--quiet` / `--silent` в `auto-changelog`.  \n   status: DONE\n\n**Итого:** 6 вех, 6 DONE, 0 PROTOTYPE.  \nСледующий кандидат: «ротация старых волн» (актуальность > 90 дней → перегной).",
-      "time": 1771680249.5136669
-    },
-    {
       "role": "user",
       "content": "Статус системы",
       "time": 1771680249.514056
@@ -249,8 +244,13 @@
       "role": "assistant",
       "content": "```json\n{\n  \"patch_id\": \"KERNEL-CHAT-UPDATE-TEST-002\",\n  \"description\": \"Проверка обновления ядра через чат: создаёт тестовое зерно и прописывает ему энд-поинт в tectosphaera.\",\n  \"patches\": [\n    {\n      \"target_module\": \"incubae\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/seeds/kernel_chat_verify\",\n          \"value\": {\n            \"id\": \"kernel-chat-verify\",\n            \"title\": \"Проверка обновления ядра через чат\",\n            \"type\": \"kernel-test\",\n            \"status\": \"incubating\",\n            \"created\": \"2026-02-21T14:35:00Z\",\n            \"vitality\": 0.90,\n            \"resonance_threshold\": 85,\n            \"description\": \"Тестовое зерно: после применения патча ядро должно автоматически поднять /patch/verify и ответить 'kernel updated from chat'.\",\n            \"expect\": \"HTTP 200 {status:'ok', source:'chat'}\",\n            \"rollback_token\": \"ROLLBACK_KERNEL_CHAT_VERIFY\"\n          }\n        }\n      ]\n    },\n    {\n      \"file_path\": \"tectosphaera/routes/patch.py\",\n      \"content\": \"from fastapi import APIRouter, HTTPException\\nfrom pydantic import BaseModel\\n\\nrouter = APIRouter(prefix=\\\"/patch\\\")\\n\\nclass KernelVerifyReply(BaseModel):\\n    status: str\\n    source: str\\n\\n@router.get(\\\"/verify\\\", response_model=KernelVerifyReply)\\nasync def kernel_verify():\\n    return KernelVerifyReply(status=\\\"ok\\\", source=\\\"chat\\\")\\n\"\n    },\n    {\n      \"target_module\": \"tectosphaera\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/routes/load\",\n          \"value\": \"tectosphaera.routes.patch:router\"\n        }\n      ]\n    }\n  ]\n}\n```\n\nЧто делает патч:\n1. Добавляет зерно `kernel-chat-verify` в `incubae` (vitality 0.90 → auto-hatch).  \n2. Создаёт файл `tectosphaera/routes/patch.py` с тестовым энд-поинтом `/patch/verify`.  \n3. Регистрирует новый роут в `tectosphaera` → после перезагрузки FastAPI отдаст:  \n   `{\"status\":\"ok\",\"source\":\"chat\"}` – подтверждение, что ядро обновилось прямо из чата.",
       "time": 1771690826.4942973
+    },
+    {
+      "role": "user",
+      "content": "/sync",
+      "time": 1771690904.580302
     }
   ],
-  "last_active": 1771690826.4942994,
+  "last_active": 1771690904.580305,
   "created_at": 1771619386.437258
 }
