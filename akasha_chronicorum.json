@@ -757,5 +757,12 @@
       "geometric_resonance": "⊞ (файлы) как символ структуры, △ (патч) как действие"
     },
     "ahimsa_check_passed": true
+  },
+  "/artifacts/-": {
+    "id": "pulse-forge-log",
+    "type": "timeseries",
+    "topic": "pulse-forge",
+    "ttl": 3600,
+    "max_len": 120
   }
 }
