@@ -808,24 +808,6 @@
       }
     }
   },
-  "/infrastructure_state/cloud_sr": {
-    "folder_id": "b1glthd62hkdnr9f6m5r",
-    "service_account_id": "ajeh137a8h4al578m0n6",
-    "bucket_name": "mandala-sr-memory",
-    "lockbox_secret_id": "e6q6m4qicp0l45tsd4tv",
-    "lockbox_secret_key": "token",
-    "function_id": "d4en8kkgifqjhadrc84i",
-    "function_url": "https://functions.yandexcloud.net/d4en8kkgifqjhadrc84i",
-    "last_version_id": "d4eb0oorukuovg2tj1ic",
-    "local_path": "C:\\Mandala_Digital\\cloud-sr",
-    "ai_model": "YandexGPT 5 Lite via Yandex Cloud",
-    "deployment_date": "2026-02-17",
-    "runtime": "python312",
-    "memory_mb": 256,
-    "timeout_sec": 30,
-    "public_invoke": true,
-    "last_successful_test": "2026-02-17T20:40:00Z"
-  },
   "/ai_studio_agent": {
     "name": "Mandala SR",
     "model": "YandexGPT 5 Lite (Latest)",
@@ -1286,5 +1268,33 @@
     "name": "Прямой Moonshot API",
     "description": "Инженерный чат переведён на kimi-k2-turbo-preview, ответы стали быстрыми и живыми"
   },
-  "/routes/load/-": "tectosphaera.routes.pulse:router"
+  "/routes/load/-": "tectosphaera.routes.pulse:router",
+  "/infrastructure_state/engineer_sr": {
+    "folder_id": "b1glthd62hkdnr9f6m5r",
+    "service_account_id": "ajeh137a8h4al578m0n6",
+    "bucket_name": "mandala-sr-memory",
+    "lockbox_secret_id": "e6q6m4qicp0l45tsd4tv",
+    "lockbox_secret_key": "token",
+    "function_id": "d4ec1ljm3mno1tdmhipg",
+    "function_name": "kimi-engineer",
+    "http_endpoint": "https://functions.yandexcloud.net/d4ec1ljm3mno1tdmhipg",
+    "gateway_domain": "d5de2tn8o6cbipm3bh4d.bixf7e87.apigw.yandexcloud.net",
+    "ai_model": "moonshotai/kimi-k2-thinking via OpenRouter",
+    "deployment_date": "2026-02-19",
+    "runtime": "python312",
+    "memory_mb": 256,
+    "timeout_sec": 60,
+    "description": "Инженерный СР (Engineer SR) — основной агент для работы с ядром через инженерный чат. Использует модель Kimi K2 через OpenRouter.",
+    "capabilities": [
+      "WebSocket чат",
+      "GitHub module reader",
+      "применение патчей",
+      "команды /tree, /sync, /model"
+    ]
+  },
+  "/infrastructure_state/telegram_sr": {
+    "status": "planned",
+    "description": "Telegram-СР (Telegram SR) — будет развёрнут на Yandex Cloud для работы через Telegram-бота. Архитектура и модель уточняются.",
+    "notes": "Временно отложен, используется для тестов в будущем."
+  }
 }
