@@ -21,9 +21,14 @@
       "role": "assistant",
       "content": "Для чего именно тебе нужен тестовый JSON? \n\nВот три варианта на выбор — скажи, какой подходит, или используй сразу:\n\n## 1. Минимальный патч (один модуль, одно поле)\nОбновляет версию в Initium:\n\n```json\n{\n  \"target_module\": \"initium\",\n  \"changes\": [\n    {\n      \"op\": \"update\",\n      \"path\": \"/version\",\n      \"value\": \"v7.5.2-test\"\n    }\n  ]\n}\n```\n\n## 2. Мульти-патч (несколько модулей сразу)\nОбновляет версии в двух модулях одним файлом:\n\n```json\n{\n  \"patch_id\": \"test_multi_update\",\n  \"description\": \"Тестовое обновление версий\",\n  \"patches\": [\n    {\n      \"target_module\": \"initium\",\n      \"changes\": [\n        {\n          \"op\": \"update\",\n          \"path\": \"/metadata/last_modified\",\n          \"value\": \"2026-02-22T10:00:00Z\"\n        }\n      ]\n    },\n    {\n      \"target_module\": \"tectosphaera\",\n      \"changes\": [\n        {\n          \"op\": \"update\",\n          \"path\": \"/version\",\n          \"value\": \"v2.0.7-test\"\n        }\n      ]\n    }\n  ]\n}\n```\n\n## 3. Тестовое семя для Incubae\nСоздаёт новое семя в реестре:\n\n```json\n{\n  \"id\": \"TEST-SEED-001\",\n  \"type\": \"test\",\n  \"name\": \"Тестовое семя\",\n  \"version\": \"v0.1.0\",\n  \"status\": \"active\",\n  \"expiry\": \"2027-02-22\",\n  \"description\": \"Тестовое семя для проверки работы инкубатора\"\n}\n```\n\nКакой вариант тебе нужен? Или хочешь что-то специфическое (например, с операцией `delete` или `add`)?",
       "time": 1771795017.6188025
+    },
+    {
+      "role": "user",
+      "content": "привет посмотри какая погода в моске в интернете",
+      "time": 1771795252.9564774
     }
   ],
-  "last_active": 1771795017.6188083,
+  "last_active": 1771795252.9564872,
   "created_at": 1771794970.7414107,
   "modules_injected": true
 }
