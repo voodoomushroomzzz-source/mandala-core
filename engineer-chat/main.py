@@ -545,7 +545,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
             
             # ИСПРАВЛЕНО: добавлено детальное логирование ошибок
             if response.status_code != 200:
-                error_text = await response.text()
+                error_text = response.text
                 logger.error(f"API error: {response.status_code} - {error_text}")
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка API: {response.status_code}"})
                 return
