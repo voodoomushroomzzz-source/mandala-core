@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.30.0
+Mandala Sync Terminal Bot v3.31.0
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.30.0:
+НОВОЕ В v3.31.0:
+- Универсальные патчи: поддержка file_path для любых файлов (не только модулей)
+- Валидация патчей теперь принимает либо target_module + changes, либо file_path + content
+- Бот может обновлять сам себя через патчи с file_path = "bot.py"
+
+Предыдущие изменения v3.30.0:
 - Добавлена поддержка операции 'remove' в патчах (наравне с delete)
 - Добавлена команда /status и кнопка "🔍 Статус системы" в главном меню
-- Исправлена валидация для операции remove
-
-Предыдущие изменения v3.29.1:
-- Починено меню обновления ядра (кнопки работают)
-- Добавлена отладка callback'ов
-- Исправлены состояния FSM
 """
 
 import os
@@ -243,13 +242,13 @@ async def call_sr(chat_id: str, text: str, selected_model: str = None) -> Option
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.30.0) — добавлена кнопка статуса"""
+    """Главное меню (v3.31.0)"""
     keyboard = [
         [KeyboardButton(text="🧘 Выбрать линзу")],
         [KeyboardButton(text="🔄 Обновление ядра")],
         [KeyboardButton(text="💾 Скачать монолит")],
         [KeyboardButton(text="🍇 Fructus")],
-        [KeyboardButton(text="🔍 Статус системы")]  # Новая кнопка
+        [KeyboardButton(text="🔍 Статус системы")]
     ]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
@@ -389,7 +388,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.30.0"
+        "User-Agent": "MandalaBot/3.31.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -447,7 +446,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.30.0"
+        "User-Agent": "MandalaBot/3.31.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -471,7 +470,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
 # ========== ФУНКЦИИ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ ==========
 
 def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
-    """Валидация структуры патча (одиночного или мульти)"""
+    """Валидация структуры патча (одиночного или мульти) с поддержкой file_path"""
     if not isinstance(patch_data, dict):
         return False, "Патч должен быть объектом JSON"
 
@@ -485,53 +484,67 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
         for i, subpatch in enumerate(patch_data["patches"]):
             if not isinstance(subpatch, dict):
                 return False, f"Подпатч #{i} должен быть объектом"
-            if "target_module" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'target_module'"
-            if "changes" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'changes'"
-            if not isinstance(subpatch["changes"], list):
-                return False, f"Подпатч #{i}: 'changes' должен быть массивом"
+            
+            # Проверяем наличие target_module ИЛИ file_path
+            if "target_module" not in subpatch and "file_path" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'target_module' или 'file_path'"
+            
+            # Для JSON-модулей проверяем changes
+            if "target_module" in subpatch:
+                if "changes" not in subpatch:
+                    return False, f"Подпатч #{i}: отсутствует 'changes' для модуля"
+                if not isinstance(subpatch["changes"], list):
+                    return False, f"Подпатч #{i}: 'changes' должен быть массивом"
 
-            # Добавлена операция 'remove' в список допустимых
-            valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
-            for j, change in enumerate(subpatch["changes"]):
-                if not isinstance(change, dict):
-                    return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
-                if "op" not in change:
-                    return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
-                if change["op"] not in valid_ops:
-                    return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
-                if "path" not in change:
-                    return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
-                if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-                    return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
+                valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
+                for j, change in enumerate(subpatch["changes"]):
+                    if not isinstance(change, dict):
+                        return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
+                    if "op" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
+                    if change["op"] not in valid_ops:
+                        return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
+                    if "path" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
+                    if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
+            
+            # Для обычных файлов проверяем content
+            elif "file_path" in subpatch:
+                if "content" not in subpatch:
+                    return False, f"Подпатч #{i}: отсутствует 'content' для файла"
 
         return True, "Мульти-патч корректен"
 
     else:
         # Одиночный патч
-        if "target_module" not in patch_data:
-            return False, "Отсутствует поле 'target_module'"
-        if "changes" not in patch_data:
-            return False, "Отсутствует поле 'changes'"
-        if not isinstance(patch_data["changes"], list):
-            return False, "'changes' должен быть массивом"
-        if len(patch_data["changes"]) == 0:
-            return False, "Массив изменений пуст"
+        if "target_module" not in patch_data and "file_path" not in patch_data:
+            return False, "Отсутствует 'target_module' или 'file_path'"
+        
+        if "target_module" in patch_data:
+            if "changes" not in patch_data:
+                return False, "Отсутствует поле 'changes'"
+            if not isinstance(patch_data["changes"], list):
+                return False, "'changes' должен быть массивом"
+            if len(patch_data["changes"]) == 0:
+                return False, "Массив изменений пуст"
 
-        # Добавлена операция 'remove' в список допустимых
-        valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
-        for i, change in enumerate(patch_data["changes"]):
-            if not isinstance(change, dict):
-                return False, f"Изменение #{i} должно быть объектом"
-            if "op" not in change:
-                return False, f"Изменение #{i}: отсутствует 'op'"
-            if change["op"] not in valid_ops:
-                return False, f"Изменение #{i}: недопустимая операция '{change['op']}'"
-            if "path" not in change:
-                return False, f"Изменение #{i}: отсутствует 'path'"
-            if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-                return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
+            valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
+            for i, change in enumerate(patch_data["changes"]):
+                if not isinstance(change, dict):
+                    return False, f"Изменение #{i} должно быть объектом"
+                if "op" not in change:
+                    return False, f"Изменение #{i}: отсутствует 'op'"
+                if change["op"] not in valid_ops:
+                    return False, f"Изменение #{i}: недопустимая операция '{change['op']}'"
+                if "path" not in change:
+                    return False, f"Изменение #{i}: отсутствует 'path'"
+                if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
+                    return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
+        
+        elif "file_path" in patch_data:
+            if "content" not in patch_data:
+                return False, "Отсутствует 'content' для файла"
 
         return True, "Одиночный патч корректен"
 
@@ -792,7 +805,7 @@ async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
 
 
 def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
-    """Форматирование предпросмотра одиночного патча"""
+    """Форматирование предпросмотра одиночного патча для модуля"""
     lines = []
     lines.append(f"🎯 <b>Целевой модуль:</b> {patch_data['target_module']}")
 
@@ -828,6 +841,24 @@ def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
     return "\n".join(lines)
 
 
+def format_file_patch_preview(patch_data: Dict) -> str:
+    """Форматирование предпросмотра для файлового патча"""
+    lines = []
+    lines.append(f"📁 <b>Файл:</b> <code>{patch_data['file_path']}</code>")
+
+    if patch_data.get("patch_id"):
+        lines.append(f"📄 <b>ID патча:</b> {patch_data['patch_id']}")
+
+    if patch_data.get("description"):
+        lines.append(f"📝 <b>Описание:</b> {patch_data['description']}")
+
+    content = patch_data.get("content", "")
+    preview = content[:300] + "..." if len(content) > 300 else content
+    lines.append(f"\n📄 <b>Новое содержимое (первые 300 символов):</b>\n<code>{preview}</code>")
+
+    return "\n".join(lines)
+
+
 def format_multi_patch_preview(patch_data: Dict, subpatch_previews: List[Dict]) -> str:
     """Форматирование предпросмотра мульти-патча"""
     lines = []
@@ -839,19 +870,24 @@ def format_multi_patch_preview(patch_data: Dict, subpatch_previews: List[Dict]) 
     if patch_data.get("description"):
         lines.append(f"📝 <b>Описание:</b> {patch_data['description']}")
 
-    lines.append(f"\n🧩 <b>Будет обновлено модулей: {len(patch_data['patches'])}</b>\n")
+    lines.append(f"\n🧩 <b>Будет обновлено файлов: {len(patch_data['patches'])}</b>\n")
 
     for i, (subpatch, preview) in enumerate(zip(patch_data["patches"], subpatch_previews)):
-        lines.append(f"--- {i+1}. {subpatch['target_module']} ---")
-        if preview.get("failed") and len(preview["failed"]) > 0:
-            lines.append(f"❌ Ошибка в тесте: {preview['failed'][0]['error']}")
+        if "target_module" in subpatch:
+            lines.append(f"--- {i+1}. {subpatch['target_module']} (модуль) ---")
         else:
-            lines.append(f"✅ Операций: {len(subpatch['changes'])}")
-            if preview.get("diff"):
+            lines.append(f"--- {i+1}. {subpatch['file_path']} (файл) ---")
+        
+        if preview.get("error"):
+            lines.append(f"❌ {preview['error']}")
+        else:
+            if "diff" in preview:
                 for d in preview["diff"][:3]:
                     lines.append(f"  {d}")
                 if len(preview["diff"]) > 3:
                     lines.append(f"  ... и ещё {len(preview['diff'])-3} изменений")
+            else:
+                lines.append(f"  ✅ файл будет обновлён")
         lines.append("")
 
     return "\n".join(lines)
@@ -891,7 +927,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.30.0"
+            "source": "mandala_bot_v3.31.0"
         }
 
         success = await update_github_file(
@@ -940,7 +976,7 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.30.0</b>\n\n"
+        "🌀 <b>Mandala Sync Terminal v3.31.0</b>\n\n"
         "🧘 <b>Выбрать линзу</b> — переключение режимов внимания\n"
         "🔄 <b>Обновление ядра</b> — загрузка файлов и пакетные патчи\n"
         "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
@@ -948,7 +984,8 @@ async def cmd_start(message: Message, state: FSMContext):
         "🔍 <b>Статус системы</b> — проверка состояния инфраструктуры\n\n"
         "🤖 <b>Управление моделями:</b> /model и /модели\n"
         "🔙 <b>Назад в меню:</b> /menu\n"
-        "🌿 Ahimsa-фильтр активен",
+        "🌿 Ahimsa-фильтр активен\n"
+        "✨ НОВОЕ: универсальные патчи — можно обновлять любые файлы (file_path)",
         reply_markup=get_main_keyboard()
     )
 
@@ -1237,14 +1274,21 @@ async def batch_update_callback(callback_query: CallbackQuery, state: FSMContext
         "  \"changes\": [...]\n"
         "}\n"
         "```\n\n"
-        "Для нескольких модулей (новый формат):\n"
+        "Для одного файла (новый формат):\n"
+        "```json\n"
+        "{\n"
+        "  \"file_path\": \"engineer-chat/main.py\",\n"
+        "  \"content\": \"новое содержимое\"\n"
+        "}\n"
+        "```\n\n"
+        "Для нескольких файлов (мульти-патч):\n"
         "```json\n"
         "{\n"
         "  \"patch_id\": \"multi_update\",\n"
         "  \"description\": \"...\",\n"
         "  \"patches\": [\n"
         "    {\"target_module\": \"initium\", \"changes\": [...]},\n"
-        "    {\"target_module\": \"philosophia\", \"changes\": [...]}\n"
+        "    {\"file_path\": \"index.html\", \"content\": \"...\"}\n"
         "  ]\n"
         "}\n"
         "```\n\n"
@@ -1400,7 +1444,12 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
             await process_multi_patch(message, state, patch_data, status_msg, user_id)
         else:
             # Одиночный патч
-            await process_single_patch(message, state, patch_data, status_msg, user_id)
+            if "target_module" in patch_data:
+                await process_single_patch(message, state, patch_data, status_msg, user_id)
+            elif "file_path" in patch_data:
+                await process_file_patch(message, state, patch_data, status_msg, user_id)
+            else:
+                await status_msg.edit_text("❌ Неизвестный формат патча")
 
     except Exception as e:
         logger.error(f"Ошибка обработки патча: {e}", exc_info=True)
@@ -1411,7 +1460,7 @@ async def process_batch_patch_file(message: Message, state: FSMContext):
 
 
 async def process_single_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
-    """Обработка одиночного патча"""
+    """Обработка одиночного патча для модуля (target_module + changes)"""
     target_module = patch_data.get("target_module")
     if target_module not in MANDALA_MODULES:
         await status_msg.edit_text(
@@ -1460,53 +1509,109 @@ async def process_single_patch(message: Message, state: FSMContext, patch_data: 
     )
 
 
+async def process_file_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
+    """Обработка одиночного патча для файла (file_path + content)"""
+    file_path = patch_data.get("file_path")
+    new_content = patch_data.get("content")
+    
+    if not file_path or new_content is None:
+        await status_msg.edit_text("❌ Не указан file_path или content")
+        return
+    
+    # Получаем текущий файл (чтобы проверить существование и получить sha)
+    success, current_content, sha = await get_github_file_content(file_path)
+    
+    # Ahimsa check
+    ahimsa_ok, ahimsa_msg, _ = await check_ahimsa_smart(new_content, file_path)
+    if not ahimsa_ok:
+        await status_msg.edit_text(f"🔶 {ahimsa_msg}")
+        return
+    
+    preview_text = format_file_patch_preview(patch_data)
+
+    await state.update_data(
+        patch_type="file",
+        patch_data=patch_data,
+        patch_filename=message.document.file_name,
+        file_path=file_path,
+        new_content=new_content
+    )
+
+    await state.set_state(UploadStates.waiting_for_patch_confirmation)
+
+    await status_msg.edit_text(
+        f"📦 <b>Файл готов к обновлению</b>\n\n"
+        f"{preview_text}\n\n"
+        f"Применить изменения?",
+        reply_markup=get_patch_confirm_keyboard(),
+        parse_mode=ParseMode.HTML
+    )
+
+
 async def process_multi_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
-    """Обработка мульти-патча"""
+    """Обработка мульти-патча (смесь модулей и файлов)"""
     subpatch_previews = []
     all_valid = True
 
     for idx, subpatch in enumerate(patch_data["patches"]):
-        target_module = subpatch["target_module"]
-        if target_module not in MANDALA_MODULES:
-            subpatch_previews.append({
-                "index": idx,
-                "target_module": target_module,
-                "error": f"Модуль '{target_module}' не найден"
-            })
+        preview = {"index": idx}
+        
+        if "target_module" in subpatch:
+            # Подпатч для модуля
+            target_module = subpatch["target_module"]
+            if target_module not in MANDALA_MODULES:
+                preview["error"] = f"Модуль '{target_module}' не найден"
+                all_valid = False
+                subpatch_previews.append(preview)
+                continue
+
+            module_info = MANDALA_MODULES[target_module]
+            success, current_content, error = await get_github_file_content(module_info["path"])
+
+            if not success:
+                preview["error"] = f"Не удалось загрузить модуль: {error}"
+                all_valid = False
+                subpatch_previews.append(preview)
+                continue
+
+            test_result = await apply_batch_patch_dry_run(current_content, subpatch["changes"])
+
+            preview["target_module"] = target_module
+            preview["test_result"] = test_result
+            preview["current_content"] = current_content
+            preview["module_info"] = module_info
+            preview["type"] = "module"
+
+            if not test_result["success"]:
+                preview["error"] = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
+                all_valid = False
+
+        elif "file_path" in subpatch:
+            # Подпатч для файла
+            file_path = subpatch["file_path"]
+            new_content = subpatch.get("content")
+            
+            if new_content is None:
+                preview["error"] = "Отсутствует content"
+                all_valid = False
+                subpatch_previews.append(preview)
+                continue
+
+            preview["file_path"] = file_path
+            preview["type"] = "file"
+            preview["new_content"] = new_content
+
+        else:
+            preview["error"] = "Нет target_module или file_path"
             all_valid = False
-            continue
 
-        module_info = MANDALA_MODULES[target_module]
-        success, current_content, error = await get_github_file_content(module_info["path"])
-
-        if not success:
-            subpatch_previews.append({
-                "index": idx,
-                "target_module": target_module,
-                "error": f"Не удалось загрузить модуль: {error}"
-            })
-            all_valid = False
-            continue
-
-        test_result = await apply_batch_patch_dry_run(current_content, subpatch["changes"])
-
-        subpatch_previews.append({
-            "index": idx,
-            "target_module": target_module,
-            "module_info": module_info,
-            "current_content": current_content,
-            "test_result": test_result,
-            "error": None if test_result["success"] else (test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка")
-        })
-
-        if not test_result["success"]:
-            all_valid = False
+        subpatch_previews.append(preview)
 
     if not all_valid:
         error_lines = ["❌ Некоторые подпатчи содержат ошибки:\n"]
         for preview in subpatch_previews:
             if preview.get("error"):
-                error_lines.append(f"• {preview['target_module']}: {preview['error']}")
+                error_lines.append(f"• {preview.get('target_module') or preview.get('file_path')}: {preview['error']}")
         await status_msg.edit_text("\n".join(error_lines))
         return
 
@@ -1534,69 +1639,101 @@ async def process_multi_patch(message: Message, state: FSMContext, patch_data: D
 async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
     logger.info("Patch apply callback")
     data = await state.get_data()
+    patch_type = data.get("patch_type")
     patch_data = data.get("patch_data")
-    current_content = data.get("current_content")
-    module_path = data.get("module_path")
-    module_name = data.get("module_name")
-    module_key = data.get("module_key")
 
-    await callback_query.message.edit_text("🔄 Применяю изменения...")
+    if patch_type == "single":
+        # Применение модульного патча
+        current_content = data.get("current_content")
+        module_path = data.get("module_path")
+        module_name = data.get("module_name")
+        module_key = data.get("module_key")
 
-    apply_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
+        await callback_query.message.edit_text("🔄 Применяю изменения...")
 
-    if not apply_result["success"]:
-        error_msg = apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
-        await callback_query.message.edit_text(f"❌ Ошибка при применении: {error_msg}")
-        await state.clear()
-        await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-        return
+        apply_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
 
-    ahimsa_ok, ahimsa_msg, _ = await check_ahimsa_smart(
-        apply_result["result_content"],
-        f"batch_patch_{module_key}"
-    )
+        if not apply_result["success"]:
+            error_msg = apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
+            await callback_query.message.edit_text(f"❌ Ошибка при применении: {error_msg}")
+            await state.clear()
+            await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+            return
 
-    if not ahimsa_ok:
-        await callback_query.message.edit_text(f"🔶 {ahimsa_msg}")
-        await state.clear()
-        await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-        return
-
-    commit_message = f"📦 Пакетное обновление {module_name}"
-    if patch_data.get("patch_id"):
-        commit_message += f" [{patch_data['patch_id']}]"
-    if patch_data.get("description"):
-        commit_message += f": {patch_data['description'][:50]}"
-
-    save_success = await update_github_file(
-        file_path=module_path,
-        content=apply_result["result_content"],
-        message=commit_message
-    )
-
-    if save_success:
-        file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_path}"
-
-        ops_report = []
-        for op in apply_result["applied"][:10]:
-            ops_report.append(f"  {op['op']}: {op['path']}")
-
-        if len(apply_result["applied"]) > 10:
-            ops_report.append(f"  ... и ещё {len(apply_result['applied']) - 10}")
-
-        report = "\n".join(ops_report)
-
-        await callback_query.message.edit_text(
-            f"✅ <b>Пакетное обновление применено</b>\n\n"
-            f"Модуль: {module_name}\n"
-            f"Операций: {len(apply_result['applied'])}\n\n"
-            f"{report}\n\n"
-            f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>",
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True
+        ahimsa_ok, ahimsa_msg, _ = await check_ahimsa_smart(
+            apply_result["result_content"],
+            f"batch_patch_{module_key}"
         )
-    else:
-        await callback_query.message.edit_text("❌ Ошибка сохранения в GitHub")
+
+        if not ahimsa_ok:
+            await callback_query.message.edit_text(f"🔶 {ahimsa_msg}")
+            await state.clear()
+            await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+            return
+
+        commit_message = f"📦 Пакетное обновление {module_name}"
+        if patch_data.get("patch_id"):
+            commit_message += f" [{patch_data['patch_id']}]"
+        if patch_data.get("description"):
+            commit_message += f": {patch_data['description'][:50]}"
+
+        save_success = await update_github_file(
+            file_path=module_path,
+            content=apply_result["result_content"],
+            message=commit_message
+        )
+
+        if save_success:
+            file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_path}"
+            ops_report = []
+            for op in apply_result["applied"][:10]:
+                ops_report.append(f"  {op['op']}: {op['path']}")
+            if len(apply_result["applied"]) > 10:
+                ops_report.append(f"  ... и ещё {len(apply_result['applied']) - 10}")
+            report = "\n".join(ops_report)
+
+            await callback_query.message.edit_text(
+                f"✅ <b>Пакетное обновление применено</b>\n\n"
+                f"Модуль: {module_name}\n"
+                f"Операций: {len(apply_result['applied'])}\n\n"
+                f"{report}\n\n"
+                f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>",
+                parse_mode=ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+        else:
+            await callback_query.message.edit_text("❌ Ошибка сохранения в GitHub")
+
+    elif patch_type == "file":
+        # Применение файлового патча
+        file_path = data.get("file_path")
+        new_content = data.get("new_content")
+
+        await callback_query.message.edit_text("🔄 Сохраняю файл...")
+
+        commit_message = f"📝 Обновление {file_path} через патч"
+        if patch_data.get("patch_id"):
+            commit_message += f" [{patch_data['patch_id']}]"
+        if patch_data.get("description"):
+            commit_message += f": {patch_data['description'][:50]}"
+
+        save_success = await update_github_file(
+            file_path=file_path,
+            content=new_content,
+            message=commit_message
+        )
+
+        if save_success:
+            file_url = f"https://github.com/{REPO_NAME}/blob/main/{file_path}"
+            await callback_query.message.edit_text(
+                f"✅ <b>Файл обновлён</b>\n\n"
+                f"📁 <code>{file_path}</code>\n\n"
+                f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>",
+                parse_mode=ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+        else:
+            await callback_query.message.edit_text("❌ Ошибка сохранения в GitHub")
 
     await state.clear()
     if callback_query.from_user.id in user_upload_target:
@@ -1619,36 +1756,45 @@ async def handle_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
 async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext):
     logger.info("Patch details callback")
     data = await state.get_data()
+    patch_type = data.get("patch_type")
     patch_data = data.get("patch_data")
     test_result = data.get("test_result")
 
     details = []
-    details.append(f"📦 <b>Патч: {patch_data.get('patch_id', 'без ID')}</b>")
-    details.append(f"📝 Описание: {patch_data.get('description', '—')}")
-    details.append(f"🎯 Модуль: {patch_data['target_module']}")
-    details.append(f"📊 Всего операций: {len(patch_data['changes'])}")
-    details.append(f"\n<b>Все изменения:</b>")
+    if patch_type == "single":
+        details.append(f"📦 <b>Патч: {patch_data.get('patch_id', 'без ID')}</b>")
+        details.append(f"📝 Описание: {patch_data.get('description', '—')}")
+        details.append(f"🎯 Модуль: {patch_data['target_module']}")
+        details.append(f"📊 Всего операций: {len(patch_data['changes'])}")
+        details.append(f"\n<b>Все изменения:</b>")
 
-    for i, change in enumerate(patch_data["changes"]):
-        op_symbol = {
-            "update": "✏️", "add": "➕", "delete": "🗑️", "remove": "🗑️",
-            "replace": "🔄", "merge": "🔄"
-        }.get(change["op"], "•")
+        for i, change in enumerate(patch_data["changes"]):
+            op_symbol = {
+                "update": "✏️", "add": "➕", "delete": "🗑️", "remove": "🗑️",
+                "replace": "🔄", "merge": "🔄"
+            }.get(change["op"], "•")
 
-        path = change["path"]
-        value = change.get("value", "")
-        if isinstance(value, (dict, list)):
-            value = json.dumps(value, ensure_ascii=False, indent=2)
-            value = value[:100] + "..." if len(value) > 100 else value
+            path = change["path"]
+            value = change.get("value", "")
+            if isinstance(value, (dict, list)):
+                value = json.dumps(value, ensure_ascii=False, indent=2)
+                value = value[:100] + "..." if len(value) > 100 else value
 
-        details.append(f"\n{op_symbol} <b>{i+1}. {change['op']}</b>")
-        details.append(f"   Путь: <code>{path}</code>")
-        details.append(f"   Значение: <code>{value}</code>")
+            details.append(f"\n{op_symbol} <b>{i+1}. {change['op']}</b>")
+            details.append(f"   Путь: <code>{path}</code>")
+            details.append(f"   Значение: <code>{value}</code>")
 
-    if test_result and test_result.get("diff"):
-        details.append(f"\n<b>Изменения в структуре:</b>")
-        for d in test_result["diff"][:10]:
-            details.append(f"  {d}")
+        if test_result and test_result.get("diff"):
+            details.append(f"\n<b>Изменения в структуре:</b>")
+            for d in test_result["diff"][:10]:
+                details.append(f"  {d}")
+
+    elif patch_type == "file":
+        details.append(f"📁 <b>Файл:</b> <code>{patch_data['file_path']}</code>")
+        details.append(f"📄 <b>ID патча:</b> {patch_data.get('patch_id', '—')}")
+        details.append(f"📝 Описание: {patch_data.get('description', '—')}")
+        content = patch_data.get("content", "")
+        details.append(f"\n<b>Новое содержимое (первые 500 символов):</b>\n<code>{content[:500]}</code>")
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="◀️ Назад", callback_data="back_to_patch_confirm")]
@@ -1666,13 +1812,19 @@ async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext)
 async def back_to_patch_confirm(callback_query: CallbackQuery, state: FSMContext):
     logger.info("Back to patch confirm callback")
     data = await state.get_data()
+    patch_type = data.get("patch_type")
     patch_data = data.get("patch_data")
     test_result = data.get("test_result")
 
-    preview_text = format_patch_preview(test_result["diff"], patch_data)
+    if patch_type == "single":
+        preview_text = format_patch_preview(test_result["diff"], patch_data)
+    elif patch_type == "file":
+        preview_text = format_file_patch_preview(patch_data)
+    else:
+        preview_text = "Неизвестный тип патча"
 
     await callback_query.message.edit_text(
-        f"📦 <b>Пакет обновлений готов к применению</b>\n\n"
+        f"📦 <b>Патч готов к применению</b>\n\n"
         f"{preview_text}\n\n"
         f"Применить изменения?",
         reply_markup=get_patch_confirm_keyboard(),
@@ -1694,64 +1846,102 @@ async def handle_multi_patch_apply(callback_query: CallbackQuery, state: FSMCont
     all_success = True
 
     for preview in subpatch_previews:
-        target_module = preview["target_module"]
-        module_info = preview["module_info"]
-        current_content = preview["current_content"]
-        changes = next((sp["changes"] for sp in patch_data["patches"] if sp["target_module"] == target_module), [])
+        if preview["type"] == "module":
+            # Применение модульного подпатча
+            target_module = preview["target_module"]
+            module_info = preview["module_info"]
+            current_content = preview["current_content"]
+            changes = next((sp["changes"] for sp in patch_data["patches"] if sp.get("target_module") == target_module), [])
 
-        apply_result = await apply_batch_patch_dry_run(current_content, changes)
+            apply_result = await apply_batch_patch_dry_run(current_content, changes)
 
-        if not apply_result["success"]:
-            results.append({
-                "module": target_module,
-                "success": False,
-                "error": apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
-            })
-            all_success = False
-            continue
+            if not apply_result["success"]:
+                results.append({
+                    "module": target_module,
+                    "success": False,
+                    "error": apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
+                })
+                all_success = False
+                continue
 
-        ahimsa_ok, _, _ = await check_ahimsa_smart(apply_result["result_content"], f"multi_{target_module}")
-        if not ahimsa_ok:
-            results.append({
-                "module": target_module,
-                "success": False,
-                "error": "Не прошёл проверку Ахимсы"
-            })
-            all_success = False
-            continue
+            ahimsa_ok, _, _ = await check_ahimsa_smart(apply_result["result_content"], f"multi_{target_module}")
+            if not ahimsa_ok:
+                results.append({
+                    "module": target_module,
+                    "success": False,
+                    "error": "Не прошёл проверку Ахимсы"
+                })
+                all_success = False
+                continue
 
-        commit_message = f"📦 Мульти-патч: {target_module}"
-        if patch_data.get("patch_id"):
-            commit_message += f" [{patch_data['patch_id']}]"
+            commit_message = f"📦 Мульти-патч: {target_module}"
+            if patch_data.get("patch_id"):
+                commit_message += f" [{patch_data['patch_id']}]"
 
-        save_success = await update_github_file(
-            file_path=module_info["path"],
-            content=apply_result["result_content"],
-            message=commit_message
-        )
+            save_success = await update_github_file(
+                file_path=module_info["path"],
+                content=apply_result["result_content"],
+                message=commit_message
+            )
 
-        if save_success:
-            file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_info['path']}"
-            results.append({
-                "module": target_module,
-                "success": True,
-                "applied": len(apply_result["applied"]),
-                "url": file_url
-            })
-        else:
-            results.append({
-                "module": target_module,
-                "success": False,
-                "error": "Ошибка сохранения в GitHub"
-            })
-            all_success = False
+            if save_success:
+                file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_info['path']}"
+                results.append({
+                    "module": target_module,
+                    "success": True,
+                    "applied": len(apply_result["applied"]),
+                    "url": file_url
+                })
+            else:
+                results.append({
+                    "module": target_module,
+                    "success": False,
+                    "error": "Ошибка сохранения в GitHub"
+                })
+                all_success = False
+
+        elif preview["type"] == "file":
+            # Применение файлового подпатча
+            file_path = preview["file_path"]
+            new_content = preview["new_content"]
+
+            commit_message = f"📝 Мульти-патч: {file_path}"
+            if patch_data.get("patch_id"):
+                commit_message += f" [{patch_data['patch_id']}]"
+
+            save_success = await update_github_file(
+                file_path=file_path,
+                content=new_content,
+                message=commit_message
+            )
+
+            if save_success:
+                file_url = f"https://github.com/{REPO_NAME}/blob/main/{file_path}"
+                results.append({
+                    "file": file_path,
+                    "success": True,
+                    "url": file_url
+                })
+            else:
+                results.append({
+                    "file": file_path,
+                    "success": False,
+                    "error": "Ошибка сохранения в GitHub"
+                })
+                all_success = False
 
     report_lines = ["📊 <b>Результаты мульти-патча</b>\n"]
     for res in results:
-        if res["success"]:
-            report_lines.append(f"✅ {res['module']}: {res['applied']} операций — <a href='{res['url']}'>файл</a>")
+        if res.get("success"):
+            if "module" in res:
+                report_lines.append(f"✅ {res['module']}: {res['applied']} операций — <a href='{res['url']}'>файл</a>")
+            else:
+                report_lines.append(f"✅ {res['file']} — <a href='{res['url']}'>файл</a>")
         else:
-            report_lines.append(f"❌ {res['module']}: {res['error']}")
+            if "module" in res:
+                report_lines.append(f"❌ {res['module']}: {res['error']}")
+            else:
+                report_lines.append(f"❌ {res['file']}: {res['error']}")
 
     report_lines.append("\n" + ("✅ Все изменения применены" if all_success else "⚠️ Некоторые изменения не удались"))
 
@@ -1788,17 +1978,25 @@ async def handle_multi_patch_details(callback_query: CallbackQuery, state: FSMCo
     details = []
     details.append(f"📦 <b>Мульти-патч: {patch_data.get('patch_id', 'без ID')}</b>")
     details.append(f"📝 Описание: {patch_data.get('description', '—')}")
-    details.append(f"🧩 Модулей: {len(patch_data['patches'])}\n")
+    details.append(f"🧩 Модулей/файлов: {len(patch_data['patches'])}\n")
 
     for preview in subpatch_previews:
-        target = preview["target_module"]
-        details.append(f"--- {target} ---")
-        test_result = preview["test_result"]
-        if test_result:
-            for d in test_result["diff"][:10]:
-                details.append(f"  {d}")
-            if len(test_result["diff"]) > 10:
-                details.append(f"  ... и ещё {len(test_result['diff']) - 10}")
+        if preview["type"] == "module":
+            target = preview["target_module"]
+            details.append(f"--- {target} (модуль) ---")
+            test_result = preview.get("test_result")
+            if test_result:
+                for d in test_result["diff"][:10]:
+                    details.append(f"  {d}")
+                if len(test_result["diff"]) > 10:
+                    details.append(f"  ... и ещё {len(test_result['diff']) - 10}")
+        else:
+            file_path = preview["file_path"]
+            details.append(f"--- {file_path} (файл) ---")
+            new_content = preview.get("new_content", "")
+            preview_content = new_content[:200] + "..." if len(new_content) > 200 else new_content
+            details.append(f"  Новое содержимое (первые 200 символов):")
+            details.append(f"  <code>{preview_content}</code>")
         details.append("")
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
@@ -2015,7 +2213,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.30.0")
+        return web.Response(text="Mandala Bot v3.31.0")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
