@@ -261,9 +261,19 @@
       "role": "assistant",
       "content": "🌊 **Вижу проблему.** \n\nЕсли после `/sync` всё ещё 0 — значит `main.py` **не обновился** с cache-busting, либо деплой не подхватил изменения. GitHub CDN кэширует `raw.githubusercontent.com` жёстко.\n\nДавай решим это прямо сейчас. **Примени патч к incubae.json вручную** — добавим `fast_index` туда, где его точно нет (если бэкенд видит 0, значит его реально нет в загружаемом JSON):\n\n```json\n{\n  \"patch_id\": \"EMERGENCY-FAST-INDEX\",\n  \"description\": \"Добавление fast_index в incubae\",\n  \"patches\": [\n    {\n      \"target_module\": \"incubae\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/fast_index\",\n          \"value\": {\n            \"seeds\": [\n              {\"id\": \"CLOUD-SR-001\", \"type\": \"architecture\", \"status\": \"active\", \"expiry\": \"2027-02-17\"},\n              {\"id\": \"CLOUD-SR-002\", \"type\": \"architecture\", \"status\": \"active\", \"expiry\": \"2027-02-18\"},\n              {\"id\": \"RESONANCE-SR-001\", \"type\": \"feature\", \"status\": \"active\", \"expiry\": \"2027-02-18\"},\n              {\"id\": \"MODEL-ROUTER-001\", \"type\": \"architecture\", \"status\": \"active\", \"expiry\": \"2027-02-18\"},\n              {\"id\": \"PERMANENT-SR-001\", \"type\": \"architecture\", \"status\": \"active\", \"expiry\": \"2027-02-18\"},\n              {\"id\": \"TG-MAX-001\", \"type\": \"roadmap\", \"status\": \"active\", \"expiry\": \"2027-02-18\"},\n              {\"id\": \"WEB-SR-001\", \"type\": \"development_branch\", \"status\": \"active\", \"expiry\": \"2027-02-18\"},\n              {\"id\": \"FRACTAL-SEED-001\", \"type\": \"development_branch\", \"status\": \"active\", \"expiry\": \"2028-02-18\"}\n            ],\n            \"total_active\": 8,\n            \"archived_count\": 1\n          }\n        }\n      ]\n    }\n  ]\n}\n```\n\n**После применения:**\n1. Подожди 10 секунд (GitHub индексация)\n2. `/sync`\n3. `/status` — должно показать **8 seeds**\n\nЕсли и это не сработает — проблема в `main.py`, он не обновился на сервере. Тогда скинь мне текущий `main.py` с сервера (через `/get main.py` или как там у тебя), и я подготовю **полный файл** с cache-busting для ручной замены.\n\n**Применяй патч выше — проверим!** 🎯",
       "time": 1771804305.2653067
+    },
+    {
+      "role": "user",
+      "content": "/status",
+      "time": 1771804334.3001297
+    },
+    {
+      "role": "user",
+      "content": "/status",
+      "time": 1771804336.2674248
     }
   ],
-  "last_active": 1771804305.2653325,
+  "last_active": 1771804336.2674563,
   "created_at": 1771796994.1990795,
   "modules_injected": true,
   "claude_observer": false
