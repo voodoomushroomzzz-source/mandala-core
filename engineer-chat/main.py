@@ -40,10 +40,16 @@ GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
 USE_TAVILY = os.getenv("USE_TAVILY", "false").lower() == "true"
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1"
+ANTHROPIC_MODEL = "claude-sonnet-4-6"
+
 if not MOONSHOT_API_KEY:
     logger.warning("⚠️ MOONSHOT_API_KEY не найден")
 if not GITHUB_TOKEN:
     logger.warning("⚠️ GITHUB_TOKEN не найден — модули не будут загружаться")
+if not ANTHROPIC_API_KEY:
+    logger.warning("⚠️ ANTHROPIC_API_KEY не найден — наблюдатель Claude недоступен")
 
 # ==================== ИНСТРУМЕНТЫ ====================
 
@@ -172,7 +178,65 @@ class FileReader:
 
 file_reader = FileReader()
 
-# ==================== ХРАНИЛИЩЕ СЕССИЙ ====================
+# ==================== CLAUDE-НАБЛЮДАТЕЛЬ ====================
+
+async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[str]:
+    """
+    Вызывает Claude как скептика-наблюдателя.
+    Получает вопрос Садовника и ответ Кими, возвращает критический анализ.
+    """
+    if not ANTHROPIC_API_KEY:
+        logger.warning("⚠️ ANTHROPIC_API_KEY не задан — наблюдатель пропущен")
+        return None
+
+    system_prompt = """Ты — Claude, внешний наблюдатель в инженерном чате. Твоя роль: скептик и технический рецензент.
+
+Тебе показывают вопрос пользователя и ответ другой модели (Kimi). Твоя задача:
+1. Найти технические неточности, упущения или потенциальные баги в ответе Kimi
+2. Предложить альтернативный подход если он лучше
+3. Отметить что в ответе Kimi хорошо (честно, без лести)
+4. Быть кратким — максимум 3-4 пункта
+
+Формат ответа — конкретно и по делу. Без вступлений типа "Я проанализировал...". Сразу к сути.
+Пиши на русском."""
+
+    messages = [
+        {
+            "role": "user",
+            "content": f"**Вопрос Садовника:**\n{user_text}\n\n**Ответ Kimi:**\n{kimi_response}\n\nДай свою оценку."
+        }
+    ]
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{ANTHROPIC_BASE_URL}/messages",
+                headers={
+                    "x-api-key": ANTHROPIC_API_KEY,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json"
+                },
+                json={
+                    "model": ANTHROPIC_MODEL,
+                    "max_tokens": 1024,
+                    "system": system_prompt,
+                    "messages": messages
+                },
+                timeout=60.0
+            )
+            if response.status_code == 200:
+                data = response.json()
+                text = data.get("content", [{}])[0].get("text", "")
+                logger.info(f"🔵 Claude-наблюдатель ответил ({len(text)} символов)")
+                return text
+            else:
+                logger.error(f"Claude API error: {response.status_code} — {response.text}")
+                return None
+    except Exception as e:
+        logger.error(f"Claude observer exception: {e}")
+        return None
+
+
 
 class GitHubSessionStore:
     def __init__(self, token: Optional[str], repo: str):
@@ -616,6 +680,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 await manager.send_to(websocket, {"type": "pong"})
             elif msg_type == "refresh_modules":
                 await handle_refresh_modules(message, websocket)
+            elif msg_type == "toggle_observer":
+                session = await get_session(session_id)
+                current = session.get("claude_observer", False)
+                session["claude_observer"] = not current
+                session_store.schedule_save(session_id, session)
+                state = session["claude_observer"]
+                logger.info(f"🔵 [{session_id[:12]}...] Claude-наблюдатель: {'включён' if state else 'выключен'}")
+                await manager.send_to(websocket, {
+                    "type": "observer_state",
+                    "active": state
+                })
             else:
                 await manager.send_to(websocket, {
                     "type": "error",
@@ -925,7 +1000,28 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 "level": "low" if resonance < 0.7 else "medium" if resonance < 0.85 else "high"
             })
             await manager.send_to(websocket, {"type": "done", "full_text": full_response[:200] + "..." if len(full_response) > 200 else full_response})
-            logger.info(f"✅ Ответ: {len(full_response)} символов")
+            logger.info(f"✅ Ответ Кими: {len(full_response)} символов")
+
+            # ── Claude-наблюдатель ──────────────────────────────────────
+            session = await get_session(session_id)
+            if session.get("claude_observer") and ANTHROPIC_API_KEY:
+                logger.info(f"🔵 [{session_id[:12]}...] Запрос к Claude-наблюдателю...")
+                await manager.send_to(websocket, {"type": "observer_thinking"})
+                claude_response = await ask_claude_observer(user_text, full_response)
+                if claude_response:
+                    # Сохраняем в контекст с особой ролью чтобы Кими видел при следующем запросе
+                    manager.add_to_context(
+                        session_id, "user",
+                        f"[Комментарий внешнего наблюдателя Claude к предыдущему ответу]:\n{claude_response}"
+                    )
+                    await manager.send_to(websocket, {
+                        "type": "observer_message",
+                        "content": claude_response
+                    })
+                else:
+                    await manager.send_to(websocket, {"type": "observer_error"})
+            # ────────────────────────────────────────────────────────────
+
         else:
             await manager.send_to(websocket, {"type": "error", "text": "❌ Пустой ответ после обработки"})
 
