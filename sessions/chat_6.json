@@ -264,9 +264,14 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1771804393.7826433
+    },
+    {
+      "role": "user",
+      "content": "/status",
+      "time": 1771804447.4953682
     }
   ],
-  "last_active": 1771804393.7826684,
+  "last_active": 1771804447.495402,
   "created_at": 1771796994.1990795,
   "modules_injected": false,
   "claude_observer": false
