@@ -784,5 +784,14 @@
         "test_line": "◈ Эхо отражено: патч жив."
       }
     }
+  },
+  "/cosmosphaera/blocks[-1]/roadmap/milestones/0": {
+    "id": "CLOUD-SR-001",
+    "name": "📦 Шаг 1: Поддержка множества моделей в функции",
+    "description": "Добавить в облачную функцию словарь URI всех доступных моделей Yandex Cloud (DeepSeek-R1 Distill, Qwen3 235B, YandexGPT Pro, Gemma 3). Реализовать функцию вызова с выбором модели.",
+    "priority": "high",
+    "depends_on": [],
+    "completion_criteria": "Функция может вызывать разные модели через параметр model_key",
+    "context": "Этот шаг относится к Telegram-СР (тестовая версия). Для инженерного СР используется отдельная функция kimi-engineer."
   }
 }
