@@ -300,9 +300,13 @@
 
         /* Messages */
         .messages {
-            flex: 1; overflow-y: auto; overflow-x: hidden;
-            padding: 28px 22px;
-            display: flex; flex-direction: column; gap: 20px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 28px 22px 20px; /* уменьшен нижний отступ */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .msg {
@@ -456,17 +460,19 @@
             word-break: break-word;
         }
 
-        /* Thinking indicator */
+        /* Thinking indicator — опущен ниже */
         .thinking {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 4px 22px 10px;
+            padding: 8px 22px 12px; /* увеличен верхний отступ для приближения к инпуту */
             font-family: var(--mono);
             font-size: 8px;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--green-bright);
+            border-top: 1px solid transparent; /* визуально отделим */
+            margin-top: auto; /* прижмёт к низу, если контейнер flex column */
         }
         .thinking .logo {
             width: 36px;
@@ -493,8 +499,7 @@
 
         /* Input area — всегда яркая */
         .input-area {
-            padding: 14px 22px 18px;
-            border-top: 1px solid var(--line);
+            padding: 0 22px 18px; /* убран верхний отступ, перенесён в thinking */
             flex-shrink: 0;
         }
         .irow { display: flex; align-items: flex-end; gap: 10px; }
@@ -545,7 +550,7 @@
             box-shadow: 0 4px 30px rgba(124,58,237,0.7);
         }
 
-        /* File preview & progress */
+        /* File preview & progress — исправлено */
         .file-attachment {
             display: flex;
             flex-direction: column;
@@ -563,8 +568,22 @@
             align-items: center;
             gap: 8px;
         }
+        .file-info .file-icon {
+            font-size: 16px;
+        }
+        .file-info .file-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .file-info .file-percent {
+            font-family: var(--mono);
+            color: var(--green-bright);
+            min-width: 40px;
+            text-align: right;
+        }
         .file-info .remove {
-            margin-left: auto;
             cursor: pointer;
             color: var(--text-3);
         }
@@ -716,6 +735,12 @@
             font-family: var(--mono);
             font-size: 11px;
             color: var(--text-3);
+        }
+        /* Стиль для кнопки сохранения без текста */
+        .file-editor-header .code-btn.apply {
+            font-size: 16px; /* символ крупнее */
+            width: 32px;
+            height: 28px;
         }
 
         /* Modals */
@@ -917,7 +942,9 @@
                     </div>
                     <div id="filePreview" class="hidden file-attachment">
                         <div class="file-info">
-                            <span>📎</span><span id="fileName"></span>
+                            <span class="file-icon">📎</span>
+                            <span class="file-name" id="fileName"></span>
+                            <span class="file-percent" id="filePercent">0%</span>
                             <span class="remove" onclick="clearFiles()">×</span>
                         </div>
                         <div class="file-progress">
@@ -956,7 +983,7 @@
                     <div class="editor-container">
                         <div class="file-editor-header">
                             <span class="file-path" id="current-file-path"></span>
-                            <button class="code-btn apply" onclick="saveCurrentFile()" id="save-file-btn" disabled>💾 Сохранить</button>
+                            <button class="code-btn apply" onclick="saveCurrentFile()" id="save-file-btn" disabled title="Сохранить">◉</button>
                         </div>
                         <div id="monaco-editor"></div>
                     </div>
@@ -990,8 +1017,7 @@
     <input type="file" id="fileInput" accept=".json,.txt,.md,.html,.py,.js,.css" style="display: none" onchange="handleFileSelect(event)" multiple>
 
     <div class="toast" id="toast"></div>
-
-    <script>
+        <script>
         // ==================== КОНСТАНТЫ ====================
         const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
         const API_BASE = 'https://mandala-engineer-chat.onrender.com'; // базовый URL для API
@@ -1017,6 +1043,7 @@
         const seedsGrid = document.getElementById('seedsGrid');
         const filePreview = document.getElementById('filePreview');
         const fileNameEl = document.getElementById('fileName');
+        const filePercentEl = document.getElementById('filePercent');
         const fileProgressBar = document.getElementById('fileProgressBar');
         const chatList = document.getElementById('chatList');
         const fileTree = document.getElementById('file-tree');
@@ -1421,7 +1448,9 @@
                             session_id: currentChatId
                         }));
                         completed++;
-                        fileProgressBar.style.width = `${(completed / files.length) * 100}%`;
+                        const percent = Math.round((completed / files.length) * 100);
+                        fileProgressBar.style.width = percent + '%';
+                        filePercentEl.textContent = percent + '%';
                         addSystemMessage(`◈ файл ${file.name} отправлен`);
                         resolve();
                     };
@@ -1429,10 +1458,13 @@
                 });
                 await new Promise(r => setTimeout(r, 100));
             }
+            // Сохраняем историю после отправки
+            saveCurrentChatMessages();
             setTimeout(() => {
                 filePreview.classList.add('hidden');
                 fileProgressBar.style.width = '0%';
-            }, 1000);
+                filePercentEl.textContent = '0%';
+            }, 3000); // увеличен таймаут до 3 секунд
         }
 
         // ==================== ФАЙЛЫ ====================
@@ -1450,9 +1482,10 @@
                 return;
             }
             const names = pendingFiles.map(f => f.name).join(', ');
-            fileNameEl.textContent = `📎 ${pendingFiles.length} файл(ов): ${names}`;
+            fileNameEl.textContent = names;
             filePreview.classList.remove('hidden');
             fileProgressBar.style.width = '0%';
+            filePercentEl.textContent = '0%';
         }
 
         function clearFiles() {
@@ -1476,11 +1509,10 @@
             });
         }
 
-        // ==================== ВКЛАДКА ФАЙЛОВ (исправленный URL) ====================
+        // ==================== ВКЛАДКА ФАЙЛОВ ====================
         async function loadFileTree() {
             fileTree.innerHTML = 'Загрузка...';
             try {
-                // Используем абсолютный URL к бэкенду
                 const response = await fetch(`${API_BASE}/api/tree`);
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
@@ -1550,6 +1582,8 @@
                 monaco.editor.setModelLanguage(editor.getModel(), language);
                 editor.setValue(content);
                 localStorage.setItem(`orig_${path}`, content);
+                // Уведомляем СР об открытом файле
+                addSystemMessage(`📁 Открыт файл: ${path}`, true);
             } catch (err) {
                 editor.setValue(`// Ошибка загрузки: ${err.message}`);
             }
@@ -1681,7 +1715,6 @@
 
         // ==================== БЫСТРЫЕ ДЕЙСТВИЯ ====================
         function quickAction(action) {
-            // Удалено, так как боковое меню убрано. Оставим заглушку.
             if (action === 'files') sendDirectMessage('/tree');
             else if (action === 'forget') {
                 if (confirm('Очистить историю этого чата?')) {
@@ -1716,7 +1749,7 @@
             if (!grad) return;
             let angle = 0;
             function step() {
-                angle += 0.005; // скорость вращения градиента
+                angle += 0.005;
                 const x = 0.5 + 0.5 * Math.sin(angle);
                 const y = 0.5 + 0.5 * Math.cos(angle);
                 grad.setAttribute('x1', x);
@@ -1741,7 +1774,7 @@
             setupTabs();
             setupKeyboard();
             setupDragDrop();
-            animateFlowerGradient(); // запуск анимации цветка
+            animateFlowerGradient();
         }
 
         init();
