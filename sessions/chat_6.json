@@ -146,9 +146,14 @@
       "role": "user",
       "content": "/status",
       "time": 1771801414.3593535
+    },
+    {
+      "role": "user",
+      "content": "🌱 Fast index: 0 seeds\n📜 Fast index: 0 roadmaps\n\nпочему 0?",
+      "time": 1771801433.7260206
     }
   ],
-  "last_active": 1771801414.3593736,
+  "last_active": 1771801433.7260432,
   "created_at": 1771796994.1990795,
   "modules_injected": true,
   "claude_observer": false
