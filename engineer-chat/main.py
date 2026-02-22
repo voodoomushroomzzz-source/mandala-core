@@ -222,7 +222,7 @@ async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[st
                     "system": system_prompt,
                     "messages": messages
                 },
-                timeout=60.0
+                timeout=300.0  # Увеличено до 300 секунд
             )
             if response.status_code == 200:
                 data = response.json()
@@ -235,7 +235,6 @@ async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[st
     except Exception as e:
         logger.error(f"Claude observer exception: {e}")
         return None
-
 
 
 class GitHubSessionStore:
@@ -385,13 +384,88 @@ class KernelMemory:
         ]
         self.last_update = None
         self.update_interval = 3600
+        # === КОЛЬЦЕВАЯ АРХИТЕКТУРА ===
+        self.etags = {}  # ETag для GitHub: имя_модуля -> hash
+        self.ring_config = {
+            'crystal': ['initium', 'philosophia', 'geometria_sacra'],  # Меняются редко
+            'flow': ['akasha_chronicorum', 'incubae', 'sphaerae'],     # Текущая работа
+            'impulse': ['tectosphaera']                                 # Инструкции
+        }
+        self.fast_index = {}  # Кэш fast_index из incubae/akasha
+        self.last_ring_update = {'crystal': 0, 'flow': 0, 'impulse': 0}
+        self.ring_intervals = {'crystal': 86400, 'flow': 3600, 'impulse': 1800}  # сек
 
     async def ensure_fresh(self):
-        if not self.last_update or (datetime.now() - self.last_update).seconds > self.update_interval:
-            await self.load_all_modules()
+        """Умное обновление по кольцам с ETag"""
+        now = datetime.now().timestamp()
+        headers = {'Authorization': f'token {GITHUB_TOKEN}'} if GITHUB_TOKEN else {}
+
+        for ring, modules in self.ring_config.items():
+            if now - self.last_ring_update.get(ring, 0) > self.ring_intervals[ring]:
+                logger.info(f'🔄 Обновление кольца {ring}')
+                for module in modules:
+                    await self._load_module_smart(module, headers)
+                self.last_ring_update[ring] = now
+
+        # Загрузка fast_index всегда при старте
+        if not self.fast_index:
+            await self._load_fast_index()
+
+    async def _load_module_smart(self, module_name: str, headers: dict):
+        """Загрузка с ETag проверкой (304 Not Modified)"""
+        url = f'https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json'
+        current_etag = self.etags.get(module_name)
+
+        if current_etag:
+            headers['If-None-Match'] = current_etag
+
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(url, headers=headers, timeout=15.0)
+                if resp.status_code == 304:
+                    logger.info(f'  ⏭️ {module_name} не изменился (304)')
+                    return
+                elif resp.status_code == 200:
+                    self.modules[module_name] = resp.json()
+                    self.etags[module_name] = resp.headers.get('ETag', '')
+                    logger.info(f'  ✅ {module_name} обновлён')
+                else:
+                    logger.error(f'  ❌ {module_name}: {resp.status_code}')
+        except Exception as e:
+            logger.error(f'  ❌ {module_name}: {e}')
+            # Если ошибка, но модуль есть в памяти - оставляем старый
+            if module_name not in self.modules:
+                self.modules[module_name] = {'error': str(e)}
+
+    async def _load_fast_index(self):
+        """Загрузка только индексов без полных данных"""
+        try:
+            # Fast index из Incubae
+            incubae = self.modules.get('incubae', {})
+            if 'fast_index' in incubae:
+                self.fast_index['seeds'] = incubae['fast_index'].get('seeds', [])
+                logger.info(f'🌱 Fast index: {len(self.fast_index["seeds"])} seeds')
+
+            # Fast index из Akasha (roadmaps)
+            akasha = self.modules.get('akasha_chronicorum', {})
+            if 'fast_index' in akasha:
+                self.fast_index['roadmaps'] = akasha['fast_index'].get('roadmaps', [])
+                logger.info(f'📜 Fast index: {len(self.fast_index["roadmaps"])} roadmaps')
+        except Exception as e:
+            logger.error(f'Ошибка загрузки fast_index: {e}')
+
+    def get_fast_summary(self, category: str = None) -> dict:
+        '''Быстрая сводка без полной загрузки модулей'''
+        if category == 'seeds':
+            return {'count': len(self.fast_index.get('seeds', [])),
+                    'items': self.fast_index.get('seeds', [])[:5]}  # Только первые 5
+        elif category == 'roadmaps':
+            return self.fast_index.get('roadmaps', [])
+        return self.fast_index
 
     async def load_all_modules(self):
-        logger.info("🔄 Загрузка модулей из GitHub...")
+        """Полная загрузка всех модулей (используется для /sync)"""
+        logger.info("🔄 Полная загрузка модулей из GitHub...")
         headers = {}
         if GITHUB_TOKEN:
             headers["Authorization"] = f"token {GITHUB_TOKEN}"
@@ -402,12 +476,19 @@ class KernelMemory:
                     resp = await client.get(url, headers=headers, timeout=15.0)
                     if resp.status_code == 200:
                         self.modules[module_name] = resp.json()
+                        self.etags[module_name] = resp.headers.get('ETag', '')
                         logger.info(f"✅ {module_name}")
                     else:
                         logger.error(f"❌ {module_name}: {resp.status_code}")
                 except Exception as e:
                     logger.error(f"❌ {module_name}: {e}")
         self.last_update = datetime.now()
+        # После полной загрузки обновляем время всех колец
+        now = datetime.now().timestamp()
+        for ring in self.ring_config:
+            self.last_ring_update[ring] = now
+        # Перезагружаем fast_index
+        await self._load_fast_index()
         logger.info(f"🎯 Загружено {len(self.modules)}/{len(self.module_list)} модулей")
 
     def get_module(self, name: str) -> Optional[dict]:
@@ -761,6 +842,22 @@ async def handle_ask(message: dict, websocket: WebSocket):
         await manager.send_to(websocket, {"type": "done"})
         return
 
+    if user_text == '/status':
+        status_info = [
+            f'◈ Кольца обновлены:',
+            f'  Crystal: {datetime.fromtimestamp(kernel.last_ring_update["crystal"]).strftime("%H:%M")}',
+            f'  Flow: {datetime.fromtimestamp(kernel.last_ring_update["flow"]).strftime("%H:%M")}',
+            f'  Impulse: {datetime.fromtimestamp(kernel.last_ring_update["impulse"]).strftime("%H:%M")}',
+            f'',
+            f'🌱 Fast index: {len(kernel.fast_index.get("seeds", []))} seeds',
+            f'📜 Fast index: {len(kernel.fast_index.get("roadmaps", []))} roadmaps',
+            f'',
+            f'💾 ETag кэш: {len(kernel.etags)} модулей'
+        ]
+        await manager.send_to(websocket, {'type': 'stream', 'content': chr(10).join(status_info)})
+        await manager.send_to(websocket, {'type': 'done'})
+        return
+
     module_request = detect_module_request(user_text)
     if module_request:
         await send_module_directly(module_request, websocket, session_id)
@@ -865,7 +962,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     "temperature": 1.0,
                     "top_p": 0.95
                 },
-                timeout=120.0
+                timeout=300.0  # Увеличено до 300 секунд
             )
             elapsed = time.time() - start_time
             logger.info(f"⏱ API ответил за {elapsed:.2f} сек")
@@ -945,7 +1042,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         "temperature": 1.0,
                         "top_p": 0.95
                     },
-                    timeout=120.0
+                    timeout=300.0  # Увеличено до 300 секунд
                 )
                 if response2.status_code != 200:
                     error_body = response2.text
@@ -1027,7 +1124,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
 
     except httpx.TimeoutException:
         logger.error("Timeout")
-        await manager.send_to(websocket, {"type": "error", "text": "⏰ Таймаут (60 сек)"})
+        await manager.send_to(websocket, {"type": "error", "text": "⏰ Таймаут (300 сек)"})
     except Exception as e:
         logger.error(f"handle_ask error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {"type": "error", "text": "❌ Внутренняя ошибка"})
