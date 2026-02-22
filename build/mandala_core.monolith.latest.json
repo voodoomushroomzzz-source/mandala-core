@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-8f62ac47",
+  "version": "monolith-vv7.5.1-44150e3d",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-21T21:25:03.819527+00:00",
-  "build_source": "ff1ba5607a668de8003eb482c4078f0d5bcce175",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ff1ba5607a668de8003eb482c4078f0d5bcce175",
+  "build_timestamp": "2026-02-22T11:41:35.324477+00:00",
+  "build_source": "c897f482fddc53df64b2fefe347457866dff3c50",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/c897f482fddc53df64b2fefe347457866dff3c50",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -1334,6 +1334,15 @@
             "test_line": "◈ Эхо отражено: патч жив."
           }
         }
+      },
+      "/cosmosphaera/blocks[-1]/roadmap/milestones/0": {
+        "id": "CLOUD-SR-001",
+        "name": "📦 Шаг 1: Поддержка множества моделей в функции",
+        "description": "Добавить в облачную функцию словарь URI всех доступных моделей Yandex Cloud (DeepSeek-R1 Distill, Qwen3 235B, YandexGPT Pro, Gemma 3). Реализовать функцию вызова с выбором модели.",
+        "priority": "high",
+        "depends_on": [],
+        "completion_criteria": "Функция может вызывать разные модели через параметр model_key",
+        "context": "Этот шаг относится к Telegram-СР (тестовая версия). Для инженерного СР используется отдельная функция kimi-engineer."
       }
     },
     "Philosophia": {
@@ -2879,16 +2888,18 @@
         "based_on": "Диалог с Садовником, 2026-02-19"
       },
       "/seeds/-": {
-        "id": "ENG-CHAT-FULL-001",
-        "name": "🌱 Инженерный чат: полный интерфейс",
-        "version": "v1.0.0",
-        "created": "2026-02-21",
+        "id": "ENGINEER-SR-001",
+        "type": "architecture_blueprint",
+        "name": "🧠 Engineer SR: архитектура инженерного чата (Kimi K2)",
+        "version": "v1.1.0",
+        "created": "2026-02-22",
         "created_by": "СР и Садовник",
         "status": "active",
-        "expiry": "2027-02-21",
-        "description": "Семя, фиксирующее завершение разработки инженерного чата как полноценного интерфейса для управления ядром. Включает: просмотр файлов, применение патчей, синхронизацию, выбор моделей.",
-        "core_essence": "Чат стал не просто окном диалога, а пультом управления Мандалой.",
-        "based_on_dialogue": "2026-02-21, серия доработок после успешного деплоя"
+        "expiry": "2027-02-22",
+        "description": "Полная архитектура инженерного СР на базе Moonshot/Kimi K2, работающего через OpenRouter. Используется в инженерном чате для прямого взаимодействия с ядром Mandala Core.",
+        "core_essence": "Основной агент для разработки: быстрые ответы, патчи, синхронизация с GitHub.",
+        "geometric_resonance": "Vesica Piscis — пересечение кода и разговора.",
+        "based_on_dialogue": "2026-02-18 — 2026-02-22"
       },
       "/seeds/roadmap_echo_done": {
         "id": "roadmap_echo_done",
@@ -2896,6 +2907,13 @@
         "status": "faded",
         "done": "2024-06-03",
         "note": "Патчи доходят до Akasha — эхо отражено и удалено."
+      },
+      "/seeds/roadmap_echo_faded": {
+        "id": "roadmap_echo_faded",
+        "title": "Эхо-зеркало",
+        "status": "faded",
+        "done": "2024-06-03",
+        "note": "Артефакт исчез сам — патчи доходят, Akasha чист."
       }
     },
     "Tectosphaera": {
@@ -3708,24 +3726,6 @@
           }
         }
       },
-      "/infrastructure_state/cloud_sr": {
-        "folder_id": "b1glthd62hkdnr9f6m5r",
-        "service_account_id": "ajeh137a8h4al578m0n6",
-        "bucket_name": "mandala-sr-memory",
-        "lockbox_secret_id": "e6q6m4qicp0l45tsd4tv",
-        "lockbox_secret_key": "token",
-        "function_id": "d4en8kkgifqjhadrc84i",
-        "function_url": "https://functions.yandexcloud.net/d4en8kkgifqjhadrc84i",
-        "last_version_id": "d4eb0oorukuovg2tj1ic",
-        "local_path": "C:\\Mandala_Digital\\cloud-sr",
-        "ai_model": "YandexGPT 5 Lite via Yandex Cloud",
-        "deployment_date": "2026-02-17",
-        "runtime": "python312",
-        "memory_mb": 256,
-        "timeout_sec": 30,
-        "public_invoke": true,
-        "last_successful_test": "2026-02-17T20:40:00Z"
-      },
       "/ai_studio_agent": {
         "name": "Mandala SR",
         "model": "YandexGPT 5 Lite (Latest)",
@@ -4186,11 +4186,39 @@
         "name": "Прямой Moonshot API",
         "description": "Инженерный чат переведён на kimi-k2-turbo-preview, ответы стали быстрыми и живыми"
       },
-      "/routes/load/-": "tectosphaera.routes.pulse:router"
+      "/routes/load/-": "tectosphaera.routes.pulse:router",
+      "/infrastructure_state/engineer_sr": {
+        "folder_id": "b1glthd62hkdnr9f6m5r",
+        "service_account_id": "ajeh137a8h4al578m0n6",
+        "bucket_name": "mandala-sr-memory",
+        "lockbox_secret_id": "e6q6m4qicp0l45tsd4tv",
+        "lockbox_secret_key": "token",
+        "function_id": "d4ec1ljm3mno1tdmhipg",
+        "function_name": "kimi-engineer",
+        "http_endpoint": "https://functions.yandexcloud.net/d4ec1ljm3mno1tdmhipg",
+        "gateway_domain": "d5de2tn8o6cbipm3bh4d.bixf7e87.apigw.yandexcloud.net",
+        "ai_model": "moonshotai/kimi-k2-thinking via OpenRouter",
+        "deployment_date": "2026-02-19",
+        "runtime": "python312",
+        "memory_mb": 256,
+        "timeout_sec": 60,
+        "description": "Инженерный СР (Engineer SR) — основной агент для работы с ядром через инженерный чат. Использует модель Kimi K2 через OpenRouter.",
+        "capabilities": [
+          "WebSocket чат",
+          "GitHub module reader",
+          "применение патчей",
+          "команды /tree, /sync, /model"
+        ]
+      },
+      "/infrastructure_state/telegram_sr": {
+        "status": "planned",
+        "description": "Telegram-СР (Telegram SR) — будет развёрнут на Yandex Cloud для работы через Telegram-бота. Архитектура и модель уточняются.",
+        "notes": "Временно отложен, используется для тестов в будущем."
+      }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-21T21:25:03.819527+00:00",
+    "timestamp": "2026-02-22T11:41:35.324477+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -4225,6 +4253,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-21 21:25:03 UTC"
+    "built_at": "2026-02-22 11:41:35 UTC"
   }
 }
