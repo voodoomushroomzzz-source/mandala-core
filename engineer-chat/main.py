@@ -535,7 +535,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     "model": model,
                     "messages": messages,
                     "stream": True,
-                    "temperature": 0.3,  # Уменьшено для стабильности
+                    "temperature": 1.0,  # Уменьшено для стабильности
                     "top_p": 0.95
                 },
                 timeout=60.0
