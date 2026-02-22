@@ -349,6 +349,17 @@ class KernelMemory:
     def get_module(self, name: str) -> Optional[dict]:
         return self.modules.get(name)
 
+    def build_kernel_injection(self) -> str:
+        """Полное содержимое всех модулей для инъекции в начало истории сессии."""
+        parts = ["# 🧠 ЯДРО МАНДАЛЫ — актуальное состояние модулей\n"]
+        for name in self.module_list:
+            mod = self.modules.get(name)
+            if mod:
+                parts.append(f"## {name}\n```json\n{json.dumps(mod, ensure_ascii=False, indent=2)}\n```\n")
+            else:
+                parts.append(f"## {name}\n_(не загружен)_\n")
+        return "\n".join(parts)
+
     def build_system_prompt(self) -> str:
         initium = self.modules.get("initium", {})
         philosophia = self.modules.get("philosophia", {})
@@ -509,12 +520,20 @@ class ConnectionManager:
             "time": time.time()
         })
         # Обрезаем по суммарному объёму символов, а не по количеству сообщений
-        # Держим последние ~200k символов (≈ 50k токенов — хорошо вписывается в 250k контекст Кими)
+        # Держим последние ~600k символов, но защищённые сообщения (инъекция ядра) не трогаем
         MAX_CONTEXT_CHARS = 600_000
         total_chars = sum(len(m["content"]) for m in session["messages"])
         while total_chars > MAX_CONTEXT_CHARS and len(session["messages"]) > 1:
-            removed = session["messages"].pop(0)
-            total_chars -= len(removed["content"])
+            # Ищем первое незащищённое сообщение для удаления
+            removed = False
+            for i, m in enumerate(session["messages"]):
+                if not m.get("_protected"):
+                    total_chars -= len(m["content"])
+                    session["messages"].pop(i)
+                    removed = True
+                    break
+            if not removed:
+                break  # все сообщения защищены, не трогаем
         session["last_active"] = time.time()
         session_store.schedule_save(session_id, session)
 
@@ -628,13 +647,18 @@ async def handle_ask(message: dict, websocket: WebSocket):
     # Специальные команды
     if user_text == '/sync':
         await kernel.load_all_modules()
+        # Сбрасываем инъекцию — при следующем сообщении СР получит свежие модули
+        session = await get_session(session_id)
+        session["modules_injected"] = False
+        session["messages"] = [m for m in session.get("messages", []) if not m.get("_protected")]
+        session_store.schedule_save(session_id, session)
         module_versions = []
         for name in kernel.module_list:
             mod = kernel.get_module(name)
             version = mod.get("version") if mod else "не загружен"
             module_versions.append(f"• {name}: {version}")
         version_text = "\n".join(module_versions)
-        response = f"✅ Ядро синхронизировано с GitHub. Текущие версии:\n{version_text}"
+        response = f"✅ Ядро синхронизировано с GitHub. Модули обновятся в следующем сообщении.\n{version_text}"
         await manager.send_to(websocket, {"type": "stream", "content": response})
         await manager.send_to(websocket, {"type": "done"})
         return
@@ -665,6 +689,28 @@ async def handle_ask(message: dict, websocket: WebSocket):
 
     await kernel.ensure_fresh()
     session = await get_session(session_id)
+
+    # Инъекция модулей ядра — один раз при старте сессии или после патча
+    if not session.get("modules_injected"):
+        injection_content = kernel.build_kernel_injection()
+        # Вставляем в начало истории как защищённый блок (не обрезается)
+        session.setdefault("messages", [])
+        session["messages"].insert(0, {
+            "role": "user",
+            "content": f"[ЯДРО МАНДАЛЫ ЗАГРУЖЕНО]\n{injection_content}",
+            "time": 0,
+            "_protected": True  # маркер — не обрезать
+        })
+        session["messages"].insert(1, {
+            "role": "assistant",
+            "content": "✅ Ядро Мандалы синхронизировано. Все модули загружены в память.",
+            "time": 0,
+            "_protected": True
+        })
+        session["modules_injected"] = True
+        session_store.schedule_save(session_id, session)
+        logger.info(f"🧠 [{session_id[:12]}...] Ядро инжектировано в сессию")
+
     messages = [{"role": "system", "content": kernel.build_system_prompt()}]
     for msg in session.get("messages", [])[:-1]:
         messages.append({"role": msg["role"], "content": msg["content"]})
@@ -795,10 +841,18 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         })
 
                 # Добавляем исходное сообщение ассистента и результаты в историю
-                messages.append({
+                # ВАЖНО: Кими K2.5 использует thinking — нужно вернуть reasoning_content обратно
+                assistant_msg = {
                     "role": "assistant",
                     "tool_calls": tool_calls
-                })
+                }
+                # Сохраняем reasoning_content если он есть (обязательно для Kimi thinking models)
+                if message_data.get("reasoning_content"):
+                    assistant_msg["reasoning_content"] = message_data["reasoning_content"]
+                # Сохраняем content если не пустой
+                if content:
+                    assistant_msg["content"] = content
+                messages.append(assistant_msg)
                 messages.extend(tool_results)
 
                 # Второй запрос с результатами
@@ -1252,12 +1306,28 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                         module_name = file_path[:-5]
                         try:
                             kernel.modules[module_name] = json.loads(new_content)
+                            logger.info(f"🔄 kernel.modules[{module_name}] обновлён из патча")
                         except:
                             pass
                 else:
                     results.append({"file": file_path, "status": "error", "message": f"GitHub: {put_resp.status_code}"})
         await manager.send_to(websocket, {"type": "patch_result", "results": results})
         manager.add_to_context(session_id, "assistant", f"[Патч: {len(patches)} файлов]")
+
+        # Если патч затронул модули ядра — сбрасываем флаг инъекции
+        # При следующем сообщении СР получит обновлённые модули
+        patched_modules = [
+            p.get("target_module") or (p.get("file_path", "").replace(".json", "") if p.get("file_path", "").endswith(".json") else None)
+            for p in patches
+        ]
+        if any(m in kernel.module_list for m in patched_modules if m):
+            session = session_store.get_cached(session_id)
+            if session:
+                session["modules_injected"] = False
+                # Убираем старый инжект из истории чтобы не дублировать
+                session["messages"] = [m for m in session.get("messages", []) if not m.get("_protected")]
+                session_store.schedule_save(session_id, session)
+                logger.info(f"🔄 [{session_id[:12]}...] modules_injected сброшен — ядро обновится при следующем сообщении")
     except Exception as e:
         logger.error(f"Patch error: {e}")
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка патча: {str(e)}"})
