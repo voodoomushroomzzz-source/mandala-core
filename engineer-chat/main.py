@@ -77,7 +77,7 @@ class WebSearchTool:
                 return []
             from duckduckgo_search import DDGS
             results = []
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             def search_sync():
                 with DDGS() as ddgs:
                     return list(ddgs.text(query, max_results=max_results))
@@ -92,18 +92,18 @@ class WebSearchTool:
             logger.info(f"🌐 DuckDuckGo found {len(results)} results for: {query}")
             return results
         except Exception as e:
-            logger.error(f"DuckDuckGo search error: {e}")
+            logger.error(f"DuckDuckGo search error: {type(e).__name__}: {e}")
             return []
 
     async def _search_tavily(self, query: str, max_results: int) -> List[Dict]:
         try:
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             def search_sync():
                 return self.tavily_client.search(
                     query=query,
                     max_results=max_results,
-                    search_depth="advanced",
-                    include_answer=False,
+                    search_depth="basic",
+                    include_answer=True,
                     include_raw_content=False
                 )
             response = await loop.run_in_executor(None, search_sync)
@@ -119,7 +119,7 @@ class WebSearchTool:
             logger.info(f"🌐 Tavily found {len(results)} results for: {query}")
             return results
         except Exception as e:
-            logger.error(f"Tavily search error: {e}")
+            logger.error(f"Tavily search error: {type(e).__name__}: {e}")
             return []
 
     async def extract_content(self, urls: List[str]) -> List[Dict]:
@@ -147,6 +147,12 @@ class WebSearchTool:
             return []
 
 web_search = WebSearchTool(use_tavily=USE_TAVILY, tavily_api_key=TAVILY_API_KEY)
+if USE_TAVILY and not web_search.tavily_client:
+    logger.error("❌ USE_TAVILY=true но клиент Tavily не создан — проверь TAVILY_API_KEY и наличие пакета tavily-python")
+elif not USE_TAVILY:
+    logger.warning("⚠️ Tavily отключён (USE_TAVILY != 'true'). Поиск через DuckDuckGo или недоступен.")
+else:
+    logger.info(f"✅ Tavily активен, ключ: ...{TAVILY_API_KEY[-6:]}")
 
 class FileReader:
     """Инструмент для чтения файлов из репозитория"""
@@ -380,7 +386,18 @@ class KernelMemory:
 
         web_search_hint = """
 ### 🌐 ВЕБ-ПОИСК
-Ты имеешь доступ к поиску в интернете через инструмент `web_search(query, num_results)`. Используй его, когда нужна актуальная информация.
+Ты имеешь доступ к поиску в интернете через инструмент `web_search(query, num_results)`.
+
+**ОБЯЗАТЕЛЬНО используй `web_search` если:**
+- Садовник спрашивает о текущих событиях, новостях, ценах, курсах, версиях библиотек
+- Вопрос содержит слова: "найди", "поищи", "погугли", "что сейчас", "последняя версия", "как сейчас"
+- Нужна информация о конкретном человеке, компании, продукте — актуальная
+- Любой технический вопрос где важна актуальность (документация, changelog, баги)
+- Ты не уверен в актуальности своих знаний по теме
+
+**НЕ используй поиск** только если вопрос явно про внутреннее устройство Мандалы или это философская беседа без запроса на внешние данные.
+
+Не спрашивай разрешения — просто ищи, потом отвечай.
 
 ### 📁 ЧТЕНИЕ ФАЙЛОВ
 Ты имеешь доступ к чтению любых файлов репозитория через инструмент `read_file(path)`. Если Садовник говорит об открытом файле, ты можешь прочитать его и предложить изменения.
@@ -752,9 +769,14 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     if func_name == "web_search":
                         query = args["query"]
                         num = args.get("num_results", 5)
+                        # Показываем пользователю что идёт поиск
+                        await manager.send_to(websocket, {"type": "stream", "content": f"🔍 *Ищу: «{query}»...*\n\n"})
                         search_results = await web_search.search(query, num)
                         result_content = json.dumps(search_results, ensure_ascii=False)
-                        logger.info(f"🔍 Web search for '{query}' returned {len(search_results)} results")
+                        if search_results:
+                            logger.info(f"🔍 Web search '{query}' → {len(search_results)} results (source: {search_results[0].get('source', '?')})")
+                        else:
+                            logger.warning(f"🔍 Web search '{query}' → 0 results. USE_TAVILY={USE_TAVILY}, tavily_client={'ok' if web_search.tavily_client else 'None'}")
                     elif func_name == "read_file":
                         path = args["path"]
                         file_content = await file_reader.read(path)
