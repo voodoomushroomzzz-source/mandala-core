@@ -219,8 +219,18 @@
       "role": "user",
       "content": "build/mandala_core.monolith.latest.json",
       "time": 1771787571.0496635
+    },
+    {
+      "role": "user",
+      "content": "Открыт файл: initium.json",
+      "time": 1771787610.984505
+    },
+    {
+      "role": "assistant",
+      "content": "[Модуль initium]",
+      "time": 1771787610.9857671
     }
   ],
-  "last_active": 1771787571.0496683,
+  "last_active": 1771787610.9857693,
   "created_at": 1771775322.4852526
 }
