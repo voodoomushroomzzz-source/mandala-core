@@ -106,5 +106,6 @@
       "description": "Показать карту модулей Мандалы",
       "output": "module_map.diagram"
     }
-  }
+  },
+  "/optimization_note": "Модуль Sphaerae теперь содержит только актуальную карту. Исторические изменения перенесены в akasha_archive."
 }
