@@ -581,13 +581,17 @@ async def websocket_endpoint(websocket: WebSocket):
             "modules_loaded": list(kernel.modules.keys()),
             "history_restored": msg_count
         })
-        last_messages = session.get("messages", [])[-50:]
-        if last_messages:
+        # Отправляем историю — только обычные сообщения, без _protected инъекций ядра
+        history_messages = [
+            msg for msg in session.get("messages", [])
+            if not msg.get("_protected")
+        ]
+        if history_messages:
             await manager.send_to(websocket, {
                 "type": "history",
                 "messages": [
                     {"role": msg["role"], "content": msg["content"]}
-                    for msg in last_messages
+                    for msg in history_messages
                 ]
             })
         else:
