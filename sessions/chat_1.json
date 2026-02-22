@@ -129,8 +129,13 @@
       "role": "assistant",
       "content": "[Модуль sphaerae]",
       "time": 1771781588.0282192
+    },
+    {
+      "role": "user",
+      "content": "это тоже не все",
+      "time": 1771781607.961474
     }
   ],
-  "last_active": 1771781588.028221,
+  "last_active": 1771781607.9614773,
   "created_at": 1771775322.4852526
 }
