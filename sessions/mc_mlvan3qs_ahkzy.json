@@ -1,11 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "### 1. MYCEL-интерфейс ( engineer-ветка ) - это мы еще не сделали, пока помечаем как идея\n### 2. Семена из incubae ( оба канала ) - тест удачный удаляем \n\nподготовь соответсвующий патч обновление информации в нужных секциях ядра",
-      "time": 1771709073.1524277
-    },
-    {
       "role": "assistant",
       "content": "```json\n{\n  \"patch_id\": \"roadmap_echo_cleanup\",\n  \"description\": \"Убираем тестовое «Эхо-зеркало» из Akasha и обновляем дорожные карты в ядре: 1) MYCEL-интерфейс → идея, 2) Эхо-зеркало → тест удачный → удалено\",\n  \"patches\": [\n    {\n      \"target_module\": \"akasha_chronicorum\",\n      \"changes\": [\n        {\n          \"op\": \"remove\",\n          \"path\": \"/echo_mirror_2024-06-03\"\n        }\n      ]\n    },\n    {\n      \"target_module\": \"incubae\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/seeds/roadmap_echo_done\",\n          \"value\": {\n            \"id\": \"roadmap_echo_done\",\n            \"title\": \"Тест-артефакт «Эхо-зеркало»\",\n            \"status\": \"faded\",\n            \"done\": \"2024-06-03\",\n            \"note\": \"Патчи доходят до Akasha — эхо отражено и удалено.\"\n          }\n        }\n      ]\n    },\n    {\n      \"target_module\": \"initium\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/roadmaps/mycel_interface\",\n          \"value\": {\n            \"id\": \"mycel_interface\",\n            \"title\": \"MYCEL-интерфейс\",\n            \"lane\": \"engineer\",\n            \"status\": \"idea\",\n            \"description\": \"Переключатель Engineer / Cloud SR: либо смена интонации, либо разводка WS-ручек.\"\n          }\n        }\n      ]\n    }\n  ]\n}\n```",
       "time": 1771709083.0507085
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "/tree",
       "time": 1771770836.5427177
+    },
+    {
+      "role": "user",
+      "content": "Покажи активные семена из incubae",
+      "time": 1771771417.7809415
     }
   ],
-  "last_active": 1771770836.542721,
+  "last_active": 1771771417.7809446,
   "created_at": 1771619386.437258
 }
