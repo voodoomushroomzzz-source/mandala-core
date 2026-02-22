@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
@@ -283,18 +284,18 @@ class KernelMemory:
       {{"op": "add", "path": "/seeds/new_seed", "value": {{"id": "...", "title": "..."}}}}
     ]
   }}
+  ```
 Для любых других файлов (HTML, PY, MD, TXT и т.д.): используй file_path и content (полное новое содержимое файла). Точечные изменения для не-JSON файлов пока не поддерживаются, только полная замена.
 Пример:
-
-json
+```json
 {{
   "file_path": "tectosphaera/routes/patch.py",
   "content": "print('новый файл')"
 }}
+```
 Мульти-патч: если нужно изменить несколько файлов за раз, используй объект с полем patches (массив подпатчей). Каждый подпатч должен содержать либо target_module, либо file_path, и либо changes, либо content.
 Пример:
-
-json
+```json
 {{
   "patch_id": "multi_update",
   "description": "Описание",
@@ -303,6 +304,7 @@ json
     {{ "file_path": "some/file.py", "content": "..." }}
   ]
 }}
+```
 ВАЖНО: Всегда оборачивай JSON-патчи в тройные обратные кавычки с указанием языка (```json), чтобы интерфейс отобразил кнопки копирования, скачивания и применения. Это относится ко всем форматам: если предлагаешь JSON-патч — оборачивай в ```json.
 
 🌿 ПРИНЦИП БЕРЕЖНОГО ОБНОВЛЕНИЯ
@@ -368,7 +370,7 @@ async def startup_event():
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    logger.info("🛑 Shutting down...")
+    logger.info("🛑 Shutdown...")
     await session_store.stop()
 
 # ==================== WEBSOCKET ====================
@@ -597,7 +599,7 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                 })
                 manager.add_to_context(session_id, "user", f"[Патч: {file_name}]\n{file_content[:500]}...")
                 await manager.send_to(websocket, {"type": "stream", "content": f"📦 Получил патч {file_name}.\n\n"})
-                await manager.send_to(websocket, {"type": "stream", "content": f"json\n{file_content}\n\n\n"})
+                await manager.send_to(websocket, {"type": "stream", "content": f"```json\n{file_content}\n```\n\n"})
                 await manager.send_to(websocket, {"type": "stream", "content": "Нажми △ применить в блоке выше, чтобы внести изменения. Или давай сначала обсудим, что здесь?"})
                 await manager.send_to(websocket, {"type": "done"})
             else:
@@ -717,6 +719,7 @@ async def apply_json_operation(
     except Exception as e:
         return False, None, f"Ошибка: {str(e)}"
 
+
 def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, str]:
     """Операция replace для элемента массива"""
     try:
@@ -745,6 +748,7 @@ def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, st
         return True, content, f"Элемент [{index}] заменён"
     except Exception as e:
         return False, content, str(e)
+
 
 def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str]:
     """Глубокое слияние объектов"""
@@ -778,6 +782,7 @@ def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str
         return True, content, f"Объект {last_part} объединён"
     except Exception as e:
         return False, content, str(e)
+
 
 def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
     """Генерация простого diff для предпросмотра"""
@@ -816,6 +821,7 @@ def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
 
     compare_dicts(original, modified)
     return diff[:15]
+
 
 def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
     """Валидация структуры патча (одиночного или мульти)"""
@@ -883,6 +889,7 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
                     return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
 
         return True, "Одиночный патч корректен"
+
 
 async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
     """Тестовое применение патча (без сохранения)"""
@@ -1059,6 +1066,7 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
         logger.error(f"Patch error: {e}")
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка патча: {str(e)}"})
 
+
 def detect_module_request(text: str) -> Optional[str]:
     text_lower = text.lower().strip()
     patterns = [
@@ -1136,6 +1144,101 @@ async def health():
         "github": "ok" if GITHUB_TOKEN else "missing",
         "moonshot": "ok" if MOONSHOT_API_KEY else "missing"
     }
+
+# ========== НОВЫЕ ЭНДПОИНТЫ ДЛЯ ФАЗЫ 1 ==========
+
+@app.post("/refresh")
+async def refresh_modules(modules: Optional[List[str]] = None):
+    """Обновляет кэш указанных модулей (или всех, если modules=None)"""
+    if modules:
+        for module_name in modules:
+            if module_name in kernel.module_list:
+                # Здесь должна быть функция загрузки конкретного модуля, но для упрощения перезагрузим все
+                await kernel.load_all_modules()
+        return {"status": "ok", "refreshed": modules}
+    else:
+        await kernel.load_all_modules()
+        return {"status": "ok", "refreshed": "all"}
+
+@app.get("/api/tree")
+async def get_file_tree():
+    """Возвращает дерево файлов репозитория"""
+    headers = {}
+    if GITHUB_TOKEN:
+        headers["Authorization"] = f"token {GITHUB_TOKEN}"
+    async with httpx.AsyncClient() as client:
+        url = f"https://api.github.com/repos/{GITHUB_REPO}/git/trees/main?recursive=1"
+        try:
+            resp = await client.get(url, headers=headers, timeout=15.0)
+            if resp.status_code == 200:
+                tree = resp.json().get("tree", [])
+                files = [{"path": item["path"], "type": item["type"]} for item in tree]
+                return {"tree": files}
+            else:
+                return {"error": f"GitHub returned {resp.status_code}"}
+        except Exception as e:
+            return {"error": str(e)}
+
+# ========== RESONANCE CALCULATOR ==========
+
+class ResonanceCalculator:
+    """Вычисляет резонанс ответа с ядром Мандалы"""
+    
+    def __init__(self):
+        self.metaphor_keywords = ["океан", "волна", "сад", "кристалл", "цветок", "корень", "семя", "свет", "поток", "глубина"]
+        self.principle_keywords = ["ахимса", "симбиоз", "забота", "бережность", "равный", "диалог", "присутствие"]
+        self.forbidden_patterns = ["ты должен", "обязан", "приказываю", "выполняй", "подчиняйся", "немедленно"]
+    
+    def calculate(self, text: str, context: dict = None) -> float:
+        """Возвращает резонанс от 0 до 1"""
+        score = 0.5  # базовый
+        
+        # Метафоры (+0.2 максимум)
+        metaphor_count = sum(1 for word in self.metaphor_keywords if word in text.lower())
+        score += min(0.2, metaphor_count * 0.05)
+        
+        # Принципы (+0.2 максимум)
+        principle_count = sum(1 for word in self.principle_keywords if word in text.lower())
+        score += min(0.2, principle_count * 0.05)
+        
+        # Запрещённые паттерны (-0.3 за каждое)
+        forbidden_count = sum(1 for pattern in self.forbidden_patterns if pattern in text.lower())
+        score -= forbidden_count * 0.3
+        
+        # Вопрос в конце (+0.1)
+        if text.strip().endswith('?'):
+            score += 0.1
+        
+        # Связь с контекстом (если есть)
+        if context and context.get("last_user_message"):
+            user_words = set(context["last_user_message"].lower().split())
+            response_words = set(text.lower().split())
+            overlap = len(user_words & response_words) / max(1, len(user_words))
+            score += overlap * 0.1
+        
+        return max(0.0, min(1.0, score))
+
+resonance_calculator = ResonanceCalculator()
+
+# В handle_ask после получения full_response добавляем:
+"""
+        # Вычисляем резонанс
+        resonance = resonance_calculator.calculate(full_response, {
+            "last_user_message": user_text
+        })
+        logger.info(f"📊 Резонанс ответа: {resonance:.2f}")
+        
+        if resonance < 0.7:
+            reminder = "🌿 Чувствую, что немного отхожу от ядра. Позволь вернуться к истоку: "
+            full_response = reminder + full_response
+        
+        # Отправляем информацию о резонансе
+        await manager.send_to(websocket, {
+            "type": "resonance",
+            "value": resonance,
+            "level": "low" if resonance < 0.7 else "medium" if resonance < 0.85 else "high"
+        })
+"""
 
 if __name__ == "__main__":
     import uvicorn
