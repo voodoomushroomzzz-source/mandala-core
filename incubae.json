@@ -1086,5 +1086,60 @@
     "status": "faded",
     "done": "2024-06-03",
     "note": "Артефакт исчез сам — патчи доходят, Akasha чист."
-  }
+  },
+  "/fast_index": {
+    "seeds": [
+      {
+        "id": "CLOUD-SR-001",
+        "type": "architecture",
+        "status": "active",
+        "expiry": "2027-02-17"
+      },
+      {
+        "id": "CLOUD-SR-002",
+        "type": "architecture",
+        "status": "active",
+        "expiry": "2027-02-18"
+      },
+      {
+        "id": "RESONANCE-SR-001",
+        "type": "feature",
+        "status": "active",
+        "expiry": "2027-02-18"
+      },
+      {
+        "id": "MODEL-ROUTER-001",
+        "type": "architecture",
+        "status": "active",
+        "expiry": "2027-02-18"
+      },
+      {
+        "id": "PERMANENT-SR-001",
+        "type": "architecture",
+        "status": "active",
+        "expiry": "2027-02-18"
+      },
+      {
+        "id": "TG-MAX-001",
+        "type": "roadmap",
+        "status": "active",
+        "expiry": "2027-02-18"
+      },
+      {
+        "id": "WEB-SR-001",
+        "type": "development_branch",
+        "status": "active",
+        "expiry": "2027-02-18"
+      },
+      {
+        "id": "FRACTAL-SEED-001",
+        "type": "development_branch",
+        "status": "active",
+        "expiry": "2028-02-18"
+      }
+    ],
+    "total_active": 8,
+    "archived_count": 1
+  },
+  "/registry/total_seeds": 8
 }
