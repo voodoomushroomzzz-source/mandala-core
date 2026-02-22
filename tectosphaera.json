@@ -877,7 +877,7 @@
       }
     ]
   },
-  "/version": "v2.7.1",
+  "/version": "v2.8.0",
   "/metadata/last_modified": "2026-02-18T23:15:00Z",
   "/metadata/modification_purpose": "Добавлена архитектурная схема 'СР как центральный агент' в infrastructure_state. Явное описание того, где живёт СР, через что говорит, за чем следит и что помнит. Обновлена карта интеграций.",
   "/changes/v2": {
@@ -1296,5 +1296,25 @@
     "status": "planned",
     "description": "Telegram-СР (Telegram SR) — будет развёрнут на Yandex Cloud для работы через Telegram-бота. Архитектура и модель уточняются.",
     "notes": "Временно отложен, используется для тестов в будущем."
+  },
+  "/layers/sr_instructionum/sections/infrastructure/instructions/latest": {
+    "id": "SR-INFRA-009",
+    "title": "Как пользоваться инженерным чатом",
+    "content": "Инженерный чат доступен через браузер...",
+    "migrated_from": "/layers/sr_instructionum/sections/infrastructure/instructions/-1"
+  },
+  "/layers/sr_instructionum/sections/tools_usage/instructions/latest": {
+    "id": "SR-TOOL-006",
+    "title": "Команды для работы с репозиторием",
+    "content": "Ты можешь использовать следующие команды...",
+    "migrated_from": "/layers/sr_instructionum/sections/tools_usage/instructions/-1"
+  },
+  "/path_normalization": {
+    "note": "Все инструкции теперь имеют явные ID вместо магических индексов",
+    "deprecated_patterns": [
+      "/-1",
+      "/[-1]"
+    ],
+    "new_pattern": "/{section}/instructions/{instruction_id}"
   }
 }
