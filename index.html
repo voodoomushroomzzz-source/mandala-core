@@ -994,7 +994,8 @@
     <script>
         // ==================== КОНСТАНТЫ ====================
         const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
-        const GITHUB_REPO = 'voodoomushroomzzz-source/mandala-core'; // для загрузки файлов
+        const API_BASE = 'https://mandala-engineer-chat.onrender.com'; // базовый URL для API
+        const GITHUB_REPO = 'voodoomushroomzzz-source/mandala-core';
 
         // Глобальные переменные
         let chats = [];
@@ -1475,11 +1476,15 @@
             });
         }
 
-        // ==================== ВКЛАДКА ФАЙЛОВ ====================
+        // ==================== ВКЛАДКА ФАЙЛОВ (исправленный URL) ====================
         async function loadFileTree() {
             fileTree.innerHTML = 'Загрузка...';
             try {
-                const response = await fetch('/api/tree');
+                // Используем абсолютный URL к бэкенду
+                const response = await fetch(`${API_BASE}/api/tree`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 const data = await response.json();
                 if (data.error) throw new Error(data.error);
                 const tree = buildTree(data.tree);
@@ -1492,7 +1497,7 @@
                     });
                 });
             } catch (err) {
-                fileTree.innerHTML = `❌ ${err.message}`;
+                fileTree.innerHTML = `❌ Ошибка загрузки: ${err.message}`;
             }
         }
 
@@ -1538,6 +1543,7 @@
             saveFileBtn.disabled = false;
             try {
                 const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${path}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const content = await response.text();
                 const ext = path.split('.').pop();
                 const language = ext === 'json' ? 'json' : ext === 'py' ? 'python' : ext === 'html' ? 'html' : ext === 'js' ? 'javascript' : 'text';
@@ -1628,7 +1634,7 @@
         async function loadSeeds() {
             seedsGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
             try {
-                const response = await fetch('https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/incubae.json');
+                const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/incubae.json`);
                 if (!response.ok) throw new Error('ошибка загрузки');
                 const data = await response.json();
                 const seeds = data.seeds || [];
@@ -1675,6 +1681,7 @@
 
         // ==================== БЫСТРЫЕ ДЕЙСТВИЯ ====================
         function quickAction(action) {
+            // Удалено, так как боковое меню убрано. Оставим заглушку.
             if (action === 'files') sendDirectMessage('/tree');
             else if (action === 'forget') {
                 if (confirm('Очистить историю этого чата?')) {
