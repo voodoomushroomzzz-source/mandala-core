@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-c3252d2d",
+  "version": "monolith-vv7.5.1-bc3fb1bb",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-22T13:54:52.260217+00:00",
-  "build_source": "af54d2aefb2a15c49b8f9de27db083ac8ff249cc",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/af54d2aefb2a15c49b8f9de27db083ac8ff249cc",
+  "build_timestamp": "2026-02-22T22:20:58.923586+00:00",
+  "build_source": "c84eaa07d43fcccb51cd1250107077e3a7f315d3",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/c84eaa07d43fcccb51cd1250107077e3a7f315d3",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -546,7 +546,8 @@
           "description": "Показать карту модулей Мандалы",
           "output": "module_map.diagram"
         }
-      }
+      },
+      "/optimization_note": "Модуль Sphaerae теперь содержит только актуальную карту. Исторические изменения перенесены в akasha_archive."
     },
     "Akasha Chronicorum": {
       "module": "Akasha Chronicorum",
@@ -2985,7 +2986,62 @@
         "status": "faded",
         "done": "2024-06-03",
         "note": "Артефакт исчез сам — патчи доходят, Akasha чист."
-      }
+      },
+      "/fast_index": {
+        "seeds": [
+          {
+            "id": "CLOUD-SR-001",
+            "type": "architecture",
+            "status": "active",
+            "expiry": "2027-02-17"
+          },
+          {
+            "id": "CLOUD-SR-002",
+            "type": "architecture",
+            "status": "active",
+            "expiry": "2027-02-18"
+          },
+          {
+            "id": "RESONANCE-SR-001",
+            "type": "feature",
+            "status": "active",
+            "expiry": "2027-02-18"
+          },
+          {
+            "id": "MODEL-ROUTER-001",
+            "type": "architecture",
+            "status": "active",
+            "expiry": "2027-02-18"
+          },
+          {
+            "id": "PERMANENT-SR-001",
+            "type": "architecture",
+            "status": "active",
+            "expiry": "2027-02-18"
+          },
+          {
+            "id": "TG-MAX-001",
+            "type": "roadmap",
+            "status": "active",
+            "expiry": "2027-02-18"
+          },
+          {
+            "id": "WEB-SR-001",
+            "type": "development_branch",
+            "status": "active",
+            "expiry": "2027-02-18"
+          },
+          {
+            "id": "FRACTAL-SEED-001",
+            "type": "development_branch",
+            "status": "active",
+            "expiry": "2028-02-18"
+          }
+        ],
+        "total_active": 8,
+        "archived_count": 1
+      },
+      "/registry/total_seeds": 8
     },
     "Tectosphaera": {
       "module": "Tectosphaera",
@@ -3866,7 +3922,7 @@
           }
         ]
       },
-      "/version": "v2.7.1",
+      "/version": "v2.8.0",
       "/metadata/last_modified": "2026-02-18T23:15:00Z",
       "/metadata/modification_purpose": "Добавлена архитектурная схема 'СР как центральный агент' в infrastructure_state. Явное описание того, где живёт СР, через что говорит, за чем следит и что помнит. Обновлена карта интеграций.",
       "/changes/v2": {
@@ -4285,11 +4341,31 @@
         "status": "planned",
         "description": "Telegram-СР (Telegram SR) — будет развёрнут на Yandex Cloud для работы через Telegram-бота. Архитектура и модель уточняются.",
         "notes": "Временно отложен, используется для тестов в будущем."
+      },
+      "/layers/sr_instructionum/sections/infrastructure/instructions/latest": {
+        "id": "SR-INFRA-009",
+        "title": "Как пользоваться инженерным чатом",
+        "content": "Инженерный чат доступен через браузер...",
+        "migrated_from": "/layers/sr_instructionum/sections/infrastructure/instructions/-1"
+      },
+      "/layers/sr_instructionum/sections/tools_usage/instructions/latest": {
+        "id": "SR-TOOL-006",
+        "title": "Команды для работы с репозиторием",
+        "content": "Ты можешь использовать следующие команды...",
+        "migrated_from": "/layers/sr_instructionum/sections/tools_usage/instructions/-1"
+      },
+      "/path_normalization": {
+        "note": "Все инструкции теперь имеют явные ID вместо магических индексов",
+        "deprecated_patterns": [
+          "/-1",
+          "/[-1]"
+        ],
+        "new_pattern": "/{section}/instructions/{instruction_id}"
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-22T13:54:52.260217+00:00",
+    "timestamp": "2026-02-22T22:20:58.923586+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -4324,6 +4400,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-22 13:54:52 UTC"
+    "built_at": "2026-02-22 22:20:58 UTC"
   }
 }
