@@ -353,6 +353,7 @@
             background: rgba(124,58,237,0.07);
             border: 1px solid rgba(124,58,237,0.18);
             border-radius: 12px 2px 12px 12px;
+            white-space: pre-wrap;
         }
         .msg.sys .bub {
             background: rgba(16,185,129,0.15);
@@ -446,7 +447,32 @@
             transform: translateY(-1px);
         }
 
-        .code-content {
+        .code-btn.toggle {
+            color: var(--text-dim);
+            border-color: var(--line-2);
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+        .code-btn.toggle:hover {
+            background: var(--surface-2);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+        .code-block.collapsed .code-content {
+            display: none;
+        }
+        .code-block.collapsed .code-header {
+            border-bottom: none;
+        }
+        .code-lines-hint {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-left: 8px;
+            opacity: 0.6;
+        }
+
+
             padding: 12px; 
             overflow-x: auto; 
             overflow-y: auto;
@@ -1334,20 +1360,40 @@
             const copyBtnClass = 'code-btn copy';
             const downloadBtnClass = 'code-btn download';
             const applyBtnClass = 'code-btn apply';
+            const lineCount = (code.match(/\n/g) || []).length + 1;
+            const shouldCollapse = complete && lineCount > 8;
+            const collapsedClass = shouldCollapse ? 'collapsed' : '';
+            const toggleBtn = complete
+                ? `<button class="code-btn toggle" onclick="toggleCodeBlock(this)" title="Развернуть/свернуть">${shouldCollapse ? '▶' : '▼'}</button>`
+                : '';
+            const linesHint = complete
+                ? `<span class="code-lines-hint">${lineCount} lines</span>`
+                : '';
             const actions = complete ? `
                 <div class="code-actions">
+                    ${toggleBtn}
                     <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">◈</button>
                     <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
                     ${lang === 'json' ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
                 </div>
             ` : '';
             return `
-                <div class="code-block ${complete?'complete':'streaming'}">
-                    <div class="code-header"><span class="code-lang">${lang||'code'}</span>${actions}</div>
+                <div class="code-block ${complete ? 'complete' : 'streaming'} ${collapsedClass}">
+                    <div class="code-header">
+                        <span class="code-lang">${lang || 'code'}</span>
+                        ${linesHint}
+                        ${actions}
+                    </div>
                     <pre class="code-content">${escapeHtml(code)}</pre>
                 </div>
             `;
         }
+
+        window.toggleCodeBlock = function(btn) {
+            const block = btn.closest('.code-block');
+            const isCollapsed = block.classList.toggle('collapsed');
+            btn.innerHTML = isCollapsed ? '▶' : '▼';
+        };
 
         // Декодирование HTML-сущностей
         function decodeHtmlEntities(text) {
@@ -1373,9 +1419,10 @@
 
         window.copyCodeFromBlock = function(btn) {
             const block = btn.closest('.code-block');
-            const rawCode = block.querySelector('.code-content').textContent;
-            const decodedCode = decodeHtmlEntities(rawCode);
-            navigator.clipboard.writeText(decodedCode).then(() => {
+            // Используем innerText вместо textContent + decodeHtmlEntities
+            // innerText корректно сохраняет переносы строк из <pre>
+            const code = block.querySelector('.code-content').innerText;
+            navigator.clipboard.writeText(code).then(() => {
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '✓';
                 showToast('◈ код скопирован', 'success');
