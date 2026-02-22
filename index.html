@@ -576,7 +576,52 @@
             box-shadow: 0 4px 30px rgba(124,58,237,0.7);
         }
 
-        /* File preview & progress — исправлено */
+        /* Claude observer button */
+        .observer-btn {
+            background: rgba(59,130,246,0.1);
+            border-color: #3b82f6;
+            color: #93c5fd;
+            font-size: 18px;
+        }
+        .observer-btn:hover {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 0 20px rgba(59,130,246,0.5);
+        }
+        .observer-btn.active {
+            background: linear-gradient(145deg, #1d4ed8, #4f46e5);
+            border-color: #60a5fa;
+            color: white;
+            box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(79,70,229,0.3);
+            animation: observer-pulse 2s ease-in-out infinite;
+        }
+        @keyframes observer-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(59,130,246,0.6); }
+            50% { box-shadow: 0 0 30px rgba(59,130,246,0.9), 0 0 50px rgba(79,70,229,0.4); }
+        }
+
+        /* Observer message bubble */
+        .msg.observer .bub {
+            background: rgba(59,130,246,0.07);
+            border: 1px solid rgba(59,130,246,0.25);
+            border-radius: 2px 12px 12px 12px;
+            border-left: 2px solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #6366f1, #8b5cf6) 1;
+            border-image-slice: 1;
+        }
+        .msg.observer .mname { color: #60a5fa; }
+        .observer-thinking-indicator {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 22px;
+            font-family: var(--mono); font-size: 10px;
+            color: #60a5fa; opacity: 0.7;
+            letter-spacing: 2px;
+        }
+        .observer-thinking-indicator .dots span {
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+
         .file-attachment {
             display: flex;
             flex-direction: column;
@@ -989,6 +1034,7 @@
                         <div class="irow">
                             <button class="ibtn" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
                             <textarea class="ifield" id="messageInput" placeholder="Впиши волну…" rows="1"></textarea>
+                            <button class="ibtn observer-btn" id="observerBtn" onclick="toggleObserver()" title="Claude-наблюдатель">◬</button>
                             <button class="ibtn isend" id="sendBtn" onclick="sendMessage()">➤</button>
                         </div>
                     </div>
@@ -1289,6 +1335,20 @@
                     updateResonance(data.value, data.level);
                     break;
                 case 'pong':
+                    break;
+                case 'observer_state':
+                    setObserverState(data.active);
+                    break;
+                case 'observer_thinking':
+                    showObserverThinking();
+                    break;
+                case 'observer_message':
+                    hideObserverThinking();
+                    addObserverMessage(data.content);
+                    break;
+                case 'observer_error':
+                    hideObserverThinking();
+                    showToast('◬ Claude-наблюдатель не ответил', 'error');
                     break;
             }
         }
@@ -1712,6 +1772,77 @@
             fill.style.width = `${percentage}%`;
             indicator.className = 'resonance-indicator visible resonance-level-' + level;
             setTimeout(() => indicator.classList.remove('visible'), 8000);
+        }
+
+        // ==================== CLAUDE-НАБЛЮДАТЕЛЬ ====================
+        let observerActive = false;
+        let observerThinkingEl = null;
+
+        function toggleObserver() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('◬ нет соединения', 'error');
+                return;
+            }
+            ws.send(JSON.stringify({ type: 'toggle_observer', session_id: currentChatId }));
+        }
+
+        function setObserverState(active) {
+            observerActive = active;
+            const btn = document.getElementById('observerBtn');
+            if (active) {
+                btn.classList.add('active');
+                btn.title = 'Claude-наблюдатель активен (нажми чтобы выключить)';
+                showToast('◬ Claude-наблюдатель подключён', 'success');
+            } else {
+                btn.classList.remove('active');
+                btn.title = 'Claude-наблюдатель (нажми чтобы включить)';
+                showToast('◬ Claude-наблюдатель отключён', 'error');
+            }
+        }
+
+        function showObserverThinking() {
+            hideObserverThinking();
+            observerThinkingEl = document.createElement('div');
+            observerThinkingEl.className = 'observer-thinking-indicator';
+            observerThinkingEl.innerHTML = `
+                <span>◬</span>
+                <span class="dots"><span>claude анализирует...</span></span>
+            `;
+            messagesEl.appendChild(observerThinkingEl);
+            scrollToBottom();
+        }
+
+        function hideObserverThinking() {
+            if (observerThinkingEl) {
+                observerThinkingEl.remove();
+                observerThinkingEl = null;
+            }
+        }
+
+        function addObserverMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'msg observer';
+            // Иконка Claude в стиле Мандалы — треугольник с кругом
+            const iconSvg = `<svg viewBox="0 0 30 30" fill="none">
+                <polygon points="15,3 27,24 3,24" stroke="#3b82f6" stroke-width="0.8" fill="rgba(59,130,246,0.06)"/>
+                <polygon points="15,8 22,21 8,21" stroke="#6366f1" stroke-width="0.8" opacity="0.6" fill="none"/>
+                <circle cx="15" cy="15" r="2" fill="#60a5fa" opacity="0.9"/>
+            </svg>`;
+            let html = escapeHtml(text);
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#60a5fa;">$1</strong>');
+            html = html.replace(/\n/g, '<br>');
+            div.innerHTML = `
+                <div class="av">${iconSvg}</div>
+                <div class="mbody">
+                    <div class="mname">Claude ◬</div>
+                    <div class="bub">${html}</div>
+                </div>
+            `;
+            messagesEl.appendChild(div);
+            scrollToBottom();
+            saveCurrentChatMessages();
         }
 
         function setupKeyboard() {
