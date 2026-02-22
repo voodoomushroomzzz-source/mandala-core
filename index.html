@@ -1243,6 +1243,16 @@
                 case 'connected':
                     updateStatus('connected');
                     break;
+                case 'history':
+                    // Бэкенд восстановил сессию из GitHub — рендерим историю
+                    // Пропускаем protected служебные сообщения (инъекция ядра)
+                    messagesEl.innerHTML = '';
+                    (data.messages || []).forEach(msg => {
+                        if (msg.role === 'user') addUserMessage(msg.content, false);
+                        else if (msg.role === 'assistant') appendFullMessage(msg.content, false);
+                    });
+                    scrollToBottom();
+                    break;
                 case 'system':
                     addSystemMessage(data.text);
                     break;
@@ -1266,6 +1276,10 @@
                     showToast(`◈ обновлено ${data.count} модулей`, 'success');
                     break;
                 case 'file_processed':
+                    // Показываем подтверждение в индикаторе
+                    fileNameEl.textContent = `✅ ${data.summary}`;
+                    fileProgressBar.style.width = '100%';
+                    filePercentEl.textContent = '100%';
                     addSystemMessage(data.summary);
                     break;
                 case 'patch_result':
@@ -1481,8 +1495,17 @@
             }
             if (caption.trim()) addUserMessage(caption);
             showThinking();
+
+            // Показываем индикатор загрузки
+            filePreview.classList.remove('hidden');
+            fileProgressBar.style.width = '0%';
+            filePercentEl.textContent = '0%';
+
             let completed = 0;
             for (const file of files) {
+                // Обновляем имя текущего файла
+                fileNameEl.textContent = `⏳ ${file.name}`;
+
                 await new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -1498,20 +1521,23 @@
                         const percent = Math.round((completed / files.length) * 100);
                         fileProgressBar.style.width = percent + '%';
                         filePercentEl.textContent = percent + '%';
-                        addSystemMessage(`◈ файл ${file.name} отправлен`);
                         resolve();
                     };
                     reader.readAsDataURL(file);
                 });
                 await new Promise(r => setTimeout(r, 100));
             }
-            // Сохраняем историю после отправки
+
+            // Показываем "ожидаем подтверждения от сервера"
+            fileNameEl.textContent = `✓ ${files.map(f => f.name).join(', ')}`;
             saveCurrentChatMessages();
+
+            // Прячем через 4 сек (к этому времени file_processed уже придёт)
             setTimeout(() => {
                 filePreview.classList.add('hidden');
                 fileProgressBar.style.width = '0%';
                 filePercentEl.textContent = '0%';
-            }, 3000); // увеличен таймаут до 3 секунд
+            }, 4000);
         }
 
         // ==================== ФАЙЛЫ ====================
@@ -1537,8 +1563,8 @@
 
         function clearFiles() {
             pendingFiles = [];
-            filePreview.classList.add('hidden');
             document.getElementById('fileInput').value = '';
+            // Не прячем filePreview здесь — он скроется сам после подтверждения сервера
         }
 
         function setupDragDrop() {
