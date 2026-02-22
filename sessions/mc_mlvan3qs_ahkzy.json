@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "/sync",
-      "time": 1771709182.9605255
-    },
-    {
-      "role": "user",
       "content": "lfdfq gfnx lkz frfib gjghfdb? xnj, jib,rb t ,skj",
       "time": 1771709197.7690258
     },
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "подскжи когда было последнее бновление модулей?",
       "time": 1771774292.6053789
+    },
+    {
+      "role": "user",
+      "content": "/model авто",
+      "time": 1771774301.283795
     }
   ],
-  "last_active": 1771774292.6053824,
+  "last_active": 1771774301.283799,
   "created_at": 1771619386.437258
 }
