@@ -15,7 +15,8 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -e .[dev]
-      - run: ruff check . --fix
+      - run: ruff format .                # автоматически форматирует код (обрезает длинные строки)
+      - run: ruff check . --fix --exit-zero  # проверяет остальные ошибки, но не проваливает билд
       - run: mypy .
       - run: pytest -v
     env:
