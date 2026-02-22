@@ -527,6 +527,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
     try:
         start_time = time.time()
         async with httpx.AsyncClient() as client:
+            # ИСПРАВЛЕНО: уменьшен temperature и добавлено логирование ошибок
             response = await client.post(
                 f"{base_url}/chat/completions",
                 headers=headers,
@@ -534,17 +535,21 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     "model": model,
                     "messages": messages,
                     "stream": True,
-                    "temperature": 0.85,
+                    "temperature": 0.3,  # Уменьшено для стабильности
                     "top_p": 0.95
                 },
                 timeout=60.0
             )
             elapsed = time.time() - start_time
             logger.info(f"⏱ API ответил за {elapsed:.2f} сек")
+            
+            # ИСПРАВЛЕНО: добавлено детальное логирование ошибок
             if response.status_code != 200:
-                logger.error(f"API error: {response.status_code}")
+                error_text = await response.text()
+                logger.error(f"API error: {response.status_code} - {error_text}")
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка API: {response.status_code}"})
                 return
+                
             chunk_count = 0
             async for line in response.aiter_lines():
                 line = line.strip()
@@ -555,12 +560,18 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 try:
                     data = json.loads(line[6:])
                     delta = data.get("choices", [{}])[0].get("delta", {})
+                    
+                    # ИСПРАВЛЕНО: обрабатываем reasoning_content, но не отправляем в интерфейс
+                    reasoning = delta.get("reasoning_content")
+                    if reasoning:
+                        # Просто логируем, но не отправляем пользователю
+                        logger.debug(f"Reasoning: {reasoning[:50]}...")
+                    
                     content = delta.get("content")
-                    if not content:
-                        continue
-                    full_response += content
-                    chunk_count += 1
-                    await manager.send_to(websocket, {"type": "stream", "content": content})
+                    if content:
+                        full_response += content
+                        chunk_count += 1
+                        await manager.send_to(websocket, {"type": "stream", "content": content})
                 except Exception as e:
                     logger.error(f"Stream parse error: {e}")
                     continue
