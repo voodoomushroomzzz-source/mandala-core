@@ -222,7 +222,7 @@ async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[st
                     "system": system_prompt,
                     "messages": messages
                 },
-                timeout=300.0  # Увеличено до 300 секунд
+                timeout=1000.0  # ⬆️ Увеличено до 1000 секунд
             )
             if response.status_code == 200:
                 data = response.json()
@@ -487,7 +487,7 @@ class KernelMemory:
         now = datetime.now().timestamp()
         for ring in self.ring_config:
             self.last_ring_update[ring] = now
-        # Перезагружаем fast_index
+        # ✅ Загружаем fast_index сразу после полной загрузки
         await self._load_fast_index()
         logger.info(f"🎯 Загружено {len(self.modules)}/{len(self.module_list)} модулей")
 
@@ -962,7 +962,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     "temperature": 1.0,
                     "top_p": 0.95
                 },
-                timeout=300.0  # Увеличено до 300 секунд
+                timeout=1000.0  # ⬆️ Увеличено до 1000 секунд
             )
             elapsed = time.time() - start_time
             logger.info(f"⏱ API ответил за {elapsed:.2f} сек")
@@ -1042,7 +1042,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         "temperature": 1.0,
                         "top_p": 0.95
                     },
-                    timeout=300.0  # Увеличено до 300 секунд
+                    timeout=1000.0  # ⬆️ Увеличено до 1000 секунд
                 )
                 if response2.status_code != 200:
                     error_body = response2.text
@@ -1124,7 +1124,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
 
     except httpx.TimeoutException:
         logger.error("Timeout")
-        await manager.send_to(websocket, {"type": "error", "text": "⏰ Таймаут (300 сек)"})
+        await manager.send_to(websocket, {"type": "error", "text": "⏰ Таймаут (1000 сек)"})
     except Exception as e:
         logger.error(f"handle_ask error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {"type": "error", "text": "❌ Внутренняя ошибка"})
