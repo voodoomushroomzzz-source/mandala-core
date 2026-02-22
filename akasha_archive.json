@@ -1,0 +1,27 @@
+{
+  "module": "Akasha Archive",
+  "version": "v1.0.0",
+  "type": "historical_archive",
+  "description": "Архив исторических изменений, milestones и устаревших roadmaps из Akasha Chronicorum",
+  "migrated_from": "akasha_chronicorum",
+  "migration_date": "2026-02-22",
+  "data": {
+    "changes": {
+      "v2.5.0": {
+        "version": "v2.5.0 → v2.5.1",
+        "summary": "Добавлен milestone FUT-SR-CLOUD-005...",
+        "details": ["В блок cosmosphaera.blocks[1].roadmap.milestones добавлен новый элемент..."]
+      },
+      "v2.5.1": {
+        "version": "v2.5.1 → v2.5.2", 
+        "summary": "Фиксация milestone COS-005...",
+        "details": ["Обновлена метадата модуля"]
+      }
+    },
+    "legacy_milestones": [
+      {"id": "COS-001", "title": "Векторы эволюции", "date": "2026-02-07"},
+      {"id": "COS-002", "title": "Дорожная карта: Будущее Мандалы", "date": "2026-02-17"}
+    ],
+    "deprecated_paths": ["/changes/v2.5.0", "/changes/v2.5.1"]
+  }
+}
