@@ -491,7 +491,13 @@ class ConnectionManager:
             "content": content,
             "time": time.time()
         })
-        session["messages"] = session["messages"][-50:]
+        # Обрезаем по суммарному объёму символов, а не по количеству сообщений
+        # Держим последние ~200k символов (≈ 50k токенов — хорошо вписывается в 250k контекст Кими)
+        MAX_CONTEXT_CHARS = 600_000
+        total_chars = sum(len(m["content"]) for m in session["messages"])
+        while total_chars > MAX_CONTEXT_CHARS and len(session["messages"]) > 1:
+            removed = session["messages"].pop(0)
+            total_chars -= len(removed["content"])
         session["last_active"] = time.time()
         session_store.schedule_save(session_id, session)
 
@@ -717,7 +723,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     "temperature": 1.0,
                     "top_p": 0.95
                 },
-                timeout=60.0
+                timeout=120.0
             )
             elapsed = time.time() - start_time
             logger.info(f"⏱ API ответил за {elapsed:.2f} сек")
@@ -784,10 +790,11 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         "temperature": 1.0,
                         "top_p": 0.95
                     },
-                    timeout=60.0
+                    timeout=120.0
                 )
                 if response2.status_code != 200:
-                    logger.error(f"Second API error: {response2.status_code}")
+                    error_body = response2.text
+                    logger.error(f"Second API error: {response2.status_code} — {error_body}")
                     await manager.send_to(websocket, {"type": "error", "text": "❌ Ошибка при получении финального ответа"})
                     return
 
@@ -882,9 +889,14 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                 await manager.send_to(websocket, {"type": "file_processed", "summary": f"✅ JSON {file_name} получен. Ключи: {keys}"})
                 manager.add_to_context(session_id, "user", f"[Загружен файл: {file_name}]")
         except json.JSONDecodeError:
-            # Не JSON, просто сохраняем
+            # Не JSON — передаём содержимое напрямую в контекст
             await manager.send_to(websocket, {"type": "file_processed", "summary": f"📄 {file_name} ({len(file_content)} символов) получен"})
-            manager.add_to_context(session_id, "user", f"[Загружен файл: {file_name}]")
+            manager.add_to_context(
+                session_id,
+                "user",
+                f"[Файл загружен: {file_name}]\n```\n{file_content}\n```"
+            )
+            await manager.send_to(websocket, {"type": "done"})
     except Exception as e:
         logger.error(f"File upload error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка: {str(e)}"})
