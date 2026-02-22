@@ -33,7 +33,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
 MOONSHOT_API_KEY = os.getenv("MOONSHOT_API_KEY")
 MOONSHOT_BASE_URL = "https://api.moonshot.ai/v1"
-MOONSHOT_MODEL = "kimi-k2.5-think"  # Kimi думающий с reasoning mode
+MOONSHOT_MODEL = "kimi-k2-turbo-preview"
 
 if not OPENROUTER_KEY:
     logger.warning("⚠️ OPENROUTER_KEY не найден")
@@ -561,25 +561,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     logger.error(f"Stream parse error: {e}")
                     continue
             if full_response:
-                # ========== ВЫЧИСЛЕНИЕ РЕЗОНАНСА ==========
-                resonance = resonance_calculator.calculate(full_response, {
-                    "last_user_message": user_text
-                })
-                logger.info(f"📊 Резонанс ответа: {resonance:.2f}")
-                
-                # Если резонанс низкий, добавляем напоминание
-                if resonance < 0.7:
-                    reminder = "🌿 Чувствую, что немного отхожу от ядра. Позволь вернуться к истоку: "
-                    full_response = reminder + full_response
-                
-                # Отправляем информацию о резонансе в UI
-                await manager.send_to(websocket, {
-                    "type": "resonance",
-                    "value": resonance,
-                    "level": "low" if resonance < 0.7 else "medium" if resonance < 0.85 else "high"
-                })
-                # ==========================================
-                
                 manager.add_to_context(session_id, "assistant", full_response)
                 await manager.send_to(websocket, {"type": "done", "full_text": full_response[:200] + "..." if len(full_response) > 200 else full_response})
                 logger.info(f"✅ Ответ: {len(full_response)} символов, {chunk_count} чанков")
