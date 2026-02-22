@@ -31,7 +31,7 @@ app.add_middleware(
 
 MOONSHOT_API_KEY = os.getenv("MOONSHOT_API_KEY")
 MOONSHOT_BASE_URL = "https://api.moonshot.ai/v1"
-MOONSHOT_MODEL = "kimi-k2.5-think"        # актуальная думающая модель
+MOONSHOT_MODEL = "kimi-k2.5"  # самая новая модель
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")   # технический токен для чтения модулей (не OAuth пользователя)
 GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
