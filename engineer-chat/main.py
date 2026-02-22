@@ -472,7 +472,7 @@ class KernelMemory:
         async with httpx.AsyncClient() as client:
             for module_name in self.module_list:
                 try:
-                    url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json"
+                    url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json?t={int(datetime.now().timestamp())}"
                     resp = await client.get(url, headers=headers, timeout=15.0)
                     if resp.status_code == 200:
                         self.modules[module_name] = resp.json()
