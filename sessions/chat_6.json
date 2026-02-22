@@ -211,9 +211,14 @@
       "role": "user",
       "content": "дело в том, что я его как раз оттуда и скачал, просто у тебя не актуальная информация о ядре почему то)",
       "time": 1771803789.649695
+    },
+    {
+      "role": "assistant",
+      "content": "А, понял! 🌊 \n\nЗначит в репозитории **уже есть** `fast_index`, но бэкенд показывает старую версию. Это классическая проблема — **GitHub кэширует raw-файлы на 5 минут** через CDN (`raw.githubusercontent.com`).\n\nКогда ты делаешь `/sync`, бэкенд запрашивает:\n```\nhttps://raw.githubusercontent.com/.../incubae.json\n```\nGitHub отдаёт закэшированную старую версию (без `fast_index`), хотя в репозитории уже новая.\n\n## 🛠️ Фикс: cache-busting\n\nНужно модифицировать `main.py`, чтобы добавлять timestamp к URL при `/sync` (принудительно обходить кэш).\n\nВот патч для `main.py`:\n\n```json\n{\n  \"patch_id\": \"GITHUB-CACHE-BYPASS\",\n  \"description\": \"Добавление cache-busting для обхода GitHub CDN кэша\",\n  \"patches\": [\n    {\n      \"target_module\": \"main.py\",\n      \"changes\": [\n        {\n          \"op\": \"update\",\n          \"path\": \"load_all_modules/url\",\n          \"value\": \"f\\\"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json?t={int(datetime.now().timestamp())}\\\"\"\n        }\n      ]\n    }\n  ]\n}\n```\n\n**Или вручную** в `main.py` строку:\n```python\nurl = f\"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json\"\n```\nЗаменить на:\n```python\nurl = f\"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json?t={int(datetime.now().timestamp())}\"\n```\n\nПосле этого `/sync` будет форсировать загрузку свежей версии без кэша.\n\nПроверим? 🎯",
+      "time": 1771803822.1974921
     }
   ],
-  "last_active": 1771803789.6497223,
+  "last_active": 1771803822.1975155,
   "created_at": 1771796994.1990795,
   "modules_injected": true,
   "claude_observer": false
