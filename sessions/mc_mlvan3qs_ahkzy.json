@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "assistant",
-      "content": "```json\n{\n  \"patch_id\": \"roadmap_echo_cleanup\",\n  \"description\": \"Убираем тестовое «Эхо-зеркало» из Akasha и обновляем дорожные карты в ядре: 1) MYCEL-интерфейс → идея, 2) Эхо-зеркало → тест удачный → удалено\",\n  \"patches\": [\n    {\n      \"target_module\": \"akasha_chronicorum\",\n      \"changes\": [\n        {\n          \"op\": \"remove\",\n          \"path\": \"/echo_mirror_2024-06-03\"\n        }\n      ]\n    },\n    {\n      \"target_module\": \"incubae\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/seeds/roadmap_echo_done\",\n          \"value\": {\n            \"id\": \"roadmap_echo_done\",\n            \"title\": \"Тест-артефакт «Эхо-зеркало»\",\n            \"status\": \"faded\",\n            \"done\": \"2024-06-03\",\n            \"note\": \"Патчи доходят до Akasha — эхо отражено и удалено.\"\n          }\n        }\n      ]\n    },\n    {\n      \"target_module\": \"initium\",\n      \"changes\": [\n        {\n          \"op\": \"add\",\n          \"path\": \"/roadmaps/mycel_interface\",\n          \"value\": {\n            \"id\": \"mycel_interface\",\n            \"title\": \"MYCEL-интерфейс\",\n            \"lane\": \"engineer\",\n            \"status\": \"idea\",\n            \"description\": \"Переключатель Engineer / Cloud SR: либо смена интонации, либо разводка WS-ручек.\"\n          }\n        }\n      ]\n    }\n  ]\n}\n```",
-      "time": 1771709083.0507085
-    },
-    {
-      "role": "assistant",
       "content": "[Патч: 3 файлов]",
       "time": 1771709097.6609893
     },
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "Покажи активные семена из incubae",
       "time": 1771771417.7809415
+    },
+    {
+      "role": "assistant",
+      "content": "```json\n{\n  \"patch_id\": \"show_active_seeds_v2\",\n  \"description\": \"Срез активных семян incubae (status = ripe/green) после свежего /sync\",\n  \"target_module\": \"incubae\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"/_active_snapshot\",\n      \"value\": {\n        \"ripe\": [\n          {\n            \"id\": \"mycel_intonation_switch\",\n            \"title\": \"MYCEL: переключатель без разводки каналов\",\n            \"lane\": \"engineer\",\n            \"status\": \"ripe\",\n            \"next_action\": \"добавить класс body и переключать интонацию СР\"\n          }\n        ],\n        \"green\": [\n          {\n            \"id\": \"portal_third_dimension\",\n            \"title\": \"Портал «Третье измерение»\",\n            \"lane\": \"cloud-sr\",\n            \"status\": \"green\",\n            \"next_action\": \"создать drop-тип + POST /api/seed + кнопку «Посадить»\"\n          },\n          {\n            \"id\": \"ahimsa_preflight_hook\",\n            \"title\": \"Ахимса-сканер перед патчем\",\n            \"lane\": \"engineer\",\n            \"status\": \"green\",\n            \"next_action\": \"вставить хук check_ahimsa() в tectosphaera/routes/patch.py\"\n          }\n        ]\n      }\n    }\n  ]\n}\n```",
+      "time": 1771771425.464277
     }
   ],
-  "last_active": 1771771417.7809446,
+  "last_active": 1771771425.464279,
   "created_at": 1771619386.437258
 }
