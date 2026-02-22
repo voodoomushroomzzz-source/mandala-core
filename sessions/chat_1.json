@@ -2,11 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "/tree",
-      "time": 1771775344.0337596
-    },
-    {
-      "role": "user",
       "content": "прием",
       "time": 1771776030.6841924
     },
@@ -249,8 +244,13 @@
       "role": "user",
       "content": "[Загружен файл: mandala_core.monolith.latest (4).json]",
       "time": 1771788211.5368505
+    },
+    {
+      "role": "user",
+      "content": "ты изучил моолит?",
+      "time": 1771788343.0349383
     }
   ],
-  "last_active": 1771788211.536852,
+  "last_active": 1771788343.0349424,
   "created_at": 1771775322.4852526
 }
