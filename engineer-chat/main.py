@@ -167,10 +167,13 @@ else:
 class FileReader:
     """Инструмент для чтения файлов из репозитория"""
     async def read(self, path: str) -> Optional[str]:
+        """Читает файл через GitHub Contents API (не CDN — всегда актуально)."""
         try:
             async with httpx.AsyncClient() as client:
-                url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{path}"
-                resp = await client.get(url, timeout=10.0)
+                url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{path}"
+                headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
+                headers["Accept"] = "application/vnd.github.v3.raw"  # Возвращает raw текст напрямую
+                resp = await client.get(url, headers=headers, timeout=10.0)
                 if resp.status_code == 200:
                     return resp.text
                 else:
@@ -483,11 +486,13 @@ class KernelMemory:
                 return False, "Все модули актуальны"
 
             headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
+            # Contents API — не CDN, отдаёт файл сразу после коммита
+            api_headers = {**headers, "Accept": "application/vnd.github.v3.raw"}
             async with httpx.AsyncClient() as client:
                 for module in changed_modules:
                     try:
-                        url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module}.json"
-                        resp = await client.get(url, headers=headers, timeout=15.0)
+                        url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{module}.json"
+                        resp = await client.get(url, headers=api_headers, timeout=15.0)
                         if resp.status_code == 200:
                             self.modules[module] = resp.json()
                             self.file_shas[module] = new_shas[module]
@@ -519,11 +524,11 @@ class KernelMemory:
         changed, msg = await self.refresh_changed_modules(force=True)
         if not changed:
             # Fallback без GitHub токена — прямая загрузка через raw
-            headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
+            headers = {"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3.raw"} if GITHUB_TOKEN else {}
             async with httpx.AsyncClient() as client:
                 for module_name in self.module_list:
                     try:
-                        url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main/{module_name}.json"
+                        url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{module_name}.json"
                         resp = await client.get(url, headers=headers, timeout=15.0)
                         if resp.status_code == 200:
                             self.modules[module_name] = resp.json()
