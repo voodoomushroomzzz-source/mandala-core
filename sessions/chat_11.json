@@ -121,9 +121,14 @@
       "role": "user",
       "content": "открой модуль крта",
       "time": 1771885659.6963215
+    },
+    {
+      "role": "user",
+      "content": "открой модуль карта",
+      "time": 1771885681.3398883
     }
   ],
-  "last_active": 1771885659.69634,
+  "last_active": 1771885681.3399074,
   "created_at": 1771883469.7287257,
   "modules_injected": true,
   "injection_timestamp": 1771883495.986017
