@@ -1142,7 +1142,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{MOONSHOT_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {MOONSHOT_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": MOONSHOT_MODEL, "messages": kimi_messages, "temperature": 1.0, "max_tokens": 32768},
+                                json={"model": MOONSHOT_MODEL, "messages": kimi_messages, "temperature": 1.0, "max_tokens": 30000},
                                 timeout=1000.0
                             )
                             if resp2.status_code == 200:
@@ -1233,6 +1233,7 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
     file_name = message.get("name", "file")
     file_content_b64 = message.get("content")
     caption = message.get("caption", "")
+    active_models = message.get("models", ["grok"])
     logger.info(f"📁 [{session_id[:12]}...] Получен файл: {file_name}")
     if not file_content_b64:
         await manager.send_to(websocket, {"type": "error", "text": "❌ Пустой файл"})
@@ -1240,35 +1241,47 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
     try:
         file_content = base64.b64decode(file_content_b64).decode("utf-8")
         logger.info(f"📄 Содержимое: {len(file_content)} символов")
-        if caption.strip():
-            manager.add_to_context(session_id, "user", f"[Комментарий к файлу {file_name}]: {caption}")
+
         try:
             json_data = json.loads(file_content)
             if "target_module" in json_data or "patches" in json_data or "file_path" in json_data:
-                # Это патч
+                # Патч — показываем для применения, не запускаем СР автоматически
+                manager.add_to_context(session_id, "user", f"[Патч: {file_name}]")
                 await manager.send_to(websocket, {
                     "type": "file_processed",
-                    "summary": f"📦 Патч {file_name} получен. Нажмите △ применить в блоке кода или отправьте для обсуждения."
+                    "summary": f"📦 Патч {file_name} получен"
                 })
-                manager.add_to_context(session_id, "user", f"[Патч: {file_name}]")
                 await manager.send_to(websocket, {"type": "stream", "content": f"📦 Получил патч {file_name}.\n\n"})
                 await manager.send_to(websocket, {"type": "stream", "content": f"```json\n{file_content}\n```\n\n"})
-                await manager.send_to(websocket, {"type": "stream", "content": "Нажми △ применить в блоке выше, чтобы внести изменения. Или давай сначала обсудим, что здесь?"})
+                await manager.send_to(websocket, {"type": "stream", "content": "Нажми △ применить в блоке выше или давай обсудим."})
                 await manager.send_to(websocket, {"type": "done"})
+                return
             else:
-                # Обычный JSON, не показываем содержимое
+                # Обычный JSON
                 keys = list(json_data.keys())[:5]
-                await manager.send_to(websocket, {"type": "file_processed", "summary": f"✅ JSON {file_name} получен. Ключи: {keys}"})
-                manager.add_to_context(session_id, "user", f"[Загружен файл: {file_name}]")
+                summary = f"✅ JSON {file_name} получен. Ключи: {keys}"
+                manager.add_to_context(session_id, "user",
+                    f"[Загружен файл: {file_name}]\n```json\n{file_content[:3000]}\n```"
+                    + ("\n_(файл обрезан, показаны первые 3000 символов)_" if len(file_content) > 3000 else ""))
         except json.JSONDecodeError:
-            # Не JSON — передаём содержимое напрямую в контекст
-            await manager.send_to(websocket, {"type": "file_processed", "summary": f"📄 {file_name} ({len(file_content)} символов) получен"})
-            manager.add_to_context(
-                session_id,
-                "user",
-                f"[Файл загружен: {file_name}]\n```\n{file_content}\n```"
-            )
-            await manager.send_to(websocket, {"type": "done"})
+            # Не JSON — текст/код
+            summary = f"📄 {file_name} ({len(file_content)} символов) получен"
+            manager.add_to_context(session_id, "user",
+                f"[Загружен файл: {file_name}]\n```\n{file_content[:3000]}\n```"
+                + ("\n_(файл обрезан, показаны первые 3000 символов)_" if len(file_content) > 3000 else ""))
+
+        await manager.send_to(websocket, {"type": "file_processed", "summary": summary})
+
+        # Добавляем комментарий если есть
+        ask_text = caption.strip() if caption.strip() else f"Проанализируй файл {file_name} и дай своё мнение."
+
+        # Запускаем СР автоматически
+        await handle_ask({
+            "text": ask_text,
+            "session_id": session_id,
+            "models": active_models
+        }, websocket)
+
     except Exception as e:
         logger.error(f"File upload error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка: {str(e)}"})
