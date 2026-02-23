@@ -467,20 +467,26 @@ class KernelMemory:
             # Fast index из Akasha (roadmaps)
             akasha = self.modules.get('akasha_chronicorum', {})
             fi_akasha = akasha.get('fast_index') or akasha.get('/fast_index', {})
-            if fi_akasha:
+            if fi_akasha and fi_akasha.get('roadmaps'):
                 self.fast_index['roadmaps'] = fi_akasha.get('roadmaps', [])
                 logger.info(f'📜 Fast index: {len(self.fast_index["roadmaps"])} roadmaps')
             else:
-                # Fallback: ищем в cosmosphaera.blocks
-                cosmo = akasha.get('cosmosphaera', akasha.get('spheres', {}))
+                # Fallback: ищем в spheres.cosmosphaera.blocks (актуальная структура)
+                cosmo = akasha.get('spheres', {}).get('cosmosphaera', akasha.get('cosmosphaera', {}))
                 blocks = cosmo.get('blocks', []) if isinstance(cosmo, dict) else []
-                roadmaps = [b for b in blocks if b.get('type') == 'roadmap' or b.get('roadmap')]
+                roadmaps = [b for b in blocks if isinstance(b, dict) and (b.get('type') == 'roadmap' or b.get('roadmap'))]
                 if roadmaps:
                     self.fast_index['roadmaps'] = [
-                        {'id': r.get('id','?'), 'title': (r.get('roadmap') or r).get('title',''), 'status': r.get('status','active')}
+                        {
+                            'id': r.get('id', '?'),
+                            'title': (r.get('roadmap') or {}).get('title') or (r.get('roadmap') or {}).get('description', '')[:60] or r.get('id', '?'),
+                            'description': (r.get('roadmap') or {}).get('description', ''),
+                            'milestones': len((r.get('roadmap') or {}).get('milestones', [])),
+                            'status': r.get('status', 'active')
+                        }
                         for r in roadmaps
                     ]
-                    logger.info(f'📜 Fast index (from blocks): {len(self.fast_index["roadmaps"])} roadmaps')
+                    logger.info(f'📜 Fast index (from spheres.cosmosphaera.blocks): {len(self.fast_index["roadmaps"])} roadmaps')
         except Exception as e:
             logger.error(f'Ошибка загрузки fast_index: {e}')
 
