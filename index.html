@@ -531,22 +531,6 @@
         }
         .code-block.collapsed .code-header {
             border-bottom: none;
-            padding: 3px 8px;
-        }
-        .code-block.collapsed {
-            box-shadow: none;
-            margin: 4px 0;
-        }
-        .code-block.collapsed .code-lang {
-            font-size: 10px;
-        }
-        .code-block.collapsed .code-btn {
-            width: 22px;
-            height: 18px;
-            font-size: 10px;
-        }
-        .code-block.collapsed .code-lines-hint {
-            font-size: 9px;
         }
         .code-lines-hint {
             font-family: var(--mono);
@@ -1113,7 +1097,7 @@
             <div class="tabs">
                 <button class="tab active" data-tab="chat">◈ чат</button>
                 <button class="tab" data-tab="status">◈ статус</button>
-                
+                <button class="tab" data-tab="files">◈ файлы</button>
             </div>
 
             <!-- Вкладка чата -->
@@ -1170,7 +1154,18 @@
             </div>
 
             <!-- Вкладка файлов с Monaco Editor -->
-
+            <div class="tab-content" id="tab-files">
+                <div style="display: flex; height: 100%;">
+                    <div id="file-tree">Загрузка...</div>
+                    <div class="editor-container">
+                        <div class="file-editor-header">
+                            <span class="file-path" id="current-file-path"></span>
+                            <button class="code-btn apply" onclick="saveCurrentFile()" id="save-file-btn" disabled title="Сохранить">◉</button>
+                        </div>
+                        <div id="monaco-editor"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1213,7 +1208,6 @@
         let pendingFiles = [];
         let messageBuffer = '';
         let currentMessageDiv = null;
-        let currentStreamModel = null;
         let currentPatch = null;
         let editor = null; // для Monaco
 
@@ -1429,14 +1423,7 @@
                     handleStream(data.content, data.model);
                     break;
                 case 'model_start':
-                    // Финишируем предыдущий блок и явно сбрасываем буфер
-                    if (currentMessageDiv) {
-                        saveCurrentChatMessages();
-                        currentMessageDiv = null;
-                    }
-                    messageBuffer = '';
-                    currentStreamModel = data.model || null;
-                    hideThinking();
+                    if (currentMessageDiv) finishMessage();
                     showThinking(data.model);
                     break;
                 case 'model_done':
@@ -1564,15 +1551,12 @@
         }
 
         function handleStream(content, model) {
-            const activeModel = currentStreamModel || model;
             if (!currentMessageDiv) {
                 currentMessageDiv = createMessageElement('assistant');
-                if (activeModel) {
+                if (model) {
                     const nameEl = currentMessageDiv.querySelector('.mname');
-                    const color = modelColors[activeModel] || 'var(--text)';
-                    const shapes = { grok: '△', kimi: '◇', claude: '○' };
-                    const shape = shapes[activeModel] || '◈';
-                    nameEl.innerHTML = `<span style="color:${color}">${shape}</span> ${activeModel}`;
+                    const label = `<span class="model-label ${model}">${model}</span>`;
+                    nameEl.innerHTML = 'СР' + label;
                 }
                 messagesEl.appendChild(currentMessageDiv);
             }
@@ -1597,7 +1581,6 @@
                 saveCurrentChatMessages();
                 currentMessageDiv = null;
                 messageBuffer = '';
-                currentStreamModel = null;
             }
         }
 
@@ -2060,6 +2043,7 @@
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
                     if (tabName === 'status') loadStatus();
+                    if (tabName === 'files') loadFileTree();
                 });
             });
         }
@@ -2069,33 +2053,37 @@
             document.getElementById('roadmapsGrid').innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
             document.getElementById('statusRings').innerHTML = '';
 
-            // Карточки модулей нового ядра
-            const modules = [
-                { name: 'boot', color: 'var(--green-bright)', desc: 'загрузочный · директивы · философия' },
-                { name: 'core_map', color: 'var(--indigo-soft)', desc: 'карта ядра · навигация · репозиторий' },
-                { name: 'engineer_chat', color: 'var(--violet-soft)', desc: 'чат · модели · архитектура' },
-                { name: 'telegram_bot', color: 'var(--copy)', desc: 'бот · возможности · роадмап' },
-                { name: 'philosophy', color: 'var(--green-2)', desc: 'онтология · принципы · свидетельства' },
+            // Карточки колец
+            const rings = [
+                { name: 'Crystal', color: 'var(--indigo-soft)', desc: 'initium · philosophia · geometria' },
+                { name: 'Flow', color: 'var(--green-2)', desc: 'akasha · incubae · sphaerae' },
+                { name: 'Impulse', color: 'var(--violet-soft)', desc: 'tectosphaera' }
             ];
-            document.getElementById('statusRings').innerHTML = modules.map(m => `
-                <div style="flex:1;min-width:140px;padding:8px 12px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius);border-left:2px solid ${m.color};">
-                    <div style="font-family:var(--mono);font-size:10px;color:${m.color};letter-spacing:1px;margin-bottom:3px;">${m.name}</div>
-                    <div style="font-family:var(--mono);font-size:9px;color:var(--text-2);">${m.desc}</div>
+            document.getElementById('statusRings').innerHTML = rings.map(r => `
+                <div style="flex:1;min-width:140px;padding:10px 12px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius);border-left:2px solid ${r.color};">
+                    <div style="font-family:var(--mono);font-size:10px;color:${r.color};letter-spacing:1px;margin-bottom:4px;">${r.name}</div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--text-2);">${r.desc}</div>
                 </div>
             `).join('');
 
-            // ── Семена из нового ядра simbiosis/seeds.json ──
+            // ── Семена ──
             try {
-                const seedsResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/simbiosis/seeds.json`);
-                if (!seedsResp.ok) throw new Error(`seeds.json: HTTP ${seedsResp.status}`);
-                const seedsData = await seedsResp.json();
+                const incResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/incubae.json`);
+                if (!incResp.ok) throw new Error(`HTTP ${incResp.status}`);
+                const incData = await incResp.json();
 
-                const allSeeds = seedsData.seeds || [];
-                const activeSeeds = allSeeds.filter(s => s.status === 'active' || !s.status);
-                const registry = seedsData.registry || {};
+                // fast_index может лежать как 'fast_index' или '/fast_index'
+                const fastIndex = incData['fast_index'] || incData['/fast_index'] || {};
+                const fastSeeds = fastIndex.seeds || [];
+                const directSeeds = incData.seeds || [];
 
+                // Предпочитаем полные данные из seeds, дополняем fast_index
+                const allSeeds = directSeeds.length ? directSeeds : fastSeeds;
+                const totalActive = fastIndex.total_active || fastSeeds.filter(s => s.status === 'active').length || allSeeds.length;
+
+                // Счётчик — одна строка
                 const seedLabel = document.getElementById('seedsLabel');
-                if (seedLabel) seedLabel.textContent = `🌱 семена — ${registry.active_seeds || activeSeeds.length} активных`;
+                if (seedLabel) seedLabel.textContent = `🌱 семена (incubae) — ${totalActive} активных`;
 
                 if (!allSeeds.length) {
                     seedsGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет семян</div></div>';
@@ -2106,12 +2094,11 @@
                                 <div class="seed-title">${escapeHtml(seed.name || seed.id || 'без названия')}</div>
                                 <div class="seed-id">${seed.id || ''}</div>
                             </div>
-                            <div class="seed-desc">${escapeHtml(seed.description || '')}</div>
+                            <div class="seed-desc">${escapeHtml(seed.description || seed.core_essence || '')}</div>
                             <div class="seed-meta">
                                 <span class="seed-badge" style="border-color:var(--green);color:var(--green-bright);">${seed.type || 'seed'}</span>
                                 <span class="seed-badge" style="border-color:${seed.status==='active'?'var(--green)':'var(--text-3)'};">${seed.status || 'active'}</span>
-                                ${seed.ttl ? `<span class="seed-badge" style="color:var(--text-dim);">ttl: ${seed.ttl}</span>` : ''}
-                                ${seed.resonance ? `<span class="seed-badge" style="border-color:var(--violet-soft);color:var(--violet-soft);">⚡ ${seed.resonance}</span>` : ''}
+                                ${seed.expiry ? `<span class="seed-badge">до ${seed.expiry}</span>` : ''}
                             </div>
                         </div>
                     `).join('');
@@ -2120,18 +2107,34 @@
                 seedsGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
             }
 
-            // ── Роадмапы из simbiosis/roadmaps.json ──
+            // ── Роадмапы ──
             const rmGrid = document.getElementById('roadmapsGrid');
             try {
-                const rmResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/simbiosis/roadmaps.json`);
-                if (!rmResp.ok) throw new Error(`roadmaps.json: HTTP ${rmResp.status}`);
-                const rmData = await rmResp.json();
+                const akResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/akasha_chronicorum.json`);
+                if (!akResp.ok) throw new Error(`HTTP ${akResp.status}`);
+                const akData = await akResp.json();
 
-                const roadmapsObj = rmData.roadmaps || {};
-                const roadmaps = Object.values(roadmapsObj);
+                // fast_index или прямой поиск в spheres.cosmosphaera.blocks
+                const fi = akData['fast_index'] || akData['/fast_index'] || {};
+                let roadmaps = fi.roadmaps || [];
 
+                if (!roadmaps.length) {
+                    // Ищем в spheres.cosmosphaera.blocks (реальная структура)
+                    const cosmo = (akData.spheres || {}).cosmosphaera || akData.cosmosphaera || {};
+                    const blocks = cosmo.blocks || [];
+                    const rmBlocks = blocks.filter(b => b && (b.type === 'roadmap' || b.roadmap));
+                    roadmaps = rmBlocks.map(b => ({
+                        id: b.id || '?',
+                        title: (b.roadmap || {}).title || (b.roadmap || {}).description || b.id || 'Роадмап',
+                        description: (b.roadmap || {}).description || '',
+                        milestones: ((b.roadmap || {}).milestones || []).length,
+                        status: b.status || 'active'
+                    }));
+                }
+
+                // Счётчик — одна строка
                 const rmLabel = document.getElementById('roadmapsLabel');
-                if (rmLabel) rmLabel.textContent = `📜 роадмапы — ${roadmaps.length}`;
+                if (rmLabel) rmLabel.textContent = `📜 роадмапы (akasha) — ${roadmaps.length}`;
 
                 if (!roadmaps.length) {
                     rmGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет роадмапов</div></div>';
@@ -2139,14 +2142,14 @@
                     rmGrid.innerHTML = roadmaps.map(rm => `
                         <div class="seed-card" style="border-left:2px solid var(--violet-soft);">
                             <div class="seed-header">
-                                <div class="seed-title">${escapeHtml(rm.title || rm.id)}</div>
-                                <div class="seed-id">${rm.id || ''}</div>
+                                <div class="seed-title">${escapeHtml(rm.title)}</div>
+                                <div class="seed-id">${rm.id}</div>
                             </div>
-                            <div class="seed-desc">${escapeHtml(rm.description || '')}</div>
+                            <div class="seed-desc">${escapeHtml(rm.description)}</div>
                             <div class="seed-meta">
-                                <span class="seed-badge" style="border-color:var(--violet-soft);color:var(--violet-soft);">${rm.status || 'active'}</span>
-                                <span class="seed-badge">${(rm.milestones || []).length || Object.keys(rm.milestones || {}).length} вех</span>
-                                ${rm.priority ? `<span class="seed-badge" style="color:var(--text-dim);">p: ${rm.priority}</span>` : ''}
+                                <span class="seed-badge" style="border-color:var(--violet-soft);color:var(--violet-soft);">roadmap</span>
+                                ${rm.milestones ? `<span class="seed-badge">${rm.milestones} milestones</span>` : ''}
+                                <span class="seed-badge">${rm.status}</span>
                             </div>
                         </div>
                     `).join('');
@@ -2155,197 +2158,6 @@
                 rmGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
             }
         }
-
-                async function loadFile(path) {
-            currentFilePath.textContent = path;
-            saveFileBtn.disabled = false;
-            try {
-                const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${path}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const content = await response.text();
-                const ext = path.split('.').pop();
-                const language = ext === 'json' ? 'json' : ext === 'py' ? 'python' : ext === 'html' ? 'html' : ext === 'js' ? 'javascript' : 'text';
-                monaco.editor.setModelLanguage(editor.getModel(), language);
-                editor.setValue(content);
-                localStorage.setItem(`orig_${path}`, content);
-                // Уведомляем СР об открытом файле
-                addSystemMessage(`📁 Открыт файл: ${path}`, true);
-            } catch (err) {
-                editor.setValue(`// Ошибка загрузки: ${err.message}`);
-            }
-        }
-
-        function saveCurrentFile() {
-            const path = currentFilePath.textContent;
-            if (!path) return;
-            const content = editor.getValue();
-            const patch = { file_path: path, content: content };
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({ type: 'apply_patch', patch: patch, session_id: currentChatId }));
-                showToast('◈ изменения отправлены', 'success');
-                localStorage.setItem(`orig_${path}`, content);
-            } else {
-                showToast('◈ нет соединения', 'error');
-            }
-        }
-
-        // ==================== УТИЛИТЫ ====================
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function showThinking(model) {
-            // Ставим иконку и цвет активной модели
-            const m = model || Array.from(activeModels)[0] || 'grok';
-            const svgEl = document.getElementById('thinkingIconSvg');
-            const labelEl = document.getElementById('thinkingLabel');
-            if (svgEl && modelIcons[m]) {
-                const tmp = document.createElement('div');
-                tmp.innerHTML = modelIcons[m];
-                const newSvg = tmp.querySelector('svg');
-                if (newSvg) {
-                    newSvg.id = 'thinkingIconSvg';
-                    svgEl.replaceWith(newSvg);
-                }
-            }
-            if (labelEl) {
-                const names = { grok: 'Грок думает', kimi: 'Кими думает', claude: 'Клод думает' };
-                labelEl.textContent = names[m] || 'думаю';
-                labelEl.style.color = modelColors[m] || 'var(--text-2)';
-            }
-            thinkingEl.classList.remove('hidden');
-            scrollToBottom();
-        }
-
-        function hideThinking() {
-            thinkingEl.classList.add('hidden');
-        }
-
-        function scrollToBottom() {
-            messagesEl.scrollTop = messagesEl.scrollHeight;
-        }
-
-        function autoHeight() {
-            inputEl.style.height = 'auto';
-            inputEl.style.height = inputEl.scrollHeight + 'px';
-        }
-
-        function updateResonance(value, level) {
-            const indicator = document.getElementById('resonanceIndicator');
-            const fill = document.getElementById('resonanceFill');
-            const valueEl = document.getElementById('resonanceValue');
-            if (!indicator || !fill || !valueEl) return;
-            indicator.classList.add('visible');
-            const percentage = Math.round(value * 100);
-            valueEl.textContent = `${percentage}%`;
-            fill.style.width = `${percentage}%`;
-            indicator.className = 'resonance-indicator visible resonance-level-' + level;
-            setTimeout(() => indicator.classList.remove('visible'), 8000);
-        }
-
-        // ==================== МОДЕЛИ ====================
-        const activeModels = new Set(['grok']);  // по умолчанию только Грок
-
-        function getActiveModels() { return Array.from(activeModels); }
-
-        function toggleModel(model) {
-            const key = model.charAt(0).toUpperCase() + model.slice(1);
-            const btn = document.getElementById('btn' + key);
-            if (!btn) return;
-            if (activeModels.has(model)) {
-                activeModels.delete(model);
-                btn.classList.remove('active');
-            } else {
-                activeModels.add(model);
-                btn.classList.add('active');
-            }
-        }
-
-        // Иконки моделей
-        const modelIcons = {
-            grok: `<svg viewBox="0 0 30 30" fill="none">
-                <polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/>
-                <circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/>
-            </svg>`,
-            kimi: `<svg viewBox="0 0 30 30" fill="none">
-                <rect x="8" y="8" width="14" height="14" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.07)" transform="rotate(45 15 15)"/>
-                <circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.9"/>
-            </svg>`,
-            claude: `<svg viewBox="0 0 30 30" fill="none">
-                <circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/>
-                <circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/>
-            </svg>`
-        };
-        const modelNames = { grok: 'Грок △', kimi: 'Кими ◇', claude: 'Клод ○' };
-        const modelColors = { grok: '#10b981', kimi: '#7c3aed', claude: '#4f46e5' };
-
-        let observerThinkingEl = null;
-
-        function showObserverThinking() {
-            hideObserverThinking();
-            observerThinkingEl = document.createElement('div');
-            observerThinkingEl.className = 'observer-thinking-indicator';
-            observerThinkingEl.innerHTML = `<span>○</span><span class="dots"><span>клод анализирует...</span></span>`;
-            messagesEl.appendChild(observerThinkingEl);
-            scrollToBottom();
-        }
-
-        function hideObserverThinking() {
-            if (observerThinkingEl) { observerThinkingEl.remove(); observerThinkingEl = null; }
-        }
-
-        function addObserverMessage(text, model = 'claude') {
-            const div = document.createElement('div');
-            div.className = 'msg observer';
-            const icon = modelIcons[model] || modelIcons.claude;
-            const name = modelNames[model] || 'Клод';
-            const color = modelColors[model] || '#4f46e5';
-            let html = escapeHtml(text);
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => renderCodeBlock(lang, code, true));
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, `<strong style="color:${color};">$1</strong>`);
-            html = html.replace(/\n/g, '<br>');
-            div.innerHTML = `
-                <div class="av">${icon}</div>
-                <div class="mbody">
-                    <div class="mname">${name}</div>
-                    <div class="bub">${html}</div>
-                </div>`;
-            messagesEl.appendChild(div);
-            scrollToBottom();
-            saveCurrentChatMessages();
-        }
-
-        // Compat stub
-        function setObserverState() {}
-        function toggleObserver() {}
-
-        function setupKeyboard() {
-            inputEl.addEventListener('keydown', e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            inputEl.addEventListener('input', autoHeight);
-        }
-
-        function setupTabs() {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.dataset.tab;
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    document.getElementById(`tab-${tabName}`).classList.add('active');
-                    if (tabName === 'status') loadStatus();
-                });
-            });
-        }
-
-
 
         // Оставляем loadSeeds как alias
         async function loadSeeds() { return loadStatus(); }
