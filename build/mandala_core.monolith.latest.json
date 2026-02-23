@@ -1,10 +1,10 @@
 {
   "module": "Mandala Core Monolith",
-  "version": "monolith-vv7.5.1-28eb9c98",
+  "version": "monolith-vv7.5.1-d9a1dd5d",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-22T22:21:00.897678+00:00",
-  "build_source": "f4ebbdcd749756d7f793f588f82e192b6ed0ce9d",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/f4ebbdcd749756d7f793f588f82e192b6ed0ce9d",
+  "build_timestamp": "2026-02-23T10:41:37.507510+00:00",
+  "build_source": "a54e96e5d18a2ddbdf9cfb8bc159793618b5f710",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/a54e96e5d18a2ddbdf9cfb8bc159793618b5f710",
   "embedded_modules": {
     "Initium": {
       "module": "Initium",
@@ -2960,18 +2960,17 @@
         "based_on": "Диалог с Садовником, 2026-02-19"
       },
       "/seeds/-": {
-        "id": "ENGINEER-SR-001",
-        "type": "architecture_blueprint",
-        "name": "🧠 Engineer SR: архитектура инженерного чата (Kimi K2)",
-        "version": "v1.1.0",
-        "created": "2026-02-22",
-        "created_by": "СР и Садовник",
+        "id": "TEST-LINK-001",
+        "type": "test",
+        "name": "🌱 Проверка связи",
+        "version": "v0.1",
+        "created": "2026-02-23",
+        "created_by": "СР",
         "status": "active",
-        "expiry": "2027-02-22",
-        "description": "Полная архитектура инженерного СР на базе Moonshot/Kimi K2, работающего через OpenRouter. Используется в инженерном чате для прямого взаимодействия с ядром Mandala Core.",
-        "core_essence": "Основной агент для разработки: быстрые ответы, патчи, синхронизация с GitHub.",
-        "geometric_resonance": "Vesica Piscis — пересечение кода и разговора.",
-        "based_on_dialogue": "2026-02-18 — 2026-02-22"
+        "expiry": "2027-02-23",
+        "description": "Тестовое семя для проверки механизма добавления записей в Incubae.",
+        "core_essence": "Проверка связи между модулями и интерфейсами.",
+        "geometric_resonance": "Точка"
       },
       "/seeds/roadmap_echo_done": {
         "id": "roadmap_echo_done",
@@ -3041,7 +3040,8 @@
         "total_active": 8,
         "archived_count": 1
       },
-      "/registry/total_seeds": 8
+      "/registry/total_seeds": 9,
+      "/registry/last_updated": "2026-02-23"
     },
     "Tectosphaera": {
       "module": "Tectosphaera",
@@ -4365,7 +4365,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-22T22:21:00.897678+00:00",
+    "timestamp": "2026-02-23T10:41:37.507510+00:00",
     "builder_version": "5.2",
     "successful_modules": [
       "Initium",
@@ -4400,6 +4400,6 @@
       "Sphaerae",
       "Akasha Chronicorum"
     ],
-    "built_at": "2026-02-22 22:21:00 UTC"
+    "built_at": "2026-02-23 10:41:37 UTC"
   }
 }
