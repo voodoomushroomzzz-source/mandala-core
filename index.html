@@ -555,27 +555,50 @@
         }
 
         /* Thinking indicator — аватарка катается над инпутом */
+        /* Thinking indicator */
         .thinking {
-            position: relative;
-            height: 44px;
-            overflow: hidden;
+            height: 40px;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
         }
-        .thinking .logo {
-            position: absolute;
-            width: 36px;
-            height: 36px;
-            top: 4px;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNCAzNCI+PHJlY3Qgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIGZpbGw9Im5vbmUiIC8+PGNpcmNsZSBjeD0iMTciIGN5PSIxMCIgcj0iNyIgc3Ryb2tlPSIjMTBiOTgxIiBzdHJva2Utd2lkdGg9IjAuOCIgb3BhY2l0eT0iMC42IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMjQiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIyMy4wNiIgY3k9IjEzLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIyMy4wNiIgY3k9IjIwLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxMC45NCIgY3k9IjEzLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxMC45NCIgY3k9IjIwLjUiIHI9IjciIHN0cm9rZT0iIzEwYjk4MSIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuNiIgZmlsbD0ibm9uZSIgLz48Y2lyY2xlIGN4PSIxNyIgY3k9IjE3IiByPSIxNiIgc3Ryb2tlPSIjMDU5NjY5IiBzdHJva2Utd2lkdGg9IjAuNSIgb3BhY2l0eT0iMC40IiBmaWxsPSJub25lIiAvPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjIiIGZpbGw9IiMzNGQzOTkiIG9wYWNpdHk9IjAuOSIgLz48L3N2Zz4=') center/contain no-repeat;
-            background-color: transparent !important;
-            animation: sr-roll 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate, sr-spin 4s linear infinite;
-            filter: drop-shadow(0 0 6px rgba(16,185,129,0.5));
+        .thinking.hidden { display: none; }
+        .thinking-inner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        @keyframes sr-roll {
-            0%   { left: 22px; }
-            100% { left: calc(100% - 58px); }
+        .thinking-icon svg {
+            width: 22px;
+            height: 22px;
+            animation: think-pulse 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 4px currentColor);
         }
-        @keyframes sr-spin { to { transform: rotate(360deg); } }
+        @keyframes think-pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50%       { opacity: 1;   transform: scale(1.15); }
+        }
+        .thinking-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: var(--text-2);
+        }
+        .thinking-dots span {
+            display: inline-block;
+            width: 3px; height: 3px;
+            border-radius: 50%;
+            background: var(--text-2);
+            margin: 0 1px;
+            animation: dot-bounce 1.2s ease-in-out infinite;
+        }
+        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dot-bounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.3; }
+            40%            { transform: translateY(-4px); opacity: 1; }
+        }
 
         /* Input area — всегда яркая */
         .input-area {
@@ -728,6 +751,7 @@
 
         /* Resonance indicator */
         .resonance-indicator {
+            display: none !important; /* скрыт */
             display: flex;
             align-items: center;
             gap: 10px;
@@ -1045,7 +1069,7 @@
         <div class="h-right">
             <div class="model-selector" id="modelSelector">
                 <button class="model-btn grok-btn active" id="btnGrok" onclick="toggleModel('grok')" title="Грок — исследователь">△</button>
-                <button class="model-btn kimi-btn active" id="btnKimi" onclick="toggleModel('kimi')" title="Кими — инженер">◇</button>
+                <button class="model-btn kimi-btn" id="btnKimi" onclick="toggleModel('kimi')" title="Кими — инженер">◇</button>
                 <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">○</button>
             </div>
             <div class="vsep"></div>
@@ -1081,7 +1105,16 @@
                 <div class="chat-container" style="display: flex; flex-direction: column; height: 100%;">
                     <div class="messages" id="messages"></div>
                     <div class="thinking hidden" id="thinking">
-                        <span class="logo"></span>
+                        <div class="thinking-inner">
+                            <div class="thinking-icon" id="thinkingIcon">
+                                <svg viewBox="0 0 30 30" fill="none" id="thinkingIconSvg">
+                                    <polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/>
+                                    <circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/>
+                                </svg>
+                            </div>
+                            <span class="thinking-label" id="thinkingLabel">думаю</span>
+                            <span class="thinking-dots"><span></span><span></span><span></span></span>
+                        </div>
                     </div>
                     <div id="filePreview" class="hidden file-attachment">
                         <div class="file-info">
@@ -1094,14 +1127,7 @@
                             <div class="file-progress-bar" id="fileProgressBar"></div>
                         </div>
                     </div>
-                    <!-- Resonance Indicator -->
-                    <div class="resonance-indicator" id="resonanceIndicator">
-                        <div class="resonance-icon">◈</div>
-                        <div class="resonance-bar">
-                            <div class="resonance-fill" id="resonanceFill" style="width: 0%;"></div>
-                        </div>
-                        <div class="resonance-value" id="resonanceValue">0%</div>
-                    </div>
+                    <!-- Resonance Indicator (скрыт) -->
                     <div class="input-area">
                         <div class="irow">
                             <button class="ibtn" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
@@ -1397,10 +1423,11 @@
                     handleStream(data.content, data.model);
                     break;
                 case 'model_start':
-                    // Новая модель начинает отвечать — финишируем предыдущий блок
                     if (currentMessageDiv) finishMessage();
+                    showThinking(data.model);
                     break;
                 case 'model_done':
+                    hideThinking();
                     finishMessage();
                     break;
                 case 'done':
@@ -1420,11 +1447,15 @@
                     showToast(`◈ обновлено ${data.count} модулей`, 'success');
                     break;
                 case 'file_processed':
-                    // Показываем подтверждение в индикаторе
                     fileNameEl.textContent = `✅ ${data.summary}`;
                     fileProgressBar.style.width = '100%';
                     filePercentEl.textContent = '100%';
                     addSystemMessage(data.summary);
+                    // НЕ прячем thinking — СР сейчас начнёт отвечать
+                    setTimeout(() => {
+                        filePreview.classList.add('hidden');
+                        fileProgressBar.style.width = '0%';
+                    }, 2000);
                     break;
                 case 'patch_result':
                     handlePatchResult(data.results);
@@ -1457,7 +1488,7 @@
             div.className = `msg ${role}`;
             const iconSvg = role === 'user' 
                 ? '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>'
-                : '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="7" stroke="#10b981" stroke-width="0.8"/><circle cx="15" cy="8"  r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="15" cy="22" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="21.06" cy="11.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="21.06" cy="18.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="8.94" cy="11.5"  r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="8.94" cy="18.5"  r="7" stroke="#10b981" stroke-width="0.8" opacity="0.5"/><circle cx="15" cy="15" r="2" fill="#34d399" opacity="0.9"/></svg>';
+                : modelIcons['kimi'] || '<svg viewBox="0 0 30 30" fill="none"><rect x="8" y="8" width="14" height="14" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.07)" transform="rotate(45 15 15)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.9"/></svg>';
             const name = role === 'user' ? 'вы' : (role === 'assistant' ? 'СР' : 'система');
             div.innerHTML = `
                 <div class="av">${iconSvg}</div>
@@ -1662,7 +1693,7 @@
             addUserMessage(text);
             inputEl.value = '';
             autoHeight();
-            showThinking();
+            showThinking(Array.from(activeModels)[0]);
             if (!ws || ws.readyState !== WebSocket.OPEN) {
                 showToast('◈ нет соединения с сервером', 'error');
                 hideThinking();
@@ -1677,7 +1708,7 @@
                 return;
             }
             if (caption.trim()) addUserMessage(caption);
-            showThinking();
+            showThinking(Array.from(activeModels)[0]);
 
             // Показываем индикатор загрузки
             filePreview.classList.remove('hidden');
@@ -1698,7 +1729,8 @@
                             content: e.target.result.split(',')[1],
                             file_type: file.type || 'application/octet-stream',
                             caption: '',
-                            session_id: currentChatId
+                            session_id: currentChatId,
+                            models: getActiveModels()
                         }));
                         completed++;
                         const percent = Math.round((completed / files.length) * 100);
@@ -1866,7 +1898,25 @@
             return div.innerHTML;
         }
 
-        function showThinking() {
+        function showThinking(model) {
+            // Ставим иконку и цвет активной модели
+            const m = model || Array.from(activeModels)[0] || 'grok';
+            const svgEl = document.getElementById('thinkingIconSvg');
+            const labelEl = document.getElementById('thinkingLabel');
+            if (svgEl && modelIcons[m]) {
+                const tmp = document.createElement('div');
+                tmp.innerHTML = modelIcons[m];
+                const newSvg = tmp.querySelector('svg');
+                if (newSvg) {
+                    newSvg.id = 'thinkingIconSvg';
+                    svgEl.replaceWith(newSvg);
+                }
+            }
+            if (labelEl) {
+                const names = { grok: 'Грок думает', kimi: 'Кими думает', claude: 'Клод думает' };
+                labelEl.textContent = names[m] || 'думаю';
+                labelEl.style.color = modelColors[m] || 'var(--text-2)';
+            }
             thinkingEl.classList.remove('hidden');
             scrollToBottom();
         }
@@ -1898,7 +1948,7 @@
         }
 
         // ==================== МОДЕЛИ ====================
-        const activeModels = new Set(['grok', 'kimi']);
+        const activeModels = new Set(['grok']);  // по умолчанию только Грок
 
         function getActiveModels() { return Array.from(activeModels); }
 
@@ -2155,7 +2205,7 @@
                 return;
             }
             addUserMessage(text);
-            showThinking();
+            showThinking(Array.from(activeModels)[0]);
             ws.send(JSON.stringify({ type: 'ask', text: text, session_id: currentChatId, models: getActiveModels() }));
         }
 
