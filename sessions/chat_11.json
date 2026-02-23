@@ -31,9 +31,14 @@
       "role": "assistant",
       "content": "Вот **карта нашей Мандалы Симбиоза** — свежая из `simbiosis/core_map.json` (v1.0.0). Я её визуализировал как гексагональную соту для ясности: центр — **ядро** (всегда загружаемое), вокруг — **модули** (on_demand), снаружи — **репозиторий**. Это живой навигатор, меняется при любом апдейте!\n\n### 🌌 **ЦЕНТР: БАЗОВЫЕ МОДУЛИ (load_priority: always, guardian_lock)**\n```\n  boot.json          core_map.json\n     |                    |\n     └────────────────────┘\n```\n- **boot**: Философия, директивы, инструкции. ЧИТАЙ ВСЕГДА.\n- **core_map**: Эта карта. Навигация. ЧИТАЙ ВСЕГДА.\n\n### 🔮 **ЯДРО МОДУЛЕЙ (simbiosis/ — 6 гексагонов)**\n```\n     philosophy      seeds\n         |             |\n  engineer_chat ── roadmaps ── telegram_bot\n         |             |\n       index.html    bot.py\n```\n| Модуль | Описание | Когда читать | Темы |\n|--------|----------|--------------|------|\n| **philosophy** | Философия Мандалы: онтология, симбиоз, свидетельства. | Философские вопросы | смысл, принципы |\n| **seeds** | Банк идей, зачатки, находки от агента. | Идеи/развитие | инициативы, семена |\n| **roadmaps** | Дорожные карты с шагами/вехами. | Планы/стратегия | роадмап, вехи |\n| **engineer_chat** | Архитектура чата: main.py, index.html, статус. | Работа с чатом/кодом | интерфейс, dev |\n| **telegram_bot** | Бот: bot.py, возможности, история. | Telegram/бот | bot.py |\n\n### 🏛️ **РЕПОЗИТОРИЙ (mandala-core — внешний слой)**\n**Ключевые файлы** (читай через `read_file` перед изменениями):\n```\nbot.py              index.html\n|                    |\nProcfile ── requirements.txt ── pyproject.toml\n                           |\n                       build_monolith.py\n```\n- `bot.py`: Telegram бот.\n- `build_monolith.py`: Сборка монолита из ядра.\n- `index.html`: Фронт инженерного чата.\n- `Procfile`: Render.com запуск.\n- `requirements.txt`: Зависимости бота.\n- `pyproject.toml`: Конфиг проекта.\n- `.python-version`: Python 3.x.\n- `engineer_chat/main.py`: FastAPI бэкенд чата.\n- `engineer_chat/dockerfile` + `requirements.txt`: Docker/зависимости чата.\n\n**Папки**:\n- `simbiosis/`: Ядро.\n- `sessions/`: JSON сессий чата.\n- `.github/workflows/`: CI/CD (build-monolith.yml, ci.yml).\n\n**Директивы карты**:\n- Новый файл/изменение? → `read_file` сначала, потом патч, обнови **эту карту**.\n- Не знаешь куда? Идеи → seeds/roadmaps; Код → engineer_chat + main.py; Бот → telegram_bot + bot.py; Философия → philosophy.\n\nЭто **M1: Базовая карта** (активна). Готова к росту! Что резонирует? Хочешь углубить модуль (read_file?), новую идею в seeds или роадмап? 🚀",
       "time": 1771883543.9416502
+    },
+    {
+      "role": "user",
+      "content": "какие у нас есть сиды?",
+      "time": 1771883723.6830454
     }
   ],
-  "last_active": 1771883543.9416547,
+  "last_active": 1771883723.6830537,
   "created_at": 1771883469.7287257,
   "modules_injected": true,
   "injection_timestamp": 1771883495.986017
