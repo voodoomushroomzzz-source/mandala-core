@@ -136,9 +136,14 @@
       "role": "user",
       "content": "давай",
       "time": 1771885704.4575608
+    },
+    {
+      "role": "user",
+      "content": "ну что покажешь карту мне?",
+      "time": 1771885754.8670807
     }
   ],
-  "last_active": 1771885704.4575927,
+  "last_active": 1771885754.867102,
   "created_at": 1771883469.7287257,
   "modules_injected": true,
   "injection_timestamp": 1771883495.986017
