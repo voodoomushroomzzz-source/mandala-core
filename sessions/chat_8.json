@@ -4,9 +4,19 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1771854406.0314674
+    },
+    {
+      "role": "user",
+      "content": "✗ incubae.json: Ошибка применения: /seeds/- не является массивом",
+      "time": 1771854422.647102
+    },
+    {
+      "role": "assistant",
+      "content": "[Модуль incubae]",
+      "time": 1771854422.6491816
     }
   ],
-  "last_active": 1771854406.0314708,
+  "last_active": 1771854422.6491854,
   "created_at": 1771854395.5437663,
   "modules_injected": false
 }
