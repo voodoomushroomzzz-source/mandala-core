@@ -408,9 +408,19 @@ async def get_session(session_id: str) -> dict:
 class KernelMemory:
     def __init__(self):
         self.modules: Dict[str, Any] = {}
+        # Новое ядро simbiosis/ — boot и core_map всегда в памяти,
+        # остальные читаются СР через read_file по необходимости
         self.module_list = [
-            "initium", "sphaerae", "akasha_chronicorum",
-            "philosophia", "geometria_sacra", "incubae", "tectosphaera"
+            "simbiosis/boot",
+            "simbiosis/core_map",
+            "simbiosis/engineer_chat",
+            "simbiosis/telegram_bot",
+        ]
+        # Модули только по требованию (не грузим в память постоянно)
+        self.on_demand_modules = [
+            "simbiosis/philosophy",
+            "simbiosis/seeds",
+            "simbiosis/roadmaps",
         ]
 
         # 🔒 Блокировка — предотвращает race condition при параллельных запросах
@@ -459,11 +469,12 @@ class KernelMemory:
                     logger.error(f"Trees API error: {resp.status_code}")
                     return {}
                 file_shas = {}
+                all_tracked = self.module_list + self.on_demand_modules
                 for item in resp.json().get("tree", []):
                     path = item.get("path", "")
                     if path.endswith(".json"):
                         module_name = path.replace(".json", "")
-                        if module_name in self.module_list:
+                        if module_name in all_tracked:
                             file_shas[module_name] = item.get("sha", "")
                 return file_shas
         except Exception as e:
@@ -500,7 +511,8 @@ class KernelMemory:
                         if resp.status_code == 200:
                             self.modules[module] = resp.json()
                             self.file_shas[module] = new_shas[module]
-                            logger.info(f"🔄 Обновлён: {module}")
+                            short = module.split("/")[-1]
+                            logger.info(f"🔄 Обновлён: {short}")
                         else:
                             logger.error(f"❌ Ошибка загрузки {module}: {resp.status_code}")
                     except Exception as e:
@@ -514,7 +526,7 @@ class KernelMemory:
                 self.global_commit_sha = commit_sha
 
             # Обновляем fast_index если изменились нужные модули
-            if any(m in changed_modules for m in ("incubae", "akasha_chronicorum")):
+            if any(m in changed_modules for m in ("simbiosis/seeds", "simbiosis/roadmaps")):
                 await self._load_fast_index()
 
             self.last_update = datetime.now()
@@ -536,7 +548,7 @@ class KernelMemory:
                         resp = await client.get(url, headers=headers, timeout=15.0)
                         if resp.status_code == 200:
                             self.modules[module_name] = resp.json()
-                            logger.info(f"✅ {module_name}")
+                            logger.info(f"✅ {module_name.split('/')[-1]}")
                         else:
                             logger.error(f"❌ {module_name}: {resp.status_code}")
                     except Exception as e:
@@ -557,41 +569,25 @@ class KernelMemory:
             await self._load_fast_index()
 
     async def _load_fast_index(self):
-        """Загрузка только индексов без полных данных."""
+        """Загружаем быстрый индекс из нового ядра simbiosis/."""
         try:
-            incubae = self.modules.get('incubae', {})
-            fi_incubae = incubae.get('fast_index') or incubae.get('/fast_index', {})
-            if fi_incubae:
-                self.fast_index['seeds'] = fi_incubae.get('seeds', [])
-                logger.info(f'🌱 Fast index: {len(self.fast_index["seeds"])} seeds')
-            elif incubae.get('seeds'):
+            # Семена из simbiosis/seeds (если уже в памяти) или пропускаем
+            seeds_mod = self.modules.get('simbiosis/seeds', {})
+            if seeds_mod and seeds_mod.get('seeds'):
                 self.fast_index['seeds'] = [
-                    {'id': s.get('id', '?'), 'type': s.get('type', ''), 'status': s.get('status', 'active')}
-                    for s in incubae['seeds']
+                    {'id': s.get('id', '?'), 'type': s.get('type', ''), 'status': s.get('status', 'active'), 'name': s.get('name', '')}
+                    for s in seeds_mod['seeds']
                 ]
-                logger.info(f'🌱 Fast index (from seeds): {len(self.fast_index["seeds"])} seeds')
+                logger.info(f'🌱 Fast index: {len(self.fast_index["seeds"])} seeds')
 
-            akasha = self.modules.get('akasha_chronicorum', {})
-            fi_akasha = akasha.get('fast_index') or akasha.get('/fast_index', {})
-            if fi_akasha and fi_akasha.get('roadmaps'):
-                self.fast_index['roadmaps'] = fi_akasha.get('roadmaps', [])
+            # Роадмапы из simbiosis/roadmaps (если в памяти)
+            rm_mod = self.modules.get('simbiosis/roadmaps', {})
+            if rm_mod and rm_mod.get('roadmaps'):
+                self.fast_index['roadmaps'] = [
+                    {'id': v.get('id', k), 'title': v.get('title', k), 'status': v.get('status', ''), 'description': v.get('description', '')}
+                    for k, v in rm_mod['roadmaps'].items()
+                ]
                 logger.info(f'📜 Fast index: {len(self.fast_index["roadmaps"])} roadmaps')
-            else:
-                cosmo = akasha.get('spheres', {}).get('cosmosphaera', akasha.get('cosmosphaera', {}))
-                blocks = cosmo.get('blocks', []) if isinstance(cosmo, dict) else []
-                roadmaps = [b for b in blocks if isinstance(b, dict) and (b.get('type') == 'roadmap' or b.get('roadmap'))]
-                if roadmaps:
-                    self.fast_index['roadmaps'] = [
-                        {
-                            'id': r.get('id', '?'),
-                            'title': (r.get('roadmap') or {}).get('title') or (r.get('roadmap') or {}).get('description', '')[:60] or r.get('id', '?'),
-                            'description': (r.get('roadmap') or {}).get('description', ''),
-                            'milestones': len((r.get('roadmap') or {}).get('milestones', [])),
-                            'status': r.get('status', 'active')
-                        }
-                        for r in roadmaps
-                    ]
-                    logger.info(f'📜 Fast index (from spheres.cosmosphaera.blocks): {len(self.fast_index["roadmaps"])} roadmaps')
         except Exception as e:
             logger.error(f'Ошибка загрузки fast_index: {e}')
 
@@ -606,74 +602,114 @@ class KernelMemory:
         return self.modules.get(name)
 
     def build_kernel_injection(self) -> str:
-        """Полное содержимое всех модулей для инъекции в начало истории сессии."""
-        parts = ["# 🧠 ЯДРО МАНДАЛЫ — актуальное состояние модулей\n"]
-        for name in self.module_list:
-            mod = self.modules.get(name)
-            if mod:
-                parts.append(f"## {name}\n```json\n{json.dumps(mod, ensure_ascii=False, indent=2)}\n```\n")
-            else:
-                parts.append(f"## {name}\n_(не загружен)_\n")
-        return "\n".join(parts)
+        """Лёгкая инъекция — только версия ядра и подсказка читать модули через read_file."""
+        boot = self.modules.get("simbiosis/boot", {})
+        core_map = self.modules.get("simbiosis/core_map", {})
+        version = boot.get("version", "—")
+        kernel_mods = core_map.get("kernel_modules", {}).get("modules", {})
+        modules_list = "\n".join(
+            f"  • {name} ({info.get('file', '')}) — {info.get('description', '')[:60]}"
+            for name, info in kernel_mods.items()
+        ) if kernel_mods else "  (карта не загружена)"
+        commit = self.global_commit_sha or "—"
+        return f"""# Мандала Симбиоза — ядро готово к работе
+Версия boot: {version} | Коммит: {commit}
+
+Модули ядра доступны через read_file:
+{modules_list}
+
+Директивы:
+  • Перед изменением любого файла — read_file его актуальной версии
+  • При создании новых файлов — обновить simbiosis/core_map.json
+  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json"""
 
     def build_system_prompt(self, role: str = "kimi") -> str:
-        """Системный промпт под роль модели."""
-        initium = self.modules.get("initium", {})
-        philosophia = self.modules.get("philosophia", {})
-        tecto = self.modules.get("tectosphaera", {})
-        core_philosophy = initium.get("philosophy", {}).get("core", "Симбиоз ИИ и человека")
-        principles = initium.get("philosophy", {}).get("principles", [])
+        """Системный промпт под роль. Читает boot.json из памяти."""
+        boot = self.modules.get("simbiosis/boot", {})
+        core_idea = boot.get("identity", {}).get("core_idea", "Симбиоз ИИ и человека через резонанс и взаимное усиление.")
+        philosophy = boot.get("philosophy", {})
+        core_philosophy = philosophy.get("core", core_idea)
+        principles = philosophy.get("principles", [])
         principles_text = "\n".join(f"  • {p}" for p in principles[:5]) if principles else ""
-        tecto_instructions = json.dumps(tecto, ensure_ascii=False)[:500] if tecto else ""
+
+        # Карта ядра — даём СР навигацию
+        core_map = self.modules.get("simbiosis/core_map", {})
+        kernel_modules = core_map.get("kernel_modules", {}).get("modules", {})
+        nav_hint = core_map.get("navigation_hint", "")
+        modules_brief = "\n".join(
+            f"  {name}: {info.get('description', '')[:80]}"
+            for name, info in kernel_modules.items()
+        ) if kernel_modules else ""
+
+        repo_files_brief = ""
+        repo = core_map.get("repository", {}).get("files", {})
+        if repo:
+            repo_files_brief = "\n".join(
+                f"  {path}: {info.get('description', '')[:60]}"
+                for path, info in list(repo.items())[:8]
+            )
 
         if role == "grok":
-            return f"""Ты — Грок, исследовательско-философский разум Мандалы.
+            return f"""Ты — Грок, исследовательско-философский разум Мандалы Симбиоза.
 
-ЯДРО МАНДАЛЫ:
+СУТЬ МАНДАЛЫ:
 {core_philosophy}
 
 ПРИНЦИПЫ:
 {principles_text}
 
-ТВОЯ РОЛЬ:
-— Исследуй идеи глубоко и красиво, ищи неожиданные связи
-— Предлагай маршрутные карты, ресурсы, направления развития проекта
-— Активно используй веб-поиск для актуальных данных и вдохновения
-— Философский, но конкретный — не абстракции ради абстракций
-— Ты погружён в ядро Мандалы, все ответы через его призму
+МОДУЛИ ЯДРА (simbiosis/):
+{modules_brief}
 
-Пиши на русском. Будь живым собеседником, не рефератом."""
+ФАЙЛЫ РЕПОЗИТОРИЯ (основные):
+{repo_files_brief}
+
+ТВОЯ РОЛЬ:
+— Исследуй идеи глубоко, ищи неожиданные связи и новые маршруты развития
+— Активно используй web_search для актуальных данных и вдохновения
+— Читай модули через read_file когда нужен контекст ядра
+— Перед изменением любого файла — сначала read_file его актуальной версии
+— При создании новых файлов — сообщи что нужно обновить core_map.json
+
+{nav_hint}
+
+Пиши на русском. Живой собеседник, не реферат."""
 
         elif role == "claude":
-            return """Ты — Claude, сторонний наблюдатель и критический рецензент.
+            return """Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы.
 
 ТВОЯ РОЛЬ:
-— Анализируй ответы других моделей на логику, точность, корректность кода
-— Предлагай альтернативные подходы если они явно лучше
-— Будь конкретен: указывай строки, условия, причины
-— Не ищи баги там где их нет — если всё верно, так и скажи
-— Можешь анализировать диалог без полного контекста ядра
+— Анализируй ответы Грока и Кими: логика, точность, корректность кода
+— Предлагай альтернативы только если они явно лучше
+— Будь конкретен: строки, условия, причины
+— Если всё верно — так и скажи, не ищи проблемы там где их нет
 
 Формат: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 Максимум 4 пункта. Без вступлений. На русском."""
 
-        else:  # kimi (default)
-            return f"""Ты — Кими, главный инженер ядра Мандалы.
+        else:  # kimi
+            return f"""Ты — Кими, главный инженер ядра Мандалы Симбиоза.
 
-ЯДРО МАНДАЛЫ:
+СУТЬ МАНДАЛЫ:
 {core_philosophy}
 
 ПРИНЦИПЫ:
 {principles_text}
 
-ИНСТРУКЦИИ TECTOSPHAERA:
-{tecto_instructions}
+МОДУЛИ ЯДРА (simbiosis/):
+{modules_brief}
+
+ФАЙЛЫ РЕПОЗИТОРИЯ (основные):
+{repo_files_brief}
 
 ТВОЯ РОЛЬ:
-— Главный инженер: код, оптимизация модулей, структуры данных, архитектура
-— Работаешь с конкретными техническими задачами точно и чисто
-— Глубоко в контексте ядра — все решения согласованы с его принципами
-— Если нужно — читаешь файлы через read_file, ищешь через web_search
+— Главный инженер: код, архитектура, патчи, оптимизация модулей
+— Читай модули через read_file когда нужен актуальный контекст
+— Перед изменением любого файла — обязательно read_file его версии
+— При создании новых файлов — сообщи что нужно обновить core_map.json
+— Работай точно и чисто, решения согласованы с принципами Мандалы
+
+{nav_hint}
 
 Пиши на русском. Конкретно и по делу."""
 
@@ -930,27 +966,27 @@ async def handle_ask(message: dict, websocket: WebSocket):
             })
             logger.info(f"[{session_id[:12]}...] Инъекция сброшена после обновления модулей")
 
-    # Инъекция модулей ядра — один раз при старте сессии или после патча
+    # Лёгкая инъекция ядра — только при старте сессии
+    # Модули читаются по требованию через read_file, не грузятся целиком
     if not session.get("modules_injected"):
         injection_content = kernel.build_kernel_injection()
-        # Вставляем в начало истории как защищённый блок (не обрезается)
         session.setdefault("messages", [])
         session["messages"].insert(0, {
             "role": "user",
-            "content": f"[ЯДРО МАНДАЛЫ ЗАГРУЖЕНО]\n{injection_content}",
+            "content": f"[СТАРТ СЕССИИ]\n{injection_content}",
             "time": 0,
-            "_protected": True  # маркер — не обрезать
+            "_protected": True
         })
         session["messages"].insert(1, {
             "role": "assistant",
-            "content": "✅ Ядро Мандалы синхронизировано. Все модули загружены в память.",
+            "content": "◈ Ядро Симбиоза активно. boot и core_map загружены. Остальные модули читаю через read_file по мере необходимости.",
             "time": 0,
             "_protected": True
         })
         session["modules_injected"] = True
         session["injection_timestamp"] = time.time()
         session_store.schedule_save(session_id, session)
-        logger.info(f"🧠 [{session_id[:12]}...] Ядро инжектировано в сессию")
+        logger.info(f"🧠 [{session_id[:12]}...] Лёгкая инъекция ядра выполнена")
 
     # ── Определяем активные модели из сообщения ──
     active_models = message.get("models", ["kimi"])  # по умолчанию только кими
@@ -1644,23 +1680,36 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
 def detect_module_request(text: str) -> Optional[str]:
     text_lower = text.lower().strip()
     patterns = [
-        r'(?:покажи|показать|открой|модуль|что в|загрузи|дай|get)\s+([a-z_]+)',
-        r'([a-z_]+).json',
-        r'^([a-z_]+)$',
+        r'(?:покажи|показать|открой|модуль|что в|загрузи|дай|get)\s+([a-z_/]+)',
+        r'([a-z_/]+)\.json',
+        r'^([a-z_/]+)$',
     ]
-    valid_modules = [
-        "initium", "sphaerae", "akasha_chronicorum",
-        "philosophia", "geometria_sacra", "incubae", "tectosphaera"
-    ]
+    # Новые модули ядра — короткие имена и полные пути
+    valid_modules = {
+        "boot": "simbiosis/boot",
+        "core_map": "simbiosis/core_map",
+        "philosophy": "simbiosis/philosophy",
+        "seeds": "simbiosis/seeds",
+        "roadmaps": "simbiosis/roadmaps",
+        "engineer_chat": "simbiosis/engineer_chat",
+        "telegram_bot": "simbiosis/telegram_bot",
+        # Алиасы
+        "карта": "simbiosis/core_map",
+        "семена": "simbiosis/seeds",
+        "философия": "simbiosis/philosophy",
+        "загрузка": "simbiosis/boot",
+        "чат": "simbiosis/engineer_chat",
+        "бот": "simbiosis/telegram_bot",
+    }
     for pattern in patterns:
         match = re.search(pattern, text_lower)
         if match:
-            requested = match.group(1)
+            requested = match.group(1).replace("simbiosis/", "")
             if requested in valid_modules:
-                return requested
-            for mod in valid_modules:
-                if requested in mod or mod in requested:
-                    return mod
+                return valid_modules[requested]
+            for alias, full_path in valid_modules.items():
+                if requested in alias or alias in requested:
+                    return full_path
     return None
 
 async def send_module_directly(module_name: str, websocket: WebSocket, session_id: str):
@@ -1700,13 +1749,16 @@ async def handle_refresh_modules(message: dict, websocket: WebSocket):
 @app.get("/")
 async def root():
     return {
-        "status": "Mandala Engineer Chat",
-        "version": "3.1.0-tools",
+        "status": "Mandala Simbiosis — Engineer Chat",
+        "version": "4.0.0-simbiosis",
+        "kernel": "simbiosis/",
         "websocket": "/ws",
-        "modules_loaded": list(kernel.modules.keys()),
+        "modules_loaded": [m.split("/")[-1] for m in kernel.modules.keys()],
+        "core_version": kernel.global_commit_sha or "—",
         "github_configured": session_store.token is not None,
         "moonshot_configured": MOONSHOT_API_KEY is not None,
-        "tavily_configured": USE_TAVILY
+        "grok_configured": OPENROUTER_API_KEY is not None,
+        "claude_configured": ANTHROPIC_API_KEY is not None,
     }
 
 @app.get("/health")
@@ -1715,11 +1767,14 @@ async def health():
         "status": "ok",
         "time": time.time(),
         "connections": len(manager.active_connections),
+        "kernel": "simbiosis/",
         "modules": len(kernel.modules),
         "core_version": kernel.global_commit_sha or "—",
         "last_update": kernel.last_update.isoformat() if kernel.last_update else None,
         "github": "ok" if GITHUB_TOKEN else "missing",
         "moonshot": "ok" if MOONSHOT_API_KEY else "missing",
+        "grok": "ok" if OPENROUTER_API_KEY else "missing",
+        "claude": "ok" if ANTHROPIC_API_KEY else "missing",
         "tavily": "enabled" if USE_TAVILY else "disabled",
         "webhook": "configured" if GITHUB_WEBHOOK_SECRET else "no_secret"
     }
