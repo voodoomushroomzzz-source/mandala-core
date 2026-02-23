@@ -1048,9 +1048,9 @@
                         <button onclick="loadStatus()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
                     </div>
                     <div id="statusRings" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;"></div>
-                    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin-bottom:10px;">🌱 семена (incubae)</div>
+                    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin-bottom:10px;" id="seedsLabel">🌱 семена (incubae)</div>
                     <div class="seeds-grid" id="seedsGrid"><div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div></div>
-                    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin:16px 0 10px;">📜 роадмапы (akasha)</div>
+                    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin:16px 0 10px;" id="roadmapsLabel">📜 роадмапы (akasha)</div>
                     <div class="seeds-grid" id="roadmapsGrid"><div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div></div>
                 </div>
             </div>
@@ -1901,101 +1901,109 @@
             document.getElementById('roadmapsGrid').innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
             document.getElementById('statusRings').innerHTML = '';
 
-            try {
-                // Загружаем incubae
-                const incResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/incubae.json`);
-                if (incResp.ok) {
-                    const incData = await incResp.json();
-                    const seeds = incData.seeds || [];
-                    const fastIndex = incData.fast_index || {};
-                    const fastSeeds = fastIndex.seeds || [];
+            // Карточки колец
+            const rings = [
+                { name: 'Crystal', color: 'var(--indigo-soft)', desc: 'initium · philosophia · geometria' },
+                { name: 'Flow', color: 'var(--green-2)', desc: 'akasha · incubae · sphaerae' },
+                { name: 'Impulse', color: 'var(--violet-soft)', desc: 'tectosphaera' }
+            ];
+            document.getElementById('statusRings').innerHTML = rings.map(r => `
+                <div style="flex:1;min-width:140px;padding:10px 12px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius);border-left:2px solid ${r.color};">
+                    <div style="font-family:var(--mono);font-size:10px;color:${r.color};letter-spacing:1px;margin-bottom:4px;">${r.name}</div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--text-2);">${r.desc}</div>
+                </div>
+            `).join('');
 
-                    // Кольца статус (из fast_index если есть)
-                    const rings = [
-                        { name: 'Crystal', color: 'var(--indigo-soft)', desc: 'initium · philosophia · geometria' },
-                        { name: 'Flow', color: 'var(--green-2)', desc: 'akasha · incubae · sphaerae' },
-                        { name: 'Impulse', color: 'var(--violet-soft)', desc: 'tectosphaera' }
-                    ];
-                    document.getElementById('statusRings').innerHTML = rings.map(r => `
-                        <div style="flex:1;min-width:140px;padding:10px 12px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius);border-left:2px solid ${r.color};">
-                            <div style="font-family:var(--mono);font-size:10px;color:${r.color};letter-spacing:1px;margin-bottom:4px;">${r.name}</div>
-                            <div style="font-family:var(--mono);font-size:9px;color:var(--text-2);">${r.desc}</div>
+            // ── Семена ──
+            try {
+                const incResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/incubae.json`);
+                if (!incResp.ok) throw new Error(`HTTP ${incResp.status}`);
+                const incData = await incResp.json();
+
+                // fast_index может лежать как 'fast_index' или '/fast_index'
+                const fastIndex = incData['fast_index'] || incData['/fast_index'] || {};
+                const fastSeeds = fastIndex.seeds || [];
+                const directSeeds = incData.seeds || [];
+
+                // Предпочитаем полные данные из seeds, дополняем fast_index
+                const allSeeds = directSeeds.length ? directSeeds : fastSeeds;
+                const totalActive = fastIndex.total_active || fastSeeds.filter(s => s.status === 'active').length || allSeeds.length;
+
+                // Счётчик — одна строка
+                const seedLabel = document.getElementById('seedsLabel');
+                if (seedLabel) seedLabel.textContent = `🌱 семена (incubae) — ${totalActive} активных`;
+
+                if (!allSeeds.length) {
+                    seedsGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет семян</div></div>';
+                } else {
+                    seedsGrid.innerHTML = allSeeds.map(seed => `
+                        <div class="seed-card" onclick="askAboutSeed('${seed.id}')">
+                            <div class="seed-header">
+                                <div class="seed-title">${escapeHtml(seed.name || seed.id || 'без названия')}</div>
+                                <div class="seed-id">${seed.id || ''}</div>
+                            </div>
+                            <div class="seed-desc">${escapeHtml(seed.description || seed.core_essence || '')}</div>
+                            <div class="seed-meta">
+                                <span class="seed-badge" style="border-color:var(--green);color:var(--green-bright);">${seed.type || 'seed'}</span>
+                                <span class="seed-badge" style="border-color:${seed.status==='active'?'var(--green)':'var(--text-3)'};">${seed.status || 'active'}</span>
+                                ${seed.expiry ? `<span class="seed-badge">до ${seed.expiry}</span>` : ''}
+                            </div>
                         </div>
                     `).join('');
-
-                    // Карточки семян — сначала из fast_index, потом из seeds
-                    const allSeeds = seeds.length ? seeds : fastSeeds;
-                    if (!allSeeds.length) {
-                        seedsGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет семян</div></div>';
-                    } else {
-                        seedsGrid.innerHTML = allSeeds.map(seed => `
-                            <div class="seed-card" onclick="askAboutSeed('${seed.id}')">
-                                <div class="seed-header">
-                                    <div class="seed-title">${escapeHtml(seed.name || seed.id || 'без названия')}</div>
-                                    <div class="seed-id">${seed.id || ''}</div>
-                                </div>
-                                <div class="seed-desc">${escapeHtml(seed.description || seed.core_essence || '')}</div>
-                                <div class="seed-meta">
-                                    <span class="seed-badge" style="border-color:var(--green);color:var(--green-bright);">${seed.type || 'seed'}</span>
-                                    <span class="seed-badge" style="border-color:${seed.status==='active'?'var(--green)':'var(--text-3)'};">${seed.status || 'active'}</span>
-                                    ${seed.expiry ? `<span class="seed-badge">до ${seed.expiry}</span>` : ''}
-                                </div>
-                            </div>
-                        `).join('');
-                    }
-
-                    // Итого
-                    const totalActive = fastIndex.total_active || fastSeeds.filter(s=>s.status==='active').length || seeds.length;
-                    seedsGrid.insertAdjacentHTML('beforebegin', `<div style="font-family:var(--mono);font-size:9px;color:var(--text-2);margin-bottom:8px;">🌱 Fast index: ${totalActive} seeds активных</div>`);
                 }
             } catch(err) {
                 seedsGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
             }
 
+            // ── Роадмапы ──
+            const rmGrid = document.getElementById('roadmapsGrid');
             try {
-                // Загружаем akasha
                 const akResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/akasha_chronicorum.json`);
-                if (akResp.ok) {
-                    const akData = await akResp.json();
-                    const fastIndex = akData.fast_index || {};
-                    const roadmaps = fastIndex.roadmaps || [];
+                if (!akResp.ok) throw new Error(`HTTP ${akResp.status}`);
+                const akData = await akResp.json();
 
-                    // Ищем роадмапы в cosmosphaera.blocks
-                    const blocks = (akData.cosmosphaera || akData.spheres || {}).blocks || [];
-                    const roadmapBlocks = blocks.filter(b => b.type === 'roadmap' || (b.roadmap));
+                // fast_index или прямой поиск в spheres.cosmosphaera.blocks
+                const fi = akData['fast_index'] || akData['/fast_index'] || {};
+                let roadmaps = fi.roadmaps || [];
 
-                    const allRoadmaps = roadmaps.length ? roadmaps : roadmapBlocks;
-                    
-                    const rmGrid = document.getElementById('roadmapsGrid');
-                    if (!allRoadmaps.length) {
-                        rmGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет роадмапов</div></div>';
-                    } else {
-                        rmGrid.innerHTML = allRoadmaps.map(rm => {
-                            const rd = rm.roadmap || rm;
-                            const name = rd.title || rm.name || rm.id || 'Роадмап';
-                            const desc = rd.goal || rm.description || '';
-                            const milestones = (rd.milestones || []).length;
-                            const status = rm.status || rd.status || 'active';
-                            return `
-                            <div class="seed-card" style="border-left:2px solid var(--violet-soft);">
-                                <div class="seed-header">
-                                    <div class="seed-title">${escapeHtml(name)}</div>
-                                    <div class="seed-id">${rm.id || ''}</div>
-                                </div>
-                                <div class="seed-desc">${escapeHtml(desc)}</div>
-                                <div class="seed-meta">
-                                    <span class="seed-badge" style="border-color:var(--violet-soft);color:var(--violet-soft);">roadmap</span>
-                                    ${milestones ? `<span class="seed-badge">${milestones} milestones</span>` : ''}
-                                    <span class="seed-badge">${status}</span>
-                                </div>
-                            </div>`;
-                        }).join('');
-                    }
-                    const rmCount = allRoadmaps.length;
-                    rmGrid.insertAdjacentHTML('beforebegin', `<div style="font-family:var(--mono);font-size:9px;color:var(--text-2);margin-bottom:8px;">📜 Fast index: ${rmCount} roadmaps</div>`);
+                if (!roadmaps.length) {
+                    // Ищем в spheres.cosmosphaera.blocks (реальная структура)
+                    const cosmo = (akData.spheres || {}).cosmosphaera || akData.cosmosphaera || {};
+                    const blocks = cosmo.blocks || [];
+                    const rmBlocks = blocks.filter(b => b && (b.type === 'roadmap' || b.roadmap));
+                    roadmaps = rmBlocks.map(b => ({
+                        id: b.id || '?',
+                        title: (b.roadmap || {}).title || (b.roadmap || {}).description || b.id || 'Роадмап',
+                        description: (b.roadmap || {}).description || '',
+                        milestones: ((b.roadmap || {}).milestones || []).length,
+                        status: b.status || 'active'
+                    }));
+                }
+
+                // Счётчик — одна строка
+                const rmLabel = document.getElementById('roadmapsLabel');
+                if (rmLabel) rmLabel.textContent = `📜 роадмапы (akasha) — ${roadmaps.length}`;
+
+                if (!roadmaps.length) {
+                    rmGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет роадмапов</div></div>';
+                } else {
+                    rmGrid.innerHTML = roadmaps.map(rm => `
+                        <div class="seed-card" style="border-left:2px solid var(--violet-soft);">
+                            <div class="seed-header">
+                                <div class="seed-title">${escapeHtml(rm.title)}</div>
+                                <div class="seed-id">${rm.id}</div>
+                            </div>
+                            <div class="seed-desc">${escapeHtml(rm.description)}</div>
+                            <div class="seed-meta">
+                                <span class="seed-badge" style="border-color:var(--violet-soft);color:var(--violet-soft);">roadmap</span>
+                                ${rm.milestones ? `<span class="seed-badge">${rm.milestones} milestones</span>` : ''}
+                                <span class="seed-badge">${rm.status}</span>
+                            </div>
+                        </div>
+                    `).join('');
                 }
             } catch(err) {
-                document.getElementById('roadmapsGrid').innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
+                rmGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
             }
         }
 
