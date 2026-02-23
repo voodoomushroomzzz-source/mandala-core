@@ -1114,7 +1114,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "messages": kimi_messages,
                             "tools": tools,
                             "tool_choice": "auto",
-                            "temperature": 0.3,
+                            "temperature": 1.0,
                             "max_tokens": 8192,
                             "stream": False,
                         },
@@ -1142,7 +1142,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{MOONSHOT_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {MOONSHOT_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": MOONSHOT_MODEL, "messages": kimi_messages, "temperature": 0.3, "max_tokens": 8192},
+                                json={"model": MOONSHOT_MODEL, "messages": kimi_messages, "temperature": 1.0, "max_tokens": 32768},
                                 timeout=1000.0
                             )
                             if resp2.status_code == 200:
