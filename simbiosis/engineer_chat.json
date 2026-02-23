@@ -1,0 +1,119 @@
+{
+  "module": "engineer_chat",
+  "version": "v1.0.0",
+  "type": "product_module",
+  "description": "Модуль инженерного чата Мандалы. Архитектура, компоненты, история, текущий статус и следующие шаги. Отдельная экосистема разработки.",
+  "meta": {
+    "layer": 2,
+    "guardian_lock": false,
+    "change_requires": "sr_or_gardener",
+    "created": "2026-02-23",
+    "version_history": [
+      {
+        "version": "v1.0.0",
+        "date": "2026-02-23",
+        "summary": "Создание модуля. Выделен из Tectosphaera как отдельная сфера."
+      }
+    ],
+    "roadmap": {
+      "current_milestone": "M3 — Три модели",
+      "milestones": [
+        {
+          "id": "M1",
+          "name": "MVP чат",
+          "status": "done",
+          "date": "2026-02",
+          "description": "Базовый чат с Кими"
+        },
+        {
+          "id": "M2",
+          "name": "Webhook + polling",
+          "status": "done",
+          "date": "2026-02-23",
+          "description": "Синхронизация ядра через GitHub API"
+        },
+        {
+          "id": "M3",
+          "name": "Три модели (Грок+Кими+Клод)",
+          "status": "active",
+          "date": "2026-02-23",
+          "description": "Мульти-агентная архитектура"
+        },
+        {
+          "id": "M4",
+          "name": "Инструменты СР",
+          "status": "planned",
+          "description": "list_files, read_live_file, validate_syntax"
+        },
+        {
+          "id": "M5",
+          "name": "Next.js переезд",
+          "status": "planned",
+          "description": "Полноценный фронтенд с авторизацией"
+        }
+      ]
+    }
+  },
+  "architecture": {
+    "hosting": "Render.com",
+    "backend": "FastAPI (Python) — engineer-chat/main.py",
+    "frontend": "Vanilla HTML/CSS/JS — index.html",
+    "kernel_storage": "GitHub API (mandala-core repo)",
+    "session_storage": "GitHub (sessions/ folder)",
+    "communication": "WebSocket (/ws endpoint)"
+  },
+  "models": {
+    "grok": {
+      "role": "Исследователь-философ",
+      "api": "OpenRouter",
+      "model_id": "x-ai/grok-4.1-fast",
+      "env_key": "OPENROUTER_KEY",
+      "temperature": 0.8,
+      "tools": [
+        "web_search",
+        "read_file"
+      ]
+    },
+    "kimi": {
+      "role": "Главный инженер",
+      "api": "Moonshot",
+      "model_id": "kimi-k2.5",
+      "env_key": "MOONSHOT_API_KEY",
+      "temperature": 1.0,
+      "tools": [
+        "web_search",
+        "read_file"
+      ]
+    },
+    "claude": {
+      "role": "Сторонний наблюдатель",
+      "api": "Anthropic",
+      "model_id": "claude-sonnet-4-6",
+      "env_key": "ANTHROPIC_API_KEY",
+      "temperature": 1.0,
+      "tools": []
+    }
+  },
+  "kernel_sync": {
+    "method": "blob SHA comparison via GitHub Contents API",
+    "polling_interval": "60 seconds",
+    "webhook": "POST /github-webhook (HMAC-SHA256)",
+    "on_update": "Сброс инъекции ядра, уведомление клиентов через WebSocket"
+  },
+  "current_issues": [
+    "Инъекция ядра тяжёлая (7 JSON в начале каждой сессии) — планируется переход на read_file по требованию",
+    "Файлы передаются через base64 по WebSocket — планируется серверное хранилище"
+  ],
+  "files": {
+    "engineer-chat/main.py": "FastAPI бэкенд. ~1800 строк. Главный файл.",
+    "engineer-chat/requirements.txt": "Зависимости: fastapi, uvicorn, httpx, python-multipart",
+    "engineer-chat/dockerfile": "Docker конфигурация",
+    "index.html": "Фронтенд чата"
+  },
+  "changes": {
+    "v1.0.0": {
+      "date": "2026-02-23",
+      "summary": "Создание модуля. Выделен из монолита."
+    }
+  }
+}

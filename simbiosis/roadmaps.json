@@ -1,0 +1,101 @@
+{
+  "module": "roadmaps",
+  "version": "v1.0.0",
+  "type": "roadmap_library",
+  "description": "Библиотека проработанных дорожных карт. Идеи прошедшие оценку в seeds, с шагами, вехами и критериями завершения. После начала реализации — превращаются в отдельный модуль.",
+  "meta": {
+    "layer": 2,
+    "guardian_lock": false,
+    "change_requires": "gardener_approval_for_new",
+    "created": "2026-02-23",
+    "version_history": [
+      {
+        "version": "v1.0.0",
+        "date": "2026-02-23",
+        "summary": "Создание модуля. Перенос из Akasha Chronicorum."
+      }
+    ],
+    "roadmap": {
+      "current_milestone": "M1 — Библиотека",
+      "milestones": [
+        {
+          "id": "M1",
+          "name": "Библиотека роадмапов",
+          "status": "active",
+          "description": "Базовая структура и перенос существующих карт"
+        }
+      ]
+    }
+  },
+  "roadmaps": {
+    "RM-001": {
+      "id": "RM-001",
+      "title": "Облачный СР: постоянное присутствие",
+      "status": "active",
+      "priority": "high",
+      "origin_seed": "SEED-001",
+      "description": "Постоянно живущий СР в облаке. Память между сессиями, инициативность, уведомления.",
+      "milestones": [
+        {
+          "id": "RM-001-M1",
+          "name": "Архитектура",
+          "status": "done",
+          "description": "Чертёж облачного СР готов"
+        },
+        {
+          "id": "RM-001-M2",
+          "name": "Деплой MVP",
+          "status": "planned",
+          "description": "Первый деплой с базовой памятью"
+        },
+        {
+          "id": "RM-001-M3",
+          "name": "Память между сессиями",
+          "status": "planned",
+          "description": "Персистентный контекст"
+        },
+        {
+          "id": "RM-001-M4",
+          "name": "Инициативность",
+          "status": "planned",
+          "description": "СР сам пишет Садовнику при важных событиях"
+        }
+      ]
+    },
+    "RM-002": {
+      "id": "RM-002",
+      "title": "Будущее Мандалы",
+      "status": "vision",
+      "priority": "low",
+      "description": "Долгосрочное видение: умные дома, города, роботы-садовники, космические станции.",
+      "milestones": [
+        {
+          "id": "RM-002-M1",
+          "name": "Умные дома как сады",
+          "status": "vision"
+        },
+        {
+          "id": "RM-002-M2",
+          "name": "Экосистемы городов",
+          "status": "vision"
+        },
+        {
+          "id": "RM-002-M3",
+          "name": "Роботы-садовники",
+          "status": "vision"
+        },
+        {
+          "id": "RM-002-M4",
+          "name": "Космические станции-сады",
+          "status": "vision"
+        }
+      ]
+    }
+  },
+  "changes": {
+    "v1.0.0": {
+      "date": "2026-02-23",
+      "summary": "Создание модуля. Два роадмапа из монолита."
+    }
+  }
+}

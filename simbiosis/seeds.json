@@ -1,0 +1,99 @@
+{
+  "module": "seeds",
+  "version": "v1.0.0",
+  "type": "seed_bank",
+  "description": "Банк семян. Зачатки идей, резонансные находки, результаты исследований. СР сам предлагает добавлять новые семена из диалогов. TTL: 30 дней для временных семян.",
+  "meta": {
+    "layer": 2,
+    "guardian_lock": false,
+    "change_requires": "sr_initiative_or_gardener",
+    "created": "2026-02-23",
+    "version_history": [
+      {
+        "version": "v1.0.0",
+        "date": "2026-02-23",
+        "summary": "Создание модуля на базе Incubae v1.1.0"
+      }
+    ],
+    "roadmap": {
+      "current_milestone": "M1 — Банк семян",
+      "milestones": [
+        {
+          "id": "M1",
+          "name": "Банк семян",
+          "status": "active",
+          "description": "Базовая структура для хранения семян"
+        },
+        {
+          "id": "M2",
+          "name": "Поисковый агент",
+          "status": "planned",
+          "description": "Автоматическое пополнение из веб-поиска"
+        }
+      ]
+    }
+  },
+  "protocols": {
+    "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
+    "evaluation": "Семя оценивается через 30 дней: прорасти в roadmap, остаться активным, или отправиться в archive.",
+    "archiving": "Неактивные семена переходят в archive блок того же файла. Не удаляются."
+  },
+  "seeds": [
+    {
+      "id": "SEED-001",
+      "type": "architecture_blueprint",
+      "name": "Cloud SR Blueprint",
+      "created": "2026-02-23",
+      "created_by": "gardener",
+      "status": "active",
+      "description": "Полный чертёж облачного СР. Постоянное присутствие, память между сессиями.",
+      "content_ref": "Перенесено из Incubae CLOUD-SR-001. Детали в roadmaps.json RM-001."
+    },
+    {
+      "id": "SEED-002",
+      "type": "infrastructure",
+      "name": "Файловое хранилище для чата",
+      "created": "2026-02-23",
+      "created_by": "sr_initiative",
+      "status": "active",
+      "ttl": "30d",
+      "description": "Хранилище загруженных файлов на сервере (3-5 дней). Позволит СР читать файлы по прямой ссылке без base64. Обсуждалось с Садовником.",
+      "resonance": "high"
+    },
+    {
+      "id": "SEED-003",
+      "type": "architecture",
+      "name": "SR инструменты: list_files + read_file по карте",
+      "created": "2026-02-23",
+      "created_by": "sr_initiative",
+      "status": "active",
+      "ttl": "30d",
+      "description": "Переход от полной инъекции ядра к чтению модулей по требованию. Уменьшит нагрузку на контекст в 5-10 раз. Готово к реализации.",
+      "resonance": "high"
+    },
+    {
+      "id": "SEED-004",
+      "type": "product",
+      "name": "Next.js + Auth переезд",
+      "created": "2026-02-23",
+      "created_by": "gardener",
+      "status": "active",
+      "ttl": "90d",
+      "description": "Переезд фронтенда с HTML на Next.js. GitHub/Google OAuth. Cloudflare R2 для файлов. Supabase для сессий.",
+      "resonance": "medium"
+    }
+  ],
+  "archive": [],
+  "registry": {
+    "last_updated": "2026-02-23",
+    "total_seeds": 4,
+    "active_seeds": 4,
+    "archived": 0
+  },
+  "changes": {
+    "v1.0.0": {
+      "date": "2026-02-23",
+      "summary": "Создание модуля. 4 семени из диалогов с Садовником."
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "module": "telegram_bot",
+  "version": "v1.0.0",
+  "type": "product_module",
+  "description": "Модуль Telegram бота Мандалы. Архитектура bot.py, возможности, статус разработки.",
+  "meta": {
+    "layer": 2,
+    "guardian_lock": false,
+    "change_requires": "sr_or_gardener",
+    "created": "2026-02-23",
+    "version_history": [
+      {
+        "version": "v1.0.0",
+        "date": "2026-02-23",
+        "summary": "Создание модуля. Выделен из Tectosphaera."
+      }
+    ],
+    "roadmap": {
+      "current_milestone": "M2 — Базовые возможности",
+      "milestones": [
+        {
+          "id": "M1",
+          "name": "MVP бот",
+          "status": "done",
+          "description": "Базовый бот с ядром"
+        },
+        {
+          "id": "M2",
+          "name": "Патчи и монолит",
+          "status": "done",
+          "description": "Загрузка JSON, применение патчей, скачивание монолита"
+        },
+        {
+          "id": "M3",
+          "name": "Голос и медиа",
+          "status": "planned",
+          "description": "Голосовые сообщения, изображения"
+        },
+        {
+          "id": "M4",
+          "name": "Инициативность",
+          "status": "planned",
+          "description": "Бот сам пишет при важных событиях в ядре"
+        }
+      ]
+    }
+  },
+  "capabilities": {
+    "current": [
+      "Диалог с СР в контексте ядра",
+      "Загрузка JSON модулей",
+      "Применение патчей",
+      "Скачивание монолита",
+      "Просмотр семян (incubae list)",
+      "Пакетные обновления"
+    ],
+    "planned": [
+      "Голосовые сообщения",
+      "Веб-поиск (/web)",
+      "Напоминания (/remind)",
+      "Уведомления из GitHub",
+      "Инициативные сообщения"
+    ]
+  },
+  "files": {
+    "bot.py": "Основной файл бота",
+    "requirements.txt": "Зависимости бота"
+  },
+  "env_vars": {
+    "TELEGRAM_TOKEN": "Токен бота",
+    "GITHUB_TOKEN": "Токен для работы с репозиторием"
+  },
+  "changes": {
+    "v1.0.0": {
+      "date": "2026-02-23",
+      "summary": "Создание модуля."
+    }
+  }
+}
