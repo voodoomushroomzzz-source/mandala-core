@@ -1067,8 +1067,11 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
                         logger.info(f"✅ Грок: {len(grok_response)} символов")
                     else:
-                        logger.error(f"Grok error: {resp.status_code} {resp.text[:200]}")
-                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок: ошибка {resp.status_code}"})
+                        err_body = ""
+                        try: err_body = resp.json().get("error", {}).get("message", resp.text[:300])
+                        except: err_body = resp.text[:300]
+                        logger.error(f"Grok error: {resp.status_code} — {err_body}")
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок {resp.status_code}: {err_body[:120]}"})
             except Exception as e:
                 logger.error(f"Grok exception: {e}")
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок: {str(e)[:100]}"})
@@ -1083,8 +1086,14 @@ async def handle_ask(message: dict, websocket: WebSocket):
             await manager.send_to(websocket, {"type": "model_start", "model": "kimi"})
             # Если грок уже ответил — добавляем его ответ в контекст для кими
             kimi_messages = [{"role": "system", "content": kernel.build_system_prompt("kimi")}]
+            # Фильтруем историю: только role+content, пропускаем tool/protected сообщения
+            # которые Moonshot не принимает в таком формате
+            allowed_roles = {"user", "assistant"}
             for msg in session.get("messages", [])[:-1]:
-                kimi_messages.append({"role": msg["role"], "content": msg["content"]})
+                role = msg.get("role", "")
+                content = msg.get("content", "")
+                if role in allowed_roles and content and not msg.get("_protected"):
+                    kimi_messages.append({"role": role, "content": content})
             if grok_response:
                 kimi_messages.append({"role": "user", "content": user_text})
                 grok_ctx = "[Грок предложил:]\n" + grok_response
@@ -1149,8 +1158,11 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         await manager.send_to(websocket, {"type": "model_done", "model": "kimi"})
                         logger.info(f"✅ Кими: {len(kimi_full)} символов")
                     else:
-                        logger.error(f"Kimi error: {resp.status_code}")
-                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Кими: ошибка {resp.status_code}"})
+                        err_body = ""
+                        try: err_body = resp.json().get("error", {}).get("message", resp.text[:300])
+                        except: err_body = resp.text[:300]
+                        logger.error(f"Kimi error: {resp.status_code} — {err_body}")
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Кими {resp.status_code}: {err_body[:120]}"})
             except Exception as e:
                 logger.error(f"Kimi exception: {e}\n{traceback.format_exc()}")
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ Кими: {str(e)[:100]}"})
