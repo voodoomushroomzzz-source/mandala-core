@@ -166,9 +166,14 @@
       "role": "assistant",
       "content": "[Модуль simbiosis/core_map]",
       "time": 1771885834.6014204
+    },
+    {
+      "role": "user",
+      "content": "Ну что а схематически покажешь, не кодом?",
+      "time": 1771885901.5481977
     }
   ],
-  "last_active": 1771885834.6014256,
+  "last_active": 1771885901.5482237,
   "created_at": 1771883469.7287257,
   "modules_injected": true,
   "injection_timestamp": 1771883495.986017
