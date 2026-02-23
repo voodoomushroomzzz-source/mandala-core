@@ -96,9 +96,14 @@
       "role": "user",
       "content": "подскажи есть ли у нас какие свежие обновление в модуле инкубае?",
       "time": 1771843329.790683
+    },
+    {
+      "role": "user",
+      "content": "я жду ответ",
+      "time": 1771843370.286794
     }
   ],
-  "last_active": 1771843330.6975815,
+  "last_active": 1771843370.286813,
   "created_at": 1771837572.5774405,
   "claude_observer": false,
   "modules_injected": true,
