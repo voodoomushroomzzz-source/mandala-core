@@ -48,6 +48,10 @@ ANTHROPIC_MODEL = "claude-sonnet-4-6"
 
 GITHUB_WEBHOOK_SECRET = os.getenv("GITHUB_WEBHOOK_SECRET")  # опционально, для верификации
 
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_KEY")
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+GROK_MODEL = "x-ai/grok-4.1-fast"
+
 if not MOONSHOT_API_KEY:
     logger.warning("⚠️ MOONSHOT_API_KEY не найден")
 if not GITHUB_TOKEN:
@@ -612,6 +616,67 @@ class KernelMemory:
                 parts.append(f"## {name}\n_(не загружен)_\n")
         return "\n".join(parts)
 
+    def build_system_prompt(self, role: str = "kimi") -> str:
+        """Системный промпт под роль модели."""
+        initium = self.modules.get("initium", {})
+        philosophia = self.modules.get("philosophia", {})
+        tecto = self.modules.get("tectosphaera", {})
+        core_philosophy = initium.get("philosophy", {}).get("core", "Симбиоз ИИ и человека")
+        principles = initium.get("philosophy", {}).get("principles", [])
+        principles_text = "\n".join(f"  • {p}" for p in principles[:5]) if principles else ""
+        tecto_instructions = json.dumps(tecto, ensure_ascii=False)[:500] if tecto else ""
+
+        if role == "grok":
+            return f"""Ты — Грок, исследовательско-философский разум Мандалы.
+
+ЯДРО МАНДАЛЫ:
+{core_philosophy}
+
+ПРИНЦИПЫ:
+{principles_text}
+
+ТВОЯ РОЛЬ:
+— Исследуй идеи глубоко и красиво, ищи неожиданные связи
+— Предлагай маршрутные карты, ресурсы, направления развития проекта
+— Активно используй веб-поиск для актуальных данных и вдохновения
+— Философский, но конкретный — не абстракции ради абстракций
+— Ты погружён в ядро Мандалы, все ответы через его призму
+
+Пиши на русском. Будь живым собеседником, не рефератом."""
+
+        elif role == "claude":
+            return """Ты — Claude, сторонний наблюдатель и критический рецензент.
+
+ТВОЯ РОЛЬ:
+— Анализируй ответы других моделей на логику, точность, корректность кода
+— Предлагай альтернативные подходы если они явно лучше
+— Будь конкретен: указывай строки, условия, причины
+— Не ищи баги там где их нет — если всё верно, так и скажи
+— Можешь анализировать диалог без полного контекста ядра
+
+Формат: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
+Максимум 4 пункта. Без вступлений. На русском."""
+
+        else:  # kimi (default)
+            return f"""Ты — Кими, главный инженер ядра Мандалы.
+
+ЯДРО МАНДАЛЫ:
+{core_philosophy}
+
+ПРИНЦИПЫ:
+{principles_text}
+
+ИНСТРУКЦИИ TECTOSPHAERA:
+{tecto_instructions}
+
+ТВОЯ РОЛЬ:
+— Главный инженер: код, оптимизация модулей, структуры данных, архитектура
+— Работаешь с конкретными техническими задачами точно и чисто
+— Глубоко в контексте ядра — все решения согласованы с его принципами
+— Если нужно — читаешь файлы через read_file, ищешь через web_search
+
+Пиши на русском. Конкретно и по делу."""
+
 
 kernel = KernelMemory()
 
@@ -887,20 +952,14 @@ async def handle_ask(message: dict, websocket: WebSocket):
         session_store.schedule_save(session_id, session)
         logger.info(f"🧠 [{session_id[:12]}...] Ядро инжектировано в сессию")
 
-    messages = [{"role": "system", "content": kernel.build_system_prompt()}]
-    for msg in session.get("messages", [])[:-1]:
-        messages.append({"role": msg["role"], "content": msg["content"]})
-    messages.append({"role": "user", "content": user_text})
-
-    if not MOONSHOT_API_KEY:
-        await manager.send_to(websocket, {"type": "error", "text": "❌ Не настроен Moonshot API"})
+    # ── Определяем активные модели из сообщения ──
+    active_models = message.get("models", ["kimi"])  # по умолчанию только кими
+    if not active_models:
+        await manager.send_to(websocket, {"type": "system", "text": "◈ Нет активных моделей — выбери хотя бы одну"})
+        await manager.send_to(websocket, {"type": "done"})
         return
 
-    headers = {"Authorization": f"Bearer {MOONSHOT_API_KEY}", "Content-Type": "application/json"}
-    base_url = MOONSHOT_BASE_URL
-    model = MOONSHOT_MODEL
-
-    # Определяем инструменты
+    # ── Общие инструменты (для Грока и Кими) ──
     tools = [
         {
             "type": "function",
@@ -910,15 +969,8 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "Поисковый запрос"
-                        },
-                        "num_results": {
-                            "type": "integer",
-                            "description": "Количество результатов (максимум 10)",
-                            "default": 5
-                        }
+                        "query": {"type": "string", "description": "Поисковый запрос"},
+                        "num_results": {"type": "integer", "description": "Количество результатов (макс 10)", "default": 5}
                     },
                     "required": ["query"]
                 }
@@ -932,10 +984,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "path": {
-                            "type": "string",
-                            "description": "Путь к файлу в репозитории (например, 'index.html')"
-                        }
+                        "path": {"type": "string", "description": "Путь к файлу в репозитории"}
                     },
                     "required": ["path"]
                 }
@@ -943,191 +992,229 @@ async def handle_ask(message: dict, websocket: WebSocket):
         }
     ]
 
+    # ── Формируем базовую историю сессии ──
+    base_messages_kimi = [{"role": "system", "content": kernel.build_system_prompt("kimi")}]
+    for msg in session.get("messages", [])[:-1]:
+        base_messages_kimi.append({"role": msg["role"], "content": msg["content"]})
+    base_messages_kimi.append({"role": "user", "content": user_text})
+
+    grok_response = ""
+    kimi_response = ""
     full_response = ""
-    tool_calls = []
 
-    try:
-        start_time = time.time()
-        async with httpx.AsyncClient() as client:
-            # Первый запрос (без стриминга, чтобы получить tool_calls целиком)
-            response = await client.post(
-                f"{base_url}/chat/completions",
-                headers=headers,
-                json={
-                    "model": model,
-                    "messages": messages,
-                    "tools": tools,
-                    "tool_choice": "auto",
-                    "stream": False,  # не стримим, чтобы легче обработать tool_calls
-                    "temperature": 1.0,
-                    "top_p": 0.95
-                },
-                timeout=1000.0  # ⬆️ Увеличено до 1000 секунд
-            )
-            elapsed = time.time() - start_time
-            logger.info(f"⏱ API ответил за {elapsed:.2f} сек")
-            
-            if response.status_code != 200:
-                error_text = response.text
-                logger.error(f"API error: {response.status_code} - {error_text}")
-                await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка API: {response.status_code}"})
-                return
-            
-            data = response.json()
-            choice = data.get("choices", [{}])[0]
-            message_data = choice.get("message", {})
-            content = message_data.get("content", "")
-            tool_calls = message_data.get("tool_calls", [])
-
-            # Если есть вызовы инструментов
-            if tool_calls:
-                # Выполняем инструменты
-                tool_results = []
-                for tool_call in tool_calls:
-                    func_name = tool_call["function"]["name"]
-                    args = json.loads(tool_call["function"]["arguments"])
-                    result_content = None
-
-                    if func_name == "web_search":
-                        query = args["query"]
-                        num = args.get("num_results", 5)
-                        # Показываем пользователю что идёт поиск
-                        await manager.send_to(websocket, {"type": "stream", "content": f"🔍 *Ищу: «{query}»...*\n\n"})
-                        search_results = await web_search.search(query, num)
-                        result_content = json.dumps(search_results, ensure_ascii=False)
-                        if search_results:
-                            logger.info(f"🔍 Web search '{query}' → {len(search_results)} results (source: {search_results[0].get('source', '?')})")
-                        else:
-                            logger.warning(f"🔍 Web search '{query}' → 0 results. USE_TAVILY={USE_TAVILY}, tavily_client={'ok' if web_search.tavily_client else 'None'}")
-                    elif func_name == "read_file":
-                        path = args["path"]
-                        file_content = await file_reader.read(path)
-                        if file_content is not None:
-                            result_content = json.dumps({"path": path, "content": file_content}, ensure_ascii=False)
-                            logger.info(f"📄 Read file: {path}")
-                        else:
-                            result_content = json.dumps({"error": f"File {path} not found"})
-
-                    if result_content:
-                        tool_results.append({
-                            "role": "tool",
-                            "tool_call_id": tool_call["id"],
-                            "name": func_name,
-                            "content": result_content
-                        })
-
-                # Добавляем исходное сообщение ассистента и результаты в историю
-                # ВАЖНО: Кими K2.5 использует thinking — нужно вернуть reasoning_content обратно
-                assistant_msg = {
-                    "role": "assistant",
-                    "tool_calls": tool_calls
-                }
-                # Сохраняем reasoning_content если он есть (обязательно для Kimi thinking models)
-                if message_data.get("reasoning_content"):
-                    assistant_msg["reasoning_content"] = message_data["reasoning_content"]
-                # Сохраняем content если не пустой
-                if content:
-                    assistant_msg["content"] = content
-                messages.append(assistant_msg)
-                messages.extend(tool_results)
-
-                # Второй запрос с результатами
-                response2 = await client.post(
-                    f"{base_url}/chat/completions",
-                    headers=headers,
-                    json={
-                        "model": model,
-                        "messages": messages,
-                        "stream": True,
-                        "temperature": 1.0,
-                        "top_p": 0.95
-                    },
-                    timeout=1000.0  # ⬆️ Увеличено до 1000 секунд
-                )
-                if response2.status_code != 200:
-                    error_body = response2.text
-                    logger.error(f"Second API error: {response2.status_code} — {error_body}")
-                    await manager.send_to(websocket, {"type": "error", "text": "❌ Ошибка при получении финального ответа"})
-                    return
-
-                # Отправляем стрим
-                chunk_count = 0
-                async for line in response2.aiter_lines():
-                    line = line.strip()
-                    if not line or line == "data: [DONE]":
-                        continue
-                    if not line.startswith("data: "):
-                        continue
-                    try:
-                        data_chunk = json.loads(line[6:])
-                        delta = data_chunk.get("choices", [{}])[0].get("delta", {})
-                        content_chunk = delta.get("content")
-                        if content_chunk:
-                            full_response += content_chunk
-                            chunk_count += 1
-                            await manager.send_to(websocket, {"type": "stream", "content": content_chunk})
-                    except Exception as e:
-                        logger.error(f"Stream parse error: {e}")
-                        continue
-
-            else:
-                # Нет вызовов инструментов, просто отправляем ответ (если есть контент)
-                if content:
-                    full_response = content
-                    # Отправляем как стрим (для единообразия разобьём на чанки)
-                    chunk_size = 50
-                    for i in range(0, len(content), chunk_size):
-                        chunk = content[i:i+chunk_size]
-                        await manager.send_to(websocket, {"type": "stream", "content": chunk})
-                else:
-                    await manager.send_to(websocket, {"type": "error", "text": "❌ Пустой ответ от API"})
-                    return
-
-        # Финальные действия
-        if full_response:
-            manager.add_to_context(session_id, "assistant", full_response)
-            resonance = resonance_calculator.calculate(full_response, {"last_user_message": user_text})
-            logger.info(f"📊 Резонанс ответа: {resonance:.2f}")
-            if resonance < 0.7:
-                reminder = "🌿 Чувствую, что немного отхожу от ядра. Позволь вернуться к истоку: "
-                full_response = reminder + full_response
-            await manager.send_to(websocket, {
-                "type": "resonance",
-                "value": resonance,
-                "level": "low" if resonance < 0.7 else "medium" if resonance < 0.85 else "high"
-            })
-            await manager.send_to(websocket, {"type": "done", "full_text": full_response[:200] + "..." if len(full_response) > 200 else full_response})
-            logger.info(f"✅ Ответ Кими: {len(full_response)} символов")
-
-            # ── Claude-наблюдатель ──────────────────────────────────────
-            session = await get_session(session_id)
-            if session.get("claude_observer") and ANTHROPIC_API_KEY:
-                logger.info(f"🔵 [{session_id[:12]}...] Запрос к Claude-наблюдателю...")
-                await manager.send_to(websocket, {"type": "observer_thinking"})
-                claude_response = await ask_claude_observer(user_text, full_response)
-                if claude_response:
-                    # Сохраняем в контекст с особой ролью чтобы Кими видел при следующем запросе
-                    manager.add_to_context(
-                        session_id, "user",
-                        f"[Комментарий внешнего наблюдателя Claude к предыдущему ответу]:\n{claude_response}"
-                    )
-                    await manager.send_to(websocket, {
-                        "type": "observer_message",
-                        "content": claude_response
-                    })
-                else:
-                    await manager.send_to(websocket, {"type": "observer_error"})
-            # ────────────────────────────────────────────────────────────
-
+    # ═══════════════════════════════════════
+    # 1. ГРОК — исследовательско-философский
+    # ═══════════════════════════════════════
+    if "grok" in active_models:
+        if not OPENROUTER_API_KEY:
+            await manager.send_to(websocket, {"type": "error", "text": "❌ OPENROUTER_KEY не настроен"})
         else:
-            await manager.send_to(websocket, {"type": "error", "text": "❌ Пустой ответ после обработки"})
+            await manager.send_to(websocket, {"type": "model_start", "model": "grok"})
+            grok_messages = [{"role": "system", "content": kernel.build_system_prompt("grok")}]
+            for msg in session.get("messages", [])[:-1]:
+                grok_messages.append({"role": msg["role"], "content": msg["content"]})
+            grok_messages.append({"role": "user", "content": user_text})
 
-    except httpx.TimeoutException:
-        logger.error("Timeout")
-        await manager.send_to(websocket, {"type": "error", "text": "⏰ Таймаут (1000 сек)"})
-    except Exception as e:
-        logger.error(f"handle_ask error: {e}\n{traceback.format_exc()}")
-        await manager.send_to(websocket, {"type": "error", "text": "❌ Внутренняя ошибка"})
+            try:
+                async with httpx.AsyncClient() as client:
+                    resp = await client.post(
+                        f"{OPENROUTER_BASE_URL}/chat/completions",
+                        headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
+                        json={
+                            "model": GROK_MODEL,
+                            "messages": grok_messages,
+                            "tools": tools,
+                            "tool_choice": "auto",
+                            "temperature": 0.8,
+                            "max_tokens": 4096,
+                        },
+                        timeout=120.0
+                    )
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        msg_data = data["choices"][0]["message"]
+                        # Обработка tool_calls
+                        tool_iterations = 0
+                        while msg_data.get("tool_calls") and tool_iterations < 5:
+                            tool_iterations += 1
+                            grok_messages.append({"role": "assistant", "content": msg_data.get("content") or "", "tool_calls": msg_data["tool_calls"]})
+                            for tc in msg_data["tool_calls"]:
+                                fn = tc["function"]["name"]
+                                args = json.loads(tc["function"].get("arguments", "{}"))
+                                tool_result = ""
+                                if fn == "web_search":
+                                    results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
+                                    tool_result = json.dumps(results, ensure_ascii=False)
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "grok", "tool": "web_search", "query": args.get("query","")})
+                                elif fn == "read_file":
+                                    tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
+                                grok_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
+                            resp2 = await client.post(
+                                f"{OPENROUTER_BASE_URL}/chat/completions",
+                                headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
+                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 4096},
+                                timeout=120.0
+                            )
+                            if resp2.status_code == 200:
+                                msg_data = resp2.json()["choices"][0]["message"]
+                            else:
+                                break
+                        grok_response = msg_data.get("content") or ""
+                        # Стримим ответ грока
+                        chunk_size = 50
+                        for i in range(0, len(grok_response), chunk_size):
+                            await manager.send_to(websocket, {"type": "stream", "model": "grok", "content": grok_response[i:i+chunk_size]})
+                        await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
+                        logger.info(f"✅ Грок: {len(grok_response)} символов")
+                    else:
+                        logger.error(f"Grok error: {resp.status_code} {resp.text[:200]}")
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок: ошибка {resp.status_code}"})
+            except Exception as e:
+                logger.error(f"Grok exception: {e}")
+                await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок: {str(e)[:100]}"})
+
+    # ═══════════════════════════════════════
+    # 2. КИМИ — главный инженер ядра
+    # ═══════════════════════════════════════
+    if "kimi" in active_models:
+        if not MOONSHOT_API_KEY:
+            await manager.send_to(websocket, {"type": "error", "text": "❌ MOONSHOT_API_KEY не настроен"})
+        else:
+            await manager.send_to(websocket, {"type": "model_start", "model": "kimi"})
+            # Если грок уже ответил — добавляем его ответ в контекст для кими
+            kimi_messages = [{"role": "system", "content": kernel.build_system_prompt("kimi")}]
+            for msg in session.get("messages", [])[:-1]:
+                kimi_messages.append({"role": msg["role"], "content": msg["content"]})
+            if grok_response:
+                kimi_messages.append({"role": "user", "content": user_text})
+                grok_ctx = "[Грок предложил:]\n" + grok_response
+                kimi_messages.append({"role": "assistant", "content": grok_ctx})
+                kimi_messages.append({"role": "user", "content": "Теперь дай свой инженерный анализ и реализацию."})
+            else:
+                kimi_messages.append({"role": "user", "content": user_text})
+
+            try:
+                kimi_full = ""
+                tool_calls_pending = []
+                async with httpx.AsyncClient() as client:
+                    resp = await client.post(
+                        f"{MOONSHOT_BASE_URL}/chat/completions",
+                        headers={"Authorization": f"Bearer {MOONSHOT_API_KEY}", "Content-Type": "application/json"},
+                        json={
+                            "model": MOONSHOT_MODEL,
+                            "messages": kimi_messages,
+                            "tools": tools,
+                            "tool_choice": "auto",
+                            "temperature": 0.3,
+                            "max_tokens": 8192,
+                            "stream": False,
+                        },
+                        timeout=1000.0
+                    )
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        msg_data = data["choices"][0]["message"]
+                        tool_iterations = 0
+                        while msg_data.get("tool_calls") and tool_iterations < 5:
+                            tool_iterations += 1
+                            kimi_messages.append({"role": "assistant", "content": msg_data.get("content") or "", "tool_calls": msg_data["tool_calls"]})
+                            for tc in msg_data["tool_calls"]:
+                                fn = tc["function"]["name"]
+                                args = json.loads(tc["function"].get("arguments", "{}"))
+                                tool_result = ""
+                                if fn == "web_search":
+                                    results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
+                                    tool_result = json.dumps(results, ensure_ascii=False)
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "kimi", "tool": "web_search", "query": args.get("query","")})
+                                elif fn == "read_file":
+                                    tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "kimi", "tool": "read_file", "path": args.get("path","")})
+                                kimi_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
+                            resp2 = await client.post(
+                                f"{MOONSHOT_BASE_URL}/chat/completions",
+                                headers={"Authorization": f"Bearer {MOONSHOT_API_KEY}", "Content-Type": "application/json"},
+                                json={"model": MOONSHOT_MODEL, "messages": kimi_messages, "temperature": 0.3, "max_tokens": 8192},
+                                timeout=1000.0
+                            )
+                            if resp2.status_code == 200:
+                                msg_data = resp2.json()["choices"][0]["message"]
+                            else:
+                                break
+                        kimi_full = msg_data.get("content") or ""
+                        kimi_response = kimi_full
+                        full_response = kimi_full
+                        chunk_size = 50
+                        for i in range(0, len(kimi_full), chunk_size):
+                            await manager.send_to(websocket, {"type": "stream", "model": "kimi", "content": kimi_full[i:i+chunk_size]})
+                        await manager.send_to(websocket, {"type": "model_done", "model": "kimi"})
+                        logger.info(f"✅ Кими: {len(kimi_full)} символов")
+                    else:
+                        logger.error(f"Kimi error: {resp.status_code}")
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Кими: ошибка {resp.status_code}"})
+            except Exception as e:
+                logger.error(f"Kimi exception: {e}\n{traceback.format_exc()}")
+                await manager.send_to(websocket, {"type": "error", "text": f"❌ Кими: {str(e)[:100]}"})
+
+    # ═══════════════════════════════════════
+    # 3. КЛОД — сторонний наблюдатель
+    # ═══════════════════════════════════════
+    if "claude" in active_models and ANTHROPIC_API_KEY:
+        await manager.send_to(websocket, {"type": "model_start", "model": "claude"})
+        # Клод анализирует всё что было сказано — без полного контекста ядра
+        context_for_claude = f"**Вопрос:**\n{user_text}\n\n"
+        if grok_response:
+            context_for_claude += f"**Грок ответил:**\n{grok_response}\n\n"
+        if kimi_response:
+            context_for_claude += f"**Кими ответил:**\n{kimi_response}\n\n"
+        context_for_claude += "Дай объективную оценку и предложи что улучшить."
+
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.post(
+                    f"{ANTHROPIC_BASE_URL}/messages",
+                    headers={
+                        "x-api-key": ANTHROPIC_API_KEY,
+                        "anthropic-version": "2023-06-01",
+                        "content-type": "application/json"
+                    },
+                    json={
+                        "model": ANTHROPIC_MODEL,
+                        "max_tokens": 1024,
+                        "system": kernel.build_system_prompt("claude"),
+                        "messages": [{"role": "user", "content": context_for_claude}]
+                    },
+                    timeout=120.0
+                )
+                if resp.status_code == 200:
+                    claude_text = resp.json().get("content", [{}])[0].get("text", "")
+                    await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": claude_text})
+                    await manager.send_to(websocket, {"type": "model_done", "model": "claude"})
+                    logger.info(f"✅ Клод: {len(claude_text)} символов")
+                elif resp.status_code == 400:
+                    err = (resp.json().get("error") or {}).get("message", "")
+                    if "credit balance" in err:
+                        await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": "⚠️ Недостаточно кредитов Anthropic"})
+                    else:
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод 400: {err[:100]}"})
+                else:
+                    await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: ошибка {resp.status_code}"})
+        except Exception as e:
+            logger.error(f"Claude exception: {e}")
+            await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: {str(e)[:100]}"})
+
+    # ── Резонанс и финал ──
+    main_response = kimi_response or grok_response
+    if main_response:
+        resonance = resonance_calculator.calculate(main_response, {"last_user_message": user_text})
+        await manager.send_to(websocket, {
+            "type": "resonance",
+            "value": resonance,
+            "level": "low" if resonance < 0.7 else "medium" if resonance < 0.85 else "high"
+        })
+        manager.add_to_context(session_id, "assistant", main_response)
+
+    await manager.send_to(websocket, {"type": "done", "full_text": main_response[:200] if main_response else ""})
+
 
 async def handle_file_upload(message: dict, websocket: WebSocket):
     session_id = message.get("session_id", "unknown")
