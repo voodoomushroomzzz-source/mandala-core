@@ -149,6 +149,25 @@
             white-space: nowrap;
         }
 
+        .commit-sha {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            color: var(--text-2);
+            background: var(--surface-2);
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--line-2);
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+        .commit-sha.updated {
+            color: var(--green-bright);
+            border-color: var(--green-2);
+            background: rgba(16,185,129,0.1);
+            box-shadow: 0 0 10px rgba(16,185,129,0.2);
+        }
+
         .vsep { width: 1px; height: 18px; background: var(--line); }
 
         .status-orb {
@@ -901,6 +920,26 @@
             padding: 2px 6px; border-radius: var(--radius-sm); color: var(--green-bright);
         }
 
+        /* Индикатор версии ядра */
+        .commit-sha {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            color: var(--text-2);
+            background: var(--surface-2);
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--line-2);
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+        .commit-sha.updated {
+            color: var(--green-bright);
+            border-color: var(--green-2);
+            background: rgba(16,185,129,0.1);
+            box-shadow: 0 0 10px rgba(16,185,129,0.2);
+        }
+
         /* Text selection colors */
         /* Green — обычный текст ответа СР */
         .msg.assistant .bub::selection,
@@ -977,6 +1016,10 @@
         </div>
         <div class="h-right">
             <div class="model-display" id="modelDisplay">модель: kimi‑k2.5</div>
+            <div class="vsep"></div>
+            <div class="commit-sha" id="coreVersion" title="Версия ядра Мандалы">◈ —</div>
+            <div class="vsep"></div>
+            <div class="commit-sha" id="coreVersion" title="Версия ядра Мандалы (commit SHA)">◈ —</div>
             <div class="vsep"></div>
             <div class="status-orb">
                 <div class="orb-dot" id="statusDot"></div>
@@ -1295,6 +1338,18 @@
             switch(data.type) {
                 case 'connected':
                     updateStatus('connected');
+                    if (data.core_version) {
+                        document.getElementById('coreVersion').textContent = `◈ ${data.core_version}`;
+                    }
+                    break;
+                case 'core_updated':
+                    const verEl = document.getElementById('coreVersion');
+                    if (verEl && data.version) {
+                        verEl.textContent = `◈ ${data.version}`;
+                        verEl.classList.add('updated');
+                        setTimeout(() => verEl.classList.remove('updated'), 3000);
+                    }
+                    showToast(`◈ Ядро обновлено: ${data.version || ''}`, 'success');
                     break;
                 case 'history':
                     // Бэкенд восстановил сессию из GitHub — рендерим историю
