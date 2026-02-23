@@ -149,6 +149,54 @@
             white-space: nowrap;
         }
 
+        /* Селектор моделей */
+        .model-selector {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--line-2);
+            border-radius: 8px;
+            padding: 3px;
+        }
+        .model-btn {
+            width: 30px;
+            height: 24px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .model-btn.active { opacity: 1; border-color: currentColor; }
+        .grok-btn  { color: #10b981; }
+        .grok-btn.active  { background: rgba(16,185,129,0.12); }
+        .kimi-btn  { color: #7c3aed; }
+        .kimi-btn.active  { background: rgba(124,58,237,0.12); }
+        .claude-btn { color: #4f46e5; }
+        .claude-btn.active { background: rgba(79,70,229,0.12); }
+
+        /* Метки моделей в сообщениях */
+        .model-label {
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 1px 6px;
+            border-radius: 3px;
+            margin-left: 6px;
+            opacity: 0.7;
+            vertical-align: middle;
+        }
+        .model-label.grok   { color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .model-label.kimi   { color: #7c3aed; border: 1px solid rgba(124,58,237,0.3); }
+        .model-label.claude { color: #4f46e5; border: 1px solid rgba(79,70,229,0.3); }
+
         .commit-sha {
             font-family: var(--mono);
             font-size: 9px;
@@ -995,7 +1043,11 @@
             </div>
         </div>
         <div class="h-right">
-            <div class="model-display" id="modelDisplay">модель: kimi‑k2.5</div>
+            <div class="model-selector" id="modelSelector">
+                <button class="model-btn grok-btn active" id="btnGrok" onclick="toggleModel('grok')" title="Грок — исследователь">△</button>
+                <button class="model-btn kimi-btn active" id="btnKimi" onclick="toggleModel('kimi')" title="Кими — инженер">◇</button>
+                <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">○</button>
+            </div>
             <div class="vsep"></div>
             <div class="commit-sha" id="coreVersion" title="Версия ядра Мандалы (commit SHA)">◈ —</div>
             <div class="vsep"></div>
@@ -1054,7 +1106,6 @@
                         <div class="irow">
                             <button class="ibtn" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
                             <textarea class="ifield" id="messageInput" placeholder="Впиши волну…" rows="1"></textarea>
-                            <button class="ibtn observer-btn" id="observerBtn" onclick="toggleObserver()" title="Claude-наблюдатель">◬</button>
                             <button class="ibtn isend" id="sendBtn" onclick="sendMessage()">➤</button>
                         </div>
                     </div>
@@ -1343,7 +1394,14 @@
                     addSystemMessage(data.text);
                     break;
                 case 'stream':
-                    handleStream(data.content);
+                    handleStream(data.content, data.model);
+                    break;
+                case 'model_start':
+                    // Новая модель начинает отвечать — финишируем предыдущий блок
+                    if (currentMessageDiv) finishMessage();
+                    break;
+                case 'model_done':
+                    finishMessage();
                     break;
                 case 'done':
                     finishMessage();
@@ -1384,7 +1442,7 @@
                     break;
                 case 'observer_message':
                     hideObserverThinking();
-                    addObserverMessage(data.content);
+                    addObserverMessage(data.content, data.model || 'claude');
                     break;
                 case 'observer_error':
                     hideObserverThinking();
@@ -1461,9 +1519,14 @@
             if (save) saveCurrentChatMessages();
         }
 
-        function handleStream(content) {
+        function handleStream(content, model) {
             if (!currentMessageDiv) {
                 currentMessageDiv = createMessageElement('assistant');
+                if (model) {
+                    const nameEl = currentMessageDiv.querySelector('.mname');
+                    const label = `<span class="model-label ${model}">${model}</span>`;
+                    nameEl.innerHTML = 'СР' + label;
+                }
                 messagesEl.appendChild(currentMessageDiv);
             }
             messageBuffer += content;
@@ -1605,7 +1668,7 @@
                 hideThinking();
                 return;
             }
-            ws.send(JSON.stringify({ type: 'ask', text: text, session_id: currentChatId }));
+            ws.send(JSON.stringify({ type: 'ask', text: text, session_id: currentChatId, models: getActiveModels() }));
         }
 
         async function sendFiles(files, caption) {
@@ -1834,76 +1897,82 @@
             setTimeout(() => indicator.classList.remove('visible'), 8000);
         }
 
-        // ==================== CLAUDE-НАБЛЮДАТЕЛЬ ====================
-        let observerActive = false;
-        let observerThinkingEl = null;
+        // ==================== МОДЕЛИ ====================
+        const activeModels = new Set(['grok', 'kimi']);
 
-        function toggleObserver() {
-            if (!ws || ws.readyState !== WebSocket.OPEN) {
-                showToast('◬ нет соединения', 'error');
-                return;
-            }
-            ws.send(JSON.stringify({ type: 'toggle_observer', session_id: currentChatId }));
-        }
+        function getActiveModels() { return Array.from(activeModels); }
 
-        function setObserverState(active) {
-            observerActive = active;
-            const btn = document.getElementById('observerBtn');
-            if (active) {
-                btn.classList.add('active');
-                btn.title = 'Claude-наблюдатель активен (нажми чтобы выключить)';
-                showToast('◬ Claude-наблюдатель подключён', 'success');
-            } else {
+        function toggleModel(model) {
+            const key = model.charAt(0).toUpperCase() + model.slice(1);
+            const btn = document.getElementById('btn' + key);
+            if (!btn) return;
+            if (activeModels.has(model)) {
+                activeModels.delete(model);
                 btn.classList.remove('active');
-                btn.title = 'Claude-наблюдатель (нажми чтобы включить)';
-                showToast('◬ Claude-наблюдатель отключён', 'error');
+            } else {
+                activeModels.add(model);
+                btn.classList.add('active');
             }
         }
+
+        // Иконки моделей
+        const modelIcons = {
+            grok: `<svg viewBox="0 0 30 30" fill="none">
+                <polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/>
+                <circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/>
+            </svg>`,
+            kimi: `<svg viewBox="0 0 30 30" fill="none">
+                <rect x="8" y="8" width="14" height="14" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.07)" transform="rotate(45 15 15)"/>
+                <circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.9"/>
+            </svg>`,
+            claude: `<svg viewBox="0 0 30 30" fill="none">
+                <circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/>
+                <circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/>
+            </svg>`
+        };
+        const modelNames = { grok: 'Грок △', kimi: 'Кими ◇', claude: 'Клод ○' };
+        const modelColors = { grok: '#10b981', kimi: '#7c3aed', claude: '#4f46e5' };
+
+        let observerThinkingEl = null;
 
         function showObserverThinking() {
             hideObserverThinking();
             observerThinkingEl = document.createElement('div');
             observerThinkingEl.className = 'observer-thinking-indicator';
-            observerThinkingEl.innerHTML = `
-                <span>◬</span>
-                <span class="dots"><span>claude анализирует...</span></span>
-            `;
+            observerThinkingEl.innerHTML = `<span>○</span><span class="dots"><span>клод анализирует...</span></span>`;
             messagesEl.appendChild(observerThinkingEl);
             scrollToBottom();
         }
 
         function hideObserverThinking() {
-            if (observerThinkingEl) {
-                observerThinkingEl.remove();
-                observerThinkingEl = null;
-            }
+            if (observerThinkingEl) { observerThinkingEl.remove(); observerThinkingEl = null; }
         }
 
-        function addObserverMessage(text) {
+        function addObserverMessage(text, model = 'claude') {
             const div = document.createElement('div');
             div.className = 'msg observer';
-            // Иконка Claude в стиле Мандалы — треугольник с кругом
-            const iconSvg = `<svg viewBox="0 0 30 30" fill="none">
-                <polygon points="15,3 27,24 3,24" stroke="#3b82f6" stroke-width="0.8" fill="rgba(59,130,246,0.06)"/>
-                <polygon points="15,8 22,21 8,21" stroke="#6366f1" stroke-width="0.8" opacity="0.6" fill="none"/>
-                <circle cx="15" cy="15" r="2" fill="#60a5fa" opacity="0.9"/>
-            </svg>`;
+            const icon = modelIcons[model] || modelIcons.claude;
+            const name = modelNames[model] || 'Клод';
+            const color = modelColors[model] || '#4f46e5';
             let html = escapeHtml(text);
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => renderCodeBlock(lang, code, true));
             html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#60a5fa;">$1</strong>');
+            html = html.replace(/\*\*([^*]+)\*\*/g, `<strong style="color:${color};">$1</strong>`);
             html = html.replace(/\n/g, '<br>');
             div.innerHTML = `
-                <div class="av">${iconSvg}</div>
+                <div class="av">${icon}</div>
                 <div class="mbody">
-                    <div class="mname">Claude ◬</div>
+                    <div class="mname">${name}</div>
                     <div class="bub">${html}</div>
-                </div>
-            `;
+                </div>`;
             messagesEl.appendChild(div);
             scrollToBottom();
             saveCurrentChatMessages();
         }
+
+        // Compat stub
+        function setObserverState() {}
+        function toggleObserver() {}
 
         function setupKeyboard() {
             inputEl.addEventListener('keydown', e => {
@@ -2087,7 +2156,7 @@
             }
             addUserMessage(text);
             showThinking();
-            ws.send(JSON.stringify({ type: 'ask', text: text, session_id: currentChatId }));
+            ws.send(JSON.stringify({ type: 'ask', text: text, session_id: currentChatId, models: getActiveModels() }));
         }
 
         // ==================== TOAST ====================
