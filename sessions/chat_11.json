@@ -156,9 +156,19 @@
       "role": "assistant",
       "content": "Ой, ты прав — **я заговорился, но не прочитал!** Сейчас момент истины, открываю сердце Мандалы...",
       "time": 1771885807.4352071
+    },
+    {
+      "role": "user",
+      "content": "INFO:httpx:HTTP Request: GET https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/simbiosis/core_map.json \"HTTP/1.1 200 OK\"\nMenu\nINFO:httpx:HTTP Request: POST https://api.moonshot.ai/v1/chat/completions \"HTTP/1.1 400 Bad Request\"\n\nэто лог в рендере",
+      "time": 1771885834.6009667
+    },
+    {
+      "role": "assistant",
+      "content": "[Модуль simbiosis/core_map]",
+      "time": 1771885834.6014204
     }
   ],
-  "last_active": 1771885807.435227,
+  "last_active": 1771885834.6014256,
   "created_at": 1771883469.7287257,
   "modules_injected": true,
   "injection_timestamp": 1771883495.986017
