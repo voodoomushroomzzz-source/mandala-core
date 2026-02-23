@@ -229,6 +229,16 @@ async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[st
                 text = data.get("content", [{}])[0].get("text", "")
                 logger.info(f"🔵 Claude-наблюдатель ответил ({len(text)} символов)")
                 return text
+            elif response.status_code == 400:
+                err_data = {}
+                try: err_data = response.json()
+                except: pass
+                err_msg = (err_data.get("error") or {}).get("message", "")
+                if "credit balance" in err_msg or "too low" in err_msg:
+                    logger.warning("⚠️ Claude-наблюдатель: недостаточно кредитов на Anthropic аккаунте")
+                    return "⚠️ Claude-наблюдатель недоступен: недостаточно кредитов на Anthropic аккаунте. Пополни баланс на console.anthropic.com."
+                logger.error(f"Claude API error: {response.status_code} — {response.text}")
+                return None
             else:
                 logger.error(f"Claude API error: {response.status_code} — {response.text}")
                 return None
@@ -440,17 +450,37 @@ class KernelMemory:
     async def _load_fast_index(self):
         """Загрузка только индексов без полных данных"""
         try:
-            # Fast index из Incubae
+            # Fast index из Incubae (поддерживаем и 'fast_index' и '/fast_index' как ключи)
             incubae = self.modules.get('incubae', {})
-            if 'fast_index' in incubae:
-                self.fast_index['seeds'] = incubae['fast_index'].get('seeds', [])
+            fi_incubae = incubae.get('fast_index') or incubae.get('/fast_index', {})
+            if fi_incubae:
+                self.fast_index['seeds'] = fi_incubae.get('seeds', [])
                 logger.info(f'🌱 Fast index: {len(self.fast_index["seeds"])} seeds')
+            elif incubae.get('seeds'):
+                # Fallback: прямо из массива seeds
+                self.fast_index['seeds'] = [
+                    {'id': s.get('id','?'), 'type': s.get('type',''), 'status': s.get('status','active')}
+                    for s in incubae['seeds']
+                ]
+                logger.info(f'🌱 Fast index (from seeds array): {len(self.fast_index["seeds"])} seeds')
 
             # Fast index из Akasha (roadmaps)
             akasha = self.modules.get('akasha_chronicorum', {})
-            if 'fast_index' in akasha:
-                self.fast_index['roadmaps'] = akasha['fast_index'].get('roadmaps', [])
+            fi_akasha = akasha.get('fast_index') or akasha.get('/fast_index', {})
+            if fi_akasha:
+                self.fast_index['roadmaps'] = fi_akasha.get('roadmaps', [])
                 logger.info(f'📜 Fast index: {len(self.fast_index["roadmaps"])} roadmaps')
+            else:
+                # Fallback: ищем в cosmosphaera.blocks
+                cosmo = akasha.get('cosmosphaera', akasha.get('spheres', {}))
+                blocks = cosmo.get('blocks', []) if isinstance(cosmo, dict) else []
+                roadmaps = [b for b in blocks if b.get('type') == 'roadmap' or b.get('roadmap')]
+                if roadmaps:
+                    self.fast_index['roadmaps'] = [
+                        {'id': r.get('id','?'), 'title': (r.get('roadmap') or r).get('title',''), 'status': r.get('status','active')}
+                        for r in roadmaps
+                    ]
+                    logger.info(f'📜 Fast index (from blocks): {len(self.fast_index["roadmaps"])} roadmaps')
         except Exception as e:
             logger.error(f'Ошибка загрузки fast_index: {e}')
 
@@ -806,6 +836,9 @@ async def handle_ask(message: dict, websocket: WebSocket):
 
     # Специальные команды
     if user_text == '/sync':
+        # Сбрасываем ETag кэш чтобы модули перезагрузились принудительно
+        kernel.etags.clear()
+        kernel.fast_index.clear()
         await kernel.load_all_modules()
         # Сбрасываем инъекцию — при следующем сообщении СР получит свежие модули
         session = await get_session(session_id)
