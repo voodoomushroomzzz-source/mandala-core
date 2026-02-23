@@ -1060,18 +1060,17 @@
     "based_on": "Диалог с Садовником, 2026-02-19"
   },
   "/seeds/-": {
-    "id": "ENGINEER-SR-001",
-    "type": "architecture_blueprint",
-    "name": "🧠 Engineer SR: архитектура инженерного чата (Kimi K2)",
-    "version": "v1.1.0",
-    "created": "2026-02-22",
-    "created_by": "СР и Садовник",
+    "id": "TEST-LINK-001",
+    "type": "test",
+    "name": "🌱 Проверка связи",
+    "version": "v0.1",
+    "created": "2026-02-23",
+    "created_by": "СР",
     "status": "active",
-    "expiry": "2027-02-22",
-    "description": "Полная архитектура инженерного СР на базе Moonshot/Kimi K2, работающего через OpenRouter. Используется в инженерном чате для прямого взаимодействия с ядром Mandala Core.",
-    "core_essence": "Основной агент для разработки: быстрые ответы, патчи, синхронизация с GitHub.",
-    "geometric_resonance": "Vesica Piscis — пересечение кода и разговора.",
-    "based_on_dialogue": "2026-02-18 — 2026-02-22"
+    "expiry": "2027-02-23",
+    "description": "Тестовое семя для проверки механизма добавления записей в Incubae.",
+    "core_essence": "Проверка связи между модулями и интерфейсами.",
+    "geometric_resonance": "Точка"
   },
   "/seeds/roadmap_echo_done": {
     "id": "roadmap_echo_done",
@@ -1141,5 +1140,6 @@
     "total_active": 8,
     "archived_count": 1
   },
-  "/registry/total_seeds": 8
+  "/registry/total_seeds": 9,
+  "/registry/last_updated": "2026-02-23"
 }
