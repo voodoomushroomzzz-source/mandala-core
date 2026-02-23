@@ -186,9 +186,14 @@
       "role": "assistant",
       "content": "[Модуль simbiosis/roadmaps]",
       "time": 1771886022.0832093
+    },
+    {
+      "role": "user",
+      "content": "Ну что пообщаемся втроем?",
+      "time": 1771886065.167175
     }
   ],
-  "last_active": 1771886022.0832143,
+  "last_active": 1771886065.1672008,
   "created_at": 1771883469.7287257,
   "modules_injected": true,
   "injection_timestamp": 1771883495.986017
