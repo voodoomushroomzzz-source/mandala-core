@@ -56,9 +56,14 @@
       "role": "user",
       "content": "все равно короткий код приходит",
       "time": 1771935260.253126
+    },
+    {
+      "role": "assistant",
+      "content": "```html\n<!DOCTYPE html>\n<html lang=\"ru\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name",
+      "time": 1771935281.2984674
     }
   ],
-  "last_active": 1771935260.2531295,
+  "last_active": 1771935281.2984762,
   "created_at": 1771933962.1658964,
   "modules_injected": true,
   "injection_timestamp": 1771934697.3069909
