@@ -1093,7 +1093,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.8,
-                            "max_tokens": 4096,
+                            "max_tokens": 300000,
                         },
                         timeout=120.0
                     )
@@ -1129,7 +1129,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 4096},
+                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 300000},
                                 timeout=120.0
                             )
                             if resp2.status_code == 200:
@@ -1191,7 +1191,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.7,
-                            "max_tokens": 8192,
+                            "max_tokens": 300000,
                         },
                         timeout=300.0
                     )
@@ -1237,7 +1237,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     "HTTP-Referer": "https://mandala-engineer-chat.onrender.com",
                                     "X-Title": "Mandala Engineer"
                                 },
-                                json={"model": DEEPSEEK_MODEL, "messages": deepseek_messages, "temperature": 0.7, "max_tokens": 8192},
+                                json={"model": DEEPSEEK_MODEL, "messages": deepseek_messages, "temperature": 0.7, "max_tokens": 300000},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
