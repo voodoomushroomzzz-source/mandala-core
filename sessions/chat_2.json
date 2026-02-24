@@ -271,9 +271,14 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1771947262.4315972
+    },
+    {
+      "role": "user",
+      "content": "а попробуй в патче не писать после названия .json",
+      "time": 1771947361.4312797
     }
   ],
-  "last_active": 1771947262.431627,
+  "last_active": 1771947361.4312878,
   "created_at": 1771933962.1658964,
   "modules_injected": true,
   "injection_timestamp": 1771945524.3495824
