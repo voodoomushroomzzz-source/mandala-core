@@ -131,9 +131,14 @@
       "role": "user",
       "content": "вопрос может опен роутер резать втой ответ?",
       "time": 1771945524.3496614
+    },
+    {
+      "role": "assistant",
+      "content": "```html\n<!DOCTYPE html>\n<html lang=\"ru\">\n<head>\n    <meta charset=\"UTF",
+      "time": 1771945545.446805
     }
   ],
-  "last_active": 1771945524.349668,
+  "last_active": 1771945545.4468224,
   "created_at": 1771933962.1658964,
   "modules_injected": true,
   "injection_timestamp": 1771945524.3495824
