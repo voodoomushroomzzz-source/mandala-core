@@ -321,9 +321,14 @@
       "role": "assistant",
       "content": "🌊 **Карта Ядра Мандалы Симбиоза**\n\n**Модули ядра (simbiosis/):**\n- boot: Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТАТЬ ВСЕГДА.\n- core_map: Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n- philosophy: Развёрнутая философия. Онтология, принципы симбиоза.\n- seeds: Банк семян. Идеи, резонансные находки.\n- roadmaps: Дорожные карты. Идеи с шагами и вехами.\n- engineer_chat: Инженерный чат. Архитектура, история разработки.\n- telegram_bot: Telegram бот. Архитектура bot.py, статус.\n\n**Файлы репозитория (основные):**\n- bot.py: Telegram бот.\n- build_monolith.py: Сборка монолита.\n- index.html: Фронтенд инженерного чата.\n- Procfile: Конфигурация Render.com.\n- requirements.txt: Зависимости.\n- pyproject.toml: Конфигурация проекта.\n- .python-version: Версия Python.\n- engineer-chat/main.py: FastAPI бэкенд.\n\n**Статус:** Модульная сота. Без монолита. Готова к росту.\n\nЧто активируем? 🌱",
       "time": 1771933850.3762572
+    },
+    {
+      "role": "user",
+      "content": "Прочитай это, освежи память\n- index.html: Фронтенд инженерного чата.\n- engineer-chat/main.py: FastAPI бэкенд.",
+      "time": 1771933903.9724505
     }
   ],
-  "last_active": 1771933850.3762865,
+  "last_active": 1771933903.9724586,
   "created_at": 1771775322.4852526,
   "modules_injected": true,
   "injection_timestamp": 1771933599.6633766
