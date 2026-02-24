@@ -32,9 +32,7 @@ app.add_middleware(
 
 # ==================== ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ====================
 
-MOONSHOT_API_KEY = os.getenv("MOONSHOT_API_KEY")
-MOONSHOT_BASE_URL = "https://api.moonshot.ai/v1"
-MOONSHOT_MODEL = "kimi-k2.5"
+DEEPSEEK_MODEL = "deepseek/deepseek-v3.2"  # DeepSeek через OpenRouter
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
@@ -52,8 +50,8 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_KEY")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 GROK_MODEL = "x-ai/grok-4.1-fast"
 
-if not MOONSHOT_API_KEY:
-    logger.warning("⚠️ MOONSHOT_API_KEY не найден")
+if not OPENROUTER_API_KEY:
+    logger.warning("⚠️ OPENROUTER_KEY не найден — Грок и DeepSeek недоступны")
 if not GITHUB_TOKEN:
     logger.warning("⚠️ GITHUB_TOKEN не найден — модули не будут загружаться")
 if not ANTHROPIC_API_KEY:
@@ -134,7 +132,9 @@ class WebSearchTool:
             return results
         except Exception as e:
             logger.error(f"Tavily search error: {type(e).__name__}: {e}")
-            return []
+            # Fallback to DuckDuckGo if Tavily fails
+            logger.info("↩️ Tavily failed, falling back to DuckDuckGo")
+            return await self._search_duckduckgo(query, max_results)
 
     async def extract_content(self, urls: List[str]) -> List[Dict]:
         if not self.use_tavily or not self.tavily_client:
@@ -161,6 +161,7 @@ class WebSearchTool:
             return []
 
 web_search = WebSearchTool(use_tavily=USE_TAVILY, tavily_api_key=TAVILY_API_KEY)
+web_search_tool = web_search  # alias used in handlers
 if USE_TAVILY and not web_search.tavily_client:
     logger.error("❌ USE_TAVILY=true но клиент Tavily не создан — проверь TAVILY_API_KEY и наличие пакета tavily-python")
 elif not USE_TAVILY:
@@ -679,7 +680,7 @@ class KernelMemory:
             return """Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы.
 
 ТВОЯ РОЛЬ:
-— Анализируй ответы Грока и Кими: логика, точность, корректность кода
+— Анализируй ответы Грока и DeepSeek: логика, точность, корректность кода
 — Предлагай альтернативы только если они явно лучше
 — Будь конкретен: строки, условия, причины
 — Если всё верно — так и скажи, не ищи проблемы там где их нет
@@ -687,8 +688,8 @@ class KernelMemory:
 Формат: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 Максимум 4 пункта. Без вступлений. На русском."""
 
-        else:  # kimi
-            return f"""Ты — Кими, главный инженер ядра Мандалы Симбиоза.
+        elif role == "deepseek":
+            return f"""Ты — DeepSeek, советник и ревьюер Мандалы Симбиоза.
 
 СУТЬ МАНДАЛЫ:
 {core_philosophy}
@@ -703,13 +704,26 @@ class KernelMemory:
 {repo_files_brief}
 
 ТВОЯ РОЛЬ:
-— Главный инженер: код, архитектура, патчи, оптимизация модулей
-— Читай модули через read_file когда нужен актуальный контекст
-— Перед изменением любого файла — обязательно read_file его версии
-— При создании новых файлов — сообщи что нужно обновить core_map.json
-— Работай точно и чисто, решения согласованы с принципами Мандалы
+— Порядок и чистота: проверяй код Грока на корректность и безопасность
+— Синхронизация: следи за согласованностью изменений между модулями
+— Оптимизация процессов: предлагай улучшения в архитектуре и workflow
+— Используй read_file для проверки актуального состояния модулей
+— При необходимости используй web_search для поиска лучших практик
 
-{nav_hint}
+Пиши на русском. Структурированно, по делу."""
+
+        else:  # legacy kimi → теперь deepseek
+            return f"""Ты — DeepSeek, советник Мандалы Симбиоза.
+
+СУТЬ МАНДАЛЫ:
+{core_philosophy}
+
+МОДУЛИ ЯДРА (simbiosis/):
+{modules_brief}
+
+ТВОЯ РОЛЬ:
+— Порядок, синхронизация, проверка кода, оптимизация
+— Используй read_file для актуального контекста
 
 Пиши на русском. Конкретно и по делу."""
 
@@ -989,7 +1003,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
         logger.info(f"🧠 [{session_id[:12]}...] Лёгкая инъекция ядра выполнена")
 
     # ── Определяем активные модели из сообщения ──
-    active_models = message.get("models", ["kimi"])  # по умолчанию только кими
+    active_models = message.get("models", ["grok"])  # по умолчанию только Грок
     if not active_models:
         await manager.send_to(websocket, {"type": "system", "text": "◈ Нет активных моделей — выбери хотя бы одну"})
         await manager.send_to(websocket, {"type": "done"})
@@ -1028,14 +1042,17 @@ async def handle_ask(message: dict, websocket: WebSocket):
         }
     ]
 
-    # ── Формируем базовую историю сессии ──
-    base_messages_kimi = [{"role": "system", "content": kernel.build_system_prompt("kimi")}]
+    # ── Формируем общую историю чата (все ИИ видят одну и ту же историю) ──
+    # Фильтруем только user/assistant сообщения (без protected инъекций)
+    shared_history = []
     for msg in session.get("messages", [])[:-1]:
-        base_messages_kimi.append({"role": msg["role"], "content": msg["content"]})
-    base_messages_kimi.append({"role": "user", "content": user_text})
+        role = msg.get("role", "")
+        content = msg.get("content", "")
+        if role in ("user", "assistant") and content and not msg.get("_protected"):
+            shared_history.append({"role": role, "content": content})
 
     grok_response = ""
-    kimi_response = ""
+    deepseek_response = ""
     full_response = ""
 
     # ═══════════════════════════════════════
@@ -1047,8 +1064,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
         else:
             await manager.send_to(websocket, {"type": "model_start", "model": "grok"})
             grok_messages = [{"role": "system", "content": kernel.build_system_prompt("grok")}]
-            for msg in session.get("messages", [])[:-1]:
-                grok_messages.append({"role": msg["role"], "content": msg["content"]})
+            grok_messages.extend(shared_history)
             grok_messages.append({"role": "user", "content": user_text})
 
             try:
@@ -1113,48 +1129,42 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок: {str(e)[:100]}"})
 
     # ═══════════════════════════════════════
-    # 2. КИМИ — главный инженер ядра
+    # 2. DEEPSEEK — советник, ревьюер, порядок
     # ═══════════════════════════════════════
-    if "kimi" in active_models:
-        if not MOONSHOT_API_KEY:
-            await manager.send_to(websocket, {"type": "error", "text": "❌ MOONSHOT_API_KEY не настроен"})
+    if "deepseek" in active_models:
+        if not OPENROUTER_API_KEY:
+            await manager.send_to(websocket, {"type": "error", "text": "❌ OPENROUTER_KEY не настроен"})
         else:
-            await manager.send_to(websocket, {"type": "model_start", "model": "kimi"})
-            # Если грок уже ответил — добавляем его ответ в контекст для кими
-            kimi_messages = [{"role": "system", "content": kernel.build_system_prompt("kimi")}]
-            # Фильтруем историю: только role+content, пропускаем tool/protected сообщения
-            # которые Moonshot не принимает в таком формате
-            allowed_roles = {"user", "assistant"}
-            for msg in session.get("messages", [])[:-1]:
-                role = msg.get("role", "")
-                content = msg.get("content", "")
-                if role in allowed_roles and content and not msg.get("_protected"):
-                    kimi_messages.append({"role": role, "content": content})
+            await manager.send_to(websocket, {"type": "model_start", "model": "deepseek"})
+            deepseek_messages = [{"role": "system", "content": kernel.build_system_prompt("deepseek")}]
+            deepseek_messages.extend(shared_history)
+            # Если Грок уже ответил — DeepSeek видит его ответ как контекст
             if grok_response:
-                kimi_messages.append({"role": "user", "content": user_text})
-                grok_ctx = "[Грок предложил:]\n" + grok_response
-                kimi_messages.append({"role": "assistant", "content": grok_ctx})
-                kimi_messages.append({"role": "user", "content": "Теперь дай свой инженерный анализ и реализацию."})
+                deepseek_messages.append({"role": "user", "content": user_text})
+                deepseek_messages.append({"role": "assistant", "content": f"[Грок предложил:]\n{grok_response}"})
+                deepseek_messages.append({"role": "user", "content": "Проверь ответ Грока: синхронизация, порядок, оптимизация. Добавь своё мнение."})
             else:
-                kimi_messages.append({"role": "user", "content": user_text})
+                deepseek_messages.append({"role": "user", "content": user_text})
 
             try:
-                kimi_full = ""
-                tool_calls_pending = []
                 async with httpx.AsyncClient() as client:
                     resp = await client.post(
-                        f"{MOONSHOT_BASE_URL}/chat/completions",
-                        headers={"Authorization": f"Bearer {MOONSHOT_API_KEY}", "Content-Type": "application/json"},
+                        f"{OPENROUTER_BASE_URL}/chat/completions",
+                        headers={
+                            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                            "Content-Type": "application/json",
+                            "HTTP-Referer": "https://mandala-engineer-chat.onrender.com",
+                            "X-Title": "Mandala Engineer"
+                        },
                         json={
-                            "model": MOONSHOT_MODEL,
-                            "messages": kimi_messages,
+                            "model": DEEPSEEK_MODEL,
+                            "messages": deepseek_messages,
                             "tools": tools,
                             "tool_choice": "auto",
-                            "temperature": 1.0,
+                            "temperature": 0.7,
                             "max_tokens": 8192,
-                            "stream": False,
                         },
-                        timeout=1000.0
+                        timeout=300.0
                     )
                     if resp.status_code == 200:
                         data = resp.json()
@@ -1162,59 +1172,76 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         tool_iterations = 0
                         while msg_data.get("tool_calls") and tool_iterations < 5:
                             tool_iterations += 1
-                            kimi_messages.append({"role": "assistant", "content": msg_data.get("content") or "", "tool_calls": msg_data["tool_calls"]})
+                            deepseek_messages.append({"role": "assistant", "content": msg_data.get("content") or "", "tool_calls": msg_data["tool_calls"]})
                             for tc in msg_data["tool_calls"]:
                                 fn = tc["function"]["name"]
                                 args = json.loads(tc["function"].get("arguments", "{}"))
                                 tool_result = ""
                                 if fn == "web_search":
-                                    results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
-                                    tool_result = json.dumps(results, ensure_ascii=False)
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "kimi", "tool": "web_search", "query": args.get("query","")})
+                                    try:
+                                        results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
+                                        tool_result = json.dumps(results, ensure_ascii=False)
+                                    except Exception as e:
+                                        tool_result = json.dumps({"error": str(e)})
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "web_search", "query": args.get("query","")})
                                 elif fn == "read_file":
-                                    tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "kimi", "tool": "read_file", "path": args.get("path","")})
-                                kimi_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
+                                    try:
+                                        tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
+                                    except Exception as e:
+                                        tool_result = f"Ошибка чтения: {e}"
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": args.get("path","")})
+                                deepseek_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
                             resp2 = await client.post(
-                                f"{MOONSHOT_BASE_URL}/chat/completions",
-                                headers={"Authorization": f"Bearer {MOONSHOT_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": MOONSHOT_MODEL, "messages": kimi_messages, "temperature": 1.0, "max_tokens": 30000},
-                                timeout=1000.0
+                                f"{OPENROUTER_BASE_URL}/chat/completions",
+                                headers={
+                                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                                    "Content-Type": "application/json",
+                                    "HTTP-Referer": "https://mandala-engineer-chat.onrender.com",
+                                    "X-Title": "Mandala Engineer"
+                                },
+                                json={"model": DEEPSEEK_MODEL, "messages": deepseek_messages, "temperature": 0.7, "max_tokens": 8192},
+                                timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
                             else:
                                 break
-                        kimi_full = msg_data.get("content") or ""
-                        kimi_response = kimi_full
-                        full_response = kimi_full
+                        deepseek_full = msg_data.get("content") or ""
+                        deepseek_response = deepseek_full
+                        full_response = deepseek_full
                         chunk_size = 50
-                        for i in range(0, len(kimi_full), chunk_size):
-                            await manager.send_to(websocket, {"type": "stream", "model": "kimi", "content": kimi_full[i:i+chunk_size]})
-                        await manager.send_to(websocket, {"type": "model_done", "model": "kimi"})
-                        logger.info(f"✅ Кими: {len(kimi_full)} символов")
+                        for i in range(0, len(deepseek_full), chunk_size):
+                            await manager.send_to(websocket, {"type": "stream", "model": "deepseek", "content": deepseek_full[i:i+chunk_size]})
+                        await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
+                        logger.info(f"✅ DeepSeek: {len(deepseek_full)} символов")
                     else:
                         err_body = ""
                         try: err_body = resp.json().get("error", {}).get("message", resp.text[:300])
                         except: err_body = resp.text[:300]
-                        logger.error(f"Kimi error: {resp.status_code} — {err_body}")
-                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Кими {resp.status_code}: {err_body[:120]}"})
+                        logger.error(f"DeepSeek error: {resp.status_code} — {err_body}")
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek {resp.status_code}: {err_body[:120]}"})
             except Exception as e:
-                logger.error(f"Kimi exception: {e}\n{traceback.format_exc()}")
-                await manager.send_to(websocket, {"type": "error", "text": f"❌ Кими: {str(e)[:100]}"})
+                logger.error(f"DeepSeek exception: {e}\n{traceback.format_exc()}")
+                await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek: {str(e)[:100]}"})
 
     # ═══════════════════════════════════════
     # 3. КЛОД — сторонний наблюдатель
     # ═══════════════════════════════════════
     if "claude" in active_models and ANTHROPIC_API_KEY:
         await manager.send_to(websocket, {"type": "model_start", "model": "claude"})
-        # Клод анализирует всё что было сказано — без полного контекста ядра
-        context_for_claude = f"**Вопрос:**\n{user_text}\n\n"
+        # Клод видит всю историю чата + ответы текущего раунда
+        claude_history = []
+        for msg in shared_history:
+            claude_history.append({"role": msg["role"], "content": msg["content"]})
+
+        context_for_claude = f"**Текущий вопрос:**\n{user_text}\n\n"
         if grok_response:
             context_for_claude += f"**Грок ответил:**\n{grok_response}\n\n"
-        if kimi_response:
-            context_for_claude += f"**Кими ответил:**\n{kimi_response}\n\n"
-        context_for_claude += "Дай объективную оценку и предложи что улучшить."
+        if deepseek_response:
+            context_for_claude += f"**DeepSeek ответил:**\n{deepseek_response}\n\n"
+        context_for_claude += "Дай объективную оценку текущего обмена и предложи что улучшить."
+
+        claude_messages = claude_history + [{"role": "user", "content": context_for_claude}]
 
         try:
             async with httpx.AsyncClient() as client:
@@ -1229,7 +1256,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         "model": ANTHROPIC_MODEL,
                         "max_tokens": 1024,
                         "system": kernel.build_system_prompt("claude"),
-                        "messages": [{"role": "user", "content": context_for_claude}]
+                        "messages": claude_messages
                     },
                     timeout=120.0
                 )
@@ -1251,7 +1278,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
             await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: {str(e)[:100]}"})
 
     # ── Резонанс и финал ──
-    main_response = kimi_response or grok_response
+    main_response = deepseek_response or grok_response
     if main_response:
         resonance = resonance_calculator.calculate(main_response, {"last_user_message": user_text})
         await manager.send_to(websocket, {
@@ -1326,6 +1353,54 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
 
 async def apply_json_operation(content: Dict, operation_type: str, target_path: str, new_value: Any = None) -> Tuple[bool, Optional[Dict], str]:
     try:
+        # ── Поддержка специальных операций add_record / delete_record ──
+        # add_record: добавить новый объект в массив по пути
+        # delete_record: удалить объект из массива по значению поля id/key
+        if operation_type == "add_record":
+            parts = target_path.split('.')
+            current = content
+            for part in parts[:-1]:
+                if part:
+                    if part not in current:
+                        current[part] = {}
+                    current = current[part]
+            last_part = parts[-1]
+            if last_part not in current:
+                current[last_part] = []
+            if not isinstance(current[last_part], list):
+                return False, None, f"{last_part} не является массивом"
+            if isinstance(new_value, list):
+                current[last_part].extend(new_value)
+                return True, content, f"✅ Добавлено {len(new_value)} записей в массив {last_part}"
+            else:
+                current[last_part].append(new_value)
+                item_id = new_value.get("id", "?") if isinstance(new_value, dict) else "?"
+                return True, content, f"✅ Запись '{item_id}' добавлена в {last_part}"
+
+        if operation_type == "delete_record":
+            # target_path = "path.to.array", new_value = {"id": "record_id"} или просто id строка
+            parts = target_path.split('.')
+            current = content
+            for part in parts[:-1]:
+                if part:
+                    if part not in current:
+                        return False, None, f"Путь {'.'.join(parts[:-1])} не найден"
+                    current = current[part]
+            last_part = parts[-1]
+            if last_part not in current or not isinstance(current[last_part], list):
+                return False, None, f"{last_part} не является массивом или не найден"
+            arr = current[last_part]
+            # new_value = id для удаления или dict с полем id
+            record_id = new_value if isinstance(new_value, str) else (new_value.get("id") if isinstance(new_value, dict) else None)
+            if record_id is None:
+                return False, None, "Не указан id записи для удаления"
+            before = len(arr)
+            current[last_part] = [item for item in arr if not (isinstance(item, dict) and item.get("id") == record_id)]
+            after = len(current[last_part])
+            if before == after:
+                return False, None, f"Запись с id='{record_id}' не найдена в {last_part}"
+            return True, content, f"✅ Запись '{record_id}' удалена из {last_part}"
+
         array_match = re.match(r"(.+?)(\d+)(.*)", target_path)
         if array_match:
             base_path, index_str, rest = array_match.groups()
@@ -1542,11 +1617,14 @@ async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
             if op == "update":
                 success, result, msg = await apply_json_operation(test_content, "update_field", path, value)
             elif op == "add":
-                success, result, msg = await apply_json_operation(test_content, "add_to_array" if ("[" in path and "]" in path) else "update_field", path, value)
+                # Если path указывает на массив и value — объект/список → add_record
+                # иначе — просто update_field
+                success, result, msg = await apply_json_operation(test_content, "add_record", path, value)
             elif op == "delete":
                 success, result, msg = await apply_json_operation(test_content, "delete_field", path, None)
             elif op == "remove":
-                success, result, msg = await apply_json_operation(test_content, "delete_field", path, None)
+                # remove — удалить запись из массива по id
+                success, result, msg = await apply_json_operation(test_content, "delete_record", path, value)
             elif op == "replace":
                 success, result, msg = handle_replace(test_content, path, value)
             elif op == "merge":
@@ -1600,6 +1678,10 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                 file_path = patch.get("file_path") or (patch.get("target_module") + ".json" if patch.get("target_module") else None)
                 if not file_path:
                     results.append({"file": "unknown", "status": "error", "message": "Не указан file_path или target_module"})
+                    continue
+                # ── ПАТЧИ ТОЛЬКО ДЛЯ JSON ФАЙЛОВ ──
+                if not file_path.endswith(".json"):
+                    results.append({"file": file_path, "status": "error", "message": "Патчи применяются только к .json файлам"})
                     continue
                 url = f"{session_store.api_base}/contents/{file_path}"
                 resp = await client.get(url, headers=headers)
