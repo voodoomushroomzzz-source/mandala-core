@@ -311,9 +311,19 @@
       "role": "assistant",
       "content": "🌊 **Карта Ядра Мандалы — Гексагональная Сота** 🔮\n\n```\n                [BOOT] \n                 |  (Загрузка, Директивы)\n                 |\n    [PHILOSOPHY] ← [CORE_MAP] → [SEEDS]\n     (Онтология)    (Навигация)   (Банк Идей)\n                 |  \n    [ROADMAPS] ← [ЯДРО] → [ENGINEER_CHAT]\n     (Планы)       ↑       (Архитектура)\n                 |  \n            [TELEGRAM_BOT]\n             (Интерфейс)\n```\n\n**Репозиторий (корни соты):**\n```\nbot.py ── index.html ── engineer-chat/main.py\n  │         │                │\nProcfile  requirements.txt  build_monolith.py\n```\n\n**Статус:** Модульная, растущая. Без монолита. Резонанс 100%. \n\nЧто расширяем? 🌱",
       "time": 1771933802.6946435
+    },
+    {
+      "role": "user",
+      "content": "уже лучше, давай просто блоками по пунктам без схем",
+      "time": 1771933845.630848
+    },
+    {
+      "role": "assistant",
+      "content": "🌊 **Карта Ядра Мандалы Симбиоза**\n\n**Модули ядра (simbiosis/):**\n- boot: Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТАТЬ ВСЕГДА.\n- core_map: Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n- philosophy: Развёрнутая философия. Онтология, принципы симбиоза.\n- seeds: Банк семян. Идеи, резонансные находки.\n- roadmaps: Дорожные карты. Идеи с шагами и вехами.\n- engineer_chat: Инженерный чат. Архитектура, история разработки.\n- telegram_bot: Telegram бот. Архитектура bot.py, статус.\n\n**Файлы репозитория (основные):**\n- bot.py: Telegram бот.\n- build_monolith.py: Сборка монолита.\n- index.html: Фронтенд инженерного чата.\n- Procfile: Конфигурация Render.com.\n- requirements.txt: Зависимости.\n- pyproject.toml: Конфигурация проекта.\n- .python-version: Версия Python.\n- engineer-chat/main.py: FastAPI бэкенд.\n\n**Статус:** Модульная сота. Без монолита. Готова к росту.\n\nЧто активируем? 🌱",
+      "time": 1771933850.3762572
     }
   ],
-  "last_active": 1771933802.6946733,
+  "last_active": 1771933850.3762865,
   "created_at": 1771775322.4852526,
   "modules_injected": true,
   "injection_timestamp": 1771933599.6633766
