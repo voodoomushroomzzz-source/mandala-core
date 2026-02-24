@@ -137,16 +137,16 @@
         "path": ".python-version",
         "description": "Версия Python."
       },
-      "engineer_chat/main.py": {
+      "engineer-chat/main.py": {
         "path": "engineer-chat/main.py",
         "description": "FastAPI бэкенд инженерного чата. Главный серверный файл.",
         "related_module": "engineer_chat"
       },
-      "engineer_chat/dockerfile": {
+      "engineer-chat/dockerfile": {
         "path": "engineer-chat/dockerfile",
         "description": "Docker конфигурация для инженерного чата."
       },
-      "engineer_chat/requirements.txt": {
+      "engineer-chat/requirements.txt": {
         "path": "engineer-chat/requirements.txt",
         "description": "Python зависимости инженерного чата."
       }
