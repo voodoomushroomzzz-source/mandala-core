@@ -1191,7 +1191,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.7,
-                            "max_tokens": 300000,
+                            "max_tokens": 163840,
                         },
                         timeout=300.0
                     )
@@ -1237,7 +1237,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     "HTTP-Referer": "https://mandala-engineer-chat.onrender.com",
                                     "X-Title": "Mandala Engineer"
                                 },
-                                json={"model": DEEPSEEK_MODEL, "messages": deepseek_messages, "temperature": 0.7, "max_tokens": 300000},
+                                json={"model": DEEPSEEK_MODEL, "messages": deepseek_messages, "temperature": 0.7, "max_tokens": 163840},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
