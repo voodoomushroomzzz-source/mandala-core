@@ -2,7 +2,7 @@
   "messages": [
     {
       "role": "user",
-      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.0.0 | Коммит: 670b6cc\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
+      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.0.0 | Коммит: e3d412d\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
       "time": 0,
       "_protected": true
     },
@@ -76,10 +76,15 @@
       "role": "user",
       "content": "&lt;!DOCTYPE html&gt;\n&lt;html lang=\"ru\"&gt;\n&lt;head&gt;\n    &lt;meta charset=\"UTF-8\"&gt;\n    &lt;meta name\n--\nэто все что пришло, проведи анализ и предложи пути решения, что нас ограничивает?",
       "time": 1771935391.2033129
+    },
+    {
+      "role": "user",
+      "content": "Димпсик, у нас проблемма с кодом, не формируется целиком в чем дело?",
+      "time": 1771935450.4194553
     }
   ],
-  "last_active": 1771935391.2033162,
+  "last_active": 1771935450.4194615,
   "created_at": 1771933962.1658964,
   "modules_injected": true,
-  "injection_timestamp": 1771934697.3069909
+  "injection_timestamp": 1771935450.419386
 }
