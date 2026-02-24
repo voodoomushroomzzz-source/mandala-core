@@ -176,8 +176,8 @@
         .model-btn.active { opacity: 1; border-color: currentColor; }
         .grok-btn  { color: #10b981; }
         .grok-btn.active  { background: rgba(16,185,129,0.12); }
-        .kimi-btn  { color: #7c3aed; }
-        .kimi-btn.active  { background: rgba(124,58,237,0.12); }
+        .deepseek-btn  { color: #f59e0b; }
+        .deepseek-btn.active  { background: rgba(245,158,11,0.12); }
         .claude-btn { color: #4f46e5; }
         .claude-btn.active { background: rgba(79,70,229,0.12); }
 
@@ -194,7 +194,7 @@
             vertical-align: middle;
         }
         .model-label.grok   { color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
-        .model-label.kimi   { color: #7c3aed; border: 1px solid rgba(124,58,237,0.3); }
+        .model-label.deepseek { color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
         .model-label.claude { color: #4f46e5; border: 1px solid rgba(79,70,229,0.3); }
 
         .commit-sha {
@@ -957,7 +957,102 @@
         .btn-primary { background: var(--surface); color: var(--green-bright); border: 1px solid var(--green); }
         .btn-primary:hover { background: var(--green); color: var(--bg); box-shadow: 0 4px 15px var(--green); }
 
-        /* Seeds tab */
+        /* === КАРТА ЯДРА === */
+        .core-map-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0 24px;
+        }
+        .core-center {
+            position: relative;
+            width: 320px;
+            height: 320px;
+        }
+        .core-node {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--mono);
+            text-align: center;
+        }
+        .core-node-center {
+            width: 90px; height: 90px;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(16,185,129,0.25) 0%, rgba(16,185,129,0.05) 100%);
+            border: 2px solid var(--green-2);
+            box-shadow: 0 0 20px rgba(16,185,129,0.3), 0 0 40px rgba(16,185,129,0.1);
+            font-size: 10px;
+            color: var(--green-bright);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .core-node-module {
+            width: 68px; height: 68px;
+            background: var(--surface-2);
+            border: 1px solid var(--line-2);
+            font-size: 9px;
+            color: var(--text-2);
+            letter-spacing: 1px;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .core-node-module:hover {
+            border-color: var(--green-2);
+            color: var(--green-bright);
+            background: var(--green-glow);
+            transform: translate(var(--ox), var(--oy)) scale(1.12);
+            z-index: 10;
+        }
+        .core-node-module .mod-icon { font-size: 14px; }
+        .core-node-module .mod-name { font-size: 8px; letter-spacing: 1px; }
+        .core-node-line {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform-origin: 0 0;
+            background: linear-gradient(90deg, var(--green), transparent);
+            height: 1px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .module-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface);
+            border: 1px solid var(--green-2);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            min-width: 200px;
+            max-width: 260px;
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--text);
+            z-index: 100;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            pointer-events: none;
+            white-space: normal;
+        }
+        .module-tooltip h4 { color: var(--green-bright); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+        .module-tooltip p { color: var(--text-2); font-size: 10px; margin-bottom: 4px; }
+        .module-tooltip ul { padding-left: 14px; color: var(--text-dim); font-size: 10px; }
+        .file-card {
+            padding: 12px 14px;
+            background: var(--surface);
+            border: 1px solid var(--line-2);
+            border-radius: var(--radius);
+            cursor: default;
+        }
+        .file-card:hover { border-color: var(--line); }
+        .file-card-path { font-family: var(--mono); font-size: 10px; color: var(--green-bright); margin-bottom: 4px; }
+        .file-card-desc { font-size: 11px; color: var(--text-2); }
         .seeds-container { flex: 1; overflow-y: auto; padding: 16px; }
         .seeds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
         .seed-card {
@@ -1069,7 +1164,7 @@
         <div class="h-right">
             <div class="model-selector" id="modelSelector">
                 <button class="model-btn grok-btn active" id="btnGrok" onclick="toggleModel('grok')" title="Грок — исследователь">△</button>
-                <button class="model-btn kimi-btn" id="btnKimi" onclick="toggleModel('kimi')" title="Кими — инженер">◇</button>
+                <button class="model-btn deepseek-btn" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — советник">◈</button>
                 <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">○</button>
             </div>
             <div class="vsep"></div>
@@ -1096,6 +1191,7 @@
         <div class="content">
             <div class="tabs">
                 <button class="tab active" data-tab="chat">◈ чат</button>
+                <button class="tab" data-tab="map">◈ карта</button>
                 <button class="tab" data-tab="status">◈ статус</button>
                 <button class="tab" data-tab="files">◈ файлы</button>
             </div>
@@ -1135,6 +1231,21 @@
                             <button class="ibtn isend" id="sendBtn" onclick="sendMessage()">➤</button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Вкладка карты ядра -->
+            <div class="tab-content" id="tab-map">
+                <div class="seeds-container" id="mapContainer">
+                    <div id="mapHeader" style="padding:0 4px 16px;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);display:flex;align-items:center;justify-content:space-between;">
+                        <span>◈ карта ядра симбиоза</span>
+                        <button onclick="loadMap()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
+                    </div>
+                    <!-- Интерактивное ядро -->
+                    <div id="coreVisualization" style="position:relative;margin-bottom:32px;"></div>
+                    <!-- Остальные файлы -->
+                    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin-bottom:10px;" id="otherFilesLabel">◈ файлы репозитория</div>
+                    <div class="seeds-grid" id="otherFilesGrid"><div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div></div>
                 </div>
             </div>
 
@@ -1483,13 +1594,23 @@
         }
 
         // ==================== СООБЩЕНИЯ ====================
-        function createMessageElement(role) {
+        function createMessageElement(role, model = null) {
             const div = document.createElement('div');
             div.className = `msg ${role}`;
-            const iconSvg = role === 'user' 
-                ? '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>'
-                : modelIcons['kimi'] || '<svg viewBox="0 0 30 30" fill="none"><rect x="8" y="8" width="14" height="14" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.07)" transform="rotate(45 15 15)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.9"/></svg>';
-            const name = role === 'user' ? 'вы' : (role === 'assistant' ? 'СР' : 'система');
+            // Определяем иконку и имя строго по model, не переиспользуем предыдущее
+            let iconSvg, name;
+            if (role === 'user') {
+                iconSvg = '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>';
+                name = 'вы';
+            } else if (model && modelIcons[model]) {
+                iconSvg = modelIcons[model];
+                name = modelNames[model] || 'СР';
+            } else {
+                // дефолт для assistant без модели — Грок
+                iconSvg = modelIcons['grok'];
+                name = 'СР';
+            }
+            if (model) div.dataset.model = model;
             div.innerHTML = `
                 <div class="av">${iconSvg}</div>
                 <div class="mbody">
@@ -1552,11 +1673,13 @@
 
         function handleStream(content, model) {
             if (!currentMessageDiv) {
-                currentMessageDiv = createMessageElement('assistant');
+                currentMessageDiv = createMessageElement('assistant', model || 'grok');
                 if (model) {
                     const nameEl = currentMessageDiv.querySelector('.mname');
-                    const label = `<span class="model-label ${model}">${model}</span>`;
-                    nameEl.innerHTML = 'СР' + label;
+                    const color = modelColors[model] || 'var(--green-bright)';
+                    const label = `<span class="model-label ${model}">${modelNames[model] || model}</span>`;
+                    nameEl.innerHTML = label;
+                    nameEl.style.color = color;
                 }
                 messagesEl.appendChild(currentMessageDiv);
             }
@@ -1913,7 +2036,7 @@
                 }
             }
             if (labelEl) {
-                const names = { grok: 'Грок думает', kimi: 'Кими думает', claude: 'Клод думает' };
+                const names = { grok: 'Грок думает', deepseek: 'DeepSeek думает', claude: 'Клод думает' };
                 labelEl.textContent = names[m] || 'думаю';
                 labelEl.style.color = modelColors[m] || 'var(--text-2)';
             }
@@ -1953,8 +2076,9 @@
         function getActiveModels() { return Array.from(activeModels); }
 
         function toggleModel(model) {
-            const key = model.charAt(0).toUpperCase() + model.slice(1);
-            const btn = document.getElementById('btn' + key);
+            // Маппинг model → id кнопки
+            const btnMap = { grok: 'btnGrok', deepseek: 'btnDeepseek', claude: 'btnClaude' };
+            const btn = document.getElementById(btnMap[model]);
             if (!btn) return;
             if (activeModels.has(model)) {
                 activeModels.delete(model);
@@ -1971,17 +2095,18 @@
                 <polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/>
                 <circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/>
             </svg>`,
-            kimi: `<svg viewBox="0 0 30 30" fill="none">
-                <rect x="8" y="8" width="14" height="14" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.07)" transform="rotate(45 15 15)"/>
-                <circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.9"/>
+            deepseek: `<svg viewBox="0 0 30 30" fill="none">
+                <circle cx="15" cy="15" r="10" stroke="#f59e0b" stroke-width="0.8" fill="rgba(245,158,11,0.07)"/>
+                <path d="M10,15 L15,10 L20,15 L15,20 Z" stroke="#f59e0b" stroke-width="0.8" fill="rgba(245,158,11,0.1)"/>
+                <circle cx="15" cy="15" r="2" fill="#fbbf24" opacity="0.9"/>
             </svg>`,
             claude: `<svg viewBox="0 0 30 30" fill="none">
                 <circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/>
                 <circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/>
             </svg>`
         };
-        const modelNames = { grok: 'Грок △', kimi: 'Кими ◇', claude: 'Клод ○' };
-        const modelColors = { grok: '#10b981', kimi: '#7c3aed', claude: '#4f46e5' };
+        const modelNames = { grok: 'Грок △', deepseek: 'DeepSeek ◈', claude: 'Клод ○' };
+        const modelColors = { grok: '#10b981', deepseek: '#f59e0b', claude: '#4f46e5' };
 
         let observerThinkingEl = null;
 
@@ -2044,9 +2169,144 @@
                     document.getElementById(`tab-${tabName}`).classList.add('active');
                     if (tabName === 'status') loadStatus();
                     if (tabName === 'files') loadFileTree();
+                    if (tabName === 'map') loadMap();
                 });
             });
         }
+
+        // ==================== КАРТА ЯДРА ====================
+        let mapLoaded = false;
+        async function loadMap() {
+            if (mapLoaded) return;
+            mapLoaded = true;
+            const viz = document.getElementById('coreVisualization');
+            const otherGrid = document.getElementById('otherFilesGrid');
+            viz.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка карты...</div></div>';
+            otherGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
+
+            // Конфигурация модулей ядра
+            const coreModules = [
+                {
+                    id: 'boot', icon: '⚡', name: 'boot', file: 'simbiosis/boot.json',
+                    desc: 'Загрузочный модуль ядра. Версия, идентификация, базовая философия.',
+                    keys: ['version', 'identity', 'philosophy', 'startup_sequence']
+                },
+                {
+                    id: 'core_map', icon: '🗺', name: 'core_map', file: 'simbiosis/core_map.json',
+                    desc: 'Карта навигации по всем модулям и файлам репозитория.',
+                    keys: ['kernel_modules', 'repository', 'navigation_hint']
+                },
+                {
+                    id: 'engineer_chat', icon: '💬', name: 'eng_chat', file: 'simbiosis/engineer_chat.json',
+                    desc: 'Конфигурация инженерного чата: роли, поведение ИИ-агентов.',
+                    keys: ['agents', 'tools', 'session_rules', 'patch_format']
+                },
+                {
+                    id: 'philosophy', icon: '🌀', name: 'philosophy', file: 'simbiosis/philosophy.json',
+                    desc: 'Философские основы Мандалы: принципы, метафоры, этика.',
+                    keys: ['core_principles', 'metaphors', 'ethics', 'resonance']
+                },
+                {
+                    id: 'seeds', icon: '🌱', name: 'seeds', file: 'simbiosis/seeds.json',
+                    desc: 'Семена — активные идеи и инкубируемые проекты системы.',
+                    keys: ['seeds[]', 'id', 'type', 'status', 'description']
+                },
+                {
+                    id: 'roadmaps', icon: '📜', name: 'roadmaps', file: 'simbiosis/roadmaps.json',
+                    desc: 'Дорожные карты развития. Этапы, вехи, критерии завершения.',
+                    keys: ['roadmaps{}', 'title', 'milestones', 'status']
+                },
+                {
+                    id: 'telegram_bot', icon: '🤖', name: 'tg_bot', file: 'simbiosis/telegram_bot.json',
+                    desc: 'Конфигурация Telegram-бота Мандалы.',
+                    keys: ['commands', 'persona', 'integration']
+                },
+            ];
+
+            // Позиции на окружности (7 модулей вокруг центра)
+            const cx = 160, cy = 160, r = 105;
+            const angleStep = (2 * Math.PI) / coreModules.length;
+
+            let svgLines = '';
+            let nodes = '';
+            coreModules.forEach((mod, i) => {
+                const angle = angleStep * i - Math.PI / 2;
+                const x = cx + r * Math.cos(angle);
+                const y = cy + r * Math.sin(angle);
+                const nx = (x / 320) * 100;
+                const ny = (y / 320) * 100;
+                const ox = x - cx;
+                const oy = y - cy;
+                // Линия от центра
+                svgLines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>`;
+                nodes += `
+                    <div class="core-node core-node-module" style="
+                        left:${nx}%;top:${ny}%;
+                        transform:translate(calc(-50% + 0px), calc(-50% + 0px));
+                        --ox:${ox > 0 ? '12%' : ox < 0 ? '-12%' : '0'};
+                        --oy:${oy > 0 ? '12%' : oy < 0 ? '-12%' : '0'};
+                        flex-direction:column;display:flex;align-items:center;justify-content:center;
+                    " 
+                    data-mod="${mod.id}"
+                    onmouseenter="showModuleTooltip(this, ${JSON.stringify(mod).replace(/"/g, '&quot;')})"
+                    onmouseleave="hideModuleTooltip(this)">
+                        <span class="mod-icon">${mod.icon}</span>
+                        <span class="mod-name">${mod.name}</span>
+                    </div>`;
+            });
+
+            viz.innerHTML = `
+                <div class="core-map-wrapper">
+                    <div class="core-center">
+                        <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 320 320">${svgLines}</svg>
+                        ${nodes}
+                        <div class="core-node core-node-center">simbiosis<br>◈ core</div>
+                    </div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:1px;text-align:center;">Наведи на модуль для деталей</div>
+                </div>
+            `;
+
+            // Остальные файлы репо
+            try {
+                const resp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/simbiosis/core_map.json`);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    const repoFiles = data.repository?.files || {};
+                    const otherItems = Object.entries(repoFiles).filter(([path]) =>
+                        !path.startsWith('simbiosis/')
+                    );
+                    if (otherItems.length) {
+                        otherGrid.innerHTML = otherItems.map(([path, info]) => `
+                            <div class="file-card">
+                                <div class="file-card-path">📄 ${escapeHtml(path)}</div>
+                                <div class="file-card-desc">${escapeHtml(info.description || '')}</div>
+                            </div>
+                        `).join('');
+                    } else {
+                        otherGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет данных</div></div>';
+                    }
+                }
+            } catch(e) {
+                otherGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${e.message}</div></div>`;
+            }
+        }
+
+        window.showModuleTooltip = function(el, mod) {
+            hideModuleTooltip(el);
+            const tip = document.createElement('div');
+            tip.className = 'module-tooltip';
+            tip.innerHTML = `
+                <h4>${mod.icon} ${mod.name}</h4>
+                <p>${escapeHtml(mod.desc)}</p>
+                <ul>${mod.keys.map(k => `<li>${escapeHtml(k)}</li>`).join('')}</ul>
+            `;
+            el.style.position = 'absolute';
+            el.appendChild(tip);
+        };
+        window.hideModuleTooltip = function(el) {
+            const tip = el.querySelector('.module-tooltip');
+            if (tip) tip.remove();
+        };
 
         async function loadStatus() {
             seedsGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
