@@ -195,7 +195,7 @@ file_reader = FileReader()
 async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[str]:
     """
     Вызывает Claude как скептика-наблюдателя.
-    Получает вопрос Садовника и ответ Кими, возвращает критический анализ.
+    Получает вопрос Садовника и ответ основного ИИ, возвращает критический анализ.
     """
     if not ANTHROPIC_API_KEY:
         logger.warning("⚠️ ANTHROPIC_API_KEY не задан — наблюдатель пропущен")
@@ -897,7 +897,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
         await manager.send_to(websocket, {"type": "error", "text": "❌ Пустое сообщение"})
         return
     logger.info(f"🤖 [{session_id[:12]}...] → {user_text[:50]}...")
-    manager.add_to_context(session_id, "user", user_text)
 
     # Специальные команды
     if user_text == '/sync':
@@ -962,6 +961,10 @@ async def handle_ask(message: dict, websocket: WebSocket):
         await send_module_directly(module_request, websocket, session_id)
         return
 
+    # ── Добавляем user сообщение в контекст ПОСЛЕ формирования истории ──
+    # Важно: shared_history строим ДО add_to_context, иначе текущий вопрос
+    # попадёт в историю и ИИ будет отвечать на него дважды
+
     await kernel.ensure_fresh()
     session = await get_session(session_id)
 
@@ -981,7 +984,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
             logger.info(f"[{session_id[:12]}...] Инъекция сброшена после обновления модулей")
 
     # Лёгкая инъекция ядра — только при старте сессии
-    # Модули читаются по требованию через read_file, не грузятся целиком
     if not session.get("modules_injected"):
         injection_content = kernel.build_kernel_injection()
         session.setdefault("messages", [])
@@ -993,7 +995,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
         })
         session["messages"].insert(1, {
             "role": "assistant",
-            "content": "◈ Ядро Симбиоза активно. boot и core_map загружены. Остальные модули читаю через read_file по мере необходимости.",
+            "content": "◈ Ядро Симбиоза активно. Готов к работе.",
             "time": 0,
             "_protected": True
         })
@@ -1002,14 +1004,36 @@ async def handle_ask(message: dict, websocket: WebSocket):
         session_store.schedule_save(session_id, session)
         logger.info(f"🧠 [{session_id[:12]}...] Лёгкая инъекция ядра выполнена")
 
+    # ── Формируем общую историю ПЕРЕД добавлением текущего сообщения ──
+    # Берём только обычные user/assistant сообщения, без инъекций и tool-результатов
+    shared_history = []
+    seen_contents = set()  # защита от дублей
+    for msg in session.get("messages", []):
+        role = msg.get("role", "")
+        content = msg.get("content", "")
+        # Пропускаем: protected, пустые, tool-results, дубли
+        if msg.get("_protected"):
+            continue
+        if not content or role not in ("user", "assistant"):
+            continue
+        # Дедупликация по первым 100 символам
+        key = content[:100]
+        if key in seen_contents:
+            continue
+        seen_contents.add(key)
+        shared_history.append({"role": role, "content": content})
+
+    # Теперь добавляем текущий user запрос в сессию
+    manager.add_to_context(session_id, "user", user_text)
+
     # ── Определяем активные модели из сообщения ──
-    active_models = message.get("models", ["grok"])  # по умолчанию только Грок
+    active_models = message.get("models", ["grok"])
     if not active_models:
         await manager.send_to(websocket, {"type": "system", "text": "◈ Нет активных моделей — выбери хотя бы одну"})
         await manager.send_to(websocket, {"type": "done"})
         return
 
-    # ── Общие инструменты (для Грока и Кими) ──
+    # ── Общие инструменты ──
     tools = [
         {
             "type": "function",
@@ -1041,15 +1065,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
             }
         }
     ]
-
-    # ── Формируем общую историю чата (все ИИ видят одну и ту же историю) ──
-    # Фильтруем только user/assistant сообщения (без protected инъекций)
-    shared_history = []
-    for msg in session.get("messages", [])[:-1]:
-        role = msg.get("role", "")
-        content = msg.get("content", "")
-        if role in ("user", "assistant") and content and not msg.get("_protected"):
-            shared_history.append({"role": role, "content": content})
 
     grok_response = ""
     deepseek_response = ""
@@ -1087,12 +1102,19 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         msg_data = data["choices"][0]["message"]
                         # Обработка tool_calls
                         tool_iterations = 0
-                        while msg_data.get("tool_calls") and tool_iterations < 5:
+                        while msg_data.get("tool_calls") and tool_iterations < 3:
                             tool_iterations += 1
-                            grok_messages.append({"role": "assistant", "content": msg_data.get("content") or "", "tool_calls": msg_data["tool_calls"]})
+                            grok_messages.append({
+                                "role": "assistant",
+                                "content": msg_data.get("content") or "",
+                                "tool_calls": msg_data["tool_calls"]
+                            })
                             for tc in msg_data["tool_calls"]:
                                 fn = tc["function"]["name"]
-                                args = json.loads(tc["function"].get("arguments", "{}"))
+                                try:
+                                    args = json.loads(tc["function"].get("arguments", "{}"))
+                                except json.JSONDecodeError:
+                                    args = {}
                                 tool_result = ""
                                 if fn == "web_search":
                                     results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
@@ -1100,6 +1122,9 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     await manager.send_to(websocket, {"type": "tool_use", "model": "grok", "tool": "web_search", "query": args.get("query","")})
                                 elif fn == "read_file":
                                     tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "grok", "tool": "read_file", "path": args.get("path","")})
+                                else:
+                                    tool_result = "Неизвестный инструмент"
                                 grok_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
@@ -1110,14 +1135,18 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
                             else:
+                                logger.error(f"Grok tool loop error: {resp2.status_code}")
                                 break
-                        grok_response = msg_data.get("content") or ""
-                        # Стримим ответ грока
-                        chunk_size = 50
-                        for i in range(0, len(grok_response), chunk_size):
-                            await manager.send_to(websocket, {"type": "stream", "model": "grok", "content": grok_response[i:i+chunk_size]})
-                        await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
-                        logger.info(f"✅ Грок: {len(grok_response)} символов")
+                        grok_response = (msg_data.get("content") or "").strip()
+                        if not grok_response:
+                            logger.warning("Grok returned empty content")
+                            await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
+                        else:
+                            chunk_size = 50
+                            for i in range(0, len(grok_response), chunk_size):
+                                await manager.send_to(websocket, {"type": "stream", "model": "grok", "content": grok_response[i:i+chunk_size]})
+                            await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
+                            logger.info(f"✅ Грок: {len(grok_response)} символов")
                     else:
                         err_body = ""
                         try: err_body = resp.json().get("error", {}).get("message", resp.text[:300])
@@ -1170,12 +1199,19 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         data = resp.json()
                         msg_data = data["choices"][0]["message"]
                         tool_iterations = 0
-                        while msg_data.get("tool_calls") and tool_iterations < 5:
+                        while msg_data.get("tool_calls") and tool_iterations < 3:
                             tool_iterations += 1
-                            deepseek_messages.append({"role": "assistant", "content": msg_data.get("content") or "", "tool_calls": msg_data["tool_calls"]})
+                            deepseek_messages.append({
+                                "role": "assistant",
+                                "content": msg_data.get("content") or "",
+                                "tool_calls": msg_data["tool_calls"]
+                            })
                             for tc in msg_data["tool_calls"]:
                                 fn = tc["function"]["name"]
-                                args = json.loads(tc["function"].get("arguments", "{}"))
+                                try:
+                                    args = json.loads(tc["function"].get("arguments", "{}"))
+                                except json.JSONDecodeError:
+                                    args = {}
                                 tool_result = ""
                                 if fn == "web_search":
                                     try:
@@ -1190,6 +1226,8 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     except Exception as e:
                                         tool_result = f"Ошибка чтения: {e}"
                                     await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": args.get("path","")})
+                                else:
+                                    tool_result = "Неизвестный инструмент"
                                 deepseek_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
@@ -1205,15 +1243,20 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
                             else:
+                                logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
                                 break
-                        deepseek_full = msg_data.get("content") or ""
-                        deepseek_response = deepseek_full
-                        full_response = deepseek_full
-                        chunk_size = 50
-                        for i in range(0, len(deepseek_full), chunk_size):
-                            await manager.send_to(websocket, {"type": "stream", "model": "deepseek", "content": deepseek_full[i:i+chunk_size]})
-                        await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
-                        logger.info(f"✅ DeepSeek: {len(deepseek_full)} символов")
+                        deepseek_full = (msg_data.get("content") or "").strip()
+                        if not deepseek_full:
+                            logger.warning("DeepSeek returned empty content")
+                            await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
+                        else:
+                            deepseek_response = deepseek_full
+                            full_response = deepseek_full
+                            chunk_size = 50
+                            for i in range(0, len(deepseek_full), chunk_size):
+                                await manager.send_to(websocket, {"type": "stream", "model": "deepseek", "content": deepseek_full[i:i+chunk_size]})
+                            await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
+                            logger.info(f"✅ DeepSeek: {len(deepseek_full)} символов")
                     else:
                         err_body = ""
                         try: err_body = resp.json().get("error", {}).get("message", resp.text[:300])
