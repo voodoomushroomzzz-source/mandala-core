@@ -2,7 +2,7 @@
   "messages": [
     {
       "role": "user",
-      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.0.0 | Коммит: e3d412d\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
+      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.0.0 | Коммит: 3b18187\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
       "time": 0,
       "_protected": true
     },
@@ -106,10 +106,15 @@
       "role": "assistant",
       "content": "```html\n<!DOCTYPE html>\n<html lang=\"ru\">\n<head",
       "time": 1771935867.9747453
+    },
+    {
+      "role": "user",
+      "content": "https://mandala-engineer-chat.onrender.com мы должны быть здесь а не в мандала боте, можкшь изучить настройку файла, все ли так",
+      "time": 1771935926.1651337
     }
   ],
-  "last_active": 1771935867.974759,
+  "last_active": 1771935926.1651433,
   "created_at": 1771933962.1658964,
   "modules_injected": true,
-  "injection_timestamp": 1771935450.419386
+  "injection_timestamp": 1771935926.1650274
 }
