@@ -36,9 +36,14 @@
       "role": "user",
       "content": "Скажи \"OK\" — выдам новый полный index.html - погнали",
       "time": 1771934863.5146246
+    },
+    {
+      "role": "assistant",
+      "content": "```html\n<!DOCTYPE html>\n<html lang=\"ru\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>◈ Mandala Engineer — MYCEL</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Fira+Mono:wght@300;400;500&family=Nunito:wght@200;300;400&display=swap\" rel=\"stylesheet\">\n    <!-- Monaco Editor -->\n    <script src=\"https://cdn.jsdelivr.net/npm/monaco-editor@",
+      "time": 1771934898.939659
     }
   ],
-  "last_active": 1771934863.5146286,
+  "last_active": 1771934898.9396656,
   "created_at": 1771933962.1658964,
   "modules_injected": true,
   "injection_timestamp": 1771934697.3069909
