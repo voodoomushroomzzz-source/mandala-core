@@ -226,9 +226,14 @@
       "role": "assistant",
       "content": "[Модуль simbiosis/roadmaps]",
       "time": 1771946905.4145591
+    },
+    {
+      "role": "user",
+      "content": "кажется некорректно навзвание модуля в последнем патче",
+      "time": 1771946946.8973024
     }
   ],
-  "last_active": 1771946905.4145877,
+  "last_active": 1771946946.897309,
   "created_at": 1771933962.1658964,
   "modules_injected": true,
   "injection_timestamp": 1771945524.3495824
