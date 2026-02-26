@@ -191,9 +191,19 @@
       "role": "assistant",
       "content": "Резонанс 92%! Крутая ДНК — gardener_lock + gentle_update вечны. Merge в boot + SEED-012? 😎🌱",
       "time": 1772144234.9986303
+    },
+    {
+      "role": "user",
+      "content": "странно я тебе загрузил полный файл, возможно у тебя или у опен роутер есть ограничение на объем входящих токенов в запросе",
+      "time": 1772144369.0599906
+    },
+    {
+      "role": "assistant",
+      "content": "Да, WS base64 limit ~3k chars (eng_chat.current_issues/SEED-002). Фикс завтра unified diff main.py + server-storage. Полный монолит: tool read_file или GitHub URL? 😎🌱",
+      "time": 1772144373.9407527
     }
   ],
-  "last_active": 1772144234.998658,
+  "last_active": 1772144373.940833,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772144135.2926834
