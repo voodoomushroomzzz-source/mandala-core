@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-74c72157",
+  "version": "simbiosis-vv1.2.0-a00014a2",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:16:46.257817+00:00",
-  "build_source": "44e1a335bbc21f9b29e5b7df8f85bdf871ff26b6",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/44e1a335bbc21f9b29e5b7df8f85bdf871ff26b6",
+  "build_timestamp": "2026-02-26T21:47:52.978994+00:00",
+  "build_source": "581b4d670a1f83eb1ec0e36ff44f0802a943a364",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/581b4d670a1f83eb1ec0e36ff44f0802a943a364",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -549,6 +549,11 @@
             "version": "v1.0.0",
             "date": "2026-02-23",
             "summary": "Создание модуля. Перенос из Akasha Chronicorum."
+          },
+          {
+            "version": "v1.1.0",
+            "date": "2026-02-27",
+            "summary": "RM-003: Scout-Agent roadmap."
           }
         ],
         "roadmap": {
@@ -561,7 +566,8 @@
               "description": "Базовая структура и перенос существующих карт"
             }
           ]
-        }
+        },
+        "version": "v1.1.0"
       },
       "roadmaps": {
         "RM-001": {
@@ -631,7 +637,43 @@
               "status": "vision"
             }
           ]
-        }
+        },
+        "RM-003": [
+          {
+            "id": "RM-003",
+            "title": "Scout-Agent: Deploy & Integrate",
+            "status": "active",
+            "priority": "high",
+            "origin_seed": "SEED-008",
+            "description": "Автономный агент для vitality Мандалы. Eng_chat primary: WS/cron. TG aux later (voice→tasks). Zero-cost.",
+            "milestones": [
+              {
+                "id": "RM-003-M1",
+                "name": "WS Handler в main.py",
+                "status": "planned",
+                "description": "type: 'start_scan' → Grok loop → Claude filter → apply_patch seeds."
+              },
+              {
+                "id": "RM-003-M2",
+                "name": "Cron APScheduler",
+                "status": "planned",
+                "description": "Daily scan fixed_topics. Log в sessions."
+              },
+              {
+                "id": "RM-003-M3",
+                "name": "UI в index.html",
+                "status": "planned",
+                "description": "Input queries + 'Start Scan' btn → WS. Table findings."
+              },
+              {
+                "id": "RM-003-M4",
+                "name": "TG Secondary",
+                "status": "planned",
+                "description": "/scout → WS proxy. Voice→tasks later."
+              }
+            ]
+          }
+        ]
       },
       "changes": {
         "v1.0.0": {
@@ -655,6 +697,11 @@
             "version": "v1.0.0",
             "date": "2026-02-23",
             "summary": "Создание модуля на базе Incubae v1.1.0"
+          },
+          {
+            "version": "v1.1.0",
+            "date": "2026-02-27",
+            "summary": "SEED-008: Scout-Agent логика + chat priorities."
           }
         ],
         "roadmap": {
@@ -673,7 +720,8 @@
               "description": "Автоматическое пополнение из веб-поиска"
             }
           ]
-        }
+        },
+        "version": "v1.1.0"
       },
       "protocols": {
         "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -744,13 +792,43 @@
           "status": "done",
           "description": "Нажатие на узел карты ядра или карточку файла отправляет read_file_request по WebSocket. СР читает файл через GitHub API и кладёт в контекст сессии.",
           "resonance": "high"
+        },
+        {
+          "id": "SEED-008",
+          "type": "feature",
+          "name": "Scout-Agent: Автономный веб-сканировщик",
+          "created": "2026-02-27",
+          "created_by": "sr_initiative",
+          "status": "active",
+          "ttl": "90d",
+          "description": "Триггер: WS 'start_scan' {queries: ['AI agents 2026 free']}. Grok: web_search → raw_findings. Claude: resonance_score (ахимса: free/open/symbiozis? >7/10). Output: auto-patch SEED-SCAN-YYYY-MM-DD с findings[]. Cron daily fixed topics из roadmaps. Primary: eng_chat WS/UI. TG: secondary (voice→tasks→send_to_core later). Пример: GitHub stars>10k, grants deadlines.",
+          "resonance": "high",
+          "content": {
+            "logic": "1. Trigger (WS/cron). 2. For each query: top-5 results. 3. Claude prompt: 'Score 0-10 по vitality Мандалы'. 4. Patch seeds.",
+            "fixed_topics": [
+              "open-source AI agents 2026",
+              "AI symbiosis breakthroughs",
+              "free grants OSS AI"
+            ],
+            "example_seed": {
+              "id": "SCAN-2026-02-27",
+              "query": "AI agents",
+              "findings": [
+                {
+                  "title": "CrewAI",
+                  "url": "github.com/crewai",
+                  "score": "9/10"
+                }
+              ]
+            }
+          }
         }
       ],
       "archive": [],
       "registry": {
         "last_updated": "2026-02-27",
-        "total_seeds": 6,
-        "active_seeds": 5,
+        "total_seeds": 7,
+        "active_seeds": 6,
         "archived": 0
       },
       "changes": {
@@ -860,7 +938,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:16:46.257817+00:00",
+    "timestamp": "2026-02-26T21:47:52.978994+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -894,6 +972,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:16:46 UTC"
+    "built_at": "2026-02-26 21:47:52 UTC"
   }
 }
