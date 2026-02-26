@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.0.0-21b6ad7a",
+  "version": "simbiosis-vv1.0.0-db6a1d9b",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T17:52:41.917465+00:00",
-  "build_source": "e4c887c6ab601b80a15fdd7841b8b9e2b8f604cc",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/e4c887c6ab601b80a15fdd7841b8b9e2b8f604cc",
+  "build_timestamp": "2026-02-26T18:00:04.747658+00:00",
+  "build_source": "99afaae7e38122e6d193c60716ac0e7bec9fcd12",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/99afaae7e38122e6d193c60716ac0e7bec9fcd12",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -478,11 +478,6 @@
             "version": "v1.0.0",
             "date": "2026-02-23",
             "summary": "Создание модуля. Перенос из Akasha Chronicorum."
-          },
-          {
-            "version": "v1.1.0",
-            "date": "2025-12",
-            "summary": "Добавлен RM-003: GitHub AI Patcher из беседы"
           }
         ],
         "roadmap": {
@@ -495,8 +490,7 @@
               "description": "Базовая структура и перенос существующих карт"
             }
           ]
-        },
-        "version": "v1.1.0"
+        }
       },
       "roadmaps": {
         "RM-001": {
@@ -561,64 +555,12 @@
               "status": "vision"
             }
           ]
-        },
-        "RM-003": [
-          {
-            "id": "RM-003",
-            "title": "GitHub AI Patcher",
-            "status": "planning",
-            "priority": "high",
-            "origin_seed": "SEED-GITHUB-PATCHER",
-            "description": "JSON/промпт → Aider/Continue читает репо, патчит файлы (main.py/index.html), auto-PR. Токены -80%",
-            "milestones": [
-              {
-                "id": "RM-003-M1",
-                "name": "Установка aider-chat → requirements.txt",
-                "status": "planned",
-                "description": "pip install + патч deps"
-              },
-              {
-                "id": "RM-003-M2",
-                "name": "AiderTool в main.py",
-                "status": "planned",
-                "description": "read_file → aider --repo {GITHUB_REPO} --message json_patch"
-              },
-              {
-                "id": "RM-003-M3",
-                "name": "UI: Кнопка 'Apply Patch' в index.html",
-                "status": "planned",
-                "description": "Monaco JSON + diff-preview"
-              },
-              {
-                "id": "RM-003-M4",
-                "name": "Endpoint /apply_patch + webhook",
-                "status": "planned",
-                "description": "Интеграция с core_map"
-              },
-              {
-                "id": "RM-003-M5",
-                "name": "Тест + v2 Continue.dev",
-                "status": "planned",
-                "description": "Патч main.py → PR. Migrate в checks"
-              }
-            ]
-          }
-        ]
+        }
       },
       "changes": {
         "v1.0.0": {
           "date": "2026-02-23",
           "summary": "Создание модуля. Два роадмапа из монолита."
-        },
-        "v1": {
-          "1": {
-            "0": [
-              {
-                "date": "2025-12",
-                "summary": "RM-003: Aider/Continue для патчей репо"
-              }
-            ]
-          }
         }
       }
     },
@@ -802,7 +744,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T17:52:41.917465+00:00",
+    "timestamp": "2026-02-26T18:00:04.747658+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -836,6 +778,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 17:52:41 UTC"
+    "built_at": "2026-02-26 18:00:04 UTC"
   }
 }
