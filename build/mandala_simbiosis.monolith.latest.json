@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.1.0-565f8726",
+  "version": "simbiosis-vv1.1.0-fbf59c34",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:11:27.432016+00:00",
-  "build_source": "0079fff95e127f6629cdbfc7fa199f383fc4dc59",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/0079fff95e127f6629cdbfc7fa199f383fc4dc59",
+  "build_timestamp": "2026-02-26T21:11:29.362723+00:00",
+  "build_source": "27d11d604e28ec895340ca381f49f7b1fa19a4ea",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/27d11d604e28ec895340ca381f49f7b1fa19a4ea",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -858,7 +858,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:11:27.432016+00:00",
+    "timestamp": "2026-02-26T21:11:29.362723+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -892,6 +892,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:11:27 UTC"
+    "built_at": "2026-02-26 21:11:29 UTC"
   }
 }
