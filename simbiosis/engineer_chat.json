@@ -1,6 +1,6 @@
 {
   "module": "engineer_chat",
-  "version": "v1.2.0",
+  "version": "v1.4.0",
   "type": "product_module",
   "description": "Модуль инженерного чата Мандалы. Архитектура, компоненты, история, текущий статус и следующие шаги. Отдельная экосистема разработки.",
   "meta": {
@@ -9,72 +9,24 @@
     "change_requires": "sr_or_gardener",
     "created": "2026-02-23",
     "version_history": [
-      {
-        "version": "v1.0.0",
-        "date": "2026-02-23",
-        "summary": "Создание модуля."
-      },
-      {
-        "version": "v1.1.0",
-        "date": "2026-02-27",
-        "summary": "Актуальные модели, env_vars, endpoints, context_config."
-      },
-      {
-        "version": "v1.2.0",
-        "date": "2026-02-27",
-        "summary": "Убран DeepSeek. Активные модели: Grok + Claude."
-      },
-      {
-        "version": "v1.3.0",
-        "date": "2026-02-27",
-        "summary": "M6 Scout + WS-type. Eng_chat=primary."
-      }
+      {"version": "v1.0.0", "date": "2026-02-23", "summary": "Создание модуля."},
+      {"version": "v1.1.0", "date": "2026-02-27", "summary": "Актуальные модели, env_vars, endpoints, context_config."},
+      {"version": "v1.2.0", "date": "2026-02-27", "summary": "Убран DeepSeek. Активные модели: Grok + Claude."},
+      {"version": "v1.3.0", "date": "2026-02-27", "summary": "M6 Scout + WS-type. Eng_chat=primary."},
+      {"version": "v1.4.0", "date": "2026-02-27", "summary": "🛠️ patch_protocol (GD-04 гид). M6→active. Root/meta sync. Array-path fix."}
     ],
     "roadmap": {
       "current_milestone": "M6 — Scout-Agent",
       "milestones": [
-        {
-          "id": "M1",
-          "name": "MVP чат",
-          "status": "done",
-          "date": "2026-02",
-          "description": "Базовый чат с Кими"
-        },
-        {
-          "id": "M2",
-          "name": "Webhook + polling",
-          "status": "done",
-          "date": "2026-02-23",
-          "description": "Синхронизация ядра через GitHub API"
-        },
-        {
-          "id": "M3",
-          "name": "Три модели (Грок+Кими+Клод)",
-          "status": "active",
-          "date": "2026-02-23",
-          "description": "Мульти-агентная архитектура"
-        },
-        {
-          "id": "M4",
-          "name": "Инструменты СР",
-          "status": "planned",
-          "description": "list_files, read_live_file, validate_syntax"
-        },
-        {
-          "id": "M5",
-          "name": "Next.js переезд",
-          "status": "planned",
-          "description": "Полноценный фронтенд с авторизацией"
-        },
-        {
-          "id": "M6",
-          "name": "Scout-Agent",
-          "status": "planned",
-          "description": "WS 'start_scan' + cron. Eng_chat primary, TG secondary (voice→tasks later)."
-        }
+        {"id": "M1", "name": "MVP чат", "status": "done", "date": "2026-02", "description": "Базовый чат с Кими"},
+        {"id": "M2", "name": "Webhook + polling", "status": "done", "date": "2026-02-23", "description": "Синхронизация ядра через GitHub API"},
+        {"id": "M3", "name": "Три модели (Грок+Кими+Клод)", "status": "active", "date": "2026-02-23", "description": "Мульти-агентная архитектура"},
+        {"id": "M4", "name": "Инструменты СР", "status": "planned", "description": "list_files, read_live_file, validate_syntax"},
+        {"id": "M5", "name": "Next.js переезд", "status": "planned", "description": "Полноценный фронтенд с авторизацией"},
+        {"id": "M6", "name": "Scout-Agent", "status": "active", "description": "WS 'start_scan' + cron. Eng_chat primary, TG secondary (voice→tasks later)."}
       ]
     },
-    "version": "v1.3.0"
+    "version": "v1.4.0"
   },
   "architecture": {
     "hosting": "Render.com",
@@ -92,11 +44,7 @@
       "env_key": "OPENROUTER_KEY",
       "temperature": 0.8,
       "max_tokens": 8192,
-      "tools": [
-        "web_search",
-        "read_file",
-        "agent_scan"
-      ]
+      "tools": ["web_search", "read_file", "agent_scan"]
     },
     "claude": {
       "role": "Сторонний наблюдатель",
@@ -117,7 +65,8 @@
   "current_issues": [
     "Файлы до 3000 символов в контексте через base64 по WS — плановый переезд на серверное хранилище (SEED-002)",
     "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search",
-    "Scout integration: WS+cron in main.py (RM-003-M1)"
+    "Scout integration: WS+cron in main.py (RM-003-M1)",
+    "apply_patch bugs: array[index]/path not found → FILE_PATCH always safe"
   ],
   "files": {
     "engineer-chat/main.py": "FastAPI бэкенд. ~1800 строк. Главный файл.",
@@ -126,10 +75,8 @@
     "index.html": "Фронтенд чата"
   },
   "changes": {
-    "v1.0.0": {
-      "date": "2026-02-23",
-      "summary": "Создание модуля. Выделен из монолита."
-    }
+    "v1.0.0": {"date": "2026-02-23", "summary": "Создание модуля. Выделен из монолита."},
+    "v1.4.0": {"date": "2026-02-27", "summary": "patch_protocol + M6 active + versions sync."}
   },
   "env_vars": {
     "GITHUB_TOKEN": "Чтение/запись репо. Обязателен.",
@@ -150,15 +97,13 @@
   "ws_message_types": {
     "init": "Открыть сессию — { session_id }",
     "ask": "Вопрос СР — { text, models: ['grok'|'claude'] }",
-    "file": "Загрузить файл — { name, content: base64, caption? }",
+    "file": "Загрузка файла — { name, content: base64, caption? }",
     "apply_patch": "Применить патч к ядру — { patch: {...} }",
     "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
     "refresh_modules": "Перезагрузить все модули ядра",
     "toggle_observer": "Вкл/выкл Claude-наблюдателя",
     "ping": "Keepalive → pong",
-    "start_scan": [
-      "Scout trigger — {queries: [str], cron_mode?: bool}"
-    ]
+    "start_scan": ["Scout trigger — {queries: [str], cron_mode?: bool}"]
   },
   "context_config": {
     "max_history_chars": 50000,
@@ -167,10 +112,27 @@
     "polling_interval_sec": 60,
     "session_storage": "GitHub sessions/ (один JSON файл на session_id)"
   },
+  "patch_protocol": {
+    "description": "🛠️ Гид GD-04/apply_patch из main.py. Обязательно перед патчем!",
+    "rules": [
+      "1. read_file target_module → полный контекст.",
+      "2. PATH: точечная нотация. Дефисы/array[index] ломаются → FILE_PATH.",
+      "3. OP-limits: update/add/merge/delete/remove для obj/key; replace ТОЛЬКО array[index]!",
+      "4. Баги ('path not found/replace array'): FILE_PATH {'content': '{full JSON}'}.",
+      "5. После: meta.version++/version_history.add().",
+      "6. Новый модуль: FILE_PATH с нуля. Multi: {'patches': [...]}."
+    ],
+    "triggers": ["Array-path error", "'path not found'", "RM-003 патчи main.py"],
+    "example": {
+      "safe_changes": [{"op": "add", "path": "new", "value": {"ok": true}}],
+      "file_patch": {"file_path": "simbiosis/module.json", "content": "{...}"} 
+    }
+  },
   "recently_resolved": [
     "Лёгкая инъекция ядра: только boot+core_map при старте (было 7 JSON)",
     "История сессии: 600K → 50K символов (под контекст DeepSeek)",
     "max_tokens: Grok 4096→8192, Claude 1024→2048",
-    "Карта ядра: клик на модуль/файл → СР читает через read_file_request"
+    "Карта ядра: клик на модуль/файл → СР читает через read_file_request",
+    "Versions sync: root/meta v1.4.0"
   ]
 }
