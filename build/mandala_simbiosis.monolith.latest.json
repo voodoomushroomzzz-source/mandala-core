@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-3708630d",
+  "version": "simbiosis-vv1.2.0-e515e319",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:49:08.114445+00:00",
-  "build_source": "d88764bdfdcfd38764e8bd7e60b3d6954af46b39",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/d88764bdfdcfd38764e8bd7e60b3d6954af46b39",
+  "build_timestamp": "2026-02-26T21:55:09.507441+00:00",
+  "build_source": "3f23c23d82430e355e5f8ef40621f89cde7da146",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/3f23c23d82430e355e5f8ef40621f89cde7da146",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -553,9 +553,9 @@
     },
     "Roadmaps": {
       "module": "roadmaps",
-      "version": "v1.0.0",
+      "version": "v1.1.2",
       "type": "roadmap_library",
-      "description": "Библиотека проработанных дорожных карт. Идеи прошедшие оценку в seeds, с шагами, вехами и критериями завершения. После начала реализации — превращаются в отдельный модуль.",
+      "description": "Библиотека проработанных дорожных карт...",
       "meta": {
         "layer": 2,
         "guardian_lock": false,
@@ -571,6 +571,16 @@
             "version": "v1.1.0",
             "date": "2026-02-27",
             "summary": "RM-003: Scout-Agent roadmap."
+          },
+          {
+            "version": "v1.1.1",
+            "date": "2026-02-27",
+            "summary": "Fix RM-003 attempts."
+          },
+          {
+            "version": "v1.1.2",
+            "date": "2026-02-27",
+            "summary": "🔧 FILE_PATCH: RM-003 array→obj. Clean structure."
           }
         ],
         "roadmap": {
@@ -584,7 +594,7 @@
             }
           ]
         },
-        "version": "v1.1.0"
+        "version": "v1.1.2"
       },
       "roadmaps": {
         "RM-001": {
@@ -599,7 +609,7 @@
               "id": "RM-001-M1",
               "name": "Архитектура",
               "status": "done",
-              "description": "Yandex Cloud Function (python312, 256MB, 30s). Bucket mandala-sr-memory для памяти. Модель: gpt-oss-120b через SiliconFlow. Деплой: 2026-02-17.",
+              "description": "Yandex Cloud Function...",
               "tech_stack": [
                 "Yandex Cloud Functions",
                 "S3 Object Storage",
@@ -655,42 +665,40 @@
             }
           ]
         },
-        "RM-003": [
-          {
-            "id": "RM-003",
-            "title": "Scout-Agent: Deploy & Integrate",
-            "status": "active",
-            "priority": "high",
-            "origin_seed": "SEED-008",
-            "description": "Автономный агент для vitality Мандалы. Eng_chat primary: WS/cron. TG aux later (voice→tasks). Zero-cost.",
-            "milestones": [
-              {
-                "id": "RM-003-M1",
-                "name": "WS Handler в main.py",
-                "status": "planned",
-                "description": "type: 'start_scan' → Grok loop → Claude filter → apply_patch seeds."
-              },
-              {
-                "id": "RM-003-M2",
-                "name": "Cron APScheduler",
-                "status": "planned",
-                "description": "Daily scan fixed_topics. Log в sessions."
-              },
-              {
-                "id": "RM-003-M3",
-                "name": "UI в index.html",
-                "status": "planned",
-                "description": "Input queries + 'Start Scan' btn → WS. Table findings."
-              },
-              {
-                "id": "RM-003-M4",
-                "name": "TG Secondary",
-                "status": "planned",
-                "description": "/scout → WS proxy. Voice→tasks later."
-              }
-            ]
-          }
-        ]
+        "RM-003": {
+          "id": "RM-003",
+          "title": "Scout-Agent: Deploy & Integrate",
+          "status": "active",
+          "priority": "high",
+          "origin": "SEED-008",
+          "description": "Автономный агент vitality Мандалы. Eng_chat=primary (WS/cron/UI). TG=secondary later. Zero-cost.",
+          "milestones": [
+            {
+              "id": "M1",
+              "name": "WS Handler main.py",
+              "status": "planned",
+              "desc": "type:'start_scan'→Grok search→Claude filter→auto-patch seeds"
+            },
+            {
+              "id": "M2",
+              "name": "Cron APScheduler",
+              "status": "planned",
+              "desc": "Daily fixed_topics из SEED-008"
+            },
+            {
+              "id": "M3",
+              "name": "UI index.html",
+              "status": "planned",
+              "desc": "Queries input + Start btn + findings table"
+            },
+            {
+              "id": "M4",
+              "name": "TG proxy",
+              "status": "planned",
+              "desc": "/scout→eng_chat WS. Voice-tasks later"
+            }
+          ]
+        }
       },
       "changes": {
         "v1.0.0": {
@@ -990,7 +998,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:49:08.114445+00:00",
+    "timestamp": "2026-02-26T21:55:09.507441+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -1024,6 +1032,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:49:08 UTC"
+    "built_at": "2026-02-26 21:55:09 UTC"
   }
 }
