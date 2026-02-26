@@ -261,9 +261,14 @@
       "role": "user",
       "content": "жду)",
       "time": 1772146271.04758
+    },
+    {
+      "role": "assistant",
+      "content": "```python\nf\"\"\"[ОБНОВЛЕНИЕ ЗНАНИЙ: 📄 {file_name}]\nРазмер: {len(file_content)} символов.\nПолный сохранён в session[\"files\"][\"{file_name}\"] (tool read_file если нужно).\nПревью (первые 1000):\n```\n{file_content[:1000]}\n```\"\"\"\n```\n\n**Почему 1000 (не весь):** История сообщений → промпт Claude/Grok (~128k tokens). Большой файл раздувает → хуже мышление/токены. Summary + storage = Ахимса (минимум шума, full доступен). Если <3k — весь preview. Аналогично в except (не JSON). \n\nДобавь session[\"files\"] выше (4 строки из прошлого). Тест! 😎🌱",
+      "time": 1772146282.7693443
     }
   ],
-  "last_active": 1772146271.047587,
+  "last_active": 1772146282.7693765,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772146271.0474904
