@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-f4de0934",
+  "version": "simbiosis-vv1.2.0-df22ae44",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:58:19.876610+00:00",
-  "build_source": "a69e399fda0dbd7f2f34e7bbbc4c013ea7ee212d",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/a69e399fda0dbd7f2f34e7bbbc4c013ea7ee212d",
+  "build_timestamp": "2026-02-26T22:07:53.365955+00:00",
+  "build_source": "5598459330171c8473b3e45ad7a4b9679a7fdb0a",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/5598459330171c8473b3e45ad7a4b9679a7fdb0a",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -377,7 +377,7 @@
     },
     "EngineerChat": {
       "module": "engineer_chat",
-      "version": "v1.2.0",
+      "version": "v1.4.0",
       "type": "product_module",
       "description": "Модуль инженерного чата Мандалы. Архитектура, компоненты, история, текущий статус и следующие шаги. Отдельная экосистема разработки.",
       "meta": {
@@ -405,6 +405,11 @@
             "version": "v1.3.0",
             "date": "2026-02-27",
             "summary": "M6 Scout + WS-type. Eng_chat=primary."
+          },
+          {
+            "version": "v1.4.0",
+            "date": "2026-02-27",
+            "summary": "🛠️ patch_protocol (GD-04 гид). M6→active. Root/meta sync. Array-path fix."
           }
         ],
         "roadmap": {
@@ -446,12 +451,12 @@
             {
               "id": "M6",
               "name": "Scout-Agent",
-              "status": "planned",
+              "status": "active",
               "description": "WS 'start_scan' + cron. Eng_chat primary, TG secondary (voice→tasks later)."
             }
           ]
         },
-        "version": "v1.3.0"
+        "version": "v1.4.0"
       },
       "architecture": {
         "hosting": "Render.com",
@@ -494,7 +499,8 @@
       "current_issues": [
         "Файлы до 3000 символов в контексте через base64 по WS — плановый переезд на серверное хранилище (SEED-002)",
         "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search",
-        "Scout integration: WS+cron in main.py (RM-003-M1)"
+        "Scout integration: WS+cron in main.py (RM-003-M1)",
+        "apply_patch bugs: array[index]/path not found → FILE_PATCH always safe"
       ],
       "files": {
         "engineer-chat/main.py": "FastAPI бэкенд. ~1800 строк. Главный файл.",
@@ -506,6 +512,10 @@
         "v1.0.0": {
           "date": "2026-02-23",
           "summary": "Создание модуля. Выделен из монолита."
+        },
+        "v1.4.0": {
+          "date": "2026-02-27",
+          "summary": "patch_protocol + M6 active + versions sync."
         }
       },
       "env_vars": {
@@ -527,7 +537,7 @@
       "ws_message_types": {
         "init": "Открыть сессию — { session_id }",
         "ask": "Вопрос СР — { text, models: ['grok'|'claude'] }",
-        "file": "Загрузить файл — { name, content: base64, caption? }",
+        "file": "Загрузка файла — { name, content: base64, caption? }",
         "apply_patch": "Применить патч к ядру — { patch: {...} }",
         "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
         "refresh_modules": "Перезагрузить все модули ядра",
@@ -544,11 +554,43 @@
         "polling_interval_sec": 60,
         "session_storage": "GitHub sessions/ (один JSON файл на session_id)"
       },
+      "patch_protocol": {
+        "description": "🛠️ Гид GD-04/apply_patch из main.py. Обязательно перед патчем!",
+        "rules": [
+          "1. read_file target_module → полный контекст.",
+          "2. PATH: точечная нотация. Дефисы/array[index] ломаются → FILE_PATH.",
+          "3. OP-limits: update/add/merge/delete/remove для obj/key; replace ТОЛЬКО array[index]!",
+          "4. Баги ('path not found/replace array'): FILE_PATH {'content': '{full JSON}'}.",
+          "5. После: meta.version++/version_history.add().",
+          "6. Новый модуль: FILE_PATH с нуля. Multi: {'patches': [...]}."
+        ],
+        "triggers": [
+          "Array-path error",
+          "'path not found'",
+          "RM-003 патчи main.py"
+        ],
+        "example": {
+          "safe_changes": [
+            {
+              "op": "add",
+              "path": "new",
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "file_patch": {
+            "file_path": "simbiosis/module.json",
+            "content": "{...}"
+          }
+        }
+      },
       "recently_resolved": [
         "Лёгкая инъекция ядра: только boot+core_map при старте (было 7 JSON)",
         "История сессии: 600K → 50K символов (под контекст DeepSeek)",
         "max_tokens: Grok 4096→8192, Claude 1024→2048",
-        "Карта ядра: клик на модуль/файл → СР читает через read_file_request"
+        "Карта ядра: клик на модуль/файл → СР читает через read_file_request",
+        "Versions sync: root/meta v1.4.0"
       ]
     },
     "Roadmaps": {
@@ -947,7 +989,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:58:19.876610+00:00",
+    "timestamp": "2026-02-26T22:07:53.365955+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -981,6 +1023,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:58:19 UTC"
+    "built_at": "2026-02-26 22:07:53 UTC"
   }
 }
