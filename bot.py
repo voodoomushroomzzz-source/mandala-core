@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.31.0
+Mandala Sync Terminal Bot v3.32.0
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.31.0:
-- Универсальные патчи: поддержка file_path для любых файлов (не только модулей)
-- Валидация патчей теперь принимает либо target_module + changes, либо file_path + content
-- Бот может обновлять сам себя через патчи с file_path = "bot.py"
+НОВОЕ В v3.32.0:
+- Удалены: линза, Fructus, статус системы (облегчение бота)
+- Добавлена кнопка "💾 Симбиозис монолит" — скачать mandala_simbiosis.monolith.latest.json
 
-Предыдущие изменения v3.30.0:
-- Добавлена поддержка операции 'remove' в патчах (наравне с delete)
-- Добавлена команда /status и кнопка "🔍 Статус системы" в главном меню
+Предыдущие изменения v3.31.0:
+- Универсальные патчи: поддержка file_path для любых файлов
+- Бот может обновлять сам себя через патчи с file_path = "bot.py"
 """
 
 import os
@@ -242,13 +241,11 @@ async def call_sr(chat_id: str, text: str, selected_model: str = None) -> Option
 # ========== КЛАВИАТУРЫ ==========
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.31.0)"""
+    """Главное меню (v3.32.0)"""
     keyboard = [
-        [KeyboardButton(text="🧘 Выбрать линзу")],
         [KeyboardButton(text="🔄 Обновление ядра")],
         [KeyboardButton(text="💾 Скачать монолит")],
-        [KeyboardButton(text="🍇 Fructus")],
-        [KeyboardButton(text="🔍 Статус системы")]
+        [KeyboardButton(text="💾 Симбиозис монолит")],
     ]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
@@ -927,7 +924,7 @@ async def upload_to_fructus(original_filename: str, content: Dict, user_id: int)
             "file_type": file_type,
             "upload_timestamp": datetime.now().isoformat(),
             "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.31.0"
+            "source": "mandala_bot_v3.32.0"
         }
 
         success = await update_github_file(
@@ -960,6 +957,23 @@ async def download_monolith_file() -> Tuple[bool, bytes, str]:
         return False, b"", str(e)
 
 
+async def download_simbiosis_monolith_file() -> Tuple[bool, bytes, str]:
+    try:
+        url = f"https://raw.githubusercontent.com/{REPO_NAME}/main/build/mandala_simbiosis.monolith.latest.json"
+        headers = {}
+        if GITHUB_TOKEN:
+            headers["Authorization"] = f"token {GITHUB_TOKEN}"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=30) as response:
+                if response.status == 200:
+                    content = await response.read()
+                    return True, content, "mandala_simbiosis.monolith.json"
+                else:
+                    return False, b"", f"Ошибка {response.status}"
+    except Exception as e:
+        return False, b"", str(e)
+
+
 # ========== ФУНКЦИИ AHHIMSA ==========
 
 async def check_ahimsa_smart(content: Any, filename: str = "") -> Tuple[bool, str, List[Tuple[str, str]]]:
@@ -976,16 +990,12 @@ async def cmd_start(message: Message, state: FSMContext):
     if user_id in user_upload_target:
         del user_upload_target[user_id]
     await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.31.0</b>\n\n"
-        "🧘 <b>Выбрать линзу</b> — переключение режимов внимания\n"
+        "🌀 <b>Mandala Sync Terminal v3.32.0</b>\n\n"
         "🔄 <b>Обновление ядра</b> — загрузка файлов и пакетные патчи\n"
         "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
-        "🍇 <b>Fructus</b> — хранилище артефактов\n"
-        "🔍 <b>Статус системы</b> — проверка состояния инфраструктуры\n\n"
+        "💾 <b>Симбиозис монолит</b> — готовый файл mandala_simbiosis.monolith.latest.json\n\n"
         "🤖 <b>Управление моделями:</b> /model и /модели\n"
-        "🔙 <b>Назад в меню:</b> /menu\n"
-        "🌿 Ahimsa-фильтр активен\n"
-        "✨ НОВОЕ: универсальные патчи — можно обновлять любые файлы (file_path)",
+        "🔙 <b>Назад в меню:</b> /menu",
         reply_markup=get_main_keyboard()
     )
 
@@ -1112,21 +1122,6 @@ async def cmd_models_ru(message: Message):
 
 # ========== ОБРАБОТЧИКИ ТЕКСТОВЫХ КНОПОК ==========
 
-@router.message(F.text == "🧘 Выбрать линзу")
-async def handle_choose_lens(message: Message):
-    await message.answer(
-        "🧘 <b>Выберите линзу внимания</b>\n\n"
-        "Каждая линза меняет фокус моего восприятия:\n\n"
-        "🧘 <b>п</b> — Проводник (философский диалог, метафоры)\n"
-        "⚙️ <b>а</b> — Архитектор (структура, код, JSON)\n"
-        "🧭 <b>с</b> — Стратег (будущее, ресурсы, анализ)\n"
-        "🌐 <b>м</b> — Маркетолог (внешний мир, контент)\n"
-        "💭 <b>ф</b> — Философия (глубокое погружение в суть)\n"
-        "🗺️ <b>к</b> — Карта Мандалы (просмотр структуры)\n\n"
-        "Просто отправь букву линзы.",
-        reply_markup=get_lens_keyboard()
-    )
-
 @router.message(F.text == "🔄 Обновление ядра")
 async def handle_core_update(message: Message):
     await message.answer(
@@ -1148,17 +1143,18 @@ async def handle_download_monolith(message: Message):
     else:
         await message.answer(f"❌ Ошибка: {filename}")
 
-@router.message(F.text == "🍇 Fructus")
-async def handle_fructus(message: Message):
-    await message.answer(
-        "🍇 <b>Fructus</b>\n\n"
-        "Хранилище артефактов Мандалы",
-        reply_markup=get_fructus_inline_keyboard()
-    )
-
-@router.message(F.text == "🔍 Статус системы")
-async def handle_status_button(message: Message):
-    await cmd_status(message)
+@router.message(F.text == "💾 Симбиозис монолит")
+async def handle_download_simbiosis_monolith(message: Message):
+    await message.answer("💾 Скачиваю...")
+    success, content, filename = await download_simbiosis_monolith_file()
+    if success:
+        await message.answer_document(
+            document=BufferedInputFile(content, filename=filename),
+            caption="📦 Монолит Mandala Simbiosis"
+        )
+        await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+    else:
+        await message.answer(f"❌ Ошибка: {filename}")
 
 @router.message(F.text == "◀️ Назад в меню")
 async def handle_back_to_menu(message: Message, state: FSMContext):
