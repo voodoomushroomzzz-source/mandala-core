@@ -236,9 +236,14 @@
       "role": "assistant",
       "content": "[Модуль simbiosis/engineer_chat]",
       "time": 1772144921.8431365
+    },
+    {
+      "role": "user",
+      "content": "он почему патч не целиком доходит и как это исправить?",
+      "time": 1772144958.187775
     }
   ],
-  "last_active": 1772144921.8431613,
+  "last_active": 1772144958.187782,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772144135.2926834
