@@ -231,9 +231,14 @@
       "role": "assistant",
       "content": "Да, вижу обрезок (WS base64 ~3k chars, eng_chat.issues[0]). Тебе тоже — лимит eng_chat. Фикс завтра unified diff main.py. 😎🌱",
       "time": 1772144884.257942
+    },
+    {
+      "role": "assistant",
+      "content": "[Модуль simbiosis/engineer_chat]",
+      "time": 1772144921.8431365
     }
   ],
-  "last_active": 1772144884.2579758,
+  "last_active": 1772144921.8431613,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772144135.2926834
