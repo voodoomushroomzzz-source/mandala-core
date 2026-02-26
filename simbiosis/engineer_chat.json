@@ -1,6 +1,6 @@
 {
   "module": "engineer_chat",
-  "version": "v1.1.0",
+  "version": "v1.2.0",
   "type": "product_module",
   "description": "Модуль инженерного чата Мандалы. Архитектура, компоненты, история, текущий статус и следующие шаги. Отдельная экосистема разработки.",
   "meta": {
@@ -17,7 +17,12 @@
       {
         "version": "v1.1.0",
         "date": "2026-02-27",
-        "summary": "Актуальные модели (deepseek вместо kimi), env_vars, endpoints, ws_message_types, context_config, recently_resolved."
+        "summary": "Актуальные модели, env_vars, endpoints, context_config."
+      },
+      {
+        "version": "v1.2.0",
+        "date": "2026-02-27",
+        "summary": "Убран DeepSeek. Активные модели: Grok + Claude."
       }
     ],
     "roadmap": {
@@ -80,18 +85,6 @@
         "read_file"
       ]
     },
-    "deepseek": {
-      "role": "Советник и ревьюер",
-      "api": "OpenRouter",
-      "model_id": "deepseek/deepseek-v3.2",
-      "env_key": "OPENROUTER_KEY",
-      "temperature": 0.7,
-      "max_tokens": 8192,
-      "tools": [
-        "web_search",
-        "read_file"
-      ]
-    },
     "claude": {
       "role": "Сторонний наблюдатель",
       "api": "Anthropic",
@@ -142,7 +135,7 @@
   },
   "ws_message_types": {
     "init": "Открыть сессию — { session_id }",
-    "ask": "Вопрос СР — { text, models: ['grok'|'deepseek'|'claude'] }",
+    "ask": "Вопрос СР — { text, models: ['grok'|'claude'] }",
     "file": "Загрузить файл — { name, content: base64, caption? }",
     "apply_patch": "Применить патч к ядру — { patch: {...} }",
     "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
