@@ -141,9 +141,14 @@
       "role": "user",
       "content": "проверь обновление",
       "time": 1772128366.6453006
+    },
+    {
+      "role": "assistant",
+      "content": "Ой, **баги в патче**! 😅 Перечитал — RM-003 стал массивом (вместо объекта), changes.v1.1.0 развалился в \"v1.1.0\". Классика JSON-add в объекты. Всё остальное (version_history, meta) — ок.\n\n**Быстрый фикс-патч** (валид по текущему файлу):\n\n```json\n{\n  \"target_module\": \"simbiosis/roadmaps\",\n  \"description\": \"Фикс RM-003: объект вместо массива + changes.v1.1.0\",\n  \"changes\": [\n    {\"op\": \"replace\", \"path\": \"roadmaps.RM-003\", \"value\": {\n      \"id\": \"RM-003\",\n      \"title\": \"GitHub AI Patcher\",\n      \"status\": \"planning\",\n      \"priority\": \"high\",\n      \"origin_seed\": \"SEED-GITHUB-PATCHER\",\n      \"description\": \"JSON/промпт → Aider/Continue читает репо, патчит файлы (main.py/index.html), auto-PR. Токены -80%\",\n      \"milestones\": [\n        {\"id\": \"RM-003-M1\", \"name\": \"Установка aider-chat → requirements.txt\", \"status\": \"planned\", \"description\": \"pip install + патч deps\"},\n        {\"id\": \"RM-003-M2\", \"name\": \"AiderTool в main.py\", \"status\": \"planned\", \"description\": \"read_file → aider --repo {GITHUB_REPO} --message json_patch\"},\n        {\"id\": \"RM-003-M3\", \"name\": \"UI: Кнопка 'Apply Patch' в index.html\", \"status\": \"planned\", \"description\": \"Monaco JSON + diff-preview\"},\n        {\"id\": \"RM-003-M4\", \"name\": \"Endpoint /apply_patch + webhook\", \"status\": \"planned\", \"description\": \"Интеграция с core_map\"},\n        {\"id\": \"RM-003-M5\", \"name\": \"Тест + v2 Continue.dev\", \"status\": \"planned\", \"description\": \"Патч main.py → PR. Migrate в checks\"}\n      ]\n    }},\n    {\"op\": \"delete\", \"path\": \"changes.v1\"},\n    {\"op\": \"add\", \"path\": \"changes.v1.1.0\", \"value\": {\"date\": \"2025-12\", \"summary\": \"RM-003: Aider/Continue для патчей репо\"}}\n  ]\n}\n```\n\nКидай — станет идеально! 🚀 Теперь шаг 1 roadmaps (aider deps)?",
+      "time": 1772128379.691742
     }
   ],
-  "last_active": 1772128366.6453073,
+  "last_active": 1772128379.691762,
   "created_at": 1772127368.1433382,
   "modules_injected": true,
   "injection_timestamp": 1772128366.645225
