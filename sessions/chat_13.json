@@ -131,9 +131,14 @@
       "role": "assistant",
       "content": "Димасик, баг пойман! 😎 **Roadmaps.json пуст/новый (read_file подтвердил 'не найден'), структура ожидает объект 'roadmaps': {}**, а мой add в \"roadmaps\" (как в массив) сломал. Остальное (seeds+eng_chat) в ядре — супер, M6/SEED-008 живы!\n\n**Фикс-патч только для roadmaps:** Создадим базу `{\"roadmaps\": {}, \"meta\": {...}}` + RM-003 внутри **update** (path: \"roadmaps.RM-003\"). Без риска, по GD-04.\n\n```json\n{\n  \"target_module\": \"simbiosis/roadmaps\",\n  \"description\": \"🔧 Fix v2: Создать структуру + RM-003 Scout. Объект roadmaps.RM-003. Eng primary.\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"roadmaps\",\n      \"value\": {}\n    },\n    {\n      \"op\": \"update\",\n      \"path\": \"roadmaps.RM-003\",\n      \"value\": {\n        \"id\": \"RM-003\",\n        \"title\": \"Scout-Agent Deploy\",\n        \"status\": \"active\",\n        \"priority\": \"high\",\n        \"origin\": \"SEED-008\",\n        \"description\": \"Eng_chat=primary (WS/cron/UI), TG=secondary (voice→tasks later). Zero-cost.\",\n        \"milestones\": [\n          {\"id\": \"M1\", \"name\": \"WS handler main.py\", \"status\": \"planned\", \"desc\": \"type:'start_scan'→Grok search→Claude filter→auto-patch seeds\"},\n          {\"id\": \"M2\", \"name\": \"Cron APScheduler\", \"status\": \"planned\", \"desc\": \"Daily fixed_topics из SEED-008\"},\n          {\"id\": \"M3\", \"name\": \"UI index.html\", \"status\": \"planned\", \"desc\": \"Queries input + Start btn + findings table\"},\n          {\"id\": \"M4\", \"name\": \"TG proxy\", \"status\": \"planned\", \"desc\": \"/scout→eng_chat WS. Voice-tasks later\"}\n        ]\n      }\n    },\n    {\n      \"op\": \"add\",\n      \"path\": \"meta\",\n      \"value\": {\n        \"version\": \"v1.1.0\",\n        \"version_history\": [\n          {\n            \"version\": \"v1.1.0\",\n            \"date\": \"2026-02-27\",\n            \"summary\": \"RM-003: Scout roadmap (eng_chat focus).\"\n          }\n        ]\n      }\n    }\n  ]\n}\n```\n\n**Применяй в eng_chat → apply_patch.** Ядро полное! 🚀 \n\n**Next (RM-003-M1):** Готов код WS-handler для main.py (~60стр: parse 'start_scan' → Grok web_search loop → Claude score → auto-patch seeds). read_file main.py уже в памяти — патч кода сперва или тест-скан руками? Резонанс max, давай код! 😎",
       "time": 1772142647.6536286
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 1 файлов]",
+      "time": 1772142670.6013823
     }
   ],
-  "last_active": 1772142647.6536448,
+  "last_active": 1772142670.601398,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772142630.6900685
