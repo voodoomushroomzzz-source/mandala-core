@@ -241,9 +241,14 @@
       "role": "user",
       "content": "он почему патч не целиком доходит и как это исправить?",
       "time": 1772144958.187775
+    },
+    {
+      "role": "assistant",
+      "content": "Димасик, **причина: handle_file_upload режет контекст истории.** 😎\n\n### 🔍 **Почему обрезается?**\n- В `main.py` (~строка 1800+): `file_content[:3000]` + \"_(обрезан...)\" → добавляется в `session[\"messages\"]` (история для СР).\n- **WS сам не режет** — полный патч в `message[\"patch\"]` → `handle_apply_patch` применяет **full** (base64→GitHub).\n- **Но СР видит обрезку** в истории (50k chars limit → tool_loop хуже).\n- eng_chat.issues[0]: \"Файлы до 3000... → server-storage (SEED-002)\".\n\n### 🛠️ **Быстрый фикс (патч main.py):**\n**FILE_PATCH для handle_file_upload** — храни full в `session[\"files\"]`, чат: summary + \"full via read_file\".\n```json\n{\n  \"file_path\": \"engineer-chat/main.py\",\n  \"content\": \"...(полный main.py с заменой в handle_file_upload: session['files'] = {file_name: file_content}; add_to_context только summary ~500 chars + 'Полный: read_file {file_name}')...\"\n}\n```\nНо **завтра с Claude unified diff** (RM-003-M1: diff>JSON_patch для больших, server-store в sessions/full_files/).\n\n**Применить сейчас?** Или пауза. Резонанс! 🌱🚀",
+      "time": 1772144978.5440774
     }
   ],
-  "last_active": 1772144958.187782,
+  "last_active": 1772144978.5441043,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772144135.2926834
