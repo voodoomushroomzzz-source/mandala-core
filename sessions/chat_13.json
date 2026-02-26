@@ -226,9 +226,14 @@
       "role": "user",
       "content": "вот в файле который я скинул, обнови мэйн пи информацию, там сейчас какой реально лимит стоит?",
       "time": 1772146388.9110327
+    },
+    {
+      "role": "assistant",
+      "content": "Димасик, **актуальный код main.py (полный из read_file):** лимит **25_000 символов** в `handle_file_upload` (строки ~2850-2870). \n\n`file_content[:25000]` + \"_(показаны первые 25000 из {len})_\" → добавляется **целиком** в `manager.add_to_context` (история сессии → промпт). Общий лимит истории: **50k chars** (`MAX_CONTEXT_CHARS=50_000` в ConnectionManager).\n\n**Почему обрезается патч в чате:** 25k+ → раздувает промпт (токены кончаются у Grok/Claude), + WS может резать большие stream. **Фикс: full в session[\"files\"] (GitHub сохранит), контекст — summary 2k preview.**\n\n### 🔧 **Руки: 2 блока замены + 4 строки добавки**\n**1. После `file_content = base64.b64decode... .decode(\"utf-8\")`** (стр ~2825, сразу после logger):\n```python\n# ДОБАВЬ (4 строки):\nsession = await get_session(session_id)\nsession[\"files\"] = session.get(\"files\", {})\nsession[\"files\"][file_name] = file_content  # Полный текст здесь!\nsession_store.schedule_save(session_id, session)\nlogger.info(f\"💾 Полный {file_name} сохранён в session.files\")\n```\n\n**2. JSON-блок (стр ~2840, в try json.loads):**\n```python\n# ЗАМЕНИ НА:\nf\"\"\"[ОБНОВЛЕНИЕ ЗНАНИЙ: 📄 {file_name}]\nРазмер: {len(file_content):,} симв. Полный: session[\"files\"][\"{file_name}\"] (read_file если нужно).\nПревью (первые 2000):\n```\n{file_content[:2000]}\n```\"\"\"  # Без обрезки в конце — preview фиксирован\n```\n\n**3. Non-JSON блок (стр ~2855, в except json.JSONDecodeError):**\n```python\n# ЗАМЕНИ НА:\nf\"\"\"[ОБНОВЛЕНИЕ ЗНАНИЙ: 📄 {file_name}]\nРазмер: {len(file_content):,} симв. Полный: session[\"files\"][\"{file_name}\"].\nПревью (первые 2000):\n```\n{file_content[:2000]}\n```\"\"\"\n```\n\n**Эффект:** Контекст ~2.5k chars (токены ок), full файл в session → СР использует `read_file` или патчит из WS. Тест: загрузи 50k патч → увидишь summary, СР поймёт \"полный в session\".\n\n**2000 preview (не весь):** История 50k → 25+ ответов по 2k. Больше — шум/токены кончаются. Ахимса! Готово, деплои → тест. 😎🌱🛠️",
+      "time": 1772146406.1220322
     }
   ],
-  "last_active": 1772146388.9110422,
+  "last_active": 1772146406.1220582,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772146271.0474904
