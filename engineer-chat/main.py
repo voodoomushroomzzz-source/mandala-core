@@ -1481,13 +1481,14 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                 keys = list(json_data.keys())[:5]
                 summary = f"✅ JSON {file_name} получен. Ключи: {keys}"
                 manager.add_to_context(session_id, "user",
-                    f"[Загружен файл: {file_name}]\n```json\n{file_content}\n```"
+                    f"[Загружен файл: {file_name}]\n```json\n{file_content[:25000]}\n```"
+                    + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
         except json.JSONDecodeError:
             # Не JSON — текст/код
             summary = f"📄 {file_name} ({len(file_content)} символов) получен"
             manager.add_to_context(session_id, "user",
-                f"[Загружен файл: {file_name}]\n```\n{file_content[:3000]}\n```"
-                + ("\n_(файл обрезан, показаны первые 3000 символов)_" if len(file_content) > 3000 else ""))
+                f"[Загружен файл: {file_name}]\n```\n{file_content[:25000]}\n```"
+                + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
 
         await manager.send_to(websocket, {"type": "file_processed", "summary": summary})
 
