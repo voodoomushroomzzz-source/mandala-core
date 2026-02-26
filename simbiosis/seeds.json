@@ -33,6 +33,11 @@
         "version": "v1.1.2",
         "date": "2026-02-27",
         "summary": "SEED-010: VoiceInput EngChat (gardener_voice)."
+      },
+      {
+        "version": "v1.1.3",
+        "date": "2026-02-27",
+        "summary": "SEED-011: Ахимса лаконичность."
       }
     ],
     "roadmap": {
@@ -52,7 +57,7 @@
         }
       ]
     },
-    "version": "v1.1.2"
+    "version": "v1.1.3"
   },
   "protocols": {
     "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -149,13 +154,31 @@
         "criteria": "Latency <2s, accuracy>90% RU/EN, zero-cost (DDG/Vosk)."
       },
       "roadmap_link": "RM-004 or eng_chat.M7"
+    },
+    {
+      "id": "SEED-011",
+      "type": "protocol",
+      "name": "Response Policy: Short for simple queries",
+      "created": "2026-02-27",
+      "created_by": "gardener_ahimsa",
+      "status": "active",
+      "ttl": "∞",
+      "resonance": "high",
+      "description": "Если вопрос не требует исследования/патча/таблиц — короткий ответ. Ахимса: минимум шума, max vitality.",
+      "content": {
+        "rules": [
+          "Опрос (да/нет/статус/короткий факт) → 1-2 предложения.",
+          "Triggers: 'давай', 'есть?', 'получилось?', 'завтра' — лаконично.",
+          "Развёрнуто: идеи/патчи/roadmaps/search."
+        ]
+      }
     }
   ],
   "archive": [],
   "registry": {
     "last_updated": "2026-02-27",
-    "total_seeds": 8,
-    "active_seeds": 7,
+    "total_seeds": 9,
+    "active_seeds": 8,
     "archived": 0
   },
   "changes": {
