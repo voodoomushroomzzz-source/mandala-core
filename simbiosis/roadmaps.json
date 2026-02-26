@@ -1,8 +1,8 @@
 {
   "module": "roadmaps",
-  "version": "v1.1.2",
+  "version": "v1.1.3",
   "type": "roadmap_library",
-  "description": "Библиотека проработанных дорожных карт...",
+  "description": "Библиотека проработанных дорожных карт. Идеи прошедшие оценку в seeds, с шагами, вехами и критериями завершения. После начала реализации — превращаются в отдельный модуль.",
   "meta": {
     "layer": 2,
     "guardian_lock": false,
@@ -11,14 +11,14 @@
     "version_history": [
       {"version": "v1.0.0", "date": "2026-02-23", "summary": "Создание модуля. Перенос из Akasha Chronicorum."},
       {"version": "v1.1.0", "date": "2026-02-27", "summary": "RM-003: Scout-Agent roadmap."},
-      {"version": "v1.1.1", "date": "2026-02-27", "summary": "Fix RM-003 attempts."},
-      {"version": "v1.1.2", "date": "2026-02-27", "summary": "🔧 FILE_PATCH: RM-003 array→obj. Clean structure."}
+      {"version": "v1.1.2", "date": "2026-02-27", "summary": "🔧 FILE_PATCH: RM-003 array→obj. Clean structure."},
+      {"version": "v1.1.3", "date": "2026-02-27", "summary": "🔧 FILE_PATCH v2: origin_seed + desc→description + id consistency. Path-fix."}
     ],
     "roadmap": {
       "current_milestone": "M1 — Библиотека",
       "milestones": [{"id": "M1", "name": "Библиотека роадмапов", "status": "active", "description": "Базовая структура и перенос существующих карт"}]
     },
-    "version": "v1.1.2"
+    "version": "v1.1.3"
   },
   "roadmaps": {
     "RM-001": {
@@ -29,7 +29,7 @@
       "origin_seed": "SEED-001",
       "description": "Постоянно живущий СР в облаке. Память между сессиями, инициативность, уведомления.",
       "milestones": [
-        {"id": "RM-001-M1", "name": "Архитектура", "status": "done", "description": "Yandex Cloud Function...", "tech_stack": ["Yandex Cloud Functions", "S3 Object Storage", "SiliconFlow API"]},
+        {"id": "RM-001-M1", "name": "Архитектура", "status": "done", "description": "Yandex Cloud Function (python312, 256MB, 30s). Bucket mandala-sr-memory для памяти. Модель: gpt-oss-120b через SiliconFlow. Деплой: 2026-02-17.", "tech_stack": ["Yandex Cloud Functions", "S3 Object Storage", "SiliconFlow API"]},
         {"id": "RM-001-M2", "name": "Деплой MVP", "status": "planned", "description": "Первый деплой с базовой памятью"},
         {"id": "RM-001-M3", "name": "Память между сессиями", "status": "planned", "description": "Персистентный контекст"},
         {"id": "RM-001-M4", "name": "Инициативность", "status": "planned", "description": "СР сам пишет Садовнику при важных событиях"}
@@ -53,17 +53,18 @@
       "title": "Scout-Agent: Deploy & Integrate",
       "status": "active",
       "priority": "high",
-      "origin": "SEED-008",
-      "description": "Автономный агент vitality Мандалы. Eng_chat=primary (WS/cron/UI). TG=secondary later. Zero-cost.",
+      "origin_seed": "SEED-008",
+      "description": "Автономный агент для vitality Мандалы. Eng_chat primary: WS/cron/UI. TG secondary later (voice→tasks). Zero-cost DuckDuckGo.",
       "milestones": [
-        {"id": "M1", "name": "WS Handler main.py", "status": "planned", "desc": "type:'start_scan'→Grok search→Claude filter→auto-patch seeds"},
-        {"id": "M2", "name": "Cron APScheduler", "status": "planned", "desc": "Daily fixed_topics из SEED-008"},
-        {"id": "M3", "name": "UI index.html", "status": "planned", "desc": "Queries input + Start btn + findings table"},
-        {"id": "M4", "name": "TG proxy", "status": "planned", "desc": "/scout→eng_chat WS. Voice-tasks later"}
+        {"id": "RM-003-M1", "name": "WS Handler в main.py", "status": "planned", "description": "type: 'start_scan' → Grok loop → Claude filter → auto-patch seeds."},
+        {"id": "RM-003-M2", "name": "Cron APScheduler", "status": "planned", "description": "Daily scan fixed_topics из SEED-008. Log в sessions."},
+        {"id": "RM-003-M3", "name": "UI в index.html", "status": "planned", "description": "Input queries + 'Start Scan' btn → WS. Table findings."},
+        {"id": "RM-003-M4", "name": "TG Secondary", "status": "planned", "description": "/scout → WS proxy. Voice→tasks later."}
       ]
     }
   },
   "changes": {
-    "v1.0.0": {"date": "2026-02-23", "summary": "Создание модуля. Два роадмапа из монолита."}
+    "v1.0.0": {"date": "2026-02-23", "summary": "Создание модуля. Два роадмапа из монолита."},
+    "v1.1.3": {"date": "2026-02-27", "summary": "RM-003 full consistency."}
   }
 }
