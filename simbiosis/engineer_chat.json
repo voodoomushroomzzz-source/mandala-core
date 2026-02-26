@@ -23,10 +23,15 @@
         "version": "v1.2.0",
         "date": "2026-02-27",
         "summary": "Убран DeepSeek. Активные модели: Grok + Claude."
+      },
+      {
+        "version": "v1.3.0",
+        "date": "2026-02-27",
+        "summary": "M6 Scout + WS-type. Eng_chat=primary."
       }
     ],
     "roadmap": {
-      "current_milestone": "M3 — Три модели",
+      "current_milestone": "M6 — Scout-Agent",
       "milestones": [
         {
           "id": "M1",
@@ -60,9 +65,16 @@
           "name": "Next.js переезд",
           "status": "planned",
           "description": "Полноценный фронтенд с авторизацией"
+        },
+        {
+          "id": "M6",
+          "name": "Scout-Agent",
+          "status": "planned",
+          "description": "WS 'start_scan' + cron. Eng_chat primary, TG secondary (voice→tasks later)."
         }
       ]
-    }
+    },
+    "version": "v1.3.0"
   },
   "architecture": {
     "hosting": "Render.com",
@@ -82,7 +94,8 @@
       "max_tokens": 8192,
       "tools": [
         "web_search",
-        "read_file"
+        "read_file",
+        "agent_scan"
       ]
     },
     "claude": {
@@ -103,7 +116,8 @@
   },
   "current_issues": [
     "Файлы до 3000 символов в контексте через base64 по WS — плановый переезд на серверное хранилище (SEED-002)",
-    "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search"
+    "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search",
+    "Scout integration: WS+cron in main.py (RM-003-M1)"
   ],
   "files": {
     "engineer-chat/main.py": "FastAPI бэкенд. ~1800 строк. Главный файл.",
@@ -141,7 +155,10 @@
     "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
     "refresh_modules": "Перезагрузить все модули ядра",
     "toggle_observer": "Вкл/выкл Claude-наблюдателя",
-    "ping": "Keepalive → pong"
+    "ping": "Keepalive → pong",
+    "start_scan": [
+      "Scout trigger — {queries: [str], cron_mode?: bool}"
+    ]
   },
   "context_config": {
     "max_history_chars": 50000,
