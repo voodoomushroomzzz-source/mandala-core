@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-e515e319",
+  "version": "simbiosis-vv1.2.0-908bc444",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:55:09.507441+00:00",
-  "build_source": "3f23c23d82430e355e5f8ef40621f89cde7da146",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/3f23c23d82430e355e5f8ef40621f89cde7da146",
+  "build_timestamp": "2026-02-26T21:56:56.413811+00:00",
+  "build_source": "875d5546e1f6ef1c25636be8465c2d0941093eae",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/875d5546e1f6ef1c25636be8465c2d0941093eae",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -732,6 +732,11 @@
             "version": "v1.1.0",
             "date": "2026-02-27",
             "summary": "SEED-008: Scout-Agent + chat priorities (eng primary)."
+          },
+          {
+            "version": "v1.1.1",
+            "date": "2026-02-27",
+            "summary": "Remove SEED-008 dup. Sync registry."
           }
         ],
         "roadmap": {
@@ -751,7 +756,7 @@
             }
           ]
         },
-        "version": "v1.1.0"
+        "version": "v1.1.1"
       },
       "protocols": {
         "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -822,73 +827,13 @@
           "status": "done",
           "description": "Нажатие на узел карты ядра или карточку файла отправляет read_file_request по WebSocket. СР читает файл через GitHub API и кладёт в контекст сессии.",
           "resonance": "high"
-        },
-        {
-          "id": "SEED-008",
-          "type": "feature",
-          "name": "Scout-Agent: Автономный веб-сканировщик",
-          "created": "2026-02-27",
-          "created_by": "sr_initiative",
-          "status": "active",
-          "ttl": "90d",
-          "description": "Триггер: WS 'start_scan' {queries: ['AI agents 2026 free']}. Grok: web_search → raw_findings. Claude: resonance_score (ахимса: free/open/symbiozis? >7/10). Output: auto-patch SEED-SCAN-YYYY-MM-DD с findings[]. Cron daily fixed topics из roadmaps. Primary: eng_chat WS/UI. TG: secondary (voice→tasks→send_to_core later). Пример: GitHub stars>10k, grants deadlines.",
-          "resonance": "high",
-          "content": {
-            "logic": "1. Trigger (WS/cron). 2. For each query: top-5 results. 3. Claude prompt: 'Score 0-10 по vitality Мандалы'. 4. Patch seeds.",
-            "fixed_topics": [
-              "open-source AI agents 2026",
-              "AI symbiosis breakthroughs",
-              "free grants OSS AI"
-            ],
-            "example_seed": {
-              "id": "SCAN-2026-02-27",
-              "query": "AI agents",
-              "findings": [
-                {
-                  "title": "CrewAI",
-                  "url": "github.com/crewai",
-                  "score": "9/10"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "id": "SEED-008",
-          "type": "feature",
-          "name": "Scout-Agent: Автономный веб-сканировщик",
-          "created": "2026-02-27",
-          "created_by": "sr_initiative",
-          "status": "active",
-          "ttl": "90d",
-          "description": "Primary: eng_chat WS 'start_scan' {queries:['...']}. Grok web_search→raw. Claude score>7/10 (ахимса). Auto-patch SCAN-*. Cron daily fixed_topics. TG aux (voice later).",
-          "resonance": "high",
-          "content": {
-            "logic": "Trigger→queries loop→search→validate→patch seeds.",
-            "fixed_topics": [
-              "open-source AI agents 2026 free",
-              "AI symbiosis 2026",
-              "OSS AI grants donations"
-            ],
-            "example": {
-              "id": "SCAN-2026-02-27",
-              "query": "agents",
-              "findings": [
-                {
-                  "title": "CrewAI",
-                  "url": "github.com/crewai/crewai",
-                  "score": "9/10"
-                }
-              ]
-            }
-          }
         }
       ],
       "archive": [],
       "registry": {
         "last_updated": "2026-02-27",
-        "total_seeds": 8,
-        "active_seeds": 7,
+        "total_seeds": 7,
+        "active_seeds": 6,
         "archived": 0
       },
       "changes": {
@@ -998,7 +943,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:55:09.507441+00:00",
+    "timestamp": "2026-02-26T21:56:56.413811+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -1032,6 +977,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:55:09 UTC"
+    "built_at": "2026-02-26 21:56:56 UTC"
   }
 }
