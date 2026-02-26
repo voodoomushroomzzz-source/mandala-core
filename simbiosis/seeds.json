@@ -18,6 +18,11 @@
         "version": "v1.1.0",
         "date": "2026-02-27",
         "summary": "SEED-008: Scout-Agent логика + chat priorities."
+      },
+      {
+        "version": "v1.1.0",
+        "date": "2026-02-27",
+        "summary": "SEED-008: Scout-Agent + chat priorities (eng primary)."
       }
     ],
     "roadmap": {
@@ -138,13 +143,43 @@
           ]
         }
       }
+    },
+    {
+      "id": "SEED-008",
+      "type": "feature",
+      "name": "Scout-Agent: Автономный веб-сканировщик",
+      "created": "2026-02-27",
+      "created_by": "sr_initiative",
+      "status": "active",
+      "ttl": "90d",
+      "description": "Primary: eng_chat WS 'start_scan' {queries:['...']}. Grok web_search→raw. Claude score>7/10 (ахимса). Auto-patch SCAN-*. Cron daily fixed_topics. TG aux (voice later).",
+      "resonance": "high",
+      "content": {
+        "logic": "Trigger→queries loop→search→validate→patch seeds.",
+        "fixed_topics": [
+          "open-source AI agents 2026 free",
+          "AI symbiosis 2026",
+          "OSS AI grants donations"
+        ],
+        "example": {
+          "id": "SCAN-2026-02-27",
+          "query": "agents",
+          "findings": [
+            {
+              "title": "CrewAI",
+              "url": "github.com/crewai/crewai",
+              "score": "9/10"
+            }
+          ]
+        }
+      }
     }
   ],
   "archive": [],
   "registry": {
     "last_updated": "2026-02-27",
-    "total_seeds": 7,
-    "active_seeds": 6,
+    "total_seeds": 8,
+    "active_seeds": 7,
     "archived": 0
   },
   "changes": {
