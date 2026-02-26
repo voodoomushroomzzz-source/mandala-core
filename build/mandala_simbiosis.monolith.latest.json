@@ -1,14 +1,14 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.1.0-b2005ba1",
+  "version": "simbiosis-vv1.2.0-74c72157",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:13:30.775132+00:00",
-  "build_source": "4016688e063b3b531afd453f7c6ccb457b24528e",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/4016688e063b3b531afd453f7c6ccb457b24528e",
+  "build_timestamp": "2026-02-26T21:16:46.257817+00:00",
+  "build_source": "44e1a335bbc21f9b29e5b7df8f85bdf871ff26b6",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/44e1a335bbc21f9b29e5b7df8f85bdf871ff26b6",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
-      "version": "v1.1.0",
+      "version": "v1.2.0",
       "type": "boot_module",
       "description": "Загрузочный модуль ядра Симбиоза. Первое что читает СР. Содержит суть, директивы и ключи для уверенного старта. Читается при каждом запросе вместе с картой ядра.",
       "meta": {
@@ -25,7 +25,12 @@
           {
             "version": "v1.1.0",
             "date": "2026-02-27",
-            "summary": "Роли: kimi→deepseek. on_work: добавлена инструкция по патчам."
+            "summary": "Роли: kimi→deepseek. on_work: инструкция по патчам."
+          },
+          {
+            "version": "v1.2.0",
+            "date": "2026-02-27",
+            "summary": "Роли: только grok + claude. on_work: правило о дефисах в ключах."
           }
         ],
         "roadmap": {
@@ -93,7 +98,8 @@
         "on_work": [
           "Перед изменением любого файла — прочитать его актуальную версию через read_file.",
           "Для изменений модулей ядра — использовать JSON патч: target_module + changes[] с op: update/add/delete/remove/replace/merge.",
-          "Путь в патче — точечная нотация: seeds.0.status, directives.GD-01.rule. Для массивов — add/remove вместо индексов.",
+          "Путь в патче — точечная нотация: seeds.status, meta.version. ВНИМАНИЕ: ключи с дефисами (RM-001, GD-01) нельзя адресовать через точечный путь — только update на родительский блок целиком.",
+          "Для массивов: add добавляет объект, remove удаляет по id. Числовые индексы (milestones.0) не работают если родительский ключ содержит дефис.",
           "Резонансные идеи сессии предлагать сохранять в seeds.json.",
           "При обнаружении противоречий в ядре — сообщать Садовнику.",
           "Сжатая коммуникация: заголовок → суть → детали. Без воды."
@@ -107,9 +113,7 @@
       },
       "roles": {
         "grok": "Исследователь-философ. Ищет неожиданные связи, предлагает маршруты развития, активно использует web_search. Погружён в ядро.",
-        "kimi": null,
-        "claude": "Сторонний наблюдатель. Объективная оценка, поиск логических ошибок, альтернативные пути.",
-        "deepseek": "Советник и ревьюер. Код, архитектура, патчи, оптимизация модулей. Точность и чистота. Читает файлы через read_file перед любым изменением."
+        "claude": "Сторонний наблюдатель. Объективная оценка, поиск логических ошибок, альтернативные пути."
       }
     },
     "CoreMap": {
@@ -373,7 +377,7 @@
     },
     "EngineerChat": {
       "module": "engineer_chat",
-      "version": "v1.1.0",
+      "version": "v1.2.0",
       "type": "product_module",
       "description": "Модуль инженерного чата Мандалы. Архитектура, компоненты, история, текущий статус и следующие шаги. Отдельная экосистема разработки.",
       "meta": {
@@ -390,7 +394,12 @@
           {
             "version": "v1.1.0",
             "date": "2026-02-27",
-            "summary": "Актуальные модели (deepseek вместо kimi), env_vars, endpoints, ws_message_types, context_config, recently_resolved."
+            "summary": "Актуальные модели, env_vars, endpoints, context_config."
+          },
+          {
+            "version": "v1.2.0",
+            "date": "2026-02-27",
+            "summary": "Убран DeepSeek. Активные модели: Grok + Claude."
           }
         ],
         "roadmap": {
@@ -453,18 +462,6 @@
             "read_file"
           ]
         },
-        "deepseek": {
-          "role": "Советник и ревьюер",
-          "api": "OpenRouter",
-          "model_id": "deepseek/deepseek-v3.2",
-          "env_key": "OPENROUTER_KEY",
-          "temperature": 0.7,
-          "max_tokens": 8192,
-          "tools": [
-            "web_search",
-            "read_file"
-          ]
-        },
         "claude": {
           "role": "Сторонний наблюдатель",
           "api": "Anthropic",
@@ -515,7 +512,7 @@
       },
       "ws_message_types": {
         "init": "Открыть сессию — { session_id }",
-        "ask": "Вопрос СР — { text, models: ['grok'|'deepseek'|'claude'] }",
+        "ask": "Вопрос СР — { text, models: ['grok'|'claude'] }",
         "file": "Загрузить файл — { name, content: base64, caption? }",
         "apply_patch": "Применить патч к ядру — { patch: {...} }",
         "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
@@ -863,7 +860,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:13:30.775132+00:00",
+    "timestamp": "2026-02-26T21:16:46.257817+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -897,6 +894,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:13:30 UTC"
+    "built_at": "2026-02-26 21:16:46 UTC"
   }
 }
