@@ -216,9 +216,14 @@
       "role": "user",
       "content": "да не 1000 код посмотри",
       "time": 1772146318.207785
+    },
+    {
+      "role": "assistant",
+      "content": "```python\nf\"\"\"[ОБНОВЛЕНИЕ ЗНАНИЙ: 📄 {file_name}]\nРазмер: {len(file_content)} символов.\nПолный сохранён в session[\"files\"][\"{file_name}\"] (tool read_file если нужно).\n```\n{file_content[:3000]}\n```\n\"\"\" + (\"\\n_(превью обрезано до 3000 симв., full в session.files)\" if len(file_content) > 3000 else \"\")\n```\n\n**Почему 3000 (не меньше):** Код уже так делает — оставляем preview ~3k (безопасно для истории). Добавили **len + уведомление о session** (full доступен). Малый файл (<3k) — весь целиком (if не сработает). \n\n**+ 4 строки выше (после decode):** \n```python\nsession_id = ...  # уже есть в func\nsession = await get_session(session_id)\nsession[\"files\"] = session.get(\"files\", {})\nsession[\"files\"][file_name] = file_content\nsession_store.schedule_save(session_id, session)\n```\n\nАналогично в **except** (не JSON): замени ту же строку на `file_content[:3000]` → без ```json```, просто ```.\n\n**Тест:** Загрузи 50k → СР увидит summary+3k preview + \"full в session\" → tool/use full. История чистая! 😎🌱",
+      "time": 1772146328.5435963
     }
   ],
-  "last_active": 1772146318.2077959,
+  "last_active": 1772146328.5436192,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772146271.0474904
