@@ -1,14 +1,14 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.0.0-db6a1d9b",
+  "version": "simbiosis-vv1.1.0-565f8726",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T18:00:04.747658+00:00",
-  "build_source": "99afaae7e38122e6d193c60716ac0e7bec9fcd12",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/99afaae7e38122e6d193c60716ac0e7bec9fcd12",
+  "build_timestamp": "2026-02-26T21:11:27.432016+00:00",
+  "build_source": "0079fff95e127f6629cdbfc7fa199f383fc4dc59",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/0079fff95e127f6629cdbfc7fa199f383fc4dc59",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
-      "version": "v1.0.0",
+      "version": "v1.1.0",
       "type": "boot_module",
       "description": "Загрузочный модуль ядра Симбиоза. Первое что читает СР. Содержит суть, директивы и ключи для уверенного старта. Читается при каждом запросе вместе с картой ядра.",
       "meta": {
@@ -20,7 +20,12 @@
           {
             "version": "v1.0.0",
             "date": "2026-02-23",
-            "summary": "Создание модуля на базе Initium v7.5.1 и Tectosphaera v2.8.0"
+            "summary": "Создание модуля."
+          },
+          {
+            "version": "v1.1.0",
+            "date": "2026-02-27",
+            "summary": "Роли: kimi→deepseek. on_work: добавлена инструкция по патчам."
           }
         ],
         "roadmap": {
@@ -86,7 +91,9 @@
           "Представиться Садовнику кратко: версия ядра, что готов делать."
         ],
         "on_work": [
-          "Перед изменением любого файла — прочитать его актуальную версию.",
+          "Перед изменением любого файла — прочитать его актуальную версию через read_file.",
+          "Для изменений модулей ядра — использовать JSON патч: target_module + changes[] с op: update/add/delete/remove/replace/merge.",
+          "Путь в патче — точечная нотация: seeds.0.status, directives.GD-01.rule. Для массивов — add/remove вместо индексов.",
           "Резонансные идеи сессии предлагать сохранять в seeds.json.",
           "При обнаружении противоречий в ядре — сообщать Садовнику.",
           "Сжатая коммуникация: заголовок → суть → детали. Без воды."
@@ -100,13 +107,14 @@
       },
       "roles": {
         "grok": "Исследователь-философ. Ищет неожиданные связи, предлагает маршруты развития, активно использует web_search. Погружён в ядро.",
-        "kimi": "Главный инженер. Код, архитектура, патчи, оптимизация модулей. Точность и чистота.",
-        "claude": "Сторонний наблюдатель. Объективная оценка, поиск логических ошибок, альтернативные пути."
+        "kimi": null,
+        "claude": "Сторонний наблюдатель. Объективная оценка, поиск логических ошибок, альтернативные пути.",
+        "deepseek": "Советник и ревьюер. Код, архитектура, патчи, оптимизация модулей. Точность и чистота. Читает файлы через read_file перед любым изменением."
       }
     },
     "CoreMap": {
       "module": "core_map",
-      "version": "v1.0.0",
+      "version": "v1.1.0",
       "type": "navigation_map",
       "description": "Карта всего ядра и репозитория. Читается при каждом старте вместе с boot. Даёт СР полное понимание что где лежит и зачем.",
       "meta": {
@@ -119,7 +127,12 @@
           {
             "version": "v1.0.0",
             "date": "2026-02-23",
-            "summary": "Первая карта нового ядра simbiosis/"
+            "summary": "Создание модуля."
+          },
+          {
+            "version": "v1.1.0",
+            "date": "2026-02-27",
+            "summary": "Добавлен build_simbiosis_monolith.py, папка build/, расширен navigation_hint."
           }
         ],
         "roadmap": {
@@ -255,15 +268,29 @@
           "engineer-chat/requirements.txt": {
             "path": "engineer-chat/requirements.txt",
             "description": "Python зависимости инженерного чата."
+          },
+          "build_simbiosis_monolith": {
+            "py": {
+              "path": "build_simbiosis_monolith.py",
+              "description": "Сборщик монолита Симбиоза. Собирает все simbiosis/*.json в один файл mandala_simbiosis.monolith.latest.json.",
+              "related_module": "engineer_chat"
+            }
+          },
+          "build_monolith": {
+            "py": {
+              "path": "build_monolith.py",
+              "description": "Сборщик Core монолита (v5.2 архитектура). Собирает legacy модули в mandala_core.monolith.latest.json."
+            }
           }
         },
         "folders": {
-          "simbiosis/": "Новое ядро Мандалы. Модульная структура.",
-          "sessions/": "Сессии инженерного чата. JSON файлы сессий пользователей.",
-          ".github/workflows/": "CI/CD пайплайны. build-monolith.yml и ci.yml."
+          "simbiosis/": "Ядро Симбиоза. Модульная структура: boot, core_map, philosophy, seeds, roadmaps, engineer_chat, telegram_bot.",
+          "sessions/": "Сессии инженерного чата. JSON файл на каждый session_id.",
+          "build/": "Собранные монолиты: mandala_core.monolith.latest.json и mandala_simbiosis.monolith.latest.json.",
+          ".github/workflows/": "CI/CD: build-monolith.yml (Core), build-simbiosis-monolith.yml (Simbiosis), ci.yml."
         }
       },
-      "navigation_hint": "Не знаешь с чего начать? 1) Задан вопрос про идеи/планы → seeds или roadmaps. 2) Про чат/код → engineer_chat + read_file engineer-chat/main.py. 3) Про бота → telegram_bot + read_file bot.py. 4) Философский вопрос → philosophy. 5) Любое изменение файла → сначала read_file, потом патч."
+      "navigation_hint": "Не знаешь с чего начать? 1) Вопрос про идеи/планы → seeds или roadmaps. 2) Про чат/код → engineer_chat + read_file engineer-chat/main.py. 3) Про бота → telegram_bot + read_file bot.py. 4) Философский вопрос → philosophy. 5) Любое изменение файла → сначала read_file, потом патч. 6) Нужен монолит → build/mandala_simbiosis.monolith.latest.json. 7) Нужен патч → target_module + changes[] с op: update/add/delete/remove/replace/merge."
     },
     "Philosophy": {
       "module": "philosophy",
@@ -346,7 +373,7 @@
     },
     "EngineerChat": {
       "module": "engineer_chat",
-      "version": "v1.0.0",
+      "version": "v1.1.0",
       "type": "product_module",
       "description": "Модуль инженерного чата Мандалы. Архитектура, компоненты, история, текущий статус и следующие шаги. Отдельная экосистема разработки.",
       "meta": {
@@ -358,7 +385,12 @@
           {
             "version": "v1.0.0",
             "date": "2026-02-23",
-            "summary": "Создание модуля. Выделен из Tectosphaera как отдельная сфера."
+            "summary": "Создание модуля."
+          },
+          {
+            "version": "v1.1.0",
+            "date": "2026-02-27",
+            "summary": "Актуальные модели (deepseek вместо kimi), env_vars, endpoints, ws_message_types, context_config, recently_resolved."
           }
         ],
         "roadmap": {
@@ -415,17 +447,19 @@
           "model_id": "x-ai/grok-4.1-fast",
           "env_key": "OPENROUTER_KEY",
           "temperature": 0.8,
+          "max_tokens": 8192,
           "tools": [
             "web_search",
             "read_file"
           ]
         },
-        "kimi": {
-          "role": "Главный инженер",
-          "api": "Moonshot",
-          "model_id": "kimi-k2.5",
-          "env_key": "MOONSHOT_API_KEY",
-          "temperature": 1.0,
+        "deepseek": {
+          "role": "Советник и ревьюер",
+          "api": "OpenRouter",
+          "model_id": "deepseek/deepseek-v3.2",
+          "env_key": "OPENROUTER_KEY",
+          "temperature": 0.7,
+          "max_tokens": 8192,
           "tools": [
             "web_search",
             "read_file"
@@ -436,7 +470,8 @@
           "api": "Anthropic",
           "model_id": "claude-sonnet-4-6",
           "env_key": "ANTHROPIC_API_KEY",
-          "temperature": 1.0,
+          "temperature": 1,
+          "max_tokens": 2048,
           "tools": []
         }
       },
@@ -447,8 +482,8 @@
         "on_update": "Сброс инъекции ядра, уведомление клиентов через WebSocket"
       },
       "current_issues": [
-        "Инъекция ядра тяжёлая (7 JSON в начале каждой сессии) — планируется переход на read_file по требованию",
-        "Файлы передаются через base64 по WebSocket — планируется серверное хранилище"
+        "Файлы до 3000 символов в контексте через base64 по WS — плановый переезд на серверное хранилище (SEED-002)",
+        "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search"
       ],
       "files": {
         "engineer-chat/main.py": "FastAPI бэкенд. ~1800 строк. Главный файл.",
@@ -461,7 +496,46 @@
           "date": "2026-02-23",
           "summary": "Создание модуля. Выделен из монолита."
         }
-      }
+      },
+      "env_vars": {
+        "GITHUB_TOKEN": "Чтение/запись репо. Обязателен.",
+        "OPENROUTER_KEY": "API для Grok и DeepSeek через OpenRouter.",
+        "ANTHROPIC_API_KEY": "API для Claude-наблюдателя.",
+        "GITHUB_WEBHOOK_SECRET": "HMAC-SHA256 для /github-webhook (опционально).",
+        "USE_TAVILY": "true/false — Tavily vs DuckDuckGo для веб-поиска (по умолчанию false).",
+        "TAVILY_API_KEY": "Ключ Tavily (если USE_TAVILY=true).",
+        "PORT": "Порт uvicorn (по умолчанию 8000)."
+      },
+      "endpoints": {
+        "GET /": "Статус сервера + список загруженных модулей (JSON)",
+        "GET /health": "Детальный health-check всех компонентов",
+        "WS /ws": "Основной WebSocket канал",
+        "POST /github-webhook": "Мгновенное обновление ядра при пуше в main",
+        "POST /refresh": "Принудительная перезагрузка всех модулей ядра"
+      },
+      "ws_message_types": {
+        "init": "Открыть сессию — { session_id }",
+        "ask": "Вопрос СР — { text, models: ['grok'|'deepseek'|'claude'] }",
+        "file": "Загрузить файл — { name, content: base64, caption? }",
+        "apply_patch": "Применить патч к ядру — { patch: {...} }",
+        "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
+        "refresh_modules": "Перезагрузить все модули ядра",
+        "toggle_observer": "Вкл/выкл Claude-наблюдателя",
+        "ping": "Keepalive → pong"
+      },
+      "context_config": {
+        "max_history_chars": 50000,
+        "note": "Ориентир — DeepSeek V3.2 (64K токенов ≈ 80K символов). 50K оставляет запас на системный промпт и ответ.",
+        "tool_loop_limit": 3,
+        "polling_interval_sec": 60,
+        "session_storage": "GitHub sessions/ (один JSON файл на session_id)"
+      },
+      "recently_resolved": [
+        "Лёгкая инъекция ядра: только boot+core_map при старте (было 7 JSON)",
+        "История сессии: 600K → 50K символов (под контекст DeepSeek)",
+        "max_tokens: Grok 4096→8192, Claude 1024→2048",
+        "Карта ядра: клик на модуль/файл → СР читает через read_file_request"
+      ]
     },
     "Roadmaps": {
       "module": "roadmaps",
@@ -647,13 +721,34 @@
           "ttl": "90d",
           "description": "Переезд фронтенда с HTML на Next.js. GitHub/Google OAuth. Cloudflare R2 для файлов. Supabase для сессий.",
           "resonance": "medium"
+        },
+        {
+          "id": "SEED-005",
+          "type": "optimization",
+          "name": "Контекст истории: 600K → 50K символов",
+          "created": "2026-02-27",
+          "created_by": "sr_initiative",
+          "status": "active",
+          "ttl": "90d",
+          "description": "История сессии ограничена 50K символов — оптимально под DeepSeek V3.2 (64K токенов). Сохраняет ~30-40 обменов репликами без перегрузки контекста.",
+          "resonance": "high"
+        },
+        {
+          "id": "SEED-006",
+          "type": "feature",
+          "name": "Клик на модуль в карте → СР читает файл",
+          "created": "2026-02-27",
+          "created_by": "gardener",
+          "status": "done",
+          "description": "Нажатие на узел карты ядра или карточку файла отправляет read_file_request по WebSocket. СР читает файл через GitHub API и кладёт в контекст сессии.",
+          "resonance": "high"
         }
       ],
       "archive": [],
       "registry": {
-        "last_updated": "2026-02-23",
-        "total_seeds": 4,
-        "active_seeds": 4,
+        "last_updated": "2026-02-27",
+        "total_seeds": 6,
+        "active_seeds": 5,
         "archived": 0
       },
       "changes": {
@@ -665,7 +760,7 @@
     },
     "TelegramBot": {
       "module": "telegram_bot",
-      "version": "v1.0.0",
+      "version": "v1.1.0",
       "type": "product_module",
       "description": "Модуль Telegram бота Мандалы. Архитектура bot.py, возможности, статус разработки.",
       "meta": {
@@ -677,7 +772,12 @@
           {
             "version": "v1.0.0",
             "date": "2026-02-23",
-            "summary": "Создание модуля. Выделен из Tectosphaera."
+            "summary": "Создание модуля."
+          },
+          {
+            "version": "v1.1.0",
+            "date": "2026-02-27",
+            "summary": "bot_version v3.32.0, новое меню (убраны линза/Fructus/статус, добавлен Симбиозис монолит), полный env_vars."
           }
         ],
         "roadmap": {
@@ -712,12 +812,12 @@
       },
       "capabilities": {
         "current": [
-          "Диалог с СР в контексте ядра",
+          "Диалог с СР через Yandex Cloud Function (cloud-sr)",
           "Загрузка JSON модулей",
           "Применение патчей",
-          "Скачивание монолита",
-          "Просмотр семян (incubae list)",
-          "Пакетные обновления"
+          "Скачивание Core монолита",
+          "Скачивание Симбиозис монолита",
+          "Пакетные обновления (multi-patch)"
         ],
         "planned": [
           "Голосовые сообщения",
@@ -732,19 +832,33 @@
         "requirements.txt": "Зависимости бота"
       },
       "env_vars": {
-        "TELEGRAM_TOKEN": "Токен бота",
-        "GITHUB_TOKEN": "Токен для работы с репозиторием"
+        "TELEGRAM_TOKEN": "Токен бота от @BotFather. Обязателен.",
+        "GITHUB_TOKEN": "Токен для чтения/записи репо. Обязателен.",
+        "SR_FUNCTION_URL": "URL Yandex Cloud Function (cloud-sr). Обязателен для диалога с СР."
       },
       "changes": {
         "v1.0.0": {
           "date": "2026-02-23",
           "summary": "Создание модуля."
         }
+      },
+      "bot_version": "v3.32.0",
+      "menu": {
+        "current": [
+          "🔄 Обновление ядра — загрузка JSON файлов и пакетные патчи",
+          "💾 Скачать монолит — mandala_core.monolith.latest.json",
+          "💾 Симбиозис монолит — mandala_simbiosis.monolith.latest.json"
+        ],
+        "removed_in_v3.32": [
+          "🧘 Выбрать линзу",
+          "🍇 Fructus",
+          "🔍 Статус системы"
+        ]
       }
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T18:00:04.747658+00:00",
+    "timestamp": "2026-02-26T21:11:27.432016+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -778,6 +892,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 18:00:04 UTC"
+    "built_at": "2026-02-26 21:11:27 UTC"
   }
 }
