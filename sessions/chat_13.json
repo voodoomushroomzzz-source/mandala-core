@@ -226,9 +226,14 @@
       "role": "user",
       "content": "вот только странно мне его код патч доходил обрезком, вы его тоже обрезком видите?",
       "time": 1772144875.6921525
+    },
+    {
+      "role": "assistant",
+      "content": "Да, вижу обрезок (WS base64 ~3k chars, eng_chat.issues[0]). Тебе тоже — лимит eng_chat. Фикс завтра unified diff main.py. 😎🌱",
+      "time": 1772144884.257942
     }
   ],
-  "last_active": 1772144875.6921659,
+  "last_active": 1772144884.2579758,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772144135.2926834
