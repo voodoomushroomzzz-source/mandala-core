@@ -104,9 +104,14 @@
       "role": "assistant",
       "content": "[Патч: 3 файлов]",
       "time": 1772142540.2411559
+    },
+    {
+      "role": "assistant",
+      "content": "[Модуль simbiosis/roadmaps]",
+      "time": 1772142570.291251
     }
   ],
-  "last_active": 1772142540.2411728,
+  "last_active": 1772142570.291266,
   "created_at": 1772128734.9526277,
   "modules_injected": false,
   "injection_timestamp": 1772142491.6860402
