@@ -86,9 +86,14 @@
       "role": "user",
       "content": "Проверь, мб есть что-то новенькое, если это останется актуальной идеей, то подготовь новую запись патчем в роад мап, потом реализуем",
       "time": 1772128078.8450472
+    },
+    {
+      "role": "assistant",
+      "content": "Да, идея 🔥 **супер-актуальна** (2024-2025 тренд: Aider/Sweep в топах awesome-lists, + новинки как Cursor Agent, Copilot Agent Mode, Cline). Aider — open-source король для локальных патчей/PR.\n\n**Свежак из поиска:**\n• **Aider v0.52+**: Auto-commits, multi-file diffs, Grok/DeepSeek support. Лучше Sweep для self-host.\n• **Sweep 1.0**: GitHub App — issues → PR за секунды, но $ (free OSS).\n• **Новое**: GitHub Copilot Agent (agent mode в PR), PR-Agent (OSS reviewer+fixer).\n\n**Патч в roadmaps** (файл пустой — стартуем с нуля):\n\n```json\n{\n  \"target_module\": \"simbiosis/roadmaps\",\n  \"description\": \"Добавить RM-001: GitHub AI Patcher (Aider в engineer_chat)\",\n  \"changes\": [\n    {\"op\": \"add\", \"path\": \"roadmaps\", \"value\": {\n      \"id\": \"RM-001\",\n      \"name\": \"GitHub AI Patcher\",\n      \"core_idea\": \"JSON/промпт → Aider читает репо, патчит файлы, PR. Токены -80%\",\n      \"status\": \"planning\",\n      \"priority\": \"high\",\n      \"tools\": [\"aider-chat\", \"openrouter\"],\n      \"steps\": [\n        {\"id\": \"1\", \"task\": \"pip install aider-chat → патч requirements.txt\", \"est\": \"1h\", \"done\": false},\n        {\"id\": \"2\", \"task\": \"Добавить AiderTool в main.py (read_file → aider --repo . --message json_patch)\", \"est\": \"2h\", \"done\": false},\n        {\"id\": \"3\", \"task\": \"UI: Кнопка 'Apply Patch' в index.html + Monaco JSON editor/preview diff\", \"est\": \"3h\", \"done\": false},\n        {\"id\": \"4\", \"task\": \"Endpoint /apply_patch + webhook на core_map\", \"est\": \"1h\", \"done\": false},\n        {\"id\": \"5\", \"task\": \"Тест: Патч bot.py → auto-PR. Migrate seeds→roadmaps\", \"est\": \"2h\", \"done\": false}\n      ],\n      \"milestones\": [\"MVP: Локальный aider в чате\", \"v1: GitHub PR\", \"v2: Multi-tool (Sweep/PR-Agent)\"],\n      \"metrics\": [\"# патчей/день\", \"токены сэкономлено\"]\n    }},\n    {\"op\": \"add\", \"path\": \"registry\", \"value\": {\"total_roadmaps\": 1, \"updated\": \"2025-01-01\"}}\n  ]\n}\n```\n\nПрименяем? Или доработаем шаги? 🚀",
+      "time": 1772128101.2222843
     }
   ],
-  "last_active": 1772128078.845052,
+  "last_active": 1772128101.2222965,
   "created_at": 1772127368.1433382,
   "modules_injected": true,
   "injection_timestamp": 1772127461.2177682
