@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.1.0-fbf59c34",
+  "version": "simbiosis-vv1.1.0-b2005ba1",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:11:29.362723+00:00",
-  "build_source": "27d11d604e28ec895340ca381f49f7b1fa19a4ea",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/27d11d604e28ec895340ca381f49f7b1fa19a4ea",
+  "build_timestamp": "2026-02-26T21:13:30.775132+00:00",
+  "build_source": "4016688e063b3b531afd453f7c6ccb457b24528e",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/4016688e063b3b531afd453f7c6ccb457b24528e",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -579,7 +579,12 @@
               "id": "RM-001-M1",
               "name": "Архитектура",
               "status": "done",
-              "description": "Чертёж облачного СР готов"
+              "description": "Yandex Cloud Function (python312, 256MB, 30s). Bucket mandala-sr-memory для памяти. Модель: gpt-oss-120b через SiliconFlow. Деплой: 2026-02-17.",
+              "tech_stack": [
+                "Yandex Cloud Functions",
+                "S3 Object Storage",
+                "SiliconFlow API"
+              ]
             },
             {
               "id": "RM-001-M2",
@@ -858,7 +863,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:11:29.362723+00:00",
+    "timestamp": "2026-02-26T21:13:30.775132+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -892,6 +897,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:11:29 UTC"
+    "built_at": "2026-02-26 21:13:30 UTC"
   }
 }
