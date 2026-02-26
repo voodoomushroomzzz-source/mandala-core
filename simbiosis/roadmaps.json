@@ -40,7 +40,12 @@
           "id": "RM-001-M1",
           "name": "Архитектура",
           "status": "done",
-          "description": "Чертёж облачного СР готов"
+          "description": "Yandex Cloud Function (python312, 256MB, 30s). Bucket mandala-sr-memory для памяти. Модель: gpt-oss-120b через SiliconFlow. Деплой: 2026-02-17.",
+          "tech_stack": [
+            "Yandex Cloud Functions",
+            "S3 Object Storage",
+            "SiliconFlow API"
+          ]
         },
         {
           "id": "RM-001-M2",
