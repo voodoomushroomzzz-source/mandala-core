@@ -1,6 +1,6 @@
 {
   "module": "telegram_bot",
-  "version": "v1.0.0",
+  "version": "v1.1.0",
   "type": "product_module",
   "description": "Модуль Telegram бота Мандалы. Архитектура bot.py, возможности, статус разработки.",
   "meta": {
@@ -12,7 +12,12 @@
       {
         "version": "v1.0.0",
         "date": "2026-02-23",
-        "summary": "Создание модуля. Выделен из Tectosphaera."
+        "summary": "Создание модуля."
+      },
+      {
+        "version": "v1.1.0",
+        "date": "2026-02-27",
+        "summary": "bot_version v3.32.0, новое меню (убраны линза/Fructus/статус, добавлен Симбиозис монолит), полный env_vars."
       }
     ],
     "roadmap": {
@@ -47,12 +52,12 @@
   },
   "capabilities": {
     "current": [
-      "Диалог с СР в контексте ядра",
+      "Диалог с СР через Yandex Cloud Function (cloud-sr)",
       "Загрузка JSON модулей",
       "Применение патчей",
-      "Скачивание монолита",
-      "Просмотр семян (incubae list)",
-      "Пакетные обновления"
+      "Скачивание Core монолита",
+      "Скачивание Симбиозис монолита",
+      "Пакетные обновления (multi-patch)"
     ],
     "planned": [
       "Голосовые сообщения",
@@ -67,13 +72,27 @@
     "requirements.txt": "Зависимости бота"
   },
   "env_vars": {
-    "TELEGRAM_TOKEN": "Токен бота",
-    "GITHUB_TOKEN": "Токен для работы с репозиторием"
+    "TELEGRAM_TOKEN": "Токен бота от @BotFather. Обязателен.",
+    "GITHUB_TOKEN": "Токен для чтения/записи репо. Обязателен.",
+    "SR_FUNCTION_URL": "URL Yandex Cloud Function (cloud-sr). Обязателен для диалога с СР."
   },
   "changes": {
     "v1.0.0": {
       "date": "2026-02-23",
       "summary": "Создание модуля."
     }
+  },
+  "bot_version": "v3.32.0",
+  "menu": {
+    "current": [
+      "🔄 Обновление ядра — загрузка JSON файлов и пакетные патчи",
+      "💾 Скачать монолит — mandala_core.monolith.latest.json",
+      "💾 Симбиозис монолит — mandala_simbiosis.monolith.latest.json"
+    ],
+    "removed_in_v3.32": [
+      "🧘 Выбрать линзу",
+      "🍇 Fructus",
+      "🔍 Статус системы"
+    ]
   }
 }
