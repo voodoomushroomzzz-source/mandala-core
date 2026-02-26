@@ -176,8 +176,6 @@
         .model-btn.active { opacity: 1; border-color: currentColor; }
         .grok-btn  { color: #10b981; }
         .grok-btn.active  { background: rgba(16,185,129,0.12); }
-        .deepseek-btn  { color: #f59e0b; }
-        .deepseek-btn.active  { background: rgba(245,158,11,0.12); }
         .claude-btn { color: #4f46e5; }
         .claude-btn.active { background: rgba(79,70,229,0.12); }
 
@@ -194,7 +192,6 @@
             vertical-align: middle;
         }
         .model-label.grok   { color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
-        .model-label.deepseek { color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
         .model-label.claude { color: #4f46e5; border: 1px solid rgba(79,70,229,0.3); }
 
         .commit-sha {
@@ -1164,7 +1161,6 @@
         <div class="h-right">
             <div class="model-selector" id="modelSelector">
                 <button class="model-btn grok-btn active" id="btnGrok" onclick="toggleModel('grok')" title="Грок — исследователь">△</button>
-                <button class="model-btn deepseek-btn" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — советник">◈</button>
                 <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">○</button>
             </div>
             <div class="vsep"></div>
@@ -2026,7 +2022,7 @@
                 }
             }
             if (labelEl) {
-                const names = { grok: 'Грок думает', deepseek: 'DeepSeek думает', claude: 'Клод думает' };
+                const names = { grok: 'Грок думает', claude: 'Клод думает' };
                 labelEl.textContent = names[m] || 'думаю';
                 labelEl.style.color = modelColors[m] || 'var(--text-2)';
             }
@@ -2067,7 +2063,7 @@
 
         function toggleModel(model) {
             // Маппинг model → id кнопки
-            const btnMap = { grok: 'btnGrok', deepseek: 'btnDeepseek', claude: 'btnClaude' };
+            const btnMap = { grok: 'btnGrok', claude: 'btnClaude' };
             const btn = document.getElementById(btnMap[model]);
             if (!btn) return;
             if (activeModels.has(model)) {
@@ -2085,18 +2081,13 @@
                 <polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/>
                 <circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/>
             </svg>`,
-            deepseek: `<svg viewBox="0 0 30 30" fill="none">
-                <circle cx="15" cy="15" r="10" stroke="#f59e0b" stroke-width="0.8" fill="rgba(245,158,11,0.07)"/>
-                <path d="M10,15 L15,10 L20,15 L15,20 Z" stroke="#f59e0b" stroke-width="0.8" fill="rgba(245,158,11,0.1)"/>
-                <circle cx="15" cy="15" r="2" fill="#fbbf24" opacity="0.9"/>
-            </svg>`,
             claude: `<svg viewBox="0 0 30 30" fill="none">
                 <circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/>
                 <circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/>
             </svg>`
         };
-        const modelNames = { grok: 'Грок △', deepseek: 'DeepSeek ◈', claude: 'Клод ○' };
-        const modelColors = { grok: '#10b981', deepseek: '#f59e0b', claude: '#4f46e5' };
+        const modelNames = { grok: 'Грок △', claude: 'Клод ○' };
+        const modelColors = { grok: '#10b981', claude: '#4f46e5' };
 
         let observerThinkingEl = null;
 
