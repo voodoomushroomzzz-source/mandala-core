@@ -246,9 +246,14 @@
       "role": "user",
       "content": "скинул мэйн пи на изучение, что меняем?",
       "time": 1772145146.4212162
+    },
+    {
+      "role": "assistant",
+      "content": "Димасик, **фикс руками в handle_file_upload (~строки 1700-1750)**. 😎 3 изменения:\n\n### 1. **После `file_content = base64...` + logger** (добавь 4 строки):\n```python\nsession = await get_session(session_id)\nsession[\"files\"] = session.get(\"files\", {})\nsession[\"files\"][file_name] = file_content\nsession_store.schedule_save(session_id, session)\n```\n\n### 2. **JSON-блок** (замени manager.add_to_context):\n```python\n# БЫЛО:\nf\"[Загружен файл: {file_name}]\\n```json\\n{file_content[:3000]}\\n```\" + ...\n\n# СТАЛО:\nf\"[ОБНОВЛЕНИЕ ЗНАНИЙ: 📄 {file_name}]\\nРазмер: {len(file_content)} симв.\\nПервые 1000: ```json\\n{file_content[:1000]}...\\n```\\nПолный: session.files['{file_name}'] (tool read_file если нужно)\"\n```\n\n### 3. **Не-JSON блок** (аналогично except):\n```python\n# БЫЛО:\nf\"[Загружен файл: {file_name}]\\n```\\n{file_content[:3000]}\\n```\" + ...\n\n# СТАЛО:\nf\"[ОБНОВЛЕНИЕ ЗНАНИЙ: 📄 {file_name}]\\nРазмер: {len(file_content)} симв.\\nПервые 1000: ```\\n{file_content[:1000]}...\\n```\\nПолный: session.files['{file_name}']\"\n```\n\n**Эффект:** Full файл в session.files (GitHub сохранит), контекст ~1k chars (не режет историю). Патчи/анализ: СР видит summary, full для apply_patch из WS. Тест: загрузи большой патч → СР поймёт. Завтра diff усилит! 🌱🛠️",
+      "time": 1772145173.978778
     }
   ],
-  "last_active": 1772145146.4212244,
+  "last_active": 1772145173.9788084,
   "created_at": 1772128734.9526277,
   "modules_injected": true,
   "injection_timestamp": 1772144135.2926834
