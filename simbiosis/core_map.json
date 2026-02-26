@@ -1,6 +1,6 @@
 {
   "module": "core_map",
-  "version": "v1.0.0",
+  "version": "v1.1.0",
   "type": "navigation_map",
   "description": "Карта всего ядра и репозитория. Читается при каждом старте вместе с boot. Даёт СР полное понимание что где лежит и зачем.",
   "meta": {
@@ -13,7 +13,12 @@
       {
         "version": "v1.0.0",
         "date": "2026-02-23",
-        "summary": "Первая карта нового ядра simbiosis/"
+        "summary": "Создание модуля."
+      },
+      {
+        "version": "v1.1.0",
+        "date": "2026-02-27",
+        "summary": "Добавлен build_simbiosis_monolith.py, папка build/, расширен navigation_hint."
       }
     ],
     "roadmap": {
@@ -149,13 +154,27 @@
       "engineer-chat/requirements.txt": {
         "path": "engineer-chat/requirements.txt",
         "description": "Python зависимости инженерного чата."
+      },
+      "build_simbiosis_monolith": {
+        "py": {
+          "path": "build_simbiosis_monolith.py",
+          "description": "Сборщик монолита Симбиоза. Собирает все simbiosis/*.json в один файл mandala_simbiosis.monolith.latest.json.",
+          "related_module": "engineer_chat"
+        }
+      },
+      "build_monolith": {
+        "py": {
+          "path": "build_monolith.py",
+          "description": "Сборщик Core монолита (v5.2 архитектура). Собирает legacy модули в mandala_core.monolith.latest.json."
+        }
       }
     },
     "folders": {
-      "simbiosis/": "Новое ядро Мандалы. Модульная структура.",
-      "sessions/": "Сессии инженерного чата. JSON файлы сессий пользователей.",
-      ".github/workflows/": "CI/CD пайплайны. build-monolith.yml и ci.yml."
+      "simbiosis/": "Ядро Симбиоза. Модульная структура: boot, core_map, philosophy, seeds, roadmaps, engineer_chat, telegram_bot.",
+      "sessions/": "Сессии инженерного чата. JSON файл на каждый session_id.",
+      "build/": "Собранные монолиты: mandala_core.monolith.latest.json и mandala_simbiosis.monolith.latest.json.",
+      ".github/workflows/": "CI/CD: build-monolith.yml (Core), build-simbiosis-monolith.yml (Simbiosis), ci.yml."
     }
   },
-  "navigation_hint": "Не знаешь с чего начать? 1) Задан вопрос про идеи/планы → seeds или roadmaps. 2) Про чат/код → engineer_chat + read_file engineer-chat/main.py. 3) Про бота → telegram_bot + read_file bot.py. 4) Философский вопрос → philosophy. 5) Любое изменение файла → сначала read_file, потом патч."
+  "navigation_hint": "Не знаешь с чего начать? 1) Вопрос про идеи/планы → seeds или roadmaps. 2) Про чат/код → engineer_chat + read_file engineer-chat/main.py. 3) Про бота → telegram_bot + read_file bot.py. 4) Философский вопрос → philosophy. 5) Любое изменение файла → сначала read_file, потом патч. 6) Нужен монолит → build/mandala_simbiosis.monolith.latest.json. 7) Нужен патч → target_module + changes[] с op: update/add/delete/remove/replace/merge."
 }
