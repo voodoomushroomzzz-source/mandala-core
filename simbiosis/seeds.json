@@ -28,6 +28,11 @@
         "version": "v1.1.1",
         "date": "2026-02-27",
         "summary": "Remove SEED-008 dup. Sync registry."
+      },
+      {
+        "version": "v1.1.2",
+        "date": "2026-02-27",
+        "summary": "SEED-010: VoiceInput EngChat (gardener_voice)."
       }
     ],
     "roadmap": {
@@ -47,7 +52,7 @@
         }
       ]
     },
-    "version": "v1.1.1"
+    "version": "v1.1.2"
   },
   "protocols": {
     "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -118,13 +123,39 @@
       "status": "done",
       "description": "Нажатие на узел карты ядра или карточку файла отправляет read_file_request по WebSocket. СР читает файл через GitHub API и кладёт в контекст сессии.",
       "resonance": "high"
+    },
+    {
+      "id": "SEED-010",
+      "type": "feature",
+      "name": "Голосовой ввод в Engineer Chat",
+      "created": "2026-02-27",
+      "created_by": "gardener_voice",
+      "status": "active",
+      "ttl": "∞",
+      "resonance": "high",
+      "description": "Наговаривай текст в index.html → real-time STT → ask/chat/patch. EngChat primary, TG-bot secondary (voice→tasks).",
+      "content": {
+        "priority": "high",
+        "tech_stack": [
+          "1. Whisper Streaming WS (GitHub ScienceIO/whisper_streaming_web): JS mic→FFmpeg→Whisper server (main.py /ws_voice).",
+          "2. Vosk-browser offline: WebWorker Kaldi (model.tar.gz ~50MB, no server).",
+          "3. WebRTC VAD: navigator.mediaDevices → buffer → WS /ws {'type':'voice_text', 'text':stt_result}."
+        ],
+        "steps": [
+          "M1: index.html +mic btn (getUserMedia → Vosk/Whisper WS).",
+          "M2: main.py WS handler voice_chunk → STT → simul ask.",
+          "M3: TG /voice → proxy eng_chat WS (secondary)."
+        ],
+        "criteria": "Latency <2s, accuracy>90% RU/EN, zero-cost (DDG/Vosk)."
+      },
+      "roadmap_link": "RM-004 or eng_chat.M7"
     }
   ],
   "archive": [],
   "registry": {
     "last_updated": "2026-02-27",
-    "total_seeds": 7,
-    "active_seeds": 6,
+    "total_seeds": 8,
+    "active_seeds": 7,
     "archived": 0
   },
   "changes": {
