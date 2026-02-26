@@ -13,6 +13,11 @@
         "version": "v1.0.0",
         "date": "2026-02-23",
         "summary": "Создание модуля. Перенос из Akasha Chronicorum."
+      },
+      {
+        "version": "v1.1.0",
+        "date": "2026-02-27",
+        "summary": "RM-003: Scout-Agent roadmap."
       }
     ],
     "roadmap": {
@@ -25,7 +30,8 @@
           "description": "Базовая структура и перенос существующих карт"
         }
       ]
-    }
+    },
+    "version": "v1.1.0"
   },
   "roadmaps": {
     "RM-001": {
@@ -95,7 +101,43 @@
           "status": "vision"
         }
       ]
-    }
+    },
+    "RM-003": [
+      {
+        "id": "RM-003",
+        "title": "Scout-Agent: Deploy & Integrate",
+        "status": "active",
+        "priority": "high",
+        "origin_seed": "SEED-008",
+        "description": "Автономный агент для vitality Мандалы. Eng_chat primary: WS/cron. TG aux later (voice→tasks). Zero-cost.",
+        "milestones": [
+          {
+            "id": "RM-003-M1",
+            "name": "WS Handler в main.py",
+            "status": "planned",
+            "description": "type: 'start_scan' → Grok loop → Claude filter → apply_patch seeds."
+          },
+          {
+            "id": "RM-003-M2",
+            "name": "Cron APScheduler",
+            "status": "planned",
+            "description": "Daily scan fixed_topics. Log в sessions."
+          },
+          {
+            "id": "RM-003-M3",
+            "name": "UI в index.html",
+            "status": "planned",
+            "description": "Input queries + 'Start Scan' btn → WS. Table findings."
+          },
+          {
+            "id": "RM-003-M4",
+            "name": "TG Secondary",
+            "status": "planned",
+            "description": "/scout → WS proxy. Voice→tasks later."
+          }
+        ]
+      }
+    ]
   },
   "changes": {
     "v1.0.0": {
