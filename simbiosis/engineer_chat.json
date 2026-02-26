@@ -1,6 +1,6 @@
 {
   "module": "engineer_chat",
-  "version": "v1.0.0",
+  "version": "v1.1.0",
   "type": "product_module",
   "description": "Модуль инженерного чата Мандалы. Архитектура, компоненты, история, текущий статус и следующие шаги. Отдельная экосистема разработки.",
   "meta": {
@@ -12,7 +12,12 @@
       {
         "version": "v1.0.0",
         "date": "2026-02-23",
-        "summary": "Создание модуля. Выделен из Tectosphaera как отдельная сфера."
+        "summary": "Создание модуля."
+      },
+      {
+        "version": "v1.1.0",
+        "date": "2026-02-27",
+        "summary": "Актуальные модели (deepseek вместо kimi), env_vars, endpoints, ws_message_types, context_config, recently_resolved."
       }
     ],
     "roadmap": {
@@ -69,17 +74,19 @@
       "model_id": "x-ai/grok-4.1-fast",
       "env_key": "OPENROUTER_KEY",
       "temperature": 0.8,
+      "max_tokens": 8192,
       "tools": [
         "web_search",
         "read_file"
       ]
     },
-    "kimi": {
-      "role": "Главный инженер",
-      "api": "Moonshot",
-      "model_id": "kimi-k2.5",
-      "env_key": "MOONSHOT_API_KEY",
-      "temperature": 1.0,
+    "deepseek": {
+      "role": "Советник и ревьюер",
+      "api": "OpenRouter",
+      "model_id": "deepseek/deepseek-v3.2",
+      "env_key": "OPENROUTER_KEY",
+      "temperature": 0.7,
+      "max_tokens": 8192,
       "tools": [
         "web_search",
         "read_file"
@@ -90,7 +97,8 @@
       "api": "Anthropic",
       "model_id": "claude-sonnet-4-6",
       "env_key": "ANTHROPIC_API_KEY",
-      "temperature": 1.0,
+      "temperature": 1,
+      "max_tokens": 2048,
       "tools": []
     }
   },
@@ -101,8 +109,8 @@
     "on_update": "Сброс инъекции ядра, уведомление клиентов через WebSocket"
   },
   "current_issues": [
-    "Инъекция ядра тяжёлая (7 JSON в начале каждой сессии) — планируется переход на read_file по требованию",
-    "Файлы передаются через base64 по WebSocket — планируется серверное хранилище"
+    "Файлы до 3000 символов в контексте через base64 по WS — плановый переезд на серверное хранилище (SEED-002)",
+    "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search"
   ],
   "files": {
     "engineer-chat/main.py": "FastAPI бэкенд. ~1800 строк. Главный файл.",
@@ -115,5 +123,44 @@
       "date": "2026-02-23",
       "summary": "Создание модуля. Выделен из монолита."
     }
-  }
+  },
+  "env_vars": {
+    "GITHUB_TOKEN": "Чтение/запись репо. Обязателен.",
+    "OPENROUTER_KEY": "API для Grok и DeepSeek через OpenRouter.",
+    "ANTHROPIC_API_KEY": "API для Claude-наблюдателя.",
+    "GITHUB_WEBHOOK_SECRET": "HMAC-SHA256 для /github-webhook (опционально).",
+    "USE_TAVILY": "true/false — Tavily vs DuckDuckGo для веб-поиска (по умолчанию false).",
+    "TAVILY_API_KEY": "Ключ Tavily (если USE_TAVILY=true).",
+    "PORT": "Порт uvicorn (по умолчанию 8000)."
+  },
+  "endpoints": {
+    "GET /": "Статус сервера + список загруженных модулей (JSON)",
+    "GET /health": "Детальный health-check всех компонентов",
+    "WS /ws": "Основной WebSocket канал",
+    "POST /github-webhook": "Мгновенное обновление ядра при пуше в main",
+    "POST /refresh": "Принудительная перезагрузка всех модулей ядра"
+  },
+  "ws_message_types": {
+    "init": "Открыть сессию — { session_id }",
+    "ask": "Вопрос СР — { text, models: ['grok'|'deepseek'|'claude'] }",
+    "file": "Загрузить файл — { name, content: base64, caption? }",
+    "apply_patch": "Применить патч к ядру — { patch: {...} }",
+    "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
+    "refresh_modules": "Перезагрузить все модули ядра",
+    "toggle_observer": "Вкл/выкл Claude-наблюдателя",
+    "ping": "Keepalive → pong"
+  },
+  "context_config": {
+    "max_history_chars": 50000,
+    "note": "Ориентир — DeepSeek V3.2 (64K токенов ≈ 80K символов). 50K оставляет запас на системный промпт и ответ.",
+    "tool_loop_limit": 3,
+    "polling_interval_sec": 60,
+    "session_storage": "GitHub sessions/ (один JSON файл на session_id)"
+  },
+  "recently_resolved": [
+    "Лёгкая инъекция ядра: только boot+core_map при старте (было 7 JSON)",
+    "История сессии: 600K → 50K символов (под контекст DeepSeek)",
+    "max_tokens: Grok 4096→8192, Claude 1024→2048",
+    "Карта ядра: клик на модуль/файл → СР читает через read_file_request"
+  ]
 }
