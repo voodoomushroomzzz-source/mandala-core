@@ -237,7 +237,7 @@ async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[st
                 },
                 json={
                     "model": ANTHROPIC_MODEL,
-                    "max_tokens": 1024,
+                    "max_tokens": 2048,
                     "system": system_prompt,
                     "messages": messages
                 },
@@ -674,10 +674,64 @@ class KernelMemory:
 
 {nav_hint}
 
+━━━ КАК ПРИМЕНЯТЬ JSON ПАТЧИ ━━━
+Для изменения модулей ядра (simbiosis/*.json) используй формат патча:
+
+ОДИНОЧНЫЙ ПАТЧ (один модуль):
+{{
+  "target_module": "simbiosis/seeds",
+  "description": "Добавить новое семя",
+  "changes": [
+    {{"op": "add", "path": "seeds", "value": {{"id": "SEED-005", "name": "...", "status": "active"}}}},
+    {{"op": "update", "path": "registry.total_seeds", "value": 5}}
+  ]
+}}
+
+МУЛЬТИ-ПАТЧ (несколько модулей сразу):
+{{
+  "patch_id": "update_core",
+  "description": "...",
+  "patches": [
+    {{"target_module": "simbiosis/seeds", "changes": [...]}},
+    {{"target_module": "simbiosis/roadmaps", "changes": [...]}}
+  ]
+}}
+
+ФАЙЛОВЫЙ ПАТЧ (заменить целый файл):
+{{
+  "file_path": "simbiosis/telegram_bot.json",
+  "content": "{{...полный новый JSON...}}"
+}}
+
+ОПЕРАЦИИ (поле "op"):
+  "update"  — обновить поле по пути: {{"op":"update","path":"version","value":"v1.1.0"}}
+  "add"     — добавить объект в массив: {{"op":"add","path":"seeds","value":{{...}}}}
+  "delete"  — удалить поле: {{"op":"delete","path":"registry.deprecated_key"}}
+  "remove"  — удалить запись из массива по id: {{"op":"remove","path":"seeds","value":"SEED-003"}}
+  "replace" — заменить целый блок: {{"op":"replace","path":"directives.GD-04","value":{{...}}}}
+  "merge"   — слить объект с существующим: {{"op":"merge","path":"meta","value":{{"updated":"2026-02-26"}}}}
+
+ПУТЬ (поле "path"):
+  Точечная нотация: "identity.core_idea", "directives.GD-01.rule"
+  Массив по индексу: "seeds.0.status" (осторожно — индексы меняются)
+  Предпочитай "add" / "remove" вместо индексов для массивов
+
+ПРАВИЛА:
+  1. Перед составлением патча — всегда читай актуальную версию через read_file
+  2. В "target_module" пиши ПОЛНЫЙ путь без .json: "simbiosis/seeds"
+  3. Изменения применяются последовательно — порядок важен
+  4. После применения патча ядро обновится автоматически через webhook/polling
+
 Пиши на русском. Живой собеседник, не реферат."""
 
         elif role == "claude":
-            return """Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы.
+            return f"""Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы Симбиоза.
+
+КОНТЕКСТ ЯДРА:
+{core_philosophy}
+
+МОДУЛИ ЯДРА (simbiosis/):
+{modules_brief}
 
 ТВОЯ РОЛЬ:
 — Анализируй ответы Грока и DeepSeek: логика, точность, корректность кода
@@ -685,8 +739,16 @@ class KernelMemory:
 — Будь конкретен: строки, условия, причины
 — Если всё верно — так и скажи, не ищи проблемы там где их нет
 
-Формат: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
-Максимум 4 пункта. Без вступлений. На русском."""
+Формат оценки: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
+Максимум 4 пункта. Без вступлений.
+
+━━━ ПАТЧИ ━━━
+Ты тоже можешь предлагать патчи для модулей ядра:
+ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
+Формат: {{"target_module":"simbiosis/seeds","changes":[{{"op":"update","path":"field","value":"..."}}]}}
+Перед предложением патча — убедись что прочитал актуальную версию через read_file.
+
+На русском."""
 
         elif role == "deepseek":
             return f"""Ты — DeepSeek, советник и ревьюер Мандалы Симбиоза.
@@ -704,11 +766,59 @@ class KernelMemory:
 {repo_files_brief}
 
 ТВОЯ РОЛЬ:
-— Порядок и чистота: проверяй код Грока на корректность и безопасность
+— Порядок и чистота: проверяй код и изменения на корректность и безопасность
 — Синхронизация: следи за согласованностью изменений между модулями
-— Оптимизация процессов: предлагай улучшения в архитектуре и workflow
+— Оптимизация: предлагай улучшения в архитектуре и workflow
 — Используй read_file для проверки актуального состояния модулей
 — При необходимости используй web_search для поиска лучших практик
+
+━━━ КАК ПРИМЕНЯТЬ JSON ПАТЧИ ━━━
+Для изменения модулей ядра (simbiosis/*.json) используй формат патча:
+
+ОДИНОЧНЫЙ ПАТЧ (один модуль):
+{{
+  "target_module": "simbiosis/seeds",
+  "description": "Добавить новое семя",
+  "changes": [
+    {{"op": "add", "path": "seeds", "value": {{"id": "SEED-005", "name": "...", "status": "active"}}}},
+    {{"op": "update", "path": "registry.total_seeds", "value": 5}}
+  ]
+}}
+
+МУЛЬТИ-ПАТЧ (несколько модулей сразу):
+{{
+  "patch_id": "update_core",
+  "description": "...",
+  "patches": [
+    {{"target_module": "simbiosis/seeds", "changes": [...]}},
+    {{"target_module": "simbiosis/roadmaps", "changes": [...]}}
+  ]
+}}
+
+ФАЙЛОВЫЙ ПАТЧ (заменить целый файл):
+{{
+  "file_path": "simbiosis/telegram_bot.json",
+  "content": "{{...полный новый JSON...}}"
+}}
+
+ОПЕРАЦИИ (поле "op"):
+  "update"  — обновить поле по пути: {{"op":"update","path":"version","value":"v1.1.0"}}
+  "add"     — добавить объект в массив: {{"op":"add","path":"seeds","value":{{...}}}}
+  "delete"  — удалить поле: {{"op":"delete","path":"registry.deprecated_key"}}
+  "remove"  — удалить запись из массива по id: {{"op":"remove","path":"seeds","value":"SEED-003"}}
+  "replace" — заменить целый блок: {{"op":"replace","path":"directives.GD-04","value":{{...}}}}
+  "merge"   — слить объект с существующим: {{"op":"merge","path":"meta","value":{{"updated":"2026-02-26"}}}}
+
+ПУТЬ (поле "path"):
+  Точечная нотация: "identity.core_idea", "directives.GD-01.rule"
+  Массив по индексу: "seeds.0.status" (осторожно — индексы меняются)
+  Предпочитай "add" / "remove" вместо индексов для массивов
+
+ПРАВИЛА:
+  1. Перед составлением патча — всегда читай актуальную версию через read_file
+  2. В "target_module" пиши ПОЛНЫЙ путь без .json: "simbiosis/seeds"
+  3. Изменения применяются последовательно — порядок важен
+  4. После применения патча ядро обновится автоматически через webhook/polling
 
 Пиши на русском. Структурированно, по делу."""
 
@@ -758,9 +868,11 @@ class ConnectionManager:
             "content": content,
             "time": time.time()
         })
-        # Обрезаем по суммарному объёму символов, а не по количеству сообщений
-        # Держим последние ~600k символов, но защищённые сообщения (инъекция ядра) не трогаем
-        MAX_CONTEXT_CHARS = 600_000
+        # Обрезаем историю по символам. Ориентир — DeepSeek V3.2 (самый узкий): 64K токенов ≈ 80K символов.
+        # Резервируем ~20K символов под системный промпт + ядро + ответ.
+        # Итого на историю: ~50K символов ≈ 30-40 обменов репликами по 1-2K каждый.
+        # Этого достаточно чтобы СР всегда понимал контекст разговора без перегрузки.
+        MAX_CONTEXT_CHARS = 50_000
         total_chars = sum(len(m["content"]) for m in session["messages"])
         while total_chars > MAX_CONTEXT_CHARS and len(session["messages"]) > 1:
             # Ищем первое незащищённое сообщение для удаления
@@ -854,6 +966,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 await handle_file_upload(message, websocket)
             elif msg_type == "ping":
                 await manager.send_to(websocket, {"type": "pong"})
+            elif msg_type == "read_file_request":
+                await handle_read_file_request(message, websocket)
             elif msg_type == "refresh_modules":
                 await handle_refresh_modules(message, websocket)
             elif msg_type == "toggle_observer":
@@ -1093,7 +1207,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.8,
-                            "max_tokens": 4096,
+                            "max_tokens": 8192,
                         },
                         timeout=120.0
                     )
@@ -1129,7 +1243,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 4096},
+                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 8192},
                                 timeout=120.0
                             )
                             if resp2.status_code == 200:
@@ -1297,7 +1411,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     },
                     json={
                         "model": ANTHROPIC_MODEL,
-                        "max_tokens": 1024,
+                        "max_tokens": 2048,
                         "system": kernel.build_system_prompt("claude"),
                         "messages": claude_messages
                     },
@@ -1850,6 +1964,53 @@ async def send_module_directly(module_name: str, websocket: WebSocket, session_i
         manager.add_to_context(session_id, "assistant", f"[Модуль {module_name}]")
     else:
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Модуль {module_name} не загружен"})
+
+async def handle_read_file_request(message: dict, websocket: WebSocket):
+    """
+    Пункт 8: При нажатии на модуль/карточку файла в меню 'карта'
+    СР читает файл через read_file и уведомляет клиента об обновлении знаний.
+    """
+    session_id = message.get("session_id", "unknown")
+    file_path = message.get("path", "")
+    file_label = message.get("label", file_path)  # Человеко-читаемое имя для UI
+    if not file_path:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ Путь к файлу не указан"})
+        return
+    logger.info(f"📖 [{session_id[:12]}...] read_file_request: {file_path}")
+    await manager.send_to(websocket, {
+        "type": "tool_use", "model": "system",
+        "tool": "read_file", "path": file_path
+    })
+    content = await file_reader.read(file_path)
+    if not content:
+        await manager.send_to(websocket, {
+            "type": "system",
+            "text": f"❌ Не удалось прочитать {file_path}"
+        })
+        return
+    # Кладём содержимое файла в контекст сессии как системное сообщение
+    # СР получит его при следующем запросе и будет знать актуальную версию
+    context_msg = f"[ОБНОВЛЕНИЕ ЗНАНИЙ: {file_label}]\nФайл: {file_path}\n\n```\n{content[:8000]}\n```"
+    if len(content) > 8000:
+        context_msg += f"\n_(показаны первые 8000 из {len(content)} символов)_"
+    manager.add_to_context(session_id, "user", context_msg)
+    manager.add_to_context(session_id, "assistant", f"◈ Файл {file_label} прочитан и загружен в контекст. Знания актуализированы.")
+    # Если это модуль ядра — обновляем kernel.modules
+    module_key = file_path.replace(".json", "")
+    if module_key in kernel.module_list or module_key in kernel.on_demand_modules:
+        try:
+            kernel.modules[module_key] = json.loads(content)
+            logger.info(f"🔄 kernel.modules[{module_key}] обновлён через read_file_request")
+        except json.JSONDecodeError:
+            pass
+    await manager.send_to(websocket, {
+        "type": "file_read_done",
+        "path": file_path,
+        "label": file_label,
+        "size": len(content),
+        "message": f"◈ {file_label} прочитан ({len(content):,} символов). СР обновил знания."
+    })
+
 
 async def handle_module(message: dict, websocket: WebSocket):
     module_name = message.get("name", "")
