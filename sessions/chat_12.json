@@ -151,9 +151,14 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772128393.380331
+    },
+    {
+      "role": "user",
+      "content": "Ошибка применения: Путь roadmaps.RM-00 не найден",
+      "time": 1772128406.8345602
     }
   ],
-  "last_active": 1772128393.380344,
+  "last_active": 1772128406.834568,
   "created_at": 1772127368.1433382,
   "modules_injected": true,
   "injection_timestamp": 1772128366.645225
