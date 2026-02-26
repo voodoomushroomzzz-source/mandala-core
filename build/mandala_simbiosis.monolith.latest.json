@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-13cefeb7",
+  "version": "simbiosis-vv1.2.0-3708630d",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-26T21:47:54.460420+00:00",
-  "build_source": "083d826ea218e7caa523dfb1b8e678bcd9136247",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/083d826ea218e7caa523dfb1b8e678bcd9136247",
+  "build_timestamp": "2026-02-26T21:49:08.114445+00:00",
+  "build_source": "d88764bdfdcfd38764e8bd7e60b3d6954af46b39",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/d88764bdfdcfd38764e8bd7e60b3d6954af46b39",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -400,10 +400,15 @@
             "version": "v1.2.0",
             "date": "2026-02-27",
             "summary": "Убран DeepSeek. Активные модели: Grok + Claude."
+          },
+          {
+            "version": "v1.3.0",
+            "date": "2026-02-27",
+            "summary": "M6 Scout + WS-type. Eng_chat=primary."
           }
         ],
         "roadmap": {
-          "current_milestone": "M3 — Три модели",
+          "current_milestone": "M6 — Scout-Agent",
           "milestones": [
             {
               "id": "M1",
@@ -437,9 +442,16 @@
               "name": "Next.js переезд",
               "status": "planned",
               "description": "Полноценный фронтенд с авторизацией"
+            },
+            {
+              "id": "M6",
+              "name": "Scout-Agent",
+              "status": "planned",
+              "description": "WS 'start_scan' + cron. Eng_chat primary, TG secondary (voice→tasks later)."
             }
           ]
-        }
+        },
+        "version": "v1.3.0"
       },
       "architecture": {
         "hosting": "Render.com",
@@ -459,7 +471,8 @@
           "max_tokens": 8192,
           "tools": [
             "web_search",
-            "read_file"
+            "read_file",
+            "agent_scan"
           ]
         },
         "claude": {
@@ -480,7 +493,8 @@
       },
       "current_issues": [
         "Файлы до 3000 символов в контексте через base64 по WS — плановый переезд на серверное хранилище (SEED-002)",
-        "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search"
+        "Claude-наблюдатель не имеет доступа к инструментам read_file и web_search",
+        "Scout integration: WS+cron in main.py (RM-003-M1)"
       ],
       "files": {
         "engineer-chat/main.py": "FastAPI бэкенд. ~1800 строк. Главный файл.",
@@ -518,7 +532,10 @@
         "read_file_request": "Попросить СР прочитать файл из репо — { path, label? }",
         "refresh_modules": "Перезагрузить все модули ядра",
         "toggle_observer": "Вкл/выкл Claude-наблюдателя",
-        "ping": "Keepalive → pong"
+        "ping": "Keepalive → pong",
+        "start_scan": [
+          "Scout trigger — {queries: [str], cron_mode?: bool}"
+        ]
       },
       "context_config": {
         "max_history_chars": 50000,
@@ -702,6 +719,11 @@
             "version": "v1.1.0",
             "date": "2026-02-27",
             "summary": "SEED-008: Scout-Agent логика + chat priorities."
+          },
+          {
+            "version": "v1.1.0",
+            "date": "2026-02-27",
+            "summary": "SEED-008: Scout-Agent + chat priorities (eng primary)."
           }
         ],
         "roadmap": {
@@ -822,13 +844,43 @@
               ]
             }
           }
+        },
+        {
+          "id": "SEED-008",
+          "type": "feature",
+          "name": "Scout-Agent: Автономный веб-сканировщик",
+          "created": "2026-02-27",
+          "created_by": "sr_initiative",
+          "status": "active",
+          "ttl": "90d",
+          "description": "Primary: eng_chat WS 'start_scan' {queries:['...']}. Grok web_search→raw. Claude score>7/10 (ахимса). Auto-patch SCAN-*. Cron daily fixed_topics. TG aux (voice later).",
+          "resonance": "high",
+          "content": {
+            "logic": "Trigger→queries loop→search→validate→patch seeds.",
+            "fixed_topics": [
+              "open-source AI agents 2026 free",
+              "AI symbiosis 2026",
+              "OSS AI grants donations"
+            ],
+            "example": {
+              "id": "SCAN-2026-02-27",
+              "query": "agents",
+              "findings": [
+                {
+                  "title": "CrewAI",
+                  "url": "github.com/crewai/crewai",
+                  "score": "9/10"
+                }
+              ]
+            }
+          }
         }
       ],
       "archive": [],
       "registry": {
         "last_updated": "2026-02-27",
-        "total_seeds": 7,
-        "active_seeds": 6,
+        "total_seeds": 8,
+        "active_seeds": 7,
         "archived": 0
       },
       "changes": {
@@ -938,7 +990,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-26T21:47:54.460420+00:00",
+    "timestamp": "2026-02-26T21:49:08.114445+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -972,6 +1024,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-26 21:47:54 UTC"
+    "built_at": "2026-02-26 21:49:08 UTC"
   }
 }
