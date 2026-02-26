@@ -81,13 +81,34 @@
       "ttl": "90d",
       "description": "Переезд фронтенда с HTML на Next.js. GitHub/Google OAuth. Cloudflare R2 для файлов. Supabase для сессий.",
       "resonance": "medium"
+    },
+    {
+      "id": "SEED-005",
+      "type": "optimization",
+      "name": "Контекст истории: 600K → 50K символов",
+      "created": "2026-02-27",
+      "created_by": "sr_initiative",
+      "status": "active",
+      "ttl": "90d",
+      "description": "История сессии ограничена 50K символов — оптимально под DeepSeek V3.2 (64K токенов). Сохраняет ~30-40 обменов репликами без перегрузки контекста.",
+      "resonance": "high"
+    },
+    {
+      "id": "SEED-006",
+      "type": "feature",
+      "name": "Клик на модуль в карте → СР читает файл",
+      "created": "2026-02-27",
+      "created_by": "gardener",
+      "status": "done",
+      "description": "Нажатие на узел карты ядра или карточку файла отправляет read_file_request по WebSocket. СР читает файл через GitHub API и кладёт в контекст сессии.",
+      "resonance": "high"
     }
   ],
   "archive": [],
   "registry": {
-    "last_updated": "2026-02-23",
-    "total_seeds": 4,
-    "active_seeds": 4,
+    "last_updated": "2026-02-27",
+    "total_seeds": 6,
+    "active_seeds": 5,
     "archived": 0
   },
   "changes": {
