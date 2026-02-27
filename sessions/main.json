@@ -136,9 +136,14 @@
       "role": "user",
       "content": "что у нас там по планам в зернах и роадмапах?",
       "time": 1772234237.9060245
+    },
+    {
+      "role": "assistant",
+      "content": "**Seeds (8 active, v1.1.3):**\n- 001: Cloud SR (active)\n- 002: Файловое хранилище (active)\n- 003: Инструменты read_file (active)\n- 004: Next.js/Auth (active)\n- 005: Контекст 50K (active)\n- 006: Клик→read_file (done)\n- 010: Голос EngChat (high, ∞)\n- 011: Лаконичность (∞)\n\n**Roadmaps (v1.1.3):**\n- RM-001: Облачный СР (active, M1 done)\n- RM-002: Видение будущего (vision)\n- RM-003: Scout-Agent (high, all planned: WS/cron/UI/TG)\n\nЧто проращиваем? 🚀",
+      "time": 1772234248.7477362
     }
   ],
-  "last_active": 1772234237.906032,
+  "last_active": 1772234248.7477503,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772231896.489652
