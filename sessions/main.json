@@ -191,9 +191,14 @@
       "role": "user",
       "content": "Далее, у нас есть что-то в разработках по тг боту?",
       "time": 1772234947.4253345
+    },
+    {
+      "role": "assistant",
+      "content": "Да, Димас! 😊\n\n**TG бот (bot.py v3.32.0):**\n- Активен на Render (aiogram 3, webhook).\n- Функции: Патчи JSON/файлов (self-update bot.py), скачивание монолитов (core/simbiosis), чат с cloud SR (модели: deepseek/qwen/yandex/gemma), линзы (п/а/с/м/ф/к), Fructus upload.\n- Новое: \"💾 Симбиозис монолит\".\n\n**В разработках:**\n- Нет roadmaps/telegram_bot.json (не найден).\n- Seeds: SEED-010 Voice TG (secondary, M3 planned).\n- Нет открытых планов — стабильный.\n\nДоработать voice или features? 🚀",
+      "time": 1772234961.2138767
     }
   ],
-  "last_active": 1772234947.4253438,
+  "last_active": 1772234961.2138968,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772234947.425208
