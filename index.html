@@ -1147,7 +1147,7 @@
         </div>
     </div>
 
-    <!-- Модальные окна (оставлены только для патча, переименование чата убрано) -->
+    <!-- Модальные окна (только для патча) -->
     <div class="modal-overlay" id="patchModal">
         <div class="modal">
             <div class="modal-header"><div class="modal-title">◈ ПРИМЕНИТЬ ПАТЧ</div><button class="modal-close" onclick="closePatchModal()">×</button></div>
@@ -1161,8 +1161,9 @@
     <div class="toast" id="toast"></div>
         <script>
         // ==================== КОНСТАНТЫ ====================
-        const WS_URL = (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws';
-        const API_BASE = window.location.origin;
+        // Явно указываем адрес Render (не динамический)
+        const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
+        const API_BASE = 'https://mandala-engineer-chat.onrender.com';
         const GITHUB_REPO = 'voodoomushroomzzz-source/mandala-core';
 
         // Глобальные переменные
