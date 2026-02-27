@@ -234,100 +234,6 @@
         /* Layout */
         .layout { flex: 1; display: flex; overflow: hidden; position: relative; z-index: 1; }
 
-        /* Chat list */
-        .chat-list {
-            width: 220px;
-            border-right: 1px solid var(--line);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .chat-list-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--line);
-            font-family: var(--mono);
-            font-size: 9px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--green-bright);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .new-chat-btn {
-            background: transparent;
-            border: 1px solid var(--green-2);
-            color: var(--green-bright);
-            width: 24px;
-            height: 24px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        .new-chat-btn:hover {
-            background: var(--green-2);
-            color: var(--bg);
-        }
-        .chat-items {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px;
-        }
-        .chat-item {
-            padding: 10px 12px;
-            margin-bottom: 4px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.15s;
-            border: 1px solid transparent;
-        }
-        .chat-item:hover {
-            background: var(--surface-2);
-            border-color: var(--line-2);
-        }
-        .chat-item.active {
-            background: var(--surface-2);
-            border-color: var(--green-2);
-        }
-        .chat-item-title {
-            font-size: 12px;
-            color: var(--text);
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .chat-item-actions {
-            display: flex;
-            gap: 4px;
-            opacity: 0;
-            transition: opacity 0.15s;
-        }
-        .chat-item:hover .chat-item-actions {
-            opacity: 1;
-        }
-        .chat-item-action {
-            background: transparent;
-            border: none;
-            color: var(--text-3);
-            cursor: pointer;
-            padding: 2px 4px;
-            font-size: 10px;
-        }
-        .chat-item-action:hover {
-            color: var(--green-bright);
-        }
-        .chat-item-action.delete:hover {
-            color: #f43f5e;
-        }
 
         /* Content */
         .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
@@ -1174,15 +1080,6 @@
     </header>
 
     <div class="layout">
-        <!-- Левая панель со списком чатов -->
-        <div class="chat-list">
-            <div class="chat-list-header">
-                <span>чаты</span>
-                <button class="new-chat-btn" onclick="createNewChat()" title="Новый чат">+</button>
-            </div>
-            <div class="chat-items" id="chatList"></div>
-        </div>
-
         <!-- Контент (вкладки) -->
         <div class="content">
             <div class="tabs">
@@ -1539,6 +1436,10 @@
                 case 'modules_refreshed':
                     showToast(`◈ обновлено ${data.count} модулей`, 'success');
                     break;
+                case 'tool_use':
+                    // Реальный статус: что СР делает прямо сейчас
+                    updateThinkingStatus(data);
+                    break;
                 case 'file_processed':
                     fileNameEl.textContent = `✅ ${data.summary}`;
                     fileProgressBar.style.width = '100%';
@@ -1551,8 +1452,18 @@
                     }, 2000);
                     break;
                 case 'file_read_done':
-                    // СР прочитал файл — показываем подтверждение в чате
-                    addSystemMessage(`✅ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов). Знания СР обновлены. Можешь задавать вопросы.`);
+                    // Файл прочитан → обновляем статус и сразу просим СР ответить
+                    updateThinkingStatus({ tool: 'read_file', path: data.path, model: Array.from(activeModels)[0] });
+                    addSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов) — СР изучает`);
+                    // Автоматически отправляем ask чтобы СР ответил без дублирования
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({
+                            type: 'ask',
+                            text: `Ты только что прочитал файл ${escapeHtml(data.label || data.path)}. Изучи его и дай своё мнение: что это, какова структура, что важно знать.`,
+                            session_id: currentChatId,
+                            models: getActiveModels()
+                        }));
+                    }
                     break;
                 case 'patch_result':
                     handlePatchResult(data.results);
@@ -1837,7 +1748,7 @@
                             name: file.name,
                             content: e.target.result.split(',')[1],
                             file_type: file.type || 'application/octet-stream',
-                            caption: '',
+                            caption: inputEl.value.trim(),
                             session_id: currentChatId,
                             models: getActiveModels()
                         }));
@@ -1868,9 +1779,23 @@
         function handleFileSelect(e) {
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
-            pendingFiles = files;
-            updateFilePreview();
-            inputEl.focus();
+            // Если текст в поле есть — показываем превью и ждём кнопки
+            // Если текст пустой — сразу отправляем файл (СР сам знает что делать)
+            if (inputEl.value.trim()) {
+                pendingFiles = files;
+                updateFilePreview();
+                inputEl.focus();
+            } else {
+                pendingFiles = files;
+                updateFilePreview();
+                // Небольшой delay чтобы пользователь видел что файл принят
+                setTimeout(() => {
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        sendFiles(files, '');
+                        clearFiles();
+                    }
+                }, 300);
+            }
         }
 
         function updateFilePreview() {
@@ -1899,9 +1824,20 @@
                 document.body.style.boxShadow = '';
                 const files = Array.from(e.dataTransfer.files);
                 if (files.length > 0) {
-                    pendingFiles = files;
-                    updateFilePreview();
-                    inputEl.focus();
+                    if (inputEl.value.trim()) {
+                        pendingFiles = files;
+                        updateFilePreview();
+                        inputEl.focus();
+                    } else {
+                        pendingFiles = files;
+                        updateFilePreview();
+                        setTimeout(() => {
+                            if (ws && ws.readyState === WebSocket.OPEN) {
+                                sendFiles(files, '');
+                                clearFiles();
+                            }
+                        }, 300);
+                    }
                 }
             });
         }
@@ -2008,7 +1944,6 @@
         }
 
         function showThinking(model) {
-            // Ставим иконку и цвет активной модели
             const m = model || Array.from(activeModels)[0] || 'grok';
             const svgEl = document.getElementById('thinkingIconSvg');
             const labelEl = document.getElementById('thinkingLabel');
@@ -2016,10 +1951,7 @@
                 const tmp = document.createElement('div');
                 tmp.innerHTML = modelIcons[m];
                 const newSvg = tmp.querySelector('svg');
-                if (newSvg) {
-                    newSvg.id = 'thinkingIconSvg';
-                    svgEl.replaceWith(newSvg);
-                }
+                if (newSvg) { newSvg.id = 'thinkingIconSvg'; svgEl.replaceWith(newSvg); }
             }
             if (labelEl) {
                 const names = { grok: 'Грок думает', claude: 'Клод думает' };
@@ -2030,7 +1962,31 @@
             scrollToBottom();
         }
 
+        function updateThinkingStatus(data) {
+            // Обновляет лейбл индикатора реальным статусом из API
+            const labelEl = document.getElementById('thinkingLabel');
+            if (!labelEl) return;
+            const model = data.model || Array.from(activeModels)[0] || 'grok';
+            const name = { grok: 'Грок', claude: 'Клод' }[model] || 'СР';
+            if (data.tool === 'web_search') {
+                const q = data.query ? `«${data.query.slice(0, 40)}»` : '';
+                labelEl.textContent = `${name} ищет ${q}`;
+            } else if (data.tool === 'read_file') {
+                const p = data.path ? data.path.split('/').pop() : '';
+                labelEl.textContent = `${name} читает ${p}`;
+            } else {
+                labelEl.textContent = `${name} думает`;
+            }
+            // Восстановим дефолтный текст через 3 сек если ответ ещё не пришёл
+            clearTimeout(window._thinkingResetTimer);
+            window._thinkingResetTimer = setTimeout(() => {
+                const names = { grok: 'Грок думает', claude: 'Клод думает' };
+                if (labelEl) labelEl.textContent = names[model] || 'думаю';
+            }, 3000);
+        }
+
         function hideThinking() {
+            clearTimeout(window._thinkingResetTimer);
             thinkingEl.classList.add('hidden');
         }
 
@@ -2312,6 +2268,7 @@
             document.getElementById('tab-chat').classList.add('active');
 
             addSystemMessage(`◈ Запрашиваю у СР чтение файла: <code style="font-family:var(--mono);font-size:11px;background:var(--surface-2);padding:2px 6px;border-radius:3px;">${escapeHtml(filePath)}</code>`);
+            showThinking(Array.from(activeModels)[0]);
             ws.send(JSON.stringify({
                 type: 'read_file_request',
                 path: filePath,
