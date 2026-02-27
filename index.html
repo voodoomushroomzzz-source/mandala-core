@@ -1468,6 +1468,9 @@
                 case 'patch_result':
                     handlePatchResult(data.results);
                     break;
+                case 'patch_preview':
+                    handlePatchPreview(data);
+                    break;
                 case 'resonance':
                     updateResonance(data.value, data.level);
                     break;
@@ -2402,6 +2405,45 @@
         function handlePatchResult(results) {
             results.forEach(r => addSystemMessage(`◈ ${r.status==='success'?'✓':'✗'} ${r.file||r.module}: ${r.message}`));
         }
+
+        function handlePatchPreview(data) {
+            // Показываем diff preview перед применением патча
+            const diffLines = data.diff || [];
+            const file = data.file || 'unknown';
+            const success = data.success !== false;
+            
+            let previewText = `**📊 Diff Preview: ${file}**\n\n`;
+            
+            if (diffLines.length === 0) {
+                previewText += '_Изменений не обнаружено_\n';
+            } else {
+                previewText += '```diff\n';
+                diffLines.forEach(line => {
+                    previewText += line + '\n';
+                });
+                previewText += '```\n';
+            }
+            
+            if (data.applied && data.applied.length > 0) {
+                previewText += `\n✅ Применено операций: ${data.applied.length}\n`;
+            }
+            
+            if (data.failed && data.failed.length > 0) {
+                previewText += `\n❌ Ошибок: ${data.failed.length}\n`;
+                data.failed.forEach(f => {
+                    previewText += `  • ${f.op} ${f.path}: ${f.error}\n`;
+                });
+            }
+            
+            appendFullMessage(previewText, true);
+            
+            if (!success) {
+                showToast(`◈ Патч ${file} содержит ошибки`, 'error');
+            } else {
+                showToast(`◈ Diff подготовлен для ${file}`, 'success');
+            }
+        }
+
 
         // ==================== БЫСТРЫЕ ДЕЙСТВИЯ ====================
         function quickAction(action) {
