@@ -146,9 +146,14 @@
       "role": "user",
       "content": "- 001: Cloud SR (active)\n- 002: Файловое хранилище (active)\n- 003: Инструменты read_file (active)\n- 004: Next.js/Auth (active)\n- 005: Контекст 50K (active)\n- 006: Клик→read_file (done)\n---\nесли это готово, то можно убирать из семян верно?",
       "time": 1772234759.0938492
+    },
+    {
+      "role": "assistant",
+      "content": "Да, Димас! 😊\n\n**Готовые seeds убрать/архивировать:**\n- 006: done → remove.\n- 001-005: active → status: \"done\" или remove (если полная реализация).\n\n**Но:** read_file(\"simbiosis/seeds\") → \"Файл не найден\". Нет актуального состояния в репо.\n\n**Предлагаю патч (сначала добавим/создадим seeds если нужно):**\n```json\n{\n  \"target_module\": \"simbiosis/seeds\",\n  \"description\": \"Archive done/active seeds 001-006\",\n  \"changes\": [\n    {\"op\": \"remove\", \"path\": \"seeds\", \"value\": \"SEED-001\"},\n    {\"op\": \"remove\", \"path\": \"seeds\", \"value\": \"SEED-002\"},\n    {\"op\": \"remove\", \"path\": \"seeds\", \"value\": \"SEED-003\"},\n    {\"op\": \"remove\", \"path\": \"seeds\", \"value\": \"SEED-004\"},\n    {\"op\": \"remove\", \"path\": \"seeds\", \"value\": \"SEED-005\"},\n    {\"op\": \"remove\", \"path\": \"seeds\", \"value\": \"SEED-006\"},\n    {\"op\": \"update\", \"path\": \"registry.total_seeds\", \"value\": 2}\n  ]\n}\n```\n\nПрименить в UI или подтвердить? 🚀",
+      "time": 1772234771.601783
     }
   ],
-  "last_active": 1772234759.0938568,
+  "last_active": 1772234771.6018007,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772231896.489652
