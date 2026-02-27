@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-90a335ec",
+  "version": "simbiosis-vv1.2.0-6e88c989",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-27T23:28:44.354555+00:00",
-  "build_source": "149b7038613323537b35729562b92d4117a3cf28",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/149b7038613323537b35729562b92d4117a3cf28",
+  "build_timestamp": "2026-02-27T23:31:36.774753+00:00",
+  "build_source": "a332a8c0866ff9eba55bf7a87c82ef20816b7ecc",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/a332a8c0866ff9eba55bf7a87c82ef20816b7ecc",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -798,6 +798,11 @@
             "version": "v1.2.0",
             "date": "2026-02-27",
             "summary": "Archive SEED-001-006 → active=2"
+          },
+          {
+            "version": "v1.2.1",
+            "date": "2026-02-27",
+            "summary": "Add SEED-012 TG-Eng proxy."
           }
         ],
         "roadmap": {
@@ -817,7 +822,7 @@
             }
           ]
         },
-        "version": "v1.2.0"
+        "version": "v1.2.1"
       },
       "protocols": {
         "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -868,6 +873,33 @@
               "Развёрнуто: идеи/патчи/roadmaps/search."
             ]
           }
+        },
+        {
+          "id": "SEED-012",
+          "type": "feature",
+          "name": "TG Bot как продолжение EngChat (proxy WS + shared context)",
+          "created": "2026-02-27",
+          "created_by": "gardener",
+          "status": "active",
+          "ttl": "∞",
+          "resonance": "high",
+          "description": "bot.py → WS /ws main.py. Grok стиль ответов, tools (search/read_file/patch), сессии через S3 (RM-001).",
+          "content": {
+            "priority": "high",
+            "tech_stack": [
+              "aiogram WSClient → httpx WS main.py /ws",
+              "Sessions: Redis/S3 shared с EngChat",
+              "Commands: /eng <msg> → proxy, /patch → JSON UI"
+            ],
+            "steps": [
+              "M1: bot.py WS proxy (aiogram → main.py /ws).",
+              "M2: Shared sessions (user_id → session_id).",
+              "M3: Tools/patches в TG (inline kb).",
+              "M4: Voice TG → Eng STT."
+            ],
+            "criteria": "Latency<3s, full tools, context sync."
+          },
+          "roadmap_link": "RM-004"
         }
       ],
       "archive": [
@@ -943,8 +975,8 @@
       ],
       "registry": {
         "last_updated": "2026-02-27",
-        "total_seeds": 9,
-        "active_seeds": 2,
+        "total_seeds": 10,
+        "active_seeds": 3,
         "archived": 6
       },
       "changes": {
@@ -1054,7 +1086,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-27T23:28:44.354555+00:00",
+    "timestamp": "2026-02-27T23:31:36.774753+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -1088,6 +1120,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-27 23:28:44 UTC"
+    "built_at": "2026-02-27 23:31:36 UTC"
   }
 }
