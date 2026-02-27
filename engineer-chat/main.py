@@ -2059,7 +2059,6 @@ async def root():
         "modules_loaded": [m.split("/")[-1] for m in kernel.modules.keys()],
         "core_version": kernel.global_commit_sha or "—",
         "github_configured": session_store.token is not None,
-        "moonshot_configured": MOONSHOT_API_KEY is not None,
         "grok_configured": OPENROUTER_API_KEY is not None,
         "claude_configured": ANTHROPIC_API_KEY is not None,
     }
@@ -2075,7 +2074,6 @@ async def health():
         "core_version": kernel.global_commit_sha or "—",
         "last_update": kernel.last_update.isoformat() if kernel.last_update else None,
         "github": "ok" if GITHUB_TOKEN else "missing",
-        "moonshot": "ok" if MOONSHOT_API_KEY else "missing",
         "grok": "ok" if OPENROUTER_API_KEY else "missing",
         "claude": "ok" if ANTHROPIC_API_KEY else "missing",
         "tavily": "enabled" if USE_TAVILY else "disabled",
