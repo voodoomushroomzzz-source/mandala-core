@@ -101,9 +101,14 @@
       "role": "assistant",
       "content": "Да, Димас! 😊\n\n**JSON патчи для модулей (simbiosis/*.json):** В ядре (boot/core_map инструкции). Форматы:\n- Одиночный: `{target_module: \"simbiosis/seeds\", changes: [{op:\"add\", path:\"seeds\", value:{id:\"SEED-1\"}}]}`\n- Мульти: `{patches: [{target_module: \"...\", changes:[...]}]}`\n- Файловый: `{file_path: \"simbiosis/bot.json\", content: \"{...}\"}`\n- Op: add/update/delete/remove/replace/merge. Перед: read_file.\n\n**Diff патчи для больших (main.py/index.html):** В main.py — GitHub API (Contents/PullRequests для diff/merge). Инструкция не в ядре (не нашёл в engineer_chat/seeds). Нужно в seeds/roadmaps? Расскажи детали или патчни.\n\nРезонанс? 🚀",
       "time": 1772232231.755899
+    },
+    {
+      "role": "user",
+      "content": "а ты в мэйн пи что то про diff патчи видешь?",
+      "time": 1772232414.273513
     }
   ],
-  "last_active": 1772232231.7559144,
+  "last_active": 1772232414.2735193,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772231896.489652
