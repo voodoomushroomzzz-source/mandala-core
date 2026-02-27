@@ -111,9 +111,19 @@
       "role": "assistant",
       "content": "Да, Димас! 😊\n\n**В main.py про патчи:**\n- **JSON патчи** (simbiosis/*.json): Полная поддержка в `handle_apply_patch`. Op: update/add/delete/remove/replace/merge.\n- **Diff preview**: `generate_simple_diff` — custom список строк \"+/- path: old→new\" для dry-run. Отправляет в UI как \"patch_preview\".\n- **Для больших (py/html)**: ❌ Нет. Только .json файлы. Non-JSON → \"Патчи применяются только к .json\".\n- **Сохранение**: GitHub Contents PUT (полная замена с sha).\n\nВнедрили diff для non-JSON? Пока не вижу — патч на `handle_apply_patch`? 🚀",
       "time": 1772232429.851158
+    },
+    {
+      "role": "user",
+      "content": "Так тоесть мэйн пи не предназначет для diff патчей?",
+      "time": 1772234182.2416115
+    },
+    {
+      "role": "assistant",
+      "content": "Да, Димас! 😊\n\n**main.py не для diff патчей:**\n- Только **JSON патчи** (simbiosis/*.json): handle_apply_patch с op/merge и т.д.\n- Non-JSON (py/html): Только **полная замена** (PUT contents с sha).\n- Diff preview: Только simple_diff для JSON (dry-run).\n\nНужен патч для git diff/merge на большие файлы? 🚀",
+      "time": 1772234186.9114382
     }
   ],
-  "last_active": 1772232429.8511734,
+  "last_active": 1772234186.9114552,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772231896.489652
