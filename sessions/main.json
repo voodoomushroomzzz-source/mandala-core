@@ -241,9 +241,14 @@
       "role": "user",
       "content": "расчитай какая стоимость будет выходить ксли мы будем генерить 3-4 картинкаи и 1-2 видео в неделю",
       "time": 1772235716.8373826
+    },
+    {
+      "role": "assistant",
+      "content": "**Расчёт (4 img + 2 video/нед, месяц=4 нед, 2026 pricing из search):**\n\n| API | Img cost | 4 img/w | Video cost | 2 vid/w | **Week** | **Month** |\n|-----|----------|---------|-------------|---------|----------|-----------|\n| **Fal.ai** (Flux/SD3) | $0.003 | $0.012 | $0.02 (AnimDiff) | $0.04 | **$0.052** | **$0.21** |\n| **Replicate** (Flux/StabVid) | $0.0031 | $0.012 | $0.03 (GPU/sec) | $0.06 | **$0.072** | **$0.29** |\n| **CF Workers** (SDXL/PixArt) | **$0** (free tier) | $0 | ❌ no | - | **$0** (img only) | **$0** |\n\n**Итог:** $0.20-0.30/мес (Fal/Replicate). CF бесплатно для img (10k req free). 🚀",
+      "time": 1772235738.875556
     }
   ],
-  "last_active": 1772235716.8373904,
+  "last_active": 1772235738.8755856,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772235310.1618412
