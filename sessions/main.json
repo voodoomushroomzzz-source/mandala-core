@@ -171,9 +171,14 @@
       "role": "assistant",
       "content": "Димас! 😊 **Seeds.json (v1.1.3)** — **банк зачатков идей** Мандалы. Семена из диалогов/поисков: прорастают в roadmaps или archive (TTL 30d). 9 семян (8 active).\n\n### Структура:\n- **meta**: Версии (history до v1.1.3), roadmap (M1 done, M2 planned).\n- **protocols**: Seeding (СР предлагает), evaluation (30d), archiving.\n- **seeds[]** (9): {id, type, name, status(active/done), ttl, description/content, resonance}.\n  - 001-005: active (Cloud SR, files, tools, Next.js, context 50K).\n  - 006: done (click→read_file).\n  - 010: Voice EngChat (high, ∞, steps/tech).\n  - 011: Laconic policy (∞).\n- **archive[]**: Пусто.\n- **registry**: total=9, active=8.\n- **changes**: История правок.\n\n### Важно знать:\n- СР сам seeds (high resonance → \"записать?\").\n- Archive вместо delete.\n- Link to roadmaps (RM-001, RM-004).\n\n**Мнение:** Идеальный инкубатор — органично растёт, Ахимса в чистом виде. 001-006 → archive? Патч? 🚀",
       "time": 1772234799.353618
+    },
+    {
+      "role": "user",
+      "content": "Давай архивировать, если это контекст не будет сильно нагружать",
+      "time": 1772234864.0136185
     }
   ],
-  "last_active": 1772234799.3536417,
+  "last_active": 1772234864.0136275,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772231896.489652
