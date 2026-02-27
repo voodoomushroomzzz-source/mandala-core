@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-6e88c989",
+  "version": "simbiosis-vv1.2.0-1e8260bf",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-27T23:31:36.774753+00:00",
-  "build_source": "a332a8c0866ff9eba55bf7a87c82ef20816b7ecc",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/a332a8c0866ff9eba55bf7a87c82ef20816b7ecc",
+  "build_timestamp": "2026-02-27T23:34:17.224893+00:00",
+  "build_source": "ab987cdf018da6240b0fd1768dcd3752fd40be8f",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ab987cdf018da6240b0fd1768dcd3752fd40be8f",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -803,6 +803,11 @@
             "version": "v1.2.1",
             "date": "2026-02-27",
             "summary": "Add SEED-012 TG-Eng proxy."
+          },
+          {
+            "version": "v1.2.2",
+            "date": "2026-02-27",
+            "summary": "Add SEED-013 Graphic Agent."
           }
         ],
         "roadmap": {
@@ -822,7 +827,7 @@
             }
           ]
         },
-        "version": "v1.2.1"
+        "version": "v1.2.2"
       },
       "protocols": {
         "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -900,6 +905,34 @@
             "criteria": "Latency<3s, full tools, context sync."
           },
           "roadmap_link": "RM-004"
+        },
+        {
+          "id": "SEED-013",
+          "type": "feature",
+          "name": "Graphic Agent: auto img/video по запросу",
+          "created": "2026-02-27",
+          "created_by": "gardener",
+          "status": "active",
+          "ttl": "∞",
+          "resonance": "high",
+          "description": "СР: 'Нужна визуал? → Graphic Agent gen img/video → inline в чат/TG.' Trigger: keywords или tool_call.",
+          "content": {
+            "priority": "high",
+            "tech_stack": [
+              "1. Fal.ai API (sd3/flux, $0.003/img, video AnimateDiff) — fastest/cheapest.",
+              "2. Cloudflare Workers AI (PixArt-α/SDXL turbo, zero-cost, img-only).",
+              "3. Replicate (FLUX.1, free tier 100/day, video support).",
+              "4. OpenRouter tools (grok-vision proxy + img-gen models)."
+            ],
+            "steps": [
+              "M1: main.py tool generate_graphic(prompt, type='img/video').",
+              "M2: index.html/TG inline preview (base64/url).",
+              "M3: Auto-trigger в промпте СР.",
+              "M4: Upscale/edit (ComfyUI API)."
+            ],
+            "criteria": "Latency<10s, quality>SDXL, multi-modal (RU/EN), inline."
+          },
+          "roadmap_link": "RM-005"
         }
       ],
       "archive": [
@@ -975,8 +1008,8 @@
       ],
       "registry": {
         "last_updated": "2026-02-27",
-        "total_seeds": 10,
-        "active_seeds": 3,
+        "total_seeds": 11,
+        "active_seeds": 4,
         "archived": 6
       },
       "changes": {
@@ -1086,7 +1119,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-27T23:31:36.774753+00:00",
+    "timestamp": "2026-02-27T23:34:17.224893+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -1120,6 +1153,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-27 23:31:36 UTC"
+    "built_at": "2026-02-27 23:34:17 UTC"
   }
 }
