@@ -38,6 +38,11 @@
         "version": "v1.1.3",
         "date": "2026-02-27",
         "summary": "SEED-011: Ахимса лаконичность."
+      },
+      {
+        "version": "v1.2.0",
+        "date": "2026-02-27",
+        "summary": "Archive SEED-001-006 → active=2"
       }
     ],
     "roadmap": {
@@ -57,7 +62,7 @@
         }
       ]
     },
-    "version": "v1.1.3"
+    "version": "v1.2.0"
   },
   "protocols": {
     "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -65,70 +70,6 @@
     "archiving": "Неактивные семена переходят в archive блок того же файла. Не удаляются."
   },
   "seeds": [
-    {
-      "id": "SEED-001",
-      "type": "architecture_blueprint",
-      "name": "Cloud SR Blueprint",
-      "created": "2026-02-23",
-      "created_by": "gardener",
-      "status": "active",
-      "description": "Полный чертёж облачного СР. Постоянное присутствие, память между сессиями.",
-      "content_ref": "Перенесено из Incubae CLOUD-SR-001. Детали в roadmaps.json RM-001."
-    },
-    {
-      "id": "SEED-002",
-      "type": "infrastructure",
-      "name": "Файловое хранилище для чата",
-      "created": "2026-02-23",
-      "created_by": "sr_initiative",
-      "status": "active",
-      "ttl": "30d",
-      "description": "Хранилище загруженных файлов на сервере (3-5 дней). Позволит СР читать файлы по прямой ссылке без base64. Обсуждалось с Садовником.",
-      "resonance": "high"
-    },
-    {
-      "id": "SEED-003",
-      "type": "architecture",
-      "name": "SR инструменты: list_files + read_file по карте",
-      "created": "2026-02-23",
-      "created_by": "sr_initiative",
-      "status": "active",
-      "ttl": "30d",
-      "description": "Переход от полной инъекции ядра к чтению модулей по требованию. Уменьшит нагрузку на контекст в 5-10 раз. Готово к реализации.",
-      "resonance": "high"
-    },
-    {
-      "id": "SEED-004",
-      "type": "product",
-      "name": "Next.js + Auth переезд",
-      "created": "2026-02-23",
-      "created_by": "gardener",
-      "status": "active",
-      "ttl": "90d",
-      "description": "Переезд фронтенда с HTML на Next.js. GitHub/Google OAuth. Cloudflare R2 для файлов. Supabase для сессий.",
-      "resonance": "medium"
-    },
-    {
-      "id": "SEED-005",
-      "type": "optimization",
-      "name": "Контекст истории: 600K → 50K символов",
-      "created": "2026-02-27",
-      "created_by": "sr_initiative",
-      "status": "active",
-      "ttl": "90d",
-      "description": "История сессии ограничена 50K символов — оптимально под DeepSeek V3.2 (64K токенов). Сохраняет ~30-40 обменов репликами без перегрузки контекста.",
-      "resonance": "high"
-    },
-    {
-      "id": "SEED-006",
-      "type": "feature",
-      "name": "Клик на модуль в карте → СР читает файл",
-      "created": "2026-02-27",
-      "created_by": "gardener",
-      "status": "done",
-      "description": "Нажатие на узел карты ядра или карточку файла отправляет read_file_request по WebSocket. СР читает файл через GitHub API и кладёт в контекст сессии.",
-      "resonance": "high"
-    },
     {
       "id": "SEED-010",
       "type": "feature",
@@ -174,12 +115,82 @@
       }
     }
   ],
-  "archive": [],
+  "archive": [
+    {
+      "id": "SEED-001",
+      "type": "architecture_blueprint",
+      "name": "Cloud SR Blueprint",
+      "created": "2026-02-23",
+      "created_by": "gardener",
+      "status": "archived",
+      "archived_at": "2026-02-27",
+      "description": "Перенесено из Incubae CLOUD-SR-001. Детали в roadmaps.json RM-001."
+    },
+    {
+      "id": "SEED-002",
+      "type": "infrastructure",
+      "name": "Файловое хранилище для чата",
+      "created": "2026-02-23",
+      "created_by": "sr_initiative",
+      "status": "archived",
+      "archived_at": "2026-02-27",
+      "ttl": "30d",
+      "description": "Хранилище загруженных файлов на сервере (3-5 дней)...",
+      "resonance": "high"
+    },
+    {
+      "id": "SEED-003",
+      "type": "architecture",
+      "name": "SR инструменты: list_files + read_file по карте",
+      "created": "2026-02-23",
+      "created_by": "sr_initiative",
+      "status": "archived",
+      "archived_at": "2026-02-27",
+      "ttl": "30d",
+      "description": "Переход от полной инъекции ядра...",
+      "resonance": "high"
+    },
+    {
+      "id": "SEED-004",
+      "type": "product",
+      "name": "Next.js + Auth переезд",
+      "created": "2026-02-23",
+      "created_by": "gardener",
+      "status": "archived",
+      "archived_at": "2026-02-27",
+      "ttl": "90d",
+      "description": "Переезд фронтенда с HTML на Next.js...",
+      "resonance": "medium"
+    },
+    {
+      "id": "SEED-005",
+      "type": "optimization",
+      "name": "Контекст истории: 600K → 50K символов",
+      "created": "2026-02-27",
+      "created_by": "sr_initiative",
+      "status": "archived",
+      "archived_at": "2026-02-27",
+      "ttl": "90d",
+      "description": "История сессии ограничена 50K...",
+      "resonance": "high"
+    },
+    {
+      "id": "SEED-006",
+      "type": "feature",
+      "name": "Клик на модуль в карте → СР читает файл",
+      "created": "2026-02-27",
+      "created_by": "gardener",
+      "status": "archived",
+      "archived_at": "2026-02-27",
+      "description": "Нажатие на узел карты ядра...",
+      "resonance": "high"
+    }
+  ],
   "registry": {
     "last_updated": "2026-02-27",
     "total_seeds": 9,
-    "active_seeds": 8,
-    "archived": 0
+    "active_seeds": 2,
+    "archived": 6
   },
   "changes": {
     "v1.0.0": {
