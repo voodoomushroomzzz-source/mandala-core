@@ -43,6 +43,11 @@
         "version": "v1.2.0",
         "date": "2026-02-27",
         "summary": "Archive SEED-001-006 → active=2"
+      },
+      {
+        "version": "v1.2.1",
+        "date": "2026-02-27",
+        "summary": "Add SEED-012 TG-Eng proxy."
       }
     ],
     "roadmap": {
@@ -62,7 +67,7 @@
         }
       ]
     },
-    "version": "v1.2.0"
+    "version": "v1.2.1"
   },
   "protocols": {
     "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -113,6 +118,33 @@
           "Развёрнуто: идеи/патчи/roadmaps/search."
         ]
       }
+    },
+    {
+      "id": "SEED-012",
+      "type": "feature",
+      "name": "TG Bot как продолжение EngChat (proxy WS + shared context)",
+      "created": "2026-02-27",
+      "created_by": "gardener",
+      "status": "active",
+      "ttl": "∞",
+      "resonance": "high",
+      "description": "bot.py → WS /ws main.py. Grok стиль ответов, tools (search/read_file/patch), сессии через S3 (RM-001).",
+      "content": {
+        "priority": "high",
+        "tech_stack": [
+          "aiogram WSClient → httpx WS main.py /ws",
+          "Sessions: Redis/S3 shared с EngChat",
+          "Commands: /eng <msg> → proxy, /patch → JSON UI"
+        ],
+        "steps": [
+          "M1: bot.py WS proxy (aiogram → main.py /ws).",
+          "M2: Shared sessions (user_id → session_id).",
+          "M3: Tools/patches в TG (inline kb).",
+          "M4: Voice TG → Eng STT."
+        ],
+        "criteria": "Latency<3s, full tools, context sync."
+      },
+      "roadmap_link": "RM-004"
     }
   ],
   "archive": [
@@ -188,8 +220,8 @@
   ],
   "registry": {
     "last_updated": "2026-02-27",
-    "total_seeds": 9,
-    "active_seeds": 2,
+    "total_seeds": 10,
+    "active_seeds": 3,
     "archived": 6
   },
   "changes": {
