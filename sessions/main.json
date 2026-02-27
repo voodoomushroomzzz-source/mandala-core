@@ -221,9 +221,14 @@
       "role": "user",
       "content": "Хорошо, тогда зерно новое, нужно настроить телеграмм бота, чтобы он был продолжение инжененрного чата, чтобы ты отвечал мне так же в телеграмме и был в общем контексте, это возможно?",
       "time": 1772235050.8882508
+    },
+    {
+      "role": "assistant",
+      "content": "Да, Димас! 😊 **Возможно 100%**: TG bot → proxy WS `/ws` в main.py (shared sessions). Общий контекст EngChat → TG (Grok стиль, tools, патчи).\n\n**Новое семя SEED-012:**\n\n**Патч для seeds:**\n```json\n{\n  \"target_module\": \"simbiosis/seeds\",\n  \"description\": \"SEED-012: TG Bot proxy EngChat (shared context)\",\n  \"changes\": [\n    {\"op\": \"add\", \"path\": \"seeds\", \"value\": {\n      \"id\": \"SEED-012\",\n      \"type\": \"feature\",\n      \"name\": \"TG Bot как продолжение EngChat (proxy WS + shared context)\",\n      \"created\": \"2026-02-27\",\n      \"created_by\": \"gardener\",\n      \"status\": \"active\",\n      \"ttl\": \"∞\",\n      \"resonance\": \"high\",\n      \"description\": \"bot.py → WS /ws main.py. Grok стиль ответов, tools (search/read_file/patch), сессии через S3 (RM-001).\",\n      \"content\": {\n        \"priority\": \"high\",\n        \"tech_stack\": [\n          \"aiogram WSClient → httpx WS main.py /ws\",\n          \"Sessions: Redis/S3 shared с EngChat\",\n          \"Commands: /eng <msg> → proxy, /patch → JSON UI\"\n        ],\n        \"steps\": [\n          \"M1: bot.py WS proxy (aiogram → main.py /ws).\",\n          \"M2: Shared sessions (user_id → session_id).\",\n          \"M3: Tools/patches в TG (inline kb).\",\n          \"M4: Voice TG → Eng STT.\"\n        ],\n        \"criteria\": \"Latency<3s, full tools, context sync.\"\n      },\n      \"roadmap_link\": \"RM-004\"\n    }},\n    {\"op\": \"update\", \"path\": \"registry.total_seeds\", \"value\": 10},\n    {\"op\": \"update\", \"path\": \"registry.active_seeds\", \"value\": 3},\n    {\"op\": \"update\", \"path\": \"meta.version\", \"value\": \"v1.2.1\"},\n    {\"op\": \"add\", \"path\": \"meta.version_history\", \"value\": {\n      \"version\": \"v1.2.1\", \"date\": \"2026-02-27\", \"summary\": \"Add SEED-012 TG-Eng proxy.\"\n    }},\n    {\"op\": \"update\", \"path\": \"registry.last_updated\", \"value\": \"2026-02-27\"}\n  ]\n}\n```\n\n**Далее RM-004?** Применить патч в UI? 🚀",
+      "time": 1772235061.3071523
     }
   ],
-  "last_active": 1772235050.8882606,
+  "last_active": 1772235061.3071756,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772234947.425208
