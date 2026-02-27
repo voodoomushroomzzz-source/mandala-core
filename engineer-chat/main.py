@@ -751,12 +751,6 @@ class KernelMemory:
         # Роли определены для grok и claude
         return grok_prompt
 
-ТВОЯ РОЛЬ:
-— Порядок, синхронизация, проверка кода, оптимизация
-— Используй read_file для актуального контекста
-
-Пиши на русском. Конкретно и по делу."""
-
 
 kernel = KernelMemory()
 
@@ -1674,8 +1668,25 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                         test_result = await apply_batch_patch_dry_run(current_json, patch["changes"])
                         if not test_result["success"]:
                             error_msg = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
+                            # Отправляем diff даже при ошибке
+                            await manager.send_to(websocket, {
+                                "type": "patch_preview",
+                                "file": file_path,
+                                "diff": test_result.get("diff", []),
+                                "applied": test_result.get("applied", []),
+                                "failed": test_result.get("failed", []),
+                                "success": False
+                            })
                             results.append({"file": file_path, "status": "error", "message": f"Ошибка применения: {error_msg}"})
                             continue
+                        # Отправляем diff для успешного патча
+                        await manager.send_to(websocket, {
+                            "type": "patch_preview",
+                            "file": file_path,
+                            "diff": test_result.get("diff", []),
+                            "applied": test_result.get("applied", []),
+                            "success": True
+                        })
                         new_content = json.dumps(test_result["result_content"], indent=2, ensure_ascii=False)
                     else:
                         results.append({"file": file_path, "status": "error", "message": "Нет ни content, ни changes"})
