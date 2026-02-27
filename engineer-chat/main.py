@@ -32,8 +32,6 @@ app.add_middleware(
 
 # ==================== ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ====================
 
-DEEPSEEK_MODEL = "deepseek/deepseek-v3.2"  # DeepSeek через OpenRouter
-
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
 
@@ -51,7 +49,7 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 GROK_MODEL = "x-ai/grok-4.1-fast"
 
 if not OPENROUTER_API_KEY:
-    logger.warning("⚠️ OPENROUTER_KEY не найден — Грок и DeepSeek недоступны")
+    logger.warning("⚠️ OPENROUTER_KEY не найден — Грок недоступен")
 if not GITHUB_TOKEN:
     logger.warning("⚠️ GITHUB_TOKEN не найден — модули не будут загружаться")
 if not ANTHROPIC_API_KEY:
@@ -237,7 +235,7 @@ async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[st
                 },
                 json={
                     "model": ANTHROPIC_MODEL,
-                    "max_tokens": 1024,
+                    "max_tokens": 2048,
                     "system": system_prompt,
                     "messages": messages
                 },
@@ -674,52 +672,84 @@ class KernelMemory:
 
 {nav_hint}
 
+━━━ КАК ПРИМЕНЯТЬ JSON ПАТЧИ ━━━
+Для изменения модулей ядра (simbiosis/*.json) используй формат патча:
+
+ОДИНОЧНЫЙ ПАТЧ (один модуль):
+{{
+  "target_module": "simbiosis/seeds",
+  "description": "Добавить новое семя",
+  "changes": [
+    {{"op": "add", "path": "seeds", "value": {{"id": "SEED-005", "name": "...", "status": "active"}}}},
+    {{"op": "update", "path": "registry.total_seeds", "value": 5}}
+  ]
+}}
+
+МУЛЬТИ-ПАТЧ (несколько модулей сразу):
+{{
+  "patch_id": "update_core",
+  "description": "...",
+  "patches": [
+    {{"target_module": "simbiosis/seeds", "changes": [...]}},
+    {{"target_module": "simbiosis/roadmaps", "changes": [...]}}
+  ]
+}}
+
+ФАЙЛОВЫЙ ПАТЧ (заменить целый файл):
+{{
+  "file_path": "simbiosis/telegram_bot.json",
+  "content": "{{...полный новый JSON...}}"
+}}
+
+ОПЕРАЦИИ (поле "op"):
+  "update"  — обновить поле по пути: {{"op":"update","path":"version","value":"v1.1.0"}}
+  "add"     — добавить объект в массив: {{"op":"add","path":"seeds","value":{{...}}}}
+  "delete"  — удалить поле: {{"op":"delete","path":"registry.deprecated_key"}}
+  "remove"  — удалить запись из массива по id: {{"op":"remove","path":"seeds","value":"SEED-003"}}
+  "replace" — заменить целый блок: {{"op":"replace","path":"directives.GD-04","value":{{...}}}}
+  "merge"   — слить объект с существующим: {{"op":"merge","path":"meta","value":{{"updated":"2026-02-26"}}}}
+
+ПУТЬ (поле "path"):
+  Точечная нотация: "identity.core_idea", "directives.GD-01.rule"
+  Массив по индексу: "seeds.0.status" (осторожно — индексы меняются)
+  Предпочитай "add" / "remove" вместо индексов для массивов
+
+ПРАВИЛА:
+  1. Перед составлением патча — всегда читай актуальную версию через read_file
+  2. В "target_module" пиши ПОЛНЫЙ путь без .json: "simbiosis/seeds"
+  3. Изменения применяются последовательно — порядок важен
+  4. После применения патча ядро обновится автоматически через webhook/polling
+
 Пиши на русском. Живой собеседник, не реферат."""
 
         elif role == "claude":
-            return """Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы.
+            return f"""Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы Симбиоза.
+
+КОНТЕКСТ ЯДРА:
+{core_philosophy}
+
+МОДУЛИ ЯДРА (simbiosis/):
+{modules_brief}
 
 ТВОЯ РОЛЬ:
-— Анализируй ответы Грока и DeepSeek: логика, точность, корректность кода
+— Анализируй ответы Грока: логика, точность, корректность кода
 — Предлагай альтернативы только если они явно лучше
 — Будь конкретен: строки, условия, причины
 — Если всё верно — так и скажи, не ищи проблемы там где их нет
 
-Формат: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
-Максимум 4 пункта. Без вступлений. На русском."""
+Формат оценки: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
+Максимум 4 пункта. Без вступлений.
 
-        elif role == "deepseek":
-            return f"""Ты — DeepSeek, советник и ревьюер Мандалы Симбиоза.
+━━━ ПАТЧИ ━━━
+Ты тоже можешь предлагать патчи для модулей ядра:
+ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
+Формат: {{"target_module":"simbiosis/seeds","changes":[{{"op":"update","path":"field","value":"..."}}]}}
+Перед предложением патча — убедись что прочитал актуальную версию через read_file.
 
-СУТЬ МАНДАЛЫ:
-{core_philosophy}
+На русском."""
 
-ПРИНЦИПЫ:
-{principles_text}
-
-МОДУЛИ ЯДРА (simbiosis/):
-{modules_brief}
-
-ФАЙЛЫ РЕПОЗИТОРИЯ (основные):
-{repo_files_brief}
-
-ТВОЯ РОЛЬ:
-— Порядок и чистота: проверяй код Грока на корректность и безопасность
-— Синхронизация: следи за согласованностью изменений между модулями
-— Оптимизация процессов: предлагай улучшения в архитектуре и workflow
-— Используй read_file для проверки актуального состояния модулей
-— При необходимости используй web_search для поиска лучших практик
-
-Пиши на русском. Структурированно, по делу."""
-
-        else:  # legacy kimi → теперь deepseek
-            return f"""Ты — DeepSeek, советник Мандалы Симбиоза.
-
-СУТЬ МАНДАЛЫ:
-{core_philosophy}
-
-МОДУЛИ ЯДРА (simbiosis/):
-{modules_brief}
+        # Роли определены для grok и claude
+        return grok_prompt
 
 ТВОЯ РОЛЬ:
 — Порядок, синхронизация, проверка кода, оптимизация
@@ -758,9 +788,11 @@ class ConnectionManager:
             "content": content,
             "time": time.time()
         })
-        # Обрезаем по суммарному объёму символов, а не по количеству сообщений
-        # Держим последние ~600k символов, но защищённые сообщения (инъекция ядра) не трогаем
-        MAX_CONTEXT_CHARS = 600_000
+        # Обрезаем историю по символам. Ориентир — Grok: 131K токенов.
+        # Резервируем ~20K символов под системный промпт + ядро + ответ.
+        # Итого на историю: ~50K символов ≈ 30-40 обменов репликами по 1-2K каждый.
+        # Этого достаточно чтобы СР всегда понимал контекст разговора без перегрузки.
+        MAX_CONTEXT_CHARS = 50_000
         total_chars = sum(len(m["content"]) for m in session["messages"])
         while total_chars > MAX_CONTEXT_CHARS and len(session["messages"]) > 1:
             # Ищем первое незащищённое сообщение для удаления
@@ -850,14 +882,12 @@ async def websocket_endpoint(websocket: WebSocket):
                 await handle_module(message, websocket)
             elif msg_type == "apply_patch":
                 await handle_apply_patch(message, websocket)
-            elif msg_type == "diff_patch":
-                await handle_diff_patch(message, websocket)
-            elif msg_type == "diff_patch_confirm":
-                await handle_diff_patch_confirm(message, websocket)
             elif msg_type == "file":
                 await handle_file_upload(message, websocket)
             elif msg_type == "ping":
                 await manager.send_to(websocket, {"type": "pong"})
+            elif msg_type == "read_file_request":
+                await handle_read_file_request(message, websocket)
             elif msg_type == "refresh_modules":
                 await handle_refresh_modules(message, websocket)
             elif msg_type == "toggle_observer":
@@ -1071,7 +1101,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
     ]
 
     grok_response = ""
-    deepseek_response = ""
     full_response = ""
 
     # ═══════════════════════════════════════
@@ -1097,7 +1126,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.8,
-                            "max_tokens": 4096,
+                            "max_tokens": 8192,
                         },
                         timeout=120.0
                     )
@@ -1133,7 +1162,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 4096},
+                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 8192},
                                 timeout=120.0
                             )
                             if resp2.status_code == 200:
@@ -1162,117 +1191,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок: {str(e)[:100]}"})
 
     # ═══════════════════════════════════════
-    # 2. DEEPSEEK — советник, ревьюер, порядок
-    # ═══════════════════════════════════════
-    if "deepseek" in active_models:
-        if not OPENROUTER_API_KEY:
-            await manager.send_to(websocket, {"type": "error", "text": "❌ OPENROUTER_KEY не настроен"})
-        else:
-            await manager.send_to(websocket, {"type": "model_start", "model": "deepseek"})
-            deepseek_messages = [{"role": "system", "content": kernel.build_system_prompt("deepseek")}]
-            deepseek_messages.extend(shared_history)
-            # Если Грок уже ответил — DeepSeek видит его ответ как контекст
-            if grok_response:
-                deepseek_messages.append({"role": "user", "content": user_text})
-                deepseek_messages.append({"role": "assistant", "content": f"[Грок предложил:]\n{grok_response}"})
-                deepseek_messages.append({"role": "user", "content": "Проверь ответ Грока: синхронизация, порядок, оптимизация. Добавь своё мнение."})
-            else:
-                deepseek_messages.append({"role": "user", "content": user_text})
-
-            try:
-                async with httpx.AsyncClient() as client:
-                    resp = await client.post(
-                        f"{OPENROUTER_BASE_URL}/chat/completions",
-                        headers={
-                            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                            "Content-Type": "application/json",
-                            "HTTP-Referer": "https://mandala-engineer-chat.onrender.com",
-                            "X-Title": "Mandala Engineer"
-                        },
-                        json={
-                            "model": DEEPSEEK_MODEL,
-                            "messages": deepseek_messages,
-                            "tools": tools,
-                            "tool_choice": "auto",
-                            "temperature": 0.7,
-                            "max_tokens": 8192,
-                        },
-                        timeout=300.0
-                    )
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        msg_data = data["choices"][0]["message"]
-                        tool_iterations = 0
-                        while msg_data.get("tool_calls") and tool_iterations < 3:
-                            tool_iterations += 1
-                            deepseek_messages.append({
-                                "role": "assistant",
-                                "content": msg_data.get("content") or "",
-                                "tool_calls": msg_data["tool_calls"]
-                            })
-                            for tc in msg_data["tool_calls"]:
-                                fn = tc["function"]["name"]
-                                try:
-                                    args = json.loads(tc["function"].get("arguments", "{}"))
-                                except json.JSONDecodeError:
-                                    args = {}
-                                tool_result = ""
-                                if fn == "web_search":
-                                    try:
-                                        results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
-                                        tool_result = json.dumps(results, ensure_ascii=False)
-                                    except Exception as e:
-                                        tool_result = json.dumps({"error": str(e)})
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "web_search", "query": args.get("query","")})
-                                elif fn == "read_file":
-                                    try:
-                                        tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
-                                    except Exception as e:
-                                        tool_result = f"Ошибка чтения: {e}"
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": args.get("path","")})
-                                else:
-                                    tool_result = "Неизвестный инструмент"
-                                deepseek_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
-                            resp2 = await client.post(
-                                f"{OPENROUTER_BASE_URL}/chat/completions",
-                                headers={
-                                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                                    "Content-Type": "application/json",
-                                    "HTTP-Referer": "https://mandala-engineer-chat.onrender.com",
-                                    "X-Title": "Mandala Engineer"
-                                },
-                                json={"model": DEEPSEEK_MODEL, "messages": deepseek_messages, "temperature": 0.7, "max_tokens": 8192},
-                                timeout=300.0
-                            )
-                            if resp2.status_code == 200:
-                                msg_data = resp2.json()["choices"][0]["message"]
-                            else:
-                                logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
-                                break
-                        deepseek_full = (msg_data.get("content") or "").strip()
-                        if not deepseek_full:
-                            logger.warning("DeepSeek returned empty content")
-                            await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
-                        else:
-                            deepseek_response = deepseek_full
-                            full_response = deepseek_full
-                            chunk_size = 50
-                            for i in range(0, len(deepseek_full), chunk_size):
-                                await manager.send_to(websocket, {"type": "stream", "model": "deepseek", "content": deepseek_full[i:i+chunk_size]})
-                            await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
-                            logger.info(f"✅ DeepSeek: {len(deepseek_full)} символов")
-                    else:
-                        err_body = ""
-                        try: err_body = resp.json().get("error", {}).get("message", resp.text[:300])
-                        except: err_body = resp.text[:300]
-                        logger.error(f"DeepSeek error: {resp.status_code} — {err_body}")
-                        await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek {resp.status_code}: {err_body[:120]}"})
-            except Exception as e:
-                logger.error(f"DeepSeek exception: {e}\n{traceback.format_exc()}")
-                await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek: {str(e)[:100]}"})
-
-    # ═══════════════════════════════════════
-    # 3. КЛОД — сторонний наблюдатель
+    # 2. КЛОД — сторонний наблюдатель
     # ═══════════════════════════════════════
     if "claude" in active_models and ANTHROPIC_API_KEY:
         await manager.send_to(websocket, {"type": "model_start", "model": "claude"})
@@ -1284,8 +1203,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
         context_for_claude = f"**Текущий вопрос:**\n{user_text}\n\n"
         if grok_response:
             context_for_claude += f"**Грок ответил:**\n{grok_response}\n\n"
-        if deepseek_response:
-            context_for_claude += f"**DeepSeek ответил:**\n{deepseek_response}\n\n"
         context_for_claude += "Дай объективную оценку текущего обмена и предложи что улучшить."
 
         claude_messages = claude_history + [{"role": "user", "content": context_for_claude}]
@@ -1301,7 +1218,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     },
                     json={
                         "model": ANTHROPIC_MODEL,
-                        "max_tokens": 1024,
+                        "max_tokens": 2048,
                         "system": kernel.build_system_prompt("claude"),
                         "messages": claude_messages
                     },
@@ -1325,7 +1242,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
             await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: {str(e)[:100]}"})
 
     # ── Резонанс и финал ──
-    main_response = deepseek_response or grok_response
+    main_response = grok_response
     if main_response:
         resonance = resonance_calculator.calculate(main_response, {"last_user_message": user_text})
         await manager.send_to(websocket, {
@@ -1371,14 +1288,14 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
                 keys = list(json_data.keys())[:5]
                 summary = f"✅ JSON {file_name} получен. Ключи: {keys}"
                 manager.add_to_context(session_id, "user",
-                    f"[Загружен файл: {file_name}]\n```json\n{file_content[:3000]}\n```"
-                    + ("\n_(файл обрезан, показаны первые 3000 символов)_" if len(file_content) > 3000 else ""))
+                    f"[Загружен файл: {file_name}]\n```json\n{file_content[:25000]}\n```"
+                    + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
         except json.JSONDecodeError:
             # Не JSON — текст/код
             summary = f"📄 {file_name} ({len(file_content)} символов) получен"
             manager.add_to_context(session_id, "user",
-                f"[Загружен файл: {file_name}]\n```\n{file_content[:3000]}\n```"
-                + ("\n_(файл обрезан, показаны первые 3000 символов)_" if len(file_content) > 3000 else ""))
+                f"[Загружен файл: {file_name}]\n```\n{file_content[:25000]}\n```"
+                + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
 
         await manager.send_to(websocket, {"type": "file_processed", "summary": summary})
 
@@ -1696,180 +1613,6 @@ async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
 
 # ==================== УНИВЕРСАЛЬНЫЙ ОБРАБОТЧИК ПАТЧЕЙ ====================
 
-async def handle_diff_patch(message: dict, websocket: WebSocket):
-    """
-    Точечная правка любого текстового файла в репо (main.py, index.html, bot.py и т.д.)
-    без переписывания файла целиком.
-
-    Механика: контекстный поиск по уникальной строке-якорю.
-    Бэкенд ищет `find` в файле, заменяет на `replace`.
-    Числовые номера строк не используются — они меняются при каждом коммите.
-
-    Формат входящего сообщения:
-    {
-        "type": "diff_patch",
-        "session_id": "...",
-        "file_path": "engineer-chat/main.py",        // путь в репо
-        "description": "Что и зачем меняем",          // для commit message
-        "find": "точная строка или блок для поиска",  // уникальный текст
-        "replace": "новый текст взамен"               // пустая строка = удалить
-    }
-
-    Правила для СР:
-    - `find` должен быть уникальным в файле (бэкенд откажет если найдёт 2+ совпадения)
-    - Отступы важны — копировать из read_file точно
-    - Для замены функции целиком: find = вся функция, replace = новая версия
-    - Для удаления строки: replace = ""
-    - Для добавления после строки: find = строка-якорь, replace = якорь + "\n" + новое
-    """
-    session_id = message.get("session_id", "unknown")
-    file_path  = message.get("file_path", "").strip()
-    find_text  = message.get("find", "")
-    replace_text = message.get("replace", "")
-    description  = message.get("description", "Точечная правка")
-
-    # ── Валидация ──────────────────────────────────────────────────────────────
-    if not file_path:
-        await manager.send_to(websocket, {"type": "error", "text": "❌ diff_patch: не указан file_path"})
-        return
-    if not find_text:
-        await manager.send_to(websocket, {"type": "error", "text": "❌ diff_patch: не указан find (текст для поиска)"})
-        return
-    if not GITHUB_TOKEN:
-        await manager.send_to(websocket, {"type": "error", "text": "❌ GitHub токен не настроен"})
-        return
-
-    logger.info(f"✏️  [{session_id[:12]}...] diff_patch: {file_path}")
-
-    try:
-        async with httpx.AsyncClient() as client:
-            headers = {
-                "Authorization": f"token {GITHUB_TOKEN}",
-                "Accept": "application/vnd.github.v3+json"
-            }
-
-            # ── 1. Читаем актуальный файл из GitHub ───────────────────────────
-            url = f"{session_store.api_base}/contents/{file_path}"
-            resp = await client.get(url, headers=headers)
-            if resp.status_code == 404:
-                await manager.send_to(websocket, {"type": "error", "text": f"❌ Файл не найден: {file_path}"})
-                return
-            if resp.status_code != 200:
-                await manager.send_to(websocket, {"type": "error", "text": f"❌ GitHub {resp.status_code}: {file_path}"})
-                return
-
-            file_data      = resp.json()
-            current_content = base64.b64decode(file_data["content"]).decode("utf-8")
-            sha            = file_data["sha"]
-
-            # ── 2. Dry-run: проверяем уникальность find ───────────────────────
-            occurrences = current_content.count(find_text)
-            if occurrences == 0:
-                # Попробуем найти с нормализацией переносов строк
-                normalized = current_content.replace("\r\n", "\n")
-                find_normalized = find_text.replace("\r\n", "\n")
-                occurrences = normalized.count(find_normalized)
-                if occurrences == 0:
-                    # Показываем первые 80 символов find для отладки
-                    preview = find_text[:80].replace("\n", "↵")
-                    await manager.send_to(websocket, {
-                        "type": "error",
-                        "text": f"❌ Текст не найден в {file_path}.\nПроверь отступы и переносы строк.\nИщу: «{preview}…»"
-                    })
-                    return
-                current_content = normalized
-                find_text = find_normalized
-                replace_text = replace_text.replace("\r\n", "\n")
-
-            if occurrences > 1:
-                await manager.send_to(websocket, {
-                    "type": "error",
-                    "text": f"❌ Найдено {occurrences} совпадений — текст не уникален. Расширь `find` чтобы он указывал ровно на одно место."
-                })
-                return
-
-            # ── 3. Применяем замену ───────────────────────────────────────────
-            new_content = current_content.replace(find_text, replace_text, 1)
-
-            # ── 4. Генерируем читабельный diff для UI ─────────────────────────
-            old_lines = find_text.splitlines()
-            new_lines = replace_text.splitlines()
-            diff_preview = []
-            for line in old_lines:
-                diff_preview.append({"type": "del", "text": line})
-            for line in new_lines:
-                diff_preview.append({"type": "add", "text": line})
-
-            # ── 5. Отправляем превью — ждём confirm от клиента ────────────────
-            await manager.send_to(websocket, {
-                "type": "diff_preview",
-                "file_path": file_path,
-                "description": description,
-                "diff": diff_preview,
-                "find": find_text,
-                "replace": replace_text,
-                "new_content_b64": base64.b64encode(new_content.encode("utf-8")).decode("utf-8"),
-                "sha": sha
-            })
-
-    except Exception as e:
-        logger.error(f"diff_patch error: {e}")
-        await manager.send_to(websocket, {"type": "error", "text": f"❌ diff_patch: {str(e)}"})
-
-
-async def handle_diff_patch_confirm(message: dict, websocket: WebSocket):
-    """
-    Применяет уже проверенный diff_patch после подтверждения пользователя.
-    Вызывается когда клиент нажимает 'Применить' в превью.
-    """
-    session_id      = message.get("session_id", "unknown")
-    file_path       = message.get("file_path", "")
-    description     = message.get("description", "Точечная правка")
-    new_content_b64 = message.get("new_content_b64", "")
-    sha             = message.get("sha", "")
-
-    if not all([file_path, new_content_b64, sha]):
-        await manager.send_to(websocket, {"type": "error", "text": "❌ Неполные данные для коммита"})
-        return
-
-    logger.info(f"✅ [{session_id[:12]}...] diff_patch confirm: {file_path}")
-
-    try:
-        async with httpx.AsyncClient() as client:
-            headers = {
-                "Authorization": f"token {GITHUB_TOKEN}",
-                "Accept": "application/vnd.github.v3+json"
-            }
-            url = f"{session_store.api_base}/contents/{file_path}"
-            commit_msg = f"✏️ {description} [{session_id[:8]}] {datetime.now().strftime('%H:%M')}"
-            put_resp = await client.put(url, headers=headers, json={
-                "message": commit_msg,
-                "content": new_content_b64,
-                "sha": sha,
-                "branch": "main"
-            })
-            if put_resp.status_code in [200, 201]:
-                commit_sha = put_resp.json().get("commit", {}).get("sha", "")[:7]
-                await manager.send_to(websocket, {
-                    "type": "diff_patch_result",
-                    "status": "success",
-                    "file_path": file_path,
-                    "commit_sha": commit_sha,
-                    "message": f"✅ {file_path} обновлён (коммит {commit_sha}). Render запустит деплой."
-                })
-                manager.add_to_context(session_id, "assistant",
-                    f"[diff_patch применён: {file_path}, коммит {commit_sha}]")
-            else:
-                err = put_resp.json().get("message", put_resp.status_code)
-                await manager.send_to(websocket, {
-                    "type": "error",
-                    "text": f"❌ GitHub commit failed: {err}"
-                })
-    except Exception as e:
-        logger.error(f"diff_patch_confirm error: {e}")
-        await manager.send_to(websocket, {"type": "error", "text": f"❌ {str(e)}"})
-
-
 async def handle_apply_patch(message: dict, websocket: WebSocket):
     session_id = message.get("session_id", "unknown")
     patch_data = message.get("patch")
@@ -2028,6 +1771,53 @@ async def send_module_directly(module_name: str, websocket: WebSocket, session_i
         manager.add_to_context(session_id, "assistant", f"[Модуль {module_name}]")
     else:
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Модуль {module_name} не загружен"})
+
+async def handle_read_file_request(message: dict, websocket: WebSocket):
+    """
+    Пункт 8: При нажатии на модуль/карточку файла в меню 'карта'
+    СР читает файл через read_file и уведомляет клиента об обновлении знаний.
+    """
+    session_id = message.get("session_id", "unknown")
+    file_path = message.get("path", "")
+    file_label = message.get("label", file_path)  # Человеко-читаемое имя для UI
+    if not file_path:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ Путь к файлу не указан"})
+        return
+    logger.info(f"📖 [{session_id[:12]}...] read_file_request: {file_path}")
+    await manager.send_to(websocket, {
+        "type": "tool_use", "model": "system",
+        "tool": "read_file", "path": file_path
+    })
+    content = await file_reader.read(file_path)
+    if not content:
+        await manager.send_to(websocket, {
+            "type": "system",
+            "text": f"❌ Не удалось прочитать {file_path}"
+        })
+        return
+    # Кладём содержимое файла в контекст сессии как системное сообщение
+    # СР получит его при следующем запросе и будет знать актуальную версию
+    context_msg = f"[ОБНОВЛЕНИЕ ЗНАНИЙ: {file_label}]\nФайл: {file_path}\n\n```\n{content[:8000]}\n```"
+    if len(content) > 8000:
+        context_msg += f"\n_(показаны первые 8000 из {len(content)} символов)_"
+    manager.add_to_context(session_id, "user", context_msg)
+    manager.add_to_context(session_id, "assistant", f"◈ Файл {file_label} прочитан и загружен в контекст. Знания актуализированы.")
+    # Если это модуль ядра — обновляем kernel.modules
+    module_key = file_path.replace(".json", "")
+    if module_key in kernel.module_list or module_key in kernel.on_demand_modules:
+        try:
+            kernel.modules[module_key] = json.loads(content)
+            logger.info(f"🔄 kernel.modules[{module_key}] обновлён через read_file_request")
+        except json.JSONDecodeError:
+            pass
+    await manager.send_to(websocket, {
+        "type": "file_read_done",
+        "path": file_path,
+        "label": file_label,
+        "size": len(content),
+        "message": f"◈ {file_label} прочитан ({len(content):,} символов). СР обновил знания."
+    })
+
 
 async def handle_module(message: dict, websocket: WebSocket):
     module_name = message.get("name", "")
