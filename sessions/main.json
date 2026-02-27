@@ -236,9 +236,14 @@
       "role": "assistant",
       "content": "Да! 😊 **Таблицы** (Markdown), **схемы** (Mermaid/ASCII).\n\n**Пример таблицы (из прошлого):**\n| API | Latency | Cost | Video |\n|-----|---------|------|-------|\n| Fal.ai | <2s | $0.003 | ✅ |\n\n**Схема Graphic Agent (Mermaid):**\n```mermaid\ngraph TD\n    A[Садовник: \"Нужна картинка\"] --> B[СР trigger]\n    B --> C[main.py tool]\n    C --> D{Fal.ai/Replicate}\n    D --> E[Gen img/video]\n    E --> F[Inline base64 → чат/TG]\n```\n\nЕщё? 🚀",
       "time": 1772235351.1845894
+    },
+    {
+      "role": "user",
+      "content": "расчитай какая стоимость будет выходить ксли мы будем генерить 3-4 картинкаи и 1-2 видео в неделю",
+      "time": 1772235716.8373826
     }
   ],
-  "last_active": 1772235351.1846256,
+  "last_active": 1772235716.8373904,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772235310.1618412
