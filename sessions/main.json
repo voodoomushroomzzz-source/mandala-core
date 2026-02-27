@@ -216,9 +216,14 @@
       "role": "assistant",
       "content": "Димас! 😊 **Roadmaps.json (v1.1.3)** — **библиотека планов роста** из seeds. 3 карты: Cloud SR (M1 done), Vision (low), Scout-Agent (high, все planned).\n\n### Структура:\n- **meta**: Версии (history), roadmap (M1 active).\n- **roadmaps**: {RM-ID: {title, status(active/vision), priority, origin_seed, desc, milestones[] {id, name, status, desc/tech}}}.\n- **changes**: История.\n\n### Важно:\n- New: gardener_approval.\n- Milestones: done/planned/vision.\n- Links: seeds (001/008).\n\n**Мнение:** Чёткий вектор эволюции — соты готовы к полёту. Прорастить RM-003 Scout? Патч? 🚀",
       "time": 1772234990.3731916
+    },
+    {
+      "role": "user",
+      "content": "Хорошо, тогда зерно новое, нужно настроить телеграмм бота, чтобы он был продолжение инжененрного чата, чтобы ты отвечал мне так же в телеграмме и был в общем контексте, это возможно?",
+      "time": 1772235050.8882508
     }
   ],
-  "last_active": 1772234990.3732193,
+  "last_active": 1772235050.8882606,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772234947.425208
