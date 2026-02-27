@@ -243,6 +243,7 @@
             height: 42px;
             border-bottom: 1px solid var(--line);
             display: flex; align-items: center;
+            justify-content: center;
             padding: 0 22px;
             flex-shrink: 0;
             gap: 2px;
@@ -1080,6 +1081,7 @@
     </header>
 
     <div class="layout">
+
         <!-- Контент (вкладки) -->
         <div class="content">
             <div class="tabs">
@@ -1437,7 +1439,6 @@
                     showToast(`◈ обновлено ${data.count} модулей`, 'success');
                     break;
                 case 'tool_use':
-                    // Реальный статус: что СР делает прямо сейчас
                     updateThinkingStatus(data);
                     break;
                 case 'file_processed':
@@ -1452,10 +1453,9 @@
                     }, 2000);
                     break;
                 case 'file_read_done':
-                    // Файл прочитан → обновляем статус и сразу просим СР ответить
                     updateThinkingStatus({ tool: 'read_file', path: data.path, model: Array.from(activeModels)[0] });
                     addSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов) — СР изучает`);
-                    // Автоматически отправляем ask чтобы СР ответил без дублирования
+                    // auto-ask: СР отвечает без дублирования вопроса
                     if (ws && ws.readyState === WebSocket.OPEN) {
                         ws.send(JSON.stringify({
                             type: 'ask',
@@ -1779,16 +1779,15 @@
         function handleFileSelect(e) {
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
-            // Если текст в поле есть — показываем превью и ждём кнопки
-            // Если текст пустой — сразу отправляем файл (СР сам знает что делать)
             if (inputEl.value.trim()) {
+                // Есть текст — ждём кнопки отправки
                 pendingFiles = files;
                 updateFilePreview();
                 inputEl.focus();
             } else {
+                // auto-send when no caption
                 pendingFiles = files;
                 updateFilePreview();
-                // Небольшой delay чтобы пользователь видел что файл принят
                 setTimeout(() => {
                     if (ws && ws.readyState === WebSocket.OPEN) {
                         sendFiles(files, '');
@@ -1824,20 +1823,9 @@
                 document.body.style.boxShadow = '';
                 const files = Array.from(e.dataTransfer.files);
                 if (files.length > 0) {
-                    if (inputEl.value.trim()) {
-                        pendingFiles = files;
-                        updateFilePreview();
-                        inputEl.focus();
-                    } else {
-                        pendingFiles = files;
-                        updateFilePreview();
-                        setTimeout(() => {
-                            if (ws && ws.readyState === WebSocket.OPEN) {
-                                sendFiles(files, '');
-                                clearFiles();
-                            }
-                        }, 300);
-                    }
+                    pendingFiles = files;
+                    updateFilePreview();
+                    inputEl.focus();
                 }
             });
         }
@@ -1944,6 +1932,7 @@
         }
 
         function showThinking(model) {
+            // Ставим иконку и цвет активной модели
             const m = model || Array.from(activeModels)[0] || 'grok';
             const svgEl = document.getElementById('thinkingIconSvg');
             const labelEl = document.getElementById('thinkingLabel');
@@ -1951,7 +1940,10 @@
                 const tmp = document.createElement('div');
                 tmp.innerHTML = modelIcons[m];
                 const newSvg = tmp.querySelector('svg');
-                if (newSvg) { newSvg.id = 'thinkingIconSvg'; svgEl.replaceWith(newSvg); }
+                if (newSvg) {
+                    newSvg.id = 'thinkingIconSvg';
+                    svgEl.replaceWith(newSvg);
+                }
             }
             if (labelEl) {
                 const names = { grok: 'Грок думает', claude: 'Клод думает' };
@@ -1963,7 +1955,6 @@
         }
 
         function updateThinkingStatus(data) {
-            // Обновляет лейбл индикатора реальным статусом из API
             const labelEl = document.getElementById('thinkingLabel');
             if (!labelEl) return;
             const model = data.model || Array.from(activeModels)[0] || 'grok';
@@ -1974,10 +1965,7 @@
             } else if (data.tool === 'read_file') {
                 const p = data.path ? data.path.split('/').pop() : '';
                 labelEl.textContent = `${name} читает ${p}`;
-            } else {
-                labelEl.textContent = `${name} думает`;
             }
-            // Восстановим дефолтный текст через 3 сек если ответ ещё не пришёл
             clearTimeout(window._thinkingResetTimer);
             window._thinkingResetTimer = setTimeout(() => {
                 const names = { grok: 'Грок думает', claude: 'Клод думает' };
@@ -2268,7 +2256,6 @@
             document.getElementById('tab-chat').classList.add('active');
 
             addSystemMessage(`◈ Запрашиваю у СР чтение файла: <code style="font-family:var(--mono);font-size:11px;background:var(--surface-2);padding:2px 6px;border-radius:3px;">${escapeHtml(filePath)}</code>`);
-            showThinking(Array.from(activeModels)[0]);
             ws.send(JSON.stringify({
                 type: 'read_file_request',
                 path: filePath,
