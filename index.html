@@ -234,8 +234,7 @@
         /* Layout */
         .layout { flex: 1; display: flex; overflow: hidden; position: relative; z-index: 1; }
 
-
-        /* Content */
+        /* Content (единственная колонка, без боковой панели) */
         .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
         /* Tabs */
@@ -275,7 +274,7 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 28px 22px 20px; /* уменьшен нижний отступ */
+            padding: 28px 22px 20px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -458,7 +457,6 @@
             word-break: break-word;
         }
 
-        /* Thinking indicator — аватарка катается над инпутом */
         /* Thinking indicator */
         .thinking {
             height: 40px;
@@ -557,7 +555,7 @@
             box-shadow: 0 4px 30px rgba(124,58,237,0.7);
         }
 
-        /* Claude observer button */
+        /* Observer button */
         .observer-btn {
             background: rgba(59,130,246,0.1);
             border-color: #3b82f6;
@@ -601,7 +599,6 @@
         .observer-thinking-indicator .dots span {
             animation: dots 1.5s steps(4, end) infinite;
         }
-
 
         .file-attachment {
             display: flex;
@@ -653,7 +650,7 @@
             transition: width 0.3s ease;
         }
 
-        /* Resonance indicator */
+        /* Resonance indicator (скрыт по умолчанию) */
         .resonance-indicator {
             display: none !important; /* скрыт */
             display: flex;
@@ -789,9 +786,8 @@
             font-size: 11px;
             color: var(--text-3);
         }
-        /* Стиль для кнопки сохранения без текста */
         .file-editor-header .code-btn.apply {
-            font-size: 16px; /* символ крупнее */
+            font-size: 16px;
             width: 32px;
             height: 28px;
         }
@@ -992,16 +988,12 @@
         }
 
         /* Text selection colors */
-        /* Green — обычный текст ответа СР */
         .msg.assistant .bub::selection,
         .msg.assistant .bub *::selection { background: rgba(16,185,129,0.35); color: #dcfce7; }
-        /* Violet — код и технические вставки */
         code::selection, pre::selection, pre *::selection,
         .code-content::selection, .code-content *::selection { background: rgba(124,58,237,0.4); color: #ede9fe; }
-        /* Indigo — сообщения пользователя */
         .msg.user .bub::selection,
         .msg.user .bub *::selection { background: rgba(55,48,163,0.45); color: #e0e7ff; }
-        /* Системные */
         .msg.sys .bub::selection { background: rgba(16,185,129,0.25); }
 
         /* Scrollbar */
@@ -1081,13 +1073,11 @@
     </header>
 
     <div class="layout">
-
-        <!-- Контент (вкладки) -->
+        <!-- Контент (вкладки) — без боковой панели -->
         <div class="content">
             <div class="tabs">
                 <button class="tab active" data-tab="chat">◈ чат</button>
                 <button class="tab" data-tab="map">◈ карта</button>
-                
                 <button class="tab" data-tab="files">◈ файлы</button>
             </div>
 
@@ -1118,7 +1108,6 @@
                             <div class="file-progress-bar" id="fileProgressBar"></div>
                         </div>
                     </div>
-                    <!-- Resonance Indicator (скрыт) -->
                     <div class="input-area">
                         <div class="irow">
                             <button class="ibtn" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
@@ -1136,14 +1125,11 @@
                         <span>◈ карта ядра симбиоза</span>
                         <button onclick="loadMap()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
                     </div>
-                    <!-- Интерактивное ядро -->
                     <div id="coreVisualization" style="position:relative;margin-bottom:32px;"></div>
-                    <!-- Остальные файлы -->
                     <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin-bottom:10px;" id="otherFilesLabel">◈ файлы репозитория</div>
                     <div class="seeds-grid" id="otherFilesGrid"><div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div></div>
                 </div>
             </div>
-
 
             <!-- Вкладка файлов с Monaco Editor -->
             <div class="tab-content" id="tab-files">
@@ -1161,7 +1147,7 @@
         </div>
     </div>
 
-    <!-- Модальные окна -->
+    <!-- Модальные окна (оставлены только для патча, переименование чата убрано) -->
     <div class="modal-overlay" id="patchModal">
         <div class="modal">
             <div class="modal-header"><div class="modal-title">◈ ПРИМЕНИТЬ ПАТЧ</div><button class="modal-close" onclick="closePatchModal()">×</button></div>
@@ -1170,38 +1156,23 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="renameModal">
-        <div class="modal">
-            <div class="modal-header"><div class="modal-title">◈ ПЕРЕИМЕНОВАТЬ ЧАТ</div><button class="modal-close" onclick="closeRenameModal()">×</button></div>
-            <div class="modal-body">
-                <input type="text" class="rename-input" id="renameInput" placeholder="Новое название" maxlength="50">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeRenameModal()">отмена</button>
-                <button class="btn btn-primary" id="confirmRenameBtn" onclick="confirmRename()">сохранить</button>
-            </div>
-        </div>
-    </div>
-
     <input type="file" id="fileInput" accept=".json,.txt,.md,.html,.py,.js,.css" style="display: none" onchange="handleFileSelect(event)" multiple>
 
     <div class="toast" id="toast"></div>
         <script>
         // ==================== КОНСТАНТЫ ====================
-        const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
-        const API_BASE = 'https://mandala-engineer-chat.onrender.com'; // базовый URL для API
+        const WS_URL = (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws';
+        const API_BASE = window.location.origin;
         const GITHUB_REPO = 'voodoomushroomzzz-source/mandala-core';
 
         // Глобальные переменные
-        let chats = [];
-        let currentChatId = null;
-        let nextChatId = 1;
         let ws = null;
         let pendingFiles = [];
         let messageBuffer = '';
         let currentMessageDiv = null;
         let currentPatch = null;
         let editor = null; // для Monaco
+        let mainMessages = []; // массив сообщений текущего чата
 
         // DOM элементы
         const statusDot = document.getElementById('statusDot');
@@ -1209,12 +1180,10 @@
         const inputEl = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const thinkingEl = document.getElementById('thinking');
-        const seedsGrid = document.getElementById('seedsGrid');
         const filePreview = document.getElementById('filePreview');
         const fileNameEl = document.getElementById('fileName');
         const filePercentEl = document.getElementById('filePercent');
         const fileProgressBar = document.getElementById('fileProgressBar');
-        const chatList = document.getElementById('chatList');
         const fileTree = document.getElementById('file-tree');
         const currentFilePath = document.getElementById('current-file-path');
         const saveFileBtn = document.getElementById('save-file-btn');
@@ -1231,137 +1200,195 @@
             });
         });
 
-        // ==================== ЗАГРУЗКА ЧАТОВ ====================
-        function loadChats() {
-            const saved = localStorage.getItem('mandala_chats');
+        // ==================== ЗАГРУЗКА СООБЩЕНИЙ ====================
+        function loadMessages() {
+            const saved = localStorage.getItem('main_chat_messages');
             if (saved) {
                 try {
-                    chats = JSON.parse(saved);
-                    nextChatId = Math.max(...chats.map(c => parseInt(c.id.replace('chat_', ''))), 0) + 1;
-                } catch (e) {
-                    chats = [];
-                }
-            }
-            renderChatList();
-        }
-
-        function saveChats() {
-            localStorage.setItem('mandala_chats', JSON.stringify(chats));
-            chats.forEach(chat => {
-                if (chat.messages && chat.messages.length) {
-                    localStorage.setItem(`chat_${chat.id}_messages`, JSON.stringify(chat.messages));
-                }
-            });
-        }
-
-        function renderChatList() {
-            chatList.innerHTML = chats.map(chat => `
-                <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="switchChat('${chat.id}')">
-                    <span class="chat-item-title">${escapeHtml(chat.name)}</span>
-                    <div class="chat-item-actions">
-                        <button class="chat-item-action" onclick="renameChat('${chat.id}', event)">✎</button>
-                        <button class="chat-item-action delete" onclick="deleteChat('${chat.id}', event)">×</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function createNewChat(name = null) {
-            const defaultName = name || `Чат ${nextChatId}`;
-            const chatId = 'chat_' + (nextChatId++);
-            const newChat = { id: chatId, name: defaultName, created: Date.now(), messages: [] };
-            chats.push(newChat);
-            saveChats();
-            renderChatList();
-            switchChat(chatId);
-        }
-
-        function switchChat(chatId) {
-            if (currentChatId === chatId) return;
-            if (currentChatId) saveCurrentChatMessages();
-            currentChatId = chatId;
-            localStorage.setItem('current_chat_id', chatId);
-            const chat = chats.find(c => c.id === chatId);
-            if (chat) {
-                const savedMessages = localStorage.getItem(`chat_${chatId}_messages`);
-                chat.messages = savedMessages ? JSON.parse(savedMessages) : [];
-                messagesEl.innerHTML = '';
-                if (chat.messages.length > 0) {
-                    chat.messages.forEach(msg => {
-                        if (msg.role === 'user') addUserMessage(msg.content, false);
-                        else if (msg.role === 'assistant') appendFullMessage(msg.content, false);
-                        else if (msg.role === 'system') addSystemMessage(msg.content, false);
+                    mainMessages = JSON.parse(saved);
+                    messagesEl.innerHTML = '';
+                    mainMessages.forEach(msg => {
+                        if (msg.role === 'user') renderUserMessage(msg.content, false);
+                        else if (msg.role === 'assistant') renderAssistantMessage(msg.content, false);
+                        else if (msg.role === 'system') renderSystemMessage(msg.content, false);
                     });
-                } else {
-                    addSystemMessage('🌱 Новый чат. Добро пожаловать!', false);
+                } catch (e) {
+                    mainMessages = [];
                 }
-                renderChatList();
+            } else {
+                renderSystemMessage('🌱 Добро пожаловать в инженерный чат Мандалы!', false);
             }
+            scrollToBottom();
         }
 
-        function saveCurrentChatMessages() {
-            if (!currentChatId) return;
-            const chat = chats.find(c => c.id === currentChatId);
-            if (chat) {
-                const messages = [];
-                document.querySelectorAll('.msg').forEach(msgEl => {
-                    const role = msgEl.classList.contains('user') ? 'user' : 
-                                msgEl.classList.contains('sys') ? 'system' : 'assistant';
-                    const content = msgEl.querySelector('.bub').innerText;
-                    messages.push({ role, content });
-                });
-                chat.messages = messages;
-                localStorage.setItem(`chat_${currentChatId}_messages`, JSON.stringify(messages));
-            }
+        function saveMessages() {
+            localStorage.setItem('main_chat_messages', JSON.stringify(mainMessages));
         }
 
-        function renameChat(chatId, event) {
-            event.stopPropagation();
-            const chat = chats.find(c => c.id === chatId);
-            if (!chat) return;
-            document.getElementById('renameInput').value = chat.name;
-            document.getElementById('renameModal').classList.add('active');
-            document.getElementById('confirmRenameBtn').dataset.chatId = chatId;
+        function addMessage(role, content) {
+            mainMessages.push({ role, content, timestamp: Date.now() });
+            saveMessages();
         }
 
-        function closeRenameModal() {
-            document.getElementById('renameModal').classList.remove('active');
+        // ==================== ОТОБРАЖЕНИЕ СООБЩЕНИЙ ====================
+        function renderUserMessage(text, save = true) {
+            const div = createMessageElement('user');
+            const fileMatch = text.match(/^\[Загружен файл: (.+?)\]/);
+            const patchMatch = text.match(/^\[Патч: (.+?)\]/);
+            
+            if (fileMatch) {
+                div.querySelector('.bub').innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--green-bright);">📎 ${escapeHtml(fileMatch[1])}</span>`;
+            } else if (patchMatch) {
+                div.querySelector('.bub').innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:var(--surface-2);border:1px solid rgba(167,139,250,0.3);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--violet-soft);">📦 ${escapeHtml(patchMatch[1])}</span>`;
+            } else {
+                div.querySelector('.bub').textContent = text;
+            }
+            messagesEl.appendChild(div);
+            if (save) addMessage('user', text);
+            scrollToBottom();
         }
 
-        function confirmRename() {
-            const chatId = document.getElementById('confirmRenameBtn').dataset.chatId;
-            const newName = document.getElementById('renameInput').value.trim();
-            if (!chatId || !newName) return;
-            const chat = chats.find(c => c.id === chatId);
-            if (chat) {
-                chat.name = newName;
-                saveChats();
-                renderChatList();
-            }
-            closeRenameModal();
+        function renderAssistantMessage(text, save = true) {
+            const div = createMessageElement('assistant', 'grok');
+            let html = escapeHtml(text);
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--green-bright);">$1</strong>');
+            html = html.replace(/\n/g, '<br>');
+            div.querySelector('.bub').innerHTML = html;
+            messagesEl.appendChild(div);
+            if (save) addMessage('assistant', text);
+            scrollToBottom();
         }
 
-        function deleteChat(chatId, event) {
-            event.stopPropagation();
-            if (chats.length <= 1) {
-                showToast('Нельзя удалить последний чат', 'error');
-                return;
-            }
-            const index = chats.findIndex(c => c.id === chatId);
-            if (index !== -1) {
-                localStorage.removeItem(`chat_${chatId}_messages`);
-                chats.splice(index, 1);
-                if (currentChatId === chatId) switchChat(chats[0].id);
-                else renderChatList();
-                saveChats();
-            }
+        function renderSystemMessage(text, save = true) {
+            const div = document.createElement('div');
+            div.className = 'msg sys';
+            div.innerHTML = `<div class="bub">${text}</div>`;
+            messagesEl.appendChild(div);
+            if (save) addMessage('system', text);
+            scrollToBottom();
         }
+
+        function createMessageElement(role, model = null) {
+            const div = document.createElement('div');
+            div.className = `msg ${role}`;
+            let iconSvg, name;
+            if (role === 'user') {
+                iconSvg = '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>';
+                name = 'вы';
+            } else {
+                iconSvg = modelIcons[model] || modelIcons['grok'];
+                name = modelNames[model] || 'СР';
+            }
+            if (model) div.dataset.model = model;
+            div.innerHTML = `
+                <div class="av">${iconSvg}</div>
+                <div class="mbody">
+                    <div class="mname">${name}</div>
+                    <div class="bub"></div>
+                </div>
+            `;
+            return div;
+        }
+
+        function renderCodeBlock(lang, code, complete) {
+            const copyBtnClass = 'code-btn copy';
+            const downloadBtnClass = 'code-btn download';
+            const applyBtnClass = 'code-btn apply';
+            const lineCount = (code.match(/\n/g) || []).length + 1;
+            const shouldCollapse = complete;
+            const collapsedClass = shouldCollapse ? 'collapsed' : '';
+            const toggleBtn = complete
+                ? `<button class="code-btn toggle" onclick="toggleCodeBlock(this)" title="Развернуть/свернуть">${shouldCollapse ? '▶' : '▼'}</button>`
+                : '';
+            const linesHint = complete
+                ? `<span class="code-lines-hint">${lineCount} lines</span>`
+                : '';
+            const actions = complete ? `
+                <div class="code-actions">
+                    ${toggleBtn}
+                    <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">◈</button>
+                    <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
+                    ${lang === 'json' ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
+                </div>
+            ` : '';
+            return `
+                <div class="code-block ${complete ? 'complete' : 'streaming'} ${collapsedClass}">
+                    <div class="code-header">
+                        <span class="code-lang">${lang || 'code'}</span>
+                        ${linesHint}
+                        ${actions}
+                    </div>
+                    <pre class="code-content">${escapeHtml(code)}</pre>
+                </div>
+            `;
+        }
+
+        window.toggleCodeBlock = function(btn) {
+            const block = btn.closest('.code-block');
+            block.classList.toggle('collapsed');
+            btn.innerHTML = block.classList.contains('collapsed') ? '▶' : '▼';
+        };
+
+        function decodeHtmlEntities(text) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = text;
+            return textarea.value;
+        }
+
+        window.downloadCodeFromBlock = function(btn) {
+            const block = btn.closest('.code-block');
+            const rawCode = block.querySelector('.code-content').textContent;
+            const decodedCode = decodeHtmlEntities(rawCode);
+            const lang = block.querySelector('.code-lang').textContent || 'txt';
+            const blob = new Blob([decodedCode], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `code.${lang}`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('◈ файл скачан', 'success');
+        };
+
+        window.copyCodeFromBlock = function(btn) {
+            const block = btn.closest('.code-block');
+            const code = block.querySelector('.code-content').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✓';
+                showToast('◈ код скопирован', 'success');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 1000);
+            }).catch(err => {
+                showToast('◈ ошибка копирования', 'error');
+                console.error('Copy failed:', err);
+            });
+        };
+
+        window.preparePatchFromBlock = function(btn) {
+            const codeElement = btn.closest('.code-block').querySelector('.code-content');
+            const rawCode = codeElement.textContent;
+            const decodedCode = decodeHtmlEntities(rawCode);
+            try {
+                JSON.parse(decodedCode);
+                currentPatch = decodedCode;
+                document.getElementById('patchPreviewContent').textContent = decodedCode;
+                document.getElementById('confirmPatchBtn').disabled = false;
+                openPatchModal();
+                showToast('◈ патч подготовлен', 'success');
+            } catch(e) {
+                showToast('◈ невалидный JSON: ' + e.message, 'error');
+            }
+        };
 
         // ==================== WEBSOCKET ====================
         function connect() {
             updateStatus('connecting');
             ws = new WebSocket(WS_URL);
-            ws.onopen = () => ws.send(JSON.stringify({ type: 'init', session_id: currentChatId }));
+            ws.onopen = () => ws.send(JSON.stringify({ type: 'init', session_id: 'main' }));
             ws.onmessage = (e) => { try { handleMessage(JSON.parse(e.data)); } catch (ex) { console.error(ex); } };
             ws.onclose = () => { updateStatus('error'); showToast('◈ соединение разорвано', 'error'); setTimeout(connect, 3000); };
             ws.onerror = () => updateStatus('error');
@@ -1399,17 +1426,15 @@
                     showToast(`◈ Ядро обновлено: ${data.version || ''}`, 'success');
                     break;
                 case 'history':
-                    // Бэкенд восстановил сессию из GitHub — рендерим историю
-                    // Пропускаем protected служебные сообщения (инъекция ядра)
                     messagesEl.innerHTML = '';
                     (data.messages || []).forEach(msg => {
-                        if (msg.role === 'user') addUserMessage(msg.content, false);
-                        else if (msg.role === 'assistant') appendFullMessage(msg.content, false);
+                        if (msg.role === 'user') renderUserMessage(msg.content, false);
+                        else if (msg.role === 'assistant') renderAssistantMessage(msg.content, false);
                     });
                     scrollToBottom();
                     break;
                 case 'system':
-                    addSystemMessage(data.text);
+                    renderSystemMessage(data.text);
                     break;
                 case 'stream':
                     handleStream(data.content, data.model);
@@ -1433,7 +1458,7 @@
                 case 'module_direct':
                     showToast(`◈ модуль ${data.name} получен`, 'success');
                     const formatted = `**Модуль ${data.name}:**\n\`\`\`json\n${data.content}\n\`\`\``;
-                    appendFullMessage(formatted, true);
+                    renderAssistantMessage(formatted, true);
                     break;
                 case 'modules_refreshed':
                     showToast(`◈ обновлено ${data.count} модулей`, 'success');
@@ -1445,8 +1470,7 @@
                     fileNameEl.textContent = `✅ ${data.summary}`;
                     fileProgressBar.style.width = '100%';
                     filePercentEl.textContent = '100%';
-                    addSystemMessage(data.summary);
-                    // НЕ прячем thinking — СР сейчас начнёт отвечать
+                    renderSystemMessage(data.summary);
                     setTimeout(() => {
                         filePreview.classList.add('hidden');
                         fileProgressBar.style.width = '0%';
@@ -1454,13 +1478,12 @@
                     break;
                 case 'file_read_done':
                     updateThinkingStatus({ tool: 'read_file', path: data.path, model: Array.from(activeModels)[0] });
-                    addSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов) — СР изучает`);
-                    // auto-ask: СР отвечает без дублирования вопроса
+                    renderSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов) — СР изучает`);
                     if (ws && ws.readyState === WebSocket.OPEN) {
                         ws.send(JSON.stringify({
                             type: 'ask',
                             text: `Ты только что прочитал файл ${escapeHtml(data.label || data.path)}. Изучи его и дай своё мнение: что это, какова структура, что важно знать.`,
-                            session_id: currentChatId,
+                            session_id: 'main',
                             models: getActiveModels()
                         }));
                     }
@@ -1493,84 +1516,6 @@
             }
         }
 
-        // ==================== СООБЩЕНИЯ ====================
-        function createMessageElement(role, model = null) {
-            const div = document.createElement('div');
-            div.className = `msg ${role}`;
-            // Определяем иконку и имя строго по model, не переиспользуем предыдущее
-            let iconSvg, name;
-            if (role === 'user') {
-                iconSvg = '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>';
-                name = 'вы';
-            } else if (model && modelIcons[model]) {
-                iconSvg = modelIcons[model];
-                name = modelNames[model] || 'СР';
-            } else {
-                // дефолт для assistant без модели — Грок
-                iconSvg = modelIcons['grok'];
-                name = 'СР';
-            }
-            if (model) div.dataset.model = model;
-            div.innerHTML = `
-                <div class="av">${iconSvg}</div>
-                <div class="mbody">
-                    <div class="mname">${name}</div>
-                    <div class="bub"></div>
-                </div>
-            `;
-            return div;
-        }
-
-        function addUserMessage(text, save = true) {
-            const div = createMessageElement('user');
-            // Детектируем файловые сообщения из истории
-            const fileMatch = text.match(/^\[Файл загружен: (.+?)\]\n```[\s\S]*$/);
-            const fileMatchSimple = text.match(/^\[Загружен файл: (.+?)\]$/);
-            const patchMatch = text.match(/^\[Патч: (.+?)\]$/);
-            const commentMatch = text.match(/^\[Комментарий к файлу (.+?)\]: ([\s\S]*)$/);
-            const coreMatch = text.match(/^\[ЯДРО МАНДАЛЫ ЗАГРУЖЕНО\]/);
-            const observerMatch = text.match(/^\[Комментарий внешнего наблюдателя Claude/);
-            
-            if (coreMatch || observerMatch) {
-                // Системные инъекции — не показываем
-                return;
-            } else if (fileMatch || fileMatchSimple) {
-                const fname = (fileMatch && fileMatch[1]) || (fileMatchSimple && fileMatchSimple[1]);
-                div.querySelector('.bub').innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--green-bright);">📎 ${escapeHtml(fname)}</span>`;
-            } else if (patchMatch) {
-                div.querySelector('.bub').innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:var(--surface-2);border:1px solid rgba(167,139,250,0.3);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--violet-soft);">📦 ${escapeHtml(patchMatch[1])}</span>`;
-            } else if (commentMatch) {
-                div.querySelector('.bub').textContent = commentMatch[2] || text;
-            } else {
-                div.querySelector('.bub').textContent = text;
-            }
-            messagesEl.appendChild(div);
-            scrollToBottom();
-            if (save) saveCurrentChatMessages();
-        }
-
-        function addSystemMessage(text, save = true) {
-            const div = document.createElement('div');
-            div.className = 'msg sys';
-            div.innerHTML = `<div class="bub">${text}</div>`;
-            messagesEl.appendChild(div);
-            scrollToBottom();
-            if (save) saveCurrentChatMessages();
-        }
-
-        function appendFullMessage(text, save = true) {
-            const div = createMessageElement('assistant');
-            let html = escapeHtml(text);
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--green-bright);">$1</strong>');
-            html = html.replace(/\n/g, '<br>');
-            div.querySelector('.bub').innerHTML = html;
-            messagesEl.appendChild(div);
-            scrollToBottom();
-            if (save) saveCurrentChatMessages();
-        }
-
         function handleStream(content, model) {
             if (!currentMessageDiv) {
                 currentMessageDiv = createMessageElement('assistant', model || 'grok');
@@ -1601,106 +1546,11 @@
         function finishMessage() {
             hideThinking();
             if (currentMessageDiv) {
-                saveCurrentChatMessages();
+                saveMessages(); // сохраняем после завершения
                 currentMessageDiv = null;
                 messageBuffer = '';
             }
         }
-
-        function renderCodeBlock(lang, code, complete) {
-            const copyBtnClass = 'code-btn copy';
-            const downloadBtnClass = 'code-btn download';
-            const applyBtnClass = 'code-btn apply';
-            const lineCount = (code.match(/\n/g) || []).length + 1;
-            const shouldCollapse = complete; // всегда свёрнут по умолчанию
-            const collapsedClass = shouldCollapse ? 'collapsed' : '';
-            const toggleBtn = complete
-                ? `<button class="code-btn toggle" onclick="toggleCodeBlock(this)" title="Развернуть/свернуть">${shouldCollapse ? '▶' : '▼'}</button>`
-                : '';
-            const linesHint = complete
-                ? `<span class="code-lines-hint">${lineCount} lines</span>`
-                : '';
-            const actions = complete ? `
-                <div class="code-actions">
-                    ${toggleBtn}
-                    <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">◈</button>
-                    <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
-                    ${lang === 'json' ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
-                </div>
-            ` : '';
-            return `
-                <div class="code-block ${complete ? 'complete' : 'streaming'} ${collapsedClass}">
-                    <div class="code-header">
-                        <span class="code-lang">${lang || 'code'}</span>
-                        ${linesHint}
-                        ${actions}
-                    </div>
-                    <pre class="code-content">${escapeHtml(code)}</pre>
-                </div>
-            `;
-        }
-
-        window.toggleCodeBlock = function(btn) {
-            const block = btn.closest('.code-block');
-            const isCollapsed = block.classList.toggle('collapsed');
-            btn.innerHTML = isCollapsed ? '▶' : '▼';
-        };
-
-        // Декодирование HTML-сущностей
-        function decodeHtmlEntities(text) {
-            const textarea = document.createElement('textarea');
-            textarea.innerHTML = text;
-            return textarea.value;
-        }
-
-        window.downloadCodeFromBlock = function(btn) {
-            const block = btn.closest('.code-block');
-            const rawCode = block.querySelector('.code-content').textContent;
-            const decodedCode = decodeHtmlEntities(rawCode);
-            const lang = block.querySelector('.code-lang').textContent || 'txt';
-            const blob = new Blob([decodedCode], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `code.${lang}`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('◈ файл скачан', 'success');
-        };
-
-        window.copyCodeFromBlock = function(btn) {
-            const block = btn.closest('.code-block');
-            // Используем innerText вместо textContent + decodeHtmlEntities
-            // innerText корректно сохраняет переносы строк из <pre>
-            const code = block.querySelector('.code-content').innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '✓';
-                showToast('◈ код скопирован', 'success');
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                }, 1000);
-            }).catch(err => {
-                showToast('◈ ошибка копирования', 'error');
-                console.error('Copy failed:', err);
-            });
-        };
-
-        window.preparePatchFromBlock = function(btn) {
-            const codeElement = btn.closest('.code-block').querySelector('.code-content');
-            const rawCode = codeElement.textContent;
-            const decodedCode = decodeHtmlEntities(rawCode);
-            try {
-                JSON.parse(decodedCode);
-                currentPatch = decodedCode;
-                document.getElementById('patchPreviewContent').textContent = decodedCode;
-                document.getElementById('confirmPatchBtn').disabled = false;
-                openPatchModal();
-                showToast('◈ патч подготовлен', 'success');
-            } catch(e) {
-                showToast('◈ невалидный JSON: ' + e.message, 'error');
-            }
-        };
 
         // ==================== ОТПРАВКА СООБЩЕНИЙ ====================
         function sendMessage() {
@@ -1713,7 +1563,7 @@
                 return;
             }
             if (!text) return;
-            addUserMessage(text);
+            renderUserMessage(text);
             inputEl.value = '';
             autoHeight();
             showThinking(Array.from(activeModels)[0]);
@@ -1722,7 +1572,7 @@
                 hideThinking();
                 return;
             }
-            ws.send(JSON.stringify({ type: 'ask', text: text, session_id: currentChatId, models: getActiveModels() }));
+            ws.send(JSON.stringify({ type: 'ask', text: text, session_id: 'main', models: getActiveModels() }));
         }
 
         async function sendFiles(files, caption) {
@@ -1730,19 +1580,16 @@
                 showToast('◈ нет соединения', 'error');
                 return;
             }
-            if (caption.trim()) addUserMessage(caption);
+            if (caption.trim()) renderUserMessage(caption);
             showThinking(Array.from(activeModels)[0]);
 
-            // Показываем индикатор загрузки
             filePreview.classList.remove('hidden');
             fileProgressBar.style.width = '0%';
             filePercentEl.textContent = '0%';
 
             let completed = 0;
             for (const file of files) {
-                // Обновляем имя текущего файла
                 fileNameEl.textContent = `⏳ ${file.name}`;
-
                 await new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -1752,7 +1599,7 @@
                             content: e.target.result.split(',')[1],
                             file_type: file.type || 'application/octet-stream',
                             caption: inputEl.value.trim(),
-                            session_id: currentChatId,
+                            session_id: 'main',
                             models: getActiveModels()
                         }));
                         completed++;
@@ -1765,12 +1612,8 @@
                 });
                 await new Promise(r => setTimeout(r, 100));
             }
-
-            // Показываем "ожидаем подтверждения от сервера"
             fileNameEl.textContent = `✓ ${files.map(f => f.name).join(', ')}`;
-            saveCurrentChatMessages();
-
-            // Прячем через 4 сек (к этому времени file_processed уже придёт)
+            saveMessages();
             setTimeout(() => {
                 filePreview.classList.add('hidden');
                 fileProgressBar.style.width = '0%';
@@ -1778,17 +1621,14 @@
             }, 4000);
         }
 
-        // ==================== ФАЙЛЫ ====================
         function handleFileSelect(e) {
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
             if (inputEl.value.trim()) {
-                // Есть текст — ждём кнопки отправки
                 pendingFiles = files;
                 updateFilePreview();
                 inputEl.focus();
             } else {
-                // auto-send when no caption
                 pendingFiles = files;
                 updateFilePreview();
                 setTimeout(() => {
@@ -1815,7 +1655,6 @@
         function clearFiles() {
             pendingFiles = [];
             document.getElementById('fileInput').value = '';
-            // Не прячем filePreview здесь — он скроется сам после подтверждения сервера
         }
 
         function setupDragDrop() {
@@ -1838,9 +1677,7 @@
             fileTree.innerHTML = 'Загрузка...';
             try {
                 const response = await fetch(`${API_BASE}/api/tree`);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 if (data.error) throw new Error(data.error);
                 const tree = buildTree(data.tree);
@@ -1906,8 +1743,7 @@
                 monaco.editor.setModelLanguage(editor.getModel(), language);
                 editor.setValue(content);
                 localStorage.setItem(`orig_${path}`, content);
-                // Уведомляем СР об открытом файле
-                addSystemMessage(`📁 Открыт файл: ${path}`, true);
+                renderSystemMessage(`📁 Открыт файл: ${path}`, true);
             } catch (err) {
                 editor.setValue(`// Ошибка загрузки: ${err.message}`);
             }
@@ -1919,7 +1755,7 @@
             const content = editor.getValue();
             const patch = { file_path: path, content: content };
             if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({ type: 'apply_patch', patch: patch, session_id: currentChatId }));
+                ws.send(JSON.stringify({ type: 'apply_patch', patch: patch, session_id: 'main' }));
                 showToast('◈ изменения отправлены', 'success');
                 localStorage.setItem(`orig_${path}`, content);
             } else {
@@ -1935,7 +1771,6 @@
         }
 
         function showThinking(model) {
-            // Ставим иконку и цвет активной модели
             const m = model || Array.from(activeModels)[0] || 'grok';
             const svgEl = document.getElementById('thinkingIconSvg');
             const labelEl = document.getElementById('thinkingLabel');
@@ -1991,25 +1826,20 @@
         }
 
         function updateResonance(value, level) {
-            const indicator = document.getElementById('resonanceIndicator');
-            const fill = document.getElementById('resonanceFill');
-            const valueEl = document.getElementById('resonanceValue');
-            if (!indicator || !fill || !valueEl) return;
-            indicator.classList.add('visible');
-            const percentage = Math.round(value * 100);
-            valueEl.textContent = `${percentage}%`;
-            fill.style.width = `${percentage}%`;
-            indicator.className = 'resonance-indicator visible resonance-level-' + level;
-            setTimeout(() => indicator.classList.remove('visible'), 8000);
+            // резонанс скрыт, можно оставить заглушку
         }
 
         // ==================== МОДЕЛИ ====================
-        const activeModels = new Set(['grok']);  // по умолчанию только Грок
+        const activeModels = new Set(['grok']);
+        const modelIcons = {
+            grok: `<svg viewBox="0 0 30 30" fill="none"><polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/><circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/></svg>`,
+            claude: `<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/><circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/></svg>`
+        };
+        const modelNames = { grok: 'Грок △', claude: 'Клод ○' };
+        const modelColors = { grok: '#10b981', claude: '#4f46e5' };
 
         function getActiveModels() { return Array.from(activeModels); }
-
         function toggleModel(model) {
-            // Маппинг model → id кнопки
             const btnMap = { grok: 'btnGrok', claude: 'btnClaude' };
             const btn = document.getElementById(btnMap[model]);
             if (!btn) return;
@@ -2022,22 +1852,8 @@
             }
         }
 
-        // Иконки моделей
-        const modelIcons = {
-            grok: `<svg viewBox="0 0 30 30" fill="none">
-                <polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/>
-                <circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/>
-            </svg>`,
-            claude: `<svg viewBox="0 0 30 30" fill="none">
-                <circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/>
-                <circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/>
-            </svg>`
-        };
-        const modelNames = { grok: 'Грок △', claude: 'Клод ○' };
-        const modelColors = { grok: '#10b981', claude: '#4f46e5' };
-
+        // ==================== НАБЛЮДАТЕЛЬ ====================
         let observerThinkingEl = null;
-
         function showObserverThinking() {
             hideObserverThinking();
             observerThinkingEl = document.createElement('div');
@@ -2046,11 +1862,9 @@
             messagesEl.appendChild(observerThinkingEl);
             scrollToBottom();
         }
-
         function hideObserverThinking() {
             if (observerThinkingEl) { observerThinkingEl.remove(); observerThinkingEl = null; }
         }
-
         function addObserverMessage(text, model = 'claude') {
             const div = document.createElement('div');
             div.className = 'msg observer';
@@ -2070,37 +1884,9 @@
                 </div>`;
             messagesEl.appendChild(div);
             scrollToBottom();
-            saveCurrentChatMessages();
+            saveMessages();
         }
-
-        // Compat stub
-        function setObserverState() {}
-        function toggleObserver() {}
-
-        function setupKeyboard() {
-            inputEl.addEventListener('keydown', e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            inputEl.addEventListener('input', autoHeight);
-        }
-
-        function setupTabs() {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.dataset.tab;
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    document.getElementById(`tab-${tabName}`).classList.add('active');
-                    // статус убран
-                    if (tabName === 'files') loadFileTree();
-                    if (tabName === 'map') loadMap();
-                });
-            });
-        }
+        function setObserverState() {} // заглушка
 
         // ==================== КАРТА ЯДРА ====================
         let mapLoaded = false;
@@ -2112,49 +1898,18 @@
             viz.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка карты...</div></div>';
             otherGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
 
-            // Конфигурация модулей ядра
             const coreModules = [
-                {
-                    id: 'boot', icon: '⚡', name: 'boot', file: 'simbiosis/boot.json',
-                    desc: 'Загрузочный модуль ядра. Версия, идентификация, базовая философия.',
-                    keys: ['version', 'identity', 'philosophy', 'startup_sequence']
-                },
-                {
-                    id: 'core_map', icon: '🗺', name: 'core_map', file: 'simbiosis/core_map.json',
-                    desc: 'Карта навигации по всем модулям и файлам репозитория.',
-                    keys: ['kernel_modules', 'repository', 'navigation_hint']
-                },
-                {
-                    id: 'engineer_chat', icon: '💬', name: 'eng_chat', file: 'simbiosis/engineer_chat.json',
-                    desc: 'Конфигурация инженерного чата: роли, поведение ИИ-агентов.',
-                    keys: ['agents', 'tools', 'session_rules', 'patch_format']
-                },
-                {
-                    id: 'philosophy', icon: '🌀', name: 'philosophy', file: 'simbiosis/philosophy.json',
-                    desc: 'Философские основы Мандалы: принципы, метафоры, этика.',
-                    keys: ['core_principles', 'metaphors', 'ethics', 'resonance']
-                },
-                {
-                    id: 'seeds', icon: '🌱', name: 'seeds', file: 'simbiosis/seeds.json',
-                    desc: 'Семена — активные идеи и инкубируемые проекты системы.',
-                    keys: ['seeds[]', 'id', 'type', 'status', 'description']
-                },
-                {
-                    id: 'roadmaps', icon: '📜', name: 'roadmaps', file: 'simbiosis/roadmaps.json',
-                    desc: 'Дорожные карты развития. Этапы, вехи, критерии завершения.',
-                    keys: ['roadmaps{}', 'title', 'milestones', 'status']
-                },
-                {
-                    id: 'telegram_bot', icon: '🤖', name: 'tg_bot', file: 'simbiosis/telegram_bot.json',
-                    desc: 'Конфигурация Telegram-бота Мандалы.',
-                    keys: ['commands', 'persona', 'integration']
-                },
+                { id: 'boot', icon: '⚡', name: 'boot', file: 'simbiosis/boot.json', desc: 'Загрузочный модуль ядра. Версия, идентификация, базовая философия.', keys: ['version', 'identity', 'philosophy', 'startup_sequence'] },
+                { id: 'core_map', icon: '🗺', name: 'core_map', file: 'simbiosis/core_map.json', desc: 'Карта навигации по всем модулям и файлам репозитория.', keys: ['kernel_modules', 'repository', 'navigation_hint'] },
+                { id: 'engineer_chat', icon: '💬', name: 'eng_chat', file: 'simbiosis/engineer_chat.json', desc: 'Конфигурация инженерного чата: роли, поведение ИИ-агентов.', keys: ['agents', 'tools', 'session_rules', 'patch_format'] },
+                { id: 'philosophy', icon: '🌀', name: 'philosophy', file: 'simbiosis/philosophy.json', desc: 'Философские основы Мандалы: принципы, метафоры, этика.', keys: ['core_principles', 'metaphors', 'ethics', 'resonance'] },
+                { id: 'seeds', icon: '🌱', name: 'seeds', file: 'simbiosis/seeds.json', desc: 'Семена — активные идеи и инкубируемые проекты системы.', keys: ['seeds[]', 'id', 'type', 'status', 'description'] },
+                { id: 'roadmaps', icon: '📜', name: 'roadmaps', file: 'simbiosis/roadmaps.json', desc: 'Дорожные карты развития. Этапы, вехи, критерии завершения.', keys: ['roadmaps{}', 'title', 'milestones', 'status'] },
+                { id: 'telegram_bot', icon: '🤖', name: 'tg_bot', file: 'simbiosis/telegram_bot.json', desc: 'Конфигурация Telegram-бота Мандалы.', keys: ['commands', 'persona', 'integration'] },
             ];
 
-            // Позиции на окружности (7 модулей вокруг центра)
             const cx = 160, cy = 160, r = 105;
             const angleStep = (2 * Math.PI) / coreModules.length;
-
             let svgLines = '';
             let nodes = '';
             coreModules.forEach((mod, i) => {
@@ -2165,19 +1920,10 @@
                 const ny = (y / 320) * 100;
                 const ox = x - cx;
                 const oy = y - cy;
-                // Линия от центра
                 svgLines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>`;
                 nodes += `
-                    <div class="core-node core-node-module" style="
-                        left:${nx}%;top:${ny}%;
-                        transform:translate(calc(-50% + 0px), calc(-50% + 0px));
-                        --ox:${ox > 0 ? '12%' : ox < 0 ? '-12%' : '0'};
-                        --oy:${oy > 0 ? '12%' : oy < 0 ? '-12%' : '0'};
-                        flex-direction:column;display:flex;align-items:center;justify-content:center;
-                        cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;
-                    " 
+                    <div class="core-node core-node-module" style="left:${nx}%;top:${ny}%;transform:translate(calc(-50% + 0px), calc(-50% + 0px));--ox:${ox > 0 ? '12%' : ox < 0 ? '-12%' : '0'};--oy:${oy > 0 ? '12%' : oy < 0 ? '-12%' : '0'};flex-direction:column;display:flex;align-items:center;justify-content:center;cursor:pointer;"
                     data-mod="${mod.id}"
-                    title="Нажми чтобы СР прочитал ${mod.name}"
                     onmouseenter="showModuleTooltip(this, ${JSON.stringify(mod).replace(/"/g, '&quot;')})"
                     onmouseleave="hideModuleTooltip(this)"
                     onclick="requestFileRead('${mod.file}', '${mod.icon} ${mod.name}')">
@@ -2186,7 +1932,6 @@
                         <span style="font-size:7px;color:var(--text-3);font-family:var(--mono);margin-top:2px;letter-spacing:0.5px;">↓ читать</span>
                     </div>`;
             });
-
             viz.innerHTML = `
                 <div class="core-map-wrapper">
                     <div class="core-center">
@@ -2197,23 +1942,15 @@
                     <div style="font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:1px;text-align:center;">Наведи — детали · Нажми — СР читает файл</div>
                 </div>
             `;
-
-            // Остальные файлы репо
             try {
                 const resp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/simbiosis/core_map.json`);
                 if (resp.ok) {
                     const data = await resp.json();
                     const repoFiles = data.repository?.files || {};
-                    const otherItems = Object.entries(repoFiles).filter(([path]) =>
-                        !path.startsWith('simbiosis/')
-                    );
+                    const otherItems = Object.entries(repoFiles).filter(([path]) => !path.startsWith('simbiosis/'));
                     if (otherItems.length) {
                         otherGrid.innerHTML = otherItems.map(([path, info]) => `
-                            <div class="file-card" style="cursor:pointer;transition:border-color 0.15s;"
-                                title="Нажми чтобы СР прочитал файл"
-                                onmouseenter="this.style.borderColor='var(--green-2)'"
-                                onmouseleave="this.style.borderColor=''"
-                                onclick="requestFileRead('${path}', '📄 ${escapeHtml(path)}')">
+                            <div class="file-card" style="cursor:pointer;" onclick="requestFileRead('${path}', '📄 ${escapeHtml(path)}')">
                                 <div class="file-card-path">📄 ${escapeHtml(path)}</div>
                                 <div class="file-card-desc">${escapeHtml(info.description || '')}</div>
                                 <div style="font-family:var(--mono);font-size:9px;color:var(--text-3);margin-top:4px;">↓ нажми — СР читает</div>
@@ -2245,143 +1982,23 @@
             if (tip) tip.remove();
         };
 
-        // ==================== ЧИТАТЬ ФАЙЛ (пункт 8) ====================
-        // Клик на модуль/карточку в карте → СР читает файл через WS → обновляет знания
         window.requestFileRead = function(filePath, label) {
             if (!ws || ws.readyState !== WebSocket.OPEN) {
-                addSystemMessage('⚠️ Нет подключения к серверу. Переподключитесь.');
+                renderSystemMessage('⚠️ Нет подключения к серверу. Переподключитесь.');
                 return;
             }
-            // Переключаемся на таб чата чтобы пользователь видел процесс
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelector('[data-tab="chat"]').classList.add('active');
             document.getElementById('tab-chat').classList.add('active');
-
-            addSystemMessage(`◈ Запрашиваю у СР чтение файла: <code style="font-family:var(--mono);font-size:11px;background:var(--surface-2);padding:2px 6px;border-radius:3px;">${escapeHtml(filePath)}</code>`);
+            renderSystemMessage(`◈ Запрашиваю у СР чтение файла: <code style="font-family:var(--mono);font-size:11px;background:var(--surface-2);padding:2px 6px;border-radius:3px;">${escapeHtml(filePath)}</code>`);
             ws.send(JSON.stringify({
                 type: 'read_file_request',
                 path: filePath,
                 label: label || filePath,
-                session_id: currentChatId
+                session_id: 'main'
             }));
         };
-
-        async function loadStatus() {
-            seedsGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
-            document.getElementById('roadmapsGrid').innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
-            document.getElementById('statusRings').innerHTML = '';
-
-            // Карточки колец
-            const rings = [
-                { name: 'Crystal', color: 'var(--indigo-soft)', desc: 'initium · philosophia · geometria' },
-                { name: 'Flow', color: 'var(--green-2)', desc: 'akasha · incubae · sphaerae' },
-                { name: 'Impulse', color: 'var(--violet-soft)', desc: 'tectosphaera' }
-            ];
-            document.getElementById('statusRings').innerHTML = rings.map(r => `
-                <div style="flex:1;min-width:140px;padding:10px 12px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius);border-left:2px solid ${r.color};">
-                    <div style="font-family:var(--mono);font-size:10px;color:${r.color};letter-spacing:1px;margin-bottom:4px;">${r.name}</div>
-                    <div style="font-family:var(--mono);font-size:9px;color:var(--text-2);">${r.desc}</div>
-                </div>
-            `).join('');
-
-            // ── Семена ──
-            try {
-                const incResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/incubae.json`);
-                if (!incResp.ok) throw new Error(`HTTP ${incResp.status}`);
-                const incData = await incResp.json();
-
-                // fast_index может лежать как 'fast_index' или '/fast_index'
-                const fastIndex = incData['fast_index'] || incData['/fast_index'] || {};
-                const fastSeeds = fastIndex.seeds || [];
-                const directSeeds = incData.seeds || [];
-
-                // Предпочитаем полные данные из seeds, дополняем fast_index
-                const allSeeds = directSeeds.length ? directSeeds : fastSeeds;
-                const totalActive = fastIndex.total_active || fastSeeds.filter(s => s.status === 'active').length || allSeeds.length;
-
-                // Счётчик — одна строка
-                const seedLabel = document.getElementById('seedsLabel');
-                if (seedLabel) seedLabel.textContent = `🌱 семена (incubae) — ${totalActive} активных`;
-
-                if (!allSeeds.length) {
-                    seedsGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет семян</div></div>';
-                } else {
-                    seedsGrid.innerHTML = allSeeds.map(seed => `
-                        <div class="seed-card" onclick="askAboutSeed('${seed.id}')">
-                            <div class="seed-header">
-                                <div class="seed-title">${escapeHtml(seed.name || seed.id || 'без названия')}</div>
-                                <div class="seed-id">${seed.id || ''}</div>
-                            </div>
-                            <div class="seed-desc">${escapeHtml(seed.description || seed.core_essence || '')}</div>
-                            <div class="seed-meta">
-                                <span class="seed-badge" style="border-color:var(--green);color:var(--green-bright);">${seed.type || 'seed'}</span>
-                                <span class="seed-badge" style="border-color:${seed.status==='active'?'var(--green)':'var(--text-3)'};">${seed.status || 'active'}</span>
-                                ${seed.expiry ? `<span class="seed-badge">до ${seed.expiry}</span>` : ''}
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            } catch(err) {
-                seedsGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
-            }
-
-            // ── Роадмапы ──
-            const rmGrid = document.getElementById('roadmapsGrid');
-            try {
-                const akResp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/akasha_chronicorum.json`);
-                if (!akResp.ok) throw new Error(`HTTP ${akResp.status}`);
-                const akData = await akResp.json();
-
-                // fast_index или прямой поиск в spheres.cosmosphaera.blocks
-                const fi = akData['fast_index'] || akData['/fast_index'] || {};
-                let roadmaps = fi.roadmaps || [];
-
-                if (!roadmaps.length) {
-                    // Ищем в spheres.cosmosphaera.blocks (реальная структура)
-                    const cosmo = (akData.spheres || {}).cosmosphaera || akData.cosmosphaera || {};
-                    const blocks = cosmo.blocks || [];
-                    const rmBlocks = blocks.filter(b => b && (b.type === 'roadmap' || b.roadmap));
-                    roadmaps = rmBlocks.map(b => ({
-                        id: b.id || '?',
-                        title: (b.roadmap || {}).title || (b.roadmap || {}).description || b.id || 'Роадмап',
-                        description: (b.roadmap || {}).description || '',
-                        milestones: ((b.roadmap || {}).milestones || []).length,
-                        status: b.status || 'active'
-                    }));
-                }
-
-                // Счётчик — одна строка
-                const rmLabel = document.getElementById('roadmapsLabel');
-                if (rmLabel) rmLabel.textContent = `📜 роадмапы (akasha) — ${roadmaps.length}`;
-
-                if (!roadmaps.length) {
-                    rmGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет роадмапов</div></div>';
-                } else {
-                    rmGrid.innerHTML = roadmaps.map(rm => `
-                        <div class="seed-card" style="border-left:2px solid var(--violet-soft);">
-                            <div class="seed-header">
-                                <div class="seed-title">${escapeHtml(rm.title)}</div>
-                                <div class="seed-id">${rm.id}</div>
-                            </div>
-                            <div class="seed-desc">${escapeHtml(rm.description)}</div>
-                            <div class="seed-meta">
-                                <span class="seed-badge" style="border-color:var(--violet-soft);color:var(--violet-soft);">roadmap</span>
-                                ${rm.milestones ? `<span class="seed-badge">${rm.milestones} milestones</span>` : ''}
-                                <span class="seed-badge">${rm.status}</span>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            } catch(err) {
-                rmGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${err.message}</div></div>`;
-            }
-        }
-
-        // Оставляем loadSeeds как alias
-        async function loadSeeds() { return loadStatus(); }
-
-        window.askAboutSeed = (seedId) => sendDirectMessage(`Расскажи о семени ${seedId}`);
 
         // ==================== ПАТЧИ ====================
         function openPatchModal() { document.getElementById('patchModal').classList.add('active'); }
@@ -2394,77 +2011,37 @@
         function confirmPatch() {
             if (!currentPatch || !ws || ws.readyState !== WebSocket.OPEN) return;
             try {
-                ws.send(JSON.stringify({ type: 'apply_patch', patch: JSON.parse(currentPatch), session_id: currentChatId }));
+                ws.send(JSON.stringify({ type: 'apply_patch', patch: JSON.parse(currentPatch), session_id: 'main' }));
                 closePatchModal();
                 showToast('◈ патч отправлен', 'success');
-                addSystemMessage('◈ применение патча...');
+                renderSystemMessage('◈ применение патча...');
             } catch(e) {
                 showToast('◈ ошибка патча', 'error');
             }
         }
         function handlePatchResult(results) {
-            results.forEach(r => addSystemMessage(`◈ ${r.status==='success'?'✓':'✗'} ${r.file||r.module}: ${r.message}`));
+            results.forEach(r => renderSystemMessage(`◈ ${r.status==='success'?'✓':'✗'} ${r.file||r.module}: ${r.message}`));
         }
-
         function handlePatchPreview(data) {
-            // Показываем diff preview перед применением патча
             const diffLines = data.diff || [];
             const file = data.file || 'unknown';
             const success = data.success !== false;
-            
             let previewText = `**📊 Diff Preview: ${file}**\n\n`;
-            
             if (diffLines.length === 0) {
                 previewText += '_Изменений не обнаружено_\n';
             } else {
-                previewText += '```diff\n';
-                diffLines.forEach(line => {
-                    previewText += line + '\n';
-                });
-                previewText += '```\n';
+                previewText += '```diff\n' + diffLines.join('\n') + '\n```\n';
             }
-            
             if (data.applied && data.applied.length > 0) {
                 previewText += `\n✅ Применено операций: ${data.applied.length}\n`;
             }
-            
             if (data.failed && data.failed.length > 0) {
                 previewText += `\n❌ Ошибок: ${data.failed.length}\n`;
-                data.failed.forEach(f => {
-                    previewText += `  • ${f.op} ${f.path}: ${f.error}\n`;
-                });
+                data.failed.forEach(f => { previewText += `  • ${f.op} ${f.path}: ${f.error}\n`; });
             }
-            
-            appendFullMessage(previewText, true);
-            
-            if (!success) {
-                showToast(`◈ Патч ${file} содержит ошибки`, 'error');
-            } else {
-                showToast(`◈ Diff подготовлен для ${file}`, 'success');
-            }
-        }
-
-
-        // ==================== БЫСТРЫЕ ДЕЙСТВИЯ ====================
-        function quickAction(action) {
-            if (action === 'files') sendDirectMessage('/tree');
-            else if (action === 'forget') {
-                if (confirm('Очистить историю этого чата?')) {
-                    messagesEl.innerHTML = '';
-                    addSystemMessage('◈ история забыта');
-                    saveCurrentChatMessages();
-                }
-            }
-        }
-
-        function sendDirectMessage(text) {
-            if (!ws || ws.readyState !== WebSocket.OPEN) {
-                showToast('◈ нет соединения', 'error');
-                return;
-            }
-            addUserMessage(text);
-            showThinking(Array.from(activeModels)[0]);
-            ws.send(JSON.stringify({ type: 'ask', text: text, session_id: currentChatId, models: getActiveModels() }));
+            renderAssistantMessage(previewText, true);
+            if (!success) showToast(`◈ Патч ${file} содержит ошибки`, 'error');
+            else showToast(`◈ Diff подготовлен для ${file}`, 'success');
         }
 
         // ==================== TOAST ====================
@@ -2475,7 +2052,32 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // ==================== АНИМАЦИЯ ЦВЕТКА ЖИЗНИ ====================
+        // ==================== НАСТРОЙКИ ====================
+        function setupKeyboard() {
+            inputEl.addEventListener('keydown', e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            inputEl.addEventListener('input', autoHeight);
+        }
+
+        function setupTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`tab-${tabName}`).classList.add('active');
+                    if (tabName === 'files') loadFileTree();
+                    if (tabName === 'map') loadMap();
+                });
+            });
+        }
+
+        // Анимация цветка
         function animateFlowerGradient() {
             const grad = document.getElementById('livingGradient');
             if (!grad) return;
@@ -2493,15 +2095,9 @@
             step();
         }
 
-        // ==================== ЗАПУСК ====================
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         function init() {
-            loadChats();
-            if (chats.length === 0) createNewChat('Основной чат');
-            else {
-                const lastActive = localStorage.getItem('current_chat_id');
-                if (lastActive && chats.find(c => c.id === lastActive)) switchChat(lastActive);
-                else switchChat(chats[0].id);
-            }
+            loadMessages();
             connect();
             setupTabs();
             setupKeyboard();
