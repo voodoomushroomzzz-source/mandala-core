@@ -53,6 +53,11 @@
         "version": "v1.2.2",
         "date": "2026-02-27",
         "summary": "Add SEED-013 Graphic Agent."
+      },
+      {
+        "version": "v1.2.3",
+        "date": "2026-02-28",
+        "summary": "SEED-014 Instructions module"
       }
     ],
     "roadmap": {
@@ -72,7 +77,7 @@
         }
       ]
     },
-    "version": "v1.2.2"
+    "version": "v1.2.3"
   },
   "protocols": {
     "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -178,6 +183,31 @@
         "criteria": "Latency<10s, quality>SDXL, multi-modal (RU/EN), inline."
       },
       "roadmap_link": "RM-005"
+    },
+    {
+      "id": "SEED-014",
+      "type": "architecture",
+      "name": "Модуль instructions.json — библиотека навыков СР",
+      "created": "2026-02-28",
+      "created_by": "gardener",
+      "status": "active",
+      "ttl": "∞",
+      "resonance": "high",
+      "description": "Хранилище инструкций: patch_skill, tools (search/read/patch), agents (Graphic/Scout). Загрузка в промпт.",
+      "content": {
+        "priority": "high",
+        "tech_stack": [
+          "JSON array",
+          "Auto-load in boot/core"
+        ],
+        "steps": [
+          "M1: Создать файл с INSTR-001 Patch.",
+          "M2: Интегр в boot.",
+          "M3: Roadmap RM-006."
+        ],
+        "criteria": "5+ instr, auto-context."
+      },
+      "roadmap_link": "RM-006"
     }
   ],
   "archive": [
@@ -252,9 +282,9 @@
     }
   ],
   "registry": {
-    "last_updated": "2026-02-27",
-    "total_seeds": 11,
-    "active_seeds": 4,
+    "last_updated": "2026-02-28",
+    "total_seeds": 12,
+    "active_seeds": 5,
     "archived": 6
   },
   "changes": {
