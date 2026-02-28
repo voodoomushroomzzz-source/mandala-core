@@ -1637,10 +1637,10 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                 if not file_path:
                     results.append({"file": "unknown", "status": "error", "message": "Не указан file_path или target_module"})
                     continue
-                # ── ПАТЧИ ТОЛЬКО ДЛЯ JSON ФАЙЛОВ ──
-                if not file_path.endswith(".json"):
-                    results.append({"file": file_path, "status": "error", "message": "Патчи применяются только к .json файлам"})
-                    continue
+                # ── ОПРЕДЕЛЯЕМ ТИП ПАТЧА ──
+                # JSON патчи (точечные изменения) - только для .json
+                # TEXT патчи (str_replace) - для .py, .html, .md, .txt и др.
+                is_json_file = file_path.endswith(".json")
                 url = f"{session_store.api_base}/contents/{file_path}"
                 resp = await client.get(url, headers=headers)
                 if resp.status_code != 200:
@@ -1657,39 +1657,69 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                     file_data = resp.json()
                     current_content = base64.b64decode(file_data["content"]).decode("utf-8")
                     sha = file_data["sha"]
+                    
+                    # ═══ ВАРИАНТ 1: Полная замена файла (content) ═══
                     if "content" in patch:
                         new_content = patch["content"]
-                    elif "changes" in patch:
+                    
+                    # ═══ ВАРИАНТ 2: JSON патчи (changes) — только для .json ═══
+                    elif "changes" in patch and is_json_file:
                         try:
                             current_json = json.loads(current_content)
                         except json.JSONDecodeError:
-                            results.append({"file": file_path, "status": "error", "message": "Файл не является JSON, а запрошены точечные изменения"})
+                            results.append({"file": file_path, "status": "error", "message": "Файл не является валидным JSON"})
                             continue
                         test_result = await apply_batch_patch_dry_run(current_json, patch["changes"])
                         if not test_result["success"]:
                             error_msg = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
-                            # Отправляем diff даже при ошибке
-                            await manager.send_to(websocket, {
-                                "type": "patch_preview",
-                                "file": file_path,
-                                "diff": test_result.get("diff", []),
-                                "applied": test_result.get("applied", []),
-                                "failed": test_result.get("failed", []),
-                                "success": False
-                            })
                             results.append({"file": file_path, "status": "error", "message": f"Ошибка применения: {error_msg}"})
                             continue
-                        # Отправляем diff для успешного патча
-                        await manager.send_to(websocket, {
-                            "type": "patch_preview",
-                            "file": file_path,
-                            "diff": test_result.get("diff", []),
-                            "applied": test_result.get("applied", []),
-                            "success": True
-                        })
                         new_content = json.dumps(test_result["result_content"], indent=2, ensure_ascii=False)
+                    
+                    # ═══ ВАРИАНТ 3: TEXT патчи (replacements) — для .py, .html, .md и др. ═══
+                    elif "replacements" in patch:
+                        new_content = current_content
+                        replacements = patch["replacements"]
+                        if not isinstance(replacements, list):
+                            results.append({"file": file_path, "status": "error", "message": "replacements должен быть массивом"})
+                            continue
+                        
+                        failed_replacements = []
+                        for i, repl in enumerate(replacements):
+                            old_str = repl.get("old")
+                            new_str = repl.get("new")
+                            if old_str is None or new_str is None:
+                                failed_replacements.append(f"#{i}: нет old/new")
+                                continue
+                            
+                            # Проверяем что old_str встречается ровно 1 раз
+                            count = new_content.count(old_str)
+                            if count == 0:
+                                failed_replacements.append(f"#{i}: строка не найдена")
+                                continue
+                            elif count > 1:
+                                failed_replacements.append(f"#{i}: найдено {count} вхождений (должно быть 1)")
+                                continue
+                            
+                            # Применяем замену
+                            new_content = new_content.replace(old_str, new_str, 1)
+                        
+                        if failed_replacements:
+                            results.append({
+                                "file": file_path,
+                                "status": "error",
+                                "message": f"Ошибки замен: {'; '.join(failed_replacements)}"
+                            })
+                            continue
+                        
+                        # Отправляем системное сообщение об успехе
+                        await manager.send_to(websocket, {
+                            "type": "system",
+                            "text": f"✅ Патч для {file_path}: {len(replacements)} замен применено"
+                        })
+                    
                     else:
-                        results.append({"file": file_path, "status": "error", "message": "Нет ни content, ни changes"})
+                        results.append({"file": file_path, "status": "error", "message": "Нет ни content, ни changes, ни replacements"})
                         continue
                 content_b64 = base64.b64encode(new_content.encode("utf-8")).decode("utf-8")
                 commit_msg = f"📝 Патч от {session_id[:8]} | {datetime.now().strftime('%H:%M')}"
