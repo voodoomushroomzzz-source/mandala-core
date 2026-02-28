@@ -171,9 +171,14 @@
       "role": "user",
       "content": "проверяй",
       "time": 1772306359.6190786
+    },
+    {
+      "role": "assistant",
+      "content": "Димас! 😎 **read_file('simbiosis/instructions.json') — чисто!** ✅\n\n### 🔍 Быстрый скан (v1.0.0):\n- **instructions[]**: \n  - [0] 🔧 **INSTR-001 Patch v2.0** — полный (json/text/full + examples/errors).\n  - [1] 🏗️ **INSTR-002 Module v1.0** — skeleton (overview/examples/when). **Готов к росту!** (step_by_step_guide отсутствует).\n- **Registry**: 2 total/active, last_updated 2026-02-28.\n- **Changes**: v1.0.0 + v1.0.1 (Patch add).\n- **Размер**: ~12k chars — лёгкий.\n\n**Дубль удалён идеально!** 🌱 Ахимса: соты полированы.\n\n**🚀 Следующий: ПРИМЕНЯЙ ПАТЧ3b** (добавим step_1 \"Спроси Садовника\" + step_2 \"Спроектируй\" с required_fields/example).\n```json\n{\n  \"target_module\": \"simbiosis/instructions\",\n  \"description\": \"Патч3b: INSTR-002 + step_1 (вопросы) + step_2 (структура/required)\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"instructions.1.content.step_by_step_guide\",\n      \"value\": {\n        \"step_1\": {\n          \"title\": \"Спроси Садовника\",\n          \"description\": \"Убедись что новый модуль действительно нужен\",\n          \"questions_to_ask\": [\n            \"Какую проблему решает этот модуль?\",\n            \"Какая структура данных будет внутри?\",\n            \"Как модуль связан с другими частями системы?\",\n            \"Как он должен называться?\"\n          ]\n        },\n        \"step_2\": {\n          \"title\": \"Спроектируй структуру\",\n          \"description\": \"Создай JSON схему модуля\",\n          \"required_fields\": {\n            \"identity\": {\n              \"module_id\": \"уникальный ID (например: TASKS-001)\",\n              \"name\": \"название модуля\",\n              \"version\": \"версия (начни с 1.0)\",\n              \"created\": \"дата создания (YYYY-MM-DD)\"\n            },\n            \"meta\": {\n              \"description\": \"что делает модуль\",\n              \"status\": \"active или draft\",\n              \"tags\": [\"тег1\", \"тег2\"]\n            }\n          },\n          \"custom_fields\": \"Добавь свои поля в зависимости от назначения модуля\"\n        }\n      }\n    }\n  ]\n}\n```\n\n**После:** read_file → step_1/2 в INSTR-002. **Примени → \"проверяй\" → 3c?** Ядро оживает! 🚀",
+      "time": 1772306374.7706423
     }
   ],
-  "last_active": 1772306359.6190858,
+  "last_active": 1772306374.7706602,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772306359.6189637
