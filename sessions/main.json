@@ -1,6 +1,18 @@
 {
   "messages": [
     {
+      "role": "user",
+      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.2.0 | Коммит: 8747140\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
+      "time": 0,
+      "_protected": true
+    },
+    {
+      "role": "assistant",
+      "content": "◈ Ядро Симбиоза активно. Готов к работе.",
+      "time": 0,
+      "_protected": true
+    },
+    {
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772306461.0916057
@@ -139,10 +151,15 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772307587.0206466
+    },
+    {
+      "role": "user",
+      "content": "Файл не является валидным JSON",
+      "time": 1772307601.9509406
     }
   ],
-  "last_active": 1772307587.0206633,
+  "last_active": 1772307601.9509451,
   "created_at": 1772231887.431914,
-  "modules_injected": false,
-  "injection_timestamp": 1772307474.164186
+  "modules_injected": true,
+  "injection_timestamp": 1772307601.9508696
 }
