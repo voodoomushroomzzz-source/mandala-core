@@ -2,6 +2,18 @@
   "messages": [
     {
       "role": "user",
+      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.2.0 | Коммит: b9e7a51\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
+      "time": 0,
+      "_protected": true
+    },
+    {
+      "role": "assistant",
+      "content": "◈ Ядро Симбиоза активно. Готов к работе.",
+      "time": 0,
+      "_protected": true
+    },
+    {
+      "role": "user",
       "content": "не появилась кнопка для применения патча, давай сделаем 2 патчами, первым создадим модуль, с общим описанием, а вторым добавим эту инструкцию",
       "time": 1772270429.9536762
     },
@@ -89,10 +101,15 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772305845.4504342
+    },
+    {
+      "role": "user",
+      "content": "теперь патч 3",
+      "time": 1772305858.982555
     }
   ],
-  "last_active": 1772305845.4504464,
+  "last_active": 1772305858.98256,
   "created_at": 1772231887.431914,
-  "modules_injected": false,
-  "injection_timestamp": 1772305809.2732105
+  "modules_injected": true,
+  "injection_timestamp": 1772305858.9824786
 }
