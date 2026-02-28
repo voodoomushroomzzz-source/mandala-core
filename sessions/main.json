@@ -111,9 +111,14 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772308786.1344569
+    },
+    {
+      "role": "user",
+      "content": "simbiosis/instructions.json: Файл не является валидным JSON",
+      "time": 1772308792.3421533
     }
   ],
-  "last_active": 1772308786.1344693,
+  "last_active": 1772308792.3421586,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772308570.5914419
