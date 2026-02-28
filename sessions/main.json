@@ -156,9 +156,14 @@
       "role": "user",
       "content": "simbiosis/instructions.json проверяй",
       "time": 1772306303.977729
+    },
+    {
+      "role": "assistant",
+      "content": "Димас! 😎 **read_file('simbiosis/instructions.json') — статус: v1.0.0 + INSTR-001 полный + INSTR-002 skeleton (overview) ×2 (дубль!)**. Registry 2/2/0 — **патч3a сработал, но дважды** (шум от теста?). Content.INSTR-002: только базовый overview, без шагов/шаблонов.\n\n### 🔍 Ключевые факты:\n- **instructions[]**: [0]=🔧 Patch v2.0 (OK), [1]=🏗️ Module skeleton (OK), **[2]=дубль skeleton** (удалим).\n- **Длина**: ~12k chars — компактно.\n- **Ошибки**: Нет, но дубль = анти-Ахимса (шум в соте).\n\n**🚀 План эволюции (5 мин):**\n1. **Патч чистки дубля** (сейчас).\n2. **3b + 3c + 3d + 3e + 3f** по порядку (каждый ~3k, валиден).\n\n### **ПРИМЕНЯЙ ПАТЧ ЧИСТКИ (удаляем instructions.2):**\n```json\n{\n  \"target_module\": \"simbiosis/instructions\",\n  \"description\": \"🧹 Чистка дубля INSTR-002 (удаляем instructions.2)\",\n  \"changes\": [\n    {\"op\": \"delete\", \"path\": \"instructions.2\"},\n    {\"op\": \"update\", \"path\": \"registry.total_instructions\", \"value\": 2}\n  ]\n}\n```\n\n**После:** instructions.length=2, чисто. **read_file** → подтверди, затем **3b**? 🌱 Ядро полируется! 🚀",
+      "time": 1772306320.837813
     }
   ],
-  "last_active": 1772306303.9777336,
+  "last_active": 1772306320.8378303,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772306303.977658
