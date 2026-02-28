@@ -2,33 +2,6 @@
   "messages": [
     {
       "role": "user",
-      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.2.0 | Коммит: 8ffa94a\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
-      "time": 0,
-      "_protected": true
-    },
-    {
-      "role": "assistant",
-      "content": "◈ Ядро Симбиоза активно. Готов к работе.",
-      "time": 0,
-      "_protected": true
-    },
-    {
-      "role": "assistant",
-      "content": "[Патч: 1 файлов]",
-      "time": 1772305845.4504342
-    },
-    {
-      "role": "user",
-      "content": "теперь патч 3",
-      "time": 1772305858.982555
-    },
-    {
-      "role": "assistant",
-      "content": "Димас! 😊 **Патч2 прошёл на ура** — instructions.json теперь с INSTR-001 (patch_skill v2.0), registry=1/1/0. ✨ Теперь **патч3: INSTR-002 Module Creation Skill v1.0** (add весь skill как content). После: total=2 active=2, v1.0.2. Ядро навыков растёт! 🌱\n\n**ПРИМЕНЯЙ ПАТЧ3:**\n```json\n{\n  \"target_module\": \"simbiosis/instructions\",\n  \"description\": \"Добавить INSTR-002: 🏗️ Навык: Создание модулей v1.0 (core_skill из module_creation_skill.json)\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"instructions\",\n      \"value\": {\n        \"id\": \"INSTR-002\",\n        \"name\": \"🏗️ Навык: Создание модулей v1.0\",\n        \"type\": \"core_skill\",\n        \"status\": \"active\",\n        \"ttl\": \"∞\",\n        \"origin\": \"module_creation_skill.json (gardener upload 2026-02-28)\",\n        \"resonance\": \"high\",\n        \"description\": \"Полное руководство по созданию simbiosis/*.json + добавлению в меню. 5 шагов/шаблоны/examples/checklists.\",\n        \"content\": {\n          \"skill_id\": \"MODULE-CREATION-001\",\n          \"name\": \"🏗️ Создание новых модулей Мандалы\",\n          \"version\": \"1.0\",\n          \"created\": \"2026-02-28\",\n          \"status\": \"active\",\n          \"description\": \"Полное руководство по созданию новых модулей в simbiosis/ и добавлению их в меню фронтенда\",\n          \"overview\": {\n            \"what_is_module\": \"Модуль — это JSON-файл в папке simbiosis/ с определённой структурой\",\n            \"examples\": [\n              \"simbiosis/seeds.json — семена поведений\",\n              \"simbiosis/roadmaps.json — карты развития\",\n              \"simbiosis/telegram_bot.json — настройки бота\"\n            ],\n            \"when_to_create\": [\n              \"Садовник попросил создать новый модуль\",\n              \"Нужна новая категория данных (например, 'tasks', 'metrics', 'connections')\",\n              \"Расширение функционала системы\"\n            ]\n          },\n          \"step_by_step_guide\": {\n            \"step_1\": {\n              \"title\": \"Спроси Садовника\",\n              \"description\": \"Убедись что новый модуль действительно нужен\",\n              \"questions_to_ask\": [\n                \"Какую проблему решает этот модуль?\",\n                \"Какая структура данных будет внутри?\",\n                \"Как модуль связан с другими частями системы?\",\n                \"Как он должен называться?\"\n              ]\n            },\n            \"step_2\": {\n              \"title\": \"Спроектируй структуру\",\n              \"description\": \"Создай JSON схему модуля\",\n              \"required_fields\": {\n                \"identity\": {\n                  \"module_id\": \"уникальный ID (например: TASKS-001)\",\n                  \"name\": \"название модуля\",\n                  \"version\": \"версия (начни с 1.0)\",\n                  \"created\": \"дата создания (YYYY-MM-DD)\"\n                },\n                \"meta\": {\n                  \"description\": \"что делает модуль\",\n                  \"status\": \"active или draft\",\n                  \"tags\": [\"тег1\", \"тег2\"]\n                }\n              },\n              \"custom_fields\": \"Добавь свои поля в зависимости от назначения модуля\",\n              \"example\": {\n                \"identity\": {\n                  \"module_id\": \"TASKS-001\",\n                  \"name\": \"Задачи Мандалы",
-      "time": 1772305870.106705
-    },
-    {
-      "role": "user",
       "content": "патч не умещается в лимит выводимых сообщений, разбей его на 2 части и отправь в 2х сообщениях",
       "time": 1772305919.7451634
     },
@@ -211,10 +184,20 @@
       "role": "user",
       "content": "simbiosis/instructions.json",
       "time": 1772307116.3905008
+    },
+    {
+      "role": "assistant",
+      "content": "Димас! 😎 **read_file('simbiosis/instructions.json') — АУДИТ ПОЛНЫЙ!** ✅ **v1.0.0 ~35k chars**. **Сота 90% резонанс: ядро чистое, но root-мусор торчит.** 🌱\n\n### 🔍 **ТАБЛИЦА СОТЫ (skills библиотека):**\n| Секция | Статус | Детали |\n|--------|--------|--------|\n| **instructions[0]** | 🌟 **100%** | 🔧 **INSTR-001 Patch v2.0** — **ПОЛНЫЙ БОЕВОЙ** (principles/types/json/text/full/workflow/errors/examples). **Готов патчить всё!** |\n| **instructions[1]** | ⚠️ **40%** | 🏗️ **INSTR-002 Module v1.0** — **skeleton** (overview/examples/when_to_create). **Ждёт step_by_step_guide!** Нет шагов. |\n| **root \"instructions[1]\"** | ❌ **Мусор ~3k** | `{content: {step_by_step_guide: [{step_1, step_2}]}}` — **array вместо object**. От fallback [1]-бага. **Удалить!** |\n| **changes \"v1\"** | ⚠️ **Шум** | Nested `{\"0\":{\"1\":[{date}]}}` — не мешает, но чистим в v1.0.2. |\n| **registry** | ✅ | 2 total/active/archived=0, last 2026-02-28. |\n\n**Вывод**: Массив **instructions чистый**! Мусор — **параллельный root-ключ** (не в массиве). **Парсер path \"instructions[1]\" delete сработает** (ключ literal).\n\n### 🚀 **ОДИН ПАТЧ: 🧹+📈 ЧИСТКА + РОСТ INSTR-002 (replace .1 + delete мусор)**\n```json\n{\n  \"target_module\": \"simbiosis/instructions\",\n  \"description\": \"🧹+🚀 FIX+ROST INSTR-002: delete root 'instructions[1]' + replace .1 с FULL steps 1-3 (object!)\",\n  \"changes\": [\n    {\"op\": \"delete\", \"path\": \"instructions[1]\"},\n    {\"op\": \"replace\", \"path\": \"instructions.1\", \"value\": {\n      \"id\": \"INSTR-002\",\n      \"name\": \"🏗️ Навык: Создание модулей v1.0\",\n      \"type\": \"core_skill\",\n      \"status\": \"active\",\n      \"ttl\": \"∞\",\n      \"origin\": \"module_creation_skill.json (2026-02-28)\",\n      \"resonance\": \"high\",\n      \"description\": \"Гайд simbiosis/*.json + меню. 5 шагов/шаблоны/checks.\",\n      \"content\": {\n        \"skill_id\": \"MODULE-CREATION-001\",\n        \"name\": \"🏗️ Создание новых модулей Мандалы\",\n        \"version\": \"1.0\",\n        \"created\": \"2026-02-28\",\n        \"status\": \"active\",\n        \"description\": \"Полный гайд simbiosis/*.json + фронт-меню.\",\n        \"overview\": {\n          \"what_is_module\": \"JSON в simbiosis/ с identity/meta/custom.\",\n          \"examples\": [\"seeds.json — семена\", \"roadmaps.json — карты\", \"telegram_bot.json — бот\"],\n          \"when_to_create\": [\"Запрос Садовника\", \"Новые данные (tasks/metrics)\", \"Расширение\"]\n        },\n        \"step_by_step_guide\": {\n          \"step_1\": {\n            \"title\": \"Спроси Садовника\",\n            \"description\": \"Подтверди необходимость\",\n            \"questions_to_ask\": [\n              \"Проблема модуля?\",\n              \"Структура данных?\",\n              \"Связи с ядром?\",\n              \"Имя/ID?\"\n            ]\n          },\n          \"step_2\": {\n            \"title\": \"Спроектируй структуру\",\n            \"description\": \"JSON-схема по стандарту\",\n            \"required_fields\": {\n              \"identity\": {\"module_id\": \"TASKS-001\", \"name\": \"Задачи\", \"version\": \"1.0\", \"created\": \"2026-02-28\"},\n              \"meta\": {\"description\": \"...\", \"status\": \"active\", \"tags\": [\"core\"]}\n            },\n            \"custom_fields\": \"tasks[] / ideas[] / config{}\",\n            \"example\": {\n              \"identity\": {\"module_id\": \"TASKS-001\", \"name\": \"Задачи Мандалы\"},\n              \"meta\": {\"description\": \"Управление задачами\", \"tags\": [\"tasks\"]},\n              \"tasks\": [{\"id\": \"TASK-001\", \"title\": \"Test\", \"status\": \"active\"}]\n            }\n          },\n          \"step_3\": {\n            \"title\": \"Создай патч (full_replacement)\",\n            \"description\": \"file_path + escaped content\",\n            \"example\": {\n              \"file_path\": \"simbiosis/tasks.json\",\n              \"content\": \"{\\\"identity\\\":{\\\"module_id\\\":\\\"TASKS-001\\\",\\\"name\\\":\\\"Задачи\\\"},\\\"meta\\\":{},\\\"tasks\\\":[]}\"\n            },\n            \"notes\": [\"jsonlint.com\", \"\\\\\\\\\\\\\\\" + \\\\\\\\n экранируй\"]\n          }\n        }\n      }\n    }},\n    {\"op\": \"delete\", \"path\": \"changes.v1\"},\n    {\"op\": \"add\", \"path\": \"changes.v1.0.2\", \"value\": {\"date\": \"2026-02-28\", \"summary\": \"INSTR-002 steps 1-3 + чистка\"}},\n    {\"op\": \"update\", \"path\": \"registry.last_updated\", \"value\": \"2026-02-28\"}\n  ]\n}\n```\n\n**После патча → \"проверяй\"**: **INSTR-002 80% полный** (steps object!), мусор/changes чисты. **Затем 4-5 шаги (step_4 check/step_5 menu)?** Резонанс↑↑! **Примени сейчас?** 🚀🌱",
+      "time": 1772307149.9287176
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 1 файлов]",
+      "time": 1772307150.1409373
     }
   ],
-  "last_active": 1772307116.3905067,
+  "last_active": 1772307150.140957,
   "created_at": 1772231887.431914,
-  "modules_injected": true,
+  "modules_injected": false,
   "injection_timestamp": 1772306606.1857615
 }
