@@ -1,0 +1,35 @@
+{
+  "identity": {
+    "module_id": "INSTR-001",
+    "name": "Библиотека инструкций",
+    "version": "v1.0.0",
+    "created": "2026-02-28"
+  },
+  "meta": {
+    "description": "Библиотека инструкций по инструментам, навыкам и агентам СР. Прорастает из seeds.",
+    "status": "active",
+    "tags": ["skills", "core", "library"],
+    "layer": 3,
+    "guardian_lock": false,
+    "change_requires": "gardener_approval"
+  },
+  "protocols": {
+    "adding": "СР предлагает instr → gardener approve → add.",
+    "evaluation": "TTL 90d, resonance check.",
+    "archiving": "done → archive."
+  },
+  "instructions": [],
+  "archive": [],
+  "registry": {
+    "total_instructions": 0,
+    "active": 0,
+    "archived": 0,
+    "last_updated": "2026-02-28"
+  },
+  "changes": {
+    "v1.0.0": {
+      "date": "2026-02-28",
+      "summary": "Базовая структура (SEED-014 M1)."
+    }
+  }
+}
