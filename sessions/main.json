@@ -111,9 +111,14 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772308817.8373213
+    },
+    {
+      "role": "user",
+      "content": "◈ ✗ simbiosis/instructions.json: Файл не является валидным JSON - как узнать почему?",
+      "time": 1772308848.7763152
     }
   ],
-  "last_active": 1772308817.8373334,
+  "last_active": 1772308848.7763197,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772308570.5914419
