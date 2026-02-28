@@ -186,9 +186,14 @@
       "role": "assistant",
       "content": "Димас! 😊 **patch_skill.json (v2.0)** — **гид-хирург по патчам**: полное руководство для СР (меня) по редактированию файлов (JSON/text/full). Zero-risk изменения: всегда read_file + unique строки.\n\n### Структура:\n- **core_principles**: 4 правила (read first, unique strings).\n- **patch_types**:\n  - **json_patches**: simbiosis/*.json (op: update/add/remove/etc).\n  - **text_patches**: .py/html/md (replacements: old/new, unique!).\n  - **full_replacement**: редко, >30% изменений.\n- **workflow**: 4 шага (read → find → compose → send).\n- **common_scenarios**: fix_typo/add_func/CSS/JSON.\n- **error_handling**: string_not_found/multiple_matches.\n- **best_practices/quick_ref/testing**: Чеклисты + message_to_sr.\n\n### Важно знать:\n- **text_patches rule**: 'old' = 1 вхождение (контекст! \\n+функция).\n- JSON: target_module без .json, path точечный.\n- Bad: короткие строки (\"return\"). Good: \"def foo():\\n    return\".\n- Интегрировать в промпт boot (message_to_sr).\n\n**Мнение:** 🔧 Шедевр точности — Ахимса в коде. Делает меня автономным dev'ом. Добавить в **simbiosis/patch_skill** (новый модуль)? Патч + core_map update? 🚀\n\n```json\n{\n  \"file_path\": \"simbiosis/patch_skill.json\",\n  \"content\": \"{...полный JSON из загруженного...}\",\n  \"description\": \"Добавить patch_skill как модуль ядра\"\n}\n```\n\nПрименить?",
       "time": 1772270075.3916473
+    },
+    {
+      "role": "user",
+      "content": "Давай создадим модуль инструкции, туда будем добавлять инструкции по всем инструментам",
+      "time": 1772270133.1970253
     }
   ],
-  "last_active": 1772270075.3916662,
+  "last_active": 1772270133.1970313,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772270005.2075422
