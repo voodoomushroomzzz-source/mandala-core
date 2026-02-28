@@ -1122,7 +1122,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "temperature": 0.8,
                             "max_tokens": 16384,
                         },
-                        timeout=120.0
+                        timeout=300.0
                     )
                     if resp.status_code == 200:
                         data = resp.json()
@@ -1157,7 +1157,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
                                 json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 16384},
-                                timeout=120.0
+                                timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
@@ -1169,7 +1169,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             logger.warning("Grok returned empty content")
                             await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
                         else:
-                            chunk_size = 50
+                            chunk_size = 500
                             for i in range(0, len(grok_response), chunk_size):
                                 await manager.send_to(websocket, {"type": "stream", "model": "grok", "content": grok_response[i:i+chunk_size]})
                             await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
@@ -1216,7 +1216,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         "system": kernel.build_system_prompt("claude"),
                         "messages": claude_messages
                     },
-                    timeout=120.0
+                    timeout=300.0
                 )
                 if resp.status_code == 200:
                     claude_text = resp.json().get("content", [{}])[0].get("text", "")
