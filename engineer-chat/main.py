@@ -235,7 +235,7 @@ async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[st
                 },
                 json={
                     "model": ANTHROPIC_MODEL,
-                    "max_tokens": 2048,
+                    "max_tokens": 8192,
                     "system": system_prompt,
                     "messages": messages
                 },
@@ -1120,7 +1120,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.8,
-                            "max_tokens": 8192,
+                            "max_tokens": 16384,
                         },
                         timeout=120.0
                     )
@@ -1156,7 +1156,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 8192},
+                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 16384},
                                 timeout=120.0
                             )
                             if resp2.status_code == 200:
@@ -1212,7 +1212,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     },
                     json={
                         "model": ANTHROPIC_MODEL,
-                        "max_tokens": 2048,
+                        "max_tokens": 8192,
                         "system": kernel.build_system_prompt("claude"),
                         "messages": claude_messages
                     },
@@ -1733,7 +1733,24 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                 put_resp = await client.put(url, headers=headers, json=put_payload)
                 if put_resp.status_code in [200, 201]:
                     commit_sha = put_resp.json().get("commit", {}).get("sha", "")[:7]
-                    results.append({"file": file_path, "status": "success", "message": f"Обновлён ({commit_sha})"})
+                    is_create = resp.status_code == 404  # Был создан новый файл
+                    
+                    if is_create:
+                        results.append({"file": file_path, "status": "success", "message": f"Создан ({commit_sha}) ✨"})
+                        # Если создан новый .json модуль в simbiosis/ → добавляем в module_list
+                        if file_path.endswith(".json") and file_path.startswith("simbiosis/"):
+                            module_name = file_path[:-5]  # убираем .json
+                            if module_name not in kernel.module_list:
+                                kernel.module_list.append(module_name)
+                                logger.info(f"✨ Новый модуль добавлен: {module_name}")
+                                await manager.send_to(websocket, {
+                                    "type": "system",
+                                    "text": f"✨ Новый модуль {module_name} создан и добавлен в ядро"
+                                })
+                    else:
+                        results.append({"file": file_path, "status": "success", "message": f"Обновлён ({commit_sha})"})
+                    
+                    # Обновляем кэш модулей
                     if file_path.endswith(".json") and file_path[:-5] in kernel.module_list:
                         module_name = file_path[:-5]
                         try:
