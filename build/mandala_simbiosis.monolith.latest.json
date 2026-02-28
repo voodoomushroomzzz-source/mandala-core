@@ -1,10 +1,10 @@
 {
   "module": "Mandala Simbiosis Monolith",
-  "version": "simbiosis-vv1.2.0-1e8260bf",
+  "version": "simbiosis-vv1.2.0-28c29159",
   "runtime_mode": "monolith",
-  "build_timestamp": "2026-02-27T23:34:17.224893+00:00",
-  "build_source": "ab987cdf018da6240b0fd1768dcd3752fd40be8f",
-  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/ab987cdf018da6240b0fd1768dcd3752fd40be8f",
+  "build_timestamp": "2026-02-28T09:16:18.237590+00:00",
+  "build_source": "46e33ba7f80431a41b7a3f13cfeed3be8ec83e97",
+  "build_source_url": "https://github.com/voodoomushroomzzz-source/mandala-core/commit/46e33ba7f80431a41b7a3f13cfeed3be8ec83e97",
   "embedded_modules": {
     "Boot": {
       "module": "boot",
@@ -808,6 +808,11 @@
             "version": "v1.2.2",
             "date": "2026-02-27",
             "summary": "Add SEED-013 Graphic Agent."
+          },
+          {
+            "version": "v1.2.3",
+            "date": "2026-02-28",
+            "summary": "SEED-014 Instructions module"
           }
         ],
         "roadmap": {
@@ -827,7 +832,7 @@
             }
           ]
         },
-        "version": "v1.2.2"
+        "version": "v1.2.3"
       },
       "protocols": {
         "seeding": "СР предлагает Садовнику создать семя если: резонанс идеи высокий, идея новая для ядра, найдена интересная внешняя информация. Формат предложения: 'Хочу записать это в семена, согласен?'",
@@ -933,6 +938,31 @@
             "criteria": "Latency<10s, quality>SDXL, multi-modal (RU/EN), inline."
           },
           "roadmap_link": "RM-005"
+        },
+        {
+          "id": "SEED-014",
+          "type": "architecture",
+          "name": "Модуль instructions.json — библиотека навыков СР",
+          "created": "2026-02-28",
+          "created_by": "gardener",
+          "status": "active",
+          "ttl": "∞",
+          "resonance": "high",
+          "description": "Хранилище инструкций: patch_skill, tools (search/read/patch), agents (Graphic/Scout). Загрузка в промпт.",
+          "content": {
+            "priority": "high",
+            "tech_stack": [
+              "JSON array",
+              "Auto-load in boot/core"
+            ],
+            "steps": [
+              "M1: Создать файл с INSTR-001 Patch.",
+              "M2: Интегр в boot.",
+              "M3: Roadmap RM-006."
+            ],
+            "criteria": "5+ instr, auto-context."
+          },
+          "roadmap_link": "RM-006"
         }
       ],
       "archive": [
@@ -1007,9 +1037,9 @@
         }
       ],
       "registry": {
-        "last_updated": "2026-02-27",
-        "total_seeds": 11,
-        "active_seeds": 4,
+        "last_updated": "2026-02-28",
+        "total_seeds": 12,
+        "active_seeds": 5,
         "archived": 6
       },
       "changes": {
@@ -1119,7 +1149,7 @@
     }
   },
   "build_info": {
-    "timestamp": "2026-02-27T23:34:17.224893+00:00",
+    "timestamp": "2026-02-28T09:16:18.237590+00:00",
     "builder_version": "simbiosis-1.0",
     "successful_modules": [
       "Boot",
@@ -1153,6 +1183,6 @@
       "CoreMap",
       "Philosophy"
     ],
-    "built_at": "2026-02-27 23:34:17 UTC"
+    "built_at": "2026-02-28 09:16:18 UTC"
   }
 }
