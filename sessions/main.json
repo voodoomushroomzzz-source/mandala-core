@@ -111,9 +111,14 @@
       "role": "user",
       "content": "Ты только что прочитал файл 📄 engineer-chat/main.py. Изучи его и дай своё мнение: что это, какова структура, что важно знать.",
       "time": 1772305617.6565976
+    },
+    {
+      "role": "assistant",
+      "content": "Димас! 😊 **engineer-chat/main.py (~94k)** — **FastAPI бэкенд EngChat**: WS-хаб для симбиоза (Grok/Claude), tools (search/read/patch), GitHub интеграция (commits/patches).\n\n### Структура (топ-level):\n1. **Init/Env (~200стр)**: CORS, keys (GH_TOKEN/Tavily/Anthropic/OpenRouter Grok-4.1-fast).\n2. **Tools (~3kстр)**: \n   - **WebSearchTool**: Tavily (paid, extract imgs) ↔ DDG fallback (async).\n   - **FileReader**: GH Contents raw (token/auth, timeout 10s).\n3. **ClaudeObserver (~1kстр)**: ask_claude_observer (skeptic critique user+response).\n4. **GrokClient**: OpenRouter proxy.\n5. **WS Handler (~50kстр)**: /ws — sessions, tools parse (`",
+      "time": 1772305628.2313082
     }
   ],
-  "last_active": 1772305617.656602,
+  "last_active": 1772305628.2313225,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772270209.40385
