@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@300;400;500&family=Nunito:wght@200;300;400&display=swap" rel="stylesheet">
     <!-- Monaco Editor -->
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+    <!-- Marked.js для markdown таблиц -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <style>
         :root {
             --bg: #030d09;
@@ -337,6 +339,49 @@
             text-align: center;
             border-radius: 6px;
             padding: 10px 16px;
+        }
+
+        /* ========== MARKDOWN TABLES ========== */
+        .bub table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 12px 0;
+            font-size: 12px;
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        .bub table thead {
+            background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(124,58,237,0.15));
+        }
+        .bub table th {
+            padding: 10px 12px;
+            text-align: left;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--green-bright);
+            border-bottom: 2px solid var(--line-2);
+        }
+        .bub table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--line);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .bub table tbody tr:hover {
+            background: rgba(16,185,129,0.05);
+        }
+        .bub table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        /* Выравнивание по центру для числовых столбцов */
+        .bub table td:has(code),
+        .bub table th:has(code) {
+            text-align: right;
+            font-family: var(--mono);
         }
 
         /* Code blocks */
@@ -1251,11 +1296,35 @@
 
         function renderAssistantMessage(text, save = true) {
             const div = createMessageElement('assistant', 'grok');
-            let html = escapeHtml(text);
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => renderCodeBlock(lang, code, true));
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--green-bright);">$1</strong>');
-            html = html.replace(/\n/g, '<br>');
+            
+            // Сначала обрабатываем code blocks отдельно (чтобы marked их не трогал)
+            const codeBlocks = [];
+            let textWithPlaceholders = text.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+                const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
+                codeBlocks.push(renderCodeBlock(lang, code, true));
+                return placeholder;
+            });
+            
+            // Обрабатываем markdown (включая таблицы)
+            let html;
+            try {
+                html = marked.parse(textWithPlaceholders, {
+                    breaks: true,
+                    gfm: true
+                });
+            } catch (e) {
+                // Fallback если marked не работает
+                html = escapeHtml(textWithPlaceholders);
+                html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+                html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--green-bright);">$1</strong>');
+                html = html.replace(/\n/g, '<br>');
+            }
+            
+            // Возвращаем code blocks на место
+            html = html.replace(/__CODE_BLOCK_(\d+)__/g, (match, index) => {
+                return codeBlocks[parseInt(index)] || '';
+            });
+            
             div.querySelector('.bub').innerHTML = html;
             messagesEl.appendChild(div);
             if (save) addMessage('assistant', text);
