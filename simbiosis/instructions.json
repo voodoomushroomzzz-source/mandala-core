@@ -174,37 +174,6 @@
           ]
         }
       }
-    },
-    {
-      "id": "INSTR-002",
-      "name": "🏗️ Навык: Создание модулей v1.0",
-      "type": "core_skill",
-      "status": "active",
-      "ttl": "∞",
-      "origin": "module_creation_skill.json upload",
-      "resonance": "high",
-      "description": "Гайд по simbiosis/*.json + меню. Шаги/шаблоны/checks.",
-      "content": {
-        "skill_id": "MODULE-CREATION-001",
-        "name": "🏗️ Создание модулей Мандалы",
-        "version": "1.0",
-        "created": "2026-02-28",
-        "status": "active",
-        "description": "Руководство по simbiosis/ + меню фронта",
-        "overview": {
-          "what_is_module": "JSON в simbiosis/ с identity/meta",
-          "examples": [
-            "seeds.json",
-            "roadmaps.json",
-            "telegram_bot.json"
-          ],
-          "when_to_create": [
-            "Запрос Садовника",
-            "Новые данные (tasks/metrics)",
-            "Расширение"
-          ]
-        }
-      }
     }
   ],
   "archive": [],
