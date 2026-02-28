@@ -1,1 +1,92 @@
-{"identity":{"module_id":"TASKS-001","name":"Задачи","version":"1.0","created":"2026-02-28"},"meta":{"description":"Задачи Мандалы Симбиоза","status":"active","tags":["tasks","core","layer3"]},"tasks":[],"archive":[],"registry":{"total":0,"active":0,"deprecated":0,"last_updated":"2026-02-28"},"changes":{"v1.0.0":{"date":"2026-02-28","summary":"Init empty по INSTR-002"}}}
+{
+  "identity": {
+    "module_id": "TASKS-001",
+    "name": "Задачи",
+    "version": "1.0.1",
+    "created": "2026-02-28"
+  },
+  "meta": {
+    "description": "Задачи Мандалы Симбиоза",
+    "status": "active",
+    "tags": [
+      "tasks",
+      "core",
+      "layer3"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "T-001",
+      "title": "Создать core_map.json",
+      "status": "active",
+      "priority": "high",
+      "desc": "Карта модулей + меню",
+      "tags": [
+        "core"
+      ]
+    },
+    {
+      "id": "T-002",
+      "title": "Заполнить seeds 10+",
+      "status": "active",
+      "priority": "high",
+      "desc": "Банк идей → резонанс",
+      "tags": [
+        "seeds"
+      ]
+    },
+    {
+      "id": "T-003",
+      "title": "Roadmaps v1",
+      "status": "active",
+      "priority": "medium",
+      "desc": "Дорожные карты задач",
+      "tags": [
+        "roadmaps"
+      ]
+    },
+    {
+      "id": "T-004",
+      "title": "Интегрировать telegram_bot",
+      "status": "active",
+      "priority": "medium",
+      "desc": "Улучшить bot.py",
+      "tags": [
+        "bot"
+      ]
+    },
+    {
+      "id": "T-005",
+      "title": "Engineer chat UI",
+      "status": "active",
+      "priority": "low",
+      "desc": "index.html responsive",
+      "tags": [
+        "chat"
+      ]
+    }
+  ],
+  "archive": [],
+  "registry": {
+    "total": 5,
+    "active": 5,
+    "deprecated": 0,
+    "last_updated": "2026-02-28"
+  },
+  "changes": {
+    "v1.0.0": {
+      "date": "2026-02-28",
+      "summary": "Init empty по INSTR-002"
+    },
+    "v1": {
+      "0": {
+        "1": [
+          {
+            "date": "2026-02-28",
+            "summary": "+5 стартовых задач"
+          }
+        ]
+      }
+    }
+  }
+}
