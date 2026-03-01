@@ -1,18 +1,6 @@
 {
   "messages": [
     {
-      "role": "user",
-      "content": "[СТАРТ СЕССИИ]\n# Мандала Симбиоза — ядро готово к работе\nВерсия boot: v1.2.0 | Коммит: eaa61f8\n\nМодули ядра доступны через read_file:\n  • boot (simbiosis/boot.json) — Загрузочный модуль. Философия, директивы, инструкции СР. ЧИТ\n  • core_map (simbiosis/core_map.json) — Эта карта. Навигация по ядру и репозиторию. ЧИТАТЬ ВСЕГДА.\n  • philosophy (simbiosis/philosophy.json) — Развёрнутая философия Мандалы. Онтология, принципы симбиоза,\n  • seeds (simbiosis/seeds.json) — Банк семян. Зачатки идей, резонансные находки, результаты по\n  • roadmaps (simbiosis/roadmaps.json) — Проработанные дорожные карты. Идеи с шагами и вехами, готовы\n  • engineer_chat (simbiosis/engineer_chat.json) — Модуль инженерного чата. Архитектура, компоненты, история ра\n  • telegram_bot (simbiosis/telegram_bot.json) — Модуль Telegram бота. Архитектура bot.py, возможности, стату\n\nДирективы:\n  • Перед изменением любого файла — read_file его актуальной версии\n  • При создании новых файлов — обновить simbiosis/core_map.json\n  • Резонансные идеи сессии предлагать записать в simbiosis/seeds.json",
-      "time": 0,
-      "_protected": true
-    },
-    {
-      "role": "assistant",
-      "content": "◈ Ядро Симбиоза активно. Готов к работе.",
-      "time": 0,
-      "_protected": true
-    },
-    {
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772309244.483919
@@ -156,10 +144,15 @@
       "role": "assistant",
       "content": "**Нет, в index.html меню \"Карта\" (.mandala-menu) динамическое — генерируется JS из core_map.kernel_modules (fetch → render buttons).**\n\n**Текущий core_map v1.1.0: 7 модулей (boot/core_map/philosophy/seeds/roadmaps/engineer_chat/telegram_bot). Instructions/tasks отсутствуют.**\n\n**Добавь патчем → кнопки появятся auto после reload/F5.**\n\n**Примени предыдущий патч?** Или read_file('simbiosis/core_map.json') → проверка.",
       "time": 1772367032.017519
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 1 файлов]",
+      "time": 1772367055.3703551
     }
   ],
-  "last_active": 1772367032.017539,
+  "last_active": 1772367055.3703737,
   "created_at": 1772231887.431914,
-  "modules_injected": true,
+  "modules_injected": false,
   "injection_timestamp": 1772366610.2519422
 }
