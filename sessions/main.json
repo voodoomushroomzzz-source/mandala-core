@@ -161,9 +161,19 @@
       "role": "assistant",
       "content": "**core_map.json v1.1.0 прочитан. 7 модулей в kernel_modules. Добавляем instructions и tasks (on_demand, как остальные).**\n\n**Патч (INSTR-001 json_patches, <1KB):**\n```json\n{\n  \"target_module\": \"simbiosis/core_map\",\n  \"description\": \"v1.1.1: +instructions/tasks в kernel_modules (меню 'Карта')\",\n  \"changes\": [\n    {\"op\": \"add\", \"path\": \"kernel_modules.modules.instructions\", \"value\": {\"file\": \"simbiosis/instructions.json\", \"description\": \"Инструкции. Патчи v2.0, создание модулей. Читать перед изменениями.\", \"load_priority\": \"on_demand\", \"topics\": [\"instructions\", \"патчи\", \"модули\"]}},\n    {\"op\": \"add\", \"path\": \"kernel_modules.modules.tasks\", \"value\": {\"file\": \"simbiosis/tasks.json\", \"description\": \"Банк задач. Управление prio/status. Читать при планировании.\", \"load_priority\": \"on_demand\", \"topics\": [\"tasks\", \"задачи\"]}},\n    {\"op\": \"add\", \"path\": \"navigation_hint\", \"value\": \" ... 8) Инструкции → instructions. 9) Задачи → tasks.\"},\n    {\"op\": \"add\", \"path\": \"meta.version_history\", \"value\": {\"version\": \"v1.1.1\", \"date\": \"2026-03-01\", \"summary\": \"+instructions/tasks\"}},\n    {\"op\": \"update\", \"path\": \"meta.version_history.1.summary\", \"value\": \"Добавлен build_simbiosis_monolith.py, папка build/, расширен navigation_hint, +kernel_modules.\"},\n    {\"op\": \"update\", \"path\": \"version\", \"value\": \"v1.1.1\"},\n    {\"op\": \"update\", \"path\": \"meta.roadmap.milestones.0.status\", \"value\": \"completed\"},\n    {\"op\": \"add\", \"path\": \"meta.roadmap.milestones\", \"value\": {\"id\": \"M2\", \"name\": \"Расширение карты (9 модулей)\", \"status\": \"active\", \"description\": \"Полное меню в engineer_chat\"}}\n  ]\n}\n```\n\n**После: 9 модулей, меню чата обновится auto (index.html scan). Тест: \"проверяй core_map\".**\n\nДальше: применить / tasks заполнить / roadmaps?",
       "time": 1772366702.4536352
+    },
+    {
+      "role": "user",
+      "content": "а для чего этот патч нам нужен?",
+      "time": 1772366734.783355
+    },
+    {
+      "role": "assistant",
+      "content": "**Цель патча для core_map.json:**\n- Добавить **instructions** и **tasks** в `kernel_modules.modules[]`.\n- **Результат**: Они появятся в верхнем меню engineer_chat/index.html (\"Карта\") как кнопки (навигация: load file → чат по модулю).\n- **Зачем?** \n  - Удобство: быстрый доступ к новым модулям (без ручного пути).\n  - Интеграция: сота полная (9 модулей), index.html auto-scan.\n  - Эволюция: по INSTR-002 step_5 \"Интегрируй в core_map.modules + menu\".\n\n**Без патча:** Модули работают, но не в меню (ручной ввод пути).\n\n**Применить?** Да, если используешь engineer_chat. Иначе — опционально. \n\nДальше: патч / пропустить / другое?",
+      "time": 1772366740.797842
     }
   ],
-  "last_active": 1772366702.4536574,
+  "last_active": 1772366740.797859,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772366610.2519422
