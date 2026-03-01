@@ -523,9 +523,22 @@
             animation: think-pulse 1.8s ease-in-out infinite;
             filter: drop-shadow(0 0 4px currentColor);
         }
+        /* Для цветка deepseek — своя анимация, не think-pulse */
+        .thinking-icon svg.deepseek-flower {
+            animation: flower-spin 3s linear infinite, flower-pulse-icon 1.5s ease-in-out infinite;
+            filter: none;
+        }
         @keyframes think-pulse {
             0%, 100% { opacity: 0.5; transform: scale(1); }
             50%       { opacity: 1;   transform: scale(1.15); }
+        }
+        @keyframes flower-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes flower-pulse-icon {
+            0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 3px #10b981); }
+            50%       { opacity: 1;   filter: drop-shadow(0 0 9px #34d399) drop-shadow(0 0 16px rgba(16,185,129,0.5)); }
         }
         .thinking-label {
             font-family: var(--mono);
@@ -1884,7 +1897,9 @@
                 const newSvg = tmp.querySelector('svg');
                 if (newSvg) {
                     newSvg.id = 'thinkingIconSvg';
-                    if (m === 'deepseek') newSvg.classList.add('thinking');
+                    newSvg.style.width = '28px';
+                    newSvg.style.height = '28px';
+                    // deepseek-flower уже в разметке — анимация через CSS
                     svgEl.replaceWith(newSvg);
                 }
             }
@@ -1939,7 +1954,7 @@
         // ==================== МОДЕЛИ ====================
         const activeModels = new Set(['deepseek']);
         const modelIcons = {
-            deepseek: `<svg class="deepseek-flower" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke="#10b981" stroke-width="0.6" opacity="0.85"><circle cx="15" cy="15" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="15" cy="20" r="5"/><circle cx="19.33" cy="12.5" r="5"/><circle cx="19.33" cy="17.5" r="5"/><circle cx="10.67" cy="12.5" r="5"/><circle cx="10.67" cy="17.5" r="5"/></g><circle cx="15" cy="15" r="2" fill="#34d399" opacity="0.9"/></svg>`,
+            deepseek: `<svg class="deepseek-flower" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><g stroke="#10b981" stroke-width="0.7" opacity="0.9"><circle cx="15" cy="15" r="5.5"/><circle cx="15" cy="9.5" r="5.5"/><circle cx="15" cy="20.5" r="5.5"/><circle cx="19.76" cy="12.25" r="5.5"/><circle cx="19.76" cy="17.75" r="5.5"/><circle cx="10.24" cy="12.25" r="5.5"/><circle cx="10.24" cy="17.75" r="5.5"/></g><circle cx="15" cy="15" r="2.2" fill="#34d399" opacity="0.95"/></svg>`,
             claude: `<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/><circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/></svg>`
         };
         const modelNames = { deepseek: 'DeepSeek ◇', claude: 'Клод ○' };
