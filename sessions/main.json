@@ -26,9 +26,14 @@
       "role": "user",
       "content": "Покажи карту нашего проекта",
       "time": 1772400408.87661
+    },
+    {
+      "role": "assistant",
+      "content": "Прочитаю актуальную карту проекта из файла ядра.\n\n<function_calls>\n<function_call>\n<invoke name=\"read_file\">\n<path>simbiosis/core_map.json</path>\n</invoke>\n</function_call>\n</function_calls>",
+      "time": 1772400424.1268716
     }
   ],
-  "last_active": 1772400408.8766146,
+  "last_active": 1772400424.1268766,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772400408.876537,
