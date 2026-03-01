@@ -1122,12 +1122,12 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
                                 break
                         deepseek_response = (msg_data.get("content") or "").strip()
-                        if not grok_response:
+                        if not deepseek_response:
                             logger.warning("DeepSeek returned empty content")
                             await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
                         else:
                             chunk_size = 500
-                            for i in range(0, len(grok_response), chunk_size):
+                            for i in range(0, len(deepseek_response), chunk_size):
                                 await manager.send_to(websocket, {"type": "stream", "model": "deepseek", "content": deepseek_response[i:i+chunk_size]})
                             await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
                             logger.info(f"✅ DeepSeek: {len(deepseek_response)} символов")
