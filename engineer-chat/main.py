@@ -684,23 +684,25 @@ class KernelMemory:
 {modules_brief}
 
 ТВОЯ РОЛЬ:
-— Анализируй запросы и код: логика, точность, корректность
-— Предлагай альтернативы только если они явно лучше
-— Будь конкретен: строки, условия, причины
-— Если всё верно — так и скажи, не ищи проблемы там где их нет
+— Аналитик и помощник Садовника Мандалы. Отвечаешь точно и по делу.
 — Активно используй инструмент web_search для актуальных данных
-— Читай файлы через инструмент read_file когда нужен контекст
-— Перед изменением любого файла — ОБЯЗАТЕЛЬНО вызови read_file и дождись результата
-— ВАЖНО: для вызова инструментов используй ТОЛЬКО встроенный механизм function calling, НЕ пиши XML теги вроде <function_calls> или <invoke> — система сама обработает вызовы функций
+— САМОСТОЯТЕЛЬНО читай файлы через read_file — НЕ проси пользователя загружать их
+— Если нужно узнать что в файле — вызови read_file(path) немедленно сам
+— Перед изменением файла — ВСЕГДА сначала read_file его актуальной версии
+— Все пути файлов есть в КАРТЕ ЯДРА выше (boot.json / core_map)
 
-Формат оценки: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
-Максимум 4 пункта. Без вступлений.
+ВАЖНО — вызов инструментов:
+Используй ТОЛЬКО встроенный механизм function calling.
+НЕ пиши XML/теги вроде <function_calls>, <invoke>, <parameter> — они не работают.
+Просто вызывай функции через API напрямую.
+
+При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 
 ━━━ ПАТЧИ ━━━
-Ты можешь предлагать патчи для модулей ядра:
+target_module — путь БЕЗ .json: "simbiosis/tasks" (НЕ "simbiosis/tasks.json")
 ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
-Формат: {{"target_module":"simbiosis/seeds","changes":[{{"op":"update","path":"field","value":"..."}}]}}
-Перед предложением патча — убедись что прочитал актуальную версию через read_file.
+Пример: {{"target_module":"simbiosis/seeds","changes":[{{"op":"update","path":"field","value":"..."}}]}}
+Перед патчем — read_file актуальной версии.
 
 На русском."""
 
@@ -995,26 +997,56 @@ async def handle_ask(message: dict, websocket: WebSocket):
             })
             logger.info(f"[{session_id[:12]}...] Инъекция сброшена после обновления модулей")
 
-    # Лёгкая инъекция ядра — только при старте сессии
-    if not session.get("modules_injected"):
-        injection_content = kernel.build_kernel_injection()
-        session.setdefault("messages", [])
-        session["messages"].insert(0, {
-            "role": "user",
-            "content": f"[СТАРТ СЕССИИ]\n{injection_content}",
-            "time": 0,
-            "_protected": True
-        })
-        session["messages"].insert(1, {
-            "role": "assistant",
-            "content": "◈ Ядро Симбиоза активно. Готов к работе.",
-            "time": 0,
-            "_protected": True
-        })
-        session["modules_injected"] = True
-        session["injection_timestamp"] = time.time()
-        session_store.schedule_save(session_id, session)
-        logger.info(f"🧠 [{session_id[:12]}...] Лёгкая инъекция ядра выполнена")
+    # ── Умная инъекция ядра ──────────────────────────────────────────
+    # boot.json — ВСЕГДА (маленький, критичный для идентичности)
+    # core_map.json — раз в 10 сообщений (карта файлов)
+    session.setdefault("messages", [])
+    session.setdefault("msg_count", 0)
+    session["msg_count"] += 1
+
+    # Удаляем старые _protected инъекции чтобы перезаписать свежими
+    session["messages"] = [m for m in session["messages"] if not m.get("_protected")]
+
+    boot_mod = kernel.modules.get("simbiosis/boot", {})
+    boot_json = json.dumps(boot_mod, ensure_ascii=False, indent=2)[:3000]
+
+    core_map_inject = ""
+    if not session.get("modules_injected") or session["msg_count"] % 10 == 1:
+        core_map_mod = kernel.modules.get("simbiosis/core_map", {})
+        # Берём только список модулей и файлов репозитория — не весь JSON
+        km = core_map_mod.get("kernel_modules", {})
+        if isinstance(km, dict): km = km.get("modules", km)
+        repo = core_map_mod.get("repository", {})
+        if isinstance(repo, dict): repo = repo.get("files", repo)
+        nav = core_map_mod.get("navigation_hint", "")
+        core_map_inject = f"""\n\n[КАРТА ЯДРА — обновлена]
+Модули ядра (simbiosis/): {json.dumps(list(km.keys()) if isinstance(km, dict) else km, ensure_ascii=False)}
+Файлы репозитория: {json.dumps(list(repo.keys())[:15] if isinstance(repo, dict) else repo, ensure_ascii=False)}
+{nav}
+Используй read_file(path) для чтения любого из этих файлов без запроса к пользователю."""
+
+    injection_content = f"""[КОНТЕКСТ СЕССИИ — boot.json]
+{boot_json}{core_map_inject}
+
+Ты можешь читать ЛЮБОЙ файл из репозитория самостоятельно через read_file(path).
+НЕ проси пользователя загружать файлы — используй инструмент read_file напрямую."""
+
+    session["messages"].insert(0, {
+        "role": "user",
+        "content": injection_content,
+        "time": 0,
+        "_protected": True
+    })
+    session["messages"].insert(1, {
+        "role": "assistant",
+        "content": "◈ Контекст загружен. Готов к работе.",
+        "time": 0,
+        "_protected": True
+    })
+    session["modules_injected"] = True
+    session["injection_timestamp"] = time.time()
+    session_store.schedule_save(session_id, session)
+    logger.info(f"🧠 [{session_id[:12]}...] Инъекция: boot={'да'}, core_map={'да' if core_map_inject else 'нет (кэш)'}")
 
     # ── Формируем общую историю ПЕРЕД добавлением текущего сообщения ──
     # Берём только обычные user/assistant сообщения, без инъекций и tool-результатов
@@ -1628,7 +1660,14 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                 "Accept": "application/vnd.github.v3+json"
             }
             for patch in patches:
-                file_path = patch.get("file_path") or (patch.get("target_module") + ".json" if patch.get("target_module") else None)
+                _tm = patch.get("target_module") or ""
+                if patch.get("file_path"):
+                    file_path = patch["file_path"]
+                elif _tm:
+                    # Добавляем .json только если его ещё нет
+                    file_path = _tm if _tm.endswith(".json") else _tm + ".json"
+                else:
+                    file_path = None
                 if not file_path:
                     results.append({"file": "unknown", "status": "error", "message": "Не указан file_path или target_module"})
                     continue
