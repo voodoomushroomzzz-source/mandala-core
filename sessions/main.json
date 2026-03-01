@@ -106,9 +106,14 @@
       "role": "user",
       "content": "Мы еще добавили ранее 2 модуля но их почему то нет в картах, изучи и нужно их будет добавить\nhttps://github.com/voodoomushroomzzz-source/mandala-core/blob/main/simbiosis/instructions.json\nhttps://github.com/voodoomushroomzzz-source/mandala-core/blob/main/simbiosis/tasks.json",
       "time": 1772396387.2272792
+    },
+    {
+      "role": "assistant",
+      "content": "Давайте прочитаем эти файлы чтобы понять их структуру и содержание.\n\n<function_calls>\n<invoke name=\"read_file\">\n<parameter name=\"path\" string=\"true\">simbiosis/instructions.json</parameter>\n</invoke>\n</function_calls>",
+      "time": 1772396401.3235366
     }
   ],
-  "last_active": 1772396387.2272847,
+  "last_active": 1772396401.323549,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772396387.227214
