@@ -31,9 +31,14 @@
       "role": "user",
       "content": "Проанализируй ядро и выведи кратко информацию, какие модули ты видишь и что в них",
       "time": 1772395565.0196526
+    },
+    {
+      "role": "assistant",
+      "content": "Давайте попробуем другой путь:\n\n\n\n<function_calls>\n<invoke name=\"web_search\">\n<parameter name=\"query\" string=\"true\">Мандала Симбиоза модули ядра simbiosis boot core_map</parameter>\n</invoke>\n</function_calls>",
+      "time": 1772395583.2370946
     }
   ],
-  "last_active": 1772395565.0196588,
+  "last_active": 1772395583.2371013,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772395565.0195863
