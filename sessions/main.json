@@ -41,9 +41,14 @@
       "role": "user",
       "content": "а почему?",
       "time": 1772395599.4466867
+    },
+    {
+      "role": "assistant",
+      "content": "<function_calls>\n<invoke name=\"read_file\">\n<parameter name=\"path\" string=\"true\">simbiosis/core_map",
+      "time": 1772395605.7496083
     }
   ],
-  "last_active": 1772395599.4466915,
+  "last_active": 1772395605.7496164,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772395565.0195863
