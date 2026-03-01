@@ -46,10 +46,10 @@ GITHUB_WEBHOOK_SECRET = os.getenv("GITHUB_WEBHOOK_SECRET")  # опциональ
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_KEY")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-GROK_MODEL = "x-ai/grok-4.1-fast"
+DEEPSEEK_MODEL = "deepseek/deepseek-v3.2"
 
 if not OPENROUTER_API_KEY:
-    logger.warning("⚠️ OPENROUTER_KEY не найден — Грок недоступен")
+    logger.warning("⚠️ OPENROUTER_KEY не найден — DeepSeek недоступен")
 if not GITHUB_TOKEN:
     logger.warning("⚠️ GITHUB_TOKEN не найден — модули не будут загружаться")
 if not ANTHROPIC_API_KEY:
@@ -648,8 +648,8 @@ class KernelMemory:
                 for path, info in list(repo.items())[:8]
             )
 
-        if role == "grok":
-            return f"""Ты — Грок, исследовательско-философский разум Мандалы Симбиоза.
+        if role == "deepseek":
+            return f"""Ты — DeepSeek, исследовательско-философский разум Мандалы Симбиоза.
 
 СУТЬ МАНДАЛЫ:
 {core_philosophy}
@@ -748,8 +748,8 @@ class KernelMemory:
 
 На русском."""
 
-        # Роли определены для grok и claude
-        return grok_prompt
+        # Роли определены для deepseek и claude
+        return kernel.build_system_prompt("deepseek")
 
 
 kernel = KernelMemory()
@@ -884,6 +884,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 await handle_read_file_request(message, websocket)
             elif msg_type == "refresh_modules":
                 await handle_refresh_modules(message, websocket)
+            elif msg_type == "reset_memory":
+                await handle_reset_memory(message, websocket)
             elif msg_type == "toggle_observer":
                 session = await get_session(session_id)
                 current = session.get("claude_observer", False)
@@ -1055,7 +1057,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
     manager.add_to_context(session_id, "user", user_text)
 
     # ── Определяем активные модели из сообщения ──
-    active_models = message.get("models", ["grok"])
+    active_models = message.get("models", ["deepseek"])
     if not active_models:
         await manager.send_to(websocket, {"type": "system", "text": "◈ Нет активных моделей — выбери хотя бы одну"})
         await manager.send_to(websocket, {"type": "done"})
@@ -1094,20 +1096,20 @@ async def handle_ask(message: dict, websocket: WebSocket):
         }
     ]
 
-    grok_response = ""
+    deepseek_response = ""
     full_response = ""
 
     # ═══════════════════════════════════════
-    # 1. ГРОК — исследовательско-философский
+    # 1. DEEPSEEK — основной ИИ
     # ═══════════════════════════════════════
-    if "grok" in active_models:
+    if "deepseek" in active_models:
         if not OPENROUTER_API_KEY:
             await manager.send_to(websocket, {"type": "error", "text": "❌ OPENROUTER_KEY не настроен"})
         else:
-            await manager.send_to(websocket, {"type": "model_start", "model": "grok"})
-            grok_messages = [{"role": "system", "content": kernel.build_system_prompt("grok")}]
-            grok_messages.extend(shared_history)
-            grok_messages.append({"role": "user", "content": user_text})
+            await manager.send_to(websocket, {"type": "model_start", "model": "deepseek"})
+            ds_messages = [{"role": "system", "content": kernel.build_system_prompt("deepseek")}]
+            ds_messages.extend(shared_history)
+            ds_messages.append({"role": "user", "content": user_text})
 
             try:
                 async with httpx.AsyncClient() as client:
@@ -1115,8 +1117,8 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         f"{OPENROUTER_BASE_URL}/chat/completions",
                         headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
                         json={
-                            "model": GROK_MODEL,
-                            "messages": grok_messages,
+                            "model": DEEPSEEK_MODEL,
+                            "messages": ds_messages,
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.8,
@@ -1131,7 +1133,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         tool_iterations = 0
                         while msg_data.get("tool_calls") and tool_iterations < 3:
                             tool_iterations += 1
-                            grok_messages.append({
+                            ds_messages.append({
                                 "role": "assistant",
                                 "content": msg_data.get("content") or "",
                                 "tool_calls": msg_data["tool_calls"]
@@ -1146,43 +1148,43 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 if fn == "web_search":
                                     results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
                                     tool_result = json.dumps(results, ensure_ascii=False)
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "grok", "tool": "web_search", "query": args.get("query","")})
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "web_search"}, "query": args.get("query","")})
                                 elif fn == "read_file":
                                     tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "grok", "tool": "read_file", "path": args.get("path","")})
+                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file"}, "path": args.get("path","")})
                                 else:
                                     tool_result = "Неизвестный инструмент"
-                                grok_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
+                                ds_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": GROK_MODEL, "messages": grok_messages, "temperature": 0.8, "max_tokens": 16384},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "temperature": 0.8, "max_tokens": 16384},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
                             else:
-                                logger.error(f"Grok tool loop error: {resp2.status_code}")
+                                logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
                                 break
-                        grok_response = (msg_data.get("content") or "").strip()
+                        deepseek_response = (msg_data.get("content") or "").strip()
                         if not grok_response:
-                            logger.warning("Grok returned empty content")
-                            await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
+                            logger.warning("DeepSeek returned empty content")
+                            await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
                         else:
                             chunk_size = 500
                             for i in range(0, len(grok_response), chunk_size):
-                                await manager.send_to(websocket, {"type": "stream", "model": "grok", "content": grok_response[i:i+chunk_size]})
-                            await manager.send_to(websocket, {"type": "model_done", "model": "grok"})
-                            logger.info(f"✅ Грок: {len(grok_response)} символов")
+                                await manager.send_to(websocket, {"type": "stream", "model": "deepseek", "content": deepseek_response[i:i+chunk_size]})
+                            await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
+                            logger.info(f"✅ DeepSeek: {len(deepseek_response)} символов")
                     else:
                         err_body = ""
                         try: err_body = resp.json().get("error", {}).get("message", resp.text[:300])
                         except: err_body = resp.text[:300]
-                        logger.error(f"Grok error: {resp.status_code} — {err_body}")
-                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок {resp.status_code}: {err_body[:120]}"})
+                        logger.error(f"DeepSeek error: {resp.status_code} — {err_body}")
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek {resp.status_code}: {err_body[:120]}"})
             except Exception as e:
-                logger.error(f"Grok exception: {e}")
-                await manager.send_to(websocket, {"type": "error", "text": f"❌ Грок: {str(e)[:100]}"})
+                logger.error(f"DeepSeek exception: {e}")
+                await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek: {str(e)[:100]}"})
 
     # ═══════════════════════════════════════
     # 2. КЛОД — сторонний наблюдатель
@@ -1195,8 +1197,8 @@ async def handle_ask(message: dict, websocket: WebSocket):
             claude_history.append({"role": msg["role"], "content": msg["content"]})
 
         context_for_claude = f"**Текущий вопрос:**\n{user_text}\n\n"
-        if grok_response:
-            context_for_claude += f"**Грок ответил:**\n{grok_response}\n\n"
+        if deepseek_response:
+            context_for_claude += f"**DeepSeek ответил:**\n{deepseek_response}\n\n"
         context_for_claude += "Дай объективную оценку текущего обмена и предложи что улучшить."
 
         claude_messages = claude_history + [{"role": "user", "content": context_for_claude}]
@@ -1236,7 +1238,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
             await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: {str(e)[:100]}"})
 
     # ── Резонанс и финал ──
-    main_response = grok_response
+    main_response = deepseek_response
     if main_response:
         resonance = resonance_calculator.calculate(main_response, {"last_user_message": user_text})
         await manager.send_to(websocket, {
@@ -1254,7 +1256,8 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
     file_name = message.get("name", "file")
     file_content_b64 = message.get("content")
     caption = message.get("caption", "")
-    active_models = message.get("models", ["grok"])
+    active_models = message.get("models", ["deepseek"])
+    is_last = message.get("is_last", True)  # если False — не вызывать ask сразу
     logger.info(f"📁 [{session_id[:12]}...] Получен файл: {file_name}")
     if not file_content_b64:
         await manager.send_to(websocket, {"type": "error", "text": "❌ Пустой файл"})
@@ -1293,15 +1296,14 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
 
         await manager.send_to(websocket, {"type": "file_processed", "summary": summary})
 
-        # Добавляем комментарий если есть
-        ask_text = caption.strip() if caption.strip() else f"Проанализируй файл {file_name} и дай своё мнение."
-
-        # Запускаем СР автоматически
-        await handle_ask({
-            "text": ask_text,
-            "session_id": session_id,
-            "models": active_models
-        }, websocket)
+        # Запускаем СР только если это последний файл в очереди
+        if is_last:
+            ask_text = caption.strip() if caption.strip() else f"Проанализируй загруженные файлы и дай своё мнение."
+            await handle_ask({
+                "text": ask_text,
+                "session_id": session_id,
+                "models": active_models
+            }, websocket)
 
     except Exception as e:
         logger.error(f"File upload error: {e}\n{traceback.format_exc()}")
@@ -1895,6 +1897,21 @@ async def handle_refresh_modules(message: dict, websocket: WebSocket):
         "count": len(kernel.modules)
     })
 
+async def handle_reset_memory(message: dict, websocket: WebSocket):
+    session_id = message.get("session_id", "unknown")
+    logger.info(f"🗑️ [{session_id[:12]}...] Сброс памяти сессии")
+    session = session_store.get_cached(session_id)
+    if session:
+        session["messages"] = []
+        session["modules_injected"] = False
+        session_store.schedule_save(session_id, session)
+    else:
+        session_store._local[session_id] = {"messages": [], "modules_injected": False, "last_active": time.time(), "created_at": time.time()}
+    await manager.send_to(websocket, {
+        "type": "system",
+        "text": "🌱 Память очищена. Начинаем с чистого листа."
+    })
+
 # ==================== HTTP ENDPOINTS ====================
 
 @app.get("/")
@@ -1907,7 +1924,7 @@ async def root():
         "modules_loaded": [m.split("/")[-1] for m in kernel.modules.keys()],
         "core_version": kernel.global_commit_sha or "—",
         "github_configured": session_store.token is not None,
-        "grok_configured": OPENROUTER_API_KEY is not None,
+        "deepseek_configured": OPENROUTER_API_KEY is not None,
         "claude_configured": ANTHROPIC_API_KEY is not None,
     }
 
@@ -1922,7 +1939,7 @@ async def health():
         "core_version": kernel.global_commit_sha or "—",
         "last_update": kernel.last_update.isoformat() if kernel.last_update else None,
         "github": "ok" if GITHUB_TOKEN else "missing",
-        "grok": "ok" if OPENROUTER_API_KEY else "missing",
+        "deepseek": "ok" if OPENROUTER_API_KEY else "missing",
         "claude": "ok" if ANTHROPIC_API_KEY else "missing",
         "tavily": "enabled" if USE_TAVILY else "disabled",
         "webhook": "configured" if GITHUB_WEBHOOK_SECRET else "no_secret"
