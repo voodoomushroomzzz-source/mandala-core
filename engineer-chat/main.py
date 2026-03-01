@@ -1094,22 +1094,33 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 "tool_calls": msg_data["tool_calls"]
                             })
                             for tc in msg_data["tool_calls"]:
-                                fn = tc["function"]["name"]
                                 try:
-                                    args = json.loads(tc["function"].get("arguments", "{}"))
-                                except json.JSONDecodeError:
-                                    args = {}
-                                tool_result = ""
-                                if fn == "web_search":
-                                    results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
-                                    tool_result = json.dumps(results, ensure_ascii=False)
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "web_search", "query": args.get("query","")})
-                                elif fn == "read_file":
-                                    tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
-                                    await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": args.get("path","")})
-                                else:
-                                    tool_result = "Неизвестный инструмент"
-                                ds_messages.append({"role": "tool", "tool_call_id": tc["id"], "content": tool_result})
+                                    # Поддержка разных форматов tool_call от разных провайдеров
+                                    if "function" in tc:
+                                        fn = tc["function"].get("name", "")
+                                        raw_args = tc["function"].get("arguments", "{}")
+                                    else:
+                                        fn = tc.get("name", "")
+                                        raw_args = tc.get("arguments", "{}")
+                                    try:
+                                        args = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
+                                    except (json.JSONDecodeError, TypeError):
+                                        args = {}
+                                    tc_id = tc.get("id", f"tool_{tool_iterations}")
+                                    tool_result = ""
+                                    if fn == "web_search":
+                                        results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
+                                        tool_result = json.dumps(results, ensure_ascii=False)
+                                        await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "web_search", "query": args.get("query","")})
+                                    elif fn == "read_file":
+                                        tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
+                                        await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": args.get("path","")})
+                                    else:
+                                        tool_result = f"Неизвестный инструмент: {fn}"
+                                    ds_messages.append({"role": "tool", "tool_call_id": tc_id, "content": tool_result})
+                                except Exception as tc_err:
+                                    logger.error(f"Tool call processing error: {tc_err} | tc={tc}")
+                                    ds_messages.append({"role": "tool", "tool_call_id": tc.get("id","err"), "content": f"Ошибка: {tc_err}"})
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
