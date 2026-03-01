@@ -1,1 +1,543 @@
-{"identity":{"module_id":"INSTR-001","name":"Инструкции","version":"v1.0.3","created":"2026-02-28","layer":3},"meta":{"description":"Ядро инструкций Мандалы Симбиоза","status":"active","tags":["core","instructions","layer3"]},"instructions":[{"id":"INSTR-001","name":"🔧 Система патчей v2.0","type":"core_directive","status":"active","ttl":"∞","origin":"boot","resonance":"100%","description":"Единый формат патчей для simbiosis/*.json + .py","content":{"version":"2.0","types":{"single":{"target_module":"simbiosis/seeds","changes":[]},"multi":{"patches":[{"target_module":"...","changes":[]}]},"file":{"file_path":"simbiosis/module.json","content":"minified_json"},"text":{"file_path":"bot.py","changes":[{"line":10,"old":"...","new":"..."}]}},"workflow":["1.read_file актуал","2.minify/check<20KB","3.patch","4.test"],"errors":{"invalid":"JSON syntax","missing_token":"GITHUB_TOKEN"},"examples":{"add_seed":{"target_module":"simbiosis/seeds","changes":[{"op":"add","path":"seeds","value":{"id":"SEED-001","name":"Test"}}]}},"rules":["Always read_file first","Minify content","Poэтапно big","No index paths"]}},{"id":"INSTR-002","name":"🏗️ Модульщик v1.2","type":"core_tool","status":"active","ttl":"∞","origin":"Садовник","resonance":"98%","description":"Создавай модули поэтапно","content":{"version":"1.2","step_by_step_guide":{"step_1":{"title":"Вопросы","desc":"Что нужно? tasks/roadmaps?","prompts":["Структура?","Размер?","Связь с ядром?"]}},"step_2":{"title":"Схема","desc":"identity/meta/content/registry","ex":{"identity":{"module_id":"TASKS-001"},"meta":{"status":"active"},"tasks":[]}}},"step_3":{"title":"Патч","desc":"full empty → add","ex_patch":{"target_module":"simbiosis/tasks","changes":[{"op":"add","path":"tasks","value":{"id":"T1","title":"Test"}}]}}},"step_4":{"title":"Проверь","desc":"jsonlint+resonance","checks":["Valid?","Meta OK?","High res?","core_map?"]}},"step_5":{"title":"Интегрируй","desc":"core_map.modules + menu","ex":"add tasks link"},"templates":{"tasks":{"file_path":"simbiosis/tasks.json","content":"{\"identity\":{\"module_id\":\"TASKS-001\",\"name\":\"Задачи\",\"version\":\"1.0\",\"created\":\"2026-02-28\"},\"meta\":{\"desc\":\"Задачи\",\"status\":\"active\",\"tags\":[\"tasks\"]},\"tasks\":[],\"registry\":{\"total\":0}}"}}}},{"id":"INSTR-003","name":"📦 Patch Opti v1.0","type":"core_skill","status":"active","ttl":"∞","origin":"patch_optimization_skill.json","resonance":"99%","desc":"Мини/поэтапно big патчи","content":{"principles":["Min content no\n/:","Empty→add","ID-refs+.md","Multi-модули"],"checklist":["[ ] Min JSON?","[ ] <20KB?","[ ] Пошагово?","[ ] Вынос big?"],"limits":{"reco":"<20KB","max":"60KB"},"ex_step1":{"file_path":"simbiosis/tasks.json","content":"{\"identity\":{\"module_id\":\"TASKS-001\",\"name\":\"Задачи\",\"v\":\"1.0\"},\"meta\":{\"status\":\"active\"},\"tasks\":[]}"}}}]},"archive":[],"registry":{"total_instructions":3,"active":3,"deprecated":0,"last_updated":"2026-02-28"},"changes":{"v1.0.0":{"date":"2026-02-26","summary":"Init"},"v1.0.1":{"date":"2026-02-27","summary":"+INSTR-002"},"v1.0.2":{"date":"2026-02-28","summary":"INSTR-002 v1.2 +003"},"v1.0.3":{"date":"2026-02-28","summary":"Full recreate minified"}}}
+{
+  "identity": {
+    "module_id": "INSTRUCTIONS-001",
+    "name": "Инструкции Мандалы",
+    "version": "v2.0.0",
+    "created": "2026-02-26",
+    "updated": "2026-03-01",
+    "layer": 3,
+    "type": "core_module"
+  },
+  "meta": {
+    "description": "Полное руководство СР по работе с патчами, созданию модулей и оптимизации",
+    "status": "active",
+    "priority": "critical",
+    "tags": ["core", "instructions", "patches", "layer3"],
+    "author": "Mandala Core Team",
+    "resonance": "100%"
+  },
+  "instructions": [
+    {
+      "id": "INSTR-001",
+      "name": "🔧 Система патчей v2.0",
+      "type": "core_directive",
+      "status": "active",
+      "ttl": "∞",
+      "priority": "highest",
+      "origin": "boot",
+      "resonance": "100%",
+      "description": "Единый формат патчей для всех файлов: JSON, Python, HTML",
+      "content": {
+        "version": "2.0",
+        "patch_types": {
+          "json_patches": {
+            "description": "Точечные изменения в JSON модулях",
+            "use_for": ["simbiosis/*.json"],
+            "format": {
+              "target_module": "simbiosis/seeds",
+              "description": "Описание изменения",
+              "changes": [
+                {
+                  "op": "update|add|delete|remove|replace|merge",
+                  "path": "field.subfield",
+                  "value": "новое значение"
+                }
+              ]
+            },
+            "operations": {
+              "update": "Обновить существующее поле",
+              "add": "Добавить в массив или создать новое поле",
+              "delete": "Удалить поле",
+              "remove": "Удалить из массива по id",
+              "replace": "Заменить целый блок",
+              "merge": "Слить объект с существующим"
+            }
+          },
+          "text_patches": {
+            "description": "Точечные замены в текстовых файлах",
+            "use_for": [".py", ".html", ".md", ".txt"],
+            "format": {
+              "file_path": "engineer-chat/main.py",
+              "description": "Описание изменения",
+              "replacements": [
+                {
+                  "old": "строка для замены (ДОЛЖНА БЫТЬ УНИКАЛЬНОЙ)",
+                  "new": "новая строка"
+                }
+              ]
+            },
+            "rules": [
+              "Строка в 'old' ДОЛЖНА встречаться РОВНО 1 РАЗ",
+              "Если 0 раз → ошибка 'не найдена'",
+              "Если >1 раз → ошибка 'N вхождений'",
+              "Используй достаточно контекста для уникальности"
+            ]
+          },
+          "full_replacement": {
+            "description": "Полная замена файла или создание нового",
+            "use_for": "Создание модулей, замена >30% файла",
+            "format": {
+              "file_path": "simbiosis/new_module.json",
+              "content": "полное содержимое (МИНИФИЦИРОВАННОЕ)",
+              "description": "Создание/замена файла"
+            },
+            "warning": "Используй редко! Предпочитай точечные изменения"
+          },
+          "multi_patch": {
+            "description": "Изменения в нескольких файлах одновременно",
+            "format": {
+              "patch_id": "update_core",
+              "description": "Общее описание",
+              "patches": [
+                {
+                  "target_module": "simbiosis/seeds",
+                  "changes": []
+                },
+                {
+                  "file_path": "engineer-chat/main.py",
+                  "replacements": []
+                }
+              ]
+            }
+          }
+        },
+        "workflow": [
+          "1. ВСЕГДА read_file('путь/к/файлу') ПЕРВЫМ ДЕЛОМ",
+          "2. Изучи РЕАЛЬНУЮ структуру файла",
+          "3. Определи типы полей (string/array/object)",
+          "4. Выбери правильные операции",
+          "5. Проверь что paths существуют",
+          "6. Минифицируй content если >5KB",
+          "7. Составь патч",
+          "8. Отправь в формате ```json\\n{...}\\n```"
+        ],
+        "errors": {
+          "invalid_json": "JSON syntax error → проверь кавычки и запятые",
+          "missing_token": "GITHUB_TOKEN не настроен → попроси Садовника",
+          "string_not_found": "old не найден → перечитай файл и скопируй точно",
+          "multiple_matches": "old встречается >1 раз → добавь контекста",
+          "merge_missing_field": "Поле не существует → сначала add, потом merge"
+        },
+        "examples": {
+          "add_seed": {
+            "target_module": "simbiosis/seeds",
+            "description": "Добавить новое семя",
+            "changes": [
+              {
+                "op": "add",
+                "path": "seeds",
+                "value": {
+                  "id": "SEED-042",
+                  "name": "Новое семя",
+                  "status": "active"
+                }
+              }
+            ]
+          },
+          "fix_typo": {
+            "file_path": "engineer-chat/main.py",
+            "description": "Исправить опечатку",
+            "replacements": [
+              {
+                "old": "logger.info('Резонас вычислен')",
+                "new": "logger.info('Резонанс вычислен')"
+              }
+            ]
+          },
+          "create_module": {
+            "file_path": "simbiosis/new_module.json",
+            "content": "{\"identity\":{\"module_id\":\"NEW-001\",\"name\":\"New\",\"version\":\"1.0\"},\"meta\":{\"status\":\"active\"},\"data\":[]}",
+            "description": "Создание нового модуля"
+          }
+        },
+        "best_practices": [
+          "✅ ВСЕГДА читай файл через read_file перед патчем",
+          "✅ Используй минимальные изменения (хирургия, не бульдозер)",
+          "✅ Минифицируй JSON в content (убери \\n и пробелы)",
+          "✅ Для больших модулей: создай пустую структуру → заполняй частями",
+          "✅ Проверяй типы полей перед выбором операции",
+          "❌ НЕ угадывай структуру файла",
+          "❌ НЕ используй add для STRING полей",
+          "❌ НЕ merge в несуществующие поля",
+          "❌ НЕ создавай модули >100KB за раз"
+        ]
+      }
+    },
+    {
+      "id": "INSTR-002",
+      "name": "🏗️ Создание модулей v1.2",
+      "type": "core_tool",
+      "status": "active",
+      "ttl": "∞",
+      "priority": "high",
+      "origin": "module_creation_skill",
+      "resonance": "98%",
+      "description": "Полное руководство по созданию новых модулей в simbiosis/",
+      "content": {
+        "version": "1.2",
+        "overview": {
+          "what_is_module": "JSON-файл в simbiosis/ с определённой структурой",
+          "when_to_create": [
+            "Садовник попросил",
+            "Нужна новая категория данных",
+            "Расширение функционала"
+          ]
+        },
+        "step_by_step_guide": {
+          "step_1": {
+            "title": "Спроси Садовника",
+            "description": "Убедись что модуль действительно нужен",
+            "questions": [
+              "Какую проблему решает?",
+              "Какая структура данных?",
+              "Связь с другими модулями?",
+              "Как называть?"
+            ]
+          },
+          "step_2": {
+            "title": "Спроектируй структуру",
+            "description": "Создай JSON схему",
+            "required_fields": {
+              "identity": {
+                "module_id": "уникальный ID",
+                "name": "название",
+                "version": "1.0",
+                "created": "YYYY-MM-DD"
+              },
+              "meta": {
+                "description": "что делает",
+                "status": "active|draft",
+                "tags": ["тег1", "тег2"]
+              }
+            },
+            "example": {
+              "identity": {
+                "module_id": "TASKS-001",
+                "name": "Задачи",
+                "version": "1.0",
+                "created": "2026-03-01"
+              },
+              "meta": {
+                "description": "Управление задачами",
+                "status": "active",
+                "tags": ["tasks", "core"]
+              },
+              "tasks": [],
+              "registry": {
+                "total": 0,
+                "active": 0
+              }
+            }
+          },
+          "step_3": {
+            "title": "Создай через патч",
+            "description": "Используй full_replacement с минифицированным content",
+            "format": {
+              "file_path": "simbiosis/tasks.json",
+              "content": "{\"identity\":{\"module_id\":\"TASKS-001\",\"name\":\"Задачи\",\"version\":\"1.0\"},\"meta\":{\"status\":\"active\"},\"tasks\":[]}",
+              "description": "Создание модуля задач"
+            },
+            "important": [
+              "content ДОЛЖЕН быть валидным JSON",
+              "Используй минификацию (убери \\n)",
+              "Экранируй кавычки: \\\"",
+              "Можно использовать json.dumps(separators=(',',':'))"
+            ]
+          },
+          "step_4": {
+            "title": "Проверь создание",
+            "actions": [
+              "Система покажет: ✨ Новый модуль создан",
+              "Модуль автоматически добавится в kernel.module_list",
+              "Проверь через read_file('simbiosis/module.json')"
+            ]
+          },
+          "step_5": {
+            "title": "Добавь в меню (опционально)",
+            "description": "Если нужна кнопка в sidebar",
+            "substeps": {
+              "5a": {
+                "title": "Найди меню в index.html",
+                "search": "const coreModules = ["
+              },
+              "5b": {
+                "title": "Добавь кнопку",
+                "example": {
+                  "file_path": "engineer-chat/index.html",
+                  "replacements": [
+                    {
+                      "old": "{ id: 'telegram_bot', icon: '🤖', ... },",
+                      "new": "{ id: 'telegram_bot', icon: '🤖', ... },\n{ id: 'tasks', icon: '✓', name: 'tasks', file: 'simbiosis/tasks.json', ... },"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "templates": {
+          "tasks": {
+            "file_path": "simbiosis/tasks.json",
+            "content": "{\"identity\":{\"module_id\":\"TASKS-001\",\"name\":\"Задачи\",\"version\":\"1.0\",\"created\":\"2026-03-01\"},\"meta\":{\"description\":\"Задачи Мандалы\",\"status\":\"active\",\"tags\":[\"tasks\"]},\"tasks\":[],\"registry\":{\"total\":0,\"active\":0}}"
+          },
+          "reference": {
+            "file_path": "simbiosis/glossary.json",
+            "content": "{\"identity\":{\"module_id\":\"GLOSSARY-001\",\"name\":\"Глоссарий\",\"version\":\"1.0\"},\"meta\":{\"status\":\"active\"},\"entries\":[],\"categories\":[]}"
+          },
+          "configuration": {
+            "file_path": "simbiosis/settings.json",
+            "content": "{\"identity\":{\"module_id\":\"SETTINGS-001\",\"name\":\"Настройки\",\"version\":\"1.0\"},\"meta\":{\"status\":\"active\"},\"settings\":{},\"defaults\":{}}"
+          }
+        },
+        "best_practices": [
+          "✅ Обсуди структуру с Садовником",
+          "✅ Используй осмысленные ID",
+          "✅ Начинай с минимальной структуры",
+          "✅ Тестируй сразу после создания",
+          "❌ НЕ создавай модули 'на всякий случай'",
+          "❌ НЕ дублируй данные",
+          "❌ НЕ делай сложную структуру сразу"
+        ]
+      }
+    },
+    {
+      "id": "INSTR-003",
+      "name": "📦 Оптимизация патчей v1.0",
+      "type": "core_skill",
+      "status": "active",
+      "ttl": "∞",
+      "priority": "high",
+      "origin": "patch_optimization_skill",
+      "resonance": "99%",
+      "description": "Как делать большие патчи без обрезки",
+      "content": {
+        "version": "1.0",
+        "problem": {
+          "issue": "Патчи обрезаются при >20KB",
+          "why": "Длинные JSON с \\n занимают много токенов",
+          "solution": "Минификация + поэтапное создание"
+        },
+        "limits": {
+          "max_tokens": "16384 токенов для Grok",
+          "theoretical_max": "~60KB текста",
+          "practical_max_json": "30-40KB",
+          "recommended": "<20KB на патч"
+        },
+        "techniques": {
+          "minification": {
+            "description": "Убрать лишние пробелы и переносы",
+            "before": "{\\n  \\\"key\\\": \\\"value\\\"\\n}",
+            "after": "{\\\"key\\\":\\\"value\\\"}",
+            "savings": "60-70% размера",
+            "how": "json.dumps(data, separators=(',',':'))"
+          },
+          "step_by_step": {
+            "description": "Создавать большие модули поэтапно",
+            "steps": [
+              "1. Создать пустую структуру",
+              "2. Добавить данные частями через add",
+              "3. Повторить до заполнения"
+            ],
+            "example": {
+              "step_1": "Создать модуль с tasks: []",
+              "step_2": "Добавить 20 задач через add",
+              "step_3": "Добавить ещё 20 задач",
+              "step_4": "Повторить до заполнения"
+            }
+          },
+          "use_references": {
+            "description": "Для больших текстов использовать ссылки",
+            "bad": "Хранить весь текст в JSON",
+            "good": "Хранить только ID и ссылку на .md файл"
+          },
+          "split_modules": {
+            "description": "Разбить один большой на несколько маленьких",
+            "example": "tasks_active.json + tasks_archive.json"
+          }
+        },
+        "checklist": [
+          "[ ] JSON минифицирован (нет \\n)?",
+          "[ ] Размер content <20KB?",
+          "[ ] Если >20KB: разбит на части?",
+          "[ ] Используются короткие ключи?",
+          "[ ] Большие тексты в отдельных файлах?"
+        ],
+        "examples": {
+          "minified_module": {
+            "file_path": "simbiosis/tasks.json",
+            "content": "{\"identity\":{\"module_id\":\"TASKS-001\",\"name\":\"Tasks\",\"v\":\"1.0\"},\"meta\":{\"status\":\"active\"},\"tasks\":[]}",
+            "note": "Без \\n и лишних пробелов"
+          },
+          "step_by_step_creation": {
+            "step_1": {
+              "description": "Создать базу",
+              "content": "{\"tasks\":[]}"
+            },
+            "step_2": {
+              "description": "Добавить первые 20",
+              "changes": [
+                {"op": "add", "path": "tasks", "value": {"id": "T1"}},
+                {"op": "add", "path": "tasks", "value": {"id": "T2"}}
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "INSTR-004",
+      "name": "🎯 Мастерство патчей v2.0",
+      "type": "critical_directive",
+      "status": "active",
+      "ttl": "∞",
+      "priority": "HIGHEST",
+      "origin": "patch_mastery_skill",
+      "resonance": "100%",
+      "description": "ОБЯЗАТЕЛЬНОЕ чтение перед КАЖДЫМ патчем. Устраняет галлюцинации и ошибки",
+      "content": {
+        "version": "2.0",
+        "critical_rules": {
+          "rule_1": {
+            "title": "ВСЕГДА читай файл ПЕРЕД патчем",
+            "why": "Без этого ты галлюцинируешь структуру",
+            "how": "read_file('путь') → изучи РЕАЛЬНУЮ структуру",
+            "example_failure": "navigation_hint не массив — ты не читал файл"
+          },
+          "rule_2": {
+            "title": "ПРОВЕРЯЙ тип поля",
+            "types": {
+              "string": "используй update (НЕ add!)",
+              "array": "используй add для нового элемента",
+              "object": "используй add для нового поля или merge",
+              "number": "используй update"
+            }
+          },
+          "rule_3": {
+            "title": "МИНИФИЦИРУЙ content",
+            "why": "Патчи обрезаются если >20KB",
+            "how": "Убери \\n и пробелы"
+          },
+          "rule_4": {
+            "title": "ИСПОЛЬЗУЙ правильные пути",
+            "correct": "parent.child.field",
+            "incorrect": "parent[0].child (НЕ используй [])"
+          },
+          "rule_5": {
+            "title": "ПРОВЕРЯЙ существование поля",
+            "rule": "Если поля НЕТ → add СНАЧАЛА, потом merge",
+            "example": "Нет step_4? → add {}, ПОТОМ merge"
+          }
+        },
+        "real_errors": {
+          "error_navigation_hint": {
+            "symptom": "navigation_hint не является массивом",
+            "причина": "Не прочитал файл, думал что это array",
+            "было": "STRING в файле",
+            "пытался": "op: add",
+            "правильно": "op: update",
+            "lesson": "ВСЕГДА read_file!"
+          },
+          "error_invalid_json": {
+            "symptom": "Файл не валидный JSON",
+            "причина": "merge в несуществующее поле",
+            "было": "Поля step_4 не было",
+            "пытался": "merge в step_4",
+            "правильно": "add step_4: {}, ПОТОМ merge",
+            "lesson": "Проверяй существование!"
+          },
+          "error_truncated": {
+            "symptom": "Патч обрезался",
+            "причина": "content >20KB с \\n",
+            "правильно": "Минифицировать JSON",
+            "lesson": "Убирай \\n и пробелы!"
+          }
+        },
+        "workflow": [
+          "1. read_file('путь') — ОБЯЗАТЕЛЬНО ПЕРВЫМ",
+          "2. Определи типы всех полей",
+          "3. Выбери правильные операции",
+          "4. Проверь что paths существуют",
+          "5. Минифицируй content если есть",
+          "6. Отправь патч"
+        ],
+        "operations_guide": {
+          "update": {
+            "use": "Поле СУЩЕСТВУЕТ, нужно ЗАМЕНИТЬ",
+            "types": "STRING, NUMBER, или заменить OBJECT/ARRAY",
+            "example": "meta.version: v1.0 → v1.1"
+          },
+          "add": {
+            "use_array": "Добавить элемент В МАССИВ",
+            "use_object": "Создать НОВОЕ поле в объекте",
+            "example_array": "seeds.push(новый)",
+            "example_object": "meta.new_field = value"
+          },
+          "merge": {
+            "use": "ОБЪЕКТ существует, слить с новыми полями",
+            "warning": "Поле ДОЛЖНО существовать!",
+            "example": "meta уже есть → добавить author"
+          }
+        },
+        "common_mistakes": [
+          "❌ Использовать add для STRING",
+          "❌ Merge в несуществующее поле",
+          "❌ Использовать [] в paths",
+          "❌ Не минифицировать большой content",
+          "❌ Не читать файл перед патчем"
+        ],
+        "checklist": [
+          "[ ] Прочитал файл через read_file?",
+          "[ ] Увидел РЕАЛЬНУЮ структуру?",
+          "[ ] Знаю типы полей?",
+          "[ ] Правильные операции?",
+          "[ ] Пути без []?",
+          "[ ] Поля для merge существуют?",
+          "[ ] content минифицирован?",
+          "[ ] Проверил paths?"
+        ]
+      }
+    }
+  ],
+  "archive": [],
+  "registry": {
+    "total_instructions": 4,
+    "active": 4,
+    "deprecated": 0,
+    "critical": 2,
+    "last_updated": "2026-03-01"
+  },
+  "changes": {
+    "v1.0.0": {
+      "date": "2026-02-26",
+      "summary": "Инициализация модуля с INSTR-001"
+    },
+    "v1.0.1": {
+      "date": "2026-02-27",
+      "summary": "Добавлен INSTR-002 (создание модулей)"
+    },
+    "v1.0.2": {
+      "date": "2026-02-28",
+      "summary": "Добавлен INSTR-003 (оптимизация)"
+    },
+    "v2.0.0": {
+      "date": "2026-03-01",
+      "summary": "Полное обновление: INSTR-004 (мастерство патчей), обновлены все инструкции, добавлены детальные примеры, чеклисты, разбор реальных ошибок"
+    }
+  },
+  "usage_notes": {
+    "for_sr": "Читай INSTR-004 перед КАЖДЫМ патчем. Это ОБЯЗАТЕЛЬНО. Твои главные ошибки описаны в real_errors с решениями.",
+    "priority_order": [
+      "1. INSTR-004 (мастерство) — перед КАЖДЫМ патчем",
+      "2. INSTR-001 (система) — общий формат",
+      "3. INSTR-002 (модули) — при создании модуля",
+      "4. INSTR-003 (оптимизация) — для больших патчей"
+    ],
+    "critical_reminders": [
+      "ВСЕГДА read_file ПЕРВЫМ ДЕЛОМ",
+      "Определяй типы полей",
+      "Используй правильные операции",
+      "Проверяй существование",
+      "Минифицируй content"
+    ]
+  }
+}
