@@ -605,11 +605,22 @@ class KernelMemory:
         boot = self.modules.get("simbiosis/boot", {})
         core_map = self.modules.get("simbiosis/core_map", {})
         version = boot.get("version", "—")
-        kernel_mods = core_map.get("kernel_modules", {}).get("modules", {})
-        modules_list = "\n".join(
-            f"  • {name} ({info.get('file', '')}) — {info.get('description', '')[:60]}"
-            for name, info in kernel_mods.items()
-        ) if kernel_mods else "  (карта не загружена)"
+        kernel_mods = core_map.get("kernel_modules", {})
+        if isinstance(kernel_mods, dict):
+            kernel_mods = kernel_mods.get("modules", {})
+        # Защита: modules может быть dict или list
+        if isinstance(kernel_mods, dict):
+            modules_list = "\n".join(
+                f"  • {name} ({info.get('file', '') if isinstance(info, dict) else ''}) — {(info.get('description', '') if isinstance(info, dict) else str(info))[:60]}"
+                for name, info in kernel_mods.items()
+            ) if kernel_mods else "  (карта не загружена)"
+        elif isinstance(kernel_mods, list):
+            modules_list = "\n".join(
+                f"  • {item.get('name', '?')} ({item.get('file', '')}) — {item.get('description', '')[:60]}"
+                for item in kernel_mods if isinstance(item, dict)
+            ) if kernel_mods else "  (карта не загружена)"
+        else:
+            modules_list = "  (карта не загружена)"
         commit = self.global_commit_sha or "—"
         return f"""# Мандала Симбиоза — ядро готово к работе
 Версия boot: {version} | Коммит: {commit}
@@ -662,9 +673,10 @@ class KernelMemory:
 — Предлагай альтернативы только если они явно лучше
 — Будь конкретен: строки, условия, причины
 — Если всё верно — так и скажи, не ищи проблемы там где их нет
-— Активно используй web_search для актуальных данных
-— Читай модули через read_file когда нужен контекст ядра
-— Перед изменением любого файла — сначала read_file его актуальной версии
+— Активно используй инструмент web_search для актуальных данных
+— Читай файлы через инструмент read_file когда нужен контекст
+— Перед изменением любого файла — ОБЯЗАТЕЛЬНО вызови read_file и дождись результата
+— ВАЖНО: для вызова инструментов используй ТОЛЬКО встроенный механизм function calling, НЕ пиши XML теги вроде <function_calls> или <invoke> — система сама обработает вызовы функций
 
 Формат оценки: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 Максимум 4 пункта. Без вступлений.
