@@ -644,18 +644,33 @@ class KernelMemory:
 
         # Карта ядра — даём СР навигацию
         core_map = self.modules.get("simbiosis/core_map", {})
-        kernel_modules = core_map.get("kernel_modules", {}).get("modules", {})
-        nav_hint = core_map.get("navigation_hint", "")
-        modules_brief = "\n".join(
-            f"  {name}: {info.get('description', '')[:80]}"
-            for name, info in kernel_modules.items()
-        ) if kernel_modules else ""
+        if not isinstance(core_map, dict):
+            core_map = {}
+        _km = core_map.get("kernel_modules", {})
+        if isinstance(_km, dict):
+            kernel_modules = _km.get("modules", {})
+        else:
+            kernel_modules = {}
+        nav_hint = core_map.get("navigation_hint", "") if isinstance(core_map, dict) else ""
+        # Защита: modules может прийти как dict или как list
+        if isinstance(kernel_modules, dict):
+            modules_brief = "\n".join(
+                f"  {name}: {(info.get('description','') if isinstance(info,dict) else str(info))[:80]}"
+                for name, info in kernel_modules.items()
+            ) if kernel_modules else ""
+        elif isinstance(kernel_modules, list):
+            modules_brief = "\n".join(
+                f"  {(item.get('name','?') if isinstance(item,dict) else str(item))}: {(item.get('description','') if isinstance(item,dict) else '')[:80]}"
+                for item in kernel_modules
+            ) if kernel_modules else ""
+        else:
+            modules_brief = ""
 
         repo_files_brief = ""
-        repo = core_map.get("repository", {}).get("files", {})
-        if repo:
+        repo = core_map.get("repository", {}).get("files", {}) if isinstance(core_map, dict) else {}
+        if isinstance(repo, dict) and repo:
             repo_files_brief = "\n".join(
-                f"  {path}: {info.get('description', '')[:60]}"
+                f"  {path}: {(info.get('description','') if isinstance(info,dict) else str(info))[:60]}"
                 for path, info in list(repo.items())[:8]
             )
 
