@@ -126,9 +126,14 @@
       "role": "user",
       "content": "Ты только что прочитал файл 📖 instructions. Изучи его и дай своё мнение: что это, какова структура, что важно знать.",
       "time": 1772396438.5495381
+    },
+    {
+      "role": "assistant",
+      "content": "<｜DSML｜function_calls>\n<｜DSML｜invoke name=\"read_file\">\n<parameter name=\"path\" string=\"true\">simbiosis/tasks.json</parameter>\n</｜DSML｜invoke>\n</｜DSML｜function_calls>",
+      "time": 1772396447.6781738
     }
   ],
-  "last_active": 1772396438.5495484,
+  "last_active": 1772396447.6781895,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772396387.227214
