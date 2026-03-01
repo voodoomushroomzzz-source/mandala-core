@@ -156,9 +156,14 @@
       "role": "user",
       "content": "Прочитал эти модули?",
       "time": 1772396558.1046872
+    },
+    {
+      "role": "assistant",
+      "content": "✅ Да, оба модуля прочитаны:\n\n1. **📖 instructions.json** — полное руководство по патчам v2.0 и созданию модулей\n2. **✓ tasks.json** — модуль задач (но с дубликатами и странной структурой changes)\n\n🔴 **ПРОБЛЕМА:** Эти модули отсутствуют в `core_map.json`, нарушая директиву **GD-05**.\n\n💡 **РЕШЕНИЕ:** Нужно создать патч для добавления их в `core_map.json`:\n\n```json\n{\n  \"target_module\": \"simbiosis/core_map\",\n  \"description\": \"Добавить modules/instructions и modules/tasks в карту ядра\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"kernel_modules.modules.instructions\",\n      \"value\": {\n        \"file\": \"simbiosis/instructions.json\",\n        \"description\": \"Полное руководство по патчам и созданию модулей. Система патчей v2.0, создание модулей v1.2. Читать при работе с патчами.\",\n        \"load_priority\": \"on_demand\",\n        \"topics\": [\"патчи\", \"создание модулей\", \"инструкции\", \"формат\"]\n      }\n    },\n    {\n      \"op\": \"add\",\n      \"path\": \"kernel_modules.modules.tasks\",\n      \"value\": {\n        \"file\": \"simbiosis/tasks.json\", \n        \"description\": \"Модуль задач Мандалы Симбиоза. Активные задачи, приоритеты, статусы. Читать при планировании работы.\",\n        \"load_priority\": \"on_demand\",\n        \"topics\": [\"задачи\", \"планирование\", \"трекинг\"]\n      }\n    }\n  ]\n}\n```\n\n🟡 **ДОПОЛНИТЕЛЬНО:** В `tasks.json` нужно почистить дубликаты и исправить структуру `changes`.",
+      "time": 1772396571.8688097
     }
   ],
-  "last_active": 1772396558.1047254,
+  "last_active": 1772396571.8688264,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772396387.227214
