@@ -1239,16 +1239,19 @@
         const saveFileBtn = document.getElementById('save-file-btn');
 
         // ==================== ИНИЦИАЛИЗАЦИЯ MONACO ====================
-        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
-        require(['vs/editor/editor.main'], function() {
-            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                value: '// Выберите файл для редактирования',
-                language: 'text',
-                theme: 'vs-dark',
-                automaticLayout: true,
-                minimap: { enabled: false }
+        if (!window._monacoInitialized) {
+            window._monacoInitialized = true;
+            require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
+            require(['vs/editor/editor.main'], function() {
+                editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                    value: '// Выберите файл для редактирования',
+                    language: 'text',
+                    theme: 'vs-dark',
+                    automaticLayout: true,
+                    minimap: { enabled: false }
+                });
             });
-        });
+        }
 
         // ==================== ЗАГРУЗКА СООБЩЕНИЙ ====================
         function loadMessages() {
