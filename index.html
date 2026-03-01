@@ -193,6 +193,7 @@
             opacity: 0.7;
             vertical-align: middle;
         }
+        .model-label.deepseek { color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
         .model-label.grok   { color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
         .model-label.claude { color: #4f46e5; border: 1px solid rgba(79,70,229,0.3); }
 
@@ -1104,7 +1105,7 @@
         </div>
         <div class="h-right">
             <div class="model-selector" id="modelSelector">
-                <button class="model-btn grok-btn active" id="btnGrok" onclick="toggleModel('grok')" title="Грок — исследователь">△</button>
+                <button class="model-btn grok-btn active" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — основной ИИ">◇</button>
                 <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">○</button>
             </div>
             <div class="vsep"></div>
@@ -1168,7 +1169,10 @@
                 <div class="seeds-container" id="mapContainer">
                     <div id="mapHeader" style="padding:0 4px 16px;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);display:flex;align-items:center;justify-content:space-between;">
                         <span>◈ карта ядра симбиоза</span>
-                        <button onclick="loadMap()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
+                        <div style="display:flex;gap:6px;">
+                            <button onclick="loadMap()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
+                            <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.4);color:var(--violet-soft);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">✕ забыть</button>
+                        </div>
                     </div>
                     <div id="coreVisualization" style="position:relative;margin-bottom:32px;"></div>
                     <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin-bottom:10px;" id="otherFilesLabel">◈ файлы репозитория</div>
@@ -1295,7 +1299,7 @@
         }
 
         function renderAssistantMessage(text, save = true) {
-            const div = createMessageElement('assistant', 'grok');
+            const div = createMessageElement('assistant', 'deepseek');
             
             // Сначала обрабатываем code blocks отдельно (чтобы marked их не трогал)
             const codeBlocks = [];
@@ -1348,7 +1352,7 @@
                 iconSvg = '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>';
                 name = 'вы';
             } else {
-                iconSvg = modelIcons[model] || modelIcons['grok'];
+                iconSvg = modelIcons[model] || modelIcons['deepseek'];
                 name = modelNames[model] || 'СР';
             }
             if (model) div.dataset.model = model;
@@ -1588,7 +1592,7 @@
 
         function handleStream(content, model) {
             if (!currentMessageDiv) {
-                currentMessageDiv = createMessageElement('assistant', model || 'grok');
+                currentMessageDiv = createMessageElement('assistant', model || 'deepseek');
                 if (model) {
                     const nameEl = currentMessageDiv.querySelector('.mname');
                     const color = modelColors[model] || 'var(--green-bright)';
@@ -1658,7 +1662,9 @@
             filePercentEl.textContent = '0%';
 
             let completed = 0;
-            for (const file of files) {
+            for (let fi = 0; fi < files.length; fi++) {
+                const file = files[fi];
+                const isLast = (fi === files.length - 1);
                 fileNameEl.textContent = `⏳ ${file.name}`;
                 await new Promise((resolve) => {
                     const reader = new FileReader();
@@ -1668,7 +1674,8 @@
                             name: file.name,
                             content: e.target.result.split(',')[1],
                             file_type: file.type || 'application/octet-stream',
-                            caption: inputEl.value.trim(),
+                            caption: isLast ? (caption || '') : '',
+                            is_last: isLast,
                             session_id: 'main',
                             models: getActiveModels()
                         }));
@@ -1841,7 +1848,7 @@
         }
 
         function showThinking(model) {
-            const m = model || Array.from(activeModels)[0] || 'grok';
+            const m = model || Array.from(activeModels)[0] || 'deepseek';
             const svgEl = document.getElementById('thinkingIconSvg');
             const labelEl = document.getElementById('thinkingLabel');
             if (svgEl && modelIcons[m]) {
@@ -1854,7 +1861,7 @@
                 }
             }
             if (labelEl) {
-                const names = { grok: 'Грок думает', claude: 'Клод думает' };
+                const names = { deepseek: 'DeepSeek думает', claude: 'Клод думает' };
                 labelEl.textContent = names[m] || 'думаю';
                 labelEl.style.color = modelColors[m] || 'var(--text-2)';
             }
@@ -1865,8 +1872,8 @@
         function updateThinkingStatus(data) {
             const labelEl = document.getElementById('thinkingLabel');
             if (!labelEl) return;
-            const model = data.model || Array.from(activeModels)[0] || 'grok';
-            const name = { grok: 'Грок', claude: 'Клод' }[model] || 'СР';
+            const model = data.model || Array.from(activeModels)[0] || 'deepseek';
+            const name = { deepseek: 'DeepSeek', claude: 'Клод' }[model] || 'СР';
             if (data.tool === 'web_search') {
                 const q = data.query ? `«${data.query.slice(0, 40)}»` : '';
                 labelEl.textContent = `${name} ищет ${q}`;
@@ -1876,7 +1883,7 @@
             }
             clearTimeout(window._thinkingResetTimer);
             window._thinkingResetTimer = setTimeout(() => {
-                const names = { grok: 'Грок думает', claude: 'Клод думает' };
+                const names = { deepseek: 'DeepSeek думает', claude: 'Клод думает' };
                 if (labelEl) labelEl.textContent = names[model] || 'думаю';
             }, 3000);
         }
@@ -1900,17 +1907,17 @@
         }
 
         // ==================== МОДЕЛИ ====================
-        const activeModels = new Set(['grok']);
+        const activeModels = new Set(['deepseek']);
         const modelIcons = {
-            grok: `<svg viewBox="0 0 30 30" fill="none"><polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/><circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/></svg>`,
+            deepseek: `<svg viewBox="0 0 30 30" fill="none"><polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/><circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/></svg>`,
             claude: `<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/><circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/></svg>`
         };
-        const modelNames = { grok: 'Грок △', claude: 'Клод ○' };
-        const modelColors = { grok: '#10b981', claude: '#4f46e5' };
+        const modelNames = { deepseek: 'DeepSeek ◇', claude: 'Клод ○' };
+        const modelColors = { deepseek: '#10b981', claude: '#4f46e5' };
 
         function getActiveModels() { return Array.from(activeModels); }
         function toggleModel(model) {
-            const btnMap = { grok: 'btnGrok', claude: 'btnClaude' };
+            const btnMap = { deepseek: 'btnDeepseek', claude: 'btnClaude' };
             const btn = document.getElementById(btnMap[model]);
             if (!btn) return;
             if (activeModels.has(model)) {
@@ -1958,12 +1965,26 @@
         }
         function setObserverState() {} // заглушка
 
+
+        function forgetMemory() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showToast('◈ нет соединения', 'error');
+                return;
+            }
+            ws.send(JSON.stringify({ type: 'reset_memory', session_id: 'main' }));
+            messagesEl.innerHTML = '';
+            mainMessages = [];
+            localStorage.removeItem('main_chat_messages');
+            showToast('✕ память очищена', 'success');
+        }
+
         // ==================== КАРТА ЯДРА ====================
-        let mapLoaded = false;
         async function loadMap() {
-            if (mapLoaded) return;
-            mapLoaded = true;
             const viz = document.getElementById('coreVisualization');
+            if (viz && viz._loading) return;
+            if (viz) viz._loading = true;
+            // Reset loading flag after 500ms to allow repeated refreshes
+            setTimeout(() => { if (viz) viz._loading = false; }, 500);
             const otherGrid = document.getElementById('otherFilesGrid');
             viz.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка карты...</div></div>';
             otherGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
