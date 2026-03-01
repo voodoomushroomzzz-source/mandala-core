@@ -1105,7 +1105,7 @@
         </div>
         <div class="h-right">
             <div class="model-selector" id="modelSelector">
-                <button class="model-btn grok-btn active" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — основной ИИ">◇</button>
+                <button class="model-btn grok-btn active" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — основной ИИ">○</button>
                 <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">○</button>
             </div>
             <div class="vsep"></div>
@@ -1909,7 +1909,7 @@
         // ==================== МОДЕЛИ ====================
         const activeModels = new Set(['deepseek']);
         const modelIcons = {
-            deepseek: `<svg viewBox="0 0 30 30" fill="none"><polygon points="15,4 26,22 4,22" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/><circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/></svg>`,
+            deepseek: `<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#10b981" stroke-width="0.8" fill="rgba(16,185,129,0.07)"/><circle cx="15" cy="15" r="3" fill="#34d399" opacity="0.9"/></svg>`,
             claude: `<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/><circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/></svg>`
         };
         const modelNames = { deepseek: 'DeepSeek ◇', claude: 'Клод ○' };
