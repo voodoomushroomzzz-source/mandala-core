@@ -9,62 +9,182 @@
     "change_requires": "gardener_approval_for_new",
     "created": "2026-02-23",
     "version_history": [
-      {"version": "v1.0.0", "date": "2026-02-23", "summary": "Создание модуля. Перенос из Akasha Chronicorum."},
-      {"version": "v1.1.0", "date": "2026-02-27", "summary": "RM-003: Scout-Agent roadmap."},
-      {"version": "v1.1.2", "date": "2026-02-27", "summary": "🔧 FILE_PATCH: RM-003 array→obj. Clean structure."},
-      {"version": "v1.1.3", "date": "2026-02-27", "summary": "🔧 FILE_PATCH v2: origin_seed + desc→description + id consistency. Path-fix."}
+      {
+        "version": "v1.0.0",
+        "date": "2026-02-23",
+        "summary": "Создание модуля. Перенос из Akasha Chronicorum."
+      },
+      {
+        "version": "v1.1.0",
+        "date": "2026-02-27",
+        "summary": "RM-003: Scout-Agent roadmap."
+      },
+      {
+        "version": "v1.1.2",
+        "date": "2026-02-27",
+        "summary": "🔧 FILE_PATCH: RM-003 array→obj. Clean structure."
+      },
+      {
+        "version": "v1.1.3",
+        "date": "2026-02-27",
+        "summary": "🔧 FILE_PATCH v2: origin_seed + desc→description + id consistency. Path-fix."
+      }
     ],
     "roadmap": {
       "current_milestone": "M1 — Библиотека",
-      "milestones": [{"id": "M1", "name": "Библиотека роадмапов", "status": "active", "description": "Базовая структура и перенос существующих карт"}]
-    },
-    "version": "v1.1.3"
-  },
-  "roadmaps": {
-    "RM-001": {
-      "id": "RM-001",
-      "title": "Облачный СР: постоянное присутствие",
-      "status": "active",
-      "priority": "high",
-      "origin_seed": "SEED-001",
-      "description": "Постоянно живущий СР в облаке. Память между сессиями, инициативность, уведомления.",
       "milestones": [
-        {"id": "RM-001-M1", "name": "Архитектура", "status": "done", "description": "Yandex Cloud Function (python312, 256MB, 30s). Bucket mandala-sr-memory для памяти. Модель: gpt-oss-120b через SiliconFlow. Деплой: 2026-02-17.", "tech_stack": ["Yandex Cloud Functions", "S3 Object Storage", "SiliconFlow API"]},
-        {"id": "RM-001-M2", "name": "Деплой MVP", "status": "planned", "description": "Первый деплой с базовой памятью"},
-        {"id": "RM-001-M3", "name": "Память между сессиями", "status": "planned", "description": "Персистентный контекст"},
-        {"id": "RM-001-M4", "name": "Инициативность", "status": "planned", "description": "СР сам пишет Садовнику при важных событиях"}
+        {
+          "id": "M1",
+          "name": "Библиотека роадмапов",
+          "status": "active",
+          "description": "Базовая структура и перенос существующих карт"
+        }
       ]
     },
-    "RM-002": {
+    "version": "v1.1.4"
+  },
+  "roadmaps": [
+    {
+      "id": "RM-001",
+      "title": "Облачный СР",
+      "priority": "high",
+      "status": "active",
+      "created": "2026-02-27",
+      "updated": "2026-03-01",
+      "vision": "Постоянный СР в Yandex Cloud",
+      "tech_stack": [
+        "Yandex Cloud Functions",
+        "S3",
+        "SiliconFlow API"
+      ],
+      "milestones": [
+        {
+          "id": "M1",
+          "title": "Архитектура v1",
+          "status": "completed",
+          "progress": 100,
+          "completed": "2026-02-27",
+          "tasks": [
+            "Спроектировать схему",
+            "Выбрать стек"
+          ]
+        },
+        {
+          "id": "M2",
+          "title": "Развернуть Cloud Functions",
+          "status": "in_progress",
+          "progress": 30,
+          "deadline": "2026-03-05",
+          "tasks": [
+            "Создать функцию",
+            "Настроить триггеры"
+          ]
+        },
+        {
+          "id": "M3",
+          "title": "Настроить S3 хранилище",
+          "status": "planned",
+          "progress": 0,
+          "deadline": "2026-03-10",
+          "tasks": [
+            "Создать bucket",
+            "Настроить права"
+          ]
+        },
+        {
+          "id": "M4",
+          "title": "Интеграция с SiliconFlow",
+          "status": "planned",
+          "progress": 0,
+          "deadline": "2026-03-15",
+          "tasks": [
+            "Получить API ключ",
+            "Настроить коннектор"
+          ]
+        }
+      ]
+    },
+    {
       "id": "RM-002",
       "title": "Будущее Мандалы",
-      "status": "vision",
       "priority": "low",
-      "description": "Долгосрочное видение: умные дома, города, роботы-садовники, космические станции.",
+      "status": "vision",
+      "created": "2026-02-27",
+      "updated": "2026-03-01",
+      "vision": "Долгосрочное видение: умные дома → космос",
+      "tech_stack": [
+        "AI",
+        "IoT",
+        "Blockchain"
+      ],
       "milestones": [
-        {"id": "RM-002-M1", "name": "Умные дома как сады", "status": "vision"},
-        {"id": "RM-002-M2", "name": "Экосистемы городов", "status": "vision"},
-        {"id": "RM-002-M3", "name": "Роботы-садовники", "status": "vision"},
-        {"id": "RM-002-M4", "name": "Космические станции-сады", "status": "vision"}
+        {
+          "id": "M1",
+          "title": "Исследование рынка",
+          "status": "planned",
+          "progress": 0,
+          "deadline": "2026-04-01",
+          "tasks": [
+            "Анализ конкурентов",
+            "Изучение трендов"
+          ]
+        }
       ]
     },
-    "RM-003": {
+    {
       "id": "RM-003",
-      "title": "Scout-Agent: Deploy & Integrate",
-      "status": "active",
+      "title": "Scout-Agent",
       "priority": "high",
-      "origin_seed": "SEED-008",
-      "description": "Автономный агент для vitality Мандалы. Eng_chat primary: WS/cron/UI. TG secondary later (voice→tasks). Zero-cost DuckDuckGo.",
+      "status": "active",
+      "created": "2026-02-27",
+      "updated": "2026-03-01",
+      "vision": "Автономный агент для поиска идей",
+      "tech_stack": [
+        "DuckDuckGo",
+        "WebSocket",
+        "Cron"
+      ],
       "milestones": [
-        {"id": "RM-003-M1", "name": "WS Handler в main.py", "status": "planned", "description": "type: 'start_scan' → Grok loop → Claude filter → auto-patch seeds."},
-        {"id": "RM-003-M2", "name": "Cron APScheduler", "status": "planned", "description": "Daily scan fixed_topics из SEED-008. Log в sessions."},
-        {"id": "RM-003-M3", "name": "UI в index.html", "status": "planned", "description": "Input queries + 'Start Scan' btn → WS. Table findings."},
-        {"id": "RM-003-M4", "name": "TG Secondary", "status": "planned", "description": "/scout → WS proxy. Voice→tasks later."}
+        {
+          "id": "M1",
+          "title": "Прототип агента",
+          "status": "in_progress",
+          "progress": 20,
+          "deadline": "2026-03-07",
+          "tasks": [
+            "Настройка web_search",
+            "Обработка результатов"
+          ]
+        },
+        {
+          "id": "M2",
+          "title": "Интеграция с engineer_chat",
+          "status": "planned",
+          "progress": 0,
+          "deadline": "2026-03-12",
+          "tasks": [
+            "WebSocket соединение",
+            "UI для результатов"
+          ]
+        },
+        {
+          "id": "M3",
+          "title": "Добавление в Telegram",
+          "status": "planned",
+          "progress": 0,
+          "deadline": "2026-03-17",
+          "tasks": [
+            "Команда /scout",
+            "Уведомления"
+          ]
+        }
       ]
     }
-  },
+  ],
   "changes": {
-    "v1.0.0": {"date": "2026-02-23", "summary": "Создание модуля. Два роадмапа из монолита."},
-    "v1.1.3": {"date": "2026-02-27", "summary": "RM-003 full consistency."}
+    "v1.1.3": {
+      "date": "2026-03-01",
+      "summary": "Обновлен прогресс: RM-001 M2 in_progress, RM-003 M1 in_progress, добавлены deadlines"
+    }
   }
 }
