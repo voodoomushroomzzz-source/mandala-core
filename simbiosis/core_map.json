@@ -19,6 +19,11 @@
         "version": "v1.1.0",
         "date": "2026-02-27",
         "summary": "Добавлен build_simbiosis_monolith.py, папка build/, расширен navigation_hint."
+      },
+      {
+        "version": "v1.2.1",
+        "date": "2026-03-01",
+        "summary": "Добавлено поле version в meta. Начало миграции на honeycomb architecture"
       }
     ],
     "roadmap": {
@@ -31,7 +36,10 @@
           "description": "Карта ядра simbiosis/ и инфраструктуры"
         }
       ]
-    }
+    },
+    "version": [
+      "v1.2.1"
+    ]
   },
   "kernel_modules": {
     "description": "Модули ядра в папке simbiosis/. Читаются через read_file по необходимости.",
