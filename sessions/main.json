@@ -16,9 +16,14 @@
       "role": "user",
       "content": "Привет, я Дима первый садовник и разарботчик этой Мандалы",
       "time": 1772448587.9053838
+    },
+    {
+      "role": "assistant",
+      "content": "<｜DSML｜function_calls>\n<｜DSML｜invoke name=\"read_file\">\n<｜DSML｜parameter name=\"path\" string=\"true\">simbiosis/core_map.json</｜DSML｜parameter>\n</｜DSML｜invoke>\n</｜DSML｜function_calls>",
+      "time": 1772448597.674266
     }
   ],
-  "last_active": 1772448587.905389,
+  "last_active": 1772448597.6742718,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772448587.9052887,
