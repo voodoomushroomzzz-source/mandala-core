@@ -1470,7 +1470,13 @@
                     ${toggleBtn}
                     <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">◈</button>
                     <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
-                    ${lang === 'json' ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
+                    ${(() => {
+                        try {
+                            const hasPatchKeys = code.includes('"target_module"') || code.includes('"file_path"') || code.includes('"patches"') || code.includes('"changes"');
+                            if (lang === 'json' || hasPatchKeys) return `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>`;
+                        } catch(e) {}
+                        return '';
+                    })()}
                 </div>
             ` : '';
             return `
@@ -1532,9 +1538,32 @@
             const codeElement = btn.closest('.code-block').querySelector('.code-content');
             const rawCode = codeElement.textContent;
             const decodedCode = decodeHtmlEntities(rawCode);
+            // Пробуем разные способы извлечь JSON
+            let patchJson = null;
+            // 1) Весь блок — валидный JSON
+            try { JSON.parse(decodedCode); patchJson = decodedCode; } catch(e) {}
+            // 2) Python код с dict — ищем первый { ... } блок
+            if (!patchJson) {
+                const match = decodedCode.match(/(\{[\s\S]*\})/);
+                if (match) {
+                    try {
+                        // Python→JSON: None→null, True→true, False→false, комментарии убираем
+                        let candidate = match[1]
+                            .replace(/#[^
+]*/g, '')
+                            .replace(/None/g, 'null')
+                            .replace(/True/g, 'true')
+                            .replace(/False/g, 'false')
+                            .replace(/,(\s*[}\]])/g, '$1'); // trailing commas
+                        JSON.parse(candidate);
+                        patchJson = candidate;
+                    } catch(e) {}
+                }
+            }
+            if (!patchJson) { showToast('◈ не удалось распарсить патч', 'error'); return; }
             try {
-                JSON.parse(decodedCode);
-                currentPatch = decodedCode;
+                JSON.parse(patchJson);
+                currentPatch = patchJson;
                 document.getElementById('patchPreviewContent').textContent = decodedCode;
                 document.getElementById('confirmPatchBtn').disabled = false;
                 openPatchModal();
