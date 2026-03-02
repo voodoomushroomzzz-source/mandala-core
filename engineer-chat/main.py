@@ -909,35 +909,101 @@ async def websocket_endpoint(websocket: WebSocket):
 import re as _re
 
 def parse_xml_tool_calls(text: str):
-    """Парсит XML-формат tool calls от DeepSeek и возвращает список вызовов."""
+    """Парсит все форматы tool calls от DeepSeek: XML, DSML, JSON."""
     calls = []
-    # Формат 1: <function_calls><invoke name="fn"><param>val</param></invoke></function_calls>
-    # Формат 2: <function_calls><function_call><invoke name="fn">...</invoke></function_call></function_calls>
-    pattern = _re.compile(
-        r'<invoke\s+name=["\']?(\w+)["\']?>(.*?)</invoke>',
-        _re.DOTALL | _re.IGNORECASE
-    )
-    for m in pattern.finditer(text):
+
+    # ── Формат 1: стандартный XML <invoke name="fn">...</invoke>
+    xml_pat = _re.compile(r'<invoke\s+name=["\']?(\w+)["\']?>(.*?)</invoke>', _re.DOTALL | _re.IGNORECASE)
+    for m in xml_pat.finditer(text):
         fn_name = m.group(1)
         inner = m.group(2)
         args = {}
-        # Ищем <path>...</path> и другие теги как параметры
-        for param_m in _re.finditer(r'<(\w+)>(.*?)</\1>', inner, _re.DOTALL):
-            param_name = param_m.group(1)
-            param_val = param_m.group(2).strip()
-            if param_name not in ("function_call", "invoke"):
-                args[param_name] = param_val
-        # Также ищем <parameter name="x">val</parameter>
-        for param_m in _re.finditer(r'<parameter\s+name=["\']?(\w+)["\']?>\s*(.*?)\s*</parameter>', inner, _re.DOTALL):
-            args[param_m.group(1)] = param_m.group(2).strip()
+        for pm in _re.finditer(r'<(\w+)>(.*?)</\1>', inner, _re.DOTALL):
+            if pm.group(1) not in ("function_call", "invoke"):
+                args[pm.group(1)] = pm.group(2).strip()
+        for pm in _re.finditer(r'<parameter\s+name=["\']?(\w+)["\']?>\s*(.*?)\s*</parameter>', inner, _re.DOTALL):
+            args[pm.group(1)] = pm.group(2).strip()
         calls.append({"name": fn_name, "args": args})
+
+    if calls:
+        return calls
+
+    # ── Формат 2: DeepSeek DSML <｜DSML｜invoke name="fn">...</｜DSML｜invoke>
+    # Символ-разделитель может быть ｜ (U+FF5C) или обычный |
+    dsml_inv = _re.compile(
+        r'<[|｜]\s*DSML\s*[|｜]invoke\s+name=["\']?(\w+)["\']?[^>]*>(.*?)</[|｜]\s*DSML\s*[|｜]invoke>',
+        _re.DOTALL | _re.IGNORECASE
+    )
+    dsml_param = _re.compile(
+        r'<[|｜]\s*DSML\s*[|｜]parameter\s+name=["\']?(\w+)["\']?[^>]*>(.*?)</[|｜]\s*DSML\s*[|｜]parameter>',
+        _re.DOTALL
+    )
+    for m in dsml_inv.finditer(text):
+        fn_name = m.group(1)
+        inner = m.group(2)
+        args = {}
+        for pm in dsml_param.finditer(inner):
+            val = pm.group(2).strip()
+            args[pm.group(1)] = val
+        # Нормализуем file_path → path
+        if "file_path" in args and "path" not in args:
+            args["path"] = args.pop("file_path")
+        calls.append({"name": fn_name, "args": args})
+
+    if calls:
+        return calls
+
+    # ── Формат 3: JSON {"function": "fn", "parameters": {...}}
+    try:
+        for block_m in _re.finditer(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', text, _re.DOTALL):
+            try:
+                obj = json.loads(block_m.group(0))
+                if isinstance(obj, dict):
+                    fn = obj.get("function") or obj.get("name") or obj.get("tool", "")
+                    params = obj.get("parameters") or obj.get("arguments") or obj.get("args") or {}
+                    if fn in KNOWN_TOOLS and isinstance(params, dict):
+                        args = dict(params)
+                        if "file_path" in args and "path" not in args:
+                            args["path"] = args.pop("file_path")
+                        calls.append({"name": fn, "args": args})
+            except (json.JSONDecodeError, TypeError):
+                pass
+    except Exception:
+        pass
+
     return calls
 
 def strip_xml_tool_calls(text: str) -> str:
-    """Удаляет XML блоки tool calls из текста для отображения пользователю."""
+    """Удаляет все форматы tool call блоков из текста для отображения пользователю."""
+    # Стандартный XML
     text = _re.sub(r'<function_calls>.*?</function_calls>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<function_call>.*?</function_call>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<invoke[^>]*>.*?</invoke>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    # DSML формат DeepSeek V3 (<｜DSML｜function_calls>...</｜DSML｜function_calls>)
+    text = _re.sub(r'<[|｜]\s*DSML\s*[|｜]function_calls>.*?</[|｜]\s*DSML\s*[|｜]function_calls>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    text = _re.sub(r'<[|｜]\s*DSML\s*[|｜]\w+[^>]*>.*?</[|｜]\s*DSML\s*[|｜]\w+>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    # JSON tool call внутри ```json ... ``` — удаляем только если это вызов инструмента
+    def _remove_json_tool_block(m):
+        try:
+            obj = json.loads(m.group(1).strip())
+            fn = obj.get("function") or obj.get("name") or obj.get("tool", "")
+            if fn in KNOWN_TOOLS:
+                return ""
+        except Exception:
+            pass
+        return m.group(0)
+    text = _re.sub(r'```(?:json)?\s*(\{[\s\S]*?\})\s*```', _remove_json_tool_block, text)
+    # Голый JSON объект с known tool
+    def _remove_bare_json(m):
+        try:
+            obj = json.loads(m.group(0))
+            fn = obj.get("function") or obj.get("name") or obj.get("tool", "")
+            if fn in KNOWN_TOOLS:
+                return ""
+        except Exception:
+            pass
+        return m.group(0)
+    text = _re.sub(r'\{[\s\S]*?"(?:function|name|tool)"\s*:\s*"(?:read_file|web_search)"[\s\S]*?\}', _remove_bare_json, text)
     return text.strip()
 
 
@@ -1185,7 +1251,9 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         # 2) JSON формат: {"function": "fn", "parameters": {...}}
                         raw_content = msg_data.get("content") or ""
                         if not msg_data.get("tool_calls"):
-                            xml_match = "<invoke" in raw_content or "<function_call" in raw_content.lower()
+                            xml_match = ("<invoke" in raw_content or
+                                         "<function_call" in raw_content.lower() or
+                                         "DSML" in raw_content or "｜DSML｜" in raw_content)
                             # JSON вызов: {"function": "read_file", ...} или {"name": "read_file", ...}
                             json_fn_match = ('"function"' in raw_content or '"name"' in raw_content) and ('"read_file"' in raw_content or '"web_search"' in raw_content)
                             if xml_match:
