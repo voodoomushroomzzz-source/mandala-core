@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "TASKS-001",
     "name": "Задачи",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "created": "2026-02-28"
   },
   "meta": {
@@ -23,7 +23,11 @@
       "desc": "Карта модулей + меню",
       "tags": [
         "core"
-      ]
+      ],
+      "assignee": "Садовник",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 100
     },
     {
       "id": "T-002",
@@ -33,7 +37,11 @@
       "desc": "Банк идей → резонанс",
       "tags": [
         "seeds"
-      ]
+      ],
+      "assignee": "Садовник",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 50
     },
     {
       "id": "T-003",
@@ -43,7 +51,11 @@
       "desc": "Дорожные карты задач",
       "tags": [
         "roadmaps"
-      ]
+      ],
+      "assignee": "DeepSeek",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 30
     },
     {
       "id": "T-004",
@@ -53,7 +65,11 @@
       "desc": "Улучшить bot.py",
       "tags": [
         "bot"
-      ]
+      ],
+      "assignee": "Садовник",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 10
     },
     {
       "id": "T-005",
@@ -63,7 +79,11 @@
       "desc": "index.html responsive",
       "tags": [
         "chat"
-      ]
+      ],
+      "assignee": "DeepSeek",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 0
     }
   ],
   "archive": [],
@@ -85,6 +105,10 @@
     "v1.0.2": {
       "date": "2026-03-01",
       "summary": "Удалено дублирование задач, исправлена структура changes"
+    },
+    "v1.1.0": {
+      "date": "2026-03-01",
+      "summary": "Добавлены assignee, dates, progress для лучшего отслеживания"
     }
   }
 }
