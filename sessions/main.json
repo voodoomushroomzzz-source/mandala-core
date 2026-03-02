@@ -26,9 +26,14 @@
       "role": "user",
       "content": "Какие модули ты видишь, какие из них загруженны на 100%?",
       "time": 1772447883.1534355
+    },
+    {
+      "role": "assistant",
+      "content": "Позволь мне сначала изучить структуру ядра Мандалы, чтобы дать точный ответ.\n\n```json\n{\n  \"function\": \"read_file\",\n  \"parameters\": {\n    \"file_path\": \"simbiosis/core_map.json\"\n  }\n}\n```",
+      "time": 1772447895.6474326
     }
   ],
-  "last_active": 1772447883.153439,
+  "last_active": 1772447895.6474383,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772447883.1533542,
