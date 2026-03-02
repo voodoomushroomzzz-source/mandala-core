@@ -12,7 +12,12 @@
     "description": "Полное руководство СР по работе с патчами, созданию модулей и оптимизации",
     "status": "active",
     "priority": "critical",
-    "tags": ["core", "instructions", "patches", "layer3"],
+    "tags": [
+      "core",
+      "instructions",
+      "patches",
+      "layer3"
+    ],
     "author": "Mandala Core Team",
     "resonance": "100%"
   },
@@ -32,7 +37,9 @@
         "patch_types": {
           "json_patches": {
             "description": "Точечные изменения в JSON модулях",
-            "use_for": ["simbiosis/*.json"],
+            "use_for": [
+              "simbiosis/*.json"
+            ],
             "format": {
               "target_module": "simbiosis/seeds",
               "description": "Описание изменения",
@@ -55,7 +62,12 @@
           },
           "text_patches": {
             "description": "Точечные замены в текстовых файлах",
-            "use_for": [".py", ".html", ".md", ".txt"],
+            "use_for": [
+              ".py",
+              ".html",
+              ".md",
+              ".txt"
+            ],
             "format": {
               "file_path": "engineer-chat/main.py",
               "description": "Описание изменения",
@@ -207,7 +219,10 @@
               "meta": {
                 "description": "что делает",
                 "status": "active|draft",
-                "tags": ["тег1", "тег2"]
+                "tags": [
+                  "тег1",
+                  "тег2"
+                ]
               }
             },
             "example": {
@@ -220,7 +235,10 @@
               "meta": {
                 "description": "Управление задачами",
                 "status": "active",
-                "tags": ["tasks", "core"]
+                "tags": [
+                  "tasks",
+                  "core"
+                ]
               },
               "tasks": [],
               "registry": {
@@ -376,8 +394,20 @@
             "step_2": {
               "description": "Добавить первые 20",
               "changes": [
-                {"op": "add", "path": "tasks", "value": {"id": "T1"}},
-                {"op": "add", "path": "tasks", "value": {"id": "T2"}}
+                {
+                  "op": "add",
+                  "path": "tasks",
+                  "value": {
+                    "id": "T1"
+                  }
+                },
+                {
+                  "op": "add",
+                  "path": "tasks",
+                  "value": {
+                    "id": "T2"
+                  }
+                }
               ]
             }
           }
@@ -496,15 +526,300 @@
           "[ ] Проверил paths?"
         ]
       }
+    },
+    {
+      "id": "INSTR-005",
+      "name": "📁 Создание папок и новых модулей v1.0",
+      "type": "core_instruction",
+      "status": "active",
+      "ttl": "∞",
+      "priority": "high",
+      "origin": "INSTR-005",
+      "resonance": "100%",
+      "description": "Как создавать новые папки и модули через патчи. GitHub не имеет API для создания пустых папок — папка создаётся автоматически при создании файла внутри неё.",
+      "content": {
+        "version": "1.0",
+        "key_insight": {
+          "title": "⚡ Главное: GitHub не создаёт пустые папки",
+          "explanation": "В GitHub папка появляется ТОЛЬКО когда в ней есть хотя бы один файл. Не существует отдельной операции 'создать папку'. Папка создаётся автоматически при создании файла по пути 'папка/файл.json'.",
+          "consequence": "Чтобы создать папку 'myFolder/' — просто создай файл 'myFolder/index.json' через full_replacement патч."
+        },
+        "creating_folder_with_module": {
+          "title": "🗂️ Создание новой папки с первым модулем",
+          "description": "Один патч — и папка, и файл создаются одновременно",
+          "steps": [
+            "1. НЕ нужно сначала создавать папку отдельно",
+            "2. Создай файл по пути 'папка/файл.json' — папка создастся сама",
+            "3. GitHub автоматически сформирует дерево директорий"
+          ],
+          "format": {
+            "file_path": "новая-папка/первый-модуль.json",
+            "content": "{минифицированный JSON}",
+            "description": "Создание новой папки 'новая-папка' с первым модулем"
+          },
+          "example": {
+            "patch": {
+              "file_path": "skills/writing.json",
+              "content": "{\"identity\":{\"module_id\":\"SKILL-WRITING-001\",\"name\":\"Навык письма\",\"version\":\"1.0\",\"created\":\"2026-03-02\"},\"meta\":{\"description\":\"Навыки написания текстов\",\"status\":\"active\",\"tags\":[\"skills\",\"writing\"]},\"entries\":[]}",
+              "description": "Создание папки 'skills/' с первым файлом writing.json"
+            },
+            "result": "Папка skills/ создана, файл writing.json внутри — всё за один патч"
+          }
+        },
+        "creating_module": {
+          "title": "🧩 Создание нового модуля (в существующей или новой папке)",
+          "mandatory_structure": {
+            "identity": {
+              "module_id": "УНИКАЛЬНЫЙ-ID (например TASKS-001)",
+              "name": "Название модуля",
+              "version": "1.0",
+              "created": "YYYY-MM-DD"
+            },
+            "meta": {
+              "description": "Что делает модуль",
+              "status": "active | draft",
+              "tags": [
+                "тег1",
+                "тег2"
+              ]
+            }
+          },
+          "patch_format": {
+            "file_path": "simbiosis/новый-модуль.json",
+            "content": "{минифицированный JSON — без \\n и лишних пробелов}",
+            "description": "Создание нового модуля"
+          },
+          "minification_rule": "ОБЯЗАТЕЛЬНО: content должен быть минифицирован. Используй json.dumps(data, separators=(',',':')) или убери все \\n и пробелы вручную.",
+          "example": {
+            "patch": {
+              "file_path": "simbiosis/rituals.json",
+              "content": "{\"identity\":{\"module_id\":\"RITUALS-001\",\"name\":\"Ритуалы\",\"version\":\"1.0\",\"created\":\"2026-03-02\"},\"meta\":{\"description\":\"Ритуалы и практики Мандалы\",\"status\":\"active\",\"tags\":[\"rituals\",\"core\"]},\"rituals\":[],\"registry\":{\"total\":0,\"active\":0}}",
+              "description": "Создание модуля ритуалов"
+            }
+          }
+        },
+        "after_creating_module": {
+          "title": "✅ Что делать ПОСЛЕ создания модуля",
+          "required_steps": [
+            {
+              "step": 1,
+              "action": "Прочитай simbiosis/core_map.json",
+              "how": "read_file('simbiosis/core_map.json')",
+              "why": "Нужно знать ТОЧНУЮ структуру перед изменением"
+            },
+            {
+              "step": 2,
+              "action": "Добавь новый модуль в core_map.json",
+              "where": "kernel_modules.modules (или по структуре из read_file)",
+              "patch_example": {
+                "target_module": "simbiosis/core_map",
+                "description": "Регистрация нового модуля в карте ядра",
+                "changes": [
+                  {
+                    "op": "add",
+                    "path": "kernel_modules.modules",
+                    "value": {
+                      "rituals": {
+                        "file": "simbiosis/rituals.json",
+                        "description": "Ритуалы и практики Мандалы",
+                        "status": "active"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "step": 3,
+              "action": "Добавь модуль в кнопки меню (если нужна кнопка в сайдбаре)",
+              "how": "text_patch в engineer-chat/index.html",
+              "patch_example": {
+                "file_path": "engineer-chat/index.html",
+                "description": "Добавить кнопку модуля в меню",
+                "replacements": [
+                  {
+                    "old": "{ id: 'telegram_bot', icon: '🤖', name: 'telegram_bot', file: 'simbiosis/telegram_bot.json' }",
+                    "new": "{ id: 'telegram_bot', icon: '🤖', name: 'telegram_bot', file: 'simbiosis/telegram_bot.json' },\n                    { id: 'rituals', icon: '🕯️', name: 'rituals', file: 'simbiosis/rituals.json' }"
+                  }
+                ]
+              }
+            }
+          ],
+          "auto_registration": "⚠️ Система автоматически добавит новый .json модуль из simbiosis/ в kernel.module_list при создании (см. handle_apply_patch в main.py). Но в core_map.json нужно добавить вручную через патч."
+        },
+        "creating_module_in_new_folder": {
+          "title": "📂 Создание модуля в совершенно НОВОЙ папке",
+          "important": "Новая папка за пределами simbiosis/ — например 'docs/', 'tools/', 'skills/' — не попадёт в kernel.module_list автоматически. Нужно добавить вручную если требуется.",
+          "workflow": [
+            "1. Создай файл через full_replacement: 'docs/overview.md' или 'tools/helper.json'",
+            "2. GitHub создаст папку автоматически",
+            "3. Если нужно включить в ядро — добавь в kernel.on_demand_modules через патч в main.py",
+            "4. Зарегистрируй в core_map.json"
+          ],
+          "example_multi_patch": {
+            "description": "Создать папку docs/ с первым файлом и зарегистрировать в core_map",
+            "patches": [
+              {
+                "file_path": "docs/architecture.md",
+                "content": "# Архитектура Мандалы\n\nОписание архитектуры системы.\n",
+                "description": "Создание папки docs/ с файлом архитектуры"
+              },
+              {
+                "target_module": "simbiosis/core_map",
+                "description": "Регистрация docs/ в карте репозитория",
+                "changes": [
+                  {
+                    "op": "add",
+                    "path": "repository.files",
+                    "value": {
+                      "docs/architecture.md": {
+                        "description": "Описание архитектуры системы",
+                        "type": "documentation"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "patch_types_summary": {
+          "title": "📋 Типы патчей для работы с файлами",
+          "types": {
+            "full_replacement": {
+              "use": "Создание нового файла или полная замена существующего",
+              "required_fields": [
+                "file_path",
+                "content",
+                "description"
+              ],
+              "note": "content ДОЛЖЕН быть минифицированным JSON или чистым текстом"
+            },
+            "json_patch": {
+              "use": "Точечные изменения в существующем .json файле",
+              "required_fields": [
+                "target_module",
+                "changes"
+              ],
+              "note": "target_module БЕЗ расширения .json: 'simbiosis/core_map' (не 'simbiosis/core_map.json')"
+            },
+            "text_patch": {
+              "use": "Замены строк в .py, .html, .md файлах",
+              "required_fields": [
+                "file_path",
+                "replacements"
+              ],
+              "note": "Строка в 'old' должна встречаться РОВНО 1 РАЗ"
+            },
+            "multi_patch": {
+              "use": "Изменения в нескольких файлах за один раз",
+              "format": {
+                "patches": [
+                  "массив патчей любых типов выше"
+                ]
+              }
+            }
+          }
+        },
+        "checklist": {
+          "title": "✅ Чеклист перед созданием папки/модуля",
+          "items": [
+            "[ ] Обсудил с Садовником — модуль/папка действительно нужна?",
+            "[ ] Придумал осмысленный ID и имя?",
+            "[ ] Подготовил минимальную структуру (не раздутую)?",
+            "[ ] content МИНИФИЦИРОВАН (нет \\n)?",
+            "[ ] Размер content < 20KB?",
+            "[ ] Готов патч для core_map.json после создания?",
+            "[ ] Нужна кнопка в меню? Готов патч для index.html?",
+            "[ ] Прочитал core_map.json через read_file перед изменением?"
+          ]
+        },
+        "common_errors": {
+          "title": "❌ Частые ошибки при создании",
+          "errors": [
+            {
+              "mistake": "Пытаться создать пустую папку",
+              "symptom": "Нет такого API в GitHub",
+              "fix": "Создай файл внутри папки — папка появится сама"
+            },
+            {
+              "mistake": "content не минифицирован",
+              "symptom": "Патч обрезается при >20KB",
+              "fix": "Убери все \\n и лишние пробелы из content"
+            },
+            {
+              "mistake": "target_module с расширением .json",
+              "symptom": "Файл не найден или создан дублем",
+              "fix": "target_module = 'simbiosis/module' (БЕЗ .json)"
+            },
+            {
+              "mistake": "Забыл обновить core_map.json после создания модуля",
+              "symptom": "СР не знает о новом модуле, не может прочитать его",
+              "fix": "После создания — всегда патчи core_map.json с новым модулем"
+            },
+            {
+              "mistake": "Попытка merge в несуществующее поле",
+              "symptom": "Ошибка: поле не найдено",
+              "fix": "Сначала read_file, убедись что поле существует. Если нет — add сначала"
+            }
+          ]
+        },
+        "examples": {
+          "title": "💡 Готовые примеры",
+          "create_module_in_simbiosis": {
+            "description": "Создать simbiosis/glossary.json",
+            "patch": {
+              "file_path": "simbiosis/glossary.json",
+              "content": "{\"identity\":{\"module_id\":\"GLOSSARY-001\",\"name\":\"Глоссарий\",\"version\":\"1.0\",\"created\":\"2026-03-02\"},\"meta\":{\"description\":\"Словарь терминов Мандалы\",\"status\":\"active\",\"tags\":[\"glossary\",\"reference\"]},\"entries\":[],\"categories\":[]}",
+              "description": "Создание модуля глоссария"
+            }
+          },
+          "create_new_folder": {
+            "description": "Создать папку tools/ с первым файлом",
+            "patch": {
+              "file_path": "tools/README.md",
+              "content": "# Tools\n\nВспомогательные инструменты Мандалы.\n",
+              "description": "Создание папки tools/ с README"
+            }
+          },
+          "create_and_register": {
+            "description": "Полный флоу: создать модуль + обновить core_map за один мульти-патч",
+            "patch": {
+              "patches": [
+                {
+                  "file_path": "simbiosis/archive.json",
+                  "content": "{\"identity\":{\"module_id\":\"ARCHIVE-001\",\"name\":\"Архив\",\"version\":\"1.0\",\"created\":\"2026-03-02\"},\"meta\":{\"description\":\"Архив завершённых задач и событий\",\"status\":\"active\",\"tags\":[\"archive\"]},\"entries\":[]}",
+                  "description": "Создание модуля архива"
+                },
+                {
+                  "target_module": "simbiosis/core_map",
+                  "description": "Регистрация архива в карте ядра",
+                  "changes": [
+                    {
+                      "op": "add",
+                      "path": "kernel_modules.modules.archive",
+                      "value": {
+                        "file": "simbiosis/archive.json",
+                        "description": "Архив завершённых задач и событий",
+                        "status": "active"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
     }
   ],
   "archive": [],
   "registry": {
-    "total_instructions": 4,
+    "total_instructions": 5,
     "active": 4,
     "deprecated": 0,
     "critical": 2,
-    "last_updated": "2026-03-01"
+    "last_updated": "2026-03-02"
   },
   "changes": {
     "v1.0.0": {
@@ -522,6 +837,16 @@
     "v2.0.0": {
       "date": "2026-03-01",
       "summary": "Полное обновление: INSTR-004 (мастерство патчей), обновлены все инструкции, добавлены детальные примеры, чеклисты, разбор реальных ошибок"
+    },
+    "v2": {
+      "0": {
+        "1": [
+          {
+            "date": "2026-03-02",
+            "summary": "Добавлен INSTR-005 (Создание папок и новых модулей)"
+          }
+        ]
+      }
     }
   },
   "usage_notes": {
@@ -530,7 +855,8 @@
       "1. INSTR-004 (мастерство) — перед КАЖДЫМ патчем",
       "2. INSTR-001 (система) — общий формат",
       "3. INSTR-002 (модули) — при создании модуля",
-      "4. INSTR-003 (оптимизация) — для больших патчей"
+      "4. INSTR-003 (оптимизация) — для больших патчей",
+      "5. INSTR-005 (папки) — при создании модулей в новых папках"
     ],
     "critical_reminders": [
       "ВСЕГДА read_file ПЕРВЫМ ДЕЛОМ",
