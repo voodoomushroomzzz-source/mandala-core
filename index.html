@@ -1293,7 +1293,7 @@
                     mainMessages.forEach(msg => {
                         if (msg.role === 'user') renderUserMessage(msg.content, false);
                         else if (msg.role === 'assistant') renderAssistantMessage(msg.content, false);
-                        else if (msg.role === 'system') renderSystemMessage(msg.content, false);
+                        else if (msg.role === 'system') renderSystemMessage(msg.content, false, true);
                     });
                 } catch (e) {
                     mainMessages = [];
@@ -1368,19 +1368,65 @@
             scrollToBottom();
         }
 
-        function renderSystemMessage(text, save = true) {
+        // Извлекает первую строку/заголовок из системного сообщения
+        function summarizeSystemMsg(text) {
+            // ОБНОВЛЕНИЕ ЗНАНИЙ: [имя файла]
+            const knowledgeMatch = text.match(/\[ОБНОВЛЕНИЕ ЗНАНИЙ[:\s]+(.+?)\]/);
+            if (knowledgeMatch) return `📖 ${knowledgeMatch[1].trim()} — прочитан`;
+            // Патч-результат
+            if (text.startsWith('◈ ✓') || text.startsWith('◈ ✗')) return text.split('\n')[0].slice(0, 80);
+            // Контекст сессии
+            if (text.startsWith('[КОНТЕКСТ СЕССИИ') || text.startsWith('[СТАРТ СЕССИИ')) return '◈ Контекст ядра загружен';
+            // Обновление карты
+            if (text.startsWith('[КАРТА ЯДРА')) return '◈ Карта ядра обновлена';
+            // Длинный JSON-блок
+            if (text.length > 300 && text.includes('```')) {
+                const firstLine = text.split('\n')[0].replace(/\[|\]/g, '').trim();
+                return firstLine.slice(0, 80) || '◈ Системное сообщение';
+            }
+            return null; // не нужно сжимать
+        }
+
+        function renderSystemMessage(text, save = true, isHistory = false) {
             const div = document.createElement('div');
             div.className = 'msg sys';
-            // Экранируем сырой текст, заменяем code blocks и inline code
-            let safeText = escapeHtml(text);
-            safeText = safeText.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => {
-                const decodedCode = code.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&#39;/g,"'").replace(/&quot;/g,'"');
-                return renderCodeBlock(lang, decodedCode, true);
-            });
-            safeText = safeText.replace(/`([^`]+)`/g, '<code>$1</code>');
-            div.innerHTML = `<div class="bub">${safeText}</div>`;
+
+            const summary = summarizeSystemMsg(text);
+            const isHeavy = summary !== null;
+
+            if (isHeavy) {
+                // Компактный вид: одна строка с кнопкой "развернуть"
+                const id = 'sysmsg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+                let safeText = escapeHtml(text);
+                safeText = safeText.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => {
+                    const decodedCode = code.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&#39;/g,"'").replace(/&quot;/g,'"');
+                    return renderCodeBlock(lang, decodedCode, true);
+                });
+                safeText = safeText.replace(/`([^`]+)`/g, '<code>$1</code>');
+                div.innerHTML = `<div class="bub" style="cursor:default;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="color:var(--text-2);font-family:var(--mono);font-size:11px;">${escapeHtml(summary)}</span>
+                        <button onclick="(function(btn){var det=document.getElementById('${id}');var vis=det.style.display!=='none';det.style.display=vis?'none':'block';btn.textContent=vis?'▼':'▲'})(this)" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:10px;padding:0 4px;opacity:0.6;">▼</button>
+                    </div>
+                    <div id="${id}" style="display:none;margin-top:8px;border-top:1px solid var(--line-1);padding-top:8px;">${safeText}</div>
+                </div>`;
+            } else {
+                // Короткое сообщение — как обычно
+                let safeText = escapeHtml(text);
+                safeText = safeText.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => {
+                    const decodedCode = code.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&#39;/g,"'").replace(/&quot;/g,'"');
+                    return renderCodeBlock(lang, decodedCode, true);
+                });
+                safeText = safeText.replace(/`([^`]+)`/g, '<code>$1</code>');
+                div.innerHTML = `<div class="bub">${safeText}</div>`;
+            }
+
             messagesEl.appendChild(div);
-            if (save) addMessage('system', text);
+            // Сохраняем только сжатую версию тяжёлых сообщений
+            if (save) {
+                const saveText = isHeavy ? summary : text;
+                addMessage('system', saveText);
+            }
             scrollToBottom();
         }
 
