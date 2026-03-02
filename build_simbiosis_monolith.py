@@ -1,239 +1,147 @@
 #!/usr/bin/env python3
 """
-Mandala Simbiosis Monolith Builder (версия 1.0)
-ПОЛНАЯ АРХИТЕКТУРА С GRACEFUL FALLBACK:
-- Boot, CoreMap, Philosophy — КРИТИЧЕСКИЕ
-- EngineerChat, Roadmaps, Seeds, TelegramBot — ОПЦИОНАЛЬНЫЕ (логируются, но не валят сборку)
-- Монолит собирается всегда, даже если опциональных модулей ещё нет
+Simbiosis Monolith Builder v2.0
+Собирает все модули из simbiosis/ в единый монолитный файл.
+Запускается из корня репозитория.
 """
 
 import json
 import os
 import sys
-import hashlib
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Any, List, Optional
 
-REPO_ROOT = Path(os.getenv("GITHUB_WORKSPACE", "."))
-BUILD_DIR = REPO_ROOT / "build"
-OUTPUT_FILE = BUILD_DIR / "mandala_simbiosis.monolith.latest.json"
-SIMBIOSIS_DIR = "simbiosis"
+# ── Конфигурация модулей ──────────────────────────────────────────────────────
+# Ключ — имя в монолите, значение — файл в simbiosis/
+MODULE_MAP = {
+    "Boot":         "simbiosis/boot.json",
+    "CoreMap":      "simbiosis/core_map.json",
+    "Philosophy":   "simbiosis/philosophy.json",
+    "EngineerChat": "simbiosis/engineer_chat.json",
+    "Roadmaps":     "simbiosis/roadmaps.json",
+    "Seeds":        "simbiosis/seeds.json",
+    "TelegramBot":  "simbiosis/telegram_bot.json",
+    "Instructions": "simbiosis/instructions.json",  # ← добавлен
+    "Tasks":        "simbiosis/tasks.json",          # ← добавлен
+}
 
-# ========== ПОЛНЫЙ СПИСОК МОДУЛЕЙ SIMBIOSIS ==========
-ALL_MODULES = [
-    ("Boot",          "boot.json"),
-    ("CoreMap",       "core_map.json"),
-    ("Philosophy",    "philosophy.json"),
-    ("EngineerChat",  "engineer_chat.json"),   # ⚙️ Опциональный
-    ("Roadmaps",      "roadmaps.json"),         # 🗺️ Опциональный
-    ("Seeds",         "seeds.json"),            # 🌱 Опциональный
-    ("TelegramBot",   "telegram_bot.json"),     # 🤖 Опциональный
-]
+CRITICAL_MODULES = ["Boot", "CoreMap", "Philosophy"]
+BUILDER_VERSION  = "simbiosis-2.0"
+OUTPUT_FILE      = "simbiosis/monolith.json"
 
-# ========== 🔴 КРИТИЧЕСКИЕ МОДУЛИ ==========
-# Без них монолит Simbiosis бессмыслен.
-CRITICAL_MODULES = [
-    "Boot",
-    "CoreMap",
-    "Philosophy",
-]
 
-def log(message: str, level: str = "INFO"):
-    timestamp = datetime.now().strftime("%H:%M:%S")
-    print(f"[{timestamp}] {level}: {message}")
-
-def load_local_json(file_path: Path) -> Optional[Dict[str, Any]]:
-    """Загружает JSON из локального файла. Возвращает None, если файла нет."""
+def load_module(name: str, path: str) -> tuple[dict | None, str | None]:
+    """Загружает JSON-модуль. Возвращает (data, error)."""
+    if not Path(path).exists():
+        return None, f"файл не найден: {path}"
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        log(f"  ✅ Загружен локально: {file_path.name}")
-        return data
-    except FileNotFoundError:
-        log(f"  ⚠️ Файл не найден локально: {file_path.name}", "WARNING")
-        return None
+        with open(path, encoding="utf-8") as f:
+            return json.load(f), None
     except json.JSONDecodeError as e:
-        log(f"  ❌ Невалидный JSON в {file_path.name}: {str(e)[:100]}", "ERROR")
-        return None
-    except Exception as e:
-        log(f"  ❌ Ошибка чтения {file_path.name}: {str(e)[:100]}", "ERROR")
-        return None
+        return None, f"JSON ошибка: {e}"
 
-def load_json_from_url(url: str, module_name: str) -> Optional[Dict[str, Any]]:
-    """Загружает JSON по URL. Возвращает None при ошибке."""
+
+def get_commit_sha() -> str:
+    """Читает SHA текущего коммита из git."""
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'MandalaSimbiosisBuilder/1.0'})
-        with urllib.request.urlopen(req, timeout=10) as response:
-            content = response.read().decode('utf-8')
-            data = json.loads(content)
-            log(f"  ✅ Загружено по URL: {module_name}")
-            return data
-    except Exception as e:
-        log(f"  ⚠️ Не удалось загрузить {module_name} по URL: {str(e)[:100]}", "WARNING")
-        return None
-
-def build_monolith() -> Dict[str, Any]:
-    """Основная функция сборки монолита."""
-    log("=" * 60)
-    log("🌀 Mandala Simbiosis Monolith Builder v1.0 (graceful fallback)")
-    log("=" * 60)
-
-    embedded_modules = {}
-    failed_modules = []
-    missing_optional = []
-    loaded_modules = []
-
-    # Загружаем все модули Simbiosis (критические + опциональные)
-    for module_name, filename in ALL_MODULES:
-        log(f"\n📦 Загрузка: {module_name}")
-
-        # Пробуем локальный файл из папки simbiosis/
-        file_path = REPO_ROOT / SIMBIOSIS_DIR / filename
-        data = load_local_json(file_path)
-
-        # Если локально нет — пробуем URL
-        if data is None:
-            raw_url = (
-                f"https://raw.githubusercontent.com/voodoomushroomzzz-source/"
-                f"mandala-core/main/{SIMBIOSIS_DIR}/{filename}"
-            )
-            data = load_json_from_url(raw_url, module_name)
-
-        # Если данные получены — сохраняем
-        if data is not None:
-            embedded_modules[module_name] = data
-            loaded_modules.append(module_name)
-        else:
-            error_info = {
-                "_error": "Module not found locally or via URL",
-                "_status": "missing",
-                "_module": module_name,
-                "_filename": f"{SIMBIOSIS_DIR}/{filename}",
-                "_critical": module_name in CRITICAL_MODULES
-            }
-            embedded_modules[module_name] = error_info
-            failed_modules.append(module_name)
-
-            if module_name in CRITICAL_MODULES:
-                log(f"  ❌ КРИТИЧЕСКИЙ МОДУЛЬ ОТСУТСТВУЕТ: {module_name}", "ERROR")
-            else:
-                log(f"  ⚠️ Опциональный модуль отсутствует: {module_name}", "WARNING")
-                missing_optional.append(module_name)
-
-    # Проверка критических модулей
-    log("\n" + "=" * 60)
-    log("🔍 ПРОВЕРКА КРИТИЧЕСКИХ МОДУЛЕЙ")
-    log("=" * 60)
-
-    critical_missing = []
-    for mod in CRITICAL_MODULES:
-        if mod in embedded_modules and "_error" not in embedded_modules[mod]:
-            version = embedded_modules[mod].get("version", "unknown")
-            log(f"  ✅ {mod}: {version}")
-        else:
-            log(f"  ❌ {mod}: ОТСУТСТВУЕТ", "ERROR")
-            critical_missing.append(mod)
-
-    if critical_missing:
-        error_msg = (
-            f"НЕВОЗМОЖНО СОБРАТЬ МОНОЛИТ: отсутствуют критические модули: "
-            f"{', '.join(critical_missing)}"
+        import subprocess
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True, text=True, check=True
         )
-        log(error_msg, "ERROR")
-        raise ValueError(error_msg)
+        return result.stdout.strip()
+    except Exception:
+        return "unknown"
 
-    # Версия и мета-информация
-    current_time = datetime.now(timezone.utc)
-    version_hash = hashlib.md5(current_time.isoformat().encode()).hexdigest()[:8]
 
-    # Определяем версию из Boot, затем CoreMap
-    boot_version = "unknown"
-    for mod in ("Boot", "CoreMap"):
-        if mod in embedded_modules and "_error" not in embedded_modules[mod]:
-            v = (
-                embedded_modules[mod].get("version")
-                or embedded_modules[mod].get("schema_version")
-            )
-            if v:
-                boot_version = v
-                break
-
-    monolith = {
-        "module": "Mandala Simbiosis Monolith",
-        "version": f"simbiosis-v{boot_version}-{version_hash}",
-        "runtime_mode": "monolith",
-        "build_timestamp": current_time.isoformat(),
-        "build_source": os.getenv("GITHUB_SHA", "local-build"),
-        "build_source_url": (
-            f"https://github.com/voodoomushroomzzz-source/mandala-core/commit/"
-            f"{os.getenv('GITHUB_SHA', 'local')}"
-        ),
-        "embedded_modules": embedded_modules,
-        "build_info": {
-            "timestamp": current_time.isoformat(),
-            "builder_version": "simbiosis-1.0",
-            "successful_modules": [
-                name for name in embedded_modules
-                if "_error" not in embedded_modules[name]
-            ],
-            "failed_modules": failed_modules,
-            "missing_optional_modules": missing_optional,
-            "total_modules": len(ALL_MODULES),
-            "loaded_modules": len(loaded_modules),
-            "critical_modules_ok": len(critical_missing) == 0
-        },
-        "runtime_instruction": "Система Simbiosis загружена из монолита.",
-        "manifest": {
-            "description": "Mandala Simbiosis Monolith — инженерное ядро Mandala Core.",
-            "modules": [name for name, _ in ALL_MODULES],
-            "critical_modules": CRITICAL_MODULES,
-            "built_at": current_time.strftime("%Y-%m-%d %H:%M:%S UTC")
-        }
-    }
-
-    return monolith
-
-def main():
-    """Точка входа."""
+def get_repo_url(sha: str) -> str:
     try:
-        BUILD_DIR.mkdir(exist_ok=True)
-        log(f"📁 Рабочая директория: {REPO_ROOT}")
+        import subprocess
+        result = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            capture_output=True, text=True, check=True
+        )
+        url = result.stdout.strip().replace(".git", "")
+        return f"{url}/commit/{sha}"
+    except Exception:
+        return ""
 
-        monolith = build_monolith()
 
-        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-            json.dump(monolith, f, indent=2, ensure_ascii=False)
+def build_monolith() -> dict:
+    embedded   = {}
+    successful = []
+    failed     = []
+    missing_optional = []
+    commit_sha = get_commit_sha()
+    repo_url   = get_repo_url(commit_sha)
+    timestamp  = datetime.now(timezone.utc).isoformat()
 
-        log(f"\n💾 Монолит сохранён: {OUTPUT_FILE}")
-        log(f"📊 Размер: {os.path.getsize(OUTPUT_FILE)} байт")
+    print(f"🏗️  Simbiosis Monolith Builder {BUILDER_VERSION}")
+    print(f"📅 {timestamp}")
+    print(f"🔖 commit: {commit_sha[:12]}")
+    print("─" * 50)
 
-        # Финальный отчёт
-        print("\n" + "=" * 60)
-        print("✨ СБОРКА ЗАВЕРШЕНА")
-        print("=" * 60)
-        print(f"🏷️  Версия: {monolith.get('version')}")
-        print(f"📦 Модулей загружено: {len(monolith['embedded_modules'])}")
-        print(f"✅ Успешно: {len(monolith['build_info']['successful_modules'])}")
+    for name, path in MODULE_MAP.items():
+        data, err = load_module(name, path)
+        if data is not None:
+            embedded[name] = data
+            successful.append(name)
+            size = Path(path).stat().st_size
+            print(f"  ✅ {name:<15} ({size:,} bytes)")
+        else:
+            failed.append(name)
+            if name in CRITICAL_MODULES:
+                print(f"  ❌ {name:<15} КРИТИЧЕСКИЙ: {err}")
+            else:
+                missing_optional.append(name)
+                print(f"  ⚠️  {name:<15} пропущен: {err}")
 
-        if monolith['build_info']['failed_modules']:
-            print(f"❌ Ошибки: {len(monolith['build_info']['failed_modules'])}")
-            for mod in monolith['build_info']['failed_modules']:
-                status = "КРИТИЧЕСКИЙ" if mod in CRITICAL_MODULES else "опциональный"
-                print(f"   - {mod} ({status})")
-
-        if monolith['build_info']['missing_optional_modules']:
-            print(
-                f"⚠️ Отсутствуют опциональные: "
-                f"{', '.join(monolith['build_info']['missing_optional_modules'])}"
-            )
-
-        print("=" * 60)
-
-    except Exception as e:
-        log(f"💥 Критическая ошибка: {e}", "ERROR")
+    critical_ok = all(m in successful for m in CRITICAL_MODULES)
+    if not critical_ok:
+        print("\n❌ Критические модули не загружены — сборка прервана")
         sys.exit(1)
 
+    monolith = {
+        "module":          "Mandala Simbiosis Monolith",
+        "version":         f"simbiosis-v2.0.0-{commit_sha[:8]}",
+        "runtime_mode":    "monolith",
+        "build_timestamp": timestamp,
+        "build_source":    commit_sha,
+        "build_source_url": repo_url,
+        "build_info": {
+            "timestamp":              timestamp,
+            "builder_version":        BUILDER_VERSION,
+            "successful_modules":     successful,
+            "failed_modules":         [m for m in failed if m not in missing_optional],
+            "missing_optional_modules": missing_optional,
+            "total_modules":          len(MODULE_MAP),
+            "loaded_modules":         len(successful),
+            "critical_modules_ok":    critical_ok,
+        },
+        "embedded_modules": embedded,
+        "runtime_instruction": (
+            "Система Simbiosis загружена из монолита. "
+            "Используй embedded_modules для доступа к модулям."
+        ),
+        "manifest": {
+            "description":      "Mandala Simbiosis Monolith — инженерное ядро Mandala Core.",
+            "modules":          successful,
+            "critical_modules": CRITICAL_MODULES,
+            "built_at":         timestamp.replace("T", " ").split(".")[0] + " UTC",
+        },
+    }
+
+    # Записываем
+    Path(OUTPUT_FILE).parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(monolith, f, ensure_ascii=False, separators=(",", ":"))
+
+    size_kb = Path(OUTPUT_FILE).stat().st_size / 1024
+    print("─" * 50)
+    print(f"✅ Монолит собран: {OUTPUT_FILE} ({size_kb:.1f} KB)")
+    print(f"   Модули: {len(successful)}/{len(MODULE_MAP)}")
+    return monolith
+
+
 if __name__ == "__main__":
-    main()
+    build_monolith()
