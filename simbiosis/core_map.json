@@ -201,5 +201,58 @@
       ".github/workflows/": "CI/CD: build-monolith.yml (Core), build-simbiosis-monolith.yml (Simbiosis), ci.yml."
     }
   },
-  "navigation_hint": "Не знаешь с чего начать? 1) Вопрос про идеи/планы → seeds или roadmaps. 2) Про чат/код → engineer_chat + read_file engineer-chat/main.py. 3) Про бота → telegram_bot + read_file bot.py. 4) Философский вопрос → philosophy. 5) Любое изменение файла → сначала read_file, потом патч. 6) Нужен монолит → build/mandala_simbiosis.monolith.latest.json. 7) Нужен патч → target_module + changes[] с op: update/add/delete/remove/replace/merge."
+  "navigation_hint": "Не знаешь с чего начать? 1) Вопрос про идеи/планы → seeds или roadmaps. 2) Про чат/код → engineer_chat + read_file engineer-chat/main.py. 3) Про бота → telegram_bot + read_file bot.py. 4) Философский вопрос → philosophy. 5) Любое изменение файла → сначала read_file, потом патч. 6) Нужен монолит → build/mandala_simbiosis.monolith.latest.json. 7) Нужен патч → target_module + changes[] с op: update/add/delete/remove/replace/merge.",
+  "honeycomb_architecture": [
+    {
+      "description": "Новая архитектура сот (honeycombs) для сегментированной загрузки. Постепенная миграция из simbiosis/ в honeycombs/",
+      "status": "migration_in_progress",
+      "migration_phase": "phase_1_instructions",
+      "base_path": "honeycombs/",
+      "honeycombs": {
+        "instructions": {
+          "path": "honeycombs/instructions/index.json",
+          "status": "pending_migration",
+          "description": "Инструкции СР, сегментированные на подмодули <2KB",
+          "priority": "highest",
+          "segments": [
+            "critical",
+            "core"
+          ]
+        },
+        "tasks": {
+          "path": "honeycombs/tasks/index.json",
+          "status": "pending_migration",
+          "description": "Активные задачи, без архива старых",
+          "priority": "high"
+        },
+        "seeds": {
+          "path": "honeycombs/seeds/index.json",
+          "status": "pending_migration",
+          "description": "Семена идей, категоризированные по темам",
+          "priority": "medium"
+        },
+        "core_map": {
+          "path": "honeycombs/core_map.json",
+          "status": "active",
+          "description": "Основная карта системы сот",
+          "priority": "critical"
+        }
+      },
+      "legacy_modules": {
+        "boot": "simbiosis/boot.json",
+        "philosophy": "simbiosis/philosophy.json",
+        "roadmaps": "simbiosis/roadmaps.json",
+        "engineer_chat": "simbiosis/engineer_chat.json",
+        "telegram_bot": "simbiosis/telegram_bot.json"
+      }
+    }
+  ],
+  "meta/version": "v1.2.0",
+  "meta/version_history": [
+    {
+      "version": "v1.2.0",
+      "date": "2026-03-01",
+      "summary": "Добавлена honeycomb_architecture. Начало миграции на систему сот."
+    }
+  ]
 }
