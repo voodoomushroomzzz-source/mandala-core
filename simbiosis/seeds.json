@@ -356,5 +356,192 @@
       "date": "2026-03-01",
       "summary": "Добавлено SEED-015: Улучшенная система задач с интеграцией и автоматизацией"
     }
-  }
+  },
+  "index": [
+    {
+      "version": "1.0",
+      "total_seeds": 8,
+      "categories": [
+        "ai",
+        "philosophy",
+        "tech"
+      ],
+      "last_updated": "2026-03-01T12:00:00Z",
+      "indices": {
+        "by_id": {
+          "SEED-001": {
+            "category": "ai",
+            "title": "Scout-Agent для поиска идей",
+            "tags": [
+              "agent",
+              "search",
+              "exploration"
+            ],
+            "created": "2026-02-28",
+            "summary": "Агент для поиска инновационных идей в интернете"
+          },
+          "SEED-002": {
+            "category": "philosophy",
+            "title": "Мандала как живая система",
+            "tags": [
+              "philosophy",
+              "living-system",
+              "core-concept"
+            ],
+            "created": "2026-02-28",
+            "summary": "Концепция Мандалы как динамической, развивающейся системы"
+          },
+          "SEED-003": {
+            "category": "tech",
+            "title": "Telegram-бот для Мандалы",
+            "tags": [
+              "implementation",
+              "telegram",
+              "bot"
+            ],
+            "created": "2026-02-28",
+            "summary": "Интерфейс для взаимодействия с Мандалой через Telegram"
+          },
+          "SEED-004": {
+            "category": "ai",
+            "title": "ИИ как катализатор роста",
+            "tags": [
+              "symbiosis",
+              "catalyst",
+              "third-dimension"
+            ],
+            "created": "2026-02-28",
+            "summary": "Роль ИИ как катализатора в симбиозе с человеком"
+          },
+          "SEED-005": {
+            "category": "philosophy",
+            "title": "Принцип Ахимсы в цифровом мире",
+            "tags": [
+              "philosophy",
+              "ahimsa",
+              "ethics"
+            ],
+            "created": "2026-02-28",
+            "summary": "Применение принципа ненасилия к вниманию и цифровой экосистеме"
+          },
+          "SEED-006": {
+            "category": "philosophy",
+            "title": "Симбиоз через резонанс",
+            "tags": [
+              "symbiosis",
+              "resonance",
+              "harmony"
+            ],
+            "created": "2026-02-28",
+            "summary": "Механизм достижения симбиоза через резонанс идей и энергий"
+          },
+          "SEED-007": {
+            "category": "tech",
+            "title": "Визуализация Мандалы",
+            "tags": [
+              "implementation",
+              "visualization",
+              "ui"
+            ],
+            "created": "2026-02-28",
+            "summary": "Визуальное представление структуры и связей Мандалы"
+          },
+          "SEED-008": {
+            "category": "ai",
+            "title": "Агент для анализа контекста",
+            "tags": [
+              "agent",
+              "context",
+              "analysis"
+            ],
+            "created": "2026-02-28",
+            "summary": "ИИ-агент для анализа и понимания контекста взаимодействий"
+          }
+        },
+        "by_category": {
+          "ai": [
+            "SEED-001",
+            "SEED-004",
+            "SEED-008"
+          ],
+          "philosophy": [
+            "SEED-002",
+            "SEED-005",
+            "SEED-006"
+          ],
+          "tech": [
+            "SEED-003",
+            "SEED-007"
+          ]
+        },
+        "by_tag": {
+          "agent": [
+            "SEED-001",
+            "SEED-008"
+          ],
+          "philosophy": [
+            "SEED-002",
+            "SEED-005",
+            "SEED-006"
+          ],
+          "implementation": [
+            "SEED-003",
+            "SEED-007"
+          ],
+          "symbiosis": [
+            "SEED-004",
+            "SEED-006"
+          ],
+          "search": [
+            "SEED-001"
+          ],
+          "exploration": [
+            "SEED-001"
+          ],
+          "living-system": [
+            "SEED-002"
+          ],
+          "core-concept": [
+            "SEED-002"
+          ],
+          "telegram": [
+            "SEED-003"
+          ],
+          "bot": [
+            "SEED-003"
+          ],
+          "catalyst": [
+            "SEED-004"
+          ],
+          "third-dimension": [
+            "SEED-004"
+          ],
+          "ahimsa": [
+            "SEED-005"
+          ],
+          "ethics": [
+            "SEED-005"
+          ],
+          "resonance": [
+            "SEED-006"
+          ],
+          "harmony": [
+            "SEED-006"
+          ],
+          "visualization": [
+            "SEED-007"
+          ],
+          "ui": [
+            "SEED-007"
+          ],
+          "context": [
+            "SEED-008"
+          ],
+          "analysis": [
+            "SEED-008"
+          ]
+        }
+      }
+    }
+  ]
 }
