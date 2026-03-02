@@ -46,9 +46,14 @@
       "role": "user",
       "content": "давай",
       "time": 1772464435.774291
+    },
+    {
+      "role": "assistant",
+      "content": "Теперь проверю файл задач (tasks.json), чтобы увидеть его структуру и потенциальную проблему с большими файлами:\n\n```python\nread_file(\"simbiosis/tasks.json\")\n```",
+      "time": 1772464444.7574558
     }
   ],
-  "last_active": 1772464435.7742956,
+  "last_active": 1772464444.7574642,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772464435.7742214,
