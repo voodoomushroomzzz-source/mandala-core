@@ -904,6 +904,41 @@ async def websocket_endpoint(websocket: WebSocket):
 
 # ==================== ОБРАБОТЧИКИ ====================
 
+import re as _re
+
+def parse_xml_tool_calls(text: str):
+    """Парсит XML-формат tool calls от DeepSeek и возвращает список вызовов."""
+    calls = []
+    # Формат 1: <function_calls><invoke name="fn"><param>val</param></invoke></function_calls>
+    # Формат 2: <function_calls><function_call><invoke name="fn">...</invoke></function_call></function_calls>
+    pattern = _re.compile(
+        r'<invoke\s+name=["\']?(\w+)["\']?>(.*?)</invoke>',
+        _re.DOTALL | _re.IGNORECASE
+    )
+    for m in pattern.finditer(text):
+        fn_name = m.group(1)
+        inner = m.group(2)
+        args = {}
+        # Ищем <path>...</path> и другие теги как параметры
+        for param_m in _re.finditer(r'<(\w+)>(.*?)</\1>', inner, _re.DOTALL):
+            param_name = param_m.group(1)
+            param_val = param_m.group(2).strip()
+            if param_name not in ("function_call", "invoke"):
+                args[param_name] = param_val
+        # Также ищем <parameter name="x">val</parameter>
+        for param_m in _re.finditer(r'<parameter\s+name=["\']?(\w+)["\']?>\s*(.*?)\s*</parameter>', inner, _re.DOTALL):
+            args[param_m.group(1)] = param_m.group(2).strip()
+        calls.append({"name": fn_name, "args": args})
+    return calls
+
+def strip_xml_tool_calls(text: str) -> str:
+    """Удаляет XML блоки tool calls из текста для отображения пользователю."""
+    text = _re.sub(r'<function_calls>.*?</function_calls>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    text = _re.sub(r'<function_call>.*?</function_call>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    text = _re.sub(r'<invoke[^>]*>.*?</invoke>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    return text.strip()
+
+
 async def handle_ask(message: dict, websocket: WebSocket):
     user_text = message.get("text", "").strip()
     session_id = message.get("session_id", "unknown")
@@ -1143,6 +1178,27 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     if resp.status_code == 200:
                         data = resp.json()
                         msg_data = data["choices"][0]["message"]
+                        # ── Перехват XML tool calls от DeepSeek ──────────────
+                        # DeepSeek иногда пишет XML в content вместо нативных tool_calls
+                        raw_content = msg_data.get("content") or ""
+                        if not msg_data.get("tool_calls") and ("<invoke" in raw_content or "<function_call" in raw_content.lower()):
+                            xml_calls = parse_xml_tool_calls(raw_content)
+                            if xml_calls:
+                                # Синтетически добавляем как tool_calls в msg_data
+                                synthetic_calls = []
+                                for i, call in enumerate(xml_calls):
+                                    synthetic_calls.append({
+                                        "id": f"xml_{i}",
+                                        "type": "function",
+                                        "function": {
+                                            "name": call["name"],
+                                            "arguments": json.dumps(call["args"], ensure_ascii=False)
+                                        }
+                                    })
+                                msg_data = dict(msg_data)
+                                msg_data["tool_calls"] = synthetic_calls
+                                msg_data["content"] = strip_xml_tool_calls(raw_content)
+                                logger.info(f"🔄 DeepSeek XML→tool_calls: {[c['name'] for c in xml_calls]}")
                         # Обработка tool_calls
                         tool_iterations = 0
                         while msg_data.get("tool_calls") and tool_iterations < 3:
@@ -1191,7 +1247,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             else:
                                 logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
                                 break
-                        deepseek_response = (msg_data.get("content") or "").strip()
+                        deepseek_response = strip_xml_tool_calls((msg_data.get("content") or "").strip())
                         if not deepseek_response:
                             logger.warning("DeepSeek returned empty content")
                             await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
