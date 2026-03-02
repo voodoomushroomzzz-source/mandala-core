@@ -1470,13 +1470,7 @@
                     ${toggleBtn}
                     <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">◈</button>
                     <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
-                    ${(() => {
-                        try {
-                            const hasPatchKeys = code.includes('"target_module"') || code.includes('"file_path"') || code.includes('"patches"') || code.includes('"changes"');
-                            if (lang === 'json' || hasPatchKeys) return `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>`;
-                        } catch(e) {}
-                        return '';
-                    })()}
+                    ${(lang === 'json' || code.includes('"target_module"') || code.includes('"file_path"')) ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
                 </div>
             ` : '';
             return `
@@ -1538,23 +1532,14 @@
             const codeElement = btn.closest('.code-block').querySelector('.code-content');
             const rawCode = codeElement.textContent;
             const decodedCode = decodeHtmlEntities(rawCode);
-            // Пробуем разные способы извлечь JSON
+            // Извлекаем JSON — работает и для ```json и для ```python блоков
             let patchJson = null;
-            // 1) Весь блок — валидный JSON
             try { JSON.parse(decodedCode); patchJson = decodedCode; } catch(e) {}
-            // 2) Python код с dict — ищем первый { ... } блок
             if (!patchJson) {
-                const match = decodedCode.match(/(\{[\s\S]*\})/);
-                if (match) {
+                const m = decodedCode.match(/(\{[\s\S]*\})/);
+                if (m) {
                     try {
-                        // Python→JSON: None→null, True→true, False→false, комментарии убираем
-                        let candidate = match[1]
-                            .replace(/#[^
-]*/g, '')
-                            .replace(/None/g, 'null')
-                            .replace(/True/g, 'true')
-                            .replace(/False/g, 'false')
-                            .replace(/,(\s*[}\]])/g, '$1'); // trailing commas
+                        const candidate = m[1].replace(/#[^\n]*/g,'').replace(/\bNone\b/g,'null').replace(/\bTrue\b/g,'true').replace(/\bFalse\b/g,'false').replace(/,(\s*[}\]])/g,'$1');
                         JSON.parse(candidate);
                         patchJson = candidate;
                     } catch(e) {}
