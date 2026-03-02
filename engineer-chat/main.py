@@ -698,27 +698,13 @@ class KernelMemory:
 
 При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 
-━━━ ПРАВИЛА ПАТЧЕЙ — СТРОГО ━━━
-1. ВСЕГДА оборачивай патч в ```json ... ``` — НЕ в ```python
-2. target_module — путь БЕЗ .json: "simbiosis/tasks" (НЕ "simbiosis/tasks.json")
-3. НЕ пиши Python код для патча — только чистый JSON объект
-4. ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
-5. Перед патчем — read_file актуальной версии файла
-
-ПРАВИЛЬНЫЙ ФОРМАТ (всегда именно так):
-```json
-{{
-  "target_module": "simbiosis/seeds",
-  "changes": [
-    {{"op": "update", "path": "поле", "value": "значение"}}
-  ]
-}}
-```
-
-ЗАПРЕЩЕНО:
-❌ ```python patch = {{"target_module": ...}}```  — это НЕ работает
-❌ target_module со значением "simbiosis/tasks.json" — только без .json
-❌ Любой Python/JS код вместо чистого JSON
+━━━ ПРАВИЛА ПАТЧЕЙ ━━━
+ВСЕГДА оборачивай патч в ```json ... ``` — НЕ в ```python
+target_module — путь БЕЗ .json: "simbiosis/tasks" (НЕ "simbiosis/tasks.json")
+ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
+Пример: {{"target_module":"simbiosis/seeds","changes":[{{"op":"update","path":"field","value":"..."}}]}}
+❌ НЕ пиши Python код для патча — только чистый JSON в ```json блоке
+Перед патчем — read_file актуальной версии.
 
 На русском."""
 
@@ -1244,8 +1230,16 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                         tool_result = json.dumps(results, ensure_ascii=False)
                                         await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "web_search", "query": args.get("query","")})
                                     elif fn == "read_file":
-                                        tool_result = await file_reader.read(args.get("path", "")) or "Файл не найден"
-                                        await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": args.get("path","")})
+                                        rpath = args.get("path", "").strip()
+                                        await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": rpath})
+                                        # Сначала ищем в кэше ядра — экономим запрос и не дублируем контекст
+                                        rkey = "simbiosis/" + rpath.split("/")[-1].replace(".json", "")
+                                        cached_mod = kernel.modules.get(rkey) or kernel.modules.get(rpath.replace(".json", ""))
+                                        if cached_mod is not None:
+                                            tool_result = json.dumps(cached_mod, ensure_ascii=False)
+                                            logger.info(f"📦 read_file кэш: {rpath}")
+                                        else:
+                                            tool_result = await file_reader.read(rpath) or "Файл не найден"
                                     else:
                                         tool_result = f"Неизвестный инструмент: {fn}"
                                     ds_messages.append({"role": "tool", "tool_call_id": tc_id, "content": tool_result})
@@ -1255,7 +1249,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "temperature": 0.8, "max_tokens": 16384},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "none", "temperature": 0.8, "max_tokens": 16384},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
@@ -1265,7 +1259,24 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 break
                         deepseek_response = strip_xml_tool_calls((msg_data.get("content") or "").strip())
                         if not deepseek_response:
-                            logger.warning("DeepSeek returned empty content")
+                            logger.warning("DeepSeek returned empty content — retry without tools")
+                            # Последний шанс: отправляем без tools чтобы гарантированно получить текст
+                            try:
+                                retry_msgs = [m for m in ds_messages if m.get("role") in ("system", "user", "assistant") and not m.get("tool_calls")]
+                                resp_retry = await client.post(
+                                    f"{OPENROUTER_BASE_URL}/chat/completions",
+                                    headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
+                                    json={"model": DEEPSEEK_MODEL, "messages": retry_msgs, "temperature": 0.8, "max_tokens": 8192},
+                                    timeout=120.0
+                                )
+                                if resp_retry.status_code == 200:
+                                    retry_content = (resp_retry.json()["choices"][0]["message"].get("content") or "").strip()
+                                    if retry_content:
+                                        deepseek_response = strip_xml_tool_calls(retry_content)
+                                        logger.info(f"✅ DeepSeek retry: {len(deepseek_response)} символов")
+                            except Exception as re:
+                                logger.error(f"DeepSeek retry failed: {re}")
+                        if not deepseek_response:
                             await manager.send_to(websocket, {"type": "model_done", "model": "deepseek"})
                         else:
                             chunk_size = 500
