@@ -31,11 +31,16 @@
       "role": "assistant",
       "content": "Позволь мне сначала изучить структуру ядра Мандалы, чтобы дать точный ответ.\n\n```json\n{\n  \"function\": \"read_file\",\n  \"parameters\": {\n    \"file_path\": \"simbiosis/core_map.json\"\n  }\n}\n```",
       "time": 1772447895.6474326
+    },
+    {
+      "role": "user",
+      "content": "Изучай",
+      "time": 1772447903.222681
     }
   ],
-  "last_active": 1772447895.6474383,
+  "last_active": 1772447903.2226882,
   "created_at": 1772231887.431914,
   "modules_injected": true,
-  "injection_timestamp": 1772447883.1533542,
-  "msg_count": 19
+  "injection_timestamp": 1772447903.2225795,
+  "msg_count": 20
 }
