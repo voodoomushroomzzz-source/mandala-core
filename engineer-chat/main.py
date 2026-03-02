@@ -1180,27 +1180,44 @@ async def handle_ask(message: dict, websocket: WebSocket):
                     if resp.status_code == 200:
                         data = resp.json()
                         msg_data = data["choices"][0]["message"]
-                        # ── Перехват XML tool calls от DeepSeek ──────────────
-                        # DeepSeek иногда пишет XML в content вместо нативных tool_calls
+                        # ── Перехват нестандартных вызовов от DeepSeek ──────────
+                        # 1) XML формат: <invoke name="fn">...</invoke>
+                        # 2) JSON формат: {"function": "fn", "parameters": {...}}
                         raw_content = msg_data.get("content") or ""
-                        if not msg_data.get("tool_calls") and ("<invoke" in raw_content or "<function_call" in raw_content.lower()):
-                            xml_calls = parse_xml_tool_calls(raw_content)
-                            if xml_calls:
-                                # Синтетически добавляем как tool_calls в msg_data
-                                synthetic_calls = []
-                                for i, call in enumerate(xml_calls):
-                                    synthetic_calls.append({
-                                        "id": f"xml_{i}",
-                                        "type": "function",
-                                        "function": {
-                                            "name": call["name"],
-                                            "arguments": json.dumps(call["args"], ensure_ascii=False)
-                                        }
-                                    })
-                                msg_data = dict(msg_data)
-                                msg_data["tool_calls"] = synthetic_calls
-                                msg_data["content"] = strip_xml_tool_calls(raw_content)
-                                logger.info(f"🔄 DeepSeek XML→tool_calls: {[c['name'] for c in xml_calls]}")
+                        if not msg_data.get("tool_calls"):
+                            xml_match = "<invoke" in raw_content or "<function_call" in raw_content.lower()
+                            # JSON вызов: {"function": "read_file", ...} или {"name": "read_file", ...}
+                            json_fn_match = ('"function"' in raw_content or '"name"' in raw_content) and ('"read_file"' in raw_content or '"web_search"' in raw_content)
+                            if xml_match:
+                                xml_calls = parse_xml_tool_calls(raw_content)
+                                if xml_calls:
+                                    synthetic_calls = [{"id": f"xml_{i}", "type": "function", "function": {"name": c["name"], "arguments": json.dumps(c["args"], ensure_ascii=False)}} for i, c in enumerate(xml_calls)]
+                                    msg_data = dict(msg_data)
+                                    msg_data["tool_calls"] = synthetic_calls
+                                    msg_data["content"] = strip_xml_tool_calls(raw_content)
+                                    logger.info(f"🔄 XML→tool_calls: {[c['name'] for c in xml_calls]}")
+                            elif json_fn_match:
+                                # Пробуем распарсить JSON вызов функции из контента
+                                try:
+                                    import re as _re
+                                    json_blocks = _re.findall(r'\{[^{}]*"(?:function|name)"[^{}]*\}', raw_content, _re.DOTALL)
+                                    synthetic_calls = []
+                                    for jb in json_blocks:
+                                        try:
+                                            jd = json.loads(jb)
+                                            fn_name = jd.get("function") or jd.get("name", "")
+                                            fn_params = jd.get("parameters") or jd.get("arguments") or jd.get("args") or {}
+                                            if fn_name in ("read_file", "web_search"):
+                                                synthetic_calls.append({"id": f"jfn_{len(synthetic_calls)}", "type": "function", "function": {"name": fn_name, "arguments": json.dumps(fn_params, ensure_ascii=False)}})
+                                        except Exception:
+                                            pass
+                                    if synthetic_calls:
+                                        msg_data = dict(msg_data)
+                                        msg_data["tool_calls"] = synthetic_calls
+                                        msg_data["content"] = ""
+                                        logger.info(f"🔄 JSON→tool_calls: {[c['function']['name'] for c in synthetic_calls]}")
+                                except Exception as je:
+                                    logger.error(f"JSON fn parse error: {je}")
                         # Обработка tool_calls
                         tool_iterations = 0
                         while msg_data.get("tool_calls") and tool_iterations < 3:
@@ -1223,7 +1240,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                         args = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
                                     except (json.JSONDecodeError, TypeError):
                                         args = {}
-                                    tc_id = tc.get("id", f"tool_{tool_iterations}")
                                     tool_result = ""
                                     if fn == "web_search":
                                         results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
@@ -1242,18 +1258,31 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                             tool_result = await file_reader.read(rpath) or "Файл не найден"
                                     else:
                                         tool_result = f"Неизвестный инструмент: {fn}"
-                                    ds_messages.append({"role": "tool", "tool_call_id": tc_id, "content": tool_result})
+                                    # Добавляем как обычный user message — не role:tool
+                                    # Это единственный надёжный способ для deepseek-v3.2
+                                    ds_messages.append({
+                                        "role": "assistant",
+                                        "content": f"[Вызываю {fn}]"
+                                    })
+                                    ds_messages.append({
+                                        "role": "user",
+                                        "content": f"[Результат {fn}]:\n{tool_result}\n\nПродолжай анализ."
+                                    })
                                 except Exception as tc_err:
                                     logger.error(f"Tool call processing error: {tc_err} | tc={tc}")
-                                    ds_messages.append({"role": "tool", "tool_call_id": tc.get("id","err"), "content": f"Ошибка: {tc_err}"})
+                                    ds_messages.append({"role": "user", "content": f"[Ошибка инструмента]: {tc_err}"})
+                            # Второй запрос БЕЗ tools — deepseek-v3.2 игнорирует tool_choice:none
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "none", "temperature": 0.8, "max_tokens": 16384},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "temperature": 0.8, "max_tokens": 16384},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
+                                # Очищаем tool_calls чтобы цикл завершился если модель ответила текстом
+                                if msg_data.get("content") and not msg_data.get("tool_calls"):
+                                    break
                             else:
                                 logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
                                 break
@@ -1262,7 +1291,23 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             logger.warning("DeepSeek returned empty content — retry without tools")
                             # Последний шанс: отправляем без tools чтобы гарантированно получить текст
                             try:
-                                retry_msgs = [m for m in ds_messages if m.get("role") in ("system", "user", "assistant") and not m.get("tool_calls")]
+                                # Строим clean контекст: system + история + tool results встраиваем как текст
+                                retry_msgs = []
+                                tool_results_text = []
+                                for m in ds_messages:
+                                    role = m.get("role")
+                                    if role == "system":
+                                        retry_msgs.append(m)
+                                    elif role == "user" and not m.get("_protected"):
+                                        retry_msgs.append(m)
+                                    elif role == "assistant" and not m.get("tool_calls"):
+                                        retry_msgs.append(m)
+                                    elif role == "tool":
+                                        tool_results_text.append(m.get("content", "")[:2000])
+                                # Добавляем tool results как user сообщение + директиву отвечать
+                                if tool_results_text:
+                                    combined = "\n\n---\n".join(tool_results_text)
+                                    retry_msgs.append({"role": "user", "content": "[Данные из файлов получены]\n" + combined + "\n\nТеперь дай развёрнутый ответ на основе этих данных. НЕ вызывай read_file снова."})
                                 resp_retry = await client.post(
                                     f"{OPENROUTER_BASE_URL}/chat/completions",
                                     headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
