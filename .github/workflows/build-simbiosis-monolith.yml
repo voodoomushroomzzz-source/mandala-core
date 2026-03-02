@@ -2,19 +2,10 @@ name: Build Simbiosis Monolith
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'simbiosis/boot.json'
-      - 'simbiosis/core_map.json'
-      - 'simbiosis/engineer_chat.json'
-      - 'simbiosis/philosophy.json'
-      - 'simbiosis/roadmaps.json'
-      - 'simbiosis/seeds.json'
-      - 'simbiosis/telegram_bot.json'
-      - 'build_simbiosis_monolith.py'
+      - 'simbiosis/**'
   workflow_dispatch:
-  schedule:
-    - cron: '0 12 * * *'
 
 jobs:
   build:
@@ -23,52 +14,21 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull latest changes
-        run: |
-          git pull origin main
-          echo "✅ Репозиторий синхронизирован"
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Build Simbiosis Monolith
-        id: build
+      - name: Build monolith
+        run: python3 .github/scripts/build_monolith.py
+
+      - name: Commit monolith
         run: |
-          echo "🔄 Запуск сборщика Simbiosis v1.0..."
-          python build_simbiosis_monolith.py
-
-          if [ ! -f "build/mandala_simbiosis.monolith.latest.json" ]; then
-            echo "❌ Файл монолита не создан"
-            exit 1
-          fi
-
-          echo "✅ Монолит Simbiosis успешно собран"
-          echo "version=$(python -c "import json; data=json.load(open('build/mandala_simbiosis.monolith.latest.json')); print(data.get('version', 'unknown'))")" >> $GITHUB_OUTPUT
-
-      - name: Commit and Push Monolith
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-
-          mkdir -p build
-          git add build/mandala_simbiosis.monolith.latest.json
-
-          if git diff --staged --quiet; then
-            echo "⚠️ Нет изменений в монолите"
-          else
-            VERSION="${{ steps.build.outputs.version }}"
-            git commit -m "🤖 Авто-сборка Simbiosis монолита $VERSION"
-            git pull --rebase origin main
-            git push origin HEAD:main
-            echo "✅ Simbiosis монолит запушен"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add simbiosis/monolith.json
+          git diff --staged --quiet || git commit -m "🏗️ build: обновлён monolith.json [skip ci]"
+          git push
