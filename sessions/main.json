@@ -26,9 +26,14 @@
       "role": "user",
       "content": "Покажи кратко по пунктам, что у нас в модуле инструкции",
       "time": 1772443443.3163102
+    },
+    {
+      "role": "assistant",
+      "content": "Давайте посмотрим, что содержится в модуле инструкций. Я прочитаю файл.\n\n```python\nread_file(\"simbiosis/instructions.json\")\n```",
+      "time": 1772443450.235437
     }
   ],
-  "last_active": 1772443443.3163154,
+  "last_active": 1772443450.2354424,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772443443.3162313,
