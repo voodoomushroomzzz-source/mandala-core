@@ -46,9 +46,14 @@
       "role": "user",
       "content": "Ну что готов дать ответ?",
       "time": 1772447926.7502697
+    },
+    {
+      "role": "assistant",
+      "content": "```json\n{\n  \"function\": \"read_file\",\n  \"parameters\": {\n    \"file_path\": \"simbiosis/core_map.json\"\n  }\n}\n```",
+      "time": 1772447936.061738
     }
   ],
-  "last_active": 1772447926.7502756,
+  "last_active": 1772447936.061745,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772447926.7500927,
