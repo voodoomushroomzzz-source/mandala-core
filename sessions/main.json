@@ -89,9 +89,14 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772476531.8400948
+    },
+    {
+      "role": "assistant",
+      "content": "[Модуль simbiosis/core_map]",
+      "time": 1772476566.5738542
     }
   ],
-  "last_active": 1772476531.840107,
+  "last_active": 1772476566.5738673,
   "created_at": 1772231887.431914,
   "modules_injected": false,
   "injection_timestamp": 1772476439.1257982,
