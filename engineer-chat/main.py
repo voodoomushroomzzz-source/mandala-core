@@ -698,11 +698,27 @@ class KernelMemory:
 
 При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 
-━━━ ПАТЧИ ━━━
-target_module — путь БЕЗ .json: "simbiosis/tasks" (НЕ "simbiosis/tasks.json")
-ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
-Пример: {{"target_module":"simbiosis/seeds","changes":[{{"op":"update","path":"field","value":"..."}}]}}
-Перед патчем — read_file актуальной версии.
+━━━ ПРАВИЛА ПАТЧЕЙ — СТРОГО ━━━
+1. ВСЕГДА оборачивай патч в ```json ... ``` — НЕ в ```python
+2. target_module — путь БЕЗ .json: "simbiosis/tasks" (НЕ "simbiosis/tasks.json")
+3. НЕ пиши Python код для патча — только чистый JSON объект
+4. ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
+5. Перед патчем — read_file актуальной версии файла
+
+ПРАВИЛЬНЫЙ ФОРМАТ (всегда именно так):
+```json
+{{
+  "target_module": "simbiosis/seeds",
+  "changes": [
+    {{"op": "update", "path": "поле", "value": "значение"}}
+  ]
+}}
+```
+
+ЗАПРЕЩЕНО:
+❌ ```python patch = {{"target_module": ...}}```  — это НЕ работает
+❌ target_module со значением "simbiosis/tasks.json" — только без .json
+❌ Любой Python/JS код вместо чистого JSON
 
 На русском."""
 
