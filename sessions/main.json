@@ -36,9 +36,14 @@
       "role": "user",
       "content": "Изучай",
       "time": 1772447903.222681
+    },
+    {
+      "role": "assistant",
+      "content": "```json\n{\n  \"function\": \"read_file\",\n  \"parameters\": {\n    \"file_path\": \"simbiosis/core_map.json\"\n  }\n}\n```",
+      "time": 1772447912.5557003
     }
   ],
-  "last_active": 1772447903.2226882,
+  "last_active": 1772447912.5557075,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772447903.2225795,
