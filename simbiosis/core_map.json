@@ -524,5 +524,13 @@
       },
       "description": "Создание манифеста соты инструкций"
     }
+  ],
+  "honeycomb_migration": [
+    {
+      "manifest": "honeycombs/core_map/index.json",
+      "status": "active",
+      "migration_date": "2026-03-01",
+      "note": "Основная навигация теперь через honeycombs/core_map/"
+    }
   ]
 }
