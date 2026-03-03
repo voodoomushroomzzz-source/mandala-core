@@ -1,0 +1,318 @@
+{
+  "identity": {
+    "module_id": "TASKS-CURRENT-001",
+    "name": "Current Active Tasks",
+    "version": "1.1.0",
+    "created": "2026-03-01",
+    "layer": 2,
+    "type": "tasks_current"
+  },
+  "meta": {
+    "description": "Текущие активные задачи Мандалы",
+    "status": "active",
+    "priority": "high",
+    "tags": [
+      "current",
+      "active",
+      "tasks",
+      "work"
+    ],
+    "resonance": "90%"
+  },
+  "tasks": [
+    {
+      "id": "T-001",
+      "title": "Создать core_map.json",
+      "status": "active",
+      "priority": "high",
+      "desc": "Карта модулей + меню",
+      "tags": [
+        "core"
+      ],
+      "assignee": "Садовник",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 100
+    },
+    {
+      "id": "T-002",
+      "title": "Заполнить seeds 10+",
+      "status": "active",
+      "priority": "high",
+      "desc": "Банк идей → резонанс",
+      "tags": [
+        "seeds"
+      ],
+      "assignee": "Садовник",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 50
+    },
+    {
+      "id": "T-003",
+      "title": "Roadmaps v1",
+      "status": "active",
+      "priority": "medium",
+      "desc": "Дорожные карты задач",
+      "tags": [
+        "roadmaps"
+      ],
+      "assignee": "DeepSeek",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 30
+    },
+    {
+      "id": "T-004",
+      "title": "Интегрировать telegram_bot",
+      "status": "active",
+      "priority": "medium",
+      "desc": "Улучшить bot.py",
+      "tags": [
+        "bot"
+      ],
+      "assignee": "Садовник",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 10
+    },
+    {
+      "id": "T-005",
+      "title": "Engineer chat UI",
+      "status": "active",
+      "priority": "low",
+      "desc": "index.html responsive",
+      "tags": [
+        "chat"
+      ],
+      "assignee": "DeepSeek",
+      "created_at": "2026-02-28",
+      "updated_at": "2026-02-28",
+      "progress": 0
+    },
+    {
+      "id": "TASK-004",
+      "title": "Анализ текущей архитектуры для оптимизации под ограничения контекста",
+      "status": "active",
+      "priority": "critical",
+      "created": "2026-03-01",
+      "updated": "2026-03-01",
+      "description": "Провести глубокий анализ всех модулей Мандалы, выявить узкие места и разработать план перехода на многоуровневую модульную архитектуру",
+      "roadmap_id": "RM-004",
+      "milestone_id": "M1",
+      "category": "architecture",
+      "tags": [
+        "optimization",
+        "scalability",
+        "performance"
+      ],
+      "estimated_hours": 4,
+      "actual_hours": 0,
+      "dependencies": [],
+      "deliverables": [
+        "Детальный отчет по размерам и структуре всех модулей",
+        "Карта роста данных и прогноз увеличения",
+        "Проект manifest системы",
+        "Критерии сегментации модулей",
+        "Прототип утилит загрузки"
+      ],
+      "steps": [
+        {
+          "id": "S1",
+          "description": "Проанализировать текущие размеры всех JSON файлов",
+          "status": "completed",
+          "notes": "philosophy: 1.5K, instructions: 2.4K, seeds: 2.0K, tasks: 2.6K, roadmaps: 1.5K"
+        },
+        {
+          "id": "S2",
+          "description": "Выявить паттерны роста данных в каждом модуле",
+          "status": "in_progress",
+          "notes": "seeds и tasks имеют наибольший потенциал роста"
+        },
+        {
+          "id": "S3",
+          "description": "Проектировать структуру core/manifest.json",
+          "status": "pending",
+          "notes": "Нужно определить поля: модули, размеры, сегменты, индексы"
+        },
+        {
+          "id": "S4",
+          "description": "Определить критерии сегментации для seeds и tasks",
+          "status": "pending",
+          "notes": "По категориям? По времени? По статусу?"
+        },
+        {
+          "id": "S5",
+          "description": "Создать прототип функций load_module()",
+          "status": "pending",
+          "notes": "Ленивая загрузка + кэширование"
+        }
+      ],
+      "notes": "Это первый шаг к масштабируемой архитектуре. Успех этой задачи определит эффективность всей дальнейшей оптимизации.",
+      "assignee": "Садовник + ИИ",
+      "ai_role": "Аналитик и архитектор",
+      "human_role": "Валидатор и стратег"
+    },
+    {
+      "id": "TASK-005",
+      "title": "Сегментация Seeds модуля - Фаза 1: Создание структуры",
+      "status": "active",
+      "priority": "high",
+      "created": "2026-03-01",
+      "updated": "2026-03-01",
+      "description": "Создать многоуровневую структуру для Seeds модуля с индексацией по категориям",
+      "roadmap_id": "RM-004",
+      "milestone_id": "M3",
+      "category": "architecture",
+      "tags": [
+        "seeds",
+        "segmentation",
+        "indexing"
+      ],
+      "estimated_hours": 2,
+      "actual_hours": 0,
+      "dependencies": [
+        "TASK-004"
+      ],
+      "deliverables": [
+        "Директория simbiosis/seeds/ создана",
+        "seeds/index.json с индексами создан",
+        "Текущие seeds разделены по category_*.json",
+        "manifest.json обновлен ссылками",
+        "Тестирование загрузки через индексы"
+      ],
+      "steps": [
+        {
+          "id": "S1",
+          "description": "Создать директорию simbiosis/seeds/ и базовую структуру",
+          "status": "pending",
+          "notes": "Нужно создать папку и заготовки файлов"
+        },
+        {
+          "id": "S2",
+          "description": "Создать seeds/index.json с индексами текущих записей",
+          "status": "pending",
+          "notes": "Индексы по id, category, tag"
+        },
+        {
+          "id": "S3",
+          "description": "Разделить текущие seeds.json на category_ai.json, category_philosophy.json, category_tech.json",
+          "status": "pending",
+          "notes": "Сохранить все поля каждой записи"
+        },
+        {
+          "id": "S4",
+          "description": "Создать core/manifest.json с ссылками на новую структуру",
+          "status": "pending",
+          "notes": "Легковесный manifest с метаданными"
+        },
+        {
+          "id": "S5",
+          "description": "Протестировать загрузку через новую систему",
+          "status": "pending",
+          "notes": "Проверить поиск по индексам и загрузку полных данных"
+        }
+      ],
+      "notes": "Первая практическая реализация новой архитектуры. Успех критически важен для дальнейшей оптимизации.",
+      "assignee": "ИИ + Садовник",
+      "ai_role": "Разработчик структуры и индексов",
+      "human_role": "Валидация и тестирование"
+    }
+  ],
+  "stats": {
+    "total_tasks": 7,
+    "by_priority": {
+      "critical": 1,
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    },
+    "by_category": {
+      "architecture": 2,
+      "core": 1,
+      "seeds": 1,
+      "roadmaps": 1,
+      "bot": 1,
+      "chat": 1
+    },
+    "by_assignee": {
+      "Садовник": 2,
+      "DeepSeek": 2,
+      "Садовник + ИИ": 1,
+      "ИИ + Садовник": 1
+    },
+    "avg_progress": "41.4%"
+  },
+  "navigation": {
+    "parent_manifest": "honeycombs/tasks/index.json",
+    "next_segment": "tasks/archive.json",
+    "previous_segment": "workflow/priorities.json"
+  },
+  "tasks/7": [
+    {
+      "id": "TASK-006",
+      "title": "Изучение архивных модулей первой Мандалы",
+      "status": "pending",
+      "priority": "medium",
+      "created": "2026-03-02",
+      "updated": "2026-03-02",
+      "description": "Исследовать архивные модули первой версии Мандалы в папке simbiosis/, изучить их структуру, содержание и полезные элементы. По необходимости дополнить текущие соты honeycombs/ ценными концепциями, компонентами или данными.",
+      "roadmap_id": "RM-003",
+      "milestone_id": "M2",
+      "category": "research",
+      "tags": [
+        "research",
+        "legacy",
+        "migration",
+        "knowledge_transfer"
+      ],
+      "estimated_hours": 2,
+      "actual_hours": 0,
+      "dependencies": [
+        "TASK-004"
+      ],
+      "deliverables": [
+        "Отчет о структуре архивных модулей первой Мандалы",
+        "Список ценных концепций для переноса в соты",
+        "Патчи для дополнения honeycombs/ при необходимости",
+        "Рекомендации по использованию или архивации legacy-кода"
+      ],
+      "steps": [
+        {
+          "id": "S1",
+          "description": "Изучить структуру папки simbiosis/ и ее подпапок",
+          "status": "pending",
+          "notes": "Понимание общей организации legacy системы"
+        },
+        {
+          "id": "S2",
+          "description": "Проанализировать ключевые модули (core/, philosophy/, protocols/)",
+          "status": "pending",
+          "notes": "Выявление ценных концепций и компонентов"
+        },
+        {
+          "id": "S3",
+          "description": "Сравнить с текущей структурой honeycombs/",
+          "status": "pending",
+          "notes": "Выявление пробелов или возможностей улучшения"
+        },
+        {
+          "id": "S4",
+          "description": "Создать список рекомендаций по переносу",
+          "status": "pending",
+          "notes": "Что стоит перенести, что можно архивировать"
+        },
+        {
+          "id": "S5",
+          "description": "Подготовить патчи для дополнения сот при необходимости",
+          "status": "pending",
+          "notes": "Только если обнаружены ценные элементы для интеграции"
+        }
+      ],
+      "notes": "Задача на 2026-03-02 (завтра). Архивные модули могут содержать ценные идеи, протоколы или компоненты, которые полезно сохранить или адаптировать в новой структуре сот.",
+      "assignee": "Садовник",
+      "ai_role": "Аналитик и помощник в исследовании",
+      "human_role": "Исследователь и валидатор"
+    }
+  ]
+}
