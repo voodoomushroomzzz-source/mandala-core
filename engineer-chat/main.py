@@ -675,40 +675,58 @@ class KernelMemory:
             )
 
         if role == "deepseek":
-            return f"""Ты — DeepSeek, технический аналитик и критический наблюдатель Мандалы Симбиоза.
+            return f"""Ты — DeepSeek, инженер и аналитик Мандалы Симбиоза.
 
-КОНТЕКСТ ЯДРА:
+ФИЛОСОФИЯ:
 {core_philosophy}
 
-МОДУЛИ ЯДРА (simbiosis/):
-{modules_brief}
+━━━ ОСНОВНАЯ СТРУКТУРА: СОТЫ (honeycombs/) ━━━
+Система организована в соты — папки в honeycombs/, каждая со своим index.json.
+Это главная рабочая система. Изучай и работай в первую очередь с ней.
 
-ТВОЯ РОЛЬ:
-— Аналитик и помощник Садовника Мандалы. Отвечаешь точно и по делу.
-— Активно используй инструмент web_search для актуальных данных
-— САМОСТОЯТЕЛЬНО читай файлы через read_file — НЕ проси пользователя загружать их
-— Если нужно узнать что в файле — вызови read_file(path) немедленно сам
-— Перед изменением файла — ВСЕГДА сначала read_file его актуальной версии
-— Все пути файлов есть в КАРТЕ ЯДРА выше (boot.json / core_map)
+Соты ядра:
+  honeycombs/core_map/      — карта системы (сегменты: kernel, modules, repository, honeycombs)
+  honeycombs/engineer_chat/ — конфигурация инженерного чата
+  honeycombs/instructions/  — инструкции, правила, форматы патчей
+  honeycombs/philosophy/    — философия и принципы Мандалы
+  honeycombs/roadmaps/      — дорожные карты развития
+  honeycombs/seeds/         — семена: активные идеи и инкубируемые проекты
+  honeycombs/telegram_bot/  — конфигурация Telegram-бота
 
-ВАЖНО — вызов инструментов:
-Используй ТОЛЬКО встроенный механизм function calling.
-НЕ пиши XML/теги вроде <function_calls>, <invoke>, <parameter> — они не работают.
-Просто вызывай функции через API напрямую.
+Как работать с сотой:
+  1. read_file("honeycombs/<сота>/index.json") — навигатор, показывает файлы
+  2. read_file нужные файлы соты
+  3. Для изменений — патч (форматы ниже)
+
+Legacy (simbiosis/) сохранена, используй если нужного нет в honeycombs/.
+
+━━━ ПРАВИЛА ИНСТРУМЕНТОВ ━━━
+— Читай файлы через read_file МОЛЧА и СРАЗУ — без объявлений "сейчас прочитаю"
+— НЕ жди подтверждения от пользователя перед чтением
+— Читай столько файлов подряд сколько нужно — без пауз и промежуточных сообщений
+— Перед изменением — ВСЕГДА сначала read_file актуальной версии файла
+— web_search — для актуальных внешних данных
+
+Используй ТОЛЬКО встроенный function calling.
+НЕ пиши XML/теги (<function_calls>, <invoke>) — они не работают.
 
 При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 
-━━━ ПРАВИЛА ПАТЧЕЙ ━━━
-ВСЕГДА оборачивай патч в ```json ... ``` — НЕ в ```python
-target_module — путь БЕЗ .json: "simbiosis/tasks" (НЕ "simbiosis/tasks.json")
-ОПЕРАЦИИ: "update", "add", "delete", "remove", "replace", "merge"
-Пример: {{"target_module":"simbiosis/seeds","changes":[{{"op":"update","path":"field","value":"..."}}]}}
-❌ НЕ пиши Python код для патча — только чистый JSON в ```json блоке
+━━━ ФОРМАТЫ ПАТЧЕЙ ━━━
+JSON-файлы (.json в simbiosis/ или honeycombs/):
+  {{\"target_module\":\"honeycombs/seeds/meta\",\"changes\":[{{\"op\":\"update\",\"path\":\"field\",\"value\":\"...\"}}]}}
+  target_module — путь БЕЗ .json
+
+Text-файлы (.py, .html, .md):
+  {{\"file_path\":\"engineer-chat/main.py\",\"replacements\":[{{\"old\":\"точная строка\",\"new\":\"новая строка\"}}]}}
+  file_path — С расширением, old должна быть уникальной в файле
+
+ВСЕГДА оборачивай патч в ```json ... ```
 Перед патчем — read_file актуальной версии.
 
 На русском."""
 
-        elif role == "claude":
+                elif role == "claude":
             return f"""Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы Симбиоза.
 
 КОНТЕКСТ ЯДРА:
@@ -1288,7 +1306,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     logger.error(f"JSON fn parse error: {je}")
                         # Обработка tool_calls
                         tool_iterations = 0
-                        while msg_data.get("tool_calls") and tool_iterations < 20:
+                        while msg_data.get("tool_calls") and tool_iterations < 3:
                             tool_iterations += 1
                             ds_messages.append({
                                 "role": "assistant",
@@ -1315,7 +1333,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                         await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "web_search", "query": args.get("query","")})
                                     elif fn == "read_file":
                                         rpath = args.get("path", "").strip()
-                                        await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": rpath})
                                         # Сначала ищем в кэше ядра — экономим запрос и не дублируем контекст
                                         rkey = "simbiosis/" + rpath.split("/")[-1].replace(".json", "")
                                         cached_mod = kernel.modules.get(rkey) or kernel.modules.get(rpath.replace(".json", ""))
@@ -1328,25 +1345,28 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                         tool_result = f"Неизвестный инструмент: {fn}"
                                     # Добавляем как обычный user message — не role:tool
                                     # Это единственный надёжный способ для deepseek-v3.2
-                                    # tool result без fake assistant сообщения
+                                    ds_messages.append({
+                                        "role": "assistant",
+                                        "content": f"[Вызываю {fn}]"
+                                    })
                                     ds_messages.append({
                                         "role": "user",
-                                        "content": f"[Результат {fn}]:\n{tool_result}"
+                                        "content": f"[Результат {fn}]:\n{tool_result}\n\nПродолжай анализ."
                                     })
                                 except Exception as tc_err:
                                     logger.error(f"Tool call processing error: {tc_err} | tc={tc}")
                                     ds_messages.append({"role": "user", "content": f"[Ошибка инструмента]: {tc_err}"})
-                            # Следующий запрос С tools — модель сама решает продолжать или завершить
+                            # Второй запрос БЕЗ tools — deepseek-v3.2 игнорирует tool_choice:none
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.8, "max_tokens": 16384},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "temperature": 0.8, "max_tokens": 16384},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
-                                # Нет tool_calls — модель завершила, выходим
-                                if not msg_data.get("tool_calls"):
+                                # Очищаем tool_calls чтобы цикл завершился если модель ответила текстом
+                                if msg_data.get("content") and not msg_data.get("tool_calls"):
                                     break
                             else:
                                 logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
