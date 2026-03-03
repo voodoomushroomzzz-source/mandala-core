@@ -579,5 +579,14 @@
       },
       "note_for_sr": "ПРИМЕНЯЙ patch_mastery.json ПЕРЕД КАЖДЫМ ПАТЧЕМ! Это устраняет галлюцинации."
     }
+  ],
+  "philosophy_migration_fix": [
+    {
+      "status": "fixing_ahimsa",
+      "original_path": "blocks/ahimsa.json",
+      "new_path": "blocks/ahimsa_principle.json",
+      "reason": "Конфликт имен (возможно файл уже существует)",
+      "action": "Обновить манифест philosophy/index.json"
+    }
   ]
 }
