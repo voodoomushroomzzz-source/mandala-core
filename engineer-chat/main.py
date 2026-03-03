@@ -430,7 +430,6 @@ class KernelMemory:
         # boot всегда в памяти; honeycombs/instructions и honeycombs/core_map — раз в 5 сообщений
         self.module_list = [
             "simbiosis/boot",
-            "honeycombs/instructions/index",
             "honeycombs/core_map/index",
         ]
         # Остальные модули СР читает сам через read_file
@@ -1169,14 +1168,9 @@ async def handle_ask(message: dict, websocket: WebSocket):
     do_honeycombs = not session.get("modules_injected") or session["msg_count"] % 5 == 1
     honeycombs_inject = ""
     if do_honeycombs:
-        instructions_mod = kernel.modules.get("honeycombs/instructions/index", {})
         core_map_hc_mod = kernel.modules.get("honeycombs/core_map/index", {})
-        instructions_json = json.dumps(instructions_mod, ensure_ascii=False, indent=2)[:2000] if instructions_mod else "(не загружен)"
         core_map_hc_json = json.dumps(core_map_hc_mod, ensure_ascii=False, indent=2)[:2000] if core_map_hc_mod else "(не загружен)"
         honeycombs_inject = f"""
-
-[HONEYCOMBS/INSTRUCTIONS — index.json]
-{instructions_json}
 
 [HONEYCOMBS/CORE_MAP — index.json]
 {core_map_hc_json}"""
