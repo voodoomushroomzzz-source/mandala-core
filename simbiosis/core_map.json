@@ -209,7 +209,7 @@
       ".github/workflows/": "CI/CD: build-monolith.yml (Core), build-simbiosis-monolith.yml (Simbiosis), ci.yml."
     }
   },
-  "navigation_hint": "Не знаешь с чего начать? 1) Вопрос про идеи/планы → seeds или roadmaps. 2) Про чат/код → engineer_chat + read_file engineer-chat/main.py. 3) Про бота → telegram_bot + read_file bot.py. 4) Философский вопрос → philosophy. 5) Любое изменение файла → сначала read_file, потом патч. 6) Нужен монолит → build/mandala_simbiosis.monolith.latest.json. 7) Нужен патч → target_module + changes[] с op: update/add/delete/remove/replace/merge.",
+  "navigation_hint": "⚠️ ВНИМАНИЕ СР: Эта карта — переходный манифест. Основная навигация теперь через honeycombs/core_map/. Используй сегменты для ленивой загрузки.",
   "honeycomb_architecture": [
     {
       "description": "Новая архитектура сот (honeycombs) для сегментированной загрузки. Постепенная миграция из simbiosis/ в honeycombs/",
@@ -253,6 +253,34 @@
         "engineer_chat": "simbiosis/engineer_chat.json",
         "telegram_bot": "simbiosis/telegram_bot.json"
       }
+    },
+    {
+      "primary_map": "honeycombs/core_map/index.json",
+      "description": "Основная карта сот ядра",
+      "segments": [
+        {
+          "file": "honeycombs/core_map/kernel.json",
+          "description": "Ядро: boot и philosophy"
+        },
+        {
+          "file": "honeycombs/core_map/modules.json",
+          "description": "Модули simbiosis/"
+        },
+        {
+          "file": "honeycombs/core_map/repository.json",
+          "description": "Файлы репозитория"
+        },
+        {
+          "file": "honeycombs/core_map/honeycombs.json",
+          "description": "Архитектура сот"
+        }
+      ],
+      "workflow": [
+        "1. При старте: загрузить honeycombs/core_map/kernel.json",
+        "2. При работе с модулями: honeycombs/core_map/modules.json",
+        "3. При поиске файлов: honeycombs/core_map/repository.json"
+      ],
+      "migration_status": "active"
     }
   ],
   "meta/version": "v1.2.0",
@@ -531,6 +559,25 @@
       "status": "active",
       "migration_date": "2026-03-01",
       "note": "Основная навигация теперь через honeycombs/core_map/"
+    }
+  ],
+  "identity": {
+    "description": "Переходный манифест. Основная навигация через honeycombs/core_map/index.json"
+  },
+  "honeycomb_instructions": [
+    {
+      "manifest": "honeycombs/instructions/index.json",
+      "description": "Сота инструкций с сегментами <2KB",
+      "segments": {
+        "critical": "patch_mastery.json (ОБЯЗАТЕЛЬНО при патчах)",
+        "core": [
+          "patch_system.json",
+          "module_creation.json",
+          "patch_optimization.json",
+          "folder_management.json"
+        ]
+      },
+      "note_for_sr": "ПРИМЕНЯЙ patch_mastery.json ПЕРЕД КАЖДЫМ ПАТЧЕМ! Это устраняет галлюцинации."
     }
   ]
 }
