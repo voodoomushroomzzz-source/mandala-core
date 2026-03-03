@@ -84,7 +84,6 @@
     "size": "~25KB в 18 файлах"
   },
   "/migration_plan/pending": [
-    "telegram_bot",
     "tasks"
   ],
   "/migration_plan/completed": [
@@ -93,7 +92,8 @@
     "seeds",
     "engineer_chat",
     "roadmaps",
-    "philosophy"
+    "philosophy",
+    "telegram_bot"
   ],
   "/honeycombs/engineer_chat": {
     "manifest": "honeycombs/engineer_chat/index.json",
@@ -134,5 +134,21 @@
     "status": "active",
     "migration_date": "2026-03-01",
     "size": "5.4KB в 9 файлах"
+  },
+  "/honeycombs/telegram_bot": {
+    "manifest": "honeycombs/telegram_bot/index.json",
+    "description": "Telegram бот Мандалы Симбиоза. Архитектура, возможности, конфигурация и интеграции.",
+    "segments": {
+      "bot_info": "bot_info/ (2 файла)",
+      "capabilities": "capabilities/ (2 файла)",
+      "configuration": "configuration/ (2 файла)",
+      "integration": "integration/ (1 файл)",
+      "meta": "meta/ (1 файл)",
+      "roadmap": "roadmap/ (1 файл)",
+      "root": "root/ (2 файла)"
+    },
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "5.9KB в 11 файлах"
   }
 }
