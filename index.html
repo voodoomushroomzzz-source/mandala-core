@@ -916,92 +916,23 @@
         .btn-primary { background: var(--surface); color: var(--green-bright); border: 1px solid var(--green); }
         .btn-primary:hover { background: var(--green); color: var(--bg); box-shadow: 0 4px 15px var(--green); }
 
-        /* === КАРТА ЯДРА === */
-        .core-map-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 0 24px;
-        }
-        .core-center {
-            position: relative;
-            width: 320px;
-            height: 320px;
-        }
-        .core-node {
-            position: absolute;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: var(--mono);
-            text-align: center;
-        }
-        .core-node-center {
-            width: 90px; height: 90px;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(16,185,129,0.25) 0%, rgba(16,185,129,0.05) 100%);
-            border: 2px solid var(--green-2);
-            box-shadow: 0 0 20px rgba(16,185,129,0.3), 0 0 40px rgba(16,185,129,0.1);
-            font-size: 10px;
-            color: var(--green-bright);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        .core-node-module {
-            width: 68px; height: 68px;
-            background: var(--surface-2);
-            border: 1px solid var(--line-2);
-            font-size: 9px;
-            color: var(--text-2);
-            letter-spacing: 1px;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .core-node-module:hover {
-            border-color: var(--green-2);
-            color: var(--green-bright);
-            background: var(--green-glow);
-            transform: translate(var(--ox), var(--oy)) scale(1.12);
-            z-index: 10;
-        }
-        .core-node-module .mod-icon { font-size: 14px; }
-        .core-node-module .mod-name { font-size: 8px; letter-spacing: 1px; }
-        .core-node-line {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform-origin: 0 0;
-            background: linear-gradient(90deg, var(--green), transparent);
-            height: 1px;
-            opacity: 0.3;
-            pointer-events: none;
-        }
-        .module-tooltip {
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--surface);
-            border: 1px solid var(--green-2);
-            border-radius: var(--radius);
-            padding: 10px 14px;
-            min-width: 200px;
-            max-width: 260px;
-            font-size: 11px;
-            line-height: 1.6;
-            color: var(--text);
-            z-index: 100;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            pointer-events: none;
-            white-space: normal;
-        }
-        .module-tooltip h4 { color: var(--green-bright); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
-        .module-tooltip p { color: var(--text-2); font-size: 10px; margin-bottom: 4px; }
-        .module-tooltip ul { padding-left: 14px; color: var(--text-dim); font-size: 10px; }
+        /* === СОТЫ === */
+        .honeycombs-section { margin-bottom: 32px; }
+        .honeycombs-label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-2); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .honeycombs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
+        .honeycomb-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .honeycomb-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--green), var(--violet)); opacity: 0; transition: opacity 0.2s ease; }
+        .honeycomb-card:hover { border-color: var(--line-2); background: var(--surface-2); transform: translateY(-1px); }
+        .honeycomb-card:hover::before { opacity: 1; }
+        .honeycomb-card-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+        .honeycomb-card-name { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 1px; color: var(--green-bright); margin-bottom: 4px; }
+        .honeycomb-card-desc { font-size: 10px; color: var(--text-2); line-height: 1.4; margin-bottom: 8px; }
+        .honeycomb-card-meta { font-family: var(--mono); font-size: 8px; letter-spacing: 0.5px; color: var(--text-3); display: flex; gap: 8px; align-items: center; }
+        .honeycomb-status { padding: 1px 5px; border-radius: 3px; font-size: 8px; }
+        .honeycomb-status.active { color: var(--green-2); border: 1px solid rgba(16,185,129,0.3); }
+        .honeycomb-status.draft  { color: var(--violet-soft); border: 1px solid rgba(124,58,237,0.3); }
+        .honeycomb-card-hint { font-family: var(--mono); font-size: 8px; color: var(--text-3); margin-top: 8px; }
+
         .file-card {
             padding: 12px 14px;
             background: var(--surface);
@@ -1204,9 +1135,16 @@
                             <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.4);color:var(--violet-soft);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">✕ забыть</button>
                         </div>
                     </div>
-                    <div id="coreVisualization" style="position:relative;margin-bottom:32px;"></div>
-                    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);margin-bottom:10px;" id="otherFilesLabel">◈ файлы репозитория</div>
-                    <div class="seeds-grid" id="otherFilesGrid"><div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div></div>
+                    <div class="honeycombs-section">
+                        <div class="honeycombs-label">
+                            <span>◈ соты ядра</span>
+                            <span id="honeycombsCount" style="color:var(--text-3);"></span>
+                        </div>
+                        <div class="honeycombs-grid" id="honeycombsGrid">
+                            <div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка сот...</div></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1591,6 +1529,7 @@
                     }
                     break;
                 case 'core_updated':
+                    if (typeof loadHoneycombs === 'function') loadHoneycombs();
                     const verEl = document.getElementById('coreVersion');
                     if (verEl && data.version) {
                         verEl.textContent = `◈ ${data.version}`;
@@ -2085,83 +2024,61 @@
 
         // ==================== КАРТА ЯДРА ====================
         async function loadMap() {
-            const viz = document.getElementById('coreVisualization');
-            if (viz && viz._loading) return;
-            if (viz) viz._loading = true;
-            // Reset loading flag after 500ms to allow repeated refreshes
-            setTimeout(() => { if (viz) viz._loading = false; }, 500);
-            const otherGrid = document.getElementById('otherFilesGrid');
-            viz.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка карты...</div></div>';
-            otherGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка...</div></div>';
+            loadHoneycombs();
+        }
 
-            const coreModules = [
-                { id: 'boot', icon: '⚡', name: 'boot', file: 'simbiosis/boot.json', desc: 'Загрузочный модуль ядра. Версия, идентификация, базовая философия.', keys: ['version', 'identity', 'philosophy', 'startup_sequence'] },
-                { id: 'core_map', icon: '🗺', name: 'core_map', file: 'simbiosis/core_map.json', desc: 'Карта навигации по всем модулям и файлам репозитория.', keys: ['kernel_modules', 'repository', 'navigation_hint'] },
-                { id: 'engineer_chat', icon: '💬', name: 'eng_chat', file: 'simbiosis/engineer_chat.json', desc: 'Конфигурация инженерного чата: роли, поведение ИИ-агентов.', keys: ['agents', 'tools', 'session_rules', 'patch_format'] },
-                { id: 'philosophy', icon: '🌀', name: 'philosophy', file: 'simbiosis/philosophy.json', desc: 'Философские основы Мандалы: принципы, метафоры, этика.', keys: ['core_principles', 'metaphors', 'ethics', 'resonance'] },
-                { id: 'seeds', icon: '🌱', name: 'seeds', file: 'simbiosis/seeds.json', desc: 'Семена — активные идеи и инкубируемые проекты системы.', keys: ['seeds[]', 'id', 'type', 'status', 'description'] },
-                { id: 'roadmaps', icon: '📜', name: 'roadmaps', file: 'simbiosis/roadmaps.json', desc: 'Дорожные карты развития. Этапы, вехи, критерии завершения.', keys: ['roadmaps{}', 'title', 'milestones', 'status'] },
-                { id: 'telegram_bot', icon: '🤖', name: 'tg_bot', file: 'simbiosis/telegram_bot.json', desc: 'Конфигурация Telegram-бота Мандалы.', keys: ['commands', 'persona', 'integration'] },
-                { id: 'instructions', icon: '📖', name: 'instructions', file: 'simbiosis/instructions.json', desc: 'Инструкции Мандалы: патчи, создание модулей, оптимизация.', keys: ['instructions[]', 'id', 'type', 'content'] },
-                { id: 'tasks', icon: '✓', name: 'tasks', file: 'simbiosis/tasks.json', desc: 'Банк задач развития Мандалы: активные, завершённые, приоритеты.', keys: ['tasks[]', 'id', 'title', 'status', 'priority'] },
-            ];
+        const HONEYCOMB_ICONS = {core_map:"🗺",engineer_chat:"💬",instructions:"📖",philosophy:"🌀",roadmaps:"📜",seeds:"🌱",telegram_bot:"🤖",tasks:"✓",boot:"⚡"};
 
-            const cx = 160, cy = 160, r = 105;
-            const angleStep = (2 * Math.PI) / coreModules.length;
-            let svgLines = '';
-            let nodes = '';
-            coreModules.forEach((mod, i) => {
-                const angle = angleStep * i - Math.PI / 2;
-                const x = cx + r * Math.cos(angle);
-                const y = cy + r * Math.sin(angle);
-                const nx = (x / 320) * 100;
-                const ny = (y / 320) * 100;
-                const ox = x - cx;
-                const oy = y - cy;
-                svgLines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>`;
-                nodes += `
-                    <div class="core-node core-node-module" style="left:${nx}%;top:${ny}%;transform:translate(calc(-50% + 0px), calc(-50% + 0px));--ox:${ox > 0 ? '12%' : ox < 0 ? '-12%' : '0'};--oy:${oy > 0 ? '12%' : oy < 0 ? '-12%' : '0'};flex-direction:column;display:flex;align-items:center;justify-content:center;cursor:pointer;"
-                    data-mod="${mod.id}"
-                    onmouseenter="showModuleTooltip(this, ${JSON.stringify(mod).replace(/"/g, '&quot;')})"
-                    onmouseleave="hideModuleTooltip(this)"
-                    onclick="requestFileRead('${mod.file}', '${mod.icon} ${mod.name}')">
-                        <span class="mod-icon">${mod.icon}</span>
-                        <span class="mod-name">${mod.name}</span>
-                        <span style="font-size:7px;color:var(--text-3);font-family:var(--mono);margin-top:2px;letter-spacing:0.5px;">↓ читать</span>
-                    </div>`;
-            });
-            viz.innerHTML = `
-                <div class="core-map-wrapper">
-                    <div class="core-center">
-                        <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 320 320">${svgLines}</svg>
-                        ${nodes}
-                        <div class="core-node core-node-center">simbiosis<br>◈ core</div>
-                    </div>
-                    <div style="font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:1px;text-align:center;">Наведи — детали · Нажми — СР читает файл</div>
-                </div>
-            `;
+        async function loadHoneycombs() {
+            const grid = document.getElementById("honeycombsGrid");
+            const countEl = document.getElementById("honeycombsCount");
+            if (!grid) return;
             try {
-                const resp = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/simbiosis/core_map.json`);
-                if (resp.ok) {
-                    const data = await resp.json();
-                    const repoFiles = data.repository?.files || {};
-                    const otherItems = Object.entries(repoFiles).filter(([path]) => !path.startsWith('simbiosis/'));
-                    if (otherItems.length) {
-                        otherGrid.innerHTML = otherItems.map(([path, info]) => `
-                            <div class="file-card" style="cursor:pointer;" onclick="requestFileRead('${path}', '📄 ${escapeHtml(path)}')">
-                                <div class="file-card-path">📄 ${escapeHtml(path)}</div>
-                                <div class="file-card-desc">${escapeHtml(info.description || '')}</div>
-                                <div style="font-family:var(--mono);font-size:9px;color:var(--text-3);margin-top:4px;">↓ нажми — СР читает</div>
-                            </div>
-                        `).join('');
-                    } else {
-                        otherGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div>нет данных</div></div>';
+                const treeResp = await fetch("https://api.github.com/repos/" + GITHUB_REPO + "/git/trees/main?recursive=1");
+                if (!treeResp.ok) throw new Error("GitHub API: " + treeResp.status);
+                const allPaths = (await treeResp.json()).tree || [];
+                const folders = {};
+                allPaths.forEach(item => {
+                    if (!item.path.startsWith("honeycombs/")) return;
+                    const rest = item.path.slice(11);
+                    const folder = rest.split("/")[0];
+                    if (!folder) return;
+                    if (!folders[folder]) folders[folder] = { files: [], indexPath: null };
+                    if (item.type === "blob") {
+                        folders[folder].files.push(item.path);
+                        if (rest === folder + "/index.json") folders[folder].indexPath = item.path;
                     }
-                }
+                });
+                const names = Object.keys(folders).sort();
+                if (!names.length) { grid.innerHTML = "<div class='empty-state'><div class='empty-state-icon'>○</div><div>сот не найдено</div></div>"; return; }
+                const metas = await Promise.allSettled(names.map(async name => {
+                    const idx = folders[name].indexPath;
+                    if (!idx) return null;
+                    const r = await fetch("https://raw.githubusercontent.com/" + GITHUB_REPO + "/main/" + idx);
+                    return r.ok ? r.json() : null;
+                }));
+                if (countEl) countEl.textContent = names.length + " сот";
+                grid.innerHTML = names.map((name, i) => {
+                    const meta = metas[i].status === "fulfilled" ? metas[i].value : null;
+                    const hc = folders[name];
+                    const icon = HONEYCOMB_ICONS[name] || meta?.meta?.icon || "⬡";
+                    const desc = meta?.meta?.description || meta?.identity?.name || name.replace(/_/g, " ");
+                    const status = meta?.meta?.status || "active";
+                    const fc = hc.files.length;
+                    const idx2 = hc.indexPath || ("honeycombs/" + name + "/index.json");
+                    const plural = fc === 1 ? "файл" : fc < 5 ? "файла" : "файлов";
+                    return "<div class='honeycomb-card' onclick='requestFileRead(\"" + idx2 + "\", \"" + icon + " " + name + "\")'>" +
+                        "<span class='honeycomb-card-icon'>" + icon + "</span>" +
+                        "<div class='honeycomb-card-name'>" + escapeHtml(name) + "</div>" +
+                        "<div class='honeycomb-card-desc'>" + escapeHtml(desc) + "</div>" +
+                        "<div class='honeycomb-card-meta'><span class='honeycomb-status " + status + "'>" + status + "</span><span>" + fc + " " + plural + "</span></div>" +
+                        "<div class='honeycomb-card-hint'>↓ нажми — СР читает</div></div>";
+                }).join("");
             } catch(e) {
-                otherGrid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">×</div><div>${e.message}</div></div>`;
+                if (grid) grid.innerHTML = "<div class='empty-state'><div class='empty-state-icon'>×</div><div>" + escapeHtml(e.message) + "</div></div>";
             }
         }
+        window.loadHoneycombs = loadHoneycombs;
 
         window.showModuleTooltip = function(el, mod) {
             hideModuleTooltip(el);
