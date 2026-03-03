@@ -1,1 +1,98 @@
-{"identity":{"module_id":"CORE-MAP-HONEYCOMBS-001","name":"Архитектура сот","version":"2.0.0","created":"2026-03-01","layer":1,"type":"segment"},"meta":{"description":"Соты и их связь с модулями","status":"active","priority":"medium","tags":["honeycombs","architecture","segmentation"],"resonance":"100%"},"honeycombs":{"instructions":{"manifest":"honeycombs/instructions/index.json","description":"Сота инструкций. Сегменты <2KB для ленивой загрузки.","segments":{"critical":"patch_mastery.json","core":["patch_system.json","module_creation.json","patch_optimization.json","folder_management.json"]},"status":"active","migration_date":"2026-03-01"},"core_map":{"manifest":"honeycombs/core_map/index.json","description":"Карта сот ядра","segments":{"kernel":"kernel.json","modules":"modules.json","repository":"repository.json","honeycombs":"honeycombs.json"},"status":"active","migration_date":"2026-03-01"}},"migration_plan":{"pending":["seeds","roadmaps","philosophy","engineer_chat","telegram_bot","tasks"],"criteria":"Файлы >2KB","priority_order":["instructions","core_map","seeds","roadmaps","philosophy","engineer_chat","telegram_bot","tasks"]}}
+{
+  "identity": {
+    "module_id": "CORE-MAP-HONEYCOMBS-001",
+    "name": "Архитектура сот",
+    "version": "2.0.0",
+    "created": "2026-03-01",
+    "layer": 1,
+    "type": "segment"
+  },
+  "meta": {
+    "description": "Соты и их связь с модулями",
+    "status": "active",
+    "priority": "medium",
+    "tags": [
+      "honeycombs",
+      "architecture",
+      "segmentation"
+    ],
+    "resonance": "100%"
+  },
+  "honeycombs": {
+    "instructions": {
+      "manifest": "honeycombs/instructions/index.json",
+      "description": "Сота инструкций. Сегменты <2KB для ленивой загрузки.",
+      "segments": {
+        "critical": "patch_mastery.json",
+        "core": [
+          "patch_system.json",
+          "module_creation.json",
+          "patch_optimization.json",
+          "folder_management.json"
+        ]
+      },
+      "status": "active",
+      "migration_date": "2026-03-01"
+    },
+    "core_map": {
+      "manifest": "honeycombs/core_map/index.json",
+      "description": "Карта сот ядра",
+      "segments": {
+        "kernel": "kernel.json",
+        "modules": "modules.json",
+        "repository": "repository.json",
+        "honeycombs": "honeycombs.json"
+      },
+      "status": "active",
+      "migration_date": "2026-03-01"
+    }
+  },
+  "migration_plan": {
+    "pending": [
+      "seeds",
+      "roadmaps",
+      "philosophy",
+      "engineer_chat",
+      "telegram_bot",
+      "tasks"
+    ],
+    "criteria": "Файлы >2KB",
+    "priority_order": [
+      "instructions",
+      "core_map",
+      "seeds",
+      "roadmaps",
+      "philosophy",
+      "engineer_chat",
+      "telegram_bot",
+      "tasks"
+    ]
+  },
+  "/honeycombs/seeds": {
+    "manifest": "honeycombs/seeds/index.json",
+    "description": "Сота семян. Банк идей для развития Мандалы. 6 активных + 7 архивных семян.",
+    "segments": {
+      "meta": "meta.json",
+      "protocols": "protocols.json",
+      "active": "active/ (6 файлов)",
+      "archive": "archive/ (7 файлов)",
+      "search_index": "search_index.json",
+      "registry": "registry.json"
+    },
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "~25KB в 18 файлах"
+  },
+  "/migration_plan/pending": [
+    "roadmaps",
+    "philosophy",
+    "engineer_chat",
+    "telegram_bot",
+    "tasks"
+  ],
+  "/migration_plan/completed": [
+    "instructions",
+    "core_map",
+    "seeds"
+  ]
+}
