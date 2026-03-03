@@ -115,5 +115,18 @@
       "workflow": "Загружай сегменты по необходимости. Все файлы <2KB.",
       "critical_instructions": "honeycombs/instructions/critical/patch_mastery.json (ОБЯЗАТЕЛЬНО перед патчами)"
     }
+  ],
+  "/sr_instructions/honeycomb_rules": [
+    {
+      "file_naming": "Все файлы сот — .json формата",
+      "reading": "read_file('honeycombs/<сота>/') → список папок сегментов. read_file('honeycombs/<сота>/<сегмент>/') → список файлов.",
+      "patching_honeycombs": "target_module: 'honeycombs/<сота>/index' (БЕЗ .json)",
+      "patching_segments": "file_path: 'honeycombs/<сота>/<сегмент>/<файл>.json' с полным content",
+      "size_limit": "Файлы <2KB для быстрой загрузки",
+      "lazy_loading": "Загружать только нужные сегменты"
+    }
+  ],
+  "/honeycomb_navigation/0/workflow": [
+    "1) Читать honeycombs/core_map/index.json → 2) Читать honeycombs/<сота>/index.json → 3) Читать сегменты по необходимости"
   ]
 }
