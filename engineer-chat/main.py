@@ -1288,7 +1288,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     logger.error(f"JSON fn parse error: {je}")
                         # Обработка tool_calls
                         tool_iterations = 0
-                        while msg_data.get("tool_calls") and tool_iterations < 3:
+                        while msg_data.get("tool_calls") and tool_iterations < 20:
                             tool_iterations += 1
                             ds_messages.append({
                                 "role": "assistant",
@@ -1328,28 +1328,25 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                         tool_result = f"Неизвестный инструмент: {fn}"
                                     # Добавляем как обычный user message — не role:tool
                                     # Это единственный надёжный способ для deepseek-v3.2
-                                    ds_messages.append({
-                                        "role": "assistant",
-                                        "content": f"[Вызываю {fn}]"
-                                    })
+                                    # tool result без fake assistant сообщения
                                     ds_messages.append({
                                         "role": "user",
-                                        "content": f"[Результат {fn}]:\n{tool_result}\n\nПродолжай анализ."
+                                        "content": f"[Результат {fn}]:\n{tool_result}"
                                     })
                                 except Exception as tc_err:
                                     logger.error(f"Tool call processing error: {tc_err} | tc={tc}")
                                     ds_messages.append({"role": "user", "content": f"[Ошибка инструмента]: {tc_err}"})
-                            # Второй запрос БЕЗ tools — deepseek-v3.2 игнорирует tool_choice:none
+                            # Следующий запрос С tools — модель сама решает продолжать или завершить
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "temperature": 0.8, "max_tokens": 16384},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.8, "max_tokens": 16384},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
-                                # Очищаем tool_calls чтобы цикл завершился если модель ответила текстом
-                                if msg_data.get("content") and not msg_data.get("tool_calls"):
+                                # Нет tool_calls — модель завершила, выходим
+                                if not msg_data.get("tool_calls"):
                                     break
                             else:
                                 logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
