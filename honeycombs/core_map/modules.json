@@ -181,5 +181,26 @@
       "roadmap": "roadmap/ (1 файл)",
       "root": "root/ (2 файла)"
     }
+  },
+  "/modules/tasks": {
+    "file": "honeycombs/tasks/index.json",
+    "description": "Сота задач Мандалы Симбиоза. Активные и завершенные задачи.",
+    "status": "active",
+    "size_kb": "8.8KB",
+    "migration_status": "completed",
+    "honeycomb_path": "honeycombs/tasks/"
+  },
+  "/honeycombs/tasks": {
+    "manifest": "honeycombs/tasks/index.json",
+    "description": "Задачи Мандалы Симбиоза. 9 файлов в 4 сегментах.",
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "8.8KB в 9 файлах",
+    "segments": {
+      "active": "active/ (5 файлов)",
+      "completed": "completed/ (2 файла)",
+      "meta": "meta/ (1 файл)",
+      "templates": "templates/ (1 файл)"
+    }
   }
 }
