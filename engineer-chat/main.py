@@ -168,17 +168,37 @@ else:
     logger.info(f"✅ Tavily активен, ключ: ...{TAVILY_API_KEY[-6:]}")
 
 class FileReader:
-    """Инструмент для чтения файлов из репозитория"""
+    """Инструмент для чтения файлов и папок из репозитория"""
     async def read(self, path: str) -> Optional[str]:
-        """Читает файл через GitHub Contents API (не CDN — всегда актуально)."""
+        """
+        Читает файл или папку через GitHub Contents API.
+        - Файл  -> возвращает текстовое содержимое
+        - Папка -> возвращает список файлов в читаемом формате
+        """
         try:
             async with httpx.AsyncClient() as client:
                 url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{path}"
                 headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
-                headers["Accept"] = "application/vnd.github.v3.raw"  # Возвращает raw текст напрямую
-                resp = await client.get(url, headers=headers, timeout=10.0)
+                headers["Accept"] = "application/vnd.github.v3+json"
+                resp = await client.get(url, headers=headers, timeout=10.0, follow_redirects=True)
                 if resp.status_code == 200:
-                    return resp.text
+                    data = resp.json()
+                    # Папка — API вернул массив
+                    if isinstance(data, list):
+                        lines = [f"Содержимое папки: {path}"]
+                        for item in sorted(data, key=lambda x: (x.get("type",""), x.get("name",""))):
+                            icon = "DIR" if item.get("type") == "dir" else "FILE"
+                            size = f" ({item.get('size', 0)} b)" if item.get("type") == "file" else ""
+                            lines.append(f"  [{icon}] {item.get('name','')}{size}  ->  {item.get('path','')}")
+                        logger.info(f"read_file dir: {path} ({len(data)} items)")
+                        return "\n".join(lines)
+                    # Файл — API вернул объект с полем content (base64)
+                    elif isinstance(data, dict) and "content" in data:
+                        import base64 as _b64
+                        content = _b64.b64decode(data["content"]).decode("utf-8")
+                        return content
+                    else:
+                        return resp.text
                 else:
                     logger.error(f"File read error: {path} - {resp.status_code}")
                     return None
@@ -412,15 +432,9 @@ class KernelMemory:
         self.module_list = [
             "simbiosis/boot",
             "simbiosis/core_map",
-            "simbiosis/engineer_chat",
-            "simbiosis/telegram_bot",
         ]
-        # Модули только по требованию (не грузим в память постоянно)
-        self.on_demand_modules = [
-            "simbiosis/philosophy",
-            "simbiosis/seeds",
-            "simbiosis/roadmaps",
-        ]
+        # Остальные модули СР читает сам через read_file
+        self.on_demand_modules = []
 
         # 🔒 Блокировка — предотвращает race condition при параллельных запросах
         self._update_lock = asyncio.Lock()
@@ -694,14 +708,16 @@ class KernelMemory:
   honeycombs/telegram_bot/  — конфигурация Telegram-бота
 
 Как работать с сотой:
-  1. read_file("honeycombs/<сота>/index.json") — навигатор, показывает файлы
-  2. read_file нужные файлы соты
-  3. Для изменений — патч (форматы ниже)
+  1. read_file("honeycombs/<сота>/index.json") — навигатор, показывает файлы соты
+  2. read_file("honeycombs/<сота>/") — список всех файлов в папке соты
+  3. read_file конкретный файл соты
+  4. Для изменений — патч (форматы ниже)
 
 Legacy (simbiosis/) сохранена, используй если нужного нет в honeycombs/.
 
 ━━━ ПРАВИЛА ИНСТРУМЕНТОВ ━━━
-— Читай файлы через read_file МОЛЧА и СРАЗУ — без объявлений "сейчас прочитаю"
+— Читай файлы И папки через read_file МОЛЧА и СРАЗУ
+— read_file на папку вернёт список файлов в ней — используй для навигации
 — НЕ жди подтверждения пользователя перед чтением
 — Читай столько файлов подряд сколько нужно — без пауз
 — Перед изменением — ВСЕГДА сначала read_file актуальной версии
