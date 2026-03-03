@@ -81,9 +81,14 @@
       "role": "user",
       "content": "готово, что дальше",
       "time": 1772541415.8975654
+    },
+    {
+      "role": "assistant",
+      "content": "**Патч 3/5:** Создаем основную инструкцию patch_system.json (INSTR-001)\n\n```json\n{\n  \"file_path\": \"honeycombs/instructions/core/patch_system.json\",\n  \"content\": \"{\\\"identity\\\":{\\\"module_id\\\":\\\"INSTR-001\\\",\\\"name\\\":\\\"🔧 Система патчей v2.0\\\",\\\"version\\\":\\\"v2.0.0\\\",\\\"created\\\":\\\"2026-03-01\\\",\\\"layer\\\":3,\\\"type\\\":\\\"core_directive\\\"},\\\"meta\\\":{\\\"description\\\":\\\"Единый формат патчей для всех файлов\\\",\\\"status\\\":\\\"active\\\",\\\"priority\\\":\\\"high\\\",\\\"tags\\\":[\\\"patch\\\",\\\"system\\\",\\\"format\\\",\\\"json\\\",\\\"text\\\"],\\\"resonance\\\":\\\"100%\\\"},\\\"content\\\":{\\\"patch_types\\\":{\\\"json_patches\\\":{\\\"format\\\":{\\\"target_module\\\":\\\"simbiosis/seeds\\\",\\\"description\\\":\\\"Описание\\\",\\\"changes\\\":[{\\\"op\\\":\\\"update|add|merge\\\",\\\"path\\\":\\\"field.subfield\\\",\\\"value\\\":\\\"новое значение\\\"}]}},\\\"text_patches\\\":{\\\"format\\\":{\\\"file_path\\\":\\\"engineer-chat/main.py\\\",\\\"description\\\":\\\"Описание\\\",\\\"replacements\\\":[{\\\"old\\\":\\\"строка\\\",\\\"new\\\":\\\"новая строка\\\"}]},\\\"rules\\\":[\\\"old ДОЛЖНА встречаться РОВНО 1 РАЗ\\\"]},\\\"full_replacement\\\":{\\\"format\\\":{\\\"file_path\\\":\\\"simbiosis/new.json\\\",\\\"content\\\":\\\"минифицированный JSON\\\",\\\"description\\\":\\\"Создание/замена\\\"}},\\\"multi_patch\\\":{\\\"format\\\":{\\\"patches\\\":[]}}},\\\"workflow\\\":[\\\"1. read_file('путь/к/файлу')\\\",\\\"2. Изучи структуру\\\",\\\"3. Определи типы полей\\\",\\\"4. Выбери операции\\\",\\\"5. Составь патч\\\"],\\\"best_practices\\\":[\\\"✅ ВСЕГДА читай файл перед патчем\\\",\\\"✅ Минифицируй JSON в content\\\",\\\"❌ НЕ угадывай структуру файла\\\",\\\"❌ НЕ используй add для STRING полей\\\"]}}\",\n  \"description\": \"Создание основной инструкции INSTR-001 в honeycombs/instructions/core/\"\n}\n```",
+      "time": 1772541429.2013862
     }
   ],
-  "last_active": 1772541415.8975725,
+  "last_active": 1772541429.2013986,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772541415.8974183,
