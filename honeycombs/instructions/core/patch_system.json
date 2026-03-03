@@ -1,1 +1,124 @@
-{"identity":{"module_id":"INSTR-001","name":"🔧 Система патчей v2.0","version":"v2.0.0","created":"2026-03-01","layer":3,"type":"core_directive"},"meta":{"description":"Единый формат патчей для всех файлов","status":"active","priority":"high","tags":["patch","system","format","json","text"],"resonance":"100%"},"content":{"patch_types":{"json_patches":{"format":{"target_module":"simbiosis/seeds","description":"Описание","changes":[{"op":"update|add|merge","path":"field.subfield","value":"новое значение"}]}},"text_patches":{"format":{"file_path":"engineer-chat/main.py","description":"Описание","replacements":[{"old":"строка","new":"новая строка"}]},"rules":["old ДОЛЖНА встречаться РОВНО 1 РАЗ"]},"full_replacement":{"format":{"file_path":"simbiosis/new.json","content":"минифицированный JSON","description":"Создание/замена"}},"multi_patch":{"format":{"patches":[]}}},"workflow":["1. read_file('путь/к/файлу')","2. Изучи структуру","3. Определи типы полей","4. Выбери операции","5. Составь патч"],"best_practices":["✅ ВСЕГДА читай файл перед патчем","✅ Минифицируй JSON в content","❌ НЕ угадывай структуру файла","❌ НЕ используй add для STRING полей"]}}
+{
+  "identity": {
+    "module_id": "INSTR-001",
+    "name": "🔧 Система патчей v2.0",
+    "version": "v2.0.0",
+    "created": "2026-03-01",
+    "layer": 3,
+    "type": "core_directive"
+  },
+  "meta": {
+    "description": "Единый формат патчей для всех файлов",
+    "status": "active",
+    "priority": "high",
+    "tags": [
+      "patch",
+      "system",
+      "format",
+      "json",
+      "text"
+    ],
+    "resonance": "100%"
+  },
+  "content": {
+    "patch_types": {
+      "json_patches": {
+        "format": {
+          "target_module": "simbiosis/seeds",
+          "description": "Описание",
+          "changes": [
+            {
+              "op": "update|add|merge",
+              "path": "field.subfield",
+              "value": "новое значение"
+            }
+          ]
+        }
+      },
+      "text_patches": {
+        "format": {
+          "file_path": "engineer-chat/main.py",
+          "description": "Описание",
+          "replacements": [
+            {
+              "old": "строка",
+              "new": "новая строка"
+            }
+          ]
+        },
+        "rules": [
+          "old ДОЛЖНА встречаться РОВНО 1 РАЗ"
+        ]
+      },
+      "full_replacement": {
+        "format": {
+          "file_path": "simbiosis/new.json",
+          "content": "минифицированный JSON",
+          "description": "Создание/замена"
+        }
+      },
+      "multi_patch": {
+        "format": {
+          "patches": []
+        }
+      }
+    },
+    "workflow": [
+      "1. read_file('путь/к/файлу')",
+      "2. Изучи структуру",
+      "3. Определи типы полей",
+      "4. Выбери операции",
+      "5. Составь патч"
+    ],
+    "best_practices": [
+      "✅ ВСЕГДА читай файл перед патчем",
+      "✅ Минифицируй JSON в content",
+      "❌ НЕ угадывай структуру файла",
+      "❌ НЕ используй add для STRING полей"
+    ]
+  },
+  "/content/patch_types/honeycomb_patches": {
+    "format": {
+      "target_module": "honeycombs/seeds/index",
+      "description": "Патч для сот (БЕЗ .json в пути)",
+      "changes": [
+        {
+          "op": "update|add|merge",
+          "path": "field.subfield",
+          "value": "новое значение"
+        }
+      ]
+    },
+    "rules": [
+      "target_module БЕЗ .json расширения",
+      "Только для JSON файлов сот",
+      "Используется для index.json соты"
+    ],
+    "examples": [
+      "✅ target_module: \"honeycombs/seeds/index\"",
+      "❌ target_module: \"honeycombs/seeds/index.json\""
+    ]
+  },
+  "/content/patch_types/honeycomb_file_patches": {
+    "format": {
+      "file_path": "honeycombs/seeds/active/seed_001.json",
+      "content": "полный минифицированный JSON",
+      "description": "Патч для файлов ВНУТРИ сот (с content)"
+    },
+    "rules": [
+      "file_path С расширением .json",
+      "content обязателен",
+      "Для создания/замены файлов в сотах"
+    ],
+    "examples": [
+      "✅ file_path: \"honeycombs/seeds/active/seed_001.json\"",
+      "✅ content: {\"id\":\"SEED-001\",...}"
+    ]
+  },
+  "/content/honeycomb_workflow": [
+    "1. Определи: соты (honeycombs/) или модули (simbiosis/)",
+    "2. Для сот: target_module БЕЗ .json",
+    "3. Для файлов в сотах: file_path С content",
+    "4. Для модулей: target_module БЕЗ .json"
+  ]
+}
