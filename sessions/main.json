@@ -66,11 +66,16 @@
       "role": "user",
       "content": "Эта инструкция тебе поможет",
       "time": 1772579086.6434329
+    },
+    {
+      "role": "user",
+      "content": "Создай обновленную версию, а так же нам нужно создать полные файлы  current и next_id опираясь на эту инструкцию",
+      "time": 1772579162.0591042
     }
   ],
-  "last_active": 1772579086.6434383,
+  "last_active": 1772579162.0591097,
   "created_at": 1772231887.431914,
   "modules_injected": true,
-  "injection_timestamp": 1772579086.6433318,
-  "msg_count": 193
+  "injection_timestamp": 1772579162.0590327,
+  "msg_count": 194
 }
