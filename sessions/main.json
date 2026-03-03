@@ -71,9 +71,14 @@
       "role": "user",
       "content": "Теперь нужно добавить новую инструкцию в index.json соты instructions: - этот патч с ошибкой: Файл не является валидным JSON\n__\nОстальные патчи применил",
       "time": 1772582180.910827
+    },
+    {
+      "role": "assistant",
+      "content": "Отлично! Значит file_naming.json не существует в структуре сот, и мой патч будет работать правильно. Но давайте проверим, чтобы убедиться, что file_naming.json действительно есть в списке файлов сотfunction_calls>\n<invoke name=\"read_file\">",
+      "time": 1772582272.2173204
     }
   ],
-  "last_active": 1772582180.9108322,
+  "last_active": 1772582272.2173297,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772582180.910698,
