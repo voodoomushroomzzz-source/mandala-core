@@ -1,1 +1,80 @@
-{"identity":{"module_id":"SEEDS-REGISTRY-001","name":"Seeds Registry","version":"v1.2.4","created":"2026-03-01","layer":3,"type":"seeds_registry"},"meta":{"description":"Статистика и реестр семян","status":"active","priority":"medium","tags":["registry","stats","seeds","analytics"],"resonance":"75%"},"registry":{"total_seeds":12,"active":6,"archived":6,"draft":0,"expired":0,"last_updated":"2026-03-01","next_seed_id":"SEED-016"},"statistics":{"by_type":{"feature":6,"architecture":3,"protocol":3},"by_status":{"active":6,"archived":6},"by_creator":{"gardener":9,"gardener_voice":1,"gardener_ahimsa":1,"sr_analysis":1},"by_resonance":{"high":6,"medium":3,"low":3},"by_month":{"2026-02":11,"2026-03":1},"avg_seeds_per_month":6,"growth_rate":"стабильный"},"performance_metrics":{"germination_rate":"0%","avg_time_to_germination":"N/A","archive_rate":"50%","active_lifetime_avg":"7 дней"},"maintenance":{"auto_ttl_check":true,"ttl_days":30,"evaluation_schedule":"еженедельно","archive_auto":true,"notifications":{"expiring_soon":true,"germination_opportunity":true}},"navigation":{"parent_manifest":"honeycombs/seeds/index.json","previous_segment":"index.json"}}
+{
+  "identity": {
+    "module_id": "SEEDS-REGISTRY-001",
+    "name": "Seeds Registry",
+    "version": "v1.2.4",
+    "created": "2026-03-01",
+    "layer": 3,
+    "type": "seeds_registry"
+  },
+  "meta": {
+    "description": "Статистика и реестр семян",
+    "status": "active",
+    "priority": "medium",
+    "tags": [
+      "registry",
+      "stats",
+      "seeds",
+      "analytics"
+    ],
+    "resonance": "75%"
+  },
+  "registry": {
+    "total_seeds": 12,
+    "active": 6,
+    "archived": 6,
+    "draft": 0,
+    "expired": 0,
+    "last_updated": "2026-03-01",
+    "next_seed_id": "SEED-016"
+  },
+  "statistics": {
+    "by_type": {
+      "feature": 6,
+      "architecture": 3,
+      "protocol": 3
+    },
+    "by_status": {
+      "active": 6,
+      "archived": 6
+    },
+    "by_creator": {
+      "gardener": 9,
+      "gardener_voice": 1,
+      "gardener_ahimsa": 1,
+      "sr_analysis": 1
+    },
+    "by_resonance": {
+      "high": 6,
+      "medium": 3,
+      "low": 3
+    },
+    "by_month": {
+      "2026-02": 11,
+      "2026-03": 1
+    },
+    "avg_seeds_per_month": 6,
+    "growth_rate": "стабильный"
+  },
+  "performance_metrics": {
+    "germination_rate": "0%",
+    "avg_time_to_germination": "N/A",
+    "archive_rate": "50%",
+    "active_lifetime_avg": "7 дней"
+  },
+  "maintenance": {
+    "auto_ttl_check": true,
+    "ttl_days": 30,
+    "evaluation_schedule": "еженедельно",
+    "archive_auto": true,
+    "notifications": {
+      "expiring_soon": true,
+      "germination_opportunity": true
+    }
+  },
+  "navigation": {
+    "parent_manifest": "honeycombs/seeds/index.json",
+    "previous_segment": "index.json"
+  },
+  "navigation/previous_segment": "search_index.json"
+}
