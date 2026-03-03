@@ -156,9 +156,14 @@
       "role": "user",
       "content": "ПАТЧ 19: ОБНОВИТЬ index.json соты инструкций - ошибка: Файл не является валидным JSON\n__\nостальные патчи применил",
       "time": 1772574295.4031699
+    },
+    {
+      "role": "assistant",
+      "content": "**🔍 ПРОБЛЕМА:** Файл `honeycombs/instructions/index.json` поврежден (невалидный JSON)\n\n<functioninvoke name=\"read_file\">\n<parameter name=\"path\" string=\"true\">honeycombs/instructions/</parameter>\n</invoke>\n</function_calls>",
+      "time": 1772574319.3172789
     }
   ],
-  "last_active": 1772574295.4031868,
+  "last_active": 1772574319.3172953,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772574295.403077,
