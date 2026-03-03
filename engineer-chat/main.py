@@ -1418,6 +1418,37 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
+                                # ── Перехват нестандартного XML внутри цикла ──
+                                if not msg_data.get("tool_calls"):
+                                    raw2 = msg_data.get("content") or ""
+                                    has_xml = ("<invoke" in raw2 or "<functioninvoke" in raw2 or
+                                               "<function_call" in raw2.lower() or
+                                               "DSML" in raw2 or "｜DSML｜" in raw2)
+                                    has_json_fn = ('"read_file"' in raw2 or '"web_search"' in raw2) and ('"function"' in raw2 or '"name"' in raw2)
+                                    if has_xml:
+                                        xml_calls2 = parse_xml_tool_calls(raw2)
+                                        if xml_calls2:
+                                            msg_data = dict(msg_data)
+                                            msg_data["tool_calls"] = [{"id": f"xl2_{i}", "type": "function", "function": {"name": c["name"], "arguments": json.dumps(c["args"], ensure_ascii=False)}} for i, c in enumerate(xml_calls2)]
+                                            msg_data["content"] = strip_xml_tool_calls(raw2)
+                                            logger.info(f"🔄 [loop] XML→tool_calls: {[c['name'] for c in xml_calls2]}")
+                                    elif has_json_fn:
+                                        jblocks = _re.findall(r'\{[^{}]*"(?:function|name)"[^{}]*\}', raw2, _re.DOTALL)
+                                        synthetic2 = []
+                                        for jb in jblocks:
+                                            try:
+                                                jd = json.loads(jb)
+                                                fn2 = jd.get("function") or jd.get("name", "")
+                                                fp2 = jd.get("parameters") or jd.get("arguments") or jd.get("args") or {}
+                                                if fn2 in ("read_file", "web_search"):
+                                                    synthetic2.append({"id": f"jl2_{len(synthetic2)}", "type": "function", "function": {"name": fn2, "arguments": json.dumps(fp2, ensure_ascii=False)}})
+                                            except Exception:
+                                                pass
+                                        if synthetic2:
+                                            msg_data = dict(msg_data)
+                                            msg_data["tool_calls"] = synthetic2
+                                            msg_data["content"] = ""
+                                            logger.info(f"🔄 [loop] JSON→tool_calls: {[c['function']['name'] for c in synthetic2]}")
                                 if not msg_data.get("tool_calls"):
                                     break
                             else:
