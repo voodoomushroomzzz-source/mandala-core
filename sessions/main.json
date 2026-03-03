@@ -336,9 +336,14 @@
       "role": "user",
       "content": "Едем дальше с семян, потом роад мапы",
       "time": 1772544237.1921668
+    },
+    {
+      "role": "assistant",
+      "content": "**Читаю seeds.json напрямую:**",
+      "time": 1772544262.1002495
     }
   ],
-  "last_active": 1772544237.1921778,
+  "last_active": 1772544262.1002843,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772544237.1920779,
