@@ -157,5 +157,29 @@
       "testimonies": "testimonies/ (2 файла)",
       "meta": "meta/ (2 файла)"
     }
+  },
+  "/modules/telegram_bot": {
+    "file": "honeycombs/telegram_bot/index.json",
+    "description": "Сота Telegram бота. Архитектура, возможности, конфигурация и интеграции.",
+    "status": "active",
+    "size_kb": "5.9KB",
+    "migration_status": "completed",
+    "honeycomb_path": "honeycombs/telegram_bot/"
+  },
+  "/honeycombs/telegram_bot": {
+    "manifest": "honeycombs/telegram_bot/index.json",
+    "description": "Telegram бот Мандалы Симбиоза. 11 файлов в 7 сегментах.",
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "5.9KB в 11 файлах",
+    "segments": {
+      "bot_info": "bot_info/ (2 файла)",
+      "capabilities": "capabilities/ (2 файла)",
+      "configuration": "configuration/ (2 файла)",
+      "integration": "integration/ (1 файл)",
+      "meta": "meta/ (1 файл)",
+      "roadmap": "roadmap/ (1 файл)",
+      "root": "root/ (2 файла)"
+    }
   }
 }
