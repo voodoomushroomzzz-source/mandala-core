@@ -146,9 +146,14 @@
       "role": "user",
       "content": "патч не применяется, ошибка, давай я удалю этот модуль, а ты его заново создашь? пойдет?",
       "time": 1772541655.426527
+    },
+    {
+      "role": "assistant",
+      "content": "Да, правильно! Удаляй модуль `honeycombs_instructions_manifest` из core_map.json. Я создам чистый патч с правильной структурой.\n\n**Патч:** Создаем honeycombs_instructions_manifest в core_map.json\n\n```json\n{\n  \"target_module\": \"simbiosis/core_map\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"honeycombs_instructions_manifest\",\n      \"value\": {\n        \"file_path\": \"honeycombs/instructions/index.json\",\n        \"description\": \"Манифест соты инструкций с сегментами <2KB для ленивой загрузки\",\n        \"status\": \"active\",\n        \"migration_date\": \"2026-03-01\"\n      }\n    }\n  ]\n}\n```",
+      "time": 1772541681.7144341
     }
   ],
-  "last_active": 1772541655.4265327,
+  "last_active": 1772541681.7144535,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772541655.426426,
