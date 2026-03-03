@@ -93,5 +93,28 @@
       "search_index": "search_index.json",
       "registry": "registry.json"
     }
+  },
+  "/modules/engineer_chat": {
+    "file": "honeycombs/engineer_chat/index.json",
+    "description": "Сота инженерного чата. Архитектура, компоненты, история разработки, текущий статус Мандалы. Сегменты <1KB.",
+    "status": "active",
+    "size_kb": "51.5KB",
+    "migration_status": "completed",
+    "honeycomb_path": "honeycombs/engineer_chat/"
+  },
+  "/honeycombs/engineer_chat": {
+    "manifest": "honeycombs/engineer_chat/index.json",
+    "description": "Архитектура, компоненты, история разработки, текущий статус Мандалы. 16 файлов в 6 сегментах.",
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "51.5KB в 16 файлах",
+    "segments": {
+      "architecture": "architecture/ (4 файла)",
+      "development": "development/ (3 файла)",
+      "status": "status/ (3 файла)",
+      "integrations": "integrations/ (3 файла)",
+      "meta": "meta/ (2 файла)",
+      "templates": "templates/ (1 файл)"
+    }
   }
 }
