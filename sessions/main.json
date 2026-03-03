@@ -206,11 +206,16 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772553982.6834729
+    },
+    {
+      "role": "user",
+      "content": "https://github.com/voodoomushroomzzz-source/mandala-core/tree/main/honeycombs/seeds/active\nhttps://github.com/voodoomushroomzzz-source/mandala-core/tree/main/honeycombs/seeds/meta\nа что это за пакпки и на сколько это вяжется с твоим переносом?\n--\nПатч 59: Исправить манифест: - выдает ошибку Файл не найден и content не предоставлен\nПатч 60: Обновить navigation в манифесте: - это не применял",
+      "time": 1772554056.8948638
     }
   ],
-  "last_active": 1772553982.6834962,
+  "last_active": 1772554056.8948705,
   "created_at": 1772231887.431914,
   "modules_injected": true,
-  "injection_timestamp": 1772553855.547292,
-  "msg_count": 128
+  "injection_timestamp": 1772554056.894785,
+  "msg_count": 129
 }
