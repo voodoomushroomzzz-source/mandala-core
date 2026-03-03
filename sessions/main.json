@@ -126,9 +126,14 @@
       "role": "user",
       "content": "готово, что дальше?",
       "time": 1772541549.9604056
+    },
+    {
+      "role": "assistant",
+      "content": "**Патч 6/5:** Создаем инструкцию folder_management.json (INSTR-005)\n\n```json\n{\n  \"file_path\": \"honeycombs/instructions/core/folder_management.json\",\n  \"content\": \"{\\\"identity\\\":{\\\"module_id\\\":\\\"INSTR-005\\\",\\\"name\\\":\\\"📁 Создание папок и модулей v1.0\\\",\\\"version\\\":\\\"v1.0.0\\\",\\\"created\\\":\\\"2026-03-01\\\",\\\"layer\\\":3,\\\"type\\\":\\\"core_instruction\\\"},\\\"meta\\\":{\\\"description\\\":\\\"Как создавать папки и модули через патчи\\\",\\\"status\\\":\\\"active\\\",\\\"priority\\\":\\\"medium\\\",\\\"tags\\\":[\\\"folder\\\",\\\"creation\\\",\\\"github\\\"],\\\"resonance\\\":\\\"100%\\\"},\\\"content\\\":{\\\"key_insight\\\":{\\\"title\\\":\\\"GitHub не создаёт пустые папки\\\",\\\"explanation\\\":\\\"Папка появляется ТОЛЬКО когда в ней есть файл\\\"},\\\"creating_folder\\\":{\\\"method\\\":\\\"Создать файл 'папка/файл.json' → папка создастся сама\\\",\\\"example\\\":{\\\"file_path\\\":\\\"новая-папка/модуль.json\\\",\\\"content\\\":\\\"минифицированный JSON\\\"}},\\\"patch_types\\\":{\\\"full_replacement\\\":{\\\"use\\\":\\\"Создание нового файла\\\",\\\"fields\\\":[\\\"file_path\\\",\\\"content\\\",\\\"description\\\"]},\\\"json_patch\\\":{\\\"use\\\":\\\"Точечные изменения в .json\\\",\\\"fields\\\":[\\\"target_module\\\",\\\"changes\\\"]},\\\"text_patch\\\":{\\\"use\\\":\\\"Замены строк в .py/.html/.md\\\",\\\"fields\\\":[\\\"file_path\\\",\\\"replacements\\\"]},\\\"multi_patch\\\":{\\\"use\\\":\\\"Изменения в нескольких файлах\\\",\\\"format\\\":{\\\"patches\\\":[]}}}},\\\"checklist\\\":[\\\"[ ] content минифицирован?\\\",\\\"[ ] Размер content <20KB?\\\",\\\"[ ] Прочитал core_map перед изменением?\\\"]}}\",\n  \"description\": \"Создание инструкции INSTR-005 в honeycombs/instructions/core/\"\n}\n```",
+      "time": 1772541564.9293036
     }
   ],
-  "last_active": 1772541549.9604106,
+  "last_active": 1772541564.9293187,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772541549.9602885,
