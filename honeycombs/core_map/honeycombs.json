@@ -86,13 +86,28 @@
   "/migration_plan/pending": [
     "roadmaps",
     "philosophy",
-    "engineer_chat",
     "telegram_bot",
     "tasks"
   ],
   "/migration_plan/completed": [
     "instructions",
     "core_map",
-    "seeds"
-  ]
+    "seeds",
+    "engineer_chat"
+  ],
+  "/honeycombs/engineer_chat": {
+    "manifest": "honeycombs/engineer_chat/index.json",
+    "description": "Сота инженерного чата. Архитектура, компоненты, история разработки, текущий статус Мандалы.",
+    "segments": {
+      "architecture": "architecture/ (4 файла)",
+      "development": "development/ (3 файла)",
+      "status": "status/ (3 файла)",
+      "integrations": "integrations/ (3 файла)",
+      "meta": "meta/ (2 файла)",
+      "templates": "templates/ (1 файл)"
+    },
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "51.5KB в 16 файлах"
+  }
 }
