@@ -196,11 +196,16 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772545998.9292402
+    },
+    {
+      "role": "user",
+      "content": "Патч 12: Создаем компоненты системы\n--\nошибка: не удается распарсить патч, остальные применил",
+      "time": 1772546008.4554713
     }
   ],
-  "last_active": 1772545998.929264,
+  "last_active": 1772546008.4554799,
   "created_at": 1772231887.431914,
   "modules_injected": true,
-  "injection_timestamp": 1772545487.402577,
-  "msg_count": 104
+  "injection_timestamp": 1772546008.4553635,
+  "msg_count": 105
 }
