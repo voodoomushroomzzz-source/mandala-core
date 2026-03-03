@@ -1008,9 +1008,106 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 2px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--green); }
+
+        /* ===== ЭКРАН ПАРОЛЯ ===== */
+        #passwordScreen {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            gap: 0;
+        }
+        #passwordScreen.hidden { display: none !important; }
+        .pw-box {
+            background: var(--surface);
+            border: 1px solid var(--line-2);
+            border-radius: 12px;
+            padding: 40px 44px 36px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 24px;
+            width: 340px;
+            box-shadow: 0 0 60px rgba(16,185,129,0.06), 0 0 120px rgba(124,58,237,0.04);
+        }
+        .pw-logo { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .pw-title {
+            font-family: var(--mono); font-size: 11px;
+            letter-spacing: 3px; text-transform: uppercase;
+            color: #ffffff;
+        }
+        .pw-sub {
+            font-family: var(--mono); font-size: 8px;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--green-neon); opacity: 0.7;
+        }
+        .pw-label {
+            font-family: var(--mono); font-size: 9px;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-2); align-self: flex-start;
+        }
+        .pw-input-wrap { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+        .pw-input {
+            width: 100%; padding: 11px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--line-2);
+            border-radius: var(--radius);
+            color: var(--text); font-family: var(--mono); font-size: 14px;
+            letter-spacing: 3px;
+            outline: none; transition: border-color 0.2s;
+        }
+        .pw-input:focus { border-color: var(--green); }
+        .pw-input.error { border-color: #f43f5e; animation: pw-shake 0.3s ease; }
+        @keyframes pw-shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        .pw-error {
+            font-family: var(--mono); font-size: 9px;
+            letter-spacing: 1px; color: #f43f5e;
+            min-height: 14px; align-self: flex-start;
+        }
+        .pw-btn {
+            width: 100%; padding: 11px;
+            background: transparent;
+            border: 1px solid var(--green);
+            border-radius: var(--radius);
+            color: var(--green-bright);
+            font-family: var(--mono); font-size: 10px;
+            letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .pw-btn:hover { background: var(--green); color: var(--bg); box-shadow: 0 4px 20px rgba(16,185,129,0.3); }
+        .pw-divider { width: 100%; height: 1px; background: var(--line); }
     </style>
 </head>
 <body>
+
+    <!-- ===== ЭКРАН ПАРОЛЯ ===== -->
+    <div id="passwordScreen">
+        <div class="pw-box">
+            <div class="pw-logo">
+                <svg viewBox="0 0 34 34" fill="none" width="40" height="40">
+                    <circle cx="17" cy="17" r="16" stroke="#10b981" stroke-width="0.8" opacity="0.4"/>
+                    <circle cx="17" cy="9"  r="8"  stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="17" cy="25" r="8"  stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="10.07" cy="13" r="8" stroke="#7c3aed" stroke-width="0.8" opacity="0.5"/>
+                    <circle cx="23.93" cy="13" r="8" stroke="#7c3aed" stroke-width="0.8" opacity="0.5"/>
+                    <circle cx="10.07" cy="21" r="8" stroke="#3730a3" stroke-width="0.8" opacity="0.5"/>
+                    <circle cx="23.93" cy="21" r="8" stroke="#3730a3" stroke-width="0.8" opacity="0.5"/>
+                </svg>
+                <div class="pw-title">Mandala Engineer</div>
+                <div class="pw-sub">MYCEL · доступ закрыт</div>
+            </div>
+            <div class="pw-divider"></div>
+            <div class="pw-input-wrap">
+                <div class="pw-label">пароль</div>
+                <input id="pwInput" class="pw-input" type="password" placeholder="••••••••••••" autocomplete="off" />
+                <div class="pw-error" id="pwError"></div>
+            </div>
+            <button class="pw-btn" onclick="checkPassword()">войти →</button>
+        </div>
+    </div>
+
     <div class="glow-pool gp-1"></div>
     <div class="glow-pool gp-2"></div>
 
@@ -1740,20 +1837,9 @@
         function handleFileSelect(e) {
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
-            if (inputEl.value.trim()) {
-                pendingFiles = files;
-                updateFilePreview();
-                inputEl.focus();
-            } else {
-                pendingFiles = files;
-                updateFilePreview();
-                setTimeout(() => {
-                    if (ws && ws.readyState === WebSocket.OPEN) {
-                        sendFiles(files, '');
-                        clearFiles();
-                    }
-                }, 300);
-            }
+            pendingFiles = files;
+            updateFilePreview();
+            inputEl.focus();
         }
 
         function updateFilePreview() {
@@ -2220,7 +2306,44 @@
             animateFlowerGradient();
         }
 
-        init();
+
+        // ===== ПАРОЛЬ =====
+        const PW_HASH = '81f4b4b7a5f9f3b2e2b3c1c6c5e2d7a1e8b9c3d2f4a6e1b7c2d8f3a9e4b5c6d7'; // SHA не используем, просто сравниваем
+        const CORRECT_PW = '26105566244';
+        const PW_KEY = 'mandala_auth';
+
+        function checkPassword() {
+            const val = document.getElementById('pwInput').value;
+            const errEl = document.getElementById('pwError');
+            const input = document.getElementById('pwInput');
+            if (val === CORRECT_PW) {
+                sessionStorage.setItem(PW_KEY, '1');
+                document.getElementById('passwordScreen').classList.add('hidden');
+                errEl.textContent = '';
+                init();
+            } else {
+                errEl.textContent = '◈ неверный пароль';
+                input.classList.add('error');
+                input.value = '';
+                setTimeout(() => input.classList.remove('error'), 400);
+            }
+        }
+
+        // Enter в поле пароля
+        document.getElementById('pwInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // Проверяем сессию при загрузке
+        if (sessionStorage.getItem(PW_KEY) === '1') {
+            document.getElementById('passwordScreen').classList.add('hidden');
+            // init() будет вызван ниже
+        }
+
+        // Запускаем только если уже аутентифицированы
+        if (sessionStorage.getItem(PW_KEY) === '1') {
+            init();
+        }
     </script>
 </body>
 </html>
