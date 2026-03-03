@@ -1365,6 +1365,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                         # Сначала ищем в кэше ядра — экономим запрос и не дублируем контекст
                                         rkey = "simbiosis/" + rpath.split("/")[-1].replace(".json", "")
                                         cached_mod = kernel.modules.get(rkey) or kernel.modules.get(rpath.replace(".json", ""))
+                                        await manager.send_to(websocket, {"type": "tool_use", "model": "deepseek", "tool": "read_file", "path": rpath, "cached": cached_mod is not None})
                                         if cached_mod is not None:
                                             tool_result = json.dumps(cached_mod, ensure_ascii=False)
                                             logger.info(f"📦 read_file кэш: {rpath}")
