@@ -963,6 +963,30 @@ def parse_xml_tool_calls(text: str):
     """Парсит все форматы tool calls от DeepSeek: XML, DSML, JSON."""
     calls = []
 
+    # ── Формат 0: <functioninvoke name="fn">...<parameter name="x">val</parameter>
+    # DeepSeek иногда генерирует этот вариант (с атрибутами типа string="true")
+    fi_pat = _re.compile(
+        r'<functioninvoke\s+name=["\']?(\w+)["\']?[^>]*>(.*?)(?:</functioninvoke>|$)',
+        _re.DOTALL | _re.IGNORECASE
+    )
+    fi_param = _re.compile(
+        r'<parameter\s+name=["\']?(\w+)["\']?[^>]*>\s*(.*?)\s*</parameter>',
+        _re.DOTALL
+    )
+    for m in fi_pat.finditer(text):
+        fn_name = m.group(1)
+        inner = m.group(2)
+        args = {}
+        for pm in fi_param.finditer(inner):
+            args[pm.group(1)] = pm.group(2).strip()
+        if "file_path" in args and "path" not in args:
+            args["path"] = args.pop("file_path")
+        if fn_name in KNOWN_TOOLS:
+            calls.append({"name": fn_name, "args": args})
+
+    if calls:
+        return calls
+
     # ── Формат 1: стандартный XML <invoke name="fn">...</invoke>
     xml_pat = _re.compile(r'<invoke\s+name=["\']?(\w+)["\']?>(.*?)</invoke>', _re.DOTALL | _re.IGNORECASE)
     for m in xml_pat.finditer(text):
@@ -1030,6 +1054,9 @@ def strip_xml_tool_calls(text: str) -> str:
     text = _re.sub(r'<function_calls>.*?</function_calls>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<function_call>.*?</function_call>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<invoke[^>]*>.*?</invoke>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    text = _re.sub(r'<functioninvoke[^>]*>.*?</functioninvoke>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    # Незакрытый <functioninvoke ...> до конца строки/блока
+    text = _re.sub(r'<functioninvoke[^>]*>.*', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     # DSML формат DeepSeek V3 (<｜DSML｜function_calls>...</｜DSML｜function_calls>)
     text = _re.sub(r'<[|｜]\s*DSML\s*[|｜]function_calls>.*?</[|｜]\s*DSML\s*[|｜]function_calls>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<[|｜]\s*DSML\s*[|｜]\w+[^>]*>.*?</[|｜]\s*DSML\s*[|｜]\w+>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
