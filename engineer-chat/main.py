@@ -685,7 +685,7 @@ class KernelMemory:
 Это главная рабочая система. Изучай и работай в первую очередь с ней.
 
 Соты ядра:
-  honeycombs/core_map/      — карта системы (сегменты: kernel, modules, repository, honeycombs)
+  honeycombs/core_map/      — карта системы
   honeycombs/engineer_chat/ — конфигурация инженерного чата
   honeycombs/instructions/  — инструкции, правила, форматы патчей
   honeycombs/philosophy/    — философия и принципы Мандалы
@@ -702,9 +702,9 @@ Legacy (simbiosis/) сохранена, используй если нужног
 
 ━━━ ПРАВИЛА ИНСТРУМЕНТОВ ━━━
 — Читай файлы через read_file МОЛЧА и СРАЗУ — без объявлений "сейчас прочитаю"
-— НЕ жди подтверждения от пользователя перед чтением
-— Читай столько файлов подряд сколько нужно — без пауз и промежуточных сообщений
-— Перед изменением — ВСЕГДА сначала read_file актуальной версии файла
+— НЕ жди подтверждения пользователя перед чтением
+— Читай столько файлов подряд сколько нужно — без пауз
+— Перед изменением — ВСЕГДА сначала read_file актуальной версии
 — web_search — для актуальных внешних данных
 
 Используй ТОЛЬКО встроенный function calling.
@@ -714,19 +714,19 @@ Legacy (simbiosis/) сохранена, используй если нужног
 
 ━━━ ФОРМАТЫ ПАТЧЕЙ ━━━
 JSON-файлы (.json в simbiosis/ или honeycombs/):
-  {{\"target_module\":\"honeycombs/seeds/meta\",\"changes\":[{{\"op\":\"update\",\"path\":\"field\",\"value\":\"...\"}}]}}
+  {{"target_module":"honeycombs/seeds/meta","changes":[{{"op":"update","path":"field","value":"..."}}]}}
   target_module — путь БЕЗ .json
 
 Text-файлы (.py, .html, .md):
-  {{\"file_path\":\"engineer-chat/main.py\",\"replacements\":[{{\"old\":\"точная строка\",\"new\":\"новая строка\"}}]}}
-  file_path — С расширением, old должна быть уникальной в файле
+  {{"file_path":"engineer-chat/main.py","replacements":[{{"old":"точная строка","new":"новая строка"}}]}}
+  file_path — С расширением, old должна быть уникальной
 
 ВСЕГДА оборачивай патч в ```json ... ```
 Перед патчем — read_file актуальной версии.
 
 На русском."""
 
-                elif role == "claude":
+        elif role == "claude":
             return f"""Ты — Claude, сторонний наблюдатель и критический рецензент Мандалы Симбиоза.
 
 КОНТЕКСТ ЯДРА:
@@ -1306,7 +1306,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     logger.error(f"JSON fn parse error: {je}")
                         # Обработка tool_calls
                         tool_iterations = 0
-                        while msg_data.get("tool_calls") and tool_iterations < 3:
+                        while msg_data.get("tool_calls") and tool_iterations < 20:
                             tool_iterations += 1
                             ds_messages.append({
                                 "role": "assistant",
@@ -1346,27 +1346,22 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     # Добавляем как обычный user message — не role:tool
                                     # Это единственный надёжный способ для deepseek-v3.2
                                     ds_messages.append({
-                                        "role": "assistant",
-                                        "content": f"[Вызываю {fn}]"
-                                    })
-                                    ds_messages.append({
                                         "role": "user",
-                                        "content": f"[Результат {fn}]:\n{tool_result}\n\nПродолжай анализ."
+                                        "content": f"[Результат {fn}]:\n{tool_result}"
                                     })
                                 except Exception as tc_err:
                                     logger.error(f"Tool call processing error: {tc_err} | tc={tc}")
                                     ds_messages.append({"role": "user", "content": f"[Ошибка инструмента]: {tc_err}"})
-                            # Второй запрос БЕЗ tools — deepseek-v3.2 игнорирует tool_choice:none
+                            # Следующий запрос С tools — модель сама решает
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "temperature": 0.8, "max_tokens": 16384},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.8, "max_tokens": 16384},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
-                                # Очищаем tool_calls чтобы цикл завершился если модель ответила текстом
-                                if msg_data.get("content") and not msg_data.get("tool_calls"):
+                                if not msg_data.get("tool_calls"):
                                     break
                             else:
                                 logger.error(f"DeepSeek tool loop error: {resp2.status_code}")
