@@ -398,6 +398,131 @@
         }
       },
       "description": "Создание манифеста соты инструкций"
+    },
+    {
+      "file_path": "honeycombs/instructions/index.json",
+      "content": {
+        "identity": {
+          "module_id": "HONEYCOMB-INSTRUCTIONS-001",
+          "name": "Сота инструкций",
+          "version": "1.0.0",
+          "created": "2026-03-01",
+          "layer": 3,
+          "type": "honeycomb_manifest"
+        },
+        "meta": {
+          "description": "Манифест соты инструкций с сегментами <2KB. Позволяет ленивую загрузку по запросу.",
+          "status": "active",
+          "priority": "critical",
+          "tags": [
+            "instructions",
+            "honeycomb",
+            "manifest",
+            "segmented"
+          ],
+          "resonance": "100%"
+        },
+        "segments": {
+          "critical": {
+            "description": "Критически важные инструкции, загружаются первыми",
+            "instructions": {
+              "patch_mastery": {
+                "file": "critical/patch_mastery.json",
+                "source_id": "INSTR-004",
+                "size_kb": 0.9,
+                "tags": [
+                  "patch",
+                  "critical",
+                  "mandatory",
+                  "mastery"
+                ],
+                "load_priority": "highest",
+                "description": "ОБЯЗАТЕЛЬНОЕ чтение перед КАЖДЫМ патчем. Устраняет галлюцинации и ошибки."
+              }
+            }
+          },
+          "core": {
+            "description": "Основные инструкции системы",
+            "instructions": {
+              "patch_system": {
+                "file": "core/patch_system.json",
+                "source_id": "INSTR-001",
+                "size_kb": 1.2,
+                "tags": [
+                  "patch",
+                  "system",
+                  "format",
+                  "json",
+                  "text"
+                ],
+                "load_priority": "high",
+                "description": "Полная система патчей v2.0 для всех типов файлов"
+              },
+              "module_creation": {
+                "file": "core/module_creation.json",
+                "source_id": "INSTR-002",
+                "size_kb": 1.5,
+                "tags": [
+                  "module",
+                  "creation",
+                  "structure",
+                  "template"
+                ],
+                "load_priority": "high",
+                "description": "Создание новых модулей в simbiosis/"
+              },
+              "folder_management": {
+                "file": "core/folder_management.json",
+                "source_id": "INSTR-005",
+                "size_kb": 1,
+                "tags": [
+                  "folder",
+                  "creation",
+                  "structure",
+                  "github"
+                ],
+                "load_priority": "medium",
+                "description": "Создание папок и новых модулей через патчи"
+              },
+              "patch_optimization": {
+                "file": "core/patch_optimization.json",
+                "source_id": "INSTR-003",
+                "size_kb": 0.8,
+                "tags": [
+                  "patch",
+                  "optimization",
+                  "large",
+                  "minification"
+                ],
+                "load_priority": "medium",
+                "description": "Оптимизация больших патчей без обрезки"
+              }
+            }
+          }
+        },
+        "usage": {
+          "for_sr": "Используй этот манифест для ленивой загрузки инструкций. Загружай только нужные сегменты.",
+          "workflow": [
+            "1. При старте: загрузить patch_mastery.json (critical)",
+            "2. При работе с патчами: загрузить patch_system.json",
+            "3. При создании модуля: загрузить module_creation.json",
+            "4. По необходимости: загрузить другие сегменты"
+          ],
+          "total_size": "4.4KB → 5 файлов <2KB каждый"
+        },
+        "registry": {
+          "total_files": 5,
+          "total_size_kb": 5.4,
+          "max_segment_kb": 1.5,
+          "segments": [
+            "critical",
+            "core"
+          ],
+          "migration_status": "pending",
+          "source_file": "simbiosis/instructions.json"
+        }
+      },
+      "description": "Создание манифеста соты инструкций"
     }
   ]
 }
