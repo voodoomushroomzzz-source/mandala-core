@@ -116,5 +116,26 @@
       "meta": "meta/ (2 файла)",
       "templates": "templates/ (1 файл)"
     }
+  },
+  "/modules/roadmaps": {
+    "file": "honeycombs/roadmaps/index.json",
+    "description": "Сота роадмапов. Проработанные дорожные карты с шагами и вехами.",
+    "status": "active",
+    "size_kb": "12KB",
+    "migration_status": "completed",
+    "honeycomb_path": "honeycombs/roadmaps/"
+  },
+  "/honeycombs/roadmaps": {
+    "manifest": "honeycombs/roadmaps/index.json",
+    "description": "Проработанные дорожные карты с шагами и вехами. 8 файлов в 4 сегментах.",
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "12KB в 8 файлах",
+    "segments": {
+      "active": "active/ (5 файлов)",
+      "completed": "completed/ (пусто)",
+      "meta": "meta/ (2 файла)",
+      "templates": "templates/ (1 файл)"
+    }
   }
 }
