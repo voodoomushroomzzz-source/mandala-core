@@ -137,5 +137,25 @@
       "meta": "meta/ (2 файла)",
       "templates": "templates/ (1 файл)"
     }
+  },
+  "/modules/philosophy": {
+    "file": "honeycombs/philosophy/index.json",
+    "description": "Сота философии Мандалы. Философская основа Мандалы Симбиоза. Сегменты <1KB для ленивой загрузки.",
+    "status": "active",
+    "size_kb": "5.4KB",
+    "migration_status": "completed",
+    "honeycomb_path": "honeycombs/philosophy/"
+  },
+  "/honeycombs/philosophy": {
+    "manifest": "honeycombs/philosophy/index.json",
+    "description": "Философская основа Мандалы Симбиоза. 9 файлов в 3 сегментах.",
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "5.4KB в 9 файлах",
+    "segments": {
+      "blocks": "blocks/ (5 файлов)",
+      "testimonies": "testimonies/ (2 файла)",
+      "meta": "meta/ (2 файла)"
+    }
   }
 }
