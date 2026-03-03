@@ -427,12 +427,11 @@ async def get_session(session_id: str) -> dict:
 class KernelMemory:
     def __init__(self):
         self.modules: Dict[str, Any] = {}
-        # Новое ядро simbiosis/ — boot всегда в памяти;
-        # honeycombs/instructions и honeycombs/core_map — раз в 5 сообщений
+        # Новое ядро simbiosis/ — boot и core_map всегда в памяти,
+        # остальные читаются СР через read_file по необходимости
         self.module_list = [
             "simbiosis/boot",
-            "honeycombs/instructions/index",
-            "honeycombs/core_map/index",
+            "simbiosis/core_map",
         ]
         # Остальные модули СР читает сам через read_file
         self.on_demand_modules = []
@@ -523,7 +522,21 @@ class KernelMemory:
                         url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{module}.json"
                         resp = await client.get(url, headers=api_headers, timeout=15.0)
                         if resp.status_code == 200:
-                            self.modules[module] = resp.json()
+                            # Accept: application/vnd.github.v3.raw должен вернуть сырой JSON,
+                            # но иногда GitHub всё равно отдаёт обёртку с base64-полем content.
+                            # Поддерживаем оба случая.
+                            try:
+                                parsed = resp.json()
+                                if isinstance(parsed, dict) and "content" in parsed and "encoding" in parsed:
+                                    # Обёртка с base64 — декодируем вручную
+                                    import base64 as _b64
+                                    raw_bytes = _b64.b64decode(parsed["content"])
+                                    self.modules[module] = json.loads(raw_bytes.decode("utf-8"))
+                                else:
+                                    self.modules[module] = parsed
+                            except Exception as parse_err:
+                                # Последний шанс: raw текст
+                                self.modules[module] = json.loads(resp.text)
                             self.file_shas[module] = new_shas[module]
                             short = module.split("/")[-1]
                             logger.info(f"🔄 Обновлён: {short}")
@@ -561,7 +574,16 @@ class KernelMemory:
                         url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{module_name}.json"
                         resp = await client.get(url, headers=headers, timeout=15.0)
                         if resp.status_code == 200:
-                            self.modules[module_name] = resp.json()
+                            try:
+                                parsed = resp.json()
+                                if isinstance(parsed, dict) and "content" in parsed and "encoding" in parsed:
+                                    import base64 as _b64
+                                    raw_bytes = _b64.b64decode(parsed["content"])
+                                    self.modules[module_name] = json.loads(raw_bytes.decode("utf-8"))
+                                else:
+                                    self.modules[module_name] = parsed
+                            except Exception:
+                                self.modules[module_name] = json.loads(resp.text)
                             logger.info(f"✅ {module_name.split('/')[-1]}")
                         else:
                             logger.error(f"❌ {module_name}: {resp.status_code}")
@@ -1148,24 +1170,23 @@ async def handle_ask(message: dict, websocket: WebSocket):
     boot_mod = kernel.modules.get("simbiosis/boot", {})
     boot_json = json.dumps(boot_mod, ensure_ascii=False, indent=2)[:3000]
 
-    # honeycombs инъекции — раз в 5 сообщений и при изменениях
-    do_honeycombs = not session.get("modules_injected") or session["msg_count"] % 5 == 1
-    honeycombs_inject = ""
-    if do_honeycombs:
-        instructions_mod = kernel.modules.get("honeycombs/instructions/index", {})
-        core_map_hc_mod = kernel.modules.get("honeycombs/core_map/index", {})
-        instructions_json = json.dumps(instructions_mod, ensure_ascii=False, indent=2)[:2000] if instructions_mod else "(не загружен)"
-        core_map_hc_json = json.dumps(core_map_hc_mod, ensure_ascii=False, indent=2)[:2000] if core_map_hc_mod else "(не загружен)"
-        honeycombs_inject = f"""
-
-[HONEYCOMBS/INSTRUCTIONS — index.json]
-{instructions_json}
-
-[HONEYCOMBS/CORE_MAP — index.json]
-{core_map_hc_json}"""
+    core_map_inject = ""
+    if not session.get("modules_injected") or session["msg_count"] % 10 == 1:
+        core_map_mod = kernel.modules.get("simbiosis/core_map", {})
+        # Берём только список модулей и файлов репозитория — не весь JSON
+        km = core_map_mod.get("kernel_modules", {})
+        if isinstance(km, dict): km = km.get("modules", km)
+        repo = core_map_mod.get("repository", {})
+        if isinstance(repo, dict): repo = repo.get("files", repo)
+        nav = core_map_mod.get("navigation_hint", "")
+        core_map_inject = f"""\n\n[КАРТА ЯДРА — обновлена]
+Модули ядра (simbiosis/): {json.dumps(list(km.keys()) if isinstance(km, dict) else km, ensure_ascii=False)}
+Файлы репозитория: {json.dumps(list(repo.keys())[:15] if isinstance(repo, dict) else repo, ensure_ascii=False)}
+{nav}
+Используй read_file(path) для чтения любого из этих файлов без запроса к пользователю."""
 
     injection_content = f"""[КОНТЕКСТ СЕССИИ — boot.json]
-{boot_json}{honeycombs_inject}
+{boot_json}{core_map_inject}
 
 Ты можешь читать ЛЮБОЙ файл из репозитория самостоятельно через read_file(path).
 НЕ проси пользователя загружать файлы — используй инструмент read_file напрямую."""
@@ -1185,7 +1206,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
     session["modules_injected"] = True
     session["injection_timestamp"] = time.time()
     session_store.schedule_save(session_id, session)
-    logger.info(f"🧠 [{session_id[:12]}...] Инъекция: boot=да, honeycombs={'да' if honeycombs_inject else 'нет (кэш)'}")
+    logger.info(f"🧠 [{session_id[:12]}...] Инъекция: boot={'да'}, core_map={'да' if core_map_inject else 'нет (кэш)'}")
 
     # ── Формируем общую историю ПЕРЕД добавлением текущего сообщения ──
     # Берём только обычные user/assistant сообщения, без инъекций и tool-результатов
