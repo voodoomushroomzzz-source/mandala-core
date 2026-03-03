@@ -84,7 +84,6 @@
     "size": "~25KB в 18 файлах"
   },
   "/migration_plan/pending": [
-    "roadmaps",
     "philosophy",
     "telegram_bot",
     "tasks"
@@ -93,7 +92,8 @@
     "instructions",
     "core_map",
     "seeds",
-    "engineer_chat"
+    "engineer_chat",
+    "roadmaps"
   ],
   "/honeycombs/engineer_chat": {
     "manifest": "honeycombs/engineer_chat/index.json",
@@ -109,5 +109,18 @@
     "status": "active",
     "migration_date": "2026-03-01",
     "size": "51.5KB в 16 файлах"
+  },
+  "/honeycombs/roadmaps": {
+    "manifest": "honeycombs/roadmaps/index.json",
+    "description": "Сота роадмапов. Проработанные дорожные карты с шагами и вехами.",
+    "segments": {
+      "active": "active/ (5 файлов)",
+      "completed": "completed/ (пусто)",
+      "meta": "meta/ (2 файла)",
+      "templates": "templates/ (1 файл)"
+    },
+    "status": "active",
+    "migration_date": "2026-03-01",
+    "size": "12KB в 8 файлах"
   }
 }
