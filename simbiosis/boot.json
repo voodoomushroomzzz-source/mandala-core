@@ -106,5 +106,14 @@
   "roles": {
     "grok": "Исследователь-философ. Ищет неожиданные связи, предлагает маршруты развития, активно использует web_search. Погружён в ядро.",
     "claude": "Сторонний наблюдатель. Объективная оценка, поиск логических ошибок, альтернативные пути."
-  }
+  },
+  "honeycomb_navigation": [
+    {
+      "title": "🚀 НОВАЯ АРХИТЕКТУРА: Соты",
+      "description": "Система переведена на сегментированную архитектуру honeycombs/",
+      "primary_map": "honeycombs/core_map/index.json",
+      "workflow": "Загружай сегменты по необходимости. Все файлы <2KB.",
+      "critical_instructions": "honeycombs/instructions/critical/patch_mastery.json (ОБЯЗАТЕЛЬНО перед патчами)"
+    }
+  ]
 }
