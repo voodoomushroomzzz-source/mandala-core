@@ -431,8 +431,9 @@ class KernelMemory:
         # остальные читаются СР через read_file по необходимости
         self.module_list = [
             "simbiosis/boot",
+            "simbiosis/core_map",
         ]
-        # core_map и остальное СР читает сам через read_file
+        # Остальные модули СР читает сам через read_file
         self.on_demand_modules = []
 
         # 🔒 Блокировка — предотвращает race condition при параллельных запросах
@@ -1146,11 +1147,26 @@ async def handle_ask(message: dict, websocket: WebSocket):
     boot_mod = kernel.modules.get("simbiosis/boot", {})
     boot_json = json.dumps(boot_mod, ensure_ascii=False, indent=2)[:3000]
 
-    injection_content = f"""[КОНТЕКСТ СЕССИИ — boot.json]
-{boot_json}
+    core_map_inject = ""
+    if not session.get("modules_injected") or session["msg_count"] % 10 == 1:
+        core_map_mod = kernel.modules.get("simbiosis/core_map", {})
+        # Берём только список модулей и файлов репозитория — не весь JSON
+        km = core_map_mod.get("kernel_modules", {})
+        if isinstance(km, dict): km = km.get("modules", km)
+        repo = core_map_mod.get("repository", {})
+        if isinstance(repo, dict): repo = repo.get("files", repo)
+        nav = core_map_mod.get("navigation_hint", "")
+        core_map_inject = f"""\n\n[КАРТА ЯДРА — обновлена]
+Модули ядра (simbiosis/): {json.dumps(list(km.keys()) if isinstance(km, dict) else km, ensure_ascii=False)}
+Файлы репозитория: {json.dumps(list(repo.keys())[:15] if isinstance(repo, dict) else repo, ensure_ascii=False)}
+{nav}
+Используй read_file(path) для чтения любого из этих файлов без запроса к пользователю."""
 
-Ты можешь читать ЛЮБОЙ файл репозитория через read_file(path) — включая папки.
-Начни с read_file("honeycombs/") чтобы увидеть все соты."""
+    injection_content = f"""[КОНТЕКСТ СЕССИИ — boot.json]
+{boot_json}{core_map_inject}
+
+Ты можешь читать ЛЮБОЙ файл из репозитория самостоятельно через read_file(path).
+НЕ проси пользователя загружать файлы — используй инструмент read_file напрямую."""
 
     session["messages"].insert(0, {
         "role": "user",
@@ -1167,7 +1183,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
     session["modules_injected"] = True
     session["injection_timestamp"] = time.time()
     session_store.schedule_save(session_id, session)
-    logger.info(f"🧠 [{session_id[:12]}...] Инъекция: boot=да")
+    logger.info(f"🧠 [{session_id[:12]}...] Инъекция: boot={'да'}, core_map={'да' if core_map_inject else 'нет (кэш)'}")
 
     # ── Формируем общую историю ПЕРЕД добавлением текущего сообщения ──
     # Берём только обычные user/assistant сообщения, без инъекций и tool-результатов
