@@ -609,5 +609,21 @@
         "Быстрый доступ к отдельным блокам"
       ]
     }
+  ],
+  "seeds_migration_complete": [
+    {
+      "status": "completed",
+      "date": "2026-03-01",
+      "original_size": "1.2KB",
+      "new_structure": "honeycombs/seeds/",
+      "total_files": 4,
+      "max_file_size": "0.6KB",
+      "segments": [
+        "active/ (1 файл)",
+        "meta/ (2 файла)",
+        "index.json"
+      ],
+      "note": "seeds.json был <2KB, но сегментирован для масштабирования"
+    }
   ]
 }
