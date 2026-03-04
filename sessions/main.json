@@ -61,9 +61,14 @@
       "role": "assistant",
       "content": "Теперь создам файлы для роадмапов на основе анализа текущих задач:\n\n```json\n{\n  \"target_module\": \"honeycombs/tasks/tasks/by_roadmap/RM-004\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"\",\n      \"value\": {\n        \"roadmap_id\": \"RM-004\",\n        \"title\": \"Задачи роадмапа RM-004: Архитектурная адаптация\",\n        \"description\": \"Задачи для роадмапа Архитектурная адаптация и оптимизация\",\n        \"created_at\": \"2026-03-02T12:00:00Z\",\n        \"updated_at\": \"2026-03-02T12:00:00Z\",\n        \"tasks\": [\n          {\n            \"id\": \"TASK-004\",\n            \"title\": \"Реорганизация структуры сот\",\n            \"description\": \"Переход на сегментированную структуру сот для снижения контента файлов\",\n            \"status\": \"in_progress\",\n            \"priority\": \"critical\",\n            \"created_at\": \"2026-03-02T10:00:00Z\",\n            \"updated_at\": \"2026-03-02T12:30:00Z\",\n            \"owner\": \"Дима\",\n            \"tags\": [\"architecture\", \"honeycombs\", \"refactoring\"],\n            \"progress\": 40\n          },\n          {\n            \"id\": \"TASK-005\",\n            \"title\": \"Интеграция новой структуры с логикой работы\",\n            \"description\": \"Настройка работы с сотами в новой структуре\",\n            \"status\": \"pending\",\n            \"priority\": \"high\",\n            \"created_at\": \"2026-03-02T10:30:00Z\",\n            \"updated_at\": \"2026-03-02T10:30:00Z\",\n            \"owner\": \"DeepSeek\",\n            \"tags\": [\"integration\", \"workflow\", \"architecture\"],\n            \"progress\": 10\n          }\n        ],\n        \"stats\": {\n          \"total_tasks\": 2,\n          \"active\": 1,\n          \"pending\": 1,\n          \"completed\": 0,\n          \"archived\": 0\n        },\n        \"meta\": {\n          \"roadmap_title\": \"Архитектурная адаптация и оптимизация\",\n          \"roadmap_phase\": \"Адаптация\",\n          \"segmentation_type\": \"by_roadmap\"\n        }\n      }\n    }\n  ]\n}\n```[Патч: 1 файлов]",
       "time": 1772617014.3585951
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 1 файлов]",
+      "time": 1772617032.4957156
     }
   ],
-  "last_active": 1772617014.3586035,
+  "last_active": 1772617032.4957242,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772616967.7639163,
