@@ -1432,17 +1432,13 @@
             const blocks = [];
             const PH = 'CODEBLOCK_PLACEHOLDER_';
             // 1. Вырезаем все завершённые ```...``` блоки
-            let processed = rawText.replace(/```([\w]*)
-?
-([\s\S]*?)```/g, function(_, lang, code) {
+            let processed = rawText.replace(/```([\w]*)\r?\n([\s\S]*?)```/g, function(_, lang, code) {
                 var idx = blocks.length;
                 blocks.push({ lang: lang || 'code', code: code, open: false });
                 return PH + idx + '_END';
             });
             // 2. Незакрытый блок в конце (стриминг)
-            processed = processed.replace(/```([\w]*)
-?
-([\s\S]*)$/, function(_, lang, code) {
+            processed = processed.replace(/```([\w]*)\r?\n([\s\S]*)$/, function(_, lang, code) {
                 var idx = blocks.length;
                 blocks.push({ lang: lang || 'code', code: code, open: true });
                 return PH + idx + '_END';
@@ -1450,8 +1446,7 @@
             // 3. Markdown для текстовой части
             var html;
             try { html = marked.parse(processed, { breaks: true, gfm: true }); }
-            catch(e) { html = escapeHtml(processed).replace(/
-/g, '<br>'); }
+            catch(e) { html = escapeHtml(processed).replace(/\n/g, '<br>'); }
             // 4. Вставляем блоки обратно
             html = html.replace(new RegExp(PH + '(\\d+)_END', 'g'), function(_, i) {
                 var b = blocks[parseInt(i)];
