@@ -62,52 +62,50 @@
           "patches": []
         }
       },
-      "delete_patches": [
-        {
-          "format": {
-            "single_file": {
-              "file_path": "honeycombs/path/to/file.json",
-              "delete_file": true,
-              "description": "Удалить один файл"
-            },
-            "batch_delete": {
-              "patches": [
-                {
-                  "file_path": "honeycombs/tasks/tasks/old1.json",
-                  "delete_file": true
-                }
-              ],
-              "description": "Удалить несколько файлов за раз"
-            },
-            "combo_operation": {
-              "patches": [
-                {
-                  "file_path": "honeycombs/tasks/tasks/old.json",
-                  "delete_file": true
-                },
-                {
-                  "target_module": "honeycombs/tasks/tasks/new",
-                  "content": "{\"tasks\":[]}"
-                }
-              ],
-              "description": "Удалить файл и сразу создать новый"
-            }
+      "delete_patches": {
+        "formats": {
+          "single_file": {
+            "file_path": "honeycombs/path/to/file.json",
+            "delete_file": true,
+            "description": "Удалить один файл"
           },
-          "rules": [
-            "delete_file: true требует только file_path или target_module",
-            "Поля changes и content не нужны для удаления",
-            "Папки нельзя удалять напрямую — удали все файлы внутри",
-            "После удаления файл убирается из кэша ядра автоматически",
-            "Откат — через историю коммитов GitHub"
-          ],
-          "examples": [
-            "Удалить один файл: {\"file_path\":\"honeycombs/tasks/tasks/old_file.json\",\"delete_file\":true}",
-            "Удалить через target_module: {\"target_module\":\"honeycombs/tasks/tasks/old_file\",\"delete_file\":true}",
-            "Удалить несколько: {\"patches\":[{\"file_path\":\"honeycombs/tasks/tasks/old1.json\",\"delete_file\":true},{\"file_path\":\"honeycombs/tasks/tasks/old2.json\",\"delete_file\":true}]}",
-            "Удалить и создать: {\"patches\":[{\"file_path\":\"honeycombs/tasks/tasks/old.json\",\"delete_file\":true},{\"target_module\":\"honeycombs/tasks/tasks/new\",\"content\":\"{\\\"tasks\\\":[]}\"}]}"
-          ]
-        }
-      ]
+          "batch_delete": {
+            "patches": [
+              {
+                "file_path": "honeycombs/tasks/tasks/old1.json",
+                "delete_file": true
+              }
+            ],
+            "description": "Удалить несколько файлов за раз"
+          },
+          "combo_operation": {
+            "patches": [
+              {
+                "file_path": "honeycombs/tasks/tasks/old.json",
+                "delete_file": true
+              },
+              {
+                "target_module": "honeycombs/tasks/tasks/new",
+                "content": "{\"tasks\":[]}"
+              }
+            ],
+            "description": "Удалить файл и сразу создать новый"
+          }
+        },
+        "rules": [
+          "delete_file: true требует только file_path или target_module",
+          "Поля changes и content не нужны для удаления",
+          "Папки нельзя удалять напрямую — удали все файлы внутри",
+          "После удаления файл убирается из кэша ядра автоматически",
+          "Откат — через историю коммитов GitHub"
+        ],
+        "examples": [
+          "Удалить один файл: {\"file_path\":\"honeycombs/tasks/tasks/old_file.json\",\"delete_file\":true}",
+          "Удалить через target_module: {\"target_module\":\"honeycombs/tasks/tasks/old_file\",\"delete_file\":true}",
+          "Удалить несколько: {\"patches\":[{\"file_path\":\"honeycombs/tasks/tasks/old1.json\",\"delete_file\":true},{\"file_path\":\"honeycombs/tasks/tasks/old2.json\",\"delete_file\":true}]}",
+          "Удалить и создать: {\"patches\":[{\"file_path\":\"honeycombs/tasks/tasks/old.json\",\"delete_file\":true},{\"target_module\":\"honeycombs/tasks/tasks/new\",\"content\":\"{\\\"tasks\\\":[]}\"}]}"
+        ]
+      }
     },
     "workflow": [
       "1. read_file('путь/к/файлу')",
@@ -117,10 +115,6 @@
       "5. Составь патч"
     ],
     "best_practices": [
-      "✅ ВСЕГДА читай файл перед патчем",
-      "✅ Минифицируй JSON в content",
-      "❌ НЕ угадывай структуру файла",
-      "❌ НЕ используй add для STRING полей",
       "✅ ВСЕГДА читай файл перед патчем",
       "✅ Минифицируй JSON в content",
       "❌ НЕ угадывай структуру файла",
