@@ -57,117 +57,140 @@
         /* ═══════════════════════════════════════════
            ЭКРАН ПАРОЛЯ
         ═══════════════════════════════════════════ */
+        /* ══ ЭКРАН ПАРОЛЯ ══ */
         #passwordScreen {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
+            position: fixed; inset: 0; z-index: 9999;
             background: #030d09;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            transition: opacity 0.8s ease;
         }
         #passwordScreen.hidden { display: none; }
 
-        .pw-flower-wrap {
-            position: relative;
-            width: 260px;
-            height: 260px;
-            margin-bottom: 32px;
+        .pw-scene {
+            position: relative; width: 300px; height: 300px;
+            margin-bottom: 36px;
         }
-        .pw-flower-wrap svg {
-            width: 100%;
-            height: 100%;
-            animation: pw-breathe 6s ease-in-out infinite alternate,
-                       pw-spin 40s linear infinite;
+        .pw-scene-inner {
+            width: 100%; height: 100%; position: relative;
         }
-        @keyframes pw-breathe {
-            from { opacity: 0.25; filter: drop-shadow(0 0 8px #10b981); }
-            to   { opacity: 0.7;  filter: drop-shadow(0 0 28px #7c3aed) drop-shadow(0 0 60px #10b981); }
+        /* Один слой — просто плоский цветок */
+        .pw-layer-b { display: none; }
+        .pw-layer-f {
+            position: absolute; inset: 0;
         }
-        @keyframes pw-spin {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
+        .pw-layer-f svg {
+            width: 100%; height: 100%;
+            animation: pw-pulse-f 5s ease-in-out infinite alternate;
         }
-
+        @keyframes pw-pulse-f {
+            from {
+                opacity: 0.45;
+                transform: scale(0.94);
+                filter: drop-shadow(0 0 6px #10b981) drop-shadow(0 0 14px #7c3aed);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1.06);
+                filter: drop-shadow(0 0 22px #10b981) drop-shadow(0 0 50px #7c3aed) drop-shadow(0 0 80px #10b981);
+            }
+        }
+        .pw-halo {
+            position: absolute; inset: -50px; border-radius: 50%; pointer-events: none;
+            background: radial-gradient(circle, rgba(16,185,129,0.09) 0%, rgba(124,58,237,0.04) 40%, transparent 68%);
+            animation: pw-pulse-f 5s ease-in-out infinite alternate;
+        }
         .pw-title {
-            font-family: var(--mono);
-            font-size: 11px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--text-2);
-            margin-bottom: 28px;
+            font-family: var(--mono); font-size: 11px; letter-spacing: 5px;
+            text-transform: uppercase; color: var(--text-2);
+            margin-bottom: 28px; text-align: center;
         }
-
-        .pw-box {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        .pw-hidden-input {
+            position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none;
         }
-        .pw-input {
-            background: var(--surface);
-            border: 1px solid var(--line-2);
-            border-radius: 8px;
-            color: var(--text);
-            font-family: var(--mono);
-            font-size: 15px;
-            padding: 10px 18px;
-            outline: none;
-            width: 200px;
-            letter-spacing: 4px;
-            text-align: center;
-            transition: border-color 0.2s, box-shadow 0.2s;
+        .pw-glyphs {
+            display: flex; gap: 9px; align-items: center; justify-content: center;
+            padding: 13px 22px;
+            border: 1px solid var(--line-2); border-radius: 10px;
+            background: rgba(3,13,9,0.85); cursor: text;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .pw-input:focus {
-            border-color: var(--green-2);
-            box-shadow: 0 0 0 3px rgba(16,185,129,0.15), 0 0 20px rgba(16,185,129,0.08);
+        .pw-glyphs.active {
+            border-color: rgba(16,185,129,0.45);
+            box-shadow: 0 0 0 2px rgba(16,185,129,0.1), 0 0 22px rgba(16,185,129,0.06);
         }
-        .pw-input.error {
-            border-color: #be123c;
-            box-shadow: 0 0 0 3px rgba(190,18,60,0.2);
-            animation: pw-shake 0.3s ease;
+        .pw-glyphs.error {
+            border-color: #be123c !important;
+            box-shadow: 0 0 0 2px rgba(190,18,60,0.25) !important;
+            animation: pw-shake 0.4s ease;
         }
         @keyframes pw-shake {
             0%,100% { transform: translateX(0); }
-            25%      { transform: translateX(-6px); }
-            75%      { transform: translateX(6px); }
+            20%     { transform: translateX(-9px); }
+            60%     { transform: translateX(9px); }
+            80%     { transform: translateX(-4px); }
         }
-        .pw-btn {
-            background: linear-gradient(135deg, var(--green), var(--violet));
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-family: var(--mono);
-            font-size: 14px;
-            padding: 10px 18px;
-            cursor: pointer;
-            transition: opacity 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 20px rgba(124,58,237,0.3);
+        .pw-slot {
+            width: 18px; height: 22px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; flex-shrink: 0;
         }
-        .pw-btn:hover {
-            opacity: 0.85;
-            box-shadow: 0 0 30px rgba(124,58,237,0.6);
+        .pw-slot svg { width: 100%; height: 100%; display: block; transition: opacity 0.15s; }
+        .pw-slot.empty svg  { opacity: 0.13; filter: none; }
+        .pw-slot.filled svg {
+            opacity: 1; animation: pw-slot-pop 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards;
         }
+        @keyframes pw-slot-pop {
+            from { filter: none; transform: scale(0.5); opacity: 0; }
+            to   { filter: drop-shadow(0 0 4px #10b981); transform: scale(1); opacity: 1; }
+        }
+        .pw-slot.cursor::after {
+            content: ''; position: absolute; bottom: 2px; left: 50%;
+            transform: translateX(-50%);
+            width: 1.5px; height: 11px;
+            background: var(--green-bright);
+            animation: pw-caret 1s steps(1) infinite;
+        }
+        @keyframes pw-caret { 0%,49%{opacity:1} 50%,100%{opacity:0} }
         .pw-error {
-            margin-top: 14px;
-            font-family: var(--mono);
-            font-size: 11px;
-            color: #fb7185;
-            letter-spacing: 2px;
-            height: 16px;
-            opacity: 0;
-            transition: opacity 0.2s;
+            margin-top: 16px; font-family: var(--mono); font-size: 10px;
+            color: #fb7185; letter-spacing: 3px;
+            text-align: center; height: 14px;
+            opacity: 0; transition: opacity 0.25s;
         }
         .pw-error.show { opacity: 1; }
 
-        .pw-glow-ring {
-            position: absolute;
-            inset: -20px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%);
-            animation: pw-breathe 6s ease-in-out infinite alternate;
+        /* ══ ТУЛТИП КАРТОЧКИ СОТЫ ══ */
+        .hc-tooltip {
+            position: absolute; z-index: 200;
+            bottom: calc(100% + 8px); left: 50%;
+            transform: translateX(-50%);
+            min-width: 180px; max-width: 260px;
+            background: var(--surface-2);
+            border: 1px solid var(--line-2);
+            border-radius: var(--radius);
+            padding: 10px 12px;
             pointer-events: none;
+            opacity: 0; transition: opacity 0.18s;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(16,185,129,0.05);
         }
+        .hc-tooltip.show { opacity: 1; }
+        .hc-tooltip-title {
+            font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px;
+            color: var(--green-bright); margin-bottom: 7px; text-transform: uppercase;
+        }
+        .hc-tooltip-file {
+            font-family: var(--mono); font-size: 8px; color: var(--text-2);
+            padding: 2px 0; border-bottom: 1px solid var(--line);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .hc-tooltip-file:last-child { border-bottom: none; }
+        .hc-tooltip::after {
+            content: ''; position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: var(--line-2);
+        }
+
         /* Glow pools */
         .glow-pool {
             position: fixed;
@@ -1098,7 +1121,7 @@
         .honeycombs-section { margin-bottom: 32px; }
         .honeycombs-label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-2); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
         .honeycombs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
-        .honeycomb-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .honeycomb-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: visible; }
         .honeycomb-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--green), var(--violet)); opacity: 0; transition: opacity 0.2s ease; }
         .honeycomb-card:hover { border-color: var(--line-2); background: var(--surface-2); transform: translateY(-1px); }
         .honeycomb-card:hover::before { opacity: 1; }
@@ -1194,47 +1217,30 @@
 
     <!-- Цветок жизни с анимированным градиентом -->
     <!-- ═══ ЭКРАН ПАРОЛЯ ═══ -->
-    <div id="passwordScreen">
-        <div class="pw-flower-wrap">
-            <div class="pw-glow-ring"></div>
-            <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="pwGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%"   stop-color="#10b981"/>
-                        <stop offset="33%"  stop-color="#7c3aed"/>
-                        <stop offset="66%"  stop-color="#3730a3"/>
-                        <stop offset="100%" stop-color="#10b981"/>
-                    </linearGradient>
-                </defs>
-                <g stroke="url(#pwGrad)" stroke-width="0.7" fill="none">
-                    <circle cx="250" cy="250" r="80"/>
-                    <circle cx="250" cy="170" r="80"/>
-                    <circle cx="250" cy="330" r="80"/>
-                    <circle cx="319.28" cy="210" r="80"/>
-                    <circle cx="319.28" cy="290" r="80"/>
-                    <circle cx="180.72" cy="210" r="80"/>
-                    <circle cx="180.72" cy="290" r="80"/>
-                    <circle cx="250"    cy="90"  r="80"/>
-                    <circle cx="250"    cy="410" r="80"/>
-                    <circle cx="388.56" cy="170" r="80"/>
-                    <circle cx="388.56" cy="330" r="80"/>
-                    <circle cx="111.44" cy="170" r="80"/>
-                    <circle cx="111.44" cy="330" r="80"/>
-                    <circle cx="250" cy="250" r="160"/>
-                    <circle cx="250" cy="250" r="240"/>
-                    <circle cx="250" cy="250" r="40"/>
-                </g>
-            </svg>
+    <div id="passwordScreen" onclick="document.getElementById('pwInput').focus()">
+        <div class="pw-scene">
+            <div class="pw-halo"></div>
+            <div class="pw-scene-inner">
+                <div class="pw-layer-b"><svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pwGradB" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="33%" stop-color="#7c3aed"/><stop offset="66%" stop-color="#3730a3"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs><g stroke="url(#pwGradB)" stroke-width="0.7" fill="none"><circle cx="250" cy="250" r="80"/><circle cx="250" cy="170" r="80"/><circle cx="250" cy="330" r="80"/><circle cx="319.28" cy="210" r="80"/><circle cx="319.28" cy="290" r="80"/><circle cx="180.72" cy="210" r="80"/><circle cx="180.72" cy="290" r="80"/><circle cx="250" cy="90" r="80"/><circle cx="250" cy="410" r="80"/><circle cx="388.56" cy="170" r="80"/><circle cx="388.56" cy="330" r="80"/><circle cx="111.44" cy="170" r="80"/><circle cx="111.44" cy="330" r="80"/><circle cx="250" cy="250" r="160"/><circle cx="250" cy="250" r="240"/><circle cx="250" cy="250" r="40"/></g></svg></div>
+                <div class="pw-layer-f"><svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pwGradF" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="33%" stop-color="#7c3aed"/><stop offset="66%" stop-color="#3730a3"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs><g stroke="url(#pwGradF)" stroke-width="0.7" fill="none"><circle cx="250" cy="250" r="80"/><circle cx="250" cy="170" r="80"/><circle cx="250" cy="330" r="80"/><circle cx="319.28" cy="210" r="80"/><circle cx="319.28" cy="290" r="80"/><circle cx="180.72" cy="210" r="80"/><circle cx="180.72" cy="290" r="80"/><circle cx="250" cy="90" r="80"/><circle cx="250" cy="410" r="80"/><circle cx="388.56" cy="170" r="80"/><circle cx="388.56" cy="330" r="80"/><circle cx="111.44" cy="170" r="80"/><circle cx="111.44" cy="330" r="80"/><circle cx="250" cy="250" r="160"/><circle cx="250" cy="250" r="240"/><circle cx="250" cy="250" r="40"/></g></svg></div>
+            </div>
         </div>
-        <div class="pw-title">◈ mandala · engineer</div>
-        <div class="pw-box">
-            <input class="pw-input" id="pwInput" type="password"
-                   placeholder="· · · · · · · ·"
-                   autocomplete="off"
-                   onkeydown="if(event.key==='Enter') checkPassword()"/>
-            <button class="pw-btn" onclick="checkPassword()">→</button>
+        <div class="pw-title">mandala · engineer · mycel</div>
+        <input class="pw-hidden-input" id="pwInput" type="password"
+               autocomplete="off" oninput="pwHandleInput(this.value)"/>
+        <div class="pw-glyphs" id="pwGlyphs" onclick="document.getElementById('pwInput').focus()">
+            <div class="pw-slot empty" id="pwSlot0"><svg viewBox="0 0 18 22"><polygon points="9,1 17,6 17,16 9,21 1,16 1,6" stroke="#10b981" stroke-width="1.3" fill="none"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot1"><svg viewBox="0 0 18 22"><polygon points="9,1 17,11 9,21 1,11" stroke="#7c3aed" stroke-width="1.3" fill="none"/><line x1="9" y1="1" x2="9" y2="21" stroke="#7c3aed" stroke-width="0.6"/><line x1="1" y1="11" x2="17" y2="11" stroke="#7c3aed" stroke-width="0.6"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot2"><svg viewBox="0 0 18 22"><polygon points="9,19 1,3 17,3" stroke="#3730a3" stroke-width="1.3" fill="none"/><circle cx="9" cy="11" r="2.5" stroke="#3730a3" stroke-width="1"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot3"><svg viewBox="0 0 18 22"><circle cx="9" cy="11" r="7" stroke="#10b981" stroke-width="1.2" fill="none"/><line x1="9" y1="2" x2="9" y2="20" stroke="#10b981" stroke-width="0.7"/><line x1="1" y1="11" x2="17" y2="11" stroke="#10b981" stroke-width="0.7"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot4"><svg viewBox="0 0 18 22"><polygon points="9,2 16,14 2,14" stroke="#a78bfa" stroke-width="1.2" fill="none"/><polygon points="9,20 2,8 16,8" stroke="#a78bfa" stroke-width="1.2" fill="none"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot5"><svg viewBox="0 0 18 22"><polyline points="9,11 9,3 16,3 16,18 2,18 2,6 13,6 13,15 5,15 5,8 11,8" stroke="#6ee7b7" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot6"><svg viewBox="0 0 18 22"><polygon points="9,1 17,7 14,18 4,18 1,7" stroke="#818cf8" stroke-width="1.2" fill="none"/><circle cx="9" cy="11" r="2" fill="#818cf8"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot7"><svg viewBox="0 0 18 22"><rect x="3" y="4" width="12" height="14" rx="1.5" stroke="#10b981" stroke-width="1.1" fill="none"/><line x1="3" y1="4" x2="15" y2="18" stroke="#10b981" stroke-width="0.7"/><line x1="15" y1="4" x2="3" y2="18" stroke="#10b981" stroke-width="0.7"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot8"><svg viewBox="0 0 18 22"><polygon points="6,1 12,1 17,6 17,16 12,21 6,21 1,16 1,6" stroke="#7c3aed" stroke-width="1.2" fill="none"/></svg></div>
+            <div class="pw-slot empty" id="pwSlot9"><svg viewBox="0 0 18 22"><line x1="9" y1="1" x2="9" y2="21" stroke="#34d399" stroke-width="1.4"/><polyline points="3,8 9,1 15,8" stroke="#34d399" stroke-width="1.4" fill="none"/><line x1="4" y1="13" x2="14" y2="13" stroke="#34d399" stroke-width="0.9"/><line x1="6" y1="17" x2="12" y2="17" stroke="#34d399" stroke-width="0.7"/></svg></div>
         </div>
-        <div class="pw-error" id="pwError">◈ доступ запрещён</div>
+        <div class="pw-error" id="pwError">доступ запрещён</div>
     </div>
 
     <svg class="bg-flower" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1351,23 +1357,18 @@
             <!-- Вкладка карты ядра -->
             <div class="tab-content" id="tab-map">
                 <div class="seeds-container" id="mapContainer">
-                    <div id="mapHeader" style="padding:0 4px 16px;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);display:flex;align-items:center;justify-content:space-between;">
-                        <span>◈ карта ядра симбиоза</span>
-                        <div style="display:flex;gap:6px;">
-                            <button onclick="loadMap()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
-                            <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.4);color:var(--violet-soft);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">✕ забыть</button>
-                        </div>
+                    <div id="mapHeader" style="padding:0 4px 14px;display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <button onclick="loadMap()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
+                        <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.4);color:var(--violet-soft);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">✕ забыть</button>
                     </div>
                     <div class="honeycombs-section">
-                        <div class="honeycombs-label">
-                            <span>◈ соты ядра</span>
-                            <span id="honeycombsCount" style="color:var(--text-3);"></span>
+                        <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+                            <span id="honeycombsCount" style="font-family:var(--mono);font-size:8px;color:var(--text-3);letter-spacing:1px;"></span>
                         </div>
                         <div class="honeycombs-grid" id="honeycombsGrid">
                             <div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка сот...</div></div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -2345,12 +2346,18 @@
                     const fc = hc.files.length;
                     const idx2 = hc.indexPath || ("honeycombs/" + name + "/index.json");
                     const plural = fc === 1 ? "файл" : fc < 5 ? "файла" : "файлов";
-                    return "<div class='honeycomb-card' onclick='requestFileRead(\"" + idx2 + "\", \"" + icon + " " + name + "\")'>" +
+                    return (function(){
+                        var fileList = hc.files.map(function(f){ return f.split('/').pop(); });
+                        var tipFiles = fileList.map(function(f){ return "<div class='hc-tooltip-file'>" + escapeHtml(f) + "</div>"; }).join('');
+                        var tipHtml = "<div class='hc-tooltip' id='hctip_" + name + "'><div class='hc-tooltip-title'>" + escapeHtml(name) + "</div>" + tipFiles + "</div>";
+                        return "<div class='honeycomb-card' onclick='requestFileRead(\"" + idx2 + "\", \"" + icon + " " + name + "\")' onmouseenter='hcShowTip(this)' onmouseleave='hcHideTip(this)'>" +
                         "<span class='honeycomb-card-icon'>" + icon + "</span>" +
                         "<div class='honeycomb-card-name'>" + escapeHtml(name) + "</div>" +
                         "<div class='honeycomb-card-desc'>" + escapeHtml(desc) + "</div>" +
                         "<div class='honeycomb-card-meta'><span class='honeycomb-status " + status + "'>" + status + "</span><span>" + fc + " " + plural + "</span></div>" +
-                        "<div class='honeycomb-card-hint'>↓ нажми — СР читает</div></div>";
+                        tipHtml +
+                        "</div>";
+                    })();
                 }).join("");
             } catch(e) {
                 if (grid) grid.innerHTML = "<div class='empty-state'><div class='empty-state-icon'>×</div><div>" + escapeHtml(e.message) + "</div></div>";
@@ -2499,26 +2506,66 @@
             return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        async function checkPassword() {
-            const val = document.getElementById('pwInput').value;
+        // Обновляем гліфи
+        function pwUpdateSlots(val) {
+            const glyphs = document.getElementById('pwGlyphs');
+            if (!glyphs) return;
+            for (let i = 0; i < 10; i++) {
+                const slot = document.getElementById('pwSlot' + i);
+                if (!slot) continue;
+                slot.classList.remove('empty','filled','cursor');
+                if (i < val.length) {
+                    slot.classList.add('filled');
+                } else if (i === val.length) {
+                    slot.classList.add('empty','cursor');
+                } else {
+                    slot.classList.add('empty');
+                }
+            }
+            if (glyphs) glyphs.classList.toggle('active', val.length > 0);
+        }
+
+        async function pwHandleInput(val) {
+            pwUpdateSlots(val);
+            if (val.length < 8) return;
             const h = await _hash(val);
             if (h === _PH) {
                 sessionStorage.setItem('_ma', '1');
-                document.getElementById('passwordScreen').classList.add('hidden');
-            } else {
-                const inp = document.getElementById('pwInput');
-                const err = document.getElementById('pwError');
-                inp.classList.add('error');
-                err.classList.add('show');
-                setTimeout(() => { inp.classList.remove('error'); err.classList.remove('show'); }, 1500);
-                inp.value = '';
+                const screen = document.getElementById('passwordScreen');
+                screen.style.opacity = '0';
+                setTimeout(() => screen.classList.add('hidden'), 750);
+            } else if (val.length >= 10) {
+                const glyphs = document.getElementById('pwGlyphs');
+                const err    = document.getElementById('pwError');
+                const inp    = document.getElementById('pwInput');
+                if (glyphs) glyphs.classList.add('error');
+                if (err)    err.classList.add('show');
+                setTimeout(() => {
+                    if (glyphs) glyphs.classList.remove('error');
+                    if (err)    err.classList.remove('show');
+                    inp.value = '';
+                    pwUpdateSlots('');
+                }, 900);
             }
+        }
+
+        // Тултипы карточек сот
+        function hcShowTip(card) {
+            const tip = card.querySelector('.hc-tooltip');
+            if (tip) { tip.classList.add('show'); }
+        }
+        function hcHideTip(card) {
+            const tip = card.querySelector('.hc-tooltip');
+            if (tip) { tip.classList.remove('show'); }
         }
 
         function _checkAccess() {
             if (sessionStorage.getItem('_ma') !== '1') {
                 document.getElementById('passwordScreen').classList.remove('hidden');
-                setTimeout(() => document.getElementById('pwInput').focus(), 100);
+                setTimeout(() => {
+                    const inp = document.getElementById('pwInput');
+                    if (inp) { inp.focus(); pwUpdateSlots(''); }
+                }, 120);
             } else {
                 document.getElementById('passwordScreen').classList.add('hidden');
             }
