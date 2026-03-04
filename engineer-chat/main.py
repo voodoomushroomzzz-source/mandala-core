@@ -1516,52 +1516,135 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek: {str(e)[:100]}"})
 
     # ═══════════════════════════════════════
-    # 2. КЛОД — сторонний наблюдатель
+    # 2. КЛОД — полноценный агент с инструментами
     # ═══════════════════════════════════════
     if "claude" in active_models and ANTHROPIC_API_KEY:
         await manager.send_to(websocket, {"type": "model_start", "model": "claude"})
-        # Клод видит всю историю чата + ответы текущего раунда
+
+        # Инструменты в формате Anthropic API
+        claude_tools = [
+            {
+                "name": "web_search",
+                "description": "Поиск в интернете для получения актуальной информации",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "query": {"type": "string", "description": "Поисковый запрос"},
+                        "num_results": {"type": "integer", "description": "Количество результатов (макс 10)", "default": 5}
+                    },
+                    "required": ["query"]
+                }
+            },
+            {
+                "name": "read_file",
+                "description": "Прочитать содержимое файла или папки из репозитория",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "path": {"type": "string", "description": "Путь к файлу или папке в репозитории"}
+                    },
+                    "required": ["path"]
+                }
+            }
+        ]
+
         claude_history = []
         for msg in shared_history:
             claude_history.append({"role": msg["role"], "content": msg["content"]})
-
-        context_for_claude = f"**Текущий вопрос:**\n{user_text}\n\n"
-        if deepseek_response:
-            context_for_claude += f"**DeepSeek ответил:**\n{deepseek_response}\n\n"
-        context_for_claude += "Дай объективную оценку текущего обмена и предложи что улучшить."
-
-        claude_messages = claude_history + [{"role": "user", "content": context_for_claude}]
+        claude_messages = claude_history + [{"role": "user", "content": user_text}]
 
         try:
             async with httpx.AsyncClient() as client:
-                resp = await client.post(
-                    f"{ANTHROPIC_BASE_URL}/messages",
-                    headers={
-                        "x-api-key": ANTHROPIC_API_KEY,
-                        "anthropic-version": "2023-06-01",
-                        "content-type": "application/json"
-                    },
-                    json={
-                        "model": ANTHROPIC_MODEL,
-                        "max_tokens": 8192,
-                        "system": kernel.build_system_prompt("claude"),
-                        "messages": claude_messages
-                    },
-                    timeout=300.0
-                )
-                if resp.status_code == 200:
-                    claude_text = resp.json().get("content", [{}])[0].get("text", "")
-                    await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": claude_text})
+                claude_headers = {
+                    "x-api-key": ANTHROPIC_API_KEY,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json"
+                }
+                claude_response = ""
+                claude_iterations = 0
+
+                while claude_iterations < 20:
+                    claude_iterations += 1
+                    resp = await client.post(
+                        f"{ANTHROPIC_BASE_URL}/messages",
+                        headers=claude_headers,
+                        json={
+                            "model": ANTHROPIC_MODEL,
+                            "max_tokens": 8192,
+                            "system": kernel.build_system_prompt("claude"),
+                            "tools": claude_tools,
+                            "messages": claude_messages
+                        },
+                        timeout=300.0
+                    )
+
+                    if resp.status_code != 200:
+                        err_body = resp.text[:200]
+                        if resp.status_code == 400:
+                            err = (resp.json().get("error") or {}).get("message", "")
+                            if "credit balance" in err:
+                                await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": "⚠️ Недостаточно кредитов Anthropic"})
+                                break
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод {resp.status_code}: {err_body[:120]}"})
+                        break
+
+                    resp_data = resp.json()
+                    stop_reason = resp_data.get("stop_reason")
+                    content_blocks = resp_data.get("content", [])
+
+                    # Собираем текст из блоков
+                    for block in content_blocks:
+                        if block.get("type") == "text":
+                            claude_response += block.get("text", "")
+
+                    # Если нет tool_use — финальный ответ
+                    if stop_reason != "tool_use":
+                        break
+
+                    # ── Обрабатываем tool_use блоки ──
+                    tool_results = []
+                    for block in content_blocks:
+                        if block.get("type") != "tool_use":
+                            continue
+                        fn = block.get("name", "")
+                        args = block.get("input", {})
+                        tool_use_id = block.get("id", "")
+
+                        tool_result = ""
+                        if fn == "web_search":
+                            results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
+                            tool_result = json.dumps(results, ensure_ascii=False)
+                            await manager.send_to(websocket, {"type": "tool_use", "model": "claude", "tool": "web_search", "query": args.get("query", "")})
+                        elif fn == "read_file":
+                            rpath = args.get("path", "").strip()
+                            rkey = "simbiosis/" + rpath.split("/")[-1].replace(".json", "")
+                            cached_mod = kernel.modules.get(rkey) or kernel.modules.get(rpath.replace(".json", ""))
+                            await manager.send_to(websocket, {"type": "tool_use", "model": "claude", "tool": "read_file", "path": rpath, "cached": cached_mod is not None})
+                            if cached_mod is not None:
+                                tool_result = json.dumps(cached_mod, ensure_ascii=False)
+                                logger.info(f"📦 [claude] read_file кэш: {rpath}")
+                            else:
+                                tool_result = await file_reader.read(rpath) or "Файл не найден"
+                        else:
+                            tool_result = f"Неизвестный инструмент: {fn}"
+
+                        tool_results.append({
+                            "type": "tool_result",
+                            "tool_use_id": tool_use_id,
+                            "content": tool_result
+                        })
+
+                    # Добавляем ответ ассистента и результаты инструментов в историю
+                    claude_messages.append({"role": "assistant", "content": content_blocks})
+                    claude_messages.append({"role": "user", "content": tool_results})
+
+                if claude_response:
+                    await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": claude_response})
                     await manager.send_to(websocket, {"type": "model_done", "model": "claude"})
-                    logger.info(f"✅ Клод: {len(claude_text)} символов")
-                elif resp.status_code == 400:
-                    err = (resp.json().get("error") or {}).get("message", "")
-                    if "credit balance" in err:
-                        await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": "⚠️ Недостаточно кредитов Anthropic"})
-                    else:
-                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод 400: {err[:100]}"})
+                    logger.info(f"✅ Клод: {len(claude_response)} символов, {claude_iterations} итераций")
                 else:
-                    await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: ошибка {resp.status_code}"})
+                    await manager.send_to(websocket, {"type": "model_done", "model": "claude"})
+
         except Exception as e:
             logger.error(f"Claude exception: {e}")
             await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: {str(e)[:100]}"})
