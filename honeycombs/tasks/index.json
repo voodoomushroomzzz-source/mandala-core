@@ -19,15 +19,8 @@
     ],
     "resonance": "95%",
     "segmentation_strategy": "Сегментация по роадмапам, приоритетам и статусам",
-    "migration_status": "in_progress",
-    "migration_plan": [
-      {
-        "phase": "1",
-        "description": "Создание новой сегментированной структуры",
-        "status": "in_progress",
-        "date": "2026-03-02"
-      }
-    ]
+    "migration_status": "completed",
+    "migration_plan": "Фаза 1: Создание новой сегментированной структуры - ЗАВЕРШЕНО"
   },
   "honeycomb_structure": {
     "total_segments": 8,
