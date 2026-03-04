@@ -53,6 +53,121 @@
             position: relative;
         }
 
+
+        /* ═══════════════════════════════════════════
+           ЭКРАН ПАРОЛЯ
+        ═══════════════════════════════════════════ */
+        #passwordScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #030d09;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #passwordScreen.hidden { display: none; }
+
+        .pw-flower-wrap {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin-bottom: 32px;
+        }
+        .pw-flower-wrap svg {
+            width: 100%;
+            height: 100%;
+            animation: pw-breathe 6s ease-in-out infinite alternate,
+                       pw-spin 40s linear infinite;
+        }
+        @keyframes pw-breathe {
+            from { opacity: 0.25; filter: drop-shadow(0 0 8px #10b981); }
+            to   { opacity: 0.7;  filter: drop-shadow(0 0 28px #7c3aed) drop-shadow(0 0 60px #10b981); }
+        }
+        @keyframes pw-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        .pw-title {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-2);
+            margin-bottom: 28px;
+        }
+
+        .pw-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .pw-input {
+            background: var(--surface);
+            border: 1px solid var(--line-2);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 15px;
+            padding: 10px 18px;
+            outline: none;
+            width: 200px;
+            letter-spacing: 4px;
+            text-align: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .pw-input:focus {
+            border-color: var(--green-2);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.15), 0 0 20px rgba(16,185,129,0.08);
+        }
+        .pw-input.error {
+            border-color: #be123c;
+            box-shadow: 0 0 0 3px rgba(190,18,60,0.2);
+            animation: pw-shake 0.3s ease;
+        }
+        @keyframes pw-shake {
+            0%,100% { transform: translateX(0); }
+            25%      { transform: translateX(-6px); }
+            75%      { transform: translateX(6px); }
+        }
+        .pw-btn {
+            background: linear-gradient(135deg, var(--green), var(--violet));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: var(--mono);
+            font-size: 14px;
+            padding: 10px 18px;
+            cursor: pointer;
+            transition: opacity 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 20px rgba(124,58,237,0.3);
+        }
+        .pw-btn:hover {
+            opacity: 0.85;
+            box-shadow: 0 0 30px rgba(124,58,237,0.6);
+        }
+        .pw-error {
+            margin-top: 14px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: #fb7185;
+            letter-spacing: 2px;
+            height: 16px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .pw-error.show { opacity: 1; }
+
+        .pw-glow-ring {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%);
+            animation: pw-breathe 6s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
         /* Glow pools */
         .glow-pool {
             position: fixed;
@@ -1078,6 +1193,50 @@
     <div class="glow-pool gp-2"></div>
 
     <!-- Цветок жизни с анимированным градиентом -->
+    <!-- ═══ ЭКРАН ПАРОЛЯ ═══ -->
+    <div id="passwordScreen">
+        <div class="pw-flower-wrap">
+            <div class="pw-glow-ring"></div>
+            <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="pwGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%"   stop-color="#10b981"/>
+                        <stop offset="33%"  stop-color="#7c3aed"/>
+                        <stop offset="66%"  stop-color="#3730a3"/>
+                        <stop offset="100%" stop-color="#10b981"/>
+                    </linearGradient>
+                </defs>
+                <g stroke="url(#pwGrad)" stroke-width="0.7" fill="none">
+                    <circle cx="250" cy="250" r="80"/>
+                    <circle cx="250" cy="170" r="80"/>
+                    <circle cx="250" cy="330" r="80"/>
+                    <circle cx="319.28" cy="210" r="80"/>
+                    <circle cx="319.28" cy="290" r="80"/>
+                    <circle cx="180.72" cy="210" r="80"/>
+                    <circle cx="180.72" cy="290" r="80"/>
+                    <circle cx="250"    cy="90"  r="80"/>
+                    <circle cx="250"    cy="410" r="80"/>
+                    <circle cx="388.56" cy="170" r="80"/>
+                    <circle cx="388.56" cy="330" r="80"/>
+                    <circle cx="111.44" cy="170" r="80"/>
+                    <circle cx="111.44" cy="330" r="80"/>
+                    <circle cx="250" cy="250" r="160"/>
+                    <circle cx="250" cy="250" r="240"/>
+                    <circle cx="250" cy="250" r="40"/>
+                </g>
+            </svg>
+        </div>
+        <div class="pw-title">◈ mandala · engineer</div>
+        <div class="pw-box">
+            <input class="pw-input" id="pwInput" type="password"
+                   placeholder="· · · · · · · ·"
+                   autocomplete="off"
+                   onkeydown="if(event.key==='Enter') checkPassword()"/>
+            <button class="pw-btn" onclick="checkPassword()">→</button>
+        </div>
+        <div class="pw-error" id="pwError">◈ доступ запрещён</div>
+    </div>
+
     <svg class="bg-flower" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <linearGradient id="livingGradient" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
@@ -2329,8 +2488,45 @@
             step();
         }
 
+        // ═══════════════════════════════════════
+        // ЗАЩИТА ПАРОЛЕМ
+        // ═══════════════════════════════════════
+        // Пароль хранится только в виде SHA-256 хэша
+        const _PH = 'dc9b4153769a6fb649dbd132c70d67825e3d93e2ca83aeaed3ee5d357ce19af8';
+
+        async function _hash(str) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function checkPassword() {
+            const val = document.getElementById('pwInput').value;
+            const h = await _hash(val);
+            if (h === _PH) {
+                sessionStorage.setItem('_ma', '1');
+                document.getElementById('passwordScreen').classList.add('hidden');
+            } else {
+                const inp = document.getElementById('pwInput');
+                const err = document.getElementById('pwError');
+                inp.classList.add('error');
+                err.classList.add('show');
+                setTimeout(() => { inp.classList.remove('error'); err.classList.remove('show'); }, 1500);
+                inp.value = '';
+            }
+        }
+
+        function _checkAccess() {
+            if (sessionStorage.getItem('_ma') !== '1') {
+                document.getElementById('passwordScreen').classList.remove('hidden');
+                setTimeout(() => document.getElementById('pwInput').focus(), 100);
+            } else {
+                document.getElementById('passwordScreen').classList.add('hidden');
+            }
+        }
+
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         function init() {
+            _checkAccess();
             loadMessages();
             connect();
             setupTabs();
