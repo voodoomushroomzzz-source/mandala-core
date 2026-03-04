@@ -972,7 +972,7 @@ def parse_xml_tool_calls(text: str):
     # ── Формат 0: <functioninvoke name="fn">...<parameter name="x">val</parameter>
     # DeepSeek иногда генерирует этот вариант (с атрибутами типа string="true")
     fi_pat = _re.compile(
-        r'<functioninvoke\s+name=["\']?(\w+)["\']?[^>]*>(.*?)(?:</functioninvoke>|$)',
+        r'<func(?:tion)?[_a-z]*invoke\s+name=["\']?(\w+)["\']?[^>]*>(.*?)(?:</func(?:tion)?[_a-z]*invoke>|$)',
         _re.DOTALL | _re.IGNORECASE
     )
     fi_param = _re.compile(
@@ -1060,9 +1060,9 @@ def strip_xml_tool_calls(text: str) -> str:
     text = _re.sub(r'<function_calls>.*?</function_calls>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<function_call>.*?</function_call>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<invoke[^>]*>.*?</invoke>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
-    text = _re.sub(r'<functioninvoke[^>]*>.*?</functioninvoke>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
-    # Незакрытый <functioninvoke ...> до конца строки/блока
-    text = _re.sub(r'<functioninvoke[^>]*>.*', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    text = _re.sub(r'<func(?:tion)?[_a-z]*invoke[^>]*>.*?</func(?:tion)?[_a-z]*invoke>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
+    # Незакрытый <func*invoke ...> до конца блока
+    text = _re.sub(r'<func(?:tion)?[_a-z]*invoke[^>]*>.*', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     # DSML формат DeepSeek V3 (<｜DSML｜function_calls>...</｜DSML｜function_calls>)
     text = _re.sub(r'<[|｜]\s*DSML\s*[|｜]function_calls>.*?</[|｜]\s*DSML\s*[|｜]function_calls>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
     text = _re.sub(r'<[|｜]\s*DSML\s*[|｜]\w+[^>]*>.*?</[|｜]\s*DSML\s*[|｜]\w+>', '', text, flags=_re.DOTALL | _re.IGNORECASE)
@@ -1332,6 +1332,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                         raw_content = msg_data.get("content") or ""
                         if not msg_data.get("tool_calls"):
                             xml_match = ("<invoke" in raw_content or
+                                         "<func" in raw_content.lower() or
                                          "<function_call" in raw_content.lower() or
                                          "DSML" in raw_content or "｜DSML｜" in raw_content)
                             # JSON вызов: {"function": "read_file", ...} или {"name": "read_file", ...}
@@ -1427,7 +1428,8 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 # ── Перехват нестандартного XML внутри цикла ──
                                 if not msg_data.get("tool_calls"):
                                     raw2 = msg_data.get("content") or ""
-                                    has_xml = ("<invoke" in raw2 or "<functioninvoke" in raw2 or
+                                    has_xml = ("<invoke" in raw2 or
+                                               "<func" in raw2.lower() or
                                                "<function_call" in raw2.lower() or
                                                "DSML" in raw2 or "｜DSML｜" in raw2)
                                     has_json_fn = ('"read_file"' in raw2 or '"web_search"' in raw2) and ('"function"' in raw2 or '"name"' in raw2)
@@ -1848,8 +1850,10 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
                 return False, f"Подпатч #{i} должен быть объектом"
             if "target_module" not in subpatch and "file_path" not in subpatch:
                 return False, f"Подпатч #{i}: отсутствует 'target_module' или 'file_path'"
-            if "changes" not in subpatch and "content" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'changes' или 'content'"
+            if subpatch.get("delete_file"):
+                continue  # delete_file не требует changes/content
+            if "changes" not in subpatch and "content" not in subpatch and "replacements" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'changes', 'content' или 'replacements'"
             if "changes" in subpatch:
                 if not isinstance(subpatch["changes"], list):
                     return False, f"Подпатч #{i}: 'changes' должен быть массивом"
@@ -1871,8 +1875,10 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
     else:
         if "target_module" not in patch_data and "file_path" not in patch_data:
             return False, "Отсутствует 'target_module' или 'file_path'"
-        if "changes" not in patch_data and "content" not in patch_data:
-            return False, "Отсутствует 'changes' или 'content'"
+        if patch_data.get("delete_file"):
+            return True, "Одиночный delete_file корректен"
+        if "changes" not in patch_data and "content" not in patch_data and "replacements" not in patch_data:
+            return False, "Отсутствует 'changes', 'content' или 'replacements'"
         if "changes" in patch_data:
             if not isinstance(patch_data["changes"], list):
                 return False, "'changes' должен быть массивом"
@@ -1978,6 +1984,35 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                 # TEXT патчи (str_replace) - для .py, .html, .md, .txt и др.
                 is_json_file = file_path.endswith(".json")
                 url = f"{session_store.api_base}/contents/{file_path}"
+
+                # ═══ delete_file: физическое удаление файла через GitHub DELETE API ═══
+                if patch.get("delete_file"):
+                    resp_sha = await client.get(url, headers=headers)
+                    if resp_sha.status_code == 404:
+                        results.append({"file": file_path, "status": "error", "message": "Файл не найден"})
+                        continue
+                    if resp_sha.status_code != 200:
+                        results.append({"file": file_path, "status": "error", "message": f"Ошибка доступа: {resp_sha.status_code}"})
+                        continue
+                    file_sha = resp_sha.json().get("sha")
+                    del_payload = {
+                        "message": f"🗑️ Удалён {file_path} | {session_id[:8]} | {datetime.now().strftime('%H:%M')}",
+                        "sha": file_sha,
+                        "branch": "main"
+                    }
+                    del_resp = await client.delete(url, headers=headers, json=del_payload)
+                    if del_resp.status_code == 200:
+                        results.append({"file": file_path, "status": "success", "message": "Удалён ✓"})
+                        module_key = file_path[:-5] if file_path.endswith(".json") else file_path
+                        kernel.modules.pop(module_key, None)
+                        if module_key in kernel.module_list:
+                            kernel.module_list.remove(module_key)
+                            logger.info(f"🗑️ Модуль {module_key} удалён из ядра")
+                        logger.info(f"🗑️ Файл удалён: {file_path}")
+                    else:
+                        results.append({"file": file_path, "status": "error", "message": f"GitHub DELETE: {del_resp.status_code} — {del_resp.text[:200]}"})
+                    continue  # переходим к следующему патчу
+
                 resp = await client.get(url, headers=headers)
                 if resp.status_code != 200:
                     if resp.status_code == 404:
