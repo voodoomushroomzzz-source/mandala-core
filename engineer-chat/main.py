@@ -2368,6 +2368,7 @@ async def handle_reset_memory(message: dict, websocket: WebSocket):
 # ==================== HTTP ENDPOINTS ====================
 
 @app.get("/")
+@app.head("/")
 async def root():
     return {
         "status": "Mandala Simbiosis — Engineer Chat",
