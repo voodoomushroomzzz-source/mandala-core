@@ -495,19 +495,6 @@
             max-height: 520px;
             background: #0d1f16;
         }
-        .code-gutter {
-            padding: 12px 8px 12px 12px;
-            font-family: var(--mono);
-            font-size: 11px;
-            line-height: 1.65;
-            color: var(--text-3);
-            text-align: right;
-            user-select: none;
-            flex-shrink: 0;
-            border-right: 1px solid var(--line);
-            background: #0a1710;
-            min-width: 36px;
-        }
         .code-content {
             padding: 12px 14px;
             font-family: var(--mono);
@@ -1478,10 +1465,6 @@
                     ${(lang === 'json' || code.includes('"target_module"') || code.includes('"file_path"')) ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
                 </div>
             ` : '';
-            const lines = code.split('\n');
-            const gutterHtml = (complete && lines.length > 1)
-                ? lines.map((_, i) => i + 1).join('\n')
-                : '';
             return `
                 <div class="code-block ${complete ? 'complete' : 'streaming'} ${collapsedClass}">
                     <div class="code-header">
@@ -1490,7 +1473,6 @@
                         ${actions}
                     </div>
                     <div class="code-body">
-                        ${gutterHtml ? `<div class="code-gutter">${gutterHtml}</div>` : ''}
                         <pre class="code-content">${escapeHtml(code)}</pre>
                     </div>
                 </div>
@@ -1684,15 +1666,7 @@
                     break;
                 case 'file_read_done':
                     updateThinkingStatus({ tool: 'read_file', path: data.path, model: Array.from(activeModels)[0] });
-                    renderSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов) — СР изучает`);
-                    if (ws && ws.readyState === WebSocket.OPEN) {
-                        ws.send(JSON.stringify({
-                            type: 'ask',
-                            text: `Ты только что прочитал файл ${escapeHtml(data.label || data.path)}. Изучи его и дай своё мнение: что это, какова структура, что важно знать.`,
-                            session_id: 'main',
-                            models: getActiveModels()
-                        }));
-                    }
+                    renderSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов)`);
                     break;
                 case 'patch_result':
                     handlePatchResult(data.results);
