@@ -20,7 +20,14 @@
     "resonance": "95%",
     "segmentation_strategy": "Сегментация по роадмапам, приоритетам и статусам",
     "migration_status": "completed",
-    "migration_plan": "Фаза 1: Создание новой сегментированной структуры - ЗАВЕРШЕНО"
+    "migration_plan": "Фаза 1: Создание новой сегментированной структуры - ЗАВЕРШЕНО",
+    "reorganization_report": [
+      {
+        "file": "meta/reorganization_report.json",
+        "status": "created",
+        "date": "2026-03-02"
+      }
+    ]
   },
   "honeycomb_structure": {
     "total_segments": 8,
@@ -300,6 +307,21 @@
         }
       },
       "load_priority": "medium"
+    },
+    "meta": {
+      "files": {
+        "reorganization_report": {
+          "file": "meta/reorganization_report.json",
+          "size_kb": null,
+          "tags": [
+            "report",
+            "reorganization",
+            "lessons_learned"
+          ],
+          "description": "Отчет о реорганизации соты tasks",
+          "status": "created"
+        }
+      }
     }
   }
 }
