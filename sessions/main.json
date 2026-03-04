@@ -36,9 +36,14 @@
       "role": "user",
       "content": "Я думаю нам не нужно менять системный промт, нам достаточно добавить инструкции в соты",
       "time": 1772623374.6164613
+    },
+    {
+      "role": "assistant",
+      "content": "Теперь создам новые файлы инструкций и обновлю index.json:\n\n1. Сначала создам инструкцию по мультипатчам в `honeycombs/instructions/core/multi_patches.json`:\n\n```json\n{\n  \"target_module\": \"honeycombs/instructions/index\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"structure.segments.core.files.multi_patches\",\n      \"value\": {\n        \"file\": \"core/multi_patches.json\",\n        \"source_id\": \"INSTR-007\",\n        \"size_kb\": 1.1,\n        \"tags\": [\"patch\", \"multi\", \"batch\", \"core\"],\n        \"load_priority\": \"high\",\n        \"description\": \"Мультипатчи — пакетные изменения нескольких файлов\"\n      }\n    },\n    {\n      \"op\": \"update\",\n      \"path\": \"meta.total_files\",\n      \"value\": 7\n    },\n    {\n      \"op\": \"update\",\n      \"path\": \"meta.total_size_kb\",\n      \"value\": 7.4\n    },\n    {\n      \"op\": \"update\",\n      \"path\": \"registry.total_files\",\n      \"value\": 7\n    },\n    {\n      \"op\": \"update\",\n      \"path\": \"registry.total_size_kb\",\n      \"value\": 7.4\n    }\n  ]\n}\n```",
+      "time": 1772623453.9503324
     }
   ],
-  "last_active": 1772623374.6164646,
+  "last_active": 1772623453.9503398,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772623374.6164005,
