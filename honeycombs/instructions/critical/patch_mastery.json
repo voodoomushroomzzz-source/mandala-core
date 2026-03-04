@@ -42,20 +42,34 @@
         "title": "ИСПОЛЬЗУЙ правильные пути",
         "correct": "parent.child.field",
         "incorrect": "parent[0].child"
-      }
+      },
+      "rule_5": [
+        {
+          "title": "Для УДАЛЕНИЯ используй delete_file: true",
+          "how": "file_path: \"путь/к/файлу.json\", delete_file: true",
+          "rules": {
+            "no_changes": "Поля changes и content не нужны",
+            "no_folders": "Папки нельзя удалять напрямую",
+            "cache_cleanup": "После удаления файл убирается из кэша автоматически",
+            "rollback": "Откат через историю коммитов GitHub"
+          }
+        }
+      ]
     },
     "workflow": [
       "1. read_file('путь') — ОБЯЗАТЕЛЬНО",
       "2. Определи типы всех полей",
       "3. Выбери правильные операции",
       "4. Минифицируй content",
-      "5. Отправь патч"
+      "5. Отправь патч",
+      "6. Для удаления: delete_file: true"
     ],
     "checklist": [
       "[ ] Прочитал файл через read_file?",
       "[ ] Увидел РЕАЛЬНУЮ структуру?",
       "[ ] Знаю типы полей?",
-      "[ ] content минифицирован?"
+      "[ ] content минифицирован?",
+      "[ ] Для удаления: delete_file: true?"
     ]
   },
   "/content/honeycomb_rules": [
