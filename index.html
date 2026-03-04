@@ -490,17 +490,18 @@
         }
 
         .code-content {
-            padding: 12px; 
-            overflow-x: auto; 
+            padding: 12px;
+            overflow-x: auto;
             overflow-y: auto;
             background: var(--surface);
-            font-family: var(--mono); 
-            font-size: 12px; 
+            font-family: var(--mono);
+            font-size: 12px;
             line-height: 1.6;
-            color: var(--text); 
-            max-height: 400px; 
-            white-space: pre-wrap;
-            word-break: break-word;
+            color: var(--text);
+            max-height: 500px;
+            white-space: pre;
+            word-break: normal;
+            overflow-wrap: normal;
         }
 
         /* Thinking indicator */
@@ -653,10 +654,24 @@
             border: 2px solid transparent;
             color: white;
             box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+            transition: all 0.2s;
         }
         .isend:hover {
             background: linear-gradient(145deg, var(--green-2), var(--violet-soft));
             box-shadow: 0 4px 30px rgba(124,58,237,0.7);
+        }
+        .isend.is-stop {
+            background: linear-gradient(145deg, #be123c, #7c3aed);
+            box-shadow: 0 4px 20px rgba(190,18,60,0.4);
+            animation: stop-pulse 1.5s ease-in-out infinite;
+        }
+        .isend.is-stop:hover {
+            background: linear-gradient(145deg, #e11d48, #a21caf);
+            box-shadow: 0 4px 30px rgba(190,18,60,0.7);
+        }
+        @keyframes stop-pulse {
+            0%,100% { box-shadow: 0 4px 20px rgba(190,18,60,0.4); }
+            50% { box-shadow: 0 4px 30px rgba(190,18,60,0.8), 0 0 0 4px rgba(190,18,60,0.15); }
         }
 
         /* Observer button */
@@ -1165,7 +1180,7 @@
                         <div class="irow">
                             <button class="ibtn" onclick="document.getElementById('fileInput').click()" title="Прикрепить файл">◎</button>
                             <textarea class="ifield" id="messageInput" placeholder="Впиши волну…" rows="1"></textarea>
-                            <button class="ibtn isend" id="sendBtn" onclick="sendMessage()">➤</button>
+                            <button class="ibtn isend" id="sendBtn" onclick="toggleSendStop()">➤</button>
                         </div>
                     </div>
                 </div>
@@ -1441,10 +1456,10 @@
             const downloadBtnClass = 'code-btn download';
             const applyBtnClass = 'code-btn apply';
             const lineCount = (code.match(/\n/g) || []).length + 1;
-            const shouldCollapse = complete;
-            const collapsedClass = shouldCollapse ? 'collapsed' : '';
+            const shouldCollapse = false;  // всегда раскрыт по умолчанию
+            const collapsedClass = '';
             const toggleBtn = complete
-                ? `<button class="code-btn toggle" onclick="toggleCodeBlock(this)" title="Развернуть/свернуть">${shouldCollapse ? '▶' : '▼'}</button>`
+                ? `<button class="code-btn toggle" onclick="toggleCodeBlock(this)" title="Свернуть/развернуть">▼</button>`
                 : '';
             const linesHint = complete
                 ? `<span class="code-lines-hint">${lineCount} lines</span>`
@@ -1786,20 +1801,10 @@
         function handleFileSelect(e) {
             const files = Array.from(e.target.files);
             if (files.length === 0) return;
-            if (inputEl.value.trim()) {
-                pendingFiles = files;
-                updateFilePreview();
-                inputEl.focus();
-            } else {
-                pendingFiles = files;
-                updateFilePreview();
-                setTimeout(() => {
-                    if (ws && ws.readyState === WebSocket.OPEN) {
-                        sendFiles(files, '');
-                        clearFiles();
-                    }
-                }, 300);
-            }
+            // Всегда ждём кнопку "Отправить" — никогда не улетает само
+            pendingFiles = [...pendingFiles, ...files];
+            updateFilePreview();
+            inputEl.focus();
         }
 
         function updateFilePreview() {
@@ -1932,6 +1937,40 @@
             return div.innerHTML;
         }
 
+        // ── Стоп / Отправка ─────────────────────────────────────────────────
+        let _isBusy = false;
+        let _stopRequested = false;
+
+        function setSendBtnState(busy) {
+            _isBusy = busy;
+            const btn = document.getElementById('sendBtn');
+            if (!btn) return;
+            if (busy) {
+                btn.classList.add('is-stop');
+                btn.innerHTML = '■';
+                btn.title = 'Остановить';
+            } else {
+                btn.classList.remove('is-stop');
+                btn.innerHTML = '➤';
+                btn.title = 'Отправить';
+                _stopRequested = false;
+            }
+        }
+
+        function toggleSendStop() {
+            if (_isBusy) {
+                // Стоп — закрываем ws и переподключаемся
+                _stopRequested = true;
+                hideThinking();
+                setSendBtnState(false);
+                if (ws) { try { ws.close(); } catch(e) {} }
+                setTimeout(() => connect(), 300);
+                showToast('◈ остановлено', 'success');
+            } else {
+                sendMessage();
+            }
+        }
+
         function showThinking(model) {
             const m = model || Array.from(activeModels)[0] || 'deepseek';
             const svgEl = document.getElementById('thinkingIconSvg');
@@ -1955,6 +1994,7 @@
             }
             thinkingEl.classList.remove('hidden');
             clearActivityFeed();
+            setSendBtnState(true);
             scrollToBottom();
         }
 
@@ -2021,6 +2061,7 @@
             const svgEl = document.getElementById('thinkingIconSvg');
             if (svgEl) svgEl.classList.remove('thinking');
             clearActivityFeed();
+            setSendBtnState(false);
         }
 
         function scrollToBottom() {
