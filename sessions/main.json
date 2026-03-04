@@ -351,9 +351,19 @@
       "role": "assistant",
       "content": "Отличная идея! Это важный опыт. Давайте создадим инструкцию по патчам на основе нашего опыта:\n\n**Патч 16: Создание инструкции по работе с патчами (на основе опыта)**\n\n```json\n{\n  \"file_path\": \"honeycombs/instructions/workflow/patch_patterns.json\",\n  \"content\": \"{\\\"title\\\":\\\"Шаблоны патчей\\\",\\\"description\\\":\\\"Паттерны и антипаттерны работы с патчами на основе опыта реорганизации соты tasks\\\",\\\"created_at\\\":\\\"2026-03-02T13:30:00Z\\\",\\\"updated_at\\\":\\\"2026-03-02T13:30:00Z\\\",\\\"patterns\\\":{\\\"success\\\":[{\\\"pattern\\\":\\\"Перед патчем всегда читать файл\\\",\\\"example\\\":\\\"read_file('honeycombs/tasks/index.json')\\\",\\\"reason\\\":\\\"Избегаем ошибок 'путь не найден'\\\"},{\\\"pattern\\\":\\\"Использовать content для новых файлов\\\",\\\"example\\\":\\\"{\\\\\\\"file_path\\\\\\\":\\\\\\\"path/new_file.json\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"{}\\\\\\\"}\\\",\\\"reason\\\":\\\"Правильное создание файлов в сотах\\\"},{\\\"pattern\\\":\\\"target_module без .json расширения\\\",\\\"example\\\":\\\"target_module: \\\\\\\"honeycombs/tasks/index\\\\\\\"\\\",\\\"reason\\\":\\\"Для работы с манифестами сот\\\"},{\\\"pattern\\\":\\\"Проверять тип данных в структуре\\\",\\\"example\\\":\\\"migration_plan - строка, а не массив\\\",\\\"reason\\\":\\\"Избегаем ошибок индексации\\\"}],\\\"antipatterns\\\":[{\\\"antipattern\\\":\\\"Предполагать структуру без чтения\\\",\\\"problem\\\":\\\"Ошибки 'путь не найден'\\\",\\\"solution\\\":\\\"Всегда читать перед патчем\\\"},{\\\"antipattern\\\":\\\"Использовать target_module для новых файлов\\\",\\\"problem\\\":\\\"Файл не найден и content не передан\\\",\\\"solution\\\":\\\"Использовать формат с content\\\"},{\\\"antipattern\\\":\\\"Не проверять тип данных\\\",\\\"problem\\\":\\\"Ошибки 'list indices must be integers'\\\",\\\"solution\\\":\\\"Проверять является ли поле массивом или объектом\\\"}]},\\\"case_studies\\\":[{\\\"title\\\":\\\"Реорганизация соты tasks\\\",\\\"date\\\":\\\"2026-03-02\\\",\\\"problem\\\":\\\"Монолитный current.json (12KB) нарушал принцип сот\\\",\\\"solution\\\":\\\"Сегментация по роадмапам, приоритетам и статусам\\\",\\\"lessons_learned\\\":[\\\"Всегда читать актуальную структуру перед патчем\\\",\\\"Использовать content для создания файлов\\\",\\\"Проверять типы данных в существующих структурах\\\"],\\\"result\\\":\\\"16 файлов <2KB вместо 1 файла 12KB\\\"}],\\\"meta\\\":{\\\"author\\\":\\\"Дима и DeepSeek\\\",\\\"context\\\":\\\"Опыт реорганизации соты tasks в соответствии с принципами сот\\\"}}\"\n}\n```\n\n**Патч 17: Обновление инструкций по сотам с новыми паттернами**\n\n```json\n{\n  \"target_module\": \"honeycombs/instructions/index\",\n  \"changes\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"files.patch_patterns\",\n      \"value\": {\n        \"file\": \"workflow/patch_patterns.json\",\n        \"size_kb\": null,\n        \"tags\": [\"workflow\", \"patterns\", \"lessons_learned\"],\n        \"description\": \"Шаблоны и антипаттерны работы с патчами\",\n        \"status\": \"created\"\n      }\n    },\n    {\n      \"op\": \"add\",\n      \"path\": \"segments.workflow.files.patch_patterns\",\n      \"value\": {\n        \"file\": \"workflow/patch_patterns.json\",\n        \"size_kb\": null,\n        \"tags\": [\"workflow\", \"patterns\", \"lessons_learned\"],\n        \"description\": \"Шаблоны и антипаттерны работы с патчами\",\n        \"status\": \"created\"\n      }\n    }\n  ]\n}\n```[Патч: 2 файлов]",
       "time": 1772618910.5207295
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 1 файлов]",
+      "time": 1772618993.998367
+    },
+    {
+      "role": "assistant",
+      "content": "[Патч: 1 файлов]",
+      "time": 1772618997.2805076
     }
   ],
-  "last_active": 1772618910.520765,
+  "last_active": 1772618997.2805505,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772618832.6940699,
