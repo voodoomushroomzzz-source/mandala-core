@@ -91,58 +91,58 @@
       "files": {
         "RM-001": {
           "file": "tasks/by_roadmap/RM-001.json",
-          "size_kb": null,
+          "size_kb": 0.142,
           "tags": [
             "roadmap",
             "cloud",
             "core"
           ],
           "description": "Задачи роадмапа RM-001: Облачный СР",
-          "status": "pending_creation"
+          "status": "created"
         },
         "RM-002": {
           "file": "tasks/by_roadmap/RM-002.json",
-          "size_kb": null,
+          "size_kb": 0.142,
           "tags": [
             "roadmap",
             "future",
             "vision"
           ],
           "description": "Задачи роадмапа RM-002: Будущее Мандалы",
-          "status": "pending_creation"
+          "status": "created"
         },
         "RM-003": {
           "file": "tasks/by_roadmap/RM-003.json",
-          "size_kb": null,
+          "size_kb": 0.466,
           "tags": [
             "roadmap",
             "scout",
             "agent"
           ],
           "description": "Задачи роадмапа RM-003: Scout-Agent",
-          "status": "pending_creation"
+          "status": "created"
         },
         "RM-004": {
           "file": "tasks/by_roadmap/RM-004.json",
-          "size_kb": null,
+          "size_kb": 1.015,
           "tags": [
             "roadmap",
             "architecture",
             "optimization"
           ],
           "description": "Задачи роадмапа RM-004: Архитектурная адаптация",
-          "status": "pending_creation"
+          "status": "created"
         },
         "RM-005": {
           "file": "tasks/by_roadmap/RM-005.json",
-          "size_kb": null,
+          "size_kb": 0.142,
           "tags": [
             "roadmap",
             "honeycombs",
             "system"
           ],
           "description": "Задачи роадмапа RM-005: Система Сот",
-          "status": "pending_creation"
+          "status": "created"
         }
       },
       "load_priority": "high"
