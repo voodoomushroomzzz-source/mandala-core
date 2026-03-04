@@ -1576,12 +1576,30 @@
         };
 
         // ==================== WEBSOCKET ====================
+        let _reconnectAttempt = 0;
+
         function connect() {
             updateStatus('connecting');
             ws = new WebSocket(WS_URL);
             ws.onopen = () => ws.send(JSON.stringify({ type: 'init', session_id: 'main' }));
             ws.onmessage = (e) => { try { handleMessage(JSON.parse(e.data)); } catch (ex) { console.error(ex); } };
-            ws.onclose = () => { updateStatus('error'); showToast('◈ соединение разорвано', 'error'); setTimeout(connect, 3000); };
+            ws.onclose = () => {
+                updateStatus('error');
+                _reconnectAttempt++;
+                // Нарастающая задержка: 3s, 5s, 10s, 15s, 15s...
+                const delay = _reconnectAttempt === 1 ? 3000
+                            : _reconnectAttempt === 2 ? 5000
+                            : _reconnectAttempt <= 4  ? 10000
+                            : 15000;
+                if (_reconnectAttempt === 1) {
+                    showToast('◈ соединение разорвано — переподключение...', 'error');
+                } else if (_reconnectAttempt <= 4) {
+                    showToast(`◈ сервер просыпается... (${_reconnectAttempt})`, 'error');
+                } else {
+                    showToast('◈ ожидание сервера...', 'error');
+                }
+                setTimeout(connect, delay);
+            };
             ws.onerror = () => updateStatus('error');
         }
 
@@ -1602,6 +1620,7 @@
         function handleMessage(data) {
             switch(data.type) {
                 case 'connected':
+                    _reconnectAttempt = 0;
                     updateStatus('connected');
                     if (data.core_version) {
                         document.getElementById('coreVersion').textContent = `◈ ${data.core_version}`;
