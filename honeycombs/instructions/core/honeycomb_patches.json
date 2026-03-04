@@ -98,48 +98,47 @@
       "honeycomb_file": "file_path: honeycombs/<сота>/<сегмент>/<файл>.json",
       "core_module": "target_module: simbiosis/<модуль>"
     },
-    "honeycomb_update_rules": [
-      {
-        "title": "Обновление сот целиком",
-        "description": "Правила для полного обновления файлов сот",
-        "workflow": {
-          "step_1": "Изучи актуальный контент файла через read_file",
-          "step_2": "Подготовь полную замену соты в content",
-          "step_3": "Отправь патч с file_path и обновлённым content"
+    "honeycomb_update_rules": {
+      "title": "🔄 Обновление сот целиком",
+      "description": "ПРАВИЛО: Соты обновляются через полную замену исключительно",
+      "mandatory_rule": "Для ВСЕХ файлов в honeycombs/ используй ТОЛЬКО полную замену через file_path + content",
+      "rationale": [
+        "Атомарность: одна операция вместо нескольких",
+        "Предсказуемость: полный контроль над структурой",
+        "Безопасность: минимизация ошибок частичного обновления",
+        "История: чистые коммиты в Git"
+      ],
+      "workflow": {
+        "step_1": "read_file('honeycombs/сота/файл.json') — изучение актуальной структуры",
+        "step_2": "Подготовка полного content с ВСЕМИ полями",
+        "step_3": "Минификация JSON (убрать переносы и пробелы)",
+        "step_4": "Отправка патча: file_path + content",
+        "step_5": "Проверка: read_file для подтверждения изменений"
+      },
+      "format_examples": {
+        "honeycomb_file": {
+          "file_path": "honeycombs/seeds/active/seed_001.json",
+          "content": "{\"identity\":{\"id\":\"SEED-001\",\"name\":\"Новый проект\",\"status\":\"active\"},\"meta\":{\"description\":\"Описание\",\"tags\":[\"project\",\"new\"]},\"content\":{\"details\":\"Подробности\"}}"
         },
-        "advantages": [
-          "Безопаснее чем удаление+создание (одна операция)",
-          "Сохраняет историю изменений в Git",
-          "Атомарная операция",
-          "Меньше шансов на ошибку",
-          "Подходит для больших рефакторингов"
-        ],
-        "when_to_use": [
-          "Большие структурные изменения",
-          "Исправление множества ошибок",
-          "Обновление версии модуля",
-          "Рефакторинг всего файла"
-        ],
-        "format": {
-          "file_path": "honeycombs/path/to/file.json",
-          "content": "{\"identity\": {...}, \"meta\": {...}, \"content\": {...}}",
-          "rules": {
-            "content_must_be_minified": "Убедись, что JSON минифицирован",
-            "check_structure_first": "Всегда сначала читай файл",
-            "update_counters": "Не забудь обновить счетчики в index.json соты",
-            "test_small": "Протестируй на небольшом файле сначала"
-          }
-        },
-        "examples": [
-          {
-            "description": "Обновление файла patch_mastery.json",
-            "patch": {
-              "file_path": "honeycombs/instructions/critical/patch_mastery.json",
-              "content": "{\"identity\":{\"module_id\":\"INSTR-004\",\"name\":\"🎯 Мастерство патчей v3.0\",\"version\":\"v3.0.0\",\"created\":\"2026-03-01\",\"updated\":\"2026-03-03\",\"layer\":3,\"type\":\"critical_directive\"},\"meta\":{\"description\":\"ОБЯЗАТЕЛЬНОЕ чтение перед КАЖДЫМ патчем\",\"status\":\"active\",\"priority\":\"HIGHEST\",\"tags\":[\"patch\",\"critical\",\"mandatory\",\"mastery\"],\"resonance\":\"100%\"},\"content\":{\"update_rules\":{\"rule_1\":\"Изучи актуальный контент файла перед обновлением\",\"rule_2\":\"Готовь полную замену соты целиком\"}}}"
-            }
-          }
-        ]
-      }
-    ]
+        "honeycomb_index": {
+          "file_path": "honeycombs/seeds/index.json",
+          "content": "{\"identity\":{\"module_id\":\"HONEYCOMB-SEEDS-001\",\"name\":\"Сота семян\",\"version\":\"v2.0.0\"},\"meta\":{\"honeycomb_name\":\"seeds\",\"total_files\":5,\"total_size_kb\":2.3},\"structure\":{\"segments\":{\"active\":{\"description\":\"Активные семена\",\"files\":{\"seed_001\":{\"file\":\"active/seed_001.json\",\"size_kb\":0.5,\"status\":\"active\"}}}}},\"registry\":{\"total_files\":5,\"total_size_kb\":2.3,\"last_updated\":\"2026-03-03\"}}"
+        }
+      },
+      "prohibited": [
+        "НЕ используй target_module для файлов в honeycombs/",
+        "НЕ используй JSON-патчи с changes для сот",
+        "НЕ делай частичные обновления сот",
+        "НЕ обновляй index.json соты через target_module — только через file_path"
+      ],
+      "update_counters": "ВАЖНО: После обновления файла в соте обнови meta.total_files и registry в index.json соты",
+      "when_to_use": [
+        "Всегда для файлов в honeycombs/",
+        "Рефакторинг всей структуры",
+        "Исправление множества ошибок",
+        "Обновление версии модуля",
+        "Большие изменения в content"
+      ]
+    }
   }
 }
