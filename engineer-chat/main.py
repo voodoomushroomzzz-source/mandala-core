@@ -1002,9 +1002,10 @@ def parse_xml_tool_calls(text: str):
         for pm in _re.finditer(r'<(\w+)>(.*?)</\1>', inner, _re.DOTALL):
             if pm.group(1) not in ("function_call", "invoke"):
                 args[pm.group(1)] = pm.group(2).strip()
-        for pm in _re.finditer(r'<parameter\s+name=["\']?(\w+)["\']?>\s*(.*?)\s*</parameter>', inner, _re.DOTALL):
+        for pm in _re.finditer(r'<parameter\s+name=["\']?(\w+)["\']?[^>]*>\s*(.*?)\s*</parameter>', inner, _re.DOTALL):
             args[pm.group(1)] = pm.group(2).strip()
-        calls.append({"name": fn_name, "args": args})
+        if fn_name in KNOWN_TOOLS:
+            calls.append({"name": fn_name, "args": args})
 
     if calls:
         return calls
@@ -2367,6 +2368,7 @@ async def handle_reset_memory(message: dict, websocket: WebSocket):
 # ==================== HTTP ENDPOINTS ====================
 
 @app.get("/")
+@app.head("/")
 async def root():
     return {
         "status": "Mandala Simbiosis — Engineer Chat",
