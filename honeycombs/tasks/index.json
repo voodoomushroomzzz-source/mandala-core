@@ -95,17 +95,155 @@
   "segments": {
     "by_roadmap": {
       "description": "Задачи, сгруппированные по роадмапам",
-      "files": {},
+      "files": {
+        "RM-001": {
+          "file": "tasks/by_roadmap/RM-001.json",
+          "size_kb": null,
+          "tags": [
+            "roadmap",
+            "cloud",
+            "core"
+          ],
+          "description": "Задачи роадмапа RM-001: Облачный СР",
+          "status": "pending_creation"
+        },
+        "RM-002": {
+          "file": "tasks/by_roadmap/RM-002.json",
+          "size_kb": null,
+          "tags": [
+            "roadmap",
+            "future",
+            "vision"
+          ],
+          "description": "Задачи роадмапа RM-002: Будущее Мандалы",
+          "status": "pending_creation"
+        },
+        "RM-003": {
+          "file": "tasks/by_roadmap/RM-003.json",
+          "size_kb": null,
+          "tags": [
+            "roadmap",
+            "scout",
+            "agent"
+          ],
+          "description": "Задачи роадмапа RM-003: Scout-Agent",
+          "status": "pending_creation"
+        },
+        "RM-004": {
+          "file": "tasks/by_roadmap/RM-004.json",
+          "size_kb": null,
+          "tags": [
+            "roadmap",
+            "architecture",
+            "optimization"
+          ],
+          "description": "Задачи роадмапа RM-004: Архитектурная адаптация",
+          "status": "pending_creation"
+        },
+        "RM-005": {
+          "file": "tasks/by_roadmap/RM-005.json",
+          "size_kb": null,
+          "tags": [
+            "roadmap",
+            "honeycombs",
+            "system"
+          ],
+          "description": "Задачи роадмапа RM-005: Система Сот",
+          "status": "pending_creation"
+        }
+      },
       "load_priority": "high"
     },
     "by_priority": {
       "description": "Задачи, сгруппированные по приоритетам",
-      "files": {},
+      "files": {
+        "critical": {
+          "file": "tasks/by_priority/critical.json",
+          "size_kb": null,
+          "tags": [
+            "priority",
+            "urgent"
+          ],
+          "description": "Критические задачи (высший приоритет)",
+          "status": "pending_creation"
+        },
+        "high": {
+          "file": "tasks/by_priority/high.json",
+          "size_kb": null,
+          "tags": [
+            "priority",
+            "important"
+          ],
+          "description": "Высокоприоритетные задачи",
+          "status": "pending_creation"
+        },
+        "medium": {
+          "file": "tasks/by_priority/medium.json",
+          "size_kb": null,
+          "tags": [
+            "priority",
+            "normal"
+          ],
+          "description": "Средние по приоритету задачи",
+          "status": "pending_creation"
+        },
+        "low": {
+          "file": "tasks/by_priority/low.json",
+          "size_kb": null,
+          "tags": [
+            "priority",
+            "minor"
+          ],
+          "description": "Низкоприоритетные задачи",
+          "status": "pending_creation"
+        }
+      },
       "load_priority": "medium"
     },
     "by_status": {
       "description": "Задачи, сгруппированные по статусам",
-      "files": {},
+      "files": {
+        "active": {
+          "file": "tasks/by_status/active.json",
+          "size_kb": null,
+          "tags": [
+            "status",
+            "working"
+          ],
+          "description": "Активные задачи в работе",
+          "status": "pending_creation"
+        },
+        "completed": {
+          "file": "tasks/by_status/completed.json",
+          "size_kb": null,
+          "tags": [
+            "status",
+            "done"
+          ],
+          "description": "Завершенные задачи",
+          "status": "pending_creation"
+        },
+        "pending": {
+          "file": "tasks/by_status/pending.json",
+          "size_kb": null,
+          "tags": [
+            "status",
+            "waiting"
+          ],
+          "description": "Задачи в ожидании",
+          "status": "pending_creation"
+        },
+        "archive": {
+          "file": "tasks/by_status/archive.json",
+          "size_kb": null,
+          "tags": [
+            "status",
+            "historical"
+          ],
+          "description": "Архивные задачи (исторические)",
+          "status": "pending_creation"
+        }
+      },
       "load_priority": "medium"
     },
     "tasks": {
