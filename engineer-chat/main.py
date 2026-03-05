@@ -1872,6 +1872,9 @@ def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
     if not isinstance(patch_data, dict):
         return False, "Патч должен быть объектом JSON"
     if "patches" in patch_data:
+        # Автофикс: patches как объект вместо массива
+        if isinstance(patch_data["patches"], dict):
+            patch_data["patches"] = [patch_data["patches"]]
         if not isinstance(patch_data["patches"], list):
             return False, "Поле 'patches' должно быть массивом"
         if len(patch_data["patches"]) == 0:
@@ -1979,6 +1982,15 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
     if not patch_data:
         await manager.send_to(websocket, {"type": "error", "text": "❌ Нет данных патча"})
         return
+    # Автораспаковка: если СР обернул патч в лишний ключ "patch"
+    # {"patch": {"target_module": ...}} → {"target_module": ...}
+    if isinstance(patch_data, dict) and "patch" in patch_data and "target_module" not in patch_data and "file_path" not in patch_data and "patches" not in patch_data:
+        patch_data = patch_data["patch"]
+        logger.info(f"🔧 Автораспаковка обёртки 'patch'")
+    # Если patches — dict вместо list, оборачиваем
+    if isinstance(patch_data, dict) and "patches" in patch_data and isinstance(patch_data["patches"], dict):
+        patch_data["patches"] = [patch_data["patches"]]
+        logger.info(f"🔧 Автофикс: patches dict → list")
     if not GITHUB_TOKEN:
         await manager.send_to(websocket, {"type": "error", "text": "❌ GitHub токен не настроен"})
         return
