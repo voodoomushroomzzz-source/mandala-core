@@ -146,11 +146,16 @@
       "role": "user",
       "content": "bot.py ну тогда и путь к файлу нашего тг бота надо добавить в соответствующее место",
       "time": 1772747356.672326
+    },
+    {
+      "role": "user",
+      "content": "это телеграм бот))",
+      "time": 1772747423.5110047
     }
   ],
-  "last_active": 1772747356.6723335,
+  "last_active": 1772747423.511012,
   "created_at": 1772231887.431914,
   "modules_injected": true,
-  "injection_timestamp": 1772747356.6722388,
-  "msg_count": 383
+  "injection_timestamp": 1772747423.5108929,
+  "msg_count": 384
 }
