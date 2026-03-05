@@ -1688,7 +1688,7 @@
                     ${toggleBtn}
                     <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">◈</button>
                     <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
-                    ${(lang === 'json' || code.includes('"target_module"') || code.includes('"file_path"')) ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
+                    ${(lang === 'json' || code.includes('"target_module"') || code.includes('"file_path"') || code.includes('"filepath"') || code.includes('"targetmodule"') || code.includes('"patches"')) ? `<button class="${applyBtnClass}" onclick="preparePatchFromBlock(this)" title="Применить патч">△</button>` : ''}
                 </div>
             ` : '';
             return `
@@ -1748,6 +1748,23 @@
             });
         };
 
+        // Нормализует ключи патча: filepath→file_path, targetmodule→target_module и т.д.
+        function normalizePatchKeys(obj) {
+            if (Array.isArray(obj)) return obj.map(normalizePatchKeys);
+            if (typeof obj !== 'object' || obj === null) return obj;
+            const MAP = {
+                'filepath':     'file_path',
+                'targetmodule': 'target_module',
+                'deletefile':   'delete_file',
+            };
+            const out = {};
+            for (const [k, v] of Object.entries(obj)) {
+                const nk = MAP[k.toLowerCase().replace(/_/g,'')] || k;
+                out[nk] = normalizePatchKeys(v);
+            }
+            return out;
+        }
+
         window.preparePatchFromBlock = function(btn) {
             const codeElement = btn.closest('.code-block').querySelector('.code-content');
             const rawCode = codeElement.textContent;
@@ -1767,9 +1784,11 @@
             }
             if (!patchJson) { showToast('◈ не удалось распарсить патч', 'error'); return; }
             try {
-                JSON.parse(patchJson);
-                currentPatch = patchJson;
-                document.getElementById('patchPreviewContent').textContent = decodedCode;
+                const parsed = JSON.parse(patchJson);
+                // Нормализуем ключи — СР часто пишет filepath вместо file_path
+                const normalized = normalizePatchKeys(parsed);
+                currentPatch = JSON.stringify(normalized);
+                document.getElementById('patchPreviewContent').textContent = JSON.stringify(normalized, null, 2);
                 document.getElementById('confirmPatchBtn').disabled = false;
                 openPatchModal();
                 showToast('◈ патч подготовлен', 'success');
