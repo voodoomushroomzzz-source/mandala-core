@@ -220,18 +220,17 @@
             right: -220px; top: 50%;
             transform: translateY(-50%);
             width: 700px; height: 700px;
-            opacity: 0.38;
+            opacity: 0.35;
             pointer-events: none;
             animation: flower-breathe 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
-            filter: drop-shadow(0 0 2px rgba(16,185,129,0.0));
         }
         .bg-flower circle {
-            stroke-width: 1.1;
+            stroke-width: 0.8;
         }
         @keyframes flower-breathe {
-            0%   { opacity: 0.22; transform: translateY(-50%) scale(0.98); filter: drop-shadow(0 0 1px rgba(16,185,129,0.0)); }
-            50%  { opacity: 0.50; transform: translateY(-50%) scale(1.02); filter: drop-shadow(0 0 8px rgba(16,185,129,0.45)) drop-shadow(0 0 18px rgba(124,58,237,0.2)); }
-            100% { opacity: 0.30; transform: translateY(-50%) scale(1.00); filter: drop-shadow(0 0 3px rgba(16,185,129,0.15)); }
+            0%   { opacity: 0.20; transform: translateY(-50%) scale(0.97); filter: drop-shadow(0 0 0px rgba(16,185,129,0)); }
+            50%  { opacity: 0.52; transform: translateY(-50%) scale(1.03); filter: drop-shadow(0 0 6px rgba(16,185,129,0.55)) drop-shadow(0 0 22px rgba(16,185,129,0.25)) drop-shadow(0 0 45px rgba(124,58,237,0.18)); }
+            100% { opacity: 0.28; transform: translateY(-50%) scale(1.00); filter: drop-shadow(0 0 3px rgba(16,185,129,0.2)); }
         }
 
         /* Header */
@@ -291,34 +290,7 @@
         }
 
         /* Селектор моделей */
-        .model-selector {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-            background: var(--surface);
-            border: 1px solid var(--line-2);
-            border-radius: 8px;
-            padding: 3px;
-        }
-        .model-btn {
-            width: 30px;
-            height: 24px;
-            border: 1px solid transparent;
-            border-radius: 5px;
-            background: transparent;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            opacity: 0.35;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .model-btn.active { opacity: 1; border-color: currentColor; }
-        .grok-btn  { color: #10b981; }
-        .grok-btn.active  { background: rgba(16,185,129,0.12); }
-        .claude-btn { color: #4f46e5; }
-        .claude-btn.active { background: rgba(79,70,229,0.12); }
+
 
         /* Метки моделей в сообщениях */
         .model-label {
@@ -817,49 +789,7 @@
         }
 
         /* Observer button */
-        .observer-btn {
-            background: rgba(59,130,246,0.1);
-            border-color: #3b82f6;
-            color: #93c5fd;
-            font-size: 18px;
-        }
-        .observer-btn:hover {
-            background: #3b82f6;
-            color: white;
-            box-shadow: 0 0 20px rgba(59,130,246,0.5);
-        }
-        .observer-btn.active {
-            background: linear-gradient(145deg, #1d4ed8, #4f46e5);
-            border-color: #60a5fa;
-            color: white;
-            box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(79,70,229,0.3);
-            animation: observer-pulse 2s ease-in-out infinite;
-        }
-        @keyframes observer-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(59,130,246,0.6); }
-            50% { box-shadow: 0 0 30px rgba(59,130,246,0.9), 0 0 50px rgba(79,70,229,0.4); }
-        }
 
-        /* Observer message bubble */
-        .msg.observer .bub {
-            background: rgba(59,130,246,0.07);
-            border: 1px solid rgba(59,130,246,0.25);
-            border-radius: 2px 12px 12px 12px;
-            border-left: 2px solid;
-            border-image: linear-gradient(to bottom, #3b82f6, #6366f1, #8b5cf6) 1;
-            border-image-slice: 1;
-        }
-        .msg.observer .mname { color: #60a5fa; }
-        .observer-thinking-indicator {
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 22px;
-            font-family: var(--mono); font-size: 10px;
-            color: #60a5fa; opacity: 0.7;
-            letter-spacing: 2px;
-        }
-        .observer-thinking-indicator .dots span {
-            animation: dots 1.5s steps(4, end) infinite;
-        }
 
         .file-attachment {
             display: flex;
@@ -1348,10 +1278,7 @@
             </div>
         </div>
         <div class="h-right">
-            <div class="model-selector" id="modelSelector">
-                <button class="model-btn grok-btn active" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — основной ИИ">◈</button>
-                <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">△</button>
-            </div>
+
             <div class="vsep"></div>
             <div class="commit-sha" id="coreVersion" title="Версия ядра Мандалы (commit SHA)">◈ —</div>
             <div class="vsep"></div>
@@ -1617,23 +1544,7 @@
             div.className = `msg ${role}`;
             let iconSvg, name;
             if (role === 'user') {
-                iconSvg = `<svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="tglow"><feGaussianBlur stdDeviation="0.7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <g filter="url(#tglow)" stroke="#a78bfa" stroke-width="1.1" fill="none" opacity="0.92">
-    <!-- трикветр: три переплетённых круга -->
-    <path d="M15,6.5 A7,7 0 0,1 21.06,17.5 A7,7 0 0,1 8.94,17.5 A7,7 0 0,1 15,6.5 Z" stroke="#a78bfa" stroke-width="1.1" fill="rgba(124,58,237,0.06)"/>
-    <!-- лепесток верх -->
-    <path d="M15,5 A5.5,5.5 0 0,0 9.24,13.75 A5.5,5.5 0 0,0 15,5" stroke="#c4b5fd" stroke-width="0.9" fill="rgba(167,139,250,0.07)"/>
-    <!-- лепесток право-низ -->
-    <path d="M20.76,13.75 A5.5,5.5 0 0,0 9.24,13.75 A5.5,5.5 0 0,0 20.76,13.75" stroke="#c4b5fd" stroke-width="0.9" fill="rgba(167,139,250,0.07)"/>
-    <!-- лепесток лево-низ -->
-    <path d="M15,5 A5.5,5.5 0 0,1 20.76,13.75 A5.5,5.5 0 0,1 15,5" stroke="#c4b5fd" stroke-width="0.9" fill="rgba(167,139,250,0.07)"/>
-  </g>
-  <circle cx="15" cy="13" r="1.5" fill="#c4b5fd" opacity="0.9"/>
-  <circle cx="15" cy="15" r="5.5" stroke="#7c3aed" stroke-width="0.5" opacity="0.3" fill="none"/>
-</svg>`;
+                iconSvg = `<svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><filter id="tgw"><feGaussianBlur stdDeviation="0.9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#tgw)"><circle cx="15" cy="9.5" r="6" stroke="#c4b5fd" stroke-width="1.15" fill="rgba(124,58,237,0.06)"/><circle cx="20.2" cy="18" r="6" stroke="#c4b5fd" stroke-width="1.15" fill="rgba(124,58,237,0.06)"/><circle cx="9.8" cy="18" r="6" stroke="#c4b5fd" stroke-width="1.15" fill="rgba(124,58,237,0.06)"/><circle cx="15" cy="15" r="12" stroke="#7c3aed" stroke-width="0.6" fill="none" opacity="0.4"/></g><circle cx="15" cy="15" r="1.8" fill="#c4b5fd" opacity="0.95"/></svg>`;
                 name = 'вы';
             } else {
                 iconSvg = modelIcons[model] || modelIcons['deepseek'];
@@ -1969,7 +1880,7 @@
                     }, 2000);
                     break;
                 case 'file_read_done':
-                    updateThinkingStatus({ tool: 'read_file', path: data.path, model: Array.from(activeModels)[0] });
+                    updateThinkingStatus({ tool: 'read_file', path: data.path, model: 'deepseek' });
                     renderSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов)`);
                     break;
                 case 'patch_result':
@@ -1983,20 +1894,7 @@
                     break;
                 case 'pong':
                     break;
-                case 'observer_state':
-                    setObserverState(data.active);
-                    break;
-                case 'observer_thinking':
-                    showObserverThinking();
-                    break;
-                case 'observer_message':
-                    hideObserverThinking();
-                    addObserverMessage(data.content, data.model || 'claude');
-                    break;
-                case 'observer_error':
-                    hideObserverThinking();
-                    showToast('◬ Claude-наблюдатель не ответил', 'error');
-                    break;
+
             }
         }
 
@@ -2041,7 +1939,7 @@
             renderUserMessage(text);
             inputEl.value = '';
             autoHeight();
-            showThinking(Array.from(activeModels)[0]);
+            showThinking('deepseek');
             if (!ws || ws.readyState !== WebSocket.OPEN) {
                 showToast('◈ нет соединения с сервером', 'error');
                 hideThinking();
@@ -2056,7 +1954,7 @@
                 return;
             }
             if (caption.trim()) renderUserMessage(caption);
-            showThinking(Array.from(activeModels)[0]);
+            showThinking('deepseek');
 
             filePreview.classList.remove('hidden');
             fileProgressBar.style.width = '0%';
@@ -2268,7 +2166,7 @@
         }
 
         function showThinking(model) {
-            const m = model || Array.from(activeModels)[0] || 'deepseek';
+            const m = model || 'deepseek' || 'deepseek';
             const svgEl = document.getElementById('thinkingIconSvg');
             const labelEl = document.getElementById('thinkingLabel');
             if (svgEl && modelIcons[m]) {
@@ -2331,7 +2229,7 @@
         function updateThinkingStatus(data) {
             const labelEl = document.getElementById('thinkingLabel');
             if (!labelEl) return;
-            const model = data.model || Array.from(activeModels)[0] || 'deepseek';
+            const model = data.model || 'deepseek' || 'deepseek';
             const name = { deepseek: 'DeepSeek', claude: 'Клод' }[model] || 'СР';
 
             if (data.tool === 'web_search') {
@@ -2374,63 +2272,12 @@
         }
 
         // ==================== МОДЕЛИ ====================
-        const activeModels = new Set(['deepseek']);
         const modelIcons = {
-            deepseek: `<svg class="deepseek-flower" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><g stroke="#10b981" stroke-width="0.7" opacity="0.9"><circle cx="15" cy="15" r="5.5"/><circle cx="15" cy="9.5" r="5.5"/><circle cx="15" cy="20.5" r="5.5"/><circle cx="19.76" cy="12.25" r="5.5"/><circle cx="19.76" cy="17.75" r="5.5"/><circle cx="10.24" cy="12.25" r="5.5"/><circle cx="10.24" cy="17.75" r="5.5"/></g><circle cx="15" cy="15" r="2.2" fill="#34d399" opacity="0.95"/></svg>`,
-            claude: `<svg viewBox="0 0 30 30" fill="none"><polygon points="15,3 28,26 2,26" stroke="#a78bfa" stroke-width="0.9" fill="rgba(167,139,250,0.06)"/><circle cx="15" cy="19" r="3.5" stroke="#a78bfa" stroke-width="0.8" fill="rgba(167,139,250,0.15)"/><circle cx="15" cy="19" r="1.4" fill="#c4b5fd" opacity="0.95"/></svg>`
+            deepseek: `<svg class="deepseek-flower" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><g stroke="#10b981" stroke-width="0.7" opacity="0.9"><circle cx="15" cy="15" r="5.5"/><circle cx="15" cy="9.5" r="5.5"/><circle cx="15" cy="20.5" r="5.5"/><circle cx="19.76" cy="12.25" r="5.5"/><circle cx="19.76" cy="17.75" r="5.5"/><circle cx="10.24" cy="12.25" r="5.5"/><circle cx="10.24" cy="17.75" r="5.5"/></g><circle cx="15" cy="15" r="2.2" fill="#34d399" opacity="0.95"/></svg>`
         };
-        const modelNames = { deepseek: 'DeepSeek ◇', claude: 'Клод ○' };
-        const modelColors = { deepseek: '#10b981', claude: '#4f46e5' };
-
-        function getActiveModels() { return Array.from(activeModels); }
-        function toggleModel(model) {
-            const btnMap = { deepseek: 'btnDeepseek', claude: 'btnClaude' };
-            const btn = document.getElementById(btnMap[model]);
-            if (!btn) return;
-            if (activeModels.has(model)) {
-                activeModels.delete(model);
-                btn.classList.remove('active');
-            } else {
-                activeModels.add(model);
-                btn.classList.add('active');
-            }
-        }
-
-        // ==================== НАБЛЮДАТЕЛЬ ====================
-        let observerThinkingEl = null;
-        function showObserverThinking() {
-            hideObserverThinking();
-            observerThinkingEl = document.createElement('div');
-            observerThinkingEl.className = 'observer-thinking-indicator';
-            observerThinkingEl.innerHTML = `<span>○</span><span class="dots"><span>клод анализирует...</span></span>`;
-            messagesEl.appendChild(observerThinkingEl);
-            scrollToBottom();
-        }
-        function hideObserverThinking() {
-            if (observerThinkingEl) { observerThinkingEl.remove(); observerThinkingEl = null; }
-        }
-        function addObserverMessage(text, model = 'claude') {
-            const div = document.createElement('div');
-            div.className = 'msg observer';
-            const icon = modelIcons[model] || modelIcons.claude;
-            const name = modelNames[model] || 'Клод';
-            const color = modelColors[model] || '#4f46e5';
-            let html = escapeHtml(text);
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => renderCodeBlock(lang, code, true));
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            html = html.replace(/\*\*([^*]+)\*\*/g, `<strong style="color:${color};">$1</strong>`);
-            html = html.replace(/\n/g, '<br>');
-            div.innerHTML = `
-                <div class="av">${icon}</div>
-                <div class="mbody">
-                    <div class="mname">${name}</div>
-                    <div class="bub">${html}</div>
-                </div>`;
-            messagesEl.appendChild(div);
-            scrollToBottom();
-            saveMessages();
-        }
-        function setObserverState() {} // заглушка
+        const modelNames = { deepseek: 'DeepSeek ◇' };
+        const modelColors = { deepseek: '#10b981' };
+        function getActiveModels() { return ['deepseek']; }
 
 
         function forgetMemory() {
@@ -2617,100 +2464,25 @@
                     ctx.fillStyle = bGrd; ctx.fill();
                 }
 
-                // — геометрическая иконка —
-                const iconR = rr * 0.32;
-                const icy   = py - rr * 0.1;
-                ctx.globalAlpha = isH ? 1 : 0.6 + pAmt * 0.25;
-                const icol  = `rgba(${col},1)`;
-                const icolF = `rgba(${col},0.18)`;
-                ctx.strokeStyle = icol; ctx.fillStyle = icolF; ctx.lineWidth = isH ? 1.2 : 0.8;
-                const ic = d.icon;
-                if (ic === 'HEX') {
-                    // Кольцо из гексагона
-                    const hp = _hexPts(px, icy, iconR);
-                    const hp2 = _hexPts(px, icy, iconR*0.5);
-                    ctx.beginPath(); ctx.moveTo(hp[0][0],hp[0][1]); for(let k=1;k<6;k++) ctx.lineTo(hp[k][0],hp[k][1]); ctx.closePath(); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(hp2[0][0],hp2[0][1]); for(let k=1;k<6;k++) ctx.lineTo(hp2[k][0],hp2[k][1]); ctx.closePath(); ctx.stroke();
-                } else if (ic === 'TRI') {
-                    // Треугольник с точкой
-                    ctx.beginPath(); ctx.moveTo(px, icy-iconR); ctx.lineTo(px+iconR*0.87, icy+iconR*0.5); ctx.lineTo(px-iconR*0.87, icy+iconR*0.5); ctx.closePath(); ctx.fill(); ctx.stroke();
-                    ctx.beginPath(); ctx.arc(px, icy+iconR*0.15, iconR*0.22, 0, Math.PI*2); ctx.fillStyle=icol; ctx.fill();
-                } else if (ic === 'DIA') {
-                    // Ромб
-                    ctx.beginPath(); ctx.moveTo(px, icy-iconR); ctx.lineTo(px+iconR*0.7, icy); ctx.lineTo(px, icy+iconR); ctx.lineTo(px-iconR*0.7, icy); ctx.closePath(); ctx.fill(); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(px, icy-iconR*0.5); ctx.lineTo(px+iconR*0.35, icy); ctx.lineTo(px, icy+iconR*0.5); ctx.lineTo(px-iconR*0.35, icy); ctx.closePath(); ctx.strokeStyle=icol; ctx.stroke();
-                } else if (ic === 'MAN') {
-                    // Мандала: 3 вложенных круга
-                    [1, 0.62, 0.3].forEach((s,j) => {
-                        ctx.beginPath(); ctx.arc(px, icy, iconR*s, 0, Math.PI*2);
-                        ctx.strokeStyle = `rgba(${col},${0.9-j*0.2})`; ctx.stroke();
-                    });
-                    for(let a=0;a<6;a++){const ang=a*Math.PI/3; ctx.beginPath(); ctx.moveTo(px,icy); ctx.lineTo(px+Math.cos(ang)*iconR,icy+Math.sin(ang)*iconR); ctx.strokeStyle=`rgba(${col},0.3)`; ctx.stroke();}
-                } else if (ic === 'ARR') {
-                    // Стрелка вверх
-                    ctx.beginPath(); ctx.moveTo(px, icy-iconR); ctx.lineTo(px+iconR*0.6, icy+iconR*0.3); ctx.lineTo(px+iconR*0.25, icy+iconR*0.3); ctx.lineTo(px+iconR*0.25, icy+iconR); ctx.lineTo(px-iconR*0.25, icy+iconR); ctx.lineTo(px-iconR*0.25, icy+iconR*0.3); ctx.lineTo(px-iconR*0.6, icy+iconR*0.3); ctx.closePath(); ctx.fill(); ctx.stroke();
-                } else if (ic === 'PEN') {
-                    // Пентагон
-                    ctx.beginPath();
-                    for(let a=0;a<5;a++){const ang=a*2*Math.PI/5-Math.PI/2; const x=px+Math.cos(ang)*iconR, y=icy+Math.sin(ang)*iconR; a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-                    ctx.closePath(); ctx.fill(); ctx.stroke();
-                    ctx.beginPath(); ctx.arc(px, icy, iconR*0.25, 0, Math.PI*2); ctx.fillStyle=icol; ctx.fill();
-                } else if (ic === 'CRS') {
-                    // Круг с крестом
-                    ctx.beginPath(); ctx.arc(px, icy, iconR, 0, Math.PI*2); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(px-iconR,icy); ctx.lineTo(px+iconR,icy); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(px,icy-iconR); ctx.lineTo(px,icy+iconR); ctx.stroke();
-                } else if (ic === 'SQX') {
-                    // Квадрат с X
-                    const s2 = iconR*0.78;
-                    ctx.beginPath(); ctx.rect(px-s2, icy-s2, s2*2, s2*2); ctx.fill(); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(px-s2*0.6,icy-s2*0.6); ctx.lineTo(px+s2*0.6,icy+s2*0.6); ctx.strokeStyle=icol; ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(px+s2*0.6,icy-s2*0.6); ctx.lineTo(px-s2*0.6,icy+s2*0.6); ctx.stroke();
-                } else if (ic === 'ST6') {
-                    // Шестиконечная звезда
-                    for(let a=0;a<6;a++){const ang=a*Math.PI/3; ctx.beginPath(); ctx.moveTo(px,icy); ctx.lineTo(px+Math.cos(ang)*iconR,icy+Math.sin(ang)*iconR); ctx.strokeStyle=icol; ctx.lineWidth=isH?1.4:1; ctx.stroke();}
-                    ctx.beginPath(); const sp=_hexPts(px,icy,iconR*0.5); ctx.moveTo(sp[0][0],sp[0][1]); for(let k=1;k<6;k++) ctx.lineTo(sp[k][0],sp[k][1]); ctx.closePath(); ctx.fillStyle=icolF; ctx.fill(); ctx.strokeStyle=icol; ctx.stroke();
-                } else {
-                    // fallback — точка
-                    ctx.beginPath(); ctx.arc(px, icy, iconR*0.4, 0, Math.PI*2); ctx.fillStyle=icol; ctx.fill();
-                }
-                ctx.globalAlpha = 1;
-
-                // — название: авто-размер, перенос, по центру —
+                // — название по центру соты (без иконки) —
                 (function(){
                     const words = d.name.replace(/_/g,' ').split(' ');
-                    // Подбираем размер чтобы самое длинное слово влезло
-                    const maxW = rr * 1.55;
-                    let sz = Math.min(rr * 0.22, 11);
+                    const maxW = rr * 1.5;
+                    let sz = Math.min(rr * 0.24, 12);
                     ctx.font = `${sz}px "Fira Mono",monospace`;
                     const longest = words.reduce((a,b) => ctx.measureText(a).width > ctx.measureText(b).width ? a : b, '');
-                    while (sz > 5.5 && ctx.measureText(longest).width > maxW) {
-                        sz -= 0.5;
-                        ctx.font = `${sz}px "Fira Mono",monospace`;
-                    }
-                    // Разбиваем на строки не шире maxW
-                    const lines = [];
-                    let line = '';
-                    words.forEach(w => {
-                        const test = line ? line + ' ' + w : w;
-                        if (ctx.measureText(test).width > maxW && line) {
-                            lines.push(line); line = w;
-                        } else { line = test; }
-                    });
+                    while (sz > 5.5 && ctx.measureText(longest).width > maxW) { sz -= 0.5; ctx.font = `${sz}px "Fira Mono",monospace`; }
+                    const lines = []; let line = '';
+                    words.forEach(w => { const test = line ? line+' '+w : w; if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; } else { line = test; } });
                     if (line) lines.push(line);
-                    const lineH = sz * 1.25;
-                    const totalH = lines.length * lineH;
-                    // Размещаем блок текста в нижней части соты
-                    const startY = py + rr * 0.32 - totalH / 2 + lineH / 2;
+                    const lineH = sz * 1.3;
+                    const startY = py - (lines.length - 1) * lineH / 2;
                     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                    ctx.globalAlpha = isH ? 1 : 0.45 + pAmt * 0.2;
+                    ctx.globalAlpha = isH ? 1 : 0.55 + pAmt * 0.25;
                     ctx.fillStyle = `rgba(${col},1)`;
-                    lines.forEach((ln, li) => {
-                        ctx.fillText(ln, px, startY + li * lineH);
-                    });
+                    lines.forEach((ln, li) => ctx.fillText(ln, px, startY + li * lineH));
                     ctx.globalAlpha = 1;
                 })();
-            });
 
             ctx.restore();
         }
