@@ -1138,12 +1138,12 @@
         }
         #hivePanel {
             position: absolute;
-            min-width: 200px; max-width: 260px;
-            background: rgba(3,13,9,0.97);
-            border: 1px solid rgba(16,185,129,0.3);
-            border-radius: 8px;
-            padding: 10px 13px 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 20px rgba(16,185,129,0.06);
+            min-width: 260px; max-width: 340px;
+            background: rgba(5,8,20,0.97);
+            border: 1px solid rgba(99,102,241,0.35);
+            border-radius: 10px;
+            padding: 14px 18px 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 24px rgba(99,102,241,0.08);
             pointer-events: none;
             opacity: 0; transform: translateY(4px);
             transition: opacity 0.2s ease, transform 0.2s ease;
@@ -1156,10 +1156,10 @@
         .hive-panel-head {
             display: flex; align-items: center; gap: 9px; margin-bottom: 7px;
         }
-        .hive-panel-icon { font-size: 18px; }
+        .hive-panel-icon { font-size: 22px; }
         .hive-panel-name {
-            font-family: var(--mono); font-size: 10px; font-weight: 500;
-            letter-spacing: 2px; color: var(--green-bright); text-transform: uppercase;
+            font-family: var(--mono); font-size: 12px; font-weight: 500;
+            letter-spacing: 2px; color: #a5b4fc; text-transform: uppercase;
         }
         .hive-panel-badge {
             font-family: var(--mono); font-size: 7px; letter-spacing: 1px;
@@ -1168,17 +1168,17 @@
         .hive-panel-badge.active { color: var(--green-2); border: 1px solid rgba(16,185,129,0.3); }
         .hive-panel-badge.draft  { color: var(--violet-soft); border: 1px solid rgba(124,58,237,0.3); }
         .hive-panel-desc {
-            font-size: 9px; color: var(--text-2); margin-bottom: 8px; line-height: 1.5;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            font-size: 11px; color: var(--text-2); margin-bottom: 10px; line-height: 1.6;
+            white-space: normal;
         }
         .hive-panel-files { display: flex; flex-wrap: wrap; gap: 4px; }
         .hive-panel-file {
-            font-family: var(--mono); font-size: 7px; color: var(--text-2);
-            background: var(--surface); border: 1px solid var(--line-2);
-            border-radius: 3px; padding: 2px 6px; cursor: pointer;
+            font-family: var(--mono); font-size: 9px; color: #a5b4fc;
+            background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 3px; padding: 3px 8px; cursor: pointer;
             transition: border-color 0.15s, color 0.15s;
         }
-        .hive-panel-file:hover { border-color: var(--green-2); color: var(--green-bright); }
+        .hive-panel-file:hover { border-color: #818cf8; color: #e0e7ff; }
 
         .file-card {
             padding: 12px 14px;
@@ -1416,7 +1416,7 @@
                             <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:8px;cursor:pointer;letter-spacing:1px;" title="Обновить">↻</button>
                             <span id="honeycombsCount"></span>
                         </div>
-                        <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.35);color:var(--violet-soft);font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:2px 8px;border-radius:3px;cursor:pointer;transition:border-color 0.15s,color 0.15s;" onmouseover="this.style.borderColor='rgba(124,58,237,0.7)';this.style.color='#c4b5fd'" onmouseout="this.style.borderColor='rgba(124,58,237,0.35)';this.style.color=''" title="Очистить память чата">✕ забыть</button>
+                        <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.55);color:rgba(167,139,250,0.75);font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:2px 8px;border-radius:3px;cursor:pointer;transition:border-color 0.15s,color 0.15s;" onmouseover="this.style.borderColor='rgba(124,58,237,0.9)';this.style.color='#c4b5fd'" onmouseout="this.style.borderColor='rgba(124,58,237,0.55)';this.style.color='rgba(167,139,250,0.75)'" title="Очистить память чата">✕ забыть</button>
                     </div>
                     <canvas id="hiveCanvas"></canvas>
                     <div id="hivePanel">
@@ -2372,7 +2372,7 @@
             loadHoneycombs();
         }
 
-        const HONEYCOMB_ICONS = {core_map:"🗺",engineer_chat:"💬",instructions:"📖",philosophy:"🌀",roadmaps:"📜",seeds:"🌱",telegram_bot:"🤖",tasks:"✓",boot:"⚡"};
+        const HONEYCOMB_ICONS = {core_map:"HEX",engineer_chat:"TRI",instructions:"DIA",philosophy:"MAN",roadmaps:"ARR",seeds:"PEN",telegram_bot:"CRS",tasks:"SQX",boot:"ST6"};
 
         // ══════════════════════════════════════════════════════
         // HIVE MAP — правильная гексагональная сетка flat-top
@@ -2429,8 +2429,8 @@
             // Диаметр сетки в единицах R
             const spanQ = maxRing * 2 + 1;   // по горизонтали
             const spanR = maxRing * 2 + 1;   // по вертикали
-            const fitW  = W / (spanQ * 1.5 + 0.5) * 0.88;
-            const fitH  = H / (spanR * Math.sqrt(3)) * 0.88;
+            const fitW  = W / (spanQ * 1.5 + 0.5) * 0.70;
+            const fitH  = H / (spanR * Math.sqrt(3)) * 0.70;
             return Math.min(fitW, fitH);
         }
 
@@ -2481,7 +2481,7 @@
 
                 const col = d.status === 'draft'
                     ? [124, 58, 237]
-                    : [16, 185, 129];
+                    : [99, 102, 241];
 
                 // — glow —
                 const glowR = rr * (isH ? 2.4 : 1.5 + pAmt * 0.3);
@@ -2539,13 +2539,64 @@
                     ctx.fillStyle = bGrd; ctx.fill();
                 }
 
-                // — иконка —
-                const iconSz = Math.max(10, rr * 0.52);
-                ctx.font = `${iconSz}px serif`;
-                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.globalAlpha = isH ? 1 : 0.65 + pAmt * 0.2;
-                ctx.fillStyle = '#fff';
-                ctx.fillText(d.icon, px, py - rr * 0.1);
+                // — геометрическая иконка —
+                const iconR = rr * 0.32;
+                const icy   = py - rr * 0.1;
+                ctx.globalAlpha = isH ? 1 : 0.6 + pAmt * 0.25;
+                const icol  = `rgba(${col},1)`;
+                const icolF = `rgba(${col},0.18)`;
+                ctx.strokeStyle = icol; ctx.fillStyle = icolF; ctx.lineWidth = isH ? 1.2 : 0.8;
+                const ic = d.icon;
+                if (ic === 'HEX') {
+                    // Кольцо из гексагона
+                    const hp = _hexPts(px, icy, iconR);
+                    const hp2 = _hexPts(px, icy, iconR*0.5);
+                    ctx.beginPath(); ctx.moveTo(hp[0][0],hp[0][1]); for(let k=1;k<6;k++) ctx.lineTo(hp[k][0],hp[k][1]); ctx.closePath(); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(hp2[0][0],hp2[0][1]); for(let k=1;k<6;k++) ctx.lineTo(hp2[k][0],hp2[k][1]); ctx.closePath(); ctx.stroke();
+                } else if (ic === 'TRI') {
+                    // Треугольник с точкой
+                    ctx.beginPath(); ctx.moveTo(px, icy-iconR); ctx.lineTo(px+iconR*0.87, icy+iconR*0.5); ctx.lineTo(px-iconR*0.87, icy+iconR*0.5); ctx.closePath(); ctx.fill(); ctx.stroke();
+                    ctx.beginPath(); ctx.arc(px, icy+iconR*0.15, iconR*0.22, 0, Math.PI*2); ctx.fillStyle=icol; ctx.fill();
+                } else if (ic === 'DIA') {
+                    // Ромб
+                    ctx.beginPath(); ctx.moveTo(px, icy-iconR); ctx.lineTo(px+iconR*0.7, icy); ctx.lineTo(px, icy+iconR); ctx.lineTo(px-iconR*0.7, icy); ctx.closePath(); ctx.fill(); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(px, icy-iconR*0.5); ctx.lineTo(px+iconR*0.35, icy); ctx.lineTo(px, icy+iconR*0.5); ctx.lineTo(px-iconR*0.35, icy); ctx.closePath(); ctx.strokeStyle=icol; ctx.stroke();
+                } else if (ic === 'MAN') {
+                    // Мандала: 3 вложенных круга
+                    [1, 0.62, 0.3].forEach((s,j) => {
+                        ctx.beginPath(); ctx.arc(px, icy, iconR*s, 0, Math.PI*2);
+                        ctx.strokeStyle = `rgba(${col},${0.9-j*0.2})`; ctx.stroke();
+                    });
+                    for(let a=0;a<6;a++){const ang=a*Math.PI/3; ctx.beginPath(); ctx.moveTo(px,icy); ctx.lineTo(px+Math.cos(ang)*iconR,icy+Math.sin(ang)*iconR); ctx.strokeStyle=`rgba(${col},0.3)`; ctx.stroke();}
+                } else if (ic === 'ARR') {
+                    // Стрелка вверх
+                    ctx.beginPath(); ctx.moveTo(px, icy-iconR); ctx.lineTo(px+iconR*0.6, icy+iconR*0.3); ctx.lineTo(px+iconR*0.25, icy+iconR*0.3); ctx.lineTo(px+iconR*0.25, icy+iconR); ctx.lineTo(px-iconR*0.25, icy+iconR); ctx.lineTo(px-iconR*0.25, icy+iconR*0.3); ctx.lineTo(px-iconR*0.6, icy+iconR*0.3); ctx.closePath(); ctx.fill(); ctx.stroke();
+                } else if (ic === 'PEN') {
+                    // Пентагон
+                    ctx.beginPath();
+                    for(let a=0;a<5;a++){const ang=a*2*Math.PI/5-Math.PI/2; const x=px+Math.cos(ang)*iconR, y=icy+Math.sin(ang)*iconR; a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+                    ctx.closePath(); ctx.fill(); ctx.stroke();
+                    ctx.beginPath(); ctx.arc(px, icy, iconR*0.25, 0, Math.PI*2); ctx.fillStyle=icol; ctx.fill();
+                } else if (ic === 'CRS') {
+                    // Круг с крестом
+                    ctx.beginPath(); ctx.arc(px, icy, iconR, 0, Math.PI*2); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(px-iconR,icy); ctx.lineTo(px+iconR,icy); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(px,icy-iconR); ctx.lineTo(px,icy+iconR); ctx.stroke();
+                } else if (ic === 'SQX') {
+                    // Квадрат с X
+                    const s2 = iconR*0.78;
+                    ctx.beginPath(); ctx.rect(px-s2, icy-s2, s2*2, s2*2); ctx.fill(); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(px-s2*0.6,icy-s2*0.6); ctx.lineTo(px+s2*0.6,icy+s2*0.6); ctx.strokeStyle=icol; ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(px+s2*0.6,icy-s2*0.6); ctx.lineTo(px-s2*0.6,icy+s2*0.6); ctx.stroke();
+                } else if (ic === 'ST6') {
+                    // Шестиконечная звезда
+                    for(let a=0;a<6;a++){const ang=a*Math.PI/3; ctx.beginPath(); ctx.moveTo(px,icy); ctx.lineTo(px+Math.cos(ang)*iconR,icy+Math.sin(ang)*iconR); ctx.strokeStyle=icol; ctx.lineWidth=isH?1.4:1; ctx.stroke();}
+                    ctx.beginPath(); const sp=_hexPts(px,icy,iconR*0.5); ctx.moveTo(sp[0][0],sp[0][1]); for(let k=1;k<6;k++) ctx.lineTo(sp[k][0],sp[k][1]); ctx.closePath(); ctx.fillStyle=icolF; ctx.fill(); ctx.strokeStyle=icol; ctx.stroke();
+                } else {
+                    // fallback — точка
+                    ctx.beginPath(); ctx.arc(px, icy, iconR*0.4, 0, Math.PI*2); ctx.fillStyle=icol; ctx.fill();
+                }
+                ctx.globalAlpha = 1;
 
                 // — название —
                 const lblSz = Math.max(6, rr * 0.19);
