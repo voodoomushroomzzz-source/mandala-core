@@ -1644,25 +1644,60 @@
                 .replace(/\*([^*\n]+)\*/g, '$1')
                 .replace(/(^|[^\w_])__([^_\n]+)__([^\w_]|$)/gm, '$1$2$3')
                 .replace(/(^|\s)_([^_\n]+)_(\s|$)/gm, '$1$2$3');
-            // 1. Вырезаем завершённые ```...``` блоки
-            // Закрывающий ``` ищем только если перед ним \n — защита от ``` внутри JSON-строк
-            let processed = rawText.replace(/```([\w]*)\r?\n([\s\S]*?)\n```(?=[ \t]*(?:\n|$))/g, function(_, lang, code) {
-                var idx = blocks.length;
-                blocks.push({ lang: lang || 'code', code: code, open: false });
-                return PH + idx + '_END';
-            });
-            // 1b. Fallback: закрывающий ``` без \n перед ним (короткие блоки)
-            processed = processed.replace(/```([\w]*)\r?\n([\s\S]*?)```(?=[ \t]*(?:\n|$))/g, function(_, lang, code) {
-                var idx = blocks.length;
-                blocks.push({ lang: lang || 'code', code: code, open: false });
-                return PH + idx + '_END';
-            });
-            // 2. Незакрытый блок в конце (стриминг)
-            processed = processed.replace(/```([\w]*)\r?\n([\s\S]*)$/, function(_, lang, code) {
-                var idx = blocks.length;
-                blocks.push({ lang: lang || 'code', code: code, open: true });
-                return PH + idx + '_END';
-            });
+            // 1. Парсим code-блоки посимвольно — единственно надёжный способ
+            // когда внутри блока могут быть ``` (например в JSON content)
+            let processed = (function(src) {
+                var out = '';
+                var i = 0;
+                while (i < src.length) {
+                    // Ищем открывающий ``` с необязательным lang и обязательным \n
+                    if (src[i] === '`' && src[i+1] === '`' && src[i+2] === '`') {
+                        var j = i + 3;
+                        // читаем lang (до \n)
+                        var langEnd = src.indexOf('\n', j);
+                        if (langEnd === -1) { out += src[i]; i++; continue; }
+                        var lang = src.slice(j, langEnd).trim();
+                        var codeStart = langEnd + 1;
+                        // Ищем закрывающий ```, который стоит на начале строки
+                        // (предыдущий символ — \n или начало строки)
+                        var found = -1;
+                        var k = codeStart;
+                        while (k < src.length - 2) {
+                            if (src[k] === '`' && src[k+1] === '`' && src[k+2] === '`') {
+                                // Закрывающий ``` — только если в начале строки
+                                if (k === 0 || src[k-1] === '\n') {
+                                    found = k;
+                                    break;
+                                }
+                            }
+                            k++;
+                        }
+                        if (found !== -1) {
+                            // Завершённый блок
+                            var code = src.slice(codeStart, found);
+                            // Убираем trailing \n если есть
+                            if (code.endsWith('\n')) code = code.slice(0, -1);
+                            var idx = blocks.length;
+                            blocks.push({ lang: lang || 'code', code: code, open: false });
+                            out += PH + idx + '_END';
+                            i = found + 3;
+                            // Пропускаем \n после закрывающего ```
+                            if (src[i] === '\n') i++;
+                        } else {
+                            // Незакрытый блок — до конца строки (стриминг)
+                            var code = src.slice(codeStart);
+                            var idx = blocks.length;
+                            blocks.push({ lang: lang || 'code', code: code, open: true });
+                            out += PH + idx + '_END';
+                            i = src.length;
+                        }
+                    } else {
+                        out += src[i];
+                        i++;
+                    }
+                }
+                return out;
+            })(rawText);
             // 3. Markdown для текстовой части
             var html;
             try { html = marked.parse(processed, { breaks: true, gfm: true }); }
