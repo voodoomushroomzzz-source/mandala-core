@@ -1128,8 +1128,9 @@
         #hiveMeta {
             flex-shrink: 0;
             font-family: var(--mono); font-size: 8px; color: var(--text-3);
-            letter-spacing: 1px; text-align: center;
-            padding: 6px 0 2px;
+            letter-spacing: 1px;
+            padding: 6px 10px 2px;
+            display: flex; align-items: center; justify-content: space-between;
         }
         #hiveCanvas {
             flex: 1; display: block;
@@ -1411,8 +1412,11 @@
             <div class="tab-content" id="tab-map">
                 <div class="hive-wrap" id="mapContainer">
                     <div id="hiveMeta">
-                        <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:8px;cursor:pointer;letter-spacing:1px;">↻</button>
-                        &nbsp;<span id="honeycombsCount"></span>
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:8px;cursor:pointer;letter-spacing:1px;" title="Обновить">↻</button>
+                            <span id="honeycombsCount"></span>
+                        </div>
+                        <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.35);color:var(--violet-soft);font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:2px 8px;border-radius:3px;cursor:pointer;transition:border-color 0.15s,color 0.15s;" onmouseover="this.style.borderColor='rgba(124,58,237,0.7)';this.style.color='#c4b5fd'" onmouseout="this.style.borderColor='rgba(124,58,237,0.35)';this.style.color=''" title="Очистить память чата">✕ забыть</button>
                     </div>
                     <canvas id="hiveCanvas"></canvas>
                     <div id="hivePanel">
