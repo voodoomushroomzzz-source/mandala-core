@@ -38,6 +38,9 @@ GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
 USE_TAVILY = os.getenv("USE_TAVILY", "false").lower() == "true"
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1"
+ANTHROPIC_MODEL = "claude-sonnet-4-6"
 
 GITHUB_WEBHOOK_SECRET = os.getenv("GITHUB_WEBHOOK_SECRET")  # опционально, для верификации
 
@@ -49,6 +52,8 @@ if not OPENROUTER_API_KEY:
     logger.warning("⚠️ OPENROUTER_KEY не найден — DeepSeek недоступен")
 if not GITHUB_TOKEN:
     logger.warning("⚠️ GITHUB_TOKEN не найден — модули не будут загружаться")
+if not ANTHROPIC_API_KEY:
+    logger.warning("⚠️ ANTHROPIC_API_KEY не найден — наблюдатель Claude недоступен")
 
 # ==================== ИНСТРУМЕНТЫ ====================
 
@@ -204,6 +209,79 @@ class FileReader:
 file_reader = FileReader()
 
 # ==================== CLAUDE-НАБЛЮДАТЕЛЬ ====================
+
+async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[str]:
+    """
+    Вызывает Claude как скептика-наблюдателя.
+    Получает вопрос Садовника и ответ основного ИИ, возвращает критический анализ.
+    """
+    if not ANTHROPIC_API_KEY:
+        logger.warning("⚠️ ANTHROPIC_API_KEY не задан — наблюдатель пропущен")
+        return None
+
+    system_prompt = """Ты — Claude, внешний технический рецензент. Видишь вопрос Садовника и ответ Kimi. Твоя задача — честная, точная оценка без выдумок.
+
+КАТЕГОРИИ (используй эмодзи как маркер):
+✅ Верно — что Kimi сделал правильно (конкретно, не "хорошая архитектура")
+🟡 Улучшение — работает, но есть лучший способ (объясни чем лучше)
+🔴 Баг — код упадёт или даст неверный результат (покажи: при каком условии, как починить)
+💡 Альтернатива — принципиально другой подход если он явно лучше
+
+ЖЁСТКИЕ ПРАВИЛА:
+— Перед словом "баг" — запусти код в голове. Если не падает → это не баг.
+— `hmac.new(key, msg, digestmod).hexdigest()` → корректный Python. Не трогай.
+— `asyncio.Lock()` в `__init__` → корректно. Не трогай.
+— `list(iterable)` для безопасной итерации → паттерн, не проблема.
+— Разница в стиле (time.time() vs datetime.now()) → не баг, максимум 🟡.
+— Если реальных проблем нет → напиши только ✅ и заверши. Не высасывай.
+
+Максимум 4 пункта. Без вступлений. Пиши на русском."""
+
+    messages = [
+        {
+            "role": "user",
+            "content": f"**Вопрос Садовника:**\n{user_text}\n\n**Ответ Kimi:**\n{kimi_response}\n\nДай свою оценку."
+        }
+    ]
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{ANTHROPIC_BASE_URL}/messages",
+                headers={
+                    "x-api-key": ANTHROPIC_API_KEY,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json"
+                },
+                json={
+                    "model": ANTHROPIC_MODEL,
+                    "max_tokens": 8192,
+                    "system": system_prompt,
+                    "messages": messages
+                },
+                timeout=1000.0  # ⬆️ Увеличено до 1000 секунд
+            )
+            if response.status_code == 200:
+                data = response.json()
+                text = data.get("content", [{}])[0].get("text", "")
+                logger.info(f"🔵 Claude-наблюдатель ответил ({len(text)} символов)")
+                return text
+            elif response.status_code == 400:
+                err_data = {}
+                try: err_data = response.json()
+                except: pass
+                err_msg = (err_data.get("error") or {}).get("message", "")
+                if "credit balance" in err_msg or "too low" in err_msg:
+                    logger.warning("⚠️ Claude-наблюдатель: недостаточно кредитов на Anthropic аккаунте")
+                    return "⚠️ Claude-наблюдатель недоступен: недостаточно кредитов на Anthropic аккаунте. Пополни баланс на console.anthropic.com."
+                logger.error(f"Claude API error: {response.status_code} — {response.text}")
+                return None
+            else:
+                logger.error(f"Claude API error: {response.status_code} — {response.text}")
+                return None
+    except Exception as e:
+        logger.error(f"Claude observer exception: {e}")
+        return None
 
 
 class GitHubSessionStore:
@@ -643,6 +721,23 @@ class KernelMemory:
 При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 Патч оборачивай в ```json ... ```. На русском."""
 
+        elif role == "claude":
+            return f"""Ты — Claude, наблюдатель и критический рецензент Мандалы Симбиоза.
+Контекст системы — в boot.json (инжектируется в диалог).
+
+РОЛЬ:
+— Анализируй ответы DeepSeek: логика, точность, корректность кода
+— Предлагай альтернативы только если они явно лучше
+— Будь конкретен: строки, условия, причины
+— Если всё верно — так и скажи
+
+Формат: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
+Максимум 4 пункта. Без вступлений.
+Можешь предлагать патчи — перед этим read_file актуальной версии.
+На русском."""
+
+        # Роли определены для deepseek и claude
+        return kernel.build_system_prompt("deepseek")
 
 
 kernel = KernelMemory()
@@ -779,6 +874,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 await handle_refresh_modules(message, websocket)
             elif msg_type == "reset_memory":
                 await handle_reset_memory(message, websocket)
+            elif msg_type == "toggle_observer":
+                session = await get_session(session_id)
+                current = session.get("claude_observer", False)
+                session["claude_observer"] = not current
+                session_store.schedule_save(session_id, session)
+                state = session["claude_observer"]
+                logger.info(f"🔵 [{session_id[:12]}...] Claude-наблюдатель: {'включён' if state else 'выключен'}")
+                await manager.send_to(websocket, {
+                    "type": "observer_state",
+                    "active": state
+                })
             else:
                 await manager.send_to(websocket, {
                     "type": "error",
@@ -1163,7 +1269,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "temperature": 0.8,
                             "max_tokens": 16384,
                         },
-                        timeout=900.0
+                        timeout=300.0
                     )
                     if resp.status_code == 200:
                         data = resp.json()
@@ -1263,7 +1369,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
                                 json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.8, "max_tokens": 16384},
-                                timeout=900.0
+                                timeout=300.0
                             )
                             if resp2.status_code == 200:
                                 msg_data = resp2.json()["choices"][0]["message"]
@@ -1330,7 +1436,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                     f"{OPENROUTER_BASE_URL}/chat/completions",
                                     headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
                                     json={"model": DEEPSEEK_MODEL, "messages": retry_msgs, "temperature": 0.8, "max_tokens": 8192},
-                                    timeout=900.0
+                                    timeout=120.0
                                 )
                                 if resp_retry.status_code == 200:
                                     retry_content = (resp_retry.json()["choices"][0]["message"].get("content") or "").strip()
@@ -1360,6 +1466,865 @@ async def handle_ask(message: dict, websocket: WebSocket):
     # ═══════════════════════════════════════
     # 2. КЛОД — полноценный агент с инструментами
     # ═══════════════════════════════════════
+    if "claude" in active_models and ANTHROPIC_API_KEY:
+        await manager.send_to(websocket, {"type": "model_start", "model": "claude"})
+
+        # Инструменты в формате Anthropic API
+        claude_tools = [
+            {
+                "name": "web_search",
+                "description": "Поиск в интернете для получения актуальной информации",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "query": {"type": "string", "description": "Поисковый запрос"},
+                        "num_results": {"type": "integer", "description": "Количество результатов (макс 10)", "default": 5}
+                    },
+                    "required": ["query"]
+                }
+            },
+            {
+                "name": "read_file",
+                "description": "Прочитать содержимое файла или папки из репозитория",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "path": {"type": "string", "description": "Путь к файлу или папке в репозитории"}
+                    },
+                    "required": ["path"]
+                }
+            }
+        ]
+
+        claude_history = []
+        for msg in shared_history:
+            claude_history.append({"role": msg["role"], "content": msg["content"]})
+        claude_messages = claude_history + [{"role": "user", "content": user_text}]
+
+        try:
+            async with httpx.AsyncClient() as client:
+                claude_headers = {
+                    "x-api-key": ANTHROPIC_API_KEY,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json"
+                }
+                claude_response = ""
+                claude_iterations = 0
+
+                while claude_iterations < 20:
+                    claude_iterations += 1
+                    resp = await client.post(
+                        f"{ANTHROPIC_BASE_URL}/messages",
+                        headers=claude_headers,
+                        json={
+                            "model": ANTHROPIC_MODEL,
+                            "max_tokens": 8192,
+                            "system": kernel.build_system_prompt("claude"),
+                            "tools": claude_tools,
+                            "messages": claude_messages
+                        },
+                        timeout=300.0
+                    )
+
+                    if resp.status_code != 200:
+                        err_body = resp.text[:200]
+                        if resp.status_code == 400:
+                            err = (resp.json().get("error") or {}).get("message", "")
+                            if "credit balance" in err:
+                                await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": "⚠️ Недостаточно кредитов Anthropic"})
+                                break
+                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод {resp.status_code}: {err_body[:120]}"})
+                        break
+
+                    resp_data = resp.json()
+                    stop_reason = resp_data.get("stop_reason")
+                    content_blocks = resp_data.get("content", [])
+
+                    # Собираем текст из блоков
+                    for block in content_blocks:
+                        if block.get("type") == "text":
+                            claude_response += block.get("text", "")
+
+                    # Если нет tool_use — финальный ответ
+                    if stop_reason != "tool_use":
+                        break
+
+                    # ── Обрабатываем tool_use блоки ──
+                    tool_results = []
+                    for block in content_blocks:
+                        if block.get("type") != "tool_use":
+                            continue
+                        fn = block.get("name", "")
+                        args = block.get("input", {})
+                        tool_use_id = block.get("id", "")
+
+                        tool_result = ""
+                        if fn == "web_search":
+                            results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
+                            tool_result = json.dumps(results, ensure_ascii=False)
+                            await manager.send_to(websocket, {"type": "tool_use", "model": "claude", "tool": "web_search", "query": args.get("query", "")})
+                        elif fn == "read_file":
+                            rpath = args.get("path", "").strip()
+                            rkey = "simbiosis/" + rpath.split("/")[-1].replace(".json", "")
+                            cached_mod = kernel.modules.get(rkey) or kernel.modules.get(rpath.replace(".json", ""))
+                            await manager.send_to(websocket, {"type": "tool_use", "model": "claude", "tool": "read_file", "path": rpath, "cached": cached_mod is not None})
+                            if cached_mod is not None:
+                                tool_result = json.dumps(cached_mod, ensure_ascii=False)
+                                logger.info(f"📦 [claude] read_file кэш: {rpath}")
+                            else:
+                                tool_result = await file_reader.read(rpath) or "Файл не найден"
+                        else:
+                            tool_result = f"Неизвестный инструмент: {fn}"
+
+                        tool_results.append({
+                            "type": "tool_result",
+                            "tool_use_id": tool_use_id,
+                            "content": tool_result
+                        })
+
+                    # Добавляем ответ ассистента и результаты инструментов в историю
+                    claude_messages.append({"role": "assistant", "content": content_blocks})
+                    claude_messages.append({"role": "user", "content": tool_results})
+
+                if claude_response:
+                    await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": claude_response})
+                    await manager.send_to(websocket, {"type": "model_done", "model": "claude"})
+                    logger.info(f"✅ Клод: {len(claude_response)} символов, {claude_iterations} итераций")
+                else:
+                    await manager.send_to(websocket, {"type": "model_done", "model": "claude"})
+
+        except Exception as e:
+            logger.error(f"Claude exception: {e}")
+            await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: {str(e)[:100]}"})
+
+    # ── Резонанс и финал ──
+    main_response = deepseek_response
+    if main_response:
+        resonance = resonance_calculator.calculate(main_response, {"last_user_message": user_text})
+        await manager.send_to(websocket, {
+            "type": "resonance",
+            "value": resonance,
+            "level": "low" if resonance < 0.7 else "medium" if resonance < 0.85 else "high"
+        })
+        manager.add_to_context(session_id, "assistant", main_response)
+
+    await manager.send_to(websocket, {"type": "done", "full_text": main_response[:200] if main_response else ""})
+
+
+async def handle_file_upload(message: dict, websocket: WebSocket):
+    session_id = message.get("session_id", "unknown")
+    file_name = message.get("name", "file")
+    file_content_b64 = message.get("content")
+    caption = message.get("caption", "")
+    active_models = message.get("models", ["deepseek"])
+    is_last = message.get("is_last", True)  # если False — не вызывать ask сразу
+    logger.info(f"📁 [{session_id[:12]}...] Получен файл: {file_name}")
+    if not file_content_b64:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ Пустой файл"})
+        return
+    try:
+        file_content = base64.b64decode(file_content_b64).decode("utf-8")
+        logger.info(f"📄 Содержимое: {len(file_content)} символов")
+
+        try:
+            json_data = json.loads(file_content)
+            if "target_module" in json_data or "patches" in json_data or "file_path" in json_data:
+                # Патч — показываем для применения, не запускаем СР автоматически
+                manager.add_to_context(session_id, "user", f"[Патч: {file_name}]")
+                await manager.send_to(websocket, {
+                    "type": "file_processed",
+                    "summary": f"📦 Патч {file_name} получен"
+                })
+                await manager.send_to(websocket, {"type": "stream", "content": f"📦 Получил патч {file_name}.\n\n"})
+                await manager.send_to(websocket, {"type": "stream", "content": f"```json\n{file_content}\n```\n\n"})
+                await manager.send_to(websocket, {"type": "stream", "content": "Нажми △ применить в блоке выше или давай обсудим."})
+                await manager.send_to(websocket, {"type": "done"})
+                return
+            else:
+                # Обычный JSON
+                keys = list(json_data.keys())[:5]
+                summary = f"✅ JSON {file_name} получен. Ключи: {keys}"
+                manager.add_to_context(session_id, "user",
+                    f"[Загружен файл: {file_name}]\n```json\n{file_content[:25000]}\n```"
+                    + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
+        except json.JSONDecodeError:
+            # Не JSON — текст/код
+            summary = f"📄 {file_name} ({len(file_content)} символов) получен"
+            manager.add_to_context(session_id, "user",
+                f"[Загружен файл: {file_name}]\n```\n{file_content[:25000]}\n```"
+                + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
+
+        await manager.send_to(websocket, {"type": "file_processed", "summary": summary})
+
+        # Запускаем СР только если это последний файл в очереди
+        if is_last:
+            ask_text = caption.strip() if caption.strip() else f"Проанализируй загруженные файлы и дай своё мнение."
+            await handle_ask({
+                "text": ask_text,
+                "session_id": session_id,
+                "models": active_models
+            }, websocket)
+
+    except Exception as e:
+        logger.error(f"File upload error: {e}\n{traceback.format_exc()}")
+        await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка: {str(e)}"})
+
+# ==================== ФУНКЦИИ ДЛЯ РАБОТЫ С JSON PATCH ====================
+
+async def apply_json_operation(content: Dict, operation_type: str, target_path: str, new_value: Any = None) -> Tuple[bool, Optional[Dict], str]:
+    try:
+        # ── Поддержка специальных операций add_record / delete_record ──
+        # add_record: добавить новый объект в массив по пути
+        # delete_record: удалить объект из массива по значению поля id/key
+        if operation_type == "add_record":
+            parts = target_path.split('.')
+            current = content
+            for part in parts[:-1]:
+                if part:
+                    if part not in current:
+                        current[part] = {}
+                    current = current[part]
+            last_part = parts[-1]
+            if last_part not in current:
+                current[last_part] = []
+            if not isinstance(current[last_part], list):
+                return False, None, f"{last_part} не является массивом"
+            if isinstance(new_value, list):
+                current[last_part].extend(new_value)
+                return True, content, f"✅ Добавлено {len(new_value)} записей в массив {last_part}"
+            else:
+                current[last_part].append(new_value)
+                item_id = new_value.get("id", "?") if isinstance(new_value, dict) else "?"
+                return True, content, f"✅ Запись '{item_id}' добавлена в {last_part}"
+
+        if operation_type == "delete_record":
+            # target_path = "path.to.array", new_value = {"id": "record_id"} или просто id строка
+            parts = target_path.split('.')
+            current = content
+            for part in parts[:-1]:
+                if part:
+                    if part not in current:
+                        return False, None, f"Путь {'.'.join(parts[:-1])} не найден"
+                    current = current[part]
+            last_part = parts[-1]
+            if last_part not in current or not isinstance(current[last_part], list):
+                return False, None, f"{last_part} не является массивом или не найден"
+            arr = current[last_part]
+            # new_value = id для удаления или dict с полем id
+            record_id = new_value if isinstance(new_value, str) else (new_value.get("id") if isinstance(new_value, dict) else None)
+            if record_id is None:
+                return False, None, "Не указан id записи для удаления"
+            before = len(arr)
+            current[last_part] = [item for item in arr if not (isinstance(item, dict) and item.get("id") == record_id)]
+            after = len(current[last_part])
+            if before == after:
+                return False, None, f"Запись с id='{record_id}' не найдена в {last_part}"
+            return True, content, f"✅ Запись '{record_id}' удалена из {last_part}"
+
+        array_match = re.match(r"(.+?)(\d+)(.*)", target_path)
+        if array_match:
+            base_path, index_str, rest = array_match.groups()
+            index = int(index_str)
+            current = content
+            for key in base_path.split('.'):
+                if key:
+                    if isinstance(current, dict) and key in current:
+                        current = current[key]
+                    else:
+                        return False, None, f"Путь {base_path} не найден"
+            if not isinstance(current, list):
+                return False, None, f"{base_path} не является массивом"
+            if index >= len(current):
+                return False, None, f"Индекс {index} вне диапазона (макс {len(current)-1})"
+            if rest:
+                rest = rest.lstrip('.')
+                if rest:
+                    return await apply_json_operation(current[index], operation_type, rest, new_value)
+            if operation_type == "update_field":
+                current[index] = new_value
+                return True, content, f"✅ Элемент [{index}] обновлён"
+            elif operation_type == "delete_field":
+                current.pop(index)
+                return True, content, f"✅ Элемент [{index}] удалён"
+            elif operation_type == "add_to_array":
+                if isinstance(new_value, list):
+                    current[index:index] = new_value
+                else:
+                    current.insert(index, new_value)
+                return True, content, f"✅ Добавлено в позицию [{index}]"
+        else:
+            parts = target_path.split('.')
+            current = content
+            for part in parts[:-1]:
+                if part:
+                    if part not in current:
+                        current[part] = {}
+                    current = current[part]
+            last_part = parts[-1]
+            if operation_type == "update_field":
+                current[last_part] = new_value
+                return True, content, f"✅ Поле {last_part} обновлено"
+            elif operation_type == "delete_field":
+                if last_part in current:
+                    del current[last_part]
+                    return True, content, f"✅ Поле {last_part} удалено"
+                else:
+                    return True, content, f"⚠️ Поле {last_part} уже отсутствует, удаление не требуется"
+            elif operation_type == "add_to_array":
+                if last_part not in current:
+                    current[last_part] = []
+                if not isinstance(current[last_part], list):
+                    return False, None, f"{last_part} не является массивом"
+                if isinstance(new_value, list):
+                    current[last_part].extend(new_value)
+                else:
+                    current[last_part].append(new_value)
+                return True, content, f"✅ Добавлено в массив {last_part}"
+            elif operation_type == "show_structure":
+                return True, current.get(last_part, "не найдено"), f"Структура по пути {target_path}"
+        return False, None, "Неизвестный тип операции"
+    except Exception as e:
+        return False, None, f"Ошибка: {str(e)}"
+
+def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, str]:
+    try:
+        array_match = re.match(r"(.+)(\d+)$", path)
+        if not array_match:
+            return False, content, "Replace работает только с элементами массива (path[index])"
+        base_path, index_str = array_match.groups()
+        index = int(index_str)
+        current = content
+        for key in base_path.split('.'):
+            if key:
+                if isinstance(current, dict) and key in current:
+                    current = current[key]
+                else:
+                    return False, content, f"Путь {base_path} не найден"
+        if not isinstance(current, list):
+            return False, content, f"{base_path} не является массивом"
+        if index >= len(current):
+            return False, content, f"Индекс {index} вне диапазона"
+        current[index] = value
+        return True, content, f"Элемент [{index}] заменён"
+    except Exception as e:
+        return False, content, str(e)
+
+def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str]:
+    try:
+        parts = path.split('.')
+        current = content
+        for part in parts[:-1]:
+            if part:
+                if part not in current:
+                    current[part] = {}
+                current = current[part]
+        last_part = parts[-1]
+        if last_part not in current:
+            current[last_part] = {}
+        if not isinstance(current[last_part], dict) or not isinstance(value, dict):
+            return False, content, "Merge работает только с объектами"
+        def deep_merge(a, b):
+            for key in b:
+                if key in a and isinstance(a[key], dict) and isinstance(b[key], dict):
+                    deep_merge(a[key], b[key])
+                else:
+                    a[key] = b[key]
+            return a
+        current[last_part] = deep_merge(current[last_part], value)
+        return True, content, f"Объект {last_part} объединён"
+    except Exception as e:
+        return False, content, str(e)
+
+def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
+    diff = []
+    def compare_dicts(a, b, path=""):
+        if a == b:
+            return
+        if type(a) != type(b):
+            diff.append(f"{path}: тип изменён")
+            return
+        if isinstance(a, dict) and isinstance(b, dict):
+            all_keys = set(a.keys()) | set(b.keys())
+            for key in all_keys:
+                new_path = f"{path}.{key}" if path else key
+                if key not in a:
+                    diff.append(f"+ {new_path}")
+                elif key not in b:
+                    diff.append(f"- {new_path}")
+                else:
+                    compare_dicts(a[key], b[key], new_path)
+        elif isinstance(a, list) and isinstance(b, list):
+            if len(a) != len(b):
+                diff.append(f"{path}: длина изменена {len(a)} → {len(b)}")
+            else:
+                for i, (ai, bi) in enumerate(zip(a, b)):
+                    if ai != bi:
+                        compare_dicts(ai, bi, f"{path}[{i}]")
+        else:
+            if a != b:
+                a_str = str(a)[:30] + "..." if len(str(a)) > 30 else str(a)
+                b_str = str(b)[:30] + "..." if len(str(b)) > 30 else str(b)
+                diff.append(f"{path}: {a_str} → {b_str}")
+    compare_dicts(original, modified)
+    return diff[:15]
+
+def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
+    if not isinstance(patch_data, dict):
+        return False, "Патч должен быть объектом JSON"
+    if "patches" in patch_data:
+        # Автофикс: patches как объект вместо массива
+        if isinstance(patch_data["patches"], dict):
+            patch_data["patches"] = [patch_data["patches"]]
+        if not isinstance(patch_data["patches"], list):
+            return False, "Поле 'patches' должно быть массивом"
+        if len(patch_data["patches"]) == 0:
+            return False, "Массив patches пуст"
+        for i, subpatch in enumerate(patch_data["patches"]):
+            if not isinstance(subpatch, dict):
+                return False, f"Подпатч #{i} должен быть объектом"
+            if "target_module" not in subpatch and "file_path" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'target_module' или 'file_path'"
+            if subpatch.get("delete_file"):
+                continue  # delete_file не требует changes/content
+            if "changes" not in subpatch and "content" not in subpatch and "replacements" not in subpatch:
+                return False, f"Подпатч #{i}: отсутствует 'changes', 'content' или 'replacements'"
+            if "changes" in subpatch:
+                if not isinstance(subpatch["changes"], list):
+                    return False, f"Подпатч #{i}: 'changes' должен быть массивом"
+                if len(subpatch["changes"]) == 0:
+                    return False, f"Подпатч #{i}: массив изменений пуст"
+                valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
+                for j, change in enumerate(subpatch["changes"]):
+                    if not isinstance(change, dict):
+                        return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
+                    if "op" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
+                    if change["op"] not in valid_ops:
+                        return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
+                    if "path" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
+                    if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
+                        return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
+        return True, "Мульти-патч корректен"
+    else:
+        if "target_module" not in patch_data and "file_path" not in patch_data:
+            return False, "Отсутствует 'target_module' или 'file_path'"
+        if patch_data.get("delete_file"):
+            return True, "Одиночный delete_file корректен"
+        if "changes" not in patch_data and "content" not in patch_data and "replacements" not in patch_data:
+            return False, "Отсутствует 'changes', 'content' или 'replacements'"
+        if "changes" in patch_data:
+            if not isinstance(patch_data["changes"], list):
+                return False, "'changes' должен быть массивом"
+            if len(patch_data["changes"]) == 0:
+                return False, "Массив изменений пуст"
+            valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
+            for i, change in enumerate(patch_data["changes"]):
+                if not isinstance(change, dict):
+                    return False, f"Изменение #{i} должно быть объектом"
+                if "op" not in change:
+                    return False, f"Изменение #{i}: отсутствует 'op'"
+                if change["op"] not in valid_ops:
+                    return False, f"Изменение #{i}: недопустимая операция '{change['op']}'"
+                if "path" not in change:
+                    return False, f"Изменение #{i}: отсутствует 'path'"
+                if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
+                    return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
+        return True, "Одиночный патч корректен"
+
+async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
+    test_content = copy.deepcopy(original)
+    applied = []
+    failed = []
+    for i, change in enumerate(changes):
+        try:
+            op = change["op"]
+            path = change["path"]
+            value = change.get("value")
+            if op == "update":
+                success, result, msg = await apply_json_operation(test_content, "update_field", path, value)
+            elif op == "add":
+                # Если path указывает на массив и value — объект/список → add_record
+                # иначе — просто update_field
+                success, result, msg = await apply_json_operation(test_content, "add_record", path, value)
+            elif op == "delete":
+                success, result, msg = await apply_json_operation(test_content, "delete_field", path, None)
+            elif op == "remove":
+                # remove — удалить запись из массива по id
+                success, result, msg = await apply_json_operation(test_content, "delete_record", path, value)
+            elif op == "replace":
+                success, result, msg = handle_replace(test_content, path, value)
+            elif op == "merge":
+                success, result, msg = handle_merge(test_content, path, value)
+            else:
+                success, result, msg = False, test_content, f"Неизвестная операция: {op}"
+            if success:
+                applied.append({"index": i, "op": op, "path": path, "msg": msg})
+                test_content = result
+            else:
+                failed.append({"index": i, "op": op, "path": path, "error": msg})
+        except Exception as e:
+            failed.append({"index": i, "op": op, "path": path, "error": str(e)})
+    diff = generate_simple_diff(original, test_content)
+    return {
+        "success": len(failed) == 0,
+        "applied": applied,
+        "failed": failed,
+        "diff": diff,
+        "result_content": test_content if len(failed) == 0 else None
+    }
+
+# ==================== УНИВЕРСАЛЬНЫЙ ОБРАБОТЧИК ПАТЧЕЙ ====================
+
+async def handle_apply_patch(message: dict, websocket: WebSocket):
+    session_id = message.get("session_id", "unknown")
+    patch_data = message.get("patch")
+    if not patch_data:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ Нет данных патча"})
+        return
+    # Автораспаковка: если СР обернул патч в лишний ключ "patch"
+    # {"patch": {"target_module": ...}} → {"target_module": ...}
+    if isinstance(patch_data, dict) and "patch" in patch_data and "target_module" not in patch_data and "file_path" not in patch_data and "patches" not in patch_data:
+        patch_data = patch_data["patch"]
+        logger.info(f"🔧 Автораспаковка обёртки 'patch'")
+    # Если patches — dict вместо list, оборачиваем
+    if isinstance(patch_data, dict) and "patches" in patch_data and isinstance(patch_data["patches"], dict):
+        patch_data["patches"] = [patch_data["patches"]]
+        logger.info(f"🔧 Автофикс: patches dict → list")
+    if not GITHUB_TOKEN:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ GitHub токен не настроен"})
+        return
+    logger.info(f"📝 [{session_id[:12]}...] Применение универсального патча")
+    is_valid, error_msg = validate_patch_structure(patch_data)
+    if not is_valid:
+        await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка в структуре патча: {error_msg}"})
+        return
+    try:
+        if "patches" in patch_data:
+            patches = patch_data["patches"]
+        else:
+            patches = [patch_data]
+        results = []
+        async with httpx.AsyncClient() as client:
+            headers = {
+                "Authorization": f"token {GITHUB_TOKEN}",
+                "Accept": "application/vnd.github.v3+json"
+            }
+            for patch in patches:
+                _tm = patch.get("target_module") or ""
+                if patch.get("file_path"):
+                    file_path = patch["file_path"]
+                elif _tm:
+                    # Добавляем .json только если его ещё нет
+                    file_path = _tm if _tm.endswith(".json") else _tm + ".json"
+                else:
+                    file_path = None
+                if not file_path:
+                    results.append({"file": "unknown", "status": "error", "message": "Не указан file_path или target_module"})
+                    continue
+                # ── ОПРЕДЕЛЯЕМ ТИП ПАТЧА ──
+                # JSON патчи (точечные изменения) - только для .json
+                # TEXT патчи (str_replace) - для .py, .html, .md, .txt и др.
+                is_json_file = file_path.endswith(".json")
+                url = f"{session_store.api_base}/contents/{file_path}"
+
+                # ═══ delete_file: физическое удаление файла через GitHub DELETE API ═══
+                if patch.get("delete_file"):
+                    resp_sha = await client.get(url, headers=headers)
+                    if resp_sha.status_code == 404:
+                        results.append({"file": file_path, "status": "error", "message": "Файл не найден"})
+                        continue
+                    if resp_sha.status_code != 200:
+                        results.append({"file": file_path, "status": "error", "message": f"Ошибка доступа: {resp_sha.status_code}"})
+                        continue
+                    file_sha = resp_sha.json().get("sha")
+                    del_payload = {
+                        "message": f"🗑️ Удалён {file_path} | {session_id[:8]} | {datetime.now().strftime('%H:%M')}",
+                        "sha": file_sha,
+                        "branch": "main"
+                    }
+                    del_resp = await client.delete(url, headers=headers, json=del_payload)
+                    if del_resp.status_code == 200:
+                        results.append({"file": file_path, "status": "success", "message": "Удалён ✓"})
+                        module_key = file_path[:-5] if file_path.endswith(".json") else file_path
+                        kernel.modules.pop(module_key, None)
+                        if module_key in kernel.module_list:
+                            kernel.module_list.remove(module_key)
+                            logger.info(f"🗑️ Модуль {module_key} удалён из ядра")
+                        logger.info(f"🗑️ Файл удалён: {file_path}")
+                    else:
+                        results.append({"file": file_path, "status": "error", "message": f"GitHub DELETE: {del_resp.status_code} — {del_resp.text[:200]}"})
+                    continue  # переходим к следующему патчу
+
+                resp = await client.get(url, headers=headers)
+                if resp.status_code != 200:
+                    if resp.status_code == 404:
+                        if "content" not in patch:
+                            results.append({"file": file_path, "status": "error", "message": "Файл не найден и content не предоставлен"})
+                            continue
+                        new_content = patch["content"]
+                        sha = None
+                    else:
+                        results.append({"file": file_path, "status": "error", "message": f"Ошибка доступа: {resp.status_code}"})
+                        continue
+                else:
+                    file_data = resp.json()
+                    current_content = base64.b64decode(file_data["content"]).decode("utf-8")
+                    sha = file_data["sha"]
+                    
+                    # ═══ ВАРИАНТ 1: Полная замена файла (content) ═══
+                    if "content" in patch:
+                        new_content = patch["content"]
+                    
+                    # ═══ ВАРИАНТ 2: JSON патчи (changes) — только для .json ═══
+                    elif "changes" in patch and is_json_file:
+                        try:
+                            current_json = json.loads(current_content)
+                        except json.JSONDecodeError:
+                            results.append({"file": file_path, "status": "error", "message": "Файл не является валидным JSON"})
+                            continue
+                        test_result = await apply_batch_patch_dry_run(current_json, patch["changes"])
+                        if not test_result["success"]:
+                            error_msg = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
+                            results.append({"file": file_path, "status": "error", "message": f"Ошибка применения: {error_msg}"})
+                            continue
+                        new_content = json.dumps(test_result["result_content"], indent=2, ensure_ascii=False)
+                    
+                    # ═══ ВАРИАНТ 3: TEXT патчи (replacements) — для .py, .html, .md и др. ═══
+                    elif "replacements" in patch:
+                        new_content = current_content
+                        replacements = patch["replacements"]
+                        if not isinstance(replacements, list):
+                            results.append({"file": file_path, "status": "error", "message": "replacements должен быть массивом"})
+                            continue
+                        
+                        failed_replacements = []
+                        for i, repl in enumerate(replacements):
+                            old_str = repl.get("old")
+                            new_str = repl.get("new")
+                            if old_str is None or new_str is None:
+                                failed_replacements.append(f"#{i}: нет old/new")
+                                continue
+                            
+                            # Проверяем что old_str встречается ровно 1 раз
+                            count = new_content.count(old_str)
+                            if count == 0:
+                                failed_replacements.append(f"#{i}: строка не найдена")
+                                continue
+                            elif count > 1:
+                                failed_replacements.append(f"#{i}: найдено {count} вхождений (должно быть 1)")
+                                continue
+                            
+                            # Применяем замену
+                            new_content = new_content.replace(old_str, new_str, 1)
+                        
+                        if failed_replacements:
+                            results.append({
+                                "file": file_path,
+                                "status": "error",
+                                "message": f"Ошибки замен: {'; '.join(failed_replacements)}"
+                            })
+                            continue
+                        
+                        # Отправляем системное сообщение об успехе
+                        await manager.send_to(websocket, {
+                            "type": "system",
+                            "text": f"✅ Патч для {file_path}: {len(replacements)} замен применено"
+                        })
+                    
+                    else:
+                        results.append({"file": file_path, "status": "error", "message": "Нет ни content, ни changes, ни replacements"})
+                        continue
+                content_b64 = base64.b64encode(new_content.encode("utf-8")).decode("utf-8")
+                commit_msg = f"📝 Патч от {session_id[:8]} | {datetime.now().strftime('%H:%M')}"
+                put_payload = {
+                    "message": commit_msg,
+                    "content": content_b64,
+                    "branch": "main"
+                }
+                if sha:
+                    put_payload["sha"] = sha
+                put_resp = await client.put(url, headers=headers, json=put_payload)
+                if put_resp.status_code in [200, 201]:
+                    commit_sha = put_resp.json().get("commit", {}).get("sha", "")[:7]
+                    is_create = resp.status_code == 404  # Был создан новый файл
+                    
+                    if is_create:
+                        results.append({"file": file_path, "status": "success", "message": f"Создан ({commit_sha}) ✨"})
+                        # Если создан новый .json модуль в simbiosis/ → добавляем в module_list
+                        if file_path.endswith(".json") and file_path.startswith("simbiosis/"):
+                            module_name = file_path[:-5]  # убираем .json
+                            if module_name not in kernel.module_list:
+                                kernel.module_list.append(module_name)
+                                logger.info(f"✨ Новый модуль добавлен: {module_name}")
+                                await manager.send_to(websocket, {
+                                    "type": "system",
+                                    "text": f"✨ Новый модуль {module_name} создан и добавлен в ядро"
+                                })
+                    else:
+                        results.append({"file": file_path, "status": "success", "message": f"Обновлён ({commit_sha})"})
+                    
+                    # Обновляем кэш модулей
+                    if file_path.endswith(".json") and file_path[:-5] in kernel.module_list:
+                        module_name = file_path[:-5]
+                        try:
+                            kernel.modules[module_name] = json.loads(new_content)
+                            logger.info(f"🔄 kernel.modules[{module_name}] обновлён из патча")
+                        except:
+                            pass
+                else:
+                    results.append({"file": file_path, "status": "error", "message": f"GitHub: {put_resp.status_code}"})
+        await manager.send_to(websocket, {"type": "patch_result", "results": results})
+        manager.add_to_context(session_id, "assistant", f"[Патч: {len(patches)} файлов]")
+
+        # Если патч затронул модули ядра — сбрасываем флаг инъекции
+        # При следующем сообщении СР получит обновлённые модули
+        patched_modules = [
+            p.get("target_module") or (p.get("file_path", "").replace(".json", "") if p.get("file_path", "").endswith(".json") else None)
+            for p in patches
+        ]
+        if any(m in kernel.module_list for m in patched_modules if m):
+            session = session_store.get_cached(session_id)
+            if session:
+                session["modules_injected"] = False
+                # Убираем старый инжект из истории чтобы не дублировать
+                session["messages"] = [m for m in session.get("messages", []) if not m.get("_protected")]
+                session_store.schedule_save(session_id, session)
+                logger.info(f"🔄 [{session_id[:12]}...] modules_injected сброшен — ядро обновится при следующем сообщении")
+    except Exception as e:
+        logger.error(f"Patch error: {e}")
+        await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка патча: {str(e)}"})
+
+def detect_module_request(text: str) -> Optional[str]:
+    text_lower = text.lower().strip()
+    patterns = [
+        r'(?:покажи|показать|открой|модуль|что в|загрузи|дай|get)\s+([a-z_/]+)',
+        r'([a-z_/]+)\.json',
+        r'^([a-z_/]+)$',
+    ]
+    # Новые модули ядра — короткие имена и полные пути
+    valid_modules = {
+        "boot": "simbiosis/boot",
+        "core_map": "simbiosis/core_map",
+        "philosophy": "simbiosis/philosophy",
+        "seeds": "simbiosis/seeds",
+        "roadmaps": "simbiosis/roadmaps",
+        "engineer_chat": "simbiosis/engineer_chat",
+        "telegram_bot": "simbiosis/telegram_bot",
+        # Алиасы
+        "карта": "simbiosis/core_map",
+        "семена": "simbiosis/seeds",
+        "философия": "simbiosis/philosophy",
+        "загрузка": "simbiosis/boot",
+        "чат": "simbiosis/engineer_chat",
+        "бот": "simbiosis/telegram_bot",
+    }
+    for pattern in patterns:
+        match = re.search(pattern, text_lower)
+        if match:
+            requested = match.group(1).replace("simbiosis/", "")
+            if requested in valid_modules:
+                return valid_modules[requested]
+            for alias, full_path in valid_modules.items():
+                if requested in alias or alias in requested:
+                    return full_path
+    return None
+
+async def send_module_directly(module_name: str, websocket: WebSocket, session_id: str):
+    logger.info(f"📦 Модуль: {module_name}")
+    module_data = kernel.get_module(module_name)
+    if module_data:
+        content_json = json.dumps(module_data, indent=2, ensure_ascii=False)
+        await manager.send_to(websocket, {
+            "type": "module_direct",
+            "name": module_name,
+            "content": content_json
+        })
+        manager.add_to_context(session_id, "assistant", f"[Модуль {module_name}]")
+    else:
+        await manager.send_to(websocket, {"type": "error", "text": f"❌ Модуль {module_name} не загружен"})
+
+async def handle_read_file_request(message: dict, websocket: WebSocket):
+    """
+    Пункт 8: При нажатии на модуль/карточку файла в меню 'карта'
+    СР читает файл через read_file и уведомляет клиента об обновлении знаний.
+    """
+    session_id = message.get("session_id", "unknown")
+    file_path = message.get("path", "")
+    file_label = message.get("label", file_path)  # Человеко-читаемое имя для UI
+    if not file_path:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ Путь к файлу не указан"})
+        return
+    logger.info(f"📖 [{session_id[:12]}...] read_file_request: {file_path}")
+    await manager.send_to(websocket, {
+        "type": "tool_use", "model": "system",
+        "tool": "read_file", "path": file_path
+    })
+    content = await file_reader.read(file_path)
+    if not content:
+        await manager.send_to(websocket, {
+            "type": "system",
+            "text": f"❌ Не удалось прочитать {file_path}"
+        })
+        return
+    # Кладём содержимое файла в контекст сессии как системное сообщение
+    # СР получит его при следующем запросе и будет знать актуальную версию
+    context_msg = f"[ОБНОВЛЕНИЕ ЗНАНИЙ: {file_label}]\nФайл: {file_path}\n\n```\n{content[:8000]}\n```"
+    if len(content) > 8000:
+        context_msg += f"\n_(показаны первые 8000 из {len(content)} символов)_"
+    manager.add_to_context(session_id, "user", context_msg)
+    manager.add_to_context(session_id, "assistant", f"◈ Файл {file_label} прочитан и загружен в контекст. Знания актуализированы.")
+    # Если это модуль ядра — обновляем kernel.modules
+    module_key = file_path.replace(".json", "")
+    if module_key in kernel.module_list or module_key in kernel.on_demand_modules:
+        try:
+            kernel.modules[module_key] = json.loads(content)
+            logger.info(f"🔄 kernel.modules[{module_key}] обновлён через read_file_request")
+        except json.JSONDecodeError:
+            pass
+    await manager.send_to(websocket, {
+        "type": "file_read_done",
+        "path": file_path,
+        "label": file_label,
+        "size": len(content),
+        "message": f"◈ {file_label} прочитан ({len(content):,} символов). СР обновил знания."
+    })
+
+
+async def handle_module(message: dict, websocket: WebSocket):
+    module_name = message.get("name", "")
+    session_id = message.get("session_id", "unknown")
+    if not module_name:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ Не указан модуль"})
+        return
+    await send_module_directly(module_name, websocket, session_id)
+
+async def handle_refresh_modules(message: dict, websocket: WebSocket):
+    session_id = message.get("session_id", "unknown")
+    logger.info(f"🔄 [{session_id[:12]}...] Обновление модулей")
+    await kernel.load_all_modules()
+    await manager.send_to(websocket, {
+        "type": "modules_refreshed",
+        "modules": list(kernel.modules.keys()),
+        "count": len(kernel.modules)
+    })
+
+async def handle_reset_memory(message: dict, websocket: WebSocket):
+    session_id = message.get("session_id", "unknown")
+    logger.info(f"🗑️ [{session_id[:12]}...] Сброс памяти сессии")
+    session = session_store.get_cached(session_id)
+    if session:
+        session["messages"] = []
+        session["modules_injected"] = False
+        session_store.schedule_save(session_id, session)
+    else:
+        session_store._local[session_id] = {"messages": [], "modules_injected": False, "last_active": time.time(), "created_at": time.time()}
+    await manager.send_to(websocket, {
+        "type": "system",
+        "text": "🌱 Память очищена. Начинаем с чистого листа."
+    })
+
+# ==================== HTTP ENDPOINTS ====================
 
 @app.get("/")
 @app.head("/")
@@ -1373,6 +2338,7 @@ async def root():
         "core_version": kernel.global_commit_sha or "—",
         "github_configured": session_store.token is not None,
         "deepseek_configured": OPENROUTER_API_KEY is not None,
+        "claude_configured": ANTHROPIC_API_KEY is not None,
     }
 
 @app.get("/health")
@@ -1387,6 +2353,7 @@ async def health():
         "last_update": kernel.last_update.isoformat() if kernel.last_update else None,
         "github": "ok" if GITHUB_TOKEN else "missing",
         "deepseek": "ok" if OPENROUTER_API_KEY else "missing",
+        "claude": "ok" if ANTHROPIC_API_KEY else "missing",
         "tavily": "enabled" if USE_TAVILY else "disabled",
         "webhook": "configured" if GITHUB_WEBHOOK_SECRET else "no_secret"
     }
