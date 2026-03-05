@@ -1118,21 +1118,69 @@
         .btn-primary:hover { background: var(--green); color: var(--bg); box-shadow: 0 4px 15px var(--green); }
 
         /* === СОТЫ === */
-        .honeycombs-section { margin-bottom: 32px; }
-        .honeycombs-label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-2); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .honeycombs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
-        .honeycomb-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: visible; }
-        .honeycomb-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--green), var(--violet)); opacity: 0; transition: opacity 0.2s ease; }
-        .honeycomb-card:hover { border-color: var(--line-2); background: var(--surface-2); transform: translateY(-1px); }
-        .honeycomb-card:hover::before { opacity: 1; }
-        .honeycomb-card-icon { font-size: 20px; margin-bottom: 8px; display: block; }
-        .honeycomb-card-name { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 1px; color: var(--green-bright); margin-bottom: 4px; }
-        .honeycomb-card-desc { font-size: 10px; color: var(--text-2); line-height: 1.4; margin-bottom: 8px; }
-        .honeycomb-card-meta { font-family: var(--mono); font-size: 8px; letter-spacing: 0.5px; color: var(--text-3); display: flex; gap: 8px; align-items: center; }
-        .honeycomb-status { padding: 1px 5px; border-radius: 3px; font-size: 8px; }
-        .honeycomb-status.active { color: var(--green-2); border: 1px solid rgba(16,185,129,0.3); }
-        .honeycomb-status.draft  { color: var(--violet-soft); border: 1px solid rgba(124,58,237,0.3); }
-        .honeycomb-card-hint { font-family: var(--mono); font-size: 8px; color: var(--text-3); margin-top: 8px; }
+        /* ══ HIVE MAP ══ */
+        .hive-wrap {
+            position: relative;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        #hiveCanvas {
+            flex: 1;
+            display: block;
+            cursor: pointer;
+            min-height: 0;
+        }
+        /* Панель раскрытия при наведении */
+        #hivePanel {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(3,13,9,0.98) 0%, rgba(7,18,9,0.95) 100%);
+            border-top: 1px solid var(--line-2);
+            padding: 14px 18px 16px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+            pointer-events: none;
+            z-index: 10;
+        }
+        #hivePanel.show {
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .hive-panel-head {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px;
+        }
+        .hive-panel-icon { font-size: 22px; }
+        .hive-panel-name {
+            font-family: var(--mono); font-size: 11px; font-weight: 500;
+            letter-spacing: 2px; color: var(--green-bright); text-transform: uppercase;
+        }
+        .hive-panel-desc {
+            font-size: 10px; color: var(--text-2); margin-bottom: 10px; line-height: 1.5;
+        }
+        .hive-panel-files {
+            display: flex; flex-wrap: wrap; gap: 5px;
+        }
+        .hive-panel-file {
+            font-family: var(--mono); font-size: 8px; color: var(--text-2);
+            background: var(--surface-2); border: 1px solid var(--line-2);
+            border-radius: 3px; padding: 2px 7px;
+            cursor: pointer; transition: border-color 0.15s, color 0.15s;
+        }
+        .hive-panel-file:hover { border-color: var(--green-2); color: var(--green-bright); }
+        .hive-panel-status {
+            font-family: var(--mono); font-size: 8px; letter-spacing: 1px;
+            padding: 2px 7px; border-radius: 3px; margin-left: auto;
+        }
+        .hive-panel-status.active { color: var(--green-2); border: 1px solid rgba(16,185,129,0.3); }
+        .hive-panel-status.draft  { color: var(--violet-soft); border: 1px solid rgba(124,58,237,0.3); }
+        /* Счётчик */
+        #hiveMeta {
+            font-family: var(--mono); font-size: 8px; color: var(--text-3);
+            letter-spacing: 1px; text-align: right; padding: 4px 2px 6px;
+            flex-shrink: 0;
+        }
 
         .file-card {
             padding: 12px 14px;
@@ -1363,19 +1411,21 @@
             </div>
 
             <!-- Вкладка карты ядра -->
-            <div class="tab-content" id="tab-map">
-                <div class="seeds-container" id="mapContainer">
-                    <div id="mapHeader" style="padding:0 4px 14px;display:flex;align-items:center;justify-content:center;gap:8px;">
-                        <button onclick="loadMap()" style="background:transparent;border:1px solid var(--line-2);color:var(--green-bright);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">↻ обновить</button>
-                        <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.4);color:var(--violet-soft);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;cursor:pointer;">✕ забыть</button>
+            <div class="tab-content" id="tab-map" style="padding:0;overflow:hidden;">
+                <div class="hive-wrap" id="mapContainer">
+                    <div id="hiveMeta">
+                        <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:8px;cursor:pointer;letter-spacing:1px;margin-right:8px;">↻</button>
+                        <span id="honeycombsCount"></span>
                     </div>
-                    <div class="honeycombs-section">
-                        <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
-                            <span id="honeycombsCount" style="font-family:var(--mono);font-size:8px;color:var(--text-3);letter-spacing:1px;"></span>
+                    <canvas id="hiveCanvas"></canvas>
+                    <div id="hivePanel">
+                        <div class="hive-panel-head">
+                            <span class="hive-panel-icon" id="hivePanelIcon"></span>
+                            <span class="hive-panel-name" id="hivePanelName"></span>
+                            <span class="hive-panel-status" id="hivePanelStatus"></span>
                         </div>
-                        <div class="honeycombs-grid" id="honeycombsGrid">
-                            <div class="empty-state"><div class="empty-state-icon">○</div><div>загрузка сот...</div></div>
-                        </div>
+                        <div class="hive-panel-desc" id="hivePanelDesc"></div>
+                        <div class="hive-panel-files" id="hivePanelFiles"></div>
                     </div>
                 </div>
             </div>
@@ -2323,10 +2373,263 @@
 
         const HONEYCOMB_ICONS = {core_map:"🗺",engineer_chat:"💬",instructions:"📖",philosophy:"🌀",roadmaps:"📜",seeds:"🌱",telegram_bot:"🤖",tasks:"✓",boot:"⚡"};
 
+        // ══════════════════════════════════════════════
+        // HIVE MAP — гексагональный canvas
+        // ══════════════════════════════════════════════
+        let _hiveData = [];      // [{name,icon,desc,status,files,indexPath}]
+        let _hiveHovered = -1;   // индекс наведённой соты
+        let _hiveAnimId = null;
+        let _hivePulse = 0;      // глобальная фаза пульсации
+
+        // Геометрия гексагона (pointy-top)
+        function hexCorners(cx, cy, r) {
+            const pts = [];
+            for (let i = 0; i < 6; i++) {
+                const a = Math.PI / 180 * (60 * i - 30);
+                pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+            }
+            return pts;
+        }
+
+        // Размещаем соты по спирали от центра
+        function hexPositions(n, R) {
+            const positions = [[0, 0]];
+            if (n <= 1) return positions;
+            const dirs = [[1,0],[0,1],[-1,1],[-1,0],[0,-1],[1,-1]];
+            let q = 1, r = 0, ring = 1;
+            while (positions.length < n) {
+                q = ring; r = 0;
+                // Начальная позиция кольца
+                for (let d = 4; d < 6 && positions.length < n; d++) {
+                    for (let s = 0; s < ring && positions.length < n; s++) {
+                        q += dirs[d][0]; r += dirs[d][1];
+                    }
+                }
+                // Обходим кольцо
+                q = ring; r = -ring;
+                for (let d = 0; d < 6 && positions.length < n; d++) {
+                    for (let s = 0; s < ring && positions.length < n; s++) {
+                        positions.push([q, r]);
+                        q += dirs[d][0]; r += dirs[d][1];
+                    }
+                }
+                ring++;
+            }
+            return positions;
+        }
+
+        // Правильный обход колец
+        function buildHexGrid(n) {
+            const out = [[0, 0]];
+            if (n <= 1) return out;
+            const dirs = [[1,-1],[1,0],[0,1],[-1,1],[-1,0],[0,-1]];
+            let ring = 1;
+            while (out.length < n) {
+                let q = 0, r = -ring;
+                for (let d = 0; d < 6 && out.length < n; d++) {
+                    for (let s = 0; s < ring && out.length < n; s++) {
+                        out.push([q, r]);
+                        q += dirs[d][0]; r += dirs[d][1];
+                    }
+                }
+                ring++;
+            }
+            return out.slice(0, n);
+        }
+
+        function drawHive(canvas, data, hovered, pulse) {
+            const W = canvas.width, H = canvas.height;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, W, H);
+
+            const n = data.length;
+            if (!n) return;
+
+            // Вычисляем радиус соты чтобы всё влезло
+            const maxRing = Math.ceil((-1 + Math.sqrt(1 + (4*(n-1))/3)) / 2) + 1;
+            const R = Math.min(W, H) / (maxRing * 2 + 2) / 1.2;
+            const gap = R * 0.06;
+            const rDraw = R - gap;
+
+            // Hex → pixel (pointy-top flat spacing)
+            const sW = Math.sqrt(3) * R;
+            const sH = 1.5 * R;
+            const cx0 = W / 2, cy0 = H / 2;
+
+            function hexToXY(q, r) {
+                return [
+                    cx0 + sW * (q + r * 0.5),
+                    cy0 + sH * r
+                ];
+            }
+
+            const grid = buildHexGrid(n);
+            const colorActive   = [16,185,129];
+            const colorDraft    = [124,58,237];
+            const colorCenter   = [16,185,129];
+
+            grid.forEach(([q, r], i) => {
+                if (i >= data.length) return;
+                const d = data[i];
+                const [px, py] = hexToXY(q, r);
+                const isCenter  = (i === 0);
+                const isHovered = (i === hovered);
+
+                // Пульсация — каждая сота со своей фазой
+                const phase = pulse + i * 0.3;
+                const pulseAmt = 0.5 + 0.5 * Math.sin(phase);
+                const rr = rDraw * (isHovered ? 1.06 : 1.0) * (1 + pulseAmt * 0.025);
+
+                // Цвет базовый
+                const baseCol = isCenter ? colorCenter
+                    : d.status === 'draft' ? colorDraft : colorActive;
+
+                // Glow
+                const glowR = rr * (isHovered ? 2.2 : 1.6);
+                const glowA = isHovered ? 0.22 : 0.08 + pulseAmt * 0.07;
+                const grad = ctx.createRadialGradient(px, py, 0, px, py, glowR);
+                grad.addColorStop(0, `rgba(${baseCol},${glowA})`);
+                grad.addColorStop(1, `rgba(${baseCol},0)`);
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(px, py, glowR, 0, Math.PI*2);
+                ctx.fill();
+
+                // Заливка гексагона
+                const corners = hexCorners(px, py, rr);
+                ctx.beginPath();
+                ctx.moveTo(corners[0][0], corners[0][1]);
+                for (let k = 1; k < 6; k++) ctx.lineTo(corners[k][0], corners[k][1]);
+                ctx.closePath();
+
+                const fillA = isCenter ? 0.18 : isHovered ? 0.14 : 0.07 + pulseAmt * 0.04;
+                ctx.fillStyle = `rgba(${baseCol},${fillA})`;
+                ctx.fill();
+
+                // Обводка
+                const strokeA = isHovered ? 0.9 : 0.35 + pulseAmt * 0.25;
+                const strokeW = isCenter ? 1.2 : isHovered ? 1.0 : 0.6;
+                ctx.strokeStyle = `rgba(${baseCol},${strokeA})`;
+                ctx.lineWidth = strokeW;
+                ctx.stroke();
+
+                // Иконка
+                const iconSize = rr * 0.6;
+                ctx.font = `${iconSize}px serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.globalAlpha = isHovered ? 1 : 0.7 + pulseAmt * 0.2;
+                ctx.fillText(d.icon, px, py - rr * 0.12);
+                ctx.globalAlpha = 1;
+
+                // Название
+                const labelSize = Math.max(7, rr * 0.22);
+                ctx.font = `${labelSize}px "Fira Mono", monospace`;
+                ctx.fillStyle = isHovered
+                    ? `rgba(${baseCol},1)`
+                    : `rgba(${baseCol},${0.5 + pulseAmt * 0.2})`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const label = d.name.replace(/_/g,' ');
+                ctx.fillText(label.length > 12 ? label.slice(0,11)+'…' : label, px, py + rr * 0.45);
+            });
+
+            // Центральное свечение
+            const cGrad = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R*2);
+            cGrad.addColorStop(0, `rgba(16,185,129,${0.04 + 0.03*Math.sin(pulse)})`);
+            cGrad.addColorStop(1, 'rgba(16,185,129,0)');
+            ctx.fillStyle = cGrad;
+            ctx.fillRect(0, 0, W, H);
+        }
+
+        function hiveAnimate() {
+            _hivePulse += 0.04;
+            const canvas = document.getElementById('hiveCanvas');
+            if (canvas) drawHive(canvas, _hiveData, _hiveHovered, _hivePulse);
+            _hiveAnimId = requestAnimationFrame(hiveAnimate);
+        }
+
+        function hiveResize() {
+            const canvas = document.getElementById('hiveCanvas');
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width  = rect.width  * devicePixelRatio;
+            canvas.height = rect.height * devicePixelRatio;
+            canvas.getContext('2d').scale(devicePixelRatio, devicePixelRatio);
+            canvas.style.width  = rect.width  + 'px';
+            canvas.style.height = rect.height + 'px';
+        }
+
+        function hiveGetIdx(canvas, data, ex, ey) {
+            const rect = canvas.getBoundingClientRect();
+            const mx = ex - rect.left, my = ey - rect.top;
+            const n = data.length;
+            if (!n) return -1;
+            const maxRing = Math.ceil((-1 + Math.sqrt(1 + (4*(n-1))/3)) / 2) + 1;
+            const R = Math.min(canvas.offsetWidth, canvas.offsetHeight) / (maxRing * 2 + 2) / 1.2;
+            const sW = Math.sqrt(3) * R, sH = 1.5 * R;
+            const cx0 = canvas.offsetWidth/2, cy0 = canvas.offsetHeight/2;
+            const grid = buildHexGrid(n);
+            let best = -1, bestD = Infinity;
+            grid.forEach(([q, r], i) => {
+                const px = cx0 + sW * (q + r * 0.5);
+                const py = cy0 + sH * r;
+                const d = Math.hypot(mx - px, my - py);
+                if (d < R && d < bestD) { bestD = d; best = i; }
+            });
+            return best;
+        }
+
+        function hiveShowPanel(idx) {
+            const panel = document.getElementById('hivePanel');
+            if (!panel || idx < 0 || idx >= _hiveData.length) {
+                if (panel) panel.classList.remove('show');
+                return;
+            }
+            const d = _hiveData[idx];
+            document.getElementById('hivePanelIcon').textContent  = d.icon;
+            document.getElementById('hivePanelName').textContent  = d.name.replace(/_/g,' ');
+            document.getElementById('hivePanelDesc').textContent  = d.desc;
+            const st = document.getElementById('hivePanelStatus');
+            st.textContent = d.status; st.className = 'hive-panel-status ' + d.status;
+            const filesEl = document.getElementById('hivePanelFiles');
+            filesEl.innerHTML = d.files.map(f => {
+                const short = f.split('/').pop();
+                return `<span class="hive-panel-file" onclick="requestFileRead('${f}','${d.icon} ${d.name}')">${short}</span>`;
+            }).join('');
+            panel.classList.add('show');
+        }
+
+        function hiveSetupCanvas() {
+            const canvas = document.getElementById('hiveCanvas');
+            if (!canvas) return;
+            hiveResize();
+
+            canvas.addEventListener('mousemove', e => {
+                const idx = hiveGetIdx(canvas, _hiveData, e.clientX, e.clientY);
+                if (idx !== _hiveHovered) {
+                    _hiveHovered = idx;
+                    hiveShowPanel(idx);
+                }
+            });
+            canvas.addEventListener('mouseleave', () => {
+                _hiveHovered = -1;
+                const panel = document.getElementById('hivePanel');
+                if (panel) panel.classList.remove('show');
+            });
+            canvas.addEventListener('click', e => {
+                const idx = hiveGetIdx(canvas, _hiveData, e.clientX, e.clientY);
+                if (idx >= 0 && idx < _hiveData.length) {
+                    const d = _hiveData[idx];
+                    requestFileRead(d.indexPath || 'honeycombs/'+d.name+'/index.json', d.icon+' '+d.name);
+                }
+            });
+            window.addEventListener('resize', hiveResize);
+            if (!_hiveAnimId) hiveAnimate();
+        }
+
         async function loadHoneycombs() {
-            const grid = document.getElementById("honeycombsGrid");
-            const countEl = document.getElementById("honeycombsCount");
-            if (!grid) return;
+            const countEl = document.getElementById('honeycombsCount');
             try {
                 const treeResp = await fetch("https://api.github.com/repos/" + GITHUB_REPO + "/git/trees/main?recursive=1");
                 if (!treeResp.ok) throw new Error("GitHub API: " + treeResp.status);
@@ -2344,41 +2647,32 @@
                     }
                 });
                 const names = Object.keys(folders).sort();
-                if (!names.length) { grid.innerHTML = "<div class='empty-state'><div class='empty-state-icon'>○</div><div>сот не найдено</div></div>"; return; }
+                if (countEl) countEl.textContent += names.length + ' сот';
                 const metas = await Promise.allSettled(names.map(async name => {
                     const idx = folders[name].indexPath;
                     if (!idx) return null;
                     const r = await fetch("https://raw.githubusercontent.com/" + GITHUB_REPO + "/main/" + idx);
                     return r.ok ? r.json() : null;
                 }));
-                if (countEl) countEl.textContent = names.length + " сот";
-                grid.innerHTML = names.map((name, i) => {
+                _hiveData = names.map((name, i) => {
                     const meta = metas[i].status === "fulfilled" ? metas[i].value : null;
                     const hc = folders[name];
-                    const icon = HONEYCOMB_ICONS[name] || meta?.meta?.icon || "⬡";
-                    const desc = meta?.meta?.description || meta?.identity?.name || name.replace(/_/g, " ");
-                    const status = meta?.meta?.status || "active";
-                    const fc = hc.files.length;
-                    const idx2 = hc.indexPath || ("honeycombs/" + name + "/index.json");
-                    const plural = fc === 1 ? "файл" : fc < 5 ? "файла" : "файлов";
-                    return (function(){
-                        var fileList = hc.files.map(function(f){ return f.split('/').pop(); });
-                        var tipFiles = fileList.map(function(f){ return "<div class='hc-tooltip-file'>" + escapeHtml(f) + "</div>"; }).join('');
-                        var tipHtml = "<div class='hc-tooltip' id='hctip_" + name + "'><div class='hc-tooltip-title'>" + escapeHtml(name) + "</div>" + tipFiles + "</div>";
-                        return "<div class='honeycomb-card' onclick='requestFileRead(\"" + idx2 + "\", \"" + icon + " " + name + "\")' onmouseenter='hcShowTip(this)' onmouseleave='hcHideTip(this)'>" +
-                        "<span class='honeycomb-card-icon'>" + icon + "</span>" +
-                        "<div class='honeycomb-card-name'>" + escapeHtml(name) + "</div>" +
-                        "<div class='honeycomb-card-desc'>" + escapeHtml(desc) + "</div>" +
-                        "<div class='honeycomb-card-meta'><span class='honeycomb-status " + status + "'>" + status + "</span><span>" + fc + " " + plural + "</span></div>" +
-                        tipHtml +
-                        "</div>";
-                    })();
-                }).join("");
+                    return {
+                        name,
+                        icon:      HONEYCOMB_ICONS[name] || meta?.meta?.icon || "⬡",
+                        desc:      meta?.meta?.description || meta?.identity?.name || name.replace(/_/g,' '),
+                        status:    meta?.meta?.status || 'active',
+                        files:     hc.files,
+                        indexPath: hc.indexPath || ('honeycombs/' + name + '/index.json'),
+                    };
+                });
+                hiveSetupCanvas();
             } catch(e) {
-                if (grid) grid.innerHTML = "<div class='empty-state'><div class='empty-state-icon'>×</div><div>" + escapeHtml(e.message) + "</div></div>";
+                if (countEl) countEl.textContent = '× ' + e.message;
             }
         }
         window.loadHoneycombs = loadHoneycombs;
+
 
         window.showModuleTooltip = function(el, mod) {
             hideModuleTooltip(el);
