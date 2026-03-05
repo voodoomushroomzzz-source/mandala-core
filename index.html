@@ -162,7 +162,7 @@
         /* ══ ТУЛТИП КАРТОЧКИ СОТЫ ══ */
         .hc-tooltip {
             position: absolute; z-index: 200;
-            top: calc(100% + 8px); left: 50%;
+            bottom: calc(100% + 8px); left: 50%;
             transform: translateX(-50%);
             min-width: 180px; max-width: 260px;
             background: var(--surface-2);
@@ -185,10 +185,10 @@
         }
         .hc-tooltip-file:last-child { border-bottom: none; }
         .hc-tooltip::after {
-            content: ''; position: absolute; bottom: 100%; left: 50%;
+            content: ''; position: absolute; top: 100%; left: 50%;
             transform: translateX(-50%);
             border: 5px solid transparent;
-            border-bottom-color: var(--line-2);
+            border-top-color: var(--line-2);
         }
 
         /* Glow pools */
@@ -571,34 +571,34 @@
             justify-content: center;
             line-height: 1; 
         }
-        /* ◈ copy — зелёный */
         .code-btn.copy { 
-            color: #10b981;
-            border-color: rgba(16,185,129,0.45); 
+            color: var(--copy); 
+            border-color: var(--copy); 
         }
         .code-btn.copy:hover { 
-            background: #10b981; color: #030d09;
-            box-shadow: 0 0 14px rgba(16,185,129,0.55);
+            background: var(--copy); 
+            color: var(--bg); 
+            box-shadow: 0 0 12px var(--copy);
             transform: translateY(-1px);
         }
-        /* ↓ download — индиго */
         .code-btn.download { 
-            color: #818cf8;
-            border-color: rgba(129,140,248,0.45);
+            color: var(--download); 
+            border-color: var(--download); 
         }
         .code-btn.download:hover { 
-            background: #818cf8; color: #030d09;
-            box-shadow: 0 0 14px rgba(129,140,248,0.55);
+            background: var(--download); 
+            color: var(--bg); 
+            box-shadow: 0 0 12px var(--download);
             transform: translateY(-1px);
         }
-        /* △ apply — фиолетовый */
         .code-btn.apply { 
-            color: #a78bfa;
-            border-color: rgba(167,139,250,0.45);
+            color: var(--apply); 
+            border-color: var(--apply); 
         }
         .code-btn.apply:hover { 
-            background: #a78bfa; color: #030d09;
-            box-shadow: 0 0 14px rgba(167,139,250,0.55);
+            background: var(--apply); 
+            color: var(--bg); 
+            box-shadow: 0 0 12px var(--apply);
             transform: translateY(-1px);
         }
 
@@ -1195,22 +1195,14 @@
             animation: flower-spin 3s linear infinite, flower-pulse 1.5s ease-in-out infinite;
         }
 
-        /* Text selection — 3 цвета по роли */
-        /* DeepSeek → зелёный */
+        /* Text selection colors */
         .msg.assistant .bub::selection,
-        .msg.assistant .bub *::selection { background: rgba(16,185,129,0.32); color: #dcfce7; }
-        /* Клод-наблюдатель → фиолетовый */
-        .msg.observer .bub::selection,
-        .msg.observer .bub *::selection { background: rgba(167,139,250,0.35); color: #ede9fe; }
-        /* Пользователь → индиго */
-        .msg.user .bub::selection,
-        .msg.user .bub *::selection { background: rgba(129,140,248,0.38); color: #e0e7ff; }
-        /* Системные → зелёный приглушённый */
-        .msg.sys .bub::selection,
-        .msg.sys .bub *::selection { background: rgba(16,185,129,0.18); color: #dcfce7; }
-        /* Код → фиолетовый */
+        .msg.assistant .bub *::selection { background: rgba(16,185,129,0.35); color: #dcfce7; }
         code::selection, pre::selection, pre *::selection,
-        .code-content::selection, .code-content *::selection { background: rgba(167,139,250,0.38); color: #ede9fe; }
+        .code-content::selection, .code-content *::selection { background: rgba(124,58,237,0.4); color: #ede9fe; }
+        .msg.user .bub::selection,
+        .msg.user .bub *::selection { background: rgba(55,48,163,0.45); color: #e0e7ff; }
+        .msg.sys .bub::selection { background: rgba(16,185,129,0.25); }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 3px; }
@@ -1302,8 +1294,8 @@
         </div>
         <div class="h-right">
             <div class="model-selector" id="modelSelector">
-                <button class="model-btn grok-btn active" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — основной ИИ">◈</button>
-                <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">△</button>
+                <button class="model-btn grok-btn active" id="btnDeepseek" onclick="toggleModel('deepseek')" title="DeepSeek — основной ИИ">○</button>
+                <button class="model-btn claude-btn" id="btnClaude" onclick="toggleModel('claude')" title="Клод — наблюдатель">○</button>
             </div>
             <div class="vsep"></div>
             <div class="commit-sha" id="coreVersion" title="Версия ядра Мандалы (commit SHA)">◈ —</div>
@@ -1586,13 +1578,6 @@
         function renderMarkdown(rawText) {
             const blocks = [];
             const PH = 'CODEBLOCK_PLACEHOLDER_';
-            // 0. Снимаем markdown-разметку вне code-блоков
-            rawText = rawText
-                .replace(/^#{1,6}\s+/gm, '')
-                .replace(/\*\*([^*\n]+)\*\*/g, '$1')
-                .replace(/\*([^*\n]+)\*/g, '$1')
-                .replace(/__([^_\n]+)__/g, '$1')
-                .replace(/_([^_\n]+)_/g, '$1');
             // 1. Вырезаем все завершённые ```...``` блоки
             let processed = rawText.replace(/```([\w]*)\r?\n([\s\S]*?)```/g, function(_, lang, code) {
                 var idx = blocks.length;
@@ -2248,7 +2233,7 @@
         const activeModels = new Set(['deepseek']);
         const modelIcons = {
             deepseek: `<svg class="deepseek-flower" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><g stroke="#10b981" stroke-width="0.7" opacity="0.9"><circle cx="15" cy="15" r="5.5"/><circle cx="15" cy="9.5" r="5.5"/><circle cx="15" cy="20.5" r="5.5"/><circle cx="19.76" cy="12.25" r="5.5"/><circle cx="19.76" cy="17.75" r="5.5"/><circle cx="10.24" cy="12.25" r="5.5"/><circle cx="10.24" cy="17.75" r="5.5"/></g><circle cx="15" cy="15" r="2.2" fill="#34d399" opacity="0.95"/></svg>`,
-            claude: `<svg viewBox="0 0 30 30" fill="none"><polygon points="15,3 28,26 2,26" stroke="#a78bfa" stroke-width="0.9" fill="rgba(167,139,250,0.06)"/><circle cx="15" cy="19" r="3.5" stroke="#a78bfa" stroke-width="0.8" fill="rgba(167,139,250,0.15)"/><circle cx="15" cy="19" r="1.4" fill="#c4b5fd" opacity="0.95"/></svg>`
+            claude: `<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#4f46e5" stroke-width="0.8" fill="rgba(79,70,229,0.07)"/><circle cx="15" cy="15" r="3" fill="#818cf8" opacity="0.9"/></svg>`
         };
         const modelNames = { deepseek: 'DeepSeek ◇', claude: 'Клод ○' };
         const modelColors = { deepseek: '#10b981', claude: '#4f46e5' };
