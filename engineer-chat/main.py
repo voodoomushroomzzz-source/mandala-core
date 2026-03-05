@@ -2043,7 +2043,7 @@ async def handle_apply_patch(message: dict, websocket: WebSocket):
                         "sha": file_sha,
                         "branch": "main"
                     }
-                    del_resp = await client.delete(url, headers=headers, json=del_payload)
+                    del_resp = await client.delete(url, headers=headers, data=json.dumps(del_payload))
                     if del_resp.status_code == 200:
                         results.append({"file": file_path, "status": "success", "message": "Удалён ✓"})
                         module_key = file_path[:-5] if file_path.endswith(".json") else file_path
