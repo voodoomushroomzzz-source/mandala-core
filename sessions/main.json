@@ -96,11 +96,16 @@
       "role": "user",
       "content": "Патчи применил, а кто делает проверку системы? как она происходит?",
       "time": 1772738022.4229383
+    },
+    {
+      "role": "user",
+      "content": "ERROR:mandala-engineer:File read error: honeycombs/registry/core/scanner - 404\nERROR:mandala-engineer:DeepSeek exception: peer closed connection without sending complete message body (incomplete chunked read)\n\nОтветы надо делать лаконичнее, и что это за ошибки?",
+      "time": 1772738351.1532238
     }
   ],
-  "last_active": 1772738022.4229443,
+  "last_active": 1772738351.1532288,
   "created_at": 1772231887.431914,
   "modules_injected": true,
-  "injection_timestamp": 1772738022.4227808,
-  "msg_count": 357
+  "injection_timestamp": 1772738351.1531255,
+  "msg_count": 358
 }
