@@ -220,17 +220,18 @@
             right: -220px; top: 50%;
             transform: translateY(-50%);
             width: 700px; height: 700px;
-            opacity: 0.35;
+            opacity: 0.38;
             pointer-events: none;
             animation: flower-breathe 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+            filter: drop-shadow(0 0 2px rgba(16,185,129,0.0));
         }
         .bg-flower circle {
-            stroke-width: 0.6;
+            stroke-width: 1.1;
         }
         @keyframes flower-breathe {
-            0% { opacity: 0.2; transform: translateY(-50%) scale(0.98); }
-            50% { opacity: 0.45; transform: translateY(-50%) scale(1.02); }
-            100% { opacity: 0.3; transform: translateY(-50%) scale(1.0); }
+            0%   { opacity: 0.22; transform: translateY(-50%) scale(0.98); filter: drop-shadow(0 0 1px rgba(16,185,129,0.0)); }
+            50%  { opacity: 0.50; transform: translateY(-50%) scale(1.02); filter: drop-shadow(0 0 8px rgba(16,185,129,0.45)) drop-shadow(0 0 18px rgba(124,58,237,0.2)); }
+            100% { opacity: 0.30; transform: translateY(-50%) scale(1.00); filter: drop-shadow(0 0 3px rgba(16,185,129,0.15)); }
         }
 
         /* Header */
@@ -1616,7 +1617,23 @@
             div.className = `msg ${role}`;
             let iconSvg, name;
             if (role === 'user') {
-                iconSvg = '<svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13" stroke="#7c3aed" stroke-width="0.8" opacity="0.4"/><circle cx="15" cy="15" r="6" stroke="#7c3aed" stroke-width="0.8" fill="rgba(124,58,237,0.08)"/><circle cx="15" cy="15" r="2" fill="#a78bfa" opacity="0.6"/></svg>';
+                iconSvg = `<svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="tglow"><feGaussianBlur stdDeviation="0.7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <g filter="url(#tglow)" stroke="#a78bfa" stroke-width="1.1" fill="none" opacity="0.92">
+    <!-- трикветр: три переплетённых круга -->
+    <path d="M15,6.5 A7,7 0 0,1 21.06,17.5 A7,7 0 0,1 8.94,17.5 A7,7 0 0,1 15,6.5 Z" stroke="#a78bfa" stroke-width="1.1" fill="rgba(124,58,237,0.06)"/>
+    <!-- лепесток верх -->
+    <path d="M15,5 A5.5,5.5 0 0,0 9.24,13.75 A5.5,5.5 0 0,0 15,5" stroke="#c4b5fd" stroke-width="0.9" fill="rgba(167,139,250,0.07)"/>
+    <!-- лепесток право-низ -->
+    <path d="M20.76,13.75 A5.5,5.5 0 0,0 9.24,13.75 A5.5,5.5 0 0,0 20.76,13.75" stroke="#c4b5fd" stroke-width="0.9" fill="rgba(167,139,250,0.07)"/>
+    <!-- лепесток лево-низ -->
+    <path d="M15,5 A5.5,5.5 0 0,1 20.76,13.75 A5.5,5.5 0 0,1 15,5" stroke="#c4b5fd" stroke-width="0.9" fill="rgba(167,139,250,0.07)"/>
+  </g>
+  <circle cx="15" cy="13" r="1.5" fill="#c4b5fd" opacity="0.9"/>
+  <circle cx="15" cy="15" r="5.5" stroke="#7c3aed" stroke-width="0.5" opacity="0.3" fill="none"/>
+</svg>`;
                 name = 'вы';
             } else {
                 iconSvg = modelIcons[model] || modelIcons['deepseek'];
@@ -2659,14 +2676,40 @@
                 }
                 ctx.globalAlpha = 1;
 
-                // — название —
-                const lblSz = Math.max(6, rr * 0.19);
-                ctx.font = `${lblSz}px "Fira Mono",monospace`;
-                ctx.globalAlpha = isH ? 1 : 0.45 + pAmt * 0.2;
-                ctx.fillStyle = `rgba(${col},1)`;
-                const lbl = d.name.replace(/_/g,' ');
-                ctx.fillText(lbl.length > 13 ? lbl.slice(0,12)+'…' : lbl, px, py + rr * 0.46);
-                ctx.globalAlpha = 1;
+                // — название: авто-размер, перенос, по центру —
+                (function(){
+                    const words = d.name.replace(/_/g,' ').split(' ');
+                    // Подбираем размер чтобы самое длинное слово влезло
+                    const maxW = rr * 1.55;
+                    let sz = Math.min(rr * 0.22, 11);
+                    ctx.font = `${sz}px "Fira Mono",monospace`;
+                    const longest = words.reduce((a,b) => ctx.measureText(a).width > ctx.measureText(b).width ? a : b, '');
+                    while (sz > 5.5 && ctx.measureText(longest).width > maxW) {
+                        sz -= 0.5;
+                        ctx.font = `${sz}px "Fira Mono",monospace`;
+                    }
+                    // Разбиваем на строки не шире maxW
+                    const lines = [];
+                    let line = '';
+                    words.forEach(w => {
+                        const test = line ? line + ' ' + w : w;
+                        if (ctx.measureText(test).width > maxW && line) {
+                            lines.push(line); line = w;
+                        } else { line = test; }
+                    });
+                    if (line) lines.push(line);
+                    const lineH = sz * 1.25;
+                    const totalH = lines.length * lineH;
+                    // Размещаем блок текста в нижней части соты
+                    const startY = py + rr * 0.32 - totalH / 2 + lineH / 2;
+                    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                    ctx.globalAlpha = isH ? 1 : 0.45 + pAmt * 0.2;
+                    ctx.fillStyle = `rgba(${col},1)`;
+                    lines.forEach((ln, li) => {
+                        ctx.fillText(ln, px, startY + li * lineH);
+                    });
+                    ctx.globalAlpha = 1;
+                })();
             });
 
             ctx.restore();
