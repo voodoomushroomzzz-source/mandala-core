@@ -176,11 +176,16 @@
       "role": "assistant",
       "content": "[Патч: 1 файлов]",
       "time": 1772743661.89307
+    },
+    {
+      "role": "user",
+      "content": "мэйн изменил, попробовал оба патча на удаление, ошибка:\nERROR:mandala-engineer:Patch error: AsyncClient.delete() got an unexpected keyword argument 'data'",
+      "time": 1772744025.788967
     }
   ],
-  "last_active": 1772743661.8930871,
+  "last_active": 1772744025.7889743,
   "created_at": 1772231887.431914,
   "modules_injected": true,
-  "injection_timestamp": 1772743607.4689558,
-  "msg_count": 371
+  "injection_timestamp": 1772744025.7888658,
+  "msg_count": 372
 }
