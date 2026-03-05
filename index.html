@@ -105,7 +105,7 @@
             margin-bottom: 28px; text-align: center;
         }
         .pw-hidden-input {
-            position: fixed; opacity: 0; width: 0; height: 0; top: 0; left: 0;
+            position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none;
         }
         .pw-glyphs {
             display: flex; gap: 9px; align-items: center; justify-content: center;
@@ -1588,15 +1588,11 @@
             const PH = 'CODEBLOCK_PLACEHOLDER_';
             // 0. Снимаем markdown-разметку вне code-блоков
             rawText = rawText
-                .replace(/^#{1,6}\s+/gm, '')           // ### заголовки
-                .replace(/\*\*([^*
-]+)\*\*/g, '$1')   // **жирный**
-                .replace(/\*([^*
-]+)\*/g, '$1')        // *курсив*
-                .replace(/__([^_
-]+)__/g, '$1')        // __жирный__
-                .replace(/_([^_
-]+)_/g, '$1');         // _курсив_
+                .replace(/^#{1,6}\s+/gm, '')
+                .replace(/\*\*([^*\n]+)\*\*/g, '$1')
+                .replace(/\*([^*\n]+)\*/g, '$1')
+                .replace(/__([^_\n]+)__/g, '$1')
+                .replace(/_([^_\n]+)_/g, '$1');
             // 1. Вырезаем все завершённые ```...``` блоки
             let processed = rawText.replace(/```([\w]*)\r?\n([\s\S]*?)```/g, function(_, lang, code) {
                 var idx = blocks.length;
@@ -2578,32 +2574,13 @@
             if (tip) { tip.classList.remove('show'); }
         }
 
-        // Резервный перехват клавиатуры — если фокус потерян, перенаправляем на input
-        document.addEventListener('keydown', function(e) {
-            const screen = document.getElementById('passwordScreen');
-            if (!screen || screen.classList.contains('hidden')) return;
-            const inp = document.getElementById('pwInput');
-            if (!inp) return;
-            if (document.activeElement !== inp) {
-                inp.focus();
-            }
-        }, true);
-
         function _checkAccess() {
             if (sessionStorage.getItem('_ma') !== '1') {
                 document.getElementById('passwordScreen').classList.remove('hidden');
-                // Retry фокус — некоторые браузеры игнорируют первую попытку
-                function tryFocus(attempts) {
+                setTimeout(() => {
                     const inp = document.getElementById('pwInput');
-                    if (!inp) return;
-                    inp.focus();
-                    pwUpdateSlots('');
-                    // Если фокус не получен — повторяем (до 5 раз)
-                    if (document.activeElement !== inp && attempts > 0) {
-                        setTimeout(() => tryFocus(attempts - 1), 150);
-                    }
-                }
-                setTimeout(() => tryFocus(5), 100);
+                    if (inp) { inp.focus(); pwUpdateSlots(''); }
+                }, 120);
             } else {
                 document.getElementById('passwordScreen').classList.add('hidden');
             }
