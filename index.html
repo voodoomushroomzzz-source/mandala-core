@@ -1136,15 +1136,22 @@
             cursor: default; min-height: 0;
         }
         #hivePanel {
-            flex-shrink: 0;
-            background: linear-gradient(to top, rgba(3,13,9,0.98), rgba(7,18,12,0.96));
-            border-top: 1px solid rgba(16,185,129,0.2);
-            padding: 12px 18px 14px;
-            max-height: 0; overflow: hidden;
-            transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1),
-                        padding 0.35s cubic-bezier(0.16,1,0.3,1);
+            position: absolute;
+            min-width: 200px; max-width: 260px;
+            background: rgba(3,13,9,0.97);
+            border: 1px solid rgba(16,185,129,0.3);
+            border-radius: 8px;
+            padding: 10px 13px 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 20px rgba(16,185,129,0.06);
+            pointer-events: none;
+            opacity: 0; transform: translateY(4px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 50;
         }
-        #hivePanel.show { max-height: 140px; }
+        #hivePanel.show {
+            opacity: 1; transform: translateY(0);
+            pointer-events: auto;
+        }
         .hive-panel-head {
             display: flex; align-items: center; gap: 9px; margin-bottom: 7px;
         }
@@ -2589,10 +2596,13 @@
         function hiveShowPanel(idx) {
             const panel = document.getElementById('hivePanel');
             if (!panel) return;
-            if (idx < 0 || idx >= _hiveData.length) {
+            if (idx < 0 || idx >= _hiveData.length || !_hiveLayout[idx]) {
                 panel.classList.remove('show'); return;
             }
-            const d = _hiveData[idx];
+            const d   = _hiveData[idx];
+            const lay = _hiveLayout[idx];
+
+            // Заполняем контент
             document.getElementById('hivePanelIcon').textContent = d.icon;
             document.getElementById('hivePanelName').textContent = d.name.replace(/_/g,' ');
             const badge = document.getElementById('hivePanelBadge');
@@ -2603,7 +2613,41 @@
                 const short = f.split('/').pop();
                 return `<span class="hive-panel-file" onclick="requestFileRead('${f}','${d.icon} ${d.name}')">${short}</span>`;
             }).join('');
+
+            // Позиционируем под сотой
+            const canvas  = document.getElementById('hiveCanvas');
+            const wrap    = document.getElementById('mapContainer');
+            const wRect   = wrap.getBoundingClientRect();
+            const cRect   = canvas.getBoundingClientRect();
+
+            // lay.px/py — координаты центра в CSS-пикселях canvas
+            // Переводим в координаты wrap
+            const cellX = cRect.left - wRect.left + lay.px;
+            const cellY = cRect.top  - wRect.top  + lay.py + lay.r * 0.82;
+
+            // Показываем временно чтобы измерить ширину
+            panel.style.opacity = '0';
+            panel.style.left    = '0px';
+            panel.style.top     = '0px';
             panel.classList.add('show');
+
+            const pW = panel.offsetWidth;
+            const pH = panel.offsetHeight;
+            const wW = wrap.offsetWidth;
+            const wH = wrap.offsetHeight;
+
+            // Центрируем по X относительно соты, не выходим за края
+            let left = cellX - pW / 2;
+            left = Math.max(6, Math.min(left, wW - pW - 6));
+
+            // Если не влезает снизу — показываем сверху
+            let top = cellY + 6;
+            if (top + pH > wH - 6) top = cRect.top - wRect.top + lay.py - lay.r * 0.82 - pH - 6;
+            top = Math.max(6, top);
+
+            panel.style.left    = left + 'px';
+            panel.style.top     = top  + 'px';
+            panel.style.opacity = '';
         }
 
         function hiveSetupCanvas() {
