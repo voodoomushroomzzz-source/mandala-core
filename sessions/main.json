@@ -186,9 +186,14 @@
       "role": "user",
       "content": "{\n  \"target_module\": \"simbiosis/instructions/core/patch_system\",\n  \"delete_file\": true\n}\n__\nа реальный путь\nhoneycombs/instructions/core/",
       "time": 1772724910.90656
+    },
+    {
+      "role": "assistant",
+      "content": "Понял! В `simbiosis/` регистрируются только модули, а не файлы сот. Файлы соты удаляются через `file_path` в мульти-патче:\n\n```json\n{\n  \"patches\": [\n    {\n      \"file_path\": \"honeycombs/instructions/core/patch_system.json\",\n      \"delete_file\": true\n    }\n  ]\n}\n```\n\nЕсли это не сработает, значит API не поддерживает удаление файлов сот через патчи — только через прямое удаление в GitHub. Нужно проверить документацию API.\n\nПопробуем этот вариант?",
+      "time": 1772724917.4841733
     }
   ],
-  "last_active": 1772724910.9065697,
+  "last_active": 1772724917.484195,
   "created_at": 1772231887.431914,
   "modules_injected": true,
   "injection_timestamp": 1772724910.90617,
