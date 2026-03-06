@@ -1643,16 +1643,23 @@
                 }
                 return out;
             })(rawText);
-            // 3. Markdown для текстовой части
+            // 3. Экранируем все остаточные ``` в тексте перед marked
+            // (наш парсер уже извлёк валидные блоки → всё что осталось — инлайн или невалидное)
+            processed = processed
+                .replace(/(?<!
+)```/g, '&#96;&#96;&#96;')   // инлайн ``` (не в начале строки)
+                .replace(/^```/gm, '&#96;&#96;&#96;');        // ``` в начале строки (нераспознанные)
+
+            // 4. Markdown для текстовой части
             var html;
             try { html = marked.parse(processed, { breaks: true, gfm: true }); }
             catch(e) { html = escapeHtml(processed).replace(/\n/g, '<br>'); }
-            // 4. Вставляем блоки обратно
+            // 5. Вставляем блоки обратно
             html = html.replace(new RegExp(PH + '(\\d+)_END', 'g'), function(_, i) {
                 var b = blocks[parseInt(i)];
                 return b ? renderCodeBlock(b.lang, b.code, !b.open) : '';
             });
-            // 5. inline code
+            // 6. inline code
             html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
             return html;
         }
