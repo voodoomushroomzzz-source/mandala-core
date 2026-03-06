@@ -1905,6 +1905,7 @@
             }
         }
 
+        let _renderPending = false;
         function handleStream(content, model) {
             if (!currentMessageDiv) {
                 currentMessageDiv = createMessageElement('assistant', model || 'deepseek');
@@ -1918,9 +1919,18 @@
                 messagesEl.appendChild(currentMessageDiv);
             }
             messageBuffer += content;
-            const bub = currentMessageDiv.querySelector('.bub');
-            bub.innerHTML = renderMarkdown(messageBuffer);
-            scrollToBottom();
+            // Throttle рендера через rAF — не пересчитываем на каждый чанк,
+            // а батчим все чанки пришедшие за один frame браузера
+            if (!_renderPending) {
+                _renderPending = true;
+                requestAnimationFrame(() => {
+                    _renderPending = false;
+                    if (!currentMessageDiv) return;
+                    const bub = currentMessageDiv.querySelector('.bub');
+                    if (bub) bub.innerHTML = renderMarkdown(messageBuffer);
+                    scrollToBottom();
+                });
+            }
         }
 
         function finishMessage() {
@@ -2162,10 +2172,13 @@
 
         function toggleSendStop() {
             if (_isBusy) {
+                // Шлём stop на бэк — он отменяет task и шлёт done
+                // НЕ закрываем соединение — нет нужды переподключаться
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ type: 'stop', session_id: 'main' }));
+                }
                 hideThinking();
                 setSendBtnState(false);
-                if (ws) { try { ws.close(); } catch(e) {} }
-                setTimeout(() => connect(), 300);
                 showToast('◈ остановлено', 'success');
             } else {
                 sendMessage();
