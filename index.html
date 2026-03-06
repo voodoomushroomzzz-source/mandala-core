@@ -401,6 +401,10 @@
             min-width: 0;
             animation: mup 0.28s ease;
         }
+        /* Сообщения с кодом растягиваем шире */
+        .msg.assistant:has(.code-block) {
+            max-width: 96%;
+        }
         @keyframes mup {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -426,6 +430,7 @@
             word-break: break-word;
             overflow-wrap: break-word;
             min-width: 0;
+            overflow: visible;
         }
         .msg.assistant .bub {
             background: var(--surface-2);
@@ -502,7 +507,7 @@
             margin: 12px 0; 
             border: 1px solid var(--line-2); 
             border-radius: var(--radius);
-            overflow: hidden; 
+            overflow: hidden;
             background: var(--surface); 
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             max-width: 100%;
@@ -603,9 +608,11 @@
 
         .code-body {
             display: flex;
-            overflow: auto;
+            overflow-x: auto;
+            overflow-y: auto;
             max-height: 520px;
             background: #0d1f16;
+            min-width: 0;
         }
         .code-content {
             padding: 12px 14px;
