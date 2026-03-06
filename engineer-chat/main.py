@@ -745,28 +745,45 @@ async def websocket_endpoint(websocket: WebSocket):
                 "type": "system",
                 "text": "🌱 Новая сессия. Добро пожаловать в инженерный чат Мандалы!"
             })
+        # Текущая активная задача — чтобы можно было отменить
+        _active_task: asyncio.Task = None
+
         while True:
             data = await websocket.receive_text()
             message = json.loads(data)
             message["session_id"] = session_id
             msg_type = message.get("type")
+
             if msg_type == "ask":
-                await handle_ask(message, websocket)
+                # Запускаем НЕ через await — чтобы loop не блокировался
+                # Это позволяет принимать "stop" пока идёт обработка
+                if _active_task and not _active_task.done():
+                    _active_task.cancel()
+                _active_task = asyncio.create_task(handle_ask(message, websocket))
+
+            elif msg_type == "stop":
+                # Явная отмена текущего запроса
+                if _active_task and not _active_task.done():
+                    _active_task.cancel()
+                    _active_task = None
+                await manager.send_to(websocket, {"type": "done", "full_text": ""})
+                logger.info(f"⏹ [{session_id[:12]}...] Запрос остановлен клиентом")
+
             elif msg_type == "module":
                 await handle_module(message, websocket)
             elif msg_type == "apply_patch":
-                await handle_apply_patch(message, websocket)
+                # Патч тоже в task — может быть долгим
+                asyncio.create_task(handle_apply_patch(message, websocket))
             elif msg_type == "file":
-                await handle_file_upload(message, websocket)
+                asyncio.create_task(handle_file_upload(message, websocket))
             elif msg_type == "ping":
                 await manager.send_to(websocket, {"type": "pong"})
             elif msg_type == "read_file_request":
-                await handle_read_file_request(message, websocket)
+                asyncio.create_task(handle_read_file_request(message, websocket))
             elif msg_type == "refresh_modules":
                 await handle_refresh_modules(message, websocket)
             elif msg_type == "reset_memory":
                 await handle_reset_memory(message, websocket)
-
             else:
                 await manager.send_to(websocket, {
                     "type": "error",
