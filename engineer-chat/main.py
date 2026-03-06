@@ -202,6 +202,116 @@ class FileReader:
 
 file_reader = FileReader()
 
+
+# ==================== ХРАНИЛИЩЕ СЕССИЙ ====================
+
+class GitHubSessionStore:
+    """
+    Хранилище сессий с персистентностью через GitHub.
+    _local — in-memory кэш, сохраняется в GitHub асинхронно.
+    """
+    def __init__(self, token: str, repo: str):
+        self.token = token
+        self.repo = repo
+        self.api_base = f"https://api.github.com/repos/{repo}"
+        self._local: dict = {}
+        self._save_queue: dict = {}
+        self._task: asyncio.Task = None
+
+    async def start(self):
+        """Запуск фонового воркера сохранения."""
+        self._task = asyncio.create_task(self._save_worker())
+        logger.info("💾 GitHub session store started")
+
+    async def stop(self):
+        """Остановка воркера."""
+        if self._task:
+            self._task.cancel()
+            try:
+                await self._task
+            except asyncio.CancelledError:
+                pass
+
+    async def _save_worker(self):
+        """Каждые 5 секунд сохраняет сессии из очереди в GitHub."""
+        while True:
+            await asyncio.sleep(5)
+            if not self._save_queue:
+                continue
+            queue_snapshot = dict(self._save_queue)
+            self._save_queue.clear()
+            for session_id, data in queue_snapshot.items():
+                try:
+                    await self._save_to_github(session_id, data)
+                except Exception as e:
+                    logger.error(f"Session save error [{session_id[:12]}]: {e}")
+
+    async def load(self, session_id: str) -> dict:
+        """Загружает сессию: сначала из кэша, потом из GitHub."""
+        if session_id in self._local:
+            return self._local[session_id]
+        if not self.token:
+            return None
+        try:
+            async with httpx.AsyncClient() as client:
+                url = f"{self.api_base}/contents/sessions/{session_id}.json"
+                headers = {"Authorization": f"token {self.token}"}
+                resp = await client.get(url, headers=headers, timeout=10.0)
+                if resp.status_code == 200:
+                    import base64 as _b64
+                    raw = _b64.b64decode(resp.json()["content"]).decode("utf-8")
+                    data = json.loads(raw)
+                    data["_sha"] = resp.json().get("sha")
+                    self._local[session_id] = data
+                    return data
+        except Exception as e:
+            logger.error(f"Session load error: {e}")
+        return None
+
+    def get_cached(self, session_id: str) -> dict:
+        """Быстрый доступ к кэшу без I/O."""
+        return self._local.get(session_id)
+
+    def schedule_save(self, session_id: str, data: dict):
+        """Ставит сессию в очередь на сохранение."""
+        self._local[session_id] = data
+        self._save_queue[session_id] = data
+
+    async def _save_to_github(self, session_id: str, data: dict):
+        """Сохраняет сессию в GitHub."""
+        if not self.token:
+            return
+        import base64 as _b64
+        sha = data.pop("_sha", None)
+        try:
+            payload_str = json.dumps(data, ensure_ascii=False)
+        except Exception:
+            return
+        finally:
+            if sha:
+                data["_sha"] = sha  # восстанавливаем sha в кэше
+        encoded = _b64.b64encode(payload_str.encode("utf-8")).decode("utf-8")
+        async with httpx.AsyncClient() as client:
+            url = f"{self.api_base}/contents/sessions/{session_id}.json"
+            headers = {"Authorization": f"token {self.token}", "Content-Type": "application/json"}
+            body = {
+                "message": f"💾 {session_id[:12]} | {len(data.get('messages', []))} msgs | {datetime.now().strftime('%H:%M')}",
+                "content": encoded,
+            }
+            if sha:
+                body["sha"] = sha
+            resp = await client.put(url, headers=headers, json=body, timeout=15.0)
+            if resp.status_code in (200, 201):
+                new_sha = resp.json().get("content", {}).get("sha")
+                if new_sha and session_id in self._local:
+                    self._local[session_id]["_sha"] = new_sha
+                logger.info(f"💾 Saved: {session_id[:12]}... ({len(data.get('messages', []))} msgs)")
+            else:
+                logger.error(f"Session save HTTP {resp.status_code}: {resp.text[:200]}")
+
+
+session_store = GitHubSessionStore(token=GITHUB_TOKEN, repo=GITHUB_REPO)
+
 # ==================== СЕССИИ ====================
 
 async def get_session(session_id: str) -> dict:
