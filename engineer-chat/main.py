@@ -76,15 +76,39 @@ class WebSearchTool:
 
     async def _search_duckduckgo(self, query: str, max_results: int) -> List[Dict]:
         try:
-            if importlib.util.find_spec("duckduckgo_search") is None:
-                logger.error("DuckDuckGo library not installed")
+            # Поддержка обоих пакетов: новый ddgs и старый duckduckgo_search
+            _ddgs_spec = importlib.util.find_spec("ddgs")
+            _ddg_spec  = importlib.util.find_spec("duckduckgo_search")
+            if _ddgs_spec is None and _ddg_spec is None:
+                logger.error("DuckDuckGo library not installed. Run: pip install ddgs")
                 return []
-            from duckduckgo_search import DDGS
+
+            def _import_ddgs():
+                if _ddgs_spec is not None:
+                    from ddgs import DDGS
+                else:
+                    from duckduckgo_search import DDGS
+                return DDGS
+
             results = []
             loop = asyncio.get_running_loop()
+
             def search_sync():
-                with DDGS() as ddgs:
-                    return list(ddgs.text(query, max_results=max_results))
+                DDGS = _import_ddgs()
+                # Пробуем до 3 раз — DDG иногда возвращает пустой список с первого раза
+                for attempt in range(3):
+                    try:
+                        with DDGS() as ddgs:
+                            raw = list(ddgs.text(query, max_results=max_results))
+                        if raw:
+                            return raw
+                        logger.warning(f"DDG attempt {attempt+1}: 0 results, retrying...")
+                        import time as _t; _t.sleep(1.5)
+                    except Exception as e:
+                        logger.warning(f"DDG attempt {attempt+1} error: {e}")
+                        import time as _t; _t.sleep(1.5)
+                return []
+
             search_results = await loop.run_in_executor(None, search_sync)
             for r in search_results:
                 results.append({
@@ -100,33 +124,39 @@ class WebSearchTool:
             return []
 
     async def _search_tavily(self, query: str, max_results: int) -> List[Dict]:
-        try:
-            loop = asyncio.get_running_loop()
-            def search_sync():
-                return self.tavily_client.search(
-                    query=query,
-                    max_results=max_results,
-                    search_depth="basic",
-                    include_answer=True,
-                    include_raw_content=False
-                )
-            response = await loop.run_in_executor(None, search_sync)
-            results = []
-            for r in response.get("results", []):
-                results.append({
-                    "title": r.get("title", ""),
-                    "url": r.get("url", ""),
-                    "snippet": r.get("content", ""),
-                    "source": "tavily",
-                    "score": r.get("score", 0)
-                })
-            logger.info(f"🌐 Tavily found {len(results)} results for: {query}")
-            return results
-        except Exception as e:
-            logger.error(f"Tavily search error: {type(e).__name__}: {e}")
-            # Fallback to DuckDuckGo if Tavily fails
-            logger.info("↩️ Tavily failed, falling back to DuckDuckGo")
-            return await self._search_duckduckgo(query, max_results)
+        import time as _t
+        last_err = None
+        for attempt in range(3):
+            try:
+                loop = asyncio.get_running_loop()
+                def search_sync():
+                    return self.tavily_client.search(
+                        query=query,
+                        max_results=max_results,
+                        search_depth="basic",
+                        include_answer=True,
+                        include_raw_content=False
+                    )
+                response = await loop.run_in_executor(None, search_sync)
+                results = []
+                for r in response.get("results", []):
+                    results.append({
+                        "title": r.get("title", ""),
+                        "url": r.get("url", ""),
+                        "snippet": r.get("content", ""),
+                        "source": "tavily",
+                        "score": r.get("score", 0)
+                    })
+                logger.info(f"🌐 Tavily found {len(results)} results for: {query}")
+                return results
+            except Exception as e:
+                last_err = e
+                logger.warning(f"Tavily attempt {attempt+1} error: {type(e).__name__}: {e}")
+                await asyncio.sleep(2 ** attempt)  # 1s, 2s, 4s
+        logger.error(f"Tavily search error after 3 attempts: {type(last_err).__name__}: {last_err}")
+        # Fallback to DuckDuckGo if Tavily fails
+        logger.info("↩️ Tavily failed, falling back to DuckDuckGo")
+        return await self._search_duckduckgo(query, max_results)
 
     async def extract_content(self, urls: List[str]) -> List[Dict]:
         if not self.use_tavily or not self.tavily_client:
@@ -662,10 +692,9 @@ class ConnectionManager:
             "content": content,
             "time": time.time()
         })
-        # История сессии: 30K символов ≈ 15-20 обменов репликами.
-        # Уменьшено с 50K чтобы дать больше места под большие ответы DeepSeek.
+        # История сессии: 50K символов ≈ 25-35 обменов репликами.
         # Контекстное окно модели 163 840 токенов — основной резерв под output.
-        MAX_CONTEXT_CHARS = 30_000
+        MAX_CONTEXT_CHARS = 50_000
         total_chars = sum(len(m["content"]) for m in session["messages"])
         while total_chars > MAX_CONTEXT_CHARS and len(session["messages"]) > 1:
             # Ищем первое незащищённое сообщение для удаления
