@@ -1268,35 +1268,16 @@
     <header class="header">
         <div class="h-left">
             <div class="logo-mark">
-                <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 5px rgba(139,92,246,0.6))">
-                    <defs>
-                        <linearGradient id="triskelGrad" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#c4b5fd"/>
-                            <stop offset="50%" stop-color="#8b5cf6"/>
-                            <stop offset="100%" stop-color="#6d28d9"/>
-                        </linearGradient>
-                        <linearGradient id="triskelGrad2" x1="1" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#a78bfa"/>
-                            <stop offset="100%" stop-color="#4c1d95"/>
-                        </linearGradient>
-                    </defs>
-                    <!-- Внешнее кольцо -->
-                    <circle cx="17" cy="17" r="15.5" stroke="url(#triskelGrad)" stroke-width="0.6" opacity="0.5"/>
-                    <!-- Трискелион — три спирали по 120° -->
-                    <!-- Спираль 1 — вверх -->
-                    <path d="M17,17 C17,12 20,9 17,6 C14,3 10,5 11,9 C12,12 15,13 17,17" stroke="url(#triskelGrad)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-                    <!-- Спираль 2 — нижний правый -->
-                    <path d="M17,17 C21.3,19.5 24.3,18 25.4,21 C26.5,24 24,27 20.5,25.5 C17.5,24 17.5,21 17,17" stroke="url(#triskelGrad)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-                    <!-- Спираль 3 — нижний левый -->
-                    <path d="M17,17 C12.7,19.5 11,23 8.6,21 C6,18.7 7.5,14.5 11,14.5 C14,14.5 15.5,16 17,17" stroke="url(#triskelGrad)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-                    <!-- Узлы на концах спиралей -->
-                    <circle cx="17" cy="5.5" r="1.8" stroke="url(#triskelGrad2)" stroke-width="0.8" fill="rgba(139,92,246,0.15)"/>
-                    <circle cx="25.8" cy="22.5" r="1.8" stroke="url(#triskelGrad2)" stroke-width="0.8" fill="rgba(139,92,246,0.15)"/>
-                    <circle cx="8.2" cy="22.5" r="1.8" stroke="url(#triskelGrad2)" stroke-width="0.8" fill="rgba(139,92,246,0.15)"/>
-                    <!-- Центр -->
-                    <circle cx="17" cy="17" r="2.2" fill="url(#triskelGrad)" opacity="0.9"/>
-                    <!-- Внутренний орнамент — кельтские переплетения -->
-                    <circle cx="17" cy="17" r="5.5" stroke="url(#triskelGrad2)" stroke-width="0.4" opacity="0.3" stroke-dasharray="2,2"/>
+                <svg viewBox="0 0 34 34" fill="none">
+                    <circle cx="17" cy="17" r="7" stroke="#10b981" stroke-width="0.8"/>
+                    <circle cx="17" cy="10" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="17" cy="24" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="23.06" cy="13.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="23.06" cy="20.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="10.94" cy="13.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="10.94" cy="20.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="17" cy="17" r="16" stroke="#059669" stroke-width="0.5" opacity="0.4"/>
+                    <circle cx="17" cy="17" r="2" fill="#34d399" opacity="0.9"/>
                 </svg>
             </div>
             <div class="brand-text">
@@ -1917,9 +1898,6 @@
                     break;
                 case 'patch_result':
                     handlePatchResult(data.results);
-                    break;
-                case 'patch_preview':
-                    handlePatchPreview(data);
                     break;
                 case 'resonance':
                     updateResonance(data.value, data.level);
