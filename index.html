@@ -105,7 +105,15 @@
             margin-bottom: 28px; text-align: center;
         }
         .pw-hidden-input {
-            position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none;
+            position: fixed;
+            opacity: 0;
+            width: 100vw;
+            height: 100vh;
+            top: 0; left: 0;
+            z-index: 10000;
+            cursor: default;
+            /* pointer-events: none убран — иначе браузер не даёт фокус и ввод */
+            font-size: 16px; /* предотвращает zoom на iOS при фокусе */
         }
         .pw-glyphs {
             display: flex; gap: 9px; align-items: center; justify-content: center;
