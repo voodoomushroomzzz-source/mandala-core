@@ -293,8 +293,7 @@
         }
 
         /* Селектор моделей */
-        .grok-btn  { color: #10b981; }
-        .grok-btn.active  { background: rgba(16,185,129,0.12); }
+        /* Кнопки выбора моделей удалены — используется только DeepSeek */
 
         /* Метки моделей в сообщениях */
         .model-label {
@@ -1272,16 +1271,35 @@
     <header class="header">
         <div class="h-left">
             <div class="logo-mark">
-                <svg viewBox="0 0 34 34" fill="none">
-                    <circle cx="17" cy="17" r="7" stroke="#10b981" stroke-width="0.8"/>
-                    <circle cx="17" cy="10" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="17" cy="24" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="23.06" cy="13.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="23.06" cy="20.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="10.94" cy="13.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="10.94" cy="20.5" r="7" stroke="#10b981" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="17" cy="17" r="16" stroke="#059669" stroke-width="0.5" opacity="0.4"/>
-                    <circle cx="17" cy="17" r="2" fill="#34d399" opacity="0.9"/>
+                <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 5px rgba(139,92,246,0.6))">
+                    <defs>
+                        <linearGradient id="triskelGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#c4b5fd"/>
+                            <stop offset="50%" stop-color="#8b5cf6"/>
+                            <stop offset="100%" stop-color="#6d28d9"/>
+                        </linearGradient>
+                        <linearGradient id="triskelGrad2" x1="1" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#a78bfa"/>
+                            <stop offset="100%" stop-color="#4c1d95"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Внешнее кольцо -->
+                    <circle cx="17" cy="17" r="15.5" stroke="url(#triskelGrad)" stroke-width="0.6" opacity="0.5"/>
+                    <!-- Трискелион — три спирали по 120° -->
+                    <!-- Спираль 1 — вверх -->
+                    <path d="M17,17 C17,12 20,9 17,6 C14,3 10,5 11,9 C12,12 15,13 17,17" stroke="url(#triskelGrad)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+                    <!-- Спираль 2 — нижний правый -->
+                    <path d="M17,17 C21.3,19.5 24.3,18 25.4,21 C26.5,24 24,27 20.5,25.5 C17.5,24 17.5,21 17,17" stroke="url(#triskelGrad)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+                    <!-- Спираль 3 — нижний левый -->
+                    <path d="M17,17 C12.7,19.5 11,23 8.6,21 C6,18.7 7.5,14.5 11,14.5 C14,14.5 15.5,16 17,17" stroke="url(#triskelGrad)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+                    <!-- Узлы на концах спиралей -->
+                    <circle cx="17" cy="5.5" r="1.8" stroke="url(#triskelGrad2)" stroke-width="0.8" fill="rgba(139,92,246,0.15)"/>
+                    <circle cx="25.8" cy="22.5" r="1.8" stroke="url(#triskelGrad2)" stroke-width="0.8" fill="rgba(139,92,246,0.15)"/>
+                    <circle cx="8.2" cy="22.5" r="1.8" stroke="url(#triskelGrad2)" stroke-width="0.8" fill="rgba(139,92,246,0.15)"/>
+                    <!-- Центр -->
+                    <circle cx="17" cy="17" r="2.2" fill="url(#triskelGrad)" opacity="0.9"/>
+                    <!-- Внутренний орнамент — кельтские переплетения -->
+                    <circle cx="17" cy="17" r="5.5" stroke="url(#triskelGrad2)" stroke-width="0.4" opacity="0.3" stroke-dasharray="2,2"/>
                 </svg>
             </div>
             <div class="brand-text">
@@ -1350,6 +1368,11 @@
             <!-- Вкладка карты ядра -->
             <div class="tab-content" id="tab-map">
                 <div class="hive-wrap" id="mapContainer">
+                    <div style="position:absolute;top:10px;right:12px;z-index:10;display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:10px;opacity:0.7;">
+                        <div style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(139,92,246,0.7);display:inline-block;"></span><span style="color:#c4b5fd;">часто</span></div>
+                        <div style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(99,102,241,0.7);display:inline-block;"></span><span style="color:#a5b4fc;">средне</span></div>
+                        <div style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:2px;background:rgba(16,185,129,0.7);display:inline-block;"></span><span style="color:#6ee7b7;">редко</span></div>
+                    </div>
                     <div id="hiveMeta">
                         <div style="display:flex;align-items:center;gap:6px;">
                             <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:8px;cursor:pointer;letter-spacing:1px;" title="Обновить">↻</button>
@@ -2320,6 +2343,7 @@
         }
 
         // ==================== МОДЕЛИ ====================
+        // Единственная модель — DeepSeek (кнопки выбора убраны)
         const activeModels = new Set(['deepseek']);
         const modelIcons = {
             deepseek: `<svg class="deepseek-flower" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><g stroke="#10b981" stroke-width="0.7" opacity="0.9"><circle cx="15" cy="15" r="5.5"/><circle cx="15" cy="9.5" r="5.5"/><circle cx="15" cy="20.5" r="5.5"/><circle cx="19.76" cy="12.25" r="5.5"/><circle cx="19.76" cy="17.75" r="5.5"/><circle cx="10.24" cy="12.25" r="5.5"/><circle cx="10.24" cy="17.75" r="5.5"/></g><circle cx="15" cy="15" r="2.2" fill="#34d399" opacity="0.95"/></svg>`,
@@ -2503,16 +2527,22 @@
                 const pAmt     = 0.5 + 0.5 * Math.sin(phase);
                 const rr       = rDraw * (isH ? 1.07 : 1.0);
 
-                const col = d.status === 'draft'
-                    ? [124, 58, 237]
-                    : [99, 102, 241];
+                // Цвет по рангу в сетке (кольцо определяет частоту)
+                // Кольцо 0 (центр, i=0) = фиолетовый (часто)
+                // Кольцо 1 (i=1..6)     = индиго (средне)
+                // Кольцо 2+ (i>6)       = зелёный (редко)
+                const col = i === 0
+                    ? [139, 92, 246]    // фиолетовый — центр, самое частое
+                    : i <= 6
+                        ? [99, 102, 241]   // индиго — первое кольцо
+                        : [16, 185, 129];  // зелёный — второе кольцо и дальше
 
                 // — glow —
                 const glowR = rr * (isH ? 2.4 : 1.5 + pAmt * 0.3);
                 const glowA = isH ? 0.25 : 0.05 + pAmt * 0.08;
                 const grd   = ctx.createRadialGradient(px, py, 0, px, py, glowR);
-                grd.addColorStop(0, `rgba(${col},${glowA})`);
-                grd.addColorStop(1, `rgba(${col},0)`);
+                grd.addColorStop(0, `rgba(${col[0]},${col[1]},${col[2]},${glowA})`);
+                grd.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`);
                 ctx.fillStyle = grd;
                 ctx.beginPath(); ctx.arc(px, py, glowR, 0, Math.PI*2); ctx.fill();
 
@@ -2531,9 +2561,9 @@
                     ctx.lineTo(ptsBot[k][0],  ptsBot[k][1]);
                     ctx.closePath();
                     const sideA = isH ? 0.18 : 0.07 + pAmt * 0.04;
-                    ctx.fillStyle = `rgba(${col},${sideA})`;
+                    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${sideA})`;
                     ctx.fill();
-                    ctx.strokeStyle = `rgba(${col},${(isH ? 0.4 : 0.15)})`;
+                    ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${(isH ? 0.4 : 0.15)})`;
                     ctx.lineWidth = 0.4;
                     ctx.stroke();
                 }
@@ -2542,8 +2572,8 @@
                 const fillA   = isH ? 0.18 : 0.06 + pAmt * 0.05;
                 const strokeA = isH ? 1.0  : 0.3  + pAmt * 0.3;
                 _drawHex(ctx, ptsTop,
-                    `rgba(${col},${fillA})`,
-                    `rgba(${col},${strokeA})`,
+                    `rgba(${col[0]},${col[1]},${col[2]},${fillA})`,
+                    `rgba(${col[0]},${col[1]},${col[2]},${strokeA})`,
                     isH ? 1.2 : 0.7
                 );
 
@@ -2554,8 +2584,8 @@
                         px - rr*0.15, py - rr*0.18, 0,
                         px - rr*0.1,  py - rr*0.1,  rr*0.5
                     );
-                    bGrd.addColorStop(0, `rgba(${col},${isH ? 0.22 : 0.08 + pAmt*0.06})`);
-                    bGrd.addColorStop(1, `rgba(${col},0)`);
+                    bGrd.addColorStop(0, `rgba(${col[0]},${col[1]},${col[2]},${isH ? 0.22 : 0.08 + pAmt*0.06})`);
+                    bGrd.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`);
                     ctx.beginPath();
                     ctx.moveTo(bPts[0][0], bPts[0][1]);
                     for (let k=1;k<6;k++) ctx.lineTo(bPts[k][0],bPts[k][1]);
@@ -2588,7 +2618,7 @@
                     const startY = py - totalH / 2 + lineH / 2;
                     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                     ctx.globalAlpha = isH ? 1 : 0.5 + pAmt * 0.25;
-                    ctx.fillStyle = `rgba(${col},1)`;
+                    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},1)`;
                     lines.forEach((ln, li) => ctx.fillText(ln, px, startY + li * lineH));
                     ctx.globalAlpha = 1;
                 })();
@@ -2751,15 +2781,22 @@
                 _hiveData = names.map((name, i) => {
                     const meta = metas[i].status === "fulfilled" ? metas[i].value : null;
                     const hc   = folders[name];
+                    // Частота: из meta или по статусу (active=3, draft=2, archived=1)
+                    const statusFreq = {active:3, draft:2, archived:1};
+                    const status = meta?.meta?.status || 'active';
+                    const freq = meta?.meta?.frequency ?? meta?.meta?.usage_count ?? statusFreq[status] ?? 1;
                     return {
                         name,
                         icon:      HONEYCOMB_ICONS[name] || meta?.meta?.icon || "⬡",
                         desc:      meta?.meta?.description || meta?.identity?.name || name.replace(/_/g,' '),
-                        status:    meta?.meta?.status || 'active',
+                        status,
+                        freq,
                         files:     hc.files,
                         indexPath: hc.indexPath || ('honeycombs/' + name + '/index.json'),
                     };
                 });
+                // Сортируем по убыванию частоты: часто → центр (кольцо 0), редко → внешние кольца
+                _hiveData.sort((a, b) => b.freq - a.freq);
                 hiveSetupCanvas();
             } catch(e) {
                 if (countEl) countEl.textContent = '× ' + e.message;
