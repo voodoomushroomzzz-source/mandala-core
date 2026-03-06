@@ -401,10 +401,6 @@
             min-width: 0;
             animation: mup 0.28s ease;
         }
-        /* Сообщения с кодом растягиваем шире */
-        .msg.assistant:has(.code-block) {
-            max-width: 96%;
-        }
         @keyframes mup {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -430,7 +426,6 @@
             word-break: break-word;
             overflow-wrap: break-word;
             min-width: 0;
-            overflow: visible;
         }
         .msg.assistant .bub {
             background: var(--surface-2);
@@ -507,7 +502,7 @@
             margin: 12px 0; 
             border: 1px solid var(--line-2); 
             border-radius: var(--radius);
-            overflow: hidden;
+            overflow: hidden; 
             background: var(--surface); 
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             max-width: 100%;
@@ -608,11 +603,9 @@
 
         .code-body {
             display: flex;
-            overflow-x: auto;
-            overflow-y: auto;
+            overflow: auto;
             max-height: 520px;
             background: #0d1f16;
-            min-width: 0;
         }
         .code-content {
             padding: 12px 14px;
@@ -1587,47 +1580,56 @@
                 .replace(/\*([^*\n]+)\*/g, '$1')
                 .replace(/(^|[^\w_])__([^_\n]+)__([^\w_]|$)/gm, '$1$2$3')
                 .replace(/(^|\s)_([^_\n]+)_(\s|$)/gm, '$1$2$3');
-            // 1. Парсим code-блоки посимвольно — единственно надёжный способ
-            // когда внутри блока могут быть ``` (например в JSON content)
+            // 1. Парсим code-блоки посимвольно
+            // Для JSON-блоков отслеживаем вложенность строк чтобы не путать
+            // ``` внутри JSON-значения с закрывающим ``` блока
+
+            // Ищет закрывающий ``` с учётом типа блока
+            function findClosingBackticks(src, codeStart, lang) {
+                var isJson = /^jsonc?$/i.test(lang);
+                var k = codeStart;
+                var inString = false;
+                var escNext = false;
+                while (k < src.length - 2) {
+                    var c = src[k];
+                    if (isJson) {
+                        if (escNext) { escNext = false; k++; continue; }
+                        if (c === '\\') { escNext = true; k++; continue; }
+                        if (c === '"') { inString = !inString; k++; continue; }
+                    }
+                    // ``` в начале строки — кандидат на закрывающий
+                    if (c === '`' && src[k+1] === '`' && src[k+2] === '`') {
+                        if (k === 0 || src[k-1] === '\n') {
+                            if (inString) { k += 3; continue; } // внутри JSON-строки — пропуск
+                            return k;
+                        }
+                    }
+                    k++;
+                }
+                return -1;
+            }
+
             let processed = (function(src) {
                 var out = '';
                 var i = 0;
                 while (i < src.length) {
-                    // Ищем открывающий ``` с необязательным lang и обязательным \n
                     if (src[i] === '`' && src[i+1] === '`' && src[i+2] === '`') {
                         var j = i + 3;
-                        // читаем lang (до \n)
                         var langEnd = src.indexOf('\n', j);
                         if (langEnd === -1) { out += src[i]; i++; continue; }
                         var lang = src.slice(j, langEnd).trim();
                         var codeStart = langEnd + 1;
-                        // Ищем закрывающий ```, который стоит на начале строки
-                        // (предыдущий символ — \n или начало строки)
-                        var found = -1;
-                        var k = codeStart;
-                        while (k < src.length - 2) {
-                            if (src[k] === '`' && src[k+1] === '`' && src[k+2] === '`') {
-                                // Закрывающий ``` — только если в начале строки
-                                if (k === 0 || src[k-1] === '\n') {
-                                    found = k;
-                                    break;
-                                }
-                            }
-                            k++;
-                        }
+                        var found = findClosingBackticks(src, codeStart, lang);
                         if (found !== -1) {
-                            // Завершённый блок
                             var code = src.slice(codeStart, found);
-                            // Убираем trailing \n если есть
                             if (code.endsWith('\n')) code = code.slice(0, -1);
                             var idx = blocks.length;
                             blocks.push({ lang: lang || 'code', code: code, open: false });
                             out += PH + idx + '_END';
                             i = found + 3;
-                            // Пропускаем \n после закрывающего ```
                             if (src[i] === '\n') i++;
                         } else {
-                            // Незакрытый блок — до конца строки (стриминг)
+                            // Незакрытый блок (стриминг)
                             var code = src.slice(codeStart);
                             var idx = blocks.length;
                             blocks.push({ lang: lang || 'code', code: code, open: true });
