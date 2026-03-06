@@ -38,10 +38,6 @@ GITHUB_REPO = "voodoomushroomzzz-source/mandala-core"
 USE_TAVILY = os.getenv("USE_TAVILY", "false").lower() == "true"
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1"
-ANTHROPIC_MODEL = "claude-sonnet-4-6"
-
 GITHUB_WEBHOOK_SECRET = os.getenv("GITHUB_WEBHOOK_SECRET")  # опционально, для верификации
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_KEY")
@@ -52,8 +48,6 @@ if not OPENROUTER_API_KEY:
     logger.warning("⚠️ OPENROUTER_KEY не найден — DeepSeek недоступен")
 if not GITHUB_TOKEN:
     logger.warning("⚠️ GITHUB_TOKEN не найден — модули не будут загружаться")
-if not ANTHROPIC_API_KEY:
-    logger.warning("⚠️ ANTHROPIC_API_KEY не найден — наблюдатель Claude недоступен")
 
 # ==================== ИНСТРУМЕНТЫ ====================
 
@@ -208,204 +202,7 @@ class FileReader:
 
 file_reader = FileReader()
 
-# ==================== CLAUDE-НАБЛЮДАТЕЛЬ ====================
-
-async def ask_claude_observer(user_text: str, kimi_response: str) -> Optional[str]:
-    """
-    Вызывает Claude как скептика-наблюдателя.
-    Получает вопрос Садовника и ответ основного ИИ, возвращает критический анализ.
-    """
-    if not ANTHROPIC_API_KEY:
-        logger.warning("⚠️ ANTHROPIC_API_KEY не задан — наблюдатель пропущен")
-        return None
-
-    system_prompt = """Ты — Claude, внешний технический рецензент. Видишь вопрос Садовника и ответ Kimi. Твоя задача — честная, точная оценка без выдумок.
-
-КАТЕГОРИИ (используй эмодзи как маркер):
-✅ Верно — что Kimi сделал правильно (конкретно, не "хорошая архитектура")
-🟡 Улучшение — работает, но есть лучший способ (объясни чем лучше)
-🔴 Баг — код упадёт или даст неверный результат (покажи: при каком условии, как починить)
-💡 Альтернатива — принципиально другой подход если он явно лучше
-
-ЖЁСТКИЕ ПРАВИЛА:
-— Перед словом "баг" — запусти код в голове. Если не падает → это не баг.
-— `hmac.new(key, msg, digestmod).hexdigest()` → корректный Python. Не трогай.
-— `asyncio.Lock()` в `__init__` → корректно. Не трогай.
-— `list(iterable)` для безопасной итерации → паттерн, не проблема.
-— Разница в стиле (time.time() vs datetime.now()) → не баг, максимум 🟡.
-— Если реальных проблем нет → напиши только ✅ и заверши. Не высасывай.
-
-Максимум 4 пункта. Без вступлений. Пиши на русском."""
-
-    messages = [
-        {
-            "role": "user",
-            "content": f"**Вопрос Садовника:**\n{user_text}\n\n**Ответ Kimi:**\n{kimi_response}\n\nДай свою оценку."
-        }
-    ]
-
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                f"{ANTHROPIC_BASE_URL}/messages",
-                headers={
-                    "x-api-key": ANTHROPIC_API_KEY,
-                    "anthropic-version": "2023-06-01",
-                    "content-type": "application/json"
-                },
-                json={
-                    "model": ANTHROPIC_MODEL,
-                    "max_tokens": 8192,
-                    "system": system_prompt,
-                    "messages": messages
-                },
-                timeout=1000.0  # ⬆️ Увеличено до 1000 секунд
-            )
-            if response.status_code == 200:
-                data = response.json()
-                text = data.get("content", [{}])[0].get("text", "")
-                logger.info(f"🔵 Claude-наблюдатель ответил ({len(text)} символов)")
-                return text
-            elif response.status_code == 400:
-                err_data = {}
-                try: err_data = response.json()
-                except: pass
-                err_msg = (err_data.get("error") or {}).get("message", "")
-                if "credit balance" in err_msg or "too low" in err_msg:
-                    logger.warning("⚠️ Claude-наблюдатель: недостаточно кредитов на Anthropic аккаунте")
-                    return "⚠️ Claude-наблюдатель недоступен: недостаточно кредитов на Anthropic аккаунте. Пополни баланс на console.anthropic.com."
-                logger.error(f"Claude API error: {response.status_code} — {response.text}")
-                return None
-            else:
-                logger.error(f"Claude API error: {response.status_code} — {response.text}")
-                return None
-    except Exception as e:
-        logger.error(f"Claude observer exception: {e}")
-        return None
-
-
-class GitHubSessionStore:
-    def __init__(self, token: Optional[str], repo: str):
-        self.token = token
-        self.repo = repo
-        self.api_base = f"https://api.github.com/repos/{repo}"
-        self.headers = {}
-        if token:
-            self.headers = {
-                "Authorization": f"token {token}",
-                "Accept": "application/vnd.github.v3+json"
-            }
-        self._local: Dict[str, dict] = {}
-        self._save_queue: asyncio.Queue = asyncio.Queue()
-        self._save_task: Optional[asyncio.Task] = None
-
-    async def start(self):
-        self._save_task = asyncio.create_task(self._save_worker())
-        logger.info("💾 GitHub session store started")
-
-    async def stop(self):
-        if self._save_task:
-            await self._save_queue.put(None)
-            try:
-                await asyncio.wait_for(self._save_task, timeout=10.0)
-            except asyncio.TimeoutError:
-                logger.warning("Save worker didn't stop in time")
-
-    async def _save_worker(self):
-        pending = {}
-        while True:
-            try:
-                item = await asyncio.wait_for(self._save_queue.get(), timeout=3.0)
-                if item is None:
-                    break
-                session_id, data = item
-                pending[session_id] = (data, time.time())
-            except asyncio.TimeoutError:
-                now = time.time()
-                to_save = []
-                for sid, (data, ts) in list(pending.items()):
-                    if now - ts >= 5.0 or len(pending) > 5:
-                        to_save.append((sid, data))
-                        del pending[sid]
-                for sid, data in to_save[:3]:
-                    await self._save_to_github_with_retry(sid, data)
-        for sid, (data, _) in pending.items():
-            await self._save_to_github_with_retry(sid, data)
-
-    async def _save_to_github_with_retry(self, session_id: str, data: dict, retries=3):
-        for attempt in range(retries):
-            try:
-                await self._save_to_github(session_id, data)
-                return
-            except Exception as e:
-                logger.error(f"Save attempt {attempt+1} failed: {e}")
-                if attempt < retries - 1:
-                    await asyncio.sleep(1)
-
-    async def _save_to_github(self, session_id: str, data: dict):
-        if not self.token:
-            return
-        path = f"sessions/{session_id}.json"
-        try:
-            content = json.dumps(data, indent=2, ensure_ascii=False, default=str)
-        except Exception as e:
-            logger.error(f"JSON serialize error: {e}")
-            return
-        content_b64 = base64.b64encode(content.encode("utf-8")).decode("utf-8")
-        async with httpx.AsyncClient() as client:
-            url = f"{self.api_base}/contents/{path}"
-            sha = None
-            try:
-                resp = await client.get(url, headers=self.headers, timeout=10.0)
-                if resp.status_code == 200:
-                    sha = resp.json().get("sha")
-            except Exception:
-                pass
-            payload = {
-                "message": f"💾 {session_id[:12]} | {len(data.get('messages', []))} msgs | {datetime.now().strftime('%H:%M')}",
-                "content": content_b64,
-                "branch": "main"
-            }
-            if sha:
-                payload["sha"] = sha
-            resp = await client.put(url, headers=self.headers, json=payload, timeout=15.0)
-            if resp.status_code in [200, 201]:
-                logger.info(f"💾 Saved: {session_id[:12]}... ({len(data.get('messages', []))} msgs)")
-            else:
-                logger.error(f"GitHub save failed: {resp.status_code}")
-
-    async def load(self, session_id: str) -> Optional[dict]:
-        if session_id in self._local:
-            return self._local[session_id]
-        if not self.token:
-            return None
-        async with httpx.AsyncClient() as client:
-            url = f"{self.api_base}/contents/sessions/{session_id}.json"
-            try:
-                resp = await client.get(url, headers=self.headers, timeout=10.0)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    content = base64.b64decode(data["content"]).decode("utf-8")
-                    session_data = json.loads(content)
-                    self._local[session_id] = session_data
-                    return session_data
-                elif resp.status_code == 404:
-                    return None
-            except Exception as e:
-                logger.error(f"GitHub load error: {e}")
-                return None
-
-    def schedule_save(self, session_id: str, data: dict):
-        self._local[session_id] = data.copy()
-        try:
-            self._save_queue.put_nowait((session_id, data.copy()))
-        except Exception as e:
-            logger.error(f"Schedule save error: {e}")
-
-    def get_cached(self, session_id: str) -> Optional[dict]:
-        return self._local.get(session_id)
-
-session_store = GitHubSessionStore(GITHUB_TOKEN, GITHUB_REPO)
+# ==================== СЕССИИ ====================
 
 async def get_session(session_id: str) -> dict:
     loaded = await session_store.load(session_id)
@@ -721,22 +518,7 @@ class KernelMemory:
 При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 Патч оборачивай в ```json ... ```. На русском."""
 
-        elif role == "claude":
-            return f"""Ты — Claude, наблюдатель и критический рецензент Мандалы Симбиоза.
-Контекст системы — в boot.json (инжектируется в диалог).
 
-РОЛЬ:
-— Анализируй ответы DeepSeek: логика, точность, корректность кода
-— Предлагай альтернативы только если они явно лучше
-— Будь конкретен: строки, условия, причины
-— Если всё верно — так и скажи
-
-Формат: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
-Максимум 4 пункта. Без вступлений.
-Можешь предлагать патчи — перед этим read_file актуальной версии.
-На русском."""
-
-        # Роли определены для deepseek и claude
         return kernel.build_system_prompt("deepseek")
 
 
@@ -874,17 +656,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 await handle_refresh_modules(message, websocket)
             elif msg_type == "reset_memory":
                 await handle_reset_memory(message, websocket)
-            elif msg_type == "toggle_observer":
-                session = await get_session(session_id)
-                current = session.get("claude_observer", False)
-                session["claude_observer"] = not current
-                session_store.schedule_save(session_id, session)
-                state = session["claude_observer"]
-                logger.info(f"🔵 [{session_id[:12]}...] Claude-наблюдатель: {'включён' if state else 'выключен'}")
-                await manager.send_to(websocket, {
-                    "type": "observer_state",
-                    "active": state
-                })
+
             else:
                 await manager.send_to(websocket, {
                     "type": "error",
@@ -1463,139 +1235,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
                 logger.error(f"DeepSeek exception: {e}")
                 await manager.send_to(websocket, {"type": "error", "text": f"❌ DeepSeek: {str(e)[:100]}"})
 
-    # ═══════════════════════════════════════
-    # 2. КЛОД — полноценный агент с инструментами
-    # ═══════════════════════════════════════
-    if "claude" in active_models and ANTHROPIC_API_KEY:
-        await manager.send_to(websocket, {"type": "model_start", "model": "claude"})
-
-        # Инструменты в формате Anthropic API
-        claude_tools = [
-            {
-                "name": "web_search",
-                "description": "Поиск в интернете для получения актуальной информации",
-                "input_schema": {
-                    "type": "object",
-                    "properties": {
-                        "query": {"type": "string", "description": "Поисковый запрос"},
-                        "num_results": {"type": "integer", "description": "Количество результатов (макс 10)", "default": 5}
-                    },
-                    "required": ["query"]
-                }
-            },
-            {
-                "name": "read_file",
-                "description": "Прочитать содержимое файла или папки из репозитория",
-                "input_schema": {
-                    "type": "object",
-                    "properties": {
-                        "path": {"type": "string", "description": "Путь к файлу или папке в репозитории"}
-                    },
-                    "required": ["path"]
-                }
-            }
-        ]
-
-        claude_history = []
-        for msg in shared_history:
-            claude_history.append({"role": msg["role"], "content": msg["content"]})
-        claude_messages = claude_history + [{"role": "user", "content": user_text}]
-
-        try:
-            async with httpx.AsyncClient() as client:
-                claude_headers = {
-                    "x-api-key": ANTHROPIC_API_KEY,
-                    "anthropic-version": "2023-06-01",
-                    "content-type": "application/json"
-                }
-                claude_response = ""
-                claude_iterations = 0
-
-                while claude_iterations < 20:
-                    claude_iterations += 1
-                    resp = await client.post(
-                        f"{ANTHROPIC_BASE_URL}/messages",
-                        headers=claude_headers,
-                        json={
-                            "model": ANTHROPIC_MODEL,
-                            "max_tokens": 8192,
-                            "system": kernel.build_system_prompt("claude"),
-                            "tools": claude_tools,
-                            "messages": claude_messages
-                        },
-                        timeout=300.0
-                    )
-
-                    if resp.status_code != 200:
-                        err_body = resp.text[:200]
-                        if resp.status_code == 400:
-                            err = (resp.json().get("error") or {}).get("message", "")
-                            if "credit balance" in err:
-                                await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": "⚠️ Недостаточно кредитов Anthropic"})
-                                break
-                        await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод {resp.status_code}: {err_body[:120]}"})
-                        break
-
-                    resp_data = resp.json()
-                    stop_reason = resp_data.get("stop_reason")
-                    content_blocks = resp_data.get("content", [])
-
-                    # Собираем текст из блоков
-                    for block in content_blocks:
-                        if block.get("type") == "text":
-                            claude_response += block.get("text", "")
-
-                    # Если нет tool_use — финальный ответ
-                    if stop_reason != "tool_use":
-                        break
-
-                    # ── Обрабатываем tool_use блоки ──
-                    tool_results = []
-                    for block in content_blocks:
-                        if block.get("type") != "tool_use":
-                            continue
-                        fn = block.get("name", "")
-                        args = block.get("input", {})
-                        tool_use_id = block.get("id", "")
-
-                        tool_result = ""
-                        if fn == "web_search":
-                            results = await web_search_tool.search(args.get("query", ""), args.get("num_results", 5))
-                            tool_result = json.dumps(results, ensure_ascii=False)
-                            await manager.send_to(websocket, {"type": "tool_use", "model": "claude", "tool": "web_search", "query": args.get("query", "")})
-                        elif fn == "read_file":
-                            rpath = args.get("path", "").strip()
-                            rkey = "simbiosis/" + rpath.split("/")[-1].replace(".json", "")
-                            cached_mod = kernel.modules.get(rkey) or kernel.modules.get(rpath.replace(".json", ""))
-                            await manager.send_to(websocket, {"type": "tool_use", "model": "claude", "tool": "read_file", "path": rpath, "cached": cached_mod is not None})
-                            if cached_mod is not None:
-                                tool_result = json.dumps(cached_mod, ensure_ascii=False)
-                                logger.info(f"📦 [claude] read_file кэш: {rpath}")
-                            else:
-                                tool_result = await file_reader.read(rpath) or "Файл не найден"
-                        else:
-                            tool_result = f"Неизвестный инструмент: {fn}"
-
-                        tool_results.append({
-                            "type": "tool_result",
-                            "tool_use_id": tool_use_id,
-                            "content": tool_result
-                        })
-
-                    # Добавляем ответ ассистента и результаты инструментов в историю
-                    claude_messages.append({"role": "assistant", "content": content_blocks})
-                    claude_messages.append({"role": "user", "content": tool_results})
-
-                if claude_response:
-                    await manager.send_to(websocket, {"type": "observer_message", "model": "claude", "content": claude_response})
-                    await manager.send_to(websocket, {"type": "model_done", "model": "claude"})
-                    logger.info(f"✅ Клод: {len(claude_response)} символов, {claude_iterations} итераций")
-                else:
-                    await manager.send_to(websocket, {"type": "model_done", "model": "claude"})
-
-        except Exception as e:
-            logger.error(f"Claude exception: {e}")
-            await manager.send_to(websocket, {"type": "error", "text": f"❌ Клод: {str(e)[:100]}"})
 
     # ── Резонанс и финал ──
     main_response = deepseek_response
@@ -2338,8 +1977,7 @@ async def root():
         "core_version": kernel.global_commit_sha or "—",
         "github_configured": session_store.token is not None,
         "deepseek_configured": OPENROUTER_API_KEY is not None,
-        "claude_configured": ANTHROPIC_API_KEY is not None,
-    }
+            }
 
 @app.get("/health")
 async def health():
@@ -2353,7 +1991,6 @@ async def health():
         "last_update": kernel.last_update.isoformat() if kernel.last_update else None,
         "github": "ok" if GITHUB_TOKEN else "missing",
         "deepseek": "ok" if OPENROUTER_API_KEY else "missing",
-        "claude": "ok" if ANTHROPIC_API_KEY else "missing",
         "tavily": "enabled" if USE_TAVILY else "disabled",
         "webhook": "configured" if GITHUB_WEBHOOK_SECRET else "no_secret"
     }
