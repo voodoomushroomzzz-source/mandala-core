@@ -1866,7 +1866,9 @@
                     finishMessage();
                     break;
                 case 'done':
+                    // Может прийти после локального stop — finishMessage безопасен повторно
                     finishMessage();
+                    setSendBtnState(false);
                     break;
                 case 'error':
                     showToast(data.text, 'error');
@@ -1943,6 +1945,13 @@
         function finishMessage() {
             hideThinking();
             if (currentMessageDiv) {
+                // Принудительно рендерим буфер — если rAF ещё не сработал
+                // (например при отмене или быстром done), bubble не будет пустым
+                if (messageBuffer) {
+                    const bub = currentMessageDiv.querySelector('.bub');
+                    if (bub) bub.innerHTML = renderMarkdown(messageBuffer);
+                }
+                _renderPending = false;
                 saveMessages(); // сохраняем после завершения
                 currentMessageDiv = null;
                 messageBuffer = '';
@@ -2184,7 +2193,10 @@
                 if (ws && ws.readyState === WebSocket.OPEN) {
                     ws.send(JSON.stringify({ type: 'stop', session_id: 'main' }));
                 }
-                hideThinking();
+                // Принудительно завершаем текущее сообщение локально —
+                // это гарантирует что накопленный messageBuffer отрендерится
+                // и сохранится, даже если бэк пришлёт done с задержкой
+                finishMessage();
                 setSendBtnState(false);
                 showToast('◈ остановлено', 'success');
             } else {
