@@ -662,11 +662,10 @@ class ConnectionManager:
             "content": content,
             "time": time.time()
         })
-        # Обрезаем историю по символам. Ориентир — Grok: 131K токенов.
-        # Резервируем ~20K символов под системный промпт + ядро + ответ.
-        # Итого на историю: ~50K символов ≈ 30-40 обменов репликами по 1-2K каждый.
-        # Этого достаточно чтобы СР всегда понимал контекст разговора без перегрузки.
-        MAX_CONTEXT_CHARS = 50_000
+        # История сессии: 30K символов ≈ 15-20 обменов репликами.
+        # Уменьшено с 50K чтобы дать больше места под большие ответы DeepSeek.
+        # Контекстное окно модели 163 840 токенов — основной резерв под output.
+        MAX_CONTEXT_CHARS = 30_000
         total_chars = sum(len(m["content"]) for m in session["messages"])
         while total_chars > MAX_CONTEXT_CHARS and len(session["messages"]) > 1:
             # Ищем первое незащищённое сообщение для удаления
@@ -1155,6 +1154,34 @@ async def handle_ask(message: dict, websocket: WebSocket):
             ds_messages.extend(shared_history)
             ds_messages.append({"role": "user", "content": user_text})
 
+            # ── Динамическая выгрузка контекста ──────────────────────────
+            # Контекстное окно: 163 840 токенов. Резервируем 60 000 под ответ
+            # и ~5 000 под tool results в loop. Остаток — под input.
+            # 1 токен ≈ 3.5 символа (консервативно для смешанного текста).
+            MAX_OUTPUT_TOKENS  = 60_000
+            TOOL_RESERVE_TOKENS = 5_000
+            CONTEXT_WINDOW     = 163_840
+            CHARS_PER_TOKEN    = 3.5
+            input_token_budget = CONTEXT_WINDOW - MAX_OUTPUT_TOKENS - TOOL_RESERVE_TOKENS  # ~98 840 токенов
+            input_char_budget  = int(input_token_budget * CHARS_PER_TOKEN)  # ~345 940 символов
+
+            # Считаем текущий размер ds_messages
+            total_chars = sum(len(m.get("content") or "") for m in ds_messages)
+            if total_chars > input_char_budget:
+                # Удаляем самые старые незащищённые сообщения из середины (не system, не последний user)
+                trimmed = 0
+                i = 1  # пропускаем system prompt (индекс 0)
+                while total_chars > input_char_budget and i < len(ds_messages) - 1:
+                    msg = ds_messages[i]
+                    if not msg.get("_protected") and msg.get("role") != "system":
+                        trimmed += len(msg.get("content") or "")
+                        total_chars -= len(msg.get("content") or "")
+                        ds_messages.pop(i)
+                    else:
+                        i += 1
+                if trimmed:
+                    logger.info(f"✂️ Динамическая выгрузка: убрано {trimmed} символов из контекста, осталось {total_chars}")
+
             try:
                 async with httpx.AsyncClient() as client:
                     resp = await client.post(
@@ -1166,7 +1193,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.8,
-                            "max_tokens": 16384,
+                            "max_tokens": 60_000,
                         },
                         timeout=300.0
                     )
@@ -1267,7 +1294,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.8, "max_tokens": 16384},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.8, "max_tokens": 60_000},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
@@ -1334,7 +1361,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 resp_retry = await client.post(
                                     f"{OPENROUTER_BASE_URL}/chat/completions",
                                     headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                    json={"model": DEEPSEEK_MODEL, "messages": retry_msgs, "temperature": 0.8, "max_tokens": 8192},
+                                    json={"model": DEEPSEEK_MODEL, "messages": retry_msgs, "temperature": 0.8, "max_tokens": 32_000},
                                     timeout=120.0
                                 )
                                 if resp_retry.status_code == 200:
