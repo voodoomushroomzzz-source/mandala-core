@@ -1,1 +1,56 @@
-{"identity":{"module_id":"INSTR-005","name":"Text-patches для .py и .html","version":"v2.0.0","created":"2026-03-03","updated":"2026-03-05","layer":1,"type":"critical_directive","description":"Инструкция по точечным изменениям в текстовых файлах через replacements","status":"active","priority":"critical","tags":["critical","text","patch","python","html","str_replace"],"resonance":"100%"},"meta":{"honeycomb_name":"critical","parent_honeycomb":"instructions","segments":2,"total_files":3,"total_size_kb":3.0,"migration_status":"completed","migration_date":"2026-03-05","segmentation_strategy":"По типам контента: принципы + примеры","load_strategy":"Ленивая загрузка сегментов"},"structure":{"segments":{"principles":{"description":"Принципы и правила работы с text-patches","files":{"text_patches_principles":{"file":"critical/text_patches_principles.json","source_id":"INSTR-005-PRINCIPLES","size_kb":1.2,"tags":["principles","rules","core"],"load_priority":"critical","description":"Основные принципы и правила text-patches"}}},"examples":{"description":"Примеры патчей для разных сценариев","files":{"text_patches_examples":{"file":"critical/text_patches_examples.json","source_id":"INSTR-005-EXAMPLES","size_kb":1.8,"tags":["examples","patterns","workflow"],"load_priority":"high","description":"Примеры патчей для разных типов изменений"}}}}},"content":{"summary":"Эта сота содержит инструкции по работе с text-patches (.py, .html, .md файлы). Основные принципы в сегменте principles, примеры в сегменте examples.","golden_rule":"Перед ЛЮБЫМ патчем — read_file актуальной версии файла. Патч только на базе прочитанного содержимого, не по памяти.","quick_reference":{"format":"text_file_patch с replacements[]","scope":".py, .html, .md, .txt, .js, .css файлы","rule_old":"Должна встречаться РОВНО 1 раз","rule_read":"Всегда read_file перед патчем","decision_tree":{"honeycombs_json":"Используй honeycomb_update с content (полная замена)","simbiosis_json":"Используй simbiosis_patch с changes[]","text_files":"Используй text_file_patch с replacements[]","new_files":"Используй honeycomb_update с content"}}},"registry":{"total_files":3,"total_size_kb":3.0,"last_updated":"2026-03-05","honeycomb_id":"HONEYCOMB-INSTR-005","status":"active","compliance_status":"v2.0_compliant","notes":"Разделено на 2 сегмента для соответствия ограничению 2KB. Основной файл содержит только мета-информацию."},"resonance":{"with_boot":"100%","with_core_map":"100%","with_parent":"100%","status":"fully_resonant"}}
+Text-patches для .py и .html — ОБЯЗАТЕЛЬНО
+
+🔹 Золотое правило: Перед ЛЮБЫМ text-patch — read_file актуальной версии файла. Патч только на базе прочитанного содержимого, не по памяти.
+
+🔹 Scope: .py, .html, .md, .txt, .js, .css, .json, .yaml, .yml, .toml, .ini, .cfg, .conf, .sh, .bash
+
+🔹 Формат патча:
+``json
+{
+  "type": "text_file_patch",
+  "file_path": "путь_с_расширением",
+  "replacements": [
+    {
+      "old": "старая_строка",
+      "new": "новая_строка"
+    }
+  ]
+}
+`
+
+🔹 Правила:
+1. old должна встречаться в файле РОВНО 1 раз
+2. Сохраняй отступы точно как в оригинале
+3. Порядок замен важен — каждая следующая применяется к уже изменённому файлу
+4. Для сложных изменений — разбивай на несколько патчей
+
+🔹 Пример исправления ошибки в Python:
+`json
+{
+  "type": "text_file_patch",
+  "file_path": "honeycombs/registry/honeycomb_scanner.py",
+  "replacements": [
+    {
+      "old": "logger = logging.getLogger(name)",
+      "new": "logger = logging.getLogger(name)"
+    },
+    {
+      "old": "def init(self, base_path: str = \"honeycombs\"):",
+      "new": "def init(self, base_path: str = \"honeycombs\"):"
+    },
+    {
+      "old": "if name == \"main\":",
+      "new": "if name == \"main\":"
+    }
+  ]
+}
+`
+
+🔹 Чеклист перед отправкой патча:
+✅ Прочитал актуальную версию через read_file
+✅ old встречается РОВНО 1 раз в файле
+✅ Сохранил отступы и форматирование
+✅ replacements содержит минимум одну замену
+✅ file_path указан с расширением
+✅ Патч обёрнут в `json ... ``
+✅ Для сложных изменений — разбил на несколько патчей
