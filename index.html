@@ -105,17 +105,7 @@
             margin-bottom: 28px; text-align: center;
         }
         .pw-hidden-input {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            opacity: 0;
-            z-index: 10001;
-            font-size: 16px;      /* iOS: предотвращает zoom при фокусе */
-            background: transparent;
-            border: none;
-            outline: none;
-            cursor: default;
-            /* pointer-events: none убран — иначе браузер блокирует ввод */
+            position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none;
         }
         .pw-glyphs {
             display: flex; gap: 9px; align-items: center; justify-content: center;
@@ -411,6 +401,10 @@
             min-width: 0;
             animation: mup 0.28s ease;
         }
+        /* Сообщения с кодом растягиваем шире */
+        .msg.assistant:has(.code-block) {
+            max-width: 96%;
+        }
         @keyframes mup {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -436,6 +430,7 @@
             word-break: break-word;
             overflow-wrap: break-word;
             min-width: 0;
+            overflow: visible;
         }
         .msg.assistant .bub {
             background: var(--surface-2);
@@ -512,7 +507,7 @@
             margin: 12px 0; 
             border: 1px solid var(--line-2); 
             border-radius: var(--radius);
-            overflow: hidden; 
+            overflow: hidden;
             background: var(--surface); 
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             max-width: 100%;
@@ -613,9 +608,11 @@
 
         .code-body {
             display: flex;
-            overflow: auto;
+            overflow-x: auto;
+            overflow-y: auto;
             max-height: 520px;
             background: #0d1f16;
+            min-width: 0;
         }
         .code-content {
             padding: 12px 14px;
@@ -1220,7 +1217,7 @@
 
     <!-- Цветок жизни с анимированным градиентом -->
     <!-- ═══ ЭКРАН ПАРОЛЯ ═══ -->
-    <div id="passwordScreen">
+    <div id="passwordScreen" onclick="document.getElementById('pwInput').focus()">
         <div class="pw-scene">
             <div class="pw-halo"></div>
             <div class="pw-scene-inner">
@@ -1231,7 +1228,7 @@
         <div class="pw-title">mandala · engineer · mycel</div>
         <input class="pw-hidden-input" id="pwInput" type="password"
                autocomplete="off" oninput="pwHandleInput(this.value)"/>
-        <div class="pw-glyphs" id="pwGlyphs">
+        <div class="pw-glyphs" id="pwGlyphs" onclick="document.getElementById('pwInput').focus()">
             <div class="pw-slot empty" id="pwSlot0"><svg viewBox="0 0 18 22"><polygon points="9,1 17,6 17,16 9,21 1,16 1,6" stroke="#10b981" stroke-width="1.3" fill="none"/></svg></div>
             <div class="pw-slot empty" id="pwSlot1"><svg viewBox="0 0 18 22"><polygon points="9,1 17,11 9,21 1,11" stroke="#7c3aed" stroke-width="1.3" fill="none"/><line x1="9" y1="1" x2="9" y2="21" stroke="#7c3aed" stroke-width="0.6"/><line x1="1" y1="11" x2="17" y2="11" stroke="#7c3aed" stroke-width="0.6"/></svg></div>
             <div class="pw-slot empty" id="pwSlot2"><svg viewBox="0 0 18 22"><polygon points="9,19 1,3 17,3" stroke="#3730a3" stroke-width="1.3" fill="none"/><circle cx="9" cy="11" r="2.5" stroke="#3730a3" stroke-width="1"/></svg></div>
@@ -1590,56 +1587,47 @@
                 .replace(/\*([^*\n]+)\*/g, '$1')
                 .replace(/(^|[^\w_])__([^_\n]+)__([^\w_]|$)/gm, '$1$2$3')
                 .replace(/(^|\s)_([^_\n]+)_(\s|$)/gm, '$1$2$3');
-            // 1. Парсим code-блоки посимвольно
-            // Для JSON-блоков отслеживаем вложенность строк чтобы не путать
-            // ``` внутри JSON-значения с закрывающим ``` блока
-
-            // Ищет закрывающий ``` с учётом типа блока
-            function findClosingBackticks(src, codeStart, lang) {
-                var isJson = /^jsonc?$/i.test(lang);
-                var k = codeStart;
-                var inString = false;
-                var escNext = false;
-                while (k < src.length - 2) {
-                    var c = src[k];
-                    if (isJson) {
-                        if (escNext) { escNext = false; k++; continue; }
-                        if (c === '\\') { escNext = true; k++; continue; }
-                        if (c === '"') { inString = !inString; k++; continue; }
-                    }
-                    // ``` в начале строки — кандидат на закрывающий
-                    if (c === '`' && src[k+1] === '`' && src[k+2] === '`') {
-                        if (k === 0 || src[k-1] === '\n') {
-                            if (inString) { k += 3; continue; } // внутри JSON-строки — пропуск
-                            return k;
-                        }
-                    }
-                    k++;
-                }
-                return -1;
-            }
-
+            // 1. Парсим code-блоки посимвольно — единственно надёжный способ
+            // когда внутри блока могут быть ``` (например в JSON content)
             let processed = (function(src) {
                 var out = '';
                 var i = 0;
                 while (i < src.length) {
+                    // Ищем открывающий ``` с необязательным lang и обязательным \n
                     if (src[i] === '`' && src[i+1] === '`' && src[i+2] === '`') {
                         var j = i + 3;
+                        // читаем lang (до \n)
                         var langEnd = src.indexOf('\n', j);
                         if (langEnd === -1) { out += src[i]; i++; continue; }
                         var lang = src.slice(j, langEnd).trim();
                         var codeStart = langEnd + 1;
-                        var found = findClosingBackticks(src, codeStart, lang);
+                        // Ищем закрывающий ```, который стоит на начале строки
+                        // (предыдущий символ — \n или начало строки)
+                        var found = -1;
+                        var k = codeStart;
+                        while (k < src.length - 2) {
+                            if (src[k] === '`' && src[k+1] === '`' && src[k+2] === '`') {
+                                // Закрывающий ``` — только если в начале строки
+                                if (k === 0 || src[k-1] === '\n') {
+                                    found = k;
+                                    break;
+                                }
+                            }
+                            k++;
+                        }
                         if (found !== -1) {
+                            // Завершённый блок
                             var code = src.slice(codeStart, found);
+                            // Убираем trailing \n если есть
                             if (code.endsWith('\n')) code = code.slice(0, -1);
                             var idx = blocks.length;
                             blocks.push({ lang: lang || 'code', code: code, open: false });
                             out += PH + idx + '_END';
                             i = found + 3;
+                            // Пропускаем \n после закрывающего ```
                             if (src[i] === '\n') i++;
                         } else {
-                            // Незакрытый блок (стриминг)
+                            // Незакрытый блок — до конца строки (стриминг)
                             var code = src.slice(codeStart);
                             var idx = blocks.length;
                             blocks.push({ lang: lang || 'code', code: code, open: true });
@@ -1653,23 +1641,16 @@
                 }
                 return out;
             })(rawText);
-            // 3. Экранируем все остаточные ``` в тексте перед marked
-            // (наш парсер уже извлёк валидные блоки → всё что осталось — инлайн или невалидное)
-            processed = processed
-                .replace(/(?<!
-)```/g, '&#96;&#96;&#96;')   // инлайн ``` (не в начале строки)
-                .replace(/^```/gm, '&#96;&#96;&#96;');        // ``` в начале строки (нераспознанные)
-
-            // 4. Markdown для текстовой части
+            // 3. Markdown для текстовой части
             var html;
             try { html = marked.parse(processed, { breaks: true, gfm: true }); }
             catch(e) { html = escapeHtml(processed).replace(/\n/g, '<br>'); }
-            // 5. Вставляем блоки обратно
+            // 4. Вставляем блоки обратно
             html = html.replace(new RegExp(PH + '(\\d+)_END', 'g'), function(_, i) {
                 var b = blocks[parseInt(i)];
                 return b ? renderCodeBlock(b.lang, b.code, !b.open) : '';
             });
-            // 6. inline code
+            // 5. inline code
             html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
             return html;
         }
@@ -2939,12 +2920,7 @@
                 document.getElementById('passwordScreen').classList.remove('hidden');
                 setTimeout(() => {
                     const inp = document.getElementById('pwInput');
-                    if (inp) {
-                        inp.focus();
-                        // iOS: повторный фокус через requestAnimationFrame
-                        requestAnimationFrame(() => inp.focus());
-                        pwUpdateSlots('');
-                    }
+                    if (inp) { inp.focus(); pwUpdateSlots(''); }
                 }, 120);
             } else {
                 document.getElementById('passwordScreen').classList.add('hidden');
