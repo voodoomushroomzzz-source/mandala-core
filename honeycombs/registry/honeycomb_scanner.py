@@ -557,7 +557,7 @@ def main():
         if scanner.validation_errors:
             print(f"\nНайдено {len(scanner.validation_errors)} ошибок валидации:")
             for error in scanner.validation_errors:
-                print(f"\n{honeycomb['honeycomb_id']}: {honeycomb['name']}")
+                print(f"\n{error['honeycomb_id']}: {error['name']}")
                 for err in error.get('errors', []):
                     print(f"  ✗ {err}")
                 for warn in error.get('warnings', []):
