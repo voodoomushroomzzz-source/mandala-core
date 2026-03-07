@@ -1,6 +1,6 @@
 {
-  "scan_time": "2026-03-07T16:12:30.912169+00:00",
-  "commit": "76857098",
+  "scan_time": "2026-03-07T16:16:48.572392+00:00",
+  "commit": "0cdfd11e",
   "branch": "main",
   "honeycombs_found": 18,
   "json_files_oversized": [
@@ -46,6 +46,7 @@
     "honeycombs/instructions/core/folder_management.json",
     "honeycombs/instructions/core/sr_workflow.json",
     "honeycombs/instructions/core/manifest_standard_v2.json",
+    "honeycombs/instructions/core/claude_workflow.json",
     "honeycombs/registry/health_check.json",
     "honeycombs/registry/scanner.json",
     "honeycombs/registry/dashboard/index.json",
