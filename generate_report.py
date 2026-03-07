@@ -48,7 +48,7 @@ def generate():
         for cat, data in cats.items():
             lines.append(f"- **{cat}**: {data.get('count', 0)} sot")
     else:
-        lines += ["## Registry", "", "Run `make scan` first."]
+        lines += ["## Registry", "", "Run make scan first."]
     lines += ["", "## Struktura sot", ""]
     hc_count = 0
     for root, dirs, files in os.walk("honeycombs"):
