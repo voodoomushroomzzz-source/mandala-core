@@ -1,6 +1,9 @@
-﻿name: Honeycomb Scanner
+name: Honeycomb Scanner
 
 on:
+  schedule:
+    - cron: '0 7 * * *'
+    - cron: '0 19 * * *'
   push:
     branches: [main, develop]
     paths:
@@ -10,7 +13,10 @@ on:
   workflow_dispatch:
     inputs:
       force_rescan:
-        description: 'Force full rescan'
+        description:
+  schedule:
+    - cron: '0 7 * * *'
+    - cron: '0 19 * * *' 'Force full rescan'
         required: false
         default: 'false'
         type: boolean
@@ -22,7 +28,10 @@ concurrency:
 jobs:
   scan:
     name: Scan and validate honeycombs
-    runs-on: ubuntu-latest
+    runs-on:
+  schedule:
+    - cron: '0 7 * * *'
+    - cron: '0 19 * * *' ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
@@ -36,7 +45,10 @@ jobs:
       - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version:
+  schedule:
+    - cron: '0 7 * * *'
+    - cron: '0 19 * * *' '3.11'
           cache: 'pip'
 
       - name: Install dependencies
