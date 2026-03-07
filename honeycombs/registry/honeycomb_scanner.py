@@ -24,13 +24,13 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
-logger = logging.getLogger(name)
+logger = logging.getLogger(__name__)
 
 
 class HoneycombScanner:
     """Основной класс для сканирования и регистрации сот"""
     
-    def init(self, base_path: str = "honeycombs"):
+    def __init__(self, base_path: str = "honeycombs"):
         """
         Инициализация сканера
         
@@ -557,7 +557,7 @@ def main():
         if scanner.validation_errors:
             print(f"\nНайдено {len(scanner.validation_errors)} ошибок валидации:")
             for error in scanner.validation_errors:
-                print(f"\n{honeycomb['honeycomb_id']}: {honeycomb['name']}")
+                print(f"\n{error['honeycomb_id']}: {error['name']}")
                 for err in error.get('errors', []):
                     print(f"  ✗ {err}")
                 for warn in error.get('warnings', []):
@@ -575,5 +575,5 @@ def main():
         sys.exit(1)
 
 
-if name == "main":
+if __name__ == "__main__":
     main()
