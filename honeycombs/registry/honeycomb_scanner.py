@@ -24,7 +24,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
-logger = logging.getLogger(name)
+logger = logging.getLogger(__name__)
 
 
 class HoneycombScanner:
