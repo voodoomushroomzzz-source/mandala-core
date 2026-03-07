@@ -1,6 +1,6 @@
 {
-  "scan_time": "2026-03-07T15:44:15.889745+00:00",
-  "commit": "852e8ca0",
+  "scan_time": "2026-03-07T16:09:01.118027+00:00",
+  "commit": "88b5604a",
   "branch": "main",
   "honeycombs_found": 18,
   "json_files_oversized": [
@@ -41,10 +41,8 @@
     "honeycombs/telegram_bot/configuration/menu.json",
     "honeycombs/telegram_bot/roadmap/milestones.json",
     "honeycombs/instructions/index.json",
-    "honeycombs/instructions/workflow/patch_patterns.json",
     "honeycombs/instructions/critical/patch_mastery.json",
     "honeycombs/instructions/critical/file_deletion_guide.json",
-    "honeycombs/instructions/critical/text_patches.json",
     "honeycombs/instructions/core/folder_management.json",
     "honeycombs/instructions/core/sr_workflow.json",
     "honeycombs/instructions/core/manifest_standard_v2.json",
