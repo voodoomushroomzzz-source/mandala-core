@@ -1,4 +1,4 @@
-name: Honeycomb Scanner
+﻿name: Honeycomb Scanner
 
 on:
   schedule:
@@ -13,10 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       force_rescan:
-        description:
-  schedule:
-    - cron: '0 7 * * *'
-    - cron: '0 19 * * *' 'Force full rescan'
+        description: 'Force full rescan'
         required: false
         default: 'false'
         type: boolean
@@ -28,10 +25,7 @@ concurrency:
 jobs:
   scan:
     name: Scan and validate honeycombs
-    runs-on:
-  schedule:
-    - cron: '0 7 * * *'
-    - cron: '0 19 * * *' ubuntu-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
@@ -45,10 +39,7 @@ jobs:
       - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version:
-  schedule:
-    - cron: '0 7 * * *'
-    - cron: '0 19 * * *' '3.11'
+          python-version: '3.11'
           cache: 'pip'
 
       - name: Install dependencies
@@ -80,7 +71,6 @@ jobs:
           import json, os
           from pathlib import Path
           from datetime import datetime, timezone
-          registry_path = Path('honeycombs/registry/index.json')
           report = {
             'scan_time': datetime.now(timezone.utc).isoformat(),
             'commit': os.environ.get('GITHUB_SHA', 'local')[:8],
@@ -95,32 +85,8 @@ jobs:
           print(f'Status: {report[\"status\"]}')
           "
 
-      - name: Summary
-        if: always()
-        run: |
-          python3 -c "
-          import json
-          from pathlib import Path
-          p = Path('reports/scan_result.json')
-          if p.exists():
-            r = json.loads(p.read_text())
-            lines = [
-              '## Honeycomb Scan Results',
-              f'Status: {r.get(\"status\")}',
-              f'Honeycombs found: {r.get(\"honeycombs_found\", 0)}',
-              f'Oversized files: {len(r.get(\"json_files_oversized\", []))}',
-            ]
-            summary = chr(10).join(lines)
-          else:
-            summary = 'No report found'
-          with open('/tmp/summary.md', 'w') as f:
-            f.write(summary)
-          print(summary)
-          "
-          cat /tmp/summary.md >> $GITHUB_STEP_SUMMARY
-
       - name: Commit updated registry
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
