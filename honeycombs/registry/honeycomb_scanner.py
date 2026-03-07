@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 class HoneycombScanner:
     """Основной класс для сканирования и регистрации сот"""
     
-    def init(self, base_path: str = "honeycombs"):
+    def __init__(self, base_path: str = "honeycombs"):
         """
         Инициализация сканера
         
@@ -575,5 +575,5 @@ def main():
         sys.exit(1)
 
 
-if name == "main":
+if __name__ == "__main__":
     main()
