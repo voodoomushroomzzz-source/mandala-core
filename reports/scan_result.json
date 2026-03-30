@@ -1,9 +1,10 @@
 {
-  "scan_time": "2026-03-30T19:34:46.615320+00:00",
-  "commit": "a7d63463",
+  "scan_time": "2026-03-30T19:41:20.607285+00:00",
+  "commit": "62d7c5ff",
   "branch": "main",
-  "honeycombs_found": 20,
+  "honeycombs_found": 21,
   "json_files_oversized": [
+    "honeycombs/boot_online/index.json",
     "honeycombs/roadmaps/index.json",
     "honeycombs/roadmaps/archive/cloud_sr.json",
     "honeycombs/roadmaps/active/architecture_adaptation.json",
