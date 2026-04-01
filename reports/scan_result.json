@@ -1,6 +1,6 @@
 {
-  "scan_time": "2026-04-01T08:17:07.724999+00:00",
-  "commit": "9645c52c",
+  "scan_time": "2026-04-01T08:33:57.785918+00:00",
+  "commit": "a06789fa",
   "branch": "main",
   "honeycombs_found": 21,
   "json_files_oversized": [
@@ -20,6 +20,7 @@
     "honeycombs/instructions/core/claude_workflow.json",
     "honeycombs/instructions/core/folder_management.json",
     "honeycombs/instructions/core/sr_workflow.json",
+    "honeycombs/instructions/core/sr_role_v3.json",
     "honeycombs/instructions/core/manifest_standard_v2.json",
     "honeycombs/instructions/critical/file_deletion_guide.json",
     "honeycombs/instructions/critical/patch_mastery.json",
