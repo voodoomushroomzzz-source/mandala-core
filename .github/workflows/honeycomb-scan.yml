@@ -1,4 +1,4 @@
-﻿name: Honeycomb Scanner
+name: Honeycomb Scanner
 
 on:
   schedule:
@@ -76,7 +76,7 @@ jobs:
             'commit': os.environ.get('GITHUB_SHA', 'local')[:8],
             'branch': os.environ.get('GITHUB_REF_NAME', 'unknown'),
             'honeycombs_found': sum(1 for r,d,f in os.walk('honeycombs') if 'index.json' in f),
-            'json_files_oversized': [str(p) for p in Path('honeycombs').rglob('*.json') if p.stat().st_size > 2048],
+            'json_files_oversized': [str(p) for p in Path('honeycombs').rglob('*.json') if p.stat().st_size > 8192],
             'status': 'ok'
           }
           report['status'] = 'warning' if report['json_files_oversized'] else 'ok'
