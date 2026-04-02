@@ -1,25 +1,25 @@
 {
-  "last_scan": "2026-04-02T18:23:38.103413",
+  "last_scan": "2026-04-02T21:23:20.928031",
   "honeycomb_hashes": {
-    "boot_online": "b9e4ab054e1ff791484cab19c3bbd843",
-    "roadmaps": "464b7475d0a5c92ec97a0ec70d65bb9c",
-    "philosophy": "52c45f3ff026b19c762c43ea599eb8db",
-    "instructions": "d31a7b84dbd47051d645305162785b1a",
-    "engineer_chat": "7b7c2dbb157f5fcca38fb6a3dedbfab4",
-    "telegram_bot": "96dde09ac99e7ed7d636304e671c9cef",
-    "visualizations": "26172a151d6ddcc0464caa64007e388c",
-    "communications": "a2650c86bb2b1de5e80a37efecc31f37",
-    "tasks": "8fd63c1978f8c879a60c6912844d7c31",
     "analytics": "9ea4e8437b5b9638ded8cafd4ad7f610",
-    "seeds": "449a69a26536b4dcc13467bd90b7d5a3",
+    "boot_online": "b9e4ab054e1ff791484cab19c3bbd843",
+    "communications": "a2650c86bb2b1de5e80a37efecc31f37",
     "core_map": "81ee1ce337f2218f8b62ac26c56b689a",
+    "engineer_chat": "7b7c2dbb157f5fcca38fb6a3dedbfab4",
+    "inbox": "928bbbfe6f994eb7835358e8e1aa4738",
+    "instructions": "d31a7b84dbd47051d645305162785b1a",
+    "philosophy": "52c45f3ff026b19c762c43ea599eb8db",
     "protocols": "0649662d387baeb1aa94843bf0fe1414",
     "registry": "51eddbfd5aa529ec5f9a6ccf5378efc9",
-    "registry/core": "9e054d2495428785e2e3f19f71e86b98",
-    "registry/notifications": "bda789ec25e0b2aa676d0d886883f65d",
     "registry/backups": "63b8478ffdd1b7dc42b8c90e12ecbac2",
+    "registry/core": "9e054d2495428785e2e3f19f71e86b98",
     "registry/dashboard": "215d3717bbfe900d3501b3571462ceb2",
-    "inbox": "928bbbfe6f994eb7835358e8e1aa4738"
+    "registry/notifications": "bda789ec25e0b2aa676d0d886883f65d",
+    "roadmaps": "464b7475d0a5c92ec97a0ec70d65bb9c",
+    "seeds": "449a69a26536b4dcc13467bd90b7d5a3",
+    "tasks": "8fd63c1978f8c879a60c6912844d7c31",
+    "telegram_bot": "96dde09ac99e7ed7d636304e671c9cef",
+    "visualizations": "26172a151d6ddcc0464caa64007e388c"
   },
   "statistics": {
     "total_scanned": 19,
@@ -28,7 +28,7 @@
     "errors": 2,
     "warnings": 0,
     "total_files": 136,
-    "total_size_kb": 340.2800000000001
+    "total_size_kb": 341.10999999999996
   },
   "scanner_config": {}
 }
