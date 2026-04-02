@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Honeycomb Scanner v1.0.0
 Модуль сканирования сот для Мандалы Симбиоза
@@ -577,3 +577,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
