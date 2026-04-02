@@ -240,7 +240,7 @@ class HoneycombScanner:
             
             if is_valid:
                 self.stats["valid_v2"] += 1
-                logger.info(f"✓ {honeycomb_id}: {honeycomb_info['name']} (v{honeycomb_info['version']})")
+                logger.info(f"[OK] {honeycomb_id}: {honeycomb_info['name']} v{honeycomb_info['version']}")
             else:
                 self.stats["invalid_v2"] += 1
                 self.stats["warnings"] += 1
@@ -372,6 +372,8 @@ class HoneycombScanner:
                 }
             
             # Обновление информации о реестре
+            if "registry_info" not in registry:
+                registry["registry_info"] = {}
             registry["registry_info"]["last_updated"] = datetime.now().isoformat()
             registry["registry_info"]["last_scan"] = datetime.now().isoformat()
             registry["registry_info"]["scanner_version"] = self.config.get("identity", {}).get("version", "v1.0.0")
