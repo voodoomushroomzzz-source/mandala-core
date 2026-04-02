@@ -1,7 +1,6 @@
 ﻿#!/usr/bin/env python3
 """
 Honeycomb Scan Report Generator
-Генерирует красивый Markdown-отчёт на основе scan_state.json и структуры сот.
 """
 
 import json
@@ -31,7 +30,7 @@ def generate():
     state = safe_load_json(SCAN_STATE)
 
     lines = [
-        "# Honeycomb Scan Report  Mandala Simbioza",
+        "# Honeycomb Scan Report  Mandala Simbioza",   #  исправлено тире
         "",
         f"**Система:** Mandala Simbioza v1.2.0",
         f"**Дата:** {ts_str}",
@@ -73,7 +72,7 @@ def generate():
     out_path = REPORTS_DIR / f"scan_{ts_file}.md"
     out_path.write_text(out, encoding="utf-8")
     (REPORTS_DIR / "scan_report.md").write_text(out, encoding="utf-8")
-    print(f" Отчёт успешно сохранён: {out_path}")
+    print(f" Отчёт успешно сохранён: {out_path}")   #  без лишнего пробела
 
 if __name__ == "__main__":
     generate()
