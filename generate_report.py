@@ -60,13 +60,13 @@ def generate():
     else:
         lines += ["## Статистика", "", "Сначала выполни `make scan`", ""]
 
-    # Структура сот
+    # Структура сот  исправлено: всегда используем /
     lines += ["## Структура сот", ""]
     hc_count = 0
     for root, dirs, files in os.walk("honeycombs"):
         dirs[:] = [d for d in dirs if not d.startswith(".")]
         if "index.json" in files:
-            rel = os.path.relpath(root, "honeycombs")
+            rel = os.path.relpath(root, "honeycombs").replace("\\", "/")
             lines.append(f"- honeycombs/{rel}/")
             hc_count += 1
 
