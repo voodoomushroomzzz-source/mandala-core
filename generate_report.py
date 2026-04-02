@@ -16,10 +16,11 @@ SCAN_RESULT = Path("reports/scan_result.json")
 def safe_load_json(path: Path):
     try:
         if path.exists():
-            return json.loads(path.read_text(encoding="utf-8").strip())
+            content = path.read_text(encoding="utf-8").strip()
+            return json.loads(content) if content else None
         return None
     except Exception as e:
-        print(f"[error] Cannot read {path}: {e}")
+        print(f"[ERROR] Cannot read {path}: {e}")
         return None
 
 def generate():
@@ -58,9 +59,9 @@ def generate():
             "",
         ]
     else:
-        lines += ["## Статистика", "", "Сначала выполни `make scan`", ""]
+        lines += ["## Статистика", "", "Сначала выполни сканирование", ""]
 
-    # Структура сот  исправлено: всегда используем /
+    # Структура сот  всегда используем прямой слеш /
     lines += ["## Структура сот", ""]
     hc_count = 0
     for root, dirs, files in os.walk("honeycombs"):
@@ -76,7 +77,7 @@ def generate():
     out_path = REPORTS_DIR / f"scan_{ts_file}.md"
     out_path.write_text(out, encoding="utf-8")
     (REPORTS_DIR / "scan_report.md").write_text(out, encoding="utf-8")
-    print(f" Отчёт сохранён: {out_path}")
+    print(f" Отчёт успешно сохранён: {out_path}")
 
 if __name__ == "__main__":
     generate()
