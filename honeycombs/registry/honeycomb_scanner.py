@@ -38,7 +38,7 @@ class HoneycombScanner:
             base_path: Базовый путь к директории honeycombs
         """
         self.base_path = Path(base_path)
-        self.registry_path = Path("honeycombs/registry/index.json")
+        self.registry_path = Path("honeycombs/registry/scan_state.json")
         self.scanner_config_path = Path("honeycombs/registry/scanner.json")
         
         # Конфигурация сканера
