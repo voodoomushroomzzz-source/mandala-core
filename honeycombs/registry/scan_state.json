@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-04-05T19:09:48.477371",
+  "last_scan": "2026-04-05T19:36:56.075633",
   "honeycomb_hashes": {
     "boot_online": "0d4d588d119d658192d118589042e814",
     "roadmaps": "ebcea278709b265a3ce4863104f3249b",
@@ -27,8 +27,8 @@
     "invalid_v2": 0,
     "errors": 2,
     "warnings": 0,
-    "total_files": 136,
-    "total_size_kb": 343.38000000000005
+    "total_files": 138,
+    "total_size_kb": 343.87000000000006
   },
   "scanner_config": {}
 }
