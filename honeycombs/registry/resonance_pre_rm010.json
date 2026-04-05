@@ -1,0 +1,7 @@
+﻿{
+  "resonance_check": "pre_rm010",
+  "timestamp": "$(Get-Date -Format 'o')",
+  "core_map_version": "v2.2.2",
+  "status": "healthy",
+  "notes": "Начало Фазы 1 RM-010. Ядро стабильно."
+}
