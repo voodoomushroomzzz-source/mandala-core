@@ -1,20 +1,20 @@
 # Honeycomb Scan Report  Mandala Simbioza
 
 **Система:** Mandala Simbioza v1.2.0
-**Дата:** 2026-04-06 07:08:16
+**Дата:** 2026-04-06 07:13:39
 **Сканер:** honeycomb_scanner.py v1.0.0
 
 ## Статистика
 
 | Параметр                  | Значение          |
 |---------------------------|-------------------|
-| Всего сот                 | 20 |
-| Валидных v2               | 20 |
+| Всего сот                 | 22 |
+| Валидных v2               | 22 |
 | Невалидных v2             | 0 |
 | Ошибок                    | 2 |
-| Всего файлов              | 143 |
-| Общий размер              | 358.5400000000001 KB |
-| Последнее сканирование    | 2026-04-06T07:08:16.167250 |
+| Всего файлов              | 150 |
+| Общий размер              | 374.27000000000004 KB |
+| Последнее сканирование    | 2026-04-06T07:13:39.366158 |
 
 ## Структура сот
 
@@ -27,6 +27,7 @@
 - honeycombs/visualizations/
 - honeycombs/communications/
 - honeycombs/tasks/
+- honeycombs/sphaerae/
 - honeycombs/analytics/
 - honeycombs/seeds/
 - honeycombs/core_map/
@@ -39,9 +40,10 @@
 - honeycombs/registry/backups/
 - honeycombs/registry/dashboard/
 - honeycombs/awareness/
+- honeycombs/tectosphaera/
 - honeycombs/inbox/
 
-**Итого сот с index.json:** 22
+**Итого сот с index.json:** 24
 
 ---
-*Сгенерировано: 2026-04-06 07:08:16*
+*Сгенерировано: 2026-04-06 07:13:39*
