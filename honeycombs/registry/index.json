@@ -1,1 +1,57 @@
-{"identity":{"module_id":"REGISTRY-INDEX","name":"Навигатор реестра сот","version":"v3.0.0","created":"2026-03-05","updated":"2026-04-02","layer":2,"type":"registry_navigator","description":"Навигатор реестра  указывает где лежат актуальные данные сканирования","status":"active","priority":"high","tags":["registry","navigator","index","monitoring"]},"meta":{"description":"Мост к актуальным данным реестра. Сам не хранит данные  только ссылки.","auto_update":false,"note":"Этот файл не устаревает  данные всегда в scan_state и scan_result"},"content":{"actual_data":{"scan_state":{"path":"honeycombs/registry/scan_state.json","contains":"Хеши сот, статистика последнего сканирования, список отсканированных сот","updated":"автоматически сканером"},"scan_result":{"path":"reports/scan_result.json","contains":"Количество сот, oversized файлы, статус warning/ok, время сканирования","updated":"автоматически сканером"},"scan_report":{"path":"reports/scan_report.md","contains":"Человекочитаемый отчёт сканирования","updated":"автоматически сканером"}},"scanner":{"script":"honeycombs/registry/honeycomb_scanner.py","workflow":".github/workflows/honeycomb-scan.yml","schedule":"10:00 и 22:00 МСК + при push в honeycombs/","local":"make scan"},"known_issues":{"oversized_warning":"Сканер использует лимит 2KB, стандарт v2.1 разрешает 8KB для инструкций. Нужно обновить сканер  задача для Claude."},"navigation":{"core_map":"honeycombs/core_map/index.json","roadmap":"RM-008 Система мониторинга и реестра"}}}
+{
+    "identity":  {
+                     "module_id":  "REGISTRY-INDEX",
+                     "name":  "РќР°РІРёРіР°С‚РѕСЂ СЂРµРµСЃС‚СЂР° СЃРѕС‚",
+                     "version":  "v3.1.0",
+                     "created":  "2026-03-05",
+                     "updated":  "2026-04-07",
+                     "layer":  2,
+                     "type":  "registry_navigator",
+                     "description":  "РќР°РІРёРіР°С‚РѕСЂ СЂРµРµСЃС‚СЂР°  СѓРєР°Р·С‹РІР°РµС‚ РіРґРµ Р»РµР¶Р°С‚ Р°РєС‚СѓР°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "registry",
+                                  "navigator",
+                                  "index",
+                                  "monitoring"
+                              ]
+                 },
+    "meta":  {
+                 "description":  "РњРѕСЃС‚ Рє Р°РєС‚СѓР°Р»СЊРЅС‹Рј РґР°РЅРЅС‹Рј СЂРµРµСЃС‚СЂР°. РЎР°Рј РЅРµ С…СЂР°РЅРёС‚ РґР°РЅРЅС‹Рµ  С‚РѕР»СЊРєРѕ СЃСЃС‹Р»РєРё.",
+                 "auto_update":  false,
+                 "note":  "Р­С‚РѕС‚ С„Р°Р№Р» РЅРµ СѓСЃС‚Р°СЂРµРІР°РµС‚  РґР°РЅРЅС‹Рµ РІСЃРµРіРґР° РІ scan_state Рё scan_result"
+             },
+    "content":  {
+                    "actual_data":  {
+                                        "scan_state":  {
+                                                           "path":  "honeycombs/registry/scan_state.json",
+                                                           "contains":  "РҐРµС€Рё СЃРѕС‚, СЃС‚Р°С‚РёСЃС‚РёРєР° РїРѕСЃР»РµРґРЅРµРіРѕ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ, СЃРїРёСЃРѕРє РѕС‚СЃРєР°РЅРёСЂРѕРІР°РЅРЅС‹С… СЃРѕС‚",
+                                                           "updated":  "Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃРєР°РЅРµСЂРѕРј"
+                                                       },
+                                        "scan_result":  {
+                                                            "path":  "reports/scan_result.json",
+                                                            "contains":  "РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРѕС‚, oversized С„Р°Р№Р»С‹, СЃС‚Р°С‚СѓСЃ warning/ok, РІСЂРµРјСЏ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ",
+                                                            "updated":  "Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃРєР°РЅРµСЂРѕРј"
+                                                        },
+                                        "scan_report":  {
+                                                            "path":  "reports/scan_report.md",
+                                                            "contains":  "Р§РµР»РѕРІРµРєРѕС‡РёС‚Р°РµРјС‹Р№ РѕС‚С‡С‘С‚ СЃРєР°РЅРёСЂРѕРІР°РЅРёСЏ",
+                                                            "updated":  "Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃРєР°РЅРµСЂРѕРј"
+                                                        }
+                                    },
+                    "scanner":  {
+                                    "script":  "honeycombs/registry/honeycomb_scanner.py",
+                                    "workflow":  ".github/workflows/honeycomb-scan.yml",
+                                    "schedule":  "10:00 Рё 22:00 РњРЎРљ + РїСЂРё push РІ honeycombs/",
+                                    "local":  "make scan"
+                                },
+                    "known_issues":  {
+                                         "oversized_warning":  "РЎРєР°РЅРµСЂ РёСЃРїРѕР»СЊР·СѓРµС‚ Р»РёРјРёС‚ 2KB, СЃС‚Р°РЅРґР°СЂС‚ v2.1 СЂР°Р·СЂРµС€Р°РµС‚ 8KB РґР»СЏ РёРЅСЃС‚СЂСѓРєС†РёР№. РќСѓР¶РЅРѕ РѕР±РЅРѕРІРёС‚СЊ СЃРєР°РЅРµСЂ  Р·Р°РґР°С‡Р° РґР»СЏ Claude."
+                                     },
+                    "navigation":  {
+                                       "core_map":  "honeycombs/core_map/index.json",
+                                       "roadmap":  "RM-008 РЎРёСЃС‚РµРјР° РјРѕРЅРёС‚РѕСЂРёРЅРіР° Рё СЂРµРµСЃС‚СЂР°"
+                                   }
+                }
+}
