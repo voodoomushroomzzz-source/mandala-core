@@ -1,37 +1,14 @@
 {
-  "last_scan": "2026-04-07T18:01:08.496490",
-  "honeycomb_hashes": {
-    "boot_online": "043a56510ea2d7e672e9e8f1bf83545d",
-    "roadmaps": "117614805721a9658f61c8839853f7fc",
-    "akasha": "10ab347bbff1f7e1fe2173b691f5d665",
-    "philosophy": "ee0149e45f90eba43d1ae64595144b79",
-    "instructions": "3ceb80528da0a188b5834c41f7cc7b54",
-    "engineer_chat": "7b7c2dbb157f5fcca38fb6a3dedbfab4",
-    "telegram_bot": "96dde09ac99e7ed7d636304e671c9cef",
-    "visualizations": "26172a151d6ddcc0464caa64007e388c",
-    "communications": "a2650c86bb2b1de5e80a37efecc31f37",
-    "tasks": "8fd63c1978f8c879a60c6912844d7c31",
-    "sphaerae": "64bc91599daf6a67c0a81eca43022a62",
-    "analytics": "9ea4e8437b5b9638ded8cafd4ad7f610",
-    "core_map": "606dc4de7a70203c6867be14a7972796",
-    "protocols": "0649662d387baeb1aa94843bf0fe1414",
-    "registry": "23f768fa6e3097f4e2699351c4484d7f",
-    "registry/core": "9e054d2495428785e2e3f19f71e86b98",
-    "registry/notifications": "bda789ec25e0b2aa676d0d886883f65d",
-    "registry/backups": "63b8478ffdd1b7dc42b8c90e12ecbac2",
-    "registry/dashboard": "215d3717bbfe900d3501b3571462ceb2",
-    "awareness": "89f9384778b0d51191ad04e85ee99b65",
-    "tectosphaera": "49edfb3ee03259ea6a566fc04ad07865",
-    "inbox": "928bbbfe6f994eb7835358e8e1aa4738"
-  },
+  "last_scan": "2026-04-07T18:19:00.455848",
+  "honeycomb_hashes": {},
   "statistics": {
-    "total_scanned": 22,
-    "valid_v2": 22,
+    "total_scanned": 0,
+    "valid_v2": 0,
     "invalid_v2": 0,
-    "errors": 3,
+    "errors": 25,
     "warnings": 0,
-    "total_files": 135,
-    "total_size_kb": 372.34000000000003
+    "total_files": 0,
+    "total_size_kb": 0
   },
   "scanner_config": {}
 }
