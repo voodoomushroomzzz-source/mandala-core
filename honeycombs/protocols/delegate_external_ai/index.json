@@ -1,0 +1,30 @@
+﻿{
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-08",
+                   "notes":  "Обновлён в Фазе 3. Убраны все упоминания Claude."
+               },
+    "rules":  [
+                  "Внешний ИИ работает только через raw-ссылки",
+                  "Все изменения генерируются в виде PowerShell-скриптов",
+                  "Обязателен gardener_approval перед применением",
+                  "Ahimsa-check обязателен"
+              ],
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "meta":  {
+                 "parent_honeycomb":  "protocols",
+                 "honeycomb_name":  "delegate_external_ai"
+             },
+    "identity":  {
+                     "version":  "v2.0.0",
+                     "name":  "delegate_external_ai",
+                     "updated":  "2026-04-08",
+                     "type":  "protocol",
+                     "module_id":  "PROTO-005",
+                     "description":  "Общий протокол делегирования задач любому Внешнему ИИ (Grok, Claude, Gemini и др.)"
+                 }
+}
