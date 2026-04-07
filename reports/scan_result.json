@@ -1,10 +1,8 @@
 {
-  "scan_time": "2026-04-07T08:51:50.575312+00:00",
-  "commit": "0d629080",
+  "scan_time": "2026-04-07T09:29:16.381483+00:00",
+  "commit": "177a9077",
   "branch": "main",
   "honeycombs_found": 25,
-  "json_files_oversized": [
-    "honeycombs/seeds/registry.json"
-  ],
-  "status": "warning"
+  "json_files_oversized": [],
+  "status": "ok"
 }
