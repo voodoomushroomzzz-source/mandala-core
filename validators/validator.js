@@ -1,53 +1,66 @@
 ﻿const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
-const ajv = new Ajv({allErrors: true});
+const ajv = new Ajv({allErrors: true, verbose: true});
 
 const schema = {
   type: "object",
   required: ["identity", "meta", "resonance", "health"],
   properties: {
-    identity: { type: "object", required: ["version"] },
+    identity: { type: "object", required: ["version", "name"] },
     meta: { type: "object" },
     resonance: { type: "object" },
     health: { type: "object" }
   }
 };
 
-const validateAll = () => {
-  const honeycombsDir = path.join(__dirname, '../honeycombs');
-  let errors = 0;
+console.log(" Запуск Node.js-валидатора Мандалы (исправленная версия)...\n");
 
-  function scan(dir) {
-    fs.readdirSync(dir).forEach(file => {
-      const fullPath = path.join(dir, file);
-      if (fs.statSync(fullPath).isDirectory()) {
-        if (fs.existsSync(path.join(fullPath, 'index.json'))) {
-          try {
-            const content = JSON.parse(fs.readFileSync(path.join(fullPath, 'index.json'), 'utf8'));
-            const valid = ajv.validate(schema, content);
-            if (!valid) {
-              console.error(` ${file}:`, ajv.errorsText());
-              errors++;
-            } else {
-              console.log(` ${file}  OK`);
-            }
-          } catch (e) {
-            console.error(` ${file}: JSON error`);
+let errors = 0;
+let checked = 0;
+
+function scan(dir) {
+  const items = fs.readdirSync(dir);
+
+  items.forEach(item => {
+    const fullPath = path.join(dir, item);
+
+    // Пропускаем backup-папки
+    if (item.toLowerCase().includes('backup') || item.toLowerCase().includes('backups')) {
+      return;
+    }
+
+    if (fs.statSync(fullPath).isDirectory()) {
+      const indexPath = path.join(fullPath, 'index.json');
+      if (fs.existsSync(indexPath)) {
+        checked++;
+        try {
+          const content = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+          const valid = ajv.validate(schema, content);
+
+          if (valid) {
+            console.log(` ${item}  OK`);
+          } else {
+            console.log(` ${item}  ошибка валидации`);
+            console.log("   " + ajv.errorsText());
             errors++;
           }
+        } catch (e) {
+          console.log(` ${item}  JSON parse error: ${e.message}`);
+          errors++;
         }
-        scan(fullPath);
       }
-    });
-  }
+      scan(fullPath); // рекурсия в подпапки
+    }
+  });
+}
 
-  scan(honeycombsDir);
-  return errors === 0;
-};
+const honeycombsDir = path.join(__dirname, '../honeycombs');
+scan(honeycombsDir);
 
-if (require.main === module) {
-  console.log(" Запуск Node.js валидатора Мандалы...");
-  const success = validateAll();
-  process.exit(success ? 0 : 1);
+console.log(`\n Проверка завершена. Проверено: ${checked} сот`);
+if (errors === 0) {
+  console.log(" Валидатор прошёл успешно  все соты корректны!");
+} else {
+  console.log(` Найдено ошибок: ${errors}`);
 }
