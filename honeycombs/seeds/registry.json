@@ -234,6 +234,104 @@
                              "folder":  "active/",
                              "title":  "[Инструменты] Node.js валидатор и автоматизатор сот",
                              "note":  "Создано Grok по обновлённому плану"
+                         },
+                         {
+                             "resonance":  85,
+                             "id":  "seed_016",
+                             "updated_by":  "Grok (xAI) + Gardener",
+                             "tags":  [
+                                          "honeycomb",
+                                          "standardization",
+                                          "v2.0",
+                                          "optimization",
+                                          "manifest"
+                                      ],
+                             "created_at":  "2026-04-07",
+                             "status":  "new",
+                             "folder":  "active/",
+                             "title":  "[Архитектура] Стандартизация манифестов сот v2.0",
+                             "note":  "Создано Grok + Садовник 2026-04-07 для завершения RM-003"
+                         },
+                         {
+                             "resonance":  88,
+                             "id":  "seed_017",
+                             "updated_by":  "Grok (xAI) + Gardener",
+                             "tags":  [
+                                          "scaling",
+                                          "index",
+                                          "architecture",
+                                          "optimization"
+                                      ],
+                             "created_at":  "2026-04-07",
+                             "status":  "new",
+                             "folder":  "active/",
+                             "title":  "[Архитектура] Многоуровневая архитектура индексов сот",
+                             "note":  "Создано Grok + Садовник 2026-04-07"
+                         },
+                         {
+                             "resonance":  85,
+                             "id":  "seed_018",
+                             "updated_by":  "Grok (xAI) + Gardener",
+                             "tags":  [
+                                          "nodejs",
+                                          "validation",
+                                          "automation",
+                                          "tools"
+                                      ],
+                             "created_at":  "2026-04-07",
+                             "status":  "new",
+                             "folder":  "active/",
+                             "title":  "[Инструменты] Node.js валидатор и автоматизатор сот",
+                             "note":  "Создано Grok + Садовник 2026-04-07"
+                         },
+                         {
+                             "resonance":  85,
+                             "id":  "seed_016",
+                             "updated_by":  "Grok (xAI) + Gardener",
+                             "tags":  [
+                                          "honeycomb",
+                                          "standardization",
+                                          "v2.0",
+                                          "optimization",
+                                          "manifest"
+                                      ],
+                             "created_at":  "2026-04-07",
+                             "status":  "new",
+                             "folder":  "active/",
+                             "title":  "[Архитектура] Стандартизация манифестов сот v2.0",
+                             "note":  "Создано Grok + Садовник 2026-04-07 для завершения RM-003"
+                         },
+                         {
+                             "resonance":  88,
+                             "id":  "seed_017",
+                             "updated_by":  "Grok (xAI) + Gardener",
+                             "tags":  [
+                                          "scaling",
+                                          "index",
+                                          "architecture",
+                                          "optimization"
+                                      ],
+                             "created_at":  "2026-04-07",
+                             "status":  "new",
+                             "folder":  "active/",
+                             "title":  "[Архитектура] Многоуровневая архитектура индексов сот",
+                             "note":  "Создано Grok + Садовник 2026-04-07"
+                         },
+                         {
+                             "resonance":  85,
+                             "id":  "seed_018",
+                             "updated_by":  "Grok (xAI) + Gardener",
+                             "tags":  [
+                                          "nodejs",
+                                          "validation",
+                                          "automation",
+                                          "tools"
+                                      ],
+                             "created_at":  "2026-04-07",
+                             "status":  "new",
+                             "folder":  "active/",
+                             "title":  "[Инструменты] Node.js валидатор и автоматизатор сот",
+                             "note":  "Создано Grok + Садовник 2026-04-07"
                          }
                      ],
     "next_seed_id":  "seed_019",
@@ -267,6 +365,6 @@
                                  "archive":  "8 Р°СЂС…РёРІРЅС‹С… СЃРµРјСЏРЅ"
                              },
                  "last_update":  "2026-04-07",
-                 "notes":  "Обновлено Grok (xAI) + Садовник 2026-04-07. Добавлены семена 016-018 для разблокировки RM-003 и дальнейшего развития."
+                 "notes":  "Обновлено Grok (xAI) + Садовник в симбиозе 2026-04-07. Добавлены семена 016-018."
              }
 }

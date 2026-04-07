@@ -4,7 +4,7 @@
                      "name":  "Seeds Honeycomb Manifest",
                      "version":  "v2.0.0",
                      "created":  "2026-03-01",
-                     "updated":  "2026-03-05",
+                     "updated":  "2026-04-07",
                      "layer":  2,
                      "type":  "honeycomb_manifest",
                      "description":  "РЈРїСЂРѕС‰РµРЅРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° СЃРѕС‚С‹ СЃРµРјСЏРЅ: active/ Рё archive/ РїР°РїРєРё, РјРёРЅРёРјР°Р»СЊРЅС‹Рµ РїСЂРѕС†РµСЃСЃС‹",
@@ -27,7 +27,7 @@
                  "total_size_kb":  6.5,
                  "segments":  4,
                  "migration_status":  "completed_v2.0",
-                 "note":  "Реестр синхронизирован. Добавлены SEED_016 (стандарт v2.0), SEED_017 (многоуровневая архитектура), SEED_018 (Node.js валидатор). Обновление выполнено Grok в симбиозе с Садовником 2026-04-07."
+                 "note":  "Реестр синхронизирован Grok + Садовник 2026-04-07. Добавлены SEED_016 (стандарт v2.0), SEED_017 (многоуровневая архитектура), SEED_018 (Node.js валидатор)."
              },
     "structure":  {
                       "segments":  {
@@ -83,13 +83,13 @@
                        "automation_plan":  "seed_018 РґР»СЏ Node.js РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ РІР°Р»РёРґР°С†РёРё"
                    },
     "registry":  {
-                     "total_files":  20,
-                     "total_size_kb":  6.5,
-                     "last_updated":  "2026-03-05",
+                     "total_files":  26,
+                     "total_size_kb":  8.5,
+                     "last_updated":  "2026-04-07",
                      "honeycomb_id":  "HONEYCOMB-SEEDS-001",
                      "status":  "active",
                      "compliance_status":  "v2.0_compliant",
-                     "notes":  "РњРёРіСЂРёСЂРѕРІР°РЅРѕ Рє СЃС‚Р°РЅРґР°СЂС‚Сѓ v2.0. РЈРїСЂРѕС‰РµРЅРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР°: 9 Р°РєС‚РёРІРЅС‹С… + 7 Р°СЂС…РёРІРЅС‹С… СЃРµРјСЏРЅ."
+                     "notes":  "Обновлено Grok (xAI) + Садовник 2026-04-07. total_seeds теперь 17, active_seeds = 9."
                  },
     "resonance":  {
                       "with_boot":  "95%",
