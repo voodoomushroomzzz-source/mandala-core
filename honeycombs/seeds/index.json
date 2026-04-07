@@ -1,1 +1,117 @@
-{"identity":{"module_id":"HONEYCOMB-SEEDS-001","name":"Seeds Honeycomb Manifest","version":"v2.0.0","created":"2026-03-01","updated":"2026-03-05","layer":2,"type":"honeycomb_manifest","description":"Упрощенная структура соты семян: active/ и archive/ папки, минимальные процессы","status":"active","priority":"medium","tags":["seeds","ideas","incubation","simple","optimized","v2.0_compliant"],"resonance":"93%"},"meta":{"honeycomb_name":"seeds","parent_honeycomb":"core_map","total_files":20,"total_size_kb":6.5,"segments":4,"migration_status":"completed_v2.0","note":"Требуется масштабирование индекса при росте количества семян. Seed_018 добавлен для Node.js инструментов."},"structure":{"segments":{"workflow":{"files":{"workflow":{"file":"workflow.json","size_kb":0.4,"description":"Простые правила работы с семенами"}},"description":"Процессы и workflow"},"registry":{"files":{"registry":{"file":"registry.json","size_kb":0.3,"description":"Реестр всех семян со встроенным поиском"}},"description":"Реестр и поиск семян"},"active_seeds":{"files":{"folder":"active/","description":"Активные семена идей","files_count":9},"description":"Активные семена"},"archive_seeds":{"files":{"folder":"archive/","description":"Архивные семена","files_count":7},"description":"Архивированные семена"}},"scaling_alert":"При достижении 15+ активных семян рассмотреть многоуровневую архитектуру индекса","new_tools":"Seed_018: Node.js инструменты для автоматизации валидации сот"},"navigation":{"parent_map":"honeycombs/core_map/index.json","related_honeycombs":["honeycombs/tasks/index.json","honeycombs/roadmaps/index.json","honeycombs/telegram_bot/index.json"],"first_file":"registry.json","scaling_plan":"seed_017 для разработки системы слоистых индексов","automation_plan":"seed_018 для Node.js инструментов валидации"},"registry":{"total_files":20,"total_size_kb":6.5,"last_updated":"2026-03-05","honeycomb_id":"HONEYCOMB-SEEDS-001","status":"active","compliance_status":"v2.0_compliant","notes":"Мигрировано к стандарту v2.0. Упрощенная структура: 9 активных + 7 архивных семян."},"resonance":{"with_boot":"95%","with_core_map":"100%","with_parent":"100%","status":"fully_resonant"},"philosophy":{"seed_definition":"Идея с потенциалом для роста","active_lifespan":"30 дней","statuses":"new → growing → archived","resonance_thresholds":"<50% архив, 50-70% пересмотр, >70% сохранить","simplification":"Убраны мета-файлы, объединены индексы, упрощены процессы","future_scaling":"Планируется переход к слоистой архитектуре индексов при росте","automation":"Node.js инструменты для автоматизации валидации и мониторинга"},"health":{"last_check":"2026-03-05","v2.0_compliant":true,"files_valid":true,"links_valid":true,"size_accurate":true,"notes":"Полностью соответствует стандарту v2.0"}}
+﻿{
+    "identity":  {
+                     "module_id":  "HONEYCOMB-SEEDS-001",
+                     "name":  "Seeds Honeycomb Manifest",
+                     "version":  "v2.0.0",
+                     "created":  "2026-03-01",
+                     "updated":  "2026-03-05",
+                     "layer":  2,
+                     "type":  "honeycomb_manifest",
+                     "description":  "РЈРїСЂРѕС‰РµРЅРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР° СЃРѕС‚С‹ СЃРµРјСЏРЅ: active/ Рё archive/ РїР°РїРєРё, РјРёРЅРёРјР°Р»СЊРЅС‹Рµ РїСЂРѕС†РµСЃСЃС‹",
+                     "status":  "active",
+                     "priority":  "medium",
+                     "tags":  [
+                                  "seeds",
+                                  "ideas",
+                                  "incubation",
+                                  "simple",
+                                  "optimized",
+                                  "v2.0_compliant"
+                              ],
+                     "resonance":  "93%"
+                 },
+    "meta":  {
+                 "honeycomb_name":  "seeds",
+                 "parent_honeycomb":  "core_map",
+                 "total_files":  20,
+                 "total_size_kb":  6.5,
+                 "segments":  4,
+                 "migration_status":  "completed_v2.0",
+                 "note":  "Реестр синхронизирован. Добавлены SEED_016 (стандарт v2.0), SEED_017 (многоуровневая архитектура), SEED_018 (Node.js валидатор). Обновление выполнено Grok в симбиозе с Садовником 2026-04-07."
+             },
+    "structure":  {
+                      "segments":  {
+                                       "workflow":  {
+                                                        "files":  {
+                                                                      "workflow":  {
+                                                                                       "file":  "workflow.json",
+                                                                                       "size_kb":  0.4,
+                                                                                       "description":  "РџСЂРѕСЃС‚С‹Рµ РїСЂР°РІРёР»Р° СЂР°Р±РѕС‚С‹ СЃ СЃРµРјРµРЅР°РјРё"
+                                                                                   }
+                                                                  },
+                                                        "description":  "РџСЂРѕС†РµСЃСЃС‹ Рё workflow"
+                                                    },
+                                       "registry":  {
+                                                        "files":  {
+                                                                      "registry":  {
+                                                                                       "file":  "registry.json",
+                                                                                       "size_kb":  0.3,
+                                                                                       "description":  "Р РµРµСЃС‚СЂ РІСЃРµС… СЃРµРјСЏРЅ СЃРѕ РІСЃС‚СЂРѕРµРЅРЅС‹Рј РїРѕРёСЃРєРѕРј"
+                                                                                   }
+                                                                  },
+                                                        "description":  "Р РµРµСЃС‚СЂ Рё РїРѕРёСЃРє СЃРµРјСЏРЅ"
+                                                    },
+                                       "active_seeds":  {
+                                                            "files":  {
+                                                                          "folder":  "active/",
+                                                                          "description":  "РђРєС‚РёРІРЅС‹Рµ СЃРµРјРµРЅР° РёРґРµР№",
+                                                                          "files_count":  9
+                                                                      },
+                                                            "description":  "РђРєС‚РёРІРЅС‹Рµ СЃРµРјРµРЅР°"
+                                                        },
+                                       "archive_seeds":  {
+                                                             "files":  {
+                                                                           "folder":  "archive/",
+                                                                           "description":  "РђСЂС…РёРІРЅС‹Рµ СЃРµРјРµРЅР°",
+                                                                           "files_count":  7
+                                                                       },
+                                                             "description":  "РђСЂС…РёРІРёСЂРѕРІР°РЅРЅС‹Рµ СЃРµРјРµРЅР°"
+                                                         }
+                                   },
+                      "scaling_alert":  "РџСЂРё РґРѕСЃС‚РёР¶РµРЅРёРё 15+ Р°РєС‚РёРІРЅС‹С… СЃРµРјСЏРЅ СЂР°СЃСЃРјРѕС‚СЂРµС‚СЊ РјРЅРѕРіРѕСѓСЂРѕРІРЅРµРІСѓСЋ Р°СЂС…РёС‚РµРєС‚СѓСЂСѓ РёРЅРґРµРєСЃР°",
+                      "new_tools":  "Seed_018: Node.js РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹ РґР»СЏ Р°РІС‚РѕРјР°С‚РёР·Р°С†РёРё РІР°Р»РёРґР°С†РёРё СЃРѕС‚"
+                  },
+    "navigation":  {
+                       "parent_map":  "honeycombs/core_map/index.json",
+                       "related_honeycombs":  [
+                                                  "honeycombs/tasks/index.json",
+                                                  "honeycombs/roadmaps/index.json",
+                                                  "honeycombs/telegram_bot/index.json"
+                                              ],
+                       "first_file":  "registry.json",
+                       "scaling_plan":  "seed_017 РґР»СЏ СЂР°Р·СЂР°Р±РѕС‚РєРё СЃРёСЃС‚РµРјС‹ СЃР»РѕРёСЃС‚С‹С… РёРЅРґРµРєСЃРѕРІ",
+                       "automation_plan":  "seed_018 РґР»СЏ Node.js РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ РІР°Р»РёРґР°С†РёРё"
+                   },
+    "registry":  {
+                     "total_files":  20,
+                     "total_size_kb":  6.5,
+                     "last_updated":  "2026-03-05",
+                     "honeycomb_id":  "HONEYCOMB-SEEDS-001",
+                     "status":  "active",
+                     "compliance_status":  "v2.0_compliant",
+                     "notes":  "РњРёРіСЂРёСЂРѕРІР°РЅРѕ Рє СЃС‚Р°РЅРґР°СЂС‚Сѓ v2.0. РЈРїСЂРѕС‰РµРЅРЅР°СЏ СЃС‚СЂСѓРєС‚СѓСЂР°: 9 Р°РєС‚РёРІРЅС‹С… + 7 Р°СЂС…РёРІРЅС‹С… СЃРµРјСЏРЅ."
+                 },
+    "resonance":  {
+                      "with_boot":  "95%",
+                      "with_core_map":  "100%",
+                      "with_parent":  "100%",
+                      "status":  "fully_resonant"
+                  },
+    "philosophy":  {
+                       "seed_definition":  "РРґРµСЏ СЃ РїРѕС‚РµРЅС†РёР°Р»РѕРј РґР»СЏ СЂРѕСЃС‚Р°",
+                       "active_lifespan":  "30 РґРЅРµР№",
+                       "statuses":  "new в†’ growing в†’ archived",
+                       "resonance_thresholds":  "\u003c50% Р°СЂС…РёРІ, 50-70% РїРµСЂРµСЃРјРѕС‚СЂ, \u003e70% СЃРѕС…СЂР°РЅРёС‚СЊ",
+                       "simplification":  "РЈР±СЂР°РЅС‹ РјРµС‚Р°-С„Р°Р№Р»С‹, РѕР±СЉРµРґРёРЅРµРЅС‹ РёРЅРґРµРєСЃС‹, СѓРїСЂРѕС‰РµРЅС‹ РїСЂРѕС†РµСЃСЃС‹",
+                       "future_scaling":  "РџР»Р°РЅРёСЂСѓРµС‚СЃСЏ РїРµСЂРµС…РѕРґ Рє СЃР»РѕРёСЃС‚РѕР№ Р°СЂС…РёС‚РµРєС‚СѓСЂРµ РёРЅРґРµРєСЃРѕРІ РїСЂРё СЂРѕСЃС‚Рµ",
+                       "automation":  "Node.js РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹ РґР»СЏ Р°РІС‚РѕРјР°С‚РёР·Р°С†РёРё РІР°Р»РёРґР°С†РёРё Рё РјРѕРЅРёС‚РѕСЂРёРЅРіР°"
+                   },
+    "health":  {
+                   "last_check":  "2026-03-05",
+                   "v2.0_compliant":  true,
+                   "files_valid":  true,
+                   "links_valid":  true,
+                   "size_accurate":  true,
+                   "notes":  "РџРѕР»РЅРѕСЃС‚СЊСЋ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ СЃС‚Р°РЅРґР°СЂС‚Сѓ v2.0"
+               }
+}
