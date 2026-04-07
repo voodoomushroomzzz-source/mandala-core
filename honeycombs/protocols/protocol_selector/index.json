@@ -1,0 +1,36 @@
+﻿{
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-08",
+                   "notes":  "Создан в начале Фазы 3. Позволяет выбирать протоколы по номерам."
+               },
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "selector":  {
+                     "menu_title":  "Доступные протоколы Фазы 3 (Цветение)",
+                     "options":  [
+                                     "1. PROTO-005 deep_analysis  Глубокий анализ всей системы",
+                                     "2. PROTO-006 auto_realize_seed  Автоматическая реализация семени",
+                                     "3. Усиление визуализации дашборда",
+                                     "4. Telegram-уведомления об ошибках",
+                                     "5. Финальный resonance-check 100%",
+                                     "6. Все протоколы сразу"
+                                 ],
+                     "trigger":  "после загрузки boot_online"
+                 },
+    "meta":  {
+                 "parent_honeycomb":  "protocols",
+                 "honeycomb_name":  "protocol_selector"
+             },
+    "identity":  {
+                     "version":  "v2.0.0",
+                     "name":  "protocol_selector",
+                     "updated":  "2026-04-08",
+                     "type":  "protocol",
+                     "module_id":  "PROTO-007",
+                     "description":  "Автоматическое меню выбора протоколов сразу после загрузки boot_online"
+                 }
+}
