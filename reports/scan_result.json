@@ -1,12 +1,12 @@
 {
-  "scan_time": "2026-04-07T19:58:52.545793+00:00",
-  "commit": "6ac72967",
+  "scan_time": "2026-04-07T20:26:55.603998+00:00",
+  "commit": "038e657c",
   "branch": "main",
   "honeycombs_found": 25,
   "json_files_oversized": [
     "honeycombs/boot_online/index.json",
-    "honeycombs/instructions/index.json",
     "honeycombs/roadmaps/index.json",
+    "honeycombs/instructions/index.json",
     "honeycombs/core_map/registry/backups/2026-04-07_21-20-45_step2/roadmaps_index.json",
     "honeycombs/core_map/registry/backups/2026-04-07_21-20-45_step2/boot_online_index.json",
     "honeycombs/core_map/registry/backups/2026-04-07_21-20-45_step2/instructions_index.json"
