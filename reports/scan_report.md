@@ -1,7 +1,7 @@
 # Honeycomb Scan Report  Mandala Simbioza
 
 **Система:** Mandala Simbioza v1.2.0
-**Дата:** 2026-04-07 18:22:55
+**Дата:** 2026-04-07 19:58:52
 **Сканер:** honeycomb_scanner.py v1.0.0
 
 ## Статистика
@@ -14,37 +14,37 @@
 | Ошибок                    | 25 |
 | Всего файлов              | 0 |
 | Общий размер              | 0 KB |
-| Последнее сканирование    | 2026-04-07T18:22:55.612797 |
+| Последнее сканирование    | 2026-04-07T19:58:52.457192 |
 
 ## Структура сот
 
-- honeycombs/boot_online/
-- honeycombs/roadmaps/
-- honeycombs/akasha/
-- honeycombs/philosophy/
-- honeycombs/instructions/
-- honeycombs/engineer_chat/
-- honeycombs/telegram_bot/
-- honeycombs/visualizations/
-- honeycombs/communications/
-- honeycombs/tasks/
-- honeycombs/sphaerae/
-- honeycombs/analytics/
-- honeycombs/seeds/
-- honeycombs/core_map/
-- honeycombs/protocols/
 - honeycombs/registry/
-- honeycombs/registry/extensions/
-- honeycombs/registry/modules/
-- honeycombs/registry/core/
 - honeycombs/registry/notifications/
+- honeycombs/registry/core/
 - honeycombs/registry/backups/
+- honeycombs/registry/modules/
+- honeycombs/registry/extensions/
 - honeycombs/registry/dashboard/
-- honeycombs/awareness/
-- honeycombs/tectosphaera/
+- honeycombs/akasha/
 - honeycombs/inbox/
+- honeycombs/philosophy/
+- honeycombs/visualizations/
+- honeycombs/tasks/
+- honeycombs/communications/
+- honeycombs/boot_online/
+- honeycombs/awareness/
+- honeycombs/sphaerae/
+- honeycombs/instructions/
+- honeycombs/tectosphaera/
+- honeycombs/protocols/
+- honeycombs/telegram_bot/
+- honeycombs/seeds/
+- honeycombs/roadmaps/
+- honeycombs/core_map/
+- honeycombs/engineer_chat/
+- honeycombs/analytics/
 
 **Итого сот с index.json:** 25
 
 ---
-*Сгенерировано: 2026-04-07 18:22:55*
+*Сгенерировано: 2026-04-07 19:58:52*
