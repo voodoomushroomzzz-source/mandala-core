@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-04-07T17:52:36.939210",
+  "last_scan": "2026-04-07T18:00:15.863090",
   "honeycomb_hashes": {
     "boot_online": "043a56510ea2d7e672e9e8f1bf83545d",
     "roadmaps": "117614805721a9658f61c8839853f7fc",
@@ -15,7 +15,7 @@
     "analytics": "9ea4e8437b5b9638ded8cafd4ad7f610",
     "core_map": "606dc4de7a70203c6867be14a7972796",
     "protocols": "0649662d387baeb1aa94843bf0fe1414",
-    "registry": "51eddbfd5aa529ec5f9a6ccf5378efc9",
+    "registry": "a7a9784c735762caf9adb6e9d1efb953",
     "registry/core": "9e054d2495428785e2e3f19f71e86b98",
     "registry/notifications": "bda789ec25e0b2aa676d0d886883f65d",
     "registry/backups": "63b8478ffdd1b7dc42b8c90e12ecbac2",
@@ -31,7 +31,7 @@
     "errors": 3,
     "warnings": 0,
     "total_files": 135,
-    "total_size_kb": 367.22
+    "total_size_kb": 370.15000000000003
   },
   "scanner_config": {}
 }
