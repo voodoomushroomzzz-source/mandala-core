@@ -1,4 +1,4 @@
-name: Honeycomb Scanner
+﻿name: Honeycomb Scanner
 
 on:
   schedule:
@@ -10,12 +10,13 @@ on:
       - 'honeycombs/**'
       - 'Makefile'
       - 'requirements.txt'
+      - '.github/workflows/honeycomb-scan.yml'
   workflow_dispatch:
     inputs:
       force_rescan:
         description: 'Force full rescan'
         required: false
-        default: 'false'
+        default: true
         type: boolean
 
 concurrency:
@@ -50,11 +51,12 @@ jobs:
       - name: Check environment
         run: make check
 
-      - name: Scan honeycombs
+      - name: Scan honeycombs (always FORCE on push)
         run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_rescan }}" = "true" ]; then
+          if [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event.inputs.force_rescan }}" = "true" ]; then
             FORCE_FLAG="FORCE=1"
+          else
+            FORCE_FLAG=""
           fi
           make scan $FORCE_FLAG
 
@@ -64,41 +66,20 @@ jobs:
       - name: Generate report
         run: make report
 
-      - name: Generate JSON report
-        run: |
-          mkdir -p reports
-          python3 -c "
-          import json, os
-          from pathlib import Path
-          from datetime import datetime, timezone
-          report = {
-            'scan_time': datetime.now(timezone.utc).isoformat(),
-            'commit': os.environ.get('GITHUB_SHA', 'local')[:8],
-            'branch': os.environ.get('GITHUB_REF_NAME', 'unknown'),
-            'honeycombs_found': sum(1 for r,d,f in os.walk('honeycombs') if 'index.json' in f),
-            'json_files_oversized': [str(p) for p in Path('honeycombs').rglob('*.json') if p.stat().st_size > 16384 and 'engineer_chat' not in str(p) and 'roadmaps/active' not in str(p)],
-            'status': 'ok'
-          }
-          report['status'] = 'warning' if report['json_files_oversized'] else 'ok'
-          Path('reports/scan_result.json').write_text(json.dumps(report, indent=2))
-          print(f'Honeycombs: {report[\"honeycombs_found\"]}')
-          print(f'Status: {report[\"status\"]}')
-          "
-
       - name: Commit updated registry
         if: github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add honeycombs/registry/index.json || true
           git add honeycombs/registry/scan_state.json || true
+          git add honeycombs/registry/index.json || true
           git add reports/ || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
             TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
             HC=$(python3 -c "import os; print(sum(1 for r,d,f in os.walk('honeycombs') if 'index.json' in f))")
-            git commit -m "auto: honeycomb scan ${TS} | ${HC} honeycombs"
+            git commit -m "auto: honeycomb scan ${TS} | ${HC} honeycombs (FORCE=1)"
             git push
           fi
 
@@ -109,4 +90,3 @@ jobs:
           name: scan-reports-${{ github.run_number }}
           path: reports/
           retention-days: 30
-          if-no-files-found: warn
