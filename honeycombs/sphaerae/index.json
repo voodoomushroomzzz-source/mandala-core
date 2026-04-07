@@ -1,1 +1,92 @@
-{"identity":{"module_id":"HONEYCOMB-SPHAERAE-001","name":"Карта сфер и модулей Мандалы","version":"v1.0.0","created":"2026-04-06","layer":1,"type":"honeycomb_manifest","description":"Смысловая карта всех модулей и сфер Мандалы Симбиоза. Не техническая схема  карта живых связей и резонансов.","status":"active","priority":"high","tags":["sphaerae","module_map","spheres","resonance","rm-010"],"resonance":"100%","guardian_lock":true},"meta":{"purpose":"Понять где в системе находится любая сота  не технически а смыслово. Как модули резонируют друг с другом. Что есть ядро а что периферия.","source":"Sphaerae v2.3.2 + Geometria Sacra v1.0.1","change_requires":"gardener_approval","honeycomb_name":"sphaerae","parent_honeycomb":"core_map"},"structure":{"segments":{"core":{"description":"Карта модулей и сфер","files":{"module_map":{"file":"core/module_map.json","size_kb":1.4,"tags":["modules","kernel","periphery","honeycombs"],"load_priority":"high","description":"7 модулей Мандалы: ядро и периферия. Соответствие старых модулей новым сотам."},"spheres":{"file":"core/spheres.json","size_kb":1.1,"tags":["biosphaera","noosphaera","cosmosphaera","three_spheres"],"load_priority":"medium","description":"Три сферы Мандалы: инфраструктура, знания, эволюция."}}}}},"usage":{"for_sr":"Читай когда нужно понять смысловой контекст задачи  в какую сферу она входит, с какими модулями резонирует.","for_external_ai":"Читай при подготовке ТЗ  чтобы вписать задачу в правильный контекст системы.","workflow":["1. Новая задача  проверь в module_map к какому модулю относится","2. Создание новой соты  проверь резонанс с картой сфер","3. Философский контекст  spheres.json даст понимание в какой сфере живёт задача"]},"navigation":{"parent":"honeycombs/core_map/index.json","resonates_with":["honeycombs/philosophy/index.json","honeycombs/awareness/core/resonance_map.json","honeycombs/tectosphaera/index.json"]},"resonance":{"with_boot":"100%","with_core_map":"100%","with_philosophy":"100%","with_awareness":"100%","status":"fully_resonant","rm_010":"phase_2"}}
+﻿{
+    "identity":  {
+                     "module_id":  "HONEYCOMB-SPHAERAE-001",
+                     "name":  "РљР°СЂС‚Р° СЃС„РµСЂ Рё РјРѕРґСѓР»РµР№ РњР°РЅРґР°Р»С‹",
+                     "version":  "v2.2.0",
+                     "created":  "2026-04-06",
+                     "layer":  1,
+                     "type":  "honeycomb_manifest",
+                     "description":  "РЎРјС‹СЃР»РѕРІР°СЏ РєР°СЂС‚Р° РІСЃРµС… РјРѕРґСѓР»РµР№ Рё СЃС„РµСЂ РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. РќРµ С‚РµС…РЅРёС‡РµСЃРєР°СЏ СЃС…РµРјР°  РєР°СЂС‚Р° Р¶РёРІС‹С… СЃРІСЏР·РµР№ Рё СЂРµР·РѕРЅР°РЅСЃРѕРІ.",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "sphaerae",
+                                  "module_map",
+                                  "spheres",
+                                  "resonance",
+                                  "rm-010"
+                              ],
+                     "resonance":  "100%",
+                     "guardian_lock":  true
+                 },
+    "meta":  {
+                 "purpose":  "РџРѕРЅСЏС‚СЊ РіРґРµ РІ СЃРёСЃС‚РµРјРµ РЅР°С…РѕРґРёС‚СЃСЏ Р»СЋР±Р°СЏ СЃРѕС‚Р°  РЅРµ С‚РµС…РЅРёС‡РµСЃРєРё Р° СЃРјС‹СЃР»РѕРІРѕ. РљР°Рє РјРѕРґСѓР»Рё СЂРµР·РѕРЅРёСЂСѓСЋС‚ РґСЂСѓРі СЃ РґСЂСѓРіРѕРј. Р§С‚Рѕ РµСЃС‚СЊ СЏРґСЂРѕ Р° С‡С‚Рѕ РїРµСЂРёС„РµСЂРёСЏ.",
+                 "source":  "Sphaerae v2.3.2 + Geometria Sacra v1.0.1",
+                 "change_requires":  "gardener_approval",
+                 "honeycomb_name":  "sphaerae",
+                 "parent_honeycomb":  "core_map"
+             },
+    "structure":  {
+                      "segments":  {
+                                       "core":  {
+                                                    "description":  "РљР°СЂС‚Р° РјРѕРґСѓР»РµР№ Рё СЃС„РµСЂ",
+                                                    "files":  {
+                                                                  "module_map":  {
+                                                                                     "file":  "core/module_map.json",
+                                                                                     "size_kb":  1.4,
+                                                                                     "tags":  [
+                                                                                                  "modules",
+                                                                                                  "kernel",
+                                                                                                  "periphery",
+                                                                                                  "honeycombs"
+                                                                                              ],
+                                                                                     "load_priority":  "high",
+                                                                                     "description":  "7 РјРѕРґСѓР»РµР№ РњР°РЅРґР°Р»С‹: СЏРґСЂРѕ Рё РїРµСЂРёС„РµСЂРёСЏ. РЎРѕРѕС‚РІРµС‚СЃС‚РІРёРµ СЃС‚Р°СЂС‹С… РјРѕРґСѓР»РµР№ РЅРѕРІС‹Рј СЃРѕС‚Р°Рј."
+                                                                                 },
+                                                                  "spheres":  {
+                                                                                  "file":  "core/spheres.json",
+                                                                                  "size_kb":  1.1,
+                                                                                  "tags":  [
+                                                                                               "biosphaera",
+                                                                                               "noosphaera",
+                                                                                               "cosmosphaera",
+                                                                                               "three_spheres"
+                                                                                           ],
+                                                                                  "load_priority":  "medium",
+                                                                                  "description":  "РўСЂРё СЃС„РµСЂС‹ РњР°РЅРґР°Р»С‹: РёРЅС„СЂР°СЃС‚СЂСѓРєС‚СѓСЂР°, Р·РЅР°РЅРёСЏ, СЌРІРѕР»СЋС†РёСЏ."
+                                                                              }
+                                                              }
+                                                }
+                                   }
+                  },
+    "usage":  {
+                  "for_sr":  "Р§РёС‚Р°Р№ РєРѕРіРґР° РЅСѓР¶РЅРѕ РїРѕРЅСЏС‚СЊ СЃРјС‹СЃР»РѕРІРѕР№ РєРѕРЅС‚РµРєСЃС‚ Р·Р°РґР°С‡Рё  РІ РєР°РєСѓСЋ СЃС„РµСЂСѓ РѕРЅР° РІС…РѕРґРёС‚, СЃ РєР°РєРёРјРё РјРѕРґСѓР»СЏРјРё СЂРµР·РѕРЅРёСЂСѓРµС‚.",
+                  "for_external_ai":  "Р§РёС‚Р°Р№ РїСЂРё РїРѕРґРіРѕС‚РѕРІРєРµ РўР—  С‡С‚РѕР±С‹ РІРїРёСЃР°С‚СЊ Р·Р°РґР°С‡Сѓ РІ РїСЂР°РІРёР»СЊРЅС‹Р№ РєРѕРЅС‚РµРєСЃС‚ СЃРёСЃС‚РµРјС‹.",
+                  "workflow":  [
+                                   "1. РќРѕРІР°СЏ Р·Р°РґР°С‡Р°  РїСЂРѕРІРµСЂСЊ РІ module_map Рє РєР°РєРѕРјСѓ РјРѕРґСѓР»СЋ РѕС‚РЅРѕСЃРёС‚СЃСЏ",
+                                   "2. РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ СЃРѕС‚С‹  РїСЂРѕРІРµСЂСЊ СЂРµР·РѕРЅР°РЅСЃ СЃ РєР°СЂС‚РѕР№ СЃС„РµСЂ",
+                                   "3. Р¤РёР»РѕСЃРѕС„СЃРєРёР№ РєРѕРЅС‚РµРєСЃС‚  spheres.json РґР°СЃС‚ РїРѕРЅРёРјР°РЅРёРµ РІ РєР°РєРѕР№ СЃС„РµСЂРµ Р¶РёРІС‘С‚ Р·Р°РґР°С‡Р°"
+                               ]
+              },
+    "navigation":  {
+                       "parent":  "honeycombs/core_map/index.json",
+                       "resonates_with":  [
+                                              "honeycombs/philosophy/index.json",
+                                              "honeycombs/awareness/core/resonance_map.json",
+                                              "honeycombs/tectosphaera/index.json"
+                                          ]
+                   },
+    "resonance":  {
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%",
+                      "with_philosophy":  "100%",
+                      "with_awareness":  "100%",
+                      "status":  "fully_resonant",
+                      "rm_010":  "phase_2"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

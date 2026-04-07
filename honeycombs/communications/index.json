@@ -1,1 +1,70 @@
-{"identity":{"module_id":"COMMUNICATIONS-001","name":"Система внутренних коммуникаций","version":"v1.0.0","layer":3,"type":"communication_module","description":"Стандартизированные форматы сообщений между сотами и SR","priority":"medium","tags":["communications","messages","standardization","layer_3"],"compliance":"v2.0_standard"},"meta":{"honeycomb_name":"communications","parent_honeycomb":"core_map","total_files":1,"total_size_kb":2.0,"segments":1,"creation_date":"2026-03-05"},"structure":{"segments":{"protocols":{"files":{"message_formats":{"file":"message_formats.json","size_kb":2.0,"description":"Стандартные форматы сообщений между компонентами"}}},"templates":{"files":{"template_library":{"file":"template_library.json","size_kb":2.0,"description":"Шаблоны для различных типов сообщений"}}}}},"message_types":{"system_alert":"критические_проблемы","health_update":"изменения_health_сот","patch_notification":"уведомления_о_патчах","validation_result":"результаты_проверок"},"integration":{"with_notifications":"расширение_форматов","with_registry":"распространение_сообщений","with_all_honeycombs":"универсальный_протокол"},"notes":"Вторая сота layer 3. Стандартизация внутренних коммуникаций системы."}
+﻿{
+    "identity":  {
+                     "module_id":  "COMMUNICATIONS-001",
+                     "name":  "РЎРёСЃС‚РµРјР° РІРЅСѓС‚СЂРµРЅРЅРёС… РєРѕРјРјСѓРЅРёРєР°С†РёР№",
+                     "version":  "v2.2.0",
+                     "layer":  3,
+                     "type":  "communication_module",
+                     "description":  "РЎС‚Р°РЅРґР°СЂС‚РёР·РёСЂРѕРІР°РЅРЅС‹Рµ С„РѕСЂРјР°С‚С‹ СЃРѕРѕР±С‰РµРЅРёР№ РјРµР¶РґСѓ СЃРѕС‚Р°РјРё Рё SR",
+                     "priority":  "medium",
+                     "tags":  [
+                                  "communications",
+                                  "messages",
+                                  "standardization",
+                                  "layer_3"
+                              ],
+                     "compliance":  "v2.0_standard"
+                 },
+    "meta":  {
+                 "honeycomb_name":  "communications",
+                 "parent_honeycomb":  "core_map",
+                 "total_files":  1,
+                 "total_size_kb":  2.0,
+                 "segments":  1,
+                 "creation_date":  "2026-03-05"
+             },
+    "structure":  {
+                      "segments":  {
+                                       "protocols":  {
+                                                         "files":  {
+                                                                       "message_formats":  {
+                                                                                               "file":  "message_formats.json",
+                                                                                               "size_kb":  2.0,
+                                                                                               "description":  "РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ С„РѕСЂРјР°С‚С‹ СЃРѕРѕР±С‰РµРЅРёР№ РјРµР¶РґСѓ РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё"
+                                                                                           }
+                                                                   }
+                                                     },
+                                       "templates":  {
+                                                         "files":  {
+                                                                       "template_library":  {
+                                                                                                "file":  "template_library.json",
+                                                                                                "size_kb":  2.0,
+                                                                                                "description":  "РЁР°Р±Р»РѕРЅС‹ РґР»СЏ СЂР°Р·Р»РёС‡РЅС‹С… С‚РёРїРѕРІ СЃРѕРѕР±С‰РµРЅРёР№"
+                                                                                            }
+                                                                   }
+                                                     }
+                                   }
+                  },
+    "message_types":  {
+                          "system_alert":  "РєСЂРёС‚РёС‡РµСЃРєРёРµ_РїСЂРѕР±Р»РµРјС‹",
+                          "health_update":  "РёР·РјРµРЅРµРЅРёСЏ_health_СЃРѕС‚",
+                          "patch_notification":  "СѓРІРµРґРѕРјР»РµРЅРёСЏ_Рѕ_РїР°С‚С‡Р°С…",
+                          "validation_result":  "СЂРµР·СѓР»СЊС‚Р°С‚С‹_РїСЂРѕРІРµСЂРѕРє"
+                      },
+    "integration":  {
+                        "with_notifications":  "СЂР°СЃС€РёСЂРµРЅРёРµ_С„РѕСЂРјР°С‚РѕРІ",
+                        "with_registry":  "СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРёРµ_СЃРѕРѕР±С‰РµРЅРёР№",
+                        "with_all_honeycombs":  "СѓРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№_РїСЂРѕС‚РѕРєРѕР»"
+                    },
+    "notes":  "Р’С‚РѕСЂР°СЏ СЃРѕС‚Р° layer 3. РЎС‚Р°РЅРґР°СЂС‚РёР·Р°С†РёСЏ РІРЅСѓС‚СЂРµРЅРЅРёС… РєРѕРјРјСѓРЅРёРєР°С†РёР№ СЃРёСЃС‚РµРјС‹.",
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

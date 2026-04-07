@@ -1,1 +1,111 @@
-{"identity":{"module_id":"ENGINEER-CHAT-001","name":"Инженерный чат Мандалы","version":"v2.0.0","created":"2026-03-01","updated":"2026-03-05","layer":2,"type":"honeycomb_manifest","description":"Архитектура, компоненты, история разработки, текущий статус Мандалы","status":"active","priority":"high","tags":["engineer_chat","mandala","development","architecture"],"resonance":"100%"},"meta":{"description":"Архитектура, компоненты, история разработки, текущий статус Мандалы","update_frequency":"при изменениях","compliance":"v2.0_standard"},"registry":{"total_files":16,"total_size_kb":51.5,"last_updated":"2026-03-05","honeycomb_version":"2.0.0"},"structure":{"segments":{"architecture":{"path":"honeycombs/engineer_chat/architecture","description":"Архитектурные решения, схемы, компоненты","files":4,"size_kb":8.2},"development":{"path":"honeycombs/engineer_chat/development","description":"История разработки, этапы, решения","files":3,"size_kb":4.1},"status":{"path":"honeycombs/engineer_chat/status","description":"Текущий статус, метрики, health check","files":3,"size_kb":5.7},"integrations":{"path":"honeycombs/engineer_chat/integrations","description":"Интеграции с другими системами, API","files":3,"size_kb":6.4},"meta":{"path":"honeycombs/engineer_chat/meta","description":"Метаданные, конфигурации, настройки","files":2,"size_kb":1.8},"templates":{"path":"honeycombs/engineer_chat/templates","description":"Шаблоны для работы с чатом","files":1,"size_kb":0.3}},"implementation_files":{"frontend":{"file":"index.html","description":"Главный интерфейс инженерного чата","size_kb":4.2,"status":"active","last_modified":"2026-03-05"},"backend":{"file":"engineer-chat/main.py","description":"Backend инженерного чата (GitHub API, патчи)","size_kb":25.7,"status":"active","last_modified":"2026-03-05"}}},"status":{"health":"healthy","uptime":"100%","last_test":"2026-03-05","test_results":{"github_api":"✅ Работает","patch_creation":"✅ Работает","patch_update":"✅ Работает","patch_deletion":"✅ Работает","multipatch":"✅ Работает"}},"notes":"Добавлены ссылки на файлы реализации (index.html и main.py). Система прошла полное тестирование всех рабочих процессов."}
+﻿{
+    "identity":  {
+                     "module_id":  "ENGINEER-CHAT-001",
+                     "name":  "РРЅР¶РµРЅРµСЂРЅС‹Р№ С‡Р°С‚ РњР°РЅРґР°Р»С‹",
+                     "version":  "v2.0.0",
+                     "created":  "2026-03-01",
+                     "updated":  "2026-04-07",
+                     "layer":  2,
+                     "type":  "honeycomb_manifest",
+                     "description":  "РђСЂС…РёС‚РµРєС‚СѓСЂР°, РєРѕРјРїРѕРЅРµРЅС‚С‹, РёСЃС‚РѕСЂРёСЏ СЂР°Р·СЂР°Р±РѕС‚РєРё, С‚РµРєСѓС‰РёР№ СЃС‚Р°С‚СѓСЃ РњР°РЅРґР°Р»С‹",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "engineer_chat",
+                                  "mandala",
+                                  "development",
+                                  "architecture"
+                              ],
+                     "resonance":  "100%"
+                 },
+    "meta":  {
+                 "description":  "РђСЂС…РёС‚РµРєС‚СѓСЂР°, РєРѕРјРїРѕРЅРµРЅС‚С‹, РёСЃС‚РѕСЂРёСЏ СЂР°Р·СЂР°Р±РѕС‚РєРё, С‚РµРєСѓС‰РёР№ СЃС‚Р°С‚СѓСЃ РњР°РЅРґР°Р»С‹",
+                 "update_frequency":  "РїСЂРё РёР·РјРµРЅРµРЅРёСЏС…",
+                 "compliance":  "v2.0_standard"
+             },
+    "registry":  {
+                     "total_files":  16,
+                     "total_size_kb":  51.5,
+                     "last_updated":  "2026-03-05",
+                     "honeycomb_version":  "2.0.0"
+                 },
+    "structure":  {
+                      "segments":  {
+                                       "architecture":  {
+                                                            "path":  "honeycombs/engineer_chat/architecture",
+                                                            "description":  "РђСЂС…РёС‚РµРєС‚СѓСЂРЅС‹Рµ СЂРµС€РµРЅРёСЏ, СЃС…РµРјС‹, РєРѕРјРїРѕРЅРµРЅС‚С‹",
+                                                            "files":  4,
+                                                            "size_kb":  8.2
+                                                        },
+                                       "development":  {
+                                                           "path":  "honeycombs/engineer_chat/development",
+                                                           "description":  "РСЃС‚РѕСЂРёСЏ СЂР°Р·СЂР°Р±РѕС‚РєРё, СЌС‚Р°РїС‹, СЂРµС€РµРЅРёСЏ",
+                                                           "files":  3,
+                                                           "size_kb":  4.1
+                                                       },
+                                       "status":  {
+                                                      "path":  "honeycombs/engineer_chat/status",
+                                                      "description":  "РўРµРєСѓС‰РёР№ СЃС‚Р°С‚СѓСЃ, РјРµС‚СЂРёРєРё, health check",
+                                                      "files":  3,
+                                                      "size_kb":  5.7
+                                                  },
+                                       "integrations":  {
+                                                            "path":  "honeycombs/engineer_chat/integrations",
+                                                            "description":  "РРЅС‚РµРіСЂР°С†РёРё СЃ РґСЂСѓРіРёРјРё СЃРёСЃС‚РµРјР°РјРё, API",
+                                                            "files":  3,
+                                                            "size_kb":  6.4
+                                                        },
+                                       "meta":  {
+                                                    "path":  "honeycombs/engineer_chat/meta",
+                                                    "description":  "РњРµС‚Р°РґР°РЅРЅС‹Рµ, РєРѕРЅС„РёРіСѓСЂР°С†РёРё, РЅР°СЃС‚СЂРѕР№РєРё",
+                                                    "files":  2,
+                                                    "size_kb":  1.8
+                                                },
+                                       "templates":  {
+                                                         "path":  "honeycombs/engineer_chat/templates",
+                                                         "description":  "РЁР°Р±Р»РѕРЅС‹ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ С‡Р°С‚РѕРј",
+                                                         "files":  1,
+                                                         "size_kb":  0.3
+                                                     }
+                                   },
+                      "implementation_files":  {
+                                                   "frontend":  {
+                                                                    "file":  "index.html",
+                                                                    "description":  "Р“Р»Р°РІРЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ РёРЅР¶РµРЅРµСЂРЅРѕРіРѕ С‡Р°С‚Р°",
+                                                                    "size_kb":  4.2,
+                                                                    "status":  "active",
+                                                                    "last_modified":  "2026-03-05"
+                                                                },
+                                                   "backend":  {
+                                                                   "file":  "engineer-chat/main.py",
+                                                                   "description":  "Backend РёРЅР¶РµРЅРµСЂРЅРѕРіРѕ С‡Р°С‚Р° (GitHub API, РїР°С‚С‡Рё)",
+                                                                   "size_kb":  25.7,
+                                                                   "status":  "active",
+                                                                   "last_modified":  "2026-03-05"
+                                                               }
+                                               }
+                  },
+    "status":  {
+                   "health":  "healthy",
+                   "uptime":  "100%",
+                   "last_test":  "2026-03-05",
+                   "test_results":  {
+                                        "github_api":  "вњ… Р Р°Р±РѕС‚Р°РµС‚",
+                                        "patch_creation":  "вњ… Р Р°Р±РѕС‚Р°РµС‚",
+                                        "patch_update":  "вњ… Р Р°Р±РѕС‚Р°РµС‚",
+                                        "patch_deletion":  "вњ… Р Р°Р±РѕС‚Р°РµС‚",
+                                        "multipatch":  "вњ… Р Р°Р±РѕС‚Р°РµС‚"
+                                    }
+               },
+    "notes":  "Р”РѕР±Р°РІР»РµРЅС‹ СЃСЃС‹Р»РєРё РЅР° С„Р°Р№Р»С‹ СЂРµР°Р»РёР·Р°С†РёРё (index.html Рё main.py). РЎРёСЃС‚РµРјР° РїСЂРѕС€Р»Р° РїРѕР»РЅРѕРµ С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РІСЃРµС… СЂР°Р±РѕС‡РёС… РїСЂРѕС†РµСЃСЃРѕРІ.",
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

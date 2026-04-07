@@ -1,0 +1,98 @@
+{
+  "identity": {
+    "module_id": "TELEGRAM-BOT-MANIFEST-001",
+    "name": "Telegram Bot Honeycomb Manifest",
+    "version": "1.0.0",
+    "created": "2026-03-01",
+    "layer": 1,
+    "type": "honeycomb_manifest"
+  },
+  "meta": {
+    "description": "Манифест соты Telegram бота Мандалы",
+    "status": "active",
+    "priority": "high",
+    "tags": [
+      "telegram",
+      "bot",
+      "manifest",
+      "honeycomb"
+    ],
+    "resonance": "95%"
+  },
+  "honeycomb_structure": {
+    "total_segments": 10,
+    "total_size": "~2.5KB",
+    "avg_segment_size": "~0.25KB",
+    "segments": [
+      {
+        "segment": "overview",
+        "file": "overview.json",
+        "description": "Общее описание модуля Telegram бота",
+        "size": "~0.3KB"
+      },
+      {
+        "segment": "meta",
+        "file": "version_history.json",
+        "description": "История версий модуля",
+        "size": "~0.3KB"
+      },
+      {
+        "segment": "roadmap",
+        "file": "milestones.json",
+        "description": "Дорожная карта и этапы разработки",
+        "size": "~0.4KB"
+      },
+      {
+        "segment": "capabilities",
+        "file": "current.json",
+        "description": "Текущие возможности бота",
+        "size": "~0.3KB"
+      },
+      {
+        "segment": "capabilities",
+        "file": "planned.json",
+        "description": "Планируемые возможности бота",
+        "size": "~0.3KB"
+      },
+      {
+        "segment": "configuration",
+        "file": "env_vars.json",
+        "description": "Переменные окружения для бота",
+        "size": "~0.2KB"
+      },
+      {
+        "segment": "configuration",
+        "file": "menu.json",
+        "description": "Меню и команды бота",
+        "size": "~0.3KB"
+      },
+      {
+        "segment": "bot_info",
+        "file": "version.json",
+        "description": "Версия бота и история изменений",
+        "size": "~0.2KB"
+      },
+      {
+        "segment": "bot_info",
+        "file": "files.json",
+        "description": "Файлы бота и их назначение",
+        "size": "~0.2KB"
+      },
+      {
+        "segment": "integration",
+        "file": "sr_connection.json",
+        "description": "Интеграция с SR через Yandex Cloud Function",
+        "size": "~0.3KB"
+      }
+    ]
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related_honeycombs": [
+      "honeycombs/engineer_chat/index.json",
+      "honeycombs/tasks/index.json"
+    ],
+    "next_segment": "overview.json"
+  },
+  "/honeycomb_structure/total_size": "~5.9KB"
+}

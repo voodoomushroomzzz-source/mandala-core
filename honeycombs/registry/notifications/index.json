@@ -1,1 +1,92 @@
-{"identity":{"module_id":"REGISTRY-NOTIFICATIONS-001","name":"Система уведомлений о проблемах","version":"v1.0.0","layer":2,"type":"notification_system","description":"Автоматические уведомления о проблемах со здоровьем сот","priority":"medium","tags":["notifications","alerts","monitoring","registry"]},"meta":{"notification_levels":["critical","warning","info"],"delivery_methods":["logs","status_updates"],"trigger_events":["health_drop_below_threshold","v2_compliance_lost","file_not_found","json_invalid"]},"rules":{"critical":{"conditions":["health 60%","v2_compliance_lost","critical_dependency_broken"],"actions":["immediate_log_alert","block_further_patches_until_resolved","highlight_in_dashboard"]},"warning":{"conditions":["health_score 60-80%","minor_v2_non_compliance","size_mismatch"],"actions":["log_warning","dashboard_warning","suggest_fix"]},"info":{"conditions":["new_honeycomb_registered","health_improved","automation_completed"],"actions":["log_info","dashboard_update"]}},"integration":{"with_health_check":"trigger_source","with_dashboard":"visual_alerts","with_scanner":"new_honeycomb_notifications"},"technical_details":{"implementation":"event_driven","format":"structured_logs","persistence":"notification_history"},"notes":"Система автоматических уведомлений для мониторинга здоровья системы."}
+﻿{
+    "identity":  {
+                     "module_id":  "REGISTRY-NOTIFICATIONS-001",
+                     "name":  "РЎРёСЃС‚РµРјР° СѓРІРµРґРѕРјР»РµРЅРёР№ Рѕ РїСЂРѕР±Р»РµРјР°С…",
+                     "version":  "v2.2.0",
+                     "layer":  2,
+                     "type":  "notification_system",
+                     "description":  "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРёРµ СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ РїСЂРѕР±Р»РµРјР°С… СЃРѕ Р·РґРѕСЂРѕРІСЊРµРј СЃРѕС‚",
+                     "priority":  "medium",
+                     "tags":  [
+                                  "notifications",
+                                  "alerts",
+                                  "monitoring",
+                                  "registry"
+                              ]
+                 },
+    "meta":  {
+                 "notification_levels":  [
+                                             "critical",
+                                             "warning",
+                                             "info"
+                                         ],
+                 "delivery_methods":  [
+                                          "logs",
+                                          "status_updates"
+                                      ],
+                 "trigger_events":  [
+                                        "health_drop_below_threshold",
+                                        "v2_compliance_lost",
+                                        "file_not_found",
+                                        "json_invalid"
+                                    ]
+             },
+    "rules":  {
+                  "critical":  {
+                                   "conditions":  [
+                                                      "health 60%",
+                                                      "v2_compliance_lost",
+                                                      "critical_dependency_broken"
+                                                  ],
+                                   "actions":  [
+                                                   "immediate_log_alert",
+                                                   "block_further_patches_until_resolved",
+                                                   "highlight_in_dashboard"
+                                               ]
+                               },
+                  "warning":  {
+                                  "conditions":  [
+                                                     "health_score 60-80%",
+                                                     "minor_v2_non_compliance",
+                                                     "size_mismatch"
+                                                 ],
+                                  "actions":  [
+                                                  "log_warning",
+                                                  "dashboard_warning",
+                                                  "suggest_fix"
+                                              ]
+                              },
+                  "info":  {
+                               "conditions":  [
+                                                  "new_honeycomb_registered",
+                                                  "health_improved",
+                                                  "automation_completed"
+                                              ],
+                               "actions":  [
+                                               "log_info",
+                                               "dashboard_update"
+                                           ]
+                           }
+              },
+    "integration":  {
+                        "with_health_check":  "trigger_source",
+                        "with_dashboard":  "visual_alerts",
+                        "with_scanner":  "new_honeycomb_notifications"
+                    },
+    "technical_details":  {
+                              "implementation":  "event_driven",
+                              "format":  "structured_logs",
+                              "persistence":  "notification_history"
+                          },
+    "notes":  "РЎРёСЃС‚РµРјР° Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёС… СѓРІРµРґРѕРјР»РµРЅРёР№ РґР»СЏ РјРѕРЅРёС‚РѕСЂРёРЅРіР° Р·РґРѕСЂРѕРІСЊСЏ СЃРёСЃС‚РµРјС‹.",
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

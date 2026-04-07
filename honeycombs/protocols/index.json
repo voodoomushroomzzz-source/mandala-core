@@ -1,1 +1,127 @@
-{"identity":{"module_id":"HONEYCOMB-PROTOCOLS-001","name":"Протоколы активации СР","version":"v1.0.0","created":"2026-03-07","layer":1,"type":"honeycomb_manifest","description":"Протоколы быстрой активации: наборы файлов для типовых задач СР","status":"active","priority":"critical","tags":["protocols","activation","sr","workflow","core"]},"meta":{"honeycomb_name":"protocols","parent_honeycomb":"core_map","segments":1,"total_files":6,"total_size_kb":12.0,"purpose":"Садовник пишет активируй протокол X  СР читает протокол и загружает все нужные файлы"},"structure":{"segments":{"protocols":{"description":"Протоколы активации для типовых задач","files":{"update_honeycombs":{"file":"update_honeycombs.json","source_id":"PROTO-001","size_kb":2.0,"tags":["patch","update","honeycombs"],"load_priority":"critical","description":"Обновление сот  загружает инструкции по патчам"},"sync_system":{"file":"sync_system.json","source_id":"PROTO-002","size_kb":2.0,"tags":["sync","registry","health"],"load_priority":"high","description":"Синхронизация  диагностика актуальности системы"},"realize_ideas":{"file":"realize_ideas.json","source_id":"PROTO-003","size_kb":2.0,"tags":["seeds","ideas","roadmap"],"load_priority":"high","description":"Реализация идей  анализ семян и подготовка плана"},"onboarding":{"file":"onboarding.json","source_id":"PROTO-004","size_kb":2.0,"tags":["onboarding","session","start"],"load_priority":"critical","description":"Онбординг  быстрый старт новой сессии СР"},"delegate_claude":{"file":"delegate_claude.json","source_id":"PROTO-005","size_kb":2.0,"tags":["claude","delegation","brief"],"load_priority":"high","description":"Делегирование Claude  подготовка брифа для внешней разработки"}}}}},"usage":{"how_to_activate":"Садовник пишет: активируй протокол [название]","sr_action":"СР находит протокол в этой соте, читает файлы из списка files_to_read, затем готов к задаче","protocols":["update_honeycombs","sync_system","realize_ideas","onboarding","delegate_claude"]},"registry":{"total_files":6,"total_size_kb":12.0,"last_updated":"2026-03-07","honeycomb_id":"HONEYCOMB-PROTOCOLS-001","status":"active","compliance_status":"v2.1_compliant"},"resonance":{"with_boot":"100%","with_core_map":"100%","with_parent":"100%","status":"fully_resonant"}}
+﻿{
+    "identity":  {
+                     "module_id":  "HONEYCOMB-PROTOCOLS-001",
+                     "name":  "РџСЂРѕС‚РѕРєРѕР»С‹ Р°РєС‚РёРІР°С†РёРё РЎР ",
+                     "version":  "v2.2.0",
+                     "created":  "2026-03-07",
+                     "layer":  1,
+                     "type":  "honeycomb_manifest",
+                     "description":  "РџСЂРѕС‚РѕРєРѕР»С‹ Р±С‹СЃС‚СЂРѕР№ Р°РєС‚РёРІР°С†РёРё: РЅР°Р±РѕСЂС‹ С„Р°Р№Р»РѕРІ РґР»СЏ С‚РёРїРѕРІС‹С… Р·Р°РґР°С‡ РЎР ",
+                     "status":  "active",
+                     "priority":  "critical",
+                     "tags":  [
+                                  "protocols",
+                                  "activation",
+                                  "sr",
+                                  "workflow",
+                                  "core"
+                              ]
+                 },
+    "meta":  {
+                 "honeycomb_name":  "protocols",
+                 "parent_honeycomb":  "core_map",
+                 "segments":  1,
+                 "total_files":  6,
+                 "total_size_kb":  12.0,
+                 "purpose":  "РЎР°РґРѕРІРЅРёРє РїРёС€РµС‚ Р°РєС‚РёРІРёСЂСѓР№ РїСЂРѕС‚РѕРєРѕР» X  РЎР  С‡РёС‚Р°РµС‚ РїСЂРѕС‚РѕРєРѕР» Рё Р·Р°РіСЂСѓР¶Р°РµС‚ РІСЃРµ РЅСѓР¶РЅС‹Рµ С„Р°Р№Р»С‹"
+             },
+    "structure":  {
+                      "segments":  {
+                                       "protocols":  {
+                                                         "description":  "РџСЂРѕС‚РѕРєРѕР»С‹ Р°РєС‚РёРІР°С†РёРё РґР»СЏ С‚РёРїРѕРІС‹С… Р·Р°РґР°С‡",
+                                                         "files":  {
+                                                                       "update_honeycombs":  {
+                                                                                                 "file":  "update_honeycombs.json",
+                                                                                                 "source_id":  "PROTO-001",
+                                                                                                 "size_kb":  2.0,
+                                                                                                 "tags":  [
+                                                                                                              "patch",
+                                                                                                              "update",
+                                                                                                              "honeycombs"
+                                                                                                          ],
+                                                                                                 "load_priority":  "critical",
+                                                                                                 "description":  "РћР±РЅРѕРІР»РµРЅРёРµ СЃРѕС‚  Р·Р°РіСЂСѓР¶Р°РµС‚ РёРЅСЃС‚СЂСѓРєС†РёРё РїРѕ РїР°С‚С‡Р°Рј"
+                                                                                             },
+                                                                       "sync_system":  {
+                                                                                           "file":  "sync_system.json",
+                                                                                           "source_id":  "PROTO-002",
+                                                                                           "size_kb":  2.0,
+                                                                                           "tags":  [
+                                                                                                        "sync",
+                                                                                                        "registry",
+                                                                                                        "health"
+                                                                                                    ],
+                                                                                           "load_priority":  "high",
+                                                                                           "description":  "РЎРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ  РґРёР°РіРЅРѕСЃС‚РёРєР° Р°РєС‚СѓР°Р»СЊРЅРѕСЃС‚Рё СЃРёСЃС‚РµРјС‹"
+                                                                                       },
+                                                                       "realize_ideas":  {
+                                                                                             "file":  "realize_ideas.json",
+                                                                                             "source_id":  "PROTO-003",
+                                                                                             "size_kb":  2.0,
+                                                                                             "tags":  [
+                                                                                                          "seeds",
+                                                                                                          "ideas",
+                                                                                                          "roadmap"
+                                                                                                      ],
+                                                                                             "load_priority":  "high",
+                                                                                             "description":  "Р РµР°Р»РёР·Р°С†РёСЏ РёРґРµР№  Р°РЅР°Р»РёР· СЃРµРјСЏРЅ Рё РїРѕРґРіРѕС‚РѕРІРєР° РїР»Р°РЅР°"
+                                                                                         },
+                                                                       "onboarding":  {
+                                                                                          "file":  "onboarding.json",
+                                                                                          "source_id":  "PROTO-004",
+                                                                                          "size_kb":  2.0,
+                                                                                          "tags":  [
+                                                                                                       "onboarding",
+                                                                                                       "session",
+                                                                                                       "start"
+                                                                                                   ],
+                                                                                          "load_priority":  "critical",
+                                                                                          "description":  "РћРЅР±РѕСЂРґРёРЅРі  Р±С‹СЃС‚СЂС‹Р№ СЃС‚Р°СЂС‚ РЅРѕРІРѕР№ СЃРµСЃСЃРёРё РЎР "
+                                                                                      },
+                                                                       "delegate_claude":  {
+                                                                                               "file":  "delegate_claude.json",
+                                                                                               "source_id":  "PROTO-005",
+                                                                                               "size_kb":  2.0,
+                                                                                               "tags":  [
+                                                                                                            "claude",
+                                                                                                            "delegation",
+                                                                                                            "brief"
+                                                                                                        ],
+                                                                                               "load_priority":  "high",
+                                                                                               "description":  "Р”РµР»РµРіРёСЂРѕРІР°РЅРёРµ Claude  РїРѕРґРіРѕС‚РѕРІРєР° Р±СЂРёС„Р° РґР»СЏ РІРЅРµС€РЅРµР№ СЂР°Р·СЂР°Р±РѕС‚РєРё"
+                                                                                           }
+                                                                   }
+                                                     }
+                                   }
+                  },
+    "usage":  {
+                  "how_to_activate":  "РЎР°РґРѕРІРЅРёРє РїРёС€РµС‚: Р°РєС‚РёРІРёСЂСѓР№ РїСЂРѕС‚РѕРєРѕР» [РЅР°Р·РІР°РЅРёРµ]",
+                  "sr_action":  "РЎР  РЅР°С…РѕРґРёС‚ РїСЂРѕС‚РѕРєРѕР» РІ СЌС‚РѕР№ СЃРѕС‚Рµ, С‡РёС‚Р°РµС‚ С„Р°Р№Р»С‹ РёР· СЃРїРёСЃРєР° files_to_read, Р·Р°С‚РµРј РіРѕС‚РѕРІ Рє Р·Р°РґР°С‡Рµ",
+                  "protocols":  [
+                                    "update_honeycombs",
+                                    "sync_system",
+                                    "realize_ideas",
+                                    "onboarding",
+                                    "delegate_claude"
+                                ]
+              },
+    "registry":  {
+                     "total_files":  6,
+                     "total_size_kb":  12.0,
+                     "last_updated":  "2026-03-07",
+                     "honeycomb_id":  "HONEYCOMB-PROTOCOLS-001",
+                     "status":  "active",
+                     "compliance_status":  "v2.1_compliant"
+                 },
+    "resonance":  {
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%",
+                      "with_parent":  "100%",
+                      "status":  "fully_resonant"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

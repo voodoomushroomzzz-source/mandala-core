@@ -1,1 +1,77 @@
-{"identity":{"module_id":"HONEYCOMB-INBOX-001","name":"Inbox  входящие для СР","version":"v1.0.0","created":"2026-03-07","layer":2,"type":"honeycomb_manifest","description":"Временное хранилище файлов от Claude и Садовника для изучения СР в начале сессии","status":"active","priority":"high","tags":["inbox","claude","reports","handoff","session"]},"meta":{"honeycomb_name":"inbox","parent_honeycomb":"core_map","segments":1,"total_files":2,"total_size_kb":12.0,"purpose":"Файлы из inbox СР читает в приоритете при старте сессии","lifecycle":"Файлы остаются до выполнения задач из них, потом архивируются или удаляются"},"structure":{"segments":{"reports":{"description":"Отчёты сессий с Claude и задачи для СР","files":{"claude_session_report":{"file":"claude_session_report.json","source_id":"CLAUDE-SESSION-001","size_kb":11.5,"tags":["report","claude","automation","ci_cd","tasks"],"load_priority":"high","description":"Отчёт сессии 2026-03-07: CI/CD автоматизация сканера. Содержит задачи для СР, описание инструментов, шаблон брифа для Claude."}}}}},"rules":{"read_on_start":"СР читает inbox при каждом старте сессии","file_lifecycle":"После выполнения задач  файл помечается как processed или удаляется","who_adds":"Файлы добавляет Садовник (через Claude или вручную)","format":"Любой JSON файл с полями identity и content"},"registry":{"total_files":2,"total_size_kb":12.0,"last_updated":"2026-03-07","honeycomb_id":"HONEYCOMB-INBOX-001","status":"active","compliance_status":"v2.1_compliant"},"resonance":{"with_boot":"100%","with_core_map":"100%","with_parent":"100%","status":"fully_resonant"}}
+﻿{
+    "identity":  {
+                     "module_id":  "HONEYCOMB-INBOX-001",
+                     "name":  "Inbox  РІС…РѕРґСЏС‰РёРµ РґР»СЏ РЎР ",
+                     "version":  "v2.2.0",
+                     "created":  "2026-03-07",
+                     "layer":  2,
+                     "type":  "honeycomb_manifest",
+                     "description":  "Р’СЂРµРјРµРЅРЅРѕРµ С…СЂР°РЅРёР»РёС‰Рµ С„Р°Р№Р»РѕРІ РѕС‚ Claude Рё РЎР°РґРѕРІРЅРёРєР° РґР»СЏ РёР·СѓС‡РµРЅРёСЏ РЎР  РІ РЅР°С‡Р°Р»Рµ СЃРµСЃСЃРёРё",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "inbox",
+                                  "claude",
+                                  "reports",
+                                  "handoff",
+                                  "session"
+                              ]
+                 },
+    "meta":  {
+                 "honeycomb_name":  "inbox",
+                 "parent_honeycomb":  "core_map",
+                 "segments":  1,
+                 "total_files":  2,
+                 "total_size_kb":  12.0,
+                 "purpose":  "Р¤Р°Р№Р»С‹ РёР· inbox РЎР  С‡РёС‚Р°РµС‚ РІ РїСЂРёРѕСЂРёС‚РµС‚Рµ РїСЂРё СЃС‚Р°СЂС‚Рµ СЃРµСЃСЃРёРё",
+                 "lifecycle":  "Р¤Р°Р№Р»С‹ РѕСЃС‚Р°СЋС‚СЃСЏ РґРѕ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РґР°С‡ РёР· РЅРёС…, РїРѕС‚РѕРј Р°СЂС…РёРІРёСЂСѓСЋС‚СЃСЏ РёР»Рё СѓРґР°Р»СЏСЋС‚СЃСЏ"
+             },
+    "structure":  {
+                      "segments":  {
+                                       "reports":  {
+                                                       "description":  "РћС‚С‡С‘С‚С‹ СЃРµСЃСЃРёР№ СЃ Claude Рё Р·Р°РґР°С‡Рё РґР»СЏ РЎР ",
+                                                       "files":  {
+                                                                     "claude_session_report":  {
+                                                                                                   "file":  "claude_session_report.json",
+                                                                                                   "source_id":  "CLAUDE-SESSION-001",
+                                                                                                   "size_kb":  11.5,
+                                                                                                   "tags":  [
+                                                                                                                "report",
+                                                                                                                "claude",
+                                                                                                                "automation",
+                                                                                                                "ci_cd",
+                                                                                                                "tasks"
+                                                                                                            ],
+                                                                                                   "load_priority":  "high",
+                                                                                                   "description":  "РћС‚С‡С‘С‚ СЃРµСЃСЃРёРё 2026-03-07: CI/CD Р°РІС‚РѕРјР°С‚РёР·Р°С†РёСЏ СЃРєР°РЅРµСЂР°. РЎРѕРґРµСЂР¶РёС‚ Р·Р°РґР°С‡Рё РґР»СЏ РЎР , РѕРїРёСЃР°РЅРёРµ РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ, С€Р°Р±Р»РѕРЅ Р±СЂРёС„Р° РґР»СЏ Claude."
+                                                                                               }
+                                                                 }
+                                                   }
+                                   }
+                  },
+    "rules":  {
+                  "read_on_start":  "РЎР  С‡РёС‚Р°РµС‚ inbox РїСЂРё РєР°Р¶РґРѕРј СЃС‚Р°СЂС‚Рµ СЃРµСЃСЃРёРё",
+                  "file_lifecycle":  "РџРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РґР°С‡  С„Р°Р№Р» РїРѕРјРµС‡Р°РµС‚СЃСЏ РєР°Рє processed РёР»Рё СѓРґР°Р»СЏРµС‚СЃСЏ",
+                  "who_adds":  "Р¤Р°Р№Р»С‹ РґРѕР±Р°РІР»СЏРµС‚ РЎР°РґРѕРІРЅРёРє (С‡РµСЂРµР· Claude РёР»Рё РІСЂСѓС‡РЅСѓСЋ)",
+                  "format":  "Р›СЋР±РѕР№ JSON С„Р°Р№Р» СЃ РїРѕР»СЏРјРё identity Рё content"
+              },
+    "registry":  {
+                     "total_files":  2,
+                     "total_size_kb":  12.0,
+                     "last_updated":  "2026-03-07",
+                     "honeycomb_id":  "HONEYCOMB-INBOX-001",
+                     "status":  "active",
+                     "compliance_status":  "v2.1_compliant"
+                 },
+    "resonance":  {
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%",
+                      "with_parent":  "100%",
+                      "status":  "fully_resonant"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

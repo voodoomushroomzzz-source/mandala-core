@@ -1,1 +1,66 @@
-{"identity":{"module_id":"REGISTRY-BACKUPS-001","name":"Система backup и восстановления сот","version":"v1.0.0","layer":2,"type":"backup_system","description":"Автоматическое создание backup сот перед изменениями и восстановление в случае проблем","priority":"high","tags":["backup","recovery","safety","registry"]},"meta":{"backup_triggers":["перед_миграцией_соты","перед_крупным_изменением","по_расписанию_раз_в_неделю"],"retention_policy":"7_дней_или_5_backups","storage_location":"honeycombs/registry/backups/"},"workflow":{"pre_change_backup":["1. Определить соту для изменения","2. Создать snapshot всех файлов соты","3. Сохранить с timestamp и описанием изменений","4. Обновить реестр backup"],"automatic_backup":["1. По расписанию сканировать критичные соты","2. Сравнить с предыдущим backup","3. Если изменения значительные — создать новый backup"],"recovery":["1. Выбрать backup из истории","2. Восстановить файлы соты","3. Обновить запись в реестре","4. Запустить health check"]},"integration":{"with_patch_system":"pre_patch_backup","with_registry":"backup_tracking","with_health_check":"post_recovery_validation"},"technical_details":{"format":"timestamped_folders","metadata":"backup_manifest.json","compression":"none_для_прозрачности"},"notes":"Система безопасности для предотвращения потери данных при изменениях."}
+﻿{
+    "identity":  {
+                     "module_id":  "REGISTRY-BACKUPS-001",
+                     "name":  "РЎРёСЃС‚РµРјР° backup Рё РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ СЃРѕС‚",
+                     "version":  "v2.2.0",
+                     "layer":  2,
+                     "type":  "backup_system",
+                     "description":  "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ СЃРѕР·РґР°РЅРёРµ backup СЃРѕС‚ РїРµСЂРµРґ РёР·РјРµРЅРµРЅРёСЏРјРё Рё РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РІ СЃР»СѓС‡Р°Рµ РїСЂРѕР±Р»РµРј",
+                     "priority":  "high",
+                     "tags":  [
+                                  "backup",
+                                  "recovery",
+                                  "safety",
+                                  "registry"
+                              ]
+                 },
+    "meta":  {
+                 "backup_triggers":  [
+                                         "РїРµСЂРµРґ_РјРёРіСЂР°С†РёРµР№_СЃРѕС‚С‹",
+                                         "РїРµСЂРµРґ_РєСЂСѓРїРЅС‹Рј_РёР·РјРµРЅРµРЅРёРµРј",
+                                         "РїРѕ_СЂР°СЃРїРёСЃР°РЅРёСЋ_СЂР°Р·_РІ_РЅРµРґРµР»СЋ"
+                                     ],
+                 "retention_policy":  "7_РґРЅРµР№_РёР»Рё_5_backups",
+                 "storage_location":  "honeycombs/registry/backups/"
+             },
+    "workflow":  {
+                     "pre_change_backup":  [
+                                               "1. РћРїСЂРµРґРµР»РёС‚СЊ СЃРѕС‚Сѓ РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ",
+                                               "2. РЎРѕР·РґР°С‚СЊ snapshot РІСЃРµС… С„Р°Р№Р»РѕРІ СЃРѕС‚С‹",
+                                               "3. РЎРѕС…СЂР°РЅРёС‚СЊ СЃ timestamp Рё РѕРїРёСЃР°РЅРёРµРј РёР·РјРµРЅРµРЅРёР№",
+                                               "4. РћР±РЅРѕРІРёС‚СЊ СЂРµРµСЃС‚СЂ backup"
+                                           ],
+                     "automatic_backup":  [
+                                              "1. РџРѕ СЂР°СЃРїРёСЃР°РЅРёСЋ СЃРєР°РЅРёСЂРѕРІР°С‚СЊ РєСЂРёС‚РёС‡РЅС‹Рµ СЃРѕС‚С‹",
+                                              "2. РЎСЂР°РІРЅРёС‚СЊ СЃ РїСЂРµРґС‹РґСѓС‰РёРј backup",
+                                              "3. Р•СЃР»Рё РёР·РјРµРЅРµРЅРёСЏ Р·РЅР°С‡РёС‚РµР»СЊРЅС‹Рµ вЂ” СЃРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ backup"
+                                          ],
+                     "recovery":  [
+                                      "1. Р’С‹Р±СЂР°С‚СЊ backup РёР· РёСЃС‚РѕСЂРёРё",
+                                      "2. Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ С„Р°Р№Р»С‹ СЃРѕС‚С‹",
+                                      "3. РћР±РЅРѕРІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ СЂРµРµСЃС‚СЂРµ",
+                                      "4. Р—Р°РїСѓСЃС‚РёС‚СЊ health check"
+                                  ]
+                 },
+    "integration":  {
+                        "with_patch_system":  "pre_patch_backup",
+                        "with_registry":  "backup_tracking",
+                        "with_health_check":  "post_recovery_validation"
+                    },
+    "technical_details":  {
+                              "format":  "timestamped_folders",
+                              "metadata":  "backup_manifest.json",
+                              "compression":  "none_РґР»СЏ_РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚Рё"
+                          },
+    "notes":  "РЎРёСЃС‚РµРјР° Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё РґР»СЏ РїСЂРµРґРѕС‚РІСЂР°С‰РµРЅРёСЏ РїРѕС‚РµСЂРё РґР°РЅРЅС‹С… РїСЂРё РёР·РјРµРЅРµРЅРёСЏС….",
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

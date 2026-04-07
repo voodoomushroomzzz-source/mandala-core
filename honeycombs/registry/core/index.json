@@ -1,1 +1,59 @@
-{"identity":{"module_id":"REG-CORE-001","name":"Реестр критических сот","version":"v1.0.0","created":"2026-03-05","layer":2,"type":"registry_segment","description":"Сегмент реестра для сот layers 1-2 (критические и ядро системы).","status":"active","priority":"high","tags":["registry","core","critical","layers_1_2"],"resonance":"100%"},"meta":{"segment_type":"core","layers":[1,2],"total_honeycombs":0,"last_scan":"2026-03-05","validation_status":"pending"},"honeycombs":{},"validation":{"rules":["layer должен быть 1 или 2","priority должен быть critical или high","должен соответствовать стандарту v2.0","должен иметь резонанс с boot.json и core_map"],"required_fields":["identity.module_id","identity.layer","identity.priority","meta.parent_honeycomb","registry.compliance_status"]},"notes":"Сегмент создан. Добавление сот будет происходить через автоматическое сканирование."}
+﻿{
+    "identity":  {
+                     "module_id":  "REG-CORE-001",
+                     "name":  "Р РµРµСЃС‚СЂ РєСЂРёС‚РёС‡РµСЃРєРёС… СЃРѕС‚",
+                     "version":  "v2.2.0",
+                     "created":  "2026-03-05",
+                     "layer":  2,
+                     "type":  "registry_segment",
+                     "description":  "РЎРµРіРјРµРЅС‚ СЂРµРµСЃС‚СЂР° РґР»СЏ СЃРѕС‚ layers 1-2 (РєСЂРёС‚РёС‡РµСЃРєРёРµ Рё СЏРґСЂРѕ СЃРёСЃС‚РµРјС‹).",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "registry",
+                                  "core",
+                                  "critical",
+                                  "layers_1_2"
+                              ],
+                     "resonance":  "100%"
+                 },
+    "meta":  {
+                 "segment_type":  "core",
+                 "layers":  [
+                                1,
+                                2
+                            ],
+                 "total_honeycombs":  0,
+                 "last_scan":  "2026-03-05",
+                 "validation_status":  "pending"
+             },
+    "honeycombs":  {
+
+                   },
+    "validation":  {
+                       "rules":  [
+                                     "layer РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ 1 РёР»Рё 2",
+                                     "priority РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ critical РёР»Рё high",
+                                     "РґРѕР»Р¶РµРЅ СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ СЃС‚Р°РЅРґР°СЂС‚Сѓ v2.0",
+                                     "РґРѕР»Р¶РµРЅ РёРјРµС‚СЊ СЂРµР·РѕРЅР°РЅСЃ СЃ boot.json Рё core_map"
+                                 ],
+                       "required_fields":  [
+                                               "identity.module_id",
+                                               "identity.layer",
+                                               "identity.priority",
+                                               "meta.parent_honeycomb",
+                                               "registry.compliance_status"
+                                           ]
+                   },
+    "notes":  "РЎРµРіРјРµРЅС‚ СЃРѕР·РґР°РЅ. Р”РѕР±Р°РІР»РµРЅРёРµ СЃРѕС‚ Р±СѓРґРµС‚ РїСЂРѕРёСЃС…РѕРґРёС‚СЊ С‡РµСЂРµР· Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ.",
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
+}

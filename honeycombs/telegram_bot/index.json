@@ -1,98 +1,108 @@
-{
-  "identity": {
-    "module_id": "TELEGRAM-BOT-MANIFEST-001",
-    "name": "Telegram Bot Honeycomb Manifest",
-    "version": "1.0.0",
-    "created": "2026-03-01",
-    "layer": 1,
-    "type": "honeycomb_manifest"
-  },
-  "meta": {
-    "description": "Манифест соты Telegram бота Мандалы",
-    "status": "active",
-    "priority": "high",
-    "tags": [
-      "telegram",
-      "bot",
-      "manifest",
-      "honeycomb"
-    ],
-    "resonance": "95%"
-  },
-  "honeycomb_structure": {
-    "total_segments": 10,
-    "total_size": "~2.5KB",
-    "avg_segment_size": "~0.25KB",
-    "segments": [
-      {
-        "segment": "overview",
-        "file": "overview.json",
-        "description": "Общее описание модуля Telegram бота",
-        "size": "~0.3KB"
-      },
-      {
-        "segment": "meta",
-        "file": "version_history.json",
-        "description": "История версий модуля",
-        "size": "~0.3KB"
-      },
-      {
-        "segment": "roadmap",
-        "file": "milestones.json",
-        "description": "Дорожная карта и этапы разработки",
-        "size": "~0.4KB"
-      },
-      {
-        "segment": "capabilities",
-        "file": "current.json",
-        "description": "Текущие возможности бота",
-        "size": "~0.3KB"
-      },
-      {
-        "segment": "capabilities",
-        "file": "planned.json",
-        "description": "Планируемые возможности бота",
-        "size": "~0.3KB"
-      },
-      {
-        "segment": "configuration",
-        "file": "env_vars.json",
-        "description": "Переменные окружения для бота",
-        "size": "~0.2KB"
-      },
-      {
-        "segment": "configuration",
-        "file": "menu.json",
-        "description": "Меню и команды бота",
-        "size": "~0.3KB"
-      },
-      {
-        "segment": "bot_info",
-        "file": "version.json",
-        "description": "Версия бота и история изменений",
-        "size": "~0.2KB"
-      },
-      {
-        "segment": "bot_info",
-        "file": "files.json",
-        "description": "Файлы бота и их назначение",
-        "size": "~0.2KB"
-      },
-      {
-        "segment": "integration",
-        "file": "sr_connection.json",
-        "description": "Интеграция с SR через Yandex Cloud Function",
-        "size": "~0.3KB"
-      }
-    ]
-  },
-  "navigation": {
-    "parent_map": "honeycombs/core_map/index.json",
-    "related_honeycombs": [
-      "honeycombs/engineer_chat/index.json",
-      "honeycombs/tasks/index.json"
-    ],
-    "next_segment": "overview.json"
-  },
-  "/honeycomb_structure/total_size": "~5.9KB"
+﻿{
+    "identity":  {
+                     "module_id":  "TELEGRAM-BOT-MANIFEST-001",
+                     "name":  "Telegram Bot Honeycomb Manifest",
+                     "version":  "v2.2.0",
+                     "created":  "2026-03-01",
+                     "layer":  1,
+                     "type":  "honeycomb_manifest"
+                 },
+    "meta":  {
+                 "description":  "РњР°РЅРёС„РµСЃС‚ СЃРѕС‚С‹ Telegram Р±РѕС‚Р° РњР°РЅРґР°Р»С‹",
+                 "status":  "active",
+                 "priority":  "high",
+                 "tags":  [
+                              "telegram",
+                              "bot",
+                              "manifest",
+                              "honeycomb"
+                          ],
+                 "resonance":  "95%"
+             },
+    "honeycomb_structure":  {
+                                "total_segments":  10,
+                                "total_size":  "~2.5KB",
+                                "avg_segment_size":  "~0.25KB",
+                                "segments":  [
+                                                 {
+                                                     "segment":  "overview",
+                                                     "file":  "overview.json",
+                                                     "description":  "РћР±С‰РµРµ РѕРїРёСЃР°РЅРёРµ РјРѕРґСѓР»СЏ Telegram Р±РѕС‚Р°",
+                                                     "size":  "~0.3KB"
+                                                 },
+                                                 {
+                                                     "segment":  "meta",
+                                                     "file":  "version_history.json",
+                                                     "description":  "РСЃС‚РѕСЂРёСЏ РІРµСЂСЃРёР№ РјРѕРґСѓР»СЏ",
+                                                     "size":  "~0.3KB"
+                                                 },
+                                                 {
+                                                     "segment":  "roadmap",
+                                                     "file":  "milestones.json",
+                                                     "description":  "Р”РѕСЂРѕР¶РЅР°СЏ РєР°СЂС‚Р° Рё СЌС‚Р°РїС‹ СЂР°Р·СЂР°Р±РѕС‚РєРё",
+                                                     "size":  "~0.4KB"
+                                                 },
+                                                 {
+                                                     "segment":  "capabilities",
+                                                     "file":  "current.json",
+                                                     "description":  "РўРµРєСѓС‰РёРµ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё Р±РѕС‚Р°",
+                                                     "size":  "~0.3KB"
+                                                 },
+                                                 {
+                                                     "segment":  "capabilities",
+                                                     "file":  "planned.json",
+                                                     "description":  "РџР»Р°РЅРёСЂСѓРµРјС‹Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё Р±РѕС‚Р°",
+                                                     "size":  "~0.3KB"
+                                                 },
+                                                 {
+                                                     "segment":  "configuration",
+                                                     "file":  "env_vars.json",
+                                                     "description":  "РџРµСЂРµРјРµРЅРЅС‹Рµ РѕРєСЂСѓР¶РµРЅРёСЏ РґР»СЏ Р±РѕС‚Р°",
+                                                     "size":  "~0.2KB"
+                                                 },
+                                                 {
+                                                     "segment":  "configuration",
+                                                     "file":  "menu.json",
+                                                     "description":  "РњРµРЅСЋ Рё РєРѕРјР°РЅРґС‹ Р±РѕС‚Р°",
+                                                     "size":  "~0.3KB"
+                                                 },
+                                                 {
+                                                     "segment":  "bot_info",
+                                                     "file":  "version.json",
+                                                     "description":  "Р’РµСЂСЃРёСЏ Р±РѕС‚Р° Рё РёСЃС‚РѕСЂРёСЏ РёР·РјРµРЅРµРЅРёР№",
+                                                     "size":  "~0.2KB"
+                                                 },
+                                                 {
+                                                     "segment":  "bot_info",
+                                                     "file":  "files.json",
+                                                     "description":  "Р¤Р°Р№Р»С‹ Р±РѕС‚Р° Рё РёС… РЅР°Р·РЅР°С‡РµРЅРёРµ",
+                                                     "size":  "~0.2KB"
+                                                 },
+                                                 {
+                                                     "segment":  "integration",
+                                                     "file":  "sr_connection.json",
+                                                     "description":  "РРЅС‚РµРіСЂР°С†РёСЏ СЃ SR С‡РµСЂРµР· Yandex Cloud Function",
+                                                     "size":  "~0.3KB"
+                                                 }
+                                             ]
+                            },
+    "navigation":  {
+                       "parent_map":  "honeycombs/core_map/index.json",
+                       "related_honeycombs":  [
+                                                  "honeycombs/engineer_chat/index.json",
+                                                  "honeycombs/tasks/index.json"
+                                              ],
+                       "next_segment":  "overview.json"
+                   },
+    "/honeycomb_structure/total_size":  "~5.9KB",
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Исправлено скриптом resonance-2026-04-v2.3.1 (PS5.1)"
+               }
 }
