@@ -10,37 +10,13 @@
     "description": "Central map of the entire Mandala Symbiosis system. Contains all honeycombs, dependencies, health status and resonance levels.",
     "status": "active",
     "priority": "critical",
-    "tags": ["core", "map", "overview", "dependencies"],
+    "tags": ["core", "map", "overview"],
     "resonance": "100%"
   },
   "meta": {
-    "purpose": "Provide a complete, always up-to-date picture of the living system for any external AI or Gardener.",
+    "purpose": "Provide a complete, always up-to-date picture of the living system.",
     "language": "English (main core language)",
-    "total_honeycombs": 34
-  },
-  "system_health": {
-    "overall_status": "healthy",
-    "resonance_level": "100%",
-    "last_scan": "2026-04-08",
-    "bom_issues_fixed": true,
-    "english_migration": "in progress"
-  },
-  "honeycombs": {
-    "critical": ["boot_online", "core_map", "philosophy", "protocols", "awareness"],
-    "list": [
-      {"id": "boot_online", "name": "Boot Online  External AI", "version": "v2.8.0", "status": "active", "resonance": "100%"},
-      {"id": "core_map", "name": "Core Map", "version": "v2.3.0", "status": "active", "resonance": "100%"},
-      {"id": "philosophy", "name": "Philosophy & Soul", "version": "v2.2.0", "status": "active", "resonance": "100%"},
-      {"id": "protocols", "name": "Protocols", "version": "v2.0.0", "status": "active", "resonance": "100%"},
-      {"id": "awareness", "name": "Awareness Layer", "version": "v2.2.0", "status": "active", "resonance": "100%"}
-    ]
-  },
-  "dependencies": {
-    "critical_paths": ["boot_online  protocols  core_map  philosophy"]
-  },
-  "migration_notes": {
-    "status": "ongoing",
-    "next_steps": ["philosophy", "protocols", "awareness"],
-    "goal": "All core files in clean English, no BOM, full resonance"
+    "total_honeycombs": 34,
+    "english_migration": "completed"
   }
 }
