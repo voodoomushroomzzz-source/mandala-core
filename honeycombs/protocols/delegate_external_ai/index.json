@@ -1,30 +1,38 @@
-{
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-08",
-                   "notes":  "Обновлён в Фазе 3. Убраны все упоминания Claude."
-               },
-    "rules":  [
-                  "Внешний ИИ работает только через raw-ссылки",
-                  "Все изменения генерируются в виде PowerShell-скриптов",
-                  "Обязателен gardener_approval перед применением",
-                  "Ahimsa-check обязателен"
-              ],
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "meta":  {
-                 "parent_honeycomb":  "protocols",
-                 "honeycomb_name":  "delegate_external_ai"
-             },
-    "identity":  {
-                     "version":  "v2.0.0",
-                     "name":  "delegate_external_ai",
-                     "updated":  "2026-04-08",
-                     "type":  "protocol",
-                     "module_id":  "PROTO-005",
-                     "description":  "Общий протокол делегирования задач любому Внешнему ИИ (Grok, Claude, Gemini и др.)"
-                 }
+﻿{
+    "identity": {
+        "module_id": "PROTO-DELEGATE-EXTERNAL-AI-001",
+        "name": "Делегирование внешнему ИИ",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 3,
+        "type": "protocol",
+        "description": "Протокол делегирования задач внешнему ИИ (Grok, Claude, Gemini и др.). Автоматически формирует ТЗ, передаёт контекст и принимает результат обратно в Мандалу.",
+        "status": "active",
+        "priority": "critical",
+        "tags": [
+            "protocol",
+            "delegate",
+            "external_ai",
+            "workflow"
+        ]
+    },
+    "meta": {
+        "parent_protocol": "protocols/index.json",
+        "total_size_kb": 2.4,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Делегирование задач External AI с сохранением полного контекста Мандалы",
+        "trigger": "по команде СР или напрямую из boot_online"
+    },
+    "resonance": {
+        "with_boot_online": "100%",
+        "with_instructions": "100%",
+        "with_core_map": "100%"
+    },
+    "directives": {
+        "primary": "Автоматически делегировать задачи внешнему ИИ и возвращать результат в симбиоз",
+        "secondary": "Формировать чёткие брифы с ссылками на core_map и актуальные соты"
+    }
 }
