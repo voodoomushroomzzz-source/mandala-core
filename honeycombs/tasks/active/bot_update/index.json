@@ -1,25 +1,31 @@
-{
-    "subtasks":  [
-                     "Этап 1. Подключение бота к СР",
-                     "Этап 2. Анализ и разбивка задач",
-                     "Этап 3. Новые команды и интерфейс",
-                     "Этап 4. Безопасность и Ahimsa"
-                 ],
-    "assignee":  "СР + Внешний ИИ",
-    "identity":  {
-                     "id":  "TASK-2026-04-08",
-                     "name":  "bot_update",
-                     "updated":  "2026-04-08",
-                     "description":  "Большое обновление Telegram-бота",
-                     "type":  "task",
-                     "version":  "v1.0.0"
-                 },
-    "description":  "Реализовать интеллектуальный Telegram-бот как шлюз СР:\n- Подключение по WebSocket к инженерному чату\n- Автоматический анализ текста сообщений\n- Разбивка задач на: Личные задачи Садовника + Улучшения ядра\n- Красивый интерфейс с кнопками",
-    "status":  "active",
-    "meta":  {
-                 "parent_honeycomb":  "tasks",
-                 "honeycomb_name":  "bot_update"
-             },
-    "priority":  "high",
-    "deadline":  "2026-04-20"
+﻿{
+    "identity": {
+        "module_id": "TASK-BOT-UPDATE-001",
+        "name": "Обновление Telegram-бота",
+        "version": "v2.2.0",
+        "created": "2026-04-01",
+        "updated": "2026-04-08",
+        "layer": 5,
+        "type": "active_task",
+        "description": "Активная задача по обновлению и поддержке Telegram-бота Мандалы Симбиоза.",
+        "status": "active",
+        "priority": "high",
+        "tags": ["task", "telegram_bot", "update", "active"]
+    },
+    "meta": {
+        "parent": "honeycombs/tasks/index.json",
+        "total_size_kb": 1.8,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Текущая активная задача по улучшению Telegram-бота",
+        "status": "in_progress"
+    },
+    "resonance": {
+        "with_telegram_bot": "100%",
+        "with_communications": "100%"
+    },
+    "directives": {
+        "primary": "Поддерживать и обновлять Telegram-бот Мандалы"
+    }
 }
