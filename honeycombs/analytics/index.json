@@ -1,19 +1,61 @@
-﻿{
-  "identity": {
-    "module_id": "ANALYTICS-001",
-    "name": "Analytics",
-    "version": "v2.2.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 2,
-    "type": "analytics",
-    "description": "System analytics and health monitoring of all honeycombs.",
-    "status": "active",
-    "priority": "medium",
-    "tags": ["analytics", "monitoring", "health"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "language": "English (main core language)"
-  }
+{
+    "identity":  {
+                     "module_id":  "ANALYTICS-001",
+                     "name":  "РЎРёСЃС‚РµРјР° Р°РЅР°Р»РёС‚РёРєРё СЃРѕС‚",
+                     "version":  "v2.2.0",
+                     "layer":  3,
+                     "type":  "analytics_module",
+                     "description":  "РђРЅР°Р»РёР· РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ СЃРѕС‚, health РёСЃС‚РѕСЂРёРё, С‚РµРЅРґРµРЅС†РёР№ СЂР°Р·РІРёС‚РёСЏ",
+                     "priority":  "medium",
+                     "tags":  [
+                                  "analytics",
+                                  "metrics",
+                                  "trends",
+                                  "layer_3"
+                              ],
+                     "compliance":  "v2.0_standard"
+                 },
+    "meta":  {
+                 "honeycomb_name":  "analytics",
+                 "parent_honeycomb":  "core_map",
+                 "total_files":  1,
+                 "total_size_kb":  2.0,
+                 "segments":  1,
+                 "creation_date":  "2026-03-05"
+             },
+    "structure":  {
+                      "segments":  {
+                                       "main":  {
+                                                    "files":  {
+                                                                  "index":  {
+                                                                                "file":  "index.json",
+                                                                                "size_kb":  2.0,
+                                                                                "description":  "РћСЃРЅРѕРІРЅРѕР№ РјРѕРґСѓР»СЊ Р°РЅР°Р»РёС‚РёРєРё"
+                                                                            }
+                                                              }
+                                                }
+                                   }
+                  },
+    "capabilities":  {
+                         "health_trends":  "РіСЂР°С„РёРєРё_РёР·РјРµРЅРµРЅРёСЏ_health_СЃРѕС‚",
+                         "usage_patterns":  "Р°РЅР°Р»РёР·_РґРѕСЃС‚СѓРїР°_Рё_РёР·РјРµРЅРµРЅРёР№",
+                         "dependency_analysis":  "РєР°СЂС‚Р°_РІР·Р°РёРјРѕСЃРІСЏР·РµР№_СЃРѕС‚",
+                         "growth_metrics":  "СЃС‚Р°С‚РёСЃС‚РёРєР°_СЂРѕСЃС‚Р°_СЃРёСЃС‚РµРјС‹"
+                     },
+    "integration":  {
+                        "with_registry":  "РёСЃС‚РѕС‡РЅРёРє_РґР°РЅРЅС‹С…",
+                        "with_dashboard":  "РІРёР·СѓР°Р»РёР·Р°С†РёСЏ",
+                        "with_notifications":  "СѓРІРµРґРѕРјР»РµРЅРёСЏ_Рѕ_С‚РµРЅРґРµРЅС†РёСЏС…"
+                    },
+    "notes":  "РџРµСЂРІР°СЏ СЃРѕС‚Р° layer 3 РІ Phase 5. РђРЅР°Р»РёС‚РёРєР° Р·РґРѕСЂРѕРІСЊСЏ Рё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ СЃРёСЃС‚РµРјС‹.",
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-07",
+                   "notes":  "Обновлено до v2.x (Шаг 2, resonance-2026-04-v2.3.2)"
+               }
 }
