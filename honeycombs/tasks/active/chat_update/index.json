@@ -1,25 +1,31 @@
-{
-    "subtasks":  [
-                     "Этап 1. Архитектурная перестройка",
-                     "Этап 2. Оптимизация и синхронизация",
-                     "Этап 3. Новые возможности",
-                     "Этап 4. Финализация и удобство"
-                 ],
-    "assignee":  "СР + Внешний ИИ",
-    "identity":  {
-                     "id":  "TASK-2026-04-08-chat",
-                     "name":  "chat_update",
-                     "updated":  "2026-04-08",
-                     "description":  "Большое обновление инженерного чата (фронт + бэк)",
-                     "type":  "task",
-                     "version":  "v1.0.0"
-                 },
-    "description":  "Реализовать Engineer Chat v2.0:\n- Модульная архитектура фронтенда и бэкенда\n- Максимальная синхронность с Telegram-ботом\n- Лёгкий вес и удобство обновления\n- Единая система анализа и разбивки задач",
-    "status":  "active",
-    "meta":  {
-                 "parent_honeycomb":  "tasks",
-                 "honeycomb_name":  "chat_update"
-             },
-    "priority":  "high",
-    "deadline":  "2026-04-30"
+﻿{
+    "identity": {
+        "module_id": "TASK-CHAT-UPDATE-001",
+        "name": "Обновление Engineer Chat",
+        "version": "v2.2.0",
+        "created": "2026-04-01",
+        "updated": "2026-04-08",
+        "layer": 5,
+        "type": "active_task",
+        "description": "Активная задача по обновлению и поддержке Engineer Chat Мандалы Симбиоза.",
+        "status": "active",
+        "priority": "high",
+        "tags": ["task", "engineer_chat", "update", "active"]
+    },
+    "meta": {
+        "parent": "honeycombs/tasks/index.json",
+        "total_size_kb": 1.8,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Текущая активная задача по улучшению Engineer Chat",
+        "status": "in_progress"
+    },
+    "resonance": {
+        "with_engineer_chat": "100%",
+        "with_communications": "100%"
+    },
+    "directives": {
+        "primary": "Поддерживать и обновлять Engineer Chat Мандалы"
+    }
 }
