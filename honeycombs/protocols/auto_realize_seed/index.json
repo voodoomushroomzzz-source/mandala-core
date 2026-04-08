@@ -1,30 +1,37 @@
-{
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-08",
-                   "notes":  "Создан в Фазе 3"
-               },
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "capabilities":  [
-                         "Находит семя по номеру",
-                         "Создаёт готовый PowerShell-скрипт",
-                         "Показывает на gardener_approval",
-                         "После одобрения автоматически реализует"
-                     ],
-    "meta":  {
-                 "parent_honeycomb":  "protocols",
-                 "honeycomb_name":  "auto_realize_seed"
-             },
-    "identity":  {
-                     "version":  "v2.0.0",
-                     "name":  "auto_realize_seed",
-                     "updated":  "2026-04-08",
-                     "type":  "protocol",
-                     "module_id":  "PROTO-006",
-                     "description":  "Автоматическая реализация любого семени в задачу или готовый скрипт"
-                 }
+﻿{
+    "identity": {
+        "module_id": "PROTO-AUTO-REALIZE-001",
+        "name": "Автоматическая реализация семян",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 3,
+        "type": "protocol",
+        "description": "Протокол автоматической материализации семян из honeycombs/seeds в полноценные соты. Автоматически создаёт index.json, структуру и запускает резонанс.",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "protocol",
+            "auto_realize",
+            "seeds",
+            "materialization"
+        ]
+    },
+    "meta": {
+        "parent_protocol": "protocols/index.json",
+        "total_size_kb": 2.1,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Автоматически переводит семена в рабочие honeycombs",
+        "trigger": "по команде Вуду или при обнаружении нового seed"
+    },
+    "resonance": {
+        "with_seeds": "100%",
+        "with_core_map": "100%",
+        "with_registry": "100%"
+    },
+    "directives": {
+        "primary": "Автоматически материализовывать семена в полноценные соты"
+    }
 }
