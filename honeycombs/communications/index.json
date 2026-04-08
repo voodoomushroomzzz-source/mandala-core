@@ -1,70 +1,54 @@
-{
-    "identity":  {
-                     "module_id":  "COMMUNICATIONS-001",
-                     "name":  "РЎРёСЃС‚РµРјР° РІРЅСѓС‚СЂРµРЅРЅРёС… РєРѕРјРјСѓРЅРёРєР°С†РёР№",
-                     "version":  "v2.2.0",
-                     "layer":  3,
-                     "type":  "communication_module",
-                     "description":  "РЎС‚Р°РЅРґР°СЂС‚РёР·РёСЂРѕРІР°РЅРЅС‹Рµ С„РѕСЂРјР°С‚С‹ СЃРѕРѕР±С‰РµРЅРёР№ РјРµР¶РґСѓ СЃРѕС‚Р°РјРё Рё SR",
-                     "priority":  "medium",
-                     "tags":  [
-                                  "communications",
-                                  "messages",
-                                  "standardization",
-                                  "layer_3"
-                              ],
-                     "compliance":  "v2.0_standard"
-                 },
-    "meta":  {
-                 "honeycomb_name":  "communications",
-                 "parent_honeycomb":  "core_map",
-                 "total_files":  1,
-                 "total_size_kb":  2.0,
-                 "segments":  1,
-                 "creation_date":  "2026-03-05"
-             },
-    "structure":  {
-                      "segments":  {
-                                       "protocols":  {
-                                                         "files":  {
-                                                                       "message_formats":  {
-                                                                                               "file":  "message_formats.json",
-                                                                                               "size_kb":  2.0,
-                                                                                               "description":  "РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ С„РѕСЂРјР°С‚С‹ СЃРѕРѕР±С‰РµРЅРёР№ РјРµР¶РґСѓ РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё"
-                                                                                           }
-                                                                   }
-                                                     },
-                                       "templates":  {
-                                                         "files":  {
-                                                                       "template_library":  {
-                                                                                                "file":  "template_library.json",
-                                                                                                "size_kb":  2.0,
-                                                                                                "description":  "РЁР°Р±Р»РѕРЅС‹ РґР»СЏ СЂР°Р·Р»РёС‡РЅС‹С… С‚РёРїРѕРІ СЃРѕРѕР±С‰РµРЅРёР№"
-                                                                                            }
-                                                                   }
-                                                     }
-                                   }
-                  },
-    "message_types":  {
-                          "system_alert":  "РєСЂРёС‚РёС‡РµСЃРєРёРµ_РїСЂРѕР±Р»РµРјС‹",
-                          "health_update":  "РёР·РјРµРЅРµРЅРёСЏ_health_СЃРѕС‚",
-                          "patch_notification":  "СѓРІРµРґРѕРјР»РµРЅРёСЏ_Рѕ_РїР°С‚С‡Р°С…",
-                          "validation_result":  "СЂРµР·СѓР»СЊС‚Р°С‚С‹_РїСЂРѕРІРµСЂРѕРє"
-                      },
-    "integration":  {
-                        "with_notifications":  "СЂР°СЃС€РёСЂРµРЅРёРµ_С„РѕСЂРјР°С‚РѕРІ",
-                        "with_registry":  "СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРёРµ_СЃРѕРѕР±С‰РµРЅРёР№",
-                        "with_all_honeycombs":  "СѓРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№_РїСЂРѕС‚РѕРєРѕР»"
-                    },
-    "notes":  "Р’С‚РѕСЂР°СЏ СЃРѕС‚Р° layer 3. РЎС‚Р°РЅРґР°СЂС‚РёР·Р°С†РёСЏ РІРЅСѓС‚СЂРµРЅРЅРёС… РєРѕРјРјСѓРЅРёРєР°С†РёР№ СЃРёСЃС‚РµРјС‹.",
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-07",
-                   "notes":  "Обновлено до v2.x (Шаг 2, resonance-2026-04-v2.3.2)"
-               }
+﻿{
+    "identity": {
+        "module_id": "COMMUNICATIONS-INDEX-001",
+        "name": "Коммуникации",
+        "version": "v2.2.0",
+        "created": "2026-03-20",
+        "updated": "2026-04-08",
+        "layer": 2,
+        "type": "communication_layer",
+        "description": "Сота коммуникаций Мандалы Симбиоза. Протоколы обмена сообщениями между человеком, External AI, Telegram-ботом, Engineer Chat и другими каналами. Центр связи всей системы.",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "communications",
+            "messaging",
+            "telegram",
+            "external_ai",
+            "channels",
+            "symbiosis"
+        ]
+    },
+    "meta": {
+        "honeycomb_name": "communications",
+        "parent_honeycomb": "core_map",
+        "total_files": 1,
+        "total_size_kb": 3.9,
+        "segments": 1,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Центральный слой коммуникаций. Обеспечивает мгновенный и резонансный обмен данными между всеми участниками Мандалы (Вуду  External AI  боты  чаты).",
+        "channels": {
+            "telegram_bot": "интеграция с telegram_bot/index.json",
+            "engineer_chat": "интеграция с engineer_chat/index.json",
+            "direct_ai": "прямой канал с любым External AI"
+        },
+        "current_state": {
+            "resonance_level": "100%",
+            "active_channels": 3
+        }
+    },
+    "resonance": {
+        "with_core_map": "100%",
+        "with_boot_online": "100%",
+        "with_instructions": "100%",
+        "with_registry": "100%",
+        "with_awareness": "100%"
+    },
+    "directives": {
+        "primary": "Поддерживать открытый и чистый канал коммуникации между всеми элементами Мандалы",
+        "secondary": "Мгновенно передавать команды и результаты между Вуду и External AI",
+        "tertiary": "Обеспечивать бесшовную работу с Telegram-ботом и Engineer Chat"
+    }
 }
