@@ -1,14 +1,32 @@
 {
-  "last_scan": "2026-04-07T20:57:28.300203",
-  "honeycomb_hashes": {},
+  "last_scan": "2026-04-08T17:49:06.007055",
+  "honeycomb_hashes": {
+    "akasha": "1bb635175cb630f61a3134676bc13a13",
+    "analytics": "19700228bbfa007ff7d4fb2993e49494",
+    "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final": "eb7d2a64070d5e84cad2fddefac65021",
+    "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3": "eb7d2a64070d5e84cad2fddefac65021",
+    "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup": "41c5d528f0d81890158a6072b734ccd2",
+    "engineer_chat": "e1c69c17a8504a26b9cd9c20f039b6e7",
+    "inbox": "68aec5ff7a225ddfe3a07aed6a2bd1aa",
+    "philosophy": "bc894fe0e674c8590ea181e6a8d5265b",
+    "registry/backups": "df65a5f3c6b492182f40cb413a3c579d",
+    "registry/core": "b9864b189dc12504ff39e583f69e16b5",
+    "registry/dashboard": "ac4993405d2c229ee8f651a43d8a1822",
+    "registry/notifications": "c24eae838b91a455f14a6e22c741f496",
+    "sphaerae": "1da0b8126dbe853d76ce15aad73f082a",
+    "tasks": "f9133effa544e1e38d1f334c9df03a8b",
+    "tectosphaera": "ed0d2025b812dfee7742feec2c343609",
+    "telegram_bot": "5dcc79715884903c6e88ccfaa9a1b8ff",
+    "visualizations": "c9ea563f04ca2bd4d045df7ae49714e0"
+  },
   "statistics": {
-    "total_scanned": 0,
-    "valid_v2": 0,
+    "total_scanned": 17,
+    "valid_v2": 17,
     "invalid_v2": 0,
-    "errors": 25,
+    "errors": 27,
     "warnings": 0,
-    "total_files": 0,
-    "total_size_kb": 0
+    "total_files": 77,
+    "total_size_kb": 287.2
   },
   "scanner_config": {}
 }
