@@ -1,54 +1,19 @@
 ﻿{
-    "identity": {
-        "module_id": "COMMUNICATIONS-INDEX-001",
-        "name": "Коммуникации",
-        "version": "v2.2.0",
-        "created": "2026-03-20",
-        "updated": "2026-04-08",
-        "layer": 2,
-        "type": "communication_layer",
-        "description": "Сота коммуникаций Мандалы Симбиоза. Протоколы обмена сообщениями между человеком, External AI, Telegram-ботом, Engineer Chat и другими каналами. Центр связи всей системы.",
-        "status": "active",
-        "priority": "high",
-        "tags": [
-            "communications",
-            "messaging",
-            "telegram",
-            "external_ai",
-            "channels",
-            "symbiosis"
-        ]
-    },
-    "meta": {
-        "honeycomb_name": "communications",
-        "parent_honeycomb": "core_map",
-        "total_files": 1,
-        "total_size_kb": 3.9,
-        "segments": 1,
-        "migration_status": "completed_v2.2"
-    },
-    "content": {
-        "description": "Центральный слой коммуникаций. Обеспечивает мгновенный и резонансный обмен данными между всеми участниками Мандалы (Вуду  External AI  боты  чаты).",
-        "channels": {
-            "telegram_bot": "интеграция с telegram_bot/index.json",
-            "engineer_chat": "интеграция с engineer_chat/index.json",
-            "direct_ai": "прямой канал с любым External AI"
-        },
-        "current_state": {
-            "resonance_level": "100%",
-            "active_channels": 3
-        }
-    },
-    "resonance": {
-        "with_core_map": "100%",
-        "with_boot_online": "100%",
-        "with_instructions": "100%",
-        "with_registry": "100%",
-        "with_awareness": "100%"
-    },
-    "directives": {
-        "primary": "Поддерживать открытый и чистый канал коммуникации между всеми элементами Мандалы",
-        "secondary": "Мгновенно передавать команды и результаты между Вуду и External AI",
-        "tertiary": "Обеспечивать бесшовную работу с Telegram-ботом и Engineer Chat"
-    }
+  "identity": {
+    "module_id": "COMMUNICATIONS-001",
+    "name": "Communications",
+    "version": "v2.2.0",
+    "created": "2026-03-30",
+    "updated": "2026-04-08",
+    "layer": 2,
+    "type": "communications",
+    "description": "Module for all internal and external communications, notifications and interactions.",
+    "status": "active",
+    "priority": "medium",
+    "tags": ["communications", "notifications", "interactions"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "language": "English (main core language)"
+  }
 }

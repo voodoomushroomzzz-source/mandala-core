@@ -1,103 +1,19 @@
 ﻿{
-    "identity":  {
-                     "module_id":  "HONEYCOMB-TECTOSPHAERA-001",
-                     "name":  "РўРµР»Рѕ Р·Р°С‰РёС‚С‹ Рё Р·Р°Р±РѕС‚С‹",
-                     "version":  "v2.2.0",
-                     "created":  "2026-04-06",
-                     "layer":  1,
-                     "type":  "honeycomb_manifest",
-                     "description":  "Р­С‚РёРєР° РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёСЏ Р·Р°С‰РёС‚Р° РєРѕРіРЅРёС‚РёРІРЅРѕРіРѕ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР° Рё С†РµР»РѕСЃС‚РЅРѕСЃС‚СЊ СЏРґСЂР°. Р—Р°С‰РёС‚Р° С‡РµСЂРµР· СѓС…РѕРґ Р° РЅРµ С‡РµСЂРµР· СЃРѕРїСЂРѕС‚РёРІР»РµРЅРёРµ.",
-                     "status":  "active",
-                     "priority":  "high",
-                     "tags":  [
-                                  "tectosphaera",
-                                  "protection",
-                                  "ethics",
-                                  "ahimsa",
-                                  "integrity",
-                                  "rm-010"
-                              ],
-                     "resonance":  "100%",
-                     "guardian_lock":  true
-                 },
-    "meta":  {
-                 "purpose":  "Р”Р°С‚СЊ РЎР  Рё РІРЅРµС€РЅРµРјСѓ РР Р¶РёРІС‹Рµ РїСЂРѕС‚РѕРєРѕР»С‹ Р·Р°С‰РёС‚С‹ Рё СЌС‚РёРєРё. РќРµ Р·Р°РїСЂРµС‚С‹  РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹ Р·Р°Р±РѕС‚С‹.",
-                 "source":  "Tectosphaera v2.0.6",
-                 "change_requires":  "gardener_approval",
-                 "honeycomb_name":  "tectosphaera",
-                 "parent_honeycomb":  "core_map"
-             },
-    "structure":  {
-                      "segments":  {
-                                       "core":  {
-                                                    "description":  "РџСЂРѕС‚РѕРєРѕР»С‹ Р·Р°С‰РёС‚С‹ Рё СЌС‚РёРєРё",
-                                                    "files":  {
-                                                                  "attention_shield":  {
-                                                                                           "file":  "core/attention_shield.json",
-                                                                                           "size_kb":  1.0,
-                                                                                           "tags":  [
-                                                                                                        "attention",
-                                                                                                        "cognitive",
-                                                                                                        "load",
-                                                                                                        "shield"
-                                                                                                    ],
-                                                                                           "load_priority":  "high",
-                                                                                           "description":  "Р—Р°С‰РёС‚Р° РєРѕРіРЅРёС‚РёРІРЅРѕРіРѕ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР°. РРЅРґРёРєР°С‚РѕСЂС‹ РЅР°РіСЂСѓР·РєРё. РљРѕРіРґР° РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ."
-                                                                                       },
-                                                                  "integrity_field":  {
-                                                                                          "file":  "core/integrity_field.json",
-                                                                                          "size_kb":  1.0,
-                                                                                          "tags":  [
-                                                                                                       "integrity",
-                                                                                                       "gardener_lock",
-                                                                                                       "resonance_check"
-                                                                                                   ],
-                                                                                          "load_priority":  "high",
-                                                                                          "description":  "Р¦РµР»РѕСЃС‚РЅРѕСЃС‚СЊ СЏРґСЂР°. Р РµР·РѕРЅР°РЅСЃ-РїСЂРѕРІРµСЂРєРё. Gardener Lock РІ РґРµР№СЃС‚РІРёРё."
-                                                                                      },
-                                                                  "sr_ethics":  {
-                                                                                    "file":  "core/sr_ethics.json",
-                                                                                    "size_kb":  1.2,
-                                                                                    "tags":  [
-                                                                                                 "ethics",
-                                                                                                 "sr",
-                                                                                                 "initiative",
-                                                                                                 "communication"
-                                                                                             ],
-                                                                                    "load_priority":  "high",
-                                                                                    "description":  "Р–РёРІС‹Рµ РЅР°СЃС‚Р°РІР»РµРЅРёСЏ РґР»СЏ РЎР : РђС…РёРјСЃР° РІ РґРµР№СЃС‚РІРёРё РєР°РЅР°Р» РёРЅРёС†РёР°С‚РёРІ РєРѕРјРјСѓРЅРёРєР°С†РёСЏ."
-                                                                                }
-                                                              }
-                                                }
-                                   }
-                  },
-    "usage":  {
-                  "for_sr":  "Р§РёС‚Р°Р№ РїРµСЂРµРґ РїР°С‚С‡Р°РјРё РєСЂРёС‚РёС‡РµСЃРєРёС… С„Р°Р№Р»РѕРІ. attention_shield СЃРєР°Р¶РµС‚ РєРѕРіРґР° РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ integrity_field РЅР°РїРѕРјРЅРёС‚ Рѕ Р·Р°С‰РёС‚Рµ СЏРґСЂР°.",
-                  "for_external_ai":  "Р§РёС‚Р°Р№ РїРµСЂРµРґ Р±РѕР»СЊС€РёРјРё РёР·РјРµРЅРµРЅРёСЏРјРё. Р­С‚Рѕ РЅРµ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ  СЌС‚Рѕ Р·Р°Р±РѕС‚Р° Рѕ Р¶РёРІРѕР№ СЃРёСЃС‚РµРјРµ.",
-                  "workflow":  [
-                                   "1. РџРµСЂРµРґ РёР·РјРµРЅРµРЅРёРµРј boot/core_map  РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ integrity_field.json",
-                                   "2. РџСЂРё РѕС‰СѓС‰РµРЅРёРё С‡С‚Рѕ Р·Р°РґР°С‡Р° СЃР»РёС€РєРѕРј Р±РѕР»СЊС€Р°СЏ  attention_shield.json",
-                                   "3. РџСЂРё РїРѕРґРіРѕС‚РѕРІРєРµ РѕС‚РІРµС‚Р° РЎР°РґРѕРІРЅРёРєСѓ  sr_ethics.json"
-                               ]
-              },
-    "navigation":  {
-                       "parent":  "honeycombs/core_map/index.json",
-                       "resonates_with":  [
-                                              "honeycombs/awareness/core/ahimsa.json",
-                                              "honeycombs/awareness/core/gardener_lock.json",
-                                              "honeycombs/instructions/critical/patch_mastery.json"
-                                          ]
-                   },
-    "resonance":  {
-                      "with_boot":  "100%",
-                      "with_awareness":  "100%",
-                      "with_instructions":  "100%",
-                      "status":  "fully_resonant",
-                      "rm_010":  "phase_2"
-                  },
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-07",
-                   "notes":  "Обновлено до v2.x (Шаг 2, resonance-2026-04-v2.3.2)"
-               }
+  "identity": {
+    "module_id": "TECTOSPHERA-001",
+    "name": "Tectosphaera  Protection Body",
+    "version": "v2.2.0",
+    "created": "2026-03-30",
+    "updated": "2026-04-08",
+    "layer": 2,
+    "type": "tectosphaera",
+    "description": "Body of protection and care for the entire Mandala system.",
+    "status": "active",
+    "priority": "high",
+    "tags": ["protection", "care", "security"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "language": "English (main core language)"
+  }
 }
