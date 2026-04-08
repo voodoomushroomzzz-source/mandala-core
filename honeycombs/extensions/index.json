@@ -1,19 +1,21 @@
-﻿{
-  "identity": {
-    "module_id": "EXTENSIONS-001",
-    "name": "Extensions",
-    "version": "v2.2.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 2,
-    "type": "extensions",
-    "description": "Extensions and plugins for extending Mandala functionality.",
-    "status": "active",
-    "priority": "medium",
-    "tags": ["extensions", "plugins"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "language": "English (main core language)"
-  }
+{
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-08",
+                   "notes":  "Создано при исправлении SEED_018"
+               },
+    "resonance":  {
+                      "status":  "fully_resonant",
+                      "with_boot":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "meta":  {
+                 "parent_honeycomb":  "core_map",
+                 "honeycomb_name":  "extensions"
+             },
+    "identity":  {
+                     "name":  "extensions",
+                     "version":  "v2.2.0",
+                     "updated":  "2026-04-08"
+                 }
 }
