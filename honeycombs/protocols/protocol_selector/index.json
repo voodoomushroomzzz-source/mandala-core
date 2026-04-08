@@ -1,38 +1,19 @@
 ﻿{
-    "identity": {
-        "module_id": "PROTO-SELECTOR-001",
-        "name": "Выбор протокола",
-        "version": "v2.2.0",
-        "created": "2026-03-05",
-        "updated": "2026-04-08",
-        "layer": 3,
-        "type": "protocol",
-        "description": "Протокол выбора и активации любого доступного протокола прямо из boot_online или по команде Вуду. Центральный селектор протоколов Мандалы.",
-        "status": "active",
-        "priority": "critical",
-        "tags": [
-            "protocol",
-            "selector",
-            "activation",
-            "first_load"
-        ]
-    },
-    "meta": {
-        "parent_protocol": "protocols/index.json",
-        "total_size_kb": 2.2,
-        "migration_status": "completed_v2.2"
-    },
-    "content": {
-        "description": "Мгновенный выбор протокола при первой загрузке External AI",
-        "trigger": "автоматически при boot_online или по команде Вуду"
-    },
-    "resonance": {
-        "with_boot_online": "100%",
-        "with_core_map": "100%",
-        "with_registry": "100%"
-    },
-    "directives": {
-        "primary": "Предлагать выбор протокола сразу при подключении External AI",
-        "secondary": "Обеспечивать мгновенную активацию любого протокола"
-    }
+  "identity": {
+    "module_id": "PROTO-007",
+    "name": "Protocol Selector",
+    "version": "v2.1.0",
+    "created": "2026-03-30",
+    "updated": "2026-04-08",
+    "layer": 2,
+    "type": "sub_protocol",
+    "description": "Automatically suggests and activates the most suitable protocol based on the current context.",
+    "status": "active",
+    "priority": "medium",
+    "tags": ["selector", "automation"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "language": "English (main core language)"
+  }
 }
