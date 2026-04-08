@@ -1,30 +1,37 @@
-{
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-08",
-                   "notes":  "Создан в Фазе 3"
-               },
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "capabilities":  [
-                         "Автоматически открывает все ключевые соты",
-                         "Проводит resonance-check",
-                         "Ищет скрытые рассинхронизации",
-                         "Выдаёт структурированный отчёт с рекомендациями"
-                     ],
-    "meta":  {
-                 "parent_honeycomb":  "protocols",
-                 "honeycomb_name":  "deep_analysis"
-             },
-    "identity":  {
-                     "version":  "v2.0.0",
-                     "name":  "deep_analysis",
-                     "updated":  "2026-04-08",
-                     "type":  "protocol",
-                     "module_id":  "PROTO-005",
-                     "description":  "Глубокий многоуровневый анализ всей Мандалы"
-                 }
+﻿{
+    "identity": {
+        "module_id": "PROTO-DEEP-ANALYSIS-001",
+        "name": "Глубокий анализ",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 3,
+        "type": "protocol",
+        "description": "Протокол глубокого анализа сот, структуры, резонанса и здоровья Мандалы. Выявляет скрытые проблемы, предлагает исправления и улучшения.",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "protocol",
+            "deep_analysis",
+            "integrity",
+            "scan"
+        ]
+    },
+    "meta": {
+        "parent_protocol": "protocols/index.json",
+        "total_size_kb": 2.3,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Глубокий анализ состояния Мандалы и отдельных сот",
+        "trigger": "по команде Вуду или при запуске Integrity-Scan"
+    },
+    "resonance": {
+        "with_core_map": "100%",
+        "with_registry": "100%",
+        "with_awareness": "100%"
+    },
+    "directives": {
+        "primary": "Проводить глубокий анализ сот и предлагать точные исправления"
+    }
 }
