@@ -1,19 +1,91 @@
-﻿{
-  "identity": {
-    "module_id": "INSTRUCTIONS-001",
-    "name": "Instructions",
-    "version": "v2.2.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 2,
-    "type": "instructions",
-    "description": "Collection of system instructions and guidelines for external AIs and the Gardener.",
-    "status": "active",
-    "priority": "medium",
-    "tags": ["instructions", "guidelines"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "language": "English (main core language)"
-  }
+{
+    "identity": {
+        "module_id": "INSTR-HONEYCOMB-001",
+        "name": "Сота инструкций",
+        "version": "v2.1.0",
+        "created": "2026-03-01",
+        "updated": "2026-04-08",
+        "layer": 2,
+        "type": "honeycomb_manifest",
+        "description": "Манифест соты инструкций. Инструкции для СР: роль v3.0, патчи, делегирование внешнему ИИ, стандарты работы.",
+        "status": "active",
+        "priority": "critical",
+        "tags": [
+            "instructions",
+            "honeycomb",
+            "core",
+            "mandala",
+            "external_ai",
+            "sr_v3"
+        ]
+    },
+    "meta": {
+        "honeycomb_name": "instructions",
+        "parent_honeycomb": "core_map",
+        "segments": 2,
+        "total_files": 8,
+        "total_size_kb": 26.0,
+        "segmentation_strategy": "critical (патчи/удаление) и core (роль СР, workflow, стандарты)",
+        "load_strategy": "Ленивая загрузка сегментов",
+        "abc_categories": "A=СР внутренняя работа, B=взаимодействие с External AI, C=GitHub/инструменты"
+    },
+    "structure": {
+        "segments": {
+            "critical": {
+                "description": "Критические инструкции  читать перед любым изменением файлов",
+                "files": {
+                    "patch_mastery": {
+                        "file": "critical/patch_mastery.json",
+                        "source_id": "INSTR-PATCH-001",
+                        "size_kb": 6.3,
+                        "tags": ["critical", "patch", "mastery", "pre_check"],
+                        "load_priority": "critical",
+                        "description": "Форматы патчей v2.3. pre_check обязателен. content  НЕ объект.",
+                        "category": "A"
+                    },
+                    "file_deletion_guide": {
+                        "file": "critical/file_deletion_guide.json",
+                        "source_id": "INSTR-DELETE-001",
+                        "size_kb": 2.6,
+                        "tags": ["delete", "guide", "critical"],
+                        "load_priority": "critical",
+                        "description": "Удаление файлов  подтверждение Садовника обязательно.",
+                        "category": "A"
+                    }
+                }
+            },
+            "core": {
+                "description": "Основные инструкции рабочего процесса СР v3.0",
+                "files": {
+                    "sr_role_v3": {
+                        "file": "core/sr_role_v3.json",
+                        "source_id": "INSTR-SR-ROLE-001",
+                        "size_kb": 4.7,
+                        "tags": ["sr", "role", "v3", "manager", "analyst"],
+                        "load_priority": "critical",
+                        "description": "Роль СР v3.0  менеджер-аналитик. Что делает, что НЕ делает, формат ТЗ для внешнего ИИ.",
+                        "category": "A"
+                    },
+                    "sr_workflow": {
+                        "file": "core/sr_workflow.json",
+                        "source_id": "INSTR-003",
+                        "size_kb": 2.9,
+                        "tags": ["workflow", "sr", "analyst", "delegation"],
+                        "load_priority": "critical",
+                        "description": "Рабочий процесс СР v3.0  аналитик ядра, патчи с pre_check, делегирование External AI.",
+                        "category": "A"
+                    }
+                }
+            }
+        }
+    },
+    "resonance": {
+        "with_core_map": "100%",
+        "with_boot_online": "100%",
+        "with_registry": "100%"
+    },
+    "directives": {
+        "primary": "Все сегменты инструкций должны загружаться перед любой работой с файлами",
+        "secondary": "External AI получает чёткие брифы через claude_workflow.json"
+    }
 }
