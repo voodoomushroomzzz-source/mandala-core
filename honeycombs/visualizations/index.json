@@ -1,70 +1,19 @@
 ﻿{
-    "identity":  {
-                     "module_id":  "VISUALIZATIONS-001",
-                     "name":  "Р‘РёР±Р»РёРѕС‚РµРєР° РІРёР·СѓР°Р»РёР·Р°С†РёР№",
-                     "version":  "v2.2.0",
-                     "layer":  4,
-                     "type":  "visualization_library",
-                     "description":  "Р“РѕС‚РѕРІС‹Рµ РІРёР·СѓР°Р»РёР·Р°С†РёРё РґР»СЏ dashboard Рё РѕС‚С‡С‘С‚РѕРІ",
-                     "priority":  "low",
-                     "tags":  [
-                                  "visualizations",
-                                  "charts",
-                                  "graphs",
-                                  "layer_4"
-                              ],
-                     "compliance":  "v2.0_standard"
-                 },
-    "meta":  {
-                 "honeycomb_name":  "visualizations",
-                 "parent_honeycomb":  "dashboard",
-                 "total_files":  1,
-                 "total_size_kb":  2.0,
-                 "segments":  1,
-                 "creation_date":  "2026-03-05"
-             },
-    "structure":  {
-                      "segments":  {
-                                       "charts":  {
-                                                      "files":  {
-                                                                    "health_charts":  {
-                                                                                          "file":  "health_charts.json",
-                                                                                          "size_kb":  2.0,
-                                                                                          "description":  "Р“СЂР°С„РёРєРё РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ health СЃРѕС‚"
-                                                                                      }
-                                                                }
-                                                  },
-                                       "dashboards":  {
-                                                          "files":  {
-                                                                        "dashboard_widgets":  {
-                                                                                                  "file":  "dashboard_widgets.json",
-                                                                                                  "size_kb":  2.0,
-                                                                                                  "description":  "Р’РёРґР¶РµС‚С‹ РґР»СЏ dashboard"
-                                                                                              }
-                                                                    }
-                                                      }
-                                   }
-                  },
-    "visualization_types":  {
-                                "health_timeline":  "РіСЂР°С„РёРє_health_СЃРѕ_РІСЂРµРјРµРЅРµРј",
-                                "dependency_map":  "РёРЅС‚РµСЂР°РєС‚РёРІРЅР°СЏ_РєР°СЂС‚Р°_Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№",
-                                "compliance_radar":  "СЂР°РґР°СЂ_СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ_СЃС‚Р°РЅРґР°СЂС‚Р°Рј",
-                                "growth_chart":  "РіСЂР°С„РёРє_СЂРѕСЃС‚Р°_СЃРёСЃС‚РµРјС‹"
-                            },
-    "integration":  {
-                        "with_dashboard":  "РїРѕСЃС‚Р°РІРєР°_РІРёРґР¶РµС‚РѕРІ",
-                        "with_analytics":  "РІРёР·СѓР°Р»РёР·Р°С†РёСЏ_РґР°РЅРЅС‹С…",
-                        "with_registry":  "РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ_СЃС‚Р°С‚РёСЃС‚РёРєРё"
-                    },
-    "notes":  "РџРµСЂРІР°СЏ СЃРѕС‚Р° layer 4. Р’РёР·СѓР°Р»РёР·Р°С†РёСЏ РґР°РЅРЅС‹С… СЃРёСЃС‚РµРјС‹.",
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-07",
-                   "notes":  "Обновлено до v2.x (Шаг 2, resonance-2026-04-v2.3.2)"
-               }
+  "identity": {
+    "module_id": "VISUALIZATIONS-001",
+    "name": "Visualizations",
+    "version": "v2.2.0",
+    "created": "2026-03-30",
+    "updated": "2026-04-08",
+    "layer": 2,
+    "type": "visualizations",
+    "description": "Library of visualizations, dashboards and sacred geometry for the Mandala system.",
+    "status": "active",
+    "priority": "medium",
+    "tags": ["visualization", "dashboard", "geometry"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "language": "English (main core language)"
+  }
 }
