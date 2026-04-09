@@ -2,7 +2,7 @@
     "identity":  {
                      "module_id":  "BOOT-ONLINE-001",
                      "name":  "Boot Online  Р’РЅРµС€РЅРёР№ РР",
-                     "version":  "v2.8.1",
+                     "version":  "v2.8.2",
                      "created":  "2026-03-30",
                      "updated":  "2026-04-09",
                      "layer":  1,
@@ -93,6 +93,17 @@
                                                                    "3. Садовник копирует ссылку и вставляет в чат",
                                                                    "4. Система получает содержимое из API и работает с актуальной версией"
                                                                ]
-                                              }
+                                              },
+                    "context_refresh_triggers":  {
+                                                     "triggers":  [
+                                                                      "После каждых 10 сообщений в сессии",
+                                                                      "При смене типа задачи (JSON  Python  Git  PowerShell)",
+                                                                      "Перед генерацией любого PowerShell скрипта для терминала",
+                                                                      "Если чувствуешь неуверенность в правилах системы",
+                                                                      "По прямой команде Садовника: \"обнови контекст\""
+                                                                  ],
+                                                     "description":  "Когда внешний ИИ должен запросить перечитывание boot_online через API",
+                                                     "api_link":  "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/boot_online/index.json?ref=main"
+                                                 }
                 }
 }
