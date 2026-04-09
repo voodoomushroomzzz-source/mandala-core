@@ -49,7 +49,13 @@ body {
 .dot.error { background: #f43f5e; }
 main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
 .messages { display: flex; flex-direction: column; gap: 16px; }
-.msg { display: flex; width: fit-content; max-width: 70%; min-width: 60px; animation: fadeIn 0.2s; }
+.msg { 
+    display: flex; 
+    width: fit-content; 
+    max-width: 70%; 
+    min-width: 60px; 
+    animation: fadeIn 0.2s; 
+}
 .msg.user { align-self: flex-end; }
 .msg.assistant { align-self: flex-start; }
 .msg.system { align-self: center; max-width: 90%; }
