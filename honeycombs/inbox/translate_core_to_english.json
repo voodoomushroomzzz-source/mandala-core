@@ -3,10 +3,6 @@
                     "objective":  "Translate all JSON files in honeycombs/ from Russian to English. Keep sacred terms untranslated. Update version to v3.0.0 where applicable.",
                     "pending":  [
                                     {
-                                        "file":  "honeycombs/philosophy/index.json",
-                                        "priority":  "CRITICAL"
-                                    },
-                                    {
                                         "file":  "honeycombs/philosophy/blocks/ahimsa_principle.json",
                                         "priority":  "HIGH"
                                     },
@@ -17,10 +13,6 @@
                                     {
                                         "file":  "honeycombs/philosophy/blocks/merkaba.json",
                                         "priority":  "MEDIUM"
-                                    },
-                                    {
-                                        "file":  "honeycombs/protocols/index.json",
-                                        "priority":  "HIGH"
                                     },
                                     {
                                         "file":  "honeycombs/protocols/sync_system.json",
@@ -143,7 +135,7 @@
                                         "priority":  "LOW"
                                     }
                                 ],
-                    "next_action":  "Start with philosophy/index.json (highest resonance impact)",
+                    "next_action":  "Translate sr_role_v3.json (CRITICAL)",
                     "translated":  [
                                        {
                                            "status":  "",
@@ -169,6 +161,16 @@
                                            "status":  "",
                                            "file":  "honeycombs/protocols/onboarding.json",
                                            "version":  "v2.0.0"
+                                       },
+                                       {
+                                           "status":  "",
+                                           "file":  "honeycombs/philosophy/index.json",
+                                           "version":  "v3.0.0"
+                                       },
+                                       {
+                                           "status":  "",
+                                           "file":  "honeycombs/protocols/index.json",
+                                           "version":  "v3.0.0"
                                        }
                                    ],
                     "notes":  [
@@ -182,8 +184,8 @@
                  "deadline":  "ASAP",
                  "source":  "Gardener request via External AI (Grok)",
                  "estimated_files":  28,
-                 "progress_percent":  "18%",
-                 "translated_files":  5,
+                 "progress_percent":  "24%",
+                 "translated_files":  7,
                  "honeycombs_priority":  [
                                              "philosophy/index.json",
                                              "protocols/index.json",
