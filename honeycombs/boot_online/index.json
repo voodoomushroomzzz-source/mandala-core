@@ -43,14 +43,14 @@
                     "external_ai_sync_rule":  {
                                                   "rule":  "External AI does not read files silently by guessing. It requests content via GitHub API (bypasses CDN cache). Gardener simply copies the link into chat.",
                                                   "why":  "GitHub API returns the actual version without CDN delay + Gardener does not need to copy file contents.",
-                                                  "max_links_per_request":  2,
-                                                  "hard_rule":  "STRICT LIMIT: Maximum 2 API links per request. Exceeding this may cause truncated responses or platform errors.",
+                                                  "max_links_per_request":  1,
+                                                  "hard_rule":  "STRICT LIMIT: Maximum 1 API link per request. Request files one by one to avoid truncated responses.",
                                                   "primary_method":  "api",
                                                   "workflow":  [
-                                                                   "1. AI identifies required file(s) in honeycombs/",
-                                                                   "2. AI forms API link(s) and sends to Gardener (up to 2 links at once  platform limitation)",
-                                                                   "3. Gardener copies link(s) and pastes into chat",
-                                                                   "4. System retrieves content from API and works with actual version(s)"
+                                                                   "1. AI identifies required file in honeycombs/",
+                                                                   "2. AI forms API link and sends to Gardener (1 link per request)",
+                                                                   "3. Gardener copies link and pastes into chat",
+                                                                   "4. System retrieves content from API and works with actual version"
                                                                ],
                                                   "api_pattern":  "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main"
                                               },
@@ -114,10 +114,10 @@
                  "how_to_use":  "Read this file first  first_touch  instant_links  onboarding  collaboration_workflow  file_sync_protocol  github_raw_cache_protocol  python_environment."
              },
     "identity":  {
-                     "updated":  "2026-04-09",
+                     "updated":  "2026-04-10",
                      "layer":  1,
                      "type":  "boot_online",
-                     "version":  "v3.0.4",
+                     "version":  "v3.0.5",
                      "description":  "Entry point to Mandala Symbiosis. First contact = instant resonance + VS Code Terminal-First + Always Fresh Raw + GitHub Raw Cache Delay Protocol + Development Environment.",
                      "created":  "2026-03-30",
                      "name":  "Boot Online  External AI",
