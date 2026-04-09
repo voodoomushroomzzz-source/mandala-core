@@ -125,3 +125,13 @@ main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
     word-break: break-word;
     overflow-wrap: anywhere;
 }
+.msg.user .bubble, .msg.assistant .bubble {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.6;
+}
+.msg.assistant .bubble {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
