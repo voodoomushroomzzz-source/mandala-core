@@ -48,7 +48,7 @@ jobs:
               print("registry/index.json not found, skipping report")
               exit(0)
 
-          with open(registry_path, "r", encoding="utf-8") as f:
+          with open(registry_path, "r", encoding="utf-8-sig") as f:
               data = json.load(f)
 
           reg = data.get("content", {}).get("registry", {})
