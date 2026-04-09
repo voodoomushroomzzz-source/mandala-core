@@ -1,1 +1,72 @@
-{"identity":{"module_id":"REGISTRY-SCANNER-001","name":"Модуль сканирования сот","version":"v1.0.0","created":"2026-03-05","layer":3,"type":"registry_scanner","description":"Автоматическое сканирование honeycombs/ директории для регистрации сот","status":"active","priority":"high","tags":["registry","scanner","automation","monitoring"],"resonance":"100%"},"meta":{"description":"Сканирует директорию honeycombs/ и автоматически регистрирует все соты","status":"active","priority":"high","update_frequency":"при каждом изменении"},"content":{"purpose":"Автоматическое обнаружение и регистрация всех сот в системе для централизованного управления","functionality":["Рекурсивное сканирование honeycombs/ директории","Обнаружение файлов index.json","Валидация структуры сот","Автоматическое обновление главного индекса","Отслеживание изменений"],"scanning_logic":{"depth":"рекурсивно все уровни вложенности","target_files":["index.json","*.json с identity секцией"],"validation_rules":["Проверка структуры v2.0","Проверка резонанса","Проверка обязательных полей","Проверка ссылок между сотами"],"update_triggers":["Новая сота обнаружена","Сота удалена","Сота изменена","Ручной запуск"]},"integration":{"with_index":"honeycombs/roadmaps/index.json","with_health_check":"будущий модуль","with_dashboard":"будущий модуль","with_github_actions":"автоматический запуск при push"},"implementation":{"language":"Python","dependencies":["os","json","pathlib","gitpython"],"architecture":"Модульная, расширяемая","error_handling":"Логирование ошибок, graceful degradation","performance":"Асинхронное сканирование для больших структур"},"output":{"registry_file":"honeycombs/registry/registry.json","statistics":"количество сот, статусы, резонанс","changes_detected":"новые, изменённые, удалённые соты","validation_errors":"список ошибок валидации"},"navigation":{"parent_honeycomb":"honeycombs/registry/index.json","next_module":"registry_validator","previous_module":"none","related_to":["RM-008 Система мониторинга и реестра","RM-007 Тестирование и валидация"]}}
+{
+    "git_integration":  {
+                            "require_token":  true,
+                            "push_enabled":  true,
+                            "auto_commit":  true,
+                            "commit_message_template":  "Auto-scan: {timestamp}"
+                        },
+    "validation":  {
+                       "strict_mode":  false,
+                       "recommended_meta_fields":  [
+                                                       "description",
+                                                       "status",
+                                                       "priority",
+                                                       "tags"
+                                                   ],
+                       "resonance_threshold":  "100%",
+                       "required_identity_fields":  [
+                                                        "module_id",
+                                                        "name",
+                                                        "version",
+                                                        "layer",
+                                                        "type"
+                                                    ]
+                   },
+    "scanning_logic":  {
+                           "exclude_patterns":  [
+                                                    ".*",
+                                                    "__*",
+                                                    "*.log",
+                                                    "*.tmp"
+                                                ],
+                           "validation_rules":  [
+                                                    "v2_structure_check",
+                                                    "required_fields_check",
+                                                    "module_id_format_check"
+                                                ],
+                           "depth":  "recursive_all_levels",
+                           "target_files":  [
+                                                "index.json"
+                                            ],
+                           "update_triggers":  [
+                                                   "new_honeycomb_detected",
+                                                   "honeycomb_modified",
+                                                   "content_hash_changed"
+                                               ]
+                       },
+    "reporting":  {
+                      "reports_dir":  "reports",
+                      "generate_json":  true,
+                      "max_errors_in_summary":  10,
+                      "generate_markdown":  true
+                  },
+    "identity":  {
+                     "updated":  "2026-04-09",
+                     "layer":  "core",
+                     "type":  "scanner_config",
+                     "version":  "v1.0.0",
+                     "description":  "Configuration file for honeycomb_scanner.py. Defines scanning logic, validation rules, and update triggers.",
+                     "created":  "2026-04-09",
+                     "name":  "Honeycomb Scanner Configuration",
+                     "module_id":  "SCANNER-CONFIG-001",
+                     "resonance":  "100%",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "scanner",
+                                  "config",
+                                  "registry",
+                                  "automation"
+                              ]
+                 }
+}
