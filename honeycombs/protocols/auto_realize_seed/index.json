@@ -1,37 +1,45 @@
-﻿{
-    "identity": {
-        "module_id": "PROTO-AUTO-REALIZE-001",
-        "name": "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ СЃРµРјСЏРЅ",
-        "version": "v2.2.0",
-        "created": "2026-03-05",
-        "updated": "2026-04-08",
-        "layer": 3,
-        "type": "protocol",
-        "description": "РџСЂРѕС‚РѕРєРѕР» Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РјР°С‚РµСЂРёР°Р»РёР·Р°С†РёРё СЃРµРјСЏРЅ РёР· honeycombs/seeds РІ РїРѕР»РЅРѕС†РµРЅРЅС‹Рµ СЃРѕС‚С‹. РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃРѕР·РґР°С‘С‚ index.json, СЃС‚СЂСѓРєС‚СѓСЂСѓ Рё Р·Р°РїСѓСЃРєР°РµС‚ СЂРµР·РѕРЅР°РЅСЃ.",
-        "status": "active",
-        "priority": "high",
-        "tags": [
-            "protocol",
-            "auto_realize",
-            "seeds",
-            "materialization"
-        ]
-    },
-    "meta": {
-        "parent_protocol": "protocols/index.json",
-        "total_size_kb": 2.1,
-        "migration_status": "completed_v2.2"
-    },
-    "content": {
-        "description": "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїРµСЂРµРІРѕРґРёС‚ СЃРµРјРµРЅР° РІ СЂР°Р±РѕС‡РёРµ honeycombs",
-        "trigger": "РїРѕ РєРѕРјР°РЅРґРµ Р’СѓРґСѓ РёР»Рё РїСЂРё РѕР±РЅР°СЂСѓР¶РµРЅРёРё РЅРѕРІРѕРіРѕ seed"
-    },
-    "resonance": {
-        "with_seeds": "100%",
-        "with_core_map": "100%",
-        "with_registry": "100%"
-    },
-    "directives": {
-        "primary": "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РјР°С‚РµСЂРёР°Р»РёР·РѕРІС‹РІР°С‚СЊ СЃРµРјРµРЅР° РІ РїРѕР»РЅРѕС†РµРЅРЅС‹Рµ СЃРѕС‚С‹"
-    }
+{
+    "content":  {
+                    "description":  "Automatically transforms seeds into working honeycombs",
+                    "workflow":  [
+                                     "1. Scan honeycombs/seeds/ for active seeds (status: ready)",
+                                     "2. For each seed, create target honeycomb directory",
+                                     "3. Generate index.json from seed template",
+                                     "4. Create required subdirectories and files",
+                                     "5. Register new honeycomb in registry",
+                                     "6. Trigger Integrity-Scan to validate",
+                                     "7. Report created honeycombs to Gardener"
+                                 ],
+                    "trigger":  "By Voodoo command or upon detection of a new seed"
+                },
+    "resonance":  {
+                      "with_seeds":  "100%",
+                      "with_registry":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "meta":  {
+                 "migration_status":  "completed_v3.0.0",
+                 "total_size_kb":  2.1,
+                 "parent_protocol":  "protocols/index.json"
+             },
+    "identity":  {
+                     "updated":  "2026-04-09",
+                     "layer":  3,
+                     "type":  "protocol",
+                     "version":  "v3.0.0",
+                     "description":  "Automatic materialization of seeds from honeycombs/seeds into full honeycombs. Creates index.json, structure, and launches resonance.",
+                     "created":  "2026-03-05",
+                     "name":  "Protocol: Auto-Realize Seeds",
+                     "module_id":  "PROTO-AUTO-REALIZE-001",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "protocol",
+                                  "auto_realize",
+                                  "seeds",
+                                  "materialization",
+                                  "english_core",
+                                  "v3.0.0"
+                              ]
+                 }
 }
