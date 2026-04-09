@@ -1,91 +1,190 @@
-﻿{
-    "identity": {
-        "module_id": "INSTR-HONEYCOMB-001",
-        "name": "РЎРѕС‚Р° РёРЅСЃС‚СЂСѓРєС†РёР№",
-        "version": "v2.1.0",
-        "created": "2026-03-01",
-        "updated": "2026-04-08",
-        "layer": 2,
-        "type": "honeycomb_manifest",
-        "description": "РњР°РЅРёС„РµСЃС‚ СЃРѕС‚С‹ РёРЅСЃС‚СЂСѓРєС†РёР№. РРЅСЃС‚СЂСѓРєС†РёРё РґР»СЏ РЎР : СЂРѕР»СЊ v3.0, РїР°С‚С‡Рё, РґРµР»РµРіРёСЂРѕРІР°РЅРёРµ РІРЅРµС€РЅРµРјСѓ РР, СЃС‚Р°РЅРґР°СЂС‚С‹ СЂР°Р±РѕС‚С‹.",
-        "status": "active",
-        "priority": "critical",
-        "tags": [
-            "instructions",
-            "honeycomb",
-            "core",
-            "mandala",
-            "external_ai",
-            "sr_v3"
-        ]
-    },
-    "meta": {
-        "honeycomb_name": "instructions",
-        "parent_honeycomb": "core_map",
-        "segments": 2,
-        "total_files": 8,
-        "total_size_kb": 26.0,
-        "segmentation_strategy": "critical (РїР°С‚С‡Рё/СѓРґР°Р»РµРЅРёРµ) Рё core (СЂРѕР»СЊ РЎР , workflow, СЃС‚Р°РЅРґР°СЂС‚С‹)",
-        "load_strategy": "Р›РµРЅРёРІР°СЏ Р·Р°РіСЂСѓР·РєР° СЃРµРіРјРµРЅС‚РѕРІ",
-        "abc_categories": "A=РЎР  РІРЅСѓС‚СЂРµРЅРЅСЏСЏ СЂР°Р±РѕС‚Р°, B=РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ External AI, C=GitHub/РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹"
-    },
-    "structure": {
-        "segments": {
-            "critical": {
-                "description": "РљСЂРёС‚РёС‡РµСЃРєРёРµ РёРЅСЃС‚СЂСѓРєС†РёРё  С‡РёС‚Р°С‚СЊ РїРµСЂРµРґ Р»СЋР±С‹Рј РёР·РјРµРЅРµРЅРёРµРј С„Р°Р№Р»РѕРІ",
-                "files": {
-                    "patch_mastery": {
-                        "file": "critical/patch_mastery.json",
-                        "source_id": "INSTR-PATCH-001",
-                        "size_kb": 6.3,
-                        "tags": ["critical", "patch", "mastery", "pre_check"],
-                        "load_priority": "critical",
-                        "description": "Р¤РѕСЂРјР°С‚С‹ РїР°С‚С‡РµР№ v2.3. pre_check РѕР±СЏР·Р°С‚РµР»РµРЅ. content  РќР• РѕР±СЉРµРєС‚.",
-                        "category": "A"
-                    },
-                    "file_deletion_guide": {
-                        "file": "critical/file_deletion_guide.json",
-                        "source_id": "INSTR-DELETE-001",
-                        "size_kb": 2.6,
-                        "tags": ["delete", "guide", "critical"],
-                        "load_priority": "critical",
-                        "description": "РЈРґР°Р»РµРЅРёРµ С„Р°Р№Р»РѕРІ  РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РЎР°РґРѕРІРЅРёРєР° РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ.",
-                        "category": "A"
-                    }
-                }
-            },
-            "core": {
-                "description": "РћСЃРЅРѕРІРЅС‹Рµ РёРЅСЃС‚СЂСѓРєС†РёРё СЂР°Р±РѕС‡РµРіРѕ РїСЂРѕС†РµСЃСЃР° РЎР  v3.0",
-                "files": {
-                    "sr_role_v3": {
-                        "file": "core/sr_role_v3.json",
-                        "source_id": "INSTR-SR-ROLE-001",
-                        "size_kb": 4.7,
-                        "tags": ["sr", "role", "v3", "manager", "analyst"],
-                        "load_priority": "critical",
-                        "description": "Р РѕР»СЊ РЎР  v3.0  РјРµРЅРµРґР¶РµСЂ-Р°РЅР°Р»РёС‚РёРє. Р§С‚Рѕ РґРµР»Р°РµС‚, С‡С‚Рѕ РќР• РґРµР»Р°РµС‚, С„РѕСЂРјР°С‚ РўР— РґР»СЏ РІРЅРµС€РЅРµРіРѕ РР.",
-                        "category": "A"
-                    },
-                    "sr_workflow": {
-                        "file": "core/sr_workflow.json",
-                        "source_id": "INSTR-003",
-                        "size_kb": 2.9,
-                        "tags": ["workflow", "sr", "analyst", "delegation"],
-                        "load_priority": "critical",
-                        "description": "Р Р°Р±РѕС‡РёР№ РїСЂРѕС†РµСЃСЃ РЎР  v3.0  Р°РЅР°Р»РёС‚РёРє СЏРґСЂР°, РїР°С‚С‡Рё СЃ pre_check, РґРµР»РµРіРёСЂРѕРІР°РЅРёРµ External AI.",
-                        "category": "A"
-                    }
-                }
-            }
-        }
-    },
-    "resonance": {
-        "with_core_map": "100%",
-        "with_boot_online": "100%",
-        "with_registry": "100%"
-    },
-    "directives": {
-        "primary": "Р’СЃРµ СЃРµРіРјРµРЅС‚С‹ РёРЅСЃС‚СЂСѓРєС†РёР№ РґРѕР»Р¶РЅС‹ Р·Р°РіСЂСѓР¶Р°С‚СЊСЃСЏ РїРµСЂРµРґ Р»СЋР±РѕР№ СЂР°Р±РѕС‚РѕР№ СЃ С„Р°Р№Р»Р°РјРё",
-        "secondary": "External AI РїРѕР»СѓС‡Р°РµС‚ С‡С‘С‚РєРёРµ Р±СЂРёС„С‹ С‡РµСЂРµР· claude_workflow.json"
-    }
+{
+    "directives":  {
+                       "primary":  "SR reads critical and core segments on every session start. Newest instructions first.",
+                       "secondary":  "External AI must read external_ai_vs_code_workflow.json before generating any PowerShell commands."
+                   },
+    "resonance":  {
+                      "with_registry":  "100%",
+                      "with_boot_online":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "structure":  {
+                      "segments":  {
+                                       "critical":  {
+                                                        "description":  "Mandatory instructions. Immutable core rules for file operations.",
+                                                        "files":  {
+                                                                      "file_deletion_guide":  {
+                                                                                                  "description":  "Safe file deletion guide for SR. Mandatory read before any deletion.",
+                                                                                                  "size_kb":  2.6,
+                                                                                                  "category":  "A",
+                                                                                                  "tags":  [
+                                                                                                               "delete",
+                                                                                                               "guide",
+                                                                                                               "critical"
+                                                                                                           ],
+                                                                                                  "source_id":  "INSTR-DELETE-001",
+                                                                                                  "load_priority":  "critical",
+                                                                                                  "file":  "critical/file_deletion_guide.json"
+                                                                                              },
+                                                                      "patch_mastery":  {
+                                                                                            "description":  "Complete patch mastery v2.3. pre_check mandatory. content must be STRING.",
+                                                                                            "size_kb":  6.3,
+                                                                                            "category":  "A",
+                                                                                            "tags":  [
+                                                                                                         "critical",
+                                                                                                         "patch",
+                                                                                                         "mastery",
+                                                                                                         "pre_check"
+                                                                                                     ],
+                                                                                            "source_id":  "INSTR-PATCH-001",
+                                                                                            "load_priority":  "critical",
+                                                                                            "file":  "critical/patch_mastery.json"
+                                                                                        }
+                                                                  }
+                                                    },
+                                       "core":  {
+                                                    "description":  "Core SR v3.0 instructions: role, workflows, and External AI integration",
+                                                    "files":  {
+                                                                  "manifest_standard_v2":  {
+                                                                                               "description":  "Honeycomb manifest standard v2.x specification.",
+                                                                                               "size_kb":  5.7,
+                                                                                               "category":  "A",
+                                                                                               "tags":  [
+                                                                                                            "manifest",
+                                                                                                            "standard",
+                                                                                                            "v2",
+                                                                                                            "honeycomb"
+                                                                                                        ],
+                                                                                               "source_id":  "INSTR-MANIFEST-001",
+                                                                                               "load_priority":  "high",
+                                                                                               "file":  "core/manifest_standard_v2.json"
+                                                                                           },
+                                                                  "folder_management":  {
+                                                                                            "description":  "Folder structure and management rules for honeycombs.",
+                                                                                            "size_kb":  5.2,
+                                                                                            "category":  "C",
+                                                                                            "tags":  [
+                                                                                                         "folder",
+                                                                                                         "management",
+                                                                                                         "organization"
+                                                                                                     ],
+                                                                                            "source_id":  "INSTR-FOLDER-001",
+                                                                                            "load_priority":  "medium",
+                                                                                            "file":  "core/folder_management.json"
+                                                                                        },
+                                                                  "claude_workflow":  {
+                                                                                          "description":  "Claude-specific workflow: PowerShell UTF8NoBOM, handoff process, TZ format.",
+                                                                                          "size_kb":  3.7,
+                                                                                          "category":  "B",
+                                                                                          "tags":  [
+                                                                                                       "claude",
+                                                                                                       "external_ai",
+                                                                                                       "delegation",
+                                                                                                       "powershell"
+                                                                                                   ],
+                                                                                          "source_id":  "INSTR-CLAUDE-001",
+                                                                                          "load_priority":  "high",
+                                                                                          "file":  "core/claude_workflow.json"
+                                                                                      },
+                                                                  "file_naming":  {
+                                                                                      "description":  "File naming conventions for honeycombs.",
+                                                                                      "size_kb":  1.5,
+                                                                                      "category":  "C",
+                                                                                      "tags":  [
+                                                                                                   "naming",
+                                                                                                   "convention",
+                                                                                                   "files"
+                                                                                               ],
+                                                                                      "source_id":  "INSTR-NAMING-001",
+                                                                                      "load_priority":  "medium",
+                                                                                      "file":  "core/file_naming.json"
+                                                                                  },
+                                                                  "sr_role_v3":  {
+                                                                                     "size_kb":  4.8,
+                                                                                     "category":  "A",
+                                                                                     "version":  "v3.0.0",
+                                                                                     "load_priority":  "critical",
+                                                                                     "tags":  [
+                                                                                                  "sr",
+                                                                                                  "role",
+                                                                                                  "v3",
+                                                                                                  "manager",
+                                                                                                  "analyst"
+                                                                                              ],
+                                                                                     "created":  "2026-03-30",
+                                                                                     "description":  "SR Role v3.0  Core manager-analyst. Does NOT write code, analyzes, prepares TZ for External AI.",
+                                                                                     "source_id":  "INSTR-SR-ROLE-001",
+                                                                                     "file":  "core/sr_role_v3.json"
+                                                                                 },
+                                                                  "external_ai_vs_code_workflow":  {
+                                                                                                       "size_kb":  8.1,
+                                                                                                       "category":  "B",
+                                                                                                       "version":  "v1.0.0",
+                                                                                                       "load_priority":  "high",
+                                                                                                       "tags":  [
+                                                                                                                    "external_ai",
+                                                                                                                    "vs_code",
+                                                                                                                    "powershell",
+                                                                                                                    "terminal_first",
+                                                                                                                    "git",
+                                                                                                                    "json_patch"
+                                                                                                                ],
+                                                                                                       "created":  "2026-04-09",
+                                                                                                       "description":  "Complete VS Code workflow for External AI: PowerShell commands, JSON updates, git cycle, Python environment.",
+                                                                                                       "source_id":  "INSTR-EXT-AI-VSCODE-001",
+                                                                                                       "file":  "core/external_ai_vs_code_workflow.json"
+                                                                                                   },
+                                                                  "sr_workflow":  {
+                                                                                      "size_kb":  3.9,
+                                                                                      "category":  "A",
+                                                                                      "version":  "v2.0.0",
+                                                                                      "load_priority":  "critical",
+                                                                                      "tags":  [
+                                                                                                   "workflow",
+                                                                                                   "sr",
+                                                                                                   "analyst",
+                                                                                                   "delegation"
+                                                                                               ],
+                                                                                      "created":  "2026-03-01",
+                                                                                      "description":  "SR Workflow v2.0  Core analysis, patching with pre_check, delegation to External AI.",
+                                                                                      "source_id":  "INSTR-003",
+                                                                                      "file":  "core/sr_workflow.json"
+                                                                                  }
+                                                              }
+                                                }
+                                   }
+                  },
+    "meta":  {
+                 "segments":  2,
+                 "segmentation_strategy":  "critical (mandatory/immutable) + core (SR v3.0 role, workflows, External AI integration)",
+                 "total_files":  9,
+                 "abc_categories":  "A=SR-critical instructions, B=External AI workflows, C=GitHub/repository guides",
+                 "parent_honeycomb":  "core_map",
+                 "load_strategy":  "AI reads both segments on session start",
+                 "total_size_kb":  34,
+                 "honeycomb_name":  "instructions"
+             },
+    "identity":  {
+                     "updated":  "2026-04-09",
+                     "layer":  2,
+                     "type":  "honeycomb_manifest",
+                     "version":  "v3.0.0",
+                     "description":  "Master index of all instructions. SR instructions: v3.0 role, workflow, and External AI integration.",
+                     "created":  "2026-03-01",
+                     "name":  "Instructions Honeycomb",
+                     "module_id":  "INSTR-HONEYCOMB-001",
+                     "resonance":  "100%",
+                     "status":  "active",
+                     "priority":  "critical",
+                     "tags":  [
+                                  "instructions",
+                                  "honeycomb",
+                                  "core",
+                                  "mandala",
+                                  "external_ai",
+                                  "sr_v3",
+                                  "vs_code_workflow",
+                                  "english_core"
+                              ]
+                 }
 }
