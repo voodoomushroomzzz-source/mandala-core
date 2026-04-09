@@ -1,0 +1,56 @@
+﻿{
+    "task_id": "T-005",
+    "name": "Scout Agent  Autonomous Discovery (Ideas, Funding, Impact)",
+    "status": "todo",
+    "priority": "MEDIUM",
+    "deadline": "2026-05-15",
+    "created": "2026-04-10",
+    "updated": "2026-04-10",
+    "description": "Implement Scout Agent for autonomous discovery of resonant ideas, funding opportunities (grants, crowdfunding), and real-world impact use cases. Store findings in Seeds/ for evaluation.",
+    "tags": ["scout", "agent", "discovery", "funding", "impact", "seeds", "RM-003"],
+    "progress": 0,
+    "roadmap_ref": "RM-003",
+    "notes": "Full implementation of RM-003. Covers ideas, funding, and impact discovery.",
+    "plan": {
+        "phase_1": {
+            "name": "Search Core",
+            "deliverables": ["scout_search.py with GitHub, ArXiv, Hacker News, Reddit"],
+            "estimated": "3 hours"
+        },
+        "phase_2": {
+            "name": "Seed Generator",
+            "deliverables": ["scout_seed.py", "integration with honeycombs/seeds/"],
+            "estimated": "2 hours"
+        },
+        "phase_3": {
+            "name": "Resonance Scorer",
+            "deliverables": ["scout_resonance.py"],
+            "estimated": "2 hours"
+        },
+        "phase_4": {
+            "name": "Scheduler",
+            "deliverables": ["Weekly GitHub Actions workflow"],
+            "estimated": "1 hour"
+        },
+        "phase_5": {
+            "name": "Gardener Review UI",
+            "deliverables": ["scout_review.py"],
+            "estimated": "2 hours"
+        },
+        "phase_6": {
+            "name": "Funding Scraper",
+            "deliverables": ["Grants.gov, Kickstarter, Crunchbase integrations"],
+            "estimated": "3 hours"
+        },
+        "phase_7": {
+            "name": "Impact Discovery",
+            "deliverables": ["Use case scraper for AI for Good"],
+            "estimated": "2 hours"
+        },
+        "phase_8": {
+            "name": "Opportunity Matcher",
+            "deliverables": ["Matching algorithm for grants/roadmaps"],
+            "estimated": "2 hours"
+        }
+    }
+}
