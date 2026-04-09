@@ -1,32 +1,37 @@
-﻿{
-  "identity": {
-    "module_id": "PROTO-006",
-    "name": "Auto Realize Seed",
-    "version": "v2.1.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 2,
-    "type": "sub_protocol",
-    "description": "Automatically realizes any seed from the inbox or seeds folder with full resonance and Ahimsa compliance.",
-    "status": "active",
-    "priority": "high",
-    "tags": ["auto", "realization", "seed", "automation"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "purpose": "Turn any idea/seed into a living honeycomb without manual intervention when conditions are met.",
-    "language": "English (main core language)"
-  },
-  "activation_conditions": [
-    "Seed is marked as ready in inbox",
-    "Gardener confirms with 'auto_realize_seed' command",
-    "System resonance is above 95%"
-  ],
-  "process": {
-    "step1": "Read seed from inbox/seeds",
-    "step2": "Create new honeycomb structure",
-    "step3": "Apply philosophy and Ahimsa checks",
-    "step4": "Update core_map and registry",
-    "step5": "Commit and push changes"
-  }
+{
+    "identity": {
+        "module_id": "PROTO-AUTO-REALIZE-001",
+        "name": "Автоматическая реализация семян",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 3,
+        "type": "protocol",
+        "description": "Протокол автоматической материализации семян из honeycombs/seeds в полноценные соты. Автоматически создаёт index.json, структуру и запускает резонанс.",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "protocol",
+            "auto_realize",
+            "seeds",
+            "materialization"
+        ]
+    },
+    "meta": {
+        "parent_protocol": "protocols/index.json",
+        "total_size_kb": 2.1,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Автоматически переводит семена в рабочие honeycombs",
+        "trigger": "по команде Вуду или при обнаружении нового seed"
+    },
+    "resonance": {
+        "with_seeds": "100%",
+        "with_core_map": "100%",
+        "with_registry": "100%"
+    },
+    "directives": {
+        "primary": "Автоматически материализовывать семена в полноценные соты"
+    }
 }
