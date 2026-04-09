@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandala  Engineer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/state.js" type="module"></script>
+    <script src="js/ws.js" type="module"></script>
+    <script src="components/protocol-bar.js" type="module"></script>
+    <script src="components/chat-view.js" type="module"></script>
+    <script src="components/hive-view.js" type="module"></script>
+    <script src="app.js" type="module"></script>
+</head>
+<body>
+    <header class="toolbar">
+        <div class="logo"> Mandala</div>
+        <protocol-bar></protocol-bar>
+        <div class="status">
+            <span class="dot" id="statusDot"></span>
+            <span id="coreVersion"></span>
+        </div>
+    </header>
+    <main>
+        <chat-view></chat-view>
+        <hive-view hidden></hive-view>
+    </main>
+    <footer class="input-bar">
+        <input type="text" id="messageInput" placeholder="Впиши волну" autofocus>
+        <button id="sendBtn"></button>
+    </footer>
+</body>
+</html>

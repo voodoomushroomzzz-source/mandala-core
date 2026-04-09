@@ -1,0 +1,102 @@
+:root {
+    --bg: #0a0f0c;
+    --surface: #121a16;
+    --border: #1e2a24;
+    --text: #c0d6cc;
+    --text-dim: #5c6e66;
+    --accent: #10b981;
+    --accent-glow: rgba(16,185,129,0.15);
+    --radius: 6px;
+    --font-mono: 'Fira Mono', monospace;
+    --font-sans: system-ui, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+}
+.logo {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--accent);
+}
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+}
+.dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+}
+.dot.connecting { background: #a78bfa; box-shadow: 0 0 8px #a78bfa; }
+.dot.error { background: #f43f5e; box-shadow: 0 0 8px #f43f5e; }
+main {
+    flex: 1;
+    overflow: hidden;
+}
+chat-view, hive-view {
+    display: block;
+    height: 100%;
+    overflow-y: auto;
+    padding: 16px;
+}
+.input-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+}
+.input-bar input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.input-bar input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.input-bar button {
+    width: 44px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: var(--bg);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.input-bar button:hover {
+    background: #34d399;
+    box-shadow: 0 0 16px var(--accent);
+}
+.input-bar button.stop {
+    background: #f43f5e;
+}
