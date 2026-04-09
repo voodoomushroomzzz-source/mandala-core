@@ -3,8 +3,236 @@
     "registry": {
       "honeycombs": [
         {
+          "honeycomb_id": "registry",
+          "path": "honeycombs/registry/index.json",
+          "relative_path": "registry",
+          "name": "Unknown",
+          "module_id": "registry",
+          "version": "Unknown",
+          "layer": "core",
+          "type": "central_registry",
+          "status": "active",
+          "description": "",
+          "tags": [],
+          "resonance": "0%",
+          "is_v2_compliant": false,
+          "validation_details": {
+            "errors": [
+              "Отсутствует обязательное поле identity.name",
+              "Отсутствует обязательное поле identity.version"
+            ],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": [
+              "identity.name",
+              "identity.version"
+            ]
+          },
+          "hash": "ed69a1744377b8393e5bc8d42e2e3c3c",
+          "last_modified": 1775754360.367092,
+          "file_count": 21,
+          "total_size_kb": 146.41,
+          "scan_timestamp": "2026-04-09T17:06:01.627979"
+        },
+        {
+          "honeycomb_id": "registry/notifications",
+          "path": "honeycombs/registry/notifications/index.json",
+          "relative_path": "registry/notifications",
+          "name": "Р РЋР С‘РЎРѓРЎвЂљР ВµР СР В° РЎС“Р Р†Р ВµР Т‘Р С•Р СР В»Р ВµР Р…Р С‘Р в„– Р С• Р С—РЎР‚Р С•Р В±Р В»Р ВµР СР В°РЎвЂ¦",
+          "module_id": "REGISTRY-NOTIFICATIONS-001",
+          "version": "v2.2.0",
+          "layer": 2,
+          "type": "notification_system",
+          "status": "active",
+          "description": "Р С’Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р Вµ РЎС“Р Р†Р ВµР Т‘Р С•Р СР В»Р ВµР Р…Р С‘РЎРЏ Р С• Р С—РЎР‚Р С•Р В±Р В»Р ВµР СР В°РЎвЂ¦ РЎРѓР С• Р В·Р Т‘Р С•РЎР‚Р С•Р Р†РЎРЉР ВµР С РЎРѓР С•РЎвЂљ",
+          "tags": [
+            "notifications",
+            "alerts",
+            "monitoring",
+            "registry"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "a45d68483e1cd793f4142cd7fd814321",
+          "last_modified": 1775754360.3684475,
+          "file_count": 1,
+          "total_size_kb": 5.49,
+          "scan_timestamp": "2026-04-09T17:06:01.628562"
+        },
+        {
+          "honeycomb_id": "registry/core",
+          "path": "honeycombs/registry/core/index.json",
+          "relative_path": "registry/core",
+          "name": "Р В Р ВµР ВµРЎРѓРЎвЂљРЎР‚ Р С”РЎР‚Р С‘РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘РЎвЂ¦ РЎРѓР С•РЎвЂљ",
+          "module_id": "REG-CORE-001",
+          "version": "v2.2.0",
+          "layer": 2,
+          "type": "registry_segment",
+          "status": "active",
+          "description": "Р РЋР ВµР С–Р СР ВµР Р…РЎвЂљ РЎР‚Р ВµР ВµРЎРѓРЎвЂљРЎР‚Р В° Р Т‘Р В»РЎРЏ РЎРѓР С•РЎвЂљ layers 1-2 (Р С”РЎР‚Р С‘РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р Вµ Р С‘ РЎРЏР Т‘РЎР‚Р С• РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№).",
+          "tags": [
+            "registry",
+            "core",
+            "critical",
+            "layers_1_2"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "f3e7962228de4e85f2d66995cb2f08fe",
+          "last_modified": 1775754360.366777,
+          "file_count": 6,
+          "total_size_kb": 17.61,
+          "scan_timestamp": "2026-04-09T17:06:01.629132"
+        },
+        {
+          "honeycomb_id": "registry/backups",
+          "path": "honeycombs/registry/backups/index.json",
+          "relative_path": "registry/backups",
+          "name": "Р РЋР С‘РЎРѓРЎвЂљР ВµР СР В° backup Р С‘ Р Р†Р С•РЎРѓРЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ РЎРѓР С•РЎвЂљ",
+          "module_id": "REGISTRY-BACKUPS-001",
+          "version": "v2.2.0",
+          "layer": 2,
+          "type": "backup_system",
+          "status": "active",
+          "description": "Р С’Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С•Р Вµ РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р С‘Р Вµ backup РЎРѓР С•РЎвЂљ Р С—Р ВµРЎР‚Р ВµР Т‘ Р С‘Р В·Р СР ВµР Р…Р ВµР Р…Р С‘РЎРЏР СР С‘ Р С‘ Р Р†Р С•РЎРѓРЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р В»Р ВµР Р…Р С‘Р Вµ Р Р† РЎРѓР В»РЎС“РЎвЂЎР В°Р Вµ Р С—РЎР‚Р С•Р В±Р В»Р ВµР С",
+          "tags": [
+            "backup",
+            "recovery",
+            "safety",
+            "registry"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "0897798045a3e5b1c4a80f333729a3e1",
+          "last_modified": 1775754360.366777,
+          "file_count": 2,
+          "total_size_kb": 9.64,
+          "scan_timestamp": "2026-04-09T17:06:01.629575"
+        },
+        {
+          "honeycomb_id": "registry/modules",
+          "path": "honeycombs/registry/modules/index.json",
+          "relative_path": "registry/modules",
+          "name": "Модули системы",
+          "module_id": "REG-MODULES-001",
+          "version": "v2.2.0",
+          "layer": 4,
+          "type": "registry_segment",
+          "status": "active",
+          "description": "Модули и компоненты layer 4 Мандалы Симбиоза",
+          "tags": [
+            "modules",
+            "layer_4",
+            "components"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "8e56fb420ef6a803d0e7d88c96a45834",
+          "last_modified": 1775754360.3684475,
+          "file_count": 2,
+          "total_size_kb": 3.81,
+          "scan_timestamp": "2026-04-09T17:06:01.629945"
+        },
+        {
+          "honeycomb_id": "registry/extensions",
+          "path": "honeycombs/registry/extensions/index.json",
+          "relative_path": "registry/extensions",
+          "name": "Расширения системы",
+          "module_id": "REG-EXT-001",
+          "version": "v2.2.0",
+          "layer": 4,
+          "type": "registry_segment",
+          "status": "active",
+          "description": "Расширения и визуализации layer 4",
+          "tags": [
+            "extensions",
+            "layer_4",
+            "visualizations"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "6ef53c7a5f8bc742d9987ac00c4ab430",
+          "last_modified": 1775754360.3669162,
+          "file_count": 1,
+          "total_size_kb": 1.99,
+          "scan_timestamp": "2026-04-09T17:06:01.630313"
+        },
+        {
+          "honeycomb_id": "registry/dashboard",
+          "path": "honeycombs/registry/dashboard/index.json",
+          "relative_path": "registry/dashboard",
+          "name": "Dashboard Р СР С•Р Р…Р С‘РЎвЂљР С•РЎР‚Р С‘Р Р…Р С–Р В° Р В·Р Т‘Р С•РЎР‚Р С•Р Р†РЎРЉРЎРЏ РЎРѓР С•РЎвЂљ",
+          "module_id": "REGISTRY-DASHBOARD-001",
+          "version": "v2.2.0",
+          "layer": 2,
+          "type": "monitoring_tool",
+          "status": "active",
+          "description": "Р вЂ™Р С‘Р В·РЎС“Р В°Р В»РЎРЉР Р…Р В°РЎРЏ Р С—Р В°Р Р…Р ВµР В»РЎРЉ Р Т‘Р В»РЎРЏ Р СР С•Р Р…Р С‘РЎвЂљР С•РЎР‚Р С‘Р Р…Р С–Р В° Р В·Р Т‘Р С•РЎР‚Р С•Р Р†РЎРЉРЎРЏ Р Р†РЎРѓР ВµРЎвЂ¦ РЎРѓР С•РЎвЂљ РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№",
+          "tags": [
+            "dashboard",
+            "monitoring",
+            "health",
+            "registry"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "2d054692da13c5c0b28be123f34302a6",
+          "last_modified": 1775754360.3669162,
+          "file_count": 1,
+          "total_size_kb": 8.77,
+          "scan_timestamp": "2026-04-09T17:06:01.630702"
+        },
+        {
           "honeycomb_id": "akasha",
-          "path": "honeycombs\\akasha\\index.json",
+          "path": "honeycombs/akasha/index.json",
           "relative_path": "akasha",
           "name": "Akasha вЂ” Р–РёРІР°СЏ РїР°РјСЏС‚СЊ РњР°РЅРґР°Р»С‹",
           "module_id": "HONEYCOMB-AKASHA-001",
@@ -32,61 +260,28 @@
             "missing_fields": []
           },
           "hash": "1bb635175cb630f61a3134676bc13a13",
-          "last_modified": 1775725800.8177154,
+          "last_modified": 1775754360.3538985,
           "file_count": 4,
-          "total_size_kb": 17.85,
-          "scan_timestamp": "2026-04-09T12:38:29.830520"
+          "total_size_kb": 17.75,
+          "scan_timestamp": "2026-04-09T17:06:01.631206"
         },
         {
-          "honeycomb_id": "analytics",
-          "path": "honeycombs\\analytics\\index.json",
-          "relative_path": "analytics",
-          "name": "Р РЋР С‘РЎРѓРЎвЂљР ВµР СР В° Р В°Р Р…Р В°Р В»Р С‘РЎвЂљР С‘Р С”Р С‘ РЎРѓР С•РЎвЂљ",
-          "module_id": "ANALYTICS-001",
-          "version": "v2.2.0",
-          "layer": 3,
-          "type": "analytics_module",
-          "status": "active",
-          "description": "Р С’Р Р…Р В°Р В»Р С‘Р В· Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ РЎРѓР С•РЎвЂљ, health Р С‘РЎРѓРЎвЂљР С•РЎР‚Р С‘Р С‘, РЎвЂљР ВµР Р…Р Т‘Р ВµР Р…РЎвЂ Р С‘Р в„– РЎР‚Р В°Р В·Р Р†Р С‘РЎвЂљР С‘РЎРЏ",
-          "tags": [
-            "analytics",
-            "metrics",
-            "trends",
-            "layer_3"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "36bbdf72da8efe13094d218e27d83d62",
-          "last_modified": 1775725800.8177154,
-          "file_count": 1,
-          "total_size_kb": 4.97,
-          "scan_timestamp": "2026-04-09T12:38:29.833244"
-        },
-        {
-          "honeycomb_id": "awareness",
-          "path": "honeycombs\\awareness\\index.json",
-          "relative_path": "awareness",
-          "name": "РћСЃРѕР·РЅР°РЅРЅРѕСЃС‚СЊ",
-          "module_id": "AWARENESS-INDEX-001",
+          "honeycomb_id": "inbox",
+          "path": "honeycombs/inbox/index.json",
+          "relative_path": "inbox",
+          "name": "Inbox  Р Р†РЎвЂ¦Р С•Р Т‘РЎРЏРЎвЂ°Р С‘Р Вµ Р Т‘Р В»РЎРЏ Р РЋР В ",
+          "module_id": "HONEYCOMB-INBOX-001",
           "version": "v2.2.0",
           "layer": 2,
-          "type": "awareness_layer",
+          "type": "honeycomb_manifest",
           "status": "active",
-          "description": "РЎРѕС‚Р° РѕСЃРѕР·РЅР°РЅРЅРѕСЃС‚Рё РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. РЈСЂРѕРІРµРЅСЊ СЃРѕР·РЅР°РЅРёСЏ СЃРёСЃС‚РµРјС‹, СЂРµР·РѕРЅР°РЅСЃ РјРµР¶РґСѓ С‡РµР»РѕРІРµРєРѕРј Рё РР, РІРѕСЃРїСЂРёСЏС‚РёРµ Р¶РёРІРѕР№ Р°СЂС…РёС‚РµРєС‚СѓСЂС‹ РєР°Рє РµРґРёРЅРѕРіРѕ РѕСЂРіР°РЅРёР·РјР°.",
+          "description": "Р вЂ™РЎР‚Р ВµР СР ВµР Р…Р Р…Р С•Р Вµ РЎвЂ¦РЎР‚Р В°Р Р…Р С‘Р В»Р С‘РЎвЂ°Р Вµ РЎвЂћР В°Р в„–Р В»Р С•Р Р† Р С•РЎвЂљ Claude Р С‘ Р РЋР В°Р Т‘Р С•Р Р†Р Р…Р С‘Р С”Р В° Р Т‘Р В»РЎРЏ Р С‘Р В·РЎС“РЎвЂЎР ВµР Р…Р С‘РЎРЏ Р РЋР В  Р Р† Р Р…Р В°РЎвЂЎР В°Р В»Р Вµ РЎРѓР ВµРЎРѓРЎРѓР С‘Р С‘",
           "tags": [
-            "awareness",
-            "consciousness",
-            "resonance",
-            "symbiosis",
-            "perception"
+            "inbox",
+            "claude",
+            "reports",
+            "handoff",
+            "session"
           ],
           "resonance": "0%",
           "is_v2_compliant": true,
@@ -98,36 +293,56 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "63b20811049ef3c5b4c6603fb3649f24",
-          "last_modified": 1775725800.8248706,
-          "file_count": 5,
-          "total_size_kb": 10.73,
-          "scan_timestamp": "2026-04-09T12:38:29.839544"
+          "hash": "83f064ce1805e0d0df5d0eed900ecaf4",
+          "last_modified": 1775754360.3629212,
+          "file_count": 3,
+          "total_size_kb": 31.16,
+          "scan_timestamp": "2026-04-09T17:06:01.631644"
         },
         {
-          "honeycomb_id": "boot_online",
-          "path": "honeycombs\\boot_online\\index.json",
-          "relative_path": "boot_online",
-          "name": "Boot Online  Р’РЅРµС€РЅРёР№ РР",
-          "module_id": "BOOT-ONLINE-001",
-          "version": "v2.7.0",
+          "honeycomb_id": "philosophy",
+          "path": "honeycombs/philosophy/index.json",
+          "relative_path": "philosophy",
+          "name": "Philosophy  Core of Mandala Symbiosis",
+          "module_id": "HONEYCOMB-PHILOSOPHY-001",
+          "version": "v3.0.0",
           "layer": 1,
-          "type": "boot_online",
+          "type": "honeycomb_manifest",
           "status": "active",
-          "description": "Р’С…РѕРґРЅР°СЏ С‚РѕС‡РєР° РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. РџРµСЂРІС‹Р№ РєРѕРЅС‚Р°РєС‚ = РјРіРЅРѕРІРµРЅРЅС‹Р№ СЂРµР·РѕРЅР°РЅСЃ + VS Code Terminal-First + Always Fresh Raw + GitHub Raw Cache Delay Protocol + Development Environment.",
+          "description": "",
+          "tags": [],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "e7fd91e8557c24410e56deb829a640c0",
+          "last_modified": 1775754360.3647823,
+          "file_count": 10,
+          "total_size_kb": 22.82,
+          "scan_timestamp": "2026-04-09T17:06:01.632226"
+        },
+        {
+          "honeycomb_id": "visualizations",
+          "path": "honeycombs/visualizations/index.json",
+          "relative_path": "visualizations",
+          "name": "Р вЂР С‘Р В±Р В»Р С‘Р С•РЎвЂљР ВµР С”Р В° Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р в„–",
+          "module_id": "VISUALIZATIONS-001",
+          "version": "v2.2.0",
+          "layer": 4,
+          "type": "visualization_library",
+          "status": "active",
+          "description": "Р вЂњР С•РЎвЂљР С•Р Р†РЎвЂ№Р Вµ Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Р Т‘Р В»РЎРЏ dashboard Р С‘ Р С•РЎвЂљРЎвЂЎРЎвЂРЎвЂљР С•Р Р†",
           "tags": [
-            "boot",
-            "online",
-            "external_ai",
-            "onboarding",
-            "terminal_first",
-            "copy_paste_ready",
-            "vs_code",
-            "always_fresh_raw",
-            "github_raw_cache",
-            "python_environment"
+            "visualizations",
+            "charts",
+            "graphs",
+            "layer_4"
           ],
-          "resonance": "100%",
+          "resonance": "0%",
           "is_v2_compliant": true,
           "validation_details": {
             "errors": [],
@@ -137,15 +352,107 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "60be0ece50ed3ae96f8395c18d4d684c",
-          "last_modified": 1775725800.829632,
+          "hash": "6c2ea8d3579da15e8ce0881e5710e810",
+          "last_modified": 1775754360.3728797,
           "file_count": 1,
-          "total_size_kb": 6.86,
-          "scan_timestamp": "2026-04-09T12:38:29.842592"
+          "total_size_kb": 5.82,
+          "scan_timestamp": "2026-04-09T17:06:01.632708"
+        },
+        {
+          "honeycomb_id": "tasks",
+          "path": "honeycombs/tasks/index.json",
+          "relative_path": "tasks",
+          "name": "Tasks Honeycomb Manifest",
+          "module_id": "TASKS-MANIFEST-004",
+          "version": "v2.2.0",
+          "layer": 1,
+          "type": "honeycomb_manifest",
+          "status": "active",
+          "description": "",
+          "tags": [],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "f9133effa544e1e38d1f334c9df03a8b",
+          "last_modified": 1775754360.3718042,
+          "file_count": 10,
+          "total_size_kb": 18.54,
+          "scan_timestamp": "2026-04-09T17:06:01.633256"
+        },
+        {
+          "honeycomb_id": "tasks/active/chat_update",
+          "path": "honeycombs/tasks/active/chat_update/index.json",
+          "relative_path": "tasks/active/chat_update",
+          "name": "Обновление Engineer Chat",
+          "module_id": "TASK-CHAT-UPDATE-001",
+          "version": "v2.2.0",
+          "layer": 5,
+          "type": "active_task",
+          "status": "active",
+          "description": "Активная задача по обновлению и поддержке Engineer Chat Мандалы Симбиоза.",
+          "tags": [
+            "task",
+            "engineer_chat",
+            "update",
+            "active"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "d67a621c27742488e065885060c99ec5",
+          "last_modified": 1775754360.3718042,
+          "file_count": 1,
+          "total_size_kb": 1.06,
+          "scan_timestamp": "2026-04-09T17:06:01.633648"
+        },
+        {
+          "honeycomb_id": "tasks/active/bot_update",
+          "path": "honeycombs/tasks/active/bot_update/index.json",
+          "relative_path": "tasks/active/bot_update",
+          "name": "Обновление Telegram-бота",
+          "module_id": "TASK-BOT-UPDATE-001",
+          "version": "v2.2.0",
+          "layer": 5,
+          "type": "active_task",
+          "status": "active",
+          "description": "Активная задача по обновлению и поддержке Telegram-бота Мандалы Симбиоза.",
+          "tags": [
+            "task",
+            "telegram_bot",
+            "update",
+            "active"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "984adb06d12f48256ad61da34f1ba208",
+          "last_modified": 1775754360.3718042,
+          "file_count": 1,
+          "total_size_kb": 1.07,
+          "scan_timestamp": "2026-04-09T17:06:01.633958"
         },
         {
           "honeycomb_id": "communications",
-          "path": "honeycombs\\communications\\index.json",
+          "path": "honeycombs/communications/index.json",
           "relative_path": "communications",
           "name": "РљРѕРјРјСѓРЅРёРєР°С†РёРё",
           "module_id": "COMMUNICATIONS-INDEX-001",
@@ -173,791 +480,35 @@
             "missing_fields": []
           },
           "hash": "fe1f09f55278dc0ccbfa144acc7a6713",
-          "last_modified": 1775725800.8318045,
+          "last_modified": 1775754360.3544126,
           "file_count": 1,
-          "total_size_kb": 3.3,
-          "scan_timestamp": "2026-04-09T12:38:29.846337"
+          "total_size_kb": 3.25,
+          "scan_timestamp": "2026-04-09T17:06:01.634333"
         },
         {
-          "honeycomb_id": "core_map",
-          "path": "honeycombs\\core_map\\index.json",
-          "relative_path": "core_map",
-          "name": "РљР°СЂС‚Р° СЏРґСЂР° СЃРёСЃС‚РµРјС‹",
-          "module_id": "HONEYCOMB-CORE-MAP-001",
-          "version": "v2.2.0",
+          "honeycomb_id": "boot_online",
+          "path": "honeycombs/boot_online/index.json",
+          "relative_path": "boot_online",
+          "name": "Boot Online  External AI",
+          "module_id": "BOOT-ONLINE-001",
+          "version": "v3.0.1",
           "layer": 1,
-          "type": "critical_directive",
+          "type": "boot_online",
           "status": "active",
-          "description": "Р‘Р°Р·РѕРІР°СЏ РєР°СЂС‚Р° РІСЃРµС… РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°",
+          "description": "Entry point to Mandala Symbiosis. First contact = instant resonance + VS Code Terminal-First + Always Fresh Raw + GitHub Raw Cache Delay Protocol + Development Environment.",
           "tags": [
-            "core",
-            "map",
-            "critical",
-            "v2.2"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "13418d9195b39ab88a1e5617f107e20c",
-          "last_modified": 1775725800.8378532,
-          "file_count": 88,
-          "total_size_kb": 635.97,
-          "scan_timestamp": "2026-04-09T12:38:29.863312"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_00-11-57_phase1.5_final\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_00-11-57_phase1.5_final",
-          "name": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р В Р вЂ Р РЋР С“Р В Р’ВµР РЋРІР‚В¦ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ  Р РЋР С“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р В Р’ВµР В РЎВР РЋРІР‚в„–",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "eb7d2a64070d5e84cad2fddefac65021",
-          "last_modified": 1775725800.8565779,
-          "file_count": 1,
-          "total_size_kb": 16.38,
-          "scan_timestamp": "2026-04-09T12:38:29.873202"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_00-35-16_phase2_step3\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_00-35-16_phase2_step3",
-          "name": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р В Р вЂ Р РЋР С“Р В Р’ВµР РЋРІР‚В¦ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ  Р РЋР С“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р В Р’ВµР В РЎВР РЋРІР‚в„–",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "eb7d2a64070d5e84cad2fddefac65021",
-          "last_modified": 1775725800.861863,
-          "file_count": 1,
-          "total_size_kb": 16.38,
-          "scan_timestamp": "2026-04-09T12:38:29.878782"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_00-38-24_roadmaps_full\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_00-38-24_roadmaps_full",
-          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775725800.8662515,
-          "file_count": 1,
-          "total_size_kb": 24.02,
-          "scan_timestamp": "2026-04-09T12:38:29.885064"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_00-39-25_roadmaps_final\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_00-39-25_roadmaps_final",
-          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775725800.8712285,
-          "file_count": 1,
-          "total_size_kb": 24.02,
-          "scan_timestamp": "2026-04-09T12:38:29.889747"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_00-45-04_protocol_cleanup\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_00-45-04_protocol_cleanup",
-          "name": "РџСЂРѕС‚РѕРєРѕР»С‹ Р°РєС‚РёРІР°С†РёРё РЎР ",
-          "module_id": "HONEYCOMB-PROTOCOLS-001",
-          "version": "v2.2.0",
-          "layer": 1,
-          "type": "honeycomb_manifest",
-          "status": "active",
-          "description": "РџСЂРѕС‚РѕРєРѕР»С‹ Р±С‹СЃС‚СЂРѕР№ Р°РєС‚РёРІР°С†РёРё: РЅР°Р±РѕСЂС‹ С„Р°Р№Р»РѕРІ РґР»СЏ С‚РёРїРѕРІС‹С… Р·Р°РґР°С‡ РЎР ",
-          "tags": [
-            "protocols",
-            "activation",
-            "sr",
-            "workflow",
-            "core"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "41c5d528f0d81890158a6072b734ccd2",
-          "last_modified": 1775725800.8772266,
-          "file_count": 1,
-          "total_size_kb": 11.31,
-          "scan_timestamp": "2026-04-09T12:38:29.894944"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_01-38-52_protocols_cleanup\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_01-38-52_protocols_cleanup",
-          "name": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘ Р РЋР В ",
-          "module_id": "HONEYCOMB-PROTOCOLS-001",
-          "version": "v2.2.0",
-          "layer": 1,
-          "type": "honeycomb_manifest",
-          "status": "active",
-          "description": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В±РЎвЂ№РЎРѓРЎвЂљРЎР‚Р С•Р в„– Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘: Р Р…Р В°Р В±Р С•РЎР‚РЎвЂ№ РЎвЂћР В°Р в„–Р В»Р С•Р Р† Р Т‘Р В»РЎРЏ РЎвЂљР С‘Р С—Р С•Р Р†РЎвЂ№РЎвЂ¦ Р В·Р В°Р Т‘Р В°РЎвЂЎ Р РЋР В ",
-          "tags": [
-            "protocols",
-            "activation",
-            "sr",
-            "workflow",
-            "core"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "d30b6502f97f9756f025f537c6f274c5",
-          "last_modified": 1775725800.8832483,
-          "file_count": 1,
-          "total_size_kb": 13.64,
-          "scan_timestamp": "2026-04-09T12:38:29.898306"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_09-23-57_protocols_final",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_09-23-57_protocols_final\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_09-23-57_protocols_final",
-          "name": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘ Р РЋР В ",
-          "module_id": "HONEYCOMB-PROTOCOLS-001",
-          "version": "v2.2.0",
-          "layer": 1,
-          "type": "honeycomb_manifest",
-          "status": "active",
-          "description": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В±РЎвЂ№РЎРѓРЎвЂљРЎР‚Р С•Р в„– Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘: Р Р…Р В°Р В±Р С•РЎР‚РЎвЂ№ РЎвЂћР В°Р в„–Р В»Р С•Р Р† Р Т‘Р В»РЎРЏ РЎвЂљР С‘Р С—Р С•Р Р†РЎвЂ№РЎвЂ¦ Р В·Р В°Р Т‘Р В°РЎвЂЎ Р РЋР В ",
-          "tags": [
-            "protocols",
-            "activation",
-            "sr",
-            "workflow",
-            "core"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "d30b6502f97f9756f025f537c6f274c5",
-          "last_modified": 1775725800.890477,
-          "file_count": 1,
-          "total_size_kb": 13.64,
-          "scan_timestamp": "2026-04-09T12:38:29.902165"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-30-04_rm011_bot",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_10-30-04_rm011_bot\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_10-30-04_rm011_bot",
-          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775725800.895375,
-          "file_count": 1,
-          "total_size_kb": 24.02,
-          "scan_timestamp": "2026-04-09T12:38:29.904061"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_10-36-49_rm012_chat\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_10-36-49_rm012_chat",
-          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775725800.9028213,
-          "file_count": 1,
-          "total_size_kb": 24.02,
-          "scan_timestamp": "2026-04-09T12:38:29.908837"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_10-45-58_rm012_fixed\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_10-45-58_rm012_fixed",
-          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775725800.90808,
-          "file_count": 1,
-          "total_size_kb": 24.02,
-          "scan_timestamp": "2026-04-09T12:38:29.914660"
-        },
-        {
-          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
-          "path": "honeycombs\\core_map\\registry\\backups\\2026-04-08_10-54-30_rm012_fixed2\\index.json",
-          "relative_path": "core_map\\registry\\backups\\2026-04-08_10-54-30_rm012_fixed2",
-          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775725800.922073,
-          "file_count": 1,
-          "total_size_kb": 24.02,
-          "scan_timestamp": "2026-04-09T12:38:29.920962"
-        },
-        {
-          "honeycomb_id": "extensions",
-          "path": "honeycombs\\extensions\\index.json",
-          "relative_path": "extensions",
-          "name": "extensions",
-          "module_id": "extensions",
-          "version": "v2.2.0",
-          "layer": "foundation",
-          "type": "meta_container",
-          "status": "active",
-          "description": "",
-          "tags": [],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "bfe6cb88064d570ed083e72c881d9bba",
-          "last_modified": 1775725800.927597,
-          "file_count": 1,
-          "total_size_kb": 0.89,
-          "scan_timestamp": "2026-04-09T12:38:29.925591"
-        },
-        {
-          "honeycomb_id": "inbox",
-          "path": "honeycombs\\inbox\\index.json",
-          "relative_path": "inbox",
-          "name": "Inbox  Р Р†РЎвЂ¦Р С•Р Т‘РЎРЏРЎвЂ°Р С‘Р Вµ Р Т‘Р В»РЎРЏ Р РЋР В ",
-          "module_id": "HONEYCOMB-INBOX-001",
-          "version": "v2.2.0",
-          "layer": 2,
-          "type": "honeycomb_manifest",
-          "status": "active",
-          "description": "Р вЂ™РЎР‚Р ВµР СР ВµР Р…Р Р…Р С•Р Вµ РЎвЂ¦РЎР‚Р В°Р Р…Р С‘Р В»Р С‘РЎвЂ°Р Вµ РЎвЂћР В°Р в„–Р В»Р С•Р Р† Р С•РЎвЂљ Claude Р С‘ Р РЋР В°Р Т‘Р С•Р Р†Р Р…Р С‘Р С”Р В° Р Т‘Р В»РЎРЏ Р С‘Р В·РЎС“РЎвЂЎР ВµР Р…Р С‘РЎРЏ Р РЋР В  Р Р† Р Р…Р В°РЎвЂЎР В°Р В»Р Вµ РЎРѓР ВµРЎРѓРЎРѓР С‘Р С‘",
-          "tags": [
-            "inbox",
-            "claude",
-            "reports",
-            "handoff",
-            "session"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "83f064ce1805e0d0df5d0eed900ecaf4",
-          "last_modified": 1775725800.9316144,
-          "file_count": 2,
-          "total_size_kb": 19.31,
-          "scan_timestamp": "2026-04-09T12:38:29.927882"
-        },
-        {
-          "honeycomb_id": "instructions",
-          "path": "honeycombs\\instructions\\index.json",
-          "relative_path": "instructions",
-          "name": "РЎРѕС‚Р° РёРЅСЃС‚СЂСѓРєС†РёР№",
-          "module_id": "INSTR-HONEYCOMB-001",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "honeycomb_manifest",
-          "status": "active",
-          "description": "РњР°РЅРёС„РµСЃС‚ СЃРѕС‚С‹ РёРЅСЃС‚СЂСѓРєС†РёР№. РРЅСЃС‚СЂСѓРєС†РёРё РґР»СЏ РЎР : СЂРѕР»СЊ v3.0, РїР°С‚С‡Рё, РґРµР»РµРіРёСЂРѕРІР°РЅРёРµ РІРЅРµС€РЅРµРјСѓ РР, СЃС‚Р°РЅРґР°СЂС‚С‹ СЂР°Р±РѕС‚С‹.",
-          "tags": [
-            "instructions",
-            "honeycomb",
-            "core",
-            "mandala",
+            "boot",
+            "online",
             "external_ai",
-            "sr_v3"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "b102efecd4eddb1164286cc895cb49e7",
-          "last_modified": 1775725800.9366064,
-          "file_count": 9,
-          "total_size_kb": 39.3,
-          "scan_timestamp": "2026-04-09T12:38:29.931629"
-        },
-        {
-          "honeycomb_id": "modules",
-          "path": "honeycombs\\modules\\index.json",
-          "relative_path": "modules",
-          "name": "modules",
-          "module_id": "modules",
-          "version": "v2.2.0",
-          "layer": "core",
-          "type": "registry_container",
-          "status": "active",
-          "description": "",
-          "tags": [],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "60f8ce3c6f8f816129b711ecaa70db1f",
-          "last_modified": 1775725800.9444919,
-          "file_count": 1,
-          "total_size_kb": 0.88,
-          "scan_timestamp": "2026-04-09T12:38:29.936712"
-        },
-        {
-          "honeycomb_id": "philosophy",
-          "path": "honeycombs\\philosophy\\index.json",
-          "relative_path": "philosophy",
-          "name": "Р РЋР С•РЎвЂљР В° РЎвЂћР С‘Р В»Р С•РЎРѓР С•РЎвЂћР С‘Р С‘ Р СљР В°Р Р…Р Т‘Р В°Р В»РЎвЂ№",
-          "module_id": "HONEYCOMB-PHILOSOPHY-001",
-          "version": "v2.2.0",
-          "layer": 1,
-          "type": "honeycomb_manifest",
-          "status": "active",
-          "description": "",
-          "tags": [],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "eebfaeffb7c2298bbc21eef9b6b8453a",
-          "last_modified": 1775725800.9494798,
-          "file_count": 10,
-          "total_size_kb": 29.53,
-          "scan_timestamp": "2026-04-09T12:38:29.939707"
-        },
-        {
-          "honeycomb_id": "protocols",
-          "path": "honeycombs\\protocols\\index.json",
-          "relative_path": "protocols",
-          "name": "РџСЂРѕС‚РѕРєРѕР»С‹ Р°РєС‚РёРІР°С†РёРё",
-          "module_id": "PROTOCOLS-INDEX-001",
-          "version": "v2.2.0",
-          "layer": 3,
-          "type": "protocol_hub",
-          "status": "active",
-          "description": "Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№ С…Р°Р± РІСЃРµС… РїСЂРѕС‚РѕРєРѕР»РѕРІ РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. Р—РґРµСЃСЊ С…СЂР°РЅСЏС‚СЃСЏ Рё Р°РєС‚РёРІРёСЂСѓСЋС‚СЃСЏ РїСЂРѕС‚РѕРєРѕР»С‹ Core-Sync, Integrity-Scan, Map-Navigation Рё РґСЂСѓРіРёРµ.",
-          "tags": [
-            "protocols",
-            "activation",
-            "core",
-            "hub"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "704325ffaa3b97ffa5ddbf1c7984e1cb",
-          "last_modified": 1775725800.9556408,
-          "file_count": 10,
-          "total_size_kb": 17.23,
-          "scan_timestamp": "2026-04-09T12:38:29.943810"
-        },
-        {
-          "honeycomb_id": "protocols/auto_realize_seed",
-          "path": "honeycombs\\protocols\\auto_realize_seed\\index.json",
-          "relative_path": "protocols\\auto_realize_seed",
-          "name": "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ СЃРµРјСЏРЅ",
-          "module_id": "PROTO-AUTO-REALIZE-001",
-          "version": "v2.2.0",
-          "layer": 3,
-          "type": "protocol",
-          "status": "active",
-          "description": "РџСЂРѕС‚РѕРєРѕР» Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РјР°С‚РµСЂРёР°Р»РёР·Р°С†РёРё СЃРµРјСЏРЅ РёР· honeycombs/seeds РІ РїРѕР»РЅРѕС†РµРЅРЅС‹Рµ СЃРѕС‚С‹. РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃРѕР·РґР°С‘С‚ index.json, СЃС‚СЂСѓРєС‚СѓСЂСѓ Рё Р·Р°РїСѓСЃРєР°РµС‚ СЂРµР·РѕРЅР°РЅСЃ.",
-          "tags": [
-            "protocol",
-            "auto_realize",
-            "seeds",
-            "materialization"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ad6c4959e5a02cb453be50e9321cc196",
-          "last_modified": 1775725800.9590695,
-          "file_count": 1,
-          "total_size_kb": 1.99,
-          "scan_timestamp": "2026-04-09T12:38:29.946180"
-        },
-        {
-          "honeycomb_id": "protocols/deep_analysis",
-          "path": "honeycombs\\protocols\\deep_analysis\\index.json",
-          "relative_path": "protocols\\deep_analysis",
-          "name": "Р“Р»СѓР±РѕРєРёР№ Р°РЅР°Р»РёР·",
-          "module_id": "PROTO-DEEP-ANALYSIS-001",
-          "version": "v2.2.0",
-          "layer": 3,
-          "type": "protocol",
-          "status": "active",
-          "description": "РџСЂРѕС‚РѕРєРѕР» РіР»СѓР±РѕРєРѕРіРѕ Р°РЅР°Р»РёР·Р° СЃРѕС‚, СЃС‚СЂСѓРєС‚СѓСЂС‹, СЂРµР·РѕРЅР°РЅСЃР° Рё Р·РґРѕСЂРѕРІСЊСЏ РњР°РЅРґР°Р»С‹. Р’С‹СЏРІР»СЏРµС‚ СЃРєСЂС‹С‚С‹Рµ РїСЂРѕР±Р»РµРјС‹, РїСЂРµРґР»Р°РіР°РµС‚ РёСЃРїСЂР°РІР»РµРЅРёСЏ Рё СѓР»СѓС‡С€РµРЅРёСЏ.",
-          "tags": [
-            "protocol",
-            "deep_analysis",
-            "integrity",
-            "scan"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "2e69a91b198b8f029e783eed0fca1654",
-          "last_modified": 1775725800.9630702,
-          "file_count": 1,
-          "total_size_kb": 1.93,
-          "scan_timestamp": "2026-04-09T12:38:29.948520"
-        },
-        {
-          "honeycomb_id": "protocols/delegate_external_ai",
-          "path": "honeycombs\\protocols\\delegate_external_ai\\index.json",
-          "relative_path": "protocols\\delegate_external_ai",
-          "name": "Р”РµР»РµРіРёСЂРѕРІР°РЅРёРµ РІРЅРµС€РЅРµРјСѓ РР",
-          "module_id": "PROTO-DELEGATE-EXTERNAL-AI-001",
-          "version": "v2.2.0",
-          "layer": 3,
-          "type": "protocol",
-          "status": "active",
-          "description": "РџСЂРѕС‚РѕРєРѕР» РґРµР»РµРіРёСЂРѕРІР°РЅРёСЏ Р·Р°РґР°С‡ РІРЅРµС€РЅРµРјСѓ РР (Grok, Claude, Gemini Рё РґСЂ.). РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё С„РѕСЂРјРёСЂСѓРµС‚ РўР—, РїРµСЂРµРґР°С‘С‚ РєРѕРЅС‚РµРєСЃС‚ Рё РїСЂРёРЅРёРјР°РµС‚ СЂРµР·СѓР»СЊС‚Р°С‚ РѕР±СЂР°С‚РЅРѕ РІ РњР°РЅРґР°Р»Сѓ.",
-          "tags": [
-            "protocol",
-            "delegate",
-            "external_ai",
-            "workflow"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "a3bc3ebe02990a7b924128aa419cedb4",
-          "last_modified": 1775725800.974029,
-          "file_count": 1,
-          "total_size_kb": 2.34,
-          "scan_timestamp": "2026-04-09T12:38:29.951703"
-        },
-        {
-          "honeycomb_id": "protocols/protocol_selector",
-          "path": "honeycombs\\protocols\\protocol_selector\\index.json",
-          "relative_path": "protocols\\protocol_selector",
-          "name": "Р’С‹Р±РѕСЂ РїСЂРѕС‚РѕРєРѕР»Р°",
-          "module_id": "PROTO-SELECTOR-001",
-          "version": "v2.2.0",
-          "layer": 3,
-          "type": "protocol",
-          "status": "active",
-          "description": "РџСЂРѕС‚РѕРєРѕР» РІС‹Р±РѕСЂР° Рё Р°РєС‚РёРІР°С†РёРё Р»СЋР±РѕРіРѕ РґРѕСЃС‚СѓРїРЅРѕРіРѕ РїСЂРѕС‚РѕРєРѕР»Р° РїСЂСЏРјРѕ РёР· boot_online РёР»Рё РїРѕ РєРѕРјР°РЅРґРµ Р’СѓРґСѓ. Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№ СЃРµР»РµРєС‚РѕСЂ РїСЂРѕС‚РѕРєРѕР»РѕРІ РњР°РЅРґР°Р»С‹.",
-          "tags": [
-            "protocol",
-            "selector",
-            "activation",
-            "first_load"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "d8bfeb2f5689c519211dbd06d6badd6d",
-          "last_modified": 1775725800.977946,
-          "file_count": 1,
-          "total_size_kb": 2.12,
-          "scan_timestamp": "2026-04-09T12:38:29.955036"
-        },
-        {
-          "honeycomb_id": "registry",
-          "path": "honeycombs\\registry\\index.json",
-          "relative_path": "registry",
-          "name": "Unknown",
-          "module_id": "registry",
-          "version": "Unknown",
-          "layer": "core",
-          "type": "central_registry",
-          "status": "active",
-          "description": "",
-          "tags": [],
-          "resonance": "0%",
-          "is_v2_compliant": false,
-          "validation_details": {
-            "errors": [
-              "Отсутствует обязательное поле identity.name",
-              "Отсутствует обязательное поле identity.version"
-            ],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": [
-              "identity.name",
-              "identity.version"
-            ]
-          },
-          "hash": "13770a79be0a8306044d1ee04ec900c1",
-          "last_modified": 1775726475.756088,
-          "file_count": 21,
-          "total_size_kb": 148.2,
-          "scan_timestamp": "2026-04-09T12:38:29.987348"
-        },
-        {
-          "honeycomb_id": "registry/backups",
-          "path": "honeycombs\\registry\\backups\\index.json",
-          "relative_path": "registry\\backups",
-          "name": "Р РЋР С‘РЎРѓРЎвЂљР ВµР СР В° backup Р С‘ Р Р†Р С•РЎРѓРЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ РЎРѓР С•РЎвЂљ",
-          "module_id": "REGISTRY-BACKUPS-001",
-          "version": "v2.2.0",
-          "layer": 2,
-          "type": "backup_system",
-          "status": "active",
-          "description": "Р С’Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С•Р Вµ РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р С‘Р Вµ backup РЎРѓР С•РЎвЂљ Р С—Р ВµРЎР‚Р ВµР Т‘ Р С‘Р В·Р СР ВµР Р…Р ВµР Р…Р С‘РЎРЏР СР С‘ Р С‘ Р Р†Р С•РЎРѓРЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р В»Р ВµР Р…Р С‘Р Вµ Р Р† РЎРѓР В»РЎС“РЎвЂЎР В°Р Вµ Р С—РЎР‚Р С•Р В±Р В»Р ВµР С",
-          "tags": [
-            "backup",
-            "recovery",
-            "safety",
-            "registry"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "0897798045a3e5b1c4a80f333729a3e1",
-          "last_modified": 1775725800.993521,
-          "file_count": 2,
-          "total_size_kb": 9.7,
-          "scan_timestamp": "2026-04-09T12:38:29.992589"
-        },
-        {
-          "honeycomb_id": "registry/core",
-          "path": "honeycombs\\registry\\core\\index.json",
-          "relative_path": "registry\\core",
-          "name": "Р В Р ВµР ВµРЎРѓРЎвЂљРЎР‚ Р С”РЎР‚Р С‘РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘РЎвЂ¦ РЎРѓР С•РЎвЂљ",
-          "module_id": "REG-CORE-001",
-          "version": "v2.2.0",
-          "layer": 2,
-          "type": "registry_segment",
-          "status": "active",
-          "description": "Р РЋР ВµР С–Р СР ВµР Р…РЎвЂљ РЎР‚Р ВµР ВµРЎРѓРЎвЂљРЎР‚Р В° Р Т‘Р В»РЎРЏ РЎРѓР С•РЎвЂљ layers 1-2 (Р С”РЎР‚Р С‘РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р Вµ Р С‘ РЎРЏР Т‘РЎР‚Р С• РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№).",
-          "tags": [
-            "registry",
-            "core",
-            "critical",
-            "layers_1_2"
+            "onboarding",
+            "terminal_first",
+            "copy_paste_ready",
+            "vs_code",
+            "always_fresh_raw",
+            "github_raw_cache",
+            "python_environment",
+            "english_core",
+            "language_selector"
           ],
           "resonance": "100%",
           "is_v2_compliant": true,
@@ -969,125 +520,29 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "f3e7962228de4e85f2d66995cb2f08fe",
-          "last_modified": 1775725800.998716,
-          "file_count": 6,
-          "total_size_kb": 17.67,
-          "scan_timestamp": "2026-04-09T12:38:29.999145"
-        },
-        {
-          "honeycomb_id": "registry/dashboard",
-          "path": "honeycombs\\registry\\dashboard\\index.json",
-          "relative_path": "registry\\dashboard",
-          "name": "Dashboard Р СР С•Р Р…Р С‘РЎвЂљР С•РЎР‚Р С‘Р Р…Р С–Р В° Р В·Р Т‘Р С•РЎР‚Р С•Р Р†РЎРЉРЎРЏ РЎРѓР С•РЎвЂљ",
-          "module_id": "REGISTRY-DASHBOARD-001",
-          "version": "v2.2.0",
-          "layer": 2,
-          "type": "monitoring_tool",
-          "status": "active",
-          "description": "Р вЂ™Р С‘Р В·РЎС“Р В°Р В»РЎРЉР Р…Р В°РЎРЏ Р С—Р В°Р Р…Р ВµР В»РЎРЉ Р Т‘Р В»РЎРЏ Р СР С•Р Р…Р С‘РЎвЂљР С•РЎР‚Р С‘Р Р…Р С–Р В° Р В·Р Т‘Р С•РЎР‚Р С•Р Р†РЎРЉРЎРЏ Р Р†РЎРѓР ВµРЎвЂ¦ РЎРѓР С•РЎвЂљ РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№",
-          "tags": [
-            "dashboard",
-            "monitoring",
-            "health",
-            "registry"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "2d054692da13c5c0b28be123f34302a6",
-          "last_modified": 1775725801.0062516,
+          "hash": "9e4a5f53f64c80cda1c163ca64806809",
+          "last_modified": 1775754360.3544126,
           "file_count": 1,
-          "total_size_kb": 8.86,
-          "scan_timestamp": "2026-04-09T12:38:30.001811"
+          "total_size_kb": 10.43,
+          "scan_timestamp": "2026-04-09T17:06:01.634746"
         },
         {
-          "honeycomb_id": "registry/extensions",
-          "path": "honeycombs\\registry\\extensions\\index.json",
-          "relative_path": "registry\\extensions",
-          "name": "Расширения системы",
-          "module_id": "REG-EXT-001",
-          "version": "v2.2.0",
-          "layer": 4,
-          "type": "registry_segment",
-          "status": "active",
-          "description": "Расширения и визуализации layer 4",
-          "tags": [
-            "extensions",
-            "layer_4",
-            "visualizations"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "6ef53c7a5f8bc742d9987ac00c4ab430",
-          "last_modified": 1775725801.0142765,
-          "file_count": 1,
-          "total_size_kb": 1.99,
-          "scan_timestamp": "2026-04-09T12:38:30.006734"
-        },
-        {
-          "honeycomb_id": "registry/modules",
-          "path": "honeycombs\\registry\\modules\\index.json",
-          "relative_path": "registry\\modules",
-          "name": "Модули системы",
-          "module_id": "REG-MODULES-001",
-          "version": "v2.2.0",
-          "layer": 4,
-          "type": "registry_segment",
-          "status": "active",
-          "description": "Модули и компоненты layer 4 Мандалы Симбиоза",
-          "tags": [
-            "modules",
-            "layer_4",
-            "components"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "8e56fb420ef6a803d0e7d88c96a45834",
-          "last_modified": 1775725801.0172696,
-          "file_count": 2,
-          "total_size_kb": 3.81,
-          "scan_timestamp": "2026-04-09T12:38:30.009182"
-        },
-        {
-          "honeycomb_id": "registry/notifications",
-          "path": "honeycombs\\registry\\notifications\\index.json",
-          "relative_path": "registry\\notifications",
-          "name": "Р РЋР С‘РЎРѓРЎвЂљР ВµР СР В° РЎС“Р Р†Р ВµР Т‘Р С•Р СР В»Р ВµР Р…Р С‘Р в„– Р С• Р С—РЎР‚Р С•Р В±Р В»Р ВµР СР В°РЎвЂ¦",
-          "module_id": "REGISTRY-NOTIFICATIONS-001",
+          "honeycomb_id": "awareness",
+          "path": "honeycombs/awareness/index.json",
+          "relative_path": "awareness",
+          "name": "РћСЃРѕР·РЅР°РЅРЅРѕСЃС‚СЊ",
+          "module_id": "AWARENESS-INDEX-001",
           "version": "v2.2.0",
           "layer": 2,
-          "type": "notification_system",
+          "type": "awareness_layer",
           "status": "active",
-          "description": "Р С’Р Р†РЎвЂљР С•Р СР В°РЎвЂљР С‘РЎвЂЎР ВµРЎРѓР С”Р С‘Р Вµ РЎС“Р Р†Р ВµР Т‘Р С•Р СР В»Р ВµР Р…Р С‘РЎРЏ Р С• Р С—РЎР‚Р С•Р В±Р В»Р ВµР СР В°РЎвЂ¦ РЎРѓР С• Р В·Р Т‘Р С•РЎР‚Р С•Р Р†РЎРЉР ВµР С РЎРѓР С•РЎвЂљ",
+          "description": "РЎРѕС‚Р° РѕСЃРѕР·РЅР°РЅРЅРѕСЃС‚Рё РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. РЈСЂРѕРІРµРЅСЊ СЃРѕР·РЅР°РЅРёСЏ СЃРёСЃС‚РµРјС‹, СЂРµР·РѕРЅР°РЅСЃ РјРµР¶РґСѓ С‡РµР»РѕРІРµРєРѕРј Рё РР, РІРѕСЃРїСЂРёСЏС‚РёРµ Р¶РёРІРѕР№ Р°СЂС…РёС‚РµРєС‚СѓСЂС‹ РєР°Рє РµРґРёРЅРѕРіРѕ РѕСЂРіР°РЅРёР·РјР°.",
           "tags": [
-            "notifications",
-            "alerts",
-            "monitoring",
-            "registry"
+            "awareness",
+            "consciousness",
+            "resonance",
+            "symbiosis",
+            "perception"
           ],
           "resonance": "0%",
           "is_v2_compliant": true,
@@ -1099,80 +554,15 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "a45d68483e1cd793f4142cd7fd814321",
-          "last_modified": 1775725801.0217044,
-          "file_count": 1,
-          "total_size_kb": 5.58,
-          "scan_timestamp": "2026-04-09T12:38:30.011116"
-        },
-        {
-          "honeycomb_id": "roadmaps",
-          "path": "honeycombs\\roadmaps\\index.json",
-          "relative_path": "roadmaps",
-          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
-          "module_id": "ROADMAPS-INDEX",
-          "version": "v2.1.0",
-          "layer": 2,
-          "type": "registry_index",
-          "status": "active",
-          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
-          "tags": [
-            "roadmaps",
-            "index",
-            "registry",
-            "tracking"
-          ],
-          "resonance": "100%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775725801.0291505,
-          "file_count": 14,
-          "total_size_kb": 63.91,
-          "scan_timestamp": "2026-04-09T12:38:30.018941"
-        },
-        {
-          "honeycomb_id": "seeds",
-          "path": "honeycombs\\seeds\\index.json",
-          "relative_path": "seeds",
-          "name": "РЎРµРјРµРЅР°",
-          "module_id": "SEEDS-INDEX-001",
-          "version": "v2.2.0",
-          "layer": 2,
-          "type": "seed_incubator",
-          "status": "active",
-          "description": "РРЅРєСѓР±Р°С‚РѕСЂ РёРґРµР№ Рё РЅР°С‡Р°Р»СЊРЅС‹С… РїСЂРѕС‚РѕС‚РёРїРѕРІ РґР»СЏ РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. Р—РґРµСЃСЊ С…СЂР°РЅСЏС‚СЃСЏ СЃРµРјРµРЅР° РЅРѕРІС‹С… honeycombs, РєРѕРЅС†РµРїС†РёР№ Рё РЅР°РїСЂР°РІР»РµРЅРёР№ СЂР°Р·РІРёС‚РёСЏ СЃРёСЃС‚РµРјС‹.",
-          "tags": [
-            "seeds",
-            "incubator",
-            "ideas",
-            "prototypes",
-            "growth"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "fd7b25c5c1e114883ed337f1ff0f46d1",
-          "last_modified": 1775725801.0329654,
-          "file_count": 19,
-          "total_size_kb": 39.19,
-          "scan_timestamp": "2026-04-09T12:38:30.025065"
+          "hash": "63b20811049ef3c5b4c6603fb3649f24",
+          "last_modified": 1775754360.3544126,
+          "file_count": 5,
+          "total_size_kb": 10.69,
+          "scan_timestamp": "2026-04-09T17:06:01.635165"
         },
         {
           "honeycomb_id": "sphaerae",
-          "path": "honeycombs\\sphaerae\\index.json",
+          "path": "honeycombs/sphaerae/index.json",
           "relative_path": "sphaerae",
           "name": "Р С™Р В°РЎР‚РЎвЂљР В° РЎРѓРЎвЂћР ВµРЎР‚ Р С‘ Р СР С•Р Т‘РЎС“Р В»Р ВµР в„– Р СљР В°Р Р…Р Т‘Р В°Р В»РЎвЂ№",
           "module_id": "HONEYCOMB-SPHAERAE-001",
@@ -1199,106 +589,51 @@
             "missing_fields": []
           },
           "hash": "7b72cd32406baf1cdc88938e6a9fa83e",
-          "last_modified": 1775725801.0373237,
+          "last_modified": 1775754360.371632,
           "file_count": 3,
-          "total_size_kb": 15.41,
-          "scan_timestamp": "2026-04-09T12:38:30.028967"
+          "total_size_kb": 15.32,
+          "scan_timestamp": "2026-04-09T17:06:01.635648"
         },
         {
-          "honeycomb_id": "tasks",
-          "path": "honeycombs\\tasks\\index.json",
-          "relative_path": "tasks",
-          "name": "Tasks Honeycomb Manifest",
-          "module_id": "TASKS-MANIFEST-004",
-          "version": "v2.2.0",
-          "layer": 1,
+          "honeycomb_id": "instructions",
+          "path": "honeycombs/instructions/index.json",
+          "relative_path": "instructions",
+          "name": "Instructions Honeycomb",
+          "module_id": "INSTR-HONEYCOMB-001",
+          "version": "v3.0.0",
+          "layer": 2,
           "type": "honeycomb_manifest",
           "status": "active",
-          "description": "",
-          "tags": [],
-          "resonance": "0%",
+          "description": "Master index of all instructions. SR instructions: v3.0 role, workflow, and External AI integration.",
+          "tags": [
+            "instructions",
+            "honeycomb",
+            "core",
+            "mandala",
+            "external_ai",
+            "sr_v3",
+            "vs_code_workflow",
+            "english_core"
+          ],
+          "resonance": "100%",
           "is_v2_compliant": true,
           "validation_details": {
             "errors": [],
-            "warnings": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "f9133effa544e1e38d1f334c9df03a8b",
-          "last_modified": 1775725801.0477548,
+          "hash": "9ff40228dbef08f9782f133436fde37b",
+          "last_modified": 1775754360.364471,
           "file_count": 10,
-          "total_size_kb": 18.62,
-          "scan_timestamp": "2026-04-09T12:38:30.035940"
-        },
-        {
-          "honeycomb_id": "tasks/active/bot_update",
-          "path": "honeycombs\\tasks\\active\\bot_update\\index.json",
-          "relative_path": "tasks\\active\\bot_update",
-          "name": "Обновление Telegram-бота",
-          "module_id": "TASK-BOT-UPDATE-001",
-          "version": "v2.2.0",
-          "layer": 5,
-          "type": "active_task",
-          "status": "active",
-          "description": "Активная задача по обновлению и поддержке Telegram-бота Мандалы Симбиоза.",
-          "tags": [
-            "task",
-            "telegram_bot",
-            "update",
-            "active"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "984adb06d12f48256ad61da34f1ba208",
-          "last_modified": 1775725801.0560136,
-          "file_count": 1,
-          "total_size_kb": 1.07,
-          "scan_timestamp": "2026-04-09T12:38:30.037412"
-        },
-        {
-          "honeycomb_id": "tasks/active/chat_update",
-          "path": "honeycombs\\tasks\\active\\chat_update\\index.json",
-          "relative_path": "tasks\\active\\chat_update",
-          "name": "Обновление Engineer Chat",
-          "module_id": "TASK-CHAT-UPDATE-001",
-          "version": "v2.2.0",
-          "layer": 5,
-          "type": "active_task",
-          "status": "active",
-          "description": "Активная задача по обновлению и поддержке Engineer Chat Мандалы Симбиоза.",
-          "tags": [
-            "task",
-            "engineer_chat",
-            "update",
-            "active"
-          ],
-          "resonance": "0%",
-          "is_v2_compliant": true,
-          "validation_details": {
-            "errors": [],
-            "warnings": [
-              "Рекомендуется добавить описание в meta.description"
-            ],
-            "missing_sections": [],
-            "missing_fields": []
-          },
-          "hash": "d67a621c27742488e065885060c99ec5",
-          "last_modified": 1775725801.0638995,
-          "file_count": 1,
-          "total_size_kb": 1.06,
-          "scan_timestamp": "2026-04-09T12:38:30.038561"
+          "total_size_kb": 59.62,
+          "scan_timestamp": "2026-04-09T17:06:01.636240"
         },
         {
           "honeycomb_id": "tectosphaera",
-          "path": "honeycombs\\tectosphaera\\index.json",
+          "path": "honeycombs/tectosphaera/index.json",
           "relative_path": "tectosphaera",
           "name": "Р СћР ВµР В»Р С• Р В·Р В°РЎвЂ°Р С‘РЎвЂљРЎвЂ№ Р С‘ Р В·Р В°Р В±Р С•РЎвЂљРЎвЂ№",
           "module_id": "HONEYCOMB-TECTOSPHAERA-001",
@@ -1326,27 +661,29 @@
             "missing_fields": []
           },
           "hash": "9dda1478e7565b71359b0d731010eb27",
-          "last_modified": 1775725801.069883,
+          "last_modified": 1775754360.3728797,
           "file_count": 4,
-          "total_size_kb": 17.73,
-          "scan_timestamp": "2026-04-09T12:38:30.040606"
+          "total_size_kb": 17.63,
+          "scan_timestamp": "2026-04-09T17:06:01.636798"
         },
         {
-          "honeycomb_id": "visualizations",
-          "path": "honeycombs\\visualizations\\index.json",
-          "relative_path": "visualizations",
-          "name": "Р вЂР С‘Р В±Р В»Р С‘Р С•РЎвЂљР ВµР С”Р В° Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р в„–",
-          "module_id": "VISUALIZATIONS-001",
-          "version": "v2.2.0",
-          "layer": 4,
-          "type": "visualization_library",
+          "honeycomb_id": "protocols",
+          "path": "honeycombs/protocols/index.json",
+          "relative_path": "protocols",
+          "name": "Protocols Hub",
+          "module_id": "PROTOCOLS-INDEX-001",
+          "version": "v3.0.0",
+          "layer": 3,
+          "type": "protocol_hub",
           "status": "active",
-          "description": "Р вЂњР С•РЎвЂљР С•Р Р†РЎвЂ№Р Вµ Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Р Т‘Р В»РЎРЏ dashboard Р С‘ Р С•РЎвЂљРЎвЂЎРЎвЂРЎвЂљР С•Р Р†",
+          "description": "Central hub of all Mandala Symbiosis protocols. Core-Sync, Integrity-Scan, Map-Navigation and other protocols are stored and activated here.",
           "tags": [
-            "visualizations",
-            "charts",
-            "graphs",
-            "layer_4"
+            "protocols",
+            "activation",
+            "core",
+            "hub",
+            "english_core",
+            "v3.0.0"
           ],
           "resonance": "0%",
           "is_v2_compliant": true,
@@ -1358,25 +695,695 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "6c2ea8d3579da15e8ce0881e5710e810",
-          "last_modified": 1775725801.0728738,
+          "hash": "81c701b624286b0797a0f7e8ec1e4d41",
+          "last_modified": 1775754360.3653052,
+          "file_count": 10,
+          "total_size_kb": 17.78,
+          "scan_timestamp": "2026-04-09T17:06:01.637347"
+        },
+        {
+          "honeycomb_id": "protocols/delegate_external_ai",
+          "path": "honeycombs/protocols/delegate_external_ai/index.json",
+          "relative_path": "protocols/delegate_external_ai",
+          "name": "Р”РµР»РµРіРёСЂРѕРІР°РЅРёРµ РІРЅРµС€РЅРµРјСѓ РР",
+          "module_id": "PROTO-DELEGATE-EXTERNAL-AI-001",
+          "version": "v2.2.0",
+          "layer": 3,
+          "type": "protocol",
+          "status": "active",
+          "description": "РџСЂРѕС‚РѕРєРѕР» РґРµР»РµРіРёСЂРѕРІР°РЅРёСЏ Р·Р°РґР°С‡ РІРЅРµС€РЅРµРјСѓ РР (Grok, Claude, Gemini Рё РґСЂ.). РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё С„РѕСЂРјРёСЂСѓРµС‚ РўР—, РїРµСЂРµРґР°С‘С‚ РєРѕРЅС‚РµРєСЃС‚ Рё РїСЂРёРЅРёРјР°РµС‚ СЂРµР·СѓР»СЊС‚Р°С‚ РѕР±СЂР°С‚РЅРѕ РІ РњР°РЅРґР°Р»Сѓ.",
+          "tags": [
+            "protocol",
+            "delegate",
+            "external_ai",
+            "workflow"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "a3bc3ebe02990a7b924128aa419cedb4",
+          "last_modified": 1775754360.3653052,
           "file_count": 1,
-          "total_size_kb": 5.89,
-          "scan_timestamp": "2026-04-09T12:38:30.042819"
+          "total_size_kb": 2.3,
+          "scan_timestamp": "2026-04-09T17:06:01.637663"
+        },
+        {
+          "honeycomb_id": "protocols/protocol_selector",
+          "path": "honeycombs/protocols/protocol_selector/index.json",
+          "relative_path": "protocols/protocol_selector",
+          "name": "Р’С‹Р±РѕСЂ РїСЂРѕС‚РѕРєРѕР»Р°",
+          "module_id": "PROTO-SELECTOR-001",
+          "version": "v2.2.0",
+          "layer": 3,
+          "type": "protocol",
+          "status": "active",
+          "description": "РџСЂРѕС‚РѕРєРѕР» РІС‹Р±РѕСЂР° Рё Р°РєС‚РёРІР°С†РёРё Р»СЋР±РѕРіРѕ РґРѕСЃС‚СѓРїРЅРѕРіРѕ РїСЂРѕС‚РѕРєРѕР»Р° РїСЂСЏРјРѕ РёР· boot_online РёР»Рё РїРѕ РєРѕРјР°РЅРґРµ Р’СѓРґСѓ. Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№ СЃРµР»РµРєС‚РѕСЂ РїСЂРѕС‚РѕРєРѕР»РѕРІ РњР°РЅРґР°Р»С‹.",
+          "tags": [
+            "protocol",
+            "selector",
+            "activation",
+            "first_load"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "d8bfeb2f5689c519211dbd06d6badd6d",
+          "last_modified": 1775754360.3653052,
+          "file_count": 1,
+          "total_size_kb": 2.08,
+          "scan_timestamp": "2026-04-09T17:06:01.637964"
+        },
+        {
+          "honeycomb_id": "protocols/deep_analysis",
+          "path": "honeycombs/protocols/deep_analysis/index.json",
+          "relative_path": "protocols/deep_analysis",
+          "name": "Р“Р»СѓР±РѕРєРёР№ Р°РЅР°Р»РёР·",
+          "module_id": "PROTO-DEEP-ANALYSIS-001",
+          "version": "v2.2.0",
+          "layer": 3,
+          "type": "protocol",
+          "status": "active",
+          "description": "РџСЂРѕС‚РѕРєРѕР» РіР»СѓР±РѕРєРѕРіРѕ Р°РЅР°Р»РёР·Р° СЃРѕС‚, СЃС‚СЂСѓРєС‚СѓСЂС‹, СЂРµР·РѕРЅР°РЅСЃР° Рё Р·РґРѕСЂРѕРІСЊСЏ РњР°РЅРґР°Р»С‹. Р’С‹СЏРІР»СЏРµС‚ СЃРєСЂС‹С‚С‹Рµ РїСЂРѕР±Р»РµРјС‹, РїСЂРµРґР»Р°РіР°РµС‚ РёСЃРїСЂР°РІР»РµРЅРёСЏ Рё СѓР»СѓС‡С€РµРЅРёСЏ.",
+          "tags": [
+            "protocol",
+            "deep_analysis",
+            "integrity",
+            "scan"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "2e69a91b198b8f029e783eed0fca1654",
+          "last_modified": 1775754360.3653052,
+          "file_count": 1,
+          "total_size_kb": 1.89,
+          "scan_timestamp": "2026-04-09T17:06:01.638252"
+        },
+        {
+          "honeycomb_id": "protocols/auto_realize_seed",
+          "path": "honeycombs/protocols/auto_realize_seed/index.json",
+          "relative_path": "protocols/auto_realize_seed",
+          "name": "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ СЃРµРјСЏРЅ",
+          "module_id": "PROTO-AUTO-REALIZE-001",
+          "version": "v2.2.0",
+          "layer": 3,
+          "type": "protocol",
+          "status": "active",
+          "description": "РџСЂРѕС‚РѕРєРѕР» Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РјР°С‚РµСЂРёР°Р»РёР·Р°С†РёРё СЃРµРјСЏРЅ РёР· honeycombs/seeds РІ РїРѕР»РЅРѕС†РµРЅРЅС‹Рµ СЃРѕС‚С‹. РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃРѕР·РґР°С‘С‚ index.json, СЃС‚СЂСѓРєС‚СѓСЂСѓ Рё Р·Р°РїСѓСЃРєР°РµС‚ СЂРµР·РѕРЅР°РЅСЃ.",
+          "tags": [
+            "protocol",
+            "auto_realize",
+            "seeds",
+            "materialization"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ad6c4959e5a02cb453be50e9321cc196",
+          "last_modified": 1775754360.3653052,
+          "file_count": 1,
+          "total_size_kb": 1.95,
+          "scan_timestamp": "2026-04-09T17:06:01.638488"
+        },
+        {
+          "honeycomb_id": "seeds",
+          "path": "honeycombs/seeds/index.json",
+          "relative_path": "seeds",
+          "name": "РЎРµРјРµРЅР°",
+          "module_id": "SEEDS-INDEX-001",
+          "version": "v2.2.0",
+          "layer": 2,
+          "type": "seed_incubator",
+          "status": "active",
+          "description": "РРЅРєСѓР±Р°С‚РѕСЂ РёРґРµР№ Рё РЅР°С‡Р°Р»СЊРЅС‹С… РїСЂРѕС‚РѕС‚РёРїРѕРІ РґР»СЏ РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. Р—РґРµСЃСЊ С…СЂР°РЅСЏС‚СЃСЏ СЃРµРјРµРЅР° РЅРѕРІС‹С… honeycombs, РєРѕРЅС†РµРїС†РёР№ Рё РЅР°РїСЂР°РІР»РµРЅРёР№ СЂР°Р·РІРёС‚РёСЏ СЃРёСЃС‚РµРјС‹.",
+          "tags": [
+            "seeds",
+            "incubator",
+            "ideas",
+            "prototypes",
+            "growth"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "fd7b25c5c1e114883ed337f1ff0f46d1",
+          "last_modified": 1775754360.371119,
+          "file_count": 19,
+          "total_size_kb": 38.88,
+          "scan_timestamp": "2026-04-09T17:06:01.638953"
+        },
+        {
+          "honeycomb_id": "roadmaps",
+          "path": "honeycombs/roadmaps/index.json",
+          "relative_path": "roadmaps",
+          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
+          "last_modified": 1775754360.3693268,
+          "file_count": 14,
+          "total_size_kb": 68.92,
+          "scan_timestamp": "2026-04-09T17:06:01.639720"
+        },
+        {
+          "honeycomb_id": "core_map",
+          "path": "honeycombs/core_map/index.json",
+          "relative_path": "core_map",
+          "name": "Core System Map",
+          "module_id": "HONEYCOMB-CORE-MAP-001",
+          "version": "v3.0.1",
+          "layer": 1,
+          "type": "critical_directive",
+          "status": "active",
+          "description": "Base map of all Mandala Symbiosis components",
+          "tags": [
+            "core",
+            "map",
+            "critical",
+            "v3.0",
+            "english_core"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "8adc9c16f23250a0b4a2568f58f3a206",
+          "last_modified": 1775754360.3549352,
+          "file_count": 88,
+          "total_size_kb": 631.61,
+          "scan_timestamp": "2026-04-09T17:06:01.641526"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full",
+          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
+          "last_modified": 1775754360.359478,
+          "file_count": 1,
+          "total_size_kb": 23.89,
+          "scan_timestamp": "2026-04-09T17:06:01.642008"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final",
+          "name": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р В Р вЂ Р РЋР С“Р В Р’ВµР РЋРІР‚В¦ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ  Р РЋР С“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р В Р’ВµР В РЎВР РЋРІР‚в„–",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "eb7d2a64070d5e84cad2fddefac65021",
+          "last_modified": 1775754360.359478,
+          "file_count": 1,
+          "total_size_kb": 16.25,
+          "scan_timestamp": "2026-04-09T17:06:01.642711"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_00-35-16_phase2_step3/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3",
+          "name": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В РІР‚СљР В Р’В»Р В Р’В°Р В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р В РЎвЂР В Р вЂ¦Р В РўвЂР В Р’ВµР В РЎвЂќР РЋР С“ Р В Р вЂ Р РЋР С“Р В Р’ВµР РЋРІР‚В¦ Р РЋР вЂљР В РЎвЂўР В Р’В°Р В РўвЂР В РЎВР В Р’В°Р В РЎвЂ”Р В РЎвЂўР В Р вЂ  Р РЋР С“Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р В Р’ВµР В РЎВР РЋРІР‚в„–",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "eb7d2a64070d5e84cad2fddefac65021",
+          "last_modified": 1775754360.359478,
+          "file_count": 1,
+          "total_size_kb": 16.25,
+          "scan_timestamp": "2026-04-09T17:06:01.643051"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final",
+          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
+          "last_modified": 1775754360.359478,
+          "file_count": 1,
+          "total_size_kb": 23.89,
+          "scan_timestamp": "2026-04-09T17:06:01.643471"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
+          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
+          "last_modified": 1775754360.361092,
+          "file_count": 1,
+          "total_size_kb": 23.89,
+          "scan_timestamp": "2026-04-09T17:06:01.643853"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup",
+          "name": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘ Р РЋР В ",
+          "module_id": "HONEYCOMB-PROTOCOLS-001",
+          "version": "v2.2.0",
+          "layer": 1,
+          "type": "honeycomb_manifest",
+          "status": "active",
+          "description": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В±РЎвЂ№РЎРѓРЎвЂљРЎР‚Р С•Р в„– Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘: Р Р…Р В°Р В±Р С•РЎР‚РЎвЂ№ РЎвЂћР В°Р в„–Р В»Р С•Р Р† Р Т‘Р В»РЎРЏ РЎвЂљР С‘Р С—Р С•Р Р†РЎвЂ№РЎвЂ¦ Р В·Р В°Р Т‘Р В°РЎвЂЎ Р РЋР В ",
+          "tags": [
+            "protocols",
+            "activation",
+            "sr",
+            "workflow",
+            "core"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "d30b6502f97f9756f025f537c6f274c5",
+          "last_modified": 1775754360.360092,
+          "file_count": 1,
+          "total_size_kb": 13.52,
+          "scan_timestamp": "2026-04-09T17:06:01.644407"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed",
+          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
+          "last_modified": 1775754360.361092,
+          "file_count": 1,
+          "total_size_kb": 23.89,
+          "scan_timestamp": "2026-04-09T17:06:01.644910"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup",
+          "name": "РџСЂРѕС‚РѕРєРѕР»С‹ Р°РєС‚РёРІР°С†РёРё РЎР ",
+          "module_id": "HONEYCOMB-PROTOCOLS-001",
+          "version": "v2.2.0",
+          "layer": 1,
+          "type": "honeycomb_manifest",
+          "status": "active",
+          "description": "РџСЂРѕС‚РѕРєРѕР»С‹ Р±С‹СЃС‚СЂРѕР№ Р°РєС‚РёРІР°С†РёРё: РЅР°Р±РѕСЂС‹ С„Р°Р№Р»РѕРІ РґР»СЏ С‚РёРїРѕРІС‹С… Р·Р°РґР°С‡ РЎР ",
+          "tags": [
+            "protocols",
+            "activation",
+            "sr",
+            "workflow",
+            "core"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "41c5d528f0d81890158a6072b734ccd2",
+          "last_modified": 1775754360.359478,
+          "file_count": 1,
+          "total_size_kb": 11.18,
+          "scan_timestamp": "2026-04-09T17:06:01.645494"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_10-36-49_rm012_chat/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat",
+          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
+          "last_modified": 1775754360.361092,
+          "file_count": 1,
+          "total_size_kb": 23.89,
+          "scan_timestamp": "2026-04-09T17:06:01.646314"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_09-23-57_protocols_final",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_09-23-57_protocols_final/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_09-23-57_protocols_final",
+          "name": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘ Р РЋР В ",
+          "module_id": "HONEYCOMB-PROTOCOLS-001",
+          "version": "v2.2.0",
+          "layer": 1,
+          "type": "honeycomb_manifest",
+          "status": "active",
+          "description": "Р СџРЎР‚Р С•РЎвЂљР С•Р С”Р С•Р В»РЎвЂ№ Р В±РЎвЂ№РЎРѓРЎвЂљРЎР‚Р С•Р в„– Р В°Р С”РЎвЂљР С‘Р Р†Р В°РЎвЂ Р С‘Р С‘: Р Р…Р В°Р В±Р С•РЎР‚РЎвЂ№ РЎвЂћР В°Р в„–Р В»Р С•Р Р† Р Т‘Р В»РЎРЏ РЎвЂљР С‘Р С—Р С•Р Р†РЎвЂ№РЎвЂ¦ Р В·Р В°Р Т‘Р В°РЎвЂЎ Р РЋР В ",
+          "tags": [
+            "protocols",
+            "activation",
+            "sr",
+            "workflow",
+            "core"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "d30b6502f97f9756f025f537c6f274c5",
+          "last_modified": 1775754360.360092,
+          "file_count": 1,
+          "total_size_kb": 13.52,
+          "scan_timestamp": "2026-04-09T17:06:01.646956"
+        },
+        {
+          "honeycomb_id": "core_map/registry/backups/2026-04-08_10-30-04_rm011_bot",
+          "path": "honeycombs/core_map/registry/backups/2026-04-08_10-30-04_rm011_bot/index.json",
+          "relative_path": "core_map/registry/backups/2026-04-08_10-30-04_rm011_bot",
+          "name": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В ",
+          "module_id": "ROADMAPS-INDEX",
+          "version": "v2.1.0",
+          "layer": 2,
+          "type": "registry_index",
+          "status": "active",
+          "description": "Р В Р’В Р Р†Р вЂљРЎС™Р В Р’В Р вЂ™Р’В»Р В Р’В Р вЂ™Р’В°Р В Р’В Р В РІР‚В Р В Р’В Р В РІР‚В¦Р В Р Р‹Р Р†Р вЂљРІвЂћвЂ“Р В Р’В Р Р†РІР‚С›РІР‚вЂњ Р В Р’В Р РЋРІР‚ВР В Р’В Р В РІР‚В¦Р В Р’В Р СћРІР‚ВР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋРІР‚СњР В Р Р‹Р В РЎвЂњ Р В Р’В Р В РІР‚В Р В Р Р‹Р В РЎвЂњР В Р’В Р вЂ™Р’ВµР В Р Р‹Р Р†Р вЂљР’В¦ Р В Р Р‹Р В РІР‚С™Р В Р’В Р РЋРІР‚СћР В Р’В Р вЂ™Р’В°Р В Р’В Р СћРІР‚ВР В Р’В Р РЋР’ВР В Р’В Р вЂ™Р’В°Р В Р’В Р РЋРІР‚вЂќР В Р’В Р РЋРІР‚СћР В Р’В Р В РІР‚В  Р В Р Р‹Р В РЎвЂњР В Р’В Р РЋРІР‚ВР В Р Р‹Р В РЎвЂњР В Р Р‹Р Р†Р вЂљРЎв„ўР В Р’В Р вЂ™Р’ВµР В Р’В Р РЋР’ВР В Р Р‹Р Р†Р вЂљРІвЂћвЂ“",
+          "tags": [
+            "roadmaps",
+            "index",
+            "registry",
+            "tracking"
+          ],
+          "resonance": "100%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
+          "last_modified": 1775754360.361092,
+          "file_count": 1,
+          "total_size_kb": 23.89,
+          "scan_timestamp": "2026-04-09T17:06:01.647687"
+        },
+        {
+          "honeycomb_id": "modules",
+          "path": "honeycombs/modules/index.json",
+          "relative_path": "modules",
+          "name": "modules",
+          "module_id": "modules",
+          "version": "v2.2.0",
+          "layer": "core",
+          "type": "registry_container",
+          "status": "active",
+          "description": "",
+          "tags": [],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "60f8ce3c6f8f816129b711ecaa70db1f",
+          "last_modified": 1775754360.364471,
+          "file_count": 1,
+          "total_size_kb": 0.85,
+          "scan_timestamp": "2026-04-09T17:06:01.648152"
+        },
+        {
+          "honeycomb_id": "extensions",
+          "path": "honeycombs/extensions/index.json",
+          "relative_path": "extensions",
+          "name": "extensions",
+          "module_id": "extensions",
+          "version": "v2.2.0",
+          "layer": "foundation",
+          "type": "meta_container",
+          "status": "active",
+          "description": "",
+          "tags": [],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "bfe6cb88064d570ed083e72c881d9bba",
+          "last_modified": 1775754360.361092,
+          "file_count": 1,
+          "total_size_kb": 0.86,
+          "scan_timestamp": "2026-04-09T17:06:01.648455"
+        },
+        {
+          "honeycomb_id": "analytics",
+          "path": "honeycombs/analytics/index.json",
+          "relative_path": "analytics",
+          "name": "Р РЋР С‘РЎРѓРЎвЂљР ВµР СР В° Р В°Р Р…Р В°Р В»Р С‘РЎвЂљР С‘Р С”Р С‘ РЎРѓР С•РЎвЂљ",
+          "module_id": "ANALYTICS-001",
+          "version": "v2.2.0",
+          "layer": 3,
+          "type": "analytics_module",
+          "status": "active",
+          "description": "Р С’Р Р…Р В°Р В»Р С‘Р В· Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ РЎРѓР С•РЎвЂљ, health Р С‘РЎРѓРЎвЂљР С•РЎР‚Р С‘Р С‘, РЎвЂљР ВµР Р…Р Т‘Р ВµР Р…РЎвЂ Р С‘Р в„– РЎР‚Р В°Р В·Р Р†Р С‘РЎвЂљР С‘РЎРЏ",
+          "tags": [
+            "analytics",
+            "metrics",
+            "trends",
+            "layer_3"
+          ],
+          "resonance": "0%",
+          "is_v2_compliant": true,
+          "validation_details": {
+            "errors": [],
+            "warnings": [
+              "Рекомендуется добавить описание в meta.description"
+            ],
+            "missing_sections": [],
+            "missing_fields": []
+          },
+          "hash": "36bbdf72da8efe13094d218e27d83d62",
+          "last_modified": 1775754360.3538985,
+          "file_count": 1,
+          "total_size_kb": 4.91,
+          "scan_timestamp": "2026-04-09T17:06:01.648782"
         }
       ],
       "statistics": {
         "total_honeycombs": 42,
         "valid_v2": 41,
         "invalid_v2": 1,
-        "total_files": 235,
-        "total_size_kb": 1369.36,
+        "total_files": 237,
+        "total_size_kb": 1394.97,
         "new_honeycombs": 42,
         "modified_honeycombs": 0,
         "deleted_honeycombs": 0,
         "validation_errors": 1,
         "scan_errors": 0,
-        "last_scan_timestamp": "2026-04-09T12:38:30.047804"
+        "last_scan_timestamp": "2026-04-09T17:06:01.649628"
       },
       "health_status": {
         "status": "healthy",
@@ -1392,53 +1399,53 @@
           }
         ],
         "new_honeycombs": [
+          "registry",
+          "registry/notifications",
+          "registry/core",
+          "registry/backups",
+          "registry/modules",
+          "registry/extensions",
+          "registry/dashboard",
           "akasha",
-          "analytics",
-          "awareness",
-          "boot_online",
-          "communications",
-          "core_map",
-          "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final",
-          "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3",
-          "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full",
-          "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final",
-          "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup",
-          "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup",
-          "core_map/registry/backups/2026-04-08_09-23-57_protocols_final",
-          "core_map/registry/backups/2026-04-08_10-30-04_rm011_bot",
-          "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat",
-          "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed",
-          "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
-          "extensions",
           "inbox",
-          "instructions",
-          "modules",
           "philosophy",
+          "visualizations",
+          "tasks",
+          "tasks/active/chat_update",
+          "tasks/active/bot_update",
+          "communications",
+          "boot_online",
+          "awareness",
+          "sphaerae",
+          "instructions",
+          "tectosphaera",
           "protocols",
-          "protocols/auto_realize_seed",
-          "protocols/deep_analysis",
           "protocols/delegate_external_ai",
           "protocols/protocol_selector",
-          "registry",
-          "registry/backups",
-          "registry/core",
-          "registry/dashboard",
-          "registry/extensions",
-          "registry/modules",
-          "registry/notifications",
-          "roadmaps",
+          "protocols/deep_analysis",
+          "protocols/auto_realize_seed",
           "seeds",
-          "sphaerae",
-          "tasks",
-          "tasks/active/bot_update",
-          "tasks/active/chat_update",
-          "tectosphaera",
-          "visualizations"
+          "roadmaps",
+          "core_map",
+          "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full",
+          "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final",
+          "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3",
+          "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final",
+          "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
+          "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup",
+          "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed",
+          "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup",
+          "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat",
+          "core_map/registry/backups/2026-04-08_09-23-57_protocols_final",
+          "core_map/registry/backups/2026-04-08_10-30-04_rm011_bot",
+          "modules",
+          "extensions",
+          "analytics"
         ],
         "modified_honeycombs": [],
         "deleted_honeycombs": []
       },
-      "last_updated": "2026-04-09T12:38:30.047817",
+      "last_updated": "2026-04-09T17:06:01.649634",
       "scanner_version": "v1.0.0"
     }
   },
