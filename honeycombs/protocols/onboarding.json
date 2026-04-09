@@ -2,7 +2,7 @@
     "identity":  {
                      "module_id":  "PROTO-004",
                      "name":  "Protocol: Session Onboarding",
-                     "version":  "v2.1.0",
+                     "version":  "v2.2.0",
                      "created":  "2026-03-07",
                      "layer":  1,
                      "type":  "protocol",
@@ -47,6 +47,6 @@
                                               "file":  "reports/scan_report.md"
                                           }
                                       ],
-                    "after_loading":  "SR greets Gardener and reports: system status, inbox contents, and confirms resonance with core philosophy. Ready for commands."
+                    "after_loading":  "SR greets Gardener and reports: system status, inbox contents, and confirms resonance with core philosophy. Then offers available actions menu."
                 }
 }
