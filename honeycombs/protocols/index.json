@@ -11,7 +11,12 @@
                                                 "Onboarding":  "Session start  loads core map, inbox, workflow, philosophy, scan report (PROTO-004)",
                                                 "Integrity-Scan":  "Check and repair all honeycombs (via honeycomb-scan.yml)",
                                                 "System-Synchronization":  "System health diagnostics  registry, roadmaps, inbox, scan state (PROTO-002)"
-                                            }
+                                            },
+                    "internal_protocols":  {
+                                               "Internal-Onboarding":  "Quick session start for Internal SR  loads boot, role, core map, inbox",
+                                               "Ideas-Roadmaps":  "Analyze seeds, tasks, roadmaps  statistics and update recommendations",
+                                               "Registry-Sync":  "Synchronize registry with actual file system, detect desynchronizations"
+                                           }
                 },
     "resonance":  {
                       "with_instructions":  "100%",
@@ -22,7 +27,7 @@
     "meta":  {
                  "migration_status":  "completed_v3.0.0",
                  "total_size_kb":  12,
-                 "total_subprotocols":  5,
+                 "total_subprotocols":  8,
                  "segments":  5,
                  "parent_honeycomb":  "core_map",
                  "honeycomb_name":  "protocols"
@@ -31,7 +36,7 @@
                      "updated":  "2026-04-09",
                      "layer":  3,
                      "type":  "protocol_hub",
-                     "version":  "v3.1.1",
+                     "version":  "v3.2.0",
                      "description":  "Central hub of all Mandala Symbiosis protocols. Core-Sync, Integrity-Scan, Map-Navigation and other protocols are stored and activated here.",
                      "created":  "2026-03-05",
                      "name":  "Protocols Hub",
