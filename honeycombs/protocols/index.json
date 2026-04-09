@@ -1,48 +1,50 @@
-﻿{
-    "identity": {
-        "module_id": "PROTOCOLS-INDEX-001",
-        "name": "РџСЂРѕС‚РѕРєРѕР»С‹ Р°РєС‚РёРІР°С†РёРё",
-        "version": "v2.2.0",
-        "created": "2026-03-05",
-        "updated": "2026-04-08",
-        "layer": 3,
-        "type": "protocol_hub",
-        "description": "Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№ С…Р°Р± РІСЃРµС… РїСЂРѕС‚РѕРєРѕР»РѕРІ РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. Р—РґРµСЃСЊ С…СЂР°РЅСЏС‚СЃСЏ Рё Р°РєС‚РёРІРёСЂСѓСЋС‚СЃСЏ РїСЂРѕС‚РѕРєРѕР»С‹ Core-Sync, Integrity-Scan, Map-Navigation Рё РґСЂСѓРіРёРµ.",
-        "status": "active",
-        "priority": "critical",
-        "tags": [
-            "protocols",
-            "activation",
-            "core",
-            "hub"
-        ]
-    },
-    "meta": {
-        "honeycomb_name": "protocols",
-        "parent_honeycomb": "core_map",
-        "total_subprotocols": 5,
-        "total_size_kb": 12.0,
-        "segments": 5,
-        "migration_status": "completed_v2.2"
-    },
-    "content": {
-        "available_protocols": {
-            "Core-Sync-001": "РџРѕР»РЅР°СЏ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ СЃ СЏРґСЂРѕРј",
-            "Integrity-Scan": "РџСЂРѕРІРµСЂРєР° Рё РёСЃРїСЂР°РІР»РµРЅРёРµ РІСЃРµС… СЃРѕС‚",
-            "Map-Navigation": "РџРµСЂРµС…РѕРґ Рє РєР°СЂС‚Рµ СЏРґСЂР°",
-            "Protocol-Activation": "Р’С‹Р±РѕСЂ Рё Р·Р°РїСѓСЃРє Р»СЋР±РѕРіРѕ РїСЂРѕС‚РѕРєРѕР»Р°",
-            "First-Load-Suggestion": "РџСЂРµРґР»РѕР¶РµРЅРёРµ РїСЂРѕС‚РѕРєРѕР»Р° РїСЂРё РїРµСЂРІРѕР№ Р·Р°РіСЂСѓР·РєРµ"
-        },
-        "note": "Р’СЃРµ РїРѕРґ-РїСЂРѕС‚РѕРєРѕР»С‹ РЅР°С…РѕРґСЏС‚СЃСЏ РІ protocols/РїРѕРґРїР°РїРєР°С…"
-    },
-    "resonance": {
-        "with_core_map": "100%",
-        "with_boot_online": "100%",
-        "with_instructions": "100%",
-        "with_registry": "100%"
-    },
-    "directives": {
-        "primary": "РџРѕРґРґРµСЂР¶РёРІР°С‚СЊ Р°РєС‚РёРІР°С†РёСЋ РїСЂРѕС‚РѕРєРѕР»РѕРІ РёР· boot_online Рё Р»СЋР±С‹С… РґСЂСѓРіРёС… СЃРѕС‚",
-        "secondary": "РћР±РµСЃРїРµС‡РёРІР°С‚СЊ РјРіРЅРѕРІРµРЅРЅС‹Р№ Р·Р°РїСѓСЃРє РїСЂРѕС‚РѕРєРѕР»РѕРІ РїРѕ РєРѕРјР°РЅРґРµ Р’СѓРґСѓ"
-    }
+{
+    "directives":  {
+                       "primary":  "Support protocol activation from boot_online and any other honeycombs",
+                       "secondary":  "Ensure instant protocol launch by Voodoo command"
+                   },
+    "content":  {
+                    "note":  "All sub-protocols are located in protocols/ subfolders",
+                    "available_protocols":  {
+                                                "Map-Navigation":  "Navigate to core map",
+                                                "Integrity-Scan":  "Check and repair all honeycombs",
+                                                "Core-Sync-001":  "Full synchronization with core",
+                                                "First-Load-Suggestion":  "Suggest protocol on first load",
+                                                "Protocol-Activation":  "Select and launch any protocol"
+                                            }
+                },
+    "resonance":  {
+                      "with_instructions":  "100%",
+                      "with_registry":  "100%",
+                      "with_boot_online":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "meta":  {
+                 "migration_status":  "completed_v3.0.0",
+                 "total_size_kb":  12,
+                 "total_subprotocols":  5,
+                 "segments":  5,
+                 "parent_honeycomb":  "core_map",
+                 "honeycomb_name":  "protocols"
+             },
+    "identity":  {
+                     "updated":  "2026-04-09",
+                     "layer":  3,
+                     "type":  "protocol_hub",
+                     "version":  "v3.0.0",
+                     "description":  "Central hub of all Mandala Symbiosis protocols. Core-Sync, Integrity-Scan, Map-Navigation and other protocols are stored and activated here.",
+                     "created":  "2026-03-05",
+                     "name":  "Protocols Hub",
+                     "module_id":  "PROTOCOLS-INDEX-001",
+                     "status":  "active",
+                     "priority":  "critical",
+                     "tags":  [
+                                  "protocols",
+                                  "activation",
+                                  "core",
+                                  "hub",
+                                  "english_core",
+                                  "v3.0.0"
+                              ]
+                 }
 }
