@@ -2,7 +2,7 @@
     "identity":  {
                      "module_id":  "PROTO-004",
                      "name":  "Protocol: Session Onboarding",
-                     "version":  "v2.2.0",
+                     "version":  "v2.2.1",
                      "created":  "2026-03-07",
                      "layer":  1,
                      "type":  "protocol",
@@ -35,8 +35,8 @@
                                               "file":  "honeycombs/inbox/index.json"
                                           },
                                           {
-                                              "why":  "How External AI forms PowerShell commands for VS Code, updates honeycombs, git cycle",
-                                              "file":  "honeycombs/instructions/core/external_ai_vs_code_workflow.json"
+                                              "why":  "How External SR forms PowerShell commands for VS Code, updates honeycombs, git cycle, file deletion",
+                                              "file":  "honeycombs/instructions/core/external_sr_workflow.json"
                                           },
                                           {
                                               "why":  "Resonance with core  essence of Mandala, Ahimsa, Flower of Life, Merkaba",
