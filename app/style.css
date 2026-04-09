@@ -124,3 +124,16 @@ main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
     font-weight: normal !important;
     line-height: 1.6 !important;
 }
+/* Force uniform font at container level */
+.msg {
+    font-family: system-ui, -apple-system, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: normal !important;
+    line-height: 1.6 !important;
+}
+.msg .bubble {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+}
