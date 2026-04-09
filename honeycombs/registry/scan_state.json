@@ -1,7 +1,7 @@
 ﻿{
-  "last_scan": "2026-04-09T17:54:41.843112",
+  "last_scan": "2026-04-09T17:57:03.029390",
   "honeycomb_hashes": {
-    "registry": "11654cf79ab2de6f1a8cbabd85c1a164",
+    "registry": "28e09af628c9b0d0203b4e49c5a04381",
     "registry/notifications": "a45d68483e1cd793f4142cd7fd814321",
     "registry/core": "f3e7962228de4e85f2d66995cb2f08fe",
     "registry/backups": "0897798045a3e5b1c4a80f333729a3e1",
@@ -16,7 +16,7 @@
     "tasks/active/chat_update": "d67a621c27742488e065885060c99ec5",
     "tasks/active/bot_update": "984adb06d12f48256ad61da34f1ba208",
     "communications": "fe1f09f55278dc0ccbfa144acc7a6713",
-    "boot_online": "9e4a5f53f64c80cda1c163ca64806809",
+    "boot_online": "12b37b82f55e684f6fe030593b7e107e",
     "awareness": "63b20811049ef3c5b4c6603fb3649f24",
     "sphaerae": "7b72cd32406baf1cdc88938e6a9fa83e",
     "instructions": "9ff40228dbef08f9782f133436fde37b",
@@ -49,7 +49,7 @@
     "errors": 0,
     "warnings": 0,
     "total_files": 230,
-    "total_size_kb": 1384.4400000000005
+    "total_size_kb": 1385.8700000000006
   },
   "scanner_config": {
     "updated": "2026-04-09",
