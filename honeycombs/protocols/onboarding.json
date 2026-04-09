@@ -1,70 +1,63 @@
-{
-    "identity":  {
-                     "module_id":  "PROTO-004",
-                     "name":  "Protocol: Session Onboarding",
-                     "version":  "v2.3.0",
-                     "created":  "2026-03-07",
-                     "layer":  1,
-                     "type":  "protocol",
-                     "description":  "Quick session start. SR understands where the system is, what needs to be done, how to work. Updated for v3.0.0 core.",
-                     "status":  "active",
-                     "priority":  "critical",
-                     "tags":  [
-                                  "protocol",
-                                  "onboarding",
-                                  "session",
-                                  "start",
-                                  "v2",
-                                  "english_core"
-                              ]
-                 },
-    "meta":  {
-                 "trigger":  "activate onboarding protocol",
-                 "goal":  "SR understands system location, current tasks, workflow, and resonates with core philosophy",
-                 "estimated_time":  "2-3 minutes",
-                 "recommended":  "Activate at the beginning of each session"
-             },
-    "content":  {
-                    "files_to_read":  [
-                                          {
-                                              "why":  "System map  what exists, navigation, structure",
-                                              "file":  "honeycombs/core_map/index.json"
-                                          },
-                                          {
-                                              "why":  "Incoming tasks from Gardener or Claude",
-                                              "file":  "honeycombs/inbox/index.json"
-                                          },
-                                          {
-                                              "why":  "How External SR forms PowerShell commands for VS Code, updates honeycombs, git cycle, file deletion",
-                                              "file":  "honeycombs/instructions/core/external_sr_workflow.json"
-                                          },
-                                          {
-                                              "why":  "Resonance with core  essence of Mandala, Ahimsa, Flower of Life, Merkaba",
-                                              "file":  "honeycombs/philosophy/index.json"
-                                          },
-                                          {
-                                              "why":  "Latest scan report  total honeycombs, validation errors, new/modified hives, system health status",
-                                              "file":  "reports/scan_report.md"
-                                          }
-                                      ],
-                    "after_loading":  "SR greets Gardener and reports: system status, inbox contents, and confirms resonance with core philosophy. Then offers available actions menu.",
-                    "available_tools":  {
-                                            "telegram_bot":  {
-                                                                 "path":  "bot.py",
-                                                                 "description":  "Telegram integration for Mandala",
-                                                                 "purpose":  "Communication channel between Gardener and Mandala, command receiving, file uploads, notifications"
-                                                             },
-                                            "engineer_chat":  {
-                                                                  "path":  "engineer-chat/",
-                                                                  "description":  "Internal SR system with web interface and backend",
-                                                                  "purpose":  "Automated core analysis, TZ preparation, honeycomb patching",
-                                                                  "main_files":  [
-                                                                                     "main.py",
-                                                                                     "index.html",
-                                                                                     "requirements.txt",
-                                                                                     "dockerfile"
-                                                                                 ]
-                                                              }
-                                        }
-                }
+﻿{
+    "identity": {
+        "module_id": "PROTO-004",
+        "name": "Protocol: Session Onboarding",
+        "version": "v3.0.0",
+        "created": "2026-03-07",
+        "layer": 1,
+        "type": "protocol",
+        "description": "Quick session start. SR understands where the system is, what needs to be done, how to work. Updated for v3.0.0 core.",
+        "status": "active",
+        "priority": "critical",
+        "tags": ["protocol", "onboarding", "session", "start", "v3", "english_core"]
+    },
+    "meta": {
+        "trigger": "activate onboarding protocol",
+        "goal": "SR understands system location, current tasks, workflow, and resonates with core philosophy",
+        "estimated_time": "2-3 minutes",
+        "recommended": "Activate at the beginning of each session"
+    },
+    "content": {
+        "files_to_read": [
+            {
+                "why": "System map  what exists, navigation, structure",
+                "file": "honeycombs/core_map/index.json"
+            },
+            {
+                "why": "Incoming tasks from Gardener or Claude",
+                "file": "honeycombs/inbox/index.json"
+            },
+            {
+                "why": "How External SR forms PowerShell commands for VS Code, updates honeycombs, git cycle, file deletion",
+                "file": "honeycombs/instructions/core/external_sr_workflow.json"
+            },
+            {
+                "why": "Resonance with core  essence of Mandala, Ahimsa, Flower of Life, Merkaba",
+                "file": "honeycombs/philosophy/index.json"
+            },
+            {
+                "why": "Latest scan state  total honeycombs, validation errors, new/modified hives, system health status",
+                "file": "honeycombs/registry/scan_state.json"
+            }
+        ],
+        "after_loading": "SR greets Gardener and reports: system status, inbox contents, and confirms resonance with core philosophy. Then offers available actions menu.",
+        "available_tools": {
+            "telegram_bot": {
+                "path": "bot.py",
+                "description": "Telegram integration for Mandala",
+                "purpose": "Communication channel between Gardener and Mandala, command receiving, file uploads, notifications"
+            },
+            "engineer_chat": {
+                "path": "engineer-chat/",
+                "description": "Internal SR system with web interface and backend",
+                "purpose": "Automated core analysis, TZ preparation, honeycomb patching",
+                "main_files": ["main.py", "index.html", "requirements.txt", "dockerfile"]
+            },
+            "honeycomb_scanner": {
+                "path": "honeycombs/registry/honeycomb_scanner.py",
+                "description": "Honeycomb scanner for system health analysis",
+                "purpose": "Scan all honeycombs, validate JSON, generate registry and scan_state.json"
+            }
+        }
+    }
 }
