@@ -1,13 +1,13 @@
-{
+﻿{
     "identity": {
         "module_id": "INSTR-HONEYCOMB-001",
-        "name": "Сота инструкций",
+        "name": "РЎРѕС‚Р° РёРЅСЃС‚СЂСѓРєС†РёР№",
         "version": "v2.1.0",
         "created": "2026-03-01",
         "updated": "2026-04-08",
         "layer": 2,
         "type": "honeycomb_manifest",
-        "description": "Манифест соты инструкций. Инструкции для СР: роль v3.0, патчи, делегирование внешнему ИИ, стандарты работы.",
+        "description": "РњР°РЅРёС„РµСЃС‚ СЃРѕС‚С‹ РёРЅСЃС‚СЂСѓРєС†РёР№. РРЅСЃС‚СЂСѓРєС†РёРё РґР»СЏ РЎР : СЂРѕР»СЊ v3.0, РїР°С‚С‡Рё, РґРµР»РµРіРёСЂРѕРІР°РЅРёРµ РІРЅРµС€РЅРµРјСѓ РР, СЃС‚Р°РЅРґР°СЂС‚С‹ СЂР°Р±РѕС‚С‹.",
         "status": "active",
         "priority": "critical",
         "tags": [
@@ -25,14 +25,14 @@
         "segments": 2,
         "total_files": 8,
         "total_size_kb": 26.0,
-        "segmentation_strategy": "critical (патчи/удаление) и core (роль СР, workflow, стандарты)",
-        "load_strategy": "Ленивая загрузка сегментов",
-        "abc_categories": "A=СР внутренняя работа, B=взаимодействие с External AI, C=GitHub/инструменты"
+        "segmentation_strategy": "critical (РїР°С‚С‡Рё/СѓРґР°Р»РµРЅРёРµ) Рё core (СЂРѕР»СЊ РЎР , workflow, СЃС‚Р°РЅРґР°СЂС‚С‹)",
+        "load_strategy": "Р›РµРЅРёРІР°СЏ Р·Р°РіСЂСѓР·РєР° СЃРµРіРјРµРЅС‚РѕРІ",
+        "abc_categories": "A=РЎР  РІРЅСѓС‚СЂРµРЅРЅСЏСЏ СЂР°Р±РѕС‚Р°, B=РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ External AI, C=GitHub/РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹"
     },
     "structure": {
         "segments": {
             "critical": {
-                "description": "Критические инструкции  читать перед любым изменением файлов",
+                "description": "РљСЂРёС‚РёС‡РµСЃРєРёРµ РёРЅСЃС‚СЂСѓРєС†РёРё  С‡РёС‚Р°С‚СЊ РїРµСЂРµРґ Р»СЋР±С‹Рј РёР·РјРµРЅРµРЅРёРµРј С„Р°Р№Р»РѕРІ",
                 "files": {
                     "patch_mastery": {
                         "file": "critical/patch_mastery.json",
@@ -40,7 +40,7 @@
                         "size_kb": 6.3,
                         "tags": ["critical", "patch", "mastery", "pre_check"],
                         "load_priority": "critical",
-                        "description": "Форматы патчей v2.3. pre_check обязателен. content  НЕ объект.",
+                        "description": "Р¤РѕСЂРјР°С‚С‹ РїР°С‚С‡РµР№ v2.3. pre_check РѕР±СЏР·Р°С‚РµР»РµРЅ. content  РќР• РѕР±СЉРµРєС‚.",
                         "category": "A"
                     },
                     "file_deletion_guide": {
@@ -49,13 +49,13 @@
                         "size_kb": 2.6,
                         "tags": ["delete", "guide", "critical"],
                         "load_priority": "critical",
-                        "description": "Удаление файлов  подтверждение Садовника обязательно.",
+                        "description": "РЈРґР°Р»РµРЅРёРµ С„Р°Р№Р»РѕРІ  РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РЎР°РґРѕРІРЅРёРєР° РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ.",
                         "category": "A"
                     }
                 }
             },
             "core": {
-                "description": "Основные инструкции рабочего процесса СР v3.0",
+                "description": "РћСЃРЅРѕРІРЅС‹Рµ РёРЅСЃС‚СЂСѓРєС†РёРё СЂР°Р±РѕС‡РµРіРѕ РїСЂРѕС†РµСЃСЃР° РЎР  v3.0",
                 "files": {
                     "sr_role_v3": {
                         "file": "core/sr_role_v3.json",
@@ -63,7 +63,7 @@
                         "size_kb": 4.7,
                         "tags": ["sr", "role", "v3", "manager", "analyst"],
                         "load_priority": "critical",
-                        "description": "Роль СР v3.0  менеджер-аналитик. Что делает, что НЕ делает, формат ТЗ для внешнего ИИ.",
+                        "description": "Р РѕР»СЊ РЎР  v3.0  РјРµРЅРµРґР¶РµСЂ-Р°РЅР°Р»РёС‚РёРє. Р§С‚Рѕ РґРµР»Р°РµС‚, С‡С‚Рѕ РќР• РґРµР»Р°РµС‚, С„РѕСЂРјР°С‚ РўР— РґР»СЏ РІРЅРµС€РЅРµРіРѕ РР.",
                         "category": "A"
                     },
                     "sr_workflow": {
@@ -72,7 +72,7 @@
                         "size_kb": 2.9,
                         "tags": ["workflow", "sr", "analyst", "delegation"],
                         "load_priority": "critical",
-                        "description": "Рабочий процесс СР v3.0  аналитик ядра, патчи с pre_check, делегирование External AI.",
+                        "description": "Р Р°Р±РѕС‡РёР№ РїСЂРѕС†РµСЃСЃ РЎР  v3.0  Р°РЅР°Р»РёС‚РёРє СЏРґСЂР°, РїР°С‚С‡Рё СЃ pre_check, РґРµР»РµРіРёСЂРѕРІР°РЅРёРµ External AI.",
                         "category": "A"
                     }
                 }
@@ -85,7 +85,7 @@
         "with_registry": "100%"
     },
     "directives": {
-        "primary": "Все сегменты инструкций должны загружаться перед любой работой с файлами",
-        "secondary": "External AI получает чёткие брифы через claude_workflow.json"
+        "primary": "Р’СЃРµ СЃРµРіРјРµРЅС‚С‹ РёРЅСЃС‚СЂСѓРєС†РёР№ РґРѕР»Р¶РЅС‹ Р·Р°РіСЂСѓР¶Р°С‚СЊСЃСЏ РїРµСЂРµРґ Р»СЋР±РѕР№ СЂР°Р±РѕС‚РѕР№ СЃ С„Р°Р№Р»Р°РјРё",
+        "secondary": "External AI РїРѕР»СѓС‡Р°РµС‚ С‡С‘С‚РєРёРµ Р±СЂРёС„С‹ С‡РµСЂРµР· claude_workflow.json"
     }
 }
