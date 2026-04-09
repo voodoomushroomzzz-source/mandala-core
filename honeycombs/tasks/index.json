@@ -1,89 +1,61 @@
 ﻿{
-    "identity":  {
-                     "module_id":  "TASKS-MANIFEST-004",
-                     "name":  "Tasks Honeycomb Manifest",
-                     "version":  "v2.2.0",
-                     "created":  "2026-03-01",
-                     "updated":  "2026-04-07",
-                     "layer":  1,
-                     "type":  "honeycomb_manifest"
-                 },
-    "meta":  {
-                 "description":  "РЈРїСЂРѕС‰РµРЅРЅС‹Р№ РјР°РЅРёС„РµСЃС‚ СЃРѕС‚С‹ Р·Р°РґР°С‡: active/ Рё archive/ РїР°РїРєРё РІ РєРѕСЂРЅРµ",
-                 "status":  "active",
-                 "priority":  "high",
-                 "tags":  [
-                              "tasks",
-                              "simple",
-                              "workflow",
-                              "minimal"
-                          ],
-                 "resonance":  "100%",
-                 "simplification_status":  "step_1"
-             },
-    "structure":  {
-                      "total_segments":  6,
-                      "segments":  [
-                                       {
-                                           "segment":  "overview",
-                                           "file":  "overview.json",
-                                           "description":  "РћР±С‰РµРµ РѕРїРёСЃР°РЅРёРµ СЃРёСЃС‚РµРјС‹ Р·Р°РґР°С‡",
-                                           "size_kb":  0.3
-                                       },
-                                       {
-                                           "segment":  "workflow",
-                                           "file":  "workflow.json",
-                                           "description":  "РџСЂРѕСЃС‚С‹Рµ РїСЂР°РІРёР»Р° СЂР°Р±РѕС‚С‹ СЃ Р·Р°РґР°С‡Р°РјРё",
-                                           "size_kb":  0.4
-                                       },
-                                       {
-                                           "segment":  "registry",
-                                           "file":  "registry.json",
-                                           "description":  "Р РµРµСЃС‚СЂ РІСЃРµС… Р·Р°РґР°С‡ Рё СЃС‚Р°С‚РёСЃС‚РёРєР°",
-                                           "size_kb":  0.2
-                                       },
-                                       {
-                                           "segment":  "template",
-                                           "file":  "basic_task.json",
-                                           "description":  "РЁР°Р±Р»РѕРЅ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ Р·Р°РґР°С‡",
-                                           "size_kb":  0.3
-                                       },
-                                       {
-                                           "segment":  "active_tasks",
-                                           "folder":  "active/",
-                                           "description":  "РђРєС‚РёРІРЅС‹Рµ Р·Р°РґР°С‡Рё РІ СЂР°Р±РѕС‚Рµ",
-                                           "files_count":  2
-                                       },
-                                       {
-                                           "segment":  "archive_tasks",
-                                           "folder":  "archive/",
-                                           "description":  "РђСЂС…РёРІРЅС‹Рµ Р·Р°РґР°С‡Рё",
-                                           "files_count":  0
-                                       }
-                                   ]
-                  },
-    "navigation":  {
-                       "parent_map":  "honeycombs/core_map/index.json",
-                       "related_honeycombs":  [
-                                                  "honeycombs/telegram_bot/index.json",
-                                                  "honeycombs/engineer_chat/index.json"
-                                              ],
-                       "first_file":  "overview.json"
-                   },
-    "registry":  {
-                     "total_files":  5,
-                     "total_size_kb":  1.2,
-                     "last_updated":  "2026-03-03",
-                     "notes":  "РЁР°Рі 1: РЎС‚СЂСѓРєС‚СѓСЂР°: active/ Рё archive/ РІ РєРѕСЂРЅРµ СЃРѕС‚С‹"
-                 },
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-07",
-                   "notes":  "Обновлено до v2.x (Шаг 2, resonance-2026-04-v2.3.2)"
-               }
+    "identity": {
+        "module_id": "TASKS-MANIFEST-004",
+        "name": "Tasks Honeycomb Manifest",
+        "version": "v3.0.0",
+        "created": "2026-03-01",
+        "updated": "2026-04-10",
+        "layer": 1,
+        "type": "honeycomb_manifest"
+    },
+    "meta": {
+        "description": "Tasks honeycomb: active/ and archive/ folders for work tracking. Minimal structure.",
+        "status": "active",
+        "priority": "high",
+        "tags": ["tasks", "simple", "workflow", "minimal"],
+        "resonance": "100%"
+    },
+    "structure": {
+        "total_segments": 3,
+        "segments": [
+            {
+                "segment": "template",
+                "file": "basic_task.json",
+                "description": "Task template for creating new tasks",
+                "size_kb": 2.0
+            },
+            {
+                "segment": "active_tasks",
+                "folder": "active/",
+                "description": "Currently active tasks",
+                "files_count": 2
+            },
+            {
+                "segment": "archive_tasks",
+                "folder": "archive/",
+                "description": "Completed and archived tasks",
+                "files_count": 2
+            }
+        ]
+    },
+    "navigation": {
+        "parent_map": "honeycombs/core_map/index.json",
+        "first_file": "basic_task.json"
+    },
+    "registry": {
+        "total_files": 2,
+        "total_size_kb": 8.0,
+        "last_updated": "2026-04-10",
+        "notes": "v3.0.0: simplified to active/ + archive/. template in basic_task.json."
+    },
+    "resonance": {
+        "status": "fully_resonant",
+        "with_boot": "100%",
+        "with_core_map": "100%"
+    },
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-04-10",
+        "notes": "v3.0.0  cleaned up obsolete files."
+    }
 }
