@@ -1,0 +1,43 @@
+{
+    "content":  {
+                    "after_loading":  "Internal SR reports: active seeds count, pending tasks, roadmap progress, and suggests: which seeds to realize, which tasks to prioritize, which roadmaps need updates.",
+                    "files_to_read":  [
+                                          {
+                                              "why":  "All seeds with statuses",
+                                              "file":  "honeycombs/seeds/index.json"
+                                          },
+                                          {
+                                              "why":  "Active tasks and their priorities",
+                                              "file":  "honeycombs/tasks/index.json"
+                                          },
+                                          {
+                                              "why":  "Current roadmaps and milestones",
+                                              "file":  "honeycombs/roadmaps/index.json"
+                                          }
+                                      ]
+                },
+    "meta":  {
+                 "estimated_time":  "3-5 minutes",
+                 "goal":  "Generate statistics on seeds, tasks, and roadmaps; suggest priority updates",
+                 "trigger":  "activate ideas analysis"
+             },
+    "identity":  {
+                     "layer":  2,
+                     "type":  "protocol",
+                     "version":  "v1.0.0",
+                     "description":  "Analyze seeds, tasks, and roadmaps to provide statistics and update recommendations.",
+                     "created":  "2026-04-09",
+                     "name":  "Protocol: Ideas \u0026 Roadmaps Analysis",
+                     "module_id":  "PROTO-INTERNAL-IDEAS-ROADMAPS-001",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "protocol",
+                                  "ideas",
+                                  "roadmaps",
+                                  "seeds",
+                                  "tasks",
+                                  "internal_sr"
+                              ]
+                 }
+}

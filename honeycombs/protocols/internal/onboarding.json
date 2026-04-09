@@ -1,0 +1,46 @@
+{
+    "content":  {
+                    "after_loading":  "Internal SR reports: system status, inbox contents, and readiness to manage core.",
+                    "files_to_read":  [
+                                          {
+                                              "why":  "Core directives and navigation for Internal SR",
+                                              "file":  "simbiosis/boot.json"
+                                          },
+                                          {
+                                              "why":  "Zone of responsibility  what Internal SR does and does NOT do",
+                                              "file":  "honeycombs/instructions/core/sr_internal_role.json"
+                                          },
+                                          {
+                                              "why":  "System map  navigation and structure",
+                                              "file":  "honeycombs/core_map/index.json"
+                                          },
+                                          {
+                                              "why":  "Incoming tasks from Gardener",
+                                              "file":  "honeycombs/inbox/index.json"
+                                          }
+                                      ]
+                },
+    "meta":  {
+                 "estimated_time":  "1-2 minutes",
+                 "goal":  "Internal SR understands system location, current tasks, and role responsibilities",
+                 "trigger":  "activate internal onboarding"
+             },
+    "identity":  {
+                     "layer":  1,
+                     "type":  "protocol",
+                     "version":  "v1.0.0",
+                     "description":  "Quick session start for Internal SR. Loads boot, role, core map, and inbox.",
+                     "created":  "2026-04-09",
+                     "name":  "Protocol: Internal Onboarding",
+                     "module_id":  "PROTO-INTERNAL-ONBOARDING-001",
+                     "status":  "active",
+                     "priority":  "critical",
+                     "tags":  [
+                                  "protocol",
+                                  "onboarding",
+                                  "internal_sr",
+                                  "session",
+                                  "start"
+                              ]
+                 }
+}
