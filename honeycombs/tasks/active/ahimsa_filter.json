@@ -3,12 +3,13 @@
     "name": "Ahimsa Auto-Filter  Core Cleanliness Scanner",
     "status": "todo",
     "priority": "MEDIUM",
+    "deadline": "2026-05-01",
     "created": "2026-04-10",
     "updated": "2026-04-10",
-    "description": "Implement Ahimsa filter to detect noise, duplicates, stale files, and redundant data in Mandala core. Preserve system cleanliness in the spirit of Ahimsa.",
-    "tags": ["ahimsa", "scanner", "cleanup", "automation"],
+    "description": "Implement Ahimsa filter to detect noise, duplicates, stale files, redundant data, and structural inconsistencies in Mandala core.",
+    "tags": ["ahimsa", "scanner", "cleanup", "automation", "quality"],
     "progress": 0,
-    "notes": "Phase 1: create ahimsa_filter.py with duplicate/stale/empty detection.",
+    "notes": "Phase 1: create ahimsa_filter.py. Phase 2: integration with scanner.",
     "plan": {
         "phase_1": {
             "name": "Core Analyzer",
@@ -30,5 +31,14 @@
             "deliverables": ["GitHub Actions step"],
             "estimated": "30 min"
         }
-    }
+    },
+    "checks": [
+        {"category": "duplicates", "description": "Files with identical name or description across honeycombs"},
+        {"category": "stale", "description": "Files with updated > 30 days ago and status planned/todo"},
+        {"category": "empty", "description": "Files < 500 bytes without meaningful content"},
+        {"category": "broken_links", "description": "Paths pointing to non-existent files"},
+        {"category": "redundant_fields", "description": "Fields present in >80% of files but not in standard"},
+        {"category": "missing_layer", "description": "Honeycombs without 'layer' field in identity", "priority": "LOW"},
+        {"category": "zero_resonance", "description": "Honeycombs with resonance '0%'  should be updated", "priority": "LOW"}
+    ]
 }
