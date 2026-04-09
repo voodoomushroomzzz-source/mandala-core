@@ -58,6 +58,32 @@
                 "Manage roadmaps and registry"
             ]
         },
+        "system_flow": {
+            "description": "How ideas and tasks flow through Mandala Symbiosis",
+            "diagram": "Scout Agent / Gardener / Claude  Seeds/  Task (1 month) or Roadmap (>1 month)  Archive",
+            "entities": {
+                "seeds": {
+                    "path": "honeycombs/seeds/",
+                    "role": "Entry point for all raw ideas, Scout Agent findings, and unprocessed concepts.",
+                    "horizon": "Unlimited"
+                },
+                "tasks": {
+                    "path": "honeycombs/tasks/active/",
+                    "role": "Concrete work units, completable within 1 month (~40-60 hours).",
+                    "horizon": "1 month"
+                },
+                "roadmaps": {
+                    "path": "honeycombs/roadmaps/active/",
+                    "role": "Strategic directions and large initiatives spanning multiple months.",
+                    "horizon": ">1 month"
+                },
+                "archive": {
+                    "path": "honeycombs/tasks/archive/ and honeycombs/roadmaps/archive/",
+                    "role": "Completed tasks and roadmaps. Historical record."
+                }
+            },
+            "inbox_note": "The 'inbox' honeycomb is deprecated and will be removed. Its contents are being migrated to Seeds or Tasks."
+        },
         "common_pitfalls": [
             "Using \"python\" instead of \"py\"",
             "Saving JSON with BOM",
@@ -93,8 +119,8 @@
         "updated": "2026-04-10",
         "layer": 2,
         "type": "workflow_guide",
-        "version": "v1.1.0",
-        "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. Includes concise communication rules.",
+        "version": "v1.2.0",
+        "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. Includes system flow logic.",
         "created": "2026-04-09",
         "name": "External SR Workflow",
         "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -108,7 +134,8 @@
             "json_patch",
             "git",
             "english_core",
-            "concise"
+            "concise",
+            "system_flow"
         ]
     }
 }
