@@ -1,7 +1,7 @@
 ﻿{
-  "last_scan": "2026-04-09T22:23:21.272798",
+  "last_scan": "2026-04-09T22:24:35.812003",
   "honeycomb_hashes": {
-    "registry": "7892ca4defd3891a2b9df09afc660cb6",
+    "registry": "3e7c5a702bb941c7e8fc7b72c5250938",
     "registry/notifications": "a45d68483e1cd793f4142cd7fd814321",
     "registry/core": "f3e7962228de4e85f2d66995cb2f08fe",
     "registry/backups": "0897798045a3e5b1c4a80f333729a3e1",
@@ -49,7 +49,7 @@
     "errors": 0,
     "warnings": 0,
     "total_files": 227,
-    "total_size_kb": 1273.6700000000003
+    "total_size_kb": 1343.7600000000004
   },
   "scanner_config": {
     "updated": "2026-04-09",
