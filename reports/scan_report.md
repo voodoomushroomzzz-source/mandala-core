@@ -1,7 +1,7 @@
 # Honeycomb Scan Report  Mandala Symbiosis
 
 **System:** Mandala Symbiosis
-**Date:** 2026-04-09 21:54:29
+**Date:** 2026-04-09 21:58:30
 **Scanner:** honeycomb_scanner.py
 
 ## Statistics
@@ -12,8 +12,8 @@
 | Valid v2 | 40 |
 | Invalid v2 | 0 |
 | Errors | 0 |
-| Total files | 228 |
-| Total size | 1369.56 KB |
+| Total files | 227 |
+| Total size | 1358.32 KB |
 | Status | healthy |
 
 ## New honeycombs
@@ -105,4 +105,4 @@
 **Total with index.json:** 40
 
 ---
-*Generated: 2026-04-09 21:54:29*
+*Generated: 2026-04-09 21:58:30*
