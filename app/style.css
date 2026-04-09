@@ -8,22 +8,18 @@
     --accent-glow: rgba(16,185,129,0.15);
     --user-bg: #1a2a24;
     --user-border: #2a4a3a;
-    --assistant-bg: rgba(16,185,129,0.08);
+    --assistant-bg: rgba(16,185,129,0.06);
     --assistant-border: #10b981;
-    --system-bg: transparent;
-    --system-border: #3a5a4a;
     --radius: 12px;
-    --radius-sm: 8px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    line-height: 1.5;
 }
 .toolbar {
     display: flex;
@@ -33,84 +29,34 @@ body {
     border-bottom: 1px solid var(--border);
     background: var(--surface);
 }
-.logo {
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    letter-spacing: 2px;
-    color: var(--accent);
-}
-.proto-bar {
-    display: flex;
-    gap: 6px;
-}
+.logo { font-family: monospace; font-size: 14px; color: var(--accent); }
+.proto-bar { display: flex; gap: 6px; }
 .proto-bar button {
     background: transparent;
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: 6px;
     color: var(--text-dim);
-    font-family: 'Courier New', monospace;
+    font-family: monospace;
     font-size: 10px;
     font-weight: bold;
     padding: 4px 8px;
     cursor: pointer;
-    transition: all 0.15s;
 }
-.proto-bar button:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-glow);
-}
-.status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-}
-.dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-}
-.dot.connecting { background: #a78bfa; box-shadow: 0 0 8px #a78bfa; }
-.dot.error { background: #f43f5e; box-shadow: 0 0 8px #f43f5e; }
-main {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-.messages {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-.msg {
-    display: flex;
-    flex-direction: column;
-    max-width: 85%;
-    animation: fadeIn 0.2s ease;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.msg.user {
-    align-self: flex-end;
-}
-.msg.assistant {
-    align-self: flex-start;
-}
-.msg.system {
-    align-self: center;
-    max-width: 90%;
-}
+.proto-bar button:hover { border-color: var(--accent); color: var(--accent); }
+.status { display: flex; align-items: center; gap: 8px; font-family: monospace; font-size: 11px; color: var(--text-dim); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.dot.connecting { background: #a78bfa; }
+.dot.error { background: #f43f5e; }
+main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
+.messages { display: flex; flex-direction: column; gap: 16px; }
+.msg { display: flex; max-width: 80%; animation: fadeIn 0.2s; }
+.msg.user { align-self: flex-end; }
+.msg.assistant { align-self: flex-start; }
+.msg.system { align-self: center; max-width: 90%; }
 .bubble {
     padding: 12px 16px;
     border-radius: var(--radius);
     word-break: break-word;
-    white-space: pre-wrap;
     font-size: 14px;
     line-height: 1.6;
 }
@@ -118,61 +64,47 @@ main {
     background: var(--user-bg);
     border: 1px solid var(--user-border);
     border-bottom-right-radius: 4px;
-    color: #d4e6dc;
 }
 .msg.assistant .bubble {
     background: var(--assistant-bg);
     border: 1px solid var(--assistant-border);
     border-bottom-left-radius: 4px;
-    color: var(--text);
 }
 .msg.system .bubble {
-    background: var(--system-bg);
-    border: 1px dashed var(--system-border);
+    background: transparent;
+    border: 1px dashed var(--border);
     color: var(--text-dim);
     font-size: 12px;
     text-align: center;
-    padding: 8px 16px;
 }
-.input-bar {
+.thinking {
     display: flex;
+    align-items: center;
     gap: 8px;
-    padding: 12px 16px;
-    border-top: 1px solid var(--border);
-    background: var(--surface);
+    padding: 8px 0;
+    color: var(--text-dim);
+    font-size: 13px;
+}
+.thinking.hidden { display: none; }
+.thinking-text { font-style: italic; }
+.dots span { animation: blink 1.4s infinite; }
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,20% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+.input-bar {
+    display: flex; gap: 8px; padding: 12px 16px;
+    border-top: 1px solid var(--border); background: var(--surface);
 }
 .input-bar input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: system-ui, sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
+    flex: 1; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 16px; color: var(--text);
+    font-size: 14px; outline: none;
 }
-.input-bar input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-}
+.input-bar input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 .input-bar button {
-    width: 48px;
-    background: var(--accent);
-    border: none;
-    border-radius: var(--radius);
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
+    width: 48px; background: var(--accent); border: none;
+    border-radius: var(--radius); color: white; font-size: 20px;
+    font-weight: bold; cursor: pointer;
 }
-.input-bar button:hover {
-    background: #34d399;
-    box-shadow: 0 0 16px var(--accent);
-    transform: scale(1.02);
-}
-.input-bar button:active {
-    transform: scale(0.98);
-}
+.input-bar button:hover { background: #34d399; box-shadow: 0 0 16px var(--accent); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
