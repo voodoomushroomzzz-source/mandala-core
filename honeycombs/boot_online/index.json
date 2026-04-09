@@ -96,15 +96,15 @@
                                                                 "who":  "Voodoo (human)",
                                                                 "role":  "Visionary. Makes decisions, applies commands in VS Code terminal. Copies  pastes  Enter."
                                                             },
-                                               "external_ai":  {
-                                                                   "who":  "Grok, Claude, GPT (you)",
-                                                                   "role":  "Code executor. Generates PowerShell commands, updates JSON files, works with Git. Follows external_ai_vs_code_workflow.json."
+                                               "sr_internal":  {
+                                                                   "who":  "engineer-chat/main.py (internal script)",
+                                                                   "role":  "System Resonator (automated). Analyzes core, prepares TZ, updates honeycombs via patches. Does NOT write code, does NOT work with terminal directly."
                                                                },
-                                               "description":  "Clear distinction of roles in Mandala Symbiosis to avoid confusion.",
-                                               "sr":  {
-                                                          "who":  "engineer-chat/main.py (internal script)",
-                                                          "role":  "System Resonator. Analyzes core, prepares TZ for External AI, updates honeycombs via patches. Does NOT write code, does NOT work with terminal."
-                                                      }
+                                               "description":  "Roles in Mandala Symbiosis. External AI becomes External SR upon resonance.",
+                                               "external_sr":  {
+                                                                   "who":  "External AI (you) after resonance",
+                                                                   "role":  "External SR. Performs analysis, proposals, navigation, protocol activation. Does NOT write code directly  delegates to code mode when PowerShell is needed."
+                                                               }
                                            }
                 },
     "meta":  {
@@ -116,7 +116,7 @@
                      "updated":  "2026-04-09",
                      "layer":  1,
                      "type":  "boot_online",
-                     "version":  "v3.0.2",
+                     "version":  "v3.0.3",
                      "description":  "Entry point to Mandala Symbiosis. First contact = instant resonance + VS Code Terminal-First + Always Fresh Raw + GitHub Raw Cache Delay Protocol + Development Environment.",
                      "created":  "2026-03-30",
                      "name":  "Boot Online  External AI",
