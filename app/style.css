@@ -7,14 +7,12 @@
     --accent: #10b981;
     --accent-glow: rgba(16,185,129,0.15);
     --radius: 6px;
-    --font-mono: 'Fira Mono', monospace;
-    --font-sans: system-ui, sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: var(--font-sans);
+    font-family: system-ui, -apple-system, sans-serif;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -28,16 +26,37 @@ body {
     background: var(--surface);
 }
 .logo {
-    font-family: var(--font-mono);
+    font-family: monospace;
     font-size: 13px;
     letter-spacing: 2px;
     color: var(--accent);
+}
+.proto-bar {
+    display: flex;
+    gap: 6px;
+}
+.proto-bar button {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    font-family: monospace;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.proto-bar button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-glow);
 }
 .status {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-mono);
+    font-family: monospace;
     font-size: 11px;
     color: var(--text-dim);
 }
@@ -51,13 +70,39 @@ body {
 .dot.error { background: #f43f5e; box-shadow: 0 0 8px #f43f5e; }
 main {
     flex: 1;
-    overflow: hidden;
-}
-chat-view, hive-view {
-    display: block;
-    height: 100%;
     overflow-y: auto;
     padding: 16px;
+}
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.msg {
+    max-width: 80%;
+}
+.msg.user {
+    align-self: flex-end;
+}
+.msg.user .bubble {
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+.msg.assistant .bubble {
+    background: var(--accent-glow);
+    border: 1px solid var(--accent);
+}
+.msg.system .bubble {
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--text-dim);
+    font-size: 11px;
+    align-self: center;
+}
+.bubble {
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    word-break: break-word;
 }
 .input-bar {
     display: flex;
@@ -73,10 +118,9 @@ chat-view, hive-view {
     border-radius: var(--radius);
     padding: 10px 14px;
     color: var(--text);
-    font-family: var(--font-sans);
+    font-family: system-ui, sans-serif;
     font-size: 14px;
     outline: none;
-    transition: border-color 0.2s;
 }
 .input-bar input:focus {
     border-color: var(--accent);
@@ -87,36 +131,12 @@ chat-view, hive-view {
     background: var(--accent);
     border: none;
     border-radius: var(--radius);
-    color: var(--bg);
+    color: white;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s;
 }
 .input-bar button:hover {
     background: #34d399;
     box-shadow: 0 0 16px var(--accent);
-}
-.input-bar button.stop {
-    background: #f43f5e;
-}
-.proto-bar {
-    display: flex;
-    gap: 4px;
-}
-.proto-bar button {
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text-dim);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    padding: 4px 8px;
-    cursor: pointer;
-    transition: all 0.15s;
-}
-.proto-bar button:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-glow);
 }

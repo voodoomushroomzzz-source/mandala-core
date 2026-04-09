@@ -55,7 +55,7 @@
                     currentMessageDiv = addMessage('assistant', '');
                 }
                 messageBuffer += data.content;
-                currentMessageDiv.querySelector('.bubble').textContent = messageBuffer;
+                currentMessageDiv.querySelector('.bubble').innerHTML = messageBuffer.replace(/\n/g, '<br>');
                 document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
             }
             if (data.type === 'done' || data.type === 'model_done') {
