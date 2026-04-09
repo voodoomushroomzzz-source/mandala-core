@@ -1,50 +1,118 @@
-# Honeycomb Scan Report  Mandala Simbioza
+# Honeycomb Scan Report  Mandala Symbiosis
 
-**Система:** Mandala Simbioza v1.2.0
-**Дата:** 2026-04-07 20:57:28
-**Сканер:** honeycomb_scanner.py v1.0.0
+**System:** Mandala Symbiosis
+**Date:** 2026-04-09 17:06:01
+**Scanner:** honeycomb_scanner.py
 
-## Статистика
+## Statistics
 
-| Параметр                  | Значение          |
-|---------------------------|-------------------|
-| Всего сот                 | 0 |
-| Валидных v2               | 0 |
-| Невалидных v2             | 0 |
-| Ошибок                    | 25 |
-| Всего файлов              | 0 |
-| Общий размер              | 0 KB |
-| Последнее сканирование    | 2026-04-07T20:57:28.300203 |
+| Parameter | Value |
+|-----------|-------|
+| Total honeycombs | 42 |
+| Valid v2 | 41 |
+| Invalid v2 | 1 |
+| Errors | 1 |
+| Total files | 237 |
+| Total size | 1394.97 KB |
+| Status | healthy |
 
-## Структура сот
+## New honeycombs
 
-- honeycombs/boot_online/
-- honeycombs/roadmaps/
-- honeycombs/akasha/
-- honeycombs/philosophy/
-- honeycombs/instructions/
-- honeycombs/engineer_chat/
-- honeycombs/telegram_bot/
-- honeycombs/visualizations/
-- honeycombs/communications/
-- honeycombs/tasks/
-- honeycombs/sphaerae/
-- honeycombs/analytics/
-- honeycombs/seeds/
-- honeycombs/core_map/
-- honeycombs/protocols/
-- honeycombs/registry/
-- honeycombs/registry/extensions/
-- honeycombs/registry/modules/
-- honeycombs/registry/core/
-- honeycombs/registry/notifications/
-- honeycombs/registry/backups/
-- honeycombs/registry/dashboard/
-- honeycombs/awareness/
-- honeycombs/tectosphaera/
-- honeycombs/inbox/
+- registry
+- registry/notifications
+- registry/core
+- registry/backups
+- registry/modules
+- registry/extensions
+- registry/dashboard
+- akasha
+- inbox
+- philosophy
+- visualizations
+- tasks
+- tasks/active/chat_update
+- tasks/active/bot_update
+- communications
+- boot_online
+- awareness
+- sphaerae
+- instructions
+- tectosphaera
+- protocols
+- protocols/delegate_external_ai
+- protocols/protocol_selector
+- protocols/deep_analysis
+- protocols/auto_realize_seed
+- seeds
+- roadmaps
+- core_map
+- core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full
+- core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final
+- core_map/registry/backups/2026-04-08_00-35-16_phase2_step3
+- core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final
+- core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2
+- core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup
+- core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed
+- core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup
+- core_map/registry/backups/2026-04-08_10-36-49_rm012_chat
+- core_map/registry/backups/2026-04-08_09-23-57_protocols_final
+- core_map/registry/backups/2026-04-08_10-30-04_rm011_bot
+- modules
+- extensions
+- analytics
 
-**Итого сот с index.json:** 25
+## Validation errors
+
+### registry  Unknown
+-  Отсутствует обязательное поле identity.name
+-  Отсутствует обязательное поле identity.version
+
+## Honeycomb structure
+
+- registry/
+- registry/notifications/
+- registry/core/
+- registry/backups/
+- registry/modules/
+- registry/extensions/
+- registry/dashboard/
+- akasha/
+- inbox/
+- philosophy/
+- visualizations/
+- tasks/
+- tasks/active/chat_update/
+- tasks/active/bot_update/
+- communications/
+- boot_online/
+- awareness/
+- sphaerae/
+- instructions/
+- tectosphaera/
+- protocols/
+- protocols/delegate_external_ai/
+- protocols/protocol_selector/
+- protocols/deep_analysis/
+- protocols/auto_realize_seed/
+- seeds/
+- roadmaps/
+- core_map/
+- core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full/
+- core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final/
+- core_map/registry/backups/2026-04-08_00-35-16_phase2_step3/
+- core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final/
+- core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2/
+- core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup/
+- core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed/
+- core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup/
+- core_map/registry/backups/2026-04-08_10-36-49_rm012_chat/
+- core_map/registry/backups/2026-04-08_09-23-57_protocols_final/
+- core_map/registry/backups/2026-04-08_10-30-04_rm011_bot/
+- modules/
+- extensions/
+- analytics/
+
+**Total with index.json:** 42
 
 ---
-*Сгенерировано: 2026-04-07 20:57:28*
+*Generated: 2026-04-09 17:06:01*
