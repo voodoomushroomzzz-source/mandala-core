@@ -15,38 +15,6 @@
                                         "priority":  "MEDIUM"
                                     },
                                     {
-                                        "file":  "honeycombs/instructions/core/sr_role_v3.json",
-                                        "priority":  "CRITICAL"
-                                    },
-                                    {
-                                        "file":  "honeycombs/instructions/core/sr_workflow.json",
-                                        "priority":  "HIGH"
-                                    },
-                                    {
-                                        "file":  "honeycombs/instructions/core/claude_workflow.json",
-                                        "priority":  "MEDIUM"
-                                    },
-                                    {
-                                        "file":  "honeycombs/instructions/core/manifest_standard_v2.json",
-                                        "priority":  "MEDIUM"
-                                    },
-                                    {
-                                        "file":  "honeycombs/instructions/core/folder_management.json",
-                                        "priority":  "LOW"
-                                    },
-                                    {
-                                        "file":  "honeycombs/instructions/core/file_naming.json",
-                                        "priority":  "LOW"
-                                    },
-                                    {
-                                        "file":  "honeycombs/instructions/critical/patch_mastery.json",
-                                        "priority":  "HIGH"
-                                    },
-                                    {
-                                        "file":  "honeycombs/instructions/critical/file_deletion_guide.json",
-                                        "priority":  "HIGH"
-                                    },
-                                    {
                                         "file":  "honeycombs/inbox/index.json",
                                         "priority":  "HIGH"
                                     },
@@ -119,7 +87,7 @@
                                         "priority":  "LOW"
                                     }
                                 ],
-                    "next_action":  "Translate instructions/core/sr_role_v3.json (CRITICAL)",
+                    "next_action":  "Translate inbox/index.json (HIGH)",
                     "translated":  [
                                        {
                                            "status":  "",
@@ -170,6 +138,16 @@
                                            "status":  "",
                                            "file":  "honeycombs/protocols/deep_analysis/index.json",
                                            "version":  "v3.0.0"
+                                       },
+                                       {
+                                           "status":  "",
+                                           "file":  "honeycombs/instructions/core/file_naming.json",
+                                           "version":  "v1.1.0"
+                                       },
+                                       {
+                                           "status":  "",
+                                           "file":  "honeycombs/instructions/core/manifest_standard_v2.json",
+                                           "version":  "v2.3.0"
                                        }
                                    ],
                     "notes":  [
@@ -183,8 +161,8 @@
                  "deadline":  "ASAP",
                  "source":  "Gardener request via External AI (Grok)",
                  "estimated_files":  28,
-                 "progress_percent":  "36%",
-                 "translated_files":  10,
+                 "progress_percent":  "43%",
+                 "translated_files":  12,
                  "honeycombs_priority":  [
                                              "philosophy/index.json",
                                              "protocols/index.json",
