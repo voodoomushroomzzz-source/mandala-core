@@ -350,65 +350,65 @@ class HoneycombScanner:
             logger.info(f"  + Новая: {honeycomb_id}")
     
     def _update_registry(self) -> bool:
-    """Обновление главного реестра в registry/index.json (content.registry)"""
-    try:
-        # Главный реестр (index.json)
-        registry_file = Path("honeycombs/registry/index.json")
-        
-        if registry_file.exists():
-            with open(registry_file, 'r', encoding='utf-8') as f:
-                registry = json.load(f)
-        else:
-            registry = {}
+        """Обновление главного реестра в registry/index.json (content.registry)"""
+        try:
+            # Главный реестр (index.json)
+            registry_file = Path("honeycombs/registry/index.json")
+            
+            if registry_file.exists():
+                with open(registry_file, 'r', encoding='utf-8') as f:
+                    registry = json.load(f)
+            else:
+                registry = {}
 
-        # Гарантируем структуру content.registry
-        if "content" not in registry:
-            registry["content"] = {}
-        if "registry" not in registry["content"]:
-            registry["content"]["registry"] = {}
+            # Гарантируем структуру content.registry
+            if "content" not in registry:
+                registry["content"] = {}
+            if "registry" not in registry["content"]:
+                registry["content"]["registry"] = {}
 
-        reg = registry["content"]["registry"]
+            reg = registry["content"]["registry"]
 
-        # Обновляем данные
-        reg["honeycombs"] = self.honeycombs
-        reg["statistics"] = {
-            "total_honeycombs": len(self.honeycombs),
-            "valid_v2": self.stats.get("valid_v2", 0),
-            "invalid_v2": self.stats.get("invalid_v2", 0),
-            "total_files": self.stats.get("total_files", 0),
-            "total_size_kb": round(self.stats.get("total_size_kb", 0), 2),
-            "new_honeycombs": len(self.new_honeycombs),
-            "modified_honeycombs": len(self.modified_honeycombs),
-            "deleted_honeycombs": len(self.deleted_honeycombs),
-            "validation_errors": len(self.validation_errors),
-            "scan_errors": self.stats.get("errors", 0),
-            "last_scan_timestamp": datetime.now().isoformat()
-        }
-        reg["health_status"] = {
-            "status": "healthy" if self.stats.get("errors", 0) == 0 else "error",
-            "validation_errors": self.validation_errors,
-            "new_honeycombs": self.new_honeycombs,
-            "modified_honeycombs": self.modified_honeycombs,
-            "deleted_honeycombs": self.deleted_honeycombs
-        }
-        reg["last_updated"] = datetime.now().isoformat()
-        reg["scanner_version"] = self.config.get("identity", {}).get("version", "v1.0.0")
+            # Обновляем данные
+            reg["honeycombs"] = self.honeycombs
+            reg["statistics"] = {
+                "total_honeycombs": len(self.honeycombs),
+                "valid_v2": self.stats.get("valid_v2", 0),
+                "invalid_v2": self.stats.get("invalid_v2", 0),
+                "total_files": self.stats.get("total_files", 0),
+                "total_size_kb": round(self.stats.get("total_size_kb", 0), 2),
+                "new_honeycombs": len(self.new_honeycombs),
+                "modified_honeycombs": len(self.modified_honeycombs),
+                "deleted_honeycombs": len(self.deleted_honeycombs),
+                "validation_errors": len(self.validation_errors),
+                "scan_errors": self.stats.get("errors", 0),
+                "last_scan_timestamp": datetime.now().isoformat()
+            }
+            reg["health_status"] = {
+                "status": "healthy" if self.stats.get("errors", 0) == 0 else "error",
+                "validation_errors": self.validation_errors,
+                "new_honeycombs": self.new_honeycombs,
+                "modified_honeycombs": self.modified_honeycombs,
+                "deleted_honeycombs": self.deleted_honeycombs
+            }
+            reg["last_updated"] = datetime.now().isoformat()
+            reg["scanner_version"] = self.config.get("identity", {}).get("version", "v1.0.0")
 
-        # Сохраняем index.json (не ломая identity/meta)
-        with open(registry_file, 'w', encoding='utf-8') as f:
-            json.dump(registry, f, indent=2, ensure_ascii=False)
+            # Сохраняем index.json (не ломая identity/meta)
+            with open(registry_file, 'w', encoding='utf-8') as f:
+                json.dump(registry, f, indent=2, ensure_ascii=False)
 
-        # Оставляем scan_state.json как внутреннее состояние (для delta-сканирования)
-        self._save_scan_state()
+            # Оставляем scan_state.json как внутреннее состояние
+            self._save_scan_state()
 
-        logger.info(f" Реестр обновлён: content.registry в {registry_file}")
-        return True
+            logger.info(f" Реестр обновлён: content.registry в {registry_file}")
+            return True
 
-    except Exception as e:
-        logger.error(f" Ошибка обновления реестра: {e}")
-        import traceback
-        logger.error(traceback.format_exc())
-        return False
+        except Exception as e:
+            logger.error(f" Ошибка обновления реестра: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            return False
     
     def _generate_report(self) -> Dict[str, Any]:
         """Генерация отчёта о сканировании"""
