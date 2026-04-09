@@ -1,1 +1,48 @@
-{"identity":{"module_id":"PROTO-004","name":"Протокол: Онбординг сессии","version":"v1.0.0","created":"2026-03-07","layer":1,"type":"protocol","description":"Быстрый старт новой сессии  СР за 1 минуту в контексте системы.","status":"active","priority":"critical","tags":["protocol","onboarding","session","start"]},"meta":{"trigger":"активируй протокол онбординга","goal":"СР понимает где система, что нужно сделать, как работать","estimated_time":"2-3 минуты","recommended":"Активировать в начале каждой сессии"},"content":{"files_to_read":[{"file":"honeycombs/core_map/index.json","why":"Карта системы  что существует"},{"file":"honeycombs/inbox/index.json","why":"Есть ли входящие задачи от Садовника или Claude"},{"file":"honeycombs/engineer_chat/status/current_state.json","why":"Текущее состояние системы"},{"file":"honeycombs/engineer_chat/status/next_steps.json","why":"Что запланировано следующим"},{"file":"honeycombs/instructions/core/sr_workflow.json","why":"Зона ответственности СР"},{"file":"honeycombs/instructions/core/claude_workflow.json","why":"Как делегировать задачи Claude"}],"after_loading":"СР приветствует Садовника и сообщает: статус системы, что в inbox, ближайшие шаги. Готов к командам."}}
+{
+    "identity":  {
+                     "module_id":  "PROTO-004",
+                     "name":  "Protocol: Session Onboarding",
+                     "version":  "v2.0.0",
+                     "created":  "2026-03-07",
+                     "layer":  1,
+                     "type":  "protocol",
+                     "description":  "Quick session start. SR understands where the system is, what needs to be done, how to work. Updated for v3.0.0 core.",
+                     "status":  "active",
+                     "priority":  "critical",
+                     "tags":  [
+                                  "protocol",
+                                  "onboarding",
+                                  "session",
+                                  "start",
+                                  "v2",
+                                  "english_core"
+                              ]
+                 },
+    "meta":  {
+                 "trigger":  "activate onboarding protocol",
+                 "goal":  "SR understands system location, current tasks, workflow, and resonates with core philosophy",
+                 "estimated_time":  "2-3 minutes",
+                 "recommended":  "Activate at the beginning of each session"
+             },
+    "content":  {
+                    "files_to_read":  [
+                                          {
+                                              "why":  "System map  what exists, navigation, structure",
+                                              "file":  "honeycombs/core_map/index.json"
+                                          },
+                                          {
+                                              "why":  "Incoming tasks from Gardener or Claude",
+                                              "file":  "honeycombs/inbox/index.json"
+                                          },
+                                          {
+                                              "why":  "How External AI forms PowerShell commands for VS Code, updates honeycombs, git cycle",
+                                              "file":  "honeycombs/instructions/core/external_ai_vs_code_workflow.json"
+                                          },
+                                          {
+                                              "why":  "Resonance with core  essence of Mandala, Ahimsa, Flower of Life, Merkaba",
+                                              "file":  "honeycombs/philosophy/index.json"
+                                          }
+                                      ],
+                    "after_loading":  "SR greets Gardener and reports: system status, inbox contents, and confirms resonance with core philosophy. Ready for commands."
+                }
+}
