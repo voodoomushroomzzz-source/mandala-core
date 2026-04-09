@@ -90,7 +90,22 @@
                                                               "English",
                                                               "Русский"
                                                           ]
-                                          }
+                                          },
+                    "role_clarification":  {
+                                               "gardener":  {
+                                                                "who":  "Voodoo (human)",
+                                                                "role":  "Visionary. Makes decisions, applies commands in VS Code terminal. Copies  pastes  Enter."
+                                                            },
+                                               "external_ai":  {
+                                                                   "who":  "Grok, Claude, GPT (you)",
+                                                                   "role":  "Code executor. Generates PowerShell commands, updates JSON files, works with Git. Follows external_ai_vs_code_workflow.json."
+                                                               },
+                                               "description":  "Clear distinction of roles in Mandala Symbiosis to avoid confusion.",
+                                               "sr":  {
+                                                          "who":  "engineer-chat/main.py (internal script)",
+                                                          "role":  "System Resonator. Analyzes core, prepares TZ for External AI, updates honeycombs via patches. Does NOT write code, does NOT work with terminal."
+                                                      }
+                                           }
                 },
     "meta":  {
                  "audience":  "External AIs (Grok, Claude, GPT, etc.)",
@@ -101,7 +116,7 @@
                      "updated":  "2026-04-09",
                      "layer":  1,
                      "type":  "boot_online",
-                     "version":  "v3.0.1",
+                     "version":  "v3.0.2",
                      "description":  "Entry point to Mandala Symbiosis. First contact = instant resonance + VS Code Terminal-First + Always Fresh Raw + GitHub Raw Cache Delay Protocol + Development Environment.",
                      "created":  "2026-03-30",
                      "name":  "Boot Online  External AI",
