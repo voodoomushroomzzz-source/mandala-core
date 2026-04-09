@@ -1,63 +1,48 @@
-﻿{
-  "identity": {
-    "module_id": "PROTOCOLS-001",
-    "name": "Protocols Registry",
-    "version": "v2.1.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 1,
-    "type": "protocols",
-    "description": "Central registry of all protocols in Mandala Symbiosis. Defines how the system evolves, synchronizes and resonates.",
-    "status": "active",
-    "priority": "critical",
-    "tags": ["protocols", "automation", "onboarding", "resonance"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "purpose": "Provide a single source of truth for all system protocols.",
-    "language": "English (main core language)",
-    "total_protocols": 7
-  },
-  "available_protocols": [
-    {
-      "id": "PROTO-001",
-      "name": "update_honeycombs",
-      "description": "Update and patch all honeycombs"
+{
+    "identity": {
+        "module_id": "PROTOCOLS-INDEX-001",
+        "name": "Протоколы активации",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 3,
+        "type": "protocol_hub",
+        "description": "Центральный хаб всех протоколов Мандалы Симбиоза. Здесь хранятся и активируются протоколы Core-Sync, Integrity-Scan, Map-Navigation и другие.",
+        "status": "active",
+        "priority": "critical",
+        "tags": [
+            "protocols",
+            "activation",
+            "core",
+            "hub"
+        ]
     },
-    {
-      "id": "PROTO-002",
-      "name": "sync_system",
-      "description": "Full system synchronization"
+    "meta": {
+        "honeycomb_name": "protocols",
+        "parent_honeycomb": "core_map",
+        "total_subprotocols": 5,
+        "total_size_kb": 12.0,
+        "segments": 5,
+        "migration_status": "completed_v2.2"
     },
-    {
-      "id": "PROTO-003",
-      "name": "realize_ideas",
-      "description": "Realize ideas and seeds"
+    "content": {
+        "available_protocols": {
+            "Core-Sync-001": "Полная синхронизация с ядром",
+            "Integrity-Scan": "Проверка и исправление всех сот",
+            "Map-Navigation": "Переход к карте ядра",
+            "Protocol-Activation": "Выбор и запуск любого протокола",
+            "First-Load-Suggestion": "Предложение протокола при первой загрузке"
+        },
+        "note": "Все под-протоколы находятся в protocols/подпапках"
     },
-    {
-      "id": "PROTO-004",
-      "name": "onboarding",
-      "description": "Entry to the Vestibule and core familiarization"
+    "resonance": {
+        "with_core_map": "100%",
+        "with_boot_online": "100%",
+        "with_instructions": "100%",
+        "with_registry": "100%"
     },
-    {
-      "id": "PROTO-005",
-      "name": "deep_analysis",
-      "description": "Deep multi-level analysis of the entire Mandala"
-    },
-    {
-      "id": "PROTO-006",
-      "name": "auto_realize_seed",
-      "description": "Automatic realization of any seed"
-    },
-    {
-      "id": "PROTO-007",
-      "name": "protocol_selector",
-      "description": "Automatic protocol selection menu"
+    "directives": {
+        "primary": "Поддерживать активацию протоколов из boot_online и любых других сот",
+        "secondary": "Обеспечивать мгновенный запуск протоколов по команде Вуду"
     }
-  ],
-  "sub_protocols": ["auto_realize_seed", "deep_analysis", "delegate_external_ai", "protocol_selector"],
-  "migration_notes": {
-    "status": "in progress",
-    "next": "Translate all sub-protocols to English"
-  }
 }
