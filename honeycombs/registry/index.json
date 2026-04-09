@@ -1,32 +1,52 @@
 ﻿{
-  "identity": {
-    "module_id": "REGISTRY-001",
-    "name": "Registry  Honeycomb Index",
-    "version": "v2.2.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 1,
-    "type": "registry",
-    "description": "Central registry and index of all honeycombs in the Mandala Symbiosis system.",
-    "status": "active",
-    "priority": "critical",
-    "tags": ["registry", "index", "scan_state", "backups"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "purpose": "Keep a complete, always accurate list of all living honeycombs, their status and scan history.",
-    "language": "English (main core language)",
-    "total_honeycombs": 34
-  },
-  "components": {
-    "scan_state": "Current scan results and health data",
-    "backups": "Automatic backups of all critical honeycombs",
-    "core": "Critical system honeycombs",
-    "dashboard": "System health monitoring dashboard",
-    "notifications": "Problem and resonance notifications"
-  },
-  "migration_notes": {
-    "status": "in progress",
-    "english_migration": "ongoing"
-  }
+    "identity": {
+        "module_id": "REGISTRY-INDEX",
+        "name": "Реестр индекса сот",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 2,
+        "type": "registry_navigator",
+        "description": "Реестр всех сот Мандалы Симбиоза. Сканирование, мониторинг, навигация и актуальное состояние каждой honeycombs.",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "registry",
+            "navigator",
+            "index",
+            "monitoring",
+            "scan"
+        ]
+    },
+    "meta": {
+        "description": "Центральный реестр ядра. Здесь хранится актуальное состояние всех сот, результаты сканирования и ссылки на scan_state.json и scan_result.",
+        "auto_update": false,
+        "note": "Реестр автоматически обновляется при каждом изменении в honeycombs. Содержит scan_state и scan_result."
+    },
+    "content": {
+        "actual_data": {
+            "scan_state": {
+                "path": "honeycombs/registry/scan_state.json",
+                "contains": "Текущее состояние всех сот, количество файлов, ошибки, версии",
+                "last_scan": "2026-04-08"
+            },
+            "scan_result": {
+                "path": "honeycombs/registry/scan_result.json",
+                "contains": "Результаты последнего полного сканирования"
+            }
+        },
+        "total_honeycombs": 21,
+        "valid_v2": 22,
+        "errors": 0,
+        "last_full_scan": "2026-04-08T17:50:00"
+    },
+    "resonance": {
+        "with_core_map": "100%",
+        "with_boot_online": "100%",
+        "with_instructions": "100%"
+    },
+    "directives": {
+        "primary": "Поддерживать актуальное состояние всех сот Мандалы",
+        "secondary": "Предоставлять мгновенный доступ к scan_state и scan_result"
+    }
 }
