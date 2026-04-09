@@ -1,37 +1,46 @@
-﻿{
-    "identity": {
-        "module_id": "PROTO-DEEP-ANALYSIS-001",
-        "name": "Р“Р»СѓР±РѕРєРёР№ Р°РЅР°Р»РёР·",
-        "version": "v2.2.0",
-        "created": "2026-03-05",
-        "updated": "2026-04-08",
-        "layer": 3,
-        "type": "protocol",
-        "description": "РџСЂРѕС‚РѕРєРѕР» РіР»СѓР±РѕРєРѕРіРѕ Р°РЅР°Р»РёР·Р° СЃРѕС‚, СЃС‚СЂСѓРєС‚СѓСЂС‹, СЂРµР·РѕРЅР°РЅСЃР° Рё Р·РґРѕСЂРѕРІСЊСЏ РњР°РЅРґР°Р»С‹. Р’С‹СЏРІР»СЏРµС‚ СЃРєСЂС‹С‚С‹Рµ РїСЂРѕР±Р»РµРјС‹, РїСЂРµРґР»Р°РіР°РµС‚ РёСЃРїСЂР°РІР»РµРЅРёСЏ Рё СѓР»СѓС‡С€РµРЅРёСЏ.",
-        "status": "active",
-        "priority": "high",
-        "tags": [
-            "protocol",
-            "deep_analysis",
-            "integrity",
-            "scan"
-        ]
-    },
-    "meta": {
-        "parent_protocol": "protocols/index.json",
-        "total_size_kb": 2.3,
-        "migration_status": "completed_v2.2"
-    },
-    "content": {
-        "description": "Р“Р»СѓР±РѕРєРёР№ Р°РЅР°Р»РёР· СЃРѕСЃС‚РѕСЏРЅРёСЏ РњР°РЅРґР°Р»С‹ Рё РѕС‚РґРµР»СЊРЅС‹С… СЃРѕС‚",
-        "trigger": "РїРѕ РєРѕРјР°РЅРґРµ Р’СѓРґСѓ РёР»Рё РїСЂРё Р·Р°РїСѓСЃРєРµ Integrity-Scan"
-    },
-    "resonance": {
-        "with_core_map": "100%",
-        "with_registry": "100%",
-        "with_awareness": "100%"
-    },
-    "directives": {
-        "primary": "РџСЂРѕРІРѕРґРёС‚СЊ РіР»СѓР±РѕРєРёР№ Р°РЅР°Р»РёР· СЃРѕС‚ Рё РїСЂРµРґР»Р°РіР°С‚СЊ С‚РѕС‡РЅС‹Рµ РёСЃРїСЂР°РІР»РµРЅРёСЏ"
-    }
+{
+    "content":  {
+                    "description":  "Deep analysis of Mandala state and individual honeycombs",
+                    "workflow":  [
+                                     "1. Load core_map for system structure context",
+                                     "2. Load registry for current honeycomb states",
+                                     "3. Analyze each honeycomb for v2 compliance, resonance, and health",
+                                     "4. Cross-reference honeycombs with core_map navigation",
+                                     "5. Detect desynchronization between map and actual files",
+                                     "6. Identify hidden issues (missing dependencies, broken resonance)",
+                                     "7. Generate detailed report with prioritized fixes",
+                                     "8. Suggest improvements for system integrity"
+                                 ],
+                    "trigger":  "By Voodoo command or when Integrity-Scan is launched"
+                },
+    "resonance":  {
+                      "with_awareness":  "100%",
+                      "with_registry":  "100%",
+                      "with_core_map":  "100%"
+                  },
+    "meta":  {
+                 "migration_status":  "completed_v3.0.0",
+                 "total_size_kb":  2.3,
+                 "parent_protocol":  "protocols/index.json"
+             },
+    "identity":  {
+                     "updated":  "2026-04-09",
+                     "layer":  3,
+                     "type":  "protocol",
+                     "version":  "v3.0.0",
+                     "description":  "Deep analysis of honeycombs, structure, resonance, and Mandala health. Reveals hidden problems, suggests fixes and improvements.",
+                     "created":  "2026-03-05",
+                     "name":  "Protocol: Deep Analysis",
+                     "module_id":  "PROTO-DEEP-ANALYSIS-001",
+                     "status":  "active",
+                     "priority":  "high",
+                     "tags":  [
+                                  "protocol",
+                                  "deep_analysis",
+                                  "integrity",
+                                  "scan",
+                                  "english_core",
+                                  "v3.0.0"
+                              ]
+                 }
 }
