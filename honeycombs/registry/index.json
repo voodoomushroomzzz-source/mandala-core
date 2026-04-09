@@ -27,11 +27,11 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "4b1df784f4fd3f730f2b6874b1402797",
-          "last_modified": 1775761409.0480602,
+          "hash": "e9b0961fcc95344af616f03f50b685e4",
+          "last_modified": 1775762856.8341367,
           "file_count": 21,
           "total_size_kb": 142.28,
-          "scan_timestamp": "2026-04-09T19:03:29.617024"
+          "scan_timestamp": "2026-04-09T19:27:37.459791"
         },
         {
           "honeycomb_id": "registry/notifications",
@@ -61,10 +61,10 @@
             "missing_fields": []
           },
           "hash": "a45d68483e1cd793f4142cd7fd814321",
-          "last_modified": 1775761409.0493383,
+          "last_modified": 1775762856.8351707,
           "file_count": 1,
           "total_size_kb": 5.49,
-          "scan_timestamp": "2026-04-09T19:03:29.617580"
+          "scan_timestamp": "2026-04-09T19:27:37.460340"
         },
         {
           "honeycomb_id": "registry/core",
@@ -94,10 +94,10 @@
             "missing_fields": []
           },
           "hash": "f3e7962228de4e85f2d66995cb2f08fe",
-          "last_modified": 1775761409.047411,
+          "last_modified": 1775762856.8331368,
           "file_count": 6,
           "total_size_kb": 17.61,
-          "scan_timestamp": "2026-04-09T19:03:29.618171"
+          "scan_timestamp": "2026-04-09T19:27:37.460949"
         },
         {
           "honeycomb_id": "registry/backups",
@@ -127,10 +127,10 @@
             "missing_fields": []
           },
           "hash": "0897798045a3e5b1c4a80f333729a3e1",
-          "last_modified": 1775761409.047411,
+          "last_modified": 1775762856.8331368,
           "file_count": 2,
           "total_size_kb": 9.64,
-          "scan_timestamp": "2026-04-09T19:03:29.618740"
+          "scan_timestamp": "2026-04-09T19:27:37.461523"
         },
         {
           "honeycomb_id": "registry/modules",
@@ -159,10 +159,10 @@
             "missing_fields": []
           },
           "hash": "8e56fb420ef6a803d0e7d88c96a45834",
-          "last_modified": 1775761409.0493383,
+          "last_modified": 1775762856.8351707,
           "file_count": 2,
           "total_size_kb": 3.81,
-          "scan_timestamp": "2026-04-09T19:03:29.619176"
+          "scan_timestamp": "2026-04-09T19:27:37.461971"
         },
         {
           "honeycomb_id": "registry/extensions",
@@ -191,10 +191,10 @@
             "missing_fields": []
           },
           "hash": "6ef53c7a5f8bc742d9987ac00c4ab430",
-          "last_modified": 1775761409.0476034,
+          "last_modified": 1775762856.833422,
           "file_count": 1,
           "total_size_kb": 1.99,
-          "scan_timestamp": "2026-04-09T19:03:29.619621"
+          "scan_timestamp": "2026-04-09T19:27:37.462461"
         },
         {
           "honeycomb_id": "registry/dashboard",
@@ -224,10 +224,10 @@
             "missing_fields": []
           },
           "hash": "2d054692da13c5c0b28be123f34302a6",
-          "last_modified": 1775761409.0476034,
+          "last_modified": 1775762856.833422,
           "file_count": 1,
           "total_size_kb": 8.77,
-          "scan_timestamp": "2026-04-09T19:03:29.620093"
+          "scan_timestamp": "2026-04-09T19:27:37.462946"
         },
         {
           "honeycomb_id": "akasha",
@@ -259,10 +259,10 @@
             "missing_fields": []
           },
           "hash": "1bb635175cb630f61a3134676bc13a13",
-          "last_modified": 1775761409.0350397,
+          "last_modified": 1775762856.8207917,
           "file_count": 4,
           "total_size_kb": 17.75,
-          "scan_timestamp": "2026-04-09T19:03:29.620723"
+          "scan_timestamp": "2026-04-09T19:27:37.463458"
         },
         {
           "honeycomb_id": "inbox",
@@ -293,10 +293,10 @@
             "missing_fields": []
           },
           "hash": "83f064ce1805e0d0df5d0eed900ecaf4",
-          "last_modified": 1775761409.0450287,
+          "last_modified": 1775762856.8308077,
           "file_count": 3,
-          "total_size_kb": 29.89,
-          "scan_timestamp": "2026-04-09T19:03:29.621248"
+          "total_size_kb": 31.37,
+          "scan_timestamp": "2026-04-09T19:27:37.463902"
         },
         {
           "honeycomb_id": "philosophy",
@@ -319,10 +319,10 @@
             "missing_fields": []
           },
           "hash": "e7fd91e8557c24410e56deb829a640c0",
-          "last_modified": 1775761409.0456715,
+          "last_modified": 1775762856.8314734,
           "file_count": 10,
           "total_size_kb": 22.82,
-          "scan_timestamp": "2026-04-09T19:03:29.621911"
+          "scan_timestamp": "2026-04-09T19:27:37.464476"
         },
         {
           "honeycomb_id": "visualizations",
@@ -352,10 +352,10 @@
             "missing_fields": []
           },
           "hash": "6c2ea8d3579da15e8ce0881e5710e810",
-          "last_modified": 1775761409.0537775,
+          "last_modified": 1775762856.8396807,
           "file_count": 1,
           "total_size_kb": 5.82,
-          "scan_timestamp": "2026-04-09T19:03:29.622503"
+          "scan_timestamp": "2026-04-09T19:27:37.464955"
         },
         {
           "honeycomb_id": "tasks",
@@ -378,10 +378,10 @@
             "missing_fields": []
           },
           "hash": "f9133effa544e1e38d1f334c9df03a8b",
-          "last_modified": 1775761409.0527146,
+          "last_modified": 1775762856.8386333,
           "file_count": 10,
           "total_size_kb": 18.54,
-          "scan_timestamp": "2026-04-09T19:03:29.623146"
+          "scan_timestamp": "2026-04-09T19:27:37.465503"
         },
         {
           "honeycomb_id": "tasks/active/chat_update",
@@ -411,10 +411,10 @@
             "missing_fields": []
           },
           "hash": "d67a621c27742488e065885060c99ec5",
-          "last_modified": 1775761409.0527146,
+          "last_modified": 1775762856.8386333,
           "file_count": 1,
           "total_size_kb": 1.06,
-          "scan_timestamp": "2026-04-09T19:03:29.623632"
+          "scan_timestamp": "2026-04-09T19:27:37.465900"
         },
         {
           "honeycomb_id": "tasks/active/bot_update",
@@ -444,10 +444,10 @@
             "missing_fields": []
           },
           "hash": "984adb06d12f48256ad61da34f1ba208",
-          "last_modified": 1775761409.0527146,
+          "last_modified": 1775762856.8386333,
           "file_count": 1,
           "total_size_kb": 1.07,
-          "scan_timestamp": "2026-04-09T19:03:29.623943"
+          "scan_timestamp": "2026-04-09T19:27:37.466239"
         },
         {
           "honeycomb_id": "communications",
@@ -479,10 +479,10 @@
             "missing_fields": []
           },
           "hash": "fe1f09f55278dc0ccbfa144acc7a6713",
-          "last_modified": 1775761409.03683,
+          "last_modified": 1775762856.82261,
           "file_count": 1,
           "total_size_kb": 3.25,
-          "scan_timestamp": "2026-04-09T19:03:29.624326"
+          "scan_timestamp": "2026-04-09T19:27:37.466588"
         },
         {
           "honeycomb_id": "boot_online",
@@ -520,10 +520,10 @@
             "missing_fields": []
           },
           "hash": "faa241a75e1f5d40167d23429b27a856",
-          "last_modified": 1775761409.03683,
+          "last_modified": 1775762856.82261,
           "file_count": 1,
           "total_size_kb": 12.16,
-          "scan_timestamp": "2026-04-09T19:03:29.624894"
+          "scan_timestamp": "2026-04-09T19:27:37.466988"
         },
         {
           "honeycomb_id": "awareness",
@@ -554,10 +554,10 @@
             "missing_fields": []
           },
           "hash": "63b20811049ef3c5b4c6603fb3649f24",
-          "last_modified": 1775761409.03683,
+          "last_modified": 1775762856.82261,
           "file_count": 5,
           "total_size_kb": 10.69,
-          "scan_timestamp": "2026-04-09T19:03:29.625395"
+          "scan_timestamp": "2026-04-09T19:27:37.467429"
         },
         {
           "honeycomb_id": "sphaerae",
@@ -588,10 +588,10 @@
             "missing_fields": []
           },
           "hash": "7b72cd32406baf1cdc88938e6a9fa83e",
-          "last_modified": 1775761409.052542,
+          "last_modified": 1775762856.8384666,
           "file_count": 3,
           "total_size_kb": 15.32,
-          "scan_timestamp": "2026-04-09T19:03:29.626045"
+          "scan_timestamp": "2026-04-09T19:27:37.467923"
         },
         {
           "honeycomb_id": "instructions",
@@ -625,10 +625,10 @@
             "missing_fields": []
           },
           "hash": "4ff64f0d8a808a256de57d0999e80a97",
-          "last_modified": 1775761409.0452611,
+          "last_modified": 1775762856.8311367,
           "file_count": 5,
           "total_size_kb": 36.98,
-          "scan_timestamp": "2026-04-09T19:03:29.626631"
+          "scan_timestamp": "2026-04-09T19:27:37.468419"
         },
         {
           "honeycomb_id": "tectosphaera",
@@ -660,10 +660,10 @@
             "missing_fields": []
           },
           "hash": "9dda1478e7565b71359b0d731010eb27",
-          "last_modified": 1775761409.0537775,
+          "last_modified": 1775762856.8396807,
           "file_count": 4,
           "total_size_kb": 17.63,
-          "scan_timestamp": "2026-04-09T19:03:29.627237"
+          "scan_timestamp": "2026-04-09T19:27:37.468916"
         },
         {
           "honeycomb_id": "protocols",
@@ -695,10 +695,10 @@
             "missing_fields": []
           },
           "hash": "d17579143e7fc0351ad68035f8d8a26e",
-          "last_modified": 1775761409.0461354,
+          "last_modified": 1775762856.831947,
           "file_count": 8,
           "total_size_kb": 21.84,
-          "scan_timestamp": "2026-04-09T19:03:29.627857"
+          "scan_timestamp": "2026-04-09T19:27:37.469434"
         },
         {
           "honeycomb_id": "protocols/deep_analysis",
@@ -730,10 +730,10 @@
             "missing_fields": []
           },
           "hash": "2fcab0a994c6c641940947c7ea4f01df",
-          "last_modified": 1775761409.0461354,
+          "last_modified": 1775762856.831947,
           "file_count": 1,
           "total_size_kb": 2.33,
-          "scan_timestamp": "2026-04-09T19:03:29.628210"
+          "scan_timestamp": "2026-04-09T19:27:37.469754"
         },
         {
           "honeycomb_id": "protocols/auto_realize_seed",
@@ -765,10 +765,10 @@
             "missing_fields": []
           },
           "hash": "17386ef6b1bfbf36fd0e97bbb141298a",
-          "last_modified": 1775761409.0461354,
+          "last_modified": 1775762856.831947,
           "file_count": 1,
           "total_size_kb": 2.18,
-          "scan_timestamp": "2026-04-09T19:03:29.628605"
+          "scan_timestamp": "2026-04-09T19:27:37.470097"
         },
         {
           "honeycomb_id": "seeds",
@@ -799,10 +799,10 @@
             "missing_fields": []
           },
           "hash": "fd7b25c5c1e114883ed337f1ff0f46d1",
-          "last_modified": 1775761409.0520217,
+          "last_modified": 1775762856.83793,
           "file_count": 19,
           "total_size_kb": 38.88,
-          "scan_timestamp": "2026-04-09T19:03:29.629083"
+          "scan_timestamp": "2026-04-09T19:27:37.470677"
         },
         {
           "honeycomb_id": "roadmaps",
@@ -830,10 +830,10 @@
             "missing_fields": []
           },
           "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775761409.0501513,
+          "last_modified": 1775762856.8361368,
           "file_count": 14,
           "total_size_kb": 68.92,
-          "scan_timestamp": "2026-04-09T19:03:29.629834"
+          "scan_timestamp": "2026-04-09T19:27:37.471496"
         },
         {
           "honeycomb_id": "core_map",
@@ -864,10 +864,10 @@
             "missing_fields": []
           },
           "hash": "8adc9c16f23250a0b4a2568f58f3a206",
-          "last_modified": 1775761409.0373125,
+          "last_modified": 1775762856.823117,
           "file_count": 88,
           "total_size_kb": 631.61,
-          "scan_timestamp": "2026-04-09T19:03:29.631529"
+          "scan_timestamp": "2026-04-09T19:27:37.473296"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full",
@@ -895,10 +895,10 @@
             "missing_fields": []
           },
           "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775761409.0417478,
+          "last_modified": 1775762856.827513,
           "file_count": 1,
           "total_size_kb": 23.89,
-          "scan_timestamp": "2026-04-09T19:03:29.632007"
+          "scan_timestamp": "2026-04-09T19:27:37.473846"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final",
@@ -926,10 +926,10 @@
             "missing_fields": []
           },
           "hash": "eb7d2a64070d5e84cad2fddefac65021",
-          "last_modified": 1775761409.0417478,
+          "last_modified": 1775762856.827513,
           "file_count": 1,
           "total_size_kb": 16.25,
-          "scan_timestamp": "2026-04-09T19:03:29.632675"
+          "scan_timestamp": "2026-04-09T19:27:37.474598"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3",
@@ -957,10 +957,10 @@
             "missing_fields": []
           },
           "hash": "eb7d2a64070d5e84cad2fddefac65021",
-          "last_modified": 1775761409.0417478,
+          "last_modified": 1775762856.827513,
           "file_count": 1,
           "total_size_kb": 16.25,
-          "scan_timestamp": "2026-04-09T19:03:29.633020"
+          "scan_timestamp": "2026-04-09T19:27:37.475033"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final",
@@ -988,10 +988,10 @@
             "missing_fields": []
           },
           "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775761409.0417478,
+          "last_modified": 1775762856.827513,
           "file_count": 1,
           "total_size_kb": 23.89,
-          "scan_timestamp": "2026-04-09T19:03:29.633399"
+          "scan_timestamp": "2026-04-09T19:27:37.475516"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
@@ -1019,10 +1019,10 @@
             "missing_fields": []
           },
           "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775761409.0440602,
+          "last_modified": 1775762856.8301368,
           "file_count": 1,
           "total_size_kb": 23.89,
-          "scan_timestamp": "2026-04-09T19:03:29.633823"
+          "scan_timestamp": "2026-04-09T19:27:37.475916"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup",
@@ -1053,10 +1053,10 @@
             "missing_fields": []
           },
           "hash": "d30b6502f97f9756f025f537c6f274c5",
-          "last_modified": 1775761409.04306,
+          "last_modified": 1775762856.8281367,
           "file_count": 1,
           "total_size_kb": 13.52,
-          "scan_timestamp": "2026-04-09T19:03:29.634358"
+          "scan_timestamp": "2026-04-09T19:27:37.476451"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed",
@@ -1084,10 +1084,10 @@
             "missing_fields": []
           },
           "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775761409.0440602,
+          "last_modified": 1775762856.8301368,
           "file_count": 1,
           "total_size_kb": 23.89,
-          "scan_timestamp": "2026-04-09T19:03:29.634875"
+          "scan_timestamp": "2026-04-09T19:27:37.476840"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup",
@@ -1118,10 +1118,10 @@
             "missing_fields": []
           },
           "hash": "41c5d528f0d81890158a6072b734ccd2",
-          "last_modified": 1775761409.0417478,
+          "last_modified": 1775762856.827513,
           "file_count": 1,
           "total_size_kb": 11.18,
-          "scan_timestamp": "2026-04-09T19:03:29.635207"
+          "scan_timestamp": "2026-04-09T19:27:37.477162"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat",
@@ -1149,10 +1149,10 @@
             "missing_fields": []
           },
           "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775761409.0440602,
+          "last_modified": 1775762856.8301368,
           "file_count": 1,
           "total_size_kb": 23.89,
-          "scan_timestamp": "2026-04-09T19:03:29.635667"
+          "scan_timestamp": "2026-04-09T19:27:37.477644"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_09-23-57_protocols_final",
@@ -1183,10 +1183,10 @@
             "missing_fields": []
           },
           "hash": "d30b6502f97f9756f025f537c6f274c5",
-          "last_modified": 1775761409.04306,
+          "last_modified": 1775762856.8291368,
           "file_count": 1,
           "total_size_kb": 13.52,
-          "scan_timestamp": "2026-04-09T19:03:29.636043"
+          "scan_timestamp": "2026-04-09T19:27:37.478025"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-30-04_rm011_bot",
@@ -1214,10 +1214,10 @@
             "missing_fields": []
           },
           "hash": "ac5a8b6d43e69b4426397bc86f9809b5",
-          "last_modified": 1775761409.0440602,
+          "last_modified": 1775762856.8301368,
           "file_count": 1,
           "total_size_kb": 23.89,
-          "scan_timestamp": "2026-04-09T19:03:29.636694"
+          "scan_timestamp": "2026-04-09T19:27:37.478464"
         },
         {
           "honeycomb_id": "modules",
@@ -1242,10 +1242,10 @@
             "missing_fields": []
           },
           "hash": "60f8ce3c6f8f816129b711ecaa70db1f",
-          "last_modified": 1775761409.0452611,
+          "last_modified": 1775762856.8311367,
           "file_count": 1,
           "total_size_kb": 0.85,
-          "scan_timestamp": "2026-04-09T19:03:29.637131"
+          "scan_timestamp": "2026-04-09T19:27:37.478826"
         },
         {
           "honeycomb_id": "extensions",
@@ -1270,10 +1270,10 @@
             "missing_fields": []
           },
           "hash": "bfe6cb88064d570ed083e72c881d9bba",
-          "last_modified": 1775761409.0440602,
+          "last_modified": 1775762856.8301368,
           "file_count": 1,
           "total_size_kb": 0.86,
-          "scan_timestamp": "2026-04-09T19:03:29.637452"
+          "scan_timestamp": "2026-04-09T19:27:37.479047"
         },
         {
           "honeycomb_id": "analytics",
@@ -1303,10 +1303,10 @@
             "missing_fields": []
           },
           "hash": "36bbdf72da8efe13094d218e27d83d62",
-          "last_modified": 1775761409.03606,
+          "last_modified": 1775762856.8221369,
           "file_count": 1,
           "total_size_kb": 4.91,
-          "scan_timestamp": "2026-04-09T19:03:29.637795"
+          "scan_timestamp": "2026-04-09T19:27:37.479343"
         }
       ],
       "statistics": {
@@ -1314,13 +1314,13 @@
         "valid_v2": 40,
         "invalid_v2": 0,
         "total_files": 228,
-        "total_size_kb": 1369.01,
+        "total_size_kb": 1370.49,
         "new_honeycombs": 40,
         "modified_honeycombs": 0,
         "deleted_honeycombs": 0,
         "validation_errors": 0,
         "scan_errors": 0,
-        "last_scan_timestamp": "2026-04-09T19:03:29.638548"
+        "last_scan_timestamp": "2026-04-09T19:27:37.480039"
       },
       "health_status": {
         "status": "healthy",
@@ -1370,7 +1370,7 @@
         "modified_honeycombs": [],
         "deleted_honeycombs": []
       },
-      "last_updated": "2026-04-09T19:03:29.638554",
+      "last_updated": "2026-04-09T19:27:37.480044",
       "scanner_version": "v1.0.0"
     }
   },
