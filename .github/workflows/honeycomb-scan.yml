@@ -1,4 +1,4 @@
-﻿name: Honeycomb Scanner
+name: Honeycomb Scanner
 
 on:
   push:
@@ -23,21 +23,18 @@ jobs:
       - name: Pull latest changes
         run: |
           git pull origin main
-          echo " Репозиторий синхронизирован"
+          echo "Repository synchronized"
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install pathlib2 2>/dev/null || true
-
       - name: Run Honeycomb Scanner
         run: |
-          echo " Запуск сканера сот..."
+          echo "Running honeycomb scanner..."
           python honeycombs/registry/honeycomb_scanner.py scan
-          echo " Сканирование завершено"
+          echo "Scan completed"
 
       - name: Generate scan report
         run: |
@@ -46,54 +43,65 @@ jobs:
           from datetime import datetime
           from pathlib import Path
 
-          results_path = Path("honeycombs/registry/scan_results.json")
-          if not results_path.exists():
-              print("scan_results.json не найден  пропускаем отчёт")
+          registry_path = Path("honeycombs/registry/index.json")
+          if not registry_path.exists():
+              print("registry/index.json not found, skipping report")
               exit(0)
 
-          with open(results_path, "r", encoding="utf-8") as f:
+          with open(registry_path, "r", encoding="utf-8") as f:
               data = json.load(f)
 
-          summary = data.get("summary", {})
-          errors = data.get("validation_errors", [])
+          reg = data.get("content", {}).get("registry", {})
+          stats = reg.get("statistics", {})
+          health = reg.get("health_status", {})
+          honeycombs = reg.get("honeycombs", [])
+          validation_errors = health.get("validation_errors", [])
+
+          total = stats.get("total_honeycombs", len(honeycombs))
+          valid = stats.get("valid_v2", 0)
+          invalid = stats.get("invalid_v2", 0)
+          errors_count = total - valid if total > valid else 0
+
           now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
           lines = [
-              "# Honeycomb Scan Report  Mandala Simbioza",
+              "# Honeycomb Scan Report  Mandala Symbiosis",
               "",
-              f"**Система:** Mandala Simbioza v1.2.0",
-              f"**Дата:** {now}",
-              f"**Сканер:** honeycomb_scanner.py v1.0.0",
+              f"**System:** Mandala Symbiosis",
+              f"**Date:** {now}",
+              f"**Scanner:** honeycomb_scanner.py",
               "",
-              "## Статистика",
+              "## Statistics",
               "",
-              "| Параметр | Значение |",
-              "|----------|----------|",
-              f"| Всего сот | {summary.get('total_honeycombs', 0)} |",
-              f"| Валидных v2 | {summary.get('valid_v2', 0)} |",
-              f"| Невалидных v2 | {summary.get('invalid_v2', 0)} |",
-              f"| Ошибок | {summary.get('total_honeycombs', 0) - summary.get('valid_v2', 0)} |",
-              f"| Всего файлов | {summary.get('total_files', 0)} |",
-              f"| Общий размер | {summary.get('total_size_kb', 0)} KB |",
-              f"| Статус | {summary.get('health_status', 'unknown')} |",
-              "",
+              "| Parameter | Value |",
+              "|-----------|-------|",
+              f"| Total honeycombs | {total} |",
+              f"| Valid v2 | {valid} |",
+              f"| Invalid v2 | {invalid} |",
+              f"| Errors | {errors_count} |",
+              f"| Total files | {stats.get('total_files', 0)} |",
+              f"| Total size | {stats.get('total_size_kb', 0)} KB |",
+              f"| Status | {health.get('status', 'unknown')} |",
+              ""
           ]
 
-          if summary.get("new_honeycombs"):
-              lines += ["## Новые соты", ""]
-              for h in summary["new_honeycombs"]:
+          new_hc = health.get("new_honeycombs", [])
+          if new_hc:
+              lines += ["## New honeycombs", ""]
+              for h in new_hc:
                   lines.append(f"- {h}")
               lines.append("")
 
-          if summary.get("modified_honeycombs"):
-              lines += ["## Изменённые соты", ""]
-              for h in summary["modified_honeycombs"]:
+          modified_hc = health.get("modified_honeycombs", [])
+          if modified_hc:
+              lines += ["## Modified honeycombs", ""]
+              for h in modified_hc:
                   lines.append(f"- {h}")
               lines.append("")
 
-          if errors:
-              lines += ["## Ошибки валидации", ""]
-              for e in errors:
+          if validation_errors:
+              lines += ["## Validation errors", ""]
+              for e in validation_errors:
                   lines.append(f"### {e.get('honeycomb_id', '?')}  {e.get('name', '?')}")
                   for err in e.get("errors", []):
                       lines.append(f"-  {err}")
@@ -101,20 +109,19 @@ jobs:
                       lines.append(f"-  {warn}")
                   lines.append("")
 
-          honeycombs = data.get("honeycombs", [])
           if honeycombs:
-              lines += ["## Структура сот", ""]
+              lines += ["## Honeycomb structure", ""]
               for h in honeycombs:
                   lines.append(f"- {h.get('relative_path', h.get('honeycomb_id', '?'))}/")
-              lines.append(f"\n**Итого сот с index.json:** {len(honeycombs)}")
+              lines.append(f"\n**Total with index.json:** {len(honeycombs)}")
 
-          lines += ["", f"---", f"*Сгенерировано: {now}*"]
+          lines += ["", "---", f"*Generated: {now}*"]
 
           Path("reports").mkdir(exist_ok=True)
           with open("reports/scan_report.md", "w", encoding="utf-8") as f:
               f.write("\n".join(lines))
 
-          print(f" scan_report.md обновлён ({len(honeycombs)} сот, {len(errors)} ошибок)")
+          print(f"scan_report.md updated ({len(honeycombs)} honeycombs, {len(validation_errors)} errors)")
           PYEOF
 
       - name: Commit scan results
@@ -123,17 +130,16 @@ jobs:
           git config --global user.name "github-actions[bot]"
 
           git add honeycombs/registry/index.json
-          git add honeycombs/registry/scan_results.json
           git add honeycombs/registry/scan_state.json || true
           git add reports/scan_report.md
 
           if git diff --staged --quiet; then
-            echo " Нет изменений после сканирования"
+            echo "No changes after scan"
           else
-            git commit -m " Авто-сканирование сот $(date +'%Y-%m-%d %H:%M')"
+            git commit -m "Auto-scan: $(date +'%Y-%m-%d %H:%M')"
             git pull --rebase origin main
             git push origin HEAD:main
-            echo " Результаты сканирования запушены"
+            echo "Scan results pushed"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
