@@ -1,19 +1,48 @@
-﻿{
-  "identity": {
-    "module_id": "SEEDS-001",
-    "name": "Seeds  Ideas Bank",
-    "version": "v2.2.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 2,
-    "type": "seeds",
-    "description": "Repository of all seeds and ideas waiting for realization in the Mandala.",
-    "status": "active",
-    "priority": "high",
-    "tags": ["seeds", "ideas", "potential"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "language": "English (main core language)"
-  }
+{
+    "identity": {
+        "module_id": "SEEDS-INDEX-001",
+        "name": "Семена",
+        "version": "v2.2.0",
+        "created": "2026-03-10",
+        "updated": "2026-04-08",
+        "layer": 2,
+        "type": "seed_incubator",
+        "description": "Инкубатор идей и начальных прототипов для Мандалы Симбиоза. Здесь хранятся семена новых honeycombs, концепций и направлений развития системы.",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "seeds",
+            "incubator",
+            "ideas",
+            "prototypes",
+            "growth"
+        ]
+    },
+    "meta": {
+        "honeycomb_name": "seeds",
+        "parent_honeycomb": "core_map",
+        "total_files": 1,
+        "total_size_kb": 4.2,
+        "segments": 1,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Центральный инкубатор семян. Каждое семя  это потенциальная новая сота или модуль, который может быть выращен в полноценный honeycomb.",
+        "current_seeds": {
+            "total": 17,
+            "active": 12,
+            "in_development": 5
+        },
+        "note": "SEED_017 уже реализован в registry"
+    },
+    "resonance": {
+        "with_core_map": "100%",
+        "with_boot_online": "100%",
+        "with_instructions": "100%",
+        "with_registry": "100%"
+    },
+    "directives": {
+        "primary": "Поддерживать инкубацию новых идей и прототипов",
+        "secondary": "Обеспечивать плавный переход семян в полноценные соты"
+    }
 }
