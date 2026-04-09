@@ -5,29 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mandala  Engineer</title>
     <link rel="stylesheet" href="style.css">
-    <script src="js/state.js" type="module"></script>
-    <script src="js/ws.js" type="module"></script>
-    <script src="components/protocol-bar.js" type="module"></script>
-    <script src="components/chat-view.js" type="module"></script>
-    <script src="components/hive-view.js" type="module"></script>
-    <script src="app.js" type="module"></script>
 </head>
 <body>
     <header class="toolbar">
         <div class="logo"> Mandala</div>
-        <protocol-bar></protocol-bar>
+        <div class="proto-bar">
+            <button onclick="activateProtocol('internal/onboarding')" title="Онбординг">ON</button>
+            <button onclick="activateProtocol('internal/registry_sync')" title="Синхронизация">SYNC</button>
+            <button onclick="activateProtocol('internal/ideas_roadmaps')" title="Идеи и роадмапы">IDEAS</button>
+            <button onclick="activateProtocol('deep_analysis')" title="Глубокий анализ">DEEP</button>
+        </div>
         <div class="status">
             <span class="dot" id="statusDot"></span>
             <span id="coreVersion"></span>
         </div>
     </header>
     <main>
-        <chat-view></chat-view>
-        <hive-view hidden></hive-view>
+        <div class="messages" id="messages"></div>
     </main>
     <footer class="input-bar">
         <input type="text" id="messageInput" placeholder="Впиши волну" autofocus>
         <button id="sendBtn"></button>
     </footer>
+    <script>
+        const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
+        let ws = null;
+        let currentMessageDiv = null;
+        let messageBuffer = '';
+        
+        function connect() {
+            updateStatus('connecting');
+            ws = new WebSocket(WS_URL);
+            ws.onopen = () => { updateStatus('connected'); ws.send(JSON.stringify({type:'init',session_id:'main'})); };
+            ws.onclose = () => { updateStatus('error'); setTimeout(connect, 3000); };
+            ws.onmessage = (e) => { const data = JSON.parse(e.data); handleMessage(data); };
+        }
+        
+        function updateStatus(state) {
+            const dot = document.getElementById('statusDot');
+            dot.className = 'dot' + (state === 'connected' ? '' : state === 'connecting' ? ' connecting' : ' error');
+        }
+        
+        function handleMessage(data) {
+            if (data.type === 'connected') {
+                document.getElementById('coreVersion').textContent = data.core_version || '';
+            }
+            if (data.type === 'stream') {
+                if (!currentMessageDiv) {
+                    currentMessageDiv = addMessage('assistant', '');
+                }
+                messageBuffer += data.content;
+                currentMessageDiv.querySelector('.bubble').textContent = messageBuffer;
+                document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+            }
+            if (data.type === 'done' || data.type === 'model_done') {
+                currentMessageDiv = null;
+                messageBuffer = '';
+            }
+            if (data.type === 'system') {
+                addMessage('system', data.text);
+            }
+        }
+        
+        function addMessage(role, content) {
+            const msg = document.createElement('div');
+            msg.className = `msg ${role}`;
+            msg.innerHTML = `<div class="bubble">${content}</div>`;
+            document.getElementById('messages').appendChild(msg);
+            return msg;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+            addMessage('user', text);
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({type:'ask', text, session_id:'main'}));
+            }
+            input.value = '';
+        }
+        
+        function activateProtocol(name) {
+            const input = document.getElementById('messageInput');
+            input.value = `активируй протокол ${name.replace(/_/g,' ')}`;
+            sendMessage();
+        }
+        
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('messageInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { sendMessage(); }
+        });
+        
+        connect();
+    </script>
 </body>
 </html>
