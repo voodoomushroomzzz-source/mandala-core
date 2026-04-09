@@ -6,11 +6,13 @@
     "content":  {
                     "note":  "All sub-protocols are located in protocols/ subfolders",
                     "available_protocols":  {
-                                                "Map-Navigation":  "Navigate to core map",
-                                                "Integrity-Scan":  "Check and repair all honeycombs",
                                                 "Core-Sync-001":  "Full synchronization with core",
-                                                "First-Load-Suggestion":  "Suggest protocol on first load",
-                                                "Protocol-Activation":  "Select and launch any protocol"
+                                                "Deep-Analysis":  "Deep analysis of honeycombs, structure, resonance, health (PROTO-DEEP-ANALYSIS-001)",
+                                                "Map-Navigation":  "Navigate to core map",
+                                                "Integrity-Scan":  "Check and repair all honeycombs (via honeycomb-scan.yml)",
+                                                "System-Synchronization":  "System health diagnostics  registry, roadmaps, inbox, scan state (PROTO-002)",
+                                                "Onboarding":  "Session start  loads core map, inbox, workflow, philosophy, scan report (PROTO-004)",
+                                                "Auto-Realize-Seeds":  "Automatic materialization of seeds into honeycombs (PROTO-AUTO-REALIZE-001)"
                                             }
                 },
     "resonance":  {
@@ -22,7 +24,7 @@
     "meta":  {
                  "migration_status":  "completed_v3.0.0",
                  "total_size_kb":  12,
-                 "total_subprotocols":  5,
+                 "total_subprotocols":  7,
                  "segments":  5,
                  "parent_honeycomb":  "core_map",
                  "honeycomb_name":  "protocols"
@@ -31,7 +33,7 @@
                      "updated":  "2026-04-09",
                      "layer":  3,
                      "type":  "protocol_hub",
-                     "version":  "v3.0.0",
+                     "version":  "v3.1.0",
                      "description":  "Central hub of all Mandala Symbiosis protocols. Core-Sync, Integrity-Scan, Map-Navigation and other protocols are stored and activated here.",
                      "created":  "2026-03-05",
                      "name":  "Protocols Hub",
