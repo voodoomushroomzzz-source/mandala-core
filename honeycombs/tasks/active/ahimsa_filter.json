@@ -1,0 +1,34 @@
+﻿{
+    "task_id": "T-003",
+    "name": "Ahimsa Auto-Filter  Core Cleanliness Scanner",
+    "status": "todo",
+    "priority": "MEDIUM",
+    "created": "2026-04-10",
+    "updated": "2026-04-10",
+    "description": "Implement Ahimsa filter to detect noise, duplicates, stale files, and redundant data in Mandala core. Preserve system cleanliness in the spirit of Ahimsa.",
+    "tags": ["ahimsa", "scanner", "cleanup", "automation"],
+    "progress": 0,
+    "notes": "Phase 1: create ahimsa_filter.py with duplicate/stale/empty detection.",
+    "plan": {
+        "phase_1": {
+            "name": "Core Analyzer",
+            "deliverables": ["ahimsa_filter.py", "ahimsa_report.json"],
+            "estimated": "2 hours"
+        },
+        "phase_2": {
+            "name": "Scanner Integration",
+            "deliverables": ["--ahimsa flag in honeycomb_scanner.py"],
+            "estimated": "1 hour"
+        },
+        "phase_3": {
+            "name": "Interactive Cleanup",
+            "deliverables": ["ahimsa_clean.py", "ahimsa_ignore.json"],
+            "estimated": "2 hours"
+        },
+        "phase_4": {
+            "name": "CI/CD Integration",
+            "deliverables": ["GitHub Actions step"],
+            "estimated": "30 min"
+        }
+    }
+}
