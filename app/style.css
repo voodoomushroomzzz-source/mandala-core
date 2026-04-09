@@ -117,3 +117,10 @@ main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
 }
 .input-bar button:hover { background: #34d399; box-shadow: 0 0 16px var(--accent); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* Force font uniformity */
+.msg.user .bubble, .msg.assistant .bubble {
+    font-family: system-ui, -apple-system, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: normal !important;
+    line-height: 1.6 !important;
+}
