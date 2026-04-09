@@ -15,22 +15,6 @@
                                         "priority":  "MEDIUM"
                                     },
                                     {
-                                        "file":  "honeycombs/protocols/sync_system.json",
-                                        "priority":  "MEDIUM"
-                                    },
-                                    {
-                                        "file":  "honeycombs/protocols/realize_ideas.json",
-                                        "priority":  "LOW"
-                                    },
-                                    {
-                                        "file":  "honeycombs/protocols/update_honeycombs.json",
-                                        "priority":  "LOW"
-                                    },
-                                    {
-                                        "file":  "honeycombs/protocols/gardener_lock.json",
-                                        "priority":  "LOW"
-                                    },
-                                    {
                                         "file":  "honeycombs/instructions/core/sr_role_v3.json",
                                         "priority":  "CRITICAL"
                                     },
@@ -135,7 +119,7 @@
                                         "priority":  "LOW"
                                     }
                                 ],
-                    "next_action":  "Translate sr_role_v3.json (CRITICAL)",
+                    "next_action":  "Translate instructions/core/sr_role_v3.json (CRITICAL)",
                     "translated":  [
                                        {
                                            "status":  "",
@@ -160,7 +144,7 @@
                                        {
                                            "status":  "",
                                            "file":  "honeycombs/protocols/onboarding.json",
-                                           "version":  "v2.0.0"
+                                           "version":  "v2.2.0"
                                        },
                                        {
                                            "status":  "",
@@ -170,6 +154,21 @@
                                        {
                                            "status":  "",
                                            "file":  "honeycombs/protocols/index.json",
+                                           "version":  "v3.1.1"
+                                       },
+                                       {
+                                           "status":  "",
+                                           "file":  "honeycombs/protocols/sync_system.json",
+                                           "version":  "v2.0.0"
+                                       },
+                                       {
+                                           "status":  "",
+                                           "file":  "honeycombs/protocols/auto_realize_seed/index.json",
+                                           "version":  "v3.0.0"
+                                       },
+                                       {
+                                           "status":  "",
+                                           "file":  "honeycombs/protocols/deep_analysis/index.json",
                                            "version":  "v3.0.0"
                                        }
                                    ],
@@ -184,8 +183,8 @@
                  "deadline":  "ASAP",
                  "source":  "Gardener request via External AI (Grok)",
                  "estimated_files":  28,
-                 "progress_percent":  "24%",
-                 "translated_files":  7,
+                 "progress_percent":  "36%",
+                 "translated_files":  10,
                  "honeycombs_priority":  [
                                              "philosophy/index.json",
                                              "protocols/index.json",
