@@ -16,6 +16,7 @@
             <button onclick="activateProtocol('deep_analysis')">DEEP</button>
         </div>
         <div class="status">
+            <button id="clearHistoryBtn" title="Очистить историю" style="background:none;border:1px solid var(--border);color:var(--text-dim);padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;"></button>
             <span class="dot" id="statusDot"></span>
             <span id="coreVersion"></span>
         </div>
@@ -36,6 +37,40 @@
         let ws = null;
         let currentMessageDiv = null;
         let messageBuffer = '';
+        let chatHistory = [];
+        
+        // Загрузка истории из localStorage
+        function loadHistory() {
+            const saved = localStorage.getItem('mandala_chat_history');
+            if (saved) {
+                try {
+                    chatHistory = JSON.parse(saved);
+                    const messagesEl = document.getElementById('messages');
+                    messagesEl.innerHTML = '';
+                    chatHistory.forEach(msg => {
+                        const div = document.createElement('div');
+                        div.className = `msg ${msg.role}`;
+                        const bubble = document.createElement('div');
+                        bubble.className = 'bubble';
+                        bubble.innerHTML = msg.role === 'user' ? msg.content : formatMessage(msg.content);
+                        div.appendChild(bubble);
+                        messagesEl.appendChild(div);
+                    });
+                } catch(e) { console.error('History load error:', e); }
+            }
+        }
+        
+        // Сохранение истории
+        function saveHistory() {
+            localStorage.setItem('mandala_chat_history', JSON.stringify(chatHistory));
+        }
+        
+        // Очистка истории
+        function clearHistory() {
+            chatHistory = [];
+            localStorage.removeItem('mandala_chat_history');
+            document.getElementById('messages').innerHTML = '';
+        }
         
         function connect() {
             updateStatus('connecting');
@@ -62,7 +97,6 @@
             return text
                 .replace(/\*\*(.+?)\*\*/g, '$1')
                 .replace(/\*(.+?)\*/g, '$1')
-                .replace(/___(.+?)___/g, '$1')
                 .replace(/```[\s\S]*?```/g, '')
                 .replace(/`(.+?)`/g, '$1');
         }
@@ -88,7 +122,7 @@
             if (data.type === 'stream') {
                 hideThinking();
                 if (!currentMessageDiv) {
-                    currentMessageDiv = addMessage('assistant', '');
+                    currentMessageDiv = addMessage('assistant', '', false);
                 }
                 messageBuffer += data.content;
                 currentMessageDiv.querySelector('.bubble').innerHTML = formatMessage(messageBuffer);
@@ -98,17 +132,20 @@
                 hideThinking();
                 if (currentMessageDiv) {
                     const bubble = currentMessageDiv.querySelector('.bubble');
-                    bubble.innerHTML = formatMessage(stripMarkdown(messageBuffer));
+                    const cleanText = stripMarkdown(messageBuffer);
+                    bubble.innerHTML = formatMessage(cleanText);
+                    chatHistory.push({ role: 'assistant', content: cleanText });
+                    saveHistory();
                 }
                 currentMessageDiv = null;
                 messageBuffer = '';
             }
             if (data.type === 'system') {
-                addMessage('system', data.text);
+                addMessage('system', data.text, true);
             }
         }
         
-        function addMessage(role, content) {
+        function addMessage(role, content, save = true) {
             const msg = document.createElement('div');
             msg.className = `msg ${role}`;
             const bubble = document.createElement('div');
@@ -116,6 +153,10 @@
             bubble.innerHTML = role === 'user' ? content : formatMessage(content);
             msg.appendChild(bubble);
             document.getElementById('messages').appendChild(msg);
+            if (save && (role === 'user' || role === 'system')) {
+                chatHistory.push({ role, content });
+                saveHistory();
+            }
             return msg;
         }
         
@@ -140,7 +181,11 @@
         document.getElementById('messageInput').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { sendMessage(); }
         });
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+            if (confirm('Очистить историю чата?')) { clearHistory(); }
+        });
         
+        loadHistory();
         connect();
     </script>
 </body>
