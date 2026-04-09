@@ -1,1 +1,37 @@
-{"template_name":"Базовая задача","version":"1.0","created_at":"2026-03-03","description":"Шаблон для создания простой задачи в системе Мандалы Симбиоза","fields":{"id":"Автоматически из registry.json (next_task_id)","title":"[Категория] Краткое описание [Срок]","status":"todo | in_progress | completed","created_at":"Текущая дата","updated_at":"Текущая дата","description":"Подробное описание задачи","assignee":"Садовник | DeepSeek | Садовник+ИИ","tags":["тег1","тег2"],"progress":0,"notes":"Дополнительные заметки","roadmap_id":"Опционально: RM-XXX"},"title_conventions":{"format":"[Категория] Описание [Срок]","categories":["Архитектура","Бот","Чат","Исследование","Документация","Оптимизация","Фикс","Функционал"],"deadlines":["2026-03-04","ASAP","WHEN","Без срока"],"priority_in_title":"Можно добавить: [CRITICAL], [HIGH], [MEDIUM], [LOW] в описание"},"examples":{"simple":{"id":"T-001","title":"[Архитектура] Упростить структуру задач [2026-03-03]","status":"in_progress","created_at":"2026-03-03","updated_at":"2026-03-03","description":"Переход на простую структуру с active/ и archive/ папками","assignee":"DeepSeek","tags":["refactoring","simplification"],"progress":80},"with_priority":{"id":"T-002","title":"[CRITICAL] [Чат] Исправить ошибку интерфейса [ASAP]","status":"todo","created_at":"2026-03-03","updated_at":"2026-03-03","description":"Пользователи не видят новые сообщения в чате","assignee":"DeepSeek","tags":["bug","ui","critical"],"progress":0}},"usage":"1. Скопировать структуру JSON\n2. Заполнить поля\n3. Сохранить как active/task_xxx.json\n4. Обновить registry.json"}
+﻿{
+    "template_name": "Basic Task",
+    "version": "2.0",
+    "created_at": "2026-04-10",
+    "description": "Template for creating tasks in Mandala Symbiosis. Tasks are concrete work units, completable within 1 month.",
+    "fields": {
+        "task_id": "T-XXX (from tasks/index.json registry)",
+        "name": "[CATEGORY] Brief description [DEADLINE]",
+        "status": "todo | in_progress | completed",
+        "priority": "CRITICAL | HIGH | MEDIUM | LOW",
+        "created": "YYYY-MM-DD",
+        "updated": "YYYY-MM-DD",
+        "description": "Detailed task description",
+        "tags": ["tag1", "tag2"],
+        "progress": 0,
+        "notes": "Additional notes"
+    },
+    "title_conventions": {
+        "format": "[CATEGORY] Description [DEADLINE]",
+        "categories": ["Architecture", "Bot", "Chat", "Research", "Documentation", "Optimization", "Fix", "Feature"],
+        "deadlines": ["YYYY-MM-DD", "ASAP", "WHEN", "No deadline"],
+        "priority_in_description": "Optional: add [CRITICAL], [HIGH], [MEDIUM], [LOW] at start of description"
+    },
+    "example": {
+        "task_id": "T-001",
+        "name": "Translate Core to English",
+        "status": "in_progress",
+        "priority": "HIGH",
+        "created": "2026-04-09",
+        "updated": "2026-04-10",
+        "description": "Translate all honeycomb JSON files from Russian to English. Preserve sacred terms.",
+        "tags": ["translation", "english_core", "v3.0.0"],
+        "progress": 86,
+        "notes": "24/28 files translated. Next: flower_of_life.json"
+    },
+    "usage": "1. Copy this structure\n2. Fill in fields\n3. Save as active/task_XXX.json\n4. Update tasks/index.json registry"
+}
