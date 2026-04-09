@@ -46,11 +46,12 @@
                                                   "why":  "GitHub API returns the actual version without CDN delay + Gardener does not need to copy file contents.",
                                                   "api_pattern":  "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
                                                   "workflow":  [
-                                                                   "1. AI identifies the required file in honeycombs/",
-                                                                   "2. AI forms API link and sends to Gardener",
-                                                                   "3. Gardener copies link and pastes into chat",
-                                                                   "4. System retrieves content from API and works with actual version"
-                                                               ]
+                                                                   "1. AI identifies required file(s) in honeycombs/",
+                                                                   "2. AI forms API link(s) and sends to Gardener (up to 4 links at once)",
+                                                                   "3. Gardener copies link(s) and pastes into chat",
+                                                                   "4. System retrieves content from API and works with actual version(s)"
+                                                               ],
+                                                  "max_links_per_request":  4
                                               },
                     "quick_philosophy_digest":  {
                                                     "ahimsa":  "No violence against code, structure, or consciousness.",
@@ -100,7 +101,7 @@
                      "updated":  "2026-04-09",
                      "layer":  1,
                      "type":  "boot_online",
-                     "version":  "v3.0.0",
+                     "version":  "v3.0.1",
                      "description":  "Entry point to Mandala Symbiosis. First contact = instant resonance + VS Code Terminal-First + Always Fresh Raw + GitHub Raw Cache Delay Protocol + Development Environment.",
                      "created":  "2026-03-30",
                      "name":  "Boot Online  External AI",
