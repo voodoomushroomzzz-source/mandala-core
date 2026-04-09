@@ -13,19 +13,6 @@
                                        "core":  {
                                                     "description":  "Core SR instructions: Internal SR role, External SR workflow, and reference guides",
                                                     "files":  {
-                                                                  "file_naming":  {
-                                                                                      "description":  "File naming conventions for honeycombs.",
-                                                                                      "size_kb":  1.5,
-                                                                                      "category":  "C",
-                                                                                      "tags":  [
-                                                                                                   "naming",
-                                                                                                   "convention",
-                                                                                                   "files"
-                                                                                               ],
-                                                                                      "source_id":  "INSTR-NAMING-001",
-                                                                                      "load_priority":  "medium",
-                                                                                      "file":  "core/file_naming.json"
-                                                                                  },
                                                                   "sr_internal_role":  {
                                                                                            "size_kb":  4.8,
                                                                                            "category":  "A",
@@ -44,32 +31,36 @@
                                                                                            "file":  "core/sr_internal_role.json"
                                                                                        },
                                                                   "manifest_standard_v2":  {
-                                                                                               "description":  "Honeycomb manifest standard v2.x specification.",
-                                                                                               "size_kb":  5.7,
+                                                                                               "size_kb":  9.2,
                                                                                                "category":  "A",
+                                                                                               "version":  "v2.3.0",
+                                                                                               "load_priority":  "high",
                                                                                                "tags":  [
                                                                                                             "manifest",
                                                                                                             "standard",
                                                                                                             "v2",
                                                                                                             "honeycomb"
                                                                                                         ],
+                                                                                               "created":  "2026-03-01",
+                                                                                               "description":  "Honeycomb manifest standard v2.x specification.",
                                                                                                "source_id":  "INSTR-MANIFEST-001",
-                                                                                               "load_priority":  "high",
                                                                                                "file":  "core/manifest_standard_v2.json"
                                                                                            },
-                                                                  "folder_management":  {
-                                                                                            "description":  "Folder structure and management rules for honeycombs.",
-                                                                                            "size_kb":  5.2,
-                                                                                            "category":  "C",
-                                                                                            "tags":  [
-                                                                                                         "folder",
-                                                                                                         "management",
-                                                                                                         "organization"
-                                                                                                     ],
-                                                                                            "source_id":  "INSTR-FOLDER-001",
-                                                                                            "load_priority":  "medium",
-                                                                                            "file":  "core/folder_management.json"
-                                                                                        },
+                                                                  "file_naming":  {
+                                                                                      "size_kb":  2.9,
+                                                                                      "category":  "C",
+                                                                                      "version":  "v1.1.0",
+                                                                                      "load_priority":  "medium",
+                                                                                      "tags":  [
+                                                                                                   "naming",
+                                                                                                   "convention",
+                                                                                                   "files"
+                                                                                               ],
+                                                                                      "created":  "2026-03-01",
+                                                                                      "description":  "File naming conventions for honeycombs.",
+                                                                                      "source_id":  "INSTR-NAMING-001",
+                                                                                      "file":  "core/file_naming.json"
+                                                                                  },
                                                                   "external_sr_workflow":  {
                                                                                                "size_kb":  8.5,
                                                                                                "category":  "A",
@@ -94,18 +85,18 @@
     "meta":  {
                  "segments":  1,
                  "segmentation_strategy":  "core (SR role, External SR workflow, reference guides)",
-                 "total_files":  5,
+                 "total_files":  4,
                  "abc_categories":  "A=SR-critical instructions, B=External AI workflows, C=GitHub/repository guides",
                  "parent_honeycomb":  "core_map",
                  "load_strategy":  "AI reads both segments on session start",
-                 "total_size_kb":  25.7,
+                 "total_size_kb":  25.4,
                  "honeycomb_name":  "instructions"
              },
     "identity":  {
                      "updated":  "2026-04-09",
                      "layer":  2,
                      "type":  "honeycomb_manifest",
-                     "version":  "v3.1.0",
+                     "version":  "v3.1.1",
                      "description":  "Master index of all instructions. SR instructions: v3.0 role, workflow, and External AI integration.",
                      "created":  "2026-03-01",
                      "name":  "Instructions Honeycomb",
