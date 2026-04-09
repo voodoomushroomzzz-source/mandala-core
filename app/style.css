@@ -17,6 +17,8 @@ body {
     background: var(--bg);
     color: var(--text);
     font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -47,39 +49,34 @@ body {
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .dot.connecting { background: #a78bfa; }
 .dot.error { background: #f43f5e; }
-main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
+main { flex: 1; overflow-y: auto; padding: 20px; }
 .messages { display: flex; flex-direction: column; gap: 16px; }
-.msg { 
-    display: flex; 
-    width: fit-content; 
-    max-width: 70%; 
-    min-width: 60px; 
-    animation: fadeIn 0.2s; 
-}
-.msg.user { align-self: flex-end; }
-.msg.assistant { align-self: flex-start; }
-.msg.system { align-self: center; max-width: 90%; }
-.bubble {
+.msg {
+    display: flex;
+    width: fit-content;
+    max-width: 70%;
+    min-width: 60px;
+    animation: fadeIn 0.2s;
     padding: 12px 16px;
     border-radius: var(--radius);
     word-break: break-word;
     overflow-wrap: anywhere;
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1.6;
 }
-.msg.user .bubble {
+.msg.user {
+    align-self: flex-end;
     background: var(--user-bg);
     border: 1px solid var(--user-border);
     border-bottom-right-radius: 4px;
 }
-.msg.assistant .bubble {
+.msg.assistant {
+    align-self: flex-start;
     background: var(--assistant-bg);
     border: 1px solid var(--assistant-border);
     border-bottom-left-radius: 4px;
 }
-.msg.system .bubble {
+.msg.system {
+    align-self: center;
+    max-width: 90%;
     background: transparent;
     border: 1px dashed var(--border);
     color: var(--text-dim);
@@ -107,7 +104,7 @@ main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
 .input-bar input {
     flex: 1; background: var(--bg); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 12px 16px; color: var(--text);
-    font-family: system-ui, sans-serif; font-size: 14px; outline: none;
+    font-size: 14px; outline: none;
 }
 .input-bar input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 .input-bar button {
@@ -117,23 +114,3 @@ main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
 }
 .input-bar button:hover { background: #34d399; box-shadow: 0 0 16px var(--accent); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-/* Force font uniformity */
-.msg.user .bubble, .msg.assistant .bubble {
-    font-family: system-ui, -apple-system, sans-serif !important;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    line-height: 1.6 !important;
-}
-/* Force uniform font at container level */
-.msg {
-    font-family: system-ui, -apple-system, sans-serif !important;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    line-height: 1.6 !important;
-}
-.msg .bubble {
-    font-family: inherit !important;
-    font-size: inherit !important;
-    font-weight: inherit !important;
-    line-height: inherit !important;
-}
