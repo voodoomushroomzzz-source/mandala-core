@@ -1,7 +1,0 @@
-﻿{
-  "lock_status": "active",
-  "activated_by": "Gardener",
-  "timestamp": "$(Get-Date -Format 'o')",
-  "purpose": "RM-010 Living Core Revival  все изменения только после подтверждения Садовника",
-  "protocol": "tectosphaera_gardener_lock"
-}
