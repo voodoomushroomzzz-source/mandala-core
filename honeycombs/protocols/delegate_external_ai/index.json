@@ -1,19 +1,38 @@
-﻿{
-  "identity": {
-    "module_id": "PROTO-008",
-    "name": "Delegate to External AI",
-    "version": "v2.1.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 2,
-    "type": "sub_protocol",
-    "description": "Safely delegates tasks to external AIs (Grok, Claude, etc.) while maintaining Ahimsa and system resonance.",
-    "status": "active",
-    "priority": "medium",
-    "tags": ["delegate", "external_ai", "collaboration"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "language": "English (main core language)"
-  }
+{
+    "identity": {
+        "module_id": "PROTO-DELEGATE-EXTERNAL-AI-001",
+        "name": "Делегирование внешнему ИИ",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 3,
+        "type": "protocol",
+        "description": "Протокол делегирования задач внешнему ИИ (Grok, Claude, Gemini и др.). Автоматически формирует ТЗ, передаёт контекст и принимает результат обратно в Мандалу.",
+        "status": "active",
+        "priority": "critical",
+        "tags": [
+            "protocol",
+            "delegate",
+            "external_ai",
+            "workflow"
+        ]
+    },
+    "meta": {
+        "parent_protocol": "protocols/index.json",
+        "total_size_kb": 2.4,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Делегирование задач External AI с сохранением полного контекста Мандалы",
+        "trigger": "по команде СР или напрямую из boot_online"
+    },
+    "resonance": {
+        "with_boot_online": "100%",
+        "with_instructions": "100%",
+        "with_core_map": "100%"
+    },
+    "directives": {
+        "primary": "Автоматически делегировать задачи внешнему ИИ и возвращать результат в симбиоз",
+        "secondary": "Формировать чёткие брифы с ссылками на core_map и актуальные соты"
+    }
 }
