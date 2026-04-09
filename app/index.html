@@ -55,7 +55,17 @@
                     currentMessageDiv = addMessage('assistant', '');
                 }
                 messageBuffer += data.content;
-                currentMessageDiv.querySelector('.bubble').innerHTML = messageBuffer.replace(/\n/g, '<br>');
+                const formatted = messageBuffer
+                    .replace(/\n/g, '<br>')
+                    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+                    .replace(/^- (.+)$/gm, '<li>$1</li>')
+                    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+                currentMessageDiv.querySelector('.bubble').innerHTML = formatted;
                 document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
             }
             if (data.type === 'done' || data.type === 'model_done') {
@@ -70,7 +80,10 @@
         function addMessage(role, content) {
             const msg = document.createElement('div');
             msg.className = `msg ${role}`;
-            msg.innerHTML = `<div class="bubble">${content}</div>`;
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.innerHTML = role === 'user' ? content : content.replace(/\n/g, '<br>');
+            msg.appendChild(bubble);
             document.getElementById('messages').appendChild(msg);
             return msg;
         }
