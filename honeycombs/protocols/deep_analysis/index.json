@@ -1,19 +1,37 @@
-﻿{
-  "identity": {
-    "module_id": "PROTO-005",
-    "name": "Deep Analysis",
-    "version": "v2.1.0",
-    "created": "2026-03-30",
-    "updated": "2026-04-08",
-    "layer": 2,
-    "type": "sub_protocol",
-    "description": "Performs deep multi-level analysis of the entire Mandala system and returns structured results with recommendations.",
-    "status": "active",
-    "priority": "high",
-    "tags": ["analysis", "deep_scan", "resonance"],
-    "resonance": "100%"
-  },
-  "meta": {
-    "language": "English (main core language)"
-  }
+{
+    "identity": {
+        "module_id": "PROTO-DEEP-ANALYSIS-001",
+        "name": "Глубокий анализ",
+        "version": "v2.2.0",
+        "created": "2026-03-05",
+        "updated": "2026-04-08",
+        "layer": 3,
+        "type": "protocol",
+        "description": "Протокол глубокого анализа сот, структуры, резонанса и здоровья Мандалы. Выявляет скрытые проблемы, предлагает исправления и улучшения.",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "protocol",
+            "deep_analysis",
+            "integrity",
+            "scan"
+        ]
+    },
+    "meta": {
+        "parent_protocol": "protocols/index.json",
+        "total_size_kb": 2.3,
+        "migration_status": "completed_v2.2"
+    },
+    "content": {
+        "description": "Глубокий анализ состояния Мандалы и отдельных сот",
+        "trigger": "по команде Вуду или при запуске Integrity-Scan"
+    },
+    "resonance": {
+        "with_core_map": "100%",
+        "with_registry": "100%",
+        "with_awareness": "100%"
+    },
+    "directives": {
+        "primary": "Проводить глубокий анализ сот и предлагать точные исправления"
+    }
 }
