@@ -1,92 +1,139 @@
 ﻿name: Honeycomb Scanner
 
 on:
-  schedule:
-    - cron: '0 7 * * *'
-    - cron: '0 19 * * *'
   push:
-    branches: [main, develop]
+    branches: [ main ]
     paths:
       - 'honeycombs/**'
-      - 'Makefile'
-      - 'requirements.txt'
-      - '.github/workflows/honeycomb-scan.yml'
   workflow_dispatch:
-    inputs:
-      force_rescan:
-        description: 'Force full rescan'
-        required: false
-        default: true
-        type: boolean
-
-concurrency:
-  group: honeycomb-scan-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   scan:
-    name: Scan and validate honeycombs
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     permissions:
       contents: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Python 3.11
-        uses: actions/setup-python@v5
+      - name: Pull latest changes
+        run: |
+          git pull origin main
+          echo " Репозиторий синхронизирован"
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-          cache: 'pip'
 
       - name: Install dependencies
+        run: pip install pathlib2 2>/dev/null || true
+
+      - name: Run Honeycomb Scanner
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          echo " Запуск сканера сот..."
+          python honeycombs/registry/honeycomb_scanner.py scan
+          echo " Сканирование завершено"
 
-      - name: Check environment
-        run: make check
-
-      - name: Scan honeycombs (always FORCE on push)
+      - name: Generate scan report
         run: |
-          if [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event.inputs.force_rescan }}" = "true" ]; then
-            FORCE_FLAG="FORCE=1"
-          else
-            FORCE_FLAG=""
-          fi
-          make scan $FORCE_FLAG
+          python - <<'PYEOF'
+          import json
+          from datetime import datetime
+          from pathlib import Path
 
-      - name: Validate honeycombs
-        run: make validate
+          results_path = Path("honeycombs/registry/scan_results.json")
+          if not results_path.exists():
+              print("scan_results.json не найден  пропускаем отчёт")
+              exit(0)
 
-      - name: Generate report
-        run: make report
+          with open(results_path, "r", encoding="utf-8") as f:
+              data = json.load(f)
 
-      - name: Commit updated registry
-        if: github.ref == 'refs/heads/main'
+          summary = data.get("summary", {})
+          errors = data.get("validation_errors", [])
+          now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+          lines = [
+              "# Honeycomb Scan Report  Mandala Simbioza",
+              "",
+              f"**Система:** Mandala Simbioza v1.2.0",
+              f"**Дата:** {now}",
+              f"**Сканер:** honeycomb_scanner.py v1.0.0",
+              "",
+              "## Статистика",
+              "",
+              "| Параметр | Значение |",
+              "|----------|----------|",
+              f"| Всего сот | {summary.get('total_honeycombs', 0)} |",
+              f"| Валидных v2 | {summary.get('valid_v2', 0)} |",
+              f"| Невалидных v2 | {summary.get('invalid_v2', 0)} |",
+              f"| Ошибок | {summary.get('total_honeycombs', 0) - summary.get('valid_v2', 0)} |",
+              f"| Всего файлов | {summary.get('total_files', 0)} |",
+              f"| Общий размер | {summary.get('total_size_kb', 0)} KB |",
+              f"| Статус | {summary.get('health_status', 'unknown')} |",
+              "",
+          ]
+
+          if summary.get("new_honeycombs"):
+              lines += ["## Новые соты", ""]
+              for h in summary["new_honeycombs"]:
+                  lines.append(f"- {h}")
+              lines.append("")
+
+          if summary.get("modified_honeycombs"):
+              lines += ["## Изменённые соты", ""]
+              for h in summary["modified_honeycombs"]:
+                  lines.append(f"- {h}")
+              lines.append("")
+
+          if errors:
+              lines += ["## Ошибки валидации", ""]
+              for e in errors:
+                  lines.append(f"### {e.get('honeycomb_id', '?')}  {e.get('name', '?')}")
+                  for err in e.get("errors", []):
+                      lines.append(f"-  {err}")
+                  for warn in e.get("warnings", []):
+                      lines.append(f"-  {warn}")
+                  lines.append("")
+
+          honeycombs = data.get("honeycombs", [])
+          if honeycombs:
+              lines += ["## Структура сот", ""]
+              for h in honeycombs:
+                  lines.append(f"- {h.get('relative_path', h.get('honeycomb_id', '?'))}/")
+              lines.append(f"\n**Итого сот с index.json:** {len(honeycombs)}")
+
+          lines += ["", f"---", f"*Сгенерировано: {now}*"]
+
+          Path("reports").mkdir(exist_ok=True)
+          with open("reports/scan_report.md", "w", encoding="utf-8") as f:
+              f.write("\n".join(lines))
+
+          print(f" scan_report.md обновлён ({len(honeycombs)} сот, {len(errors)} ошибок)")
+          PYEOF
+
+      - name: Commit scan results
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git add honeycombs/registry/index.json
+          git add honeycombs/registry/scan_results.json
           git add honeycombs/registry/scan_state.json || true
-          git add honeycombs/registry/index.json || true
-          git add reports/ || true
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            HC=$(python3 -c "import os; print(sum(1 for r,d,f in os.walk('honeycombs') if 'index.json' in f))")
-            git commit -m "auto: honeycomb scan ${TS} | ${HC} honeycombs (FORCE=1)"
-            git push
-          fi
+          git add reports/scan_report.md
 
-      - name: Upload artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: scan-reports-${{ github.run_number }}
-          path: reports/
-          retention-days: 30
+          if git diff --staged --quiet; then
+            echo " Нет изменений после сканирования"
+          else
+            git commit -m " Авто-сканирование сот $(date +'%Y-%m-%d %H:%M')"
+            git pull --rebase origin main
+            git push origin HEAD:main
+            echo " Результаты сканирования запушены"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

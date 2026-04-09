@@ -68,7 +68,7 @@ class HoneycombScanner:
     def _load_config(self) -> Dict[str, Any]:
         """Загрузка конфигурации сканера"""
         try:
-            with open(self.scanner_config_path, 'r', encoding='utf-8') as f:
+            with open(self.scanner_config_path, 'r', encoding='utf-8-sig') as f:
                 return json.load(f)
         except Exception as e:
             logger.error(f"Ошибка загрузки конфигурации: {e}")
@@ -131,7 +131,7 @@ class HoneycombScanner:
         """Загрузка предыдущего состояния реестра для сравнения"""
         try:
             if self.registry_path.exists():
-                with open(self.registry_path, 'r', encoding='utf-8') as f:
+                with open(self.registry_path, 'r', encoding='utf-8-sig') as f:
                     registry = json.load(f)
                 
                 # Кэширование информации о предыдущих сотах
@@ -182,7 +182,7 @@ class HoneycombScanner:
         """
         try:
             # Чтение файла соты
-            with open(honeycomb_path, 'r', encoding='utf-8') as f:
+            with open(honeycomb_path, 'r', encoding='utf-8-sig') as f:
                 honeycomb_data = json.load(f)
             
             # Извлечение идентификатора соты
@@ -356,7 +356,7 @@ class HoneycombScanner:
             registry_file = Path("honeycombs/registry/index.json")
             
             if registry_file.exists():
-                with open(registry_file, 'r', encoding='utf-8') as f:
+                with open(registry_file, 'r', encoding='utf-8-sig') as f:
                     registry = json.load(f)
             else:
                 registry = {}
@@ -395,7 +395,7 @@ class HoneycombScanner:
             reg["scanner_version"] = self.config.get("identity", {}).get("version", "v1.0.0")
 
             # Сохраняем index.json (не ломая identity/meta)
-            with open(registry_file, 'w', encoding='utf-8') as f:
+            with open(registry_file, 'w', encoding='utf-8-sig') as f:
                 json.dump(registry, f, indent=2, ensure_ascii=False)
 
             # Оставляем scan_state.json как внутреннее состояние
@@ -467,7 +467,7 @@ class HoneycombScanner:
                 "scanner_config": self.config.get("identity", {})
             }
             
-            with open(state_file, 'w', encoding='utf-8') as f:
+            with open(state_file, 'w', encoding='utf-8-sig') as f:
                 json.dump(state_data, f, indent=2, ensure_ascii=False)
             
             logger.info(f"Сохранено состояние сканирования: {state_file}")
@@ -567,5 +567,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
