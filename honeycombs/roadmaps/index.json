@@ -2,7 +2,7 @@
     "identity": {
         "module_id": "ROADMAPS-INDEX",
         "name": "Roadmaps Registry Index",
-        "version": "v2.2.0",
+        "version": "v2.3.0",
         "created": "2026-03-04",
         "updated": "2026-04-10",
         "layer": 2,
@@ -14,7 +14,7 @@
         "resonance": "100%"
     },
     "meta": {
-        "description": "Roadmaps registry index v2.2.0  synchronized with actual files 2026-04-10.",
+        "description": "Roadmaps registry index v2.3.0  synchronized with actual files 2026-04-10.",
         "update_frequency": "on change",
         "compliance": "v2.1_standard"
     },
@@ -57,13 +57,6 @@
                     "progress": "25%",
                     "phase_1_completed": "2026-03-07",
                     "notes": "Phase 1 CI/CD completed: GitHub Actions, auto-scan on push, scheduled scans 10:00 and 22:00 MSK."
-                },
-                "RM-009": {
-                    "name": "Automated Testing Suite",
-                    "status": "planned",
-                    "phase": 0,
-                    "priority": "medium",
-                    "progress": "0%"
                 }
             },
             "archived_roadmaps": {
@@ -98,13 +91,13 @@
         "metrics": {
             "total_roadmaps": 9,
             "completed": 3,
-            "in_progress": 4,
-            "planned": 1,
+            "in_progress": 3,
+            "planned": 0,
             "vision": 1,
             "archived": 4,
             "progress_trend": "positive  moving towards automation and stabilization"
         },
-        "notes": "2026-04-10: Synchronized index with actual files. RM-001, RM-006 removed (files not found). RM-007, RM-010 archived. RM-003 moved to active. Metrics updated."
+        "notes": "2026-04-10: Synchronized index with actual files. RM-007 moved to archive. RM-009 removed (file not found). Metrics updated."
     },
     "resonance": {
         "status": "fully_resonant",
@@ -114,6 +107,6 @@
     "health": {
         "status": "healthy",
         "last_check": "2026-04-10",
-        "notes": "v2.2.0  synchronized with repository state."
+        "notes": "v2.3.0  synchronized with repository state. testing_validation.json archived."
     }
 }
