@@ -1,1 +1,56 @@
-{"identity":{"module_id":"INSTR-002","name":"🗂️ Соглашения по именованию файлов","version":"v1.0.0","created":"2026-03-01","layer":2,"type":"naming_convention"},"meta":{"description":"Правила именования файлов в системе Мандалы","status":"active","priority":"medium","tags":["naming","files","structure","convention"],"resonance":"100%"},"content":{"general_rules":{"lowercase":"Использовать только строчные буквы и подчеркивания","descriptive":"Имена должны быть описательными и понятными","no_spaces":"Без пробелов, использовать подчеркивания","extension":"Всегда указывать расширение файла"},"honeycomb_rules":{"index_json":"index.json — главный файл соты","core_prefix":"core/ — основные файлы соты","critical_prefix":"critical/ — критические инструкции","workflow_prefix":"workflow/ — рабочие шаблоны"},"naming_patterns":{"json_files":"имя_файла.json","python_files":"имя_модуля.py","markdown_files":"имя_документа.md","config_files":"конфиг_название.json"},"examples":{"good":["patch_system.json","text_patches.json","file_deletion.json","honeycomb_patches.json"],"bad":["PatchSystem.json","text patches.json","FILE_DELETION.json","honeycomb-patches.json"]}}}
+{
+    "content":  {
+                    "examples":  {
+                                     "good":  [
+                                                  "patch_system.json",
+                                                  "text_patches.json",
+                                                  "file_deletion.json",
+                                                  "honeycomb_patches.json"
+                                              ],
+                                     "bad":  [
+                                                 "PatchSystem.json",
+                                                 "text patches.json",
+                                                 "FILE_DELETION.json",
+                                                 "honeycomb-patches.json"
+                                             ]
+                                 },
+                    "general_rules":  {
+                                          "lowercase":  "Use only lowercase letters and underscores",
+                                          "descriptive":  "Names should be descriptive and understandable",
+                                          "extension":  "Always specify file extension",
+                                          "no_spaces":  "No spaces, use underscores instead"
+                                      },
+                    "naming_patterns":  {
+                                            "config_files":  "config_name.json",
+                                            "markdown_files":  "name_of_document.md",
+                                            "json_files":  "name_of_file.json",
+                                            "python_files":  "name_of_module.py"
+                                        },
+                    "honeycomb_rules":  {
+                                            "index_json":  "index.json  main honeycomb file",
+                                            "core_prefix":  "core/  core honeycomb files"
+                                        }
+                },
+    "meta":  {
+                 "priority":  "medium",
+                 "status":  "active",
+                 "description":  "File naming rules in Mandala system",
+                 "resonance":  "100%",
+                 "tags":  [
+                              "naming",
+                              "files",
+                              "structure",
+                              "convention",
+                              "english_core"
+                          ]
+             },
+    "identity":  {
+                     "version":  "v1.1.0",
+                     "name":  "File Naming Conventions",
+                     "updated":  "2026-04-09",
+                     "type":  "naming_convention",
+                     "module_id":  "INSTR-002",
+                     "created":  "2026-03-01",
+                     "layer":  2
+                 }
+}
