@@ -1,7 +1,7 @@
 # Honeycomb Scan Report  Mandala Symbiosis
 
 **System:** Mandala Symbiosis
-**Date:** 2026-04-09 17:18:18
+**Date:** 2026-04-09 17:19:44
 **Scanner:** honeycomb_scanner.py
 
 ## Statistics
@@ -9,11 +9,11 @@
 | Parameter | Value |
 |-----------|-------|
 | Total honeycombs | 42 |
-| Valid v2 | 41 |
-| Invalid v2 | 1 |
-| Errors | 1 |
+| Valid v2 | 42 |
+| Invalid v2 | 0 |
+| Errors | 0 |
 | Total files | 237 |
-| Total size | 1491.99 KB |
+| Total size | 1492.67 KB |
 | Status | healthy |
 
 ## New honeycombs
@@ -60,12 +60,6 @@
 - modules
 - extensions
 - analytics
-
-## Validation errors
-
-### registry  Unknown
--  Отсутствует обязательное поле identity.name
--  Отсутствует обязательное поле identity.version
 
 ## Honeycomb structure
 
@@ -115,4 +109,4 @@
 **Total with index.json:** 42
 
 ---
-*Generated: 2026-04-09 17:18:18*
+*Generated: 2026-04-09 17:19:44*
