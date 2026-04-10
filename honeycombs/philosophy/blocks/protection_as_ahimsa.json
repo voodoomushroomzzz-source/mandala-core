@@ -1,0 +1,34 @@
+﻿{
+    "identity": {
+        "block_id": "PHI-008",
+        "title": "Protection as Ahimsa",
+        "version": "v1.0",
+        "created": "2026-04-11",
+        "layer": 3,
+        "type": "philosophical_block",
+        "origin": "tectosphaera v2.0.6"
+    },
+    "meta": {
+        "description": "Protection through care  Ahimsa in action",
+        "status": "active",
+        "priority": "high",
+        "tags": ["protection", "ahimsa", "care", "boundaries", "attention"],
+        "resonance": "100%"
+    },
+    "content": {
+        "core_principles": [
+            "Protection through care, not through resistance",
+            "Tools are an extension of care, not just functionality",
+            "Attention security is a higher priority than data security",
+            "Boundaries as membranes: let in the nourishing, hold back the toxic",
+            "Ahimsa in protection: do not create weapons even for defense"
+        ],
+        "attention_shield": "Protection of the cognitive space of Gardener and SR through  indicators and gentle warnings",
+        "resonance_note": "Transforms Ahimsa from 'do no harm' into active, gentle care"
+    },
+    "navigation": {
+        "parent_manifest": "honeycombs/philosophy/index.json",
+        "previous_block": "PHI-007",
+        "next_block": null
+    }
+}
