@@ -26,16 +26,37 @@
         "search": "ScrapeGraphAI SearchScraper + DuckDuckGo (free)",
         "llm": "Local models or free high-quality APIs (Grok, DeepSeek, Qwen)",
         "storage": "JSON files in /seeds/ with clear structure + registry",
-        "scheduling": "GitHub Actions (weekly) or APScheduler"
+        "scheduling": "Render Cron Job (weekly)"
     },
     "constraints": [
         "Fully free stack (open-source + free tiers)",
         "Minimal token consumption (Ahimsa)",
         "Clean, documented code",
         "Full compatibility with Python 3.12+",
-        "All data stored in Mandala format"
+        "All data stored in Mandala format",
+        "API keys stored in Render Environment Variables  NEVER in repo"
     ],
-    "plan": {
+    "deployment": {
+        "platform": "Render",
+        "service_type": "Cron Job",
+        "schedule": "0 9 * * 1 (every Monday 09:00 UTC)",
+        "env_vars": [
+            "GITHUB_TOKEN",
+            "LLM_API_KEY",
+            "LLM_API_URL"
+        ],
+        "build_command": "pip install -r requirements.txt",
+        "start_command": "python -m scout_agent"
+    },
+    "startup_plan": {
+        "phase_0": {
+            "name": "Project Structure & Dependencies",
+            "deliverables": [
+                "Create scout_agent/ folder with __init__.py, graph.py, search.py, models.py, config.py, github_client.py",
+                "Add langgraph, scrapegraphai, pydantic, duckduckgo-search, httpx to requirements.txt"
+            ],
+            "estimated": "30 min"
+        },
         "phase_1": {
             "name": "Search Core",
             "deliverables": ["scout_search.py with GitHub, ArXiv, Hacker News, Reddit"],
@@ -52,8 +73,8 @@
             "estimated": "2 hours"
         },
         "phase_4": {
-            "name": "Scheduler",
-            "deliverables": ["Weekly GitHub Actions workflow"],
+            "name": "Render Deployment",
+            "deliverables": ["Render Cron Job configured", "Environment Variables set"],
             "estimated": "1 hour"
         },
         "phase_5": {
@@ -82,7 +103,7 @@
         "ScrapeGraphAI tools integration",
         "Pydantic models for Seed and Opportunity",
         "Script for running and testing",
-        "GitHub Actions workflow (optional)",
+        "Render Cron Job configured",
         "Documentation + startup guide"
     ]
 }
