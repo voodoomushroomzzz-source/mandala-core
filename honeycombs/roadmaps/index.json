@@ -2,7 +2,7 @@
     "identity": {
         "module_id": "ROADMAPS-INDEX",
         "name": "Roadmaps Registry Index",
-        "version": "v2.4.0",
+        "version": "v2.5.0",
         "created": "2026-03-04",
         "updated": "2026-04-10",
         "layer": 2,
@@ -14,7 +14,7 @@
         "resonance": "100%"
     },
     "meta": {
-        "description": "Roadmaps registry index v2.4.0  synchronized with actual files 2026-04-10.",
+        "description": "Roadmaps registry index v2.5.0  synchronized with actual files 2026-04-10.",
         "update_frequency": "on change",
         "compliance": "v2.1_standard"
     },
@@ -50,6 +50,14 @@
                     "progress": "25%",
                     "phase_1_completed": "2026-03-07",
                     "notes": "Phase 1 CI/CD completed: GitHub Actions, auto-scan on push, scheduled scans 10:00 and 22:00 MSK."
+                },
+                "RM-011": {
+                    "name": "Living Visualizations  Mer-Ka-Ba Perception System",
+                    "status": "planned",
+                    "phase": 0,
+                    "priority": "low",
+                    "progress": "0%",
+                    "notes": "Strategic roadmap for visualizations. Phase 1 = T-007."
                 }
             },
             "archived_roadmaps": {
@@ -62,41 +70,38 @@
                     "name": "Mandala Core Update",
                     "status": "archived",
                     "archived_date": "2026-04-10",
-                    "final_progress": "100%",
-                    "notes": "Completed: all core honeycombs updated to v3.0.0 (English core)."
+                    "final_progress": "100%"
                 },
                 "RM-005": {
                     "name": "Honeycomb System",
                     "status": "archived",
                     "archived_date": "2026-04-10",
-                    "final_progress": "60%",
-                    "notes": "Archived: core modules migrated, remaining modules deprecated or removed."
+                    "final_progress": "60%"
                 },
                 "RM-007": {
                     "name": "Testing and Validation",
                     "status": "archived",
                     "archived_date": "2026-04-10",
-                    "final_progress": "100%",
-                    "notes": "Completed: CI/CD pipeline, honeycomb_scanner, validation rules v2.0."
+                    "final_progress": "100%"
                 },
                 "RM-010": {
                     "name": "Living Core Revival",
                     "status": "archived",
                     "archived_date": "2026-04-10",
-                    "final_progress": "100%",
-                    "notes": "Completed: Initium v7.5.1, Philosophia v1.5.4, Geometria Sacra v1.0.1, Akasha Chronicorum v2.5.2, Sphaerae v2.3.2, Tectosphaera v2.0.6 integrated. Phases 1-6 complete."
+                    "final_progress": "100%"
                 }
             }
         },
         "metrics": {
-            "total_roadmaps": 8,
+            "total_roadmaps": 9,
             "completed": 2,
             "in_progress": 2,
+            "planned": 1,
             "vision": 1,
             "archived": 5,
-            "progress_trend": "positive  core stabilization achieved, moving to expansion"
+            "progress_trend": "positive  new strategic roadmap added"
         },
-        "notes": "2026-04-10: RM-005 (Honeycomb System) moved to archive. Core migration complete, remaining modules deprecated."
+        "notes": "2026-04-10: Added RM-011 (Living Visualizations). Total active roadmaps: 5."
     },
     "resonance": {
         "status": "fully_resonant",
@@ -106,6 +111,6 @@
     "health": {
         "status": "healthy",
         "last_check": "2026-04-10",
-        "notes": "v2.4.0  RM-005 archived. Active roadmaps cleaned up."
+        "notes": "v2.5.0  RM-011 added."
     }
 }
