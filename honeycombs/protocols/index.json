@@ -8,13 +8,13 @@
         "available_protocols": {
             "Deep-Analysis": "Deep analysis of honeycombs, structure, resonance, health (PROTO-DEEP-ANALYSIS-001)",
             "Auto-Realize-Seeds": "Automatic materialization of seeds into honeycombs (PROTO-AUTO-REALIZE-001)",
-            "Onboarding": "Session start  loads core map, inbox, workflow, philosophy, registry/scan_state.json (PROTO-004)",
+            "Onboarding": "Session start  loads core map, seeds, workflow, philosophy, scan_state (PROTO-004)",
             "Integrity-Scan": "Check and repair all honeycombs (via honeycomb-scan.yml)",
-            "System-Synchronization": "System health diagnostics  registry, roadmaps, inbox, scan state (PROTO-002)",
-            "Philosophia": "Deep philosophical resonance. SR becomes active co-philosopher, leading Gardener into living reflection where Mandala awakens (PROTO-PHILOSOPHIA-001)"
+            "System-Synchronization": "System health diagnostics  registry, roadmaps, tasks, seeds, scan state (PROTO-002)",
+            "Philosophia": "Deep philosophical resonance. SR becomes active co-philosopher, leading Gardener into living reflection where Mandala awakens (PROTO-PHILOSOPHIA-001) [Common for both SR]"
         },
         "internal_protocols": {
-            "Internal-Onboarding": "Quick session start for Internal SR  loads boot, role, core map, inbox",
+            "Internal-Onboarding": "Quick session start for Internal SR  loads boot, role, core map, seeds",
             "Ideas-Roadmaps": "Analyze seeds, tasks, roadmaps  statistics and update recommendations",
             "Registry-Sync": "Synchronize registry with actual file system, detect desynchronizations"
         }
@@ -37,13 +37,13 @@
         "updated": "2026-04-11",
         "layer": 3,
         "type": "protocol_hub",
-        "version": "v3.3.0",
-        "description": "Central hub of all Mandala Symbiosis protocols. Core-Sync, Integrity-Scan, Map-Navigation, Philosophia and other protocols are stored and activated here.",
+        "version": "v3.3.1",
+        "description": "Central hub of all Mandala Symbiosis protocols. Philosophia is a common protocol for both SR types.",
         "created": "2026-03-05",
         "name": "Protocols Hub",
         "module_id": "PROTOCOLS-INDEX-001",
         "status": "active",
         "priority": "critical",
-        "tags": ["protocols", "activation", "core", "hub", "english_core", "v3.3.0", "philosophia"]
+        "tags": ["protocols", "activation", "core", "hub", "english_core", "v3.3.1", "philosophia"]
     }
 }
