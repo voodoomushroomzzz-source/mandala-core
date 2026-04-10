@@ -1,56 +1,56 @@
-{
-    "content":  {
-                    "after_loading":  "SR reports: what is current, what is outdated, where desynchronization occurs, what in inbox requires action.",
-                    "files_to_read":  [
-                                          {
-                                              "why":  "Core map  what is included in the system",
-                                              "file":  "honeycombs/core_map/index.json"
-                                          },
-                                          {
-                                              "why":  "Honeycomb registry  current state",
-                                              "file":  "honeycombs/registry/index.json"
-                                          },
-                                          {
-                                              "why":  "Roadmaps  progress and statuses",
-                                              "file":  "honeycombs/roadmaps/index.json"
-                                          },
-                                          {
-                                              "why":  "Current scan state  last scan timestamp and hashes",
-                                              "file":  "honeycombs/registry/scan_state.json"
-                                          },
-                                          {
-                                              "why":  "Incoming tasks from Gardener and Claude",
-                                              "file":  "honeycombs/inbox/index.json"
-                                          },
-                                          {
-                                              "why":  "Latest scan report",
-                                              "file":  "reports/scan_report.md"
-                                          }
-                                      ]
-                },
-    "meta":  {
-                 "estimated_time":  "3-5 minutes",
-                 "goal":  "Complete picture of current system state",
-                 "trigger":  "activate synchronization protocol"
-             },
-    "identity":  {
-                     "updated":  "2026-04-09",
-                     "layer":  1,
-                     "type":  "protocol",
-                     "version":  "v2.0.0",
-                     "description":  "System health diagnostics  registry, roadmaps, inbox, scan state.",
-                     "created":  "2026-03-07",
-                     "name":  "Protocol: System Synchronization",
-                     "module_id":  "PROTO-002",
-                     "status":  "active",
-                     "priority":  "high",
-                     "tags":  [
-                                  "protocol",
-                                  "sync",
-                                  "health",
-                                  "registry",
-                                  "english_core",
-                                  "v2.0.0"
-                              ]
-                 }
+﻿{
+    "content": {
+        "after_loading": "SR reports: what is current, what is outdated, where desynchronization occurs, what in seeds/tasks requires action.",
+        "files_to_read": [
+            {
+                "why": "Core map  what is included in the system",
+                "file": "honeycombs/core_map/index.json"
+            },
+            {
+                "why": "Honeycomb registry  current state",
+                "file": "honeycombs/registry/index.json"
+            },
+            {
+                "why": "Roadmaps  progress and statuses",
+                "file": "honeycombs/roadmaps/index.json"
+            },
+            {
+                "why": "Current scan state  last scan timestamp and hashes",
+                "file": "honeycombs/registry/scan_state.json"
+            },
+            {
+                "why": "Active tasks  current work items",
+                "file": "honeycombs/tasks/index.json"
+            },
+            {
+                "why": "Seeds  incoming ideas and Scout Agent findings",
+                "file": "honeycombs/seeds/index.json"
+            }
+        ]
+    },
+    "meta": {
+        "estimated_time": "3-5 minutes",
+        "goal": "Complete picture of current system state",
+        "trigger": "activate synchronization protocol"
+    },
+    "identity": {
+        "updated": "2026-04-10",
+        "layer": 1,
+        "type": "protocol",
+        "version": "v3.0.0",
+        "description": "System health diagnostics  registry, roadmaps, tasks, seeds, scan state.",
+        "created": "2026-03-07",
+        "name": "Protocol: System Synchronization",
+        "module_id": "PROTO-002",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "protocol",
+            "sync",
+            "health",
+            "registry",
+            "english_core",
+            "v3.0.0"
+        ]
+    }
 }
