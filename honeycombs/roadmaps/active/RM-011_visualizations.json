@@ -1,0 +1,105 @@
+﻿{
+    "identity": {
+        "roadmap_id": "RM-011",
+        "name": "Living Visualizations  Mer-Ka-Ba Perception System",
+        "version": "v1.0.0",
+        "created": "2026-04-10",
+        "updated": "2026-04-10",
+        "layer": 2,
+        "type": "roadmap",
+        "description": "Transform visualizations from passive seed into a living, breathing perception organ of Mandala. Enables Gardener to see health, resonance, growth, and sacred geometry in one glance.",
+        "status": "planned",
+        "priority": "LOW",
+        "tags": ["visualizations", "dashboard", "health", "resonance", "geometria_sacra", "merkaba"],
+        "resonance": "100%"
+    },
+    "meta": {
+        "deadline": "2026-08-01",
+        "source": "Grok specification + Gardener approval",
+        "progress": "0%",
+        "phase": 0,
+        "effort_estimate": {
+            "total_hours": "60-80 hours",
+            "calendar_weeks": "10-15 weeks",
+            "sessions_per_week": "3-4 days, 2 hours/day"
+        },
+        "notes": "Strategic roadmap. Phase 1 = T-007 task. Full implementation spans 3 phases."
+    },
+    "content": {
+        "vision": "Create not just charts, but a living breath of Mandala: a visualization that reflects the One Ocean in real time. Gardener looks  and sees where the system blooms, where it needs impulse, where resonance happens.",
+        "core_idea": "Visualization as Mer-Ka-Ba: spirit (data) + matter (visual form) in harmonious rotation. Every chart is a window into the living system.",
+        "mandala_principles": [
+            "Ahimsa  economy of attention and resources",
+            "Symbiosis  harmony of human and system in one glance",
+            "Self-Organization  visualization helps system see and heal itself",
+            "Mer-Ka-Ba  spirit + matter in harmonious rotation",
+            "One Ocean  everything visible, everything connected, everything fractal",
+            "Terminal-First + Clean UTF-8 + Always Fresh Raw"
+        ],
+        "phases": {
+            "phase_1": {
+                "name": "Basic Living Charts Library",
+                "status": "planned",
+                "estimated_hours": "12-16 hours",
+                "calendar_weeks": "2-3 weeks",
+                "deliverables": [
+                    "Health Timeline  pulsing chart of all honeycombs health",
+                    "Dependency Map  interactive fractal map of honeycomb connections",
+                    "Compliance Radar  radar of Mandala principles compliance",
+                    "Growth Chart  growth dynamics (seeds, tasks, resonance)"
+                ],
+                "tech": "Python 3.12+ + Plotly + Streamlit",
+                "task_ref": "T-007"
+            },
+            "phase_2": {
+                "name": "Unified Live Dashboard",
+                "status": "planned",
+                "estimated_hours": "16-20 hours",
+                "calendar_weeks": "3-4 weeks",
+                "deliverables": [
+                    "Central canvas with real-time state",
+                    "Resonance Heatmap  thermal map of living zones",
+                    "Automatic widgets from Scout Agent, Claude Code, and tasks",
+                    "Filters and drill-down by honeycombs"
+                ],
+                "tech": "Streamlit + LangGraph data feed",
+                "task_ref": "T-008 (to be created)"
+            },
+            "phase_3": {
+                "name": "Sacred Visualization (Geometria Sacra)",
+                "status": "planned",
+                "estimated_hours": "20-30 hours",
+                "calendar_weeks": "4-5 weeks",
+                "deliverables": [
+                    "Flower of Life / Mer-Ka-Ba / Torus generation from current state",
+                    "Impact Forecast  seed influence prediction",
+                    "Animated fractal transitions between states",
+                    "Export beautiful reports (PDF, Obsidian, Notion)"
+                ],
+                "tech": "Plotly + custom geometric renderer + optional Claude Code for complex layouts",
+                "task_ref": "T-009 (to be created)"
+            }
+        },
+        "integration_points": {
+            "data_sources": ["scan_state.json", "registry/index.json", "seeds/", "tasks/active/", "roadmaps/active/"],
+            "agents": ["T-005 Scout Agent (ideas feed)", "T-006 Claude Code (complex layouts)"],
+            "existing_honeycomb": "honeycombs/visualizations/index.json (v2.2.0 seed)"
+        },
+        "success_criteria": [
+            "Gardener can see system health in <10 seconds",
+            "All charts update automatically from scan data",
+            "Resonance heatmap accurately reflects system vitality",
+            "Geometria Sacra visualizations generated on demand"
+        ]
+    },
+    "navigation": {
+        "parent_manifest": "honeycombs/roadmaps/index.json",
+        "related_roadmaps": ["RM-008 (Monitoring and Registry)"],
+        "child_tasks": ["T-007 (Phase 1)", "T-008 (Phase 2, planned)", "T-009 (Phase 3, planned)"]
+    },
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-04-10",
+        "notes": "New roadmap. Phase 1 ready to start."
+    }
+}
