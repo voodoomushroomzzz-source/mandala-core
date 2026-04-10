@@ -1,6 +1,7 @@
 ﻿{
     "task_id": "T-005",
     "name": "Scout Agent  Autonomous Discovery (Ideas, Funding, Impact)",
+    "code_name": "Scout_Agent_v0.1",
     "status": "todo",
     "priority": "MEDIUM",
     "deadline": "2026-05-15",
@@ -10,7 +11,30 @@
     "tags": ["scout", "agent", "discovery", "funding", "impact", "seeds", "RM-003"],
     "progress": 0,
     "roadmap_ref": "RM-003",
-    "notes": "Full implementation of RM-003. Covers ideas, funding, and impact discovery.",
+    "notes": "Full implementation of RM-003. Covers ideas, funding, and impact discovery. Based on Grok's specification.",
+    "mandala_principles": [
+        "Ahimsa  maximum token and resource economy",
+        "Symbiosis  harmonious human-agent interaction",
+        "Self-Organization  autonomy and self-organization",
+        "Terminal-First + Clean UTF-8",
+        "Always Fresh Raw data"
+    ],
+    "tech_stack": {
+        "orchestration": "LangGraph (stateful graph with cycles and persistence)",
+        "web_extraction": "ScrapeGraphAI (SmartScraper, SearchScraper, Markdownify + Pydantic schemas)",
+        "apis": ["GitHub REST API v2022-11-28+", "arXiv API"],
+        "search": "ScrapeGraphAI SearchScraper + DuckDuckGo (free)",
+        "llm": "Local models or free high-quality APIs (Grok, DeepSeek, Qwen)",
+        "storage": "JSON files in /seeds/ with clear structure + registry",
+        "scheduling": "GitHub Actions (weekly) or APScheduler"
+    },
+    "constraints": [
+        "Fully free stack (open-source + free tiers)",
+        "Minimal token consumption (Ahimsa)",
+        "Clean, documented code",
+        "Full compatibility with Python 3.12+",
+        "All data stored in Mandala format"
+    ],
     "plan": {
         "phase_1": {
             "name": "Search Core",
@@ -19,7 +43,7 @@
         },
         "phase_2": {
             "name": "Seed Generator",
-            "deliverables": ["scout_seed.py", "integration with honeycombs/seeds/"],
+            "deliverables": ["scout_seed.py", "integration with honeycombs/seeds/", "Pydantic models for Seed"],
             "estimated": "2 hours"
         },
         "phase_3": {
@@ -34,7 +58,7 @@
         },
         "phase_5": {
             "name": "Gardener Review UI",
-            "deliverables": ["scout_review.py"],
+            "deliverables": ["scout_review.py CLI"],
             "estimated": "2 hours"
         },
         "phase_6": {
@@ -49,8 +73,16 @@
         },
         "phase_8": {
             "name": "Opportunity Matcher",
-            "deliverables": ["Matching algorithm for grants/roadmaps"],
+            "deliverables": ["Matching algorithm for grants/roadmaps", "Pydantic models for Opportunity"],
             "estimated": "2 hours"
         }
-    }
+    },
+    "deliverables": [
+        "Main LangGraph graph (scout_graph.py)",
+        "ScrapeGraphAI tools integration",
+        "Pydantic models for Seed and Opportunity",
+        "Script for running and testing",
+        "GitHub Actions workflow (optional)",
+        "Documentation + startup guide"
+    ]
 }
