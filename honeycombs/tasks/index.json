@@ -2,7 +2,7 @@
     "identity": {
         "module_id": "TASKS-MANIFEST-004",
         "name": "Tasks Honeycomb Manifest",
-        "version": "v3.0.1",
+        "version": "v3.0.2",
         "created": "2026-03-01",
         "updated": "2026-04-10",
         "layer": 1,
@@ -28,7 +28,7 @@
                 "segment": "active_tasks",
                 "folder": "active/",
                 "description": "Currently active tasks",
-                "files_count": 5
+                "files_count": 6
             },
             {
                 "segment": "archive_tasks",
@@ -43,10 +43,10 @@
         "first_file": "basic_task.json"
     },
     "registry": {
-        "total_files": 5,
-        "total_size_kb": 12.0,
+        "total_files": 6,
+        "total_size_kb": 14.0,
         "last_updated": "2026-04-10",
-        "notes": "v3.0.1: added Ahimsa Filter, Deadline Sentinel, Scout Agent tasks."
+        "notes": "v3.0.2: added Claude Code Integration task (T-006)."
     },
     "resonance": {
         "status": "fully_resonant",
@@ -56,6 +56,6 @@
     "health": {
         "status": "healthy",
         "last_check": "2026-04-10",
-        "notes": "v3.0.1  active tasks: 5."
+        "notes": "v3.0.2  active tasks: 6."
     }
 }
