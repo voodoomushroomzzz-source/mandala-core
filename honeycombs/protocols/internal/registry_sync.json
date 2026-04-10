@@ -1,41 +1,36 @@
-{
-    "content":  {
-                    "after_loading":  "Internal SR reports: which honeycombs are missing in registry, which are outdated, and suggests sync actions (prepare TZ for External SR).",
-                    "files_to_read":  [
-                                          {
-                                              "why":  "Current registry state",
-                                              "file":  "honeycombs/registry/index.json"
-                                          },
-                                          {
-                                              "why":  "Last scan timestamps and hashes",
-                                              "file":  "honeycombs/registry/scan_state.json"
-                                          },
-                                          {
-                                              "why":  "Expected honeycombs from navigation",
-                                              "file":  "honeycombs/core_map/index.json"
-                                          }
-                                      ]
-                },
-    "meta":  {
-                 "estimated_time":  "2-3 minutes",
-                 "goal":  "Compare registry index with actual honeycombs and report discrepancies",
-                 "trigger":  "activate registry sync"
-             },
-    "identity":  {
-                     "layer":  2,
-                     "type":  "protocol",
-                     "version":  "v1.0.0",
-                     "description":  "Synchronize registry with actual file system state. Detects desynchronizations.",
-                     "created":  "2026-04-09",
-                     "name":  "Protocol: Registry Sync",
-                     "module_id":  "PROTO-INTERNAL-REGISTRY-SYNC-001",
-                     "status":  "active",
-                     "priority":  "high",
-                     "tags":  [
-                                  "protocol",
-                                  "registry",
-                                  "sync",
-                                  "internal_sr"
-                              ]
-                 }
+﻿{
+    "content": {
+        "after_loading": "Internal SR reports: which honeycombs are missing in registry, which are outdated, and suggests sync actions (prepare TZ for External SR).",
+        "files_to_read": [
+            {
+                "why": "Current registry state",
+                "file": "honeycombs/registry/registry.json"
+            },
+            {
+                "why": "Last scan timestamps and hashes",
+                "file": "honeycombs/registry/scan_state.json"
+            },
+            {
+                "why": "Expected honeycombs from navigation",
+                "file": "honeycombs/core_map/index.json"
+            }
+        ]
+    },
+    "meta": {
+        "estimated_time": "2-3 minutes",
+        "goal": "Compare registry index with actual honeycombs and report discrepancies",
+        "trigger": "activate registry sync"
+    },
+    "identity": {
+        "layer": 2,
+        "type": "protocol",
+        "version": "v1.1.0",
+        "description": "Synchronize registry with actual file system state. Detects desynchronizations.",
+        "created": "2026-04-09",
+        "name": "Protocol: Registry Sync",
+        "module_id": "PROTO-INTERNAL-REGISTRY-SYNC-001",
+        "status": "active",
+        "priority": "high",
+        "tags": ["protocol", "registry", "sync", "internal_sr"]
+    }
 }
