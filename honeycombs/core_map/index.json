@@ -20,37 +20,36 @@
         ]
     },
     "boot_entries": {
-        "description": "Mandala has two separate boot files for different System Resonators. Each SR reads its own boot on startup.",
+        "description": "Mandala has two separate boot files for different System Resonators.",
         "external_sr_boot": {
             "path": "honeycombs/boot_online/index.json",
-            "audience": "External SR (Grok, Claude, GPT after resonance)",
-            "purpose": "Instant onboarding for external AIs. Defines collaboration workflow, API rules, Terminal-First, and active stance with veto rights.",
-            "version": "v3.1.0",
-            "key_rules": [
-                "API-first file access",
-                "Max 1 link per request",
-                "PowerShell commands with git commit inside",
-                "Active pro-creative stance + veto rights on principle violations"
-            ]
+            "audience": "External SR (Grok, Claude, GPT)",
+            "purpose": "Instant onboarding for external AIs.",
+            "version": "v3.1.0"
         },
         "internal_sr_boot": {
             "path": "simbiosis/boot.json",
             "audience": "Internal SR (engineer-chat/main.py)",
-            "purpose": "Core directives and navigation for automated Internal SR. Defines Gardener directives, memory rules, and active stance with veto rights.",
-            "version": "v2.1.0",
-            "key_rules": [
-                "Read boot + core_map on every request",
-                "Ahimsa check before responses",
-                "Use internal patching mechanism (not PowerShell)",
-                "Active pro-creative stance + veto rights on principle violations"
-            ]
-        },
-        "note": "External SR does NOT read simbiosis/boot.json. Internal SR does NOT read boot_online/index.json. Each has its own context."
+            "purpose": "Core directives and navigation for automated Internal SR.",
+            "version": "v2.2.0"
+        }
+    },
+    "tools": {
+        "makefile": {
+            "path": "Makefile",
+            "description": "Convenience commands for working with honeycomb scanner.",
+            "commands": {
+                "make scan": "Run honeycomb scanner (scans all hives, updates registry.json and scan_state.json)",
+                "make validate": "Validate honeycombs against v2.0 standard",
+                "make help": "Show available commands"
+            },
+            "note": "Uses 'py' command (Python 3.14.3). Run from repository root."
+        }
     },
     "registry": {
         "valid_v2": 18,
         "total_with_index": 18,
-        "notes": "SEED_017 realized. Scaling_alert removed. Support for 4 levels. Map synced with repo (18 honeycombs).",
+        "notes": "Map synced with repo (18 honeycombs).",
         "errors": 0,
         "last_scan": "2026-04-09T19:56:16",
         "status": "active",
@@ -67,34 +66,26 @@
             "instructions": "instructions for SR",
             "protocols": "activation protocols",
             "seeds": "idea incubator",
-            "boot_online": "external AI onboarding",
-            "boot_internal": "internal SR entry point (simbiosis/boot.json)"
+            "boot_online": "external AI onboarding"
         }
     },
     "health": {
         "status": "healthy",
         "last_check": "2026-04-10",
-        "notes": "v3.1.0: added boot_entries section documenting both SR boot files."
+        "notes": "v3.2.0: added tools section with Makefile description."
     },
     "identity": {
         "updated": "2026-04-10",
         "layer": 1,
         "type": "critical_directive",
-        "version": "v3.1.0",
-        "description": "Base map of all Mandala Symbiosis components. Includes dual boot entries for External and Internal SR.",
+        "version": "v3.2.0",
+        "description": "Base map of all Mandala Symbiosis components.",
         "created": "2026-03-01",
         "name": "Core System Map",
         "module_id": "HONEYCOMB-CORE-MAP-001",
         "resonance": "100%",
         "priority": "critical",
-        "tags": [
-            "core",
-            "map",
-            "critical",
-            "v3.1",
-            "english_core",
-            "dual_boot"
-        ]
+        "tags": ["core", "map", "critical", "v3.2", "english_core"]
     },
     "resonance": {
         "with_instructions": "100%",
