@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>◈ Mandala Engineer — MYCEL</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@300;400;500&family=Nunito:wght@200;300;400&display=swap" rel="stylesheet">
-    <!-- Monaco Editor -->
-    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
     <!-- Marked.js для markdown таблиц -->
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <style>
@@ -942,68 +940,84 @@
             background: linear-gradient(90deg, var(--green-2), var(--violet-soft));
         }
 
-        /* File tree */
-        #file-tree {
-            width: 250px;
-            border-right: 1px solid var(--line);
-            overflow-y: auto;
-            padding: 12px;
-            font-family: var(--mono);
-            font-size: 11px;
+        /* ══ ПУЛЬС ══ */
+        #tab-pulse { overflow-y: auto; }
+        #pulseWrap {
+            padding: 14px 18px;
+            display: flex; flex-direction: column; gap: 16px;
+            min-height: 100%;
         }
-        #file-tree .folder { 
-            color: var(--green-bright); 
-            cursor: pointer;
-            padding: 2px 0;
+        #pulseCounters {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
-        #file-tree .file { 
-            color: var(--text-2); 
-            cursor: pointer; 
-            padding-left: 16px;
-            padding: 2px 0 2px 16px;
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        #file-tree .file:hover { 
-            color: var(--text); 
-            background: var(--green-glow);
-        }
-        #file-tree .file.selected { 
-            color: var(--green-bright); 
-            background: var(--green-glow);
-        }
-
-        /* Editor container */
-        .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        #monaco-editor {
-            flex: 1;
-            min-height: 0;
-            border: none;
-        }
-        .file-editor-header {
-            padding: 8px 16px;
-            border-bottom: 1px solid var(--line-2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .pulse-counter {
             background: var(--surface-2);
+            border: 1px solid var(--line-2);
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex; flex-direction: column; gap: 4px;
         }
-        .file-editor-header .file-path {
+        .pulse-counter-val {
             font-family: var(--mono);
-            font-size: 11px;
-            color: var(--text-3);
+            font-size: 26px;
+            font-weight: 400;
+            color: var(--green-bright);
+            line-height: 1;
         }
-        .file-editor-header .code-btn.apply {
-            font-size: 16px;
-            width: 32px;
-            height: 28px;
+        .pulse-counter-label {
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 1px;
+            color: var(--text-3);
+            text-transform: uppercase;
+        }
+        #pcZero .pulse-counter-val { color: #f87171; }
+        #pulseCharts {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 12px;
+            align-items: start;
+        }
+        .pulse-panel {
+            background: var(--surface-2);
+            border: 1px solid var(--line-2);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+        .pulse-panel-title {
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 1.5px;
+            color: var(--text-3);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        #pulseRadar { display: block; margin: 0 auto; }
+        #pulseTimeline {
+            display: flex; flex-direction: column; gap: 5px;
+            max-height: 280px; overflow-y: auto;
+        }
+        #pulseTimeline::-webkit-scrollbar { width: 3px; }
+        #pulseTimeline::-webkit-scrollbar-thumb { background: #0f2518; border-radius: 2px; }
+        .pulse-tl-row {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .pulse-tl-dot {
+            width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+        }
+        .pulse-tl-name {
+            font-family: var(--mono); font-size: 9px; color: #a5b4fc;
+            width: 110px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .pulse-tl-bar-wrap {
+            flex: 1; height: 4px; background: #0f2518; border-radius: 2px; overflow: hidden;
+        }
+        .pulse-tl-bar { height: 100%; border-radius: 2px; }
+        .pulse-tl-date {
+            font-family: var(--mono); font-size: 8px; color: var(--text-3);
+            width: 68px; text-align: right; flex-shrink: 0;
         }
 
         /* Modals */
@@ -1121,8 +1135,90 @@
         #tab-map { padding: 0 !important; overflow: hidden !important; }
         .hive-wrap {
             width: 100%; height: 100%;
-            display: flex; flex-direction: column;
+            display: flex; flex-direction: row;
             position: relative; overflow: hidden;
+        }
+
+        /* ── Список слева (Б) ── */
+        #hiveList {
+            width: 172px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #0f2518;
+            overflow: hidden;
+        }
+        #hiveListMeta {
+            flex-shrink: 0;
+            font-family: var(--mono);
+            font-size: 7px;
+            color: var(--text-3);
+            letter-spacing: 1px;
+            padding: 6px 10px 4px;
+            border-bottom: 1px solid #0f2518;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #hiveListScroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        #hiveListScroll::-webkit-scrollbar { width: 3px; }
+        #hiveListScroll::-webkit-scrollbar-track { background: transparent; }
+        #hiveListScroll::-webkit-scrollbar-thumb { background: #0f2518; border-radius: 2px; }
+        .hive-list-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(15,37,24,0.5);
+            transition: background 0.12s;
+            position: relative;
+        }
+        .hive-list-item:hover { background: rgba(99,102,241,0.06); }
+        .hive-list-item.hovered { background: rgba(99,102,241,0.12); }
+        .hive-list-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: box-shadow 0.3s;
+        }
+        .hive-list-item.hovered .hive-list-dot {
+            box-shadow: 0 0 6px currentColor;
+        }
+        .hive-list-name {
+            font-family: var(--mono);
+            font-size: 9px;
+            color: #a5b4fc;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+        .hive-list-bar {
+            width: 28px; height: 3px;
+            background: #0f2518;
+            border-radius: 2px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .hive-list-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        /* ── Hex + панель (А) ── */
+        #hiveMain {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            position: relative;
         }
         #hiveMeta {
             flex-shrink: 0;
@@ -1135,49 +1231,68 @@
             flex: 1; display: block;
             cursor: default; min-height: 0;
         }
-        #hivePanel {
+
+        /* ── Карточка при клике (детали соты) ── */
+        #hiveCard {
             position: absolute;
-            min-width: 260px; max-width: 340px;
-            background: rgba(5,8,20,0.97);
-            border: 1px solid rgba(99,102,241,0.35);
-            border-radius: 10px;
-            padding: 14px 18px 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 24px rgba(99,102,241,0.08);
-            pointer-events: none;
-            opacity: 0; transform: translateY(4px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            z-index: 50;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(5,10,18,0.97);
+            border-top: 1px solid rgba(99,102,241,0.25);
+            padding: 12px 16px 14px;
+            display: none;
+            z-index: 40;
         }
-        #hivePanel.show {
-            opacity: 1; transform: translateY(0);
-            pointer-events: auto;
+        #hiveCard.show { display: block; }
+        .hive-card-head {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
         }
-        .hive-panel-head {
-            display: flex; align-items: center; gap: 9px; margin-bottom: 7px;
+        .hive-card-name {
+            font-family: var(--mono); font-size: 11px; font-weight: 500;
+            letter-spacing: 2px; color: #a5b4fc; text-transform: uppercase; flex: 1;
         }
-        .hive-panel-icon { font-size: 22px; }
-        .hive-panel-name {
-            font-family: var(--mono); font-size: 12px; font-weight: 500;
-            letter-spacing: 2px; color: #a5b4fc; text-transform: uppercase;
+        .hive-card-close {
+            background: transparent; border: none; color: var(--text-3);
+            cursor: pointer; font-size: 16px; padding: 0 4px; line-height: 1;
+            transition: color 0.15s;
         }
-        .hive-panel-badge {
+        .hive-card-close:hover { color: var(--text); }
+        .hive-card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px 10px;
+            margin-bottom: 10px;
+        }
+        .hive-card-stat {
+            display: flex; flex-direction: column; gap: 2px;
+        }
+        .hive-card-stat-label {
             font-family: var(--mono); font-size: 7px; letter-spacing: 1px;
-            padding: 1px 6px; border-radius: 3px; margin-left: auto;
+            color: var(--text-3); text-transform: uppercase;
         }
-        .hive-panel-badge.active { color: var(--green-2); border: 1px solid rgba(16,185,129,0.3); }
-        .hive-panel-badge.draft  { color: var(--violet-soft); border: 1px solid rgba(124,58,237,0.3); }
-        .hive-panel-desc {
-            font-size: 11px; color: var(--text-2); margin-bottom: 10px; line-height: 1.6;
-            white-space: normal;
+        .hive-card-stat-val {
+            font-family: var(--mono); font-size: 11px; color: var(--text);
         }
-        .hive-panel-files { display: flex; flex-wrap: wrap; gap: 4px; }
-        .hive-panel-file {
+        .hive-card-files {
+            display: flex; flex-wrap: wrap; gap: 4px;
+        }
+        .hive-card-file {
             font-family: var(--mono); font-size: 9px; color: #a5b4fc;
             background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.3);
             border-radius: 3px; padding: 3px 8px; cursor: pointer;
             transition: border-color 0.15s, color 0.15s;
         }
-        .hive-panel-file:hover { border-color: #818cf8; color: #e0e7ff; }
+        .hive-card-file:hover { border-color: #818cf8; color: #e0e7ff; }
+        .hive-card-read-btn {
+            font-family: var(--mono); font-size: 9px; letter-spacing: 1px;
+            padding: 5px 14px; border-radius: 4px; cursor: pointer;
+            background: transparent; border: 1px solid rgba(16,185,129,0.35);
+            color: #10b981; transition: all 0.15s; margin-left: auto; display: block;
+            margin-top: 10px;
+        }
+        .hive-card-read-btn:hover {
+            background: rgba(16,185,129,0.1);
+            border-color: rgba(16,185,129,0.7);
+        }
 
         .file-card {
             padding: 12px 14px;
@@ -1359,7 +1474,7 @@
             <div class="tabs">
                 <button class="tab active" data-tab="chat">◈ чат</button>
                 <button class="tab" data-tab="map">◈ карта</button>
-                <button class="tab" data-tab="files">◈ файлы</button>
+                <button class="tab" data-tab="pulse">◈ пульс</button>
             </div>
 
             <!-- Вкладка чата -->
@@ -1403,59 +1518,95 @@
             <!-- Вкладка карты ядра -->
             <div class="tab-content" id="tab-map">
                 <div class="hive-wrap" id="mapContainer">
-                    <div id="hiveMeta">
-                        <div style="display:flex;align-items:center;gap:6px;">
-                            <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:8px;cursor:pointer;letter-spacing:1px;" title="Обновить">↻</button>
-                            <span id="honeycombsCount"></span>
+
+                    <!-- Б: список слева -->
+                    <div id="hiveList">
+                        <div id="hiveListMeta">
+                            <span id="honeycombsCount">◈ соты</span>
+                            <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:9px;cursor:pointer;" title="Обновить">↻</button>
                         </div>
-                        <!-- ══ ПРОТОКОЛЫ ══ -->
-                        <div id="protocolsBar" style="display:flex;align-items:center;gap:4px;flex:1;justify-content:center;">
-                            <span style="font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:var(--text-3);margin-right:4px;text-transform:uppercase;">протоколы</span>
-                            <div class="proto-btn-wrap" style="position:relative;">
-                                <button class="proto-btn" onclick="activateProtocol('internal/onboarding')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/onboarding" data-desc="Быстрый старт сессии — СР за 1 минуту в контексте системы">⟳ онбординг</button>
-                                <div class="proto-tip"></div>
-                            </div>
-                            <div class="proto-btn-wrap" style="position:relative;">
-                                <button class="proto-btn" onclick="activateProtocol('internal/registry_sync')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/registry_sync" data-desc="Диагностика актуальности — реестр, роадмапы, inbox, статус системы">⟳ синхронизация</button>
-                                <div class="proto-tip"></div>
-                            </div>
-                            <div class="proto-btn-wrap" style="position:relative;">
-                                <button class="proto-btn" onclick="activateProtocol('internal/ideas_roadmaps')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/ideas_roadmaps" data-desc="Анализ активных семян и подготовка плана реализации идей">✦ идеи</button>
-                                <div class="proto-tip"></div>
-                            </div>
-                            <div class="proto-btn-wrap" style="position:relative;">
-                                <button class="proto-btn" onclick="activateProtocol('deep_analysis')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="deep_analysis" data-desc="Глубокий анализ сот, структуры, резонанса и здоровья Мандалы">🔬 deep analysis</button>
-                                <div class="proto-tip"></div>
-                            </div>
-                        </div>
-                        <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.55);color:rgba(167,139,250,0.75);font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:5px 12px;border-radius:4px;cursor:pointer;transition:border-color 0.15s,color 0.15s;" onmouseover="this.style.borderColor='rgba(124,58,237,0.9)';this.style.color='#c4b5fd'" onmouseout="this.style.borderColor='rgba(124,58,237,0.55)';this.style.color='rgba(167,139,250,0.75)'" title="Очистить память чата">✕ забыть</button>
+                        <div id="hiveListScroll"></div>
                     </div>
-                    <canvas id="hiveCanvas"></canvas>
-                    <div id="hivePanel">
-                        <div class="hive-panel-head">
-                            <span class="hive-panel-icon" id="hivePanelIcon"></span>
-                            <span class="hive-panel-name" id="hivePanelName"></span>
-                            <span class="hive-panel-badge" id="hivePanelBadge"></span>
+
+                    <!-- А: hex + мета -->
+                    <div id="hiveMain">
+                        <div id="hiveMeta">
+                            <div style="display:flex;align-items:center;gap:6px;">
+                                <!-- ══ ПРОТОКОЛЫ ══ -->
+                                <div id="protocolsBar" style="display:flex;align-items:center;gap:4px;">
+                                    <span style="font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:var(--text-3);margin-right:4px;text-transform:uppercase;">протоколы</span>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocol('internal/onboarding')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/onboarding" data-desc="Быстрый старт сессии — СР за 1 минуту в контексте системы">⟳ онбординг</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocol('internal/registry_sync')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/registry_sync" data-desc="Диагностика актуальности — реестр, роадмапы, inbox, статус системы">⟳ синхронизация</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocol('internal/ideas_roadmaps')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/ideas_roadmaps" data-desc="Анализ активных семян и подготовка плана реализации идей">✦ идеи</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocol('deep_analysis')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="deep_analysis" data-desc="Глубокий анализ сот, структуры, резонанса и здоровья Мандалы">🔬 deep</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.55);color:rgba(167,139,250,0.75);font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:5px 12px;border-radius:4px;cursor:pointer;transition:border-color 0.15s,color 0.15s;" onmouseover="this.style.borderColor='rgba(124,58,237,0.9)';this.style.color='#c4b5fd'" onmouseout="this.style.borderColor='rgba(124,58,237,0.55)';this.style.color='rgba(167,139,250,0.75)'" title="Очистить память чата">✕ забыть</button>
                         </div>
-                        <div class="hive-panel-desc" id="hivePanelDesc"></div>
-                        <div class="hive-panel-files" id="hivePanelFiles"></div>
+
+                        <canvas id="hiveCanvas"></canvas>
+
+                        <!-- Карточка при клике -->
+                        <div id="hiveCard">
+                            <div class="hive-card-head">
+                                <span class="hive-card-name" id="hiveCardName"></span>
+                                <button class="hive-card-close" onclick="closeHiveCard()">×</button>
+                            </div>
+                            <div class="hive-card-grid" id="hiveCardGrid"></div>
+                            <div class="hive-card-files" id="hiveCardFiles"></div>
+                            <button class="hive-card-read-btn" id="hiveCardReadBtn">◈ читать index.json</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Вкладка ПУЛЬС -->
+            <div class="tab-content" id="tab-pulse">
+                <div id="pulseWrap">
+                    <div id="pulseCounters">
+                        <div class="pulse-counter" id="pcTotal">
+                            <div class="pulse-counter-val" id="pcTotalVal">—</div>
+                            <div class="pulse-counter-label">всего сот</div>
+                        </div>
+                        <div class="pulse-counter" id="pcActive">
+                            <div class="pulse-counter-val" id="pcActiveVal">—</div>
+                            <div class="pulse-counter-label">активных</div>
+                        </div>
+                        <div class="pulse-counter" id="pcFull">
+                            <div class="pulse-counter-val" id="pcFullVal">—</div>
+                            <div class="pulse-counter-label">резонанс 100%</div>
+                        </div>
+                        <div class="pulse-counter" id="pcZero">
+                            <div class="pulse-counter-val" id="pcZeroVal">—</div>
+                            <div class="pulse-counter-label">требуют внимания</div>
+                        </div>
+                    </div>
+                    <div id="pulseCharts">
+                        <div class="pulse-panel">
+                            <div class="pulse-panel-title">◈ радар резонанса по слоям</div>
+                            <canvas id="pulseRadar" width="300" height="260"></canvas>
+                        </div>
+                        <div class="pulse-panel">
+                            <div class="pulse-panel-title">◈ здоровье сот (по last_check)</div>
+                            <div id="pulseTimeline"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-                        <!-- Вкладка файлов с Monaco Editor -->
-            <div class="tab-content" id="tab-files">
-                <div style="display: flex; height: 100%;">
-                    <div id="file-tree">Загрузка...</div>
-                    <div class="editor-container">
-                        <div class="file-editor-header">
-                            <span class="file-path" id="current-file-path"></span>
-                            <button class="code-btn apply" onclick="saveCurrentFile()" id="save-file-btn" disabled title="Сохранить">◉</button>
-                        </div>
-                        <div id="monaco-editor"></div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -1474,7 +1625,6 @@
         let pendingFiles = [];
         let messageBuffer = '';
         let currentMessageDiv = null;
-        let editor = null; // для Monaco
         let mainMessages = []; // массив сообщений текущего чата
 
         // DOM элементы
@@ -1487,24 +1637,6 @@
         const fileNameEl = document.getElementById('fileName');
         const filePercentEl = document.getElementById('filePercent');
         const fileProgressBar = document.getElementById('fileProgressBar');
-        const fileTree = document.getElementById('file-tree');
-        const currentFilePath = document.getElementById('current-file-path');
-        const saveFileBtn = document.getElementById('save-file-btn');
-
-        // ==================== ИНИЦИАЛИЗАЦИЯ MONACO ====================
-        if (!window._monacoInitialized) {
-            window._monacoInitialized = true;
-            require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
-            require(['vs/editor/editor.main'], function() {
-                editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                    value: '// Выберите файл для редактирования',
-                    language: 'text',
-                    theme: 'vs-dark',
-                    automaticLayout: true,
-                    minimap: { enabled: false }
-                });
-            });
-        }
 
         // ==================== ЗАГРУЗКА СООБЩЕНИЙ ====================
         function loadMessages() {
@@ -2077,95 +2209,6 @@
         }
 
         // ==================== ВКЛАДКА ФАЙЛОВ ====================
-        async function loadFileTree() {
-            fileTree.innerHTML = 'Загрузка...';
-            try {
-                const response = await fetch(`${API_BASE}/api/tree`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                if (data.error) throw new Error(data.error);
-                const tree = buildTree(data.tree);
-                fileTree.innerHTML = renderTree(tree);
-                document.querySelectorAll('#file-tree .file').forEach(el => {
-                    el.addEventListener('click', () => {
-                        document.querySelectorAll('#file-tree .file').forEach(f => f.classList.remove('selected'));
-                        el.classList.add('selected');
-                        loadFile(el.dataset.path);
-                    });
-                });
-            } catch (err) {
-                fileTree.innerHTML = `❌ Ошибка загрузки: ${err.message}`;
-            }
-        }
-
-        function buildTree(files) {
-            const root = {};
-            files.forEach(file => {
-                if (file.type !== 'blob') return;
-                const parts = file.path.split('/');
-                let current = root;
-                parts.forEach((part, i) => {
-                    if (i === parts.length - 1) {
-                        current[part] = { type: 'file', path: file.path };
-                    } else {
-                        if (!current[part]) current[part] = { type: 'dir', children: {} };
-                        current = current[part].children;
-                    }
-                });
-            });
-            return root;
-        }
-
-        function renderTree(node, level = 0) {
-            if (node.type === 'file') {
-                const ext = node.path.split('.').pop();
-                return `<div class="file file ${ext}" data-path="${node.path}" style="padding-left: ${level * 16 + 16}px">${node.path.split('/').pop()}</div>`;
-            }
-            let html = '';
-            Object.keys(node).forEach(key => {
-                if (key === 'type') return;
-                const child = node[key];
-                if (child.type === 'dir') {
-                    html += `<div class="folder" style="padding-left: ${level * 16}px">${key}</div>`;
-                    html += renderTree(child.children, level + 1);
-                } else {
-                    html += renderTree(child, level + 1);
-                }
-            });
-            return html;
-        }
-
-        async function loadFile(path) {
-            currentFilePath.textContent = path;
-            saveFileBtn.disabled = false;
-            try {
-                const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/main/${path}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const content = await response.text();
-                const ext = path.split('.').pop();
-                const language = ext === 'json' ? 'json' : ext === 'py' ? 'python' : ext === 'html' ? 'html' : ext === 'js' ? 'javascript' : 'text';
-                monaco.editor.setModelLanguage(editor.getModel(), language);
-                editor.setValue(content);
-                localStorage.setItem(`orig_${path}`, content);
-                renderSystemMessage(`📁 Открыт файл: ${path}`, true);
-            } catch (err) {
-                editor.setValue(`// Ошибка загрузки: ${err.message}`);
-            }
-        }
-
-        function saveCurrentFile() {
-            const path = currentFilePath.textContent;
-            if (!path) return;
-            const content = editor.getValue();
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({ type: 'save_file', file_path: path, content: content, session_id: 'main' }));
-                showToast('◈ изменения отправлены', 'success');
-                localStorage.setItem(`orig_${path}`, content);
-            } else {
-                showToast('◈ нет соединения', 'error');
-            }
-        }
-
         // ==================== УТИЛИТЫ ====================
         function escapeHtml(text) {
             const div = document.createElement('div');
@@ -2349,47 +2392,61 @@
             showToast('✕ память очищена', 'success');
         }
 
-        // ==================== КАРТА ЯДРА ====================
-        async function loadMap() {
-            loadHoneycombs();
+        // ==================== КАРТА ЯДРА (гибрид A+Б) ====================
+
+        async function loadMap() { loadHoneycombs(); }
+
+        // ── Резонанс → цвет: зелёный 100%, индиго 50%, красный 0% ──
+        function resonanceColor(r, alpha) {
+            alpha = (alpha === undefined) ? 1 : alpha;
+            r = Math.max(0, Math.min(1, r));
+            let R, G, B;
+            if (r >= 0.5) {
+                // 100%→50%: зелёный(16,185,129) → индиго(99,102,241)
+                const t = (r - 0.5) * 2;
+                R = Math.round(99  + t * (16  - 99));
+                G = Math.round(102 + t * (185 - 102));
+                B = Math.round(241 + t * (129 - 241));
+            } else {
+                // 50%→0%: индиго(99,102,241) → красный(239,68,68)
+                const t = r * 2;
+                R = Math.round(239 + t * (99  - 239));
+                G = Math.round(68  + t * (102 - 68));
+                B = Math.round(68  + t * (241 - 68));
+            }
+            return `rgba(${R},${G},${B},${alpha})`;
         }
 
-        const HONEYCOMB_ICONS = {core_map:"HEX",engineer_chat:"TRI",instructions:"DIA",philosophy:"MAN",roadmaps:"ARR",seeds:"PEN",telegram_bot:"CRS",tasks:"SQX",boot:"ST6"};
-
         // ══════════════════════════════════════════════════════
-        // HIVE MAP — правильная гексагональная сетка flat-top
+        // HIVE MAP — гексагональная сетка flat-top
         // ══════════════════════════════════════════════════════
         let _hiveData    = [];
         let _hiveHovered = -1;
         let _hiveAnimId  = null;
         let _hivePulse   = 0;
-        let _hiveLayout  = [];   // [{px,py,r}] — пиксельные координаты каждой соты
+        let _hiveLayout  = [];
+        let _hiveSelected = -1;  // для карточки при клике
 
-        // flat-top hexagon corners
         function _hexPts(cx, cy, r) {
             const p = [];
             for (let i = 0; i < 6; i++) {
-                const a = (Math.PI / 3) * i;          // 0°,60°,120°…  flat-top
+                const a = (Math.PI / 3) * i;
                 p.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
             }
             return p;
         }
 
-        // Строим координаты сетки по кольцам (flat-top offset)
-        // q,r — cube-координаты, переводим в пиксели внутри drawHive
         function _buildGrid(n) {
             const out = [{q:0, r:0}];
             if (n <= 1) return out;
             const dirs = [{q:1,r:0},{q:0,r:1},{q:-1,r:1},{q:-1,r:0},{q:0,r:-1},{q:1,r:-1}];
             let ring = 1;
             while (out.length < n) {
-                // Начинаем с позиции ring*dir[4] = (0, -ring)
                 let q = 0, r = -ring;
                 for (let d = 0; d < 6; d++) {
                     for (let s = 0; s < ring; s++) {
                         if (out.length < n) out.push({q, r});
-                        q += dirs[d].q;
-                        r += dirs[d].r;
+                        q += dirs[d].q; r += dirs[d].r;
                     }
                 }
                 ring++;
@@ -2397,23 +2454,17 @@
             return out;
         }
 
-        // flat-top: px = cx + R*(3/2)*q,  py = cy + R*sqrt(3)*(r + q/2)
         function _cubeToXY(q, r, cx, cy, R) {
-            return [
-                cx + R * 1.5 * q,
-                cy + R * Math.sqrt(3) * (r + q * 0.5)
-            ];
+            return [cx + R * 1.5 * q, cy + R * Math.sqrt(3) * (r + q * 0.5)];
         }
 
-        // Вычисляем R так чтобы все соты влезли с отступом
         function _calcR(W, H, n) {
             const maxRing = Math.ceil((-1 + Math.sqrt(1 + (4*(n-1))/3)) / 2);
-            // Диаметр сетки в единицах R
-            const spanQ = maxRing * 2 + 1;   // по горизонтали
-            const spanR = maxRing * 2 + 1;   // по вертикали
-            const fitW  = W / (spanQ * 1.5 + 0.5) * 0.70;
-            const fitH  = H / (spanR * Math.sqrt(3)) * 0.70;
-            return Math.min(fitW, fitH);
+            const spanQ = maxRing * 2 + 1;
+            const spanR = maxRing * 2 + 1;
+            const fitW  = W / (spanQ * 1.5 + 0.5) * 0.72;
+            const fitH  = H / (spanR * Math.sqrt(3)) * 0.72;
+            return Math.max(14, Math.min(fitW, fitH));
         }
 
         function _drawHex(ctx, pts, fillStyle, strokeStyle, lineWidth) {
@@ -2427,7 +2478,6 @@
 
         function drawHive(canvas, data, hovered, pulse) {
             const dpr = window.devicePixelRatio || 1;
-            // Логические размеры (CSS pixels)
             const W = canvas.width  / dpr;
             const H = canvas.height / dpr;
             const ctx = canvas.getContext('2d');
@@ -2438,54 +2488,44 @@
             if (!n) { ctx.restore(); return; }
 
             const R     = _calcR(W, H, n);
-            const rGap  = R * 0.08;           // зазор между сотами
+            const rGap  = R * 0.07;
             const rDraw = R - rGap;
             const cx0   = W / 2;
             const cy0   = H / 2;
             const grid  = _buildGrid(n);
 
-            // Обновляем layout для hit-test
             _hiveLayout = grid.map(({q, r}) => {
                 const [px, py] = _cubeToXY(q, r, cx0, cy0, R);
                 return {px, py, r: R};
             });
 
-            // Рисуем соты (сначала glow, потом сами)
             grid.forEach(({q, r}, i) => {
                 if (i >= n) return;
                 const d   = data[i];
                 const [px, py] = _cubeToXY(q, r, cx0, cy0, R);
                 const isH = (i === hovered);
+                const isSel = (i === _hiveSelected);
+                const res = d.resonance;
 
-                const phase    = pulse + i * 0.42;
-                const pAmt     = 0.5 + 0.5 * Math.sin(phase);
-                const rr       = rDraw * (isH ? 1.07 : 1.0);
+                const phase = pulse + i * 0.42;
+                const pAmt  = 0.5 + 0.5 * Math.sin(phase);
+                const rr    = rDraw * (isH ? 1.07 : 1.0);
 
-                // Цвет по рангу в сетке (кольцо определяет частоту)
-                // Кольцо 0 (центр, i=0) = фиолетовый (часто)
-                // Кольцо 1 (i=1..6)     = индиго (средне)
-                // Кольцо 2+ (i>6)       = зелёный (редко)
-                const col = i === 0
-                    ? [139, 92, 246]    // фиолетовый — центр, самое частое
-                    : i <= 6
-                        ? [99, 102, 241]   // индиго — первое кольцо
-                        : [16, 185, 129];  // зелёный — второе кольцо и дальше
+                // glow — только для высокого резонанса (>0.8) или hover
+                if (res > 0.8 || isH || isSel) {
+                    const glowIntensity = isH ? 0.28 : (isSel ? 0.22 : (0.06 + pAmt * 0.08) * res);
+                    const glowR = rr * (isH ? 2.2 : 1.6 + pAmt * 0.25);
+                    const grd = ctx.createRadialGradient(px, py, 0, px, py, glowR);
+                    grd.addColorStop(0, resonanceColor(res, glowIntensity));
+                    grd.addColorStop(1, resonanceColor(res, 0));
+                    ctx.fillStyle = grd;
+                    ctx.beginPath(); ctx.arc(px, py, glowR, 0, Math.PI*2); ctx.fill();
+                }
 
-                // — glow —
-                const glowR = rr * (isH ? 2.4 : 1.5 + pAmt * 0.3);
-                const glowA = isH ? 0.25 : 0.05 + pAmt * 0.08;
-                const grd   = ctx.createRadialGradient(px, py, 0, px, py, glowR);
-                grd.addColorStop(0, `rgba(${col[0]},${col[1]},${col[2]},${glowA})`);
-                grd.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`);
-                ctx.fillStyle = grd;
-                ctx.beginPath(); ctx.arc(px, py, glowR, 0, Math.PI*2); ctx.fill();
-
-                // — 3D объём: нижняя грань (тень) —
-                const depth = rr * 0.12;
+                // 3D боковые грани
+                const depth = rr * 0.10;
                 const ptsTop = _hexPts(px, py,       rr);
                 const ptsBot = _hexPts(px, py+depth, rr * 0.96);
-
-                // Боковые грани (нижние 3 ребра)
                 for (let k = 3; k < 6; k++) {
                     const k2 = (k+1) % 6;
                     ctx.beginPath();
@@ -2494,32 +2534,31 @@
                     ctx.lineTo(ptsBot[k2][0], ptsBot[k2][1]);
                     ctx.lineTo(ptsBot[k][0],  ptsBot[k][1]);
                     ctx.closePath();
-                    const sideA = isH ? 0.18 : 0.07 + pAmt * 0.04;
-                    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${sideA})`;
+                    ctx.fillStyle = resonanceColor(res, isH ? 0.15 : 0.06 + pAmt * 0.03);
                     ctx.fill();
-                    ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${(isH ? 0.4 : 0.15)})`;
-                    ctx.lineWidth = 0.4;
-                    ctx.stroke();
+                    ctx.strokeStyle = resonanceColor(res, isH ? 0.35 : 0.12);
+                    ctx.lineWidth = 0.4; ctx.stroke();
                 }
 
-                // — верхняя грань —
-                const fillA   = isH ? 0.18 : 0.06 + pAmt * 0.05;
-                const strokeA = isH ? 1.0  : 0.3  + pAmt * 0.3;
+                // верхняя грань
+                const fillA   = isSel ? 0.22 : isH ? 0.16 : 0.05 + pAmt * 0.04;
+                const strokeA = isSel ? 1.0  : isH ? 0.9  : 0.25 + pAmt * 0.25;
+                const strokeW = isSel ? 1.5  : isH ? 1.2  : 0.6;
                 _drawHex(ctx, ptsTop,
-                    `rgba(${col[0]},${col[1]},${col[2]},${fillA})`,
-                    `rgba(${col[0]},${col[1]},${col[2]},${strokeA})`,
-                    isH ? 1.2 : 0.7
+                    resonanceColor(res, fillA),
+                    resonanceColor(res, strokeA),
+                    strokeW
                 );
 
-                // — блик (верхний левый) —
-                if (rr > 14) {
-                    const bPts = _hexPts(px - rr*0.1, py - rr*0.12, rr * 0.55);
+                // блик
+                if (rr > 12) {
+                    const bPts = _hexPts(px - rr*0.1, py - rr*0.12, rr * 0.52);
                     const bGrd = ctx.createRadialGradient(
                         px - rr*0.15, py - rr*0.18, 0,
                         px - rr*0.1,  py - rr*0.1,  rr*0.5
                     );
-                    bGrd.addColorStop(0, `rgba(${col[0]},${col[1]},${col[2]},${isH ? 0.22 : 0.08 + pAmt*0.06})`);
-                    bGrd.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`);
+                    bGrd.addColorStop(0, resonanceColor(res, isH ? 0.18 : 0.07 + pAmt*0.05));
+                    bGrd.addColorStop(1, resonanceColor(res, 0));
                     ctx.beginPath();
                     ctx.moveTo(bPts[0][0], bPts[0][1]);
                     for (let k=1;k<6;k++) ctx.lineTo(bPts[k][0],bPts[k][1]);
@@ -2527,15 +2566,15 @@
                     ctx.fillStyle = bGrd; ctx.fill();
                 }
 
-                // — название по центру соты (без иконок) —
+                // название
                 (function(){
                     const words = d.name.replace(/_/g,' ').split(' ');
-                    const maxW = rr * 1.55;
-                    let sz = Math.min(rr * 0.22, 11);
+                    const maxW = rr * 1.5;
+                    let sz = Math.min(rr * 0.21, 10);
                     ctx.font = `${sz}px "Fira Mono",monospace`;
                     const longest = words.reduce((a,b) => ctx.measureText(a).width > ctx.measureText(b).width ? a : b, '');
-                    while (sz > 5.5 && ctx.measureText(longest).width > maxW) {
-                        sz -= 0.5;
+                    while (sz > 5 && ctx.measureText(longest).width > maxW) {
+                        sz -= 0.4;
                         ctx.font = `${sz}px "Fira Mono",monospace`;
                     }
                     const lines = [];
@@ -2548,12 +2587,20 @@
                     });
                     if (line) lines.push(line);
                     const lineH = sz * 1.3;
-                    const totalH = lines.length * lineH;
-                    const startY = py - totalH / 2 + lineH / 2;
+                    const startY = py - (lines.length * lineH) / 2 + lineH / 2;
                     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                    ctx.globalAlpha = isH ? 1 : 0.5 + pAmt * 0.25;
-                    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},1)`;
+                    ctx.globalAlpha = isH || isSel ? 1 : 0.55 + pAmt * 0.2;
+                    ctx.fillStyle = resonanceColor(res, 1);
                     lines.forEach((ln, li) => ctx.fillText(ln, px, startY + li * lineH));
+
+                    // резонанс % внизу соты
+                    if (rr > 18) {
+                        const pct = Math.round(res * 100) + '%';
+                        ctx.font = `${Math.max(5, sz * 0.8)}px "Fira Mono",monospace`;
+                        ctx.globalAlpha = isH || isSel ? 0.9 : 0.4 + pAmt * 0.15;
+                        ctx.fillStyle = resonanceColor(res, 1);
+                        ctx.fillText(pct, px, startY + lines.length * lineH + 3);
+                    }
                     ctx.globalAlpha = 1;
                 })();
             });
@@ -2561,8 +2608,9 @@
             ctx.restore();
         }
 
+        // ── Анимация ──
         function hiveAnimate() {
-            _hivePulse += 0.035;
+            _hivePulse += 0.030;
             const canvas = document.getElementById('hiveCanvas');
             if (canvas && document.getElementById('tab-map').classList.contains('active')) {
                 drawHive(canvas, _hiveData, _hiveHovered, _hivePulse);
@@ -2573,17 +2621,14 @@
         function hiveResize() {
             const canvas = document.getElementById('hiveCanvas');
             if (!canvas) return;
-            const dpr  = window.devicePixelRatio || 1;
-            const w    = canvas.offsetWidth;
-            const h    = canvas.offsetHeight;
-            if (w === 0 || h === 0) return;
-            canvas.width  = w * dpr;
-            canvas.height = h * dpr;
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width  = rect.width  * dpr;
+            canvas.height = rect.height * dpr;
             const ctx = canvas.getContext('2d');
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.scale(dpr, dpr);
         }
 
-        // Hit-test через сохранённый layout — один источник истины
         function hiveGetIdx(ex, ey) {
             const canvas = document.getElementById('hiveCanvas');
             if (!canvas || !_hiveLayout.length) return -1;
@@ -2593,66 +2638,103 @@
             let best = -1, bestD = Infinity;
             _hiveLayout.forEach(({px, py, r}, i) => {
                 const d = Math.hypot(mx - px, my - py);
-                if (d < r * 0.95 && d < bestD) { bestD = d; best = i; }
+                if (d < r * 0.93 && d < bestD) { bestD = d; best = i; }
             });
             return best;
         }
 
-        function hiveShowPanel(idx) {
-            const panel = document.getElementById('hivePanel');
-            if (!panel) return;
-            if (idx < 0 || idx >= _hiveData.length || !_hiveLayout[idx]) {
-                panel.classList.remove('show'); return;
-            }
-            const d   = _hiveData[idx];
-            const lay = _hiveLayout[idx];
+        // ── Синхронизация списка слева ──
+        function hiveListHighlight(idx) {
+            const scroll = document.getElementById('hiveListScroll');
+            if (!scroll) return;
+            scroll.querySelectorAll('.hive-list-item').forEach((el, i) => {
+                el.classList.toggle('hovered', i === idx);
+                if (i === idx) {
+                    // Скроллим к элементу если не виден
+                    const elTop    = el.offsetTop;
+                    const elBot    = elTop + el.offsetHeight;
+                    const scrTop   = scroll.scrollTop;
+                    const scrBot   = scrTop + scroll.offsetHeight;
+                    if (elTop < scrTop || elBot > scrBot) {
+                        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    }
+                }
+            });
+        }
 
-            // Заполняем контент
-            document.getElementById('hivePanelIcon').textContent = d.icon;
-            document.getElementById('hivePanelName').textContent = d.name.replace(/_/g,' ');
-            const badge = document.getElementById('hivePanelBadge');
-            badge.textContent = d.status;
-            badge.className = 'hive-panel-badge ' + d.status;
-            document.getElementById('hivePanelDesc').textContent = d.desc;
-            document.getElementById('hivePanelFiles').innerHTML = d.files.map(f => {
+        // ── Карточка при клике ──
+        function showHiveCard(idx) {
+            if (idx < 0 || idx >= _hiveData.length) return;
+            _hiveSelected = idx;
+            const d = _hiveData[idx];
+            const res = d.resonance;
+            const col = resonanceColor(res, 1);
+
+            document.getElementById('hiveCardName').textContent = d.name.replace(/_/g, ' ');
+            document.getElementById('hiveCardName').style.color = col;
+
+            const stats = [
+                { label: 'резонанс', val: Math.round(res * 100) + '%', color: col },
+                { label: 'версия',   val: d.version   || '—' },
+                { label: 'layer',    val: d.layer !== undefined ? 'L' + d.layer : '—' },
+                { label: 'файлов',   val: d.files.length },
+                { label: 'статус',   val: d.status || '—', color: d.status === 'active' ? '#10b981' : '#a78bfa' },
+                { label: 'last check', val: d.last_check || '—' },
+            ];
+            document.getElementById('hiveCardGrid').innerHTML = stats.map(s =>
+                `<div class="hive-card-stat">
+                    <span class="hive-card-stat-label">${s.label}</span>
+                    <span class="hive-card-stat-val" style="${s.color ? 'color:'+s.color : ''}">${s.val}</span>
+                </div>`
+            ).join('');
+
+            const visibleFiles = d.files.slice(0, 8).map(f => {
                 const short = f.split('/').pop();
-                return `<span class="hive-panel-file" onclick="requestFileRead('${f}','${d.icon} ${d.name}')">${short}</span>`;
+                return `<span class="hive-card-file" onclick="requestFileRead('${f}','${d.name}')">${short}</span>`;
             }).join('');
+            document.getElementById('hiveCardFiles').innerHTML = visibleFiles;
 
-            // Позиционируем под сотой
-            const canvas  = document.getElementById('hiveCanvas');
-            const wrap    = document.getElementById('mapContainer');
-            const wRect   = wrap.getBoundingClientRect();
-            const cRect   = canvas.getBoundingClientRect();
+            const readBtn = document.getElementById('hiveCardReadBtn');
+            readBtn.onclick = () => requestFileRead(d.indexPath, d.name);
+            readBtn.style.borderColor = resonanceColor(res, 0.5);
+            readBtn.style.color = col;
 
-            // lay.px/py — координаты центра в CSS-пикселях canvas
-            // Переводим в координаты wrap
-            const cellX = cRect.left - wRect.left + lay.px;
-            const cellY = cRect.top  - wRect.top  + lay.py + lay.r * 0.82;
+            document.getElementById('hiveCard').classList.add('show');
+        }
 
-            // Показываем временно чтобы измерить ширину
-            panel.style.opacity = '0';
-            panel.style.left    = '0px';
-            panel.style.top     = '0px';
-            panel.classList.add('show');
+        function closeHiveCard() {
+            document.getElementById('hiveCard').classList.remove('show');
+            _hiveSelected = -1;
+        }
 
-            const pW = panel.offsetWidth;
-            const pH = panel.offsetHeight;
-            const wW = wrap.offsetWidth;
-            const wH = wrap.offsetHeight;
-
-            // Центрируем по X относительно соты, не выходим за края
-            let left = cellX - pW / 2;
-            left = Math.max(6, Math.min(left, wW - pW - 6));
-
-            // Если не влезает снизу — показываем сверху
-            let top = cellY + 6;
-            if (top + pH > wH - 6) top = cRect.top - wRect.top + lay.py - lay.r * 0.82 - pH - 6;
-            top = Math.max(6, top);
-
-            panel.style.left    = left + 'px';
-            panel.style.top     = top  + 'px';
-            panel.style.opacity = '';
+        // ── Построение списка Б ──
+        function buildHiveList(data) {
+            const scroll = document.getElementById('hiveListScroll');
+            if (!scroll) return;
+            scroll.innerHTML = '';
+            data.forEach((d, i) => {
+                const res = d.resonance;
+                const col = resonanceColor(res, 1);
+                const item = document.createElement('div');
+                item.className = 'hive-list-item';
+                item.innerHTML = `
+                    <div class="hive-list-dot" style="background:${col};color:${col};"></div>
+                    <span class="hive-list-name">${d.name.replace(/_/g,' ')}</span>
+                    <div class="hive-list-bar">
+                        <div class="hive-list-bar-fill" style="width:${Math.round(res*100)}%;background:${col};"></div>
+                    </div>
+                `;
+                item.addEventListener('mouseenter', () => {
+                    _hiveHovered = i;
+                    hiveListHighlight(i);
+                });
+                item.addEventListener('mouseleave', () => {
+                    _hiveHovered = -1;
+                    hiveListHighlight(-1);
+                });
+                item.addEventListener('click', () => showHiveCard(i));
+                scroll.appendChild(item);
+            });
         }
 
         function hiveSetupCanvas() {
@@ -2664,21 +2746,23 @@
                 const idx = hiveGetIdx(e.clientX, e.clientY);
                 if (idx !== _hiveHovered) {
                     _hiveHovered = idx;
-                    hiveShowPanel(idx);
+                    hiveListHighlight(idx);
                     canvas.style.cursor = idx >= 0 ? 'pointer' : 'default';
                 }
             });
             canvas.addEventListener('mouseleave', () => {
                 _hiveHovered = -1;
-                const p = document.getElementById('hivePanel');
-                if (p) p.classList.remove('show');
+                hiveListHighlight(-1);
                 canvas.style.cursor = 'default';
             });
             canvas.addEventListener('click', e => {
                 const idx = hiveGetIdx(e.clientX, e.clientY);
                 if (idx >= 0 && idx < _hiveData.length) {
-                    const d = _hiveData[idx];
-                    requestFileRead(d.indexPath, d.icon + ' ' + d.name);
+                    if (_hiveSelected === idx) {
+                        closeHiveCard();
+                    } else {
+                        showHiveCard(idx);
+                    }
                 }
             });
             const ro = new ResizeObserver(() => { hiveResize(); });
@@ -2715,28 +2799,185 @@
                 _hiveData = names.map((name, i) => {
                     const meta = metas[i].status === "fulfilled" ? metas[i].value : null;
                     const hc   = folders[name];
-                    // Частота: из meta или по статусу (active=3, draft=2, archived=1)
                     const statusFreq = {active:3, draft:2, archived:1};
-                    const status = meta?.meta?.status || 'active';
+                    const status = meta?.meta?.status || meta?.identity?.status || 'active';
                     const freq = meta?.meta?.frequency ?? meta?.meta?.usage_count ?? statusFreq[status] ?? 1;
+
+                    // Резонанс: ищем в разных полях
+                    let res = 0;
+                    const rawRes = meta?.meta?.resonance || meta?.health?.resonance || meta?.identity?.resonance;
+                    if (rawRes !== undefined && rawRes !== null) {
+                        const r = typeof rawRes === 'string' ? parseFloat(rawRes) : rawRes;
+                        res = isNaN(r) ? 0 : (r > 1 ? r / 100 : r);
+                    }
+
                     return {
                         name,
-                        icon:      HONEYCOMB_ICONS[name] || meta?.meta?.icon || "⬡",
-                        desc:      meta?.meta?.description || meta?.identity?.name || name.replace(/_/g,' '),
+                        desc:       meta?.meta?.description || meta?.identity?.name || name.replace(/_/g,' '),
                         status,
                         freq,
-                        files:     hc.files,
-                        indexPath: hc.indexPath || ('honeycombs/' + name + '/index.json'),
+                        resonance:  res,
+                        version:    meta?.identity?.version || meta?.meta?.version || '—',
+                        layer:      meta?.identity?.layer   || meta?.meta?.layer,
+                        last_check: meta?.health?.last_check || '—',
+                        files:      hc.files,
+                        indexPath:  hc.indexPath || ('honeycombs/' + name + '/index.json'),
                     };
                 });
-                // Сортируем по убыванию частоты: часто → центр (кольцо 0), редко → внешние кольца
+                // Центр = самые частые
                 _hiveData.sort((a, b) => b.freq - a.freq);
+                buildHiveList(_hiveData);
                 hiveSetupCanvas();
+                // Обновляем пульс теми же данными
+                updatePulse(_hiveData);
             } catch(e) {
                 if (countEl) countEl.textContent = '× ' + e.message;
             }
         }
         window.loadHoneycombs = loadHoneycombs;
+
+        // ==================== ПУЛЬС ====================
+
+        function resonanceColorForPulse(r) { return resonanceColor(r, 1); }
+
+        function drawRadar(canvas, layerData) {
+            const dpr = window.devicePixelRatio || 1;
+            const W = 300, H = 260;
+            canvas.width  = W * dpr; canvas.height = H * dpr;
+            canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, W, H);
+
+            const cx = W / 2, cy = H / 2 + 10;
+            const maxR = 100;
+            const layers = Object.keys(layerData).sort();
+            const n = layers.length;
+            if (!n) return;
+
+            // Сетка
+            [0.25, 0.5, 0.75, 1.0].forEach(t => {
+                ctx.beginPath();
+                for (let i = 0; i < n; i++) {
+                    const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+                    const x = cx + maxR * t * Math.cos(a);
+                    const y = cy + maxR * t * Math.sin(a);
+                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(15,37,24,0.8)';
+                ctx.lineWidth = 0.8; ctx.stroke();
+                // % метка
+                ctx.font = '7px "Fira Mono",monospace';
+                ctx.fillStyle = 'rgba(58,106,74,0.6)';
+                ctx.textAlign = 'center';
+                ctx.fillText(Math.round(t*100)+'%', cx, cy - maxR * t - 3);
+            });
+
+            // Оси
+            layers.forEach((lyr, i) => {
+                const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(cx + maxR * Math.cos(a), cy + maxR * Math.sin(a));
+                ctx.strokeStyle = 'rgba(15,37,24,0.6)'; ctx.lineWidth = 0.8; ctx.stroke();
+                // label
+                const lx = cx + (maxR + 14) * Math.cos(a);
+                const ly = cy + (maxR + 14) * Math.sin(a);
+                ctx.font = '8px "Fira Mono",monospace';
+                ctx.fillStyle = 'rgba(99,102,241,0.7)';
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText('L' + lyr, lx, ly);
+            });
+
+            // Данные
+            ctx.beginPath();
+            layers.forEach((lyr, i) => {
+                const val = layerData[lyr].avg;
+                const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+                const x = cx + maxR * val * Math.cos(a);
+                const y = cy + maxR * val * Math.sin(a);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(16,185,129,0.12)'; ctx.fill();
+            ctx.strokeStyle = 'rgba(16,185,129,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+            // Точки
+            layers.forEach((lyr, i) => {
+                const val = layerData[lyr].avg;
+                const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+                const x = cx + maxR * val * Math.cos(a);
+                const y = cy + maxR * val * Math.sin(a);
+                ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI*2);
+                ctx.fillStyle = resonanceColor(val, 1); ctx.fill();
+            });
+        }
+
+        function buildTimeline(data) {
+            const tl = document.getElementById('pulseTimeline');
+            if (!tl) return;
+            // Сортируем по last_check (новые первые)
+            const sorted = [...data].sort((a, b) => {
+                if (a.last_check === '—' && b.last_check === '—') return 0;
+                if (a.last_check === '—') return 1;
+                if (b.last_check === '—') return -1;
+                return b.last_check.localeCompare(a.last_check);
+            });
+            tl.innerHTML = sorted.map(d => {
+                const col = resonanceColor(d.resonance, 1);
+                const pct = Math.round(d.resonance * 100);
+                return `<div class="pulse-tl-row">
+                    <div class="pulse-tl-dot" style="background:${col};"></div>
+                    <span class="pulse-tl-name">${d.name.replace(/_/g,' ')}</span>
+                    <div class="pulse-tl-bar-wrap">
+                        <div class="pulse-tl-bar" style="width:${pct}%;background:${col};"></div>
+                    </div>
+                    <span class="pulse-tl-date">${d.last_check !== '—' ? d.last_check : '—'}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function updatePulse(data) {
+            if (!data || !data.length) return;
+
+            // Счётчики
+            const total  = data.length;
+            const active = data.filter(d => d.status === 'active').length;
+            const full   = data.filter(d => d.resonance >= 0.99).length;
+            const zero   = data.filter(d => d.resonance <= 0.01).length;
+
+            const animCounter = (el, target) => {
+                let cur = 0;
+                const step = Math.ceil(target / 20);
+                const iv = setInterval(() => {
+                    cur = Math.min(cur + step, target);
+                    el.textContent = cur;
+                    if (cur >= target) clearInterval(iv);
+                }, 40);
+            };
+            animCounter(document.getElementById('pcTotalVal'),  total);
+            animCounter(document.getElementById('pcActiveVal'), active);
+            animCounter(document.getElementById('pcFullVal'),   full);
+            animCounter(document.getElementById('pcZeroVal'),   zero);
+
+            // Радар по слоям
+            const layerData = {};
+            data.forEach(d => {
+                const l = d.layer !== undefined ? String(d.layer) : '?';
+                if (!layerData[l]) layerData[l] = { sum: 0, count: 0 };
+                layerData[l].sum   += d.resonance;
+                layerData[l].count += 1;
+            });
+            Object.keys(layerData).forEach(l => {
+                layerData[l].avg = layerData[l].sum / layerData[l].count;
+            });
+            const radar = document.getElementById('pulseRadar');
+            if (radar) drawRadar(radar, layerData);
+
+            // Таймлайн
+            buildTimeline(data);
+        }
 
         // ══ ПРОТОКОЛЫ ══
         function showProtoTip(btn) {
@@ -2836,8 +3077,8 @@
                     tab.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
-                    if (tabName === 'files') loadFileTree();
-                    if (tabName === 'map') loadMap();
+                    if (tabName === 'map')   loadMap();
+                    if (tabName === 'pulse') { if (!_hiveData.length) loadMap(); }
                 });
             });
         }
