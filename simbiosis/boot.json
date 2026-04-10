@@ -50,9 +50,8 @@
         "philosophy_ref": "honeycombs/philosophy/index.json",
         "navigation": {
             "core_map": "honeycombs/core_map/index.json",
-            "registry": "honeycombs/registry/index.json",
+            "registry": "honeycombs/registry/registry.json",
             "awareness": "honeycombs/awareness/index.json",
-            "inbox": "honeycombs/inbox/index.json",
             "seeds": "honeycombs/seeds/index.json",
             "sr_internal_role": "honeycombs/instructions/core/sr_internal_role.json",
             "protocols": "honeycombs/protocols/index.json",
@@ -107,7 +106,7 @@
         "updated": "2026-04-10",
         "layer": 1,
         "type": "boot_module",
-        "version": "v2.1.0",
+        "version": "v2.2.0",
         "description": "Entry module for Internal SR (engineer-chat). Contains core directives and navigation for confident start. Internal SR has active pro-creative stance and veto rights on principle violations.",
         "created": "2026-02-23",
         "name": "Boot  Internal SR Entry Point",
@@ -121,7 +120,7 @@
             "core",
             "directives",
             "english_core",
-            "v2.1.0",
+            "v2.2.0",
             "active_stance",
             "veto_rights"
         ]
