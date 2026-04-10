@@ -732,7 +732,7 @@
 
         /* Input area — всегда яркая */
         .input-area {
-            padding: 6px 22px 18px;
+            padding: 10px 22px 20px;
             flex-shrink: 0;
         }
         .irow { display: flex; align-items: flex-end; gap: 10px; }
@@ -762,7 +762,12 @@
             color: var(--text);
             font-family: var(--sans); font-weight: 300; font-size: 14px;
             padding: 10px 15px; outline: none;
-            resize: none; max-height: 120px; line-height: 1.5;
+            resize: none;
+            min-height: 42px;
+            max-height: 160px;
+            height: 42px;
+            line-height: 1.5;
+            overflow-y: auto;
             transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
         }
         .ifield:focus {
@@ -1036,21 +1041,6 @@
         }
         .rename-input:focus {
             border-color: var(--green-2);
-        }
-        .patch-preview-box {
-            background: var(--surface-2);
-            border: 1px solid var(--line-2);
-            border-radius: var(--radius-sm);
-            padding: 12px;
-            max-height: 200px;
-            overflow: auto;
-        }
-        .patch-preview-box pre {
-            font-family: var(--mono);
-            font-size: 11px;
-            line-height: 1.5;
-            color: var(--text);
-            margin: 0;
         }
         .modal-footer {
             padding: 16px; border-top: 1px solid var(--line-2);
@@ -1469,15 +1459,6 @@
         </div>
     </div>
 
-    <!-- Модальные окна (только для патча) -->
-    <div class="modal-overlay" id="patchModal">
-        <div class="modal">
-            <div class="modal-header"><div class="modal-title">◈ ПРИМЕНИТЬ ПАТЧ</div><button class="modal-close" onclick="closePatchModal()">×</button></div>
-            <div class="modal-body"><div class="patch-preview-box" id="patchPreviewBox"><pre id="patchPreviewContent">загрузите JSON-патч...</pre></div></div>
-            <div class="modal-footer"><button class="btn btn-secondary" onclick="closePatchModal()">отмена</button><button class="btn btn-primary" id="confirmPatchBtn" onclick="confirmPatch()" disabled>применить</button></div>
-        </div>
-    </div>
-
     <input type="file" id="fileInput" accept=".json,.txt,.md,.html,.py,.js,.css" style="display: none" onchange="handleFileSelect(event)" multiple>
 
     <div class="toast" id="toast"></div>
@@ -1493,7 +1474,6 @@
         let pendingFiles = [];
         let messageBuffer = '';
         let currentMessageDiv = null;
-        let currentPatch = null;
         let editor = null; // для Monaco
         let mainMessages = []; // массив сообщений текущего чата
 
@@ -1738,7 +1718,6 @@
         function renderCodeBlock(lang, code, complete) {
             const copyBtnClass = 'code-btn copy';
             const downloadBtnClass = 'code-btn download';
-            const applyBtnClass = 'code-btn apply';
             const lineCount = (code.match(/\n/g) || []).length + 1;
             const shouldCollapse = false;
             const collapsedClass = '';
@@ -1753,7 +1732,6 @@
                     ${toggleBtn}
                     <button class="${copyBtnClass}" onclick="copyCodeFromBlock(this)" title="Копировать">◈</button>
                     <button class="${downloadBtnClass}" onclick="downloadCodeFromBlock(this)" title="Скачать">↓</button>
-                    /* apply patch button removed — SR no longer applies patches via UI */
                 </div>
             ` : '';
             return `
@@ -1811,55 +1789,6 @@
                 showToast('◈ ошибка копирования', 'error');
                 console.error('Copy failed:', err);
             });
-        };
-
-        // Нормализует ключи патча: filepath→file_path, targetmodule→target_module и т.д.
-        function normalizePatchKeys(obj) {
-            if (Array.isArray(obj)) return obj.map(normalizePatchKeys);
-            if (typeof obj !== 'object' || obj === null) return obj;
-            const MAP = {
-                'filepath':     'file_path',
-                'targetmodule': 'target_module',
-                'deletefile':   'delete_file',
-            };
-            const out = {};
-            for (const [k, v] of Object.entries(obj)) {
-                const nk = MAP[k.toLowerCase().replace(/_/g,'')] || k;
-                out[nk] = normalizePatchKeys(v);
-            }
-            return out;
-        }
-
-        window.preparePatchFromBlock = function(btn) {
-            const codeElement = btn.closest('.code-block').querySelector('.code-content');
-            const rawCode = codeElement.textContent;
-            const decodedCode = decodeHtmlEntities(rawCode);
-            // Извлекаем JSON — работает и для ```json и для ```python блоков
-            let patchJson = null;
-            try { JSON.parse(decodedCode); patchJson = decodedCode; } catch(e) {}
-            if (!patchJson) {
-                const m = decodedCode.match(/(\{[\s\S]*\})/);
-                if (m) {
-                    try {
-                        const candidate = m[1].replace(/#[^\n]*/g,'').replace(/\bNone\b/g,'null').replace(/\bTrue\b/g,'true').replace(/\bFalse\b/g,'false').replace(/,(\s*[}\]])/g,'$1');
-                        JSON.parse(candidate);
-                        patchJson = candidate;
-                    } catch(e) {}
-                }
-            }
-            if (!patchJson) { showToast('◈ не удалось распарсить патч', 'error'); return; }
-            try {
-                const parsed = JSON.parse(patchJson);
-                // Нормализуем ключи — СР часто пишет filepath вместо file_path
-                const normalized = normalizePatchKeys(parsed);
-                currentPatch = JSON.stringify(normalized);
-                document.getElementById('patchPreviewContent').textContent = JSON.stringify(normalized, null, 2);
-                document.getElementById('confirmPatchBtn').disabled = false;
-                openPatchModal();
-                showToast('◈ патч подготовлен', 'success');
-            } catch(e) {
-                showToast('◈ невалидный JSON: ' + e.message, 'error');
-            }
         };
 
         // ==================== WEBSOCKET ====================
@@ -1979,9 +1908,6 @@
                 case 'file_read_done':
                     updateThinkingStatus({ tool: 'read_file', path: data.path, model: Array.from(activeModels)[0] });
                     renderSystemMessage(`◈ ${escapeHtml(data.label || data.path)} прочитан (${(data.size||0).toLocaleString()} символов)`);
-                    break;
-                case 'patch_result':
-                    handlePatchResult(data.results);
                     break;
                 case 'resonance':
                     updateResonance(data.value, data.level);
@@ -2231,9 +2157,8 @@
             const path = currentFilePath.textContent;
             if (!path) return;
             const content = editor.getValue();
-            const patch = { file_path: path, content: content };
             if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({ type: 'apply_patch', patch: patch, session_id: 'main' }));
+                ws.send(JSON.stringify({ type: 'save_file', file_path: path, content: content, session_id: 'main' }));
                 showToast('◈ изменения отправлены', 'success');
                 localStorage.setItem(`orig_${path}`, content);
             } else {
@@ -2383,7 +2308,8 @@
 
         function autoHeight() {
             inputEl.style.height = 'auto';
-            inputEl.style.height = inputEl.scrollHeight + 'px';
+            const newH = Math.max(42, Math.min(inputEl.scrollHeight, 160));
+            inputEl.style.height = newH + 'px';
         }
 
         function updateResonance(value, level) {
@@ -2882,50 +2808,6 @@
             }));
         };
 
-        // ==================== ПАТЧИ ====================
-        function openPatchModal() { document.getElementById('patchModal').classList.add('active'); }
-        function closePatchModal() {
-            document.getElementById('patchModal').classList.remove('active');
-            currentPatch = null;
-            document.getElementById('confirmPatchBtn').disabled = true;
-            document.getElementById('patchPreviewContent').textContent = 'загрузите JSON-патч...';
-        }
-        function confirmPatch() {
-            if (!currentPatch || !ws || ws.readyState !== WebSocket.OPEN) return;
-            try {
-                ws.send(JSON.stringify({ type: 'apply_patch', patch: JSON.parse(currentPatch), session_id: 'main' }));
-                closePatchModal();
-                showToast('◈ патч отправлен', 'success');
-                renderSystemMessage('◈ применение патча...');
-            } catch(e) {
-                showToast('◈ ошибка патча', 'error');
-            }
-        }
-        function handlePatchResult(results) {
-            results.forEach(r => renderSystemMessage(`◈ ${r.status==='success'?'✓':'✗'} ${r.file||r.module}: ${r.message}`));
-        }
-        function handlePatchPreview(data) {
-            const diffLines = data.diff || [];
-            const file = data.file || 'unknown';
-            const success = data.success !== false;
-            let previewText = `**📊 Diff Preview: ${file}**\n\n`;
-            if (diffLines.length === 0) {
-                previewText += '_Изменений не обнаружено_\n';
-            } else {
-                previewText += '```diff\n' + diffLines.join('\n') + '\n```\n';
-            }
-            if (data.applied && data.applied.length > 0) {
-                previewText += `\n✅ Применено операций: ${data.applied.length}\n`;
-            }
-            if (data.failed && data.failed.length > 0) {
-                previewText += `\n❌ Ошибок: ${data.failed.length}\n`;
-                data.failed.forEach(f => { previewText += `  • ${f.op} ${f.path}: ${f.error}\n`; });
-            }
-            renderAssistantMessage(previewText, true);
-            if (!success) showToast(`◈ Патч ${file} содержит ошибки`, 'error');
-            else showToast(`◈ Diff подготовлен для ${file}`, 'success');
-        }
-
         // ==================== TOAST ====================
         function showToast(msg, type='success') {
             const toast = document.getElementById('toast');
@@ -2943,6 +2825,7 @@
                 }
             });
             inputEl.addEventListener('input', autoHeight);
+            autoHeight(); // Инициализация правильной высоты
         }
 
         function setupTabs() {
