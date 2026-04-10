@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/env python3
 """
-Honeycomb Scanner v1.1.0
+Honeycomb Scanner v1.2.0
 Module for scanning honeycomb system state for Mandala Symbiosis
 
 Automatically scans honeycombs/ directory and registers all hives in the system.
@@ -81,20 +81,17 @@ class HoneycombScanner:
                 }
             }
     
-    def scan_all_honeycombs(self, force_rescan: bool = False) -> Dict[str, Any]:
+    def scan_all_honeycombs(self, force_rescan: bool = False) -> None:
         """
         Main scanning of all hives
         
         Args:
             force_rescan: Force full rescan
-            
-        Returns:
-            Dictionary with scan results
         """
         logger.info("=" * 60)
         logger.info("STARTING HONEYCOMB SCAN")
         logger.info(f"Base path: {self.base_path}")
-        logger.info(f"Scanner config: {self.config.get('identity', {}).get('name', 'Unknown')}")
+        logger.info(f"Scanner version: v1.2.0")
         logger.info("=" * 60)
         
         # Load previous registry state
@@ -110,9 +107,6 @@ class HoneycombScanner:
             logger.warning("No hives found!")
             registry_updated = False
         
-        # Generate report
-        report = self._generate_report()
-        
         # Save scan state
         self._save_scan_state()
         
@@ -121,11 +115,8 @@ class HoneycombScanner:
         logger.info(f"Found hives: {len(self.honeycombs)}")
         logger.info(f"New: {len(self.new_honeycombs)}")
         logger.info(f"Modified: {len(self.modified_honeycombs)}")
-        logger.info(f"Deleted: {len(self.deleted_honeycombs)}")
         logger.info(f"Validation errors: {len(self.validation_errors)}")
         logger.info("=" * 60)
-        
-        return report
     
     def _load_previous_state(self):
         """Load previous registry state for comparison"""
@@ -391,7 +382,7 @@ class HoneycombScanner:
                 "deleted_honeycombs": self.deleted_honeycombs
             }
             reg["last_updated"] = datetime.now().isoformat()
-            reg["scanner_version"] = self.config.get("identity", {}).get("version", "v1.1.0")
+            reg["scanner_version"] = "v1.2.0"
 
             # Write registry.json
             with open(registry_file, 'w', encoding='utf-8-sig') as f:
@@ -408,49 +399,6 @@ class HoneycombScanner:
             import traceback
             logger.error(traceback.format_exc())
             return False
-    
-    def _generate_report(self) -> Dict[str, Any]:
-        """Generate scan report"""
-        return {
-            "scan_report": {
-                "timestamp": datetime.now().isoformat(),
-                "scanner_version": self.config.get("identity", {}).get("version", "v1.1.0"),
-                "base_path": str(self.base_path),
-                "duration_seconds": None,
-                "status": "completed"
-            },
-            "summary": {
-                "total_honeycombs_found": len(self.honeycombs),
-                "new_honeycombs": self.new_honeycombs,
-                "modified_honeycombs": self.modified_honeycombs,
-                "deleted_honeycombs": self.deleted_honeycombs,
-                "validation_errors_count": len(self.validation_errors)
-            },
-            "statistics": self.stats,
-            "validation_errors": self.validation_errors,
-            "honeycombs_by_layer": self._group_by_layer(),
-            "honeycombs_by_type": self._group_by_type()
-        }
-    
-    def _group_by_layer(self) -> Dict[int, List[str]]:
-        """Group hives by layer"""
-        layers = {}
-        for honeycomb in self.honeycombs:
-            layer = honeycomb.get("layer", 0)
-            if layer not in layers:
-                layers[layer] = []
-            layers[layer].append(honeycomb["honeycomb_id"])
-        return layers
-    
-    def _group_by_type(self) -> Dict[str, List[str]]:
-        """Group hives by type"""
-        types = {}
-        for honeycomb in self.honeycombs:
-            honeycomb_type = honeycomb.get("type", "unknown")
-            if honeycomb_type not in types:
-                types[honeycomb_type] = []
-            types[honeycomb_type].append(honeycomb["honeycomb_id"])
-        return types
     
     def _save_scan_state(self):
         """Save scan state for future comparison"""
@@ -478,14 +426,13 @@ def main():
     """CLI entry point"""
     if len(sys.argv) < 2:
         print("=" * 60)
-        print("HONEYCOMB SCANNER v1.1.0")
+        print("HONEYCOMB SCANNER v1.2.0")
         print("Module for scanning Mandala Symbiosis hives")
         print("=" * 60)
         print("\nUsage:")
         print("  python honeycomb_scanner.py scan     # Run scan")
         print("  python honeycomb_scanner.py test     # Test run")
         print("  python honeycomb_scanner.py validate # Validate only")
-        print("  python honeycomb_scanner.py report   # Generate report")
         print("\nOptions:")
         print("  --force      # Force full rescan")
         print("  --verbose    # Verbose output")
@@ -503,15 +450,14 @@ def main():
     
     if command == "scan":
         print("Starting hive scan...")
-        report = scanner.scan_all_honeycombs(force_rescan)
+        scanner.scan_all_honeycombs(force_rescan)
         
         print("\n" + "=" * 60)
-        print("SCAN REPORT")
+        print("SCAN COMPLETE")
         print("=" * 60)
         print(f"Total hives: {len(scanner.honeycombs)}")
         print(f"New: {len(scanner.new_honeycombs)}")
         print(f"Modified: {len(scanner.modified_honeycombs)}")
-        print(f"Deleted: {len(scanner.deleted_honeycombs)}")
         print(f"Validation errors: {len(scanner.validation_errors)}")
         print(f"Registry updated: {'Yes' if scanner.honeycombs else 'No'}")
         
@@ -523,8 +469,6 @@ def main():
                     print(f"    - {err}")
             if len(scanner.validation_errors) > 5:
                 print(f"    ... and {len(scanner.validation_errors) - 5} more")
-        
-        print("\nSCAN COMPLETE")
         
     elif command == "test":
         print("Test scan...")
@@ -552,10 +496,6 @@ def main():
                     print(f"  ! {warn}")
         else:
             print("All hives are v2.0 compliant!")
-            
-    elif command == "report":
-        print("Generating report...")
-        print("Report functionality in development")
         
     else:
         print(f"Unknown command: {command}")
