@@ -2,9 +2,9 @@
     "identity": {
         "roadmap_id": "RM-008",
         "name": "Monitoring and Registry System",
-        "version": "v1.1.0",
+        "version": "v1.2.0",
         "created": "2026-03-01",
-        "updated": "2026-04-10",
+        "updated": "2026-04-11",
         "layer": 2,
         "type": "roadmap",
         "description": "Roadmap for building a comprehensive monitoring and registry system for Mandala Symbiosis. Evolves into Mandala Guard  full integrity protection.",
@@ -16,10 +16,11 @@
     "meta": {
         "deadline": "2026-06-01",
         "source": "Internal SR + External SR",
-        "progress": "30%",
+        "progress": "50%",
         "phase": 2,
         "phase_1_completed": "2026-03-07",
-        "notes": "Phase 1 CI/CD complete. Phase 2 (registry.json) complete. Phase 3 (dashboard) planned. Phase 5 (Mandala Guard) added."
+        "phase_2_completed": "2026-04-11",
+        "notes": "Phase 1 CI/CD complete. Phase 2 (Registry Core) complete. Phase 3 (Dashboard) planned. Phase 5 (Mandala Guard) planned."
     },
     "content": {
         "objective": "Create a unified monitoring and registry system that provides real-time visibility into Mandala's health, state, and changes. Evolve scanner into Mandala Guard  full integrity protection with Ahimsa filtering and resonance validation.",
@@ -39,11 +40,12 @@
                 "status": "completed",
                 "deliverables": [
                     "scan_state.json as single source of truth",
-                    "honeycomb_scanner.py stable (v1.1.0)",
+                    "honeycomb_scanner.py stable (v1.2.0)",
                     "Validation rules v2.0 enforced",
                     "Change detection (new, modified, deleted)",
                     "Registry refactored: index.json = manifest, registry.json = central registry"
-                ]
+                ],
+                "completed": "2026-04-11"
             },
             "phase_3": {
                 "name": "Dashboard & Visualization",
@@ -93,7 +95,7 @@
     },
     "health": {
         "status": "healthy",
-        "last_check": "2026-04-10",
-        "notes": "Phase 2 complete. Phase 5 (Mandala Guard) planned."
+        "last_check": "2026-04-11",
+        "notes": "Phase 2 complete. Progress: 50%."
     }
 }
