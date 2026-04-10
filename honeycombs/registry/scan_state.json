@@ -1,7 +1,7 @@
 ﻿{
-  "last_scan": "2026-04-10T09:14:56.500095",
+  "last_scan": "2026-04-10T09:20:58.607643",
   "honeycomb_hashes": {
-    "registry": "3daa5f58ebacd2791291ba987f91131f",
+    "registry": "2fdc03bf47d1678091054efef1e1aab4",
     "registry/notifications": "a45d68483e1cd793f4142cd7fd814321",
     "registry/core": "f3e7962228de4e85f2d66995cb2f08fe",
     "registry/backups": "0897798045a3e5b1c4a80f333729a3e1",
@@ -22,7 +22,7 @@
     "protocols/deep_analysis": "2fcab0a994c6c641940947c7ea4f01df",
     "protocols/auto_realize_seed": "17386ef6b1bfbf36fd0e97bbb141298a",
     "seeds": "fd7b25c5c1e114883ed337f1ff0f46d1",
-    "roadmaps": "fb52d0be81f66df5c193fdd13063124c",
+    "roadmaps": "9a89f00e7bc754d8f821dd71da691e29",
     "core_map": "f2f8dfb4fc14897af4a803e215a20958",
     "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full": "ac5a8b6d43e69b4426397bc86f9809b5",
     "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final": "eb7d2a64070d5e84cad2fddefac65021",
@@ -45,8 +45,8 @@
     "invalid_v2": 0,
     "errors": 0,
     "warnings": 0,
-    "total_files": 224,
-    "total_size_kb": 1306.6000000000006
+    "total_files": 225,
+    "total_size_kb": 1311.5300000000004
   },
   "scanner_config": {
     "updated": "2026-04-09",
