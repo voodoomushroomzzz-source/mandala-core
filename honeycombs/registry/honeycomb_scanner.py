@@ -1,9 +1,9 @@
 ﻿#!/usr/bin/env python3
 """
-Honeycomb Scanner v1.0.0
-Модуль сканирования сот для Мандалы Симбиоза
+Honeycomb Scanner v1.1.0
+Module for scanning honeycomb system state for Mandala Symbiosis
 
-Автоматически сканирует директорию honeycombs/ и регистрирует все соты в системе.
+Automatically scans honeycombs/ directory and registers all hives in the system.
 """
 
 import os
@@ -15,7 +15,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple
 import hashlib
 
-# Настройка логирования
+# Logging setup
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -28,30 +28,30 @@ logger = logging.getLogger(__name__)
 
 
 class HoneycombScanner:
-    """Основной класс для сканирования и регистрации сот"""
+    """Main class for scanning and registering hives"""
     
     def __init__(self, base_path: str = "honeycombs"):
         """
-        Инициализация сканера
+        Initialize scanner
         
         Args:
-            base_path: Базовый путь к директории honeycombs
+            base_path: Base path to honeycombs directory
         """
         self.base_path = Path(base_path)
         self.registry_path = Path("honeycombs/registry/scan_state.json")
         self.scanner_config_path = Path("honeycombs/registry/scanner.json")
         
-        # Конфигурация сканера
+        # Load scanner configuration
         self.config = self._load_config()
         
-        # Результаты сканирования
+        # Scan results
         self.honeycombs: List[Dict[str, Any]] = []
         self.new_honeycombs: List[str] = []
         self.modified_honeycombs: List[str] = []
         self.deleted_honeycombs: List[str] = []
         self.validation_errors: List[Dict[str, Any]] = []
         
-        # Статистика
+        # Statistics
         self.stats = {
             "total_scanned": 0,
             "valid_v2": 0,
@@ -62,79 +62,79 @@ class HoneycombScanner:
             "total_size_kb": 0
         }
         
-        # Кэш предыдущего сканирования
+        # Cache of previous scan
         self.previous_scan_cache: Dict[str, Any] = {}
         
     def _load_config(self) -> Dict[str, Any]:
-        """Загрузка конфигурации сканера"""
+        """Load scanner configuration"""
         try:
             with open(self.scanner_config_path, 'r', encoding='utf-8-sig') as f:
                 return json.load(f)
         except Exception as e:
-            logger.error(f"Ошибка загрузки конфигурации: {e}")
+            logger.error(f"Error loading scanner config: {e}")
             return {
                 "scanning_logic": {
-                    "depth": "рекурсивно все уровни вложенности",
+                    "depth": "recursive all levels of nesting",
                     "target_files": ["index.json"],
-                    "validation_rules": ["Проверка структуры v2.0"],
-                    "update_triggers": ["Новая сота обнаружена", "Сота изменена"]
+                    "validation_rules": ["Structure validation v2.0"],
+                    "update_triggers": ["New hive detected", "Hive modified"]
                 }
             }
     
     def scan_all_honeycombs(self, force_rescan: bool = False) -> Dict[str, Any]:
         """
-        Основное сканирование всех сот
+        Main scanning of all hives
         
         Args:
-            force_rescan: Принудительное полное сканирование
+            force_rescan: Force full rescan
             
         Returns:
-            Словарь с результатами сканирования
+            Dictionary with scan results
         """
         logger.info("=" * 60)
-        logger.info("НАЧАЛО СКАНИРОВАНИЯ СОТ")
-        logger.info(f"Базовый путь: {self.base_path}")
-        logger.info(f"Конфигурация: {self.config.get('identity', {}).get('name', 'Unknown')}")
+        logger.info("STARTING HONEYCOMB SCAN")
+        logger.info(f"Base path: {self.base_path}")
+        logger.info(f"Scanner config: {self.config.get('identity', {}).get('name', 'Unknown')}")
         logger.info("=" * 60)
         
-        # Загрузка предыдущего состояния реестра
+        # Load previous registry state
         self._load_previous_state()
         
-        # Рекурсивное сканирование
+        # Recursive scan
         self._recursive_scan(self.base_path)
         
-        # Обновление реестра
+        # Update registry
         if self.honeycombs:
             registry_updated = self._update_registry()
         else:
-            logger.warning("Соты не найдены!")
+            logger.warning("No hives found!")
             registry_updated = False
         
-        # Формирование отчёта
+        # Generate report
         report = self._generate_report()
         
-        # Сохранение состояния сканирования
+        # Save scan state
         self._save_scan_state()
         
         logger.info("=" * 60)
-        logger.info("СКАНИРОВАНИЕ ЗАВЕРШЕНО")
-        logger.info(f"Найдено сот: {len(self.honeycombs)}")
-        logger.info(f"Новых: {len(self.new_honeycombs)}")
-        logger.info(f"Изменённых: {len(self.modified_honeycombs)}")
-        logger.info(f"Удалённых: {len(self.deleted_honeycombs)}")
-        logger.info(f"Ошибок валидации: {len(self.validation_errors)}")
+        logger.info("SCAN COMPLETE")
+        logger.info(f"Found hives: {len(self.honeycombs)}")
+        logger.info(f"New: {len(self.new_honeycombs)}")
+        logger.info(f"Modified: {len(self.modified_honeycombs)}")
+        logger.info(f"Deleted: {len(self.deleted_honeycombs)}")
+        logger.info(f"Validation errors: {len(self.validation_errors)}")
         logger.info("=" * 60)
         
         return report
     
     def _load_previous_state(self):
-        """Загрузка предыдущего состояния реестра для сравнения"""
+        """Load previous registry state for comparison"""
         try:
             if self.registry_path.exists():
                 with open(self.registry_path, 'r', encoding='utf-8-sig') as f:
                     registry = json.load(f)
                 
-                # Кэширование информации о предыдущих сотах
+                # Cache info about previous hives
                 if "honeycombs" in registry:
                     for honeycomb in registry["honeycombs"]:
                         honeycomb_id = honeycomb.get("honeycomb_id", "")
@@ -144,65 +144,65 @@ class HoneycombScanner:
                                 "last_modified": honeycomb.get("last_modified", 0),
                                 "file_count": honeycomb.get("file_count", 0)
                             }
-                logger.info(f"Загружено {len(self.previous_scan_cache)} записей из предыдущего реестра")
+                logger.info(f"Loaded {len(self.previous_scan_cache)} entries from previous registry")
         except Exception as e:
-            logger.error(f"Ошибка загрузки предыдущего состояния: {e}")
+            logger.error(f"Error loading previous state: {e}")
     
     def _recursive_scan(self, directory: Path):
         """
-        Рекурсивное сканирование директории
+        Recursively scan directory for hives
         
         Args:
-            directory: Директория для сканирования
+            directory: Directory to scan
         """
         try:
             for item in directory.iterdir():
                 if item.is_dir():
-                    # Пропускаем некоторые системные директории
+                    # Skip system directories
                     if item.name.startswith('.') or item.name.startswith('__'):
                         continue
                     
-                    # Проверяем наличие index.json в директории
+                    # Check for index.json in directory
                     index_file = item / "index.json"
                     if index_file.exists():
                         self._analyze_honeycomb(index_file)
                     
-                    # Рекурсивный вызов для поддиректорий
+                    # Recursive call for subdirectories
                     self._recursive_scan(item)
         except Exception as e:
-            logger.error(f"Ошибка сканирования директории {directory}: {e}")
+            logger.error(f"Error scanning directory {directory}: {e}")
             self.stats["errors"] += 1
     
     def _analyze_honeycomb(self, honeycomb_path: Path):
         """
-        Анализ и валидация соты
+        Analyze and validate hive
         
         Args:
-            honeycomb_path: Путь к файлу index.json соты
+            honeycomb_path: Path to index.json file
         """
         try:
-            # Чтение файла соты
+            # Read file
             with open(honeycomb_path, 'r', encoding='utf-8-sig') as f:
                 honeycomb_data = json.load(f)
             
-            # Извлечение идентификатора соты
+            # Extract identity information
             honeycomb_dir = honeycomb_path.parent
             relative_path = honeycomb_dir.relative_to(self.base_path)
             honeycomb_id = str(relative_path).replace(os.sep, '/')
             
-            # Вычисление хэша содержимого
+            # Calculate content hash
             content_hash = self._calculate_hash(honeycomb_data)
             
-            # Проверка структуры v2.0
+            # Validate v2.0 structure
             is_valid, validation_details = self._validate_v2_structure(honeycomb_data)
             
-            # Подсчёт файлов и размера
+            # Count files and size
             file_count, total_size_kb = self._count_honeycomb_files(honeycomb_dir)
             
-            # Извлечение информации из identity
+            # Extract identity info
             identity = honeycomb_data.get("identity", {})
             
-            # Формирование записи соты
+            # Form hive info
             honeycomb_info = {
                 "honeycomb_id": honeycomb_id,
                 "path": str(honeycomb_path),
@@ -217,7 +217,7 @@ class HoneycombScanner:
                 "tags": identity.get("tags", []),
                 "resonance": identity.get("resonance", "0%"),
                 
-                # Техническая информация
+                # Technical info
                 "is_v2_compliant": is_valid,
                 "validation_details": validation_details,
                 "hash": content_hash,
@@ -227,13 +227,13 @@ class HoneycombScanner:
                 "scan_timestamp": datetime.now().isoformat()
             }
             
-            # Проверка изменений
+            # Detect changes
             self._detect_changes(honeycomb_id, honeycomb_info)
             
-            # Добавление в список
+            # Add to list
             self.honeycombs.append(honeycomb_info)
             
-            # Обновление статистики
+            # Update stats
             self.stats["total_scanned"] += 1
             self.stats["total_files"] += file_count
             self.stats["total_size_kb"] += total_size_kb
@@ -244,7 +244,7 @@ class HoneycombScanner:
             else:
                 self.stats["invalid_v2"] += 1
                 self.stats["warnings"] += 1
-                logger.warning(f"✗ {honeycomb_id}: Не соответствует v2.0")
+                logger.warning(f" {honeycomb_id}: Not v2.0 compliant")
                 self.validation_errors.append({
                     "honeycomb_id": honeycomb_id,
                     "name": honeycomb_info["name"],
@@ -253,16 +253,16 @@ class HoneycombScanner:
                 })
                 
         except json.JSONDecodeError as e:
-            logger.error(f"{honeycomb_path}: Ошибка JSON: {e}")
+            logger.error(f"{honeycomb_path}: JSON error: {e}")
             self.stats["errors"] += 1
         except Exception as e:
-            logger.error(f"{honeycomb_path}: Ошибка анализа: {e}")
+            logger.error(f"{honeycomb_path}: Analysis error: {e}")
             self.stats["errors"] += 1
     
     def _calculate_hash(self, data: Dict[str, Any]) -> str:
-        """Вычисление хэша JSON данных"""
+        """Calculate MD5 hash of JSON data"""
         try:
-            # Сортировка ключей для консистентности
+            # Sort keys for consistency
             json_str = json.dumps(data, sort_keys=True, ensure_ascii=False)
             return hashlib.md5(json_str.encode('utf-8')).hexdigest()
         except:
@@ -270,10 +270,10 @@ class HoneycombScanner:
     
     def _validate_v2_structure(self, honeycomb_data: Dict[str, Any]) -> Tuple[bool, Dict[str, Any]]:
         """
-        Валидация структуры соты по стандарту v2.0
+        Validate hive structure against v2.0 standard
         
         Returns:
-            Кортеж (валидна ли структура, детали валидации)
+            Tuple (is_valid, validation_details)
         """
         details = {
             "errors": [],
@@ -282,42 +282,42 @@ class HoneycombScanner:
             "missing_fields": []
         }
         
-        # Проверка обязательных секций
+        # Check required sections
         required_sections = ["identity", "meta"]
         for section in required_sections:
             if section not in honeycomb_data:
-                details["errors"].append(f"Отсутствует обязательная секция: {section}")
+                details["errors"].append(f"Missing required section: {section}")
                 details["missing_sections"].append(section)
         
-        # Проверка identity секции
+        # Validate identity section
         if "identity" in honeycomb_data:
             identity = honeycomb_data["identity"]
             required_fields = ["module_id", "name", "version", "layer", "type"]
             
             for field in required_fields:
                 if field not in identity:
-                    details["errors"].append(f"Отсутствует обязательное поле identity.{field}")
+                    details["errors"].append(f"Missing required field identity.{field}")
                     details["missing_fields"].append(f"identity.{field}")
             
-            # Проверка формата module_id
+            # Check module_id format
             if "module_id" in identity:
                 module_id = identity["module_id"]
                 if not isinstance(module_id, str) or len(module_id.strip()) == 0:
-                    details["warnings"].append("module_id должен быть непустой строкой")
+                    details["warnings"].append("module_id should be non-empty string")
         
-        # Проверка meta секции
+        # Validate meta section
         if "meta" in honeycomb_data:
             meta = honeycomb_data["meta"]
             if "description" not in meta:
-                details["warnings"].append("Рекомендуется добавить описание в meta.description")
+                details["warnings"].append("Recommended to add description in meta.description")
         
-        # Определение результата
+        # Determine validity
         is_valid = len(details["errors"]) == 0
         
         return is_valid, details
     
     def _count_honeycomb_files(self, honeycomb_dir: Path) -> Tuple[int, float]:
-        """Подсчёт JSON файлов в соте"""
+        """Count JSON files in hive"""
         file_count = 0
         total_size_bytes = 0
         
@@ -329,31 +329,30 @@ class HoneycombScanner:
                         file_count += 1
                         total_size_bytes += os.path.getsize(file_path)
         except Exception as e:
-            logger.warning(f"Ошибка подсчёта файлов в {honeycomb_dir}: {e}")
+            logger.warning(f"Error counting files in {honeycomb_dir}: {e}")
             self.stats["errors"] += 1
         
         total_size_kb = round(total_size_bytes / 1024, 2)
         return file_count, total_size_kb
     
     def _detect_changes(self, honeycomb_id: str, honeycomb_info: Dict[str, Any]):
-        """Обнаружение изменений в соте"""
+        """Detect if hive is new or modified"""
         if honeycomb_id in self.previous_scan_cache:
             previous = self.previous_scan_cache[honeycomb_id]
             
-            # Проверка хэша
+            # Check hash
             if previous.get("hash") != honeycomb_info["hash"]:
                 self.modified_honeycombs.append(honeycomb_id)
-                logger.info(f"  → Изменена: {honeycomb_id}")
+                logger.info(f"   Modified: {honeycomb_id}")
         else:
-            # Новая сота
+            # New hive
             self.new_honeycombs.append(honeycomb_id)
-            logger.info(f"  + Новая: {honeycomb_id}")
+            logger.info(f"  + New: {honeycomb_id}")
     
     def _update_registry(self) -> bool:
-        """Обновление главного реестра в registry/index.json (content.registry)"""
+        """Update main registry file (registry.json)"""
         try:
-            # Главный реестр (index.json)
-            registry_file = Path("honeycombs/registry/index.json")
+            registry_file = Path("honeycombs/registry/registry.json")
             
             if registry_file.exists():
                 with open(registry_file, 'r', encoding='utf-8-sig') as f:
@@ -361,7 +360,7 @@ class HoneycombScanner:
             else:
                 registry = {}
 
-            # Гарантируем структуру content.registry
+            # Ensure content.registry structure
             if "content" not in registry:
                 registry["content"] = {}
             if "registry" not in registry["content"]:
@@ -369,7 +368,7 @@ class HoneycombScanner:
 
             reg = registry["content"]["registry"]
 
-            # Обновляем данные
+            # Update data
             reg["honeycombs"] = self.honeycombs
             reg["statistics"] = {
                 "total_honeycombs": len(self.honeycombs),
@@ -392,32 +391,32 @@ class HoneycombScanner:
                 "deleted_honeycombs": self.deleted_honeycombs
             }
             reg["last_updated"] = datetime.now().isoformat()
-            reg["scanner_version"] = self.config.get("identity", {}).get("version", "v1.0.0")
+            reg["scanner_version"] = self.config.get("identity", {}).get("version", "v1.1.0")
 
-            # Сохраняем index.json (не ломая identity/meta)
+            # Write registry.json
             with open(registry_file, 'w', encoding='utf-8-sig') as f:
                 json.dump(registry, f, indent=2, ensure_ascii=False)
 
-            # Оставляем scan_state.json как внутреннее состояние
+            # Save scan_state.json
             self._save_scan_state()
 
-            logger.info(f" Реестр обновлён: content.registry в {registry_file}")
+            logger.info(f" Registry updated: content.registry in {registry_file}")
             return True
 
         except Exception as e:
-            logger.error(f" Ошибка обновления реестра: {e}")
+            logger.error(f" Error updating registry: {e}")
             import traceback
             logger.error(traceback.format_exc())
             return False
     
     def _generate_report(self) -> Dict[str, Any]:
-        """Генерация отчёта о сканировании"""
+        """Generate scan report"""
         return {
             "scan_report": {
                 "timestamp": datetime.now().isoformat(),
-                "scanner_version": self.config.get("identity", {}).get("version", "v1.0.0"),
+                "scanner_version": self.config.get("identity", {}).get("version", "v1.1.0"),
                 "base_path": str(self.base_path),
-                "duration_seconds": None,  # Можно добавить измерение времени
+                "duration_seconds": None,
                 "status": "completed"
             },
             "summary": {
@@ -434,7 +433,7 @@ class HoneycombScanner:
         }
     
     def _group_by_layer(self) -> Dict[int, List[str]]:
-        """Группировка сот по слоям"""
+        """Group hives by layer"""
         layers = {}
         for honeycomb in self.honeycombs:
             layer = honeycomb.get("layer", 0)
@@ -444,7 +443,7 @@ class HoneycombScanner:
         return layers
     
     def _group_by_type(self) -> Dict[str, List[str]]:
-        """Группировка сот по типам"""
+        """Group hives by type"""
         types = {}
         for honeycomb in self.honeycombs:
             honeycomb_type = honeycomb.get("type", "unknown")
@@ -454,7 +453,7 @@ class HoneycombScanner:
         return types
     
     def _save_scan_state(self):
-        """Сохранение состояния сканирования для следующего запуска"""
+        """Save scan state for future comparison"""
         try:
             state_file = Path("honeycombs/registry/scan_state.json")
             state_data = {
@@ -470,27 +469,27 @@ class HoneycombScanner:
             with open(state_file, 'w', encoding='utf-8-sig') as f:
                 json.dump(state_data, f, indent=2, ensure_ascii=False)
             
-            logger.info(f"Сохранено состояние сканирования: {state_file}")
+            logger.info(f"Scan state saved: {state_file}")
         except Exception as e:
-            logger.error(f"Ошибка сохранения состояния: {e}")
+            logger.error(f"Error saving scan state: {e}")
 
 
 def main():
-    """Основная функция CLI"""
+    """CLI entry point"""
     if len(sys.argv) < 2:
         print("=" * 60)
-        print("HONEYCOMB SCANNER v1.0.0")
-        print("Модуль сканирования сот Мандалы Симбиоза")
+        print("HONEYCOMB SCANNER v1.1.0")
+        print("Module for scanning Mandala Symbiosis hives")
         print("=" * 60)
-        print("\nИспользование:")
-        print("  python honeycomb_scanner.py scan     # Запустить сканирование")
-        print("  python honeycomb_scanner.py test     # Тестовый прогон")
-        print("  python honeycomb_scanner.py validate # Только валидация")
-        print("  python honeycomb_scanner.py report   # Отчёт без сканирования")
-        print("\nОпции:")
-        print("  --force      Принудительное полное сканирование")
-        print("  --verbose    Подробный вывод")
-        print("  --log-file   Сохранить логи в файл")
+        print("\nUsage:")
+        print("  python honeycomb_scanner.py scan     # Run scan")
+        print("  python honeycomb_scanner.py test     # Test run")
+        print("  python honeycomb_scanner.py validate # Validate only")
+        print("  python honeycomb_scanner.py report   # Generate report")
+        print("\nOptions:")
+        print("  --force      # Force full rescan")
+        print("  --verbose    # Verbose output")
+        print("  --log-file   # Save logs to file")
         return
     
     command = sys.argv[1]
@@ -503,70 +502,65 @@ def main():
     scanner = HoneycombScanner()
     
     if command == "scan":
-        print("Запуск сканирования сот...")
+        print("Starting hive scan...")
         report = scanner.scan_all_honeycombs(force_rescan)
         
         print("\n" + "=" * 60)
-        print("ОТЧЁТ СКАНА")
+        print("SCAN REPORT")
         print("=" * 60)
-        print(f"Всего сот: {len(scanner.honeycombs)}")
-        print(f"Новых: {len(scanner.new_honeycombs)}")
-        print(f"Изменённых: {len(scanner.modified_honeycombs)}")
-        print(f"Удалённых: {len(scanner.deleted_honeycombs)}")
-        print(f"Ошибок валидации: {len(scanner.validation_errors)}")
-        print(f"Реестр обновлён: {'Да' if scanner.honeycombs else 'Нет'}")
+        print(f"Total hives: {len(scanner.honeycombs)}")
+        print(f"New: {len(scanner.new_honeycombs)}")
+        print(f"Modified: {len(scanner.modified_honeycombs)}")
+        print(f"Deleted: {len(scanner.deleted_honeycombs)}")
+        print(f"Validation errors: {len(scanner.validation_errors)}")
+        print(f"Registry updated: {'Yes' if scanner.honeycombs else 'No'}")
         
         if scanner.validation_errors:
-            print("\nОШИБКИ ВАЛИДАЦИИ:")
-            for error in scanner.validation_errors[:5]:  # Показываем первые 5
-                print(f"  • {error['honeycomb_id']}: {error['name']}")
+            print("\nVALIDATION ERRORS:")
+            for error in scanner.validation_errors[:5]:
+                print(f"   {error['honeycomb_id']}: {error['name']}")
                 for err in error.get('errors', [])[:3]:
                     print(f"    - {err}")
             if len(scanner.validation_errors) > 5:
-                print(f"    ... и ещё {len(scanner.validation_errors) - 5} ошибок")
+                print(f"    ... and {len(scanner.validation_errors) - 5} more")
         
-        print("\nСКАНИРОВАНИЕ ЗАВЕРШЕНО")
+        print("\nSCAN COMPLETE")
         
     elif command == "test":
-        print("Тестовый прогон сканирования...")
-        # Тестовый режим - сканируем, но не сохраняем
+        print("Test scan...")
         scanner.scan_all_honeycombs(force_rescan)
-        print(f"Найдено сот: {len(scanner.honeycombs)}")
-        print(f"Валидных v2.0: {scanner.stats['valid_v2']}")
-        print(f"Невалидных v2.0: {scanner.stats['invalid_v2']}")
+        print(f"Found hives: {len(scanner.honeycombs)}")
+        print(f"Valid v2.0: {scanner.stats['valid_v2']}")
+        print(f"Invalid v2.0: {scanner.stats['invalid_v2']}")
         
         if scanner.honeycombs:
-            print("\nПервые 5 сот:")
+            print("\nFirst 5 hives:")
             for honeycomb in scanner.honeycombs[:5]:
-                print(f"  • {honeycomb['honeycomb_id']}: {honeycomb['name']} (v{honeycomb['version']})")
+                print(f"   {honeycomb['honeycomb_id']}: {honeycomb['name']} (v{honeycomb['version']})")
         
     elif command == "validate":
-        print("Режим валидации...")
+        print("Validation mode...")
         scanner.scan_all_honeycombs(force_rescan)
         
         if scanner.validation_errors:
-            print(f"\nНайдено {len(scanner.validation_errors)} ошибок валидации:")
+            print(f"\nFound {len(scanner.validation_errors)} validation errors:")
             for error in scanner.validation_errors:
                 print(f"\n{error['honeycomb_id']}: {error['name']}")
                 for err in error.get('errors', []):
-                    print(f"  ✗ {err}")
+                    print(f"   {err}")
                 for warn in error.get('warnings', []):
                     print(f"  ! {warn}")
         else:
-            print("Все соты соответствуют стандарту v2.0!")
+            print("All hives are v2.0 compliant!")
             
     elif command == "report":
-        print("Генерация отчёта...")
-        # Можно добавить генерацию HTML или Markdown отчёта
-        print("Функция отчёта в разработке")
+        print("Generating report...")
+        print("Report functionality in development")
         
     else:
-        print(f"Неизвестная команда: {command}")
+        print(f"Unknown command: {command}")
         sys.exit(1)
 
 
 if __name__ == "__main__":
     main()
-
-
-
