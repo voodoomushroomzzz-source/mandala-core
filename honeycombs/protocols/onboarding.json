@@ -2,7 +2,7 @@
     "identity": {
         "module_id": "PROTO-004",
         "name": "Protocol: Session Onboarding",
-        "version": "v3.0.0",
+        "version": "v3.0.1",
         "created": "2026-03-07",
         "layer": 1,
         "type": "protocol",
@@ -24,8 +24,8 @@
                 "file": "honeycombs/core_map/index.json"
             },
             {
-                "why": "Incoming tasks from Gardener or Claude",
-                "file": "honeycombs/inbox/index.json"
+                "why": "Incoming ideas and tasks (via Seeds)",
+                "file": "honeycombs/seeds/index.json"
             },
             {
                 "why": "How External SR forms PowerShell commands for VS Code, updates honeycombs, git cycle, file deletion",
@@ -40,7 +40,7 @@
                 "file": "honeycombs/registry/scan_state.json"
             }
         ],
-        "after_loading": "SR greets Gardener and reports: system status, inbox contents, and confirms resonance with core philosophy. Then offers available actions menu.",
+        "after_loading": "SR greets Gardener and reports: system status, active tasks, pending seeds, and confirms resonance with core philosophy. Then offers available actions menu.",
         "available_tools": {
             "telegram_bot": {
                 "path": "bot.py",
