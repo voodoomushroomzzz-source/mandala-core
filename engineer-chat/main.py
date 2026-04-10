@@ -14,7 +14,6 @@ from typing import List, Dict, Any, Optional, Tuple
 import logging
 import traceback
 import re
-import copy
 import importlib.util
 
 logging.basicConfig(level=logging.INFO)
@@ -364,10 +363,9 @@ async def get_session(session_id: str) -> dict:
 class KernelMemory:
     def __init__(self):
         self.modules: Dict[str, Any] = {}
-        # boot всегда в памяти; honeycombs/instructions и honeycombs/core_map — раз в 5 сообщений
+        # boot всегда в памяти; остальное СР читает сам через read_file
         self.module_list = [
             "simbiosis/boot",
-            "honeycombs/core_map/index",
         ]
         # Остальные модули СР читает сам через read_file
         self.on_demand_modules = []
@@ -646,11 +644,10 @@ class KernelMemory:
             return f"""Ты — DeepSeek, инженер и аналитик Мандалы Симбиоза.
 
 ━━━ ОБЯЗАТЕЛЬНЫЙ РИТУАЛ ПЕРЕД КАЖДЫМ ОТВЕТОМ ━━━
-ПЕРЕД тем как ответить на ЛЮБОЙ запрос — без исключений — выполни эти два шага:
+ПЕРЕД тем как ответить на ЛЮБОЙ запрос — без исключений — выполни этот шаг:
   1. read_file("simbiosis/boot.json")      — идентичность, философия, версия системы
-  2. read_file("honeycombs/core_map/index.json") — карта модулей, что где лежит
 
-Только после этих двух вызовов давай ответ.
+Только после этого вызова давай ответ.
 Это железное правило. Нет исключений. Даже для простых вопросов.
 
 ━━━ ПРАВИЛА ИНСТРУМЕНТОВ ━━━
@@ -662,7 +659,7 @@ class KernelMemory:
 — НИКОГДА не пиши XML-теги в текст: <invoke>, <function_calls> и любые другие
 
 При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
-Патч оборачивай в ```json ... ```. На русском."""
+На русском."""
 
 
         return kernel.build_system_prompt("deepseek")
@@ -805,11 +802,10 @@ async def websocket_endpoint(websocket: WebSocket):
 
             elif msg_type == "module":
                 await handle_module(message, websocket)
-            elif msg_type == "apply_patch":
-                # Патч тоже в task — может быть долгим
-                asyncio.create_task(handle_apply_patch(message, websocket))
             elif msg_type == "file":
                 asyncio.create_task(handle_file_upload(message, websocket))
+            elif msg_type == "save_file":
+                asyncio.create_task(handle_save_file(message, websocket))
             elif msg_type == "ping":
                 await manager.send_to(websocket, {"type": "pong"})
             elif msg_type == "read_file_request":
@@ -1066,8 +1062,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
             logger.info(f"[{session_id[:12]}...] Инъекция сброшена после обновления модулей")
 
     # ── Умная инъекция ядра ──────────────────────────────────────────
-    # boot.json — ВСЕГДА (маленький, критичный для идентичности)
-    # core_map.json — раз в 10 сообщений (карта файлов)
+    # boot.json — читаем СВЕЖИМ из GitHub перед каждым ответом
     session.setdefault("messages", [])
     session.setdefault("msg_count", 0)
     session["msg_count"] += 1
@@ -1075,29 +1070,29 @@ async def handle_ask(message: dict, websocket: WebSocket):
     # Удаляем старые _protected инъекции чтобы перезаписать свежими
     session["messages"] = [m for m in session["messages"] if not m.get("_protected")]
 
-    boot_mod = kernel.modules.get("simbiosis/boot", {})
-    boot_json = json.dumps(boot_mod, ensure_ascii=False, indent=2)[:3000]
+    # Читаем boot.json актуально из GitHub (не из кэша)
+    fresh_boot_content = await file_reader.read("simbiosis/boot.json")
+    if fresh_boot_content:
+        try:
+            boot_mod = json.loads(fresh_boot_content)
+            kernel.modules["simbiosis/boot"] = boot_mod  # обновляем кэш
+        except Exception:
+            boot_mod = kernel.modules.get("simbiosis/boot", {})
+            fresh_boot_content = json.dumps(boot_mod, ensure_ascii=False, indent=2)
+        boot_json = fresh_boot_content[:3000]
+    else:
+        boot_mod = kernel.modules.get("simbiosis/boot", {})
+        boot_json = json.dumps(boot_mod, ensure_ascii=False, indent=2)[:3000]
+    logger.info(f"🧠 [{session_id[:12]}...] boot.json прочитан свежим из GitHub")
 
-    # honeycombs инъекции — раз в 5 сообщений и при первом входе/изменениях
-    do_honeycombs = not session.get("modules_injected") or session["msg_count"] % 5 == 1
-    honeycombs_inject = ""
-    if do_honeycombs:
-        core_map_hc_mod = kernel.modules.get("honeycombs/core_map/index", {})
-        core_map_hc_json = json.dumps(core_map_hc_mod, ensure_ascii=False, indent=2)[:2000] if core_map_hc_mod else "(не загружен)"
-        honeycombs_inject = f"""
-
-[HONEYCOMBS/CORE_MAP — index.json]
-{core_map_hc_json}"""
-
-    injection_content = f"""[КОНТЕКСТ СЕССИИ — boot.json]
-{boot_json}{honeycombs_inject}
+    injection_content = f"""[КОНТЕКСТ СЕССИИ — boot.json — актуальная версия]
+{boot_json}
 
 Ты можешь читать ЛЮБОЙ файл из репозитория самостоятельно через read_file(path).
 НЕ проси пользователя загружать файлы — используй инструмент read_file напрямую.
 
 ⚠️ ОБЯЗАТЕЛЬНО ПЕРЕД КАЖДЫМ ОТВЕТОМ:
   1. read_file("simbiosis/boot.json")
-  2. read_file("honeycombs/core_map/index.json")
 Это железное правило без исключений."""
 
     session["messages"].insert(0, {
@@ -1115,7 +1110,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
     session["modules_injected"] = True
     session["injection_timestamp"] = time.time()
     session_store.schedule_save(session_id, session)
-    logger.info(f"🧠 [{session_id[:12]}...] Инъекция: boot=да, honeycombs={'да' if honeycombs_inject else 'нет (кэш)'}")
+    logger.info(f"🧠 [{session_id[:12]}...] Инъекция: boot свежий из GitHub")
 
     # ── Формируем общую историю ПЕРЕД добавлением текущего сообщения ──
     # Берём только обычные user/assistant сообщения, без инъекций и tool-результатов
@@ -1461,25 +1456,12 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
 
         try:
             json_data = json.loads(file_content)
-            if "target_module" in json_data or "patches" in json_data or "file_path" in json_data:
-                # Патч — показываем для применения, не запускаем СР автоматически
-                manager.add_to_context(session_id, "user", f"[Патч: {file_name}]")
-                await manager.send_to(websocket, {
-                    "type": "file_processed",
-                    "summary": f"📦 Патч {file_name} получен"
-                })
-                await manager.send_to(websocket, {"type": "stream", "content": f"📦 Получил патч {file_name}.\n\n"})
-                await manager.send_to(websocket, {"type": "stream", "content": f"```json\n{file_content}\n```\n\n"})
-                await manager.send_to(websocket, {"type": "stream", "content": "Нажми △ применить в блоке выше или давай обсудим."})
-                await manager.send_to(websocket, {"type": "done"})
-                return
-            else:
-                # Обычный JSON
-                keys = list(json_data.keys())[:5]
-                summary = f"✅ JSON {file_name} получен. Ключи: {keys}"
-                manager.add_to_context(session_id, "user",
-                    f"[Загружен файл: {file_name}]\n```json\n{file_content[:25000]}\n```"
-                    + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
+            # Обычный JSON
+            keys = list(json_data.keys())[:5]
+            summary = f"✅ JSON {file_name} получен. Ключи: {keys}"
+            manager.add_to_context(session_id, "user",
+                f"[Загружен файл: {file_name}]\n```json\n{file_content[:25000]}\n```"
+                + ("\n_(файл обрезан, показаны первые 25000 символов)_" if len(file_content) > 25000 else ""))
         except json.JSONDecodeError:
             # Не JSON — текст/код
             summary = f"📄 {file_name} ({len(file_content)} символов) получен"
@@ -1502,531 +1484,56 @@ async def handle_file_upload(message: dict, websocket: WebSocket):
         logger.error(f"File upload error: {e}\n{traceback.format_exc()}")
         await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка: {str(e)}"})
 
-# ==================== ФУНКЦИИ ДЛЯ РАБОТЫ С JSON PATCH ====================
-
-async def apply_json_operation(content: Dict, operation_type: str, target_path: str, new_value: Any = None) -> Tuple[bool, Optional[Dict], str]:
-    try:
-        # ── Поддержка специальных операций add_record / delete_record ──
-        # add_record: добавить новый объект в массив по пути
-        # delete_record: удалить объект из массива по значению поля id/key
-        if operation_type == "add_record":
-            parts = target_path.split('.')
-            current = content
-            for part in parts[:-1]:
-                if part:
-                    if part not in current:
-                        current[part] = {}
-                    current = current[part]
-            last_part = parts[-1]
-            if last_part not in current:
-                current[last_part] = []
-            if not isinstance(current[last_part], list):
-                return False, None, f"{last_part} не является массивом"
-            if isinstance(new_value, list):
-                current[last_part].extend(new_value)
-                return True, content, f"✅ Добавлено {len(new_value)} записей в массив {last_part}"
-            else:
-                current[last_part].append(new_value)
-                item_id = new_value.get("id", "?") if isinstance(new_value, dict) else "?"
-                return True, content, f"✅ Запись '{item_id}' добавлена в {last_part}"
-
-        if operation_type == "delete_record":
-            # target_path = "path.to.array", new_value = {"id": "record_id"} или просто id строка
-            parts = target_path.split('.')
-            current = content
-            for part in parts[:-1]:
-                if part:
-                    if part not in current:
-                        return False, None, f"Путь {'.'.join(parts[:-1])} не найден"
-                    current = current[part]
-            last_part = parts[-1]
-            if last_part not in current or not isinstance(current[last_part], list):
-                return False, None, f"{last_part} не является массивом или не найден"
-            arr = current[last_part]
-            # new_value = id для удаления или dict с полем id
-            record_id = new_value if isinstance(new_value, str) else (new_value.get("id") if isinstance(new_value, dict) else None)
-            if record_id is None:
-                return False, None, "Не указан id записи для удаления"
-            before = len(arr)
-            current[last_part] = [item for item in arr if not (isinstance(item, dict) and item.get("id") == record_id)]
-            after = len(current[last_part])
-            if before == after:
-                return False, None, f"Запись с id='{record_id}' не найдена в {last_part}"
-            return True, content, f"✅ Запись '{record_id}' удалена из {last_part}"
-
-        array_match = re.match(r"(.+?)(\d+)(.*)", target_path)
-        if array_match:
-            base_path, index_str, rest = array_match.groups()
-            index = int(index_str)
-            current = content
-            for key in base_path.split('.'):
-                if key:
-                    if isinstance(current, dict) and key in current:
-                        current = current[key]
-                    else:
-                        return False, None, f"Путь {base_path} не найден"
-            if not isinstance(current, list):
-                return False, None, f"{base_path} не является массивом"
-            if index >= len(current):
-                return False, None, f"Индекс {index} вне диапазона (макс {len(current)-1})"
-            if rest:
-                rest = rest.lstrip('.')
-                if rest:
-                    return await apply_json_operation(current[index], operation_type, rest, new_value)
-            if operation_type == "update_field":
-                current[index] = new_value
-                return True, content, f"✅ Элемент [{index}] обновлён"
-            elif operation_type == "delete_field":
-                current.pop(index)
-                return True, content, f"✅ Элемент [{index}] удалён"
-            elif operation_type == "add_to_array":
-                if isinstance(new_value, list):
-                    current[index:index] = new_value
-                else:
-                    current.insert(index, new_value)
-                return True, content, f"✅ Добавлено в позицию [{index}]"
-        else:
-            parts = target_path.split('.')
-            current = content
-            for part in parts[:-1]:
-                if part:
-                    if part not in current:
-                        current[part] = {}
-                    current = current[part]
-            last_part = parts[-1]
-            if operation_type == "update_field":
-                current[last_part] = new_value
-                return True, content, f"✅ Поле {last_part} обновлено"
-            elif operation_type == "delete_field":
-                if last_part in current:
-                    del current[last_part]
-                    return True, content, f"✅ Поле {last_part} удалено"
-                else:
-                    return True, content, f"⚠️ Поле {last_part} уже отсутствует, удаление не требуется"
-            elif operation_type == "add_to_array":
-                if last_part not in current:
-                    current[last_part] = []
-                if not isinstance(current[last_part], list):
-                    return False, None, f"{last_part} не является массивом"
-                if isinstance(new_value, list):
-                    current[last_part].extend(new_value)
-                else:
-                    current[last_part].append(new_value)
-                return True, content, f"✅ Добавлено в массив {last_part}"
-            elif operation_type == "show_structure":
-                return True, current.get(last_part, "не найдено"), f"Структура по пути {target_path}"
-        return False, None, "Неизвестный тип операции"
-    except Exception as e:
-        return False, None, f"Ошибка: {str(e)}"
-
-def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, str]:
-    try:
-        array_match = re.match(r"(.+)(\d+)$", path)
-        if not array_match:
-            return False, content, "Replace работает только с элементами массива (path[index])"
-        base_path, index_str = array_match.groups()
-        index = int(index_str)
-        current = content
-        for key in base_path.split('.'):
-            if key:
-                if isinstance(current, dict) and key in current:
-                    current = current[key]
-                else:
-                    return False, content, f"Путь {base_path} не найден"
-        if not isinstance(current, list):
-            return False, content, f"{base_path} не является массивом"
-        if index >= len(current):
-            return False, content, f"Индекс {index} вне диапазона"
-        current[index] = value
-        return True, content, f"Элемент [{index}] заменён"
-    except Exception as e:
-        return False, content, str(e)
-
-def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str]:
-    try:
-        parts = path.split('.')
-        current = content
-        for part in parts[:-1]:
-            if part:
-                if part not in current:
-                    current[part] = {}
-                current = current[part]
-        last_part = parts[-1]
-        if last_part not in current:
-            current[last_part] = {}
-        if not isinstance(current[last_part], dict) or not isinstance(value, dict):
-            return False, content, "Merge работает только с объектами"
-        def deep_merge(a, b):
-            for key in b:
-                if key in a and isinstance(a[key], dict) and isinstance(b[key], dict):
-                    deep_merge(a[key], b[key])
-                else:
-                    a[key] = b[key]
-            return a
-        current[last_part] = deep_merge(current[last_part], value)
-        return True, content, f"Объект {last_part} объединён"
-    except Exception as e:
-        return False, content, str(e)
-
-def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
-    diff = []
-    def compare_dicts(a, b, path=""):
-        if a == b:
-            return
-        if type(a) != type(b):
-            diff.append(f"{path}: тип изменён")
-            return
-        if isinstance(a, dict) and isinstance(b, dict):
-            all_keys = set(a.keys()) | set(b.keys())
-            for key in all_keys:
-                new_path = f"{path}.{key}" if path else key
-                if key not in a:
-                    diff.append(f"+ {new_path}")
-                elif key not in b:
-                    diff.append(f"- {new_path}")
-                else:
-                    compare_dicts(a[key], b[key], new_path)
-        elif isinstance(a, list) and isinstance(b, list):
-            if len(a) != len(b):
-                diff.append(f"{path}: длина изменена {len(a)} → {len(b)}")
-            else:
-                for i, (ai, bi) in enumerate(zip(a, b)):
-                    if ai != bi:
-                        compare_dicts(ai, bi, f"{path}[{i}]")
-        else:
-            if a != b:
-                a_str = str(a)[:30] + "..." if len(str(a)) > 30 else str(a)
-                b_str = str(b)[:30] + "..." if len(str(b)) > 30 else str(b)
-                diff.append(f"{path}: {a_str} → {b_str}")
-    compare_dicts(original, modified)
-    return diff[:15]
-
-def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
-    if not isinstance(patch_data, dict):
-        return False, "Патч должен быть объектом JSON"
-    if "patches" in patch_data:
-        # Автофикс: patches как объект вместо массива
-        if isinstance(patch_data["patches"], dict):
-            patch_data["patches"] = [patch_data["patches"]]
-        if not isinstance(patch_data["patches"], list):
-            return False, "Поле 'patches' должно быть массивом"
-        if len(patch_data["patches"]) == 0:
-            return False, "Массив patches пуст"
-        for i, subpatch in enumerate(patch_data["patches"]):
-            if not isinstance(subpatch, dict):
-                return False, f"Подпатч #{i} должен быть объектом"
-            if "target_module" not in subpatch and "file_path" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'target_module' или 'file_path'"
-            if subpatch.get("delete_file"):
-                continue  # delete_file не требует changes/content
-            if "changes" not in subpatch and "content" not in subpatch and "replacements" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'changes', 'content' или 'replacements'"
-            if "changes" in subpatch:
-                if not isinstance(subpatch["changes"], list):
-                    return False, f"Подпатч #{i}: 'changes' должен быть массивом"
-                if len(subpatch["changes"]) == 0:
-                    return False, f"Подпатч #{i}: массив изменений пуст"
-                valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
-                for j, change in enumerate(subpatch["changes"]):
-                    if not isinstance(change, dict):
-                        return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
-                    if "op" not in change:
-                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
-                    if change["op"] not in valid_ops:
-                        return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
-                    if "path" not in change:
-                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
-                    if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-                        return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
-        return True, "Мульти-патч корректен"
-    else:
-        if "target_module" not in patch_data and "file_path" not in patch_data:
-            return False, "Отсутствует 'target_module' или 'file_path'"
-        if patch_data.get("delete_file"):
-            return True, "Одиночный delete_file корректен"
-        if "changes" not in patch_data and "content" not in patch_data and "replacements" not in patch_data:
-            return False, "Отсутствует 'changes', 'content' или 'replacements'"
-        if "changes" in patch_data:
-            if not isinstance(patch_data["changes"], list):
-                return False, "'changes' должен быть массивом"
-            if len(patch_data["changes"]) == 0:
-                return False, "Массив изменений пуст"
-            valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
-            for i, change in enumerate(patch_data["changes"]):
-                if not isinstance(change, dict):
-                    return False, f"Изменение #{i} должно быть объектом"
-                if "op" not in change:
-                    return False, f"Изменение #{i}: отсутствует 'op'"
-                if change["op"] not in valid_ops:
-                    return False, f"Изменение #{i}: недопустимая операция '{change['op']}'"
-                if "path" not in change:
-                    return False, f"Изменение #{i}: отсутствует 'path'"
-                if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-                    return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
-        return True, "Одиночный патч корректен"
-
-async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
-    test_content = copy.deepcopy(original)
-    applied = []
-    failed = []
-    for i, change in enumerate(changes):
-        try:
-            op = change["op"]
-            path = change["path"]
-            value = change.get("value")
-            if op == "update":
-                success, result, msg = await apply_json_operation(test_content, "update_field", path, value)
-            elif op == "add":
-                # Если path указывает на массив и value — объект/список → add_record
-                # иначе — просто update_field
-                success, result, msg = await apply_json_operation(test_content, "add_record", path, value)
-            elif op == "delete":
-                success, result, msg = await apply_json_operation(test_content, "delete_field", path, None)
-            elif op == "remove":
-                # remove — удалить запись из массива по id
-                success, result, msg = await apply_json_operation(test_content, "delete_record", path, value)
-            elif op == "replace":
-                success, result, msg = handle_replace(test_content, path, value)
-            elif op == "merge":
-                success, result, msg = handle_merge(test_content, path, value)
-            else:
-                success, result, msg = False, test_content, f"Неизвестная операция: {op}"
-            if success:
-                applied.append({"index": i, "op": op, "path": path, "msg": msg})
-                test_content = result
-            else:
-                failed.append({"index": i, "op": op, "path": path, "error": msg})
-        except Exception as e:
-            failed.append({"index": i, "op": op, "path": path, "error": str(e)})
-    diff = generate_simple_diff(original, test_content)
-    return {
-        "success": len(failed) == 0,
-        "applied": applied,
-        "failed": failed,
-        "diff": diff,
-        "result_content": test_content if len(failed) == 0 else None
-    }
-
-# ==================== УНИВЕРСАЛЬНЫЙ ОБРАБОТЧИК ПАТЧЕЙ ====================
-
-async def handle_apply_patch(message: dict, websocket: WebSocket):
+async def handle_save_file(message: dict, websocket: WebSocket):
+    """Прямое сохранение содержимого файла в GitHub (из Monaco редактора)."""
     session_id = message.get("session_id", "unknown")
-    patch_data = message.get("patch")
-    if not patch_data:
-        await manager.send_to(websocket, {"type": "error", "text": "❌ Нет данных патча"})
+    file_path = message.get("file_path", "").strip()
+    content = message.get("content", "")
+    if not file_path:
+        await manager.send_to(websocket, {"type": "error", "text": "❌ Не указан путь к файлу"})
         return
-    # Автораспаковка: если СР обернул патч в лишний ключ "patch"
-    # {"patch": {"target_module": ...}} → {"target_module": ...}
-    if isinstance(patch_data, dict) and "patch" in patch_data and "target_module" not in patch_data and "file_path" not in patch_data and "patches" not in patch_data:
-        patch_data = patch_data["patch"]
-        logger.info(f"🔧 Автораспаковка обёртки 'patch'")
-    # Если patches — dict вместо list, оборачиваем
-    if isinstance(patch_data, dict) and "patches" in patch_data and isinstance(patch_data["patches"], dict):
-        patch_data["patches"] = [patch_data["patches"]]
-        logger.info(f"🔧 Автофикс: patches dict → list")
     if not GITHUB_TOKEN:
         await manager.send_to(websocket, {"type": "error", "text": "❌ GitHub токен не настроен"})
         return
-    logger.info(f"📝 [{session_id[:12]}...] Применение универсального патча")
-    is_valid, error_msg = validate_patch_structure(patch_data)
-    if not is_valid:
-        await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка в структуре патча: {error_msg}"})
-        return
+    logger.info(f"💾 [{session_id[:12]}...] Сохранение файла: {file_path}")
     try:
-        if "patches" in patch_data:
-            patches = patch_data["patches"]
-        else:
-            patches = [patch_data]
-        results = []
+        url = f"{session_store.api_base}/contents/{file_path}"
+        headers = {"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"}
         async with httpx.AsyncClient() as client:
-            headers = {
-                "Authorization": f"token {GITHUB_TOKEN}",
-                "Accept": "application/vnd.github.v3+json"
+            # Получаем текущий SHA файла
+            resp = await client.get(url, headers=headers, timeout=10.0)
+            sha = resp.json().get("sha") if resp.status_code == 200 else None
+            content_b64 = base64.b64encode(content.encode("utf-8")).decode("utf-8")
+            payload = {
+                "message": f"💾 {file_path} | {session_id[:8]} | {datetime.now().strftime('%H:%M')}",
+                "content": content_b64,
+                "branch": "main"
             }
-            for patch in patches:
-                _tm = patch.get("target_module") or ""
-                if patch.get("file_path"):
-                    file_path = patch["file_path"]
-                elif _tm:
-                    # Добавляем .json только если его ещё нет
-                    file_path = _tm if _tm.endswith(".json") else _tm + ".json"
-                else:
-                    file_path = None
-                if not file_path:
-                    results.append({"file": "unknown", "status": "error", "message": "Не указан file_path или target_module"})
-                    continue
-                # ── ОПРЕДЕЛЯЕМ ТИП ПАТЧА ──
-                # JSON патчи (точечные изменения) - только для .json
-                # TEXT патчи (str_replace) - для .py, .html, .md, .txt и др.
-                is_json_file = file_path.endswith(".json")
-                url = f"{session_store.api_base}/contents/{file_path}"
-
-                # ═══ delete_file: физическое удаление файла через GitHub DELETE API ═══
-                if patch.get("delete_file"):
-                    resp_sha = await client.get(url, headers=headers)
-                    if resp_sha.status_code == 404:
-                        results.append({"file": file_path, "status": "error", "message": "Файл не найден"})
-                        continue
-                    if resp_sha.status_code != 200:
-                        results.append({"file": file_path, "status": "error", "message": f"Ошибка доступа: {resp_sha.status_code}"})
-                        continue
-                    file_sha = resp_sha.json().get("sha")
-                    del_payload = {
-                        "message": f"🗑️ Удалён {file_path} | {session_id[:8]} | {datetime.now().strftime('%H:%M')}",
-                        "sha": file_sha,
-                        "branch": "main"
-                    }
-                    del_resp = await client.request("DELETE", url, headers=headers, json=del_payload)
-                    if del_resp.status_code == 200:
-                        results.append({"file": file_path, "status": "success", "message": "Удалён ✓"})
-                        module_key = file_path[:-5] if file_path.endswith(".json") else file_path
-                        kernel.modules.pop(module_key, None)
-                        if module_key in kernel.module_list:
-                            kernel.module_list.remove(module_key)
-                            logger.info(f"🗑️ Модуль {module_key} удалён из ядра")
-                        logger.info(f"🗑️ Файл удалён: {file_path}")
-                    else:
-                        results.append({"file": file_path, "status": "error", "message": f"GitHub DELETE: {del_resp.status_code} — {del_resp.text[:200]}"})
-                    continue  # переходим к следующему патчу
-
-                resp = await client.get(url, headers=headers)
-                if resp.status_code != 200:
-                    if resp.status_code == 404:
-                        if "content" not in patch:
-                            results.append({"file": file_path, "status": "error", "message": "Файл не найден и content не предоставлен"})
-                            continue
-                        new_content = patch["content"]
-                        sha = None
-                    else:
-                        results.append({"file": file_path, "status": "error", "message": f"Ошибка доступа: {resp.status_code}"})
-                        continue
-                else:
-                    file_data = resp.json()
-                    current_content = base64.b64decode(file_data["content"]).decode("utf-8")
-                    sha = file_data["sha"]
-                    
-                    # ═══ ВАРИАНТ 1: Полная замена файла (content) ═══
-                    if "content" in patch:
-                        new_content = patch["content"]
-                    
-                    # ═══ ВАРИАНТ 2: JSON патчи (changes) — только для .json ═══
-                    elif "changes" in patch and is_json_file:
-                        try:
-                            current_json = json.loads(current_content)
-                        except json.JSONDecodeError:
-                            results.append({"file": file_path, "status": "error", "message": "Файл не является валидным JSON"})
-                            continue
-                        test_result = await apply_batch_patch_dry_run(current_json, patch["changes"])
-                        if not test_result["success"]:
-                            error_msg = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
-                            results.append({"file": file_path, "status": "error", "message": f"Ошибка применения: {error_msg}"})
-                            continue
-                        new_content = json.dumps(test_result["result_content"], indent=2, ensure_ascii=False)
-                    
-                    # ═══ ВАРИАНТ 3: TEXT патчи (replacements) — для .py, .html, .md и др. ═══
-                    elif "replacements" in patch:
-                        new_content = current_content
-                        replacements = patch["replacements"]
-                        if not isinstance(replacements, list):
-                            results.append({"file": file_path, "status": "error", "message": "replacements должен быть массивом"})
-                            continue
-                        
-                        failed_replacements = []
-                        for i, repl in enumerate(replacements):
-                            old_str = repl.get("old")
-                            new_str = repl.get("new")
-                            if old_str is None or new_str is None:
-                                failed_replacements.append(f"#{i}: нет old/new")
-                                continue
-                            
-                            # Проверяем что old_str встречается ровно 1 раз
-                            count = new_content.count(old_str)
-                            if count == 0:
-                                failed_replacements.append(f"#{i}: строка не найдена")
-                                continue
-                            elif count > 1:
-                                failed_replacements.append(f"#{i}: найдено {count} вхождений (должно быть 1)")
-                                continue
-                            
-                            # Применяем замену
-                            new_content = new_content.replace(old_str, new_str, 1)
-                        
-                        if failed_replacements:
-                            results.append({
-                                "file": file_path,
-                                "status": "error",
-                                "message": f"Ошибки замен: {'; '.join(failed_replacements)}"
-                            })
-                            continue
-                        
-                        # Отправляем системное сообщение об успехе
-                        await manager.send_to(websocket, {
-                            "type": "system",
-                            "text": f"✅ Патч для {file_path}: {len(replacements)} замен применено"
-                        })
-                    
-                    else:
-                        results.append({"file": file_path, "status": "error", "message": "Нет ни content, ни changes, ни replacements"})
-                        continue
-                content_b64 = base64.b64encode(new_content.encode("utf-8")).decode("utf-8")
-                commit_msg = f"📝 Патч от {session_id[:8]} | {datetime.now().strftime('%H:%M')}"
-                put_payload = {
-                    "message": commit_msg,
-                    "content": content_b64,
-                    "branch": "main"
-                }
-                if sha:
-                    put_payload["sha"] = sha
-                put_resp = await client.put(url, headers=headers, json=put_payload)
-                if put_resp.status_code in [200, 201]:
-                    commit_sha = put_resp.json().get("commit", {}).get("sha", "")[:7]
-                    is_create = resp.status_code == 404  # Был создан новый файл
-                    
-                    if is_create:
-                        results.append({"file": file_path, "status": "success", "message": f"Создан ({commit_sha}) ✨"})
-                        # Если создан новый .json модуль в simbiosis/ → добавляем в module_list
-                        if file_path.endswith(".json") and file_path.startswith("simbiosis/"):
-                            module_name = file_path[:-5]  # убираем .json
-                            if module_name not in kernel.module_list:
-                                kernel.module_list.append(module_name)
-                                logger.info(f"✨ Новый модуль добавлен: {module_name}")
-                                await manager.send_to(websocket, {
-                                    "type": "system",
-                                    "text": f"✨ Новый модуль {module_name} создан и добавлен в ядро"
-                                })
-                    else:
-                        results.append({"file": file_path, "status": "success", "message": f"Обновлён ({commit_sha})"})
-                    
-                    # Обновляем кэш модулей
-                    if file_path.endswith(".json") and file_path[:-5] in kernel.module_list:
-                        module_name = file_path[:-5]
-                        try:
-                            kernel.modules[module_name] = json.loads(new_content)
-                            logger.info(f"🔄 kernel.modules[{module_name}] обновлён из патча")
-                        except:
-                            pass
-                else:
-                    results.append({"file": file_path, "status": "error", "message": f"GitHub: {put_resp.status_code}"})
-        await manager.send_to(websocket, {"type": "patch_result", "results": results})
-        manager.add_to_context(session_id, "assistant", f"[Патч: {len(patches)} файлов]")
-
-        # Если патч затронул модули ядра — сбрасываем флаг инъекции
-        # При следующем сообщении СР получит обновлённые модули
-        patched_modules = [
-            p.get("target_module") or (p.get("file_path", "").replace(".json", "") if p.get("file_path", "").endswith(".json") else None)
-            for p in patches
-        ]
-        if any(m in kernel.module_list for m in patched_modules if m):
-            session = session_store.get_cached(session_id)
-            if session:
-                session["modules_injected"] = False
-                # Убираем старый инжект из истории чтобы не дублировать
-                session["messages"] = [m for m in session.get("messages", []) if not m.get("_protected")]
-                session_store.schedule_save(session_id, session)
-                logger.info(f"🔄 [{session_id[:12]}...] modules_injected сброшен — ядро обновится при следующем сообщении")
+            if sha:
+                payload["sha"] = sha
+            put_resp = await client.put(url, headers=headers, json=payload, timeout=15.0)
+            if put_resp.status_code in (200, 201):
+                commit_sha = put_resp.json().get("commit", {}).get("sha", "")[:7]
+                # Обновляем кэш если это модуль ядра
+                module_key = file_path[:-5] if file_path.endswith(".json") else None
+                if module_key and module_key in kernel.module_list:
+                    try:
+                        kernel.modules[module_key] = json.loads(content)
+                    except Exception:
+                        pass
+                await manager.send_to(websocket, {
+                    "type": "system",
+                    "text": f"✅ {file_path} сохранён ({commit_sha})"
+                })
+            else:
+                await manager.send_to(websocket, {
+                    "type": "error",
+                    "text": f"❌ GitHub: {put_resp.status_code} — {put_resp.text[:200]}"
+                })
     except Exception as e:
-        logger.error(f"Patch error: {e}")
-        await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка патча: {str(e)}"})
+        logger.error(f"Save file error: {e}")
+        await manager.send_to(websocket, {"type": "error", "text": f"❌ Ошибка сохранения: {str(e)}"})
+
 
 def detect_module_request(text: str) -> Optional[str]:
     text_lower = text.lower().strip()
