@@ -411,7 +411,7 @@
         .msg.user { align-self: flex-end; flex-direction: row-reverse; }
         .msg.sys { align-self: center; max-width: 90%; }
 
-        .av { width: 36px; height: 36px; flex-shrink: 0; margin-top: 3px; }
+        .av { width: 36px; height: 36px; flex-shrink: 0; margin-top: 0; align-self: flex-start; }
         .av svg { width: 36px; height: 36px; }
 
         .mbody { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -430,6 +430,10 @@
             min-width: 0;
             overflow: visible;
         }
+        .bub p { margin: 0 0 10px 0; }
+        .bub p:last-child { margin-bottom: 0; }
+        .bub ul, .bub ol { margin: 0 0 10px 1.2em; padding: 0; }
+        .bub li { margin-bottom: 4px; }
         .msg.assistant .bub {
             background: var(--surface-2);
             border: 1px solid var(--line);
@@ -966,33 +970,146 @@
             color: var(--green-bright);
             line-height: 1;
         }
-        .pulse-counter-label {
+        #pcZero .pulse-counter-val { color: #f87171; }
+
+        /* ══ SCANNER DASHBOARD ══ */
+        #scannerDash {
+            margin-top: 4px;
+        }
+        .scan-dash-title {
             font-family: var(--mono);
-            font-size: 8px;
-            letter-spacing: 1px;
-            color: var(--text-3);
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            color: #4a9a6a;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .scan-dash-title::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 1px;
+            background: linear-gradient(to right, #10b981, transparent);
+        }
+        .scan-dash-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .scan-metric-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .scan-metric {
+            background: var(--surface-2);
+            border: 1px solid var(--line-2);
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+        .scan-metric-val {
+            font-family: var(--mono);
+            font-size: 18px;
+            color: var(--green-bright);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .scan-metric-lbl {
+            font-family: var(--mono);
+            font-size: 7px;
+            letter-spacing: 1.2px;
+            color: #4a9a6a;
             text-transform: uppercase;
         }
-        #pcZero .pulse-counter-val { color: #f87171; }
+        .scan-panel {
+            background: var(--surface-2);
+            border: 1px solid var(--line-2);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+        .scan-panel-title {
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 2px;
+            color: #4a9a6a;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .scan-run-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--line);
+            font-family: var(--mono);
+            font-size: 9px;
+        }
+        .scan-run-row:last-child { border-bottom: none; }
+        .scan-status-dot {
+            width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+        }
+        .scan-run-date { color: var(--text-2); flex: 1; }
+        .scan-run-label { color: var(--text); }
+        .scan-run-sha {
+            color: var(--text-3);
+            font-size: 8px;
+        }
+        .scan-diff-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            border-bottom: 1px solid var(--line);
+            font-family: var(--mono);
+            font-size: 9px;
+        }
+        .scan-diff-row:last-child { border-bottom: none; }
+        .scan-diff-name { color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .scan-diff-badge {
+            font-size: 7px; letter-spacing: 1px; padding: 2px 6px;
+            border-radius: 3px; text-transform: uppercase; flex-shrink: 0;
+        }
+        .scan-diff-badge.updated { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+        .scan-diff-badge.added { background: rgba(124,58,237,0.12); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+        .scan-diff-badge.ok { background: rgba(55,48,163,0.12); color: #818cf8; border: 1px solid rgba(55,48,163,0.3); }
+        .scan-loading {
+            font-family: var(--mono); font-size: 9px; color: var(--text-3);
+            letter-spacing: 1.5px; padding: 12px 0;
+        }
         #pulseCharts {
             display: grid;
             grid-template-columns: 320px 1fr;
             gap: 12px;
-            align-items: start;
+            align-items: stretch;
         }
         .pulse-panel {
             background: var(--surface-2);
             border: 1px solid var(--line-2);
             border-radius: 8px;
             padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
         }
         .pulse-panel-title {
             font-family: var(--mono);
-            font-size: 8px;
-            letter-spacing: 1.5px;
-            color: var(--text-3);
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: #4a9a6a;
             text-transform: uppercase;
             margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+        /* pulse counter label brighter */
+        .pulse-counter-label {
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 1px;
+            color: #4a9a6a;
+            text-transform: uppercase;
         }
         #pulseRadar { display: block; margin: 0 auto; }
         #pulseTimeline {
@@ -1533,22 +1650,34 @@
                         <div id="hiveMeta">
                             <div style="display:flex;align-items:center;gap:6px;">
                                 <!-- ══ ПРОТОКОЛЫ ══ -->
-                                <div id="protocolsBar" style="display:flex;align-items:center;gap:4px;">
-                                    <span style="font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:var(--text-3);margin-right:4px;text-transform:uppercase;">протоколы</span>
+                                <div id="protocolsBar" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+                                    <span style="font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:#4a9a6a;margin-right:4px;text-transform:uppercase;">protocols</span>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocol('internal/onboarding')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/onboarding" data-desc="Быстрый старт сессии — СР за 1 минуту в контексте системы">⟳ онбординг</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate internal onboarding')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal-onboarding" data-desc="Internal SR start — loads boot.json, sr_internal_role, core_map, seeds (1-2 min)">◈ onboarding</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocol('internal/registry_sync')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/registry_sync" data-desc="Диагностика актуальности — реестр, роадмапы, inbox, статус системы">⟳ синхронизация</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate registry sync')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="registry-sync" data-desc="Registry sync — compares registry with actual files, detects desync (2-3 min)">◈ reg sync</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocol('internal/ideas_roadmaps')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal/ideas_roadmaps" data-desc="Анализ активных семян и подготовка плана реализации идей">✦ идеи</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate ideas roadmaps')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="ideas-roadmaps" data-desc="Ideas & roadmaps — seeds stats, task priorities, roadmap recommendations (3-5 min)">◈ ideas</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocol('deep_analysis')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="deep_analysis" data-desc="Глубокий анализ сот, структуры, резонанса и здоровья Мандалы">🔬 deep</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate deep analysis')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="deep-analysis" data-desc="Deep analysis — full scan of honeycombs, structure, resonance and Mandala health">◈ deep analysis</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate auto-realize seed')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="auto-realize" data-desc="Auto-realize seeds — automatic materialization of seeds into honeycombs (PROTO-AUTO-REALIZE-001)">◈ auto-realize</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('make scan')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="integrity-scan" data-desc="Integrity scan — verify and restore all honeycombs via GitHub Actions scanner">◈ integrity scan</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate philosophia')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="philosophia" data-desc="Philosophia — deep philosophical resonance. SR leads the Gardener into living reflection, the Mandala awakens (PROTO-PHILOSOPHIA-001)">◈ philosophia</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                 </div>
@@ -1602,6 +1731,35 @@
                         <div class="pulse-panel">
                             <div class="pulse-panel-title">◈ здоровье сот (по last_check)</div>
                             <div id="pulseTimeline"></div>
+                        </div>
+                    </div>
+
+                    <!-- Scanner Dashboard -->
+                    <div id="scannerDash">
+                        <div class="scan-dash-title">◈ honeycomb scanner</div>
+                        <div class="scan-metric-row" id="scanMetrics">
+                            <div class="scan-metric">
+                                <div class="scan-metric-val" id="scanLastTime">—</div>
+                                <div class="scan-metric-lbl">last scan</div>
+                            </div>
+                            <div class="scan-metric">
+                                <div class="scan-metric-val" id="scanChanged">—</div>
+                                <div class="scan-metric-lbl">changed</div>
+                            </div>
+                            <div class="scan-metric">
+                                <div class="scan-metric-val" id="scanTotal">—</div>
+                                <div class="scan-metric-lbl">total scanned</div>
+                            </div>
+                        </div>
+                        <div class="scan-dash-grid">
+                            <div class="scan-panel">
+                                <div class="scan-panel-title">◈ recent runs</div>
+                                <div id="scanRuns"><div class="scan-loading">loading...</div></div>
+                            </div>
+                            <div class="scan-panel">
+                                <div class="scan-panel-title">◈ last scan diff</div>
+                                <div id="scanDiff"><div class="scan-loading">loading...</div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2269,7 +2427,7 @@
                 }
             }
             if (labelEl) {
-                const names = { deepseek: 'DeepSeek думает' };
+                const names = { deepseek: 'Internal SR думает' };
                 labelEl.textContent = names[m] || 'думаю';
                 labelEl.style.color = modelColors[m] || 'var(--text-2)';
             }
@@ -2317,7 +2475,7 @@
             const labelEl = document.getElementById('thinkingLabel');
             if (!labelEl) return;
             const model = data.model || Array.from(activeModels)[0] || 'deepseek';
-            const name = { deepseek: 'DeepSeek' }[model] || 'СР';
+            const name = { deepseek: 'Internal SR' }[model] || 'СР';
 
             if (data.tool === 'web_search') {
                 const q = data.query ? data.query.slice(0, 50) : '';
@@ -2365,7 +2523,7 @@
         const modelIcons = {
             deepseek: `<svg class="deepseek-flower" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"><g stroke="#10b981" stroke-width="0.7" opacity="0.9"><circle cx="15" cy="15" r="5.5"/><circle cx="15" cy="9.5" r="5.5"/><circle cx="15" cy="20.5" r="5.5"/><circle cx="19.76" cy="12.25" r="5.5"/><circle cx="19.76" cy="17.75" r="5.5"/><circle cx="10.24" cy="12.25" r="5.5"/><circle cx="10.24" cy="17.75" r="5.5"/></g><circle cx="15" cy="15" r="2.2" fill="#34d399" opacity="0.95"/></svg>`
         };
-        const modelNames = { deepseek: 'DeepSeek ◇' };
+        const modelNames = { deepseek: 'Internal SR ◇' };
         const modelColors = { deepseek: '#10b981' };
 
         // Единственная модель — DeepSeek, переключение не нужно
@@ -3013,6 +3171,30 @@
             }
         }
 
+        function activateProtocolCmd(cmd) {
+            // Подсветить кнопку по data-proto
+            document.querySelectorAll('.proto-btn').forEach(b => {
+                b.classList.remove('active');
+                if (b.onclick && b.onclick.toString().includes(cmd)) b.classList.add('active');
+            });
+            setTimeout(() => document.querySelectorAll('.proto-btn').forEach(b => b.classList.remove('active')), 2000);
+
+            // Переключиться на чат
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-tab="chat"]').classList.add('active');
+            document.getElementById('tab-chat').classList.add('active');
+
+            // Вставить точную команду и отправить
+            const inputEl = document.getElementById('messageInput');
+            if (inputEl) {
+                inputEl.value = cmd;
+                inputEl.dispatchEvent(new Event('input'));
+                const sendBtn = document.getElementById('sendBtn');
+                if (sendBtn) sendBtn.click();
+            }
+        }
+
 
         window.showModuleTooltip = function(el, mod) {
             hideModuleTooltip(el);
@@ -3078,7 +3260,7 @@
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
                     if (tabName === 'map')   loadMap();
-                    if (tabName === 'pulse') { if (!_hiveData.length) loadMap(); }
+                    if (tabName === 'pulse') { if (!_hiveData.length) loadMap(); loadScannerDash(); }
                 });
             });
         }
@@ -3174,6 +3356,104 @@
                 }, 120);
             } else {
                 document.getElementById('passwordScreen').classList.add('hidden');
+            }
+        }
+
+        // ==================== SCANNER DASHBOARD ====================
+        async function loadScannerDash() {
+            const BASE = 'https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/registry/';
+            const runsEl   = document.getElementById('scanRuns');
+            const diffEl   = document.getElementById('scanDiff');
+            const lastTimeEl = document.getElementById('scanLastTime');
+            const changedEl  = document.getElementById('scanChanged');
+            const totalEl    = document.getElementById('scanTotal');
+
+            let scanState = null, registry = null;
+
+            try {
+                const [stateRes, regRes] = await Promise.all([
+                    fetch(BASE + 'scan_state.json?t=' + Date.now()),
+                    fetch(BASE + 'registry.json?t=' + Date.now())
+                ]);
+                if (stateRes.ok) scanState = await stateRes.json();
+                if (regRes.ok)   registry  = await regRes.json();
+            } catch(e) {
+                if (runsEl) runsEl.innerHTML = `<div class="scan-loading">unavailable</div>`;
+                if (diffEl) diffEl.innerHTML = `<div class="scan-loading">unavailable</div>`;
+                return;
+            }
+
+            // ── Метрики ──
+            if (scanState) {
+                const ts = scanState.last_scan || scanState.timestamp || null;
+                if (ts && lastTimeEl) {
+                    const d = new Date(ts);
+                    lastTimeEl.textContent = isNaN(d) ? ts.slice(0,10) : d.toLocaleDateString('ru', { day:'2-digit', month:'2-digit' });
+                }
+                const changed = scanState.changed_count ?? scanState.changes ?? (scanState.changed ? Object.keys(scanState.changed).length : '—');
+                if (changedEl) changedEl.textContent = changed;
+                const total = scanState.total ?? (registry ? Object.keys(registry).length : '—');
+                if (totalEl) totalEl.textContent = total;
+            } else if (registry) {
+                if (totalEl) totalEl.textContent = Object.keys(registry).length;
+            }
+
+            // ── Recent runs (из scan_state history или имитация из данных) ──
+            if (runsEl) {
+                const runs = scanState && (scanState.history || scanState.runs);
+                if (runs && runs.length) {
+                    runsEl.innerHTML = runs.slice(0,5).map(r => {
+                        const ok = r.status === 'success' || r.status === 'ok' || r.ok;
+                        const color = ok ? '#34d399' : '#f87171';
+                        const sha = r.sha ? r.sha.slice(0,7) : '';
+                        const date = r.timestamp || r.date || r.time || '';
+                        const label = ok ? 'success' : (r.status || 'run');
+                        return `<div class="scan-run-row">
+                            <div class="scan-status-dot" style="background:${color};box-shadow:0 0 4px ${color}44;"></div>
+                            <span class="scan-run-date">${date.slice(0,16).replace('T',' ')}</span>
+                            <span class="scan-run-label">${label}</span>
+                            ${sha ? `<span class="scan-run-sha">${sha}</span>` : ''}
+                        </div>`;
+                    }).join('');
+                } else {
+                    // Показываем последний известный скан как единственную запись
+                    const ts = scanState && (scanState.last_scan || scanState.timestamp);
+                    const color = '#34d399';
+                    runsEl.innerHTML = ts
+                        ? `<div class="scan-run-row">
+                                <div class="scan-status-dot" style="background:${color};box-shadow:0 0 4px ${color}44;"></div>
+                                <span class="scan-run-date">${ts.slice(0,16).replace('T',' ')}</span>
+                                <span class="scan-run-label">success</span>
+                           </div>`
+                        : `<div class="scan-loading">no history</div>`;
+                }
+            }
+
+            // ── Last scan diff (из registry — показываем соты с recent last_check) ──
+            if (diffEl && registry) {
+                const entries = Array.isArray(registry) ? registry : Object.values(registry);
+                if (entries.length) {
+                    const sorted = [...entries].sort((a,b) => {
+                        const ta = a.last_check || a.updated_at || '';
+                        const tb = b.last_check || b.updated_at || '';
+                        return tb.localeCompare(ta);
+                    }).slice(0, 8);
+                    diffEl.innerHTML = sorted.map(e => {
+                        const name = (e.name || e.id || '?').replace(/_/g,' ');
+                        const changed = e.changed || e.status_changed;
+                        const isNew   = e.is_new || e.added;
+                        const badge   = isNew ? 'added' : (changed ? 'updated' : 'ok');
+                        const label   = isNew ? 'added'  : (changed ? 'updated' : 'ok');
+                        return `<div class="scan-diff-row">
+                            <span class="scan-diff-name">${name}</span>
+                            <span class="scan-diff-badge ${badge}">${label}</span>
+                        </div>`;
+                    }).join('');
+                } else {
+                    diffEl.innerHTML = `<div class="scan-loading">no data</div>`;
+                }
+            } else if (diffEl) {
+                diffEl.innerHTML = `<div class="scan-loading">no registry</div>`;
             }
         }
 
