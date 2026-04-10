@@ -1,4 +1,4 @@
-name: Honeycomb Scanner
+﻿name: Honeycomb Scanner
 
 on:
   push:
@@ -43,9 +43,9 @@ jobs:
           from datetime import datetime
           from pathlib import Path
 
-          registry_path = Path("honeycombs/registry/index.json")
+          registry_path = Path("honeycombs/registry/registry.json")
           if not registry_path.exists():
-              print("registry/index.json not found, skipping report")
+              print("registry/registry.json not found, skipping report")
               exit(0)
 
           with open(registry_path, "r", encoding="utf-8-sig") as f:
@@ -65,11 +65,11 @@ jobs:
           now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
           lines = [
-              "# Honeycomb Scan Report  Mandala Symbiosis",
+              f"# Honeycomb Scan Report  Mandala Symbiosis",
               "",
               f"**System:** Mandala Symbiosis",
               f"**Date:** {now}",
-              f"**Scanner:** honeycomb_scanner.py",
+              f"**Scanner:** honeycomb_scanner.py v1.1.0",
               "",
               "## Statistics",
               "",
@@ -129,7 +129,10 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
-          git add honeycombs/registry/index.json
+          # Stash any unstaged changes before pull
+          git stash
+
+          git add honeycombs/registry/registry.json
           git add honeycombs/registry/scan_state.json || true
           git add reports/scan_report.md
 
@@ -141,5 +144,8 @@ jobs:
             git push origin HEAD:main
             echo "Scan results pushed"
           fi
+
+          # Restore stashed changes
+          git stash pop || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
