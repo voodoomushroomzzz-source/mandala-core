@@ -39,6 +39,7 @@
         {"category": "broken_links", "description": "Paths pointing to non-existent files"},
         {"category": "redundant_fields", "description": "Fields present in >80% of files but not in standard"},
         {"category": "missing_layer", "description": "Honeycombs without 'layer' field in identity", "priority": "LOW"},
-        {"category": "zero_resonance", "description": "Honeycombs with resonance '0%'  should be updated", "priority": "LOW"}
+        {"category": "zero_resonance", "description": "Honeycombs with resonance '0%'  should be updated", "priority": "LOW"},
+        {"category": "old_backups", "description": "Backup files in core_map/registry/backups/ older than 14 days  suggest cleanup", "priority": "LOW"}
     ]
 }
