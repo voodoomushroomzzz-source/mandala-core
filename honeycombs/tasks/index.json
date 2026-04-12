@@ -1,4 +1,4 @@
-{
+﻿{
     "identity": {
         "module_id": "TASKS-MANIFEST-004",
         "name": "Tasks Honeycomb Manifest",
@@ -38,15 +38,6 @@
             }
         ]
     },
-    "active_tasks_summary": [
-        {"id": "T-007", "priority": "HIGH", "status": "refined", "title": "Mobile Engineer Chat (Android)"},
-        {"id": "—", "priority": "HIGH", "status": "in_progress", "title": "Обновление Telegram-бота"},
-        {"id": "T-003", "priority": "MEDIUM", "status": "todo", "title": "Ahimsa Auto-Filter"},
-        {"id": "T-004", "priority": "MEDIUM", "status": "todo", "title": "Deadline Sentinel"},
-        {"id": "T-005", "priority": "MEDIUM", "status": "todo", "title": "Scout Agent"},
-        {"id": "T-006", "priority": "MEDIUM", "status": "todo", "title": "Claude Code Integration"},
-        {"id": "—", "priority": "LOW", "status": "in_progress", "title": "Translate Core to English"}
-    ],
     "navigation": {
         "parent_map": "honeycombs/core_map/index.json",
         "first_file": "basic_task.json"
@@ -55,7 +46,7 @@
         "total_files": 7,
         "total_size_kb": 16.0,
         "last_updated": "2026-04-12",
-        "notes": "v3.1.0: added active_tasks_summary for quick overview."
+        "notes": "v3.1.0: added T-007 (Engineer Chat Garden integration). Updated T-002 (Bot as Gentle Companion)."
     },
     "resonance": {
         "status": "fully_resonant",
@@ -65,6 +56,6 @@
     "health": {
         "status": "healthy",
         "last_check": "2026-04-12",
-        "notes": "v3.1.0 — active tasks: 7."
+        "notes": "v3.1.0  active tasks: 7."
     }
 }
