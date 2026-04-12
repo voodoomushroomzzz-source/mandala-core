@@ -1,43 +1,49 @@
-﻿{
-    "task_id": "T-002",
-    "name": "Telegram Bot  Gentle Companion for Garden",
-    "status": "in_progress",
-    "priority": "HIGH",
-    "deadline": "2026-05-01",
-    "created": "2026-04-01",
-    "updated": "2026-04-12",
-    "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
-    "tags": ["telegram_bot", "garden", "companion", "ahimsa", "active"],
-    "progress": 50,
-    "garden_ref": "honeycombs/garden/",
-    "deliverables": [
-        "/start  onboarding questionnaire, creates gardener.json sota",
-        "/profile  display resonance, top achievements, active tasks",
-        "/achievements  list achievements + add new",
-        "/resonance  current resonance level + growth history",
-        "/ask  dialogue with Gentle SR Companion",
-        "Proactive messages: morning greeting, evening check, gentle reminders (Ahimsa: max 1/day)",
-        "GitHub API integration for reading/updating gardener.json",
-        "Soft-fail mode when API unavailable"
-    ],
-    "requires": [
-        "honeycombs/garden/architecture.json",
-        "honeycombs/garden/ideology.json",
-        "honeycombs/personal_gardeners/gardener_template.json"
-    ],
-    "acceptance_criteria": [
-        "All /commands respond correctly with gardener data",
-        "Proactive messages follow silence_policy and ahimsa_guardrails",
-        "Bot continues in degraded mode when GitHub API is down",
-        "Gardener can /leave gracefully"
-    ],
-    "depends_on": [
-        "M1-T1 (personal_gardeners/ structure)",
-        "M1-T2 (achievements catalog)"
-    ],
-    "health": {
-        "status": "healthy",
-        "last_check": "2026-04-12",
-        "notes": "Updated to reflect Garden MVP requirements (M1-T3, M1-T4, M2-T1, M3-T1)"
-    }
+{
+    "task_id":  "T-20260408-1030",
+    "name":  "Telegram Bot  Gentle Companion for Garden",
+    "status":  "in_progress",
+    "priority":  "HIGH",
+    "deadline":  "2026-05-01",
+    "created":  "2026-04-01",
+    "updated":  "2026-04-12",
+    "description":  "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
+    "tags":  [
+                 "telegram_bot",
+                 "garden",
+                 "companion",
+                 "ahimsa",
+                 "active"
+             ],
+    "progress":  50,
+    "garden_ref":  "honeycombs/garden/",
+    "deliverables":  [
+                         "/start  onboarding questionnaire, creates gardener.json sota",
+                         "/profile  display resonance, top achievements, active tasks",
+                         "/achievements  list achievements + add new",
+                         "/resonance  current resonance level + growth history",
+                         "/ask  dialogue with Gentle SR Companion",
+                         "Proactive messages: morning greeting, evening check, gentle reminders (Ahimsa: max 1/day)",
+                         "GitHub API integration for reading/updating gardener.json",
+                         "Soft-fail mode when API unavailable"
+                     ],
+    "requires":  [
+                     "honeycombs/garden/architecture.json",
+                     "honeycombs/garden/ideology.json",
+                     "honeycombs/personal_gardeners/gardener_template.json"
+                 ],
+    "acceptance_criteria":  [
+                                "All /commands respond correctly with gardener data",
+                                "Proactive messages follow silence_policy and ahimsa_guardrails",
+                                "Bot continues in degraded mode when GitHub API is down",
+                                "Gardener can /leave gracefully"
+                            ],
+    "depends_on":  [
+                       "M1-T1 (personal_gardeners/ structure)",
+                       "M1-T2 (achievements catalog)"
+                   ],
+    "health":  {
+                   "status":  "healthy",
+                   "last_check":  "2026-04-12",
+                   "notes":  "Updated to reflect Garden MVP requirements (M1-T3, M1-T4, M2-T1, M3-T1)"
+               }
 }
