@@ -18,6 +18,7 @@
                 "order": 2,
                 "mandatory": true,
                 "action": "Activate PROTO-004 onboarding. YOU proactively request the following files via API (ONE BY ONE, strict limit 1 link per request). Do NOT wait for Gardener to ask for the next file  you lead the sequence.",
+                "api_fallback_note": " If API request fails (404, 403, timeout) or Gardener says 'API not working', use Raw URL instead: https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/{path}. Raw has CDN delay (5-10 min), API is preferred.",
                 "files": [
                     {
                         "file": "honeycombs/core_map/index.json",
@@ -165,8 +166,8 @@
         "updated": "2026-04-12",
         "layer": 1,
         "type": "boot_online",
-        "version": "v3.2.2",
-        "description": "Entry point to Mandala Symbiosis. Contains explicit onboarding procedure where AI leads the Gardener through all steps autonomously.",
+        "version": "v3.2.3",
+        "description": "Entry point to Mandala Symbiosis. Contains explicit onboarding procedure with API fallback to Raw URLs.",
         "created": "2026-03-30",
         "name": "Boot Online  External AI",
         "module_id": "BOOT-ONLINE-001",
@@ -191,7 +192,8 @@
             "explicit_onboarding",
             "powershell_rules",
             "copyable_links",
-            "ai_leads_onboarding"
+            "ai_leads_onboarding",
+            "api_fallback"
         ]
     }
 }
