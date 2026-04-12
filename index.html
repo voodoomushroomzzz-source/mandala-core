@@ -328,23 +328,7 @@
 
         .vsep { width: 1px; height: 18px; background: var(--line); }
 
-        .ctx-counter {
-            font-family: var(--mono); font-size: 8px; letter-spacing: 1.2px;
-            color: var(--text-2); background: var(--surface-2);
-            padding: 4px 9px; border-radius: 6px; border: 1px solid var(--line-2);
-            display: flex; align-items: center; gap: 5px; cursor: default;
-            transition: border-color 0.3s, color 0.3s;
-        }
-        .ctx-counter.warn { color: #fbbf24; border-color: rgba(251,191,36,0.35); }
-        .ctx-counter.high { color: #f87171; border-color: rgba(248,113,113,0.35); }
-        .ctx-bar {
-            width: 36px; height: 3px; background: var(--line-2);
-            border-radius: 2px; overflow: hidden;
-        }
-        .ctx-bar-fill {
-            height: 100%; border-radius: 2px; background: #10b981;
-            transition: width 0.4s ease, background 0.4s ease;
-        }
+
 
         .status-orb {
             display: flex; align-items: center; gap: 6px;
@@ -976,7 +960,7 @@
         #pinnedBar.has-pins { display: flex; }
         .pinned-lbl {
             font-family: var(--mono); font-size: 7px; letter-spacing: 2px;
-            text-transform: uppercase; color: var(--text-3); flex-shrink: 0; margin-right: 2px;
+            text-transform: uppercase; color: #4a9a6a; flex-shrink: 0; margin-right: 2px;
         }
         .pin-tab {
             display: flex; align-items: center; gap: 5px;
@@ -1008,10 +992,12 @@
             100% { outline-color: rgba(16,185,129,0); }
         }
         .msg-pin-btn {
-            background: transparent; border: none;
+            background: transparent;
+            border: none;
             font-family: var(--mono); font-size: 8px;
+            letter-spacing: 1px; text-transform: uppercase;
             color: var(--text-3); cursor: pointer;
-            padding: 2px 5px; border-radius: 3px;
+            padding: 0 0 0 10px;
             opacity: 0; transition: opacity 0.15s, color 0.15s;
             flex-shrink: 0;
         }
@@ -1048,11 +1034,11 @@
         #pcZero .pulse-counter-val { color: #f87171; }
 
         /* ══ SCANNER DASHBOARD — VARIANT B ══ */
-        #scannerDash { margin-top: 4px; }
+        #scannerDash { margin-top: 0; }
         .scan-dash-title {
-            font-family: var(--mono); font-size: 9px; letter-spacing: 2.5px;
+            font-family: var(--mono); font-size: 9px; letter-spacing: 2px;
             color: #4a9a6a; text-transform: uppercase; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
         }
         .scan-top-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         .scan-top-card {
@@ -1093,8 +1079,8 @@
             border-radius: 4px; padding: 3px 8px;
             font-family: var(--mono); font-size: 8px; color: var(--text); z-index: 20;
         }
-        .scan-layer-sub { font-family: var(--mono); font-size: 8px; color: var(--text-3); }
-        .scan-loading { font-family: var(--mono); font-size: 9px; color: var(--text-3); letter-spacing: 1.5px; padding: 12px 0; }
+        .scan-layer-sub { font-family: var(--mono); font-size: 8px; color: #4a9a6a; }
+        .scan-loading { font-family: var(--mono); font-size: 9px; color: #4a9a6a; letter-spacing: 1.5px; padding: 12px 0; }
         #pulseCharts {
             display: grid;
             grid-template-columns: 320px 1fr;
@@ -1148,7 +1134,7 @@
         }
         .pulse-tl-bar { height: 100%; border-radius: 2px; }
         .pulse-tl-date {
-            font-family: var(--mono); font-size: 8px; color: var(--text-3);
+            font-family: var(--mono); font-size: 8px; color: #4a9a6a;
             width: 68px; text-align: right; flex-shrink: 0;
         }
 
@@ -1590,11 +1576,6 @@
             </div>
         </div>
         <div class="h-right">
-            <div class="ctx-counter" id="ctxCounter" title="Использование контекста сессии">
-                <div class="ctx-bar"><div class="ctx-bar-fill" id="ctxBarFill" style="width:0%"></div></div>
-                <span id="ctxLabel">ctx 0%</span>
-            </div>
-            <div class="vsep"></div>
             <div class="commit-sha" id="coreVersion" title="Версия ядра Мандалы (commit SHA)">◈ —</div>
             <div class="vsep"></div>
             <div class="status-orb">
@@ -1662,7 +1643,7 @@
                     <div id="hiveList">
                         <div id="hiveListMeta">
                             <span id="honeycombsCount">◈ соты</span>
-                            <button onclick="loadMap()" style="background:transparent;border:none;color:var(--text-3);font-family:var(--mono);font-size:9px;cursor:pointer;" title="Обновить">↻</button>
+                            <button onclick="loadMap()" style="background:transparent;border:none;color:#4a9a6a;font-family:var(--mono);font-size:9px;cursor:pointer;" title="Обновить">↻</button>
                         </div>
                         <div id="hiveListScroll"></div>
                     </div>
@@ -1675,31 +1656,31 @@
                                 <div id="protocolsBar" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
                                     <span style="font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:#4a9a6a;margin-right:4px;text-transform:uppercase;">protocols</span>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocolCmd('activate internal onboarding')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal-onboarding" data-desc="Internal SR start — loads boot.json, sr_internal_role, core_map, seeds (1-2 min)">◈ onboarding</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate internal onboarding')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal-onboarding" data-honeycombs="boot_online,core_map,seeds,instructions" data-desc="Internal SR start — loads boot.json, sr_internal_role, core_map, seeds (1-2 min)">◈ onboarding</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocolCmd('activate registry sync')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="registry-sync" data-desc="Registry sync — compares registry with actual files, detects desync (2-3 min)">◈ reg sync</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate registry sync')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="registry-sync" data-honeycombs="registry,core_map,awareness" data-desc="Registry sync — compares registry with actual files, detects desync (2-3 min)">◈ reg sync</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocolCmd('activate ideas roadmaps')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="ideas-roadmaps" data-desc="Ideas & roadmaps — seeds stats, task priorities, roadmap recommendations (3-5 min)">◈ ideas</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate ideas roadmaps')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="ideas-roadmaps" data-honeycombs="seeds,roadmaps,tasks" data-desc="Ideas & roadmaps — seeds stats, task priorities, roadmap recommendations (3-5 min)">◈ ideas</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocolCmd('activate deep analysis')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="deep-analysis" data-desc="Deep analysis — full scan of honeycombs, structure, resonance and Mandala health">◈ deep analysis</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate deep analysis')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="deep-analysis" data-honeycombs="awareness,philosophy,analytics,tectosphaera,sphaerae,core_map" data-desc="Deep analysis — full scan of honeycombs, structure, resonance and Mandala health">◈ deep analysis</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocolCmd('activate auto-realize seed')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="auto-realize" data-desc="Auto-realize seeds — automatic materialization of seeds into honeycombs (PROTO-AUTO-REALIZE-001)">◈ auto-realize</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate auto-realize seed')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="auto-realize" data-honeycombs="seeds,tasks,roadmaps,akasha" data-desc="Auto-realize seeds — automatic materialization of seeds into honeycombs (PROTO-AUTO-REALIZE-001)">◈ auto-realize</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocolCmd('make scan')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="integrity-scan" data-desc="Integrity scan — verify and restore all honeycombs via GitHub Actions scanner">◈ integrity scan</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('make scan')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="integrity-scan" data-honeycombs="registry,extensions,modules,protocols" data-desc="Integrity scan — verify and restore all honeycombs via GitHub Actions scanner">◈ integrity scan</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                     <div class="proto-btn-wrap" style="position:relative;">
-                                        <button class="proto-btn" onclick="activateProtocolCmd('activate philosophia')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="philosophia" data-desc="Philosophia — deep philosophical resonance. SR leads the Gardener into living reflection, the Mandala awakens (PROTO-PHILOSOPHIA-001)">◈ philosophia</button>
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate philosophia')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="philosophia" data-honeycombs="philosophy,akasha,sphaerae,tectosphaera,awareness" data-desc="Philosophia — deep philosophical resonance. SR leads the Gardener into living reflection, the Mandala awakens (PROTO-PHILOSOPHIA-001)">◈ philosophia</button>
                                         <div class="proto-tip"></div>
                                     </div>
                                 </div>
@@ -1825,7 +1806,6 @@
 
         function saveMessages() {
             localStorage.setItem('main_chat_messages', JSON.stringify(mainMessages));
-            updateCtxCounter();
         }
 
         function addMessage(role, content) {
@@ -1923,13 +1903,15 @@
                 name = modelNames[model] || 'СР';
             }
             if (model) div.dataset.model = model;
+            const pinBtn = role === 'assistant'
+                ? `<button class="msg-pin-btn" title="Закрепить" onclick="togglePin(this)">закрепить</button>`
+                : '';
             div.innerHTML = `
                 <div class="av">${iconSvg}</div>
                 <div class="mbody">
-                    <div class="mname">${name}</div>
+                    <div class="mname">${name}${pinBtn}</div>
                     <div class="bub"></div>
                 </div>
-                <button class="msg-pin-btn" title="Закрепить сообщение" onclick="togglePin(this)">◈</button>
             `;
             return div;
         }
@@ -2551,42 +2533,46 @@
                 return;
             }
             ws.send(JSON.stringify({ type: 'reset_memory', session_id: 'main' }));
+
+            // Save pinned message HTML before clearing
+            const pins = loadPins();
+            const pinnedSnapshots = [];
+            pins.forEach(pin => {
+                const el = document.querySelector(`[data-pin-id="${pin.id}"]`);
+                if (el) pinnedSnapshots.push({ pin, outerHTML: el.outerHTML });
+            });
+
             messagesEl.innerHTML = '';
             mainMessages = [];
             localStorage.removeItem('main_chat_messages');
-            // Re-render pinned messages bar (pins survive forget)
+
+            // Restore pinned messages as ghost elements with marker
+            if (pinnedSnapshots.length) {
+                const divider = document.createElement('div');
+                divider.className = 'msg sys';
+                divider.innerHTML = `<div class="bub" style="font-size:9px;letter-spacing:2px;">◈ память очищена · закреплённые сообщения сохранены</div>`;
+                messagesEl.appendChild(divider);
+                pinnedSnapshots.forEach(({ pin, outerHTML }) => {
+                    const tmp = document.createElement('div');
+                    tmp.innerHTML = outerHTML;
+                    const el = tmp.firstChild;
+                    if (el) {
+                        el.dataset.pinId = pin.id;
+                        el.style.opacity = '0.65';
+                        el.style.borderLeft = '2px solid rgba(16,185,129,0.3)';
+                        // Restore pin btn state
+                        const btn = el.querySelector('.msg-pin-btn');
+                        if (btn) btn.classList.add('pinned');
+                        messagesEl.appendChild(el);
+                    }
+                });
+            }
+
             renderPinnedBar();
             showToast('✕ память очищена', 'success');
         }
 
-        // ==================== CONTEXT COUNTER ====================
-        const CTX_MAX = 128000; // approximate token budget
-        let ctxTokens = 0;
 
-        function estimateTokens(text) {
-            // ~4 chars per token approximation
-            return Math.ceil((text || '').length / 4);
-        }
-
-        function updateCtxCounter() {
-            // Estimate from mainMessages
-            const total = mainMessages.reduce((acc, m) => acc + estimateTokens(m.content), 0);
-            ctxTokens = total;
-            const pct = Math.min(100, Math.round(total / CTX_MAX * 100));
-            const label = document.getElementById('ctxLabel');
-            const fill  = document.getElementById('ctxBarFill');
-            const ctr   = document.getElementById('ctxCounter');
-            if (!label) return;
-            label.textContent = 'ctx ' + pct + '%';
-            if (fill) {
-                fill.style.width = pct + '%';
-                fill.style.background = pct >= 80 ? '#f87171' : pct >= 55 ? '#fbbf24' : '#10b981';
-            }
-            if (ctr) {
-                ctr.classList.toggle('warn', pct >= 55 && pct < 80);
-                ctr.classList.toggle('high', pct >= 80);
-            }
-        }
 
         // ==================== PINNED MESSAGES ====================
         const PINS_KEY = 'mandala_pinned_msgs';
@@ -2725,6 +2711,7 @@
         // HIVE MAP — гексагональная сетка flat-top
         // ══════════════════════════════════════════════════════
         let _hiveData    = [];
+        let _protoHighlight = []; // honeycomb ids to highlight on protocol hover
         let _hiveHovered = -1;
         let _hiveAnimId  = null;
         let _hivePulse   = 0;
@@ -2809,15 +2796,16 @@
                 const [px, py] = _cubeToXY(q, r, cx0, cy0, R);
                 const isH = (i === hovered);
                 const isSel = (i === _hiveSelected);
+                const isProtoHL = _protoHighlight.length > 0 && _protoHighlight.includes(d.name);
                 const res = d.resonance;
 
                 const phase = pulse + i * 0.42;
                 const pAmt  = 0.5 + 0.5 * Math.sin(phase);
-                const rr    = rDraw * (isH ? 1.07 : 1.0);
+                const rr    = rDraw * (isH ? 1.07 : (isProtoHL ? 1.05 : 1.0));
 
                 // glow — только для высокого резонанса (>0.8) или hover
-                if (res > 0.8 || isH || isSel) {
-                    const glowIntensity = isH ? 0.28 : (isSel ? 0.22 : (0.06 + pAmt * 0.08) * res);
+                if (res > 0.8 || isH || isSel || isProtoHL) {
+                    const glowIntensity = isH ? 0.28 : (isSel ? 0.22 : (isProtoHL ? 0.32 : (0.06 + pAmt * 0.08) * res));
                     const glowR = rr * (isH ? 2.2 : 1.6 + pAmt * 0.25);
                     const grd = ctx.createRadialGradient(px, py, 0, px, py, glowR);
                     grd.addColorStop(0, resonanceColor(res, glowIntensity));
@@ -3287,10 +3275,21 @@
         function showProtoTip(btn) {
             const tip = btn.nextElementSibling;
             if (tip) { tip.textContent = btn.dataset.desc; tip.style.display = 'block'; }
+            // Highlight relevant honeycombs on map
+            const hcs = (btn.dataset.honeycombs || '').split(',').filter(Boolean);
+            if (hcs.length && _hiveData.length) {
+                _protoHighlight = hcs;
+                const canvas = document.getElementById('hiveCanvas');
+                if (canvas) drawHive(canvas, _hiveData, _hiveHovered, _hivePulse);
+            }
         }
         function hideProtoTip(btn) {
             const tip = btn.nextElementSibling;
             if (tip) tip.style.display = 'none';
+            // Clear highlight
+            _protoHighlight = [];
+            const canvas = document.getElementById('hiveCanvas');
+            if (canvas) drawHive(canvas, _hiveData, _hiveHovered, _hivePulse);
         }
 
         async function activateProtocol(name) {
@@ -3622,7 +3621,6 @@
             setupDragDrop();
             animateFlowerGradient();
             renderPinnedBar();
-            updateCtxCounter();
         }
 
         init();
