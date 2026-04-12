@@ -1,24 +1,56 @@
-﻿{
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-08",
-                   "notes":  "РЎРѕР·РґР°РЅРѕ РїСЂРё РёСЃРїСЂР°РІР»РµРЅРёРё SEED_018"
-               },
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "meta":  {
-                 "parent_honeycomb":  "core_map",
-                 "honeycomb_name":  "extensions"
-             },
-    "identity":  {
-                     "name":  "extensions",
-                     "version":  "v2.2.0",
-                     "updated":  "2026-04-08",
-                     "module_id":  "extensions",
-                     "layer":  "foundation",
-                     "type":  "meta_container"
-                 }
+{
+  "identity": {
+    "module_id": "EXTENSIONS-MANIFEST-001",
+    "name": "Extensions",
+    "version": "v2.2.0",
+    "created": "2026-03-15",
+    "updated": "2026-04-13",
+    "layer": "foundation",
+    "type": "meta_container",
+    "status": "active",
+    "priority": "low",
+    "tags": ["extensions", "plugins", "modules", "expandable"]
+  },
+  "meta": {
+    "honeycomb_name": "extensions",
+    "parent_honeycomb": "core_map",
+    "description": "Extensions honeycomb — container for optional Mandala modules and plugins. Everything that expands the core without modifying it."
+  },
+  "structure": {
+    "segments": {
+      "plugins": {
+        "folder": "plugins/",
+        "description": "Optional plugins extending Mandala functionality."
+      },
+      "integrations": {
+        "folder": "integrations/",
+        "description": "Third-party integrations and connectors."
+      },
+      "experiments": {
+        "folder": "experiments/",
+        "description": "Experimental features — test garden for new ideas."
+      }
+    }
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related": [
+      "honeycombs/modules/index.json",
+      "honeycombs/seeds/index.json"
+    ]
+  },
+  "content": {
+    "philosophy": "Extensions are the natural expansion of Mandala. They do not modify the core — they grow alongside it. Each extension is a new petal, not a patch.",
+    "rule": "Extensions must follow Ahimsa: no breaking changes, no forced dependencies, gentle integration."
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-13",
+    "notes": "Container ready. Awaiting SEED_018."
+  }
 }
