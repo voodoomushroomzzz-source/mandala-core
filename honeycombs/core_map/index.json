@@ -73,7 +73,7 @@
     "health":  {
                    "status":  "healthy",
                    "last_check":  "2026-04-12",
-                   "notes":  "v3.3.0: added honeycombs/garden to references. Garden  first living prototype of PHI-009."
+                   "notes":  "v3.3.0: added honeycombs/garden to references. Garden is first living prototype of PHI-009."
                },
     "identity":  {
                      "updated":  "2026-04-12",
@@ -116,6 +116,7 @@
                                           "honeycombs/modules/index.json",
                                           "honeycombs/sphaerae/index.json",
                                           "honeycombs/tectosphaera/index.json",
+                                          "honeycombs/garden/index.json",
                                           "honeycombs/garden/index.json"
                                       ],
                        "children":  [
