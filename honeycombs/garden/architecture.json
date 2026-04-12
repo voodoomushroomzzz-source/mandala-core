@@ -2,7 +2,7 @@
     "identity": {
         "module_id": "GARDEN-ARCH-001",
         "name": "Technical Architecture of Garden",
-        "version": "v1.2.0",
+        "version": "v1.3.0",
         "created": "2026-04-12",
         "layer": 2,
         "type": "architecture",
@@ -284,5 +284,38 @@
                 "annotations": "Points = achievements, size of point = resonance_bonus"
             }
         }
+    },
+    "security": {
+        "description": "Security measures for Garden  protecting sacred data and system integrity",
+        "github_token": {
+            "storage": "GITHUB_TOKEN stored in .env file of bot (Render Environment Variables). NEVER in repo.",
+            "scope": "Only repo scope, limited to mandala-core.",
+            "audit": "Token usage logged. Suspicious activity triggers alert to Gardener."
+        },
+        "soft_fail": {
+            "principle": "If bot cannot reach GitHub API, it continues in degraded mode.",
+            "behavior": "Reads local copy of gardener.json if available. Queues writes for later sync. Notifies gardener: 'I'm having trouble reaching the Garden. Your data is safe locally.'",
+            "recovery": "When connection restored, auto-syncs queued changes."
+        },
+        "ahimsa_guardrails": {
+            "message_filter": "Before sending any proactive message, bot checks: (1) Is this within allowed time window? (2) Has gardener interacted recently? (3) Is this the only message today?",
+            "veto_rights": "SR may soft-veto any message that feels pressuring. Veto is logged and reviewed."
+        }
+    },
+    "graceful_exit": {
+        "description": "How a gardener can leave the Garden  with dignity and data sovereignty",
+        "initiation": "Gardener sends /leave command in bot.",
+        "confirmation": "Bot asks: 'Are you sure you want to archive your Garden? Your data will be saved, but Companion will stop writing. You can return anytime.'",
+        "action": "Gardener confirms  sota moved to honeycombs/personal_gardeners/archive/{gardener_id}/. Gardener receives final message: 'Your Garden sleeps. Thank you for growing with me. Return whenever you wish.'",
+        "data_retention": "Archived sota kept indefinitely unless gardener explicitly requests deletion.",
+        "deletion": "/delete_all command permanently removes sota after double confirmation."
+    },
+    "silence_policy": {
+        "description": "How Companion behaves when gardener is silent  Ahimsa first",
+        "phase_1_days_1_7": "Normal operation. If gardener doesn't reply, Companion assumes they are busy. No additional messages.",
+        "phase_2_days_8_30": "Companion sends ONE gentle check-in: 'I'm here if you need me. No pressure to reply.'",
+        "phase_3_days_31_plus": "Companion stops all proactive messages. Gardener can still use /ask and all commands. Sota remains intact.",
+        "resonance_decay": "If no new achievements for 14 days, resonance_level slowly decreases by 1% per week (min 10%). This is not punishment  it reflects natural ebb of attention.",
+        "return": "When gardener returns, Companion greets: 'Welcome back. Your Garden missed you.' Resonance restores gradually with new activity."
     }
 }
