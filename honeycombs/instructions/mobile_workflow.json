@@ -1,1 +1,142 @@
-{"name": "Mobile Workflow", "version": "v1.0.0"}
+{
+    "identity": {
+        "module_id": "INSTR-MOBILE-WORKFLOW-001",
+        "name": "Mobile Workflow — Working with Mandala from Android",
+        "version": "v1.0.0",
+        "created": "2026-04-12",
+        "layer": 2,
+        "type": "workflow_guide",
+        "description": "Complete guide for working with Mandala Symbiosis from Android phone using Termux.",
+        "status": "active",
+        "priority": "high",
+        "tags": ["mobile", "android", "termux", "git", "workflow", "guide"]
+    },
+    "prerequisites": {
+        "description": "What you need before starting",
+        "items": [
+            "Android phone (version 7.0+)",
+            "Internet connection",
+            "GitHub account with access to mandala-core repository",
+            "GitHub Personal Access Token (classic) with 'repo' scope"
+        ]
+    },
+    "setup": {
+        "description": "One-time setup. Do this only once.",
+        "steps": [
+            {
+                "step": 1,
+                "name": "Install Termux",
+                "action": "Download and install Termux from F-Droid (recommended) or GitHub Releases. Do NOT use Google Play version.",
+                "link": "https://f-droid.org/en/packages/com.termux/"
+            },
+            {
+                "step": 2,
+                "name": "Update packages",
+                "command": "pkg update && pkg upgrade"
+            },
+            {
+                "step": 3,
+                "name": "Install Git, Python, and Micro editor",
+                "command": "pkg install git python micro"
+            },
+            {
+                "step": 4,
+                "name": "Grant storage access",
+                "command": "termux-setup-storage"
+            },
+            {
+                "step": 5,
+                "name": "Clone the repository",
+                "commands": [
+                    "cd ~/storage/shared/",
+                    "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git",
+                    "cd mandala-core"
+                ]
+            },
+            {
+                "step": 6,
+                "name": "Configure Git",
+                "commands": [
+                    "git config --global user.name \"Voodoo\"",
+                    "git config --global user.email \"voodoo@mandala.symbiosis\"",
+                    "git config --global --add safe.directory /storage/emulated/0/mandala-core",
+                    "git config --global credential.helper store"
+                ]
+            },
+            {
+                "step": 7,
+                "name": "First push (authentication)",
+                "action": "Create a test file and push. Username: voodoomushroomzzz-source, Password: your GitHub token.",
+                "commands": [
+                    "echo \"# Mobile test\" >> mobile_test.md",
+                    "git add mobile_test.md",
+                    "git commit -m \"test: mobile git setup\"",
+                    "git push",
+                    "git rm mobile_test.md",
+                    "git commit -m \"chore: remove mobile test file\"",
+                    "git push"
+                ]
+            }
+        ]
+    },
+    "daily_workflow": {
+        "description": "How to work with Mandala on a daily basis",
+        "steps": [
+            {"step": 1, "name": "Pull latest changes", "command": "git pull --rebase origin main"},
+            {"step": 2, "name": "Edit a honeycomb file", "command": "micro honeycombs/path/to/file.json", "note": "Ctrl+S save, Ctrl+Q quit."},
+            {"step": 3, "name": "Commit changes", "commands": ["git add honeycombs/path/to/file.json", "git commit -m \"feat: description\""]},
+            {"step": 4, "name": "Push to GitHub", "command": "git push"},
+            {"step": 5, "name": "Run scanner (optional)", "command": "python honeycombs/registry/honeycomb_scanner.py scan"}
+        ]
+    },
+    "useful_commands": {
+        "commands": [
+            {"name": "Check status", "command": "git status"},
+            {"name": "View diff", "command": "git diff"},
+            {"name": "View history", "command": "git log --oneline -10"},
+            {"name": "Discard changes", "command": "git checkout -- filename.json"},
+            {"name": "Create new honeycomb", "command": "mkdir -p honeycombs/new && micro honeycombs/new/index.json"},
+            {"name": "Delete file", "command": "git rm path/to/file.json"},
+            {"name": "Move file", "command": "git mv old new"}
+        ]
+    },
+    "micro_shortcuts": {
+        "Save": "Ctrl+S",
+        "Quit": "Ctrl+Q",
+        "Search": "Ctrl+F",
+        "Undo": "Ctrl+Z",
+        "Cut": "Ctrl+X",
+        "Copy": "Ctrl+C",
+        "Paste": "Ctrl+V",
+        "note": "Use Volume Up as Ctrl on Android."
+    },
+    "troubleshooting": {
+        "issues": [
+            {"problem": "Asks password every time", "solution": "git config --global credential.helper store"},
+            {"problem": "dubious ownership", "solution": "git config --global --add safe.directory /storage/emulated/0/mandala-core"},
+            {"problem": "Token not working", "solution": "Create new token at https://github.com/settings/tokens/new with 'repo' scope."},
+            {"problem": "Cannot paste", "solution": "Long-press screen → Paste."},
+            {"problem": "Ctrl keys not working", "solution": "Use Volume Up as Ctrl."}
+        ]
+    },
+    "getting_token": {
+        "steps": [
+            "1. Open: https://github.com/settings/tokens/new",
+            "2. Note: mandala-android",
+            "3. Expiration: 90 days",
+            "4. Check 'repo' box",
+            "5. Generate and COPY token immediately (starts with ghp_)",
+            "6. Use token as PASSWORD in Termux"
+        ]
+    },
+    "notes": [
+        "Username: voodoomushroomzzz-source",
+        "Password: your GitHub token (ghp_...)",
+        "After setup, daily: git pull → edit → git add → git commit → git push"
+    ],
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-04-12",
+        "notes": "Mobile workflow fully operational."
+    }
+}
