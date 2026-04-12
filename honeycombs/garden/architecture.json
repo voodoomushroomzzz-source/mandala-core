@@ -1,0 +1,147 @@
+{
+  "identity": {
+    "module_id": "GARDEN-ARCH-001",
+    "name": "Техническая архитектура Garden",
+    "version": "v1.0.0",
+    "created": "2026-04-12",
+    "layer": 2,
+    "type": "architecture",
+    "status": "active",
+    "priority": "high",
+    "tags": ["architecture", "data_structures", "integrations", "garden"]
+  },
+  "data_structures": {
+    "gardener_personal": {
+      "path": "honeycombs/personal_gardeners/{gardener_id}/gardener.json",
+      "fields": {
+        "identity": {
+          "gardener_id": "string (gardener_001)",
+          "telegram_id": "string",
+          "name": "string",
+          "resonance_level": "int 0-100",
+          "created": "date",
+          "updated": "date"
+        },
+        "personal_info": {
+          "interests": "array of strings",
+          "goals": "array of strings",
+          "life_areas": {
+            "health": {"current": "int 1-10", "target": "int 1-10"},
+            "creativity": {"current": "int 1-10", "target": "int 1-10"},
+            "knowledge": {"current": "int 1-10", "target": "int 1-10"},
+            "relationships": {"current": "int 1-10", "target": "int 1-10"}
+          }
+        },
+        "companion_settings": {
+          "morning_message_time": "HH:MM",
+          "evening_check_time": "HH:MM",
+          "proactive_mode": "boolean",
+          "timezone": "string"
+        },
+        "growth_history": "array of {date, resonance, achievements_count}"
+      }
+    },
+    "achievements": {
+      "path": "honeycombs/personal_gardeners/{gardener_id}/achievements.json",
+      "achievement_schema": {
+        "id": "string (ach_001)",
+        "category": "health | creativity | knowledge | exploration | relationships",
+        "title": "string",
+        "description": "string",
+        "completed": "date",
+        "resonance_bonus": "int (1-10)",
+        "icon": "string emoji"
+      }
+    },
+    "achievements_catalog": {
+      "path": "honeycombs/garden/achievements_catalog.json",
+      "categories": {
+        "health": {
+          "resonance_weight": 1.2,
+          "examples": ["Утренняя зарядка 7 дней", "Медитация 21 день", "Здоровое питание неделю"],
+          "philosophy": "Резонанс с телом  основа всего Сада"
+        },
+        "creativity": {
+          "resonance_weight": 1.1,
+          "examples": ["Записал новую идею", "Завершил творческий проект", "Выучил новый инструмент"],
+          "philosophy": "Резонанс с духом  цветение Сада"
+        },
+        "knowledge": {
+          "resonance_weight": 1.0,
+          "examples": ["Прочитал книгу", "Прошёл курс", "Применил новый навык"],
+          "philosophy": "Резонанс с умом  рост корней"
+        },
+        "exploration": {
+          "resonance_weight": 1.1,
+          "examples": ["Посетил новое место", "Попробовал новую кухню", "Познакомился с новым человеком"],
+          "philosophy": "Резонанс с миром  расширение границ Сада"
+        }
+      },
+      "resonance_rules": {
+        "calculation": "sum(achievement.resonance_bonus * category.resonance_weight)",
+        "decay": "Без новых свершений резонанс не падает  только растёт (Ахимса)",
+        "max_per_day": 3,
+        "note": "Резонанс  не соревнование. Нет максимума, нет рейтинга."
+      }
+    }
+  },
+  "components": {
+    "telegram_bot": {
+      "file": "bot.py",
+      "current_version": "v3.32.0",
+      "new_commands": {
+        "/start": "Онбординг: знакомство, анкета, создание gardener.json",
+        "/profile": "Персональная страница: резонанс, топ-свершения, активные задачи",
+        "/achievements": "Список свершений + добавить новое",
+        "/resonance": "Текущий уровень + история роста",
+        "/ask": "Диалог с Gentle SR Companion"
+      },
+      "proactive_features": {
+        "morning": "Мягкое приветствие + предложение одного семени на день",
+        "evening": "Вечерняя проверка + возможность добавить свершение",
+        "reminder": "Мягкое напоминание о задаче (только 1 раз, не повторять)"
+      }
+    },
+    "dashboard": {
+      "phase_1_tech": "HTML + Chart.js (автономный файл, открывается локально)",
+      "phase_2_tech": "HTML + D3.js + SVG анимации",
+      "data_source": "gardener.json + achievements.json (локально или через GitHub API)",
+      "key_visualizations": {
+        "resonance_flower": "Цветок Жизни SVG  лепестки = категории, размер = уровень",
+        "growth_timeline": "График резонанса во времени",
+        "task_constellation": "Созвездие задач  связи и приоритеты",
+        "daily_mandala": "Дневная мандала  визуализация прожитого дня"
+      }
+    },
+    "personal_sota": {
+      "path_pattern": "honeycombs/personal_gardeners/{gardener_id}/",
+      "files": ["gardener.json", "achievements.json", "tasks.json"],
+      "creation": "Автоматически при /start в боте",
+      "access": "Только через gardener_id + telegram_id (не публичное)"
+    }
+  },
+  "integrations": {
+    "github_api": {
+      "purpose": "Бот читает и обновляет gardener.json через API",
+      "pattern": "GET + PUT /repos/{owner}/{repo}/contents/{path}",
+      "auth": "GITHUB_TOKEN в .env бота",
+      "note": "Альтернатива: локальный доступ к репо если бот на той же машине"
+    },
+    "scout_agent": {
+      "purpose": "Предложение семян из seeds/ на основе интересов садовника",
+      "readiness": "60% (RM-003)",
+      "integration_point": "bot.py вызывает scout_agent как модуль"
+    },
+    "existing_sr": {
+      "purpose": "engineer_chat/main.py как внутренний SR для анализа",
+      "usage": "Автоматическая генерация персонализированных рекомендаций"
+    }
+  },
+  "external_sr_notes": {
+    "start_here": "Начинай с M1-T1: создание personal_gardeners/",
+    "bot_rule": "Не создавать бота с нуля  только расширять bot.py. Читать существующий код перед изменениями.",
+    "philosophy_first": "Перед любой функцией читай ideology.json  каждая кнопка должна соответствовать Ахимсе",
+    "data_sacred": "personal_gardeners/  священные данные. Никогда не удалять без подтверждения Садовника.",
+    "one_script": "Всегда один PowerShell скрипт. Всегда git pull в начале. Всегда git push в конце."
+  }
+}
