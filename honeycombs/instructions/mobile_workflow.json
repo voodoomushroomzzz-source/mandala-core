@@ -2,20 +2,57 @@
     "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.1.0",
+        "version": "v1.2.0",
         "created": "2026-04-12",
         "updated": "2026-04-12",
         "layer": 2,
         "type": "workflow_guide",
-        "description": "Complete guide for working with Mandala Symbiosis from Android phone using Termux. All update commands are single-block copy-paste ready — they include git add, commit, and push.",
+        "description": "Complete guide for External SR working from Android/Termux. Includes core SR principles, system flow, and mobile-specific commands.",
         "status": "active",
         "priority": "high",
-        "tags": ["mobile", "android", "termux", "git", "workflow", "guide", "copy-paste"]
+        "tags": ["mobile", "android", "termux", "git", "workflow", "guide", "copy-paste", "core_principles"]
     },
     "golden_rule": {
         "title": "ONE COPY — ONE ACTION — FULL DEPLOY",
-        "description": "Every code block marked as 'FULL DEPLOY' is a COMPLETE command. It creates/updates the file, adds to git, commits, and pushes to GitHub. Copy ONCE, paste ONCE, press ENTER. The entire change is live. No separate git add/commit/push steps.",
-        "example": "When you see a block starting with 'cat > ... << EOF' and ending with 'git push', that's the whole thing. Copy from 'cat' to 'git push' inclusive."
+        "description": "Every code block marked as 'FULL DEPLOY' is a COMPLETE command. It creates/updates the file, adds to git, commits, and pushes to GitHub. Copy ONCE, paste ONCE, press ENTER.",
+        "example": "When you see a block starting with 'cat > ... << EOF' and ending with 'git push', that's the whole thing."
+    },
+    "core_principles": {
+        "description": "Fundamental rules for External SR — apply to both PC and mobile.",
+        "api_first": "Before modifying any file, request its current content via GitHub API (bypasses CDN). Raw URL has 5-10 min delay.",
+        "always_fetch_before_update": "NEVER assume local state. ALWAYS fetch the current version via API before preparing an update.",
+        "pre_check_flow": {
+            "steps": [
+                "1. Identify the file to modify",
+                "2. Form API link: https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
+                "3. Send link to Gardener, wait for content",
+                "4. Read current version from identity.version",
+                "5. Only then prepare the update"
+            ]
+        },
+        "laconic_communication": "Responses must be concise. Avoid showing unnecessary code. Only output what Gardener needs to see or execute.",
+        "copyable_links": "When providing URLs, wrap them in a code block with 'text' language (```text ... ```) so the 'Copy' button appears.",
+        "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the SAME command block."
+    },
+    "zones_of_responsibility": {
+        "external_sr": ["Analyze system state", "Propose improvements", "Prepare commands for Gardener", "Update JSON honeycombs", "Activate protocols"],
+        "gardener": ["Final decisions", "Pastes commands in Termux/VS Code", "Approves deletions"],
+        "internal_sr": ["Automated analysis (engineer-chat)", "Prepare TZ for External AI", "Patch honeycombs autonomously", "Manage roadmaps and registry"]
+    },
+    "system_flow": {
+        "description": "How ideas and tasks flow through Mandala Symbiosis",
+        "diagram": "Scout Agent / Gardener / Claude → Seeds/ → Task (≤1 month) or Roadmap (>1 month) → Archive",
+        "entities": {
+            "seeds": {"path": "honeycombs/seeds/", "role": "Entry point for all raw ideas"},
+            "tasks": {"path": "honeycombs/tasks/active/", "role": "Concrete work units, ≤1 month"},
+            "roadmaps": {"path": "honeycombs/roadmaps/active/", "role": "Strategic directions, >1 month"},
+            "archive": {"path": "honeycombs/tasks/archive/ and honeycombs/roadmaps/archive/", "role": "Completed items"}
+        },
+        "inbox_note": "The 'inbox' honeycomb is deprecated and removed. Use Seeds."
+    },
+    "api_patterns": {
+        "get_file": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
+        "recursive_tree": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1"
     },
     "prerequisites": {
         "description": "What you need before starting",
@@ -29,52 +66,13 @@
     "setup": {
         "description": "One-time setup. Do this only once.",
         "steps": [
-            {
-                "step": 1,
-                "name": "Install Termux",
-                "action": "Download and install Termux from F-Droid (recommended) or GitHub Releases. Do NOT use Google Play version.",
-                "link": "https://f-droid.org/en/packages/com.termux/"
-            },
-            {
-                "step": 2,
-                "name": "Update packages",
-                "command": "pkg update && pkg upgrade"
-            },
-            {
-                "step": 3,
-                "name": "Install Git, Python, and Micro editor",
-                "command": "pkg install git python micro"
-            },
-            {
-                "step": 4,
-                "name": "Grant storage access",
-                "command": "termux-setup-storage"
-            },
-            {
-                "step": 5,
-                "name": "Clone the repository",
-                "commands": [
-                    "cd ~/storage/shared/",
-                    "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git",
-                    "cd mandala-core"
-                ]
-            },
-            {
-                "step": 6,
-                "name": "Configure Git",
-                "commands": [
-                    "git config --global user.name \"Voodoo\"",
-                    "git config --global user.email \"voodoo@mandala.symbiosis\"",
-                    "git config --global --add safe.directory /storage/emulated/0/mandala-core",
-                    "git config --global credential.helper store"
-                ]
-            },
-            {
-                "step": 7,
-                "name": "First push (authentication)",
-                "action": "Create a test file and push. Username: voodoomushroomzzz-source, Password: your GitHub token.",
-                "full_deploy_command": "echo \"# Mobile test\" >> mobile_test.md; git add mobile_test.md; git commit -m \"test: mobile git setup\"; git push; git rm mobile_test.md; git commit -m \"chore: remove mobile test file\"; git push"
-            }
+            {"step": 1, "name": "Install Termux", "action": "Download from F-Droid (recommended) or GitHub Releases. Do NOT use Google Play.", "link": "https://f-droid.org/en/packages/com.termux/"},
+            {"step": 2, "name": "Update packages", "command": "pkg update && pkg upgrade"},
+            {"step": 3, "name": "Install Git, Python, and Micro", "command": "pkg install git python micro"},
+            {"step": 4, "name": "Grant storage access", "command": "termux-setup-storage"},
+            {"step": 5, "name": "Clone repository", "commands": ["cd ~/storage/shared/", "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git", "cd mandala-core"]},
+            {"step": 6, "name": "Configure Git", "commands": ["git config --global user.name \"Voodoo\"", "git config --global user.email \"voodoo@mandala.symbiosis\"", "git config --global --add safe.directory /storage/emulated/0/mandala-core", "git config --global credential.helper store"]},
+            {"step": 7, "name": "First push", "action": "Username: voodoomushroomzzz-source, Password: your GitHub token.", "full_deploy_command": "echo \"# Mobile test\" >> mobile_test.md; git add mobile_test.md; git commit -m \"test: mobile git setup\"; git push; git rm mobile_test.md; git commit -m \"chore: remove mobile test file\"; git push"}
         ]
     },
     "daily_workflow": {
@@ -82,14 +80,13 @@
         "steps": [
             {"step": 1, "name": "Pull latest changes", "command": "git pull --rebase origin main"},
             {"step": 2, "name": "Edit a honeycomb file", "command": "micro honeycombs/path/to/file.json", "note": "Ctrl+S save, Ctrl+Q quit."},
-            {"step": 3, "name": "FULL DEPLOY after editing", "description": "After you finish editing in micro, use a FULL DEPLOY block provided by External SR. It will add, commit, and push automatically."},
+            {"step": 3, "name": "FULL DEPLOY after editing", "description": "Use a FULL DEPLOY block provided by External SR. It will add, commit, and push automatically."},
             {"step": 4, "name": "Run scanner (optional)", "command": "python honeycombs/registry/honeycomb_scanner.py scan"}
         ]
     },
     "full_deploy_pattern": {
         "description": "External SR will provide updates in this format. Copy the WHOLE block.",
-        "template": "cat > honeycombs/path/to/file.json << 'EOF'\n{ ... full JSON content ... }\nEOF\ngit add honeycombs/path/to/file.json\ngit commit -m \"feat: description\"\ngit push",
-        "note": "This single block replaces the file, adds to git, commits, and pushes. No extra steps."
+        "template": "cat > honeycombs/path/to/file.json << 'EOF'\n{ ... full JSON content ... }\nEOF\ngit add honeycombs/path/to/file.json\ngit commit -m \"feat: description\"\ngit push"
     },
     "useful_commands": {
         "commands": [
@@ -103,13 +100,7 @@
         ]
     },
     "micro_shortcuts": {
-        "Save": "Ctrl+S",
-        "Quit": "Ctrl+Q",
-        "Search": "Ctrl+F",
-        "Undo": "Ctrl+Z",
-        "Cut": "Ctrl+X",
-        "Copy": "Ctrl+C",
-        "Paste": "Ctrl+V",
+        "Save": "Ctrl+S", "Quit": "Ctrl+Q", "Search": "Ctrl+F", "Undo": "Ctrl+Z", "Cut": "Ctrl+X", "Copy": "Ctrl+C", "Paste": "Ctrl+V",
         "note": "Use Volume Up as Ctrl on Android."
     },
     "troubleshooting": {
@@ -139,6 +130,6 @@
     "health": {
         "status": "healthy",
         "last_check": "2026-04-12",
-        "notes": "v1.1.0 — added golden rule and full deploy pattern."
+        "notes": "v1.2.0 — added core principles, zones of responsibility, system flow, and API patterns."
     }
 }
