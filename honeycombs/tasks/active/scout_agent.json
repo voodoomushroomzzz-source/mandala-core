@@ -6,8 +6,8 @@
     "priority":  "MEDIUM",
     "deadline":  "2026-05-15",
     "created":  "2026-04-10",
-    "updated":  "2026-04-12",
-    "description":  "Implement Scout Agent for autonomous discovery of resonant ideas, funding opportunities (grants, crowdfunding), and real-world impact use cases. Store findings in Seeds/ for evaluation.",
+    "updated":  "2026-04-13",
+    "description":  "Implement Scout Agent for autonomous discovery of resonant ideas, funding opportunities (grants, crowdfunding), and real-world impact use cases. Also provides personalized seed suggestions for Garden based on gardener\u0027s interests and goals from gardener.json. Store findings in Seeds/ for evaluation.",
     "tags":  [
                  "scout",
                  "agent",
@@ -135,6 +135,7 @@
                          "Pydantic models for Seed and Opportunity",
                          "Script for running and testing",
                          "Render Cron Job configured",
-                         "Documentation + startup guide"
+                         "Documentation + startup guide",
+                         "garden_scout.py  personalized seed filter for Garden integration"
                      ]
 }
