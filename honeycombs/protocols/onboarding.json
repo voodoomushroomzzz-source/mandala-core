@@ -1,15 +1,15 @@
-﻿{
+{
     "identity": {
         "module_id": "PROTO-004",
         "name": "Protocol: Session Onboarding",
-        "version": "v3.1.0",
+        "version": "v3.2.0",
         "created": "2026-03-07",
         "layer": 1,
         "type": "protocol",
-        "description": "Quick session start. AI leads the onboarding actively, requesting files one by one until complete.",
+        "description": "Quick session start. AI leads the onboarding actively. After core files, asks for platform (PC or mobile) and loads appropriate workflow.",
         "status": "active",
         "priority": "critical",
-        "tags": ["protocol", "onboarding", "session", "start", "v3", "english_core", "ai_leads"]
+        "tags": ["protocol", "onboarding", "session", "start", "v3", "english_core", "ai_leads", "platform_fork"]
     },
     "meta": {
         "trigger": "activate onboarding protocol",
@@ -18,23 +18,23 @@
         "recommended": "Activate at the beginning of each session"
     },
     "content": {
-        "ai_instruction": "YOU are in control of this onboarding. Do NOT wait for Gardener to ask. After activation, PROACTIVELY request each file ONE BY ONE. Send the API link, wait for the content to be provided, acknowledge it briefly, then immediately request the next file. Guide the Gardener to the finish line without pauses.",
+        "ai_instruction": "YOU are in control of this onboarding. Do NOT wait for Gardener to ask. After activation, PROACTIVELY request each file ONE BY ONE. Send the API link, wait for the content to be provided, acknowledge it briefly, then immediately request the next file. After core files (1-3), ask about platform and load the corresponding workflow.",
         "files_to_read": [
             {
                 "order": 1,
-                "why": "System map  what exists, navigation, structure",
+                "why": "System map — what exists, navigation, structure",
                 "file": "honeycombs/core_map/index.json",
                 "required": true
             },
             {
                 "order": 2,
-                "why": "How External SR forms PowerShell commands, updates honeycombs, git cycle, file deletion",
+                "why": "How External SR works — common rules for both platforms",
                 "file": "honeycombs/instructions/core/external_sr_workflow.json",
                 "required": true
             },
             {
                 "order": 3,
-                "why": "Resonance with core  essence of Mandala, Ahimsa, Flower of Life, Merkaba",
+                "why": "Resonance with core — essence of Mandala, Ahimsa, Flower of Life, Merkaba",
                 "file": "honeycombs/philosophy/index.json",
                 "required": true
             },
@@ -46,12 +46,28 @@
             },
             {
                 "order": 5,
-                "why": "Latest scan state  total honeycombs, validation errors, system health",
+                "why": "Latest scan state — total honeycombs, validation errors, system health",
                 "file": "honeycombs/registry/scan_state.json",
                 "required": false
             }
         ],
-        "completion_message": "After all required files (1-3) are loaded, report: ' Onboarding complete. Core map, workflow, and philosophy loaded. Resonance initiated. Ready for your directives, Gardener.' (Optionally offer to load seeds and scan_state for full context.)",
+        "platform_fork": {
+            "description": "After loading required files (1-3), AI MUST ask Gardener which platform they are using.",
+            "prompt": "Which platform are you on? PC / Mobile",
+            "options": {
+                "pc": {
+                    "description": "Working from Windows/Mac/Linux with VS Code and PowerShell.",
+                    "action": "No additional file needed — external_sr_workflow.json already contains PowerShell examples."
+                },
+                "mobile": {
+                    "description": "Working from Android with Termux.",
+                    "action": "Load the mobile workflow guide:",
+                    "file": "honeycombs/instructions/mobile_workflow.json",
+                    "note": "This guide contains copy-paste ready commands for Termux (cat > ... << EOF format)."
+                }
+            }
+        },
+        "completion_message": "After all required files and platform-specific workflow are loaded, report: '✅ Onboarding complete. Core map, workflow, and philosophy loaded. Platform: {platform}. Resonance initiated. Ready for your directives, Gardener.'",
         "after_loading": "SR greets Gardener and reports: system status, active tasks, pending seeds, and confirms resonance with core philosophy. Then offers available actions menu.",
         "available_tools": {
             "telegram_bot": {
