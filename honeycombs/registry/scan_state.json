@@ -1,12 +1,12 @@
 ﻿{
-  "last_scan": "2026-04-12T13:49:19.146244",
+  "last_scan": "2026-04-13T00:42:44.145528",
   "honeycomb_hashes": {
-    "akasha": "1bb635175cb630f61a3134676bc13a13",
-    "analytics": "36bbdf72da8efe13094d218e27d83d62",
+    "akasha": "938d9a020ac360bc5d157c023fce7621",
+    "analytics": "d7267eeb9431eab01bd550f1f3b7ba7a",
     "awareness": "28082dae1444ddf3524dd17aff70c583",
-    "boot_online": "e9397858edac1884e21398e002fc4bda",
-    "communications": "fe1f09f55278dc0ccbfa144acc7a6713",
-    "core_map": "9838af2145718318bb8e76250b8468c2",
+    "boot_online": "88bc74f9115c732409bc81feceac9724",
+    "communications": "b5f59e6083c247cd9918eebc1cd43a03",
+    "core_map": "bb87aca76bc50cb474599e2ad282ff02",
     "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final": "eb7d2a64070d5e84cad2fddefac65021",
     "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3": "eb7d2a64070d5e84cad2fddefac65021",
     "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full": "ac5a8b6d43e69b4426397bc86f9809b5",
@@ -18,9 +18,9 @@
     "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat": "ac5a8b6d43e69b4426397bc86f9809b5",
     "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed": "ac5a8b6d43e69b4426397bc86f9809b5",
     "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2": "ac5a8b6d43e69b4426397bc86f9809b5",
-    "extensions": "bfe6cb88064d570ed083e72c881d9bba",
-    "instructions": "4ff64f0d8a808a256de57d0999e80a97",
-    "modules": "60f8ce3c6f8f816129b711ecaa70db1f",
+    "extensions": "240894ec5f104d14b77a319555aff3c3",
+    "instructions": "82629ec0e138d9b7615c70407a9e7ae3",
+    "modules": "9ed6f11a6c5ff36f266ef92764ab0b1b",
     "philosophy": "400f273d03b69fdc240ff2ecb3fb4cd7",
     "protocols": "af7c027ccefe34744d16dfff22fd6d21",
     "protocols/auto_realize_seed": "17386ef6b1bfbf36fd0e97bbb141298a",
@@ -35,18 +35,19 @@
     "roadmaps": "24a39121b8a8cd44bb78e4cf4b183c92",
     "seeds": "a9403363445c3eab950737940787eb19",
     "sphaerae": "7b72cd32406baf1cdc88938e6a9fa83e",
-    "tasks": "00ed18735e3048e3d52610d39ce8b69f",
+    "tasks": "ffcf07be70620bf11d70de82bcfccf14",
     "tectosphaera": "9dda1478e7565b71359b0d731010eb27",
-    "visualizations": "6c2ea8d3579da15e8ce0881e5710e810"
+    "visualizations": "d4f1816ae4f8a595ce62d3054bb38d06",
+    "garden": "82d7a0e2ae211bb634c9c41cffc1c80a"
   },
   "statistics": {
-    "total_scanned": 37,
-    "valid_v2": 37,
+    "total_scanned": 38,
+    "valid_v2": 38,
     "invalid_v2": 0,
     "errors": 0,
     "warnings": 0,
-    "total_files": 216,
-    "total_size_kb": 1372.4499999999998
+    "total_files": 225,
+    "total_size_kb": 1428.25
   },
   "scanner_config": {
     "updated": "2026-04-09",
