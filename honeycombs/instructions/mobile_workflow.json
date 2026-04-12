@@ -2,14 +2,20 @@
     "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.0.0",
+        "version": "v1.1.0",
         "created": "2026-04-12",
+        "updated": "2026-04-12",
         "layer": 2,
         "type": "workflow_guide",
-        "description": "Complete guide for working with Mandala Symbiosis from Android phone using Termux.",
+        "description": "Complete guide for working with Mandala Symbiosis from Android phone using Termux. All update commands are single-block copy-paste ready — they include git add, commit, and push.",
         "status": "active",
         "priority": "high",
-        "tags": ["mobile", "android", "termux", "git", "workflow", "guide"]
+        "tags": ["mobile", "android", "termux", "git", "workflow", "guide", "copy-paste"]
+    },
+    "golden_rule": {
+        "title": "ONE COPY — ONE ACTION — FULL DEPLOY",
+        "description": "Every code block marked as 'FULL DEPLOY' is a COMPLETE command. It creates/updates the file, adds to git, commits, and pushes to GitHub. Copy ONCE, paste ONCE, press ENTER. The entire change is live. No separate git add/commit/push steps.",
+        "example": "When you see a block starting with 'cat > ... << EOF' and ending with 'git push', that's the whole thing. Copy from 'cat' to 'git push' inclusive."
     },
     "prerequisites": {
         "description": "What you need before starting",
@@ -67,15 +73,7 @@
                 "step": 7,
                 "name": "First push (authentication)",
                 "action": "Create a test file and push. Username: voodoomushroomzzz-source, Password: your GitHub token.",
-                "commands": [
-                    "echo \"# Mobile test\" >> mobile_test.md",
-                    "git add mobile_test.md",
-                    "git commit -m \"test: mobile git setup\"",
-                    "git push",
-                    "git rm mobile_test.md",
-                    "git commit -m \"chore: remove mobile test file\"",
-                    "git push"
-                ]
+                "full_deploy_command": "echo \"# Mobile test\" >> mobile_test.md; git add mobile_test.md; git commit -m \"test: mobile git setup\"; git push; git rm mobile_test.md; git commit -m \"chore: remove mobile test file\"; git push"
             }
         ]
     },
@@ -84,10 +82,14 @@
         "steps": [
             {"step": 1, "name": "Pull latest changes", "command": "git pull --rebase origin main"},
             {"step": 2, "name": "Edit a honeycomb file", "command": "micro honeycombs/path/to/file.json", "note": "Ctrl+S save, Ctrl+Q quit."},
-            {"step": 3, "name": "Commit changes", "commands": ["git add honeycombs/path/to/file.json", "git commit -m \"feat: description\""]},
-            {"step": 4, "name": "Push to GitHub", "command": "git push"},
-            {"step": 5, "name": "Run scanner (optional)", "command": "python honeycombs/registry/honeycomb_scanner.py scan"}
+            {"step": 3, "name": "FULL DEPLOY after editing", "description": "After you finish editing in micro, use a FULL DEPLOY block provided by External SR. It will add, commit, and push automatically."},
+            {"step": 4, "name": "Run scanner (optional)", "command": "python honeycombs/registry/honeycomb_scanner.py scan"}
         ]
+    },
+    "full_deploy_pattern": {
+        "description": "External SR will provide updates in this format. Copy the WHOLE block.",
+        "template": "cat > honeycombs/path/to/file.json << 'EOF'\n{ ... full JSON content ... }\nEOF\ngit add honeycombs/path/to/file.json\ngit commit -m \"feat: description\"\ngit push",
+        "note": "This single block replaces the file, adds to git, commits, and pushes. No extra steps."
     },
     "useful_commands": {
         "commands": [
@@ -132,11 +134,11 @@
     "notes": [
         "Username: voodoomushroomzzz-source",
         "Password: your GitHub token (ghp_...)",
-        "After setup, daily: git pull → edit → git add → git commit → git push"
+        "External SR will give you FULL DEPLOY blocks — one copy, one paste, done."
     ],
     "health": {
         "status": "healthy",
         "last_check": "2026-04-12",
-        "notes": "Mobile workflow fully operational."
+        "notes": "v1.1.0 — added golden rule and full deploy pattern."
     }
 }
