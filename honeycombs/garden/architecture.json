@@ -2,7 +2,7 @@
     "identity": {
         "module_id": "GARDEN-ARCH-001",
         "name": "Technical Architecture of Garden",
-        "version": "v1.3.0",
+        "version": "v1.3.1",
         "created": "2026-04-12",
         "layer": 2,
         "type": "architecture",
@@ -166,7 +166,10 @@
             "purpose": "Bot reads and updates gardener.json via API",
             "pattern": "GET + PUT /repos/{owner}/{repo}/contents/{path}",
             "auth": "GITHUB_TOKEN in .env of bot",
-            "note": "Alternative: local access to repo if bot runs on same machine"
+            "primary": "Direct API calls from bot to GitHub",
+            "fallback": "If API fails (rate limit, network), bot uses local cached copy of gardener.json. Writes are queued in local .json file and synced when connection restores.",
+            "soft_fail": "Bot continues in degraded mode. Gardener notified: 'I'm having trouble reaching the Garden. Your data is safe locally.'",
+            "sync_recovery": "When connection restored, bot reads queued changes and applies them via API. Conflict resolution: last-write-wins with backup."
         },
         "scout_agent": {
             "purpose": "Suggest seeds from seeds/ based on gardener's interests",
