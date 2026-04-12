@@ -1,0 +1,38 @@
+{
+    "task_id": "T-007",
+    "name": "Mobile Engineer Chat — Adaptive Interface for Android",
+    "status": "todo",
+    "priority": "MEDIUM",
+    "deadline": "2026-05-15",
+    "created": "2026-04-12",
+    "updated": "2026-04-12",
+    "description": "Adapt Engineer Chat interface for mobile devices (Android/iOS). Make it fully usable from phone browsers and integrate with Termux workflow.",
+    "tags": ["mobile", "engineer_chat", "ui", "responsive", "pwa", "termux"],
+    "progress": 0,
+    "notes": "Mobile adaptation of Internal SR interface. Should work seamlessly with mobile_workflow.json.",
+    "deliverables": [
+        "Responsive CSS for index.html (media queries, flexbox)",
+        "Touch-optimized buttons and inputs",
+        "Collapsible sections for honeycomb data",
+        "One-tap copy for commands (integrates with Termux)",
+        "PWA manifest for 'Add to Home Screen'",
+        "Dark mode support (OLED friendly)"
+    ],
+    "tech_stack": {
+        "frontend": "HTML5, CSS3 (Flexbox/Grid), JavaScript",
+        "pwa": "Service Worker, Web App Manifest",
+        "testing": "Chrome DevTools mobile emulation"
+    },
+    "acceptance_criteria": [
+        "Interface is fully usable on 6-inch screen without horizontal scroll",
+        "All buttons have minimum 44x44px touch target",
+        "Commands can be copied with one tap",
+        "Works offline after first load (PWA)",
+        "Matches Mandala visual style (Geometria Sacra)"
+    ],
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-04-12",
+        "notes": "New task created."
+    }
+}
