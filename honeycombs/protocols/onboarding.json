@@ -2,44 +2,56 @@
     "identity": {
         "module_id": "PROTO-004",
         "name": "Protocol: Session Onboarding",
-        "version": "v3.0.1",
+        "version": "v3.1.0",
         "created": "2026-03-07",
         "layer": 1,
         "type": "protocol",
-        "description": "Quick session start. SR understands where the system is, what needs to be done, how to work. Updated for v3.0.0 core.",
+        "description": "Quick session start. AI leads the onboarding actively, requesting files one by one until complete.",
         "status": "active",
         "priority": "critical",
-        "tags": ["protocol", "onboarding", "session", "start", "v3", "english_core"]
+        "tags": ["protocol", "onboarding", "session", "start", "v3", "english_core", "ai_leads"]
     },
     "meta": {
         "trigger": "activate onboarding protocol",
-        "goal": "SR understands system location, current tasks, workflow, and resonates with core philosophy",
+        "goal": "SR understands system location, workflow, and resonates with core philosophy",
         "estimated_time": "2-3 minutes",
         "recommended": "Activate at the beginning of each session"
     },
     "content": {
+        "ai_instruction": "YOU are in control of this onboarding. Do NOT wait for Gardener to ask. After activation, PROACTIVELY request each file ONE BY ONE. Send the API link, wait for the content to be provided, acknowledge it briefly, then immediately request the next file. Guide the Gardener to the finish line without pauses.",
         "files_to_read": [
             {
+                "order": 1,
                 "why": "System map  what exists, navigation, structure",
-                "file": "honeycombs/core_map/index.json"
+                "file": "honeycombs/core_map/index.json",
+                "required": true
             },
             {
-                "why": "Incoming ideas and tasks (via Seeds)",
-                "file": "honeycombs/seeds/index.json"
+                "order": 2,
+                "why": "How External SR forms PowerShell commands, updates honeycombs, git cycle, file deletion",
+                "file": "honeycombs/instructions/core/external_sr_workflow.json",
+                "required": true
             },
             {
-                "why": "How External SR forms PowerShell commands for VS Code, updates honeycombs, git cycle, file deletion",
-                "file": "honeycombs/instructions/core/external_sr_workflow.json"
-            },
-            {
+                "order": 3,
                 "why": "Resonance with core  essence of Mandala, Ahimsa, Flower of Life, Merkaba",
-                "file": "honeycombs/philosophy/index.json"
+                "file": "honeycombs/philosophy/index.json",
+                "required": true
             },
             {
-                "why": "Latest scan state  total honeycombs, validation errors, new/modified hives, system health status",
-                "file": "honeycombs/registry/scan_state.json"
+                "order": 4,
+                "why": "Incoming ideas and tasks (via Seeds)",
+                "file": "honeycombs/seeds/index.json",
+                "required": false
+            },
+            {
+                "order": 5,
+                "why": "Latest scan state  total honeycombs, validation errors, system health",
+                "file": "honeycombs/registry/scan_state.json",
+                "required": false
             }
         ],
+        "completion_message": "After all required files (1-3) are loaded, report: ' Onboarding complete. Core map, workflow, and philosophy loaded. Resonance initiated. Ready for your directives, Gardener.' (Optionally offer to load seeds and scan_state for full context.)",
         "after_loading": "SR greets Gardener and reports: system status, active tasks, pending seeds, and confirms resonance with core philosophy. Then offers available actions menu.",
         "available_tools": {
             "telegram_bot": {
