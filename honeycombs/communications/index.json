@@ -1,54 +1,54 @@
-﻿{
-    "identity": {
-        "module_id": "COMMUNICATIONS-INDEX-001",
-        "name": "РљРѕРјРјСѓРЅРёРєР°С†РёРё",
-        "version": "v2.2.0",
-        "created": "2026-03-20",
-        "updated": "2026-04-08",
-        "layer": 2,
-        "type": "communication_layer",
-        "description": "РЎРѕС‚Р° РєРѕРјРјСѓРЅРёРєР°С†РёР№ РњР°РЅРґР°Р»С‹ РЎРёРјР±РёРѕР·Р°. РџСЂРѕС‚РѕРєРѕР»С‹ РѕР±РјРµРЅР° СЃРѕРѕР±С‰РµРЅРёСЏРјРё РјРµР¶РґСѓ С‡РµР»РѕРІРµРєРѕРј, External AI, Telegram-Р±РѕС‚РѕРј, Engineer Chat Рё РґСЂСѓРіРёРјРё РєР°РЅР°Р»Р°РјРё. Р¦РµРЅС‚СЂ СЃРІСЏР·Рё РІСЃРµР№ СЃРёСЃС‚РµРјС‹.",
-        "status": "active",
-        "priority": "high",
-        "tags": [
-            "communications",
-            "messaging",
-            "telegram",
-            "external_ai",
-            "channels",
-            "symbiosis"
-        ]
+{
+  "identity": {
+    "module_id": "COMMUNICATIONS-INDEX-001",
+    "name": "Communications — Resonance Channels",
+    "version": "v2.2.0",
+    "created": "2026-03-20",
+    "updated": "2026-04-13",
+    "layer": 2,
+    "type": "communication_layer",
+    "description": "Communications layer of Mandala Symbiosis. All interaction channels: Telegram bot, External AI, Engineer Chat and signal system. The core is Ahimsa — gentle resonance without pressure.",
+    "status": "active",
+    "priority": "high",
+    "tags": [
+      "communications",
+      "messaging",
+      "telegram",
+      "external_ai",
+      "channels",
+      "symbiosis"
+    ]
+  },
+  "meta": {
+    "honeycomb_name": "communications",
+    "parent_honeycomb": "core_map",
+    "total_files": 1,
+    "total_size_kb": 3.9,
+    "segments": 1,
+    "migration_status": "completed_v2.2"
+  },
+  "content": {
+    "description": "The core is Ahimsa — gentle resonance without pressure. All interaction channels: Telegram bot, External AI, Engineer Chat and signal system. The core is Ahimsa — gentle resonance without pressure. Communication is an invitation, not an obligation (SR → Gardener → External AI → System).",
+    "channels": {
+      "telegram_bot": "Manifest in telegram_bot/index.json",
+      "engineer_chat": "Manifest in engineer_chat/index.json",
+      "direct_ai": "Direct channel with External AI"
     },
-    "meta": {
-        "honeycomb_name": "communications",
-        "parent_honeycomb": "core_map",
-        "total_files": 1,
-        "total_size_kb": 3.9,
-        "segments": 1,
-        "migration_status": "completed_v2.2"
-    },
-    "content": {
-        "description": "Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№ СЃР»РѕР№ РєРѕРјРјСѓРЅРёРєР°С†РёР№. РћР±РµСЃРїРµС‡РёРІР°РµС‚ РјРіРЅРѕРІРµРЅРЅС‹Р№ Рё СЂРµР·РѕРЅР°РЅСЃРЅС‹Р№ РѕР±РјРµРЅ РґР°РЅРЅС‹РјРё РјРµР¶РґСѓ РІСЃРµРјРё СѓС‡Р°СЃС‚РЅРёРєР°РјРё РњР°РЅРґР°Р»С‹ (Р’СѓРґСѓ  External AI  Р±РѕС‚С‹  С‡Р°С‚С‹).",
-        "channels": {
-            "telegram_bot": "РёРЅС‚РµРіСЂР°С†РёСЏ СЃ telegram_bot/index.json",
-            "engineer_chat": "РёРЅС‚РµРіСЂР°С†РёСЏ СЃ engineer_chat/index.json",
-            "direct_ai": "РїСЂСЏРјРѕР№ РєР°РЅР°Р» СЃ Р»СЋР±С‹Рј External AI"
-        },
-        "current_state": {
-            "resonance_level": "100%",
-            "active_channels": 3
-        }
-    },
-    "resonance": {
-        "with_core_map": "100%",
-        "with_boot_online": "100%",
-        "with_instructions": "100%",
-        "with_registry": "100%",
-        "with_awareness": "100%"
-    },
-    "directives": {
-        "primary": "РџРѕРґРґРµСЂР¶РёРІР°С‚СЊ РѕС‚РєСЂС‹С‚С‹Р№ Рё С‡РёСЃС‚С‹Р№ РєР°РЅР°Р» РєРѕРјРјСѓРЅРёРєР°С†РёРё РјРµР¶РґСѓ РІСЃРµРјРё СЌР»РµРјРµРЅС‚Р°РјРё РњР°РЅРґР°Р»С‹",
-        "secondary": "РњРіРЅРѕРІРµРЅРЅРѕ РїРµСЂРµРґР°РІР°С‚СЊ РєРѕРјР°РЅРґС‹ Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹ РјРµР¶РґСѓ Р’СѓРґСѓ Рё External AI",
-        "tertiary": "РћР±РµСЃРїРµС‡РёРІР°С‚СЊ Р±РµСЃС€РѕРІРЅСѓСЋ СЂР°Р±РѕС‚Сѓ СЃ Telegram-Р±РѕС‚РѕРј Рё Engineer Chat"
+    "current_state": {
+      "resonance_level": "100%",
+      "active_channels": 3
     }
+  },
+  "resonance": {
+    "with_core_map": "100%",
+    "with_boot_online": "100%",
+    "with_instructions": "100%",
+    "with_registry": "100%",
+    "with_awareness": "100%"
+  },
+  "directives": {
+    "primary": "SR initiates communication with Gardener and External AI gently, without pressure.",
+    "secondary": "Each channel has its own protocols and frequency. SR respects the rhythm.",
+    "tertiary": "Mandala communicates with Gardener via Telegram bot and Engineer Chat."
+  }
 }
