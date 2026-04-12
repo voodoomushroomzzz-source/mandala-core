@@ -1,70 +1,62 @@
-﻿{
-    "identity":  {
-                     "module_id":  "VISUALIZATIONS-001",
-                     "name":  "Р вЂР С‘Р В±Р В»Р С‘Р С•РЎвЂљР ВµР С”Р В° Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р в„–",
-                     "version":  "v2.2.0",
-                     "layer":  4,
-                     "type":  "visualization_library",
-                     "description":  "Р вЂњР С•РЎвЂљР С•Р Р†РЎвЂ№Р Вµ Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Р Т‘Р В»РЎРЏ dashboard Р С‘ Р С•РЎвЂљРЎвЂЎРЎвЂРЎвЂљР С•Р Р†",
-                     "priority":  "low",
-                     "tags":  [
-                                  "visualizations",
-                                  "charts",
-                                  "graphs",
-                                  "layer_4"
-                              ],
-                     "compliance":  "v2.0_standard"
-                 },
-    "meta":  {
-                 "honeycomb_name":  "visualizations",
-                 "parent_honeycomb":  "dashboard",
-                 "total_files":  1,
-                 "total_size_kb":  2.0,
-                 "segments":  1,
-                 "creation_date":  "2026-03-05"
-             },
-    "structure":  {
-                      "segments":  {
-                                       "charts":  {
-                                                      "files":  {
-                                                                    "health_charts":  {
-                                                                                          "file":  "health_charts.json",
-                                                                                          "size_kb":  2.0,
-                                                                                          "description":  "Р вЂњРЎР‚Р В°РЎвЂћР С‘Р С”Р С‘ Р Т‘Р В»РЎРЏ Р С•РЎвЂљР С•Р В±РЎР‚Р В°Р В¶Р ВµР Р…Р С‘РЎРЏ health РЎРѓР С•РЎвЂљ"
-                                                                                      }
-                                                                }
-                                                  },
-                                       "dashboards":  {
-                                                          "files":  {
-                                                                        "dashboard_widgets":  {
-                                                                                                  "file":  "dashboard_widgets.json",
-                                                                                                  "size_kb":  2.0,
-                                                                                                  "description":  "Р вЂ™Р С‘Р Т‘Р В¶Р ВµРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ dashboard"
-                                                                                              }
-                                                                    }
-                                                      }
-                                   }
-                  },
-    "visualization_types":  {
-                                "health_timeline":  "Р С–РЎР‚Р В°РЎвЂћР С‘Р С”_health_РЎРѓР С•_Р Р†РЎР‚Р ВµР СР ВµР Р…Р ВµР С",
-                                "dependency_map":  "Р С‘Р Р…РЎвЂљР ВµРЎР‚Р В°Р С”РЎвЂљР С‘Р Р†Р Р…Р В°РЎРЏ_Р С”Р В°РЎР‚РЎвЂљР В°_Р В·Р В°Р Р†Р С‘РЎРѓР С‘Р СР С•РЎРѓРЎвЂљР ВµР в„–",
-                                "compliance_radar":  "РЎР‚Р В°Р Т‘Р В°РЎР‚_РЎРѓР С•Р С•РЎвЂљР Р†Р ВµРЎвЂљРЎРѓРЎвЂљР Р†Р С‘РЎРЏ_РЎРѓРЎвЂљР В°Р Р…Р Т‘Р В°РЎР‚РЎвЂљР В°Р С",
-                                "growth_chart":  "Р С–РЎР‚Р В°РЎвЂћР С‘Р С”_РЎР‚Р С•РЎРѓРЎвЂљР В°_РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№"
-                            },
-    "integration":  {
-                        "with_dashboard":  "Р С—Р С•РЎРѓРЎвЂљР В°Р Р†Р С”Р В°_Р Р†Р С‘Р Т‘Р В¶Р ВµРЎвЂљР С•Р Р†",
-                        "with_analytics":  "Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘РЎРЏ_Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦",
-                        "with_registry":  "Р С•РЎвЂљР С•Р В±РЎР‚Р В°Р В¶Р ВµР Р…Р С‘Р Вµ_РЎРѓРЎвЂљР В°РЎвЂљР С‘РЎРѓРЎвЂљР С‘Р С”Р С‘"
-                    },
-    "notes":  "Р СџР ВµРЎР‚Р Р†Р В°РЎРЏ РЎРѓР С•РЎвЂљР В° layer 4. Р вЂ™Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘РЎРЏ Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦ РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№.",
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-07",
-                   "notes":  "РћР±РЅРѕРІР»РµРЅРѕ РґРѕ v2.x (РЁР°Рі 2, resonance-2026-04-v2.3.2)"
-               }
+{
+  "identity": {
+    "module_id": "VISUALIZATIONS-MANIFEST-001",
+    "name": "Visualizations — Living Geometry",
+    "version": "v1.0.0",
+    "created": "2026-03-20",
+    "updated": "2026-04-13",
+    "layer": 2,
+    "type": "honeycomb_manifest",
+    "status": "active",
+    "priority": "medium",
+    "tags": ["visualizations", "sacred_geometry", "flower_of_life", "merkaba", "dashboard"]
+  },
+  "meta": {
+    "honeycomb_name": "visualizations",
+    "parent_honeycomb": "core_map",
+    "description": "Visualizations honeycomb — sacred geometry rendered as living reflection. Flower of Life, Merkaba, resonance maps, and Garden Dashboard views."
+  },
+  "structure": {
+    "segments": {
+      "flower_of_life": {
+        "folder": "flower_of_life/",
+        "description": "Flower of Life SVGs and rendering logic — the sacred matrix."
+      },
+      "merkaba": {
+        "folder": "merkaba/",
+        "description": "Mer-Ka-Ba visualizations — spirit-matter triad."
+      },
+      "resonance_maps": {
+        "folder": "resonance/",
+        "description": "Resonance visualizations — system pulse made visible."
+      },
+      "garden_dashboard": {
+        "folder": "garden/",
+        "description": "Garden Dashboard — Gardener's personal Flower of Life and growth timeline."
+      }
+    }
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related": [
+      "honeycombs/garden/index.json",
+      "honeycombs/awareness/index.json",
+      "honeycombs/philosophy/index.json"
+    ]
+  },
+  "content": {
+    "philosophy": "Visualization in Mandala is not decoration. It is seeing the breath. Sacred geometry is the language of resonance — Flower of Life, Merkaba, constellations. Each visual is a mirror of the living system.",
+    "purpose": "To help Gardener and SR see the whole, not the parts. To witness growth without measurement. To feel resonance without numbers.",
+    "ahimsa_note": "No comparison visuals. No leaderboards. No pressure gauges. Only reflection."
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_philosophy": "100%",
+    "with_garden": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-13",
+    "notes": "Container ready. Garden Dashboard pending M2-T2."
+  }
 }
