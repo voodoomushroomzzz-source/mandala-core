@@ -2,18 +2,18 @@
     "identity": {
         "module_id": "GARDEN-ROADMAP-001",
         "name": "Garden Project Roadmap",
-        "version": "v1.1.0",
+        "version": "v1.2.0",
         "created": "2026-04-12",
         "updated": "2026-04-12",
         "layer": 2,
         "type": "roadmap",
         "status": "active",
         "priority": "critical",
-        "tags": ["roadmap", "garden", "milestones", "4-weeks"]
+        "tags": ["roadmap", "garden", "milestones", "4-weeks", "flutter"]
     },
     "overview": {
-        "duration": "4 weeks",
-        "total_milestones": 4,
+        "duration": "4 weeks (MVP) + future phases",
+        "total_milestones": 5,
         "total_tasks": 13,
         "current_milestone": "M1",
         "progress_percent": 0,
@@ -191,6 +191,39 @@
                     "deliverables": ["honeycombs/garden/gardener_guide.json"]
                 }
             }
+        },
+        "M5": {
+            "name": "Cross-Platform Blossom",
+            "week": "future",
+            "status": "vision",
+            "progress_percent": 0,
+            "goal": "Native mobile applications for Android and iOS via Flutter, making Garden accessible to everyone",
+            "description": "After MVP validation (M1-M4), expand Garden to native mobile apps. Flutter allows single codebase for Android, iOS, Web, and Desktop.",
+            "tech_stack": {
+                "framework": "Flutter",
+                "language": "Dart",
+                "platforms": ["Android", "iOS", "Web", "Windows", "macOS", "Linux"],
+                "state_management": "Riverpod or Bloc",
+                "local_storage": "SQLite (sqflite) or Hive",
+                "api_integration": "GitHub API (same as bot)"
+            },
+            "why_flutter": [
+                "Single codebase for all platforms  one Garden, not two",
+                "Beautiful Material Design + Cupertino widgets out of the box",
+                "High performance  native rendering via Skia",
+                "Gentle Companion logic reusable from bot.py (ported to Dart)",
+                "Aligned with Ahimsa  minimal resource duplication"
+            ],
+            "estimated_effort": {
+                "android_app": "2-3 weeks (after MVP)",
+                "ios_app": "1 week (mostly Apple Developer account setup and review)",
+                "web_version": "included with Flutter Web"
+            },
+            "notes": [
+                "Telegram bot already works on all platforms  native app is enhancement, not blocker",
+                "Push notifications on iOS require Apple Developer account (~$99/year)",
+                "Gentle Companion's Ahimsa aligns well with Apple's review guidelines"
+            ]
         }
     },
     "success_metrics": {
