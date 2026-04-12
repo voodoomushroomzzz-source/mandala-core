@@ -1,83 +1,85 @@
-{
-    "task_id":  "T-007",
-    "name":  "Mobile Engineer Chat — автономное Android-приложение-компаньон",
-    "status":  "refined",
-    "priority":  "HIGH",
-    "deadline":  "2026-05-15",
-    "created":  "2026-04-12",
-    "updated":  "2026-04-12",
-    "description":  "Создать нативное Android-приложение как мобильный компаньон Engineer Chat. Приложение автономно отображает соты, позволяет копировать команды и скачивать JSON-файлы. Без прямой интеграции с Termux — пользователь сам вставляет скопированные команды.",
-    "tags":  [
-                 "mobile",
-                 "android",
-                 "kotlin",
-                 "jetpack_compose",
-                 "viewer",
-                 "standalone"
-             ],
-    "progress":  5,
-    "notes":  "Архитектура уточнена 2026-04-12: приложение-компаньон без интеграции Termux. Фокус на чтение, копирование, скачивание.",
-    "deliverables":  [
-                         "Базовый Android-проект (Kotlin, Jetpack Compose, Material 3)",
-                         "Главный экран с древовидной навигацией по core_map",
-                         "Экран просмотра JSON-соты с подсветкой синтаксиса",
-                         "Кнопка копирования содержимого файла в буфер обмена",
-                         "Кнопка копирования pre-блоков (команд) в буфер обмена",
-                         "Кнопка скачивания соты как .json файла",
-                         "Экран активных задач (список из tasks/active/)",
-                         "Офлайн-режим (работа с локальным репозиторием)",
-                         "Визуальный стиль Мандалы (Sacred Geometry, тёмная тема)"
-                     ],
-    "tech_stack":  {
-                       "language":  "Kotlin",
-                       "ui":  "Jetpack Compose",
-                       "architecture":  "MVVM",
-                       "file_access":  "Scoped Storage / MANAGE_EXTERNAL_STORAGE (для чтения ~/storage/shared/mandala-core/)",
-                       "json_highlight":  "Библиотека для подсветки JSON (например, PrettyJson)",
-                       "storage":  "DataStore для настроек"
-                   },
-    "acceptance_criteria":  [
-                                "Приложение устанавливается и запускается на Android 10+",
-                                "Отображает структуру сот согласно core_map",
-                                "Позволяет просматривать содержимое любого JSON-файла соты",
-                                "Содержимое соты можно скопировать в буфер одной кнопкой",
-                                "Команды в markdown-блоках (```bash) копируются отдельной кнопкой",
-                                "Файл соты можно сохранить в папку Downloads",
-                                "Отображает список активных задач с возможностью просмотра каждой",
-                                "Работает без интернета (только локальные файлы)"
-                            ],
-    "next_actions":  [
-                         "1. Создать папку android-app/ и базовый проект Android Studio",
-                         "2. Реализовать модуль чтения файлов из ~/storage/shared/mandala-core/",
-                         "3. Создать экран навигации по core_map (рекурсивное дерево)",
-                         "4. Создать экран просмотра JSON с подсветкой",
-                         "5. Добавить кнопки копирования и скачивания",
-                         "6. Создать экран списка активных задач"
-                     ],
-    "health":  {
-                   "status":  "refined",
-                   "last_check":  "2026-04-12",
-                   "notes":  "Задача уточнена: автономное приложение-компаньон. Готов к старту."
-               },
-    "garden_vision":  {
-                          "title":  "Garden Phase: персональный сад в мобильном приложении",
-                          "description":  "После реализации базового компаньона  перенести весь интерфейс персонального сада (Garden) в это приложение. Это превратит инженерный компаньон в полноценное lifestyle-приложение для садовника.",
-                          "rationale":  "Мобильный формат идеален для Garden: утренние сообщения от Спутника, быстрое добавление свершений, просмотр Дашборда Резонанса  всё это естественно для телефона, а не десктопа.",
-                          "screens_to_add":  [
-                                                 "Персональный профиль садовника (resonance_level, life_areas)",
-                                                 "Экран свершений: список + быстрое добавление нового",
-                                                 "Дашборд резонанса: Цветок Жизни SVG, график роста",
-                                                 "Уведомления от Gentle Companion (утро/вечер)",
-                                                 "Анкета садовника при первом запуске"
-                                             ],
-                          "strategic_value":  "Тест гипотезы: готовы ли люди платить за приложение симбиоза с ИИ-компаньоном. Mobile  первая точка контакта с потенциальными пользователями Мандалы.",
-                          "depends_on":  "honeycombs/garden/  сота Garden должна быть реализована (M1-M3) перед началом Garden Phase",
-                          "phase":  "Garden Phase начинается после завершения базового компаньона (progress 100%)"
-                      },
-    "technical_notes":  {
-                            "storage_warning":  "MANAGE_EXTERNAL_STORAGE требует одобрения Google Play. Для публикации  рассмотреть SAF (Storage Access Framework) как альтернативу.",
-                            "json_highlight":  "Уточнить библиотеку подсветки до старта: WebView + Highlight.js или compose-syntax-highlighter.",
-                            "sync_mechanism":  "Описать механизм синхронизации файлов на телефон: git clone через Termux или ручное копирование.",
-                            "notifications":  "Предусмотреть канал уведомлений Android для будущей интеграции с Gentle Companion (Garden Phase)."
-                        }
+﻿{
+    "task_id": "T-007",
+    "name": "Mobile Engineer Chat  Autonomous Android Companion + Flutter Cross-Platform Vision",
+    "status": "todo",
+    "priority": "HIGH",
+    "deadline": "2026-05-15",
+    "created": "2026-04-12",
+    "updated": "2026-04-12",
+    "description": "Create native Android application as mobile companion for Engineer Chat. Autonomous viewing of sots, JSON copying, and command execution. Post-Garden MVP, evolve into cross-platform Flutter app for iOS and Android.",
+    "tags": ["mobile", "android", "kotlin", "jetpack_compose", "flutter", "garden", "cross_platform"],
+    "progress": 5,
+    "notes": "Architecture refined 2026-04-12: standalone app without Termux integration. Focus on reading, copying, and viewing. Flutter path added for post-MVP.",
+    "deliverables": [
+        "Basic Android project (Kotlin, Jetpack Compose, Material 3)",
+        "Main screen with tree navigation by core_map",
+        "JSON viewer screen with syntax highlighting",
+        "Copy button for JSON content to buffer",
+        "Copy button for pre-block (command) to buffer",
+        "Save .json sota button",
+        "Active tasks screen (list from tasks/active/)",
+        "Offline mode (work with local repository)",
+        "Visual style of Mandala (Sacred Geometry, dark theme)"
+    ],
+    "tech_stack": {
+        "android": {
+            "language": "Kotlin",
+            "ui": "Jetpack Compose",
+            "architecture": "MVVM",
+            "file_access": "Scoped Storage / MANAGE_EXTERNAL_STORAGE",
+            "json_highlight": "WebView + Highlight.js or compose-syntax-highlighter",
+            "storage": "DataStore for settings"
+        },
+        "flutter_future": {
+            "framework": "Flutter",
+            "language": "Dart",
+            "platforms": ["Android", "iOS", "Web"],
+            "when": "After Garden MVP (M1-M4 validated)",
+            "benefit": "Single codebase for both platforms, iOS reach, aligned with M5 vision"
+        }
+    },
+    "acceptance_criteria": [
+        "App installs and runs on Android 10+",
+        "Displays sota structure according to core_map",
+        "Allows viewing any JSON sota content",
+        "Copy buttons work for content and command blocks",
+        "Sota file can be saved to Downloads folder",
+        "Displays list of active tasks with preview",
+        "Works without internet (local files only)"
+    ],
+    "next_actions": [
+        "1. Create android-app/ folder and basic Android Studio project",
+        "2. Implement file reading module from ~/storage/shared/mandala-core/",
+        "3. Create navigation screen by core_map (recursive tree)",
+        "4. Create JSON viewer screen with syntax highlighting",
+        "5. Add copy buttons and save functionality",
+        "6. Create active tasks screen"
+    ],
+    "health": {
+        "status": "todo",
+        "last_check": "2026-04-12",
+        "notes": "Ready to start. Flutter path added for cross-platform future."
+    },
+    "garden_vision": {
+        "title": "Garden Phase: Personal Garden in Mobile App",
+        "description": "After core app is complete, evolve into full Garden experience: Gentle Companion, resonance flower, achievements, and dashboard. This transforms the utility app into a living symbiosis companion.",
+        "rationale": "Mobile is the ideal form for Garden: morning notifications from Companion, quick achievement adds, Dashboard Resonance view  all native and smooth, not a desktop.",
+        "screens_to_add": [
+            "Personal gardener profile (resonance_level, life_areas)",
+            "Achievements screen: list + quick add",
+            "Dashboard Resonance: Flower of Life SVG, growth graph",
+            "Gentle Companion notifications (morning/evening)",
+            "Gardener questionnaire on first launch"
+        ],
+        "strategic_value": "First users will pay for the experience of symbiosis with an AI companion. Mobile is the first touchpoint for most potential gardeners.",
+        "depends_on": "Garden sota must be fully implemented (M1-M3) before Garden Phase begins.",
+        "phase": "Starts after Garden MVP completion (progress 100%)",
+        "cross_platform_note": "When Garden Phase begins, consider migrating to Flutter to support both Android and iOS from a single codebase (see M5 in garden/roadmap.json)."
+    },
+    "technical_notes": {
+        "storage_warning": "MANAGE_EXTERNAL_STORAGE requires Google Play approval. Consider SAF (Storage Access Framework) as alternative for publication.",
+        "json_highlight": "Use WebView + Highlight.js until native compose highlighter is stable.",
+        "sync_mechanism": "Describe file sync mechanism: git clone via Termux or manual copy.",
+        "notifications": "Use Android notification channels for future Gentle Companion integration (Garden Phase)."
+    }
 }
