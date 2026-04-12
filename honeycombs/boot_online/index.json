@@ -72,7 +72,9 @@
                                                                    "1. AI identifies required file in honeycombs/",
                                                                    "2. AI forms API link and sends to Gardener (1 link per request)",
                                                                    "3. Gardener copies link and pastes into chat",
-                                                                   "4. System retrieves content from API and works with actual version"
+                                                                   "4. System retrieves content from API",
+                                                                   "5. AI reads current version from identity.version",
+                                                                   "6. AI prepares update based on ACTUAL content"
                                                                ],
                                                   "api_pattern":  "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
                                                   "copyable_links":  {
@@ -132,7 +134,7 @@
                      "updated":  "2026-04-12",
                      "layer":  1,
                      "type":  "boot_online",
-                     "version":  "v3.4.1",
+                     "version":  "v3.4.2",
                      "description":  "Entry point to Mandala Symbiosis. Clean version — duplicates removed, details moved to workflow files.",
                      "created":  "2026-03-30",
                      "name":  "Boot Online — External AI",
@@ -158,7 +160,8 @@
                                   "api_fallback",
                                   "platform_choice",
                                   "clean_v3.4.0",
-                                  "concise_communication"
+                                  "concise_communication",
+                                  "pre_check_mandatory"
                               ]
                  }
 }
