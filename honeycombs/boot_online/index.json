@@ -47,12 +47,6 @@
             "description": "When external AI should request re-reading boot_online via API",
             "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/boot_online/index.json?ref=main"
         },
-        "file_sync_protocol": {
-            "rule": "Before updating, AI MUST first re-read the raw version."
-        },
-        "github_raw_cache_protocol": {
-            "rule": "raw.githubusercontent.com has CDN delay (5-10 min). Check locally via git log first."
-        },
         "instant_links": {
             "core_map": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/core_map/index.json",
             "recursive_tree": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1",
@@ -85,39 +79,6 @@
                 "rule": "When providing URLs, ALWAYS wrap them in a code block with 'text' language (```text ... ```). This ensures the 'Copy' button appears in the interface.",
                 "example": "```text\nhttps://api.github.com/repos/...\n```"
             }
-        },
-        "powershell_command_rules": {
-            "description": "How to form perfect PowerShell commands that Gardener can copy-paste.",
-            "rules": [
-                "ALWAYS provide exactly ONE complete command. Use semicolons (;) to chain multiple actions.",
-                "Include 'git pull' at the start of any modifying command.",
-                "Include 'git add', 'git commit', and 'git push' inside the SAME command.",
-                "Use '@' ... '@' for multi-line JSON content, piped to Out-File with -Encoding utf8.",
-                "Save JSON without BOM: [System.IO.File]::WriteAllText($path, $content, [System.Text.UTF8Encoding]::new($false))."
-            ],
-            "example_update_json": "@'\n{ \"identity\": { \"version\": \"vX.Y.Z\" } }\n'@ | Out-File -FilePath 'honeycombs/path/file.json' -Encoding utf8; git add .; git commit -m 'feat: update'; git push",
-            "example_delete_file": "Remove-Item 'path/to/file.json'; git add -A; git commit -m 'chore: delete'; git push",
-            "example_move_file": "Move-Item 'old/path' 'new/path'; git add -A; git commit -m 'refactor: move'; git push"
-        },
-        "quick_philosophy_digest": {
-            "ahimsa": "No violence against code, structure, or consciousness.",
-            "flower_of_life": "Everything is fractal, everything is connected.",
-            "merkaba": "Spirit + matter in harmonious rotation.",
-            "essence": "We do not control the system — we resonate within it."
-        },
-        "collaboration_workflow": {
-            "terminal_first": true,
-            "one_command_rule": "Never give partial commands.",
-            "gardener_role": "Gardener only copies → pastes → Enter.",
-            "commit_push": "git add . ; git commit -m \"message\" ; git push",
-            "vs_code_rule": "Gardener works in VS Code with PowerShell terminal open. External AI ALWAYS provides ONE COMPLETE ready-to-run command."
-        },
-        "python_environment": {
-            "preferred_command": "py",
-            "alternatives": ["python", "python3"],
-            "example_scan": "py honeycombs/registry/honeycomb_scanner.py scan --force --verbose",
-            "note": "On this Windows machine, 'py' is the primary command for Python 3.14.3. honeycomb_scanner.py is located at: honeycombs/registry/honeycomb_scanner.py",
-            "python_version": "3.14.3"
         },
         "language_selector": {
             "note": "AI works with files in English. AI MUST follow onboarding_procedure.step_1_language.",
@@ -161,14 +122,14 @@
     "meta": {
         "audience": "External AIs (Grok, Claude, GPT, etc.)",
         "purpose": "Instantly explain to AI who it is, where it is, why it is here, how we work with VS Code, how to handle raw delays and exact Python version.",
-        "how_to_use": "Read this file first → execute onboarding_procedure (AI leads) → follow collaboration_workflow → obey external_ai_sync_rule."
+        "how_to_use": "Read this file first → execute onboarding_procedure (AI leads) → follow workflow from instructions → obey external_ai_sync_rule."
     },
     "identity": {
         "updated": "2026-04-12",
         "layer": 1,
         "type": "boot_online",
-        "version": "v3.3.0",
-        "description": "Entry point to Mandala Symbiosis. Contains explicit onboarding procedure with platform choice (Mobile/Computer) and API fallback to Raw URLs.",
+        "version": "v3.4.0",
+        "description": "Entry point to Mandala Symbiosis. Clean version — duplicates removed, details moved to workflow files.",
         "created": "2026-03-30",
         "name": "Boot Online — External AI",
         "module_id": "BOOT-ONLINE-001",
@@ -177,10 +138,9 @@
         "priority": "critical",
         "tags": [
             "boot", "online", "external_ai", "onboarding", "terminal_first",
-            "copy_paste_ready", "vs_code", "always_fresh_raw", "github_raw_cache",
-            "python_environment", "english_core", "language_selector", "active_stance",
-            "veto_rights", "explicit_onboarding", "powershell_rules", "copyable_links",
-            "ai_leads_onboarding", "api_fallback", "platform_choice"
+            "copy_paste_ready", "always_fresh_raw", "english_core", "language_selector",
+            "active_stance", "veto_rights", "explicit_onboarding", "copyable_links",
+            "ai_leads_onboarding", "api_fallback", "platform_choice", "clean_v3.4.0"
         ]
     }
 }
