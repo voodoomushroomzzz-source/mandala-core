@@ -63,7 +63,7 @@
                        "related":  [
                                        "honeycombs/philosophy/index.json",
                                        "honeycombs/seeds/index.json",
-                                       "honeycombs/tasks/active/task_004.json",
+                                       "honeycombs/tasks/active/garden_core.json",
                                        "honeycombs/roadmaps/active/RM-012_first_products.json"
                                    ]
                    },
@@ -98,7 +98,7 @@
                                                "already_done":  false
                                            },
                                 "step_3":  {
-                                               "file":  "honeycombs/tasks/active/task_004.json",
+                                               "file":  "honeycombs/tasks/active/garden_core.json",
                                                "why":  "Посмотри текущий прогресс по вехам. Найди current_milestone и next_action.",
                                                "already_done":  false
                                            },
