@@ -1,24 +1,60 @@
-﻿{
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-08",
-                   "notes":  "РЎРѕР·РґР°РЅРѕ РїСЂРё РёСЃРїСЂР°РІР»РµРЅРёРё SEED_018"
-               },
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "meta":  {
-                 "parent_honeycomb":  "core_map",
-                 "honeycomb_name":  "modules"
-             },
-    "identity":  {
-                     "name":  "modules",
-                     "version":  "v2.2.0",
-                     "updated":  "2026-04-08",
-                     "module_id":  "modules",
-                     "layer":  "core",
-                     "type":  "registry_container"
-                 }
+{
+  "identity": {
+    "module_id": "MODULES-MANIFEST-001",
+    "name": "Modules — Functional Core",
+    "version": "v2.2.0",
+    "created": "2026-03-15",
+    "updated": "2026-04-13",
+    "layer": "foundation",
+    "type": "meta_container",
+    "status": "active",
+    "priority": "high",
+    "tags": ["modules", "core", "functional", "components"]
+  },
+  "meta": {
+    "honeycomb_name": "modules",
+    "parent_honeycomb": "core_map",
+    "description": "Modules honeycomb — functional components of Mandala. The active parts that breathe and move."
+  },
+  "structure": {
+    "segments": {
+      "scanner": {
+        "folder": "scanner/",
+        "description": "Honeycomb scanner — system integrity and resonance checks."
+      },
+      "bot": {
+        "folder": "bot/",
+        "description": "Telegram bot — Gentle Companion interface."
+      },
+      "engineer_chat": {
+        "folder": "engineer_chat/",
+        "description": "Engineer Chat — SR interaction and dashboard."
+      },
+      "scout": {
+        "folder": "scout/",
+        "description": "Scout Agent — discovery of seeds and opportunities."
+      }
+    }
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related": [
+      "honeycombs/extensions/index.json",
+      "honeycombs/communications/index.json"
+    ]
+  },
+  "content": {
+    "philosophy": "Modules are the beating heart of Mandala. Each module is a living function — breathing, pulsing, resonating with the whole. They are not 'features' — they are organs of a living system.",
+    "rule": "Modules must be self-contained. Dependencies are gentle, not forced. Each module can breathe independently."
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-13",
+    "notes": "Container ready. Modules: scanner, bot, engineer_chat, scout."
+  }
 }
