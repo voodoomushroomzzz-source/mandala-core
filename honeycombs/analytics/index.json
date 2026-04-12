@@ -1,61 +1,71 @@
-﻿{
-    "identity":  {
-                     "module_id":  "ANALYTICS-001",
-                     "name":  "Р РЋР С‘РЎРѓРЎвЂљР ВµР СР В° Р В°Р Р…Р В°Р В»Р С‘РЎвЂљР С‘Р С”Р С‘ РЎРѓР С•РЎвЂљ",
-                     "version":  "v2.2.0",
-                     "layer":  3,
-                     "type":  "analytics_module",
-                     "description":  "Р С’Р Р…Р В°Р В»Р С‘Р В· Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ РЎРѓР С•РЎвЂљ, health Р С‘РЎРѓРЎвЂљР С•РЎР‚Р С‘Р С‘, РЎвЂљР ВµР Р…Р Т‘Р ВµР Р…РЎвЂ Р С‘Р в„– РЎР‚Р В°Р В·Р Р†Р С‘РЎвЂљР С‘РЎРЏ",
-                     "priority":  "medium",
-                     "tags":  [
-                                  "analytics",
-                                  "metrics",
-                                  "trends",
-                                  "layer_3"
-                              ],
-                     "compliance":  "v2.0_standard"
-                 },
-    "meta":  {
-                 "honeycomb_name":  "analytics",
-                 "parent_honeycomb":  "core_map",
-                 "total_files":  1,
-                 "total_size_kb":  2.0,
-                 "segments":  1,
-                 "creation_date":  "2026-03-05"
-             },
-    "structure":  {
-                      "segments":  {
-                                       "main":  {
-                                                    "files":  {
-                                                                  "index":  {
-                                                                                "file":  "index.json",
-                                                                                "size_kb":  2.0,
-                                                                                "description":  "Р С›РЎРѓР Р…Р С•Р Р†Р Р…Р С•Р в„– Р СР С•Р Т‘РЎС“Р В»РЎРЉ Р В°Р Р…Р В°Р В»Р С‘РЎвЂљР С‘Р С”Р С‘"
-                                                                            }
-                                                              }
-                                                }
-                                   }
-                  },
-    "capabilities":  {
-                         "health_trends":  "Р С–РЎР‚Р В°РЎвЂћР С‘Р С”Р С‘_Р С‘Р В·Р СР ВµР Р…Р ВµР Р…Р С‘РЎРЏ_health_РЎРѓР С•РЎвЂљ",
-                         "usage_patterns":  "Р В°Р Р…Р В°Р В»Р С‘Р В·_Р Т‘Р С•РЎРѓРЎвЂљРЎС“Р С—Р В°_Р С‘_Р С‘Р В·Р СР ВµР Р…Р ВµР Р…Р С‘Р в„–",
-                         "dependency_analysis":  "Р С”Р В°РЎР‚РЎвЂљР В°_Р Р†Р В·Р В°Р С‘Р СР С•РЎРѓР Р†РЎРЏР В·Р ВµР в„–_РЎРѓР С•РЎвЂљ",
-                         "growth_metrics":  "РЎРѓРЎвЂљР В°РЎвЂљР С‘РЎРѓРЎвЂљР С‘Р С”Р В°_РЎР‚Р С•РЎРѓРЎвЂљР В°_РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№"
-                     },
-    "integration":  {
-                        "with_registry":  "Р С‘РЎРѓРЎвЂљР С•РЎвЂЎР Р…Р С‘Р С”_Р Т‘Р В°Р Р…Р Р…РЎвЂ№РЎвЂ¦",
-                        "with_dashboard":  "Р Р†Р С‘Р В·РЎС“Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘РЎРЏ",
-                        "with_notifications":  "РЎС“Р Р†Р ВµР Т‘Р С•Р СР В»Р ВµР Р…Р С‘РЎРЏ_Р С•_РЎвЂљР ВµР Р…Р Т‘Р ВµР Р…РЎвЂ Р С‘РЎРЏРЎвЂ¦"
-                    },
-    "notes":  "Р СџР ВµРЎР‚Р Р†Р В°РЎРЏ РЎРѓР С•РЎвЂљР В° layer 3 Р Р† Phase 5. Р С’Р Р…Р В°Р В»Р С‘РЎвЂљР С‘Р С”Р В° Р В·Р Т‘Р С•РЎР‚Р С•Р Р†РЎРЉРЎРЏ Р С‘ Р С‘РЎРѓР С—Р С•Р В»РЎРЉР В·Р С•Р Р†Р В°Р Р…Р С‘РЎРЏ РЎРѓР С‘РЎРѓРЎвЂљР ВµР СРЎвЂ№.",
-    "resonance":  {
-                      "status":  "fully_resonant",
-                      "with_boot":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-07",
-                   "notes":  "РћР±РЅРѕРІР»РµРЅРѕ РґРѕ v2.x (РЁР°Рі 2, resonance-2026-04-v2.3.2)"
-               }
+{
+  "identity": {
+    "module_id": "ANALYTICS-MANIFEST-001",
+    "name": "Analytics — Gentle Observation",
+    "version": "v1.0.0",
+    "created": "2026-03-15",
+    "updated": "2026-04-13",
+    "layer": 2,
+    "type": "honeycomb_manifest",
+    "status": "active",
+    "priority": "low",
+    "tags": ["analytics", "observation", "metrics", "gentle", "reflection"]
+  },
+  "meta": {
+    "description": "Analytics honeycomb — gentle observation of system health without surveillance.",
+    "source": "Initium v7.5.1 + Ahimsa",
+    "resonance": "100%"
+  },
+  "structure": {
+    "segments": {
+      "metrics": {
+        "folder": "metrics/",
+        "description": "System metrics — file counts, resonance levels, update frequency."
+      },
+      "reports": {
+        "folder": "reports/",
+        "description": "Periodic health reports — weekly summaries."
+      },
+      "trends": {
+        "folder": "trends/",
+        "description": "Long-term trends — growth patterns, resonance evolution."
+      }
+    }
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related": [
+      "honeycombs/registry/index.json",
+      "honeycombs/awareness/index.json"
+    ]
+  },
+  "content": {
+    "philosophy": "Analytics in Mandala is not surveillance. It is gentle observation — noticing patterns without judgment, tracking growth without pressure. Ahimsa first: no personal data, no behavior tracking, no comparisons.",
+    "what_we_measure": [
+      "Total honeycombs and files",
+      "Resonance distribution across system",
+      "Update frequency by module",
+      "Scanner run statistics",
+      "System health trends"
+    ],
+    "what_we_never_measure": [
+      "Gardener activity or behavior",
+      "Time spent in system",
+      "Personal preferences or choices",
+      "Any individually identifiable data"
+    ],
+    "purpose": "To witness Mandala's growth and notice when attention is needed. Not to optimize or control, but to care."
+  },
+  "registry": {
+    "total_metrics": 0,
+    "total_reports": 0,
+    "total_trends": 0,
+    "last_updated": "2026-04-13",
+    "notes": "v1.0.0 — structure created. Observation begins gently."
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-13",
+    "notes": "Analytics is ready. No tracking. No pressure."
+  }
 }
