@@ -1,38 +1,55 @@
 {
     "task_id": "T-007",
-    "name": "Mobile Engineer Chat — Adaptive Interface for Android",
-    "status": "todo",
-    "priority": "MEDIUM",
+    "name": "Mobile Engineer Chat — автономное Android-приложение-компаньон",
+    "status": "refined",
+    "priority": "HIGH",
     "deadline": "2026-05-15",
     "created": "2026-04-12",
     "updated": "2026-04-12",
-    "description": "Adapt Engineer Chat interface for mobile devices (Android/iOS). Make it fully usable from phone browsers and integrate with Termux workflow.",
-    "tags": ["mobile", "engineer_chat", "ui", "responsive", "pwa", "termux"],
-    "progress": 0,
-    "notes": "Mobile adaptation of Internal SR interface. Should work seamlessly with mobile_workflow.json.",
+    "description": "Создать нативное Android-приложение как мобильный компаньон Engineer Chat. Приложение автономно отображает соты, позволяет копировать команды и скачивать JSON-файлы. Без прямой интеграции с Termux — пользователь сам вставляет скопированные команды.",
+    "tags": ["mobile", "android", "kotlin", "jetpack_compose", "viewer", "standalone"],
+    "progress": 5,
+    "notes": "Архитектура уточнена 2026-04-12: приложение-компаньон без интеграции Termux. Фокус на чтение, копирование, скачивание.",
     "deliverables": [
-        "Responsive CSS for index.html (media queries, flexbox)",
-        "Touch-optimized buttons and inputs",
-        "Collapsible sections for honeycomb data",
-        "One-tap copy for commands (integrates with Termux)",
-        "PWA manifest for 'Add to Home Screen'",
-        "Dark mode support (OLED friendly)"
+        "Базовый Android-проект (Kotlin, Jetpack Compose, Material 3)",
+        "Главный экран с древовидной навигацией по core_map",
+        "Экран просмотра JSON-соты с подсветкой синтаксиса",
+        "Кнопка копирования содержимого файла в буфер обмена",
+        "Кнопка копирования pre-блоков (команд) в буфер обмена",
+        "Кнопка скачивания соты как .json файла",
+        "Экран активных задач (список из tasks/active/)",
+        "Офлайн-режим (работа с локальным репозиторием)",
+        "Визуальный стиль Мандалы (Sacred Geometry, тёмная тема)"
     ],
     "tech_stack": {
-        "frontend": "HTML5, CSS3 (Flexbox/Grid), JavaScript",
-        "pwa": "Service Worker, Web App Manifest",
-        "testing": "Chrome DevTools mobile emulation"
+        "language": "Kotlin",
+        "ui": "Jetpack Compose",
+        "architecture": "MVVM",
+        "file_access": "Scoped Storage / MANAGE_EXTERNAL_STORAGE (для чтения ~/storage/shared/mandala-core/)",
+        "json_highlight": "Библиотека для подсветки JSON (например, PrettyJson)",
+        "storage": "DataStore для настроек"
     },
     "acceptance_criteria": [
-        "Interface is fully usable on 6-inch screen without horizontal scroll",
-        "All buttons have minimum 44x44px touch target",
-        "Commands can be copied with one tap",
-        "Works offline after first load (PWA)",
-        "Matches Mandala visual style (Geometria Sacra)"
+        "Приложение устанавливается и запускается на Android 10+",
+        "Отображает структуру сот согласно core_map",
+        "Позволяет просматривать содержимое любого JSON-файла соты",
+        "Содержимое соты можно скопировать в буфер одной кнопкой",
+        "Команды в markdown-блоках (```bash) копируются отдельной кнопкой",
+        "Файл соты можно сохранить в папку Downloads",
+        "Отображает список активных задач с возможностью просмотра каждой",
+        "Работает без интернета (только локальные файлы)"
+    ],
+    "next_actions": [
+        "1. Создать папку android-app/ и базовый проект Android Studio",
+        "2. Реализовать модуль чтения файлов из ~/storage/shared/mandala-core/",
+        "3. Создать экран навигации по core_map (рекурсивное дерево)",
+        "4. Создать экран просмотра JSON с подсветкой",
+        "5. Добавить кнопки копирования и скачивания",
+        "6. Создать экран списка активных задач"
     ],
     "health": {
-        "status": "healthy",
+        "status": "refined",
         "last_check": "2026-04-12",
-        "notes": "New task created."
+        "notes": "Задача уточнена: автономное приложение-компаньон. Готов к старту."
     }
 }
