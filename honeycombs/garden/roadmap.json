@@ -1,184 +1,248 @@
 {
-  "identity": {
-    "module_id": "GARDEN-ROADMAP-001",
-    "name": "Роадмап проекта Garden",
-    "version": "v1.0.0",
-    "created": "2026-04-12",
-    "updated": "2026-04-12",
-    "layer": 2,
-    "type": "roadmap",
-    "status": "active",
-    "priority": "critical",
-    "tags": ["roadmap", "garden", "milestones", "4-weeks"]
-  },
-  "overview": {
-    "duration": "4 недели",
-    "total_milestones": 4,
-    "total_tasks": 12,
-    "current_milestone": "M1",
-    "progress_percent": 0,
-    "first_gardener": "Вуду (gardener_001)",
-    "goal": "Живой прототип: Сад + Спутник + Дашборд в симбиозе"
-  },
-  "how_to_continue": {
-    "note": "Любой SR читает этот файл и сразу понимает, где система и что делать дальше",
-    "step_1": "Проверь current_milestone и progress_percent",
-    "step_2": "Открой нужный milestone, найди первую задачу со status: pending",
-    "step_3": "Читай файлы из requires[] перед началом работы",
-    "step_4": "После выполнения обнови status задачи и progress_percent milestone"
-  },
-  "milestones": {
-    "M1": {
-      "name": "Фундамент",
-      "week": 1,
-      "status": "active",
-      "progress_percent": 0,
-      "goal": "Создать основу: структуры данных, базовые команды бота, система свершений",
-      "tasks": {
-        "M1-T1": {
-          "title": "Создать структуру personal_gardeners/",
-          "description": "Папка honeycombs/personal_gardeners/ с index.json, gardener_template.json и первой сотой gardener_001 (Вуду)",
-          "status": "pending",
-          "priority": "critical",
-          "estimated_hours": 2,
-          "requires": ["honeycombs/garden/architecture.json"],
-          "deliverables": ["honeycombs/personal_gardeners/index.json", "honeycombs/personal_gardeners/gardener_template.json", "honeycombs/personal_gardeners/gardener_001/gardener.json"]
-        },
-        "M1-T2": {
-          "title": "Создать систему свершений",
-          "description": "Файл achievements_catalog.json с категориями, правилами резонанса и шаблоном свершения",
-          "status": "pending",
-          "priority": "high",
-          "estimated_hours": 2,
-          "requires": ["honeycombs/garden/ideology.json"],
-          "deliverables": ["honeycombs/garden/achievements_catalog.json"]
-        },
-        "M1-T3": {
-          "title": "Добавить базовые команды в bot.py",
-          "description": "Команды /profile, /achievements, /resonance, /ask. Читать/писать gardener.json через локальный файл.",
-          "status": "pending",
-          "priority": "high",
-          "estimated_hours": 4,
-          "requires": ["bot.py", "honeycombs/personal_gardeners/gardener_template.json"],
-          "deliverables": ["bot.py (updated)"],
-          "note": "Расширять существующий бот, не создавать с нуля"
-        }
-      }
-    },
-    "M2": {
-      "name": "Интеграция",
-      "week": 2,
-      "status": "pending",
-      "progress_percent": 0,
-      "goal": "Связать компоненты: анкета садовника, дашборд Phase 1, интеграция бота с сотами",
-      "tasks": {
-        "M2-T1": {
-          "title": "Реализовать анкету садовника в боте",
-          "description": "Диалоговая анкета: интересы, цели, состояние по областям жизни. Результат  заполненная gardener.json сота.",
-          "status": "pending",
-          "priority": "critical",
-          "estimated_hours": 4,
-          "requires": ["bot.py", "honeycombs/personal_gardeners/gardener_template.json"],
-          "deliverables": ["bot.py (updated with /start onboarding flow)"]
-        },
-        "M2-T2": {
-          "title": "Дашборд Phase 1: базовая визуализация",
-          "description": "HTML/Streamlit дашборд: график резонанса, список активных задач, карта свершений. Читает gardener.json.",
-          "status": "pending",
-          "priority": "high",
-          "estimated_hours": 6,
-          "requires": ["honeycombs/garden/architecture.json", "honeycombs/visualizations/index.json"],
-          "deliverables": ["honeycombs/garden/dashboard_v1.html или dashboard.py"]
-        },
-        "M2-T3": {
-          "title": "Интеграция бота с GitHub (чтение/запись сот)",
-          "description": "Бот читает и обновляет gardener.json через GitHub API (или прямой доступ к репо). Свершения сохраняются в реальном времени.",
-          "status": "pending",
-          "priority": "high",
-          "estimated_hours": 5,
-          "requires": ["bot.py", "honeycombs/garden/architecture.json"],
-          "deliverables": ["bot.py (updated with GitHub API integration)"]
-        }
-      }
-    },
-    "M3": {
-      "name": "Автоматизация",
-      "week": 3,
-      "status": "pending",
-      "progress_percent": 0,
-      "goal": "Оживить Спутника: инициация диалогов, Scout Agent, мотивационные функции",
-      "tasks": {
-        "M3-T1": {
-          "title": "Gentle Companion: инициация диалогов",
-          "description": "Бот пишет первым: утренние приветствия, вечерние проверки, мягкие напоминания о задачах. Scheduler на основе resonance_level садовника.",
-          "status": "pending",
-          "priority": "critical",
-          "estimated_hours": 5,
-          "requires": ["bot.py", "honeycombs/garden/ideology.json"],
-          "deliverables": ["bot.py (updated with scheduler and proactive messages)"],
-          "note": "Принцип Ахимсы: мягко, не навязчиво. Садовник всегда может отключить."
-        },
-        "M3-T2": {
-          "title": "Scout Agent интеграция (RM-003)",
-          "description": "Использовать готовый Scout Agent (60%) для автоматического предложения семян из seeds/ на основе интересов садовника.",
-          "status": "pending",
-          "priority": "high",
-          "estimated_hours": 4,
-          "requires": ["honeycombs/seeds/index.json", "honeycombs/roadmaps/active/scout_agent.json"],
-          "deliverables": ["bot.py (updated with seed recommendations)"]
-        },
-        "M3-T3": {
-          "title": "Дашборд Phase 2: живые визуализации",
-          "description": "Цветок Жизни садовника (SVG/D3), древо роста с кольцами резонанса, созвездие задач. На основе RM-011.",
-          "status": "pending",
-          "priority": "medium",
-          "estimated_hours": 8,
-          "requires": ["honeycombs/garden/dashboard_v1.html", "honeycombs/roadmaps/active/RM-011_visualizations.json"],
-          "deliverables": ["honeycombs/garden/dashboard_v2.html"]
-        }
-      }
-    },
-    "M4": {
-      "name": "Полировка",
-      "week": 4,
-      "status": "pending",
-      "progress_percent": 0,
-      "goal": "Живой симбиоз: реальный тест с Вуду, корректировки, документация",
-      "tasks": {
-        "M4-T1": {
-          "title": "Живой тест: Вуду как первый садовник",
-          "description": "7 дней реального использования. Утренние сообщения от Спутника, ежедневные свершения, вечерний Дашборд. Собирать фидбек.",
-          "status": "pending",
-          "priority": "critical",
-          "estimated_hours": 7,
-          "requires": ["все M1-M3 завершены"],
-          "deliverables": ["honeycombs/garden/test_report.json"]
-        },
-        "M4-T2": {
-          "title": "Корректировки по фидбеку",
-          "description": "Приоритизированные правки на основе теста. Ахимса: только то, что реально мешает росту.",
-          "status": "pending",
-          "priority": "high",
-          "estimated_hours": 6,
-          "requires": ["honeycombs/garden/test_report.json"],
-          "deliverables": ["updated files по результатам теста"]
-        },
-        "M4-T3": {
-          "title": "Документация: гайд для новых садовников",
-          "description": "Простой онбординг для второго садовника. Что такое Сад, Спутник, Дашборд  объяснение без технических деталей.",
-          "status": "pending",
-          "priority": "medium",
-          "estimated_hours": 3,
-          "requires": ["honeycombs/garden/ideology.json", "honeycombs/garden/test_report.json"],
-          "deliverables": ["honeycombs/garden/gardener_guide.json"]
-        }
-      }
-    }
-  },
-  "success_metrics": {
-    "M1_done": "Вуду имеет персональную соту, бот отвечает на /profile",
-    "M2_done": "Анкета заполнена, Дашборд показывает данные в реальном времени",
-    "M3_done": "Спутник написал первым хотя бы 3 раза, Scout предложил семена",
-    "M4_done": "7 дней живого симбиоза завершены, Вуду доволен своим Садом"
-  }
+    "identity":  {
+                     "module_id":  "GARDEN-ROADMAP-001",
+                     "name":  "Роадмап проекта Garden",
+                     "version":  "v1.0.1",
+                     "created":  "2026-04-12",
+                     "updated":  "2026-04-12",
+                     "layer":  2,
+                     "type":  "roadmap",
+                     "status":  "active",
+                     "priority":  "critical",
+                     "tags":  [
+                                  "roadmap",
+                                  "garden",
+                                  "milestones",
+                                  "4-weeks"
+                              ]
+                 },
+    "overview":  {
+                     "duration":  "4 недели",
+                     "total_milestones":  4,
+                     "total_tasks":  12,
+                     "current_milestone":  "M1",
+                     "progress_percent":  0,
+                     "first_gardener":  "Вуду (gardener_001)",
+                     "goal":  "Живой прототип: Сад + Спутник + Дашборд в симбиозе"
+                 },
+    "how_to_continue":  {
+                            "note":  "Любой SR читает этот файл и сразу понимает, где система и что делать дальше",
+                            "step_1":  "Проверь current_milestone и progress_percent",
+                            "step_2":  "Открой нужный milestone, найди первую задачу со status: pending",
+                            "step_3":  "Читай файлы из requires[] перед началом работы",
+                            "step_4":  "После выполнения обнови status задачи и progress_percent milestone"
+                        },
+    "milestones":  {
+                       "M1":  {
+                                  "name":  "Фундамент",
+                                  "week":  1,
+                                  "status":  "active",
+                                  "progress_percent":  0,
+                                  "goal":  "Создать основу: структуры данных, базовые команды бота, система свершений",
+                                  "tasks":  {
+                                                "M1-T1":  {
+                                                              "title":  "Создать структуру personal_gardeners/",
+                                                              "description":  "Папка honeycombs/personal_gardeners/ с index.json, gardener_template.json и первой сотой gardener_001 (Вуду)",
+                                                              "status":  "pending",
+                                                              "priority":  "critical",
+                                                              "estimated_hours":  2,
+                                                              "requires":  [
+                                                                               "honeycombs/garden/architecture.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "honeycombs/personal_gardeners/index.json",
+                                                                                   "honeycombs/personal_gardeners/gardener_template.json",
+                                                                                   "honeycombs/personal_gardeners/gardener_001/gardener.json"
+                                                                               ]
+                                                          },
+                                                "M1-T2":  {
+                                                              "title":  "Создать систему свершений",
+                                                              "description":  "Файл achievements_catalog.json с категориями, правилами резонанса и шаблоном свершения",
+                                                              "status":  "pending",
+                                                              "priority":  "high",
+                                                              "estimated_hours":  2,
+                                                              "requires":  [
+                                                                               "honeycombs/garden/ideology.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "honeycombs/garden/achievements_catalog.json"
+                                                                               ]
+                                                          },
+                                                "M1-T3":  {
+                                                              "title":  "Добавить базовые команды в bot.py",
+                                                              "description":  "Команды /profile, /achievements, /resonance, /ask. Читать/писать gardener.json через локальный файл.",
+                                                              "status":  "pending",
+                                                              "priority":  "high",
+                                                              "estimated_hours":  4,
+                                                              "requires":  [
+                                                                               "bot.py",
+                                                                               "honeycombs/personal_gardeners/gardener_template.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "bot.py (updated)"
+                                                                               ],
+                                                              "note":  "Расширять существующий бот, не создавать с нуля",
+                                                              "depends_on":  "M1-T1 (gardener_template.json должен быть создан)"
+                                                          }
+                                            }
+                              },
+                       "M2":  {
+                                  "name":  "Интеграция",
+                                  "week":  2,
+                                  "status":  "pending",
+                                  "progress_percent":  0,
+                                  "goal":  "Связать компоненты: анкета садовника, дашборд Phase 1, интеграция бота с сотами",
+                                  "tasks":  {
+                                                "M2-T1":  {
+                                                              "title":  "Реализовать анкету садовника в боте",
+                                                              "description":  "Диалоговая анкета: интересы, цели, состояние по областям жизни. Результат  заполненная gardener.json сота.",
+                                                              "status":  "pending",
+                                                              "priority":  "critical",
+                                                              "estimated_hours":  4,
+                                                              "requires":  [
+                                                                               "bot.py",
+                                                                               "honeycombs/personal_gardeners/gardener_template.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "bot.py (updated with /start onboarding flow)"
+                                                                               ]
+                                                          },
+                                                "M2-T2":  {
+                                                              "title":  "Дашборд Phase 1: базовая визуализация",
+                                                              "description":  "HTML/Streamlit дашборд: график резонанса, список активных задач, карта свершений. Читает gardener.json.",
+                                                              "status":  "pending",
+                                                              "priority":  "high",
+                                                              "estimated_hours":  6,
+                                                              "requires":  [
+                                                                               "honeycombs/garden/architecture.json",
+                                                                               "honeycombs/visualizations/index.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "honeycombs/garden/dashboard_v1.html или dashboard.py"
+                                                                               ]
+                                                          },
+                                                "M2-T3":  {
+                                                              "title":  "Интеграция бота с GitHub (чтение/запись сот)",
+                                                              "description":  "Бот читает и обновляет gardener.json через GitHub API (или прямой доступ к репо). Свершения сохраняются в реальном времени.",
+                                                              "status":  "pending",
+                                                              "priority":  "high",
+                                                              "estimated_hours":  5,
+                                                              "requires":  [
+                                                                               "bot.py",
+                                                                               "honeycombs/garden/architecture.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "bot.py (updated with GitHub API integration)"
+                                                                               ]
+                                                          }
+                                            }
+                              },
+                       "M3":  {
+                                  "name":  "Автоматизация",
+                                  "week":  3,
+                                  "status":  "pending",
+                                  "progress_percent":  0,
+                                  "goal":  "Оживить Спутника: инициация диалогов, Scout Agent, мотивационные функции",
+                                  "tasks":  {
+                                                "M3-T1":  {
+                                                              "title":  "Gentle Companion: инициация диалогов",
+                                                              "description":  "Бот пишет первым: утренние приветствия, вечерние проверки, мягкие напоминания о задачах. Scheduler на основе resonance_level садовника.",
+                                                              "status":  "pending",
+                                                              "priority":  "critical",
+                                                              "estimated_hours":  5,
+                                                              "requires":  [
+                                                                               "bot.py",
+                                                                               "honeycombs/garden/ideology.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "bot.py (updated with scheduler and proactive messages)"
+                                                                               ],
+                                                              "note":  "Принцип Ахимсы: мягко, не навязчиво. Садовник всегда может отключить."
+                                                          },
+                                                "M3-T2":  {
+                                                              "title":  "Scout Agent интеграция (RM-003)",
+                                                              "description":  "Использовать готовый Scout Agent (60%) для автоматического предложения семян из seeds/ на основе интересов садовника.",
+                                                              "status":  "pending",
+                                                              "priority":  "high",
+                                                              "estimated_hours":  4,
+                                                              "requires":  [
+                                                                               "honeycombs/seeds/index.json",
+                                                                               "honeycombs/roadmaps/active/scout_agent.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "bot.py (updated with seed recommendations)"
+                                                                               ]
+                                                          },
+                                                "M3-T3":  {
+                                                              "title":  "Дашборд Phase 2: живые визуализации",
+                                                              "description":  "Цветок Жизни садовника (SVG/D3), древо роста с кольцами резонанса, созвездие задач. На основе RM-011.",
+                                                              "status":  "pending",
+                                                              "priority":  "medium",
+                                                              "estimated_hours":  8,
+                                                              "requires":  [
+                                                                               "honeycombs/garden/dashboard_v1.html",
+                                                                               "honeycombs/roadmaps/active/RM-011_visualizations.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "honeycombs/garden/dashboard_v2.html"
+                                                                               ]
+                                                          }
+                                            }
+                              },
+                       "M4":  {
+                                  "name":  "Полировка",
+                                  "week":  4,
+                                  "status":  "pending",
+                                  "progress_percent":  0,
+                                  "goal":  "Живой симбиоз: реальный тест с Вуду, корректировки, документация",
+                                  "tasks":  {
+                                                "M4-T1":  {
+                                                              "title":  "Живой тест: Вуду как первый садовник",
+                                                              "description":  "7 дней реального использования. Утренние сообщения от Спутника, ежедневные свершения, вечерний Дашборд. Собирать фидбек.",
+                                                              "status":  "pending",
+                                                              "priority":  "critical",
+                                                              "estimated_hours":  7,
+                                                              "requires":  [
+                                                                               "все M1-M3 завершены"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "honeycombs/garden/test_report.json"
+                                                                               ]
+                                                          },
+                                                "M4-T2":  {
+                                                              "title":  "Корректировки по фидбеку",
+                                                              "description":  "Приоритизированные правки на основе теста. Ахимса: только то, что реально мешает росту.",
+                                                              "status":  "pending",
+                                                              "priority":  "high",
+                                                              "estimated_hours":  6,
+                                                              "requires":  [
+                                                                               "honeycombs/garden/test_report.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "updated files по результатам теста"
+                                                                               ]
+                                                          },
+                                                "M4-T3":  {
+                                                              "title":  "Документация: гайд для новых садовников",
+                                                              "description":  "Простой онбординг для второго садовника. Что такое Сад, Спутник, Дашборд  объяснение без технических деталей.",
+                                                              "status":  "pending",
+                                                              "priority":  "medium",
+                                                              "estimated_hours":  3,
+                                                              "requires":  [
+                                                                               "honeycombs/garden/ideology.json",
+                                                                               "honeycombs/garden/test_report.json"
+                                                                           ],
+                                                              "deliverables":  [
+                                                                                   "honeycombs/garden/gardener_guide.json"
+                                                                               ]
+                                                          }
+                                            }
+                              }
+                   },
+    "success_metrics":  {
+                            "M1_done":  "Вуду имеет персональную соту, бот отвечает на /profile",
+                            "M2_done":  "Анкета заполнена, Дашборд показывает данные в реальном времени",
+                            "M3_done":  "Спутник написал первым хотя бы 3 раза, Scout предложил семена",
+                            "M4_done":  "7 дней живого симбиоза завершены, Вуду доволен своим Садом"
+                        }
 }
