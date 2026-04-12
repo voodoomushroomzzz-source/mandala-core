@@ -1,118 +1,79 @@
 {
-    "directives":  {
-                       "primary":  "External SR reads external_sr_workflow.json before generating any PowerShell commands.",
-                       "secondary":  "Internal SR (engineer-chat) follows sr_internal_role.json."
-                   },
-    "resonance":  {
-                      "with_registry":  "100%",
-                      "with_boot_online":  "100%",
-                      "with_core_map":  "100%"
-                  },
-    "structure":  {
-                      "segments":  {
-                                       "core":  {
-                                                    "description":  "Core SR instructions: Internal SR role, External SR workflow, and reference guides",
-                                                    "files":  {
-                                                                  "sr_internal_role":  {
-                                                                                           "size_kb":  4.8,
-                                                                                           "category":  "A",
-                                                                                           "version":  "v3.1.0",
-                                                                                           "load_priority":  "critical",
-                                                                                           "tags":  [
-                                                                                                        "sr",
-                                                                                                        "role",
-                                                                                                        "internal",
-                                                                                                        "manager",
-                                                                                                        "analyst"
-                                                                                                    ],
-                                                                                           "created":  "2026-03-30",
-                                                                                           "description":  "Internal SR Role v3.1  Core manager-analyst. Does NOT write code, analyzes, prepares TZ for External SR.",
-                                                                                           "source_id":  "INSTR-SR-ROLE-001",
-                                                                                           "file":  "core/sr_internal_role.json"
-                                                                                       },
-                                                                  "manifest_standard_v2":  {
-                                                                                               "size_kb":  9.2,
-                                                                                               "category":  "A",
-                                                                                               "version":  "v2.3.0",
-                                                                                               "load_priority":  "high",
-                                                                                               "tags":  [
-                                                                                                            "manifest",
-                                                                                                            "standard",
-                                                                                                            "v2",
-                                                                                                            "honeycomb"
-                                                                                                        ],
-                                                                                               "created":  "2026-03-01",
-                                                                                               "description":  "Honeycomb manifest standard v2.x specification.",
-                                                                                               "source_id":  "INSTR-MANIFEST-001",
-                                                                                               "file":  "core/manifest_standard_v2.json"
-                                                                                           },
-                                                                  "file_naming":  {
-                                                                                      "size_kb":  2.9,
-                                                                                      "category":  "C",
-                                                                                      "version":  "v1.1.0",
-                                                                                      "load_priority":  "medium",
-                                                                                      "tags":  [
-                                                                                                   "naming",
-                                                                                                   "convention",
-                                                                                                   "files"
-                                                                                               ],
-                                                                                      "created":  "2026-03-01",
-                                                                                      "description":  "File naming conventions for honeycombs.",
-                                                                                      "source_id":  "INSTR-NAMING-001",
-                                                                                      "file":  "core/file_naming.json"
-                                                                                  },
-                                                                  "external_sr_workflow":  {
-                                                                                               "size_kb":  8.5,
-                                                                                               "category":  "A",
-                                                                                               "version":  "v1.0.0",
-                                                                                               "load_priority":  "critical",
-                                                                                               "tags":  [
-                                                                                                            "external_sr",
-                                                                                                            "workflow",
-                                                                                                            "powershell",
-                                                                                                            "json_patch",
-                                                                                                            "git"
-                                                                                                        ],
-                                                                                               "created":  "2026-04-09",
-                                                                                               "description":  "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment.",
-                                                                                               "source_id":  "INSTR-EXT-SR-WORKFLOW-001",
-                                                                                               "file":  "core/external_sr_workflow.json"
-                                                                                           }
-                                                              }
-                                                }
-                                   }
-                  },
-    "meta":  {
-                 "segments":  1,
-                 "segmentation_strategy":  "core (SR role, External SR workflow, reference guides)",
-                 "total_files":  4,
-                 "abc_categories":  "A=SR-critical instructions, B=External AI workflows, C=GitHub/repository guides",
-                 "parent_honeycomb":  "core_map",
-                 "load_strategy":  "AI reads both segments on session start",
-                 "total_size_kb":  25.4,
-                 "honeycomb_name":  "instructions"
-             },
-    "identity":  {
-                     "updated":  "2026-04-09",
-                     "layer":  2,
-                     "type":  "honeycomb_manifest",
-                     "version":  "v3.1.1",
-                     "description":  "Master index of all instructions. SR instructions: v3.0 role, workflow, and External AI integration.",
-                     "created":  "2026-03-01",
-                     "name":  "Instructions Honeycomb",
-                     "module_id":  "INSTR-HONEYCOMB-001",
-                     "resonance":  "100%",
-                     "status":  "active",
-                     "priority":  "critical",
-                     "tags":  [
-                                  "instructions",
-                                  "honeycomb",
-                                  "core",
-                                  "mandala",
-                                  "external_ai",
-                                  "sr_v3",
-                                  "vs_code_workflow",
-                                  "english_core"
-                              ]
-                 }
+    "identity": {
+        "module_id": "INSTRUCTIONS-MANIFEST-001",
+        "name": "Instructions Honeycomb",
+        "version": "v3.2.0",
+        "created": "2026-03-01",
+        "updated": "2026-04-12",
+        "layer": 2,
+        "type": "honeycomb_manifest",
+        "description": "Master index of all instructions. SR instructions: v3.0 role, workflow, External AI integration, and mobile workflow.",
+        "status": "active",
+        "priority": "high",
+        "tags": ["instructions", "honeycomb", "core", "mandala", "external_ai", "sr_v3", "vs_code_workflow", "english_core", "mobile"],
+        "resonance": "100%"
+    },
+    "meta": {
+        "description": "Central index of all instruction files for Mandala Symbiosis.",
+        "status": "active",
+        "priority": "high",
+        "tags": ["instructions", "honeycomb", "core", "mandala", "external_ai", "sr_v3", "vs_code_workflow", "english_core", "mobile"],
+        "resonance": "100%"
+    },
+    "structure": {
+        "total_segments": 2,
+        "segments": [
+            {
+                "segment": "core",
+                "description": "Core SR instructions",
+                "files": {
+                    "sr_internal_role": {
+                        "file": "core/sr_internal_role.json",
+                        "description": "Internal SR role definition and responsibilities"
+                    },
+                    "external_sr_workflow": {
+                        "file": "core/external_sr_workflow.json",
+                        "description": "Complete workflow for External SR: PowerShell, JSON updates, git cycle"
+                    },
+                    "file_naming": {
+                        "file": "core/file_naming.json",
+                        "description": "File naming conventions"
+                    },
+                    "manifest_standard": {
+                        "file": "core/manifest_standard_v2.json",
+                        "description": "Honeycomb manifest standard v2.0"
+                    }
+                }
+            },
+            {
+                "segment": "workflows",
+                "description": "Platform-specific workflows",
+                "files": {
+                    "mobile_workflow": {
+                        "file": "mobile_workflow.json",
+                        "description": "Working with Mandala from Android phone using Termux"
+                    }
+                }
+            }
+        ]
+    },
+    "navigation": {
+        "parent_map": "honeycombs/core_map/index.json",
+        "first_file": "core/external_sr_workflow.json"
+    },
+    "registry": {
+        "total_files": 6,
+        "last_updated": "2026-04-12",
+        "notes": "v3.2.0: added mobile workflow."
+    },
+    "resonance": {
+        "status": "fully_resonant",
+        "with_boot": "100%",
+        "with_core_map": "100%"
+    },
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-04-12",
+        "notes": "v3.2.0 — added mobile workflow for Android/Termux."
+    }
 }
