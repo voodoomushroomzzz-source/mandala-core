@@ -47,7 +47,7 @@
                                }
               },
     "registry":  {
-                     "valid_v2":  18,
+                     "valid_v2":  19,
                      "total_with_index":  19,
                      "notes":  "Map synced with repo (19 honeycombs). Added: garden.",
                      "errors":  0,
@@ -90,7 +90,7 @@
                                   "core",
                                   "map",
                                   "critical",
-                                  "v3.2",
+                                  "v3.3",
                                   "english_core"
                               ]
                  },
@@ -116,8 +116,6 @@
                                           "honeycombs/modules/index.json",
                                           "honeycombs/sphaerae/index.json",
                                           "honeycombs/tectosphaera/index.json",
-                                          "honeycombs/garden/index.json",
-                                          "honeycombs/garden/index.json",
                                           "honeycombs/garden/index.json"
                                       ],
                        "children":  [
