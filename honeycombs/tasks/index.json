@@ -1,10 +1,10 @@
-﻿{
+{
     "identity": {
         "module_id": "TASKS-MANIFEST-004",
         "name": "Tasks Honeycomb Manifest",
-        "version": "v3.0.2",
+        "version": "v3.0.3",
         "created": "2026-03-01",
-        "updated": "2026-04-10",
+        "updated": "2026-04-12",
         "layer": 1,
         "type": "honeycomb_manifest"
     },
@@ -28,7 +28,7 @@
                 "segment": "active_tasks",
                 "folder": "active/",
                 "description": "Currently active tasks",
-                "files_count": 6
+                "files_count": 7
             },
             {
                 "segment": "archive_tasks",
@@ -43,10 +43,10 @@
         "first_file": "basic_task.json"
     },
     "registry": {
-        "total_files": 6,
-        "total_size_kb": 14.0,
-        "last_updated": "2026-04-10",
-        "notes": "v3.0.2: added Claude Code Integration task (T-006)."
+        "total_files": 7,
+        "total_size_kb": 16.0,
+        "last_updated": "2026-04-12",
+        "notes": "v3.0.3: added Mobile Engineer Chat task (T-007)."
     },
     "resonance": {
         "status": "fully_resonant",
@@ -55,7 +55,7 @@
     },
     "health": {
         "status": "healthy",
-        "last_check": "2026-04-10",
-        "notes": "v3.0.2  active tasks: 6."
+        "last_check": "2026-04-12",
+        "notes": "v3.0.3 — active tasks: 7."
     }
 }
