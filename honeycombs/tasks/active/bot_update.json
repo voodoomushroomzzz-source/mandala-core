@@ -1,31 +1,27 @@
-﻿{
-    "identity": {
-        "module_id": "TASK-BOT-UPDATE-001",
-        "name": "Обновление Telegram-бота",
-        "version": "v2.2.0",
-        "created": "2026-04-01",
-        "updated": "2026-04-08",
-        "layer": 5,
-        "type": "active_task",
-        "description": "Активная задача по обновлению и поддержке Telegram-бота Мандалы Симбиоза.",
-        "status": "active",
-        "priority": "high",
-        "tags": ["task", "telegram_bot", "update", "active"]
-    },
-    "meta": {
-        "parent": "honeycombs/tasks/index.json",
-        "total_size_kb": 1.8,
-        "migration_status": "completed_v2.2"
-    },
-    "content": {
-        "description": "Текущая активная задача по улучшению Telegram-бота",
-        "status": "in_progress"
-    },
-    "resonance": {
-        "with_telegram_bot": "100%",
-        "with_communications": "100%"
-    },
-    "directives": {
-        "primary": "Поддерживать и обновлять Telegram-бот Мандалы"
+{
+    "task_id": "T-002",
+    "name": "Telegram Bot Update",
+    "status": "in_progress",
+    "priority": "HIGH",
+    "deadline": "2026-05-01",
+    "created": "2026-04-01",
+    "updated": "2026-04-12",
+    "description": "Active task for updating and maintaining the Mandala Symbiosis Telegram bot.",
+    "tags": ["telegram_bot", "update", "active"],
+    "progress": 50,
+    "deliverables": [
+        "Update bot commands",
+        "Integration with engineer-chat",
+        "Improve error handling"
+    ],
+    "acceptance_criteria": [
+        "Bot responds to all primary commands",
+        "Connection with engineer-chat is stable",
+        "Error logging is configured"
+    ],
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-04-12",
+        "notes": "Standardized to task structure v3.1.0"
     }
 }
