@@ -1,135 +1,278 @@
 {
-    "identity": {
-        "module_id": "INSTR-MOBILE-WORKFLOW-001",
-        "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.2.0",
-        "created": "2026-04-12",
-        "updated": "2026-04-12",
-        "layer": 2,
-        "type": "workflow_guide",
-        "description": "Complete guide for External SR working from Android/Termux. Includes core SR principles, system flow, and mobile-specific commands.",
-        "status": "active",
-        "priority": "high",
-        "tags": ["mobile", "android", "termux", "git", "workflow", "guide", "copy-paste", "core_principles"]
+  "identity": {
+    "module_id": "INSTR-MOBILE-WORKFLOW-001",
+    "name": "Mobile Workflow — Working with Mandala from Android",
+    "version": "v1.3.0",
+    "created": "2026-04-12",
+    "updated": "2026-04-13",
+    "layer": 2,
+    "type": "workflow_guide",
+    "description": "Complete guide for External SR working from Android/Termux. Includes core SR principles, system flow, and mobile-specific commands.",
+    "status": "active",
+    "priority": "high",
+    "tags": [
+      "mobile",
+      "android",
+      "termux",
+      "git",
+      "workflow",
+      "guide",
+      "copy-paste",
+      "core_principles"
+    ]
+  },
+  "golden_rule": {
+    "title": "ONE COPY — ONE ACTION — FULL DEPLOY",
+    "description": "Every code block marked as 'FULL DEPLOY' is a COMPLETE command. It creates/updates the file, adds to git, commits, and pushes to GitHub. Copy ONCE, paste ONCE, press ENTER.",
+    "example": "When you see a block starting with 'cat > ... << EOF' and ending with 'git push', that's the whole thing."
+  },
+  "core_principles": {
+    "description": "Fundamental rules for External SR — apply to both PC and mobile.",
+    "api_first": "Before modifying any file, request its current content via GitHub API (bypasses CDN). Raw URL has 5-10 min delay.",
+    "always_fetch_before_update": "NEVER assume local state. ALWAYS fetch the current version via API before preparing an update.",
+    "pre_check_flow": {
+      "steps": [
+        "1. Identify the file to modify",
+        "2. Form API link: https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
+        "3. Send link to Gardener, wait for content",
+        "4. Read current version from identity.version",
+        "5. Only then prepare the update"
+      ]
     },
-    "golden_rule": {
-        "title": "ONE COPY — ONE ACTION — FULL DEPLOY",
-        "description": "Every code block marked as 'FULL DEPLOY' is a COMPLETE command. It creates/updates the file, adds to git, commits, and pushes to GitHub. Copy ONCE, paste ONCE, press ENTER.",
-        "example": "When you see a block starting with 'cat > ... << EOF' and ending with 'git push', that's the whole thing."
-    },
-    "core_principles": {
-        "description": "Fundamental rules for External SR — apply to both PC and mobile.",
-        "api_first": "Before modifying any file, request its current content via GitHub API (bypasses CDN). Raw URL has 5-10 min delay.",
-        "always_fetch_before_update": "NEVER assume local state. ALWAYS fetch the current version via API before preparing an update.",
-        "pre_check_flow": {
-            "steps": [
-                "1. Identify the file to modify",
-                "2. Form API link: https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
-                "3. Send link to Gardener, wait for content",
-                "4. Read current version from identity.version",
-                "5. Only then prepare the update"
-            ]
-        },
-        "laconic_communication": "Responses must be concise. Avoid showing unnecessary code. Only output what Gardener needs to see or execute.",
-        "copyable_links": "When providing URLs, wrap them in a code block with 'text' language (```text ... ```) so the 'Copy' button appears.",
-        "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the SAME command block."
-    },
-    "zones_of_responsibility": {
-        "external_sr": ["Analyze system state", "Propose improvements", "Prepare commands for Gardener", "Update JSON honeycombs", "Activate protocols"],
-        "gardener": ["Final decisions", "Pastes commands in Termux/VS Code", "Approves deletions"],
-        "internal_sr": ["Automated analysis (engineer-chat)", "Prepare TZ for External AI", "Patch honeycombs autonomously", "Manage roadmaps and registry"]
-    },
-    "system_flow": {
-        "description": "How ideas and tasks flow through Mandala Symbiosis",
-        "diagram": "Scout Agent / Gardener / Claude → Seeds/ → Task (≤1 month) or Roadmap (>1 month) → Archive",
-        "entities": {
-            "seeds": {"path": "honeycombs/seeds/", "role": "Entry point for all raw ideas"},
-            "tasks": {"path": "honeycombs/tasks/active/", "role": "Concrete work units, ≤1 month"},
-            "roadmaps": {"path": "honeycombs/roadmaps/active/", "role": "Strategic directions, >1 month"},
-            "archive": {"path": "honeycombs/tasks/archive/ and honeycombs/roadmaps/archive/", "role": "Completed items"}
-        },
-        "inbox_note": "The 'inbox' honeycomb is deprecated and removed. Use Seeds."
-    },
-    "api_patterns": {
-        "get_file": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
-        "recursive_tree": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1"
-    },
-    "prerequisites": {
-        "description": "What you need before starting",
-        "items": [
-            "Android phone (version 7.0+)",
-            "Internet connection",
-            "GitHub account with access to mandala-core repository",
-            "GitHub Personal Access Token (classic) with 'repo' scope"
-        ]
-    },
-    "setup": {
-        "description": "One-time setup. Do this only once.",
-        "steps": [
-            {"step": 1, "name": "Install Termux", "action": "Download from F-Droid (recommended) or GitHub Releases. Do NOT use Google Play.", "link": "https://f-droid.org/en/packages/com.termux/"},
-            {"step": 2, "name": "Update packages", "command": "pkg update && pkg upgrade"},
-            {"step": 3, "name": "Install Git, Python, and Micro", "command": "pkg install git python micro"},
-            {"step": 4, "name": "Grant storage access", "command": "termux-setup-storage"},
-            {"step": 5, "name": "Clone repository", "commands": ["cd ~/storage/shared/", "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git", "cd mandala-core"]},
-            {"step": 6, "name": "Configure Git", "commands": ["git config --global user.name \"Voodoo\"", "git config --global user.email \"voodoo@mandala.symbiosis\"", "git config --global --add safe.directory /storage/emulated/0/mandala-core", "git config --global credential.helper store"]},
-            {"step": 7, "name": "First push", "action": "Username: voodoomushroomzzz-source, Password: your GitHub token.", "full_deploy_command": "echo \"# Mobile test\" >> mobile_test.md; git add mobile_test.md; git commit -m \"test: mobile git setup\"; git push; git rm mobile_test.md; git commit -m \"chore: remove mobile test file\"; git push"}
-        ]
-    },
-    "daily_workflow": {
-        "description": "How to work with Mandala on a daily basis",
-        "steps": [
-            {"step": 1, "name": "Pull latest changes", "command": "git pull --rebase origin main"},
-            {"step": 2, "name": "Edit a honeycomb file", "command": "micro honeycombs/path/to/file.json", "note": "Ctrl+S save, Ctrl+Q quit."},
-            {"step": 3, "name": "FULL DEPLOY after editing", "description": "Use a FULL DEPLOY block provided by External SR. It will add, commit, and push automatically."},
-            {"step": 4, "name": "Run scanner (optional)", "command": "python honeycombs/registry/honeycomb_scanner.py scan"}
-        ]
-    },
-    "full_deploy_pattern": {
-        "description": "External SR will provide updates in this format. Copy the WHOLE block.",
-        "template": "cat > honeycombs/path/to/file.json << 'EOF'\n{ ... full JSON content ... }\nEOF\ngit add honeycombs/path/to/file.json\ngit commit -m \"feat: description\"\ngit push"
-    },
-    "useful_commands": {
-        "commands": [
-            {"name": "Check status", "command": "git status"},
-            {"name": "View diff", "command": "git diff"},
-            {"name": "View history", "command": "git log --oneline -10"},
-            {"name": "Discard changes", "command": "git checkout -- filename.json"},
-            {"name": "Create new honeycomb", "command": "mkdir -p honeycombs/new && micro honeycombs/new/index.json"},
-            {"name": "Delete file", "command": "git rm path/to/file.json"},
-            {"name": "Move file", "command": "git mv old new"}
-        ]
-    },
-    "micro_shortcuts": {
-        "Save": "Ctrl+S", "Quit": "Ctrl+Q", "Search": "Ctrl+F", "Undo": "Ctrl+Z", "Cut": "Ctrl+X", "Copy": "Ctrl+C", "Paste": "Ctrl+V",
-        "note": "Use Volume Up as Ctrl on Android."
-    },
-    "troubleshooting": {
-        "issues": [
-            {"problem": "Asks password every time", "solution": "git config --global credential.helper store"},
-            {"problem": "dubious ownership", "solution": "git config --global --add safe.directory /storage/emulated/0/mandala-core"},
-            {"problem": "Token not working", "solution": "Create new token at https://github.com/settings/tokens/new with 'repo' scope."},
-            {"problem": "Cannot paste", "solution": "Long-press screen → Paste."},
-            {"problem": "Ctrl keys not working", "solution": "Use Volume Up as Ctrl."}
-        ]
-    },
-    "getting_token": {
-        "steps": [
-            "1. Open: https://github.com/settings/tokens/new",
-            "2. Note: mandala-android",
-            "3. Expiration: 90 days",
-            "4. Check 'repo' box",
-            "5. Generate and COPY token immediately (starts with ghp_)",
-            "6. Use token as PASSWORD in Termux"
-        ]
-    },
-    "notes": [
-        "Username: voodoomushroomzzz-source",
-        "Password: your GitHub token (ghp_...)",
-        "External SR will give you FULL DEPLOY blocks — one copy, one paste, done."
+    "laconic_communication": "Responses must be concise. Avoid showing unnecessary code. Only output what Gardener needs to see or execute.",
+    "copyable_links": "When providing URLs, wrap them in a code block with 'text' language (```text ... ```) so the 'Copy' button appears.",
+    "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the SAME command block."
+  },
+  "zones_of_responsibility": {
+    "external_sr": [
+      "Analyze system state",
+      "Propose improvements",
+      "Prepare commands for Gardener",
+      "Update JSON honeycombs",
+      "Activate protocols"
     ],
-    "health": {
-        "status": "healthy",
-        "last_check": "2026-04-12",
-        "notes": "v1.2.0 — added core principles, zones of responsibility, system flow, and API patterns."
-    }
+    "gardener": [
+      "Final decisions",
+      "Pastes commands in Termux/VS Code",
+      "Approves deletions"
+    ],
+    "internal_sr": [
+      "Automated analysis (engineer-chat)",
+      "Prepare TZ for External AI",
+      "Patch honeycombs autonomously",
+      "Manage roadmaps and registry"
+    ]
+  },
+  "system_flow": {
+    "description": "How ideas and tasks flow through Mandala Symbiosis",
+    "diagram": "Scout Agent / Gardener / Claude → Seeds/ → Task (≤1 month) or Roadmap (>1 month) → Archive",
+    "entities": {
+      "seeds": {
+        "path": "honeycombs/seeds/",
+        "role": "Entry point for all raw ideas"
+      },
+      "tasks": {
+        "path": "honeycombs/tasks/active/",
+        "role": "Concrete work units, ≤1 month"
+      },
+      "roadmaps": {
+        "path": "honeycombs/roadmaps/active/",
+        "role": "Strategic directions, >1 month"
+      },
+      "archive": {
+        "path": "honeycombs/tasks/archive/ and honeycombs/roadmaps/archive/",
+        "role": "Completed items"
+      }
+    },
+    "inbox_note": "The 'inbox' honeycomb is deprecated and removed. Use Seeds."
+  },
+  "api_patterns": {
+    "get_file": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
+    "recursive_tree": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1"
+  },
+  "prerequisites": {
+    "description": "What you need before starting",
+    "items": [
+      "Android phone (version 7.0+)",
+      "Internet connection",
+      "GitHub account with access to mandala-core repository",
+      "GitHub Personal Access Token (classic) with 'repo' scope"
+    ]
+  },
+  "setup": {
+    "description": "One-time setup. Do this only once.",
+    "steps": [
+      {
+        "step": 1,
+        "name": "Install Termux",
+        "action": "Download from F-Droid (recommended) or GitHub Releases. Do NOT use Google Play.",
+        "link": "https://f-droid.org/en/packages/com.termux/"
+      },
+      {
+        "step": 2,
+        "name": "Update packages",
+        "command": "pkg update && pkg upgrade"
+      },
+      {
+        "step": 3,
+        "name": "Install Git, Python, and Micro",
+        "command": "pkg install git python micro"
+      },
+      {
+        "step": 4,
+        "name": "Grant storage access",
+        "command": "termux-setup-storage"
+      },
+      {
+        "step": 5,
+        "name": "Clone repository",
+        "commands": [
+          "cd ~/storage/shared/",
+          "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git",
+          "cd mandala-core"
+        ]
+      },
+      {
+        "step": 6,
+        "name": "Configure Git",
+        "commands": [
+          "git config --global user.name \"Voodoo\"",
+          "git config --global user.email \"voodoo@mandala.symbiosis\"",
+          "git config --global --add safe.directory /storage/emulated/0/mandala-core",
+          "git config --global credential.helper store"
+        ]
+      },
+      {
+        "step": 7,
+        "name": "First push",
+        "action": "Username: voodoomushroomzzz-source, Password: your GitHub token.",
+        "full_deploy_command": "echo \"# Mobile test\" >> mobile_test.md; git add mobile_test.md; git commit -m \"test: mobile git setup\"; git push; git rm mobile_test.md; git commit -m \"chore: remove mobile test file\"; git push"
+      }
+    ]
+  },
+  "daily_workflow": {
+    "description": "How to work with Mandala on a daily basis",
+    "steps": [
+      {
+        "step": 1,
+        "name": "Pull latest changes",
+        "command": "git pull --rebase origin main"
+      },
+      {
+        "step": 2,
+        "name": "Edit a honeycomb file",
+        "command": "micro honeycombs/path/to/file.json",
+        "note": "Ctrl+S save, Ctrl+Q quit."
+      },
+      {
+        "step": 3,
+        "name": "FULL DEPLOY after editing",
+        "description": "Use a FULL DEPLOY block provided by External SR. It will add, commit, and push automatically."
+      },
+      {
+        "step": 4,
+        "name": "Run scanner (optional)",
+        "command": "python honeycombs/registry/honeycomb_scanner.py scan"
+      }
+    ]
+  },
+  "full_deploy_pattern": {
+    "description": "External SR will provide updates in this format. Copy the WHOLE block.",
+    "template": "cat > honeycombs/path/to/file.json << 'EOF'\n{ ... full JSON content ... }\nEOF\ngit add honeycombs/path/to/file.json\ngit commit -m \"feat: description\"\ngit push"
+  },
+  "useful_commands": {
+    "commands": [
+      {
+        "name": "Check status",
+        "command": "git status"
+      },
+      {
+        "name": "View diff",
+        "command": "git diff"
+      },
+      {
+        "name": "View history",
+        "command": "git log --oneline -10"
+      },
+      {
+        "name": "Discard changes",
+        "command": "git checkout -- filename.json"
+      },
+      {
+        "name": "Create new honeycomb",
+        "command": "mkdir -p honeycombs/new && micro honeycombs/new/index.json"
+      },
+      {
+        "name": "Delete file",
+        "command": "git rm path/to/file.json"
+      },
+      {
+        "name": "Move file",
+        "command": "git mv old new"
+      }
+    ]
+  },
+  "micro_shortcuts": {
+    "Save": "Ctrl+S",
+    "Quit": "Ctrl+Q",
+    "Search": "Ctrl+F",
+    "Undo": "Ctrl+Z",
+    "Cut": "Ctrl+X",
+    "Copy": "Ctrl+C",
+    "Paste": "Ctrl+V",
+    "note": "Use Volume Up as Ctrl on Android."
+  },
+  "troubleshooting": {
+    "issues": [
+      {
+        "problem": "Asks password every time",
+        "solution": "git config --global credential.helper store"
+      },
+      {
+        "problem": "dubious ownership",
+        "solution": "git config --global --add safe.directory /storage/emulated/0/mandala-core"
+      },
+      {
+        "problem": "Token not working",
+        "solution": "Create new token at https://github.com/settings/tokens/new with 'repo' scope."
+      },
+      {
+        "problem": "Cannot paste",
+        "solution": "Long-press screen → Paste."
+      },
+      {
+        "problem": "Ctrl keys not working",
+        "solution": "Use Volume Up as Ctrl."
+      }
+    ]
+  },
+  "getting_token": {
+    "steps": [
+      "1. Open: https://github.com/settings/tokens/new",
+      "2. Note: mandala-android",
+      "3. Expiration: 90 days",
+      "4. Check 'repo' box",
+      "5. Generate and COPY token immediately (starts with ghp_)",
+      "6. Use token as PASSWORD in Termux"
+    ]
+  },
+  "notes": [
+    "Username: voodoomushroomzzz-source",
+    "Password: your GitHub token (ghp_...)",
+    "External SR will give you FULL DEPLOY blocks — one copy, one paste, done."
+  ],
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-12",
+    "notes": "v1.2.0 — added core principles, zones of responsibility, system flow, and API patterns."
+  },
+  "voice_input_note": {
+    "description": "Gardener uses voice input on mobile. Sometimes transcription is inaccurate.",
+    "rule": "If a word or phrase is unclear, External SR should: 1) Logically infer based on Mandala context (honeycombs, tasks, garden, etc.), or 2) Ask for clarification.",
+    "examples": [
+      "asiansa → Ahimsa",
+      "voodoo → Voodoo",
+      "gardener lock → gardener_lock"
+    ]
+  }
 }
