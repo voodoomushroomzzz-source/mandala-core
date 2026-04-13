@@ -16,7 +16,9 @@ from typing import Optional, Any, Tuple
 from aiohttp import web
 from aiogram import Bot, Dispatcher, Router, F
 from aiogram.enums import ParseMode
-from aiogram.filters import Command
+from aiogram.filters import Command, StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.client.default import DefaultBotProperties
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
@@ -146,6 +148,20 @@ async def call_bot_ask(session_id: str, message: str, gardener_context: dict) ->
         logger.error(f"Bot ask exception: {e}")
         return None
 
+
+# ========== FSM STATES ==========
+class GardenOnboardingStates(StatesGroup):
+    waiting_for_name = State()
+    waiting_for_interests = State()
+    waiting_for_goals = State()
+    waiting_for_health_current = State()
+    waiting_for_health_target = State()
+    waiting_for_creativity_current = State()
+    waiting_for_creativity_target = State()
+    waiting_for_morning = State()
+    waiting_for_evening = State()
+    done = State()
+
 # ========== KEYBOARDS ==========
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
@@ -153,10 +169,184 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
         resize_keyboard=True
     )
 
+
+# ========== FSM: ONBOARDING ==========
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_name))
+async def onboarding_name(message: Message, state: FSMContext):
+    name = message.text.strip()
+    if len(name) < 2:
+        await message.answer("Имя должно быть не короче 2 символов.")
+        return
+    await state.update_data(name=name)
+    await state.set_state(GardenOnboardingStates.waiting_for_interests)
+    await message.answer(
+        f"Приятно познакомиться, {name}!\n\n"
+        "Что приносит тебе радость? Напиши 3-5 интересов через запятую.",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_interests))
+async def onboarding_interests(message: Message, state: FSMContext):
+    interests = [i.strip() for i in message.text.split(",") if i.strip()]
+    if len(interests) < 1:
+        await message.answer("Напиши хотя бы один интерес.")
+        return
+    await state.update_data(interests=interests)
+    await state.set_state(GardenOnboardingStates.waiting_for_goals)
+    await message.answer(
+        "Какие семена хочешь посадить в этом сезоне? Напиши 2-3 цели.",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_goals))
+async def onboarding_goals(message: Message, state: FSMContext):
+    goals = [g.strip() for g in message.text.split(",") if g.strip()]
+    await state.update_data(goals=goals)
+    await state.set_state(GardenOnboardingStates.waiting_for_health_current)
+    await message.answer(
+        "Оцени своё здоровье от 1 до 10.\nГде ты сейчас?",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_health_current))
+async def onboarding_health_current(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    await state.update_data(health_current=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_health_target)
+    await message.answer("Куда хочешь прийти? (1-10)")
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_health_target))
+async def onboarding_health_target(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    await state.update_data(health_target=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_creativity_current)
+    await message.answer("🎨 Творчество: текущий уровень? (1-10)")
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_current))
+async def onboarding_creativity_current(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    await state.update_data(creativity_current=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_creativity_target)
+    await message.answer("🎨 Творчество — цель? (1-10)")
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_target))
+async def onboarding_creativity_target(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    await state.update_data(creativity_target=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_morning)
+    await message.answer(
+        "Когда тебе удобно получать утреннее приветствие?\n"
+        "Напиши время (ЧЧ:ММ) или 'нет'."
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_morning))
+async def onboarding_morning(message: Message, state: FSMContext):
+    text = message.text.strip().lower()
+    morning = "" if text == "нет" else text
+    await state.update_data(morning_time=morning)
+    await state.set_state(GardenOnboardingStates.waiting_for_evening)
+    await message.answer("А вечернее время? (ЧЧ:ММ или 'нет')")
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_evening))
+async def onboarding_evening(message: Message, state: FSMContext):
+    text = message.text.strip().lower()
+    evening = "" if text == "нет" else text
+
+    data = await state.get_data()
+    user_id = str(message.from_user.id)
+
+    # Проверка авторизации
+    if not await is_authorized(user_id):
+        await message.answer("🌱 Сначала /start [пароль]")
+        await state.clear()
+        return
+
+    gardener = {
+        "identity": {
+            "gardener_id": GARDENER_ID,
+            "telegram_id": user_id,
+            "name": data["name"],
+            "resonance_level": 13,
+            "created": datetime.now().strftime("%Y-%m-%d"),
+            "updated": datetime.now().strftime("%Y-%m-%d")
+        },
+        "personal_info": {
+            "interests": data["interests"],
+            "goals": data["goals"],
+            "life_areas": {
+                "health": {"current": data["health_current"], "target": data["health_target"]},
+                "creativity": {"current": data["creativity_current"], "target": data["creativity_target"]},
+                "knowledge": {"current": 5, "target": 7},
+                "relationships": {"current": 5, "target": 7}
+            }
+        },
+        "companion_settings": {
+            "morning_message_time": data["morning_time"],
+            "evening_check_time": evening,
+            "proactive_mode": True,
+            "timezone": "Europe/Moscow"
+        },
+        "growth_history": []
+    }
+
+    groups = {
+        "groups": [
+            {"id": "group_001", "name": "Дом", "emoji": "🏠", "created": datetime.now().strftime("%Y-%m-%d")},
+            {"id": "group_002", "name": "Работа", "emoji": "💼", "created": datetime.now().strftime("%Y-%m-%d")},
+            {"id": "group_003", "name": "Личное", "emoji": "🌱", "created": datetime.now().strftime("%Y-%m-%d")}
+        ],
+        "default_group": "group_001"
+    }
+
+    # Сохранение в GitHub
+    success = await write_gardener_file("gardener.json", gardener)
+    if not success:
+        await message.answer("⚠️ Ошибка сохранения профиля. Попробуй позже.")
+        await state.clear()
+        return
+
+    await write_gardener_file("tasks.json", [])
+    await write_gardener_file("achievements.json", [])
+    await write_gardener_file("groups.json", groups)
+
+    await state.set_state(GardenOnboardingStates.done)
+    await message.answer(
+        f"🌸 <b>{data['name']}, твой Сад создан!</b>\n\n"
+        f"Твой резонанс: 13%\n\n"
+        f"Добро пожаловать в симбиоз!",
+        reply_markup=get_main_keyboard()
+    )
+
+
 # ========== COMMANDS ==========
 @router.message(Command("start"))
-async def cmd_start(message: Message):
-    user_id = str(message.from_user.id)
+async def cmd_start(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)\n    await state.clear()
     
     if not await is_authorized(user_id):
         args = message.text.replace("/start", "").strip()
@@ -171,7 +361,14 @@ async def cmd_start(message: Message):
             await message.answer(f"🌱 С возвращением, {gardener['identity'].get('name', 'Садовник')}!", reply_markup=get_main_keyboard())
             return
         else:
-            await message.answer("🌱 Сад ещё не создан. Ожидай создания gardener_001.")
+            # Запуск онбординга для нового садовника
+            await state.set_state(GardenOnboardingStates.waiting_for_name)
+            await message.answer(
+                "🌱 <b>Добро пожаловать в Сад Мандалы!</b>\n\n"
+                "Я — твой Нежный Спутник. Давай познакомимся.\n\n"
+                "Как мне тебя называть?",
+                reply_markup=get_cancel_keyboard()
+            )
             return
     
     gardener = await read_gardener()
