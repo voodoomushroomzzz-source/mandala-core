@@ -1,7 +1,7 @@
 {
     "task_id":  "T-20260408-1030",
     "name":  "Telegram Bot  Gentle Companion for Garden",
-    "status":  "in_progress",
+    "status":  "todo",
     "priority":  "HIGH",
     "deadline":  "2026-05-01",
     "created":  "2026-04-01",
@@ -13,14 +13,10 @@
                  "garden",
                  "companion",
                  "ahimsa",
-                 "active",
-                 "taskboard",
-                 "dashboard",
-                 "unified_sr",
-                 "modular_refactor"
+                 "active"
              ],
-    "progress":  20,
-    "progress_notes":  "v4.0.1 in progress: fixing button handlers (D15), onboarding data (D16). D0,D1,D5,D6 done. D2-D4,D7 broken.",
+    "progress":  0,
+    "progress_notes":  "Rolled back to start. All deliverables pending.",
     "garden_ref":  "honeycombs/garden/",
     "estimated_effort_hours":  30,
     "effort_breakdown":  {
@@ -32,7 +28,7 @@
                          "D0_backend":  {
                                             "id":  "D0",
                                             "name":  "POST /bot/ask endpoint in main.py",
-                                            "status":  "done",
+                                            "status":  "todo",
                                             "priority":  "CRITICAL",
                                             "estimated_hours":  1,
                                             "description":  "Add HTTP endpoint to engineer chat backend. Bot sends messages here instead of Yandex Cloud Function. Shared session history via session_id = tg_{telegram_user_id}."
@@ -40,7 +36,7 @@
                          "D1_helpers":  {
                                             "id":  "D1",
                                             "name":  "Garden helpers in bot.py",
-                                            "status":  "done",
+                                            "status":  "todo",
                                             "priority":  "CRITICAL",
                                             "estimated_hours":  1,
                                             "description":  "find_gardener_by_telegram_id(), read_gardener_file(), write_gardener_file(), soft-fail local queue (.json.queue)."
@@ -48,7 +44,7 @@
                          "D2_onboarding":  {
                                                "id":  "D2",
                                                "name":  "/start onboarding FSM",
-                                               "status":  "broken",
+                                               "status":  "todo",
                                                "priority":  "CRITICAL",
                                                "estimated_hours":  3,
                                                "description":  "GardenOnboardingStates FSM: nameinterestsgoalslife_areascompanion_settingsdone. Creates gardener.json, tasks.json, achievements.json, groups.json."
@@ -56,7 +52,7 @@
                          "D3_profile":  {
                                             "id":  "D3",
                                             "name":  "/profile command",
-                                            "status":  "broken",
+                                            "status":  "todo",
                                             "priority":  "HIGH",
                                             "estimated_hours":  1,
                                             "description":  "Show name, resonance, top-3 achievements, active tasks count."
@@ -64,7 +60,7 @@
                          "D4_achievements":  {
                                                  "id":  "D4",
                                                  "name":  "/achievements command",
-                                                 "status":  "broken",
+                                                 "status":  "todo",
                                                  "priority":  "HIGH",
                                                  "estimated_hours":  2,
                                                  "description":  "List achievements + add FSM  save to achievements.json  recalculate resonance."
@@ -72,7 +68,7 @@
                          "D5_resonance":  {
                                               "id":  "D5",
                                               "name":  "/resonance command",
-                                              "status":  "done",
+                                              "status":  "todo",
                                               "priority":  "MEDIUM",
                                               "estimated_hours":  1,
                                               "description":  "Current resonance level + growth_history. Formula: sum(bonus * category_weight)."
@@ -80,7 +76,7 @@
                          "D6_sr_switch":  {
                                               "id":  "D6",
                                               "name":  "Switch SR to main.py (Variant B)",
-                                              "status":  "done",
+                                              "status":  "todo",
                                               "priority":  "CRITICAL",
                                               "estimated_hours":  1,
                                               "description":  "Replace Yandex Cloud Function with POST /bot/ask on main.py. Pass session_id = tg_{user_id} + gardener_context."
@@ -88,7 +84,7 @@
                          "D7_tasks_personal":  {
                                                    "id":  "D7",
                                                    "name":  "Personal task management (FR1-FR6)",
-                                                   "status":  "broken",
+                                                   "status":  "todo",
                                                    "priority":  "HIGH",
                                                    "estimated_hours":  6,
                                                    "description":  "Full CRUD for personal tasks with groups, priority auto-calc (resonance_match * life_area_gap), deadlines, subtasks, link to achievements. Commands: /addtask /tasks /done /edittask /deletetask /archive /groups /newgroup. FR3: smart task detection from chat messages (Ahimsa limits: max 3/day, stop after 3 declines).",
@@ -113,7 +109,7 @@
                          "D8_tasks_mandala":  {
                                                   "id":  "D8",
                                                   "name":  "Mandala tasks via bot",
-                                                  "status":  "in_progress",
+                                                  "status":  "todo",
                                                   "priority":  "MEDIUM",
                                                   "estimated_hours":  2,
                                                   "description":  "/tasks mandala  reads honeycombs/tasks/active/. View + update status/progress. New task creation generates PowerShell script (Terminal-First)."
@@ -121,7 +117,7 @@
                          "D9_ahimsa":  {
                                            "id":  "D9",
                                            "name":  "Ahimsa guardrails + /leave",
-                                           "status":  "in_progress",
+                                           "status":  "todo",
                                            "priority":  "HIGH",
                                            "estimated_hours":  2,
                                            "description":  "Silence policy: 1-7d normal, 8-30d one gentle msg, 31d+ stop. Resonance decay: -1%/week after 14d no achievements (min 10%). /leave  confirm  archive sota  farewell."
@@ -137,7 +133,7 @@
                          "D11_dashboard":  {
                                                "id":  "D11",
                                                "name":  "Garden dashboard tab in engineer chat",
-                                               "status":  "pending",
+                                               "status":  "todo",
                                                "priority":  "MEDIUM",
                                                "estimated_hours":  2,
                                                "description":  "Tab in engineer chat frontend. Kanban (Todo/InProgress/Done by group), Flower of Life SVG (petals = life_areas), resonance timeline, profile summary. Reads GitHub raw. No separate backend."
@@ -172,7 +168,7 @@
                                                          "description":  "Add state: FSMContext to btn_profile, btn_achievements, btn_tasks.",
                                                          "estimated_hours":  0.5,
                                                          "priority":  "CRITICAL",
-                                                         "status":  "in_progress"
+                                                         "status":  "todo"
                                                      },
                          "D16_fix_onboarding_data":  {
                                                          "id":  "D16",
@@ -180,7 +176,7 @@
                                                          "description":  "Fix FSM to correctly save gardener.json with user data.",
                                                          "estimated_hours":  1,
                                                          "priority":  "CRITICAL",
-                                                         "status":  "in_progress"
+                                                         "status":  "todo"
                                                      },
                          "D17_add_reset_command":  {
                                                        "id":  "D17",
