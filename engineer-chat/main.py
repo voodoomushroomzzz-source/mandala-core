@@ -1776,6 +1776,195 @@ async def get_file_tree():
         except Exception as e:
             return {"error": str(e)}
 
+# ==================== BOT ENDPOINT ====================
+
+from pydantic import BaseModel as _BaseModel
+
+class BotAskRequest(_BaseModel):
+    session_id: str           # "tg_{telegram_user_id}"
+    message: str              # текст от пользователя
+    gardener_context: dict = {}  # профиль садовника для персонализации
+
+@app.post("/bot/ask")
+async def bot_ask(req: BotAskRequest):
+    """
+    HTTP endpoint для Telegram-бота (D0 — Variant B).
+    Бот шлёт сюда сообщения вместо Яндекс Cloud Function.
+    Тот же DeepSeek + GitHubSessionStore что и в веб-чате.
+    session_id = "tg_{telegram_user_id}" — история общая между ботом и чатом.
+    """
+    session_id = req.session_id
+    user_text = req.message.strip()
+    gardener_context = req.gardener_context
+
+    if not user_text:
+        raise HTTPException(status_code=400, detail="Empty message")
+
+    if not OPENROUTER_API_KEY:
+        raise HTTPException(status_code=503, detail="SR unavailable: OPENROUTER_KEY not set")
+
+    logger.info(f"🤖 [BOT] [{session_id[:12]}...] → {user_text[:60]}")
+
+    # ── Сессия (общая с веб-чатом) ──────────────────────────────────────
+    session = await get_session(session_id)
+    session.setdefault("messages", [])
+    session.setdefault("msg_count", 0)
+    session["msg_count"] += 1
+
+    # ── Инъекция boot.json (свежим из GitHub) ───────────────────────────
+    session["messages"] = [m for m in session["messages"] if not m.get("_protected")]
+
+    fresh_boot = await file_reader.read("simbiosis/boot.json")
+    if fresh_boot:
+        try:
+            kernel.modules["simbiosis/boot"] = json.loads(fresh_boot)
+        except Exception:
+            pass
+        boot_json = fresh_boot[:2000]
+    else:
+        boot_json = json.dumps(kernel.modules.get("simbiosis/boot", {}), ensure_ascii=False)[:2000]
+
+    # Краткий профиль садовника для персонализации ответов
+    gardener_summary = ""
+    if gardener_context:
+        name = gardener_context.get("name", "")
+        resonance = gardener_context.get("resonance_level", "")
+        interests = ", ".join(gardener_context.get("interests", []))
+        goals = ", ".join(gardener_context.get("goals", []))
+        gardener_summary = f"\n[ПРОФИЛЬ САДОВНИКА]\nИмя: {name}\nРезонанс: {resonance}%\nИнтересы: {interests}\nЦели: {goals}\n"
+
+    injection = f"""[КОНТЕКСТ — boot.json]
+{boot_json}
+{gardener_summary}
+Ты — Нежный Спутник садовника в Telegram. Отвечай мягко, кратко, по-человечески.
+Следуй принципам Ахимсы: без давления, без сравнений, без наказаний.
+Используй read_file для чтения файлов репозитория если нужно."""
+
+    session["messages"].insert(0, {"role": "user", "content": injection, "time": 0, "_protected": True})
+    session["messages"].insert(1, {"role": "assistant", "content": "◈ Контекст загружен.", "time": 0, "_protected": True})
+    session["modules_injected"] = True
+    session["injection_timestamp"] = time.time()
+    session_store.schedule_save(session_id, session)
+
+    # ── История сессии (без protected) ──────────────────────────────────
+    shared_history = []
+    seen = set()
+    for msg in session.get("messages", []):
+        if msg.get("_protected"):
+            continue
+        role = msg.get("role", "")
+        content = msg.get("content", "")
+        if not content or role not in ("user", "assistant"):
+            continue
+        key = content[:100]
+        if key in seen:
+            continue
+        seen.add(key)
+        shared_history.append({"role": role, "content": content})
+
+    # Текущее сообщение добавляем в историю
+    manager.add_to_context(session_id, "user", user_text)
+
+    # ── Запрос к DeepSeek ────────────────────────────────────────────────
+    ds_messages = [{"role": "system", "content": kernel.build_system_prompt("deepseek")}]
+    ds_messages.extend(shared_history)
+    ds_messages.append({"role": "user", "content": user_text})
+
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "read_file",
+                "description": "Прочитать файл из репозитория",
+                "parameters": {
+                    "type": "object",
+                    "properties": {"path": {"type": "string", "description": "Путь к файлу"}},
+                    "required": ["path"]
+                }
+            }
+        }
+    ]
+
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                f"{OPENROUTER_BASE_URL}/chat/completions",
+                headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
+                json={
+                    "model": DEEPSEEK_MODEL,
+                    "messages": ds_messages,
+                    "tools": tools,
+                    "tool_choice": "auto",
+                    "temperature": 0.7,
+                    "max_tokens": 2000,
+                },
+                timeout=60.0
+            )
+
+            if resp.status_code != 200:
+                logger.error(f"[BOT] DeepSeek error: {resp.status_code} {resp.text[:200]}")
+                raise HTTPException(status_code=502, detail="SR model error")
+
+            msg_data = resp.json()["choices"][0]["message"]
+
+            # ── Tool call loop (только read_file, макс 5 итераций) ───────
+            tool_iterations = 0
+            while msg_data.get("tool_calls") and tool_iterations < 5:
+                tool_iterations += 1
+                ds_messages.append({
+                    "role": "assistant",
+                    "content": msg_data.get("content") or "",
+                    "tool_calls": msg_data["tool_calls"]
+                })
+                for tc in msg_data["tool_calls"]:
+                    fn = tc.get("function", {}).get("name", "")
+                    try:
+                        args = json.loads(tc.get("function", {}).get("arguments", "{}"))
+                    except Exception:
+                        args = {}
+                    if fn == "read_file":
+                        rpath = args.get("path", "").strip()
+                        tool_result = await file_reader.read(rpath) or "Файл не найден"
+                        logger.info(f"[BOT] read_file: {rpath}")
+                    else:
+                        tool_result = f"Инструмент {fn} недоступен в боте"
+                    ds_messages.append({"role": "user", "content": f"[Результат {fn}]:\n{tool_result}"})
+
+                resp2 = await client.post(
+                    f"{OPENROUTER_BASE_URL}/chat/completions",
+                    headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
+                    json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.7, "max_tokens": 2000},
+                    timeout=60.0
+                )
+                if resp2.status_code == 200:
+                    msg_data = resp2.json()["choices"][0]["message"]
+                else:
+                    break
+
+            # ── Финальный ответ ──────────────────────────────────────────
+            final_response = (msg_data.get("content") or "").strip()
+            # Убираем XML tool-call артефакты если модель вернула их в тексте
+            final_response = strip_xml_tool_calls(final_response)
+            if not final_response:
+                final_response = "😔 СР не смог сформулировать ответ. Попробуй ещё раз."
+
+            # Сохраняем ответ в общую историю
+            manager.add_to_context(session_id, "assistant", final_response)
+            session_store.schedule_save(session_id, session)
+
+            logger.info(f"✅ [BOT] [{session_id[:12]}...] ответ {len(final_response)} символов")
+            return {"response": final_response, "session_id": session_id}
+
+    except HTTPException:
+        raise
+    except asyncio.TimeoutError:
+        logger.error(f"[BOT] Timeout для {session_id}")
+        raise HTTPException(status_code=504, detail="SR timeout")
+    except Exception as e:
+        logger.error(f"[BOT] Ошибка: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal SR error")
+
+
 # ========== RESONANCE CALCULATOR ==========
 
 class ResonanceCalculator:
