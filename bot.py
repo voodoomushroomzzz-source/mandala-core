@@ -63,8 +63,15 @@ PORT = 10000
 WEBHOOK_PATH = "/webhook"
 WEBHOOK_SECRET = "mandala-secret"
 
-# URL нашей облачной функции СР
-SR_FUNCTION_URL = "https://functions.yandexcloud.net/d4en8kkgifqjhadrc84i"
+# URL инженерного чата (Variant B — единый СР с историей)
+ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")
+SR_FUNCTION_URL = f"{ENGINEER_CHAT_URL}/bot/ask"  # совместимость со старым call_sr
+
+# Путь к личным сотам садовников в репозитории
+GARDENERS_PATH = "honeycombs/personal_gardeners"
+
+# Локальная очередь для soft-fail (когда GitHub API недоступен)
+LOCAL_QUEUE_PATH = Path("./garden_queue")
 
 # ========== ПРОВЕРКА КРИТИЧЕСКИХ ПЕРЕМЕННЫХ ==========
 if not BOT_TOKEN:
@@ -216,25 +223,30 @@ user_selected_model = {}
 
 # ========== ФУНКЦИЯ ВЫЗОВА СР ==========
 
-async def call_sr(chat_id: str, text: str, selected_model: str = None) -> Optional[str]:
-    """Вызывает облачную функцию СР и возвращает ответ."""
+async def call_sr(chat_id: str, text: str, selected_model: str = None, gardener_context: dict = None) -> Optional[str]:
+    """Вызывает инженерный чат (main.py /bot/ask) и возвращает ответ.
+    session_id = tg_{chat_id} — история общая между ботом и веб-чатом."""
     async with aiohttp.ClientSession() as session:
         try:
             payload = {
-                "chat_id": chat_id,
+                "session_id": f"tg_{chat_id}",
                 "message": text,
-                "selected_model": selected_model
+                "gardener_context": gardener_context or {}
             }
-            logger.info(f"Calling SR for chat {chat_id} with model {selected_model}")
-            async with session.post(SR_FUNCTION_URL, json=payload, timeout=30) as resp:
+            logger.info(f"Calling SR for chat {chat_id}")
+            async with session.post(
+                SR_FUNCTION_URL,
+                json=payload,
+                timeout=60
+            ) as resp:
                 if resp.status == 200:
                     data = await resp.json()
                     return data.get("response")
                 else:
-                    logger.error(f"SR function returned {resp.status}")
+                    logger.error(f"SR returned {resp.status}")
                     return None
         except Exception as e:
-            logger.error(f"Error calling SR function: {e}")
+            logger.error(f"Error calling SR: {e}")
             return None
 
 
@@ -464,7 +476,143 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
             return False, None, str(e)
 
 
-# ========== ФУНКЦИИ ДЛЯ ПАКЕТНЫХ ОБНОВЛЕНИЙ ==========
+
+# ========== GARDEN HELPERS (D1) ==========
+
+# Локальный кэш: telegram_id → gardener_id (чтобы не дёргать GitHub каждый раз)
+_gardener_id_cache: Dict[str, str] = {}
+
+async def find_gardener_by_telegram_id(telegram_id: str) -> Optional[str]:
+    """Найти gardener_id по telegram_id. Сканирует personal_gardeners/ в GitHub.
+    Возвращает 'gardener_001' или None если не найден."""
+    if telegram_id in _gardener_id_cache:
+        return _gardener_id_cache[telegram_id]
+
+    if not GITHUB_TOKEN:
+        return None
+
+    url = f"https://api.github.com/repos/{REPO_NAME}/contents/{GARDENERS_PATH}"
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "MandalaBot/4.0.0"
+    }
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=15) as resp:
+                if resp.status != 200:
+                    return None
+                items = await resp.json()
+                # Ищем папки gardener_XXX (не archive, не template)
+                folders = [
+                    item["name"] for item in items
+                    if item["type"] == "dir"
+                    and item["name"].startswith("gardener_")
+                    and item["name"] != "gardener_template"
+                    and "archive" not in item["name"]
+                ]
+                for folder in folders:
+                    ok, data, _ = await get_github_file_content(
+                        f"{GARDENERS_PATH}/{folder}/gardener.json"
+                    )
+                    if ok and isinstance(data, dict):
+                        if str(data.get("identity", {}).get("telegram_id", "")) == str(telegram_id):
+                            _gardener_id_cache[telegram_id] = folder
+                            return folder
+    except Exception as e:
+        logger.error(f"find_gardener error: {e}")
+    return None
+
+
+async def read_gardener_file(gardener_id: str, filename: str) -> Optional[Any]:
+    """Читает файл из личной соты садовника. Возвращает dict/list или None."""
+    path = f"{GARDENERS_PATH}/{gardener_id}/{filename}"
+    ok, data, _ = await get_github_file_content(path)
+    if ok:
+        return data
+    # Soft-fail: проверяем локальную очередь
+    queue_file = LOCAL_QUEUE_PATH / gardener_id / filename
+    if queue_file.exists():
+        try:
+            return json.loads(queue_file.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return None
+
+
+async def write_gardener_file(gardener_id: str, filename: str, content: Any, commit_msg: str = "") -> bool:
+    """Записывает файл в личную соту садовника через GitHub API.
+    При недоступности API — сохраняет в локальную очередь (soft-fail)."""
+    path = f"{GARDENERS_PATH}/{gardener_id}/{filename}"
+    msg = commit_msg or f"🌱 {gardener_id}/{filename} обновлён через бот"
+    success = await update_github_file(path, content, msg)
+    if not success:
+        # Soft-fail: сохраняем локально
+        try:
+            queue_dir = LOCAL_QUEUE_PATH / gardener_id
+            queue_dir.mkdir(parents=True, exist_ok=True)
+            queue_file = queue_dir / filename
+            content_str = json.dumps(content, ensure_ascii=False, indent=2) if not isinstance(content, str) else content
+            queue_file.write_text(content_str, encoding="utf-8")
+            logger.warning(f"⚠️ Soft-fail: {path} сохранён локально в очередь")
+        except Exception as e:
+            logger.error(f"Soft-fail write error: {e}")
+    return success
+
+
+async def flush_gardener_queue(gardener_id: str) -> int:
+    """Синхронизирует локальную очередь с GitHub при восстановлении соединения.
+    Возвращает количество успешно отправленных файлов."""
+    queue_dir = LOCAL_QUEUE_PATH / gardener_id
+    if not queue_dir.exists():
+        return 0
+    synced = 0
+    for queue_file in queue_dir.glob("*.json"):
+        try:
+            content = json.loads(queue_file.read_text(encoding="utf-8"))
+            path = f"{GARDENERS_PATH}/{gardener_id}/{queue_file.name}"
+            success = await update_github_file(path, content, f"🔄 Sync queue: {queue_file.name}")
+            if success:
+                queue_file.unlink()
+                synced += 1
+                logger.info(f"✅ Queue synced: {queue_file.name}")
+        except Exception as e:
+            logger.error(f"Queue flush error {queue_file.name}: {e}")
+    return synced
+
+
+async def get_gardener_context(telegram_id: str) -> dict:
+    """Возвращает краткий профиль садовника для передачи в SR."""
+    gardener_id = await find_gardener_by_telegram_id(str(telegram_id))
+    if not gardener_id:
+        return {}
+    data = await read_gardener_file(gardener_id, "gardener.json")
+    if not data or not isinstance(data, dict):
+        return {}
+    identity = data.get("identity", {})
+    personal = data.get("personal_info", {})
+    return {
+        "gardener_id": gardener_id,
+        "name": identity.get("name", ""),
+        "resonance_level": identity.get("resonance_level", 0),
+        "interests": personal.get("interests", []),
+        "goals": personal.get("goals", []),
+    }
+
+
+def generate_gardener_id(existing_ids: List[str]) -> str:
+    """Генерирует следующий gardener_id (gardener_001, gardener_002 и т.д.)"""
+    nums = []
+    for gid in existing_ids:
+        try:
+            nums.append(int(gid.replace("gardener_", "")))
+        except Exception:
+            pass
+    next_num = max(nums) + 1 if nums else 1
+    return f"gardener_{next_num:03d}"
+
+
+
 
 def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
     """Валидация структуры патча (одиночного или мульти) с поддержкой file_path"""
@@ -2162,11 +2310,14 @@ async def handle_other_messages(message: Message, state: FSMContext):
     # Отправляем действие "печатает"
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
-    # Вызываем СР с выбранной моделью (если есть)
+    # Загружаем профиль садовника для персонализации SR
+    gardener_context = await get_gardener_context(message.from_user.id)
+
+    # Вызываем СР (инженерный чат, единая история)
     response = await call_sr(
         str(message.from_user.id),
         message.text,
-        user_selected_model.get(message.from_user.id)
+        gardener_context=gardener_context
     )
 
     if response:
