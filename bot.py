@@ -178,7 +178,13 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
         one_time_keyboard=True
     )
 
-def get_main_keyboard()
+def get_main_keyboard() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="🌱 Профиль"), KeyboardButton(text="🏆 Достижения")]
+        ],
+        resize_keyboard=True
+    )
 
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
