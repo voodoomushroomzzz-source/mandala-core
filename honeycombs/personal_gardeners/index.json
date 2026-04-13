@@ -1,0 +1,38 @@
+{
+  "identity": {
+    "module_id": "HONEYCOMB-PERSONAL-GARDENERS-001",
+    "name": "Personal Gardeners Sotas",
+    "version": "v1.0.0",
+    "created": "2026-04-13",
+    "updated": "2026-04-13",
+    "layer": 3,
+    "type": "honeycomb_manifest",
+    "description": "Personal sotas of all gardeners. Sacred data. Each gardener has their own folder with gardener.json, achievements.json, tasks.json.",
+    "status": "active",
+    "priority": "critical",
+    "tags": ["personal", "gardeners", "sotas", "sacred", "phi-009"]
+  },
+  "meta": {
+    "honeycomb_name": "personal_gardeners",
+    "parent_honeycomb": "garden",
+    "total_gardeners": 1,
+    "first_gardener": "gardener_001"
+  },
+  "structure": {
+    "pattern": "honeycombs/personal_gardeners/{gardener_id}/",
+    "files_per_sota": ["gardener.json", "achievements.json", "tasks.json"],
+    "template": "honeycombs/personal_gardeners/gardener_template.json"
+  },
+  "navigation": {
+    "parent": "honeycombs/garden/index.json",
+    "related": [
+      "honeycombs/garden/ideology.json",
+      "honeycombs/garden/architecture.json",
+      "honeycombs/tasks/active/garden_core.json"
+    ]
+  },
+  "resonance": {
+    "with_garden": "100%",
+    "status": "fully_resonant"
+  }
+}
