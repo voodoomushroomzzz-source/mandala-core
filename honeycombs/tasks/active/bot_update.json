@@ -1,49 +1,64 @@
 {
-    "task_id":  "T-20260408-1030",
-    "name":  "Telegram Bot  Gentle Companion for Garden",
-    "status":  "in_progress",
-    "priority":  "HIGH",
-    "deadline":  "2026-05-01",
-    "created":  "2026-04-01",
-    "updated":  "2026-04-12",
-    "description":  "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
-    "tags":  [
-                 "telegram_bot",
-                 "garden",
-                 "companion",
-                 "ahimsa",
-                 "active"
-             ],
-    "progress":  50,
-    "garden_ref":  "honeycombs/garden/",
-    "deliverables":  [
-                         "/start  onboarding questionnaire, creates gardener.json sota",
-                         "/profile  display resonance, top achievements, active tasks",
-                         "/achievements  list achievements + add new",
-                         "/resonance  current resonance level + growth history",
-                         "/ask  dialogue with Gentle SR Companion",
-                         "Proactive messages: morning greeting, evening check, gentle reminders (Ahimsa: max 1/day)",
-                         "GitHub API integration for reading/updating gardener.json",
-                         "Soft-fail mode when API unavailable"
-                     ],
-    "requires":  [
-                     "honeycombs/garden/architecture.json",
-                     "honeycombs/garden/ideology.json",
-                     "honeycombs/personal_gardeners/gardener_template.json"
-                 ],
-    "acceptance_criteria":  [
-                                "All /commands respond correctly with gardener data",
-                                "Proactive messages follow silence_policy and ahimsa_guardrails",
-                                "Bot continues in degraded mode when GitHub API is down",
-                                "Gardener can /leave gracefully"
-                            ],
-    "depends_on":  [
-                       "M1-T1 (personal_gardeners/ structure)",
-                       "M1-T2 (achievements catalog)"
-                   ],
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-04-12",
-                   "notes":  "Updated to reflect Garden MVP requirements (M1-T3, M1-T4, M2-T1, M3-T1)"
-               }
+  "task_id": "T-20260408-1030",
+  "name": "Telegram Bot  Gentle Companion for Garden",
+  "status": "in_progress",
+  "priority": "HIGH",
+  "deadline": "2026-05-01",
+  "created": "2026-04-01",
+  "updated": "2026-04-13",
+  "description": "Evolve bot v3.32.0 into Garden Gentle Companion v4.0.0. Full Garden integration: onboarding, profile, achievements, resonance, task management (personal + Mandala tasks), proactive Ahimsa messaging, unified SR with engineer chat (shared session history), and Garden dashboard tab in engineer chat.",
+  "version_target": "v4.0.0",
+  "tags": ["telegram_bot","garden","companion","ahimsa","active","taskboard","dashboard","unified_sr"],
+  "progress": 5,
+  "progress_notes": "Architecture and full plan finalized (2026-04-13). Coding not started.",
+  "garden_ref": "honeycombs/garden/",
+  "estimated_effort_hours": 24,
+  "effort_breakdown": {"original_tz_hours": 16, "taskboard_addon_hours": 8},
+  "deliverables": {
+    "D0_backend":   {"id":"D0","name":"POST /bot/ask endpoint in main.py","status":"todo","priority":"CRITICAL","estimated_hours":1,"description":"Add HTTP endpoint to engineer chat backend. Bot sends messages here instead of Yandex Cloud Function. Shared session history via session_id = tg_{telegram_user_id}."},
+    "D1_helpers":   {"id":"D1","name":"Garden helpers in bot.py","status":"todo","priority":"CRITICAL","estimated_hours":1,"description":"find_gardener_by_telegram_id(), read_gardener_file(), write_gardener_file(), soft-fail local queue (.json.queue)."},
+    "D2_onboarding":{"id":"D2","name":"/start onboarding FSM","status":"todo","priority":"CRITICAL","estimated_hours":3,"description":"GardenOnboardingStates FSM: nameinterestsgoalslife_areascompanion_settingsdone. Creates gardener.json, tasks.json, achievements.json, groups.json."},
+    "D3_profile":   {"id":"D3","name":"/profile command","status":"todo","priority":"HIGH","estimated_hours":1,"description":"Show name, resonance, top-3 achievements, active tasks count."},
+    "D4_achievements":{"id":"D4","name":"/achievements command","status":"todo","priority":"HIGH","estimated_hours":2,"description":"List achievements + add FSM  save to achievements.json  recalculate resonance."},
+    "D5_resonance": {"id":"D5","name":"/resonance command","status":"todo","priority":"MEDIUM","estimated_hours":1,"description":"Current resonance level + growth_history. Formula: sum(bonus * category_weight)."},
+    "D6_sr_switch": {"id":"D6","name":"Switch SR to main.py (Variant B)","status":"todo","priority":"CRITICAL","estimated_hours":1,"description":"Replace Yandex Cloud Function with POST /bot/ask on main.py. Pass session_id = tg_{user_id} + gardener_context."},
+    "D7_tasks_personal":{"id":"D7","name":"Personal task management (FR1-FR6)","status":"todo","priority":"HIGH","estimated_hours":6,"description":"Full CRUD for personal tasks with groups, priority auto-calc (resonance_match * life_area_gap), deadlines, subtasks, link to achievements. Commands: /addtask /tasks /done /edittask /deletetask /archive /groups /newgroup. FR3: smart task detection from chat messages (Ahimsa limits: max 3/day, stop after 3 declines).","task_schema":{"task_id":"task_YYYYMMDD_NNN","title":"string","status":"todo|in_progress|completed","priority":"int 1-10","life_area":"health|creativity|knowledge|exploration|relationships|other","group_id":"string","source":"manual|scout|parsed","tags":"array","deadline":"YYYY-MM-DD|null","estimated_hours":"int|null","linked_achievement":"ach_id|null","created":"date","updated":"date","completed":"date|null","notes":"string"}},
+    "D8_tasks_mandala":{"id":"D8","name":"Mandala tasks via bot","status":"todo","priority":"MEDIUM","estimated_hours":2,"description":"/tasks mandala  reads honeycombs/tasks/active/. View + update status/progress. New task creation generates PowerShell script (Terminal-First)."},
+    "D9_ahimsa":    {"id":"D9","name":"Ahimsa guardrails + /leave","status":"todo","priority":"HIGH","estimated_hours":2,"description":"Silence policy: 1-7d normal, 8-30d one gentle msg, 31d+ stop. Resonance decay: -1%/week after 14d no achievements (min 10%). /leave  confirm  archive sota  farewell."},
+    "D10_proactive":{"id":"D10","name":"Proactive messages (apscheduler)","status":"todo","priority":"HIGH","estimated_hours":2,"description":"Morning greeting + evening check-in + gentle task reminder. Ahimsa filter before every send: correct time? recent interaction? only one today?"},
+    "D11_dashboard":{"id":"D11","name":"Garden dashboard tab in engineer chat","status":"todo","priority":"MEDIUM","estimated_hours":2,"description":"Tab in engineer chat frontend. Kanban (Todo/InProgress/Done by group), Flower of Life SVG (petals = life_areas), resonance timeline, profile summary. Reads GitHub raw. No separate backend."}
+  },
+  "implementation_order": ["D0","D1","D2","D3","D4","D5","D6","D7","D8","D9","D10","D11"],
+  "new_bot_commands": ["/start","/profile","/achievements","/resonance","/tasks","/addtask","/done","/edittask","/deletetask","/archive","/groups","/newgroup","/tasks mandala","/leave"],
+  "data_files": {
+    "existing": ["personal_gardeners/gardener_XXX/gardener.json","personal_gardeners/gardener_XXX/achievements.json","personal_gardeners/gardener_XXX/tasks.json"],
+    "new": ["personal_gardeners/gardener_XXX/groups.json"]
+  },
+  "architecture_decisions": {
+    "sr_backend": "main.py via POST /bot/ask  NOT Yandex Cloud Function",
+    "session_id": "tg_{telegram_user_id}  shared between bot and engineer chat",
+    "soft_fail": "Local .json.queue when GitHub API unavailable",
+    "terminal_first": "Mandala task creation generates PowerShell script",
+    "dashboard": "Tab in engineer chat frontend, reads GitHub raw"
+  },
+  "requires": ["honeycombs/garden/architecture.json","honeycombs/garden/ideology.json","honeycombs/garden/achievements_catalog.json","honeycombs/personal_gardeners/gardener_template.json","honeycombs/instructions/core/external_sr_workflow.json"],
+  "depends_on": ["M1-T1 (personal_gardeners/ structure  done)","M1-T2 (achievements catalog  done)","main.py running and accessible for POST /bot/ask"],
+  "acceptance_criteria": [
+    "New gardener completes /start onboarding, sota files created in GitHub",
+    "All /commands respond with correct gardener data",
+    "Bot and engineer chat share SR session history",
+    "Personal tasks: full CRUD, groups, priority auto-calc, link to achievements",
+    "Mandala tasks: view + status update from bot",
+    "Task completion offers achievement conversion",
+    "FR3 message parsing: smart task detection with Ahimsa limits",
+    "Proactive messages follow silence_policy and ahimsa_guardrails",
+    "Bot continues in degraded mode when GitHub API is down",
+    "Gardener can /leave gracefully (sota archived)",
+    "Garden dashboard tab shows live kanban + Flower of Life"
+  ],
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-13",
+    "notes": "Full plan finalized with Claude (2026-04-13). Added: unified SR (Variant B), taskboard FR1-6, Mandala tasks, groups.json, dashboard tab. Total: 24h. Ready to code from D0."
+  }
 }
