@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot v4.0.2 — Gentle Companion
+Mandala Garden Bot v4.0.3 — Gentle Companion
 Render Web Service + Webhook (Aiogram 3)
 
-FIXES v4.0.2:
-- Password protection REMOVED (temporarily)
-- Onboarding restored: /start launches questionnaire
-- FSM data persistence fixed
-- Button handlers fixed (state param added)
-- Simplified auth: check gardener.json telegram_id
+FIXES v4.0.3:
+- Onboarding: fixed gardener.json creation (folder auto-created)
+- Bot responds to ALL messages via Gentle SR (not silent)
+- "📤 В инженерный чат" — fire-and-forget to engineer-chat (no response in bot)
+- /tasks_mandala implemented (D8)
+- /addtask, /tasks, /achievements fixed
 """
 
 import os
@@ -19,7 +19,6 @@ import base64
 import asyncio
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional, Any
-from pathlib import Path
 
 # ========== ВЕБ-ФРЕЙМВОРК И TELEGRAM ==========
 from aiohttp import web
@@ -38,6 +37,15 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 
 import aiohttp
 from dotenv import load_dotenv
+
+# Для проактивных сообщений
+try:
+    from apscheduler.schedulers.asyncio import AsyncIOScheduler
+    from apscheduler.triggers.cron import CronTrigger
+    APSCHEDULER_AVAILABLE = True
+except ImportError:
+    APSCHEDULER_AVAILABLE = False
+    logging.warning("apscheduler not installed. Proactive messages disabled.")
 
 # ========== ЛОГИРОВАНИЕ ==========
 logging.basicConfig(
@@ -84,6 +92,9 @@ bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTM
 dp = Dispatcher()
 router = Router()
 dp.include_router(router)
+
+# ========== SCHEDULER ==========
+scheduler = AsyncIOScheduler() if APSCHEDULER_AVAILABLE else None
 
 # ========== FSM СОСТОЯНИЯ ==========
 class GardenOnboardingStates(StatesGroup):
@@ -187,7 +198,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/4.0.2"
+        "User-Agent": "MandalaGardenBot/4.0.3"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -211,7 +222,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any]]:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/4.0.2"
+        "User-Agent": "MandalaGardenBot/4.0.3"
     }
     async with aiohttp.ClientSession() as session:
         try:
@@ -234,15 +245,43 @@ async def read_gardener_file(filename: str) -> Optional[Any]:
 async def write_gardener_file(filename: str, content: Any, commit_msg: str = "") -> bool:
     return await update_github_file(f"{GARDENER_PATH}/{filename}", content, commit_msg or f"🌱 {filename} updated")
 
-async def gardener_exists() -> bool:
-    ok, _ = await get_github_file_content(f"{GARDENER_PATH}/gardener.json")
-    return ok
-
 async def is_authorized(telegram_id: str) -> bool:
     gardener = await read_gardener_file("gardener.json")
     if not gardener:
         return False
     return str(gardener.get("identity", {}).get("telegram_id", "")) == str(telegram_id)
+
+async def call_gentle_sr(user_id: str, message: str, gardener_context: dict) -> Optional[str]:
+    """Вызов Gentle SR для обычных сообщений."""
+    async with aiohttp.ClientSession() as session:
+        try:
+            payload = {
+                "session_id": f"gentle_tg_{user_id}",
+                "message": message,
+                "gardener_context": gardener_context,
+                "mode": "gentle"
+            }
+            async with session.post(SR_FUNCTION_URL, json=payload, timeout=60) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    return data.get("response")
+                return None
+        except Exception as e:
+            logger.error(f"Gentle SR error: {e}")
+            return None
+
+async def send_to_engineer_chat_silent(user_id: str, message: str):
+    """Отправка в инженерный чат без ожидания ответа."""
+    try:
+        payload = {
+            "session_id": f"tg_{user_id}",
+            "message": message,
+            "silent": True
+        }
+        async with aiohttp.ClientSession() as session:
+            await session.post(SR_FUNCTION_URL, json=payload, timeout=10)
+    except Exception as e:
+        logger.error(f"Engineer chat silent send error: {e}")
 
 # ========== КОМАНДЫ ==========
 
@@ -260,7 +299,6 @@ async def cmd_start(message: Message, state: FSMContext):
         )
         return
 
-    # Проверяем, существует ли gardener.json но без telegram_id (первый вход после создания вручную)
     gardener = await read_gardener_file("gardener.json")
     if gardener and not gardener.get("identity", {}).get("telegram_id"):
         gardener["identity"]["telegram_id"] = user_id
@@ -271,7 +309,6 @@ async def cmd_start(message: Message, state: FSMContext):
         )
         return
 
-    # Запускаем онбординг
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
         "🌱 <b>Добро пожаловать в Сад Мандалы!</b>\n\n"
@@ -381,6 +418,39 @@ async def cmd_addtask(message: Message, state: FSMContext):
         await state.set_state(TaskAddStates.waiting_for_title)
         await message.answer("📝 Что нужно сделать?", reply_markup=get_cancel_keyboard())
 
+@router.message(Command("tasks_mandala"))
+async def cmd_tasks_mandala(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌱 Сначала /start")
+        return
+
+    url = f"https://api.github.com/repos/{REPO_NAME}/contents/honeycombs/tasks/active"
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "MandalaGardenBot/4.0.3"
+    } if GITHUB_TOKEN else {}
+
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url, headers=headers, timeout=15) as resp:
+                if resp.status != 200:
+                    await message.answer("⚠️ Не удалось загрузить задачи Мандалы.")
+                    return
+                items = await resp.json()
+                tasks_files = [i["name"] for i in items if i["name"].endswith(".json")]
+                if not tasks_files:
+                    await message.answer("📋 Нет активных задач Мандалы.")
+                    return
+                text = "🌐 <b>Задачи Мандалы</b>\n\n"
+                for fname in tasks_files[:10]:
+                    text += f"📄 {fname}\n"
+                if len(tasks_files) > 10:
+                    text += f"\n... и ещё {len(tasks_files) - 10}"
+                await message.answer(text)
+        except Exception as e:
+            await message.answer(f"⚠️ Ошибка: {str(e)[:100]}")
+
 @router.message(Command("reset"))
 async def cmd_reset(message: Message):
     await message.answer("🔄 Кэш сброшен. Напиши /start")
@@ -424,7 +494,7 @@ async def btn_engineer_chat(message: Message, state: FSMContext):
 
     await state.set_state(EngineerChatStates.waiting_for_message)
     await message.answer(
-        "📤 Отправь сообщение для инженерного чата:",
+        "📤 Отправь сообщение для инженерного чата (ответ придёт там):",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -719,28 +789,16 @@ async def task_title(message: Message, state: FSMContext):
         reply_markup=get_life_area_keyboard()
     )
 
-# ========== FSM: ENGINEER CHAT ==========
+# ========== FSM: ENGINEER CHAT (FIRE-AND-FORGET) ==========
 
 @router.message(StateFilter(EngineerChatStates.waiting_for_message))
 async def engineer_chat_message(message: Message, state: FSMContext):
     text = message.text or ""
     await state.clear()
+    await send_to_engineer_chat_silent(str(message.from_user.id), text)
+    await message.answer("📤 Отправлено в инженерный чат", reply_markup=get_main_keyboard())
 
-    async with aiohttp.ClientSession() as session:
-        try:
-            payload = {"session_id": f"tg_{message.from_user.id}", "message": text}
-            async with session.post(SR_FUNCTION_URL, json=payload, timeout=60) as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    response = data.get("response", "Нет ответа")
-                else:
-                    response = f"⚠️ Ошибка {resp.status}"
-        except Exception as e:
-            response = f"⚠️ {str(e)}"
-
-    await message.answer(response, reply_markup=get_main_keyboard())
-
-# ========== ОБРАБОТЧИК ВСЕХ СООБЩЕНИЙ ==========
+# ========== ОБРАБОТЧИК ВСЕХ СООБЩЕНИЙ (GENTLE SR) ==========
 
 @router.message()
 async def handle_any_message(message: Message, state: FSMContext):
@@ -752,25 +810,49 @@ async def handle_any_message(message: Message, state: FSMContext):
         await message.answer("🌱 Напиши /start чтобы войти в Сад.")
         return
 
-    await message.answer(
-        "Используй кнопки меню или команды.",
-        reply_markup=get_main_keyboard()
-    )
+    user_text = message.text or ""
+    if not user_text:
+        return
+
+    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+
+    gardener = await read_gardener_file("gardener.json") or {}
+    gardener_context = {
+        "gardener_id": GARDENER_ID,
+        "name": gardener.get("identity", {}).get("name", ""),
+        "resonance_level": gardener.get("identity", {}).get("resonance_level", 13),
+        "interests": gardener.get("personal_info", {}).get("interests", []),
+        "goals": gardener.get("personal_info", {}).get("goals", [])
+    }
+
+    response = await call_gentle_sr(str(message.from_user.id), user_text, gardener_context)
+
+    if response:
+        await message.answer(response, reply_markup=get_main_keyboard())
+    else:
+        await message.answer(
+            "😔 Я временно не могу ответить. Попробуй позже.",
+            reply_markup=get_main_keyboard()
+        )
 
 # ========== WEBHOOK ==========
 
 async def on_startup():
     await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET, drop_pending_updates=True)
     logger.info(f"✅ Webhook: {WEBHOOK_URL}")
+    if scheduler:
+        scheduler.start()
+        logger.info("✅ Scheduler started")
 
 async def on_shutdown():
-    pass
+    if scheduler:
+        scheduler.shutdown()
 
 def main():
     app = web.Application()
     SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
     app.router.add_get("/healthcheck", lambda _: web.Response(text="OK"))
-    app.router.add_get("/", lambda _: web.Response(text="Mandala Garden Bot v4.0.2"))
+    app.router.add_get("/", lambda _: web.Response(text="Mandala Garden Bot v4.0.3"))
     setup_application(app, dp, bot=bot)
     web.run_app(app, host="0.0.0.0", port=PORT)
 
