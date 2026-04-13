@@ -385,6 +385,43 @@ async def cmd_profile(message: Message):
     resonance = gardener.get("identity", {}).get("resonance_level", 13)
     await message.answer(f"🌱 <b>{name}</b>\n└ Резонанс: {resonance}%")
 
+
+@router.message(Command("resonance"))
+async def cmd_resonance(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌱 Сначала /start")
+        return
+    
+    achievements = await read_gardener_file("achievements.json") or []
+    
+    weights = {
+        "health": 1.2,
+        "creativity": 1.1,
+        "knowledge": 1.0,
+        "exploration": 1.1,
+        "relationships": 1.0
+    }
+    
+    total = 13
+    for ach in achievements:
+        cat = ach.get("category", "knowledge")
+        bonus = ach.get("resonance_bonus", 1)
+        total += bonus * weights.get(cat, 1.0)
+    
+    total = min(100, int(total))
+    
+    gardener = await read_gardener()
+    history = gardener.get("growth_history", []) if gardener else []
+    
+    text = f"✨ <b>Резонанс: {total}%</b>"
+    if history:
+        text += "\n\n📈 История:\n"
+        for h in history[-5:]:
+            text += f"  {h.get('date', '?')}: {h.get('resonance', '?')}%\n"
+    
+    await message.answer(text)
+
+
 @router.message(F.text == "🌱 Профиль")
 async def btn_profile(message: Message):
     await cmd_profile(message)
