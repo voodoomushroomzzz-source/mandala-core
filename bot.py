@@ -152,7 +152,6 @@ async def call_bot_ask(session_id: str, message: str, gardener_context: dict) ->
 
 # ========== FSM STATES ==========
 class GardenOnboardingStates(StatesGroup):
-    waiting_for_password = State()
     waiting_for_name = State()
     waiting_for_interests = State()
     waiting_for_goals = State()
@@ -290,11 +289,6 @@ async def onboarding_evening(message: Message, state: FSMContext):
     data = await state.get_data()
     user_id = str(message.from_user.id)
 
-    # Проверка авторизации
-    if not await is_authorized(user_id):
-        await message.answer("🌱 Сначала /start [пароль]")
-        await state.clear()
-        return
 
     gardener = {
         "identity": {
@@ -356,35 +350,25 @@ async def onboarding_evening(message: Message, state: FSMContext):
 # ========== COMMANDS ==========
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
     await state.clear()
-    
-    if not await is_authorized(user_id):
-        args = message.text.replace("/start", "").strip()
-        if args != ALLOWED_PASSWORD:
-            await message.answer("🔐 Введи пароль: /start [пароль]")
-            return
-        
-        gardener = await read_gardener()
-        if gardener:
-            gardener["identity"]["telegram_id"] = user_id
-            await write_gardener_file("gardener.json", gardener)
-            await message.answer(f"🌱 С возвращением, {gardener['identity'].get('name', 'Садовник')}!", reply_markup=get_main_keyboard())
-            return
-        else:
-            # Запуск онбординга для нового садовника
-            await state.set_state(GardenOnboardingStates.waiting_for_name)
-            await message.answer(
-                "🌱 <b>Добро пожаловать в Сад Мандалы!</b>\n\n"
-                "Я — твой Нежный Спутник. Давай познакомимся.\n\n"
-                "Как мне тебя называть?",
-                reply_markup=get_cancel_keyboard()
-            )
-            return
+    user_id = str(message.from_user.id)
     
     gardener = await read_gardener()
-    name = gardener.get("identity", {}).get("name", "Садовник") if gardener else "Садовник"
-    await message.answer(f"🌱 С возвращением, {name}!", reply_markup=get_main_keyboard())
+    
+    # Файл существует и telegram_id совпадает — приветствуем
+    if gardener and str(gardener.get("identity", {}).get("telegram_id", "")) == user_id:
+        name = gardener.get("identity", {}).get("name", "Садовник")
+        await message.answer(f"🌱 С возвращением, {name}!", reply_markup=get_main_keyboard())
+        return
+    
+    # Файла нет или telegram_id не совпадает — запускаем онбординг
+    await state.set_state(GardenOnboardingStates.waiting_for_name)
+    await message.answer(
+        "🌱 <b>Добро пожаловать в Сад Мандалы!</b>\n\n"
+        "Я — твой Нежный Спутник. Давай познакомимся.\n\n"
+        "Как мне тебя называть?",
+        reply_markup=get_cancel_keyboard()
+    )
 
 @router.message(Command("profile"))
 async def cmd_profile(message: Message):
