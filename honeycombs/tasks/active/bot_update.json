@@ -15,8 +15,8 @@
                  "ahimsa",
                  "active"
              ],
-    "progress":  25,
-    "progress_notes":  "D0, D6 (SR integration), D13 (password), D14 (hardcode gardener_001), D15 (button handlers) done. Gentle Companion mode working. Next: D5 (/resonance) or D2 (onboarding).",
+    "progress":  35,
+    "progress_notes":  "D16 done — full onboarding FSM with GitHub persistence. D2 in progress.",
     "garden_ref":  "honeycombs/garden/",
     "estimated_effort_hours":  30,
     "effort_breakdown":  {
@@ -44,7 +44,7 @@
                          "D2_onboarding":  {
                                                "id":  "D2",
                                                "name":  "/start onboarding FSM",
-                                               "status":  "todo",
+                                               "status":  "in_progress",
                                                "priority":  "CRITICAL",
                                                "estimated_hours":  3,
                                                "description":  "GardenOnboardingStates FSM: nameinterestsgoalslife_areascompanion_settingsdone. Creates gardener.json, tasks.json, achievements.json, groups.json."
@@ -176,7 +176,7 @@
                                                          "description":  "Fix FSM to correctly save gardener.json with user data.",
                                                          "estimated_hours":  1,
                                                          "priority":  "CRITICAL",
-                                                         "status":  "todo"
+                                                         "status":  "done"
                                                      },
                          "D17_add_reset_command":  {
                                                        "id":  "D17",
