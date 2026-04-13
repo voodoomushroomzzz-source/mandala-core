@@ -20,7 +20,7 @@ from aiogram.enums import ParseMode
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from aiogram.client.default import DefaultBotProperties
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
@@ -178,7 +178,19 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
         one_time_keyboard=True
     )
 
-def get_main_keyboard() -> ReplyKeyboardMarkup:
+def get_main_keyboard()
+
+
+def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🌱 Здоровье", callback_data="ach_cat_health")],
+        [InlineKeyboardButton(text="🎨 Творчество", callback_data="ach_cat_creativity")],
+        [InlineKeyboardButton(text="📚 Знания", callback_data="ach_cat_knowledge")],
+        [InlineKeyboardButton(text="🌍 Исследование", callback_data="ach_cat_exploration")],
+        [InlineKeyboardButton(text="🤝 Отношения", callback_data="ach_cat_relationships")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_achievement")]
+    ])
+ -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="🌱 Профиль")]],
         resize_keyboard=True
