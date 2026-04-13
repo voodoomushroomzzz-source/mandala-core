@@ -346,7 +346,8 @@ async def onboarding_evening(message: Message, state: FSMContext):
 # ========== COMMANDS ==========
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)\n    await state.clear()
+    user_id = str(message.from_user.id)
+    await state.clear()
     
     if not await is_authorized(user_id):
         args = message.text.replace("/start", "").strip()
