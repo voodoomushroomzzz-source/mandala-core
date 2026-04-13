@@ -151,6 +151,7 @@ async def call_bot_ask(session_id: str, message: str, gardener_context: dict) ->
 
 # ========== FSM STATES ==========
 class GardenOnboardingStates(StatesGroup):
+    waiting_for_password = State()
     waiting_for_name = State()
     waiting_for_interests = State()
     waiting_for_goals = State()
@@ -163,6 +164,14 @@ class GardenOnboardingStates(StatesGroup):
     done = State()
 
 # ========== KEYBOARDS ==========
+
+def get_cancel_keyboard() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="❌ Отмена")]],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    )
+
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="🌱 Профиль")]],
