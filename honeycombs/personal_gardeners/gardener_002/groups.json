@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "id": "group_001",
+      "name": "Дом",
+      "emoji": "🏠",
+      "created": "2026-04-13"
+    },
+    {
+      "id": "group_002",
+      "name": "Работа",
+      "emoji": "💼",
+      "created": "2026-04-13"
+    },
+    {
+      "id": "group_003",
+      "name": "Личное",
+      "emoji": "🌱",
+      "created": "2026-04-13"
+    }
+  ],
+  "default_group": "group_001"
+}
