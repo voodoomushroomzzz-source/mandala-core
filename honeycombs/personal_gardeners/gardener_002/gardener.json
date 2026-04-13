@@ -1,0 +1,57 @@
+{
+  "identity": {
+    "gardener_id": "gardener_002",
+    "telegram_id": "224736062",
+    "name": "Voodoo",
+    "resonance_level": 13,
+    "created": "2026-04-13",
+    "updated": "2026-04-13",
+    "last_interaction": "2026-04-13T14:07:16.603040"
+  },
+  "personal_info": {
+    "interests": [
+      "Творчество",
+      "разработка нашей мандалы",
+      "спорт",
+      "прогулки",
+      "чтение книг",
+      "путешествия (но с этим сложно"
+    ],
+    "goals": [
+      "Хочу стабильный доход от 150-200к на удаленке\nРазработать совместно с тобой хороший полезный продукт",
+      "чтобы работа над мандалой стала не просто хобби",
+      "а полноценной и основной моей работой и делом\nПопробовать пожить в другой стране\nСвозить детей на море"
+    ],
+    "life_areas": {
+      "health": {
+        "current": 7,
+        "target": 10
+      },
+      "creativity": {
+        "current": 6,
+        "target": 10
+      },
+      "knowledge": {
+        "current": 5,
+        "target": 7
+      },
+      "relationships": {
+        "current": 5,
+        "target": 7
+      }
+    }
+  },
+  "companion_settings": {
+    "morning_message_time": "10:00 по москве",
+    "evening_check_time": "21:00",
+    "proactive_mode": true,
+    "timezone": "Europe/Moscow"
+  },
+  "growth_history": [
+    {
+      "date": "2026-04-13",
+      "resonance": 13
+    }
+  ],
+  "_proactive_sent": {}
+}
