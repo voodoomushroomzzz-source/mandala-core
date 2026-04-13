@@ -15,8 +15,8 @@
                  "ahimsa",
                  "active"
              ],
-    "progress":  35,
-    "progress_notes":  "D16 done — full onboarding FSM with GitHub persistence. D2 in progress.",
+    "progress":  45,
+    "progress_notes":  "D16, D2 done — full onboarding working, data persists to GitHub. Gentle SR confirmed.",
     "garden_ref":  "honeycombs/garden/",
     "estimated_effort_hours":  30,
     "effort_breakdown":  {
@@ -44,7 +44,7 @@
                          "D2_onboarding":  {
                                                "id":  "D2",
                                                "name":  "/start onboarding FSM",
-                                               "status":  "in_progress",
+                                               "status":  "done",
                                                "priority":  "CRITICAL",
                                                "estimated_hours":  3,
                                                "description":  "GardenOnboardingStates FSM: nameinterestsgoalslife_areascompanion_settingsdone. Creates gardener.json, tasks.json, achievements.json, groups.json."
