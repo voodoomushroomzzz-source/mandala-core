@@ -15,8 +15,8 @@
                  "ahimsa",
                  "active"
              ],
-    "progress":  45,
-    "progress_notes":  "D16, D2 done — full onboarding working, data persists to GitHub. Gentle SR confirmed.",
+    "progress":  50,
+    "progress_notes":  "D5 done — /resonance command working, calculates resonance from achievements.",
     "garden_ref":  "honeycombs/garden/",
     "estimated_effort_hours":  30,
     "effort_breakdown":  {
@@ -68,7 +68,7 @@
                          "D5_resonance":  {
                                               "id":  "D5",
                                               "name":  "/resonance command",
-                                              "status":  "todo",
+                                              "status":  "done",
                                               "priority":  "MEDIUM",
                                               "estimated_hours":  1,
                                               "description":  "Current resonance level + growth_history. Formula: sum(bonus * category_weight)."
