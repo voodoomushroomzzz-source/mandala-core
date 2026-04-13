@@ -19,10 +19,10 @@
                  "unified_sr",
                  "modular_refactor"
              ],
-    "progress":  69,
-    "progress_notes":  "v4.0.0 deployed and tested. Onboarding, profile, achievements, tasks CRUD, /ask, /leave work. D8, D10 in progress. D11 pending (separate task). D12 planned.",
+    "progress":  20,
+    "progress_notes":  "v4.0.1 in progress: fixing button handlers (D15), onboarding data (D16). D0,D1,D5,D6 done. D2-D4,D7 broken.",
     "garden_ref":  "honeycombs/garden/",
-    "estimated_effort_hours":  26,
+    "estimated_effort_hours":  30,
     "effort_breakdown":  {
                              "taskboard_addon_hours":  8,
                              "modular_refactor_hours":  2,
@@ -48,7 +48,7 @@
                          "D2_onboarding":  {
                                                "id":  "D2",
                                                "name":  "/start onboarding FSM",
-                                               "status":  "done",
+                                               "status":  "broken",
                                                "priority":  "CRITICAL",
                                                "estimated_hours":  3,
                                                "description":  "GardenOnboardingStates FSM: nameinterestsgoalslife_areascompanion_settingsdone. Creates gardener.json, tasks.json, achievements.json, groups.json."
@@ -56,7 +56,7 @@
                          "D3_profile":  {
                                             "id":  "D3",
                                             "name":  "/profile command",
-                                            "status":  "done",
+                                            "status":  "broken",
                                             "priority":  "HIGH",
                                             "estimated_hours":  1,
                                             "description":  "Show name, resonance, top-3 achievements, active tasks count."
@@ -64,7 +64,7 @@
                          "D4_achievements":  {
                                                  "id":  "D4",
                                                  "name":  "/achievements command",
-                                                 "status":  "done",
+                                                 "status":  "broken",
                                                  "priority":  "HIGH",
                                                  "estimated_hours":  2,
                                                  "description":  "List achievements + add FSM  save to achievements.json  recalculate resonance."
@@ -88,7 +88,7 @@
                          "D7_tasks_personal":  {
                                                    "id":  "D7",
                                                    "name":  "Personal task management (FR1-FR6)",
-                                                   "status":  "done",
+                                                   "status":  "broken",
                                                    "priority":  "HIGH",
                                                    "estimated_hours":  6,
                                                    "description":  "Full CRUD for personal tasks with groups, priority auto-calc (resonance_match * life_area_gap), deadlines, subtasks, link to achievements. Commands: /addtask /tasks /done /edittask /deletetask /archive /groups /newgroup. FR3: smart task detection from chat messages (Ahimsa limits: max 3/day, stop after 3 declines).",
@@ -121,7 +121,7 @@
                          "D9_ahimsa":  {
                                            "id":  "D9",
                                            "name":  "Ahimsa guardrails + /leave",
-                                           "status":  "done",
+                                           "status":  "in_progress",
                                            "priority":  "HIGH",
                                            "estimated_hours":  2,
                                            "description":  "Silence policy: 1-7d normal, 8-30d one gentle msg, 31d+ stop. Resonance decay: -1%/week after 14d no achievements (min 10%). /leave  confirm  archive sota  farewell."
@@ -129,7 +129,7 @@
                          "D10_proactive":  {
                                                "id":  "D10",
                                                "name":  "Proactive messages (apscheduler)",
-                                               "status":  "in_progress",
+                                               "status":  "todo",
                                                "priority":  "HIGH",
                                                "estimated_hours":  2,
                                                "description":  "Morning greeting + evening check-in + gentle task reminder. Ahimsa filter before every send: correct time? recent interaction? only one today?"
@@ -149,19 +149,82 @@
                                                       "estimated_hours":  2,
                                                       "priority":  "LOW",
                                                       "status":  "todo"
-                                                  }
+                                                  },
+                         "D13_password_protection":  {
+                                                         "id":  "D13",
+                                                         "name":  "Password protection for private Garden",
+                                                         "description":  "Guard access by password on first message. ALLOWED_PASSWORD from .env.",
+                                                         "estimated_hours":  1,
+                                                         "priority":  "HIGH",
+                                                         "status":  "todo"
+                                                     },
+                         "D14_single_gardener":  {
+                                                     "id":  "D14",
+                                                     "name":  "Hardcode to gardener_001 only",
+                                                     "description":  "Remove scanning of all gardeners. Always work with gardener_001.",
+                                                     "estimated_hours":  0.5,
+                                                     "priority":  "HIGH",
+                                                     "status":  "todo"
+                                                 },
+                         "D15_fix_button_handlers":  {
+                                                         "id":  "D15",
+                                                         "name":  "Fix button handlers (state param)",
+                                                         "description":  "Add state: FSMContext to btn_profile, btn_achievements, btn_tasks.",
+                                                         "estimated_hours":  0.5,
+                                                         "priority":  "CRITICAL",
+                                                         "status":  "in_progress"
+                                                     },
+                         "D16_fix_onboarding_data":  {
+                                                         "id":  "D16",
+                                                         "name":  "Fix onboarding data persistence",
+                                                         "description":  "Fix FSM to correctly save gardener.json with user data.",
+                                                         "estimated_hours":  1,
+                                                         "priority":  "CRITICAL",
+                                                         "status":  "in_progress"
+                                                     },
+                         "D17_add_reset_command":  {
+                                                       "id":  "D17",
+                                                       "name":  "Add /reset command",
+                                                       "description":  "Clear _gardener_id_cache for debugging.",
+                                                       "estimated_hours":  0.5,
+                                                       "priority":  "MEDIUM",
+                                                       "status":  "todo"
+                                                   },
+                         "D18_remove_ask":  {
+                                                "id":  "D18",
+                                                "name":  "Remove /ask command and button",
+                                                "description":  "Remove redundant /ask. Add \u0027📤 В инженерный чат\u0027 button instead.",
+                                                "estimated_hours":  0.5,
+                                                "priority":  "LOW",
+                                                "status":  "todo"
+                                            },
+                         "D19_settings_toggle":  {
+                                                     "id":  "D19",
+                                                     "name":  "Fix settings toggle proactive",
+                                                     "description":  "Add callback handler for settings_toggle_proactive.",
+                                                     "estimated_hours":  0.5,
+                                                     "priority":  "MEDIUM",
+                                                     "status":  "todo"
+                                                 }
                      },
     "implementation_order":  [
                                  "D0",
                                  "D1",
+                                 "D6",
+                                 "D5",
+                                 "D15",
+                                 "D16",
+                                 "D14",
+                                 "D13",
+                                 "D17",
+                                 "D19",
+                                 "D18",
                                  "D2",
                                  "D3",
                                  "D4",
-                                 "D5",
-                                 "D6",
                                  "D7",
-                                 "D8",
                                  "D9",
+                                 "D8",
                                  "D10",
                                  "D11",
                                  "D12"
