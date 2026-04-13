@@ -94,6 +94,12 @@ async def read_gardener() -> Optional[dict]:
     ok, data = await get_github_file(f"{GARDENER_PATH}/gardener.json")
     return data if ok else None
 
+
+async def read_gardener_file(filename: str) -> Optional[Any]:
+    ok, data = await get_github_file(f"{GARDENER_PATH}/{filename}")
+    return data if ok else None
+
+
 async def write_gardener_file(filename: str, content: Any) -> bool:
     if not GITHUB_TOKEN:
         return False
