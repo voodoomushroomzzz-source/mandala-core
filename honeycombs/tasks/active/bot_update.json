@@ -5,7 +5,7 @@
     "priority":  "HIGH",
     "deadline":  "2026-05-01",
     "created":  "2026-04-01",
-    "updated":  "2026-04-13",
+    "updated":  "2026-04-14",
     "description":  "Evolve bot v3.32.0 into Garden Gentle Companion v4.0.0. Full Garden integration: onboarding, profile, achievements, resonance, task management (personal + Mandala tasks), proactive Ahimsa messaging, unified SR with engineer chat (shared session history), and Garden dashboard tab in engineer chat.",
     "version_target":  "v4.0.0",
     "tags":  [
@@ -15,8 +15,8 @@
                  "ahimsa",
                  "active"
              ],
-    "progress":  50,
-    "progress_notes":  "D5 done — /resonance command working.",
+    "progress":  55,
+    "progress_notes":  "D3 done — /profile expanded with top achievements and active task count.",
     "garden_ref":  "honeycombs/garden/",
     "estimated_effort_hours":  30,
     "effort_breakdown":  {
@@ -52,7 +52,7 @@
                          "D3_profile":  {
                                             "id":  "D3",
                                             "name":  "/profile command",
-                                            "status":  "todo",
+                                            "status":  "done",
                                             "priority":  "HIGH",
                                             "estimated_hours":  1,
                                             "description":  "Show name, resonance, top-3 achievements, active tasks count."
