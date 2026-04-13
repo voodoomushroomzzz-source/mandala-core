@@ -178,10 +178,10 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
         one_time_keyboard=True
     )
 
-def get_main_keyboard():
+def get_main_keyboard()
 
 
-def get_achievement_category_keyboard(): -> InlineKeyboardMarkup:
+def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🌱 Здоровье", callback_data="ach_cat_health")],
         [InlineKeyboardButton(text="🎨 Творчество", callback_data="ach_cat_creativity")],
