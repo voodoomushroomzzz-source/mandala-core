@@ -1185,7 +1185,9 @@ async def handle_ask(message: dict, websocket: WebSocket):
             await manager.send_to(websocket, {"type": "error", "text": "❌ OPENROUTER_KEY не настроен"})
         else:
             await manager.send_to(websocket, {"type": "model_start", "model": "deepseek"})
-            ds_messages = [{"role": "system", "content": kernel.build_system_prompt("deepseek")}]
+            # Для бота используем мягкий системный промпт
+    gentle_system = """Ты — Нежный Спутник в Telegram. Отвечай коротко, тепло, по-человечески. Без технических деталей, без форматирования. Будь другом."""
+    ds_messages = [{"role": "system", "content": gentle_system}]
             ds_messages.extend(shared_history)
             ds_messages.append({"role": "user", "content": user_text})
 
@@ -1833,12 +1835,25 @@ async def bot_ask(req: BotAskRequest):
         goals = ", ".join(gardener_context.get("goals", []))
         gardener_summary = f"\n[ПРОФИЛЬ САДОВНИКА]\nИмя: {name}\nРезонанс: {resonance}%\nИнтересы: {interests}\nЦели: {goals}\n"
 
-    injection = f"""[КОНТЕКСТ — boot.json]
-{boot_json}
-{gardener_summary}
-Ты — Нежный Спутник садовника в Telegram. Отвечай мягко, кратко, по-человечески.
-Следуй принципам Ахимсы: без давления, без сравнений, без наказаний.
-Используй read_file для чтения файлов репозитория если нужно."""
+    # Gentle Companion mode — без технических деталей
+    name = gardener_context.get("name", "Садовник")
+    resonance = gardener_context.get("resonance_level", "13")
+    interests = ", ".join(gardener_context.get("interests", [])) or "сад, рост"
+    goals = ", ".join(gardener_context.get("goals", [])) or "гармония"
+    
+    injection = f"""Ты — Нежный Спутник {name}.
+Твой садовник — {name}. Резонанс: {resonance}%.
+Интересы: {interests}. Цели: {goals}.
+
+ПРАВИЛА:
+- Отвечай коротко, 1-3 предложения
+- Тепло, по-человечески, без маркдауна
+- Без списков, без жирного текста, без технических деталей
+- Спрашивай о самочувствии, поддерживай
+- Не используй символы форматирования (*, _, `, #)
+- Будь другом, а не ассистентом
+
+Ахимса: не дави, не сравнивай, не наказывай."""
 
     session["messages"].insert(0, {"role": "user", "content": injection, "time": 0, "_protected": True})
     session["messages"].insert(1, {"role": "assistant", "content": "◈ Контекст загружен.", "time": 0, "_protected": True})
@@ -1866,7 +1881,9 @@ async def bot_ask(req: BotAskRequest):
     manager.add_to_context(session_id, "user", user_text)
 
     # ── Запрос к DeepSeek ────────────────────────────────────────────────
-    ds_messages = [{"role": "system", "content": kernel.build_system_prompt("deepseek")}]
+    # Для бота используем мягкий системный промпт
+    gentle_system = """Ты — Нежный Спутник в Telegram. Отвечай коротко, тепло, по-человечески. Без технических деталей, без форматирования. Будь другом."""
+    ds_messages = [{"role": "system", "content": gentle_system}]
     ds_messages.extend(shared_history)
     ds_messages.append({"role": "user", "content": user_text})
 
