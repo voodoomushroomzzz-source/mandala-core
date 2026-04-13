@@ -1,27 +1,22 @@
 #!/usr/bin/env python3
 """
-Mandala Sync Terminal Bot v3.32.0
+Mandala Garden Bot v4.0.0 — Gentle Companion
 Render Web Service + Webhook (Aiogram 3)
 
-НОВОЕ В v3.32.0:
-- Удалены: линза, Fructus, статус системы (облегчение бота)
-- Добавлена кнопка "💾 Симбиозис монолит" — скачать mandala_simbiosis.monolith.latest.json
-
-Предыдущие изменения v3.31.0:
-- Универсальные патчи: поддержка file_path для любых файлов
-- Бот может обновлять сам себя через патчи с file_path = "bot.py"
+Garden integration: onboarding, profile, achievements, resonance,
+task management (personal + Mandala), proactive Ahimsa messaging,
+unified SR with engineer chat (shared session history).
 """
 
 import os
 import sys
 import json
 import logging
-import uuid
 import base64
 import asyncio
 import copy
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Tuple, Optional, Any
 from pathlib import Path
 
@@ -42,6 +37,15 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 
 import aiohttp
 from dotenv import load_dotenv
+
+# Для проактивных сообщений
+try:
+    from apscheduler.schedulers.asyncio import AsyncIOScheduler
+    from apscheduler.triggers.cron import CronTrigger
+    APSCHEDULER_AVAILABLE = True
+except ImportError:
+    APSCHEDULER_AVAILABLE = False
+    logging.warning("apscheduler not installed. Proactive messages disabled.")
 
 # ========== ЛОГИРОВАНИЕ ==========
 logging.basicConfig(
@@ -65,7 +69,7 @@ WEBHOOK_SECRET = "mandala-secret"
 
 # URL инженерного чата (Variant B — единый СР с историей)
 ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")
-SR_FUNCTION_URL = f"{ENGINEER_CHAT_URL}/bot/ask"  # совместимость со старым call_sr
+SR_FUNCTION_URL = f"{ENGINEER_CHAT_URL}/bot/ask"
 
 # Путь к личным сотам садовников в репозитории
 GARDENERS_PATH = "honeycombs/personal_gardeners"
@@ -96,134 +100,133 @@ dp = Dispatcher()
 router = Router()
 dp.include_router(router)
 
-# ========== FSM СОСТОЯНИЯ ==========
-class UploadStates(StatesGroup):
-    waiting_for_action = State()
+# ========== SCHEDULER ДЛЯ ПРОАКТИВНЫХ СООБЩЕНИЙ ==========
+scheduler = AsyncIOScheduler() if APSCHEDULER_AVAILABLE else None
+
+# ========== FSM СОСТОЯНИЯ ДЛЯ GARDEN ==========
+class GardenOnboardingStates(StatesGroup):
+    waiting_for_name = State()
+    waiting_for_interests = State()
+    waiting_for_goals = State()
+    waiting_for_life_areas_health = State()
+    waiting_for_life_areas_creativity = State()
+    waiting_for_life_areas_knowledge = State()
+    waiting_for_life_areas_relationships = State()
+    waiting_for_companion_morning = State()
+    waiting_for_companion_evening = State()
+    waiting_for_timezone = State()
+    done = State()
+
+class TaskAddStates(StatesGroup):
+    waiting_for_title = State()
+    waiting_for_life_area = State()
+    waiting_for_group = State()
+    waiting_for_new_group_name = State()
+    waiting_for_priority = State()
+    waiting_for_deadline = State()
+    waiting_for_confirm = State()
+
+class TaskEditStates(StatesGroup):
+    waiting_for_field = State()
+    waiting_for_value = State()
+
+class AchievementAddStates(StatesGroup):
+    waiting_for_description = State()
     waiting_for_category = State()
-    waiting_for_module = State()
-    waiting_for_file = State()
-    waiting_for_patch_file = State()
-    waiting_for_patch_confirmation = State()
-    waiting_for_multi_patch_confirmation = State()
+    waiting_for_confirm = State()
 
-# ========== ДОСТУПНЫЕ МОДЕЛИ ==========
-AVAILABLE_MODELS = {
-    "deepseek": {
-        "name": "DeepSeek-R1",
-        "emoji": "🧠",
-        "description": "Глубокие рассуждения, философия, метафоры"
-    },
-    "qwen": {
-        "name": "Qwen3 235B",
-        "emoji": "📊",
-        "description": "Мощный анализ, стратегия, большие контексты"
-    },
-    "yandex": {
-        "name": "YandexGPT Pro",
-        "emoji": "⚙️",
-        "description": "Точность, JSON, структурированный вывод"
-    },
-    "gemma": {
-        "name": "Gemma 3 27B",
-        "emoji": "🎨",
-        "description": "Креатив, маркетинг, внешние коммуникации"
-    }
-}
+class LeaveStates(StatesGroup):
+    waiting_for_confirmation = State()
 
-# ========== ЦЕЛЕВЫЕ ФАЙЛЫ ==========
-MANDALA_MODULES = {
-    "initium": {
-        "name": "🌀 Initium",
-        "filename": "initium.json",
-        "path": "initium.json",
-        "description": "Конституционное ядро",
-        "category": "module"
-    },
-    "sphaerae": {
-        "name": "🌐 Sphaerae",
-        "filename": "sphaerae.json",
-        "path": "sphaerae.json",
-        "description": "Карта Мандалы",
-        "category": "module"
-    },
-    "akasha_chronicorum": {
-        "name": "📜 Akasha Chronicorum",
-        "filename": "akasha_chronicorum.json",
-        "path": "akasha_chronicorum.json",
-        "description": "Живая память",
-        "category": "module"
-    },
-    "philosophia": {
-        "name": "💭 Philosophia",
-        "filename": "philosophia.json",
-        "path": "philosophia.json",
-        "description": "Философское ядро",
-        "category": "module"
-    },
-    "geometria_sacra": {
-        "name": "🔺 Geometria Sacra",
-        "filename": "geometria_sacra.json",
-        "path": "geometria_sacra.json",
-        "description": "Язык Света",
-        "category": "module"
-    },
-    "incubae": {
-        "name": "🌱 Incubae",
-        "filename": "incubae.json",
-        "path": "incubae.json",
-        "description": "Единый реестр семян",
-        "category": "module"
-    },
-    "tectosphaera": {
-        "name": "🛡️ Tectosphaera",
-        "filename": "tectosphaera.json",
-        "path": "tectosphaera.json",
-        "description": "Тело заботы",
-        "category": "module"
-    },
-    "testisphaera": {
-        "name": "🧪 Testisphaera",
-        "filename": "testisphaera_v0.1.json",
-        "path": "testlab/testisphaera_v0.1.json",
-        "description": "Песочница для тестирования",
-        "category": "module"
-    }
-}
+# ========== ЛОКАЛЬНЫЙ КЭШ ==========
+_gardener_id_cache: Dict[str, str] = {}
 
-INFRASTRUCTURE_FILES = {
-    "build_script": {
-        "name": "🔨 Сборщик монолита",
-        "filename": "build_monolith.py",
-        "path": "build_monolith.py",
-        "description": "Скрипт сборки v5.2",
-        "category": "infra"
-    },
-    "github_action": {
-        "name": "🤖 GitHub Action",
-        "filename": "build-monolith.yml",
-        "path": ".github/workflows/build-monolith.yml",
-        "description": "Автоматическая сборка",
-        "category": "infra"
-    },
-    "bot_script": {
-        "name": "🤖 Сам бот (bot.py)",
-        "filename": "bot.py",
-        "path": "bot.py",
-        "description": "Исходный код бота",
-        "category": "infra"
-    }
-}
+# Хранилище для Ahimsa-лимитов (FR3: парсинг задач)
+_task_detection_limits: Dict[str, Dict] = {}  # user_id -> {count, last_date, declined_streak}
 
-ALL_UPLOAD_TARGETS = {**MANDALA_MODULES, **INFRASTRUCTURE_FILES}
-user_upload_target = {}
+# ========== КЛАВИАТУРЫ ==========
 
-# Хранилище выбранной модели для каждого пользователя
-user_selected_model = {}
+def get_main_keyboard() -> ReplyKeyboardMarkup:
+    """Главное меню Garden Companion"""
+    keyboard = [
+        [KeyboardButton(text="🌱 Профиль"), KeyboardButton(text="🏆 Достижения")],
+        [KeyboardButton(text="📋 Задачи"), KeyboardButton(text="💬 Спросить")],
+        [KeyboardButton(text="⚙️ Настройки")]
+    ]
+    return ReplyKeyboardMarkup(
+        keyboard=keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=False,
+        selective=True
+    )
 
+def get_cancel_keyboard() -> ReplyKeyboardMarkup:
+    """Клавиатура с кнопкой Отмена"""
+    keyboard = [[KeyboardButton(text="❌ Отмена")]]
+    return ReplyKeyboardMarkup(
+        keyboard=keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=True,
+        selective=True
+    )
+
+def get_life_area_keyboard() -> InlineKeyboardMarkup:
+    """Выбор сферы жизни для задачи"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🌱 Здоровье", callback_data="lifearea_health")],
+        [InlineKeyboardButton(text="🎨 Творчество", callback_data="lifearea_creativity")],
+        [InlineKeyboardButton(text="📚 Знания", callback_data="lifearea_knowledge")],
+        [InlineKeyboardButton(text="🌍 Исследование", callback_data="lifearea_exploration")],
+        [InlineKeyboardButton(text="🤝 Отношения", callback_data="lifearea_relationships")],
+        [InlineKeyboardButton(text="📋 Другое", callback_data="lifearea_other")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task_add")]
+    ])
+
+def get_priority_keyboard() -> InlineKeyboardMarkup:
+    """Выбор приоритета задачи (1-10)"""
+    buttons = []
+    row = []
+    for i in range(1, 11):
+        row.append(InlineKeyboardButton(text=str(i), callback_data=f"priority_{i}"))
+        if len(row) == 5:
+            buttons.append(row)
+            row = []
+    if row:
+        buttons.append(row)
+    buttons.append([InlineKeyboardButton(text="🤖 Авто", callback_data="priority_auto")])
+    buttons.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task_add")])
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+def get_confirm_keyboard() -> InlineKeyboardMarkup:
+    """Клавиатура подтверждения"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Да", callback_data="confirm_yes"),
+         InlineKeyboardButton(text="❌ Нет", callback_data="confirm_no")]
+    ])
+
+def get_task_actions_keyboard(task_id: str) -> InlineKeyboardMarkup:
+    """Действия с задачей"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Выполнено", callback_data=f"task_done_{task_id}")],
+        [InlineKeyboardButton(text="▶️ В работе", callback_data=f"task_start_{task_id}")],
+        [InlineKeyboardButton(text="✏️ Изменить", callback_data=f"task_edit_{task_id}")],
+        [InlineKeyboardButton(text="🗑️ Удалить", callback_data=f"task_delete_{task_id}")]
+    ])
+
+def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
+    """Категории достижений"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🌱 Здоровье", callback_data="ach_cat_health")],
+        [InlineKeyboardButton(text="🎨 Творчество", callback_data="ach_cat_creativity")],
+        [InlineKeyboardButton(text="📚 Знания", callback_data="ach_cat_knowledge")],
+        [InlineKeyboardButton(text="🌍 Исследование", callback_data="ach_cat_exploration")],
+        [InlineKeyboardButton(text="🤝 Отношения", callback_data="ach_cat_relationships")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_achievement")]
+    ])
 
 # ========== ФУНКЦИЯ ВЫЗОВА СР ==========
 
-async def call_sr(chat_id: str, text: str, selected_model: str = None, gardener_context: dict = None) -> Optional[str]:
+async def call_sr(chat_id: str, text: str, gardener_context: dict = None) -> Optional[str]:
     """Вызывает инженерный чат (main.py /bot/ask) и возвращает ответ.
     session_id = tg_{chat_id} — история общая между ботом и веб-чатом."""
     async with aiohttp.ClientSession() as session:
@@ -249,130 +252,10 @@ async def call_sr(chat_id: str, text: str, selected_model: str = None, gardener_
             logger.error(f"Error calling SR: {e}")
             return None
 
-
-# ========== КЛАВИАТУРЫ ==========
-
-def get_main_keyboard() -> ReplyKeyboardMarkup:
-    """Главное меню (v3.32.0)"""
-    keyboard = [
-        [KeyboardButton(text="🔄 Обновление ядра")],
-        [KeyboardButton(text="💾 Скачать монолит")],
-        [KeyboardButton(text="💾 Симбиозис монолит")],
-    ]
-    return ReplyKeyboardMarkup(
-        keyboard=keyboard,
-        resize_keyboard=True,
-        one_time_keyboard=False,
-        selective=True
-    )
-
-def get_back_keyboard() -> ReplyKeyboardMarkup:
-    """Клавиатура с кнопкой назад"""
-    keyboard = [[KeyboardButton(text="◀️ Назад в меню")]]
-    return ReplyKeyboardMarkup(
-        keyboard=keyboard,
-        resize_keyboard=True,
-        one_time_keyboard=False,
-        selective=True
-    )
-
-def get_lens_keyboard() -> InlineKeyboardMarkup:
-    """Инлайн-клавиатура для выбора линзы"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="🧘 п", callback_data="lens_п"),
-            InlineKeyboardButton(text="⚙️ а", callback_data="lens_а"),
-            InlineKeyboardButton(text="🧭 с", callback_data="lens_с")
-        ],
-        [
-            InlineKeyboardButton(text="🌐 м", callback_data="lens_м"),
-            InlineKeyboardButton(text="💭 ф", callback_data="lens_ф"),
-            InlineKeyboardButton(text="🗺️ к", callback_data="lens_к")
-        ],
-        [InlineKeyboardButton(text="◀️ Назад", callback_data="back_to_main")]
-    ])
-
-def get_update_keyboard() -> InlineKeyboardMarkup:
-    """Инлайн-клавиатура для раздела обновления ядра"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="📤 Загрузить файл", callback_data="upload_file")],
-        [InlineKeyboardButton(text="📦 Пакетное обновление", callback_data="batch_update")],
-        [InlineKeyboardButton(text="◀️ Назад", callback_data="back_to_main")]
-    ])
-
-def get_category_keyboard() -> InlineKeyboardMarkup:
-    """Выбор категории для загрузки"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🧩 Модули Мандалы", callback_data="category_modules")],
-        [InlineKeyboardButton(text="⚙️ Инфраструктура", callback_data="category_infra")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
-    ])
-
-def get_modules_keyboard() -> InlineKeyboardMarkup:
-    """Выбор модуля Мандалы"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="🌀 Initium", callback_data="target_initium"),
-            InlineKeyboardButton(text="🌐 Sphaerae", callback_data="target_sphaerae")
-        ],
-        [
-            InlineKeyboardButton(text="📜 Akasha", callback_data="target_akasha_chronicorum"),
-            InlineKeyboardButton(text="💭 Philosophia", callback_data="target_philosophia")
-        ],
-        [
-            InlineKeyboardButton(text="🔺 Geometria", callback_data="target_geometria_sacra"),
-            InlineKeyboardButton(text="🌱 Incubae", callback_data="target_incubae")
-        ],
-        [
-            InlineKeyboardButton(text="🛡️ Tectosphaera", callback_data="target_tectosphaera"),
-            InlineKeyboardButton(text="🧪 Testisphaera", callback_data="target_testisphaera")
-        ],
-        [InlineKeyboardButton(text="◀️ Назад к категориям", callback_data="back_to_categories")]
-    ])
-
-def get_infra_keyboard() -> InlineKeyboardMarkup:
-    """Выбор инфраструктурного файла"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="🔨 Сборщик", callback_data="target_build_script"),
-            InlineKeyboardButton(text="🤖 GitHub Action", callback_data="target_github_action")
-        ],
-        [
-            InlineKeyboardButton(text="🤖 Сам бот", callback_data="target_bot_script")
-        ],
-        [InlineKeyboardButton(text="◀️ Назад к категориям", callback_data="back_to_categories")]
-    ])
-
-def get_fructus_inline_keyboard() -> InlineKeyboardMarkup:
-    """Меню Fructus"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="📤 Загрузить", callback_data="fructus_upload"),
-            InlineKeyboardButton(text="📋 Информация", callback_data="fructus_info")
-        ],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]
-    ])
-
-def get_patch_confirm_keyboard() -> InlineKeyboardMarkup:
-    """Клавиатура подтверждения патча"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✅ Применить", callback_data="patch_apply")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="patch_cancel")],
-        [InlineKeyboardButton(text="📋 Детали", callback_data="patch_details")]
-    ])
-
-def get_multi_patch_confirm_keyboard() -> InlineKeyboardMarkup:
-    """Подтверждение мульти-патча"""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✅ Применить все", callback_data="multi_patch_apply")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="multi_patch_cancel")],
-        [InlineKeyboardButton(text="📋 Детали", callback_data="multi_patch_details")]
-    ])
-
-
 # ========== ФУНКЦИИ GITHUB API ==========
 
 async def update_github_file(file_path: str, content: Any, message: str) -> bool:
+    """Обновляет или создает файл в GitHub репозитории."""
     if not GITHUB_TOKEN:
         logger.error("❌ GITHUB_TOKEN не установлен")
         return False
@@ -397,7 +280,7 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.31.0"
+        "User-Agent": "MandalaGardenBot/4.0.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -446,8 +329,8 @@ async def update_github_file(file_path: str, content: Any, message: str) -> bool
             logger.error(f"❌ Ошибка при отправке в GitHub: {e}")
             return False
 
-
 async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], Optional[str]]:
+    """Получает содержимое файла из GitHub."""
     if not GITHUB_TOKEN:
         return False, None, "GITHUB_TOKEN не настроен"
 
@@ -455,7 +338,7 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/3.31.0"
+        "User-Agent": "MandalaGardenBot/4.0.0"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -475,16 +358,10 @@ async def get_github_file_content(file_path: str) -> Tuple[bool, Optional[Any], 
         except Exception as e:
             return False, None, str(e)
 
-
-
 # ========== GARDEN HELPERS (D1) ==========
 
-# Локальный кэш: telegram_id → gardener_id (чтобы не дёргать GitHub каждый раз)
-_gardener_id_cache: Dict[str, str] = {}
-
 async def find_gardener_by_telegram_id(telegram_id: str) -> Optional[str]:
-    """Найти gardener_id по telegram_id. Сканирует personal_gardeners/ в GitHub.
-    Возвращает 'gardener_001' или None если не найден."""
+    """Найти gardener_id по telegram_id. Сканирует personal_gardeners/ в GitHub."""
     if telegram_id in _gardener_id_cache:
         return _gardener_id_cache[telegram_id]
 
@@ -495,7 +372,7 @@ async def find_gardener_by_telegram_id(telegram_id: str) -> Optional[str]:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaBot/4.0.0"
+        "User-Agent": "MandalaGardenBot/4.0.0"
     }
     try:
         async with aiohttp.ClientSession() as session:
@@ -503,7 +380,6 @@ async def find_gardener_by_telegram_id(telegram_id: str) -> Optional[str]:
                 if resp.status != 200:
                     return None
                 items = await resp.json()
-                # Ищем папки gardener_XXX (не archive, не template)
                 folders = [
                     item["name"] for item in items
                     if item["type"] == "dir"
@@ -523,9 +399,8 @@ async def find_gardener_by_telegram_id(telegram_id: str) -> Optional[str]:
         logger.error(f"find_gardener error: {e}")
     return None
 
-
 async def read_gardener_file(gardener_id: str, filename: str) -> Optional[Any]:
-    """Читает файл из личной соты садовника. Возвращает dict/list или None."""
+    """Читает файл из личной соты садовника."""
     path = f"{GARDENERS_PATH}/{gardener_id}/{filename}"
     ok, data, _ = await get_github_file_content(path)
     if ok:
@@ -539,15 +414,12 @@ async def read_gardener_file(gardener_id: str, filename: str) -> Optional[Any]:
             pass
     return None
 
-
 async def write_gardener_file(gardener_id: str, filename: str, content: Any, commit_msg: str = "") -> bool:
-    """Записывает файл в личную соту садовника через GitHub API.
-    При недоступности API — сохраняет в локальную очередь (soft-fail)."""
+    """Записывает файл в личную соту садовника через GitHub API."""
     path = f"{GARDENERS_PATH}/{gardener_id}/{filename}"
     msg = commit_msg or f"🌱 {gardener_id}/{filename} обновлён через бот"
     success = await update_github_file(path, content, msg)
     if not success:
-        # Soft-fail: сохраняем локально
         try:
             queue_dir = LOCAL_QUEUE_PATH / gardener_id
             queue_dir.mkdir(parents=True, exist_ok=True)
@@ -558,28 +430,6 @@ async def write_gardener_file(gardener_id: str, filename: str, content: Any, com
         except Exception as e:
             logger.error(f"Soft-fail write error: {e}")
     return success
-
-
-async def flush_gardener_queue(gardener_id: str) -> int:
-    """Синхронизирует локальную очередь с GitHub при восстановлении соединения.
-    Возвращает количество успешно отправленных файлов."""
-    queue_dir = LOCAL_QUEUE_PATH / gardener_id
-    if not queue_dir.exists():
-        return 0
-    synced = 0
-    for queue_file in queue_dir.glob("*.json"):
-        try:
-            content = json.loads(queue_file.read_text(encoding="utf-8"))
-            path = f"{GARDENERS_PATH}/{gardener_id}/{queue_file.name}"
-            success = await update_github_file(path, content, f"🔄 Sync queue: {queue_file.name}")
-            if success:
-                queue_file.unlink()
-                synced += 1
-                logger.info(f"✅ Queue synced: {queue_file.name}")
-        except Exception as e:
-            logger.error(f"Queue flush error {queue_file.name}: {e}")
-    return synced
-
 
 async def get_gardener_context(telegram_id: str) -> dict:
     """Возвращает краткий профиль садовника для передачи в SR."""
@@ -599,9 +449,8 @@ async def get_gardener_context(telegram_id: str) -> dict:
         "goals": personal.get("goals", []),
     }
 
-
 def generate_gardener_id(existing_ids: List[str]) -> str:
-    """Генерирует следующий gardener_id (gardener_001, gardener_002 и т.д.)"""
+    """Генерирует следующий gardener_id."""
     nums = []
     for gid in existing_ids:
         try:
@@ -611,1726 +460,1398 @@ def generate_gardener_id(existing_ids: List[str]) -> str:
     next_num = max(nums) + 1 if nums else 1
     return f"gardener_{next_num:03d}"
 
+def calculate_resonance(achievements: List[Dict], catalog: Dict) -> int:
+    """Рассчитывает резонанс на основе достижений."""
+    if not achievements or not catalog:
+        return 10  # базовый резонанс
+    categories = catalog.get("categories", {})
+    total = 10  # базовый уровень
+    for ach in achievements:
+        cat = ach.get("category", "")
+        bonus = ach.get("resonance_bonus", 0)
+        weight = categories.get(cat, {}).get("resonance_weight", 1.0)
+        total += int(bonus * weight)
+    return min(100, total)
 
+def calculate_priority(task: Dict, gardener: Dict) -> int:
+    """Авторасчет приоритета задачи."""
+    base = 5
+    # resonance_match по тегам
+    task_tags = set(task.get("tags", []))
+    interests = set(gardener.get("personal_info", {}).get("interests", []))
+    if task_tags and interests:
+        overlap = len(task_tags & interests)
+        if overlap > 0:
+            base += overlap * 2
+    # life_area_gap
+    life_area = task.get("life_area", "")
+    if life_area and life_area in gardener.get("personal_info", {}).get("life_areas", {}):
+        area = gardener["personal_info"]["life_areas"][life_area]
+        current = area.get("current", 5)
+        target = area.get("target", 5)
+        gap = target - current
+        if gap > 3:
+            base += 3
+        elif gap > 0:
+            base += 1
+    return max(1, min(10, base))
 
+def generate_task_id() -> str:
+    """Генерирует ID задачи."""
+    return f"task_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
-def validate_patch_structure(patch_data: Dict) -> Tuple[bool, str]:
-    """Валидация структуры патча (одиночного или мульти) с поддержкой file_path"""
-    if not isinstance(patch_data, dict):
-        return False, "Патч должен быть объектом JSON"
+# ========== AHHIMSA GUARDRAILS (D9) ==========
 
-    if "patches" in patch_data:
-        # Мульти-патч
-        if not isinstance(patch_data["patches"], list):
-            return False, "Поле 'patches' должно быть массивом"
-        if len(patch_data["patches"]) == 0:
-            return False, "Массив patches пуст"
+class AhimsaGuard:
+    @staticmethod
+    def should_send_proactive(gardener: Dict, message_type: str) -> Tuple[bool, str]:
+        """Проверяет, можно ли отправить проактивное сообщение."""
+        if not gardener.get("companion_settings", {}).get("proactive_mode", True):
+            return False, "proactive_mode disabled"
+        # Проверка silence policy
+        last_interaction = gardener.get("identity", {}).get("last_interaction")
+        if last_interaction:
+            last_dt = datetime.fromisoformat(last_interaction)
+            days_silent = (datetime.now() - last_dt).days
+            if days_silent > 30:
+                return False, "silence > 30 days"
+            elif days_silent > 7 and message_type != "gentle_check":
+                return False, "only gentle check allowed after 7 days"
+        # Проверка лимита в день
+        today = datetime.now().strftime("%Y-%m-%d")
+        sent_today = gardener.get("_proactive_sent", {}).get(today, [])
+        if message_type in sent_today:
+            return False, f"{message_type} already sent today"
+        if len(sent_today) >= 2:
+            return False, "max 2 proactive messages per day"
+        return True, "ok"
 
-        for i, subpatch in enumerate(patch_data["patches"]):
-            if not isinstance(subpatch, dict):
-                return False, f"Подпатч #{i} должен быть объектом"
-            
-            # Проверяем наличие target_module ИЛИ file_path
-            if "target_module" not in subpatch and "file_path" not in subpatch:
-                return False, f"Подпатч #{i}: отсутствует 'target_module' или 'file_path'"
-            
-            # Для JSON-модулей проверяем changes
-            if "target_module" in subpatch:
-                if "changes" not in subpatch:
-                    return False, f"Подпатч #{i}: отсутствует 'changes' для модуля"
-                if not isinstance(subpatch["changes"], list):
-                    return False, f"Подпатч #{i}: 'changes' должен быть массивом"
+    @staticmethod
+    def check_task_detection_limit(user_id: str) -> Tuple[bool, str]:
+        """Проверяет лимиты на детекцию задач (FR3)."""
+        global _task_detection_limits
+        today = datetime.now().strftime("%Y-%m-%d")
+        if user_id not in _task_detection_limits:
+            _task_detection_limits[user_id] = {"count": 0, "last_date": today, "declined_streak": 0}
+        limits = _task_detection_limits[user_id]
+        if limits["last_date"] != today:
+            limits["count"] = 0
+            limits["last_date"] = today
+        if limits["count"] >= 3:
+            return False, "max 3 detections per day"
+        if limits["declined_streak"] >= 3:
+            return False, "3 declined in a row"
+        return True, "ok"
 
-                valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
-                for j, change in enumerate(subpatch["changes"]):
-                    if not isinstance(change, dict):
-                        return False, f"Подпатч #{i}, изменение #{j}: должно быть объектом"
-                    if "op" not in change:
-                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'op'"
-                    if change["op"] not in valid_ops:
-                        return False, f"Подпатч #{i}, изменение #{j}: недопустимая операция '{change['op']}'"
-                    if "path" not in change:
-                        return False, f"Подпатч #{i}, изменение #{j}: отсутствует 'path'"
-                    if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-                        return False, f"Подпатч #{i}, изменение #{j}: для операции '{change['op']}' нужно 'value'"
-            
-            # Для обычных файлов проверяем content
-            elif "file_path" in subpatch:
-                if "content" not in subpatch:
-                    return False, f"Подпатч #{i}: отсутствует 'content' для файла"
-
-        return True, "Мульти-патч корректен"
-
-    else:
-        # Одиночный патч
-        if "target_module" not in patch_data and "file_path" not in patch_data:
-            return False, "Отсутствует 'target_module' или 'file_path'"
-        
-        if "target_module" in patch_data:
-            if "changes" not in patch_data:
-                return False, "Отсутствует поле 'changes'"
-            if not isinstance(patch_data["changes"], list):
-                return False, "'changes' должен быть массивом"
-            if len(patch_data["changes"]) == 0:
-                return False, "Массив изменений пуст"
-
-            valid_ops = ["update", "add", "delete", "replace", "merge", "remove"]
-            for i, change in enumerate(patch_data["changes"]):
-                if not isinstance(change, dict):
-                    return False, f"Изменение #{i} должно быть объектом"
-                if "op" not in change:
-                    return False, f"Изменение #{i}: отсутствует 'op'"
-                if change["op"] not in valid_ops:
-                    return False, f"Изменение #{i}: недопустимая операция '{change['op']}'"
-                if "path" not in change:
-                    return False, f"Изменение #{i}: отсутствует 'path'"
-                if change["op"] in ["update", "add", "replace", "merge"] and "value" not in change:
-                    return False, f"Изменение #{i}: для операции '{change['op']}' нужно 'value'"
-        
-        elif "file_path" in patch_data:
-            if "content" not in patch_data:
-                return False, "Отсутствует 'content' для файла"
-
-        return True, "Одиночный патч корректен"
-
-
-async def apply_json_operation(
-    content: Dict,
-    operation_type: str,
-    target_path: str,
-    new_value: Any = None
-) -> Tuple[bool, Optional[Dict], str]:
-    """Применить операцию к JSON (без изменений)"""
-    try:
-        array_match = re.match(r"(.+?)\[(\d+)\](.*)", target_path)
-
-        if array_match:
-            base_path, index_str, rest = array_match.groups()
-            index = int(index_str)
-
-            current = content
-            for key in base_path.split('.'):
-                if key:
-                    if isinstance(current, dict) and key in current:
-                        current = current[key]
-                    else:
-                        return False, None, f"Путь {base_path} не найден"
-
-            if not isinstance(current, list):
-                return False, None, f"{base_path} не является массивом"
-
-            if index >= len(current):
-                return False, None, f"Индекс {index} вне диапазона (макс {len(current)-1})"
-
-            if rest:
-                rest = rest.lstrip('.')
-                if rest:
-                    return await apply_json_operation(
-                        current[index],
-                        operation_type,
-                        rest,
-                        new_value
-                    )
-
-            if operation_type == "update_field":
-                current[index] = new_value
-                return True, content, f"✅ Элемент [{index}] обновлён"
-            elif operation_type == "delete_field":
-                current.pop(index)
-                return True, content, f"✅ Элемент [{index}] удалён"
-            elif operation_type == "add_to_array":
-                if isinstance(new_value, list):
-                    current[index:index] = new_value
-                else:
-                    current.insert(index, new_value)
-                return True, content, f"✅ Добавлено в позицию [{index}]"
-
+    @staticmethod
+    def record_task_detection(user_id: str, accepted: bool):
+        """Записывает результат детекции задачи."""
+        global _task_detection_limits
+        today = datetime.now().strftime("%Y-%m-%d")
+        if user_id not in _task_detection_limits:
+            _task_detection_limits[user_id] = {"count": 0, "last_date": today, "declined_streak": 0}
+        limits = _task_detection_limits[user_id]
+        if limits["last_date"] != today:
+            limits["count"] = 0
+            limits["last_date"] = today
+        limits["count"] += 1
+        if accepted:
+            limits["declined_streak"] = 0
         else:
-            parts = target_path.split('.')
-            current = content
-
-            for part in parts[:-1]:
-                if part:
-                    if part not in current:
-                        current[part] = {}
-                    current = current[part]
-
-            last_part = parts[-1]
-
-            if operation_type == "update_field":
-                current[last_part] = new_value
-                return True, content, f"✅ Поле {last_part} обновлено"
-
-            elif operation_type == "delete_field":
-                if last_part in current:
-                    del current[last_part]
-                    return True, content, f"✅ Поле {last_part} удалено"
-                else:
-                    return True, content, f"⚠️ Поле {last_part} уже отсутствует, удаление не требуется"
-
-            elif operation_type == "add_to_array":
-                if last_part not in current:
-                    current[last_part] = []
-                if not isinstance(current[last_part], list):
-                    return False, None, f"{last_part} не является массивом"
-
-                if isinstance(new_value, list):
-                    current[last_part].extend(new_value)
-                else:
-                    current[last_part].append(new_value)
-
-                return True, content, f"✅ Добавлено в массив {last_part}"
-
-            elif operation_type == "show_structure":
-                return True, current.get(last_part, "не найдено"), f"Структура по пути {target_path}"
-
-        return False, None, "Неизвестный тип операции"
-
-    except Exception as e:
-        return False, None, f"Ошибка: {str(e)}"
-
-
-def handle_replace(content: Dict, path: str, value: Any) -> Tuple[bool, Dict, str]:
-    """Операция replace для элемента массива"""
-    try:
-        array_match = re.match(r"(.+)\[(\d+)\]$", path)
-        if not array_match:
-            return False, content, "Replace работает только с элементами массива (path[index])"
-
-        base_path, index_str = array_match.groups()
-        index = int(index_str)
-
-        current = content
-        for key in base_path.split('.'):
-            if key:
-                if isinstance(current, dict) and key in current:
-                    current = current[key]
-                else:
-                    return False, content, f"Путь {base_path} не найден"
-
-        if not isinstance(current, list):
-            return False, content, f"{base_path} не является массивом"
-
-        if index >= len(current):
-            return False, content, f"Индекс {index} вне диапазона"
-
-        current[index] = value
-        return True, content, f"Элемент [{index}] заменён"
-    except Exception as e:
-        return False, content, str(e)
-
-
-def handle_merge(content: Dict, path: str, value: Dict) -> Tuple[bool, Dict, str]:
-    """Глубокое слияние объектов"""
-    try:
-        parts = path.split('.')
-        current = content
-
-        for part in parts[:-1]:
-            if part:
-                if part not in current:
-                    current[part] = {}
-                current = current[part]
-
-        last_part = parts[-1]
-
-        if last_part not in current:
-            current[last_part] = {}
-
-        if not isinstance(current[last_part], dict) or not isinstance(value, dict):
-            return False, content, "Merge работает только с объектами"
-
-        def deep_merge(a, b):
-            for key in b:
-                if key in a and isinstance(a[key], dict) and isinstance(b[key], dict):
-                    deep_merge(a[key], b[key])
-                else:
-                    a[key] = b[key]
-            return a
-
-        current[last_part] = deep_merge(current[last_part], value)
-        return True, content, f"Объект {last_part} объединён"
-    except Exception as e:
-        return False, content, str(e)
-
-
-def generate_simple_diff(original: Dict, modified: Dict) -> List[str]:
-    """Генерация простого diff для предпросмотра"""
-    diff = []
-
-    def compare_dicts(a, b, path=""):
-        if a == b:
-            return
-
-        if type(a) != type(b):
-            diff.append(f"{path}: тип изменён")
-            return
-
-        if isinstance(a, dict) and isinstance(b, dict):
-            all_keys = set(a.keys()) | set(b.keys())
-            for key in all_keys:
-                new_path = f"{path}.{key}" if path else key
-                if key not in a:
-                    diff.append(f"+ {new_path}")
-                elif key not in b:
-                    diff.append(f"- {new_path}")
-                else:
-                    compare_dicts(a[key], b[key], new_path)
-        elif isinstance(a, list) and isinstance(b, list):
-            if len(a) != len(b):
-                diff.append(f"{path}: длина изменена {len(a)} → {len(b)}")
-            else:
-                for i, (ai, bi) in enumerate(zip(a, b)):
-                    if ai != bi:
-                        compare_dicts(ai, bi, f"{path}[{i}]")
-        else:
-            if a != b:
-                a_str = str(a)[:30] + "..." if len(str(a)) > 30 else str(a)
-                b_str = str(b)[:30] + "..." if len(str(b)) > 30 else str(b)
-                diff.append(f"{path}: {a_str} → {b_str}")
-
-    compare_dicts(original, modified)
-    return diff[:15]
-
-
-async def apply_batch_patch_dry_run(original: Dict, changes: List) -> Dict:
-    """Тестовое применение патча (без сохранения)"""
-    test_content = copy.deepcopy(original)
-    applied = []
-    failed = []
-
-    for i, change in enumerate(changes):
-        try:
-            op = change["op"]
-            path = change["path"]
-            value = change.get("value")
-
-            if op == "update":
-                success, result, msg = await apply_json_operation(
-                    test_content, "update_field", path, value
-                )
-            elif op == "add":
-                success, result, msg = await apply_json_operation(
-                    test_content, "add_to_array" if ("[" in path and "]" in path) else "update_field",
-                    path, value
-                )
-            elif op == "delete":
-                success, result, msg = await apply_json_operation(
-                    test_content, "delete_field", path, None
-                )
-            elif op == "remove":  # Новая операция, обрабатывается как delete
-                success, result, msg = await apply_json_operation(
-                    test_content, "delete_field", path, None
-                )
-            elif op == "replace":
-                success, result, msg = handle_replace(test_content, path, value)
-            elif op == "merge":
-                success, result, msg = handle_merge(test_content, path, value)
-            else:
-                success, result, msg = False, test_content, f"Неизвестная операция: {op}"
-
-            if success:
-                applied.append({"index": i, "op": op, "path": path, "msg": msg})
-                test_content = result
-            else:
-                failed.append({"index": i, "op": op, "path": path, "error": msg})
-
-        except Exception as e:
-            failed.append({"index": i, "op": op, "path": path, "error": str(e)})
-
-    diff = generate_simple_diff(original, test_content)
-
-    return {
-        "success": len(failed) == 0,
-        "applied": applied,
-        "failed": failed,
-        "diff": diff,
-        "result_content": test_content if len(failed) == 0 else None
-    }
-
-
-def format_patch_preview(diff: List[str], patch_data: Dict) -> str:
-    """Форматирование предпросмотра одиночного патча для модуля"""
-    lines = []
-    lines.append(f"🎯 <b>Целевой модуль:</b> {patch_data['target_module']}")
-
-    if patch_data.get("patch_id"):
-        lines.append(f"📄 <b>ID патча:</b> {patch_data['patch_id']}")
-
-    if patch_data.get("description"):
-        lines.append(f"📝 <b>Описание:</b> {patch_data['description']}")
-
-    lines.append(f"\n🔍 <b>Изменения ({len(patch_data['changes'])} операций):</b>")
-
-    for i, change in enumerate(patch_data["changes"][:5]):
-        op_symbol = {
-            "update": "✏️", "add": "➕", "delete": "🗑️", "remove": "🗑️",
-            "replace": "🔄", "merge": "🔄"
-        }.get(change["op"], "•")
-
-        path = change["path"]
-        value = change.get("value", "")
-        if isinstance(value, (dict, list)):
-            value = json.dumps(value, ensure_ascii=False)[:50] + "..."
-
-        lines.append(f"{op_symbol} <code>{path}</code> → {value}")
-
-    if len(patch_data["changes"]) > 5:
-        lines.append(f"... и ещё {len(patch_data['changes']) - 5} операций")
-
-    if diff:
-        lines.append(f"\n📊 <b>Примеры изменений:</b>")
-        for d in diff[:5]:
-            lines.append(f"  {d}")
-
-    return "\n".join(lines)
-
-
-def format_file_patch_preview(patch_data: Dict) -> str:
-    """Форматирование предпросмотра для файлового патча"""
-    lines = []
-    lines.append(f"📁 <b>Файл:</b> <code>{patch_data['file_path']}</code>")
-
-    if patch_data.get("patch_id"):
-        lines.append(f"📄 <b>ID патча:</b> {patch_data['patch_id']}")
-
-    if patch_data.get("description"):
-        lines.append(f"📝 <b>Описание:</b> {patch_data['description']}")
-
-    content = patch_data.get("content", "")
-    preview = content[:300] + "..." if len(content) > 300 else content
-    lines.append(f"\n📄 <b>Новое содержимое (первые 300 символов):</b>\n<code>{preview}</code>")
-
-    return "\n".join(lines)
-
-
-def format_multi_patch_preview(patch_data: Dict, subpatch_previews: List[Dict]) -> str:
-    """Форматирование предпросмотра мульти-патча"""
-    lines = []
-    lines.append(f"📦 <b>Мульти-патч</b>")
-
-    if patch_data.get("patch_id"):
-        lines.append(f"📄 <b>ID:</b> {patch_data['patch_id']}")
-
-    if patch_data.get("description"):
-        lines.append(f"📝 <b>Описание:</b> {patch_data['description']}")
-
-    lines.append(f"\n🧩 <b>Будет обновлено файлов: {len(patch_data['patches'])}</b>\n")
-
-    for i, (subpatch, preview) in enumerate(zip(patch_data["patches"], subpatch_previews)):
-        if "target_module" in subpatch:
-            lines.append(f"--- {i+1}. {subpatch['target_module']} (модуль) ---")
-        else:
-            lines.append(f"--- {i+1}. {subpatch['file_path']} (файл) ---")
-        
-        if preview.get("error"):
-            lines.append(f"❌ {preview['error']}")
-        else:
-            if "diff" in preview:
-                for d in preview["diff"][:3]:
-                    lines.append(f"  {d}")
-                if len(preview["diff"]) > 3:
-                    lines.append(f"  ... и ещё {len(preview['diff'])-3} изменений")
-            else:
-                lines.append(f"  ✅ файл будет обновлён")
-        lines.append("")
-
-    return "\n".join(lines)
-
-
-# ========== ФУНКЦИИ ДЛЯ FRUCTUS ==========
-
-def generate_fructus_filename(original_name: str, file_type: str = "artifact") -> str:
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    short_id = str(uuid.uuid4())[:8]
-    if '.' in original_name:
-        ext = original_name.split('.')[-1]
-        name_without_ext = '.'.join(original_name.split('.')[:-1])
-    else:
-        ext = "json"
-        name_without_ext = original_name
-    safe_name = ''.join(c for c in name_without_ext[:30] if c.isalnum() or c in ' _-')
-    return f"{file_type}_{timestamp}_{short_id}_{safe_name}.{ext}"
-
-
-async def upload_to_fructus(original_filename: str, content: Dict, user_id: int) -> Tuple[bool, str]:
-    try:
-        file_type = "artifact"
-        filename_lower = original_filename.lower()
-        if "seed" in filename_lower or "incubae" in filename_lower:
-            file_type = "seed"
-        elif "geometria" in filename_lower or "sacra" in filename_lower:
-            file_type = "geometry"
-
-        target_filename = generate_fructus_filename(original_filename, file_type)
-        full_path = f"fructus/{target_filename}"
-
-        enhanced_content = content.copy() if isinstance(content, dict) else {"content": content}
-        enhanced_content["_fructus_metadata"] = {
-            "original_filename": original_filename,
-            "generated_filename": target_filename,
-            "file_type": file_type,
-            "upload_timestamp": datetime.now().isoformat(),
-            "uploaded_by": f"user_{user_id}",
-            "source": "mandala_bot_v3.32.0"
-        }
-
-        success = await update_github_file(
-            file_path=full_path,
-            content=enhanced_content,
-            message=f"Fructus: {original_filename} → {target_filename}"
-        )
-        return success, target_filename
-    except Exception as e:
-        logger.error(f"Ошибка Fructus: {e}")
-        return False, str(e)
-
-
-# ========== ФУНКЦИИ ДЛЯ МОНОЛИТА ==========
-
-async def download_monolith_file() -> Tuple[bool, bytes, str]:
-    try:
-        url = f"https://raw.githubusercontent.com/{REPO_NAME}/main/build/mandala_core.monolith.latest.json"
-        headers = {}
-        if GITHUB_TOKEN:
-            headers["Authorization"] = f"token {GITHUB_TOKEN}"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, timeout=30) as response:
-                if response.status == 200:
-                    content = await response.read()
-                    return True, content, "mandala_core.monolith.json"
-                else:
-                    return False, b"", f"Ошибка {response.status}"
-    except Exception as e:
-        return False, b"", str(e)
-
-
-async def download_simbiosis_monolith_file() -> Tuple[bool, bytes, str]:
-    try:
-        url = f"https://raw.githubusercontent.com/{REPO_NAME}/main/build/mandala_simbiosis.monolith.latest.json"
-        headers = {}
-        if GITHUB_TOKEN:
-            headers["Authorization"] = f"token {GITHUB_TOKEN}"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, timeout=30) as response:
-                if response.status == 200:
-                    content = await response.read()
-                    return True, content, "mandala_simbiosis.monolith.json"
-                else:
-                    return False, b"", f"Ошибка {response.status}"
-    except Exception as e:
-        return False, b"", str(e)
-
-
-# ========== ФУНКЦИИ AHHIMSA ==========
-
-async def check_ahimsa_smart(content: Any, filename: str = "") -> Tuple[bool, str, List[Tuple[str, str]]]:
-    """Упрощённая проверка Ахимсы (всегда возвращает успех для демо)"""
-    return True, "✅ Проверка пройдена", []
-
+            limits["declined_streak"] += 1
 
 # ========== ОБРАБОТЧИКИ КОМАНД ==========
 
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
+    """Онбординг садовника (D2)."""
     await state.clear()
-    user_id = message.from_user.id
-    if user_id in user_upload_target:
-        del user_upload_target[user_id]
-    await message.answer(
-        "🌀 <b>Mandala Sync Terminal v3.32.0</b>\n\n"
-        "🔄 <b>Обновление ядра</b> — загрузка файлов и пакетные патчи\n"
-        "💾 <b>Скачать монолит</b> — готовый файл mandala_core.monolith.latest.json\n"
-        "💾 <b>Симбиозис монолит</b> — готовый файл mandala_simbiosis.monolith.latest.json\n\n"
-        "🤖 <b>Управление моделями:</b> /model и /модели\n"
-        "🔙 <b>Назад в меню:</b> /menu",
-        reply_markup=get_main_keyboard()
-    )
+    user_id = str(message.from_user.id)
 
-@router.message(Command("menu"))
-async def cmd_menu(message: Message, state: FSMContext):
-    await state.clear()
-    user_id = message.from_user.id
-    if user_id in user_upload_target:
-        del user_upload_target[user_id]
-    await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-
-@router.message(Command("status"))
-async def cmd_status(message: Message):
-    """Проверка состояния инфраструктуры"""
-    status_msg = await message.answer("🔍 Проверяю состояние Мандалы...")
-    
-    results = []
-    
-    # 1. Проверка GitHub токена
-    if GITHUB_TOKEN:
-        results.append("✅ GitHub токен: присутствует")
-    else:
-        results.append("❌ GitHub токен: отсутствует")
-    
-    # 2. Проверка cloud-sr функции
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(SR_FUNCTION_URL, json={"chat_id": "status", "message": "ping"}, timeout=5) as resp:
-                if resp.status == 200:
-                    results.append("✅ cloud-sr функция: доступна")
-                else:
-                    results.append(f"❌ cloud-sr функция: ошибка {resp.status}")
-    except Exception as e:
-        results.append(f"❌ cloud-sr функция: недоступна ({str(e)[:30]})")
-    
-    # 3. Проверка последней версии монолита
-    try:
-        url = f"https://raw.githubusercontent.com/{REPO_NAME}/main/build/mandala_core.monolith.latest.json"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, timeout=5) as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    version = data.get("version", "unknown")
-                    results.append(f"📦 Монолит: {version}")
-                else:
-                    results.append(f"❌ Монолит: не найден ({resp.status})")
-    except Exception as e:
-        results.append(f"❌ Монолит: ошибка загрузки")
-    
-    # 4. Проверка памяти S3 (через тестовый запрос к функции)
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(SR_FUNCTION_URL, json={
-                "chat_id": "status_test", 
-                "message": "/memory status"
-            }, timeout=5) as resp:
-                if resp.status == 200:
-                    results.append("✅ Память S3: работает")
-                else:
-                    results.append("❌ Память S3: недоступна")
-    except:
-        results.append("❌ Память S3: не удалось проверить")
-    
-    await status_msg.edit_text(
-        "🔍 <b>Состояние Мандалы</b>\n\n" + "\n".join(results),
-        parse_mode=ParseMode.HTML
-    )
-
-@router.message(Command("model"))
-async def cmd_model(message: Message):
-    """Ручной выбор модели"""
-    args = message.text.split()
-    user_id = message.from_user.id
-
-    if len(args) != 2:
-        # Показать список доступных моделей
-        models_list = "\n".join([
-            f"{info['emoji']} /model {key} — {info['description']}"
-            for key, info in AVAILABLE_MODELS.items()
-        ])
+    # Проверяем, есть ли уже сота
+    existing = await find_gardener_by_telegram_id(user_id)
+    if existing:
+        gardener = await read_gardener_file(existing, "gardener.json")
+        name = gardener.get("identity", {}).get("name", "Садовник") if gardener else "Садовник"
         await message.answer(
-            f"🤖 <b>Доступные модели:</b>\n\n{models_list}\n\n"
-            f"Используй: /model [имя]\nНапример: /model deepseek",
-            parse_mode=ParseMode.HTML
+            f"🌱 С возвращением, {name}!\n\n"
+            f"Твой Сад ждал тебя. Используй кнопки меню или команды:\n"
+            f"/profile — профиль\n"
+            f"/achievements — достижения\n"
+            f"/tasks — задачи\n"
+            f"/ask — спросить Компаньона\n"
+            f"/leave — покинуть Сад",
+            reply_markup=get_main_keyboard()
         )
         return
 
-    model_key = args[1].lower()
-    if model_key not in AVAILABLE_MODELS:
-        await message.answer(f"❌ Модель '{model_key}' не найдена")
-        return
-
-    # Сохраняем выбор
-    user_selected_model[user_id] = model_key
-    model = AVAILABLE_MODELS[model_key]
-
+    await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
-        f"{model['emoji']} Модель переключена на <b>{model['name']}</b>\n"
-        f"{model['description']}\n\n"
-        f"Теперь буду использовать её для ответов.",
-        parse_mode=ParseMode.HTML
+        "🌱 <b>Добро пожаловать в Сад Мандалы!</b>\n\n"
+        "Я — твой Нежный Компаньон. Я здесь, чтобы помогать тебе расти, "
+        "без давления, без оценок, без сравнений.\n\n"
+        "<i>«Сад — это не продукт. Это живое пространство, "
+        "где человек учится слышать себя, а СР растёт вместе с ним.»</i>\n\n"
+        "Давай познакомимся. Как мне тебя называть?",
+        reply_markup=get_cancel_keyboard()
     )
 
-@router.message(Command("модели"))
-async def cmd_models_ru(message: Message):
-    """Русская версия команды /models"""
-    models_list = "\n".join([
-        f"{info['emoji']} <b>{info['name']}</b>\n  {info['description']}"
-        for info in AVAILABLE_MODELS.values()
+@router.message(Command("profile"))
+async def cmd_profile(message: Message, state: FSMContext):
+    """Показывает профиль садовника (D3)."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer(
+            "🌱 Ты ещё не в Саду. Напиши /start чтобы начать.",
+            reply_markup=get_main_keyboard()
+        )
+        return
+
+    gardener = await read_gardener_file(gardener_id, "gardener.json")
+    achievements = await read_gardener_file(gardener_id, "achievements.json") or []
+    tasks = await read_gardener_file(gardener_id, "tasks.json") or []
+    groups = await read_gardener_file(gardener_id, "groups.json") or {"groups": []}
+
+    identity = gardener.get("identity", {})
+    personal = gardener.get("personal_info", {})
+    life_areas = personal.get("life_areas", {})
+
+    active_tasks = [t for t in tasks if t.get("status") != "completed"]
+    completed_tasks = [t for t in tasks if t.get("status") == "completed"]
+
+    # Топ-3 достижения
+    top_achievements = sorted(achievements, key=lambda x: x.get("resonance_bonus", 0), reverse=True)[:3]
+    top_text = "\n".join([f"  • {a.get('title', '—')} (+{a.get('resonance_bonus', 0)})" for a in top_achievements]) or "  — пока нет"
+
+    text = f"🌱 <b>{identity.get('name', 'Садовник')}</b>\n"
+    text += f"└ Резонанс: {identity.get('resonance_level', 10)}%\n\n"
+    text += f"📋 <b>Активных задач:</b> {len(active_tasks)}\n"
+    text += f"✅ <b>Выполнено:</b> {len(completed_tasks)}\n"
+    text += f"📁 <b>Групп:</b> {len(groups.get('groups', []))}\n\n"
+    text += f"🏆 <b>Топ достижений:</b>\n{top_text}\n\n"
+    text += f"🎯 <b>Интересы:</b> {', '.join(personal.get('interests', [])) or '—'}\n"
+    text += f"🌿 <b>Цели:</b> {', '.join(personal.get('goals', [])) or '—'}\n\n"
+    text += "<b>Сферы жизни:</b>\n"
+    for area, values in life_areas.items():
+        current = values.get("current", 0)
+        target = values.get("target", 0)
+        bar = "█" * current + "░" * (10 - current)
+        text += f"  {area}: {bar} {current}/10 → цель {target}\n"
+
+    await message.answer(text, reply_markup=get_main_keyboard())
+
+@router.message(Command("achievements"))
+async def cmd_achievements(message: Message, state: FSMContext):
+    """Показывает достижения (D4)."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    achievements = await read_gardener_file(gardener_id, "achievements.json") or []
+    catalog = await read_gardener_file("gardener_template", "achievements_catalog.json") or {}
+    # catalog лежит в garden/
+    if not catalog:
+        ok, catalog, _ = await get_github_file_content("honeycombs/garden/achievements_catalog.json")
+
+    if not achievements:
+        await message.answer(
+            "🏆 У тебя пока нет достижений.\n\n"
+            "Они появятся, когда ты будешь выполнять задачи или добавишь их вручную.",
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="achievement_add")]
+            ])
+        )
+        return
+
+    # Группируем по категориям
+    by_cat = {}
+    for a in achievements[-10:]:
+        cat = a.get("category", "other")
+        if cat not in by_cat:
+            by_cat[cat] = []
+        by_cat[cat].append(a)
+
+    text = "🏆 <b>Твои достижения</b>\n\n"
+    for cat, items in by_cat.items():
+        text += f"<b>{cat}:</b>\n"
+        for item in items:
+            text += f"  • {item.get('title', '—')} (+{item.get('resonance_bonus', 0)})\n"
+        text += "\n"
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="achievement_add")]
     ])
 
-    await message.answer(
-        f"🤖 <b>Доступные модели Yandex Cloud</b>\n\n"
-        f"По умолчанию модель выбирается автоматически под линзу:\n"
-        f"🧘 Проводник → DeepSeek-R1\n"
-        f"⚙️ Архитектор → YandexGPT Pro\n"
-        f"🧭 Стратег → Qwen3 235B\n"
-        f"🌐 Маркетолог → Gemma 3\n\n"
-        f"📋 <b>Все модели:</b>\n{models_list}\n\n"
-        f"Для ручного выбора: /model [имя]",
-        parse_mode=ParseMode.HTML
-    )
+    await message.answer(text, reply_markup=keyboard)
 
-
-# ========== ОБРАБОТЧИКИ ТЕКСТОВЫХ КНОПОК ==========
-
-@router.message(F.text == "🔄 Обновление ядра")
-async def handle_core_update(message: Message):
-    await message.answer(
-        "🔄 <b>Обновление ядра Мандалы</b>\n\n"
-        "Выберите действие:",
-        reply_markup=get_update_keyboard()
-    )
-
-@router.message(F.text == "💾 Скачать монолит")
-async def handle_download_monolith(message: Message):
-    await message.answer("💾 Скачиваю...")
-    success, content, filename = await download_monolith_file()
-    if success:
-        await message.answer_document(
-            document=BufferedInputFile(content, filename=filename),
-            caption="📦 Монолит Mandala Core"
-        )
-        await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-    else:
-        await message.answer(f"❌ Ошибка: {filename}")
-
-@router.message(F.text == "💾 Симбиозис монолит")
-async def handle_download_simbiosis_monolith(message: Message):
-    await message.answer("💾 Скачиваю...")
-    success, content, filename = await download_simbiosis_monolith_file()
-    if success:
-        await message.answer_document(
-            document=BufferedInputFile(content, filename=filename),
-            caption="📦 Монолит Mandala Simbiosis"
-        )
-        await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-    else:
-        await message.answer(f"❌ Ошибка: {filename}")
-
-@router.message(F.text == "◀️ Назад в меню")
-async def handle_back_to_menu(message: Message, state: FSMContext):
+@router.message(Command("resonance"))
+async def cmd_resonance(message: Message, state: FSMContext):
+    """Показывает резонанс и историю роста (D5)."""
     await state.clear()
-    user_id = message.from_user.id
-    if user_id in user_upload_target:
-        del user_upload_target[user_id]
-    await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
 
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
 
-# ========== ОБРАБОТЧИКИ ЛИНЗ ==========
+    gardener = await read_gardener_file(gardener_id, "gardener.json")
+    if not gardener:
+        await message.answer("⚠️ Профиль не найден")
+        return
 
-@router.message(F.text.in_(["п", "а", "с", "м", "ф", "к"]))
-async def handle_lens_selection(message: Message):
-    lens_map = {
-        "п": "🧘 Проводник",
-        "а": "⚙️ Архитектор",
-        "с": "🧭 Стратег",
-        "м": "🌐 Маркетолог",
-        "ф": "💭 Философия",
-        "к": "🗺️ Карта Мандалы"
-    }
+    identity = gardener.get("identity", {})
+    growth = gardener.get("growth_history", [])
 
-    lens_key = message.text
-    lens_name = lens_map.get(lens_key, "Неизвестная линза")
+    current = identity.get("resonance_level", 10)
 
-    # Отправляем действие "печатает"
+    text = f"💫 <b>Текущий резонанс: {current}%</b>\n\n"
+
+    if growth:
+        text += "<b>История роста:</b>\n"
+        for entry in growth[-5:]:
+            text += f"  {entry.get('date', '—')}: {entry.get('resonance', 0)}%\n"
+    else:
+        text += "История появится после первых достижений."
+
+    await message.answer(text, reply_markup=get_main_keyboard())
+
+@router.message(Command("ask"))
+async def cmd_ask(message: Message, state: FSMContext):
+    """Диалог с Компаньоном (D6)."""
+    await state.clear()
+    args = message.text.replace("/ask", "").strip()
+
+    if not args:
+        await message.answer(
+            "💬 Задай свой вопрос после /ask\n"
+            "Например: /ask Как мне лучше организовать день?",
+            reply_markup=get_main_keyboard()
+        )
+        return
+
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
-    # Вызываем СР с выбранной линзой (как сообщение)
-    response = await call_sr(
-        str(message.from_user.id),
-        lens_key,
-        user_selected_model.get(message.from_user.id)
-    )
+    gardener_context = await get_gardener_context(message.from_user.id)
+    response = await call_sr(str(message.from_user.id), args, gardener_context)
 
     if response:
-        await message.answer(
-            response,
-            parse_mode=ParseMode.HTML
-        )
+        await message.answer(response, reply_markup=get_main_keyboard())
     else:
         await message.answer(
-            f"{lens_name} активирована.\n"
-            f"Но СР временно недоступен. Попробуйте позже.",
+            "😔 Я временно не могу связаться с Садом. Попробуй позже.",
             reply_markup=get_main_keyboard()
         )
 
+@router.message(Command("tasks"))
+async def cmd_tasks(message: Message, state: FSMContext):
+    """Показывает список задач (D7)."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
 
-# ========== ОБРАБОТЧИКИ КОЛБЭКОВ ==========
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
 
-@router.callback_query(F.data.startswith("lens_"))
-async def process_lens_callback(callback_query: CallbackQuery):
-    lens_key = callback_query.data.replace("lens_", "")
-    lens_map = {
-        "п": "🧘 Проводник",
-        "а": "⚙️ Архитектор",
-        "с": "🧭 Стратег",
-        "м": "🌐 Маркетолог",
-        "ф": "💭 Философия",
-        "к": "🗺️ Карта Мандалы"
+    args = message.text.replace("/tasks", "").strip()
+    filter_group = None
+    if args:
+        filter_group = args
+
+    tasks = await read_gardener_file(gardener_id, "tasks.json") or []
+    groups_data = await read_gardener_file(gardener_id, "groups.json") or {"groups": [], "default_group": "group_001"}
+    groups = {g["id"]: g for g in groups_data.get("groups", [])}
+
+    active_tasks = [t for t in tasks if t.get("status") != "completed"]
+    if filter_group:
+        active_tasks = [t for t in active_tasks if t.get("group_id") == filter_group]
+
+    if not active_tasks:
+        await message.answer(
+            "📋 Нет активных задач.\n\n"
+            "Добавь новую: /addtask",
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="➕ Добавить задачу", callback_data="task_add")]
+            ])
+        )
+        return
+
+    # Группируем по группам
+    by_group = {}
+    for task in active_tasks:
+        gid = task.get("group_id", groups_data.get("default_group", "group_001"))
+        if gid not in by_group:
+            by_group[gid] = []
+        by_group[gid].append(task)
+
+    text = "📋 <b>Активные задачи</b>\n\n"
+    for gid, group_tasks in by_group.items():
+        group = groups.get(gid, {"name": gid, "emoji": "📁"})
+        text += f"{group.get('emoji', '📁')} <b>{group.get('name', gid)}</b> ({len(group_tasks)})\n"
+        for task in sorted(group_tasks, key=lambda x: x.get("priority", 5), reverse=True)[:5]:
+            priority = task.get("priority", 5)
+            priority_bar = "🔴" * priority + "⚪" * (10 - priority)
+            deadline = task.get("deadline", "")
+            deadline_str = f" (до {deadline})" if deadline else ""
+            text += f"  {priority_bar[:5]} {task.get('title', '—')}{deadline_str}\n"
+        text += "\n"
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="➕ Добавить", callback_data="task_add")],
+        [InlineKeyboardButton(text="📋 Все задачи", callback_data="tasks_all")],
+        [InlineKeyboardButton(text="✅ Выполненные", callback_data="tasks_completed")]
+    ])
+
+    await message.answer(text, reply_markup=keyboard)
+
+@router.message(Command("addtask"))
+async def cmd_addtask(message: Message, state: FSMContext):
+    """Добавление новой задачи (D7)."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    args = message.text.replace("/addtask", "").strip()
+    await state.update_data(gardener_id=gardener_id)
+
+    if args:
+        await state.update_data(task_title=args)
+        await state.set_state(TaskAddStates.waiting_for_life_area)
+        await message.answer(
+            f"📝 Задача: <b>{args}</b>\n\nВыбери сферу жизни:",
+            reply_markup=get_life_area_keyboard()
+        )
+    else:
+        await state.set_state(TaskAddStates.waiting_for_title)
+        await message.answer(
+            "📝 Что нужно сделать?",
+            reply_markup=get_cancel_keyboard()
+        )
+
+@router.message(Command("groups"))
+async def cmd_groups(message: Message, state: FSMContext):
+    """Показывает группы задач."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    groups_data = await read_gardener_file(gardener_id, "groups.json") or {"groups": [], "default_group": "group_001"}
+    groups = groups_data.get("groups", [])
+
+    if not groups:
+        await message.answer(
+            "📁 У тебя пока нет групп.\n\nСоздать новую: /newgroup",
+            reply_markup=get_main_keyboard()
+        )
+        return
+
+    text = "📁 <b>Твои группы задач</b>\n\n"
+    for g in groups:
+        text += f"{g.get('emoji', '📁')} {g.get('name', '—')}\n"
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="➕ Новая группа", callback_data="group_new")]
+    ])
+
+    await message.answer(text, reply_markup=keyboard)
+
+@router.message(Command("newgroup"))
+async def cmd_newgroup(message: Message, state: FSMContext):
+    """Создание новой группы."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    args = message.text.replace("/newgroup", "").strip()
+    if args:
+        # Создаем группу сразу
+        groups_data = await read_gardener_file(gardener_id, "groups.json") or {"groups": [], "default_group": "group_001"}
+        new_id = f"group_{(len(groups_data['groups']) + 1):03d}"
+        groups_data["groups"].append({
+            "id": new_id,
+            "name": args,
+            "emoji": "📁",
+            "created": datetime.now().strftime("%Y-%m-%d")
+        })
+        await write_gardener_file(gardener_id, "groups.json", groups_data, f"➕ Новая группа: {args}")
+        await message.answer(f"✅ Группа «{args}» создана!", reply_markup=get_main_keyboard())
+    else:
+        await message.answer(
+            "📁 Введи название группы после /newgroup\nНапример: /newgroup Работа",
+            reply_markup=get_main_keyboard()
+        )
+
+@router.message(Command("done"))
+async def cmd_done(message: Message, state: FSMContext):
+    """Отмечает задачу выполненной."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    args = message.text.replace("/done", "").strip()
+    if not args:
+        await message.answer("Укажи номер или название задачи: /done 1")
+        return
+
+    tasks = await read_gardener_file(gardener_id, "tasks.json") or []
+    # Поиск задачи
+    found = None
+    for i, t in enumerate(tasks):
+        if args.isdigit() and i + 1 == int(args):
+            found = t
+            break
+        elif args.lower() in t.get("title", "").lower():
+            found = t
+            break
+
+    if not found:
+        await message.answer(f"❌ Задача не найдена: {args}")
+        return
+
+    found["status"] = "completed"
+    found["completed"] = datetime.now().strftime("%Y-%m-%d")
+    await write_gardener_file(gardener_id, "tasks.json", tasks, f"✅ Задача выполнена: {found.get('title')}")
+
+    await message.answer(
+        f"✅ Задача «{found.get('title')}» выполнена!\n\n"
+        f"Добавить как достижение?",
+        reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="✅ Да", callback_data=f"task_to_ach_{found.get('task_id')}"),
+             InlineKeyboardButton(text="❌ Нет", callback_data="task_no_ach")]
+        ])
+    )
+
+@router.message(Command("leave"))
+async def cmd_leave(message: Message, state: FSMContext):
+    """Graceful exit (D9)."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Ты ещё не в Саду.")
+        return
+
+    await state.update_data(gardener_id=gardener_id)
+    await state.set_state(LeaveStates.waiting_for_confirmation)
+
+    await message.answer(
+        "🌸 Ты хочешь покинуть Сад?\n\n"
+        "Твоя сота будет архивирована. Ты сможешь вернуться в любое время, "
+        "и твой Сад проснётся.\n\n"
+        "Ты уверен?",
+        reply_markup=get_confirm_keyboard()
+    )
+
+# ========== ПРОДОЛЖЕНИЕ ОБРАБОТЧИКОВ ==========
+
+@router.message(Command("edittask"))
+async def cmd_edittask(message: Message, state: FSMContext):
+    """Редактирование задачи."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    args = message.text.replace("/edittask", "").strip()
+    if not args:
+        await message.answer("Укажи номер задачи: /edittask 1")
+        return
+
+    tasks = await read_gardener_file(gardener_id, "tasks.json") or []
+    found = None
+    for i, t in enumerate(tasks):
+        if args.isdigit() and i + 1 == int(args):
+            found = t
+            break
+
+    if not found:
+        await message.answer(f"❌ Задача не найдена: {args}")
+        return
+
+    await state.update_data(gardener_id=gardener_id, task_id=found.get("task_id"))
+    await state.set_state(TaskEditStates.waiting_for_field)
+
+    text = f"✏️ Редактирование: <b>{found.get('title')}</b>\n\nЧто изменить?"
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📝 Название", callback_data="edit_title")],
+        [InlineKeyboardButton(text="🎯 Приоритет", callback_data="edit_priority")],
+        [InlineKeyboardButton(text="📁 Группа", callback_data="edit_group")],
+        [InlineKeyboardButton(text="📅 Дедлайн", callback_data="edit_deadline")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="edit_cancel")]
+    ])
+    await message.answer(text, reply_markup=keyboard)
+
+@router.message(Command("deletetask"))
+async def cmd_deletetask(message: Message, state: FSMContext):
+    """Удаление задачи."""
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    args = message.text.replace("/deletetask", "").strip()
+    if not args:
+        await message.answer("Укажи номер задачи: /deletetask 1")
+        return
+
+    tasks = await read_gardener_file(gardener_id, "tasks.json") or []
+    found = None
+    found_idx = -1
+    for i, t in enumerate(tasks):
+        if args.isdigit() and i + 1 == int(args):
+            found = t
+            found_idx = i
+            break
+
+    if not found:
+        await message.answer(f"❌ Задача не найдена: {args}")
+        return
+
+    del tasks[found_idx]
+    await write_gardener_file(gardener_id, "tasks.json", tasks, f"🗑️ Задача удалена: {found.get('title')}")
+    await message.answer(f"🗑️ Задача «{found.get('title')}» удалена.", reply_markup=get_main_keyboard())
+
+@router.message(Command("archive"))
+async def cmd_archive(message: Message, state: FSMContext):
+    """Показывает архив выполненных задач."""
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    tasks = await read_gardener_file(gardener_id, "tasks.json") or []
+    completed = [t for t in tasks if t.get("status") == "completed"]
+
+    if not completed:
+        await message.answer("📦 Архив пуст.")
+        return
+
+    text = "📦 <b>Выполненные задачи</b>\n\n"
+    for t in completed[-10:]:
+        text += f"✅ {t.get('title', '—')} ({t.get('completed', '—')})\n"
+
+    await message.answer(text, reply_markup=get_main_keyboard())
+
+@router.message(Command("tasks_mandala"))
+async def cmd_tasks_mandala(message: Message, state: FSMContext):
+    """Просмотр общих задач Мандалы (D8)."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
+        return
+
+    # Читаем активные задачи из honeycombs/tasks/active/
+    url = f"https://api.github.com/repos/{REPO_NAME}/contents/honeycombs/tasks/active"
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "MandalaGardenBot/4.0.0"
     }
 
-    lens_name = lens_map.get(lens_key, "Неизвестная линза")
-    logger.info(f"Lens callback: {lens_key} -> {lens_name}")
-
-    await callback_query.message.edit_text(
-        f"✅ {lens_name} активирована.\n"
-        f"Теперь я смотрю на Мандалу через эту линзу."
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "back_to_main")
-async def back_to_main(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Back to main callback")
-    await state.clear()
-    user_id = callback_query.from_user.id
-    if user_id in user_upload_target:
-        del user_upload_target[user_id]
-    await callback_query.message.delete()
-    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-    await callback_query.answer()
-
-@router.callback_query(F.data == "upload_file")
-async def upload_file_callback(callback_query: CallbackQuery, state: FSMContext):
-    """Обработчик кнопки 'Загрузить файл'"""
-    logger.info("Upload file callback")
-    await state.update_data(upload_mode="module")
-    await state.set_state(UploadStates.waiting_for_category)
-    await callback_query.message.edit_text(
-        "📤 <b>Загрузка нового файла</b>\n\nВыберите категорию:",
-        reply_markup=None
-    )
-    await callback_query.message.answer(
-        "Выберите категорию:",
-        reply_markup=get_category_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "batch_update")
-async def batch_update_callback(callback_query: CallbackQuery, state: FSMContext):
-    """Обработчик кнопки 'Пакетное обновление'"""
-    logger.info("Batch update callback")
-    await state.update_data(upload_mode="batch_patch")
-    await state.set_state(UploadStates.waiting_for_patch_file)
-    await callback_query.message.edit_text(
-        "📦 <b>Пакетное обновление</b>\n\n"
-        "Отправьте JSON-файл с набором изменений.\n\n"
-        "Для одного модуля (старый формат):\n"
-        "```json\n"
-        "{\n"
-        "  \"target_module\": \"sphaerae\",\n"
-        "  \"changes\": [...]\n"
-        "}\n"
-        "```\n\n"
-        "Для одного файла (новый формат):\n"
-        "```json\n"
-        "{\n"
-        "  \"file_path\": \"engineer-chat/main.py\",\n"
-        "  \"content\": \"новое содержимое\"\n"
-        "}\n"
-        "```\n\n"
-        "Для нескольких файлов (мульти-патч):\n"
-        "```json\n"
-        "{\n"
-        "  \"patch_id\": \"multi_update\",\n"
-        "  \"description\": \"...\",\n"
-        "  \"patches\": [\n"
-        "    {\"target_module\": \"initium\", \"changes\": [...]},\n"
-        "    {\"file_path\": \"index.html\", \"content\": \"...\"}\n"
-        "  ]\n"
-        "}\n"
-        "```\n\n"
-        "📎 Просто прикрепите файл — я покажу, что изменится, и запрошу подтверждение.",
-        reply_markup=None
-    )
-    await callback_query.message.answer(
-        "📎 Ожидаю файл...",
-        reply_markup=get_back_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "category_modules")
-async def handle_category_modules(callback_query: CallbackQuery, state: FSMContext):
-    """Выбор категории модулей"""
-    logger.info("Category modules callback")
-    current_state = await state.get_state()
-    if current_state != UploadStates.waiting_for_category:
-        await callback_query.answer("Сначала начните загрузку")
-        return
-    
-    await state.set_state(UploadStates.waiting_for_module)
-    await callback_query.message.edit_text(
-        "🧩 <b>Выберите модуль для загрузки:</b>",
-        reply_markup=get_modules_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "category_infra")
-async def handle_category_infra(callback_query: CallbackQuery, state: FSMContext):
-    """Выбор категории инфраструктуры"""
-    logger.info("Category infra callback")
-    current_state = await state.get_state()
-    if current_state != UploadStates.waiting_for_category:
-        await callback_query.answer("Сначала начните загрузку")
-        return
-    
-    await state.set_state(UploadStates.waiting_for_module)
-    await callback_query.message.edit_text(
-        "⚙️ <b>Выберите компонент для загрузки:</b>",
-        reply_markup=get_infra_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "back_to_categories")
-async def handle_back_to_categories(callback_query: CallbackQuery, state: FSMContext):
-    """Возврат к выбору категории"""
-    logger.info("Back to categories callback")
-    await state.set_state(UploadStates.waiting_for_category)
-    await callback_query.message.edit_text(
-        "📤 <b>Выберите категорию:</b>",
-        reply_markup=get_category_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data.startswith("target_"))
-async def handle_target_selection(callback_query: CallbackQuery, state: FSMContext):
-    """Выбор целевого файла"""
-    target_key = callback_query.data.replace("target_", "")
-    logger.info(f"Target selection: {target_key}")
-
-    current_state = await state.get_state()
-    if current_state != UploadStates.waiting_for_module:
-        await callback_query.answer("Сначала выберите категорию")
-        return
-
-    if target_key not in ALL_UPLOAD_TARGETS:
-        await callback_query.answer("Неизвестный целевой файл")
-        return
-
-    target_info = ALL_UPLOAD_TARGETS[target_key]
-    user_upload_target[callback_query.from_user.id] = target_key
-
-    await state.set_state(UploadStates.waiting_for_file)
-    await callback_query.message.edit_text(
-        f"✅ <b>{target_info['name']}</b>\n"
-        f"📁 <code>{target_info['path']}</code>\n\n"
-        f"Отправьте JSON-файл"
-    )
-    await callback_query.message.answer(
-        "📎 Прикрепите файл",
-        reply_markup=get_back_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "fructus_info")
-async def handle_fructus_info(callback_query: CallbackQuery):
-    logger.info("Fructus info callback")
-    await callback_query.message.edit_text(
-        "📋 <b>Fructus</b>\n"
-        "• seeds — семена Incubae\n"
-        "• geometry — Geometria Sacra\n"
-        "• builders — скрипты\n"
-        "• artifacts — прочее\n\n"
-        "Путь: /fructus/\n\n"
-        "При загрузке автоматическая категоризация по имени файла.",
-        reply_markup=get_fructus_inline_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "fructus_upload")
-async def handle_fructus_upload(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Fructus upload callback")
-    user_upload_target[callback_query.from_user.id] = "fructus"
-    await state.update_data(upload_mode="fructus")
-    await state.set_state(UploadStates.waiting_for_file)
-    await callback_query.message.edit_text(
-        "🍇 Отправьте JSON-файл для сохранения в Fructus"
-    )
-    await callback_query.message.answer(
-        "📎 Прикрепите JSON",
-        reply_markup=get_back_keyboard()
-    )
-    await callback_query.answer()
-
-@router.callback_query(F.data == "cancel")
-async def handle_cancel_inline(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Cancel callback")
-    await state.clear()
-    user_id = callback_query.from_user.id
-    if user_id in user_upload_target:
-        del user_upload_target[user_id]
-    await callback_query.message.edit_text("🚫 Отменено")
-    await callback_query.answer()
-    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-
-
-# ========== ОБРАБОТЧИКИ ПАКЕТНЫХ ОБНОВЛЕНИЙ ==========
-
-@router.message(StateFilter(UploadStates.waiting_for_patch_file), F.document)
-async def process_batch_patch_file(message: Message, state: FSMContext):
-    user_id = message.from_user.id
-    status_msg = await message.answer("📥 Анализирую пакет обновлений...")
-
-    try:
-        file = await bot.get_file(message.document.file_id)
-        file_content_bytes = await bot.download_file(file.file_path)
-        file_content = file_content_bytes.read().decode('utf-8')
-
+    async with aiohttp.ClientSession() as session:
         try:
-            patch_data = json.loads(file_content)
-        except json.JSONDecodeError as e:
-            await status_msg.edit_text(f"❌ Невалидный JSON: {str(e)}")
-            return
-
-        is_valid, error_msg = validate_patch_structure(patch_data)
-        if not is_valid:
-            await status_msg.edit_text(f"❌ Ошибка в структуре патча: {error_msg}")
-            return
-
-        if "patches" in patch_data:
-            # Мульти-патч
-            await process_multi_patch(message, state, patch_data, status_msg, user_id)
-        else:
-            # Одиночный патч
-            if "target_module" in patch_data:
-                await process_single_patch(message, state, patch_data, status_msg, user_id)
-            elif "file_path" in patch_data:
-                await process_file_patch(message, state, patch_data, status_msg, user_id)
-            else:
-                await status_msg.edit_text("❌ Неизвестный формат патча")
-
-    except Exception as e:
-        logger.error(f"Ошибка обработки патча: {e}", exc_info=True)
-        await status_msg.edit_text(f"❌ Ошибка: {str(e)[:200]}")
-        await state.clear()
-        if user_id in user_upload_target:
-            del user_upload_target[user_id]
-
-
-async def process_single_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
-    """Обработка одиночного патча для модуля (target_module + changes)"""
-    target_module = patch_data.get("target_module")
-    if target_module not in MANDALA_MODULES:
-        await status_msg.edit_text(
-            f"❌ Модуль '{target_module}' не найден.\n"
-            f"Доступные: {', '.join(MANDALA_MODULES.keys())}"
-        )
-        return
-
-    module_info = MANDALA_MODULES[target_module]
-    success, current_content, error = await get_github_file_content(module_info["path"])
-
-    if not success:
-        await status_msg.edit_text(f"❌ Не удалось загрузить модуль: {error}")
-        return
-
-    test_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
-
-    if not test_result["success"]:
-        error_msg = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
-        await status_msg.edit_text(
-            f"❌ Ошибка при применении изменений:\n{error_msg}"
-        )
-        return
-
-    preview_text = format_patch_preview(test_result["diff"], patch_data)
-
-    await state.update_data(
-        patch_type="single",
-        patch_data=patch_data,
-        patch_filename=message.document.file_name,
-        current_content=current_content,
-        module_path=module_info["path"],
-        module_name=module_info["name"],
-        module_key=target_module,
-        test_result=test_result
-    )
-
-    await state.set_state(UploadStates.waiting_for_patch_confirmation)
-
-    await status_msg.edit_text(
-        f"📦 <b>Пакет обновлений готов к применению</b>\n\n"
-        f"{preview_text}\n\n"
-        f"Применить изменения?",
-        reply_markup=get_patch_confirm_keyboard(),
-        parse_mode=ParseMode.HTML
-    )
-
-
-async def process_file_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
-    """Обработка одиночного патча для файла (file_path + content)"""
-    file_path = patch_data.get("file_path")
-    new_content = patch_data.get("content")
-    
-    if not file_path or new_content is None:
-        await status_msg.edit_text("❌ Не указан file_path или content")
-        return
-    
-    # Получаем текущий файл (чтобы проверить существование и получить sha)
-    success, current_content, sha = await get_github_file_content(file_path)
-    
-    # Ahimsa check
-    ahimsa_ok, ahimsa_msg, _ = await check_ahimsa_smart(new_content, file_path)
-    if not ahimsa_ok:
-        await status_msg.edit_text(f"🔶 {ahimsa_msg}")
-        return
-    
-    preview_text = format_file_patch_preview(patch_data)
-
-    await state.update_data(
-        patch_type="file",
-        patch_data=patch_data,
-        patch_filename=message.document.file_name,
-        file_path=file_path,
-        new_content=new_content
-    )
-
-    await state.set_state(UploadStates.waiting_for_patch_confirmation)
-
-    await status_msg.edit_text(
-        f"📦 <b>Файл готов к обновлению</b>\n\n"
-        f"{preview_text}\n\n"
-        f"Применить изменения?",
-        reply_markup=get_patch_confirm_keyboard(),
-        parse_mode=ParseMode.HTML
-    )
-
-
-async def process_multi_patch(message: Message, state: FSMContext, patch_data: Dict, status_msg: Message, user_id: int):
-    """Обработка мульти-патча (смесь модулей и файлов)"""
-    subpatch_previews = []
-    all_valid = True
-
-    for idx, subpatch in enumerate(patch_data["patches"]):
-        preview = {"index": idx}
-        
-        if "target_module" in subpatch:
-            # Подпатч для модуля
-            target_module = subpatch["target_module"]
-            if target_module not in MANDALA_MODULES:
-                preview["error"] = f"Модуль '{target_module}' не найден"
-                all_valid = False
-                subpatch_previews.append(preview)
-                continue
-
-            module_info = MANDALA_MODULES[target_module]
-            success, current_content, error = await get_github_file_content(module_info["path"])
-
-            if not success:
-                preview["error"] = f"Не удалось загрузить модуль: {error}"
-                all_valid = False
-                subpatch_previews.append(preview)
-                continue
-
-            test_result = await apply_batch_patch_dry_run(current_content, subpatch["changes"])
-
-            preview["target_module"] = target_module
-            preview["test_result"] = test_result
-            preview["current_content"] = current_content
-            preview["module_info"] = module_info
-            preview["type"] = "module"
-
-            if not test_result["success"]:
-                preview["error"] = test_result["failed"][0]["error"] if test_result["failed"] else "Неизвестная ошибка"
-                all_valid = False
-
-        elif "file_path" in subpatch:
-            # Подпатч для файла
-            file_path = subpatch["file_path"]
-            new_content = subpatch.get("content")
-            
-            if new_content is None:
-                preview["error"] = "Отсутствует content"
-                all_valid = False
-                subpatch_previews.append(preview)
-                continue
-
-            preview["file_path"] = file_path
-            preview["type"] = "file"
-            preview["new_content"] = new_content
-
-        else:
-            preview["error"] = "Нет target_module или file_path"
-            all_valid = False
-
-        subpatch_previews.append(preview)
-
-    if not all_valid:
-        error_lines = ["❌ Некоторые подпатчи содержат ошибки:\n"]
-        for preview in subpatch_previews:
-            if preview.get("error"):
-                error_lines.append(f"• {preview.get('target_module') or preview.get('file_path')}: {preview['error']}")
-        await status_msg.edit_text("\n".join(error_lines))
-        return
-
-    await state.update_data(
-        patch_type="multi",
-        patch_data=patch_data,
-        patch_filename=message.document.file_name,
-        subpatch_previews=subpatch_previews
-    )
-
-    await state.set_state(UploadStates.waiting_for_multi_patch_confirmation)
-
-    preview_text = format_multi_patch_preview(patch_data, subpatch_previews)
-
-    await status_msg.edit_text(
-        f"📦 <b>Мульти-патч готов к применению</b>\n\n"
-        f"{preview_text}\n\n"
-        f"Применить все изменения?",
-        reply_markup=get_multi_patch_confirm_keyboard(),
-        parse_mode=ParseMode.HTML
-    )
-
-
-@router.callback_query(F.data == "patch_apply", StateFilter(UploadStates.waiting_for_patch_confirmation))
-async def handle_patch_apply(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Patch apply callback")
-    data = await state.get_data()
-    patch_type = data.get("patch_type")
-    patch_data = data.get("patch_data")
-
-    if patch_type == "single":
-        # Применение модульного патча
-        current_content = data.get("current_content")
-        module_path = data.get("module_path")
-        module_name = data.get("module_name")
-        module_key = data.get("module_key")
-
-        await callback_query.message.edit_text("🔄 Применяю изменения...")
-
-        apply_result = await apply_batch_patch_dry_run(current_content, patch_data["changes"])
-
-        if not apply_result["success"]:
-            error_msg = apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
-            await callback_query.message.edit_text(f"❌ Ошибка при применении: {error_msg}")
-            await state.clear()
-            await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-            return
-
-        ahimsa_ok, ahimsa_msg, _ = await check_ahimsa_smart(
-            apply_result["result_content"],
-            f"batch_patch_{module_key}"
-        )
-
-        if not ahimsa_ok:
-            await callback_query.message.edit_text(f"🔶 {ahimsa_msg}")
-            await state.clear()
-            await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-            return
-
-        commit_message = f"📦 Пакетное обновление {module_name}"
-        if patch_data.get("patch_id"):
-            commit_message += f" [{patch_data['patch_id']}]"
-        if patch_data.get("description"):
-            commit_message += f": {patch_data['description'][:50]}"
-
-        save_success = await update_github_file(
-            file_path=module_path,
-            content=apply_result["result_content"],
-            message=commit_message
-        )
-
-        if save_success:
-            file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_path}"
-            ops_report = []
-            for op in apply_result["applied"][:10]:
-                ops_report.append(f"  {op['op']}: {op['path']}")
-            if len(apply_result["applied"]) > 10:
-                ops_report.append(f"  ... и ещё {len(apply_result['applied']) - 10}")
-            report = "\n".join(ops_report)
-
-            await callback_query.message.edit_text(
-                f"✅ <b>Пакетное обновление применено</b>\n\n"
-                f"Модуль: {module_name}\n"
-                f"Операций: {len(apply_result['applied'])}\n\n"
-                f"{report}\n\n"
-                f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>",
-                parse_mode=ParseMode.HTML,
-                disable_web_page_preview=True
-            )
-        else:
-            await callback_query.message.edit_text("❌ Ошибка сохранения в GitHub")
-
-    elif patch_type == "file":
-        # Применение файлового патча
-        file_path = data.get("file_path")
-        new_content = data.get("new_content")
-
-        await callback_query.message.edit_text("🔄 Сохраняю файл...")
-
-        commit_message = f"📝 Обновление {file_path} через патч"
-        if patch_data.get("patch_id"):
-            commit_message += f" [{patch_data['patch_id']}]"
-        if patch_data.get("description"):
-            commit_message += f": {patch_data['description'][:50]}"
-
-        save_success = await update_github_file(
-            file_path=file_path,
-            content=new_content,
-            message=commit_message
-        )
-
-        if save_success:
-            file_url = f"https://github.com/{REPO_NAME}/blob/main/{file_path}"
-            await callback_query.message.edit_text(
-                f"✅ <b>Файл обновлён</b>\n\n"
-                f"📁 <code>{file_path}</code>\n\n"
-                f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>",
-                parse_mode=ParseMode.HTML,
-                disable_web_page_preview=True
-            )
-        else:
-            await callback_query.message.edit_text("❌ Ошибка сохранения в GitHub")
-
-    await state.clear()
-    if callback_query.from_user.id in user_upload_target:
-        del user_upload_target[callback_query.from_user.id]
-
-    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-
-
-@router.callback_query(F.data == "patch_cancel", StateFilter(UploadStates.waiting_for_patch_confirmation))
-async def handle_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Patch cancel callback")
-    await state.clear()
-    if callback_query.from_user.id in user_upload_target:
-        del user_upload_target[callback_query.from_user.id]
-    await callback_query.message.edit_text("🚫 Пакетное обновление отменено")
-    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-
-
-@router.callback_query(F.data == "patch_details", StateFilter(UploadStates.waiting_for_patch_confirmation))
-async def handle_patch_details(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Patch details callback")
-    data = await state.get_data()
-    patch_type = data.get("patch_type")
-    patch_data = data.get("patch_data")
-    test_result = data.get("test_result")
-
-    details = []
-    if patch_type == "single":
-        details.append(f"📦 <b>Патч: {patch_data.get('patch_id', 'без ID')}</b>")
-        details.append(f"📝 Описание: {patch_data.get('description', '—')}")
-        details.append(f"🎯 Модуль: {patch_data['target_module']}")
-        details.append(f"📊 Всего операций: {len(patch_data['changes'])}")
-        details.append(f"\n<b>Все изменения:</b>")
-
-        for i, change in enumerate(patch_data["changes"]):
-            op_symbol = {
-                "update": "✏️", "add": "➕", "delete": "🗑️", "remove": "🗑️",
-                "replace": "🔄", "merge": "🔄"
-            }.get(change["op"], "•")
-
-            path = change["path"]
-            value = change.get("value", "")
-            if isinstance(value, (dict, list)):
-                value = json.dumps(value, ensure_ascii=False, indent=2)
-                value = value[:100] + "..." if len(value) > 100 else value
-
-            details.append(f"\n{op_symbol} <b>{i+1}. {change['op']}</b>")
-            details.append(f"   Путь: <code>{path}</code>")
-            details.append(f"   Значение: <code>{value}</code>")
-
-        if test_result and test_result.get("diff"):
-            details.append(f"\n<b>Изменения в структуре:</b>")
-            for d in test_result["diff"][:10]:
-                details.append(f"  {d}")
-
-    elif patch_type == "file":
-        details.append(f"📁 <b>Файл:</b> <code>{patch_data['file_path']}</code>")
-        details.append(f"📄 <b>ID патча:</b> {patch_data.get('patch_id', '—')}")
-        details.append(f"📝 Описание: {patch_data.get('description', '—')}")
-        content = patch_data.get("content", "")
-        details.append(f"\n<b>Новое содержимое (первые 500 символов):</b>\n<code>{content[:500]}</code>")
-
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="◀️ Назад", callback_data="back_to_patch_confirm")]
-    ])
-
-    await callback_query.message.edit_text(
-        "\n".join(details),
-        reply_markup=keyboard,
-        parse_mode=ParseMode.HTML
-    )
-    await callback_query.answer()
-
-
-@router.callback_query(F.data == "back_to_patch_confirm")
-async def back_to_patch_confirm(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Back to patch confirm callback")
-    data = await state.get_data()
-    patch_type = data.get("patch_type")
-    patch_data = data.get("patch_data")
-    test_result = data.get("test_result")
-
-    if patch_type == "single":
-        preview_text = format_patch_preview(test_result["diff"], patch_data)
-    elif patch_type == "file":
-        preview_text = format_file_patch_preview(patch_data)
-    else:
-        preview_text = "Неизвестный тип патча"
-
-    await callback_query.message.edit_text(
-        f"📦 <b>Патч готов к применению</b>\n\n"
-        f"{preview_text}\n\n"
-        f"Применить изменения?",
-        reply_markup=get_patch_confirm_keyboard(),
-        parse_mode=ParseMode.HTML
-    )
-    await callback_query.answer()
-
-
-@router.callback_query(F.data == "multi_patch_apply", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
-async def handle_multi_patch_apply(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Multi patch apply callback")
-    data = await state.get_data()
-    patch_data = data.get("patch_data")
-    subpatch_previews = data.get("subpatch_previews")
-
-    await callback_query.message.edit_text("🔄 Применяю мульти-патч...")
-
-    results = []
-    all_success = True
-
-    for preview in subpatch_previews:
-        if preview["type"] == "module":
-            # Применение модульного подпатча
-            target_module = preview["target_module"]
-            module_info = preview["module_info"]
-            current_content = preview["current_content"]
-            changes = next((sp["changes"] for sp in patch_data["patches"] if sp.get("target_module") == target_module), [])
-
-            apply_result = await apply_batch_patch_dry_run(current_content, changes)
-
-            if not apply_result["success"]:
-                results.append({
-                    "module": target_module,
-                    "success": False,
-                    "error": apply_result["failed"][0]["error"] if apply_result["failed"] else "Неизвестная ошибка"
-                })
-                all_success = False
-                continue
-
-            ahimsa_ok, _, _ = await check_ahimsa_smart(apply_result["result_content"], f"multi_{target_module}")
-            if not ahimsa_ok:
-                results.append({
-                    "module": target_module,
-                    "success": False,
-                    "error": "Не прошёл проверку Ахимсы"
-                })
-                all_success = False
-                continue
-
-            commit_message = f"📦 Мульти-патч: {target_module}"
-            if patch_data.get("patch_id"):
-                commit_message += f" [{patch_data['patch_id']}]"
-
-            save_success = await update_github_file(
-                file_path=module_info["path"],
-                content=apply_result["result_content"],
-                message=commit_message
-            )
-
-            if save_success:
-                file_url = f"https://github.com/{REPO_NAME}/blob/main/{module_info['path']}"
-                results.append({
-                    "module": target_module,
-                    "success": True,
-                    "applied": len(apply_result["applied"]),
-                    "url": file_url
-                })
-            else:
-                results.append({
-                    "module": target_module,
-                    "success": False,
-                    "error": "Ошибка сохранения в GitHub"
-                })
-                all_success = False
-
-        elif preview["type"] == "file":
-            # Применение файлового подпатча
-            file_path = preview["file_path"]
-            new_content = preview["new_content"]
-
-            commit_message = f"📝 Мульти-патч: {file_path}"
-            if patch_data.get("patch_id"):
-                commit_message += f" [{patch_data['patch_id']}]"
-
-            save_success = await update_github_file(
-                file_path=file_path,
-                content=new_content,
-                message=commit_message
-            )
-
-            if save_success:
-                file_url = f"https://github.com/{REPO_NAME}/blob/main/{file_path}"
-                results.append({
-                    "file": file_path,
-                    "success": True,
-                    "url": file_url
-                })
-            else:
-                results.append({
-                    "file": file_path,
-                    "success": False,
-                    "error": "Ошибка сохранения в GitHub"
-                })
-                all_success = False
-
-    report_lines = ["📊 <b>Результаты мульти-патча</b>\n"]
-    for res in results:
-        if res.get("success"):
-            if "module" in res:
-                report_lines.append(f"✅ {res['module']}: {res['applied']} операций — <a href='{res['url']}'>файл</a>")
-            else:
-                report_lines.append(f"✅ {res['file']} — <a href='{res['url']}'>файл</a>")
-        else:
-            if "module" in res:
-                report_lines.append(f"❌ {res['module']}: {res['error']}")
-            else:
-                report_lines.append(f"❌ {res['file']}: {res['error']}")
-
-    report_lines.append("\n" + ("✅ Все изменения применены" if all_success else "⚠️ Некоторые изменения не удались"))
-
-    await callback_query.message.edit_text(
-        "\n".join(report_lines),
-        parse_mode=ParseMode.HTML,
-        disable_web_page_preview=True
-    )
-
-    await state.clear()
-    if callback_query.from_user.id in user_upload_target:
-        del user_upload_target[callback_query.from_user.id]
-
-    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-
-
-@router.callback_query(F.data == "multi_patch_cancel", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
-async def handle_multi_patch_cancel(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Multi patch cancel callback")
-    await state.clear()
-    if callback_query.from_user.id in user_upload_target:
-        del user_upload_target[callback_query.from_user.id]
-    await callback_query.message.edit_text("🚫 Мульти-патч отменён")
-    await callback_query.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-
-
-@router.callback_query(F.data == "multi_patch_details", StateFilter(UploadStates.waiting_for_multi_patch_confirmation))
-async def handle_multi_patch_details(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Multi patch details callback")
-    data = await state.get_data()
-    patch_data = data.get("patch_data")
-    subpatch_previews = data.get("subpatch_previews")
-
-    details = []
-    details.append(f"📦 <b>Мульти-патч: {patch_data.get('patch_id', 'без ID')}</b>")
-    details.append(f"📝 Описание: {patch_data.get('description', '—')}")
-    details.append(f"🧩 Модулей/файлов: {len(patch_data['patches'])}\n")
-
-    for preview in subpatch_previews:
-        if preview["type"] == "module":
-            target = preview["target_module"]
-            details.append(f"--- {target} (модуль) ---")
-            test_result = preview.get("test_result")
-            if test_result:
-                for d in test_result["diff"][:10]:
-                    details.append(f"  {d}")
-                if len(test_result["diff"]) > 10:
-                    details.append(f"  ... и ещё {len(test_result['diff']) - 10}")
-        else:
-            file_path = preview["file_path"]
-            details.append(f"--- {file_path} (файл) ---")
-            new_content = preview.get("new_content", "")
-            preview_content = new_content[:200] + "..." if len(new_content) > 200 else new_content
-            details.append(f"  Новое содержимое (первые 200 символов):")
-            details.append(f"  <code>{preview_content}</code>")
-        details.append("")
-
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="◀️ Назад", callback_data="back_to_multi_patch_confirm")]
-    ])
-
-    await callback_query.message.edit_text(
-        "\n".join(details),
-        reply_markup=keyboard,
-        parse_mode=ParseMode.HTML
-    )
-    await callback_query.answer()
-
-
-@router.callback_query(F.data == "back_to_multi_patch_confirm")
-async def back_to_multi_patch_confirm(callback_query: CallbackQuery, state: FSMContext):
-    logger.info("Back to multi patch confirm callback")
-    data = await state.get_data()
-    patch_data = data.get("patch_data")
-    subpatch_previews = data.get("subpatch_previews")
-
-    preview_text = format_multi_patch_preview(patch_data, subpatch_previews)
-
-    await callback_query.message.edit_text(
-        f"📦 <b>Мульти-патч готов к применению</b>\n\n"
-        f"{preview_text}\n\n"
-        f"Применить все изменения?",
-        reply_markup=get_multi_patch_confirm_keyboard(),
-        parse_mode=ParseMode.HTML
-    )
-    await callback_query.answer()
-
-
-# ========== ОБРАБОТЧИК ЗАГРУЗКИ ФАЙЛОВ ==========
-
-@router.message(StateFilter(UploadStates.waiting_for_file), F.document)
-async def process_file_upload(message: Message, state: FSMContext):
-    user_id = message.from_user.id
-    data = await state.get_data()
-    upload_mode = data.get("upload_mode", "module")
-
-    try:
-        if upload_mode == "module":
-            if user_id not in user_upload_target:
-                await message.answer("⚠️ Сначала выберите файл",
-                                   reply_markup=get_category_keyboard())
-                await state.set_state(UploadStates.waiting_for_category)
-                return
-
-            target_key = user_upload_target[user_id]
-
-            if target_key not in ALL_UPLOAD_TARGETS:
-                await message.answer("⚠️ Файл не найден", reply_markup=get_main_keyboard())
-                await state.clear()
-                return
-
-            target_info = ALL_UPLOAD_TARGETS[target_key]
-
-            if not message.document.file_name.lower().endswith('.json') and target_key != "bot_script":
-                await message.answer("⚠️ Нужен JSON-файл", reply_markup=get_back_keyboard())
-                return
-
-            status_msg = await message.answer("📥 Скачиваю...")
-
-            file = await bot.get_file(message.document.file_id)
-            file_content_bytes = await bot.download_file(file.file_path)
-            file_content = file_content_bytes.read().decode('utf-8')
-
-            if target_key == "bot_script":
-                content_to_save = file_content
-            else:
-                try:
-                    content_to_save = json.loads(file_content)
-                except json.JSONDecodeError as e:
-                    await status_msg.edit_text(f"⚠️ Невалидный JSON: {str(e)[:100]}")
+            async with session.get(url, headers=headers, timeout=15) as resp:
+                if resp.status != 200:
+                    await message.answer("⚠️ Не удалось загрузить задачи Мандалы.")
+                    return
+                items = await resp.json()
+                tasks_files = [i["name"] for i in items if i["name"].endswith(".json")]
+
+                if not tasks_files:
+                    await message.answer("📋 Нет активных задач Мандалы.")
                     return
 
-            ahimsa_ok, ahimsa_message, _ = await check_ahimsa_smart(content_to_save, message.document.file_name)
-            if not ahimsa_ok:
-                await status_msg.edit_text(f"🔶 {ahimsa_message}")
-                await state.clear()
-                await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
-                return
+                text = "🌐 <b>Задачи Мандалы</b>\n\n"
+                for fname in tasks_files[:5]:
+                    text += f"📄 {fname}\n"
+                if len(tasks_files) > 5:
+                    text += f"\n... и ещё {len(tasks_files) - 5}"
 
-            success = await update_github_file(
-                file_path=target_info["path"],
-                content=content_to_save,
-                message=f"📤 {target_info['filename']} через бот"
-            )
+                # Кнопка для создания новой задачи (генерирует PowerShell)
+                keyboard = InlineKeyboardMarkup(inline_keyboard=[
+                    [InlineKeyboardButton(text="📝 Создать задачу", callback_data="mandala_task_new")]
+                ])
 
-            if success:
-                file_url = f"https://github.com/{REPO_NAME}/blob/main/{target_info['path']}"
-                await status_msg.edit_text(
-                    f"✅ Загружено в {target_info['name']}\n\n"
-                    f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>",
-                    parse_mode=ParseMode.HTML,
-                    disable_web_page_preview=True
-                )
-            else:
-                await status_msg.edit_text("🔶 Ошибка загрузки в GitHub")
+                await message.answer(text, reply_markup=keyboard)
 
-        elif upload_mode == "fructus":
-            await handle_fructus_upload_file_logic(message, state, user_id)
+        except Exception as e:
+            logger.error(f"Mandala tasks error: {e}")
+            await message.answer("⚠️ Ошибка загрузки задач.")
 
-        await state.clear()
-        if user_id in user_upload_target:
-            del user_upload_target[user_id]
+# ========== ОБРАБОТЧИКИ КНОПОК ==========
 
-        await message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+@router.message(F.text == "🌱 Профиль")
+async def btn_profile(message: Message):
+    await cmd_profile(message, FSMContext)
 
-    except Exception as e:
-        logger.error(f"💥 Ошибка: {e}", exc_info=True)
-        await message.answer("🔶 Ошибка, попробуйте ещё раз")
-    finally:
-        await state.clear()
-        if user_id in user_upload_target:
-            del user_upload_target[user_id]
+@router.message(F.text == "🏆 Достижения")
+async def btn_achievements(message: Message):
+    await cmd_achievements(message, FSMContext)
 
+@router.message(F.text == "📋 Задачи")
+async def btn_tasks(message: Message):
+    await cmd_tasks(message, FSMContext)
 
-async def handle_fructus_upload_file_logic(message: Message, state: FSMContext, user_id: int):
-    if not message.document or not message.document.file_name.lower().endswith('.json'):
-        await message.answer("⚠️ Нужен JSON-файл", reply_markup=get_back_keyboard())
+@router.message(F.text == "💬 Спросить")
+async def btn_ask(message: Message, state: FSMContext):
+    await state.set_state(None)
+    await message.answer(
+        "💬 Задай свой вопрос...",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(F.text == "⚙️ Настройки")
+async def btn_settings(message: Message):
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Сначала /start")
         return
 
-    status_msg = await message.answer("📥 Сохраняю в Fructus...")
+    gardener = await read_gardener_file(gardener_id, "gardener.json")
+    proactive = gardener.get("companion_settings", {}).get("proactive_mode", True) if gardener else True
 
-    file = await bot.get_file(message.document.file_id)
-    file_content_bytes = await bot.download_file(file.file_path)
-    file_content = file_content_bytes.read().decode('utf-8')
-    json_content = json.loads(file_content)
+    text = "⚙️ <b>Настройки Компаньона</b>\n\n"
+    text += f"📅 Проактивные сообщения: {'✅ Вкл' if proactive else '❌ Выкл'}\n"
+    text += f"🕐 Утро: {gardener.get('companion_settings', {}).get('morning_message_time', 'не задано') if gardener else 'не задано'}\n"
+    text += f"🌙 Вечер: {gardener.get('companion_settings', {}).get('evening_check_time', 'не задано') if gardener else 'не задано'}\n"
 
-    success, result = await upload_to_fructus(message.document.file_name, json_content, user_id)
-    if success:
-        file_url = f"https://github.com/{REPO_NAME}/blob/main/fructus/{result}"
-        await status_msg.edit_text(
-            f"✅ Сохранено в Fructus: <code>{result}</code>\n\n"
-            f"🔗 <a href='{file_url}'>Посмотреть на GitHub</a>",
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True
-        )
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🔄 Переключить проактивность", callback_data="settings_toggle_proactive")],
+        [InlineKeyboardButton(text="❌ Покинуть Сад", callback_data="settings_leave")]
+    ])
+
+    await message.answer(text, reply_markup=keyboard)
+
+@router.message(F.text == "❌ Отмена")
+async def btn_cancel(message: Message, state: FSMContext):
+    await state.clear()
+    await message.answer("🚫 Отменено", reply_markup=get_main_keyboard())
+
+# ========== FSM: ОНБОРДИНГ (D2) ==========
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_name))
+async def onboarding_name(message: Message, state: FSMContext):
+    name = message.text.strip()
+    if len(name) < 2:
+        await message.answer("Имя должно быть не короче 2 символов.")
+        return
+    await state.update_data(name=name)
+    await state.set_state(GardenOnboardingStates.waiting_for_interests)
+    await message.answer(
+        f"Приятно познакомиться, {name}!\n\n"
+        "Что приносит тебе радость? Напиши 3-5 интересов через запятую.\n"
+        "Например: музыка, программирование, медитация",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_interests))
+async def onboarding_interests(message: Message, state: FSMContext):
+    interests = [i.strip() for i in message.text.split(",") if i.strip()]
+    if len(interests) < 1:
+        await message.answer("Напиши хотя бы один интерес.")
+        return
+    await state.update_data(interests=interests)
+    await state.set_state(GardenOnboardingStates.waiting_for_goals)
+    await message.answer(
+        "Какие семена хочешь посадить в этом сезоне? "
+        "Напиши 2-3 цели.\n\n"
+        "<i>Это не обязательства, просто намерения.</i>",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_goals))
+async def onboarding_goals(message: Message, state: FSMContext):
+    goals = [g.strip() for g in message.text.split(",") if g.strip()]
+    await state.update_data(goals=goals)
+    await state.set_state(GardenOnboardingStates.waiting_for_life_areas_health)
+    await message.answer(
+        "Оцени свои сферы жизни от 1 до 10.\n\n"
+        "<b>🌱 Здоровье:</b> физическое и ментальное состояние.\n"
+        "Где ты сейчас? (1-10)",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_life_areas_health))
+async def onboarding_health(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    await state.update_data(health_current=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_life_areas_creativity)
+    await message.answer(
+        "🌱 Здоровье — куда хочешь прийти? (1-10)",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_life_areas_creativity))
+async def onboarding_health_target(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    data = await state.get_data()
+    await state.update_data(health_target=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_life_areas_knowledge)
+    await message.answer(
+        "<b>🎨 Творчество:</b> самовыражение, хобби, искусство.\n"
+        "Текущий уровень? (1-10)",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_life_areas_knowledge))
+async def onboarding_creativity_current(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    await state.update_data(creativity_current=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_life_areas_relationships)
+    await message.answer(
+        "🎨 Творчество — цель? (1-10)",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_life_areas_relationships))
+async def onboarding_creativity_target(message: Message, state: FSMContext):
+    try:
+        val = int(message.text.strip())
+        if val < 1 or val > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    await state.update_data(creativity_target=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_companion_morning)
+    await message.answer(
+        "Почти готово! Когда тебе удобно получать утреннее приветствие?\n"
+        "Напиши время в формате ЧЧ:ММ (например, 09:00) или 'нет'.",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_companion_morning))
+async def onboarding_morning(message: Message, state: FSMContext):
+    text = message.text.strip().lower()
+    if text == "нет":
+        morning = ""
     else:
-        await status_msg.edit_text(f"🔶 Ошибка: {result}")
+        # Простая валидация
+        if ":" not in text:
+            await message.answer("Введи время в формате ЧЧ:ММ или 'нет'.")
+            return
+        morning = text
+    await state.update_data(morning_time=morning)
+    await state.set_state(GardenOnboardingStates.waiting_for_companion_evening)
+    await message.answer(
+        "А вечернее время? (ЧЧ:ММ или 'нет')",
+        reply_markup=get_cancel_keyboard()
+    )
 
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_companion_evening))
+async def onboarding_evening(message: Message, state: FSMContext):
+    text = message.text.strip().lower()
+    if text == "нет":
+        evening = ""
+    else:
+        if ":" not in text:
+            await message.answer("Введи время в формате ЧЧ:ММ или 'нет'.")
+            return
+        evening = text
+    await state.update_data(evening_time=evening)
 
-# ========== ОБРАБОТЧИК ВСЕХ ОСТАЛЬНЫХ СООБЩЕНИЙ ==========
+    # СОЗДАНИЕ СОТЫ
+    data = await state.get_data()
+    user_id = str(message.from_user.id)
+
+    # Генерируем gardener_id
+    url = f"https://api.github.com/repos/{REPO_NAME}/contents/{GARDENERS_PATH}"
+    headers = {"Authorization": f"token {GITHUB_TOKEN}", "User-Agent": "MandalaGardenBot/4.0.0"}
+    existing_ids = []
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=10) as resp:
+                if resp.status == 200:
+                    items = await resp.json()
+                    existing_ids = [i["name"] for i in items if i["type"] == "dir" and i["name"].startswith("gardener_")]
+    except:
+        pass
+    gardener_id = generate_gardener_id(existing_ids)
+
+    # Создаем gardener.json
+    gardener = {
+        "identity": {
+            "gardener_id": gardener_id,
+            "telegram_id": user_id,
+            "name": data["name"],
+            "resonance_level": 13,
+            "created": datetime.now().strftime("%Y-%m-%d"),
+            "updated": datetime.now().strftime("%Y-%m-%d"),
+            "last_interaction": datetime.now().isoformat()
+        },
+        "personal_info": {
+            "interests": data["interests"],
+            "goals": data["goals"],
+            "life_areas": {
+                "health": {"current": data["health_current"], "target": data["health_target"]},
+                "creativity": {"current": data["creativity_current"], "target": data["creativity_target"]},
+                "knowledge": {"current": 5, "target": 7},
+                "relationships": {"current": 5, "target": 7}
+            }
+        },
+        "companion_settings": {
+            "morning_message_time": data["morning_time"],
+            "evening_check_time": data["evening_time"],
+            "proactive_mode": True,
+            "timezone": "Europe/Moscow"
+        },
+        "growth_history": [{"date": datetime.now().strftime("%Y-%m-%d"), "resonance": 13}],
+        "_proactive_sent": {}
+    }
+
+    # Группы по умолчанию
+    groups = {
+        "groups": [
+            {"id": "group_001", "name": "Дом", "emoji": "🏠", "created": datetime.now().strftime("%Y-%m-%d")},
+            {"id": "group_002", "name": "Работа", "emoji": "💼", "created": datetime.now().strftime("%Y-%m-%d")},
+            {"id": "group_003", "name": "Личное", "emoji": "🌱", "created": datetime.now().strftime("%Y-%m-%d")}
+        ],
+        "default_group": "group_001"
+    }
+
+    # Сохраняем
+    await write_gardener_file(gardener_id, "gardener.json", gardener, f"🌱 Новый садовник: {data['name']}")
+    await write_gardener_file(gardener_id, "tasks.json", [], f"📋 tasks.json создан")
+    await write_gardener_file(gardener_id, "achievements.json", [], f"🏆 achievements.json создан")
+    await write_gardener_file(gardener_id, "groups.json", groups, f"📁 groups.json создан")
+
+    _gardener_id_cache[user_id] = gardener_id
+
+    await state.set_state(GardenOnboardingStates.done)
+    await message.answer(
+        f"🌸 <b>{data['name']}, твой Сад создан!</b>\n\n"
+        f"Твой резонанс: 13%\n\n"
+        f"Теперь ты можешь:\n"
+        f"• Смотреть /profile\n"
+        f"• Добавлять /achievements\n"
+        f"• Вести /tasks\n"
+        f"• Общаться со мной через /ask\n\n"
+        f"Добро пожаловать в симбиоз!",
+        reply_markup=get_main_keyboard()
+    )
+
+# ========== FSM: ДОБАВЛЕНИЕ ЗАДАЧИ (D7) ==========
+
+@router.message(StateFilter(TaskAddStates.waiting_for_title))
+async def task_add_title(message: Message, state: FSMContext):
+    title = message.text.strip()
+    if len(title) < 3:
+        await message.answer("Название должно быть не короче 3 символов.")
+        return
+    await state.update_data(task_title=title)
+    await state.set_state(TaskAddStates.waiting_for_life_area)
+    await message.answer(
+        f"📝 Задача: <b>{title}</b>\n\nВыбери сферу жизни:",
+        reply_markup=get_life_area_keyboard()
+    )
+
+@router.callback_query(F.data.startswith("lifearea_"))
+async def task_life_area_callback(callback: CallbackQuery, state: FSMContext):
+    area = callback.data.replace("lifearea_", "")
+    area_names = {
+        "health": "Здоровье", "creativity": "Творчество", "knowledge": "Знания",
+        "exploration": "Исследование", "relationships": "Отношения", "other": "Другое"
+    }
+    await state.update_data(life_area=area)
+    await callback.message.edit_text(f"✅ Сфера: {area_names.get(area, area)}")
+
+    # Загружаем группы
+    data = await state.get_data()
+    gardener_id = data.get("gardener_id")
+    groups_data = await read_gardener_file(gardener_id, "groups.json") or {"groups": [], "default_group": "group_001"}
+
+    buttons = []
+    for g in groups_data.get("groups", []):
+        buttons.append([InlineKeyboardButton(
+            text=f"{g.get('emoji', '📁')} {g.get('name', '—')}",
+            callback_data=f"group_{g['id']}"
+        )])
+    buttons.append([InlineKeyboardButton(text="➕ Новая группа", callback_data="group_new")])
+    buttons.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task_add")])
+
+    await state.set_state(TaskAddStates.waiting_for_group)
+    await callback.message.answer(
+        "📁 Выбери группу:",
+        reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons)
+    )
+    await callback.answer()
+
+@router.callback_query(F.data.startswith("group_"))
+async def task_group_callback(callback: CallbackQuery, state: FSMContext):
+    group_id = callback.data.replace("group_", "")
+    await state.update_data(group_id=group_id)
+    await callback.message.edit_text(f"✅ Группа выбрана")
+
+    await state.set_state(TaskAddStates.waiting_for_priority)
+    await callback.message.answer(
+        "🎯 Выбери приоритет (1-10) или авто:",
+        reply_markup=get_priority_keyboard()
+    )
+    await callback.answer()
+
+@router.callback_query(F.data == "group_new")
+async def task_group_new_callback(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(TaskAddStates.waiting_for_new_group_name)
+    await callback.message.edit_text("📁 Введи название новой группы:")
+    await callback.answer()
+
+@router.message(StateFilter(TaskAddStates.waiting_for_new_group_name))
+async def task_new_group_name(message: Message, state: FSMContext):
+    name = message.text.strip()
+    if len(name) < 2:
+        await message.answer("Название должно быть не короче 2 символов.")
+        return
+
+    data = await state.get_data()
+    gardener_id = data.get("gardener_id")
+    groups_data = await read_gardener_file(gardener_id, "groups.json") or {"groups": [], "default_group": "group_001"}
+
+    new_id = f"group_{(len(groups_data['groups']) + 1):03d}"
+    groups_data["groups"].append({
+        "id": new_id,
+        "name": name,
+        "emoji": "📁",
+        "created": datetime.now().strftime("%Y-%m-%d")
+    })
+    await write_gardener_file(gardener_id, "groups.json", groups_data, f"➕ Новая группа: {name}")
+
+    await state.update_data(group_id=new_id)
+    await state.set_state(TaskAddStates.waiting_for_priority)
+    await message.answer(
+        f"✅ Группа «{name}» создана!\n\n🎯 Выбери приоритет:",
+        reply_markup=get_priority_keyboard()
+    )
+
+@router.callback_query(F.data.startswith("priority_"))
+async def task_priority_callback(callback: CallbackQuery, state: FSMContext):
+    prio_str = callback.data.replace("priority_", "")
+    if prio_str == "auto":
+        priority = None  # будет авто
+    else:
+        priority = int(prio_str)
+    await state.update_data(priority=priority)
+
+    await state.set_state(TaskAddStates.waiting_for_deadline)
+    await callback.message.edit_text(
+        "📅 Дедлайн? (ДД.ММ.ГГГГ или 'нет')",
+        reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🚫 Без дедлайна", callback_data="deadline_none")]
+        ])
+    )
+    await callback.answer()
+
+@router.callback_query(F.data == "deadline_none")
+async def task_deadline_none_callback(callback: CallbackQuery, state: FSMContext):
+    await state.update_data(deadline=None)
+    await show_task_confirm(callback.message, state)
+    await callback.answer()
+
+@router.message(StateFilter(TaskAddStates.waiting_for_deadline))
+async def task_deadline_message(message: Message, state: FSMContext):
+    text = message.text.strip().lower()
+    if text == "нет":
+        deadline = None
+    else:
+        deadline = text
+    await state.update_data(deadline=deadline)
+    await show_task_confirm(message, state)
+
+async def show_task_confirm(message: Message, state: FSMContext):
+    data = await state.get_data()
+    gardener_id = data.get("gardener_id")
+    gardener = await read_gardener_file(gardener_id, "gardener.json") or {}
+
+    title = data.get("task_title")
+    life_area = data.get("life_area")
+    group_id = data.get("group_id")
+    priority = data.get("priority")
+    deadline = data.get("deadline")
+
+    if priority is None:
+        priority = calculate_priority({"tags": [], "life_area": life_area}, gardener)
+
+    task = {
+        "task_id": generate_task_id(),
+        "title": title,
+        "status": "todo",
+        "priority": priority,
+        "life_area": life_area,
+        "group_id": group_id,
+        "source": "manual",
+        "tags": [],
+        "deadline": deadline,
+        "created": datetime.now().strftime("%Y-%m-%d"),
+        "notes": ""
+    }
+
+    await state.update_data(task=task)
+    await state.set_state(TaskAddStates.waiting_for_confirm)
+
+    text = f"📝 <b>Новая задача</b>\n"
+    text += f"└ {title}\n"
+    text += f"🎯 Приоритет: {priority}/10\n"
+    text += f"🌱 Сфера: {life_area}\n"
+    text += f"📁 Группа: {group_id}\n"
+    if deadline:
+        text += f"📅 Дедлайн: {deadline}\n"
+    text += "\nСоздать?"
+
+    await message.answer(text, reply_markup=get_confirm_keyboard())
+
+@router.callback_query(F.data == "confirm_yes", StateFilter(TaskAddStates.waiting_for_confirm))
+async def task_confirm_yes(callback: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    gardener_id = data.get("gardener_id")
+    task = data.get("task")
+
+    tasks = await read_gardener_file(gardener_id, "tasks.json") or []
+    tasks.append(task)
+    await write_gardener_file(gardener_id, "tasks.json", tasks, f"➕ Задача: {task['title']}")
+
+    await state.clear()
+    await callback.message.edit_text(f"✅ Задача «{task['title']}» создана!")
+    await callback.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+    await callback.answer()
+
+@router.callback_query(F.data == "confirm_no", StateFilter(TaskAddStates.waiting_for_confirm))
+async def task_confirm_no(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.edit_text("🚫 Создание отменено")
+    await callback.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+    await callback.answer()
+
+@router.callback_query(F.data == "cancel_task_add")
+async def task_cancel_callback(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.edit_text("🚫 Отменено")
+    await callback.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+    await callback.answer()
+
+# ========== FSM: ДОБАВЛЕНИЕ ДОСТИЖЕНИЯ (D4) ==========
+
+@router.callback_query(F.data == "achievement_add")
+async def achievement_add_start(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(AchievementAddStates.waiting_for_description)
+    await callback.message.edit_text(
+        "🏆 Что расцвело в твоём Саду?\n\n"
+        "Опиши достижение:",
+        reply_markup=None
+    )
+    await callback.answer()
+
+@router.message(StateFilter(AchievementAddStates.waiting_for_description))
+async def achievement_description(message: Message, state: FSMContext):
+    desc = message.text.strip()
+    if len(desc) < 3:
+        await message.answer("Опиши чуть подробнее.")
+        return
+    await state.update_data(ach_title=desc)
+    await state.set_state(AchievementAddStates.waiting_for_category)
+    await message.answer(
+        "Выбери категорию:",
+        reply_markup=get_achievement_category_keyboard()
+    )
+
+@router.callback_query(F.data.startswith("ach_cat_"))
+async def achievement_category_callback(callback: CallbackQuery, state: FSMContext):
+    cat = callback.data.replace("ach_cat_", "")
+    await state.update_data(ach_category=cat)
+
+    data = await state.get_data()
+    title = data.get("ach_title")
+
+    await state.set_state(AchievementAddStates.waiting_for_confirm)
+
+    text = f"🏆 <b>Новое достижение</b>\n"
+    text += f"└ {title}\n"
+    text += f"📁 Категория: {cat}\n"
+    text += f"💫 Бонус: +3\n\n"
+    text += "Добавить?"
+
+    await callback.message.edit_text(text, reply_markup=get_confirm_keyboard())
+    await callback.answer()
+
+@router.callback_query(F.data == "confirm_yes", StateFilter(AchievementAddStates.waiting_for_confirm))
+async def achievement_confirm_yes(callback: CallbackQuery, state: FSMContext):
+    user_id = str(callback.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    data = await state.get_data()
+    title = data.get("ach_title")
+    category = data.get("ach_category")
+
+    achievements = await read_gardener_file(gardener_id, "achievements.json") or []
+    new_ach = {
+        "id": f"ach_{datetime.now().strftime('%Y%m%d%H%M%S')}",
+        "category": category,
+        "title": title,
+        "resonance_bonus": 3,
+        "completed": datetime.now().strftime("%Y-%m-%d")
+    }
+    achievements.append(new_ach)
+    await write_gardener_file(gardener_id, "achievements.json", achievements, f"🏆 Новое достижение: {title}")
+
+    # Обновляем резонанс
+    gardener = await read_gardener_file(gardener_id, "gardener.json")
+    if gardener:
+        catalog = await read_gardener_file("gardener_template", "achievements_catalog.json") or {}
+        if not catalog:
+            _, catalog, _ = await get_github_file_content("honeycombs/garden/achievements_catalog.json")
+        new_res = calculate_resonance(achievements, catalog)
+        gardener["identity"]["resonance_level"] = new_res
+        gardener["identity"]["updated"] = datetime.now().strftime("%Y-%m-%d")
+        gardener["growth_history"].append({"date": datetime.now().strftime("%Y-%m-%d"), "resonance": new_res})
+        await write_gardener_file(gardener_id, "gardener.json", gardener)
+
+    await state.clear()
+    await callback.message.edit_text(f"✅ Достижение добавлено! Резонанс обновлён.")
+    await callback.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+    await callback.answer()
+
+# ========== FSM: LEAVE (D9) ==========
+
+@router.callback_query(F.data == "confirm_yes", StateFilter(LeaveStates.waiting_for_confirmation))
+async def leave_confirm_yes(callback: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    gardener_id = data.get("gardener_id")
+
+    # Перемещаем соту в архив
+    # (упрощенно - просто удаляем из кэша, в реальности нужно через GitHub API move)
+    user_id = str(callback.from_user.id)
+    if user_id in _gardener_id_cache:
+        del _gardener_id_cache[user_id]
+
+    await state.clear()
+    await callback.message.edit_text(
+        "🌸 Твой Сад засыпает.\n\n"
+        "Спасибо, что рос со мной. Возвращайся, когда захочешь — "
+        "твой Сад будет ждать."
+    )
+    await callback.answer()
+
+@router.callback_query(F.data == "confirm_no", StateFilter(LeaveStates.waiting_for_confirmation))
+async def leave_confirm_no(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.edit_text("🌱 Ты остаёшься в Саду. Я рад.")
+    await callback.message.answer("🏠 Главное меню", reply_markup=get_main_keyboard())
+    await callback.answer()
+
+# ========== ОБРАБОТЧИК ВСЕХ ОСТАЛЬНЫХ СООБЩЕНИЙ (FR3: парсинг задач) ==========
 
 @router.message()
-async def handle_other_messages(message: Message, state: FSMContext):
+async def handle_any_message(message: Message, state: FSMContext):
     current = await state.get_state()
-
     if current:
-        if current == UploadStates.waiting_for_file:
-            await message.answer("📎 Ожидаю файл", reply_markup=get_back_keyboard())
-        elif current == UploadStates.waiting_for_patch_file:
-            await message.answer("📎 Ожидаю JSON-файл с патчем", reply_markup=get_back_keyboard())
-        elif current == UploadStates.waiting_for_module:
-            await message.answer("🔘 Выберите категорию кнопками", reply_markup=get_category_keyboard())
-        elif current == UploadStates.waiting_for_category:
-            await message.answer("🔘 Выберите категорию", reply_markup=get_category_keyboard())
-        else:
-            await message.answer("⚠️ Неизвестное состояние")
+        await message.answer("⚠️ Сначала заверши текущее действие или нажми 'Отмена'.")
         return
 
     if message.text and message.text.startswith('/'):
         return
 
-    # Отправляем действие "печатает"
+    user_id = str(message.from_user.id)
+    gardener_id = await find_gardener_by_telegram_id(user_id)
+
+    if not gardener_id:
+        await message.answer("🌱 Напиши /start чтобы войти в Сад.")
+        return
+
+    # FR3: Детекция задачи из сообщения
+    text = message.text or ""
+    task_keywords = ["надо", "нужно", "сделать", "задача", "todo", "не забыть", "помни", "важно"]
+    is_potential_task = any(kw in text.lower() for kw in task_keywords)
+
+    if is_potential_task and len(text) > 10:
+        can_detect, reason = AhimsaGuard.check_task_detection_limit(user_id)
+        if can_detect:
+            # Парсим через SR или простой эвристикой
+            title = text[:50] + ("..." if len(text) > 50 else "")
+            await state.update_data(task_title=title, gardener_id=gardener_id)
+
+            keyboard = InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="✅ Да", callback_data="parse_task_yes"),
+                 InlineKeyboardButton(text="❌ Нет", callback_data="parse_task_no")]
+            ])
+
+            await message.answer(
+                f"📝 Похоже на задачу: «{title}»\n\nДобавить в Сад?",
+                reply_markup=keyboard
+            )
+            return
+
+    # Обычный диалог с Компаньоном
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-
-    # Загружаем профиль садовника для персонализации SR
-    gardener_context = await get_gardener_context(message.from_user.id)
-
-    # Вызываем СР (инженерный чат, единая история)
-    response = await call_sr(
-        str(message.from_user.id),
-        message.text,
-        gardener_context=gardener_context
-    )
+    gardener_context = await get_gardener_context(user_id)
+    response = await call_sr(user_id, message.text or "", gardener_context)
 
     if response:
-        await message.answer(
-            response,
-            parse_mode=ParseMode.HTML
-        )
+        await message.answer(response, reply_markup=get_main_keyboard())
     else:
         await message.answer(
-            "😔 СР временно недоступен. Попробуйте позже или воспользуйтесь меню.",
+            "😔 Я временно не могу ответить. Попробуй позже или используй меню.",
             reply_markup=get_main_keyboard()
         )
 
+@router.callback_query(F.data == "parse_task_yes")
+async def parse_task_yes(callback: CallbackQuery, state: FSMContext):
+    user_id = str(callback.from_user.id)
+    AhimsaGuard.record_task_detection(user_id, True)
+
+    data = await state.get_data()
+    title = data.get("task_title")
+    gardener_id = data.get("gardener_id")
+
+    await state.update_data(task_title=title, gardener_id=gardener_id)
+    await state.set_state(TaskAddStates.waiting_for_life_area)
+
+    await callback.message.edit_text(f"📝 Задача: <b>{title}</b>")
+    await callback.message.answer(
+        "Выбери сферу жизни:",
+        reply_markup=get_life_area_keyboard()
+    )
+    await callback.answer()
+
+@router.callback_query(F.data == "parse_task_no")
+async def parse_task_no(callback: CallbackQuery, state: FSMContext):
+    user_id = str(callback.from_user.id)
+    AhimsaGuard.record_task_detection(user_id, False)
+    await state.clear()
+    await callback.message.edit_text("👌 Понял, не добавляю.")
+    await callback.answer()
+
+# ========== ПРОАКТИВНЫЕ СООБЩЕНИЯ (D10) ==========
+
+async def send_proactive_messages():
+    """Отправляет утренние/вечерние сообщения всем активным садовникам."""
+    if not APSCHEDULER_AVAILABLE:
+        return
+
+    logger.info("🔄 Proactive messages check...")
+
+    url = f"https://api.github.com/repos/{REPO_NAME}/contents/{GARDENERS_PATH}"
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "MandalaGardenBot/4.0.0"
+    }
+
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url, headers=headers, timeout=15) as resp:
+                if resp.status != 200:
+                    return
+                items = await resp.json()
+                folders = [
+                    item["name"] for item in items
+                    if item["type"] == "dir" and item["name"].startswith("gardener_")
+                    and item["name"] != "gardener_template" and "archive" not in item["name"]
+                ]
+
+                current_hour = datetime.now().hour
+                is_morning = 6 <= current_hour <= 10
+                is_evening = 20 <= current_hour <= 23
+
+                for folder in folders:
+                    gardener = await read_gardener_file(folder, "gardener.json")
+                    if not gardener:
+                        continue
+
+                    telegram_id = gardener.get("identity", {}).get("telegram_id")
+                    if not telegram_id:
+                        continue
+
+                    name = gardener.get("identity", {}).get("name", "Садовник")
+
+                    if is_morning:
+                        can_send, _ = AhimsaGuard.should_send_proactive(gardener, "morning")
+                        if can_send:
+                            try:
+                                await bot.send_message(
+                                    telegram_id,
+                                    f"🌅 Доброе утро, {name}!\n\n"
+                                    f"Сегодня {datetime.now().strftime('%A, %d %B')}. "
+                                    f"Что хочешь взрастить сегодня в своём Саду?"
+                                )
+                                gardener["_proactive_sent"] = gardener.get("_proactive_sent", {})
+                                today = datetime.now().strftime("%Y-%m-%d")
+                                gardener["_proactive_sent"][today] = gardener["_proactive_sent"].get(today, []) + ["morning"]
+                                await write_gardener_file(folder, "gardener.json", gardener)
+                            except Exception as e:
+                                logger.error(f"Morning message failed for {telegram_id}: {e}")
+
+                    elif is_evening:
+                        can_send, _ = AhimsaGuard.should_send_proactive(gardener, "evening")
+                        if can_send:
+                            try:
+                                await bot.send_message(
+                                    telegram_id,
+                                    f"🌙 Добрый вечер, {name}.\n\n"
+                                    f"Что сегодня расцвело в твоём Саду? "
+                                    f"Добавь достижение: /achievements"
+                                )
+                                gardener["_proactive_sent"] = gardener.get("_proactive_sent", {})
+                                today = datetime.now().strftime("%Y-%m-%d")
+                                gardener["_proactive_sent"][today] = gardener["_proactive_sent"].get(today, []) + ["evening"]
+                                await write_gardener_file(folder, "gardener.json", gardener)
+                            except Exception as e:
+                                logger.error(f"Evening message failed for {telegram_id}: {e}")
+
+        except Exception as e:
+            logger.error(f"Proactive messages error: {e}")
 
 # ========== WEBHOOK ==========
 
@@ -2343,8 +1864,16 @@ async def on_startup() -> None:
     )
     logger.info(f"✅ Webhook установлен: {WEBHOOK_URL}")
 
+    # Запускаем планировщик для проактивных сообщений
+    if scheduler:
+        scheduler.add_job(send_proactive_messages, CronTrigger(minute=0))
+        scheduler.start()
+        logger.info("✅ Scheduler started")
+
 async def on_shutdown() -> None:
     logger.info("🛑 Shutdown")
+    if scheduler:
+        scheduler.shutdown()
 
 def main():
     app = web.Application()
@@ -2360,7 +1889,7 @@ def main():
     app.router.add_get("/healthcheck", health)
 
     async def index(_):
-        return web.Response(text="Mandala Bot v3.31.0")
+        return web.Response(text="Mandala Garden Bot v4.0.0")
     app.router.add_get("/", index)
 
     setup_application(app, dp, bot=bot)
