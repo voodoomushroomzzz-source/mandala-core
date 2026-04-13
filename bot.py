@@ -389,7 +389,24 @@ async def cmd_profile(message: Message):
     
     name = gardener.get("identity", {}).get("name", "Садовник")
     resonance = gardener.get("identity", {}).get("resonance_level", 13)
-    await message.answer(f"🌱 <b>{name}</b>\n└ Резонанс: {resonance}%")
+    # Достижения
+    achievements = await read_gardener_file("achievements.json") or []
+    top_achievements = sorted(achievements, key=lambda x: x.get("resonance_bonus", 0), reverse=True)[:3]
+    
+    # Задачи
+    tasks = await read_gardener_file("tasks.json") or []
+    active_tasks = [t for t in tasks if t.get("status") != "completed"]
+    
+    text = f"🌱 <b>{name}</b>\n└ Резонанс: {resonance}%\n\n"
+    
+    if top_achievements:
+        text += "<b>🏆 Топ достижений:</b>\n"
+        for ach in top_achievements:
+            text += f"  • {ach.get('title', '—')} (+{ach.get('resonance_bonus', 0)})\n"
+    
+    text += f"\n📋 <b>Активных задач:</b> {len(active_tasks)}"
+    
+    await message.answer(text)
 
 
 @router.message(Command("resonance"))
