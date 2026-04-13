@@ -1,7 +1,7 @@
 {
     "task_id":  "T-20260408-1030",
     "name":  "Telegram Bot  Gentle Companion for Garden",
-    "status":  "todo",
+    "status":  "in_progress",
     "priority":  "HIGH",
     "deadline":  "2026-05-01",
     "created":  "2026-04-01",
@@ -15,8 +15,8 @@
                  "ahimsa",
                  "active"
              ],
-    "progress":  0,
-    "progress_notes":  "Rolled back to start. All deliverables pending.",
+    "progress":  25,
+    "progress_notes":  "D0, D6 (SR integration), D13 (password), D14 (hardcode gardener_001), D15 (button handlers) done. Gentle Companion mode working. Next: D5 (/resonance) or D2 (onboarding).",
     "garden_ref":  "honeycombs/garden/",
     "estimated_effort_hours":  30,
     "effort_breakdown":  {
@@ -28,7 +28,7 @@
                          "D0_backend":  {
                                             "id":  "D0",
                                             "name":  "POST /bot/ask endpoint in main.py",
-                                            "status":  "todo",
+                                            "status":  "done",
                                             "priority":  "CRITICAL",
                                             "estimated_hours":  1,
                                             "description":  "Add HTTP endpoint to engineer chat backend. Bot sends messages here instead of Yandex Cloud Function. Shared session history via session_id = tg_{telegram_user_id}."
@@ -36,7 +36,7 @@
                          "D1_helpers":  {
                                             "id":  "D1",
                                             "name":  "Garden helpers in bot.py",
-                                            "status":  "todo",
+                                            "status":  "done",
                                             "priority":  "CRITICAL",
                                             "estimated_hours":  1,
                                             "description":  "find_gardener_by_telegram_id(), read_gardener_file(), write_gardener_file(), soft-fail local queue (.json.queue)."
@@ -76,7 +76,7 @@
                          "D6_sr_switch":  {
                                               "id":  "D6",
                                               "name":  "Switch SR to main.py (Variant B)",
-                                              "status":  "todo",
+                                              "status":  "done",
                                               "priority":  "CRITICAL",
                                               "estimated_hours":  1,
                                               "description":  "Replace Yandex Cloud Function with POST /bot/ask on main.py. Pass session_id = tg_{user_id} + gardener_context."
@@ -152,7 +152,7 @@
                                                          "description":  "Guard access by password on first message. ALLOWED_PASSWORD from .env.",
                                                          "estimated_hours":  1,
                                                          "priority":  "HIGH",
-                                                         "status":  "todo"
+                                                         "status":  "done"
                                                      },
                          "D14_single_gardener":  {
                                                      "id":  "D14",
@@ -160,7 +160,7 @@
                                                      "description":  "Remove scanning of all gardeners. Always work with gardener_001.",
                                                      "estimated_hours":  0.5,
                                                      "priority":  "HIGH",
-                                                     "status":  "todo"
+                                                     "status":  "done"
                                                  },
                          "D15_fix_button_handlers":  {
                                                          "id":  "D15",
@@ -168,7 +168,7 @@
                                                          "description":  "Add state: FSMContext to btn_profile, btn_achievements, btn_tasks.",
                                                          "estimated_hours":  0.5,
                                                          "priority":  "CRITICAL",
-                                                         "status":  "todo"
+                                                         "status":  "done"
                                                      },
                          "D16_fix_onboarding_data":  {
                                                          "id":  "D16",
