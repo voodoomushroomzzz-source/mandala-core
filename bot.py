@@ -197,8 +197,6 @@ def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🤝 Отношения", callback_data="ach_cat_relationships")],
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_achievement")]
     ])
- -> ReplyKeyboardMarkup:
-    return ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="🌱 Профиль")]],
         resize_keyboard=True
     )
