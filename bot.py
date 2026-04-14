@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v5.2.2
+Mandala Garden Bot — Gentle Companion v5.2.3
 Integrated with /bot/ask endpoint. Password protected. Hardcoded to gardener_001.
 Fixed: «💬 В инженерный чат» sends to main.json session.
 """
@@ -144,7 +144,7 @@ async def get_github_file(file_path: str) -> Tuple[bool, Optional[Any]]:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/5.2.2"
+        "User-Agent": "MandalaGardenBot/5.2.3"
     }
     async with aiohttp.ClientSession() as session:
         try:
@@ -168,7 +168,7 @@ async def list_github_dir(dir_path: str) -> Tuple[bool, Optional[list[dict]]]:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/5.2.2"
+        "User-Agent": "MandalaGardenBot/5.2.3"
     }
     async with aiohttp.ClientSession() as session:
         try:
@@ -201,7 +201,7 @@ async def write_repo_json(path: str, content: Any) -> bool:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/5.2.2"
+        "User-Agent": "MandalaGardenBot/5.2.3"
     }
     async with aiohttp.ClientSession() as session:
         try:
@@ -420,9 +420,9 @@ def _start_scheduler() -> None:
     if _scheduler is not None:
         return
     sched = AsyncIOScheduler()
-    sched.add_job(lambda: asyncio.create_task(_job_morning()), CronTrigger(minute="*/30"))
-    sched.add_job(lambda: asyncio.create_task(_job_evening()), CronTrigger(minute="*/30"))
-    sched.add_job(lambda: asyncio.create_task(_job_deadlines()), CronTrigger(minute="*/15"))
+    sched.add_job(_job_morning, CronTrigger(minute="*/30"))
+    sched.add_job(_job_evening, CronTrigger(minute="*/30"))
+    sched.add_job(_job_deadlines, CronTrigger(minute="*/15"))
     sched.start()
     _scheduler = sched
     logger.info("Proactive scheduler started")
