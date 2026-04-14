@@ -190,16 +190,13 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌱 Здоровье", callback_data="ach_cat_health")],
-        [InlineKeyboardButton(text="🎨 Творчество", callback_data="ach_cat_creativity")],
-        [InlineKeyboardButton(text="📚 Знания", callback_data="ach_cat_knowledge")],
-        [InlineKeyboardButton(text="🌍 Исследование", callback_data="ach_cat_exploration")],
-        [InlineKeyboardButton(text="🤝 Отношения", callback_data="ach_cat_relationships")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_achievement")]
+        [InlineKeyboardButton(text=" Здоровье", callback_data="ach_cat_health")],
+        [InlineKeyboardButton(text=" Творчество", callback_data="ach_cat_creativity")],
+        [InlineKeyboardButton(text=" Знания", callback_data="ach_cat_knowledge")],
+        [InlineKeyboardButton(text=" Исследование", callback_data="ach_cat_exploration")],
+        [InlineKeyboardButton(text=" Отношения", callback_data="ach_cat_relationships")],
+        [InlineKeyboardButton(text=" Отмена", callback_data="cancel_achievement")]
     ])
-        keyboard=[[KeyboardButton(text="🌱 Профиль")]],
-        resize_keyboard=True
-    )
 
 
 # ========== FSM: ONBOARDING ==========
