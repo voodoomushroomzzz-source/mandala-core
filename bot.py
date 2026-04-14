@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v5.2.1
+Mandala Garden Bot — Gentle Companion v5.2.2
 Integrated with /bot/ask endpoint. Password protected. Hardcoded to gardener_001.
-Fixed encoding: all strings UTF-8, buttons readable.
+Fixed: «💬 В инженерный чат» sends to main.json session.
 """
 
 import os
@@ -63,6 +63,7 @@ GARDENER_ID = "gardener_001"
 GARDENER_PATH = f"honeycombs/personal_gardeners/{GARDENER_ID}"
 CATALOG_ACH_PATH = "honeycombs/garden/achievements_catalog.json"
 SIMBIOSIS_SEEDS_PATH = "simbiosis/seeds.json"
+MAIN_SESSION_ID = "main"
 
 LOCAL_QUEUE_PATH = os.getenv("LOCAL_QUEUE_PATH", os.path.join(os.getcwd(), f".{GARDENER_ID}.json.queue"))
 
@@ -98,7 +99,6 @@ def _parse_date_yyyy_mm_dd(text: str) -> Optional[str]:
         return None
 
 def enqueue_op(op: dict) -> None:
-    """Append operation to local JSONL queue. Best-effort."""
     try:
         op = dict(op)
         op.setdefault("timestamp", _utc_iso())
@@ -144,7 +144,7 @@ async def get_github_file(file_path: str) -> Tuple[bool, Optional[Any]]:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/5.2.1"
+        "User-Agent": "MandalaGardenBot/5.2.2"
     }
     async with aiohttp.ClientSession() as session:
         try:
@@ -168,7 +168,7 @@ async def list_github_dir(dir_path: str) -> Tuple[bool, Optional[list[dict]]]:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/5.2.1"
+        "User-Agent": "MandalaGardenBot/5.2.2"
     }
     async with aiohttp.ClientSession() as session:
         try:
@@ -201,7 +201,7 @@ async def write_repo_json(path: str, content: Any) -> bool:
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/5.2.1"
+        "User-Agent": "MandalaGardenBot/5.2.2"
     }
     async with aiohttp.ClientSession() as session:
         try:
@@ -663,6 +663,10 @@ async def onboarding_evening(message: Message, state: FSMContext):
         reply_markup=get_main_keyboard()
     )
 
+# ========== ENGINEER CHAT FSM ==========
+class EngineerChatStates(StatesGroup):
+    waiting_for_message = State()
+
 # ========== ACHIEVEMENTS FSM ==========
 class AchievementStates(StatesGroup):
     waiting_for_category = State()
@@ -944,17 +948,45 @@ async def cmd_resonance(message: Message):
     await message.answer(text.strip(), reply_markup=get_main_keyboard())
 
 @router.message(F.text == "💬 В инженерный чат")
-async def btn_engineer_chat(message: Message):
+async def btn_engineer_chat(message: Message, state: FSMContext):
     if not await is_authorized(str(message.from_user.id)):
         await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
         return
-    session_id = f"tg_{message.from_user.id}"
+    await state.set_state(EngineerChatStates.waiting_for_message)
+    await message.answer(
+        "💬 <b>Инженерный чат</b>\n\n"
+        "Напиши сообщение — оно отправится в основную сессию engineer-chat.\n"
+        "Internal SR увидит его и ответит там.\n\n"
+        "Для отмены нажми ❌ Отмена",
+        reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(EngineerChatStates.waiting_for_message))
+async def engineer_chat_send(message: Message, state: FSMContext):
+    text = message.text.strip()
+    if not text:
+        await message.answer("💬 Напиши сообщение или нажми ❌ Отмена")
+        return
+
     gardener = await read_gardener() or {}
-    response = await call_bot_ask(session_id, "Привет, я из бота", gardener)
-    if response:
-        await message.answer(response, reply_markup=get_main_keyboard())
-    else:
-        await message.answer("💬 Инженерный чат временно недоступен. Попробуй позже.", reply_markup=get_main_keyboard())
+
+    try:
+        payload = {
+            "session_id": MAIN_SESSION_ID,
+            "message": text,
+            "gardener_context": gardener
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(SR_BACKEND_URL, json=payload, timeout=10) as resp:
+                if resp.status in [200, 202]:
+                    logger.info(f"Message sent to engineer-chat main session: {text[:50]}...")
+                else:
+                    logger.error(f"Bot ask error: {resp.status}")
+    except Exception as e:
+        logger.error(f"Bot ask exception: {e}")
+
+    await state.clear()
+    await message.answer("✅ Отправлено в инженерный чат", reply_markup=get_main_keyboard())
 
 @router.message(F.text == "📋 Задачи")
 async def btn_tasks(message: Message):
