@@ -1030,3 +1030,283 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# ==================== D7: TASK MANAGEMENT ====================
+
+class TaskStates(StatesGroup):
+    waiting_for_title = State()
+    waiting_for_group = State()
+    waiting_for_deadline = State()
+    waiting_for_estimated_hours = State()
+    waiting_for_life_area = State()
+    waiting_for_notes = State()
+    waiting_for_confirm = State()
+
+# ---------- GROUP FUNCTIONS ----------
+async def read_groups() -> dict:
+    data = await read_gardener_file("groups.json")
+    return data if isinstance(data, dict) else {"groups": []}
+
+async def write_groups(data: dict) -> None:
+    await safe_write_gardener_file("groups.json", data)
+
+async def list_groups() -> list:
+    data = await read_groups()
+    return data.get("groups", [])
+
+async def create_group(name: str, color: str = "#808080") -> dict:
+    data = await read_groups()
+    groups = data.get("groups", [])
+    base_id = "".join(c for c in name.lower() if c.isalnum() or c == "_") or "group"
+    gid = base_id
+    counter = 1
+    while any(g.get("id") == gid for g in groups):
+        gid = f"{base_id}_{counter}"
+        counter += 1
+    new_group = {"id": gid, "name": name, "color": color, "created": _today()}
+    groups.append(new_group)
+    data["groups"] = groups
+    await write_groups(data)
+    return new_group
+
+# ---------- TASK FUNCTIONS ----------
+def calculate_priority(res_match: int = 5, gap: float = 5.0, deadline: str = None) -> int:
+    base = res_match * 0.6 + gap * 0.4
+    p = int(round(base))
+    if deadline:
+        try:
+            dl = datetime.fromisoformat(deadline)
+            days = (dl - datetime.now()).days
+            if days < 0: p += 2
+            elif days <= 3: p += 1
+        except: pass
+    return max(1, min(10, p))
+
+async def create_task(title: str, group_id: str, life_area: str,
+                      deadline: str = None, estimated_hours: int = None,
+                      notes: str = "") -> dict:
+    tasks = await load_tasks()
+    task_id = f"task_{_today().replace('-', '')}_{len(tasks)+1:03d}"
+    new_task = {
+        "task_id": task_id, "title": title, "status": "todo",
+        "group_id": group_id, "life_area": life_area,
+        "priority": calculate_priority(deadline=deadline),
+        "deadline": deadline, "estimated_hours": estimated_hours,
+        "created": _today(), "updated": _today(), "completed": None, "notes": notes
+    }
+    tasks.append(new_task)
+    await save_tasks(tasks)
+    return new_task
+
+async def complete_task(task_id: str) -> bool:
+    tasks = await load_tasks()
+    for t in tasks:
+        if t.get("task_id") == task_id:
+            t["status"] = "completed"
+            t["completed"] = _today()
+            t["updated"] = _today()
+            await save_tasks(tasks)
+            return True
+    return False
+
+async def delete_task(task_id: str) -> bool:
+    tasks = await load_tasks()
+    new_tasks = [t for t in tasks if t.get("task_id") != task_id]
+    if len(new_tasks) < len(tasks):
+        await save_tasks(new_tasks)
+        return True
+    return False
+
+# ---------- TASK KEYBOARDS ----------
+def get_groups_keyboard(groups: list) -> InlineKeyboardMarkup:
+    btns = [[InlineKeyboardButton(text=g["name"], callback_data=f"grp_{g['id']}")] for g in groups]
+    btns.append([InlineKeyboardButton(text="➕ Новая группа", callback_data="new_group")])
+    btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def get_life_area_keyboard() -> InlineKeyboardMarkup:
+    areas = [("❤️ Здоровье", "health"), ("🎨 Творчество", "creativity"),
+             ("📚 Знания", "knowledge"), ("🗺️ Исследования", "exploration"),
+             ("👥 Отношения", "relationships"), ("📌 Другое", "other")]
+    btns = [[InlineKeyboardButton(text=name, callback_data=f"area_{val}")] for name, val in areas]
+    btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def get_confirm_task_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Создать", callback_data="confirm_task")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")]
+    ])
+
+# ---------- TASK HANDLERS ----------
+@router.message(Command("addtask"))
+async def cmd_addtask(message: Message, state: FSMContext):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        return
+    await state.set_state(TaskStates.waiting_for_title)
+    await message.answer("📝 Введи название задачи:", reply_markup=get_cancel_keyboard())
+
+@router.message(TaskStates.waiting_for_title)
+async def task_title(message: Message, state: FSMContext):
+    title = message.text.strip()
+    if len(title) < 2:
+        await message.answer("📝 Название должно быть не короче 2 символов.")
+        return
+    await state.update_data(title=title)
+    await state.set_state(TaskStates.waiting_for_group)
+    groups = await list_groups()
+    await message.answer("📂 Выбери группу:", reply_markup=get_groups_keyboard(groups))
+
+@router.callback_query(F.data.startswith("grp_"))
+async def task_group(callback: CallbackQuery, state: FSMContext):
+    group_id = callback.data.replace("grp_", "")
+    await state.update_data(group_id=group_id)
+    await state.set_state(TaskStates.waiting_for_life_area)
+    await callback.message.edit_text("🌈 Выбери сферу жизни:", reply_markup=get_life_area_keyboard())
+    await callback.answer()
+
+@router.callback_query(F.data == "new_group")
+async def task_new_group(callback: CallbackQuery, state: FSMContext):
+    await callback.message.edit_text("📂 Введи название новой группы:", reply_markup=get_cancel_keyboard())
+    await state.set_state(TaskStates.waiting_for_group)
+    await callback.answer()
+
+@router.callback_query(F.data.startswith("area_"))
+async def task_life_area(callback: CallbackQuery, state: FSMContext):
+    area = callback.data.replace("area_", "")
+    await state.update_data(life_area=area)
+    await state.set_state(TaskStates.waiting_for_deadline)
+    await callback.message.edit_text(
+        "📅 Введи дедлайн в формате ГГГГ-ММ-ДД\nили отправь '-' если нет:",
+        reply_markup=get_cancel_keyboard()
+    )
+    await callback.answer()
+
+@router.message(TaskStates.waiting_for_deadline)
+async def task_deadline(message: Message, state: FSMContext):
+    text = message.text.strip()
+    deadline = None if text == "-" else text
+    await state.update_data(deadline=deadline)
+    await state.set_state(TaskStates.waiting_for_estimated_hours)
+    await message.answer("⏱️ Сколько часов займёт? (число или '-')")
+
+@router.message(TaskStates.waiting_for_estimated_hours)
+async def task_hours(message: Message, state: FSMContext):
+    text = message.text.strip()
+    hours = None if text == "-" else int(text) if text.isdigit() else None
+    await state.update_data(estimated_hours=hours)
+    await state.set_state(TaskStates.waiting_for_notes)
+    await message.answer("📝 Заметки (или '-'):")
+
+@router.message(TaskStates.waiting_for_notes)
+async def task_notes(message: Message, state: FSMContext):
+    text = message.text.strip()
+    notes = "" if text == "-" else text
+    await state.update_data(notes=notes)
+    
+    data = await state.get_data()
+    summary = f"""
+<b>📋 Проверь задачу:</b>
+🏷️ {data['title']}
+📂 Группа: {data['group_id']}
+🌈 Сфера: {data['life_area']}
+📅 Дедлайн: {data.get('deadline', 'нет')}
+⏱️ Часы: {data.get('estimated_hours', 'нет')}
+📝 Заметки: {notes or 'нет'}
+"""
+    await state.set_state(TaskStates.waiting_for_confirm)
+    await message.answer(summary, reply_markup=get_confirm_task_keyboard())
+
+@router.callback_query(F.data == "confirm_task")
+async def confirm_task(callback: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    new_task = await create_task(
+        title=data["title"], group_id=data["group_id"], life_area=data["life_area"],
+        deadline=data.get("deadline"), estimated_hours=data.get("estimated_hours"),
+        notes=data.get("notes", "")
+    )
+    await callback.message.edit_text(f"✅ Задача '{new_task['title']}' создана!")
+    await state.clear()
+    await callback.answer()
+
+@router.callback_query(F.data == "cancel_task")
+async def cancel_task(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.edit_text("❌ Создание задачи отменено.")
+    await callback.answer()
+
+@router.message(Command("tasks"))
+async def cmd_tasks(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        return
+    tasks = await load_tasks()
+    active = [t for t in tasks if t.get("status") != "completed"]
+    if not active:
+        await message.answer("✨ Нет активных задач.", reply_markup=get_main_keyboard())
+        return
+    text = "\n".join([f"• <code>{t['task_id']}</code>: {t['title']} (⭐{t.get('priority',5)})" for t in active[:15]])
+    await message.answer(f"📋 <b>Активные задачи:</b>\n{text}", reply_markup=get_main_keyboard())
+
+@router.message(Command("done"))
+async def cmd_done(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        return
+    parts = message.text.split()
+    if len(parts) < 2:
+        await message.answer("Укажи ID задачи: /done task_20260415_001")
+        return
+    task_id = parts[1]
+    if await complete_task(task_id):
+        await message.answer(f"✅ Задача <code>{task_id}</code> выполнена!")
+    else:
+        await message.answer("❌ Задача не найдена.")
+
+@router.message(Command("groups"))
+async def cmd_groups(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        return
+    groups = await list_groups()
+    if not groups:
+        await message.answer("📂 Нет групп. Создай через /newgroup")
+        return
+    text = "\n".join([f"• {g['name']} ({g['id']})" for g in groups])
+    await message.answer(f"📂 <b>Группы:</b>\n{text}")
+
+@router.message(Command("newgroup"))
+async def cmd_newgroup(message: Message, state: FSMContext):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        return
+    parts = message.text.split(maxsplit=1)
+    if len(parts) < 2:
+        await message.answer("Используй: /newgroup Название группы")
+        return
+    name = parts[1].strip()
+    group = await create_group(name)
+    await message.answer(f"✅ Группа '{group['name']}' создана!")
+
+@router.message(Command("archive"))
+async def cmd_archive(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        return
+    tasks = await load_tasks()
+    completed = [t for t in tasks if t.get("status") == "completed"]
+    if not completed:
+        await message.answer("📦 Нет завершённых задач для архивации.")
+        return
+    archive_file = f"tasks_archive_{_today()}.json"
+    await safe_write_gardener_file(archive_file, completed)
+    active = [t for t in tasks if t.get("status") != "completed"]
+    await save_tasks(active)
+    await message.answer(f"📦 {len(completed)} задач перемещено в архив.")
+
+# ---------- UPDATE BTN_TASKS ----------
+@router.message(F.text == "📋 Задачи")
+async def btn_tasks_new(message: Message):
+    await cmd_tasks(message)
+
