@@ -1004,7 +1004,7 @@ async def btn_cancel(message: Message, state: FSMContext):
 async def on_startup(app: web.Application):
     await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
     logger.info(f"Webhook set: {WEBHOOK_URL}")
-    _start_scheduler()
+    # _start_scheduler()  # temporarily disabled for debugging
 
 async def on_shutdown(app: web.Application):
     await bot.delete_webhook()
