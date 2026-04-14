@@ -172,7 +172,7 @@ class GardenOnboardingStates(StatesGroup):
 
 def get_cancel_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=" Отмена")]],
+        keyboard=[[KeyboardButton(text=" РћС‚РјРµРЅР°")]],
         resize_keyboard=True,
         one_time_keyboard=True
     )
@@ -180,19 +180,19 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text=" Профиль"), KeyboardButton(text=" Достижения")]
+            [KeyboardButton(text=" РџСЂРѕС„РёР»СЊ"), KeyboardButton(text=" Р”РѕСЃС‚РёР¶РµРЅРёСЏ")]
         ],
         resize_keyboard=True
     )
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=" Здоровье", callback_data="ach_cat_health")],
-        [InlineKeyboardButton(text=" Творчество", callback_data="ach_cat_creativity")],
-        [InlineKeyboardButton(text=" Знания", callback_data="ach_cat_knowledge")],
-        [InlineKeyboardButton(text=" Исследование", callback_data="ach_cat_exploration")],
-        [InlineKeyboardButton(text=" Отношения", callback_data="ach_cat_relationships")],
-        [InlineKeyboardButton(text=" Отмена", callback_data="cancel_achievement")]
+        [InlineKeyboardButton(text=" Р—РґРѕСЂРѕРІСЊРµ", callback_data="ach_cat_health")],
+        [InlineKeyboardButton(text=" РўРІРѕСЂС‡РµСЃС‚РІРѕ", callback_data="ach_cat_creativity")],
+        [InlineKeyboardButton(text=" Р—РЅР°РЅРёСЏ", callback_data="ach_cat_knowledge")],
+        [InlineKeyboardButton(text=" РСЃСЃР»РµРґРѕРІР°РЅРёРµ", callback_data="ach_cat_exploration")],
+        [InlineKeyboardButton(text=" РћС‚РЅРѕС€РµРЅРёСЏ", callback_data="ach_cat_relationships")],
+        [InlineKeyboardButton(text=" РћС‚РјРµРЅР°", callback_data="cancel_achievement")]
     ])
 
 # ========== FSM: ONBOARDING ==========
@@ -201,13 +201,13 @@ def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
 async def onboarding_name(message: Message, state: FSMContext):
     name = message.text.strip()
     if len(name) < 2:
-        await message.answer("Имя должно быть не короче 2 символов.")
+        await message.answer("РРјСЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РєРѕСЂРѕС‡Рµ 2 СЃРёРјРІРѕР»РѕРІ.")
         return
     await state.update_data(name=name)
     await state.set_state(GardenOnboardingStates.waiting_for_interests)
     await message.answer(
-        f"Приятно познакомиться, {name}!\n\n"
-        "Что приносит тебе радость? Напиши 3-5 интересов через запятую.",
+        f"РџСЂРёСЏС‚РЅРѕ РїРѕР·РЅР°РєРѕРјРёС‚СЊСЃСЏ, {name}!\n\n"
+        "Р§С‚Рѕ РїСЂРёРЅРѕСЃРёС‚ С‚РµР±Рµ СЂР°РґРѕСЃС‚СЊ? РќР°РїРёС€Рё 3-5 РёРЅС‚РµСЂРµСЃРѕРІ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ.",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -215,12 +215,12 @@ async def onboarding_name(message: Message, state: FSMContext):
 async def onboarding_interests(message: Message, state: FSMContext):
     interests = [i.strip() for i in message.text.split(",") if i.strip()]
     if len(interests) < 1:
-        await message.answer("Напиши хотя бы один интерес.")
+        await message.answer("РќР°РїРёС€Рё С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ РёРЅС‚РµСЂРµСЃ.")
         return
     await state.update_data(interests=interests)
     await state.set_state(GardenOnboardingStates.waiting_for_goals)
     await message.answer(
-        "Какие семена хочешь посадить в этом сезоне? Напиши 2-3 цели.",
+        "РљР°РєРёРµ СЃРµРјРµРЅР° С…РѕС‡РµС€СЊ РїРѕСЃР°РґРёС‚СЊ РІ СЌС‚РѕРј СЃРµР·РѕРЅРµ? РќР°РїРёС€Рё 2-3 С†РµР»Рё.",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -230,7 +230,7 @@ async def onboarding_goals(message: Message, state: FSMContext):
     await state.update_data(goals=goals)
     await state.set_state(GardenOnboardingStates.waiting_for_health_current)
     await message.answer(
-        "Оцени своё здоровье от 1 до 10.\nГде ты сейчас?",
+        "РћС†РµРЅРё СЃРІРѕС‘ Р·РґРѕСЂРѕРІСЊРµ РѕС‚ 1 РґРѕ 10.\nР“РґРµ С‚С‹ СЃРµР№С‡Р°СЃ?",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -241,11 +241,11 @@ async def onboarding_health_current(message: Message, state: FSMContext):
         if val < 1 or val > 10:
             raise ValueError
     except:
-        await message.answer("Введи число от 1 до 10.")
+        await message.answer("Р’РІРµРґРё С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 10.")
         return
     await state.update_data(health_current=val)
     await state.set_state(GardenOnboardingStates.waiting_for_health_target)
-    await message.answer("Куда хочешь прийти? (1-10)")
+    await message.answer("РљСѓРґР° С…РѕС‡РµС€СЊ РїСЂРёР№С‚Рё? (1-10)")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_health_target))
 async def onboarding_health_target(message: Message, state: FSMContext):
@@ -254,11 +254,11 @@ async def onboarding_health_target(message: Message, state: FSMContext):
         if val < 1 or val > 10:
             raise ValueError
     except:
-        await message.answer("Введи число от 1 до 10.")
+        await message.answer("Р’РІРµРґРё С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 10.")
         return
     await state.update_data(health_target=val)
     await state.set_state(GardenOnboardingStates.waiting_for_creativity_current)
-    await message.answer(" Творчество: текущий уровень? (1-10)")
+    await message.answer(" РўРІРѕСЂС‡РµСЃС‚РІРѕ: С‚РµРєСѓС‰РёР№ СѓСЂРѕРІРµРЅСЊ? (1-10)")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_current))
 async def onboarding_creativity_current(message: Message, state: FSMContext):
@@ -267,11 +267,11 @@ async def onboarding_creativity_current(message: Message, state: FSMContext):
         if val < 1 or val > 10:
             raise ValueError
     except:
-        await message.answer("Введи число от 1 до 10.")
+        await message.answer("Р’РІРµРґРё С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 10.")
         return
     await state.update_data(creativity_current=val)
     await state.set_state(GardenOnboardingStates.waiting_for_creativity_target)
-    await message.answer(" Творчество  цель? (1-10)")
+    await message.answer(" РўРІРѕСЂС‡РµСЃС‚РІРѕ  С†РµР»СЊ? (1-10)")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_target))
 async def onboarding_creativity_target(message: Message, state: FSMContext):
@@ -280,27 +280,27 @@ async def onboarding_creativity_target(message: Message, state: FSMContext):
         if val < 1 or val > 10:
             raise ValueError
     except:
-        await message.answer("Введи число от 1 до 10.")
+        await message.answer("Р’РІРµРґРё С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 10.")
         return
     await state.update_data(creativity_target=val)
     await state.set_state(GardenOnboardingStates.waiting_for_morning)
     await message.answer(
-        "Когда тебе удобно получать утреннее приветствие?\n"
-        "Напиши время (ЧЧ:ММ) или 'нет'."
+        "РљРѕРіРґР° С‚РµР±Рµ СѓРґРѕР±РЅРѕ РїРѕР»СѓС‡Р°С‚СЊ СѓС‚СЂРµРЅРЅРµРµ РїСЂРёРІРµС‚СЃС‚РІРёРµ?\n"
+        "РќР°РїРёС€Рё РІСЂРµРјСЏ (Р§Р§:РњРњ) РёР»Рё 'РЅРµС‚'."
     )
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_morning))
 async def onboarding_morning(message: Message, state: FSMContext):
     text = message.text.strip().lower()
-    morning = "" if text == "нет" else text
+    morning = "" if text == "РЅРµС‚" else text
     await state.update_data(morning_time=morning)
     await state.set_state(GardenOnboardingStates.waiting_for_evening)
-    await message.answer("А вечернее время? (ЧЧ:ММ или 'нет')")
+    await message.answer("Рђ РІРµС‡РµСЂРЅРµРµ РІСЂРµРјСЏ? (Р§Р§:РњРњ РёР»Рё 'РЅРµС‚')")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_evening))
 async def onboarding_evening(message: Message, state: FSMContext):
     text = message.text.strip().lower()
-    evening = "" if text == "нет" else text
+    evening = "" if text == "РЅРµС‚" else text
 
     data = await state.get_data()
     user_id = str(message.from_user.id)
@@ -335,17 +335,17 @@ async def onboarding_evening(message: Message, state: FSMContext):
 
     groups = {
         "groups": [
-            {"id": "group_001", "name": "Дом", "emoji": "", "created": datetime.now().strftime("%Y-%m-%d")},
-            {"id": "group_002", "name": "Работа", "emoji": "", "created": datetime.now().strftime("%Y-%m-%d")},
-            {"id": "group_003", "name": "Личное", "emoji": "", "created": datetime.now().strftime("%Y-%m-%d")}
+            {"id": "group_001", "name": "Р”РѕРј", "emoji": "", "created": datetime.now().strftime("%Y-%m-%d")},
+            {"id": "group_002", "name": "Р Р°Р±РѕС‚Р°", "emoji": "", "created": datetime.now().strftime("%Y-%m-%d")},
+            {"id": "group_003", "name": "Р›РёС‡РЅРѕРµ", "emoji": "", "created": datetime.now().strftime("%Y-%m-%d")}
         ],
         "default_group": "group_001"
     }
 
-    # Сохранение в GitHub
+    # РЎРѕС…СЂР°РЅРµРЅРёРµ РІ GitHub
     success = await write_gardener_file("gardener.json", gardener)
     if not success:
-        await message.answer(" Ошибка сохранения профиля. Попробуй позже.")
+        await message.answer(" РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ РїСЂРѕС„РёР»СЏ. РџРѕРїСЂРѕР±СѓР№ РїРѕР·Р¶Рµ.")
         await state.clear()
         return
 
@@ -355,9 +355,9 @@ async def onboarding_evening(message: Message, state: FSMContext):
 
     await state.set_state(GardenOnboardingStates.done)
     await message.answer(
-        f" <b>{data['name']}, твой Сад создан!</b>\n\n"
-        f"Твой резонанс: 13%\n\n"
-        f"Добро пожаловать в симбиоз!",
+        f" <b>{data['name']}, С‚РІРѕР№ РЎР°Рґ СЃРѕР·РґР°РЅ!</b>\n\n"
+        f"РўРІРѕР№ СЂРµР·РѕРЅР°РЅСЃ: 13%\n\n"
+        f"Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ СЃРёРјР±РёРѕР·!",
         reply_markup=get_main_keyboard()
     )
 
@@ -369,15 +369,15 @@ class AchievementStates(StatesGroup):
     waiting_for_bonus = State()
 
 @router.message(Command("achievements"))
-@router.message(F.text == " Достижения")
+@router.message(F.text == " Р”РѕСЃС‚РёР¶РµРЅРёСЏ")
 async def cmd_achievements(message: Message):
     if not await is_authorized(str(message.from_user.id)):
-        await message.answer(" Сначала /start")
+        await message.answer(" РЎРЅР°С‡Р°Р»Р° /start")
         return
 
     achievements = await read_gardener_file("achievements.json") or []
     if not achievements:
-        await message.answer(" У тебя пока нет достижений.\n\nДобавь первое: /addachievement", reply_markup=get_main_keyboard())
+        await message.answer(" РЈ С‚РµР±СЏ РїРѕРєР° РЅРµС‚ РґРѕСЃС‚РёР¶РµРЅРёР№.\n\nР”РѕР±Р°РІСЊ РїРµСЂРІРѕРµ: /addachievement", reply_markup=get_main_keyboard())
         return
 
     cats = {"health": [], "creativity": [], "knowledge": [], "exploration": [], "relationships": []}
@@ -386,7 +386,7 @@ async def cmd_achievements(message: Message):
         if cat in cats:
             cats[cat].append(ach)
 
-    text = " <b>Твои достижения:</b>\n\n"
+    text = " <b>РўРІРѕРё РґРѕСЃС‚РёР¶РµРЅРёСЏ:</b>\n\n"
     emoji = {"health": "", "creativity": "", "knowledge": "", "exploration": "", "relationships": ""}
     for cat, items in cats.items():
         if items:
@@ -399,10 +399,10 @@ async def cmd_achievements(message: Message):
 @router.message(Command("addachievement"))
 async def cmd_addachievement(message: Message, state: FSMContext):
     if not await is_authorized(str(message.from_user.id)):
-        await message.answer(" Сначала /start")
+        await message.answer(" РЎРЅР°С‡Р°Р»Р° /start")
         return
     await state.set_state(AchievementStates.waiting_for_category)
-    await message.answer(" <b>Создание достижения</b>\n\nВыбери категорию:", reply_markup=get_achievement_category_keyboard())
+    await message.answer(" <b>РЎРѕР·РґР°РЅРёРµ РґРѕСЃС‚РёР¶РµРЅРёСЏ</b>\n\nР’С‹Р±РµСЂРё РєР°С‚РµРіРѕСЂРёСЋ:", reply_markup=get_achievement_category_keyboard())
 
 @router.callback_query(lambda c: c.data and c.data.startswith("ach_cat_"))
 async def process_achievement_category(callback: CallbackQuery, state: FSMContext):
@@ -417,31 +417,31 @@ async def process_achievement_category(callback: CallbackQuery, state: FSMContex
     await state.update_data(category=category)
     await state.set_state(AchievementStates.waiting_for_title)
 
-    await callback.message.edit_text(f" Категория: {category}\n\nВведи название достижения:")
+    await callback.message.edit_text(f" РљР°С‚РµРіРѕСЂРёСЏ: {category}\n\nР’РІРµРґРё РЅР°Р·РІР°РЅРёРµ РґРѕСЃС‚РёР¶РµРЅРёСЏ:")
     await callback.answer()
 
 @router.callback_query(lambda c: c.data == "cancel_achievement")
 async def cancel_achievement(callback: CallbackQuery, state: FSMContext):
     await state.clear()
-    await callback.message.edit_text(" Создание достижения отменено.")
+    await callback.message.edit_text(" РЎРѕР·РґР°РЅРёРµ РґРѕСЃС‚РёР¶РµРЅРёСЏ РѕС‚РјРµРЅРµРЅРѕ.")
     await callback.answer()
 
 @router.message(StateFilter(AchievementStates.waiting_for_title))
 async def achievement_title(message: Message, state: FSMContext):
     title = message.text.strip()
     if len(title) < 3:
-        await message.answer("Название должно быть не короче 3 символов.")
+        await message.answer("РќР°Р·РІР°РЅРёРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РєРѕСЂРѕС‡Рµ 3 СЃРёРјРІРѕР»РѕРІ.")
         return
     await state.update_data(title=title)
     await state.set_state(AchievementStates.waiting_for_description)
-    await message.answer(" Напиши описание достижения:")
+    await message.answer(" РќР°РїРёС€Рё РѕРїРёСЃР°РЅРёРµ РґРѕСЃС‚РёР¶РµРЅРёСЏ:")
 
 @router.message(StateFilter(AchievementStates.waiting_for_description))
 async def achievement_description(message: Message, state: FSMContext):
     description = message.text.strip()
     await state.update_data(description=description)
     await state.set_state(AchievementStates.waiting_for_bonus)
-    await message.answer(" Сколько процентов резонанса даёт это достижение? (1-10)\n\nПо умолчанию: 1")
+    await message.answer(" РЎРєРѕР»СЊРєРѕ РїСЂРѕС†РµРЅС‚РѕРІ СЂРµР·РѕРЅР°РЅСЃР° РґР°С‘С‚ СЌС‚Рѕ РґРѕСЃС‚РёР¶РµРЅРёРµ? (1-10)\n\nРџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ: 1")
 
 @router.message(StateFilter(AchievementStates.waiting_for_bonus))
 async def achievement_bonus(message: Message, state: FSMContext):
@@ -450,7 +450,7 @@ async def achievement_bonus(message: Message, state: FSMContext):
         if bonus < 1 or bonus > 10:
             raise ValueError
     except:
-        await message.answer("Введи число от 1 до 10.")
+        await message.answer("Р’РІРµРґРё С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 10.")
         return
 
     data = await state.get_data()
@@ -488,14 +488,14 @@ async def achievement_bonus(message: Message, state: FSMContext):
             await write_gardener_file("gardener.json", gardener)
 
         await message.answer(
-            f" <b>Достижение добавлено!</b>\n\n"
-            f"{data['title']} (+{bonus}% резонанса)\n"
+            f" <b>Р”РѕСЃС‚РёР¶РµРЅРёРµ РґРѕР±Р°РІР»РµРЅРѕ!</b>\n\n"
+            f"{data['title']} (+{bonus}% СЂРµР·РѕРЅР°РЅСЃР°)\n"
             f"{data['description']}\n\n"
-            f"Твой резонанс вырос!",
+            f"РўРІРѕР№ СЂРµР·РѕРЅР°РЅСЃ РІС‹СЂРѕСЃ!",
             reply_markup=get_main_keyboard()
         )
     else:
-        await message.answer(" Ошибка сохранения. Попробуй позже.")
+        await message.answer(" РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ. РџРѕРїСЂРѕР±СѓР№ РїРѕР·Р¶Рµ.")
 
     await state.clear()
 
@@ -508,30 +508,30 @@ async def cmd_start(message: Message, state: FSMContext):
     gardener = await read_gardener()
 
     if gardener and str(gardener.get("identity", {}).get("telegram_id", "")) == user_id:
-        name = gardener.get("identity", {}).get("name", "Садовник")
-        await message.answer(f" С возвращением, {name}!", reply_markup=get_main_keyboard())
+        name = gardener.get("identity", {}).get("name", "РЎР°РґРѕРІРЅРёРє")
+        await message.answer(f" РЎ РІРѕР·РІСЂР°С‰РµРЅРёРµРј, {name}!", reply_markup=get_main_keyboard())
         return
 
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
-        " <b>Добро пожаловать в Сад Мандалы!</b>\n\n"
-        "Я  твой Нежный Спутник. Давай познакомимся.\n\n"
-        "Как мне тебя называть?",
+        " <b>Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ РЎР°Рґ РњР°РЅРґР°Р»С‹!</b>\n\n"
+        "РЇ  С‚РІРѕР№ РќРµР¶РЅС‹Р№ РЎРїСѓС‚РЅРёРє. Р”Р°РІР°Р№ РїРѕР·РЅР°РєРѕРјРёРјСЃСЏ.\n\n"
+        "РљР°Рє РјРЅРµ С‚РµР±СЏ РЅР°Р·С‹РІР°С‚СЊ?",
         reply_markup=get_cancel_keyboard()
     )
 
 @router.message(Command("profile"))
 async def cmd_profile(message: Message):
     if not await is_authorized(str(message.from_user.id)):
-        await message.answer(" Сначала /start [пароль]")
+        await message.answer(" РЎРЅР°С‡Р°Р»Р° /start [РїР°СЂРѕР»СЊ]")
         return
 
     gardener = await read_gardener()
     if not gardener:
-        await message.answer(" Профиль не найден")
+        await message.answer(" РџСЂРѕС„РёР»СЊ РЅРµ РЅР°Р№РґРµРЅ")
         return
 
-    name = gardener.get("identity", {}).get("name", "Садовник")
+    name = gardener.get("identity", {}).get("name", "РЎР°РґРѕРІРЅРёРє")
     resonance = gardener.get("identity", {}).get("resonance_level", 13)
     achievements = await read_gardener_file("achievements.json") or []
     top_achievements = sorted(achievements, key=lambda x: x.get("resonance_bonus", 0), reverse=True)[:3]
@@ -539,21 +539,21 @@ async def cmd_profile(message: Message):
     tasks = await read_gardener_file("tasks.json") or []
     active_tasks = [t for t in tasks if t.get("status") != "completed"]
 
-    text = f" <b>{name}</b>\n Резонанс: {resonance}%\n\n"
+    text = f" <b>{name}</b>\n Р РµР·РѕРЅР°РЅСЃ: {resonance}%\n\n"
 
     if top_achievements:
-        text += "<b> Топ достижений:</b>\n"
+        text += "<b> РўРѕРї РґРѕСЃС‚РёР¶РµРЅРёР№:</b>\n"
         for ach in top_achievements:
             text += f"   {ach.get('title', '')} (+{ach.get('resonance_bonus', 0)})\n"
 
-    text += f"\n <b>Активных задач:</b> {len(active_tasks)}"
+    text += f"\n <b>РђРєС‚РёРІРЅС‹С… Р·Р°РґР°С‡:</b> {len(active_tasks)}"
 
     await message.answer(text)
 
 @router.message(Command("resonance"))
 async def cmd_resonance(message: Message):
     if not await is_authorized(str(message.from_user.id)):
-        await message.answer(" Сначала /start")
+        await message.answer(" РЎРЅР°С‡Р°Р»Р° /start")
         return
 
     achievements = await read_gardener_file("achievements.json") or []
@@ -577,15 +577,15 @@ async def cmd_resonance(message: Message):
     gardener = await read_gardener()
     history = gardener.get("growth_history", []) if gardener else []
 
-    text = f" <b>Резонанс: {total}%</b>"
+    text = f" <b>Р РµР·РѕРЅР°РЅСЃ: {total}%</b>"
     if history:
-        text += "\n\n История:\n"
+        text += "\n\n РСЃС‚РѕСЂРёСЏ:\n"
         for h in history[-5:]:
             text += f"  {h.get('date', '?')}: {h.get('resonance', '?')}%\n"
 
     await message.answer(text)
 
-@router.message(F.text == " Профиль")
+@router.message(F.text == " РџСЂРѕС„РёР»СЊ")
 async def btn_profile(message: Message):
     await cmd_profile(message)
 
@@ -593,7 +593,7 @@ async def btn_profile(message: Message):
 @router.message()
 async def handle_gentle_sr(message: Message):
     if not await is_authorized(str(message.from_user.id)):
-        await message.answer(" Сначала /start [пароль]")
+        await message.answer(" РЎРЅР°С‡Р°Р»Р° /start [РїР°СЂРѕР»СЊ]")
         return
 
     user_text = message.text or ""
@@ -617,7 +617,7 @@ async def handle_gentle_sr(message: Message):
     if response:
         await message.answer(response, reply_markup=get_main_keyboard())
     else:
-        await message.answer(" СР временно недоступен. Попробуй позже.", reply_markup=get_main_keyboard())
+        await message.answer(" РЎР  РІСЂРµРјРµРЅРЅРѕ РЅРµРґРѕСЃС‚СѓРїРµРЅ. РџРѕРїСЂРѕР±СѓР№ РїРѕР·Р¶Рµ.", reply_markup=get_main_keyboard())
 
 # ========== WEBHOOK ==========
 async def on_startup():
