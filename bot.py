@@ -1310,3 +1310,9 @@ async def cmd_archive(message: Message):
 async def btn_tasks_new(message: Message):
     await cmd_tasks(message)
 
+    )
+    setup_application(app, dp, bot=bot)
+    web.run_app(app, host="0.0.0.0", port=PORT)
+
+if __name__ == "__main__":
+    main()
