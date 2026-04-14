@@ -367,6 +367,109 @@ async def onboarding_evening(message: Message, state: FSMContext):
     )
 
 
+# ========== ACHIEVEMENTS FSM ==========
+class AchievementStates(StatesGroup):
+    waiting_for_category = State()
+    waiting_for_title = State()
+    waiting_for_description = State()
+    waiting_for_bonus = State()
+
+@router.message(Command("achievements"))
+@router.message(F.text == " Достижения")
+async def cmd_achievements(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer(" Сначала /start")
+        return
+    
+    achievements = await read_gardener_file("achievements.json") or []
+    if not achievements:
+        await message.answer(" У тебя пока нет достижений.\n\nДобавь первое: /addachievement", reply_markup=get_main_keyboard())
+        return
+    
+    cats = {"health": [], "creativity": [], "knowledge": [], "exploration": [], "relationships": []}
+    for ach in achievements:
+        cat = ach.get("category", "knowledge")
+        if cat in cats:
+            cats[cat].append(ach)
+    
+    text = " <b>Твои достижения:</b>\n\n"
+    emoji = {"health": "", "creativity": "", "knowledge": "", "exploration": "", "relationships": ""}
+    for cat, items in cats.items():
+        if items:
+            text += f"{emoji.get(cat, '')} <b>{cat.title()}:</b>\n"
+            for ach in items[:5]:
+                text += f"   {ach.get('title', '')} (+{ach.get('resonance_bonus', 1)}%)\n"
+            text += "\n"
+    await message.answer(text, reply_markup=get_main_keyboard())
+
+@router.message(Command("addachievement"))
+async def cmd_addachievement(message: Message, state: FSMContext):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer(" Сначала /start")
+        return
+    await state.set_state(AchievementStates.waiting_for_category)
+    await message.answer(" <b>Создание достижения</b>\n\nВыбери категорию:", reply_markup=get_achievement_category_keyboard())
+
+@router.callback_query(lambda c: c.data and c.data.startswith("ach_cat_"))
+async def process_achievement_category(callback: CallbackQuery, state: FSMContext):
+    cat_map = {"ach_cat_health": "health", "ach_cat_creativity": "creativity", "ach_cat_knowledge": "knowledge", "ach_cat_exploration": "exploration", "ach_cat_relationships": "relationships"}
+    category = cat_map.get(callback.data, "knowledge")
+    await state.update_data(category=category)
+    await state.set_state(AchievementStates.waiting_for_title)
+    await callback.message.edit_text(f" Категория: {category}\n\nВведи название достижения:")
+    await callback.answer()
+
+@router.callback_query(lambda c: c.data == "cancel_achievement")
+async def cancel_achievement(callback: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback.message.edit_text(" Создание достижения отменено.")
+    await callback.answer()
+
+@router.message(StateFilter(AchievementStates.waiting_for_title))
+async def achievement_title(message: Message, state: FSMContext):
+    title = message.text.strip()
+    if len(title) < 3:
+        await message.answer("Название должно быть не короче 3 символов.")
+        return
+    await state.update_data(title=title)
+    await state.set_state(AchievementStates.waiting_for_description)
+    await message.answer(" Напиши описание достижения:")
+
+@router.message(StateFilter(AchievementStates.waiting_for_description))
+async def achievement_description(message: Message, state: FSMContext):
+    await state.update_data(description=message.text.strip())
+    await state.set_state(AchievementStates.waiting_for_bonus)
+    await message.answer(" Сколько процентов резонанса даёт это достижение? (1-10)\n\nПо умолчанию: 1")
+
+@router.message(StateFilter(AchievementStates.waiting_for_bonus))
+async def achievement_bonus(message: Message, state: FSMContext):
+    try:
+        bonus = int(message.text.strip())
+        if bonus < 1 or bonus > 10:
+            raise ValueError
+    except:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    data = await state.get_data()
+    new_achievement = {"id": f"ach_{datetime.now().strftime('%Y%m%d_%H%M%S')}", "title": data["title"], "description": data["description"], "category": data["category"], "resonance_bonus": bonus, "date_earned": datetime.now().strftime("%Y-%m-%d"), "gardener_id": GARDENER_ID}
+    achievements = await read_gardener_file("achievements.json") or []
+    achievements.append(new_achievement)
+    if await write_gardener_file("achievements.json", achievements):
+        gardener = await read_gardener()
+        if gardener:
+            current_res = gardener.get("identity", {}).get("resonance_level", 13)
+            new_res = min(100, current_res + bonus)
+            gardener["identity"]["resonance_level"] = new_res
+            gardener["identity"]["updated"] = datetime.now().strftime("%Y-%m-%d")
+            if "growth_history" not in gardener:
+                gardener["growth_history"] = []
+            gardener["growth_history"].append({"date": datetime.now().strftime("%Y-%m-%d"), "resonance": new_res, "change": bonus, "achievement": data["title"]})
+            await write_gardener_file("gardener.json", gardener)
+        await message.answer(f" <b>Достижение добавлено!</b>\n\n{data['title']} (+{bonus}%)\n{data['description']}\n\nТвой резонанс вырос!", reply_markup=get_main_keyboard())
+    else:
+        await message.answer(" Ошибка сохранения.")
+    await state.clear()
+
 # ========== COMMANDS ==========
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
