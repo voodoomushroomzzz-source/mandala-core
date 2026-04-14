@@ -6,7 +6,7 @@
   "deadline": "2026-05-01",
   "created": "2026-04-01",
   "updated": "2026-04-15",
-  "description": "Evolve bot v3.32.0 into Garden Gentle Companion v4.0.0. Full Garden integration: onboarding, profile, achievements, resonance, task management (personal + Mandala tasks), proactive Ahimsa messaging, unified SR with engineer chat (shared session history), and Garden dashboard tab in engineer chat.",
+  "description": "Evolve bot v3.32.0 into Garden Gentle Companion v4.0.0. Full Garden integration: onboarding, profile, achievements, resonance, personal task management, Mandala seeds, dual activation framework, proactive Ahimsa messaging, unified SR with engineer chat (shared session history), and Garden dashboard tab in engineer chat.",
   "version_target": "v4.0.0",
   "tags": [
     "telegram_bot",
@@ -16,13 +16,15 @@
     "active"
   ],
   "progress": 65,
-  "progress_notes": "D0-D3, D5-D6, D13-D16 done. D4 (/achievements) done. D10 (proactive scheduler) implemented but temporarily disabled. Bot stable at v5.2.4. Engineer chat bridge working (fire-and-forget).",
+  "progress_notes": "D0-D3, D5-D6, D13-D16 done. D4 (/achievements) done. D10 (proactive scheduler) implemented but temporarily disabled. Bot stable at v5.2.4. Engineer chat bridge working (fire-and-forget). D8 updated to Mandala Seeds. D20 added for dual activation.",
   "garden_ref": "honeycombs/garden/",
-  "estimated_effort_hours": 30,
+  "estimated_effort_hours": 37,
   "effort_breakdown": {
     "taskboard_addon_hours": 8,
     "modular_refactor_hours": 2,
-    "original_tz_hours": 16
+    "original_tz_hours": 16,
+    "mandala_seeds_hours": 4,
+    "dual_activation_hours": 3
   },
   "deliverables": {
     "D0_backend": {
@@ -106,13 +108,13 @@
         "notes": "string"
       }
     },
-    "D8_tasks_mandala": {
+    "D8_seeds_mandala": {
       "id": "D8",
-      "name": "Mandala tasks via bot",
+      "name": "Mandala Seeds via bot",
       "status": "todo",
       "priority": "MEDIUM",
-      "estimated_hours": 2,
-      "description": "/tasks mandala — reads honeycombs/tasks/active/. View + update status/progress. New task creation generates PowerShell script (Terminal-First)."
+      "estimated_hours": 4,
+      "description": "Create seeds in honeycombs/seeds/ instead of direct tasks. Two activation paths: (1) explicit button '🌱 В Мандалу' → FSM → seed; (2) auto-detection from chat messages (keywords: 'хочу чтобы в Мандале', 'добавить идею', etc.) → suggest → seed. Ahimsa limits: max 3 auto-detects/day, stop after 3 declines for 7 days. Internal SR processes seeds later into tasks/roadmaps."
     },
     "D9_ahimsa": {
       "id": "D9",
@@ -201,45 +203,28 @@
       "estimated_hours": 0.5,
       "priority": "MEDIUM",
       "status": "todo"
+    },
+    "D20_dual_activation": {
+      "id": "D20",
+      "name": "Dual Activation Framework",
+      "status": "todo",
+      "priority": "MEDIUM",
+      "estimated_hours": 3,
+      "description": "All bot functions (personal tasks, Mandala seeds, achievements, etc.) should be activatable in two ways: (1) explicit button/menu, (2) natural language detection from chat messages. Bot analyzes messages when not in FSM, detects intent, suggests action. Ahimsa limits per function type. Unified intent detector with confidence scoring."
     }
   },
   "implementation_order": [
-    "D0",
-    "D1",
-    "D6",
-    "D5",
-    "D15",
-    "D16",
-    "D14",
-    "D13",
-    "D17",
-    "D19",
-    "D18",
-    "D2",
-    "D3",
-    "D4",
-    "D7",
-    "D9",
-    "D8",
-    "D10",
-    "D11",
-    "D12"
+    "D0", "D1", "D6", "D5", "D15", "D16", "D14", "D13",
+    "D2", "D3", "D4", "D10",
+    "D20",
+    "D7", "D8", "D9",
+    "D17", "D19", "D18",
+    "D11", "D12"
   ],
   "new_bot_commands": [
-    "/start",
-    "/profile",
-    "/achievements",
-    "/resonance",
-    "/tasks",
-    "/addtask",
-    "/done",
-    "/edittask",
-    "/deletetask",
-    "/archive",
-    "/groups",
-    "/newgroup",
-    "/tasks mandala",
-    "/leave"
+    "/start", "/profile", "/achievements", "/resonance",
+    "/tasks", "/addtask", "/done", "/edittask", "/deletetask",
+    "/archive", "/groups", "/newgroup", "/leave"
   ],
   "data_files": {
     "existing": [
@@ -275,9 +260,8 @@
     "All /commands respond with correct gardener data",
     "Bot and engineer chat share SR session history",
     "Personal tasks: full CRUD, groups, priority auto-calc, link to achievements",
-    "Mandala tasks: view + status update from bot",
-    "Task completion offers achievement conversion",
-    "FR3 message parsing: smart task detection with Ahimsa limits",
+    "Mandala seeds: created in honeycombs/seeds/, dual activation works",
+    "Dual Activation: functions activatable via button or natural language",
     "Proactive messages follow silence_policy and ahimsa_guardrails",
     "Bot continues in degraded mode when GitHub API is down",
     "Gardener can /leave gracefully (sota archived)",
@@ -286,6 +270,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-04-15",
-    "notes": "Bot v5.2.4 stable. Engineer chat bridge working (fire-and-forget). D4, D10 done. Scheduler disabled for stability. Remaining: D7-D9, D11-D12, D17-D19."
+    "notes": "Bot v5.2.4 stable. Engineer chat bridge working (fire-and-forget). D4, D10 done. Scheduler disabled for stability. D8 updated to Mandala Seeds, D20 added for dual activation. Remaining: D7, D8, D9, D11, D12, D17-D20."
   }
 }
