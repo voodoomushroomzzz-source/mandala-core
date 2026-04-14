@@ -961,9 +961,16 @@ async def btn_engineer_chat(message: Message, state: FSMContext):
         reply_markup=get_cancel_keyboard()
     )
 
+async def _fire_and_forget(url, payload):
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=payload, timeout=5) as resp:
+                logger.info(f"Sent to engineer-chat, status: {resp.status}")
+    except Exception as e:
+        logger.error(f"Fire-and-forget error: {e}")
+
 @router.message(StateFilter(EngineerChatStates.waiting_for_message))
 async def engineer_chat_send(message: Message, state: FSMContext):
-    text = message.text.strip()
     if not text:
         await message.answer("💬 Напиши сообщение или нажми ❌ Отмена")
         return
