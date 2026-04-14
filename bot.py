@@ -1,4 +1,4 @@
-﻿# Test deploy trigger
+# Test deploy trigger
 # Force deploy 
 #!/usr/bin/env python3
 """
@@ -367,37 +367,144 @@ async def onboarding_evening(message: Message, state: FSMContext):
     )
 
 
-# ========== ACHIEVEMENTS FSM ==========
-class AchievementStates(StatesGroup):
-    waiting_for_category = State()
-    waiting_for_title = State()
-    waiting_for_description = State()
-    waiting_for_bonus = State()
+# ========== COMMANDS ==========
+@router.message(Command("start"))
+async def cmd_start(message: Message, state: FSMContext):
+    await state.clear()
+    user_id = str(message.from_user.id)
+    
+    gardener = await read_gardener()
+    
+    # Файл существует и telegram_id совпадает — приветствуем
+    if gardener and str(gardener.get("identity", {}).get("telegram_id", "")) == user_id:
+        name = gardener.get("identity", {}).get("name", "Садовник")
+        await message.answer(f"🌱 С возвращением, {name}!", reply_markup=get_main_keyboard())
+        return
+    
+    # Файла нет или telegram_id не совпадает — запускаем онбординг
+    await state.set_state(GardenOnboardingStates.waiting_for_name)
+    await message.answer(
+        "🌱 <b>Добро пожаловать в Сад Мандалы!</b>\n\n"
+        "Я — твой Нежный Спутник. Давай познакомимся.\n\n"
+        "Как мне тебя называть?",
+        reply_markup=get_cancel_keyboard()
+    )
 
-@router.message(Command("achievements"))
-@router.message(F.text == " Достижения")
-async def cmd_achievements(message: Message):
+@router.message(Command("profile"))
+async def cmd_profile(message: Message):
     if not await is_authorized(str(message.from_user.id)):
-        await message.answer(" Сначала /start")
+        await message.answer("🌱 Сначала /start [пароль]")
+        return
+    
+    gardener = await read_gardener()
+    if not gardener:
+        await message.answer("⚠️ Профиль не найден")
+        return
+    
+    name = gardener.get("identity", {}).get("name", "Садовник")
+    resonance = gardener.get("identity", {}).get("resonance_level", 13)
+    # Достижения
+    achievements = await read_gardener_file("achievements.json") or []
+    top_achievements = sorted(achievements, key=lambda x: x.get("resonance_bonus", 0), reverse=True)[:3]
+    
+    # Задачи
+    tasks = await read_gardener_file("tasks.json") or []
+    active_tasks = [t for t in tasks if t.get("status") != "completed"]
+    
+    text = f"🌱 <b>{name}</b>\n└ Резонанс: {resonance}%\n\n"
+    
+    if top_achievements:
+        text += "<b>🏆 Топ достижений:</b>\n"
+        for ach in top_achievements:
+            text += f"  • {ach.get('title', '—')} (+{ach.get('resonance_bonus', 0)})\n"
+    
+    text += f"\n📋 <b>Активных задач:</b> {len(active_tasks)}"
+    
+    await message.answer(text)
+
+
+@router.message(Command("resonance"))
+async def cmd_resonance(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌱 Сначала /start")
         return
     
     achievements = await read_gardener_file("achievements.json") or []
-    if not achievements:
-        await message.answer(" У тебя пока нет достижений.\n\nДобавь первое: /addachievement", reply_markup=get_main_keyboard())
-        return
     
-    cats = {"health": [], "creativity": [], "knowledge": [], "exploration": [], "relationships": []}
+    weights = {
+        "health": 1.2,
+        "creativity": 1.1,
+        "knowledge": 1.0,
+        "exploration": 1.1,
+        "relationships": 1.0
+    }
+    
+    total = 13
     for ach in achievements:
         cat = ach.get("category", "knowledge")
-        if cat in cats:
-            cats[cat].append(ach)
+        bonus = ach.get("resonance_bonus", 1)
+        total += bonus * weights.get(cat, 1.0)
     
-    text = " <b>Твои достижения:</b>\n\n"
-    emoji = {"health": "", "creativity": "", "knowledge": "", "exploration": "", "relationships": ""}
-    for cat, items in cats.items():
-        if items:
-            text += f"{emoji.get(cat, '')} <b>{cat.title()}:</b>\n"
-            for ach in items[:5]:
-                text += f"   {ach.get('title', '')} (+{ach.get('resonance_bonus', 1)}%)\n"
-            text += "\n"
-    await message.answer(text, reply_markup=get_main_keyboard())
+    total = min(100, int(total))
+    
+    gardener = await read_gardener()
+    history = gardener.get("growth_history", []) if gardener else []
+    
+    text = f"✨ <b>Резонанс: {total}%</b>"
+    if history:
+        text += "\n\n📈 История:\n"
+        for h in history[-5:]:
+            text += f"  {h.get('date', '?')}: {h.get('resonance', '?')}%\n"
+    
+    await message.answer(text)
+
+
+@router.message(F.text == "🌱 Профиль")
+async def btn_profile(message: Message):
+    await cmd_profile(message)
+
+# ========== MAIN HANDLER (Gentle SR) ==========
+@router.message()
+async def handle_gentle_sr(message: Message):
+    if not await is_authorized(str(message.from_user.id)):
+        await message.answer("🌱 Сначала /start [пароль]")
+        return
+    
+    user_text = message.text or ""
+    if not user_text.strip():
+        return
+    
+    gardener = await read_gardener()
+    gardener_context = {
+        "gardener_id": GARDENER_ID,
+        "name": gardener.get("identity", {}).get("name", ""),
+        "resonance_level": gardener.get("identity", {}).get("resonance_level", 13),
+        "interests": gardener.get("personal_info", {}).get("interests", []),
+        "goals": gardener.get("personal_info", {}).get("goals", [])
+    }
+    
+    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+    
+    session_id = f"tg_{message.from_user.id}"
+    response = await call_bot_ask(session_id, user_text, gardener_context)
+    
+    if response:
+        await message.answer(response, reply_markup=get_main_keyboard())
+    else:
+        await message.answer("😔 СР временно недоступен. Попробуй позже.", reply_markup=get_main_keyboard())
+
+# ========== WEBHOOK ==========
+async def on_startup():
+    await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET, drop_pending_updates=True)
+    logger.info(f"Webhook set: {WEBHOOK_URL}")
+
+def main():
+    app = web.Application()
+    SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
+    app.router.add_get("/", lambda _: web.Response(text="Mandala Garden Bot v5.1.0"))
+    setup_application(app, dp, bot=bot)
+    web.run_app(app, host="0.0.0.0", port=PORT)
+
+if __name__ == "__main__":
+    dp.startup.register(on_startup)
+    main()
