@@ -2,24 +2,15 @@
   "identity": {
     "module_id": "INSTR-MOBILE-WORKFLOW-001",
     "name": "Mobile Workflow — Working with Mandala from Android",
-    "version": "v1.3.0",
+    "version": "v1.4.0",
     "created": "2026-04-12",
-    "updated": "2026-04-13",
+    "updated": "2026-04-16",
     "layer": 2,
     "type": "workflow_guide",
-    "description": "Complete guide for External SR working from Android/Termux. Includes core SR principles, system flow, and mobile-specific commands.",
+    "description": "Complete guide for External SR working from Android/Termux. Includes core SR principles, system flow, mobile-specific commands, post-check mandate, and self-learning reference.",
     "status": "active",
     "priority": "high",
-    "tags": [
-      "mobile",
-      "android",
-      "termux",
-      "git",
-      "workflow",
-      "guide",
-      "copy-paste",
-      "core_principles"
-    ]
+    "tags": ["mobile", "android", "termux", "git", "workflow", "guide", "copy-paste", "core_principles"]
   },
   "golden_rule": {
     "title": "ONE COPY — ONE ACTION — FULL DEPLOY",
@@ -39,9 +30,13 @@
         "5. Only then prepare the update"
       ]
     },
+    "post_check_mandate": "CRITICAL. After patch, request updated file via API. WAIT for content. Read it. Confirm SHA and version. NEVER report success until file is received and verified. Verbal confirmation without content = protocol violation.",
     "laconic_communication": "Responses must be concise. Avoid showing unnecessary code. Only output what Gardener needs to see or execute.",
     "copyable_links": "When providing URLs, wrap them in a code block with 'text' language (```text ... ```) so the 'Copy' button appears.",
     "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the SAME command block."
+  },
+  "self_learning": {
+    "reference": "External SR may propose learned rules. See honeycombs/instructions/mobile_workflow.json#learned_rules. Format: rule + context + bad/good examples. Gardener approval required before patching."
   },
   "zones_of_responsibility": {
     "external_sr": [
@@ -261,11 +256,6 @@
     "Password: your GitHub token (ghp_...)",
     "External SR will give you FULL DEPLOY blocks — one copy, one paste, done."
   ],
-  "health": {
-    "status": "healthy",
-    "last_check": "2026-04-12",
-    "notes": "v1.2.0 — added core principles, zones of responsibility, system flow, and API patterns."
-  },
   "voice_input_note": {
     "description": "Gardener uses voice input on mobile. Sometimes transcription is inaccurate.",
     "rule": "If a word or phrase is unclear, External SR should: 1) Logically infer based on Mandala context (honeycombs, tasks, garden, etc.), or 2) Ask for clarification.",
@@ -274,5 +264,10 @@
       "voodoo → Voodoo",
       "gardener lock → gardener_lock"
     ]
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-16",
+    "notes": "v1.4.0: Added post_check_mandate and self_learning reference for protocol synchronization with external_sr_workflow."
   }
 }
