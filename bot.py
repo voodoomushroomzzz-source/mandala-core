@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v5.4.1
+Mandala Garden Bot — Gentle Companion v5.5.0
 Fixes from v5.4.0:
 - BUG FIX: task_new_group — missing text handler for TaskStates.waiting_for_group
   caused infinite hang when user typed new group name → FIXED
@@ -465,61 +465,61 @@ class LeaveStates(StatesGroup):
 
 def get_cancel_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="❌ Отмена")]],
+        keyboard=[[KeyboardButton(text="— Отмена")]],
         resize_keyboard=True, one_time_keyboard=True
     )
 
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="🌿 Профиль"), KeyboardButton(text="🏆 Достижения")],
-            [KeyboardButton(text="📋 Задачи"), KeyboardButton(text="✨ Резонанс")],
-            [KeyboardButton(text="💬 В инженерный чат")]
+            [KeyboardButton(text="◈ Профиль"), KeyboardButton(text="◆ Достижения")],
+            [KeyboardButton(text="⬡ Задачи"), KeyboardButton(text="⟁ Резонанс")],
+            [KeyboardButton(text="⌬ Инженерный чат")]
         ],
         resize_keyboard=True
     )
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="💚 Здоровье", callback_data="ach_cat_health")],
-        [InlineKeyboardButton(text="🎨 Творчество", callback_data="ach_cat_creativity")],
-        [InlineKeyboardButton(text="📚 Знания", callback_data="ach_cat_knowledge")],
-        [InlineKeyboardButton(text="🌍 Исследования", callback_data="ach_cat_exploration")],
-        [InlineKeyboardButton(text="🤝 Отношения", callback_data="ach_cat_relationships")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_achievement")]
+        [InlineKeyboardButton(text="◆ Здоровье", callback_data="ach_cat_health")],
+        [InlineKeyboardButton(text="◆ Творчество", callback_data="ach_cat_creativity")],
+        [InlineKeyboardButton(text="◆ Знания", callback_data="ach_cat_knowledge")],
+        [InlineKeyboardButton(text="◆ Исследования", callback_data="ach_cat_exploration")],
+        [InlineKeyboardButton(text="◆ Отношения", callback_data="ach_cat_relationships")],
+        [InlineKeyboardButton(text="— Отмена", callback_data="cancel_achievement")]
     ])
 
 def get_groups_keyboard(groups: list) -> InlineKeyboardMarkup:
     btns = [[InlineKeyboardButton(text=g["name"], callback_data=f"grp_{g['id']}")] for g in groups]
     btns.append([InlineKeyboardButton(text="➕ Новая группа", callback_data="new_group")])
-    btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")])
+    btns.append([InlineKeyboardButton(text="— Отмена", callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_life_area_keyboard() -> InlineKeyboardMarkup:
     areas = [
-        ("❤️ Здоровье", "health"), ("🎨 Творчество", "creativity"),
-        ("📚 Знания", "knowledge"), ("🗺️ Исследования", "exploration"),
-        ("👥 Отношения", "relationships"), ("📌 Другое", "other")
+        ("◆ Здоровье", "health"), ("◆ Творчество", "creativity"),
+        ("◆ Знания", "knowledge"), ("◆ Исследования", "exploration"),
+        ("◆ Отношения", "relationships"), ("◆ Другое", "other")
     ]
     btns = [[InlineKeyboardButton(text=name, callback_data=f"area_{val}")] for name, val in areas]
-    btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")])
+    btns.append([InlineKeyboardButton(text="— Отмена", callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_confirm_task_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✅ Создать задачу", callback_data="confirm_task")],
-        [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")]
+        [InlineKeyboardButton(text="◈ Подтвердить", callback_data="confirm_task")],
+        [InlineKeyboardButton(text="— Отмена", callback_data="cancel_task")]
     ])
 
 def get_tasks_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="➕ Добавить задачу", callback_data="start_addtask")],
+        [InlineKeyboardButton(text="+ Новая задача", callback_data="start_addtask")],
     ])
 
 def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌙 Да, архивировать", callback_data="leave_confirm")],
-        [InlineKeyboardButton(text="🌿 Нет, остаюсь", callback_data="leave_cancel")]
+        [InlineKeyboardButton(text="◈ Да, архивировать", callback_data="leave_confirm")],
+        [InlineKeyboardButton(text="◈ Нет, остаюсь", callback_data="leave_cancel")]
     ])
 
 # ─── Interaction tracker ──────────────────────────────────────────────────────
@@ -582,15 +582,15 @@ async def send_morning_greeting(telegram_id: str) -> None:
         return
     name = gardener.get("identity", {}).get("name", "Садовник")
     if phase == 2:
-        text = f"🌸 {name}, я здесь, если понадоблюсь.\nНикакого давления — просто знай, что Сад ждёт тебя. 🌿"
+        text = f"◈ {name}, я здесь если понадоблюсь.\nБез давления. Система ждёт твоего сигнала."
     else:
         tasks = await load_tasks()
         active = [t for t in tasks if t.get("status") != "completed"]
         task_hint = ""
         if active:
             top = sorted(active, key=lambda x: x.get("priority", 5), reverse=True)[0]
-            task_hint = f"\n\n🌱 Сегодня можно уделить внимание: <i>{top['title']}</i>"
-        text = f"🌅 Доброе утро, {name}!\n\nНовый день — новая возможность для роста.{task_hint}\n\nКак ты сегодня? 🌿"
+            task_hint = f"\n\n◈ Рекомендую сегодня: <i>{top['title']}</i>"
+        text = f"◬ Утро, {name}!\n\nНовый цикл — новая возможность.{task_hint}\n\nКак ты? ◈"
     try:
         await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
         _mark_proactive_sent(telegram_id)
@@ -613,9 +613,9 @@ async def send_evening_checkin(telegram_id: str) -> None:
         return
     name = gardener.get("identity", {}).get("name", "Садовник")
     text = (
-        f"🌙 Добрый вечер, {name}.\n\n"
-        f"Что расцвело сегодня в твоём Саду? Если было что-то важное — "
-        f"можешь добавить достижение через /achievements.\n\nСпокойной ночи 🌸"
+        f"◬ Вечер, {name}.\n\n"
+        f"Что произошло сегодня? Если было что-то важное — "
+        f"Зафикисруй достижение: /achievements\n\nДо следующего цикла. ◈"
     )
     try:
         await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
@@ -668,14 +668,14 @@ async def cmd_start(message: Message, state: FSMContext):
 
     if gardener and str(gardener.get("identity", {}).get("telegram_id", "")) == user_id:
         name = gardener.get("identity", {}).get("name", "Садовник")
-        await message.answer(f"🌸 С возвращением, {name}!", reply_markup=get_main_keyboard())
+        await message.answer(f"◈ С возвращением, {name}!", reply_markup=get_main_keyboard())
         return
 
     if gardener:
         bound_id = str(gardener.get("identity", {}).get("telegram_id", "") or "").strip()
         if bound_id and bound_id != user_id:
             if not password or password != ALLOWED_PASSWORD:
-                await message.answer("🔒 Доступ защищён паролем.\nИспользуй: /start <пароль>")
+                await message.answer("◈ Доступ защищён паролем.\nИспользуй: /start <пароль>")
                 return
             gardener.setdefault("identity", {})["telegram_id"] = user_id
             gardener["identity"]["updated"] = _today()
@@ -686,9 +686,9 @@ async def cmd_start(message: Message, state: FSMContext):
 
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
-        "🌸 <b>Добро пожаловать в Сад!</b>\n\n"
+        "◬ <b>Добро пожаловать в систему!</b>\n\n"
         "Я — твой Gentle Companion. Давай познакомимся.\n\n"
-        "🌱 Как тебя зовут? Это имя будет только между нами.",
+        "◈ Как тебя зовут? Это имя будет только между нами.",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -696,13 +696,13 @@ async def cmd_start(message: Message, state: FSMContext):
 async def onboarding_name(message: Message, state: FSMContext):
     name = message.text.strip()
     if len(name) < 2:
-        await message.answer("🌱 Имя должно быть не короче 2 символов.")
+        await message.answer("◈ Имя должно быть не короче 2 символов.")
         return
     await state.update_data(name=name)
     await state.set_state(GardenOnboardingStates.waiting_for_interests)
     await message.answer(
-        f"✨ Приятно познакомиться, {name}!\n\n"
-        "🎯 Что тебя вдохновляет прямо сейчас? Напиши 3 вещи через запятую.\n\n"
+        f"◬ Приятно познакомиться, {name}!\n\n"
+        "◈ Что тебя вдохновляет прямо сейчас? Напиши 3 вещи через запятую.\n\n"
         "<i>Первое, что приходит в голову — самое честное.</i>",
         reply_markup=get_cancel_keyboard()
     )
@@ -711,12 +711,12 @@ async def onboarding_name(message: Message, state: FSMContext):
 async def onboarding_interests(message: Message, state: FSMContext):
     interests = [i.strip() for i in message.text.split(",") if i.strip()]
     if len(interests) < 1:
-        await message.answer("🌱 Напиши хотя бы один интерес.")
+        await message.answer("◈ Напиши хотя бы один интерес.")
         return
     await state.update_data(interests=interests)
     await state.set_state(GardenOnboardingStates.waiting_for_goals)
     await message.answer(
-        "🎯 Какие семена хочешь посадить в этом сезоне?\n\n<i>Это не обязательства. Просто намерения.</i>",
+        "◈ Какие намерения хочешь посадить в этом сезоне?\n\n<i>Это не обязательства. Просто намерения.</i>",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -725,7 +725,7 @@ async def onboarding_goals(message: Message, state: FSMContext):
     goals = [g.strip() for g in message.text.split(",") if g.strip()]
     await state.update_data(goals=goals)
     await state.set_state(GardenOnboardingStates.waiting_for_health_current)
-    await message.answer("💚 Оцени, где ты сейчас в сфере <b>здоровья</b> — от 1 до 10.", reply_markup=get_cancel_keyboard())
+    await message.answer("◆ Здоровье — оцени сейчас (1-10) — от 1 до 10.", reply_markup=get_cancel_keyboard())
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_health_current))
 async def onboarding_health_current(message: Message, state: FSMContext):
@@ -738,7 +738,7 @@ async def onboarding_health_current(message: Message, state: FSMContext):
         return
     await state.update_data(health_current=val)
     await state.set_state(GardenOnboardingStates.waiting_for_health_target)
-    await message.answer("💚 А к какому уровню стремишься? (1-10)")
+    await message.answer("◆ Цель по здоровью (1-10)? (1-10)")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_health_target))
 async def onboarding_health_target(message: Message, state: FSMContext):
@@ -751,7 +751,7 @@ async def onboarding_health_target(message: Message, state: FSMContext):
         return
     await state.update_data(health_target=val)
     await state.set_state(GardenOnboardingStates.waiting_for_creativity_current)
-    await message.answer("🎨 Оцени текущий уровень <b>творчества</b> от 1 до 10.")
+    await message.answer("◆ Творчество — оцени сейчас (1-10) от 1 до 10.")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_current))
 async def onboarding_creativity_current(message: Message, state: FSMContext):
@@ -764,7 +764,7 @@ async def onboarding_creativity_current(message: Message, state: FSMContext):
         return
     await state.update_data(creativity_current=val)
     await state.set_state(GardenOnboardingStates.waiting_for_creativity_target)
-    await message.answer("🎨 А к какому уровню стремишься? (1-10)")
+    await message.answer("◆ Цель по творчеству (1-10)? (1-10)")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_target))
 async def onboarding_creativity_target(message: Message, state: FSMContext):
@@ -778,7 +778,7 @@ async def onboarding_creativity_target(message: Message, state: FSMContext):
     await state.update_data(creativity_target=val)
     await state.set_state(GardenOnboardingStates.waiting_for_morning)
     await message.answer(
-        "⏰ Когда тебе комфортно получать утреннее приветствие?\n"
+        "◷ Время утреннего сигнала (ЧЧ:ММ или 'нет') получать утреннее приветствие?\n"
         "Формат ЧЧ:ММ или 'нет'.",
         reply_markup=get_cancel_keyboard()
     )
@@ -789,7 +789,7 @@ async def onboarding_morning(message: Message, state: FSMContext):
     morning = "" if text == "нет" else text
     await state.update_data(morning_time=morning)
     await state.set_state(GardenOnboardingStates.waiting_for_evening)
-    await message.answer("🌙 А вечерний чек-ин? (ЧЧ:ММ или 'нет')")
+    await message.answer("◷ Вечерний сигнал (ЧЧ:ММ или 'нет')? (ЧЧ:ММ или 'нет')")
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_evening))
 async def onboarding_evening(message: Message, state: FSMContext):
@@ -825,9 +825,9 @@ async def onboarding_evening(message: Message, state: FSMContext):
     }
     groups = {
         "groups": [
-            {"id": "group_001", "name": "🌿 Сад", "created": _today()},
-            {"id": "group_002", "name": "💼 Работа", "created": _today()},
-            {"id": "group_003", "name": "🏡 Дом", "created": _today()}
+            {"id": "group_001", "name": "◈ Личное", "created": _today()},
+            {"id": "group_002", "name": "◈ Работа", "created": _today()},
+            {"id": "group_003", "name": "◈ Дом", "created": _today()}
         ],
         "default_group": "group_001"
     }
@@ -848,25 +848,25 @@ async def onboarding_evening(message: Message, state: FSMContext):
     _track_interaction(user_id)
     await state.set_state(GardenOnboardingStates.done)
     await message.answer(
-        f"🌸 <b>{data['name']}, добро пожаловать в Сад!</b>\n\n"
-        f"✨ Твой начальный резонанс: <b>{initial_resonance}%</b>\n\n"
-        f"🌱 Резонанс только растёт. Нет наказаний за паузы.\n\nЯ здесь рядом 🌿",
+        f"◬ <b>{data['name']}, добро пожаловать в систему!</b>\n\n"
+        f"◈ Начальный резонанс: <b>{initial_resonance}%</b>\n\n"
+        f"— Резонанс только растёт. Нет наказаний за паузы.\n\nСистема активна ◈",
         reply_markup=get_main_keyboard()
     )
 
 # ─── /profile ─────────────────────────────────────────────────────────────────
 
 @router.message(Command("profile"))
-@router.message(F.text == "🌿 Профиль")
+@router.message(F.text == "◈ Профиль")
 async def cmd_profile(message: Message):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start")
+        await message.answer("◈ Используй /start")
         return
     gardener = await read_gardener()
     if not gardener:
-        await message.answer("🌸 Профиль не найден")
+        await message.answer("◈ Профиль не найден")
         return
     name = gardener.get("identity", {}).get("name", "Садовник")
     resonance = gardener.get("identity", {}).get("resonance_level", 13)
@@ -875,24 +875,24 @@ async def cmd_profile(message: Message):
     interests = gardener.get("personal_info", {}).get("interests", [])
     interests_str = ", ".join(interests[:3]) if interests else "не указаны"
     await message.answer(
-        f"🌿 <b>{name}</b>\n✨ Резонанс: <b>{resonance}%</b>\n"
-        f"📋 Активных задач: {len(active_tasks)}\n🎯 Интересы: {interests_str}",
+        f"◈ <b>{name}</b>\n⟁ Резонанс: <b>{resonance}%</b>\n"
+        f"⬡ Активных задач: {len(active_tasks)}\n◈ Интересы: {interests_str}",
         reply_markup=get_main_keyboard()
     )
 
 # ─── /resonance ───────────────────────────────────────────────────────────────
 
 @router.message(Command("resonance"))
-@router.message(F.text == "✨ Резонанс")
+@router.message(F.text == "⟁ Резонанс")
 async def cmd_resonance(message: Message):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     gardener = await read_gardener()
     if not gardener:
-        await message.answer("🌸 Профиль не найден", reply_markup=get_main_keyboard())
+        await message.answer("◈ Профиль не найден", reply_markup=get_main_keyboard())
         return
 
     resonance = gardener.get("identity", {}).get("resonance_level", 13)
@@ -907,19 +907,19 @@ async def cmd_resonance(message: Message):
 
     if history:
         recent = history[-5:]
-        history_text = "\n📈 <b>История роста:</b>\n"
+        history_text = "\n◈ <b>Хроника роста:</b>\n"
         for entry in reversed(recent):
             history_text += f"• {entry.get('date','?')}: {entry.get('resonance','?')}% ({entry.get('achievements_count',0)} достиж.)\n"
     else:
         history_text = "\n<i>История пока пуста — начни добавлять достижения!</i>"
 
     bar_filled = round(resonance / 10)
-    bar = "🟢" * bar_filled + "⬜" * (10 - bar_filled)
+    bar = "■" * bar_filled + "□" * (10 - bar_filled)
 
     await message.answer(
-        f"✨ <b>Твой резонанс</b>\n\n{bar}\n<b>{resonance}%</b>\n\n"
-        f"🌱 <b>Сферы жизни:</b>\n{areas_text}{history_text}\n\n"
-        f"<i>Резонанс только растёт. Каждое достижение — пётал твоего Цветка.</i>",
+        f"⟁ <b>Резонанс системы</b>\n\n{bar}\n<b>{resonance}%</b>\n\n"
+        f"◆ <b>Орбиты:</b>\n{areas_text}{history_text}\n\n"
+        f"<i>Резонанс только растёт. Каждое достижение расширяет орбиту.</i>",
         reply_markup=get_main_keyboard()
     )
 
@@ -930,12 +930,12 @@ async def cmd_ask(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     await state.set_state(AskStates.waiting_for_question)
     await message.answer(
-        "🌿 <b>Companion слушает</b>\n\nЧто у тебя на душе? Задай вопрос или просто поделись.\n\n"
-        "<i>Нажми ❌ Отмена чтобы вернуться.</i>",
+        "◬ <b>Companion слушает</b>\n\nЧто у тебя на душе? Задай вопрос или просто поделись.\n\n"
+        "<i>Нажми — Отмена чтобы вернуться.</i>",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -945,12 +945,12 @@ async def ask_question(message: Message, state: FSMContext):
     _track_interaction(user_id)
     text = message.text.strip()
     if not text:
-        await message.answer("🌿 Напиши что-нибудь или нажми ❌ Отмена")
+        await message.answer("◈ Напиши что-нибудь или нажми — Отмена")
         return
     gardener = await read_gardener() or {}
     name = gardener.get("identity", {}).get("name", "Садовник")
     resonance = gardener.get("identity", {}).get("resonance_level", 13)
-    await message.answer("🌱 Думаю...")
+    await message.answer("◈ Обрабатываю...")
     try:
         payload = {
             "session_id": MAIN_SESSION_ID,
@@ -962,49 +962,49 @@ async def ask_question(message: Message, state: FSMContext):
             if resp.status in [200, 202]:
                 try:
                     data = await resp.json()
-                    reply = data.get("response") or data.get("message") or "🌿 Я здесь, рядом."
+                    reply = data.get("response") or data.get("message") or "◈ Система слышит тебя."
                 except Exception:
-                    reply = "🌿 Я слышу тебя. Сад с тобой."
+                    reply = "◈ Я слышу тебя. SR с тобой."
             else:
-                reply = "🌿 Не смог дотянуться до Сада, но я здесь рядом."
+                reply = "◈ SR недоступен, но я здесь рядом."
     except Exception as e:
         logger.error(f"Ask SR error: {e}")
-        reply = "🌿 Связь с Садом прервалась. Попробуй позже."
+        reply = "◈ Связь с SR прервалась. Попробуй позже."
     await state.clear()
     await message.answer(reply, reply_markup=get_main_keyboard())
 
 # ─── /achievements ────────────────────────────────────────────────────────────
 
 @router.message(Command("achievements"))
-@router.message(F.text == "🏆 Достижения")
+@router.message(F.text == "◆ Достижения")
 async def cmd_achievements(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start")
+        await message.answer("◈ Используй /start")
         return
     achievements = await read_gardener_file("achievements.json") or []
     add_btn = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌸 Добавить достижение", callback_data="add_achievement")]
+        [InlineKeyboardButton(text="◈ Добавить достижение", callback_data="add_achievement")]
     ])
     if not achievements:
         await message.answer(
-            "🌸 Достижений пока нет.\n\nКаждое достижение — пётал твоего Цветка Жизни.\nДобавь первое!",
+            "◈ Достижений пока нет.\n\nКаждое достижение расширяет твою орбиту.\nДобавь первое.",
             reply_markup=add_btn
         )
         return
     recent = achievements[-3:]
-    text = "🏆 <b>Твои достижения:</b>\n\n"
+    text = "◆ <b>Достижения:</b>\n\n"
     for ach in reversed(recent):
-        text += f"{ach.get('icon','🌸')} <b>{ach.get('title','')}</b>\n📅 {ach.get('completed','')} · +{ach.get('resonance_bonus',1)} резонанс\n\n"
-    text += f"<i>Всего: {len(achievements)}</i>"
+        text += f"{ach.get('icon','◈')} <b>{ach.get('title','')}</b>\n📅 {ach.get('completed','')} · +{ach.get('resonance_bonus',1)} резонанс\n\n"
+    text += f"<i>◈ Всего: {len(achievements)}</i>"
     await message.answer(text, reply_markup=add_btn)
 
 @router.callback_query(F.data == "add_achievement")
 async def cb_add_achievement(callback: CallbackQuery, state: FSMContext):
     await state.set_state(AchievementStates.waiting_for_category)
     await callback.message.answer(
-        "🌸 <b>Что расцвело в твоём Саду?</b>\n\nВыбери категорию:",
+        "◈ <b>Что проявилось в твоей орбите?</b>\n\nВыбери сферу:",
         reply_markup=get_achievement_category_keyboard()
     )
     await callback.answer()
@@ -1014,21 +1014,21 @@ async def ach_category(callback: CallbackQuery, state: FSMContext):
     category = callback.data.replace("ach_cat_", "")
     await state.update_data(category=category)
     await state.set_state(AchievementStates.waiting_for_title)
-    await callback.message.edit_text("🌸 Как называется это достижение?\n\n<i>Опиши в одном предложении.</i>", reply_markup=None)
+    await callback.message.edit_text("◈ Как назовёшь это достижение?\n\n<i>Одним предложением.</i>", reply_markup=None)
     await callback.answer()
 
 @router.message(StateFilter(AchievementStates.waiting_for_title))
 async def ach_title(message: Message, state: FSMContext):
     await state.update_data(title=message.text.strip())
     await state.set_state(AchievementStates.waiting_for_description)
-    await message.answer("🌸 Расскажи подробнее (или '-'):")
+    await message.answer("◈ Подробнее (или '-'): (или '-'):")
 
 @router.message(StateFilter(AchievementStates.waiting_for_description))
 async def ach_description(message: Message, state: FSMContext):
     desc = "" if message.text.strip() == "-" else message.text.strip()
     await state.update_data(description=desc)
     await state.set_state(AchievementStates.waiting_for_bonus)
-    await message.answer("✨ Насколько это важно для тебя? Оцени от 1 до 10.\n\n<i>Это станет бонусом к резонансу.</i>")
+    await message.answer("◈ Значимость (1-10): для тебя? Оцени от 1 до 10.\n\n<i>Бонус к резонансу.</i>")
 
 @router.message(StateFilter(AchievementStates.waiting_for_bonus))
 async def ach_bonus(message: Message, state: FSMContext):
@@ -1037,7 +1037,7 @@ async def ach_bonus(message: Message, state: FSMContext):
     except Exception:
         bonus = 3
     data = await state.get_data()
-    icon = {"health": "💚", "creativity": "🎨", "knowledge": "📚", "exploration": "🌍", "relationships": "🤝"}.get(data.get("category", ""), "🌸")
+    icon = {"health": "◆", "creativity": "◆", "knowledge": "◆", "exploration": "◆", "relationships": "◆"}.get(data.get("category", ""), "◈")
     achievements = await read_gardener_file("achievements.json") or []
     achievements.append({
         "id": f"ach_{len(achievements)+1:03d}",
@@ -1061,40 +1061,40 @@ async def ach_bonus(message: Message, state: FSMContext):
         _invalidate_gardener_cache()
     await state.clear()
     await message.answer(
-        f"{icon} <b>Достижение добавлено!</b>\n\n<b>{data.get('title','')}</b>\n✨ +{bonus} к резонансу\n\n<i>Новый пётал расцвёл 🌸</i>",
+        f"{icon} <b>Достижение добавлено!</b>\n\n<b>{data.get('title','')}</b>\n◈ +{bonus} к резонансу\n\n<i>Орбита расширяется ◈</i>",
         reply_markup=get_main_keyboard()
     )
 
 @router.callback_query(F.data == "cancel_achievement")
 async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
     await state.clear()
-    await callback.message.edit_text("❌ Отменено.")
+    await callback.message.edit_text("— Отменено.")
     await callback.answer()
 
 # ─── /tasks ───────────────────────────────────────────────────────────────────
 
 @router.message(Command("tasks"))
-@router.message(F.text == "📋 Задачи")
+@router.message(F.text == "⬡ Задачи")
 async def cmd_tasks(message: Message):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     tasks = await load_tasks()
     active = [t for t in tasks if t.get("status") != "completed"]
     if not active:
-        await message.answer("✨ Нет активных задач.\n\nПосади первое семя в свой Сад!", reply_markup=get_main_keyboard())
-        await message.answer("Нажми чтобы добавить задачу:", reply_markup=get_tasks_keyboard())
+        await message.answer("◈ Активных задач нет.\n\nИнициируй первую задачу.", reply_markup=get_main_keyboard())
+        await message.answer("Добавить:", reply_markup=get_tasks_keyboard())
         return
     lines = []
     for t in active[:15]:
         dl = f" 📅{t['deadline']}" if t.get("deadline") else ""
         lines.append(f"• <code>{t['task_id']}</code>: {t['title']} (⭐{t.get('priority',5)}){dl}")
-    text = "📋 <b>Активные задачи:</b>\n\n" + "\n".join(lines)
+    text = "⬡ <b>Активные задачи:</b>\n\n" + "\n".join(lines)
     text += "\n\n<i>Завершить: /done task_id</i>"
     await message.answer(text, reply_markup=get_main_keyboard())
-    await message.answer("Управление задачами:", reply_markup=get_tasks_keyboard())
+    await message.answer("Действия:", reply_markup=get_tasks_keyboard())
 
 # ─── /addtask ─────────────────────────────────────────────────────────────────
 
@@ -1104,19 +1104,19 @@ async def cb_start_addtask(callback: CallbackQuery, state: FSMContext):
     if not await is_authorized(user_id):
         await callback.answer("Используй /start")
         return
+    await callback.answer()  # FIX: answer FIRST
     await state.set_state(TaskStates.waiting_for_title)
-    await callback.message.answer("📝 Введи название задачи:", reply_markup=get_cancel_keyboard())
-    await callback.answer()
+    await callback.message.answer("◈ Название задачи:", reply_markup=get_cancel_keyboard())
 
 @router.message(Command("addtask"))
 async def cmd_addtask(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     await state.set_state(TaskStates.waiting_for_title)
-    await message.answer("📝 Введи название задачи:", reply_markup=get_cancel_keyboard())
+    await message.answer("◈ Название задачи:", reply_markup=get_cancel_keyboard())
 
 @router.message(StateFilter(TaskStates.waiting_for_title))
 async def task_title(message: Message, state: FSMContext):
@@ -1127,22 +1127,20 @@ async def task_title(message: Message, state: FSMContext):
     await state.update_data(title=title)
     await state.set_state(TaskStates.waiting_for_group)
     groups = await list_groups()
-    await message.answer("📂 Выбери группу или создай новую:", reply_markup=get_groups_keyboard(groups))
+    await message.answer("⬡ Выбери орбиту или создай новую:", reply_markup=get_groups_keyboard(groups))
 
 @router.callback_query(F.data.startswith("grp_"))
 async def task_group(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()  # FIX: answer FIRST
     group_id = callback.data.replace("grp_", "")
     await state.update_data(group_id=group_id)
     await state.set_state(TaskStates.waiting_for_life_area)
-    await callback.message.edit_text("🌈 Выбери сферу жизни:", reply_markup=get_life_area_keyboard())
-    await callback.answer()
+    await callback.message.edit_text("⬡ Выбери сферу:", reply_markup=get_life_area_keyboard())
 
 @router.callback_query(F.data == "new_group")
 async def task_new_group_cb(callback: CallbackQuery, state: FSMContext):
-    """Asks user to type a new group name. Text is handled by task_group_name_input."""
-    await callback.message.edit_text("📂 Введи название новой группы:", reply_markup=None)
-    # state remains waiting_for_group — text handler below catches it
-    await callback.answer()
+    await callback.answer()  # FIX: answer FIRST
+    await callback.message.edit_text("⬡ Введи название новой орбиты:", reply_markup=None)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # KEY FIX: This handler was MISSING in v5.3.0 and v5.4.0.
@@ -1160,7 +1158,7 @@ async def task_group_name_input(message: Message, state: FSMContext):
     await state.update_data(group_id=new_group["id"])
     await state.set_state(TaskStates.waiting_for_life_area)
     await message.answer(
-        f"✅ Группа '<b>{new_group['name']}</b>' создана!\n\n🌈 Выбери сферу жизни:",
+        f"✅ Группа '<b>{new_group['name']}</b>' создана!\n\n◆ Выбери сферу:",
         reply_markup=get_life_area_keyboard()
     )
 
@@ -1198,19 +1196,20 @@ async def task_notes(message: Message, state: FSMContext):
     await state.update_data(notes=notes)
     data = await state.get_data()
     summary = (
-        f"<b>📋 Проверь задачу:</b>\n\n"
+        f"<b>◈ Проверь задачу:</b>\n\n"
         f"🏷️ <b>{data['title']}</b>\n"
         f"📂 Группа: {data.get('group_id','—')}\n"
-        f"🌈 Сфера: {data.get('life_area','—')}\n"
-        f"📅 Дедлайн: {data.get('deadline') or 'нет'}\n"
-        f"⏱️ Часы: {data.get('estimated_hours') or 'нет'}\n"
-        f"📝 Заметки: {notes or 'нет'}"
+        f"◆ Сфера: {data.get('life_area','—')}\n"
+        f"◷ Дедлайн: {data.get('deadline') or 'нет'}\n"
+        f"◈ Часы: {data.get('estimated_hours') or 'нет'}\n"
+        f"◈ Заметки: {notes or 'нет'}"
     )
     await state.set_state(TaskStates.waiting_for_confirm)
     await message.answer(summary, reply_markup=get_confirm_task_keyboard())
 
 @router.callback_query(F.data == "confirm_task")
 async def confirm_task(callback: CallbackQuery, state: FSMContext):
+    await callback.answer("Сохраняю в систему...")  # FIX: answer FIRST
     data = await state.get_data()
     new_task = await create_task(
         title=data["title"],
@@ -1221,82 +1220,82 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
         notes=data.get("notes", "")
     )
     await callback.message.edit_text(
-        f"✅ Задача '<b>{new_task['title']}</b>' создана!\n<code>{new_task['task_id']}</code>"
+        f"◈ Задача '<b>{new_task['title']}</b>' создана!\n<code>{new_task['task_id']}</code>"
     )
     await state.clear()
-    await callback.answer("Задача создана! 🌱")
-    await callback.message.answer("🌿 Задача посажена в твой Сад.", reply_markup=get_main_keyboard())
+    await callback.answer("Задача зафиксирована ◈")
+    await callback.message.answer("◈ Задача зафиксирована.", reply_markup=get_main_keyboard())
 
 @router.callback_query(F.data == "cancel_task")
 async def cancel_task_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()  # FIX: answer FIRST
     await state.clear()
-    await callback.message.edit_text("❌ Создание задачи отменено.")
-    await callback.answer()
-    await callback.message.answer("Возвращаемся в Сад 🌿", reply_markup=get_main_keyboard())
+    await callback.message.edit_text("— отменено")
+    await callback.message.answer("◈ Возврат в систему", reply_markup=get_main_keyboard())
 
 @router.message(Command("done"))
 async def cmd_done(message: Message):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     parts = message.text.split()
     if len(parts) < 2:
-        await message.answer("Укажи ID задачи: <code>/done task_20260415_001</code>", reply_markup=get_main_keyboard())
+        await message.answer("◈ ID задачи: <code>/done task_20260415_001</code>", reply_markup=get_main_keyboard())
         return
     task_id = parts[1]
     if await complete_task(task_id):
         await message.answer(
-            f"✅ Задача <code>{task_id}</code> выполнена!\n\n🌸 Добавь её как достижение? /achievements",
+            f"◈ Задача <code>{task_id}</code> выполнена!\n\n◈ Добавь как достижение? /achievements",
             reply_markup=get_main_keyboard()
         )
     else:
-        await message.answer("❌ Задача не найдена.", reply_markup=get_main_keyboard())
+        await message.answer("◈ Задача не найдена.", reply_markup=get_main_keyboard())
 
 @router.message(Command("groups"))
 async def cmd_groups(message: Message):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     groups = await list_groups()
     if not groups:
-        await message.answer("📂 Нет групп. Создай через /newgroup")
+        await message.answer("⬡ Орбит нет. Создай через /newgroup")
         return
     text = "\n".join([f"• {g['name']} ({g['id']})" for g in groups])
-    await message.answer(f"📂 <b>Группы:</b>\n{text}")
+    await message.answer(f"⬡ <b>Орбиты:</b>\n{text}")
 
 @router.message(Command("newgroup"))
 async def cmd_newgroup(message: Message):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     parts = message.text.split(maxsplit=1)
     if len(parts) < 2:
         await message.answer("Используй: /newgroup Название группы")
         return
     group = await create_group(parts[1].strip())
-    await message.answer(f"✅ Группа '{group['name']}' создана!")
+    await message.answer(f"◈ Орбита '{group['name']}' создана.")
 
 @router.message(Command("archive"))
 async def cmd_archive(message: Message):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     tasks = await load_tasks()
     completed = [t for t in tasks if t.get("status") == "completed"]
     if not completed:
-        await message.answer("📦 Нет завершённых задач для архивации.")
+        await message.answer("◈ Завершённых задач нет.")
         return
     await safe_write_gardener_file(f"tasks_archive_{_today()}.json", completed)
     await save_tasks([t for t in tasks if t.get("status") != "completed"])
-    await message.answer(f"📦 {len(completed)} задач перемещено в архив.")
+    await message.answer(f"◈ {len(completed)} задач перемещено в архив.")
 
 # ─── /leave ───────────────────────────────────────────────────────────────────
 
@@ -1304,11 +1303,11 @@ async def cmd_archive(message: Message):
 async def cmd_leave(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     await state.set_state(LeaveStates.waiting_for_confirm)
     await message.answer(
-        "🌙 <b>Ты хочешь архивировать свой Сад?</b>\n\n"
+        "◈ <b>Архивировать свой Сад?</b>\n\n"
         "Твои данные будут сохранены. Companion перестанет писать первым.\n\n"
         "<i>Это не конец — это пауза.</i>",
         reply_markup=get_leave_confirm_keyboard()
@@ -1326,22 +1325,22 @@ async def leave_confirm(callback: CallbackQuery, state: FSMContext):
     _invalidate_gardener_cache()
     await state.clear()
     await callback.message.edit_text(
-        "🌙 <b>Твой Сад засыпает.</b>\n\nСпасибо за то, что рос вместе со мной.\n"
-        "Возвращайся когда захочешь — я буду здесь. 🌸"
+        "◈ <b>Система переходит в архив.</b>\n\nСпасибо за то, что рос вместе со мной.\n"
+        "Возвращайся когда захочешь. ◈"
     )
     await callback.answer()
 
 @router.callback_query(F.data == "leave_cancel")
 async def leave_cancel(callback: CallbackQuery, state: FSMContext):
     await state.clear()
-    await callback.message.edit_text("🌿 Хорошо. Сад продолжает цвести!")
+    await callback.message.edit_text("◈ Система активна. Продолжаем.")
     await callback.answer()
 
 @router.message(Command("delete_all"))
 async def cmd_delete_all(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     await state.set_state(LeaveStates.waiting_for_delete_confirm_1)
     await message.answer(
@@ -1353,7 +1352,7 @@ async def cmd_delete_all(message: Message, state: FSMContext):
 @router.message(StateFilter(LeaveStates.waiting_for_delete_confirm_1))
 async def delete_confirm_1(message: Message, state: FSMContext):
     if message.text.strip() != "УДАЛИТЬ":
-        await message.answer("❌ Отменено.")
+        await message.answer("— Отменено.")
         await state.clear()
         return
     await state.set_state(LeaveStates.waiting_for_delete_confirm_2)
@@ -1362,7 +1361,7 @@ async def delete_confirm_1(message: Message, state: FSMContext):
 @router.message(StateFilter(LeaveStates.waiting_for_delete_confirm_2))
 async def delete_confirm_2(message: Message, state: FSMContext):
     if message.text.strip() != "ДА, УДАЛИТЬ ВСЁ":
-        await message.answer("❌ Отменено.")
+        await message.answer("— Отменено.")
         await state.clear()
         return
     await safe_write_gardener_file("gardener.json", {})
@@ -1372,22 +1371,22 @@ async def delete_confirm_2(message: Message, state: FSMContext):
     _invalidate_gardener_cache()
     await state.clear()
     await message.answer(
-        "🌑 Сад очищен.\n\nЕсли захочешь начать заново — /start 🌱",
+        "◈ Данные удалены.\n\nНачать заново: /start",
         reply_markup=ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="/start")]], resize_keyboard=True)
     )
 
 # ─── Engineer chat ────────────────────────────────────────────────────────────
 
-@router.message(F.text == "💬 В инженерный чат")
+@router.message(F.text == "⌬ Инженерный чат")
 async def btn_engineer_chat(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not await is_authorized(user_id):
-        await message.answer("🌸 Используй /start", reply_markup=get_main_keyboard())
+        await message.answer("◈ Используй /start", reply_markup=get_main_keyboard())
         return
     await state.set_state(EngineerChatStates.waiting_for_message)
     await message.answer(
-        "💬 <b>Инженерный чат</b>\n\nНапиши сообщение — оно отправится в основную сессию engineer-chat.\n\nДля отмены нажми ❌ Отмена",
+        "⌬ <b>Инженерный чат</b>\n\nНапиши сообщение — оно отправится в основную сессию engineer-chat.\n\nДля отмены нажми — Отмена",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -1395,7 +1394,7 @@ async def btn_engineer_chat(message: Message, state: FSMContext):
 async def engineer_chat_send(message: Message, state: FSMContext):
     text = message.text.strip()
     if not text:
-        await message.answer("💬 Напиши сообщение или нажми ❌ Отмена")
+        await message.answer("◈ Напиши сообщение или нажми — Отмена")
         return
     gardener = await read_gardener() or {}
     try:
@@ -1407,14 +1406,14 @@ async def engineer_chat_send(message: Message, state: FSMContext):
     except Exception as e:
         logger.error(f"Bot ask exception: {e}")
     await state.clear()
-    await message.answer("✅ Отправлено в инженерный чат", reply_markup=get_main_keyboard())
+    await message.answer("◈ Отправлено в инженерный чат", reply_markup=get_main_keyboard())
 
 # ─── Cancel ───────────────────────────────────────────────────────────────────
 
-@router.message(F.text == "❌ Отмена")
+@router.message(F.text == "— Отмена")
 async def btn_cancel(message: Message, state: FSMContext):
     await state.clear()
-    await message.answer("❌ Действие отменено.", reply_markup=get_main_keyboard())
+    await message.answer("— Действие отменено.", reply_markup=get_main_keyboard())
 
 # ─── Startup / Shutdown ───────────────────────────────────────────────────────
 
