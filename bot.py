@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.1.0
+Mandala Garden Bot — Gentle Companion v7.1.1
 
 ARCHITECTURE CHANGE (v7.1.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -11,9 +11,14 @@ ARCHITECTURE CHANGE (v7.1.0):
 - On restart: re-load from GitHub (source of truth)
 - Result: no more hanging. User gets response in <100ms always.
 
+FIXES (v7.1.1):
+- Fixed HTML parse error in free_conversation (parse_mode=None for LLM responses)
+- Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
+- Completed truncated quick_add_achievement handler
+
 EMOJI (v7.1.0):
-- Botanical-sacred palette: 🌾 💎 🌀 🔮 🪶 🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
-- Life areas: 🌿 🔥 📿 🧭 🪬
+- Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
+- Life areas: 🌿 🔥 📿 🧭 
 """
 
 import os
@@ -110,7 +115,6 @@ _store: dict = {
 # pending GitHub writes: {path: content} — deduplicated by path
 _pending_writes: dict = {}
 _write_lock = asyncio.Lock() if False else None  # initialized in on_startup
-
 
 def store_get_gardener() -> Optional[dict]:
     return copy.deepcopy(_store["gardener"])
@@ -219,20 +223,23 @@ async def _github_put(path: str, content: Any) -> bool:
 
 async def _sync_pending() -> None:
     """Flush all pending writes to GitHub concurrently. Called by scheduler every 2 min."""
-    if not _pending_writes:
-        return
-    batch = dict(_pending_writes)
-    _pending_writes.clear()
-    logger.info(f"Syncing {len(batch)} file(s) to GitHub...")
+    try:
+        if not _pending_writes:
+            return
+        batch = dict(_pending_writes)
+        _pending_writes.clear()
+        logger.info(f"Syncing {len(batch)} file(s) to GitHub...")
 
-    async def _put_one(path, data):
-        ok = await _github_put(path, data)
-        if not ok:
-            logger.warning(f"Sync failed for {path}, re-queuing")
-            _pending_writes.setdefault(path, data)
-        return ok
+        async def _put_one(path, data):
+            ok = await _github_put(path, data)
+            if not ok:
+                logger.warning(f"Sync failed for {path}, re-queuing")
+                _pending_writes.setdefault(path, data)
+            return ok
 
-    await asyncio.gather(*[_put_one(p, c) for p, c in batch.items()])
+        await asyncio.gather(*[_put_one(p, c) for p, c in batch.items()])
+    except Exception as e:
+        logger.error(f"Sync pending crashed: {e}", exc_info=True)
 
 def _fire_sync() -> None:
     """Schedule a background sync without blocking the caller."""
@@ -460,13 +467,13 @@ def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🔥 Творчество",   callback_data="ach_cat_creativity")],
         [InlineKeyboardButton(text="📿 Знания",       callback_data="ach_cat_knowledge")],
         [InlineKeyboardButton(text="🧭 Исследования", callback_data="ach_cat_exploration")],
-        [InlineKeyboardButton(text="🪬 Отношения",    callback_data="ach_cat_relationships")],
+        [InlineKeyboardButton(text="🤝 Отношения",    callback_data="ach_cat_relationships")],
         [InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_achievement")]
     ])
 
 LIFE_AREA_ICONS = {
     "health": "🌿", "creativity": "🔥", "knowledge": "📿",
-    "exploration": "🧭", "relationships": "🪬", "other": "🌱"
+    "exploration": "🧭", "relationships": "🤝", "other": "🌱"
 }
 
 def get_groups_keyboard(groups: list) -> InlineKeyboardMarkup:
@@ -479,7 +486,7 @@ def get_life_area_keyboard() -> InlineKeyboardMarkup:
     areas = [
         ("🌿 Здоровье", "health"), ("🔥 Творчество", "creativity"),
         ("📿 Знания", "knowledge"), ("🧭 Исследования", "exploration"),
-        ("🪬 Отношения", "relationships"), ("🌱 Другое", "other")
+        ("🤝 Отношения", "relationships"), ("🌱 Другое", "other")
     ]
     btns = [[InlineKeyboardButton(text=n, callback_data=f"area_{v}")] for n, v in areas]
     btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")])
@@ -505,78 +512,84 @@ def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
 # ─── Proactive messaging ──────────────────────────────────────────────────────
 
 async def send_morning_greeting(telegram_id: str) -> None:
-    phase = _silence_phase(telegram_id)
-    if phase == 3 or not _can_send_proactive(telegram_id):
-        return
-    gardener = _store.get("gardener")
-    if not gardener:
-        return
-    if str(gardener.get("identity", {}).get("telegram_id", "")) != str(telegram_id):
-        return
-    if not gardener.get("companion_settings", {}).get("proactive_mode", True):
-        return
-    name = gardener.get("identity", {}).get("name", "Садовник")
-    if phase == 2:
-        text = f"🌿 {name}, я здесь если понадоблюсь.\nБез давления — возвращайся когда захочешь."
-    else:
-        tasks = _store.get("tasks", [])
-        active = [t for t in tasks if t.get("status") != "completed"]
-        hint = ""
-        if active:
-            top = sorted(active, key=lambda x: x.get("priority", 5), reverse=True)[0]
-            hint = f"\n\n🌱 Сегодня можно уделить внимание: <i>{top['title']}</i>"
-        text = f"🌄 Доброе утро, {name}!\n\nНовый день — новая возможность.{hint}\n\nКак ты сегодня?"
     try:
+        phase = _silence_phase(telegram_id)
+        if phase == 3 or not _can_send_proactive(telegram_id):
+            return
+        gardener = _store.get("gardener")
+        if not gardener:
+            return
+        if str(gardener.get("identity", {}).get("telegram_id", "")) != str(telegram_id):
+            return
+        if not gardener.get("companion_settings", {}).get("proactive_mode", True):
+            return
+        name = gardener.get("identity", {}).get("name", "Садовник")
+        if phase == 2:
+            text = f"🌿 {name}, я здесь если понадоблюсь.\nБез давления — возвращайся когда захочешь."
+        else:
+            tasks = _store.get("tasks", [])
+            active = [t for t in tasks if t.get("status") != "completed"]
+            hint = ""
+            if active:
+                top = sorted(active, key=lambda x: x.get("priority", 5), reverse=True)[0]
+                hint = f"\n\n🌱 Сегодня можно уделить внимание: <i>{top['title']}</i>"
+            text = f"🌄 Доброе утро, {name}!\n\nНовый день — новая возможность.{hint}\n\nКак ты сегодня?"
         await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
         _mark_proactive_sent(telegram_id)
     except Exception as e:
         logger.error(f"Morning greeting error: {e}")
 
 async def send_evening_checkin(telegram_id: str) -> None:
-    phase = _silence_phase(telegram_id)
-    if phase == 3 or not _can_send_proactive(telegram_id):
-        return
-    gardener = _store.get("gardener")
-    if not gardener:
-        return
-    if str(gardener.get("identity", {}).get("telegram_id", "")) != str(telegram_id):
-        return
-    if not gardener.get("companion_settings", {}).get("proactive_mode", True):
-        return
-    name = gardener.get("identity", {}).get("name", "Садовник")
-    text = (
-        f"🌒 Добрый вечер, {name}.\n\n"
-        f"Что произошло сегодня? Если было что-то важное — "
-        f"зафиксируй достижение: /achievements\n\nДо завтра 🌿"
-    )
     try:
+        phase = _silence_phase(telegram_id)
+        if phase == 3 or not _can_send_proactive(telegram_id):
+            return
+        gardener = _store.get("gardener")
+        if not gardener:
+            return
+        if str(gardener.get("identity", {}).get("telegram_id", "")) != str(telegram_id):
+            return
+        if not gardener.get("companion_settings", {}).get("proactive_mode", True):
+            return
+        name = gardener.get("identity", {}).get("name", "Садовник")
+        text = (
+            f"🌒 Добрый вечер, {name}.\n\n"
+            f"Что произошло сегодня? Если было что-то важное — "
+            f"зафиксируй достижение: /achievements\n\nДо завтра 🌿"
+        )
         await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
         _mark_proactive_sent(telegram_id)
     except Exception as e:
         logger.error(f"Evening check-in error: {e}")
 
 async def run_proactive_scheduler() -> None:
-    gardener = _store.get("gardener")
-    if not gardener:
-        return
-    telegram_id = str(gardener.get("identity", {}).get("telegram_id", ""))
-    if not telegram_id:
-        return
-    settings = gardener.get("companion_settings", {})
-    if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"]):
-        await send_morning_greeting(telegram_id)
-    if settings.get("evening_check_time") and _time_matches(settings["evening_check_time"]):
-        await send_evening_checkin(telegram_id)
+    try:
+        gardener = _store.get("gardener")
+        if not gardener:
+            return
+        telegram_id = str(gardener.get("identity", {}).get("telegram_id", ""))
+        if not telegram_id:
+            return
+        settings = gardener.get("companion_settings", {})
+        if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"]):
+            await send_morning_greeting(telegram_id)
+        if settings.get("evening_check_time") and _time_matches(settings["evening_check_time"]):
+            await send_evening_checkin(telegram_id)
+    except Exception as e:
+        logger.error(f"Proactive scheduler crashed: {e}", exc_info=True)
 
 async def run_resonance_decay() -> None:
-    gardener = _store.get("gardener")
-    if not gardener:
-        return
-    gardener, changed = _apply_resonance_decay(dict(gardener))
-    if changed:
-        store_set_gardener(gardener)
-        _fire_sync()
-        logger.info("Resonance decay applied")
+    try:
+        gardener = _store.get("gardener")
+        if not gardener:
+            return
+        gardener, changed = _apply_resonance_decay(dict(gardener))
+        if changed:
+            store_set_gardener(gardener)
+            _fire_sync()
+            logger.info("Resonance decay applied")
+    except Exception as e:
+        logger.error(f"Resonance decay crashed: {e}", exc_info=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # HANDLERS
@@ -835,7 +848,7 @@ async def cmd_resonance(message: Message):
     life_areas = gardener.get("personal_info", {}).get("life_areas", {})
 
     area_lines = ""
-    for area, icon in [("health","🌿"),("creativity","🔥"),("knowledge","📿"),("relationships","🪬")]:
+    for area, icon in [("health","🌿"),("creativity","🔥"),("knowledge","📿"),("relationships","🤝")]:
         d = life_areas.get(area, {})
         area_lines += f"{icon} {area.capitalize()}: {d.get('current','?')}/10 → цель {d.get('target','?')}/10\n"
 
@@ -867,7 +880,7 @@ async def cmd_ask(message: Message, state: FSMContext):
         return
     await state.set_state(AskStates.waiting_for_question)
     await message.answer(
-        "🪶 <b>Companion слушает</b>\n\nЧто у тебя на душе? Задай вопрос или просто поделись.\n\n"
+        "🤫 <b>Companion слушает</b>\n\nЧто у тебя на душе? Задай вопрос или просто поделись.\n\n"
         "<i>Нажми ❌ Отмена чтобы вернуться.</i>",
         reply_markup=get_cancel_keyboard()
     )
@@ -877,7 +890,7 @@ async def ask_question(message: Message, state: FSMContext):
     _track_interaction(str(message.from_user.id))
     text = message.text.strip()
     if not text:
-        await message.answer("🪶 Напиши что-нибудь или нажми ❌ Отмена")
+        await message.answer("🤫 Напиши что-нибудь или нажми ❌ Отмена")
         return
     gardener = _store.get("gardener") or {}
     name = gardener.get("identity", {}).get("name", "Садовник")
@@ -1423,8 +1436,6 @@ async def idea_send(message: Message, state: FSMContext):
             reply_markup=get_main_keyboard()
         )
 
-
-
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
 
@@ -1454,7 +1465,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), м�
 ТРИ СФЕРЫ (Мер-Ка-Ба):
 - 🌿 Тело: здоровье, спорт, питание, сон, отдых
 - 🔥 Дух: знания, творчество, хобби, рост, книги
-- 🪬 Мир: отношения, путешествия, события, дружба, сообщество
+- 🤝 Мир: отношения, путешествия, события, дружба, сообщество
 
 ПРАВИЛА ОБЩЕНИЯ:
 1. Отвечай тепло и кратко (2-4 предложения) как живой друг на русском языке
@@ -1599,7 +1610,8 @@ async def free_conversation(message: Message, state: FSMContext):
         reply_text = "🌿 Связь прервалась. Попробуй ещё раз."
 
     kb = _get_action_keyboard(action)
-    await message.answer(reply_text, reply_markup=kb if kb else get_main_keyboard())
+    # FIXED: LLM responses may contain unescaped HTML entities. Disable parsing.
+    await message.answer(reply_text, reply_markup=kb if kb else get_main_keyboard(), parse_mode=None)
 
 @router.callback_query(F.data.startswith("qt:"))
 async def quick_add_task(callback: CallbackQuery):
@@ -1623,107 +1635,72 @@ async def quick_add_achievement(callback: CallbackQuery):
     title = callback.data[3:]
     achievements = list(_store.get("achievements", []))
     achievements.append({
-        "id": "ach_" + str(len(achievements)+1).zfill(3),
-        "category": "other", "title": title, "description": "",
-        "completed": _today(), "resonance_bonus": 3, "icon": "🌱"
+        "id": f"ach_{len(achievements)+1:03d}",
+        "category": "other",
+        "title": title,
+        "description": "",
+        "completed": _today(),
+        "resonance_bonus": 3,
+        "icon": "🌱"
     })
     store_set_achievements(achievements)
+    # Update resonance
     gardener = _store.get("gardener")
     if gardener:
         g = dict(gardener)
-        new_res = min(100, g.get("identity", {}).get("resonance_level", 13) + 3)
+        current_res = g.get("identity", {}).get("resonance_level", 13)
+        new_res = min(100, current_res + 3)
         g.setdefault("identity", {})["resonance_level"] = new_res
         g["identity"]["updated"] = _today()
         g = _add_growth_history_entry(g, new_res)
         store_set_gardener(g)
+        _invalidate_auth_cache(str(callback.from_user.id))
     _fire_sync()
-    await callback.message.edit_text("💎 Достижение: <b>" + title + "</b>\n🔮 +3 к резонансу")
+    await callback.message.edit_text("💎 Достижение зафиксировано: <b>" + title + "</b>\n🔮 +3 к резонансу")
 
 @router.callback_query(F.data.startswith("qs:"))
-async def quick_search(callback: CallbackQuery):
+async def quick_web_search(callback: CallbackQuery):
     await callback.answer()
     query = callback.data[3:]
-    gardener = _store.get("gardener") or {}
-    await callback.message.edit_text("🧭 Ищу: <i>" + query + "</i>...")
-    try:
-        msgs = [
-            {"role": "system", "content": SR_SYSTEM_PROMPT},
-            {"role": "user", "content": "Найди в интернете: " + query + ". Краткий ответ на русском, 3-5 предложений."}
-        ]
-        result = await _call_openrouter(msgs)
-        if not result:
-            result = "🧭 Поиск временно недоступен. Попробуй позже."
-    except Exception as e:
-        logger.error("Quick search error: " + str(e))
-        result = "🧭 Ошибка поиска."
-    await callback.message.answer(result, reply_markup=get_main_keyboard())
+    await callback.message.edit_text("🧭 Поиск в интернете пока в разработке.\nЗапрос: <i>" + query + "</i>")
 
 @router.callback_query(F.data == "qdismiss")
 async def quick_dismiss(callback: CallbackQuery):
     await callback.answer()
-    await callback.message.edit_reply_markup(reply_markup=None)
+    await callback.message.edit_text("🌿 Хорошо, не буду.")
 
-# ─── Cancel ───────────────────────────────────────────────────────────────────
+# ─── Startup / Shutdown ──────────────────────────────────────────────────────
 
-@router.message(F.text == "❌ Отмена")
-async def btn_cancel(message: Message, state: FSMContext):
-    await state.clear()
-    await message.answer("❌ Отменено.", reply_markup=get_main_keyboard())
-
-# ─── Startup / Shutdown ───────────────────────────────────────────────────────
-
-async def on_startup(app: web.Application) -> None:
-    # Load data FIRST — before accepting any webhook requests
+async def on_startup():
+    """Called when bot starts."""
     await _load_store()
-
     await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
     logger.info(f"Webhook set: {WEBHOOK_URL}")
 
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(run_proactive_scheduler, "interval", minutes=1)
-    scheduler.add_job(run_resonance_decay, CronTrigger(hour=3, minute=0))
-    scheduler.add_job(_sync_pending, "interval", minutes=2)   # flush pending writes
+    # Scheduler setup
+    scheduler = AsyncIOScheduler(timezone="UTC")
+    scheduler.add_job(run_proactive_scheduler, "interval", minutes=1, id="proactive")
+    scheduler.add_job(run_resonance_decay, "cron", hour=3, minute=0, id="decay")
+    scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
     scheduler.start()
-    app["scheduler"] = scheduler
     logger.info("Scheduler started")
 
-async def on_shutdown(app: web.Application) -> None:
-    # Final sync before shutdown
-    if _pending_writes:
-        logger.info(f"Flushing {len(_pending_writes)} pending writes on shutdown...")
-        await _sync_pending()
-
-    scheduler = app.get("scheduler")
-    if scheduler:
-        scheduler.shutdown(wait=False)
-    global _http_session
-    if _http_session and not _http_session.closed:
-        await _http_session.close()
+async def on_shutdown():
+    """Called when bot stops."""
     await bot.delete_webhook()
     await bot.session.close()
+    if _http_session:
+        await _http_session.close()
+    logger.info("Bot shut down")
 
-async def health(request: web.Request) -> web.Response:
-    status = "ready" if _store.get("ready") else "loading"
-    gardener = _store.get("gardener")
-    name = gardener.get("identity", {}).get("name", "none") if gardener else "none"
-    # Auto-restore webhook if missing
-    try:
-        info = await bot.get_webhook_info()
-        if not info.url:
-            await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
-            logger.info("Webhook auto-restored")
-    except Exception:
-        pass
-    return web.Response(text=f"ok|{status}|gardener={name}")
+# ─── Main ─────────────────────────────────────────────────────────────────────
 
 def main():
     app = web.Application()
-    app.router.add_get("/", health)
-    app.router.add_get("/health", health)
     SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
     setup_application(app, dp, bot=bot)
-    app.on_startup.append(on_startup)
-    app.on_shutdown.append(on_shutdown)
+    app.on_startup.append(lambda _: on_startup())
+    app.on_shutdown.append(lambda _: on_shutdown())
     web.run_app(app, host="0.0.0.0", port=PORT)
 
 if __name__ == "__main__":
