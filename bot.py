@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v6.0.0
+Mandala Garden Bot — Gentle Companion v6.0.1
 
-ARCHITECTURE CHANGE (v6.0.0):
+ARCHITECTURE CHANGE (v6.0.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -11,7 +11,7 @@ ARCHITECTURE CHANGE (v6.0.0):
 - On restart: re-load from GitHub (source of truth)
 - Result: no more hanging. User gets response in <100ms always.
 
-EMOJI (v6.0.0):
+EMOJI (v6.0.1):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮 🪶 🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 🪬
 """
@@ -278,6 +278,13 @@ def is_authorized(telegram_id: str) -> bool:
 
 def _invalidate_auth_cache(telegram_id: str) -> None:
     _auth_cache.pop(telegram_id, None)
+
+async def _check_ready(message: Message) -> bool:
+    """Guard: returns False and notifies user if store not loaded yet."""
+    if not _store.get("ready"):
+        await message.answer("🌱 Запускаюсь, подожди пару секунд и повтори.")
+        return False
+    return True
 
 # ─── Resonance helpers ────────────────────────────────────────────────────────
 
@@ -564,6 +571,9 @@ async def run_resonance_decay() -> None:
 
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
+    if not _store.get("ready"):
+        await message.answer("🌱 Запускаюсь, подожди пару секунд и повтори.")
+        return
     await state.clear()
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
@@ -763,6 +773,8 @@ async def onboarding_evening(message: Message, state: FSMContext):
 @router.message(Command("profile"))
 @router.message(F.text == "🌾 Профиль")
 async def cmd_profile(message: Message):
+    if not await _check_ready(message):
+        return
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not is_authorized(user_id):
@@ -790,6 +802,8 @@ async def cmd_profile(message: Message):
 @router.message(Command("resonance"))
 @router.message(F.text == "🔮 Резонанс")
 async def cmd_resonance(message: Message):
+    if not await _check_ready(message):
+        return
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not is_authorized(user_id):
@@ -880,6 +894,8 @@ async def ask_question(message: Message, state: FSMContext):
 @router.message(Command("achievements"))
 @router.message(F.text == "💎 Достижения")
 async def cmd_achievements(message: Message):
+    if not await _check_ready(message):
+        return
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not is_authorized(user_id):
@@ -998,6 +1014,8 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
 @router.message(Command("tasks"))
 @router.message(F.text == "🌀 Задачи")
 async def cmd_tasks(message: Message):
+    if not await _check_ready(message):
+        return
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not is_authorized(user_id):
@@ -1378,11 +1396,11 @@ async def btn_cancel(message: Message, state: FSMContext):
 # ─── Startup / Shutdown ───────────────────────────────────────────────────────
 
 async def on_startup(app: web.Application) -> None:
+    # Load data FIRST — before accepting any webhook requests
+    await _load_store()
+
     await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
     logger.info(f"Webhook set: {WEBHOOK_URL}")
-
-    # Load all data into memory
-    await _load_store()
 
     scheduler = AsyncIOScheduler()
     scheduler.add_job(run_proactive_scheduler, "interval", minutes=1)
