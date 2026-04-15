@@ -1,9 +1,34 @@
 {
   "groups": [
-    { "id": "group_work", "name": "Работа", "color": "#FF6B6B", "created": "2026-04-15" },
-    { "id": "group_health", "name": "Здоровье", "color": "#4ECDC4", "created": "2026-04-15" },
-    { "id": "group_creativity", "name": "Творчество", "color": "#FFE66D", "created": "2026-04-15" },
-    { "id": "group_learning", "name": "Обучение", "color": "#A8E6CF", "created": "2026-04-15" }
+    {
+      "id": "group_work",
+      "name": "Работа",
+      "color": "#FF6B6B",
+      "created": "2026-04-15"
+    },
+    {
+      "id": "group_health",
+      "name": "Здоровье",
+      "color": "#4ECDC4",
+      "created": "2026-04-15"
+    },
+    {
+      "id": "group_creativity",
+      "name": "Творчество",
+      "color": "#FFE66D",
+      "created": "2026-04-15"
+    },
+    {
+      "id": "group_learning",
+      "name": "Обучение",
+      "color": "#A8E6CF",
+      "created": "2026-04-15"
+    },
+    {
+      "id": "тест",
+      "name": "Тест",
+      "created": "2026-04-15"
+    }
   ],
   "updated": "2026-04-15"
 }
