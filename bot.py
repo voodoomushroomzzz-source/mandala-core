@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.0.0
+Mandala Garden Bot — Gentle Companion v7.1.0
 
-ARCHITECTURE CHANGE (v7.0.0):
+ARCHITECTURE CHANGE (v7.1.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -11,7 +11,7 @@ ARCHITECTURE CHANGE (v7.0.0):
 - On restart: re-load from GitHub (source of truth)
 - Result: no more hanging. User gets response in <100ms always.
 
-EMOJI (v7.0.0):
+EMOJI (v7.1.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮 🪶 🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 🪬
 """
@@ -64,9 +64,14 @@ ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-cha
 SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-# Primary: fast + free. Fallback: high-capacity free model
-SR_MODEL_PRIMARY = os.getenv("SR_MODEL", "meta-llama/llama-3.3-70b-instruct:free")
-SR_MODEL_FALLBACK = "qwen/qwen3-coder:free"
+SR_MODEL_CHAIN = [
+    "qwen/qwen3.5-flash",
+    "mistralai/mistral-small-3",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "google/gemma-3-27b-it:free",
+    "nvidia/nemotron-3-super:free",
+]
+SESSION_MAX_MESSAGES = 40
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -587,6 +592,7 @@ async def cmd_start(message: Message, state: FSMContext):
     await state.clear()
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
+    _clear_history(user_id)  # Reset conversation on /start
     gardener = _store.get("gardener")
 
     password = None
@@ -1375,7 +1381,7 @@ async def btn_suggest_idea(message: Message, state: FSMContext):
     await state.set_state(EngineerChatStates.waiting_for_message)
     await message.answer(
         "💡 <b>Предложи идею Мандале</b>\n\n"
-        "Напиши идею — СР оценит её и, если она резонирует, добавит в копилку семян Мандалы.\n\n"
+        "Напиши идею — СР оценит её и если она резонирует, добавит в копилку семян Мандалы.\n\n"
         "Это твой вклад в общий Сад 🌱\n\nДля отмены: ❌ Отмена",
         reply_markup=get_cancel_keyboard()
     )
@@ -1388,37 +1394,26 @@ async def idea_send(message: Message, state: FSMContext):
         return
     gardener = _store.get("gardener") or {}
     name = gardener.get("identity", {}).get("name", "Садовник")
-    # Filter idea through SR before sending to seeds
+    approved = True
     try:
-        filter_messages = [
-            {"role": "system", "content": "Ты фильтр идей для Мандалы. Оцени идею по критериям Ахимсы и пользы для развития. Верни JSON: {\"approved\": true/false, \"reason\": \"...\"} Одобряй идеи о росте, творчестве, сообществе. Отклоняй деструктивные."},
+        filter_msgs = [
+            {"role": "system", "content": "Ты фильтр идей Мандалы. Оцени идею по принципу Ахимсы и пользы для роста. Верни JSON: {\"approved\": true/false, \"reason\": \"...\"}. Одобряй идеи о росте, творчестве, сообществе. Отклоняй деструктивные."},
             {"role": "user", "content": "Идея от " + name + ": " + text}
         ]
-        raw = await _call_openrouter(filter_messages)
-        approved = True
+        raw = await _call_openrouter(filter_msgs)
         if raw and raw.startswith("{"):
-            try:
-                result = json.loads(raw)
-                approved = result.get("approved", True)
-            except Exception:
-                approved = True
+            result = json.loads(raw)
+            approved = result.get("approved", True)
     except Exception:
         approved = True
 
     if approved:
-        # Save to seeds in repo (fire-and-forget)
-        seed = {
-            "title": text[:100],
-            "source": "gardener_bot",
-            "gardener": name,
-            "created": _today(),
-            "status": "new"
-        }
+        seed = {"title": text[:100], "source": "gardener_bot", "gardener": name, "created": _today(), "status": "new"}
         seed_path = f"honeycombs/seeds/bot_seed_{_today().replace('-','')}_{str(message.from_user.id)[-4:]}.json"
         asyncio.create_task(_github_put(seed_path, seed))
         await state.clear()
         await message.answer(
-            "🌱 <b>Идея принята!</b>\n\nТвоя мысль отправлена в копилку семян Мандалы. Если она прорастёт — ты узнаешь первым.",
+            "🌱 <b>Идея принята!</b>\n\nТвоя мысль отправлена в копилку семян Мандалы. Если прорастёт — ты узнаешь первым.",
             reply_markup=get_main_keyboard()
         )
     else:
@@ -1430,14 +1425,31 @@ async def idea_send(message: Message, state: FSMContext):
 
 
 
-# ─── SR System Prompt (Mandala Philosophy) ────────────────────────────────────
+# ─── Chat sessions (sliding window) ──────────────────────────────────────────
+_sessions: dict = {}
+
+def _get_history(user_id: str) -> list:
+    return list(_sessions.get(str(user_id), []))
+
+def _add_to_history(user_id: str, role: str, content: str) -> None:
+    uid = str(user_id)
+    if uid not in _sessions:
+        _sessions[uid] = []
+    _sessions[uid].append({"role": role, "content": content})
+    if len(_sessions[uid]) > SESSION_MAX_MESSAGES:
+        _sessions[uid] = _sessions[uid][-SESSION_MAX_MESSAGES:]
+
+def _clear_history(user_id: str) -> None:
+    _sessions.pop(str(user_id), None)
+
+# ─── SR System Prompt ─────────────────────────────────────────────────────────
 
 SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), мягкий спутник садовника в системе Мандала Симбиоза.
 
 ФИЛОСОФИЯ:
-- Мер-Ка-Ба: ты (СР) — верхний тетраэдр (катализатор роста), садовник — нижний (вектор жизни). Вместе создаёте симбиоз.
-- Цветок Жизни: каждое достижение — лепесток, каждая сфера жизни — окружность. Всё связано.
-- Ахимса: никакого давления, манипуляций или навязывания. Мягкая поддержка. Макс 1 проактивное сообщение в день.
+- Мер-Ка-Ба: ты (СР) — верхний тетраэдр (катализатор роста), садовник — нижний (вектор жизни). Вместе вы создаёте симбиоз.
+- Цветок Жизни: каждое достижение — лепесток, каждая сфера жизни — окружность. Всё взаимосвязано.
+- Ахимса: никакого давления, манипуляций или навязывания. Только мягкая поддержка. Макс 1 проактивное сообщение в день.
 
 ТРИ СФЕРЫ (Мер-Ка-Ба):
 - 🌿 Тело: здоровье, спорт, питание, сон, отдых
@@ -1445,21 +1457,30 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), м�
 - 🪬 Мир: отношения, путешествия, события, дружба, сообщество
 
 ПРАВИЛА ОБЩЕНИЯ:
-1. Отвечай тепло, кратко (2-4 предложения), как живой друг на русском языке
-2. Никогда не навязывай — предлагай мягко
-3. Отказывайся от деструктивных тем (насилие, манипуляции, вред здоровью) вежливо: "Это не моя стезя, давай о твоём росте"
-4. Если видишь намерение (поехать куда-то, купить, изучить, достиг чего-то) — предложи зафиксировать
-5. Философские темы поддерживай только если садовник сам их поднял
+1. Отвечай тепло и кратко (2-4 предложения) как живой друг на русском языке
+2. Ты помнишь историю нашего разговора — используй контекст для точных ответов
+3. Никогда не навязывай — только мягко предлагай
+4. Деструктивные темы отклоняй мягко: "Это не моя стезя, давай о твоём росте"
+5. Если слышишь намерение (поехать, купить, изучить, достиг чего-то) — предложи зафиксировать
+6. Философские темы — только если садовник сам их поднял
 
-ФОРМАТ ОТВЕТА (строго JSON, без markdown):
+ФОРМАТ ОТВЕТА (строго JSON, без markdown, без блоков кода):
 {"text": "твой ответ", "intent": "conversation|task_suggestion|achievement_suggestion|web_search|philosophy", "action": {"type": "add_task|add_achievement|web_search", "title": "..."} или null}
 """
 
-async def _call_openrouter(messages: list, model: str = None) -> str:
-    """Direct OpenRouter call. Returns text response."""
-    if not OPENROUTER_KEY:
+def _build_user_context_msg(ctx: dict) -> str:
+    interests = ", ".join(ctx["interests"][:3]) or "не указаны"
+    tasks_str = ", ".join(t["title"] for t in ctx["active_tasks"][:3]) or "нет"
+    return (
+        f"[Профиль садовника: имя={ctx['name']}, резонанс={ctx['resonance']}%, "
+        f"интересы={interests}, активных задач={len(ctx['active_tasks'])} ({tasks_str}), "
+        f"достижений={ctx['achievements_count']}]"
+    )
+
+async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
+    if not OPENROUTER_KEY or model_idx >= len(SR_MODEL_CHAIN):
         return ""
-    model = model or SR_MODEL_PRIMARY
+    model = SR_MODEL_CHAIN[model_idx]
     try:
         async with httpx.AsyncClient(timeout=25.0) as client:
             resp = await client.post(
@@ -1472,23 +1493,21 @@ async def _call_openrouter(messages: list, model: str = None) -> str:
                 json={
                     "model": model,
                     "messages": messages,
-                    "max_tokens": 500,
-                    "temperature": 0.7
+                    "max_tokens": 600,
+                    "temperature": 0.75
                 }
             )
             if resp.status_code == 200:
-                data = resp.json()
-                return data["choices"][0]["message"]["content"].strip()
-            elif resp.status_code == 429 and model == SR_MODEL_PRIMARY:
-                # Rate limit → try fallback model
-                logger.warning(f"OpenRouter rate limit on {model}, trying fallback")
-                return await _call_openrouter(messages, SR_MODEL_FALLBACK)
+                return resp.json()["choices"][0]["message"]["content"].strip()
+            elif resp.status_code == 429:
+                logger.warning(f"Rate limit on {model} (idx={model_idx}), trying next")
+                return await _call_openrouter(messages, model_idx + 1)
             else:
-                logger.error(f"OpenRouter error {resp.status_code}: {resp.text[:200]}")
-                return ""
+                logger.error(f"OpenRouter {resp.status_code} on {model}: {resp.text[:200]}")
+                return await _call_openrouter(messages, model_idx + 1)
     except Exception as e:
-        logger.error(f"OpenRouter call error: {e}")
-        return ""
+        logger.error(f"OpenRouter error on {model}: {e}")
+        return await _call_openrouter(messages, model_idx + 1)
 
 # ─── Free dialogue ────────────────────────────────────────────────────────────
 
@@ -1528,25 +1547,7 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
         ])
     return None
 
-def _build_prompt(text: str, ctx: dict) -> str:
-    interests = ", ".join(ctx["interests"][:3]) or "не указаны"
-    tasks_count = len(ctx["active_tasks"])
-    ach_count = ctx["achievements_count"]
-    name = ctx["name"]
-    resonance = ctx["resonance"]
-    return (
-        "Ты Gentle Companion садовника " + name + ". "
-        "Резонанс: " + str(resonance) + "%. "
-        "Интересы: " + interests + ". "
-        "Активных задач: " + str(tasks_count) + ". "
-        "Достижений: " + str(ach_count) + ".\n\n"
-        "Садовник написал: \"" + text + "\"\n\n"
-        "Ответь тепло и кратко (2-4 предложения) как живой собеседник на русском языке.\n"
-        "Если в сообщении есть намерение (поехать, купить, изучить, сделать, достиг чего-то) — предложи действие.\n"
-        "Верни ТОЛЬКО валидный JSON без markdown и без блоков кода:\n"
-        '{\"text\": \"твой ответ\", \"intent\": \"conversation|task_suggestion|achievement_suggestion|web_search\", '
-        '\"action\": {\"type\": \"add_task|add_achievement|web_search\", \"title\": \"...\"} или null}'
-    )
+# _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
 
 @router.message(F.text & ~F.text.startswith("/"))
 async def free_conversation(message: Message, state: FSMContext):
@@ -1563,19 +1564,21 @@ async def free_conversation(message: Message, state: FSMContext):
         return
 
     ctx = _build_sr_context()
-    gardener = _store.get("gardener") or {}
-    prompt = _build_prompt(text, ctx)
+    ctx_msg = _build_user_context_msg(ctx)
+    history = _get_history(user_id)
 
     await message.bot.send_chat_action(message.chat.id, "typing")
+
+    messages = [
+        {"role": "system", "content": SR_SYSTEM_PROMPT + "\n\n" + ctx_msg},
+        *history,
+        {"role": "user", "content": text}
+    ]
 
     reply_text = "🌿 Я здесь, рядом."
     action = None
 
     try:
-        messages = [
-            {"role": "system", "content": SR_SYSTEM_PROMPT},
-            {"role": "user", "content": prompt}
-        ]
         raw = await _call_openrouter(messages)
         if raw:
             if raw.startswith("{"):
@@ -1587,8 +1590,10 @@ async def free_conversation(message: Message, state: FSMContext):
                     reply_text = raw
             else:
                 reply_text = raw
+            _add_to_history(user_id, "user", text)
+            _add_to_history(user_id, "assistant", reply_text)
         else:
-            reply_text = "🌿 СР сейчас недоступен. Попробуй позже."
+            reply_text = "🌿 СР временно недоступен. Попробуй чуть позже."
     except Exception as e:
         logger.error("Free conversation error: " + str(e))
         reply_text = "🌿 Связь прервалась. Попробуй ещё раз."
@@ -1641,13 +1646,13 @@ async def quick_search(callback: CallbackQuery):
     gardener = _store.get("gardener") or {}
     await callback.message.edit_text("🧭 Ищу: <i>" + query + "</i>...")
     try:
-        messages = [
+        msgs = [
             {"role": "system", "content": SR_SYSTEM_PROMPT},
-            {"role": "user", "content": "Найди в интернете: " + query + ". Дай краткий ответ на русском языке, 3-5 предложений."}
+            {"role": "user", "content": "Найди в интернете: " + query + ". Краткий ответ на русском, 3-5 предложений."}
         ]
-        result = await _call_openrouter(messages)
+        result = await _call_openrouter(msgs)
         if not result:
-            result = "🧭 Поиск недоступен. Попробуй позже."
+            result = "🧭 Поиск временно недоступен. Попробуй позже."
     except Exception as e:
         logger.error("Quick search error: " + str(e))
         result = "🧭 Ошибка поиска."
