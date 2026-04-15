@@ -1,59 +1,54 @@
 {
   "task_id": "T-20260408-1030",
-  "name": "Telegram Bot — Gentle Companion for Garden",
+  "name": "Telegram Bot  Gentle Companion for Garden",
   "status": "in_progress",
   "priority": "HIGH",
   "deadline": "2026-05-01",
   "created": "2026-04-01",
   "updated": "2026-04-15",
-  "description": "Evolve bot v3.32.0 into Garden Gentle Companion v4.0.0. Full Garden integration: onboarding, profile, achievements, resonance, personal task management, Mandala seeds, dual activation framework, proactive Ahimsa messaging, unified SR with engineer chat (shared session history), and Garden dashboard tab in engineer chat.",
-  "version_target": "v4.0.0",
-  "tags": ["telegram_bot", "garden", "companion", "ahimsa", "active"],
-  "progress": 65,
-  "progress_notes": "D0-D3, D5-D6, D13-D16 done. D4 (/achievements) done. D10 (proactive scheduler) implemented but temporarily disabled. Bot stable at v5.2.4. Engineer chat bridge working (fire-and-forget). D8 updated to Mandala Seeds, D20 added for dual activation.",
+  "description": "Evolve Telegram bot into a living Gentle Companion. Core infrastructure complete (v6.0.2). Now moving toward free dialogue, intent detection, mood tracking, voice messages, and SR integration as the central interaction layer.",
+  "tags": ["telegram_bot", "garden", "companion", "ahimsa", "active", "sr_integration", "voice", "intent"],
+  "progress": 70,
   "garden_ref": "honeycombs/garden/",
-  "estimated_effort_hours": 37,
-  "effort_breakdown": {
-    "taskboard_addon_hours": 8,
-    "modular_refactor_hours": 2,
-    "original_tz_hours": 16,
-    "mandala_seeds_hours": 4,
-    "dual_activation_hours": 3
+  "done": [
+    "v6.0.2: In-memory store  zero GitHub blocking, <100ms responses",
+    "v6.0.2: Fire-and-forget GitHub sync (concurrent, every 2 min)",
+    "v6.0.2: Health check endpoint  stable Render deployment",
+    "v6.0.1: _load_store before webhook  no message loss on restart",
+    "All /commands: /start, /profile, /resonance, /achievements, /tasks, /ask, /leave",
+    "Proactive messages: morning/evening with Ahimsa silence policy",
+    "Resonance decay, growth_history tracking",
+    "Botanical-sacred emoji palette",
+    "FSM task and achievement flows without hanging",
+    "Callback.answer() first  no TelegramBadRequest on restart"
+  ],
+  "deliverables_next": [
+    "STAGE 1: Fallback handler  any free text goes to SR, returns {text, intent, action}",
+    "STAGE 2: Intent detection  task/achievement/search/mood suggestions from natural speech",
+    "STAGE 2: Web search integration  connect main.py search to bot via intent",
+    "STAGE 3: Mood tracker  analyze message tone, adaptive SR responses",
+    "STAGE 4: Voice messages in  Groq Whisper transcription",
+    "STAGE 4: Voice messages out  TTS responses (2nd priority)",
+    "STAGE 5: Pattern analysis  weekly/monthly recommendations from history"
+  ],
+  "acceptance_criteria": [
+    "Gardener can freely converse  bot responds naturally via SR",
+    "Bot detects intent from natural language and suggests actions",
+    "Bot adapts tone based on gardener mood signals",
+    "Voice messages transcribed and processed as text",
+    "Web search available from conversation",
+    "All existing commands stable, no hangs"
+  ],
+  "architecture": {
+    "core": "In-memory store + fire-and-forget GitHub sync",
+    "dialogue": "Any message  SR (main.py)  {text, intent, action}  bot responds + optional action button",
+    "voice": "Telegram voice  Groq Whisper  text  SR pipeline",
+    "mood": "_store[mood_history] + session signals  adaptive prompting",
+    "search": "intent=web_search  main.py search tool  formatted result"
   },
-  "priority_order": {
-    "HIGH": ["D7", "D9"],
-    "MEDIUM": ["D20", "D8", "D11", "D17", "D19"],
-    "LOW": ["D18", "D12"]
-  },
-  "deliverables": {
-    "D0_backend": { "id": "D0", "name": "POST /bot/ask endpoint in main.py", "status": "done", "priority": "CRITICAL", "estimated_hours": 1, "description": "Add HTTP endpoint to engineer chat backend. Bot sends messages here instead of Yandex Cloud Function. Shared session history via session_id = tg_{telegram_user_id}." },
-    "D1_helpers": { "id": "D1", "name": "Garden helpers in bot.py", "status": "done", "priority": "CRITICAL", "estimated_hours": 1, "description": "find_gardener_by_telegram_id(), read_gardener_file(), write_gardener_file(), soft-fail local queue (.json.queue)." },
-    "D2_onboarding": { "id": "D2", "name": "/start onboarding FSM", "status": "done", "priority": "CRITICAL", "estimated_hours": 3, "description": "GardenOnboardingStates FSM: name→interests→goals→life_areas→companion_settings→done. Creates gardener.json, tasks.json, achievements.json, groups.json." },
-    "D3_profile": { "id": "D3", "name": "/profile command", "status": "done", "priority": "HIGH", "estimated_hours": 1, "description": "Show name, resonance, top-3 achievements, active tasks count." },
-    "D4_achievements": { "id": "D4", "name": "/achievements command", "status": "done", "priority": "HIGH", "estimated_hours": 2, "description": "List achievements + add FSM → save to achievements.json → recalculate resonance." },
-    "D5_resonance": { "id": "D5", "name": "/resonance command", "status": "done", "priority": "MEDIUM", "estimated_hours": 1, "description": "Current resonance level + growth_history. Formula: sum(bonus * category_weight)." },
-    "D6_sr_switch": { "id": "D6", "name": "Switch SR to main.py (Variant B)", "status": "done", "priority": "CRITICAL", "estimated_hours": 1, "description": "Replace Yandex Cloud Function with POST /bot/ask on main.py. Pass session_id = tg_{user_id} + gardener_context." },
-    "D7_tasks_personal": { "id": "D7", "name": "Personal task management (FR1-FR6)", "status": "todo", "priority": "HIGH", "estimated_hours": 6, "description": "Full CRUD for personal tasks with groups, priority auto-calc (resonance_match * life_area_gap), deadlines, subtasks, link to achievements. Commands: /addtask /tasks /done /edittask /deletetask /archive /groups /newgroup. FR3: smart task detection from chat messages (Ahimsa limits: max 3/day, stop after 3 declines).", "task_schema": { "task_id": "task_YYYYMMDD_NNN", "title": "string", "status": "todo|in_progress|completed", "priority": "int 1-10", "life_area": "health|creativity|knowledge|exploration|relationships|other", "group_id": "string", "source": "manual|scout|parsed", "tags": "array", "deadline": "YYYY-MM-DD|null", "estimated_hours": "int|null", "linked_achievement": "ach_id|null", "created": "date", "updated": "date", "completed": "date|null", "notes": "string" } },
-    "D8_seeds_mandala": { "id": "D8", "name": "Mandala Seeds via bot", "status": "todo", "priority": "MEDIUM", "estimated_hours": 4, "description": "Create seeds in honeycombs/seeds/ instead of direct tasks. Two activation paths: (1) explicit button '🌱 В Мандалу' → FSM → seed; (2) auto-detection from chat messages (keywords: 'хочу чтобы в Мандале', 'добавить идею', etc.) → suggest → seed. Ahimsa limits: max 3 auto-detects/day, stop after 3 declines for 7 days. Internal SR processes seeds later into tasks/roadmaps." },
-    "D9_ahimsa": { "id": "D9", "name": "Ahimsa guardrails + /leave", "status": "todo", "priority": "HIGH", "estimated_hours": 2, "description": "Silence policy: 1-7d normal, 8-30d one gentle msg, 31d+ stop. Resonance decay: -1%/week after 14d no achievements (min 10%). /leave → confirm → archive sota → farewell." },
-    "D10_proactive": { "id": "D10", "name": "Proactive messages (apscheduler)", "status": "done", "priority": "HIGH", "estimated_hours": 2, "description": "Morning greeting + evening check-in + gentle task reminder. Ahimsa filter before every send: correct time? recent interaction? only one today? Currently disabled for stability debugging." },
-    "D11_dashboard": { "id": "D11", "name": "Garden dashboard tab in engineer chat", "status": "todo", "priority": "MEDIUM", "estimated_hours": 2, "description": "Tab in engineer chat frontend. Kanban (Todo/InProgress/Done by group), Flower of Life SVG (petals = life_areas), resonance timeline, profile summary. Reads GitHub raw. No separate backend." },
-    "D12_modular_refactor": { "id": "D12", "name": "Modular refactor of bot.py", "description": "Split monolithic bot.py into modules: bot_handlers/, bot_services/, bot_keyboards/, bot_fsm/. Main bot.py becomes thin entry point (~30 lines). Enables easier patching and maintenance.", "estimated_hours": 2, "priority": "LOW", "status": "todo" },
-    "D13_password_protection": { "id": "D13", "name": "Password protection for private Garden", "description": "Guard access by password on first message. ALLOWED_PASSWORD from .env.", "estimated_hours": 1, "priority": "HIGH", "status": "done" },
-    "D14_single_gardener": { "id": "D14", "name": "Hardcode to gardener_001 only", "description": "Remove scanning of all gardeners. Always work with gardener_001.", "estimated_hours": 0.5, "priority": "HIGH", "status": "done" },
-    "D15_fix_button_handlers": { "id": "D15", "name": "Fix button handlers (state param)", "description": "Add state: FSMContext to btn_profile, btn_achievements, btn_tasks.", "estimated_hours": 0.5, "priority": "CRITICAL", "status": "done" },
-    "D16_fix_onboarding_data": { "id": "D16", "name": "Fix onboarding data persistence", "description": "Fix FSM to correctly save gardener.json with user data.", "estimated_hours": 1, "priority": "CRITICAL", "status": "done" },
-    "D17_add_reset_command": { "id": "D17", "name": "Add /reset command", "description": "Clear _gardener_id_cache for debugging.", "estimated_hours": 0.5, "priority": "MEDIUM", "status": "todo" },
-    "D18_remove_ask": { "id": "D18", "name": "Remove /ask command and button", "description": "Remove redundant /ask. Add '📧 В инженерный чат' button instead.", "estimated_hours": 0.5, "priority": "LOW", "status": "todo" },
-    "D19_settings_toggle": { "id": "D19", "name": "Fix settings toggle proactive", "description": "Add callback handler for settings_toggle_proactive.", "estimated_hours": 0.5, "priority": "MEDIUM", "status": "todo" },
-    "D20_dual_activation": { "id": "D20", "name": "Dual Activation Framework", "status": "todo", "priority": "MEDIUM", "estimated_hours": 3, "description": "All bot functions (personal tasks, Mandala seeds, achievements, etc.) should be activatable in two ways: (1) explicit button/menu, (2) natural language detection from chat messages. Bot analyzes messages when not in FSM, detects intent, suggests action. Ahimsa limits per function type. Unified intent detector with confidence scoring." }
-  },
-  "implementation_order": ["D0", "D1", "D6", "D5", "D15", "D16", "D14", "D13", "D2", "D3", "D4", "D10", "D20", "D7", "D8", "D9", "D17", "D19", "D18", "D11", "D12"],
-  "new_bot_commands": ["/start", "/profile", "/achievements", "/resonance", "/tasks", "/addtask", "/done", "/edittask", "/deletetask", "/archive", "/groups", "/newgroup", "/leave"],
-  "data_files": { "existing": ["personal_gardeners/gardener_XXX/gardener.json", "personal_gardeners/gardener_XXX/achievements.json", "personal_gardeners/gardener_XXX/tasks.json"], "new": ["personal_gardeners/gardener_XXX/groups.json"] },
-  "architecture_decisions": { "sr_backend": "main.py via POST /bot/ask — NOT Yandex Cloud Function", "session_id": "tg_{telegram_user_id} — shared between bot and engineer chat", "soft_fail": "Local .json.queue when GitHub API unavailable", "terminal_first": "Mandala task creation generates PowerShell script", "dashboard": "Tab in engineer chat frontend, reads GitHub raw" },
-  "requires": ["honeycombs/garden/architecture.json", "honeycombs/garden/ideology.json", "honeycombs/garden/achievements_catalog.json", "honeycombs/personal_gardeners/gardener_template.json", "honeycombs/instructions/core/external_sr_workflow.json"],
-  "depends_on": ["M1-T1 (personal_gardeners/ structure — done)", "M1-T2 (achievements catalog — done)", "main.py running and accessible for POST /bot/ask"],
-  "acceptance_criteria": ["New gardener completes /start onboarding, sota files created in GitHub", "All /commands respond with correct gardener data", "Bot and engineer chat share SR session history", "Personal tasks: full CRUD, groups, priority auto-calc, link to achievements", "Mandala seeds: created in honeycombs/seeds/, dual activation works", "Dual Activation: functions activatable via button or natural language", "Proactive messages follow silence_policy and ahimsa_guardrails", "Bot continues in degraded mode when GitHub API is down", "Gardener can /leave gracefully (sota archived)", "Garden dashboard tab shows live kanban + Flower of Life"],
-  "health": { "status": "healthy", "last_check": "2026-04-15", "notes": "Bot v5.2.4 stable. Engineer chat bridge working (fire-and-forget). D4, D10 done. Scheduler disabled for stability. D8 updated to Mandala Seeds, D20 added for dual activation. Remaining: D7, D8, D9, D11, D12, D17-D20." }
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-15",
+    "notes": "v6.0.2 stable. Health check endpoint stops Render restarts. Moving to live dialogue phase."
+  }
 }
