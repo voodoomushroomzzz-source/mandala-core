@@ -1,10 +1,10 @@
 ﻿{
-  "last_scan": "2026-04-13T00:42:44.145528",
+  "last_scan": "2026-04-15T19:08:42.735120",
   "honeycomb_hashes": {
     "akasha": "938d9a020ac360bc5d157c023fce7621",
     "analytics": "d7267eeb9431eab01bd550f1f3b7ba7a",
     "awareness": "28082dae1444ddf3524dd17aff70c583",
-    "boot_online": "88bc74f9115c732409bc81feceac9724",
+    "boot_online": "4ffe819b21b9db3f74551189ba054980",
     "communications": "b5f59e6083c247cd9918eebc1cd43a03",
     "core_map": "bb87aca76bc50cb474599e2ad282ff02",
     "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final": "eb7d2a64070d5e84cad2fddefac65021",
@@ -35,19 +35,20 @@
     "roadmaps": "24a39121b8a8cd44bb78e4cf4b183c92",
     "seeds": "a9403363445c3eab950737940787eb19",
     "sphaerae": "7b72cd32406baf1cdc88938e6a9fa83e",
-    "tasks": "ffcf07be70620bf11d70de82bcfccf14",
+    "tasks": "bfbbc09d1ef33fc6f75f66bdf7009e80",
     "tectosphaera": "9dda1478e7565b71359b0d731010eb27",
     "visualizations": "d4f1816ae4f8a595ce62d3054bb38d06",
-    "garden": "82d7a0e2ae211bb634c9c41cffc1c80a"
+    "garden": "82d7a0e2ae211bb634c9c41cffc1c80a",
+    "personal_gardeners": "911a4177f4675bbdbe1a6ac58096be95"
   },
   "statistics": {
-    "total_scanned": 38,
-    "valid_v2": 38,
+    "total_scanned": 39,
+    "valid_v2": 39,
     "invalid_v2": 0,
     "errors": 0,
     "warnings": 0,
-    "total_files": 225,
-    "total_size_kb": 1428.25
+    "total_files": 234,
+    "total_size_kb": 1465.4599999999998
   },
   "scanner_config": {
     "updated": "2026-04-09",
