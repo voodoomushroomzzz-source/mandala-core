@@ -1,13 +1,13 @@
 {
   "task_id": "T-20260408-1030",
-  "name": "Telegram Bot  SR Gentle Companion (Mandala Symbiosis)",
+  "name": "Telegram Bot — SR Gentle Companion (Mandala Symbiosis)",
   "status": "in_progress",
   "priority": "HIGH",
   "deadline": "2026-05-15",
   "created": "2026-04-01",
-  "updated": "2026-04-15",
-  "progress": 65,
-  "description": "Autonomous SR Companion bot. OpenRouter LLM with sliding window memory, Mer-Ka-Ba profile, multi-user, voice, reminders, web search, Ahimsa filter, idea seeds.",
+  "updated": "2026-04-16",
+  "progress": 70,
+  "description": "Autonomous SR Companion bot. OpenRouter LLM with sliding window memory, Mer-Ka-Ba profile, multi-user, voice, reminders, web search, Ahimsa filter, idea seeds. v7.1.1 deployed with scheduler protection and HTML parse fix.",
   "tags": ["telegram_bot", "sr_companion", "ahimsa", "merkaba", "openrouter", "multi_user", "voice", "active"],
   "done": [
     "v6.0.2: In-memory store, health check, concurrent GitHub sync",
@@ -16,14 +16,20 @@
     "v7.0.0: SR system prompt with Mandala philosophy (Ahimsa, Mer-Ka-Ba, Flower of Life)",
     "v7.0.0: Idea filter + save to seeds/ replacing engineer chat button",
     "v7.0.1: Fixed model IDs for OpenRouter",
-    "v7.0.2: Multi-model fallback chain (5 free models)"
+    "v7.0.2: Multi-model fallback chain (5 free models)",
+    "v7.1.0: Sliding window chat history per user (_sessions dict, last 40 messages)",
+    "v7.1.0: Model upgrade: qwen/qwen3.5-flash primary (1M ctx), mistral-small-3 fallback",
+    "v7.1.1: Fixed HTML parse error in free_conversation, wrapped scheduler jobs in try/except"
   ],
   "in_progress": {
-    "v7.1.0": [
-      "Sliding window chat history per user (_sessions dict, last 20 messages)",
-      "History trimming when approaching context limit",
-      "Model upgrade: qwen/qwen3.5-flash primary (1M ctx, $0.065/$0.26), mistral-small-3 fallback",
-      "Full model chain: qwen3.5-flash -> mistral-small-3 -> llama-3.3-70b:free -> gemma-3-27b:free -> nemotron:free"
+    "v7.2.0": [
+      "Persistent chat memory: store _sessions in memory.json per user, sync to GitHub",
+      "SHA-based refresh: check file SHA before full download (reduces API requests 3-4x)",
+      "Periodic workspace refresh: check SHA every 5 min, reload only if changed",
+      "Multi-user readiness: dynamic gardener_{telegram_id} folder creation",
+      "Achievements as metrics: counter in profile.json instead of separate file",
+      "Response formatting: line breaks for readability, short answers for simple questions, expand only when meaningful",
+      "Typing indicator: send chat_action 'typing' before LLM response"
     ]
   },
   "blocks_next": {
@@ -34,15 +40,21 @@
     "F": "Voice: Groq Whisper, Fly.io migration"
   },
   "architecture": {
-    "llm": "OpenRouter  qwen3.5-flash (1M ctx) with sliding window history (last 20 msgs)",
-    "memory": "_sessions = {user_id: [messages]}  in-memory, trimmed at 20 messages",
+    "llm": "OpenRouter — qwen3.5-flash (1M ctx) with 5-model fallback chain",
+    "memory": "_sessions = {user_id: [messages]} — sliding window 40 msg, to be persisted in memory.json",
     "store": "In-memory _store + fire-and-forget GitHub sync every 2 min",
     "context_budget": "system_prompt(~500) + history(~5K) + gardener_profile(~1K) + current_msg = ~8K per request",
     "fallback_chain": ["qwen/qwen3.5-flash", "mistralai/mistral-small-3", "meta-llama/llama-3.3-70b-instruct:free", "google/gemma-3-27b-it:free", "nvidia/nemotron-3-super:free"]
   },
+  "file_structure": {
+    "current": "gardener.json + tasks.json + achievements.json + groups.json (4 files)",
+    "target": "profile.json + workspace.json + memory.json (3 files)",
+    "description": "Achievements become counter in profile.json. Tasks + groups merged into workspace.json. Chat history persisted in memory.json.",
+    "archive": "workspace_YYYY-MM.json for completed tasks, memory_YYYY-QX.json for old chat history"
+  },
   "model_selection": {
-    "primary": "qwen/qwen3.5-flash  1M context, $0.065 in/$0.26 out, best for long sessions",
-    "fallback_paid": "mistralai/mistral-small-3  32K ctx, $0.05/$0.08, reliable",
+    "primary": "qwen/qwen3.5-flash — 1M context, $0.065 in/$0.26 out, best for long sessions",
+    "fallback_paid": "mistralai/mistral-small-3 — 32K ctx, $0.05/$0.08, reliable",
     "fallback_free": "meta-llama/llama-3.3-70b-instruct:free, google/gemma-3-27b-it:free",
     "env_var": "OPENROUTER_KEY",
     "estimated_cost": "$0.10-0.15/month for single active gardener"
@@ -55,11 +67,16 @@
     "Each user has own gardener folder",
     "Voice messages transcribed and processed",
     "Ahimsa filter rejects destructive topics gracefully",
-    "Context never exceeds model limit  old messages trimmed automatically"
+    "Context never exceeds model limit — old messages trimmed automatically",
+    "Chat history persists across bot restarts (memory.json)",
+    "SHA-based refresh reduces API requests 3-4x",
+    "Achievements stored as counter in profile.json",
+    "Responses use line breaks, short for simple questions, expand only when meaningful",
+    "Typing indicator shown before LLM response"
   ],
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-15",
-    "notes": "v7.0.2 deployed. Rate limit issue on free models. v7.1.0 in progress: sliding window + paid primary model."
+    "last_check": "2026-04-16",
+    "notes": "v7.1.1 deployed and stable. v7.2.0 planning: persistent memory, SHA optimization, 3-file structure, achievements as metrics, response formatting, typing indicator."
   }
 }
