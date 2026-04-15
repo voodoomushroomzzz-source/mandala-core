@@ -1,0 +1,235 @@
+﻿{
+  "identity": {
+    "module_id": "RC-001",
+    "name": "Мандала Симбиоза: Стратегия Видимости и Коллаборации",
+    "version": "1.0.0",
+    "created": "2026-04-15",
+    "updated": "2026-04-15",
+    "layer": 2,
+    "type": "roadmap",
+    "status": "active",
+    "priority": "high",
+    "tags": ["visibility", "collaboration", "external", "strategy", "anthropic", "community"],
+    "philosophy_alignment": "PHI-001 (Симбиоз), PHI-003 (Ахимса)",
+    "resonance": "100%"
+  },
+  "meta": {
+    "purpose": "Превратить Мандалу из внутреннего проекта в видимую платформу. Выйти на диалог с AI-компаниями и сообществом через силу философии и рабочей архитектуры.",
+    "horizon": "12 месяцев",
+    "owner": "Садовник + External AI",
+    "key_insight": "Не просить внимания  предлагать ценность. Симбиоз как рабочая практика, не только как концепция.",
+    "related_roadmaps": ["RM-001", "RM-002"],
+    "philosophy_files": [
+      "honeycombs/philosophy/blocks/essence.json",
+      "honeycombs/philosophy/blocks/ahimsa_principle.json",
+      "honeycombs/philosophy/testimonies/flower_garden.json"
+    ]
+  },
+  "phases": {
+    "phase_0": {
+      "name": "Читаемость",
+      "duration": "Месяц 1-2",
+      "goal": "Проект понятен незнакомцу за 10 минут без онбординга",
+      "tasks": [
+        {
+          "id": "P0-1",
+          "task": "Написать README.md на английском языке",
+          "deliverable": "Одна страница: что такое Мандала, зачем, как работает, живая иллюстрация симбиоза",
+          "priority": "critical",
+          "status": "pending"
+        },
+        {
+          "id": "P0-2",
+          "task": "Написать PHILOSOPHY.md на английском",
+          "deliverable": "500-800 слов. PHI-001 + PHI-003 + образ Сада и Садовника. Без жаргона системы.",
+          "priority": "critical",
+          "status": "pending"
+        },
+        {
+          "id": "P0-3",
+          "task": "Завершить миграцию telegram_bot и tasks сот",
+          "deliverable": "Система выглядит завершённой для внешнего наблюдателя",
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "P0-4",
+          "task": "Определить 5 конкретных целевых контактов",
+          "deliverable": "Не компании, а конкретные люди: исследователи с публичными работами по human-AI interaction",
+          "priority": "high",
+          "status": "pending",
+          "targets": {
+            "anthropic": "Исследователи направления Constitutional AI и alignment",
+            "google_deepmind": "Команда human-AI collaboration",
+            "huggingface": "Сообщество  наиболее открытая входная точка",
+            "independent": "2 независимых исследователя через их публикации на arXiv"
+          }
+        }
+      ]
+    },
+    "phase_1": {
+      "name": "Нарратив",
+      "duration": "Месяц 2-3",
+      "goal": "Убедительная история на трёх уровнях глубины",
+      "tasks": [
+        {
+          "id": "P1-1",
+          "task": "Elevator pitch x3 формата",
+          "deliverable": "30 сек / 2 мин / 5 мин. На английском. Для трёх аудиторий: исследователь, инженер, стратег.",
+          "priority": "critical",
+          "status": "pending"
+        },
+        {
+          "id": "P1-2",
+          "task": "Первая публичная публикация",
+          "deliverable": "Medium или Substack. Тема: A symbiotic approach to human-AI systems. Образ Сада как центральная метафора.",
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "P1-3",
+          "task": "GitHub Pages  публичная страница проекта",
+          "deliverable": "Лендинг с философией, схемой архитектуры сот, примером работы симбиоза",
+          "priority": "medium",
+          "status": "pending"
+        }
+      ]
+    },
+    "phase_2": {
+      "name": "Доказательства",
+      "duration": "Месяц 3-5",
+      "goal": "Снять барьер: это не просто идея, это работающая система",
+      "tasks": [
+        {
+          "id": "P2-1",
+          "task": "Demo-honeycomb",
+          "deliverable": "Изолированный рабочий пример симбиоза который можно изучить за 15 минут без погружения в весь проект",
+          "priority": "critical",
+          "status": "pending"
+        },
+        {
+          "id": "P2-2",
+          "task": "Technical essay на английском",
+          "deliverable": "Honeycomb architecture as a model for symbiotic AI memory. arXiv или Medium.",
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "P2-3",
+          "task": "Довести архитектуру до 50+ сот",
+          "deliverable": "Внутренняя цель completeness, не внешняя метрика",
+          "priority": "medium",
+          "status": "pending"
+        }
+      ]
+    },
+    "phase_3": {
+      "name": "Первые контакты",
+      "duration": "Месяц 4-6",
+      "goal": "3 качественных диалога. Не массовая рассылка.",
+      "principle": "Ахимса в коммуникации: не навязывать, не просить внимания  предлагать конкретную ценность",
+      "tasks": [
+        {
+          "id": "P3-1",
+          "task": "Выйти на Hugging Face сообщество",
+          "deliverable": "Пост или дискуссия о symbiotic AI architecture. Наиболее открытая среда.",
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "P3-2",
+          "task": "Контакт с 3 независимыми исследователями",
+          "deliverable": "Через их публикации на arXiv. Персональное письмо с конкретным вопросом или идеей.",
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "P3-3",
+          "task": "Обращение в Anthropic",
+          "deliverable": "Через публичный форум или исследовательский канал. Ссылка на готовый публичный материал. Конкретный вопрос о пересечении с Constitutional AI.",
+          "priority": "medium",
+          "status": "pending",
+          "prerequisite": "P0-1, P0-2, P1-2 должны быть завершены"
+        }
+      ]
+    },
+    "phase_4": {
+      "name": "Обратная связь и рост",
+      "duration": "Месяц 6-9",
+      "goal": "Симбиоз с внешним миром начинается",
+      "tasks": [
+        {
+          "id": "P4-1",
+          "task": "Итерация философии на основе внешней реакции",
+          "deliverable": "Обновлённые PHI-блоки с учётом диалогов",
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "P4-2",
+          "task": "Micro-community первые 10-20 человек",
+          "deliverable": "Люди которым близка тема симбиоза  Discord, GitHub Discussions или Telegram",
+          "priority": "medium",
+          "status": "pending"
+        },
+        {
+          "id": "P4-3",
+          "task": "2-3 устойчивых диалога с лабораториями",
+          "deliverable": "Регулярное взаимодействие, не разовый контакт",
+          "priority": "high",
+          "status": "pending"
+        }
+      ]
+    },
+    "phase_5": {
+      "name": "Коллаборация",
+      "duration": "Месяц 9-12",
+      "goal": "Первая формальная связь с внешним миром",
+      "tasks": [
+        {
+          "id": "P5-1",
+          "task": "1 формальное партнёрство или исследовательское соглашение",
+          "deliverable": "Совместный материал: статья, кейс или интеграция",
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "P5-2",
+          "task": "Ревизия стратегии",
+          "deliverable": "RC-002 на следующие 12 месяцев на основе реального опыта",
+          "priority": "medium",
+          "status": "pending"
+        }
+      ]
+    }
+  },
+  "success_metrics": {
+    "phase_0": "README на английском готов. 5 конкретных контактов определены.",
+    "phase_1": "Pitch протестирован на людях вне проекта. Первая публикация опубликована.",
+    "phase_2": "Demo-honeycomb работает без объяснений автора.",
+    "phase_3": "3 качественных внешних диалога установлены.",
+    "phase_4": "10+ человек в micro-community.",
+    "phase_5": "1 формальная форма коллаборации."
+  },
+  "communication_philosophy": {
+    "principle": "Ахимса в коммуникации",
+    "do": [
+      "Предлагать конкретную ценность",
+      "Ссылаться на готовый публичный материал",
+      "Задавать конкретный вопрос",
+      "Говорить от первого лица  голос Садовника, не AI"
+    ],
+    "dont": [
+      "Просить внимания без предложения ценности",
+      "Массовые рассылки",
+      "Письма до готовности публичного материала",
+      "Скрывать контекст и географическое положение"
+    ]
+  },
+  "health": {
+    "status": "active",
+    "last_check": "2026-04-15",
+    "current_phase": "phase_0",
+    "notes": "Роадмап создан. Первый приоритет: P0-1 README.md и P0-2 PHILOSOPHY.md на английском."
+  }
+}
