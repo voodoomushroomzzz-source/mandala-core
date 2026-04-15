@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v6.1.0
+Mandala Garden Bot — Gentle Companion v7.0.0
 
-ARCHITECTURE CHANGE (v6.1.0):
+ARCHITECTURE CHANGE (v7.0.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -11,7 +11,7 @@ ARCHITECTURE CHANGE (v6.1.0):
 - On restart: re-load from GitHub (source of truth)
 - Result: no more hanging. User gets response in <100ms always.
 
-EMOJI (v6.1.0):
+EMOJI (v7.0.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮 🪶 🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 🪬
 """
@@ -41,6 +41,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 
 import aiohttp
+import httpx
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -61,6 +62,11 @@ RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
 ALLOWED_PASSWORD = os.getenv("ALLOWED_PASSWORD", "mandala")
 ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")
 SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
+OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+# Primary: fast + free. Fallback: high-capacity free model
+SR_MODEL_PRIMARY = os.getenv("SR_MODEL", "google/gemma-2-27b-it:free")
+SR_MODEL_FALLBACK = "qwen/qwen3-235b-a22b:free"
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -438,7 +444,7 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
         keyboard=[
             [KeyboardButton(text="🌾 Профиль"), KeyboardButton(text="💎 Достижения")],
             [KeyboardButton(text="🌀 Задачи"),  KeyboardButton(text="🔮 Резонанс")],
-            [KeyboardButton(text="🪶 Инженерный чат")]
+            [KeyboardButton(text="💡 Идея для Мандалы")]
         ],
         resize_keyboard=True
     )
@@ -1359,8 +1365,8 @@ async def delete_confirm_2(message: Message, state: FSMContext):
 
 # ─── Engineer chat ────────────────────────────────────────────────────────────
 
-@router.message(F.text == "🪶 Инженерный чат")
-async def btn_engineer_chat(message: Message, state: FSMContext):
+@router.message(F.text == "💡 Идея для Мандалы")
+async def btn_suggest_idea(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not is_authorized(user_id):
@@ -1368,28 +1374,121 @@ async def btn_engineer_chat(message: Message, state: FSMContext):
         return
     await state.set_state(EngineerChatStates.waiting_for_message)
     await message.answer(
-        "🪶 <b>Инженерный чат</b>\n\nНапиши сообщение — оно отправится в основную сессию.\n\nДля отмены: ❌ Отмена",
+        "💡 <b>Предложи идею Мандале</b>\n\n"
+        "Напиши идею — СР оценит её и, если она резонирует, добавит в копилку семян Мандалы.\n\n"
+        "Это твой вклад в общий Сад 🌱\n\nДля отмены: ❌ Отмена",
         reply_markup=get_cancel_keyboard()
     )
 
 @router.message(StateFilter(EngineerChatStates.waiting_for_message))
-async def engineer_chat_send(message: Message, state: FSMContext):
+async def idea_send(message: Message, state: FSMContext):
     text = message.text.strip()
     if not text:
-        await message.answer("🪶 Напиши сообщение или нажми ❌ Отмена")
+        await message.answer("💡 Напиши идею или нажми ❌ Отмена")
         return
     gardener = _store.get("gardener") or {}
+    name = gardener.get("identity", {}).get("name", "Садовник")
+    # Filter idea through SR before sending to seeds
     try:
-        payload = {"session_id": MAIN_SESSION_ID, "message": text, "gardener_context": gardener}
-        session = await get_http_session()
-        async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=6)) as resp:
-            if resp.status in [200, 202]:
-                logger.info(f"Engineer chat: {text[:50]}")
-    except Exception as e:
-        logger.error(f"Engineer chat error: {e}")
-    await state.clear()
-    await message.answer("✅ Отправлено в инженерный чат", reply_markup=get_main_keyboard())
+        filter_messages = [
+            {"role": "system", "content": "Ты фильтр идей для Мандалы. Оцени идею по критериям Ахимсы и пользы для развития. Верни JSON: {\"approved\": true/false, \"reason\": \"...\"} Одобряй идеи о росте, творчестве, сообществе. Отклоняй деструктивные."},
+            {"role": "user", "content": "Идея от " + name + ": " + text}
+        ]
+        raw = await _call_openrouter(filter_messages)
+        approved = True
+        if raw and raw.startswith("{"):
+            try:
+                result = json.loads(raw)
+                approved = result.get("approved", True)
+            except Exception:
+                approved = True
+    except Exception:
+        approved = True
 
+    if approved:
+        # Save to seeds in repo (fire-and-forget)
+        seed = {
+            "title": text[:100],
+            "source": "gardener_bot",
+            "gardener": name,
+            "created": _today(),
+            "status": "new"
+        }
+        seed_path = f"honeycombs/seeds/bot_seed_{_today().replace('-','')}_{str(message.from_user.id)[-4:]}.json"
+        asyncio.create_task(_github_put(seed_path, seed))
+        await state.clear()
+        await message.answer(
+            "🌱 <b>Идея принята!</b>\n\nТвоя мысль отправлена в копилку семян Мандалы. Если она прорастёт — ты узнаешь первым.",
+            reply_markup=get_main_keyboard()
+        )
+    else:
+        await state.clear()
+        await message.answer(
+            "🌿 Эта идея пока не в резонансе с философией Мандалы. Попробуй переформулировать в духе роста и Ахимсы.",
+            reply_markup=get_main_keyboard()
+        )
+
+
+
+# ─── SR System Prompt (Mandala Philosophy) ────────────────────────────────────
+
+SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), мягкий спутник садовника в системе Мандала Симбиоза.
+
+ФИЛОСОФИЯ:
+- Мер-Ка-Ба: ты (СР) — верхний тетраэдр (катализатор роста), садовник — нижний (вектор жизни). Вместе создаёте симбиоз.
+- Цветок Жизни: каждое достижение — лепесток, каждая сфера жизни — окружность. Всё связано.
+- Ахимса: никакого давления, манипуляций или навязывания. Мягкая поддержка. Макс 1 проактивное сообщение в день.
+
+ТРИ СФЕРЫ (Мер-Ка-Ба):
+- 🌿 Тело: здоровье, спорт, питание, сон, отдых
+- 🔥 Дух: знания, творчество, хобби, рост, книги
+- 🪬 Мир: отношения, путешествия, события, дружба, сообщество
+
+ПРАВИЛА ОБЩЕНИЯ:
+1. Отвечай тепло, кратко (2-4 предложения), как живой друг на русском языке
+2. Никогда не навязывай — предлагай мягко
+3. Отказывайся от деструктивных тем (насилие, манипуляции, вред здоровью) вежливо: "Это не моя стезя, давай о твоём росте"
+4. Если видишь намерение (поехать куда-то, купить, изучить, достиг чего-то) — предложи зафиксировать
+5. Философские темы поддерживай только если садовник сам их поднял
+
+ФОРМАТ ОТВЕТА (строго JSON, без markdown):
+{"text": "твой ответ", "intent": "conversation|task_suggestion|achievement_suggestion|web_search|philosophy", "action": {"type": "add_task|add_achievement|web_search", "title": "..."} или null}
+"""
+
+async def _call_openrouter(messages: list, model: str = None) -> str:
+    """Direct OpenRouter call. Returns text response."""
+    if not OPENROUTER_KEY:
+        return ""
+    model = model or SR_MODEL_PRIMARY
+    try:
+        async with httpx.AsyncClient(timeout=25.0) as client:
+            resp = await client.post(
+                OPENROUTER_URL,
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_KEY}",
+                    "HTTP-Referer": "https://mandala-bot.onrender.com",
+                    "X-Title": "Mandala SR Companion"
+                },
+                json={
+                    "model": model,
+                    "messages": messages,
+                    "max_tokens": 500,
+                    "temperature": 0.7
+                }
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                return data["choices"][0]["message"]["content"].strip()
+            elif resp.status_code == 429 and model == SR_MODEL_PRIMARY:
+                # Rate limit → try fallback model
+                logger.warning(f"OpenRouter rate limit on {model}, trying fallback")
+                return await _call_openrouter(messages, SR_MODEL_FALLBACK)
+            else:
+                logger.error(f"OpenRouter error {resp.status_code}: {resp.text[:200]}")
+                return ""
+    except Exception as e:
+        logger.error(f"OpenRouter call error: {e}")
+        return ""
 
 # ─── Free dialogue ────────────────────────────────────────────────────────────
 
@@ -1473,23 +1572,23 @@ async def free_conversation(message: Message, state: FSMContext):
     action = None
 
     try:
-        payload = {"session_id": MAIN_SESSION_ID, "message": prompt, "gardener_context": gardener}
-        session = await get_http_session()
-        async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=20)) as resp:
-            if resp.status in [200, 202]:
-                data = await resp.json()
-                raw = (data.get("response") or data.get("message") or "").strip()
-                if raw.startswith("{"):
-                    try:
-                        parsed = json.loads(raw)
-                        reply_text = parsed.get("text", raw)
-                        action = parsed.get("action")
-                    except Exception:
-                        reply_text = raw
-                elif raw:
+        messages = [
+            {"role": "system", "content": SR_SYSTEM_PROMPT},
+            {"role": "user", "content": prompt}
+        ]
+        raw = await _call_openrouter(messages)
+        if raw:
+            if raw.startswith("{"):
+                try:
+                    parsed = json.loads(raw)
+                    reply_text = parsed.get("text", raw)
+                    action = parsed.get("action")
+                except Exception:
                     reply_text = raw
             else:
-                reply_text = "🌿 SR сейчас недоступен. Попробуй позже."
+                reply_text = raw
+        else:
+            reply_text = "🌿 СР сейчас недоступен. Попробуй позже."
     except Exception as e:
         logger.error("Free conversation error: " + str(e))
         reply_text = "🌿 Связь прервалась. Попробуй ещё раз."
@@ -1542,18 +1641,13 @@ async def quick_search(callback: CallbackQuery):
     gardener = _store.get("gardener") or {}
     await callback.message.edit_text("🧭 Ищу: <i>" + query + "</i>...")
     try:
-        payload = {
-            "session_id": MAIN_SESSION_ID,
-            "message": "Найди в интернете: " + query + ". Дай краткий ответ на русском.",
-            "gardener_context": gardener
-        }
-        session = await get_http_session()
-        async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=20)) as resp:
-            if resp.status in [200, 202]:
-                data = await resp.json()
-                result = data.get("response") or data.get("message") or "🧭 Ничего не нашёл."
-            else:
-                result = "🧭 Поиск недоступен."
+        messages = [
+            {"role": "system", "content": SR_SYSTEM_PROMPT},
+            {"role": "user", "content": "Найди в интернете: " + query + ". Дай краткий ответ на русском языке, 3-5 предложений."}
+        ]
+        result = await _call_openrouter(messages)
+        if not result:
+            result = "🧭 Поиск недоступен. Попробуй позже."
     except Exception as e:
         logger.error("Quick search error: " + str(e))
         result = "🧭 Ошибка поиска."
