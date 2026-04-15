@@ -65,11 +65,11 @@ SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 SR_MODEL_CHAIN = [
-    "qwen/qwen3.5-flash",
-    "mistralai/mistral-small-3",
+    "qwen/qwen3.5-flash-02-23",
+    "mistralai/mistral-small-3.2-24b-instruct",
     "meta-llama/llama-3.3-70b-instruct:free",
     "google/gemma-3-27b-it:free",
-    "nvidia/nemotron-3-super:free",
+    "nvidia/nemotron-3-nano-30b-a3b",
 ]
 SESSION_MAX_MESSAGES = 40
 
