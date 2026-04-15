@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v6.0.2
+Mandala Garden Bot — Gentle Companion v6.1.0
 
-ARCHITECTURE CHANGE (v6.0.2):
+ARCHITECTURE CHANGE (v6.1.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -11,7 +11,7 @@ ARCHITECTURE CHANGE (v6.0.2):
 - On restart: re-load from GitHub (source of truth)
 - Result: no more hanging. User gets response in <100ms always.
 
-EMOJI (v6.0.2):
+EMOJI (v6.1.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮 🪶 🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 🪬
 """
@@ -1389,6 +1389,180 @@ async def engineer_chat_send(message: Message, state: FSMContext):
         logger.error(f"Engineer chat error: {e}")
     await state.clear()
     await message.answer("✅ Отправлено в инженерный чат", reply_markup=get_main_keyboard())
+
+
+# ─── Free dialogue ────────────────────────────────────────────────────────────
+
+def _build_sr_context() -> dict:
+    gardener = _store.get("gardener") or {}
+    tasks = _store.get("tasks", [])
+    achievements = _store.get("achievements", [])
+    active = [t for t in tasks if t.get("status") != "completed"]
+    return {
+        "name": gardener.get("identity", {}).get("name", "Садовник"),
+        "resonance": gardener.get("identity", {}).get("resonance_level", 13),
+        "interests": gardener.get("personal_info", {}).get("interests", []),
+        "active_tasks": [{"title": t["title"], "priority": t.get("priority", 5)} for t in active[:5]],
+        "achievements_count": len(achievements),
+        "life_areas": gardener.get("personal_info", {}).get("life_areas", {}),
+    }
+
+def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
+    if not action:
+        return None
+    kind = action.get("type", "")
+    label = action.get("title", action.get("query", ""))[:50]
+    if kind == "add_task":
+        return InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="✅ Добавить задачу", callback_data="qt:" + label)],
+            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
+        ])
+    if kind == "add_achievement":
+        return InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="💎 Зафиксировать достижение", callback_data="qa:" + label)],
+            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
+        ])
+    if kind == "web_search":
+        return InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🧭 Найти в интернете", callback_data="qs:" + label)],
+            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
+        ])
+    return None
+
+def _build_prompt(text: str, ctx: dict) -> str:
+    interests = ", ".join(ctx["interests"][:3]) or "не указаны"
+    tasks_count = len(ctx["active_tasks"])
+    ach_count = ctx["achievements_count"]
+    name = ctx["name"]
+    resonance = ctx["resonance"]
+    return (
+        "Ты Gentle Companion садовника " + name + ". "
+        "Резонанс: " + str(resonance) + "%. "
+        "Интересы: " + interests + ". "
+        "Активных задач: " + str(tasks_count) + ". "
+        "Достижений: " + str(ach_count) + ".\n\n"
+        "Садовник написал: \"" + text + "\"\n\n"
+        "Ответь тепло и кратко (2-4 предложения) как живой собеседник на русском языке.\n"
+        "Если в сообщении есть намерение (поехать, купить, изучить, сделать, достиг чего-то) — предложи действие.\n"
+        "Верни ТОЛЬКО валидный JSON без markdown и без блоков кода:\n"
+        '{\"text\": \"твой ответ\", \"intent\": \"conversation|task_suggestion|achievement_suggestion|web_search\", '
+        '\"action\": {\"type\": \"add_task|add_achievement|web_search\", \"title\": \"...\"} или null}'
+    )
+
+@router.message(F.text & ~F.text.startswith("/"))
+async def free_conversation(message: Message, state: FSMContext):
+    """Catches any plain text not handled above. MUST be last message handler."""
+    user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start чтобы начать.")
+        return
+
+    text = (message.text or "").strip()
+    if not text:
+        return
+
+    ctx = _build_sr_context()
+    gardener = _store.get("gardener") or {}
+    prompt = _build_prompt(text, ctx)
+
+    await message.bot.send_chat_action(message.chat.id, "typing")
+
+    reply_text = "🌿 Я здесь, рядом."
+    action = None
+
+    try:
+        payload = {"session_id": MAIN_SESSION_ID, "message": prompt, "gardener_context": gardener}
+        session = await get_http_session()
+        async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=20)) as resp:
+            if resp.status in [200, 202]:
+                data = await resp.json()
+                raw = (data.get("response") or data.get("message") or "").strip()
+                if raw.startswith("{"):
+                    try:
+                        parsed = json.loads(raw)
+                        reply_text = parsed.get("text", raw)
+                        action = parsed.get("action")
+                    except Exception:
+                        reply_text = raw
+                elif raw:
+                    reply_text = raw
+            else:
+                reply_text = "🌿 SR сейчас недоступен. Попробуй позже."
+    except Exception as e:
+        logger.error("Free conversation error: " + str(e))
+        reply_text = "🌿 Связь прервалась. Попробуй ещё раз."
+
+    kb = _get_action_keyboard(action)
+    await message.answer(reply_text, reply_markup=kb if kb else get_main_keyboard())
+
+@router.callback_query(F.data.startswith("qt:"))
+async def quick_add_task(callback: CallbackQuery):
+    await callback.answer()
+    title = callback.data[3:]
+    tasks = list(_store.get("tasks", []))
+    task_id = "task_" + _today().replace("-", "") + "_" + str(len(tasks)+1).zfill(3)
+    tasks.append({
+        "task_id": task_id, "title": title, "status": "todo",
+        "group_id": "group_001", "life_area": "other", "priority": 5,
+        "deadline": None, "estimated_hours": None,
+        "created": _today(), "updated": _today(), "completed": None, "notes": ""
+    })
+    store_set_tasks(tasks)
+    _fire_sync()
+    await callback.message.edit_text("✅ Задача добавлена: <b>" + title + "</b>\n<code>" + task_id + "</code>")
+
+@router.callback_query(F.data.startswith("qa:"))
+async def quick_add_achievement(callback: CallbackQuery):
+    await callback.answer()
+    title = callback.data[3:]
+    achievements = list(_store.get("achievements", []))
+    achievements.append({
+        "id": "ach_" + str(len(achievements)+1).zfill(3),
+        "category": "other", "title": title, "description": "",
+        "completed": _today(), "resonance_bonus": 3, "icon": "🌱"
+    })
+    store_set_achievements(achievements)
+    gardener = _store.get("gardener")
+    if gardener:
+        g = dict(gardener)
+        new_res = min(100, g.get("identity", {}).get("resonance_level", 13) + 3)
+        g.setdefault("identity", {})["resonance_level"] = new_res
+        g["identity"]["updated"] = _today()
+        g = _add_growth_history_entry(g, new_res)
+        store_set_gardener(g)
+    _fire_sync()
+    await callback.message.edit_text("💎 Достижение: <b>" + title + "</b>\n🔮 +3 к резонансу")
+
+@router.callback_query(F.data.startswith("qs:"))
+async def quick_search(callback: CallbackQuery):
+    await callback.answer()
+    query = callback.data[3:]
+    gardener = _store.get("gardener") or {}
+    await callback.message.edit_text("🧭 Ищу: <i>" + query + "</i>...")
+    try:
+        payload = {
+            "session_id": MAIN_SESSION_ID,
+            "message": "Найди в интернете: " + query + ". Дай краткий ответ на русском.",
+            "gardener_context": gardener
+        }
+        session = await get_http_session()
+        async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=20)) as resp:
+            if resp.status in [200, 202]:
+                data = await resp.json()
+                result = data.get("response") or data.get("message") or "🧭 Ничего не нашёл."
+            else:
+                result = "🧭 Поиск недоступен."
+    except Exception as e:
+        logger.error("Quick search error: " + str(e))
+        result = "🧭 Ошибка поиска."
+    await callback.message.answer(result, reply_markup=get_main_keyboard())
+
+@router.callback_query(F.data == "qdismiss")
+async def quick_dismiss(callback: CallbackQuery):
+    await callback.answer()
+    await callback.message.edit_reply_markup(reply_markup=None)
 
 # ─── Cancel ───────────────────────────────────────────────────────────────────
 
