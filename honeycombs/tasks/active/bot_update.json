@@ -1,54 +1,37 @@
 {
   "task_id": "T-20260408-1030",
-  "name": "Telegram Bot  Gentle Companion for Garden",
+  "name": "Telegram Bot  SR Gentle Companion (Mandala Symbiosis)",
   "status": "in_progress",
   "priority": "HIGH",
-  "deadline": "2026-05-01",
+  "deadline": "2026-05-15",
   "created": "2026-04-01",
   "updated": "2026-04-15",
-  "description": "Evolve Telegram bot into a living Gentle Companion. Core infrastructure complete (v6.0.2). Now moving toward free dialogue, intent detection, mood tracking, voice messages, and SR integration as the central interaction layer.",
-  "tags": ["telegram_bot", "garden", "companion", "ahimsa", "active", "sr_integration", "voice", "intent"],
-  "progress": 70,
-  "garden_ref": "honeycombs/garden/",
+  "progress": 60,
+  "description": "Autonomous SR Companion bot. OpenRouter LLM, Mer-Ka-Ba profile, multi-user, voice, reminders, web search, Ahimsa filter, idea seeds.",
+  "version": "v7.0.0",
   "done": [
-    "v6.0.2: In-memory store  zero GitHub blocking, <100ms responses",
-    "v6.0.2: Fire-and-forget GitHub sync (concurrent, every 2 min)",
-    "v6.0.2: Health check endpoint  stable Render deployment",
-    "v6.0.1: _load_store before webhook  no message loss on restart",
-    "All /commands: /start, /profile, /resonance, /achievements, /tasks, /ask, /leave",
-    "Proactive messages: morning/evening with Ahimsa silence policy",
-    "Resonance decay, growth_history tracking",
-    "Botanical-sacred emoji palette",
-    "FSM task and achievement flows without hanging",
-    "Callback.answer() first  no TelegramBadRequest on restart"
+    "v6.0.2: In-memory store, health check, concurrent sync",
+    "v6.1.0: Free dialogue fallback, intent detection, quick actions",
+    "v7.0.0: OpenRouter direct (google/gemma-2-27b-it:free), SR system prompt",
+    "v7.0.0: Ahimsa philosophy filter in prompt",
+    "v7.0.0: Idea button replaces engineer chat, saves to seeds/",
+    "v7.0.0: Fallback model (qwen/qwen3-235b-a22b:free) on rate limit"
   ],
-  "deliverables_next": [
-    "STAGE 1: Fallback handler  any free text goes to SR, returns {text, intent, action}",
-    "STAGE 2: Intent detection  task/achievement/search/mood suggestions from natural speech",
-    "STAGE 2: Web search integration  connect main.py search to bot via intent",
-    "STAGE 3: Mood tracker  analyze message tone, adaptive SR responses",
-    "STAGE 4: Voice messages in  Groq Whisper transcription",
-    "STAGE 4: Voice messages out  TTS responses (2nd priority)",
-    "STAGE 5: Pattern analysis  weekly/monthly recommendations from history"
-  ],
-  "acceptance_criteria": [
-    "Gardener can freely converse  bot responds naturally via SR",
-    "Bot detects intent from natural language and suggests actions",
-    "Bot adapts tone based on gardener mood signals",
-    "Voice messages transcribed and processed as text",
-    "Web search available from conversation",
-    "All existing commands stable, no hangs"
-  ],
-  "architecture": {
-    "core": "In-memory store + fire-and-forget GitHub sync",
-    "dialogue": "Any message  SR (main.py)  {text, intent, action}  bot responds + optional action button",
-    "voice": "Telegram voice  Groq Whisper  text  SR pipeline",
-    "mood": "_store[mood_history] + session signals  adaptive prompting",
-    "search": "intent=web_search  main.py search tool  formatted result"
+  "blocks_next": {
+    "B": "Multi-user: dynamic gardener_{telegram_id}, own folder per user",
+    "C": "Mer-Ka-Ba profile: Body/Spirit/World spheres, extended onboarding",
+    "D": "UX: grouped menu, changelog, multilingual",
+    "E": "Intelligence: reminders, Tavily search in bot, progressive learning",
+    "F": "Voice: Groq Whisper, Fly.io migration"
+  },
+  "model": {
+    "primary": "google/gemma-2-27b-it:free",
+    "fallback": "qwen/qwen3-235b-a22b:free",
+    "env_var": "OPENROUTER_KEY"
   },
   "health": {
     "status": "healthy",
     "last_check": "2026-04-15",
-    "notes": "v6.0.2 stable. Health check endpoint stops Render restarts. Moving to live dialogue phase."
+    "notes": "v7.0.0 ready for deploy. Add OPENROUTER_KEY to Render env vars."
   }
 }
