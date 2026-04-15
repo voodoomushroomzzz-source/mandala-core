@@ -65,8 +65,8 @@ SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 # Primary: fast + free. Fallback: high-capacity free model
-SR_MODEL_PRIMARY = os.getenv("SR_MODEL", "google/gemma-2-27b-it:free")
-SR_MODEL_FALLBACK = "qwen/qwen3-235b-a22b:free"
+SR_MODEL_PRIMARY = os.getenv("SR_MODEL", "meta-llama/llama-3.3-70b-instruct:free")
+SR_MODEL_FALLBACK = "qwen/qwen3-coder:free"
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
