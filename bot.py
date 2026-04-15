@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v6.0.1
+Mandala Garden Bot — Gentle Companion v6.0.2
 
-ARCHITECTURE CHANGE (v6.0.1):
+ARCHITECTURE CHANGE (v6.0.2):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -11,7 +11,7 @@ ARCHITECTURE CHANGE (v6.0.1):
 - On restart: re-load from GitHub (source of truth)
 - Result: no more hanging. User gets response in <100ms always.
 
-EMOJI (v6.0.1):
+EMOJI (v6.0.2):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮 🪶 🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 🪬
 """
@@ -161,7 +161,7 @@ async def _github_get(file_path: str) -> Optional[Any]:
     }
     session = await get_http_session()
     try:
-        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=6)) as resp:
             if resp.status == 200:
                 data = await resp.json()
                 content = base64.b64decode(data["content"]).decode("utf-8")
@@ -187,7 +187,7 @@ async def _github_put(path: str, content: Any) -> bool:
     session = await get_http_session()
     sha = None
     try:
-        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=6)) as resp:
             if resp.status == 200:
                 sha = (await resp.json()).get("sha")
     except Exception:
@@ -198,7 +198,7 @@ async def _github_put(path: str, content: Any) -> bool:
         payload["sha"] = sha
     try:
         async with session.put(url, headers=headers, json=payload,
-                               timeout=aiohttp.ClientTimeout(total=10)) as resp:
+                               timeout=aiohttp.ClientTimeout(total=6)) as resp:
             return resp.status in [200, 201]
     except Exception as e:
         logger.error(f"GitHub PUT error [{path}]: {e}")
@@ -207,17 +207,21 @@ async def _github_put(path: str, content: Any) -> bool:
 # ─── Background sync ──────────────────────────────────────────────────────────
 
 async def _sync_pending() -> None:
-    """Flush all pending writes to GitHub. Called by scheduler every 2 min."""
+    """Flush all pending writes to GitHub concurrently. Called by scheduler every 2 min."""
     if not _pending_writes:
         return
-    # snapshot and clear pending atomically
     batch = dict(_pending_writes)
     _pending_writes.clear()
-    for path, content in batch.items():
-        ok = await _github_put(path, content)
+    logger.info(f"Syncing {len(batch)} file(s) to GitHub...")
+
+    async def _put_one(path, data):
+        ok = await _github_put(path, data)
         if not ok:
             logger.warning(f"Sync failed for {path}, re-queuing")
-            _pending_writes.setdefault(path, content)
+            _pending_writes.setdefault(path, data)
+        return ok
+
+    await asyncio.gather(*[_put_one(p, c) for p, c in batch.items()])
 
 def _fire_sync() -> None:
     """Schedule a background sync without blocking the caller."""
@@ -1378,7 +1382,7 @@ async def engineer_chat_send(message: Message, state: FSMContext):
     try:
         payload = {"session_id": MAIN_SESSION_ID, "message": text, "gardener_context": gardener}
         session = await get_http_session()
-        async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+        async with session.post(SR_BACKEND_URL, json=payload, timeout=aiohttp.ClientTimeout(total=6)) as resp:
             if resp.status in [200, 202]:
                 logger.info(f"Engineer chat: {text[:50]}")
     except Exception as e:
@@ -1425,8 +1429,16 @@ async def on_shutdown(app: web.Application) -> None:
     await bot.delete_webhook()
     await bot.session.close()
 
+async def health(request: web.Request) -> web.Response:
+    status = "ready" if _store.get("ready") else "loading"
+    gardener = _store.get("gardener")
+    name = gardener.get("identity", {}).get("name", "none") if gardener else "none"
+    return web.Response(text=f"ok|{status}|gardener={name}")
+
 def main():
     app = web.Application()
+    app.router.add_get("/", health)
+    app.router.add_get("/health", health)
     SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
     setup_application(app, dp, bot=bot)
     app.on_startup.append(on_startup)
