@@ -2,9 +2,9 @@
     "identity":  {
                      "module_id":  "TASKS-MANIFEST-004",
                      "name":  "Tasks Honeycomb Manifest",
-                     "version":  "v3.2.0",
+                     "version":  "v3.3.0",
                      "created":  "2026-03-01",
-                     "updated":  "2026-04-13",
+                     "updated":  "2026-04-15",
                      "layer":  1,
                      "type":  "honeycomb_manifest"
                  },
@@ -33,7 +33,7 @@
                                            "segment":  "active_tasks",
                                            "folder":  "active/",
                                            "description":  "Currently active tasks",
-                                           "files_count":  10
+                                           "files_count":  11
                                        },
                                        {
                                            "segment":  "archive_tasks",
@@ -48,10 +48,10 @@
                        "first_file":  "basic_task.json"
                    },
     "registry":  {
-                     "total_files":  10,
+                     "total_files":  11,
                      "total_size_kb":  16.0,
-                     "last_updated":  "2026-04-13",
-                     "notes":  "v3.2.0: updated task IDs to T-YYYYMMDD-HHMM format. Added task_scanner (T-20260413-0140). Total active: 10."
+                     "last_updated":  "2026-04-15",
+                     "notes":  "v3.3.0: added T-20260415-VPS (Hetzner VPS migration). Total active: 11."
                  },
     "resonance":  {
                       "status":  "fully_resonant",
@@ -60,7 +60,7 @@
                   },
     "health":  {
                    "status":  "healthy",
-                   "last_check":  "2026-04-13",
-                   "notes":  "v3.2.0  active tasks: 10. Task IDs migrated."
+                   "last_check":  "2026-04-15",
+                   "notes":  "v3.3.0 active tasks: 11."
                }
 }
