@@ -1,97 +1,108 @@
-﻿{
-    "identity": {
-        "module_id": "ROADMAPS-INDEX",
-        "name": "Roadmaps Registry Index",
-        "version": "v2.6.0",
-        "created": "2026-03-04",
-        "updated": "2026-04-10",
-        "layer": 2,
-        "type": "registry_index",
-        "description": "Central index of all Mandala Symbiosis roadmaps. Tracks status, progress, and metadata for active, completed, and archived roadmaps.",
-        "status": "active",
-        "priority": "high",
-        "tags": ["roadmaps", "index", "registry", "tracking"],
-        "resonance": "100%"
-    },
-    "meta": {
-        "description": "Roadmaps registry index v2.6.0  synchronized with actual files 2026-04-10.",
-        "update_frequency": "on change",
-        "compliance": "v2.1_standard"
-    },
-    "content": {
-        "roadmaps": {
-            "active_roadmaps": {
-                "RM-002": {
-                    "name": "Future Mandala  Long-term Vision",
-                    "status": "vision",
-                    "phase": 0,
-                    "priority": "low",
-                    "progress": "10%"
-                },
-                "RM-003": {
-                    "name": "Scout Agent  Autonomous Exploration",
-                    "status": "in_progress",
-                    "phase": 2,
-                    "priority": "medium",
-                    "progress": "60%"
-                },
-                "RM-004": {
-                    "name": "Architecture Adaptation",
-                    "status": "completed",
-                    "phase": 4,
-                    "priority": "critical",
-                    "progress": "100%"
-                },
-                "RM-008": {
-                    "name": "Monitoring and Registry System",
-                    "status": "in_progress",
-                    "phase": 1,
-                    "priority": "high",
-                    "progress": "25%"
-                },
-                "RM-011": {
-                    "name": "Living Visualizations  Mer-Ka-Ba Perception System",
-                    "status": "planned",
-                    "phase": 0,
-                    "priority": "low",
-                    "progress": "0%"
-                },
-                "RM-012": {
-                    "name": "First Living Products  Mandala MVPs",
-                    "status": "planned",
-                    "phase": 0,
-                    "priority": "low",
-                    "progress": "0%",
-                    "notes": "Three products: Garden, Dashboard, Companion."
-                }
-            },
-            "archived_roadmaps": {
-                "cloud_sr": {"name": "Cloud SR", "status": "archived", "archived_date": "2026-03-05"},
-                "RM-001": {"name": "Mandala Core Update", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%"},
-                "RM-005": {"name": "Honeycomb System", "status": "archived", "archived_date": "2026-04-10", "final_progress": "60%"},
-                "RM-007": {"name": "Testing and Validation", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%"},
-                "RM-010": {"name": "Living Core Revival", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%"}
-            }
+{
+  "identity": {
+    "module_id": "ROADMAPS-INDEX",
+    "name": "Roadmaps Registry Index",
+    "version": "v2.7.0",
+    "created": "2026-03-04",
+    "updated": "2026-04-16",
+    "layer": 2,
+    "type": "registry_index",
+    "description": "Central index of all Mandala Symbiosis roadmaps. Tracks status, progress, and metadata for active, completed, and archived roadmaps.",
+    "status": "active",
+    "priority": "high",
+    "tags": ["roadmaps", "index", "registry", "tracking"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "description": "Roadmaps registry index v2.7.0 — synchronized with actual files 2026-04-16. Added RC-001 (Visibility Strategy) and RM-014 (Personal Operations Transition).",
+    "update_frequency": "on change",
+    "compliance": "v2.1_standard"
+  },
+  "content": {
+    "roadmaps": {
+      "active_roadmaps": {
+        "RC-001": {
+          "name": "Mandala Symbiosis: Visibility and Collaboration Strategy",
+          "status": "active",
+          "phase": 0,
+          "priority": "high",
+          "progress": "5%",
+          "notes": "Focus on creating first public resource (Rhythm Manifesto, README, PHILOSOPHY)."
         },
-        "metrics": {
-            "total_roadmaps": 10,
-            "completed": 2,
-            "in_progress": 2,
-            "planned": 2,
-            "vision": 1,
-            "archived": 5,
-            "progress_trend": "positive  product direction added"
+        "RM-002": {
+          "name": "Future Mandala — Long-term Vision",
+          "status": "vision",
+          "phase": 0,
+          "priority": "low",
+          "progress": "10%"
         },
-        "notes": "2026-04-10: Added RM-012 (First Living Products). Total active roadmaps: 6."
+        "RM-003": {
+          "name": "Scout Agent — Autonomous Exploration",
+          "status": "in_progress",
+          "phase": 2,
+          "priority": "medium",
+          "progress": "60%"
+        },
+        "RM-008": {
+          "name": "Monitoring and Registry System",
+          "status": "in_progress",
+          "phase": 1,
+          "priority": "high",
+          "progress": "25%"
+        },
+        "RM-011": {
+          "name": "Living Visualizations — Mer-Ka-Ba Perception System",
+          "status": "planned",
+          "phase": 0,
+          "priority": "low",
+          "progress": "0%"
+        },
+        "RM-012": {
+          "name": "First Living Products — Mandala MVPs",
+          "status": "planned",
+          "phase": 0,
+          "priority": "low",
+          "progress": "0%",
+          "notes": "Three products: Garden, Dashboard, Companion. Companion priority upgraded to HIGH internally."
+        },
+        "RM-014": {
+          "name": "From HoReCa to IT Operations — A Gardener's Personal Transition",
+          "status": "active",
+          "phase": 1,
+          "priority": "high",
+          "progress": "0%",
+          "notes": "Personal strategic roadmap for career transition and relocation to Vietnam."
+        }
+      },
+      "archived_roadmaps": {
+        "cloud_sr": {"name": "Cloud SR", "status": "archived", "archived_date": "2026-03-05"},
+        "RM-001": {"name": "Mandala Core Update", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%"},
+        "RM-004": {"name": "Architecture Adaptation", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%"},
+        "RM-005": {"name": "Honeycomb System", "status": "archived", "archived_date": "2026-04-10", "final_progress": "60%"},
+        "RM-007": {"name": "Testing and Validation", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%"},
+        "RM-010": {"name": "Living Core Revival", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%"}
+      }
     },
-    "resonance": {
-        "status": "fully_resonant",
-        "with_boot": "100%",
-        "with_core_map": "100%"
+    "metrics": {
+      "total_roadmaps": 12,
+      "completed": 2,
+      "in_progress": 2,
+      "planned": 2,
+      "vision": 1,
+      "active_strategic": 2,
+      "archived": 6,
+      "progress_trend": "positive — product direction added, personal growth roadmap added"
     },
-    "health": {
-        "status": "healthy",
-        "last_check": "2026-04-10",
-        "notes": "v2.6.0  RM-012 added."
-    }
+    "notes": "2026-04-16: Added RC-001 (Visibility Strategy) and RM-014 (Personal Operations Transition). Total active roadmaps: 7 (including RC-001 and RM-014). RM-004 moved to archive."
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-16",
+    "notes": "v2.7.0 — RC-001 and RM-014 added to active roadmaps. Metrics updated."
+  }
 }
