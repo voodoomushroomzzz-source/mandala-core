@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.5.0
+Mandala Garden Bot — Gentle Companion v7.5.1
 
-ARCHITECTURE CHANGE (v7.5.0):
+ARCHITECTURE CHANGE (v7.5.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.5.0):
+EMOJI (v7.5.1):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -329,9 +329,10 @@ async def ensure_user_loaded(telegram_id: str) -> bool:
 def _invalidate_auth_cache(telegram_id: str) -> None:
     _auth_cache.pop(telegram_id, None)
 
-async def _check_ready(message: Message) -> bool:
+async def _check_ready(message: Message, user_id: str = None) -> bool:
     """Guard: returns False and notifies user if store not loaded yet."""
-    user_id = str(message.from_user.id) if message.from_user else "0"
+    if not user_id:
+        user_id = str(message.from_user.id) if message.from_user else "0"
     store = _get_user_store(user_id)
     if not store.get("ready"):
         await message.answer("🌱 Запускаюсь, подожди пару секунд и повтори.")
@@ -494,14 +495,14 @@ def get_garden_inline() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🌀 Задачи",     callback_data="menu_tasks"),
          InlineKeyboardButton(text="💎 Достижения", callback_data="menu_achievements")],
         [InlineKeyboardButton(text="🔮 Резонанс",   callback_data="menu_resonance"),
-         InlineKeyboardButton(text="💡 Идея",       callback_data="menu_idea")],
+         InlineKeyboardButton(text="💡 Идея (!)",       callback_data="menu_idea")],
     ])
 
 def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🌾 Профиль",              callback_data="menu_profile")],
         [InlineKeyboardButton(text="🔄 Пройти анкету заново", callback_data="menu_restart")],
-        [InlineKeyboardButton(text="🚪 Покинуть сад",         callback_data="menu_leave")],
+
     ])
 
 def get_back_garden() -> InlineKeyboardMarkup:
@@ -1626,12 +1627,18 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
 async def btn_garden(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
     await message.answer("🌾 Твой сад:", reply_markup=get_garden_inline())
 
 @router.message(F.text == "⚙️ Настройки")
 async def btn_settings(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
     await message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
 
 @router.callback_query(F.data == "back_garden")
@@ -1715,8 +1722,17 @@ async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "menu_idea")
 async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    user_id = str(callback.from_user.id)
+    if not is_authorized(user_id):
+        await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
     await callback.message.edit_reply_markup(reply_markup=None)
-    await btn_suggest_idea(callback.message, state)
+    await state.set_state(EngineerChatStates.waiting_for_message)
+    await callback.message.answer(
+        "💡 <b>Предложи идею Мандале (!)</b>\n\n"
+        "Эта функция в разработке. Напиши идею — СР её оценит.\n\nДля отмены: ❌ Отмена",
+        reply_markup=get_cancel_keyboard()
+    )
 
 @router.callback_query(F.data == "menu_restart")
 async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
@@ -1724,9 +1740,14 @@ async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     user_id = str(callback.from_user.id)
     _clear_history(user_id)
-    _get_user_store(user_id)["ready"] = False
+    if user_id in _store:
+        del _store[user_id]
     await callback.message.edit_reply_markup(reply_markup=None)
-    await cmd_start(callback.message, state)
+    await state.set_state(GardenOnboardingStates.waiting_for_name)
+    await callback.message.answer(
+        "🌱 Начнём знакомство заново.\n\nКак тебя зовут?",
+        reply_markup=get_cancel_keyboard()
+    )
 
 @router.callback_query(F.data == "menu_leave")
 async def cb_menu_leave(callback: CallbackQuery, state: FSMContext):
