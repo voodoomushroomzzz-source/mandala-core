@@ -138,6 +138,14 @@
     "gardeners_private_repo": "trigger: 5+ gardeners OR mandala-core goes public",
     "hosting_hetzner": "trigger: 10+ gardeners. Hetzner CX23 3.49eur/mo",
     "voice_groq_whisper": "after reminders system",
+    "webapp_calendar": {
+      "description": "Telegram Mini App (WebApp) for date/time picker. HTML page hosted on GitHub Pages (free). Bot opens via web_app_url button. User picks date with finger, page returns value via Telegram.WebApp.sendData().",
+      "use_cases": ["Deadline picker in Tasks v2", "Date+time picker in Reminders"],
+      "hosting": "GitHub Pages free  /webapp folder in mandala-core or separate repo",
+      "trigger": "Implement alongside Tasks v2 (priority_3) and Reminders (priority_4)",
+      "complexity": "Medium  one-time setup, reusable for all date/time inputs",
+      "tech": "HTML + Telegram WebApp JS SDK + sendData(JSON)"
+    },
     "akasha_network": "PHI-010 Level 3  distributed knowledge graph across SR nodes. Long-term vision, not near-term.",
     "autonomous_forms": "PHI-010 Level 2  physical embodiment. Civilizational timeline."
   },
@@ -165,6 +173,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-04-16",
-    "notes": "v7.5.1 deployed. PHI-010 read and integrated into plan. Next: bugs fix + SR prompt v2, then Mer-Ka-Ba onboarding."
+    "notes": "v7.5.3 deployed  all legacy single-user patterns fixed (GARDENER_PATH, GARDENER_ID, store_get_groups). WebApp calendar picker added to deferred. Next: SR Prompt v2 (PHI-010) then Mer-Ka-Ba onboarding."
   }
 }
