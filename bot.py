@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.4.0
+Mandala Garden Bot — Gentle Companion v7.5.0
 
-ARCHITECTURE CHANGE (v7.4.0):
+ARCHITECTURE CHANGE (v7.5.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.4.0):
+EMOJI (v7.5.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -65,6 +65,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_NAME = os.getenv("REPO_NAME", "voodoomushroomzzz-source/mandala-core")
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
 ALLOWED_PASSWORD = os.getenv("ALLOWED_PASSWORD", "mandala")
+ARCHITECT_TELEGRAM_ID = os.getenv("ARCHITECT_TELEGRAM_ID", "224736062")
 ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")
 SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
@@ -330,7 +331,9 @@ def _invalidate_auth_cache(telegram_id: str) -> None:
 
 async def _check_ready(message: Message) -> bool:
     """Guard: returns False and notifies user if store not loaded yet."""
-    if not _store.get("ready"):
+    user_id = str(message.from_user.id) if message.from_user else "0"
+    store = _get_user_store(user_id)
+    if not store.get("ready"):
         await message.answer("🌱 Запускаюсь, подожди пару секунд и повтори.")
         return False
     return True
@@ -488,17 +491,27 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
 
 def get_garden_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌀 Задачи",       callback_data="menu_tasks")],
-        [InlineKeyboardButton(text="💎 Достижения",   callback_data="menu_achievements")],
-        [InlineKeyboardButton(text="🔮 Резонанс",     callback_data="menu_resonance")],
-        [InlineKeyboardButton(text="💡 Идея",         callback_data="menu_idea")],
+        [InlineKeyboardButton(text="🌀 Задачи",     callback_data="menu_tasks"),
+         InlineKeyboardButton(text="💎 Достижения", callback_data="menu_achievements")],
+        [InlineKeyboardButton(text="🔮 Резонанс",   callback_data="menu_resonance"),
+         InlineKeyboardButton(text="💡 Идея",       callback_data="menu_idea")],
     ])
 
 def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌾 Профиль",           callback_data="menu_profile")],
+        [InlineKeyboardButton(text="🌾 Профиль",              callback_data="menu_profile")],
         [InlineKeyboardButton(text="🔄 Пройти анкету заново", callback_data="menu_restart")],
-        [InlineKeyboardButton(text="🚪 Покинуть сад",      callback_data="menu_leave")],
+        [InlineKeyboardButton(text="🚪 Покинуть сад",         callback_data="menu_leave")],
+    ])
+
+def get_back_garden() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Сад", callback_data="back_garden")]
+    ])
+
+def get_back_settings() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Настройки", callback_data="back_settings")]
     ])
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
@@ -656,23 +669,36 @@ async def cmd_start(message: Message, state: FSMContext):
     except Exception:
         pass
 
-    if gardener and str(gardener.get("identity", {}).get("telegram_id", "")) == user_id:
-        name = gardener.get("identity", {}).get("name", "Садовник")
+    # Check if existing user
+    user_profile = store_get_profile(user_id)
+    if user_profile:
+        name = user_profile.get("name", "Садовник")
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
         return
 
-    if gardener:
-        bound_id = str(gardener.get("identity", {}).get("telegram_id", "") or "").strip()
-        if bound_id and bound_id != user_id:
-            if not password or password != ALLOWED_PASSWORD:
-                await message.answer("🔒 Доступ защищён паролем.\nИспользуй: /start <пароль>")
-                return
-            g = dict(gardener)
-            g.setdefault("identity", {})["telegram_id"] = user_id
-            g["identity"]["updated"] = _today()
-            store_set_gardener(g)
-            _invalidate_auth_cache(user_id)
-            _fire_sync()
+    # Check whitelist
+    whitelist = await _github_get("gardeners/whitelist.json") or {"approved": []}
+    approved = whitelist.get("approved", []) if isinstance(whitelist, dict) else []
+
+    # Architect always has access
+    if user_id == ARCHITECT_TELEGRAM_ID:
+        pass  # proceed to onboarding
+    elif user_id not in approved:
+        # Unknown user — show welcome + notify architect
+        username = message.from_user.username or ""
+        welcome_text = (
+            "🌱 <b>Ты нашёл Мандалу Симбиоза.</b>\n\n"
+            "Это живой сад осознанного роста —\n"
+            "место где СР становится твоим спутником\n"
+            "на пути к себе.\n\n"
+            "Сад принимает новых садовников\n"
+            "по приглашению Архитектора.\n\n"
+            "Твой запрос уже отправлен —\n"
+            "просто подожди здесь 🌀"
+        )
+        await message.answer(welcome_text, parse_mode="HTML")
+        await _notify_architect(user_id, username)
+        return
 
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
@@ -1608,29 +1634,88 @@ async def btn_settings(message: Message, state: FSMContext):
     _track_interaction(user_id)
     await message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
 
+@router.callback_query(F.data == "back_garden")
+async def cb_back_garden(callback: CallbackQuery):
+    await callback.answer()
+    await callback.message.edit_text("🌾 Твой сад:", reply_markup=get_garden_inline())
+
+@router.callback_query(F.data == "back_settings")
+async def cb_back_settings(callback: CallbackQuery):
+    await callback.answer()
+    await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
+
 @router.callback_query(F.data == "menu_tasks")
 async def cb_menu_tasks(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await cmd_tasks(callback.message, state)
+    user_id = str(callback.from_user.id)
+    tasks = store_get_tasks(user_id)
+    active = [t for t in tasks if t.get("status") != "completed"]
+    if not active:
+        text = "🌀 <b>Задачи</b>\n\nАктивных задач нет.\nНапиши о чём хочешь — СР поможет создать первую."
+    else:
+        lines = [f"🌀 <b>Задачи</b> ({len(active)} активных)\n"]
+        for t in active[:5]:
+            lines.append(f"• {t['title']}")
+        if len(active) > 5:
+            lines.append(f"…и ещё {len(active)-5}")
+        text = "\n".join(lines)
+    await callback.message.edit_text(text, reply_markup=get_back_garden(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_achievements")
 async def cb_menu_achievements(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await cmd_achievements(callback.message, state)
+    user_id = str(callback.from_user.id)
+    achs = store_get_achievements(user_id)
+    if not achs:
+        text = "💎 <b>Достижения</b>\n\nПока нет достижений.\nКогда что-то сделаешь — расскажи СР, он зафиксирует."
+    else:
+        lines = [f"💎 <b>Достижения</b> ({len(achs)})\n"]
+        for a in achs[-5:]:
+            lines.append(f"• {a.get('title','?')}")
+        text = "\n".join(lines)
+    await callback.message.edit_text(text, reply_markup=get_back_garden(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_resonance")
 async def cb_menu_resonance(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await cmd_resonance(callback.message, state)
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    resonance = profile.get("resonance_level", 0)
+    name = profile.get("name", "Садовник")
+    bar = "█" * (resonance // 10) + "░" * (10 - resonance // 10)
+    text = (
+        f"🔮 <b>Резонанс</b>\n\n"
+        f"{bar} {resonance}%\n\n"
+        f"Каждое достижение усиливает резонанс, {name}.\n"
+        f"Резонанс только растёт — каждый шаг считается."
+    )
+    await callback.message.edit_text(text, reply_markup=get_back_garden(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_profile")
 async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await cmd_profile(callback.message, state)
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    name = profile.get("name", "?")
+    resonance = profile.get("resonance_level", 0)
+    info = profile.get("personal_info", {})
+    interests = ", ".join(info.get("interests", [])) or "не указаны"
+    tasks = store_get_tasks(user_id)
+    active_count = len([t for t in tasks if t.get("status") != "completed"])
+    ach_count = len(store_get_achievements(user_id))
+    text = (
+        f"🌾 <b>{name}</b>\n\n"
+        f"🔮 Резонанс: {resonance}%\n"
+        f"🌀 Активных задач: {active_count}\n"
+        f"💎 Достижений: {ach_count}\n"
+        f"🌱 Интересы: {interests}"
+    )
+    await callback.message.edit_text(text, reply_markup=get_back_settings(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_idea")
 async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    await callback.message.edit_reply_markup(reply_markup=None)
     await btn_suggest_idea(callback.message, state)
 
 @router.callback_query(F.data == "menu_restart")
@@ -1640,19 +1725,81 @@ async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     _clear_history(user_id)
     _get_user_store(user_id)["ready"] = False
-    await callback.message.answer(
-        "🔄 Начинаем анкету заново...",
-        reply_markup=get_main_keyboard()
-    )
+    await callback.message.edit_reply_markup(reply_markup=None)
     await cmd_start(callback.message, state)
 
 @router.callback_query(F.data == "menu_leave")
 async def cb_menu_leave(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await callback.message.answer(
+    await callback.message.edit_text(
         "🚪 Хочешь покинуть сад?",
         reply_markup=get_leave_confirm_keyboard()
     )
+
+
+# ─── Architect authorization ──────────────────────────────────────────────────
+
+async def _notify_architect(telegram_id: str, username: str) -> None:
+    """Send approval request to architect."""
+    try:
+        uname = f"@{username}" if username else f"id:{telegram_id}"
+        text = f"🌱 <b>Кто-то у врат сада</b>\n\n👤 {uname}\nID: <code>{telegram_id}</code>"
+        kb = InlineKeyboardMarkup(inline_keyboard=[
+            [
+                InlineKeyboardButton(text="🌿 Открыть врата", callback_data=f"approve_{telegram_id}"),
+                InlineKeyboardButton(text="❌ Пока нет",       callback_data=f"deny_{telegram_id}")
+            ]
+        ])
+        await bot.send_message(int(ARCHITECT_TELEGRAM_ID), text, reply_markup=kb, parse_mode="HTML")
+        logger.info(f"Architect notified about {telegram_id}")
+    except Exception as e:
+        logger.error(f"Architect notify error: {e}")
+
+@router.callback_query(F.data.startswith("approve_"))
+async def cb_approve_gardener(callback: CallbackQuery):
+    await callback.answer("✅ Врата открыты")
+    telegram_id = callback.data.replace("approve_", "")
+    # Add to whitelist
+    whitelist = await _github_get("gardeners/whitelist.json") or {"approved": []}
+    if not isinstance(whitelist, dict):
+        whitelist = {"approved": []}
+    if telegram_id not in whitelist.get("approved", []):
+        whitelist.setdefault("approved", []).append(telegram_id)
+        _pending_writes["gardeners/whitelist.json"] = whitelist
+        _fire_sync()
+    await callback.message.edit_text(
+        callback.message.text + "\n\n✅ <b>Врата открыты</b>",
+        parse_mode="HTML", reply_markup=None
+    )
+    # Notify user
+    try:
+        await bot.send_message(
+            int(telegram_id),
+            "🌿 <b>Врата открыты.</b>\n\nДобро пожаловать в сад.\n\nНапиши /start чтобы начать.",
+            parse_mode="HTML"
+        )
+    except Exception as e:
+        logger.error(f"Approve notify error: {e}")
+
+@router.callback_query(F.data.startswith("deny_"))
+async def cb_deny_gardener(callback: CallbackQuery):
+    await callback.answer("❌ Отклонено")
+    telegram_id = callback.data.replace("deny_", "")
+    await callback.message.edit_text(
+        callback.message.text + "\n\n❌ <b>Отклонено</b>",
+        parse_mode="HTML", reply_markup=None
+    )
+    try:
+        await bot.send_message(
+            int(telegram_id),
+            "🙏 Сад пока не готов принять нового садовника.\nЗагляни позже.",
+        )
+    except Exception as e:
+        logger.error(f"Deny notify error: {e}")
+
+def is_whitelisted(telegram_id: str) -> bool:
+    """Check if user is in whitelist (in-memory check via pending or cached)."""
+    return True  # Will be checked properly in cmd_start
 
 # ─── Free dialogue ────────────────────────────────────────────────────────────
 
@@ -1848,6 +1995,17 @@ async def quick_dismiss(callback: CallbackQuery):
 
 # ─── Startup / Shutdown ──────────────────────────────────────────────────────
 
+
+async def _check_webhook() -> None:
+    """Restore webhook if missing — runs every 5 min via scheduler."""
+    try:
+        info = await bot.get_webhook_info()
+        if not info.url:
+            await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
+            logger.info("Webhook restored by scheduler")
+    except Exception as e:
+        logger.error(f"Webhook check error: {e}")
+
 async def on_startup():
     """Called when bot starts."""
     await _load_store()
@@ -1859,6 +2017,7 @@ async def on_startup():
     scheduler.add_job(run_proactive_scheduler, "interval", minutes=1, id="proactive")
     scheduler.add_job(run_resonance_decay, "cron", hour=3, minute=0, id="decay")
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
+    scheduler.add_job(_check_webhook, "interval", minutes=5, id="webhook_check")
     scheduler.start()
     logger.info("Scheduler started")
 
