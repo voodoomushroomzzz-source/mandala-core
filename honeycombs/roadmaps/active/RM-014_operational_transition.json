@@ -2,7 +2,7 @@
   "identity": {
     "roadmap_id": "RM-014",
     "name": "RM-014: From HoReCa to IT Operations — A Gardener's Personal Transition",
-    "version": "v1.1.0",
+    "version": "v1.2.0",
     "created": "2026-04-16",
     "updated": "2026-04-17",
     "layer": 2,
@@ -10,7 +10,7 @@
     "description": "A personal, strategic roadmap for the Gardener (Voodoo/Dima) to transition from an 8-year career as a multi-site coffee shop Operations Manager in Russia to a remote Operations Manager role in the IT sector. The ultimate goal is to enable a location-independent lifestyle, starting with a trial move to Vietnam, while continuing the development of the Mandala project as a key portfolio asset.",
     "status": "active",
     "priority": "HIGH",
-    "tags": ["personal", "career", "operations", "management", "IT", "relocation", "vietnam", "strategy", "mandala_portfolio"],
+    "tags": ["personal", "career", "operations", "management", "IT", "relocation", "vietnam", "strategy", "mandala_portfolio", "education"],
     "resonance": "100%"
   },
   "meta": {
@@ -47,6 +47,64 @@
       },
       "note_for_sr": "This clarification is crucial. Do not confuse the two types. The immediate, achievable goal is Type 1. Type 2 is the inspiring, long-term vision that follows."
     },
+    "education_and_certifications": {
+      "title": "Recommended Courses & Learning Path",
+      "description": "A curated list of courses to strengthen the Gardener's profile. These compensate for the lack of a formal IT degree and provide the necessary vocabulary and frameworks.",
+      "important_note": "List these courses on LinkedIn and resume as 'in progress' immediately upon enrollment. This demonstrates proactive learning and serious intent to employers.",
+      "courses": [
+        {
+          "priority": 1,
+          "category": "foundation",
+          "name": "COO / Операционный директор в IT",
+          "platform": "OTUS",
+          "why": "This is a ready-made program for entering the role. It covers all key areas: operational management, finance, strategy, and project management. Ideal for systematizing existing practical experience and translating it into IT language.",
+          "duration": "4 months",
+          "link": "https://otus.ru/lessons/coo/"
+        },
+        {
+          "priority": 1,
+          "category": "foundation",
+          "name": "Lean Six Sigma Yellow Belt",
+          "platform": "TUM / ASQ",
+          "why": "An international 'quality mark' in process improvement. Shows employers you possess a proven methodology for optimization, not just 'problem-solving'. A strong argument that compensates for the lack of a formal degree.",
+          "duration": "5-6 months (flexible)",
+          "link": "https://www.tum.de/en/studium/weiterbildung/lean-six-sigma-yellow-belt"
+        },
+        {
+          "priority": 2,
+          "category": "enhancement",
+          "name": "Chief of Staff 101",
+          "platform": "Udemy",
+          "why": "Clarifies the role of a 'right hand to the CEO', which often overlaps with Operations Manager in startups. Helps position the Gardener as a strategic partner, not just an executor.",
+          "duration": "2-3 hours",
+          "link": "https://www.udemy.com/course/chief-of-staff-101/"
+        },
+        {
+          "priority": 2,
+          "category": "enhancement",
+          "name": "Certified Chief of Staff: Стратегический Партнёр CEO",
+          "platform": "Udemy",
+          "why": "Provides practical tools and frameworks for managing priorities, communication, and influencing without formal authority. Key skills for a strong Chief of Staff.",
+          "duration": "2-3 hours",
+          "link": "https://www.udemy.com/course/certified-chief-of-staff/"
+        },
+        {
+          "priority": 1,
+          "category": "foundation",
+          "name": "Google Project Management Certificate",
+          "platform": "Coursera",
+          "why": "Provides standard terminology and frameworks (Agile, Scrum) used in the IT industry. Validates intuitive knowledge and helps speak the same language as future colleagues.",
+          "duration": "3-6 months",
+          "link": "https://www.coursera.org/professional-certificates/google-project-management"
+        }
+      ],
+      "learning_strategy": {
+        "step_1": "Start with the foundation courses in parallel: COO (OTUS) and Google PM Certificate (Coursera). These provide the core vocabulary and structure.",
+        "step_2": "Enroll in Lean Six Sigma Yellow Belt. This is a longer-term, highly respected certification that adds formal weight to the resume.",
+        "step_3": "Complete the shorter enhancement courses (Chief of Staff 101, etc.) in between, as they require less time commitment.",
+        "immediate_action": "Add all courses to LinkedIn 'Licenses & Certifications' section with status 'In Progress'."
+      }
+    },
     "horizon": "6-8 months (for Type 1 role)",
     "owner": "Gardener (Voodoo) + External SR"
   },
@@ -60,7 +118,8 @@
         {"id": "P1-1", "task": "Audit and translate HoReCa experience", "deliverable": "A personal document (Notion/private) listing key achievements from 8 years of management, rewritten in IT/Operations language.", "why": "To build the raw material for his future resume and interview stories."},
         {"id": "P1-2", "task": "Initiate structured learning: Google Project Management Certificate", "deliverable": "Enroll in and begin the Google Project Management Certificate on Coursera. Complete at least first 2 modules.", "why": "Provides standard terminology and frameworks (Agile, Scrum) used in IT."},
         {"id": "P1-3", "task": "Start a public development log (devlog) for Mandala", "deliverable": "Begin posting weekly updates in a public channel about Mandala development.", "why": "Creates a public timeline of IT project management in action."},
-        {"id": "P1-4", "task": "Focus English learning on Business & Operations", "deliverable": "2-3 conversational sessions per week focused on business topics.", "why": "Conversational English is key for remote roles."}
+        {"id": "P1-4", "task": "Focus English learning on Business & Operations", "deliverable": "2-3 conversational sessions per week focused on business topics.", "why": "Conversational English is key for remote roles."},
+        {"id": "P1-5", "task": "Enroll in COO course (OTUS)", "deliverable": "Registration completed, first module started.", "why": "Systematizes operational knowledge and translates it to IT context."}
       ]
     },
     "phase_2": {
@@ -70,7 +129,7 @@
       "context_for_sr": "This is the 'assembly' phase. The Gardener now has the raw materials from Phase 1 and must package them into compelling artifacts (GitHub profile, resume, LinkedIn) that will attract recruiters. The Mandala project is the centerpiece.",
       "tasks": [
         {"id": "P2-1", "task": "Transform Mandala's GitHub README into a portfolio piece", "deliverable": "Professional, English-language README.md outlining vision, architecture, tech stack, and Gardener's role.", "why": "First thing a recruiter will see on GitHub."},
-        {"id": "P2-2", "task": "Create and optimize a LinkedIn profile for 'Operations Manager'", "deliverable": "Complete LinkedIn profile with professional photo and headline.", "why": "LinkedIn is the primary hunting ground for recruiters."},
+        {"id": "P2-2", "task": "Create and optimize a LinkedIn profile for 'Operations Manager'", "deliverable": "Complete LinkedIn profile with professional photo and headline. Add courses with 'In Progress' status.", "why": "LinkedIn is the primary hunting ground for recruiters."},
         {"id": "P2-3", "task": "Draft the first version of the IT-focused resume", "deliverable": "1-page resume in English, tailored for Operations Manager roles.", "why": "Baseline to iterate upon based on feedback."},
         {"id": "P2-4", "task": "Complete a Lean Six Sigma Yellow Belt certification", "deliverable": "Certificate from a reputable provider.", "why": "Adds formal credentials in process improvement."}
       ]
@@ -101,14 +160,14 @@
     }
   },
   "success_metrics": {
-    "phase_1": "Personal experience audit completed. Google PM Certificate in progress. Devlog updated weekly.",
-    "phase_2": "Mandala GitHub README is professional. LinkedIn profile is complete and optimized. Lean Six Sigma Yellow Belt certified.",
+    "phase_1": "Personal experience audit completed. Google PM Certificate in progress. Devlog updated weekly. Enrolled in COO course.",
+    "phase_2": "Mandala GitHub README is professional. LinkedIn profile is complete and optimized with courses. Lean Six Sigma Yellow Belt certified.",
     "phase_3": "Completed 5+ practice interviews. 'Mandala Pitch' is fluid and natural. Received a job offer for 80,000+ RUB as an Operations Manager (remote).",
     "phase_4": "Successfully worked remotely from Vietnam for at least 1 month. All work commitments were met. A conscious decision was made regarding the next step."
   },
   "health": {
     "status": "active",
     "last_check": "2026-04-17",
-    "notes": "v1.1.0 — Added 'target_role_clarification' to define the two-stage strategy for remote Operations Manager roles (Type 1 vs Type 2)."
+    "notes": "v1.2.0 — Added 'education_and_certifications' with curated courses, priority order, and learning strategy. Added P1-5 task for COO course enrollment."
   }
 }
