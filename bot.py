@@ -1695,8 +1695,25 @@ async def on_shutdown():
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
+
+async def health(request: web.Request) -> web.Response:
+    status = "ready" if _store.get("ready") else "loading"
+    gardener = _store.get("gardener")
+    name = gardener.get("identity", {}).get("name", "none") if gardener else "none"
+    # Auto-restore webhook if missing
+    try:
+        info = await bot.get_webhook_info()
+        if not info.url:
+            await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
+            logger.info("Webhook auto-restored")
+    except Exception:
+        pass
+    return web.Response(text=f"ok|{status}|gardener={name}")
+
 def main():
     app = web.Application()
+    app.router.add_get("/", health)
+    app.router.add_get("/health", health)
     SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
     setup_application(app, dp, bot=bot)
     app.on_startup.append(lambda _: on_startup())
