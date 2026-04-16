@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.1.1
+Mandala Garden Bot — Gentle Companion v7.3.0
 
-ARCHITECTURE CHANGE (v7.2.0):
+ARCHITECTURE CHANGE (v7.3.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.2.0):
+EMOJI (v7.3.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -113,6 +113,8 @@ def _get_user_store(telegram_id: str) -> dict:
 
 # pending GitHub writes: {path: content} — deduplicated by path
 _pending_writes: dict = {}
+# SHA cache: {path: sha} — skip download if SHA unchanged
+_sha_cache: dict = {}
 _write_lock = asyncio.Lock() if False else None  # initialized in on_startup
 
 def _user_path(telegram_id: str) -> str:
@@ -186,21 +188,27 @@ def _json_dumps(obj: Any) -> str:
 
 # ─── GitHub API ───────────────────────────────────────────────────────────────
 
-async def _github_get(file_path: str) -> Optional[Any]:
-    """GET a file from GitHub. Returns parsed JSON or None."""
+async def _github_get(file_path: str, force: bool = False) -> Optional[Any]:
+    """GET a file from GitHub. Skips download if SHA unchanged (cache hit)."""
     if not GITHUB_TOKEN:
         return None
     url = f"https://api.github.com/repos/{REPO_NAME}/contents/{file_path}?ref=main"
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "MandalaGardenBot/6.0.0"
+        "User-Agent": "MandalaGardenBot/7.3.0"
     }
     session = await get_http_session()
     try:
         async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=6)) as resp:
             if resp.status == 200:
                 data = await resp.json()
+                new_sha = data.get("sha", "")
+                # SHA-optimization: skip decode if file unchanged
+                if not force and _sha_cache.get(file_path) == new_sha:
+                    logger.debug(f"SHA cache hit: {file_path}")
+                    return None  # caller should use cached value
+                _sha_cache[file_path] = new_sha
                 content = base64.b64decode(data["content"]).decode("utf-8")
                 try:
                     return json.loads(content)
@@ -270,18 +278,24 @@ def _fire_sync() -> None:
 # ─── Initial load ─────────────────────────────────────────────────────────────
 
 async def _load_user(telegram_id: str) -> None:
-    """Load profile + workspace for a specific user from GitHub."""
+    """Load profile + workspace + memory for a specific user from GitHub."""
     uid = str(telegram_id)
     base = _user_path(uid)
-    profile, workspace = await asyncio.gather(
-        _github_get(f"{base}/profile.json"),
-        _github_get(f"{base}/workspace.json"),
+    results = await asyncio.gather(
+        _github_get(f"{base}/profile.json", force=True),
+        _github_get(f"{base}/workspace.json", force=True),
+        _github_get(f"{base}/memory.json", force=True),
         return_exceptions=True
     )
+    profile, workspace, memory = results
     store = _get_user_store(uid)
     store["profile"]   = profile if isinstance(profile, dict) else None
     store["workspace"] = workspace if isinstance(workspace, dict) else {"tasks": [], "groups": [], "achievements": []}
     store["ready"]     = True
+    # Restore conversation history from memory.json
+    if isinstance(memory, dict) and memory.get("sessions"):
+        _sessions[uid] = memory["sessions"]
+        logger.info(f"Memory restored: {uid} msgs={len(_sessions[uid])}")
     name = store["profile"].get("name", "?") if store["profile"] else "none"
     tasks_count = len(store["workspace"].get("tasks", []))
     logger.info(f"User loaded: {uid} name={name} tasks={tasks_count}")
@@ -1632,6 +1646,11 @@ async def free_conversation(message: Message, state: FSMContext):
                 reply_text = raw
             _add_to_history(user_id, "user", text)
             _add_to_history(user_id, "assistant", reply_text)
+            # Persist memory to GitHub (fire-and-forget)
+            _pending_writes[f"{_user_path(user_id)}/memory.json"] = {
+                "sessions": _sessions.get(user_id, []),
+                "updated": _today()
+            }
         else:
             reply_text = "🌿 СР временно недоступен. Попробуй чуть позже."
     except Exception as e:
