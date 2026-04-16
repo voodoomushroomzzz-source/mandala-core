@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.5.1
+Mandala Garden Bot — Gentle Companion v7.5.3
 
-ARCHITECTURE CHANGE (v7.5.1):
+ARCHITECTURE CHANGE (v7.5.3):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.5.1):
+EMOJI (v7.5.3):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -653,14 +653,16 @@ async def run_resonance_decay() -> None:
 
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
-    if not _store.get("ready"):
-        await message.answer("🌱 Запускаюсь, подожди пару секунд и повтори.")
-        return
     await state.clear()
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
-    _clear_history(user_id)  # Reset conversation on /start
-    gardener = _store.get("gardener")
+    _clear_history(user_id)
+    # Load user on demand if not yet loaded
+    user_store = _get_user_store(user_id)
+    if not user_store.get("ready"):
+        await message.answer("🌱 Загружаю твой сад...")
+        await _load_user(user_id)
+    gardener = store_get_profile(user_id)
 
     password = None
     try:
@@ -824,7 +826,7 @@ async def onboarding_evening(message: Message, state: FSMContext):
 
     gardener = {
         "identity": {
-            "gardener_id": GARDENER_ID, "telegram_id": user_id,
+            "gardener_id": f"gardener_{user_id}", "telegram_id": user_id,
             "name": data["name"], "resonance_level": initial_resonance,
             "created": _today(), "updated": _today()
         },
@@ -959,13 +961,13 @@ async def ask_question(message: Message, state: FSMContext):
     if not text:
         await message.answer("🤫 Напиши что-нибудь или нажми ❌ Отмена")
         return
-    gardener = _store.get("gardener") or {}
-    name = gardener.get("identity", {}).get("name", "Садовник")
-    resonance = gardener.get("identity", {}).get("resonance_level", 13)
+    profile = store_get_profile(str(message.from_user.id)) or {}
+    name = profile.get("name", "Садовник")
+    resonance = profile.get("resonance_level", 13)
     await message.answer("🌱 Думаю...")
     try:
         payload = {
-            "session_id": MAIN_SESSION_ID,
+            "session_id": f"session_{message.from_user.id}",
             "message": f"[Садовник {name}, резонанс {resonance}%] спрашивает: {text}\n\nОтветь как Gentle Companion — тепло, без давления.",
             "gardener_context": gardener
         }
@@ -1178,18 +1180,19 @@ async def task_new_group_cb(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(TaskStates.waiting_for_group))
 async def task_group_name_input(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
     name = message.text.strip()
     if len(name) < 1:
         await message.answer("🌱 Введи название группы.")
         return
     # Create group in store
-    data = store_get_groups()
+    data = store_get_groups(user_id)
     groups = data.get("groups", [])
     gid = _make_group_id(name, groups)
     new_group = {"id": gid, "name": name, "created": _today()}
     groups.append(new_group)
     data["groups"] = groups
-    store_set_groups(data)
+    store_set_groups(user_id, data)
     _fire_sync()
 
     await state.update_data(group_id=gid)
@@ -1337,12 +1340,12 @@ async def cmd_newgroup(message: Message):
         await message.answer("Используй: /newgroup Название группы")
         return
     name = parts[1].strip()
-    data = store_get_groups()
+    data = store_get_groups(user_id)
     groups = data.get("groups", [])
     gid = _make_group_id(name, groups)
     groups.append({"id": gid, "name": name, "created": _today()})
     data["groups"] = groups
-    store_set_groups(data)
+    store_set_groups(user_id, data)
     _fire_sync()
     await message.answer(f"✅ Группа '<b>{name}</b>' создана!")
 
@@ -1353,17 +1356,16 @@ async def cmd_archive(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    tasks = _store.get("tasks", [])
+    tasks = store_get_tasks(user_id)
     completed = [t for t in tasks if t.get("status") == "completed"]
     if not completed:
         await message.answer("📜 Завершённых задач нет.")
         return
     active = [t for t in tasks if t.get("status") != "completed"]
-    store_set_tasks(active)
+    store_set_tasks(user_id, active)
     # Also write archive file directly (fire-and-forget)
-    asyncio.create_task(_github_put(
-        f"{GARDENER_PATH}/tasks_archive_{_today()}.json", completed
-    ))
+    archive_path = f"{_user_path(user_id)}/tasks_archive_{_today()}.json"
+    asyncio.create_task(_github_put(archive_path, completed))
     _fire_sync()
     await message.answer(f"📜 {len(completed)} задач перемещено в архив.")
 
@@ -1432,15 +1434,14 @@ async def delete_confirm_2(message: Message, state: FSMContext):
         await state.clear()
         return
     user_id = str(message.from_user.id)
-    _store["gardener"] = None
-    _store["tasks"] = []
-    _store["achievements"] = []
-    _store["groups"] = {}
-    _invalidate_auth_cache(user_id)
-    # Clear on GitHub too
-    asyncio.create_task(_github_put(f"{GARDENER_PATH}/gardener.json", {}))
-    asyncio.create_task(_github_put(f"{GARDENER_PATH}/tasks.json", []))
-    asyncio.create_task(_github_put(f"{GARDENER_PATH}/achievements.json", []))
+    # Clear multi-user store
+    if user_id in _store:
+        del _store[user_id]
+    # Clear on GitHub — new file structure
+    base = _user_path(user_id)
+    asyncio.create_task(_github_put(f"{base}/profile.json", {}))
+    asyncio.create_task(_github_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
+    asyncio.create_task(_github_put(f"{base}/memory.json", {"sessions": []}))
     await state.clear()
     await message.answer(
         "🌑 Сад очищен.\n\nНачать заново: /start 🌱",
@@ -1505,6 +1506,8 @@ async def idea_send(message: Message, state: FSMContext):
 
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
+# Track last menu message per user — delete before showing new menu
+_menu_messages: dict = {}  # {user_id: message_id}
 
 def _get_history(user_id: str) -> list:
     return list(_sessions.get(str(user_id), []))
@@ -1630,7 +1633,14 @@ async def btn_garden(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await message.answer("🌾 Твой сад:", reply_markup=get_garden_inline())
+    # Delete previous menu message if exists
+    if user_id in _menu_messages:
+        try:
+            await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
+        except Exception:
+            pass
+    sent = await message.answer("🌾 Твой сад:", reply_markup=get_garden_inline())
+    _menu_messages[user_id] = sent.message_id
 
 @router.message(F.text == "⚙️ Настройки")
 async def btn_settings(message: Message, state: FSMContext):
@@ -1639,7 +1649,13 @@ async def btn_settings(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
+    if user_id in _menu_messages:
+        try:
+            await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
+        except Exception:
+            pass
+    sent = await message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
+    _menu_messages[user_id] = sent.message_id
 
 @router.callback_query(F.data == "back_garden")
 async def cb_back_garden(callback: CallbackQuery):
