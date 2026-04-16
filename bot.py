@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.3.0
+Mandala Garden Bot — Gentle Companion v7.4.0
 
-ARCHITECTURE CHANGE (v7.3.0):
+ARCHITECTURE CHANGE (v7.4.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.3.0):
+EMOJI (v7.4.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -481,12 +481,25 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="🌾 Профиль"), KeyboardButton(text="💎 Достижения")],
-            [KeyboardButton(text="🌀 Задачи"),  KeyboardButton(text="🔮 Резонанс")],
-            [KeyboardButton(text="💡 Идея для Мандалы")]
+            [KeyboardButton(text="🌾 Сад"), KeyboardButton(text="⚙️ Настройки")]
         ],
         resize_keyboard=True
     )
+
+def get_garden_inline() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🌀 Задачи",       callback_data="menu_tasks")],
+        [InlineKeyboardButton(text="💎 Достижения",   callback_data="menu_achievements")],
+        [InlineKeyboardButton(text="🔮 Резонанс",     callback_data="menu_resonance")],
+        [InlineKeyboardButton(text="💡 Идея",         callback_data="menu_idea")],
+    ])
+
+def get_settings_inline() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🌾 Профиль",           callback_data="menu_profile")],
+        [InlineKeyboardButton(text="🔄 Пройти анкету заново", callback_data="menu_restart")],
+        [InlineKeyboardButton(text="🚪 Покинуть сад",      callback_data="menu_leave")],
+    ])
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -1512,7 +1525,23 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), м�
 - Краткость важнее полноты: лучше меньше слов, но точнее
 
 ФОРМАТ ОТВЕТА (строго JSON, без markdown, без блоков кода):
-{"text": "твой ответ", "intent": "conversation|task_suggestion|achievement_suggestion|web_search|philosophy", "action": {"type": "add_task|add_achievement|web_search", "title": "..."} или null}
+{
+  "text": "твой ответ (или пустая строка если выполняешь команду)",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|add_achievement|web_search|philosophy",
+  "confidence": 0.0-1.0,
+  "clarification": "вопрос для уточнения если не уверен (или null)",
+  "action": {"type": "add_task|add_achievement|web_search", "title": "..."} или null
+}
+
+ПРАВИЛА INTENT:
+- "покажи задачи", "мои задачи", "что у меня" → intent=show_tasks, confidence=0.95
+- "мой профиль", "кто я" → intent=show_profile, confidence=0.95
+- "резонанс", "мой уровень" → intent=show_resonance, confidence=0.95
+- "достижения", "мои успехи" → intent=show_achievements, confidence=0.95
+- "добавь задачу", "хочу сделать X" → intent=add_task, confidence=0.9
+- "достиг", "сделал", "выполнил" → intent=add_achievement, confidence=0.85
+- Сомневаешься → confidence < 0.7, напиши clarification вопрос
+- Обычный разговор → intent=conversation, confidence=1.0
 """
 
 def _build_user_context_msg(telegram_id: str) -> str:
@@ -1563,6 +1592,67 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
     except Exception as e:
         logger.error(f"OpenRouter error on {model}: {e}")
         return await _call_openrouter(messages, model_idx + 1)
+
+
+# ─── Menu button handlers ─────────────────────────────────────────────────────
+
+@router.message(F.text == "🌾 Сад")
+async def btn_garden(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+    await message.answer("🌾 Твой сад:", reply_markup=get_garden_inline())
+
+@router.message(F.text == "⚙️ Настройки")
+async def btn_settings(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+    await message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
+
+@router.callback_query(F.data == "menu_tasks")
+async def cb_menu_tasks(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await cmd_tasks(callback.message, state)
+
+@router.callback_query(F.data == "menu_achievements")
+async def cb_menu_achievements(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await cmd_achievements(callback.message, state)
+
+@router.callback_query(F.data == "menu_resonance")
+async def cb_menu_resonance(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await cmd_resonance(callback.message, state)
+
+@router.callback_query(F.data == "menu_profile")
+async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await cmd_profile(callback.message, state)
+
+@router.callback_query(F.data == "menu_idea")
+async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await btn_suggest_idea(callback.message, state)
+
+@router.callback_query(F.data == "menu_restart")
+async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await state.clear()
+    user_id = str(callback.from_user.id)
+    _clear_history(user_id)
+    _get_user_store(user_id)["ready"] = False
+    await callback.message.answer(
+        "🔄 Начинаем анкету заново...",
+        reply_markup=get_main_keyboard()
+    )
+    await cmd_start(callback.message, state)
+
+@router.callback_query(F.data == "menu_leave")
+async def cb_menu_leave(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await callback.message.answer(
+        "🚪 Хочешь покинуть сад?",
+        reply_markup=get_leave_confirm_keyboard()
+    )
 
 # ─── Free dialogue ────────────────────────────────────────────────────────────
 
@@ -1644,6 +1734,45 @@ async def free_conversation(message: Message, state: FSMContext):
                     reply_text = raw
             else:
                 reply_text = raw
+
+            # ── Intent router ──────────────────────────────────────────────
+            try:
+                parsed_check = json.loads(raw) if raw.startswith("{") else {}
+                intent = parsed_check.get("intent", "conversation")
+                confidence = float(parsed_check.get("confidence", 1.0))
+                clarification = parsed_check.get("clarification")
+
+                if confidence < 0.7 and clarification:
+                    # Not sure — ask clarification
+                    reply_text = clarification
+                elif confidence >= 0.7 and intent != "conversation":
+                    # Execute command directly
+                    current_state = await state.get_state()
+                    if current_state is None:  # only if no FSM active
+                        if intent == "show_tasks":
+                            await cmd_tasks(message, state)
+                            reply_text = ""
+                        elif intent == "show_profile":
+                            await cmd_profile(message, state)
+                            reply_text = ""
+                        elif intent == "show_resonance":
+                            await cmd_resonance(message, state)
+                            reply_text = ""
+                        elif intent == "show_achievements":
+                            await cmd_achievements(message, state)
+                            reply_text = ""
+                        elif intent == "add_task":
+                            await message.answer(reply_text, reply_markup=get_main_keyboard())
+                            await start_addtask_cb(message, state)
+                            reply_text = ""
+                        elif intent == "add_achievement":
+                            await message.answer(reply_text, reply_markup=get_main_keyboard())
+                            await cmd_achievements(message, state)
+                            reply_text = ""
+            except Exception as e:
+                logger.warning(f"Intent router error: {e}")
+            # ──────────────────────────────────────────────────────────────
+
             _add_to_history(user_id, "user", text)
             _add_to_history(user_id, "assistant", reply_text)
             # Persist memory to GitHub (fire-and-forget)
