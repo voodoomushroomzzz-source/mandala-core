@@ -2,7 +2,7 @@
 """
 Mandala Garden Bot — Gentle Companion v7.1.1
 
-ARCHITECTURE CHANGE (v7.1.0):
+ARCHITECTURE CHANGE (v7.2.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.1.0):
+EMOJI (v7.2.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -82,9 +82,7 @@ PORT = 10000
 WEBHOOK_PATH = "/webhook"
 WEBHOOK_SECRET = "mandala-secret"
 
-GARDENER_ID = "gardener_001"
-GARDENER_PATH = f"honeycombs/personal_gardeners/{GARDENER_ID}"
-MAIN_SESSION_ID = "main"
+GARDENERS_ROOT = "gardeners"  # gardeners/{telegram_id}/profile.json etc
 
 if not BOT_TOKEN or not RENDER_EXTERNAL_URL:
     logger.error("Missing BOT_TOKEN or RENDER_EXTERNAL_URL")
@@ -104,45 +102,69 @@ dp.include_router(router)
 # WRITE → update _store → respond to user → sync GitHub in background
 # ═══════════════════════════════════════════════════════════════════════════════
 
-_store: dict = {
-    "gardener":     None,   # dict | None
-    "tasks":        [],     # list
-    "achievements": [],     # list
-    "groups":       {},     # dict
-    "ready":        False,  # True after initial load
-}
+# Multi-user store: {telegram_id: {"profile": dict, "workspace": dict, "ready": bool}}
+_store: dict = {}
+
+def _get_user_store(telegram_id: str) -> dict:
+    uid = str(telegram_id)
+    if uid not in _store:
+        _store[uid] = {"profile": None, "workspace": None, "ready": False}
+    return _store[uid]
 
 # pending GitHub writes: {path: content} — deduplicated by path
 _pending_writes: dict = {}
 _write_lock = asyncio.Lock() if False else None  # initialized in on_startup
 
+def _user_path(telegram_id: str) -> str:
+    return f"{GARDENERS_ROOT}/gardener_{telegram_id}"
+
+def store_get_profile(telegram_id: str) -> Optional[dict]:
+    return copy.deepcopy(_get_user_store(telegram_id).get("profile"))
+
+def store_set_profile(telegram_id: str, g: dict) -> None:
+    _get_user_store(telegram_id)["profile"] = g
+    _pending_writes[f"{_user_path(telegram_id)}/profile.json"] = g
+
+def store_get_workspace(telegram_id: str) -> Optional[dict]:
+    return copy.deepcopy(_get_user_store(telegram_id).get("workspace"))
+
+def store_set_workspace(telegram_id: str, w: dict) -> None:
+    _get_user_store(telegram_id)["workspace"] = w
+    _pending_writes[f"{_user_path(telegram_id)}/workspace.json"] = w
+
+def store_get_tasks(telegram_id: str) -> list:
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("tasks", [])) if ws else []
+
+def store_set_tasks(telegram_id: str, t: list) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
+    ws["tasks"] = t
+    store_set_workspace(telegram_id, ws)
+
+def store_get_achievements(telegram_id: str) -> list:
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("achievements", [])) if ws else []
+
+def store_set_achievements(telegram_id: str, a: list) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
+    ws["achievements"] = a
+    store_set_workspace(telegram_id, ws)
+
+def store_get_groups(telegram_id: str) -> dict:
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy({"groups": ws.get("groups", [])}) if ws else {"groups": []}
+
+def store_set_groups(telegram_id: str, g: dict) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
+    ws["groups"] = g.get("groups", g) if isinstance(g, dict) else g
+    store_set_workspace(telegram_id, ws)
+
+# Legacy aliases for backward compat during transition
 def store_get_gardener() -> Optional[dict]:
-    return copy.deepcopy(_store["gardener"])
+    return None
 
 def store_set_gardener(g: dict) -> None:
-    _store["gardener"] = g
-    _pending_writes[f"{GARDENER_PATH}/gardener.json"] = g
-
-def store_get_tasks() -> list:
-    return copy.deepcopy(_store["tasks"])
-
-def store_set_tasks(t: list) -> None:
-    _store["tasks"] = t
-    _pending_writes[f"{GARDENER_PATH}/tasks.json"] = t
-
-def store_get_achievements() -> list:
-    return copy.deepcopy(_store["achievements"])
-
-def store_set_achievements(a: list) -> None:
-    _store["achievements"] = a
-    _pending_writes[f"{GARDENER_PATH}/achievements.json"] = a
-
-def store_get_groups() -> dict:
-    return copy.deepcopy(_store["groups"])
-
-def store_set_groups(g: dict) -> None:
-    _store["groups"] = g
-    _pending_writes[f"{GARDENER_PATH}/groups.json"] = g
+    pass
 
 # ─── Global HTTP session ───────────────────────────────────────────────────────
 
@@ -247,37 +269,28 @@ def _fire_sync() -> None:
 
 # ─── Initial load ─────────────────────────────────────────────────────────────
 
-async def _load_store() -> None:
-    """Load all gardener files from GitHub in parallel on startup."""
-    logger.info("Loading store from GitHub...")
-    gardener_path = f"{GARDENER_PATH}/gardener.json"
-    tasks_path    = f"{GARDENER_PATH}/tasks.json"
-    ach_path      = f"{GARDENER_PATH}/achievements.json"
-    groups_path   = f"{GARDENER_PATH}/groups.json"
-
-    results = await asyncio.gather(
-        _github_get(gardener_path),
-        _github_get(tasks_path),
-        _github_get(ach_path),
-        _github_get(groups_path),
+async def _load_user(telegram_id: str) -> None:
+    """Load profile + workspace for a specific user from GitHub."""
+    uid = str(telegram_id)
+    base = _user_path(uid)
+    profile, workspace = await asyncio.gather(
+        _github_get(f"{base}/profile.json"),
+        _github_get(f"{base}/workspace.json"),
         return_exceptions=True
     )
+    store = _get_user_store(uid)
+    store["profile"]   = profile if isinstance(profile, dict) else None
+    store["workspace"] = workspace if isinstance(workspace, dict) else {"tasks": [], "groups": [], "achievements": []}
+    store["ready"]     = True
+    name = store["profile"].get("name", "?") if store["profile"] else "none"
+    tasks_count = len(store["workspace"].get("tasks", []))
+    logger.info(f"User loaded: {uid} name={name} tasks={tasks_count}")
 
-    gardener, tasks, achievements, groups = results
-
-    _store["gardener"]     = gardener if isinstance(gardener, dict) else None
-    _store["tasks"]        = tasks if isinstance(tasks, list) else []
-    _store["achievements"] = achievements if isinstance(achievements, list) else []
-    _store["groups"]       = groups if isinstance(groups, dict) else {"groups": []}
-    _store["ready"]        = True
-
-    g_name = _store["gardener"].get("identity", {}).get("name", "?") if _store["gardener"] else "none"
-    logger.info(
-        f"Store loaded: gardener={g_name}, "
-        f"tasks={len(_store['tasks'])}, "
-        f"ach={len(_store['achievements'])}, "
-        f"groups={len(_store['groups'].get('groups', []))}"
-    )
+async def _load_store() -> None:
+    """Load known gardeners on startup. Loads gardener_224736062 (Dima) by default."""
+    logger.info("Loading store from GitHub...")
+    await _load_user("224736062")
+    logger.info("Store ready")
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
 
@@ -285,18 +298,18 @@ _auth_cache: dict = {}
 AUTH_CACHE_TTL = 120
 
 def is_authorized(telegram_id: str) -> bool:
-    """Sync auth check from in-memory store — no GitHub call needed."""
-    now = time.time()
-    if telegram_id in _auth_cache:
-        result, ts = _auth_cache[telegram_id]
-        if now - ts < AUTH_CACHE_TTL:
-            return result
-    gardener = _store.get("gardener")
-    if not gardener:
-        return False
-    result = str(gardener.get("identity", {}).get("telegram_id", "")) == str(telegram_id)
-    _auth_cache[telegram_id] = (result, now)
-    return result
+    """Check if user has a profile loaded. Load on demand if not."""
+    uid = str(telegram_id)
+    store = _get_user_store(uid)
+    return store.get("ready", False) and store.get("profile") is not None
+
+async def ensure_user_loaded(telegram_id: str) -> bool:
+    """Load user data if not already loaded. Returns True if user exists."""
+    uid = str(telegram_id)
+    store = _get_user_store(uid)
+    if not store.get("ready"):
+        await _load_user(uid)
+    return store.get("profile") is not None
 
 def _invalidate_auth_cache(telegram_id: str) -> None:
     _auth_cache.pop(telegram_id, None)
@@ -1468,24 +1481,41 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), м�
 - 🤝 Мир: отношения, путешествия, события, дружба, сообщество
 
 ПРАВИЛА ОБЩЕНИЯ:
-1. Отвечай тепло и кратко (2-4 предложения) как живой друг на русском языке
+1. Отвечай тепло, как живой друг на русском языке
 2. Ты помнишь историю нашего разговора — используй контекст для точных ответов
 3. Никогда не навязывай — только мягко предлагай
 4. Деструктивные темы отклоняй мягко: "Это не моя стезя, давай о твоём росте"
 5. Если слышишь намерение (поехать, купить, изучить, достиг чего-то) — предложи зафиксировать
 6. Философские темы — только если садовник сам их поднял
 
+КРАТКОСТЬ И ФОРМАТИРОВАНИЕ (строго):
+- Простое приветствие, "как дела" → 1-2 предложения, не больше
+- Обычный вопрос → 2-3 предложения максимум
+- Развёрнутый разговор → разбивай на абзацы с переносами строк
+- НИКОГДА не пиши стену текста без переносов
+- Каждая отдельная мысль — новая строка
+- Не заканчивай каждый ответ вопросом — только когда реально нужно
+- Краткость важнее полноты: лучше меньше слов, но точнее
+
 ФОРМАТ ОТВЕТА (строго JSON, без markdown, без блоков кода):
 {"text": "твой ответ", "intent": "conversation|task_suggestion|achievement_suggestion|web_search|philosophy", "action": {"type": "add_task|add_achievement|web_search", "title": "..."} или null}
 """
 
-def _build_user_context_msg(ctx: dict) -> str:
-    interests = ", ".join(ctx["interests"][:3]) or "не указаны"
-    tasks_str = ", ".join(t["title"] for t in ctx["active_tasks"][:3]) or "нет"
+def _build_user_context_msg(telegram_id: str) -> str:
+    profile = store_get_profile(telegram_id) or {}
+    workspace = store_get_workspace(telegram_id) or {}
+    name = profile.get("name", "Садовник")
+    resonance = profile.get("resonance_level", 0)
+    info = profile.get("personal_info", {})
+    interests = ", ".join(info.get("interests", [])[:3]) or "не указаны"
+    tasks = workspace.get("tasks", [])
+    active = [t for t in tasks if t.get("status") != "completed"]
+    tasks_str = ", ".join(t["title"] for t in active[:3]) or "нет"
+    ach_count = len(workspace.get("achievements", []))
     return (
-        f"[Профиль садовника: имя={ctx['name']}, резонанс={ctx['resonance']}%, "
-        f"интересы={interests}, активных задач={len(ctx['active_tasks'])} ({tasks_str}), "
-        f"достижений={ctx['achievements_count']}]"
+        f"[Профиль: имя={name}, резонанс={resonance}%, "
+        f"интересы={interests}, активных задач={len(active)} ({tasks_str}), "
+        f"достижений={ach_count}]"
     )
 
 async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
@@ -1574,8 +1604,7 @@ async def free_conversation(message: Message, state: FSMContext):
     if not text:
         return
 
-    ctx = _build_sr_context()
-    ctx_msg = _build_user_context_msg(ctx)
+    ctx_msg = _build_user_context_msg(user_id)
     history = _get_history(user_id)
 
     await message.bot.send_chat_action(message.chat.id, "typing")
