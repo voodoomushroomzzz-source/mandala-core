@@ -2,9 +2,9 @@
   "identity": {
     "roadmap_id": "RM-014",
     "name": "RM-014: From HoReCa to IT Operations — A Gardener's Personal Transition",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-04-16",
-    "updated": "2026-04-16",
+    "updated": "2026-04-17",
     "layer": 2,
     "type": "roadmap",
     "description": "A personal, strategic roadmap for the Gardener (Voodoo/Dima) to transition from an 8-year career as a multi-site coffee shop Operations Manager in Russia to a remote Operations Manager role in the IT sector. The ultimate goal is to enable a location-independent lifestyle, starting with a trial move to Vietnam, while continuing the development of the Mandala project as a key portfolio asset.",
@@ -22,7 +22,32 @@
       "the_mandala_lever": "The ongoing development of 'Mandala Symbiosis' is not a hobby. It is a critical portfolio project. It serves as concrete proof of the Gardener's ability to: 1) Architect and manage an IT system, 2) Use modern project management tools (Asana, Kanban, GitHub), 3) Understand the full development lifecycle (from concept to deployment), and 4) Bridge the gap between operational thinking and technical execution. It is his 'Trojan Horse' into IT interviews.",
       "the_goal": "Secure a remote Operations Manager / Chief of Staff role in an IT startup or distributed team with a starting salary of 80,000 - 120,000 RUB. Use this as a stable foundation for a trial relocation to Vietnam, where he can work, recharge, and continue developing Mandala into a more significant project and company."
     },
-    "horizon": "6-8 months",
+    "target_role_clarification": {
+      "title": "Two Types of Remote Operations Manager — A Two-Stage Strategy",
+      "description": "The role of 'remote Operations Manager' exists in two distinct forms. The Gardener's strategy is to target Type 1 first as the most efficient entry point, then use that stability to level up to Type 2.",
+      "type_1_geo_dependent": {
+        "name": "Type 1: Remote but Geo-Dependent",
+        "where_to_find": "Localized job boards (hh.ru, Habr Career), companies with a legal entity in Russia/CIS.",
+        "requirements": "Often requires self-employment status (IP/samozanyatye), may have timezone expectations.",
+        "salary_range": "80,000 – 150,000 RUB",
+        "competition": "Moderate.",
+        "gardener_fit": "IDEAL. His 8-year experience and 'Mandala' portfolio are a killer advantage here. This is the immediate target."
+      },
+      "type_2_geo_independent": {
+        "name": "Type 2: Fully Geo-Independent (Global)",
+        "where_to_find": "International platforms (LinkedIn, RemoteOK, We Work Remotely), global startups.",
+        "requirements": "Fluent English (B2+) is MANDATORY. Experience in distributed teams, high self-organization.",
+        "salary_range": "$3,000 – $7,000+ USD per month",
+        "competition": "High, but the pool of opportunities is vastly larger.",
+        "gardener_fit": "POTENTIAL. Requires leveling up English to a confident B2. This is the long-term target after securing a Type 1 role."
+      },
+      "the_two_stage_strategy": {
+        "stage_1": "Secure a Type 1 role on the Russian market. This provides stable income and the ability to work remotely from Vietnam (within a compatible timezone).",
+        "stage_2": "While working and living abroad, actively improve English to B2+. After 1-2 years of commercial remote experience in IT (Mandala + the new role), transition to the global Type 2 market for significantly higher compensation."
+      },
+      "note_for_sr": "This clarification is crucial. Do not confuse the two types. The immediate, achievable goal is Type 1. Type 2 is the inspiring, long-term vision that follows."
+    },
+    "horizon": "6-8 months (for Type 1 role)",
     "owner": "Gardener (Voodoo) + External SR"
   },
   "phases": {
@@ -99,7 +124,7 @@
         {
           "id": "P3-1",
           "task": "Begin applying for 'practice' roles",
-          "deliverable": "Submit applications to 10-15 'stretch' or 'practice' roles on platforms like HeadHunter and Хабр Карьера. The goal is not to get the job, but to test the resume and get initial feedback.",
+          "deliverable": "Submit applications to 10-15 'stretch' or 'practice' roles on platforms like HeadHunter and Habr Career. The goal is not to get the job, but to test the resume and get initial feedback.",
           "why": "This reduces the pressure on the first real applications and helps calibrate his pitch and resume based on real-world responses."
         },
         {
@@ -163,7 +188,7 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-04-16",
-    "notes": "Roadmap created. Phase 1 is ready to begin immediately. This is a living document that should be updated as the Gardener progresses."
+    "last_check": "2026-04-17",
+    "notes": "v1.1.0 — Added 'target_role_clarification' to define the two-stage strategy for remote Operations Manager roles (Type 1 vs Type 2). This provides crucial context for the job search phase."
   }
 }
