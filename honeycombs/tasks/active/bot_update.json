@@ -1,82 +1,124 @@
 {
   "task_id": "T-20260408-1030",
-  "name": "Telegram Bot — SR Gentle Companion (Mandala Symbiosis)",
+  "name": "Telegram Bot  SR Gentle Companion (Mandala Symbiosis)",
   "status": "in_progress",
   "priority": "HIGH",
   "deadline": "2026-05-15",
   "created": "2026-04-01",
   "updated": "2026-04-16",
-  "progress": 70,
-  "description": "Autonomous SR Companion bot. OpenRouter LLM with sliding window memory, Mer-Ka-Ba profile, multi-user, voice, reminders, web search, Ahimsa filter, idea seeds. v7.1.1 deployed with scheduler protection and HTML parse fix.",
-  "tags": ["telegram_bot", "sr_companion", "ahimsa", "merkaba", "openrouter", "multi_user", "voice", "active"],
+  "progress": 75,
+  "description": "Autonomous SR Companion bot. OpenRouter LLM with sliding window memory, Mer-Ka-Ba profile, multi-user, voice, reminders, Ahimsa filter, idea seeds.",
+  "tags": ["telegram_bot", "sr_companion", "ahimsa", "merkaba", "openrouter", "multi_user", "active"],
+
   "done": [
     "v6.0.2: In-memory store, health check, concurrent GitHub sync",
     "v6.1.0: Free dialogue fallback, intent detection, quick action buttons",
-    "v7.0.0: OpenRouter direct (meta-llama/llama-3.3-70b + fallback chain)",
-    "v7.0.0: SR system prompt with Mandala philosophy (Ahimsa, Mer-Ka-Ba, Flower of Life)",
-    "v7.0.0: Idea filter + save to seeds/ replacing engineer chat button",
+    "v7.0.0: OpenRouter direct, SR system prompt (Ahimsa, Mer-Ka-Ba, Flower of Life)",
+    "v7.0.0: Idea filter + save to seeds/ (replaced engineer chat button)",
     "v7.0.1: Fixed model IDs for OpenRouter",
-    "v7.0.2: Multi-model fallback chain (5 free models)",
-    "v7.1.0: Sliding window chat history per user (_sessions dict, last 40 messages)",
-    "v7.1.0: Model upgrade: qwen/qwen3.5-flash primary (1M ctx), mistral-small-3 fallback",
-    "v7.1.1: Fixed HTML parse error in free_conversation, wrapped scheduler jobs in try/except"
+    "v7.0.2: Multi-model fallback chain (5 models)",
+    "v7.1.0: Sliding window 40 msgs (_sessions dict), qwen3.5-flash-02-23 primary",
+    "v7.1.0: Model chain: qwen3.5-flash-02-23  mistral-small-3.2-24b  llama-3.3-70b:free  gemma-3-27b:free  nemotron-3-nano-30b",
+    "v7.1.2: try/except in all scheduler jobs (DeepSeek fix)",
+    "v7.1.2: parse_mode=None for LLM responses (DeepSeek fix)",
+    "v7.1.2: typing indicator before LLM call",
+    "v7.1.2+: health endpoint GET /  200 + webhook auto-restore on every ping"
   ],
-  "in_progress": {
-    "v7.2.0": [
-      "Persistent chat memory: store _sessions in memory.json per user, sync to GitHub",
-      "SHA-based refresh: check file SHA before full download (reduces API requests 3-4x)",
-      "Periodic workspace refresh: check SHA every 5 min, reload only if changed",
-      "Multi-user readiness: dynamic gardener_{telegram_id} folder creation",
-      "Achievements as metrics: counter in profile.json instead of separate file",
-      "Response formatting: line breaks for readability, short answers for simple questions, expand only when meaningful",
-      "Typing indicator: send chat_action 'typing' before LLM response"
+
+  "current_version": {
+    "version": "v7.1.2+",
+    "deployed_at": "Render free tier",
+    "stable": true,
+    "model_chain": [
+      "qwen/qwen3.5-flash-02-23 (primary, paid, 1M ctx)",
+      "mistralai/mistral-small-3.2-24b-instruct (fallback paid)",
+      "meta-llama/llama-3.3-70b-instruct:free",
+      "google/gemma-3-27b-it:free",
+      "nvidia/nemotron-3-nano-30b-a3b"
     ]
   },
+
   "blocks_next": {
-    "B": "Multi-user: dynamic gardener_{telegram_id}, own folder per user, _store multi-user",
-    "C": "Mer-Ka-Ba profile: Body/Spirit/World spheres in onboarding and profile",
-    "D": "UX: grouped menu, changelog announcements, multilingual support",
-    "E": "Intelligence: reminders system, Tavily search in bot, progressive gardener learning",
-    "F": "Voice: Groq Whisper, Fly.io migration"
+    "B_priority_1": {
+      "name": "Multi-user + file restructure",
+      "description": "Dynamic gardener_{telegram_id} instead of hardcoded gardener_001. Each user gets own folder. Restructure files: profile.json + workspace.json + memory.json (3 files instead of 4)",
+      "why_first": "Critical  any new user sees Dimas data right now",
+      "estimated": "1 session"
+    },
+    "C_priority_2": {
+      "name": "Persistent memory (memory.json)",
+      "description": "Save _sessions to memory.json per user. Restore on bot restart  conversation survives Render reboots",
+      "why": "Bot forgets all conversations on every restart",
+      "estimated": "0.5 session",
+      "depends_on": "B"
+    },
+    "D_priority_3": {
+      "name": "Mer-Ka-Ba profile spheres",
+      "description": "Replace Health/Creativity/Knowledge with three Mer-Ka-Ba spheres: Body() / Spirit() / World() in onboarding and profile display",
+      "estimated": "1 session"
+    },
+    "E_priority_4": {
+      "name": "SHA-optimization + periodic refresh",
+      "description": "Check file SHA before full download. Periodic workspace refresh every 5 min. Reduces GitHub API calls 3-4x",
+      "estimated": "0.5 session"
+    },
+    "F_priority_5": {
+      "name": "UX improvements",
+      "description": "Grouped menu (Info/Actions/More), changelog announcements via changelog.json, multilingual support",
+      "estimated": "1 session"
+    },
+    "G_priority_6": {
+      "name": "Intelligence: reminders + Tavily search",
+      "description": "Reminders system with APScheduler, Tavily web search in bot dialogue, progressive gardener learning via conversation",
+      "estimated": "2 sessions"
+    },
+    "H_priority_7": {
+      "name": "Voice: Groq Whisper",
+      "description": "Voice message transcription via Groq Whisper API  text  SR dialogue",
+      "estimated": "1 session"
+    }
   },
+
+  "deferred": {
+    "gardeners_private_repo": {
+      "name": "Move personal_gardeners/ to private repository",
+      "description": "Create separate private repo mandala-gardeners. Move all personal_gardeners/ data there. Bot reads gardener data from GARDENERS_REPO env var, core data from CORE_REPO. Makes mandala-core fully open-source.",
+      "why_deferred": "Low priority while only 1 active gardener. Adds complexity without benefit at current scale.",
+      "trigger": "When 5+ real gardeners onboarded OR mandala-core goes public",
+      "implementation": "Add repo param to _github_get/_github_put. Add GARDENERS_REPO env var. Migrate existing data.",
+      "estimated": "1 session"
+    },
+    "hosting_migration": {
+      "name": "Migrate from Render to stable hosting",
+      "description": "Render free tier restarts randomly. Options: Railway ($5/mo), Hetzner CX23 (3.49eur/mo for 2+ services)",
+      "why_deferred": "v7.1.2+ with health endpoint + webhook auto-restore makes Render stable enough for MVP",
+      "trigger": "When 10+ gardeners OR instability returns after fixes",
+      "recommended": "Hetzner CX23 when 2+ services needed (bot + engineer-chat)"
+    }
+  },
+
   "architecture": {
-    "llm": "OpenRouter — qwen3.5-flash (1M ctx) with 5-model fallback chain",
-    "memory": "_sessions = {user_id: [messages]} — sliding window 40 msg, to be persisted in memory.json",
+    "llm": "OpenRouter  qwen3.5-flash-02-23 (1M ctx) with sliding window history (40 msgs)",
+    "memory": "_sessions = {user_id: [messages]}  in-memory, trimmed at 40 messages, LOST on restart",
     "store": "In-memory _store + fire-and-forget GitHub sync every 2 min",
-    "context_budget": "system_prompt(~500) + history(~5K) + gardener_profile(~1K) + current_msg = ~8K per request",
-    "fallback_chain": ["qwen/qwen3.5-flash", "mistralai/mistral-small-3", "meta-llama/llama-3.3-70b-instruct:free", "google/gemma-3-27b-it:free", "nvidia/nemotron-3-super:free"]
+    "health": "GET /  200 + auto-restore webhook if missing",
+    "context_budget": "system_prompt(~800) + gardener_profile(~500) + history(~8K) + current_msg = ~10K per request",
+    "estimated_cost": "$0.10-0.30/month for 1 active gardener"
   },
-  "file_structure": {
-    "current": "gardener.json + tasks.json + achievements.json + groups.json (4 files)",
-    "target": "profile.json + workspace.json + memory.json (3 files)",
-    "description": "Achievements become counter in profile.json. Tasks + groups merged into workspace.json. Chat history persisted in memory.json.",
-    "archive": "workspace_YYYY-MM.json for completed tasks, memory_YYYY-QX.json for old chat history"
-  },
-  "model_selection": {
-    "primary": "qwen/qwen3.5-flash — 1M context, $0.065 in/$0.26 out, best for long sessions",
-    "fallback_paid": "mistralai/mistral-small-3 — 32K ctx, $0.05/$0.08, reliable",
-    "fallback_free": "meta-llama/llama-3.3-70b-instruct:free, google/gemma-3-27b-it:free",
-    "env_var": "OPENROUTER_KEY",
-    "estimated_cost": "$0.10-0.15/month for single active gardener"
-  },
+
   "acceptance_criteria": [
-    "Bot remembers conversation context within session (sliding window)",
-    "Model chain auto-switches on rate limit without user seeing error",
-    "Free dialogue feels natural and warm, follows Ahimsa",
-    "Three Mer-Ka-Ba spheres in profile",
-    "Each user has own gardener folder",
-    "Voice messages transcribed and processed",
-    "Ahimsa filter rejects destructive topics gracefully",
-    "Context never exceeds model limit — old messages trimmed automatically",
-    "Chat history persists across bot restarts (memory.json)",
-    "SHA-based refresh reduces API requests 3-4x",
-    "Achievements stored as counter in profile.json",
-    "Responses use line breaks, short for simple questions, expand only when meaningful",
-    "Typing indicator shown before LLM response"
+    "Bot remembers conversation within session (sliding window 40 msgs)",
+    "Bot responds within 5-10 seconds",
+    "Model chain auto-switches on rate limit  user never sees error",
+    "Free dialogue feels warm and natural, follows Ahimsa",
+    "Health endpoint returns 200, webhook auto-restores after restart",
+    "Each user sees only their own data (after Block B)",
+    "Conversation survives bot restart (after Block C)"
   ],
+
   "health": {
     "status": "healthy",
     "last_check": "2026-04-16",
-    "notes": "v7.1.1 deployed and stable. v7.2.0 planning: persistent memory, SHA optimization, 3-file structure, achievements as metrics, response formatting, typing indicator."
+    "notes": "v7.1.2+ deployed and stable. Health endpoint added. Webhook auto-restore active. Main pending: multi-user (Block B)  critical before sharing with others."
   }
 }
