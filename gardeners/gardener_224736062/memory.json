@@ -55,6 +55,22 @@
     {
       "role": "assistant",
       "content": "```json\n{\n  \"text\": \"Отлично, Дима! Хорошее настроение — это уже лепесток Цветка Жизни. 🌸\\n\\nЧем хочешь заняться сегодня в саду?\",\n  \"intent\": \"conversation\",\n  \"confidence\": 1.0,\n  \"clarification\": null,\n  \"action\": null\n}\n```"
+    },
+    {
+      "role": "user",
+      "content": "Ты здесь?"
+    },
+    {
+      "role": "assistant",
+      "content": "Привет, Дима! Я всегда здесь, твой системный резонатор в саду. 🌿\n\nЧем могу поддержать тебя сегодня?"
+    },
+    {
+      "role": "user",
+      "content": "Покажи мои задачи"
+    },
+    {
+      "role": "assistant",
+      "content": "```json\n{\n  \"text\": \"У тебя 3 активных задачи, Дима:\\n\\n1. Настроить первый проект в Garden\\n2. Доделать бота\\n3. ШМЕ\\n\\nКак продвигается каждая из них?\",\n  \"intent\": \"show_tasks\",\n  \"confidence\": 0.95,\n  \"clarification\": null,\n  \"action\": null\n}\n```"
     }
   ],
   "updated": "2026-04-16"
