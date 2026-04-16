@@ -57,30 +57,10 @@
       "goal": "To systematically translate 8 years of operational experience in HoReCa into the language and frameworks valued in the IT sector, and to establish a solid learning and development system.",
       "context_for_sr": "This phase is about building the launchpad. The Gardener must reframe his own narrative. He is not a 'newbie' but an 'experienced operational leader adapting his skills to a new domain'. The focus is on building the assets (audit, portfolio, learning plan) that will be used in the next phases.",
       "tasks": [
-        {
-          "id": "P1-1",
-          "task": "Audit and translate HoReCa experience",
-          "deliverable": "A personal document (Notion/private) listing key achievements from 8 years of management, rewritten in IT/Operations language. Example: 'Managed a team of 15' becomes 'Led and optimized a cross-functional team of 15, improving operational efficiency'.",
-          "why": "To build the raw material for his future resume and interview stories. This is a necessary reframing exercise."
-        },
-        {
-          "id": "P1-2",
-          "task": "Initiate structured learning: Google Project Management Certificate",
-          "deliverable": "Enroll in and begin the Google Project Management Certificate on Coursera. Goal: Complete at least the first 2 modules.",
-          "why": "This course provides the standard terminology and structured frameworks (Agile, Scrum) used in the IT industry. It will allow the Gardener to speak the same language as his future colleagues and validate his intuitive knowledge."
-        },
-        {
-          "id": "P1-3",
-          "task": "Start a public development log (devlog) for Mandala",
-          "deliverable": "Begin posting weekly updates in a public channel (e.g., a dedicated Telegram channel, or simple GitHub Discussions) about the development of Mandala. Topics: new features, architectural decisions, challenges overcome.",
-          "why": "This creates a public timeline of his IT project management in action. It's a living portfolio that grows over time and demonstrates consistency."
-        },
-        {
-          "id": "P1-4",
-          "task": "Focus English learning on Business & Operations",
-          "deliverable": "2-3 conversational sessions per week (e.g., on italki) focused on topics like describing a process, explaining a project, and presenting business results.",
-          "why": "Conversational English is a key requirement for many remote roles. Focusing on business English maximizes the return on his study time."
-        }
+        {"id": "P1-1", "task": "Audit and translate HoReCa experience", "deliverable": "A personal document (Notion/private) listing key achievements from 8 years of management, rewritten in IT/Operations language.", "why": "To build the raw material for his future resume and interview stories."},
+        {"id": "P1-2", "task": "Initiate structured learning: Google Project Management Certificate", "deliverable": "Enroll in and begin the Google Project Management Certificate on Coursera. Complete at least first 2 modules.", "why": "Provides standard terminology and frameworks (Agile, Scrum) used in IT."},
+        {"id": "P1-3", "task": "Start a public development log (devlog) for Mandala", "deliverable": "Begin posting weekly updates in a public channel about Mandala development.", "why": "Creates a public timeline of IT project management in action."},
+        {"id": "P1-4", "task": "Focus English learning on Business & Operations", "deliverable": "2-3 conversational sessions per week focused on business topics.", "why": "Conversational English is key for remote roles."}
       ]
     },
     "phase_2": {
@@ -89,94 +69,34 @@
       "goal": "To transform the Mandala project and the Gardener's experience into a polished, professional portfolio and resume that is ready for the job market.",
       "context_for_sr": "This is the 'assembly' phase. The Gardener now has the raw materials from Phase 1 and must package them into compelling artifacts (GitHub profile, resume, LinkedIn) that will attract recruiters. The Mandala project is the centerpiece.",
       "tasks": [
-        {
-          "id": "P2-1",
-          "task": "Transform Mandala's GitHub README into a portfolio piece",
-          "deliverable": "A professional, English-language `README.md` for the `mandala-core` repository. It should clearly outline: 1) The project's vision and architecture, 2) The tech stack used (Python, aiogram, Render, etc.), 3) The project management process (Kanban, roadmap), and 4) The Gardener's specific role as Project Architect and Lead.",
-          "why": "This is the first thing a recruiter will see if they look at his GitHub. It must clearly communicate the project's value and the Gardener's leadership."
-        },
-        {
-          "id": "P2-2",
-          "task": "Create and optimize a LinkedIn profile for 'Operations Manager'",
-          "deliverable": "A complete LinkedIn profile with a professional photo, a headline like 'Operations Manager | 8+ Years Managing Multi-site Teams | Transitioning to IT', and a detailed 'About' section telling his story.",
-          "why": "LinkedIn is the primary hunting ground for recruiters. A strong profile is essential for being discovered."
-        },
-        {
-          "id": "P2-3",
-          "task": "Draft the first version of the IT-focused resume",
-          "deliverable": "A 1-page resume in English (or bilingual). It should be tailored for 'Operations Manager' roles, highlighting relevant experience and framing the Mandala project as 'Professional Experience' (Personal Project).",
-          "why": "Having a draft resume makes the job search process much faster. It's a baseline to be iterated upon based on feedback from early applications."
-        },
-        {
-          "id": "P2-4",
-          "task": "Complete a Lean Six Sigma Yellow Belt certification",
-          "deliverable": "A certificate from a reputable provider (e.g., GoLeanSixSigma.com, ASQ).",
-          "why": "This adds formal, recognized credentials in 'process improvement' to his resume, which is highly relevant to operations management and helps offset the lack of formal IT experience."
-        }
+        {"id": "P2-1", "task": "Transform Mandala's GitHub README into a portfolio piece", "deliverable": "Professional, English-language README.md outlining vision, architecture, tech stack, and Gardener's role.", "why": "First thing a recruiter will see on GitHub."},
+        {"id": "P2-2", "task": "Create and optimize a LinkedIn profile for 'Operations Manager'", "deliverable": "Complete LinkedIn profile with professional photo and headline.", "why": "LinkedIn is the primary hunting ground for recruiters."},
+        {"id": "P2-3", "task": "Draft the first version of the IT-focused resume", "deliverable": "1-page resume in English, tailored for Operations Manager roles.", "why": "Baseline to iterate upon based on feedback."},
+        {"id": "P2-4", "task": "Complete a Lean Six Sigma Yellow Belt certification", "deliverable": "Certificate from a reputable provider.", "why": "Adds formal credentials in process improvement."}
       ]
     },
     "phase_3": {
       "name": "Phase 3: Active Search — Testing the Market",
       "duration": "Month 5-6",
       "goal": "To actively apply for positions, gather feedback from the market through 'practice' interviews, and secure a job offer that meets the target criteria.",
-      "context_for_sr": "This is the most psychologically challenging phase. The Gardener will face rejection, which is a normal part of any job search. The key is to frame the first 5-10 applications and interviews as 'market research' to gather feedback and refine his approach. The Mandala project is his anchor and proof of competence in every conversation.",
+      "context_for_sr": "This is the most psychologically challenging phase. Frame first 5-10 applications as 'market research' to gather feedback. Mandala project is anchor and proof of competence.",
       "tasks": [
-        {
-          "id": "P3-1",
-          "task": "Begin applying for 'practice' roles",
-          "deliverable": "Submit applications to 10-15 'stretch' or 'practice' roles on platforms like HeadHunter and Habr Career. The goal is not to get the job, but to test the resume and get initial feedback.",
-          "why": "This reduces the pressure on the first real applications and helps calibrate his pitch and resume based on real-world responses."
-        },
-        {
-          "id": "P3-2",
-          "task": "Master the 'Mandala Pitch'",
-          "deliverable": "A 2-minute, confident story about the Mandala project that explains: 1) What it is, 2) Why he built it, 3) What his role was, and 4) What he learned. This story should be ready for any interview.",
-          "why": "Mandala is his strongest, most unique asset. A clear, compelling story about it will differentiate him from every other candidate."
-        },
-        {
-          "id": "P3-3",
-          "task": "Targeted applications and networking",
-          "deliverable": "Apply to 3-5 highly relevant 'Operations Manager' or 'Chief of Staff' roles per week at IT startups or companies with a remote-first culture. Begin reaching out to HR professionals and Operations leaders in these companies for 'informational interviews'.",
-          "why": "This moves the search from quantity to quality. Networking is often the most effective way to find a great role."
-        },
-        {
-          "id": "P3-4",
-          "task": "Secure a job offer",
-          "deliverable": "Receive at least one written job offer for a remote Operations Manager (or similar) role with a salary in the range of 80,000 - 120,000 RUB.",
-          "why": "This is the primary metric of success for this phase. It's the key that unlocks Phase 4."
-        }
+        {"id": "P3-1", "task": "Begin applying for 'practice' roles", "deliverable": "Submit 10-15 'stretch' applications on HeadHunter and Habr Career to test resume.", "why": "Reduces pressure and calibrates pitch."},
+        {"id": "P3-2", "task": "Master the 'Mandala Pitch'", "deliverable": "2-minute confident story about Mandala project.", "why": "Differentiates him from every other candidate."},
+        {"id": "P3-3", "task": "Targeted applications and networking", "deliverable": "Apply to 3-5 highly relevant roles per week. Reach out for informational interviews.", "why": "Moves search from quantity to quality."},
+        {"id": "P3-4", "task": "Secure a job offer", "deliverable": "Receive at least one written job offer for remote Operations Manager with 80,000-120,000 RUB.", "why": "Primary metric of success."}
       ]
     },
     "phase_4": {
       "name": "Phase 4: Relocation — The Trial Run in Vietnam",
       "duration": "Month 7-8",
-      "goal": "To successfully execute a trial relocation to Vietnam while maintaining the new remote role and continuing to develop Mandala. The goal is to test the lifestyle, not to permanently move.",
-      "context_for_sr": "This is the realization of the initial desire. The Gardener will test the location-independent lifestyle he has been working towards. This phase is an experiment. Success is not defined as 'staying forever' but as 'gathering valuable data and experience'.",
+      "goal": "To successfully execute a trial relocation to Vietnam while maintaining the new remote role and continuing to develop Mandala.",
+      "context_for_sr": "This phase is an experiment. Success is 'gathering valuable data and experience', not 'staying forever'.",
       "tasks": [
-        {
-          "id": "P4-1",
-          "task": "Handle all logistics for a 1-2 month stay",
-          "deliverable": "Visa obtained, flights booked, accommodation secured (Airbnb), and key infrastructure (local SIM card, backup internet) researched.",
-          "why": "Proper preparation reduces anxiety and allows him to focus on work and exploration upon arrival."
-        },
-        {
-          "id": "P4-2",
-          "task": "Establish a stable work routine in the new location",
-          "deliverable": "Find a reliable workspace (co-working space or a quiet cafe with good internet) and adapt to the new time zone. Ensure seamless communication with his new employer.",
-          "why": "This is the most critical operational test. His ability to work effectively from anywhere is the foundation of his new life."
-        },
-        {
-          "id": "P4-3",
-          "task": "Continue development of Mandala and personal projects",
-          "deliverable": "Maintain the devlog and continue working on Mandala's features (e.g., visualizations). Optionally, start a personal blog/vlog about the relocation and career change journey.",
-          "why": "This provides creative fulfillment and continues to build his personal brand and portfolio. It's a long-term investment in himself and the project."
-        },
-        {
-          "id": "P4-4",
-          "task": "Evaluate the experience and decide on next steps",
-          "deliverable": "After 1-2 months, make a conscious decision: 1) Extend the stay in Vietnam, 2) Return to Russia but continue working remotely, or 3) Explore another country. This decision will be based on real experience, not speculation.",
-          "why": "This is the final step of the experiment. It turns the 'dream' into a data-driven life decision."
-        }
+        {"id": "P4-1", "task": "Handle all logistics for a 1-2 month stay", "deliverable": "Visa, flights, accommodation, local SIM, backup internet.", "why": "Proper preparation reduces anxiety."},
+        {"id": "P4-2", "task": "Establish a stable work routine in the new location", "deliverable": "Find reliable workspace and adapt to time zone.", "why": "Most critical operational test."},
+        {"id": "P4-3", "task": "Continue development of Mandala and personal projects", "deliverable": "Maintain devlog, work on Mandala features, optional blog.", "why": "Builds personal brand and portfolio."},
+        {"id": "P4-4", "task": "Evaluate the experience and decide on next steps", "deliverable": "Conscious decision: extend, return, or explore another country.", "why": "Turns dream into data-driven life decision."}
       ]
     }
   },
@@ -189,6 +109,6 @@
   "health": {
     "status": "active",
     "last_check": "2026-04-17",
-    "notes": "v1.1.0 — Added 'target_role_clarification' to define the two-stage strategy for remote Operations Manager roles (Type 1 vs Type 2). This provides crucial context for the job search phase."
+    "notes": "v1.1.0 — Added 'target_role_clarification' to define the two-stage strategy for remote Operations Manager roles (Type 1 vs Type 2)."
   }
 }
