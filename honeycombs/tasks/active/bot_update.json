@@ -3,122 +3,190 @@
   "name": "Telegram Bot  SR Gentle Companion (Mandala Symbiosis)",
   "status": "in_progress",
   "priority": "HIGH",
-  "deadline": "2026-05-15",
+  "deadline": "2026-06-01",
   "created": "2026-04-01",
   "updated": "2026-04-16",
-  "progress": 75,
-  "description": "Autonomous SR Companion bot. OpenRouter LLM with sliding window memory, Mer-Ka-Ba profile, multi-user, voice, reminders, Ahimsa filter, idea seeds.",
-  "tags": ["telegram_bot", "sr_companion", "ahimsa", "merkaba", "openrouter", "multi_user", "active"],
+  "progress": 82,
+  "description": "Autonomous SR Companion. Multi-user, OpenRouter LLM, memory, architect auth, intent router, grouped menus, tasks/reminders/roadmaps system.",
+  "tags": ["telegram_bot", "sr_companion", "ahimsa", "merkaba", "openrouter", "multi_user", "tasks", "reminders", "roadmaps", "active"],
 
   "done": [
-    "v6.0.2: In-memory store, health check, concurrent GitHub sync",
-    "v6.1.0: Free dialogue fallback, intent detection, quick action buttons",
-    "v7.0.0: OpenRouter direct, SR system prompt (Ahimsa, Mer-Ka-Ba, Flower of Life)",
-    "v7.0.0: Idea filter + save to seeds/ (replaced engineer chat button)",
-    "v7.0.1: Fixed model IDs for OpenRouter",
-    "v7.0.2: Multi-model fallback chain (5 models)",
-    "v7.1.0: Sliding window 40 msgs (_sessions dict), qwen3.5-flash-02-23 primary",
-    "v7.1.0: Model chain: qwen3.5-flash-02-23  mistral-small-3.2-24b  llama-3.3-70b:free  gemma-3-27b:free  nemotron-3-nano-30b",
-    "v7.1.2: try/except in all scheduler jobs (DeepSeek fix)",
-    "v7.1.2: parse_mode=None for LLM responses (DeepSeek fix)",
-    "v7.1.2: typing indicator before LLM call",
-    "v7.1.2+: health endpoint GET /  200 + webhook auto-restore on every ping"
+    "v6.0.2: In-memory store, health check, GitHub sync",
+    "v7.0.0: OpenRouter SR prompt, Ahimsa, Mer-Ka-Ba, Flower of Life",
+    "v7.1.0: Sliding window 40 msgs, 5-model chain",
+    "v7.1.2: Scheduler fixes, parse_mode=None, typing indicator",
+    "v7.1.2+: Health endpoint GET/ + webhook auto-restore",
+    "v7.2.0: Multi-user gardener_{telegram_id}, profile/workspace/memory structure",
+    "v7.3.0: Persistent memory.json, SHA cache optimization",
+    "v7.4.0: 2-button menu (Sad/Nastrojki), inline submenus, intent router",
+    "v7.5.0: Edit-in-place menus, back buttons, architect auth, webhook scheduler",
+    "v7.5.1: Fix cb_menu_idea/restart (callback.from_user bug), auth checks on menu buttons, (!) on placeholders"
   ],
 
-  "current_version": {
-    "version": "v7.1.2+",
-    "deployed_at": "Render free tier",
-    "stable": true,
-    "model_chain": [
-      "qwen/qwen3.5-flash-02-23 (primary, paid, 1M ctx)",
-      "mistralai/mistral-small-3.2-24b-instruct (fallback paid)",
-      "meta-llama/llama-3.3-70b-instruct:free",
-      "google/gemma-3-27b-it:free",
-      "nvidia/nemotron-3-nano-30b-a3b"
-    ]
+  "bugs_fixed_v751": [
+    "cb_menu_idea called btn_suggest_idea(callback.message) where from_user=BOT  is_authorized failed",
+    "cb_menu_restart called cmd_start(callback.message) where from_user=BOT  _check_ready failed",
+    "btn_settings/btn_garden missing is_authorized check",
+    "_check_ready now accepts optional user_id param for callback context",
+    "Removed redundant Покинуть сад button"
+  ],
+
+  "placeholders_marked": [
+    " Идея (!)  idea submission flow needs full implementation"
+  ],
+
+  "tasks_v2_spec": {
+    "description": "Enhanced task model  Phase 1 implementation",
+    "fields": {
+      "task_id": "auto-generated",
+      "title": "required  short name",
+      "description": "optional  detailed description",
+      "deadline": {
+        "format": "dd.mm.yyyy or dd.mm.yyyy hh:mm",
+        "note": "Text input  Telegram has no native date picker. Bot parses and confirms. WebApp calendar possible in future.",
+        "optional": true
+      },
+      "reminder_id": "optional  link to reminder from reminders system",
+      "status": "todo | in_progress | completed",
+      "group_id": "task group",
+      "priority": {
+        "auto": true,
+        "note": "Auto-calculated from deadline proximity + Mer-Ka-Ba sphere weight. Manual override allowed.",
+        "range": "1-10"
+      },
+      "labels": {
+        "description": "Life vector labels  cross-label supported (task can have multiple)",
+        "values": ["work", "study", "health", "creativity", "rest", "relationships", "exploration", "finance"],
+        "note": "Maps to Mer-Ka-Ba spheres: Body(health,rest), Spirit(study,creativity), World(relationships,exploration,work). Will align with final Mer-Ka-Ba implementation.",
+        "cross_label": true
+      },
+      "life_area": "primary sphere: body | spirit | world (Mer-Ka-Ba)",
+      "estimated_hours": "optional",
+      "roadmap_id": "optional  link to roadmap",
+      "created": "auto",
+      "updated": "auto",
+      "completed": "date when completed"
+    },
+    "fsm_flow": "title  description (skip?)  deadline (skip?)  label selection  confirm",
+    "implementation_priority": 1
+  },
+
+  "reminders_spec": {
+    "description": "Standalone reminders  can be linked to tasks or independent",
+    "fields": {
+      "reminder_id": "auto-generated",
+      "title": "required  if linked to task, auto-filled with task title + suggestion to review",
+      "datetime": "required  dd.mm.yyyy hh:mm",
+      "repeat": {
+        "type": "once | daily | weekly | custom",
+        "custom_options": {
+          "every_n_days": "every N days",
+          "days_of_week": "[mon,tue,wed,thu,fri,sat,sun]",
+          "every_n_weeks": "every N weeks",
+          "every_n_months": "every N months",
+          "yearly": "same date every year"
+        }
+      },
+      "linked_task_id": "optional",
+      "status": "active | paused | done",
+      "created": "auto"
+    },
+    "delivery": "APScheduler _check_reminders every 1 min. Sends message to user with task link if linked.",
+    "menu": "New button in garden inline:  Напоминания (!)",
+    "crud": ["create", "list", "pause", "delete"],
+    "implementation_priority": 2
+  },
+
+  "roadmaps_spec": {
+    "description": "Multi-step goal tracking  collection of tasks toward one big goal",
+    "fields": {
+      "roadmap_id": "auto-generated",
+      "title": "required",
+      "description": "optional",
+      "tasks": "list of task_ids (tasks with full task fields)",
+      "deadline": "optional  dd.mm.yyyy",
+      "priority": "1-10, auto or manual",
+      "status": "planning | active | completed | paused",
+      "progress_auto": "calculated from % of completed tasks",
+      "life_area": "primary sphere",
+      "labels": "same label system as tasks",
+      "created": "auto",
+      "updated": "auto"
+    },
+    "menu": "New button:  Роадмапы (!)",
+    "crud": ["create", "view", "add_task_to_roadmap", "complete", "delete"],
+    "storage": "workspace.json roadmaps[]",
+    "implementation_priority": 3
+  },
+
+  "labels_design_decision": {
+    "decision": "IMPLEMENT cross-labels",
+    "rationale": "Simple array field in task/roadmap. Enables filtering by user request. Aligns with Mer-Ka-Ba spheres. Low complexity  just a list field.",
+    "predefined_vectors": ["work", "study", "health", "creativity", "rest", "relationships", "exploration", "finance"],
+    "cross_label": "Yes  task can have [health, rest] or [study, creativity]",
+    "auto_suggest": "SR suggests labels from task title context during creation",
+    "filter_in_list": "User can ask 'покажи задачи по здоровью'  intent router filters by label"
   },
 
   "blocks_next": {
-    "B_priority_1": {
-      "name": "Multi-user + file restructure",
-      "description": "Dynamic gardener_{telegram_id} instead of hardcoded gardener_001. Each user gets own folder. Restructure files: profile.json + workspace.json + memory.json (3 files instead of 4)",
-      "why_first": "Critical  any new user sees Dimas data right now",
+    "priority_1": {
+      "name": "Tasks v2",
+      "desc": "Add description, deadline, labels to FSM flow. Update workspace.json schema. Labels selection via inline buttons.",
       "estimated": "1 session"
     },
-    "C_priority_2": {
-      "name": "Persistent memory (memory.json)",
-      "description": "Save _sessions to memory.json per user. Restore on bot restart  conversation survives Render reboots",
-      "why": "Bot forgets all conversations on every restart",
-      "estimated": "0.5 session",
-      "depends_on": "B"
+    "priority_2": {
+      "name": "Reminders system",
+      "desc": "New FSM for adding reminders. _check_reminders APScheduler job. Repeat types. Link to tasks.",
+      "estimated": "1-2 sessions"
     },
-    "D_priority_3": {
+    "priority_3": {
+      "name": "Roadmaps",
+      "desc": "Create roadmap FSM, link tasks to roadmap, progress tracking, display.",
+      "estimated": "1-2 sessions"
+    },
+    "priority_4": {
       "name": "Mer-Ka-Ba profile spheres",
-      "description": "Replace Health/Creativity/Knowledge with three Mer-Ka-Ba spheres: Body() / Spirit() / World() in onboarding and profile display",
+      "desc": "Replace Health/Creativity/Knowledge with Body/Spirit/World in onboarding. Align task labels to spheres.",
       "estimated": "1 session"
     },
-    "E_priority_4": {
-      "name": "SHA-optimization + periodic refresh",
-      "description": "Check file SHA before full download. Periodic workspace refresh every 5 min. Reduces GitHub API calls 3-4x",
+    "priority_5": {
+      "name": "Intent router tuning",
+      "desc": "More intent types including show tasks by label, create reminder, open roadmap.",
       "estimated": "0.5 session"
     },
-    "F_priority_5": {
-      "name": "UX improvements",
-      "description": "Grouped menu (Info/Actions/More), changelog announcements via changelog.json, multilingual support",
-      "estimated": "1 session"
-    },
-    "G_priority_6": {
-      "name": "Intelligence: reminders + Tavily search",
-      "description": "Reminders system with APScheduler, Tavily web search in bot dialogue, progressive gardener learning via conversation",
-      "estimated": "2 sessions"
-    },
-    "H_priority_7": {
-      "name": "Voice: Groq Whisper",
-      "description": "Voice message transcription via Groq Whisper API  text  SR dialogue",
-      "estimated": "1 session"
+    "priority_6": {
+      "name": "Idea button full implementation",
+      "desc": "Remove (!) from Идея. Proper idea submission with SR filter and seeds/ storage.",
+      "estimated": "0.5 session"
     }
   },
 
   "deferred": {
-    "gardeners_private_repo": {
-      "name": "Move personal_gardeners/ to private repository",
-      "description": "Create separate private repo mandala-gardeners. Move all personal_gardeners/ data there. Bot reads gardener data from GARDENERS_REPO env var, core data from CORE_REPO. Makes mandala-core fully open-source.",
-      "why_deferred": "Low priority while only 1 active gardener. Adds complexity without benefit at current scale.",
-      "trigger": "When 5+ real gardeners onboarded OR mandala-core goes public",
-      "implementation": "Add repo param to _github_get/_github_put. Add GARDENERS_REPO env var. Migrate existing data.",
-      "estimated": "1 session"
-    },
-    "hosting_migration": {
-      "name": "Migrate from Render to stable hosting",
-      "description": "Render free tier restarts randomly. Options: Railway ($5/mo), Hetzner CX23 (3.49eur/mo for 2+ services)",
-      "why_deferred": "v7.1.2+ with health endpoint + webhook auto-restore makes Render stable enough for MVP",
-      "trigger": "When 10+ gardeners OR instability returns after fixes",
-      "recommended": "Hetzner CX23 when 2+ services needed (bot + engineer-chat)"
-    }
+    "calendar_picker": "Native date picker requires Telegram WebApp. Deferred until WebApp phase.",
+    "gardeners_private_repo": "Trigger: 5+ gardeners OR mandala-core public",
+    "hosting_hetzner": "Trigger: 10+ gardeners. Hetzner CX23 3.49eur/mo",
+    "voice_groq_whisper": "After roadmaps system"
   },
 
   "architecture": {
-    "llm": "OpenRouter  qwen3.5-flash-02-23 (1M ctx) with sliding window history (40 msgs)",
-    "memory": "_sessions = {user_id: [messages]}  in-memory, trimmed at 40 messages, LOST on restart",
-    "store": "In-memory _store + fire-and-forget GitHub sync every 2 min",
-    "health": "GET /  200 + auto-restore webhook if missing",
-    "context_budget": "system_prompt(~800) + gardener_profile(~500) + history(~8K) + current_msg = ~10K per request",
-    "estimated_cost": "$0.10-0.30/month for 1 active gardener"
+    "llm": "OpenRouter qwen3.5-flash-02-23 (1M ctx), 40 msg sliding window",
+    "memory": "_sessions RAM + memory.json GitHub, restored on restart",
+    "store": "Multi-user _store + 2min GitHub sync fire-and-forget",
+    "health": "GET/ 200 + webhook auto-restore in health + scheduler every 5min",
+    "auth": "Architect (224736062) approves via inline buttons. gardeners/whitelist.json",
+    "intent_router": "confidence>=0.7 execute command, <0.7 ask clarification",
+    "workspace_schema": {
+      "tasks": "tasks[]",
+      "groups": "groups[]",
+      "achievements": "achievements[]",
+      "reminders": "reminders[] (to add in priority_2)",
+      "roadmaps": "roadmaps[] (to add in priority_3)"
+    }
   },
-
-  "acceptance_criteria": [
-    "Bot remembers conversation within session (sliding window 40 msgs)",
-    "Bot responds within 5-10 seconds",
-    "Model chain auto-switches on rate limit  user never sees error",
-    "Free dialogue feels warm and natural, follows Ahimsa",
-    "Health endpoint returns 200, webhook auto-restores after restart",
-    "Each user sees only their own data (after Block B)",
-    "Conversation survives bot restart (after Block C)"
-  ],
 
   "health": {
     "status": "healthy",
     "last_check": "2026-04-16",
-    "notes": "v7.1.2+ deployed and stable. Health endpoint added. Webhook auto-restore active. Main pending: multi-user (Block B)  critical before sharing with others."
+    "notes": "v7.5.1 fixes all callback from_user bugs. Menu auth checks added. Placeholders marked. Next: Tasks v2 + Reminders."
   }
 }
