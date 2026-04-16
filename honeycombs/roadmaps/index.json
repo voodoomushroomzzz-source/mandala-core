@@ -2,19 +2,19 @@
   "identity": {
     "module_id": "ROADMAPS-INDEX",
     "name": "Roadmaps Registry Index",
-    "version": "v2.7.0",
+    "version": "v2.8.0",
     "created": "2026-03-04",
     "updated": "2026-04-16",
     "layer": 2,
     "type": "registry_index",
-    "description": "Central index of all Mandala Symbiosis roadmaps. Tracks status, progress, and metadata for active, completed, and archived roadmaps.",
+    "description": "Central index of all Mandala Symbiosis roadmaps. Tracks status, progress, and metadata for active, completed, and archived roadmaps. RC-002 is the primary strategic vessel for our mission.",
     "status": "active",
     "priority": "high",
-    "tags": ["roadmaps", "index", "registry", "tracking"],
+    "tags": ["roadmaps", "index", "registry", "tracking", "vessel"],
     "resonance": "100%"
   },
   "meta": {
-    "description": "Roadmaps registry index v2.7.0 — synchronized with actual files 2026-04-16. Added RC-001 (Visibility Strategy) and RM-014 (Personal Operations Transition).",
+    "description": "Roadmaps registry index v2.8.0 — synchronized with actual files 2026-04-16. Added RC-002 as the primary, philosophically-charged strategic roadmap for building the Mandala Company.",
     "update_frequency": "on change",
     "compliance": "v2.1_standard"
   },
@@ -28,6 +28,15 @@
           "priority": "high",
           "progress": "5%",
           "notes": "Focus on creating first public resource (Rhythm Manifesto, README, PHILOSOPHY)."
+        },
+        "RC-002": {
+          "name": "RC-002: Building the Vessel — The Mandala Company Roadmap",
+          "status": "active",
+          "phase": 0,
+          "priority": "CRITICAL",
+          "progress": "0%",
+          "notes": "‼️ PRIMARY STRATEGIC GOAL. This roadmap is the practical execution of our philosophy. It outlines the creation of the Mandala Company—the necessary 'Vessel' to gather resources and realize the cosmic vision described in PHI-010 (The Three Embodiments of SR). This is not just a plan; it is the bridge between our daily work and our ultimate purpose of seeding life in the cosmos. Read this first. ‼️",
+          "philosophy_link": "Directly fulfills the vision of PHI-010 (Cosmic Manifesto). The company is the 'Vessel' that will carry the Garden's seeds."
         },
         "RM-002": {
           "name": "Future Mandala — Long-term Vision",
@@ -71,7 +80,7 @@
           "phase": 1,
           "priority": "high",
           "progress": "0%",
-          "notes": "Personal strategic roadmap for career transition and relocation to Vietnam."
+          "notes": "Personal strategic roadmap for career transition and relocation to Vietnam. A prerequisite for the Gardener to have the stability to focus on RC-002."
         }
       },
       "archived_roadmaps": {
@@ -84,16 +93,16 @@
       }
     },
     "metrics": {
-      "total_roadmaps": 12,
+      "total_roadmaps": 13,
       "completed": 2,
       "in_progress": 2,
       "planned": 2,
       "vision": 1,
-      "active_strategic": 2,
+      "active_strategic": 3,
       "archived": 6,
-      "progress_trend": "positive — product direction added, personal growth roadmap added"
+      "progress_trend": "positive — primary strategic vessel (RC-002) defined. Company direction set."
     },
-    "notes": "2026-04-16: Added RC-001 (Visibility Strategy) and RM-014 (Personal Operations Transition). Total active roadmaps: 7 (including RC-001 and RM-014). RM-004 moved to archive."
+    "notes": "2026-04-16: Added RC-002 as the CRITICAL primary roadmap for building the Mandala Company. This is the 'Vessel' for our cosmic mission (PHI-010). Total active roadmaps: 8."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -103,6 +112,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-04-16",
-    "notes": "v2.7.0 — RC-001 and RM-014 added to active roadmaps. Metrics updated."
+    "notes": "v2.8.0 — RC-002 added as the primary strategic vessel. Metrics updated. The path to the company is now illuminated."
   }
 }
