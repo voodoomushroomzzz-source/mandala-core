@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.5.3
+Mandala Garden Bot — Gentle Companion v7.5.4
 
-ARCHITECTURE CHANGE (v7.5.3):
+ARCHITECTURE CHANGE (v7.5.4):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.5.3):
+EMOJI (v7.5.4):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -505,16 +505,6 @@ def get_settings_inline() -> InlineKeyboardMarkup:
 
     ])
 
-def get_back_garden() -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="← Сад", callback_data="back_garden")]
-    ])
-
-def get_back_settings() -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="← Настройки", callback_data="back_settings")]
-    ])
-
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🌿 Здоровье",     callback_data="ach_cat_health")],
@@ -570,14 +560,12 @@ async def send_morning_greeting(telegram_id: str) -> None:
         phase = _silence_phase(telegram_id)
         if phase == 3 or not _can_send_proactive(telegram_id):
             return
-        gardener = _store.get("gardener")
+        gardener = store_get_profile(str(telegram_id))
         if not gardener:
-            return
-        if str(gardener.get("identity", {}).get("telegram_id", "")) != str(telegram_id):
             return
         if not gardener.get("companion_settings", {}).get("proactive_mode", True):
             return
-        name = gardener.get("identity", {}).get("name", "Садовник")
+        name = gardener.get("name", "Садовник")
         if phase == 2:
             text = f"🌿 {name}, я здесь если понадоблюсь.\nБез давления — возвращайся когда захочешь."
         else:
@@ -598,14 +586,12 @@ async def send_evening_checkin(telegram_id: str) -> None:
         phase = _silence_phase(telegram_id)
         if phase == 3 or not _can_send_proactive(telegram_id):
             return
-        gardener = _store.get("gardener")
+        gardener = store_get_profile(str(telegram_id))
         if not gardener:
-            return
-        if str(gardener.get("identity", {}).get("telegram_id", "")) != str(telegram_id):
             return
         if not gardener.get("companion_settings", {}).get("proactive_mode", True):
             return
-        name = gardener.get("identity", {}).get("name", "Садовник")
+        name = gardener.get("name", "Садовник")
         text = (
             f"🌒 Добрый вечер, {name}.\n\n"
             f"Что произошло сегодня? Если было что-то важное — "
@@ -618,15 +604,15 @@ async def send_evening_checkin(telegram_id: str) -> None:
 
 async def run_proactive_scheduler() -> None:
     try:
-        gardener = _store.get("gardener")
-        if not gardener:
-            return
-        telegram_id = str(gardener.get("identity", {}).get("telegram_id", ""))
-        if not telegram_id:
-            return
-        settings = gardener.get("companion_settings", {})
-        if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"]):
-            await send_morning_greeting(telegram_id)
+        for uid, user_store in list(_store.items()):
+            if not isinstance(user_store, dict) or not user_store.get("ready"):
+                continue
+            g = user_store.get("profile")
+            if not g:
+                continue
+            settings = g.get("companion_settings", {})
+            if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"]):
+                await send_morning_greeting(uid)
         if settings.get("evening_check_time") and _time_matches(settings["evening_check_time"]):
             await send_evening_checkin(telegram_id)
     except Exception as e:
@@ -634,14 +620,17 @@ async def run_proactive_scheduler() -> None:
 
 async def run_resonance_decay() -> None:
     try:
-        gardener = _store.get("gardener")
-        if not gardener:
-            return
-        gardener, changed = _apply_resonance_decay(dict(gardener))
-        if changed:
-            store_set_gardener(gardener)
-            _fire_sync()
-            logger.info("Resonance decay applied")
+        for uid, user_store in list(_store.items()):
+            if not isinstance(user_store, dict) or not user_store.get("ready"):
+                continue
+            g = user_store.get("profile")
+            if not g:
+                continue
+            g, changed = _apply_resonance_decay(dict(g))
+            if changed:
+                store_set_profile(uid, g)
+                _fire_sync()
+                logger.info(f"Resonance decay applied for {uid}")
     except Exception as e:
         logger.error(f"Resonance decay crashed: {e}", exc_info=True)
 
@@ -878,13 +867,13 @@ async def cmd_profile(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start")
         return
-    gardener = _store.get("gardener")
+    gardener = store_get_profile(user_id)
     if not gardener:
         await message.answer("🌿 Профиль не найден")
         return
-    name = gardener.get("identity", {}).get("name", "Садовник")
-    resonance = gardener.get("identity", {}).get("resonance_level", 13)
-    active_tasks = [t for t in _store.get("tasks", []) if t.get("status") != "completed"]
+    name = gardener.get("name", "Садовник")
+    resonance = gardener.get("resonance_level", 13)
+    active_tasks = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
     interests = gardener.get("personal_info", {}).get("interests", [])
     interests_str = ", ".join(interests[:3]) if interests else "не указаны"
     await message.answer(
@@ -907,12 +896,12 @@ async def cmd_resonance(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    gardener = _store.get("gardener")
+    gardener = store_get_profile(user_id)
     if not gardener:
         await message.answer("🌿 Профиль не найден", reply_markup=get_main_keyboard())
         return
 
-    resonance = gardener.get("identity", {}).get("resonance_level", 13)
+    resonance = gardener.get("resonance_level", 13)
     history = gardener.get("growth_history", [])
     life_areas = gardener.get("personal_info", {}).get("life_areas", {})
 
@@ -1078,15 +1067,15 @@ async def ach_bonus(message: Message, state: FSMContext):
     store_set_achievements(achievements)
 
     # Update gardener resonance
-    gardener = _store.get("gardener")
+    gardener = store_get_profile(user_id)
     if gardener:
         g = dict(gardener)
-        current_res = g.get("identity", {}).get("resonance_level", 13)
+        current_res = g.get("resonance_level", 13)
         new_res = min(100, current_res + bonus)
-        g.setdefault("identity", {})["resonance_level"] = new_res
-        g["identity"]["updated"] = _today()
+        g["resonance_level"] = new_res
+        g["updated"] = _today()
         g = _add_growth_history_entry(g, new_res)
-        store_set_gardener(g)
+        store_set_profile(user_id, g)
         _invalidate_auth_cache(str(message.from_user.id))
 
     # Sync to GitHub in background
@@ -1388,13 +1377,12 @@ async def cmd_leave(message: Message, state: FSMContext):
 async def leave_confirm(callback: CallbackQuery, state: FSMContext):
     await callback.answer()  # FIRST
     user_id = str(callback.from_user.id)
-    gardener = _store.get("gardener")
+    gardener = store_get_profile(user_id)
     if gardener:
         g = dict(gardener)
         g.setdefault("companion_settings", {})["proactive_mode"] = False
-        g["identity"]["updated"] = _today()
-        store_set_gardener(g)
-        _invalidate_auth_cache(user_id)
+        g["updated"] = _today()
+        store_set_profile(user_id, g)
         _fire_sync()
     await state.clear()
     await callback.message.edit_text(
@@ -1473,8 +1461,8 @@ async def idea_send(message: Message, state: FSMContext):
     if not text:
         await message.answer("💡 Напиши идею или нажми ❌ Отмена")
         return
-    gardener = _store.get("gardener") or {}
-    name = gardener.get("identity", {}).get("name", "Садовник")
+    gardener = store_get_profile(user_id) or {}
+    name = gardener.get("name", "Садовник")
     approved = True
     try:
         filter_msgs = [
@@ -1657,16 +1645,6 @@ async def btn_settings(message: Message, state: FSMContext):
     sent = await message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
     _menu_messages[user_id] = sent.message_id
 
-@router.callback_query(F.data == "back_garden")
-async def cb_back_garden(callback: CallbackQuery):
-    await callback.answer()
-    await callback.message.edit_text("🌾 Твой сад:", reply_markup=get_garden_inline())
-
-@router.callback_query(F.data == "back_settings")
-async def cb_back_settings(callback: CallbackQuery):
-    await callback.answer()
-    await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
-
 @router.callback_query(F.data == "menu_tasks")
 async def cb_menu_tasks(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
@@ -1682,7 +1660,7 @@ async def cb_menu_tasks(callback: CallbackQuery, state: FSMContext):
         if len(active) > 5:
             lines.append(f"…и ещё {len(active)-5}")
         text = "\n".join(lines)
-    await callback.message.edit_text(text, reply_markup=get_back_garden(), parse_mode="HTML")
+    await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_achievements")
 async def cb_menu_achievements(callback: CallbackQuery, state: FSMContext):
@@ -1696,7 +1674,7 @@ async def cb_menu_achievements(callback: CallbackQuery, state: FSMContext):
         for a in achs[-5:]:
             lines.append(f"• {a.get('title','?')}")
         text = "\n".join(lines)
-    await callback.message.edit_text(text, reply_markup=get_back_garden(), parse_mode="HTML")
+    await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_resonance")
 async def cb_menu_resonance(callback: CallbackQuery, state: FSMContext):
@@ -1712,7 +1690,7 @@ async def cb_menu_resonance(callback: CallbackQuery, state: FSMContext):
         f"Каждое достижение усиливает резонанс, {name}.\n"
         f"Резонанс только растёт — каждый шаг считается."
     )
-    await callback.message.edit_text(text, reply_markup=get_back_garden(), parse_mode="HTML")
+    await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_profile")
 async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
@@ -1733,7 +1711,7 @@ async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
         f"💎 Достижений: {ach_count}\n"
         f"🌱 Интересы: {interests}"
     )
-    await callback.message.edit_text(text, reply_markup=get_back_settings(), parse_mode="HTML")
+    await callback.message.edit_text(text, reply_markup=get_settings_inline(), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_idea")
 async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
@@ -1742,13 +1720,11 @@ async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
     if not is_authorized(user_id):
         await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await callback.message.edit_reply_markup(reply_markup=None)
-    await state.set_state(EngineerChatStates.waiting_for_message)
     await callback.message.answer(
-        "💡 <b>Предложи идею Мандале (!)</b>\n\n"
-        "Эта функция в разработке. Напиши идею — СР её оценит.\n\nДля отмены: ❌ Отмена",
+        "💡 <b>Идея для Мандалы (!)</b>\n\nНапиши свою идею — СР оценит её.\n\nДля отмены: ❌ Отмена",
         reply_markup=get_cancel_keyboard()
     )
+    await state.set_state(EngineerChatStates.waiting_for_message)
 
 @router.callback_query(F.data == "menu_restart")
 async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
@@ -1840,14 +1816,14 @@ def is_whitelisted(telegram_id: str) -> bool:
 
 # ─── Free dialogue ────────────────────────────────────────────────────────────
 
-def _build_sr_context() -> dict:
-    gardener = _store.get("gardener") or {}
-    tasks = _store.get("tasks", [])
-    achievements = _store.get("achievements", [])
+def _build_sr_context(user_id: str) -> dict:
+    gardener = store_get_profile(user_id) or {}
+    tasks = store_get_tasks(user_id)
+    achievements = store_get_achievements(user_id)
     active = [t for t in tasks if t.get("status") != "completed"]
     return {
-        "name": gardener.get("identity", {}).get("name", "Садовник"),
-        "resonance": gardener.get("identity", {}).get("resonance_level", 13),
+        "name": gardener.get("name", "Садовник"),
+        "resonance": gardener.get("resonance_level", 13),
         "interests": gardener.get("personal_info", {}).get("interests", []),
         "active_tasks": [{"title": t["title"], "priority": t.get("priority", 5)} for t in active[:5]],
         "achievements_count": len(achievements),
@@ -2006,15 +1982,15 @@ async def quick_add_achievement(callback: CallbackQuery):
     })
     store_set_achievements(achievements)
     # Update resonance
-    gardener = _store.get("gardener")
+    gardener = store_get_profile(user_id)
     if gardener:
         g = dict(gardener)
-        current_res = g.get("identity", {}).get("resonance_level", 13)
+        current_res = g.get("resonance_level", 13)
         new_res = min(100, current_res + 3)
-        g.setdefault("identity", {})["resonance_level"] = new_res
-        g["identity"]["updated"] = _today()
+        g["resonance_level"] = new_res
+        g["updated"] = _today()
         g = _add_growth_history_entry(g, new_res)
-        store_set_gardener(g)
+        store_set_profile(user_id, g)
         _invalidate_auth_cache(str(callback.from_user.id))
     _fire_sync()
     await callback.message.edit_text("💎 Достижение зафиксировано: <b>" + title + "</b>\n🔮 +3 к резонансу")
@@ -2071,8 +2047,11 @@ async def on_shutdown():
 
 async def health(request: web.Request) -> web.Response:
     status = "ready" if _store.get("ready") else "loading"
-    gardener = _store.get("gardener")
-    name = gardener.get("identity", {}).get("name", "none") if gardener else "none"
+    name = "none"
+    for uid, us in _store.items():
+        if isinstance(us, dict) and us.get("ready") and us.get("profile"):
+            name = us["profile"].get("name", "none")
+            break
     # Auto-restore webhook if missing
     try:
         info = await bot.get_webhook_info()
