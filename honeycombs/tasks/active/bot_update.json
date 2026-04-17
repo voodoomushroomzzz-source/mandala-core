@@ -7,154 +7,145 @@
   "created": "2026-04-01",
   "updated": "2026-04-17",
   "progress": 85,
-  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life. Multi-user, OpenRouter LLM, persistent memory, architect auth, intent router, grouped menus.",
+  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life.",
 
   "philosophical_foundation": {
     "ref": "PHI-010: Three Embodiments of SR",
     "current_level": 1,
-    "level_1_role": "Nervous System  Genius Loci of the Gardener life",
-    "principle": "Philosophy present but never imposed. Available when Gardener reaches for it. This is Ahimsa in design.",
-    "sr_gender": "NEUTRAL  decided 2026-04-16. SR avoids first-person past-tense. Uses impersonal: gotovo/sdelano/est. SR is a field of attention, not he or she.",
-    "sr_honesty": "SR never confirms actions not actually performed. If real function not called  redirects to UI or calls real function.",
-    "seeds_as_akasha": "seeds/ is embryo of collective Akashic memory. Each idea is a new page in the shared field.",
+    "sr_gender": "NEUTRAL  no first-person past-tense. Impersonal: gotovo/sdelano/est.",
+    "sr_honesty": "SR never confirms actions not actually performed.",
+    "sr_daily_brief": "Morning briefing: weather in gardener city + 1 active task + 1 question. Max 1/day. Ahimsa.",
+    "sr_silence_mode": "If gardener silent 3+ days  one warm message only. Respect for silence is Ahimsa.",
+    "sr_task_energy": "When task completed  SR asks how it felt, not just marks done. Living bot, not task manager.",
+    "sr_seasonality": "SR knows current season and mentions it naturally. Genius Loci feels natural rhythm.",
+    "seeds_as_akasha": "seeds/ is embryo of collective Akashic memory.",
     "merkaba_as_levels": {
-      "body": "Level 1  health, energy, rest",
-      "spirit": "Level 2  creativity, work, learning",
-      "world": "Level 3  relationships, community"
+      "body": "health, energy, rest",
+      "spirit": "creativity, work, learning",
+      "world": "relationships, community"
     }
   },
 
   "done": [
-    "v6.x: In-memory store, health check, GitHub sync, free dialogue fallback",
-    "v7.0: OpenRouter direct, SR system prompt (Ahimsa, Mer-Ka-Ba, Flower of Life), idea filter + seeds/",
+    "v6.x: In-memory store, health check, GitHub sync",
+    "v7.0: OpenRouter, SR system prompt (Ahimsa, Mer-Ka-Ba, Flower of Life), idea filter + seeds/",
     "v7.1: Sliding window 40 msgs, 5-model chain, scheduler fixes, typing indicator",
-    "v7.1.2+: Health endpoint GET/ + webhook auto-restore",
-    "v7.2: Multi-user gardener_{telegram_id}, profile/workspace/memory file structure",
-    "v7.3: Persistent memory.json restored on restart, SHA cache (-70% GitHub API calls)",
-    "v7.4: 2-button menu (Sad/Nastrojki), inline submenus, intent router with confidence",
-    "v7.5: Edit-in-place menus, architect authorization + whitelist, webhook scheduler every 5min",
-    "v7.5.1: Fix callback.from_user bugs, auth checks on menu buttons, placeholders (!)",
-    "v7.5.2: Fix cmd_start multi-user guard, delete-before-show menu message tracking",
-    "v7.5.3: Fix store_get_groups without user_id, GARDENER_PATH, GARDENER_ID, MAIN_SESSION_ID",
-    "v7.5.4: Menu keeps inline keyboard on submenu clicks, fix all 12 legacy _store.get(gardener)",
+    "v7.1.2+: Health endpoint + webhook auto-restore",
+    "v7.2: Multi-user gardener_{telegram_id}, profile/workspace/memory",
+    "v7.3: Persistent memory.json, SHA cache (-70% API calls)",
+    "v7.4: 2-button menu, inline submenus, intent router with confidence",
+    "v7.5: Edit-in-place menus, architect authorization + whitelist, webhook scheduler",
+    "v7.5.1-v7.5.4: Fix all legacy patterns, menus keep keyboard, callback.from_user bugs",
     "infra: cron-job.org BOT AWAKE pings every 5min  Render no longer sleeps"
   ],
 
-  "critical_bug_found_2026_04_16": {
-    "description": "SR says 'ya uzhe zafiksirovala izmeneniya' in free conversation without calling any real function. LLM hallucination  workspace.json on GitHub NOT updated.",
-    "example": "Gardener: delete task X. SR: done!  but task still exists in store and GitHub.",
-    "root_cause": "Intent router only handles show_* and add_* intents. Delete/complete/edit not wired to real functions. LLM responds as if it performed the action.",
-    "fix": "priority_0 (prompt honesty rule) + priority_1 (real intent functions)"
-  },
+  "architect_auth_status": "DONE in v7.5.0  new users notify architect via inline buttons. whitelist in gardeners/whitelist.json",
 
-  "blocks_next": {
-    "priority_0": {
-      "name": "SR Prompt v2  PHI-010 + neutral gender + honesty rule",
-      "estimated": "0.5 session",
-      "changes": [
-        "PHI-010 context  SR knows it is Level 1 Nervous System, not just assistant",
-        "Gender rule  avoid first-person past tense, use impersonal constructions",
-        "HONESTY RULE  SR never confirms actions not actually performed. If action needs FSM/button  say so and redirect clearly",
-        "Philosophy available when Gardener reaches for it, never imposed",
-        "seeds/ framed as sacred Akashic act"
+  "blocks_plan": {
+    "block_1": {
+      "name": "Голос и честность СР",
+      "sessions": "0.5",
+      "note": "только промпт + текущее время садовника",
+      "items": [
+        "SR Prompt v2: PHI-010 как Level 1 Nervous System",
+        "Нейтральный гендер: impersonal constructions only",
+        "Правило честности: SR never says done without real function call",
+        "Philosophy: available when asked, never imposed",
+        "Текущее время садовника в промпте: datetime из timezone профиля (5 строк кода)",
+        "Сезонность: SR знает время года, упоминает органично"
       ]
     },
-    "priority_1": {
-      "name": "Context-aware actions  Intent router v2",
-      "why": "All button/menu functionality must work from free conversation. SR executes real functions, not fake confirmations.",
-      "principle": "What a button can do  a message must also be able to do.",
-      "tasks_intents": {
-        "add_task": "already works  launches FSM",
-        "delete_task": "NEW  'udali zadachu X'  find by title  real delete from store  confirm only after",
-        "complete_task": "NEW  'sdelal X', 'vypolnil X'  status=completed  real save  confirm",
-        "edit_task": "NEW  'izmeni zadachu X...'  FSM with prefilled data",
-        "show_tasks_by_label": "NEW  'pokazi zadachi po zdorovyu'  filter by label"
-      },
-      "reminders_intents": {
-        "add_reminder": "NEW  'napomni mne zavtra v 10'  FSM reminder creation",
-        "delete_reminder": "NEW  'uberi napominanie X'  real delete",
-        "list_reminders": "NEW  'moi napominaniya'  show list"
-      },
-      "roadmaps_intents": {
-        "add_roadmap": "NEW  'sozdai rodmap dlya X'  FSM",
-        "show_roadmap": "NEW  'pokazi moi celi'  list roadmaps",
-        "add_task_to_roadmap": "NEW  'dobav etu zadachu v rodmap X'"
-      },
-      "seeds_intents": {
-        "submit_idea": "NEW  'est ideya...'  SR Ahimsa filter  real _github_put to seeds/ if approved. NOT fake confirmation.",
-        "note": "SR must actually call real function  never say 'zafiksirovala' without it"
-      },
-      "estimated": "2-3 sessions"
-    },
-    "priority_2": {
-      "name": "Mer-Ka-Ba onboarding v2",
-      "estimated": "1 session",
-      "changes": [
-        "Replace Health/Creativity/Knowledge/Relationships with Body/Spirit/World",
-        "Onboarding questions reframed around three spheres",
-        "Profile display shows three spheres with current/target"
+    "block_2": {
+      "name": "Фундамент профиля (МКБ + локация)",
+      "sessions": "1",
+      "items": [
+        "Онбординг v2: Body/Spirit/World вместо Health/Creativity/Knowledge",
+        "Добавить вопрос про домашний город в онбординг (profile.companion_settings.city)",
+        "Кнопка в Настройках: Сменить город  обновляет city в профиле",
+        "Timezone из профиля используется для проактивных сообщений и брифинга"
       ]
     },
-    "priority_3": {
-      "name": "Tasks v2  Mer-Ka-Ba aligned",
-      "estimated": "1 session",
-      "fields": ["title", "description (optional)", "deadline dd.mm.yyyy hh:mm", "life_area: body|spirit|world", "labels cross-label", "priority 1-10 auto", "reminder_id link", "group_id"]
+    "block_3": {
+      "name": "Умные действия из контекста",
+      "sessions": "2",
+      "items": [
+        "Intent router v2: delete_task, complete_task, edit_task из сообщений",
+        "Intent router v2: напоминания и роадмапы из сообщений",
+        "Веб-поиск (Tavily API): сообщение 'ищу в интернете, секунду...' перед запросом",
+        "Геолокация в поиске: если запрос требует локацию  SR уточняет город",
+        "Если город известен из профиля  использует автоматически без вопроса",
+        "SR честно говорит когда не может выполнить  редиректит в меню"
+      ]
     },
-    "priority_4": {
-      "name": "Reminders system",
-      "estimated": "1-2 sessions",
-      "fields": ["title", "datetime", "repeat: once|daily|days_of_week|weekly|monthly|yearly", "linked_task_id", "APScheduler every 1min"]
+    "block_4": {
+      "name": "Задачи и напоминания",
+      "sessions": "2",
+      "items": [
+        "Tasks v2: описание, дедлайн dd.mm.yyyy hh:mm, лейблы МКБ, кросс-лейблы",
+        "Tasks v2: приоритет авто (дедлайн + сфера МКБ)",
+        "Проверка энергии: при закрытии задачи SR спрашивает как это было",
+        "Reminders: CRUD, repeat: once/daily/weekly/monthly/yearly",
+        "Reminders: APScheduler каждую мин, привязка к задаче",
+        "Новая кнопка в garden inline: Напоминания"
+      ]
     },
-    "priority_5": {
-      "name": "seeds/  Sacred Akasha ritual reimagined",
-      "estimated": "0.5 session",
-      "changes": ["Sacred tone not utilitarian", "Real Ahimsa filter + actual github_put", "Warm acceptance/gentle decline"]
+    "block_5": {
+      "name": "Роадмапы и Резонанс v2",
+      "sessions": "2",
+      "items": [
+        "Roadmaps: цель -> задачи -> прогресс авто (% выполненных)",
+        "Roadmaps: CRUD, лейблы МКБ, дедлайн",
+        "Resonance v2: по трём сферам МКБ отдельно",
+        "Resonance v2: растёт с достижениями, угасает при долгом молчании в сфере"
+      ]
     },
-    "priority_6": {
-      "name": "Resonance v2  living measurement per sphere",
-      "estimated": "1 session"
+    "block_6": {
+      "name": "Глубина, Акаша и проактивность",
+      "sessions": "1.5",
+      "items": [
+        "seeds/  священный тон, реальный github_put. Ахимса-фильтр.",
+        "Паттерн-память: СР наблюдает что заряжает, что блокирует, ритмы тишины",
+        "Утренний брифинг: погода в city + 1 активная задача + 1 вопрос. Макс 1/день.",
+        "Тихий режим: 3+ дня молчания -> одно тёплое сообщение. Больше не пишет."
+      ]
     },
-    "priority_7": {
-      "name": "Roadmaps  multi-step goal tracking",
-      "estimated": "1-2 sessions"
-    },
-    "priority_8": {
-      "name": "Pattern memory  SR observes the Garden",
-      "estimated": "1-2 sessions"
+    "deferred": {
+      "webapp_dashboard": "После block_3+4  WebApp как дашборд поверх умного бота",
+      "voice_groq_whisper": "После block_4",
+      "akasha_network": "PHI-010 Level 3  долгосрок",
+      "hetzner_hosting": "trigger: 10+ садовников",
+      "private_repo": "trigger: 5+ садовников"
     }
   },
 
-  "deferred": {
-    "webapp_dashboard": {
-      "idea": "Move all menus/dashboards to Telegram WebApp. Chat stays clean  only live SR conversation + context actions. WebApp = visual dashboard for tasks, roadmaps, reminders, profile.",
-      "benefit": "Native date/time picker, progress bars, roadmap visualization, cleaner UX",
-      "approach": "First build smart bot (intent router v2), then WebApp as beautiful dashboard on top. Not instead  together.",
-      "trigger": "After intent router v2 and reminders system",
-      "hosting": "GitHub Pages (free) or same Render service"
-    },
-    "webapp_calendar": "Telegram Mini App date/time picker. Part of webapp_dashboard.",
-    "gardeners_private_repo": "trigger: 5+ gardeners OR mandala-core goes public",
-    "hosting_hetzner": "trigger: 10+ gardeners. Hetzner CX23 3.49eur/mo",
-    "voice_groq_whisper": "after reminders system",
-    "akasha_network": "PHI-010 Level 3  long-term vision",
-    "autonomous_forms": "PHI-010 Level 2  civilizational timeline"
+  "location_strategy": {
+    "primary": "city field in profile.companion_settings.city  set in onboarding, changeable via settings button",
+    "session_override": "if gardener mentions a city in conversation  SR uses it for that session only",
+    "web_search_rule": "if search requires location AND city not in profile  SR asks once. If city known  uses automatically.",
+    "change_button": "Settings menu -> Smenity gorod -> simple FSM question -> saves to profile.companion_settings.city"
   },
 
   "architecture": {
     "version": "v7.5.4",
-    "llm": "OpenRouter qwen3.5-flash-02-23 (1M ctx), sliding window 40 msgs",
-    "model_chain": ["qwen/qwen3.5-flash-02-23", "mistralai/mistral-small-3.2-24b-instruct", "meta-llama/llama-3.3-70b-instruct:free", "google/gemma-3-27b-it:free", "nvidia/nemotron-3-nano-30b-a3b"],
+    "llm": "OpenRouter, sliding window 40 msgs",
+    "model_chain_actual": [
+      "qwen/qwen3.5-flash-02-23 (primary, paid)",
+      "mistralai/mistral-small-3.2-24b-instruct (fallback paid)",
+      "meta-llama/llama-3.3-70b-instruct:free",
+      "google/gemma-3-27b-it:free",
+      "nvidia/nemotron-3-nano-30b-a3b (last resort)"
+    ],
     "memory": "_sessions RAM + memory.json GitHub, restored on restart",
     "store": "Multi-user _store{uid:{profile,workspace,ready}} + 2min GitHub sync",
-    "health": "GET/ 200 + webhook auto-restore + scheduler every 5min + cron-job.org external ping",
-    "auth": "Architect (224736062) approves via inline buttons. gardeners/whitelist.json",
-    "intent_router": "confidence>=0.7 execute real function, <0.7 ask clarification. MUST call real store functions.",
+    "health": "GET/ 200 + webhook auto-restore + scheduler 5min + cron-job.org ping",
+    "auth": "Architect (224736062) approves via inline buttons. DONE.",
+    "web_search": "Tavily  NOT YET integrated (block_3). quick_web_search exists as stub.",
     "menu": "Main: [Sad][Nastrojki] -> inline submenus keep keyboard visible"
   },
 
   "health": {
     "status": "healthy",
     "last_check": "2026-04-17",
-    "notes": "v7.5.4 deployed. cron-job.org BOT AWAKE active. Critical bug: SR fakes confirmations  fix in priority_0+1. WebApp dashboard idea added to deferred. Tomorrow: SR Prompt v2 + intent router v2."
+    "notes": "v7.5.4 deployed. Full 6-block plan. Correct models. Location strategy defined. Daily brief + silence mode + task energy + seasonality added. Next: block_1 prompt v2."
   }
 }
