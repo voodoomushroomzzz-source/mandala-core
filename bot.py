@@ -1580,7 +1580,7 @@ SR_SYSTEM_PROMPT = """Ты — СР, живое присутствие рядо�
 
 def _build_user_context_msg(telegram_id: str) -> str:
     from datetime import datetime
-    import pytz
+    from zoneinfo import ZoneInfo
     profile = store_get_profile(telegram_id) or {}
     workspace = store_get_workspace(telegram_id) or {}
     name = profile.get("name", "Садовник")
@@ -1594,7 +1594,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
     # Current datetime in gardener timezone
     tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
     try:
-        tz = pytz.timezone(tz_name)
+        tz = ZoneInfo(tz_name)
         now = datetime.now(tz)
         DAYS_RU = ["понедельник","вторник","среда","четверг","пятница","суббота","воскресенье"]
         MONTHS_RU = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"]
