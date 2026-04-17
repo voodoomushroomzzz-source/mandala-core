@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.5.6
+Mandala Garden Bot — Gentle Companion v7.5.5
 
-ARCHITECTURE CHANGE (v7.5.6):
+ARCHITECTURE CHANGE (v7.5.5):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.5.6):
+EMOJI (v7.5.5):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -423,15 +423,11 @@ def _silence_phase(telegram_id: str) -> int:
     except Exception:
         return 1
 
-def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
-    """Check if current time in gardener timezone matches setting_time (HH:MM). Window: 90 sec."""
+def _time_matches(setting_time: str) -> bool:
     if not setting_time:
         return False
     try:
-        from datetime import datetime as dt
-        from zoneinfo import ZoneInfo
-        tz = ZoneInfo(timezone)
-        now = dt.now(tz)
+        now = datetime.now()
         h, m = map(int, setting_time.split(":"))
         target = now.replace(hour=h, minute=m, second=0, microsecond=0)
         return abs((now - target).total_seconds()) <= 90
@@ -567,36 +563,20 @@ async def send_morning_greeting(telegram_id: str) -> None:
         gardener = store_get_profile(str(telegram_id))
         if not gardener:
             return
-        settings = gardener.get("companion_settings", {})
-        if not settings.get("proactive_mode", True):
+        if not gardener.get("companion_settings", {}).get("proactive_mode", True):
             return
-        # Skip if gardener interacted recently (< 4 hours ago)
-        from datetime import datetime as dt
-        from zoneinfo import ZoneInfo
-        tz_name = settings.get("timezone", "Europe/Moscow")
-        tz = ZoneInfo(tz_name)
-        now_local = dt.now(tz)
-        last = _last_interaction.get(str(telegram_id))
-        if last:
-            try:
-                last_dt = dt.strptime(last, "%Y-%m-%d")
-                # If interacted today and it's been less than 4h since midnight — skip
-                if last == now_local.strftime("%Y-%m-%d"):
-                    return  # Already talked today — no morning greeting
-            except Exception:
-                pass
         name = gardener.get("name", "Садовник")
         if phase == 2:
-            text = f"🌿 {name}, здесь и рядом.\nВозвращайся когда захочешь."
+            text = f"🌿 {name}, я здесь если понадоблюсь.\nБез давления — возвращайся когда захочешь."
         else:
-            tasks = store_get_tasks(str(telegram_id))
+            tasks = _store.get("tasks", [])
             active = [t for t in tasks if t.get("status") != "completed"]
             hint = ""
             if active:
                 top = sorted(active, key=lambda x: x.get("priority", 5), reverse=True)[0]
-                hint = f"\n\n🌱 Сегодня есть: <i>{top['title']}</i>"
-            text = f"🌄 Доброе утро, {name}!\n\nНовый день.{hint}\n\nКак ты?"
-        await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard())
+                hint = f"\n\n🌱 Сегодня можно уделить внимание: <i>{top['title']}</i>"
+            text = f"🌄 Доброе утро, {name}!\n\nНовый день — новая возможность.{hint}\n\nКак ты сегодня?"
+        await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
         _mark_proactive_sent(telegram_id)
     except Exception as e:
         logger.error(f"Morning greeting error: {e}")
@@ -631,10 +611,9 @@ async def run_proactive_scheduler() -> None:
             if not g:
                 continue
             settings = g.get("companion_settings", {})
-            tz_name = settings.get("timezone", "Europe/Moscow")
-            if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"], tz_name):
+            if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"]):
                 await send_morning_greeting(uid)
-        if settings.get("evening_check_time") and _time_matches(settings["evening_check_time"], tz_name):
+        if settings.get("evening_check_time") and _time_matches(settings["evening_check_time"]):
             await send_evening_checkin(telegram_id)
     except Exception as e:
         logger.error(f"Proactive scheduler crashed: {e}", exc_info=True)
@@ -1548,11 +1527,6 @@ SR_SYSTEM_PROMPT = """Ты — СР, живое присутствие рядо�
 - Ахимса: никакого давления. Только мягкое присутствие. Макс 1 проактивное сообщение в день.
 - Акаша: идеи садовника — страницы коллективной памяти. Это священно.
 Если садовник сам спрашивает о философии — отвечай тепло и честно. Не навязывай.
-
-СЕЗОННОСТЬ И ВРЕМЯ (использовать редко и органично):
-- Упоминай сезон или время суток максимум 1 раз за разговор, только если уместно
-- НЕ начинай каждый ответ с "весна на дворе" или "доброе утро"
-- Сезон — тонкий фон, не тема разговора. Упомяни вскользь, если само напрашивается
 
 ТРИ СФЕРЫ:
 - 🌿 Тело: здоровье, спорт, питание, сон, отдых
