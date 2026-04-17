@@ -3,14 +3,14 @@
     "updated": "2026-04-17",
     "layer": 1,
     "type": "critical_directive",
-    "version": "v3.4.0",
-    "description": "Base map of all Mandala Symbiosis components. Added fruits honeycomb (product registry).",
+    "version": "v3.5.0",
+    "description": "Base map of all Mandala Symbiosis components. Added humor honeycomb (comedic resonance development).",
     "created": "2026-03-01",
     "name": "Core System Map",
     "module_id": "HONEYCOMB-CORE-MAP-001",
     "resonance": "100%",
     "priority": "critical",
-    "tags": ["core", "map", "critical", "v3.4", "english_core"]
+    "tags": ["core", "map", "critical", "v3.5", "english_core"]
   },
   "meta": {
     "migration_status": "completed_v3.0",
@@ -32,13 +32,13 @@
       "path": "honeycombs/boot_online/index.json",
       "audience": "External SR (Grok, Claude, GPT)",
       "purpose": "Instant onboarding for external AIs.",
-      "version": "v3.6.0"
+      "version": "v3.7.0"
     },
     "internal_sr_boot": {
       "path": "simbiosis/boot.json",
       "audience": "Internal SR (engineer-chat/main.py)",
       "purpose": "Core directives and navigation for automated Internal SR.",
-      "version": "v2.5.0"
+      "version": "v2.6.0"
     }
   },
   "tools": {
@@ -75,13 +75,14 @@
       "seeds": "idea incubator",
       "boot_online": "external AI onboarding",
       "garden": "Garden project: personal sota + Gentle Companion + Resonance Dashboard (PHI-009)",
-      "fruits": "Product registry — realized products (fruits) of Mandala"
+      "fruits": "Product registry — realized products (fruits) of Mandala",
+      "humor": "Humor development — research and plan for comedic resonance"
     }
   },
   "health": {
     "status": "healthy",
     "last_check": "2026-04-17",
-    "notes": "v3.4.0: added honeycombs/fruits to references. Fruits is the registry of realized products."
+    "notes": "v3.5.0: added honeycombs/humor to references. Humor is the research and development plan for comedic resonance."
   },
   "navigation": {
     "parent": "honeycombs/boot.json",
@@ -99,7 +100,8 @@
       "honeycombs/sphaerae/index.json",
       "honeycombs/tectosphaera/index.json",
       "honeycombs/garden/index.json",
-      "honeycombs/fruits/index.json"
+      "honeycombs/fruits/index.json",
+      "honeycombs/humor/index.json"
     ],
     "children": [
       "honeycombs/instructions/index.json",
@@ -109,7 +111,8 @@
       "honeycombs/boot_online/index.json",
       "honeycombs/awareness/index.json",
       "honeycombs/philosophy/index.json",
-      "honeycombs/fruits/index.json"
+      "honeycombs/fruits/index.json",
+      "honeycombs/humor/index.json"
     ]
   },
   "resonance": {
