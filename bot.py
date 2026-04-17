@@ -81,7 +81,7 @@ SESSION_MAX_MESSAGES = 40
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
-WEBHOOK_SECRET = "mandala-secret"
+WEBHOOK_SECRET = ""  # No secret — HTTPS on Render is sufficient
 
 GARDENERS_ROOT = "gardeners"  # gardeners/{telegram_id}/profile.json etc
 
@@ -2045,7 +2045,7 @@ async def _check_webhook() -> None:
     try:
         info = await bot.get_webhook_info()
         if not info.url:
-            await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
+            await bot.set_webhook(WEBHOOK_URL)
             logger.info("Webhook restored by scheduler")
     except Exception as e:
         logger.error(f"Webhook check error: {e}")
@@ -2053,7 +2053,7 @@ async def _check_webhook() -> None:
 async def on_startup():
     """Called when bot starts."""
     await _load_store()
-    await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
+    await bot.set_webhook(WEBHOOK_URL)
     logger.info(f"Webhook set: {WEBHOOK_URL}")
 
     # Scheduler setup
@@ -2087,7 +2087,7 @@ async def health(request: web.Request) -> web.Response:
     try:
         info = await bot.get_webhook_info()
         if not info.url:
-            await bot.set_webhook(WEBHOOK_URL, secret_token=WEBHOOK_SECRET)
+            await bot.set_webhook(WEBHOOK_URL)
             logger.info("Webhook auto-restored")
     except Exception:
         pass
@@ -2097,7 +2097,7 @@ def main():
     app = web.Application()
     app.router.add_get("/", health)
     app.router.add_get("/health", health)
-    SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
+    SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path=WEBHOOK_PATH)
     setup_application(app, dp, bot=bot)
     app.on_startup.append(lambda _: on_startup())
     app.on_shutdown.append(lambda _: on_shutdown())
