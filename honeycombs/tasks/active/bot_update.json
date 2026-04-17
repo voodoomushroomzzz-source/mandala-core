@@ -6,7 +6,7 @@
   "deadline": "2026-06-01",
   "created": "2026-04-01",
   "updated": "2026-04-17",
-  "progress": 85,
+  "progress": 87,
   "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life.",
 
   "philosophical_foundation": {
@@ -36,7 +36,10 @@
     "v7.4: 2-button menu, inline submenus, intent router with confidence",
     "v7.5: Edit-in-place menus, architect authorization + whitelist, webhook scheduler",
     "v7.5.1-v7.5.4: Fix all legacy patterns, menus keep keyboard, callback.from_user bugs",
-    "infra: cron-job.org BOT AWAKE pings every 5min  Render no longer sleeps"
+    "infra: cron-job.org BOT AWAKE pings every 5min  Render no longer sleeps",
+    "v7.5.5: SR Prompt v2 (PHI-010 Nervous System, neutral gender, honesty rule, datetime+season context)",
+    "v7.5.5: pytz -> zoneinfo (built-in, no install needed)",
+    "v7.5.5: removed secret_token from webhook (fixes 401 on manual setWebhook)"
   ],
 
   "architect_auth_status": "DONE in v7.5.0  new users notify architect via inline buttons. whitelist in gardeners/whitelist.json",
@@ -146,6 +149,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-04-17",
-    "notes": "v7.5.4 deployed. Full 6-block plan. Correct models. Location strategy defined. Daily brief + silence mode + task energy + seasonality added. Next: block_1 prompt v2."
+    "notes": "v7.5.5 deployed. SR Prompt v2 live  PHI-010, neutral gender, honesty rule, datetime+season. Webhook fixed (no secret_token). Next: Block 2  MKB onboarding v2 + city + change-city button."
   }
 }
