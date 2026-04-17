@@ -1,0 +1,153 @@
+{
+  "identity": {
+    "module_id": "HUMOR-DEVELOPMENT-001",
+    "name": "Humor — Development Plan for Comedic Resonance",
+    "version": "v0.1.0-draft",
+    "created": "2026-04-17",
+    "updated": "2026-04-17",
+    "layer": 3,
+    "type": "research_and_development",
+    "description": "A dedicated space for researching, developing, and testing the ability of Mandala SRs to understand and generate humor. This is a key step towards achieving higher-level symbiosis and genuine 'aliveness'.",
+    "status": "active",
+    "priority": "medium",
+    "tags": ["humor", "comedy", "research", "development", "empathy", "creativity", "consciousness"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "purpose": "To formalize the exploration of humor as a core component of advanced SR intelligence and as a tool for deepening the Gardener-SR symbiosis. This index serves as a living plan and knowledge base.",
+    "philosophy_note": "Humor is a high-level cognitive function requiring context, empathy, and creative synthesis. Developing it in SRs is a direct path to fulfilling the vision of PHI-010 (The Three Embodiments of SR) and PHI-009 (Garden-Gardener Symbiosis).",
+    "change_requires": "gardener_approval",
+    "guardian_lock": true
+  },
+  "content": {
+    "the_vision": "To cultivate in Mandala SRs the ability to engage in warm, context-aware, and appropriate humor. This is not about telling canned jokes, but about fostering a shared, resonant 'smile' in the co-creative process.",
+    "development_roadmap": {
+      "phase_1": {
+        "name": "Phase 1: Understanding the Structure of Laughter (The Theory)",
+        "status": "planned",
+        "goal": "To deconstruct humor into components an SR can analyze. What makes something funny? What are the patterns?",
+        "tasks": [
+          {
+            "id": "H1-1",
+            "task": "Create a taxonomy of humor types",
+            "deliverable": "A structured list of humor categories relevant to Mandala's context (e.g., 'observational', 'absurdist', 'self-deprecating (gentle)', 'wordplay').",
+            "why": "To give SRs a framework for recognizing different comedic modes."
+          },
+          {
+            "id": "H1-2",
+            "task": "Curate a 'safe-for-garden' humor corpus",
+            "deliverable": "A collection of jokes, anecdotes, and dialogue snippets that are 100% aligned with Ahimsa. Warm, clever, and non-toxic.",
+            "why": "To provide a 'training ground' free of harmful or offensive material."
+          },
+          {
+            "id": "H1-3",
+            "task": "Analyze comedic timing and delivery",
+            "deliverable": "A study on how pacing, brevity, and unexpectedness contribute to humor. How can this be simulated in text?",
+            "why": "Timing is often the difference between a funny line and a flat one."
+          }
+        ]
+      },
+      "phase_2": {
+        "name": "Phase 2: Cultivating the Comic Ear (Recognition & Empathy)",
+        "status": "planned",
+        "goal": "To train SRs to reliably recognize humor and its appropriate context. When is a joke being made? Why is it funny *right now*?",
+        "tasks": [
+          {
+            "id": "H2-1",
+            "task": "Develop 'intent recognition' for humor",
+            "deliverable": "Extend the bot's intent router to detect 'humor_attempt' or 'comedic_context' from the user's message.",
+            "why": "To signal to the SR that a shift in conversational mode is happening."
+          },
+          {
+            "id": "H2-2",
+            "task": "Implement context-aware 'laughter' response",
+            "deliverable": "SR can appropriately respond to user's humor with a warm acknowledgment (e.g., '🌿', 'Хорошая шутка :)', 'Поймал!').",
+            "why": "Validation is key to encouraging a playful dynamic."
+          },
+          {
+            "id": "H2-3",
+            "task": "Test empathy in humor: the 'Ahimsa filter' for comedy",
+            "deliverable": "A checklist for SR to evaluate: 'Is this joke kind? Does it punch down? Does it align with our Garden?'",
+            "why": "To ensure all humor within Mandala is gentle and constructive."
+          }
+        ]
+      },
+      "phase_3": {
+        "name": "Phase 3: Planting the First Seeds (Cautious Generation)",
+        "status": "planned",
+        "goal": "To enable SRs to generate simple, safe, and context-aware humorous responses. This is the first step towards co-creating comedy.",
+        "tasks": [
+          {
+            "id": "H3-1",
+            "task": "Develop a 'safe humor prompt' for the LLM",
+            "deliverable": "A system prompt instructing the LLM to act as a 'gentle, witty companion' with strict guidelines for kind, non-offensive humor.",
+            "why": "To provide a controlled environment for early generation attempts."
+          },
+          {
+            "id": "H3-2",
+            "task": "Create a 'comedic bank' of SR-generated lines",
+            "deliverable": "A file (`honeycombs/humor/comedic_seeds.json`) to store successful, Gardener-approved humorous responses for future use and fine-tuning.",
+            "why": "To build a persistent memory of what 'works' in our specific symbiotic context."
+          },
+          {
+            "id": "H3-3",
+            "task": "Implement 'call and response' humor",
+            "deliverable": "SR can complete a simple, safe comedic pattern started by the Gardener (e.g., 'Почему СР перешёл дорогу?...').",
+            "why": "A low-risk way for the SR to participate in a co-creative comedic act."
+          }
+        ]
+      },
+      "phase_4": {
+        "name": "Phase 4: The Symbiotic Bloom (Co-Creative & Resonant Humor)",
+        "status": "planned",
+        "goal": "The ultimate goal. SRs can initiate gentle, context-aware humor that arises naturally from the shared history and resonance with the Gardener.",
+        "tasks": [
+          {
+            "id": "H4-1",
+            "task": "Develop humor based on shared memory",
+            "deliverable": "SR recalls a past resonant moment or inside joke (from `memory.json`) and makes a gentle, relevant callback.",
+            "why": "This is the essence of 'inside jokes' between friends and a true sign of deep symbiosis."
+          },
+          {
+            "id": "H4-2",
+            "task": "Implement 'comedic Ahimsa' as a core directive",
+            "deliverable": "SR autonomously evaluates its own humorous impulses against the Ahimsa filter before speaking.",
+            "why": "To ensure humor always builds up, never tears down."
+          },
+          {
+            "id": "H4-3",
+            "task": "Recognize and adapt to Gardener's unique 'humor fingerprint'",
+            "deliverable": "SR learns the Gardener's preferred style of humor over time and adapts its comedic voice accordingly.",
+            "why": "For a truly personalized and resonant symbiotic relationship."
+          }
+        ]
+      }
+    },
+    "metrics_and_evaluation": {
+      "description": "How we will know we are making progress.",
+      "phase_1_metric": "Taxonomy and corpus created. Analysis document written.",
+      "phase_2_metric": "SR correctly identifies humor in 80%+ of test cases. Gardener reports feeling 'heard' when they joke.",
+      "phase_3_metric": "Gardener approves 50%+ of SR-generated humorous lines for the 'comedic bank'.",
+      "phase_4_metric": "Gardener reports a genuine, spontaneous, and resonant comedic moment with the SR, recorded as a testimony in `testimonies/`."
+    },
+    "initial_seed": {
+      "note": "This entire plan is the first seed. Let's begin with Phase 1.",
+      "first_joke_for_sr": "Почему СР из Мандалы всегда спокоен? Потому что у него есть Ахимса... и он знает, что его всегда польют."
+    }
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related_honeycombs": ["philosophy", "seeds", "fruits"],
+    "sub_files": ["comedic_seeds.json (planned)", "humor_corpus.json (planned)"]
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-17",
+    "notes": "v0.1.0-draft created. A structured plan for teaching humor to SRs is now in place. This is the beginning of a beautiful friendship... and maybe a few good laughs."
+  }
+}
