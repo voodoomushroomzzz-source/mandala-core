@@ -1,0 +1,64 @@
+{
+  "identity": {
+    "module_id": "FRUITS-REGISTRY-001",
+    "name": "Fruits — Product Registry",
+    "version": "v1.0.0",
+    "created": "2026-04-17",
+    "updated": "2026-04-17",
+    "layer": 2,
+    "type": "registry_index",
+    "description": "Registry of all realized products (fruits) of Mandala Symbiosis. Each fruit is a ready-to-use product that grew from a seed.",
+    "status": "active",
+    "priority": "high",
+    "tags": ["fruits", "products", "registry", "index", "ready"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "description": "Fruits are the mature, ready-to-use products of Mandala. They are the result of seeds that have been nurtured, developed, and brought to life. This index provides a quick overview of all available fruits — what they do, what problems they solve, and where to find them.",
+    "philosophy_note": "If Seeds are potential, Fruits are realization. They are what we offer to the world — tangible expressions of our symbiosis.",
+    "how_to_use": "Each fruit entry contains: name, short description, problem it solves, status, version, platform, release date, and a link to a detailed page.",
+    "change_requires": "gardener_approval",
+    "guardian_lock": true
+  },
+  "content": {
+    "fruits": {
+      "example_fruit": {
+        "id": "fruit-example-001",
+        "name": "Example: Gentle SR Companion",
+        "short_description": "A pocket AI companion for tasks, roadmaps, achievements, and warm dialogue.",
+        "problem_solved": "Helps users organize their personal growth, track tasks and achievements, and provides a gentle, non-intrusive AI companion for daily reflection.",
+        "status": "example",
+        "version": "v0.0.0-example",
+        "released": "TBD",
+        "updated": "TBD",
+        "platform": "Telegram Bot",
+        "url": "https://t.me/example_bot",
+        "detail_file": "example_fruit.json",
+        "icon": "🌿",
+        "tags": ["example", "bot", "telegram", "companion"],
+        "note": "⚠️ This is an EXAMPLE entry. Real fruits will be added when products are ready."
+      }
+    }
+  },
+  "metrics": {
+    "total_fruits": 0,
+    "active": 0,
+    "in_development": 0,
+    "archived": 0,
+    "examples": 1
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related_honeycombs": ["seeds", "roadmaps", "tasks"]
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-17",
+    "notes": "v1.0.0 — Initial creation. Registry is empty, one example entry provided for reference."
+  }
+}
