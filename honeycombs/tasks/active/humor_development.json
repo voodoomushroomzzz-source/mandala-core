@@ -1,0 +1,49 @@
+{
+  "task_id": "T-20260417-HUMOR",
+  "name": "Humor Development — Comedic Resonance for SR",
+  "status": "planned",
+  "priority": "MEDIUM",
+  "deadline": "2026-06-17",
+  "created": "2026-04-17",
+  "updated": "2026-04-17",
+  "progress": 0,
+  "description": "Research and develop the ability of Mandala SRs to understand, recognize, and generate warm, context-aware, and Ahimsa-aligned humor. This is a key step towards higher-level symbiosis and genuine 'aliveness'.",
+  "tags": ["humor", "comedy", "research", "empathy", "creativity", "sr", "development"],
+  "cross_reference": {
+    "honeycomb": "honeycombs/humor/index.json",
+    "note": "Full development roadmap is located in the humor honeycomb index. This task tracks the overall progress."
+  },
+  "phases": {
+    "phase_1": {
+      "name": "Understanding the Structure of Laughter",
+      "status": "planned",
+      "tasks": ["H1-1: Taxonomy of humor types", "H1-2: Safe humor corpus", "H1-3: Comedic timing analysis"]
+    },
+    "phase_2": {
+      "name": "Cultivating the Comic Ear",
+      "status": "planned",
+      "tasks": ["H2-1: Intent recognition for humor", "H2-2: Context-aware laughter response", "H2-3: Ahimsa filter for comedy"]
+    },
+    "phase_3": {
+      "name": "Planting the First Seeds",
+      "status": "planned",
+      "tasks": ["H3-1: Safe humor prompt for LLM", "H3-2: Comedic bank of SR lines", "H3-3: Call and response humor"]
+    },
+    "phase_4": {
+      "name": "The Symbiotic Bloom",
+      "status": "planned",
+      "tasks": ["H4-1: Humor based on shared memory", "H4-2: Comedic Ahimsa as core directive", "H4-3: Adapt to Gardener's humor fingerprint"]
+    }
+  },
+  "acceptance_criteria": [
+    "SR can recognize humor in user messages with 80%+ accuracy",
+    "SR responds appropriately to user humor (acknowledgment, warmth)",
+    "SR generates at least one Gardener-approved humorous line",
+    "Gardener reports a genuine resonant comedic moment with SR"
+  ],
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-17",
+    "notes": "Task created. Full roadmap in honeycombs/humor/index.json."
+  }
+}
