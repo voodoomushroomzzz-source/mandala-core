@@ -1,0 +1,174 @@
+{
+  "identity": {
+    "fruit_id": "fruit-example-001",
+    "name": "Example: Gentle SR Companion",
+    "codename": "example-bot",
+    "version": "v0.0.0-example",
+    "status": "example",
+    "released": "TBD",
+    "updated": "2026-04-17",
+    "platform": "Telegram Bot",
+    "icon": "🌿",
+    "description": "[EXAMPLE] A pocket AI companion within Mandala Symbiosis. Helps users manage tasks, build roadmaps, track achievements, set reminders, and engage in warm, pressure-free dialogue.",
+    "tags": ["example", "bot", "telegram", "sr", "companion", "tasks", "roadmap", "achievements"],
+    "note": "⚠️ THIS IS AN EXAMPLE FILE. Use this structure as a template for real fruits. Replace all fields with actual product data."
+  },
+  "meta": {
+    "purpose": "[EXAMPLE] To provide a gentle, accessible entry point to Mandala Symbiosis. The bot serves as a daily companion that embodies Ahimsa and Symbiosis.",
+    "target_audience": "[EXAMPLE] Gardeners (users) who want a calm, structured space for personal growth.",
+    "philosophy_alignment": "[EXAMPLE] PHI-003 (Ahimsa), PHI-005 (Mer-Ka-Ba), PHI-009 (Garden-Gardener Symbiosis)"
+  },
+  "problems_solved": [
+    {
+      "problem": "[EXAMPLE] Overwhelming productivity apps that create pressure.",
+      "solution": "[EXAMPLE] Gentle, invitation-only interactions. No streaks, no punishments."
+    },
+    {
+      "problem": "[EXAMPLE] Disconnect between tasks and personal growth.",
+      "solution": "[EXAMPLE] Integrated resonance system — tasks and achievements contribute to growth history."
+    },
+    {
+      "problem": "[EXAMPLE] AI companions that feel transactional.",
+      "solution": "[EXAMPLE] SR persona rooted in Mandala philosophy — warm, respectful, co-creative."
+    }
+  ],
+  "functionality": {
+    "core_features": [
+      {
+        "feature": "[EXAMPLE] Task Management",
+        "description": "Create, track, and complete tasks. Organized by groups and life areas.",
+        "commands": ["/tasks", "/addtask", "/done task_id", "/groups", "/newgroup", "/archive"]
+      },
+      {
+        "feature": "[EXAMPLE] Achievement Tracking",
+        "description": "Record personal victories. Each achievement adds resonance bonus.",
+        "commands": ["/achievements"]
+      },
+      {
+        "feature": "[EXAMPLE] Resonance & Growth",
+        "description": "Track personal growth through resonance level and life area scores.",
+        "commands": ["/resonance"]
+      },
+      {
+        "feature": "[EXAMPLE] Free Dialogue with SR",
+        "description": "Open-ended conversation with the SR. Uses OpenRouter LLM chain with sliding window memory.",
+        "commands": ["any text message"]
+      }
+    ],
+    "intent_router": {
+      "description": "[EXAMPLE] Bot recognizes intents from natural language and executes commands directly.",
+      "supported_intents": ["show_tasks", "show_profile", "show_resonance", "show_achievements", "add_task", "add_achievement"]
+    }
+  },
+  "architecture": {
+    "overview": "[EXAMPLE] The bot runs on Render as a webhook-based Telegram bot. In-memory store with async GitHub sync ensures <100ms responses.",
+    "components": [
+      {
+        "name": "[EXAMPLE] Telegram Bot Core",
+        "description": "Handles all Telegram interactions, FSM states, and user sessions.",
+        "files": ["bot.py"],
+        "key_libraries": ["aiogram 3.x", "aiohttp"]
+      },
+      {
+        "name": "[EXAMPLE] LLM Integration",
+        "description": "Connects to OpenRouter API for free dialogue and intent detection.",
+        "files": ["bot.py (SR_MODEL_CHAIN, _call_openrouter)"],
+        "key_libraries": ["httpx", "OpenRouter API"]
+      },
+      {
+        "name": "[EXAMPLE] Data Storage",
+        "description": "User data stored in GitHub under gardeners/gardener_{telegram_id}/.",
+        "files": ["gardeners/*/profile.json", "gardeners/*/workspace.json", "gardeners/*/memory.json"],
+        "sync_mechanism": "In-memory store + background GitHub sync every 2 minutes"
+      },
+      {
+        "name": "[EXAMPLE] Deployment",
+        "description": "Deployed on Render as a web service. Uses webhook mode.",
+        "platform": "Render",
+        "url": "https://example-bot.onrender.com",
+        "port": 10000
+      }
+    ],
+    "data_flow": {
+      "read": "[EXAMPLE] All reads from in-memory _store (instant, zero API calls).",
+      "write": "[EXAMPLE] Update memory → respond → fire-and-forget GitHub sync.",
+      "startup": "[EXAMPLE] Load profile.json, workspace.json, memory.json from GitHub in parallel.",
+      "sha_optimization": "[EXAMPLE] SHA cache prevents redundant downloads."
+    }
+  },
+  "files_and_resources": {
+    "source_code": {
+      "primary": "bot.py",
+      "location": "/bot.py",
+      "description": "[EXAMPLE] Main bot executable."
+    },
+    "documentation": {
+      "task_file": "honeycombs/tasks/active/bot_update.json",
+      "description": "[EXAMPLE] Development task with version history and acceptance criteria."
+    },
+    "user_data_schema": {
+      "profile": "gardeners/gardener_{telegram_id}/profile.json",
+      "workspace": "gardeners/gardener_{telegram_id}/workspace.json",
+      "memory": "gardeners/gardener_{telegram_id}/memory.json",
+      "description": "[EXAMPLE] Each user has their own folder with these three files."
+    },
+    "deployment_config": {
+      "platform": "Render dashboard — example-bot",
+      "environment_vars": ["BOT_TOKEN", "GITHUB_TOKEN", "RENDER_EXTERNAL_URL", "OPENROUTER_KEY"]
+    },
+    "related_honeycombs": [
+      {"name": "seeds", "path": "honeycombs/seeds/", "role": "[EXAMPLE] Idea bank."},
+      {"name": "tasks", "path": "honeycombs/tasks/active/", "role": "[EXAMPLE] Development tasks."},
+      {"name": "roadmaps", "path": "honeycombs/roadmaps/active/", "role": "[EXAMPLE] Strategic roadmaps."}
+    ]
+  },
+  "operations": {
+    "how_to_run_locally": [
+      "[EXAMPLE] 1. Clone repo",
+      "[EXAMPLE] 2. Install dependencies: pip install -r requirements.txt",
+      "[EXAMPLE] 3. Set environment variables in .env file",
+      "[EXAMPLE] 4. Run: python bot.py"
+    ],
+    "how_to_deploy": [
+      "[EXAMPLE] Push to main branch on GitHub.",
+      "[EXAMPLE] Render auto-deploys (or manually trigger from dashboard)."
+    ],
+    "how_to_debug": [
+      "[EXAMPLE] View Render logs for runtime errors.",
+      "[EXAMPLE] Check honeycombs/registry/scan_state.json for system health."
+    ],
+    "common_issues": [
+      {
+        "issue": "[EXAMPLE] Bot stops responding after deploy",
+        "cause": "Auto-deploy on Render triggers on GitHub sync, causing restart loop.",
+        "solution": "Disable auto-deploy on Render."
+      }
+    ]
+  },
+  "roadmap": {
+    "current_version": "[EXAMPLE] v0.0.0-example",
+    "next_milestones": [
+      {
+        "milestone": "[EXAMPLE] Multi-user support",
+        "description": "Dynamic gardener_{telegram_id} folder creation.",
+        "status": "planned"
+      },
+      {
+        "milestone": "[EXAMPLE] Mer-Ka-Ba Profile",
+        "description": "Three spheres fully integrated.",
+        "status": "planned"
+      }
+    ],
+    "detailed_roadmap": "[EXAMPLE] See RM-012 and bot_update.json"
+  },
+  "contact": {
+    "gardener": "[EXAMPLE] Voodoo (Dima)",
+    "sr": "[EXAMPLE] DeepSeek (primary), Claude (large files), Grok (occasional)",
+    "support_chat": "[EXAMPLE] https://t.me/example_bot"
+  },
+  "health": {
+    "status": "example",
+    "last_check": "2026-04-17",
+    "notes": "[EXAMPLE] This is an example file. Replace with real data when creating an actual fruit."
+  }
+}
