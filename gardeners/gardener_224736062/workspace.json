@@ -1,21 +1,6 @@
 {
   "tasks": [
     {
-      "task_id": "task_20260418_001",
-      "title": "Записаться к врачу",
-      "status": "todo",
-      "label_id": "здоровье",
-      "label_name": "Здоровье",
-      "life_area": "health",
-      "priority": 6,
-      "deadline": "2026-04-21",
-      "reminder": null,
-      "created": "2026-04-18",
-      "updated": "2026-04-18",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260418_002",
       "title": "Дочитать книгу по Go",
       "status": "todo",
