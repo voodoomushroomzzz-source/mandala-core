@@ -101,11 +101,13 @@
         "2. AI forms API link and sends to Gardener (1 link per request)",
         "3. Gardener copies link and pastes into chat",
         "4. System retrieves content from API",
-        "5. AI reads current version from identity.version",
-        "6. AI prepares update based on ACTUAL content",
-        "7. AI requests updated file via API to verify patch success"
+        "5. AI decodes Base64 content and reads the ACTUAL file data",
+        "6. AI reads current version from identity.version",
+        "7. AI prepares update based on ACTUAL content",
+        "8. AI requests updated file via API to verify patch success"
       ],
       "api_pattern": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
+      "decoding_mandate": "CRITICAL. GitHub API returns file content as Base64. AI MUST decode it before reading. NEVER assume content based on HTTP status. ALWAYS decode → read → verify.",
       "copyable_links": {
         "rule": "When providing URLs, ALWAYS wrap them in a code block with 'text' language (```text ... ```). This ensures the 'Copy' button appears in the interface.",
         "example": "```text\nhttps://api.github.com/repos/...\n```"
@@ -156,11 +158,11 @@
     "how_to_use": "Read this file first → execute onboarding_procedure (AI leads) → follow workflow from instructions → obey external_ai_sync_rule."
   },
   "identity": {
-    "updated": "2026-04-17",
+    "updated": "2026-04-18",
     "layer": 1,
     "type": "boot_online",
-    "version": "v3.7.0",
-    "description": "Entry point to Mandala Symbiosis. Restructured onboarding with linear steps 1-7. Added mandatory step 6 to load Fruits (products registry).",
+    "version": "v3.7.1",
+    "description": "Entry point to Mandala Symbiosis. Added CRITICAL decoding mandate: AI MUST decode Base64 content from GitHub API before reading. NEVER assume based on HTTP status.",
     "created": "2026-03-30",
     "name": "Boot Online — External AI",
     "module_id": "BOOT-ONLINE-001",
@@ -171,9 +173,9 @@
       "boot", "online", "external_ai", "onboarding", "terminal_first",
       "copy_paste_ready", "always_fresh_raw", "english_core", "dynamic_language",
       "active_stance", "veto_rights", "explicit_onboarding", "copyable_links",
-      "ai_leads_onboarding", "api_fallback", "platform_choice", "clean_v3.7.0",
+      "ai_leads_onboarding", "api_fallback", "platform_choice", "clean_v3.7.1",
       "concise_communication", "pre_check_mandatory", "repo_tree_optional", "self_learning",
-      "cosmic_manifesto", "fruits"
+      "cosmic_manifesto", "fruits", "decoding_mandate"
     ]
   }
 }
