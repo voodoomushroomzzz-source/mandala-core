@@ -1,5 +1,20 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "task_id": "task_20260418_001",
+      "title": "Купить кофе",
+      "status": "todo",
+      "group_id": "дом",
+      "life_area": "other",
+      "priority": 5,
+      "deadline": "20.04.2026",
+      "estimated_hours": null,
+      "created": "2026-04-18",
+      "updated": "2026-04-18",
+      "completed": null,
+      "notes": "Крупно зерновой"
+    }
+  ],
   "groups": [
     {
       "id": "дом",
