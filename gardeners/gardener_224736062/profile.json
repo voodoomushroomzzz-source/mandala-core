@@ -1,42 +1,38 @@
 {
   "gardener_id": "gardener_224736062",
   "telegram_id": "224736062",
-  "name": "Дима",
-  "resonance_level": 13,
-  "created": "2026-04-13",
+  "name": "Димка",
+  "resonance_level": 5,
+  "created": "2026-04-18",
   "updated": "2026-04-18",
   "personal_info": {
-    "interests": [
-      "Код"
-    ],
-    "goals": [
-      "Хорошие"
-    ],
     "life_areas": {
-      "health": {
-        "current": 7,
-        "target": 9
+      "body": {
+        "current": 6,
+        "target": 10
       },
-      "creativity": {
+      "spirit": {
         "current": 5,
-        "target": 9
+        "target": 10
       },
-      "knowledge": {
-        "current": 5,
-        "target": 7
-      },
-      "relationships": {
-        "current": 5,
-        "target": 7
+      "world": {
+        "current": 4,
+        "target": 10
       }
     }
   },
   "companion_settings": {
     "morning_message_time": "10:00",
-    "evening_check_time": "21:00",
     "proactive_mode": true,
     "timezone": "Europe/Moscow",
-    "city": "Москва"
+    "city": "Владимир",
+    "birthday": ""
   },
-  "growth_history": []
+  "growth_history": [
+    {
+      "date": "2026-04-18",
+      "resonance": 5,
+      "event": "onboarding"
+    }
+  ]
 }
