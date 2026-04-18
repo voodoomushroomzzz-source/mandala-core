@@ -23,6 +23,22 @@
     {
       "role": "assistant",
       "content": "</think>\n\n{\n  \"text\": \"Рада, Дима. Пусть ночь будет лёгкой, я рядом.\",\n  \"intent\": \"conversation\",\n  \"confidence\": 1.0,\n  \"clarification\": null,\n  \"action\": null\n}"
+    },
+    {
+      "role": "user",
+      "content": "Доделать бота"
+    },
+    {
+      "role": "assistant",
+      "content": "Задача добавлена. Сколько времени планируешь выделить на это?"
+    },
+    {
+      "role": "user",
+      "content": "7 дней"
+    },
+    {
+      "role": "assistant",
+      "content": "{\n  \"text\": \"Задача принята, Дима. «Доделать бота» — 7 дней. \n\nА что для тебя значит «готовность» этого бота? Как ты поймёшь, что он завершён?\",\n  \"intent\": \"add_task\",\n  \"confidence\": 0.9,\n  \"clarification\": null,\n  \"action\": {\n    \"type\": \"add_task\",\n    \"title\": \"Доделать бота\"\n  }\n}"
     }
   ],
   "updated": "2026-04-18"
