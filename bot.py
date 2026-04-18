@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.8.0
+Mandala Garden Bot — Gentle Companion v7.9.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -471,13 +471,12 @@ class AchievementStates(StatesGroup):
     waiting_for_bonus = State()
 
 class TaskStates(StatesGroup):
-    waiting_for_title = State()
-    waiting_for_group = State()
-    waiting_for_life_area = State()
-    waiting_for_deadline = State()
-    waiting_for_estimated_hours = State()
-    waiting_for_notes = State()
-    waiting_for_confirm = State()
+    waiting_for_title     = State()
+    waiting_for_deadline  = State()
+    waiting_for_reminder  = State()
+    waiting_for_label     = State()
+    waiting_for_new_label = State()
+    waiting_for_confirm   = State()
 
 class AskStates(StatesGroup):
     waiting_for_question = State()
@@ -573,6 +572,48 @@ def get_tasks_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")]
     ])
+
+def get_deadline_keyboard() -> InlineKeyboardMarkup:
+    from datetime import datetime, timedelta
+    t = datetime.now()
+    f = lambda d: d.strftime("%Y-%m-%d")
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📅 Сегодня",    callback_data="dl_" + f(t))],
+        [InlineKeyboardButton(text="📅 Завтра",     callback_data="dl_" + f(t + timedelta(days=1)))],
+        [InlineKeyboardButton(text="📅 +3 дня",     callback_data="dl_" + f(t + timedelta(days=3)))],
+        [InlineKeyboardButton(text="📅 +неделя",    callback_data="dl_" + f(t + timedelta(days=7)))],
+        [InlineKeyboardButton(text="⏭ Пропустить",  callback_data="dl_skip")],
+        [InlineKeyboardButton(text="❌ Отмена",      callback_data="cancel_task")],
+    ])
+
+def get_reminder_keyboard() -> InlineKeyboardMarkup:
+    from datetime import datetime, timedelta
+    t = datetime.now()
+    f = lambda d: d.strftime("%Y-%m-%d")
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🔔 Сегодня вечером", callback_data="rem_" + f(t))],
+        [InlineKeyboardButton(text="🔔 Завтра утром",    callback_data="rem_" + f(t + timedelta(days=1)))],
+        [InlineKeyboardButton(text="⏭ Пропустить",       callback_data="rem_skip")],
+        [InlineKeyboardButton(text="❌ Отмена",           callback_data="cancel_task")],
+    ])
+
+def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
+    btns = [[InlineKeyboardButton(text="🏷 " + lb["name"], callback_data="lbl_" + lb["id"])] for lb in labels[:8]]
+    btns.append([InlineKeyboardButton(text="➕ Новый лейбл",  callback_data="lbl_new")])
+    btns.append([InlineKeyboardButton(text="⏭ Без лейбла",   callback_data="lbl_skip")])
+    btns.append([InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_task")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def _auto_merkaba(title: str, label_name: str = "") -> str:
+    text = (title + " " + label_name).lower()
+    body_kw   = ["здоровье","спорт","сон","питание","бег","врач","зал","тренировка","физ","еда","отдых"]
+    spirit_kw = ["работа","учёба","курс","читать","написать","код","проект","творч","идея","задач","разраб","бот"]
+    world_kw  = ["друг","встреч","семья","звонить","поездка","путешеств","кафе","знаком","люди","событи"]
+    if any(k in text for k in body_kw):   return "health"
+    if any(k in text for k in spirit_kw): return "spirit"
+    if any(k in text for k in world_kw):  return "world"
+    return "other"
+
 
 def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -1208,17 +1249,24 @@ async def cmd_tasks(message: Message):
 
 @router.callback_query(F.data == "start_addtask")
 async def cb_start_addtask(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()  # FIRST
+    await callback.answer()
     if not is_authorized(str(callback.from_user.id)):
         await callback.message.answer("🌿 Используй /start")
         return
-    await state.set_state(TaskStates.waiting_for_title)
-    await callback.message.answer("🌀 Название задачи:", reply_markup=get_cancel_keyboard())
+    await _start_task_flow(callback.message, state)
 
 async def cb_start_addtask_msg(message: Message, state: FSMContext):
-    """Helper: start add-task FSM from a plain message context (intent router)."""
+    """Helper: start task FSM from message context (intent router)."""
+    await _start_task_flow(message, state)
+
+async def _start_task_flow(message: Message, state: FSMContext):
     await state.set_state(TaskStates.waiting_for_title)
-    await message.answer("🌀 Название задачи:", reply_markup=get_cancel_keyboard())
+    await message.answer(
+        "🌀 <b>Новая задача</b>\n\nНазови её чётко — одним действием.\n"
+        "<i>Хорошо: «Записаться к врачу», «Дочитать книгу по Go»</i>\n"
+        "<i>Плохо: «дела», «важное»</i>",
+        reply_markup=get_cancel_keyboard()
+    )
 
 @router.message(Command("addtask"))
 async def cmd_addtask(message: Message, state: FSMContext):
@@ -1227,141 +1275,218 @@ async def cmd_addtask(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await state.set_state(TaskStates.waiting_for_title)
-    await message.answer("🌀 Название задачи:", reply_markup=get_cancel_keyboard())
+    await _start_task_flow(message, state)
+
+# ── Step 1: Title ──────────────────────────────────────────────────────────
 
 @router.message(StateFilter(TaskStates.waiting_for_title))
 async def task_title(message: Message, state: FSMContext):
-    title = message.text.strip()
+    if message.text and message.text.strip() == "❌ Отмена":
+        await state.clear()
+        await message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+        return
+    title = (message.text or "").strip()
     if len(title) < 2:
         await message.answer("🌀 Название должно быть не короче 2 символов.")
         return
     await state.update_data(title=title)
-    await state.set_state(TaskStates.waiting_for_group)
-    groups = _store.get("groups", {}).get("groups", [])
-    await message.answer("🌱 Выбери группу:", reply_markup=get_groups_keyboard(groups))
-
-@router.callback_query(F.data.startswith("grp_"))
-async def task_group(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()  # FIRST
-    group_id = callback.data.replace("grp_", "")
-    await state.update_data(group_id=group_id)
-    await state.set_state(TaskStates.waiting_for_life_area)
-    try:
-        await callback.message.edit_text("🌱 Выбери сферу жизни:", reply_markup=get_life_area_keyboard())
-    except Exception:
-        pass
-
-@router.callback_query(F.data == "new_group")
-async def task_new_group_cb(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()  # FIRST
-    try:
-        await callback.message.edit_text("🌱 Введи название новой группы:", reply_markup=None)
-    except Exception:
-        pass
-
-@router.message(StateFilter(TaskStates.waiting_for_group))
-async def task_group_name_input(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    name = message.text.strip()
-    if len(name) < 1:
-        await message.answer("🌱 Введи название группы.")
-        return
-    # Create group in store
-    data = store_get_groups(user_id)
-    groups = data.get("groups", [])
-    gid = _make_group_id(name, groups)
-    new_group = {"id": gid, "name": name, "created": _today()}
-    groups.append(new_group)
-    data["groups"] = groups
-    store_set_groups(user_id, data)
-    _fire_sync()
-
-    await state.update_data(group_id=gid)
-    await state.set_state(TaskStates.waiting_for_life_area)
-    await message.answer(
-        f"✅ Группа '<b>{name}</b>' создана!\n\n🌱 Выбери сферу жизни:",
-        reply_markup=get_life_area_keyboard()
-    )
-
-@router.callback_query(F.data.startswith("area_"))
-async def task_life_area(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()  # FIRST
-    area = callback.data.replace("area_", "")
-    await state.update_data(life_area=area)
     await state.set_state(TaskStates.waiting_for_deadline)
-    await callback.message.edit_text(
-        "📿 Дедлайн в формате ГГГГ-ММ-ДД\nили '-' если нет:",
-        reply_markup=None
+    await message.answer(
+        "📅 <b>Дедлайн?</b>\nВыбери или напиши в формате ДД.ММ.ГГГГ:",
+        reply_markup=get_deadline_keyboard()
     )
+
+# ── Step 2: Deadline ──────────────────────────────────────────────────────
+
+@router.callback_query(F.data.startswith("dl_"), StateFilter(TaskStates.waiting_for_deadline))
+async def task_deadline_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    val = callback.data[3:]
+    deadline = None if val == "skip" else val
+    await state.update_data(deadline=deadline)
+    await state.set_state(TaskStates.waiting_for_reminder)
+    dl_str = (" · " + deadline) if deadline else ""
+    try:
+        await callback.message.edit_text(
+            "🔔 <b>Напоминание?</b>" + dl_str,
+            reply_markup=get_reminder_keyboard()
+        )
+    except Exception:
+        await callback.message.answer(
+            "🔔 <b>Напоминание?</b>",
+            reply_markup=get_reminder_keyboard()
+        )
 
 @router.message(StateFilter(TaskStates.waiting_for_deadline))
-async def task_deadline(message: Message, state: FSMContext):
-    text = message.text.strip()
-    await state.update_data(deadline=None if text == "-" else text)
-    await state.set_state(TaskStates.waiting_for_estimated_hours)
-    await message.answer("📿 Сколько часов займёт? (число или '-')")
-
-@router.message(StateFilter(TaskStates.waiting_for_estimated_hours))
-async def task_hours(message: Message, state: FSMContext):
-    text = message.text.strip()
-    hours = None if text == "-" else (int(text) if text.isdigit() else None)
-    await state.update_data(estimated_hours=hours)
-    await state.set_state(TaskStates.waiting_for_notes)
-    await message.answer("🌱 Заметки (или '-'):")
-
-@router.message(StateFilter(TaskStates.waiting_for_notes))
-async def task_notes(message: Message, state: FSMContext):
-    text = message.text.strip()
-    notes = "" if text == "-" else text
-    await state.update_data(notes=notes)
-    data = await state.get_data()
-    summary = (
-        f"<b>🌀 Проверь задачу:</b>\n\n"
-        f"🌱 <b>{data['title']}</b>\n"
-        f"📿 Группа: {data.get('group_id','—')}\n"
-        f"🌿 Сфера: {data.get('life_area','—')}\n"
-        f"📅 Дедлайн: {data.get('deadline') or 'нет'}\n"
-        f"⏱ Часы: {data.get('estimated_hours') or 'нет'}\n"
-        f"📝 Заметки: {notes or 'нет'}"
+async def task_deadline_text(message: Message, state: FSMContext):
+    if message.text and message.text.strip() == "❌ Отмена":
+        await state.clear()
+        await message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+        return
+    text = (message.text or "").strip()
+    import re as _re
+    deadline = None
+    m = _re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", text)
+    if m:
+        deadline = m.group(3) + "-" + m.group(2) + "-" + m.group(1)
+    elif _re.match(r"^\d{4}-\d{2}-\d{2}$", text):
+        deadline = text
+    await state.update_data(deadline=deadline)
+    await state.set_state(TaskStates.waiting_for_reminder)
+    dl_str = (" · " + deadline) if deadline else " · без дедлайна"
+    await message.answer(
+        "🔔 <b>Напоминание?</b>" + dl_str,
+        reply_markup=get_reminder_keyboard()
     )
+
+# ── Step 3: Reminder ──────────────────────────────────────────────────────
+
+@router.callback_query(F.data.startswith("rem_"), StateFilter(TaskStates.waiting_for_reminder))
+async def task_reminder_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    val = callback.data[4:]
+    reminder = None if val == "skip" else val
+    await state.update_data(reminder=reminder)
+    user_id = str(callback.from_user.id)
+    await _ask_label(callback.message, state, user_id, edit=True)
+
+@router.message(StateFilter(TaskStates.waiting_for_reminder))
+async def task_reminder_text(message: Message, state: FSMContext):
+    if message.text and message.text.strip() == "❌ Отмена":
+        await state.clear()
+        await message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+        return
+    await state.update_data(reminder=None)
+    user_id = str(message.from_user.id)
+    await _ask_label(message, state, user_id, edit=False)
+
+async def _ask_label(message: Message, state: FSMContext, user_id: str, edit: bool = False):
+    await state.set_state(TaskStates.waiting_for_label)
+    labels = store_get_groups(user_id).get("groups", [])
+    text = "🏷 <b>Лейбл?</b>\nЛейблы группируют задачи. Выбери или создай свой:"
+    kb = get_labels_keyboard(labels)
+    if edit:
+        try:
+            await message.edit_text(text, reply_markup=kb)
+            return
+        except Exception:
+            pass
+    await message.answer(text, reply_markup=kb)
+
+# ── Step 4: Label ─────────────────────────────────────────────────────────
+
+@router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskStates.waiting_for_label))
+async def task_label_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    val = callback.data[4:]
+    if val == "new":
+        await state.set_state(TaskStates.waiting_for_new_label)
+        try:
+            await callback.message.edit_text("🏷 Введи название нового лейбла:", reply_markup=None)
+        except Exception:
+            await callback.message.answer("🏷 Введи название нового лейбла:", reply_markup=get_cancel_keyboard())
+        return
+    label_id = None if val == "skip" else val
+    label_name = ""
+    if label_id:
+        user_id = str(callback.from_user.id)
+        labels = store_get_groups(user_id).get("groups", [])
+        lb = next((l for l in labels if l["id"] == label_id), None)
+        label_name = lb["name"] if lb else ""
+    await state.update_data(label_id=label_id, label_name=label_name)
+    await _show_task_confirm(callback.message, state, edit=True)
+
+@router.message(StateFilter(TaskStates.waiting_for_new_label))
+async def task_new_label_input(message: Message, state: FSMContext):
+    if message.text and message.text.strip() == "❌ Отмена":
+        await state.clear()
+        await message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+        return
+    user_id = str(message.from_user.id)
+    name = (message.text or "").strip()
+    if len(name) < 1:
+        await message.answer("🏷 Введи название лейбла.")
+        return
+    data_store = store_get_groups(user_id)
+    labels = data_store.get("groups", [])
+    gid = _make_group_id(name, labels)
+    labels.append({"id": gid, "name": name, "created": _today()})
+    data_store["groups"] = labels
+    store_set_groups(user_id, data_store)
+    _fire_sync()
+    await state.update_data(label_id=gid, label_name=name)
+    await message.answer("✅ Лейбл «" + name + "» создан!")
+    await _show_task_confirm(message, state, edit=False)
+
+async def _show_task_confirm(message: Message, state: FSMContext, edit: bool = False):
     await state.set_state(TaskStates.waiting_for_confirm)
-    await message.answer(summary, reply_markup=get_confirm_task_keyboard())
+    data = await state.get_data()
+    title      = data.get("title", "—")
+    deadline   = data.get("deadline") or "не указан"
+    reminder   = data.get("reminder") or "нет"
+    label_name = data.get("label_name") or "без лейбла"
+    merkaba    = _auto_merkaba(title, data.get("label_name", ""))
+    mkb_icons  = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир", "other": "🌱 Другое"}
+    summary = (
+        "<b>🌀 Проверь задачу:</b>\n\n"
+        "📝 <b>" + title + "</b>\n"
+        "📅 Дедлайн: " + deadline + "\n"
+        "🔔 Напоминание: " + reminder + "\n"
+        "🏷 Лейбл: " + label_name + "\n"
+        "✨ МКБ: " + mkb_icons.get(merkaba, "🌱 Другое")
+    )
+    kb = get_confirm_task_keyboard()
+    if edit:
+        try:
+            await message.edit_text(summary, reply_markup=kb)
+            return
+        except Exception:
+            pass
+    await message.answer(summary, reply_markup=kb)
+
+# ── Confirm / Cancel ──────────────────────────────────────────────────────
 
 @router.callback_query(F.data == "confirm_task")
 async def confirm_task(callback: CallbackQuery, state: FSMContext):
-    await callback.answer("Сохраняю...")  # FIRST
-    data = await state.get_data()
-
-    # Create task in store
+    await callback.answer("Сохраняю...")
+    data    = await state.get_data()
     user_id = str(callback.from_user.id)
-    tasks = list(store_get_tasks(user_id))
-    task_id = f"task_{_today().replace('-', '')}_{len(tasks)+1:03d}"
+    tasks   = list(store_get_tasks(user_id))
+    task_id = "task_" + _today().replace("-", "") + "_" + str(len(tasks)+1).zfill(3)
+    title   = data.get("title", "Задача")
+    merkaba = _auto_merkaba(title, data.get("label_name", ""))
     new_task = {
-        "task_id": task_id,
-        "title": data["title"],
-        "status": "todo",
-        "group_id": data.get("group_id", "group_001"),
-        "life_area": data.get("life_area", "other"),
-        "priority": calculate_priority(data.get("deadline")),
-        "deadline": data.get("deadline"),
-        "estimated_hours": data.get("estimated_hours"),
-        "created": _today(), "updated": _today(), "completed": None,
-        "notes": data.get("notes", "")
+        "task_id":    task_id,
+        "title":      title,
+        "status":     "todo",
+        "label_id":   data.get("label_id"),
+        "label_name": data.get("label_name", ""),
+        "life_area":  merkaba,
+        "priority":   calculate_priority(data.get("deadline")),
+        "deadline":   data.get("deadline"),
+        "reminder":   data.get("reminder"),
+        "created":    _today(),
+        "updated":    _today(),
+        "completed":  None,
+        "notes":      ""
     }
     tasks.append(new_task)
     store_set_tasks(user_id, tasks)
     _fire_sync()
-
     await state.clear()
-    await callback.message.edit_text(
-        f"✅ <b>{new_task['title']}</b> добавлена!\n<code>{task_id}</code>"
-    )
+    mkb_icons = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир", "other": "🌱 Другое"}
+    try:
+        await callback.message.edit_text(
+            "✅ <b>" + title + "</b> добавлена!\n"
+            "<code>" + task_id + "</code> · " + mkb_icons.get(merkaba, "🌱")
+        )
+    except Exception:
+        pass
     await callback.message.answer("🌱 Задача посеяна в твой Сад.", reply_markup=get_main_keyboard())
 
 @router.callback_query(F.data == "cancel_task")
 async def cancel_task_cb(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()  # FIRST
+    await callback.answer()
     await state.clear()
     try:
         await callback.message.edit_text("❌ Отменено.")
@@ -2432,7 +2557,7 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
     if not action:
         return None
     kind = action.get("type", "")
-    label = action.get("title", action.get("query", ""))[:50]
+    label = (action.get("title") or action.get("query") or "")[:50]
     if kind == "add_task":
         return InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✅ Добавить задачу", callback_data="qt:" + label)],
@@ -2525,7 +2650,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             await cmd_resonance(message, state)
                             reply_text = ""
                         elif intent == "show_achievements":
-                            await cmd_achievements(message, state)
+                            await cmd_achievements(message)
                             reply_text = ""
                         elif intent == "add_task":
                             # Send SR reply first if non-empty, then start FSM
@@ -2536,7 +2661,7 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "add_achievement":
                             if reply_text and reply_text.strip():
                                 await message.answer(reply_text, reply_markup=get_main_keyboard())
-                            await cmd_achievements(message, state)
+                            await cmd_achievements(message)
                             reply_text = ""
                         elif intent == "web_search":
                             q = (parsed_check.get("action") or {}).get("title", "") or text
