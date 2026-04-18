@@ -47,6 +47,14 @@
     {
       "role": "assistant",
       "content": "🗑 Задача удалена: Купить кофе"
+    },
+    {
+      "role": "user",
+      "content": "хочу создать задачу"
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-18"
