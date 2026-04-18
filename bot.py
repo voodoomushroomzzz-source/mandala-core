@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.7.1
+Mandala Garden Bot — Gentle Companion v7.7.2
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -1745,12 +1745,52 @@ def _build_user_context_msg(telegram_id: str) -> str:
     )
 
 
+def _classify_query_complexity(query: str) -> int:
+    """
+    Определяет сколько источников смотреть: 1, 2 или 3.
+    1 — простой факт: погода, курс, одна дата, одно событие
+    2 — средний: объяснение, сравнение, текущие новости
+    3 — сложный: исследование, аналитика, несколько аспектов
+    """
+    q = query.lower()
+    # Признаки простого запроса (1 источник)
+    simple_keywords = [
+        "погода", "температура", "курс", "сколько стоит", "когда", "где находится",
+        "время", "расписание", "телефон", "адрес", "открыт", "закрыт",
+    ]
+    # Признаки сложного запроса (3 источника)
+    complex_keywords = [
+        "сравни", "сравнение", "плюсы и минусы", "анализ", "история",
+        "почему", "как работает", "объясни", "расскажи подробно",
+        "лучший", "топ", "рейтинг", "обзор", "исследование",
+    ]
+    if any(k in q for k in simple_keywords) or len(query.split()) <= 4:
+        return 1
+    if any(k in q for k in complex_keywords) or len(query.split()) >= 10:
+        return 3
+    return 2
+
+
+# Приоритетные домены: сначала Яндекс, затем Google-смежные русскоязычные ресурсы
+_PRIORITY_DOMAINS = [
+    "yandex.ru", "ya.ru",
+    "pogoda.yandex.ru", "market.yandex.ru",
+    "google.com", "google.ru",
+    "rbc.ru", "ria.ru", "tass.ru", "kommersant.ru",
+    "wikipedia.org",
+]
+
+
 async def _tavily_search(query: str, city: str = "") -> str:
-    """Search via Tavily API and return HTML-formatted Russian result."""
+    """Search via Tavily API. Кол-во источников зависит от сложности запроса.
+    Приоритет: Яндекс / Google / крупные рус. ресурсы.
+    """
     if not TAVILY_API_KEY:
         return ""
     try:
         q = f"{query} {city}".strip() if city else query
+        num_results = _classify_query_complexity(q)  # 1, 2 или 3
+
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 "https://api.tavily.com/search",
@@ -1758,49 +1798,72 @@ async def _tavily_search(query: str, city: str = "") -> str:
                     "api_key": TAVILY_API_KEY,
                     "query": q,
                     "search_depth": "basic",
-                    "max_results": 3,
+                    "max_results": num_results + 2,  # берём с запасом, потом фильтруем
                     "include_answer": True,
+                    "include_domains": _PRIORITY_DOMAINS,
                 },
                 timeout=aiohttp.ClientTimeout(total=10)
             ) as resp:
                 if resp.status != 200:
-                    return ""
-                data = await resp.json()
+                    # Повтор без фильтра доменов если нет результатов
+                    async with session.post(
+                        "https://api.tavily.com/search",
+                        json={
+                            "api_key": TAVILY_API_KEY,
+                            "query": q,
+                            "search_depth": "basic",
+                            "max_results": num_results,
+                            "include_answer": True,
+                        },
+                        timeout=aiohttp.ClientTimeout(total=10)
+                    ) as resp2:
+                        if resp2.status != 200:
+                            return ""
+                        data = await resp2.json()
+                else:
+                    data = await resp.json()
+
                 answer = data.get("answer", "")
                 results = data.get("results", [])
-                # Build sources list
+
+                # Если приоритетных доменов нет — берём что есть
                 sources = []
-                for r in results[:3]:
+                for r in results[:num_results]:
                     title = (r.get("title") or "").strip()
                     url = (r.get("url") or "").strip()
-                    snippet = (r.get("content") or "")[:150].strip()
+                    snippet = (r.get("content") or "")[:200].strip()
                     if title and url:
                         sources.append((title, url, snippet))
-                # Format output
+
+                # Формируем ответ
                 parts = []
                 if answer:
                     parts.append(answer)
                 elif sources:
-                    # Use snippets as answer
                     parts.append(sources[0][2] if sources[0][2] else sources[0][0])
+
                 if sources:
-                    source_lines = []
-                    for title, url, _ in sources[:3]:
-                        source_lines.append(f'• <a href="{url}">{title}</a>')
+                    source_lines = [
+                        f'• <a href="{url}">{title}</a>'
+                        for title, url, _ in sources
+                    ]
                     parts.append("\n<b>Источники:</b>\n" + "\n".join(source_lines))
+
                 result = "\n\n".join(parts)
-                # Post-process with LLM to translate to Russian if needed
+
+                # Перевод на русский если нужен
                 if result and any(c.isascii() and c.isalpha() for c in result[:50]):
                     try:
-                        translate_msgs = [
-                            {"role": "system", "content": "Переведи текст на русский язык. Сохрани HTML теги <b> и <a href>. Верни только переведённый текст без пояснений."},
+                        translated = await _call_openrouter([
+                            {"role": "system", "content": "Переведи на русский. Сохрани HTML теги <b> и <a href>. Только перевод, без пояснений."},
                             {"role": "user", "content": result}
-                        ]
-                        translated = await _call_openrouter(translate_msgs)
+                        ])
                         if translated and len(translated) > 20:
                             result = translated
                     except Exception:
                         pass
+
+                logger.info(f"Web search: complexity={num_results} sources={len(sources)} q='{q[:50]}'")
                 return result
     except Exception as e:
         logger.warning(f"Tavily error: {e}")
@@ -2367,10 +2430,7 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
             [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
         ])
     if kind == "web_search":
-        return InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="🧭 Найти в интернете", callback_data="qs:" + label)],
-            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
-        ])
+        return None  # поиск уже выполнен — кнопки не нужны
     return None
 
 # _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
