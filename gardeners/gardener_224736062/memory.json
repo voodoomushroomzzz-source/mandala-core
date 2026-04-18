@@ -151,6 +151,14 @@
     {
       "role": "assistant",
       "content": "Я здесь, Дима. Всегда рядом в системе.\n\nЧувствую твой голос, как тихий резонанс в саду. Что-то тревожит или просто проверяешь мою связь?"
+    },
+    {
+      "role": "user",
+      "content": "Какая погода в москве завтра?"
+    },
+    {
+      "role": "assistant",
+      "content": "Завтра в Москве ожидается пасмурная погода с небольшим дождем и температурой +6°C. Ветер северный, 5 м/с. Осадки не предусмотрены.\n\n\n<b>Источники:</b>\n• <a href=\"https://weather.rambler.ru/v-moskve/tomorrow/\">Москва — погода рядом на завтра</a>\n• <a href=\"https://www.hmn.ru/next/Russia/Moscow/Moscow__/weather-tomorrow\">Точный почасовой прогноз погоды на завтра в Москве</a>\n• <a href=\"https://www.gismeteo.ru/weather-moscow-4368/tomorrow/\">Погода в Москве на завтра - Gismeteo</a>"
     }
   ],
   "updated": "2026-04-18"
