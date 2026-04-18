@@ -1,6 +1,12 @@
 {
   "tasks": [],
-  "groups": [],
+  "groups": [
+    {
+      "id": "дом",
+      "name": "Дом",
+      "created": "2026-04-18"
+    }
+  ],
   "achievements": [],
   "updated": "2026-04-18"
 }
