@@ -23,6 +23,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "удали задачу записаться к врачу"
+    },
+    {
+      "role": "assistant",
+      "content": "🗑 Задача удалена: Записаться к врачу"
     }
   ],
   "updated": "2026-04-18"
