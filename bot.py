@@ -1,9 +1,9 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.7.0
+Mandala Garden Bot — Gentle Companion v7.7.1
 
-ARCHITECTURE CHANGE (v7.7.0):
+ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -17,7 +17,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.7.0):
+EMOJI (v7.7.1):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -1746,6 +1746,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
 
 
 async def _tavily_search(query: str, city: str = "") -> str:
+    """Search via Tavily API and return HTML-formatted Russian result."""
     if not TAVILY_API_KEY:
         return ""
     try:
@@ -1753,8 +1754,13 @@ async def _tavily_search(query: str, city: str = "") -> str:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 "https://api.tavily.com/search",
-                json={"api_key": TAVILY_API_KEY, "query": q,
-                      "search_depth": "basic", "max_results": 3, "include_answer": True},
+                json={
+                    "api_key": TAVILY_API_KEY,
+                    "query": q,
+                    "search_depth": "basic",
+                    "max_results": 3,
+                    "include_answer": True,
+                },
                 timeout=aiohttp.ClientTimeout(total=10)
             ) as resp:
                 if resp.status != 200:
@@ -1762,14 +1768,40 @@ async def _tavily_search(query: str, city: str = "") -> str:
                 data = await resp.json()
                 answer = data.get("answer", "")
                 results = data.get("results", [])
+                # Build sources list
+                sources = []
+                for r in results[:3]:
+                    title = (r.get("title") or "").strip()
+                    url = (r.get("url") or "").strip()
+                    snippet = (r.get("content") or "")[:150].strip()
+                    if title and url:
+                        sources.append((title, url, snippet))
+                # Format output
+                parts = []
                 if answer:
-                    sources = [f'• <a href="{r["url"]}">{r["title"]}</a>'
-                               for r in results[:2] if r.get("title") and r.get("url")]
-                    return answer + ("\n\n<b>Источники:</b>\n" + "\n".join(sources) if sources else "")
-                elif results:
-                    parts = [f'<b>{r.get("title","")}</b>\n{(r.get("content","") or "")[:200]}\n<a href="{r.get("url","")}">→ подробнее</a>'
-                             for r in results[:3] if r.get("title")]
-                    return "\n\n".join(parts)
+                    parts.append(answer)
+                elif sources:
+                    # Use snippets as answer
+                    parts.append(sources[0][2] if sources[0][2] else sources[0][0])
+                if sources:
+                    source_lines = []
+                    for title, url, _ in sources[:3]:
+                        source_lines.append(f'• <a href="{url}">{title}</a>')
+                    parts.append("\n<b>Источники:</b>\n" + "\n".join(source_lines))
+                result = "\n\n".join(parts)
+                # Post-process with LLM to translate to Russian if needed
+                if result and any(c.isascii() and c.isalpha() for c in result[:50]):
+                    try:
+                        translate_msgs = [
+                            {"role": "system", "content": "Переведи текст на русский язык. Сохрани HTML теги <b> и <a href>. Верни только переведённый текст без пояснений."},
+                            {"role": "user", "content": result}
+                        ]
+                        translated = await _call_openrouter(translate_msgs)
+                        if translated and len(translated) > 20:
+                            result = translated
+                    except Exception:
+                        pass
+                return result
     except Exception as e:
         logger.warning(f"Tavily error: {e}")
     return ""
@@ -2437,17 +2469,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             try: await sm.delete()
                             except Exception: pass
                             reply_text = result if result else "🔍 Не нашла. Отвечу из своих знаний."
-                        elif intent == "web_search":
-                            action_data = parsed_check.get("action") or {}
-                            query = action_data.get("title", "") if isinstance(action_data, dict) else ""
-                            if not query and clarification:
-                                query = clarification
-                            await message.answer(
-                                f"🔍 Ищу в интернете, секунду...\n<i>{query}</i>\n\n"
-                                f"Поиск пока в разработке. Попробую ответить из своих знаний.",
-                                parse_mode="HTML", reply_markup=get_main_keyboard()
-                            )
-                            reply_text = ""
+
             except Exception as e:
                 logger.warning(f"Intent router error: {e}")
             # ──────────────────────────────────────────────────────────────
@@ -2467,7 +2489,9 @@ async def free_conversation(message: Message, state: FSMContext):
 
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
-        await message.answer(reply_text, reply_markup=kb if kb else None, parse_mode=None)
+        _has_html = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
+        _mode = "HTML" if _has_html else None
+        await message.answer(reply_text, reply_markup=kb if kb else None, parse_mode=_mode)
 
 @router.callback_query(F.data.startswith("qt:"))
 async def quick_add_task(callback: CallbackQuery):
@@ -2520,14 +2544,6 @@ async def quick_add_achievement(callback: CallbackQuery):
     except Exception:
         pass
 
-@router.callback_query(F.data.startswith("qs:"))
-async def quick_web_search(callback: CallbackQuery):
-    await callback.answer()
-    query = callback.data[3:]
-    try:
-        await callback.message.edit_text("🧭 Поиск в интернете пока в разработке.\nЗапрос: <i>" + query + "</i>")
-    except Exception:
-        pass
 
 @router.callback_query(F.data == "qdismiss")
 async def quick_dismiss(callback: CallbackQuery):
