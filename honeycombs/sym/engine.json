@@ -1,0 +1,43 @@
+{
+  "identity": {
+    "module_id": "SYM-ENGINE-001",
+    "name": "SYM Engine — Earning Matrix and Validation Rules",
+    "version": "v0.1.0-draft",
+    "created": "2026-04-18",
+    "updated": "2026-04-18"
+  },
+  "matrix": {
+    "simple_task": 1,
+    "roadmap_task": 1,
+    "roadmap_bonus_per_task": 0.5,
+    "new_honeycomb": 5,
+    "realized_seed": 3,
+    "archive_action": 1
+  },
+  "distribution": {
+    "personal_share": 0.6,
+    "mandala_fund_share": 0.4
+  },
+  "validation_rules": {
+    "task_completion": {
+      "required_fields": ["completed", "completion_verified"],
+      "min_age_hours": 24
+    },
+    "honeycomb_creation": {
+      "required_structure": ["identity", "meta", "content"],
+      "must_be_unique_path": true
+    },
+    "seed_realization": {
+      "required_status": "implemented",
+      "must_have_linked_honeycomb": true
+    },
+    "ahima_filter": {
+      "disallowed_actions": ["deletion_without_archive", "duplicate_content"],
+      "check_philosophy_alignment": true
+    }
+  },
+  "health": {
+    "status": "draft",
+    "last_check": "2026-04-18"
+  }
+}

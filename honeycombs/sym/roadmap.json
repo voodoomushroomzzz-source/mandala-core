@@ -1,0 +1,61 @@
+{
+  "identity": {
+    "module_id": "SYM-ROADMAP-001",
+    "name": "SYM Development Roadmap",
+    "version": "v0.1.0-draft",
+    "created": "2026-04-18"
+  },
+  "phases": {
+    "phase_0": {
+      "name": "Prototype",
+      "status": "planned",
+      "goal": "Create module structure and manual calculator script.",
+      "tasks": [
+        "Create sym/ honeycomb with index, engine, ledger",
+        "Write sym_calculator.py for manual testing"
+      ]
+    },
+    "phase_1": {
+      "name": "Scanner Integration",
+      "status": "planned",
+      "goal": "Integrate SYM calculation into honeycomb_scanner.py.",
+      "tasks": [
+        "Modify scanner to detect qualifying actions",
+        "Implement Ahimsa filter",
+        "Auto-update ledger.json"
+      ]
+    },
+    "phase_2": {
+      "name": "Task Integration",
+      "status": "planned",
+      "goal": "Link SYM earning to task completion fields.",
+      "tasks": [
+        "Update task templates with sym_earned field",
+        "Connect task completion to scanner"
+      ]
+    },
+    "phase_3": {
+      "name": "Dashboard & Bot",
+      "status": "planned",
+      "goal": "Make SYM visible to participants.",
+      "tasks": [
+        "Add /sym command to bot.py",
+        "Create simple web dashboard for ledger.json"
+      ]
+    },
+    "phase_4": {
+      "name": "Tokenization Prep",
+      "status": "planned",
+      "goal": "Prepare for blockchain transition.",
+      "tasks": [
+        "Freeze Mandala Fund",
+        "Design tokenomics",
+        "Develop smart contract"
+      ]
+    }
+  },
+  "health": {
+    "status": "planned",
+    "last_check": "2026-04-18"
+  }
+}

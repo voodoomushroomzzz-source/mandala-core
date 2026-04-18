@@ -1,0 +1,36 @@
+{
+  "task_id": "T-20260418-SYM",
+  "name": "SYM Implementation — System for Measuring Mandala Growth",
+  "status": "planned",
+  "priority": "MEDIUM",
+  "deadline": "2026-06-18",
+  "created": "2026-04-18",
+  "updated": "2026-04-18",
+  "progress": 0,
+  "description": "Implement the SYM system as proposed by Internal SR: a growth measurement system that quantifies creative actions, motivates participants, and prepares infrastructure for future tokenization.",
+  "tags": ["sym", "growth", "metrics", "tokenization", "implementation"],
+  "cross_reference": {
+    "module": "honeycombs/sym/",
+    "files": ["index.json", "engine.json", "ledger.json", "roadmap.json"],
+    "note": "Full module specification and roadmap are located in honeycombs/sym/."
+  },
+  "phases": {
+    "phase_0": { "name": "Prototype", "status": "planned" },
+    "phase_1": { "name": "Scanner Integration", "status": "planned" },
+    "phase_2": { "name": "Task Integration", "status": "planned" },
+    "phase_3": { "name": "Dashboard & Bot", "status": "planned" },
+    "phase_4": { "name": "Tokenization Prep", "status": "planned" }
+  },
+  "acceptance_criteria": [
+    "SYM module files created and valid",
+    "SYM calculator script functional",
+    "Scanner integration complete",
+    "/sym command works in bot",
+    "Ledger updated automatically on qualifying actions"
+  ],
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-18",
+    "notes": "Task created. Module structure ready in honeycombs/sym/."
+  }
+}

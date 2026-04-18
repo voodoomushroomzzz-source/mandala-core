@@ -1,0 +1,32 @@
+{
+  "identity": {
+    "module_id": "SYM-MANIFEST-001",
+    "name": "SYM — System for Measuring Mandala Growth",
+    "version": "v0.1.0-draft",
+    "created": "2026-04-18",
+    "updated": "2026-04-18",
+    "layer": 2,
+    "type": "module_manifest",
+    "description": "SYM is an internal system for measuring the growth of Mandala. It quantifies creative actions, motivates participants, and prepares infrastructure for future tokenization.",
+    "status": "active",
+    "priority": "medium",
+    "tags": ["sym", "growth", "metrics", "tokenization", "economy", "symbiosis"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "purpose": "To create a quantitative reflection of Mandala's development, fostering motivation and symbiosis among participants.",
+    "philosophy_alignment": "PHI-003 (Ahimsa), PHI-009 (Garden-Gardener Symbiosis), PHI-010 (Cosmic Manifesto)",
+    "distribution_principle": "60% to participant (personal growth), 40% to Mandala Fund (system growth)",
+    "change_requires": "gardener_approval",
+    "guardian_lock": true
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related_files": ["engine.json", "ledger.json", "roadmap.json"]
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-18",
+    "notes": "Module created. Ready for Phase 0 implementation."
+  }
+}
