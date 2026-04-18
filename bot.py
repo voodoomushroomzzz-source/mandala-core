@@ -1,8 +1,9 @@
+import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.6.1
+Mandala Garden Bot — Gentle Companion v7.6.2
 
-ARCHITECTURE CHANGE (v7.6.1):
+ARCHITECTURE CHANGE (v7.6.2):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +17,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.6.1):
+EMOJI (v7.6.2):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -845,13 +846,16 @@ async def onboard_city(message: Message, state: FSMContext):
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_birthday))
 async def onboard_birthday(message: Message, state: FSMContext):
-    bday = message.text.strip()
-    if bday.lower() in ["пропустить", "skip", "-"]:
-        bday = ""
-    else:
-        if not re.match(r"^\d{2}\.\d{2}$", bday):
-            await message.answer("Формат: ДД.ММ (например 15.03) или напиши пропустить")
-            return
+    bday_raw = message.text.strip()
+    bday = ""
+    # Try full date DD.MM.YYYY
+    if re.match(r"^\d{2}\.\d{2}\.\d{4}$", bday_raw):
+        bday = bday_raw[0:5]  # save as DD.MM only
+    # Try short date DD.MM
+    elif re.match(r"^\d{2}\.\d{2}$", bday_raw):
+        bday = bday_raw
+    # Anything else — skip (no error, just continue)
+    # This way "26.10.1989", "26.10", "нет", "пропустить", "skip" all work
     await state.update_data(birthday=bday)
     await state.set_state(GardenOnboardingStates.waiting_for_morning)
     await message.answer(
