@@ -1,55 +1,6 @@
 {
-  "tasks": [
-    {
-      "task_id": "task_20260415_001",
-      "title": "Настроить первый проект в Garden",
-      "status": "todo",
-      "group_id": "group_work",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": null,
-      "estimated_hours": null,
-      "created": "2026-04-15",
-      "updated": "2026-04-15",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260415_002",
-      "title": "Доделать бота",
-      "status": "todo",
-      "group_id": "group_work",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": null,
-      "estimated_hours": null,
-      "created": "2026-04-15",
-      "updated": "2026-04-15",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260415_003",
-      "title": "ШМЕ",
-      "status": "todo",
-      "group_id": "тест",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": "17.04.2026",
-      "estimated_hours": 2,
-      "created": "2026-04-15",
-      "updated": "2026-04-15",
-      "completed": null,
-      "notes": "гэ"
-    }
-  ],
-  "groups": [
-    { "id": "group_work",       "name": "Работа",      "color": "#FF6B6B", "created": "2026-04-15" },
-    { "id": "group_health",     "name": "Здоровье",    "color": "#4ECDC4", "created": "2026-04-15" },
-    { "id": "group_creativity", "name": "Творчество",  "color": "#FFE66D", "created": "2026-04-15" },
-    { "id": "group_learning",   "name": "Обучение",    "color": "#A8E6CF", "created": "2026-04-15" },
-    { "id": "тест",             "name": "Тест",                            "created": "2026-04-15" }
-  ],
+  "tasks": [],
+  "groups": [],
   "achievements": [],
-  "updated": "2026-04-16"
+  "updated": "2026-04-18"
 }
