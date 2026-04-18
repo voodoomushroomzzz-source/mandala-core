@@ -5,24 +5,26 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-04-17",
-  "progress": 87,
+  "updated": "2026-04-18",
+  "progress": 92,
   "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life.",
 
   "philosophical_foundation": {
-    "ref": "PHI-010: Three Embodiments of SR",
-    "current_level": 1,
-    "sr_gender": "NEUTRAL  no first-person past-tense. Impersonal: gotovo/sdelano/est.",
-    "sr_honesty": "SR never confirms actions not actually performed.",
-    "sr_daily_brief": "Morning briefing: weather in gardener city + 1 active task + 1 question. Max 1/day. Ahimsa.",
-    "sr_silence_mode": "If gardener silent 3+ days  one warm message only. Respect for silence is Ahimsa.",
-    "sr_task_energy": "When task completed  SR asks how it felt, not just marks done. Living bot, not task manager.",
-    "sr_seasonality": "SR knows current season and mentions it naturally. Genius Loci feels natural rhythm.",
-    "seeds_as_akasha": "seeds/ is embryo of collective Akashic memory.",
+    "ref": "PHI-001 + PHI-003 + PHI-005 + PHI-009 + PHI-010",
+    "sr_role": "Nervous System  Genius Loci of the Gardener life. Not an assistant.",
+    "sr_gender": "FEMININE  Nervous System is feminine in Russian. SR says ya zametila, mne vazhno. Action verbs stay impersonal: gotovo/sdelano.",
+    "sr_honesty": "SR never confirms actions not actually performed. Redirects to menu if needed.",
+    "sr_dialogue": "SR deepens dialogue  guiding questions, develops topics, learns gardener through conversation for deeper symbiosis.",
+    "sr_seasonality": "Mentions season/time max 1x per conversation, only if natural.",
+    "sr_daily_brief": "Morning greeting max 1/day. Skips if already talked today. Respects timezone.",
+    "sr_silence_mode": "3+ days silent -> one warm message only. Ahimsa.",
+    "sr_task_energy": "After task completion  SR asks how it felt. Living bot, not task manager.",
+    "sr_philosophy": "Deep knowledge of PHI-001/003/005/009. Shares when asked, never imposed.",
+    "seeds_as_akasha": "seeds/ is embryo of collective Akashic memory. Sacred act.",
     "merkaba_as_levels": {
-      "body": "health, energy, rest",
-      "spirit": "creativity, work, learning",
-      "world": "relationships, community"
+      "body": "health, sport, sleep, nutrition, energy",
+      "spirit": "work, study, creativity, hobbies, growth",
+      "world": "relationships, friends, travel, community"
     }
   },
 
@@ -36,101 +38,113 @@
     "v7.4: 2-button menu, inline submenus, intent router with confidence",
     "v7.5: Edit-in-place menus, architect authorization + whitelist, webhook scheduler",
     "v7.5.1-v7.5.4: Fix all legacy patterns, menus keep keyboard, callback.from_user bugs",
-    "infra: cron-job.org BOT AWAKE pings every 5min  Render no longer sleeps",
-    "v7.5.5: SR Prompt v2 (PHI-010 Nervous System, neutral gender, honesty rule, datetime+season context)",
-    "v7.5.5: pytz -> zoneinfo (built-in, no install needed)",
-    "v7.5.5: removed secret_token from webhook (fixes 401 on manual setWebhook)"
+    "infra: cron-job.org BOT AWAKE pings every 5min",
+    "v7.5.5: SR Prompt v2 (PHI-010, neutral gender, honesty rule, datetime+season context)",
+    "v7.5.5: pytz -> zoneinfo built-in, removed secret_token from webhook (fixes 401)",
+    "v7.5.6: Feminine gender for SR, _time_matches timezone-aware, morning greeting skips if talked today",
+    "v7.5.6: Auto-layout (Latin -> Cyrillic), season max 1x/conversation rule in prompt",
+    "v7.5.6: Deep philosophy in prompt (PHI-001/003/005/009), city in context",
+    "v7.5.6: Empty reply_text no longer crashes bot",
+    "v7.6.0: MKB onboarding v2  Body/Spirit/World with explanations, city, birthday",
+    "v7.6.0: Edit profile by field (name/body/spirit/world/city/morning) without full restart",
+    "v7.6.0: Birthday auto-congratulation in scheduler",
+    "v7.6.0: Extended questionnaire stub in settings (!)",
+    "v7.6.0: Evening check-in removed from scheduler",
+    "v7.6.1: Fix onboarding crash (old handler referenced waiting_for_interests)",
+    "v7.6.1: Fix duplicate StateFilter(waiting_for_name)",
+    "v7.6.1: Fix menu_edit_profile button not responding",
+    "v7.6.1: Dialogue depth rule in prompt  SR asks questions, deepens understanding"
   ],
 
   "architect_auth_status": "DONE in v7.5.0  new users notify architect via inline buttons. whitelist in gardeners/whitelist.json",
 
+  "decisions_made": {
+    "sr_gender": "FEMININE  decided 2026-04-18. Nervous System is feminine. ya zametila, mne vazhno. Actions stay impersonal.",
+    "sr_dialogue": "SR must deepen conversation, not just answer. One guiding question at a time.",
+    "location_strategy": "City in profile -> auto-used. If city in query -> use directly, no clarification. If unknown and needed -> ask once.",
+    "morning_greeting": "Only if not talked today. Timezone-aware. Skips if last interaction was today.",
+    "extended_questionnaire": "Planned for Block 6  deep interests/preferences for symbiosis enhancement.",
+    "auto_layout": "Latin typed in Russian layout -> auto-converted to Cyrillic.",
+    "philosophy_depth": "SR knows PHI-001/003/005/009 deeply. Speaks about it warmly when asked."
+  },
+
   "blocks_plan": {
-    "block_1": {
-      "name": "Голос и честность СР",
-      "sessions": "0.5",
-      "note": "только промпт + текущее время садовника",
+    "block_1": {"name": "Голос и честность СР", "status": "DONE", "version": "v7.5.5-v7.5.6"},
+    "block_2": {"name": "Профиль МКБ + анкета v2", "status": "DONE", "version": "v7.6.0-v7.6.1",
       "items": [
-        "SR Prompt v2: PHI-010 как Level 1 Nervous System",
-        "Нейтральный гендер: impersonal constructions only",
-        "Правило честности: SR never says done without real function call",
-        "Philosophy: available when asked, never imposed",
-        "Текущее время садовника в промпте: datetime из timezone профиля (5 строк кода)",
-        "Сезонность: SR знает время года, упоминает органично"
-      ]
-    },
-    "block_2": {
-      "name": "Фундамент профиля (МКБ + локация)",
-      "sessions": "1",
-      "items": [
-        "Онбординг v2: Body/Spirit/World вместо Health/Creativity/Knowledge",
-        "Добавить вопрос про домашний город в онбординг (profile.companion_settings.city)",
-        "Кнопка в Настройках: Сменить город  обновляет city в профиле",
-        "Timezone из профиля используется для проактивных сообщений и брифинга"
+        "Onboarding v2: Body/Spirit/World with explanations",
+        "City + birthday in onboarding",
+        "Edit profile by field without full restart",
+        "Change city button in settings",
+        "Extended questionnaire stub (!)",
+        "Birthday auto-congratulation"
       ]
     },
     "block_3": {
       "name": "Умные действия из контекста",
+      "status": "NEXT",
       "sessions": "2",
       "items": [
-        "Intent router v2: delete_task, complete_task, edit_task из сообщений",
-        "Intent router v2: напоминания и роадмапы из сообщений",
-        "Веб-поиск (Tavily API): сообщение 'ищу в интернете, секунду...' перед запросом",
-        "Геолокация в поиске: если запрос требует локацию  SR уточняет город",
-        "Если город известен из профиля  использует автоматически без вопроса",
-        "SR честно говорит когда не может выполнить  редиректит в меню"
+        "Intent router v2: delete_task, complete_task, edit_task from messages",
+        "Intent router v2: reminders and roadmaps from context",
+        "Tavily web search: show 'ищу в интернете...' before search",
+        "City auto-used from profile in search. Ask only if unknown and needed.",
+        "SR honest redirect when cannot perform action"
       ]
     },
     "block_4": {
       "name": "Задачи и напоминания",
+      "status": "PENDING",
       "sessions": "2",
       "items": [
-        "Tasks v2: описание, дедлайн dd.mm.yyyy hh:mm, лейблы МКБ, кросс-лейблы",
-        "Tasks v2: приоритет авто (дедлайн + сфера МКБ)",
-        "Проверка энергии: при закрытии задачи SR спрашивает как это было",
-        "Reminders: CRUD, repeat: once/daily/weekly/monthly/yearly",
-        "Reminders: APScheduler каждую мин, привязка к задаче",
-        "Новая кнопка в garden inline: Напоминания"
+        "Tasks v2: description, deadline, MKB labels, cross-labels, auto-priority",
+        "After task close  SR asks how it felt",
+        "Reminders: CRUD, repeat modes, APScheduler every 1min",
+        "New button in garden menu: Reminders"
       ]
     },
     "block_5": {
       "name": "Роадмапы и Резонанс v2",
+      "status": "PENDING",
       "sessions": "2",
       "items": [
-        "Roadmaps: цель -> задачи -> прогресс авто (% выполненных)",
-        "Roadmaps: CRUD, лейблы МКБ, дедлайн",
-        "Resonance v2: по трём сферам МКБ отдельно",
-        "Resonance v2: растёт с достижениями, угасает при долгом молчании в сфере"
+        "Roadmaps: goal -> tasks -> progress auto (%)",
+        "Resonance v2: per MKB sphere separately",
+        "Decays on 14+ days silence in sphere",
+        "SR notices sphere imbalance and mentions gently"
       ]
     },
     "block_6": {
       "name": "Глубина, Акаша и проактивность",
-      "sessions": "1.5",
+      "status": "PENDING",
+      "sessions": "2",
       "items": [
-        "seeds/  священный тон, реальный github_put. Ахимса-фильтр.",
-        "Паттерн-память: СР наблюдает что заряжает, что блокирует, ритмы тишины",
-        "Утренний брифинг: погода в city + 1 активная задача + 1 вопрос. Макс 1/день.",
-        "Тихий режим: 3+ дня молчания -> одно тёплое сообщение. Больше не пишет."
+        "seeds/  sacred tone, real github_put, Ahimsa filter",
+        "Extended questionnaire (realization)  interests/preferences for deep symbiosis",
+        "Pattern memory  SR observes gardener rhythms",
+        "Morning briefing: weather + task + question (max 1/day)",
+        "Silent mode: 3+ days -> one warm message"
       ]
     },
     "deferred": {
-      "webapp_dashboard": "После block_3+4  WebApp как дашборд поверх умного бота",
-      "voice_groq_whisper": "После block_4",
-      "akasha_network": "PHI-010 Level 3  долгосрок",
-      "hetzner_hosting": "trigger: 10+ садовников",
-      "private_repo": "trigger: 5+ садовников"
+      "webapp_dashboard": "After block_3+4  WebApp as beautiful dashboard",
+      "voice_groq_whisper": "After block_4",
+      "akasha_network": "PHI-010 Level 3  long-term",
+      "hetzner_hosting": "trigger: 10+ gardeners",
+      "private_repo": "trigger: 5+ gardeners"
     }
   },
 
   "location_strategy": {
-    "primary": "city field in profile.companion_settings.city  set in onboarding, changeable via settings button",
-    "session_override": "if gardener mentions a city in conversation  SR uses it for that session only",
-    "web_search_rule": "if search requires location AND city not in profile  SR asks once. If city known  uses automatically.",
-    "change_button": "Settings menu -> Smenity gorod -> simple FSM question -> saves to profile.companion_settings.city"
+    "primary": "profile.companion_settings.city  set in onboarding v2, changeable via settings",
+    "session_override": "if gardener mentions city in message  use for that session only",
+    "web_search_rule": "city in query -> use it directly. city in profile -> auto. unknown + needed -> ask once.",
+    "change_button": "Settings -> Smenity gorod -> FSM -> saves to profile"
   },
 
   "architecture": {
-    "version": "v7.5.4",
-    "llm": "OpenRouter, sliding window 40 msgs",
+    "version": "v7.6.1",
+    "llm": "OpenRouter qwen/qwen3.5-flash-02-23 (1M ctx), sliding window 40 msgs",
     "model_chain_actual": [
       "qwen/qwen3.5-flash-02-23 (primary, paid)",
       "mistralai/mistral-small-3.2-24b-instruct (fallback paid)",
@@ -142,13 +156,14 @@
     "store": "Multi-user _store{uid:{profile,workspace,ready}} + 2min GitHub sync",
     "health": "GET/ 200 + webhook auto-restore + scheduler 5min + cron-job.org ping",
     "auth": "Architect (224736062) approves via inline buttons. DONE.",
-    "web_search": "Tavily  NOT YET integrated (block_3). quick_web_search exists as stub.",
-    "menu": "Main: [Sad][Nastrojki] -> inline submenus keep keyboard visible"
+    "web_search": "Tavily  NOT YET (block_3). quick_web_search stub exists.",
+    "menu": "Main: [Sad][Nastrojki] -> inline submenus keep keyboard visible",
+    "auto_layout": "_fix_layout() converts Latin QWERTY -> Cyrillic on every message"
   },
 
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-17",
-    "notes": "v7.5.5 deployed. SR Prompt v2 live  PHI-010, neutral gender, honesty rule, datetime+season. Webhook fixed (no secret_token). Next: Block 2  MKB onboarding v2 + city + change-city button."
+    "last_check": "2026-04-18",
+    "notes": "v7.6.1 deployed. Block 1+2 complete. SR feminine, deep philosophy, MKB onboarding, edit by field, birthday. Next: Block 3  intent router v2 + Tavily web search."
   }
 }
