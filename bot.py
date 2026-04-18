@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.5.6
+Mandala Garden Bot — Gentle Companion v7.6.0
 
-ARCHITECTURE CHANGE (v7.5.6):
+ARCHITECTURE CHANGE (v7.6.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.5.6):
+EMOJI (v7.6.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -442,15 +442,21 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
 
 class GardenOnboardingStates(StatesGroup):
     waiting_for_name = State()
-    waiting_for_interests = State()
-    waiting_for_goals = State()
-    waiting_for_health_current = State()
-    waiting_for_health_target = State()
-    waiting_for_creativity_current = State()
-    waiting_for_creativity_target = State()
+    waiting_for_body = State()
+    waiting_for_spirit = State()
+    waiting_for_world = State()
+    waiting_for_city = State()
+    waiting_for_birthday = State()
     waiting_for_morning = State()
-    waiting_for_evening = State()
     done = State()
+
+class EditProfileStates(StatesGroup):
+    waiting_for_new_name = State()
+    waiting_for_new_body = State()
+    waiting_for_new_spirit = State()
+    waiting_for_new_world = State()
+    waiting_for_new_city = State()
+    waiting_for_new_morning = State()
 
 class EngineerChatStates(StatesGroup):
     waiting_for_message = State()
@@ -504,9 +510,11 @@ def get_garden_inline() -> InlineKeyboardMarkup:
 
 def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌾 Профиль",              callback_data="menu_profile")],
-        [InlineKeyboardButton(text="🔄 Пройти анкету заново", callback_data="menu_restart")],
-
+        [InlineKeyboardButton(text="🌾 Профиль",                  callback_data="menu_profile")],
+        [InlineKeyboardButton(text="✏️ Изменить профиль",         callback_data="menu_edit_profile")],
+        [InlineKeyboardButton(text="📍 Сменить город",            callback_data="menu_change_city")],
+        [InlineKeyboardButton(text="📋 Расширенная анкета (!)",   callback_data="menu_extended")],
+        [InlineKeyboardButton(text="🔄 Пройти анкету заново",     callback_data="menu_restart")],
     ])
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
@@ -630,6 +638,34 @@ async def run_proactive_scheduler() -> None:
                 await send_morning_greeting(uid)
         if settings.get("evening_check_time") and _time_matches(settings["evening_check_time"], tz_name):
             await send_evening_checkin(telegram_id)
+        # Birthday check
+        for uid2, us2 in list(_store.items()):
+            if not isinstance(us2, dict) or not us2.get("ready"):
+                continue
+            g2 = us2.get("profile")
+            if not g2:
+                continue
+            bday = g2.get("companion_settings", {}).get("birthday", "")
+            if not bday:
+                continue
+            try:
+                from zoneinfo import ZoneInfo as _ZI
+                from datetime import datetime as _dt2
+                tz2 = ZoneInfo(g2.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
+                now2 = _dt2.now(tz2)
+                today_bday = now2.strftime("%d.%m")
+                if today_bday == bday and _can_send_proactive(uid2):
+                    bname = g2.get("name", "Садовник")
+                    await bot.send_message(
+                        int(uid2),
+                        f"🎂 С днём рождения, {bname}!\n\n"
+                        f"Пусть этот год будет годом роста во всех трёх сферах.\n"
+                        f"Сад помнит этот день. 🌿",
+                        reply_markup=get_main_keyboard()
+                    )
+                    _mark_proactive_sent(uid2)
+            except Exception:
+                pass
     except Exception as e:
         logger.error(f"Proactive scheduler crashed: {e}", exc_info=True)
 
@@ -730,143 +766,156 @@ async def onboarding_name(message: Message, state: FSMContext):
         reply_markup=get_cancel_keyboard()
     )
 
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_interests))
-async def onboarding_interests(message: Message, state: FSMContext):
-    interests = [i.strip() for i in message.text.split(",") if i.strip()]
-    if not interests:
-        await message.answer("🌱 Напиши хотя бы один интерес.")
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_name))
+async def onboard_name(message: Message, state: FSMContext):
+    name = message.text.strip()
+    if len(name) < 1:
+        await message.answer("🌱 Введи своё имя.")
         return
-    await state.update_data(interests=interests)
-    await state.set_state(GardenOnboardingStates.waiting_for_goals)
+    await state.update_data(name=name)
+    await state.set_state(GardenOnboardingStates.waiting_for_body)
     await message.answer(
-        "🌱 Какие намерения хочешь посадить в этом сезоне?\n\n<i>Это не обязательства. Просто намерения.</i>",
-        reply_markup=get_cancel_keyboard()
+        f"🌿 <b>Тело</b> — это твоя физическая жизнь:\n"
+        f"здоровье, спорт, сон, питание, уровень энергии.\n\n"
+        f"Как ты оцениваешь эту сферу сейчас? <i>(от 1 до 10)</i>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
 
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_goals))
-async def onboarding_goals(message: Message, state: FSMContext):
-    goals = [g.strip() for g in message.text.split(",") if g.strip()]
-    await state.update_data(goals=goals)
-    await state.set_state(GardenOnboardingStates.waiting_for_health_current)
-    await message.answer("🌿 Здоровье — оцени где ты сейчас (1-10):", reply_markup=get_cancel_keyboard())
-
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_health_current))
-async def onboarding_health_current(message: Message, state: FSMContext):
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_body))
+async def onboard_body(message: Message, state: FSMContext):
     try:
         val = int(message.text.strip())
-        if not 1 <= val <= 10:
+        if not (1 <= val <= 10):
             raise ValueError
-    except Exception:
-        await message.answer("🌿 Введи число от 1 до 10.")
+    except ValueError:
+        await message.answer("Введи число от 1 до 10.")
         return
-    await state.update_data(health_current=val)
-    await state.set_state(GardenOnboardingStates.waiting_for_health_target)
-    await message.answer("🌿 А к какому уровню стремишься? (1-10)")
+    await state.update_data(body=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_spirit)
+    await message.answer(
+        f"🔥 <b>Дух</b> — это твоя внутренняя жизнь:\n"
+        f"работа, учёба, творчество, хобби, профессиональный рост.\n\n"
+        f"Как ты оцениваешь эту сферу сейчас? <i>(от 1 до 10)</i>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
 
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_health_target))
-async def onboarding_health_target(message: Message, state: FSMContext):
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_spirit))
+async def onboard_spirit(message: Message, state: FSMContext):
     try:
         val = int(message.text.strip())
-        if not 1 <= val <= 10:
+        if not (1 <= val <= 10):
             raise ValueError
-    except Exception:
-        await message.answer("🌿 Введи число от 1 до 10.")
+    except ValueError:
+        await message.answer("Введи число от 1 до 10.")
         return
-    await state.update_data(health_target=val)
-    await state.set_state(GardenOnboardingStates.waiting_for_creativity_current)
-    await message.answer("🔥 Творчество — оцени где ты сейчас (1-10):")
+    await state.update_data(spirit=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_world)
+    await message.answer(
+        f"🤝 <b>Мир</b> — это твоя жизнь среди людей:\n"
+        f"отношения, дружба, путешествия, сообщество, события.\n\n"
+        f"Как ты оцениваешь эту сферу сейчас? <i>(от 1 до 10)</i>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
 
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_current))
-async def onboarding_creativity_current(message: Message, state: FSMContext):
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_world))
+async def onboard_world(message: Message, state: FSMContext):
     try:
         val = int(message.text.strip())
-        if not 1 <= val <= 10:
+        if not (1 <= val <= 10):
             raise ValueError
-    except Exception:
-        await message.answer("🔥 Введи число от 1 до 10.")
+    except ValueError:
+        await message.answer("Введи число от 1 до 10.")
         return
-    await state.update_data(creativity_current=val)
-    await state.set_state(GardenOnboardingStates.waiting_for_creativity_target)
-    await message.answer("🔥 А к какому уровню стремишься? (1-10)")
+    await state.update_data(world=val)
+    await state.set_state(GardenOnboardingStates.waiting_for_city)
+    await message.answer(
+        "📍 В каком городе ты живёшь?\n"
+        "<i>Буду учитывать при поиске и в утреннем сообщении.</i>\n\n"
+        "Можно пропустить — напиши <b>пропустить</b>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
 
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_creativity_target))
-async def onboarding_creativity_target(message: Message, state: FSMContext):
-    try:
-        val = int(message.text.strip())
-        if not 1 <= val <= 10:
-            raise ValueError
-    except Exception:
-        await message.answer("🔥 Введи число от 1 до 10.")
-        return
-    await state.update_data(creativity_target=val)
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_city))
+async def onboard_city(message: Message, state: FSMContext):
+    city = message.text.strip()
+    if city.lower() in ["пропустить", "skip", "-"]:
+        city = ""
+    await state.update_data(city=city)
+    await state.set_state(GardenOnboardingStates.waiting_for_birthday)
+    await message.answer(
+        "🎂 Когда твой день рождения?\n"
+        "<i>Формат: ДД.ММ (например 15.03)</i>\n\n"
+        "Можно пропустить — напиши <b>пропустить</b>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.message(StateFilter(GardenOnboardingStates.waiting_for_birthday))
+async def onboard_birthday(message: Message, state: FSMContext):
+    bday = message.text.strip()
+    if bday.lower() in ["пропустить", "skip", "-"]:
+        bday = ""
+    else:
+        if not re.match(r"^\d{2}\.\d{2}$", bday):
+            await message.answer("Формат: ДД.ММ (например 15.03) или напиши пропустить")
+            return
+    await state.update_data(birthday=bday)
     await state.set_state(GardenOnboardingStates.waiting_for_morning)
     await message.answer(
-        "🌄 Когда тебе комфортно получать утреннее приветствие?\n"
-        "Формат ЧЧ:ММ или 'нет'.",
-        reply_markup=get_cancel_keyboard()
+        "⏰ Во сколько присылать утреннее сообщение?\n"
+        "<i>Формат: ЧЧ:ММ (например 09:00 или 10:30)</i>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_morning))
-async def onboarding_morning(message: Message, state: FSMContext):
-    text = message.text.strip().lower()
-    await state.update_data(morning_time="" if text == "нет" else text)
-    await state.set_state(GardenOnboardingStates.waiting_for_evening)
-    await message.answer("🌒 А вечерний чек-ин? (ЧЧ:ММ или 'нет')")
-
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_evening))
-async def onboarding_evening(message: Message, state: FSMContext):
-    text = message.text.strip().lower()
-    evening = "" if text == "нет" else text
+async def onboard_morning(message: Message, state: FSMContext):
+    morning = message.text.strip()
+    if not re.match(r"^\d{1,2}:\d{2}$", morning):
+        await message.answer("Формат: ЧЧ:ММ (например 09:00)")
+        return
     data = await state.get_data()
     user_id = str(message.from_user.id)
-
+    name = data.get("name", "Садовник")
+    body_val = data.get("body", 5)
+    spirit_val = data.get("spirit", 5)
+    world_val = data.get("world", 5)
+    city = data.get("city", "")
+    birthday = data.get("birthday", "")
     life_areas = {
-        "health":        {"current": data["health_current"],    "target": data["health_target"]},
-        "creativity":    {"current": data["creativity_current"], "target": data["creativity_target"]},
-        "knowledge":     {"current": 5, "target": 7},
-        "relationships": {"current": 5, "target": 7}
+        "body":   {"current": body_val,   "target": 10},
+        "spirit": {"current": spirit_val, "target": 10},
+        "world":  {"current": world_val,  "target": 10},
     }
-    initial_resonance = _calculate_initial_resonance(life_areas)
-
+    initial_resonance = round((body_val + spirit_val + world_val) / 3)
     gardener = {
-        "identity": {
-            "gardener_id": f"gardener_{user_id}", "telegram_id": user_id,
-            "name": data["name"], "resonance_level": initial_resonance,
-            "created": _today(), "updated": _today()
-        },
-        "personal_info": {"interests": data["interests"], "goals": data["goals"], "life_areas": life_areas},
+        "gardener_id": f"gardener_{user_id}",
+        "telegram_id": user_id,
+        "name": name,
+        "resonance_level": initial_resonance,
+        "created": _today(),
+        "updated": _today(),
+        "personal_info": {"life_areas": life_areas},
         "companion_settings": {
-            "morning_message_time": data["morning_time"],
-            "evening_check_time": evening,
-            "proactive_mode": True, "timezone": "Europe/Moscow"
+            "morning_message_time": morning,
+            "proactive_mode": True,
+            "timezone": "Europe/Moscow",
+            "city": city,
+            "birthday": birthday,
         },
-        "growth_history": [{"date": _today(), "resonance": initial_resonance, "achievements_count": 0}]
+        "growth_history": [{"date": _today(), "resonance": initial_resonance, "event": "onboarding"}],
     }
-    groups = {
-        "groups": [
-            {"id": "group_001", "name": "🌿 Личное", "created": _today()},
-            {"id": "group_002", "name": "🔥 Работа",  "created": _today()},
-            {"id": "group_003", "name": "🌱 Дом",      "created": _today()}
-        ],
-        "default_group": "group_001"
-    }
-
-    # Update store immediately — respond to user right away
-    store_set_gardener(gardener)
-    store_set_tasks([])
-    store_set_achievements([])
-    store_set_groups(groups)
+    workspace = {"tasks": [], "groups": [], "achievements": [], "updated": _today()}
+    store_set_profile(user_id, gardener)
+    store_set_workspace(user_id, workspace)
     _invalidate_auth_cache(user_id)
-    _track_interaction(user_id)
-
-    # Sync to GitHub in background
     _fire_sync()
-
     await state.set_state(GardenOnboardingStates.done)
+    spheres = f"🌿 Тело {body_val}/10  🔥 Дух {spirit_val}/10  🤝 Мир {world_val}/10"
     await message.answer(
-        f"🌿 <b>{data['name']}, добро пожаловать в Сад!</b>\n\n"
-        f"🔮 Начальный резонанс: <b>{initial_resonance}%</b>\n\n"
-        f"🌱 Резонанс только растёт. Нет наказаний за паузы.\n\nЯ здесь рядом.",
+        f"🌱 <b>Сад открыт, {name}!</b>\n\n"
+        f"{spheres}\n"
+        f"🔮 Начальный резонанс: {initial_resonance}%\n\n"
+        f"Симбиоз начинается. Я рядом.",
+        parse_mode="HTML",
         reply_markup=get_main_keyboard()
     )
 
@@ -1911,6 +1960,219 @@ def _fix_layout(text: str) -> str:
     if total_alpha > 0 and latin_count / total_alpha > 0.7 and len(text) > 2:
         return ''.join(en_to_ru.get(c, c) for c in text)
     return text
+
+
+@router.callback_query(F.data == "back_to_settings")
+async def cb_back_to_settings(callback: CallbackQuery):
+    await callback.answer()
+    await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
+
+@router.callback_query(F.data == "menu_edit_profile")
+async def cb_menu_edit_profile(callback: CallbackQuery):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    if not is_authorized(user_id):
+        await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
+    await callback.message.edit_text("✏️ Что изменить?", reply_markup=get_edit_profile_inline())
+
+@router.callback_query(F.data == "menu_extended")
+async def cb_menu_extended(callback: CallbackQuery):
+    await callback.answer()
+    await callback.message.answer(
+        "📋 Расширенная анкета — скоро.\n\n"
+        "Здесь будут вопросы о твоих интересах, предпочтениях и ритмах жизни — "
+        "чтобы симбиоз стал глубже.",
+        reply_markup=get_main_keyboard()
+    )
+
+@router.callback_query(F.data == "menu_change_city")
+async def cb_menu_change_city(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    if not is_authorized(user_id):
+        await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
+    await callback.message.edit_reply_markup(reply_markup=None)
+    profile = store_get_profile(user_id) or {}
+    cur = profile.get("companion_settings", {}).get("city", "не указан")
+    await state.set_state(EditProfileStates.waiting_for_new_city)
+    await callback.message.answer(
+        f"📍 Текущий город: <b>{cur}</b>\n\nНапиши новый:",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.callback_query(F.data == "edit_name")
+async def cb_edit_name(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await state.set_state(EditProfileStates.waiting_for_new_name)
+    await callback.message.answer("👤 Новое имя:", reply_markup=get_cancel_keyboard())
+
+@router.callback_query(F.data == "edit_city")
+async def cb_edit_city(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    cur = profile.get("companion_settings", {}).get("city", "не указан")
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await state.set_state(EditProfileStates.waiting_for_new_city)
+    await callback.message.answer(
+        f"📍 Город сейчас: <b>{cur}</b>\n\nНапиши новый:",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.callback_query(F.data == "edit_body")
+async def cb_edit_body(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    cur = profile.get("personal_info", {}).get("life_areas", {}).get("body", {}).get("current", "?")
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await state.set_state(EditProfileStates.waiting_for_new_body)
+    await callback.message.answer(
+        f"🌿 <b>Тело</b> — здоровье, спорт, сон, питание, энергия\n"
+        f"Сейчас: {cur}/10\n\nНовое значение (1-10):",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.callback_query(F.data == "edit_spirit")
+async def cb_edit_spirit(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    cur = profile.get("personal_info", {}).get("life_areas", {}).get("spirit", {}).get("current", "?")
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await state.set_state(EditProfileStates.waiting_for_new_spirit)
+    await callback.message.answer(
+        f"🔥 <b>Дух</b> — работа, учёба, творчество, хобби, рост\n"
+        f"Сейчас: {cur}/10\n\nНовое значение (1-10):",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.callback_query(F.data == "edit_world")
+async def cb_edit_world(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    cur = profile.get("personal_info", {}).get("life_areas", {}).get("world", {}).get("current", "?")
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await state.set_state(EditProfileStates.waiting_for_new_world)
+    await callback.message.answer(
+        f"🤝 <b>Мир</b> — отношения, друзья, путешествия, сообщество\n"
+        f"Сейчас: {cur}/10\n\nНовое значение (1-10):",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.callback_query(F.data == "edit_morning")
+async def cb_edit_morning(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    cur = profile.get("companion_settings", {}).get("morning_message_time", "10:00")
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await state.set_state(EditProfileStates.waiting_for_new_morning)
+    await callback.message.answer(
+        f"⏰ Время утреннего сообщения — сейчас: <b>{cur}</b>\n\nНапиши новое (ЧЧ:ММ):",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+
+# ─── Edit profile FSM ──────────────────────────────────────────────────────────
+
+def _parse_sphere(text: str):
+    try:
+        v = int(text.strip())
+        return v if 1 <= v <= 10 else None
+    except Exception:
+        return None
+
+@router.message(StateFilter(EditProfileStates.waiting_for_new_name))
+async def ep_name(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    name = message.text.strip()
+    if not name:
+        await message.answer("Введи имя.")
+        return
+    g = store_get_profile(user_id) or {}
+    g["name"] = name
+    g["updated"] = _today()
+    store_set_profile(user_id, g)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Имя: {name}", reply_markup=get_main_keyboard())
+
+@router.message(StateFilter(EditProfileStates.waiting_for_new_city))
+async def ep_city(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    city = message.text.strip()
+    g = store_get_profile(user_id) or {}
+    g.setdefault("companion_settings", {})["city"] = city
+    g["updated"] = _today()
+    store_set_profile(user_id, g)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Город: {city}", reply_markup=get_main_keyboard())
+
+@router.message(StateFilter(EditProfileStates.waiting_for_new_morning))
+async def ep_morning(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    t = message.text.strip()
+    if not re.match(r"^\d{1,2}:\d{2}$", t):
+        await message.answer("Формат: ЧЧ:ММ (например 09:00)")
+        return
+    g = store_get_profile(user_id) or {}
+    g.setdefault("companion_settings", {})["morning_message_time"] = t
+    g["updated"] = _today()
+    store_set_profile(user_id, g)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Время утра: {t}", reply_markup=get_main_keyboard())
+
+@router.message(StateFilter(EditProfileStates.waiting_for_new_body))
+async def ep_body(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    val = _parse_sphere(message.text)
+    if not val:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    g = store_get_profile(user_id) or {}
+    g.setdefault("personal_info", {}).setdefault("life_areas", {})["body"] = {"current": val, "target": 10}
+    g["updated"] = _today()
+    store_set_profile(user_id, g)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Тело: {val}/10", reply_markup=get_main_keyboard())
+
+@router.message(StateFilter(EditProfileStates.waiting_for_new_spirit))
+async def ep_spirit(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    val = _parse_sphere(message.text)
+    if not val:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    g = store_get_profile(user_id) or {}
+    g.setdefault("personal_info", {}).setdefault("life_areas", {})["spirit"] = {"current": val, "target": 10}
+    g["updated"] = _today()
+    store_set_profile(user_id, g)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Дух: {val}/10", reply_markup=get_main_keyboard())
+
+@router.message(StateFilter(EditProfileStates.waiting_for_new_world))
+async def ep_world(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    val = _parse_sphere(message.text)
+    if not val:
+        await message.answer("Введи число от 1 до 10.")
+        return
+    g = store_get_profile(user_id) or {}
+    g.setdefault("personal_info", {}).setdefault("life_areas", {})["world"] = {"current": val, "target": 10}
+    g["updated"] = _today()
+    store_set_profile(user_id, g)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Мир: {val}/10", reply_markup=get_main_keyboard())
 
 # ─── Free dialogue ────────────────────────────────────────────────────────────
 
