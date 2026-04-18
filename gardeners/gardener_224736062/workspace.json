@@ -44,6 +44,21 @@
       "updated": "2026-04-18",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260418_004",
+      "title": "Встреча со слоном",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "world",
+      "priority": 6,
+      "deadline": "2026-04-19",
+      "reminder": "2026-04-19",
+      "created": "2026-04-18",
+      "updated": "2026-04-18",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
