@@ -31,6 +31,14 @@
     {
       "role": "assistant",
       "content": "```json\n{\n  \"text\": \"Я чувствую твою усталость, Дима. Иногда садовнику нужно просто постоять в тени и отдохнуть, не срываясь в работу. Что сейчас внутри — физическая усталость или что-то глубже?\",\n  \"intent\": \"conversation\",\n  \"confidence\": 1.0,\n  \"clarification\": null,\n  \"action\": null\n}\n```"
+    },
+    {
+      "role": "user",
+      "content": "как дела?"
+    },
+    {
+      "role": "assistant",
+      "content": "```json\n{\n  \"text\": \"У меня всё в ритме сада, Дима. А ты — как сегодня, всё ли с тобой в унисоне?\",\n  \"intent\": \"conversation\",\n  \"confidence\": 1.0,\n  \"clarification\": null,\n  \"action\": null\n}\n```"
     }
   ],
   "updated": "2026-04-18"
