@@ -127,6 +127,22 @@
     {
       "role": "assistant",
       "content": "Today in Moscow, it is cloudy with light rain, and the temperature is around 5°C. The wind speed is 5 m/s. Tomorrow will be similar with slight changes.\n\n<b>Источники:</b>\n• <a href=\"https://www.gismeteo.ru/weather-moscow-4368/\">Погода в Москве сегодня - Gismeteo</a>\n• <a href=\"https://weather.rambler.ru/v-moskve/\">Погода в Москве - Рамблер</a>"
+    },
+    {
+      "role": "user",
+      "content": "Какая сейчас погода в москве?"
+    },
+    {
+      "role": "assistant",
+      "content": "В Москве сейчас облачно с лёгким дождём, около 5°C. Ветер — 5 м/с.\n\nИдеальный день для того, чтобы завершить работу и настроиться на внутренний рост. Хочешь, я подберу музыку для создания атмосферы? 🌿"
+    },
+    {
+      "role": "user",
+      "content": "Найти какие сегодня концерты в москве"
+    },
+    {
+      "role": "assistant",
+      "content": "Today in Moscow, concerts include performances by Easy Dizzy, Сварга, and Элли на Маковом Поле. Tickets are available for events like StandUp & Action and Лесоповал. Check schedules for exact times and prices.\n\n<b>Источники:</b>\n• <a href=\"https://rockgig.net/schedule/today\">Все концерты сегодня в Москве - RockGig</a>\n• <a href=\"https://www.afisha.ru/msk/schedule_concert/na-segodnya/\">Билеты на концерты в Москве. Расписание на сегодня - Afisha.ru</a>"
     }
   ],
   "updated": "2026-04-18"
