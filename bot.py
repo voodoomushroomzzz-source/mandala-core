@@ -1,9 +1,9 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.6.2
+Mandala Garden Bot — Gentle Companion v7.6.3
 
-ARCHITECTURE CHANGE (v7.6.2):
+ARCHITECTURE CHANGE (v7.6.3):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -17,7 +17,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.6.2):
+EMOJI (v7.6.3):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -457,6 +457,7 @@ class EditProfileStates(StatesGroup):
     waiting_for_new_spirit = State()
     waiting_for_new_world = State()
     waiting_for_new_city = State()
+    waiting_for_new_birthday = State()
     waiting_for_new_morning = State()
 
 class EngineerChatStates(StatesGroup):
@@ -921,32 +922,37 @@ async def onboard_morning(message: Message, state: FSMContext):
 
 @router.message(Command("profile"))
 @router.message(F.text == "🌾 Профиль")
-async def cmd_profile(message: Message):
-    if not await _check_ready(message):
-        return
-    user_id = str(message.from_user.id)
-    _track_interaction(user_id)
-    if not is_authorized(user_id):
-        await message.answer("🌿 Используй /start")
-        return
+async def cmd_profile(message: Message, state: FSMContext = None):
+    user_id = str(message.from_user.id) if hasattr(message, 'from_user') else str(message)
+    if hasattr(message, 'from_user'):
+        user_id = str(message.from_user.id)
     gardener = store_get_profile(user_id)
     if not gardener:
-        await message.answer("🌿 Профиль не найден")
+        if hasattr(message, 'answer'):
+            await message.answer("🌿 Профиль не найден")
         return
     name = gardener.get("name", "Садовник")
-    resonance = gardener.get("resonance_level", 13)
+    resonance = gardener.get("resonance_level", 0)
     active_tasks = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
-    interests = gardener.get("personal_info", {}).get("interests", [])
-    interests_str = ", ".join(interests[:3]) if interests else "не указаны"
-    await message.answer(
-        f"🌾 <b>{name}</b>\n"
-        f"🔮 Резонанс: <b>{resonance}%</b>\n"
-        f"🌀 Активных задач: {len(active_tasks)}\n"
-        f"🌱 Интересы: {interests_str}",
-        reply_markup=get_main_keyboard()
+    ach_count = len(store_get_achievements(user_id))
+    life_areas = gardener.get("personal_info", {}).get("life_areas", {})
+    body = life_areas.get("body", {}).get("current", "—")
+    spirit = life_areas.get("spirit", {}).get("current", "—")
+    world = life_areas.get("world", {}).get("current", "—")
+    city = gardener.get("companion_settings", {}).get("city", "")
+    birthday = gardener.get("companion_settings", {}).get("birthday", "")
+    city_str = f"\n📍 Город: {city}" if city else ""
+    birthday_str = f"\n🎂 День рождения: {birthday}" if birthday else ""
+    text = (
+        f"🌾 <b>{name}</b>\n\n"
+        f"🔮 Резонанс: {resonance}%\n"
+        f"🌿 Тело: {body}/10  🔥 Дух: {spirit}/10  🤝 Мир: {world}/10\n"
+        f"🎯 Активных задач: {len(active_tasks)}\n"
+        f"💎 Достижений: {ach_count}"
+        f"{city_str}{birthday_str}"
     )
-
-# ─── /resonance ───────────────────────────────────────────────────────────────
+    if hasattr(message, 'answer'):
+        await message.answer(text, parse_mode="HTML", reply_markup=get_settings_inline())
 
 @router.message(Command("resonance"))
 @router.message(F.text == "🔮 Резонанс")
@@ -1842,7 +1848,6 @@ async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
         f"🔮 Резонанс: {resonance}%\n"
         f"🌀 Активных задач: {active_count}\n"
         f"💎 Достижений: {ach_count}\n"
-        f"🌱 Интересы: {interests}"
     )
     await callback.message.edit_text(text, reply_markup=get_settings_inline(), parse_mode="HTML")
 
@@ -2180,6 +2185,42 @@ async def ep_world(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(f"✅ Мир: {val}/10", reply_markup=get_main_keyboard())
 
+
+@router.callback_query(F.data == "edit_birthday")
+async def cb_edit_birthday(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    cur = profile.get("companion_settings", {}).get("birthday", "не указан")
+    await callback.message.edit_reply_markup(reply_markup=None)
+    await state.set_state(EditProfileStates.waiting_for_new_birthday)
+    await callback.message.answer(
+        f"🎂 День рождения сейчас: <b>{cur}</b>\n\n"
+        f"Напиши новый в формате ДД.ММ или ДД.ММ.ГГГГ\n"
+        f"Для отмены: пропустить",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+
+@router.message(StateFilter(EditProfileStates.waiting_for_new_birthday))
+async def ep_birthday(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    bday_raw = message.text.strip()
+    bday = ""
+    if re.match(r"^\d{2}\.\d{2}\.\d{4}$", bday_raw):
+        bday = bday_raw[0:5]
+    elif re.match(r"^\d{2}\.\d{2}$", bday_raw):
+        bday = bday_raw
+    # anything else = clear/skip
+    g = store_get_profile(user_id) or {}
+    g.setdefault("companion_settings", {})["birthday"] = bday
+    g["updated"] = _today()
+    store_set_profile(user_id, g)
+    _fire_sync()
+    await state.clear()
+    result = bday if bday else "не указан"
+    await message.answer(f"✅ День рождения: {result}", reply_markup=get_main_keyboard())
+
 # ─── Free dialogue ────────────────────────────────────────────────────────────
 
 def _build_sr_context(user_id: str) -> dict:
@@ -2252,19 +2293,24 @@ async def free_conversation(message: Message, state: FSMContext):
     try:
         raw = await _call_openrouter(messages)
         if raw:
-            if raw.startswith("{"):
+            # Strip markdown code fences if LLM wrapped JSON in ```json...```
+            raw_clean = raw.strip()
+            if raw_clean.startswith("```"):
+                raw_clean = re.sub(r"^```(?:json)?\s*", "", raw_clean)
+                raw_clean = re.sub(r"\s*```$", "", raw_clean).strip()
+            if raw_clean.startswith("{"):
                 try:
-                    parsed = json.loads(raw)
-                    reply_text = parsed.get("text", raw)
+                    parsed = json.loads(raw_clean)
+                    reply_text = parsed.get("text", "")
                     action = parsed.get("action")
                 except Exception:
-                    reply_text = raw
+                    reply_text = raw_clean
             else:
-                reply_text = raw
+                reply_text = raw_clean
 
             # ── Intent router ──────────────────────────────────────────────
             try:
-                parsed_check = json.loads(raw) if raw.startswith("{") else {}
+                parsed_check = json.loads(raw_clean) if raw_clean.startswith("{") else {}
                 intent = parsed_check.get("intent", "conversation")
                 confidence = float(parsed_check.get("confidence", 1.0))
                 clarification = parsed_check.get("clarification")
