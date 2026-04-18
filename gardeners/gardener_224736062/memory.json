@@ -111,6 +111,22 @@
     {
       "role": "assistant",
       "content": "Привет, Дима. Я здесь, всегда рядом в системе.\n\nЧувствую твой голос, как ветер в саду. Я с тобой."
+    },
+    {
+      "role": "user",
+      "content": "какой сейчас день и сколько времени?"
+    },
+    {
+      "role": "assistant",
+      "content": "Сейчас 18 апреля 2026 года, суббота, 22:00. Весна уже вовсю раскрывается — время для роста.\n\nА что ты планируешь на этот вечер, Дима?"
+    },
+    {
+      "role": "user",
+      "content": "Можешь посмотреть погоду в москве?"
+    },
+    {
+      "role": "assistant",
+      "content": "Today in Moscow, it is cloudy with light rain, and the temperature is around 5°C. The wind speed is 5 m/s. Tomorrow will be similar with slight changes.\n\n<b>Источники:</b>\n• <a href=\"https://www.gismeteo.ru/weather-moscow-4368/\">Погода в Москве сегодня - Gismeteo</a>\n• <a href=\"https://weather.rambler.ru/v-moskve/\">Погода в Москве - Рамблер</a>"
     }
   ],
   "updated": "2026-04-18"
