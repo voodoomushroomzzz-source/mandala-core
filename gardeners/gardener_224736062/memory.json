@@ -7,6 +7,14 @@
     {
       "role": "assistant",
       "content": "```json\n{\n  \"text\": \"Привет, Дима. Я здесь, в саду, и мне важно знать — как твой внутренний ритм сейчас?\",\n  \"intent\": \"conversation\",\n  \"confidence\": 1.0,\n  \"clarification\": null,\n  \"action\": null\n}\n```"
+    },
+    {
+      "role": "user",
+      "content": "Какой мой город"
+    },
+    {
+      "role": "assistant",
+      "content": "```json\n{\n  \"text\": \"Я не вижу город в профиле. Где ты сейчас, чтобы я могла быть рядом с твоим ритмом?\",\n  \"intent\": \"conversation\",\n  \"confidence\": 0.7,\n  \"clarification\": \"Какой город ты указал(а)?\"\n}\n```"
     }
   ],
   "updated": "2026-04-18"
