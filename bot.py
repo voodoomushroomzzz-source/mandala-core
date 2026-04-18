@@ -1,9 +1,9 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.6.5
+Mandala Garden Bot — Gentle Companion v7.7.0
 
-ARCHITECTURE CHANGE (v7.6.5):
+ARCHITECTURE CHANGE (v7.7.0):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -17,7 +17,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.6.5):
+EMOJI (v7.7.0):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -70,6 +70,7 @@ ARCHITECT_TELEGRAM_ID = os.getenv("ARCHITECT_TELEGRAM_ID", "224736062")
 ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")
 SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 SR_MODEL_CHAIN = [
     "qwen/qwen3.5-flash-02-23",
@@ -1172,7 +1173,10 @@ async def ach_bonus(message: Message, state: FSMContext):
 async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
     await callback.answer()  # FIRST
     await state.clear()
-    await callback.message.edit_text("❌ Отменено.")
+    try:
+        await callback.message.edit_text("❌ Отменено.")
+    except Exception:
+        pass
 
 # ─── /tasks ───────────────────────────────────────────────────────────────────
 
@@ -1238,12 +1242,18 @@ async def task_group(callback: CallbackQuery, state: FSMContext):
     group_id = callback.data.replace("grp_", "")
     await state.update_data(group_id=group_id)
     await state.set_state(TaskStates.waiting_for_life_area)
-    await callback.message.edit_text("🌱 Выбери сферу жизни:", reply_markup=get_life_area_keyboard())
+    try:
+        await callback.message.edit_text("🌱 Выбери сферу жизни:", reply_markup=get_life_area_keyboard())
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "new_group")
 async def task_new_group_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()  # FIRST
-    await callback.message.edit_text("🌱 Введи название новой группы:", reply_markup=None)
+    try:
+        await callback.message.edit_text("🌱 Введи название новой группы:", reply_markup=None)
+    except Exception:
+        pass
 
 @router.message(StateFilter(TaskStates.waiting_for_group))
 async def task_group_name_input(message: Message, state: FSMContext):
@@ -1347,7 +1357,10 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
 async def cancel_task_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()  # FIRST
     await state.clear()
-    await callback.message.edit_text("❌ Отменено.")
+    try:
+        await callback.message.edit_text("❌ Отменено.")
+    except Exception:
+        pass
     await callback.message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
 
 @router.message(Command("done"))
@@ -1471,7 +1484,10 @@ async def leave_confirm(callback: CallbackQuery, state: FSMContext):
 async def leave_cancel(callback: CallbackQuery, state: FSMContext):
     await callback.answer()  # FIRST
     await state.clear()
-    await callback.message.edit_text("🌿 Хорошо. Продолжаем.")
+    try:
+        await callback.message.edit_text("🌿 Хорошо. Продолжаем.")
+    except Exception:
+        pass
 
 @router.message(Command("delete_all"))
 async def cmd_delete_all(message: Message, state: FSMContext):
@@ -1728,6 +1744,36 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"[Сейчас у садовника: {current_dt}]"
     )
 
+
+async def _tavily_search(query: str, city: str = "") -> str:
+    if not TAVILY_API_KEY:
+        return ""
+    try:
+        q = f"{query} {city}".strip() if city else query
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                "https://api.tavily.com/search",
+                json={"api_key": TAVILY_API_KEY, "query": q,
+                      "search_depth": "basic", "max_results": 3, "include_answer": True},
+                timeout=aiohttp.ClientTimeout(total=10)
+            ) as resp:
+                if resp.status != 200:
+                    return ""
+                data = await resp.json()
+                answer = data.get("answer", "")
+                results = data.get("results", [])
+                if answer:
+                    sources = [f'• <a href="{r["url"]}">{r["title"]}</a>'
+                               for r in results[:2] if r.get("title") and r.get("url")]
+                    return answer + ("\n\n<b>Источники:</b>\n" + "\n".join(sources) if sources else "")
+                elif results:
+                    parts = [f'<b>{r.get("title","")}</b>\n{(r.get("content","") or "")[:200]}\n<a href="{r.get("url","")}">→ подробнее</a>'
+                             for r in results[:3] if r.get("title")]
+                    return "\n\n".join(parts)
+    except Exception as e:
+        logger.warning(f"Tavily error: {e}")
+    return ""
+
 async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
     if not OPENROUTER_KEY or model_idx >= len(SR_MODEL_CHAIN):
         return ""
@@ -1809,7 +1855,10 @@ async def cb_menu_tasks(callback: CallbackQuery, state: FSMContext):
         if len(active) > 5:
             lines.append(f"…и ещё {len(active)-5}")
         text = "\n".join(lines)
-    await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
+    try:
+        await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "menu_achievements")
 async def cb_menu_achievements(callback: CallbackQuery, state: FSMContext):
@@ -1823,7 +1872,10 @@ async def cb_menu_achievements(callback: CallbackQuery, state: FSMContext):
         for a in achs[-5:]:
             lines.append(f"• {a.get('title','?')}")
         text = "\n".join(lines)
-    await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
+    try:
+        await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "menu_resonance")
 async def cb_menu_resonance(callback: CallbackQuery, state: FSMContext):
@@ -1839,7 +1891,10 @@ async def cb_menu_resonance(callback: CallbackQuery, state: FSMContext):
         f"Каждое достижение усиливает резонанс, {name}.\n"
         f"Резонанс только растёт — каждый шаг считается."
     )
-    await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
+    try:
+        await callback.message.edit_text(text, reply_markup=get_garden_inline(), parse_mode="HTML")
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "menu_profile")
 async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
@@ -1867,7 +1922,10 @@ async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
         f"💎 Достижений: {ach_count}"
         f"{city_str}{birthday_str}"
     )
-    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=get_garden_inline())
+    try:
+        await callback.message.edit_text(text, parse_mode="HTML", reply_markup=get_garden_inline())
+    except Exception:
+        pass
 @router.callback_query(F.data == "menu_idea")
 async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
@@ -1994,7 +2052,10 @@ def _fix_layout(text: str) -> str:
 @router.callback_query(F.data == "back_to_settings")
 async def cb_back_to_settings(callback: CallbackQuery):
     await callback.answer()
-    await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
+    try:
+        await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "menu_edit_profile")
 async def cb_menu_edit_profile(callback: CallbackQuery):
@@ -2003,7 +2064,10 @@ async def cb_menu_edit_profile(callback: CallbackQuery):
     if not is_authorized(user_id):
         await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await callback.message.edit_text("✏️ Что изменить?", reply_markup=get_edit_profile_inline())
+    try:
+        await callback.message.edit_text("✏️ Что изменить?", reply_markup=get_edit_profile_inline())
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "menu_extended")
 async def cb_menu_extended(callback: CallbackQuery):
@@ -2365,6 +2429,15 @@ async def free_conversation(message: Message, state: FSMContext):
                             await cmd_achievements(message, state)
                             reply_text = ""
                         elif intent == "web_search":
+                            q = (parsed_check.get("action") or {}).get("title", "") or text
+                            prof = store_get_profile(user_id)
+                            city = (prof or {}).get("companion_settings", {}).get("city", "")
+                            sm = await message.answer(f"🔍 Ищу...\n<i>{q}</i>", parse_mode="HTML")
+                            result = await _tavily_search(q, city)
+                            try: await sm.delete()
+                            except Exception: pass
+                            reply_text = result if result else "🔍 Не нашла. Отвечу из своих знаний."
+                        elif intent == "web_search":
                             action_data = parsed_check.get("action") or {}
                             query = action_data.get("title", "") if isinstance(action_data, dict) else ""
                             if not query and clarification:
@@ -2394,7 +2467,7 @@ async def free_conversation(message: Message, state: FSMContext):
 
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
-        await message.answer(reply_text, reply_markup=kb if kb else get_main_keyboard(), parse_mode=None)
+        await message.answer(reply_text, reply_markup=kb if kb else None, parse_mode=None)
 
 @router.callback_query(F.data.startswith("qt:"))
 async def quick_add_task(callback: CallbackQuery):
@@ -2410,7 +2483,10 @@ async def quick_add_task(callback: CallbackQuery):
     })
     store_set_tasks(tasks)
     _fire_sync()
-    await callback.message.edit_text("✅ Задача добавлена: <b>" + title + "</b>\n<code>" + task_id + "</code>")
+    try:
+        await callback.message.edit_text("✅ Задача добавлена: <b>" + title + "</b>\n<code>" + task_id + "</code>")
+    except Exception:
+        pass
 
 @router.callback_query(F.data.startswith("qa:"))
 async def quick_add_achievement(callback: CallbackQuery):
@@ -2439,18 +2515,27 @@ async def quick_add_achievement(callback: CallbackQuery):
         store_set_profile(user_id, g)
         _invalidate_auth_cache(str(callback.from_user.id))
     _fire_sync()
-    await callback.message.edit_text("💎 Достижение зафиксировано: <b>" + title + "</b>\n🔮 +3 к резонансу")
+    try:
+        await callback.message.edit_text("💎 Достижение зафиксировано: <b>" + title + "</b>\n🔮 +3 к резонансу")
+    except Exception:
+        pass
 
 @router.callback_query(F.data.startswith("qs:"))
 async def quick_web_search(callback: CallbackQuery):
     await callback.answer()
     query = callback.data[3:]
-    await callback.message.edit_text("🧭 Поиск в интернете пока в разработке.\nЗапрос: <i>" + query + "</i>")
+    try:
+        await callback.message.edit_text("🧭 Поиск в интернете пока в разработке.\nЗапрос: <i>" + query + "</i>")
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "qdismiss")
 async def quick_dismiss(callback: CallbackQuery):
     await callback.answer()
-    await callback.message.edit_text("🌿 Хорошо, не буду.")
+    try:
+        await callback.message.edit_text("🌿 Хорошо, не буду.")
+    except Exception:
+        pass
 
 # ─── Startup / Shutdown ──────────────────────────────────────────────────────
 
