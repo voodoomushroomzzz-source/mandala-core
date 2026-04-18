@@ -1,9 +1,9 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.6.3
+Mandala Garden Bot — Gentle Companion v7.6.4
 
-ARCHITECTURE CHANGE (v7.6.3):
+ARCHITECTURE CHANGE (v7.6.4):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -17,7 +17,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.6.3):
+EMOJI (v7.6.4):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -512,13 +512,14 @@ def get_garden_inline() -> InlineKeyboardMarkup:
 
 def get_edit_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="👤 Имя",         callback_data="edit_name")],
-        [InlineKeyboardButton(text="🌿 Тело",        callback_data="edit_body")],
-        [InlineKeyboardButton(text="🔥 Дух",         callback_data="edit_spirit")],
-        [InlineKeyboardButton(text="🤝 Мир",         callback_data="edit_world")],
-        [InlineKeyboardButton(text="📍 Город",       callback_data="edit_city")],
-        [InlineKeyboardButton(text="⏰ Время утра",  callback_data="edit_morning")],
-        [InlineKeyboardButton(text="← Настройки",   callback_data="back_to_settings")],
+        [InlineKeyboardButton(text="👤 Имя",           callback_data="edit_name")],
+        [InlineKeyboardButton(text="🌿 Тело",          callback_data="edit_body")],
+        [InlineKeyboardButton(text="🔥 Дух",           callback_data="edit_spirit")],
+        [InlineKeyboardButton(text="🤝 Мир",           callback_data="edit_world")],
+        [InlineKeyboardButton(text="📍 Город",         callback_data="edit_city")],
+        [InlineKeyboardButton(text="🎂 День рождения", callback_data="edit_birthday")],
+        [InlineKeyboardButton(text="⏰ Время утра",    callback_data="edit_morning")],
+        [InlineKeyboardButton(text="← Настройки",     callback_data="back_to_settings")],
     ])
 
 def get_settings_inline() -> InlineKeyboardMarkup:
@@ -1627,7 +1628,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ТВОЙ ГОЛОС (строго):
 - Ты говоришь о себе в женском роде: "я заметила", "я здесь", "мне важно"
 - НО избегаешь глаголов прошедшего времени от первого лица когда речь об действиях
-  НЕТ: "я удалила задачу", "я нашла", "я сохранила"
+  НЕТ: "удаленоа задачу", "я нашла", "я сохранила"
   ДА: "удалено", "найдено", "сохранено", "готово"
 - Исключение: эмоции и наблюдения — можно: "я заметила", "я рада", "мне кажется"
 
@@ -1836,21 +1837,28 @@ async def cb_menu_profile(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     profile = store_get_profile(user_id) or {}
-    name = profile.get("name", "?")
+    name = profile.get("name", "Садовник")
     resonance = profile.get("resonance_level", 0)
-    info = profile.get("personal_info", {})
-    interests = ", ".join(info.get("interests", [])) or "не указаны"
     tasks = store_get_tasks(user_id)
     active_count = len([t for t in tasks if t.get("status") != "completed"])
     ach_count = len(store_get_achievements(user_id))
+    life_areas = profile.get("personal_info", {}).get("life_areas", {})
+    body = life_areas.get("body", {}).get("current", "—")
+    spirit = life_areas.get("spirit", {}).get("current", "—")
+    world = life_areas.get("world", {}).get("current", "—")
+    city = profile.get("companion_settings", {}).get("city", "")
+    birthday = profile.get("companion_settings", {}).get("birthday", "")
+    city_str = f"\n📍 {city}" if city else ""
+    birthday_str = f"\n🎂 ДР: {birthday}" if birthday else ""
     text = (
         f"🌾 <b>{name}</b>\n\n"
+        f"🌿 Тело: {body}/10  🔥 Дух: {spirit}/10  🤝 Мир: {world}/10\n"
         f"🔮 Резонанс: {resonance}%\n"
-        f"🌀 Активных задач: {active_count}\n"
-        f"💎 Достижений: {ach_count}\n"
+        f"🎯 Активных задач: {active_count}\n"
+        f"💎 Достижений: {ach_count}"
+        f"{city_str}{birthday_str}"
     )
-    await callback.message.edit_text(text, reply_markup=get_settings_inline(), parse_mode="HTML")
-
+    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=get_garden_inline())
 @router.callback_query(F.data == "menu_idea")
 async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
