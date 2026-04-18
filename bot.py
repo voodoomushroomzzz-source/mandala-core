@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.7.2
+Mandala Garden Bot — Gentle Companion v7.8.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -1215,6 +1215,11 @@ async def cb_start_addtask(callback: CallbackQuery, state: FSMContext):
     await state.set_state(TaskStates.waiting_for_title)
     await callback.message.answer("🌀 Название задачи:", reply_markup=get_cancel_keyboard())
 
+async def cb_start_addtask_msg(message: Message, state: FSMContext):
+    """Helper: start add-task FSM from a plain message context (intent router)."""
+    await state.set_state(TaskStates.waiting_for_title)
+    await message.answer("🌀 Название задачи:", reply_markup=get_cancel_keyboard())
+
 @router.message(Command("addtask"))
 async def cmd_addtask(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
@@ -1329,7 +1334,8 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
 
     # Create task in store
-    tasks = list(_store.get("tasks", []))
+    user_id = str(callback.from_user.id)
+    tasks = list(store_get_tasks(user_id))
     task_id = f"task_{_today().replace('-', '')}_{len(tasks)+1:03d}"
     new_task = {
         "task_id": task_id,
@@ -1344,7 +1350,7 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
         "notes": data.get("notes", "")
     }
     tasks.append(new_task)
-    store_set_tasks(tasks)
+    store_set_tasks(user_id, tasks)
     _fire_sync()
 
     await state.clear()
@@ -1375,7 +1381,7 @@ async def cmd_done(message: Message):
         await message.answer("📿 Укажи ID задачи: <code>/done task_id</code>", reply_markup=get_main_keyboard())
         return
     task_id = parts[1]
-    tasks = list(_store.get("tasks", []))
+    tasks = list(store_get_tasks(user_id))
     found = False
     for t in tasks:
         if t.get("task_id") == task_id:
@@ -1385,7 +1391,7 @@ async def cmd_done(message: Message):
             found = True
             break
     if found:
-        store_set_tasks(tasks)
+        store_set_tasks(user_id, tasks)
         _fire_sync()
         await message.answer(
             f"✅ Задача <code>{task_id}</code> выполнена!\n\n💎 Добавь как достижение? /achievements",
@@ -1694,10 +1700,10 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|add_achievement|web_search|philosophy",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|add_achievement|web_search|philosophy|complete_task|delete_task",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
-  "action": {"type": "add_task|add_achievement|web_search", "title": "..."} или null
+  "action": {"type": "add_task|add_achievement|web_search|complete_task|delete_task", "title": "..."} или null
 }
 
 ПРАВИЛА INTENT:
@@ -1706,10 +1712,18 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "резонанс", "мой уровень" → show_resonance, 0.95
 - "достижения" → show_achievements, 0.95
 - "добавь задачу", "хочу сделать X" → add_task, 0.9
-- "достиг", "сделал", "выполнил" → add_achievement, 0.85
+- "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
+- "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
+- "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "найди", "поищи", "погода", "что такое X" → web_search, 0.9
+- Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
 - Сомневаешься → confidence < 0.7, напиши clarification
 - Обычный разговор → conversation, 1.0
+
+ЧЕСТНЫЙ РЕДИРЕКТ (строго):
+- Если садовник просит удалить/изменить задачу, которой нет — скажи "такой задачи нет, вот список: ..."
+- Если действие технически невозможно — честно скажи и предложи альтернативу
+- Никогда не имитируй выполнение действия
 """
 
 def _build_user_context_msg(telegram_id: str) -> str:
@@ -2467,16 +2481,17 @@ async def free_conversation(message: Message, state: FSMContext):
     try:
         raw = await _call_openrouter(messages)
         if raw:
-            # Strip markdown code fences if LLM wrapped JSON in ```json...```
-            raw_clean = raw.strip()
+            # 1. Strip <think>...</think> blocks (qwen3.5 extended thinking)
+            raw_clean = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
+            # 2. Strip markdown code fences
             if raw_clean.startswith("```"):
                 raw_clean = re.sub(r"^```(?:json)?\s*", "", raw_clean)
                 raw_clean = re.sub(r"\s*```$", "", raw_clean).strip()
+            # 3. Parse JSON envelope
             if raw_clean.startswith("{"):
                 try:
                     parsed = json.loads(raw_clean)
                     extracted = parsed.get("text", "")
-                    # Fallback: if text field is empty, try raw without JSON wrapper
                     reply_text = extracted if extracted and extracted.strip() else ""
                     action = parsed.get("action")
                 except json.JSONDecodeError:
@@ -2513,22 +2528,60 @@ async def free_conversation(message: Message, state: FSMContext):
                             await cmd_achievements(message, state)
                             reply_text = ""
                         elif intent == "add_task":
-                            await message.answer(reply_text, reply_markup=get_main_keyboard())
-                            await start_addtask_cb(message, state)
+                            # Send SR reply first if non-empty, then start FSM
+                            if reply_text and reply_text.strip():
+                                await message.answer(reply_text, reply_markup=get_main_keyboard())
+                            await cb_start_addtask_msg(message, state)
                             reply_text = ""
                         elif intent == "add_achievement":
-                            await message.answer(reply_text, reply_markup=get_main_keyboard())
+                            if reply_text and reply_text.strip():
+                                await message.answer(reply_text, reply_markup=get_main_keyboard())
                             await cmd_achievements(message, state)
                             reply_text = ""
                         elif intent == "web_search":
                             q = (parsed_check.get("action") or {}).get("title", "") or text
                             prof = store_get_profile(user_id)
+                            # City: from query context OR auto from profile (Block 3)
                             city = (prof or {}).get("companion_settings", {}).get("city", "")
                             sm = await message.answer(f"🔍 Ищу...\n<i>{q}</i>", parse_mode="HTML")
                             result = await _tavily_search(q, city)
                             try: await sm.delete()
                             except Exception: pass
                             reply_text = result if result else "🔍 Не нашла. Отвечу из своих знаний."
+
+                        elif intent == "complete_task":
+                            target = (parsed_check.get("action") or {}).get("title", "").lower().strip()
+                            tasks = store_get_tasks(user_id)
+                            matched = [t for t in tasks if target and target in t.get("title", "").lower()]
+                            if matched:
+                                t = matched[0]
+                                t["status"] = "completed"
+                                t["completed"] = _today()
+                                t["updated"] = _today()
+                                store_set_tasks(user_id, tasks)
+                                _fire_sync()
+                                reply_text = f"✅ Задача завершена: {t['title']}"
+                            elif tasks:
+                                titles = ", ".join(t["title"] for t in tasks[:5])
+                                reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
+                            else:
+                                reply_text = "🌀 Активных задач нет."
+
+                        elif intent == "delete_task":
+                            target = (parsed_check.get("action") or {}).get("title", "").lower().strip()
+                            tasks = store_get_tasks(user_id)
+                            matched = [t for t in tasks if target and target in t.get("title", "").lower()]
+                            if matched:
+                                t = matched[0]
+                                tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
+                                store_set_tasks(user_id, tasks)
+                                _fire_sync()
+                                reply_text = f"🗑 Задача удалена: {t['title']}"
+                            elif tasks:
+                                titles = ", ".join(t["title"] for t in tasks[:5])
+                                reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
+                            else:
+                                reply_text = "🌀 Активных задач нет — нечего удалять."
 
             except Exception as e:
                 logger.warning(f"Intent router error: {e}")
@@ -2556,8 +2609,9 @@ async def free_conversation(message: Message, state: FSMContext):
 @router.callback_query(F.data.startswith("qt:"))
 async def quick_add_task(callback: CallbackQuery):
     await callback.answer()
+    user_id = str(callback.from_user.id)
     title = callback.data[3:]
-    tasks = list(_store.get("tasks", []))
+    tasks = list(store_get_tasks(user_id))
     task_id = "task_" + _today().replace("-", "") + "_" + str(len(tasks)+1).zfill(3)
     tasks.append({
         "task_id": task_id, "title": title, "status": "todo",
@@ -2565,10 +2619,10 @@ async def quick_add_task(callback: CallbackQuery):
         "deadline": None, "estimated_hours": None,
         "created": _today(), "updated": _today(), "completed": None, "notes": ""
     })
-    store_set_tasks(tasks)
+    store_set_tasks(user_id, tasks)
     _fire_sync()
     try:
-        await callback.message.edit_text("✅ Задача добавлена: <b>" + title + "</b>\n<code>" + task_id + "</code>")
+        await callback.message.edit_text("✅ Задача добавлена: <b>" + title + "</b>\n<code>" + task_id + "</code>", parse_mode="HTML")
     except Exception:
         pass
 
