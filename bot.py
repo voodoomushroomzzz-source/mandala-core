@@ -1,9 +1,9 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.6.4
+Mandala Garden Bot — Gentle Companion v7.6.5
 
-ARCHITECTURE CHANGE (v7.6.4):
+ARCHITECTURE CHANGE (v7.6.5):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -17,7 +17,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.6.4):
+EMOJI (v7.6.5):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -903,7 +903,16 @@ async def onboard_morning(message: Message, state: FSMContext):
         },
         "growth_history": [{"date": _today(), "resonance": initial_resonance, "event": "onboarding"}],
     }
-    workspace = {"tasks": [], "groups": [], "achievements": [], "updated": _today()}
+    # Preserve existing tasks and achievements — only reset on first onboarding
+    existing_ws = store_get_workspace(user_id) or {}
+    existing_tasks = existing_ws.get("tasks", [])
+    existing_achievements = existing_ws.get("achievements", [])
+    workspace = {
+        "tasks": existing_tasks,
+        "groups": existing_ws.get("groups", []),
+        "achievements": existing_achievements,
+        "updated": _today()
+    }
     store_set_profile(user_id, gardener)
     store_set_workspace(user_id, workspace)
     _invalidate_auth_cache(user_id)
@@ -1879,7 +1888,8 @@ async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     _clear_history(user_id)
     if user_id in _store:
-        del _store[user_id]
+        # Preserve workspace data — only reset ready flag so profile can be re-onboarded
+        _store[user_id]["ready"] = False
     await callback.message.edit_reply_markup(reply_markup=None)
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await callback.message.answer(
@@ -2309,8 +2319,12 @@ async def free_conversation(message: Message, state: FSMContext):
             if raw_clean.startswith("{"):
                 try:
                     parsed = json.loads(raw_clean)
-                    reply_text = parsed.get("text", "")
+                    extracted = parsed.get("text", "")
+                    # Fallback: if text field is empty, try raw without JSON wrapper
+                    reply_text = extracted if extracted and extracted.strip() else ""
                     action = parsed.get("action")
+                except json.JSONDecodeError:
+                    reply_text = raw_clean
                 except Exception:
                     reply_text = raw_clean
             else:
@@ -2349,6 +2363,17 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "add_achievement":
                             await message.answer(reply_text, reply_markup=get_main_keyboard())
                             await cmd_achievements(message, state)
+                            reply_text = ""
+                        elif intent == "web_search":
+                            action_data = parsed_check.get("action") or {}
+                            query = action_data.get("title", "") if isinstance(action_data, dict) else ""
+                            if not query and clarification:
+                                query = clarification
+                            await message.answer(
+                                f"🔍 Ищу в интернете, секунду...\n<i>{query}</i>\n\n"
+                                f"Поиск пока в разработке. Попробую ответить из своих знаний.",
+                                parse_mode="HTML", reply_markup=get_main_keyboard()
+                            )
                             reply_text = ""
             except Exception as e:
                 logger.warning(f"Intent router error: {e}")
