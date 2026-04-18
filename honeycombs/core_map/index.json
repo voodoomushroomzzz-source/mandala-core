@@ -1,16 +1,16 @@
 {
   "identity": {
-    "updated": "2026-04-17",
+    "updated": "2026-04-18",
     "layer": 1,
     "type": "critical_directive",
-    "version": "v3.5.0",
-    "description": "Base map of all Mandala Symbiosis components. Added humor honeycomb (comedic resonance development).",
+    "version": "v3.6.0",
+    "description": "Base map of all Mandala Symbiosis components. Added sym honeycomb (System for Measuring Mandala Growth).",
     "created": "2026-03-01",
     "name": "Core System Map",
     "module_id": "HONEYCOMB-CORE-MAP-001",
     "resonance": "100%",
     "priority": "critical",
-    "tags": ["core", "map", "critical", "v3.5", "english_core"]
+    "tags": ["core", "map", "critical", "v3.6", "english_core"]
   },
   "meta": {
     "migration_status": "completed_v3.0",
@@ -76,13 +76,14 @@
       "boot_online": "external AI onboarding",
       "garden": "Garden project: personal sota + Gentle Companion + Resonance Dashboard (PHI-009)",
       "fruits": "Product registry — realized products (fruits) of Mandala",
-      "humor": "Humor development — research and plan for comedic resonance"
+      "humor": "Humor development — research and plan for comedic resonance",
+      "sym": "SYM — System for Measuring Mandala Growth"
     }
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-17",
-    "notes": "v3.5.0: added honeycombs/humor to references. Humor is the research and development plan for comedic resonance."
+    "last_check": "2026-04-18",
+    "notes": "v3.6.0: added honeycombs/sym to references. SYM is the internal growth measurement system."
   },
   "navigation": {
     "parent": "honeycombs/boot.json",
@@ -101,7 +102,8 @@
       "honeycombs/tectosphaera/index.json",
       "honeycombs/garden/index.json",
       "honeycombs/fruits/index.json",
-      "honeycombs/humor/index.json"
+      "honeycombs/humor/index.json",
+      "honeycombs/sym/index.json"
     ],
     "children": [
       "honeycombs/instructions/index.json",
@@ -112,7 +114,8 @@
       "honeycombs/awareness/index.json",
       "honeycombs/philosophy/index.json",
       "honeycombs/fruits/index.json",
-      "honeycombs/humor/index.json"
+      "honeycombs/humor/index.json",
+      "honeycombs/sym/index.json"
     ]
   },
   "resonance": {
