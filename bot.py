@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.9.0
+Mandala Garden Bot — Gentle Companion v7.10.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -497,18 +497,24 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="🌾 Сад"), KeyboardButton(text="⚙️ Настройки")]
+            [KeyboardButton(text="👤 Профиль"), KeyboardButton(text="⚙️ Настройки")]
         ],
         resize_keyboard=True
     )
 
-def get_garden_inline() -> InlineKeyboardMarkup:
+def get_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌀 Задачи",     callback_data="menu_tasks"),
-         InlineKeyboardButton(text="💎 Достижения", callback_data="menu_achievements")],
-        [InlineKeyboardButton(text="🔮 Резонанс",   callback_data="menu_resonance"),
-         InlineKeyboardButton(text="💡 Идея (!)",       callback_data="menu_idea")],
+        [InlineKeyboardButton(text="🌀 Задачи",      callback_data="menu_tasks"),
+         InlineKeyboardButton(text="🔮 Резонанс",    callback_data="menu_resonance")],
+        [InlineKeyboardButton(text="💎 Достижения",  callback_data="menu_achievements"),
+         InlineKeyboardButton(text="💡 Идея (!)",    callback_data="menu_idea")],
+        [InlineKeyboardButton(text="✏️ Изменить",    callback_data="menu_edit_profile"),
+         InlineKeyboardButton(text="📋 Анкета",      callback_data="menu_extended")],
     ])
+
+# Keep alias for backwards compat
+def get_garden_inline() -> InlineKeyboardMarkup:
+    return get_profile_inline()
 
 def get_edit_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -1223,7 +1229,45 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
 
 @router.message(Command("tasks"))
 @router.message(F.text == "🌀 Задачи")
-async def cmd_tasks(message: Message):
+def _format_tasks_mkb(tasks: list) -> str:
+    """Format active tasks grouped by МКБ sphere."""
+    mkb_groups = {
+        "health":  ("🌿 Тело",  []),
+        "spirit":  ("🔥 Дух",   []),
+        "world":   ("🤝 Мир",   []),
+        "other":   ("🌱 Другое",[]),
+    }
+    for t in tasks:
+        area = t.get("life_area", "other")
+        if area not in mkb_groups:
+            area = "other"
+        mkb_groups[area][1].append(t)
+    parts = []
+    for area, (label, items) in mkb_groups.items():
+        if not items:
+            continue
+        parts.append(f"<b>{label}</b>")
+        for t in items[:5]:
+            dl = " · " + t["deadline"] if t.get("deadline") else ""
+            lbl = (" #" + t["label_name"]) if t.get("label_name") else ""
+            parts.append(f"  • {t['title']}{lbl}{dl}")
+    return "\n".join(parts) if parts else ""
+
+def _format_tasks_labels(tasks: list) -> str:
+    """Format active tasks grouped by label."""
+    labeled: dict = {}
+    for t in tasks:
+        key = t.get("label_name") or "Без лейбла"
+        labeled.setdefault(key, []).append(t)
+    parts = []
+    for lbl, items in labeled.items():
+        parts.append(f"<b>🏷 {lbl}</b>")
+        for t in items[:5]:
+            dl = " · " + t["deadline"] if t.get("deadline") else ""
+            parts.append(f"  • {t['title']}{dl}")
+    return "\n".join(parts) if parts else ""
+
+async def cmd_tasks(message: Message, view: str = "mkb"):
     if not await _check_ready(message):
         return
     user_id = str(message.from_user.id)
@@ -1231,21 +1275,41 @@ async def cmd_tasks(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    tasks = _store.get("tasks", [])
+    tasks = store_get_tasks(user_id)
     active = [t for t in tasks if t.get("status") != "completed"]
     if not active:
-        await message.answer("🌀 Активных задач нет.\n\nДобавь первую:", reply_markup=get_main_keyboard())
+        await message.answer("🌀 Активных задач нет.", reply_markup=get_main_keyboard())
         await message.answer("👇", reply_markup=get_tasks_keyboard())
         return
-    lines = []
-    for t in active[:15]:
-        dl = f" · 📿{t['deadline']}" if t.get("deadline") else ""
-        icon = LIFE_AREA_ICONS.get(t.get("life_area", ""), "🌱")
-        lines.append(f"{icon} <code>{t['task_id']}</code>: {t['title']} (⭐{t.get('priority',5)}){dl}")
-    text = "🌀 <b>Активные задачи:</b>\n\n" + "\n".join(lines)
-    text += "\n\n<i>Завершить: /done task_id</i>"
-    await message.answer(text, reply_markup=get_main_keyboard())
-    await message.answer("Действия:", reply_markup=get_tasks_keyboard())
+    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active)
+    toggle_label = "🏷 По лейблам" if view == "mkb" else "✨ По МКБ"
+    toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
+        [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
+    ])
+    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Лейблы:</b>"
+    await message.answer(header + "\n\n" + body, reply_markup=kb)
+
+@router.callback_query(F.data.in_({"tasks_view_mkb", "tasks_view_labels"}))
+async def tasks_toggle_view(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    tasks = store_get_tasks(user_id)
+    active = [t for t in tasks if t.get("status") != "completed"]
+    view = "mkb" if callback.data == "tasks_view_mkb" else "labels"
+    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active)
+    toggle_label = "🏷 По лейблам" if view == "mkb" else "✨ По МКБ"
+    toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
+        [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
+    ])
+    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Лейблы:</b>"
+    try:
+        await callback.message.edit_text(header + "\n\n" + body, reply_markup=kb)
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "start_addtask")
 async def cb_start_addtask(callback: CallbackQuery, state: FSMContext):
@@ -1255,18 +1319,29 @@ async def cb_start_addtask(callback: CallbackQuery, state: FSMContext):
         return
     await _start_task_flow(callback.message, state)
 
-async def cb_start_addtask_msg(message: Message, state: FSMContext):
+async def cb_start_addtask_msg(message: Message, state: FSMContext, pre_title: str = ""):
     """Helper: start task FSM from message context (intent router)."""
-    await _start_task_flow(message, state)
+    await _start_task_flow(message, state, pre_title=pre_title)
 
-async def _start_task_flow(message: Message, state: FSMContext):
-    await state.set_state(TaskStates.waiting_for_title)
-    await message.answer(
-        "🌀 <b>Новая задача</b>\n\nНазови её чётко — одним действием.\n"
-        "<i>Хорошо: «Записаться к врачу», «Дочитать книгу по Go»</i>\n"
-        "<i>Плохо: «дела», «важное»</i>",
-        reply_markup=get_cancel_keyboard()
-    )
+async def _start_task_flow(message: Message, state: FSMContext, pre_title: str = ""):
+    # Mark as interacted today to suppress proactive greeting
+    if message.from_user:
+        uid = str(message.from_user.id)
+        _track_interaction(uid)
+    if pre_title:
+        await state.update_data(title=pre_title)
+        await state.set_state(TaskStates.waiting_for_deadline)
+        await message.answer(
+            "📅 <b>" + pre_title + "</b> — дедлайн?",
+            reply_markup=get_deadline_keyboard()
+        )
+    else:
+        await state.set_state(TaskStates.waiting_for_title)
+        await message.answer(
+            "🌀 <b>Новая задача</b> — как назовём?\n"
+            "<i>Пример: «Записаться к врачу»</i>",
+            reply_markup=get_cancel_keyboard()
+        )
 
 @router.message(Command("addtask"))
 async def cmd_addtask(message: Message, state: FSMContext):
@@ -1428,12 +1503,9 @@ async def _show_task_confirm(message: Message, state: FSMContext, edit: bool = F
     merkaba    = _auto_merkaba(title, data.get("label_name", ""))
     mkb_icons  = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир", "other": "🌱 Другое"}
     summary = (
-        "<b>🌀 Проверь задачу:</b>\n\n"
         "📝 <b>" + title + "</b>\n"
-        "📅 Дедлайн: " + deadline + "\n"
-        "🔔 Напоминание: " + reminder + "\n"
-        "🏷 Лейбл: " + label_name + "\n"
-        "✨ МКБ: " + mkb_icons.get(merkaba, "🌱 Другое")
+        "📅 " + deadline + " · 🏷 " + label_name + "\n"
+        "✨ " + mkb_icons.get(merkaba, "🌱 Другое")
     )
     kb = get_confirm_task_keyboard()
     if edit:
@@ -1825,7 +1897,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|add_achievement|web_search|philosophy|complete_task|delete_task",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|add_achievement|web_search|philosophy|complete_task|delete_task|delete_label|rename_label",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|add_achievement|web_search|complete_task|delete_task", "title": "..."} или null
@@ -1840,6 +1912,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
+- "удали лейбл X", "убери лейбл X" → delete_label, action.title=название лейбла, 0.9
+- "переименуй лейбл X в Y", "измени лейбл X на Y" → rename_label, action.title="X→Y", 0.9
 - "найди", "поищи", "погода", "что такое X" → web_search, 0.9
 - Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
 - Сомневаешься → confidence < 0.7, напиши clarification
@@ -2043,21 +2117,45 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
 
 # ─── Menu button handlers ─────────────────────────────────────────────────────
 
-@router.message(F.text == "🌾 Сад")
-async def btn_garden(message: Message, state: FSMContext):
+@router.message(F.text == "👤 Профиль")
+async def btn_profile(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    # Delete previous menu message if exists
     if user_id in _menu_messages:
         try:
             await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
         except Exception:
             pass
-    sent = await message.answer("🌾 Твой сад:", reply_markup=get_garden_inline())
+    profile = store_get_profile(user_id) or {}
+    tasks = store_get_tasks(user_id)
+    active_count = len([t for t in tasks if t.get("status") != "completed"])
+    name = profile.get("name", "Садовник")
+    res  = profile.get("resonance_level", 0)
+    mkb  = profile.get("life_areas", {})
+    body_v    = mkb.get("body",    {}).get("current", "—")
+    spirit_v  = mkb.get("spirit",  {}).get("current", "—")
+    world_v   = mkb.get("world",   {}).get("current", "—")
+    city  = profile.get("companion_settings", {}).get("city", "")
+    bday  = profile.get("personal_info", {}).get("birthday", "")
+    bday_str = ("🎂 " + bday) if bday else ""
+    city_str = ("📍 " + city) if city else ""
+    card = (
+        f"🌾 <b>{name}</b>\n"
+        f"🌿 Тело: {body_v}/10  🔥 Дух: {spirit_v}/10  🤝 Мир: {world_v}/10\n"
+        f"💫 Резонанс: {res}%\n"
+        f"🌀 Активных задач: {active_count}\n"
+        + (city_str + "\n" if city_str else "")
+        + (bday_str if bday_str else "")
+    )
+    sent = await message.answer(card.strip(), reply_markup=get_profile_inline())
     _menu_messages[user_id] = sent.message_id
+
+@router.message(F.text == "🌾 Сад")
+async def btn_garden(message: Message, state: FSMContext):
+    await btn_profile(message, state)
 
 @router.message(F.text == "⚙️ Настройки")
 async def btn_settings(message: Message, state: FSMContext):
@@ -2641,7 +2739,7 @@ async def free_conversation(message: Message, state: FSMContext):
                     current_state = await state.get_state()
                     if current_state is None:  # only if no FSM active
                         if intent == "show_tasks":
-                            await cmd_tasks(message, state)
+                            await cmd_tasks(message)
                             reply_text = ""
                         elif intent == "show_profile":
                             await cmd_profile(message, state)
@@ -2653,10 +2751,9 @@ async def free_conversation(message: Message, state: FSMContext):
                             await cmd_achievements(message)
                             reply_text = ""
                         elif intent == "add_task":
-                            # Send SR reply first if non-empty, then start FSM
-                            if reply_text and reply_text.strip():
-                                await message.answer(reply_text, reply_markup=get_main_keyboard())
-                            await cb_start_addtask_msg(message, state)
+                            # Extract pre-title from action if present (e.g. "встреча с другом создай задачу")
+                            pre_title = (parsed_check.get("action") or {}).get("title", "").strip()
+                            await cb_start_addtask_msg(message, state, pre_title=pre_title)
                             reply_text = ""
                         elif intent == "add_achievement":
                             if reply_text and reply_text.strip():
@@ -2707,6 +2804,51 @@ async def free_conversation(message: Message, state: FSMContext):
                                 reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
                             else:
                                 reply_text = "🌀 Активных задач нет — нечего удалять."
+
+                        elif intent == "delete_label":
+                            target = (parsed_check.get("action") or {}).get("title", "").lower().strip()
+                            grp_data = store_get_groups(user_id)
+                            labels = grp_data.get("groups", [])
+                            matched = [l for l in labels if target and target in l.get("name","").lower()]
+                            if matched:
+                                lb = matched[0]
+                                grp_data["groups"] = [l for l in labels if l["id"] != lb["id"]]
+                                store_set_groups(user_id, grp_data)
+                                tasks = store_get_tasks(user_id)
+                                for t in tasks:
+                                    if t.get("label_id") == lb["id"]:
+                                        t["label_id"] = None
+                                        t["label_name"] = ""
+                                store_set_tasks(user_id, tasks)
+                                _fire_sync()
+                                reply_text = f"🗑 Лейбл «{lb['name']}» удалён."
+                            else:
+                                lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет лейблов"
+                                reply_text = f"🌀 Не нашла такой лейбл. Есть: {lbl_names}"
+
+                        elif intent == "rename_label":
+                            raw_title = (parsed_check.get("action") or {}).get("title", "")
+                            parts = raw_title.split("→") if "→" in raw_title else raw_title.split(" в ")
+                            if len(parts) >= 2:
+                                old_name = parts[0].strip().lower()
+                                new_name = parts[-1].strip()
+                                grp_data = store_get_groups(user_id)
+                                labels = grp_data.get("groups", [])
+                                matched = [l for l in labels if old_name in l.get("name","").lower()]
+                                if matched:
+                                    matched[0]["name"] = new_name
+                                    store_set_groups(user_id, grp_data)
+                                    tasks = store_get_tasks(user_id)
+                                    for t in tasks:
+                                        if t.get("label_id") == matched[0]["id"]:
+                                            t["label_name"] = new_name
+                                    store_set_tasks(user_id, tasks)
+                                    _fire_sync()
+                                    reply_text = f"✅ Лейбл переименован в «{new_name}»."
+                                else:
+                                    reply_text = "🌀 Лейбл не найден."
+                            else:
+                                reply_text = "🌀 Скажи: «переименуй лейбл X в Y»."
 
             except Exception as e:
                 logger.warning(f"Intent router error: {e}")
