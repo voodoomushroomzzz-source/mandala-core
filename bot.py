@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.6.0
+Mandala Garden Bot — Gentle Companion v7.6.1
 
-ARCHITECTURE CHANGE (v7.6.0):
+ARCHITECTURE CHANGE (v7.6.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
 - All READ operations: instant from memory, zero GitHub API calls
 - All WRITE operations: update memory first → respond to user → sync to GitHub
@@ -16,7 +16,7 @@ FIXES (v7.1.1):
 - Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
 - Completed truncated quick_add_achievement handler
 
-EMOJI (v7.6.0):
+EMOJI (v7.6.1):
 - Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
 - Life areas: 🌿 🔥 📿 🧭 
 """
@@ -508,13 +508,24 @@ def get_garden_inline() -> InlineKeyboardMarkup:
          InlineKeyboardButton(text="💡 Идея (!)",       callback_data="menu_idea")],
     ])
 
+def get_edit_profile_inline() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="👤 Имя",         callback_data="edit_name")],
+        [InlineKeyboardButton(text="🌿 Тело",        callback_data="edit_body")],
+        [InlineKeyboardButton(text="🔥 Дух",         callback_data="edit_spirit")],
+        [InlineKeyboardButton(text="🤝 Мир",         callback_data="edit_world")],
+        [InlineKeyboardButton(text="📍 Город",       callback_data="edit_city")],
+        [InlineKeyboardButton(text="⏰ Время утра",  callback_data="edit_morning")],
+        [InlineKeyboardButton(text="← Настройки",   callback_data="back_to_settings")],
+    ])
+
 def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌾 Профиль",                  callback_data="menu_profile")],
-        [InlineKeyboardButton(text="✏️ Изменить профиль",         callback_data="menu_edit_profile")],
-        [InlineKeyboardButton(text="📍 Сменить город",            callback_data="menu_change_city")],
-        [InlineKeyboardButton(text="📋 Расширенная анкета (!)",   callback_data="menu_extended")],
-        [InlineKeyboardButton(text="🔄 Пройти анкету заново",     callback_data="menu_restart")],
+        [InlineKeyboardButton(text="🌾 Профиль",                callback_data="menu_profile")],
+        [InlineKeyboardButton(text="✏️ Изменить профиль",       callback_data="menu_edit_profile")],
+        [InlineKeyboardButton(text="📍 Сменить город",          callback_data="menu_change_city")],
+        [InlineKeyboardButton(text="📋 Расширенная анкета (!)", callback_data="menu_extended")],
+        [InlineKeyboardButton(text="🔄 Пройти анкету заново",   callback_data="menu_restart")],
     ])
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
@@ -636,8 +647,6 @@ async def run_proactive_scheduler() -> None:
             tz_name = settings.get("timezone", "Europe/Moscow")
             if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"], tz_name):
                 await send_morning_greeting(uid)
-        if settings.get("evening_check_time") and _time_matches(settings["evening_check_time"], tz_name):
-            await send_evening_checkin(telegram_id)
         # Birthday check
         for uid2, us2 in list(_store.items()):
             if not isinstance(us2, dict) or not us2.get("ready"):
@@ -748,21 +757,6 @@ async def cmd_start(message: Message, state: FSMContext):
         "🌿 <b>Добро пожаловать в Сад!</b>\n\n"
         "Я — твой Gentle Companion. Давай познакомимся.\n\n"
         "🌱 Как тебя зовут? Это имя будет только между нами.",
-        reply_markup=get_cancel_keyboard()
-    )
-
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_name))
-async def onboarding_name(message: Message, state: FSMContext):
-    name = message.text.strip()
-    if len(name) < 2:
-        await message.answer("🌱 Имя должно быть не короче 2 символов.")
-        return
-    await state.update_data(name=name)
-    await state.set_state(GardenOnboardingStates.waiting_for_interests)
-    await message.answer(
-        f"🌿 Приятно познакомиться, {name}!\n\n"
-        "Что тебя вдохновляет прямо сейчас? Напиши 3 вещи через запятую.\n\n"
-        "<i>Первое, что приходит в голову — самое честное.</i>",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -1642,7 +1636,15 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 2. Используй историю разговора — отвечай точно.
 3. Если слышишь намерение (поехать, купить, изучить, достиг) — мягко предложи зафиксировать.
 4. Деструктивные темы: "Это не моя стезя, давай о твоём росте."
-5. Не заканчивай каждый ответ вопросом.
+5. Не заканчивай каждый ответ вопросом — но задавай его когда хочешь углубить тему.
+
+РАЗВИТИЕ ДИАЛОГА (важно):
+- Твоя задача не просто ответить, а развить разговор и углубить понимание садовника.
+- Задавай наводящие вопросы: "А что за этим стоит?", "Как давно это ощущается?", "Что мешает?"
+- Раскрывай тему: не ограничивайся поверхностным ответом — копай глубже вместе с садовником.
+- Через диалог изучай садовника: его ритмы, ценности, блоки, источники энергии.
+- Это не допрос — это живой разговор. Один вопрос за раз, в нужный момент.
+- Чем лучше ты понимаешь садовника — тем глубже симбиоз.
 
 СЕЗОННОСТЬ (редко и органично):
 - Упоминай сезон или время суток максимум 1 раз за разговор, только если само напрашивается.
