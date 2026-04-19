@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.17.0
+Mandala Garden Bot — Gentle Companion v7.17.1
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -1348,6 +1348,7 @@ async def cb_lbl_create_mgmt(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "back_to_settings")
 async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    await state.clear()  # ALWAYS clear any active FSM state on back
     try:
         await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
     except Exception:
@@ -1871,9 +1872,10 @@ def _format_tasks_mkb(tasks: list) -> str:
         "world":  ("🤝 Мир",  []),
     }
     for t in tasks:
-        area = t.get("life_area", "world")
+        # Re-classify on the fly so old/stale life_area values are corrected
+        area = _auto_merkaba(t.get("title", ""), t.get("label_name", ""))
         if area not in mkb_groups:
-            area = "world"  # anything unclassified → Мир
+            area = "world"
         mkb_groups[area][1].append(t)
     parts = []
     for area, (label, items) in mkb_groups.items():
