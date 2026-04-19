@@ -29,6 +29,21 @@
       "updated": "2026-04-19",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260419_003",
+      "title": "Подключить ледген",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "spirit",
+      "priority": 6,
+      "deadline": "2026-04-20",
+      "reminder": "2026-04-20",
+      "created": "2026-04-19",
+      "updated": "2026-04-19",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
