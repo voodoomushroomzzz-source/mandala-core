@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.11.0
+Mandala Garden Bot — Gentle Companion v7.12.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -582,7 +582,10 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
         keyboard=[
             [KeyboardButton(text="👤 Профиль"), KeyboardButton(text="⚙️ Настройки")]
         ],
-        resize_keyboard=True
+        resize_keyboard=True,
+        one_time_keyboard=True,
+        is_persistent=False,
+        input_field_placeholder="Напиши сюда..."
     )
 
 def get_profile_inline() -> InlineKeyboardMarkup:
@@ -613,12 +616,42 @@ def get_edit_profile_inline() -> InlineKeyboardMarkup:
 
 def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌾 Профиль",                callback_data="menu_profile")],
+        [InlineKeyboardButton(text="🌀 Задачи",                 callback_data="menu_tasks_mgmt")],
+        [InlineKeyboardButton(text="🏷 Лейблы",                 callback_data="menu_labels_mgmt")],
         [InlineKeyboardButton(text="✏️ Изменить профиль",       callback_data="menu_edit_profile")],
         [InlineKeyboardButton(text="📍 Сменить город",          callback_data="menu_change_city")],
         [InlineKeyboardButton(text="📋 Расширенная анкета (!)", callback_data="menu_extended")],
         [InlineKeyboardButton(text="🔄 Пройти анкету заново",   callback_data="menu_restart")],
     ])
+
+def get_tasks_mgmt_inline(tasks: list) -> InlineKeyboardMarkup:
+    """Tasks management menu: create + list with delete buttons."""
+    btns = [[InlineKeyboardButton(text="➕ Создать задачу", callback_data="start_addtask")]]
+    active = [t for t in tasks if t.get("status") != "completed"]
+    for t in active[:10]:
+        title = t.get("title", "—")[:28]
+        tid   = t.get("task_id", "")
+        btns.append([
+            InlineKeyboardButton(text=f"• {title}", callback_data=f"task_noop_{tid}"),
+            InlineKeyboardButton(text="✅",          callback_data=f"task_done_{tid}"),
+            InlineKeyboardButton(text="🗑",          callback_data=f"task_del_{tid}"),
+        ])
+    btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def get_labels_mgmt_inline(labels: list) -> InlineKeyboardMarkup:
+    """Labels management menu: create + list with rename/delete."""
+    btns = [[InlineKeyboardButton(text="➕ Новый лейбл", callback_data="lbl_create_mgmt")]]
+    for lb in labels[:7]:
+        name = lb.get("name", "—")[:28]
+        lid  = lb.get("id", "")
+        btns.append([
+            InlineKeyboardButton(text=f"🏷 {name}",   callback_data=f"lbl_noop_{lid}"),
+            InlineKeyboardButton(text="✏️",           callback_data=f"lbl_rename_{lid}"),
+            InlineKeyboardButton(text="🗑",           callback_data=f"lbl_del_{lid}"),
+        ])
+    btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -811,6 +844,181 @@ async def run_proactive_scheduler() -> None:
                 pass
     except Exception as e:
         logger.error(f"Proactive scheduler crashed: {e}", exc_info=True)
+
+
+# ─── Tasks & Labels management menus ─────────────────────────────────────────
+
+@router.callback_query(F.data == "menu_tasks_mgmt")
+async def cb_tasks_mgmt(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    tasks   = store_get_tasks(user_id)
+    active  = [t for t in tasks if t.get("status") != "completed"]
+    header  = f"🌀 <b>Задачи</b> ({len(active)}/{TASK_LIMIT_HARD})"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_tasks_mgmt_inline(tasks))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_tasks_mgmt_inline(tasks))
+
+@router.callback_query(F.data == "menu_labels_mgmt")
+async def cb_labels_mgmt(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    labels  = store_get_groups(user_id).get("groups", [])
+    header  = f"🏷 <b>Лейблы</b> ({len(labels)}/{LABEL_LIMIT_HARD})"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_labels_mgmt_inline(labels))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_labels_mgmt_inline(labels))
+
+@router.callback_query(F.data.startswith("task_done_"))
+async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    tid     = callback.data[len("task_done_"):]
+    tasks   = store_get_tasks(user_id)
+    matched = [t for t in tasks if t.get("task_id") == tid]
+    if matched:
+        new_tasks = [t for t in tasks if t.get("task_id") != tid]
+        store_set_tasks(user_id, new_tasks)
+        count = store_increment_achievements(user_id)
+        _fire_sync()
+    active = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
+    try:
+        await callback.message.edit_text(
+            f"✅ Готово! 💎 {count}\n🌀 <b>Задачи</b> ({len(active)}/{TASK_LIMIT_HARD})",
+            reply_markup=get_tasks_mgmt_inline(store_get_tasks(user_id))
+        )
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("task_del_"))
+async def cb_task_del_mgmt(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    tid     = callback.data[len("task_del_"):]
+    tasks   = store_get_tasks(user_id)
+    matched = [t for t in tasks if t.get("task_id") == tid]
+    if matched:
+        title = matched[0].get("title", "—")
+        store_set_tasks(user_id, [t for t in tasks if t.get("task_id") != tid])
+        _fire_sync()
+    remaining = store_get_tasks(user_id)
+    try:
+        await callback.message.edit_text(
+            f"🗑 Удалено: {title}\n🌀 <b>Задачи</b>",
+            reply_markup=get_tasks_mgmt_inline(remaining)
+        )
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("task_noop_"))
+async def cb_task_noop(callback: CallbackQuery):
+    await callback.answer()  # do nothing — label button
+
+@router.callback_query(F.data.startswith("lbl_del_"))
+async def cb_label_del_mgmt(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id  = str(callback.from_user.id)
+    lid      = callback.data[len("lbl_del_"):]
+    grp_data = store_get_groups(user_id)
+    labels   = grp_data.get("groups", [])
+    matched  = [l for l in labels if l.get("id") == lid]
+    if matched:
+        lb_name = matched[0].get("name", "—")
+        grp_data["groups"] = [l for l in labels if l.get("id") != lid]
+        store_set_groups(user_id, grp_data)
+        # Clear label from tasks
+        tasks = store_get_tasks(user_id)
+        for t in tasks:
+            if t.get("label_id") == lid:
+                t["label_id"] = None
+                t["label_name"] = ""
+        store_set_tasks(user_id, tasks)
+        _fire_sync()
+    new_labels = store_get_groups(user_id).get("groups", [])
+    try:
+        await callback.message.edit_text(
+            f"🗑 Лейбл «{lb_name}» удалён\n🏷 <b>Лейблы</b>",
+            reply_markup=get_labels_mgmt_inline(new_labels)
+        )
+    except Exception:
+        pass
+
+class LabelRenameStates(StatesGroup):
+    waiting_for_new_name = State()
+    label_id = None
+
+@router.callback_query(F.data.startswith("lbl_rename_"))
+async def cb_label_rename_start(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    lid = callback.data[len("lbl_rename_"):]
+    await state.update_data(rename_label_id=lid)
+    await state.set_state(LabelRenameStates.waiting_for_new_name)
+    try:
+        await callback.message.edit_text("✏️ Введи новое название лейбла:", reply_markup=None)
+    except Exception:
+        await callback.message.answer("✏️ Введи новое название лейбла:", reply_markup=get_cancel_keyboard())
+
+@router.message(StateFilter(LabelRenameStates.waiting_for_new_name))
+async def cb_label_rename_input(message: Message, state: FSMContext):
+    if message.text and message.text.strip() == "❌ Отмена":
+        await state.clear()
+        await message.answer("Отменено.", reply_markup=get_main_keyboard())
+        return
+    user_id  = str(message.from_user.id)
+    new_name = (message.text or "").strip()
+    data     = await state.get_data()
+    lid      = data.get("rename_label_id", "")
+    grp_data = store_get_groups(user_id)
+    labels   = grp_data.get("groups", [])
+    for lb in labels:
+        if lb.get("id") == lid:
+            lb["name"] = new_name
+    grp_data["groups"] = labels
+    store_set_groups(user_id, grp_data)
+    tasks = store_get_tasks(user_id)
+    for t in tasks:
+        if t.get("label_id") == lid:
+            t["label_name"] = new_name
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    await message.answer(
+        f"✅ Лейбл переименован в «{new_name}»",
+        reply_markup=get_labels_mgmt_inline(labels)
+    )
+
+@router.callback_query(F.data == "lbl_noop_" + "")
+async def cb_lbl_noop(callback: CallbackQuery):
+    await callback.answer()
+
+@router.callback_query(F.data.startswith("lbl_noop_"))
+async def cb_lbl_noop_any(callback: CallbackQuery):
+    await callback.answer()
+
+@router.callback_query(F.data == "lbl_create_mgmt")
+async def cb_lbl_create_mgmt(callback: CallbackQuery, state: FSMContext):
+    """Start new label creation from management menu."""
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    labels  = store_get_groups(user_id).get("groups", [])
+    if len(labels) >= LABEL_LIMIT_HARD:
+        await callback.answer(f"⚠️ Лимит {LABEL_LIMIT_HARD} лейблов.", show_alert=True)
+        return
+    await state.set_state(TaskStates.waiting_for_new_label)
+    try:
+        await callback.message.edit_text("🏷 Введи название нового лейбла:", reply_markup=None)
+    except Exception:
+        await callback.message.answer("🏷 Введи название нового лейбла:", reply_markup=get_cancel_keyboard())
+
+@router.callback_query(F.data == "back_to_settings")
+async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    try:
+        await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
+    except Exception:
+        await callback.message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
 
 async def run_resonance_decay() -> None:
     try:
@@ -2011,6 +2219,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
+- "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
 - "удали лейбл X", "убери лейбл X" → delete_label, action.title=название лейбла, 0.9
 - "переименуй лейбл X в Y", "измени лейбл X на Y" → rename_label, action.title="X→Y", 0.9
 - "найди", "поищи", "погода", "что такое X" → web_search, 0.9
@@ -2035,7 +2244,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
     interests = ", ".join(info.get("interests", [])[:3]) or "не указаны"
     tasks = workspace.get("tasks", [])
     active = [t for t in tasks if t.get("status") != "completed"]
-    tasks_str = ", ".join(t["title"] for t in active[:3]) or "нет"
+    tasks_str = ", ".join(t["title"] for t in active[:10]) or "нет"
     ach_count = len(workspace.get("achievements", []))
     # Current datetime in gardener timezone
     tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
@@ -2789,18 +2998,19 @@ async def free_conversation(message: Message, state: FSMContext):
         if raw:
             # 1. Strip <think>...</think> blocks (qwen3.5 extended thinking)
             raw_clean = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
-            # 2. Strip markdown code fences
-            if raw_clean.startswith("```"):
-                raw_clean = re.sub(r"^```(?:json)?\s*", "", raw_clean)
-                raw_clean = re.sub(r"\s*```$", "", raw_clean).strip()
-            # 3. Parse JSON envelope
+            # 2. Strip markdown code fences (handle both leading and trailing)
+            raw_clean = re.sub(r"^```(?:json)?\s*", "", raw_clean)
+            raw_clean = re.sub(r"\s*```\s*$", "", raw_clean).strip()
+            # 3. If multiple JSON objects — take only first one
             if raw_clean.startswith("{"):
+                # Find where first JSON object ends using decoder
                 try:
-                    parsed = json.loads(raw_clean)
+                    parsed, end_idx = json.JSONDecoder().raw_decode(raw_clean)
                     extracted = parsed.get("text", "")
                     reply_text = extracted if extracted and extracted.strip() else ""
                     action = parsed.get("action")
-                except json.JSONDecodeError:
+                    raw_clean = json.dumps(parsed)  # normalize to single object
+                except (json.JSONDecodeError, ValueError):
                     reply_text = raw_clean
                 except Exception:
                     reply_text = raw_clean
@@ -2874,18 +3084,27 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "delete_task":
                             target = (parsed_check.get("action") or {}).get("title", "").lower().strip()
                             tasks = store_get_tasks(user_id)
-                            matched = [t for t in tasks if target and target in t.get("title", "").lower()]
-                            if matched:
-                                t = matched[0]
-                                tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
-                                store_set_tasks(user_id, tasks)
-                                _fire_sync()
-                                reply_text = f"🗑 Задача удалена: {t['title']}"
-                            elif tasks:
-                                titles = ", ".join(t["title"] for t in tasks[:5])
-                                reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
+                            if target in ("все", "all", "все задачи", ""):
+                                if not tasks:
+                                    reply_text = "🌀 Активных задач нет."
+                                else:
+                                    count = len(tasks)
+                                    store_set_tasks(user_id, [])
+                                    _fire_sync()
+                                    reply_text = f"🗑 Удалено {count} задач. Поле чисто."
                             else:
-                                reply_text = "🌀 Активных задач нет — нечего удалять."
+                                matched = [t for t in tasks if target and target in t.get("title", "").lower()]
+                                if matched:
+                                    t = matched[0]
+                                    new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
+                                    store_set_tasks(user_id, new_tasks)
+                                    _fire_sync()
+                                    reply_text = f"🗑 Задача удалена: {t['title']}"
+                                elif tasks:
+                                    titles = ", ".join(t["title"] for t in tasks[:5])
+                                    reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
+                                else:
+                                    reply_text = "🌀 Активных задач нет — нечего удалять."
 
                         elif intent == "delete_label":
                             target = (parsed_check.get("action") or {}).get("title", "").lower().strip()
