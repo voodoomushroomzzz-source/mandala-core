@@ -20,7 +20,7 @@
       "title": "Сходить на тренировку",
       "status": "todo",
       "label_id": "дом",
-      "label_name": "Дом",
+      "label_name": "Личное",
       "life_area": "other",
       "priority": 7,
       "deadline": "2026-04-19",
@@ -34,7 +34,7 @@
   "groups": [
     {
       "id": "дом",
-      "name": "Дом",
+      "name": "Личное",
       "created": "2026-04-18"
     },
     {
