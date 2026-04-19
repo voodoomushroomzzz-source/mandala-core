@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.15.0
+Mandala Garden Bot — Gentle Companion v7.16.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -510,6 +510,13 @@ class TaskStates(StatesGroup):
     waiting_for_new_group      = State()
     waiting_for_confirm        = State()
 
+class TaskEditStates(StatesGroup):
+    waiting_for_field    = State()   # field selector shown
+    editing_title        = State()
+    editing_deadline     = State()
+    editing_reminder     = State()
+    editing_group        = State()
+
 class AskStates(StatesGroup):
     waiting_for_question = State()
 
@@ -684,34 +691,35 @@ def get_settings_inline() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🔬 Улучшить симбиоз (!)",   callback_data="menu_extended")],
     ])
 
-def get_tasks_mgmt_inline(tasks: list) -> InlineKeyboardMarkup:
-    """Tasks management: create + task list + groups section."""
+def get_tasks_mgmt_inline(tasks: list, user_id: str = "") -> InlineKeyboardMarkup:
+    """Tasks management: create + task list with edit/done/del + groups button."""
     btns = [[InlineKeyboardButton(text="➕ Создать задачу", callback_data="start_addtask")]]
     active = [t for t in tasks if t.get("status") != "completed"]
     for t in active[:10]:
-        title = t.get("title", "—")[:28]
+        title = t.get("title", "—")[:22]
         tid   = t.get("task_id", "")
         btns.append([
             InlineKeyboardButton(text=f"• {title}", callback_data=f"task_noop_{tid}"),
+            InlineKeyboardButton(text="✏️",          callback_data=f"task_edit_{tid}"),
             InlineKeyboardButton(text="✅",          callback_data=f"task_done_{tid}"),
             InlineKeyboardButton(text="🗑",          callback_data=f"task_del_{tid}"),
         ])
-    # Separator + groups section
-    btns.append([InlineKeyboardButton(text="── 🎨 Группы ──", callback_data="task_noop_sep")])
-    btns.append([InlineKeyboardButton(text="🎨 Управлять группами", callback_data="menu_labels_mgmt")])
-    btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
+    btns.append([InlineKeyboardButton(text="🎨 Группы", callback_data="menu_labels_mgmt")])
+    btns.append([InlineKeyboardButton(text="← Назад",   callback_data="back_to_settings")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_labels_mgmt_inline(labels: list) -> InlineKeyboardMarkup:
-    """Labels management menu: create + list with rename/delete."""
+    """Groups management menu: create + list with rename/delete + unique emojis."""
+    emoji_map = _assign_group_emojis(labels)
     btns = [[InlineKeyboardButton(text="➕ Новая группа", callback_data="lbl_create_mgmt")]]
     for lb in labels[:7]:
-        name = lb.get("name", "—")[:28]
-        lid  = lb.get("id", "")
+        name  = lb.get("name", "—")[:26]
+        lid   = lb.get("id", "")
+        emoji = emoji_map.get(lid, "🎨")
         btns.append([
-            InlineKeyboardButton(text=f"🏷 {name}",   callback_data=f"lbl_noop_{lid}"),
-            InlineKeyboardButton(text="✏️",           callback_data=f"lbl_rename_{lid}"),
-            InlineKeyboardButton(text="🗑",           callback_data=f"lbl_del_{lid}"),
+            InlineKeyboardButton(text=f"{emoji} {name}", callback_data=f"lbl_noop_{lid}"),
+            InlineKeyboardButton(text="✏️",              callback_data=f"lbl_rename_{lid}"),
+            InlineKeyboardButton(text="🗑",              callback_data=f"lbl_del_{lid}"),
         ])
     btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
@@ -979,6 +987,202 @@ async def cb_labels_mgmt(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(header, reply_markup=get_labels_mgmt_inline(labels))
     except Exception:
         await callback.message.answer(header, reply_markup=get_labels_mgmt_inline(labels))
+
+
+# ─── Task editing from settings ───────────────────────────────────────────────
+
+def _task_edit_field_kb(tid: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ Название",  callback_data=f"tedit_title_{tid}"),
+         InlineKeyboardButton(text="📅 Дедлайн",   callback_data=f"tedit_deadline_{tid}")],
+        [InlineKeyboardButton(text="🔔 Напомин.",   callback_data=f"tedit_reminder_{tid}"),
+         InlineKeyboardButton(text="🎨 Группа",    callback_data=f"tedit_group_{tid}")],
+        [InlineKeyboardButton(text="← Назад",      callback_data="menu_tasks_mgmt")],
+    ])
+
+@router.callback_query(F.data.startswith("task_edit_"))
+async def cb_task_edit_start(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    tid = callback.data[len("task_edit_"):]
+    user_id = str(callback.from_user.id)
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == tid), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    await state.update_data(edit_task_id=tid)
+    await state.set_state(TaskEditStates.waiting_for_field)
+    text = (
+        f"✏️ <b>{task.get('title', '—')}</b>\n"
+        f"📅 {task.get('deadline') or 'нет'}  "
+        f"🎨 {task.get('label_name') or 'без группы'}\n"
+        f"Что меняем?"
+    )
+    try:
+        await callback.message.edit_text(text, reply_markup=_task_edit_field_kb(tid))
+    except Exception:
+        await callback.message.answer(text, reply_markup=_task_edit_field_kb(tid))
+
+@router.callback_query(F.data.startswith("tedit_title_"))
+async def cb_tedit_title(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    tid = callback.data[len("tedit_title_"):]
+    await state.update_data(edit_task_id=tid)
+    await state.set_state(TaskEditStates.editing_title)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data=f"task_edit_{tid}")]
+    ])
+    try:
+        await callback.message.edit_text("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
+    except Exception:
+        await callback.message.answer("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
+
+@router.message(StateFilter(TaskEditStates.editing_title))
+async def tedit_title_input(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    data = await state.get_data()
+    tid  = data.get("edit_task_id", "")
+    new_title = (message.text or "").strip()
+    if not new_title:
+        await message.answer("⚠️ Название не может быть пустым.")
+        return
+    tasks = store_get_tasks(user_id)
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["title"] = new_title
+            t["updated"] = _today()
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Название → «{new_title}»", reply_markup=get_main_keyboard())
+
+@router.callback_query(F.data.startswith("tedit_deadline_"))
+async def cb_tedit_deadline(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    tid = callback.data[len("tedit_deadline_"):]
+    await state.update_data(edit_task_id=tid)
+    await state.set_state(TaskEditStates.editing_deadline)
+    try:
+        await callback.message.edit_text(
+            "📅 Выбери новый дедлайн:",
+            reply_markup=get_deadline_keyboard()
+        )
+    except Exception:
+        await callback.message.answer("📅 Выбери новый дедлайн:", reply_markup=get_deadline_keyboard())
+
+@router.callback_query(F.data.startswith("dl_"), StateFilter(TaskEditStates.editing_deadline))
+async def tedit_deadline_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    tid  = data.get("edit_task_id", "")
+    val  = callback.data[3:]
+    deadline = None if val == "skip" else val
+    tasks = store_get_tasks(user_id)
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["deadline"] = deadline
+            t["updated"]  = _today()
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    dl_str = deadline or "убран"
+    await callback.message.edit_text(f"✅ Дедлайн → {dl_str}")
+    await callback.message.answer("🌿", reply_markup=get_main_keyboard())
+
+@router.callback_query(F.data.startswith("tedit_reminder_"))
+async def cb_tedit_reminder(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    tid = callback.data[len("tedit_reminder_"):]
+    await state.update_data(edit_task_id=tid)
+    await state.set_state(TaskEditStates.editing_reminder)
+    user_id = str(callback.from_user.id)
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == tid), None)
+    deadline = task.get("deadline") if task else None
+    try:
+        await callback.message.edit_text(
+            "🔔 Выбери напоминание:",
+            reply_markup=get_reminder_keyboard(deadline)
+        )
+    except Exception:
+        await callback.message.answer("🔔 Выбери напоминание:", reply_markup=get_reminder_keyboard(deadline))
+
+@router.callback_query(F.data.startswith("rem_"), StateFilter(TaskEditStates.editing_reminder))
+async def tedit_reminder_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    tid  = data.get("edit_task_id", "")
+    val  = callback.data[4:]
+    if val == "custom":
+        await state.set_state(TaskEditStates.editing_reminder)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="❌ Отмена", callback_data=f"task_edit_{tid}")]
+        ])
+        try:
+            await callback.message.edit_text(
+                "✏️ Введи дату и время: <code>ДД.ММ.ГГ ЧЧ:ММ</code>",
+                reply_markup=cancel_kb
+            )
+        except Exception:
+            await callback.message.answer("✏️ Введи: <code>ДД.ММ.ГГ ЧЧ:ММ</code>", reply_markup=cancel_kb)
+        return
+    reminder = None if val == "skip" else val
+    tasks = store_get_tasks(user_id)
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["reminder"] = reminder
+            t["updated"]  = _today()
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    r_str = reminder or "убрано"
+    await callback.message.edit_text(f"✅ Напоминание → {r_str}")
+    await callback.message.answer("🌿", reply_markup=get_main_keyboard())
+
+@router.callback_query(F.data.startswith("tedit_group_"))
+async def cb_tedit_group(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    tid = callback.data[len("tedit_group_"):]
+    await state.update_data(edit_task_id=tid)
+    await state.set_state(TaskEditStates.editing_group)
+    user_id = str(callback.from_user.id)
+    labels = store_get_groups(user_id).get("groups", [])
+    try:
+        await callback.message.edit_text("🎨 Выбери группу:", reply_markup=get_labels_keyboard(labels))
+    except Exception:
+        await callback.message.answer("🎨 Выбери группу:", reply_markup=get_labels_keyboard(labels))
+
+@router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskEditStates.editing_group))
+async def tedit_group_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    tid  = data.get("edit_task_id", "")
+    val  = callback.data[4:]
+    if val in ("new", "skip"):
+        label_id, label_name = None, ""
+    else:
+        labels = store_get_groups(user_id).get("groups", [])
+        lb = next((l for l in labels if l["id"] == val), None)
+        label_id   = val
+        label_name = lb["name"] if lb else ""
+    tasks = store_get_tasks(user_id)
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["label_id"]   = label_id
+            t["label_name"] = label_name
+            t["updated"]    = _today()
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    g_str = label_name or "без группы"
+    try:
+        await callback.message.edit_text(f"✅ Группа → {g_str}")
+    except Exception:
+        pass
+    await callback.message.answer("🌿", reply_markup=get_main_keyboard())
 
 @router.callback_query(F.data.startswith("task_done_"))
 async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
@@ -1694,7 +1898,7 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
             parts.append(f"  • {t['title']}{dl}")
     return "\n".join(parts) if parts else ""
 
-async def cmd_tasks(message: Message, view: str = "mkb"):
+async def cmd_tasks(message: Message, view: str = "labels"):
     if not await _check_ready(message):
         return
     user_id = str(message.from_user.id)
@@ -1709,8 +1913,8 @@ async def cmd_tasks(message: Message, view: str = "mkb"):
         await message.answer("👇", reply_markup=get_tasks_keyboard())
         return
     body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
-    toggle_label = "🏷 По группам" if view == "mkb" else "✨ По МКБ"
-    toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
+    toggle_label = "✨ По МКБ" if view == "labels" else "🎨 По группам"
+    toggle_data  = "tasks_view_mkb" if view == "labels" else "tasks_view_labels"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
         [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
@@ -1726,8 +1930,8 @@ async def tasks_toggle_view(callback: CallbackQuery, state: FSMContext):
     active = [t for t in tasks if t.get("status") != "completed"]
     view = "mkb" if callback.data == "tasks_view_mkb" else "labels"
     body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
-    toggle_label = "🏷 По группам" if view == "mkb" else "✨ По МКБ"
-    toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
+    toggle_label = "✨ По МКБ" if view == "labels" else "🎨 По группам"
+    toggle_data  = "tasks_view_mkb" if view == "labels" else "tasks_view_labels"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
         [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
@@ -2386,7 +2590,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|add_achievement|web_search|philosophy|complete_task|delete_task|delete_label|rename_label",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|add_achievement|web_search|complete_task|delete_task", "title": "..."} или null
@@ -2400,6 +2604,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "добавь задачу", "хочу сделать X" → add_task, 0.9
 - "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
+- "переименуй задачу X в Y", "измени дедлайн задачи X на Y", "смени группу задачи X на Y" → edit_task, action.title="X", action.field="title|deadline|group", action.value="Y", 0.9
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
 - "удали группа X", "убери группа X" → delete_label, action.title=название группы, 0.9
