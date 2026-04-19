@@ -111,6 +111,14 @@
     {
       "role": "assistant",
       "content": "✅ Дедлайн → завтра"
+    },
+    {
+      "role": "user",
+      "content": "Покажи мои задачи"
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-19"
