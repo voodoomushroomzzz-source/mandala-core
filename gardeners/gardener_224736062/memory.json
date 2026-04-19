@@ -95,6 +95,22 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Покажи мои задачи"
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Перенеси ддэдлайн в задаче сходить на тренеровку на завтра"
+    },
+    {
+      "role": "assistant",
+      "content": "✅ Дедлайн → завтра"
     }
   ],
   "updated": "2026-04-19"
