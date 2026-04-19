@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.12.0
+Mandala Garden Bot — Gentle Companion v7.13.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -619,9 +619,10 @@ def get_settings_inline() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🌀 Задачи",                 callback_data="menu_tasks_mgmt")],
         [InlineKeyboardButton(text="🏷 Лейблы",                 callback_data="menu_labels_mgmt")],
         [InlineKeyboardButton(text="✏️ Изменить профиль",       callback_data="menu_edit_profile")],
-        [InlineKeyboardButton(text="📍 Сменить город",          callback_data="menu_change_city")],
         [InlineKeyboardButton(text="📋 Расширенная анкета (!)", callback_data="menu_extended")],
-        [InlineKeyboardButton(text="🔄 Пройти анкету заново",   callback_data="menu_restart")],
+        [InlineKeyboardButton(text="🔔 Напоминания (!)",        callback_data="menu_reminders_soon")],
+        [InlineKeyboardButton(text="🗺 Роадмапы (!)",           callback_data="menu_roadmaps_soon")],
+        [InlineKeyboardButton(text="☑️ Чеклисты (!)",           callback_data="menu_checklists_soon")],
     ])
 
 def get_tasks_mgmt_inline(tasks: list) -> InlineKeyboardMarkup:
@@ -708,16 +709,47 @@ def get_deadline_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="❌ Отмена",      callback_data="cancel_task")],
     ])
 
-def get_reminder_keyboard() -> InlineKeyboardMarkup:
+def get_reminder_keyboard(deadline: str = None) -> InlineKeyboardMarkup:
+    """Reminder v2: options relative to deadline (or today if no deadline).
+    Time is auto-set to profile.morning_time on delivery."""
     from datetime import datetime, timedelta
-    t = datetime.now()
-    f = lambda d: d.strftime("%Y-%m-%d")
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🔔 Сегодня вечером", callback_data="rem_" + f(t))],
-        [InlineKeyboardButton(text="🔔 Завтра утром",    callback_data="rem_" + f(t + timedelta(days=1)))],
-        [InlineKeyboardButton(text="⏭ Пропустить",       callback_data="rem_skip")],
-        [InlineKeyboardButton(text="❌ Отмена",           callback_data="cancel_task")],
-    ])
+    today = datetime.now()
+    fmt = lambda d: d.strftime("%Y-%m-%d")
+    btns = []
+    if deadline:
+        try:
+            dl = datetime.fromisoformat(deadline)
+            days_left = (dl - today).days
+            # In day of deadline
+            btns.append([InlineKeyboardButton(
+                text=f"📅 В день задачи ({deadline})",
+                callback_data="rem_" + fmt(dl)
+            )])
+            # 3 days before (only if > 3 days away)
+            if days_left > 3:
+                remind3 = dl - timedelta(days=3)
+                btns.append([InlineKeyboardButton(
+                    text=f"🔔 За 3 дня ({fmt(remind3)})",
+                    callback_data="rem_" + fmt(remind3)
+                )])
+            # 1 week before (only if > 7 days away)
+            if days_left > 7:
+                remind7 = dl - timedelta(days=7)
+                btns.append([InlineKeyboardButton(
+                    text=f"🗓 За неделю ({fmt(remind7)})",
+                    callback_data="rem_" + fmt(remind7)
+                )])
+        except Exception:
+            pass
+    # Fallback if no deadline or deadline too close
+    if not btns:
+        btns.append([InlineKeyboardButton(
+            text="🔔 Завтра утром",
+            callback_data="rem_" + (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+        )])
+    btns.append([InlineKeyboardButton(text="⏭ Пропустить", callback_data="rem_skip")])
+    btns.append([InlineKeyboardButton(text="❌ Отмена",     callback_data="cancel_task")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
     btns = [[InlineKeyboardButton(text="🏷 " + lb["name"], callback_data="lbl_" + lb["id"])] for lb in labels[:8]]
@@ -746,9 +778,9 @@ def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
 # ─── Proactive messaging ──────────────────────────────────────────────────────
 
 async def send_morning_greeting(telegram_id: str) -> None:
+    """Morning brief v2: daily analytics digest. Always sends — if no tasks, proposes to fill the day."""
     try:
-        phase = _silence_phase(telegram_id)
-        if phase == 3 or not _can_send_proactive(telegram_id):
+        if not _can_send_proactive(telegram_id):
             return
         gardener = store_get_profile(str(telegram_id))
         if not gardener:
@@ -756,30 +788,49 @@ async def send_morning_greeting(telegram_id: str) -> None:
         settings = gardener.get("companion_settings", {})
         if not settings.get("proactive_mode", True):
             return
-        # Skip if already talked today
         from zoneinfo import ZoneInfo
         from datetime import datetime as _dt
         tz_name = settings.get("timezone", "Europe/Moscow")
         tz = ZoneInfo(tz_name)
         today_str = _dt.now(tz).strftime("%Y-%m-%d")
-        last = _last_interaction.get(str(telegram_id))
-        if last == today_str:
-            return  # Already interacted today — skip morning greeting
-        name = gardener.get("name", "Садовник")
-        if phase == 2:
-            text = f"🌿 {name}, здесь и рядом.\nВозвращайся когда захочешь."
+        # Skip if already interacted today
+        if _last_interaction.get(str(telegram_id)) == today_str:
+            return
+        name      = gardener.get("name", "Садовник")
+        resonance = gardener.get("resonance_level", 0)
+        ach_count = store_get_achievements_count(str(telegram_id))
+        tasks     = store_get_tasks(str(telegram_id))
+        active    = [t for t in tasks if t.get("status") != "completed"]
+        # Format date
+        MONTHS_RU = ["января","февраля","марта","апреля","мая","июня",
+                     "июля","августа","сентября","октября","ноября","декабря"]
+        now = _dt.now(tz)
+        date_str = f"{now.day} {MONTHS_RU[now.month-1]}"
+        # Build brief
+        lines = [f"🌅 <b>{name}, {date_str}</b>"]
+        lines.append(f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений")
+        if active:
+            lines.append("")
+            lines.append(f"🌀 Активных задач: {len(active)}")
+            # Sort by deadline proximity, show up to 3
+            def sort_key(t):
+                dl = t.get("deadline")
+                return dl if dl else "9999"
+            for t in sorted(active, key=sort_key)[:3]:
+                dl = f" · {t['deadline']}" if t.get("deadline") else ""
+                lbl = f" #{t['label_name']}" if t.get("label_name") else ""
+                lines.append(f"  • {t['title']}{lbl}{dl}")
+            if len(active) > 3:
+                lines.append(f"  <i>...и ещё {len(active)-3}</i>")
         else:
-            tasks = store_get_tasks(str(telegram_id))
-            active = [t for t in tasks if t.get("status") != "completed"]
-            hint = ""
-            if active:
-                top = sorted(active, key=lambda x: x.get("priority", 5), reverse=True)[0]
-                hint = f"\n\n🌱 Сегодня есть: <i>{top['title']}</i>"
-            text = f"🌄 Доброе утро, {name}!\n\nНовый день.{hint}\n\nКак ты?"
+            lines.append("")
+            lines.append("🌱 Активных задач нет.")
+            lines.append("Как наполним этот день?")
+        text = "\n".join(lines)
         await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard())
         _mark_proactive_sent(telegram_id)
     except Exception as e:
-        logger.error(f"Morning greeting error: {e}")
+        logger.error(f"Morning brief error: {e}")
 
 async def send_evening_checkin(telegram_id: str) -> None:
     try:
@@ -1019,6 +1070,16 @@ async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text("⚙️ Настройки:", reply_markup=get_settings_inline())
     except Exception:
         await callback.message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
+
+@router.callback_query(F.data.in_({"menu_reminders_soon", "menu_roadmaps_soon", "menu_checklists_soon"}))
+async def cb_coming_soon(callback: CallbackQuery):
+    labels = {
+        "menu_reminders_soon":  "🔔 Напоминания",
+        "menu_roadmaps_soon":   "🗺 Роадмапы",
+        "menu_checklists_soon": "☑️ Чеклисты",
+    }
+    name = labels.get(callback.data, "Функция")
+    await callback.answer(f"{name} — скоро! 🌱", show_alert=True)
 
 async def run_resonance_decay() -> None:
     try:
@@ -1675,12 +1736,12 @@ async def task_deadline_cb(callback: CallbackQuery, state: FSMContext):
     try:
         await callback.message.edit_text(
             "🔔 <b>Напоминание?</b>" + dl_str,
-            reply_markup=get_reminder_keyboard()
+            reply_markup=get_reminder_keyboard(deadline)
         )
     except Exception:
         await callback.message.answer(
             "🔔 <b>Напоминание?</b>",
-            reply_markup=get_reminder_keyboard()
+            reply_markup=get_reminder_keyboard(deadline)
         )
 
 @router.message(StateFilter(TaskStates.waiting_for_deadline))
@@ -1702,7 +1763,7 @@ async def task_deadline_text(message: Message, state: FSMContext):
     dl_str = (" · " + deadline) if deadline else " · без дедлайна"
     await message.answer(
         "🔔 <b>Напоминание?</b>" + dl_str,
-        reply_markup=get_reminder_keyboard()
+        reply_markup=get_reminder_keyboard(deadline)
     )
 
 # ── Step 3: Reminder ──────────────────────────────────────────────────────
