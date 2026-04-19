@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.16.0
+Mandala Garden Bot — Gentle Companion v7.17.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -825,14 +825,31 @@ def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def _auto_merkaba(title: str, label_name: str = "") -> str:
+    """Auto-classify task into one of 3 MKB spheres. Defaults to world if unclear."""
     text = (title + " " + label_name).lower()
-    body_kw   = ["здоровье","спорт","сон","питание","бег","врач","зал","тренировка","физ","еда","отдых"]
-    spirit_kw = ["работа","учёба","курс","читать","написать","код","проект","творч","идея","задач","разраб","бот"]
-    world_kw  = ["друг","встреч","семья","звонить","поездка","путешеств","кафе","знаком","люди","событи"]
+    body_kw = [
+        "здоровье","спорт","сон","питание","бег","врач","зал","тренировка","трениров",
+        "физ","еда","отдых","фитнес","вес","диет","медицин","лечени","давлени",
+        "витамин","таблетк","аптека","массаж","плавани","велосипед","пробежк",
+        "гимнастик","растяжк","медитац","йога","сауна","баня"
+    ]
+    spirit_kw = [
+        "работа","учёба","курс","читать","написать","код","проект","творч","идея",
+        "задач","разраб","бот","книг","учить","изучить","план","цел","карьер",
+        "бизнес","стратег","анализ","отчёт","презентац","навык","развит","обучен",
+        "программ","дизайн","музык","писать","создат","запуск","деньг","финанс",
+        "инвест","бюджет","доход","расход","зарабат","монетиз"
+    ]
+    world_kw = [
+        "друг","встреч","семья","звонить","поездка","путешеств","кафе","знаком",
+        "люди","событи","отношени","вечеринк","праздник","подарок","родител",
+        "ребёнок","дети","партнёр","свидани","общени","компани","коллег","клиент",
+        "нетворк","волонтёр","помоч","поддержк","совместн"
+    ]
     if any(k in text for k in body_kw):   return "health"
     if any(k in text for k in spirit_kw): return "spirit"
     if any(k in text for k in world_kw):  return "world"
-    return "other"
+    return "world"  # default: мир (was "other")
 
 
 def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
@@ -1268,14 +1285,17 @@ async def cb_label_rename_start(callback: CallbackQuery, state: FSMContext):
     lid = callback.data[len("lbl_rename_"):]
     await state.update_data(rename_label_id=lid)
     await state.set_state(LabelRenameStates.waiting_for_new_name)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="back_to_settings")]
+    ])
     try:
-        await callback.message.edit_text("✏️ Введи новое название группы:", reply_markup=None)
+        await callback.message.edit_text("✏️ Введи новое название группы:", reply_markup=cancel_kb)
     except Exception:
-        await callback.message.answer("✏️ Введи новое название группы:", reply_markup=get_cancel_keyboard())
+        await callback.message.answer("✏️ Введи новое название группы:", reply_markup=cancel_kb)
 
 @router.message(StateFilter(LabelRenameStates.waiting_for_new_name))
 async def cb_label_rename_input(message: Message, state: FSMContext):
-    if message.text and message.text.strip() == "❌ Отмена":
+    if message.text and message.text.strip() in ("❌ Отмена", "Отмена"):
         await state.clear()
         await message.answer("Отменено.", reply_markup=get_main_keyboard())
         return
@@ -1844,17 +1864,16 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
 @router.message(Command("tasks"))
 @router.message(F.text == "🌀 Задачи")
 def _format_tasks_mkb(tasks: list) -> str:
-    """Format active tasks grouped by МКБ sphere."""
+    """Format active tasks grouped by МКБ sphere (3 spheres only)."""
     mkb_groups = {
-        "health":  ("🌿 Тело",  []),
-        "spirit":  ("🔥 Дух",   []),
-        "world":   ("🤝 Мир",   []),
-        "other":   ("🌱 Другое",[]),
+        "health": ("🌿 Тело", []),
+        "spirit": ("🔥 Дух",  []),
+        "world":  ("🤝 Мир",  []),
     }
     for t in tasks:
-        area = t.get("life_area", "other")
+        area = t.get("life_area", "world")
         if area not in mkb_groups:
-            area = "other"
+            area = "world"  # anything unclassified → Мир
         mkb_groups[area][1].append(t)
     parts = []
     for area, (label, items) in mkb_groups.items():
@@ -2182,11 +2201,11 @@ async def _show_task_confirm(message: Message, state: FSMContext, edit: bool = F
     reminder   = data.get("reminder") or "нет"
     label_name = data.get("label_name") or "без группы"
     merkaba    = _auto_merkaba(title, data.get("label_name", ""))
-    mkb_icons  = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир", "other": "🌱 Другое"}
+    mkb_icons  = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир"}
     summary = (
         "📝 <b>" + title + "</b>\n"
         "📅 " + deadline + " · 🏷 " + label_name + "\n"
-        "✨ " + mkb_icons.get(merkaba, "🌱 Другое")
+        "✨ " + mkb_icons.get(merkaba, "🤝 Мир")
     )
     kb = get_confirm_task_keyboard()
     if edit:
@@ -2237,7 +2256,7 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
     store_set_tasks(user_id, tasks)
     _fire_sync()
     await state.clear()
-    mkb_icons = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир", "other": "🌱 Другое"}
+    mkb_icons = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир"}
     try:
         await callback.message.edit_text(
             "✅ <b>" + title + "</b> добавлена!\n"
