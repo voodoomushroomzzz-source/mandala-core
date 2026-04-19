@@ -59,6 +59,21 @@
       "updated": "2026-04-19",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260419_005",
+      "title": "Записать трек Беги",
+      "status": "todo",
+      "label_id": "творчество",
+      "label_name": "Творчество",
+      "life_area": "health",
+      "priority": 5,
+      "deadline": "2026-05-01",
+      "reminder": "2026-04-24",
+      "created": "2026-04-19",
+      "updated": "2026-04-19",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
