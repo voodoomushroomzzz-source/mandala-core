@@ -1,5 +1,21 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "task_id": "task_20260419_001",
+      "title": "доделать бота",
+      "status": "todo",
+      "label_id": "мандала",
+      "label_name": "Мандала",
+      "life_area": "spirit",
+      "priority": 5,
+      "deadline": "2026-04-26",
+      "reminder": "2026-04-20",
+      "created": "2026-04-19",
+      "updated": "2026-04-19",
+      "completed": null,
+      "notes": ""
+    }
+  ],
   "groups": [
     {
       "id": "дом",
