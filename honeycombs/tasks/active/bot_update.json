@@ -1,16 +1,199 @@
-﻿{
+{
   "task_id": "T-20260408-1030",
-  "name": "Telegram Bot  SR Gentle Companion (Mandala Symbiosis)",
+  "name": "Telegram Bot SR Gentle Companion — Mandala Symbiosis",
   "status": "in_progress",
   "priority": "highest",
-  "deadline": "2026-06-01",
+  "deadline": "2026-07-01",
   "created": "2026-04-01",
   "updated": "2026-04-19",
-  "progress": 65,
-  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life.",
-  "done": ["v6.x-v7.6.1: In-memory store, health check, GitHub sync, OpenRouter LLM, SR prompt v2, MKB onboarding, edit profile by field, birthday congratulation","v7.7.2: Tavily web search dynamic 1/2/3 sources, Yandex/Google priority, no buttons after result","v7.8.0: think-strip qwen3.5, store_set_tasks multi-user fix, complete_task + delete_task intents","v7.9.0: Task FSM 4 steps (title/deadline/reminder/label), auto-MKB, label keyboards","v7.10.0: Profile card Variant B Style 1, main menu [Profil][Nastrojki], task grouping MKB+labels","v7.11.0: GitHub PUT retry on 409, sequential sync, TASK_LIMIT=21, LABEL_LIMIT=7, achievements counter","v7.12.0: JSON first-object parsing fix, delete_all tasks, Settings CRUD (tasks+labels inline), one_time_keyboard"],
-  "decisions_made": {"sr_gender":"FEMININE. ya zametila, mne vazhno. Actions stay impersonal.","achievements":"Counter only (achievements_count: int). Increments on task close. No list, no manual add.","task_limits":"TASK_LIMIT_HARD=21, LABEL_LIMIT_HARD=7, CHECKLIST_LIMIT=3, CHECKLIST_ITEMS_LIMIT=20","checklists":"Variant A: inline message with toggle buttons per item. Auto-pin. Stored in workspace.checklists[].","voice":"Groq Whisper API. OGG -> transcription -> intent router pipeline. Sprint 3.","morning_brief":"Daily digest replacing old greeting. Always sends. If no tasks propose to fill the day. Time = profile.morning_time.","reminder_v2":"Options: on task day / 3 days before / 1 week before. Time = profile.morning_time auto.","symbiosis_learning":"Max 1 guiding question per session (Ahimsa). Saves to profile.deep_profile. SR synthesizes every 10 dialogues.","settings_menu":"Removed: Smenity gorod + Projti anketu zanovo. Added placeholders for Reminders/Roadmaps/Checklists."},
-  "blocks_plan": {"block_1":{"name":"Голос и честность СР","status":"DONE","version":"v7.5.5-v7.5.6"},"block_2":{"name":"Профиль МКБ + анкета v2","status":"DONE","version":"v7.6.0-v7.6.1"},"block_3":{"name":"Умные действия из контекста","status":"DONE","version":"v7.7.2-v7.12.0","items":["Intent router v2: complete_task, delete_task, delete_all, delete_label, rename_label  DONE","Tavily web search dynamic  DONE","JSON double-output fix  DONE","Settings CRUD for tasks and labels  DONE"]},"sprint_1":{"name":"Стабилизация + фундамент","status":"IN_PROGRESS","version":"v7.13.x","items":["Settings: remove Smenity gorod + Projti anketu zanovo","Reminder options v2: on task day / 3 days before / 1 week before (time = morning_time)","Morning brief v2: daily digest  tasks + progress + resonance + propose if empty","Settings: placeholder slots for Reminders / Roadmaps / Checklists"]},"sprint_2":{"name":"Чеклисты","status":"PENDING","version":"v7.14.x","items":["Checklist FSM: title + items (up to 20)","Inline message: each item = button, tap toggles done/undone, edits in place","Auto-pin: pinned_message_id stored per checklist","CRUD: create / view / toggle / delete. Intent router support.","Limits: 3 checklists, 20 items each","Settings -> Checklists menu"]},"sprint_3":{"name":"Голос (Groq Whisper)","status":"PENDING","version":"v7.15.x","items":["Groq Whisper API: OGG -> transcription -> intent router","Show Слушаю... indicator while processing","Fallback if Groq unavailable"]},"block_4":{"name":"Напоминания","status":"PENDING","version":"v7.16.x","items":["Reminders CRUD from dialog and Settings","APScheduler every 1min","Settings -> Reminders menu","Intent: napomni mne X -> reminder FSM"]},"block_5":{"name":"Роадмапы + Резонанс v2","status":"PENDING","version":"v7.17.x","items":["Roadmaps: goal -> tasks -> progress auto (%) max 3","Resonance v2: per MKB sphere","Decays on 14+ days silence"]},"block_6":{"name":"Глубина, Акаша, Симбиоз","status":"PENDING","version":"v7.18.x","items":["Symbiosis learning: max 1 guiding question per session","Deep profile accumulation","SR synthesis every 10 dialogues","Extended questionnaire"]},"deferred":{"webapp_dashboard":"After block_4+5","akasha_network":"PHI-010 Level 3  long-term","hetzner_hosting":"trigger: 10+ gardeners"}},
-  "architecture": {"version":"v7.12.0","llm":"OpenRouter qwen/qwen3.5-flash-02-23 (1M ctx), sliding window 40 msgs","workspace_schema":{"tasks":"list, max 21 active","groups":"list (labels), max 7","achievements_count":"int","checklists":"list, max 3, 20 items each (Sprint 2)","reminders":"list (Block 4)"},"github_sync":"Sequential writes, retry on 409 SHA conflict","menu":"Main: [Profil][Nastrojki]. one_time_keyboard=True"},
-  "health": {"status":"healthy","last_check":"2026-04-19","notes":"v7.12.0 deployed. Block 1+2+3 DONE. Sprint 1 next: settings cleanup, reminder v2, morning brief v2. Then Sprint 2 checklists, Sprint 3 Groq Whisper voice."}
+  "progress": 72,
+  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion bot that feels the pulse of the Gardener life. Single-file bot.py evolving toward modular architecture.",
+
+  "philosophical_foundation": {
+    "sr_role": "Nervous System / Genius Loci. Not an assistant.",
+    "sr_gender": "FEMININE. ya zametila, mne vazhno. Actions stay impersonal.",
+    "sr_honesty": "Never confirms actions not performed. Redirects to menu.",
+    "sr_dialogue": "Deepens conversation. Max 1 guiding question per session (Ahimsa).",
+    "sr_daily_brief": "Analytics digest always sends at morning_time. If no tasks → propose to fill the day.",
+    "sr_silence_mode": "3+ days silent → one warm message only. Ahimsa.",
+    "merkaba": {"body": "health/sport/sleep/nutrition", "spirit": "work/study/creativity/growth", "world": "relationships/friends/travel/community"}
+  },
+
+  "decisions_made": {
+    "achievements": "Counter only (achievements_count: int). Increments on task close only.",
+    "limits": "tasks=21, groups=7, checklists=3, checklist_items=20, roadmaps=3",
+    "groups": "Renamed from labels. Emoji: 🎨. Auto-unique via _assign_group_emojis + fallback pool.",
+    "profile_header": "🪬 Name · City",
+    "mkb_spheres": "3 only: Тело/Дух/Мир. No 'other'. Default unclassified → Мир. Re-classify on display.",
+    "checklists": "Variant A: inline message, each item = toggle button. Auto-pin. workspace.checklists[].",
+    "voice": "Groq Whisper API. OGG → transcription → intent router. Sprint 3.",
+    "morning_brief": "Always sends. Analytics: date + resonance + achievements + top tasks by deadline.",
+    "reminder_v2": "on day / 3 days before / week before / custom ДД.ММ.ГГ ЧЧ:ММ. Any time.",
+    "task_editing_chat": "edit_task intent: title / deadline / reminder / group. All 4 fields from chat.",
+    "modularization": "Sprint 4: split bot.py into modules. See module_map below.",
+    "settings_structure": "Задачи&Группы / Напоминания(!) / Чеклисты(!) / Роадмапы(!) / Улучшить симбиоз(!)",
+    "fsm_cancel": "back_to_settings always calls state.clear(). Prevents FSM leak."
+  },
+
+  "module_map": {
+    "description": "Target modular structure after Sprint 4. Each module is independent and reusable for other bots.",
+    "modules": {
+      "bot_core.py": "Bot init, webhook, scheduler startup, on_startup/on_shutdown. No business logic.",
+      "store.py": "In-memory _store, all store_get/store_set functions, _pending_writes, GitHub sync (_github_put, _sync_pending, _fire_sync).",
+      "auth.py": "is_authorized, whitelist management, architect approval flow, _invalidate_auth_cache.",
+      "keyboards.py": "All InlineKeyboardMarkup and ReplyKeyboardMarkup factory functions. get_main_keyboard, get_settings_inline, get_tasks_mgmt_inline, get_labels_mgmt_inline, get_deadline_keyboard, get_reminder_keyboard, etc.",
+      "profile.py": "_build_profile_card, _label_emoji, _group_emoji, _assign_group_emojis, cmd_profile, btn_profile, onboarding FSM (OnboardStates), edit profile handlers.",
+      "tasks.py": "TaskStates FSM, cmd_tasks, _format_tasks_mkb, _format_tasks_labels, _auto_merkaba, confirm_task, task CRUD handlers (done/del/edit), tasks_toggle_view. TaskEditStates FSM.",
+      "groups.py": "LabelRenameStates FSM, group CRUD (create/rename/delete), get_labels_keyboard, cb_labels_mgmt.",
+      "checklists.py": "ChecklistStates FSM, checklist CRUD, toggle handler, auto-pin logic. (Sprint 2)",
+      "reminders.py": "ReminderStates FSM, reminder CRUD, APScheduler check job. (Block 4)",
+      "roadmaps.py": "RoadmapStates FSM, roadmap CRUD, progress calculation. (Block 5)",
+      "sr_engine.py": "_call_openrouter, _build_user_context_msg, _get_history, _add_to_history, free_conversation handler, intent router, _tavily_search, _fix_layout.",
+      "proactive.py": "send_morning_greeting (brief v2), run_proactive_scheduler, run_resonance_decay, send_evening_checkin, _can_send_proactive, _mark_proactive_sent, _silence_phase.",
+      "settings.py": "btn_settings, cb_tasks_mgmt, cb_labels_mgmt, cb_back_to_settings, cb_coming_soon, all settings navigation callbacks.",
+      "utils.py": "_today, _json_dumps, calculate_priority, _make_group_id, get_http_session, _time_matches, _track_interaction, _last_interaction, _proactive_sent_today."
+    },
+    "reuse_note": "store.py + auth.py + sr_engine.py + utils.py are fully reusable for any new bot. keyboards.py and profile.py are Mandala-specific but serve as templates."
+  },
+
+  "done": [
+    "v6.x-v7.3: In-memory store, health check, GitHub sync, OpenRouter LLM, sliding window 40 msgs, multi-user, SHA cache",
+    "v7.4-v7.5: 2-button menu, intent router, architect auth, webhook auto-restore, auto-layout Latin→Cyrillic",
+    "v7.5.5-v7.5.6: SR prompt v2, feminine gender, PHI depth, city in context, empty reply fix",
+    "v7.6.0-v7.6.1: MKB onboarding v2, edit profile by field, birthday congratulation",
+    "v7.7.2: Tavily web search dynamic 1/2/3 sources, Yandex/Google priority",
+    "v7.8.0: think-strip qwen3.5, complete_task + delete_task intents, multi-user fix",
+    "v7.9.0: Task FSM 4 steps (title/deadline/reminder/group), auto-MKB",
+    "v7.10.0: Profile card Variant B Style 1, [Profil][Nastrojki] main menu",
+    "v7.11.0: GitHub PUT retry on 409, sequential sync, TASK_LIMIT=21, GROUP_LIMIT=7, achievements counter",
+    "v7.12.0: JSON first-object fix (JSONDecoder.raw_decode), delete_all tasks, Settings CRUD inline, one_time_keyboard",
+    "v7.13.0: Settings cleanup, reminder v2 keyboard (on day/3days/week), morning brief v2 analytics digest",
+    "v7.14.0: Groups rename (label→group everywhere), settings restructure, _assign_group_emojis unique, 🪬 header, custom reminder ДД.ММ.ГГ ЧЧ:ММ",
+    "v7.15.0: Inline cancel on task title, 🗂→🎨, typo fix, tasks+groups unified mgmt, _format_tasks_labels with unique emojis",
+    "v7.16.0: Task editing from settings [✏️] → field selector (title/deadline/reminder/group), TaskEditStates FSM, edit_task intent in prompt",
+    "v7.17.0: MKB 3 spheres only (no other), expanded _auto_merkaba keywords, default→Мир, cancel button on group rename",
+    "v7.17.1: state.clear() in back_to_settings (fixes FSM leak on cancel), _format_tasks_mkb re-classifies on display"
+  ],
+
+  "sprint_2": {
+    "name": "Чеклисты + Редактирование задач из чата",
+    "status": "NEXT",
+    "version": "v7.18.x",
+    "items": [
+      "edit_task intent handlers: title / deadline / reminder / group — all 4 fields from chat dialog",
+      "Checklist FSM (ChecklistStates): title → items (add one by one or batch via newlines)",
+      "Checklist inline message: each item = toggle button ☐/✅, message edits in place on tap",
+      "Checklist auto-pin: bot.pin_chat_message(), pinned_message_id stored in workspace",
+      "Checklist CRUD: create / view / toggle items / delete — from Settings and chat intent",
+      "Intent: 'sozday chekList X s punktami A B C' → FSM auto-fills items",
+      "Limits: 3 checklists per user, 20 items each",
+      "Settings → Чеклисты (!) → full section with list + [☑️ open] [🗑 delete] per checklist"
+    ]
+  },
+
+  "sprint_3": {
+    "name": "Голос (Groq Whisper)",
+    "status": "PENDING",
+    "version": "v7.19.x",
+    "items": [
+      "voice_message handler: download OGG → send to Groq Whisper API → get transcription",
+      "Transcribed text → normal intent router pipeline (no duplicate logic)",
+      "Show 'Слушаю... 🎙' indicator while processing (edit message after)",
+      "Fallback: 'Не расслышала, попробуй ещё раз 🌿' if Groq unavailable",
+      "GROQ_API_KEY env variable"
+    ]
+  },
+
+  "sprint_4": {
+    "name": "Модуляризация (monolith → modules)",
+    "status": "PENDING",
+    "version": "v7.20.x",
+    "items": [
+      "Split bot.py into modules per module_map above",
+      "Create /bot/ package: __init__.py + all module files",
+      "Main entry: main.py imports from bot/ package",
+      "Each module has module docstring: purpose, dependencies, reuse notes",
+      "SR system prompt includes module_map summary so SR knows what to edit where",
+      "README.md: module structure diagram + how to create a new bot from this base",
+      "Zero breaking changes: all handlers/callbacks remain identical"
+    ]
+  },
+
+  "block_4": {
+    "name": "Напоминания",
+    "status": "PENDING",
+    "version": "v7.21.x",
+    "items": [
+      "workspace.reminders[]: [{id, title, datetime_iso, repeat, task_id?, active}]",
+      "ReminderStates FSM: title → datetime → repeat mode → confirm",
+      "APScheduler every 1min: check reminders against now() in user timezone",
+      "Repeat modes: once / daily / weekdays",
+      "CRUD from chat: 'napomni mne X zavtra v 9' and from Settings → Напоминания",
+      "Settings → Напоминания (!) → full section: list + [✏️][🗑] per reminder",
+      "Reminder delivered as bot message with task link if task_id present"
+    ]
+  },
+
+  "block_5": {
+    "name": "Роадмапы + Резонанс v2",
+    "status": "PENDING",
+    "version": "v7.22.x",
+    "items": [
+      "workspace.roadmaps[]: [{id, title, goal, task_ids[], progress_pct, created}]",
+      "Progress auto-calculated: completed_tasks / total_tasks * 100",
+      "Max 3 roadmaps. Settings → Роадмапы (!) → full section",
+      "Resonance v2: per MKB sphere separately (body_res, spirit_res, world_res)",
+      "Sphere resonance decays on 14+ days silence in that sphere",
+      "SR notices imbalance: 'Твой Дух сейчас активнее всего. Как Тело?'",
+      "Profile card updated: show per-sphere resonance bars"
+    ]
+  },
+
+  "block_6": {
+    "name": "Глубина, Акаша, Симбиоз",
+    "status": "PENDING",
+    "version": "v7.23.x",
+    "items": [
+      "Symbiosis learning: max 1 guiding question per session (Ahimsa, organic moment only)",
+      "profile.deep_profile: {interests, values, life_events, communication_style, observations}",
+      "Guiding questions bank by MKB sphere (15+ questions each sphere)",
+      "SR synthesis every 10 dialogues → updates deep_profile summary",
+      "Улучшить симбиоз: structured questionnaire → saves to deep_profile",
+      "Seeds: sacred tone, real github_put, Ahimsa filter on idea content"
+    ]
+  },
+
+  "deferred": {
+    "webapp_dashboard": "After block_4+5. WebApp as visual garden dashboard.",
+    "akasha_network": "PHI-010 Level 3. Long-term collective memory.",
+    "hetzner_hosting": "Trigger: 10+ active gardeners. CX23 VPS.",
+    "private_repo": "Trigger: 5+ active gardeners."
+  },
+
+  "architecture": {
+    "current_version": "v7.17.1",
+    "current_structure": "Single file bot.py (~3700 lines). Moving to modular in Sprint 4.",
+    "llm": "OpenRouter qwen/qwen3.5-flash-02-23. Sliding window 40 msgs. 5-model fallback chain.",
+    "workspace_schema": {
+      "tasks": "list, max 21 active",
+      "groups": "list (renamed from labels), max 7, auto-unique emoji",
+      "achievements_count": "int, increments on task close only",
+      "checklists": "list, max 3, 20 items each (Sprint 2)",
+      "reminders": "list (Block 4)",
+      "roadmaps": "list, max 3 (Block 5)"
+    },
+    "github_sync": "Sequential writes. Retry on 409 SHA conflict with fresh SHA.",
+    "menu": "Main: [🪬 Profil][⚙️ Nastrojki]. one_time_keyboard=True.",
+    "intent_router": "Intents: conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label",
+    "edit_task_fields": "title / deadline / reminder / group — all editable from chat and settings menu",
+    "mkb_classification": "_auto_merkaba re-runs on display. 3 spheres only. Expanded keyword lists. Default → Мир.",
+    "fsm_safety": "back_to_settings always calls state.clear(). All FSM states named in TaskStates/TaskEditStates/LabelRenameStates/ChecklistStates/ReminderStates."
+  },
+
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-19",
+    "current_version": "v7.17.1",
+    "notes": "Sprint 1 complete. Task editing from menu done. MKB fixed. FSM leak fixed. Sprint 2 next: checklists + edit_task from chat. Then voice, modularization, reminders, roadmaps, symbiosis."
+  }
 }
