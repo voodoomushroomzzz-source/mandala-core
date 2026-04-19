@@ -2,39 +2,7 @@
   "sessions": [
     {
       "role": "user",
-      "content": "Удали все задачи"
-    },
-    {
-      "role": "assistant",
-      "content": "🗑 Удалено 4 задач. Поле чисто."
-    },
-    {
-      "role": "user",
-      "content": "Добавь задачу доделать бота"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Сходить на тренеровку"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Подключить ледген"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Покажи мои задачи"
+      "content": "Покажи мои заачи"
     },
     {
       "role": "assistant",
