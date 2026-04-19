@@ -1,26 +1,5 @@
-import re
 #!/usr/bin/env python3
-"""
-Mandala Garden Bot — Gentle Companion v7.17.2
-
-ARCHITECTURE CHANGE (v7.7.1):
-- In-memory store for all gardener data (gardener, tasks, achievements, groups)
-- All READ operations: instant from memory, zero GitHub API calls
-- All WRITE operations: update memory first → respond to user → sync to GitHub
-  in background via asyncio.create_task (fire-and-forget)
-- On startup: load all 4 files in parallel via asyncio.gather (~2s, one-time)
-- On restart: re-load from GitHub (source of truth)
-- Result: no more hanging. User gets response in <100ms always.
-
-FIXES (v7.1.1):
-- Fixed HTML parse error in free_conversation (parse_mode=None for LLM responses)
-- Wrapped scheduler jobs in try/except to prevent silent scheduler shutdown
-- Completed truncated quick_add_achievement handler
-
-EMOJI (v7.7.1):
-- Botanical-sacred palette: 🌾 💎 🌀 🔮  🌿 🌄 🌒 🌱 ✅ ❌ ⚠️
-- Life areas: 🌿 🔥 📿 🧭 
-"""
+# Mandala Garden Bot — SR Gentle Companion v7.18.0
 
 import os
 import sys
@@ -502,13 +481,14 @@ class AchievementStates(StatesGroup):
     waiting_for_bonus = State()
 
 class TaskStates(StatesGroup):
-    waiting_for_title          = State()
-    waiting_for_deadline       = State()
-    waiting_for_reminder       = State()
+    waiting_for_title           = State()
+    waiting_for_deadline        = State()
+    waiting_for_custom_deadline = State()
+    waiting_for_reminder        = State()
     waiting_for_custom_reminder = State()
-    waiting_for_group          = State()
-    waiting_for_new_group      = State()
-    waiting_for_confirm        = State()
+    waiting_for_group           = State()
+    waiting_for_new_group       = State()
+    waiting_for_confirm         = State()
 
 class TaskEditStates(StatesGroup):
     waiting_for_field    = State()   # field selector shown
@@ -709,18 +689,21 @@ def get_tasks_mgmt_inline(tasks: list, user_id: str = "") -> InlineKeyboardMarku
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_labels_mgmt_inline(labels: list) -> InlineKeyboardMarkup:
-    """Groups management menu: create + list with rename/delete + unique emojis."""
+    """Groups management: create + list with up/down/rename/delete + unique emojis."""
     emoji_map = _assign_group_emojis(labels)
     btns = [[InlineKeyboardButton(text="➕ Новая группа", callback_data="lbl_create_mgmt")]]
-    for lb in labels[:7]:
-        name  = lb.get("name", "—")[:26]
+    for idx, lb in enumerate(labels[:7]):
+        name  = lb.get("name", "—")[:20]
         lid   = lb.get("id", "")
         emoji = emoji_map.get(lid, "🎨")
-        btns.append([
-            InlineKeyboardButton(text=f"{emoji} {name}", callback_data=f"lbl_noop_{lid}"),
-            InlineKeyboardButton(text="✏️",              callback_data=f"lbl_rename_{lid}"),
-            InlineKeyboardButton(text="🗑",              callback_data=f"lbl_del_{lid}"),
-        ])
+        row = [InlineKeyboardButton(text=f"{emoji} {name}", callback_data=f"lbl_noop_{lid}")]
+        if idx > 0:
+            row.append(InlineKeyboardButton(text="↑", callback_data=f"lbl_up_{lid}"))
+        if idx < len(labels) - 1:
+            row.append(InlineKeyboardButton(text="↓", callback_data=f"lbl_dn_{lid}"))
+        row.append(InlineKeyboardButton(text="✏️", callback_data=f"lbl_rename_{lid}"))
+        row.append(InlineKeyboardButton(text="🗑",  callback_data=f"lbl_del_{lid}"))
+        btns.append(row)
     btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
@@ -771,12 +754,12 @@ def get_deadline_keyboard() -> InlineKeyboardMarkup:
     t = datetime.now()
     f = lambda d: d.strftime("%Y-%m-%d")
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="📅 Сегодня",    callback_data="dl_" + f(t))],
-        [InlineKeyboardButton(text="📅 Завтра",     callback_data="dl_" + f(t + timedelta(days=1)))],
-        [InlineKeyboardButton(text="📅 +3 дня",     callback_data="dl_" + f(t + timedelta(days=3)))],
-        [InlineKeyboardButton(text="📅 +неделя",    callback_data="dl_" + f(t + timedelta(days=7)))],
-        [InlineKeyboardButton(text="⏭ Пропустить",  callback_data="dl_skip")],
-        [InlineKeyboardButton(text="❌ Отмена",      callback_data="cancel_task")],
+        [InlineKeyboardButton(text="📅 Завтра",      callback_data="dl_" + f(t + timedelta(days=1)))],
+        [InlineKeyboardButton(text="📅 +неделя",     callback_data="dl_" + f(t + timedelta(days=7)))],
+        [InlineKeyboardButton(text="📅 +месяц",      callback_data="dl_" + f(t + timedelta(days=30)))],
+        [InlineKeyboardButton(text="✏️ Своя дата",   callback_data="dl_custom")],
+        [InlineKeyboardButton(text="⏭ Пропустить",   callback_data="dl_skip")],
+        [InlineKeyboardButton(text="❌ Отмена",       callback_data="cancel_task")],
     ])
 
 def get_reminder_keyboard(deadline: str = None) -> InlineKeyboardMarkup:
@@ -1245,6 +1228,49 @@ async def cb_task_del_mgmt(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("task_noop_"))
 async def cb_task_noop(callback: CallbackQuery):
     await callback.answer()  # do nothing — label button
+
+
+@router.callback_query(F.data.startswith("lbl_up_"))
+async def cb_group_up(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    lid = callback.data[len("lbl_up_"):]
+    grp_data = store_get_groups(user_id)
+    labels = grp_data.get("groups", [])
+    idx = next((i for i, g in enumerate(labels) if g["id"] == lid), None)
+    if idx and idx > 0:
+        labels[idx], labels[idx-1] = labels[idx-1], labels[idx]
+        grp_data["groups"] = labels
+        store_set_groups(user_id, grp_data)
+        _fire_sync()
+    try:
+        await callback.message.edit_text(
+            f"🎨 <b>Группы</b> ({len(labels)}/{LABEL_LIMIT_HARD})",
+            reply_markup=get_labels_mgmt_inline(labels)
+        )
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("lbl_dn_"))
+async def cb_group_down(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    lid = callback.data[len("lbl_dn_"):]
+    grp_data = store_get_groups(user_id)
+    labels = grp_data.get("groups", [])
+    idx = next((i for i, g in enumerate(labels) if g["id"] == lid), None)
+    if idx is not None and idx < len(labels) - 1:
+        labels[idx], labels[idx+1] = labels[idx+1], labels[idx]
+        grp_data["groups"] = labels
+        store_set_groups(user_id, grp_data)
+        _fire_sync()
+    try:
+        await callback.message.edit_text(
+            f"🎨 <b>Группы</b> ({len(labels)}/{LABEL_LIMIT_HARD})",
+            reply_markup=get_labels_mgmt_inline(labels)
+        )
+    except Exception:
+        pass
 
 @router.callback_query(F.data.startswith("lbl_del_"))
 async def cb_label_del_mgmt(callback: CallbackQuery, state: FSMContext):
@@ -1864,6 +1890,14 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
 
 @router.message(Command("tasks"))
 @router.message(F.text == "🌀 Задачи")
+
+def _sort_by_deadline(tasks: list) -> list:
+    """Sort tasks: nearest deadline first, no deadline last."""
+    def key(t):
+        dl = t.get("deadline")
+        return dl if dl else "9999-99-99"
+    return sorted(tasks, key=key)
+
 def _format_tasks_mkb(tasks: list) -> str:
     """Format active tasks grouped by МКБ sphere (3 spheres only)."""
     mkb_groups = {
@@ -1872,7 +1906,6 @@ def _format_tasks_mkb(tasks: list) -> str:
         "world":  ("🤝 Мир",  []),
     }
     for t in tasks:
-        # Re-classify on the fly so old/stale life_area values are corrected
         area = _auto_merkaba(t.get("title", ""), t.get("label_name", ""))
         if area not in mkb_groups:
             area = "world"
@@ -1882,7 +1915,7 @@ def _format_tasks_mkb(tasks: list) -> str:
         if not items:
             continue
         parts.append(f"<b>{label}</b>")
-        for t in items[:5]:
+        for t in _sort_by_deadline(items)[:5]:
             dl = " · " + t["deadline"] if t.get("deadline") else ""
             lbl = (" #" + t["label_name"]) if t.get("label_name") else ""
             parts.append(f"  • {t['title']}{lbl}{dl}")
@@ -1908,13 +1941,13 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
             continue
         emoji = get_emoji(gname)
         parts.append(f"<b>{emoji} {gname}</b>")
-        for t in items[:5]:
+        for t in _sort_by_deadline(items)[:5]:
             dl = " · " + t["deadline"] if t.get("deadline") else ""
             parts.append(f"  • {t['title']}{dl}")
     no_group = by_group.get("", [])
     if no_group:
         parts.append("<b>🌱 Без группы</b>")
-        for t in no_group[:5]:
+        for t in _sort_by_deadline(no_group)[:5]:
             dl = " · " + t["deadline"] if t.get("deadline") else ""
             parts.append(f"  • {t['title']}{dl}")
     return "\n".join(parts) if parts else ""
@@ -2032,6 +2065,23 @@ async def task_title(message: Message, state: FSMContext):
 async def task_deadline_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     val = callback.data[3:]
+    if val == "custom":
+        await state.set_state(TaskStates.waiting_for_custom_deadline)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")]
+        ])
+        try:
+            await callback.message.edit_text(
+                "✏️ <b>Своя дата</b>\n\nВведи в формате: <code>ДД.ММ.ГГ</code>\n"
+                "<i>Пример: 25.05.26</i>",
+                reply_markup=cancel_kb
+            )
+        except Exception:
+            await callback.message.answer(
+                "✏️ Введи дату: <code>ДД.ММ.ГГ</code>",
+                reply_markup=cancel_kb
+            )
+        return
     deadline = None if val == "skip" else val
     await state.update_data(deadline=deadline)
     await state.set_state(TaskStates.waiting_for_reminder)
@@ -2046,6 +2096,36 @@ async def task_deadline_cb(callback: CallbackQuery, state: FSMContext):
             "🔔 <b>Напоминание?</b>",
             reply_markup=get_reminder_keyboard(deadline)
         )
+
+@router.message(StateFilter(TaskStates.waiting_for_custom_deadline))
+async def task_custom_deadline_input(message: Message, state: FSMContext):
+    if message.text and message.text.strip() == "❌ Отмена":
+        await state.clear()
+        await message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+        return
+    import re as _re
+    text = (message.text or "").strip()
+    deadline = None
+    m = _re.match(r"^(\d{2})\.(\d{2})\.(\d{2})$", text)
+    if m:
+        dd, mm, yy = m.groups()
+        deadline = f"20{yy}-{mm}-{dd}"
+    elif _re.match(r"^\d{4}-\d{2}-\d{2}$", text):
+        deadline = text
+    if not deadline:
+        await message.answer(
+            "⚠️ Не понял формат. Введи: <code>ДД.ММ.ГГ</code>\n<i>Пример: 25.05.26</i>",
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")]
+            ])
+        )
+        return
+    await state.update_data(deadline=deadline)
+    await state.set_state(TaskStates.waiting_for_reminder)
+    await message.answer(
+        f"📅 {deadline}\n🔔 <b>Напоминание?</b>",
+        reply_markup=get_reminder_keyboard(deadline)
+    )
 
 @router.message(StateFilter(TaskStates.waiting_for_deadline))
 async def task_deadline_text(message: Message, state: FSMContext):
@@ -3629,15 +3709,32 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = f"✅ Название → «{value}»"
                                 elif field in ("deadline", "дедлайн", "срок", "дата"):
                                     import re as _re2
-                                    m2 = _re2.match(r"(\d{2})\.(\d{2})\.(\d{2,4})", value)
-                                    if m2:
-                                        dd,mm,yy = m2.groups()
-                                        yy = "20"+yy if len(yy)==2 else yy
-                                        t["deadline"] = f"{yy}-{mm}-{dd}"
+                                    from datetime import datetime as _dtt, timedelta as _tdd
+                                    _val_lower = value.lower().strip()
+                                    _dl = None
+                                    # Natural language → date
+                                    if _val_lower in ("сегодня", "today"):
+                                        _dl = _dtt.now().strftime("%Y-%m-%d")
+                                    elif _val_lower in ("завтра", "tomorrow"):
+                                        _dl = (_dtt.now() + _tdd(days=1)).strftime("%Y-%m-%d")
+                                    elif _val_lower in ("послезавтра",):
+                                        _dl = (_dtt.now() + _tdd(days=2)).strftime("%Y-%m-%d")
+                                    elif _re2.match(r"через (\d+) дн", _val_lower):
+                                        _n = int(_re2.search(r"(\d+)", _val_lower).group(1))
+                                        _dl = (_dtt.now() + _tdd(days=_n)).strftime("%Y-%m-%d")
                                     else:
-                                        t["deadline"] = value
-                                    t["updated"] = _today()
-                                    reply_text = f"✅ Дедлайн → {t['deadline']}"
+                                        _m2 = _re2.match(r"(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?", value)
+                                        if _m2:
+                                            _dd,_mm = _m2.group(1).zfill(2),_m2.group(2).zfill(2)
+                                            _yy = _m2.group(3) or str(_dtt.now().year)
+                                            _yy = "20"+_yy if len(_yy)==2 else _yy
+                                            _dl = f"{_yy}-{_mm}-{_dd}"
+                                    if _dl:
+                                        t["deadline"] = _dl
+                                        t["updated"]  = _today()
+                                        reply_text = f"✅ Дедлайн → {_dl}"
+                                    else:
+                                        reply_text = f"🌀 Не понял дату «{value}». Напиши: завтра / 25.05 / 25.05.26"
                                 elif field in ("reminder", "напоминание", "напомни"):
                                     t["reminder"] = value
                                     t["updated"]  = _today()
