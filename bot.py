@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Mandala Garden Bot — SR Gentle Companion v7.18.0
 
+import re
 import os
 import sys
 import json
@@ -3500,8 +3501,9 @@ async def free_conversation(message: Message, state: FSMContext):
                     # Strategy: replace any unescaped " that appear INSIDE string values
                     # by using a two-pass repair:
                     # Pass 1: escape unescaped quotes inside known string fields
+                    import re as _re  # ensure available in this scope
                     def _repair_json(s: str) -> str:
-                        import re as _re
+                        _re2 = _re
                         # Replace straight ASCII quotes inside text/title values
                         # with typographic equivalents to preserve JSON structure
                         # Pattern: after ": " or ,"  find broken quotes in values
@@ -3512,7 +3514,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             inner_fixed = inner.replace('"', '\\"')
                             return f'"{key}": "{inner_fixed}"'
                         # Fix string values: "key": "...broken..."
-                        repaired = _re.sub(
+                        repaired = _re2.sub(
                             r'"(\w+)":\s*"((?:[^"\\\n]|\\.)*(?:"(?:[^"\\\n]|\\.)*")*(?:[^"\\\n]|\\.)*)"',
                             fix_value, s
                         )
@@ -3530,16 +3532,16 @@ async def free_conversation(message: Message, state: FSMContext):
                     raw_clean = json.dumps(parsed, ensure_ascii=False)
                 else:
                     # 3c. Last resort: regex-extract "text" field only
-                    m = re.search(r'"text"\s*:\s*"((?:[^\\"\n]|\\.)*)"', raw_clean)
+                    m = _re.search(r'"text"\s*:\s*"((?:[^\\"\n]|\\.)*)"', raw_clean)
                     if m:
                         reply_text = m.group(1).replace("\\n", "\n").replace("\\'", "'")
                     else:
                         reply_text = ""  # NEVER show raw JSON
                     # Try to get intent for router even from broken JSON
-                    m_intent = re.search(r'"intent"\s*:\s*"([^"]+)"', raw_clean)
-                    m_conf   = re.search(r'"confidence"\s*:\s*([\d.]+)', raw_clean)
-                    m_atype  = re.search(r'"type"\s*:\s*"([^"]+)"', raw_clean)
-                    m_atitle = re.search(r'"title"\s*:\s*"([^"]+)"', raw_clean)
+                    m_intent = _re.search(r'"intent"\s*:\s*"([^"]+)"', raw_clean)
+                    m_conf   = _re.search(r'"confidence"\s*:\s*([\d.]+)', raw_clean)
+                    m_atype  = _re.search(r'"type"\s*:\s*"([^"]+)"', raw_clean)
+                    m_atitle = _re.search(r'"title"\s*:\s*"([^"]+)"', raw_clean)
                     parsed = {
                         "intent": m_intent.group(1) if m_intent else "conversation",
                         "confidence": float(m_conf.group(1)) if m_conf else 1.0,
