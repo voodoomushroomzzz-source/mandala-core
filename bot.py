@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.13.0
+Mandala Garden Bot — Gentle Companion v7.14.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -502,12 +502,13 @@ class AchievementStates(StatesGroup):
     waiting_for_bonus = State()
 
 class TaskStates(StatesGroup):
-    waiting_for_title     = State()
-    waiting_for_deadline  = State()
-    waiting_for_reminder  = State()
-    waiting_for_label     = State()
-    waiting_for_new_label = State()
-    waiting_for_confirm   = State()
+    waiting_for_title          = State()
+    waiting_for_deadline       = State()
+    waiting_for_reminder       = State()
+    waiting_for_custom_reminder = State()
+    waiting_for_group          = State()
+    waiting_for_new_group      = State()
+    waiting_for_confirm        = State()
 
 class AskStates(StatesGroup):
     waiting_for_question = State()
@@ -522,17 +523,67 @@ class LeaveStates(StatesGroup):
 
 # ─── Profile card builder ─────────────────────────────────────────────────────
 
-def _label_emoji(name: str) -> str:
+# Keyword → emoji mapping for groups
+_GROUP_EMOJI_MAP = [
+    (["здоровье","врач","медиц","лечени"],                        "🌿"),
+    (["спорт","тренировк","фитнес","бег","зал","физ"],            "🏃"),
+    (["работа","проект","бот","код","разраб","dev","программ"],   "💻"),
+    (["учёба","книга","курс","знания","учить","читать","образован"],"📚"),
+    (["дом","быт","уборка","кухня","квартира","ремонт"],          "🏠"),
+    (["друг","встреч","общени","знаком","семья"],                 "🤝"),
+    (["путешеств","поездка","отель","тревел","тур"],              "✈️"),
+    (["деньги","финанс","бюджет","доход","расход"],               "💰"),
+    (["творчество","арт","дизайн","рисован"],                     "🎨"),
+    (["музыка","песня","инструмент","звук"],                      "🎵"),
+    (["фото","видео","съёмка","контент","блог"],                  "📷"),
+    (["еда","питание","кафе","ресторан","готовк"],                "🍽"),
+    (["медитац","духовн","практик","осознан","йога"],             "🧘"),
+    (["авто","машина","транспорт","мотоцикл"],                    "🚗"),
+    (["мандала","симбиоз","резонанс","сад","рост"],               "🌀"),
+    (["личное","личн","себя","мой","моё"],                        "🔮"),
+    (["покупк","магазин","шопинг","заказ"],                       "🛒"),
+    (["игры","игра","геймин","steam"],                            "🎮"),
+    (["наука","исследован","эксперимент","анализ"],               "🔬"),
+    (["люди","коллег","команда","нетворк"],                       "🌐"),
+]
+_GROUP_FALLBACK_POOL = ["⚡","🎯","🔑","💡","🌊","🏔","🦋","🌙","⭐","🔥","🌸","🪐","🧩","🏅","🎪"]
+
+def _group_emoji(name: str) -> str:
+    """Return emoji for a group name based on keywords."""
     n = name.lower()
-    if any(k in n for k in ["здоровье","спорт","врач","тело","бег","зал","фитнес","питание"]): return "🌿"
-    if any(k in n for k in ["работа","проект","бот","код","разраб","dev","программ"]): return "💻"
-    if any(k in n for k in ["учёба","книга","курс","знания","учить","читать","образован"]): return "📚"
-    if any(k in n for k in ["дом","быт","уборка","кухня","квартира","ремонт"]): return "🏠"
-    if any(k in n for k in ["друг","встреч","общени","люди","знаком","семья"]): return "🤝"
-    if any(k in n for k in ["путешеств","поездка","отель","тревел"]): return "✈️"
-    if any(k in n for k in ["деньги","финанс","бюджет","доход"]): return "💰"
-    if any(k in n for k in ["творчество","музыка","арт","дизайн","фото","видео"]): return "🎨"
-    return "🌱"
+    for keywords, emoji in _GROUP_EMOJI_MAP:
+        if any(k in n for k in keywords):
+            return emoji
+    return ""  # Will use fallback pool
+
+def _label_emoji(name: str) -> str:
+    """Alias kept for backwards compat."""
+    return _group_emoji(name) or "🌱"
+
+def _assign_group_emojis(groups: list) -> dict:
+    """Assign unique emojis to a list of groups. Returns {group_id: emoji}."""
+    used = set()
+    result = {}
+    fallback = list(_GROUP_FALLBACK_POOL)
+    # First pass: assign keyword-based emojis if unique
+    for g in groups:
+        e = _group_emoji(g.get("name", ""))
+        if e and e not in used:
+            result[g["id"]] = e
+            used.add(e)
+        else:
+            result[g["id"]] = None  # will fill from fallback
+    # Second pass: fill unassigned from fallback pool
+    for g in groups:
+        if result[g["id"]] is None:
+            for fb in fallback:
+                if fb not in used:
+                    result[g["id"]] = fb
+                    used.add(fb)
+                    break
+            else:
+                result[g["id"]] = "🌱"  # absolute last resort
+    return result
 
 def _build_profile_card(user_id: str) -> str:
     profile    = store_get_profile(user_id) or {}
@@ -544,28 +595,38 @@ def _build_profile_card(user_id: str) -> str:
     ach_count  = store_get_achievements_count(user_id)
     city_part  = f" · {city}" if city else ""
     lines = [
-        f"🌾 <b>{name}</b>{city_part}",
+        f"✦ <b>{name}</b>{city_part}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
     ]
     if not active:
         lines.append("\n🌀 Активных задач нет")
         return "\n".join(lines)
     lines.append("")
-    by_label: dict = {}
+    # Group tasks by group_name, assign unique emojis
+    by_group: dict = {}
     for t in active:
         key = t.get("label_name") or ""
-        by_label.setdefault(key, []).append(t)
-    for label_name, items in by_label.items():
-        if not label_name:
+        by_group.setdefault(key, []).append(t)
+    # Build emoji map for named groups
+    groups_data = store_get_groups(user_id).get("groups", [])
+    emoji_map = _assign_group_emojis(groups_data)
+    # Helper: get emoji by group name
+    def get_group_emoji(gname: str) -> str:
+        for g in groups_data:
+            if g.get("name") == gname:
+                return emoji_map.get(g["id"], "🌱")
+        return _group_emoji(gname) or "🌱"
+    for group_name, items in by_group.items():
+        if not group_name:
             continue
-        emoji = _label_emoji(label_name)
-        lines.append(f"{emoji} <b>{label_name}</b>")
+        emoji = get_group_emoji(group_name)
+        lines.append(f"{emoji} <b>{group_name}</b>")
         for t in items[:5]:
             dl = f" · {t['deadline']}" if t.get("deadline") else ""
             lines.append(f"  · {t['title']}{dl}")
-    unlabeled = by_label.get("", [])
+    unlabeled = by_group.get("", [])
     if unlabeled:
-        lines.append("🌱 <b>Без лейбла</b>")
+        lines.append("🌱 <b>Без группы</b>")
         for t in unlabeled[:5]:
             dl = f" · {t['deadline']}" if t.get("deadline") else ""
             lines.append(f"  · {t['title']}{dl}")
@@ -616,13 +677,11 @@ def get_edit_profile_inline() -> InlineKeyboardMarkup:
 
 def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌀 Задачи",                 callback_data="menu_tasks_mgmt")],
-        [InlineKeyboardButton(text="🏷 Лейблы",                 callback_data="menu_labels_mgmt")],
-        [InlineKeyboardButton(text="✏️ Изменить профиль",       callback_data="menu_edit_profile")],
-        [InlineKeyboardButton(text="📋 Расширенная анкета (!)", callback_data="menu_extended")],
+        [InlineKeyboardButton(text="🌀 Задачи & Группы",        callback_data="menu_tasks_mgmt")],
         [InlineKeyboardButton(text="🔔 Напоминания (!)",        callback_data="menu_reminders_soon")],
-        [InlineKeyboardButton(text="🗺 Роадмапы (!)",           callback_data="menu_roadmaps_soon")],
         [InlineKeyboardButton(text="☑️ Чеклисты (!)",           callback_data="menu_checklists_soon")],
+        [InlineKeyboardButton(text="🗺 Роадмапы (!)",           callback_data="menu_roadmaps_soon")],
+        [InlineKeyboardButton(text="🔬 Улучшить симбиоз (!)",   callback_data="menu_extended")],
     ])
 
 def get_tasks_mgmt_inline(tasks: list) -> InlineKeyboardMarkup:
@@ -642,7 +701,7 @@ def get_tasks_mgmt_inline(tasks: list) -> InlineKeyboardMarkup:
 
 def get_labels_mgmt_inline(labels: list) -> InlineKeyboardMarkup:
     """Labels management menu: create + list with rename/delete."""
-    btns = [[InlineKeyboardButton(text="➕ Новый лейбл", callback_data="lbl_create_mgmt")]]
+    btns = [[InlineKeyboardButton(text="➕ Новая группа", callback_data="lbl_create_mgmt")]]
     for lb in labels[:7]:
         name = lb.get("name", "—")[:28]
         lid  = lb.get("id", "")
@@ -710,8 +769,7 @@ def get_deadline_keyboard() -> InlineKeyboardMarkup:
     ])
 
 def get_reminder_keyboard(deadline: str = None) -> InlineKeyboardMarkup:
-    """Reminder v2: options relative to deadline (or today if no deadline).
-    Time is auto-set to profile.morning_time on delivery."""
+    """Reminder v2: on deadline day / 3 days before / 1 week before / custom / skip."""
     from datetime import datetime, timedelta
     today = datetime.now()
     fmt = lambda d: d.strftime("%Y-%m-%d")
@@ -720,41 +778,38 @@ def get_reminder_keyboard(deadline: str = None) -> InlineKeyboardMarkup:
         try:
             dl = datetime.fromisoformat(deadline)
             days_left = (dl - today).days
-            # In day of deadline
             btns.append([InlineKeyboardButton(
-                text=f"📅 В день задачи ({deadline})",
+                text=f"📅 В день задачи",
                 callback_data="rem_" + fmt(dl)
             )])
-            # 3 days before (only if > 3 days away)
             if days_left > 3:
                 remind3 = dl - timedelta(days=3)
                 btns.append([InlineKeyboardButton(
-                    text=f"🔔 За 3 дня ({fmt(remind3)})",
+                    text=f"🔔 За 3 дня",
                     callback_data="rem_" + fmt(remind3)
                 )])
-            # 1 week before (only if > 7 days away)
             if days_left > 7:
                 remind7 = dl - timedelta(days=7)
                 btns.append([InlineKeyboardButton(
-                    text=f"🗓 За неделю ({fmt(remind7)})",
+                    text=f"🗓 За неделю",
                     callback_data="rem_" + fmt(remind7)
                 )])
         except Exception:
             pass
-    # Fallback if no deadline or deadline too close
     if not btns:
         btns.append([InlineKeyboardButton(
-            text="🔔 Завтра утром",
-            callback_data="rem_" + (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+            text="🔔 Завтра",
+            callback_data="rem_" + (today + timedelta(days=1)).strftime("%Y-%m-%d")
         )])
+    btns.append([InlineKeyboardButton(text="✏️ Своя дата", callback_data="rem_custom")])
     btns.append([InlineKeyboardButton(text="⏭ Пропустить", callback_data="rem_skip")])
     btns.append([InlineKeyboardButton(text="❌ Отмена",     callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
-    btns = [[InlineKeyboardButton(text="🏷 " + lb["name"], callback_data="lbl_" + lb["id"])] for lb in labels[:8]]
-    btns.append([InlineKeyboardButton(text="➕ Новый лейбл",  callback_data="lbl_new")])
-    btns.append([InlineKeyboardButton(text="⏭ Без лейбла",   callback_data="lbl_skip")])
+    btns = [[InlineKeyboardButton(text="🗂 " + lb["name"], callback_data="lbl_" + lb["id"])] for lb in labels[:8]]
+    btns.append([InlineKeyboardButton(text="➕ Новая группа",  callback_data="lbl_new")])
+    btns.append([InlineKeyboardButton(text="⏭ Без группы",   callback_data="lbl_skip")])
     btns.append([InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
@@ -916,7 +971,7 @@ async def cb_labels_mgmt(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     labels  = store_get_groups(user_id).get("groups", [])
-    header  = f"🏷 <b>Лейблы</b> ({len(labels)}/{LABEL_LIMIT_HARD})"
+    header  = f"🗂 <b>Группы</b> ({len(labels)}/{LABEL_LIMIT_HARD})"
     try:
         await callback.message.edit_text(header, reply_markup=get_labels_mgmt_inline(labels))
     except Exception:
@@ -990,7 +1045,7 @@ async def cb_label_del_mgmt(callback: CallbackQuery, state: FSMContext):
     new_labels = store_get_groups(user_id).get("groups", [])
     try:
         await callback.message.edit_text(
-            f"🗑 Лейбл «{lb_name}» удалён\n🏷 <b>Лейблы</b>",
+            f"🗑 Группа «{lb_name}» удалена\n🏷 <b>Группы</b>",
             reply_markup=get_labels_mgmt_inline(new_labels)
         )
     except Exception:
@@ -1007,9 +1062,9 @@ async def cb_label_rename_start(callback: CallbackQuery, state: FSMContext):
     await state.update_data(rename_label_id=lid)
     await state.set_state(LabelRenameStates.waiting_for_new_name)
     try:
-        await callback.message.edit_text("✏️ Введи новое название лейбла:", reply_markup=None)
+        await callback.message.edit_text("✏️ Введи новое название группы:", reply_markup=None)
     except Exception:
-        await callback.message.answer("✏️ Введи новое название лейбла:", reply_markup=get_cancel_keyboard())
+        await callback.message.answer("✏️ Введи новое название группы:", reply_markup=get_cancel_keyboard())
 
 @router.message(StateFilter(LabelRenameStates.waiting_for_new_name))
 async def cb_label_rename_input(message: Message, state: FSMContext):
@@ -1036,7 +1091,7 @@ async def cb_label_rename_input(message: Message, state: FSMContext):
     _fire_sync()
     await state.clear()
     await message.answer(
-        f"✅ Лейбл переименован в «{new_name}»",
+        f"✅ Группа переименована в «{new_name}»",
         reply_markup=get_labels_mgmt_inline(labels)
     )
 
@@ -1055,13 +1110,13 @@ async def cb_lbl_create_mgmt(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     labels  = store_get_groups(user_id).get("groups", [])
     if len(labels) >= LABEL_LIMIT_HARD:
-        await callback.answer(f"⚠️ Лимит {LABEL_LIMIT_HARD} лейблов.", show_alert=True)
+        await callback.answer(f"⚠️ Лимит {LABEL_LIMIT_HARD} групп.", show_alert=True)
         return
-    await state.set_state(TaskStates.waiting_for_new_label)
+    await state.set_state(TaskStates.waiting_for_new_group)
     try:
-        await callback.message.edit_text("🏷 Введи название нового лейбла:", reply_markup=None)
+        await callback.message.edit_text("🗂 Введи название новой группы:", reply_markup=None)
     except Exception:
-        await callback.message.answer("🏷 Введи название нового лейбла:", reply_markup=get_cancel_keyboard())
+        await callback.message.answer("🗂 Введи название новой группы:", reply_markup=get_cancel_keyboard())
 
 @router.callback_query(F.data == "back_to_settings")
 async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
@@ -1609,7 +1664,7 @@ def _format_tasks_labels(tasks: list) -> str:
     """Format active tasks grouped by label."""
     labeled: dict = {}
     for t in tasks:
-        key = t.get("label_name") or "Без лейбла"
+        key = t.get("label_name") or "Без группы"
         labeled.setdefault(key, []).append(t)
     parts = []
     for lbl, items in labeled.items():
@@ -1634,13 +1689,13 @@ async def cmd_tasks(message: Message, view: str = "mkb"):
         await message.answer("👇", reply_markup=get_tasks_keyboard())
         return
     body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active)
-    toggle_label = "🏷 По лейблам" if view == "mkb" else "✨ По МКБ"
+    toggle_label = "🏷 По группым" if view == "mkb" else "✨ По МКБ"
     toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
         [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
     ])
-    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Лейблы:</b>"
+    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Группы:</b>"
     await message.answer(header + "\n\n" + body, reply_markup=kb)
 
 @router.callback_query(F.data.in_({"tasks_view_mkb", "tasks_view_labels"}))
@@ -1651,13 +1706,13 @@ async def tasks_toggle_view(callback: CallbackQuery, state: FSMContext):
     active = [t for t in tasks if t.get("status") != "completed"]
     view = "mkb" if callback.data == "tasks_view_mkb" else "labels"
     body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active)
-    toggle_label = "🏷 По лейблам" if view == "mkb" else "✨ По МКБ"
+    toggle_label = "🏷 По группым" if view == "mkb" else "✨ По МКБ"
     toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
         [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
     ])
-    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Лейблы:</b>"
+    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Группы:</b>"
     try:
         await callback.message.edit_text(header + "\n\n" + body, reply_markup=kb)
     except Exception:
@@ -1772,10 +1827,52 @@ async def task_deadline_text(message: Message, state: FSMContext):
 async def task_reminder_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     val = callback.data[4:]
+    if val == "custom":
+        # Switch to custom date input state
+        await state.set_state(TaskStates.waiting_for_custom_reminder)
+        try:
+            await callback.message.edit_text(
+                "✏️ <b>Своя дата напоминания</b>\n\n"
+                "Введи в формате: <code>ДД.ММ.ГГ ЧЧ:ММ</code>\n"
+                "<i>Пример: 25.04.26 09:00</i>",
+                reply_markup=None
+            )
+        except Exception:
+            await callback.message.answer(
+                "✏️ Введи дату и время: <code>ДД.ММ.ГГ ЧЧ:ММ</code>",
+                reply_markup=get_cancel_keyboard()
+            )
+        return
     reminder = None if val == "skip" else val
     await state.update_data(reminder=reminder)
     user_id = str(callback.from_user.id)
-    await _ask_label(callback.message, state, user_id, edit=True)
+    await _ask_group(callback.message, state, user_id, edit=True)
+
+@router.message(StateFilter(TaskStates.waiting_for_custom_reminder))
+async def task_custom_reminder_input(message: Message, state: FSMContext):
+    if message.text and message.text.strip() == "❌ Отмена":
+        await state.clear()
+        await message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+        return
+    text = (message.text or "").strip()
+    reminder = None
+    # Parse ДД.ММ.ГГ ЧЧ:ММ
+    import re as _re
+    m = _re.match(r"^(\d{2})\.(\d{2})\.(\d{2})\s+(\d{2}):(\d{2})$", text)
+    if m:
+        dd, mm, yy, hh, mi = m.groups()
+        reminder = f"20{yy}-{mm}-{dd}T{hh}:{mi}"
+    if not reminder:
+        await message.answer(
+            "⚠️ Не понял формат. Введи: <code>ДД.ММ.ГГ ЧЧ:ММ</code>\n"
+            "<i>Пример: 25.04.26 09:00</i>",
+            reply_markup=get_cancel_keyboard()
+        )
+        return
+    await state.update_data(reminder=reminder)
+    user_id = str(message.from_user.id)
+    await message.answer(f"✅ Напоминание: {text}")
+    await _ask_group(message, state, user_id, edit=False)
 
 @router.message(StateFilter(TaskStates.waiting_for_reminder))
 async def task_reminder_text(message: Message, state: FSMContext):
@@ -1785,12 +1882,13 @@ async def task_reminder_text(message: Message, state: FSMContext):
         return
     await state.update_data(reminder=None)
     user_id = str(message.from_user.id)
-    await _ask_label(message, state, user_id, edit=False)
+    await _ask_group(message, state, user_id, edit=False)
 
-async def _ask_label(message: Message, state: FSMContext, user_id: str, edit: bool = False):
-    await state.set_state(TaskStates.waiting_for_label)
+async def _ask_group(message: Message, state: FSMContext, user_id: str, edit: bool = False):
+    """Step 4 of task FSM: choose group (formerly label)."""
+    await state.set_state(TaskStates.waiting_for_group)
     labels = store_get_groups(user_id).get("groups", [])
-    text = "🏷 <b>Лейбл?</b>\nЛейблы группируют задачи. Выбери или создай свой:"
+    text = "🗂 <b>Группа?</b>\nГруппы объединяют задачи. Выбери или создай свою:"
     kb = get_labels_keyboard(labels)
     if edit:
         try:
@@ -1802,16 +1900,16 @@ async def _ask_label(message: Message, state: FSMContext, user_id: str, edit: bo
 
 # ── Step 4: Label ─────────────────────────────────────────────────────────
 
-@router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskStates.waiting_for_label))
+@router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskStates.waiting_for_group))
 async def task_label_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     val = callback.data[4:]
     if val == "new":
-        await state.set_state(TaskStates.waiting_for_new_label)
+        await state.set_state(TaskStates.waiting_for_new_group)
         try:
-            await callback.message.edit_text("🏷 Введи название нового лейбла:", reply_markup=None)
+            await callback.message.edit_text("🗂 Введи название новой группы:", reply_markup=None)
         except Exception:
-            await callback.message.answer("🏷 Введи название нового лейбла:", reply_markup=get_cancel_keyboard())
+            await callback.message.answer("🗂 Введи название новой группы:", reply_markup=get_cancel_keyboard())
         return
     label_id = None if val == "skip" else val
     label_name = ""
@@ -1823,7 +1921,7 @@ async def task_label_cb(callback: CallbackQuery, state: FSMContext):
     await state.update_data(label_id=label_id, label_name=label_name)
     await _show_task_confirm(callback.message, state, edit=True)
 
-@router.message(StateFilter(TaskStates.waiting_for_new_label))
+@router.message(StateFilter(TaskStates.waiting_for_new_group))
 async def task_new_label_input(message: Message, state: FSMContext):
     if message.text and message.text.strip() == "❌ Отмена":
         await state.clear()
@@ -1832,12 +1930,12 @@ async def task_new_label_input(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     name = (message.text or "").strip()
     if len(name) < 1:
-        await message.answer("🏷 Введи название лейбла.")
+        await message.answer("🏷 Введи название группы.")
         return
     data_store = store_get_groups(user_id)
     labels = data_store.get("groups", [])
     if len(labels) >= LABEL_LIMIT_HARD:
-        await message.answer(f"⚠️ Лимит лейблов: {LABEL_LIMIT_HARD}. Удали или переименуй существующий.")
+        await message.answer(f"⚠️ Лимит групп: {LABEL_LIMIT_HARD}. Удали или переименуй существующий.")
         return
     gid = _make_group_id(name, labels)
     labels.append({"id": gid, "name": name, "created": _today()})
@@ -1846,7 +1944,7 @@ async def task_new_label_input(message: Message, state: FSMContext):
     _fire_sync()
     await state.update_data(label_id=gid, label_name=name)
     suffix = f" Осталось {LABEL_LIMIT_HARD - len(labels)} слота." if len(labels) >= LABEL_LIMIT_SOFT else ""
-    await message.answer("✅ Лейбл «" + name + "» создан!" + suffix)
+    await message.answer("✅ Группа «" + name + "» создана!" + suffix)
     await _show_task_confirm(message, state, edit=False)
 
 async def _show_task_confirm(message: Message, state: FSMContext, edit: bool = False):
@@ -1855,7 +1953,7 @@ async def _show_task_confirm(message: Message, state: FSMContext, edit: bool = F
     title      = data.get("title", "—")
     deadline   = data.get("deadline") or "не указан"
     reminder   = data.get("reminder") or "нет"
-    label_name = data.get("label_name") or "без лейбла"
+    label_name = data.get("label_name") or "без группы"
     merkaba    = _auto_merkaba(title, data.get("label_name", ""))
     mkb_icons  = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир", "other": "🌱 Другое"}
     summary = (
@@ -2281,8 +2379,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
-- "удали лейбл X", "убери лейбл X" → delete_label, action.title=название лейбла, 0.9
-- "переименуй лейбл X в Y", "измени лейбл X на Y" → rename_label, action.title="X→Y", 0.9
+- "удали группа X", "убери группа X" → delete_label, action.title=название группы, 0.9
+- "переименуй группа X в Y", "измени группа X на Y" → rename_label, action.title="X→Y", 0.9
 - "найди", "поищи", "погода", "что такое X" → web_search, 0.9
 - Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
 - Сомневаешься → confidence < 0.7, напиши clarification
@@ -3183,10 +3281,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                         t["label_name"] = ""
                                 store_set_tasks(user_id, tasks)
                                 _fire_sync()
-                                reply_text = f"🗑 Лейбл «{lb['name']}» удалён."
+                                reply_text = f"🗑 Группа «{lb['name']}» удалена."
                             else:
-                                lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет лейблов"
-                                reply_text = f"🌀 Не нашла такой лейбл. Есть: {lbl_names}"
+                                lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет групп"
+                                reply_text = f"🌀 Не нашла такую группу. Есть: {lbl_names}"
 
                         elif intent == "rename_label":
                             raw_title = (parsed_check.get("action") or {}).get("title", "")
@@ -3206,11 +3304,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                             t["label_name"] = new_name
                                     store_set_tasks(user_id, tasks)
                                     _fire_sync()
-                                    reply_text = f"✅ Лейбл переименован в «{new_name}»."
+                                    reply_text = f"✅ Группа переименована в «{new_name}»."
                                 else:
-                                    reply_text = "🌀 Лейбл не найден."
+                                    reply_text = "🌀 Группа не найдена."
                             else:
-                                reply_text = "🌀 Скажи: «переименуй лейбл X в Y»."
+                                reply_text = "🌀 Скажи: «переименуй группа X в Y»."
 
             except Exception as e:
                 logger.warning(f"Intent router error: {e}")
