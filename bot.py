@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.17.1
+Mandala Garden Bot — Gentle Companion v7.17.2
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -3400,34 +3400,83 @@ async def free_conversation(message: Message, state: FSMContext):
 
     reply_text = "🌿 Я здесь, рядом."
     action = None
+    parsed = None  # will hold decoded JSON dict
 
     try:
         raw = await _call_openrouter(messages)
         if raw:
-            # 1. Strip <think>...</think> blocks (qwen3.5 extended thinking)
+            # 1. Strip <think>...</think>
             raw_clean = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
-            # 2. Strip markdown code fences (handle both leading and trailing)
+            # 2. Strip markdown fences
             raw_clean = re.sub(r"^```(?:json)?\s*", "", raw_clean)
             raw_clean = re.sub(r"\s*```\s*$", "", raw_clean).strip()
-            # 3. If multiple JSON objects — take only first one
+
             if raw_clean.startswith("{"):
-                # Find where first JSON object ends using decoder
+                # 3a. Try direct parse
                 try:
-                    parsed, end_idx = json.JSONDecoder().raw_decode(raw_clean)
-                    extracted = parsed.get("text", "")
-                    reply_text = extracted if extracted and extracted.strip() else ""
-                    action = parsed.get("action")
-                    raw_clean = json.dumps(parsed)  # normalize to single object
+                    parsed, _ = json.JSONDecoder().raw_decode(raw_clean)
                 except (json.JSONDecodeError, ValueError):
-                    reply_text = raw_clean
-                except Exception:
-                    reply_text = raw_clean
+                    # 3b. LLM used unescaped ASCII quotes inside JSON string values.
+                    # Strategy: replace any unescaped " that appear INSIDE string values
+                    # by using a two-pass repair:
+                    # Pass 1: escape unescaped quotes inside known string fields
+                    def _repair_json(s: str) -> str:
+                        import re as _re
+                        # Replace straight ASCII quotes inside text/title values
+                        # with typographic equivalents to preserve JSON structure
+                        # Pattern: after ": " or ,"  find broken quotes in values
+                        def fix_value(m):
+                            key = m.group(1)
+                            inner = m.group(2)
+                            # escape any bare double-quotes inside the value
+                            inner_fixed = inner.replace('"', '\\"')
+                            return f'"{key}": "{inner_fixed}"'
+                        # Fix string values: "key": "...broken..."
+                        repaired = _re.sub(
+                            r'"(\w+)":\s*"((?:[^"\\\n]|\\.)*(?:"(?:[^"\\\n]|\\.)*")*(?:[^"\\\n]|\\.)*)"',
+                            fix_value, s
+                        )
+                        return repaired
+                    try:
+                        repaired = _repair_json(raw_clean)
+                        parsed, _ = json.JSONDecoder().raw_decode(repaired)
+                    except Exception:
+                        parsed = None
+
+                if parsed is not None:
+                    extracted = parsed.get("text", "")
+                    reply_text = extracted.strip() if extracted else ""
+                    action = parsed.get("action")
+                    raw_clean = json.dumps(parsed, ensure_ascii=False)
+                else:
+                    # 3c. Last resort: regex-extract "text" field only
+                    m = re.search(r'"text"\s*:\s*"((?:[^\\"\n]|\\.)*)"', raw_clean)
+                    if m:
+                        reply_text = m.group(1).replace("\\n", "\n").replace("\\'", "'")
+                    else:
+                        reply_text = ""  # NEVER show raw JSON
+                    # Try to get intent for router even from broken JSON
+                    m_intent = re.search(r'"intent"\s*:\s*"([^"]+)"', raw_clean)
+                    m_conf   = re.search(r'"confidence"\s*:\s*([\d.]+)', raw_clean)
+                    m_atype  = re.search(r'"type"\s*:\s*"([^"]+)"', raw_clean)
+                    m_atitle = re.search(r'"title"\s*:\s*"([^"]+)"', raw_clean)
+                    parsed = {
+                        "intent": m_intent.group(1) if m_intent else "conversation",
+                        "confidence": float(m_conf.group(1)) if m_conf else 1.0,
+                        "action": {"type": m_atype.group(1), "title": m_atitle.group(1)}
+                                  if m_atype else None
+                    }
+                    raw_clean = json.dumps(parsed, ensure_ascii=False)
             else:
+                # Plain text response
                 reply_text = raw_clean
+                raw_clean = "{}"
 
             # ── Intent router ──────────────────────────────────────────────
             try:
-                parsed_check = json.loads(raw_clean) if raw_clean.startswith("{") else {}
+                parsed_check = parsed if parsed is not None else (
+                    json.loads(raw_clean) if raw_clean.startswith("{") else {}
+                )
                 intent = parsed_check.get("intent", "conversation")
                 confidence = float(parsed_check.get("confidence", 1.0))
                 clarification = parsed_check.get("clarification")
@@ -3559,6 +3608,56 @@ async def free_conversation(message: Message, state: FSMContext):
                             else:
                                 reply_text = "🌀 Скажи: «переименуй группа X в Y»."
 
+
+                        elif intent == "edit_task":
+                            action_data = parsed_check.get("action") or {}
+                            target = action_data.get("title", "").lower().strip()
+                            field  = action_data.get("field", "").lower().strip()
+                            value  = action_data.get("value", "").strip()
+                            tasks  = store_get_tasks(user_id)
+                            matched = [t for t in tasks if target and target in t.get("title","").lower()]
+                            if not matched:
+                                titles = ", ".join(t["title"] for t in tasks[:3])
+                                reply_text = f"🌀 Не нашла задачу «{target}». Активные: {titles}"
+                            elif not field or not value:
+                                reply_text = "🌀 Уточни: «переименуй задачу X в Y»"
+                            else:
+                                t = matched[0]
+                                if field in ("title", "название", "имя", "name"):
+                                    t["title"]   = value
+                                    t["updated"] = _today()
+                                    reply_text = f"✅ Название → «{value}»"
+                                elif field in ("deadline", "дедлайн", "срок", "дата"):
+                                    import re as _re2
+                                    m2 = _re2.match(r"(\d{2})\.(\d{2})\.(\d{2,4})", value)
+                                    if m2:
+                                        dd,mm,yy = m2.groups()
+                                        yy = "20"+yy if len(yy)==2 else yy
+                                        t["deadline"] = f"{yy}-{mm}-{dd}"
+                                    else:
+                                        t["deadline"] = value
+                                    t["updated"] = _today()
+                                    reply_text = f"✅ Дедлайн → {t['deadline']}"
+                                elif field in ("reminder", "напоминание", "напомни"):
+                                    t["reminder"] = value
+                                    t["updated"]  = _today()
+                                    reply_text = f"✅ Напоминание → {value}"
+                                elif field in ("group", "группа", "label", "лейбл"):
+                                    groups = store_get_groups(user_id).get("groups", [])
+                                    grp = next((g for g in groups if value.lower() in g.get("name","").lower()), None)
+                                    if grp:
+                                        t["label_id"]   = grp["id"]
+                                        t["label_name"] = grp["name"]
+                                        t["updated"]    = _today()
+                                        reply_text = f"✅ Группа → {grp['name']}"
+                                    else:
+                                        g_names = ", ".join(g["name"] for g in groups[:5])
+                                        reply_text = f"🌀 Группа «{value}» не найдена. Есть: {g_names}"
+                                else:
+                                    reply_text = f"🌀 Поле «{field}» не знаю. Скажи: название/дедлайн/напоминание/группа"
+                                if "✅" in reply_text:
+                                    store_set_tasks(user_id, tasks)
+                                    _fire_sync()
             except Exception as e:
                 logger.warning(f"Intent router error: {e}")
             # ──────────────────────────────────────────────────────────────
