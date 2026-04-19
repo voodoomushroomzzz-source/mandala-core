@@ -1,7 +1,7 @@
 import re
 #!/usr/bin/env python3
 """
-Mandala Garden Bot — Gentle Companion v7.14.0
+Mandala Garden Bot — Gentle Companion v7.15.0
 
 ARCHITECTURE CHANGE (v7.7.1):
 - In-memory store for all gardener data (gardener, tasks, achievements, groups)
@@ -595,7 +595,7 @@ def _build_profile_card(user_id: str) -> str:
     ach_count  = store_get_achievements_count(user_id)
     city_part  = f" · {city}" if city else ""
     lines = [
-        f"✦ <b>{name}</b>{city_part}",
+        f"🪬 <b>{name}</b>{city_part}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
     ]
     if not active:
@@ -685,7 +685,7 @@ def get_settings_inline() -> InlineKeyboardMarkup:
     ])
 
 def get_tasks_mgmt_inline(tasks: list) -> InlineKeyboardMarkup:
-    """Tasks management menu: create + list with delete buttons."""
+    """Tasks management: create + task list + groups section."""
     btns = [[InlineKeyboardButton(text="➕ Создать задачу", callback_data="start_addtask")]]
     active = [t for t in tasks if t.get("status") != "completed"]
     for t in active[:10]:
@@ -696,6 +696,9 @@ def get_tasks_mgmt_inline(tasks: list) -> InlineKeyboardMarkup:
             InlineKeyboardButton(text="✅",          callback_data=f"task_done_{tid}"),
             InlineKeyboardButton(text="🗑",          callback_data=f"task_del_{tid}"),
         ])
+    # Separator + groups section
+    btns.append([InlineKeyboardButton(text="── 🎨 Группы ──", callback_data="task_noop_sep")])
+    btns.append([InlineKeyboardButton(text="🎨 Управлять группами", callback_data="menu_labels_mgmt")])
     btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
@@ -807,7 +810,7 @@ def get_reminder_keyboard(deadline: str = None) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
-    btns = [[InlineKeyboardButton(text="🗂 " + lb["name"], callback_data="lbl_" + lb["id"])] for lb in labels[:8]]
+    btns = [[InlineKeyboardButton(text="🎨 " + lb["name"], callback_data="lbl_" + lb["id"])] for lb in labels[:8]]
     btns.append([InlineKeyboardButton(text="➕ Новая группа",  callback_data="lbl_new")])
     btns.append([InlineKeyboardButton(text="⏭ Без группы",   callback_data="lbl_skip")])
     btns.append([InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_task")])
@@ -971,7 +974,7 @@ async def cb_labels_mgmt(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     labels  = store_get_groups(user_id).get("groups", [])
-    header  = f"🗂 <b>Группы</b> ({len(labels)}/{LABEL_LIMIT_HARD})"
+    header  = f"🎨 <b>Группы</b> ({len(labels)}/{LABEL_LIMIT_HARD})"
     try:
         await callback.message.edit_text(header, reply_markup=get_labels_mgmt_inline(labels))
     except Exception:
@@ -1114,9 +1117,9 @@ async def cb_lbl_create_mgmt(callback: CallbackQuery, state: FSMContext):
         return
     await state.set_state(TaskStates.waiting_for_new_group)
     try:
-        await callback.message.edit_text("🗂 Введи название новой группы:", reply_markup=None)
+        await callback.message.edit_text("🎨 Введи название новой группы:", reply_markup=None)
     except Exception:
-        await callback.message.answer("🗂 Введи название новой группы:", reply_markup=get_cancel_keyboard())
+        await callback.message.answer("🎨 Введи название новой группы:", reply_markup=get_cancel_keyboard())
 
 @router.callback_query(F.data == "back_to_settings")
 async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
@@ -1660,16 +1663,33 @@ def _format_tasks_mkb(tasks: list) -> str:
             parts.append(f"  • {t['title']}{lbl}{dl}")
     return "\n".join(parts) if parts else ""
 
-def _format_tasks_labels(tasks: list) -> str:
-    """Format active tasks grouped by label."""
-    labeled: dict = {}
+def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
+    """Format active tasks grouped by group, with unique emojis."""
+    by_group: dict = {}
     for t in tasks:
-        key = t.get("label_name") or "Без группы"
-        labeled.setdefault(key, []).append(t)
+        key = t.get("label_name") or ""
+        by_group.setdefault(key, []).append(t)
+    # Build unique emoji map from stored groups
+    groups_data = store_get_groups(user_id).get("groups", []) if user_id else []
+    emoji_map = _assign_group_emojis(groups_data)
+    def get_emoji(gname: str) -> str:
+        for g in groups_data:
+            if g.get("name") == gname:
+                return emoji_map.get(g["id"], "🌱")
+        return _group_emoji(gname) or "🌱"
     parts = []
-    for lbl, items in labeled.items():
-        parts.append(f"<b>🏷 {lbl}</b>")
+    for gname, items in by_group.items():
+        if not gname:
+            continue
+        emoji = get_emoji(gname)
+        parts.append(f"<b>{emoji} {gname}</b>")
         for t in items[:5]:
+            dl = " · " + t["deadline"] if t.get("deadline") else ""
+            parts.append(f"  • {t['title']}{dl}")
+    no_group = by_group.get("", [])
+    if no_group:
+        parts.append("<b>🌱 Без группы</b>")
+        for t in no_group[:5]:
             dl = " · " + t["deadline"] if t.get("deadline") else ""
             parts.append(f"  • {t['title']}{dl}")
     return "\n".join(parts) if parts else ""
@@ -1688,8 +1708,8 @@ async def cmd_tasks(message: Message, view: str = "mkb"):
         await message.answer("🌀 Активных задач нет.", reply_markup=get_main_keyboard())
         await message.answer("👇", reply_markup=get_tasks_keyboard())
         return
-    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active)
-    toggle_label = "🏷 По группым" if view == "mkb" else "✨ По МКБ"
+    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
+    toggle_label = "🏷 По группам" if view == "mkb" else "✨ По МКБ"
     toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
@@ -1705,8 +1725,8 @@ async def tasks_toggle_view(callback: CallbackQuery, state: FSMContext):
     tasks = store_get_tasks(user_id)
     active = [t for t in tasks if t.get("status") != "completed"]
     view = "mkb" if callback.data == "tasks_view_mkb" else "labels"
-    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active)
-    toggle_label = "🏷 По группым" if view == "mkb" else "✨ По МКБ"
+    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
+    toggle_label = "🏷 По группам" if view == "mkb" else "✨ По МКБ"
     toggle_data  = "tasks_view_labels" if view == "mkb" else "tasks_view_mkb"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
@@ -1744,10 +1764,13 @@ async def _start_task_flow(message: Message, state: FSMContext, pre_title: str =
         )
     else:
         await state.set_state(TaskStates.waiting_for_title)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")]
+        ])
         await message.answer(
             "🌀 <b>Новая задача</b> — как назовём?\n"
             "<i>Пример: «Записаться к врачу»</i>",
-            reply_markup=get_cancel_keyboard()
+            reply_markup=cancel_kb
         )
 
 @router.message(Command("addtask"))
@@ -1888,7 +1911,7 @@ async def _ask_group(message: Message, state: FSMContext, user_id: str, edit: bo
     """Step 4 of task FSM: choose group (formerly label)."""
     await state.set_state(TaskStates.waiting_for_group)
     labels = store_get_groups(user_id).get("groups", [])
-    text = "🗂 <b>Группа?</b>\nГруппы объединяют задачи. Выбери или создай свою:"
+    text = "🎨 <b>Группа?</b>\nГруппы объединяют задачи. Выбери или создай свою:"
     kb = get_labels_keyboard(labels)
     if edit:
         try:
@@ -1907,9 +1930,9 @@ async def task_label_cb(callback: CallbackQuery, state: FSMContext):
     if val == "new":
         await state.set_state(TaskStates.waiting_for_new_group)
         try:
-            await callback.message.edit_text("🗂 Введи название новой группы:", reply_markup=None)
+            await callback.message.edit_text("🎨 Введи название новой группы:", reply_markup=None)
         except Exception:
-            await callback.message.answer("🗂 Введи название новой группы:", reply_markup=get_cancel_keyboard())
+            await callback.message.answer("🎨 Введи название новой группы:", reply_markup=get_cancel_keyboard())
         return
     label_id = None if val == "skip" else val
     label_name = ""
