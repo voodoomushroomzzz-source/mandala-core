@@ -7,6 +7,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Закрой задачу про бекон в меню"
+    },
+    {
+      "role": "assistant",
+      "content": "✅ Готово: добавить бекон в меню · 💎 1"
     }
   ],
   "updated": "2026-04-20"
