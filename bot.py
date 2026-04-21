@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Garden Bot — SR Gentle Companion v7.21.0
+# Mandala Garden Bot — SR Gentle Companion v7.21.1
 
 import re
 import os
@@ -108,6 +108,7 @@ _pending_writes: dict = {}
 # SHA cache: {path: sha} — skip download if SHA unchanged
 _sha_cache: dict = {}
 _write_lock = asyncio.Lock() if False else None  # initialized in on_startup
+_sync_lock   = asyncio.Lock()  # prevents parallel GitHub syncs
 
 def _user_path(telegram_id: str) -> str:
     return f"{GARDENERS_ROOT}/gardener_{telegram_id}"
@@ -279,26 +280,28 @@ async def _github_put(path: str, content: Any, _retry: int = 0) -> bool:
 # ─── Background sync ──────────────────────────────────────────────────────────
 
 async def _sync_pending() -> None:
-    """Flush all pending writes to GitHub concurrently. Called by scheduler every 2 min."""
-    try:
-        if not _pending_writes:
-            return
-        batch = dict(_pending_writes)
-        _pending_writes.clear()
-        logger.info(f"Syncing {len(batch)} file(s) to GitHub...")
+    """Flush all pending writes to GitHub sequentially. Lock prevents parallel syncs."""
+    if _sync_lock.locked():
+        return  # another sync already running — scheduler will retry next tick
+    async with _sync_lock:
+        try:
+            if not _pending_writes:
+                return
+            batch = dict(_pending_writes)
+            _pending_writes.clear()
+            logger.info(f"Syncing {len(batch)} file(s) to GitHub...")
 
-        async def _put_one(path, data):
-            ok = await _github_put(path, data)
-            if not ok:
-                logger.warning(f"Sync failed for {path}, re-queuing")
-                _pending_writes.setdefault(path, data)
-            return ok
+            async def _put_one(path, data):
+                ok = await _github_put(path, data)
+                if not ok:
+                    logger.warning(f"Sync failed for {path}, re-queuing")
+                    _pending_writes.setdefault(path, data)
+                return ok
 
-        # Sequential to avoid concurrent SHA conflicts
-        for p, c in batch.items():
-            await _put_one(p, c)
-    except Exception as e:
-        logger.error(f"Sync pending crashed: {e}", exc_info=True)
+            for p, c in batch.items():
+                await _put_one(p, c)
+        except Exception as e:
+            logger.error(f"Sync pending crashed: {e}", exc_info=True)
 
 def _fire_sync() -> None:
     """Schedule a background sync without blocking the caller."""
@@ -725,12 +728,11 @@ def get_checklist_inline(checklist: dict) -> InlineKeyboardMarkup:
         iid  = it["id"]
         mark = "✅" if it.get("done") else "☐"
         text = f"{mark} {it['text'][:35]}"
-        btns.append([InlineKeyboardButton(text=text, callback_data=f"cl_toggle_{cid}_{iid}")])
+        btns.append([InlineKeyboardButton(text=text, callback_data=f"cl_toggle|{cid}|{iid}")])
     # Action row
     btns.append([
         InlineKeyboardButton(text="✏️ Ред.",   callback_data=f"cl_edit_{cid}"),
         InlineKeyboardButton(text="🗑 Удалить", callback_data=f"cl_delete_{cid}"),
-        InlineKeyboardButton(text="📌 Закрепить", callback_data=f"cl_pin_{cid}"),
     ])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
@@ -743,7 +745,6 @@ def get_checklists_mgmt_inline(checklists: list) -> InlineKeyboardMarkup:
         cid   = cl["id"]
         btns.append([
             InlineKeyboardButton(text=f"☑️ {title} ({prog})", callback_data=f"cl_open_{cid}"),
-            InlineKeyboardButton(text="📌", callback_data=f"cl_pin_{cid}"),
             InlineKeyboardButton(text="🗑", callback_data=f"cl_delete_{cid}"),
         ])
     btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
@@ -1606,7 +1607,12 @@ async def cb_cl_create_new(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(ChecklistStates.waiting_for_title))
 async def cl_title_input(message: Message, state: FSMContext):
-    title = (message.text or "").strip()
+    # Support voice input via state override
+    _sd = await state.get_data()
+    _vt = _sd.pop("_voice_text", None)
+    if _vt:
+        await state.update_data(**_sd)
+    title = (_vt or message.text or "").strip()
     if not title or len(title) < 2:
         await message.answer("☑️ Введи название чеклиста (минимум 2 символа).")
         return
@@ -1626,7 +1632,10 @@ async def cl_items_input(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     data    = await state.get_data()
     title   = data.get("cl_title", "Чеклист")
-    raw     = (message.text or "").strip()
+    _vt     = data.pop("_voice_text", None)
+    if _vt:
+        await state.update_data(**data)
+    raw = (_vt or message.text or "").strip()
     if not raw:
         await message.answer("☑️ Введи хотя бы один пункт.")
         return
@@ -1674,18 +1683,16 @@ async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
 
 # ─── Checklist — Toggle item ──────────────────────────────────────────────────
 
-@router.callback_query(F.data.startswith("cl_toggle_"))
+@router.callback_query(F.data.startswith("cl_toggle|"))
 async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     parts   = callback.data.split("_")
     # cl_toggle_CLID_IID — but CLID can have underscores, so:
     # format: cl_toggle_{cid}_{iid}
-    remainder = callback.data[len("cl_toggle_"):]
-    # last _ separates iid
-    last_under = remainder.rfind("_")
-    cid = remainder[:last_under]
-    iid = remainder[last_under+1:]
+    parts = callback.data.split("|")
+    cid = parts[1] if len(parts) > 1 else ""
+    iid = parts[2] if len(parts) > 2 else ""
     checklists = store_get_checklists(user_id)
     cl = next((c for c in checklists if c["id"] == cid), None)
     if not cl:
@@ -1698,7 +1705,23 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     store_set_checklists(user_id, checklists)
     _fire_sync()
     prog   = _checklist_progress(cl)
+    items  = cl.get("items", [])
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
+    # Check 100% completion
+    if items and all(it.get("done") for it in items):
+        count = store_increment_achievements(user_id)
+        _fire_sync()
+        try:
+            await callback.message.edit_text(
+                f"🎉 <b>{cl['title']}</b> — выполнен полностью!\n"
+                f"💎 +1 достижение · всего {count}",
+                reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                    [InlineKeyboardButton(text="🗑 Удалить чеклист", callback_data=f"cl_delete_{cl['id']}")]
+                ])
+            )
+        except Exception:
+            pass
+        return
     try:
         await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl))
     except Exception:
@@ -1787,9 +1810,9 @@ async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
         mark = "✅" if it.get("done") else "☐"
         text = it["text"][:20]
         edit_kb_rows.append([
-            InlineKeyboardButton(text=f"{mark} {text}", callback_data=f"cl_noop_{cid}_{iid}"),
-            InlineKeyboardButton(text="✏️",              callback_data=f"cl_edititem_{cid}_{iid}"),
-            InlineKeyboardButton(text="🗑",              callback_data=f"cl_delitem_{cid}_{iid}"),
+            InlineKeyboardButton(text=f"{mark} {text}", callback_data=f"cl_noop|{cid}|{iid}"),
+            InlineKeyboardButton(text="✏️",              callback_data=f"cl_edititem|{cid}|{iid}"),
+            InlineKeyboardButton(text="🗑",              callback_data=f"cl_delitem|{cid}|{iid}"),
         ])
     edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
     try:
@@ -1814,13 +1837,12 @@ async def cb_cl_add_item_start(callback: CallbackQuery, state: FSMContext):
     except Exception:
         await callback.message.answer("➕ Введи текст нового пункта:", reply_markup=cancel_kb)
 
-@router.callback_query(F.data.startswith("cl_edititem_"))
+@router.callback_query(F.data.startswith("cl_edititem|"))
 async def cb_cl_edititem_start(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    remainder = callback.data[len("cl_edititem_"):]
-    last_under = remainder.rfind("_")
-    cid = remainder[:last_under]
-    iid = remainder[last_under+1:]
+    parts = callback.data.split("|")
+    cid = parts[1] if len(parts) > 1 else ""
+    iid = parts[2] if len(parts) > 2 else ""
     await state.update_data(cl_edit_id=cid, cl_edit_item_id=iid)
     await state.set_state(ChecklistStates.waiting_for_item_edit)
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
@@ -1874,14 +1896,13 @@ async def cl_item_edit_input(message: Message, state: FSMContext):
         reply_markup=get_checklist_inline(cl)
     )
 
-@router.callback_query(F.data.startswith("cl_delitem_"))
+@router.callback_query(F.data.startswith("cl_delitem|"))
 async def cb_cl_delitem(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id   = str(callback.from_user.id)
-    remainder = callback.data[len("cl_delitem_"):]
-    last_under = remainder.rfind("_")
-    cid = remainder[:last_under]
-    iid = remainder[last_under+1:]
+    parts = callback.data.split("|")
+    cid = parts[1] if len(parts) > 1 else ""
+    iid = parts[2] if len(parts) > 2 else ""
     checklists = store_get_checklists(user_id)
     cl = next((c for c in checklists if c["id"] == cid), None)
     if cl:
@@ -1898,9 +1919,9 @@ async def cb_cl_delitem(callback: CallbackQuery, state: FSMContext):
             mark = "✅" if it.get("done") else "☐"
             text = it["text"][:20]
             edit_kb_rows.append([
-                InlineKeyboardButton(text=f"{mark} {text}", callback_data=f"cl_noop_{cid}_{iid2}"),
-                InlineKeyboardButton(text="✏️",              callback_data=f"cl_edititem_{cid}_{iid2}"),
-                InlineKeyboardButton(text="🗑",              callback_data=f"cl_delitem_{cid}_{iid2}"),
+                InlineKeyboardButton(text=f"{mark} {text}", callback_data=f"cl_noop|{cid}|{iid2}"),
+                InlineKeyboardButton(text="✏️",              callback_data=f"cl_edititem|{cid}|{iid2}"),
+                InlineKeyboardButton(text="🗑",              callback_data=f"cl_delitem|{cid}|{iid2}"),
             ])
         edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
         try:
@@ -1911,7 +1932,7 @@ async def cb_cl_delitem(callback: CallbackQuery, state: FSMContext):
         except Exception:
             pass
 
-@router.callback_query(F.data.startswith("cl_noop_"))
+@router.callback_query(F.data.startswith("cl_noop|"))
 async def cb_cl_noop(callback: CallbackQuery):
     await callback.answer()
 
@@ -4134,8 +4155,24 @@ async def handle_voice(message: Message, state: FSMContext):
         # Show what was heard
         await status_msg.edit_text(f"🎙 <i>«{text}»</i>", parse_mode="HTML")
         # Route via state — Message is frozen, can't set .text directly
-        await state.update_data(_voice_text=text)
-        await free_conversation(message, state)
+        # Check if an active FSM is waiting for text input
+        current_state = await state.get_state()
+        if current_state == ChecklistStates.waiting_for_title.state:
+            message._voice_override = text
+            await state.update_data(_voice_text=text)
+            await cl_title_input(message, state)
+        elif current_state == ChecklistStates.waiting_for_items.state:
+            await state.update_data(_voice_text=text)
+            await cl_items_input(message, state)
+        elif current_state == ChecklistStates.waiting_for_item_edit.state:
+            await state.update_data(_voice_text=text)
+            await cl_item_edit_input(message, state)
+        elif current_state == TaskStates.waiting_for_title.state:
+            await state.update_data(_voice_text=text)
+            await task_title(message, state)
+        else:
+            await state.update_data(_voice_text=text)
+            await free_conversation(message, state)
     except Exception as e:
         logger.error(f"Voice handler error: {e}")
         try:
