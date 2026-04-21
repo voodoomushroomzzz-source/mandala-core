@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Garden Bot — SR Gentle Companion v7.19.1
+# Mandala Garden Bot — SR Gentle Companion v7.20.0
 
 import re
 import os
@@ -610,16 +610,72 @@ def _build_profile_card(user_id: str) -> str:
             continue
         emoji = get_group_emoji(group_name)
         lines.append(f"{emoji} <b>{group_name}</b>")
-        for t in items[:5]:
-            dl = f" · {t['deadline']}" if t.get("deadline") else ""
-            lines.append(f"  · {t['title']}{dl}")
+        for t in _sort_by_deadline(items)[:5]:
+            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+            ind = _deadline_indicator(t.get("deadline", ""))
+            lines.append(f"  · {ind}{t['title']}{dl}")
     unlabeled = by_group.get("", [])
     if unlabeled:
         lines.append("🌱 <b>Без группы</b>")
-        for t in unlabeled[:5]:
-            dl = f" · {t['deadline']}" if t.get("deadline") else ""
-            lines.append(f"  · {t['title']}{dl}")
+        for t in _sort_by_deadline(unlabeled)[:5]:
+            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+            ind = _deadline_indicator(t.get("deadline", ""))
+            lines.append(f"  · {ind}{t['title']}{dl}")
     return "\n".join(lines)
+
+
+# ─── Unified action functions (single source of truth for all interfaces) ─────
+
+async def _show_profile(user_id: str, message: Message):
+    """Show profile card — used by button, command, voice, intent."""
+    card = _build_profile_card(user_id)
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ Изменить", callback_data="menu_edit_profile"),
+         InlineKeyboardButton(text="💡 Идея (!)",  callback_data="menu_idea")],
+    ])
+    await message.answer(card, reply_markup=kb)
+
+async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels"):
+    """Show tasks — used by button, command, voice, intent."""
+    tasks  = store_get_tasks(user_id)
+    active = [t for t in tasks if t.get("status") != "completed"]
+    if not active:
+        await message.answer("🌀 Активных задач нет.", reply_markup=get_main_keyboard())
+        await message.answer("👇", reply_markup=get_tasks_keyboard())
+        return
+    # Filtered periods
+    if period not in ("labels", "mkb", "all"):
+        filtered = _filter_tasks_by_period(tasks, period)
+        period_ru = {
+            "today":    "📅 Сегодня",
+            "tomorrow": "📅 Завтра",
+            "day_after":"📅 Послезавтра",
+            "week":     "📅 На неделе",
+            "month":    "📅 В этом месяце",
+            "overdue":  "⚠️ Просроченные",
+        }.get(period, "🌀 Задачи")
+        if not filtered:
+            await message.answer(f"{period_ru}: задач нет 🌱", reply_markup=get_main_keyboard())
+            return
+        lines = [f"<b>{period_ru}:</b>"]
+        for t in _sort_by_deadline(filtered):
+            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+            grp = f" #{t['label_name']}" if t.get("label_name") else ""
+            ind = _deadline_indicator(t.get("deadline", ""))
+            lines.append(f"  • {ind}{t['title']}{grp}{dl}")
+        await message.answer("\n".join(lines), reply_markup=get_main_keyboard())
+        return
+    # Standard grouped view
+    view = "mkb" if period == "mkb" else "labels"
+    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
+    toggle_label = "✨ По МКБ" if view == "labels" else "🎨 По группам"
+    toggle_data  = "tasks_view_mkb" if view == "labels" else "tasks_view_labels"
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
+        [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
+    ])
+    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Группы:</b>"
+    await message.answer(header + "\n\n" + body, reply_markup=kb)
 
 def get_cancel_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
@@ -895,16 +951,22 @@ async def send_morning_greeting(telegram_id: str) -> None:
                             if t not in overdue and t not in due_today and t not in due_tmrw],
                            key=_dl_key))[:3]
             lines.append(f"🌀 Задач: {len(active)}")
-            if overdue:
-                lines.append(f"  ⚠️ Просрочено: {len(overdue)}")
-            for t in top3:
+            # Urgent block first (overdue + today)
+            urgent = sorted(overdue, key=lambda t: t.get("deadline") or "9999") + due_today
+            if urgent:
+                lines.append("⚠️ <b>Срочно:</b>")
+                for t in urgent[:3]:
+                    dl = t.get("deadline", "")
+                    dl_str = " · просрочена" if dl < today_s else " · сегодня"
+                    lines.append(f"  🔴 {t['title']}{dl_str}")
+            # Then remaining top tasks
+            rest = [t for t in top3 if t not in urgent]
+            if not urgent:
+                rest = top3
+            for t in rest[:3]:
                 dl = t.get("deadline", "")
-                if dl == today_s:
-                    dl_str = " · сегодня"
-                elif dl == tomorrow_s:
-                    dl_str = " · завтра"
-                elif dl and dl < today_s:
-                    dl_str = f" · ⚠️ {dl}"
+                if dl == tomorrow_s:
+                    dl_str = " · завтра 🟡"
                 elif dl:
                     dl_str = f" · {dl}"
                 else:
@@ -1925,11 +1987,17 @@ def _filter_tasks_by_period(tasks: list, period: str) -> list:
     tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
     week_end = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
     month_end = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
+    day_after = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
     active = [t for t in tasks if t.get("status") != "completed"]
     if period == "today":
         return [t for t in active if t.get("deadline") == today]
     elif period == "tomorrow":
         return [t for t in active if t.get("deadline") == tomorrow]
+    elif period == "day_after":
+        return [t for t in active if t.get("deadline") == day_after]
+    elif period.startswith("date:"):
+        target = period[5:]
+        return [t for t in active if t.get("deadline") == target]
     elif period == "week":
         return [t for t in active if t.get("deadline") and today <= t["deadline"] <= week_end]
     elif period == "month":
@@ -1939,19 +2007,60 @@ def _filter_tasks_by_period(tasks: list, period: str) -> list:
     return active  # "all"
 
 def _detect_task_period(text: str) -> str:
-    """Detect time period from user query."""
+    """Detect time period from user query. Returns period key or date:YYYY-MM-DD."""
+    import re as _re
+    from datetime import datetime, timedelta
     t = text.lower()
     if any(k in t for k in ["сегодня", "today", "на сегодня"]):
         return "today"
+    if any(k in t for k in ["послезавтра", "day after tomorrow"]):
+        return "day_after"
     if any(k in t for k in ["завтра", "tomorrow", "на завтра"]):
         return "tomorrow"
     if any(k in t for k in ["неделю", "неделя", "на неделе", "на этой неделе", "week"]):
         return "week"
     if any(k in t for k in ["месяц", "month", "на месяц"]):
         return "month"
-    if any(k in t for k in ["просрочен", "просрочен", "overdue", "прошли", "устарел"]):
+    if any(k in t for k in ["просрочен", "overdue", "прошли", "устарел", "истёк"]):
         return "overdue"
+    # Specific date: "на 22", "на 22 апреля", "на 22 число"
+    MONTHS_RU = {"январ":1,"феврал":2,"март":3,"апрел":4,"май":5,"мая":5,
+                 "июн":6,"июл":7,"август":8,"сентябр":9,"октябр":10,"ноябр":11,"декабр":12}
+    m = _re.search(r"на\s+(\d{1,2})(?:\s+(\w+))?", t)
+    if m:
+        day = int(m.group(1))
+        if 1 <= day <= 31:
+            month = datetime.now().month
+            year  = datetime.now().year
+            if m.group(2):
+                for mn, mv in MONTHS_RU.items():
+                    if mn in m.group(2).lower():
+                        month = mv
+                        break
+            try:
+                date_str = f"{year}-{month:02d}-{day:02d}"
+                datetime.strptime(date_str, "%Y-%m-%d")  # validate
+                return f"date:{date_str}"
+            except ValueError:
+                pass
     return "all"
+
+
+def _deadline_indicator(deadline: str) -> str:
+    """Return urgency emoji for a task deadline.
+    🔴 = today or overdue   🟡 = tomorrow/day-after   '' = 3+ days or none
+    """
+    if not deadline:
+        return ""
+    from datetime import datetime, timedelta
+    today     = datetime.now().strftime("%Y-%m-%d")
+    tomorrow  = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+    day_after = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
+    if deadline <= today:
+        return "🔴 "
+    if deadline in (tomorrow, day_after):
+        return "🟡 "
+    return ""
 
 def _sort_by_deadline(tasks: list) -> list:
     """Sort tasks: nearest deadline first, no deadline last."""
@@ -1978,10 +2087,10 @@ def _format_tasks_mkb(tasks: list) -> str:
             continue
         parts.append(f"<b>{label}</b>")
         for t in _sort_by_deadline(items)[:5]:
-            dl = " · " + t["deadline"] if t.get("deadline") else ""
+            dl  = " · " + t["deadline"] if t.get("deadline") else ""
             lbl = (" #" + t["label_name"]) if t.get("label_name") else ""
-            parts.append(f"  • {t['title']}{lbl}{dl}")
-    return "\n".join(parts) if parts else ""
+            ind = _deadline_indicator(t.get("deadline",""))
+            parts.append(f"  • {ind}{t['title']}{lbl}{dl}")
 
 def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
     """Format active tasks grouped by group, with unique emojis."""
@@ -2004,14 +2113,16 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
         emoji = get_emoji(gname)
         parts.append(f"<b>{emoji} {gname}</b>")
         for t in _sort_by_deadline(items)[:5]:
-            dl = " · " + t["deadline"] if t.get("deadline") else ""
-            parts.append(f"  • {t['title']}{dl}")
+            dl  = " · " + t["deadline"] if t.get("deadline") else ""
+            ind = _deadline_indicator(t.get("deadline",""))
+            parts.append(f"  • {ind}{t['title']}{dl}")
     no_group = by_group.get("", [])
     if no_group:
         parts.append("<b>🌱 Без группы</b>")
         for t in _sort_by_deadline(no_group)[:5]:
-            dl = " · " + t["deadline"] if t.get("deadline") else ""
-            parts.append(f"  • {t['title']}{dl}")
+            dl  = " · " + t["deadline"] if t.get("deadline") else ""
+            ind = _deadline_indicator(t.get("deadline",""))
+            parts.append(f"  • {ind}{t['title']}{dl}")
     return "\n".join(parts) if parts else ""
 
 async def cmd_tasks(message: Message, view: str = "labels"):
@@ -2763,8 +2874,11 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "покажи задачи", "мои задачи" → show_tasks, 0.95
 - "задачи на сегодня", "что делать сегодня" → show_tasks, action.period=today, 0.95
 - "задачи на завтра" → show_tasks, action.period=tomorrow, 0.95
+- "задачи на послезавтра" → show_tasks, action.period=day_after, 0.95
+- "задачи на 22", "на 22 апреля", "на 22 число" → show_tasks, action.period=date:YYYY-MM-DD, 0.95
 - "задачи на неделю", "на этой неделе" → show_tasks, action.period=week, 0.95
-- "просроченные задачи" → show_tasks, action.period=overdue, 0.95
+- "задачи на месяц" → show_tasks, action.period=month, 0.95
+- "просроченные задачи", "что просрочено" → show_tasks, action.period=overdue, 0.95
 - "мой профиль" → show_profile, 0.95
 - "резонанс", "мой уровень" → show_resonance, 0.95
 - "достижения" → show_achievements, 0.95
@@ -3001,7 +3115,7 @@ async def btn_profile(message: Message, state: FSMContext):
 
 @router.message(F.text == "🌾 Сад")
 async def btn_garden(message: Message, state: FSMContext):
-    await btn_profile(message, state)
+    await btn_profile(message, state)  # legacy alias
 
 @router.message(F.text == "⚙️ Настройки")
 async def btn_settings(message: Message, state: FSMContext):
@@ -3693,32 +3807,15 @@ async def free_conversation(message: Message, state: FSMContext):
                     current_state = await state.get_state()
                     if current_state is None:  # only if no FSM active
                         if intent == "show_tasks":
-                            # Detect if user wants filtered view (today/tomorrow/week)
                             period = _detect_task_period(text)
-                            if period != "all":
-                                uid_tasks = store_get_tasks(user_id)
-                                filtered  = _filter_tasks_by_period(uid_tasks, period)
-                                period_ru = {
-                                    "today":    "📅 Сегодня",
-                                    "tomorrow": "📅 Завтра",
-                                    "week":     "📅 На этой неделе",
-                                    "month":    "📅 В этом месяце",
-                                    "overdue":  "⚠️ Просроченные",
-                                }.get(period, "🌀 Задачи")
-                                if not filtered:
-                                    reply_text = f"{period_ru}: задач нет 🌱"
-                                else:
-                                    lines = [f"<b>{period_ru}:</b>"]
-                                    for t in _sort_by_deadline(filtered):
-                                        dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                                        grp = f" #{t['label_name']}" if t.get("label_name") else ""
-                                        lines.append(f"  • {t['title']}{grp}{dl}")
-                                    reply_text = "\n".join(lines)
-                            else:
-                                await cmd_tasks(message)
-                                reply_text = ""
+                            # Also check action.period from SR
+                            action_period = (parsed_check.get("action") or {}).get("period", "")
+                            if action_period and action_period != "all":
+                                period = action_period
+                            await _show_tasks_unified(user_id, message, period)
+                            reply_text = ""
                         elif intent == "show_profile":
-                            await cmd_profile(message, state)
+                            await _show_profile(user_id, message)
                             reply_text = ""
                         elif intent == "show_resonance":
                             await cmd_resonance(message, state)
@@ -3865,9 +3962,15 @@ async def free_conversation(message: Message, state: FSMContext):
                                         _dl = (_dtt.now() + _tdd(days=1)).strftime("%Y-%m-%d")
                                     elif _val_lower in ("послезавтра",):
                                         _dl = (_dtt.now() + _tdd(days=2)).strftime("%Y-%m-%d")
-                                    elif _re2.match(r"через (\d+) дн", _val_lower):
+                                    elif _re2.match(r"через \d+ дн", _val_lower):
                                         _n = int(_re2.search(r"(\d+)", _val_lower).group(1))
                                         _dl = (_dtt.now() + _tdd(days=_n)).strftime("%Y-%m-%d")
+                                    elif _re2.match(r"^\d{4}-\d{2}-\d{2}$", value):
+                                        _dl = value  # already ISO
+                                    elif _re2.match(r"^\d{1,2}\.\d{1,2}\.\d{4}$", value):
+                                        # DD.MM.YYYY
+                                        _parts = value.split(".")
+                                        _dl = f"{_parts[2]}-{_parts[1].zfill(2)}-{_parts[0].zfill(2)}"
                                     else:
                                         _m2 = _re2.match(r"(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?", value)
                                         if _m2:
