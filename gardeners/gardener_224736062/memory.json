@@ -55,6 +55,14 @@
     {
       "role": "assistant",
       "content": "✅ Дедлайн → 2026-04-23"
+    },
+    {
+      "role": "user",
+      "content": "Покажи мои задачи."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-21"
