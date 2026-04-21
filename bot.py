@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Garden Bot — SR Gentle Companion v7.20.0
+# Mandala Garden Bot — SR Gentle Companion v7.21.0
 
 import re
 import os
@@ -63,10 +63,12 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ─── Business limits ──────────────────────────────────────────────────────────
-TASK_LIMIT_HARD  = 21
-TASK_LIMIT_SOFT  = 18
+TASK_LIMIT_HARD  = 30
+TASK_LIMIT_SOFT  = 24
 LABEL_LIMIT_HARD = 7
 LABEL_LIMIT_SOFT = 6
+CHECKLIST_LIMIT      = 3    # max checklists per user
+CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -162,6 +164,18 @@ def store_get_groups(telegram_id: str) -> dict:
 def store_set_groups(telegram_id: str, g: dict) -> None:
     ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
     ws["groups"] = g.get("groups", g) if isinstance(g, dict) else g
+    store_set_workspace(telegram_id, ws)
+
+
+def store_get_checklists(telegram_id: str) -> list:
+    """Return checklists list from workspace."""
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("checklists", [])) if ws else []
+
+def store_set_checklists(telegram_id: str, checklists: list) -> None:
+    """Save checklists list to workspace."""
+    ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": [], "checklists": []}
+    ws["checklists"] = checklists
     store_set_workspace(telegram_id, ws)
 
 # Legacy aliases for backward compat during transition
@@ -499,6 +513,11 @@ class TaskEditStates(StatesGroup):
     editing_reminder     = State()
     editing_group        = State()
 
+class ChecklistStates(StatesGroup):
+    waiting_for_title     = State()
+    waiting_for_items     = State()
+    waiting_for_item_edit = State()  # for editing a specific item text
+
 class AskStates(StatesGroup):
     waiting_for_question = State()
 
@@ -677,6 +696,59 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Группы:</b>"
     await message.answer(header + "\n\n" + body, reply_markup=kb)
 
+
+# ─── Checklist keyboards ──────────────────────────────────────────────────────
+
+def _make_checklist_id(title: str, existing: list) -> str:
+    """Generate unique checklist id."""
+    base = "cl_" + "".join(c for c in title.lower()[:8] if c.isalnum())
+    ids  = {c["id"] for c in existing}
+    candidate = base
+    i = 1
+    while candidate in ids:
+        candidate = f"{base}_{i}"
+        i += 1
+    return candidate
+
+def _checklist_progress(checklist: dict) -> str:
+    """Return '2/5' progress string."""
+    items = checklist.get("items", [])
+    done  = sum(1 for it in items if it.get("done"))
+    return f"{done}/{len(items)}"
+
+def get_checklist_inline(checklist: dict) -> InlineKeyboardMarkup:
+    """Build inline keyboard for a checklist — each item is a toggle button."""
+    cid   = checklist["id"]
+    items = checklist.get("items", [])
+    btns  = []
+    for it in items:
+        iid  = it["id"]
+        mark = "✅" if it.get("done") else "☐"
+        text = f"{mark} {it['text'][:35]}"
+        btns.append([InlineKeyboardButton(text=text, callback_data=f"cl_toggle_{cid}_{iid}")])
+    # Action row
+    btns.append([
+        InlineKeyboardButton(text="✏️ Ред.",   callback_data=f"cl_edit_{cid}"),
+        InlineKeyboardButton(text="🗑 Удалить", callback_data=f"cl_delete_{cid}"),
+        InlineKeyboardButton(text="📌 Закрепить", callback_data=f"cl_pin_{cid}"),
+    ])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def get_checklists_mgmt_inline(checklists: list) -> InlineKeyboardMarkup:
+    """Checklists management menu."""
+    btns = [[InlineKeyboardButton(text="➕ Новый чеклист", callback_data="cl_create_new")]]
+    for cl in checklists:
+        prog = _checklist_progress(cl)
+        title = cl.get("title", "—")[:25]
+        cid   = cl["id"]
+        btns.append([
+            InlineKeyboardButton(text=f"☑️ {title} ({prog})", callback_data=f"cl_open_{cid}"),
+            InlineKeyboardButton(text="📌", callback_data=f"cl_pin_{cid}"),
+            InlineKeyboardButton(text="🗑", callback_data=f"cl_delete_{cid}"),
+        ])
+    btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
 def get_cancel_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="❌ Отмена")]],
@@ -724,7 +796,7 @@ def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🌀 Задачи & Группы",        callback_data="menu_tasks_mgmt")],
         [InlineKeyboardButton(text="🔔 Напоминания (!)",        callback_data="menu_reminders_soon")],
-        [InlineKeyboardButton(text="☑️ Чеклисты (!)",           callback_data="menu_checklists_soon")],
+        [InlineKeyboardButton(text="☑️ Чеклисты",               callback_data="menu_checklists_mgmt")],
         [InlineKeyboardButton(text="🗺 Роадмапы (!)",           callback_data="menu_roadmaps_soon")],
         [InlineKeyboardButton(text="🔬 Улучшить симбиоз (!)",   callback_data="menu_extended")],
     ])
@@ -1466,15 +1538,395 @@ async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
     except Exception:
         await callback.message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
 
-@router.callback_query(F.data.in_({"menu_reminders_soon", "menu_roadmaps_soon", "menu_checklists_soon"}))
+@router.callback_query(F.data.in_({"menu_reminders_soon", "menu_roadmaps_soon"}))
 async def cb_coming_soon(callback: CallbackQuery):
     labels = {
-        "menu_reminders_soon":  "🔔 Напоминания",
-        "menu_roadmaps_soon":   "🗺 Роадмапы",
-        "menu_checklists_soon": "☑️ Чеклисты",
+        "menu_reminders_soon": "🔔 Напоминания",
+        "menu_roadmaps_soon":  "🗺 Роадмапы",
     }
     name = labels.get(callback.data, "Функция")
     await callback.answer(f"{name} — скоро! 🌱", show_alert=True)
+
+
+# ─── Checklist unified show function ──────────────────────────────────────────
+
+async def _show_checklist(cl: dict, message: Message, edit: bool = False):
+    """Show a single checklist as inline message. Used by button, intent, voice."""
+    prog  = _checklist_progress(cl)
+    title = cl.get("title", "Чеклист")
+    items = cl.get("items", [])
+    done  = sum(1 for it in items if it.get("done"))
+    header = f"☑️ <b>{title}</b>  {prog}"
+    kb = get_checklist_inline(cl)
+    if edit:
+        try:
+            await message.edit_text(header, reply_markup=kb)
+            return
+        except Exception:
+            pass
+    await message.answer(header, reply_markup=kb)
+
+# ─── Checklist FSM — Create ───────────────────────────────────────────────────
+
+async def _start_checklist_create(message: Message, state: FSMContext, pre_title: str = ""):
+    """Start checklist creation FSM."""
+    user_id = str(message.from_user.id)
+    checklists = store_get_checklists(user_id)
+    if len(checklists) >= CHECKLIST_LIMIT:
+        await message.answer(
+            f"⚠️ Лимит чеклистов: {CHECKLIST_LIMIT}. Удали один чтобы создать новый.",
+            reply_markup=get_main_keyboard()
+        )
+        return
+    if pre_title:
+        await state.update_data(cl_title=pre_title)
+        await state.set_state(ChecklistStates.waiting_for_items)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="❌ Отмена", callback_data="cl_cancel_fsm")]
+        ])
+        await message.answer(
+            f"☑️ <b>{pre_title}</b>\n\nДобавляй пункты — каждый с новой строки.\n"
+            "<i>Пример:\nПалатка\nСпальник\nАптечка</i>",
+            reply_markup=cancel_kb
+        )
+    else:
+        await state.set_state(ChecklistStates.waiting_for_title)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="❌ Отмена", callback_data="cl_cancel_fsm")]
+        ])
+        await message.answer(
+            "☑️ <b>Новый чеклист</b>\n\nКак назовём?",
+            reply_markup=cancel_kb
+        )
+
+@router.callback_query(F.data == "cl_create_new")
+async def cb_cl_create_new(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await _start_checklist_create(callback.message, state)
+
+@router.message(StateFilter(ChecklistStates.waiting_for_title))
+async def cl_title_input(message: Message, state: FSMContext):
+    title = (message.text or "").strip()
+    if not title or len(title) < 2:
+        await message.answer("☑️ Введи название чеклиста (минимум 2 символа).")
+        return
+    await state.update_data(cl_title=title)
+    await state.set_state(ChecklistStates.waiting_for_items)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="cl_cancel_fsm")]
+    ])
+    await message.answer(
+        f"☑️ <b>{title}</b>\n\nДобавляй пункты — каждый с новой строки.\n"
+        "<i>Пример:\nПалатка\nСпальник\nАптечка</i>",
+        reply_markup=cancel_kb
+    )
+
+@router.message(StateFilter(ChecklistStates.waiting_for_items))
+async def cl_items_input(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    data    = await state.get_data()
+    title   = data.get("cl_title", "Чеклист")
+    raw     = (message.text or "").strip()
+    if not raw:
+        await message.answer("☑️ Введи хотя бы один пункт.")
+        return
+    # Split by newlines
+    item_texts = [line.strip() for line in raw.splitlines() if line.strip()]
+    item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT]
+    checklists = store_get_checklists(user_id)
+    cid = _make_checklist_id(title, checklists)
+    items = [{"id": f"i{i+1}", "text": t, "done": False} for i, t in enumerate(item_texts)]
+    new_cl = {
+        "id":               cid,
+        "title":            title,
+        "items":            items,
+        "pinned_message_id": None,
+        "created":          _today()
+    }
+    checklists.append(new_cl)
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    await state.clear()
+    await message.answer(f"✅ Чеклист «{title}» создан с {len(items)} пунктами!")
+    # Show checklist and try to pin
+    sent = await message.answer(
+        f"☑️ <b>{title}</b>  0/{len(items)}",
+        reply_markup=get_checklist_inline(new_cl)
+    )
+    # Store pinned_message_id and auto-pin
+    new_cl["pinned_message_id"] = sent.message_id
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    try:
+        await message.bot.pin_chat_message(message.chat.id, sent.message_id, disable_notification=True)
+    except Exception:
+        pass
+
+@router.callback_query(F.data == "cl_cancel_fsm")
+async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    await state.clear()
+    try:
+        await callback.message.edit_text("❌ Отменено.")
+    except Exception:
+        pass
+    await callback.message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+
+# ─── Checklist — Toggle item ──────────────────────────────────────────────────
+
+@router.callback_query(F.data.startswith("cl_toggle_"))
+async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    parts   = callback.data.split("_")
+    # cl_toggle_CLID_IID — but CLID can have underscores, so:
+    # format: cl_toggle_{cid}_{iid}
+    remainder = callback.data[len("cl_toggle_"):]
+    # last _ separates iid
+    last_under = remainder.rfind("_")
+    cid = remainder[:last_under]
+    iid = remainder[last_under+1:]
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if not cl:
+        await callback.answer("Чеклист не найден", show_alert=True)
+        return
+    for it in cl.get("items", []):
+        if it["id"] == iid:
+            it["done"] = not it.get("done", False)
+            break
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    prog   = _checklist_progress(cl)
+    header = f"☑️ <b>{cl['title']}</b>  {prog}"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl))
+    except Exception:
+        pass
+
+# ─── Checklist — Open / Pin ───────────────────────────────────────────────────
+
+@router.callback_query(F.data.startswith("cl_open_"))
+async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    cid     = callback.data[len("cl_open_"):]
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if not cl:
+        await callback.answer("Чеклист не найден", show_alert=True)
+        return
+    prog   = _checklist_progress(cl)
+    header = f"☑️ <b>{cl['title']}</b>  {prog}"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_checklist_inline(cl))
+
+@router.callback_query(F.data.startswith("cl_pin_"))
+async def cb_cl_pin(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    cid     = callback.data[len("cl_pin_"):]
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if not cl:
+        return
+    prog   = _checklist_progress(cl)
+    header = f"☑️ <b>{cl['title']}</b>  {prog}"
+    sent = await callback.message.answer(header, reply_markup=get_checklist_inline(cl))
+    cl["pinned_message_id"] = sent.message_id
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    try:
+        await callback.message.bot.pin_chat_message(
+            callback.message.chat.id, sent.message_id, disable_notification=True
+        )
+        await callback.answer("📌 Закреплено!", show_alert=False)
+    except Exception:
+        pass
+
+# ─── Checklist — Delete ───────────────────────────────────────────────────────
+
+@router.callback_query(F.data.startswith("cl_delete_"))
+async def cb_cl_delete(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    cid     = callback.data[len("cl_delete_"):]
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if not cl:
+        return
+    title = cl.get("title", "—")
+    checklists = [c for c in checklists if c["id"] != cid]
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    try:
+        await callback.message.edit_text(f"🗑 Чеклист «{title}» удалён.")
+    except Exception:
+        pass
+
+# ─── Checklist — Edit (add/delete/edit items) ────────────────────────────────
+
+@router.callback_query(F.data.startswith("cl_edit_"))
+async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
+    """Show edit options for a checklist."""
+    await callback.answer()
+    cid = callback.data[len("cl_edit_"):]
+    user_id = str(callback.from_user.id)
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if not cl:
+        return
+    items = cl.get("items", [])
+    edit_kb_rows = [
+        [InlineKeyboardButton(text="➕ Добавить пункт",   callback_data=f"cl_add_item_{cid}")],
+    ]
+    for it in items:
+        iid  = it["id"]
+        mark = "✅" if it.get("done") else "☐"
+        text = it["text"][:20]
+        edit_kb_rows.append([
+            InlineKeyboardButton(text=f"{mark} {text}", callback_data=f"cl_noop_{cid}_{iid}"),
+            InlineKeyboardButton(text="✏️",              callback_data=f"cl_edititem_{cid}_{iid}"),
+            InlineKeyboardButton(text="🗑",              callback_data=f"cl_delitem_{cid}_{iid}"),
+        ])
+    edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
+    try:
+        await callback.message.edit_text(
+            f"✏️ <b>{cl['title']}</b> — редактирование пунктов:",
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows)
+        )
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("cl_add_item_"))
+async def cb_cl_add_item_start(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    cid = callback.data[len("cl_add_item_"):]
+    await state.update_data(cl_edit_id=cid, cl_edit_item_id=None)
+    await state.set_state(ChecklistStates.waiting_for_item_edit)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data=f"cl_edit_{cid}")]
+    ])
+    try:
+        await callback.message.edit_text("➕ Введи текст нового пункта:", reply_markup=cancel_kb)
+    except Exception:
+        await callback.message.answer("➕ Введи текст нового пункта:", reply_markup=cancel_kb)
+
+@router.callback_query(F.data.startswith("cl_edititem_"))
+async def cb_cl_edititem_start(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    remainder = callback.data[len("cl_edititem_"):]
+    last_under = remainder.rfind("_")
+    cid = remainder[:last_under]
+    iid = remainder[last_under+1:]
+    await state.update_data(cl_edit_id=cid, cl_edit_item_id=iid)
+    await state.set_state(ChecklistStates.waiting_for_item_edit)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data=f"cl_edit_{cid}")]
+    ])
+    try:
+        await callback.message.edit_text("✏️ Введи новый текст для пункта:", reply_markup=cancel_kb)
+    except Exception:
+        await callback.message.answer("✏️ Введи новый текст для пункта:", reply_markup=cancel_kb)
+
+@router.message(StateFilter(ChecklistStates.waiting_for_item_edit))
+async def cl_item_edit_input(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    data    = await state.get_data()
+    cid     = data.get("cl_edit_id", "")
+    iid     = data.get("cl_edit_item_id")
+    new_text = (message.text or "").strip()
+    if not new_text:
+        await message.answer("⚠️ Введи текст пункта.")
+        return
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if not cl:
+        await state.clear()
+        return
+    if iid:
+        # Edit existing item
+        for it in cl.get("items", []):
+            if it["id"] == iid:
+                it["text"] = new_text
+                break
+        msg = f"✅ Пункт изменён: «{new_text}»"
+    else:
+        # Add new item
+        items = cl.get("items", [])
+        if len(items) >= CHECKLIST_ITEMS_LIMIT:
+            await message.answer(f"⚠️ Лимит пунктов: {CHECKLIST_ITEMS_LIMIT}.")
+            await state.clear()
+            return
+        new_id = f"i{len(items)+1}"
+        items.append({"id": new_id, "text": new_text, "done": False})
+        cl["items"] = items
+        msg = f"✅ Пункт добавлен: «{new_text}»"
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    await state.clear()
+    await message.answer(msg)
+    prog   = _checklist_progress(cl)
+    await message.answer(
+        f"☑️ <b>{cl['title']}</b>  {prog}",
+        reply_markup=get_checklist_inline(cl)
+    )
+
+@router.callback_query(F.data.startswith("cl_delitem_"))
+async def cb_cl_delitem(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id   = str(callback.from_user.id)
+    remainder = callback.data[len("cl_delitem_"):]
+    last_under = remainder.rfind("_")
+    cid = remainder[:last_under]
+    iid = remainder[last_under+1:]
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if cl:
+        cl["items"] = [it for it in cl.get("items", []) if it["id"] != iid]
+        store_set_checklists(user_id, checklists)
+        _fire_sync()
+    if cl:
+        items = cl.get("items", [])
+        edit_kb_rows = [
+            [InlineKeyboardButton(text="➕ Добавить пункт", callback_data=f"cl_add_item_{cid}")],
+        ]
+        for it in items:
+            iid2 = it["id"]
+            mark = "✅" if it.get("done") else "☐"
+            text = it["text"][:20]
+            edit_kb_rows.append([
+                InlineKeyboardButton(text=f"{mark} {text}", callback_data=f"cl_noop_{cid}_{iid2}"),
+                InlineKeyboardButton(text="✏️",              callback_data=f"cl_edititem_{cid}_{iid2}"),
+                InlineKeyboardButton(text="🗑",              callback_data=f"cl_delitem_{cid}_{iid2}"),
+            ])
+        edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
+        try:
+            await callback.message.edit_text(
+                f"🗑 Пункт удалён.\n✏️ <b>{cl['title']}</b>:",
+                reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows)
+            )
+        except Exception:
+            pass
+
+@router.callback_query(F.data.startswith("cl_noop_"))
+async def cb_cl_noop(callback: CallbackQuery):
+    await callback.answer()
+
+# ─── Checklist — Settings navigation ─────────────────────────────────────────
+
+@router.callback_query(F.data == "menu_checklists_mgmt")
+async def cb_checklists_mgmt(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id    = str(callback.from_user.id)
+    checklists = store_get_checklists(user_id)
+    header     = f"☑️ <b>Чеклисты</b> ({len(checklists)}/{CHECKLIST_LIMIT})"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_checklists_mgmt_inline(checklists))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_checklists_mgmt_inline(checklists))
 
 async def run_resonance_decay() -> None:
     try:
@@ -2864,7 +3316,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|add_achievement|web_search|complete_task|delete_task", "title": "..."} или null
@@ -2885,6 +3337,15 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "добавь задачу", "хочу сделать X" → add_task, 0.9
 - "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
+- "создай чеклист X", "новый чеклист X" → create_checklist, action.title=X, 0.95
+- "создай чеклист X с пунктами A B C" → create_checklist, action.title=X, action.items="A|B|C", 0.95
+- "покажи чеклисты", "мои чеклисты" → show_checklists, 0.95
+- "покажи чеклист X" → show_checklist, action.title=X, 0.95
+- "удали чеклист X" → delete_checklist, action.title=X, 0.95
+- "добавь в чеклист X пункт Y" → checklist_add_item, action.title=X, action.item=Y, 0.95
+- "удали из чеклиста X пункт Y" → checklist_delete_item, action.title=X, action.item=Y, 0.95
+- "измени пункт Y в чеклисте X на Z" → checklist_edit_item, action.title=X, action.item=Y, action.value=Z, 0.95
+- "отметь пункт Y в чеклисте X" → checklist_toggle_item, action.title=X, action.item=Y, 0.95
 - "переименуй задачу X в Y", "измени дедлайн задачи X на Y", "смени группу задачи X на Y" → edit_task, action.title="X", action.field="title|deadline|group", action.value="Y", 0.9
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
@@ -3907,6 +4368,153 @@ async def free_conversation(message: Message, state: FSMContext):
                                 lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет групп"
                                 reply_text = f"🌀 Не нашла такую группу. Есть: {lbl_names}"
 
+
+                        elif intent == "show_checklists":
+                            checklists = store_get_checklists(user_id)
+                            if not checklists:
+                                reply_text = "☑️ Чеклистов пока нет. Создай первый!"
+                            else:
+                                lines = [f"☑️ <b>Чеклисты ({len(checklists)}/{CHECKLIST_LIMIT}):</b>"]
+                                for cl in checklists:
+                                    prog = _checklist_progress(cl)
+                                    lines.append(f"  • {cl['title']} ({prog})")
+                                reply_text = "\n".join(lines)
+                                reply_text += "\n\nОткрой через Настройки → Чеклисты"
+
+                        elif intent == "show_checklist":
+                            target     = (parsed_check.get("action") or {}).get("title","").lower()
+                            checklists = store_get_checklists(user_id)
+                            cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if cl:
+                                await _show_checklist(cl, message)
+                                reply_text = ""
+                            else:
+                                names = ", ".join(c["title"] for c in checklists[:3]) or "нет чеклистов"
+                                reply_text = f"🌀 Чеклист не найден. Есть: {names}"
+
+                        elif intent == "create_checklist":
+                            action_data = parsed_check.get("action") or {}
+                            title  = action_data.get("title","").strip()
+                            items_raw = action_data.get("items","").strip()
+                            await _start_checklist_create(message, state, pre_title=title)
+                            if items_raw and title:
+                                # Pre-fill items if provided
+                                item_texts = [i.strip() for i in items_raw.split("|") if i.strip()]
+                                if item_texts:
+                                    checklists = store_get_checklists(user_id)
+                                    cid = _make_checklist_id(title, checklists)
+                                    items = [{"id": f"i{i+1}", "text": t, "done": False}
+                                             for i, t in enumerate(item_texts[:CHECKLIST_ITEMS_LIMIT])]
+                                    new_cl = {"id": cid, "title": title, "items": items,
+                                              "pinned_message_id": None, "created": _today()}
+                                    checklists.append(new_cl)
+                                    store_set_checklists(user_id, checklists)
+                                    _fire_sync()
+                                    await state.clear()
+                                    sent = await message.answer(
+                                        f"✅ Чеклист «{title}» создан!",
+                                        reply_markup=get_main_keyboard()
+                                    )
+                                    cl_msg = await message.answer(
+                                        f"☑️ <b>{title}</b>  0/{len(items)}",
+                                        reply_markup=get_checklist_inline(new_cl)
+                                    )
+                                    new_cl["pinned_message_id"] = cl_msg.message_id
+                                    store_set_checklists(user_id, checklists)
+                                    _fire_sync()
+                                    try:
+                                        await message.bot.pin_chat_message(
+                                            message.chat.id, cl_msg.message_id, disable_notification=True
+                                        )
+                                    except Exception:
+                                        pass
+                            reply_text = ""
+
+                        elif intent == "delete_checklist":
+                            target     = (parsed_check.get("action") or {}).get("title","").lower()
+                            checklists = store_get_checklists(user_id)
+                            cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if cl:
+                                checklists = [c for c in checklists if c["id"] != cl["id"]]
+                                store_set_checklists(user_id, checklists)
+                                _fire_sync()
+                                reply_text = f"🗑 Чеклист «{cl['title']}» удалён."
+                            else:
+                                reply_text = f"🌀 Чеклист «{target}» не найден."
+
+                        elif intent == "checklist_add_item":
+                            action_data = parsed_check.get("action") or {}
+                            target   = action_data.get("title","").lower()
+                            new_item = action_data.get("item","").strip()
+                            checklists = store_get_checklists(user_id)
+                            cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if cl and new_item:
+                                items = cl.get("items",[])
+                                if len(items) >= CHECKLIST_ITEMS_LIMIT:
+                                    reply_text = f"⚠️ Лимит пунктов: {CHECKLIST_ITEMS_LIMIT}"
+                                else:
+                                    items.append({"id": f"i{len(items)+1}", "text": new_item, "done": False})
+                                    cl["items"] = items
+                                    store_set_checklists(user_id, checklists)
+                                    _fire_sync()
+                                    reply_text = f"✅ Добавлен пункт «{new_item}» в «{cl['title']}»"
+                            else:
+                                reply_text = "🌀 Не нашла чеклист или пустой пункт."
+
+                        elif intent == "checklist_delete_item":
+                            action_data = parsed_check.get("action") or {}
+                            target   = action_data.get("title","").lower()
+                            item_txt = action_data.get("item","").lower()
+                            checklists = store_get_checklists(user_id)
+                            cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if cl:
+                                before = len(cl.get("items",[]))
+                                cl["items"] = [it for it in cl.get("items",[])
+                                               if item_txt not in it.get("text","").lower()]
+                                if len(cl["items"]) < before:
+                                    store_set_checklists(user_id, checklists)
+                                    _fire_sync()
+                                    reply_text = f"🗑 Пункт удалён из «{cl['title']}»"
+                                else:
+                                    reply_text = f"🌀 Пункт «{item_txt}» не найден в «{cl['title']}»"
+                            else:
+                                reply_text = "🌀 Чеклист не найден."
+
+                        elif intent == "checklist_edit_item":
+                            action_data = parsed_check.get("action") or {}
+                            target   = action_data.get("title","").lower()
+                            item_txt = action_data.get("item","").lower()
+                            new_val  = action_data.get("value","").strip()
+                            checklists = store_get_checklists(user_id)
+                            cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if cl and new_val:
+                                for it in cl.get("items",[]):
+                                    if item_txt in it.get("text","").lower():
+                                        it["text"] = new_val
+                                        break
+                                store_set_checklists(user_id, checklists)
+                                _fire_sync()
+                                reply_text = f"✅ Пункт изменён на «{new_val}»"
+                            else:
+                                reply_text = "🌀 Не нашла чеклист или пункт."
+
+                        elif intent == "checklist_toggle_item":
+                            action_data = parsed_check.get("action") or {}
+                            target   = action_data.get("title","").lower()
+                            item_txt = action_data.get("item","").lower()
+                            checklists = store_get_checklists(user_id)
+                            cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if cl:
+                                for it in cl.get("items",[]):
+                                    if item_txt in it.get("text","").lower():
+                                        it["done"] = not it.get("done", False)
+                                        break
+                                store_set_checklists(user_id, checklists)
+                                _fire_sync()
+                                await _show_checklist(cl, message)
+                                reply_text = ""
+                            else:
+                                reply_text = "🌀 Чеклист не найден."
                         elif intent == "rename_label":
                             raw_title = (parsed_check.get("action") or {}).get("title", "")
                             parts = raw_title.split("→") if "→" in raw_title else raw_title.split(" в ")
