@@ -74,6 +74,21 @@
       "updated": "2026-04-21",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260421_006",
+      "title": "Рассчитать ЗП",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "spirit",
+      "priority": 6,
+      "deadline": "2026-04-22",
+      "reminder": "2026-04-22",
+      "created": "2026-04-21",
+      "updated": "2026-04-21",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
