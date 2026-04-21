@@ -104,6 +104,21 @@
       "updated": "2026-04-21",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260421_008",
+      "title": "подготовить резюме на удаленку",
+      "status": "todo",
+      "label_id": "дом",
+      "label_name": "Личное",
+      "life_area": "world",
+      "priority": 5,
+      "deadline": "2026-04-28",
+      "reminder": "2026-04-25",
+      "created": "2026-04-21",
+      "updated": "2026-04-21",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
