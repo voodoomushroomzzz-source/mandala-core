@@ -23,6 +23,22 @@
     {
       "role": "assistant",
       "content": "✅ Дедлайн → 2026-04-23"
+    },
+    {
+      "role": "user",
+      "content": "Покажи мои задачи."
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Поменяй дату в задаче подключить лютген на завтра."
+    },
+    {
+      "role": "assistant",
+      "content": "✅ Дедлайн → 2026-04-23"
     }
   ],
   "updated": "2026-04-21"
