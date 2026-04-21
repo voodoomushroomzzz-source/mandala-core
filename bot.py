@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Garden Bot — SR Gentle Companion v7.19.0
+# Mandala Garden Bot — SR Gentle Companion v7.19.1
 
 import re
 import os
@@ -3558,9 +3558,8 @@ async def handle_voice(message: Message, state: FSMContext):
             return
         # Show what was heard
         await status_msg.edit_text(f"🎙 <i>«{text}»</i>", parse_mode="HTML")
-        # Route as regular text message (reuse free_conversation logic)
-        message.text = text
-        from aiogram.types import Message as _Msg
+        # Route via state — Message is frozen, can't set .text directly
+        await state.update_data(_voice_text=text)
         await free_conversation(message, state)
     except Exception as e:
         logger.error(f"Voice handler error: {e}")
@@ -3579,8 +3578,15 @@ async def free_conversation(message: Message, state: FSMContext):
         await message.answer("🌿 Используй /start чтобы начать.")
         return
 
-    text = (message.text or "").strip()
-    text = _fix_layout(text)
+    # Support voice messages: text may come via state instead of message.text
+    _state_data = await state.get_data()
+    _voice_override = _state_data.pop("_voice_text", None)
+    if _voice_override:
+        await state.update_data(**_state_data)  # remove key from state
+        text = _voice_override.strip()
+    else:
+        text = (message.text or "").strip()
+        text = _fix_layout(text)
     if not text:
         return
 
