@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Garden Bot — SR Gentle Companion v7.18.0
+# Mandala Garden Bot — SR Gentle Companion v7.19.0
 
 import re
 import os
@@ -51,6 +51,7 @@ ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-cha
 SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
+GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 SR_MODEL_CHAIN = [
     "qwen/qwen3.5-flash-02-23",
@@ -876,17 +877,39 @@ async def send_morning_greeting(telegram_id: str) -> None:
         # Build brief
         lines = [f"🌅 <b>{name}, {date_str}</b>"]
         lines.append(f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений")
+        from datetime import datetime as _dtt
+        today_s = _dtt.now(tz).strftime("%Y-%m-%d")
+        tomorrow_s = (_dtt.now(tz) + __import__("datetime").timedelta(days=1)).strftime("%Y-%m-%d")
         if active:
             lines.append("")
-            lines.append(f"🌀 Активных задач: {len(active)}")
-            # Sort by deadline proximity, show up to 3
-            def sort_key(t):
-                dl = t.get("deadline")
-                return dl if dl else "9999"
-            for t in sorted(active, key=sort_key)[:3]:
-                dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                lbl = f" #{t['label_name']}" if t.get("label_name") else ""
-                lines.append(f"  • {t['title']}{lbl}{dl}")
+            # Separate overdue, today, tomorrow, future
+            overdue  = [t for t in active if t.get("deadline") and t["deadline"] < today_s]
+            due_today = [t for t in active if t.get("deadline") == today_s]
+            due_tmrw  = [t for t in active if t.get("deadline") == tomorrow_s]
+            # Build top 3: overdue first, then today, then tomorrow, then rest by deadline
+            def _dl_key(t):
+                return t.get("deadline") or "9999"
+            top3 = (sorted(overdue, key=_dl_key) +
+                    due_today + due_tmrw +
+                    sorted([t for t in active
+                            if t not in overdue and t not in due_today and t not in due_tmrw],
+                           key=_dl_key))[:3]
+            lines.append(f"🌀 Задач: {len(active)}")
+            if overdue:
+                lines.append(f"  ⚠️ Просрочено: {len(overdue)}")
+            for t in top3:
+                dl = t.get("deadline", "")
+                if dl == today_s:
+                    dl_str = " · сегодня"
+                elif dl == tomorrow_s:
+                    dl_str = " · завтра"
+                elif dl and dl < today_s:
+                    dl_str = f" · ⚠️ {dl}"
+                elif dl:
+                    dl_str = f" · {dl}"
+                else:
+                    dl_str = ""
+                lines.append(f"  • {t['title']}{dl_str}")
             if len(active) > 3:
                 lines.append(f"  <i>...и ещё {len(active)-3}</i>")
         else:
@@ -1892,6 +1915,44 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
 @router.message(Command("tasks"))
 @router.message(F.text == "🌀 Задачи")
 
+
+def _filter_tasks_by_period(tasks: list, period: str) -> list:
+    """Filter active tasks by deadline period.
+    period: today | tomorrow | week | month | overdue | all
+    """
+    from datetime import datetime, timedelta
+    today = datetime.now().strftime("%Y-%m-%d")
+    tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+    week_end = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+    month_end = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
+    active = [t for t in tasks if t.get("status") != "completed"]
+    if period == "today":
+        return [t for t in active if t.get("deadline") == today]
+    elif period == "tomorrow":
+        return [t for t in active if t.get("deadline") == tomorrow]
+    elif period == "week":
+        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= week_end]
+    elif period == "month":
+        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= month_end]
+    elif period == "overdue":
+        return [t for t in active if t.get("deadline") and t["deadline"] < today]
+    return active  # "all"
+
+def _detect_task_period(text: str) -> str:
+    """Detect time period from user query."""
+    t = text.lower()
+    if any(k in t for k in ["сегодня", "today", "на сегодня"]):
+        return "today"
+    if any(k in t for k in ["завтра", "tomorrow", "на завтра"]):
+        return "tomorrow"
+    if any(k in t for k in ["неделю", "неделя", "на неделе", "на этой неделе", "week"]):
+        return "week"
+    if any(k in t for k in ["месяц", "month", "на месяц"]):
+        return "month"
+    if any(k in t for k in ["просрочен", "просрочен", "overdue", "прошли", "устарел"]):
+        return "overdue"
+    return "all"
+
 def _sort_by_deadline(tasks: list) -> list:
     """Sort tasks: nearest deadline first, no deadline last."""
     def key(t):
@@ -2700,6 +2761,10 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 
 ПРАВИЛА INTENT:
 - "покажи задачи", "мои задачи" → show_tasks, 0.95
+- "задачи на сегодня", "что делать сегодня" → show_tasks, action.period=today, 0.95
+- "задачи на завтра" → show_tasks, action.period=tomorrow, 0.95
+- "задачи на неделю", "на этой неделе" → show_tasks, action.period=week, 0.95
+- "просроченные задачи" → show_tasks, action.period=overdue, 0.95
 - "мой профиль" → show_profile, 0.95
 - "резонанс", "мой уровень" → show_resonance, 0.95
 - "достижения" → show_achievements, 0.95
@@ -3453,6 +3518,57 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
 
 # _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
 
+
+# ─── Voice message handler (Groq Whisper) ─────────────────────────────────────
+
+@router.message(F.content_type == "voice")
+async def handle_voice(message: Message, state: FSMContext):
+    """Transcribe voice message via Groq Whisper, then route as text."""
+    user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
+    if not GROQ_API_KEY:
+        await message.answer("🎙 Голосовые сообщения ещё не настроены.", reply_markup=get_main_keyboard())
+        return
+    status_msg = await message.answer("🎙 <i>Слушаю...</i>", parse_mode="HTML")
+    try:
+        # Download voice file from Telegram
+        voice = message.voice
+        file_info = await message.bot.get_file(voice.file_id)
+        file_path = file_info.file_path
+        file_url  = f"https://api.telegram.org/file/bot{message.bot.token}/{file_path}"
+        session   = await get_http_session()
+        async with session.get(file_url) as resp:
+            ogg_bytes = await resp.read()
+        # Send to Groq Whisper
+        from groq import Groq as _Groq
+        import io as _io
+        client = _Groq(api_key=GROQ_API_KEY)
+        transcription = client.audio.transcriptions.create(
+            file=("voice.ogg", _io.BytesIO(ogg_bytes), "audio/ogg"),
+            model="whisper-large-v3-turbo",
+            language="ru",
+            response_format="text"
+        )
+        text = transcription.strip() if isinstance(transcription, str) else transcription.text.strip()
+        if not text:
+            await status_msg.edit_text("🎙 Не расслышала. Попробуй ещё раз 🌿")
+            return
+        # Show what was heard
+        await status_msg.edit_text(f"🎙 <i>«{text}»</i>", parse_mode="HTML")
+        # Route as regular text message (reuse free_conversation logic)
+        message.text = text
+        from aiogram.types import Message as _Msg
+        await free_conversation(message, state)
+    except Exception as e:
+        logger.error(f"Voice handler error: {e}")
+        try:
+            await status_msg.edit_text("🎙 Не расслышала. Попробуй ещё раз 🌿")
+        except Exception:
+            await message.answer("🎙 Не расслышала. Попробуй ещё раз 🌿")
+
 @router.message(F.text & ~F.text.startswith("/"))
 async def free_conversation(message: Message, state: FSMContext):
     """Catches any plain text not handled above. MUST be last message handler."""
@@ -3571,8 +3687,30 @@ async def free_conversation(message: Message, state: FSMContext):
                     current_state = await state.get_state()
                     if current_state is None:  # only if no FSM active
                         if intent == "show_tasks":
-                            await cmd_tasks(message)
-                            reply_text = ""
+                            # Detect if user wants filtered view (today/tomorrow/week)
+                            period = _detect_task_period(text)
+                            if period != "all":
+                                uid_tasks = store_get_tasks(user_id)
+                                filtered  = _filter_tasks_by_period(uid_tasks, period)
+                                period_ru = {
+                                    "today":    "📅 Сегодня",
+                                    "tomorrow": "📅 Завтра",
+                                    "week":     "📅 На этой неделе",
+                                    "month":    "📅 В этом месяце",
+                                    "overdue":  "⚠️ Просроченные",
+                                }.get(period, "🌀 Задачи")
+                                if not filtered:
+                                    reply_text = f"{period_ru}: задач нет 🌱"
+                                else:
+                                    lines = [f"<b>{period_ru}:</b>"]
+                                    for t in _sort_by_deadline(filtered):
+                                        dl = f" · {t['deadline']}" if t.get("deadline") else ""
+                                        grp = f" #{t['label_name']}" if t.get("label_name") else ""
+                                        lines.append(f"  • {t['title']}{grp}{dl}")
+                                    reply_text = "\n".join(lines)
+                            else:
+                                await cmd_tasks(message)
+                                reply_text = ""
                         elif intent == "show_profile":
                             await cmd_profile(message, state)
                             reply_text = ""
