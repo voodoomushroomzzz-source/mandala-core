@@ -31,6 +31,14 @@
     {
       "role": "assistant",
       "content": "✅ Дедлайн → 2026-04-22"
+    },
+    {
+      "role": "user",
+      "content": "Добавь задачу забрать кэш с патриков."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-21"
