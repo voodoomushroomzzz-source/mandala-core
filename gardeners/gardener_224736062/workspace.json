@@ -189,6 +189,19 @@
       ],
       "pinned_message_id": 5465,
       "created": "2026-04-22"
+    },
+    {
+      "id": "cl_утро",
+      "title": "утро",
+      "items": [
+        {
+          "id": "i1",
+          "text": "добавь чек-лист утро.",
+          "done": false
+        }
+      ],
+      "pinned_message_id": 5474,
+      "created": "2026-04-22"
     }
   ]
 }
