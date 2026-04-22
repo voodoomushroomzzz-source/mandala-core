@@ -189,29 +189,6 @@
       ],
       "pinned_message_id": 5437,
       "created": "2026-04-22"
-    },
-    {
-      "id": "cl_утро_1",
-      "title": "утро",
-      "items": [
-        {
-          "id": "i1",
-          "text": "палатка",
-          "done": false
-        },
-        {
-          "id": "i2",
-          "text": "спальник",
-          "done": false
-        },
-        {
-          "id": "i3",
-          "text": "аптечка",
-          "done": false
-        }
-      ],
-      "pinned_message_id": 5443,
-      "created": "2026-04-22"
     }
   ]
 }
