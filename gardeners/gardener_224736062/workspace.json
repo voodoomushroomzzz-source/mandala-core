@@ -164,6 +164,21 @@
       "updated": "2026-04-22",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260422_012",
+      "title": "доделать роад мапы",
+      "status": "todo",
+      "label_id": "мандала",
+      "label_name": "Мандала",
+      "life_area": "world",
+      "priority": 6,
+      "deadline": "2026-04-23",
+      "reminder": "2026-04-23T10:00",
+      "created": "2026-04-22",
+      "updated": "2026-04-22",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
