@@ -193,13 +193,7 @@
     {
       "id": "cl_утро",
       "title": "утро",
-      "items": [
-        {
-          "id": "i1",
-          "text": "добавь чек-лист утро.",
-          "done": false
-        }
-      ],
+      "items": [],
       "pinned_message_id": 5474,
       "created": "2026-04-22"
     }
