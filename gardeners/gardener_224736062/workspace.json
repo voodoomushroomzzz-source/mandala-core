@@ -189,6 +189,19 @@
       ],
       "pinned_message_id": 5465,
       "created": "2026-04-22"
+    },
+    {
+      "id": "cl_задачид",
+      "title": "Задачи дня",
+      "items": [
+        {
+          "id": "i1",
+          "text": "/start",
+          "done": false
+        }
+      ],
+      "pinned_message_id": 5503,
+      "created": "2026-04-22"
     }
   ]
 }
