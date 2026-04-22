@@ -2,47 +2,7 @@
   "sessions": [
     {
       "role": "user",
-      "content": "Привет, создайчик лист утро."
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Привет, создай чек-лист утро, добавь туда палатка, спальник, аптечка."
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Привет, создаю чек-лист утро."
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Привет, создай чек-лист вечер."
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "добавь чек-лист утро."
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Покажи мои задачи."
+      "content": "Что у меня сегодня по задаче?"
     },
     {
       "role": "assistant",
