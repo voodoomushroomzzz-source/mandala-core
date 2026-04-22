@@ -103,6 +103,14 @@
     {
       "role": "assistant",
       "content": "🗑 Задача удалена: Сходить на тренировку"
+    },
+    {
+      "role": "user",
+      "content": "Покажи мой профиль."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-22"
