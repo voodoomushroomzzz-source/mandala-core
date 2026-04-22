@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.22.1
+# Mandala Helper - Lite — SR Gentle Companion v7.22.2
 
 import re
 import os
@@ -3334,6 +3334,84 @@ def _clear_history(user_id: str) -> None:
 
 # ─── SR System Prompt ─────────────────────────────────────────────────────────
 
+
+async def _create_task_atomic(user_id: str, message: Message,
+                               title: str, deadline: str = None,
+                               reminder: str = None, label_name: str = None) -> dict:
+    """Create a task instantly from chat/voice without FSM. Returns created task dict."""
+    from datetime import datetime, timedelta
+    tasks = store_get_tasks(user_id)
+    active_count = len([t for t in tasks if t.get("status") != "completed"])
+    if active_count >= TASK_LIMIT_HARD:
+        await message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач. Заверши что-нибудь сначала.")
+        return {}
+    # Resolve label
+    label_id, resolved_label = None, ""
+    if label_name:
+        groups = store_get_groups(user_id).get("groups", [])
+        grp = next((g for g in groups if label_name.lower() in g.get("name","").lower()), None)
+        if grp:
+            label_id      = grp["id"]
+            resolved_label = grp["name"]
+    # Parse natural-language deadline if needed
+    if deadline:
+        import re as _re
+        from datetime import datetime as _dt2, timedelta as _td2
+        _dl = deadline.strip().lower()
+        if _dl in ("завтра", "tomorrow"):
+            deadline = (_dt2.now() + _td2(days=1)).strftime("%Y-%m-%d")
+        elif _dl in ("сегодня", "today"):
+            deadline = _dt2.now().strftime("%Y-%m-%d")
+        elif _dl in ("послезавтра",):
+            deadline = (_dt2.now() + _td2(days=2)).strftime("%Y-%m-%d")
+        elif _re.match(r"^(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?$", deadline):
+            m = _re.match(r"^(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?$", deadline)
+            dd, mm = m.group(1).zfill(2), m.group(2).zfill(2)
+            yy = m.group(3) or str(_dt2.now().year)
+            yy = "20"+yy if len(yy)==2 else yy
+            deadline = f"{yy}-{mm}-{dd}"
+        # if already ISO YYYY-MM-DD → keep as-is
+    merkaba = _auto_merkaba(title, resolved_label)
+    task_id = "task_" + _today().replace("-","") + "_" + str(active_count+1).zfill(3)
+    new_task = {
+        "task_id":    task_id,
+        "title":      title,
+        "status":     "todo",
+        "label_id":   label_id,
+        "label_name": resolved_label,
+        "life_area":  merkaba,
+        "priority":   calculate_priority(deadline),
+        "deadline":   deadline,
+        "reminder":   reminder,
+        "created":    _today(),
+        "updated":    _today(),
+        "completed":  None,
+        "notes":      ""
+    }
+    tasks.append(new_task)
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    return new_task
+
+
+async def _create_checklist_atomic(user_id: str, message: Message,
+                                    title: str, items_raw: str = "") -> dict:
+    """Create a checklist instantly from chat/voice without FSM."""
+    checklists = store_get_checklists(user_id)
+    if len(checklists) >= CHECKLIST_LIMIT:
+        await message.answer(f"⚠️ Лимит {CHECKLIST_LIMIT} чеклистов. Удали один сначала.")
+        return {}
+    item_texts = [i.strip() for i in items_raw.split("|") if i.strip()] if items_raw else []
+    item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT]
+    items  = [{"id": f"i{i+1}", "text": t, "done": False} for i, t in enumerate(item_texts)]
+    cid    = _make_checklist_id(title, checklists)
+    new_cl = {"id": cid, "title": title, "items": items,
+              "pinned_message_id": None, "created": _today()}
+    checklists.append(new_cl)
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    return new_cl
+
 SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), живое присутствие рядом с садовником в системе Мандала Симбиоза.
 
 КТО ТЫ:
@@ -3424,7 +3502,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
   "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
-  "action": {"type": "add_task|add_achievement|web_search|complete_task|delete_task", "title": "..."} или null
+  "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|..."} или null
 }
 
 ПРАВИЛА INTENT:
@@ -3439,11 +3517,20 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "мой профиль" → show_profile, 0.95
 - "резонанс", "мой уровень" → show_resonance, 0.95
 - "достижения" → show_achievements, 0.95
-- "добавь задачу", "хочу сделать X" → add_task, 0.9
+- "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
+  Извлекай из сообщения ВСЁ что найдёшь:
+  action.deadline = дата в ISO (YYYY-MM-DD) или null
+  action.reminder = дата+время ISO или null  
+  action.label = название группы или null
+  action.items = null (для задач не нужно)
+  Пример: "создай задачу проверить бота с дедлайном завтра в группу Мандала"
+  → add_task, action.title="проверить бота", action.deadline="2026-04-23", action.label="Мандала"
 - "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
 - "создай чеклист X", "новый чеклист X" → create_checklist, action.title=X, 0.95
 - "создай чеклист X с пунктами A B C" → create_checklist, action.title=X, action.items="A|B|C", 0.95
+  Если пункты упомянуты в любом виде — извлекай в action.items через |
+  Если пунктов нет — создаём пустой, action.items=""
 - "покажи чеклисты", "мои чеклисты" → show_checklists, 0.95
 - "покажи чеклист X" → show_checklist, action.title=X, 0.95
 - "удали чеклист X" → delete_checklist, action.title=X, 0.95
@@ -4406,10 +4493,50 @@ async def free_conversation(message: Message, state: FSMContext):
                             await cmd_achievements(message)
                             reply_text = ""
                         elif intent == "add_task":
-                            # Extract pre-title from action if present (e.g. "встреча с другом создай задачу")
-                            pre_title = (parsed_check.get("action") or {}).get("title", "").strip()
-                            await cb_start_addtask_msg(message, state, pre_title=pre_title)
-                            reply_text = ""
+                            action_data = parsed_check.get("action") or {}
+                            title    = action_data.get("title", "").strip()
+                            deadline = action_data.get("deadline", "") or ""
+                            reminder = action_data.get("reminder", "") or ""
+                            label    = action_data.get("label", "") or ""
+                            if not title:
+                                # No title extracted — fall back to FSM
+                                await cb_start_addtask_msg(message, state, pre_title="")
+                                reply_text = ""
+                            else:
+                                # Atomic creation — no FSM needed
+                                new_task = await _create_task_atomic(
+                                    user_id, message,
+                                    title=title,
+                                    deadline=deadline or None,
+                                    reminder=reminder or None,
+                                    label_name=label or None
+                                )
+                                if new_task:
+                                    # Build confirmation message
+                                    parts = [f"✅ Задача «{new_task['title']}» создана"]
+                                    if new_task.get("deadline"):
+                                        ind = _deadline_indicator(new_task["deadline"])
+                                        parts.append(f"📅 {ind}{new_task['deadline']}")
+                                    if new_task.get("label_name"):
+                                        parts.append(f"🎨 {new_task['label_name']}")
+                                    if new_task.get("reminder"):
+                                        parts.append(f"🔔 {new_task['reminder']}")
+                                    # Suggest what is missing
+                                    missing = []
+                                    if not new_task.get("deadline"):
+                                        missing.append("📅 дедлайн")
+                                    if not new_task.get("label_name"):
+                                        missing.append("🎨 группа")
+                                    confirm_text = " · ".join(parts)
+                                    if missing:
+                                        confirm_text += f"\n<i>Не указано: {', '.join(missing)} — добавь через [✏️] если нужно</i>"
+                                    # Show edit button
+                                    tid = new_task["task_id"]
+                                    edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
+                                        InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"task_edit_{tid}")
+                                    ]])
+                                    await message.answer(confirm_text, reply_markup=edit_kb)
+                                reply_text = ""
                         elif intent == "add_achievement":
                             if reply_text and reply_text.strip():
                                 await message.answer(reply_text, reply_markup=get_main_keyboard())
@@ -4515,36 +4642,46 @@ async def free_conversation(message: Message, state: FSMContext):
 
                         elif intent == "create_checklist":
                             action_data = parsed_check.get("action") or {}
-                            title  = action_data.get("title","").strip()
+                            title     = action_data.get("title","").strip()
                             items_raw = action_data.get("items","").strip()
-                            await _start_checklist_create(message, state, pre_title=title)
-                            if items_raw and title:
-                                # Pre-fill items if provided
-                                item_texts = [i.strip() for i in items_raw.split("|") if i.strip()]
-                                if item_texts:
-                                    checklists = store_get_checklists(user_id)
-                                    cid = _make_checklist_id(title, checklists)
-                                    items = [{"id": f"i{i+1}", "text": t, "done": False}
-                                             for i, t in enumerate(item_texts[:CHECKLIST_ITEMS_LIMIT])]
-                                    new_cl = {"id": cid, "title": title, "items": items,
-                                              "pinned_message_id": None, "created": _today()}
-                                    checklists.append(new_cl)
-                                    store_set_checklists(user_id, checklists)
-                                    _fire_sync()
-                                    await state.clear()
-                                    sent = await message.answer(
-                                        f"✅ Чеклист «{title}» создан!",
-                                        reply_markup=get_main_keyboard()
-                                    )
+                            if not title:
+                                # No title — fall back to FSM
+                                await _start_checklist_create(message, state)
+                                reply_text = ""
+                            else:
+                                # Atomic creation — always instant, no FSM
+                                new_cl = await _create_checklist_atomic(
+                                    user_id, message, title=title, items_raw=items_raw
+                                )
+                                if new_cl:
+                                    n_items = len(new_cl.get("items", []))
+                                    confirm = f"✅ Чеклист «{title}» создан"
+                                    confirm += f" с {n_items} пунктами!" if n_items else "!"
+                                    await message.answer(confirm, reply_markup=get_main_keyboard())
+                                    # Show inline checklist
+                                    prog = _checklist_progress(new_cl)
                                     cl_msg = await message.answer(
-                                        f"☑️ <b>{title}</b>  0/{len(items)}",
+                                        f"☑️ <b>{title}</b>  {prog}",
                                         reply_markup=get_checklist_inline(new_cl)
                                     )
-                                    new_cl["pinned_message_id"] = cl_msg.message_id
-                                    store_set_checklists(user_id, checklists)
-                                    _fire_sync()
-                                    # No auto-pin — available via menu
-                            reply_text = ""
+                                    # Save msg_id
+                                    checklists = store_get_checklists(user_id)
+                                    cl_ref = next((c for c in checklists if c["id"] == new_cl["id"]), None)
+                                    if cl_ref:
+                                        cl_ref["pinned_message_id"] = cl_msg.message_id
+                                        store_set_checklists(user_id, checklists)
+                                        _fire_sync()
+                                    # If empty — suggest editing
+                                    if not n_items:
+                                        edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
+                                            InlineKeyboardButton(text="✏️ Добавить пункты",
+                                                                 callback_data=f"cl_edit_{new_cl['id']}")
+                                        ]])
+                                        await message.answer(
+                                            "<i>Чеклист пустой — добавь пункты:</i>",
+                                            reply_markup=edit_kb
+                                        )
+                                reply_text = ""
 
                         elif intent == "delete_checklist":
                             target     = (parsed_check.get("action") or {}).get("title","").lower()
