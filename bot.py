@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Garden Bot — SR Gentle Companion v7.22.0
+# Mandala Helper - Lite — SR Gentle Companion v7.22.1
 
 import re
 import os
@@ -119,6 +119,14 @@ def store_get_profile(telegram_id: str) -> Optional[dict]:
 def store_set_profile(telegram_id: str, g: dict) -> None:
     _get_user_store(telegram_id)["profile"] = g
     _pending_writes[f"{_user_path(telegram_id)}/profile.json"] = g
+
+
+async def _safe_cb_answer(callback: CallbackQuery, text: str = "", show_alert: bool = False) -> None:
+    """Safely answer a callback query — ignores 'query too old' errors after bot restart."""
+    try:
+        await callback.answer(text, show_alert=show_alert)
+    except Exception:
+        pass  # TelegramBadRequest: query too old after bot restart
 
 def store_get_workspace(telegram_id: str) -> Optional[dict]:
     return copy.deepcopy(_get_user_store(telegram_id).get("workspace"))
@@ -613,25 +621,39 @@ def _build_profile_card(user_id: str) -> str:
         lines.append("\n🌀 Активных задач нет")
         return "\n".join(lines)
     lines.append("")
-    # Group tasks by group_name, assign unique emojis
+    # Group tasks — iterate in workspace.groups[] order for correct display
+    groups_data = store_get_groups(user_id).get("groups", [])
+    emoji_map   = _assign_group_emojis(groups_data)
+    # Build index: group_name → tasks
     by_group: dict = {}
     for t in active:
         key = t.get("label_name") or ""
         by_group.setdefault(key, []).append(t)
-    # Build emoji map for named groups
-    groups_data = store_get_groups(user_id).get("groups", [])
-    emoji_map = _assign_group_emojis(groups_data)
-    # Helper: get emoji by group name
     def get_group_emoji(gname: str) -> str:
         for g in groups_data:
             if g.get("name") == gname:
                 return emoji_map.get(g["id"], "🌱")
         return _group_emoji(gname) or "🌱"
-    for group_name, items in by_group.items():
-        if not group_name:
+    # Output in stored groups order
+    shown = set()
+    for g in groups_data:
+        gname = g.get("name", "")
+        items = by_group.get(gname, [])
+        if not items:
             continue
-        emoji = get_group_emoji(group_name)
-        lines.append(f"{emoji} <b>{group_name}</b>")
+        shown.add(gname)
+        emoji = emoji_map.get(g["id"], "🌱")
+        lines.append(f"{emoji} <b>{gname}</b>")
+        for t in _sort_by_deadline(items)[:5]:
+            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+            ind = _deadline_indicator(t.get("deadline", ""))
+            lines.append(f"  · {ind}{t['title']}{dl}")
+    # Groups not in workspace (edge case)
+    for gname, items in by_group.items():
+        if not gname or gname in shown:
+            continue
+        emoji = get_group_emoji(gname)
+        lines.append(f"{emoji} <b>{gname}</b>")
         for t in _sort_by_deadline(items)[:5]:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
@@ -1165,7 +1187,7 @@ def _task_edit_field_kb(tid: str) -> InlineKeyboardMarkup:
 
 @router.callback_query(F.data.startswith("task_edit_"))
 async def cb_task_edit_start(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     tid = callback.data[len("task_edit_"):]
     user_id = str(callback.from_user.id)
     tasks = store_get_tasks(user_id)
@@ -1360,7 +1382,7 @@ async def tedit_group_cb(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("task_done_"))
 async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
     tid     = callback.data[len("task_done_"):]
     tasks   = store_get_tasks(user_id)
@@ -1381,7 +1403,7 @@ async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("task_del_"))
 async def cb_task_del_mgmt(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
     tid     = callback.data[len("task_del_"):]
     tasks   = store_get_tasks(user_id)
@@ -1639,9 +1661,9 @@ async def cb_cl_create_new(callback: CallbackQuery, state: FSMContext):
 async def cl_title_input(message: Message, state: FSMContext):
     # Support voice input via state override
     _sd = await state.get_data()
-    _vt = _sd.pop("_voice_text", None)
+    _vt = _sd.get("_voice_text")
     if _vt:
-        await state.update_data(**_sd)
+        await state.update_data(_voice_text=None)
     title = (_vt or message.text or "").strip()
     if not title or len(title) < 2:
         await message.answer("☑️ Введи название чеклиста (минимум 2 символа).")
@@ -1669,11 +1691,12 @@ async def cl_title_input(message: Message, state: FSMContext):
 @router.message(StateFilter(ChecklistStates.waiting_for_items))
 async def cl_items_input(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
-    data    = await state.get_data()
-    title   = data.get("cl_title", "Чеклист")
-    _vt     = data.pop("_voice_text", None)
+    data  = await state.get_data()
+    title = data.get("cl_title", "Чеклист")
+    _vt   = data.get("_voice_text")
     if _vt:
-        await state.update_data(**data)
+        # Clear voice text from state after reading
+        await state.update_data(_voice_text=None)
     raw = (_vt or message.text or "").strip()
     if not raw:
         await message.answer("☑️ Введи хотя бы один пункт.")
@@ -1726,7 +1749,7 @@ async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_toggle|"))
 async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
     parts   = callback.data.split("_")
     # cl_toggle_CLID_IID — but CLID can have underscores, so:
@@ -1772,7 +1795,7 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_open_"))
 async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
     cid     = callback.data[len("cl_open_"):]
     checklists = store_get_checklists(user_id)
@@ -1814,7 +1837,7 @@ async def cb_cl_pin(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_delete_"))
 async def cb_cl_delete(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
     cid     = callback.data[len("cl_delete_"):]
     checklists = store_get_checklists(user_id)
@@ -1835,7 +1858,7 @@ async def cb_cl_delete(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("cl_edit_"))
 async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
     """Show edit options for a checklist."""
-    await callback.answer()
+    await _safe_cb_answer(callback)
     cid = callback.data[len("cl_edit_"):]
     user_id = str(callback.from_user.id)
     checklists = store_get_checklists(user_id)
@@ -1866,7 +1889,7 @@ async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_add_item_"))
 async def cb_cl_add_item_start(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     cid = callback.data[len("cl_add_item_"):]
     await state.update_data(cl_edit_id=cid, cl_edit_item_id=None)
     await state.set_state(ChecklistStates.waiting_for_item_edit)
@@ -1880,7 +1903,7 @@ async def cb_cl_add_item_start(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_edititem|"))
 async def cb_cl_edititem_start(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     parts = callback.data.split("|")
     cid = parts[1] if len(parts) > 1 else ""
     iid = parts[2] if len(parts) > 2 else ""
@@ -1939,7 +1962,7 @@ async def cl_item_edit_input(message: Message, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_delitem|"))
 async def cb_cl_delitem(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
+    await _safe_cb_answer(callback)
     user_id   = str(callback.from_user.id)
     parts = callback.data.split("|")
     cid = parts[1] if len(parts) > 1 else ""
@@ -2613,22 +2636,36 @@ def _format_tasks_mkb(tasks: list) -> str:
             parts.append(f"  • {ind}{t['title']}{lbl}{dl}")
 
 def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
-    """Format active tasks grouped by group, with unique emojis."""
+    """Format active tasks grouped by group in workspace order, with unique emojis."""
     by_group: dict = {}
     for t in tasks:
         key = t.get("label_name") or ""
         by_group.setdefault(key, []).append(t)
-    # Build unique emoji map from stored groups
     groups_data = store_get_groups(user_id).get("groups", []) if user_id else []
-    emoji_map = _assign_group_emojis(groups_data)
+    emoji_map   = _assign_group_emojis(groups_data)
     def get_emoji(gname: str) -> str:
         for g in groups_data:
             if g.get("name") == gname:
                 return emoji_map.get(g["id"], "🌱")
         return _group_emoji(gname) or "🌱"
     parts = []
+    shown = set()
+    # Iterate in stored groups order
+    for g in groups_data:
+        gname = g.get("name", "")
+        items = by_group.get(gname, [])
+        if not items:
+            continue
+        shown.add(gname)
+        emoji = emoji_map.get(g["id"], "🌱")
+        parts.append(f"<b>{emoji} {gname}</b>")
+        for t in _sort_by_deadline(items)[:5]:
+            dl  = " · " + t["deadline"] if t.get("deadline") else ""
+            ind = _deadline_indicator(t.get("deadline",""))
+            parts.append(f"  • {ind}{t['title']}{dl}")
+    # Any groups not in workspace (edge case)
     for gname, items in by_group.items():
-        if not gname:
+        if not gname or gname in shown:
             continue
         emoji = get_emoji(gname)
         parts.append(f"<b>{emoji} {gname}</b>")
@@ -4202,23 +4239,23 @@ async def handle_voice(message: Message, state: FSMContext):
         # Show what was heard
         await status_msg.edit_text(f"🎙 <i>«{text}»</i>", parse_mode="HTML")
         # Route via state — Message is frozen, can't set .text directly
-        # Check if an active FSM is waiting for text input
+        # Save text to state FIRST, then call appropriate handler
+        await state.update_data(_voice_text=text)
         current_state = await state.get_state()
         if current_state == ChecklistStates.waiting_for_title.state:
-            message._voice_override = text
-            await state.update_data(_voice_text=text)
             await cl_title_input(message, state)
         elif current_state == ChecklistStates.waiting_for_items.state:
-            await state.update_data(_voice_text=text)
             await cl_items_input(message, state)
         elif current_state == ChecklistStates.waiting_for_item_edit.state:
-            await state.update_data(_voice_text=text)
             await cl_item_edit_input(message, state)
         elif current_state == TaskStates.waiting_for_title.state:
-            await state.update_data(_voice_text=text)
             await task_title(message, state)
+        elif current_state == TaskStates.waiting_for_custom_deadline.state:
+            await task_custom_deadline_input(message, state)
+        elif current_state == LabelRenameStates.waiting_for_new_name.state:
+            await cb_label_rename_input(message, state)
         else:
-            await state.update_data(_voice_text=text)
+            # No active FSM — route to free conversation
             await free_conversation(message, state)
     except Exception as e:
         logger.error(f"Voice handler error: {e}")
@@ -4239,9 +4276,9 @@ async def free_conversation(message: Message, state: FSMContext):
 
     # Support voice messages: text may come via state instead of message.text
     _state_data = await state.get_data()
-    _voice_override = _state_data.pop("_voice_text", None)
+    _voice_override = _state_data.get("_voice_text")
     if _voice_override:
-        await state.update_data(**_state_data)  # remove key from state
+        await state.update_data(_voice_text=None)
         text = _voice_override.strip()
     else:
         text = (message.text or "").strip()
