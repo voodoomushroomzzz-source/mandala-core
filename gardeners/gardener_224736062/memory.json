@@ -79,6 +79,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Изменить дату в задаче доделать roadmap на 24.04."
+    },
+    {
+      "role": "assistant",
+      "content": "✅ Дедлайн → 2026-04-24"
     }
   ],
   "updated": "2026-04-22"
