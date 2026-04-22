@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Garden Bot — SR Gentle Companion v7.21.1
+# Mandala Garden Bot — SR Gentle Companion v7.22.0
 
 import re
 import os
@@ -1005,52 +1005,56 @@ async def send_morning_greeting(telegram_id: str) -> None:
         date_str = f"{now.day} {MONTHS_RU[now.month-1]}"
         # Build brief
         lines = [f"🌅 <b>{name}, {date_str}</b>"]
-        lines.append(f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений")
-        from datetime import datetime as _dtt
-        today_s = _dtt.now(tz).strftime("%Y-%m-%d")
-        tomorrow_s = (_dtt.now(tz) + __import__("datetime").timedelta(days=1)).strftime("%Y-%m-%d")
+        from datetime import datetime as _dtt, timedelta as _tdelta
+        today_s    = _dtt.now(tz).strftime("%Y-%m-%d")
+        tomorrow_s = (_dtt.now(tz) + _tdelta(days=1)).strftime("%Y-%m-%d")
+        day_after_s= (_dtt.now(tz) + _tdelta(days=2)).strftime("%Y-%m-%d")
+        week_end_s = (_dtt.now(tz) + _tdelta(days=7)).strftime("%Y-%m-%d")
         if active:
-            lines.append("")
-            # Separate overdue, today, tomorrow, future
-            overdue  = [t for t in active if t.get("deadline") and t["deadline"] < today_s]
-            due_today = [t for t in active if t.get("deadline") == today_s]
-            due_tmrw  = [t for t in active if t.get("deadline") == tomorrow_s]
-            # Build top 3: overdue first, then today, then tomorrow, then rest by deadline
-            def _dl_key(t):
-                return t.get("deadline") or "9999"
-            top3 = (sorted(overdue, key=_dl_key) +
-                    due_today + due_tmrw +
-                    sorted([t for t in active
-                            if t not in overdue and t not in due_today and t not in due_tmrw],
-                           key=_dl_key))[:3]
-            lines.append(f"🌀 Задач: {len(active)}")
-            # Urgent block first (overdue + today)
-            urgent = sorted(overdue, key=lambda t: t.get("deadline") or "9999") + due_today
-            if urgent:
-                lines.append("⚠️ <b>Срочно:</b>")
-                for t in urgent[:3]:
+            # Classify tasks
+            hot    = sorted([t for t in active if t.get("deadline") and t["deadline"] <= today_s],
+                             key=lambda t: t.get("deadline") or "9999")  # overdue + today
+            medium = [t for t in active if t.get("deadline") in (tomorrow_s, day_after_s)]
+            low    = [t for t in active
+                      if t.get("deadline") and tomorrow_s < t["deadline"] <= week_end_s]
+            rest   = [t for t in active
+                      if t not in hot and t not in medium and t not in low]
+            # Build brief Variant B
+            if hot:
+                lines.append("")
+                lines.append("🔥 <b>Сегодня горит:</b>")
+                for t in hot:
                     dl = t.get("deadline", "")
-                    dl_str = " · просрочена" if dl < today_s else " · сегодня"
-                    lines.append(f"  🔴 {t['title']}{dl_str}")
-            # Then remaining top tasks
-            rest = [t for t in top3 if t not in urgent]
-            if not urgent:
-                rest = top3
-            for t in rest[:3]:
-                dl = t.get("deadline", "")
-                if dl == tomorrow_s:
-                    dl_str = " · завтра 🟡"
-                elif dl:
-                    dl_str = f" · {dl}"
-                else:
-                    dl_str = ""
-                lines.append(f"  • {t['title']}{dl_str}")
-            if len(active) > 3:
-                lines.append(f"  <i>...и ещё {len(active)-3}</i>")
+                    suffix = " <i>· просрочена</i>" if dl < today_s else ""
+                    lines.append(f"  {t['title']}{suffix}")
+            if medium:
+                lines.append("")
+                lines.append("⚡ <b>На подходе:</b>")
+                for t in medium:
+                    dl = t.get("deadline", "")
+                    day_label = "завтра" if dl == tomorrow_s else "послезавтра"
+                    lines.append(f"  {t['title']} · {day_label}")
+            if low:
+                lines.append("")
+                lines.append("🌱 <b>В работе:</b>")
+                for t in low[:3]:
+                    dl = t.get("deadline", "")
+                    lines.append(f"  {t['title']} · {dl}")
+                if len(low) > 3:
+                    lines.append(f"  <i>...и ещё {len(low)-3}</i>")
+            if rest and not hot and not medium and not low:
+                lines.append("")
+                for t in rest[:3]:
+                    lines.append(f"  {t['title']}")
+                if len(rest) > 3:
+                    lines.append(f"  <i>...и ещё {len(rest)-3}</i>")
+            lines.append("")
+            lines.append("Что берёшь в работу первым?")
+            lines.append("")
+            lines.append(f"💎 {ach_count} достижений · Резонанс {resonance}%")
         else:
             lines.append("")
-            lines.append("🌱 Активных задач нет.")
-            lines.append("Как наполним этот день?")
+            lines.append("Активных задач нет — как наполним этот день? 🌱")
         text = "\n".join(lines)
         await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard())
         _mark_proactive_sent(telegram_id)
@@ -1193,8 +1197,12 @@ async def cb_tedit_title(callback: CallbackQuery, state: FSMContext):
     ])
     try:
         await callback.message.edit_text("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
+        await state.update_data(_tedit_msg_id=callback.message.message_id,
+                                _tedit_chat_id=callback.message.chat.id)
     except Exception:
-        await callback.message.answer("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
+        sent = await callback.message.answer("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
+        await state.update_data(_tedit_msg_id=sent.message_id,
+                                _tedit_chat_id=sent.chat.id)
 
 @router.message(StateFilter(TaskEditStates.editing_title))
 async def tedit_title_input(message: Message, state: FSMContext):
@@ -1212,6 +1220,13 @@ async def tedit_title_input(message: Message, state: FSMContext):
             t["updated"] = _today()
     store_set_tasks(user_id, tasks)
     _fire_sync()
+    _ted = await state.get_data()
+    if _ted.get("_tedit_msg_id"):
+        try:
+            await message.bot.delete_message(_ted.get("_tedit_chat_id", message.chat.id),
+                                             _ted["_tedit_msg_id"])
+        except Exception:
+            pass
     await state.clear()
     await message.answer(f"✅ Название → «{new_title}»", reply_markup=get_main_keyboard())
 
@@ -1473,10 +1488,15 @@ async def cb_label_rename_start(callback: CallbackQuery, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="back_to_settings")]
     ])
+    await state.update_data(rename_label_id=lid)
     try:
         await callback.message.edit_text("✏️ Введи новое название группы:", reply_markup=cancel_kb)
+        await state.update_data(_rename_msg_id=callback.message.message_id,
+                                _rename_chat_id=callback.message.chat.id)
     except Exception:
-        await callback.message.answer("✏️ Введи новое название группы:", reply_markup=cancel_kb)
+        sent = await callback.message.answer("✏️ Введи новое название группы:", reply_markup=cancel_kb)
+        await state.update_data(_rename_msg_id=sent.message_id,
+                                _rename_chat_id=sent.chat.id)
 
 @router.message(StateFilter(LabelRenameStates.waiting_for_new_name))
 async def cb_label_rename_input(message: Message, state: FSMContext):
@@ -1501,6 +1521,12 @@ async def cb_label_rename_input(message: Message, state: FSMContext):
             t["label_name"] = new_name
     store_set_tasks(user_id, tasks)
     _fire_sync()
+    _rd = await state.get_data()
+    if _rd.get("_rename_msg_id"):
+        try:
+            await message.bot.delete_message(_rd["_rename_chat_id"], _rd["_rename_msg_id"])
+        except Exception:
+            pass
     await state.clear()
     await message.answer(
         f"✅ Группа переименована в «{new_name}»",
@@ -1585,20 +1611,24 @@ async def _start_checklist_create(message: Message, state: FSMContext, pre_title
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="❌ Отмена", callback_data="cl_cancel_fsm")]
         ])
-        await message.answer(
+        sent = await message.answer(
             f"☑️ <b>{pre_title}</b>\n\nДобавляй пункты — каждый с новой строки.\n"
             "<i>Пример:\nПалатка\nСпальник\nАптечка</i>",
             reply_markup=cancel_kb
         )
+        await state.update_data(_cl_instr_msg_id=sent.message_id,
+                                _cl_instr_chat_id=message.chat.id)
     else:
         await state.set_state(ChecklistStates.waiting_for_title)
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="❌ Отмена", callback_data="cl_cancel_fsm")]
         ])
-        await message.answer(
+        sent = await message.answer(
             "☑️ <b>Новый чеклист</b>\n\nКак назовём?",
             reply_markup=cancel_kb
         )
+        await state.update_data(_cl_instr_msg_id=sent.message_id,
+                                _cl_instr_chat_id=message.chat.id)
 
 @router.callback_query(F.data == "cl_create_new")
 async def cb_cl_create_new(callback: CallbackQuery, state: FSMContext):
@@ -1621,11 +1651,20 @@ async def cl_title_input(message: Message, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="cl_cancel_fsm")]
     ])
-    await message.answer(
+    # Try delete previous instruction
+    _prev = (await state.get_data())
+    if _prev.get("_cl_instr_msg_id"):
+        try:
+            await message.bot.delete_message(_prev["_cl_instr_chat_id"], _prev["_cl_instr_msg_id"])
+        except Exception:
+            pass
+    sent = await message.answer(
         f"☑️ <b>{title}</b>\n\nДобавляй пункты — каждый с новой строки.\n"
         "<i>Пример:\nПалатка\nСпальник\nАптечка</i>",
         reply_markup=cancel_kb
     )
+    await state.update_data(_cl_instr_msg_id=sent.message_id,
+                            _cl_instr_chat_id=message.chat.id)
 
 @router.message(StateFilter(ChecklistStates.waiting_for_items))
 async def cl_items_input(message: Message, state: FSMContext):
@@ -1655,21 +1694,23 @@ async def cl_items_input(message: Message, state: FSMContext):
     checklists.append(new_cl)
     store_set_checklists(user_id, checklists)
     _fire_sync()
+    # Delete instruction message
+    _d = await state.get_data()
+    if _d.get("_cl_instr_msg_id"):
+        try:
+            await message.bot.delete_message(_d["_cl_instr_chat_id"], _d["_cl_instr_msg_id"])
+        except Exception:
+            pass
     await state.clear()
     await message.answer(f"✅ Чеклист «{title}» создан с {len(items)} пунктами!")
-    # Show checklist and try to pin
     sent = await message.answer(
         f"☑️ <b>{title}</b>  0/{len(items)}",
         reply_markup=get_checklist_inline(new_cl)
     )
-    # Store pinned_message_id and auto-pin
+    # Store message_id (no auto-pin — available in menu)
     new_cl["pinned_message_id"] = sent.message_id
     store_set_checklists(user_id, checklists)
     _fire_sync()
-    try:
-        await message.bot.pin_chat_message(message.chat.id, sent.message_id, disable_notification=True)
-    except Exception:
-        pass
 
 @router.callback_query(F.data == "cl_cancel_fsm")
 async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
@@ -2521,7 +2562,10 @@ def _detect_task_period(text: str) -> str:
 
 def _deadline_indicator(deadline: str) -> str:
     """Return urgency emoji for a task deadline.
-    🔴 = today or overdue   🟡 = tomorrow/day-after   '' = 3+ days or none
+    🔥 = today or overdue
+    ⚡ = tomorrow or day-after
+    🌱 = 3-7 days
+    '' = 8+ days or no deadline
     """
     if not deadline:
         return ""
@@ -2529,10 +2573,13 @@ def _deadline_indicator(deadline: str) -> str:
     today     = datetime.now().strftime("%Y-%m-%d")
     tomorrow  = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
     day_after = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
+    week_end  = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
     if deadline <= today:
-        return "🔴 "
+        return "🔥 "
     if deadline in (tomorrow, day_after):
-        return "🟡 "
+        return "⚡ "
+    if deadline <= week_end:
+        return "🌱 "
     return ""
 
 def _sort_by_deadline(tasks: list) -> list:
@@ -4459,12 +4506,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     new_cl["pinned_message_id"] = cl_msg.message_id
                                     store_set_checklists(user_id, checklists)
                                     _fire_sync()
-                                    try:
-                                        await message.bot.pin_chat_message(
-                                            message.chat.id, cl_msg.message_id, disable_notification=True
-                                        )
-                                    except Exception:
-                                        pass
+                                    # No auto-pin — available via menu
                             reply_text = ""
 
                         elif intent == "delete_checklist":
