@@ -55,6 +55,22 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Создай новую задачу, сходить на тренировку. Дедлайн у нас послезавтра и напоминание в день дедлайна."
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Покажи мои задачи."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-22"
