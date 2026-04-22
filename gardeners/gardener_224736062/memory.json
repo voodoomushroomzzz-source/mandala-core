@@ -55,6 +55,30 @@
     {
       "role": "assistant",
       "content": "800 000 тайских батов составляют примерно 27 000 российских рублей по состоянию на 2026-04-22. Курс валют колеблется, поэтому это приблизительная оценка. Для точной конвертации проверьте надежный финансовый источник.\n\n\n<b>Источники:</b>\n• <a href=\"https://iy.kommersant.ru/ISSUES.PDF/REGIONS/ROSTOV_TEMA/2013/034/12T034.PDF\">[PDF] Audi A7, Москва, январь 2013</a>\n• <a href=\"https://yandex.ru/finance/crypto/BTC_RUB\">Курс Bitcoin (BTC) к Российскому рублю (RUB) на сегодня ...</a>"
+    },
+    {
+      "role": "user",
+      "content": "Покажи задачи на завтра."
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Покажи задачи на сегодня."
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Покажи все задачи."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-22"
