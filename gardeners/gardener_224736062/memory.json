@@ -7,6 +7,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Привет, создай чек-лист утро, добавь туда палатка, спальник, аптечка."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-22"
