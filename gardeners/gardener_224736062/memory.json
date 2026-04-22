@@ -47,6 +47,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Добавь задачу оплатить старый счет по кофе."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-22"
