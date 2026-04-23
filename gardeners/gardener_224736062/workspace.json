@@ -164,6 +164,21 @@
       "updated": "2026-04-22",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260423_012",
+      "title": "сделать возмещение с лесной подчеку",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "world",
+      "priority": 6,
+      "deadline": "2026-04-24",
+      "reminder": null,
+      "created": "2026-04-23",
+      "updated": "2026-04-23",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
