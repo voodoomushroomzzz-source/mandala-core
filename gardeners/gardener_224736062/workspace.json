@@ -238,19 +238,6 @@
   "achievements_count": 6,
   "checklists": [
     {
-      "id": "cl_вечер",
-      "title": "Вечер",
-      "items": [
-        {
-          "id": "i1",
-          "text": "Привет, создай чек-лист вечер.",
-          "done": false
-        }
-      ],
-      "pinned_message_id": 5465,
-      "created": "2026-04-22"
-    },
-    {
       "id": "cl_походв",
       "title": "поход в магазин",
       "items": [
