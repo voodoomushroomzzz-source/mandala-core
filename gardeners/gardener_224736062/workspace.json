@@ -249,6 +249,39 @@
       ],
       "pinned_message_id": 5465,
       "created": "2026-04-22"
+    },
+    {
+      "id": "cl_походв",
+      "title": "поход в магазин",
+      "items": [
+        {
+          "id": "i1",
+          "text": "хлеб",
+          "done": false
+        },
+        {
+          "id": "i2",
+          "text": "яйца",
+          "done": false
+        },
+        {
+          "id": "i3",
+          "text": "огурцы",
+          "done": false
+        },
+        {
+          "id": "i4",
+          "text": "намаз",
+          "done": false
+        },
+        {
+          "id": "i5",
+          "text": "сладкое",
+          "done": false
+        }
+      ],
+      "pinned_message_id": null,
+      "created": "2026-04-23"
     }
   ]
 }
