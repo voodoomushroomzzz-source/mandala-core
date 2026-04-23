@@ -4701,6 +4701,11 @@ async def free_conversation(message: Message, state: FSMContext):
             raw_clean = re.sub(r"^```(?:json)?\s*", "", raw_clean)
             raw_clean = re.sub(r"\s*```\s*$", "", raw_clean).strip()
 
+            # Strip any text prefix before JSON (LLM sometimes adds "📋 Показываю..." before {)
+            _brace_idx = raw_clean.find("{")
+            if _brace_idx > 0:
+                raw_clean = raw_clean[_brace_idx:]
+
             if raw_clean.startswith("{"):
                 # 3a. Try direct parse
                 try:
