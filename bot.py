@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.22.2
+# Mandala Helper - Lite — SR Gentle Companion v7.23.1
 
 import re
 import os
@@ -69,6 +69,7 @@ LABEL_LIMIT_HARD = 7
 LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
 CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
+REMINDER_LIMIT         = 10  # max reminders per user
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -160,12 +161,45 @@ def store_get_achievements_count(telegram_id: str) -> int:
     return int(ws.get("achievements_count", 0)) if ws else 0
 
 def store_increment_achievements(telegram_id: str) -> int:
-    """Call when task is closed. Returns new count."""
+    """Increment achievement counter. Returns new count."""
     ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
     count = int(ws.get("achievements_count", 0)) + 1
     ws["achievements_count"] = count
     store_set_workspace(telegram_id, ws)
     return count
+
+def store_add_resonance(telegram_id: str, delta: int) -> int:
+    """Add delta to resonance_level. Min 5, max 100. Returns new level."""
+    profile = store_get_profile(telegram_id)
+    if not profile:
+        return 5
+    current = int(profile.get("resonance_level", 5))
+    new_val = max(5, min(100, current + delta))
+    profile["resonance_level"] = new_val
+    if telegram_id in _store:
+        _store[telegram_id]["profile"] = profile
+        _pending_writes[f"{_user_path(telegram_id)}/gardener.json"] = profile
+    return new_val
+
+def _days_since_last_interaction(telegram_id: str) -> int:
+    """Days since last user message. 0=today, 999=never."""
+    last = _last_interaction.get(str(telegram_id))
+    if not last:
+        return 999
+    try:
+        from datetime import datetime as _dti
+        return (_dti.now() - _dti.strptime(last, "%Y-%m-%d")).days
+    except Exception:
+        return 999
+
+def _recalc_resonance_from_achievements(telegram_id: str) -> int:
+    """One-time recalc: achievements_count * 2, min 5."""
+    count = store_get_achievements_count(telegram_id)
+    new_val = max(5, min(100, count * 2))
+    store_add_resonance(telegram_id, new_val - int(
+        (store_get_profile(telegram_id) or {}).get("resonance_level", 5)
+    ))
+    return new_val
 def store_get_groups(telegram_id: str) -> dict:
     ws = store_get_workspace(telegram_id)
     return copy.deepcopy({"groups": ws.get("groups", [])}) if ws else {"groups": []}
@@ -185,6 +219,16 @@ def store_set_checklists(telegram_id: str, checklists: list) -> None:
     """Save checklists list to workspace."""
     ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": [], "checklists": []}
     ws["checklists"] = checklists
+    store_set_workspace(telegram_id, ws)
+
+
+def store_get_reminders(telegram_id: str) -> list:
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("reminders", [])) if ws else []
+
+def store_set_reminders(telegram_id: str, reminders: list) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks":[],"groups":[],"achievements":[],"reminders":[]}
+    ws["reminders"] = reminders
     store_set_workspace(telegram_id, ws)
 
 # Legacy aliases for backward compat during transition
@@ -529,6 +573,9 @@ class ChecklistStates(StatesGroup):
     waiting_for_items     = State()
     waiting_for_item_edit = State()  # for editing a specific item text
 
+class ReminderStates(StatesGroup):
+    waiting_for_input = State()
+
 class AskStates(StatesGroup):
     waiting_for_question = State()
 
@@ -643,6 +690,8 @@ def _build_profile_card(user_id: str) -> str:
             continue
         shown.add(gname)
         emoji = emoji_map.get(g["id"], "🌱")
+        if lines and not lines[-1].startswith(("🌱", "💫", "🪬")):
+            lines.append("")  # visual separator between groups
         lines.append(f"{emoji} <b>{gname}</b>")
         for t in _sort_by_deadline(items)[:5]:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
@@ -818,24 +867,29 @@ def get_edit_profile_inline() -> InlineKeyboardMarkup:
 def get_settings_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🌀 Задачи & Группы",        callback_data="menu_tasks_mgmt")],
-        [InlineKeyboardButton(text="🔔 Напоминания (!)",        callback_data="menu_reminders_soon")],
+        [InlineKeyboardButton(text="🔔 Напоминания",             callback_data="menu_reminders_mgmt")],
         [InlineKeyboardButton(text="☑️ Чеклисты",               callback_data="menu_checklists_mgmt")],
         [InlineKeyboardButton(text="🗺 Роадмапы (!)",           callback_data="menu_roadmaps_soon")],
         [InlineKeyboardButton(text="🔬 Улучшить симбиоз (!)",   callback_data="menu_extended")],
     ])
 
 def get_tasks_mgmt_inline(tasks: list, user_id: str = "") -> InlineKeyboardMarkup:
-    """Tasks management: create + task list with edit/done/del + groups button."""
+    """Tasks management: create + task list (2-row mobile layout) + groups button."""
     btns = [[InlineKeyboardButton(text="➕ Создать задачу", callback_data="start_addtask")]]
     active = [t for t in tasks if t.get("status") != "completed"]
-    for t in active[:10]:
-        title = t.get("title", "—")[:22]
+    for t in active[:30]:  # show all up to limit
+        title = t.get("title", "—")[:30]
         tid   = t.get("task_id", "")
+        ind   = _deadline_indicator(t.get("deadline",""))
+        # Row 1: task name (full width for readability on mobile)
         btns.append([
-            InlineKeyboardButton(text=f"• {title}", callback_data=f"task_noop_{tid}"),
-            InlineKeyboardButton(text="✏️",          callback_data=f"task_edit_{tid}"),
-            InlineKeyboardButton(text="✅",          callback_data=f"task_done_{tid}"),
-            InlineKeyboardButton(text="🗑",          callback_data=f"task_del_{tid}"),
+            InlineKeyboardButton(text=f"{ind}• {title}", callback_data=f"task_noop_{tid}"),
+        ])
+        # Row 2: action buttons
+        btns.append([
+            InlineKeyboardButton(text="✏️ Ред.",  callback_data=f"task_edit_{tid}"),
+            InlineKeyboardButton(text="✅ Готово", callback_data=f"task_done_{tid}"),
+            InlineKeyboardButton(text="🗑",        callback_data=f"task_del_{tid}"),
         ])
     btns.append([InlineKeyboardButton(text="🎨 Группы", callback_data="menu_labels_mgmt")])
     btns.append([InlineKeyboardButton(text="← Назад",   callback_data="back_to_settings")])
@@ -1104,6 +1158,48 @@ async def send_evening_checkin(telegram_id: str) -> None:
     except Exception as e:
         logger.error(f"Evening check-in error: {e}")
 
+
+async def run_reminder_scheduler() -> None:
+    """Fire reminders every minute."""
+    try:
+        from datetime import datetime as _dtr6, timedelta as _td6
+        now_str = _dtr6.now().strftime("%Y-%m-%dT%H:%M")
+        for uid, user_store in list(_store.items()):
+            if not isinstance(user_store, dict) or not user_store.get("ready"):
+                continue
+            reminders = store_get_reminders(uid)
+            if not reminders:
+                continue
+            changed = False
+            for r in list(reminders):
+                if not r.get("active"):
+                    continue
+                if r.get("datetime_iso", "")[:16] != now_str:
+                    continue
+                try:
+                    await bot.send_message(int(uid), f"🔔 <b>{r['title']}</b>",
+                                           parse_mode="HTML", reply_markup=get_main_keyboard())
+                except Exception:
+                    pass
+                repeat = r.get("repeat", "once")
+                if repeat == "once":
+                    reminders.remove(r)
+                elif repeat == "daily":
+                    d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
+                    r["datetime_iso"] = (d + _td6(days=1)).strftime("%Y-%m-%dT%H:%M")
+                elif repeat == "weekdays":
+                    d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
+                    skip = 1
+                    while (d + _td6(days=skip)).weekday() >= 5:
+                        skip += 1
+                    r["datetime_iso"] = (d + _td6(days=skip)).strftime("%Y-%m-%dT%H:%M")
+                changed = True
+            if changed:
+                store_set_reminders(uid, reminders)
+                _fire_sync()
+    except Exception as e:
+        logger.error(f"Reminder scheduler error: {e}", exc_info=True)
+
 async def run_proactive_scheduler() -> None:
     try:
         for uid, user_store in list(_store.items()):
@@ -1116,6 +1212,8 @@ async def run_proactive_scheduler() -> None:
             tz_name = settings.get("timezone", "Europe/Moscow")
             if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"], tz_name):
                 await send_morning_greeting(uid)
+            else:
+                await check_silence_and_engage(uid, g)
         # Birthday check
         for uid2, us2 in list(_store.items()):
             if not isinstance(us2, dict) or not us2.get("ready"):
@@ -1386,16 +1484,24 @@ async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     tid     = callback.data[len("task_done_"):]
     tasks   = store_get_tasks(user_id)
+    count, res_delta, new_res = 0, 0, 5
     matched = [t for t in tasks if t.get("task_id") == tid]
     if matched:
+        t_done = matched[0]
         new_tasks = [t for t in tasks if t.get("task_id") != tid]
         store_set_tasks(user_id, new_tasks)
         count = store_increment_achievements(user_id)
+        from datetime import datetime as _dtr
+        today_s = _dtr.now().strftime("%Y-%m-%d")
+        dl = t_done.get("deadline")
+        res_delta = 2 if (dl and dl >= today_s) else 1
+        new_res = store_add_resonance(user_id, res_delta)
         _fire_sync()
     active = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
+    res_str = f" · 🔮 +{res_delta}% → {new_res}%" if res_delta else ""
     try:
         await callback.message.edit_text(
-            f"✅ Готово! 💎 {count}\n🌀 <b>Задачи</b> ({len(active)}/{TASK_LIMIT_HARD})",
+            f"✅ Готово! 💎 {count}{res_str}\n🌀 <b>Задачи</b> ({len(active)}/{TASK_LIMIT_HARD})",
             reply_markup=get_tasks_mgmt_inline(store_get_tasks(user_id))
         )
     except Exception:
@@ -1587,11 +1693,10 @@ async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
     except Exception:
         await callback.message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
 
-@router.callback_query(F.data.in_({"menu_reminders_soon", "menu_roadmaps_soon"}))
+@router.callback_query(F.data.in_({"menu_roadmaps_soon"}))
 async def cb_coming_soon(callback: CallbackQuery):
     labels = {
-        "menu_reminders_soon": "🔔 Напоминания",
-        "menu_roadmaps_soon":  "🗺 Роадмапы",
+        "menu_roadmaps_soon": "🗺 Роадмапы",
     }
     name = labels.get(callback.data, "Функция")
     await callback.answer(f"{name} — скоро! 🌱", show_alert=True)
@@ -1773,12 +1878,13 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
     # Check 100% completion
     if items and all(it.get("done") for it in items):
-        count = store_increment_achievements(user_id)
+        count  = store_increment_achievements(user_id)
+        cl_res = store_add_resonance(user_id, 2)
         _fire_sync()
         try:
             await callback.message.edit_text(
                 f"🎉 <b>{cl['title']}</b> — выполнен полностью!\n"
-                f"💎 +1 достижение · всего {count}",
+                f"💎 +1 достижение · всего {count} · 🔮 +2% → {cl_res}%",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     [InlineKeyboardButton(text="🗑 Удалить чеклист", callback_data=f"cl_delete_{cl['id']}")]
                 ])
@@ -2013,29 +2119,220 @@ async def cb_checklists_mgmt(callback: CallbackQuery, state: FSMContext):
     except Exception:
         await callback.message.answer(header, reply_markup=get_checklists_mgmt_inline(checklists))
 
-async def run_resonance_decay() -> None:
+
+# ─── Reminders ────────────────────────────────────────────────────────────────
+
+def _make_reminder_id(existing: list) -> str:
+    import uuid
+    ids = {r["id"] for r in existing}
+    for _ in range(10):
+        rid = "rem_" + str(uuid.uuid4())[:8]
+        if rid not in ids:
+            return rid
+    return "rem_" + str(len(existing) + 1)
+
+def get_reminders_mgmt_inline(reminders: list) -> InlineKeyboardMarkup:
+    btns = [[InlineKeyboardButton(text="➕ Новое напоминание", callback_data="rem_create_new")]]
+    for r in reminders:
+        rid   = r.get("id", "")
+        title = r.get("title", "—")[:22]
+        dt    = r.get("datetime_iso", "")[:16].replace("T", " ")
+        rep   = {"once": "1×", "daily": "ежедн.", "weekdays": "пн-пт"}.get(r.get("repeat", "once"), "1×")
+        btns.append([
+            InlineKeyboardButton(text=f"🔔 {title} · {dt} ({rep})", callback_data=f"rem_noop_{rid}"),
+            InlineKeyboardButton(text="🗑", callback_data=f"rem_del_{rid}"),
+        ])
+    btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+@router.callback_query(F.data == "menu_reminders_mgmt")
+async def cb_reminders_mgmt(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    user_id   = str(callback.from_user.id)
+    reminders = store_get_reminders(user_id)
+    header    = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
     try:
+        await callback.message.edit_text(header, reply_markup=get_reminders_mgmt_inline(reminders))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders))
+
+@router.callback_query(F.data == "rem_create_new")
+async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    if len(store_get_reminders(user_id)) >= REMINDER_LIMIT:
+        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
+        return
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
+    ])
+    try:
+        await callback.message.edit_text(
+            "🔔 <b>Новое напоминание</b>\n\n"
+            "Напиши в формате:\n"
+            "<code>Название | ДД.ММ.ГГ ЧЧ:ММ | once/daily/weekdays</code>\n"
+            "<i>Пример: Позвонить маме | 25.04.26 09:00 | once</i>",
+            reply_markup=cancel_kb
+        )
+        msg_id  = callback.message.message_id
+        chat_id = callback.message.chat.id
+    except Exception:
+        sent = await callback.message.answer(
+            "🔔 Напиши: <code>Название | ДД.ММ.ГГ ЧЧ:ММ</code>",
+            reply_markup=cancel_kb
+        )
+        msg_id  = sent.message_id
+        chat_id = sent.chat.id
+    await state.set_state(ReminderStates.waiting_for_input)
+    await state.update_data(_rem_msg_id=msg_id, _rem_chat_id=chat_id)
+
+@router.callback_query(F.data.startswith("rem_del_"))
+async def cb_rem_delete(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    user_id   = str(callback.from_user.id)
+    rid       = callback.data[len("rem_del_"):]
+    reminders = [r for r in store_get_reminders(user_id) if r["id"] != rid]
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    header = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_reminders_mgmt_inline(reminders))
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("rem_noop_"))
+async def cb_rem_noop(callback: CallbackQuery):
+    await _safe_cb_answer(callback)
+
+@router.message(StateFilter(ReminderStates.waiting_for_input))
+async def rem_text_input(message: Message, state: FSMContext):
+    import re as _re3
+    user_id = str(message.from_user.id)
+    raw     = (message.text or "").strip()
+    data    = await state.get_data()
+    if data.get("_rem_msg_id"):
+        try:
+            await message.bot.delete_message(data["_rem_chat_id"], data["_rem_msg_id"])
+        except Exception:
+            pass
+    await state.clear()
+    parts  = [p.strip() for p in raw.split("|")]
+    if len(parts) < 2:
+        await message.answer("⚠️ Формат: <code>Название | ДД.ММ.ГГ ЧЧ:ММ</code>")
+        return
+    title  = parts[0]
+    dt_raw = parts[1]
+    repeat = parts[2].strip().lower() if len(parts) > 2 else "once"
+    if repeat not in ("once", "daily", "weekdays"):
+        repeat = "once"
+    m3 = _re3.match(r"^(\d{1,2})\.(\d{1,2})\.(\d{2,4})\s+(\d{1,2}):(\d{2})$", dt_raw)
+    if not m3:
+        await message.answer("⚠️ Не понял дату. Формат: <code>ДД.ММ.ГГ ЧЧ:ММ</code>")
+        return
+    dd, mm, yy, hh, mi = m3.groups()
+    yy = "20" + yy if len(yy) == 2 else yy
+    dt_iso    = f"{yy}-{mm.zfill(2)}-{dd.zfill(2)}T{hh.zfill(2)}:{mi}"
+    reminders = store_get_reminders(user_id)
+    if len(reminders) >= REMINDER_LIMIT:
+        await message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
+        return
+    rid = _make_reminder_id(reminders)
+    reminders.append({"id": rid, "title": title, "datetime_iso": dt_iso, "repeat": repeat, "active": True})
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    rep_str = {"once": "один раз", "daily": "ежедневно", "weekdays": "по будням"}.get(repeat, "один раз")
+    await message.answer(
+        f"✅ Напоминание создано:\n🔔 {title}\n📅 {dt_iso[:16].replace('T', ' ')} · {rep_str}",
+        reply_markup=get_main_keyboard()
+    )
+
+async def run_resonance_decay() -> None:
+    """Daily resonance decay: silence + overdue tasks. Runs at 03:00."""
+    try:
+        from datetime import datetime as _dtr3
+        today_s = _dtr3.now().strftime("%Y-%m-%d")
         for uid, user_store in list(_store.items()):
             if not isinstance(user_store, dict) or not user_store.get("ready"):
                 continue
-            g = user_store.get("profile")
-            if not g:
+            ws = store_get_workspace(uid) or {}
+            if ws.get("_decay_date") == today_s:
                 continue
-            g, changed = _apply_resonance_decay(dict(g))
-            if changed:
-                store_set_profile(uid, g)
-                _fire_sync()
-                logger.info(f"Resonance decay applied for {uid}")
+            days_silent = _days_since_last_interaction(uid)
+            if days_silent <= 2:
+                decay = 0
+            elif days_silent <= 6:
+                decay = 1
+            elif days_silent <= 13:
+                decay = 2
+            else:
+                decay = 3
+            tasks   = store_get_tasks(uid)
+            overdue = [t for t in tasks
+                       if t.get("deadline") and t["deadline"] < today_s
+                       and t.get("status") != "completed"]
+            decay += len(overdue)
+            if decay > 0:
+                store_add_resonance(uid, -decay)
+            ws["_decay_date"] = today_s
+            store_set_workspace(uid, ws)
+            _fire_sync()
     except Exception as e:
-        logger.error(f"Resonance decay crashed: {e}", exc_info=True)
+        logger.error(f"Resonance decay error: {e}", exc_info=True)
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# HANDLERS
-# ═══════════════════════════════════════════════════════════════════════════════
 
-# ─── /start + onboarding ──────────────────────────────────────────────────────
+async def _pick_engagement_message(telegram_id: str, days: int) -> str:
+    """Pick engagement message by silence level and MKB context."""
+    profile = store_get_profile(telegram_id) or {}
+    name    = profile.get("name", "Садовник")
+    tasks   = store_get_tasks(telegram_id)
+    active  = [t for t in tasks if t.get("status") != "completed"]
+    from datetime import datetime as _dtr4
+    today_s = _dtr4.now().strftime("%Y-%m-%d")
+    overdue = [t for t in active if t.get("deadline") and t["deadline"] < today_s]
+    if days >= 14:
+        return f"Буду здесь, {name}, когда понадоблюсь. 🌱"
+    if days >= 7:
+        return (f"{name}, замечаю тишину уже {days} дней. Всё хорошо? 🌿\n\n"
+                f"Иногда молчание — тоже ответ. Просто хочу убедиться.")
+    if days >= 5:
+        if overdue:
+            t = overdue[0]
+            return f"«{t['title']}» висит уже несколько дней, {name}.\n\nЧто-то изменилось с этим?"
+        from collections import Counter
+        areas  = [t.get("life_area", "world") for t in active]
+        sphere = Counter(areas).most_common(1)[0][0] if areas else "world"
+        questions = {
+            "health": "Как с тренировками и энергией на этой неделе?",
+            "spirit": "Что сейчас занимает больше всего в работе и творчестве?",
+            "world":  "Как люди вокруг — всё в порядке?"
+        }
+        return questions.get(sphere, "Что сейчас занимает твоё внимание?") + " 🌿"
+    return f"{name}, как ты? 🌿"
 
-@router.message(Command("start"))
+
+async def check_silence_and_engage(telegram_id: str, gardener: dict) -> None:
+    """Send proactive message if user silent 3+ days. Respects quiet hours."""
+    try:
+        days = _days_since_last_interaction(telegram_id)
+        if days < 3 or days >= 15:
+            return
+        if not _can_send_proactive(telegram_id):
+            return
+        from zoneinfo import ZoneInfo
+        from datetime import datetime as _dtr5
+        tz   = ZoneInfo(gardener.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
+        now_h = _dtr5.now(tz).hour
+        if now_h >= 22 or now_h < 9:
+            return
+        text = await _pick_engagement_message(telegram_id, days)
+        await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
+        _mark_proactive_sent(telegram_id)
+        if days >= 3:
+            store_add_resonance(telegram_id, 1)
+    except Exception as e:
+        logger.error(f"Engagement error {telegram_id}: {e}")
+
+
 async def cmd_start(message: Message, state: FSMContext):
     await state.clear()
     user_id = str(message.from_user.id)
@@ -3499,7 +3796,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|create_reminder|show_reminders|delete_reminder",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|..."} или null
@@ -3544,6 +3841,13 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "удали группа X", "убери группа X" → delete_label, action.title=название группы, 0.9
 - "переименуй группа X в Y", "измени группа X на Y" → rename_label, action.title="X→Y", 0.9
 - "найди", "поищи", "погода", "что такое X" → web_search, 0.9
+- "напомни мне X завтра в 9", "поставь напоминание X" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM", action.repeat=once/daily/weekdays, 0.95
+- "покажи напоминания", "мои напоминания" → show_reminders, 0.95
+- "удали напоминание X" → delete_reminder, action.title=X, 0.95
+- "закрой задачи X и Y", "закрой обе" → complete_task, action.titles=["X","Y"], 0.95
+- "закрой все задачи на сегодня" → complete_task, action.period=today, 0.95
+- ВАЖНО: никогда не генерируй список задач в поле text — только через intent show_tasks
+- ВАЖНО: никогда не генерируй профиль в поле text — только через intent show_profile
 - Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
 - Сомневаешься → confidence < 0.7, напиши clarification
 - Обычный разговор → conversation, 1.0
@@ -4476,13 +4780,39 @@ async def free_conversation(message: Message, state: FSMContext):
                     current_state = await state.get_state()
                     if current_state is None:  # only if no FSM active
                         if intent == "show_tasks":
+                            # Detect period from text + SR action
                             period = _detect_task_period(text)
-                            # Also check action.period from SR
                             action_period = (parsed_check.get("action") or {}).get("period", "")
                             if action_period and action_period != "all":
                                 period = action_period
-                            await _show_tasks_unified(user_id, message, period)
-                            reply_text = ""
+                            if period == "all":
+                                # No filter — show full grouped menu
+                                await _show_tasks_unified(user_id, message, "labels")
+                            else:
+                                # Filtered view — text list, not menu
+                                uid_tasks = store_get_tasks(user_id)
+                                filtered  = _filter_tasks_by_period(uid_tasks, period)
+                                period_ru = {
+                                    "today":    "📅 Сегодня",
+                                    "tomorrow": "📅 Завтра",
+                                    "day_after":"📅 Послезавтра",
+                                    "week":     "📅 На неделе",
+                                    "month":    "📅 В этом месяце",
+                                    "overdue":  "⚠️ Просроченные",
+                                }.get(period, "🌀 Задачи")
+                                if period.startswith("date:"):
+                                    period_ru = f"📅 {period[5:]}"
+                                if not filtered:
+                                    reply_text = f"{period_ru}: задач нет 🌱"
+                                else:
+                                    lines = [f"<b>{period_ru}:</b>"]
+                                    for t in _sort_by_deadline(filtered):
+                                        dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+                                        grp = f" #{t['label_name']}" if t.get("label_name") else ""
+                                        ind = _deadline_indicator(t.get("deadline",""))
+                                        lines.append(f"  • {ind}{t['title']}{grp}{dl}")
+                                    reply_text = "\n".join(lines)
+                            reply_text = reply_text if period != "all" else ""
                         elif intent == "show_profile":
                             await _show_profile(user_id, message)
                             reply_text = ""
@@ -4554,16 +4884,49 @@ async def free_conversation(message: Message, state: FSMContext):
                             reply_text = result if result else "🔍 Не нашла. Отвечу из своих знаний."
 
                         elif intent == "complete_task":
-                            target = (parsed_check.get("action") or {}).get("title", "").lower().strip()
+                            action_ct   = parsed_check.get("action") or {}
+                            target      = action_ct.get("title", "").lower().strip()
+                            # Batch: action.titles=["X","Y"] or action.period=today
+                            batch_raw   = action_ct.get("titles", [])
+                            batch_period= action_ct.get("period", "").strip()
                             tasks = store_get_tasks(user_id)
-                            matched = [t for t in tasks if target and target in t.get("title", "").lower()]
-                            if matched:
-                                t = matched[0]
-                                new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
+                            from datetime import datetime as _dtr2
+                            today_s2 = _dtr2.now().strftime("%Y-%m-%d")
+
+                            # Collect targets
+                            to_close = []
+                            if batch_raw and isinstance(batch_raw, list):
+                                for bt in batch_raw:
+                                    bt_l = bt.lower()
+                                    found = [t for t in tasks if bt_l in t.get("title","").lower()]
+                                    to_close.extend(found)
+                            elif batch_period:
+                                filtered_p = _filter_tasks_by_period(tasks, batch_period)
+                                to_close.extend(filtered_p)
+                            elif target:
+                                matched_t = [t for t in tasks if target in t.get("title","").lower()]
+                                to_close.extend(matched_t[:1])
+
+                            if to_close:
+                                closed_ids = {t.get("task_id") for t in to_close}
+                                new_tasks = [t for t in tasks if t.get("task_id") not in closed_ids]
                                 store_set_tasks(user_id, new_tasks)
-                                count = store_increment_achievements(user_id)
+                                total_res = 0
+                                for tc in to_close:
+                                    store_increment_achievements(user_id)
+                                    dl2 = tc.get("deadline")
+                                    r2  = 2 if (dl2 and dl2 >= today_s2) else 1
+                                    total_res += r2
+                                count_now = store_get_achievements_count(user_id)
+                                new_res2  = store_add_resonance(user_id, total_res)
                                 _fire_sync()
-                                reply_text = f"✅ Готово: {t['title']} · 💎 {count}"
+                                if len(to_close) == 1:
+                                    reply_text = (f"✅ Готово: {to_close[0]['title']} · "
+                                                  f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
+                                else:
+                                    names = ", ".join(t["title"] for t in to_close)
+                                    reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
+                                                  f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
                             elif tasks:
                                 titles = ", ".join(t["title"] for t in tasks[:5])
                                 reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
@@ -4768,6 +5131,53 @@ async def free_conversation(message: Message, state: FSMContext):
                                 reply_text = ""
                             else:
                                 reply_text = "🌀 Чеклист не найден."
+
+                        elif intent == "create_reminder":
+                            action_r = parsed_check.get("action") or {}
+                            r_title  = action_r.get("title","").strip()
+                            r_dt     = action_r.get("datetime","").strip()
+                            r_repeat = action_r.get("repeat","once").strip()
+                            if r_repeat not in ("once","daily","weekdays"):
+                                r_repeat = "once"
+                            if not r_title or not r_dt:
+                                reply_text = "🔔 Скажи точнее: «напомни мне X завтра в 9:00»"
+                            else:
+                                reminders = store_get_reminders(user_id)
+                                if len(reminders) >= REMINDER_LIMIT:
+                                    reply_text = f"⚠️ Лимит {REMINDER_LIMIT} напоминаний."
+                                else:
+                                    rid = _make_reminder_id(reminders)
+                                    reminders.append({"id":rid,"title":r_title,
+                                                      "datetime_iso":r_dt,"repeat":r_repeat,"active":True})
+                                    store_set_reminders(user_id, reminders)
+                                    _fire_sync()
+                                    rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(r_repeat,"один раз")
+                                    reply_text = f"✅ Напоминание: 🔔 {r_title} · {r_dt[:16].replace('T',' ')} · {rep_s}"
+
+                        elif intent == "show_reminders":
+                            reminders = store_get_reminders(user_id)
+                            if not reminders:
+                                reply_text = "🔔 Напоминаний нет. Создай голосом или через Настройки."
+                            else:
+                                lines = [f"🔔 <b>Напоминания ({len(reminders)}):</b>"]
+                                for r in reminders:
+                                    dt  = r.get("datetime_iso","")[:16].replace("T"," ")
+                                    rep = {"once":"1×","daily":"ежедн.","weekdays":"пн-пт"}.get(r.get("repeat","once"),"1×")
+                                    lines.append(f"  🔔 {r['title']} · {dt} ({rep})")
+                                reply_text = "\n".join(lines)
+
+                        elif intent == "delete_reminder":
+                            target_r  = (parsed_check.get("action") or {}).get("title","").lower()
+                            reminders = store_get_reminders(user_id)
+                            rem = next((r for r in reminders if target_r and target_r in r.get("title","").lower()), None)
+                            if rem:
+                                reminders = [r for r in reminders if r["id"] != rem["id"]]
+                                store_set_reminders(user_id, reminders)
+                                _fire_sync()
+                                reply_text = f"🗑 Напоминание «{rem['title']}» удалено."
+                            else:
+                                reply_text = f"🌀 Напоминание «{target_r}» не найдено."
+
                         elif intent == "rename_label":
                             raw_title = (parsed_check.get("action") or {}).get("title", "")
                             parts = raw_title.split("→") if "→" in raw_title else raw_title.split(" в ")
@@ -4800,6 +5210,12 @@ async def free_conversation(message: Message, state: FSMContext):
                             value  = action_data.get("value", "").strip()
                             tasks  = store_get_tasks(user_id)
                             matched = [t for t in tasks if target and target in t.get("title","").lower()]
+                            # No target? Try last edited task from state
+                            if not matched:
+                                _st_data = await state.get_data()
+                                _last_tid = _st_data.get("last_task_id","")
+                                if _last_tid:
+                                    matched = [t for t in tasks if t.get("task_id") == _last_tid]
                             if not matched:
                                 titles = ", ".join(t["title"] for t in tasks[:3])
                                 reply_text = f"🌀 Не нашла задачу «{target}». Активные: {titles}"
@@ -4865,6 +5281,30 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if "✅" in reply_text:
                                     store_set_tasks(user_id, tasks)
                                     _fire_sync()
+                                    # Save last edited task for context continuity
+                                    tid_edited = t.get("task_id","")
+                                    await state.update_data(
+                                        last_task_id=tid_edited,
+                                        last_task_title=t.get("title","")
+                                    )
+                                    # Suggest what else can be edited
+                                    missing = []
+                                    if not t.get("deadline"):
+                                        missing.append("📅 дедлайн")
+                                    if not t.get("label_name"):
+                                        missing.append("🎨 группу")
+                                    if not t.get("reminder"):
+                                        missing.append("🔔 напоминание")
+                                    if missing and tid_edited:
+                                        suggest = ", ".join(missing)
+                                        edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
+                                            InlineKeyboardButton(
+                                                text="✏️ Дополнить",
+                                                callback_data=f"task_edit_{tid_edited}"
+                                            )
+                                        ]])
+                                        reply_text += f"\n<i>Можно также добавить: {suggest}</i>"
+                                        action = {"_edit_kb": edit_kb}
             except Exception as e:
                 logger.warning(f"Intent router error: {e}")
             # ──────────────────────────────────────────────────────────────
@@ -4970,6 +5410,7 @@ async def on_startup():
 
     # Scheduler setup
     scheduler = AsyncIOScheduler(timezone="UTC")
+    scheduler.add_job(run_reminder_scheduler, "interval", minutes=1, id="reminders")
     scheduler.add_job(run_proactive_scheduler, "interval", minutes=1, id="proactive")
     scheduler.add_job(run_resonance_decay, "cron", hour=3, minute=0, id="decay")
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
