@@ -4783,6 +4783,42 @@ async def free_conversation(message: Message, state: FSMContext):
                 reply_text = raw_clean
                 raw_clean = "{}"
 
+            # ── Fuzzy title matcher ────────────────────────────────────────
+            def _normalize(s: str) -> str:
+                import re as _ren
+                s = s.lower().strip()
+                s = _ren.sub(r"[^\w\s]", "", s)
+                s = _ren.sub(r"\s+", "", s)
+                return s
+
+            def _fuzzy_match_tasks(target: str, tasks: list, threshold: float = 0.55) -> list:
+                """Fuzzy task title match: exact substr → normalized substr → LCS ratio."""
+                if not target:
+                    return []
+                t_norm = _normalize(target)
+                # 1. Normalized substring
+                exact = [t for t in tasks if t_norm in _normalize(t.get("title", ""))]
+                if exact:
+                    return exact[:1]
+                # 2. LCS ratio
+                def _lcs_ratio(a: str, b: str) -> float:
+                    la, lb = len(a), len(b)
+                    if la == 0 or lb == 0:
+                        return 0.0
+                    dp = [[0] * (lb + 1) for _ in range(la + 1)]
+                    for i in range(1, la + 1):
+                        for j in range(1, lb + 1):
+                            if a[i-1] == b[j-1]:
+                                dp[i][j] = dp[i-1][j-1] + 1
+                            else:
+                                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+                    return (2 * dp[la][lb]) / (la + lb)
+                scored = sorted(
+                    [(_lcs_ratio(t_norm, _normalize(t.get("title", ""))), t) for t in tasks],
+                    key=lambda x: -x[0]
+                )
+                return [scored[0][1]] if scored and scored[0][0] >= threshold else []
+
             # ── Intent router ──────────────────────────────────────────────
             try:
                 parsed_check = parsed if parsed is not None else (
@@ -4794,10 +4830,16 @@ async def free_conversation(message: Message, state: FSMContext):
 
                 # Safety net: if LLM returned conversation but text looks like
                 # a fake action result — treat as unrecognised command
-                _ACTION_FAKE_MARKERS = ("✅ Готово", "задача закрыта", "напоминание создано",
-                                        "задача добавлена", "напоминание удалено", "задача удалена",
-                                        "дедлайн изменён", "название изменено")
-                if intent == "conversation" and any(m in reply_text for m in _ACTION_FAKE_MARKERS):
+                _ACTION_FAKE_MARKERS = (
+                    "✅ готово", "✅ изменено", "✅ изменён", "✅ дедлайн",
+                    "задача закрыта", "задача добавлена", "задача удалена",
+                    "напоминание создано", "напоминание удалено",
+                    "дедлайн изменён", "дедлайн изменен", "название изменено",
+                    "перенесён", "перенесен", "изменена дата",
+                )
+                if intent == "conversation" and any(
+                    m in reply_text.lower() for m in _ACTION_FAKE_MARKERS
+                ):
                     reply_text = ("🌀 Не смогла распознать команду точно. "
                                   "Попробуй ещё раз или уточни что именно нужно сделать.")
 
@@ -4940,15 +4982,13 @@ async def free_conversation(message: Message, state: FSMContext):
                             to_close = []
                             if batch_raw and isinstance(batch_raw, list):
                                 for bt in batch_raw:
-                                    bt_l = bt.lower()
-                                    found = [t for t in tasks if bt_l in t.get("title","").lower()]
+                                    found = _fuzzy_match_tasks(bt, tasks)
                                     to_close.extend(found)
                             elif batch_period:
                                 filtered_p = _filter_tasks_by_period(tasks, batch_period)
                                 to_close.extend(filtered_p)
                             elif target:
-                                matched_t = [t for t in tasks if target in t.get("title","").lower()]
-                                to_close.extend(matched_t[:1])
+                                to_close.extend(_fuzzy_match_tasks(target, tasks))
 
                             if to_close:
                                 closed_ids = {t.get("task_id") for t in to_close}
@@ -4988,7 +5028,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _fire_sync()
                                     reply_text = f"🗑 Удалено {count} задач. Поле чисто."
                             else:
-                                matched = [t for t in tasks if target and target in t.get("title", "").lower()]
+                                matched = _fuzzy_match_tasks(target, tasks)
                                 if matched:
                                     t = matched[0]
                                     new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
@@ -5252,7 +5292,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             field  = action_data.get("field", "").lower().strip()
                             value  = action_data.get("value", "").strip()
                             tasks  = store_get_tasks(user_id)
-                            matched = [t for t in tasks if target and target in t.get("title","").lower()]
+                            matched = _fuzzy_match_tasks(target, tasks)
                             # No target? Try last edited task from state
                             if not matched:
                                 _st_data = await state.get_data()
