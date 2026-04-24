@@ -134,6 +134,21 @@
       "updated": "2026-04-23",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260424_010",
+      "title": "сходить на тренировку",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "health",
+      "priority": 6,
+      "deadline": "2026-04-25",
+      "reminder": "2026-04-25T10:00",
+      "created": "2026-04-24",
+      "updated": "2026-04-24",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
