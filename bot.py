@@ -2343,6 +2343,7 @@ async def check_silence_and_engage(telegram_id: str, gardener: dict) -> None:
         logger.error(f"Engagement error {telegram_id}: {e}")
 
 
+@router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
     await state.clear()
     user_id = str(message.from_user.id)
@@ -3848,6 +3849,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "измени пункт Y в чеклисте X на Z" → checklist_edit_item, action.title=X, action.item=Y, action.value=Z, 0.95
 - "отметь пункт Y в чеклисте X" → checklist_toggle_item, action.title=X, action.item=Y, 0.95
 - "переименуй задачу X в Y", "измени дедлайн задачи X на Y", "смени группу задачи X на Y" → edit_task, action.title="X", action.field="title|deadline|group", action.value="Y", 0.9
+- "перенеси дедлайн X на Y", "сдвинь срок X на Y", "поставь новый срок X", "измени дату задачи X", "задача X — новый дедлайн Y", "задача X перенеси на Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
+- ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
 - "удали группа X", "убери группа X" → delete_label, action.title=название группы, 0.9
@@ -4836,6 +4839,9 @@ async def free_conversation(message: Message, state: FSMContext):
                     "напоминание создано", "напоминание удалено",
                     "дедлайн изменён", "дедлайн изменен", "название изменено",
                     "перенесён", "перенесен", "изменена дата",
+                    "изменено дедлайн", "дедлайн задачи", "изменила дедлайн",
+                    "перенесла", "изменила", "команда:", "**команда",
+                    "сделала это", "выполнила", "изменила срок",
                 )
                 if intent == "conversation" and any(
                     m in reply_text.lower() for m in _ACTION_FAKE_MARKERS
@@ -5315,16 +5321,24 @@ async def free_conversation(message: Message, state: FSMContext):
                                     from datetime import datetime as _dtt, timedelta as _tdd
                                     _val_lower = value.lower().strip()
                                     _dl = None
+                                    # Resolve user timezone for relative dates
+                                    try:
+                                        from zoneinfo import ZoneInfo as _ZIe
+                                        _tz_e = _ZIe(store_get_profile(user_id).get(
+                                            "companion_settings", {}).get("timezone", "Europe/Moscow"))
+                                        _now_e = _dtt.now(_tz_e)
+                                    except Exception:
+                                        _now_e = _dtt.now()
                                     # Natural language → date
                                     if _val_lower in ("сегодня", "today"):
-                                        _dl = _dtt.now().strftime("%Y-%m-%d")
+                                        _dl = _now_e.strftime("%Y-%m-%d")
                                     elif _val_lower in ("завтра", "tomorrow"):
-                                        _dl = (_dtt.now() + _tdd(days=1)).strftime("%Y-%m-%d")
+                                        _dl = (_now_e + _tdd(days=1)).strftime("%Y-%m-%d")
                                     elif _val_lower in ("послезавтра",):
-                                        _dl = (_dtt.now() + _tdd(days=2)).strftime("%Y-%m-%d")
+                                        _dl = (_now_e + _tdd(days=2)).strftime("%Y-%m-%d")
                                     elif _re2.match(r"через \d+ дн", _val_lower):
                                         _n = int(_re2.search(r"(\d+)", _val_lower).group(1))
-                                        _dl = (_dtt.now() + _tdd(days=_n)).strftime("%Y-%m-%d")
+                                        _dl = (_now_e + _tdd(days=_n)).strftime("%Y-%m-%d")
                                     elif _re2.match(r"^\d{4}-\d{2}-\d{2}$", value):
                                         _dl = value  # already ISO
                                     elif _re2.match(r"^\d{1,2}\.\d{1,2}\.\d{4}$", value):
@@ -5335,7 +5349,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         _m2 = _re2.match(r"(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?", value)
                                         if _m2:
                                             _dd,_mm = _m2.group(1).zfill(2),_m2.group(2).zfill(2)
-                                            _yy = _m2.group(3) or str(_dtt.now().year)
+                                            _yy = _m2.group(3) or str(_now_e.year)
                                             _yy = "20"+_yy if len(_yy)==2 else _yy
                                             _dl = f"{_yy}-{_mm}-{_dd}"
                                     if _dl:
