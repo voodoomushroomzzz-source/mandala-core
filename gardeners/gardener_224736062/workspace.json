@@ -162,6 +162,14 @@
   "updated": "2026-04-18",
   "achievements_count": 9,
   "checklists": [],
-  "reminders": [],
+  "reminders": [
+    {
+      "id": "rem_945a7409",
+      "title": "тест",
+      "datetime_iso": "2026-04-24T21:38",
+      "repeat": "once",
+      "active": true
+    }
+  ],
   "_decay_date": "2026-04-24"
 }
