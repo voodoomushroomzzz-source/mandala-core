@@ -216,6 +216,14 @@
       "created": "2026-04-24"
     }
   ],
-  "reminders": [],
+  "reminders": [
+    {
+      "id": "rem_bed0229d",
+      "title": "Тест",
+      "datetime_iso": "2026-04-24T21:57",
+      "repeat": "once",
+      "active": true
+    }
+  ],
   "_decay_date": "2026-04-24"
 }
