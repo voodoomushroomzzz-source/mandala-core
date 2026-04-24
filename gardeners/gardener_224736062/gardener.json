@@ -1,0 +1,38 @@
+{
+  "gardener_id": "gardener_224736062",
+  "telegram_id": "224736062",
+  "name": "Дима",
+  "resonance_level": 18,
+  "created": "2026-04-18",
+  "updated": "2026-04-19",
+  "personal_info": {
+    "life_areas": {
+      "body": {
+        "current": 6,
+        "target": 10
+      },
+      "spirit": {
+        "current": 4,
+        "target": 10
+      },
+      "world": {
+        "current": 3,
+        "target": 10
+      }
+    }
+  },
+  "companion_settings": {
+    "morning_message_time": "9:00",
+    "proactive_mode": true,
+    "timezone": "Europe/Moscow",
+    "city": "Москва",
+    "birthday": "26.10"
+  },
+  "growth_history": [
+    {
+      "date": "2026-04-18",
+      "resonance": 5,
+      "event": "onboarding"
+    }
+  ]
+}
