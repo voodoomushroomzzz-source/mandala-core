@@ -161,11 +161,13 @@ def store_get_achievements_count(telegram_id: str) -> int:
     return int(ws.get("achievements_count", 0)) if ws else 0
 
 def store_increment_achievements(telegram_id: str) -> int:
-    """Increment achievement counter. Returns new count."""
+    """Increment achievement counter and sync resonance. Returns new count."""
     ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
     count = int(ws.get("achievements_count", 0)) + 1
     ws["achievements_count"] = count
     store_set_workspace(telegram_id, ws)
+    # Keep resonance in sync: each achievement adds 2% (min 5, max 100)
+    _recalc_resonance_from_achievements(telegram_id)
     return count
 
 def store_add_resonance(telegram_id: str, delta: int) -> int:
@@ -1160,16 +1162,24 @@ async def send_evening_checkin(telegram_id: str) -> None:
 
 
 async def run_reminder_scheduler() -> None:
-    """Fire reminders every minute."""
+    """Fire reminders every minute. Compares in gardener's local timezone."""
     try:
         from datetime import datetime as _dtr6, timedelta as _td6
-        now_str = _dtr6.now().strftime("%Y-%m-%dT%H:%M")
+        from zoneinfo import ZoneInfo as _ZI6
         for uid, user_store in list(_store.items()):
             if not isinstance(user_store, dict) or not user_store.get("ready"):
                 continue
             reminders = store_get_reminders(uid)
             if not reminders:
                 continue
+            # Resolve per-user timezone instead of bare server UTC
+            _profile6 = user_store.get("profile") or {}
+            _tz_name6 = _profile6.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+            try:
+                _tz6 = _ZI6(_tz_name6)
+            except Exception:
+                _tz6 = _ZI6("Europe/Moscow")
+            now_str = _dtr6.now(_tz6).strftime("%Y-%m-%dT%H:%M")
             changed = False
             for r in list(reminders):
                 if not r.get("active"):
@@ -2357,6 +2367,8 @@ async def cmd_start(message: Message, state: FSMContext):
     user_profile = store_get_profile(user_id)
     if user_profile:
         name = user_profile.get("name", "Садовник")
+        # Sync resonance with actual achievements count on every /start
+        _recalc_resonance_from_achievements(user_id)
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
         return
 
@@ -3565,7 +3577,7 @@ async def btn_suggest_idea(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await state.set_state(EngineerChatStates.waiting_for_message)
+    # Stub: no FSM state — never blocks voice/text commands
     await message.answer(
         "💡 <b>Предложи идею Мандале</b>\n\n"
         "Напиши идею — СР оценит её и если она резонирует, добавит в копилку семян Мандалы.\n\n"
@@ -4782,8 +4794,22 @@ async def free_conversation(message: Message, state: FSMContext):
                     reply_text = clarification
                 elif confidence >= 0.7 and intent != "conversation":
                     # Execute command directly
+                    # Only block intents during active multi-step input FSM flows.
+                    # Transient/stale states (EngineerChat, Ask, Achievement) are cleared.
                     current_state = await state.get_state()
-                    if current_state is None:  # only if no FSM active
+                    _BLOCKING_PREFIXES = (
+                        "GardenOnboardingStates:", "EditProfileStates:",
+                        "TaskStates:", "TaskEditStates:", "ChecklistStates:",
+                        "ReminderStates:", "LabelRenameStates:", "LeaveStates:",
+                    )
+                    _is_blocked = current_state and any(
+                        current_state.startswith(p) for p in _BLOCKING_PREFIXES
+                    )
+                    if current_state and not _is_blocked:
+                        # Stale/transient state — clear it so command can run
+                        await state.clear()
+                        current_state = None
+                    if not _is_blocked:  # only if no blocking FSM active
                         if intent == "show_tasks":
                             # Detect period from text + SR action
                             period = _detect_task_period(text)
