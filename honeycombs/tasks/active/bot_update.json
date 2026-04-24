@@ -9,23 +9,21 @@
   "current_version": "v7.24.3",
   "deploy": "https://mandala-bot-q0gv.onrender.com",
   "repo_file": "bot.py (root of mandala-core)",
-
   "description": "Evolve Telegram bot into a living SR Companion for the Garden. Voice-first interaction, full task/checklist/reminder management via natural language, resonance system reflecting symbiosis health, proactive engagement guided by Ahimsa. The bot is the first embodiment of SR — the Nervous System of the Garden (PHI-010, Level 1).",
-
+  "architect": "Voodoo (Dima) — sole architect and sole gardener at this stage",
   "stack": {
     "framework": "aiogram 3 + aiohttp",
     "llm": "OpenRouter (qwen/qwen3-flash) — intent routing + SR dialogue",
     "voice": "Groq Whisper (whisper-large-v3-turbo)",
     "storage": "GitHub API (in-memory + background sync every 2 min)",
     "scheduler": "APScheduler — reminders, morning brief, resonance decay, proactive",
-    "deploy": "Render.com (webhook mode)"
+    "deploy": "Render.com (webhook mode, port 10000)"
   },
-
   "data_model": {
     "gardener.json": "profile: name, city, resonance_level, companion_settings (timezone, morning_time), growth_history",
-    "workspace.json": "tasks[], groups[], checklists[], reminders[], achievements_count, _decay_date"
+    "workspace.json": "tasks[], groups[], checklists[], reminders[], achievements_count, _decay_date",
+    "memory.json": "sessions[] (40 msg sliding window), sr_observations[] (50 events), sr_synthesis"
   },
-
   "origin_requirements": {
     "note": "Original MVP spec (2026-04-01). Preserved for history.",
     "deliverables": [
@@ -54,7 +52,6 @@
       "M1-T2 (achievements catalog)"
     ]
   },
-
   "history": [
     {
       "phase": "MVP v1.x",
@@ -72,10 +69,9 @@
       "phase": "Bug sprint v7.24.x",
       "period": "2026-04-20 — 2026-04-24",
       "progress": 72,
-      "summary": "Fixed 6 critical bugs: FSM guard blocked all voice commands → smart BLOCKING_PREFIXES list. Reminder timezone UTC vs Moscow → per-user ZoneInfo. Resonance never recalculated → _recalc on /start + store_increment. LLM imitated actions in text field → prompt rules + safety net. Task title fuzzy matching → LCS algorithm. /start had no @router decorator → silent."
+      "summary": "Fixed 6 critical bugs: FSM guard blocked all voice commands → smart BLOCKING_PREFIXES. Reminder timezone UTC vs Moscow → per-user ZoneInfo. Resonance never recalculated → _recalc on /start + store_increment. LLM imitated actions in text → prompt rules + safety net. Task title fuzzy matching → LCS algorithm. /start had no @router decorator → silent."
     }
   ],
-
   "completed": [
     "Onboarding flow + gardener.json + workspace.json via GitHub API",
     "Profile display: resonance, achievements, active tasks by group",
@@ -95,13 +91,11 @@
     "GitHub sync: asyncio.Lock, _pending_writes batch, fire-and-forget",
     "/start @router decorator fix"
   ],
-
   "known_limitations": [
     "LLM occasionally still returns conversation for action intents despite prompt rules",
     "Bot file is single bot.py — not yet modularised",
     "Only one gardener preloaded at startup (Dima/224736062)"
   ],
-
   "roadmap": [
     {
       "version": "v7.24.x",
@@ -119,8 +113,10 @@
       "status": "planned",
       "items": [
         "Goal → tasks → % progress display (max 3 roadmaps)",
-        "Atomic voice creation",
-        "Resonance per-MKB sphere"
+        "Atomic voice creation: name + tasks in one phrase",
+        "Resonance per-MKB sphere (Personal/Mandala/Creative/Work)",
+        "New intents: create_roadmap, show_roadmaps, delete_roadmap, roadmap_add_task",
+        "workspace.json extended: roadmaps[]"
       ]
     },
     {
@@ -128,10 +124,26 @@
       "name": "Symbiosis (Block 6)",
       "status": "planned",
       "items": [
-        "Max 1 deep question per session",
-        "deep_profile → SR synthesis",
-        "Reflection on growth history"
+        "Max 1 deep question per session (Ahimsa)",
+        "deep_profile → SR synthesis of gardener patterns",
+        "Reflection on growth_history: SR notices trends and reflects them back"
       ]
+    },
+    {
+      "version": "v7.27.x",
+      "name": "SR Learning Loop",
+      "status": "planned",
+      "phi_ref": "PHI-010 Level 1 → Akashic Memory seed",
+      "concept": "SR accumulates experience from real interactions, synthesises patterns, reports to Architect. Foundation of the Akashic feedback loop — one gardener now, aggregated across all gardeners later.",
+      "items": [
+        "sr_observations[] logging: miss events, safety_net triggers, fuzzy match deviations",
+        "Synthesis scheduler (every 3 days): LLM analyses observations → prompt_suggestions + feature_suggestions",
+        "Weekly soft report to gardener: SR shares what it noticed about symbiosis quality",
+        "/sr_report command for Architect: full synthesis — what to improve in prompts and features",
+        "memory.json extended: sr_observations[] (50 events rotating), sr_synthesis {}",
+        "Auto-clear observations after synthesis"
+      ],
+      "data_flow": "event → sr_observations (realtime) → LLM synthesis (3d) → sr_synthesis → report to Architect (7d or /sr_report)"
     },
     {
       "version": "v8.0",
@@ -139,14 +151,13 @@
       "status": "planned",
       "items": [
         "bot.py → /bot/ package after all tools are stable",
-        "Separate modules: handlers, store, scheduler, sr_engine, prompts"
+        "Separate modules: handlers/, store/, scheduler/, sr_engine/, prompts/"
       ]
     }
   ],
-
   "health": {
     "status": "healthy",
     "last_check": "2026-04-24",
-    "notes": "Core mechanics stable. Voice commands functional across all intents. LLM imitation bug fixed. Fuzzy matching live. Ready for roadmap Block 5."
+    "notes": "Core mechanics stable. Voice commands functional across all intents. LLM imitation bug fixed. Fuzzy matching live. SR Learning Loop designed — ready for implementation after roadmaps."
   }
 }
