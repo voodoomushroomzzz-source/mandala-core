@@ -231,14 +231,6 @@
       "created": "2026-04-24"
     }
   ],
-  "reminders": [
-    {
-      "id": "rem_873eb254",
-      "title": "Тест",
-      "datetime_iso": "2026-04-24T22:00",
-      "repeat": "once",
-      "active": true
-    }
-  ],
+  "reminders": [],
   "_decay_date": "2026-04-24"
 }
