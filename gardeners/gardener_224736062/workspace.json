@@ -121,21 +121,6 @@
       "notes": ""
     },
     {
-      "task_id": "task_20260423_014",
-      "title": "Добавить фотографии в Яндекс.Карты Патрики",
-      "status": "todo",
-      "label_id": "работа",
-      "label_name": "Работа",
-      "life_area": "world",
-      "priority": 6,
-      "deadline": "2026-04-27",
-      "reminder": "2026-04-27T20:00",
-      "created": "2026-04-23",
-      "updated": "2026-04-23",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260423_016",
       "title": "Записать трек. Не трать себя",
       "status": "todo",
@@ -145,21 +130,6 @@
       "priority": 5,
       "deadline": "2026-06-01",
       "reminder": null,
-      "created": "2026-04-23",
-      "updated": "2026-04-23",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260423_014",
-      "title": "Сходить на тренировку",
-      "status": "todo",
-      "label_id": "дом",
-      "label_name": "Личное",
-      "life_area": "health",
-      "priority": 6,
-      "deadline": "2026-04-24",
-      "reminder": "2026-04-24",
       "created": "2026-04-23",
       "updated": "2026-04-23",
       "completed": null,
@@ -190,7 +160,7 @@
   ],
   "achievements": [],
   "updated": "2026-04-18",
-  "achievements_count": 8,
+  "achievements_count": 9,
   "checklists": [],
   "reminders": [],
   "_decay_date": "2026-04-24"
