@@ -186,14 +186,6 @@
       "created": "2026-04-24"
     }
   ],
-  "reminders": [
-    {
-      "id": "rem_945a7409",
-      "title": "тест",
-      "datetime_iso": "2026-04-24T21:38",
-      "repeat": "once",
-      "active": true
-    }
-  ],
+  "reminders": [],
   "_decay_date": "2026-04-24"
 }
