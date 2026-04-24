@@ -7,6 +7,22 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Ты здесь?"
+    },
+    {
+      "role": "assistant",
+      "content": "Я здесь, Дима. Всегда рядом с твоим садом."
+    },
+    {
+      "role": "user",
+      "content": "Перенеси дедлайн задачи доделать роуд мапы на завтра."
+    },
+    {
+      "role": "assistant",
+      "content": "✅ Дедлайн → 2026-04-25"
     }
   ],
   "updated": "2026-04-24"
