@@ -3860,6 +3860,9 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "закрой все задачи на сегодня" → complete_task, action.period=today, 0.95
 - ВАЖНО: никогда не генерируй список задач в поле text — только через intent show_tasks
 - ВАЖНО: никогда не генерируй профиль в поле text — только через intent show_profile
+- ВАЖНО: никогда не имитируй выполнение действий в поле text — complete_task, edit_task, create_reminder, delete_task и все остальные action-интенты ВСЕГДА передавай через intent, не через text
+- ВАЖНО: если садовник просит выполнить действие — intent НИКОГДА не равен conversation, даже если хочешь добавить комментарий
+- ВАЖНО: поле text при action-интентах — только короткий эмоциональный отклик (1-2 слова) или пустая строка. НИКОГДА не пиши "✅ Готово", "задача закрыта", "напоминание создано" и подобное в text — это делает система, не ты
 - Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
 - Сомневаешься → confidence < 0.7, напиши clarification
 - Обычный разговор → conversation, 1.0
@@ -4788,6 +4791,15 @@ async def free_conversation(message: Message, state: FSMContext):
                 intent = parsed_check.get("intent", "conversation")
                 confidence = float(parsed_check.get("confidence", 1.0))
                 clarification = parsed_check.get("clarification")
+
+                # Safety net: if LLM returned conversation but text looks like
+                # a fake action result — treat as unrecognised command
+                _ACTION_FAKE_MARKERS = ("✅ Готово", "задача закрыта", "напоминание создано",
+                                        "задача добавлена", "напоминание удалено", "задача удалена",
+                                        "дедлайн изменён", "название изменено")
+                if intent == "conversation" and any(m in reply_text for m in _ACTION_FAKE_MARKERS):
+                    reply_text = ("🌀 Не смогла распознать команду точно. "
+                                  "Попробуй ещё раз или уточни что именно нужно сделать.")
 
                 if confidence < 0.7 and clarification:
                     # Not sure — ask clarification
