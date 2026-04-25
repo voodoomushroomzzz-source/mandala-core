@@ -661,7 +661,7 @@ def _build_profile_card(user_id: str) -> str:
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
-        "──────────────────────",
+        "",
     ]
     if not active:
         lines.append("🌀 Активных задач нет")
@@ -681,6 +681,7 @@ def _build_profile_card(user_id: str) -> str:
         return _group_emoji(gname) or "🌱"
     # Output in stored groups order
     shown = set()
+    first_group = True
     for g in groups_data:
         gname = g.get("name", "")
         items = by_group.get(gname, [])
@@ -688,10 +689,9 @@ def _build_profile_card(user_id: str) -> str:
             continue
         shown.add(gname)
         emoji = emoji_map.get(g["id"], "🌱")
-        if lines and not lines[-1].startswith(("🌱", "💫", "🪬", "─", "")):
-            lines.append("")  # visual separator between groups
-        elif lines and lines[-1].startswith("─"):
-            lines.append("")  # one empty line after separator before first group
+        if not first_group:
+            lines.append("")  # empty line between groups
+        first_group = False
         lines.append(f"{emoji} <b>{gname}</b>")
         for t in _sort_by_deadline(items)[:5]:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
