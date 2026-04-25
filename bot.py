@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.24.5
+# Mandala Helper - Lite — SR Gentle Companion v7.24.6
 
 import re
 import os
@@ -3814,14 +3814,16 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 
 ПРАВИЛА INTENT:
 - "покажи задачи", "мои задачи" → show_tasks, 0.95
-- "задачи на сегодня", "что делать сегодня" → show_tasks, action.period=today, 0.95
-- "задачи на завтра" → show_tasks, action.period=tomorrow, 0.95
+- "задачи на сегодня", "что делать сегодня", "что сегодня" → show_tasks, action.period=today, 0.95
+- "задачи на завтра", "какие задачи завтра", "что у меня на завтра" → show_tasks, action.period=tomorrow, 0.95
 - "задачи на послезавтра" → show_tasks, action.period=day_after, 0.95
 - "задачи на 22", "на 22 апреля", "на 22 число" → show_tasks, action.period=date:YYYY-MM-DD, 0.95
 - "задачи на неделю", "на этой неделе" → show_tasks, action.period=week, 0.95
 - "задачи на месяц" → show_tasks, action.period=month, 0.95
 - "просроченные задачи", "что просрочено" → show_tasks, action.period=overdue, 0.95
-- "задачи группы X", "покажи задачи из X", "что в группе X", "задачи по X" → show_tasks, action.label="X", 0.95
+- "задачи группы X", "покажи задачи из X", "что в группе X", "задачи по X", "задачи из X" → show_tasks, action.label="X", 0.95
+- ВАЖНО: "покажи задачи на завтра, все", "все задачи на завтра" → show_tasks, action.period=tomorrow (НЕ complete_task). Слово "все" при показе задач означает показать все, а не закрыть
+- ВАЖНО: если Садовник спрашивает о задачах — всегда show_tasks с нужным параметром, не отвечай текстом из контекста
 - "мой профиль" → show_profile, 0.95
 - "резонанс", "мой уровень" → show_resonance, 0.95
 - "достижения" → show_achievements, 0.95
@@ -4796,6 +4798,10 @@ async def free_conversation(message: Message, state: FSMContext):
                 ):
                     reply_text = ("🌀 Не смогла распознать команду точно. "
                                   "Попробуй ещё раз или уточни что именно нужно сделать.")
+                # Bare "готово" with no action markers is also suspicious when intent=conversation
+                if intent == "conversation" and reply_text.lower().strip() in ("готово", "готово.", "done", "ok", "ок"):
+                    reply_text = ("🌀 Не смогла распознать команду точно. "
+                                  "Попробуй ещё раз или уточни что именно нужно сделать.")
 
                 if confidence < 0.7 and clarification:
                     # Not sure — ask clarification
@@ -4877,7 +4883,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         ind = _deadline_indicator(t.get("deadline",""))
                                         lines.append(f"  • {ind}{t['title']}{grp}{dl}")
                                     reply_text = "\n".join(lines)
-                            reply_text = reply_text if period != "all" else ""
+                            reply_text = reply_text if (period != "all" or action_label) else ""
                         elif intent == "show_profile":
                             await _show_profile(user_id, message)
                             reply_text = ""
