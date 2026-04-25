@@ -661,8 +661,7 @@ def _build_profile_card(user_id: str) -> str:
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
-        "─────────────────",
-        "",
+        "──────────────────────",
     ]
     if not active:
         lines.append("🌀 Активных задач нет")
@@ -689,8 +688,10 @@ def _build_profile_card(user_id: str) -> str:
             continue
         shown.add(gname)
         emoji = emoji_map.get(g["id"], "🌱")
-        if lines and not lines[-1].startswith(("🌱", "💫", "🪬")):
+        if lines and not lines[-1].startswith(("🌱", "💫", "🪬", "─", "")):
             lines.append("")  # visual separator between groups
+        elif lines and lines[-1].startswith("─"):
+            lines.append("")  # one empty line after separator before first group
         lines.append(f"{emoji} <b>{gname}</b>")
         for t in _sort_by_deadline(items)[:5]:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
@@ -4196,11 +4197,25 @@ async def cb_menu_idea(callback: CallbackQuery, state: FSMContext):
     if not is_authorized(user_id):
         await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
+    # Stub: no FSM state — idea form is coming in future version
+    close_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Закрыть", callback_data="close_idea")]
+    ])
     await callback.message.answer(
-        "💡 <b>Идея для Мандалы (!)</b>\n\nНапиши свою идею — СР оценит её.\n\nДля отмены: ❌ Отмена",
-        reply_markup=get_cancel_keyboard()
+        "💡 <b>Идея для Мандалы</b>\n\n"
+        "Функция скоро будет доступна — СР сможет принимать идеи напрямую.\n\n"
+        "Пока можешь написать идею в чате — СР прочитает.",
+        parse_mode="HTML",
+        reply_markup=close_kb
     )
-    await state.set_state(EngineerChatStates.waiting_for_message)
+
+@router.callback_query(F.data == "close_idea")
+async def cb_close_idea(callback: CallbackQuery):
+    await callback.answer()
+    try:
+        await callback.message.delete()
+    except Exception:
+        await callback.message.edit_reply_markup(reply_markup=None)
 
 @router.callback_query(F.data == "menu_restart")
 async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
