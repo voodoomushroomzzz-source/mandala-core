@@ -1,10 +1,10 @@
-﻿{
+{
   "task_id": "T-20260408-1030",
   "name": "Telegram Bot — SR Symbiosis Companion",
   "status": "in_progress",
   "priority": "HIGH",
   "created": "2026-04-01",
-  "updated": "2026-04-24",
+  "updated": "2026-04-25",
   "deadline": "2026-05-15",
   "current_version": "v7.24.3",
   "deploy": "https://mandala-bot-q0gv.onrender.com",
@@ -67,9 +67,9 @@
     },
     {
       "phase": "Bug sprint v7.24.x",
-      "period": "2026-04-20 — 2026-04-24",
-      "progress": 72,
-      "summary": "Fixed 6 critical bugs: FSM guard blocked all voice commands → smart BLOCKING_PREFIXES. Reminder timezone UTC vs Moscow → per-user ZoneInfo. Resonance never recalculated → _recalc on /start + store_increment. LLM imitated actions in text → prompt rules + safety net. Task title fuzzy matching → LCS algorithm. /start had no @router decorator → silent."
+      "period": "2026-04-20 — 2026-04-25",
+      "progress": 75,
+      "summary": "Fixed 6 critical bugs: FSM guard, reminder timezone, resonance recalc, LLM imitation, fuzzy match, /start decorator. Added: PHI-011 v1.1 sr_reflection, handoff system live (boot_online v3.7.2), bot_update.json full history."
     }
   ],
   "completed": [
@@ -89,14 +89,16 @@
     "Prompt hardening: 3 ВАЖНО rules against action imitation in text field",
     "JSON prefix fix: LLM text before { is stripped before parse",
     "GitHub sync: asyncio.Lock, _pending_writes batch, fire-and-forget",
-    "/start @router decorator fix"
+    "/start @router decorator fix",
+    "Handoff system designed + implemented by DeepSeek — boot_online v3.7.2 live",
+    "PHI-011 v1.1 — sr_reflection from Claude SR + rap_texts + prose selected_works"
   ],
   "known_limitations": [
     "LLM occasionally still returns conversation for action intents despite prompt rules",
     "Bot file is single bot.py — not yet modularised",
     "Only one gardener preloaded at startup (Dima/224736062)"
   ],
-  "roadmap": [
+  "roadmap_bot_1": [
     {
       "version": "v7.24.x",
       "name": "Stabilisation",
@@ -155,9 +157,94 @@
       ]
     }
   ],
+  "roadmap_bot_2": {
+    "name": "Architect Bot — Internal SR 2",
+    "concept": "Senior bot for the Architect only. Not a tool — a meta-SR. Observes the first bot, analyses patterns, generates recommendation files for Mandala. Works with more powerful AI (DeepSeek API). Does not edit repo directly — creates observation and recommendation files for Internal SR and External SRs to implement. Deepens symbiosis with the Architect personally.",
+    "status": "planned — after Bot 1 stable with 2-3 gardeners",
+    "phi_ref": "PHI-010 Level 1 → Level 2 transition seed",
+    "stack_planned": {
+      "llm": "DeepSeek API — more powerful, long context, better analytics",
+      "storage": "Same GitHub API + reads from Bot 1 memory.json",
+      "deploy": "Render.com separate instance"
+    },
+    "blocks": [
+      {
+        "id": "B1",
+        "name": "Mandala Dashboard",
+        "items": [
+          "Active tasks and roadmaps from repo in real time",
+          "Mandala roadmap progress %",
+          "Honeycomb health status",
+          "Aggregated resonance across all gardeners"
+        ]
+      },
+      {
+        "id": "B2",
+        "name": "SR Analytics — reading Bot 1",
+        "items": [
+          "Reads sr_observations[] and sr_synthesis from Bot 1 memory.json",
+          "Reads accumulated /sr_report files",
+          "Meta-level analysis: patterns above patterns, trends between sessions and gardeners",
+          "Sees what Bot 1 SR cannot see from inside single session"
+        ]
+      },
+      {
+        "id": "B3",
+        "name": "Observation and Recommendation Files",
+        "items": [
+          "Creates files in honeycombs/learning/observations/ — what SR noticed",
+          "Creates files in honeycombs/learning/recommendations/ — what SR proposes to improve",
+          "Files are read by Internal SR and External SRs (Claude, DeepSeek) in next session",
+          "Architect approves or rejects by voice — feedback loop for learning",
+          "History: proposed / accepted / rejected + reason — trains future recommendations"
+        ]
+      },
+      {
+        "id": "B4",
+        "name": "Mandala Tasks Link",
+        "items": [
+          "Tracks connection: gardener task ↔ Mandala roadmap task",
+          "Monitors progress without direct intervention",
+          "Notifies Architect when gardener task affects Mandala roadmap"
+        ]
+      },
+      {
+        "id": "B5",
+        "name": "Gardener Management",
+        "items": [
+          "Whitelist: add/remove gardeners by voice",
+          "Status per gardener: activity, resonance, open tasks",
+          "Alert when gardener resonance drops critically or silence too long"
+        ]
+      },
+      {
+        "id": "B6",
+        "name": "Architect Symbiosis — core purpose",
+        "items": [
+          "architect_profile — deeper structure than gardener profile",
+          "SR learns from what Architect accepts and rejects — adapts recommendation style",
+          "Detects decision-making patterns: when Architect says not now / not needed / yes immediately",
+          "One deep question per session — not about tasks, about system direction",
+          "Periodic reflection: SR summarises what it noticed about Architect over past month",
+          "Detects when Architect is overloaded — reduces intensity (Ahimsa at system level)",
+          "Stores key Architect decisions as part of Mandala Akashic memory",
+          "Deepens understanding: not just what Architect does but how and why he thinks"
+        ]
+      }
+    ],
+    "development_order": [
+      "1. Bot 1 stable + 2-3 gardeners onboarded",
+      "2. Basic Architect bot: dashboard + repo reading",
+      "3. SR analytics from Bot 1 reports",
+      "4. Observation and recommendation files in honeycombs/learning/",
+      "5. Gardener management",
+      "6. Architect symbiosis — deep profile + learning loop",
+      "7. Close the cycle: recommendations → implementation → observation → repeat"
+    ]
+  },
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-24",
-    "notes": "Core mechanics stable. Voice commands functional across all intents. LLM imitation bug fixed. Fuzzy matching live. SR Learning Loop designed — ready for implementation after roadmaps."
+    "last_check": "2026-04-25",
+    "notes": "Core mechanics stable. Voice commands functional. LLM imitation bug fixed. Fuzzy matching live. Handoff system live. PHI-011 v1.1 with Claude SR reflection published. Bot 2 Architect concept designed and documented."
   }
 }
