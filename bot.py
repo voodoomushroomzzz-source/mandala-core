@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.24.6
+# Mandala Helper - Lite — SR Gentle Companion v7.24.7
 
 import re
 import os
@@ -252,8 +252,37 @@ async def get_http_session() -> aiohttp.ClientSession:
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 
-def _today() -> str:
-    return datetime.now().strftime("%Y-%m-%d")
+def _today(tz_name: str = "Europe/Moscow") -> str:
+    from zoneinfo import ZoneInfo
+    try:
+        return datetime.now(ZoneInfo(tz_name)).strftime("%Y-%m-%d")
+    except Exception:
+        return datetime.now(ZoneInfo("Europe/Moscow")).strftime("%Y-%m-%d")
+
+
+async def _city_to_timezone(city: str) -> str:
+    """Resolve city name to IANA timezone string.
+    Uses geopy (Nominatim) + timezonefinder.
+    Falls back to Europe/Moscow on any error.
+    """
+    if not city:
+        return "Europe/Moscow"
+    try:
+        from geopy.geocoders import Nominatim
+        from timezonefinder import TimezoneFinder
+        import asyncio
+        loop = asyncio.get_event_loop()
+        geolocator = Nominatim(user_agent="mandala_bot_tz", timeout=5)
+        # Run blocking geocode in executor to avoid blocking event loop
+        location = await loop.run_in_executor(None, geolocator.geocode, city)
+        if not location:
+            return "Europe/Moscow"
+        tf = TimezoneFinder()
+        tz = tf.timezone_at(lat=location.latitude, lng=location.longitude)
+        return tz or "Europe/Moscow"
+    except Exception as e:
+        logger.warning(f"Timezone lookup failed for '{city}': {e}")
+        return "Europe/Moscow"
 
 def _json_dumps(obj: Any) -> str:
     return json.dumps(obj, ensure_ascii=False, indent=2)
@@ -2476,6 +2505,10 @@ async def onboard_city(message: Message, state: FSMContext):
     if city.lower() in ["пропустить", "skip", "-"]:
         city = ""
     await state.update_data(city=city)
+    # Auto-detect timezone from city
+    if city:
+        tz = await _city_to_timezone(city)
+        await state.update_data(timezone=tz)
     await state.set_state(GardenOnboardingStates.waiting_for_birthday)
     await message.answer(
         "🎂 Когда твой день рождения?\n"
@@ -2821,16 +2854,22 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
 @router.message(F.text == "🌀 Задачи")
 
 
-def _filter_tasks_by_period(tasks: list, period: str) -> list:
+def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Moscow") -> list:
     """Filter active tasks by deadline period.
     period: today | tomorrow | week | month | overdue | all
     """
     from datetime import datetime, timedelta
-    today = datetime.now().strftime("%Y-%m-%d")
-    tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-    week_end = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
-    month_end = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
-    day_after = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
+    from zoneinfo import ZoneInfo
+    try:
+        _tz = ZoneInfo(tz_name)
+    except Exception:
+        _tz = ZoneInfo("Europe/Moscow")
+    _now      = datetime.now(_tz)
+    today     = _now.strftime("%Y-%m-%d")
+    tomorrow  = (_now + timedelta(days=1)).strftime("%Y-%m-%d")
+    week_end  = (_now + timedelta(days=7)).strftime("%Y-%m-%d")
+    month_end = (_now + timedelta(days=30)).strftime("%Y-%m-%d")
+    day_after = (_now + timedelta(days=2)).strftime("%Y-%m-%d")
     active = [t for t in tasks if t.get("status") != "completed"]
     if period == "today":
         return [t for t in active if t.get("deadline") == today]
@@ -2889,7 +2928,7 @@ def _detect_task_period(text: str) -> str:
     return "all"
 
 
-def _deadline_indicator(deadline: str) -> str:
+def _deadline_indicator(deadline: str, tz_name: str = "Europe/Moscow") -> str:
     """Return urgency emoji for a task deadline.
     🔥 = today or overdue
     ⚡ = tomorrow or day-after
@@ -2899,10 +2938,16 @@ def _deadline_indicator(deadline: str) -> str:
     if not deadline:
         return ""
     from datetime import datetime, timedelta
-    today     = datetime.now().strftime("%Y-%m-%d")
-    tomorrow  = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-    day_after = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
-    week_end  = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+    from zoneinfo import ZoneInfo
+    try:
+        _tz = ZoneInfo(tz_name)
+    except Exception:
+        _tz = ZoneInfo("Europe/Moscow")
+    _now      = datetime.now(_tz)
+    today     = _now.strftime("%Y-%m-%d")
+    tomorrow  = (_now + timedelta(days=1)).strftime("%Y-%m-%d")
+    day_after = (_now + timedelta(days=2)).strftime("%Y-%m-%d")
+    week_end  = (_now + timedelta(days=7)).strftime("%Y-%m-%d")
     if deadline <= today:
         return "🔥 "
     if deadline in (tomorrow, day_after):
@@ -3886,13 +3931,17 @@ def _build_user_context_msg(telegram_id: str) -> str:
     workspace = store_get_workspace(telegram_id) or {}
     name = profile.get("name", "Садовник")
     resonance = profile.get("resonance_level", 0)
-    info = profile.get("personal_info", {})
-    interests = ", ".join(info.get("interests", [])[:3]) or "не указаны"
+    companion = profile.get("companion_settings", {})
+    city = companion.get("city", "") or ""
+    birthday = companion.get("birthday", "") or ""
+    morning_time = companion.get("morning_message_time", "") or ""
+    tz_name = companion.get("timezone", "Europe/Moscow")
+    # achievements_count is the reliable counter
+    ach_count = workspace.get("achievements_count", 0) or len(workspace.get("achievements", []))
+
+    # Build full task list with label and deadline
     tasks = workspace.get("tasks", [])
     active = [t for t in tasks if t.get("status") != "completed"]
-    ach_count = len(workspace.get("achievements", []))
-
-    # Build full task list with label and deadline — SR needs this for grouping/filtering
     task_lines = []
     for t in active:
         label = t.get("label_name") or "без группы"
@@ -3900,12 +3949,11 @@ def _build_user_context_msg(telegram_id: str) -> str:
         task_lines.append(f"  - {t['title']} | группа: {label} | дедлайн: {dl}")
     tasks_block = "\n".join(task_lines) if task_lines else "  нет активных задач"
 
-    # Build groups list
+    # Groups list
     groups_data = store_get_groups(telegram_id).get("groups", [])
     groups_list = ", ".join(g.get("name", "") for g in groups_data) if groups_data else "нет групп"
 
     # Current datetime in gardener timezone
-    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
     try:
         tz = ZoneInfo(tz_name)
         now = datetime.now(tz)
@@ -3917,9 +3965,18 @@ def _build_user_context_msg(telegram_id: str) -> str:
     except Exception:
         current_dt = "неизвестно"
 
+    profile_block = (
+        f"  имя: {name}\n"
+        f"  город: {city or 'не указан'}\n"
+        f"  резонанс: {resonance}%\n"
+        f"  достижений: {ach_count}\n"
+        f"  день рождения: {birthday or 'не указан'}\n"
+        f"  время утра: {morning_time or 'не указано'}\n"
+        f"  часовой пояс: {tz_name}"
+    )
+
     return (
-        f"[Профиль: имя={name}, резонанс={resonance}%, "
-        f"интересы={interests}, достижений={ach_count}]\n"
+        f"[Профиль садовника:\n{profile_block}\n]\n"
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]"
@@ -4460,11 +4517,18 @@ async def ep_city(message: Message, state: FSMContext):
     city = message.text.strip()
     g = store_get_profile(user_id) or {}
     g.setdefault("companion_settings", {})["city"] = city
+    # Auto-detect and update timezone
+    if city:
+        tz = await _city_to_timezone(city)
+        g["companion_settings"]["timezone"] = tz
+        tz_display = f" · 🕐 {tz}"
+    else:
+        tz_display = ""
     g["updated"] = _today()
     store_set_profile(user_id, g)
     _fire_sync()
     await state.clear()
-    await message.answer(f"✅ Город: {city}", reply_markup=get_main_keyboard())
+    await message.answer(f"✅ Город: {city}{tz_display}", reply_markup=get_main_keyboard())
 
 @router.message(StateFilter(EditProfileStates.waiting_for_new_morning))
 async def ep_morning(message: Message, state: FSMContext):
