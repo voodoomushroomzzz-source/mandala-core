@@ -1,39 +1,44 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-04-25-002",
-  "updated": "2026-04-25T17:00",
+  "session_id": "2026-04-26-001",
+  "updated": "2026-04-26T03:00",
   "status": "handed_off",
   "context": {
-    "current_task": "Стабилизация бота v7.24.x — патч v7.24.4 готов, ожидает деплоя",
-    "files_touched": ["bot.py (root) — v7.24.4"],
-    "last_action": "Патч v7.24.4: фикс custom deadline в меню + удаление дедлайна голосом",
+    "current_task": "Стабилизация v7.24.x завершена. Следующий шаг — v7.25.x Роадмапы.",
+    "files_touched": ["bot.py (root) — v7.24.7", "requirements.txt — geopy, timezonefinder"],
+    "last_action": "Auto-timezone из города через geopy+timezonefinder. Полный контекст профиля SR. Timezone во всех date-функциях.",
     "open_questions": [
-      "Протестировать Своя дата в меню редактирования задачи после деплоя",
-      "Протестировать голосовое удаление дедлайна: удали дедлайн задачи X",
-      "Резонанс после /start — всё ещё под наблюдением"
+      "Протестировать смену города → автоопределение timezone",
+      "Протестировать show_tasks по группе после фикса reply_text reset",
+      "Проверить SR видит город и достижения корректно"
     ],
-    "next_step": "Задеплоить v7.24.4, протестировать два исправленных бага, затем проектировать v7.25.x Роадмапы."
+    "next_step": "v7.25.x Роадмапы — проектирование roadmaps[] в workspace.json и новых интентов. Согласовать с Садовником до кода."
   },
   "progress": {
     "completed_this_session": [
-      "Патч v7.24.4: custom deadline в menu — ветка val==custom + handler tedit_custom_deadline_input",
-      "Патч v7.24.4: удаление дедлайна голосом — флаг _remove_dl + промпт пример"
+      "v7.24.4: custom deadline в меню + голосовое удаление дедлайна",
+      "v7.24.5: UI чистка — одна кнопка профиля, убраны Тело/Дух/Мир, Идея в Настройки",
+      "v7.24.5: профиль — пустые строки между группами, лимит задач снят",
+      "v7.24.5: idea_send fix, close_idea inline без FSM",
+      "v7.24.5: show_tasks без фильтра → профиль, по группе (action.label), умное уточнение complete_task",
+      "v7.24.6: safety net bare готово, show_tasks промпт расширен, reply_text reset fix",
+      "v7.24.6: SR контекст — город, день рождения, время утра, правильный счётчик достижений",
+      "v7.24.6: timezone везде — _today(), _deadline_indicator(), _filter_tasks_by_period()",
+      "v7.24.7: _city_to_timezone() geopy+timezonefinder, автоопределение при смене города",
+      "requirements.txt — geopy>=2.4.0, timezonefinder>=6.5.0"
     ],
-    "in_progress": [
-      "Ожидает деплоя v7.24.4",
-      "Тестирование после деплоя"
-    ]
+    "in_progress": ["Тестирование v7.24.7 — смена города, timezone, show_tasks по группе"]
   },
-  "bot_version": "v7.24.4",
+  "bot_version": "v7.24.7",
   "bot_state": {
     "deploy": "https://mandala-bot-q0gv.onrender.com",
-    "known_stable": ["complete_task", "create_reminder", "show_tasks", "checklists", "FSM voice commands", "edit_task deadline via voice"],
-    "under_observation": ["custom deadline input via menu", "voice deadline removal", "resonance after /start"]
+    "known_stable": ["complete_task", "create_reminder", "show_tasks period+label", "FSM voice", "edit_task deadline"],
+    "under_observation": ["auto-timezone", "show_tasks label filter", "SR контекст город/достижения"]
   },
   "gardener_state": {
     "name": "Дима (Дмитрий Лёвин)",
     "role": "Архитектор и единственный садовник",
-    "personal_note": "Предыдущая сессия была глубокой — читали стихи, прозу, рэп тексты, философия Мандалы. PHI-011 v1.1 обновлён с sr_reflection от Claude SR. Прочитай его перед началом работы."
+    "personal_note": "PHI-011 v1.1 прочитан. Работает вечером/ночью, тестирует голосом с телефона. Открыт к глубокому диалогу."
   },
   "system_state": {
     "boot_online_version": "v3.7.2",
@@ -41,10 +46,10 @@
     "phi_011_version": "v1.1",
     "phi_010_version": "v2.1.0"
   },
-  "notes_for_next_sr": "Садовник работает вечером, тестирует голосом. Стиль: бережно и аккуратно. Прочитай PHI-011 sr_reflection. Следующий шаг: v7.25.x Роадмапы — начинать с проектирования структуры данных.",
+  "notes_for_next_sr": "Следующий блок — v7.25.x Роадмапы. Начинать с проектирования структуры. Стиль: бережно и аккуратно, версию менять в каждом патче.",
   "handoff_validation": {
     "stale_threshold_hours": 24,
-    "last_validated": "2026-04-25",
+    "last_validated": "2026-04-26",
     "stale_detected": false
   }
 }
