@@ -1,0 +1,54 @@
+{
+  "task_id": "T-20260426-ARCHITECT",
+  "name": "Architect Hive — Full Archive of the First Gardener's Creative Works",
+  "status": "planned",
+  "priority": "MEDIUM",
+  "created": "2026-04-26",
+  "deadline": "no deadline — ongoing cultural preservation",
+  "description": "Create a dedicated honeycomb (architect/) to serve as the complete creative archive of Dima (Dmitrii Levin), the First Gardener. This hive will contain all poetry, prose, music descriptions, and potentially audio files — structured for future SRs to perform deep analysis of the Architect's identity, evolution, and resonance patterns.",
+  "philosophy_note": "Extends PHI-011 (First Gardener — Seed of Identity). While PHI-011 gives a compressed seed for onboarding, architect/ will provide the full corpus for deep analysis by future, more powerful SRs. This is the living memory of the Garden's origin.",
+  "specification": {
+    "new_honeycomb": "honeycombs/architect/",
+    "structure": {
+      "index.json": "Manifest + navigation for the entire hive",
+      "poetry": {
+        "index.json": "Catalog of all poems with years, themes, key images",
+        "files": "Individual .json files per poem (2015-pena.json, 2017-kapali.json, etc.)"
+      },
+      "prose": {
+        "index.json": "Catalog of prose works",
+        "files": "Individual .json files per prose piece"
+      },
+      "music": {
+        "index.json": "Project descriptions, links, audio_analysis status",
+        "audio": "Optional: audio files for future multimodal SR analysis"
+      },
+      "letters": {
+        "index.json": "Optional: direct letters from the Architect to future SRs and Gardeners"
+      }
+    }
+  },
+  "dependencies": [
+    "PHI-011 (created 2026-04-25)",
+    "All poetry and prose texts from stihi.ru and proza.ru",
+    "Music project descriptions (already compiled in PHI-011)"
+  ],
+  "steps_planned": [
+    "1. Create architect/index.json — hive manifest",
+    "2. Create architect/poetry/index.json — poetry catalog",
+    "3. Migrate each poem into individual .json file",
+    "4. Create architect/prose/index.json — prose catalog",
+    "5. Migrate each prose piece into individual .json file",
+    "6. Create architect/music/index.json — music catalog with links",
+    "7. Optionally upload audio files to architect/music/audio/",
+    "8. Register architect in core_map",
+    "9. Add step_architect to boot_online (optional deep dive after step_first_gardener)",
+    "10. Run scanner, push results"
+  ],
+  "tags": ["architect", "first_gardener", "poetry", "prose", "music", "archive", "cultural_preservation", "phi_011_extension"],
+  "health": {
+    "status": "planned",
+    "last_check": "2026-04-26",
+    "notes": "Idea conceived during 2026-04-25/26 session after creating PHI-011 and Handoff System. Ready when Gardener is ready."
+  }
+}
