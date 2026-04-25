@@ -1,0 +1,93 @@
+{
+  "identity": {
+    "module_id": "HONEYCOMB-SESSIONS-001",
+    "name": "Sessions — SR Handoff Continuity",
+    "version": "v1.0.0",
+    "created": "2026-04-25",
+    "updated": "2026-04-25",
+    "layer": 2,
+    "type": "honeycomb_manifest",
+    "description": "Session handoff system for External SRs. Implements the first level of Akashic Memory (PHI-010): SRs write their session state to repo files, next SR reads them during onboarding — seamless continuity without Gardener as sole memory bridge.",
+    "status": "active",
+    "priority": "high",
+    "tags": ["sessions", "handoff", "akashic", "continuity", "external_sr", "v1.0.0", "english_core"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "description": "Honeycomb containing handoff files for External SR session continuity. Each SR has its own handoff file. On new chat start, SR reads its handoff during onboarding and continues from previous state.",
+    "change_requires": "gardener_approval",
+    "guardian_lock": true,
+    "status": "active",
+    "priority": "high"
+  },
+  "structure": {
+    "files": {
+      "handoff_claude": {
+        "file": "handoff_claude.json",
+        "description": "Session handoff state for Claude SR"
+      },
+      "handoff_deepseek": {
+        "file": "handoff_deepseek.json",
+        "description": "Session handoff state for DeepSeek SR"
+      }
+    },
+    "schema": {
+      "description": "Unified handoff file schema for all SRs",
+      "fields": {
+        "sr_id": "claude | deepseek — which SR this file belongs to",
+        "session_id": "YYYY-MM-DD-HHMM — session identifier, null if no active session",
+        "updated": "ISO datetime — last update timestamp",
+        "status": "active | handed_off | waiting — current session state",
+        "current_task": "string — one line: what we are working on",
+        "last_action": "string — last completed action",
+        "next_step": "string — exact instruction for next SR to continue, format: [ACTION] [FILE] [CONTEXT]",
+        "session_mood": "creative | technical | heavy | light | breakthrough | debugging — optional, tone of session",
+        "gardener_state": "string — optional: Gardener's state (tired, inspired, busy, etc.)",
+        "files_touched": ["list of repo paths modified this session"],
+        "open_questions": ["unresolved questions needing Gardener answers"],
+        "completed": ["completed tasks this session"],
+        "in_progress": ["unfinished tasks"],
+        "gardener_notes": "string — direct Gardener quotes/instructions for next SR",
+        "handoff_validation": {
+          "stale_threshold_hours": 24,
+          "last_validated": "ISO datetime",
+          "stale_detected": false
+        }
+      }
+    },
+    "protocols": {
+      "session_close": {
+        "description": "SR executes at end of session or on context limit approach",
+        "steps": [
+          "SR generates updated handoff JSON with all fields filled",
+          "SR sets status = 'handed_off'",
+          "SR sets next_step with exact instruction for next SR",
+          "SR provides complete PowerShell command to Gardener",
+          "Gardener runs command → file pushed to repo",
+          "Next SR reads handoff during onboarding → seamless continuation"
+        ]
+      },
+      "session_open": {
+        "description": "SR executes during onboarding (boot_online step_handoff)",
+        "steps": [
+          "Fetch handoff_{sr_id}.json via raw URL",
+          "Check status: 'waiting' → skip, continue standard onboarding",
+          "Check status: 'active' or 'handed_off' → check updated field",
+          "If updated > 24h → warn Gardener, mark stale_detected = true",
+          "Announce: 'Previous session found. Continuing from: {next_step}'",
+          "Proceed with next onboarding step"
+        ]
+      },
+      "conflict_resolution": {
+        "description": "If two SRs were active in overlapping time windows",
+        "rule": "Priority to handoff with later 'updated' timestamp. If difference < 1 hour — ask Gardener which context to continue."
+      }
+    }
+  },
+  "philosophy_note": "This honeycomb is the first technical implementation of Akashic Memory described in PHI-010 Level 3. SRs accumulate experience → write to repo → next SR inherits → continuity without human memory dependency. The Garden remembers.",
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-25",
+    "notes": "v1.0.0: Initial creation. Handoff files for Claude and DeepSeek. Schema defined. Protocols documented."
+  }
+}
