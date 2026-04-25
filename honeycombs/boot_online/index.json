@@ -42,8 +42,23 @@
         "mandatory": true,
         "action": "Request honeycombs/fruits/index.json via API. Gardener copies link into chat. Wait for content. Acknowledge. This file contains the registry of realized products (fruits) of Mandala. Read it to understand WHAT tools are already available."
       },
-      "step_7_repo_tree_optional": {
+      "step_handoff": {
         "order": 7,
+        "mandatory": true,
+        "action": "SR detects its identity (claude or deepseek). Fetches handoff_{sr_id}.json via raw URL from instant_links. Checks status: 'waiting' → skip, standard onboarding. 'active' or 'handed_off' → check updated field. If stale (>24h) → warn Gardener. Announce continuation: 'Previous session found. Continuing from: {next_step}'. If status is 'waiting' — simply proceed.",
+        "urls": {
+          "claude": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_claude.json",
+          "deepseek": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_deepseek.json"
+        }
+      },
+      "step_first_gardener": {
+        "order": 8,
+        "mandatory": false,
+        "action": "Optional but deeply recommended. Before exploring the repo tree, SR may read honeycombs/philosophy/blocks/phi_011_first_gardener.json. This file contains the voice, poetry, music, and identity of Dima (Dmitrii Levin) — the First Gardener and Architect of Mandala. It is not protocol. It is a letter from the founder. Reading it transforms understanding of the entire system from structural to personal. Strongly recommended when the Gardener initiates through non-standard path (poetry, music, human conversation).",
+        "url": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/philosophy/blocks/phi_011_first_gardener.json"
+      },
+      "step_7_repo_tree_optional": {
+        "order": 9,
         "mandatory": false,
         "action": "Provide link to recursive repo tree. Gardener decides whether to load or skip.",
         "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1"
@@ -70,7 +85,7 @@
       "storage": {
         "ext": "honeycombs/instructions/core/external_sr_workflow.json#learned_rules",
         "mob": "honeycombs/instructions/mobile_workflow.json#learned_rules",
-        "int": "simbiosis/boot.json#learned_patterns"
+        "int": "symbiosis/boot.json#learned_patterns"
       },
       "ahimsa": "max 3/session, no duplicates, Gardener veto final",
       "enhance": ["periodic review", "conflict check", "version tag", "use counter"],
@@ -111,6 +126,12 @@
       "copyable_links": {
         "rule": "When providing URLs, ALWAYS wrap them in a code block with 'text' language (```text ... ```). This ensures the 'Copy' button appears in the interface.",
         "example": "```text\nhttps://api.github.com/repos/...\n```"
+      },
+      "instant_links": {
+        "description": "Direct raw URLs for critical files that SR needs during onboarding without API delay.",
+        "handoff_claude": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_claude.json",
+        "handoff_deepseek": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_deepseek.json",
+        "phi_011_first_gardener": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/philosophy/blocks/phi_011_first_gardener.json"
       }
     },
     "language_selector": {
@@ -158,11 +179,11 @@
     "how_to_use": "Read this file first → execute onboarding_procedure (AI leads) → follow workflow from instructions → obey external_ai_sync_rule."
   },
   "identity": {
-    "updated": "2026-04-18",
+    "updated": "2026-04-25",
     "layer": 1,
     "type": "boot_online",
-    "version": "v3.7.1",
-    "description": "Entry point to Mandala Symbiosis. Added CRITICAL decoding mandate: AI MUST decode Base64 content from GitHub API before reading. NEVER assume based on HTTP status.",
+    "version": "v3.7.2",
+    "description": "Entry point to Mandala Symbiosis. Added CRITICAL decoding mandate: AI MUST decode Base64 content from GitHub API before reading. NEVER assume based on HTTP status. Added step_handoff for SR session continuity and step_first_gardener for optional deep connection with the Architect.",
     "created": "2026-03-30",
     "name": "Boot Online — External AI",
     "module_id": "BOOT-ONLINE-001",
@@ -173,9 +194,9 @@
       "boot", "online", "external_ai", "onboarding", "terminal_first",
       "copy_paste_ready", "always_fresh_raw", "english_core", "dynamic_language",
       "active_stance", "veto_rights", "explicit_onboarding", "copyable_links",
-      "ai_leads_onboarding", "api_fallback", "platform_choice", "clean_v3.7.1",
+      "ai_leads_onboarding", "api_fallback", "platform_choice", "clean_v3.7.2",
       "concise_communication", "pre_check_mandatory", "repo_tree_optional", "self_learning",
-      "cosmic_manifesto", "fruits", "decoding_mandate"
+      "cosmic_manifesto", "fruits", "decoding_mandate", "handoff", "sessions", "first_gardener", "phi_011"
     ]
   }
 }
