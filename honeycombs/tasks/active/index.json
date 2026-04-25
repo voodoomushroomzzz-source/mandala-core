@@ -1,0 +1,61 @@
+{
+  "identity": {
+    "module_id": "TASKS-MANIFEST-004",
+    "name": "Tasks Honeycomb Manifest",
+    "version": "v3.7.0",
+    "created": "2026-03-01",
+    "updated": "2026-04-26",
+    "layer": 1,
+    "type": "honeycomb_manifest"
+  },
+  "meta": {
+    "description": "Tasks honeycomb: active/ and archive/ folders for work tracking. Minimal structure.",
+    "status": "active",
+    "priority": "high",
+    "tags": ["tasks", "simple", "workflow", "minimal"],
+    "resonance": "100%"
+  },
+  "structure": {
+    "total_segments": 3,
+    "segments": [
+      {
+        "segment": "template",
+        "file": "basic_task.json",
+        "description": "Task template for creating new tasks",
+        "size_kb": 2.0
+      },
+      {
+        "segment": "active_tasks",
+        "folder": "active/",
+        "description": "Currently active tasks",
+        "files_count": 13
+      },
+      {
+        "segment": "archive_tasks",
+        "folder": "archive/",
+        "description": "Completed and archived tasks",
+        "files_count": 3
+      }
+    ]
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "first_file": "basic_task.json"
+  },
+  "registry": {
+    "total_files": 13,
+    "total_size_kb": 20.0,
+    "last_updated": "2026-04-26",
+    "notes": "v3.7.0: added T-20260426-ARCHITECT task. Active: 13 tasks."
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-26",
+    "notes": "v3.7.0: T-20260426-ARCHITECT added. Architect Hive planned."
+  }
+}
