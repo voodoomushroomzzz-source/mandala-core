@@ -693,7 +693,7 @@ def _build_profile_card(user_id: str) -> str:
             lines.append("")  # empty line between groups
         first_group = False
         lines.append(f"{emoji} <b>{gname}</b>")
-        for t in _sort_by_deadline(items)[:10]:
+        for t in _sort_by_deadline(items):
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
@@ -703,14 +703,14 @@ def _build_profile_card(user_id: str) -> str:
             continue
         emoji = get_group_emoji(gname)
         lines.append(f"{emoji} <b>{gname}</b>")
-        for t in _sort_by_deadline(items)[:10]:
+        for t in _sort_by_deadline(items):
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
     unlabeled = by_group.get("", [])
     if unlabeled:
         lines.append("🌱 <b>Без группы</b>")
-        for t in _sort_by_deadline(unlabeled)[:10]:
+        for t in _sort_by_deadline(unlabeled):
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
@@ -3886,8 +3886,20 @@ def _build_user_context_msg(telegram_id: str) -> str:
     interests = ", ".join(info.get("interests", [])[:3]) or "не указаны"
     tasks = workspace.get("tasks", [])
     active = [t for t in tasks if t.get("status") != "completed"]
-    tasks_str = ", ".join(t["title"] for t in active[:10]) or "нет"
     ach_count = len(workspace.get("achievements", []))
+
+    # Build full task list with label and deadline — SR needs this for grouping/filtering
+    task_lines = []
+    for t in active:
+        label = t.get("label_name") or "без группы"
+        dl = t.get("deadline") or "без даты"
+        task_lines.append(f"  - {t['title']} | группа: {label} | дедлайн: {dl}")
+    tasks_block = "\n".join(task_lines) if task_lines else "  нет активных задач"
+
+    # Build groups list
+    groups_data = store_get_groups(telegram_id).get("groups", [])
+    groups_list = ", ".join(g.get("name", "") for g in groups_data) if groups_data else "нет групп"
+
     # Current datetime in gardener timezone
     tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
     try:
@@ -3900,11 +3912,13 @@ def _build_user_context_msg(telegram_id: str) -> str:
         current_dt = f"{now.day} {MONTHS_RU[month-1]} {now.year}, {DAYS_RU[now.weekday()]}, {now.strftime('%H:%M')}, {season}"
     except Exception:
         current_dt = "неизвестно"
+
     return (
         f"[Профиль: имя={name}, резонанс={resonance}%, "
-        f"интересы={interests}, активных задач={len(active)} ({tasks_str}), "
-        f"достижений={ach_count}]\n"
-        f"[Сейчас у садовника: {current_dt}]"
+        f"интересы={interests}, достижений={ach_count}]\n"
+        f"[Сейчас у садовника: {current_dt}]\n"
+        f"[Группы задач: {groups_list}]\n"
+        f"[Активные задачи ({len(active)}):\n{tasks_block}\n]"
     )
 
 
