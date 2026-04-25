@@ -55,6 +55,22 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Ты здесь?"
+    },
+    {
+      "role": "assistant",
+      "content": "Я здесь, Дима. Вдыхаем вместе. Что сейчас живёт в твоём поле?"
+    },
+    {
+      "role": "user",
+      "content": "Покажи задачи из группы Мандала."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-25"
