@@ -3821,6 +3821,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "задачи на неделю", "на этой неделе" → show_tasks, action.period=week, 0.95
 - "задачи на месяц" → show_tasks, action.period=month, 0.95
 - "просроченные задачи", "что просрочено" → show_tasks, action.period=overdue, 0.95
+- "задачи группы X", "покажи задачи из X", "что в группе X", "задачи по X" → show_tasks, action.label="X", 0.95
 - "мой профиль" → show_profile, 0.95
 - "резонанс", "мой уровень" → show_resonance, 0.95
 - "достижения" → show_achievements, 0.95
@@ -3835,6 +3836,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
 - ВАЖНО: action.title — ПОЛНОЕ название задачи одной строкой без разбивки по запятым. Если Садовник говорит "закрой задачу выдать ЗП, часть 1" → action.title="выдать ЗП часть 1" (убрать запятую, сохранить всё как одно название)
+- ВАЖНО: если название задачи из речи Садовника похоже на задачу в [Активные задачи] контекста — используй ТОЧНОЕ название из контекста как action.title, не переформулируй
 - "создай чеклист X", "новый чеклист X" → create_checklist, action.title=X, 0.95
 - "создай чеклист X с пунктами A B C" → create_checklist, action.title=X, action.items="A|B|C", 0.95
   Если пункты упомянуты в любом виде — извлекай в action.items через |
@@ -4820,9 +4822,35 @@ async def free_conversation(message: Message, state: FSMContext):
                             # Detect period from text + SR action
                             period = _detect_task_period(text)
                             action_period = (parsed_check.get("action") or {}).get("period", "")
+                            action_label  = (parsed_check.get("action") or {}).get("label", "").strip()
                             if action_period and action_period != "all":
                                 period = action_period
-                            if period == "all" or not period:
+                            if action_label:
+                                # Filter by group label
+                                uid_tasks = store_get_tasks(user_id)
+                                filtered = [t for t in uid_tasks
+                                            if t.get("status") != "completed"
+                                            and action_label.lower() in (t.get("label_name") or "").lower()]
+                                if not filtered:
+                                    # Try fuzzy group match
+                                    groups_data = store_get_groups(user_id).get("groups", [])
+                                    matched_g = next((g["name"] for g in groups_data
+                                                      if action_label.lower() in g.get("name","").lower()), None)
+                                    if matched_g:
+                                        filtered = [t for t in uid_tasks
+                                                    if t.get("status") != "completed"
+                                                    and (t.get("label_name") or "") == matched_g]
+                                if filtered:
+                                    label_display = filtered[0].get("label_name") or action_label
+                                    lines = [f"<b>🗂 {label_display}:</b>"]
+                                    for t in _sort_by_deadline(filtered):
+                                        dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+                                        ind = _deadline_indicator(t.get("deadline", ""))
+                                        lines.append(f"  • {ind}{t['title']}{dl}")
+                                    reply_text = "\n".join(lines)
+                                else:
+                                    reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
+                            elif period == "all" or not period:
                                 # No filter — show profile (tasks embedded there)
                                 await _show_profile(user_id, message)
                             else:
@@ -4963,8 +4991,43 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
                                                   f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
                             elif tasks:
-                                titles = ", ".join(t["title"] for t in tasks[:5])
-                                reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
+                                # Smart clarification: find top fuzzy candidates
+                                _candidates = []
+                                if target:
+                                    def _lcs_r(a, b):
+                                        la, lb = len(a), len(b)
+                                        if not la or not lb: return 0.0
+                                        dp = [[0]*(lb+1) for _ in range(la+1)]
+                                        for i in range(1,la+1):
+                                            for j in range(1,lb+1):
+                                                if a[i-1]==b[j-1]: dp[i][j]=dp[i-1][j-1]+1
+                                                else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])
+                                        return (2*dp[la][lb])/(la+lb)
+                                    import re as _rec2
+                                    def _norm2(s):
+                                        s = s.lower().strip()
+                                        s = _rec2.sub(r"[^\w\s]","",s)
+                                        return _rec2.sub(r"\s+","",s)
+                                    _tn = _norm2(target)
+                                    scored = sorted(
+                                        [(_lcs_r(_tn, _norm2(t.get("title",""))), t) for t in tasks],
+                                        key=lambda x: -x[0]
+                                    )
+                                    _candidates = [(r, t) for r, t in scored if r >= 0.35][:3]
+                                if len(_candidates) == 1:
+                                    _ct = _candidates[0][1]
+                                    reply_text = (f"🔍 Ты имеешь в виду «{_ct['title']}»?\n"
+                                                  f"Скажи «да» или назови точнее.")
+                                elif len(_candidates) > 1:
+                                    _opts = "\n".join(f"  {i+1}. {c[1]['title']}"
+                                                      for i, c in enumerate(_candidates))
+                                    reply_text = f"🔍 Уточни — какую задачу закрыть?\n{_opts}"
+                                else:
+                                    # No candidates — ask by group
+                                    groups_data = store_get_groups(user_id).get("groups", [])
+                                    grp_names = ", ".join(g.get("name","") for g in groups_data) or "задачи без группы"
+                                    reply_text = (f"🌀 Не нашла задачу «{target}».\n"
+                                                  f"Из какой группы она — {grp_names}?")
                             else:
                                 reply_text = "🌀 Активных задач нет."
 
