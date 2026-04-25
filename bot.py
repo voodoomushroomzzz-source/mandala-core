@@ -1381,6 +1381,25 @@ async def tedit_deadline_cb(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     tid  = data.get("edit_task_id", "")
     val  = callback.data[3:]
+
+    # Custom date — ask for text input
+    if val == "custom":
+        await state.set_state(TaskEditStates.waiting_for_custom_deadline)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="❌ Отмена", callback_data=f"task_edit_{tid}")]
+        ])
+        try:
+            await callback.message.edit_text(
+                "✏️ Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
+                parse_mode="HTML", reply_markup=cancel_kb
+            )
+        except Exception:
+            await callback.message.answer(
+                "✏️ Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
+                parse_mode="HTML", reply_markup=cancel_kb
+            )
+        return
+
     deadline = None if val == "skip" else val
     tasks = store_get_tasks(user_id)
     for t in tasks:
@@ -1393,6 +1412,41 @@ async def tedit_deadline_cb(callback: CallbackQuery, state: FSMContext):
     dl_str = deadline or "убран"
     await callback.message.edit_text(f"✅ Дедлайн → {dl_str}")
     await callback.message.answer("🌿", reply_markup=get_main_keyboard())
+
+@router.message(StateFilter(TaskEditStates.waiting_for_custom_deadline))
+async def tedit_custom_deadline_input(message: Message, state: FSMContext):
+    """Handle free-text custom deadline input in task edit flow."""
+    from datetime import datetime as _dttc
+    user_id = str(message.from_user.id)
+    data = await state.get_data()
+    tid = data.get("edit_task_id", "")
+    raw = (message.text or "").strip()
+    _dl = None
+    import re as _rec
+    # DD.MM or DD.MM.YY or DD.MM.YYYY
+    m = _rec.match(r"^(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?$", raw)
+    if m:
+        dd, mm = m.group(1).zfill(2), m.group(2).zfill(2)
+        yy = m.group(3) or str(_dttc.now().year)
+        yy = "20" + yy if len(yy) == 2 else yy
+        _dl = f"{yy}-{mm}-{dd}"
+    elif _rec.match(r"^\d{4}-\d{2}-\d{2}$", raw):
+        _dl = raw
+    if _dl:
+        tasks = store_get_tasks(user_id)
+        for t in tasks:
+            if t.get("task_id") == tid:
+                t["deadline"] = _dl
+                t["updated"] = _today()
+        store_set_tasks(user_id, tasks)
+        _fire_sync()
+        await state.clear()
+        await message.answer(f"✅ Дедлайн → {_dl}", reply_markup=get_main_keyboard())
+    else:
+        await message.answer(
+            "🌀 Не понял дату. Напиши: <code>25.05</code> или <code>25.05.26</code>",
+            parse_mode="HTML"
+        )
 
 @router.callback_query(F.data.startswith("tedit_reminder_"))
 async def cb_tedit_reminder(callback: CallbackQuery, state: FSMContext):
@@ -3850,6 +3904,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "отметь пункт Y в чеклисте X" → checklist_toggle_item, action.title=X, action.item=Y, 0.95
 - "переименуй задачу X в Y", "измени дедлайн задачи X на Y", "смени группу задачи X на Y" → edit_task, action.title="X", action.field="title|deadline|group", action.value="Y", 0.9
 - "перенеси дедлайн X на Y", "сдвинь срок X на Y", "поставь новый срок X", "измени дату задачи X", "задача X — новый дедлайн Y", "задача X перенеси на Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
+- "удали дедлайн задачи X", "убери срок у задачи X", "убери дедлайн X", "задача X без дедлайна" → edit_task, action.title="X", action.field="deadline", action.value="удали", 0.95
 - ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
@@ -5321,6 +5376,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                     from datetime import datetime as _dtt, timedelta as _tdd
                                     _val_lower = value.lower().strip()
                                     _dl = None
+                                    _remove_dl = False
+                                    # Removal keywords
+                                    if _val_lower in ("null", "none", "убрать", "убери", "удалить",
+                                                      "удали", "без дедлайна", "без срока", ""):
+                                        _remove_dl = True
                                     # Resolve user timezone for relative dates
                                     try:
                                         from zoneinfo import ZoneInfo as _ZIe
@@ -5352,7 +5412,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                             _yy = _m2.group(3) or str(_now_e.year)
                                             _yy = "20"+_yy if len(_yy)==2 else _yy
                                             _dl = f"{_yy}-{_mm}-{_dd}"
-                                    if _dl:
+                                    if _remove_dl:
+                                        t["deadline"] = None
+                                        t["updated"]  = _today()
+                                        reply_text = "✅ Дедлайн убран"
+                                    elif _dl:
                                         t["deadline"] = _dl
                                         t["updated"]  = _today()
                                         reply_text = f"✅ Дедлайн → {_dl}"
