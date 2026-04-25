@@ -4,7 +4,7 @@
   "name": "Дима",
   "resonance_level": 20,
   "created": "2026-04-18",
-  "updated": "2026-04-19",
+  "updated": "2026-04-24",
   "personal_info": {
     "life_areas": {
       "body": {
@@ -22,7 +22,7 @@
     }
   },
   "companion_settings": {
-    "morning_message_time": "9:00",
+    "morning_message_time": "10:00",
     "proactive_mode": true,
     "timezone": "Europe/Moscow",
     "city": "Москва",
