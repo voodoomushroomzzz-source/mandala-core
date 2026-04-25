@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.23.1
+# Mandala Helper - Lite — SR Gentle Companion v7.24.5
 
 import re
 import os
@@ -527,22 +527,17 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
 
 class GardenOnboardingStates(StatesGroup):
     waiting_for_name = State()
-    waiting_for_body = State()
-    waiting_for_spirit = State()
-    waiting_for_world = State()
-    waiting_for_city = State()
+    waiting_for_city = State()  # body/spirit/world removed in v7.24.5
     waiting_for_birthday = State()
     waiting_for_morning = State()
     done = State()
 
 class EditProfileStates(StatesGroup):
     waiting_for_new_name = State()
-    waiting_for_new_body = State()
-    waiting_for_new_spirit = State()
-    waiting_for_new_world = State()
     waiting_for_new_city = State()
     waiting_for_new_birthday = State()
     waiting_for_new_morning = State()
+    # waiting_for_new_body/spirit/world removed in v7.24.5
 
 class EngineerChatStates(StatesGroup):
     waiting_for_message = State()
@@ -726,8 +721,7 @@ async def _show_profile(user_id: str, message: Message):
     """Show profile card — used by button, command, voice, intent."""
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✏️ Изменить", callback_data="menu_edit_profile"),
-         InlineKeyboardButton(text="💡 Идея (!)",  callback_data="menu_idea")],
+        [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
     ])
     await message.answer(card, reply_markup=kb)
 
@@ -846,9 +840,8 @@ def get_profile_inline() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🌀 Задачи",      callback_data="menu_tasks"),
          InlineKeyboardButton(text="🔮 Резонанс",    callback_data="menu_resonance")],
         [InlineKeyboardButton(text="💎 Достижения",  callback_data="menu_achievements"),
-         InlineKeyboardButton(text="💡 Идея (!)",    callback_data="menu_idea")],
-        [InlineKeyboardButton(text="✏️ Изменить",    callback_data="menu_edit_profile"),
          InlineKeyboardButton(text="📋 Анкета",      callback_data="menu_extended")],
+        [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
     ])
 
 # Keep alias for backwards compat
@@ -858,9 +851,6 @@ def get_garden_inline() -> InlineKeyboardMarkup:
 def get_edit_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="👤 Имя",           callback_data="edit_name")],
-        [InlineKeyboardButton(text="🌿 Тело",          callback_data="edit_body")],
-        [InlineKeyboardButton(text="🔥 Дух",           callback_data="edit_spirit")],
-        [InlineKeyboardButton(text="🤝 Мир",           callback_data="edit_world")],
         [InlineKeyboardButton(text="📍 Город",         callback_data="edit_city")],
         [InlineKeyboardButton(text="🎂 День рождения", callback_data="edit_birthday")],
         [InlineKeyboardButton(text="⏰ Время утра",    callback_data="edit_morning")],
@@ -873,7 +863,7 @@ def get_settings_inline() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🔔 Напоминания",             callback_data="menu_reminders_mgmt")],
         [InlineKeyboardButton(text="☑️ Чеклисты",               callback_data="menu_checklists_mgmt")],
         [InlineKeyboardButton(text="🗺 Роадмапы (!)",           callback_data="menu_roadmaps_soon")],
-        [InlineKeyboardButton(text="🔬 Улучшить симбиоз (!)",   callback_data="menu_extended")],
+        [InlineKeyboardButton(text="💡 Идея для Мандалы",       callback_data="menu_idea")],
     ])
 
 def get_tasks_mgmt_inline(tasks: list, user_id: str = "") -> InlineKeyboardMarkup:
@@ -2467,60 +2457,6 @@ async def onboard_name(message: Message, state: FSMContext):
         await message.answer("🌱 Введи своё имя.")
         return
     await state.update_data(name=name)
-    await state.set_state(GardenOnboardingStates.waiting_for_body)
-    await message.answer(
-        f"🌿 <b>Тело</b> — это твоя физическая жизнь:\n"
-        f"здоровье, спорт, сон, питание, уровень энергии.\n\n"
-        f"Как ты оцениваешь эту сферу сейчас? <i>(от 1 до 10)</i>",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
-    )
-
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_body))
-async def onboard_body(message: Message, state: FSMContext):
-    try:
-        val = int(message.text.strip())
-        if not (1 <= val <= 10):
-            raise ValueError
-    except ValueError:
-        await message.answer("Введи число от 1 до 10.")
-        return
-    await state.update_data(body=val)
-    await state.set_state(GardenOnboardingStates.waiting_for_spirit)
-    await message.answer(
-        f"🔥 <b>Дух</b> — это твоя внутренняя жизнь:\n"
-        f"работа, учёба, творчество, хобби, профессиональный рост.\n\n"
-        f"Как ты оцениваешь эту сферу сейчас? <i>(от 1 до 10)</i>",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
-    )
-
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_spirit))
-async def onboard_spirit(message: Message, state: FSMContext):
-    try:
-        val = int(message.text.strip())
-        if not (1 <= val <= 10):
-            raise ValueError
-    except ValueError:
-        await message.answer("Введи число от 1 до 10.")
-        return
-    await state.update_data(spirit=val)
-    await state.set_state(GardenOnboardingStates.waiting_for_world)
-    await message.answer(
-        f"🤝 <b>Мир</b> — это твоя жизнь среди людей:\n"
-        f"отношения, дружба, путешествия, сообщество, события.\n\n"
-        f"Как ты оцениваешь эту сферу сейчас? <i>(от 1 до 10)</i>",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
-    )
-
-@router.message(StateFilter(GardenOnboardingStates.waiting_for_world))
-async def onboard_world(message: Message, state: FSMContext):
-    try:
-        val = int(message.text.strip())
-        if not (1 <= val <= 10):
-            raise ValueError
-    except ValueError:
-        await message.answer("Введи число от 1 до 10.")
-        return
-    await state.update_data(world=val)
     await state.set_state(GardenOnboardingStates.waiting_for_city)
     await message.answer(
         "📍 В каком городе ты живёшь?\n"
@@ -2528,6 +2464,9 @@ async def onboard_world(message: Message, state: FSMContext):
         "Можно пропустить — напиши <b>пропустить</b>",
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
+
+# Body/Spirit/World onboarding removed in v7.24.5
+# Sphere resonance will be calculated automatically from task life_area in v7.26.x
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_city))
 async def onboard_city(message: Message, state: FSMContext):
@@ -4438,47 +4377,9 @@ async def cb_edit_city(callback: CallbackQuery, state: FSMContext):
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
 
-@router.callback_query(F.data == "edit_body")
-async def cb_edit_body(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    profile = store_get_profile(user_id) or {}
-    cur = profile.get("personal_info", {}).get("life_areas", {}).get("body", {}).get("current", "?")
-    await callback.message.edit_reply_markup(reply_markup=None)
-    await state.set_state(EditProfileStates.waiting_for_new_body)
-    await callback.message.answer(
-        f"🌿 <b>Тело</b> — здоровье, спорт, сон, питание, энергия\n"
-        f"Сейчас: {cur}/10\n\nНовое значение (1-10):",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
-    )
 
-@router.callback_query(F.data == "edit_spirit")
-async def cb_edit_spirit(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    profile = store_get_profile(user_id) or {}
-    cur = profile.get("personal_info", {}).get("life_areas", {}).get("spirit", {}).get("current", "?")
-    await callback.message.edit_reply_markup(reply_markup=None)
-    await state.set_state(EditProfileStates.waiting_for_new_spirit)
-    await callback.message.answer(
-        f"🔥 <b>Дух</b> — работа, учёба, творчество, хобби, рост\n"
-        f"Сейчас: {cur}/10\n\nНовое значение (1-10):",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
-    )
-
-@router.callback_query(F.data == "edit_world")
-async def cb_edit_world(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    profile = store_get_profile(user_id) or {}
-    cur = profile.get("personal_info", {}).get("life_areas", {}).get("world", {}).get("current", "?")
-    await callback.message.edit_reply_markup(reply_markup=None)
-    await state.set_state(EditProfileStates.waiting_for_new_world)
-    await callback.message.answer(
-        f"🤝 <b>Мир</b> — отношения, друзья, путешествия, сообщество\n"
-        f"Сейчас: {cur}/10\n\nНовое значение (1-10):",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
-    )
+# edit_body / edit_spirit / edit_world removed in v7.24.5
+# Sphere resonance (Мер-Ка-Ба) will be auto-calculated from task life_area in v7.26.x
 
 @router.callback_query(F.data == "edit_morning")
 async def cb_edit_morning(callback: CallbackQuery, state: FSMContext):
@@ -4545,51 +4446,9 @@ async def ep_morning(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(f"✅ Время утра: {t}", reply_markup=get_main_keyboard())
 
-@router.message(StateFilter(EditProfileStates.waiting_for_new_body))
-async def ep_body(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    val = _parse_sphere(message.text)
-    if not val:
-        await message.answer("Введи число от 1 до 10.")
-        return
-    g = store_get_profile(user_id) or {}
-    g.setdefault("personal_info", {}).setdefault("life_areas", {})["body"] = {"current": val, "target": 10}
-    g["updated"] = _today()
-    store_set_profile(user_id, g)
-    _fire_sync()
-    await state.clear()
-    await message.answer(f"✅ Тело: {val}/10", reply_markup=get_main_keyboard())
 
-@router.message(StateFilter(EditProfileStates.waiting_for_new_spirit))
-async def ep_spirit(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    val = _parse_sphere(message.text)
-    if not val:
-        await message.answer("Введи число от 1 до 10.")
-        return
-    g = store_get_profile(user_id) or {}
-    g.setdefault("personal_info", {}).setdefault("life_areas", {})["spirit"] = {"current": val, "target": 10}
-    g["updated"] = _today()
-    store_set_profile(user_id, g)
-    _fire_sync()
-    await state.clear()
-    await message.answer(f"✅ Дух: {val}/10", reply_markup=get_main_keyboard())
-
-@router.message(StateFilter(EditProfileStates.waiting_for_new_world))
-async def ep_world(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    val = _parse_sphere(message.text)
-    if not val:
-        await message.answer("Введи число от 1 до 10.")
-        return
-    g = store_get_profile(user_id) or {}
-    g.setdefault("personal_info", {}).setdefault("life_areas", {})["world"] = {"current": val, "target": 10}
-    g["updated"] = _today()
-    store_set_profile(user_id, g)
-    _fire_sync()
-    await state.clear()
-    await message.answer(f"✅ Мир: {val}/10", reply_markup=get_main_keyboard())
-
+# ep_body / ep_spirit / ep_world removed in v7.24.5
+# Sphere resonance auto-calculated from task life_area in v7.26.x
 
 @router.callback_query(F.data == "edit_birthday")
 async def cb_edit_birthday(callback: CallbackQuery, state: FSMContext):
