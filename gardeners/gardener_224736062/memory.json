@@ -95,6 +95,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Удали дедлайн. Задача записать трек «Беги»."
+    },
+    {
+      "role": "assistant",
+      "content": "🌀 Уточни: «переименуй задачу X в Y»"
     }
   ],
   "updated": "2026-04-25"
