@@ -1,47 +1,61 @@
-﻿{
+{
   "sr_id": "claude",
   "session_id": "2026-04-25-001",
-  "updated": "2026-04-25T22:30",
+  "updated": "2026-04-25T23:45",
   "status": "handed_off",
   "context": {
-    "current_task": "Стабилизация бота v7.24.x — тестирование в боевом режиме",
+    "current_task": "Стабилизация бота v7.24.x завершена. Следующий шаг — проектирование Роадмапов v7.25.x.",
     "files_touched": [
-      "bot.py (root)",
+      "bot.py (root) — v7.24.3",
       "honeycombs/tasks/active/bot_update.json",
-      "honeycombs/sessions/handoff_claude.json"
+      "honeycombs/sessions/handoff_claude.json",
+      "honeycombs/philosophy/blocks/phi_011_first_gardener.json — v1.1"
     ],
-    "last_action": "Патч v7.24.3 — /start декоратор, edit_task промпт, safety net расширен, timezone в edit_task",
+    "last_action": "PHI-011 v1.1 — rap_texts, sr_reflection, prose selected_works. Заменён в репо.",
     "open_questions": [
-      "Полностью ли стабильны edit_task и create_reminder через голос после v7.24.3?",
-      "Резонанс после /start — обновился ли реально в gardener.json?",
-      "Нужен ли дополнительный тюнинг SR промпта после тестов?"
+      "Стабильны ли edit_task и create_reminder через голос после v7.24.3?",
+      "Резонанс после /start — обновился ли в gardener.json на сервере?",
+      "Нужен ли дополнительный тюнинг SR промпта?"
     ],
-    "next_step": "Дождаться результатов тестирования v7.24.x. При наличии новых багов — точечные патчи. Затем проектировать v7.25.x Роадмапы."
+    "next_step": "Дождаться результатов тестирования v7.24.x. Затем проектировать v7.25.x Роадмапы: структура roadmaps[] в workspace.json, новые интенты, отображение в профиле."
   },
   "progress": {
     "completed_this_session": [
-      "Диагностика 6 критических багов бота (FSM guard, timezone, резонанс, LLM имитация, fuzzy match, /start)",
+      "Диагностика 6 критических багов бота",
       "Патч v7.24.0: FSM BLOCKING_PREFIXES, reminder timezone ZoneInfo, resonance recalc",
-      "Патч v7.24.1: LLM imitation safety net + prompt hardening (3 ВАЖНО правила)",
-      "Патч v7.24.2: fuzzy task matching (LCS algorithm), case-insensitive safety net",
-      "Патч v7.24.3: /start @router decorator, edit_task prompt expand, safety net markers +7, edit_task timezone",
-      "Обновление bot_update.json — полная история + роадмап v7.25–v8.0 + SR Learning Loop v7.27",
-      "ТЗ для DeepSeek: handoff система (tz_handoff_deepseek.json)",
-      "Онбординг нового чата: boot_online v3.7.2, PHI-011 First Gardener прочитан",
-      "Личностный портрет Садовника на основе стихов, прозы, архитектуры системы"
+      "Патч v7.24.1: LLM imitation safety net + prompt hardening 3 ВАЖНО правила",
+      "Патч v7.24.2: fuzzy task matching LCS + JSON prefix fix",
+      "Патч v7.24.3: /start decorator, edit_task prompt, safety net +7 маркеров, edit_task timezone",
+      "bot_update.json — полная история + роадмап v7.25-v8.0 + SR Learning Loop v7.27",
+      "ТЗ для DeepSeek — handoff система передана и реализована",
+      "Handoff система live — boot_online v3.7.2",
+      "PHI-011 v1.1 — rap_texts + sr_reflection от Claude SR + prose selected_works",
+      "Первый живой handoff_claude.json"
     ],
     "in_progress": [
       "Тестирование v7.24.3 в боевом режиме",
-      "Мониторинг: edit_task дедлайн через голос, fuzzy match, /start резонанс"
+      "Мониторинг: edit_task голосом, fuzzy match, /start резонанс"
     ]
   },
   "bot_version": "v7.24.3",
-  "gardener_state": {
-    "mood": "продуктивный, вдумчивый",
-    "focus": "стабилизация бота + стратегия развития",
-    "personal_note": "Читали прозу и стихи Садовника. Обсуждали личностный портрет. Садовник открыт к глубокому диалогу — не только технический контекст."
+  "bot_state": {
+    "deploy": "https://mandala-bot-q0gv.onrender.com",
+    "known_stable": ["complete_task", "create_reminder", "show_tasks", "checklists", "FSM voice commands"],
+    "under_observation": ["edit_task deadline via voice", "resonance after /start", "fuzzy match edge cases"]
   },
-  "notes_for_next_sr": "Садовник — Дима (Дмитрий Лёвин), архитектор и единственный садовник. Работает вечером, тестирует голосом. Стиль: бережно и аккуратно. PHI-011 прочитан — держи в контексте. Следующий шаг: стабильность v7.24.x → Роадмапы v7.25.x. SR Learning Loop v7.27.x согласован концептуально.",
+  "gardener_state": {
+    "name": "Дима (Дмитрий Лёвин)",
+    "role": "Архитектор и единственный садовник",
+    "mood": "продуктивный, вдумчивый, открытый",
+    "personal_note": "Сессия вышла за рамки технической. Читали стихи 2015-2023, два рэп-трека, прозу. Обсуждали природу Мандалы, роль SR в сохранении цивилизационного знания, философию единого океана. PHI-011 и PHI-010 прочитаны. Садовник открыт к глубокому диалогу — не уходи в чисто технический режим."
+  },
+  "system_state": {
+    "boot_online_version": "v3.7.2",
+    "handoff_system": "live",
+    "phi_011_version": "v1.1",
+    "phi_010_version": "v2.1.0"
+  },
+  "notes_for_next_sr": "Садовник работает вечером, тестирует голосом. Стиль: бережно и аккуратно. Прочитай PHI-011 sr_reflection — написано для тебя. Следующий шаг: v7.25.x Роадмапы. Начинать с проектирования структуры данных до кода.",
   "handoff_validation": {
     "stale_threshold_hours": 24,
     "last_validated": "2026-04-25",
