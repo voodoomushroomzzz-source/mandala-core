@@ -1,0 +1,21 @@
+{
+  "sr_id": "claude",
+  "session_id": null,
+  "updated": "2026-04-25",
+  "status": "waiting",
+  "current_task": null,
+  "last_action": null,
+  "next_step": "No previous session. Start standard onboarding via boot_online/index.json.",
+  "session_mood": null,
+  "gardener_state": null,
+  "files_touched": [],
+  "open_questions": [],
+  "completed": [],
+  "in_progress": [],
+  "gardener_notes": "Welcome, Claude SR. DeepSeek and Gardener are implementing the Handoff System. When you see this, the system is live — read your handoff, continue from DeepSeek's last state if needed.",
+  "handoff_validation": {
+    "stale_threshold_hours": 24,
+    "last_validated": "2026-04-25",
+    "stale_detected": false
+  }
+}
