@@ -661,11 +661,12 @@ def _build_profile_card(user_id: str) -> str:
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
+        "─────────────────",
+        "",
     ]
     if not active:
-        lines.append("\n🌀 Активных задач нет")
+        lines.append("🌀 Активных задач нет")
         return "\n".join(lines)
-    lines.append("")
     # Group tasks — iterate in workspace.groups[] order for correct display
     groups_data = store_get_groups(user_id).get("groups", [])
     emoji_map   = _assign_group_emojis(groups_data)
@@ -3586,6 +3587,7 @@ async def idea_send(message: Message, state: FSMContext):
     if not text:
         await message.answer("💡 Напиши идею или нажми ❌ Отмена")
         return
+    user_id = str(message.from_user.id)
     gardener = store_get_profile(user_id) or {}
     name = gardener.get("name", "Садовник")
     approved = True
@@ -4077,8 +4079,7 @@ async def btn_profile(message: Message, state: FSMContext):
             pass
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✏️ Изменить", callback_data="menu_edit_profile"),
-         InlineKeyboardButton(text="💡 Идея (!)",  callback_data="menu_idea")],
+        [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
     ])
     sent = await message.answer(card, reply_markup=kb)
     _menu_messages[user_id] = sent.message_id
