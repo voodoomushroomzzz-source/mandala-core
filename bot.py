@@ -693,7 +693,7 @@ def _build_profile_card(user_id: str) -> str:
             lines.append("")  # empty line between groups
         first_group = False
         lines.append(f"{emoji} <b>{gname}</b>")
-        for t in _sort_by_deadline(items)[:5]:
+        for t in _sort_by_deadline(items)[:10]:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
@@ -703,14 +703,14 @@ def _build_profile_card(user_id: str) -> str:
             continue
         emoji = get_group_emoji(gname)
         lines.append(f"{emoji} <b>{gname}</b>")
-        for t in _sort_by_deadline(items)[:5]:
+        for t in _sort_by_deadline(items)[:10]:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
     unlabeled = by_group.get("", [])
     if unlabeled:
         lines.append("🌱 <b>Без группы</b>")
-        for t in _sort_by_deadline(unlabeled)[:5]:
+        for t in _sort_by_deadline(unlabeled)[:10]:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
@@ -2935,7 +2935,7 @@ def _format_tasks_mkb(tasks: list) -> str:
         if not items:
             continue
         parts.append(f"<b>{label}</b>")
-        for t in _sort_by_deadline(items)[:5]:
+        for t in _sort_by_deadline(items)[:10]:
             dl  = " · " + t["deadline"] if t.get("deadline") else ""
             lbl = (" #" + t["label_name"]) if t.get("label_name") else ""
             ind = _deadline_indicator(t.get("deadline",""))
@@ -2965,7 +2965,7 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
         shown.add(gname)
         emoji = emoji_map.get(g["id"], "🌱")
         parts.append(f"<b>{emoji} {gname}</b>")
-        for t in _sort_by_deadline(items)[:5]:
+        for t in _sort_by_deadline(items)[:10]:
             dl  = " · " + t["deadline"] if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline",""))
             parts.append(f"  • {ind}{t['title']}{dl}")
@@ -2975,7 +2975,7 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
             continue
         emoji = get_emoji(gname)
         parts.append(f"<b>{emoji} {gname}</b>")
-        for t in _sort_by_deadline(items)[:5]:
+        for t in _sort_by_deadline(items)[:10]:
             dl  = " · " + t["deadline"] if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline",""))
             parts.append(f"  • {ind}{t['title']}{dl}")
@@ -3834,6 +3834,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
   → add_task, action.title="проверить бота", action.deadline="2026-04-23", action.label="Мандала"
 - "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
+- ВАЖНО: action.title — ПОЛНОЕ название задачи одной строкой без разбивки по запятым. Если Садовник говорит "закрой задачу выдать ЗП, часть 1" → action.title="выдать ЗП часть 1" (убрать запятую, сохранить всё как одно название)
 - "создай чеклист X", "новый чеклист X" → create_checklist, action.title=X, 0.95
 - "создай чеклист X с пунктами A B C" → create_checklist, action.title=X, action.items="A|B|C", 0.95
   Если пункты упомянуты в любом виде — извлекай в action.items через |
@@ -4807,9 +4808,9 @@ async def free_conversation(message: Message, state: FSMContext):
                             action_period = (parsed_check.get("action") or {}).get("period", "")
                             if action_period and action_period != "all":
                                 period = action_period
-                            if period == "all":
-                                # No filter — show full grouped menu
-                                await _show_tasks_unified(user_id, message, "labels")
+                            if period == "all" or not period:
+                                # No filter — show profile (tasks embedded there)
+                                await _show_profile(user_id, message)
                             else:
                                 # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
