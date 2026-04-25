@@ -564,11 +564,12 @@ class TaskStates(StatesGroup):
     waiting_for_confirm         = State()
 
 class TaskEditStates(StatesGroup):
-    waiting_for_field    = State()   # field selector shown
-    editing_title        = State()
-    editing_deadline     = State()
-    editing_reminder     = State()
-    editing_group        = State()
+    waiting_for_field        = State()   # field selector shown
+    editing_title            = State()
+    editing_deadline         = State()
+    waiting_for_custom_deadline = State()  # free-text custom date input
+    editing_reminder         = State()
+    editing_group            = State()
 
 class ChecklistStates(StatesGroup):
     waiting_for_title     = State()
