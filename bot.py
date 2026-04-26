@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.25.7
+# Mandala Helper - Lite — SR Gentle Companion v7.25.8
 
 import re
 import os
@@ -2302,20 +2302,29 @@ async def cb_roadmap_delconfirm(callback: CallbackQuery, state: FSMContext):
 # ─── Checklist unified show function ──────────────────────────────────────────
 
 async def _show_checklist(cl: dict, message: Message, edit: bool = False):
-    """Show a single checklist as inline message. Used by button, intent, voice."""
-    prog  = _checklist_progress(cl)
-    title = cl.get("title", "Чеклист")
-    items = cl.get("items", [])
-    done  = sum(1 for it in items if it.get("done"))
-    header = f"☑️ <b>{title}</b>  {prog}"
-    kb = get_checklist_inline(cl)
+    """Show a single checklist as inline message. Deletes previous checklist message."""
+    user_id = str(message.from_user.id)
+    prog    = _checklist_progress(cl)
+    title   = cl.get("title", "Чеклист")
+    header  = f"☑️ <b>{title}</b>  {prog}"
+    kb      = get_checklist_inline(cl)
+    # Delete previous checklist message to keep chat clean
+    prev_mid = _checklist_messages.get(user_id)
+    if prev_mid:
+        try:
+            await message.bot.delete_message(message.chat.id, prev_mid)
+        except Exception:
+            pass
+        _checklist_messages.pop(user_id, None)
     if edit:
         try:
-            await message.edit_text(header, reply_markup=kb)
+            sent = await message.edit_text(header, reply_markup=kb, parse_mode="HTML")
+            _checklist_messages[user_id] = sent.message_id
             return
         except Exception:
             pass
-    await message.answer(header, reply_markup=kb)
+    sent = await message.answer(header, reply_markup=kb, parse_mode="HTML")
+    _checklist_messages[user_id] = sent.message_id
 
 # ─── Checklist FSM — Create ───────────────────────────────────────────────────
 
@@ -2509,9 +2518,11 @@ async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
     prog   = _checklist_progress(cl)
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
     try:
-        await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl))
+        sent = await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
+        _checklist_messages[user_id] = callback.message.message_id
     except Exception:
-        await callback.message.answer(header, reply_markup=get_checklist_inline(cl))
+        sent = await callback.message.answer(header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
+        _checklist_messages[user_id] = sent.message_id
 
 @router.callback_query(F.data.startswith("cl_pin_"))
 async def cb_cl_pin(callback: CallbackQuery, state: FSMContext):
@@ -4238,6 +4249,7 @@ async def idea_send(message: Message, state: FSMContext):
 _sessions: dict = {}
 # Track last menu message per user — delete before showing new menu
 _menu_messages: dict = {}  # {user_id: message_id}
+_checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
 
 def _get_history(user_id: str) -> list:
     return list(_sessions.get(str(user_id), []))
@@ -5853,7 +5865,7 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "checklist_add_item":
                             action_data = parsed_check.get("action") or {}
                             target   = (action_data.get("title") or "").lower()
-                            new_item = action_data.get("item","").strip()
+                            new_item = (action_data.get("item") or "").strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl and new_item:
@@ -5865,7 +5877,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                     cl["items"] = items
                                     store_set_checklists(user_id, checklists)
                                     await _sync_pending()
-                                    reply_text = f"✅ Добавлен пункт «{new_item}» в «{cl['title']}»"
+                                    await _show_checklist(cl, message)
+                                    reply_text = ""
                             else:
                                 reply_text = "🌀 Не нашла чеклист или пустой пункт."
 
@@ -5895,7 +5908,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if len(cl["items"]) < before:
                                     store_set_checklists(user_id, checklists)
                                     await _sync_pending()
-                                    reply_text = f"🗑 Пункт удалён из «{cl['title']}»"
+                                    await _show_checklist(cl, message)
+                                    reply_text = ""
                                 else:
                                     reply_text = f"🌀 Пункт «{item_txt}» не найден в «{cl['title']}»"
                             else:
@@ -5928,7 +5942,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if found:
                                     store_set_checklists(user_id, checklists)
                                     await _sync_pending()
-                                    reply_text = f"✅ Пункт изменён на «{new_val}»"
+                                    await _show_checklist(cl, message)
+                                    reply_text = ""
                                 else:
                                     reply_text = f"🌀 Пункт «{item_txt}» не найден."
                             else:
