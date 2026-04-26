@@ -95,6 +95,14 @@
     {
       "role": "assistant",
       "content": "✅ Добавлен пункт «купить масло» в «Поход на улицу»"
+    },
+    {
+      "role": "user",
+      "content": "Покажу его здесь."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-26"
