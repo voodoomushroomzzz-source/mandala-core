@@ -365,6 +365,11 @@
           "id": "i3",
           "text": "купить шимпанзе",
           "done": true
+        },
+        {
+          "id": "i4",
+          "text": "Купить улитку",
+          "done": false
         }
       ],
       "pinned_message_id": 7218,
