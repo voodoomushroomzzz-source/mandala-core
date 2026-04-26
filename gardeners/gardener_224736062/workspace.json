@@ -194,70 +194,6 @@
       "updated": "2026-04-25",
       "completed": null,
       "notes": ""
-    },
-    {
-      "task_id": "t_d667819c",
-      "title": "записать минус",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-04-30",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-04-26"
-    },
-    {
-      "task_id": "t_b5d10024",
-      "title": "записать вокал",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_4b57fd31",
-      "title": "свести",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_662e8038",
-      "title": "сделать мастеринг",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_f930be7c",
-      "title": "сделать обложку",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_39698436",
-      "title": "выложить",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_c79ebbf7",
-      "title": "подготовить промо-компанию",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
     }
   ],
   "groups": [
@@ -347,22 +283,5 @@
   ],
   "reminders": [],
   "_decay_date": "2026-04-26",
-  "roadmaps": [
-    {
-      "roadmap_id": "rm_987a2672",
-      "title": "Выпустить трек «Беги»",
-      "deadline": "2026-07-02",
-      "created": "2026-04-26",
-      "task_ids": [
-        "t_d667819c",
-        "t_b5d10024",
-        "t_4b57fd31",
-        "t_662e8038",
-        "t_f930be7c",
-        "t_39698436",
-        "t_c79ebbf7"
-      ],
-      "status": "active"
-    }
-  ]
+  "roadmaps": []
 }
