@@ -391,7 +391,9 @@
       "title": "музыкальный альбом",
       "deadline": null,
       "created": "2026-04-26",
-      "task_ids": [],
+      "task_ids": [
+        "task_20260419_005"
+      ],
       "status": "active"
     },
     {
