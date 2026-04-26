@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.24.8
+# Mandala Helper - Lite — SR Gentle Companion v7.25.0
 
 import re
 import os
@@ -232,6 +232,34 @@ def store_set_reminders(telegram_id: str, reminders: list) -> None:
     ws = store_get_workspace(telegram_id) or {"tasks":[],"groups":[],"achievements":[],"reminders":[]}
     ws["reminders"] = reminders
     store_set_workspace(telegram_id, ws)
+
+def store_get_roadmaps(telegram_id: str) -> list:
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("roadmaps", [])) if ws else []
+
+def store_set_roadmaps(telegram_id: str, roadmaps: list) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks":[],"groups":[],"achievements":[],"reminders":[],"roadmaps":[]}
+    ws["roadmaps"] = roadmaps
+    store_set_workspace(telegram_id, ws)
+
+def _calc_roadmap_progress(roadmap: dict, all_tasks: list) -> int:
+    """Calculate roadmap progress % based on completed tasks. Returns 0-100."""
+    task_ids = roadmap.get("task_ids", [])
+    if not task_ids:
+        return 0
+    # Only count task_ids that still exist
+    existing = {t["task_id"]: t for t in all_tasks if t.get("task_id")}
+    relevant = [existing[tid] for tid in task_ids if tid in existing]
+    if not relevant:
+        return 0
+    done = sum(1 for t in relevant if t.get("status") == "completed")
+    return round(done / len(relevant) * 100)
+
+def _roadmap_progress_bar(pct: int) -> str:
+    """Return visual progress bar string: ████░░░░ 75%"""
+    filled = round(pct / 10)
+    empty  = 10 - filled
+    return f"{'█' * filled}{'░' * empty} {pct}%"
 
 # Legacy aliases for backward compat during transition
 def store_get_gardener() -> Optional[dict]:
@@ -604,6 +632,14 @@ class ChecklistStates(StatesGroup):
 class ReminderStates(StatesGroup):
     waiting_for_input = State()
 
+class RoadmapStates(StatesGroup):
+    waiting_for_title    = State()  # name of new roadmap
+    waiting_for_tasks    = State()  # comma-separated task list
+    waiting_for_deadline = State()  # deadline for roadmap
+    waiting_for_rename   = State()  # new name
+    waiting_for_add_task = State()  # task name to link
+    confirm_delete       = State()  # confirm roadmap deletion
+
 class AskStates(StatesGroup):
     waiting_for_question = State()
 
@@ -693,6 +729,17 @@ def _build_profile_card(user_id: str) -> str:
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
         "",
     ]
+    # Roadmaps block — shown between resonance and task groups
+    roadmaps = store_get_roadmaps(user_id)
+    if roadmaps:
+        all_tasks = store_get_tasks(user_id)
+        for rm in roadmaps:
+            if rm.get("status") == "active":
+                pct = _calc_roadmap_progress(rm, all_tasks)
+                bar = _roadmap_progress_bar(pct)
+                dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
+                lines.append(f"🗺 <b>{rm['title']}</b>  {bar}{dl}")
+        lines.append("")
     if not active:
         lines.append("🌀 Активных задач нет")
         return "\n".join(lines)
@@ -3853,7 +3900,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|create_reminder|show_reminders|delete_reminder",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|..."} или null
@@ -3912,6 +3959,18 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: "через N минут" → прибавь N минут к текущему времени из контекста [Сейчас у садовника]. "через N часов" → прибавь N часов. Результат в ISO формате YYYY-MM-DDTHH:MM
 - "покажи напоминания", "мои напоминания" → show_reminders, 0.95
 - "удали напоминание X" → delete_reminder, action.title=X, 0.95
+
+РОАДМАПЫ (цели с задачами):
+- "покажи роадмапы", "мои цели", "что в роадмапах" → show_roadmaps, 0.95
+- "создай роадмап X" → create_roadmap, action.title="X", 0.9
+- "роадмап X: задача1, задача2, задача3" → create_roadmap, action.title="X", action.tasks=["задача1","задача2","задача3"], 0.95
+- "добавь задачу X в роадмап Y" → roadmap_add_task, action.roadmap="Y", action.title="X", 0.95
+- "убери задачу X из роадмапа Y" → roadmap_remove_task, action.roadmap="Y", action.title="X", 0.95
+- "удали роадмап X" → delete_roadmap, action.title="X", 0.95
+- "переименуй роадмап X в Y" → rename_roadmap, action.title="X", action.value="Y", 0.95
+- "поставь дедлайн роадмапа X на Y" → roadmap_set_deadline, action.title="X", action.value="Y", 0.95
+- "как дела с роадмапом X", "прогресс по X" → show_roadmaps, action.title="X", 0.9
+- ВАЖНО: роадмап — это цель с задачами, не просто задача. Максимум 3 роадмапа одновременно.
 - "закрой задачи X и Y", "закрой обе" → complete_task, action.titles=["X","Y"], 0.95
 - "закрой все задачи на сегодня" → complete_task, action.period=today, 0.95
 - ВАЖНО: никогда не генерируй список задач в поле text — только через intent show_tasks
@@ -3980,11 +4039,25 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"  часовой пояс: {tz_name}"
     )
 
+    # Roadmaps block for SR context
+    roadmaps = store_get_roadmaps(telegram_id)
+    if roadmaps:
+        rm_lines = []
+        for rm in roadmaps:
+            pct = _calc_roadmap_progress(rm, tasks)
+            dl  = rm.get("deadline") or "нет"
+            n   = len(rm.get("task_ids", []))
+            rm_lines.append(f"  - {rm['title']} | прогресс: {pct}% | дедлайн: {dl} | задач: {n}")
+        roadmaps_block = "\n".join(rm_lines)
+    else:
+        roadmaps_block = "  нет активных роадмапов"
+
     return (
         f"[Профиль садовника:\n{profile_block}\n]\n"
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Группы задач: {groups_list}]\n"
-        f"[Активные задачи ({len(active)}):\n{tasks_block}\n]"
+        f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
+        f"[Роадмапы:\n{roadmaps_block}\n]"
     )
 
 
@@ -4888,6 +4961,7 @@ async def free_conversation(message: Message, state: FSMContext):
                         "GardenOnboardingStates:", "EditProfileStates:",
                         "TaskStates:", "TaskEditStates:", "ChecklistStates:",
                         "ReminderStates:", "LabelRenameStates:", "LeaveStates:",
+                        "RoadmapStates:",
                     )
                     _is_blocked = current_state and any(
                         current_state.startswith(p) for p in _BLOCKING_PREFIXES
