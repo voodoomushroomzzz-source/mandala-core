@@ -63,6 +63,22 @@
     {
       "role": "assistant",
       "content": "какой чеклист удалить"
+    },
+    {
+      "role": "user",
+      "content": "Поход в магазин."
+    },
+    {
+      "role": "assistant",
+      "content": "🗑 Чеклист «поход в магазин» удалён."
+    },
+    {
+      "role": "user",
+      "content": "Покажи мой профиль."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-27"
