@@ -15,6 +15,30 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Удали пункт 3."
+    },
+    {
+      "role": "assistant",
+      "content": "🗑 Пункт удалён из «поход в магазин»"
+    },
+    {
+      "role": "user",
+      "content": "выведя сюда этот лист."
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Пункт 2. Замени название на «Купить улитку»."
+    },
+    {
+      "role": "assistant",
+      "content": "Теперь у тебя: слон, улитка и змея — экзотический список 🌿"
     }
   ],
   "updated": "2026-04-27"
