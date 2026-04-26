@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.25.2
+# Mandala Helper - Lite — SR Gentle Companion v7.25.3
 
 import re
 import os
@@ -750,10 +750,12 @@ def _build_profile_card(user_id: str) -> str:
                 t = task_by_id.get(tid)
                 if not t:
                     continue
-                done = "✅" if t.get("status") == "completed" else "◻️"
-                t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                ind  = _deadline_indicator(t.get("deadline", "")) if t.get("status") != "completed" else ""
-                lines.append(f"  {done} {ind}{t['title']}{t_dl}")
+                if t.get("status") == "completed":
+                    lines.append(f"  ✅ {t['title']}")
+                else:
+                    t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
+                    ind  = _deadline_indicator(t.get("deadline", ""))
+                    lines.append(f"  · {ind}{t['title']}{t_dl}")
         lines.append("")
 
     # Active tasks NOT in any roadmap
@@ -5227,7 +5229,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if _deleted:
                                     tasks = [t for t in tasks if t.get("task_id") not in _ids_to_del]
                                     store_set_tasks(user_id, tasks)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"🗑 Удалено задач: {', '.join(_deleted)}"
                                 else:
                                     reply_text = "🌀 Не нашла указанные задачи."
@@ -5506,8 +5508,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                     for tid in rm.get("task_ids", []):
                                         t = _task_by_id.get(tid)
                                         if t:
-                                            done = "✅" if t.get("status") == "completed" else "◻️"
-                                            _lines.append(f"  {done} {t['title']}")
+                                            if t.get("status") == "completed":
+                                                _lines.append(f"  ✅ {t['title']}")
+                                            else:
+                                                _lines.append(f"  · {t['title']}")
                                 reply_text = "\n".join(_lines)
 
                         elif intent == "create_roadmap":
@@ -5521,10 +5525,47 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = "🌀 Укажи название роадмапа."
                                 else:
                                     import uuid as _uuid
+                                    import re as _re_dl
+                                    from datetime import datetime as _dtr_dl, timedelta as _tdr_dl
+                                    from zoneinfo import ZoneInfo as _ZI_dl
+                                    # Parse deadline from action
+                                    _rm_dl_raw = (_act.get("deadline") or _act.get("value") or "").strip()
+                                    _rm_deadline = None
+                                    if _rm_dl_raw:
+                                        _tz_dl = _ZI_dl(store_get_profile(user_id).get(
+                                            "companion_settings",{}).get("timezone","Europe/Moscow"))
+                                        _now_dl = _dtr_dl.now(_tz_dl)
+                                        _dv_dl = _rm_dl_raw.lower()
+                                        if _dv_dl in ("сегодня","today"):
+                                            _rm_deadline = _now_dl.strftime("%Y-%m-%d")
+                                        elif _dv_dl in ("завтра","tomorrow"):
+                                            _rm_deadline = (_now_dl+_tdr_dl(days=1)).strftime("%Y-%m-%d")
+                                        elif _re_dl.match(r"^\d{4}-\d{2}-\d{2}$", _rm_dl_raw):
+                                            _rm_deadline = _rm_dl_raw
+                                        elif _re_dl.match(r"^\d{1,2}\.\d{1,2}", _rm_dl_raw):
+                                            _p_dl = _rm_dl_raw.split(".")
+                                            _yr_dl = _p_dl[2].strip() if len(_p_dl) > 2 else str(_now_dl.year)
+                                            _yr_dl = "20"+_yr_dl if len(_yr_dl)==2 else _yr_dl
+                                            _rm_deadline = f"{_yr_dl}-{_p_dl[1].zfill(2)}-{_p_dl[0].zfill(2)}"
+                                        # Also handle "1 июля", "1 july" etc via month names
+                                        else:
+                                            _MONTHS = {"января":1,"февраля":2,"марта":3,"апреля":4,"мая":5,
+                                                       "июня":6,"июля":7,"августа":8,"сентября":9,
+                                                       "октября":10,"ноября":11,"декабря":12,
+                                                       "january":1,"february":2,"march":3,"april":4,
+                                                       "may":5,"june":6,"july":7,"august":8,
+                                                       "september":9,"october":10,"november":11,"december":12}
+                                            _m_dl = _re_dl.match(r"(\d{1,2})\s+(\w+)(?:\s+(\d{4}))?", _dv_dl)
+                                            if _m_dl:
+                                                _day_dl = int(_m_dl.group(1))
+                                                _mon_dl = _MONTHS.get(_m_dl.group(2), 0)
+                                                _yr_dl2 = int(_m_dl.group(3)) if _m_dl.group(3) else _now_dl.year
+                                                if _mon_dl:
+                                                    _rm_deadline = f"{_yr_dl2}-{_mon_dl:02d}-{_day_dl:02d}"
                                     new_rm = {
                                         "roadmap_id": f"rm_{_uuid.uuid4().hex[:8]}",
                                         "title": _rm_title,
-                                        "deadline": None,
+                                        "deadline": _rm_deadline,
                                         "created": _today(),
                                         "task_ids": [],
                                         "status": "active"
@@ -5711,9 +5752,9 @@ async def free_conversation(message: Message, state: FSMContext):
 
                         elif intent == "edit_task":
                             action_data = parsed_check.get("action") or {}
-                            target = action_data.get("title", "").lower().strip()
-                            field  = action_data.get("field", "").lower().strip()
-                            value  = action_data.get("value", "").strip()
+                            target = (action_data.get("title") or "").lower().strip()
+                            field  = (action_data.get("field") or "").lower().strip()
+                            value  = (action_data.get("value") or "").strip()
                             tasks  = store_get_tasks(user_id)
                             matched = _fuzzy_match_tasks(target, tasks)
                             # No target? Try last edited task from state
