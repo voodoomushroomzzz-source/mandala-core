@@ -319,6 +319,21 @@
       "updated": "2026-04-26",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260426_025",
+      "title": "Оплатить коммуналку",
+      "status": "todo",
+      "label_id": "дом",
+      "label_name": "Личное",
+      "life_area": "world",
+      "priority": 6,
+      "deadline": "2026-04-30",
+      "reminder": null,
+      "created": "2026-04-26",
+      "updated": "2026-04-26",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
