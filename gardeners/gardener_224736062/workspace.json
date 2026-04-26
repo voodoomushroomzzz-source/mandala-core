@@ -385,6 +385,11 @@
           "id": "i10",
           "text": "купить кетчуп",
           "done": true
+        },
+        {
+          "id": "i11",
+          "text": "купить масло",
+          "done": false
         }
       ],
       "pinned_message_id": 6750,
