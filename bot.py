@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.25.6
+# Mandala Helper - Lite — SR Gentle Companion v7.25.7
 
 import re
 import os
@@ -894,14 +894,14 @@ def _checklist_progress(checklist: dict) -> str:
     return f"{done}/{len(items)}"
 
 def get_checklist_inline(checklist: dict) -> InlineKeyboardMarkup:
-    """Build inline keyboard for a checklist — each item is a toggle button."""
+    """Build inline keyboard for a checklist — numbered items, checkbox on right."""
     cid   = checklist["id"]
     items = checklist.get("items", [])
     btns  = []
-    for it in items:
+    for i, it in enumerate(items, 1):
         iid  = it["id"]
         mark = "✅" if it.get("done") else "☐"
-        text = f"{mark} {it['text'][:35]}"
+        text = f"{i}. {it['text'][:28]}  {mark}"
         btns.append([InlineKeyboardButton(text=text, callback_data=f"cl_toggle|{cid}|{iid}")])
     # Action row
     btns.append([
@@ -2572,21 +2572,79 @@ async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
     edit_kb_rows = [
         [InlineKeyboardButton(text="➕ Добавить пункт",   callback_data=f"cl_add_item_{cid}")],
     ]
-    for it in items:
+    for idx, it in enumerate(items):
         iid  = it["id"]
         mark = "✅" if it.get("done") else "☐"
-        text = it["text"][:20]
-        edit_kb_rows.append([
-            InlineKeyboardButton(text=f"{mark} {text}", callback_data=f"cl_noop|{cid}|{iid}"),
-            InlineKeyboardButton(text="✏️",              callback_data=f"cl_edititem|{cid}|{iid}"),
-            InlineKeyboardButton(text="🗑",              callback_data=f"cl_delitem|{cid}|{iid}"),
-        ])
+        num  = idx + 1
+        text = it["text"][:18]
+        row = [
+            InlineKeyboardButton(text=f"{num}. {mark} {text}", callback_data=f"cl_noop|{cid}|{iid}"),
+            InlineKeyboardButton(text="✏️",  callback_data=f"cl_edititem|{cid}|{iid}"),
+            InlineKeyboardButton(text="🗑",  callback_data=f"cl_delitem|{cid}|{iid}"),
+        ]
+        # Add up/down arrows
+        if idx > 0:
+            row.append(InlineKeyboardButton(text="↑", callback_data=f"cl_moveup|{cid}|{iid}"))
+        if idx < len(items) - 1:
+            row.append(InlineKeyboardButton(text="↓", callback_data=f"cl_movedn|{cid}|{iid}"))
+        edit_kb_rows.append(row)
     edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
     try:
         await callback.message.edit_text(
             f"✏️ <b>{cl['title']}</b> — редактирование пунктов:",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows)
         )
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("cl_moveup|") | F.data.startswith("cl_movedn|"))
+async def cb_cl_move_item(callback: CallbackQuery, state: FSMContext):
+    """Move checklist item up or down."""
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    parts = callback.data.split("|")
+    if len(parts) != 3:
+        return
+    direction, cid, iid = parts
+    checklists = store_get_checklists(user_id)
+    cl = next((c for c in checklists if c["id"] == cid), None)
+    if not cl:
+        return
+    items = cl.get("items", [])
+    idx = next((i for i, it in enumerate(items) if it["id"] == iid), None)
+    if idx is None:
+        return
+    if direction == "cl_moveup" and idx > 0:
+        items[idx], items[idx-1] = items[idx-1], items[idx]
+    elif direction == "cl_movedn" and idx < len(items) - 1:
+        items[idx], items[idx+1] = items[idx+1], items[idx]
+    else:
+        return
+    cl["items"] = items
+    store_set_checklists(user_id, checklists)
+    await _sync_pending()
+    # Refresh edit menu
+    edit_kb_rows = [
+        [InlineKeyboardButton(text="➕ Добавить пункт", callback_data=f"cl_add_item_{cid}")],
+    ]
+    for i2, it2 in enumerate(items):
+        iid2 = it2["id"]
+        mark2 = "✅" if it2.get("done") else "☐"
+        num2  = i2 + 1
+        text2 = it2["text"][:18]
+        row2 = [
+            InlineKeyboardButton(text=f"{num2}. {mark2} {text2}", callback_data=f"cl_noop|{cid}|{iid2}"),
+            InlineKeyboardButton(text="✏️", callback_data=f"cl_edititem|{cid}|{iid2}"),
+            InlineKeyboardButton(text="🗑", callback_data=f"cl_delitem|{cid}|{iid2}"),
+        ]
+        if i2 > 0:
+            row2.append(InlineKeyboardButton(text="↑", callback_data=f"cl_moveup|{cid}|{iid2}"))
+        if i2 < len(items) - 1:
+            row2.append(InlineKeyboardButton(text="↓", callback_data=f"cl_movedn|{cid}|{iid2}"))
+        edit_kb_rows.append(row2)
+    edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
+    try:
+        await callback.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows))
     except Exception:
         pass
 
@@ -4362,7 +4420,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|..."} или null
@@ -4406,6 +4464,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "удали из чеклиста X пункт Y" → checklist_delete_item, action.title=X, action.item=Y, 0.95
 - "измени пункт Y в чеклисте X на Z" → checklist_edit_item, action.title=X, action.item=Y, action.value=Z, 0.95
 - "отметь пункт Y в чеклисте X" → checklist_toggle_item, action.title=X, action.item=Y, 0.95
+- "поставь пункт N после пункта M в чеклисте X", "переставь пункт N на место M", "подними пункт N над пунктом M" → checklist_reorder, action.title=X, action.from_pos=N, action.to_pos=M, 0.95
+- ВАЖНО: пункты в чеклисте нумеруются с 1. "пункт 3" = третий пункт по порядку
 - "переименуй задачу X в Y", "измени дедлайн задачи X на Y", "смени группу задачи X на Y" → edit_task, action.title="X", action.field="title|deadline|group", action.value="Y", 0.9
 - "перенеси дедлайн X на Y", "сдвинь срок X на Y", "поставь новый срок X", "измени дату задачи X", "задача X — новый дедлайн Y", "задача X перенеси на Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
 - "удали дедлайн задачи X", "убери срок у задачи X", "убери дедлайн X", "задача X без дедлайна" → edit_task, action.title="X", action.field="deadline", action.value="удали", 0.95
@@ -5812,13 +5872,26 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "checklist_delete_item":
                             action_data = parsed_check.get("action") or {}
                             target   = (action_data.get("title") or "").lower()
-                            item_txt = (action_data.get("item") or "").lower()
+                            item_txt = (action_data.get("item") or "").lower().strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl:
-                                before = len(cl.get("items",[]))
-                                cl["items"] = [it for it in cl.get("items",[])
-                                               if item_txt not in it.get("text","").lower()]
+                                items = cl.get("items", [])
+                                # Support item by number (e.g. "пункт 3")
+                                matched_id = None
+                                try:
+                                    num = int(item_txt)
+                                    if 1 <= num <= len(items):
+                                        matched_id = items[num-1]["id"]
+                                except (ValueError, TypeError):
+                                    pass
+                                if not matched_id:
+                                    for it in items:
+                                        if item_txt in it.get("text","").lower():
+                                            matched_id = it["id"]
+                                            break
+                                before = len(items)
+                                cl["items"] = [it for it in items if it["id"] != matched_id] if matched_id else items
                                 if len(cl["items"]) < before:
                                     store_set_checklists(user_id, checklists)
                                     await _sync_pending()
@@ -5831,38 +5904,96 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "checklist_edit_item":
                             action_data = parsed_check.get("action") or {}
                             target   = (action_data.get("title") or "").lower()
-                            item_txt = (action_data.get("item") or "").lower()
-                            new_val  = action_data.get("value","").strip()
+                            item_txt = (action_data.get("item") or "").lower().strip()
+                            new_val  = (action_data.get("value") or "").strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl and new_val:
-                                for it in cl.get("items",[]):
-                                    if item_txt in it.get("text","").lower():
-                                        it["text"] = new_val
-                                        break
-                                store_set_checklists(user_id, checklists)
-                                await _sync_pending()
-                                reply_text = f"✅ Пункт изменён на «{new_val}»"
+                                items = cl.get("items", [])
+                                # Support item by number
+                                found = False
+                                try:
+                                    num = int(item_txt)
+                                    if 1 <= num <= len(items):
+                                        items[num-1]["text"] = new_val
+                                        found = True
+                                except (ValueError, TypeError):
+                                    pass
+                                if not found:
+                                    for it in items:
+                                        if item_txt in it.get("text","").lower():
+                                            it["text"] = new_val
+                                            found = True
+                                            break
+                                if found:
+                                    store_set_checklists(user_id, checklists)
+                                    await _sync_pending()
+                                    reply_text = f"✅ Пункт изменён на «{new_val}»"
+                                else:
+                                    reply_text = f"🌀 Пункт «{item_txt}» не найден."
                             else:
                                 reply_text = "🌀 Не нашла чеклист или пункт."
 
                         elif intent == "checklist_toggle_item":
                             action_data = parsed_check.get("action") or {}
                             target   = (action_data.get("title") or "").lower()
-                            item_txt = (action_data.get("item") or "").lower()
+                            item_txt = (action_data.get("item") or "").lower().strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl:
-                                for it in cl.get("items",[]):
-                                    if item_txt in it.get("text","").lower():
-                                        it["done"] = not it.get("done", False)
-                                        break
+                                items = cl.get("items", [])
+                                # Support item by number
+                                toggled = False
+                                try:
+                                    num = int(item_txt)
+                                    if 1 <= num <= len(items):
+                                        items[num-1]["done"] = not items[num-1].get("done", False)
+                                        toggled = True
+                                except (ValueError, TypeError):
+                                    pass
+                                if not toggled:
+                                    for it in items:
+                                        if item_txt in it.get("text","").lower():
+                                            it["done"] = not it.get("done", False)
+                                            toggled = True
+                                            break
                                 store_set_checklists(user_id, checklists)
                                 await _sync_pending()
                                 await _show_checklist(cl, message)
                                 reply_text = ""
                             else:
                                 reply_text = "🌀 Чеклист не найден."
+
+                        elif intent == "checklist_reorder":
+                            action_data = parsed_check.get("action") or {}
+                            target    = (action_data.get("title") or "").lower()
+                            from_pos  = action_data.get("from_pos")
+                            to_pos    = action_data.get("to_pos")
+                            checklists = store_get_checklists(user_id)
+                            cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if cl and from_pos is not None and to_pos is not None:
+                                try:
+                                    fi = int(from_pos) - 1
+                                    ti = int(to_pos) - 1
+                                    items = cl.get("items", [])
+                                    if 0 <= fi < len(items) and 0 <= ti < len(items) and fi != ti:
+                                        item = items.pop(fi)
+                                        # Insert after target position
+                                        insert_at = ti if ti < fi else ti
+                                        items.insert(insert_at, item)
+                                        cl["items"] = items
+                                        store_set_checklists(user_id, checklists)
+                                        await _sync_pending()
+                                        await _show_checklist(cl, message)
+                                        reply_text = ""
+                                    else:
+                                        reply_text = f"🌀 Неверные номера пунктов. В чеклисте {len(items)} пунктов."
+                                except (ValueError, TypeError):
+                                    reply_text = "🌀 Не понял номера пунктов. Укажи: «поставь пункт 3 после пункта 1»"
+                            elif not cl:
+                                reply_text = "🌀 Чеклист не найден."
+                            else:
+                                reply_text = "🌀 Укажи номера пунктов: «поставь пункт 3 после пункта 1»"
 
                         elif intent == "create_reminder":
                             action_r = parsed_check.get("action") or {}
