@@ -289,6 +289,13 @@
       "datetime_iso": "2026-04-26T15:00",
       "repeat": "once",
       "active": true
+    },
+    {
+      "id": "rem_78d30173",
+      "title": "тест",
+      "datetime_iso": "2026-04-26T13:28",
+      "repeat": "once",
+      "active": true
     }
   ],
   "_decay_date": "2026-04-26"
