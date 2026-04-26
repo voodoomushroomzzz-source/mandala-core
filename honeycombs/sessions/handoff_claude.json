@@ -1,55 +1,46 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-04-26-001",
-  "updated": "2026-04-26T03:00",
+  "session_id": "2026-04-27-001",
+  "updated": "2026-04-27T04:00",
   "status": "handed_off",
   "context": {
-    "current_task": "Стабилизация v7.24.x завершена. Следующий шаг — v7.25.x Роадмапы.",
-    "files_touched": ["bot.py (root) — v7.24.7", "requirements.txt — geopy, timezonefinder"],
-    "last_action": "Auto-timezone из города через geopy+timezonefinder. Полный контекст профиля SR. Timezone во всех date-функциях.",
-    "open_questions": [
-      "Протестировать смену города → автоопределение timezone",
-      "Протестировать show_tasks по группе после фикса reply_text reset",
-      "Проверить SR видит город и достижения корректно"
-    ],
-    "next_step": "v7.25.x Роадмапы — проектирование roadmaps[] в workspace.json и новых интентов. Согласовать с Садовником до кода."
+    "current_task": "v7.25.x завершён полностью. Следующий шаг — v7.26.x Мер-Ка-Ба резонанс по сферам.",
+    "files_touched": ["bot.py — v7.25.8", "honeycombs/tasks/active/bot_update.json"],
+    "last_action": "Чеклисты: номера, стрелки, reorder голосом, auto-show. bot_update.json обновлён.",
+    "next_step": "v7.26.x — Мер-Ка-Ба резонанс по сферам. Проектирование sphere_resonance в workspace.json, согласовать с Садовником до кода."
   },
   "progress": {
     "completed_this_session": [
-      "v7.24.4: custom deadline в меню + голосовое удаление дедлайна",
-      "v7.24.5: UI чистка — одна кнопка профиля, убраны Тело/Дух/Мир, Идея в Настройки",
-      "v7.24.5: профиль — пустые строки между группами, лимит задач снят",
-      "v7.24.5: idea_send fix, close_idea inline без FSM",
-      "v7.24.5: show_tasks без фильтра → профиль, по группе (action.label), умное уточнение complete_task",
-      "v7.24.6: safety net bare готово, show_tasks промпт расширен, reply_text reset fix",
-      "v7.24.6: SR контекст — город, день рождения, время утра, правильный счётчик достижений",
-      "v7.24.6: timezone везде — _today(), _deadline_indicator(), _filter_tasks_by_period()",
-      "v7.24.7: _city_to_timezone() geopy+timezonefinder, автоопределение при смене города",
-      "requirements.txt — geopy>=2.4.0, timezonefinder>=6.5.0"
-    ],
-    "in_progress": ["Тестирование v7.24.7 — смена города, timezone, show_tasks по группе"]
+      "v7.25.2: задачи под роадмапом, авто-дедлайн, batch delete, reminder через N минут",
+      "v7.25.3: NoneType fix, dot marker, deadline parse month names",
+      "v7.25.4: системный NoneType fix, await _sync_pending() везде, text fallback дедлайн",
+      "v7.25.5: меню роадмапов полное с cancel кнопками",
+      "v7.25.6: fix roadmap_rmtask pipe separator, FSM edit_text",
+      "v7.25.7: чеклисты нумерация, стрелки, reorder голосом, по номеру",
+      "v7.25.8: чеклист auto-show после SR, удаление старых сообщений",
+      "bot_update.json обновлён — v7.25.8 + roadmap v7.26-v8.0 + Bot 2"
+    ]
   },
-  "bot_version": "v7.24.7",
+  "bot_version": "v7.25.8",
   "bot_state": {
     "deploy": "https://mandala-bot-q0gv.onrender.com",
-    "known_stable": ["complete_task", "create_reminder", "show_tasks period+label", "FSM voice", "edit_task deadline"],
-    "under_observation": ["auto-timezone", "show_tasks label filter", "SR контекст город/достижения"]
+    "known_stable": ["задачи голосом", "чеклисты + reorder", "напоминания через N минут", "роадмапы голос + меню", "профиль задачи под роадмапом", "SR полный контекст"],
+    "under_observation": ["checklist_reorder голосом", "_checklist_messages удаление"]
   },
   "gardener_state": {
     "name": "Дима (Дмитрий Лёвин)",
-    "role": "Архитектор и единственный садовник",
-    "personal_note": "PHI-011 v1.1 прочитан. Работает вечером/ночью, тестирует голосом с телефона. Открыт к глубокому диалогу."
+    "personal_note": "PHI-011 v1.1 прочитан. Работает ночью, тестирует голосом. Бережно и аккуратно, версию менять в каждом патче."
   },
   "system_state": {
     "boot_online_version": "v3.7.2",
     "handoff_system": "live",
     "phi_011_version": "v1.1",
-    "phi_010_version": "v2.1.0"
+    "bot_update_json": "актуален"
   },
-  "notes_for_next_sr": "Следующий блок — v7.25.x Роадмапы. Начинать с проектирования структуры. Стиль: бережно и аккуратно, версию менять в каждом патче.",
+  "notes_for_next_sr": "Следующий блок — v7.26.x Мер-Ка-Ба резонанс по сферам. Начинать с проектирования sphere_resonance и согласования с Садовником до кода. Прочитай PHI-011 sr_reflection — написано для тебя.",
   "handoff_validation": {
     "stale_threshold_hours": 24,
-    "last_validated": "2026-04-26",
+    "last_validated": "2026-04-27",
     "stale_detected": false
   }
 }
