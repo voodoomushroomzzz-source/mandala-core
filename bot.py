@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.25.3
+# Mandala Helper - Lite — SR Gentle Companion v7.25.4
 
 import re
 import os
@@ -5003,7 +5003,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             # Detect period from text + SR action
                             period = _detect_task_period(text)
                             action_period = (parsed_check.get("action") or {}).get("period", "")
-                            action_label  = (parsed_check.get("action") or {}).get("label", "").strip()
+                            action_label  = ((parsed_check.get("action") or {}).get("label") or "").strip()
                             if action_period and action_period != "all":
                                 period = action_period
                             if action_label:
@@ -5070,7 +5070,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             reply_text = ""
                         elif intent == "add_task":
                             action_data = parsed_check.get("action") or {}
-                            title    = action_data.get("title", "").strip()
+                            title    = (action_data.get("title") or "").strip()
                             deadline = action_data.get("deadline", "") or ""
                             reminder = action_data.get("reminder", "") or ""
                             label    = action_data.get("label", "") or ""
@@ -5131,10 +5131,10 @@ async def free_conversation(message: Message, state: FSMContext):
 
                         elif intent == "complete_task":
                             action_ct   = parsed_check.get("action") or {}
-                            target      = action_ct.get("title", "").lower().strip()
+                            target      = (action_ct.get("title") or "").lower().strip()
                             # Batch: action.titles=["X","Y"] or action.period=today
                             batch_raw   = action_ct.get("titles", [])
-                            batch_period= action_ct.get("period", "").strip()
+                            batch_period= (action_ct.get("period") or "").strip()
                             tasks = store_get_tasks(user_id)
                             from datetime import datetime as _dtr2
                             today_s2 = _dtr2.now().strftime("%Y-%m-%d")
@@ -5163,7 +5163,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     total_res += r2
                                 count_now = store_get_achievements_count(user_id)
                                 new_res2  = store_add_resonance(user_id, total_res)
-                                _fire_sync()
+                                await _sync_pending()
                                 if len(to_close) == 1:
                                     reply_text = (f"✅ Готово: {to_close[0]['title']} · "
                                                   f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
@@ -5239,7 +5239,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 else:
                                     count = len(tasks)
                                     store_set_tasks(user_id, [])
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"🗑 Удалено {count} задач. Поле чисто."
                             else:
                                 matched = _fuzzy_match_tasks(target, tasks)
@@ -5247,7 +5247,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     t = matched[0]
                                     new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
                                     store_set_tasks(user_id, new_tasks)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"🗑 Задача удалена: {t['title']}"
                                 elif tasks:
                                     titles = ", ".join(t["title"] for t in tasks[:5])
@@ -5256,7 +5256,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = "🌀 Активных задач нет — нечего удалять."
 
                         elif intent == "delete_label":
-                            target = (parsed_check.get("action") or {}).get("title", "").lower().strip()
+                            target = ((parsed_check.get("action") or {}).get("title") or "").lower().strip()
                             grp_data = store_get_groups(user_id)
                             labels = grp_data.get("groups", [])
                             matched = [l for l in labels if target and target in l.get("name","").lower()]
@@ -5270,7 +5270,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         t["label_id"] = None
                                         t["label_name"] = ""
                                 store_set_tasks(user_id, tasks)
-                                _fire_sync()
+                                await _sync_pending()
                                 reply_text = f"🗑 Группа «{lb['name']}» удалена."
                             else:
                                 lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет групп"
@@ -5330,7 +5330,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     if cl_ref:
                                         cl_ref["pinned_message_id"] = cl_msg.message_id
                                         store_set_checklists(user_id, checklists)
-                                        _fire_sync()
+                                        await _sync_pending()
                                     # If empty — suggest editing
                                     if not n_items:
                                         edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
@@ -5350,14 +5350,14 @@ async def free_conversation(message: Message, state: FSMContext):
                             if cl:
                                 checklists = [c for c in checklists if c["id"] != cl["id"]]
                                 store_set_checklists(user_id, checklists)
-                                _fire_sync()
+                                await _sync_pending()
                                 reply_text = f"🗑 Чеклист «{cl['title']}» удалён."
                             else:
                                 reply_text = f"🌀 Чеклист «{target}» не найден."
 
                         elif intent == "checklist_add_item":
                             action_data = parsed_check.get("action") or {}
-                            target   = action_data.get("title","").lower()
+                            target   = (action_data.get("title") or "").lower()
                             new_item = action_data.get("item","").strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
@@ -5369,15 +5369,15 @@ async def free_conversation(message: Message, state: FSMContext):
                                     items.append({"id": f"i{len(items)+1}", "text": new_item, "done": False})
                                     cl["items"] = items
                                     store_set_checklists(user_id, checklists)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"✅ Добавлен пункт «{new_item}» в «{cl['title']}»"
                             else:
                                 reply_text = "🌀 Не нашла чеклист или пустой пункт."
 
                         elif intent == "checklist_delete_item":
                             action_data = parsed_check.get("action") or {}
-                            target   = action_data.get("title","").lower()
-                            item_txt = action_data.get("item","").lower()
+                            target   = (action_data.get("title") or "").lower()
+                            item_txt = (action_data.get("item") or "").lower()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl:
@@ -5386,7 +5386,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                                if item_txt not in it.get("text","").lower()]
                                 if len(cl["items"]) < before:
                                     store_set_checklists(user_id, checklists)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"🗑 Пункт удалён из «{cl['title']}»"
                                 else:
                                     reply_text = f"🌀 Пункт «{item_txt}» не найден в «{cl['title']}»"
@@ -5395,8 +5395,8 @@ async def free_conversation(message: Message, state: FSMContext):
 
                         elif intent == "checklist_edit_item":
                             action_data = parsed_check.get("action") or {}
-                            target   = action_data.get("title","").lower()
-                            item_txt = action_data.get("item","").lower()
+                            target   = (action_data.get("title") or "").lower()
+                            item_txt = (action_data.get("item") or "").lower()
                             new_val  = action_data.get("value","").strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
@@ -5406,15 +5406,15 @@ async def free_conversation(message: Message, state: FSMContext):
                                         it["text"] = new_val
                                         break
                                 store_set_checklists(user_id, checklists)
-                                _fire_sync()
+                                await _sync_pending()
                                 reply_text = f"✅ Пункт изменён на «{new_val}»"
                             else:
                                 reply_text = "🌀 Не нашла чеклист или пункт."
 
                         elif intent == "checklist_toggle_item":
                             action_data = parsed_check.get("action") or {}
-                            target   = action_data.get("title","").lower()
-                            item_txt = action_data.get("item","").lower()
+                            target   = (action_data.get("title") or "").lower()
+                            item_txt = (action_data.get("item") or "").lower()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl:
@@ -5423,7 +5423,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         it["done"] = not it.get("done", False)
                                         break
                                 store_set_checklists(user_id, checklists)
-                                _fire_sync()
+                                await _sync_pending()
                                 await _show_checklist(cl, message)
                                 reply_text = ""
                             else:
@@ -5462,7 +5462,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reminders.append({"id":rid,"title":r_title,
                                                       "datetime_iso":r_dt,"repeat":r_repeat,"active":True})
                                     store_set_reminders(user_id, reminders)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(r_repeat,"один раз")
                                     reply_text = f"✅ Напоминание: 🔔 {r_title} · {r_dt[:16].replace('T',' ')} · {rep_s}"
 
@@ -5485,7 +5485,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             if rem:
                                 reminders = [r for r in reminders if r["id"] != rem["id"]]
                                 store_set_reminders(user_id, reminders)
-                                _fire_sync()
+                                await _sync_pending()
                                 reply_text = f"🗑 Напоминание «{rem['title']}» удалено."
                             else:
                                 reply_text = f"🌀 Напоминание «{target_r}» не найдено."
@@ -5530,6 +5530,24 @@ async def free_conversation(message: Message, state: FSMContext):
                                     from zoneinfo import ZoneInfo as _ZI_dl
                                     # Parse deadline from action
                                     _rm_dl_raw = (_act.get("deadline") or _act.get("value") or "").strip()
+                                    # Fallback: extract deadline from original text if LLM missed it
+                                    if not _rm_dl_raw and text:
+                                        import re as _re_txt
+                                        _MONTHS_TXT = {
+                                            "января":1,"февраля":2,"марта":3,"апреля":4,"мая":5,
+                                            "июня":6,"июля":7,"августа":8,"сентября":9,
+                                            "октября":10,"ноября":11,"декабря":12
+                                        }
+                                        _m_txt = _re_txt.search(
+                                            r"(\d{1,2})\s+(" + "|".join(_MONTHS_TXT.keys()) + r")",
+                                            text.lower()
+                                        )
+                                        if _m_txt:
+                                            _rm_dl_raw = f"{_m_txt.group(1)} {_m_txt.group(2)}"
+                                        else:
+                                            _m_iso_txt = _re_txt.search(r"\d{1,2}\.\d{1,2}(?:\.\d{2,4})?", text)
+                                            if _m_iso_txt:
+                                                _rm_dl_raw = _m_iso_txt.group(0)
                                     _rm_deadline = None
                                     if _rm_dl_raw:
                                         _tz_dl = _ZI_dl(store_get_profile(user_id).get(
@@ -5589,7 +5607,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         store_set_tasks(user_id, all_tasks)
                                     roadmaps.append(new_rm)
                                     store_set_roadmaps(user_id, roadmaps)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     _task_info = f" · {len(new_rm['task_ids'])} задач добавлено" if new_rm["task_ids"] else ""
                                     reply_text = f"🗺 Роадмап «{_rm_title}» создан{_task_info}"
 
@@ -5630,7 +5648,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             if _found_rm and _new_name:
                                 _found_rm["title"] = _new_name
                                 store_set_roadmaps(user_id, roadmaps)
-                                _fire_sync()
+                                await _sync_pending()
                                 reply_text = f"✅ Роадмап переименован: «{_old_name}» → «{_new_name}»"
                             else:
                                 reply_text = f"🌀 Не нашла роадмап «{_old_name}»."
@@ -5661,7 +5679,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if _dl_iso:
                                     _found_rm["deadline"] = _dl_iso
                                     store_set_roadmaps(user_id, roadmaps)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"📅 Дедлайн роадмапа «{_found_rm['title']}» → {_dl_iso}"
                                 else:
                                     reply_text = f"🌀 Не понял дату «{_dl_val}». Напиши: 01.06 или 2026-06-01"
@@ -5692,7 +5710,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                                     break
                                             store_set_tasks(user_id, all_tasks)
                                         store_set_roadmaps(user_id, roadmaps)
-                                        _fire_sync()
+                                        await _sync_pending()
                                         reply_text = f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»"
                                     else:
                                         reply_text = f"🌀 Задача уже в роадмапе."
@@ -5718,7 +5736,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _tid = _matched[0].get("task_id","")
                                     _found_rm["task_ids"] = [tid for tid in _found_rm.get("task_ids",[]) if tid != _tid]
                                     store_set_roadmaps(user_id, roadmaps)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"✅ Задача «{_matched[0]['title']}» убрана из роадмапа «{_found_rm['title']}»"
                                 else:
                                     reply_text = f"🌀 Задача «{_task_q}» не найдена в роадмапе."
@@ -5742,7 +5760,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         if t.get("label_id") == matched[0]["id"]:
                                             t["label_name"] = new_name
                                     store_set_tasks(user_id, tasks)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     reply_text = f"✅ Группа переименована в «{new_name}»."
                                 else:
                                     reply_text = "🌀 Группа не найдена."
@@ -5844,7 +5862,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = f"🌀 Поле «{field}» не знаю. Скажи: название/дедлайн/напоминание/группа"
                                 if "✅" in reply_text:
                                     store_set_tasks(user_id, tasks)
-                                    _fire_sync()
+                                    await _sync_pending()
                                     # Save last edited task for context continuity
                                     tid_edited = t.get("task_id","")
                                     await state.update_data(
