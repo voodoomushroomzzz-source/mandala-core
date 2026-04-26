@@ -273,69 +273,6 @@
       "deadline": null,
       "label_name": null,
       "reminder": null
-    },
-    {
-      "task_id": "t_e64aa9f1",
-      "title": "Записать минус",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-01",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_a691ad50",
-      "title": "Записать вокал",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-01",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_4ba27992",
-      "title": "Свести",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-01",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_cf913c51",
-      "title": "Сделать мастеринг",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-01",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_4fe465bc",
-      "title": "Сделать обложку",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-01",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_226b4388",
-      "title": "Выпустить",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-01",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_47c5336d",
-      "title": "Сделать промо-акцию",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-01",
-      "label_name": null,
-      "reminder": null
     }
   ],
   "groups": [
@@ -439,22 +376,6 @@
         "t_f930be7c",
         "t_39698436",
         "t_c79ebbf7"
-      ],
-      "status": "active"
-    },
-    {
-      "roadmap_id": "rm_c306c85a",
-      "title": "Выпустите песню «Беги»",
-      "deadline": "2026-07-01",
-      "created": "2026-04-26",
-      "task_ids": [
-        "t_e64aa9f1",
-        "t_a691ad50",
-        "t_4ba27992",
-        "t_cf913c51",
-        "t_4fe465bc",
-        "t_226b4388",
-        "t_47c5336d"
       ],
       "status": "active"
     }
