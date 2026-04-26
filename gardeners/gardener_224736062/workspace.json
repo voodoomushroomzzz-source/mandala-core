@@ -244,6 +244,21 @@
       "deadline": "2026-07-27",
       "label_name": null,
       "reminder": null
+    },
+    {
+      "task_id": "task_20260426_020",
+      "title": "выдать зарплату",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "world",
+      "priority": 6,
+      "deadline": "2026-04-27",
+      "reminder": null,
+      "created": "2026-04-26",
+      "updated": "2026-04-26",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
