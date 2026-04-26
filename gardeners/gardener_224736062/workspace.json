@@ -254,6 +254,60 @@
       "updated": "2026-04-26",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "t_55eb27c9",
+      "title": "Записать минус",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_47c26c44",
+      "title": "Записать вокал",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_c323c6a7",
+      "title": "Свести",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_5ae40028",
+      "title": "Сделать мастеринг",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_0297a2c9",
+      "title": "Сделать обложку",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_b70c8c63",
+      "title": "Опубликовать",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -343,5 +397,21 @@
   ],
   "reminders": [],
   "_decay_date": "2026-04-26",
-  "roadmaps": []
+  "roadmaps": [
+    {
+      "roadmap_id": "rm_0c66123b",
+      "title": "записать трек, беги",
+      "deadline": null,
+      "created": "2026-04-26",
+      "task_ids": [
+        "t_55eb27c9",
+        "t_47c26c44",
+        "t_c323c6a7",
+        "t_5ae40028",
+        "t_0297a2c9",
+        "t_b70c8c63"
+      ],
+      "status": "active"
+    }
+  ]
 }
