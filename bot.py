@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.24.7
+# Mandala Helper - Lite — SR Gentle Companion v7.24.8
 
 import re
 import os
@@ -516,6 +516,7 @@ def _make_group_id(name: str, existing: list) -> str:
 # ─── Proactive / Silence trackers ─────────────────────────────────────────────
 
 _proactive_sent_today: dict = {}
+_morning_sent: dict = {}        # uid → date, separate from proactive
 _last_interaction: dict = {}
 
 def _track_interaction(telegram_id: str) -> None:
@@ -538,7 +539,7 @@ def _silence_phase(telegram_id: str) -> int:
         return 1
 
 def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
-    """Check if current time in gardener timezone matches setting_time (HH:MM). Window 90s."""
+    """Check if current time in gardener timezone matches setting_time (HH:MM). Window 5 min."""
     if not setting_time:
         return False
     try:
@@ -548,7 +549,7 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
         now = _dt.now(tz)
         h, m_val = map(int, setting_time.split(":"))
         target = now.replace(hour=h, minute=m_val, second=0, microsecond=0)
-        return abs((now - target).total_seconds()) <= 90
+        return abs((now - target).total_seconds()) <= 300  # 5 min window
     except Exception:
         return False
 
@@ -1090,9 +1091,10 @@ async def send_morning_greeting(telegram_id: str) -> None:
         tz_name = settings.get("timezone", "Europe/Moscow")
         tz = ZoneInfo(tz_name)
         today_str = _dt.now(tz).strftime("%Y-%m-%d")
-        # Skip if already interacted today
-        if _last_interaction.get(str(telegram_id)) == today_str:
+        # Use dedicated morning_sent flag — don't block if gardener already interacted today
+        if _morning_sent.get(str(telegram_id)) == today_str:
             return
+        _morning_sent[str(telegram_id)] = today_str
         name      = gardener.get("name", "Садовник")
         resonance = gardener.get("resonance_level", 0)
         ach_count = store_get_achievements_count(str(telegram_id))
@@ -3905,6 +3907,9 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "переименуй группа X в Y", "измени группа X на Y" → rename_label, action.title="X→Y", 0.9
 - "найди", "поищи", "погода", "что такое X" → web_search, 0.9
 - "напомни мне X завтра в 9", "поставь напоминание X" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM", action.repeat=once/daily/weekdays, 0.95
+- "напомни через 30 минут", "через 2 часа напомни X" → create_reminder, action.title=X, action.datetime=текущее_время+N_минут/часов в ISO формате, 0.95
+- "напомни сегодня в 21:00", "напоминание X в 20:30" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM" (сегодняшняя дата), 0.95
+- ВАЖНО: "через N минут" → прибавь N минут к текущему времени из контекста [Сейчас у садовника]. "через N часов" → прибавь N часов. Результат в ISO формате YYYY-MM-DDTHH:MM
 - "покажи напоминания", "мои напоминания" → show_reminders, 0.95
 - "удали напоминание X" → delete_reminder, action.title=X, 0.95
 - "закрой задачи X и Y", "закрой обе" → complete_task, action.titles=["X","Y"], 0.95
@@ -4534,8 +4539,12 @@ async def ep_city(message: Message, state: FSMContext):
 async def ep_morning(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     t = message.text.strip()
+    if t in ("❌ Отмена", "Отмена", "отмена", "cancel"):
+        await state.clear()
+        await message.answer("🌿 Отменено.", reply_markup=get_main_keyboard())
+        return
     if not re.match(r"^\d{1,2}:\d{2}$", t):
-        await message.answer("Формат: ЧЧ:ММ (например 09:00)")
+        await message.answer("Формат: ЧЧ:ММ (например 09:00)\nДля отмены: ❌ Отмена")
         return
     g = store_get_profile(user_id) or {}
     g.setdefault("companion_settings", {})["morning_message_time"] = t
