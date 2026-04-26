@@ -254,69 +254,6 @@
       "updated": "2026-04-26",
       "completed": null,
       "notes": ""
-    },
-    {
-      "task_id": "t_535bf927",
-      "title": "Записать минус",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_8d2069fc",
-      "title": "Записать вокал",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_ab928427",
-      "title": "Свести",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_678e5c9e",
-      "title": "Сделать мастеринг",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_c5a2f4b4",
-      "title": "Сделать обложку",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_42a977eb",
-      "title": "Выпустить релиз",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_15df57d4",
-      "title": "Подготовить промо-компанию",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
     }
   ],
   "groups": [
@@ -406,22 +343,5 @@
   ],
   "reminders": [],
   "_decay_date": "2026-04-26",
-  "roadmaps": [
-    {
-      "roadmap_id": "rm_5e816fd3",
-      "title": "выпустить трек",
-      "deadline": null,
-      "created": "2026-04-26",
-      "task_ids": [
-        "t_535bf927",
-        "t_8d2069fc",
-        "t_ab928427",
-        "t_678e5c9e",
-        "t_c5a2f4b4",
-        "t_42a977eb",
-        "t_15df57d4"
-      ],
-      "status": "active"
-    }
-  ]
+  "roadmaps": []
 }
