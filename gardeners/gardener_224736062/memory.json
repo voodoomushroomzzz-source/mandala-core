@@ -71,6 +71,22 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Покажи активный чек-лист."
+    },
+    {
+      "role": "assistant",
+      "content": "☑️ <b>Чеклисты (1/3):</b>\n  • Поход на улицу (0/10)\n\nОткрой через Настройки → Чеклисты"
+    },
+    {
+      "role": "user",
+      "content": "Выведи его на экран."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-26"
