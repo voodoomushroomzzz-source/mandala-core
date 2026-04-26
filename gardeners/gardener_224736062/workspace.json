@@ -215,9 +215,10 @@
       "title": "записать минус",
       "status": "active",
       "created": "2026-04-26",
-      "deadline": null,
+      "deadline": "2026-04-30",
       "label_name": null,
-      "reminder": null
+      "reminder": null,
+      "updated": "2026-04-26"
     },
     {
       "task_id": "t_b5d10024",
