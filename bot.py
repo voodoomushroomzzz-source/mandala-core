@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.25.5
+# Mandala Helper - Lite — SR Gentle Companion v7.25.6
 
 import re
 import os
@@ -1944,10 +1944,10 @@ async def cb_roadmap_new(callback: CallbackQuery, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_roadmaps")]
     ])
-    await callback.message.answer(
-        "🗺 Введи название нового роадмапа:",
-        reply_markup=cancel_kb
-    )
+    try:
+        await callback.message.edit_text("🗺 Введи название нового роадмапа:", reply_markup=cancel_kb)
+    except Exception:
+        await callback.message.answer("🗺 Введи название нового роадмапа:", reply_markup=cancel_kb)
 
 @router.message(StateFilter(RoadmapStates.waiting_for_title))
 async def rm_input_title(message: Message, state: FSMContext):
@@ -1989,7 +1989,10 @@ async def cb_roadmap_rename(callback: CallbackQuery, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data=f"roadmap_open_{rm_id}")]
     ])
-    await callback.message.answer("✏️ Введи новое название:", reply_markup=cancel_kb)
+    try:
+        await callback.message.edit_text("✏️ Введи новое название:", reply_markup=cancel_kb)
+    except Exception:
+        await callback.message.answer("✏️ Введи новое название:", reply_markup=cancel_kb)
 
 @router.message(StateFilter(RoadmapStates.waiting_for_rename))
 async def rm_input_rename(message: Message, state: FSMContext):
@@ -2030,10 +2033,16 @@ async def cb_roadmap_deadline(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="❌ Отмена", callback_data=f"roadmap_open_{rm_id}")],
         [InlineKeyboardButton(text="🗑 Убрать дедлайн", callback_data=f"roadmap_dl_clear_{rm_id}")]
     ])
-    await callback.message.answer(
-        "📅 Введи дедлайн: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
-        parse_mode="HTML", reply_markup=cancel_kb
-    )
+    try:
+        await callback.message.edit_text(
+            "📅 Введи дедлайн: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
+            parse_mode="HTML", reply_markup=cancel_kb
+        )
+    except Exception:
+        await callback.message.answer(
+            "📅 Введи дедлайн: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
+            parse_mode="HTML", reply_markup=cancel_kb
+        )
 
 @router.callback_query(F.data.startswith("roadmap_dl_clear_"))
 async def cb_roadmap_dl_clear(callback: CallbackQuery, state: FSMContext):
@@ -2105,11 +2114,18 @@ async def cb_roadmap_addtask(callback: CallbackQuery, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data=f"roadmap_open_{rm_id}")]
     ])
-    await callback.message.answer(
-        "➕ Введи название задачи для добавления в роадмап\n"
-        "<i>Будет найдена существующая задача или создана новая</i>",
-        parse_mode="HTML", reply_markup=cancel_kb
-    )
+    try:
+        await callback.message.edit_text(
+            "➕ Введи название задачи для добавления в роадмап\n"
+            "<i>Будет найдена существующая задача или создана новая</i>",
+            parse_mode="HTML", reply_markup=cancel_kb
+        )
+    except Exception:
+        await callback.message.answer(
+            "➕ Введи название задачи для добавления в роадмап\n"
+            "<i>Будет найдена существующая задача или создана новая</i>",
+            parse_mode="HTML", reply_markup=cancel_kb
+        )
 
 @router.message(StateFilter(RoadmapStates.waiting_for_add_task))
 async def rm_input_add_task(message: Message, state: FSMContext):
@@ -2173,57 +2189,63 @@ async def rm_input_add_task(message: Message, state: FSMContext):
 
 @router.callback_query(F.data.startswith("roadmap_rmtask_"))
 async def cb_roadmap_rmtask(callback: CallbackQuery, state: FSMContext):
+    """Show list of roadmap tasks to remove."""
+    await callback.answer()
+    await state.clear()
+    user_id  = str(callback.from_user.id)
+    rm_id    = callback.data[len("roadmap_rmtask_"):]
+    roadmaps = store_get_roadmaps(user_id)
+    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
+    if not rm or not rm.get("task_ids"):
+        await callback.answer("🌀 Задач в роадмапе нет.", show_alert=True)
+        return
+    all_tasks  = store_get_tasks(user_id)
+    task_by_id = {t.get("task_id"): t for t in all_tasks}
+    btns = []
+    for tid in rm["task_ids"]:
+        t = task_by_id.get(tid)
+        if t:
+            status = "✅ " if t.get("status") == "completed" else ""
+            btns.append([InlineKeyboardButton(
+                text=f"{status}{t['title'][:35]}",
+                callback_data=f"roadmap_rmdo_{rm_id}|{tid}"
+            )])
+    btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data=f"roadmap_open_{rm_id}")])
+    try:
+        await callback.message.edit_text(
+            "➖ Выбери задачу для удаления из роадмапа:",
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=btns)
+        )
+    except Exception:
+        await callback.message.answer(
+            "➖ Выбери задачу для удаления из роадмапа:",
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=btns)
+        )
+
+@router.callback_query(F.data.startswith("roadmap_rmdo_"))
+async def cb_roadmap_rmdo(callback: CallbackQuery, state: FSMContext):
+    """Remove specific task from roadmap."""
     await callback.answer()
     await state.clear()
     user_id = str(callback.from_user.id)
-    parts   = callback.data.split("_")
-    # Format: roadmap_rmtask_{rm_id} or roadmap_rmtask_{rm_id}_{task_id}
-    if len(parts) == 3:
-        # Show task list to choose from
-        rm_id    = parts[2]
-        roadmaps = store_get_roadmaps(user_id)
-        rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-        if not rm or not rm.get("task_ids"):
-            await callback.answer("🌀 Задач в роадмапе нет.", show_alert=True)
-            return
-        all_tasks  = store_get_tasks(user_id)
-        task_by_id = {t.get("task_id"): t for t in all_tasks}
-        btns = []
-        for tid in rm["task_ids"]:
-            t = task_by_id.get(tid)
-            if t:
-                status = "✅ " if t.get("status") == "completed" else ""
-                btns.append([InlineKeyboardButton(
-                    text=f"{status}{t['title'][:35]}",
-                    callback_data=f"roadmap_rmtask_{rm_id}_{tid}"
-                )])
-        btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data=f"roadmap_open_{rm_id}")])
-        try:
-            await callback.message.edit_text(
-                "➖ Выбери задачу для удаления из роадмапа:",
-                reply_markup=InlineKeyboardMarkup(inline_keyboard=btns)
-            )
-        except Exception:
-            await callback.message.answer(
-                "➖ Выбери задачу для удаления из роадмапа:",
-                reply_markup=InlineKeyboardMarkup(inline_keyboard=btns)
-            )
-    elif len(parts) == 4:
-        # Remove specific task
-        rm_id   = parts[2]
-        task_id = parts[3]
-        roadmaps = store_get_roadmaps(user_id)
-        rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-        if rm:
-            rm["task_ids"] = [tid for tid in rm.get("task_ids", []) if tid != task_id]
-            store_set_roadmaps(user_id, roadmaps)
-            await _sync_pending()
-        all_tasks = store_get_tasks(user_id)
-        text = _roadmap_card_text(rm, all_tasks) if rm else "🌀 Роадмап не найден."
-        try:
-            await callback.message.edit_text(text, reply_markup=get_roadmap_detail_kb(rm_id), parse_mode="HTML")
-        except Exception:
-            await callback.message.answer(text, reply_markup=get_roadmap_detail_kb(rm_id), parse_mode="HTML")
+    # Format: roadmap_rmdo_{rm_id}|{task_id}
+    payload = callback.data[len("roadmap_rmdo_"):]
+    if "|" not in payload:
+        await callback.answer("🌀 Ошибка.", show_alert=True)
+        return
+    rm_id, task_id = payload.split("|", 1)
+    roadmaps = store_get_roadmaps(user_id)
+    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
+    if rm:
+        rm["task_ids"] = [tid for tid in rm.get("task_ids", []) if tid != task_id]
+        store_set_roadmaps(user_id, roadmaps)
+        await _sync_pending()
+    all_tasks = store_get_tasks(user_id)
+    text = _roadmap_card_text(rm, all_tasks) if rm else "🌀 Роадмап не найден."
+    try:
+        await callback.message.edit_text(text, reply_markup=get_roadmap_detail_kb(rm_id), parse_mode="HTML")
+    except Exception:
+        await callback.message.answer(text, reply_markup=get_roadmap_detail_kb(rm_id), parse_mode="HTML")
 
 @router.callback_query(F.data.startswith("roadmap_del_") & ~F.data.startswith("roadmap_delconfirm_"))
 async def cb_roadmap_del(callback: CallbackQuery, state: FSMContext):
