@@ -331,71 +331,7 @@
   "achievements": [],
   "updated": "2026-04-18",
   "achievements_count": 14,
-  "checklists": [
-    {
-      "id": "cl_походна",
-      "title": "Поход на улицу",
-      "items": [
-        {
-          "id": "i1",
-          "text": "Зайти на озон",
-          "done": true
-        },
-        {
-          "id": "i2",
-          "text": "Снять деньги",
-          "done": true
-        },
-        {
-          "id": "i3",
-          "text": "Зайти в магазин",
-          "done": true
-        },
-        {
-          "id": "i4",
-          "text": "Купить намаз",
-          "done": true
-        },
-        {
-          "id": "i5",
-          "text": "Купить горошек",
-          "done": true
-        },
-        {
-          "id": "i6",
-          "text": "Купить крабовые палочки",
-          "done": true
-        },
-        {
-          "id": "i7",
-          "text": "Купить кукурузу",
-          "done": true
-        },
-        {
-          "id": "i8",
-          "text": "Купить вкусняшку",
-          "done": true
-        },
-        {
-          "id": "i9",
-          "text": "Купить хлеб",
-          "done": true
-        },
-        {
-          "id": "i10",
-          "text": "купить кетчуп",
-          "done": true
-        },
-        {
-          "id": "i11",
-          "text": "купить масло",
-          "done": true
-        }
-      ],
-      "pinned_message_id": 6750,
-      "created": "2026-04-26"
-    }
-  ],
+  "checklists": [],
   "reminders": [],
   "_decay_date": "2026-04-26",
   "roadmaps": [
