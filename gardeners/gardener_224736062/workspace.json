@@ -194,6 +194,69 @@
       "updated": "2026-04-25",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "t_ebd0bbaf",
+      "title": "Записать минус",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_693bda18",
+      "title": "Записать вокал",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_6835ebf3",
+      "title": "Свести",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_a018b24a",
+      "title": "Сделать мастеринг",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_87e68797",
+      "title": "Сделать обложку",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_1dd4a5e1",
+      "title": "Опубликовать",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_4dc7d659",
+      "title": "Подготовить промокомпанию",
+      "status": "active",
+      "created": "2026-04-26",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -283,5 +346,22 @@
   ],
   "reminders": [],
   "_decay_date": "2026-04-26",
-  "roadmaps": []
+  "roadmaps": [
+    {
+      "roadmap_id": "rm_cbb8d586",
+      "title": "выпустить трек «Беги»",
+      "deadline": "2026-07-27",
+      "created": "2026-04-26",
+      "task_ids": [
+        "t_ebd0bbaf",
+        "t_693bda18",
+        "t_6835ebf3",
+        "t_a018b24a",
+        "t_87e68797",
+        "t_1dd4a5e1",
+        "t_4dc7d659"
+      ],
+      "status": "active"
+    }
+  ]
 }
