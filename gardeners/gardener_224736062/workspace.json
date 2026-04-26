@@ -1,21 +1,6 @@
 {
   "tasks": [
     {
-      "task_id": "task_20260419_005",
-      "title": "Записать трек Беги",
-      "status": "todo",
-      "label_id": "творчество",
-      "label_name": "Творчество",
-      "life_area": "health",
-      "priority": 5,
-      "deadline": "2026-06-01",
-      "reminder": "2026-04-24",
-      "created": "2026-04-19",
-      "updated": "2026-04-25",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260421_007",
       "title": "проработать соту плоды",
       "status": "todo",
@@ -358,16 +343,5 @@
   ],
   "reminders": [],
   "_decay_date": "2026-04-26",
-  "roadmaps": [
-    {
-      "roadmap_id": "rm_eefe5a26",
-      "title": "музыкальный альбом",
-      "deadline": null,
-      "created": "2026-04-26",
-      "task_ids": [
-        "task_20260419_005"
-      ],
-      "status": "active"
-    }
-  ]
+  "roadmaps": []
 }
