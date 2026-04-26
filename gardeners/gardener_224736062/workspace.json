@@ -357,5 +357,15 @@
     }
   ],
   "reminders": [],
-  "_decay_date": "2026-04-26"
+  "_decay_date": "2026-04-26",
+  "roadmaps": [
+    {
+      "roadmap_id": "rm_eefe5a26",
+      "title": "музыкальный альбом",
+      "deadline": null,
+      "created": "2026-04-26",
+      "task_ids": [],
+      "status": "active"
+    }
+  ]
 }
