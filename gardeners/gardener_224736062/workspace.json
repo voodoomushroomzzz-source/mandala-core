@@ -357,6 +357,11 @@
           "done": false
         },
         {
+          "id": "i4",
+          "text": "купить змею",
+          "done": false
+        },
+        {
           "id": "i2",
           "text": "купить обезьяну",
           "done": false
@@ -365,14 +370,9 @@
           "id": "i3",
           "text": "купить шимпанзе",
           "done": false
-        },
-        {
-          "id": "i4",
-          "text": "купить змею",
-          "done": false
         }
       ],
-      "pinned_message_id": null,
+      "pinned_message_id": 7218,
       "created": "2026-04-27"
     }
   ],
