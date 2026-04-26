@@ -111,6 +111,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Добавь задачу «Оплатить коммуналку до 30.04.00», добавь в личное."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-26"
