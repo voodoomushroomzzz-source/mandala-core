@@ -47,6 +47,22 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Переименую пункт 1. Накупить собаку."
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Удалийте checklist."
+    },
+    {
+      "role": "assistant",
+      "content": "какой чеклист удалить"
     }
   ],
   "updated": "2026-04-27"
