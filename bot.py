@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.2
+# Mandala Helper - Lite — SR Gentle Companion v7.27.4
 
 import re
 import os
@@ -1855,8 +1855,18 @@ async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
     matched = [t for t in tasks if t.get("task_id") == tid]
     if matched:
         t_done = matched[0]
-        new_tasks = [t for t in tasks if t.get("task_id") != tid]
-        store_set_tasks(user_id, new_tasks)
+        # If task belongs to a roadmap — mark completed, don't delete
+        roadmaps = store_get_roadmaps(user_id)
+        _roadmap_task_ids = {tid2 for rm in roadmaps for tid2 in rm.get("task_ids", [])}
+        if t_done.get("task_id") in _roadmap_task_ids:
+            for t in tasks:
+                if t.get("task_id") == t_done["task_id"]:
+                    t["status"] = "completed"
+                    break
+            store_set_tasks(user_id, tasks)
+        else:
+            new_tasks = [t for t in tasks if t.get("task_id") != tid]
+            store_set_tasks(user_id, new_tasks)
         count = store_increment_achievements(user_id)
         from datetime import datetime as _dtr
         today_s = _dtr.now().strftime("%Y-%m-%d")
@@ -5881,7 +5891,18 @@ async def free_conversation(message: Message, state: FSMContext):
 
                             if to_close:
                                 closed_ids = {t.get("task_id") for t in to_close}
-                                new_tasks = [t for t in tasks if t.get("task_id") not in closed_ids]
+                                # Tasks in roadmaps: mark completed. Others: remove.
+                                _roadmaps_all = store_get_roadmaps(user_id)
+                                _rm_task_ids = {tid3 for rm in _roadmaps_all for tid3 in rm.get("task_ids", [])}
+                                new_tasks = []
+                                for t in tasks:
+                                    if t.get("task_id") in closed_ids:
+                                        if t.get("task_id") in _rm_task_ids:
+                                            t["status"] = "completed"  # keep in roadmap
+                                            new_tasks.append(t)
+                                        # else: drop (normal task)
+                                    else:
+                                        new_tasks.append(t)
                                 store_set_tasks(user_id, new_tasks)
                                 total_res = 0
                                 for tc in to_close:
@@ -5902,6 +5923,19 @@ async def free_conversation(message: Message, state: FSMContext):
                                     names = ", ".join(t["title"] for t in to_close)
                                     reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
                                                   f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
+                                # Auto-show roadmap if closed task belongs to one, else profile
+                                _closed_ids_set = {t.get("task_id") for t in to_close}
+                                _roadmaps_upd = store_get_roadmaps(user_id)
+                                _affected_rm = next(
+                                    (rm for rm in _roadmaps_upd
+                                     if any(tid in _closed_ids_set for tid in rm.get("task_ids", []))),
+                                    None
+                                )
+                                if _affected_rm:
+                                    _all_tasks_upd = store_get_tasks(user_id)
+                                    reply_text += "\n\n" + _roadmap_card_text(_affected_rm, _all_tasks_upd)
+                                else:
+                                    reply_text += "\n\n" + _build_profile_card(user_id)
                             elif tasks:
                                 # Smart clarification: find top fuzzy candidates
                                 _candidates = []
@@ -6298,6 +6332,7 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "show_roadmaps":
                             roadmaps = store_get_roadmaps(user_id)
                             all_tasks = store_get_tasks(user_id)
+                            _task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
                             _rm_filter = ((parsed_check.get("action") or {}).get("title","") or "").lower()
                             _show_list = [r for r in roadmaps if not _rm_filter or _rm_filter in r.get("title","").lower()]
                             if not _show_list:
@@ -6311,7 +6346,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     task_ids = rm.get("task_ids", [])
                                     total    = len(task_ids)
                                     done_cnt = sum(1 for tid in task_ids
-                                                   if next((t for t in all_tasks if t.get("task_id")==tid),{}).get("status")=="completed")
+                                                   if _task_by_id.get(tid, {}).get("status") == "completed")
                                     _lines.append(f"\n🗺 <b>{rm['title']}</b>  {bar}  {done_cnt}/{total}  {pct}%{dl}")
                                     for t in _sort_roadmap_tasks(task_ids, all_tasks):
                                         if t.get("status") == "completed":
@@ -6668,7 +6703,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         reply_text = f"🌀 Группа «{value}» не найдена. Есть: {g_names}"
                                 else:
                                     reply_text = f"🌀 Поле «{field}» не знаю. Скажи: название/дедлайн/напоминание/группа"
-                                if "✅" in reply_text:
+                                if "✅" in (reply_text or ""):
                                     store_set_tasks(user_id, tasks)
                                     await _sync_pending()
                                     # Save last edited task for context continuity
