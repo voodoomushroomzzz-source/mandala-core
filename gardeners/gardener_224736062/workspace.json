@@ -327,6 +327,15 @@
       "updated": "2026-04-28",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "t_08b361e6",
+      "title": "Студия вокал",
+      "status": "active",
+      "created": "2026-04-28",
+      "deadline": "2026-05-10",
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -372,7 +381,8 @@
         "task_20260427_022",
         "t_eafdaa59",
         "t_46f9faf3",
-        "t_f89a42e7"
+        "t_f89a42e7",
+        "t_08b361e6"
       ],
       "status": "active"
     }
