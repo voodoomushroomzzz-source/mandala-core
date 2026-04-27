@@ -2,15 +2,7 @@
   "sessions": [
     {
       "role": "user",
-      "content": "Покажи roadmap выпустить трек «Беги»."
-    },
-    {
-      "role": "assistant",
-      "content": "🗺 Роадмапов пока нет. Скажи «создай роадмап [название]» чтобы начать."
-    },
-    {
-      "role": "user",
-      "content": "Покажи roadmap."
+      "content": "Открой мои активные родмапы."
     },
     {
       "role": "assistant",
@@ -18,19 +10,11 @@
     },
     {
       "role": "user",
-      "content": "Покажи резонанс."
+      "content": "Добавь в этот roadmap еще одну задачу — записать вокал. Deadline... Deadline... Две недели."
     },
     {
       "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Добавь задачу провести выходные с детьми. Группа личная, дедлайн до 10.05."
-    },
-    {
-      "role": "assistant",
-      "content": ""
+      "content": "🌀 Задача уже в роадмапе."
     }
   ],
   "updated": "2026-04-27"
