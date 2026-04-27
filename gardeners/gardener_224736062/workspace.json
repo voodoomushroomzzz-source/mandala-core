@@ -302,6 +302,15 @@
       "updated": "2026-04-27",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "t_f89a42e7",
+      "title": "дополнить синтезаторы",
+      "status": "active",
+      "created": "2026-04-28",
+      "deadline": "2026-07-27",
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -339,17 +348,15 @@
       "deadline": "2026-07-27",
       "created": "2026-04-26",
       "task_ids": [
-        "t_ebd0bbaf",
-        "t_693bda18",
         "t_6835ebf3",
         "t_a018b24a",
         "t_87e68797",
         "t_1dd4a5e1",
         "t_4dc7d659",
-        "task_20260427_025",
         "task_20260427_022",
         "t_eafdaa59",
-        "t_46f9faf3"
+        "t_46f9faf3",
+        "t_f89a42e7"
       ],
       "status": "active"
     }
