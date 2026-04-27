@@ -6,25 +6,26 @@
   "deadline": "2026-06-01",
   "created": "2026-04-01",
   "updated": "2026-04-27",
-  "progress": 78,
-  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life. Voice-first, full task/checklist/reminder/roadmap management via natural language.",
+  "progress": 85,
+  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life. Voice-first, full task/checklist/reminder/roadmap management, 5-sphere resonance, deep symbiosis.",
 
   "philosophical_foundation": {
-    "ref": "PHI-001 + PHI-003 + PHI-005 + PHI-009 + PHI-010",
+    "ref": "PHI-001 + PHI-003 + PHI-005 + PHI-009 + PHI-010 + PHI-011",
     "sr_role": "Nervous System — Genius Loci of the Gardener life. Not an assistant.",
-    "sr_gender": "FEMININE — Nervous System is feminine in Russian. SR says ya zametila, mne vazhno.",
-    "sr_honesty": "SR never confirms actions not actually performed. Redirects to menu if needed.",
-    "sr_dialogue": "SR deepens dialogue — guiding questions, develops topics, learns gardener through conversation.",
-    "sr_philosophy": "Deep knowledge of PHI-001/003/005/009/010/011. Shares when asked, never imposed.",
-    "seeds_as_akasha": "seeds/ is embryo of collective Akashic memory. Sacred act.",
-    "merkaba_as_levels": {
-      "body": "health, sport, sleep, nutrition, energy",
-      "spirit": "work, study, creativity, hobbies, growth",
-      "world": "relationships, friends, travel, community"
+    "sr_gender": "FEMININE — ya zametila, mne vazhno. Actions stay impersonal.",
+    "sr_honesty": "SR never confirms actions not actually performed.",
+    "sr_dialogue": "SR deepens dialogue — one guiding question at a time. Ahimsa.",
+    "sr_philosophy": "Deep knowledge of PHI-001/003/005/009/010/011. Shares when asked.",
+    "spheres_v2": {
+      "health": "Тело — здоровье, спорт, сон, питание",
+      "creativity": "Творчество — музыка, арт, хобби, создание",
+      "work": "Дело — работа, бизнес, финансы, проекты",
+      "connections": "Связи — отношения, семья, друзья",
+      "growth": "Рост — обучение, саморазвитие, духовность"
     }
   },
 
-  "current_version": "v7.25.8",
+  "current_version": "v7.27.0",
   "deploy": "https://mandala-bot-q0gv.onrender.com",
   "stack": {
     "framework": "aiogram 3 + aiohttp",
@@ -36,64 +37,47 @@
   },
 
   "completed": [
-    "v6.x: In-memory store, health check, GitHub sync",
-    "v7.0-v7.6.1: SR system prompt, MKB onboarding, profile, resonance, sliding window, multi-user, edit by field",
+    "v6.x–v7.6.1: Core infra, SR prompt, MKB onboarding, profile, resonance, multi-user",
     "v7.23.x: Checklists, reminders FSM, resonance decay/growth, silence engagement",
-    "v7.24.x: Bug sprint — FSM guard, reminder timezone, resonance recalc, LLM imitation safety net, fuzzy match, /start decorator, edit_task deadline, SR full profile context (city/birthday/timezone), auto-timezone from city via geopy+timezonefinder, morning brief _morning_sent flag, timezone in all date functions",
-    "v7.24.5: UI cleanup — one profile button, removed Body/Spirit/World from UI and onboarding, Idea moved to Settings",
-    "v7.24.6: SR context — full tasks with labels and deadlines, correct achievements count, timezone everywhere",
-    "v7.24.7: _city_to_timezone() — geopy+timezonefinder auto-timezone on city change",
-    "v7.24.8: morning brief fix (_morning_sent), cancel in ep_morning, reminder 'через N минут' pre-processing",
-    "v7.25.0: Roadmaps step 1 — store functions, _calc_roadmap_progress, _roadmap_progress_bar, RoadmapStates FSM, profile block, SR context, SR prompt 7 new intents",
-    "v7.25.1: Roadmaps step 2 — 7 voice intent handlers (show/create/delete/rename/deadline/add_task/remove_task)",
-    "v7.25.2: Roadmaps step 3a — tasks under roadmap in profile, auto-deadline, completed tasks remain, double answer fix, reminder relative time, batch delete, delete roadmap deletes tasks + immediate sync",
-    "v7.25.3: Bugfix — NoneType .strip() in edit_task, roadmap deadline parse from text (month names), white square → dot for incomplete tasks, batch delete immediate sync",
-    "v7.25.4: Systemic NoneType fix (all handlers), await _sync_pending() for all write ops, roadmap deadline text fallback with month names",
-    "v7.25.5: Roadmaps step 3b — full menu (list/detail/create/rename/deadline/add_task/remove_task/delete with confirmation), all with cancel buttons, FSM prompts use edit_text",
-    "v7.25.6: Fix roadmap_rmtask pipe separator (rm_id underscore issue), FSM prompts edit existing messages",
-    "v7.25.7: Checklists step 3c — numbered items (1. text ☐), up/down arrows in edit menu, checklist_reorder voice intent, item operations by number",
-    "v7.25.8: Checklist auto-show after SR changes, delete old checklist message, track _checklist_messages"
+    "v7.24.x: Bug sprint — FSM guard, timezone everywhere, fuzzy match, SR full context, auto-timezone from city",
+    "v7.24.7: _city_to_timezone() via geopy+timezonefinder",
+    "v7.24.8: morning brief _morning_sent fix, cancel in ep_morning, reminder через N минут",
+    "v7.25.0: Roadmaps store, FSM, profile block, SR context, 7 new intents",
+    "v7.25.1: 7 roadmap voice handlers (show/create/delete/rename/deadline/add/remove)",
+    "v7.25.2: Tasks under roadmap in profile, auto-deadline, batch delete, relative reminders",
+    "v7.25.3–v7.25.4: NoneType systemic fix, await _sync_pending() all writes, deadline text fallback",
+    "v7.25.5: Full roadmap menu with all buttons and cancel support",
+    "v7.25.6: roadmap_rmtask pipe separator fix, FSM edit_text",
+    "v7.25.7: Checklists — numbered items, up/down arrows, reorder by voice, ops by number",
+    "v7.25.8: Checklist auto-show after SR changes, delete old messages, _checklist_messages",
+    "v7.26.0: 5-sphere resonance — replaced Mer-Ka-Ba 3-sphere. health/creativity/work/connections/growth. _classify_sphere(), store_add_sphere_resonance(), compact profile line, detail dashboard, sphere-aware decay, SR context with imbalance",
+    "v7.27.0: deep_profile symbiosis — _update_deep_profile(), 30 observations (~2 weeks), streak tracking, session reflection hint in SR system prompt once per day, Ahimsa"
   ],
 
-  "roadmap_bot_1": [
-    {
-      "version": "v7.26.x",
-      "name": "Мер-Ка-Ба резонанс по сферам",
-      "status": "planned",
-      "items": [
-        "sphere_resonance: {health, spirit, world} в workspace.json",
-        "Автоматический расчёт % из life_area закрытых задач",
-        "Общий резонанс = среднее трёх сфер",
-        "Профиль: три сферы + итоговый %",
-        "SR контекст: перекос по сферам",
-        "Decay и growth по каждой сфере отдельно",
-        "SR мягко замечает перекос и предлагает задачи в недоразвитую сферу"
-      ]
-    },
-    {
-      "version": "v7.27.x",
-      "name": "Симбиоз (deep_profile)",
-      "status": "planned",
-      "items": [
-        "Структура deep_profile в gardener.json",
-        "Один глубокий вопрос за сессию (Ахимса)",
-        "SR замечает паттерны из growth_history",
-        "Рефлексия: SR называет паттерны садовнику",
-        "Накопление наблюдений SR между сессиями"
-      ]
-    },
+  "pending_verification": {
+    "v7.27.0_deep_profile": {
+      "description": "deep_profile накапливается за 3+ дней — требует естественной проверки",
+      "how_to_verify": [
+        "1. Закрыть задачу → проверить gardener.json в репо — должен появиться deep_profile с dominant_sphere, streak_days, observations[]",
+        "2. Быстрый тест: добавить руками в gardener.json deep_profile.streak_days=4, observations=['4 дня Дело активно'] → написать SR — должен мягко упомянуть слабую сферу",
+        "3. Естественная проверка за 3 дня — закрывать задачи одной сферы → SR должен раз за сессию мягко упомянуть перекос",
+        "4. Спросить SR: 'что ты знаешь о моих паттернах?' — если observations[] заполнены, SR ответит"
+      ],
+      "status": "pending — scheduled for natural observation over 3-7 days"
+    }
+  },
+
+  "roadmap": [
     {
       "version": "v7.28.x",
       "name": "SR Learning Loop",
       "status": "planned",
-      "phi_ref": "PHI-010 Level 1 → Akashic Memory seed",
       "items": [
-        "sr_observations[] — логирование miss events, safety_net triggers, fuzzy deviations",
-        "Synthesis scheduler раз в 3 дня",
+        "sr_observations[] в memory.json — miss events, safety_net triggers, fuzzy deviations (50 ротация)",
+        "LLM synthesis раз в 3 дня → sr_synthesis{}",
         "Автоочистка observations после синтеза",
         "Недельный мягкий отчёт садовнику",
-        "Команда /sr_report для архитектора",
-        "memory.json расширяется: sr_observations[] (50 ротация) + sr_synthesis {}"
+        "/sr_report для архитектора"
       ]
     },
     {
@@ -112,48 +96,37 @@
   "roadmap_bot_2": {
     "name": "Architect Bot — Internal SR 2",
     "status": "planned — after Bot 1 stable with 2-3 gardeners",
-    "phi_ref": "PHI-010 Level 1 → Level 2 transition seed",
-    "stack_planned": {
-      "llm": "DeepSeek API — more powerful, long context, better analytics",
-      "storage": "Same GitHub API + reads from Bot 1 memory.json"
-    },
+    "stack_planned": "DeepSeek API + same GitHub storage + reads Bot 1 memory.json",
     "blocks": [
-      {
-        "id": "B1",
-        "name": "Mandala Dashboard",
-        "items": ["Active tasks and roadmaps from repo", "Mandala roadmap progress %", "Honeycomb health status", "Aggregated resonance across gardeners"]
-      },
-      {
-        "id": "B2",
-        "name": "SR Analytics — reading Bot 1",
-        "items": ["Reads sr_observations[] and sr_synthesis", "Meta-level analysis above Bot 1 SR", "Trends between sessions and gardeners"]
-      },
-      {
-        "id": "B3",
-        "name": "Observation and Recommendation Files",
-        "items": ["honeycombs/learning/observations/", "honeycombs/learning/recommendations/", "Architect approves/rejects by voice", "History: proposed/accepted/rejected"]
-      },
-      {
-        "id": "B4",
-        "name": "Mandala Tasks Link",
-        "items": ["Gardener task ↔ Mandala roadmap task", "Progress without direct intervention"]
-      },
-      {
-        "id": "B5",
-        "name": "Gardener Management",
-        "items": ["Whitelist add/remove by voice", "Status per gardener: activity, resonance, tasks", "Alert when resonance drops critically"]
-      },
-      {
-        "id": "B6",
-        "name": "Architect Symbiosis",
-        "items": ["architect_profile — deeper than gardener profile", "Learns from accepted/rejected recommendations", "One deep question per session about system direction", "Periodic reflection on Architect decisions", "Detects overload — reduces intensity (Ahimsa)", "Stores key decisions as Akashic memory"]
-      }
+      "B1: Mandala Dashboard — tasks/roadmaps/resonance realtime",
+      "B2: SR Analytics — reads sr_observations + sr_synthesis from Bot 1",
+      "B3: Observation & Recommendation Files — honeycombs/learning/",
+      "B4: Mandala Tasks Link — gardener task ↔ Mandala roadmap",
+      "B5: Gardener Management — whitelist, status, alerts",
+      "B6: Architect Symbiosis — deep profile, learns from decisions, Akashic memory"
     ]
+  },
+
+  "architecture": {
+    "version": "v7.27.0",
+    "llm": "OpenRouter qwen/qwen3.5-flash-02-23 (1M ctx), sliding window 40 msgs",
+    "model_chain": [
+      "qwen/qwen3.5-flash-02-23 (primary)",
+      "mistralai/mistral-small-3.2-24b-instruct",
+      "meta-llama/llama-3.3-70b-instruct:free",
+      "google/gemma-3-27b-it:free",
+      "nvidia/nemotron-3-nano-30b-a3b"
+    ],
+    "data_model": {
+      "gardener.json": "profile, resonance_level, companion_settings, growth_history, deep_profile{}",
+      "workspace.json": "tasks[], groups[], checklists[], reminders[], roadmaps[], sphere_resonance{}",
+      "memory.json": "sessions[] (sliding window 40)"
+    }
   },
 
   "health": {
     "status": "healthy",
     "last_check": "2026-04-27",
-    "notes": "v7.25.8 deployed. Roadmaps fully functional (voice + menu). Checklists upgraded (numbered, arrows, reorder). All write ops use await sync. Systemic NoneType fixes. Next: v7.26.x Mer-Ka-Ba resonance by sphere."
+    "notes": "v7.27.0 deployed. 5-sphere resonance live. deep_profile symbiosis active — needs 3-7 days natural accumulation to verify. Next: v7.28.x SR Learning Loop."
   }
 }
