@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.1
+# Mandala Helper - Lite — SR Gentle Companion v7.27.2
 
 import re
 import os
@@ -63,8 +63,8 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ─── Business limits ──────────────────────────────────────────────────────────
-TASK_LIMIT_HARD  = 30
-TASK_LIMIT_SOFT  = 24
+TASK_LIMIT_HARD  = 50
+TASK_LIMIT_SOFT  = 40
 LABEL_LIMIT_HARD = 7
 LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
@@ -907,25 +907,18 @@ def _build_profile_card(user_id: str) -> str:
         for tid in rm.get("task_ids", []):
             roadmap_task_ids.add(tid)
 
-    # Roadmaps block — tasks shown under roadmap (including completed)
+    # Roadmaps block — compact one-liner per roadmap, tasks hidden
     if roadmaps:
         for rm in roadmaps:
             if rm.get("status") != "active":
                 continue
-            pct = _calc_roadmap_progress(rm, all_tasks)
-            bar = _roadmap_progress_bar(pct)
+            pct      = _calc_roadmap_progress(rm, all_tasks)
+            task_ids = rm.get("task_ids", [])
+            total    = len(task_ids)
+            done_cnt = sum(1 for tid in task_ids
+                          if task_by_id.get(tid, {}).get("status") == "completed")
             dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-            lines.append(f"🗺 <b>{rm['title']}</b>  {bar}{dl}")
-            for tid in rm.get("task_ids", []):
-                t = task_by_id.get(tid)
-                if not t:
-                    continue
-                if t.get("status") == "completed":
-                    lines.append(f"  ✅ {t['title']}")
-                else:
-                    t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                    ind  = _deadline_indicator(t.get("deadline", ""))
-                    lines.append(f"  · {ind}{t['title']}{t_dl}")
+            lines.append(f"🗺 <b>{rm['title']}</b>  {done_cnt}/{total}  {pct}%{dl}")
         lines.append("")
 
     # Active tasks NOT in any roadmap
@@ -2076,20 +2069,26 @@ async def cb_coming_soon(callback: CallbackQuery):
 # ─── Roadmap menu handlers ─────────────────────────────────────────────────────
 
 def _roadmap_card_text(rm: dict, all_tasks: list) -> str:
-    """Build roadmap detail text for menu display."""
-    pct = _calc_roadmap_progress(rm, all_tasks)
-    bar = _roadmap_progress_bar(pct)
-    dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-    lines = [f"🗺 <b>{rm['title']}</b>", f"{bar}{dl}", ""]
-    task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
-    for tid in rm.get("task_ids", []):
-        t = task_by_id.get(tid)
-        if t:
-            if t.get("status") == "completed":
-                lines.append(f"  ✅ {t['title']}")
-            else:
-                t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                lines.append(f"  · {t['title']}{t_dl}")
+    """Build roadmap detail text for menu — sorted: urgent → by date → no deadline → done last."""
+    pct      = _calc_roadmap_progress(rm, all_tasks)
+    bar      = _roadmap_progress_bar(pct)
+    dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
+    task_ids = rm.get("task_ids", [])
+    total    = len(task_ids)
+    done_cnt = sum(1 for tid in task_ids
+                   if next((t for t in all_tasks if t.get("task_id") == tid), {}).get("status") == "completed")
+    lines = [
+        f"🗺 <b>{rm['title']}</b>",
+        f"{bar}  {done_cnt}/{total}  {pct}%{dl}",
+        ""
+    ]
+    for t in _sort_roadmap_tasks(task_ids, all_tasks):
+        if t.get("status") == "completed":
+            lines.append(f"  ✅ {t['title']}")
+        else:
+            t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
+            ind  = _deadline_indicator(t.get("deadline", ""))
+            lines.append(f"  {ind}· {t['title']}{t_dl}")
     return "\n".join(lines)
 
 @router.callback_query(F.data == "menu_roadmaps")
@@ -3423,36 +3422,14 @@ async def cmd_resonance(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    gardener = store_get_profile(user_id)
-    if not gardener:
+    profile = store_get_profile(user_id)
+    if not profile:
         await message.answer("🌿 Профиль не найден", reply_markup=get_main_keyboard())
         return
-
-    resonance = gardener.get("resonance_level", 13)
-    history = gardener.get("growth_history", [])
-    life_areas = gardener.get("personal_info", {}).get("life_areas", {})
-
-    area_lines = ""
-    for area, icon in [("health","🌿"),("creativity","🔥"),("knowledge","📿"),("relationships","🤝")]:
-        d = life_areas.get(area, {})
-        area_lines += f"{icon} {area.capitalize()}: {d.get('current','?')}/10 → цель {d.get('target','?')}/10\n"
-
-    if history:
-        hist_text = "\n📿 <b>История роста:</b>\n"
-        for e in reversed(history[-5:]):
-            hist_text += f"• {e.get('date','?')}: {e.get('resonance','?')}% ({e.get('achievements_count',0)} достиж.)\n"
-    else:
-        hist_text = "\n<i>История пуста — добавь первое достижение!</i>"
-
-    filled = round(resonance / 10)
-    bar = "🟢" * filled + "⬜" * (10 - filled)
-
-    await message.answer(
-        f"🔮 <b>Резонанс</b>\n\n{bar}\n<b>{resonance}%</b>\n\n"
-        f"🌱 <b>Сферы жизни:</b>\n{area_lines}{hist_text}\n\n"
-        f"<i>Резонанс только растёт. Каждое достижение — новый слой.</i>",
-        reply_markup=get_main_keyboard()
-    )
+    overall = profile.get("resonance_level", 20)
+    sr = store_get_sphere_resonance(user_id)
+    text = _sphere_detail_text(sr, overall)
+    await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
 
 # ─── /ask ─────────────────────────────────────────────────────────────────────
 
@@ -3740,6 +3717,23 @@ def _sort_by_deadline(tasks: list) -> list:
         dl = t.get("deadline")
         return dl if dl else "9999-99-99"
     return sorted(tasks, key=key)
+
+def _sort_roadmap_tasks(task_ids: list, all_tasks: list) -> list:
+    """Sort roadmap tasks: urgent → by date → no deadline → completed last."""
+    task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
+    tasks = [task_by_id[tid] for tid in task_ids if tid in task_by_id]
+    from datetime import datetime as _dts
+    today = _dts.now().strftime("%Y-%m-%d")
+    def sort_key(t):
+        if t.get("status") == "completed":
+            return (3, "9999-99-99")
+        dl = t.get("deadline")
+        if not dl:
+            return (2, "9999-99-99")
+        if dl <= today:
+            return (0, dl)  # urgent/overdue first
+        return (1, dl)
+    return sorted(tasks, key=sort_key)
 
 def _format_tasks_mkb(tasks: list) -> str:
     """Format active tasks grouped by МКБ sphere (3 spheres only)."""
@@ -6309,20 +6303,23 @@ async def free_conversation(message: Message, state: FSMContext):
                             if not _show_list:
                                 reply_text = "🗺 Роадмапов пока нет. Скажи «создай роадмап [название]» чтобы начать."
                             else:
-                                _task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
                                 _lines = ["🗺 <b>Роадмапы:</b>"]
                                 for rm in _show_list:
-                                    pct = _calc_roadmap_progress(rm, all_tasks)
-                                    bar = _roadmap_progress_bar(pct)
-                                    dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-                                    _lines.append(f"\n🗺 <b>{rm['title']}</b>  {bar}{dl}")
-                                    for tid in rm.get("task_ids", []):
-                                        t = _task_by_id.get(tid)
-                                        if t:
-                                            if t.get("status") == "completed":
-                                                _lines.append(f"  ✅ {t['title']}")
-                                            else:
-                                                _lines.append(f"  · {t['title']}")
+                                    pct      = _calc_roadmap_progress(rm, all_tasks)
+                                    bar      = _roadmap_progress_bar(pct)
+                                    dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
+                                    task_ids = rm.get("task_ids", [])
+                                    total    = len(task_ids)
+                                    done_cnt = sum(1 for tid in task_ids
+                                                   if next((t for t in all_tasks if t.get("task_id")==tid),{}).get("status")=="completed")
+                                    _lines.append(f"\n🗺 <b>{rm['title']}</b>  {bar}  {done_cnt}/{total}  {pct}%{dl}")
+                                    for t in _sort_roadmap_tasks(task_ids, all_tasks):
+                                        if t.get("status") == "completed":
+                                            _lines.append(f"  ✅ {t['title']}")
+                                        else:
+                                            t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
+                                            ind  = _deadline_indicator(t.get("deadline", ""))
+                                            _lines.append(f"  {ind}· {t['title']}{t_dl}")
                                 reply_text = "\n".join(_lines)
 
                         elif intent == "create_roadmap":
