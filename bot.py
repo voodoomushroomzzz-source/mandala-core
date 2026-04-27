@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.26.0
+# Mandala Helper - Lite — SR Gentle Companion v7.27.0
 
 import re
 import os
@@ -567,6 +567,104 @@ def _add_growth_history_entry(gardener: dict, resonance: int) -> dict:
         history.append({"date": today, "resonance": resonance, "achievements_count": ach_count})
     gardener["growth_history"] = history[-90:]
     return gardener
+
+# ─── Deep Profile / Symbiosis (v7.27.0) ───────────────────────────────────────
+_reflection_sent: dict = {}  # uid → date — one reflection hint per session
+
+_DEEP_OBS_LIMIT = 30  # ~2 weeks of active use
+
+def _get_deep_profile(telegram_id: str) -> dict:
+    """Get deep_profile from gardener.json. Initialise if missing."""
+    profile = store_get_profile(telegram_id) or {}
+    dp = profile.get("deep_profile")
+    if not dp or not isinstance(dp, dict):
+        dp = {
+            "dominant_sphere": None,
+            "weak_sphere": None,
+            "streak_days": 0,
+            "streak_sphere": None,
+            "last_reflection_date": None,
+            "observations": []
+        }
+        profile["deep_profile"] = dp
+        store_set_profile(telegram_id, profile)
+    return dp
+
+def _save_deep_profile(telegram_id: str, dp: dict) -> None:
+    profile = store_get_profile(telegram_id) or {}
+    profile["deep_profile"] = dp
+    store_set_profile(telegram_id, profile)
+
+def _update_deep_profile(telegram_id: str) -> None:
+    """Called after complete_task. Analyses sphere patterns and adds observations."""
+    sr   = store_get_sphere_resonance(telegram_id)
+    dp   = _get_deep_profile(telegram_id)
+    today = _today()
+
+    # Find dominant and weak spheres
+    dominant = max(SPHERES, key=lambda s: sr.get(s, 20))
+    weak     = min(SPHERES, key=lambda s: sr.get(s, 20))
+    dp["dominant_sphere"] = dominant
+    dp["weak_sphere"]     = weak
+
+    # Update streak: how many consecutive days closing tasks in same sphere
+    prev_streak_sphere = dp.get("streak_sphere")
+    if prev_streak_sphere == dominant:
+        dp["streak_days"] = dp.get("streak_days", 0) + 1
+    else:
+        dp["streak_days"]    = 1
+        dp["streak_sphere"]  = dominant
+
+    # Add observation if pattern is notable
+    obs = dp.get("observations", [])
+    note = None
+    streak = dp.get("streak_days", 1)
+
+    dom_pct  = sr.get(dominant, 20)
+    weak_pct = sr.get(weak, 20)
+    dom_ru   = SPHERE_NAME_RU.get(dominant, dominant)
+    weak_ru  = SPHERE_NAME_RU.get(weak, weak)
+
+    if streak >= 3 and today != dp.get("last_reflection_date"):
+        note = (f"{today}: {streak} дней подряд активна сфера «{dom_ru}» ({dom_pct}%), "
+                f"«{weak_ru}» на {weak_pct}%")
+    elif weak_pct < 15 and today != dp.get("last_reflection_date"):
+        note = f"{today}: сфера «{weak_ru}» очень слабая ({weak_pct}%) — давно без внимания"
+
+    if note:
+        obs.append(note)
+        dp["observations"] = obs[-_DEEP_OBS_LIMIT:]  # keep last 30
+
+    dp["last_reflection_date"] = today
+    _save_deep_profile(telegram_id, dp)
+
+def _get_session_reflection_hint(telegram_id: str) -> str | None:
+    """Returns a one-line hint for SR if notable pattern exists. Max once per session."""
+    today = _today()
+    if _reflection_sent.get(telegram_id) == today:
+        return None  # already sent today
+    dp      = _get_deep_profile(telegram_id)
+    sr      = store_get_sphere_resonance(telegram_id)
+    streak  = dp.get("streak_days", 0)
+    dominant = dp.get("dominant_sphere")
+    weak     = dp.get("weak_sphere")
+    if not dominant or not weak:
+        return None
+    dom_pct  = sr.get(dominant, 20)
+    weak_pct = sr.get(weak, 20)
+    dom_ru   = SPHERE_NAME_RU.get(dominant, dominant)
+    weak_ru  = SPHERE_NAME_RU.get(weak, weak)
+    hint = None
+    if streak >= 3:
+        hint = (f"Садовник {streak} дней подряд активен в сфере «{dom_ru}» ({dom_pct}%). "
+                f"Сфера «{weak_ru}» на {weak_pct}%. "
+                f"Можно мягко упомянуть это один раз если уместно — не навязывать.")
+    elif weak_pct < 15:
+        hint = (f"Сфера «{weak_ru}» очень слабая ({weak_pct}%) — давно без движения. "
+                f"Можно мягко спросить про неё один раз если уместно — не навязывать.")
+    if hint:
+        _reflection_sent[telegram_id] = today
+    return hint
 
 def _apply_resonance_decay(gardener: dict) -> Tuple[dict, bool]:
     history = gardener.get("growth_history", [])
@@ -1773,6 +1871,7 @@ async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
         res_delta = 2 if (dl and dl >= today_s) else 1
         sphere = _classify_sphere(t_done.get("title",""), t_done.get("label_name",""))
         new_res = store_add_sphere_resonance(user_id, sphere, res_delta)
+        _update_deep_profile(user_id)
         _fire_sync()
     active = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
     res_str = f" · 🔮 +{res_delta}% → {new_res}%" if res_delta else ""
@@ -4553,6 +4652,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "резонанс", "мой уровень" → show_resonance, 0.95
 - "баланс сфер", "расскажи про баланс", "как мои сферы", "покажи резонанс подробно", "что с балансом" → show_resonance_detail, 0.95
 - ВАЖНО: SR видит [Резонанс по сферам] в контексте. Если есть слабые сферы — SR может мягко (1 раз за сессию) упомянуть это в разговоре. Не навязывать, Ахимса.
+- ВАЖНО: если в системном сообщении есть [SR reflection hint] — SR может один раз органично вплести это наблюдение в ответ. Не цитировать дословно, не повторять если садовник не реагирует. Один вопрос максимум. Ахимса.
 - "достижения" → show_achievements, 0.95
 - "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
   Извлекай из сообщения ВСЁ что найдёшь:
@@ -4693,6 +4793,13 @@ def _build_user_context_msg(telegram_id: str) -> str:
     weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
     imbalance = f" | слабые сферы: {', '.join(weak_spheres)}" if weak_spheres else ""
 
+    # Deep profile observations
+    dp = _get_deep_profile(telegram_id)
+    obs_list = dp.get("observations", [])
+    dp_block = ""
+    if obs_list:
+        dp_block = f"\n[Паттерны садовника:\n" + "\n".join(f"  - {o}" for o in obs_list[-10:]) + "\n]"
+
     return (
         f"[Профиль садовника:\n{profile_block}\n]\n"
         f"[Сейчас у садовника: {current_dt}]\n"
@@ -4700,6 +4807,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
         f"[Роадмапы:\n{roadmaps_block}\n]"
+        f"{dp_block}"
     )
 
 
@@ -5438,8 +5546,15 @@ async def free_conversation(message: Message, state: FSMContext):
 
     await message.bot.send_chat_action(message.chat.id, "typing")
 
+    # Deep profile reflection hint — once per session
+    _hint = _get_session_reflection_hint(user_id)
+    _hint_block = f"\n\n[SR reflection hint: {_hint}]" if _hint else ""
+
     messages = [
-        {"role": "system", "content": SR_SYSTEM_PROMPT + "\n\n" + ctx_msg},
+        {
+            "role": "system",
+            "content": SR_SYSTEM_PROMPT + "\n\n" + ctx_msg + _hint_block
+        },
         *history,
         {"role": "user", "content": text}
     ]
@@ -5782,6 +5897,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     sphere2 = _classify_sphere(tc.get("title",""), tc.get("label_name",""))
                                     store_add_sphere_resonance(user_id, sphere2, r2)
                                     total_res += r2
+                                _update_deep_profile(user_id)
                                 count_now = store_get_achievements_count(user_id)
                                 new_res2  = store_get_profile(user_id).get("resonance_level", 0)
                                 await _sync_pending()
