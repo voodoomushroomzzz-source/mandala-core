@@ -261,21 +261,6 @@
       "notes": ""
     },
     {
-      "task_id": "task_20260426_024",
-      "title": "оплатить налог",
-      "status": "todo",
-      "label_id": "дом",
-      "label_name": "Личное",
-      "life_area": "world",
-      "priority": 6,
-      "deadline": "2026-04-28",
-      "reminder": null,
-      "created": "2026-04-26",
-      "updated": "2026-04-26",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260426_025",
       "title": "Оплатить коммуналку",
       "status": "todo",
@@ -330,7 +315,7 @@
   ],
   "achievements": [],
   "updated": "2026-04-18",
-  "achievements_count": 16,
+  "achievements_count": 17,
   "checklists": [],
   "reminders": [],
   "_decay_date": "2026-04-27",
