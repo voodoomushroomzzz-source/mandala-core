@@ -319,6 +319,21 @@
       "updated": "2026-04-26",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260427_025",
+      "title": "Перепечатать меню на всех точках",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "spirit",
+      "priority": 6,
+      "deadline": "2026-04-29",
+      "reminder": null,
+      "created": "2026-04-27",
+      "updated": "2026-04-27",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
