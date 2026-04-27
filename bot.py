@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.5
+# Mandala Helper - Lite — SR Gentle Companion v7.27.6
 
 import re
 import os
@@ -4728,6 +4728,9 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "создай роадмап X" → create_roadmap, action.title="X", 0.9
 - "роадмап X: задача1, задача2, задача3" → create_roadmap, action.title="X", action.tasks=["задача1","задача2","задача3"], 0.95
 - "добавь задачу X в роадмап Y" → roadmap_add_task, action.roadmap="Y", action.title="X", 0.95
+- "создай задачу X в роадмап Y", "добавь в роадмап Y задачу X с дедлайном Z" → roadmap_add_task, action.roadmap="Y", action.title="X", action.deadline="Z", 0.95
+- "добавь сюда задачу X", "создай в нём задачу X" (роадмап ясен из контекста) → roadmap_add_task, action.roadmap="", action.title="X", action.deadline="Z если указан", 0.95
+- ВАЖНО: если садовник говорит «сюда», «в него», «в этот роадмап» — action.roadmap="" (пустое), SR определит роадмап по контексту
 - "убери задачу X из роадмапа Y" → roadmap_remove_task, action.roadmap="Y", action.title="X", 0.95
 - "удали роадмап X" → delete_roadmap, action.title="X", 0.95
 - "переименуй роадмап X в Y" → rename_roadmap, action.title="X", action.value="Y", 0.95
@@ -6564,36 +6567,86 @@ async def free_conversation(message: Message, state: FSMContext):
                             _act = parsed_check.get("action") or {}
                             _rm_name = (_act.get("roadmap") or "").strip()
                             _task_q  = (_act.get("title") or "").strip()
+                            _task_dl = (_act.get("deadline") or "").strip()
                             roadmaps = store_get_roadmaps(user_id)
-                            _found_rm = next(
-                                (r for r in roadmaps if _rm_name.lower() in r.get("title","").lower()),
-                                None
-                            )
+                            # If roadmap name empty — use the only active roadmap
+                            if not _rm_name and len(roadmaps) == 1:
+                                _found_rm = roadmaps[0]
+                            elif not _rm_name and len(roadmaps) > 1:
+                                reply_text = f"🌀 Уточни в какой роадмап: {', '.join(r['title'] for r in roadmaps)}"
+                                _found_rm = None
+                            else:
+                                _found_rm = next(
+                                    (r for r in roadmaps if _rm_name.lower() in r.get("title","").lower()),
+                                    None
+                                )
                             if _found_rm and _task_q:
                                 all_tasks = store_get_tasks(user_id)
                                 _matched = _fuzzy_match_tasks(_task_q, all_tasks)
-                                if _matched:
-                                    _tid = _matched[0].get("task_id","")
-                                    if _tid and _tid not in _found_rm.get("task_ids",[]):
-                                        _found_rm.setdefault("task_ids",[]).append(_tid)
-                                        # Auto-deadline: if task has no deadline and roadmap has one
-                                        if not _matched[0].get("deadline") and _found_rm.get("deadline"):
-                                            for _t in all_tasks:
-                                                if _t.get("task_id") == _tid:
-                                                    _t["deadline"] = _found_rm["deadline"]
-                                                    break
-                                            store_set_tasks(user_id, all_tasks)
-                                        store_set_roadmaps(user_id, roadmaps)
-                                        await _sync_pending()
-                                        _all_t = store_get_tasks(user_id)
-                                        reply_text = (f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»\n\n"
-                                                      + _roadmap_card_text(_found_rm, _all_t))
-                                    else:
-                                        reply_text = f"🌀 Задача уже в роадмапе."
+                                if _matched and _matched[0].get("task_id") not in _found_rm.get("task_ids", []):
+                                    # Link existing task
+                                    _tid = _matched[0].get("task_id", "")
+                                    _found_rm.setdefault("task_ids", []).append(_tid)
+                                    if not _matched[0].get("deadline") and _found_rm.get("deadline"):
+                                        for _t in all_tasks:
+                                            if _t.get("task_id") == _tid:
+                                                _t["deadline"] = _found_rm["deadline"]
+                                                break
+                                        store_set_tasks(user_id, all_tasks)
+                                    store_set_roadmaps(user_id, roadmaps)
+                                    await _sync_pending()
+                                    _all_t = store_get_tasks(user_id)
+                                    reply_text = (f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t))
+                                elif _matched and _matched[0].get("task_id") in _found_rm.get("task_ids", []):
+                                    reply_text = "🌀 Задача уже в роадмапе."
                                 else:
-                                    reply_text = f"🌀 Задача «{_task_q}» не найдена."
-                            else:
-                                reply_text = f"🌀 Не нашла роадмап «{_rm_name}»."
+                                    # Create new task and link to roadmap
+                                    import uuid as _uuid_ra
+                                    from datetime import datetime as _dtr_ra, timedelta as _tdr_ra
+                                    from zoneinfo import ZoneInfo as _ZI_ra
+                                    _tz_ra = _ZI_ra(store_get_profile(user_id).get(
+                                        "companion_settings", {}).get("timezone", "Europe/Moscow"))
+                                    _now_ra = _dtr_ra.now(_tz_ra)
+                                    # Parse deadline
+                                    _new_dl = None
+                                    if _task_dl:
+                                        import re as _re_ra
+                                        _dv = _task_dl.lower()
+                                        if _dv in ("сегодня", "today"):
+                                            _new_dl = _now_ra.strftime("%Y-%m-%d")
+                                        elif _dv in ("завтра", "tomorrow"):
+                                            _new_dl = (_now_ra + _tdr_ra(days=1)).strftime("%Y-%m-%d")
+                                        elif _re_ra.match(r"^\d{4}-\d{2}-\d{2}$", _task_dl):
+                                            _new_dl = _task_dl
+                                        elif _re_ra.match(r"^\d{1,2}\.\d{1,2}", _task_dl):
+                                            _p = _task_dl.split(".")
+                                            _yr = _p[2].strip() if len(_p) > 2 else str(_now_ra.year)
+                                            _yr = "20"+_yr if len(_yr)==2 else _yr
+                                            _new_dl = f"{_yr}-{_p[1].zfill(2)}-{_p[0].zfill(2)}"
+                                    # Fallback to roadmap deadline
+                                    if not _new_dl:
+                                        _new_dl = _found_rm.get("deadline")
+                                    new_t = {
+                                        "task_id":    f"t_{_uuid_ra.uuid4().hex[:8]}",
+                                        "title":      _task_q,
+                                        "status":     "active",
+                                        "created":    _today(),
+                                        "deadline":   _new_dl,
+                                        "label_name": None,
+                                        "reminder":   None,
+                                    }
+                                    all_tasks.append(new_t)
+                                    _found_rm.setdefault("task_ids", []).append(new_t["task_id"])
+                                    store_set_tasks(user_id, all_tasks)
+                                    store_set_roadmaps(user_id, roadmaps)
+                                    await _sync_pending()
+                                    _all_t = store_get_tasks(user_id)
+                                    reply_text = (f"✅ Задача «{_task_q}» создана и добавлена в роадмап «{_found_rm['title']}»\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t))
+                            elif not _found_rm and _rm_name:
+                                _rm_names = ", ".join(r["title"] for r in roadmaps) or "нет роадмапов"
+                                reply_text = f"🌀 Не нашла роадмап «{_rm_name}». Активные: {_rm_names}"
 
                         elif intent == "roadmap_remove_task":
                             _act = parsed_check.get("action") or {}
