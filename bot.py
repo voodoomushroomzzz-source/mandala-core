@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.4
+# Mandala Helper - Lite — SR Gentle Companion v7.27.5
 
 import re
 import os
@@ -325,6 +325,21 @@ def _calc_roadmap_progress(roadmap: dict, all_tasks: list) -> int:
         return 0
     done = sum(1 for t in relevant if t.get("status") == "completed")
     return round(done / len(relevant) * 100)
+
+def _roadmap_live_tasks(roadmap: dict, all_tasks: list) -> list:
+    """Return only existing tasks for a roadmap (filters orphaned task_ids)."""
+    existing = {t["task_id"]: t for t in all_tasks if t.get("task_id")}
+    return [existing[tid] for tid in roadmap.get("task_ids", []) if tid in existing]
+
+def _clean_roadmap_task_ids(roadmap: dict, all_tasks: list) -> bool:
+    """Remove dead task_ids from roadmap in-place. Returns True if changed."""
+    existing_ids = {t["task_id"] for t in all_tasks if t.get("task_id")}
+    before = roadmap.get("task_ids", [])
+    after  = [tid for tid in before if tid in existing_ids]
+    if len(after) != len(before):
+        roadmap["task_ids"] = after
+        return True
+    return False
 
 def _roadmap_progress_bar(pct: int) -> str:
     """Return visual progress bar string: ████░░░░ 75%"""
@@ -912,12 +927,12 @@ def _build_profile_card(user_id: str) -> str:
         for rm in roadmaps:
             if rm.get("status") != "active":
                 continue
-            pct      = _calc_roadmap_progress(rm, all_tasks)
-            task_ids = rm.get("task_ids", [])
-            total    = len(task_ids)
-            done_cnt = sum(1 for tid in task_ids
-                          if task_by_id.get(tid, {}).get("status") == "completed")
-            dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
+            live     = _roadmap_live_tasks(rm, all_tasks)
+            total    = len(live)
+            done_cnt = sum(1 for t in live if t.get("status") == "completed")
+            pct      = round(done_cnt / total * 100) if total else 0
+            bar      = _roadmap_progress_bar(pct)
+            dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
             lines.append(f"🗺 <b>{rm['title']}</b>  {done_cnt}/{total}  {pct}%{dl}")
         lines.append("")
 
@@ -2079,20 +2094,24 @@ async def cb_coming_soon(callback: CallbackQuery):
 # ─── Roadmap menu handlers ─────────────────────────────────────────────────────
 
 def _roadmap_card_text(rm: dict, all_tasks: list) -> str:
-    """Build roadmap detail text for menu — sorted: urgent → by date → no deadline → done last."""
-    pct      = _calc_roadmap_progress(rm, all_tasks)
-    bar      = _roadmap_progress_bar(pct)
-    dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-    task_ids = rm.get("task_ids", [])
-    total    = len(task_ids)
-    done_cnt = sum(1 for tid in task_ids
-                   if next((t for t in all_tasks if t.get("task_id") == tid), {}).get("status") == "completed")
+    """Build roadmap detail text — uses live tasks only, ignores orphaned IDs."""
+    live  = _roadmap_live_tasks(rm, all_tasks)
+    total = len(live)
+    done_cnt = sum(1 for t in live if t.get("status") == "completed")
+    pct   = round(done_cnt / total * 100) if total else 0
+    bar   = _roadmap_progress_bar(pct)
+    dl    = f" · до {rm['deadline']}" if rm.get("deadline") else ""
     lines = [
         f"🗺 <b>{rm['title']}</b>",
         f"{bar}  {done_cnt}/{total}  {pct}%{dl}",
         ""
     ]
-    for t in _sort_roadmap_tasks(task_ids, all_tasks):
+    for t in sorted(live, key=lambda t: (
+        3 if t.get("status") == "completed" else
+        2 if not t.get("deadline") else
+        (0 if t["deadline"] <= _today() else 1),
+        t.get("deadline") or "9999-99-99"
+    )):
         if t.get("status") == "completed":
             lines.append(f"  ✅ {t['title']}")
         else:
@@ -3231,8 +3250,12 @@ async def cmd_start(message: Message, state: FSMContext):
     user_profile = store_get_profile(user_id)
     if user_profile:
         name = user_profile.get("name", "Садовник")
-        # Sync resonance with actual achievements count on every /start
-        _recalc_resonance_from_achievements(user_id)
+        # Sync resonance_level as mean of sphere_resonance (v7.26+)
+        sr = store_get_sphere_resonance(user_id)
+        mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+        if abs(mean - int(user_profile.get("resonance_level", 5))) > 2:
+            user_profile["resonance_level"] = mean
+            store_set_profile(user_id, user_profile)
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
         return
 
@@ -6013,7 +6036,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
                                     store_set_tasks(user_id, new_tasks)
                                     await _sync_pending()
-                                    reply_text = f"🗑 Задача удалена: {t['title']}"
+                                    reply_text = f"🗑 Задача удалена: {t['title']}\n\n" + _build_profile_card(user_id)
                                 elif tasks:
                                     titles = ", ".join(t["title"] for t in tasks[:5])
                                     reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
@@ -6332,7 +6355,6 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "show_roadmaps":
                             roadmaps = store_get_roadmaps(user_id)
                             all_tasks = store_get_tasks(user_id)
-                            _task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
                             _rm_filter = ((parsed_check.get("action") or {}).get("title","") or "").lower()
                             _show_list = [r for r in roadmaps if not _rm_filter or _rm_filter in r.get("title","").lower()]
                             if not _show_list:
@@ -6340,15 +6362,19 @@ async def free_conversation(message: Message, state: FSMContext):
                             else:
                                 _lines = ["🗺 <b>Роадмапы:</b>"]
                                 for rm in _show_list:
-                                    pct      = _calc_roadmap_progress(rm, all_tasks)
+                                    live     = _roadmap_live_tasks(rm, all_tasks)
+                                    total    = len(live)
+                                    done_cnt = sum(1 for t in live if t.get("status") == "completed")
+                                    pct      = round(done_cnt / total * 100) if total else 0
                                     bar      = _roadmap_progress_bar(pct)
                                     dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-                                    task_ids = rm.get("task_ids", [])
-                                    total    = len(task_ids)
-                                    done_cnt = sum(1 for tid in task_ids
-                                                   if _task_by_id.get(tid, {}).get("status") == "completed")
                                     _lines.append(f"\n🗺 <b>{rm['title']}</b>  {bar}  {done_cnt}/{total}  {pct}%{dl}")
-                                    for t in _sort_roadmap_tasks(task_ids, all_tasks):
+                                    for t in sorted(live, key=lambda t: (
+                                        3 if t.get("status") == "completed" else
+                                        2 if not t.get("deadline") else
+                                        (0 if t["deadline"] <= _today() else 1),
+                                        t.get("deadline") or "9999-99-99"
+                                    )):
                                         if t.get("status") == "completed":
                                             _lines.append(f"  ✅ {t['title']}")
                                         else:
@@ -6451,8 +6477,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                     roadmaps.append(new_rm)
                                     store_set_roadmaps(user_id, roadmaps)
                                     await _sync_pending()
+                                    _all_t5 = store_get_tasks(user_id)
                                     _task_info = f" · {len(new_rm['task_ids'])} задач добавлено" if new_rm["task_ids"] else ""
-                                    reply_text = f"🗺 Роадмап «{_rm_title}» создан{_task_info}"
+                                    reply_text = f"🗺 Роадмап «{_rm_title}» создан{_task_info}\n\n" + _roadmap_card_text(new_rm, _all_t5)
 
                         elif intent == "delete_roadmap":
                             _target_rm = ((parsed_check.get("action") or {}).get("title","") or "").strip()
@@ -6492,7 +6519,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                 _found_rm["title"] = _new_name
                                 store_set_roadmaps(user_id, roadmaps)
                                 await _sync_pending()
-                                reply_text = f"✅ Роадмап переименован: «{_old_name}» → «{_new_name}»"
+                                _all_t3 = store_get_tasks(user_id)
+                                reply_text = (f"✅ Роадмап переименован: «{_old_name}» → «{_new_name}»\n\n"
+                                              + _roadmap_card_text(_found_rm, _all_t3))
                             else:
                                 reply_text = f"🌀 Не нашла роадмап «{_old_name}»."
 
@@ -6523,7 +6552,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _found_rm["deadline"] = _dl_iso
                                     store_set_roadmaps(user_id, roadmaps)
                                     await _sync_pending()
-                                    reply_text = f"📅 Дедлайн роадмапа «{_found_rm['title']}» → {_dl_iso}"
+                                    _all_t4 = store_get_tasks(user_id)
+                                    reply_text = (f"📅 Дедлайн роадмапа «{_found_rm['title']}» → {_dl_iso}\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t4))
                                 else:
                                     reply_text = f"🌀 Не понял дату «{_dl_val}». Напиши: 01.06 или 2026-06-01"
                             else:
@@ -6554,7 +6585,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                             store_set_tasks(user_id, all_tasks)
                                         store_set_roadmaps(user_id, roadmaps)
                                         await _sync_pending()
-                                        reply_text = f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»"
+                                        _all_t = store_get_tasks(user_id)
+                                        reply_text = (f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»\n\n"
+                                                      + _roadmap_card_text(_found_rm, _all_t))
                                     else:
                                         reply_text = f"🌀 Задача уже в роадмапе."
                                 else:
@@ -6580,7 +6613,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _found_rm["task_ids"] = [tid for tid in _found_rm.get("task_ids",[]) if tid != _tid]
                                     store_set_roadmaps(user_id, roadmaps)
                                     await _sync_pending()
-                                    reply_text = f"✅ Задача «{_matched[0]['title']}» убрана из роадмапа «{_found_rm['title']}»"
+                                    _all_t2 = store_get_tasks(user_id)
+                                    reply_text = (f"✅ Задача «{_matched[0]['title']}» убрана из роадмапа «{_found_rm['title']}»\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t2))
                                 else:
                                     reply_text = f"🌀 Задача «{_task_q}» не найдена в роадмапе."
                             else:
