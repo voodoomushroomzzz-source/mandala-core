@@ -1,0 +1,59 @@
+{
+  "task_id": "T-20260427-SYMBGUARD",
+  "name": "Symbiosis Guard — Core Cleanliness & Deadline Sentinel",
+  "status": "in_progress",
+  "priority": "MEDIUM",
+  "deadline": "2026-05-15",
+  "created": "2026-04-27",
+  "updated": "2026-04-27",
+  "description": "Merged task from ahimsa_filter, deadline_sentinel, and task_scanner. Part of RM-013 (Symbiosis Guard). Automated system for honeycomb health checks, deadline monitoring, and file quality validation.",
+  "roadmap_ref": "RM-013",
+  "progress": 30,
+  "notes": "Task scanner was at 90% before merge. Ahimsa filter at 0%. Deadline sentinel planned.",
+  "tags": ["symbiosis_guard", "ahimsa", "cleanup", "deadline", "scanner", "automation", "quality", "RM-013"],
+  "mandala_principles": [
+    "Ahimsa — maximum token and resource economy",
+    "Symbiosis — harmonious human-agent interaction",
+    "Self-Organization — autonomy under Gardener's resonance"
+  ],
+  "merged_from": {
+    "task_scanner": {
+      "task_id": "T-20260412-TS",
+      "status": "done (90%)",
+      "description": "Task scanner validates: task_id uniqueness, JSON validity, required fields (task_id, name, status, priority), non-standard statuses, expired deadlines"
+    },
+    "ahimsa_filter": {
+      "task_id": "T-20260410-0230",
+      "status": "todo",
+      "description": "Ahimsa filter detects noise in honeycombs: duplicates, stale files (>30 days), empty files (<500 bytes), broken links, redundant fields, missing layer, zero resonance, old backups (>14 days)",
+      "plan": "Phase 1: Core Analyzer. Phase 2: Scanner Integration. Phase 3: Interactive Cleanup. Phase 4: CI/CD Integration"
+    },
+    "deadline_sentinel": {
+      "task_id": "T-20260412-DS",
+      "status": "planned",
+      "description": "Deadline monitoring: auto-warnings 2-3 days before deadline, daily morning report. GitHub Issues API, APScheduler. Extension to roadmaps, Honeycomb Scanner API, Git Hooks, GitHub Actions, bot integration.",
+      "phases": ["Core Engine", "Storage Layer", "Scheduler Integration", "Extensible Architecture", "Bot Integration", "CI/CD"]
+    }
+  },
+  "deliverables": [
+    "ahimsik_filter.py — core cleanliness scanner",
+    "task_scanner.py — task file validator",
+    "deadline_sentinel.py — deadline monitor and reporter",
+    "symbiosis_guard.py — unified entry point (optional)",
+    "Integration with honeycomb_scanner.py via --ahimsa flag",
+    "GitHub Actions workflow for automated checks",
+    "Daily report output to honeycombs/analytics/guard_report.json"
+  ],
+  "acceptance_criteria": [
+    "All 3 modules (filter, scanner, sentinel) functional",
+    "Scanner integration complete (--ahimsa flag)",
+    "Daily report generated without errors",
+    "CI/CD pipeline active on push to main",
+    "Zero false positives on critical categories"
+  ],
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-27",
+    "notes": "Merged from 3 tasks. Task scanner code ready. Filter and sentinel to implement."
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.25.8
+# Mandala Helper - Lite — SR Gentle Companion v7.27.8
 
 import re
 import os
@@ -63,8 +63,8 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ─── Business limits ──────────────────────────────────────────────────────────
-TASK_LIMIT_HARD  = 30
-TASK_LIMIT_SOFT  = 24
+TASK_LIMIT_HARD  = 50
+TASK_LIMIT_SOFT  = 40
 LABEL_LIMIT_HARD = 7
 LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
@@ -183,6 +183,88 @@ def store_add_resonance(telegram_id: str, delta: int) -> int:
         _pending_writes[f"{_user_path(telegram_id)}/gardener.json"] = profile
     return new_val
 
+# ─── 5-Sphere Resonance (v7.26.0) ─────────────────────────────────────────────
+SPHERES = ("health", "creativity", "work", "connections", "growth")
+SPHERE_EMOJI = {
+    "health":      "🌿",
+    "creativity":  "🔥",
+    "work":        "💼",
+    "connections": "🤝",
+    "growth":      "🌱",
+}
+SPHERE_NAME_RU = {
+    "health":      "Тело",
+    "creativity":  "Творчество",
+    "work":        "Дело",
+    "connections": "Связи",
+    "growth":      "Рост",
+}
+
+def store_get_sphere_resonance(telegram_id: str) -> dict:
+    """Get sphere_resonance dict. Initialises missing spheres to 20."""
+    ws = store_get_workspace(telegram_id) or {}
+    sr = dict(ws.get("sphere_resonance", {}))
+    changed = False
+    for s in SPHERES:
+        if s not in sr:
+            sr[s] = 20
+            changed = True
+    if changed:
+        ws["sphere_resonance"] = sr
+        store_set_workspace(telegram_id, ws)
+    return sr
+
+def store_set_sphere_resonance(telegram_id: str, sr: dict) -> None:
+    ws = store_get_workspace(telegram_id) or {}
+    ws["sphere_resonance"] = sr
+    store_set_workspace(telegram_id, ws)
+
+def store_add_sphere_resonance(telegram_id: str, sphere: str, delta: int) -> int:
+    """Add delta to sphere. Clamp 5-100. Recalc overall resonance_level as mean of 5. Returns new overall."""
+    if sphere not in SPHERES:
+        sphere = "work"
+    sr = store_get_sphere_resonance(telegram_id)
+    sr[sphere] = max(5, min(100, sr[sphere] + delta))
+    store_set_sphere_resonance(telegram_id, sr)
+    mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+    profile = store_get_profile(telegram_id) or {}
+    profile["resonance_level"] = mean
+    store_set_profile(telegram_id, profile)
+    return mean
+
+def _sphere_compact_line(sr: dict) -> str:
+    """One-line compact for profile card: 🌿 22%  🔥 45%  💼 38%  🤝 20%  🌱 15%"""
+    return "  ".join(f"{SPHERE_EMOJI[s]} {sr.get(s, 20)}%" for s in SPHERES)
+
+def _reminder_list_text(reminders: list) -> str:
+    """Build reminder list text for auto-show after create/delete."""
+    if not reminders:
+        return "🔔 Напоминаний нет."
+    lines = [f"🔔 <b>Напоминания ({len(reminders)}):</b>"]
+    for r in reminders:
+        dt  = r.get("datetime_iso","")[:16].replace("T"," ")
+        rep = {"once":"1×","daily":"ежедн.","weekdays":"пн-пт"}.get(r.get("repeat","once"),"1×")
+        lines.append(f"  🔔 {r['title']} · {dt} ({rep})")
+    return "\n".join(lines)
+
+def _sphere_progress_bar(pct: int) -> str:
+    filled = round(pct / 10)
+    return "█" * filled + "░" * (10 - filled)
+
+def _sphere_detail_text(sr: dict, overall: int) -> str:
+    """Multi-line detail dashboard for show_resonance_detail."""
+    lines = [f"🔮 <b>Резонанс: {overall}%</b>\n"]
+    for s in SPHERES:
+        pct  = sr.get(s, 20)
+        bar  = _sphere_progress_bar(pct)
+        name = SPHERE_NAME_RU[s]
+        emoji = SPHERE_EMOJI[s]
+        lines.append(f"{emoji} {name:<14} {pct}%  {bar}")
+    weak = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
+    if weak:
+        lines.append(f"\n💡 {' и '.join(weak)} {'требует' if len(weak)==1 else 'требуют'} внимания")
+    return "\n".join(lines)
+
 def _days_since_last_interaction(telegram_id: str) -> int:
     """Days since last user message. 0=today, 999=never."""
     last = _last_interaction.get(str(telegram_id))
@@ -254,6 +336,21 @@ def _calc_roadmap_progress(roadmap: dict, all_tasks: list) -> int:
         return 0
     done = sum(1 for t in relevant if t.get("status") == "completed")
     return round(done / len(relevant) * 100)
+
+def _roadmap_live_tasks(roadmap: dict, all_tasks: list) -> list:
+    """Return only existing tasks for a roadmap (filters orphaned task_ids)."""
+    existing = {t["task_id"]: t for t in all_tasks if t.get("task_id")}
+    return [existing[tid] for tid in roadmap.get("task_ids", []) if tid in existing]
+
+def _clean_roadmap_task_ids(roadmap: dict, all_tasks: list) -> bool:
+    """Remove dead task_ids from roadmap in-place. Returns True if changed."""
+    existing_ids = {t["task_id"] for t in all_tasks if t.get("task_id")}
+    before = roadmap.get("task_ids", [])
+    after  = [tid for tid in before if tid in existing_ids]
+    if len(after) != len(before):
+        roadmap["task_ids"] = after
+        return True
+    return False
 
 def _roadmap_progress_bar(pct: int) -> str:
     """Return visual progress bar string: ████░░░░ 75%"""
@@ -497,6 +594,104 @@ def _add_growth_history_entry(gardener: dict, resonance: int) -> dict:
     gardener["growth_history"] = history[-90:]
     return gardener
 
+# ─── Deep Profile / Symbiosis (v7.27.0) ───────────────────────────────────────
+_reflection_sent: dict = {}  # uid → date — one reflection hint per session
+
+_DEEP_OBS_LIMIT = 30  # ~2 weeks of active use
+
+def _get_deep_profile(telegram_id: str) -> dict:
+    """Get deep_profile from gardener.json. Initialise if missing."""
+    profile = store_get_profile(telegram_id) or {}
+    dp = profile.get("deep_profile")
+    if not dp or not isinstance(dp, dict):
+        dp = {
+            "dominant_sphere": None,
+            "weak_sphere": None,
+            "streak_days": 0,
+            "streak_sphere": None,
+            "last_reflection_date": None,
+            "observations": []
+        }
+        profile["deep_profile"] = dp
+        store_set_profile(telegram_id, profile)
+    return dp
+
+def _save_deep_profile(telegram_id: str, dp: dict) -> None:
+    profile = store_get_profile(telegram_id) or {}
+    profile["deep_profile"] = dp
+    store_set_profile(telegram_id, profile)
+
+def _update_deep_profile(telegram_id: str) -> None:
+    """Called after complete_task. Analyses sphere patterns and adds observations."""
+    sr   = store_get_sphere_resonance(telegram_id)
+    dp   = _get_deep_profile(telegram_id)
+    today = _today()
+
+    # Find dominant and weak spheres
+    dominant = max(SPHERES, key=lambda s: sr.get(s, 20))
+    weak     = min(SPHERES, key=lambda s: sr.get(s, 20))
+    dp["dominant_sphere"] = dominant
+    dp["weak_sphere"]     = weak
+
+    # Update streak: how many consecutive days closing tasks in same sphere
+    prev_streak_sphere = dp.get("streak_sphere")
+    if prev_streak_sphere == dominant:
+        dp["streak_days"] = dp.get("streak_days", 0) + 1
+    else:
+        dp["streak_days"]    = 1
+        dp["streak_sphere"]  = dominant
+
+    # Add observation if pattern is notable
+    obs = dp.get("observations", [])
+    note = None
+    streak = dp.get("streak_days", 1)
+
+    dom_pct  = sr.get(dominant, 20)
+    weak_pct = sr.get(weak, 20)
+    dom_ru   = SPHERE_NAME_RU.get(dominant, dominant)
+    weak_ru  = SPHERE_NAME_RU.get(weak, weak)
+
+    if streak >= 3 and today != dp.get("last_reflection_date"):
+        note = (f"{today}: {streak} дней подряд активна сфера «{dom_ru}» ({dom_pct}%), "
+                f"«{weak_ru}» на {weak_pct}%")
+    elif weak_pct < 15 and today != dp.get("last_reflection_date"):
+        note = f"{today}: сфера «{weak_ru}» очень слабая ({weak_pct}%) — давно без внимания"
+
+    if note:
+        obs.append(note)
+        dp["observations"] = obs[-_DEEP_OBS_LIMIT:]  # keep last 30
+
+    dp["last_reflection_date"] = today
+    _save_deep_profile(telegram_id, dp)
+
+def _get_session_reflection_hint(telegram_id: str) -> str | None:
+    """Returns a one-line hint for SR if notable pattern exists. Max once per session."""
+    today = _today()
+    if _reflection_sent.get(telegram_id) == today:
+        return None  # already sent today
+    dp      = _get_deep_profile(telegram_id)
+    sr      = store_get_sphere_resonance(telegram_id)
+    streak  = dp.get("streak_days", 0)
+    dominant = dp.get("dominant_sphere")
+    weak     = dp.get("weak_sphere")
+    if not dominant or not weak:
+        return None
+    dom_pct  = sr.get(dominant, 20)
+    weak_pct = sr.get(weak, 20)
+    dom_ru   = SPHERE_NAME_RU.get(dominant, dominant)
+    weak_ru  = SPHERE_NAME_RU.get(weak, weak)
+    hint = None
+    if streak >= 3:
+        hint = (f"Садовник {streak} дней подряд активен в сфере «{dom_ru}» ({dom_pct}%). "
+                f"Сфера «{weak_ru}» на {weak_pct}%. "
+                f"Можно мягко упомянуть это один раз если уместно — не навязывать.")
+    elif weak_pct < 15:
+        hint = (f"Сфера «{weak_ru}» очень слабая ({weak_pct}%) — давно без движения. "
+                f"Можно мягко спросить про неё один раз если уместно — не навязывать.")
+    if hint:
+        _reflection_sent[telegram_id] = today
+    return hint
+
 def _apply_resonance_decay(gardener: dict) -> Tuple[dict, bool]:
     history = gardener.get("growth_history", [])
     if not history:
@@ -726,6 +921,7 @@ def _build_profile_card(user_id: str) -> str:
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
+        _sphere_compact_line(store_get_sphere_resonance(user_id)),
         "",
     ]
 
@@ -737,25 +933,18 @@ def _build_profile_card(user_id: str) -> str:
         for tid in rm.get("task_ids", []):
             roadmap_task_ids.add(tid)
 
-    # Roadmaps block — tasks shown under roadmap (including completed)
+    # Roadmaps block — compact one-liner per roadmap, tasks hidden
     if roadmaps:
         for rm in roadmaps:
             if rm.get("status") != "active":
                 continue
-            pct = _calc_roadmap_progress(rm, all_tasks)
-            bar = _roadmap_progress_bar(pct)
-            dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-            lines.append(f"🗺 <b>{rm['title']}</b>  {bar}{dl}")
-            for tid in rm.get("task_ids", []):
-                t = task_by_id.get(tid)
-                if not t:
-                    continue
-                if t.get("status") == "completed":
-                    lines.append(f"  ✅ {t['title']}")
-                else:
-                    t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                    ind  = _deadline_indicator(t.get("deadline", ""))
-                    lines.append(f"  · {ind}{t['title']}{t_dl}")
+            live     = _roadmap_live_tasks(rm, all_tasks)
+            total    = len(live)
+            done_cnt = sum(1 for t in live if t.get("status") == "completed")
+            pct      = round(done_cnt / total * 100) if total else 0
+            bar      = _roadmap_progress_bar(pct)
+            dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
+            lines.append(f"🗺 <b>{rm['title']}</b>  {done_cnt}/{total}  {pct}%{dl}")
         lines.append("")
 
     # Active tasks NOT in any roadmap
@@ -1136,32 +1325,51 @@ def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
     btns.append([InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
-def _auto_merkaba(title: str, label_name: str = "") -> str:
-    """Auto-classify task into one of 3 MKB spheres. Defaults to world if unclear."""
+def _classify_sphere(title: str, label_name: str = "") -> str:
+    """Classify task into one of 5 spheres. Returns sphere key."""
     text = (title + " " + label_name).lower()
-    body_kw = [
+    health_kw = [
         "здоровье","спорт","сон","питание","бег","врач","зал","тренировка","трениров",
         "физ","еда","отдых","фитнес","вес","диет","медицин","лечени","давлени",
         "витамин","таблетк","аптека","массаж","плавани","велосипед","пробежк",
-        "гимнастик","растяжк","медитац","йога","сауна","баня"
+        "гимнастик","растяжк","медитац","йога","сауна","баня","линзы","очки",
+        "операц","анализ","обследован","процедур"
     ]
-    spirit_kw = [
-        "работа","учёба","курс","читать","написать","код","проект","творч","идея",
-        "задач","разраб","бот","книг","учить","изучить","план","цел","карьер",
-        "бизнес","стратег","анализ","отчёт","презентац","навык","развит","обучен",
-        "программ","дизайн","музык","писать","создат","запуск","деньг","финанс",
-        "инвест","бюджет","доход","расход","зарабат","монетиз"
+    creativity_kw = [
+        "музык","трек","альбом","запис","сведен","мастеринг","обложк","клип","видео",
+        "рисовать","рисунок","арт","дизайн","творч","хобби","фото","съемк","монтаж",
+        "стих","поэзи","проза","роман","пьес","сценар","игра","игр","танц","песн",
+        "инструмент","гитар","пианин","барабан","студи","репетиц","концерт","выставк"
     ]
-    world_kw = [
-        "друг","встреч","семья","звонить","поездка","путешеств","кафе","знаком",
-        "люди","событи","отношени","вечеринк","праздник","подарок","родител",
-        "ребёнок","дети","партнёр","свидани","общени","компани","коллег","клиент",
-        "нетворк","волонтёр","помоч","поддержк","совместн"
+    work_kw = [
+        "работа","проект","задач","код","программ","бот","разраб","запуск","бизнес",
+        "клиент","встреч","переговор","контракт","договор","счёт","оплатить","зп",
+        "зарплат","деньг","финанс","бюджет","доход","расход","инвест","налог",
+        "отчёт","презентац","совещани","дедлайн","офис","удалёнк","фриланс",
+        "монетиз","продаж","маркетинг","реклам","сайт","магазин","заказ"
     ]
-    if any(k in text for k in body_kw):   return "health"
-    if any(k in text for k in spirit_kw): return "spirit"
-    if any(k in text for k in world_kw):  return "world"
-    return "world"  # default: мир (was "other")
+    connections_kw = [
+        "друг","семья","родител","мама","папа","брат","сестра","партнёр","любим",
+        "свидани","встреч с","позвонить","написать","поздравить","подарок","праздник",
+        "вечеринк","мероприяти","коллег","нетворк","знаком","общени","волонтёр",
+        "помоч","поддержк","ребёнок","дети","отношени","совместн","поездк с"
+    ]
+    growth_kw = [
+        "учить","изучить","курс","книг","читать","обучен","навык","развит","рост",
+        "саморазвит","личностн","духовн","практик","осознанн","рефлекси","дневник",
+        "план жизн","цел","смысл","ценност","философи","психолог","терапи","коучинг",
+        "язык","английск","иностранн","онлайн-курс","сертификат","диплом"
+    ]
+    if any(k in text for k in health_kw):      return "health"
+    if any(k in text for k in creativity_kw):  return "creativity"
+    if any(k in text for k in growth_kw):      return "growth"
+    if any(k in text for k in connections_kw): return "connections"
+    if any(k in text for k in work_kw):        return "work"
+    return "work"  # default
+
+# Keep old name as alias for backward compat
+def _auto_merkaba(title: str, label_name: str = "") -> str:
+    return _classify_sphere(title, label_name)
 
 
 def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
@@ -1673,14 +1881,26 @@ async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
     matched = [t for t in tasks if t.get("task_id") == tid]
     if matched:
         t_done = matched[0]
-        new_tasks = [t for t in tasks if t.get("task_id") != tid]
-        store_set_tasks(user_id, new_tasks)
+        # If task belongs to a roadmap — mark completed, don't delete
+        roadmaps = store_get_roadmaps(user_id)
+        _roadmap_task_ids = {tid2 for rm in roadmaps for tid2 in rm.get("task_ids", [])}
+        if t_done.get("task_id") in _roadmap_task_ids:
+            for t in tasks:
+                if t.get("task_id") == t_done["task_id"]:
+                    t["status"] = "completed"
+                    break
+            store_set_tasks(user_id, tasks)
+        else:
+            new_tasks = [t for t in tasks if t.get("task_id") != tid]
+            store_set_tasks(user_id, new_tasks)
         count = store_increment_achievements(user_id)
         from datetime import datetime as _dtr
         today_s = _dtr.now().strftime("%Y-%m-%d")
         dl = t_done.get("deadline")
         res_delta = 2 if (dl and dl >= today_s) else 1
-        new_res = store_add_resonance(user_id, res_delta)
+        sphere = _classify_sphere(t_done.get("title",""), t_done.get("label_name",""))
+        new_res = store_add_sphere_resonance(user_id, sphere, res_delta)
+        _update_deep_profile(user_id)
         _fire_sync()
     active = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
     res_str = f" · 🔮 +{res_delta}% → {new_res}%" if res_delta else ""
@@ -1885,20 +2105,30 @@ async def cb_coming_soon(callback: CallbackQuery):
 # ─── Roadmap menu handlers ─────────────────────────────────────────────────────
 
 def _roadmap_card_text(rm: dict, all_tasks: list) -> str:
-    """Build roadmap detail text for menu display."""
-    pct = _calc_roadmap_progress(rm, all_tasks)
-    bar = _roadmap_progress_bar(pct)
-    dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-    lines = [f"🗺 <b>{rm['title']}</b>", f"{bar}{dl}", ""]
-    task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
-    for tid in rm.get("task_ids", []):
-        t = task_by_id.get(tid)
-        if t:
-            if t.get("status") == "completed":
-                lines.append(f"  ✅ {t['title']}")
-            else:
-                t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                lines.append(f"  · {t['title']}{t_dl}")
+    """Build roadmap detail text — uses live tasks only, ignores orphaned IDs."""
+    live  = _roadmap_live_tasks(rm, all_tasks)
+    total = len(live)
+    done_cnt = sum(1 for t in live if t.get("status") == "completed")
+    pct   = round(done_cnt / total * 100) if total else 0
+    bar   = _roadmap_progress_bar(pct)
+    dl    = f" · до {rm['deadline']}" if rm.get("deadline") else ""
+    lines = [
+        f"🗺 <b>{rm['title']}</b>",
+        f"{bar}  {done_cnt}/{total}  {pct}%{dl}",
+        ""
+    ]
+    for t in sorted(live, key=lambda t: (
+        3 if t.get("status") == "completed" else
+        2 if not t.get("deadline") else
+        (0 if t["deadline"] <= _today() else 1),
+        t.get("deadline") or "9999-99-99"
+    )):
+        if t.get("status") == "completed":
+            lines.append(f"  ✅ {t['title']}")
+        else:
+            t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
+            ind  = _deadline_indicator(t.get("deadline", ""))
+            lines.append(f"  {ind}· {t['title']}{t_dl}")
     return "\n".join(lines)
 
 @router.callback_query(F.data == "menu_roadmaps")
@@ -2485,7 +2715,7 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     # Check 100% completion
     if items and all(it.get("done") for it in items):
         count  = store_increment_achievements(user_id)
-        cl_res = store_add_resonance(user_id, 2)
+        cl_res = store_add_sphere_resonance(user_id, "growth", 2)
         _fire_sync()
         try:
             await callback.message.edit_text(
@@ -2938,7 +3168,14 @@ async def run_resonance_decay() -> None:
                        and t.get("status") != "completed"]
             decay += len(overdue)
             if decay > 0:
-                store_add_resonance(uid, -decay)
+                sr = store_get_sphere_resonance(uid)
+                for s in SPHERES:
+                    sr[s] = max(5, sr[s] - decay)
+                store_set_sphere_resonance(uid, sr)
+                mean = max(5, round(sum(sr[s] for s in SPHERES) / len(SPHERES)))
+                profile2 = store_get_profile(uid) or {}
+                profile2["resonance_level"] = mean
+                store_set_profile(uid, profile2)
             ws["_decay_date"] = today_s
             store_set_workspace(uid, ws)
             _fire_sync()
@@ -3024,8 +3261,12 @@ async def cmd_start(message: Message, state: FSMContext):
     user_profile = store_get_profile(user_id)
     if user_profile:
         name = user_profile.get("name", "Садовник")
-        # Sync resonance with actual achievements count on every /start
-        _recalc_resonance_from_achievements(user_id)
+        # Sync resonance_level as mean of sphere_resonance (v7.26+)
+        sr = store_get_sphere_resonance(user_id)
+        mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+        if abs(mean - int(user_profile.get("resonance_level", 5))) > 2:
+            user_profile["resonance_level"] = mean
+            store_set_profile(user_id, user_profile)
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
         return
 
@@ -3225,36 +3466,14 @@ async def cmd_resonance(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    gardener = store_get_profile(user_id)
-    if not gardener:
+    profile = store_get_profile(user_id)
+    if not profile:
         await message.answer("🌿 Профиль не найден", reply_markup=get_main_keyboard())
         return
-
-    resonance = gardener.get("resonance_level", 13)
-    history = gardener.get("growth_history", [])
-    life_areas = gardener.get("personal_info", {}).get("life_areas", {})
-
-    area_lines = ""
-    for area, icon in [("health","🌿"),("creativity","🔥"),("knowledge","📿"),("relationships","🤝")]:
-        d = life_areas.get(area, {})
-        area_lines += f"{icon} {area.capitalize()}: {d.get('current','?')}/10 → цель {d.get('target','?')}/10\n"
-
-    if history:
-        hist_text = "\n📿 <b>История роста:</b>\n"
-        for e in reversed(history[-5:]):
-            hist_text += f"• {e.get('date','?')}: {e.get('resonance','?')}% ({e.get('achievements_count',0)} достиж.)\n"
-    else:
-        hist_text = "\n<i>История пуста — добавь первое достижение!</i>"
-
-    filled = round(resonance / 10)
-    bar = "🟢" * filled + "⬜" * (10 - filled)
-
-    await message.answer(
-        f"🔮 <b>Резонанс</b>\n\n{bar}\n<b>{resonance}%</b>\n\n"
-        f"🌱 <b>Сферы жизни:</b>\n{area_lines}{hist_text}\n\n"
-        f"<i>Резонанс только растёт. Каждое достижение — новый слой.</i>",
-        reply_markup=get_main_keyboard()
-    )
+    overall = profile.get("resonance_level", 20)
+    sr = store_get_sphere_resonance(user_id)
+    text = _sphere_detail_text(sr, overall)
+    await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
 
 # ─── /ask ─────────────────────────────────────────────────────────────────────
 
@@ -3542,6 +3761,23 @@ def _sort_by_deadline(tasks: list) -> list:
         dl = t.get("deadline")
         return dl if dl else "9999-99-99"
     return sorted(tasks, key=key)
+
+def _sort_roadmap_tasks(task_ids: list, all_tasks: list) -> list:
+    """Sort roadmap tasks: urgent → by date → no deadline → completed last."""
+    task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
+    tasks = [task_by_id[tid] for tid in task_ids if tid in task_by_id]
+    from datetime import datetime as _dts
+    today = _dts.now().strftime("%Y-%m-%d")
+    def sort_key(t):
+        if t.get("status") == "completed":
+            return (3, "9999-99-99")
+        dl = t.get("deadline")
+        if not dl:
+            return (2, "9999-99-99")
+        if dl <= today:
+            return (0, dl)  # urgent/overdue first
+        return (1, dl)
+    return sorted(tasks, key=sort_key)
 
 def _format_tasks_mkb(tasks: list) -> str:
     """Format active tasks grouped by МКБ sphere (3 spheres only)."""
@@ -4432,7 +4668,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|..."} или null
@@ -4452,6 +4688,9 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: если Садовник спрашивает о задачах — всегда show_tasks с нужным параметром, не отвечай текстом из контекста
 - "мой профиль" → show_profile, 0.95
 - "резонанс", "мой уровень" → show_resonance, 0.95
+- "баланс сфер", "расскажи про баланс", "как мои сферы", "покажи резонанс подробно", "что с балансом" → show_resonance_detail, 0.95
+- ВАЖНО: SR видит [Резонанс по сферам] в контексте. Если есть слабые сферы — SR может мягко (1 раз за сессию) упомянуть это в разговоре. Не навязывать, Ахимса.
+- ВАЖНО: если в системном сообщении есть [SR reflection hint] — SR может один раз органично вплести это наблюдение в ответ. Не цитировать дословно, не повторять если садовник не реагирует. Один вопрос максимум. Ахимса.
 - "достижения" → show_achievements, 0.95
 - "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
   Извлекай из сообщения ВСЁ что найдёшь:
@@ -4500,6 +4739,9 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "создай роадмап X" → create_roadmap, action.title="X", 0.9
 - "роадмап X: задача1, задача2, задача3" → create_roadmap, action.title="X", action.tasks=["задача1","задача2","задача3"], 0.95
 - "добавь задачу X в роадмап Y" → roadmap_add_task, action.roadmap="Y", action.title="X", 0.95
+- "создай задачу X в роадмап Y", "добавь в роадмап Y задачу X с дедлайном Z" → roadmap_add_task, action.roadmap="Y", action.title="X", action.deadline="Z", 0.95
+- "добавь сюда задачу X", "создай в нём задачу X" (роадмап ясен из контекста) → roadmap_add_task, action.roadmap="", action.title="X", action.deadline="Z если указан", 0.95
+- ВАЖНО: если садовник говорит «сюда», «в него», «в этот роадмап» — action.roadmap="" (пустое), SR определит роадмап по контексту
 - "убери задачу X из роадмапа Y" → roadmap_remove_task, action.roadmap="Y", action.title="X", 0.95
 - "удали роадмап X" → delete_roadmap, action.title="X", 0.95
 - "переименуй роадмап X в Y" → rename_roadmap, action.title="X", action.value="Y", 0.95
@@ -4511,6 +4753,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: никогда не генерируй список задач в поле text — только через intent show_tasks
 - ВАЖНО: никогда не генерируй профиль в поле text — только через intent show_profile
 - ВАЖНО: никогда не имитируй выполнение действий в поле text — complete_task, edit_task, create_reminder, delete_task и все остальные action-интенты ВСЕГДА передавай через intent, не через text
+- ВАЖНО: если сообщение — просто подтверждение или реакция («да», «нет», «правильно», «ок», «хорошо», «понял», «именно», «верно», «точно», «нет не надо») без нового действия — ВСЕГДА используй intent=conversation, confidence=1.0. Никогда не запускай action-интенты по одному слову-подтверждению.
 - ВАЖНО: если садовник просит выполнить действие — intent НИКОГДА не равен conversation, даже если хочешь добавить комментарий
 - ВАЖНО: поле text при action-интентах — только короткий эмоциональный отклик (1-2 слова) или пустая строка. НИКОГДА не пиши "✅ Готово", "задача закрыта", "напоминание создано" и подобное в text — это делает система, не ты
 - Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
@@ -4587,12 +4830,26 @@ def _build_user_context_msg(telegram_id: str) -> str:
     else:
         roadmaps_block = "  нет активных роадмапов"
 
+    sr = store_get_sphere_resonance(telegram_id)
+    sr_context = "  ".join(f"{SPHERE_EMOJI[s]} {SPHERE_NAME_RU[s]} {sr.get(s,20)}%" for s in SPHERES)
+    weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
+    imbalance = f" | слабые сферы: {', '.join(weak_spheres)}" if weak_spheres else ""
+
+    # Deep profile observations
+    dp = _get_deep_profile(telegram_id)
+    obs_list = dp.get("observations", [])
+    dp_block = ""
+    if obs_list:
+        dp_block = f"\n[Паттерны садовника:\n" + "\n".join(f"  - {o}" for o in obs_list[-10:]) + "\n]"
+
     return (
         f"[Профиль садовника:\n{profile_block}\n]\n"
         f"[Сейчас у садовника: {current_dt}]\n"
+        f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
         f"[Роадмапы:\n{roadmaps_block}\n]"
+        f"{dp_block}"
     )
 
 
@@ -5331,8 +5588,15 @@ async def free_conversation(message: Message, state: FSMContext):
 
     await message.bot.send_chat_action(message.chat.id, "typing")
 
+    # Deep profile reflection hint — once per session
+    _hint = _get_session_reflection_hint(user_id)
+    _hint_block = f"\n\n[SR reflection hint: {_hint}]" if _hint else ""
+
     messages = [
-        {"role": "system", "content": SR_SYSTEM_PROMPT + "\n\n" + ctx_msg},
+        {
+            "role": "system",
+            "content": SR_SYSTEM_PROMPT + "\n\n" + ctx_msg + _hint_block
+        },
         *history,
         {"role": "user", "content": text}
     ]
@@ -5570,8 +5834,13 @@ async def free_conversation(message: Message, state: FSMContext):
                             await _show_profile(user_id, message)
                             reply_text = ""
                         elif intent == "show_resonance":
-                            await cmd_resonance(message, state)
+                            await cmd_resonance(message)
                             reply_text = ""
+
+                        elif intent == "show_resonance_detail":
+                            sr = store_get_sphere_resonance(user_id)
+                            overall = store_get_profile(user_id).get("resonance_level", 0)
+                            reply_text = _sphere_detail_text(sr, overall)
                         elif intent == "show_achievements":
                             await cmd_achievements(message)
                             reply_text = ""
@@ -5604,7 +5873,6 @@ async def free_conversation(message: Message, state: FSMContext):
                                         parts.append(f"🎨 {new_task['label_name']}")
                                     if new_task.get("reminder"):
                                         parts.append(f"🔔 {new_task['reminder']}")
-                                    # Suggest what is missing
                                     missing = []
                                     if not new_task.get("deadline"):
                                         missing.append("📅 дедлайн")
@@ -5612,13 +5880,13 @@ async def free_conversation(message: Message, state: FSMContext):
                                         missing.append("🎨 группа")
                                     confirm_text = " · ".join(parts)
                                     if missing:
-                                        confirm_text += f"\n<i>Не указано: {', '.join(missing)} — добавь через [✏️] если нужно</i>"
-                                    # Show edit button
+                                        confirm_text += f"\n<i>Можно добавить: {', '.join(missing)}</i>"
+                                    confirm_text += "\n\n" + _build_profile_card(user_id)
                                     tid = new_task["task_id"]
                                     edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
                                         InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"task_edit_{tid}")
                                     ]])
-                                    await message.answer(confirm_text, reply_markup=edit_kb)
+                                    await message.answer(confirm_text, reply_markup=edit_kb, parse_mode="HTML")
                                 reply_text = ""
                         elif intent == "add_achievement":
                             if reply_text and reply_text.strip():
@@ -5660,16 +5928,30 @@ async def free_conversation(message: Message, state: FSMContext):
 
                             if to_close:
                                 closed_ids = {t.get("task_id") for t in to_close}
-                                new_tasks = [t for t in tasks if t.get("task_id") not in closed_ids]
+                                # Tasks in roadmaps: mark completed. Others: remove.
+                                _roadmaps_all = store_get_roadmaps(user_id)
+                                _rm_task_ids = {tid3 for rm in _roadmaps_all for tid3 in rm.get("task_ids", [])}
+                                new_tasks = []
+                                for t in tasks:
+                                    if t.get("task_id") in closed_ids:
+                                        if t.get("task_id") in _rm_task_ids:
+                                            t["status"] = "completed"  # keep in roadmap
+                                            new_tasks.append(t)
+                                        # else: drop (normal task)
+                                    else:
+                                        new_tasks.append(t)
                                 store_set_tasks(user_id, new_tasks)
                                 total_res = 0
                                 for tc in to_close:
                                     store_increment_achievements(user_id)
                                     dl2 = tc.get("deadline")
                                     r2  = 2 if (dl2 and dl2 >= today_s2) else 1
+                                    sphere2 = _classify_sphere(tc.get("title",""), tc.get("label_name",""))
+                                    store_add_sphere_resonance(user_id, sphere2, r2)
                                     total_res += r2
+                                _update_deep_profile(user_id)
                                 count_now = store_get_achievements_count(user_id)
-                                new_res2  = store_add_resonance(user_id, total_res)
+                                new_res2  = store_get_profile(user_id).get("resonance_level", 0)
                                 await _sync_pending()
                                 if len(to_close) == 1:
                                     reply_text = (f"✅ Готово: {to_close[0]['title']} · "
@@ -5678,6 +5960,19 @@ async def free_conversation(message: Message, state: FSMContext):
                                     names = ", ".join(t["title"] for t in to_close)
                                     reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
                                                   f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
+                                # Auto-show roadmap if closed task belongs to one, else profile
+                                _closed_ids_set = {t.get("task_id") for t in to_close}
+                                _roadmaps_upd = store_get_roadmaps(user_id)
+                                _affected_rm = next(
+                                    (rm for rm in _roadmaps_upd
+                                     if any(tid in _closed_ids_set for tid in rm.get("task_ids", []))),
+                                    None
+                                )
+                                if _affected_rm:
+                                    _all_tasks_upd = store_get_tasks(user_id)
+                                    reply_text += "\n\n" + _roadmap_card_text(_affected_rm, _all_tasks_upd)
+                                else:
+                                    reply_text += "\n\n" + _build_profile_card(user_id)
                             elif tasks:
                                 # Smart clarification: find top fuzzy candidates
                                 _candidates = []
@@ -5755,7 +6050,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
                                     store_set_tasks(user_id, new_tasks)
                                     await _sync_pending()
-                                    reply_text = f"🗑 Задача удалена: {t['title']}"
+                                    reply_text = f"🗑 Задача удалена: {t['title']}\n\n" + _build_profile_card(user_id)
                                 elif tasks:
                                     titles = ", ".join(t["title"] for t in tasks[:5])
                                     reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
@@ -5778,7 +6073,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         t["label_name"] = ""
                                 store_set_tasks(user_id, tasks)
                                 await _sync_pending()
-                                reply_text = f"🗑 Группа «{lb['name']}» удалена."
+                                reply_text = f"🗑 Группа «{lb['name']}» удалена.\n\n" + _build_profile_card(user_id)
                             else:
                                 lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет групп"
                                 reply_text = f"🌀 Не нашла такую группу. Есть: {lbl_names}"
@@ -6045,7 +6340,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                     store_set_reminders(user_id, reminders)
                                     await _sync_pending()
                                     rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(r_repeat,"один раз")
-                                    reply_text = f"✅ Напоминание: 🔔 {r_title} · {r_dt[:16].replace('T',' ')} · {rep_s}"
+                                    reply_text = (f"✅ Напоминание: 🔔 {r_title} · {r_dt[:16].replace('T',' ')} · {rep_s}\n\n"
+                                                  + _reminder_list_text(store_get_reminders(user_id)))
 
                         elif intent == "show_reminders":
                             reminders = store_get_reminders(user_id)
@@ -6067,7 +6363,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 reminders = [r for r in reminders if r["id"] != rem["id"]]
                                 store_set_reminders(user_id, reminders)
                                 await _sync_pending()
-                                reply_text = f"🗑 Напоминание «{rem['title']}» удалено."
+                                reply_text = (f"🗑 Напоминание «{rem['title']}» удалено.\n\n"
+                                              + _reminder_list_text(reminders))
                             else:
                                 reply_text = f"🌀 Напоминание «{target_r}» не найдено."
 
@@ -6079,20 +6376,27 @@ async def free_conversation(message: Message, state: FSMContext):
                             if not _show_list:
                                 reply_text = "🗺 Роадмапов пока нет. Скажи «создай роадмап [название]» чтобы начать."
                             else:
-                                _task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
                                 _lines = ["🗺 <b>Роадмапы:</b>"]
                                 for rm in _show_list:
-                                    pct = _calc_roadmap_progress(rm, all_tasks)
-                                    bar = _roadmap_progress_bar(pct)
-                                    dl  = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-                                    _lines.append(f"\n🗺 <b>{rm['title']}</b>  {bar}{dl}")
-                                    for tid in rm.get("task_ids", []):
-                                        t = _task_by_id.get(tid)
-                                        if t:
-                                            if t.get("status") == "completed":
-                                                _lines.append(f"  ✅ {t['title']}")
-                                            else:
-                                                _lines.append(f"  · {t['title']}")
+                                    live     = _roadmap_live_tasks(rm, all_tasks)
+                                    total    = len(live)
+                                    done_cnt = sum(1 for t in live if t.get("status") == "completed")
+                                    pct      = round(done_cnt / total * 100) if total else 0
+                                    bar      = _roadmap_progress_bar(pct)
+                                    dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
+                                    _lines.append(f"\n🗺 <b>{rm['title']}</b>  {bar}  {done_cnt}/{total}  {pct}%{dl}")
+                                    for t in sorted(live, key=lambda t: (
+                                        3 if t.get("status") == "completed" else
+                                        2 if not t.get("deadline") else
+                                        (0 if t["deadline"] <= _today() else 1),
+                                        t.get("deadline") or "9999-99-99"
+                                    )):
+                                        if t.get("status") == "completed":
+                                            _lines.append(f"  ✅ {t['title']}")
+                                        else:
+                                            t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
+                                            ind  = _deadline_indicator(t.get("deadline", ""))
+                                            _lines.append(f"  {ind}· {t['title']}{t_dl}")
                                 reply_text = "\n".join(_lines)
 
                         elif intent == "create_roadmap":
@@ -6189,8 +6493,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                     roadmaps.append(new_rm)
                                     store_set_roadmaps(user_id, roadmaps)
                                     await _sync_pending()
+                                    _all_t5 = store_get_tasks(user_id)
                                     _task_info = f" · {len(new_rm['task_ids'])} задач добавлено" if new_rm["task_ids"] else ""
-                                    reply_text = f"🗺 Роадмап «{_rm_title}» создан{_task_info}"
+                                    reply_text = f"🗺 Роадмап «{_rm_title}» создан{_task_info}\n\n" + _roadmap_card_text(new_rm, _all_t5)
 
                         elif intent == "delete_roadmap":
                             _target_rm = ((parsed_check.get("action") or {}).get("title","") or "").strip()
@@ -6212,7 +6517,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 await _sync_pending()
                                 _del_count = len(_rm_task_ids)
                                 _task_info = f" и {_del_count} задач" if _del_count else ""
-                                reply_text = f"🗑 Роадмап «{_found_rm['title']}» удалён{_task_info}."
+                                reply_text = f"🗑 Роадмап «{_found_rm['title']}» удалён{_task_info}.\n\n" + _build_profile_card(user_id)
                             else:
                                 _rm_names = ", ".join(r["title"] for r in roadmaps) or "нет роадмапов"
                                 reply_text = f"🌀 Роадмап «{_target_rm}» не найден. Активные: {_rm_names}"
@@ -6230,7 +6535,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                 _found_rm["title"] = _new_name
                                 store_set_roadmaps(user_id, roadmaps)
                                 await _sync_pending()
-                                reply_text = f"✅ Роадмап переименован: «{_old_name}» → «{_new_name}»"
+                                _all_t3 = store_get_tasks(user_id)
+                                reply_text = (f"✅ Роадмап переименован: «{_old_name}» → «{_new_name}»\n\n"
+                                              + _roadmap_card_text(_found_rm, _all_t3))
                             else:
                                 reply_text = f"🌀 Не нашла роадмап «{_old_name}»."
 
@@ -6261,7 +6568,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _found_rm["deadline"] = _dl_iso
                                     store_set_roadmaps(user_id, roadmaps)
                                     await _sync_pending()
-                                    reply_text = f"📅 Дедлайн роадмапа «{_found_rm['title']}» → {_dl_iso}"
+                                    _all_t4 = store_get_tasks(user_id)
+                                    reply_text = (f"📅 Дедлайн роадмапа «{_found_rm['title']}» → {_dl_iso}\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t4))
                                 else:
                                     reply_text = f"🌀 Не понял дату «{_dl_val}». Напиши: 01.06 или 2026-06-01"
                             else:
@@ -6271,34 +6580,114 @@ async def free_conversation(message: Message, state: FSMContext):
                             _act = parsed_check.get("action") or {}
                             _rm_name = (_act.get("roadmap") or "").strip()
                             _task_q  = (_act.get("title") or "").strip()
+                            _task_dl = (_act.get("deadline") or "").strip()
                             roadmaps = store_get_roadmaps(user_id)
-                            _found_rm = next(
-                                (r for r in roadmaps if _rm_name.lower() in r.get("title","").lower()),
-                                None
-                            )
+                            # If roadmap name empty — use the only active roadmap
+                            if not _rm_name and len(roadmaps) == 1:
+                                _found_rm = roadmaps[0]
+                            elif not _rm_name and len(roadmaps) > 1:
+                                reply_text = f"🌀 Уточни в какой роадмап: {', '.join(r['title'] for r in roadmaps)}"
+                                _found_rm = None
+                            else:
+                                _found_rm = next(
+                                    (r for r in roadmaps if _rm_name.lower() in r.get("title","").lower()),
+                                    None
+                                )
                             if _found_rm and _task_q:
                                 all_tasks = store_get_tasks(user_id)
+                                # Clean orphaned task_ids before any check
+                                if _clean_roadmap_task_ids(_found_rm, all_tasks):
+                                    store_set_roadmaps(user_id, roadmaps)
                                 _matched = _fuzzy_match_tasks(_task_q, all_tasks)
-                                if _matched:
-                                    _tid = _matched[0].get("task_id","")
-                                    if _tid and _tid not in _found_rm.get("task_ids",[]):
-                                        _found_rm.setdefault("task_ids",[]).append(_tid)
-                                        # Auto-deadline: if task has no deadline and roadmap has one
-                                        if not _matched[0].get("deadline") and _found_rm.get("deadline"):
-                                            for _t in all_tasks:
-                                                if _t.get("task_id") == _tid:
-                                                    _t["deadline"] = _found_rm["deadline"]
-                                                    break
-                                            store_set_tasks(user_id, all_tasks)
-                                        store_set_roadmaps(user_id, roadmaps)
-                                        await _sync_pending()
-                                        reply_text = f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»"
+                                if _matched and _matched[0].get("task_id") not in _found_rm.get("task_ids", []):
+                                    # Link existing task
+                                    _tid = _matched[0].get("task_id", "")
+                                    _found_rm.setdefault("task_ids", []).append(_tid)
+                                    if not _matched[0].get("deadline") and _found_rm.get("deadline"):
+                                        for _t in all_tasks:
+                                            if _t.get("task_id") == _tid:
+                                                _t["deadline"] = _found_rm["deadline"]
+                                                break
+                                        store_set_tasks(user_id, all_tasks)
+                                    store_set_roadmaps(user_id, roadmaps)
+                                    await _sync_pending()
+                                    _all_t = store_get_tasks(user_id)
+                                    reply_text = (f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t))
+                                elif _matched and _matched[0].get("task_id") in _found_rm.get("task_ids", []):
+                                    # Task exists in roadmap — if completed, say so and show card
+                                    _all_t = store_get_tasks(user_id)
+                                    _is_done = _matched[0].get("status") == "completed"
+                                    if _is_done:
+                                        reply_text = (f"✅ Задача «{_matched[0]['title']}» уже выполнена в роадмапе «{_found_rm['title']}».\n\n"
+                                                      + _roadmap_card_text(_found_rm, _all_t))
                                     else:
-                                        reply_text = f"🌀 Задача уже в роадмапе."
+                                        reply_text = (f"🌀 Задача «{_matched[0]['title']}» уже в роадмапе «{_found_rm['title']}».\n\n"
+                                                      + _roadmap_card_text(_found_rm, _all_t))
                                 else:
-                                    reply_text = f"🌀 Задача «{_task_q}» не найдена."
-                            else:
-                                reply_text = f"🌀 Не нашла роадмап «{_rm_name}»."
+                                    # Create new task and link to roadmap
+                                    import uuid as _uuid_ra
+                                    from datetime import datetime as _dtr_ra, timedelta as _tdr_ra
+                                    from zoneinfo import ZoneInfo as _ZI_ra
+                                    _tz_ra = _ZI_ra(store_get_profile(user_id).get(
+                                        "companion_settings", {}).get("timezone", "Europe/Moscow"))
+                                    _now_ra = _dtr_ra.now(_tz_ra)
+                                    # Parse deadline
+                                    _new_dl = None
+                                    if _task_dl:
+                                        import re as _re_ra
+                                        _dv = _task_dl.lower()
+                                        _src_txt = (text or "").lower()
+                                        if _dv in ("сегодня", "today"):
+                                            _new_dl = _now_ra.strftime("%Y-%m-%d")
+                                        elif _dv in ("завтра", "tomorrow"):
+                                            _new_dl = (_now_ra + _tdr_ra(days=1)).strftime("%Y-%m-%d")
+                                        elif _re_ra.match(r"^\d{4}-\d{2}-\d{2}$", _task_dl):
+                                            _new_dl = _task_dl
+                                        elif _re_ra.match(r"^\d{1,2}\.\d{1,2}", _task_dl):
+                                            _p = _task_dl.split(".")
+                                            _yr = _p[2].strip() if len(_p) > 2 else str(_now_ra.year)
+                                            _yr = "20"+_yr if len(_yr)==2 else _yr
+                                            _new_dl = f"{_yr}-{_p[1].zfill(2)}-{_p[0].zfill(2)}"
+                                    # Also check original text for relative time phrases
+                                    if not _new_dl:
+                                        import re as _re_ra2
+                                        _src2 = (text or "").lower()
+                                        _m_w = _re_ra2.search(r"через\s+(\d+)\s*недел", _src2)
+                                        _m_d = _re_ra2.search(r"через\s+(\d+)\s*дн", _src2)
+                                        _m_mo = _re_ra2.search(r"через\s+(\d+)\s*месяц", _src2)
+                                        if _m_w:
+                                            from datetime import timedelta as _tdr_ra2
+                                            _new_dl = (_now_ra + _tdr_ra2(weeks=int(_m_w.group(1)))).strftime("%Y-%m-%d")
+                                        elif _m_d:
+                                            from datetime import timedelta as _tdr_ra3
+                                            _new_dl = (_now_ra + _tdr_ra3(days=int(_m_d.group(1)))).strftime("%Y-%m-%d")
+                                        elif _m_mo:
+                                            from datetime import timedelta as _tdr_ra4
+                                            _new_dl = (_now_ra + _tdr_ra4(days=int(_m_mo.group(1))*30)).strftime("%Y-%m-%d")
+                                    # Fallback to roadmap deadline
+                                    if not _new_dl:
+                                        _new_dl = _found_rm.get("deadline")
+                                    new_t = {
+                                        "task_id":    f"t_{_uuid_ra.uuid4().hex[:8]}",
+                                        "title":      _task_q,
+                                        "status":     "active",
+                                        "created":    _today(),
+                                        "deadline":   _new_dl,
+                                        "label_name": None,
+                                        "reminder":   None,
+                                    }
+                                    all_tasks.append(new_t)
+                                    _found_rm.setdefault("task_ids", []).append(new_t["task_id"])
+                                    store_set_tasks(user_id, all_tasks)
+                                    store_set_roadmaps(user_id, roadmaps)
+                                    await _sync_pending()
+                                    _all_t = store_get_tasks(user_id)
+                                    reply_text = (f"✅ Задача «{_task_q}» создана и добавлена в роадмап «{_found_rm['title']}»\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t))
+                            elif not _found_rm and _rm_name:
+                                _rm_names = ", ".join(r["title"] for r in roadmaps) or "нет роадмапов"
+                                reply_text = f"🌀 Не нашла роадмап «{_rm_name}». Активные: {_rm_names}"
 
                         elif intent == "roadmap_remove_task":
                             _act = parsed_check.get("action") or {}
@@ -6318,7 +6707,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _found_rm["task_ids"] = [tid for tid in _found_rm.get("task_ids",[]) if tid != _tid]
                                     store_set_roadmaps(user_id, roadmaps)
                                     await _sync_pending()
-                                    reply_text = f"✅ Задача «{_matched[0]['title']}» убрана из роадмапа «{_found_rm['title']}»"
+                                    _all_t2 = store_get_tasks(user_id)
+                                    reply_text = (f"✅ Задача «{_matched[0]['title']}» убрана из роадмапа «{_found_rm['title']}»\n\n"
+                                                  + _roadmap_card_text(_found_rm, _all_t2))
                                 else:
                                     reply_text = f"🌀 Задача «{_task_q}» не найдена в роадмапе."
                             else:
@@ -6342,7 +6733,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                             t["label_name"] = new_name
                                     store_set_tasks(user_id, tasks)
                                     await _sync_pending()
-                                    reply_text = f"✅ Группа переименована в «{new_name}»."
+                                    reply_text = f"✅ Группа переименована в «{new_name}».\n\n" + _build_profile_card(user_id)
                                 else:
                                     reply_text = "🌀 Группа не найдена."
                             else:
@@ -6441,16 +6832,25 @@ async def free_conversation(message: Message, state: FSMContext):
                                         reply_text = f"🌀 Группа «{value}» не найдена. Есть: {g_names}"
                                 else:
                                     reply_text = f"🌀 Поле «{field}» не знаю. Скажи: название/дедлайн/напоминание/группа"
-                                if "✅" in reply_text:
+                                if "✅" in (reply_text or ""):
                                     store_set_tasks(user_id, tasks)
                                     await _sync_pending()
-                                    # Save last edited task for context continuity
                                     tid_edited = t.get("task_id","")
                                     await state.update_data(
                                         last_task_id=tid_edited,
                                         last_task_title=t.get("title","")
                                     )
-                                    # Suggest what else can be edited
+                                    # Auto-show: roadmap if task is in one, else profile
+                                    _rms_upd = store_get_roadmaps(user_id)
+                                    _all_t_upd = store_get_tasks(user_id)
+                                    _task_rm = next(
+                                        (rm for rm in _rms_upd if tid_edited in rm.get("task_ids",[])),
+                                        None
+                                    )
+                                    if _task_rm:
+                                        reply_text += "\n\n" + _roadmap_card_text(_task_rm, _all_t_upd)
+                                    else:
+                                        reply_text += "\n\n" + _build_profile_card(user_id)
                                     missing = []
                                     if not t.get("deadline"):
                                         missing.append("📅 дедлайн")

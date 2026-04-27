@@ -1,0 +1,46 @@
+{
+  "task_id": "T-20260427-FLUTTER",
+  "name": "Cross-Platform Engineer Chat — Flutter Mobile App",
+  "status": "planned",
+  "priority": "low",
+  "created": "2026-04-27",
+  "description": "Native mobile Engineer Chat app via Flutter. Phase 1: Android. Phase 2: iOS. Single Dart codebase, all platforms supported.",
+  "tech_stack": {
+    "framework": "Flutter",
+    "language": "Dart",
+    "platforms": ["Android (first)", "iOS (second)", "Web", "Desktop"],
+    "state_management": "Riverpod or Bloc",
+    "local_storage": "SQLite (sqflite) or Hive",
+    "api_integration": "GitHub API (same as bot.py)"
+  },
+  "why_flutter": [
+    "Single codebase for all platforms",
+    "Material Design + Cupertino widgets built-in",
+    "High performance native rendering via Skia",
+    "Reuse bot.py Companion logic (ported to Dart)",
+    "Ahimsa: minimal resource duplication"
+  ],
+  "phases": {
+    "phase_1_android": {
+      "platform": "Android",
+      "duration": "2-3 weeks",
+      "deliverables": ["Android APK", "GitHub API integration", "Engineer Chat parity with Telegram bot"]
+    },
+    "phase_2_ios": {
+      "platform": "iOS",
+      "duration": "1 week",
+      "deliverables": ["iOS build", "App Store submission"],
+      "requirements": "Apple Developer account (~$99/year)"
+    }
+  },
+  "prerequisites": "Bot stable with 2-3 active gardeners",
+  "notes": [
+    "Telegram bot already works on all platforms — native app is enhancement",
+    "iOS push notifications require Apple Developer account",
+    "Ahimsa-aligned: gentle Companion, no tracking, no analytics"
+  ],
+  "health": {
+    "status": "planned",
+    "last_check": "2026-04-27"
+  }
+}

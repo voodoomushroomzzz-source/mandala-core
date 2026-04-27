@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "TASKS-MANIFEST-004",
     "name": "Tasks Honeycomb Manifest",
-    "version": "v3.6.0",
+    "version": "v3.8.0",
     "created": "2026-03-01",
-    "updated": "2026-04-18",
+    "updated": "2026-04-27",
     "layer": 1,
     "type": "honeycomb_manifest"
   },
@@ -28,7 +28,7 @@
         "segment": "active_tasks",
         "folder": "active/",
         "description": "Currently active tasks",
-        "files_count": 12
+        "files_count": 7
       },
       {
         "segment": "archive_tasks",
@@ -43,10 +43,10 @@
     "first_file": "basic_task.json"
   },
   "registry": {
-    "total_files": 12,
-    "total_size_kb": 18.0,
-    "last_updated": "2026-04-18",
-    "notes": "v3.6.0: added sym_implementation task. Active: 12 tasks."
+    "total_files": 11,
+    "total_size_kb": 45.0,
+    "last_updated": "2026-04-27",
+    "notes": "v3.8.0: merged 3 tasks (ahimsa_filter, deadline_sentinel, task_scanner) into symbiosis_guard. Active: 7 tasks."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -55,7 +55,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-18",
-    "notes": "v3.6.0 active tasks: 12. SYM implementation task added."
+    "last_check": "2026-04-27",
+    "notes": "v3.8.0: 7 active tasks. Merged cleanup under RM-013."
   }
 }

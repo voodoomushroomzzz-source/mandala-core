@@ -1,0 +1,42 @@
+{
+  "identity": {
+    "roadmap_id": "RM-013",
+    "name": "Symbiosis Guard — Core Cleanliness & Health Sentinel",
+    "version": "v1.2.0",
+    "created": "2026-04-12",
+    "updated": "2026-04-27",
+    "layer": 2,
+    "type": "roadmap",
+    "status": "in_progress",
+    "priority": "medium",
+    "tags": ["symbiosis_guard", "ahimsa", "scanner", "deadline", "health", "cleanliness"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "description": "Automated system for honeycomb health monitoring, deadline tracking, file quality validation, and structural cleanliness. Merged from ahimsa_filter, deadline_sentinel, and task_scanner under RM-013.",
+    "progress": "30%",
+    "linked_task": "T-20260427-SYMBGUARD"
+  },
+  "content": {
+    "vision": "Symbiosis Guard is the immune system of Mandala. It continuously monitors, validates, alerts, and heals.",
+    "components": {
+      "ahimsa_filter": "Detects duplicates, stale files, empty files, broken links, redundant fields, zero resonance, old backups",
+      "deadline_sentinel": "Monitors task deadlines, sends auto-warnings, generates daily reports",
+      "task_scanner": "Validates task_id uniqueness, JSON validity, required fields, non-standard statuses, expired deadlines"
+    },
+    "phases": {
+      "phase_1": { "name": "Core Analyzer", "status": "completed", "note": "task_scanner at 90%" },
+      "phase_2": { "name": "Scanner Integration", "status": "in_progress" },
+      "phase_3": { "name": "Interactive Cleanup", "status": "planned" },
+      "phase_4": { "name": "CI/CD Integration", "status": "planned" }
+    }
+  },
+  "navigation": {
+    "parent_manifest": "honeycombs/roadmaps/index.json",
+    "related_tasks": ["symbiosis_guard"]
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-27"
+  }
+}

@@ -1,5 +1,5 @@
 ﻿{
-  "last_scan": "2026-04-25T14:28:10.336905",
+  "last_scan": "2026-04-27T02:56:02.191967",
   "honeycomb_hashes": {
     "akasha": "938d9a020ac360bc5d157c023fce7621",
     "analytics": "d7267eeb9431eab01bd550f1f3b7ba7a",
@@ -19,9 +19,6 @@
     "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed": "ac5a8b6d43e69b4426397bc86f9809b5",
     "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2": "ac5a8b6d43e69b4426397bc86f9809b5",
     "extensions": "240894ec5f104d14b77a319555aff3c3",
-    "fruits": "4a3b603d900e4a62daf4ce5aff501de5",
-    "garden": "82d7a0e2ae211bb634c9c41cffc1c80a",
-    "humor": "4107e446a930400d09916afe15bd33ad",
     "instructions": "82629ec0e138d9b7615c70407a9e7ae3",
     "modules": "9ed6f11a6c5ff36f266ef92764ab0b1b",
     "philosophy": "e17c25c89089dbc39a40394f2016d22e",
@@ -37,21 +34,25 @@
     "registry/notifications": "a45d68483e1cd793f4142cd7fd814321",
     "roadmaps": "605ebd3a75ece4d7bbceedf2e9ecc0c4",
     "seeds": "a9403363445c3eab950737940787eb19",
-    "sessions": "676e443ea43942ae919837475f6c9bbd",
     "sphaerae": "7b72cd32406baf1cdc88938e6a9fa83e",
-    "sym": "892b09f32abe87de96e2a6426cea472a",
     "tasks": "cff3314b08f0ecbe6eccaa0812f6d1ff",
+    "tasks/active": "a4c7c24d4b4593634b2f21a0f31febc3",
     "tectosphaera": "9dda1478e7565b71359b0d731010eb27",
-    "visualizations": "d4f1816ae4f8a595ce62d3054bb38d06"
+    "visualizations": "d4f1816ae4f8a595ce62d3054bb38d06",
+    "garden": "82d7a0e2ae211bb634c9c41cffc1c80a",
+    "fruits": "4a3b603d900e4a62daf4ce5aff501de5",
+    "humor": "4107e446a930400d09916afe15bd33ad",
+    "sym": "892b09f32abe87de96e2a6426cea472a",
+    "sessions": "676e443ea43942ae919837475f6c9bbd"
   },
   "statistics": {
-    "total_scanned": 42,
-    "valid_v2": 42,
+    "total_scanned": 43,
+    "valid_v2": 43,
     "invalid_v2": 0,
     "errors": 0,
     "warnings": 0,
-    "total_files": 245,
-    "total_size_kb": 1505.97
+    "total_files": 257,
+    "total_size_kb": 1545.2399999999998
   },
   "scanner_config": {
     "updated": "2026-04-09",
