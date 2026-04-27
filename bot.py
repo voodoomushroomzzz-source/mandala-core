@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.7
+# Mandala Helper - Lite — SR Gentle Companion v7.27.8
 
 import re
 import os
@@ -4753,6 +4753,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: никогда не генерируй список задач в поле text — только через intent show_tasks
 - ВАЖНО: никогда не генерируй профиль в поле text — только через intent show_profile
 - ВАЖНО: никогда не имитируй выполнение действий в поле text — complete_task, edit_task, create_reminder, delete_task и все остальные action-интенты ВСЕГДА передавай через intent, не через text
+- ВАЖНО: если сообщение — просто подтверждение или реакция («да», «нет», «правильно», «ок», «хорошо», «понял», «именно», «верно», «точно», «нет не надо») без нового действия — ВСЕГДА используй intent=conversation, confidence=1.0. Никогда не запускай action-интенты по одному слову-подтверждению.
 - ВАЖНО: если садовник просит выполнить действие — intent НИКОГДА не равен conversation, даже если хочешь добавить комментарий
 - ВАЖНО: поле text при action-интентах — только короткий эмоциональный отклик (1-2 слова) или пустая строка. НИКОГДА не пиши "✅ Готово", "задача закрыта", "напоминание создано" и подобное в text — это делает система, не ты
 - Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
@@ -6594,6 +6595,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                 )
                             if _found_rm and _task_q:
                                 all_tasks = store_get_tasks(user_id)
+                                # Clean orphaned task_ids before any check
+                                if _clean_roadmap_task_ids(_found_rm, all_tasks):
+                                    store_set_roadmaps(user_id, roadmaps)
                                 _matched = _fuzzy_match_tasks(_task_q, all_tasks)
                                 if _matched and _matched[0].get("task_id") not in _found_rm.get("task_ids", []):
                                     # Link existing task
@@ -6611,7 +6615,15 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = (f"✅ Задача «{_matched[0]['title']}» добавлена в роадмап «{_found_rm['title']}»\n\n"
                                                   + _roadmap_card_text(_found_rm, _all_t))
                                 elif _matched and _matched[0].get("task_id") in _found_rm.get("task_ids", []):
-                                    reply_text = "🌀 Задача уже в роадмапе."
+                                    # Task exists in roadmap — if completed, say so and show card
+                                    _all_t = store_get_tasks(user_id)
+                                    _is_done = _matched[0].get("status") == "completed"
+                                    if _is_done:
+                                        reply_text = (f"✅ Задача «{_matched[0]['title']}» уже выполнена в роадмапе «{_found_rm['title']}».\n\n"
+                                                      + _roadmap_card_text(_found_rm, _all_t))
+                                    else:
+                                        reply_text = (f"🌀 Задача «{_matched[0]['title']}» уже в роадмапе «{_found_rm['title']}».\n\n"
+                                                      + _roadmap_card_text(_found_rm, _all_t))
                                 else:
                                     # Create new task and link to roadmap
                                     import uuid as _uuid_ra
@@ -6625,6 +6637,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     if _task_dl:
                                         import re as _re_ra
                                         _dv = _task_dl.lower()
+                                        _src_txt = (text or "").lower()
                                         if _dv in ("сегодня", "today"):
                                             _new_dl = _now_ra.strftime("%Y-%m-%d")
                                         elif _dv in ("завтра", "tomorrow"):
@@ -6636,6 +6649,22 @@ async def free_conversation(message: Message, state: FSMContext):
                                             _yr = _p[2].strip() if len(_p) > 2 else str(_now_ra.year)
                                             _yr = "20"+_yr if len(_yr)==2 else _yr
                                             _new_dl = f"{_yr}-{_p[1].zfill(2)}-{_p[0].zfill(2)}"
+                                    # Also check original text for relative time phrases
+                                    if not _new_dl:
+                                        import re as _re_ra2
+                                        _src2 = (text or "").lower()
+                                        _m_w = _re_ra2.search(r"через\s+(\d+)\s*недел", _src2)
+                                        _m_d = _re_ra2.search(r"через\s+(\d+)\s*дн", _src2)
+                                        _m_mo = _re_ra2.search(r"через\s+(\d+)\s*месяц", _src2)
+                                        if _m_w:
+                                            from datetime import timedelta as _tdr_ra2
+                                            _new_dl = (_now_ra + _tdr_ra2(weeks=int(_m_w.group(1)))).strftime("%Y-%m-%d")
+                                        elif _m_d:
+                                            from datetime import timedelta as _tdr_ra3
+                                            _new_dl = (_now_ra + _tdr_ra3(days=int(_m_d.group(1)))).strftime("%Y-%m-%d")
+                                        elif _m_mo:
+                                            from datetime import timedelta as _tdr_ra4
+                                            _new_dl = (_now_ra + _tdr_ra4(days=int(_m_mo.group(1))*30)).strftime("%Y-%m-%d")
                                     # Fallback to roadmap deadline
                                     if not _new_dl:
                                         _new_dl = _found_rm.get("deadline")
