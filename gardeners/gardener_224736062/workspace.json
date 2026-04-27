@@ -278,6 +278,15 @@
       "deadline": "2026-04-28",
       "label_name": null,
       "reminder": null
+    },
+    {
+      "task_id": "t_46f9faf3",
+      "title": "Запись сессия 1",
+      "status": "active",
+      "created": "2026-04-27",
+      "deadline": "2026-04-27",
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -324,7 +333,8 @@
         "t_4dc7d659",
         "task_20260427_025",
         "task_20260427_022",
-        "t_eafdaa59"
+        "t_eafdaa59",
+        "t_46f9faf3"
       ],
       "status": "active"
     }
