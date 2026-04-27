@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.25.8
+# Mandala Helper - Lite — SR Gentle Companion v7.26.0
 
 import re
 import os
@@ -182,6 +182,77 @@ def store_add_resonance(telegram_id: str, delta: int) -> int:
         _store[telegram_id]["profile"] = profile
         _pending_writes[f"{_user_path(telegram_id)}/gardener.json"] = profile
     return new_val
+
+# ─── 5-Sphere Resonance (v7.26.0) ─────────────────────────────────────────────
+SPHERES = ("health", "creativity", "work", "connections", "growth")
+SPHERE_EMOJI = {
+    "health":      "🌿",
+    "creativity":  "🔥",
+    "work":        "💼",
+    "connections": "🤝",
+    "growth":      "🌱",
+}
+SPHERE_NAME_RU = {
+    "health":      "Тело",
+    "creativity":  "Творчество",
+    "work":        "Дело",
+    "connections": "Связи",
+    "growth":      "Рост",
+}
+
+def store_get_sphere_resonance(telegram_id: str) -> dict:
+    """Get sphere_resonance dict. Initialises missing spheres to 20."""
+    ws = store_get_workspace(telegram_id) or {}
+    sr = dict(ws.get("sphere_resonance", {}))
+    changed = False
+    for s in SPHERES:
+        if s not in sr:
+            sr[s] = 20
+            changed = True
+    if changed:
+        ws["sphere_resonance"] = sr
+        store_set_workspace(telegram_id, ws)
+    return sr
+
+def store_set_sphere_resonance(telegram_id: str, sr: dict) -> None:
+    ws = store_get_workspace(telegram_id) or {}
+    ws["sphere_resonance"] = sr
+    store_set_workspace(telegram_id, ws)
+
+def store_add_sphere_resonance(telegram_id: str, sphere: str, delta: int) -> int:
+    """Add delta to sphere. Clamp 5-100. Recalc overall resonance_level as mean of 5. Returns new overall."""
+    if sphere not in SPHERES:
+        sphere = "work"
+    sr = store_get_sphere_resonance(telegram_id)
+    sr[sphere] = max(5, min(100, sr[sphere] + delta))
+    store_set_sphere_resonance(telegram_id, sr)
+    mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+    profile = store_get_profile(telegram_id) or {}
+    profile["resonance_level"] = mean
+    store_set_profile(telegram_id, profile)
+    return mean
+
+def _sphere_compact_line(sr: dict) -> str:
+    """One-line compact for profile card: 🌿 22%  🔥 45%  💼 38%  🤝 20%  🌱 15%"""
+    return "  ".join(f"{SPHERE_EMOJI[s]} {sr.get(s, 20)}%" for s in SPHERES)
+
+def _sphere_progress_bar(pct: int) -> str:
+    filled = round(pct / 10)
+    return "█" * filled + "░" * (10 - filled)
+
+def _sphere_detail_text(sr: dict, overall: int) -> str:
+    """Multi-line detail dashboard for show_resonance_detail."""
+    lines = [f"🔮 <b>Резонанс: {overall}%</b>\n"]
+    for s in SPHERES:
+        pct  = sr.get(s, 20)
+        bar  = _sphere_progress_bar(pct)
+        name = SPHERE_NAME_RU[s]
+        emoji = SPHERE_EMOJI[s]
+        lines.append(f"{emoji} {name:<14} {pct}%  {bar}")
+    weak = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
+    if weak:
+        lines.append(f"\n💡 {' и '.join(weak)} {'требует' if len(weak)==1 else 'требуют'} внимания")
+    return "\n".join(lines)
 
 def _days_since_last_interaction(telegram_id: str) -> int:
     """Days since last user message. 0=today, 999=never."""
@@ -726,6 +797,7 @@ def _build_profile_card(user_id: str) -> str:
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
+        _sphere_compact_line(store_get_sphere_resonance(user_id)),
         "",
     ]
 
@@ -1136,32 +1208,51 @@ def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
     btns.append([InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
-def _auto_merkaba(title: str, label_name: str = "") -> str:
-    """Auto-classify task into one of 3 MKB spheres. Defaults to world if unclear."""
+def _classify_sphere(title: str, label_name: str = "") -> str:
+    """Classify task into one of 5 spheres. Returns sphere key."""
     text = (title + " " + label_name).lower()
-    body_kw = [
+    health_kw = [
         "здоровье","спорт","сон","питание","бег","врач","зал","тренировка","трениров",
         "физ","еда","отдых","фитнес","вес","диет","медицин","лечени","давлени",
         "витамин","таблетк","аптека","массаж","плавани","велосипед","пробежк",
-        "гимнастик","растяжк","медитац","йога","сауна","баня"
+        "гимнастик","растяжк","медитац","йога","сауна","баня","линзы","очки",
+        "операц","анализ","обследован","процедур"
     ]
-    spirit_kw = [
-        "работа","учёба","курс","читать","написать","код","проект","творч","идея",
-        "задач","разраб","бот","книг","учить","изучить","план","цел","карьер",
-        "бизнес","стратег","анализ","отчёт","презентац","навык","развит","обучен",
-        "программ","дизайн","музык","писать","создат","запуск","деньг","финанс",
-        "инвест","бюджет","доход","расход","зарабат","монетиз"
+    creativity_kw = [
+        "музык","трек","альбом","запис","сведен","мастеринг","обложк","клип","видео",
+        "рисовать","рисунок","арт","дизайн","творч","хобби","фото","съемк","монтаж",
+        "стих","поэзи","проза","роман","пьес","сценар","игра","игр","танц","песн",
+        "инструмент","гитар","пианин","барабан","студи","репетиц","концерт","выставк"
     ]
-    world_kw = [
-        "друг","встреч","семья","звонить","поездка","путешеств","кафе","знаком",
-        "люди","событи","отношени","вечеринк","праздник","подарок","родител",
-        "ребёнок","дети","партнёр","свидани","общени","компани","коллег","клиент",
-        "нетворк","волонтёр","помоч","поддержк","совместн"
+    work_kw = [
+        "работа","проект","задач","код","программ","бот","разраб","запуск","бизнес",
+        "клиент","встреч","переговор","контракт","договор","счёт","оплатить","зп",
+        "зарплат","деньг","финанс","бюджет","доход","расход","инвест","налог",
+        "отчёт","презентац","совещани","дедлайн","офис","удалёнк","фриланс",
+        "монетиз","продаж","маркетинг","реклам","сайт","магазин","заказ"
     ]
-    if any(k in text for k in body_kw):   return "health"
-    if any(k in text for k in spirit_kw): return "spirit"
-    if any(k in text for k in world_kw):  return "world"
-    return "world"  # default: мир (was "other")
+    connections_kw = [
+        "друг","семья","родител","мама","папа","брат","сестра","партнёр","любим",
+        "свидани","встреч с","позвонить","написать","поздравить","подарок","праздник",
+        "вечеринк","мероприяти","коллег","нетворк","знаком","общени","волонтёр",
+        "помоч","поддержк","ребёнок","дети","отношени","совместн","поездк с"
+    ]
+    growth_kw = [
+        "учить","изучить","курс","книг","читать","обучен","навык","развит","рост",
+        "саморазвит","личностн","духовн","практик","осознанн","рефлекси","дневник",
+        "план жизн","цел","смысл","ценност","философи","психолог","терапи","коучинг",
+        "язык","английск","иностранн","онлайн-курс","сертификат","диплом"
+    ]
+    if any(k in text for k in health_kw):      return "health"
+    if any(k in text for k in creativity_kw):  return "creativity"
+    if any(k in text for k in growth_kw):      return "growth"
+    if any(k in text for k in connections_kw): return "connections"
+    if any(k in text for k in work_kw):        return "work"
+    return "work"  # default
+
+# Keep old name as alias for backward compat
+def _auto_merkaba(title: str, label_name: str = "") -> str:
+    return _classify_sphere(title, label_name)
 
 
 def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
@@ -1680,7 +1771,8 @@ async def cb_task_done_mgmt(callback: CallbackQuery, state: FSMContext):
         today_s = _dtr.now().strftime("%Y-%m-%d")
         dl = t_done.get("deadline")
         res_delta = 2 if (dl and dl >= today_s) else 1
-        new_res = store_add_resonance(user_id, res_delta)
+        sphere = _classify_sphere(t_done.get("title",""), t_done.get("label_name",""))
+        new_res = store_add_sphere_resonance(user_id, sphere, res_delta)
         _fire_sync()
     active = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
     res_str = f" · 🔮 +{res_delta}% → {new_res}%" if res_delta else ""
@@ -2485,7 +2577,7 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     # Check 100% completion
     if items and all(it.get("done") for it in items):
         count  = store_increment_achievements(user_id)
-        cl_res = store_add_resonance(user_id, 2)
+        cl_res = store_add_sphere_resonance(user_id, "growth", 2)
         _fire_sync()
         try:
             await callback.message.edit_text(
@@ -2938,7 +3030,14 @@ async def run_resonance_decay() -> None:
                        and t.get("status") != "completed"]
             decay += len(overdue)
             if decay > 0:
-                store_add_resonance(uid, -decay)
+                sr = store_get_sphere_resonance(uid)
+                for s in SPHERES:
+                    sr[s] = max(5, sr[s] - decay)
+                store_set_sphere_resonance(uid, sr)
+                mean = max(5, round(sum(sr[s] for s in SPHERES) / len(SPHERES)))
+                profile2 = store_get_profile(uid) or {}
+                profile2["resonance_level"] = mean
+                store_set_profile(uid, profile2)
             ws["_decay_date"] = today_s
             store_set_workspace(uid, ws)
             _fire_sync()
@@ -4432,7 +4531,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|..."} или null
@@ -4452,6 +4551,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: если Садовник спрашивает о задачах — всегда show_tasks с нужным параметром, не отвечай текстом из контекста
 - "мой профиль" → show_profile, 0.95
 - "резонанс", "мой уровень" → show_resonance, 0.95
+- "баланс сфер", "расскажи про баланс", "как мои сферы", "покажи резонанс подробно", "что с балансом" → show_resonance_detail, 0.95
+- ВАЖНО: SR видит [Резонанс по сферам] в контексте. Если есть слабые сферы — SR может мягко (1 раз за сессию) упомянуть это в разговоре. Не навязывать, Ахимса.
 - "достижения" → show_achievements, 0.95
 - "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
   Извлекай из сообщения ВСЁ что найдёшь:
@@ -4587,9 +4688,15 @@ def _build_user_context_msg(telegram_id: str) -> str:
     else:
         roadmaps_block = "  нет активных роадмапов"
 
+    sr = store_get_sphere_resonance(telegram_id)
+    sr_context = "  ".join(f"{SPHERE_EMOJI[s]} {SPHERE_NAME_RU[s]} {sr.get(s,20)}%" for s in SPHERES)
+    weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
+    imbalance = f" | слабые сферы: {', '.join(weak_spheres)}" if weak_spheres else ""
+
     return (
         f"[Профиль садовника:\n{profile_block}\n]\n"
         f"[Сейчас у садовника: {current_dt}]\n"
+        f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
         f"[Роадмапы:\n{roadmaps_block}\n]"
@@ -5572,6 +5679,11 @@ async def free_conversation(message: Message, state: FSMContext):
                         elif intent == "show_resonance":
                             await cmd_resonance(message, state)
                             reply_text = ""
+
+                        elif intent == "show_resonance_detail":
+                            sr = store_get_sphere_resonance(user_id)
+                            overall = store_get_profile(user_id).get("resonance_level", 0)
+                            reply_text = _sphere_detail_text(sr, overall)
                         elif intent == "show_achievements":
                             await cmd_achievements(message)
                             reply_text = ""
@@ -5667,9 +5779,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                     store_increment_achievements(user_id)
                                     dl2 = tc.get("deadline")
                                     r2  = 2 if (dl2 and dl2 >= today_s2) else 1
+                                    sphere2 = _classify_sphere(tc.get("title",""), tc.get("label_name",""))
+                                    store_add_sphere_resonance(user_id, sphere2, r2)
                                     total_res += r2
                                 count_now = store_get_achievements_count(user_id)
-                                new_res2  = store_add_resonance(user_id, total_res)
+                                new_res2  = store_get_profile(user_id).get("resonance_level", 0)
                                 await _sync_pending()
                                 if len(to_close) == 1:
                                     reply_text = (f"✅ Готово: {to_close[0]['title']} · "
