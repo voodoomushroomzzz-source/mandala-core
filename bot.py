@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.6
+# Mandala Helper - Lite — SR Gentle Companion v7.27.7
 
 import re
 import os
@@ -235,6 +235,17 @@ def store_add_sphere_resonance(telegram_id: str, sphere: str, delta: int) -> int
 def _sphere_compact_line(sr: dict) -> str:
     """One-line compact for profile card: 🌿 22%  🔥 45%  💼 38%  🤝 20%  🌱 15%"""
     return "  ".join(f"{SPHERE_EMOJI[s]} {sr.get(s, 20)}%" for s in SPHERES)
+
+def _reminder_list_text(reminders: list) -> str:
+    """Build reminder list text for auto-show after create/delete."""
+    if not reminders:
+        return "🔔 Напоминаний нет."
+    lines = [f"🔔 <b>Напоминания ({len(reminders)}):</b>"]
+    for r in reminders:
+        dt  = r.get("datetime_iso","")[:16].replace("T"," ")
+        rep = {"once":"1×","daily":"ежедн.","weekdays":"пн-пт"}.get(r.get("repeat","once"),"1×")
+        lines.append(f"  🔔 {r['title']} · {dt} ({rep})")
+    return "\n".join(lines)
 
 def _sphere_progress_bar(pct: int) -> str:
     filled = round(pct / 10)
@@ -5861,7 +5872,6 @@ async def free_conversation(message: Message, state: FSMContext):
                                         parts.append(f"🎨 {new_task['label_name']}")
                                     if new_task.get("reminder"):
                                         parts.append(f"🔔 {new_task['reminder']}")
-                                    # Suggest what is missing
                                     missing = []
                                     if not new_task.get("deadline"):
                                         missing.append("📅 дедлайн")
@@ -5869,13 +5879,13 @@ async def free_conversation(message: Message, state: FSMContext):
                                         missing.append("🎨 группа")
                                     confirm_text = " · ".join(parts)
                                     if missing:
-                                        confirm_text += f"\n<i>Не указано: {', '.join(missing)} — добавь через [✏️] если нужно</i>"
-                                    # Show edit button
+                                        confirm_text += f"\n<i>Можно добавить: {', '.join(missing)}</i>"
+                                    confirm_text += "\n\n" + _build_profile_card(user_id)
                                     tid = new_task["task_id"]
                                     edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
                                         InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"task_edit_{tid}")
                                     ]])
-                                    await message.answer(confirm_text, reply_markup=edit_kb)
+                                    await message.answer(confirm_text, reply_markup=edit_kb, parse_mode="HTML")
                                 reply_text = ""
                         elif intent == "add_achievement":
                             if reply_text and reply_text.strip():
@@ -6062,7 +6072,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         t["label_name"] = ""
                                 store_set_tasks(user_id, tasks)
                                 await _sync_pending()
-                                reply_text = f"🗑 Группа «{lb['name']}» удалена."
+                                reply_text = f"🗑 Группа «{lb['name']}» удалена.\n\n" + _build_profile_card(user_id)
                             else:
                                 lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет групп"
                                 reply_text = f"🌀 Не нашла такую группу. Есть: {lbl_names}"
@@ -6329,7 +6339,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                     store_set_reminders(user_id, reminders)
                                     await _sync_pending()
                                     rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(r_repeat,"один раз")
-                                    reply_text = f"✅ Напоминание: 🔔 {r_title} · {r_dt[:16].replace('T',' ')} · {rep_s}"
+                                    reply_text = (f"✅ Напоминание: 🔔 {r_title} · {r_dt[:16].replace('T',' ')} · {rep_s}\n\n"
+                                                  + _reminder_list_text(store_get_reminders(user_id)))
 
                         elif intent == "show_reminders":
                             reminders = store_get_reminders(user_id)
@@ -6351,7 +6362,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 reminders = [r for r in reminders if r["id"] != rem["id"]]
                                 store_set_reminders(user_id, reminders)
                                 await _sync_pending()
-                                reply_text = f"🗑 Напоминание «{rem['title']}» удалено."
+                                reply_text = (f"🗑 Напоминание «{rem['title']}» удалено.\n\n"
+                                              + _reminder_list_text(reminders))
                             else:
                                 reply_text = f"🌀 Напоминание «{target_r}» не найдено."
 
@@ -6504,7 +6516,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 await _sync_pending()
                                 _del_count = len(_rm_task_ids)
                                 _task_info = f" и {_del_count} задач" if _del_count else ""
-                                reply_text = f"🗑 Роадмап «{_found_rm['title']}» удалён{_task_info}."
+                                reply_text = f"🗑 Роадмап «{_found_rm['title']}» удалён{_task_info}.\n\n" + _build_profile_card(user_id)
                             else:
                                 _rm_names = ", ".join(r["title"] for r in roadmaps) or "нет роадмапов"
                                 reply_text = f"🌀 Роадмап «{_target_rm}» не найден. Активные: {_rm_names}"
@@ -6692,7 +6704,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                             t["label_name"] = new_name
                                     store_set_tasks(user_id, tasks)
                                     await _sync_pending()
-                                    reply_text = f"✅ Группа переименована в «{new_name}»."
+                                    reply_text = f"✅ Группа переименована в «{new_name}».\n\n" + _build_profile_card(user_id)
                                 else:
                                     reply_text = "🌀 Группа не найдена."
                             else:
@@ -6794,13 +6806,22 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if "✅" in (reply_text or ""):
                                     store_set_tasks(user_id, tasks)
                                     await _sync_pending()
-                                    # Save last edited task for context continuity
                                     tid_edited = t.get("task_id","")
                                     await state.update_data(
                                         last_task_id=tid_edited,
                                         last_task_title=t.get("title","")
                                     )
-                                    # Suggest what else can be edited
+                                    # Auto-show: roadmap if task is in one, else profile
+                                    _rms_upd = store_get_roadmaps(user_id)
+                                    _all_t_upd = store_get_tasks(user_id)
+                                    _task_rm = next(
+                                        (rm for rm in _rms_upd if tid_edited in rm.get("task_ids",[])),
+                                        None
+                                    )
+                                    if _task_rm:
+                                        reply_text += "\n\n" + _roadmap_card_text(_task_rm, _all_t_upd)
+                                    else:
+                                        reply_text += "\n\n" + _build_profile_card(user_id)
                                     missing = []
                                     if not t.get("deadline"):
                                         missing.append("📅 дедлайн")
