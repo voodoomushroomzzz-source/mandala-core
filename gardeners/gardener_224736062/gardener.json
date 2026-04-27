@@ -34,5 +34,13 @@
       "resonance": 5,
       "event": "onboarding"
     }
-  ]
+  ],
+  "deep_profile": {
+    "dominant_sphere": null,
+    "weak_sphere": null,
+    "streak_days": 0,
+    "streak_sphere": null,
+    "last_reflection_date": null,
+    "observations": []
+  }
 }
