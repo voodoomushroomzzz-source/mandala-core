@@ -321,5 +321,12 @@
       ],
       "status": "active"
     }
-  ]
+  ],
+  "sphere_resonance": {
+    "health": 20,
+    "creativity": 20,
+    "work": 20,
+    "connections": 20,
+    "growth": 20
+  }
 }
