@@ -364,6 +364,21 @@
       "updated": "2026-04-27",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260427_028",
+      "title": "Починить лестницу",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-04-28",
+      "reminder": null,
+      "created": "2026-04-27",
+      "updated": "2026-04-27",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
