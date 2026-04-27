@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.0
+# Mandala Helper - Lite — SR Gentle Companion v7.27.1
 
 import re
 import os
@@ -5792,7 +5792,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             await _show_profile(user_id, message)
                             reply_text = ""
                         elif intent == "show_resonance":
-                            await cmd_resonance(message, state)
+                            await cmd_resonance(message)
                             reply_text = ""
 
                         elif intent == "show_resonance_detail":
