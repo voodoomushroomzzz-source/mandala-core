@@ -2,20 +2,17 @@
   "identity": {
     "module_id": "CORE-MAP-HONEYCOMBS-001",
     "name": "Архитектура сот",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "created": "2026-03-01",
+    "updated": "2026-04-27",
     "layer": 1,
     "type": "segment"
   },
   "meta": {
-    "description": "Соты и их связь с модулями",
+    "description": "Соты и их связи с модулями",
     "status": "active",
     "priority": "medium",
-    "tags": [
-      "honeycombs",
-      "architecture",
-      "segmentation"
-    ],
+    "tags": ["honeycombs", "architecture", "segmentation"],
     "resonance": "100%"
   },
   "honeycombs": {
@@ -24,15 +21,9 @@
       "description": "Сота инструкций. Сегменты <2KB для ленивой загрузки.",
       "segments": {
         "critical": "patch_mastery.json",
-        "core": [
-          "patch_system.json",
-          "module_creation.json",
-          "patch_optimization.json",
-          "folder_management.json"
-        ]
+        "core": ["patch_system.json", "module_creation.json", "patch_optimization.json", "folder_management.json"]
       },
-      "status": "active",
-      "migration_date": "2026-03-01"
+      "status": "active"
     },
     "core_map": {
       "manifest": "honeycombs/core_map/index.json",
@@ -43,112 +34,83 @@
         "repository": "repository.json",
         "honeycombs": "honeycombs.json"
       },
+      "status": "active"
+    },
+    "seeds": {
+      "manifest": "honeycombs/seeds/index.json",
+      "description": "Сота семян. Банк идей для развития Мандалы. 6 активных + 7 архивных семян.",
+      "segments": {
+        "meta": "meta.json",
+        "protocols": "protocols.json",
+        "active": "active/ (6 файлов)",
+        "archive": "archive/ (7 файлов)",
+        "search_index": "search_index.json",
+        "registry": "registry.json"
+      },
       "status": "active",
-      "migration_date": "2026-03-01"
+      "size": "~25KB в 18 файлах"
+    },
+    "roadmaps": {
+      "manifest": "honeycombs/roadmaps/index.json",
+      "description": "Сота роадмапов. Проработанные дорожные карты с шагами и вехами.",
+      "segments": {
+        "active": "active/ (5 файлов)",
+        "completed": "completed/ (пусто)",
+        "meta": "meta/ (2 файла)",
+        "templates": "templates/ (1 файл)"
+      },
+      "status": "active",
+      "size": "12KB в 8 файлах"
+    },
+    "philosophy": {
+      "manifest": "honeycombs/philosophy/index.json",
+      "description": "Сота философии Мандалы. Философская основа Мандалы Симбиоза.",
+      "segments": {
+        "blocks": "blocks/ (5 файлов)",
+        "testimonies": "testimonies/ (2 файла)",
+        "meta": "meta/ (2 файла)"
+      },
+      "status": "active",
+      "size": "5.4KB в 9 файлах"
+    },
+    "engineer_chat": {
+      "manifest": "honeycombs/engineer_chat/index.json",
+      "description": "Сота инженерного чата. Архитектура, компоненты, история разработки, текущий статус Мандалы.",
+      "segments": {
+        "architecture": "architecture/ (4 файла)",
+        "development": "development/ (3 файла)",
+        "status": "status/ (3 файла)",
+        "integrations": "integrations/ (3 файла)",
+        "meta": "meta/ (2 файла)",
+        "templates": "templates/ (1 файл)"
+      },
+      "status": "active",
+      "size": "51.5KB в 16 файлах"
+    },
+    "telegram_bot": {
+      "manifest": "honeycombs/telegram_bot/index.json",
+      "description": "Telegram бот Мандалы Симбиоза. Архитектура, возможности, конфигурация и интеграции.",
+      "segments": {
+        "bot_info": "bot_info/ (2 файла)",
+        "capabilities": "capabilities/ (2 файла)",
+        "configuration": "configuration/ (2 файла)",
+        "integration": "integration/ (1 файл)",
+        "meta": "meta/ (1 файл)",
+        "roadmap": "roadmap/ (1 файл)",
+        "root": "root/ (2 файла)"
+      },
+      "status": "active",
+      "size": "5.9KB в 11 файлах"
+    },
+    "tasks": {
+      "manifest": "honeycombs/tasks/index.json",
+      "description": "Сота задач. Активные и архивные задачи. 11 активных, 3 в архиве.",
+      "segments": {
+        "template": "basic_task.json",
+        "active": "active/ (11 файлов)",
+        "archive": "archive/ (3 файла)"
+      },
+      "status": "active"
     }
-  },
-  "migration_plan": {
-    "pending": [
-      "seeds",
-      "roadmaps",
-      "philosophy",
-      "engineer_chat",
-      "telegram_bot",
-      "tasks"
-    ],
-    "criteria": "Файлы >2KB",
-    "priority_order": [
-      "instructions",
-      "core_map",
-      "seeds",
-      "roadmaps",
-      "philosophy",
-      "engineer_chat",
-      "telegram_bot",
-      "tasks"
-    ]
-  },
-  "/honeycombs/seeds": {
-    "manifest": "honeycombs/seeds/index.json",
-    "description": "Сота семян. Банк идей для развития Мандалы. 6 активных + 7 архивных семян.",
-    "segments": {
-      "meta": "meta.json",
-      "protocols": "protocols.json",
-      "active": "active/ (6 файлов)",
-      "archive": "archive/ (7 файлов)",
-      "search_index": "search_index.json",
-      "registry": "registry.json"
-    },
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "~25KB в 18 файлах"
-  },
-  "/migration_plan/pending": [
-    "tasks"
-  ],
-  "/migration_plan/completed": [
-    "instructions",
-    "core_map",
-    "seeds",
-    "engineer_chat",
-    "roadmaps",
-    "philosophy",
-    "telegram_bot"
-  ],
-  "/honeycombs/engineer_chat": {
-    "manifest": "honeycombs/engineer_chat/index.json",
-    "description": "Сота инженерного чата. Архитектура, компоненты, история разработки, текущий статус Мандалы.",
-    "segments": {
-      "architecture": "architecture/ (4 файла)",
-      "development": "development/ (3 файла)",
-      "status": "status/ (3 файла)",
-      "integrations": "integrations/ (3 файла)",
-      "meta": "meta/ (2 файла)",
-      "templates": "templates/ (1 файл)"
-    },
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "51.5KB в 16 файлах"
-  },
-  "/honeycombs/roadmaps": {
-    "manifest": "honeycombs/roadmaps/index.json",
-    "description": "Сота роадмапов. Проработанные дорожные карты с шагами и вехами.",
-    "segments": {
-      "active": "active/ (5 файлов)",
-      "completed": "completed/ (пусто)",
-      "meta": "meta/ (2 файла)",
-      "templates": "templates/ (1 файл)"
-    },
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "12KB в 8 файлах"
-  },
-  "/honeycombs/philosophy": {
-    "manifest": "honeycombs/philosophy/index.json",
-    "description": "Сота философии Мандалы. Философская основа Мандалы Симбиоза.",
-    "segments": {
-      "blocks": "blocks/ (5 файлов)",
-      "testimonies": "testimonies/ (2 файла)",
-      "meta": "meta/ (2 файла)"
-    },
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "5.4KB в 9 файлах"
-  },
-  "/honeycombs/telegram_bot": {
-    "manifest": "honeycombs/telegram_bot/index.json",
-    "description": "Telegram бот Мандалы Симбиоза. Архитектура, возможности, конфигурация и интеграции.",
-    "segments": {
-      "bot_info": "bot_info/ (2 файла)",
-      "capabilities": "capabilities/ (2 файла)",
-      "configuration": "configuration/ (2 файла)",
-      "integration": "integration/ (1 файл)",
-      "meta": "meta/ (1 файл)",
-      "roadmap": "roadmap/ (1 файл)",
-      "root": "root/ (2 файла)"
-    },
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "5.9KB в 11 файлах"
   }
 }
