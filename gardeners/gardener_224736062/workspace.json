@@ -269,6 +269,15 @@
       "updated": "2026-04-27",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "t_eafdaa59",
+      "title": "Редактировать ударные",
+      "status": "active",
+      "created": "2026-04-27",
+      "deadline": "2026-04-28",
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -314,7 +323,8 @@
         "t_1dd4a5e1",
         "t_4dc7d659",
         "task_20260427_025",
-        "task_20260427_022"
+        "task_20260427_022",
+        "t_eafdaa59"
       ],
       "status": "active"
     }
