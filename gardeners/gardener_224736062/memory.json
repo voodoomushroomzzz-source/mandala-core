@@ -135,6 +135,14 @@
     {
       "role": "assistant",
       "content": "В Москве заметные театральные события включают «Преступление и наказание» и «Бесприданница» в театре на 4-м Сыромятническом. Малый театр и Театр на Страстном также предлагают разнообразные спектакли. Проверьте местные афиши для актуального расписания.\n\n<b>Источники:</b>\n• <a href=\"https://www.m.yandex.ru/search/touch?lr=21366&noreask=1&rq=1&ncrnd=1196&text=%D0%9C%D0%B0%D0%BB%D1%8B%D0%B9%20%D1%82%D0%B5%D0%B0%D1%82%D1%80&es_context=0oYlcQDxpMMTcyMzM1MDU5OTU5Nzg4NS0xNzEzNzM1NjMzNTg5NDYyMDM1MS1iYWxhbmNlci1sN2xldmVsZXIta3Vici15cC12bGEtMjEzLUJBTDIFYXNzb2MEgGAl&es_params=%7B%22collapsed%22%3A1%7D&ento=0oCghydXc0MjQzMRIKcnV3NzE6cHJvahgCcCBS1g\">Без названия</a>"
+    },
+    {
+      "role": "user",
+      "content": "Добавь задачу возместить 4413 рублей. Дедлайн завтра. Группа работа."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-28"
