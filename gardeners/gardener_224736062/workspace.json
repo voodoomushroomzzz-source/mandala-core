@@ -262,6 +262,21 @@
       "deadline": "2026-05-10",
       "label_name": null,
       "reminder": null
+    },
+    {
+      "task_id": "task_20260428_019",
+      "title": "перепечатать все в меню",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "work",
+      "priority": 5,
+      "deadline": null,
+      "reminder": null,
+      "created": "2026-04-28",
+      "updated": "2026-04-28",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
