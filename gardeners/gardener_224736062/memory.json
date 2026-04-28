@@ -63,6 +63,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Перенеси задачу починить лестницу на завтра."
+    },
+    {
+      "role": "assistant",
+      "content": "🌀 Уточни: «переименуй задачу X в Y»"
     }
   ],
   "updated": "2026-04-28"
