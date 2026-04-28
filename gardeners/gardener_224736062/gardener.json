@@ -2,7 +2,7 @@
   "gardener_id": "gardener_224736062",
   "telegram_id": "224736062",
   "name": "Дима",
-  "resonance_level": 60,
+  "resonance_level": 62,
   "created": "2026-04-18",
   "updated": "2026-04-26",
   "personal_info": {
@@ -38,9 +38,11 @@
   "deep_profile": {
     "dominant_sphere": "work",
     "weak_sphere": "health",
-    "streak_days": 5,
+    "streak_days": 6,
     "streak_sphere": "work",
-    "last_reflection_date": "2026-04-27",
-    "observations": []
+    "last_reflection_date": "2026-04-28",
+    "observations": [
+      "2026-04-28: 6 дней подряд активна сфера «Дело» (32%), «Тело» на 20%"
+    ]
   }
 }
