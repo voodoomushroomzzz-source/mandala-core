@@ -307,6 +307,21 @@
       "updated": "2026-04-28",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260428_022",
+      "title": "поменять кран на патриках",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-04-29",
+      "reminder": null,
+      "created": "2026-04-28",
+      "updated": "2026-04-28",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
