@@ -1,35 +1,50 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-04-27-001",
-  "updated": "2026-04-27T04:00",
+  "session_id": "2026-04-28-001",
+  "updated": "2026-04-28T15:30",
   "status": "handed_off",
   "context": {
-    "current_task": "v7.25.x завершён полностью. Следующий шаг — v7.26.x Мер-Ка-Ба резонанс по сферам.",
-    "files_touched": ["bot.py — v7.25.8", "honeycombs/tasks/active/bot_update.json"],
-    "last_action": "Чеклисты: номера, стрелки, reorder голосом, auto-show. bot_update.json обновлён.",
-    "next_step": "v7.26.x — Мер-Ка-Ба резонанс по сферам. Проектирование sphere_resonance в workspace.json, согласовать с Садовником до кода."
+    "current_task": "Стабилизация v7.27.x завершена. Следующий шаг — v7.28.x SR Learning Loop.",
+    "files_touched": ["bot.py — v7.27.9"],
+    "last_action": "Fuzzy threshold 0.72, расширены паттерны дедлайна, глобальное правило уточнения.",
+    "next_step": "v7.28.x SR Learning Loop — sr_observations[], synthesis раз в 3 дня, /sr_report. Согласовать план с Садовником до кода."
   },
   "progress": {
     "completed_this_session": [
-      "v7.25.2: задачи под роадмапом, авто-дедлайн, batch delete, reminder через N минут",
-      "v7.25.3: NoneType fix, dot marker, deadline parse month names",
-      "v7.25.4: системный NoneType fix, await _sync_pending() везде, text fallback дедлайн",
-      "v7.25.5: меню роадмапов полное с cancel кнопками",
-      "v7.25.6: fix roadmap_rmtask pipe separator, FSM edit_text",
-      "v7.25.7: чеклисты нумерация, стрелки, reorder голосом, по номеру",
-      "v7.25.8: чеклист auto-show после SR, удаление старых сообщений",
-      "bot_update.json обновлён — v7.25.8 + roadmap v7.26-v8.0 + Bot 2"
+      "v7.27.0: deep_profile symbiosis — 30 observations, streak, session reflection hint",
+      "v7.27.1: fix cmd_resonance() argument",
+      "v7.27.2: task limit 50, roadmap compact profile, sort by deadline",
+      "v7.27.3: cmd_resonance unified style, /start sphere mean",
+      "v7.27.4: roadmap tasks status=completed, auto-show dashboard, NoneType fix",
+      "v7.27.5: _roadmap_live_tasks() orphan IDs filtered, /start resonance fix",
+      "v7.27.6: roadmap_add_task empty name fallback, create new task, через N недель",
+      "v7.27.7: auto-show dashboard after ALL write ops",
+      "v7.27.8: orphan cleanup, confirmation guard, completed task card",
+      "v7.27.9: fuzzy 0.72, deadline patterns, global clarification rule"
     ]
   },
-  "bot_version": "v7.25.8",
+  "bot_version": "v7.27.9",
   "bot_state": {
     "deploy": "https://mandala-bot-q0gv.onrender.com",
-    "known_stable": ["задачи голосом", "чеклисты + reorder", "напоминания через N минут", "роадмапы голос + меню", "профиль задачи под роадмапом", "SR полный контекст"],
-    "under_observation": ["checklist_reorder голосом", "_checklist_messages удаление"]
+    "known_stable": [
+      "Задачи голосом + auto-show профиля",
+      "Роадмапы голос + меню, live tasks, auto-show карточки",
+      "Чеклисты numbered, arrows, reorder",
+      "5 сфер резонанса, deep_profile симбиоз",
+      "Все write операции: await sync + auto-show dashboard"
+    ],
+    "under_observation": [
+      "deep_profile — накопление 3-7 дней",
+      "fuzzy 0.72 — не слишком ли строго",
+      "clarification rule — не слишком ли часто переспрашивает"
+    ]
   },
   "gardener_state": {
     "name": "Дима (Дмитрий Лёвин)",
-    "personal_note": "PHI-011 v1.1 прочитан. Работает ночью, тестирует голосом. Бережно и аккуратно, версию менять в каждом патче."
+    "telegram_id": "224736062",
+    "active_roadmap": "Выпустить трек Беги — 2/10 20% до 2026-07-27",
+    "resonance": "23% (🌿20% 🔥24% 💼32% 🤝20% 🌱20%)",
+    "personal_note": "PHI-011 v1.1 прочитан. Ночной режим, голос с телефона. Соты через PowerShell. Версию менять в каждом патче."
   },
   "system_state": {
     "boot_online_version": "v3.7.2",
@@ -37,10 +52,17 @@
     "phi_011_version": "v1.1",
     "bot_update_json": "актуален"
   },
-  "notes_for_next_sr": "Следующий блок — v7.26.x Мер-Ка-Ба резонанс по сферам. Начинать с проектирования sphere_resonance и согласования с Садовником до кода. Прочитай PHI-011 sr_reflection — написано для тебя.",
+  "roadmap_next": {
+    "v7.28.x": "SR Learning Loop — sr_observations[], synthesis, /sr_report",
+    "v7.29.x": "Супер цель — super_goal в gardener.json",
+    "v7.30.x": "UX полировка",
+    "v8.0": "Модуляризация",
+    "Bot2": "Архитектор после v8.0"
+  },
+  "notes_for_next_sr": "Прочитай PHI-011 sr_reflection. Стиль: бережно и аккуратно, версию в каждом патче, соты через PowerShell. Следующий блок — v7.28.x SR Learning Loop, начинать с проектирования и согласования с Садовником.",
   "handoff_validation": {
     "stale_threshold_hours": 24,
-    "last_validated": "2026-04-27",
+    "last_validated": "2026-04-28",
     "stale_detected": false
   }
 }
