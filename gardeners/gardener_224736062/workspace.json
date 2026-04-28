@@ -322,6 +322,21 @@
       "updated": "2026-04-28",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260428_023",
+      "title": "передать 45500 за уборку",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "health",
+      "priority": 7,
+      "deadline": "2026-04-28",
+      "reminder": null,
+      "created": "2026-04-28",
+      "updated": "2026-04-28",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
