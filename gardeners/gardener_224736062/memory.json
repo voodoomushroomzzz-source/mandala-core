@@ -55,6 +55,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Добавь задачу передать 45500 за уборку. Дедлайн сегодня группа работы."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-04-28"
