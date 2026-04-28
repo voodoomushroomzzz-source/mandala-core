@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.8
+# Mandala Helper - Lite — SR Gentle Companion v7.27.9
 
 import re
 import os
@@ -4719,6 +4719,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: пункты в чеклисте нумеруются с 1. "пункт 3" = третий пункт по порядку
 - "переименуй задачу X в Y", "измени дедлайн задачи X на Y", "смени группу задачи X на Y" → edit_task, action.title="X", action.field="title|deadline|group", action.value="Y", 0.9
 - "перенеси дедлайн X на Y", "сдвинь срок X на Y", "поставь новый срок X", "измени дату задачи X", "задача X — новый дедлайн Y", "задача X перенеси на Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
+- "поменяй дедлайн у задачи X на Y", "поменяй дату задачи X на Y", "в задаче X поменяй дедлайн на Y", "задаче X поставь дедлайн Y", "у задачи X дедлайн Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
 - "удали дедлайн задачи X", "убери срок у задачи X", "убери дедлайн X", "задача X без дедлайна" → edit_task, action.title="X", action.field="deadline", action.value="удали", 0.95
 - ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
@@ -4754,6 +4755,7 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: никогда не генерируй профиль в поле text — только через intent show_profile
 - ВАЖНО: никогда не имитируй выполнение действий в поле text — complete_task, edit_task, create_reminder, delete_task и все остальные action-интенты ВСЕГДА передавай через intent, не через text
 - ВАЖНО: если сообщение — просто подтверждение или реакция («да», «нет», «правильно», «ок», «хорошо», «понял», «именно», «верно», «точно», «нет не надо») без нового действия — ВСЕГДА используй intent=conversation, confidence=1.0. Никогда не запускай action-интенты по одному слову-подтверждению.
+- ВАЖНО: если не уверена какую именно задачу имеет в виду садовник (похожие названия, неточное описание) — задай один уточняющий вопрос через intent=conversation. Не угадывай и не выбирай похожую задачу самостоятельно. Лучше спросить один раз, чем сделать неверное действие.
 - ВАЖНО: если садовник просит выполнить действие — intent НИКОГДА не равен conversation, даже если хочешь добавить комментарий
 - ВАЖНО: поле text при action-интентах — только короткий эмоциональный отклик (1-2 слова) или пустая строка. НИКОГДА не пиши "✅ Готово", "задача закрыта", "напоминание создано" и подобное в text — это делает система, не ты
 - Если действие невозможно (нет задачи, нет данных) → conversation, скажи честно что не можешь
@@ -6598,7 +6600,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 # Clean orphaned task_ids before any check
                                 if _clean_roadmap_task_ids(_found_rm, all_tasks):
                                     store_set_roadmaps(user_id, roadmaps)
-                                _matched = _fuzzy_match_tasks(_task_q, all_tasks)
+                                _matched = _fuzzy_match_tasks(_task_q, all_tasks, threshold=0.72)
                                 if _matched and _matched[0].get("task_id") not in _found_rm.get("task_ids", []):
                                     # Link existing task
                                     _tid = _matched[0].get("task_id", "")
