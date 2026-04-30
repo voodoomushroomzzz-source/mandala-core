@@ -2515,13 +2515,17 @@ async def cb_roadmap_delconfirm(callback: CallbackQuery, state: FSMContext):
     rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
     if rm:
         _rm_task_ids = set(rm.get("task_ids", []))
+        # Unlink tasks from roadmap — do NOT delete them, they stay in user's task list
         if _rm_task_ids:
-            all_tasks = [t for t in store_get_tasks(user_id) if t.get("task_id") not in _rm_task_ids]
+            all_tasks = store_get_tasks(user_id)
+            for t in all_tasks:
+                if t.get("task_id") in _rm_task_ids and t.get("status") == "completed":
+                    t["status"] = "todo"  # restore completed roadmap tasks to active
             store_set_tasks(user_id, all_tasks)
         roadmaps = [r for r in roadmaps if r["roadmap_id"] != rm_id]
         store_set_roadmaps(user_id, roadmaps)
         await _sync_pending()
-        _del_info = f" и {len(_rm_task_ids)} задач" if _rm_task_ids else ""
+        _del_info = f" · {len(_rm_task_ids)} задач возвращено в список" if _rm_task_ids else ""
         header = f"🗑 Роадмап «{rm['title']}» удалён{_del_info}.\n\n🗺 Роадмапы ({len(roadmaps)}/3):" if roadmaps else f"🗑 Роадмап «{rm['title']}» удалён{_del_info}.\n\n🗺 Роадмапов пока нет."
         try:
             await callback.message.edit_text(header, reply_markup=get_roadmaps_main_kb(roadmaps), parse_mode="HTML")
@@ -3601,8 +3605,9 @@ async def ach_bonus(message: Message, state: FSMContext):
     category = data.get("category", "other")
     icon = LIFE_AREA_ICONS.get(category, "🌱")
 
+    user_id = str(message.from_user.id)
     # Update store immediately
-    achievements = list(_store.get("achievements", []))
+    achievements = list(store_get_achievements(user_id))
     achievements.append({
         "id": f"ach_{len(achievements)+1:03d}",
         "category": category,
@@ -3612,7 +3617,7 @@ async def ach_bonus(message: Message, state: FSMContext):
         "resonance_bonus": bonus,
         "icon": icon
     })
-    store_set_achievements(achievements)
+    store_set_achievements(user_id, achievements)
 
     # Update gardener resonance
     gardener = store_get_profile(user_id)
@@ -3624,7 +3629,7 @@ async def ach_bonus(message: Message, state: FSMContext):
         g["updated"] = _today()
         g = _add_growth_history_entry(g, new_res)
         store_set_profile(user_id, g)
-        _invalidate_auth_cache(str(message.from_user.id))
+        _invalidate_auth_cache(user_id)
 
     # Sync to GitHub in background
     _fire_sync()
@@ -6985,6 +6990,9 @@ async def on_startup():
 
 async def on_shutdown():
     """Called when bot stops."""
+    if _pending_writes:
+        logger.info(f"Flushing {len(_pending_writes)} pending write(s) before shutdown...")
+        await _sync_pending()
     await bot.delete_webhook()
     await bot.session.close()
     if _http_session:
