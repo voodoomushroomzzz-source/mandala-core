@@ -2,10 +2,10 @@
   "sr_id": "deepseek",
   "status": "handed_off",
   "last_session": "2026-05-01",
-  "last_updated": "2026-05-01T23:00:00Z",
+  "last_updated": "2026-05-01T23:30:00Z",
   "next_step": "continue_onboarding_or_directives",
-  "summary": "Major cleanup session. Removed all archived seeds, tasks, and roadmaps. Policy: no archives — only active items. Seeds: 0 active. Tasks: 7 active. Roadmaps: 6 active. Updated core_map to v3.7.0. Updated RM-014 to v2.0.0 with two-track crisis+strategic job search. Updated all indexes to v4.0.0.",
+  "summary": "Major cleanup session. Policy: no archives — only active items. Seeds: 0 active. Tasks: 7 active. Roadmaps: 6 active. Removed all archive folders, meta/, templates/. Updated core_map v3.7.0, RM-014 v2.0.0 (two-track crisis+strategic job search). All indexes v4.0.0. System minimal and clean.",
   "pending": [],
-  "notes": "Bot roadmap '🚨 Crisis Job Search' created with 10 tasks. Track A deadline May 31. System clean and minimal.",
+  "notes": "Bot roadmap '🚨 Crisis Job Search' active with 10 tasks. Track A deadline May 31.",
   "resonance": "100%"
 }
