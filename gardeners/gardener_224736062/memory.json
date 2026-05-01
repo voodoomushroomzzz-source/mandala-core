@@ -103,6 +103,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Перемести пункт 10 от пункта 4."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-05-01"
