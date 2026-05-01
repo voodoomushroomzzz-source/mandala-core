@@ -332,7 +332,7 @@
         {
           "id": "i6",
           "text": "кукуруза",
-          "done": false
+          "done": true
         },
         {
           "id": "i7",
@@ -350,7 +350,7 @@
           "done": false
         }
       ],
-      "pinned_message_id": null,
+      "pinned_message_id": 8092,
       "created": "2026-05-01"
     }
   ],
