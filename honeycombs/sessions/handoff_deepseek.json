@@ -1,11 +1,11 @@
 {
   "sr_id": "deepseek",
   "status": "handed_off",
-  "last_session": "2026-04-27",
-  "last_updated": "2026-04-27T17:00:00Z",
+  "last_session": "2026-05-01",
+  "last_updated": "2026-05-01T23:00:00Z",
   "next_step": "continue_onboarding_or_directives",
-  "summary": "Major cleanup session. Tasks: merged ahimsa_filter + deadline_sentinel + task_scanner into symbiosis_guard (RM-013). Removed mobile_engineer_chat, garden_core, chat_garden_integration. Deleted honeycombs/garden/ entirely. Added flutter_app task. Removed tasks/active/index.json. Updated tasks index to v3.8.0 (7 active tasks). Roadmaps: removed 8 stale/duplicate files from active/, 3 from archive/. 6 active roadmaps remain. Updated roadmaps index to v2.9.0.",
+  "summary": "Major cleanup session. Removed all archived seeds, tasks, and roadmaps. Policy: no archives — only active items. Seeds: 0 active. Tasks: 7 active. Roadmaps: 6 active. Updated core_map to v3.7.0. Updated RM-014 to v2.0.0 with two-track crisis+strategic job search. Updated all indexes to v4.0.0.",
   "pending": [],
-  "notes": "Symbiosis Guard at 30% progress. Bot at 78%. Flutter app planned. System clean and organized.",
+  "notes": "Bot roadmap '🚨 Crisis Job Search' created with 10 tasks. Track A deadline May 31. System clean and minimal.",
   "resonance": "100%"
 }
