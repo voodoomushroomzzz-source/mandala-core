@@ -281,7 +281,7 @@
       "label_name": "Работа",
       "life_area": "work",
       "priority": 5,
-      "deadline": null,
+      "deadline": "2026-05-31",
       "reminder": null,
       "created": "2026-05-01",
       "updated": "2026-05-01",
@@ -343,7 +343,8 @@
       "deadline": "2026-05-31",
       "created": "2026-05-01",
       "task_ids": [
-        "t_cd992632"
+        "t_cd992632",
+        "task_20260501_020"
       ],
       "status": "active"
     }
