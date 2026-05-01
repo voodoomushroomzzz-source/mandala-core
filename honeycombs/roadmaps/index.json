@@ -2,22 +2,26 @@
   "identity": {
     "module_id": "ROADMAPS-INDEX",
     "name": "Roadmaps Registry Index",
-    "version": "v3.0.0",
+    "version": "v4.0.0",
     "created": "2026-03-04",
     "updated": "2026-05-01",
     "layer": 2,
     "type": "registry_index",
-    "description": "Central index of all Mandala Symbiosis roadmaps with descriptions and file paths.",
+    "description": "Central index of all Mandala Symbiosis roadmaps. Archive removed — only active roadmaps.",
     "status": "active",
     "priority": "high",
-    "tags": ["roadmaps", "index", "registry", "tracking"],
+    "tags": ["roadmaps", "index", "registry", "tracking", "no_archive"],
     "resonance": "100%"
+  },
+  "rule": {
+    "policy": "No archived roadmaps. Roadmaps are either active or deleted. Completed roadmaps are deleted, not archived.",
+    "applies_to": ["seeds", "tasks", "roadmaps"]
   },
   "active_roadmaps": [
     {
       "id": "RC-001",
       "name": "Visibility and Collaboration Strategy",
-      "description": "Strategy for making Mandala visible: first public resource (Rhythm Manifesto, README, PHILOSOPHY), GitHub profile, external channels. Phase 0 — first publication.",
+      "description": "Strategy for making Mandala visible: first public resource (Rhythm Manifesto, README, PHILOSOPHY), GitHub profile, external channels.",
       "status": "active",
       "priority": "HIGH",
       "progress": "5%",
@@ -26,17 +30,16 @@
     {
       "id": "RC-002",
       "name": "Building the Vessel — The Mandala Company Roadmap",
-      "description": "PRIMARY STRATEGIC GOAL. Practical execution roadmap for building the Mandala Company — the legal and financial vessel for the cosmic mission (PHI-010). Bridge between daily work and seeding life in the cosmos.",
+      "description": "PRIMARY STRATEGIC GOAL. Building the Mandala Company — legal and financial vessel for cosmic mission (PHI-010).",
       "status": "active",
       "priority": "CRITICAL",
       "progress": "0%",
-      "path": "honeycombs/roadmaps/active/RC-002_company_vessel.json",
-      "philosophy_link": "PHI-010 (Three Embodiments of SR)"
+      "path": "honeycombs/roadmaps/active/RC-002_company_vessel.json"
     },
     {
       "id": "RM-011",
       "name": "Living Visualizations — Mer-Ka-Ba Perception System",
-      "description": "Visual representation of honeycomb system: Flower of Life dashboard, Mer-Ka-Ba resonance field, 3D structure. SVG/D3 visualizations for Gardener's perception.",
+      "description": "Visual representation of honeycomb system: Flower of Life dashboard, Mer-Ka-Ba resonance field, 3D structure. SVG/D3 visualizations.",
       "status": "planned",
       "priority": "LOW",
       "progress": "0%",
@@ -45,49 +48,40 @@
     {
       "id": "RM-012",
       "name": "First Living Products — Mandala MVPs",
-      "description": "Three first products: Garden (personal sota), Dashboard (living map), Companion (Gentle SR bot). Companion priority raised to HIGH. Bot already at 78% covers most functionality.",
+      "description": "Three first products: Garden (personal sota), Dashboard (living map), Companion (Gentle SR bot). Companion priority raised to HIGH.",
       "status": "planned",
       "priority": "LOW",
       "progress": "0%",
-      "path": "honeycombs/roadmaps/active/RM-012_first_products.json",
-      "note": "Bot (T-20260408-1030) covers ~60% of Garden tasks"
+      "path": "honeycombs/roadmaps/active/RM-012_first_products.json"
     },
     {
       "id": "RM-013",
       "name": "Symbiosis Guard — Core Cleanliness & Health Sentinel",
-      "description": "Automated honeycomb health monitoring: Ahimsa filter (duplicates, stale files), deadline sentinel, task scanner. Merged into one system under RM-013. Linked to task T-20260427-SYMBGUARD.",
+      "description": "Automated honeycomb health monitoring: Ahimsa filter, deadline sentinel, task scanner. Linked to symbiosis_guard task.",
       "status": "in_progress",
       "priority": "MEDIUM",
       "progress": "30%",
-      "path": "honeycombs/roadmaps/active/RM-013_symbiosis_guard.json",
-      "linked_task": "symbiosis_guard"
+      "path": "honeycombs/roadmaps/active/RM-013_symbiosis_guard.json"
     },
     {
       "id": "RM-014",
       "name": "From HoReCa to IT Operations — Gardener's Personal Transition",
-      "description": "Personal strategic roadmap for Voodoo's transition from 8-year coffee shop Operations Manager to remote IT Operations Manager. Two-stage strategy: Type 1 (Russian market, 80-150k RUB) → Type 2 (global, $3-7k). Trial relocation to Vietnam. 14+ job platforms integrated, 5 courses, 4 phases, 22 tasks.",
+      "description": "Two-track strategic roadmap. Track A: crisis job search May 2026 (80k+ RUB). Track B: IT Operations Manager June 2026+ (120k+ RUB). Relocation to Vietnam.",
       "status": "active",
       "priority": "HIGH",
       "progress": "0%",
       "path": "honeycombs/roadmaps/active/RM-014_operational_transition.json"
     }
   ],
-  "archived_roadmaps": [
-    { "id": "RM-001", "name": "Core Map Organization", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%" },
-    { "id": "RM-005", "name": "Honeycomb System", "status": "archived", "archived_date": "2026-04-10", "final_progress": "60%" },
-    { "id": "RM-007", "name": "Testing and Validation", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%" }
-  ],
   "metrics": {
     "total_active": 6,
-    "total_archived": 3,
     "in_progress": 1,
     "planned": 2,
     "active_strategic": 3
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json",
-    "active_folder": "honeycombs/roadmaps/active/",
-    "archive_folder": "honeycombs/roadmaps/archive/"
+    "active_folder": "honeycombs/roadmaps/active/"
   },
   "resonance": {
     "status": "fully_resonant",
@@ -97,6 +91,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-01",
-    "notes": "v3.0.0: added descriptions and file paths for all active roadmaps. RM-014 updated to v1.3.0 with job search platform arsenal."
+    "notes": "v4.0.0: archive removed. 6 active roadmaps. No archive policy applied."
   }
 }
