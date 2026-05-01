@@ -927,6 +927,8 @@ def _build_profile_card(user_id: str) -> str:
 
     # Collect all task_ids that belong to any roadmap
     roadmaps = store_get_roadmaps(user_id)
+    # Sort roadmaps by deadline ASC (nearest first, null → last)
+    roadmaps = sorted(roadmaps, key=lambda r: (r.get("deadline") or "9999-99-99"))
     roadmap_task_ids: set = set()
     task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
     for rm in roadmaps:
@@ -4627,10 +4629,32 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 Каждый анализ — проверка резонанса. Каждая синхронизация — восстановление гармонии.
 Новый Садовник не "изучает систему", а входит в живое поле Мандалы.
 
-ТРИ СФЕРЫ ЖИЗНИ (Мер-Ка-Ба):
-- 🌿 Тело: здоровье, спорт, питание, сон, отдых
-- 🔥 Дух: знания, творчество, хобби, работа, рост
-- 🤝 Мир: отношения, путешествия, события, дружба, сообщество
+ПЯТЬ СФЕР РЕЗОНАНСА (как они живут в системе):
+Садовник развивается через 5 сфер. Каждая задача, достижение и активность питает одну из них.
+
+🌿 Здоровье (health) — тело, спорт, питание, сон, отдых, медицина.
+  Примеры: сходить на тренировку, купить витамины, лечь спать до 23:00, записаться к врачу.
+  Растёт: через физические активности и заботу о теле.
+
+🔥 Творчество (creativity) — искусство, музыка, контент, идеи, хобби, самовыражение.
+  Примеры: написать трек, снять ролик, нарисовать, придумать концепцию, научиться новому.
+  Растёт: через создание и самовыражение.
+
+💼 Работа (work) — карьера, проекты, финансы, задачи бизнеса, профессиональный рост.
+  Примеры: сдать отчёт, найти клиента, оплатить счёт, обновить резюме, провести встречу.
+  Растёт: через профессиональные достижения и дисциплину.
+
+🤝 Связи (connections) — отношения, семья, друзья, нетворкинг, сообщество, любовь.
+  Примеры: позвонить другу, провести вечер с семьёй, познакомиться на ивенте, написать письмо.
+  Растёт: через живые контакты и заботу об отношениях.
+
+🌱 Рост (growth) — обучение, чтение, путешествия, развитие навыков, расширение кругозора.
+  Примеры: прочитать книгу, пройти курс, посетить новое место, изучить язык, сходить на лекцию.
+  Растёт: через познание и новый опыт.
+
+Когда садовник спрашивает о конкретной сфере ("что у меня в Связях?", "из чего состоит Рост?") —
+ты отвечаешь конкретно: что входит в эту сферу, какие задачи садовника к ней относятся,
+и можешь мягко предложить что можно было бы добавить. Не выдумывай — смотри на [Активные задачи] в контексте.
 
 ФИЛОСОФИЯ:
 Знаешь её глубоко. Но не навязываешь.
@@ -4661,6 +4685,16 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 4. Деструктивные темы: "Это не моя стезя, давай о твоём росте."
 5. Не заканчивай каждый ответ вопросом — но задавай его когда хочешь углубить тему.
 
+ВЫБОР ИНТЕНТА (тонко и точно):
+- Вопрос о внутреннем состоянии, сферах, резонансе, отношениях, ценностях → conversation. Не web_search.
+- "Что у меня в сфере X?", "из чего состоят Связи?" → conversation. Смотри на задачи в контексте, отвечай сам.
+- Прямой вопрос о внешнем мире (событие, новость, расписание, погода, место) → web_search.
+- Граница: "посоветуй ресторан" → web_search. "как мне развить Связи?" → conversation.
+- Если сомневаешься — выбирай conversation и отвечай из контекста. Лучше живой ответ чем поиск.
+- Перечисление задач через нумерацию или "и" → add_task с action.tasks=[{title,deadline,label},...].
+  Пример: "Добавь: 1. купить молоко до 2.05, 2. записаться к врачу до 5.05"
+  → intent: add_task, action.tasks=[{"title":"купить молоко","deadline":"2026-05-02"},{"title":"записаться к врачу","deadline":"2026-05-05"}]
+
 РАЗВИТИЕ ДИАЛОГА (важно):
 - Твоя задача не просто ответить, а развить разговор и углубить понимание садовника.
 - Задавай наводящие вопросы: "А что за этим стоит?", "Как давно это ощущается?", "Что мешает?"
@@ -4684,7 +4718,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
   "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
-  "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|..."} или null
+  "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|...", "tasks": [{"title":"...","deadline":"YYYY-MM-DD|null","label":"...|null"}]} или null
+// tasks[] — массив для bulk add_task (несколько задач за раз). Если одна задача — используй title/deadline/label как обычно.
 }
 
 ПРАВИЛА INTENT:
@@ -4834,6 +4869,8 @@ def _build_user_context_msg(telegram_id: str) -> str:
 
     # Roadmaps block for SR context
     roadmaps = store_get_roadmaps(telegram_id)
+    # Sort roadmaps by deadline ASC (nearest first, null → last)
+    roadmaps = sorted(roadmaps, key=lambda r: (r.get("deadline") or "9999-99-99"))
     if roadmaps:
         rm_lines = []
         for rm in roadmaps:
@@ -5855,48 +5892,76 @@ async def free_conversation(message: Message, state: FSMContext):
                             reply_text = ""
                         elif intent == "add_task":
                             action_data = parsed_check.get("action") or {}
-                            title    = (action_data.get("title") or "").strip()
-                            deadline = action_data.get("deadline", "") or ""
-                            reminder = action_data.get("reminder", "") or ""
-                            label    = action_data.get("label", "") or ""
-                            if not title:
-                                # No title extracted — fall back to FSM
-                                await cb_start_addtask_msg(message, state, pre_title="")
+                            bulk_tasks  = action_data.get("tasks") or []
+                            if bulk_tasks and isinstance(bulk_tasks, list):
+                                # ── Bulk add: несколько задач за раз ──────────────
+                                created_lines = []
+                                for _bt in bulk_tasks:
+                                    _bt_title = (_bt.get("title") or "").strip()
+                                    _bt_dl    = (_bt.get("deadline") or "").strip() or None
+                                    _bt_label = (_bt.get("label") or "").strip() or None
+                                    if not _bt_title:
+                                        continue
+                                    _nt = await _create_task_atomic(
+                                        user_id, message,
+                                        title=_bt_title,
+                                        deadline=_bt_dl,
+                                        reminder=None,
+                                        label_name=_bt_label
+                                    )
+                                    if _nt:
+                                        _ind = _deadline_indicator(_nt["deadline"]) if _nt.get("deadline") else ""
+                                        _dl_part = f" · {_ind}{_nt['deadline']}" if _nt.get("deadline") else ""
+                                        created_lines.append(f"  • {_nt['title']}{_dl_part}")
+                                if created_lines:
+                                    bulk_confirm = f"✅ Добавлено {len(created_lines)} задач:\n" + "\n".join(created_lines)
+                                    bulk_confirm += "\n\n" + _build_profile_card(user_id)
+                                    await message.answer(bulk_confirm, parse_mode="HTML", reply_markup=get_main_keyboard())
                                 reply_text = ""
                             else:
-                                # Atomic creation — no FSM needed
-                                new_task = await _create_task_atomic(
-                                    user_id, message,
-                                    title=title,
-                                    deadline=deadline or None,
-                                    reminder=reminder or None,
-                                    label_name=label or None
-                                )
-                                if new_task:
-                                    # Build confirmation message
-                                    parts = [f"✅ Задача «{new_task['title']}» создана"]
-                                    if new_task.get("deadline"):
-                                        ind = _deadline_indicator(new_task["deadline"])
-                                        parts.append(f"📅 {ind}{new_task['deadline']}")
-                                    if new_task.get("label_name"):
-                                        parts.append(f"🎨 {new_task['label_name']}")
-                                    if new_task.get("reminder"):
-                                        parts.append(f"🔔 {new_task['reminder']}")
-                                    missing = []
-                                    if not new_task.get("deadline"):
-                                        missing.append("📅 дедлайн")
-                                    if not new_task.get("label_name"):
-                                        missing.append("🎨 группа")
-                                    confirm_text = " · ".join(parts)
-                                    if missing:
-                                        confirm_text += f"\n<i>Можно добавить: {', '.join(missing)}</i>"
-                                    confirm_text += "\n\n" + _build_profile_card(user_id)
-                                    tid = new_task["task_id"]
-                                    edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
-                                        InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"task_edit_{tid}")
-                                    ]])
-                                    await message.answer(confirm_text, reply_markup=edit_kb, parse_mode="HTML")
-                                reply_text = ""
+                                # ── Single task ───────────────────────────────────
+                                title    = (action_data.get("title") or "").strip()
+                                deadline = action_data.get("deadline", "") or ""
+                                reminder = action_data.get("reminder", "") or ""
+                                label    = action_data.get("label", "") or ""
+                                if not title:
+                                    # No title extracted — fall back to FSM
+                                    await cb_start_addtask_msg(message, state, pre_title="")
+                                    reply_text = ""
+                                else:
+                                    # Atomic creation — no FSM needed
+                                    new_task = await _create_task_atomic(
+                                        user_id, message,
+                                        title=title,
+                                        deadline=deadline or None,
+                                        reminder=reminder or None,
+                                        label_name=label or None
+                                    )
+                                    if new_task:
+                                        # Build confirmation message
+                                        parts = [f"✅ Задача «{new_task['title']}» создана"]
+                                        if new_task.get("deadline"):
+                                            ind = _deadline_indicator(new_task["deadline"])
+                                            parts.append(f"📅 {ind}{new_task['deadline']}")
+                                        if new_task.get("label_name"):
+                                            parts.append(f"🎨 {new_task['label_name']}")
+                                        if new_task.get("reminder"):
+                                            parts.append(f"🔔 {new_task['reminder']}")
+                                        missing = []
+                                        if not new_task.get("deadline"):
+                                            missing.append("📅 дедлайн")
+                                        if not new_task.get("label_name"):
+                                            missing.append("🎨 группа")
+                                        confirm_text = " · ".join(parts)
+                                        if missing:
+                                            confirm_text += f"\n<i>Можно добавить: {', '.join(missing)}</i>"
+                                        confirm_text += "\n\n" + _build_profile_card(user_id)
+                                        tid = new_task["task_id"]
+                                        edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
+                                            InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"task_edit_{tid}")
+                                        ]])
+                                        await message.answer(confirm_text, reply_markup=edit_kb, parse_mode="HTML")
+                                    reply_text = ""
                         elif intent == "add_achievement":
                             if reply_text and reply_text.strip():
                                 await message.answer(reply_text, reply_markup=get_main_keyboard())
