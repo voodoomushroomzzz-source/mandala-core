@@ -2,275 +2,145 @@
   "identity": {
     "roadmap_id": "RM-014",
     "name": "RM-014: From HoReCa to IT Operations — A Gardener's Personal Transition",
-    "version": "v1.3.0",
+    "version": "v2.0.0",
     "created": "2026-04-16",
     "updated": "2026-05-01",
     "layer": 2,
     "type": "roadmap",
-    "description": "A personal, strategic roadmap for the Gardener (Voodoo/Dima) to transition from an 8-year career as a multi-site coffee shop Operations Manager in Russia to a remote Operations Manager role in the IT sector. The ultimate goal is to enable a location-independent lifestyle, starting with a trial move to Vietnam, while continuing the development of the Mandala project as a key portfolio asset.",
+    "description": "Two-track strategic roadmap. Track A: crisis job search (May 2026, any remote 80k+ RUB). Track B: strategic transition to IT Operations Manager (June 2026+, 120k+ RUB). Ultimate goal: location-independent lifestyle with trial relocation to Vietnam.",
     "status": "active",
     "priority": "HIGH",
-    "tags": ["personal", "career", "operations", "management", "IT", "relocation", "vietnam", "strategy", "mandala_portfolio", "education", "job_search", "networking"],
+    "tags": ["personal", "career", "operations", "management", "IT", "relocation", "vietnam", "crisis", "two_track", "job_search"],
     "resonance": "100%"
   },
   "meta": {
-    "purpose": "To provide a clear, structured, and philosophically aligned path for the Gardener's professional and personal transformation. This roadmap is a living document that will be updated as the journey progresses.",
+    "purpose": "Two-track survival-to-strategy roadmap. Track A secures income within 30 days. Track B builds long-term IT career. Courses run in parallel.",
     "context_for_sr": {
-      "who": "Voodoo (Dima), the Gardener and co-creator of Mandala Symbiosis. He has 8+ years of experience managing a multi-location coffee business in Russia.",
-      "why_change": "The Russian coffee business is under increasing pressure (taxes, costs). More importantly, the Gardener is experiencing burnout and desires a new challenge. He wishes to transition to a remote career that offers more freedom, creativity, and the ability to live abroad.",
-      "why_operations_management": "After analysis, an Operations Manager role in IT was identified as the most strategic entry point. This role leverages the Gardener's strongest existing skills (managing complex, multi-site operations, leading teams, optimizing processes) while having significantly lower competition compared to entry-level Project Management roles. His 8-year experience is a direct asset, not something to downplay.",
-      "the_mandala_lever": "The ongoing development of 'Mandala Symbiosis' is not a hobby. It is a critical portfolio project. It serves as concrete proof of the Gardener's ability to: 1) Architect and manage an IT system, 2) Use modern project management tools (Asana, Kanban, GitHub), 3) Understand the full development lifecycle (from concept to deployment), and 4) Bridge the gap between operational thinking and technical execution. It is his 'Trojan Horse' into IT interviews.",
-      "the_goal": "Secure a remote Operations Manager / Chief of Staff role in an IT startup or distributed team with a starting salary of 80,000 - 120,000 RUB. Use this as a stable foundation for a trial relocation to Vietnam, where he can work, recharge, and continue developing Mandala into a more significant project and company."
+      "who": "Voodoo (Dima), Gardener and co-creator of Mandala Symbiosis. 8+ years managing multi-location coffee business in Russia.",
+      "situation": "Current employer failing. Hard deadline: May 31, 2026 to find new income source.",
+      "strategy": "Two parallel tracks. Track A: any remote 80k+ RUB immediately. Track B: IT Operations Manager 120k+ RUB from June 2026.",
+      "mandala_lever": "Mandala project is portfolio proof of IT competence — architecting systems, using PM tools, full development lifecycle.",
+      "courses_parallel": "Google PM Certificate + COO OTUS start immediately. Do not wait for Track A completion. Progress during gaps between applications."
     },
-    "target_role_clarification": {
-      "title": "Two Types of Remote Operations Manager — A Two-Stage Strategy",
-      "description": "The role of 'remote Operations Manager' exists in two distinct forms. The Gardener's strategy is to target Type 1 first as the most efficient entry point, then use that stability to level up to Type 2.",
-      "type_1_geo_dependent": {
-        "name": "Type 1: Remote but Geo-Dependent",
-        "where_to_find": "Localized job boards (hh.ru, Habr Career, Geekjob, Getmatch, Superjob, Zarplata.ru, Avito, TrudVsem), companies with a legal entity in Russia/CIS.",
-        "requirements": "Often requires self-employment status (IP/samozanyatye), may have timezone expectations.",
-        "salary_range": "80,000 – 150,000 RUB",
-        "competition": "Moderate. Market note: 2025 shows 11-36% fewer vacancies, 20-30% more resumes. Companies hire precisely, not in bulk.",
-        "gardener_fit": "IDEAL. His 8-year experience and 'Mandala' portfolio are a killer advantage here. This is the immediate target."
-      },
-      "type_2_geo_independent": {
-        "name": "Type 2: Fully Geo-Independent (Global)",
-        "where_to_find": "International platforms (LinkedIn, RemoteOK, We Work Remotely, Levels.fyi for salary data), global startups.",
-        "requirements": "Fluent English (B2+) is MANDATORY. Experience in distributed teams, high self-organization.",
-        "salary_range": "$3,000 – $7,000+ USD per month",
-        "competition": "High, but the pool of opportunities is vastly larger.",
-        "gardener_fit": "POTENTIAL. Requires leveling up English to a confident B2. This is the long-term target after securing a Type 1 role."
-      },
-      "the_two_stage_strategy": {
-        "stage_1": "Secure a Type 1 role on the Russian market. This provides stable income and the ability to work remotely from Vietnam (within a compatible timezone).",
-        "stage_2": "While working and living abroad, actively improve English to B2+. After 1-2 years of commercial remote experience in IT (Mandala + the new role), transition to the global Type 2 market for significantly higher compensation."
-      },
-      "note_for_sr": "This clarification is crucial. Do not confuse the two types. The immediate, achievable goal is Type 1. Type 2 is the inspiring, long-term vision that follows."
-    },
-    "job_search_platforms": {
-      "title": "Complete Job Search Platform Arsenal",
-      "description": "Curated list of all relevant platforms for the Gardener's job search, organized by priority and phase.",
-      "primary_platforms": {
-        "hh_ru": {
-          "url": "https://hh.ru",
-          "role": "Dominant platform in Russia — 75-80% of IT hires go through hh.ru. High volume, high competition. Requires strong resume to stand out.",
-          "usage_phase": "P2-P3 (resume + active search)"
-        },
-        "habr_career": {
-          "url": "https://career.habr.com",
-          "role": "Professional IT job board. ~700K resumes, ~27 applications per vacancy (much cleaner than hh.ru). 63% of candidates get employer response.",
-          "usage_phase": "P2-P3 (profile + active search)",
-          "note": "hh.ru acquired Habr in 2025 — pending integration means one profile will work across both platforms."
-        },
-        "superjob": {
-          "url": "https://superjob.ru",
-          "role": "Second largest traditional job board. Still significant traffic, worth cross-posting resume.",
-          "usage_phase": "P3 (active search)"
-        }
-      },
-      "specialized_it_platforms": {
-        "geekjob": {
-          "url": "https://geekjob.ru",
-          "role": "Anonymous job search with Telegram integration. Automatically reposts your resume to Telegram communities (~135K subscribers). Direct employer contact without intermediaries.",
-          "usage_phase": "P2-P3 (profile + passive search)"
-        },
-        "getmatch": {
-          "url": "https://getmatch.ru",
-          "role": "Telegram-bot matchmaking service with live HR experts. Helps with selection and interview preparation. Free for candidates.",
-          "usage_phase": "P2-P3 (profile + interview prep)"
-        },
-        "tenchat": {
-          "url": "https://tenchat.ru",
-          "role": "Professional social network for informal networking and direct employer outreach.",
-          "usage_phase": "P3 (networking)"
-        },
-        "habr_portal": {
-          "url": "https://habr.com",
-          "role": "Use for networking and reputation building. Comments, articles increase visibility in professional community.",
-          "usage_phase": "Ongoing (networking)"
-        }
-      },
-      "additional_aggregators": {
-        "zarplata_ru": { "url": "https://zarplata.ru", "role": "Large aggregator, 6th by traffic in Russia." },
-        "rabota_ru": { "url": "https://rabota.ru", "role": "Major aggregator with large resume database." },
-        "avito": { "url": "https://avito.ru", "role": "3rd by traffic in 'Jobs' category. IT positions also listed here." },
-        "trudvsem": { "url": "https://trudvsem.ru", "role": "State portal 'Work of Russia'. 2nd by traffic. Good for large companies and public sector." }
-      },
-      "telegram_channels": {
-        "role": "Now one of the primary IT job search channels. Geekjob auto-crossposts. Find and subscribe to 5-10 thematic channels.",
-        "usage_phase": "P1-P3 (passive monitoring)"
-      },
-      "employer_verification": {
-        "dream_job": {
-          "url": "https://dreamjob.ru",
-          "role": "Employee reviews, real salaries, interview experiences. Use before applying to verify employer.",
-          "usage_phase": "P3 (due diligence before interviews)"
-        },
-        "glassdoor": {
-          "url": "https://glassdoor.com",
-          "role": "Global equivalent of Dream Job. Reviews, salaries, company ratings. Use for Type 2 market research.",
-          "usage_phase": "P2-P3 (market research)"
-        }
-      },
-      "salary_and_level_data": {
-        "levels_fyi": {
-          "url": "https://levels.fyi",
-          "role": "Global standard for compensation comparison. Standardized levels (L4, E5, M1) across companies. Essential for Type 2 preparation.",
-          "usage_phase": "P2 (market research for Type 2)",
-          "note": "VPN required in Russia. Limited data for Russian market — use Getmatch salary calculator locally."
-        },
-        "getmatch_calculator": {
-          "url": "https://getmatch.ru",
-          "role": "Salary calculator within Getmatch. Shows real market data for Russian IT salaries.",
-          "usage_phase": "P2-P3 (salary expectations)"
-        }
-      },
-      "networking_and_social": {
-        "linkedin": {
-          "url": "https://linkedin.com",
-          "role": "Global professional network. Required for Type 2 positioning. Also used by Russian IT professionals. Create in P2, actively use in P3-P4.",
-          "usage_phase": "P2-P4 (profile + networking)"
-        },
-        "hh_setka": {
-          "url": "Inside hh.ru ecosystem",
-          "role": "HeadHunter's internal social network. Allows direct outreach to hiring managers and recruiters.",
-          "usage_phase": "P3 (direct networking)"
-        },
-        "corporate_sites": {
-          "role": "Many IT companies (Selectel, Oblakoteka, etc.) publish vacancies first on their own sites or Telegram channels. Monitor target companies directly.",
-          "usage_phase": "P3 (direct outreach)"
-        }
-      }
-    },
-    "market_reality_2025": {
-      "note": "The market has shifted: 11-36% fewer vacancies, 20-30% more resumes. Companies do targeted 'sniper' hiring. One resume on hh.ru is not enough. Diversification and networking are key.",
-      "implication": "Gardener must be active across multiple platforms, build network, and use Mandala portfolio as differentiator."
-    },
-    "education_and_certifications": {
-      "title": "Recommended Courses & Learning Path",
-      "description": "A curated list of courses to strengthen the Gardener's profile. These compensate for the lack of a formal IT degree and provide the necessary vocabulary and frameworks.",
-      "important_note": "List these courses on LinkedIn and resume as 'in progress' immediately upon enrollment. This demonstrates proactive learning and serious intent to employers.",
-      "courses": [
-        {
-          "priority": 1,
-          "category": "foundation",
-          "name": "COO / Операционный директор в IT",
-          "platform": "OTUS",
-          "why": "This is a ready-made program for entering the role. It covers all key areas: operational management, finance, strategy, and project management. Ideal for systematizing existing practical experience and translating it into IT language.",
-          "duration": "4 months",
-          "link": "https://otus.ru/lessons/coo/"
-        },
-        {
-          "priority": 1,
-          "category": "foundation",
-          "name": "Lean Six Sigma Yellow Belt",
-          "platform": "TUM / ASQ",
-          "why": "An international 'quality mark' in process improvement. Shows employers you possess a proven methodology for optimization, not just 'problem-solving'. A strong argument that compensates for the lack of a formal degree.",
-          "duration": "5-6 months (flexible)",
-          "link": "https://www.tum.de/en/studium/weiterbildung/lean-six-sigma-yellow-belt"
-        },
-        {
-          "priority": 2,
-          "category": "enhancement",
-          "name": "Chief of Staff 101",
-          "platform": "Udemy",
-          "why": "Clarifies the role of a 'right hand to the CEO', which often overlaps with Operations Manager in startups. Helps position the Gardener as a strategic partner, not just an executor.",
-          "duration": "2-3 hours",
-          "link": "https://www.udemy.com/course/chief-of-staff-101/"
-        },
-        {
-          "priority": 2,
-          "category": "enhancement",
-          "name": "Certified Chief of Staff: Стратегический Партнёр CEO",
-          "platform": "Udemy",
-          "why": "Provides practical tools and frameworks for managing priorities, communication, and influencing without formal authority. Key skills for a strong Chief of Staff.",
-          "duration": "2-3 hours",
-          "link": "https://www.udemy.com/course/certified-chief-of-staff/"
-        },
-        {
-          "priority": 1,
-          "category": "foundation",
-          "name": "Google Project Management Certificate",
-          "platform": "Coursera",
-          "why": "Provides standard terminology and frameworks (Agile, Scrum) used in the IT industry. Validates intuitive knowledge and helps speak the same language as future colleagues.",
-          "duration": "3-6 months",
-          "link": "https://www.coursera.org/professional-certificates/google-project-management"
-        }
-      ],
-      "learning_strategy": {
-        "step_1": "Start with the foundation courses in parallel: COO (OTUS) and Google PM Certificate (Coursera). These provide the core vocabulary and structure.",
-        "step_2": "Enroll in Lean Six Sigma Yellow Belt. This is a longer-term, highly respected certification that adds formal weight to the resume.",
-        "step_3": "Complete the shorter enhancement courses (Chief of Staff 101, etc.) in between, as they require less time commitment.",
-        "immediate_action": "Add all courses to LinkedIn 'Licenses & Certifications' section with status 'In Progress'."
-      }
-    },
-    "horizon": "6-8 months (for Type 1 role)",
+    "horizon": "30 days (Track A) + 6-8 months (Track B)",
     "owner": "Gardener (Voodoo) + External SR"
   },
-  "phases": {
-    "phase_1": {
-      "name": "Phase 1: Foundation — Packaging the Past",
-      "duration": "Month 1-2",
-      "goal": "To systematically translate 8 years of operational experience in HoReCa into the language and frameworks valued in the IT sector, and to establish a solid learning and development system.",
-      "context_for_sr": "This phase is about building the launchpad. The Gardener must reframe his own narrative. He is not a 'newbie' but an 'experienced operational leader adapting his skills to a new domain'. The focus is on building the assets (audit, portfolio, learning plan) that will be used in the next phases.",
-      "tasks": [
-        {"id": "P1-1", "task": "Audit and translate HoReCa experience", "deliverable": "A personal document (Notion/private) listing key achievements from 8 years of management, rewritten in IT/Operations language.", "why": "To build the raw material for his future resume and interview stories."},
-        {"id": "P1-2", "task": "Initiate structured learning: Google Project Management Certificate", "deliverable": "Enroll in and begin the Google Project Management Certificate on Coursera. Complete at least first 2 modules.", "why": "Provides standard terminology and frameworks (Agile, Scrum) used in IT."},
-        {"id": "P1-3", "task": "Start a public development log (devlog) for Mandala", "deliverable": "Begin posting weekly updates in a public channel about Mandala development.", "why": "Creates a public timeline of IT project management in action."},
-        {"id": "P1-4", "task": "Focus English learning on Business & Operations", "deliverable": "2-3 conversational sessions per week focused on business topics.", "why": "Conversational English is key for remote roles."},
-        {"id": "P1-5", "task": "Enroll in COO course (OTUS)", "deliverable": "Registration completed, first module started.", "why": "Systematizes operational knowledge and translates it to IT context."},
-        {"id": "P1-6", "task": "Subscribe to Telegram job channels", "deliverable": "Subscribe to 5-10 thematic Telegram channels for IT vacancies. Set up Geekjob account for auto-crosspost.", "why": "Start passive monitoring early. Build awareness of market demands and language."}
-      ]
+  "tracks": {
+    "track_a": {
+      "name": "Track A: Crisis Job Search",
+      "deadline": "2026-05-31",
+      "goal": "Any remote job with 80 000+ RUB income",
+      "reasoning": "30 days is too short for IT industry entry. Leverage 8-year HoReCa operations experience. Target: operations, administration, Chief of Staff in any sector.",
+      "bot_roadmap": "🚨 Crisis Job Search",
+      "milestones": {
+        "m1_packaging": {
+          "name": "Packaging (May 1-7)",
+          "tasks": [
+            "Experience audit + IT translation — deadline 02.05",
+            "Resume on hh.ru, Superjob, Rabota.ru, Zarplata.ru, Avito, TrudVsem — deadline 05.05",
+            "LinkedIn + Habr Career profiles — deadline 07.05",
+            "Geekjob + Getmatch + 10 Telegram channels — deadline 08.05"
+          ]
+        },
+        "m2_first_wave": {
+          "name": "First Wave (May 8-14)",
+          "tasks": [
+            "70+ applications across all platforms — deadline 14.05",
+            "Employer verification via Dream Job — deadline 14.05"
+          ]
+        },
+        "m3_interviews": {
+          "name": "Interviews (May 15-21)",
+          "tasks": [
+            "All first-wave interviews — deadline 21.05",
+            "Second wave 20-30 applications + pitch calibration — deadline 21.05"
+          ]
+        },
+        "m4_offer": {
+          "name": "Offer (May 22-31)",
+          "tasks": [
+            "Minimum 1 written offer 80 000+ RUB (or expand to projects/contracts) — deadline 31.05"
+          ]
+        }
+      }
     },
-    "phase_2": {
-      "name": "Phase 2: Deepening and Packaging — Building the Portfolio",
-      "duration": "Month 3-4",
-      "goal": "To transform the Mandala project and the Gardener's experience into a polished, professional portfolio and resume that is ready for the job market. Create profiles on all relevant platforms.",
-      "context_for_sr": "This is the 'assembly' phase. The Gardener now has the raw materials from Phase 1 and must package them into compelling artifacts (GitHub profile, resume, LinkedIn, platform profiles) that will attract recruiters. The Mandala project is the centerpiece.",
-      "tasks": [
-        {"id": "P2-1", "task": "Transform Mandala's GitHub README into a portfolio piece", "deliverable": "Professional, English-language README.md outlining vision, architecture, tech stack, and Gardener's role.", "why": "First thing a recruiter will see on GitHub."},
-        {"id": "P2-2", "task": "Create and optimize a LinkedIn profile for 'Operations Manager'", "deliverable": "Complete LinkedIn profile with professional photo and headline. Add courses with 'In Progress' status.", "why": "LinkedIn is the primary hunting ground for recruiters on global market. Also used by Russian IT professionals."},
-        {"id": "P2-3", "task": "Draft the first version of the IT-focused resume", "deliverable": "1-page resume in English, tailored for Operations Manager roles.", "why": "Baseline to iterate upon based on feedback."},
-        {"id": "P2-4", "task": "Complete a Lean Six Sigma Yellow Belt certification", "deliverable": "Certificate from a reputable provider.", "why": "Adds formal credentials in process improvement."},
-        {"id": "P2-5", "task": "Register on all primary platforms", "deliverable": "Profiles created on hh.ru, Habr Career, Superjob, Geekjob, Getmatch, Zarplata.ru. Upload resume to each.", "why": "Maximum coverage. Note: hh.ru × Habr Career integration means one profile may soon work across both."},
-        {"id": "P2-6", "task": "Research salary data", "deliverable": "Use Getmatch salary calculator for Russian market data. Browse Levels.fyi for global benchmarks (via VPN). Check Dream Job for real salary reports by company.", "why": "Calibrate salary expectations before interviews."}
-      ]
-    },
-    "phase_3": {
-      "name": "Phase 3: Active Search — Testing the Market",
-      "duration": "Month 5-6",
-      "goal": "To actively apply for positions, gather feedback from the market through 'practice' interviews, and secure a job offer that meets the target criteria.",
-      "context_for_sr": "This is the most psychologically challenging phase. Frame first 5-10 applications as 'market research' to gather feedback. Mandala project is anchor and proof of competence.",
-      "tasks": [
-        {"id": "P3-1", "task": "Begin applying for 'practice' roles", "deliverable": "Submit 10-15 'stretch' applications on HeadHunter, Habr Career, and Superjob to test resume.", "why": "Reduces pressure and calibrates pitch."},
-        {"id": "P3-2", "task": "Master the 'Mandala Pitch'", "deliverable": "2-minute confident story about Mandala project.", "why": "Differentiates him from every other candidate."},
-        {"id": "P3-3", "task": "Targeted applications and networking", "deliverable": "Apply to 3-5 highly relevant roles per week. Reach out for informational interviews via TenChat, 'Setka' (HH network), and LinkedIn.", "why": "Moves search from quantity to quality. Networking often yields the best offers."},
-        {"id": "P3-4", "task": "Employer due diligence", "deliverable": "Before each interview, check employer on Dream Job for reviews and real salaries.", "why": "Avoid toxic workplaces. Enter interviews informed."},
-        {"id": "P3-5", "task": "Secure a job offer", "deliverable": "Receive at least one written job offer for remote Operations Manager with 80,000-120,000 RUB.", "why": "Primary metric of success."}
-      ]
-    },
-    "phase_4": {
-      "name": "Phase 4: Relocation — The Trial Run in Vietnam",
-      "duration": "Month 7-8",
-      "goal": "To successfully execute a trial relocation to Vietnam while maintaining the new remote role and continuing to develop Mandala.",
-      "context_for_sr": "This phase is an experiment. Success is 'gathering valuable data and experience', not 'staying forever'.",
-      "tasks": [
-        {"id": "P4-1", "task": "Handle all logistics for a 1-2 month stay", "deliverable": "Visa, flights, accommodation, local SIM, backup internet.", "why": "Proper preparation reduces anxiety."},
-        {"id": "P4-2", "task": "Establish a stable work routine in the new location", "deliverable": "Find reliable workspace and adapt to time zone.", "why": "Most critical operational test."},
-        {"id": "P4-3", "task": "Continue development of Mandala and personal projects", "deliverable": "Maintain devlog, work on Mandala features, optional blog.", "why": "Builds personal brand and portfolio."},
-        {"id": "P4-4", "task": "Evaluate the experience and decide on next steps", "deliverable": "Conscious decision: extend, return, or explore another country.", "why": "Turns dream into data-driven life decision."}
-      ]
+    "track_b": {
+      "name": "Track B: Strategic IT Transition",
+      "start": "2026-06-01",
+      "goal": "Remote Operations Manager in IT, 120 000+ RUB",
+      "reasoning": "After Track A income stabilised. Leverage Mandala portfolio + ongoing certifications + 8-year operations experience translated to IT context.",
+      "phases": {
+        "phase_1": {
+          "name": "Foundation (June-July 2026)",
+          "duration": "Month 1-2",
+          "tasks": [
+            "Continue Google PM Certificate (started May) — first 2 modules complete",
+            "Continue COO OTUS (started May) — in progress, 4-month program",
+            "Weekly Mandala devlog — public IT project timeline",
+            "Business English 2-3 sessions/week",
+            "Re-audit experience into IT language v2"
+          ]
+        },
+        "phase_2": {
+          "name": "Packaging (August-September 2026)",
+          "duration": "Month 3-4",
+          "tasks": [
+            "Professional Mandala GitHub README (English)",
+            "LinkedIn optimized for IT Operations Manager",
+            "Start Lean Six Sigma Yellow Belt certification",
+            "IT-focused resume v2"
+          ]
+        },
+        "phase_3": {
+          "name": "Active Search (October-November 2026)",
+          "duration": "Month 5-6",
+          "tasks": [
+            "Active applications on hh.ru, Habr Career, Superjob, Geekjob, Getmatch",
+            "Networking via TenChat, 'Setka' (HH), LinkedIn",
+            "Employer due diligence via Dream Job",
+            "Target: offer 120 000+ RUB as IT Operations Manager"
+          ]
+        },
+        "phase_4": {
+          "name": "Relocation Trial (December 2026+)",
+          "duration": "Month 7-8",
+          "tasks": [
+            "Visa, housing, logistics for 1-2 months in Vietnam",
+            "Stable remote work routine from new location",
+            "Continue Mandala development + devlog",
+            "Conscious decision: extend / return / next country"
+          ]
+        }
+      }
     }
   },
+  "courses": {
+    "strategy": "Start immediately in May, progress in gaps between Track A applications. Complete by Track B Phase 2-3.",
+    "list": [
+      { "priority": 1, "name": "Google Project Management Certificate", "platform": "Coursera", "duration": "3-6 months", "start": "2026-05-03" },
+      { "priority": 1, "name": "COO / Операционный директор в IT", "platform": "OTUS", "duration": "4 months", "start": "2026-05-03" },
+      { "priority": 2, "name": "Lean Six Sigma Yellow Belt", "platform": "TUM / ASQ", "duration": "5-6 months", "start": "2026-08" },
+      { "priority": 2, "name": "Chief of Staff 101", "platform": "Udemy", "duration": "2-3 hours" },
+      { "priority": 2, "name": "Certified Chief of Staff", "platform": "Udemy", "duration": "2-3 hours" }
+    ]
+  },
+  "job_search_platforms": {
+    "primary": ["hh.ru", "Superjob", "Rabota.ru", "Zarplata.ru", "Avito", "TrudVsem"],
+    "it_specific": ["Habr Career", "Geekjob", "Getmatch", "TenChat"],
+    "telegram": "10+ thematic channels (auto-crosspost via Geekjob)",
+    "networking": ["LinkedIn", "Setka (HH)", "Habr portal"],
+    "verification": ["Dream Job", "Glassdoor"],
+    "salary_data": ["Getmatch calculator", "Levels.fyi (VPN)"]
+  },
   "success_metrics": {
-    "phase_1": "Personal experience audit completed. Google PM Certificate in progress. Devlog updated weekly. Enrolled in COO course. Subscribed to 5-10 Telegram channels.",
-    "phase_2": "Mandala GitHub README is professional. LinkedIn profile complete and optimized. Profiles on hh.ru, Habr Career, Geekjob, Getmatch, Superjob created. Lean Six Sigma Yellow Belt certified.",
-    "phase_3": "Completed 5+ practice interviews. 'Mandala Pitch' is fluid and natural. Checked employers on Dream Job. Received a job offer for 80,000+ RUB as an Operations Manager (remote).",
-    "phase_4": "Successfully worked remotely from Vietnam for at least 1 month. All work commitments were met. A conscious decision was made regarding the next step."
+    "track_a": "Written job offer 80 000+ RUB by May 31, 2026",
+    "track_b": "IT Operations Manager offer 120 000+ RUB by December 2026",
+    "courses": "Google PM Certificate and COO OTUS in progress by end of May 2026",
+    "relocation": "1+ month successful remote work from Vietnam"
   },
   "health": {
     "status": "active",
     "last_check": "2026-05-01",
-    "notes": "v1.3.0 — Added comprehensive job search platform arsenal (14 platforms + Telegram + networking tools). Added P1-6 (Telegram channels), P2-5 (multi-platform registration), P2-6 (salary research), P3-4 (employer due diligence). Added market reality notes for 2025. Updated success metrics."
+    "notes": "v2.0.0: Major restructure. Split into two tracks (A: crisis, B: strategic). Track A deadline May 31. Courses run parallel. Bot roadmap '🚨 Crisis Job Search' created with 10 tasks."
   }
 }
