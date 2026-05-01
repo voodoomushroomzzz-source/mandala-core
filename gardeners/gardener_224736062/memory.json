@@ -87,6 +87,14 @@
     {
       "role": "assistant",
       "content": "6-7 мая 2026 в Москве ожидается небольшой дождь, температура воздуха +10-16°C, пасмурно.\n\n\n<b>Источники:</b>\n• <a href=\"https://yandex.ru/pogoda/ru/moscow/details/14-day-weather\">Погода в Москве на 14 дней — Прогноз погоды в Москве, Россия на 14 дней</a>"
+    },
+    {
+      "role": "user",
+      "content": "Создай роадмап 🚨 Crisis Job Search с дедлайном 31.05.2026"
+    },
+    {
+      "role": "assistant",
+      "content": "🗺 Роадмап «🚨 Crisis Job Search» создан\n\n🗺 <b>🚨 Crisis Job Search</b>\n░░░░░░░░░░ 0%  0/0  0% · до 2026-05-31\n"
     }
   ],
   "updated": "2026-05-01"
