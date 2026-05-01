@@ -585,11 +585,12 @@ def _calculate_initial_resonance(life_areas: dict) -> int:
     avg = sum(vals) / len(vals) if vals else 5
     return max(10, round(10 + avg / 4 * 2))
 
-def _add_growth_history_entry(gardener: dict, resonance: int) -> dict:
+def _add_growth_history_entry(gardener: dict, resonance: int, telegram_id: str = "") -> dict:
     history = gardener.get("growth_history", [])
     today = _today()
     if not history or history[-1].get("date") != today:
-        ach_count = len(_store.get("achievements", []))
+        # Use store_get_achievements_count if telegram_id provided, else 0
+        ach_count = store_get_achievements_count(telegram_id) if telegram_id else 0
         history.append({"date": today, "resonance": resonance, "achievements_count": ach_count})
     gardener["growth_history"] = history[-90:]
     return gardener
@@ -706,12 +707,12 @@ def _apply_resonance_decay(gardener: dict) -> Tuple[dict, bool]:
     weeks = (days_silent - 14) // 7
     if weeks < 1:
         return gardener, False
-    current_res = gardener.get("identity", {}).get("resonance_level", 13)
+    current_res = gardener.get("resonance_level", 13)
     new_res = max(10, current_res - weeks)
     if new_res == current_res:
         return gardener, False
-    gardener.setdefault("identity", {})["resonance_level"] = new_res
-    gardener["identity"]["updated"] = _today()
+    gardener["resonance_level"] = new_res
+    gardener["updated"] = _today()
     return gardener, True
 
 # ─── Task helpers ─────────────────────────────────────────────────────────────
@@ -4073,7 +4074,10 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
 - "удали группа X", "убери группа X" → delete_label, action.title=название группы, 0.9
 - "переименуй группа X в Y", "измени группа X на Y" → rename_label, action.title="X→Y", 0.9
-- "найди", "поищи", "погода", "что такое X" → web_search, 0.9
+- "найди", "поищи", "погода", "что такое X" → web_search, action.query="нормализованный поисковый запрос на русском", 0.9
+  ВАЖНО: action.query — это короткий, чёткий поисковый запрос (3-7 слов), не копия фразы пользователя.
+  Пример: "посмотри какие мероприятия в театрах" → action.query="театры Москва афиша мероприятия май 2026"
+  Пример: "найди где поесть рядом" → action.query="рестораны {city} рядом"
 - "напомни мне X завтра в 9", "поставь напоминание X" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM", action.repeat=once/daily/weekdays, 0.95
 - "напомни через 30 минут", "через 2 часа напомни X" → create_reminder, action.title=X, action.datetime=текущее_время+N_минут/часов в ISO формате, 0.95
 - "напомни сегодня в 21:00", "напоминание X в 20:30" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM" (сегодняшняя дата), 0.95
@@ -4089,6 +4093,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "создай задачу X в роадмап Y", "добавь в роадмап Y задачу X с дедлайном Z" → roadmap_add_task, action.roadmap="Y", action.title="X", action.deadline="Z", 0.95
 - "добавь сюда задачу X", "создай в нём задачу X" (роадмап ясен из контекста) → roadmap_add_task, action.roadmap="", action.title="X", action.deadline="Z если указан", 0.95
 - ВАЖНО: если садовник говорит «сюда», «в него», «в этот роадмап» — action.roadmap="" (пустое), SR определит роадмап по контексту
+- список задач для роадмапа (нумерованный, с дедлайнами) → roadmap_add_task, action.roadmap="Y", action.tasks=[{"title":"X1","deadline":"YYYY-MM-DD"},{"title":"X2","deadline":"YYYY-MM-DD"},...]
+  Пример: "добавь задачи в роадмап Y: 1. задача A до 05.05, 2. задача B до 10.05" → roadmap_add_task, action.roadmap="Y", action.tasks=[{"title":"задача A","deadline":"2026-05-05"},{"title":"задача B","deadline":"2026-05-10"}]
 - "убери задачу X из роадмапа Y" → roadmap_remove_task, action.roadmap="Y", action.title="X", 0.95
 - "удали роадмап X" → delete_roadmap, action.title="X", 0.95
 - "переименуй роадмап X в Y" → rename_roadmap, action.title="X", action.value="Y", 0.95
@@ -5142,15 +5148,17 @@ async def free_conversation(message: Message, state: FSMContext):
                             await cmd_achievements(message)
                             reply_text = ""
                         elif intent == "web_search":
-                            q = (parsed_check.get("action") or {}).get("title", "") or text
+                            _ws_act = parsed_check.get("action") or {}
+                            # Use reformulated query from SR if provided, else raw text
+                            q = (_ws_act.get("query") or _ws_act.get("title") or "").strip() or text
                             prof = store_get_profile(user_id)
-                            # City: from query context OR auto from profile (Block 3)
                             city = (prof or {}).get("companion_settings", {}).get("city", "")
-                            sm = await message.answer(f"🔍 Ищу...\n<i>{q}</i>", parse_mode="HTML")
+                            sm = await message.answer("🔍 Ищу...", parse_mode="HTML")
                             result = await _tavily_search(q, city)
                             try: await sm.delete()
                             except Exception: pass
-                            reply_text = result if result else "🔍 Не нашла. Отвечу из своих знаний."
+                            # No profile card after search — just the result
+                            reply_text = result if result else "🔍 Не нашла ничего релевантного. Попробуй переформулировать запрос."
 
                         elif intent == "complete_task":
                             action_ct   = parsed_check.get("action") or {}
@@ -5826,11 +5834,12 @@ async def free_conversation(message: Message, state: FSMContext):
 
                         elif intent == "roadmap_add_task":
                             _act = parsed_check.get("action") or {}
-                            _rm_name = (_act.get("roadmap") or "").strip()
-                            _task_q  = (_act.get("title") or "").strip()
-                            _task_dl = (_act.get("deadline") or "").strip()
+                            _rm_name    = (_act.get("roadmap") or "").strip()
+                            _task_q     = (_act.get("title") or "").strip()
+                            _task_dl    = (_act.get("deadline") or "").strip()
+                            _bulk_tasks = _act.get("tasks") or []
                             roadmaps = store_get_roadmaps(user_id)
-                            # If roadmap name empty — use the only active roadmap
+                            # Resolve roadmap
                             if not _rm_name and len(roadmaps) == 1:
                                 _found_rm = roadmaps[0]
                             elif not _rm_name and len(roadmaps) > 1:
@@ -5841,7 +5850,55 @@ async def free_conversation(message: Message, state: FSMContext):
                                     (r for r in roadmaps if _rm_name.lower() in r.get("title","").lower()),
                                     None
                                 )
-                            if _found_rm and _task_q:
+                            # ── BULK: несколько задач ────────────────────────────
+                            if _found_rm and _bulk_tasks and isinstance(_bulk_tasks, list):
+                                import uuid as _uuid_bulk
+                                all_tasks = store_get_tasks(user_id)
+                                if _clean_roadmap_task_ids(_found_rm, all_tasks):
+                                    store_set_roadmaps(user_id, roadmaps)
+                                _added, _skipped = [], []
+                                for _bt in _bulk_tasks:
+                                    _bt_title = (_bt.get("title") if isinstance(_bt, dict) else str(_bt)).strip()
+                                    _bt_dl    = (_bt.get("deadline") if isinstance(_bt, dict) else None) or _found_rm.get("deadline")
+                                    if not _bt_title:
+                                        continue
+                                    _bm = _fuzzy_match_tasks(_bt_title, all_tasks, threshold=0.72)
+                                    if _bm and _bm[0].get("task_id") not in _found_rm.get("task_ids", []):
+                                        # Link existing task
+                                        _found_rm.setdefault("task_ids", []).append(_bm[0]["task_id"])
+                                        if not _bm[0].get("deadline") and _bt_dl:
+                                            for _t in all_tasks:
+                                                if _t.get("task_id") == _bm[0]["task_id"]:
+                                                    _t["deadline"] = _bt_dl
+                                                    break
+                                        _added.append(_bm[0]["title"])
+                                    elif _bm:
+                                        _skipped.append(_bt_title)
+                                    else:
+                                        # Create new task and link
+                                        _nt = {
+                                            "task_id":    f"t_{_uuid_bulk.uuid4().hex[:8]}",
+                                            "title":      _bt_title,
+                                            "status":     "active",
+                                            "created":    _today(),
+                                            "deadline":   _bt_dl,
+                                            "label_name": None,
+                                            "reminder":   None,
+                                        }
+                                        all_tasks.append(_nt)
+                                        _found_rm.setdefault("task_ids", []).append(_nt["task_id"])
+                                        _added.append(_bt_title)
+                                store_set_tasks(user_id, all_tasks)
+                                store_set_roadmaps(user_id, roadmaps)
+                                await _sync_pending()
+                                _all_t = store_get_tasks(user_id)
+                                _skip_note = ("\n⚠️ Уже в роадмапе: " + ", ".join(_skipped)) if _skipped else ""
+                                reply_text = (
+                                    f"✅ Добавлено {len(_added)} задач в роадмап «{_found_rm['title']}»" + _skip_note + "\n\n"
+                                    + _roadmap_card_text(_found_rm, _all_t)
+                                )
+                            # ── SINGLE: одна задача (старая логика) ─────────────
+                            elif _found_rm and _task_q:
                                 all_tasks = store_get_tasks(user_id)
                                 # Clean orphaned task_ids before any check
                                 if _clean_roadmap_task_ids(_found_rm, all_tasks):
