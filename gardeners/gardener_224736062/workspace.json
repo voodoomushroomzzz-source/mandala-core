@@ -298,7 +298,7 @@
   ],
   "achievements": [],
   "updated": "2026-04-18",
-  "achievements_count": 38,
+  "achievements_count": 39,
   "checklists": [
     {
       "id": "cl_вмагази",
@@ -322,12 +322,12 @@
         {
           "id": "i5",
           "text": "сухари",
-          "done": false
+          "done": true
         },
         {
           "id": "i6",
           "text": "кукуруза",
-          "done": false
+          "done": true
         },
         {
           "id": "i7",
@@ -392,6 +392,6 @@
     "creativity": 24,
     "work": 41,
     "connections": 20,
-    "growth": 22
+    "growth": 24
   }
 }
