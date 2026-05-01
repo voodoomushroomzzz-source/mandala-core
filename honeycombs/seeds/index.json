@@ -1,57 +1,47 @@
-﻿{
-    "identity": {
-        "module_id": "SEEDS-INDEX-001",
-        "name": "Seeds  Idea Incubator",
-        "version": "v3.0.0",
-        "created": "2026-03-01",
-        "updated": "2026-04-11",
-        "layer": 2,
-        "type": "honeycomb_manifest",
-        "description": "Seeds honeycomb  entry point for all raw ideas, Scout Agent findings, and unprocessed concepts. Seeds mature into Tasks or Roadmaps.",
-        "status": "active",
-        "priority": "high",
-        "tags": ["seeds", "incubator", "ideas", "growth", "v3.0.0"],
-        "resonance": "100%"
-    },
-    "meta": {
-        "honeycomb_name": "seeds",
-        "parent_honeycomb": "core_map",
-        "description": "Seeds is the entry point for all raw ideas, external findings, and unprocessed concepts. Seeds are evaluated and either become Tasks (1 month) or Roadmaps (>1 month).",
-        "lifecycle": "Seeds are created by Gardener, External SR, or Scout Agent. Upon evaluation, they are transformed into Tasks or Roadmaps and moved from seeds/ to the corresponding honeycomb.",
-        "rules": {
-            "creation": "Any SR or Gardener can create a seed. Format must follow basic_seed.json template.",
-            "evaluation": "Seeds are reviewed by Gardener. Decision: promote to Task, promote to Roadmap, or archive.",
-            "archiving": "Processed seeds are moved to seeds/archive/."
-        }
-    },
-    "structure": {
-        "segments": {
-            "active": {
-                "description": "Active seeds awaiting evaluation",
-                "folder": "active/"
-            },
-            "archive": {
-                "description": "Processed and archived seeds",
-                "folder": "archive/"
-            }
-        }
-    },
-    "registry": {
-        "total_files": 0,
-        "last_updated": "2026-04-11",
-        "honeycomb_id": "SEEDS-INDEX-001",
-        "status": "active",
-        "compliance_status": "v3.0.0_compliant"
-    },
-    "resonance": {
-        "with_boot": "100%",
-        "with_core_map": "100%",
-        "with_system_flow": "100%",
-        "status": "fully_resonant"
-    },
-    "health": {
-        "status": "healthy",
-        "last_check": "2026-04-11",
-        "notes": "Translated to English (v3.0.0 core). Clean UTF-8."
+{
+  "identity": {
+    "module_id": "SEEDS-MANIFEST-002",
+    "name": "Seeds Honeycomb Manifest",
+    "version": "v2.0.0",
+    "created": "2026-03-01",
+    "updated": "2026-05-01",
+    "layer": 1,
+    "type": "honeycomb_manifest",
+    "description": "Seeds honeycomb: active/ folder for idea incubation. Archive removed. Only active seeds.",
+    "status": "active",
+    "priority": "high",
+    "tags": ["seeds", "simple", "workflow", "minimal", "no_archive"],
+    "resonance": "100%"
+  },
+  "structure": {
+    "segments": {
+      "active_seeds": {
+        "folder": "active/",
+        "description": "Currently active seeds",
+        "files_count": 0
+      }
     }
+  },
+  "rule": {
+    "policy": "No archived seeds. Seeds are either active or deleted. When realized, becomes task/roadmap. When irrelevant, deleted.",
+    "applies_to": ["seeds", "tasks", "roadmaps"]
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json"
+  },
+  "registry": {
+    "total_files": 0,
+    "last_updated": "2026-05-01",
+    "notes": "v2.0.0: all seeds removed. Clean slate."
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-05-01",
+    "notes": "v2.0.0: 0 active seeds. No archive."
+  }
 }
