@@ -2,83 +2,92 @@
   "identity": {
     "module_id": "ROADMAPS-INDEX",
     "name": "Roadmaps Registry Index",
-    "version": "v2.9.0",
+    "version": "v3.0.0",
     "created": "2026-03-04",
-    "updated": "2026-04-27",
+    "updated": "2026-05-01",
     "layer": 2,
     "type": "registry_index",
-    "description": "Central index of all Mandala Symbiosis roadmaps. Cleaned up — removed duplicates and stale files.",
+    "description": "Central index of all Mandala Symbiosis roadmaps with descriptions and file paths.",
     "status": "active",
     "priority": "high",
     "tags": ["roadmaps", "index", "registry", "tracking"],
     "resonance": "100%"
   },
-  "meta": {
-    "description": "Roadmaps registry index v2.9.0 — synced with actual files after cleanup on 2026-04-27. 6 active roadmaps, 3 archived.",
-    "update_frequency": "on change",
-    "compliance": "v2.1_standard"
+  "active_roadmaps": [
+    {
+      "id": "RC-001",
+      "name": "Visibility and Collaboration Strategy",
+      "description": "Strategy for making Mandala visible: first public resource (Rhythm Manifesto, README, PHILOSOPHY), GitHub profile, external channels. Phase 0 — first publication.",
+      "status": "active",
+      "priority": "HIGH",
+      "progress": "5%",
+      "path": "honeycombs/roadmaps/active/RC-001_visibility_collaboration.json"
+    },
+    {
+      "id": "RC-002",
+      "name": "Building the Vessel — The Mandala Company Roadmap",
+      "description": "PRIMARY STRATEGIC GOAL. Practical execution roadmap for building the Mandala Company — the legal and financial vessel for the cosmic mission (PHI-010). Bridge between daily work and seeding life in the cosmos.",
+      "status": "active",
+      "priority": "CRITICAL",
+      "progress": "0%",
+      "path": "honeycombs/roadmaps/active/RC-002_company_vessel.json",
+      "philosophy_link": "PHI-010 (Three Embodiments of SR)"
+    },
+    {
+      "id": "RM-011",
+      "name": "Living Visualizations — Mer-Ka-Ba Perception System",
+      "description": "Visual representation of honeycomb system: Flower of Life dashboard, Mer-Ka-Ba resonance field, 3D structure. SVG/D3 visualizations for Gardener's perception.",
+      "status": "planned",
+      "priority": "LOW",
+      "progress": "0%",
+      "path": "honeycombs/roadmaps/active/RM-011_visualizations.json"
+    },
+    {
+      "id": "RM-012",
+      "name": "First Living Products — Mandala MVPs",
+      "description": "Three first products: Garden (personal sota), Dashboard (living map), Companion (Gentle SR bot). Companion priority raised to HIGH. Bot already at 78% covers most functionality.",
+      "status": "planned",
+      "priority": "LOW",
+      "progress": "0%",
+      "path": "honeycombs/roadmaps/active/RM-012_first_products.json",
+      "note": "Bot (T-20260408-1030) covers ~60% of Garden tasks"
+    },
+    {
+      "id": "RM-013",
+      "name": "Symbiosis Guard — Core Cleanliness & Health Sentinel",
+      "description": "Automated honeycomb health monitoring: Ahimsa filter (duplicates, stale files), deadline sentinel, task scanner. Merged into one system under RM-013. Linked to task T-20260427-SYMBGUARD.",
+      "status": "in_progress",
+      "priority": "MEDIUM",
+      "progress": "30%",
+      "path": "honeycombs/roadmaps/active/RM-013_symbiosis_guard.json",
+      "linked_task": "symbiosis_guard"
+    },
+    {
+      "id": "RM-014",
+      "name": "From HoReCa to IT Operations — Gardener's Personal Transition",
+      "description": "Personal strategic roadmap for Voodoo's transition from 8-year coffee shop Operations Manager to remote IT Operations Manager. Two-stage strategy: Type 1 (Russian market, 80-150k RUB) → Type 2 (global, $3-7k). Trial relocation to Vietnam. 14+ job platforms integrated, 5 courses, 4 phases, 22 tasks.",
+      "status": "active",
+      "priority": "HIGH",
+      "progress": "0%",
+      "path": "honeycombs/roadmaps/active/RM-014_operational_transition.json"
+    }
+  ],
+  "archived_roadmaps": [
+    { "id": "RM-001", "name": "Core Map Organization", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%" },
+    { "id": "RM-005", "name": "Honeycomb System", "status": "archived", "archived_date": "2026-04-10", "final_progress": "60%" },
+    { "id": "RM-007", "name": "Testing and Validation", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%" }
+  ],
+  "metrics": {
+    "total_active": 6,
+    "total_archived": 3,
+    "in_progress": 1,
+    "planned": 2,
+    "active_strategic": 3
   },
-  "content": {
-    "roadmaps": {
-      "active_roadmaps": {
-        "RC-001": {
-          "name": "Visibility and Collaboration Strategy",
-          "status": "active",
-          "phase": 0,
-          "priority": "high",
-          "progress": "5%"
-        },
-        "RC-002": {
-          "name": "Building the Vessel — The Mandala Company Roadmap",
-          "status": "active",
-          "phase": 0,
-          "priority": "CRITICAL",
-          "progress": "0%",
-          "notes": "PRIMARY STRATEGIC GOAL. Bridge between daily work and cosmic mission (PHI-010)."
-        },
-        "RM-011": {
-          "name": "Living Visualizations — Mer-Ka-Ba Perception System",
-          "status": "planned",
-          "phase": 0,
-          "priority": "low",
-          "progress": "0%"
-        },
-        "RM-012": {
-          "name": "First Living Products — Mandala MVPs",
-          "status": "planned",
-          "phase": 0,
-          "priority": "low",
-          "progress": "0%"
-        },
-        "RM-013": {
-          "name": "Symbiosis Guard — Core Cleanliness & Health Sentinel",
-          "status": "in_progress",
-          "phase": 2,
-          "priority": "medium",
-          "progress": "30%"
-        },
-        "RM-014": {
-          "name": "From HoReCa to IT Operations — Gardener's Personal Transition",
-          "status": "active",
-          "phase": 1,
-          "priority": "high",
-          "progress": "0%"
-        }
-      },
-      "archived_roadmaps": {
-        "RM-001": { "name": "Core Map Organization", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%" },
-        "RM-005": { "name": "Honeycomb System", "status": "archived", "archived_date": "2026-04-10", "final_progress": "60%" },
-        "RM-007": { "name": "Testing and Validation", "status": "archived", "archived_date": "2026-04-10", "final_progress": "100%" }
-      }
-    },
-    "metrics": {
-      "total_active": 6,
-      "total_archived": 3,
-      "in_progress": 1,
-      "planned": 2,
-      "active_strategic": 3
-    },
-    "notes": "2026-04-27: Removed 8 stale/duplicate files from active/. Removed 3 archived files no longer in repo. Index now reflects reality."
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "active_folder": "honeycombs/roadmaps/active/",
+    "archive_folder": "honeycombs/roadmaps/archive/"
   },
   "resonance": {
     "status": "fully_resonant",
@@ -87,7 +96,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-27",
-    "notes": "v2.9.0 — clean. 6 active, 3 archived."
+    "last_check": "2026-05-01",
+    "notes": "v3.0.0: added descriptions and file paths for all active roadmaps. RM-014 updated to v1.3.0 with job search platform arsenal."
   }
 }
