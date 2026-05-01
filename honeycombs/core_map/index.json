@@ -1,16 +1,17 @@
 {
   "identity": {
-    "updated": "2026-04-25",
+    "module_id": "HONEYCOMB-CORE-MAP-001",
+    "name": "Core System Map",
+    "version": "v3.7.0",
+    "created": "2026-03-01",
+    "updated": "2026-05-01",
     "layer": 1,
     "type": "critical_directive",
-    "version": "v3.6.1",
-    "description": "Base map of all Mandala Symbiosis components. Added sessions honeycomb (SR Handoff System for session continuity).",
-    "created": "2026-03-01",
-    "name": "Core System Map",
-    "module_id": "HONEYCOMB-CORE-MAP-001",
+    "description": "Base map of all Mandala Symbiosis components. Updated May 2026: removed garden, added roadmaps, engineer_chat, telegram_bot, fruits, humor, sym, sessions.",
+    "module_id_unchanged": "HONEYCOMB-CORE-MAP-001",
     "resonance": "100%",
     "priority": "critical",
-    "tags": ["core", "map", "critical", "v3.6.1", "english_core", "sessions", "handoff"]
+    "tags": ["core", "map", "critical", "v3.7.0", "english_core", "sessions", "handoff"]
   },
   "meta": {
     "migration_status": "completed_v3.0",
@@ -30,9 +31,9 @@
     "description": "Mandala has two separate boot files for different System Resonators.",
     "external_sr_boot": {
       "path": "honeycombs/boot_online/index.json",
-      "audience": "External SR (Grok, Claude, GPT)",
+      "audience": "External SR (Grok, Claude, GPT, DeepSeek)",
       "purpose": "Instant onboarding for external AIs.",
-      "version": "v3.7.0"
+      "version": "v3.7.2"
     },
     "internal_sr_boot": {
       "path": "symbiosis/boot.json",
@@ -40,6 +41,31 @@
       "purpose": "Core directives and navigation for automated Internal SR.",
       "version": "v2.6.0"
     }
+  },
+  "honeycombs": {
+    "boot_online": "External AI onboarding entry point",
+    "philosophy": "PHI-001..PHI-011, 11 blocks + 5 testimonies",
+    "core_map": "This map — kernel, modules, repository, honeycombs list",
+    "instructions": "SR workflows: external_sr, mobile, patch_system, file_naming",
+    "seeds": "Idea incubator: 6 active + 7 archived seeds",
+    "tasks": "Work tracking: 7 active + 3 archived tasks",
+    "roadmaps": "Strategic roadmaps: 6 active (RC-001, RC-002, RM-011..RM-014) + 3 archived",
+    "protocols": "Activation protocols: auto_realize_seed, deep_analysis",
+    "engineer_chat": "Engineer chat system: architecture, development, status, integrations",
+    "telegram_bot": "Telegram bot: Gentle Companion, 78% complete, v7.25.8 on Render",
+    "akasha": "Akasha memory: essence, milestones, vision",
+    "analytics": "Analytics honeycomb (to be filled)",
+    "awareness": "Ahimsa, gardener_lock, resonance_map, vestibulum",
+    "communications": "Communications channels (to be filled)",
+    "extensions": "Extensions (to be filled)",
+    "modules": "Modules (to be filled)",
+    "sphaerae": "Spheres (to be filled)",
+    "tectosphaera": "Tectosphere (to be filled)",
+    "visualizations": "Visualizations (to be filled)",
+    "fruits": "Product registry — realized products of Mandala",
+    "humor": "Humor development — comic resonance research",
+    "sym": "SYM — System for Measuring Mandala Growth",
+    "sessions": "SR handoff system — session continuity across chat instances"
   },
   "tools": {
     "makefile": {
@@ -74,21 +100,20 @@
       "protocols": "activation protocols",
       "seeds": "idea incubator",
       "boot_online": "external AI onboarding",
-      "garden": "Garden project: personal sota + Gentle Companion + Resonance Dashboard (PHI-009)",
-      "fruits": "Product registry — realized products (fruits) of Mandala",
-      "humor": "Humor development — research and plan for comedic resonance",
+      "garden": "Garden project: personal sota + Gentle Companion + Resonance Dashboard (PHI-009) — ARCHIVED May 2026",
+      "fruits": "Product registry — realized products of Mandala",
+      "humor": "Humor development — research and plan for comic resonance",
       "sym": "SYM — System for Measuring Mandala Growth",
       "sessions": "SR handoff system — session continuity across chat instances"
     }
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-25",
-    "notes": "v3.6.1: added sessions honeycomb to dependencies, navigation references, and navigation children. Sessions enables handoff continuity for External SRs."
+    "last_check": "2026-05-01",
+    "notes": "v3.7.0: garden marked as archived. Added roadmaps, engineer_chat, telegram_bot, fruits, humor, sym, sessions to honeycombs list. Registry numbers preserved from last scan."
   },
   "navigation": {
     "parent": "honeycombs/boot.json",
-    "note": "registry contains additional subfolders (backups, core, dashboard, etc.).",
     "references": [
       "honeycombs/analytics/index.json",
       "honeycombs/communications/index.json",
