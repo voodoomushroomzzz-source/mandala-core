@@ -1124,7 +1124,7 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="👤 Профиль"), KeyboardButton(text="⚙️ Настройки")]
+            [KeyboardButton(text="👤 Профиль"), KeyboardButton(text="ℹ️ Информация")]
         ],
         resize_keyboard=True,
         one_time_keyboard=True,
@@ -1134,10 +1134,6 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
 
 def get_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🌀 Задачи",      callback_data="menu_tasks"),
-         InlineKeyboardButton(text="🔮 Резонанс",    callback_data="menu_resonance")],
-        [InlineKeyboardButton(text="💎 Достижения",  callback_data="menu_achievements"),
-         InlineKeyboardButton(text="📋 Анкета",      callback_data="menu_extended")],
         [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
     ])
 
@@ -1151,7 +1147,7 @@ def get_edit_profile_inline() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="📍 Город",         callback_data="edit_city")],
         [InlineKeyboardButton(text="🎂 День рождения", callback_data="edit_birthday")],
         [InlineKeyboardButton(text="⏰ Время утра",    callback_data="edit_morning")],
-        [InlineKeyboardButton(text="← Настройки",     callback_data="back_to_settings")],
+        [InlineKeyboardButton(text="← Назад",          callback_data="menu_edit_profile_back")],
     ])
 
 def get_settings_inline() -> InlineKeyboardMarkup:
@@ -5087,20 +5083,19 @@ async def btn_profile(message: Message, state: FSMContext):
 async def btn_garden(message: Message, state: FSMContext):
     await btn_profile(message, state)  # legacy alias
 
-@router.message(F.text == "⚙️ Настройки")
-async def btn_settings(message: Message, state: FSMContext):
+@router.message(F.text == "ℹ️ Информация")
+async def btn_info(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    if user_id in _menu_messages:
-        try:
-            await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
-        except Exception:
-            pass
-    sent = await message.answer("⚙️ Настройки:", reply_markup=get_settings_inline())
-    _menu_messages[user_id] = sent.message_id
+    await message.answer('🤖 <b>Что умеет СР — Mandala Helper</b>\n\nВсё управляется через голос или текст в чате.\n\n━━━━━━━━━━━━━━━━━━━━━\n\n🌀 <b>Задачи</b>\n• «добавь задачу подготовить презентацию до пятницы»\n• «закрой задачу X»\n• «удали задачу X»\n• «перенеси дедлайн задачи X на 10 мая»\n• «покажи задачи на неделю»\n• «покажи просроченные задачи»\n\n🎨 <b>Группы задач</b>\n• «создай группу Работа»\n• «добавь задачу X в группу Работа»\n• «покажи задачи группы Личное»\n\n🗺 <b>Роадмапы</b> (крупные цели, макс. 3)\n• «создай роадмап Выпустить альбом до июля»\n• «добавь задачу X в роадмап Y»\n• «покажи роадмап Y»\n• «удали роадмап Y»\n\n🔔 <b>Напоминания</b>\n• «напомни мне позвонить врачу завтра в 10:00»\n• «поставь напоминание на 25 мая в 9 утра»\n\n☑️ <b>Чеклисты</b>\n• «создай чеклист Сборы в поход»\n• «добавь пункт палатка в чеклист Сборы»\n• «покажи чеклист Сборы»\n\n💎 <b>Достижения</b>\n• «добавь достижение — пробежал 5 км»\n• «покажи достижения»\n\n🔮 <b>Резонанс</b>\n• «покажи баланс сфер»\n• «что у меня в сфере Связи?»\n\n🌐 <b>Поиск</b>\n• «найди события в театрах Москвы на выходные»\n• «что посмотреть в кино сегодня»\n\n💬 <b>Свободный диалог</b>\nПросто напиши или скажи голосом — СР поймёт контекст и поможет.', parse_mode="HTML", reply_markup=get_main_keyboard())
+
+@router.message(F.text == "⚙️ Настройки")
+async def btn_settings(message: Message, state: FSMContext):
+    """Legacy — redirects to info."""
+    await btn_info(message, state)
 
 @router.callback_query(F.data == "menu_tasks")
 async def cb_menu_tasks(callback: CallbackQuery, state: FSMContext):
@@ -6988,8 +6983,9 @@ async def quick_add_task(callback: CallbackQuery):
 @router.callback_query(F.data.startswith("qa:"))
 async def quick_add_achievement(callback: CallbackQuery):
     await callback.answer()
+    user_id = str(callback.from_user.id)
     title = callback.data[3:]
-    achievements = list(_store.get("achievements", []))
+    achievements = list(store_get_achievements(user_id))
     achievements.append({
         "id": f"ach_{len(achievements)+1:03d}",
         "category": "other",
@@ -6999,7 +6995,7 @@ async def quick_add_achievement(callback: CallbackQuery):
         "resonance_bonus": 3,
         "icon": "🌱"
     })
-    store_set_achievements(achievements)
+    store_set_achievements(user_id, achievements)
     # Update resonance
     gardener = store_get_profile(user_id)
     if gardener:
@@ -7010,10 +7006,10 @@ async def quick_add_achievement(callback: CallbackQuery):
         g["updated"] = _today()
         g = _add_growth_history_entry(g, new_res)
         store_set_profile(user_id, g)
-        _invalidate_auth_cache(str(callback.from_user.id))
+        _invalidate_auth_cache(user_id)
     _fire_sync()
     try:
-        await callback.message.edit_text("💎 Достижение зафиксировано: <b>" + title + "</b>\n🔮 +3 к резонансу")
+        await callback.message.edit_text("💎 Достижение зафиксировано: <b>" + title + "</b>\n🔮 +3 к резонансу", parse_mode="HTML")
     except Exception:
         pass
 
