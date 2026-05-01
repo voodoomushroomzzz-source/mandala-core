@@ -263,6 +263,15 @@
       "updated": "2026-05-01",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "t_cd992632",
+      "title": "Аудит опыта за 8 лет и перевод в IT-лексику",
+      "status": "active",
+      "created": "2026-05-01",
+      "deadline": "2026-05-02",
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -318,7 +327,9 @@
       "title": "🚨 Crisis Job Search",
       "deadline": "2026-05-31",
       "created": "2026-05-01",
-      "task_ids": [],
+      "task_ids": [
+        "t_cd992632"
+      ],
       "status": "active"
     }
   ],
