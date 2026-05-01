@@ -272,6 +272,21 @@
       "deadline": "2026-05-02",
       "label_name": null,
       "reminder": null
+    },
+    {
+      "task_id": "task_20260501_020",
+      "title": "Резюме на hh.ru, Superjob, Работа.ру, Зарплата.ру, Авито, ТрудВсем",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "work",
+      "priority": 5,
+      "deadline": null,
+      "reminder": null,
+      "created": "2026-05-01",
+      "updated": "2026-05-01",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
