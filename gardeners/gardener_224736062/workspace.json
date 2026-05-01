@@ -299,7 +299,61 @@
   "achievements": [],
   "updated": "2026-04-18",
   "achievements_count": 38,
-  "checklists": [],
+  "checklists": [
+    {
+      "id": "cl_вмагази",
+      "title": "В магазин",
+      "items": [
+        {
+          "id": "i1",
+          "text": "картошка",
+          "done": false
+        },
+        {
+          "id": "i2",
+          "text": "молоко",
+          "done": false
+        },
+        {
+          "id": "i3",
+          "text": "помидоры",
+          "done": false
+        },
+        {
+          "id": "i4",
+          "text": "плавленый сырок",
+          "done": false
+        },
+        {
+          "id": "i5",
+          "text": "сухари",
+          "done": false
+        },
+        {
+          "id": "i6",
+          "text": "кукуруза",
+          "done": false
+        },
+        {
+          "id": "i7",
+          "text": "фасоль",
+          "done": false
+        },
+        {
+          "id": "i8",
+          "text": "майонез",
+          "done": false
+        },
+        {
+          "id": "i9",
+          "text": "наггетсы или котлета",
+          "done": false
+        }
+      ],
+      "pinned_message_id": null,
+      "created": "2026-05-01"
+    }
+  ],
   "reminders": [],
   "_decay_date": "2026-05-01",
   "roadmaps": [
