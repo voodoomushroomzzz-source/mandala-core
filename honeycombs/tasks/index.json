@@ -2,51 +2,40 @@
   "identity": {
     "module_id": "TASKS-MANIFEST-004",
     "name": "Tasks Honeycomb Manifest",
-    "version": "v3.8.0",
+    "version": "v4.0.0",
     "created": "2026-03-01",
-    "updated": "2026-04-27",
+    "updated": "2026-05-01",
     "layer": 1,
     "type": "honeycomb_manifest"
   },
   "meta": {
-    "description": "Tasks honeycomb: active/ and archive/ folders for work tracking. Minimal structure.",
+    "description": "Tasks honeycomb: active/ folder for work tracking. Archive removed — only active tasks.",
     "status": "active",
     "priority": "high",
-    "tags": ["tasks", "simple", "workflow", "minimal"],
+    "tags": ["tasks", "simple", "workflow", "minimal", "no_archive"],
     "resonance": "100%"
   },
   "structure": {
-    "total_segments": 3,
-    "segments": [
-      {
-        "segment": "template",
-        "file": "basic_task.json",
-        "description": "Task template for creating new tasks",
-        "size_kb": 2.0
-      },
-      {
-        "segment": "active_tasks",
+    "segments": {
+      "active_tasks": {
         "folder": "active/",
         "description": "Currently active tasks",
         "files_count": 7
-      },
-      {
-        "segment": "archive_tasks",
-        "folder": "archive/",
-        "description": "Completed and archived tasks",
-        "files_count": 3
       }
-    ]
+    }
+  },
+  "rule": {
+    "policy": "No archived tasks. Tasks are either active or deleted. When completed, they are deleted, not archived.",
+    "applies_to": ["seeds", "tasks", "roadmaps"]
   },
   "navigation": {
-    "parent_map": "honeycombs/core_map/index.json",
-    "first_file": "basic_task.json"
+    "parent_map": "honeycombs/core_map/index.json"
   },
   "registry": {
-    "total_files": 11,
+    "total_files": 7,
     "total_size_kb": 45.0,
-    "last_updated": "2026-04-27",
-    "notes": "v3.8.0: merged 3 tasks (ahimsa_filter, deadline_sentinel, task_scanner) into symbiosis_guard. Active: 7 tasks."
+    "last_updated": "2026-05-01",
+    "notes": "v4.0.0: archive removed. 7 active tasks only."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -55,7 +44,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-04-27",
-    "notes": "v3.8.0: 7 active tasks. Merged cleanup under RM-013."
+    "last_check": "2026-05-01",
+    "notes": "v4.0.0: 7 active tasks. No archive."
   }
 }
