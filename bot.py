@@ -4775,8 +4775,6 @@ async def handle_voice(message: Message, state: FSMContext):
             await task_title(message, state)
         elif current_state == TaskStates.waiting_for_custom_deadline.state:
             await task_custom_deadline_input(message, state)
-        elif current_state == LabelRenameStates.waiting_for_new_name.state:
-            await cb_label_rename_input(message, state)
         else:
             # No active FSM — route to free conversation
             await free_conversation(message, state)
@@ -4985,7 +4983,7 @@ async def free_conversation(message: Message, state: FSMContext):
                     _BLOCKING_PREFIXES = (
                         "GardenOnboardingStates:", "EditProfileStates:",
                         "TaskStates:", "TaskEditStates:", "ChecklistStates:",
-                        "ReminderStates:", "LabelRenameStates:", "LeaveStates:",
+                        "ReminderStates:", "LeaveStates:",
                         "RoadmapStates:",
                     )
                     _is_blocked = current_state and any(
