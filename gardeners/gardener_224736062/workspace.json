@@ -320,6 +320,11 @@
           "done": false
         },
         {
+          "id": "i10",
+          "text": "хлеб",
+          "done": false
+        },
+        {
           "id": "i4",
           "text": "плавленый сырок",
           "done": false
@@ -347,11 +352,6 @@
         {
           "id": "i9",
           "text": "наггетсы или котлета",
-          "done": false
-        },
-        {
-          "id": "i10",
-          "text": "хлеб",
           "done": false
         }
       ],
