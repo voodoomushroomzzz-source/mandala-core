@@ -25,7 +25,7 @@
     }
   },
   "rule": {
-    "policy": "No archived tasks. Tasks are either active or deleted. When completed, they are deleted, not archived.",
+    "policy": "No archived tasks. Tasks are either active or deleted. Completed tasks are deleted, not archived.",
     "applies_to": ["seeds", "tasks", "roadmaps"]
   },
   "navigation": {
@@ -33,7 +33,6 @@
   },
   "registry": {
     "total_files": 7,
-    "total_size_kb": 45.0,
     "last_updated": "2026-05-01",
     "notes": "v4.0.0: archive removed. 7 active tasks only."
   },
