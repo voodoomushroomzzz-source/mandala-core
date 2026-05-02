@@ -4349,7 +4349,7 @@ async def _synthesize_search(query: str, sources: list) -> str:
 
     # Ссылки на источники
     source_links = "\n".join(
-        f'• <a href="{s['url']}">{s['title']}</a>' for s in sources
+        '• <a href="' + s['url'] + '">' + s['title'] + '</a>' for s in sources
     )
 
     synthesis = await _call_openrouter(
