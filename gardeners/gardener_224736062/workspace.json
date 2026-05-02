@@ -377,6 +377,15 @@
       "completed": "2026-05-02",
       "resonance_bonus": 3,
       "icon": "🌱"
+    },
+    {
+      "id": "ach_002",
+      "category": "connections",
+      "title": "Провел вечер с близким человеком",
+      "description": "",
+      "completed": "2026-05-02",
+      "resonance_bonus": 3,
+      "icon": "🌱"
     }
   ],
   "updated": "2026-04-18",
@@ -428,7 +437,7 @@
     "health": 30,
     "creativity": 24,
     "work": 41,
-    "connections": 23,
+    "connections": 26,
     "growth": 24
   }
 }
