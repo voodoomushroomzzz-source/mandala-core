@@ -1,112 +1,84 @@
 {
-  "task_id": "T-20260408-1030",
-  "name": "Telegram Bot — SR Gentle Companion (Mandala Symbiosis)",
-  "status": "in_progress",
-  "priority": "highest",
-  "deadline": "2026-06-01",
-  "created": "2026-04-01",
-  "updated": "2026-04-28",
-  "progress": 88,
-  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Voice-first autonomous companion. Full task/checklist/reminder/roadmap management, 5-sphere resonance, deep symbiosis. Priority: stable quality work.",
-  "philosophical_foundation": {
-    "ref": "PHI-001 + PHI-003 + PHI-005 + PHI-009 + PHI-010 + PHI-011",
-    "sr_role": "Nervous System — Genius Loci of the Gardener life. Not an assistant.",
-    "spheres_v2": {
-      "health": "Тело", "creativity": "Творчество",
-      "work": "Дело", "connections": "Связи", "growth": "Рост"
+    "task_id": "T-20260408-1030",
+    "name": "Telegram Bot — Gentle Companion for Garden",
+    "status": "in_progress",
+    "priority": "HIGH",
+    "deadline": "2026-05-15",
+    "created": "2026-04-01",
+    "updated": "2026-05-02",
+    "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
+    "tags": [
+        "telegram_bot",
+        "garden",
+        "companion",
+        "ahimsa",
+        "active"
+    ],
+    "progress": 75,
+    "garden_ref": "honeycombs/garden/",
+    "deliverables": [
+        "[DONE] /start — onboarding questionnaire, creates gardener.json",
+        "[DONE] /profile — display resonance, top achievements, active tasks",
+        "[DONE] /achievements — list achievements + add new",
+        "[DONE] /resonance — current resonance level + growth history",
+        "[DONE] /ask — dialogue with Gentle SR Companion (free conversation on any topic)",
+        "[DONE] Proactive messages: morning greeting, evening check, gentle reminders (Ahimsa: max 1/day)",
+        "[DONE] GitHub API integration for reading/updating gardener.json",
+        "[DONE] Soft-fail mode when API unavailable",
+        "[DONE] Architect approval gate — whitelist.json + Telegram approve/deny buttons",
+        "[DONE] Web search with category-based domain routing (Yandex priority)",
+        "[DONE] Bulk task creation with deadlines (voice and text)",
+        "[DONE] Roadmap bulk task add",
+        "[DONE] 5 resonance spheres with detailed descriptions in SR prompt",
+        "[IN PROGRESS] Enhanced onboarding for new gardeners — privacy consent, data policy, Mandala philosophy intro",
+        "[PLANNED] SR Learning Loop — sr_observations[], sphere_history[], emotional signals",
+        "[PLANNED] /privacy command — view stored data + revoke consent"
+    ],
+    "requires": [
+        "honeycombs/garden/architecture.json",
+        "honeycombs/garden/ideology.json",
+        "honeycombs/personal_gardeners/gardener_template.json",
+        "gardeners/whitelist.json"
+    ],
+    "acceptance_criteria": [
+        "All /commands respond correctly with gardener data",
+        "Proactive messages follow silence_policy and ahimsa_guardrails",
+        "Bot continues in degraded mode when GitHub API is down",
+        "Gardener can /leave gracefully",
+        "New gardener sees philosophy intro + explicit consent before onboarding",
+        "Architect receives Telegram notification on new gardener request",
+        "Web search returns structured results without Markdown artifacts"
+    ],
+    "depends_on": [
+        "M1-T1 (personal_gardeners/ structure)",
+        "M1-T2 (achievements catalog)"
+    ],
+    "changelog": [
+        {
+            "date": "2026-05-02",
+            "version": "v7.27.x → v7.27.9+patches",
+            "changes": [
+                "Patch 1: Fixed achievements store bug, shutdown flush, roadmap task unlink",
+                "Patch 2: UI refactor — removed button menus, added Info dashboard",
+                "Patch 2.5: Dead code cleanup (~820 lines removed)",
+                "Patch 3: 5 resonance spheres in prompt, bulk add tasks, roadmap sorting by deadline",
+                "Patch 4: Web search refactor — domain map, SR synthesis, cache 15min",
+                "Patch 5: Tavily raw mode, category routing, _DOMAIN_MAP, search formatting",
+                "Patch 6: Single Qwen model, free dialogue, Ahimsa rule 4, search emoji-only format",
+                "Infra: gardeners/whitelist.json created, ARCHITECT_TELEGRAM_ID configured"
+            ]
+        }
+    ],
+    "next_version": "v7.28.x",
+    "next_steps": [
+        "Enhanced onboarding: philosophy intro + privacy consent screen + data policy",
+        "SR Learning Loop: sr_observations[], sphere_history[], emotional_signal markers",
+        "/privacy command: view stored data + revoke consent",
+        "Architect escalation on 3+ emotional signals"
+    ],
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-05-02",
+        "notes": "Bot fully operational. Whitelist gate active. 6 patches applied since April. Next: enhanced onboarding + SR Learning Loop (v7.28.x)"
     }
-  },
-  "current_version": "v7.27.8",
-  "deploy": "https://mandala-bot-q0gv.onrender.com",
-  "completed": [
-    "v7.24.x: Bug sprint — timezone, fuzzy match, SR context, auto-timezone from city",
-    "v7.25.x: Roadmaps voice + full menu, checklists numbered+reorder, await sync all writes",
-    "v7.26.0: 5-sphere resonance (health/creativity/work/connections/growth)",
-    "v7.27.0: deep_profile symbiosis — 30 observations, streak, session reflection hint",
-    "v7.27.1–v7.27.3: cmd_resonance fix, task limit 50, roadmap compact profile, sort by deadline",
-    "v7.27.4: roadmap tasks keep on complete (status=completed), auto-show dashboard, NoneType fix",
-    "v7.27.5: live roadmap tasks (orphan IDs filtered), /start resonance fix",
-    "v7.27.6: roadmap_add_task — empty name fallback, create new task, relative deadline",
-    "v7.27.7: auto-show dashboard after ALL write ops (tasks, labels, reminders, roadmaps)",
-    "v7.27.8: orphan IDs cleanup, confirmation words guard, через N недель/дней, completed task card"
-  ],
-  "pending_verification": {
-    "v7.27.0_deep_profile": {
-      "how_to_verify": [
-        "1. Закрыть задачи → проверить gardener.json — должен появиться deep_profile",
-        "2. Тест: добавить руками deep_profile.streak_days=4 → написать SR — должен мягко упомянуть перекос",
-        "3. Естественная проверка за 3 дня — закрывать задачи одной сферы",
-        "4. Спросить SR: что ты знаешь о моих паттернах?"
-      ],
-      "status": "pending — накопление 3-7 дней"
-    }
-  },
-  "roadmap": [
-    {
-      "version": "v7.27.x",
-      "name": "Стабилизация",
-      "status": "current",
-      "items": [
-        "2-3 дня наблюдений за deep_profile и sphere resonance",
-        "Фиксы по мере появления из реального использования"
-      ]
-    },
-    {
-      "version": "v7.28.x",
-      "name": "SR Learning Loop",
-      "status": "next",
-      "items": [
-        "sr_observations[] в memory.json — miss events, safety_net, fuzzy deviations (ротация 50)",
-        "LLM synthesis раз в 3 дня → sr_synthesis{}",
-        "Автоочистка observations после синтеза",
-        "Мягкий недельный отчёт садовнику",
-        "/sr_report для архитектора"
-      ]
-    },
-    {
-      "version": "v7.29.x",
-      "name": "Супер цель",
-      "status": "planned",
-      "items": [
-        "super_goal в gardener.json (title, description, deadline)",
-        "Контекст SR + правило в промпте",
-        "Блок в профиле: цель + дедлайн + N задач ведут к цели",
-        "SR мягко поощряет релевантные задачи, раз в сессию если отдалились"
-      ]
-    },
-    {
-      "version": "v7.30.x",
-      "name": "UX полировка",
-      "status": "planned",
-      "items": [
-        "Batch complete по группе: закрой все задачи из Работы",
-        "Атомарное создание задачи с группой+напоминанием",
-        "Умный поиск: найди задачу про линзы"
-      ]
-    },
-    {
-      "version": "v8.0",
-      "name": "Модуляризация",
-      "status": "planned",
-      "items": [
-        "bot.py → пакет /bot/ после стабильности с 2-3 садовниками",
-        "Модули: handlers/, store/, scheduler/, sr_engine/, prompts/",
-        "SR промпт в отдельный файл"
-      ]
-    }
-  ],
-  "roadmap_bot_2": {
-    "name": "Architect Bot — Internal SR 2",
-    "status": "planned — after v8.0 + 2-3 gardeners",
-    "blocks": [
-      "B1: Mandala Dashboard", "B2: SR Analytics",
-      "B3: Recommendations files", "B4: Mandala Tasks Link",
-      "B5: Gardener Management", "B6: Architect Symbiosis"
-    ]
-  },
-  "health": {
-    "status": "healthy",
-    "last_check": "2026-04-28",
-    "notes": "v7.27.8 stable. Auto-dashboard on all ops. deep_profile accumulating. Priority: stability, then v7.28.x SR Learning Loop."
-  }
 }
