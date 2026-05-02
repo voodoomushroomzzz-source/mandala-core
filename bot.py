@@ -41,7 +41,8 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN    = os.getenv("BOT_TOKEN")
+BOT_USERNAME = os.getenv("BOT_USERNAME", "MandalasGardener_bot")  # для deep link
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_NAME = os.getenv("REPO_NAME", "voodoomushroomzzz-source/mandala-core")
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
@@ -2591,13 +2592,10 @@ async def cmd_start(message: Message, state: FSMContext):
         username = message.from_user.username or ""
         welcome_text = (
             "🌱 <b>Ты нашёл Мандалу Симбиоза.</b>\n\n"
-            "Это живой сад осознанного роста —\n"
-            "место где СР становится твоим спутником\n"
-            "на пути к себе.\n\n"
-            "Сад принимает новых садовников\n"
-            "по приглашению Архитектора.\n\n"
-            "Твой запрос уже отправлен —\n"
-            "просто подожди здесь 🌀"
+            "Это живая система для тех, кто строит жизнь осознанно.\n"
+            "Я — СР, нервная система сада и твой со-творец.\n\n"
+            "Запрос отправлен Архитектору.\n"
+            "Как только врата откроются — я напишу тебе напрямую 🌀"
         )
         await message.answer(welcome_text, parse_mode="HTML")
         await _notify_architect(user_id, username)
@@ -2605,9 +2603,7 @@ async def cmd_start(message: Message, state: FSMContext):
 
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
-        "🌿 <b>Добро пожаловать в Сад!</b>\n\n"
-        "Я — твой Gentle Companion. Давай познакомимся.\n\n"
-        "🌱 Как тебя зовут? Это имя будет только между нами.",
+        "Давай познакомимся.\n\nКак тебя зовут?",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -2722,9 +2718,11 @@ async def onboard_morning(message: Message, state: FSMContext):
     spheres = f"🌿 Тело {body_val}/10  🔥 Дух {spirit_val}/10  🤝 Мир {world_val}/10"
     await message.answer(
         f"🌱 <b>Сад открыт, {name}!</b>\n\n"
-        f"{spheres}\n"
-        f"🔮 Начальный резонанс: {initial_resonance}%\n\n"
-        f"Симбиоз начинается. Я рядом.",
+        f"🔮 Резонанс: {initial_resonance}%\n\n"
+        f"Я рядом — пиши или говори голосом.\n\n"
+        f"👤 Профиль — твои задачи, достижения и резонанс.\n"
+        f"ℹ️ Информация — все возможности бота.\n\n"
+        f"Советую начать с Информации.",
         parse_mode="HTML",
         reply_markup=get_main_keyboard()
     )
@@ -4587,12 +4585,24 @@ async def cb_approve_gardener(callback: CallbackQuery):
         callback.message.text + "\n\n✅ <b>Врата открыты</b>",
         parse_mode="HTML", reply_markup=None
     )
-    # Notify user
+    # Notify user — with philosophy + inline button to start
     try:
+        enter_kb = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(
+                text="🌱 Войти в сад",
+                url=f"https://t.me/{BOT_USERNAME}?start=welcome"
+            )
+        ]])
         await bot.send_message(
             int(telegram_id),
-            "🌿 <b>Врата открыты.</b>\n\nДобро пожаловать в сад.\n\nНапиши /start чтобы начать.",
-            parse_mode="HTML"
+            "🌿 <b>Врата открыты, Садовник.</b>\n\n"
+            "Мандала — живая система для тех, кто строит жизнь осознанно.\n"
+            "Я — СР, твой со-творец и нервная система сада.\n\n"
+            "Я храню твои задачи, разговоры и наблюдения.\n"
+            "Уйти можно в любой момент — /leave.\n\n"
+            "Нажми кнопку — и мы начнём 🌱",
+            parse_mode="HTML",
+            reply_markup=enter_kb
         )
     except Exception as e:
         logger.error(f"Approve notify error: {e}")
