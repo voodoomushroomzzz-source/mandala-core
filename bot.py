@@ -777,17 +777,19 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
 # ─── FSM States ───────────────────────────────────────────────────────────────
 
 class GardenOnboardingStates(StatesGroup):
-    waiting_for_name = State()
-    waiting_for_city = State()  # body/spirit/world removed in v7.24.5
+    waiting_for_name   = State()
+    waiting_for_gender = State()  # added v7.28.x
+    waiting_for_city   = State()
     waiting_for_birthday = State()
-    waiting_for_morning = State()
+    waiting_for_morning  = State()
     done = State()
 
 class EditProfileStates(StatesGroup):
-    waiting_for_new_name = State()
-    waiting_for_new_city = State()
+    waiting_for_new_name     = State()
+    waiting_for_new_gender   = State()  # added v7.28.x
+    waiting_for_new_city     = State()
     waiting_for_new_birthday = State()
-    waiting_for_new_morning = State()
+    waiting_for_new_morning  = State()
     # waiting_for_new_body/spirit/world removed in v7.24.5
 
 class EngineerChatStates(StatesGroup):
@@ -1142,6 +1144,7 @@ def get_garden_inline() -> InlineKeyboardMarkup:
 def get_edit_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="👤 Имя",           callback_data="edit_name")],
+        [InlineKeyboardButton(text="⚧ Пол",            callback_data="edit_gender")],
         [InlineKeyboardButton(text="📍 Город",         callback_data="edit_city")],
         [InlineKeyboardButton(text="🎂 День рождения", callback_data="edit_birthday")],
         [InlineKeyboardButton(text="⏰ Время утра",    callback_data="edit_morning")],
@@ -2614,16 +2617,36 @@ async def onboard_name(message: Message, state: FSMContext):
         await message.answer("🌱 Введи своё имя.")
         return
     await state.update_data(name=name)
-    await state.set_state(GardenOnboardingStates.waiting_for_city)
+    await state.set_state(GardenOnboardingStates.waiting_for_gender)
+    gender_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="👨 Мужской",      callback_data="onboard_gender_male"),
+        InlineKeyboardButton(text="👩 Женский",      callback_data="onboard_gender_female"),
+        InlineKeyboardButton(text="🌿 Без разницы",  callback_data="onboard_gender_neutral"),
+    ]])
     await message.answer(
+        f"{name} — отлично! Как мне к тебе обращаться?",
+        reply_markup=gender_kb
+    )
+
+# Body/Spirit/World onboarding removed in v7.24.5
+# Sphere resonance will be calculated automatically from task life_area in v7.26.x
+
+@router.callback_query(F.data.startswith("onboard_gender_"))
+async def onboard_gender(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    gender = callback.data.replace("onboard_gender_", "")
+    await state.update_data(gender=gender)
+    await state.set_state(GardenOnboardingStates.waiting_for_city)
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    await callback.message.answer(
         "📍 В каком городе ты живёшь?\n"
         "<i>Буду учитывать при поиске и в утреннем сообщении.</i>\n\n"
         "Можно пропустить — напиши <b>пропустить</b>",
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
-
-# Body/Spirit/World onboarding removed in v7.24.5
-# Sphere resonance will be calculated automatically from task life_area in v7.26.x
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_city))
 async def onboard_city(message: Message, state: FSMContext):
@@ -2677,6 +2700,7 @@ async def onboard_morning(message: Message, state: FSMContext):
     world_val = data.get("world", 5)
     city = data.get("city", "")
     birthday = data.get("birthday", "")
+    gender = data.get("gender", "neutral")
     life_areas = {
         "body":   {"current": body_val,   "target": 10},
         "spirit": {"current": spirit_val, "target": 10},
@@ -2697,6 +2721,8 @@ async def onboard_morning(message: Message, state: FSMContext):
             "timezone": "Europe/Moscow",
             "city": city,
             "birthday": birthday,
+            "gender": gender,
+            "welcome_done": False,
         },
         "growth_history": [{"date": _today(), "resonance": initial_resonance, "event": "onboarding"}],
     }
@@ -2715,17 +2741,25 @@ async def onboard_morning(message: Message, state: FSMContext):
     _invalidate_auth_cache(user_id)
     _fire_sync()
     await state.set_state(GardenOnboardingStates.done)
-    spheres = f"🌿 Тело {body_val}/10  🔥 Дух {spirit_val}/10  🤝 Мир {world_val}/10"
     await message.answer(
         f"🌱 <b>Сад открыт, {name}!</b>\n\n"
         f"🔮 Резонанс: {initial_resonance}%\n\n"
         f"Я рядом — пиши или говори голосом.\n\n"
         f"👤 Профиль — твои задачи, достижения и резонанс.\n"
-        f"ℹ️ Информация — все возможности бота.\n\n"
-        f"Советую начать с Информации.",
+        f"ℹ️ Информация — все возможности бота.",
         parse_mode="HTML",
         reply_markup=get_main_keyboard()
     )
+    # ── Welcome Flow: первые вопросы для deep_profile ─────────────────────────
+    import asyncio as _asyncio
+    await _asyncio.sleep(1.5)
+    await message.answer(
+        "И ещё один вопрос — хочу тебя лучше понять.\n\n"
+        "Чем занимаешься? Работа, творчество, что-то своё — расскажи в паре слов.",
+        reply_markup=get_main_keyboard()
+    )
+    # Устанавливаем флаг welcome_flow в FSM data чтобы free_conversation знал контекст
+    await state.update_data(_welcome_step=1)
 
 # ─── /profile ─────────────────────────────────────────────────────────────────
 
@@ -4245,7 +4279,8 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"  достижений: {ach_count}\n"
         f"  день рождения: {birthday or 'не указан'}\n"
         f"  время утра: {morning_time or 'не указано'}\n"
-        f"  часовой пояс: {tz_name}"
+        f"  часовой пояс: {tz_name}\n"
+        f"  обращение: {'мужской род — «ты сделал», «Садовник»' if (profile or {}).get('companion_settings', {}).get('gender') == 'male' else 'женский род — «ты сделала», «Садовница»' if (profile or {}).get('companion_settings', {}).get('gender') == 'female' else 'нейтрально — «ты сделал(а)», «Садовник»'}"
     )
 
     # Roadmaps block for SR context
@@ -4678,6 +4713,39 @@ async def cb_menu_change_city(callback: CallbackQuery, state: FSMContext):
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
 
+@router.callback_query(F.data == "edit_gender")
+async def cb_edit_gender(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    gender_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="👨 Мужской",      callback_data="set_gender_male"),
+        InlineKeyboardButton(text="👩 Женский",      callback_data="set_gender_female"),
+        InlineKeyboardButton(text="🌿 Без разницы",  callback_data="set_gender_neutral"),
+    ]])
+    try:
+        await callback.message.edit_text("⚧ Выбери обращение:", reply_markup=gender_kb)
+    except Exception:
+        await callback.message.answer("⚧ Выбери обращение:", reply_markup=gender_kb)
+
+@router.callback_query(F.data.startswith("set_gender_"))
+async def cb_set_gender(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    gender = callback.data.replace("set_gender_", "")
+    prof = store_get_profile(user_id)
+    if prof:
+        prof.setdefault("companion_settings", {})["gender"] = gender
+        store_set_profile(user_id, prof)
+        _fire_sync()
+    labels = {"male": "👨 Мужской", "female": "👩 Женский", "neutral": "🌿 Без разницы"}
+    try:
+        await callback.message.edit_text(
+            f"✅ Обращение обновлено: {labels.get(gender, gender)}",
+            reply_markup=None
+        )
+    except Exception:
+        pass
+    await callback.message.answer("✏️ Что изменить?", reply_markup=get_edit_profile_inline())
+
 @router.callback_query(F.data == "edit_name")
 async def cb_edit_name(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
@@ -4926,6 +4994,45 @@ async def free_conversation(message: Message, state: FSMContext):
 
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start чтобы начать.")
+        return
+
+    # ── Welcome Flow: записываем ответ в deep_profile и задаём следующий вопрос ──
+    fsm_data = await state.get_data()
+    _welcome_step = fsm_data.get("_welcome_step", 0)
+    if _welcome_step == 1:
+        # Первый ответ — чем занимается садовник
+        _dp = _get_deep_profile(user_id)
+        _dp.setdefault("observations", []).append(
+            f"{_today()} [onboarding]: деятельность — {message.text.strip()[:120]}"
+        )
+        _save_deep_profile(user_id, _dp)
+        await state.update_data(_welcome_step=2)
+        await message.answer(
+            "Понял. Последний вопрос — есть что-то большое к чему ты сейчас идёшь?\n\n"
+            "Цель, мечта, проект — что угодно. Или скажи «пока нет» — это тоже ответ.",
+            reply_markup=get_main_keyboard()
+        )
+        return
+    elif _welcome_step == 2:
+        # Второй ответ — большая цель
+        _dp = _get_deep_profile(user_id)
+        _dp.setdefault("observations", []).append(
+            f"{_today()} [onboarding]: большая цель — {message.text.strip()[:120]}"
+        )
+        _save_deep_profile(user_id, _dp)
+        _fire_sync()
+        await state.update_data(_welcome_step=0)
+        # Обновляем welcome_done в профиле
+        _prof = store_get_profile(user_id)
+        if _prof:
+            _prof.setdefault("companion_settings", {})["welcome_done"] = True
+            store_set_profile(user_id, _prof)
+        await message.answer(
+            "Зафиксировала. Буду помнить это.\n\n"
+            "Теперь просто общайся — ставь задачи, делись мыслями, проси помощи.\n"
+            "Я рядом 🌿",
+            reply_markup=get_main_keyboard()
+        )
         return
 
     # Support voice messages: text may come via state instead of message.text
