@@ -344,6 +344,21 @@
       "updated": "2026-05-02",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260502_028",
+      "title": "подключить садовника",
+      "status": "todo",
+      "label_id": "мандала",
+      "label_name": "Мандала",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-05-03",
+      "reminder": null,
+      "created": "2026-05-02",
+      "updated": "2026-05-02",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
