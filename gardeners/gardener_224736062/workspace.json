@@ -410,6 +410,15 @@
       "completed": "2026-05-02",
       "resonance_bonus": 3,
       "icon": "🌱"
+    },
+    {
+      "id": "ach_004",
+      "category": "health",
+      "title": "Приготовил завтрак",
+      "description": "",
+      "completed": "2026-05-02",
+      "resonance_bonus": 3,
+      "icon": "🌿"
     }
   ],
   "updated": "2026-04-18",
@@ -466,7 +475,7 @@
     }
   ],
   "sphere_resonance": {
-    "health": 30,
+    "health": 33,
     "creativity": 24,
     "work": 41,
     "connections": 26,
