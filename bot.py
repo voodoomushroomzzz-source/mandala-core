@@ -2853,23 +2853,56 @@ async def cmd_achievements(message: Message):
             reply_markup=get_main_keyboard()
         )
         return
-    # Группируем по сферам
+
+    from datetime import datetime as _dt_ach
     sphere_names = {
         "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
         "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост", "other": "💎 Другое"
     }
-    by_sphere: dict = {}
+    cur_month = _dt_ach.now().strftime("%Y-%m")
+
+    # Разделяем на этот месяц и все остальные
+    this_month = [a for a in achievements if (a.get("completed") or "").startswith(cur_month)]
+    by_sphere_all: dict = {}
+    by_sphere_month: dict = {}
     for ach in achievements:
         cat = ach.get("category", "other")
-        by_sphere.setdefault(cat, []).append(ach)
+        by_sphere_all.setdefault(cat, 0)
+        by_sphere_all[cat] += 1
+    for ach in this_month:
+        cat = ach.get("category", "other")
+        by_sphere_month.setdefault(cat, []).append(ach)
+
     text = f"💎 Достижения · всего {len(achievements)}\n\n"
-    for cat, achs in by_sphere.items():
-        text += f"{sphere_names.get(cat, cat)} ({len(achs)})\n"
-        for ach in achs[-2:]:  # последние 2 по каждой сфере
-            text += f"  · {ach.get('title','')} · {ach.get('completed','')}\n"
+
+    # Этот месяц
+    month_label = _dt_ach.now().strftime("%B").capitalize()
+    if this_month:
+        text += f"📅 {month_label}:\n"
+        for cat, achs in by_sphere_month.items():
+            text += f"{sphere_names.get(cat, cat)} — {len(achs)}\n"
+            for ach in achs[-2:]:
+                text += f"  · {ach.get('title','')}\n"
         text += "\n"
-    text += "Добавить: «добавь достижение — [что сделал]»"
-    await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
+    else:
+        text += f"📅 {month_label}: пока нет достижений\n\n"
+
+    # Итого по сферам за всё время
+    text += "За всё время:\n"
+    sorted_spheres = sorted(by_sphere_all.items(), key=lambda x: x[1], reverse=True)
+    for cat, cnt in sorted_spheres:
+        text += f"{sphere_names.get(cat, cat)} — {cnt}\n"
+
+    # Наблюдение СР
+    if sorted_spheres:
+        top_cat, top_cnt = sorted_spheres[0]
+        low_cats = [sphere_names.get(c, c) for c, n in sorted_spheres if n == 0] if len(sorted_spheres) > 1 else []
+        text += f"\n💡 Сильнее всего растёт {sphere_names.get(top_cat, top_cat)}."
+        if low_cats:
+            text += f" {', '.join(low_cats)} ещё ждут своего момента."
+
+    text += "\n\nДобавить: «добавь достижение — [что сделал]»"
+    await message.answer(text, reply_markup=get_main_keyboard())
 
 @router.callback_query(F.data == "add_achievement")
 async def cb_add_achievement(callback: CallbackQuery, state: FSMContext):
@@ -3662,6 +3695,24 @@ async def cmd_archive(message: Message):
     await message.answer(f"📜 {len(completed)} задач перемещено в архив.")
 
 # ─── /leave ───────────────────────────────────────────────────────────────────
+
+@router.message(Command("privacy"))
+async def cmd_privacy(message: Message):
+    user_id = str(message.from_user.id)
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
+    await message.answer(
+        "🔐 Мои данные\n\n"
+        "СР хранит:\n"
+        "· задачи и дедлайны\n"
+        "· историю разговоров (40 сообщений)\n"
+        "· достижения и резонанс\n"
+        "· наблюдения о твоих паттернах\n\n"
+        "Хочешь покинуть сад и удалить данные — /leave\n\n"
+        "🔧 Расширенное управление данными — в разработке",
+        reply_markup=get_main_keyboard()
+    )
 
 @router.message(Command("leave"))
 async def cmd_leave(message: Message, state: FSMContext):
@@ -5221,9 +5272,20 @@ async def free_conversation(message: Message, state: FSMContext):
                                 _ach_cat = _sphere_map.get(_ach_sphere) or _classify_sphere(_ach_title)
                                 _ach_icon = LIFE_AREA_ICONS.get(_ach_cat, "🌱")
                                 _ach_bonus = 3  # стандартный бонус через чат
-                                # Создаём достижение
+                                # Защита от дублей — не добавляем если такое же название уже есть сегодня
                                 _achievements = list(store_get_achievements(user_id))
-                                _achievements.append({
+                                _today_str = _today()
+                                _is_dup = any(
+                                    a.get("title", "").lower().strip() == _ach_title.lower().strip()
+                                    and a.get("completed", "") == _today_str
+                                    for a in _achievements
+                                )
+                                if _is_dup:
+                                    reply_text = f"{_ach_icon} Достижение «{_ach_title}» уже зафиксировано сегодня."
+                                else:
+                                    pass  # продолжаем ниже
+                                if not _is_dup:
+                                    _achievements.append({
                                     "id": f"ach_{len(_achievements)+1:03d}",
                                     "category": _ach_cat,
                                     "title": _ach_title,
@@ -5232,23 +5294,23 @@ async def free_conversation(message: Message, state: FSMContext):
                                     "resonance_bonus": _ach_bonus,
                                     "icon": _ach_icon
                                 })
-                                store_set_achievements(user_id, _achievements)
-                                # Обновляем резонанс сферы
-                                store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
-                                _gardener = store_get_profile(user_id)
-                                if _gardener:
-                                    _g = dict(_gardener)
-                                    _g["resonance_level"] = min(100, _g.get("resonance_level", 13) + _ach_bonus)
-                                    _g["updated"] = _today()
-                                    _g = _add_growth_history_entry(_g, _g["resonance_level"], user_id)
-                                    store_set_profile(user_id, _g)
-                                    _invalidate_auth_cache(user_id)
-                                _fire_sync()
-                                reply_text = (
-                                    f"{_ach_icon} Достижение зафиксировано!\n\n"
-                                    f"{_ach_title}\n"
-                                    f"🔮 +{_ach_bonus} к резонансу · сфера: {_ach_cat}"
-                                )
+                                    store_set_achievements(user_id, _achievements)
+                                    # Обновляем резонанс сферы
+                                    store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
+                                    _gardener = store_get_profile(user_id)
+                                    if _gardener:
+                                        _g = dict(_gardener)
+                                        _g["resonance_level"] = min(100, _g.get("resonance_level", 13) + _ach_bonus)
+                                        _g["updated"] = _today()
+                                        _g = _add_growth_history_entry(_g, _g["resonance_level"], user_id)
+                                        store_set_profile(user_id, _g)
+                                        _invalidate_auth_cache(user_id)
+                                    _fire_sync()
+                                    reply_text = (
+                                        f"{_ach_icon} Достижение зафиксировано!\n\n"
+                                        f"{_ach_title}\n"
+                                        f"🔮 +{_ach_bonus} к резонансу · сфера: {_ach_cat}"
+                                    )
                             else:
                                 # Название не распознано — открываем FSM
                                 await cmd_achievements(message)
@@ -6398,8 +6460,8 @@ async def on_startup():
     # Регистрируем команды в меню Telegram
     from aiogram.types import BotCommand
     await bot.set_my_commands([
-        BotCommand(command="start",   description="🌱 Начать / Войти в сад"),
-        BotCommand(command="profile", description="👤 Мой профиль"),
+        BotCommand(command="start",   description="🌱 Войти в сад"),
+        BotCommand(command="privacy", description="🔐 Мои данные"),
         BotCommand(command="leave",   description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
