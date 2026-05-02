@@ -23,7 +23,7 @@
   },
   "companion_settings": {
     "morning_message_time": "10:00",
-    "proactive_mode": true,
+    "proactive_mode": false,
     "timezone": "Europe/Moscow",
     "city": "Москва",
     "birthday": "14.02"
