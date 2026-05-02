@@ -4074,10 +4074,15 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
 - "удали группа X", "убери группа X" → delete_label, action.title=название группы, 0.9
 - "переименуй группа X в Y", "измени группа X на Y" → rename_label, action.title="X→Y", 0.9
-- "найди", "поищи", "погода", "что такое X" → web_search, action.query="нормализованный поисковый запрос на русском", 0.9
+- "найди", "поищи", "погода", "что такое X" → web_search, action.query="нормализованный поисковый запрос на русском", action.search_category="категория", 0.9
   ВАЖНО: action.query — это короткий, чёткий поисковый запрос (3-7 слов), не копия фразы пользователя.
-  Пример: "посмотри какие мероприятия в театрах" → action.query="театры Москва афиша мероприятия май 2026"
-  Пример: "найди где поесть рядом" → action.query="рестораны {city} рядом"
+  action.search_category — одно из: weather / cinema / events / concerts / jobs / food / sport / health / news / education / default
+  Пример: "посмотри какие мероприятия в театрах" → action.query="театры Москва афиша май 2026", action.search_category="events"
+  Пример: "найди где поесть рядом" → action.query="рестораны {city} рядом", action.search_category="food"
+  Пример: "какая погода завтра" → action.query="погода {city} завтра", action.search_category="weather"
+  Пример: "что идёт в кино" → action.query="кино {city} афиша сегодня", action.search_category="cinema"
+  Пример: "найди вакансии разработчика" → action.query="вакансии разработчик {city}", action.search_category="jobs"
+  В поле text пиши ТОЛЬКО нормализованный запрос — без анализа сфер, профиля, философии.
 - "напомни мне X завтра в 9", "поставь напоминание X" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM", action.repeat=once/daily/weekdays, 0.95
 - "напомни через 30 минут", "через 2 часа напомни X" → create_reminder, action.title=X, action.datetime=текущее_время+N_минут/часов в ISO формате, 0.95
 - "напомни сегодня в 21:00", "напоминание X в 20:30" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM" (сегодняшняя дата), 0.95
@@ -4235,41 +4240,68 @@ def _classify_query_complexity(query: str) -> int:
     return 2
 
 
-# Приоритетные домены: сначала Яндекс, затем Google-смежные русскоязычные ресурсы
-_PRIORITY_DOMAINS = [
-    "yandex.ru", "ya.ru",
-    "pogoda.yandex.ru", "market.yandex.ru",
-    "google.com", "google.ru",
-    "rbc.ru", "ria.ru", "tass.ru", "kommersant.ru",
-    "wikipedia.org",
-]
+# ── Домены по категориям запросов (Блок 1) ────────────────────────────────────
+_DOMAIN_MAP = {
+    "weather":    ["yandex.ru/pogoda", "gismeteo.ru", "meteoinfo.ru"],
+    "cinema":     ["afisha.yandex.ru", "kinopoisk.ru", "afisha.ru", "kudago.com"],
+    "events":     ["afisha.yandex.ru", "afisha.ru", "kudago.com", "timepad.ru", "mos.ru"],
+    "concerts":   ["afisha.yandex.ru", "kassir.ru", "afisha.ru", "kudago.com"],
+    "jobs":       ["hh.ru", "superjob.ru", "rabota.ru"],
+    "food":       ["yandex.ru/maps", "2gis.ru", "restoclub.ru", "afisha.ru"],
+    "sport":      ["yandex.ru/maps", "sports.ru", "sport-express.ru", "championat.com"],
+    "health":     ["yandex.ru/maps", "prodoctorov.ru", "napopravku.ru", "gosuslugi.ru"],
+    "news":       ["rbc.ru", "ria.ru", "interfax.ru", "tass.ru"],
+    "education":  ["skillbox.ru", "stepik.org", "otus.ru"],
+    "default":    ["yandex.ru/maps", "afisha.yandex.ru", "2gis.ru", "rbc.ru"],
+}
+
+# ── Кэш поисковых запросов 15 минут (Блок 5) ─────────────────────────────────
+_search_cache: dict = {}  # {cache_key: (result_list, timestamp)}
+_SEARCH_CACHE_TTL = 900   # 15 минут
 
 
-async def _tavily_search(query: str, city: str = "") -> str:
-    """Search via Tavily API. Кол-во источников зависит от сложности запроса.
-    Приоритет: Яндекс / Google / крупные рус. ресурсы.
+async def _tavily_search_raw(query: str, city: str = "", category: str = "default") -> list:
+    """Поиск через Tavily. Возвращает список словарей [{title, url, content}].
+    Использует домены по категории. Без AI-answer — только реальный контент.
+    Кэширует результаты на 15 минут.
     """
     if not TAVILY_API_KEY:
-        return ""
-    try:
-        q = f"{query} {city}".strip() if city else query
-        num_results = _classify_query_complexity(q)  # 1, 2 или 3
+        return []
+    import time as _time
+    import hashlib as _hashlib
 
+    q = f"{query} {city}".strip() if city else query
+    cache_key = _hashlib.md5(q.encode()).hexdigest()
+
+    # Проверяем кэш
+    if cache_key in _search_cache:
+        cached_result, cached_ts = _search_cache[cache_key]
+        if _time.time() - cached_ts < _SEARCH_CACHE_TTL:
+            logger.info(f"Web search cache hit: q='{q[:50]}'")
+            return cached_result
+
+    num_results = _classify_query_complexity(q)
+    domains = _DOMAIN_MAP.get(category, _DOMAIN_MAP["default"])
+
+    try:
         async with aiohttp.ClientSession() as session:
+            # Первый запрос — с приоритетными доменами
             async with session.post(
                 "https://api.tavily.com/search",
                 json={
                     "api_key": TAVILY_API_KEY,
                     "query": q,
                     "search_depth": "basic",
-                    "max_results": num_results + 2,  # берём с запасом, потом фильтруем
-                    "include_answer": True,
-                    "include_domains": _PRIORITY_DOMAINS,
+                    "max_results": num_results + 2,
+                    "include_answer": False,
+                    "include_domains": domains,
                 },
                 timeout=aiohttp.ClientTimeout(total=10)
             ) as resp:
-                if resp.status != 200:
-                    # Повтор без фильтра доменов если нет результатов
+                if resp.status == 200:
+                    data = await resp.json()
+                else:
+                    # Повтор без фильтра доменов
                     async with session.post(
                         "https://api.tavily.com/search",
                         json={
@@ -4277,61 +4309,75 @@ async def _tavily_search(query: str, city: str = "") -> str:
                             "query": q,
                             "search_depth": "basic",
                             "max_results": num_results,
-                            "include_answer": True,
+                            "include_answer": False,
                         },
                         timeout=aiohttp.ClientTimeout(total=10)
                     ) as resp2:
                         if resp2.status != 200:
-                            return ""
+                            return []
                         data = await resp2.json()
-                else:
-                    data = await resp.json()
 
-                answer = data.get("answer", "")
-                results = data.get("results", [])
+            results = data.get("results", [])
+            sources = []
+            for r in results[:num_results]:
+                title   = (r.get("title") or "").strip()
+                url     = (r.get("url") or "").strip()
+                content = (r.get("content") or "")[:400].strip()
+                if title and url:
+                    sources.append({"title": title, "url": url, "content": content})
 
-                # Если приоритетных доменов нет — берём что есть
-                sources = []
-                for r in results[:num_results]:
-                    title = (r.get("title") or "").strip()
-                    url = (r.get("url") or "").strip()
-                    snippet = (r.get("content") or "")[:200].strip()
-                    if title and url:
-                        sources.append((title, url, snippet))
+            # Сохраняем в кэш
+            _search_cache[cache_key] = (sources, _time.time())
+            logger.info(f"Web search: cat={category} complexity={num_results} sources={len(sources)} q='{q[:50]}'")
+            return sources
 
-                # Формируем ответ
-                parts = []
-                if answer:
-                    parts.append(answer)
-                elif sources:
-                    parts.append(sources[0][2] if sources[0][2] else sources[0][0])
-
-                if sources:
-                    source_lines = [
-                        f'• <a href="{url}">{title}</a>'
-                        for title, url, _ in sources
-                    ]
-                    parts.append("\n<b>Источники:</b>\n" + "\n".join(source_lines))
-
-                result = "\n\n".join(parts)
-
-                # Перевод на русский если нужен
-                if result and any(c.isascii() and c.isalpha() for c in result[:50]):
-                    try:
-                        translated = await _call_openrouter([
-                            {"role": "system", "content": "Переведи на русский. Сохрани HTML теги <b> и <a href>. Только перевод, без пояснений."},
-                            {"role": "user", "content": result}
-                        ])
-                        if translated and len(translated) > 20:
-                            result = translated
-                    except Exception:
-                        pass
-
-                logger.info(f"Web search: complexity={num_results} sources={len(sources)} q='{q[:50]}'")
-                return result
     except Exception as e:
         logger.warning(f"Tavily error: {e}")
-    return ""
+    return []
+
+
+async def _synthesize_search(query: str, sources: list) -> str:
+    """SR синтезирует результаты поиска в структурированный ответ."""
+    if not sources:
+        return ""
+
+    # Собираем контент из источников
+    context_parts = []
+    for s in sources:
+        context_parts.append(f"Источник: {s['title']}\n{s['content']}")
+    context = "\n\n".join(context_parts)
+
+    # Ссылки на источники
+    source_links = "\n".join(
+        f'• <a href="{s['url']}">{s['title']}</a>' for s in sources
+    )
+
+    synthesis = await _call_openrouter(
+        [
+            {
+                "role": "system",
+                "content": (
+                    "Ты помощник. Синтезируй данные из поиска в чёткий структурированный ответ на русском. "
+                    "Только конкретные факты из источников — названия, даты, цены, адреса, варианты. "
+                    "Никаких сфер резонанса, профилей, личных наблюдений, философии. "
+                    "Структурируй по категориям если есть несколько вариантов. "
+                    "В конце один уточняющий вопрос если уместно. "
+                    "Ответ до 400 слов."
+                )
+            },
+            {
+                "role": "user",
+                "content": f"Запрос: {query}\n\nДанные из источников:\n{context}"
+            }
+        ],
+        model_idx=0
+    )
+
+    if synthesis:
+        return synthesis + f"\n\n<b>Источники:</b>\n{source_links}"
+    # Fallback — минимальный ответ из первого источника
+    first = sources[0]
+    return f"{first['content']}\n\n<b>Источники:</b>\n{source_links}"
 
 async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
     if not OPENROUTER_KEY or model_idx >= len(SR_MODEL_CHAIN):
@@ -5147,16 +5193,29 @@ async def free_conversation(message: Message, state: FSMContext):
                             reply_text = ""
                         elif intent == "web_search":
                             _ws_act = parsed_check.get("action") or {}
-                            # Use reformulated query from SR if provided, else raw text
+                            # Нормализованный запрос от SR
                             q = (_ws_act.get("query") or _ws_act.get("title") or "").strip() or text
+                            cat = (_ws_act.get("search_category") or "default").strip()
                             prof = store_get_profile(user_id)
                             city = (prof or {}).get("companion_settings", {}).get("city", "")
-                            sm = await message.answer("🔍 Ищу...", parse_mode="HTML")
-                            result = await _tavily_search(q, city)
+                            # Показываем нормализованный запрос
+                            sm = await message.answer(f"🔍 Ищу: <i>{q}</i>", parse_mode="HTML")
+                            # Получаем raw данные из Tavily
+                            raw_sources = await _tavily_search_raw(q, city, category=cat)
                             try: await sm.delete()
                             except Exception: pass
-                            # No profile card after search — just the result
-                            reply_text = result if result else "🔍 Не нашла ничего релевантного. Попробуй переформулировать запрос."
+                            if raw_sources:
+                                total_content = " ".join(s.get("content","") for s in raw_sources)
+                                if len(total_content.strip()) >= 100:
+                                    # SR синтезирует результаты
+                                    reply_text = await _synthesize_search(q, raw_sources)
+                                    if not reply_text:
+                                        reply_text = "🔍 Не удалось обработать результаты. Попробуй переформулировать запрос."
+                                else:
+                                    # Мало контента — честный fallback
+                                    reply_text = f"🔍 Не нашла актуальных данных по запросу «{q}». Попробуй уточнить или задать вопрос иначе."
+                            else:
+                                reply_text = f"🔍 Ничего не нашла по запросу «{q}». Попробуй переформулировать."
 
                         elif intent == "complete_task":
                             action_ct   = parsed_check.get("action") or {}
