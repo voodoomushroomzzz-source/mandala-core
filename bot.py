@@ -2845,23 +2845,31 @@ async def cmd_achievements(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start")
         return
-    achievements = _store.get("achievements", [])
-    add_btn = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="💎 Добавить достижение", callback_data="add_achievement")]
-    ])
+    achievements = store_get_achievements(user_id)
     if not achievements:
         await message.answer(
-            "💎 Достижений пока нет.\n\nКаждое достижение добавляет слой к твоему резонансу.\nДобавь первое!",
-            reply_markup=add_btn
+            "💎 Достижений пока нет.\n\nКаждое достижение добавляет слой к твоему резонансу.\n"
+            "Просто напиши или скажи голосом: «добавь достижение — пробежал 5 км»",
+            reply_markup=get_main_keyboard()
         )
         return
-    recent = achievements[-3:]
-    text = "💎 <b>Достижения:</b>\n\n"
-    for ach in reversed(recent):
-        icon = LIFE_AREA_ICONS.get(ach.get("category", ""), "🌱")
-        text += f"{icon} <b>{ach.get('title','')}</b>\n📿 {ach.get('completed','')} · +{ach.get('resonance_bonus',1)} резонанс\n\n"
-    text += f"<i>Всего: {len(achievements)}</i>"
-    await message.answer(text, reply_markup=add_btn)
+    # Группируем по сферам
+    sphere_names = {
+        "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
+        "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост", "other": "💎 Другое"
+    }
+    by_sphere: dict = {}
+    for ach in achievements:
+        cat = ach.get("category", "other")
+        by_sphere.setdefault(cat, []).append(ach)
+    text = f"💎 Достижения · всего {len(achievements)}\n\n"
+    for cat, achs in by_sphere.items():
+        text += f"{sphere_names.get(cat, cat)} ({len(achs)})\n"
+        for ach in achs[-2:]:  # последние 2 по каждой сфере
+            text += f"  · {ach.get('title','')} · {ach.get('completed','')}\n"
+        text += "\n"
+    text += "Добавить: «добавь достижение — [что сделал]»"
+    await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
 
 @router.callback_query(F.data == "add_achievement")
 async def cb_add_achievement(callback: CallbackQuery, state: FSMContext):
@@ -4055,7 +4063,10 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
   action.items = null (для задач не нужно)
   Пример: "создай задачу проверить бота с дедлайном завтра в группу Мандала"
   → add_task, action.title="проверить бота", action.deadline="2026-04-23", action.label="Мандала"
-- "достиг", "сделал", "выполнил", "закрыл" → add_achievement, 0.85
+- "достиг", "сделал", "выполнил", "пробежал", "добавь достижение X" → add_achievement, action.title="название достижения", action.sphere="health|creativity|work|connections|growth", 0.85
+  Сферу определяй по смыслу: бег/спорт/здоровье → health, музыка/творчество → creativity, работа/деньги → work, друзья/семья → connections, обучение/книги → growth
+  Пример: "пробежал 5 км" → add_achievement, action.title="Пробежал 5 км", action.sphere="health"
+  Пример: "закончил курс по питону" → add_achievement, action.title="Закончил курс по питону", action.sphere="growth"
 - "завершил задачу X", "отметь X выполненной" → complete_task, action.title=название, 0.9
 - ВАЖНО: action.title — ПОЛНОЕ название задачи одной строкой без разбивки по запятым. Если Садовник говорит "закрой задачу выдать ЗП, часть 1" → action.title="выдать ЗП часть 1" (убрать запятую, сохранить всё как одно название)
 - ВАЖНО: если название задачи из речи Садовника похоже на задачу в [Активные задачи] контекста — используй ТОЧНОЕ название из контекста как action.title, не переформулируй
@@ -5150,7 +5161,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         created_lines.append(f"  • {_nt['title']}{_dl_part}")
                                 if created_lines:
                                     bulk_confirm = f"✅ Добавлено {len(created_lines)} задач:\n" + "\n".join(created_lines)
-                                    bulk_confirm += "\n\n" + _build_profile_card(user_id)
+                                    # profile not shown automatically
                                     await message.answer(bulk_confirm, parse_mode="HTML", reply_markup=get_main_keyboard())
                                 reply_text = ""
                             else:
@@ -5190,7 +5201,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         confirm_text = " · ".join(parts)
                                         if missing:
                                             confirm_text += f"\n<i>Можно добавить: {', '.join(missing)}</i>"
-                                        confirm_text += "\n\n" + _build_profile_card(user_id)
+                                        # profile not shown automatically
                                         tid = new_task["task_id"]
                                         edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
                                             InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"task_edit_{tid}")
@@ -5198,10 +5209,50 @@ async def free_conversation(message: Message, state: FSMContext):
                                         await message.answer(confirm_text, reply_markup=edit_kb, parse_mode="HTML")
                                     reply_text = ""
                         elif intent == "add_achievement":
-                            if reply_text and reply_text.strip():
-                                await message.answer(reply_text, reply_markup=get_main_keyboard())
-                            await cmd_achievements(message)
-                            reply_text = ""
+                            _ach_act   = parsed_check.get("action") or {}
+                            _ach_title = (_ach_act.get("title") or parsed_check.get("text") or "").strip()
+                            _ach_sphere = (_ach_act.get("sphere") or "").strip()
+                            if _ach_title:
+                                # Определяем сферу — из SR или через _classify_sphere
+                                _sphere_map = {
+                                    "health": "health", "creativity": "creativity",
+                                    "work": "work", "connections": "connections", "growth": "growth"
+                                }
+                                _ach_cat = _sphere_map.get(_ach_sphere) or _classify_sphere(_ach_title)
+                                _ach_icon = LIFE_AREA_ICONS.get(_ach_cat, "🌱")
+                                _ach_bonus = 3  # стандартный бонус через чат
+                                # Создаём достижение
+                                _achievements = list(store_get_achievements(user_id))
+                                _achievements.append({
+                                    "id": f"ach_{len(_achievements)+1:03d}",
+                                    "category": _ach_cat,
+                                    "title": _ach_title,
+                                    "description": "",
+                                    "completed": _today(),
+                                    "resonance_bonus": _ach_bonus,
+                                    "icon": _ach_icon
+                                })
+                                store_set_achievements(user_id, _achievements)
+                                # Обновляем резонанс сферы
+                                store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
+                                _gardener = store_get_profile(user_id)
+                                if _gardener:
+                                    _g = dict(_gardener)
+                                    _g["resonance_level"] = min(100, _g.get("resonance_level", 13) + _ach_bonus)
+                                    _g["updated"] = _today()
+                                    _g = _add_growth_history_entry(_g, _g["resonance_level"], user_id)
+                                    store_set_profile(user_id, _g)
+                                    _invalidate_auth_cache(user_id)
+                                _fire_sync()
+                                reply_text = (
+                                    f"{_ach_icon} Достижение зафиксировано!\n\n"
+                                    f"{_ach_title}\n"
+                                    f"🔮 +{_ach_bonus} к резонансу · сфера: {_ach_cat}"
+                                )
+                            else:
+                                # Название не распознано — открываем FSM
+                                await cmd_achievements(message)
+                                reply_text = ""
                         elif intent == "web_search":
                             _ws_act = parsed_check.get("action") or {}
                             # Нормализованный запрос от SR
@@ -5296,7 +5347,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _all_tasks_upd = store_get_tasks(user_id)
                                     reply_text += "\n\n" + _roadmap_card_text(_affected_rm, _all_tasks_upd)
                                 else:
-                                    reply_text += "\n\n" + _build_profile_card(user_id)
+                                    pass  # profile not shown automatically
                             elif tasks:
                                 # Smart clarification: find top fuzzy candidates
                                 _candidates = []
@@ -5374,7 +5425,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
                                     store_set_tasks(user_id, new_tasks)
                                     await _sync_pending()
-                                    reply_text = f"🗑 Задача удалена: {t['title']}\n\n" + _build_profile_card(user_id)
+                                    reply_text = f"🗑 Задача удалена: {t['title']}"
                                 elif tasks:
                                     titles = ", ".join(t["title"] for t in tasks[:5])
                                     reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
@@ -5397,7 +5448,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         t["label_name"] = ""
                                 store_set_tasks(user_id, tasks)
                                 await _sync_pending()
-                                reply_text = f"🗑 Группа «{lb['name']}» удалена.\n\n" + _build_profile_card(user_id)
+                                reply_text = f"🗑 Группа «{lb['name']}» удалена."
                             else:
                                 lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет групп"
                                 reply_text = f"🌀 Не нашла такую группу. Есть: {lbl_names}"
@@ -5841,7 +5892,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 await _sync_pending()
                                 _del_count = len(_rm_task_ids)
                                 _task_info = f" и {_del_count} задач" if _del_count else ""
-                                reply_text = f"🗑 Роадмап «{_found_rm['title']}» удалён{_task_info}.\n\n" + _build_profile_card(user_id)
+                                reply_text = f"🗑 Роадмап «{_found_rm['title']}» удалён{_task_info}."
                             else:
                                 _rm_names = ", ".join(r["title"] for r in roadmaps) or "нет роадмапов"
                                 reply_text = f"🌀 Роадмап «{_target_rm}» не найден. Активные: {_rm_names}"
@@ -6106,7 +6157,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                             t["label_name"] = new_name
                                     store_set_tasks(user_id, tasks)
                                     await _sync_pending()
-                                    reply_text = f"✅ Группа переименована в «{new_name}».\n\n" + _build_profile_card(user_id)
+                                    reply_text = f"✅ Группа переименована в «{new_name}»."
                                 else:
                                     reply_text = "🌀 Группа не найдена."
                             else:
@@ -6223,7 +6274,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     if _task_rm:
                                         reply_text += "\n\n" + _roadmap_card_text(_task_rm, _all_t_upd)
                                     else:
-                                        reply_text += "\n\n" + _build_profile_card(user_id)
+                                        pass  # profile not shown automatically
                                     missing = []
                                     if not t.get("deadline"):
                                         missing.append("📅 дедлайн")
@@ -6344,6 +6395,14 @@ async def on_startup():
     await _load_store()
     await bot.set_webhook(WEBHOOK_URL)
     logger.info(f"Webhook set: {WEBHOOK_URL}")
+    # Регистрируем команды в меню Telegram
+    from aiogram.types import BotCommand
+    await bot.set_my_commands([
+        BotCommand(command="start",   description="🌱 Начать / Войти в сад"),
+        BotCommand(command="profile", description="👤 Мой профиль"),
+        BotCommand(command="leave",   description="🚪 Покинуть сад"),
+    ])
+    logger.info("Bot commands registered")
 
     # Scheduler setup
     scheduler = AsyncIOScheduler(timezone="UTC")
