@@ -2860,6 +2860,10 @@ async def cmd_achievements(message: Message):
         "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост", "other": "💎 Другое"
     }
     cur_month = _dt_ach.now().strftime("%Y-%m")
+    _RU_MONTHS = {
+        1:"Январь",2:"Февраль",3:"Март",4:"Апрель",5:"Май",6:"Июнь",
+        7:"Июль",8:"Август",9:"Сентябрь",10:"Октябрь",11:"Ноябрь",12:"Декабрь"
+    }
 
     # Разделяем на этот месяц и все остальные
     this_month = [a for a in achievements if (a.get("completed") or "").startswith(cur_month)]
@@ -2876,7 +2880,7 @@ async def cmd_achievements(message: Message):
     text = f"💎 Достижения · всего {len(achievements)}\n\n"
 
     # Этот месяц
-    month_label = _dt_ach.now().strftime("%B").capitalize()
+    month_label = _RU_MONTHS[_dt_ach.now().month]
     if this_month:
         text += f"📅 {month_label}:\n"
         for cat, achs in by_sphere_month.items():
