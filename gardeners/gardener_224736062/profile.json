@@ -2,7 +2,7 @@
   "gardener_id": "gardener_224736062",
   "telegram_id": "224736062",
   "name": "Дима",
-  "resonance_level": 30,
+  "resonance_level": 31,
   "created": "2026-04-18",
   "updated": "2026-05-02",
   "personal_info": {
@@ -44,7 +44,7 @@
   "deep_profile": {
     "dominant_sphere": "work",
     "weak_sphere": "creativity",
-    "streak_days": 16,
+    "streak_days": 17,
     "streak_sphere": "work",
     "last_reflection_date": "2026-05-03",
     "observations": [
@@ -53,6 +53,41 @@
       "2026-04-30: 13 дней подряд активна сфера «Дело» (39%), «Связи» на 20%",
       "2026-05-02: 15 дней подряд активна сфера «Дело» (41%), «Связи» на 20%",
       "2026-05-03: 16 дней подряд активна сфера «Дело» (43%), «Творчество» на 24%"
+    ],
+    "sphere_history": [
+      {
+        "month": "2026-05",
+        "health": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "creativity": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "work": {
+          "tasks": 1,
+          "achievements": 0,
+          "resonance_delta": 2
+        },
+        "connections": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "growth": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "other": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        }
+      }
     ]
   },
   "last_notified_version": "7.29"
