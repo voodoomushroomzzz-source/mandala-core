@@ -533,6 +533,11 @@
           "id": "i7",
           "text": "груша китайская",
           "done": true
+        },
+        {
+          "id": "i8",
+          "text": "авокадо",
+          "done": false
         }
       ],
       "pinned_message_id": 8606,
