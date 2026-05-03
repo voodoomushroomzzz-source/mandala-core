@@ -2,14 +2,6 @@
   "sessions": [
     {
       "role": "user",
-      "content": "Покажи мои задачи."
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
       "content": "Почему ты не отвечаешь мне?"
     },
     {
@@ -155,6 +147,14 @@
     {
       "role": "user",
       "content": "Добавь задачу сверка оплат сессионной хозяюшки с дедлайном 4 мая"
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Добавь задачу сверка оплат сессионной хозяюшки"
     },
     {
       "role": "assistant",
