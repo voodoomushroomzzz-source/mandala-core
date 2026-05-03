@@ -2,9 +2,9 @@
   "gardener_id": "gardener_851913510",
   "telegram_id": "851913510",
   "name": "Яна",
-  "resonance_level": 5,
+  "resonance_level": 8,
   "created": "2026-05-02",
-  "updated": "2026-05-02",
+  "updated": "2026-05-03",
   "personal_info": {
     "life_areas": {
       "body": {
@@ -35,6 +35,11 @@
       "date": "2026-05-02",
       "resonance": 5,
       "event": "onboarding"
+    },
+    {
+      "date": "2026-05-03",
+      "resonance": 8,
+      "achievements_count": 0
     }
   ],
   "deep_profile": {
