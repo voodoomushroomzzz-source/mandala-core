@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# Mandala Helper - Lite — SR Gentle Companion v7.27.9
 
 import re
 import os
