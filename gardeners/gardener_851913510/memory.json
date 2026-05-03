@@ -2,14 +2,6 @@
   "sessions": [
     {
       "role": "user",
-      "content": "Почему ты не отвечаешь мне?"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
       "content": "Ты здесь?"
     },
     {
@@ -159,6 +151,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Достижение проснулась в 6:30"
+    },
+    {
+      "role": "assistant",
+      "content": "🌱 Утренний старт — это уже победа"
     }
   ],
   "updated": "2026-05-03"
