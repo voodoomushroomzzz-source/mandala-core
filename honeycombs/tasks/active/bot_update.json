@@ -3,30 +3,46 @@
     "name": "Telegram Bot — Gentle Companion for Garden",
     "status": "in_progress",
     "priority": "HIGH",
-    "deadline": "2026-05-15",
+    "deadline": "2026-06-01",
     "created": "2026-04-01",
-    "updated": "2026-05-02",
+    "updated": "2026-05-03",
     "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
     "tags": ["telegram_bot", "garden", "companion", "ahimsa", "active"],
-    "progress": 75,
+    "progress": 85,
+    "current_version": "7.28",
     "garden_ref": "honeycombs/garden/",
+    "dev_rules": [
+        "При добавлении новой функции в код — обязательно добавить её в КАРТУ ФУНКЦИЙ в SR_SYSTEM_PROMPT",
+        "При каждом патче обновлять BOT_VERSION и BOT_LATEST_UPDATE в коде",
+        "Каждый патч применяется на актуальный файл бота — всегда проверять наличие предыдущих патчей",
+        "Монолитный файл — все правки в одном bot.py, не кусками"
+    ],
     "deliverables": [
-        "[DONE] /start — onboarding questionnaire, creates gardener.json",
-        "[DONE] /profile — display resonance, top achievements, active tasks",
-        "[DONE] /achievements — list achievements + add new",
-        "[DONE] /resonance — current resonance level + growth history",
-        "[DONE] /ask — dialogue with Gentle SR Companion (free conversation on any topic)",
-        "[DONE] Proactive messages: morning greeting, evening check, gentle reminders (Ahimsa: max 1/day)",
-        "[DONE] GitHub API integration for reading/updating gardener.json",
-        "[DONE] Soft-fail mode when API unavailable",
-        "[DONE] Architect approval gate — whitelist.json + Telegram approve/deny buttons",
-        "[DONE] Web search with category-based domain routing (Yandex priority)",
-        "[DONE] Bulk task creation with deadlines (voice and text)",
-        "[DONE] Roadmap bulk task add",
-        "[DONE] 5 resonance spheres with detailed descriptions in SR prompt",
-        "[IN PROGRESS] Enhanced onboarding for new gardeners — privacy consent, data policy, Mandala philosophy intro",
-        "[PLANNED] SR Learning Loop — sr_observations[], sphere_history[], emotional signals",
-        "[PLANNED] /privacy command — view stored data + revoke consent"
+        "[DONE] /start — onboarding с философией + запрос архитектора",
+        "[DONE] /profile — резонанс, достижения, задачи, группы",
+        "[DONE] /achievements — аналитика по месяцам и сферам",
+        "[DONE] /resonance — уровень + история роста",
+        "[DONE] /ask — свободный диалог на любые темы (Ахимса)",
+        "[DONE] /leave — покинуть сад с подтверждением",
+        "[DONE] /privacy — информация о данных (заглушка)",
+        "[DONE] Проактивные сообщения — утро, напоминания (макс 1/день)",
+        "[DONE] GitHub API — чтение/запись gardener.json",
+        "[DONE] Soft-fail при недоступности API",
+        "[DONE] Architect approval gate — whitelist.json + Telegram кнопки",
+        "[DONE] Web search — категории доменов, Яндекс приоритет, SR синтез",
+        "[DONE] Bulk add tasks — список через тире/нумерацию с дедлайном",
+        "[DONE] Bulk edit дедлайна — несколько задач или вся группа",
+        "[DONE] Группы — создание, перемещение задач, всегда видны в профиле",
+        "[DONE] Роадмапы — bulk добавление задач, сортировка по дедлайну",
+        "[DONE] Достижения — через чат, по сферам, защита от дублей",
+        "[DONE] Онбординг — пол, Welcome Flow, запись в deep_profile",
+        "[DONE] Уведомления об обновлениях — BOT_VERSION + changelog",
+        "[DONE] Карта функций в SR промте — все 35 интентов с bulk вариантами",
+        "[DONE] Автоочистка пустых задач при загрузке",
+        "[IN PROGRESS] /privacy — полноценный с отзывом согласия",
+        "[PLANNED] SR Learning Loop — sr_observations[], sphere_history[], emotional_signal",
+        "[PLANNED] /sr_report — синтез раз в 3 дня",
+        "[PLANNED] Голос — составные команды, fuzzy threshold улучшение"
     ],
     "requires": [
         "honeycombs/garden/architecture.json",
@@ -41,7 +57,9 @@
         "Gardener can /leave gracefully",
         "New gardener sees philosophy intro + explicit consent before onboarding",
         "Architect receives Telegram notification on new gardener request",
-        "Web search returns structured results without Markdown artifacts"
+        "Web search returns structured results without Markdown artifacts",
+        "All 35 intents work correctly including bulk operations",
+        "Version notifications sent automatically on deploy"
     ],
     "depends_on": [
         "M1-T1 (personal_gardeners/ structure)",
@@ -49,30 +67,20 @@
     ],
     "changelog": [
         {
-            "date": "2026-05-02",
-            "version": "v7.27.9+patches",
-            "changes": [
-                "Patch 1: Fixed achievements store bug, shutdown flush, roadmap task unlink",
-                "Patch 2: UI refactor — removed button menus, added Info dashboard",
-                "Patch 2.5: Dead code cleanup (~820 lines removed)",
-                "Patch 3: 5 resonance spheres in prompt, bulk add tasks, roadmap sorting by deadline",
-                "Patch 4: Web search refactor — domain map, SR synthesis, cache 15min",
-                "Patch 5: Tavily raw mode, category routing, _DOMAIN_MAP, search formatting",
-                "Patch 6: Single Qwen model, free dialogue, Ahimsa rule 4, search emoji-only format",
-                "Infra: gardeners/whitelist.json created, ARCHITECT_TELEGRAM_ID configured"
-            ]
+            "date": "2026-05-03",
+            "patches": "P1-P13",
+            "summary": "Full refactor: UI simplification, web search, bulk ops, onboarding 2.0, function map, version notifications"
         }
     ],
-    "next_version": "v7.28.x",
     "next_steps": [
-        "Enhanced onboarding: philosophy intro + privacy consent screen + data policy",
-        "SR Learning Loop: sr_observations[], sphere_history[], emotional_signal markers",
-        "/privacy command: view stored data + revoke consent",
-        "Architect escalation on 3+ emotional signals"
+        "v7.28.x: SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers",
+        "/privacy full implementation — consent revocation + data deletion",
+        "Голос — составные команды",
+        "Супер-цель садовника — отдельная задача в ядре"
     ],
     "health": {
         "status": "healthy",
-        "last_check": "2026-05-02",
-        "notes": "Bot fully operational. Whitelist gate active. 6 patches applied since April. Next: enhanced onboarding + SR Learning Loop (v7.28.x)"
+        "last_check": "2026-05-03",
+        "notes": "Bot v7.28 live. 2 gardeners (Dima + Yana). 13 patches applied. Next: SR Learning Loop."
     }
 }
