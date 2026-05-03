@@ -494,7 +494,51 @@
   ],
   "updated": "2026-04-18",
   "achievements_count": 42,
-  "checklists": [],
+  "checklists": [
+    {
+      "id": "cl_огород",
+      "title": "Огород",
+      "items": [
+        {
+          "id": "i1",
+          "text": "рынок",
+          "done": false
+        },
+        {
+          "id": "i2",
+          "text": "трава",
+          "done": false
+        },
+        {
+          "id": "i3",
+          "text": "огурцы",
+          "done": false
+        },
+        {
+          "id": "i4",
+          "text": "виноград",
+          "done": false
+        },
+        {
+          "id": "i5",
+          "text": "кабачок",
+          "done": false
+        },
+        {
+          "id": "i6",
+          "text": "баклажан",
+          "done": false
+        },
+        {
+          "id": "i7",
+          "text": "груша китайская",
+          "done": false
+        }
+      ],
+      "pinned_message_id": null,
+      "created": "2026-05-03"
+    }
+  ],
   "reminders": [],
   "_decay_date": "2026-05-03",
   "roadmaps": [
