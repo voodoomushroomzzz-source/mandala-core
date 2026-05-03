@@ -528,7 +528,15 @@ async def _load_user(telegram_id: str) -> None:
     profile, workspace, memory = results
     store = _get_user_store(uid)
     store["profile"]   = profile if isinstance(profile, dict) else None
-    store["workspace"] = workspace if isinstance(workspace, dict) else {"tasks": [], "groups": [], "achievements": []}
+    _ws = workspace if isinstance(workspace, dict) else {"tasks": [], "groups": [], "achievements": []}
+    # Auto-cleanup: remove tasks with empty or very short title
+    _raw_tasks = _ws.get("tasks", [])
+    _clean_tasks = [t for t in _raw_tasks if len((t.get("title") or "").strip()) >= 2]
+    if len(_clean_tasks) < len(_raw_tasks):
+        logger.info(f"Auto-cleaned {len(_raw_tasks) - len(_clean_tasks)} empty task(s) for {uid}")
+        _ws["tasks"] = _clean_tasks
+        _pending_writes[f"{_user_path(uid)}/workspace.json"] = _ws
+    store["workspace"] = _ws
     store["ready"]     = True
     # Restore conversation history from memory.json
     if isinstance(memory, dict) and memory.get("sessions"):
@@ -1350,7 +1358,7 @@ async def send_morning_greeting(telegram_id: str) -> None:
                              key=lambda t: t.get("deadline") or "9999")  # overdue + today
             medium = [t for t in active if t.get("deadline") in (tomorrow_s, day_after_s)]
             low    = [t for t in active
-                      if t.get("deadline") and tomorrow_s < t["deadline"] <= week_end_s]
+                      if t.get("deadline") and day_after_s < t["deadline"] <= week_end_s]
             rest   = [t for t in active
                       if t not in hot and t not in medium and t not in low]
             # Build brief Variant B
@@ -4188,6 +4196,10 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
 - "удали группа X", "убери группа X" → delete_label, action.title=название группы, 0.9
 - "переименуй группа X в Y", "измени группа X на Y" → rename_label, action.title="X→Y", 0.9
+- "создай группу X", "добавь группу X", "сделай группу X" → create_label, action.title="X", 0.95
+- "перемести задачу X в группу Y", "переместить X в Y", "перенеси задачу X в Y" → move_task, action.title="X", action.label="Y", 0.95
+- "перемести задачи X и Y в группу Z" → move_task, action.titles=["X","Y"], action.label="Z", 0.95
+- "перемести все задачи из группы X в Y" → move_task, action.from_label="X", action.label="Y", 0.95
 - "найди", "поищи", "погода", "что такое X" → web_search, action.query="нормализованный поисковый запрос на русском", action.search_category="категория", 0.9
   ВАЖНО: action.query — это короткий, чёткий поисковый запрос (3-7 слов), не копия фразы пользователя.
   action.search_category — одно из: weather / cinema / events / concerts / jobs / food / sport / health / news / education / default
@@ -4222,6 +4234,9 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: роадмап — это цель с задачами, не просто задача. Максимум 3 роадмапа одновременно.
 - "закрой задачи X и Y", "закрой обе" → complete_task, action.titles=["X","Y"], 0.95
 - "закрой все задачи на сегодня" → complete_task, action.period=today, 0.95
+- "закрой все задачи группы X", "закрыть всё в группе X" → complete_task, action.label="X", 0.95
+- "удали все задачи группы X", "удалить всё в группе X" → delete_task, action.label="X", 0.95
+- "удали задачи X и Y" → delete_task, action.titles=["X","Y"], 0.95
 - ВАЖНО: никогда не генерируй список задач в поле text — только через intent show_tasks
 - ВАЖНО: никогда не генерируй профиль в поле text — только через intent show_profile
 - ВАЖНО: никогда не имитируй выполнение действий в поле text — complete_task, edit_task, create_reminder, delete_task и все остальные action-интенты ВСЕГДА передавай через intent, не через text
@@ -5161,7 +5176,7 @@ async def free_conversation(message: Message, state: FSMContext):
                 s = _ren.sub(r"\s+", "", s)
                 return s
 
-            def _fuzzy_match_tasks(target: str, tasks: list, threshold: float = 0.55) -> list:
+            def _fuzzy_match_tasks(target: str, tasks: list, threshold: float = 0.65) -> list:
                 """Fuzzy task title match: exact substr → normalized substr → LCS ratio."""
                 if not target:
                     return []
@@ -5476,6 +5491,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             # Batch: action.titles=["X","Y"] or action.period=today
                             batch_raw   = action_ct.get("titles", [])
                             batch_period= (action_ct.get("period") or "").strip()
+                            batch_label = (action_ct.get("label") or "").strip().lower()
                             tasks = store_get_tasks(user_id)
                             from datetime import datetime as _dtr2
                             today_s2 = _dtr2.now().strftime("%Y-%m-%d")
@@ -5486,6 +5502,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                 for bt in batch_raw:
                                     found = _fuzzy_match_tasks(bt, tasks)
                                     to_close.extend(found)
+                            elif batch_label:
+                                to_close = [t for t in tasks
+                                            if t.get("status") != "completed"
+                                            and batch_label in (t.get("label_name","") or "").lower()]
                             elif batch_period:
                                 filtered_p = _filter_tasks_by_period(tasks, batch_period)
                                 to_close.extend(filtered_p)
@@ -5584,8 +5604,21 @@ async def free_conversation(message: Message, state: FSMContext):
                             _act_dt = parsed_check.get("action") or {}
                             target = (_act_dt.get("title") or "").lower().strip()
                             _batch_titles = _act_dt.get("titles") or []
+                            _batch_lbl_d  = (_act_dt.get("label") or "").strip().lower()
                             tasks = store_get_tasks(user_id)
-                            if _batch_titles and isinstance(_batch_titles, list):
+                            if _batch_lbl_d:
+                                # Удалить все задачи группы
+                                _lbl_deleted = [t for t in tasks
+                                                if t.get("status") != "completed"
+                                                and _batch_lbl_d in (t.get("label_name","") or "").lower()]
+                                if _lbl_deleted:
+                                    _lbl_ids = {t.get("task_id") for t in _lbl_deleted}
+                                    store_set_tasks(user_id, [t for t in tasks if t.get("task_id") not in _lbl_ids])
+                                    await _sync_pending()
+                                    reply_text = f"🗑 Удалено {len(_lbl_deleted)} задач из группы «{_batch_lbl_d}»"
+                                else:
+                                    reply_text = f"🌀 Задачи группы «{_batch_lbl_d}» не найдены."
+                            elif _batch_titles and isinstance(_batch_titles, list):
                                 # Batch delete: action.titles = ["X", "Y", "Z"]
                                 _deleted = []
                                 _ids_to_del = set()
@@ -5622,6 +5655,27 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = f"🌀 Не нашла такую задачу. Активные: {titles}"
                                 else:
                                     reply_text = "🌀 Активных задач нет — нечего удалять."
+
+                        elif intent == "create_label":
+                            _cl_act   = parsed_check.get("action") or {}
+                            _cl_title = (_cl_act.get("title") or "").strip()
+                            if not _cl_title:
+                                reply_text = "🎨 Как назовём группу? Напиши название."
+                            else:
+                                _cl_groups = store_get_groups(user_id).get("groups", [])
+                                if len(_cl_groups) >= LABEL_LIMIT_HARD:
+                                    reply_text = f"⚠️ Лимит групп: {LABEL_LIMIT_HARD}. Удали или переименуй существующую."
+                                elif any(g.get("name","").lower() == _cl_title.lower() for g in _cl_groups):
+                                    reply_text = f"🎨 Группа «{_cl_title}» уже существует."
+                                else:
+                                    _cl_gid = _make_group_id(_cl_title, _cl_groups)
+                                    _cl_groups.append({"id": _cl_gid, "name": _cl_title, "created": _today()})
+                                    _cl_data = store_get_groups(user_id)
+                                    _cl_data["groups"] = _cl_groups
+                                    store_set_groups(user_id, _cl_data)
+                                    _fire_sync()
+                                    _suffix = f" Осталось {LABEL_LIMIT_HARD - len(_cl_groups)} слота." if len(_cl_groups) >= LABEL_LIMIT_SOFT else ""
+                                    reply_text = f"✅ Группа «{_cl_title}» создана.{_suffix}\n\nТеперь можешь добавлять задачи: «добавь задачу X в группу {_cl_title}»"
 
                         elif intent == "delete_label":
                             target = ((parsed_check.get("action") or {}).get("title") or "").lower().strip()
@@ -6329,6 +6383,44 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = f"🌀 Задача «{_task_q}» не найдена в роадмапе."
                             else:
                                 reply_text = f"🌀 Не нашла роадмап «{_rm_name}»."
+
+                        elif intent == "move_task":
+                            _mt_act        = parsed_check.get("action") or {}
+                            _mt_title      = (_mt_act.get("title") or "").strip()
+                            _mt_titles     = _mt_act.get("titles") or []
+                            _mt_label      = (_mt_act.get("label") or "").strip()
+                            _mt_from_label = (_mt_act.get("from_label") or "").strip()
+                            _mt_tasks      = store_get_tasks(user_id)
+                            _mt_groups     = store_get_groups(user_id).get("groups", [])
+                            # Найти целевую группу
+                            _mt_target_grp = next((g for g in _mt_groups if _mt_label.lower() in g.get("name","").lower()), None)
+                            if not _mt_target_grp:
+                                reply_text = f"🎨 Группа «{_mt_label}» не найдена. Сначала создай: «создай группу {_mt_label}»"
+                            else:
+                                _mt_moved = []
+                                if _mt_from_label:
+                                    # Переместить все из одной группы в другую
+                                    _mt_src_grp = next((g for g in _mt_groups if _mt_from_label.lower() in g.get("name","").lower()), None)
+                                    for t in _mt_tasks:
+                                        if _mt_src_grp and t.get("label_name","").lower() == _mt_src_grp["name"].lower():
+                                            t["label_id"]   = _mt_target_grp["id"]
+                                            t["label_name"] = _mt_target_grp["name"]
+                                            _mt_moved.append(t["title"])
+                                else:
+                                    # Переместить конкретные задачи
+                                    _targets = _mt_titles if _mt_titles else ([_mt_title] if _mt_title else [])
+                                    for _tgt in _targets:
+                                        _found = _fuzzy_match_tasks(_tgt, _mt_tasks)
+                                        for t in _found:
+                                            t["label_id"]   = _mt_target_grp["id"]
+                                            t["label_name"] = _mt_target_grp["name"]
+                                            _mt_moved.append(t["title"])
+                                if _mt_moved:
+                                    store_set_tasks(user_id, _mt_tasks)
+                                    _fire_sync()
+                                    reply_text = f"✅ Перемещено в «{_mt_target_grp['name']}»: {', '.join(_mt_moved)}"
+                                else:
+                                    reply_text = "🌀 Задачи не найдены. Уточни название."
 
                         elif intent == "rename_label":
                             raw_title = (parsed_check.get("action") or {}).get("title", "")
