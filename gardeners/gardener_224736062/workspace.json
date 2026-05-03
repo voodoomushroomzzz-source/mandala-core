@@ -363,21 +363,6 @@
       "notes": ""
     },
     {
-      "task_id": "task_20260503_029",
-      "title": "улучшенная инструкция бота",
-      "status": "todo",
-      "label_id": "мандала",
-      "label_name": "Мандала",
-      "life_area": "work",
-      "priority": 5,
-      "deadline": "2026-05-10",
-      "reminder": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260503_030",
       "title": "подключить камеру",
       "status": "todo",
@@ -493,7 +478,7 @@
     }
   ],
   "updated": "2026-04-18",
-  "achievements_count": 43,
+  "achievements_count": 44,
   "checklists": [],
   "reminders": [],
   "_decay_date": "2026-05-03",
@@ -540,7 +525,7 @@
   "sphere_resonance": {
     "health": 33,
     "creativity": 24,
-    "work": 43,
+    "work": 45,
     "connections": 26,
     "growth": 26
   }
