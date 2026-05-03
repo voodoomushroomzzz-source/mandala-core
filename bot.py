@@ -177,7 +177,8 @@ def store_add_resonance(telegram_id: str, delta: int) -> int:
     profile["resonance_level"] = new_val
     if telegram_id in _store:
         _store[telegram_id]["profile"] = profile
-        _pending_writes[f"{_user_path(telegram_id)}/gardener.json"] = profile
+        # profile.json is the source of truth — gardener.json write removed (dead code)
+        _pending_writes[f"{_user_path(telegram_id)}/profile.json"] = profile
     return new_val
 
 # ─── 5-Sphere Resonance (v7.26.0) ─────────────────────────────────────────────
@@ -3914,6 +3915,10 @@ async def _create_task_atomic(user_id: str, message: Message,
                                reminder: str = None, label_name: str = None) -> dict:
     """Create a task instantly from chat/voice without FSM. Returns created task dict."""
     from datetime import datetime, timedelta
+    # Защита от пустого или слишком короткого названия
+    if not title or len(title.strip()) < 2:
+        return {}
+    title = title.strip()
     tasks = store_get_tasks(user_id)
     active_count = len([t for t in tasks if t.get("status") != "completed"])
     if active_count >= TASK_LIMIT_HARD:
@@ -4093,9 +4098,12 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - Прямой вопрос о внешнем мире (событие, новость, расписание, погода, место) → web_search.
 - Граница: "посоветуй ресторан" → web_search. "как мне развить Связи?" → conversation.
 - Если сомневаешься — выбирай conversation и отвечай из контекста. Лучше живой ответ чем поиск.
-- Перечисление задач через нумерацию или "и" → add_task с action.tasks=[{title,deadline,label},...].
-  Пример: "Добавь: 1. купить молоко до 2.05, 2. записаться к врачу до 5.05"
+- Перечисление задач через нумерацию, "и" ИЛИ тире → add_task с action.tasks=[{title,deadline,label},...].
+  Дедлайн может быть в заголовке списка ("на понедельник 4.05", "до пятницы") — применяй его ко всем задачам если у них нет своего.
+  Пример 1 — нумерация: "Добавь: 1. купить молоко до 2.05, 2. записаться к врачу до 5.05"
   → intent: add_task, action.tasks=[{"title":"купить молоко","deadline":"2026-05-02"},{"title":"записаться к врачу","deadline":"2026-05-05"}]
+  Пример 2 — тире с общим дедлайном: "Поставь задачи на понедельник 4.05:\n- сверка оплат\n- просчет зп\n- заказ материалов"
+  → intent: add_task, action.tasks=[{"title":"сверка оплат","deadline":"2026-05-04"},{"title":"просчет зп","deadline":"2026-05-04"},{"title":"заказ материалов","deadline":"2026-05-04"}]
 
 РАЗВИТИЕ ДИАЛОГА (важно):
 - Твоя задача не просто ответить, а развить разговор и углубить понимание садовника.
