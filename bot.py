@@ -59,6 +59,24 @@ SR_MODEL_CHAIN = [
 ]
 SESSION_MAX_MESSAGES = 40
 
+# ── Версия бота ───────────────────────────────────────────────────────────────
+BOT_VERSION = "7.28"
+BOT_LATEST_UPDATE = {
+    "version": "7.28",
+    "date": "2026-05-03",
+    "features": [
+        "создание групп голосом: «создай группу X»",
+        "перемещение задач между группами",
+        "bulk редактирование дедлайнов",
+        "группы всегда видны в профиле",
+        "карта функций — СР лучше понимает контекст",
+    ],
+    "fixes": [
+        "дубли задач в утреннем сообщении",
+        "автоочистка пустых задач при загрузке",
+    ]
+}
+
 # ─── Business limits ──────────────────────────────────────────────────────────
 TASK_LIMIT_HARD  = 50
 TASK_LIMIT_SOFT  = 40
@@ -982,6 +1000,11 @@ def _build_profile_card(user_id: str) -> str:
 
     shown = set()
     first_group = True
+    # Show empty groups too — so gardener always sees all their groups
+    empty_groups = [g.get("name","") for g in groups_data if not by_group.get(g.get("name",""))]
+    if empty_groups:
+        lines.append(f"🎨 Пустые группы: {' · '.join(empty_groups)}")
+
     for g in groups_data:
         gname = g.get("name", "")
         items = by_group.get(gname, [])
@@ -3741,6 +3764,24 @@ async def cmd_archive(message: Message):
 
 # ─── /leave ───────────────────────────────────────────────────────────────────
 
+@router.callback_query(F.data == "show_changelog")
+async def cb_show_changelog(callback: CallbackQuery):
+    await callback.answer()
+    upd = BOT_LATEST_UPDATE
+    lines_cl = [f"📋 Обновление v{upd['version']} · {upd['date']}\n"]
+    if upd.get("features"):
+        lines_cl.append("Новое:")
+        for feat in upd["features"]:
+            lines_cl.append(f"  · {feat}")
+    if upd.get("fixes"):
+        lines_cl.append("\nИсправлено:")
+        for fix in upd["fixes"]:
+            lines_cl.append(f"  · {fix}")
+    try:
+        await callback.message.edit_text("\n".join(lines_cl), reply_markup=None)
+    except Exception:
+        await callback.message.answer("\n".join(lines_cl))
+
 @router.message(Command("privacy"))
 async def cmd_privacy(message: Message):
     user_id = str(message.from_user.id)
@@ -4140,6 +4181,80 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 // tasks[] — массив для bulk add_task (несколько задач за раз). Если одна задача — используй title/deadline/label как обычно.
 }
 
+КАРТА ФУНКЦИЙ (все доступные операции):
+
+📋 ЗАДАЧИ
+  add_task — "добавь задачу X до пятницы", "поставь X", "нужно сделать X"
+    bulk: список через тире/нумерацию/запятую с общим дедлайном
+  complete_task — "закрой X", "готово", "сделал(а) X", "выполнил(а) X"
+    bulk: "закрой X и Y", "закрой все на сегодня", "закрой все задачи группы X"
+  delete_task — "удали X", "убери X", "не нужно X"
+    bulk: "удали X и Y", "удали все задачи группы X", "удали просроченные"
+  edit_task — "перенеси дедлайн X на 10 мая", "переименуй X в Y", "измени группу X на Y"
+    bulk: "перенеси дедлайн X и Y на 10 мая", "перенеси дедлайн группы X на 15 мая"
+  show_tasks — "покажи задачи", "что сегодня", "задачи на неделю", "задачи группы X"
+  move_task — "перемести X в группу Y", "перемести X и Y в Z", "перемести все из X в Y"
+
+🎨 ГРУППЫ
+  create_label — "создай группу X", "добавь категорию X", "сделай группу X"
+  rename_label — "переименуй группу X в Y", "измени название группы X на Y"
+  delete_label — "удали группу X", "убери категорию X"
+
+🗺 РОАДМАПЫ
+  create_roadmap — "создай роадмап X до июля", "роадмап X: задача1, задача2"
+  show_roadmaps — "покажи роадмапы", "прогресс по X", "как дела с X"
+  delete_roadmap — "удали роадмап X"
+  rename_roadmap — "переименуй роадмап X в Y"
+  roadmap_set_deadline — "поставь дедлайн роадмапа X на Y"
+  roadmap_add_task — "добавь задачу X в роадмап Y", "перемести задачу X в роадмап Y"
+    bulk: "добавь задачи в роадмап Y: 1. X до 05.05, 2. Z до 10.05"
+  roadmap_remove_task — "убери задачу X из роадмапа Y"
+
+☑️ ЧЕКЛИСТЫ
+  create_checklist — "создай чеклист X"
+  show_checklists — "покажи чеклисты", "мои чеклисты"
+  show_checklist — "открой чеклист X", "покажи X"
+  delete_checklist — "удали чеклист X"
+  checklist_add_item — "добавь пункт X в чеклист Y"
+    bulk: "добавь пункты X, Y, Z в чеклист W"
+  checklist_delete_item — "удали пункт X из чеклиста Y", "удали пункт 3"
+  checklist_edit_item — "измени пункт X на Y в чеклисте Z"
+  checklist_toggle_item — "отметь X в чеклисте Y", "сними галочку с X"
+  checklist_reorder — "переставь пункты в чеклисте X"
+
+🔔 НАПОМИНАНИЯ
+  create_reminder — "напомни мне X завтра в 10:00", "поставь напоминание X в 20:30"
+  show_reminders — "покажи напоминания", "мои напоминания"
+  delete_reminder — "удали напоминание X", "отмени напоминание X"
+
+💎 ДОСТИЖЕНИЯ
+  add_achievement — "добавь достижение — пробежал 5 км", "сделал X"
+  show_achievements — "покажи достижения", "мои достижения"
+
+🔮 РЕЗОНАНС
+  show_resonance — "покажи резонанс", "мой баланс"
+  show_resonance_detail — "что у меня в сфере X", "расскажи про сферу X"
+
+🌐 ПОИСК
+  web_search — "найди X", "поищи X", "погода", "что идёт в кино"
+
+👤 ПРОФИЛЬ
+  show_profile — "профиль", "покажи профиль"
+
+САМОПРЕЗЕНТАЦИЯ ФУНКЦИЙ:
+Если садовник спрашивает "что ты умеешь?", "какие функции есть?",
+"как работает X?", "объясни X" — отвечай живо и конкретно,
+опираясь на карту выше. Показывай примеры фраз.
+Не перечисляй всё сразу — отвечай на конкретный вопрос
+или давай краткий обзор с предложением рассказать подробнее.
+
+КОНТЕКСТНЫЕ ПРАВИЛА:
+- Bulk когда: список через запятую/тире/нумерацию, слово "все", указана группа
+- "сюда", "это", "те задачи" — смотри контекст предыдущих сообщений
+- Если неясно какую задачу имеет в виду — переспроси один раз, не угадывай
+- Несколько действий в одном запросе — выполни главное, уточни остальное
+- Никогда не имитируй действие в тексте — всегда используй intent
+
 ПРАВИЛА INTENT:
 - "покажи задачи", "мои задачи" → show_tasks, 0.95
 - "задачи на сегодня", "что делать сегодня", "что сегодня" → show_tasks, action.period=today, 0.95
@@ -4191,6 +4306,8 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - "поменяй дедлайн у задачи X на Y", "поменяй дату задачи X на Y", "в задаче X поменяй дедлайн на Y", "задаче X поставь дедлайн Y", "у задачи X дедлайн Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
 - "удали дедлайн задачи X", "убери срок у задачи X", "убери дедлайн X", "задача X без дедлайна" → edit_task, action.title="X", action.field="deadline", action.value="удали", 0.95
 - ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
+- "перенеси дедлайн задач X и Y на Z" → edit_task, action.titles=["X","Y"], action.field="deadline", action.value=Z, 0.95
+- "перенеси дедлайн всех задач группы X на Z" → edit_task, action.label="X", action.field="deadline", action.value=Z, 0.95
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "удали задачи X и Y", "удали X, Y и Z" → delete_task, action.titles=["X","Y","Z"], 0.95
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
@@ -6449,24 +6566,70 @@ async def free_conversation(message: Message, state: FSMContext):
 
                         elif intent == "edit_task":
                             action_data = parsed_check.get("action") or {}
-                            target = (action_data.get("title") or "").lower().strip()
-                            field  = (action_data.get("field") or "").lower().strip()
-                            value  = (action_data.get("value") or "").strip()
-                            tasks  = store_get_tasks(user_id)
-                            matched = _fuzzy_match_tasks(target, tasks)
-                            # No target? Try last edited task from state
-                            if not matched:
-                                _st_data = await state.get_data()
-                                _last_tid = _st_data.get("last_task_id","")
-                                if _last_tid:
-                                    matched = [t for t in tasks if t.get("task_id") == _last_tid]
-                            if not matched:
-                                titles = ", ".join(t["title"] for t in tasks[:3])
-                                reply_text = f"🌀 Не нашла задачу «{target}». Активные: {titles}"
-                            elif not field or not value:
-                                reply_text = "🌀 Уточни: «переименуй задачу X в Y»"
+                            target      = (action_data.get("title") or "").lower().strip()
+                            _et_titles  = action_data.get("titles") or []
+                            _et_label   = (action_data.get("label") or "").strip().lower()
+                            field       = (action_data.get("field") or "").lower().strip()
+                            value       = (action_data.get("value") or "").strip()
+                            tasks       = store_get_tasks(user_id)
+
+                            # ── BULK edit по списку или группе ────────────────
+                            if (_et_titles or _et_label) and field in ("deadline","дедлайн","срок","дата") and value:
+                                if _et_titles:
+                                    _et_m = []
+                                    for _etn in _et_titles:
+                                        _et_m.extend(_fuzzy_match_tasks(_etn, tasks))
+                                else:
+                                    _et_m = [t for t in tasks
+                                             if _et_label in (t.get("label_name","") or "").lower()
+                                             and t.get("status") != "completed"]
+                                if _et_m:
+                                    import re as _re_b
+                                    _v = value.lower().strip()
+                                    _dl_b = None
+                                    if _v in ("сегодня","today"):
+                                        _dl_b = _today()
+                                    elif _v in ("завтра","tomorrow"):
+                                        from datetime import timedelta as _td_b
+                                        _dl_b = (datetime.now() + _td_b(1)).strftime("%Y-%m-%d")
+                                    elif _re_b.match(r"^\d{4}-\d{2}-\d{2}$", value):
+                                        _dl_b = value
+                                    else:
+                                        _m_b = _re_b.match(r"(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?", value)
+                                        if _m_b:
+                                            _dd_b = _m_b.group(1).zfill(2)
+                                            _mm_b = _m_b.group(2).zfill(2)
+                                            _yy_b = _m_b.group(3) or str(datetime.now().year)
+                                            _yy_b = "20"+_yy_b if len(_yy_b)==2 else _yy_b
+                                            _dl_b = f"{_yy_b}-{_mm_b}-{_dd_b}"
+                                    if _dl_b:
+                                        for _tb in _et_m:
+                                            _tb["deadline"] = _dl_b
+                                            _tb["updated"] = _today()
+                                        store_set_tasks(user_id, tasks)
+                                        _fire_sync()
+                                        _nb = ", ".join(t["title"] for t in _et_m)
+                                        reply_text = f"✅ Дедлайн → {_dl_b} для {len(_et_m)} задач: {_nb}"
+                                    else:
+                                        reply_text = f"🌀 Не понял дату «{value}»"
+                                else:
+                                    reply_text = "🌀 Задачи не найдены."
                             else:
-                                t = matched[0]
+                                # ── SINGLE edit ───────────────────────────────
+                                matched = _fuzzy_match_tasks(target, tasks)
+                                # No target? Try last edited task from state
+                                if not matched:
+                                    _st_data = await state.get_data()
+                                    _last_tid = _st_data.get("last_task_id","")
+                                    if _last_tid:
+                                        matched = [t for t in tasks if t.get("task_id") == _last_tid]
+                                if not matched:
+                                    titles = ", ".join(t["title"] for t in tasks[:3])
+                                    reply_text = f"🌀 Не нашла задачу «{target}». Активные: {titles}"
+                                elif not field or not value:
+                                    reply_text = "🌀 Уточни: «переименуй задачу X в Y»"
+                                else:
+                                    t = matched[0]
                                 if field in ("title", "название", "имя", "name"):
                                     t["title"]   = value
                                     t["updated"] = _today()
@@ -6686,6 +6849,25 @@ async def on_startup():
         BotCommand(command="leave",   description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
+    # Notify gardeners about version update (60s delay)
+    async def _notify_version():
+        import asyncio as _aio2
+        await _aio2.sleep(60)
+        for _uid in list(_store.keys()):
+            try:
+                _p = store_get_profile(_uid)
+                if not _p or _p.get("last_notified_version") == BOT_VERSION:
+                    continue
+                _kb = InlineKeyboardMarkup(inline_keyboard=[[
+                    InlineKeyboardButton(text="📋 Что нового →", callback_data="show_changelog")
+                ]])
+                await bot.send_message(int(_uid), f"🌱 Мандала обновилась · v{BOT_VERSION}", reply_markup=_kb)
+                _p["last_notified_version"] = BOT_VERSION
+                store_set_profile(_uid, _p)
+                _fire_sync()
+            except Exception as _ve:
+                logger.warning(f"Version notify {_uid}: {_ve}")
+    asyncio.create_task(_notify_version())
 
     # Scheduler setup
     scheduler = AsyncIOScheduler(timezone="UTC")
