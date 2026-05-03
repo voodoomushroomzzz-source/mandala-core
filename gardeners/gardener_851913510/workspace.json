@@ -44,7 +44,17 @@
     }
   ],
   "groups": [],
-  "achievements": [],
+  "achievements": [
+    {
+      "id": "ach_001",
+      "category": "other",
+      "title": "Проснулась в 6:30",
+      "description": "",
+      "completed": "2026-05-03",
+      "resonance_bonus": 3,
+      "icon": "🌱"
+    }
+  ],
   "updated": "2026-05-02",
   "sphere_resonance": {
     "health": 20,
