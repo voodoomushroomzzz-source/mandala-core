@@ -1,47 +1,5 @@
-{
+﻿{
   "tasks": [
-    {
-      "task_id": "task_20260502_001",
-      "title": "",
-      "status": "todo",
-      "group_id": "group_001",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": null,
-      "estimated_hours": null,
-      "created": "2026-05-02",
-      "updated": "2026-05-02",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260503_002",
-      "title": "",
-      "status": "todo",
-      "group_id": "group_001",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": null,
-      "estimated_hours": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260503_003",
-      "title": "",
-      "status": "todo",
-      "group_id": "group_001",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": null,
-      "estimated_hours": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
     {
       "task_id": "task_20260503_004",
       "title": "сверка оплат сессионной хозяюшки",
@@ -139,7 +97,7 @@
       "icon": "🌱"
     }
   ],
-  "updated": "2026-05-02",
+  "updated": "2026-05-03",
   "sphere_resonance": {
     "health": 20,
     "creativity": 20,
