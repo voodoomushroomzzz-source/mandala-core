@@ -59,19 +59,20 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.29"
+BOT_VERSION = "7.30"
 BOT_LATEST_UPDATE = {
-    "version": "7.29",
+    "version": "7.30",
     "date": "2026-05-03",
     "features": [
-        "SR Learning Loop — СР учится наблюдать за садовником",
-        "месячная статистика по сферам",
-        "/sr_report — живой отчёт СР о тебе",
-        "ежедневный отчёт архитектору в 21:00",
+        "Живая память СР — портрет садовника обновляется каждый день",
+        "Интересы садовника из задач и диалогов",
+        "Персонализированные рекомендации по сферам",
+        "Месячная статистика достижений по сферам",
+        "Пустые группы видны в профиле",
     ],
     "fixes": [
-        "синтез СР каждые 3 дня",
-        "наблюдения передаются в каждый диалог",
+        "Дистилляция наблюдений перед удалением — знания не теряются",
+        "Портрет садовника в ежедневном отчёте архитектору",
     ]
 }
 
@@ -704,13 +705,18 @@ def _get_session_reflection_hint(telegram_id: str) -> str | None:
     dom_ru   = SPHERE_NAME_RU.get(dominant, dominant)
     weak_ru  = SPHERE_NAME_RU.get(weak, weak)
     hint = None
+    # Get confirmed interests for personalized suggestions
+    _mem_h = dp.get("memory", {})
+    _confirmed = _mem_h.get("interests", {}).get("confirmed", [])
+    _interest_hint = f" Интересы садовника: {', '.join(_confirmed[:3])}." if _confirmed else ""
+
     if streak >= 3:
         hint = (f"Садовник {streak} дней подряд активен в сфере «{dom_ru}» ({dom_pct}%). "
-                f"Сфера «{weak_ru}» на {weak_pct}%. "
-                f"Можно мягко упомянуть это один раз если уместно — не навязывать.")
+                f"Сфера «{weak_ru}» на {weak_pct}%.{_interest_hint} "
+                f"Можно мягко упомянуть баланс один раз если уместно — не навязывать.")
     elif weak_pct < 15:
-        hint = (f"Сфера «{weak_ru}» очень слабая ({weak_pct}%) — давно без движения. "
-                f"Можно мягко спросить про неё один раз если уместно — не навязывать.")
+        hint = (f"Сфера «{weak_ru}» очень слабая ({weak_pct}%) — давно без движения.{_interest_hint} "
+                f"Можно предложить конкретное действие через интересы садовника — не навязывать.")
     if hint:
         _reflection_sent[telegram_id] = today
     return hint
@@ -1090,10 +1096,6 @@ def _build_profile_card(user_id: str) -> str:
 
     shown = set()
     first_group = True
-    # Show empty groups too — so gardener always sees all their groups
-    empty_groups = [g.get("name","") for g in groups_data if not by_group.get(g.get("name",""))]
-    if empty_groups:
-        lines.append(f"🎨 Пустые группы: {' · '.join(empty_groups)}")
 
     for g in groups_data:
         gname = g.get("name", "")
@@ -1131,6 +1133,11 @@ def _build_profile_card(user_id: str) -> str:
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
+    # Empty groups at the bottom
+    empty_groups = [g.get("name","") for g in groups_data if not by_group.get(g.get("name",""))]
+    if empty_groups:
+        lines.append("")
+        lines.append(f"🎨 {' · '.join(empty_groups)}")
     return "\n".join(lines)
 
 
@@ -3015,51 +3022,75 @@ async def cmd_achievements(message: Message):
         "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
         "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост", "other": "💎 Другое"
     }
-    cur_month = _dt_ach.now().strftime("%Y-%m")
     _RU_MONTHS = {
         1:"Январь",2:"Февраль",3:"Март",4:"Апрель",5:"Май",6:"Июнь",
         7:"Июль",8:"Август",9:"Сентябрь",10:"Октябрь",11:"Ноябрь",12:"Декабрь"
     }
 
-    # Разделяем на этот месяц и все остальные
-    this_month = [a for a in achievements if (a.get("completed") or "").startswith(cur_month)]
-    by_sphere_all: dict = {}
-    by_sphere_month: dict = {}
-    for ach in achievements:
-        cat = ach.get("category", "other")
-        by_sphere_all.setdefault(cat, 0)
-        by_sphere_all[cat] += 1
-    for ach in this_month:
-        cat = ach.get("category", "other")
-        by_sphere_month.setdefault(cat, []).append(ach)
+    # Получаем sphere_history из deep_profile
+    prof = store_get_profile(user_id) or {}
+    dp = prof.get("deep_profile", {})
+    sphere_hist = dp.get("sphere_history", [])
 
-    text = f"💎 Достижения · всего {len(achievements)}\n\n"
+    text = f"💎 Достижения · всего {len(achievements)}\n"
 
-    # Этот месяц
-    month_label = _RU_MONTHS[_dt_ach.now().month]
-    if this_month:
-        text += f"📅 {month_label}:\n"
-        for cat, achs in by_sphere_month.items():
-            text += f"{sphere_names.get(cat, cat)} — {len(achs)}\n"
-            for ach in achs[-2:]:
-                text += f"  · {ach.get('title','')}\n"
-        text += "\n"
+    if sphere_hist:
+        text += "\n📊 Статистика по месяцам:\n"
+        for month_data in reversed(sphere_hist[-3:]):  # последние 3 месяца
+            m_str = month_data.get("month", "")
+            try:
+                m_num = int(m_str.split("-")[1])
+                m_year = m_str.split("-")[0]
+                m_label = f"{_RU_MONTHS[m_num]} {m_year}"
+            except Exception:
+                m_label = m_str
+            text += f"\n{m_label}:\n"
+            has_data = False
+            for sphere, sname in sphere_names.items():
+                if sphere == "other":
+                    continue
+                d = month_data.get(sphere, {})
+                t_cnt = d.get("tasks", 0)
+                a_cnt = d.get("achievements", 0)
+                r_delta = d.get("resonance_delta", 0)
+                if t_cnt > 0 or a_cnt > 0:
+                    has_data = True
+                    text += f"  {sname} — {t_cnt} задач · {a_cnt} достижений"
+                    if r_delta > 0:
+                        text += f" · +{r_delta}% резонанс"
+                    text += "\n"
+            if not has_data:
+                text += "  нет активности\n"
     else:
-        text += f"📅 {month_label}: пока нет достижений\n\n"
+        # Fallback: считаем из массива достижений
+        cur_month = _dt_ach.now().strftime("%Y-%m")
+        this_month = [a for a in achievements if (a.get("completed") or "").startswith(cur_month)]
+        by_sphere_all: dict = {}
+        for ach in achievements:
+            cat = ach.get("category", "other")
+            by_sphere_all.setdefault(cat, 0)
+            by_sphere_all[cat] += 1
+        month_label = _RU_MONTHS[_dt_ach.now().month]
+        text += f"\n📅 {month_label} · {len(this_month)} достижений\n"
+        sorted_spheres = sorted(by_sphere_all.items(), key=lambda x: x[1], reverse=True)
+        for cat, cnt in sorted_spheres:
+            text += f"  {sphere_names.get(cat, cat)} — {cnt}\n"
 
-    # Итого по сферам за всё время
-    text += "За всё время:\n"
-    sorted_spheres = sorted(by_sphere_all.items(), key=lambda x: x[1], reverse=True)
-    for cat, cnt in sorted_spheres:
-        text += f"{sphere_names.get(cat, cat)} — {cnt}\n"
-
-    # Наблюдение СР
-    if sorted_spheres:
-        top_cat, top_cnt = sorted_spheres[0]
-        low_cats = [sphere_names.get(c, c) for c, n in sorted_spheres if n == 0] if len(sorted_spheres) > 1 else []
-        text += f"\n💡 Сильнее всего растёт {sphere_names.get(top_cat, top_cat)}."
-        if low_cats:
-            text += f" {', '.join(low_cats)} ещё ждут своего момента."
+    # Аналитика СР
+    if sphere_hist:
+        cur = sphere_hist[-1]
+        top_sphere = max(
+            [(s, cur.get(s, {}).get("tasks", 0) + cur.get(s, {}).get("achievements", 0))
+             for s in ["health","creativity","work","connections","growth"]],
+            key=lambda x: x[1]
+        )
+        quiet_spheres = [sphere_names[s] for s, cnt in
+            [(s, cur.get(s, {}).get("tasks", 0) + cur.get(s, {}).get("achievements", 0))
+             for s in ["health","creativity","work","connections","growth"]]
+            if cnt == 0]
+        text += f"\n💡 {sphere_names.get(top_sphere[0], top_sphere[0])} — сильнейшая сфера месяца."
+        if quiet_spheres:
+            text += f" {', '.join(quiet_spheres[:2])} — без движения."
 
     text += "\n\nДобавить: «добавь достижение — [что сделал]»"
     await message.answer(text, reply_markup=get_main_keyboard())
@@ -5157,17 +5188,27 @@ def _build_sr_context(user_id: str) -> dict:
     achievements = store_get_achievements(user_id)
     active = [t for t in tasks if t.get("status") != "completed"]
     dp = gardener.get("deep_profile", {})
+    mem = dp.get("memory", {})
+    # Core portrait (living memory)
+    core = mem.get("core", dp.get("synthesis", ""))
+    # Interests from living memory
+    interests_data = mem.get("interests", {})
+    confirmed_interests = interests_data.get("confirmed", [])
+    # Recent sr_observations
     recent_obs = dp.get("sr_observations", [])[-5:]
     obs_lines = [f"{o['date']}: {o['text']}" for o in recent_obs] if recent_obs else []
+    # Old observations (streak/sphere patterns)
+    old_obs = dp.get("observations", [])[-3:]
     return {
         "name": gardener.get("name", "Садовник"),
         "resonance": gardener.get("resonance_level", 13),
-        "interests": gardener.get("personal_info", {}).get("interests", []),
+        "interests": confirmed_interests,
         "active_tasks": [{"title": t["title"], "priority": t.get("priority", 5)} for t in active[:5]],
         "achievements_count": len(achievements),
         "life_areas": gardener.get("personal_info", {}).get("life_areas", {}),
         "sr_observations": obs_lines,
-        "synthesis": dp.get("synthesis", ""),
+        "sphere_patterns": old_obs,
+        "core": core,
         "gender": gardener.get("companion_settings", {}).get("gender", "neutral"),
     }
 
@@ -5192,38 +5233,134 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
 
 # _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
 
+async def _distill_observations(user_id: str, dp: dict) -> None:
+    """Distill old sr_observations into long_term_insights before they are dropped."""
+    obs = dp.get("sr_observations", [])
+    if len(obs) < 45:
+        return
+    # Take oldest 20 before they get cut
+    old_obs = obs[:20]
+    old_text = "\n".join(f"- {o['date']}: {o['text']}" for o in old_obs)
+    insight = await _call_openrouter([
+        {"role": "system", "content": (
+            "Ты — SR. Сожми эти наблюдения в один долгосрочный инсайт (1-2 предложения). "
+            "Только устойчивые паттерны. На русском."
+        )},
+        {"role": "user", "content": f"Наблюдения:\n{old_text}\n\nСожми в инсайт:"}
+    ])
+    if insight:
+        insights = dp.setdefault("long_term_insights", [])
+        insights.append({"date": _today(), "text": insight})
+        dp["long_term_insights"] = insights[-10:]
+        logger.info(f"Long-term insight distilled for {user_id}")
+
+
 async def _generate_synthesis(user_id: str) -> None:
-    """Generate SR synthesis every 3 days and save to deep_profile."""
+    """Generate living memory core once per active day."""
     prof = store_get_profile(user_id)
     if not prof:
         return
     dp = prof.setdefault("deep_profile", {})
-    last_synth = dp.get("synthesis_date", "")
-    if last_synth:
-        from datetime import datetime as _dts
-        try:
-            days_since = (_dts.now() - _dts.strptime(last_synth, "%Y-%m-%d")).days
-            if days_since < 3:
-                return
-        except Exception:
-            pass
+
+    # Дистилляция если наблюдений накопилось много
+    await _distill_observations(user_id, dp)
+
+    # Собираем входные данные
     obs = dp.get("sr_observations", [])[-10:]
-    if len(obs) < 3:
+    if len(obs) < 2:
         return
-    obs_text = "\n".join(f"- {o['date']}: {o['text']}" for o in obs)
-    synthesis = await _call_openrouter([
+
+    mem = dp.setdefault("memory", {})
+    core     = mem.get("core", "")
+    snapshots = mem.get("snapshots", [])
+    insights  = dp.get("long_term_insights", [])
+    old_obs   = dp.get("observations", [])[-5:]  # streak/sphere observations
+
+    # Закрытые задачи
+    tasks = store_get_tasks(user_id)
+    completed = [t for t in tasks if t.get("status") == "completed"][-15:]
+    tasks_text = "\n".join(f"- {t['title']}" for t in completed) if completed else "нет"
+
+    obs_text      = "\n".join(f"- {o['date']}: {o['text']}" for o in obs)
+    insights_text = "\n".join(f"- {i['date']}: {i['text']}" for i in insights) if insights else "нет"
+    snapshots_text = "\n".join(f"- {s['date']}: {s['text']}" for s in snapshots[-5:]) if snapshots else "нет"
+    old_obs_text  = "\n".join(f"- {o}" for o in old_obs) if old_obs else "нет"
+
+    prompt = f"""ТЕКУЩИЙ ПОРТРЕТ:
+{core if core else "пока не сформирован"}
+
+ДОЛГОСРОЧНЫЕ ИНСАЙТЫ:
+{insights_text}
+
+СНАПШОТЫ ПОСЛЕДНИХ ДНЕЙ:
+{snapshots_text}
+
+ПАТТЕРНЫ АКТИВНОСТИ:
+{old_obs_text}
+
+НАБЛЮДЕНИЯ ИЗ ДИАЛОГОВ:
+{obs_text}
+
+ЗАКРЫТЫЕ ЗАДАЧИ:
+{tasks_text}
+
+Ответь строго в JSON (без markdown):
+{{
+  "core": "живой портрет 4-6 предложений — состояние, ценности, стиль общения, паттерны, вектор роста. Пиши как будто объясняешь другу кто этот человек.",
+  "snapshot": "1-2 предложения — что изменилось или подтвердилось сегодня",
+  "confirmed_interests": ["интерес1", "интерес2"],
+  "mentioned_interests": ["интерес3"]
+}}"""
+
+    import json as _json_s
+    raw = await _call_openrouter([
         {"role": "system", "content": (
-            "Ты — SR, наблюдатель Сада. На основе наблюдений сформируй одно короткое "
-            "наблюдение о садовнике (2-3 предложения). Только факты и паттерны. "
-            "Без оценок и советов. На русском."
+            "Ты — SR, хранитель памяти Сада. Твоя задача — понимать садовника глубже "
+            "чтобы общаться персонализированно. Помогай вести к балансу и росту. "
+            "Отвечай только JSON без markdown."
         )},
-        {"role": "user", "content": f"Наблюдения:\n{obs_text}\n\nСформируй краткий синтез:"}
+        {"role": "user", "content": prompt}
     ])
-    if synthesis:
-        dp["synthesis"] = synthesis
+
+    if not raw:
+        return
+    try:
+        import re as _re_s
+        raw_clean = _re_s.sub(r"^```(?:json)?\s*", "", raw.strip())
+        raw_clean = _re_s.sub(r"\s*```\s*$", "", raw_clean).strip()
+        result = _json_s.loads(raw_clean)
+
+        new_core     = result.get("core", "").strip()
+        new_snapshot = result.get("snapshot", "").strip()
+        confirmed    = result.get("confirmed_interests", [])
+        mentioned    = result.get("mentioned_interests", [])
+
+        if new_core:
+            mem["core"] = new_core
+        if new_snapshot:
+            snaps = mem.get("snapshots", [])
+            snaps.append({"date": _today(), "text": new_snapshot})
+            mem["snapshots"] = snaps[-5:]
+
+        # Update interests
+        interests = mem.setdefault("interests", {"confirmed": [], "mentioned": []})
+        for i in confirmed:
+            if i and i not in interests["confirmed"]:
+                interests["confirmed"].append(i)
+        interests["confirmed"] = interests["confirmed"][-20:]
+        for i in mentioned:
+            if i and i not in interests["mentioned"] and i not in interests["confirmed"]:
+                interests["mentioned"].append(i)
+        interests["mentioned"] = interests["mentioned"][-20:]
+        interests["updated"] = _today()
+
+        dp["memory"] = mem
+        dp["synthesis"] = new_core  # backward compat
         dp["synthesis_date"] = _today()
         store_set_profile(user_id, prof)
-        logger.info(f"Synthesis generated for {user_id}")
+        logger.info(f"Living memory updated for {user_id}")
+    except Exception as e:
+        logger.warning(f"Synthesis parse error for {user_id}: {e}")
 
 async def _detect_and_save_observation(user_id: str, text: str) -> None:
     """Detect significant signals in user message and save to sr_observations."""
@@ -5236,10 +5373,16 @@ async def _detect_and_save_observation(user_id: str, text: str) -> None:
             f"позитивный сигнал: {text[:80]}", sphere=None)
 
 async def _send_daily_report() -> None:
-    """Send daily report to architect at 21:00 MSK."""
+    """Send daily report to architect at 21:00 MSK.
+    Also triggers living memory synthesis for active gardeners."""
     if not ARCHITECT_TELEGRAM_ID:
         return
     try:
+        # Generate living memory for active gardeners before report
+        for _uid in list(_store.keys()):
+            if _daily_stats.get(_uid, {}).get("messages", 0) > 0:
+                await _generate_synthesis(_uid)
+
         lines = [f"📊 Отчёт СР · {_today()} · v{BOT_VERSION}\n"]
         # Gardeners activity
         if _daily_stats:
@@ -5267,6 +5410,17 @@ async def _send_daily_report() -> None:
                     name = prof.get("name", issue["user_id"]) if prof else issue["user_id"]
                     lines.append(f"  · {name}: {issue['type']} — {issue['context']}")
         # Unused intents (7 days check)
+        # Add memory cores to report
+        lines.append("\n🔮 Портреты садовников:")
+        for _uid in list(_store.keys()):
+            _rp = store_get_profile(_uid)
+            if not _rp:
+                continue
+            _rname = _rp.get("name", _uid)
+            _rmem  = _rp.get("deep_profile", {}).get("memory", {})
+            _rcore = _rmem.get("core", "")
+            if _rcore:
+                lines.append(f"  {_rname}: {_rcore[:200]}...")
         lines.append("\n🌱 Всё остальное в норме.")
         text = "\n".join(lines)
         await bot.send_message(int(ARCHITECT_TELEGRAM_ID), text)
