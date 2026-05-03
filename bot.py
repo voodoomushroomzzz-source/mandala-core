@@ -60,20 +60,19 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.28"
+BOT_VERSION = "7.29"
 BOT_LATEST_UPDATE = {
-    "version": "7.28",
+    "version": "7.29",
     "date": "2026-05-03",
     "features": [
-        "создание групп голосом: «создай группу X»",
-        "перемещение задач между группами",
-        "bulk редактирование дедлайнов",
-        "группы всегда видны в профиле",
-        "карта функций — СР лучше понимает контекст",
+        "SR Learning Loop — СР учится наблюдать за садовником",
+        "месячная статистика по сферам",
+        "/sr_report — живой отчёт СР о тебе",
+        "ежедневный отчёт архитектору в 21:00",
     ],
     "fixes": [
-        "дубли задач в утреннем сообщении",
-        "автоочистка пустых задач при загрузке",
+        "синтез СР каждые 3 дня",
+        "наблюдения передаются в каждый диалог",
     ]
 }
 
@@ -739,6 +738,71 @@ def _apply_resonance_decay(gardener: dict) -> Tuple[dict, bool]:
     gardener["updated"] = _today()
     return gardener, True
 
+# ── SR Learning Loop helpers ──────────────────────────────────────────────────
+
+def _update_sphere_history(user_id: str, sphere: str, task: bool = False,
+                           achievement: bool = False, resonance_delta: int = 0) -> None:
+    """Update monthly sphere statistics in deep_profile.sphere_history."""
+    prof = store_get_profile(user_id)
+    if not prof:
+        return
+    dp = prof.setdefault("deep_profile", {})
+    history = dp.setdefault("sphere_history", [])
+    cur_month = _today()[:7]  # YYYY-MM
+    # Find or create current month entry
+    entry = next((e for e in history if e.get("month") == cur_month), None)
+    if not entry:
+        entry = {
+            "month": cur_month,
+            "health":      {"tasks": 0, "achievements": 0, "resonance_delta": 0},
+            "creativity":  {"tasks": 0, "achievements": 0, "resonance_delta": 0},
+            "work":        {"tasks": 0, "achievements": 0, "resonance_delta": 0},
+            "connections": {"tasks": 0, "achievements": 0, "resonance_delta": 0},
+            "growth":      {"tasks": 0, "achievements": 0, "resonance_delta": 0},
+            "other":       {"tasks": 0, "achievements": 0, "resonance_delta": 0},
+        }
+        history.append(entry)
+    # Update sphere counters
+    s = sphere if sphere in entry else "other"
+    if task:        entry[s]["tasks"] += 1
+    if achievement: entry[s]["achievements"] += 1
+    entry[s]["resonance_delta"] += resonance_delta
+    # Keep only 12 months rolling window
+    dp["sphere_history"] = sorted(history, key=lambda x: x["month"])[-12:]
+    store_set_profile(user_id, prof)
+
+def _add_sr_observation(user_id: str, obs_type: str, text: str,
+                        sphere: str = None) -> None:
+    """Write SR observation to deep_profile.sr_observations[]."""
+    prof = store_get_profile(user_id)
+    if not prof:
+        return
+    dp = prof.setdefault("deep_profile", {})
+    obs = dp.setdefault("sr_observations", [])
+    obs.append({
+        "date": _today(),
+        "type": obs_type,   # pattern|emotional_signal|silence|positive
+        "sphere": sphere,
+        "text": text,
+    })
+    # Keep last 50 observations
+    dp["sr_observations"] = obs[-50:]
+    store_set_profile(user_id, prof)
+
+def _detect_emotion(text: str) -> str:
+    """Detect emotional signal in text. Returns signal type or empty string."""
+    text_l = text.lower()
+    negative = ["устал", "тревожно", "тревога", "плохо", "тяжело", "перегруз",
+                "грустно", "злюсь", "не могу", "сложно", "депресс", "выгор",
+                "не хочу", "бессмысл", "не справл"]
+    positive = ["отлично", "супер", "рад ", "радуюсь", "счастлив", "доволен",
+                "получилось", "справился", "гордо", "кайф"]
+    if any(w in text_l for w in negative):
+        return "negative"
+    if any(w in text_l for w in positive):
+        return "positive"
+    return ""
+
 # ─── Task helpers ─────────────────────────────────────────────────────────────
 
 def calculate_priority(deadline: str = None) -> int:
@@ -767,8 +831,35 @@ _proactive_sent_today: dict = {}
 _morning_sent: dict = {}        # uid → date, separate from proactive
 _last_interaction: dict = {}
 
-def _track_interaction(telegram_id: str) -> None:
-    _last_interaction[str(telegram_id)] = _today()
+# ── SR Learning Loop — in-memory, reset daily ──────────────────────────────────
+_daily_stats: dict = {}   # uid → {messages, tasks_created, tasks_completed, achievements}
+_daily_issues: list = []  # [{user_id, type, intent, count, context}]
+_intent_tracker: dict = {}  # uid → [last_intent, last_intent] for repeat detection
+
+def _track_interaction(telegram_id: str, intent: str = "", msg_type: str = "message") -> None:
+    uid = str(telegram_id)
+    _last_interaction[uid] = _today()
+    # Daily stats
+    if uid not in _daily_stats:
+        _daily_stats[uid] = {"messages": 0, "tasks_created": 0, "tasks_completed": 0, "achievements": 0, "intents": {}}
+    _daily_stats[uid]["messages"] += 1
+    if intent:
+        _daily_stats[uid]["intents"][intent] = _daily_stats[uid]["intents"].get(intent, 0) + 1
+    # Intent repeat detection (possible failed request)
+    if intent and intent not in ("conversation", "show_tasks", "show_profile"):
+        _intent_tracker.setdefault(uid, [])
+        _intent_tracker[uid].append(intent)
+        if len(_intent_tracker[uid]) > 5:
+            _intent_tracker[uid] = _intent_tracker[uid][-5:]
+        # Two identical action intents in a row = possible failure
+        if len(_intent_tracker[uid]) >= 2 and _intent_tracker[uid][-1] == _intent_tracker[uid][-2]:
+            _daily_issues.append({
+                "user_id": uid,
+                "type": "repeated_request",
+                "intent": intent,
+                "count": 2,
+                "context": f"повторный {intent}"
+            })
 
 def _can_send_proactive(telegram_id: str) -> bool:
     return _proactive_sent_today.get(str(telegram_id)) != _today()
@@ -1505,6 +1596,8 @@ async def run_proactive_scheduler() -> None:
             g = user_store.get("profile")
             if not g:
                 continue
+            # SR Learning: generate synthesis every 3 days
+            await _generate_synthesis(uid)
             settings = g.get("companion_settings", {})
             tz_name = settings.get("timezone", "Europe/Moscow")
             if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"], tz_name):
@@ -3782,6 +3875,38 @@ async def cb_show_changelog(callback: CallbackQuery):
     except Exception:
         await callback.message.answer("\n".join(lines_cl))
 
+@router.message(Command("sr_report"))
+async def cmd_sr_report(message: Message):
+    """SR report for gardener."""
+    user_id = str(message.from_user.id)
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
+    prof = store_get_profile(user_id)
+    if not prof:
+        await message.answer("🌀 Профиль не найден.")
+        return
+    dp = prof.get("deep_profile", {})
+    synthesis = dp.get("synthesis", "")
+    sphere_hist = dp.get("sphere_history", [])
+    sphere_names = {
+        "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
+        "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост"
+    }
+    lines = ["🔮 СР видит тебя так:\n"]
+    if synthesis:
+        lines.append(synthesis)
+    else:
+        lines.append("Наблюдения накапливаются — синтез будет через несколько дней.")
+    if sphere_hist:
+        cur = sphere_hist[-1]
+        lines.append("\nЭтот месяц по сферам:")
+        for s, label in sphere_names.items():
+            d = cur.get(s, {})
+            if d.get("tasks", 0) > 0 or d.get("achievements", 0) > 0:
+                lines.append(f"  {label} — {d.get('tasks',0)} задач · {d.get('achievements',0)} достижений")
+    await message.answer("\n".join(lines), reply_markup=get_main_keyboard())
+
 @router.message(Command("privacy"))
 async def cmd_privacy(message: Message):
     user_id = str(message.from_user.id)
@@ -4694,7 +4819,7 @@ async def btn_info(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await message.answer('🤖 <b>Что умеет СР — Mandala Helper</b>\n\nВсё управляется через голос или текст в чате.\n\n━━━━━━━━━━━━━━━━━━━━━\n\n🌀 <b>Задачи</b>\n• «добавь задачу подготовить презентацию до пятницы»\n• «закрой задачу X»\n• «удали задачу X»\n• «перенеси дедлайн задачи X на 10 мая»\n• «покажи задачи на неделю»\n• «покажи просроченные задачи»\n\n🎨 <b>Группы задач</b>\n• «создай группу Работа»\n• «добавь задачу X в группу Работа»\n• «покажи задачи группы Личное»\n\n🗺 <b>Роадмапы</b> (крупные цели, макс. 3)\n• «создай роадмап Выпустить альбом до июля»\n• «добавь задачу X в роадмап Y»\n• «покажи роадмап Y»\n• «удали роадмап Y»\n\n🔔 <b>Напоминания</b>\n• «напомни мне позвонить врачу завтра в 10:00»\n• «поставь напоминание на 25 мая в 9 утра»\n\n☑️ <b>Чеклисты</b>\n• «создай чеклист Сборы в поход»\n• «добавь пункт палатка в чеклист Сборы»\n• «покажи чеклист Сборы»\n\n💎 <b>Достижения</b>\n• «добавь достижение — пробежал 5 км»\n• «покажи достижения»\n\n🔮 <b>Резонанс</b>\n• «покажи баланс сфер»\n• «что у меня в сфере Связи?»\n\n🌐 <b>Поиск</b>\n• «найди события в театрах Москвы на выходные»\n• «что посмотреть в кино сегодня»\n\n💬 <b>Свободный диалог</b>\nПросто напиши или скажи голосом — СР поймёт контекст и поможет.', parse_mode="HTML", reply_markup=get_main_keyboard())
+    await message.answer('🌱 Привет. Я — СР, твой компаньон в саду.\n\nУмею работать с:\n📋 Задачами и группами\n🗺 Роадмапами (крупные цели)\n☑️ Чеклистами\n🔔 Напоминаниями\n💎 Достижениями\n🔮 Резонансом сфер\n🌐 Поиском\n\nПросто пиши или говори голосом — я пойму.\nХочешь узнать подробнее о чём-то? Просто спроси меня.', parse_mode="HTML", reply_markup=get_main_keyboard())
 
 @router.message(F.text == "⚙️ Настройки")
 async def btn_settings(message: Message, state: FSMContext):
@@ -5032,6 +5157,9 @@ def _build_sr_context(user_id: str) -> dict:
     tasks = store_get_tasks(user_id)
     achievements = store_get_achievements(user_id)
     active = [t for t in tasks if t.get("status") != "completed"]
+    dp = gardener.get("deep_profile", {})
+    recent_obs = dp.get("sr_observations", [])[-5:]
+    obs_lines = [f"{o['date']}: {o['text']}" for o in recent_obs] if recent_obs else []
     return {
         "name": gardener.get("name", "Садовник"),
         "resonance": gardener.get("resonance_level", 13),
@@ -5039,6 +5167,9 @@ def _build_sr_context(user_id: str) -> dict:
         "active_tasks": [{"title": t["title"], "priority": t.get("priority", 5)} for t in active[:5]],
         "achievements_count": len(achievements),
         "life_areas": gardener.get("personal_info", {}).get("life_areas", {}),
+        "sr_observations": obs_lines,
+        "synthesis": dp.get("synthesis", ""),
+        "gender": gardener.get("companion_settings", {}).get("gender", "neutral"),
     }
 
 def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
@@ -5061,6 +5192,102 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
     return None
 
 # _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
+
+async def _generate_synthesis(user_id: str) -> None:
+    """Generate SR synthesis every 3 days and save to deep_profile."""
+    prof = store_get_profile(user_id)
+    if not prof:
+        return
+    dp = prof.setdefault("deep_profile", {})
+    last_synth = dp.get("synthesis_date", "")
+    if last_synth:
+        from datetime import datetime as _dts
+        try:
+            days_since = (_dts.now() - _dts.strptime(last_synth, "%Y-%m-%d")).days
+            if days_since < 3:
+                return
+        except Exception:
+            pass
+    obs = dp.get("sr_observations", [])[-10:]
+    if len(obs) < 3:
+        return
+    obs_text = "\n".join(f"- {o['date']}: {o['text']}" for o in obs)
+    synthesis = await _call_openrouter([
+        {"role": "system", "content": (
+            "Ты — SR, наблюдатель Сада. На основе наблюдений сформируй одно короткое "
+            "наблюдение о садовнике (2-3 предложения). Только факты и паттерны. "
+            "Без оценок и советов. На русском."
+        )},
+        {"role": "user", "content": f"Наблюдения:\n{obs_text}\n\nСформируй краткий синтез:"}
+    ])
+    if synthesis:
+        dp["synthesis"] = synthesis
+        dp["synthesis_date"] = _today()
+        store_set_profile(user_id, prof)
+        logger.info(f"Synthesis generated for {user_id}")
+
+async def _detect_and_save_observation(user_id: str, text: str) -> None:
+    """Detect significant signals in user message and save to sr_observations."""
+    emotion = _detect_emotion(text)
+    if emotion == "negative":
+        _add_sr_observation(user_id, "emotional_signal",
+            f"негативный сигнал: {text[:80]}", sphere=None)
+    elif emotion == "positive":
+        _add_sr_observation(user_id, "positive",
+            f"позитивный сигнал: {text[:80]}", sphere=None)
+
+async def _send_daily_report() -> None:
+    """Send daily report to architect at 21:00 MSK."""
+    if not ARCHITECT_TELEGRAM_ID:
+        return
+    try:
+        lines = [f"📊 Отчёт СР · {_today()} · v{BOT_VERSION}\n"]
+        # Gardeners activity
+        if _daily_stats:
+            lines.append("👥 Активность:")
+            for uid, stats in _daily_stats.items():
+                prof = store_get_profile(uid)
+                name = prof.get("name", uid) if prof else uid
+                lines.append(
+                    f"  {name}: {stats['messages']} сообщений · "
+                    f"{stats['tasks_created']} создано · "
+                    f"{stats['tasks_completed']} закрыто · "
+                    f"{stats['achievements']} достижений"
+                )
+        else:
+            lines.append("👥 Активности не было")
+        # Issues
+        if _daily_issues:
+            lines.append("\n⚠️ Проблемы:")
+            seen = set()
+            for issue in _daily_issues:
+                key = f"{issue['user_id']}_{issue['type']}_{issue['intent']}"
+                if key not in seen:
+                    seen.add(key)
+                    prof = store_get_profile(issue["user_id"])
+                    name = prof.get("name", issue["user_id"]) if prof else issue["user_id"]
+                    lines.append(f"  · {name}: {issue['type']} — {issue['context']}")
+        # Unused intents (7 days check)
+        lines.append("\n🌱 Всё остальное в норме.")
+        text = "\n".join(lines)
+        await bot.send_message(int(ARCHITECT_TELEGRAM_ID), text)
+        # Save to GitHub
+        report = {
+            "date": _today(),
+            "version": BOT_VERSION,
+            "gardeners": _daily_stats,
+            "issues": _daily_issues,
+        }
+        _pending_writes["honeycombs/sessions/sr_daily_report.json"] = report
+        await _sync_pending()
+        # Reset daily counters
+        _daily_stats.clear()
+        _daily_issues.clear()
+        for uid in list(_intent_tracker.keys()):
+            _intent_tracker[uid] = []
+        logger.info("Daily report sent to architect")
+    except Exception as e:
+        logger.error(f"Daily report error: {e}")
 
 
 # ─── Voice message handler (Groq Whisper) ─────────────────────────────────────
@@ -5475,6 +5702,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                     bulk_confirm = f"✅ Добавлено {len(created_lines)} задач:\n" + "\n".join(created_lines)
                                     # profile not shown automatically
                                     await message.answer(bulk_confirm, parse_mode="HTML", reply_markup=get_main_keyboard())
+                                    _daily_stats.setdefault(user_id, {"messages":0,"tasks_created":0,"tasks_completed":0,"achievements":0,"intents":{}})
+                                    _daily_stats[user_id]["tasks_created"] += len(created_lines)
                                 reply_text = ""
                             else:
                                 # ── Single task ───────────────────────────────────
@@ -5651,6 +5880,9 @@ async def free_conversation(message: Message, state: FSMContext):
                                     r2  = 2 if (dl2 and dl2 >= today_s2) else 1
                                     sphere2 = _classify_sphere(tc.get("title",""), tc.get("label_name",""))
                                     store_add_sphere_resonance(user_id, sphere2, r2)
+                                    _update_sphere_history(user_id, sphere2, task=True, resonance_delta=r2)
+                                    _daily_stats.setdefault(user_id, {"messages":0,"tasks_created":0,"tasks_completed":0,"achievements":0,"intents":{}})
+                                    _daily_stats[user_id]["tasks_completed"] += 1
                                     total_res += r2
                                 _update_deep_profile(user_id)
                                 count_now = store_get_achievements_count(user_id)
@@ -6844,9 +7076,10 @@ async def on_startup():
     # Регистрируем команды в меню Telegram
     from aiogram.types import BotCommand
     await bot.set_my_commands([
-        BotCommand(command="start",   description="🌱 Войти в сад"),
-        BotCommand(command="privacy", description="🔐 Мои данные"),
-        BotCommand(command="leave",   description="🚪 Покинуть сад"),
+        BotCommand(command="start",     description="🌱 Войти в сад"),
+        BotCommand(command="sr_report", description="🔮 Отчёт СР"),
+        BotCommand(command="privacy",   description="🔐 Мои данные"),
+        BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
     # Notify gardeners about version update (60s delay)
@@ -6874,6 +7107,8 @@ async def on_startup():
     scheduler.add_job(run_reminder_scheduler, "interval", minutes=1, id="reminders")
     scheduler.add_job(run_proactive_scheduler, "interval", minutes=1, id="proactive")
     scheduler.add_job(run_resonance_decay, "cron", hour=3, minute=0, id="decay")
+    scheduler.add_job(_send_daily_report, "cron", hour=18, minute=0, id="daily_report",
+                      timezone="UTC")  # 18:00 UTC = 21:00 MSK
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
     scheduler.add_job(_check_webhook, "interval", minutes=5, id="webhook_check")
     scheduler.start()
