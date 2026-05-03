@@ -346,6 +346,21 @@
       "updated": "2026-05-02",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260503_028",
+      "title": "добавить еще 2 тестировщика",
+      "status": "todo",
+      "label_id": "мандала",
+      "label_name": "Мандала",
+      "life_area": "work",
+      "priority": 5,
+      "deadline": "2026-05-10",
+      "reminder": null,
+      "created": "2026-05-03",
+      "updated": "2026-05-03",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
