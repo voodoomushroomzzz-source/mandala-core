@@ -597,12 +597,56 @@
       "icon": "🌱"
     }
   ],
-  "updated": "2026-05-05",
+  "updated": "2026-04-18",
+  "achievements_count": 47,
+  "checklists": [],
+  "reminders": [],
+  "_decay_date": "2026-05-04",
+  "roadmaps": [
+    {
+      "roadmap_id": "rm_cbb8d586",
+      "title": "Выпустить трек \"Беги\"",
+      "deadline": "2026-07-27",
+      "created": "2026-04-26",
+      "task_ids": [
+        "t_6835ebf3",
+        "t_a018b24a",
+        "t_87e68797",
+        "t_1dd4a5e1",
+        "t_4dc7d659",
+        "task_20260427_022",
+        "t_eafdaa59",
+        "t_46f9faf3",
+        "t_f89a42e7",
+        "t_08b361e6"
+      ],
+      "status": "active"
+    },
+    {
+      "roadmap_id": "rm_5b8c972a",
+      "title": "🚨 Crisis Job Search",
+      "deadline": "2026-05-31",
+      "created": "2026-05-01",
+      "task_ids": [
+        "t_cd992632",
+        "task_20260501_020",
+        "t_8c10d092",
+        "t_f1d5e4eb",
+        "t_bf602b98",
+        "t_e09f124b",
+        "t_f82dcad6",
+        "t_104194fa",
+        "t_223087d3",
+        "t_24e04f34"
+      ],
+      "status": "active"
+    }
+  ],
   "sphere_resonance": {
-    "health": 20,
-    "creativity": 20,
-    "work": 20,
-    "connections": 20,
-    "growth": 20
+    "health": 33,
+    "creativity": 24,
+    "work": 50,
+    "connections": 26,
+    "growth": 26
   }
 }
