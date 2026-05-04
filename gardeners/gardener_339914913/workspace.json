@@ -1,5 +1,15 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "task_id": "t_71d916fb",
+      "title": "Запись лекции о decimal",
+      "status": "active",
+      "created": "2026-05-04",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    }
+  ],
   "groups": [],
   "achievements": [],
   "updated": "2026-05-04",
@@ -25,7 +35,9 @@
       "title": "инжениринг данных",
       "deadline": null,
       "created": "2026-05-04",
-      "task_ids": [],
+      "task_ids": [
+        "t_71d916fb"
+      ],
       "status": "active"
     }
   ]
