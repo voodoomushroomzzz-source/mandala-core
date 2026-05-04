@@ -597,5 +597,12 @@
       "icon": "🌱"
     }
   ],
-  "updated": "2026-05-05"
+  "updated": "2026-05-05",
+  "sphere_resonance": {
+    "health": 20,
+    "creativity": 20,
+    "work": 20,
+    "connections": 20,
+    "growth": 20
+  }
 }
