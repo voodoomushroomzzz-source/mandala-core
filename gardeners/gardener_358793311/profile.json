@@ -28,7 +28,7 @@
     "city": "Владимир",
     "birthday": "15.11",
     "gender": "male",
-    "welcome_done": false
+    "welcome_done": true
   },
   "growth_history": [
     {
@@ -36,5 +36,16 @@
       "resonance": 5,
       "event": "onboarding"
     }
-  ]
+  ],
+  "deep_profile": {
+    "dominant_sphere": null,
+    "weak_sphere": null,
+    "streak_days": 0,
+    "streak_sphere": null,
+    "last_reflection_date": null,
+    "observations": [
+      "2026-05-04 [onboarding]: деятельность — Программирую, пишу музыку",
+      "2026-05-04 [onboarding]: большая цель — Не знаю, постоянно что-то новое"
+    ]
+  }
 }
