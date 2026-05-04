@@ -1,0 +1,40 @@
+{
+  "gardener_id": "gardener_339914913",
+  "telegram_id": "339914913",
+  "name": "Антон",
+  "resonance_level": 5,
+  "created": "2026-05-04",
+  "updated": "2026-05-04",
+  "personal_info": {
+    "life_areas": {
+      "body": {
+        "current": 5,
+        "target": 10
+      },
+      "spirit": {
+        "current": 5,
+        "target": 10
+      },
+      "world": {
+        "current": 5,
+        "target": 10
+      }
+    }
+  },
+  "companion_settings": {
+    "morning_message_time": "08:00",
+    "proactive_mode": true,
+    "timezone": "Europe/Moscow",
+    "city": "Алматы",
+    "birthday": "18.05",
+    "gender": "male",
+    "welcome_done": false
+  },
+  "growth_history": [
+    {
+      "date": "2026-05-04",
+      "resonance": 5,
+      "event": "onboarding"
+    }
+  ]
+}
