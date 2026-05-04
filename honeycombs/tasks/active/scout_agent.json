@@ -1,141 +1,192 @@
 {
-    "task_id":  "T-20260410-0240",
-    "name":  "Scout Agent  Autonomous Discovery (Ideas, Funding, Impact)",
-    "code_name":  "Scout_Agent_v0.1",
-    "status":  "todo",
-    "priority":  "MEDIUM",
-    "deadline":  "2026-05-15",
-    "created":  "2026-04-10",
-    "updated":  "2026-04-13",
-    "description":  "Implement Scout Agent for autonomous discovery of resonant ideas, funding opportunities (grants, crowdfunding), and real-world impact use cases. Also provides personalized seed suggestions for Garden based on gardener\u0027s interests and goals from gardener.json. Store findings in Seeds/ for evaluation.",
-    "tags":  [
-                 "scout",
-                 "agent",
-                 "discovery",
-                 "funding",
-                 "impact",
-                 "seeds",
-                 "RM-003"
-             ],
-    "progress":  0,
-    "roadmap_ref":  "RM-003",
-    "notes":  "Full implementation of RM-003. Covers ideas, funding, and impact discovery. Based on Grok\u0027s specification.",
-    "mandala_principles":  [
-                               "Ahimsa  maximum token and resource economy",
-                               "Symbiosis  harmonious human-agent interaction",
-                               "Self-Organization  autonomy and self-organization",
-                               "Terminal-First + Clean UTF-8",
-                               "Always Fresh Raw data"
-                           ],
-    "tech_stack":  {
-                       "orchestration":  "LangGraph (stateful graph with cycles and persistence)",
-                       "web_extraction":  "ScrapeGraphAI (SmartScraper, SearchScraper, Markdownify + Pydantic schemas)",
-                       "apis":  [
-                                    "GitHub REST API v2022-11-28+",
-                                    "arXiv API"
-                                ],
-                       "search":  "ScrapeGraphAI SearchScraper + DuckDuckGo (free)",
-                       "llm":  "Local models or free high-quality APIs (Grok, DeepSeek, Qwen)",
-                       "storage":  "JSON files in /seeds/ with clear structure + registry",
-                       "scheduling":  "Render Cron Job (weekly)"
-                   },
-    "constraints":  [
-                        "Fully free stack (open-source + free tiers)",
-                        "Minimal token consumption (Ahimsa)",
-                        "Clean, documented code",
-                        "Full compatibility with Python 3.12+",
-                        "All data stored in Mandala format",
-                        "API keys stored in Render Environment Variables  NEVER in repo"
-                    ],
-    "deployment":  {
-                       "platform":  "Render",
-                       "service_type":  "Cron Job",
-                       "schedule":  "0 9 * * 1 (every Monday 09:00 UTC)",
-                       "env_vars":  [
-                                        "GITHUB_TOKEN",
-                                        "LLM_API_KEY",
-                                        "LLM_API_URL"
-                                    ],
-                       "build_command":  "pip install -r requirements.txt",
-                       "start_command":  "python -m scout_agent"
-                   },
-    "startup_plan":  {
-                         "phase_0":  {
-                                         "name":  "Project Structure \u0026 Dependencies",
-                                         "deliverables":  [
-                                                              "Create scout_agent/ folder with __init__.py, graph.py, search.py, models.py, config.py, github_client.py",
-                                                              "Add langgraph, scrapegraphai, pydantic, duckduckgo-search, httpx to requirements.txt"
-                                                          ],
-                                         "estimated":  "30 min"
-                                     },
-                         "phase_1":  {
-                                         "name":  "Search Core",
-                                         "deliverables":  [
-                                                              "scout_search.py with GitHub, ArXiv, Hacker News, Reddit"
-                                                          ],
-                                         "estimated":  "3 hours"
-                                     },
-                         "phase_2":  {
-                                         "name":  "Seed Generator",
-                                         "deliverables":  [
-                                                              "scout_seed.py",
-                                                              "integration with honeycombs/seeds/",
-                                                              "Pydantic models for Seed"
-                                                          ],
-                                         "estimated":  "2 hours"
-                                     },
-                         "phase_3":  {
-                                         "name":  "Resonance Scorer",
-                                         "deliverables":  [
-                                                              "scout_resonance.py"
-                                                          ],
-                                         "estimated":  "2 hours"
-                                     },
-                         "phase_4":  {
-                                         "name":  "Render Deployment",
-                                         "deliverables":  [
-                                                              "Render Cron Job configured",
-                                                              "Environment Variables set"
-                                                          ],
-                                         "estimated":  "1 hour"
-                                     },
-                         "phase_5":  {
-                                         "name":  "Gardener Review UI",
-                                         "deliverables":  [
-                                                              "scout_review.py CLI"
-                                                          ],
-                                         "estimated":  "2 hours"
-                                     },
-                         "phase_6":  {
-                                         "name":  "Funding Scraper",
-                                         "deliverables":  [
-                                                              "Grants.gov, Kickstarter, Crunchbase integrations"
-                                                          ],
-                                         "estimated":  "3 hours"
-                                     },
-                         "phase_7":  {
-                                         "name":  "Impact Discovery",
-                                         "deliverables":  [
-                                                              "Use case scraper for AI for Good"
-                                                          ],
-                                         "estimated":  "2 hours"
-                                     },
-                         "phase_8":  {
-                                         "name":  "Opportunity Matcher",
-                                         "deliverables":  [
-                                                              "Matching algorithm for grants/roadmaps",
-                                                              "Pydantic models for Opportunity"
-                                                          ],
-                                         "estimated":  "2 hours"
-                                     }
-                     },
-    "deliverables":  [
-                         "Main LangGraph graph (scout_graph.py)",
-                         "ScrapeGraphAI tools integration",
-                         "Pydantic models for Seed and Opportunity",
-                         "Script for running and testing",
-                         "Render Cron Job configured",
-                         "Documentation + startup guide",
-                         "garden_scout.py  personalized seed filter for Garden integration"
-                     ]
+    "task_id": "T-20260410-0240",
+    "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
+    "code_name": "Scout_Agent_v1.0",
+    "status": "todo",
+    "priority": "MEDIUM",
+    "deadline": "2026-05-15",
+    "created": "2026-04-10",
+    "updated": "2026-05-05",
+    "description": "Двухуровневый автономный агент: Level 1 (Raw Collector) ежедневно собирает находки, Level 2 (Resonance Filter) раз в 3 дня оценивает через LLM и сохраняет в seeds. Использует существующий ключ OpenRouter.",
+    "tags": ["scout", "agent", "discovery", "funding", "impact", "seeds", "RM-003", "two-level", "openrouter"],
+    "progress": 5,
+    "roadmap_ref": "RM-003",
+    "notes": "v1.0. Обновлён 2026-05-05: двухуровневая архитектура, OpenRouter вместо Grok/DeepSeek API, эмбеддинг-предфильтр, умные запросы, источники с порогами качества.",
+    "mandala_principles": [
+      "Ахимса — максимальная экономия токенов и ресурсов",
+      "Симбиоз — гармоничное взаимодействие человек-агент",
+      "Самоорганизация — автономность и самоконтроль",
+      "Terminal-First + Clean UTF-8",
+      "Always Fresh Raw data"
+    ],
+    "architecture": {
+      "level_1_raw_collector": {
+        "schedule": "каждый день 09:00 и 21:00 UTC",
+        "sources": {
+          "github": {"min_stars": 10, "updated_days": 30},
+          "arxiv": {"category": "cs.AI, cs.CL, cs.LG", "limit": 100},
+          "hacker_news": {"min_upvotes": 20, "type": "story"},
+          "reddit": {"subreddits": ["MachineLearning", "opensource", "artificial"], "limit": 25},
+          "producthunt": {"period": "week"},
+          "duckduckgo": {"queries": 15, "results_per_query": 10}
+        },
+        "smart_queries_from": ["roadmaps/active/", "gardener.json"],
+        "embedding_pre_filter": {
+          "tool": "Sentence Transformers (локально)",
+          "threshold": 0.3,
+          "action": "удалить из raw/ если косинусное сходство с roadmap < 0.3",
+          "cost": "0 токенов, 0$"
+        },
+        "output": "scout/raw/raw_YYYY-MM-DD_HH-MM.json"
+      },
+      "level_2_resonance_filter": {
+        "schedule": "пн, чт 12:00 UTC",
+        "llm": {
+          "provider": "OpenRouter (существующий ключ)",
+          "model": "qwen/qwen-3.6-plus или deepseek/deepseek-v4-flash (бесплатные тарифы)",
+          "prompt_template": "Оцени находку по 4 критериям (0-100): 1. Совпадение с дорожными картами (40%) 2. Совпадение с интересами садовника (30%) 3. Практическая польза — есть код/инструмент (20%) 4. Новизна — не дубликат (10%). Верни ТОЛЬКО JSON: {\"score\": число, \"reason\": \"кратко\"}",
+          "tokens_per_session": "3,000-6,000",
+          "monthly_usage": "~40,000 токенов"
+        },
+        "decision": {
+          "score_ge_70": "сохранить в honeycombs/seeds/",
+          "score_lt_70": "удалить из raw/"
+        },
+        "cleanup": "удалить обработанные raw файлы"
+      }
+    },
+    "tech_stack": {
+      "orchestration": "LangGraph (stateful graph с циклами и персистенцией)",
+      "web_extraction": "ScrapeGraphAI (SmartScraper, SearchScraper, Markdownify + Pydantic схемы)",
+      "apis": ["GitHub REST API", "arXiv API", "OpenRouter API (OpenAI-совместимый)"],
+      "search": "DuckDuckGo (бесплатно) + ScrapeGraphAI SearchScraper",
+      "embeddings": "Sentence Transformers (локально, all-MiniLM-L6-v2)",
+      "llm": "OpenRouter (qwen/qwen-3.6-plus или deepseek/deepseek-v4-flash, бесплатно)",
+      "storage": "JSON файлы в scout/raw/ и honeycombs/seeds/ с чёткой структурой + реестр",
+      "scheduling": "Render Cron Jobs (2 jobs, бесплатный тариф)",
+      "cli": "scout_review.py для просмотра находок садовником"
+    },
+    "constraints": [
+      "Полностью бесплатный стек (open-source + бесплатные тарифы)",
+      "Минимальное потребление токенов (Ахимса)",
+      "Чистый, документированный код",
+      "Полная совместимость с Python 3.12+",
+      "Все данные в формате Мандалы",
+      "API ключи только в Render Environment Variables — НИКОГДА в репо"
+    ],
+    "deployment": {
+      "platform": "Render (бесплатный тариф)",
+      "jobs": {
+        "scout_raw_collector": {
+          "type": "Cron Job",
+          "schedule": "0 9,21 * * *",
+          "command": "python scout/collector.py",
+          "env_vars": ["SCRAPEGRAPHAI_KEY"]
+        },
+        "scout_resonance_filter": {
+          "type": "Cron Job",
+          "schedule": "0 12 * * 1,4",
+          "command": "python scout/resonance.py",
+          "env_vars": ["OPENROUTER_API_KEY", "OPENROUTER_API_URL"]
+        }
+      }
+    },
+    "startup_plan": {
+      "phase_0": {
+        "name": "Project Structure & Dependencies",
+        "deliverables": [
+          "Создать scout/ папку с подпапками raw/, processed/",
+          "Файлы: collector.py, resonance.py, models.py, config.py, cli.py",
+          "Добавить зависимости: scrapegraphai, duckduckgo-search, httpx, openai, pydantic, sentence-transformers, langgraph"
+        ],
+        "estimated": "30 мин"
+      },
+      "phase_1": {
+        "name": "Raw Collector — Smart Search Engine",
+        "deliverables": [
+          "collector.py с GitHub, arXiv, HN, Reddit, ProductHunt, DuckDuckGo",
+          "10-15 целевых запросов из roadmaps + gardener.json",
+          "Фильтры качества по каждому источнику",
+          "Сохранение в scout/raw/raw_YYYY-MM-DD_HH-MM.json"
+        ],
+        "estimated": "3 часа"
+      },
+      "phase_2": {
+        "name": "Embedding Pre-Filter",
+        "deliverables": [
+          "Локальные эмбеддинги Sentence Transformers",
+          "Косинусное сходство с дорожными картами",
+          "Порог 0.3 — удаление нерелевантного из raw/"
+        ],
+        "estimated": "1.5 часа"
+      },
+      "phase_3": {
+        "name": "Resonance Scorer — LLM через OpenRouter",
+        "deliverables": [
+          "resonance.py с вызовом OpenRouter API",
+          "Промпт по 4 критериям",
+          "score >= 70 → seeds, score < 70 → удалить"
+        ],
+        "estimated": "2 часа"
+      },
+      "phase_4": {
+        "name": "Seed Generator",
+        "deliverables": [
+          "Формат сида по шаблону honeycombs/seeds/",
+          "Pydantic-валидация",
+          "Авто-сохранение + обновление реестра"
+        ],
+        "estimated": "1.5 часа"
+      },
+      "phase_5": {
+        "name": "Render Deployment — Level 1 (Raw Collector)",
+        "deliverables": [
+          "Cron Job: каждый день 09:00 и 21:00 UTC",
+          "Запуск collector.py + эмбеддинг-фильтр",
+          "Переменные окружения"
+        ],
+        "estimated": "1 час"
+      },
+      "phase_6": {
+        "name": "Render Deployment — Level 2 (Resonance Filter)",
+        "deliverables": [
+          "Cron Job: пн, чт 12:00 UTC",
+          "Запуск resonance.py (LLM-оценка + seeds)",
+          "Переменные окружения"
+        ],
+        "estimated": "1 час"
+      },
+      "phase_7": {
+        "name": "Gardener Review CLI",
+        "deliverables": [
+          "cli.py: просмотр, отметка интересного, удаление"
+        ],
+        "estimated": "1.5 часа"
+      },
+      "phase_8": {
+        "name": "Funding & Impact Scrapers",
+        "deliverables": [
+          "Grants.gov, Kickstarter, Crunchbase интеграции",
+          "AI for Good use cases поиск"
+        ],
+        "estimated": "3 часа"
+      },
+      "phase_9": {
+        "name": "Opportunity Matcher",
+        "deliverables": [
+          "Сопоставление грантов с дорожными картами",
+          "Pydantic модели для Opportunity"
+        ],
+        "estimated": "1.5 часа"
+      }
+    },
+    "deliverables": [
+      "collector.py — Level 1: ежедневный сбор", 
+      "resonance.py — Level 2: LLM-фильтр + сохранение в seeds",
+      "models.py — Pydantic модели RawFind, Seed, Opportunity",
+      "config.py — запросы, пороги, источники",
+      "cli.py — интерфейс просмотра для Садовника",
+      "Render Cron Jobs x2 настроены",
+      "Документация + startup guide"
+    ]
 }
