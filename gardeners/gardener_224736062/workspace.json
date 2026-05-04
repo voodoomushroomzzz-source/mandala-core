@@ -348,21 +348,6 @@
       "notes": ""
     },
     {
-      "task_id": "task_20260503_028",
-      "title": "добавить еще 2 тестировщика",
-      "status": "todo",
-      "label_id": "мандала",
-      "label_name": "Мандала",
-      "life_area": "work",
-      "priority": 5,
-      "deadline": "2026-05-10",
-      "reminder": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260503_031",
       "title": "система оповещения обновлений для садовников",
       "status": "todo",
@@ -493,7 +478,7 @@
     }
   ],
   "updated": "2026-04-18",
-  "achievements_count": 45,
+  "achievements_count": 46,
   "checklists": [],
   "reminders": [],
   "_decay_date": "2026-05-04",
@@ -540,7 +525,7 @@
   "sphere_resonance": {
     "health": 33,
     "creativity": 24,
-    "work": 46,
+    "work": 48,
     "connections": 26,
     "growth": 26
   }
