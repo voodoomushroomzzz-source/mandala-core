@@ -406,6 +406,21 @@
       "updated": "2026-05-03",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260504_032",
+      "title": "оплатить свитшот",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 7,
+      "deadline": "2026-05-04",
+      "reminder": null,
+      "created": "2026-05-04",
+      "updated": "2026-05-04",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
