@@ -526,6 +526,42 @@
       "updated": "2026-05-04",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "t_e0f3903d",
+      "title": "Bot Update",
+      "status": "active",
+      "created": "2026-05-05",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_e4276d15",
+      "title": "Scout Agent",
+      "status": "active",
+      "created": "2026-05-05",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_e829ab0f",
+      "title": "Symbiosis Guard",
+      "status": "active",
+      "created": "2026-05-05",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
+    },
+    {
+      "task_id": "t_32dadf0b",
+      "title": "Flutter App",
+      "status": "active",
+      "created": "2026-05-05",
+      "deadline": null,
+      "label_name": null,
+      "reminder": null
     }
   ],
   "groups": [
@@ -638,6 +674,19 @@
         "t_104194fa",
         "t_223087d3",
         "t_24e04f34"
+      ],
+      "status": "active"
+    },
+    {
+      "roadmap_id": "rm_cb437437",
+      "title": "Развитие Мандалы",
+      "deadline": null,
+      "created": "2026-05-05",
+      "task_ids": [
+        "t_e0f3903d",
+        "t_e4276d15",
+        "t_e829ab0f",
+        "t_32dadf0b"
       ],
       "status": "active"
     }
