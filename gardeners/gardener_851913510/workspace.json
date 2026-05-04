@@ -82,26 +82,26 @@
     "achievements":  [
                          {
                              "id":  "ach_001",
-                             "category":  "other",
+                             "category":  "health",
                              "title":  "Проснулась в 6:30",
                              "description":  "",
                              "completed":  "2026-05-03",
                              "resonance_bonus":  3,
-                             "icon":  "🌱"
+                             "icon":  "🌿"
                          },
                          {
                              "id":  "ach_002",
-                             "category":  "other",
+                             "category":  "health",
                              "title":  "устроила себе чайную церемонию",
                              "description":  "",
                              "completed":  "2026-05-03",
                              "resonance_bonus":  3,
-                             "icon":  "🌱"
+                             "icon":  "🌿"
                          }
                      ],
     "updated":  "2026-05-03",
     "sphere_resonance":  {
-                             "health":  20,
+                             "health":  26,
                              "creativity":  20,
                              "work":  20,
                              "connections":  20,
