@@ -2750,6 +2750,7 @@ async def cmd_start(message: Message, state: FSMContext):
     except Exception:
         pass
 
+    await ensure_user_loaded(user_id)
     # Check if existing user
     user_profile = store_get_profile(user_id)
     if user_profile:
