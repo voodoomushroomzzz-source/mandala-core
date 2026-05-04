@@ -7,6 +7,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Создай задачу кепки на цветной. Дедлайн завтра. Группа работает."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-05-04"
