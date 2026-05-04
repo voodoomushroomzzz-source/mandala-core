@@ -54,7 +54,8 @@ TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
 GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 SR_MODEL_CHAIN = [
-    "qwen/qwen3.5-flash-02-23",
+    "qwen/qwen3.5-flash-02-23",   # primary — fast and cheap
+    "qwen/qwen3.6-plus",           # fallback on rate limit — separate quota
 ]
 SESSION_MAX_MESSAGES = 40
 
@@ -1644,8 +1645,6 @@ async def run_proactive_scheduler() -> None:
             g = user_store.get("profile")
             if not g:
                 continue
-            # SR Learning: generate synthesis every 3 days
-            await _generate_synthesis(uid)
             settings = g.get("companion_settings", {})
             tz_name = settings.get("timezone", "Europe/Moscow")
             if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"], tz_name):
@@ -4427,6 +4426,9 @@ SR_SYSTEM_PROMPT = """Ты — СР (Системный Резонатор), ж�
 - ВАЖНО: пункты в чеклисте нумеруются с 1. "пункт 3" = третий пункт по порядку
 - "переименуй задачу X в Y", "измени дедлайн задачи X на Y", "смени группу задачи X на Y" → edit_task, action.title="X", action.field="title|deadline|group", action.value="Y", 0.9
 - "перенеси дедлайн X на Y", "сдвинь срок X на Y", "поставь новый срок X", "измени дату задачи X", "задача X — новый дедлайн Y", "задача X перенеси на Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
+- "перенеси на 2 дня", "сдвинь на три дня", "перенеси на неделю" → edit_task, action.field="deadline", action.value="через N дней" (N = число из запроса), 0.95
+  Примеры: "перенести на 2 дня" → action.value="через 2 дня", "сдвинь на неделю" → action.value="через 7 дней"
+- "перенести на послезавтра" → action.value="послезавтра", 0.95
 - "поменяй дедлайн у задачи X на Y", "поменяй дату задачи X на Y", "в задаче X поменяй дедлайн на Y", "задаче X поставь дедлайн Y", "у задачи X дедлайн Y" → edit_task, action.title="X", action.field="deadline", action.value="Y", 0.95
 - "удали дедлайн задачи X", "убери срок у задачи X", "убери дедлайн X", "задача X без дедлайна" → edit_task, action.title="X", action.field="deadline", action.value="удали", 0.95
 - ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
@@ -5304,6 +5306,10 @@ async def _generate_synthesis(user_id: str) -> None:
     if not prof:
         return
     dp = prof.setdefault("deep_profile", {})
+
+    # Daily guard — run only once per day
+    if dp.get("synthesis_date") == _today():
+        return
 
     # Дистилляция если наблюдений накопилось много
     await _distill_observations(user_id, dp)
@@ -7292,15 +7298,17 @@ async def on_startup():
         for _uid in list(_store.keys()):
             try:
                 _p = store_get_profile(_uid)
-                if not _p or _p.get("last_notified_version") == BOT_VERSION:
+                if not _p:
                     continue
                 _kb = InlineKeyboardMarkup(inline_keyboard=[[
                     InlineKeyboardButton(text="📋 Что нового →", callback_data="show_changelog")
                 ]])
-                await bot.send_message(int(_uid), f"🌱 Мандала обновилась · v{BOT_VERSION}", reply_markup=_kb)
-                _p["last_notified_version"] = BOT_VERSION
-                store_set_profile(_uid, _p)
-                _fire_sync()
+                await bot.send_message(
+                    int(_uid),
+                    f"🌱 Мандала обновилась · v{BOT_VERSION}",
+                    reply_markup=_kb
+                )
+                await _aio2.sleep(2)  # пауза между садовниками
             except Exception as _ve:
                 logger.warning(f"Version notify {_uid}: {_ve}")
     asyncio.create_task(_notify_version())
