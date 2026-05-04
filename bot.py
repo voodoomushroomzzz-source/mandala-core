@@ -545,6 +545,7 @@ async def _load_user(telegram_id: str) -> None:
     )
     profile, workspace, memory = results
     store = _get_user_store(uid)
+    store["ready"] = False
     store["profile"]   = profile if isinstance(profile, dict) else None
     _ws = workspace if isinstance(workspace, dict) else {"tasks": [], "groups": [], "achievements": []}
     # Auto-cleanup: remove tasks with empty or very short title
@@ -556,7 +557,7 @@ async def _load_user(telegram_id: str) -> None:
         _pending_writes[f"{_user_path(uid)}/workspace.json"] = _ws
         await _sync_pending()  # immediate — ensure cleanup is saved
     store["workspace"] = _ws
-    store["ready"]     = True
+    store["ready"]     = store["profile"] is not None
     # Restore conversation history from memory.json
     if isinstance(memory, dict) and memory.get("sessions"):
         _sessions[uid] = memory["sessions"]
