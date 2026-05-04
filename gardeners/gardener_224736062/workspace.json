@@ -466,6 +466,21 @@
       "updated": "2026-05-04",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260504_036",
+      "title": "продумать систему оплаты бота",
+      "status": "todo",
+      "label_id": "мандала",
+      "label_name": "Мандала",
+      "life_area": "work",
+      "priority": 5,
+      "deadline": "2026-05-18",
+      "reminder": null,
+      "created": "2026-05-04",
+      "updated": "2026-05-04",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
