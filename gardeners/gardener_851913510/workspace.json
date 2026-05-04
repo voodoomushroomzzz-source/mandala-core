@@ -1,109 +1,111 @@
 ﻿{
-  "tasks": [
-    {
-      "task_id": "task_20260503_004",
-      "title": "сверка оплат сессионной хозяюшки",
-      "status": "todo",
-      "label_id": null,
-      "label_name": "",
-      "life_area": "work",
-      "priority": 6,
-      "deadline": "2026-05-04",
-      "reminder": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260503_005",
-      "title": "просчет зп",
-      "status": "todo",
-      "label_id": null,
-      "label_name": "",
-      "life_area": "work",
-      "priority": 6,
-      "deadline": "2026-05-04",
-      "reminder": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260503_006",
-      "title": "возмещение трат на ремонт",
-      "status": "todo",
-      "label_id": null,
-      "label_name": "",
-      "life_area": "work",
-      "priority": 6,
-      "deadline": "2026-05-04",
-      "reminder": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260503_007",
-      "title": "заказ материалов для ремонта (рейки 3*1,5м), отметить полки",
-      "status": "todo",
-      "label_id": null,
-      "label_name": "",
-      "life_area": "work",
-      "priority": 6,
-      "deadline": "2026-05-04",
-      "reminder": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260503_008",
-      "title": "изучить материалы для диссертации",
-      "status": "todo",
-      "label_id": null,
-      "label_name": "",
-      "life_area": "growth",
-      "priority": 5,
-      "deadline": null,
-      "reminder": null,
-      "created": "2026-05-03",
-      "updated": "2026-05-03",
-      "completed": null,
-      "notes": ""
-    }
-  ],
-  "groups": [],
-  "achievements": [
-    {
-      "id": "ach_001",
-      "category": "other",
-      "title": "Проснулась в 6:30",
-      "description": "",
-      "completed": "2026-05-03",
-      "resonance_bonus": 3,
-      "icon": "🌱"
-    },
-    {
-      "id": "ach_002",
-      "category": "other",
-      "title": "устроила себе чайную церемонию",
-      "description": "",
-      "completed": "2026-05-03",
-      "resonance_bonus": 3,
-      "icon": "🌱"
-    }
-  ],
-  "updated": "2026-05-03",
-  "sphere_resonance": {
-    "health": 20,
-    "creativity": 20,
-    "work": 20,
-    "connections": 20,
-    "growth": 20
-  },
-  "_decay_date": "2026-05-03"
+    "tasks":  [
+                  {
+                      "task_id":  "task_20260503_004",
+                      "title":  "сверка оплат сессионной хозяюшки",
+                      "status":  "todo",
+                      "label_id":  null,
+                      "label_name":  "",
+                      "life_area":  "work",
+                      "priority":  6,
+                      "deadline":  "2026-05-04",
+                      "reminder":  null,
+                      "created":  "2026-05-03",
+                      "updated":  "2026-05-03",
+                      "completed":  null,
+                      "notes":  ""
+                  },
+                  {
+                      "task_id":  "task_20260503_005",
+                      "title":  "просчет зп",
+                      "status":  "todo",
+                      "label_id":  null,
+                      "label_name":  "",
+                      "life_area":  "work",
+                      "priority":  6,
+                      "deadline":  "2026-05-04",
+                      "reminder":  null,
+                      "created":  "2026-05-03",
+                      "updated":  "2026-05-03",
+                      "completed":  null,
+                      "notes":  ""
+                  },
+                  {
+                      "task_id":  "task_20260503_006",
+                      "title":  "возмещение трат на ремонт",
+                      "status":  "todo",
+                      "label_id":  null,
+                      "label_name":  "",
+                      "life_area":  "work",
+                      "priority":  6,
+                      "deadline":  "2026-05-04",
+                      "reminder":  null,
+                      "created":  "2026-05-03",
+                      "updated":  "2026-05-03",
+                      "completed":  null,
+                      "notes":  ""
+                  },
+                  {
+                      "task_id":  "task_20260503_007",
+                      "title":  "заказ материалов для ремонта (рейки 3*1,5м), отметить полки",
+                      "status":  "todo",
+                      "label_id":  null,
+                      "label_name":  "",
+                      "life_area":  "work",
+                      "priority":  6,
+                      "deadline":  "2026-05-04",
+                      "reminder":  null,
+                      "created":  "2026-05-03",
+                      "updated":  "2026-05-03",
+                      "completed":  null,
+                      "notes":  ""
+                  },
+                  {
+                      "task_id":  "task_20260503_008",
+                      "title":  "изучить материалы для диссертации",
+                      "status":  "todo",
+                      "label_id":  null,
+                      "label_name":  "",
+                      "life_area":  "growth",
+                      "priority":  5,
+                      "deadline":  null,
+                      "reminder":  null,
+                      "created":  "2026-05-03",
+                      "updated":  "2026-05-03",
+                      "completed":  null,
+                      "notes":  ""
+                  }
+              ],
+    "groups":  [
+
+               ],
+    "achievements":  [
+                         {
+                             "id":  "ach_001",
+                             "category":  "other",
+                             "title":  "Проснулась в 6:30",
+                             "description":  "",
+                             "completed":  "2026-05-03",
+                             "resonance_bonus":  3,
+                             "icon":  "🌱"
+                         },
+                         {
+                             "id":  "ach_002",
+                             "category":  "other",
+                             "title":  "устроила себе чайную церемонию",
+                             "description":  "",
+                             "completed":  "2026-05-03",
+                             "resonance_bonus":  3,
+                             "icon":  "🌱"
+                         }
+                     ],
+    "updated":  "2026-05-03",
+    "sphere_resonance":  {
+                             "health":  20,
+                             "creativity":  20,
+                             "work":  20,
+                             "connections":  20,
+                             "growth":  20
+                         },
+    "_decay_date":  "2026-05-03"
 }
