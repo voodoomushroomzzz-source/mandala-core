@@ -4,7 +4,7 @@
     "name": "Tasks Honeycomb Manifest",
     "version": "v4.0.0",
     "created": "2026-03-01",
-    "updated": "2026-05-01",
+    "updated": "2026-05-05",
     "layer": 1,
     "type": "honeycomb_manifest"
   },
@@ -20,7 +20,69 @@
       "active_tasks": {
         "folder": "active/",
         "description": "Currently active tasks",
-        "files_count": 7
+        "files_count": 6,
+        "tasks": [
+          {
+            "file": "bot_update.json",
+            "task_id": "T-20260408-1030",
+            "name": "Telegram Bot — Gentle Companion for Garden",
+            "status": "in_progress",
+            "progress": 87,
+            "priority": "HIGH",
+            "deadline": "2026-06-01",
+            "description": "Core bot development: 5-sphere resonance, living memory, checklists, reminders, voice, onboarding 2.0. v7.30 live with 7.30.1 hotfixes. v7.31 plan: critical fixes, dead code removal, SR prompt optimization."
+          },
+          {
+            "file": "scout_agent.json",
+            "task_id": "T-20260410-0240",
+            "name": "Scout Agent — Autonomous Discovery (Ideas, Funding, Impact)",
+            "status": "todo",
+            "progress": 5,
+            "priority": "MEDIUM",
+            "deadline": "2026-05-15",
+            "description": "Two-level autonomous agent: Level 1 (Raw Collector) daily search across GitHub/arXiv/HN/Reddit, Level 2 (Resonance Filter) every 3 days via OpenRouter LLM. Embedding pre-filter, smart queries, saves to seeds/."
+          },
+          {
+            "file": "symbiosis_guard.json",
+            "task_id": "T-20260420-0620",
+            "name": "Symbiosis Guard — Validation Layer for Mandala Principles",
+            "status": "planned",
+            "progress": 0,
+            "priority": "HIGH",
+            "deadline": "2026-05-18",
+            "description": "Validates new tasks/achievements against Mandala principles (Ahimsa, Symbiosis, Self-Organization, Terminal-First). Prevents 'junk' tasks, suggests improvements. Python decorator for task creation functions."
+          },
+          {
+            "file": "sym_implementation.json",
+            "task_id": "T-20260412-1106",
+            "name": "SYM — System for Measuring Mandala Growth",
+            "status": "planned",
+            "progress": 0,
+            "priority": "HIGH",
+            "deadline": "2026-05-25",
+            "description": "SYM metrics system: growth scoring (tasks, resonance, achievements, depth), Garden Health Index, monthly reports, personal stats. Aggregates data across all gardeners."
+          },
+          {
+            "file": "humor_development.json",
+            "task_id": "T-20260417-1802",
+            "name": "Humor Development — Comic Resonance Research",
+            "status": "planned",
+            "progress": 0,
+            "priority": "LOW",
+            "deadline": "2026-06-10",
+            "description": "Research humor as a mechanism for Garden growth and community bonding. Literature review, prototype methods, Mandala comic concept, gardener reactions measurement."
+          },
+          {
+            "file": "flutter_app.json",
+            "task_id": "T-20260423-0751",
+            "name": "Mandala Mobile App — MVP (Flutter/Dart)",
+            "status": "planned",
+            "progress": 0,
+            "priority": "LOW",
+            "deadline": "2026-07-15",
+            "description": "Native mobile app (Flutter) as alternative to Telegram bot. Offline mode, push notifications, rich visualizations. Requires separate repository and dedicated development time."
+          }
+        ]
       }
     }
   },
@@ -32,9 +94,9 @@
     "parent_map": "honeycombs/core_map/index.json"
   },
   "registry": {
-    "total_files": 7,
-    "last_updated": "2026-05-01",
-    "notes": "v4.0.0: archive removed. 7 active tasks only."
+    "total_files": 6,
+    "last_updated": "2026-05-05",
+    "notes": "v4.0.0: archive removed. 6 active tasks. T-20260426-ARCHITECT removed as not relevant at this stage."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -43,7 +105,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-01",
-    "notes": "v4.0.0: 7 active tasks. No archive."
+    "last_check": "2026-05-05",
+    "notes": "v4.0.0: 6 active tasks. Core tasks (Bot, Guard, SYM) are critical path. Scout Agent has full spec. Humor and Flutter are backlog."
   }
 }
