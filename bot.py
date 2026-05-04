@@ -554,7 +554,6 @@ async def _load_user(telegram_id: str) -> None:
         logger.info(f"Auto-cleaned {len(_raw_tasks) - len(_clean_tasks)} empty task(s) for {uid}")
         _ws["tasks"] = _clean_tasks
         _pending_writes[f"{_user_path(uid)}/workspace.json"] = _ws
-        await _sync_pending()  # immediate — ensure cleanup is saved
     store["workspace"] = _ws
     store["ready"]     = True
     # Restore conversation history from memory.json
@@ -572,14 +571,10 @@ async def _load_user(telegram_id: str) -> None:
             _seed_sphere_history_from_achievements(uid, _achs)
 
 async def _load_store() -> None:
-    """Load all approved gardeners from whitelist on startup."""
+    """Load known gardeners on startup. Loads gardener_224736062 (Dima) by default."""
     logger.info("Loading store from GitHub...")
-    whitelist = await _github_get("gardeners/whitelist.json") or {}
-    approved = whitelist.get("approved", ["224736062"]) if isinstance(whitelist, dict) else ["224736062"]
-    for uid in approved:
-        await _load_user(str(uid))
-        logger.info(f"Loaded gardener {uid}")
-    logger.info(f"Store ready — {len(approved)} gardener(s)")
+    await _load_user("224736062")
+    logger.info("Store ready")
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
 
@@ -1436,10 +1431,7 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
         "физ","еда","отдых","фитнес","вес","диет","медицин","лечени","давлени",
         "витамин","таблетк","аптека","массаж","плавани","велосипед","пробежк",
         "гимнастик","растяжк","медитац","йога","сауна","баня","линзы","очки",
-        "операц","анализ","обследован","процедур",
-        "проснул","подъём","утренн","церемони","водные","прогулка","прогулк",
-        "дыхани","расслаблен","купани","контрастн","зарядка","заряд",
-        "самочувств","настроени","водн","завтрак","ужин","обед","режим"
+        "операц","анализ","обследован","процедур"
     ]
     creativity_kw = [
         "музык","трек","альбом","запис","сведен","мастеринг","обложк","клип","видео",
@@ -4889,7 +4881,7 @@ async def cb_approve_gardener(callback: CallbackQuery):
     if telegram_id not in whitelist.get("approved", []):
         whitelist.setdefault("approved", []).append(telegram_id)
         _pending_writes["gardeners/whitelist.json"] = whitelist
-        await _sync_pending()  # immediate — don't risk losing on restart
+        _fire_sync()
     await callback.message.edit_text(
         callback.message.text + "\n\n✅ <b>Врата открыты</b>",
         parse_mode="HTML", reply_markup=None
@@ -5441,28 +5433,20 @@ async def _send_daily_report() -> None:
                 await _generate_synthesis(_uid)
 
         lines = [f"📊 Отчёт СР · {_today()} · v{BOT_VERSION}\n"]
-        # Load all from whitelist
-        _wl_rep = await _github_get("gardeners/whitelist.json") or {}
-        _all_uids = _wl_rep.get("approved", []) if isinstance(_wl_rep, dict) else []
-        for _ru in _all_uids:
-            if not store_get_profile(str(_ru)):
-                await _load_user(str(_ru))
-        # Activity — all from whitelist
-        lines.append("👥 Активность:")
-        for uid in _all_uids:
-            prof  = store_get_profile(str(uid))
-            name  = prof.get("name", str(uid)) if prof else str(uid)
-            stats = _daily_stats.get(str(uid), {})
-            msgs  = stats.get("messages", 0)
-            if msgs > 0:
+        # Gardeners activity
+        if _daily_stats:
+            lines.append("👥 Активность:")
+            for uid, stats in _daily_stats.items():
+                prof = store_get_profile(uid)
+                name = prof.get("name", uid) if prof else uid
                 lines.append(
-                    f"  {name}: {msgs} сообщений · "
-                    f"{stats.get('tasks_created',0)} создано · "
-                    f"{stats.get('tasks_completed',0)} закрыто · "
-                    f"{stats.get('achievements',0)} достижений"
+                    f"  {name}: {stats['messages']} сообщений · "
+                    f"{stats['tasks_created']} создано · "
+                    f"{stats['tasks_completed']} закрыто · "
+                    f"{stats['achievements']} достижений"
                 )
-            else:
-                lines.append(f"  {name}: неактивен")
+        else:
+            lines.append("👥 Активности не было")
         # Issues
         if _daily_issues:
             lines.append("\n⚠️ Проблемы:")
@@ -5774,8 +5758,6 @@ async def free_conversation(message: Message, state: FSMContext):
                 intent = parsed_check.get("intent", "conversation")
                 confidence = float(parsed_check.get("confidence", 1.0))
                 clarification = parsed_check.get("clarification")
-                # Update daily stats with actual intent
-                _track_interaction(user_id, intent=intent)
 
                 # Safety net: if LLM returned conversation but text looks like
                 # a fake action result — treat as unrecognised command
@@ -7313,23 +7295,20 @@ async def on_startup():
     async def _notify_version():
         import asyncio as _aio2
         await _aio2.sleep(60)
-        # Read whitelist to notify ALL approved gardeners, not just those in memory
-        _wl_n = await _github_get("gardeners/whitelist.json") or {}
-        _approved_n = _wl_n.get("approved", []) if isinstance(_wl_n, dict) else []
-        for _uid in _approved_n:
+        for _uid in list(_store.keys()):
             try:
-                # Load if not in store yet
-                if not store_get_profile(str(_uid)):
-                    await _load_user(str(_uid))
+                _p = store_get_profile(_uid)
+                if not _p:
+                    continue
                 _kb = InlineKeyboardMarkup(inline_keyboard=[[
                     InlineKeyboardButton(text="📋 Что нового →", callback_data="show_changelog")
                 ]])
-                _architect_id = str(ARCHITECT_TELEGRAM_ID or "224736062")
-                _notify_text = f"🌱 Мандала обновилась · v{BOT_VERSION}"
-                if str(_uid) != _architect_id:
-                    _notify_text += "\n\nЕсли ты получил это сообщение — напиши Диме (@voodoomushroomzzz) что получил 🌿"
-                await bot.send_message(int(_uid), _notify_text, reply_markup=_kb)
-                await _aio2.sleep(2)
+                await bot.send_message(
+                    int(_uid),
+                    f"🌱 Мандала обновилась · v{BOT_VERSION}",
+                    reply_markup=_kb
+                )
+                await _aio2.sleep(2)  # пауза между садовниками
             except Exception as _ve:
                 logger.warning(f"Version notify {_uid}: {_ve}")
     asyncio.create_task(_notify_version())
