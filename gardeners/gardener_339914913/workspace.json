@@ -18,5 +18,15 @@
       "repeat": "daily",
       "active": true
     }
+  ],
+  "roadmaps": [
+    {
+      "roadmap_id": "rm_5cafdee9",
+      "title": "инжениринг данных",
+      "deadline": null,
+      "created": "2026-05-04",
+      "task_ids": [],
+      "status": "active"
+    }
   ]
 }
