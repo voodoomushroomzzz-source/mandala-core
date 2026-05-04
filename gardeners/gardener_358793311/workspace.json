@@ -2,5 +2,12 @@
   "tasks": [],
   "groups": [],
   "achievements": [],
-  "updated": "2026-05-04"
+  "updated": "2026-05-04",
+  "sphere_resonance": {
+    "health": 20,
+    "creativity": 20,
+    "work": 20,
+    "connections": 20,
+    "growth": 20
+  }
 }
