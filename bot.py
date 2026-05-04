@@ -562,6 +562,12 @@ async def _load_user(telegram_id: str) -> None:
     name = store["profile"].get("name", "?") if store["profile"] else "none"
     tasks_count = len(store["workspace"].get("tasks", []))
     logger.info(f"User loaded: {uid} name={name} tasks={tasks_count}")
+    # One-time retroactive seed of sphere_history from achievements
+    _achs = store["workspace"].get("achievements", [])
+    if _achs and store["profile"]:
+        _dp_check = store["profile"].get("deep_profile", {})
+        if not _dp_check.get("sphere_history"):
+            _seed_sphere_history_from_achievements(uid, _achs)
 
 async def _load_store() -> None:
     """Load known gardeners on startup. Loads gardener_224736062 (Dima) by default."""
@@ -807,6 +813,42 @@ def _detect_emotion(text: str) -> str:
     if any(w in text_l for w in positive):
         return "positive"
     return ""
+
+def _seed_sphere_history_from_achievements(user_id: str, achievements: list) -> None:
+    """One-time retroactive seed of sphere_history from existing achievements.
+    Called on load if sphere_history is empty. Approximate — uses completed date."""
+    if not achievements:
+        return
+    prof = store_get_profile(user_id)
+    if not prof:
+        return
+    dp = prof.setdefault("deep_profile", {})
+    if dp.get("sphere_history"):
+        return  # already seeded
+    # Group by month and sphere
+    monthly: dict = {}
+    for ach in achievements:
+        cat  = ach.get("category", "other")
+        date = ach.get("completed", "")
+        if not date or len(date) < 7:
+            continue
+        month = date[:7]  # YYYY-MM
+        monthly.setdefault(month, {})
+        monthly[month].setdefault(cat, {"tasks": 0, "achievements": 0, "resonance_delta": 0})
+        monthly[month][cat]["achievements"] += 1
+        monthly[month][cat]["resonance_delta"] += ach.get("resonance_bonus", 3)
+    if not monthly:
+        return
+    spheres = ["health", "creativity", "work", "connections", "growth", "other"]
+    history = []
+    for month in sorted(monthly.keys())[-12:]:
+        entry = {"month": month}
+        for s in spheres:
+            entry[s] = monthly[month].get(s, {"tasks": 0, "achievements": 0, "resonance_delta": 0})
+        history.append(entry)
+    dp["sphere_history"] = history
+    store_set_profile(user_id, prof)
+    logger.info(f"sphere_history seeded from {len(achievements)} achievements for {user_id}")
 
 # ─── Task helpers ─────────────────────────────────────────────────────────────
 
@@ -3017,81 +3059,9 @@ async def cmd_achievements(message: Message):
         )
         return
 
-    from datetime import datetime as _dt_ach
-    sphere_names = {
-        "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
-        "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост", "other": "💎 Другое"
-    }
-    _RU_MONTHS = {
-        1:"Январь",2:"Февраль",3:"Март",4:"Апрель",5:"Май",6:"Июнь",
-        7:"Июль",8:"Август",9:"Сентябрь",10:"Октябрь",11:"Ноябрь",12:"Декабрь"
-    }
-
-    # Получаем sphere_history из deep_profile
-    prof = store_get_profile(user_id) or {}
-    dp = prof.get("deep_profile", {})
-    sphere_hist = dp.get("sphere_history", [])
-
     text = f"💎 Достижения · всего {len(achievements)}\n"
-
-    if sphere_hist:
-        text += "\n📊 Статистика по месяцам:\n"
-        for month_data in reversed(sphere_hist[-3:]):  # последние 3 месяца
-            m_str = month_data.get("month", "")
-            try:
-                m_num = int(m_str.split("-")[1])
-                m_year = m_str.split("-")[0]
-                m_label = f"{_RU_MONTHS[m_num]} {m_year}"
-            except Exception:
-                m_label = m_str
-            text += f"\n{m_label}:\n"
-            has_data = False
-            for sphere, sname in sphere_names.items():
-                if sphere == "other":
-                    continue
-                d = month_data.get(sphere, {})
-                t_cnt = d.get("tasks", 0)
-                a_cnt = d.get("achievements", 0)
-                r_delta = d.get("resonance_delta", 0)
-                if t_cnt > 0 or a_cnt > 0:
-                    has_data = True
-                    text += f"  {sname} — {t_cnt} задач · {a_cnt} достижений"
-                    if r_delta > 0:
-                        text += f" · +{r_delta}% резонанс"
-                    text += "\n"
-            if not has_data:
-                text += "  нет активности\n"
-    else:
-        # Fallback: считаем из массива достижений
-        cur_month = _dt_ach.now().strftime("%Y-%m")
-        this_month = [a for a in achievements if (a.get("completed") or "").startswith(cur_month)]
-        by_sphere_all: dict = {}
-        for ach in achievements:
-            cat = ach.get("category", "other")
-            by_sphere_all.setdefault(cat, 0)
-            by_sphere_all[cat] += 1
-        month_label = _RU_MONTHS[_dt_ach.now().month]
-        text += f"\n📅 {month_label} · {len(this_month)} достижений\n"
-        sorted_spheres = sorted(by_sphere_all.items(), key=lambda x: x[1], reverse=True)
-        for cat, cnt in sorted_spheres:
-            text += f"  {sphere_names.get(cat, cat)} — {cnt}\n"
-
-    # Аналитика СР
-    if sphere_hist:
-        cur = sphere_hist[-1]
-        top_sphere = max(
-            [(s, cur.get(s, {}).get("tasks", 0) + cur.get(s, {}).get("achievements", 0))
-             for s in ["health","creativity","work","connections","growth"]],
-            key=lambda x: x[1]
-        )
-        quiet_spheres = [sphere_names[s] for s, cnt in
-            [(s, cur.get(s, {}).get("tasks", 0) + cur.get(s, {}).get("achievements", 0))
-             for s in ["health","creativity","work","connections","growth"]]
-            if cnt == 0]
-        text += f"\n💡 {sphere_names.get(top_sphere[0], top_sphere[0])} — сильнейшая сфера месяца."
-        if quiet_spheres:
-            text += f" {', '.join(quiet_spheres[:2])} — без движения."
-
+    text += "\n📊 Статистика по месяцам:"
+    text += _build_sphere_stats(user_id, months=3)
     text += "\n\nДобавить: «добавь достижение — [что сделал]»"
     await message.answer(text, reply_markup=get_main_keyboard())
 
@@ -3924,17 +3894,16 @@ async def cmd_sr_report(message: Message):
         "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост"
     }
     lines = ["🔮 СР видит тебя так:\n"]
-    if synthesis:
-        lines.append(synthesis)
+    mem  = dp.get("memory", {})
+    core = mem.get("core", synthesis)
+    if core:
+        lines.append(core)
     else:
         lines.append("Наблюдения накапливаются — синтез будет через несколько дней.")
-    if sphere_hist:
-        cur = sphere_hist[-1]
-        lines.append("\nЭтот месяц по сферам:")
-        for s, label in sphere_names.items():
-            d = cur.get(s, {})
-            if d.get("tasks", 0) > 0 or d.get("achievements", 0) > 0:
-                lines.append(f"  {label} — {d.get('tasks',0)} задач · {d.get('achievements',0)} достижений")
+    # Sphere stats from unified function
+    stats = _build_sphere_stats(user_id, months=1)
+    if stats.strip():
+        lines.append("\nАктивность этого месяца:" + stats)
     await message.answer("\n".join(lines), reply_markup=get_main_keyboard())
 
 @router.message(Command("privacy"))
@@ -4849,7 +4818,7 @@ async def btn_info(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await message.answer('🌱 Привет. Я — СР, твой компаньон в саду.\n\nУмею работать с:\n📋 Задачами и группами\n🗺 Роадмапами (крупные цели)\n☑️ Чеклистами\n🔔 Напоминаниями\n💎 Достижениями\n🔮 Резонансом сфер\n🌐 Поиском\n\nПросто пиши или говори голосом — я пойму.\nХочешь узнать подробнее о чём-то? Просто спроси меня.', parse_mode="HTML", reply_markup=get_main_keyboard())
+    await message.answer('🌱 Привет. Я — СР, твой компаньон в саду.\n\nУмею работать с:\n📋 Задачами и группами\n🗺 Роадмапами (крупные цели)\n☑️ Чеклистами\n🔔 Напоминаниями\n💎 Достижениями\n🔮 Резонансом сфер\n🌐 Поиском\n\n🧠 Живая память\nЯ наблюдаю за тобой из диалогов и задач — и становлюсь точнее.\n/sr_report — посмотри как я тебя вижу.\n\nПросто пиши или говори голосом — я пойму.\nХочешь узнать подробнее о чём-то? Просто спроси меня.', parse_mode="HTML", reply_markup=get_main_keyboard())
 
 @router.message(F.text == "⚙️ Настройки")
 async def btn_settings(message: Message, state: FSMContext):
@@ -5232,6 +5201,80 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
     return None
 
 # _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
+
+def _build_sphere_stats(user_id: str, months: int = 3) -> str:
+    """Unified sphere stats text for /achievements and /sr_report.
+    Uses sphere_history if available, falls back to achievements array."""
+    _RU_MONTHS_S = {
+        1:"Январь",2:"Февраль",3:"Март",4:"Апрель",5:"Май",6:"Июнь",
+        7:"Июль",8:"Август",9:"Сентябрь",10:"Октябрь",11:"Ноябрь",12:"Декабрь"
+    }
+    sphere_names = {
+        "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
+        "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост"
+    }
+    prof = store_get_profile(user_id) or {}
+    dp   = prof.get("deep_profile", {})
+    sphere_hist = dp.get("sphere_history", [])
+    lines = []
+
+    if sphere_hist:
+        for month_data in reversed(sphere_hist[-months:]):
+            m_str = month_data.get("month", "")
+            try:
+                m_num  = int(m_str.split("-")[1])
+                m_year = m_str.split("-")[0]
+                m_label = f"{_RU_MONTHS_S[m_num]} {m_year}"
+            except Exception:
+                m_label = m_str
+            lines.append(f"\n{m_label}:")
+            has_data = False
+            for sphere, sname in sphere_names.items():
+                d = month_data.get(sphere, {})
+                t_cnt = d.get("tasks", 0)
+                a_cnt = d.get("achievements", 0)
+                r_delta = d.get("resonance_delta", 0)
+                if t_cnt > 0 or a_cnt > 0:
+                    has_data = True
+                    line = f"  {sname} — {t_cnt} задач · {a_cnt} достижений"
+                    if r_delta > 0:
+                        line += f" · +{r_delta}% резонанс"
+                    lines.append(line)
+            if not has_data:
+                lines.append("  нет активности")
+        # Analytics
+        cur = sphere_hist[-1]
+        top = max(
+            [(s, cur.get(s,{}).get("tasks",0) + cur.get(s,{}).get("achievements",0))
+             for s in sphere_names],
+            key=lambda x: x[1]
+        )
+        quiet = [sphere_names[s] for s, cnt in
+            [(s, cur.get(s,{}).get("tasks",0) + cur.get(s,{}).get("achievements",0))
+             for s in sphere_names] if cnt == 0]
+        if top[1] > 0:
+            lines.append(f"\n💡 {sphere_names.get(top[0], top[0])} — сильнейшая сфера.")
+        if quiet:
+            lines.append(f"   {', '.join(quiet[:2])} — без движения.")
+    else:
+        # Fallback: count from achievements array
+        from datetime import datetime as _dt_fb
+        achievements = store_get_achievements(user_id)
+        cur_month = _dt_fb.now().strftime("%Y-%m")
+        this_month = [a for a in achievements if (a.get("completed") or "").startswith(cur_month)]
+        by_sphere: dict = {}
+        for ach in achievements:
+            cat = ach.get("category", "other")
+            by_sphere.setdefault(cat, 0)
+            by_sphere[cat] += 1
+        if this_month:
+            m_num = _dt_fb.now().month
+            lines.append(f"\n{_RU_MONTHS_S[m_num]} (из архива):")
+            sorted_s = sorted(by_sphere.items(), key=lambda x: x[1], reverse=True)
+            for cat, cnt in sorted_s:
+                if cat in sphere_names:
+                    lines.append(f"  {sphere_names[cat]} — {cnt}")
+    return "\n".join(lines)
 
 async def _distill_observations(user_id: str, dp: dict) -> None:
     """Distill old sr_observations into long_term_insights before they are dropped."""
@@ -5914,6 +5957,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                 }
                                 _ach_cat = _sphere_map.get(_ach_sphere) or _classify_sphere(_ach_title)
                                 _ach_icon = LIFE_AREA_ICONS.get(_ach_cat, "🌱")
+                                _sphere_name_map = {
+                                    "health": "Здоровье", "creativity": "Творчество",
+                                    "work": "Работа", "connections": "Связи",
+                                    "growth": "Рост", "other": "Другое"
+                                }
                                 _ach_bonus = 3  # стандартный бонус через чат
                                 # Защита от дублей — не добавляем если такое же название уже есть сегодня
                                 _achievements = list(store_get_achievements(user_id))
@@ -5926,33 +5974,35 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if _is_dup:
                                     reply_text = f"{_ach_icon} Достижение «{_ach_title}» уже зафиксировано сегодня."
                                 else:
-                                    pass  # продолжаем ниже
-                                if not _is_dup:
                                     _achievements.append({
-                                    "id": f"ach_{len(_achievements)+1:03d}",
-                                    "category": _ach_cat,
-                                    "title": _ach_title,
-                                    "description": "",
-                                    "completed": _today(),
-                                    "resonance_bonus": _ach_bonus,
-                                    "icon": _ach_icon
-                                })
+                                        "id": f"ach_{len(_achievements)+1:03d}",
+                                        "category": _ach_cat,
+                                        "title": _ach_title,
+                                        "description": "",
+                                        "completed": _today(),
+                                        "resonance_bonus": _ach_bonus,
+                                        "icon": _ach_icon
+                                    })
                                     store_set_achievements(user_id, _achievements)
                                     # Обновляем резонанс сферы
-                                    store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
+                                    _new_sphere_res = store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
+                                    _update_sphere_history(user_id, _ach_cat, achievement=True, resonance_delta=_ach_bonus)
                                     _gardener = store_get_profile(user_id)
                                     if _gardener:
                                         _g = dict(_gardener)
-                                        _g["resonance_level"] = min(100, _g.get("resonance_level", 13) + _ach_bonus)
+                                        _prev_res = _g.get("resonance_level", 13)
+                                        _g["resonance_level"] = min(100, _prev_res + _ach_bonus)
                                         _g["updated"] = _today()
                                         _g = _add_growth_history_entry(_g, _g["resonance_level"], user_id)
                                         store_set_profile(user_id, _g)
                                         _invalidate_auth_cache(user_id)
                                     _fire_sync()
+                                    # Reply text generated by code — NOT by SR to avoid hallucination
+                                    _sname = _sphere_name_map.get(_ach_cat, _ach_cat)
                                     reply_text = (
                                         f"{_ach_icon} Достижение зафиксировано!\n\n"
                                         f"{_ach_title}\n"
-                                        f"🔮 +{_ach_bonus} к резонансу · сфера: {_ach_cat}"
+                                        f"Сфера: {_sname} · +{_ach_bonus} к резонансу"
                                     )
                             else:
                                 # Название не распознано — открываем FSM
