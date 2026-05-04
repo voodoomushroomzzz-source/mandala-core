@@ -1,112 +1,119 @@
 {
-    "task_id":  "T-20260408-1030",
-    "name":  "Telegram Bot — Gentle Companion for Garden",
-    "status":  "in_progress",
-    "priority":  "HIGH",
-    "deadline":  "2026-06-01",
-    "created":  "2026-04-01",
-    "updated":  "2026-05-03",
-    "description":  "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
-    "tags":  [
-                 "telegram_bot",
-                 "garden",
-                 "companion",
-                 "ahimsa",
-                 "active"
-             ],
-    "progress":  85,
-    "current_version":  "7.28",
-    "garden_ref":  "honeycombs/garden/",
-    "dev_rules":  [
-                      "При добавлении новой функции в код — обязательно добавить её в КАРТУ ФУНКЦИЙ в SR_SYSTEM_PROMPT",
-                      "При каждом патче обновлять BOT_VERSION и BOT_LATEST_UPDATE в коде",
-                      "Каждый патч применяется на актуальный файл бота — всегда проверять наличие предыдущих патчей",
-                      "Монолитный файл — все правки в одном bot.py, не кусками"
-                  ],
-    "deliverables":  [
-                         "[DONE] /start — onboarding с философией + запрос архитектора",
-                         "[DONE] /profile — резонанс, достижения, задачи, группы",
-                         "[DONE] /achievements — аналитика по месяцам и сферам",
-                         "[DONE] /resonance — уровень + история роста",
-                         "[DONE] /ask — свободный диалог на любые темы (Ахимса)",
-                         "[DONE] /leave — покинуть сад с подтверждением",
-                         "[DONE] /privacy — информация о данных (заглушка)",
-                         "[DONE] Проактивные сообщения — утро, напоминания (макс 1/день)",
-                         "[DONE] GitHub API — чтение/запись gardener.json",
-                         "[DONE] Soft-fail при недоступности API",
-                         "[DONE] Architect approval gate — whitelist.json + Telegram кнопки",
-                         "[DONE] Web search — категории доменов, Яндекс приоритет, SR синтез",
-                         "[DONE] Bulk add tasks — список через тире/нумерацию с дедлайном",
-                         "[DONE] Bulk edit дедлайна — несколько задач или вся группа",
-                         "[DONE] Группы — создание, перемещение задач, всегда видны в профиле",
-                         "[DONE] Роадмапы — bulk добавление задач, сортировка по дедлайну",
-                         "[DONE] Достижения — через чат, по сферам, защита от дублей",
-                         "[DONE] Онбординг — пол, Welcome Flow, запись в deep_profile",
-                         "[DONE] Уведомления об обновлениях — BOT_VERSION + changelog",
-                         "[DONE] Карта функций в SR промте — все 35 интентов с bulk вариантами",
-                         "[DONE] Автоочистка пустых задач при загрузке",
-                         "[IN PROGRESS] /privacy — полноценный с отзывом согласия",
-                         "[PLANNED] SR Learning Loop — sr_observations[], sphere_history[], emotional_signal",
-                         "[PLANNED] /sr_report — синтез раз в 3 дня",
-                         "[PLANNED] Голос — составные команды, fuzzy threshold улучшение",
-                         "[v7.30.1] Fix: _load_user ready flag only if profile loaded (onboarding bug)",
-                         "[v7.30.1] Fix: cmd_start await ensure_user_loaded before profile check",
-                         "[v7.30.1] Data recovery: resonance 32, 5 spheres, 3 roadmaps restored after onboarding reset"
-                     ],
-    "requires":  [
-                     "honeycombs/garden/architecture.json",
-                     "honeycombs/garden/ideology.json",
-                     "honeycombs/personal_gardeners/gardener_template.json",
-                     "gardeners/whitelist.json"
-                 ],
-    "acceptance_criteria":  [
-                                "All /commands respond correctly with gardener data",
-                                "Proactive messages follow silence_policy and ahimsa_guardrails",
-                                "Bot continues in degraded mode when GitHub API is down",
-                                "Gardener can /leave gracefully",
-                                "New gardener sees philosophy intro + explicit consent before onboarding",
-                                "Architect receives Telegram notification on new gardener request",
-                                "Web search returns structured results without Markdown artifacts",
-                                "All 35 intents work correctly including bulk operations",
-                                "Version notifications sent automatically on deploy",
-                                "[v7.31] health() endpoint returns correct status on Render",
-                                "[v7.31] SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced from 8000 to ~500",
-                                "[v7.31] All dead handlers removed, dashboard duplicates unified",
-                                "[v7.31] _city_to_timezone correctly resolves timezone for Almaty, Astana, Kiev, Minsk"
-                            ],
-    "depends_on":  [
-                       "M1-T1 (personal_gardeners/ structure)",
-                       "M1-T2 (achievements catalog)"
-                   ],
-    "changelog":  [
-                      {
-                          "date":  "2026-05-05",
-                          "summary":  "Hotfix: fixed race condition in /start (profile loss on startup). Restored gardener data after onboarding reset. v7.31 plan: critical fixes, dead code removal, SR prompt layer split.",
-                          "patches":  "P14-P15"
-                      },
-                      {
-                          "date":  "2026-05-03",
-                          "summary":  "Full refactor: UI simplification, web search, bulk ops, onboarding 2.0, function map, version notifications",
-                          "patches":  "P1-P13"
-                      }
-                  ],
-    "next_steps":  [
-                       "v7.31: Critical fixes — health() endpoint, store_add_resonance race condition, /groups command",
-                       "v7.31: Dead code removal — btn_garden, btn_settings, btn_suggest_idea, EngineerChatStates, unused keyboards",
-                       "v7.31: LLM reliability — _repair_json fallback for broken JSON, _detect_emotion context-aware negation",
-                       "v7.31: UX improvements — bulk operation feedback, resilient welcome flow, checklist auto-achievement",
-                       "v7.31: SR Architecture — split SR_SYSTEM_PROMPT into 3 layers (CORE/INTENT_MAP/CONTEXT), ~94% token savings",
-                       "v7.31: Interest decay — mention counter for gardener interests, auto-remove stale ones",
-                       "v7.31: CIS city timezone hardcode — Almaty, Astana, Kiev, Minsk etc. for _city_to_timezone",
-                       "v7.31: show_label intent — \u0027show group Work\u0027 command support",
-                       "v7.31: Profile unification — cmd_profile to use _build_profile_card (5 spheres instead of 3)",
-                       "v7.32: SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers",
-                       "v7.32: /sr_report — SR synthesis every 3 days",
-                       "v7.32: Voice — compound commands, fuzzy match for task titles"
-                   ],
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-05-03",
-                   "notes":  "Bot v7.28 live. 2 gardeners (Dima + Yana). 13 patches applied. Next: SR Learning Loop."
-               }
+  "task_id": "T-20260408-1030",
+  "name": "Telegram Bot — Gentle Companion for Garden",
+  "status": "in_progress",
+  "priority": "HIGH",
+  "deadline": "2026-06-01",
+  "created": "2026-04-01",
+  "updated": "2026-05-05",
+  "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
+  "tags": ["telegram_bot", "garden", "companion", "ahimsa", "active"],
+  "progress": 87,
+  "current_version": "7.30",
+  "garden_ref": "honeycombs/garden/",
+  "dev_rules": [
+    "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
+    "Update BOT_VERSION and BOT_LATEST_UPDATE on every patch",
+    "Every patch is applied to the actual bot file — always check for previous patches first",
+    "Monolithic file — all changes in one bot.py, no split files"
+  ],
+  "deliverables": [
+    "[DONE] /start — onboarding with philosophy + architect request flow",
+    "[DONE] /profile — resonance, achievements, tasks, groups (5-sphere card)",
+    "[DONE] /achievements — monthly analytics by sphere",
+    "[DONE] /resonance — resonance level + growth history",
+    "[DONE] /ask — free dialogue on any topic (Ahimsa)",
+    "[DONE] /leave — leave garden with confirmation",
+    "[DONE] /privacy — data info (stub)",
+    "[DONE] Proactive messages — morning brief, evening check-in (max 1/day)",
+    "[DONE] GitHub API — read/write profile.json, workspace.json, memory.json",
+    "[DONE] Soft-fail when GitHub API is unavailable",
+    "[DONE] Architect approval gate — whitelist.json + Telegram buttons",
+    "[DONE] Web search — domain categories, Yandex priority, SR synthesis",
+    "[DONE] Bulk add tasks — dash/numbered list with deadline",
+    "[DONE] Bulk edit deadline — multiple tasks or entire group",
+    "[DONE] Groups — create, move tasks, always visible in profile",
+    "[DONE] Roadmaps — bulk add tasks, sorted by deadline, progress bars",
+    "[DONE] Achievements — via chat, by sphere, duplicate protection",
+    "[DONE] Onboarding — gender, Welcome Flow, deep_profile recording",
+    "[DONE] Version notifications — BOT_VERSION + changelog on deploy",
+    "[DONE] Function map in SR prompt — all 35 intents with bulk variants",
+    "[DONE] Auto-cleanup of empty tasks on load",
+    "[DONE] 5-Sphere Resonance — health/creativity/work/connections/growth (v7.26+)",
+    "[DONE] Living Memory — gardener portrait updated daily, interests from tasks/dialogue",
+    "[DONE] /sr_report — SR sees gardener portrait + monthly sphere stats",
+    "[DONE] Checklist system — create, toggle, edit, reorder, 100%→achievement",
+    "[DONE] Reminder system — once/daily/weekdays, per-user timezone",
+    "[DONE] Voice messages — Groq Whisper transcription → intent routing",
+    "[DONE] Deep Profile — streak detection, sphere patterns, reflection hints",
+    "[DONE] Roadmap task cleanup — orphaned task_ids auto-removed",
+    "[v7.30.1] Fix: _load_user ready flag only if profile loaded (prevents false onboarding)",
+    "[v7.30.1] Fix: cmd_start await ensure_user_loaded before profile check (race condition)",
+    "[IN PROGRESS] /privacy — consent revocation + full data deletion",
+    "[PLANNED] v7.31: Critical fixes — health() endpoint, store_add_resonance race condition, /groups fix",
+    "[PLANNED] v7.31: Dead code removal — 5 unused handlers, 3 keyboards, 2 legacy functions",
+    "[PLANNED] v7.31: LLM reliability — _repair_json fallback, _detect_emotion context negation",
+    "[PLANNED] v7.31: UX — bulk feedback, resilient welcome flow, checklist auto-achievement",
+    "[PLANNED] v7.31: SR Architecture — split prompt into CORE/INTENT_MAP/CONTEXT (94% token savings)",
+    "[PLANNED] v7.31: Interest decay — mention counter, auto-remove stale interests",
+    "[PLANNED] v7.31: CIS city timezone hardcode — bypass geopy for 12 cities",
+    "[PLANNED] v7.31: show_label intent — \"show group Work\" support",
+    "[PLANNED] v7.31: Profile unification — cmd_profile → _build_profile_card",
+    "[PLANNED] v7.32: SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers",
+    "[PLANNED] v7.32: /sr_report — SR synthesis every 3 days",
+    "[PLANNED] v7.32: Voice — compound commands, fuzzy match improvements"
+  ],
+  "requires": [
+    "gardeners/whitelist.json"
+  ],
+  "acceptance_criteria": [
+    "All /commands respond correctly with gardener data",
+    "Proactive messages follow silence_policy and ahimsa_guardrails",
+    "Bot continues in degraded mode when GitHub API is down",
+    "Gardener can /leave gracefully",
+    "New gardener sees philosophy intro + explicit consent before onboarding",
+    "Architect receives Telegram notification on new gardener request",
+    "Web search returns structured results without Markdown artifacts",
+    "All 35 intents work correctly including bulk operations",
+    "Version notifications sent automatically on deploy",
+    "[v7.31] health() endpoint returns correct status on Render",
+    "[v7.31] SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced from 8000 to ~500",
+    "[v7.31] All dead handlers removed, dashboard duplicates unified",
+    "[v7.31] _city_to_timezone correctly resolves timezone for Almaty, Astana, Kiev, Minsk"
+  ],
+  "depends_on": [
+    "M1-T1 (personal_gardeners/ structure)",
+    "M1-T2 (achievements catalog)"
+  ],
+  "changelog": [
+    {
+      "date": "2026-05-05",
+      "patches": "P14-P15",
+      "summary": "Hotfix: fixed /start race condition causing profile loss. Restored gardener data after onboarding reset (resonance, roadmaps, sphere_resonance). Fixed timezone for Almaty gardener. v7.31 plan documented."
+    },
+    {
+      "date": "2026-05-03",
+      "patches": "P1-P13",
+      "summary": "Major update: UI simplification, web search, bulk operations, onboarding 2.0 with gender, 5-sphere resonance, living memory, checklist system, reminder system, voice messages, roadmap task cleanup, function map with 35 intents."
+    }
+  ],
+  "next_steps": [
+    "v7.31: Critical fixes — health() endpoint, store_add_resonance race condition, /groups command",
+    "v7.31: Dead code removal — btn_garden, btn_settings, btn_suggest_idea, EngineerChatStates, unused keyboards",
+    "v7.31: LLM reliability — _repair_json fallback for broken JSON, _detect_emotion context-aware negation",
+    "v7.31: UX improvements — bulk operation feedback, resilient welcome flow, checklist auto-achievement",
+    "v7.31: SR Architecture — split SR_SYSTEM_PROMPT into 3 layers (CORE/INTENT_MAP/CONTEXT), ~94% token savings",
+    "v7.31: Interest decay — mention counter for gardener interests, auto-remove stale ones",
+    "v7.31: CIS city timezone hardcode — Almaty, Astana, Kiev, Minsk etc. for _city_to_timezone",
+    "v7.31: show_label intent — 'show group Work' command support",
+    "v7.31: Profile unification — cmd_profile to use _build_profile_card (5 spheres instead of 3)",
+    "v7.32: SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers",
+    "v7.32: /sr_report — SR synthesis every 3 days",
+    "v7.32: Voice — compound commands, fuzzy match for task titles"
+  ],
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-05-05",
+    "notes": "Bot v7.30 live with 7.30.1 hotfixes applied. 2 gardeners active (Dima + Yana). Roadmaps restored after onboarding reset. v7.31 plan ready — critical fixes + dead code removal + SR prompt optimization."
+  }
 }
