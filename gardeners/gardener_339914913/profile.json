@@ -1,51 +1,52 @@
 {
-    "gardener_id":  "gardener_339914913",
-    "telegram_id":  "339914913",
-    "name":  "Антон",
-    "resonance_level":  20,
-    "created":  "2026-05-04",
-    "updated":  "2026-05-05",
-    "personal_info":  {
-                          "life_areas":  {
-                                             "body":  {
-                                                          "current":  5,
-                                                          "target":  10
-                                                      },
-                                             "spirit":  {
-                                                            "current":  5,
-                                                            "target":  10
-                                                        },
-                                             "world":  {
-                                                           "current":  5,
-                                                           "target":  10
-                                                       }
-                                         }
-                      },
-    "companion_settings":  {
-                               "morning_message_time":  "08:00",
-                               "proactive_mode":  true,
-                               "timezone":  "Asia/Almaty",
-                               "city":  "Алматы",
-                               "birthday":  "18.05",
-                               "gender":  "male",
-                               "welcome_done":  true
-                           },
-    "growth_history":  [
-                           {
-                               "date":  "2026-05-04",
-                               "resonance":  5,
-                               "event":  "onboarding"
-                           }
-                       ],
-    "deep_profile":  {
-                         "dominant_sphere":  null,
-                         "weak_sphere":  null,
-                         "streak_days":  0,
-                         "streak_sphere":  null,
-                         "last_reflection_date":  null,
-                         "observations":  [
-                                              "2026-05-04 [onboarding]: деятельность — Работа: data governance и data engineering. Хобби на текущий момент времени: организация хаоса жизни и выстраивание проч",
-                                              "2026-05-04 [onboarding]: большая цель — пока нет"
-                                          ]
-                     }
+  "gardener_id": "gardener_339914913",
+  "telegram_id": "339914913",
+  "name": "Антон",
+  "resonance_level": 20,
+  "created": "2026-05-04",
+  "updated": "2026-05-05",
+  "personal_info": {
+    "life_areas": {
+      "body": {
+        "current": 5,
+        "target": 10
+      },
+      "spirit": {
+        "current": 5,
+        "target": 10
+      },
+      "world": {
+        "current": 5,
+        "target": 10
+      }
+    }
+  },
+  "companion_settings": {
+    "morning_message_time": "08:00",
+    "proactive_mode": true,
+    "timezone": "Asia/Almaty",
+    "city": "Алматы",
+    "birthday": "18.05",
+    "gender": "male",
+    "welcome_done": true
+  },
+  "growth_history": [
+    {
+      "date": "2026-05-04",
+      "resonance": 5,
+      "event": "onboarding"
+    }
+  ],
+  "deep_profile": {
+    "dominant_sphere": null,
+    "weak_sphere": null,
+    "streak_days": 0,
+    "streak_sphere": null,
+    "last_reflection_date": null,
+    "observations": [
+      "2026-05-04 [onboarding]: деятельность — Работа: data governance и data engineering. Хобби на текущий момент времени: организация хаоса жизни и выстраивание проч",
+      "2026-05-04 [onboarding]: большая цель — пока нет"
+    ]
+  },
+  "last_notified_version": "7.31"
 }
