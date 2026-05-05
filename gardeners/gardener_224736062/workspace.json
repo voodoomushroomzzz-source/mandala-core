@@ -582,15 +582,7 @@
       "created": "2026-05-05"
     }
   ],
-  "reminders": [
-    {
-      "id": "rem_98aba688",
-      "title": "тест",
-      "datetime_iso": "2026-05-05T21:27+03:00",
-      "repeat": "once",
-      "active": true
-    }
-  ],
+  "reminders": [],
   "_decay_date": "2026-05-05",
   "roadmaps": [
     {
