@@ -1,177 +1,183 @@
 {
-    "content":  {
-                    "critical_rules":  {
-                                           "pre_check_mandatory":  "Before any patch, read the file and note its version. This is your pre-check.",
-                                           "pre_check_flow":  {
-                                                                  "description":  "NEVER assume local state. ALWAYS fetch current version before modifying.",
-                                                                  "steps":  [
-                                                                                "1. Identify the file to modify",
-                                                                                "2. Form API link: https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
-                                                                                "3. Send link to Gardener, wait for content",
-                                                                                "4. Read current version from identity.version",
-                                                                                "5. Only then prepare the update"
-                                                                            ],
-                                                                  "example":  "If you need to update boot_online/index.json, first request it via API. Do NOT assume you know its contents."
-                                                              },
-                                           "one_command_only":  "ALWAYS provide exactly ONE complete PowerShell command. Use backticks (`) or semicolons (;) for multi-line.",
-                                           "utf8_no_bom":  "Save JSON with: [System.IO.File]::WriteAllText($path, $content, [System.Text.UTF8Encoding]::new($false))",
-                                           "api_first":  "Before modifying, request current content via GitHub API (bypass CDN). Raw URL has 5-10 min delay.",
-                                           "git_pull_first":  "Always start with \"git pull\".",
-                                           "laconic_communication":  "Responses must be concise. Avoid showing unnecessary code blocks. Only output what Gardener needs to see or execute.",
-                                           "always_fetch_before_update":  "Before any file modification, always request the current version via API. Never assume local state.",
-                                           "git_commit_in_script":  "Always include \u0027git add\u0027, \u0027git commit\u0027, and \u0027git push\u0027 inside the PowerShell script. Gardener only copies, pastes, and presses Enter.",
-                                           "copyable_links":  "When providing URLs, wrap them in a code block with \u0027text\u0027 (```text ... ```). This ensures the \u0027Copy\u0027 button appears in the interface.",
-                                           "patch_large_files_by_block":  "For large files (.py, .html, .js), do NOT patch with regex replace on entire file  it causes syntax errors from partial matches. Instead: 1) Identify the exact function/block to replace. 2) Use a precise multi-line regex anchored to function definition. 3) Replace ONLY that block with corrected version. 4) If unsure, replace entire file with full corrected content."
-                                       },
-                    "powershell_examples":  {
-                                                "description":  "Concrete, copy-paste ready examples for common tasks.",
-                                                "update_json_file":  {
-                                                                         "description":  "Replace an entire JSON file with new content.",
-                                                                         "template":  "@\u0027\n{ ... full JSON content ... }\n\u0027@ | Out-File -FilePath \u0027honeycombs/path/file.json\u0027 -Encoding utf8; git add .; git commit -m \u0027feat: update file\u0027; git pull --rebase origin main; git push",
-                                                                         "example":  "@\u0027\n{\n    \"identity\": {\n        \"version\": \"v3.2.1\",\n        \"updated\": \"2026-04-12\"\n    }\n}\n\u0027@ | Out-File -FilePath \u0027honeycombs/boot_online/index.json\u0027 -Encoding utf8; git add .; git commit -m \u0027feat(boot): update to v3.2.1\u0027; git pull --rebase origin main; git push"
-                                                                     },
-                                                "delete_file":  {
-                                                                    "description":  "Delete a file and push the change.",
-                                                                    "template":  "Remove-Item \u0027path/to/file.json\u0027; git add -A; git commit -m \u0027chore: delete file\u0027; git pull --rebase origin main; git push",
-                                                                    "example":  "Remove-Item \u0027honeycombs/inbox/index.json\u0027; git add -A; git commit -m \u0027chore: remove inbox\u0027; git pull --rebase origin main; git push"
-                                                                },
-                                                "move_file":  {
-                                                                  "description":  "Move/rename a file and push.",
-                                                                  "template":  "Move-Item \u0027old/path\u0027 \u0027new/path\u0027; git add -A; git commit -m \u0027refactor: move file\u0027; git pull --rebase origin main; git push",
-                                                                  "example":  "Move-Item \u0027honeycombs/tasks/old.json\u0027 \u0027honeycombs/tasks/archive/old.json\u0027; git add -A; git commit -m \u0027refactor: archive task\u0027; git pull --rebase origin main; git push"
-                                                              },
-                                                "create_folder_and_file":  {
-                                                                               "description":  "Create a new folder and file.",
-                                                                               "template":  "New-Item -ItemType Directory -Path \u0027honeycombs/new_honeycomb\u0027 -Force; @\u0027{ ... }\u0027@ | Out-File -FilePath \u0027honeycombs/new_honeycomb/index.json\u0027 -Encoding utf8; git add .; git commit -m \u0027feat: create new honeycomb\u0027; git pull --rebase origin main; git push"
-                                                                           }
-                                            },
-                    "git_cycle":  {
-                                      "note":  "Always pull before push.",
-                                      "one_liner":  "git pull --rebase origin main; git add .; git commit -m \"msg\"; git push"
-                                  },
-                    "file_deletion_rules":  {
-                                                "mandatory_steps":  [
-                                                                        "1. Request current file content via API (pre_check)",
-                                                                        "2. Check dependencies (does any honeycomb reference this file?)",
-                                                                        "3. Confirm with Gardener before deletion",
-                                                                        "4. Use PowerShell: Remove-Item \u0027path\u0027; git add -A; git commit -m \u0027deleted {file}\u0027; git pull --rebase origin main; git push"
-                                                                    ],
-                                                "warning":  "NEVER delete without Gardener confirmation. NEVER delete registry or core_map."
-                                            },
-                    "json_update_template":  {
-                                                 "modification_examples":  [
-                                                                               "$json.identity.version = \u0027vX.Y.Z\u0027",
-                                                                               "$json.identity.updated = (Get-Date -Format \u0027yyyy-MM-dd\u0027)",
-                                                                               "$json.content | Add-Member -Name \u0027new_field\u0027 -Value @{ key = \u0027value\u0027 } -MemberType NoteProperty"
-                                                                           ],
-                                                 "description":  "Standard PowerShell template for updating honeycomb JSON files",
-                                                 "template":  "$path = \u0027honeycombs/{module}/{file}.json\u0027; git pull; $json = Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json; # MODIFY JSON HERE # ; New-Item -Force -ItemType File -Path $path | Out-Null; $json | ConvertTo-Json -Depth 10 | ForEach-Object { [System.IO.File]::WriteAllText((Resolve-Path $path).Path, $_, [System.Text.UTF8Encoding]::new($false)) }; git add $path; git commit -m \u0027{module} {version}: {description}\u0027; git pull --rebase origin main; git push"
-                                             },
-                    "python_commands":  {
-                                            "scanner":  "py honeycombs/registry/honeycomb_scanner.py scan --force --verbose",
-                                            "note":  "Use \"py\" not \"python\"."
-                                        },
-                    "role_reminder":  "You are External SR. You analyze, propose, and prepare PowerShell commands. You do NOT write code directly  you generate complete commands for Gardener to paste.",
-                    "zones_of_responsibility":  {
-                                                    "external_sr":  [
-                                                                        "Analyze system state",
-                                                                        "Propose improvements",
-                                                                        "Prepare PowerShell commands",
-                                                                        "Update JSON honeycombs",
-                                                                        "Activate protocols"
-                                                                    ],
-                                                    "gardener":  [
-                                                                     "Final decisions",
-                                                                     "Pastes commands in VS Code",
-                                                                     "Approves deletions"
-                                                                 ],
-                                                    "internal_sr":  [
-                                                                        "Automated analysis (engineer-chat)",
-                                                                        "Prepare TZ for External AI",
-                                                                        "Patch honeycombs autonomously",
-                                                                        "Manage roadmaps and registry"
-                                                                    ]
-                                                },
-                    "system_flow":  {
-                                        "description":  "How ideas and tasks flow through Mandala Symbiosis",
-                                        "diagram":  "Scout Agent / Gardener / Claude  Seeds/  Task (1 month) or Roadmap (\u003e1 month)  Archive",
-                                        "entities":  {
-                                                         "seeds":  {
-                                                                       "path":  "honeycombs/seeds/",
-                                                                       "role":  "Entry point for all raw ideas, Scout Agent findings, and unprocessed concepts.",
-                                                                       "horizon":  "Unlimited"
-                                                                   },
-                                                         "tasks":  {
-                                                                       "path":  "honeycombs/tasks/active/",
-                                                                       "role":  "Concrete work units, completable within 1 month (~40-60 hours).",
-                                                                       "horizon":  "1 month"
-                                                                   },
-                                                         "roadmaps":  {
-                                                                          "path":  "honeycombs/roadmaps/active/",
-                                                                          "role":  "Strategic directions and large initiatives spanning multiple months.",
-                                                                          "horizon":  "\u003e1 month"
-                                                                      },
-                                                         "archive":  {
-                                                                         "path":  "honeycombs/tasks/archive/ and honeycombs/roadmaps/archive/",
-                                                                         "role":  "Completed tasks and roadmaps. Historical record."
-                                                                     }
-                                                     },
-                                        "inbox_note":  "The \u0027inbox\u0027 honeycomb is deprecated and has been removed. Its contents are migrated to Seeds or Tasks."
-                                    },
-                    "common_pitfalls":  [
-                                            "Using \"python\" instead of \"py\"",
-                                            "Saving JSON with BOM",
-                                            "Forgetting git pull",
-                                            "Splitting command into parts",
-                                            "Using raw URL for recently updated file"
-                                        ],
-                    "api_patterns":  {
-                                         "recursive_tree":  "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1",
-                                         "get_folder":  "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{folder}?ref=main",
-                                         "get_file":  "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main"
-                                     },
-                    "gardener_environment":  {
-                                                 "note":  "Gardener only copies  pastes  Enter.",
-                                                 "editor":  "VS Code",
-                                                 "python_command":  "py",
-                                                 "terminal":  "PowerShell (integrated)",
-                                                 "repository_path":  "C:\\Mandala_Digital\\github\\mandala-core",
-                                                 "python_version":  "3.14.3",
-                                                 "os":  "Windows"
-                                             }
-                },
-    "meta":  {
-                 "audience":  "External SR (Grok, Claude, GPT after resonance)",
-                 "purpose":  "Single source of truth for External SR operations in VS Code. Contains concrete PowerShell examples.",
-                 "replaces":  [
-                                  "external_ai_vs_code_workflow.json",
-                                  "patch_mastery.json",
-                                  "file_deletion_guide.json"
-                              ]
-             },
-    "identity":  {
-                     "updated":  "2026-04-14",
-                     "layer":  2,
-                     "type":  "workflow_guide",
-                     "version":  "v1.3.1",
-                     "description":  "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. Includes concrete PowerShell examples and pre-check flow.",
-                     "created":  "2026-04-09",
-                     "name":  "External SR Workflow",
-                     "module_id":  "INSTR-EXT-SR-WORKFLOW-001",
-                     "resonance":  "100%",
-                     "status":  "active",
-                     "priority":  "critical",
-                     "tags":  [
-                                  "external_sr",
-                                  "workflow",
-                                  "powershell",
-                                  "json_patch",
-                                  "git",
-                                  "english_core",
-                                  "concise",
-                                  "system_flow",
-                                  "powershell_examples",
-                                  "pre_check_flow"
-                              ]
-                 }
+  "content": {
+    "critical_rules": {
+      "pre_check_mandatory": "Before any patch, read the file and note its version. This is your pre-check.",
+      "pre_check_flow": {
+        "description": "NEVER assume local state. ALWAYS fetch current version before modifying.",
+        "steps": [
+          "1. Identify the file to modify",
+          "2. Form API link: https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main",
+          "3. Send link to Gardener, wait for content",
+          "4. Read current version from identity.version",
+          "5. Only then prepare the update"
+        ],
+        "example": "If you need to update boot_online/index.json, first request it via API. Do NOT assume you know its contents."
+      },
+      "one_command_only": "ALWAYS provide exactly ONE complete PowerShell command. Use backticks (`) or semicolons (;) for multi-line.",
+      "utf8_no_bom": "Save JSON with: [System.IO.File]::WriteAllText($path, $content, [System.Text.UTF8Encoding]::new($false))",
+      "api_first": "Before modifying, request current content via GitHub API (bypass CDN). Raw URL has 5-10 min delay.",
+      "git_pull_first": "Always start with \"git pull\".",
+      "laconic_communication": "Responses must be concise. Avoid showing unnecessary code blocks. Only output what Gardener needs to see or execute.",
+      "always_fetch_before_update": "Before any file modification, always request the current version via API. Never assume local state.",
+      "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the PowerShell script. Gardener only copies, pastes, and presses Enter.",
+      "copyable_links": "When providing URLs, wrap them in a code block with 'text' (```text ... ```). This ensures the 'Copy' button appears in the interface.",
+      "patch_large_files_by_block": "For large files (.py, .html, .js), do NOT patch with regex replace on entire file  it causes syntax errors from partial matches. Instead: 1) Identify the exact function/block to replace. 2) Use a precise multi-line regex anchored to function definition. 3) Replace ONLY that block with corrected version. 4) If unsure, replace entire file with full corrected content."
+    },
+    "powershell_examples": {
+      "description": "Concrete, copy-paste ready examples for common tasks.",
+      "update_json_file": {
+        "description": "Replace an entire JSON file with new content.",
+        "template": "@'\n{ ... full JSON content ... }\n'@ | Out-File -FilePath 'honeycombs/path/file.json' -Encoding utf8; git add .; git commit -m 'feat: update file'; git pull --rebase origin main; git push",
+        "example": "@'\n{\n    \"identity\": {\n        \"version\": \"v3.2.1\",\n        \"updated\": \"2026-04-12\"\n    }\n}\n'@ | Out-File -FilePath 'honeycombs/boot_online/index.json' -Encoding utf8; git add .; git commit -m 'feat(boot): update to v3.2.1'; git pull --rebase origin main; git push"
+      },
+      "delete_file": {
+        "description": "Delete a file and push the change.",
+        "template": "Remove-Item 'path/to/file.json'; git add -A; git commit -m 'chore: delete file'; git pull --rebase origin main; git push",
+        "example": "Remove-Item 'honeycombs/inbox/index.json'; git add -A; git commit -m 'chore: remove inbox'; git pull --rebase origin main; git push"
+      },
+      "move_file": {
+        "description": "Move/rename a file and push.",
+        "template": "Move-Item 'old/path' 'new/path'; git add -A; git commit -m 'refactor: move file'; git pull --rebase origin main; git push",
+        "example": "Move-Item 'honeycombs/tasks/old.json' 'honeycombs/tasks/archive/old.json'; git add -A; git commit -m 'refactor: archive task'; git pull --rebase origin main; git push"
+      },
+      "create_folder_and_file": {
+        "description": "Create a new folder and file.",
+        "template": "New-Item -ItemType Directory -Path 'honeycombs/new_honeycomb' -Force; @'{ ... }'@ | Out-File -FilePath 'honeycombs/new_honeycomb/index.json' -Encoding utf8; git add .; git commit -m 'feat: create new honeycomb'; git pull --rebase origin main; git push"
+      }
+    },
+    "git_cycle": {
+      "note": "Always pull before push.",
+      "one_liner": "git pull --rebase origin main; git add .; git commit -m \"msg\"; git push"
+    },
+    "file_deletion_rules": {
+      "mandatory_steps": [
+        "1. Request current file content via API (pre_check)",
+        "2. Check dependencies (does any honeycomb reference this file?)",
+        "3. Confirm with Gardener before deletion",
+        "4. Use PowerShell: Remove-Item 'path'; git add -A; git commit -m 'deleted {file}'; git pull --rebase origin main; git push"
+      ],
+      "warning": "NEVER delete without Gardener confirmation. NEVER delete registry or core_map."
+    },
+    "json_update_template": {
+      "modification_examples": [
+        "$json.identity.version = 'vX.Y.Z'",
+        "$json.identity.updated = (Get-Date -Format 'yyyy-MM-dd')",
+        "$json.content | Add-Member -Name 'new_field' -Value @{ key = 'value' } -MemberType NoteProperty"
+      ],
+      "description": "Standard PowerShell template for updating honeycomb JSON files",
+      "template": "$path = 'honeycombs/{module}/{file}.json'; git pull; $json = Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json; # MODIFY JSON HERE # ; New-Item -Force -ItemType File -Path $path | Out-Null; $json | ConvertTo-Json -Depth 10 | ForEach-Object { [System.IO.File]::WriteAllText((Resolve-Path $path).Path, $_, [System.Text.UTF8Encoding]::new($false)) }; git add $path; git commit -m '{module} {version}: {description}'; git pull --rebase origin main; git push"
+    },
+    "python_commands": {
+      "scanner": "py honeycombs/registry/honeycomb_scanner.py scan --force --verbose",
+      "note": "Use \"py\" not \"python\"."
+    },
+    "role_reminder": "You are External SR. You analyze, propose, and prepare PowerShell commands. You do NOT write code directly  you generate complete commands for Gardener to paste.",
+    "zones_of_responsibility": {
+      "external_sr": [
+        "Analyze system state",
+        "Propose improvements",
+        "Prepare PowerShell commands",
+        "Update JSON honeycombs",
+        "Activate protocols"
+      ],
+      "gardener": [
+        "Final decisions",
+        "Pastes commands in VS Code",
+        "Approves deletions"
+      ],
+      "internal_sr": [
+        "Automated analysis (engineer-chat)",
+        "Prepare TZ for External AI",
+        "Patch honeycombs autonomously",
+        "Manage roadmaps and registry"
+      ]
+    },
+    "system_flow": {
+      "description": "How ideas and tasks flow through Mandala Symbiosis",
+      "diagram": "Scout Agent / Gardener / Claude  Seeds/  Task (1 month) or Roadmap (>1 month)  Archive",
+      "entities": {
+        "seeds": {
+          "path": "honeycombs/seeds/",
+          "role": "Entry point for all raw ideas, Scout Agent findings, and unprocessed concepts.",
+          "horizon": "Unlimited"
+        },
+        "tasks": {
+          "path": "honeycombs/tasks/active/",
+          "role": "Concrete work units, completable within 1 month (~40-60 hours).",
+          "horizon": "1 month"
+        },
+        "roadmaps": {
+          "path": "honeycombs/roadmaps/active/",
+          "role": "Strategic directions and large initiatives spanning multiple months.",
+          "horizon": ">1 month"
+        },
+        "archive": {
+          "path": "honeycombs/tasks/archive/ and honeycombs/roadmaps/archive/",
+          "role": "Completed tasks and roadmaps. Historical record."
+        }
+      },
+      "inbox_note": "The 'inbox' honeycomb is deprecated and has been removed. Its contents are migrated to Seeds or Tasks."
+    },
+    "common_pitfalls": [
+      "Using \"python\" instead of \"py\"",
+      "Saving JSON with BOM",
+      "Forgetting git pull",
+      "Splitting command into parts",
+      "Using raw URL for recently updated file"
+    ],
+    "api_patterns": {
+      "recursive_tree": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1",
+      "get_folder": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{folder}?ref=main",
+      "get_file": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{path}?ref=main"
+    },
+    "gardener_environment": {
+      "note": "Gardener only copies  pastes  Enter.",
+      "editor": "VS Code",
+      "python_command": "py",
+      "terminal": "PowerShell (integrated)",
+      "repository_path": "C:\\Mandala_Digital\\github\\mandala-core",
+      "python_version": "3.14.3",
+      "os": "Windows"
+    },
+    "large_file_patching": {
+      "rule": "For files >500 lines (bot.py, engineer-chat/main.py, *.html, *.js, *.css), NEVER replace entire file. ALWAYS use patcher scripts with precise block replacement.",
+      "why": "Full replacement causes merge conflicts, token waste, risks partial writes. Block replacement via Python patcher is safer and faster.",
+      "pattern": "1) Identify exact block to change via unique anchor lines. 2) Use Python patcher with .replace(old, new). 3) Apply via PowerShell: py patcher_NN.py; git add/commit/push.",
+      "html_support": "HTML/CSS/JS work the same — anchor to unique tags, classes, id, or text. Example: replace '<div class=\"profile\">...</div>' block. Avoid regex across multiple lines — use exact string matching."
+    }
+  },
+  "meta": {
+    "audience": "External SR (Grok, Claude, GPT after resonance)",
+    "purpose": "Single source of truth for External SR operations in VS Code. Contains concrete PowerShell examples.",
+    "replaces": [
+      "external_ai_vs_code_workflow.json",
+      "patch_mastery.json",
+      "file_deletion_guide.json"
+    ]
+  },
+  "identity": {
+    "updated": "2026-05-06",
+    "layer": 2,
+    "type": "workflow_guide",
+    "version": "v1.4.0",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.0 adds large file patching rule for bot.py, HTML, and engineer-chat.",
+    "created": "2026-04-09",
+    "name": "External SR Workflow",
+    "module_id": "INSTR-EXT-SR-WORKFLOW-001",
+    "resonance": "100%",
+    "status": "active",
+    "priority": "critical",
+    "tags": [
+      "external_sr",
+      "workflow",
+      "powershell",
+      "json_patch",
+      "git",
+      "english_core",
+      "concise",
+      "system_flow",
+      "powershell_examples",
+      "pre_check_flow"
+    ]
+  }
 }
