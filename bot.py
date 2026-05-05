@@ -60,11 +60,15 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.31"
+BOT_VERSION = "7.32"
 BOT_LATEST_UPDATE = {
-    "version": "7.31",
+    "version": "7.32",
     "date": "2026-05-05",
     "features": [
+        "Напоминания сегодня в профиле (N/M)",
+        "Количество задач в заголовке группы (16)",
+        "Лимит 3 задачи на группу + ...и ещё N",
+        "Разделители ──── между группами",
         "Утренний брифинг с автодогоном — не пропадает после сна бота",
         "Надёжные уведомления об обновлениях — при первом сообщении",
         "Автоопределение часового пояса для 13 городов СНГ",
@@ -1096,6 +1100,16 @@ def _build_profile_card(user_id: str) -> str:
         "",
     ]
 
+    # ── Reminders block ────────────────────────────────────────────────
+    reminders = store_get_reminders(user_id)
+    if reminders:
+        from datetime import datetime as _dt_rem
+        today_rem = _dt_rem.now().strftime("%Y-%m-%d")
+        today_count = sum(1 for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem)
+        total_rem = len(reminders)
+        lines.append(f"🔔 Напоминания сегодня: {today_count}/{total_rem}")
+        lines.append("")
+
     # Collect all task_ids that belong to any roadmap
     roadmaps = store_get_roadmaps(user_id)
     # Sort roadmaps by deadline ASC (nearest first, null → last)
@@ -1155,11 +1169,18 @@ def _build_profile_card(user_id: str) -> str:
         if not first_group:
             lines.append("")
         first_group = False
-        lines.append(f"{emoji} <b>{gname}</b>")
+        lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
+        shown_count = 0
         for t in _sort_by_deadline(items):
+            if shown_count >= 3:
+                break
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
+            shown_count += 1
+        remaining = len(items) - shown_count
+        if remaining > 0:
+            lines.append(f"  <i>...и ещё {remaining}</i>")
     for gname, items in by_group.items():
         if not gname or gname in shown:
             continue
@@ -1167,20 +1188,34 @@ def _build_profile_card(user_id: str) -> str:
         if not first_group:
             lines.append("")
         first_group = False
-        lines.append(f"{emoji} <b>{gname}</b>")
+        lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
+        shown_count = 0
         for t in _sort_by_deadline(items):
+            if shown_count >= 3:
+                break
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
+            shown_count += 1
+        remaining = len(items) - shown_count
+        if remaining > 0:
+            lines.append(f"  <i>...и ещё {remaining}</i>")
     unlabeled = by_group.get("", [])
     if unlabeled:
         if not first_group:
             lines.append("")
-        lines.append("🌱 <b>Без группы</b>")
+        lines.append(f"🌱 <b>Без группы ({len(unlabeled)})</b>")
+        shown_ul = 0
         for t in _sort_by_deadline(unlabeled):
+            if shown_ul >= 3:
+                break
             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
             ind = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  · {ind}{t['title']}{dl}")
+            shown_ul += 1
+        remaining_ul = len(unlabeled) - shown_ul
+        if remaining_ul > 0:
+            lines.append(f"  <i>...и ещё {remaining_ul}</i>")
     # Empty groups at the bottom
     empty_groups = [g.get("name","") for g in groups_data if not by_group.get(g.get("name",""))]
     if empty_groups:
@@ -4007,6 +4042,121 @@ async def _check_version_notify(user_id: str) -> None:
 # ─── SR System Prompt ─────────────────────────────────────────────────────────
 
 
+
+async def _create_reminder_atomic(user_id: str, message: Message,
+                                   title: str, datetime_str: str = None,
+                                   repeat: str = "once") -> dict:
+    """Create a reminder instantly from chat/voice without FSM.
+    Cleans title from time phrases, parses natural-language datetime,
+    adds timezone offset from gardener settings. Returns created reminder dict."""
+    import re as _re_rem
+    from datetime import datetime as _dt_rem, timedelta as _td_rem
+    from zoneinfo import ZoneInfo as _ZI_rem
+
+    reminders = store_get_reminders(user_id)
+    if len(reminders) >= REMINDER_LIMIT:
+        return {}
+
+    # ── 1. Clean title: remove time phrases ────────────────────────────────
+    title = title.strip()
+    # Remove trailing time patterns: "в 9", "в 21:00", "завтра в 9", "сегодня в 21:00"
+    title = _re_rem.sub(
+        r'\s+(завтра|сегодня|послезавтра|через\s+\d+\s+(минут|час|часа|часов|дня|дней|неделю|недели))\s*'
+        r'(в\s+\d{1,2}(:\d{2})?\s*)?$',
+        '', title, flags=_re_rem.IGNORECASE
+    ).strip()
+    # Remove standalone time: "в 13:00", "в 9"
+    title = _re_rem.sub(r'\s+в\s+\d{1,2}(:\d{2})?\s*$', '', title, flags=_re_rem.IGNORECASE).strip()
+
+    if not title or len(title) < 2:
+        return {}
+
+    # ── 2. Resolve timezone ────────────────────────────────────────────────
+    profile = store_get_profile(user_id) or {}
+    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz = _ZI_rem(tz_name)
+    except Exception:
+        tz = _ZI_rem("Europe/Moscow")
+    now = _dt_rem.now(tz)
+    today_str = now.strftime("%Y-%m-%d")
+
+    # ── 3. Parse datetime_str ──────────────────────────────────────────────
+    dt_iso = None
+
+    if datetime_str and datetime_str not in ("null", "none", ""):
+        ds = datetime_str.strip()
+        # Already ISO with timezone offset: "2026-05-05T13:00+05:00"
+        if _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}[+-]\d{2}:\d{2}$', ds):
+            dt_iso = ds
+        # ISO without offset: "2026-05-05T13:00" → add offset
+        elif _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$', ds):
+            offset = now.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = f"{ds}{offset_formatted}"
+        # Relative time: "через 30 минут", "через 2 часа"
+        elif (m := _re_rem.match(r'через\s+(\d+)\s+(минут|час|часа|часов|дня|дней|недел[юиь])', ds.lower())):
+            n = int(m.group(1))
+            unit = m.group(2)
+            if unit.startswith("минут"):
+                target = now + _td_rem(minutes=n)
+            elif unit.startswith("час"):
+                target = now + _td_rem(hours=n)
+            elif unit.startswith("дн"):
+                target = now + _td_rem(days=n)
+            elif unit.startswith("недел"):
+                target = now + _td_rem(weeks=n)
+            else:
+                target = now + _td_rem(minutes=30)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+        # "сегодня в 21:00", "завтра в 9"
+        elif (m := _re_rem.match(r'(сегодня|завтра|послезавтра)\s+в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
+            day_map = {"сегодня": 0, "завтра": 1, "послезавтра": 2}
+            day_offset = day_map.get(m.group(1), 0)
+            hh = int(m.group(2))
+            mm = int(m.group(3)) if m.group(3) else 0
+            target = (now + _td_rem(days=day_offset)).replace(hour=hh, minute=mm, second=0, microsecond=0)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+        # "в 21:00", "в 9" (today)
+        elif (m := _re_rem.match(r'в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
+            hh = int(m.group(1))
+            mm = int(m.group(2)) if m.group(2) else 0
+            target = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+            if target <= now:
+                target += _td_rem(days=1)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+
+    # Fallback: if no datetime parsed, set to tomorrow 9:00
+    if not dt_iso:
+        target = (now + _td_rem(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+        offset = target.strftime("%z")
+        offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+        dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+
+    # ── 4. Validate repeat ─────────────────────────────────────────────────
+    if repeat not in ("once", "daily", "weekdays"):
+        repeat = "once"
+
+    # ── 5. Create reminder ─────────────────────────────────────────────────
+    rid = _make_reminder_id(reminders)
+    new_rem = {
+        "id": rid,
+        "title": title,
+        "datetime_iso": dt_iso,
+        "repeat": repeat,
+        "active": True
+    }
+    reminders.append(new_rem)
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    return new_rem
+
 async def _create_task_atomic(user_id: str, message: Message,
                                title: str, deadline: str = None,
                                reminder: str = None, label_name: str = None) -> dict:
@@ -6461,7 +6611,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             else:
                                 reply_text = "🌀 Укажи номера пунктов: «поставь пункт 3 после пункта 1»"
 
-                        elif intent == "create_reminder":
+                                                elif intent == "create_reminder":
                             action_r = parsed_check.get("action") or {}
                             r_title  = action_r.get("title","").strip()
                             r_dt     = action_r.get("datetime","").strip()
@@ -6478,7 +6628,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     repeat=r_repeat
                                 )
                                 if result:
-                                    rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(r_repeat,"один раз")
+                                    rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(result.get("repeat","once"),"один раз")
                                     reply_text = (f"✅ Напоминание: 🔔 {result['title']} · {result['datetime_iso'][:16].replace('T',' ')} · {rep_s}\n\n"
                                                   + _reminder_list_text(store_get_reminders(user_id)))
                                 else:
