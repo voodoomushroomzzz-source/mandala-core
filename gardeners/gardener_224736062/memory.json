@@ -79,6 +79,14 @@
     {
       "role": "assistant",
       "content": "🗑 Задача «Bot Update» удалена."
+    },
+    {
+      "role": "user",
+      "content": "Удали задачу, бот апдейт без группы."
+    },
+    {
+      "role": "assistant",
+      "content": "🗑 Задача удалена: Bot Update"
     }
   ],
   "updated": "2026-05-05"
