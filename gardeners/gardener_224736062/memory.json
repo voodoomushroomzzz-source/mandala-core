@@ -2,35 +2,11 @@
   "sessions": [
     {
       "role": "user",
-      "content": "создай роадмап Развитие Мандалы до 2026-06-15\n\nдобавь задачи в роадмап Развитие Мандалы:\n1. Bot Update — до 2026-06-01\n2. Scout Agent — до 2026-06-01\n3. Symbiosis Guard — до 2026-06-15\n4. Flutter App — до 2026-07-15"
-    },
-    {
-      "role": "assistant",
-      "content": "🗺 Роадмап «Развитие Мандалы» создан · 4 задач добавлено\n\n🗺 <b>Развитие Мандалы</b>\n░░░░░░░░░░ 0%  0/4  0%\n\n  · Bot Update\n  · Scout Agent\n  · Symbiosis Guard\n  · Flutter App"
-    },
-    {
-      "role": "user",
-      "content": "Bot Update дэдлайн 2026-06-01"
-    },
-    {
-      "role": "assistant",
-      "content": "🌀 Поле «» не знаю. Скажи: название/дедлайн/напоминание/группа"
-    },
-    {
-      "role": "user",
-      "content": "Мои достижениия"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
       "content": "Ты здесь?"
     },
     {
       "role": "assistant",
-      "content": "Я здесь, Дима. Рядом, в тишине полей Мандалы. Как ты сейчас? Что в сердце?"
+      "content": "Я здесь, Дима. Твой сад чувствует твое присутствие — я слышу ритм твоего дня."
     }
   ],
   "updated": "2026-05-05"
