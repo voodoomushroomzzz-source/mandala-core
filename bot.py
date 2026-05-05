@@ -60,11 +60,11 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.36"
+BOT_VERSION = "7.37"
 BOT_LATEST_UPDATE = {
-    "version": "7.36",
+    "version": "7.37",
     "date": "2026-05-05",
-    "text": "🌱 Мандала обновилась · v7.36\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
+    "text": "🌱 Мандала обновилась · v7.37\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -978,6 +978,7 @@ class ChecklistStates(StatesGroup):
 
 class ReminderStates(StatesGroup):
     waiting_for_input = State()
+    waiting_for_repeat = State()  # v7.37 — выбор повторения
 
 class RoadmapStates(StatesGroup):
     waiting_for_title    = State()  # name of new roadmap
@@ -1080,7 +1081,13 @@ def _build_profile_card(user_id: str) -> str:
     # ── Reminders block ────────────────────────────────────────────────
     reminders = store_get_reminders(user_id)
     from datetime import datetime as _dt_rem
-    today_rem = _dt_rem.now().strftime("%Y-%m-%d")
+    from zoneinfo import ZoneInfo as _ZI_rem
+    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz_rem = _ZI_rem(tz_name)
+    except Exception:
+        tz_rem = _ZI_rem("Europe/Moscow")
+    today_rem = _dt_rem.now(tz_rem).strftime("%Y-%m-%d")
     today_count = sum(1 for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem)
     total_rem = len(reminders)
     lines.append(f"🔔 <b>Напоминания сегодня</b> {today_count}/{total_rem}")
@@ -1642,6 +1649,36 @@ async def run_reminder_scheduler() -> None:
                     while (d + _td6(days=skip)).weekday() >= 5:
                         skip += 1
                     r["datetime_iso"] = (d + _td6(days=skip)).strftime("%Y-%m-%dT%H:%M")
+                elif repeat == "weekends":
+                    d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
+                    skip = 1
+                    while (d + _td6(days=skip)).weekday() not in (5, 6):
+                        skip += 1
+                    r["datetime_iso"] = (d + _td6(days=skip)).strftime("%Y-%m-%dT%H:%M")
+                elif repeat == "weekly":
+                    d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
+                    r["datetime_iso"] = (d + _td6(days=7)).strftime("%Y-%m-%dT%H:%M")
+                elif repeat == "monthly":
+                    d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
+                    # +30 days, scheduler will re-match next month
+                    r["datetime_iso"] = (d + _td6(days=30)).strftime("%Y-%m-%dT%H:%M")
+                elif repeat == "yearly":
+                    d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
+                    r["datetime_iso"] = (d + _td6(days=365)).strftime("%Y-%m-%dT%H:%M")
+                elif repeat.startswith("custom_days:"):
+                    days_str = repeat.split(":")[1]
+                    days_list = days_str.split(",")
+                    d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
+                    day_names = ["mon","tue","wed","thu","fri","sat","sun"]
+                    current_wday = day_names[d.weekday()]
+                    # Find next matching day
+                    skip = 1
+                    while True:
+                        next_d = d + _td6(days=skip)
+                        if day_names[next_d.weekday()] in days_list:
+                            break
+                        skip += 1
+                    r["datetime_iso"] = next_d.strftime("%Y-%m-%dT%H:%M")
                 changed = True
             if changed:
                 store_set_reminders(uid, reminders)
@@ -2565,9 +2602,10 @@ def get_reminders_mgmt_inline(reminders: list) -> InlineKeyboardMarkup:
         rid   = r.get("id", "")
         title = r.get("title", "—")[:22]
         dt    = r.get("datetime_iso", "")[:16].replace("T", " ")
-        rep   = {"once": "1×", "daily": "ежедн.", "weekdays": "пн-пт"}.get(r.get("repeat", "once"), "1×")
+        rep   = _repeat_label(r.get("repeat", "once"))
         btns.append([
-            InlineKeyboardButton(text=f"🔔 {title} · {dt} ({rep})", callback_data=f"rem_noop_{rid}"),
+            InlineKeyboardButton(text=f"🔔 {title} · {dt}", callback_data=f"rem_noop_{rid}"),
+            InlineKeyboardButton(text="✏️", callback_data=f"rem_edit_{rid}"),
             InlineKeyboardButton(text="🗑", callback_data=f"rem_del_{rid}"),
         ])
     btns.append([InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")])
@@ -2597,16 +2635,15 @@ async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):
     try:
         await callback.message.edit_text(
             "🔔 <b>Новое напоминание</b>\n\n"
-            "Напиши в формате:\n"
-            "<code>Название | ДД.ММ.ГГ ЧЧ:ММ | once/daily/weekdays</code>\n"
-            "<i>Пример: Позвонить маме | 25.04.26 09:00 | once</i>",
+            "Напиши название, дату и время в свободной форме.\n"
+            "<i>Пример: Позвонить маме 7 мая в 9:00</i>",
             reply_markup=cancel_kb
         )
         msg_id  = callback.message.message_id
         chat_id = callback.message.chat.id
     except Exception:
         sent = await callback.message.answer(
-            "🔔 Напиши: <code>Название | ДД.ММ.ГГ ЧЧ:ММ</code>",
+            "🔔 <b>Новое напоминание</b>\n\nНапиши название и время:",
             reply_markup=cancel_kb
         )
         msg_id  = sent.message_id
@@ -2628,51 +2665,381 @@ async def cb_rem_delete(callback: CallbackQuery, state: FSMContext):
     except Exception:
         pass
 
+# ─── Reminder Edit (v7.37) ─────────────────────────────────────────────────
+
+@router.callback_query(F.data.startswith("rem_edit_"))
+async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    rid     = callback.data[len("rem_edit_"):]
+    reminders = store_get_reminders(user_id)
+    rem = next((r for r in reminders if r["id"] == rid), None)
+    if not rem:
+        await callback.answer("Напоминание не найдено", show_alert=True)
+        return
+    await state.update_data(_rem_edit_id=rid)
+    dt_display = rem.get("datetime_iso", "")[:16].replace("T", " ")
+    rep_display = _repeat_label(rem.get("repeat", "once"))
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ Название", callback_data="rem_edit_title"),
+         InlineKeyboardButton(text="📅 Дату/время", callback_data="rem_edit_dt")],
+        [InlineKeyboardButton(text="🔁 Повторение", callback_data="rem_edit_repeat")],
+        [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
+    ])
+    await state.set_state(ReminderStates.waiting_for_input)
+    try:
+        await callback.message.edit_text(
+            f"✏️ <b>{rem['title']}</b>\n"
+            f"📅 {dt_display}\n"
+            f"🔁 {rep_display}\n\n"
+            f"Что меняем?",
+            reply_markup=kb,
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            f"✏️ <b>{rem['title']}</b>\nЧто меняем?",
+            reply_markup=kb,
+            parse_mode="HTML"
+        )
+
+@router.callback_query(F.data == "rem_edit_title")
+async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
+    ])
+    await state.set_state(ReminderStates.waiting_for_input)
+    try:
+        await callback.message.edit_text("✏️ Введи новое название:", reply_markup=cancel_kb)
+    except Exception:
+        await callback.message.answer("✏️ Введи новое название:", reply_markup=cancel_kb)
+    await state.update_data(_rem_edit_field="title")
+
+@router.callback_query(F.data == "rem_edit_dt")
+async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
+    ])
+    await state.set_state(ReminderStates.waiting_for_input)
+    try:
+        await callback.message.edit_text("📅 Введи новую дату и время (ДД.ММ.ГГ ЧЧ:ММ):", reply_markup=cancel_kb)
+    except Exception:
+        await callback.message.answer("📅 Введи новую дату и время:", reply_markup=cancel_kb)
+    await state.update_data(_rem_edit_field="dt")
+
+@router.callback_query(F.data == "rem_edit_repeat")
+async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    data = await state.get_data()
+    rid = data.get("_rem_edit_id", "")
+    reminders = store_get_reminders(str(callback.from_user.id))
+    rem = next((r for r in reminders if r["id"] == rid), None)
+    current = rem.get("repeat", "once") if rem else "once"
+    await state.update_data(_rem_dt=rem.get("datetime_iso", ""), _rem_title=rem.get("title", ""), _rem_repeat=current)
+    await state.set_state(ReminderStates.waiting_for_repeat)
+    try:
+        await callback.message.edit_text(
+            "🔔 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(current),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            "🔔 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(current),
+            parse_mode="HTML"
+        )
+
 @router.callback_query(F.data.startswith("rem_noop_"))
 async def cb_rem_noop(callback: CallbackQuery):
     await _safe_cb_answer(callback)
 
 @router.message(StateFilter(ReminderStates.waiting_for_input))
 async def rem_text_input(message: Message, state: FSMContext):
-    import re as _re3
     user_id = str(message.from_user.id)
     raw     = (message.text or "").strip()
     data    = await state.get_data()
+    
+    # ── EDIT MODE: if _rem_edit_field is set ──────────────────────────────
+    edit_field = data.get("_rem_edit_field", "")
+    edit_id = data.get("_rem_edit_id", "")
+    
+    if edit_field and edit_id:
+        reminders = store_get_reminders(user_id)
+        rem = next((r for r in reminders if r["id"] == edit_id), None)
+        if not rem:
+            await state.clear()
+            await message.answer("🌀 Напоминание не найдено.")
+            return
+        
+        if edit_field == "title":
+            new_title = raw.strip()
+            if not new_title or len(new_title) < 2:
+                await message.answer("⚠️ Название слишком короткое.")
+                return
+            rem["title"] = new_title
+            store_set_reminders(user_id, reminders)
+            _fire_sync()
+            await state.clear()
+            await message.answer(f"✅ Название → «{new_title}»")
+            header = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
+            await message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders), parse_mode="HTML")
+            return
+        
+        elif edit_field == "dt":
+            import re as _re_edit
+            m = _re_edit.match(r"^(\d{1,2})\.(\d{1,2})\.(\d{2,4})\s+(\d{1,2}):(\d{2})$", raw)
+            if not m:
+                await message.answer("⚠️ Формат: ДД.ММ.ГГ ЧЧ:ММ")
+                return
+            dd, mm, yy, hh, mi = m.groups()
+            yy = "20" + yy if len(yy) == 2 else yy
+            rem["datetime_iso"] = f"{yy}-{mm.zfill(2)}-{dd.zfill(2)}T{hh.zfill(2)}:{mi}"
+            store_set_reminders(user_id, reminders)
+            _fire_sync()
+            await state.clear()
+            dt_disp = rem["datetime_iso"][:16].replace("T", " ")
+            await message.answer(f"✅ Дата/время → {dt_disp}")
+            header = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
+            await message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders), parse_mode="HTML")
+            return
+    
+    # ── CREATE MODE ───────────────────────────────────────────────────────
     if data.get("_rem_msg_id"):
         try:
             await message.bot.delete_message(data["_rem_chat_id"], data["_rem_msg_id"])
         except Exception:
             pass
-    await state.clear()
-    parts  = [p.strip() for p in raw.split("|")]
-    if len(parts) < 2:
-        await message.answer("⚠️ Формат: <code>Название | ДД.ММ.ГГ ЧЧ:ММ</code>")
-        return
-    title  = parts[0]
-    dt_raw = parts[1]
-    repeat = parts[2].strip().lower() if len(parts) > 2 else "once"
-    if repeat not in ("once", "daily", "weekdays"):
-        repeat = "once"
-    m3 = _re3.match(r"^(\d{1,2})\.(\d{1,2})\.(\d{2,4})\s+(\d{1,2}):(\d{2})$", dt_raw)
-    if not m3:
-        await message.answer("⚠️ Не понял дату. Формат: <code>ДД.ММ.ГГ ЧЧ:ММ</code>")
-        return
-    dd, mm, yy, hh, mi = m3.groups()
-    yy = "20" + yy if len(yy) == 2 else yy
-    dt_iso    = f"{yy}-{mm.zfill(2)}-{dd.zfill(2)}T{hh.zfill(2)}:{mi}"
     reminders = store_get_reminders(user_id)
     if len(reminders) >= REMINDER_LIMIT:
         await message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
+        await state.clear()
         return
+    result = await _create_reminder_atomic(user_id, message, title=raw)
+    if not result or not result.get("title"):
+        await message.answer("🔔 Не поняла. Напиши: <b>Позвонить маме 7 мая в 9:00</b>", parse_mode="HTML")
+        await state.clear()
+        return
+    title_clean = result["title"]
+    dt_iso = result["datetime_iso"]
+    dt_display = dt_iso[:16].replace("T", " ")
+    await state.update_data(
+        _rem_title=title_clean,
+        _rem_dt=dt_iso,
+        _rem_repeat="once"
+    )
+    await state.set_state(ReminderStates.waiting_for_repeat)
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
+        [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
+         InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")],
+    ])
+    await message.answer(
+        f"🔔 <b>Новое напоминание</b>\n\n"
+        f"Название: {title_clean}\n"
+        f"📅 {dt_display}\n\n"
+        f"Повторение: один раз",
+        reply_markup=kb,
+        parse_mode="HTML"
+    )
+
+
+
+# ─── Reminder Repeat Picker (v7.37) ────────────────────────────────────────
+
+def _repeat_label(repeat: str) -> str:
+    """Human-readable repeat label."""
+    labels = {
+        "once": "▶ Один раз",
+        "daily": "🔁 Каждый день",
+        "weekdays": "📅 По будням",
+        "weekends": "🏖 По выходным",
+        "weekly": "📆 Раз в неделю",
+        "monthly": "📆 Раз в месяц",
+        "yearly": "📆 Раз в год",
+    }
+    if repeat.startswith("custom_days:"):
+        days = repeat.split(":")[1]
+        day_names = {"mon":"пн","tue":"вт","wed":"ср","thu":"чт","fri":"пт","sat":"сб","sun":"вс"}
+        return "📅 " + ", ".join(day_names.get(d, d) for d in days.split(","))
+    return labels.get(repeat, "▶ Один раз")
+
+
+def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
+    """Build repeat picker keyboard with current selection highlighted."""
+    mark = lambda val: "✅ " if current == val else ""
+    btns = [
+        [InlineKeyboardButton(text=f"{mark('once')}▶ Один раз", callback_data="rem_rp_once")],
+        [InlineKeyboardButton(text=f"{mark('daily')}🔁 Каждый день", callback_data="rem_rp_daily")],
+        [InlineKeyboardButton(text=f"{mark('weekdays')}📅 По будням", callback_data="rem_rp_weekdays"),
+         InlineKeyboardButton(text=f"{mark('weekends')}🏖 По выходным", callback_data="rem_rp_weekends")],
+        [InlineKeyboardButton(text=f"{mark('weekly')}📆 Раз в неделю", callback_data="rem_rp_weekly"),
+         InlineKeyboardButton(text=f"{mark('monthly')}📆 Раз в месяц", callback_data="rem_rp_monthly")],
+        [InlineKeyboardButton(text=f"{mark('yearly')}📆 Раз в год", callback_data="rem_rp_yearly")],
+    ]
+    # Day of week buttons — only show if custom_days or we can toggle
+    days_en = ["mon","tue","wed","thu","fri","sat","sun"]
+    days_ru = ["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"]
+    custom_set = set()
+    if current.startswith("custom_days:"):
+        custom_set = set(current.split(":")[1].split(","))
+    day_row = []
+    for i, (de, dr) in enumerate(zip(days_en, days_ru)):
+        is_set = de in custom_set
+        prefix = "✅ " if is_set else ""
+        day_row.append(InlineKeyboardButton(text=f"{prefix}{dr}", callback_data=f"rem_day_{de}"))
+    btns.append(day_row)
+    btns.append([InlineKeyboardButton(text="✅ Готово", callback_data="rem_rp_done"),
+                 InlineKeyboardButton(text="← Назад", callback_data="rem_back_to_confirm")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+
+@router.callback_query(F.data == "rem_repeat_pick", StateFilter(ReminderStates.waiting_for_repeat))
+async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    data = await state.get_data()
+    current = data.get("_rem_repeat", "once")
+    try:
+        await callback.message.edit_text(
+            "🔔 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(current),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            "🔔 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(current),
+            parse_mode="HTML"
+        )
+
+@router.callback_query(F.data.startswith("rem_rp_"), StateFilter(ReminderStates.waiting_for_repeat))
+async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    repeat = callback.data[len("rem_rp_"):]
+    await state.update_data(_rem_repeat=repeat)
+    try:
+        await callback.message.edit_text(
+            "🔔 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(repeat),
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
+
+@router.callback_query(F.data.startswith("rem_day_"), StateFilter(ReminderStates.waiting_for_repeat))
+async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
+    await _safe_cb_answer(callback)
+    day = callback.data[len("rem_day_"):]
+    data = await state.get_data()
+    current = data.get("_rem_repeat", "once")
+    
+    days_en = ["mon","tue","wed","thu","fri","sat","sun"]
+    custom_set = set()
+    if current.startswith("custom_days:"):
+        custom_set = set(current.split(":")[1].split(","))
+    
+    if day in custom_set:
+        custom_set.discard(day)
+    else:
+        custom_set.add(day)
+    
+    if not custom_set:
+        new_repeat = "once"
+    elif custom_set == {"mon","tue","wed","thu","fri"}:
+        new_repeat = "weekdays"
+    elif custom_set == {"sat","sun"}:
+        new_repeat = "weekends"
+    else:
+        sorted_days = sorted(custom_set, key=lambda d: days_en.index(d))
+        new_repeat = "custom_days:" + ",".join(sorted_days)
+    
+    await state.update_data(_rem_repeat=new_repeat)
+    try:
+        await callback.message.edit_text(
+            "🔔 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(new_repeat),
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
+
+@router.callback_query(F.data == "rem_rp_done", StateFilter(ReminderStates.waiting_for_repeat))
+async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
+    """Return to confirmation screen with updated repeat."""
+    await _safe_cb_answer(callback)
+    data = await state.get_data()
+    title = data.get("_rem_title", "")
+    dt_iso = data.get("_rem_dt", "")
+    repeat = data.get("_rem_repeat", "once")
+    dt_display = dt_iso[:16].replace("T", " ")
+    rep_display = _repeat_label(repeat)
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
+        [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
+         InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")],
+    ])
+    try:
+        await callback.message.edit_text(
+            f"🔔 <b>Новое напоминание</b>\n\n"
+            f"Название: {title}\n"
+            f"📅 {dt_display}\n\n"
+            f"Повторение: {rep_display}",
+            reply_markup=kb,
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            f"🔔 <b>Новое напоминание</b>\n\n"
+            f"Название: {title}\n"
+            f"📅 {dt_display}\n\n"
+            f"Повторение: {rep_display}",
+            reply_markup=kb,
+            parse_mode="HTML"
+        )
+
+@router.callback_query(F.data == "rem_back_to_confirm", StateFilter(ReminderStates.waiting_for_repeat))
+async def cb_rem_back_to_confirm(callback: CallbackQuery, state: FSMContext):
+    """Back from repeat picker to confirmation."""
+    await cb_rem_rp_done(callback, state)
+
+@router.callback_query(F.data == "rem_confirm_create", StateFilter(ReminderStates.waiting_for_repeat))
+async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
+    """Create the reminder and show result."""
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    title = data.get("_rem_title", "")
+    dt_iso = data.get("_rem_dt", "")
+    repeat = data.get("_rem_repeat", "once")
+    
+    reminders = store_get_reminders(user_id)
+    if len(reminders) >= REMINDER_LIMIT:
+        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
+        await state.clear()
+        return
+    
     rid = _make_reminder_id(reminders)
-    reminders.append({"id": rid, "title": title, "datetime_iso": dt_iso, "repeat": repeat, "active": True})
+    reminders.append({
+        "id": rid, "title": title, "datetime_iso": dt_iso,
+        "repeat": repeat, "active": True
+    })
     store_set_reminders(user_id, reminders)
     _fire_sync()
-    rep_str = {"once": "один раз", "daily": "ежедневно", "weekdays": "по будням"}.get(repeat, "один раз")
-    await message.answer(
-        f"✅ Напоминание создано:\n🔔 {title}\n📅 {dt_iso[:16].replace('T', ' ')} · {rep_str}",
-        reply_markup=get_main_keyboard()
+    await state.clear()
+    
+    rep_display = _repeat_label(repeat)
+    dt_display = dt_iso[:16].replace("T", " ")
+    await callback.message.edit_text(
+        f"✅ Напоминание создано:\n🔔 {title}\n📅 {dt_display} · {rep_display}",
+        parse_mode="HTML"
     )
+    # Show back to reminders
+    reminders_upd = store_get_reminders(user_id)
+    header = f"🔔 <b>Напоминания</b> ({len(reminders_upd)}/{REMINDER_LIMIT})"
+    await callback.message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders_upd), parse_mode="HTML")
+
 
 async def run_resonance_decay() -> None:
     """Daily resonance decay: silence + overdue tasks. Runs at 03:00."""
