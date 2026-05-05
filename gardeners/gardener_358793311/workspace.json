@@ -1,28 +1,30 @@
 {
-  "tasks": [
-    {
-      "task_id": "task_20260504_001",
-      "title": "сходить к врачу",
-      "status": "todo",
-      "group_id": "group_001",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": null,
-      "estimated_hours": null,
-      "created": "2026-05-04",
-      "updated": "2026-05-04",
-      "completed": null,
-      "notes": ""
-    }
-  ],
-  "groups": [],
-  "achievements": [],
-  "updated": "2026-05-04",
-  "sphere_resonance": {
-    "health": 20,
-    "creativity": 20,
-    "work": 20,
-    "connections": 20,
-    "growth": 20
-  }
+    "tasks":  [
+                  {
+                      "task_id":  "task_20260504_001",
+                      "title":  "сходить к врачу",
+                      "status":  "todo",
+                      "group_id":  "group_001",
+                      "life_area":  "other",
+                      "priority":  5,
+                      "deadline":  null,
+                      "estimated_hours":  null,
+                      "created":  "2026-05-04",
+                      "updated":  "2026-05-04",
+                      "completed":  null,
+                      "notes":  ""
+                  }
+              ],
+    "groups":  [
+
+               ],
+    "updated":  "2026-05-04",
+    "sphere_resonance":  {
+                             "health":  20,
+                             "creativity":  20,
+                             "work":  20,
+                             "connections":  20,
+                             "growth":  20
+                         },
+    "achievements_count":  0
 }
