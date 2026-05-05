@@ -1195,7 +1195,10 @@ async def _show_profile(user_id: str, message: Message):
     """Show profile card — used by button, command, voice, intent."""
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
+        [
+            InlineKeyboardButton(text="✏️ Профиль", callback_data="menu_edit_profile"),
+            InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
+        ]
     ])
     await message.answer(card, reply_markup=kb)
 
@@ -2086,6 +2089,46 @@ async def _start_checklist_create(message: Message, state: FSMContext, pre_title
         )
         await state.update_data(_cl_instr_msg_id=sent.message_id,
                                 _cl_instr_chat_id=message.chat.id)
+
+@router.callback_query(F.data == "profile_achievements")
+async def cb_profile_achievements(callback: CallbackQuery):
+    """Show achievements dashboard inline."""
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    ach_count = store_get_achievements_count(user_id)
+    if ach_count == 0:
+        text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу.\nПросто скажи: «добавь достижение — пробежал 5 км»"
+    else:
+        text = f"💎 Достижения · всего {ach_count}\n"
+        text += "\n📊 Статистика по месяцам:"
+        text += _build_sphere_stats(user_id, months=3)
+        text += "\n\nДобавить: «добавь достижение — [что сделал]»"
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")]
+    ])
+    try:
+        await callback.message.edit_text(text, reply_markup=kb, parse_mode="HTML")
+    except Exception:
+        await callback.message.answer(text, reply_markup=kb, parse_mode="HTML")
+
+
+@router.callback_query(F.data == "profile_back")
+async def cb_profile_back(callback: CallbackQuery):
+    """Return from achievements dashboard to profile."""
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    card = _build_profile_card(user_id)
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="✏️ Профиль", callback_data="menu_edit_profile"),
+            InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
+        ]
+    ])
+    try:
+        await callback.message.edit_text(card, reply_markup=kb, parse_mode="HTML")
+    except Exception:
+        await callback.message.answer(card, reply_markup=kb, parse_mode="HTML")
+
 
 @router.callback_query(F.data == "cl_create_new")
 async def cb_cl_create_new(callback: CallbackQuery, state: FSMContext):
