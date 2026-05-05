@@ -469,6 +469,13 @@
       "datetime_iso": "2026-05-07T09:00+03:00",
       "repeat": "once",
       "active": true
+    },
+    {
+      "id": "rem_bae35fb4",
+      "title": "Позвонить маме",
+      "datetime_iso": "2026-05-07T09:00+03:00",
+      "repeat": "done",
+      "active": true
     }
   ],
   "_decay_date": "2026-05-05",
