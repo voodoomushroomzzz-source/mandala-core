@@ -1097,7 +1097,7 @@ def _build_profile_card(user_id: str) -> str:
         dt = (r.get("datetime_iso","") or "")
         time_part = dt[11:16] if len(dt) >= 16 and dt[10] == "T" else ""
         time_str = f" · {time_part}" if time_part else ""
-        lines.append(f"  🔔 {r['title']}{time_str}")
+        lines.append(f"  · {r['title']}{time_str}")
     lines.append("────────────────")
 
     # Collect all task_ids that belong to any roadmap
@@ -1122,29 +1122,23 @@ def _build_profile_card(user_id: str) -> str:
             bar      = _roadmap_progress_bar(pct)
             dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
             lines.append(f"🗺 <b>{rm['title']}</b>  {done_cnt}/{total}  {pct}%{dl}")
+            # Show up to 3 tasks due today or overdue
+            roadmap_today = [
+                t for t in all_tasks
+                if t.get("task_id") in rm.get("task_ids", [])
+                and t.get("status") != "completed"
+                and t.get("deadline") and t["deadline"] <= today_rem
+            ]
+            for rt in sorted(roadmap_today, key=lambda x: x.get("deadline") or "9999")[:3]:
+                rt_dl = rt.get("deadline", "")
+                overdue_str = " · просрочено" if rt_dl < today_rem else ""
+                lines.append(f"  · 🔥 {rt['title']}{overdue_str}")
         lines.append("")
 
     # Active tasks NOT in any roadmap
     active = [t for t in all_tasks
               if t.get("status") != "completed"
               and t.get("task_id") not in roadmap_task_ids]
-    # ── Today's tasks block ─────────────────────────────────────────────
-    from zoneinfo import ZoneInfo as _ZI_today
-    tz_name_t = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
-    try:
-        tz_today = _ZI_today(tz_name_t)
-    except Exception:
-        tz_today = _ZI_today("Europe/Moscow")
-    today_str = _dt_rem.now(tz_today).strftime("%Y-%m-%d")
-    today_tasks = [t for t in active if t.get("deadline") and t["deadline"] <= today_str]
-    if today_tasks:
-        lines.append("🔥 <b>Сегодня</b>")
-        for t in sorted(today_tasks, key=lambda x: x.get("deadline") or "9999")[:3]:
-            dl = t.get("deadline","")
-            overdue = " · просрочено" if dl < today_str else ""
-            lines.append(f"  · {t['title']}{overdue}")
-        lines.append("")
-
     if not active and not roadmaps:
         lines.append("🌀 Активных задач нет")
         return "\n".join(lines)
