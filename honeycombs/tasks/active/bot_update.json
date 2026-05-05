@@ -1,4 +1,3 @@
-@"
 {
     "task_id": "T-20260408-1030",
     "name": "Telegram Bot — Gentle Companion for Garden",
@@ -6,18 +5,16 @@
     "priority": "HIGH",
     "deadline": "2026-06-01",
     "created": "2026-04-01",
-    "updated": "2026-05-05",
-    "progress": 96,
-    "current_version": "7.31",
+    "updated": "2026-05-06",
+    "progress": 98,
+    "current_version": "7.38",
     "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
-
     "dev_rules": [
         "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
         "Update BOT_VERSION and BOT_LATEST_UPDATE on every patch",
         "Every patch is applied to the actual bot file — always check for previous patches first",
         "Monolithic file — all changes in one bot.py, no split files"
     ],
-
     "done": {
         "core_features": [
             "/start — onboarding with philosophy + architect request flow",
@@ -62,46 +59,42 @@
             "Profile unification (patch 18a): cmd_profile → _build_profile_card"
         ],
         "v7_31_patches_today": [
-            "Patch 20: SR Prompt Architecture — split into CORE_PROMPT (always) + INTENT_MAP (every 10 msgs) → 94% token savings",
-            "Patch 20 fix: INTENT_MAP loads on first message + every 10th",
-            "Patch 20b: Reminders timezone — offset storage + tz-aware comparison + SR instruction",
-            "Patch 20b: Interest Decay — confirmed 30d, mentioned 14d auto-removal",
-            "HTML format rule moved to CORE_PROMPT — forbids Markdown (**bold**)",
-            "Post-processing: auto-strip ** and * from SR responses",
+            "Patch 20: SR Prompt Architecture — split into CORE_PROMPT + INTENT_MAP, 94% token savings",
+            "Patch 20b: Reminders timezone fix, Interest Decay (30d/14d)",
+            "HTML format rule in CORE_PROMPT, post-processing strip",
             "Disabled catch-up morning greeting (scheduler only)",
-            "Removed /sr_report mention from info text",
             "Changed 'наблюдаю' → 'учусь у тебя' in info text",
-            "Removed 8 patcher scripts after all patches applied"
+            "Removed /sr_report mention from info text"
+        ],
+        "v7_32_to_v7_38": [
+            "v7.32: Profile unification + 5-sphere sync in profile",
+            "v7.33: Profile v2 — reminders today count, group task counts, 3-task limit, dividers, compact brief",
+            "v7.34: Model swap to DeepSeek V4 Flash, profile message cleanup, divider spacing",
+            "v7.35: Profile buttons, achievements counter only, auto-delete checklist, leave architect notify",
+            "v7.36: Bug fixes — single divider, checklist delete returns to menu, back buttons → profile, bold reminders",
+            "v7.37: Reminders v2 — two-step creation, repeat picker (weekly/monthly/yearly/weekends/custom_days), edit mode, timezone fix",
+            "v7.38: Reminders today list in profile, today tasks block, fix duplicates, voice repeat picker, /info command, simplified main menu"
         ]
     },
-
     "observations": {
-        "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Need simpler approach: either context-aware pinned dashboards (show_tasks/sphere/roadmap as inline messages) or Telegram Mini App (WebApp) for full profile.",
-        "markdown_leak": "SR still generates Markdown despite HTML-only rules. Root cause: HTML format rule was only in INTENT_MAP (every 10 msgs), not in CORE_PROMPT (always). Fixed by moving to CORE + adding post-processing strip.",
+        "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
+        "markdown_leak": "SR still generates Markdown despite HTML-only rules. Fixed by moving format rule to CORE_PROMPT + post-processing strip.",
         "catchup_annoying": "Morning catch-up on every message after restart irritated users. Disabled — only scheduler now triggers morning greeting.",
-        "rate_limit": "Qwen Flash hits Alibaba Cloud rate limit (200 req/day via OpenRouter). Fallback to Qwen Plus works. Consider direct Alibaba API key or Groq as third fallback.",
-        "reminders_phantom": "Anton (Almaty) created 5 reminders, only 1 saved — 4 were created before timezone fix deployment. Cleaned his memory.json manually. Timezone fix works now."
+        "rate_limit": "Qwen Flash hits rate limit (200 req/day). DeepSeek V4 Flash now primary. Consider direct Alibaba API key or self-hosted vLLM.",
+        "reminders_phantom": "Anton (Almaty) created reminders before timezone fix. Cleaned manually. Timezone fix works now."
     },
-
     "planned": {
-        "v7_32": [
+        "v7_39": [
             "SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers → SR learns from past interactions",
             "Voice compound commands — 'добавь задачу купить хлеб на завтра в группу дом' in one phrase",
             "/sr_report v2 — SR synthesis every 3 days, auto-sent or on-demand"
         ],
-        "dashboard_v2": [
-            "Context-aware pinned dashboards: show_tasks → inline message with today tasks + keyboard",
-            "Sphere dashboard: resonance details with progress bars, expandable per sphere",
-            "Roadmap dashboard: roadmap list inline, expand to see tasks",
-            "Or: Telegram Mini App (WebApp) — full profile as web page inside Telegram"
-        ],
         "model_optimization": [
-            "Consider direct Alibaba DashScope API key for Qwen (2000 req/day free tier)",
+            "Direct Alibaba DashScope API key for Qwen (2000 req/day free tier)",
             "Or self-hosted vLLM on GPU server (RTX 4090) when scaling to 10+ gardeners",
-            "Current: OpenRouter → Qwen Flash (primary) → Qwen Plus (fallback)"
+            "Current: OpenRouter → DeepSeek V4 Flash (primary) → Qwen Flash (fallback)"
         ]
     },
-
     "acceptance_criteria": [
         "All /commands respond correctly with gardener data",
         "Proactive messages follow silence_policy and ahimsa_guardrails",
@@ -114,23 +107,21 @@
         "Version notifications sent automatically on deploy",
         "SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced from 8000 to ~500",
         "Reminders respect gardener timezone with offset storage",
-        "SR responses use HTML formatting only, no Markdown"
+        "SR responses use HTML formatting only, no Markdown",
+        "Profile shows fresh resonance from 5 spheres"
     ],
-
     "health": {
         "status": "healthy",
-        "last_check": "2026-05-05",
-        "notes": "Bot v7.31 live with all patches applied. 2 gardeners active (Dima + Anton). Split prompt working. Reminders timezone fix deployed. Interest decay added. Dashboard v1 reverted. Patcher scripts cleaned up."
+        "last_check": "2026-05-06",
+        "notes": "Bot v7.38 live. 4 gardeners active. DeepSeek V4 Flash primary. Profile v2, reminders v2, compact brief/changelog deployed. Info menu simplified."
     },
-
     "future_scaling": {
         "current_state": {
-            "gardeners": 2,
+            "gardeners": 4,
             "daily_requests": "~50-100",
-            "llm_provider": "OpenRouter (qwen/qwen3.5-flash-02-23, fallback qwen/qwen3.6-plus)",
+            "llm_provider": "OpenRouter (deepseek/deepseek-v4-flash primary, qwen/qwen3.5-flash-02-23 fallback)",
             "hosting": "Render (free tier, 512MB RAM, auto-sleep after 15min idle)",
             "monthly_cost": "~$2 (OpenRouter tokens only)"
         }
     }
 }
-"@ | Set-Content honeycombs/tasks/active/bot_update.json -Encoding UTF8
