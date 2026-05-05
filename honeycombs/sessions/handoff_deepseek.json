@@ -2,13 +2,13 @@
   "sr_id": "deepseek",
   "status": "active",
   "last_session": "2026-05-06",
-  "last_updated": "2026-05-06T02:41:22Z",
-  "next_step": "deploy_v7_38_and_test",
-  "summary": "v7.38 deployed. 4 gardeners. Profile v2, reminders v2, compact brief, UI polish. DeepSeek V4 Flash primary model. 18 patches applied this session.",
+  "last_updated": "2026-05-06T02:49:34Z",
+  "next_step": "deploy_v7_38_1_and_test",
+  "summary": "v7.38.1 deployed. Roadmap today tasks, reminder dot, duplicate today block removed. 4 gardeners active.",
   "first_steps": "ON FIRST LOAD: 1) Read task file at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Ask gardener for latest bot.py via GitHub API for pre-check before any patch.",
   "bot_state": {
-    "version": "7.38",
-    "progress": "98%",
+    "version": "7.38.1",
+    "progress": "99%",
     "repo": "voodoomushroomzzz-source/mandala-core",
     "platform": "Render webhook + aiogram 3 + OpenRouter",
     "model_primary": "deepseek/deepseek-v4-flash",
@@ -66,7 +66,8 @@
       "Today tasks block «🔥 Сегодня» under roadmaps (up to 3)",
       "Empty groups at bottom",
       "Profile buttons: [☑️ Checklists] [🔔 Reminders] [✏️ Profile] [💎 Achievements]",
-      "Profile message auto-delete old on new show"
+      "Profile message auto-delete old on new show",
+      "Roadmap today tasks under progress bar (up to 3, deadline <= today)"
     ],
     "reminders_v2": [
       "Two-step creation: enter title+datetime → confirm with repeat picker",
