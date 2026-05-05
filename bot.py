@@ -60,11 +60,11 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.37"
+BOT_VERSION = "7.38"
 BOT_LATEST_UPDATE = {
-    "version": "7.37",
+    "version": "7.38",
     "date": "2026-05-05",
-    "text": "🌱 Мандала обновилась · v7.37\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
+    "text": "🌱 Мандала обновилась · v7.38\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1091,6 +1091,13 @@ def _build_profile_card(user_id: str) -> str:
     today_count = sum(1 for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem)
     total_rem = len(reminders)
     lines.append(f"🔔 <b>Напоминания сегодня</b> {today_count}/{total_rem}")
+    # Show up to 3 reminders for today
+    today_reminders = [r for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem]
+    for r in today_reminders[:3]:
+        dt = (r.get("datetime_iso","") or "")
+        time_part = dt[11:16] if len(dt) >= 16 and dt[10] == "T" else ""
+        time_str = f" · {time_part}" if time_part else ""
+        lines.append(f"  🔔 {r['title']}{time_str}")
     lines.append("────────────────")
 
     # Collect all task_ids that belong to any roadmap
@@ -1121,6 +1128,23 @@ def _build_profile_card(user_id: str) -> str:
     active = [t for t in all_tasks
               if t.get("status") != "completed"
               and t.get("task_id") not in roadmap_task_ids]
+    # ── Today's tasks block ─────────────────────────────────────────────
+    from zoneinfo import ZoneInfo as _ZI_today
+    tz_name_t = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz_today = _ZI_today(tz_name_t)
+    except Exception:
+        tz_today = _ZI_today("Europe/Moscow")
+    today_str = _dt_rem.now(tz_today).strftime("%Y-%m-%d")
+    today_tasks = [t for t in active if t.get("deadline") and t["deadline"] <= today_str]
+    if today_tasks:
+        lines.append("🔥 <b>Сегодня</b>")
+        for t in sorted(today_tasks, key=lambda x: x.get("deadline") or "9999")[:3]:
+            dl = t.get("deadline","")
+            overdue = " · просрочено" if dl < today_str else ""
+            lines.append(f"  · {t['title']}{overdue}")
+        lines.append("")
+
     if not active and not roadmaps:
         lines.append("🌀 Активных задач нет")
         return "\n".join(lines)
@@ -1327,7 +1351,7 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="👤 Профиль"), KeyboardButton(text="ℹ️ Информация")]
+            [KeyboardButton(text="👤 Профиль")]
         ],
         resize_keyboard=True,
         one_time_keyboard=True,
@@ -2812,18 +2836,66 @@ async def rem_text_input(message: Message, state: FSMContext):
             await message.bot.delete_message(data["_rem_chat_id"], data["_rem_msg_id"])
         except Exception:
             pass
-    reminders = store_get_reminders(user_id)
-    if len(reminders) >= REMINDER_LIMIT:
-        await message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
-        await state.clear()
-        return
-    result = await _create_reminder_atomic(user_id, message, title=raw)
-    if not result or not result.get("title"):
+    # Parse with _create_reminder_atomic but DON'T save — it returns parsed dict
+    # We'll extract title and datetime from it, but create only on confirm
+    import re as _re_parse
+    from datetime import datetime as _dt_parse, timedelta as _td_parse
+    from zoneinfo import ZoneInfo as _ZI_parse
+    
+    profile_p = store_get_profile(user_id) or {}
+    tz_name_p = profile_p.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz_p = _ZI_parse(tz_name_p)
+    except Exception:
+        tz_p = _ZI_parse("Europe/Moscow")
+    now_p = _dt_parse.now(tz_p)
+    
+    # Parse title and datetime from raw text
+    title_clean = raw.strip()
+    dt_iso = None
+    
+    # Try to extract date and time
+    # "завтра в 9", "7 мая в 9:00", "сегодня в 21:00"
+    m = _re_parse.search(r'(завтра|сегодня|послезавтра)\s+в\s+(\d{1,2})(?::(\d{2}))?', title_clean.lower())
+    if m:
+        day_word, hh, mm = m.group(1), m.group(2), m.group(3) or "0"
+        title_clean = title_clean[:m.start()].strip() + " " + title_clean[m.end():].strip()
+        days_offset = {"сегодня": 0, "завтра": 1, "послезавтра": 2}.get(day_word, 0)
+        target = (now_p + _td_parse(days=days_offset)).replace(hour=int(hh), minute=int(mm), second=0, microsecond=0)
+        offset = target.strftime("%z")
+        offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+        dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
+    else:
+        # Try DD.MM or DD.MM.YY or DD.MM.YYYY with optional time
+        m = _re_parse.search(r'(\d{1,2})\s+(\w+)(?:\s+в\s+(\d{1,2})(?::(\d{2}))?)?', title_clean.lower())
+        if m:
+            day, month_str = m.group(1), m.group(2)
+            hh2, mm2 = m.group(3) or "9", m.group(4) or "0"
+            MONTHS = {"января":1,"февраля":2,"марта":3,"апреля":4,"мая":5,"июня":6,
+                      "июля":7,"августа":8,"сентября":9,"октября":10,"ноября":11,"декабря":12}
+            month_num = MONTHS.get(month_str, now_p.month)
+            target = now_p.replace(year=now_p.year, month=month_num, day=int(day),
+                                   hour=int(hh2), minute=int(mm2), second=0, microsecond=0)
+            if target < now_p:
+                target = target.replace(year=target.year + 1)
+            offset = target.strftime("%z")
+            offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
+            # Clean title
+            title_clean = title_clean[:m.start()].strip() + " " + title_clean[m.end():].strip()
+    
+    if not dt_iso:
+        target = (now_p + _td_parse(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+        offset = target.strftime("%z")
+        offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+        dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
+    
+    title_clean = title_clean.strip().rstrip(".,;!")
+    if not title_clean or len(title_clean) < 2:
         await message.answer("🔔 Не поняла. Напиши: <b>Позвонить маме 7 мая в 9:00</b>", parse_mode="HTML")
         await state.clear()
         return
-    title_clean = result["title"]
-    dt_iso = result["datetime_iso"]
+    
     dt_display = dt_iso[:16].replace("T", " ")
     await state.update_data(
         _rem_title=title_clean,
@@ -4222,6 +4294,27 @@ async def cb_show_changelog(callback: CallbackQuery):
         await callback.message.answer(text)
 
 
+@router.message(Command("info"))
+async def cmd_info(message: Message):
+    user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+    await message.answer(
+        '🌱 Привет. Я — СР, твой компаньон в саду.\n\n'
+        'Умею работать с:\n'
+        '📋 Задачами и группами\n'
+        '🗺 Роадмапами (крупные цели)\n'
+        '☑️ Чеклистами\n'
+        '🔔 Напоминаниями\n'
+        '💎 Достижениями\n'
+        '🔮 Резонансом сфер\n'
+        '🌐 Поиском\n\n'
+        '🧠 Живая память\n'
+        'Я учусь у тебя из диалогов и задач — и становлюсь точнее.\n'
+        'Просто пиши или говори голосом — я пойму.\n'
+        'Хочешь узнать подробнее о чём-то? Просто спроси меня.',
+        parse_mode="HTML", reply_markup=get_main_keyboard()
+    )
+
 @router.message(Command("privacy"))
 async def cmd_privacy(message: Message):
     user_id = str(message.from_user.id)
@@ -5246,16 +5339,6 @@ async def btn_profile(message: Message, state: FSMContext):
         except Exception:
             pass
     await _show_profile(user_id, message)
-
-
-@router.message(F.text == "ℹ️ Информация")
-async def btn_info(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    _track_interaction(user_id)
-    if not is_authorized(user_id):
-        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
-        return
-    await message.answer('🌱 Привет. Я — СР, твой компаньон в саду.\n\nУмею работать с:\n📋 Задачами и группами\n🗺 Роадмапами (крупные цели)\n☑️ Чеклистами\n🔔 Напоминаниями\n💎 Достижениями\n🔮 Резонансом сфер\n🌐 Поиском\n\n🧠 Живая память\nЯ учусь у тебя из диалогов и задач — и становлюсь точнее.\nПросто пиши или говори голосом — я пойму.\nХочешь узнать подробнее о чём-то? Просто спроси меня.', parse_mode="HTML", reply_markup=get_main_keyboard())
 
 
 @router.callback_query(F.data == "menu_restart")
@@ -6955,18 +7038,45 @@ async def free_conversation(message: Message, state: FSMContext):
                             if not r_title:
                                 reply_text = "🔔 Скажи точнее: «напомни мне X завтра в 9:00»"
                             else:
-                                result = await _create_reminder_atomic(
-                                    user_id, message,
-                                    title=r_title,
-                                    datetime_str=r_dt if r_dt and r_dt not in ("null","none","") else None,
-                                    repeat=r_repeat
-                                )
-                                if result:
-                                    rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(result.get("repeat","once"),"один раз")
-                                    reply_text = (f"✅ Напоминание: 🔔 {result['title']} · {result['datetime_iso'][:16].replace('T',' ')} · {rep_s}\n\n"
-                                                  + _reminder_list_text(store_get_reminders(user_id)))
+                                # Parse datetime from SR response or use fallback
+                                from datetime import datetime as _dt_cr, timedelta as _td_cr
+                                from zoneinfo import ZoneInfo as _ZI_cr
+                                profile_cr = store_get_profile(user_id) or {}
+                                tz_name_cr = profile_cr.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+                                try:
+                                    tz_cr = _ZI_cr(tz_name_cr)
+                                except Exception:
+                                    tz_cr = _ZI_cr("Europe/Moscow")
+                                now_cr = _dt_cr.now(tz_cr)
+                                if r_dt and r_dt not in ("null","none",""):
+                                    dt_iso_cr = r_dt
                                 else:
-                                    reply_text = "🔔 Не удалось создать напоминание."
+                                    target_cr = (now_cr + _td_cr(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+                                    offset_cr = target_cr.strftime("%z")
+                                    offset_f_cr = offset_cr[:3] + ":" + offset_cr[3:] if offset_cr else "+00:00"
+                                    dt_iso_cr = target_cr.strftime(f"%Y-%m-%dT%H:%M{offset_f_cr}")
+                                # Store in state and show two-step confirmation
+                                await state.update_data(
+                                    _rem_title=r_title,
+                                    _rem_dt=dt_iso_cr,
+                                    _rem_repeat=r_repeat
+                                )
+                                await state.set_state(ReminderStates.waiting_for_repeat)
+                                dt_display_cr = dt_iso_cr[:16].replace("T", " ")
+                                kb_cr = InlineKeyboardMarkup(inline_keyboard=[
+                                    [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
+                                    [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
+                                     InlineKeyboardButton(text="❌ Отмена", callback_data="qdismiss")],
+                                ])
+                                await message.answer(
+                                    f"🔔 <b>Новое напоминание</b>\n\n"
+                                    f"Название: {r_title}\n"
+                                    f"📅 {dt_display_cr}\n\n"
+                                    f"Повторение: {_repeat_label(r_repeat)}",
+                                    reply_markup=kb_cr,
+                                    parse_mode="HTML"
+                                )
+                                reply_text = ""
                         elif intent == "show_reminders":
                             reminders = store_get_reminders(user_id)
                             if not reminders:
@@ -7744,6 +7854,7 @@ async def on_startup():
     from aiogram.types import BotCommand
     await bot.set_my_commands([
         BotCommand(command="start",     description="🌱 Войти в сад"),
+        BotCommand(command="info",      description="ℹ️ Возможности"),
         BotCommand(command="privacy",   description="🔐 Мои данные"),
         BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
