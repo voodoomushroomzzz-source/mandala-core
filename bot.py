@@ -145,6 +145,7 @@ def store_set_profile(telegram_id: str, g: dict) -> None:
     _get_user_store(telegram_id)["profile"] = g
     _pending_writes[f"{_user_path(telegram_id)}/profile.json"] = g
 
+
 async def _safe_cb_answer(callback: CallbackQuery, text: str = "", show_alert: bool = False) -> None:
     """Safely answer a callback query — ignores 'query too old' errors after bot restart."""
     try:
@@ -176,6 +177,7 @@ def store_set_achievements(telegram_id: str, a: list) -> None:
     ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
     ws["achievements"] = a
     store_set_workspace(telegram_id, ws)
+
 
 def store_get_achievements_count(telegram_id: str) -> int:
     """Achievements = number of closed tasks. Counter only."""
@@ -323,6 +325,7 @@ def store_set_groups(telegram_id: str, g: dict) -> None:
     ws["groups"] = g.get("groups", g) if isinstance(g, dict) else g
     store_set_workspace(telegram_id, ws)
 
+
 def store_get_checklists(telegram_id: str) -> list:
     """Return checklists list from workspace."""
     ws = store_get_workspace(telegram_id)
@@ -333,6 +336,7 @@ def store_set_checklists(telegram_id: str, checklists: list) -> None:
     ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": [], "checklists": []}
     ws["checklists"] = checklists
     store_set_workspace(telegram_id, ws)
+
 
 def store_get_reminders(telegram_id: str) -> list:
     ws = store_get_workspace(telegram_id)
@@ -386,6 +390,7 @@ def _roadmap_progress_bar(pct: int) -> str:
     empty  = 10 - filled
     return f"{'█' * filled}{'░' * empty} {pct}%"
 
+
 # ─── Global HTTP session ───────────────────────────────────────────────────────
 
 _http_session: Optional[aiohttp.ClientSession] = None
@@ -404,6 +409,7 @@ def _today(tz_name: str = "Europe/Moscow") -> str:
         return datetime.now(ZoneInfo(tz_name)).strftime("%Y-%m-%d")
     except Exception:
         return datetime.now(ZoneInfo("Europe/Moscow")).strftime("%Y-%m-%d")
+
 
 CIS_TIMEZONES = {
     "алматы": "Asia/Almaty", "алмата": "Asia/Almaty",
@@ -634,6 +640,7 @@ async def _check_ready(message: Message, user_id: str = None) -> bool:
 
 # ─── Resonance helpers ────────────────────────────────────────────────────────
 
+
 def _add_growth_history_entry(gardener: dict, resonance: int, telegram_id: str = "") -> dict:
     history = gardener.get("growth_history", [])
     today = _today()
@@ -746,6 +753,7 @@ def _get_session_reflection_hint(telegram_id: str) -> str | None:
     if hint:
         _reflection_sent[telegram_id] = today
     return hint
+
 
 # ── SR Learning Loop helpers ──────────────────────────────────────────────────
 
@@ -957,6 +965,7 @@ class EditProfileStates(StatesGroup):
     waiting_for_new_morning  = State()
     # waiting_for_new_body/spirit/world removed in v7.24.5
 
+
 class AchievementStates(StatesGroup):
     waiting_for_category = State()
     waiting_for_title = State()
@@ -1006,6 +1015,7 @@ class LeaveStates(StatesGroup):
     waiting_for_delete_confirm_2 = State()
 
 # ─── Keyboards ────────────────────────────────────────────────────────────────
+
 
 # ─── Profile card builder ─────────────────────────────────────────────────────
 
@@ -1178,6 +1188,7 @@ def _build_profile_card(user_id: str) -> str:
         lines.append(f"🎨 {' · '.join(empty_groups)}")
     return "\n".join(lines)
 
+
 # ─── Unified action functions (single source of truth for all interfaces) ─────
 
 async def _show_profile(user_id: str, message: Message):
@@ -1223,6 +1234,7 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     body = _format_tasks_labels(active, user_id)
     header = "🌀 <b>Задачи · Группы:</b>"
     await message.answer(header + "\n\n" + body)
+
 
 # ─── Checklist keyboards ──────────────────────────────────────────────────────
 
@@ -1283,13 +1295,19 @@ def get_cancel_keyboard() -> ReplyKeyboardMarkup:
 def get_main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="👤 Профиль")]
+            [KeyboardButton(text="👤 Профиль"), KeyboardButton(text="ℹ️ Информация")]
         ],
         resize_keyboard=True,
         one_time_keyboard=True,
         is_persistent=False,
         input_field_placeholder="Напиши сюда..."
     )
+
+def get_profile_inline() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
+    ])
+
 
 def get_edit_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -1321,6 +1339,7 @@ def get_groups_keyboard(groups: list) -> InlineKeyboardMarkup:
     btns.append([InlineKeyboardButton(text="➕ Новая группа", callback_data="new_group")])
     btns.append([InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
+
 
 def get_confirm_task_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -1440,6 +1459,7 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
 def _auto_merkaba(title: str, label_name: str = "") -> str:
     return _classify_sphere(title, label_name)
 
+
 def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="✅ Да, архивировать", callback_data="leave_confirm")],
@@ -1557,6 +1577,7 @@ async def send_evening_checkin(telegram_id: str) -> None:
     except Exception as e:
         logger.error(f"Evening check-in error: {e}")
 
+
 async def run_reminder_scheduler() -> None:
     """Fire reminders every minute. Compares in gardener's local timezone."""
     try:
@@ -1670,6 +1691,7 @@ async def run_proactive_scheduler() -> None:
     except Exception as e:
         logger.error(f"Proactive scheduler crashed: {e}", exc_info=True)
 
+
 # ─── Tasks & Labels management menus ─────────────────────────────────────────
 
 @router.callback_query(F.data == "menu_tasks_mgmt")
@@ -1694,6 +1716,7 @@ async def cb_labels_mgmt(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(header, reply_markup=get_labels_mgmt_inline(labels))
     except Exception:
         await callback.message.answer(header, reply_markup=get_labels_mgmt_inline(labels))
+
 
 # ─── Task editing from settings ───────────────────────────────────────────────
 
@@ -1966,449 +1989,11 @@ async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
 async def cb_edit_profile_back(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
-    data = _build_dashboard_data(user_id)
-    text = _build_dashboard_main(data)
-    kb = _build_dashboard_keyboard_main(data)
+    card = _build_profile_card(user_id)
     try:
-        await callback.message.edit_text(text, reply_markup=kb, parse_mode="HTML")
+        await callback.message.edit_text(card, reply_markup=get_profile_inline(), parse_mode="HTML")
     except Exception:
-        await callback.message.answer(text, reply_markup=kb, parse_mode="HTML")
-
-
-# ─── Dashboard System (v7.31) ─────────────────────────────────────────────────
-
-def _build_dashboard_data(user_id: str) -> dict:
-    """Collect all dashboard data once. Single data pass for text + keyboard."""
-    from datetime import datetime as _dtd
-    today_s = _dtd.now().strftime("%Y-%m-%d")
-
-    profile = store_get_profile(user_id) or {}
-    tasks = store_get_tasks(user_id)
-    roadmaps = store_get_roadmaps(user_id)
-    reminders = store_get_reminders(user_id)
-    groups_data = store_get_groups(user_id).get("groups", [])
-    sr = store_get_sphere_resonance(user_id)
-
-    rm_task_ids = {tid for rm in roadmaps for tid in rm.get("task_ids", [])}
-
-    # Today tasks (overdue first)
-    overdue = sorted(
-        [t for t in tasks if t.get("deadline") and t["deadline"] < today_s
-         and t.get("status") != "completed" and t.get("task_id") not in rm_task_ids],
-        key=lambda t: t.get("deadline", "9999")
-    )
-    due_today = [t for t in tasks if t.get("deadline") == today_s
-                 and t.get("status") != "completed" and t.get("task_id") not in rm_task_ids]
-    today_all = overdue + due_today
-
-    # Active roadmaps with today tasks
-    active_roadmaps = []
-    for rm in roadmaps:
-        if rm.get("status") != "active":
-            continue
-        live = _roadmap_live_tasks(rm, tasks)
-        total = len(live)
-        done_cnt = sum(1 for t in live if t.get("status") == "completed")
-        pct = round(done_cnt / total * 100) if total else 0
-        rm_today = [t for t in live if t.get("deadline") and t["deadline"] <= today_s
-                    and t.get("status") != "completed"]
-        active_roadmaps.append({
-            "rm": rm,
-            "live": live,
-            "total": total,
-            "done_cnt": done_cnt,
-            "pct": pct,
-            "rm_today": rm_today,
-        })
-
-    # Groups with emoji and task counts
-    emoji_map = _assign_group_emojis(groups_data)
-    groups_with_counts = []
-    for g in groups_data:
-        gname = g.get("name", "")
-        count = len([t for t in tasks if t.get("label_name") == gname and t.get("status") != "completed"])
-        groups_with_counts.append({
-            "name": gname,
-            "emoji": emoji_map.get(g["id"], "\U0001f331"),
-            "count": count,
-        })
-
-    return {
-        "profile": profile,
-        "name": profile.get("name", "\u0421\u0430\u0434\u043e\u0432\u043d\u0438\u043a"),
-        "city": profile.get("companion_settings", {}).get("city", ""),
-        "resonance": profile.get("resonance_level", 5),
-        "ach_count": store_get_achievements_count(user_id),
-        "sr": sr,
-        "today_all": today_all,
-        "today_s": today_s,
-        "active_roadmaps": active_roadmaps,
-        "groups_with_counts": groups_with_counts,
-        "reminders": reminders,
-    }
-
-
-def _build_dashboard_main(data: dict) -> str:
-    """Build main dashboard text from pre-collected data."""
-    city_part = f" \u00b7 {data['city']}" if data["city"] else ""
-    lines = [f"\U0001faac {data['name']}{city_part}", ""]
-
-    # Today tasks
-    if data["today_all"]:
-        lines.append("\U0001f4c5 \u0421\u0435\u0433\u043e\u0434\u043d\u044f:")
-        for t in data["today_all"]:
-            ind = _deadline_indicator(t.get("deadline", ""))
-            dl_label = "\u043f\u0440\u043e\u0441\u0440\u043e\u0447\u0435\u043d\u043e" if t.get("deadline", "") < data["today_s"] else "\u0441\u0435\u0433\u043e\u0434\u043d\u044f"
-            lines.append(f"  {ind}\u00b7 {t['title']} \u00b7 {dl_label}")
-        lines.append("")
-
-    # Roadmaps
-    if data["active_roadmaps"]:
-        lines.append("\U0001f5fa \u0420\u043e\u0430\u0434\u043c\u0430\u043f\u044b:")
-        for rd in data["active_roadmaps"]:
-            rm = rd["rm"]
-            lines.append(f"\U0001f5fa {rm['title']}  {rd['done_cnt']}/{rd['total']}  {rd['pct']}%")
-            for t in rd["rm_today"]:
-                ind = _deadline_indicator(t.get("deadline", ""))
-                dl_label = "\u043f\u0440\u043e\u0441\u0440\u043e\u0447\u0435\u043d\u043e" if t.get("deadline", "") < data["today_s"] else "\u0441\u0435\u0433\u043e\u0434\u043d\u044f"
-                lines.append(f"  \U0001f4c5 {ind}\u00b7 {t['title']} \u00b7 {dl_label}")
-        lines.append("")
-
-    return "\n".join(lines)
-
-
-def _build_dashboard_keyboard_main(data: dict) -> InlineKeyboardMarkup:
-    """Build main dashboard inline keyboard from pre-collected data."""
-    kb = []
-
-    # Row 1: Resonance + Achievements
-    kb.append([
-        InlineKeyboardButton(text=f"\U0001f4ab \u0420\u0435\u0437\u043e\u043d\u0430\u043d\u0441: {data['resonance']}%", callback_data="profile_resonance"),
-        InlineKeyboardButton(text=f"\U0001f48e {data['ach_count']} \u0434\u043e\u0441\u0442\u0438\u0436\u0435\u043d\u0438\u0439", callback_data="profile_achievements"),
-    ])
-
-    # Row 2: 5 spheres
-    sr = data["sr"]
-    sphere_row = []
-    for s in SPHERES:
-        pct = sr.get(s, 20)
-        sphere_row.append(InlineKeyboardButton(
-            text=f"{SPHERE_EMOJI[s]} {pct}%",
-            callback_data=f"profile_sphere_{s}"
-        ))
-    kb.append(sphere_row)
-
-    # Today tasks as buttons
-    for t in data["today_all"][:5]:
-        ind = _deadline_indicator(t.get("deadline", ""))
-        dl_label = "\u043f\u0440\u043e\u0441\u0440\u043e\u0447\u0435\u043d\u043e" if t.get("deadline", "") < data["today_s"] else "\u0441\u0435\u0433\u043e\u0434\u043d\u044f"
-        kb.append([InlineKeyboardButton(
-            text=f"\U0001f4c5 {ind}\u00b7 {t['title'][:30]} \u00b7 {dl_label}",
-            callback_data=f"profile_today_{t.get('task_id','')}"
-        )])
-    if len(data["today_all"]) > 5:
-        kb.append([InlineKeyboardButton(
-            text=f"\U0001f4c5 \u0435\u0449\u0451 {len(data['today_all']) - 5} \u0437\u0430\u0434\u0430\u0447 \u0441\u0435\u0433\u043e\u0434\u043d\u044f",
-            callback_data="profile_today_all"
-        )])
-
-    # Roadmaps as buttons
-    for rd in data["active_roadmaps"]:
-        rm = rd["rm"]
-        kb.append([InlineKeyboardButton(
-            text=f"\U0001f5fa {rm['title']}  {rd['done_cnt']}/{rd['total']}  {rd['pct']}%",
-            callback_data=f"profile_rm_{rm.get('roadmap_id','')}"
-        )])
-        for t in rd["rm_today"]:
-            ind = _deadline_indicator(t.get("deadline", ""))
-            kb.append([InlineKeyboardButton(
-                text=f"  \U0001f4c5 {ind}\u00b7 {t['title'][:28]}",
-                callback_data=f"profile_today_{t.get('task_id','')}"
-            )])
-
-    # Groups
-    for g in data["groups_with_counts"][:10]:
-        kb.append([InlineKeyboardButton(
-            text=f"{g['emoji']} {g['name']} ({g['count']})",
-            callback_data=f"profile_group_{g['name']}"
-        )])
-    if len(data["groups_with_counts"]) > 10:
-        kb.append([InlineKeyboardButton(
-            text=f"\U0001f3a8 \u0435\u0449\u0451 {len(data['groups_with_counts']) - 10} \u0433\u0440\u0443\u043f\u043f",
-            callback_data="profile_groups_all"
-        )])
-
-    # Reminders
-    if data["reminders"]:
-        for r in data["reminders"][:2]:
-            dt = r.get("datetime_iso", "")[:16].replace("T", " ")
-            kb.append([InlineKeyboardButton(
-                text=f"\U0001f514 {r['title'][:25]} \u00b7 {dt}",
-                callback_data=f"profile_rem_{r.get('id','')}"
-            )])
-        if len(data["reminders"]) > 2:
-            kb.append([InlineKeyboardButton(
-                text=f"\u2795 \u0435\u0449\u0451 {len(data['reminders']) - 2}",
-                callback_data="profile_reminders"
-            )])
-
-    # Footer
-    kb.append([
-        InlineKeyboardButton(text="\u2139\ufe0f \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f", callback_data="profile_info"),
-        InlineKeyboardButton(text="\U0001f4cb \u0427\u0442\u043e \u043d\u043e\u0432\u043e\u0433\u043e", callback_data="profile_changelog"),
-    ])
-
-    return InlineKeyboardMarkup(inline_keyboard=kb)
-
-
-async def _show_dashboard(user_id: str, message: Message):
-    """Show interactive profile dashboard. Replaces old _show_profile."""
-    data = _build_dashboard_data(user_id)
-    text = _build_dashboard_main(data)
-    kb = _build_dashboard_keyboard_main(data)
-    await message.answer(text, reply_markup=kb)
-
-
-async def _edit_dashboard(callback: CallbackQuery, text: str, kb: InlineKeyboardMarkup):
-    """Edit dashboard message in place. Falls back to new message on error."""
-    try:
-        await callback.message.edit_text(text, reply_markup=kb, parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=kb, parse_mode="HTML")
-
-
-# ─── Dashboard Callback Handlers ──────────────────────────────────────────────
-
-@router.callback_query(F.data == "profile_resonance")
-async def cb_profile_resonance(callback: CallbackQuery):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    sr = store_get_sphere_resonance(user_id)
-    overall = (store_get_profile(user_id) or {}).get("resonance_level", 0)
-    text = _sphere_detail_text(sr, overall)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, text, kb)
-
-
-@router.callback_query(F.data == "profile_achievements")
-async def cb_profile_achievements(callback: CallbackQuery):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    ach_count = store_get_achievements_count(user_id)
-    text = f"\U0001f48e {ach_count} \u0434\u043e\u0441\u0442\u0438\u0436\u0435\u043d\u0438\u0439\n"
-    text += _build_sphere_stats(user_id, months=3)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, text, kb)
-
-
-@router.callback_query(F.data.startswith("profile_sphere_"))
-async def cb_profile_sphere(callback: CallbackQuery):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    sphere = callback.data[len("profile_sphere_"):]
-    sr = store_get_sphere_resonance(user_id)
-    pct = sr.get(sphere, 20)
-    bar = _sphere_progress_bar(pct)
-    name = SPHERE_NAME_RU.get(sphere, sphere)
-    emoji = SPHERE_EMOJI.get(sphere, "\U0001f331")
-
-    tasks = store_get_tasks(user_id)
-    sphere_tasks = [t for t in tasks if _classify_sphere(t.get("title",""), t.get("label_name","")) == sphere
-                    and t.get("status") != "completed"]
-
-    achievements = store_get_achievements(user_id)
-    sphere_achs = [a for a in achievements if a.get("category") == sphere]
-
-    lines = [
-        f"{emoji} {name}: {pct}%",
-        f"{bar} {pct}%",
-        ""
-    ]
-    if sphere_tasks:
-        lines.append("\u0417\u0430\u0434\u0430\u0447\u0438 \u0432 \u044d\u0442\u043e\u0439 \u0441\u0444\u0435\u0440\u0435:")
-        for t in _sort_by_deadline(sphere_tasks)[:5]:
-            ind = _deadline_indicator(t.get("deadline", ""))
-            dl = f" \u00b7 {t['deadline']}" if t.get("deadline") else ""
-            lines.append(f"  {ind}\u00b7 {t['title']}{dl}")
-        lines.append("")
-    if sphere_achs:
-        lines.append("\u0414\u043e\u0441\u0442\u0438\u0436\u0435\u043d\u0438\u044f:")
-        for a in sphere_achs[-3:]:
-            a_title = a.get('title') or '\u2014'
-            a_bonus = a.get('resonance_bonus', 3)
-            lines.append(f"  \u00b7 {a_title} (+{a_bonus}%)")
-        lines.append("")
-
-    if pct < 25:
-        lines.append(f"\U0001f4a1 \u041c\u043e\u0436\u0435\u0442, \u0434\u043e\u0431\u0430\u0432\u0438\u043c \u0447\u0442\u043e-\u0442\u043e \u0434\u043b\u044f {name}?")
-
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, "\n".join(lines), kb)
-
-
-@router.callback_query(F.data.startswith("profile_rm_"))
-async def cb_profile_roadmap(callback: CallbackQuery):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    rm_id = callback.data[len("profile_rm_"):]
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r.get("roadmap_id") == rm_id), None)
-    if not rm:
-        await callback.answer("\u0420\u043e\u0430\u0434\u043c\u0430\u043f \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d", show_alert=True)
-        return
-
-    all_tasks = store_get_tasks(user_id)
-    text = _roadmap_card_text(rm, all_tasks)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, text, kb)
-
-
-@router.callback_query(F.data == "profile_info")
-async def cb_profile_info(callback: CallbackQuery):
-    await callback.answer()
-    text = (
-        "\U0001f331 \u042f \u2014 \u0421\u0420, \u0442\u0432\u043e\u0439 \u043a\u043e\u043c\u043f\u0430\u043d\u044c\u043e\u043d \u0432 \u0441\u0430\u0434\u0443.\n\n"
-        "\u0423\u043c\u0435\u044e \u0440\u0430\u0431\u043e\u0442\u0430\u0442\u044c \u0441:\n"
-        "\U0001f4cb \u0417\u0430\u0434\u0430\u0447\u0430\u043c\u0438 \u0438 \u0433\u0440\u0443\u043f\u043f\u0430\u043c\u0438\n"
-        "\U0001f5fa \u0420\u043e\u0430\u0434\u043c\u0430\u043f\u0430\u043c\u0438 (\u043a\u0440\u0443\u043f\u043d\u044b\u0435 \u0446\u0435\u043b\u0438)\n"
-        "\u2611\ufe0f \u0427\u0435\u043a\u043b\u0438\u0441\u0442\u0430\u043c\u0438\n"
-        "\U0001f514 \u041d\u0430\u043f\u043e\u043c\u0438\u043d\u0430\u043d\u0438\u044f\u043c\u0438\n"
-        "\U0001f48e \u0414\u043e\u0441\u0442\u0438\u0436\u0435\u043d\u0438\u044f\u043c\u0438\n"
-        "\U0001f52e \u0420\u0435\u0437\u043e\u043d\u0430\u043d\u0441\u043e\u043c \u0441\u0444\u0435\u0440\n"
-        "\U0001f310 \u041f\u043e\u0438\u0441\u043a\u043e\u043c\n\n"
-        "\U0001f9e0 \u0416\u0438\u0432\u0430\u044f \u043f\u0430\u043c\u044f\u0442\u044c\n"
-        "\u042f \u043d\u0430\u0431\u043b\u044e\u0434\u0430\u044e \u0437\u0430 \u0442\u043e\u0431\u043e\u0439 \u0438\u0437 \u0434\u0438\u0430\u043b\u043e\u0433\u043e\u0432 \u0438 \u0437\u0430\u0434\u0430\u0447 \u2014 \u0438 \u0441\u0442\u0430\u043d\u043e\u0432\u043b\u044e\u0441\u044c \u0442\u043e\u0447\u043d\u0435\u0435.\n\n"
-        "\U0001f4f1 <b>\u041a\u0430\u043a \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c\u0441\u044f \u0434\u0430\u0448\u0431\u043e\u0440\u0434\u043e\u043c:</b>\n"
-        "\u00b7 \u041d\u0430\u0436\u0438\u043c\u0430\u0439 \u043d\u0430 \u043a\u043d\u043e\u043f\u043a\u0438 \u0447\u0442\u043e\u0431\u044b \u0440\u0430\u0441\u043a\u0440\u044b\u0442\u044c \u0434\u0435\u0442\u0430\u043b\u0438\n"
-        "\u00b7 \u0417\u0430\u0434\u0430\u0447\u0438 \u0438 \u0433\u0440\u0443\u043f\u043f\u044b \u2014 \u043f\u0438\u0448\u0438 \u0432 \u0447\u0430\u0442 \u0447\u0442\u043e \u043d\u0443\u0436\u043d\u043e \u0441\u0434\u0435\u043b\u0430\u0442\u044c\n"
-        "\u00b7 \u0412\u0441\u0451 \u043c\u043e\u0436\u043d\u043e \u0433\u043e\u043b\u043e\u0441\u043e\u043c \u0438\u043b\u0438 \u0442\u0435\u043a\u0441\u0442\u043e\u043c\n\n"
-        "\u041f\u0440\u043e\u0441\u0442\u043e \u0441\u043a\u0430\u0436\u0438 \u0447\u0442\u043e \u043d\u0443\u0436\u043d\u043e \U0001f33f"
-    )
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, text, kb)
-
-
-@router.callback_query(F.data == "profile_changelog")
-async def cb_profile_changelog(callback: CallbackQuery):
-    await callback.answer()
-    upd = BOT_LATEST_UPDATE
-    lines = [f"\U0001f4cb \u041e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435 v{upd['version']} \u00b7 {upd['date']}\n"]
-    if upd.get("features"):
-        lines.append("\u041d\u043e\u0432\u043e\u0435:")
-        for feat in upd["features"]:
-            lines.append(f"  \u00b7 {feat}")
-    if upd.get("fixes"):
-        lines.append("\n\u0418\u0441\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e:")
-        for fix in upd["fixes"]:
-            lines.append(f"  \u00b7 {fix}")
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, "\n".join(lines), kb)
-
-
-@router.callback_query(F.data == "profile_reminders")
-async def cb_profile_reminders_expand(callback: CallbackQuery):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    reminders = store_get_reminders(user_id)
-    text = _reminder_list_text(reminders)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, text, kb)
-
-
-@router.callback_query(F.data == "profile_collapse")
-async def cb_profile_collapse(callback: CallbackQuery):
-    """Return to main dashboard view."""
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    data = _build_dashboard_data(user_id)
-    text = _build_dashboard_main(data)
-    kb = _build_dashboard_keyboard_main(data)
-    await _edit_dashboard(callback, text, kb)
-
-
-# ─── Send-to-chat handlers ────────────────────────────────────────────────────
-
-@router.callback_query(F.data.startswith("profile_today_"))
-async def cb_profile_today_task(callback: CallbackQuery):
-    await callback.answer()
-    task_id = callback.data[len("profile_today_"):]
-    user_id = str(callback.from_user.id)
-    tasks = store_get_tasks(user_id)
-    task = next((t for t in tasks if t.get("task_id") == task_id), None)
-    if task:
-        await callback.message.answer(f"\u0437\u0430\u0434\u0430\u0447\u0430 {task['title']}", reply_markup=get_main_keyboard())
-    else:
-        await callback.answer("\u0417\u0430\u0434\u0430\u0447\u0430 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u0430", show_alert=True)
-
-
-@router.callback_query(F.data.startswith("profile_group_"))
-async def cb_profile_group(callback: CallbackQuery):
-    await callback.answer()
-    group_name = callback.data[len("profile_group_"):]
-    await callback.message.answer(f"\u043f\u043e\u043a\u0430\u0436\u0438 \u0433\u0440\u0443\u043f\u043f\u0443 {group_name}", reply_markup=get_main_keyboard())
-
-
-@router.callback_query(F.data.startswith("profile_rem_"))
-async def cb_profile_reminder(callback: CallbackQuery):
-    await callback.answer()
-    rem_id = callback.data[len("profile_rem_"):]
-    user_id = str(callback.from_user.id)
-    reminders = store_get_reminders(user_id)
-    rem = next((r for r in reminders if r.get("id") == rem_id), None)
-    if rem:
-        await callback.message.answer(f"\u043d\u0430\u043f\u043e\u043c\u0438\u043d\u0430\u043d\u0438\u0435 {rem['title']}", reply_markup=get_main_keyboard())
-    else:
-        await callback.answer("\u041d\u0430\u043f\u043e\u043c\u0438\u043d\u0430\u043d\u0438\u0435 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", show_alert=True)
-
-
-@router.callback_query(F.data == "profile_today_all")
-async def cb_profile_today_all(callback: CallbackQuery):
-    """Show all today tasks inline."""
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    data = _build_dashboard_data(user_id)
-
-    lines = ["\U0001f4c5 \u0421\u0435\u0433\u043e\u0434\u043d\u044f (\u0432\u0441\u0435):"]
-    for t in data["today_all"]:
-        ind = _deadline_indicator(t.get("deadline", ""))
-        dl_label = "\u043f\u0440\u043e\u0441\u0440\u043e\u0447\u0435\u043d\u043e" if t.get("deadline", "") < data["today_s"] else "\u0441\u0435\u0433\u043e\u0434\u043d\u044f"
-        lines.append(f"  {ind}\u00b7 {t['title']} \u00b7 {dl_label}")
-
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, "\n".join(lines), kb)
-
-
-@router.callback_query(F.data == "profile_groups_all")
-async def cb_profile_groups_all(callback: CallbackQuery):
-    """Show all groups inline."""
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    data = _build_dashboard_data(user_id)
-
-    lines = ["\U0001f3a8 \u0412\u0441\u0435 \u0433\u0440\u0443\u043f\u043f\u044b:"]
-    for g in data["groups_with_counts"]:
-        lines.append(f"  {g['emoji']} {g['name']} ({g['count']})")
-
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="profile_collapse")]
-    ])
-    await _edit_dashboard(callback, "\n".join(lines), kb)
+        await callback.message.answer(card, reply_markup=get_profile_inline(), parse_mode="HTML")
 
 def _roadmap_card_text(rm: dict, all_tasks: list) -> str:
     """Build roadmap detail text — uses live tasks only, ignores orphaned IDs."""
@@ -2436,6 +2021,7 @@ def _roadmap_card_text(rm: dict, all_tasks: list) -> str:
             ind  = _deadline_indicator(t.get("deadline", ""))
             lines.append(f"  {ind}· {t['title']}{t_dl}")
     return "\n".join(lines)
+
 
 # ─── Checklist unified show function ──────────────────────────────────────────
 
@@ -2923,6 +2509,7 @@ async def cb_checklists_mgmt(callback: CallbackQuery, state: FSMContext):
     except Exception:
         await callback.message.answer(header, reply_markup=get_checklists_mgmt_inline(checklists))
 
+
 # ─── Reminders ────────────────────────────────────────────────────────────────
 
 def _make_reminder_id(existing: list) -> str:
@@ -3089,6 +2676,7 @@ async def run_resonance_decay() -> None:
     except Exception as e:
         logger.error(f"Resonance decay error: {e}", exc_info=True)
 
+
 async def _pick_engagement_message(telegram_id: str, days: int) -> str:
     """Pick engagement message by silence level and MKB context."""
     profile = store_get_profile(telegram_id) or {}
@@ -3118,6 +2706,7 @@ async def _pick_engagement_message(telegram_id: str, days: int) -> str:
         return questions.get(sphere, "Что сейчас занимает твоё внимание?") + " 🌿"
     return f"{name}, как ты? 🌿"
 
+
 async def check_silence_and_engage(telegram_id: str, gardener: dict) -> None:
     """Send proactive message if user silent 3+ days. Respects quiet hours."""
     try:
@@ -3139,6 +2728,7 @@ async def check_silence_and_engage(telegram_id: str, gardener: dict) -> None:
             store_add_resonance(telegram_id, 1)
     except Exception as e:
         logger.error(f"Engagement error {telegram_id}: {e}")
+
 
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
@@ -3360,7 +2950,7 @@ async def onboard_morning(message: Message, state: FSMContext):
 @router.message(F.text == "🌾 Профиль")
 async def cmd_profile(message: Message, state: FSMContext = None):
     user_id = str(message.from_user.id)
-    await _show_dashboard(user_id, message)
+    await _show_profile(user_id, message)
 @router.message(Command("resonance"))
 @router.message(F.text == "🔮 Резонанс")
 async def cmd_resonance(message: Message):
@@ -3555,6 +3145,7 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
 @router.message(Command("tasks"))
 @router.message(F.text == "🌀 Задачи")
 
+
 def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Moscow") -> list:
     """Filter active tasks by deadline period.
     period: today | tomorrow | week | month | overdue | all
@@ -3628,6 +3219,7 @@ def _detect_task_period(text: str) -> str:
                 pass
     return "all"
 
+
 def _deadline_indicator(deadline: str, tz_name: str = "Europe/Moscow") -> str:
     """Return urgency emoji for a task deadline.
     🔥 = today or overdue
@@ -3679,6 +3271,7 @@ def _sort_roadmap_tasks(task_ids: list, all_tasks: list) -> list:
             return (0, dl)  # urgent/overdue first
         return (1, dl)
     return sorted(tasks, key=sort_key)
+
 
 def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
     """Format active tasks grouped by group in workspace order, with unique emojis."""
@@ -3744,6 +3337,7 @@ async def cmd_tasks(message: Message, view: str = "labels"):
     body = _format_tasks_labels(active, user_id)
     header = "🌀 <b>Задачи · Группы:</b>"
     await message.answer(header + "\n\n" + body)
+
 
 
 
@@ -4217,6 +3811,7 @@ async def cb_show_changelog(callback: CallbackQuery):
     except Exception:
         await callback.message.answer("\n".join(lines_cl))
 
+
 @router.message(Command("privacy"))
 async def cmd_privacy(message: Message):
     user_id = str(message.from_user.id)
@@ -4319,12 +3914,14 @@ async def delete_confirm_2(message: Message, state: FSMContext):
 # ─── Engineer chat ────────────────────────────────────────────────────────────
 
 
+
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
 # Track last menu message per user — delete before showing new menu
 _menu_messages: dict = {}  # {user_id: message_id}
 _checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
+
 
 def _get_history(user_id: str) -> list:
     return list(_sessions.get(str(user_id), []))
@@ -4364,6 +3961,7 @@ async def _check_version_notify(user_id: str) -> None:
         logger.warning(f"Version notify error for {user_id}: {e}")
 
 # ─── SR System Prompt ─────────────────────────────────────────────────────────
+
 
 async def _create_task_atomic(user_id: str, message: Message,
                                title: str, deadline: str = None,
@@ -4426,6 +4024,7 @@ async def _create_task_atomic(user_id: str, message: Message,
     store_set_tasks(user_id, tasks)
     _fire_sync()
     return new_task
+
 
 async def _create_checklist_atomic(user_id: str, message: Message,
                                     title: str, items_raw: str = "") -> dict:
@@ -4783,6 +4382,7 @@ SR_INTENT_MAP = """ПЯТЬ СФЕР РЕЗОНАНСА (как они живу�
 
 SR_SYSTEM_PROMPT = SR_CORE_PROMPT + "\n\n" + SR_INTENT_MAP
 
+
 def _build_user_context_msg(telegram_id: str) -> str:
     from datetime import datetime
     from zoneinfo import ZoneInfo
@@ -4872,6 +4472,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"{dp_block}"
     )
 
+
 def _classify_query_complexity(query: str) -> int:
     """
     Определяет сколько источников смотреть: 1, 2 или 3.
@@ -4897,6 +4498,7 @@ def _classify_query_complexity(query: str) -> int:
         return 3
     return 2
 
+
 # ── Домены по категориям запросов (Блок 1) ────────────────────────────────────
 _DOMAIN_MAP = {
     "weather":    ["yandex.ru/pogoda", "gismeteo.ru", "meteoinfo.ru"],
@@ -4915,6 +4517,7 @@ _DOMAIN_MAP = {
 # ── Кэш поисковых запросов 15 минут (Блок 5) ─────────────────────────────────
 _search_cache: dict = {}  # {cache_key: (result_list, timestamp)}
 _SEARCH_CACHE_TTL = 900   # 15 минут
+
 
 async def _tavily_search_raw(query: str, city: str = "", category: str = "default") -> list:
     """Поиск через Tavily. Возвращает список словарей [{title, url, content}].
@@ -4990,6 +4593,7 @@ async def _tavily_search_raw(query: str, city: str = "", category: str = "defaul
     except Exception as e:
         logger.warning(f"Tavily error: {e}")
     return []
+
 
 async def _synthesize_search(query: str, sources: list) -> str:
     """SR синтезирует результаты поиска в структурированный ответ."""
@@ -5069,6 +4673,7 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
         logger.error(f"OpenRouter error on {model}: {e}")
         return await _call_openrouter(messages, model_idx + 1)
 
+
 # ─── Menu button handlers ─────────────────────────────────────────────────────
 
 @router.message(F.text == "👤 Профиль")
@@ -5078,8 +4683,27 @@ async def btn_profile(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    await _show_dashboard(user_id, message)
+    if user_id in _menu_messages:
+        try:
+            await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
+        except Exception:
+            pass
+    card = _build_profile_card(user_id)
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
+    ])
+    sent = await message.answer(card, reply_markup=kb)
+    _menu_messages[user_id] = sent.message_id
 
+
+@router.message(F.text == "ℹ️ Информация")
+async def btn_info(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
+    await message.answer('🌱 Привет. Я — СР, твой компаньон в саду.\n\nУмею работать с:\n📋 Задачами и группами\n🗺 Роадмапами (крупные цели)\n☑️ Чеклистами\n🔔 Напоминаниями\n💎 Достижениями\n🔮 Резонансом сфер\n🌐 Поиском\n\n🧠 Живая память\nЯ наблюдаю за тобой из диалогов и задач — и становлюсь точнее.\n/sr_report — посмотри как я тебя вижу.\n\nПросто пиши или говори голосом — я пойму.\nХочешь узнать подробнее о чём-то? Просто спроси меня.', parse_mode="HTML", reply_markup=get_main_keyboard())
 
 
 @router.callback_query(F.data == "menu_restart")
@@ -5105,6 +4729,7 @@ async def cb_menu_leave(callback: CallbackQuery, state: FSMContext):
         "🚪 Хочешь покинуть сад?",
         reply_markup=get_leave_confirm_keyboard()
     )
+
 
 # ─── Architect authorization ──────────────────────────────────────────────────
 
@@ -5182,6 +4807,7 @@ def is_whitelisted(telegram_id: str) -> bool:
     """Check if user is in whitelist (in-memory check via pending or cached)."""
     return True  # Will be checked properly in cmd_start
 
+
 def _fix_layout(text: str) -> str:
     """Convert accidentally-typed Latin (QWERTY) to Russian Cyrillic."""
     en_to_ru = {
@@ -5200,6 +4826,7 @@ def _fix_layout(text: str) -> str:
     if total_alpha > 0 and latin_count / total_alpha > 0.7 and len(text) > 2:
         return ''.join(en_to_ru.get(c, c) for c in text)
     return text
+
 
 # back_to_settings duplicate removed (handled above)
 
@@ -5284,6 +4911,7 @@ async def cb_edit_city(callback: CallbackQuery, state: FSMContext):
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
 
+
 # edit_body / edit_spirit / edit_world removed in v7.24.5
 # Sphere resonance (Мер-Ка-Ба) will be auto-calculated from task life_area in v7.26.x
 
@@ -5299,6 +4927,7 @@ async def cb_edit_morning(callback: CallbackQuery, state: FSMContext):
         f"⏰ Время утреннего сообщения — сейчас: <b>{cur}</b>\n\nНапиши новое (ЧЧ:ММ):",
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
+
 
 # ─── Edit profile FSM ──────────────────────────────────────────────────────────
 
@@ -5362,6 +4991,7 @@ async def ep_morning(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(f"✅ Время утра: {t}", reply_markup=get_main_keyboard())
 
+
 # ep_body / ep_spirit / ep_world removed in v7.24.5
 # Sphere resonance auto-calculated from task life_area in v7.26.x
 
@@ -5379,6 +5009,7 @@ async def cb_edit_birthday(callback: CallbackQuery, state: FSMContext):
         f"Для отмены: пропустить",
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
     )
+
 
 @router.message(StateFilter(EditProfileStates.waiting_for_new_birthday))
 async def ep_birthday(message: Message, state: FSMContext):
@@ -5546,6 +5177,7 @@ async def _distill_observations(user_id: str, dp: dict) -> None:
         insights.append({"date": _today(), "text": insight})
         dp["long_term_insights"] = insights[-10:]
         logger.info(f"Long-term insight distilled for {user_id}")
+
 
 async def _generate_synthesis(user_id: str) -> None:
     """Generate living memory core once per active day."""
@@ -5745,6 +5377,7 @@ async def _send_daily_report() -> None:
         logger.info("Daily report sent to architect")
     except Exception as e:
         logger.error(f"Daily report error: {e}")
+
 
 # ─── Voice message handler (Groq Whisper) ─────────────────────────────────────
 
@@ -6102,8 +5735,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 else:
                                     reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
                             elif period == "all" or not period:
-                                # No filter — show dashboard
-                                await _show_dashboard(user_id, message)
+                                # No filter — show profile (tasks embedded there)
+                                await _show_profile(user_id, message)
                             else:
                                 # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
@@ -6130,7 +5763,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = "\n".join(lines)
                             reply_text = reply_text if (period != "all" or action_label) else ""
                         elif intent == "show_profile":
-                            await _show_dashboard(user_id, message)
+                            await _show_profile(user_id, message)
                             reply_text = ""
                         elif intent == "show_resonance":
                             await cmd_resonance(message)
@@ -6521,6 +6154,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             else:
                                 lbl_names = ", ".join(l["name"] for l in labels[:5]) or "нет групп"
                                 reply_text = f"🌀 Не нашла такую группу. Есть: {lbl_names}"
+
 
                         elif intent == "show_checklists":
                             checklists = store_get_checklists(user_id)
@@ -7288,6 +6922,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             else:
                                 reply_text = "🌀 Скажи: «переименуй группа X в Y»."
 
+
                         elif intent == "edit_task":
                             action_data = parsed_check.get("action") or {}
                             target      = (action_data.get("title") or "").lower().strip()
@@ -7538,6 +7173,7 @@ async def quick_add_achievement(callback: CallbackQuery):
     except Exception:
         pass
 
+
 @router.callback_query(F.data == "qdismiss")
 async def quick_dismiss(callback: CallbackQuery):
     await callback.answer()
@@ -7547,6 +7183,7 @@ async def quick_dismiss(callback: CallbackQuery):
         pass
 
 # ─── Startup / Shutdown ──────────────────────────────────────────────────────
+
 
 async def _check_webhook() -> None:
     """Restore webhook if missing — runs every 5 min via scheduler."""
@@ -7572,6 +7209,7 @@ async def on_startup():
     ])
     logger.info("Bot commands registered")
 
+
     # Scheduler setup
     scheduler = AsyncIOScheduler(timezone="UTC")
     scheduler.add_job(run_reminder_scheduler, "interval", minutes=1, id="reminders")
@@ -7596,6 +7234,7 @@ async def on_shutdown():
     logger.info("Bot shut down")
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
+
 
 async def health(request: web.Request) -> web.Response:
     status = "ready" if any(us.get("ready") for us in _store.values() if isinstance(us, dict)) else "loading"
