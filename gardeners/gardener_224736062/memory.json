@@ -63,6 +63,14 @@
     {
       "role": "assistant",
       "content": "✅ Задача «Bot Update» убрана из роадмапа «Развитие Мандалы»\n\n🗺 <b>Развитие Мандалы</b>\n░░░░░░░░░░ 0%  0/3  0%\n\n  · Scout Agent\n  · Symbiosis Guard\n  · Flutter App"
+    },
+    {
+      "role": "user",
+      "content": "Удалировать roadmap развития мандалы."
+    },
+    {
+      "role": "assistant",
+      "content": "🗑 Роадмап «Развитие Мандалы» удалён и 3 задач."
     }
   ],
   "updated": "2026-05-05"
