@@ -6,8 +6,8 @@
     "deadline": "2026-06-01",
     "created": "2026-04-01",
     "updated": "2026-05-06",
-    "progress": 98,
-    "current_version": "7.38",
+    "progress": 99,
+    "current_version": "7.38.1",
     "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
     "dev_rules": [
         "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
@@ -73,7 +73,8 @@
             "v7.35: Profile buttons, achievements counter only, auto-delete checklist, leave architect notify",
             "v7.36: Bug fixes — single divider, checklist delete returns to menu, back buttons → profile, bold reminders",
             "v7.37: Reminders v2 — two-step creation, repeat picker (weekly/monthly/yearly/weekends/custom_days), edit mode, timezone fix",
-            "v7.38: Reminders today list in profile, today tasks block, fix duplicates, voice repeat picker, /info command, simplified main menu"
+            "v7.38: Reminders today list in profile, today tasks block, fix duplicates, voice repeat picker, /info command, simplified main menu",
+            "v7.38.1: Roadmap today tasks under progress bar, reminder dot instead of bell, removed duplicate today block"
         ]
     },
     "observations": {
@@ -113,7 +114,7 @@
     "health": {
         "status": "healthy",
         "last_check": "2026-05-06",
-        "notes": "Bot v7.38 live. 4 gardeners active. DeepSeek V4 Flash primary. Profile v2, reminders v2, compact brief/changelog deployed. Info menu simplified."
+        "notes": "Bot v7.38.1 live. Roadmap today tasks visible under progress bar. Reminder list uses dot instead of bell. Duplicate today block removed. 4 gardeners active. DeepSeek V4 Flash primary."
     },
     "future_scaling": {
         "current_state": {
