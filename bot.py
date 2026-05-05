@@ -4084,7 +4084,6 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 Списки через • (буллит), без цифр и тире.
 Эмодзи для структуры — не для украшения.
 
-ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
   "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
@@ -6431,56 +6430,21 @@ async def free_conversation(message: Message, state: FSMContext):
                             r_repeat = action_r.get("repeat","once").strip()
                             if r_repeat not in ("once","daily","weekdays"):
                                 r_repeat = "once"
-                            # Pre-processing: compute relative time if LLM didn't
-                            if not r_dt or r_dt in ("null", "none", ""):
-                                import re as _rer
-                                from datetime import datetime as _dtr, timedelta as _tdr
-                                from zoneinfo import ZoneInfo as _ZIr
-                                _tzr = _ZIr(store_get_profile(user_id).get(
-                                    "companion_settings",{}).get("timezone","Europe/Moscow"))
-                                _now_r = _dtr.now(_tzr)
-                                _src = (text or "").lower()
-                                _m_min = _rer.search(r"через\s+(\d+)\s*мин", _src)
-                                _m_hr  = _rer.search(r"через\s+(\d+)\s*час", _src)
-                                if _m_min:
-                                    r_dt = (_now_r + _tdr(minutes=int(_m_min.group(1)))).strftime("%Y-%m-%dT%H:%M")
-                                elif _m_hr:
-                                    r_dt = (_now_r + _tdr(hours=int(_m_hr.group(1)))).strftime("%Y-%m-%dT%H:%M")
-                            if not r_title or not r_dt:
-                                reply_text = "🔔 Скажи точнее: «напомни мне X завтра в 9:00» или «напомни X через 30 минут»"
+                            if not r_title:
+                                reply_text = "🔔 Скажи точнее: «напомни мне X завтра в 9:00»"
                             else:
-                                # Apply gardener's timezone offset to datetime_iso
-                                # LLM returns local time; add timezone offset for storage
-                                try:
-                                    from zoneinfo import ZoneInfo as _ZIr2
-                                    _tz_name_r = (store_get_profile(user_id) or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
-                                    _tz_r = _ZIr2(_tz_name_r)
-                                    from datetime import datetime as _dtr2, timezone as _dtz2, timedelta as _td2
-                                    if "+" not in r_dt and not r_dt.endswith("Z"):
-                                        # Plain datetime, parse and add offset
-                                        r_dt_local = _dtr2.strptime(r_dt, "%Y-%m-%dT%H:%M")
-                                        r_dt_local = r_dt_local.replace(tzinfo=_tz_r)
-                                        offset = r_dt_local.utcoffset()
-                                        if offset:
-                                            hours = int(offset.total_seconds() // 3600)
-                                            minutes = int((offset.total_seconds() % 3600) // 60)
-                                            sign = "+" if hours >= 0 else "-"
-                                            r_dt = f"{r_dt}{sign}{abs(hours):02d}:{minutes:02d}"
-                                except Exception:
-                                    pass  # Keep original if parsing fails
-                                reminders = store_get_reminders(user_id)
-                                if len(reminders) >= REMINDER_LIMIT:
-                                    reply_text = f"⚠️ Лимит {REMINDER_LIMIT} напоминаний."
-                                else:
-                                    rid = _make_reminder_id(reminders)
-                                    reminders.append({"id":rid,"title":r_title,
-                                                      "datetime_iso":r_dt,"repeat":r_repeat,"active":True})
-                                    store_set_reminders(user_id, reminders)
-                                    await _sync_pending()
+                                result = await _create_reminder_atomic(
+                                    user_id, message,
+                                    title=r_title,
+                                    datetime_str=r_dt if r_dt and r_dt not in ("null","none","") else None,
+                                    repeat=r_repeat
+                                )
+                                if result:
                                     rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(r_repeat,"один раз")
-                                    reply_text = (f"✅ Напоминание: 🔔 {r_title} · {r_dt[:16].replace('T',' ')} · {rep_s}\n\n"
+                                    reply_text = (f"✅ Напоминание: 🔔 {result['title']} · {result['datetime_iso'][:16].replace('T',' ')} · {rep_s}\n\n"
                                                   + _reminder_list_text(store_get_reminders(user_id)))
-
+                                else:
+                                    reply_text = "🔔 Не удалось создать напоминание."
                         elif intent == "show_reminders":
                             reminders = store_get_reminders(user_id)
                             if not reminders:
@@ -7145,12 +7109,17 @@ async def free_conversation(message: Message, state: FSMContext):
 
             _add_to_history(user_id, "user", text)
             # Track if next request needs full INTENT_MAP
+            # Keep map active for 3 messages after any action intent
             try:
                 _last_intent = parsed.get("intent", "conversation") if parsed else "conversation"
-                # Show map on next request if this was an action or first message
-                _intent_map_needed[user_id] = (_last_intent != "conversation")
+                if _last_intent != "conversation":
+                    _intent_map_needed[user_id] = 3  # keep map for 3 more messages
+                else:
+                    current = _intent_map_needed.get(user_id, 0)
+                    if current > 0:
+                        _intent_map_needed[user_id] = current - 1  # countdown
             except Exception:
-                _intent_map_needed[user_id] = False
+                _intent_map_needed[user_id] = 0
             _add_to_history(user_id, "assistant", reply_text)
             # Persist memory to GitHub (fire-and-forget)
             _pending_writes[f"{_user_path(user_id)}/memory.json"] = {
