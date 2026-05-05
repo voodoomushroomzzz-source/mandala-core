@@ -582,7 +582,15 @@
       "created": "2026-05-05"
     }
   ],
-  "reminders": [],
+  "reminders": [
+    {
+      "id": "rem_1f01ddd9",
+      "title": "лечь спать",
+      "datetime_iso": "2026-05-06T01:30+03:00",
+      "repeat": "once",
+      "active": true
+    }
+  ],
   "_decay_date": "2026-05-05",
   "roadmaps": [
     {
