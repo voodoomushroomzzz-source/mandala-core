@@ -267,7 +267,14 @@ def _reminder_list_text(reminders: list) -> str:
         return "🔔 Напоминаний нет."
     lines = [f"🔔 <b>Напоминания ({len(reminders)}):</b>"]
     for r in reminders:
-        dt  = r.get("datetime_iso","")[:16].replace("T"," ")
+        dt_iso = r.get("datetime_iso","")
+        # Strip timezone offset for display: "2026-05-05T13:00+05:00" → "2026-05-05 13:00"
+        if "+" in dt_iso:
+            dt = dt_iso[:16].replace("T"," ")
+        elif dt_iso.endswith("Z"):
+            dt = dt_iso[:-1][:16].replace("T"," ")
+        else:
+            dt = dt_iso[:16].replace("T"," ")
         rep = {"once":"1×","daily":"ежедн.","weekdays":"пн-пт"}.get(r.get("repeat","once"),"1×")
         lines.append(f"  🔔 {r['title']} · {dt} ({rep})")
     return "\n".join(lines)
@@ -1589,12 +1596,31 @@ async def run_reminder_scheduler() -> None:
                 _tz6 = _ZI6(_tz_name6)
             except Exception:
                 _tz6 = _ZI6("Europe/Moscow")
-            now_str = _dtr6.now(_tz6).strftime("%Y-%m-%dT%H:%M")
+            now_dt = _dtr6.now(_tz6)
+            now_str = now_dt.strftime("%Y-%m-%dT%H:%M")
             changed = False
             for r in list(reminders):
                 if not r.get("active"):
                     continue
-                if r.get("datetime_iso", "")[:16] != now_str:
+                # Parse reminder time with timezone awareness
+                r_dt_str = r.get("datetime_iso", "")
+                r_match = False
+                # Try timezone-aware format first: "YYYY-MM-DDTHH:MM+HH:MM"
+                if "+" in r_dt_str or r_dt_str.endswith("Z"):
+                    try:
+                        from datetime import timezone as _dtz
+                        if r_dt_str.endswith("Z"):
+                            r_dt = _dtr6.fromisoformat(r_dt_str[:-1] + "+00:00")
+                        else:
+                            r_dt = _dtr6.fromisoformat(r_dt_str)
+                        r_dt_tz = r_dt.astimezone(_tz6)
+                        r_match = r_dt_tz.strftime("%Y-%m-%dT%H:%M") == now_str
+                    except Exception:
+                        r_match = r_dt_str[:16] == now_str  # fallback
+                else:
+                    # Plain format: compare directly (gardener's local time)
+                    r_match = r_dt_str[:16] == now_str
+                if not r_match:
                     continue
                 try:
                     await bot.send_message(int(uid), f"🔔 <b>{r['title']}</b>",
@@ -4309,6 +4335,7 @@ SR_INTENT_MAP = """ПЯТЬ СФЕР РЕЗОНАНСА (как они живу�
   Пример: "найди вакансии разработчика" → action.query="вакансии разработчик {city}", action.search_category="jobs"
   В поле text пиши ТОЛЬКО нормализованный запрос — без анализа сфер, профиля, философии.
 - "напомни мне X завтра в 9", "поставь напоминание X" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM", action.repeat=once/daily/weekdays, 0.95
+  ВАЖНО: datetime_iso ВСЕГДА в локальном времени садовника из [Сейчас у садовника]. НЕ переводи в UTC. Если садовник говорит "в 13:00" и в контексте Asia/Almaty — ставь 13:00 по Алматы
 - "напомни через 30 минут", "через 2 часа напомни X" → create_reminder, action.title=X, action.datetime=текущее_время+N_минут/часов в ISO формате, 0.95
 - "напомни сегодня в 21:00", "напоминание X в 20:30" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM" (сегодняшняя дата), 0.95
 - ВАЖНО: "через N минут" → прибавь N минут к текущему времени из контекста [Сейчас у садовника]. "через N часов" → прибавь N часов. Результат в ISO формате YYYY-MM-DDTHH:MM
@@ -6380,6 +6407,25 @@ async def free_conversation(message: Message, state: FSMContext):
                             if not r_title or not r_dt:
                                 reply_text = "🔔 Скажи точнее: «напомни мне X завтра в 9:00» или «напомни X через 30 минут»"
                             else:
+                                # Apply gardener's timezone offset to datetime_iso
+                                # LLM returns local time; add timezone offset for storage
+                                try:
+                                    from zoneinfo import ZoneInfo as _ZIr2
+                                    _tz_name_r = (store_get_profile(user_id) or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
+                                    _tz_r = _ZIr2(_tz_name_r)
+                                    from datetime import datetime as _dtr2, timezone as _dtz2, timedelta as _td2
+                                    if "+" not in r_dt and not r_dt.endswith("Z"):
+                                        # Plain datetime, parse and add offset
+                                        r_dt_local = _dtr2.strptime(r_dt, "%Y-%m-%dT%H:%M")
+                                        r_dt_local = r_dt_local.replace(tzinfo=_tz_r)
+                                        offset = r_dt_local.utcoffset()
+                                        if offset:
+                                            hours = int(offset.total_seconds() // 3600)
+                                            minutes = int((offset.total_seconds() % 3600) // 60)
+                                            sign = "+" if hours >= 0 else "-"
+                                            r_dt = f"{r_dt}{sign}{abs(hours):02d}:{minutes:02d}"
+                                except Exception:
+                                    pass  # Keep original if parsing fails
                                 reminders = store_get_reminders(user_id)
                                 if len(reminders) >= REMINDER_LIMIT:
                                     reply_text = f"⚠️ Лимит {REMINDER_LIMIT} напоминаний."
