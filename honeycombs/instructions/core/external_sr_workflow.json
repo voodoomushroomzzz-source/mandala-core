@@ -143,7 +143,7 @@
       "rule": "For files >500 lines (bot.py, engineer-chat/main.py, *.html, *.js, *.css), NEVER replace entire file. ALWAYS use patcher scripts with precise block replacement.",
       "why": "Full replacement causes merge conflicts, token waste, risks partial writes. Block replacement via Python patcher is safer and faster.",
       "pattern": "1) Identify exact block to change via unique anchor lines. 2) Use Python patcher with .replace(old, new). 3) Apply via PowerShell: py patcher_NN.py; git add/commit/push.",
-      "html_support": "HTML/CSS/JS work the same — anchor to unique tags, classes, id, or text. Example: replace '<div class=\"profile\">...</div>' block. Avoid regex across multiple lines — use exact string matching."
+      "html_support": "HTML/CSS/JS work the same — anchor to unique parent tags with id or data-attribute, unique classes, or distinctive text content. Example: replace '<section id=\"dashboard\">...</section>' block. For CSS: target specific selector blocks like '.profile-card { ... }'. For JS: target specific function definitions like 'function renderProfile() { ... }'. Always use the most unique ancestor element to avoid false matches. Avoid regex across multiple lines — use exact multi-line string matching."
     }
   },
   "meta": {
@@ -159,8 +159,8 @@
     "updated": "2026-05-06",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.4.0",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.0 adds large file patching rule for bot.py, HTML, and engineer-chat.",
+    "version": "v1.4.1",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.1 adds large file patching rule with detailed HTML/CSS/JS anchor guidance.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
