@@ -60,11 +60,12 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.30"
+BOT_VERSION = "7.31"
 BOT_LATEST_UPDATE = {
-    "version": "7.30",
-    "date": "2026-05-03",
+    "version": "7.31",
+    "date": "2026-05-05",
     "features": [
+        "Кликабельный профиль — сферы, роадмапы, группы, напоминания в одном дашборде",
         "Живая память СР — портрет садовника обновляется каждый день",
         "Интересы садовника из задач и диалогов",
         "Персонализированные рекомендации по сферам",
@@ -72,6 +73,12 @@ BOT_LATEST_UPDATE = {
         "Пустые группы видны в профиле",
     ],
     "fixes": [
+        "Исправлен health() endpoint для Render",
+        "Исправлен race condition в store_add_resonance",
+        "Исправлена команда /groups",
+        "Профиль унифицирован через _show_profile",
+        "Автоопределение часового пояса для Алматы, Астаны, Киева, Минска и др.",
+        "Исправлен _time_matches для не-московских часовых поясов",
         "Дистилляция наблюдений перед удалением — знания не теряются",
         "Портрет садовника в ежедневном отчёте архитектору",
     ]
@@ -401,13 +408,27 @@ def _today(tz_name: str = "Europe/Moscow") -> str:
         return datetime.now(ZoneInfo("Europe/Moscow")).strftime("%Y-%m-%d")
 
 
+CIS_TIMEZONES = {
+    "алматы": "Asia/Almaty", "алмата": "Asia/Almaty",
+    "астана": "Asia/Almaty", "нур-султан": "Asia/Almaty",
+    "киев": "Europe/Kiev", "київ": "Europe/Kiev",
+    "минск": "Europe/Minsk", "мінск": "Europe/Minsk",
+    "ташкент": "Asia/Tashkent", "баку": "Asia/Baku",
+    "ереван": "Asia/Yerevan", "тбилиси": "Asia/Tbilisi",
+    "бишкек": "Asia/Bishkek", "душанбе": "Asia/Dushanbe",
+    "ашхабад": "Asia/Ashgabat",
+}
+
 async def _city_to_timezone(city: str) -> str:
     """Resolve city name to IANA timezone string.
-    Uses geopy (Nominatim) + timezonefinder.
+    Checks hardcoded CIS cities first, then uses geopy + timezonefinder.
     Falls back to Europe/Moscow on any error.
     """
     if not city:
         return "Europe/Moscow"
+    city_lower = city.strip().lower()
+    if city_lower in CIS_TIMEZONES:
+        return CIS_TIMEZONES[city_lower]
     try:
         from geopy.geocoders import Nominatim
         from timezonefinder import TimezoneFinder
@@ -941,7 +962,7 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
         tz = ZoneInfo(timezone)
         now = _dt.now(tz)
         h, m_val = map(int, setting_time.split(":"))
-        target = now.replace(hour=h, minute=m_val, second=0, microsecond=0)
+        target = t.replace(hour=h, minute=m_val, second=0, microsecond=0)
         return abs((now - target).total_seconds()) <= 300  # 5 min window
     except Exception:
         return False
