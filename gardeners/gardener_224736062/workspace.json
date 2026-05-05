@@ -646,6 +646,11 @@
           "done": false
         },
         {
+          "id": "i4",
+          "text": "тест 4",
+          "done": false
+        },
+        {
           "id": "i2",
           "text": "тест 2",
           "done": false
@@ -653,11 +658,6 @@
         {
           "id": "i3",
           "text": "тест 3",
-          "done": false
-        },
-        {
-          "id": "i4",
-          "text": "тест 4",
           "done": false
         }
       ],
