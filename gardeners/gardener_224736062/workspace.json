@@ -661,7 +661,7 @@
           "done": false
         }
       ],
-      "pinned_message_id": null,
+      "pinned_message_id": 9293,
       "created": "2026-05-05"
     }
   ],
@@ -720,7 +720,6 @@
       "deadline": null,
       "created": "2026-05-05",
       "task_ids": [
-        "t_e0f3903d",
         "t_e4276d15",
         "t_e829ab0f",
         "t_32dadf0b"
