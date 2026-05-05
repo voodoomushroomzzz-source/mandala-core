@@ -2238,7 +2238,9 @@ async def cb_profile_sphere(callback: CallbackQuery):
     if sphere_achs:
         lines.append("\u0414\u043e\u0441\u0442\u0438\u0436\u0435\u043d\u0438\u044f:")
         for a in sphere_achs[-3:]:
-            lines.append(f"  \u00b7 {a.get('title', '\u2014')} (+{a.get('resonance_bonus', 3)}%)")
+            a_title = a.get('title') or '\u2014'
+            a_bonus = a.get('resonance_bonus', 3)
+            lines.append(f"  \u00b7 {a_title} (+{a_bonus}%)")
         lines.append("")
 
     if pct < 25:
