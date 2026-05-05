@@ -6611,7 +6611,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             else:
                                 reply_text = "🌀 Укажи номера пунктов: «поставь пункт 3 после пункта 1»"
 
-                                                elif intent == "create_reminder":
+                        elif intent == "create_reminder":
                             action_r = parsed_check.get("action") or {}
                             r_title  = action_r.get("title","").strip()
                             r_dt     = action_r.get("datetime","").strip()
