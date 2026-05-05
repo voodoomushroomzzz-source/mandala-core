@@ -194,7 +194,7 @@ def store_add_resonance(telegram_id: str, delta: int) -> int:
     new_val = max(5, min(100, current + delta))
     profile["resonance_level"] = new_val
     if telegram_id in _store:
-        _store[telegram_id]["profile"] = profile
+        store_set_profile(telegram_id, profile)
         # profile.json is the source of truth — gardener.json write removed (dead code)
         _pending_writes[f"{_user_path(telegram_id)}/profile.json"] = profile
     return new_val
@@ -555,7 +555,7 @@ async def _load_user(telegram_id: str) -> None:
         logger.info(f"Auto-cleaned {len(_raw_tasks) - len(_clean_tasks)} empty task(s) for {uid}")
         _ws["tasks"] = _clean_tasks
         _pending_writes[f"{_user_path(uid)}/workspace.json"] = _ws
-        await _sync_pending()  # immediate — ensure cleanup is saved
+        _fire_sync()  # fire-and-forget — don't block startup
     store["workspace"] = _ws
     store["ready"]     = store["profile"] is not None
     # Restore conversation history from memory.json
@@ -2948,36 +2948,8 @@ async def onboard_morning(message: Message, state: FSMContext):
 @router.message(Command("profile"))
 @router.message(F.text == "🌾 Профиль")
 async def cmd_profile(message: Message, state: FSMContext = None):
-    user_id = str(message.from_user.id) if hasattr(message, 'from_user') else str(message)
-    if hasattr(message, 'from_user'):
-        user_id = str(message.from_user.id)
-    gardener = store_get_profile(user_id)
-    if not gardener:
-        if hasattr(message, 'answer'):
-            await message.answer("🌿 Профиль не найден")
-        return
-    name = gardener.get("name", "Садовник")
-    resonance = gardener.get("resonance_level", 0)
-    active_tasks = [t for t in store_get_tasks(user_id) if t.get("status") != "completed"]
-    ach_count = len(store_get_achievements(user_id))
-    life_areas = gardener.get("personal_info", {}).get("life_areas", {})
-    body = life_areas.get("body", {}).get("current", "—")
-    spirit = life_areas.get("spirit", {}).get("current", "—")
-    world = life_areas.get("world", {}).get("current", "—")
-    city = gardener.get("companion_settings", {}).get("city", "")
-    birthday = gardener.get("companion_settings", {}).get("birthday", "")
-    city_str = f"\n📍 Город: {city}" if city else ""
-    birthday_str = f"\n🎂 День рождения: {birthday}" if birthday else ""
-    text = (
-        f"🌾 <b>{name}</b>\n\n"
-        f"🔮 Резонанс: {resonance}%\n"
-        f"🌿 Тело: {body}/10  🔥 Дух: {spirit}/10  🤝 Мир: {world}/10\n"
-        f"🎯 Активных задач: {len(active_tasks)}\n"
-        f"💎 Достижений: {ach_count}"
-        f"{city_str}{birthday_str}"
-    )
-    if hasattr(message, 'answer'):
-        await message.answer(text, parse_mode="HTML", reply_markup=get_settings_inline())
+    user_id = str(message.from_user.id)
+    await _show_profile(user_id, message)
 
 @router.message(Command("resonance"))
 @router.message(F.text == "🔮 Резонанс")
@@ -3816,7 +3788,7 @@ async def cmd_groups(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    groups = _store.get("groups", {}).get("groups", [])
+    groups = store_get_groups(user_id).get("groups", [])
     if not groups:
         await message.answer("🌱 Групп пока нет. Создай через /newgroup")
         return
@@ -7363,7 +7335,7 @@ async def on_shutdown():
 
 
 async def health(request: web.Request) -> web.Response:
-    status = "ready" if _store.get("ready") else "loading"
+    status = "ready" if any(us.get("ready") for us in _store.values() if isinstance(us, dict)) else "loading"
     name = "none"
     for uid, us in _store.items():
         if isinstance(us, dict) and us.get("ready") and us.get("profile"):
