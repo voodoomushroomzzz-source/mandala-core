@@ -3884,43 +3884,7 @@ async def delete_confirm_2(message: Message, state: FSMContext):
 
 # ─── Engineer chat ────────────────────────────────────────────────────────────
 
-@router.message(StateFilter(EngineerChatStates.waiting_for_message))
-async def idea_send(message: Message, state: FSMContext):
-    text = message.text.strip()
-    if not text:
-        await message.answer("💡 Напиши идею или нажми ❌ Отмена")
-        return
-    user_id = str(message.from_user.id)
-    gardener = store_get_profile(user_id) or {}
-    name = gardener.get("name", "Садовник")
-    approved = True
-    try:
-        filter_msgs = [
-            {"role": "system", "content": "Ты фильтр идей Мандалы. Оцени идею по принципу Ахимсы и пользы для роста. Верни JSON: {\"approved\": true/false, \"reason\": \"...\"}. Одобряй идеи о росте, творчестве, сообществе. Отклоняй деструктивные."},
-            {"role": "user", "content": "Идея от " + name + ": " + text}
-        ]
-        raw = await _call_openrouter(filter_msgs)
-        if raw and raw.startswith("{"):
-            result = json.loads(raw)
-            approved = result.get("approved", True)
-    except Exception:
-        approved = True
 
-    if approved:
-        seed = {"title": text[:100], "source": "gardener_bot", "gardener": name, "created": _today(), "status": "new"}
-        seed_path = f"honeycombs/seeds/bot_seed_{_today().replace('-','')}_{str(message.from_user.id)[-4:]}.json"
-        asyncio.create_task(_github_put(seed_path, seed))
-        await state.clear()
-        await message.answer(
-            "🌱 <b>Идея принята!</b>\n\nТвоя мысль отправлена в копилку семян Мандалы. Если прорастёт — ты узнаешь первым.",
-            reply_markup=get_main_keyboard()
-        )
-    else:
-        await state.clear()
-        await message.answer(
-            "🌿 Эта идея пока не в резонансе с философией Мандалы. Попробуй переформулировать в духе роста и Ахимсы.",
-            reply_markup=get_main_keyboard()
-        )
 
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
