@@ -60,11 +60,11 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.35"
+BOT_VERSION = "7.36"
 BOT_LATEST_UPDATE = {
-    "version": "7.35",
+    "version": "7.36",
     "date": "2026-05-05",
-    "text": "🌱 Мандала обновилась · v7.35\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
+    "text": "🌱 Мандала обновилась · v7.36\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1083,7 +1083,7 @@ def _build_profile_card(user_id: str) -> str:
     today_rem = _dt_rem.now().strftime("%Y-%m-%d")
     today_count = sum(1 for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem)
     total_rem = len(reminders)
-    lines.append(f"🔔 Напоминания сегодня: {today_count}/{total_rem}")
+    lines.append(f"🔔 <b>Напоминания сегодня</b> {today_count}/{total_rem}")
     lines.append("────────────────")
 
     # Collect all task_ids that belong to any roadmap
@@ -1114,8 +1114,6 @@ def _build_profile_card(user_id: str) -> str:
     active = [t for t in all_tasks
               if t.get("status") != "completed"
               and t.get("task_id") not in roadmap_task_ids]
-    if active:
-        lines.append("────────────────")
     if not active and not roadmaps:
         lines.append("🌀 Активных задач нет")
         return "\n".join(lines)
@@ -1310,7 +1308,7 @@ def get_checklists_mgmt_inline(checklists: list) -> InlineKeyboardMarkup:
             InlineKeyboardButton(text=f"☑️ {title} ({prog})", callback_data=f"cl_open_{cid}"),
             InlineKeyboardButton(text="🗑", callback_data=f"cl_delete_{cid}"),
         ])
-    btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
+    btns.append([InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_cancel_keyboard() -> ReplyKeyboardMarkup:
@@ -2325,10 +2323,11 @@ async def cb_cl_delete(callback: CallbackQuery, state: FSMContext):
     checklists = [c for c in checklists if c["id"] != cid]
     store_set_checklists(user_id, checklists)
     _fire_sync()
+    header = f"☑️ <b>Чеклисты</b> ({len(checklists)}/{CHECKLIST_LIMIT})"
     try:
-        await callback.message.edit_text(f"🗑 Чеклист «{title}» удалён.")
+        await callback.message.edit_text(header, reply_markup=get_checklists_mgmt_inline(checklists))
     except Exception:
-        pass
+        await callback.message.answer(header, reply_markup=get_checklists_mgmt_inline(checklists))
 
 # ─── Checklist — Edit (add/delete/edit items) ────────────────────────────────
 
@@ -2571,7 +2570,7 @@ def get_reminders_mgmt_inline(reminders: list) -> InlineKeyboardMarkup:
             InlineKeyboardButton(text=f"🔔 {title} · {dt} ({rep})", callback_data=f"rem_noop_{rid}"),
             InlineKeyboardButton(text="🗑", callback_data=f"rem_del_{rid}"),
         ])
-    btns.append([InlineKeyboardButton(text="← Назад", callback_data="back_to_settings")])
+    btns.append([InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 @router.callback_query(F.data == "menu_reminders_mgmt")
