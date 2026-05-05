@@ -1,51 +1,55 @@
 {
-  "tasks": [
-    {
-      "task_id": "t_71d916fb",
-      "title": "Запись лекции о decimal",
-      "status": "active",
-      "created": "2026-05-04",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
-    }
-  ],
-  "groups": [],
-  "achievements": [],
-  "updated": "2026-05-04",
-  "sphere_resonance": {
-    "health": 20,
-    "creativity": 20,
-    "work": 20,
-    "connections": 20,
-    "growth": 20
-  },
-  "reminders": [
-    {
-      "id": "rem_989b762e",
-      "title": "Python: функциональное программирование",
-      "datetime_iso": "2026-05-05T20:00",
-      "repeat": "daily",
-      "active": true
-    },
-    {
-      "id": "rem_576faca0",
-      "title": "Запись лекции о decimal",
-      "datetime_iso": "2026-05-05T13:00",
-      "repeat": "once",
-      "active": true
-    }
-  ],
-  "roadmaps": [
-    {
-      "roadmap_id": "rm_5cafdee9",
-      "title": "инжениринг данных",
-      "deadline": null,
-      "created": "2026-05-04",
-      "task_ids": [
-        "t_71d916fb"
-      ],
-      "status": "active"
-    }
-  ]
+    "tasks":  [
+                  {
+                      "task_id":  "t_71d916fb",
+                      "title":  "Запись лекции о decimal",
+                      "status":  "active",
+                      "created":  "2026-05-04",
+                      "deadline":  null,
+                      "label_name":  null,
+                      "reminder":  null
+                  }
+              ],
+    "groups":  [
+
+               ],
+    "achievements":  [
+
+                     ],
+    "updated":  "2026-05-04",
+    "sphere_resonance":  {
+                             "health":  20,
+                             "creativity":  20,
+                             "work":  20,
+                             "connections":  20,
+                             "growth":  20
+                         },
+    "reminders":  [
+                      {
+                          "id":  "rem_989b762e",
+                          "title":  "Python: функциональное программирование",
+                          "datetime_iso":  "2026-05-05T20:00+05:00",
+                          "repeat":  "daily",
+                          "active":  true
+                      },
+                      {
+                          "id":  "rem_576faca0",
+                          "title":  "Запись лекции о decimal",
+                          "datetime_iso":  "2026-05-05T13:00+05:00",
+                          "repeat":  "once",
+                          "active":  true
+                      }
+                  ],
+    "roadmaps":  [
+                     {
+                         "roadmap_id":  "rm_5cafdee9",
+                         "title":  "инжениринг данных",
+                         "deadline":  null,
+                         "created":  "2026-05-04",
+                         "task_ids":  [
+                                          "t_71d916fb"
+                                      ],
+                         "status":  "active"
+                     }
+                 ]
 }
