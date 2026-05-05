@@ -60,34 +60,39 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.33"
+BOT_VERSION = "7.33.1"
 BOT_LATEST_UPDATE = {
-    "version": "7.33",
+    "version": "7.33.1",
     "date": "2026-05-05",
-    "features": [
-        "Напоминания сегодня в профиле (N/M)",
-        "Количество задач в заголовке группы (16)",
-        "Лимит 3 задачи на группу + ...и ещё N",
-        "Разделители - - - - - - - - - между блоками",
-        "Утренний брифинг с автодогоном — не пропадает после сна бота",
-        "Надёжные уведомления об обновлениях — при первом сообщении",
-        "Автоопределение часового пояса для 13 городов СНГ",
-        "5 сфер резонанса в профиле вместо 3",
-        "Пустые группы видны в профиле",
-    ],
-    "fixes": [
-        "Исправлен health() endpoint для Render",
-        "Исправлен race condition в store_add_resonance",
-        "Исправлена команда /groups",
-        "Профиль унифицирован через _show_profile",
-        "Исправлен _time_matches для не-московских часовых поясов",
-        "Удалён МКБ-вид задач — только группировка по группам",
-        "Удалён /sr_report — заменён на интерактивный дашборд (скоро)",
-        "Удалено 12 мёртвых хендлеров и функций",
-        "Категории достижений синхронизированы с 5 сферами",
-        "Детект эмоций не срабатывает на отрицания",
-        "Догоняющий брифинг не спамит после рестарта",
-    ]
+    "text": "🌱 Мандала обновилась · v7.33.1
+
+"
+            "Привет, {name}! Смотри что нового:
+
+"
+            "🪪 Профиль стал понятнее:
+"
+            "  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)
+"
+            "  · Задачи сгруппированы, до 3 на группу
+"
+            "  · Разделители между блоками для ясности
+
+"
+            "🔔 Оповещения:
+"
+            "  · Утренний брифинг — компактный, только важное
+"
+            "  · Уведомления об обновлениях при первом сообщении
+
+"
+            "🛠 Улучшения:
+"
+            "  · Часовые пояса для 13 городов СНГ
+"
+            "  · Профиль унифицирован, убраны дубликаты
+"
+            "  · Мёртвый код удалён, бот легче и быстрее",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1102,13 +1107,12 @@ def _build_profile_card(user_id: str) -> str:
 
     # ── Reminders block ────────────────────────────────────────────────
     reminders = store_get_reminders(user_id)
-    if reminders:
-        from datetime import datetime as _dt_rem
-        today_rem = _dt_rem.now().strftime("%Y-%m-%d")
-        today_count = sum(1 for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem)
-        total_rem = len(reminders)
-        lines.append(f"🔔 Напоминания сегодня: {today_count}/{total_rem}")
-        lines.append("")
+    from datetime import datetime as _dt_rem
+    today_rem = _dt_rem.now().strftime("%Y-%m-%d")
+    today_count = sum(1 for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem)
+    total_rem = len(reminders)
+    lines.append(f"🔔 Напоминания сегодня: {today_count}/{total_rem}")
+    lines.append("────────────────")
 
     # Collect all task_ids that belong to any roadmap
     roadmaps = store_get_roadmaps(user_id)
@@ -1138,9 +1142,10 @@ def _build_profile_card(user_id: str) -> str:
     active = [t for t in all_tasks
               if t.get("status") != "completed"
               and t.get("task_id") not in roadmap_task_ids]
-    if not active:
-        if not roadmaps:
-            lines.append("🌀 Активных задач нет")
+    if active:
+        lines.append("────────────────")
+    if not active and not roadmaps:
+        lines.append("🌀 Активных задач нет")
         return "\n".join(lines)
 
     groups_data = store_get_groups(user_id).get("groups", [])
@@ -1167,7 +1172,7 @@ def _build_profile_card(user_id: str) -> str:
         shown.add(gname)
         emoji = emoji_map.get(g["id"], "🌱")
         if not first_group:
-            lines.append("- - - - - - - - -")
+            lines.append("")
         first_group = False
         lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
         shown_count = 0
@@ -1186,7 +1191,7 @@ def _build_profile_card(user_id: str) -> str:
             continue
         emoji = get_group_emoji(gname)
         if not first_group:
-            lines.append("- - - - - - - - -")
+            lines.append("")
         first_group = False
         lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
         shown_count = 0
@@ -1203,7 +1208,7 @@ def _build_profile_card(user_id: str) -> str:
     unlabeled = by_group.get("", [])
     if unlabeled:
         if not first_group:
-            lines.append("- - - - - - - - -")
+            lines.append("")
         lines.append(f"🌱 <b>Без группы ({len(unlabeled)})</b>")
         shown_ul = 0
         for t in _sort_by_deadline(unlabeled):
@@ -1547,44 +1552,22 @@ async def send_morning_greeting(telegram_id: str) -> None:
             # Classify tasks
             hot    = sorted([t for t in active if t.get("deadline") and t["deadline"] <= today_s],
                              key=lambda t: t.get("deadline") or "9999")  # overdue + today
-            medium = [t for t in active if t.get("deadline") in (tomorrow_s, day_after_s)]
-            low    = [t for t in active
-                      if t.get("deadline") and day_after_s < t["deadline"] <= week_end_s]
-            rest   = [t for t in active
-                      if t not in hot and t not in medium and t not in low]
-            # Build brief Variant B
+            tomorrow_tasks = [t for t in active if t.get("deadline") == tomorrow_s]
+            # Compact brief
             if hot:
-                lines.append("")
-                lines.append("🔥 <b>Сегодня горит:</b>")
-                for t in hot:
-                    dl = t.get("deadline", "")
-                    suffix = " <i>· просрочена</i>" if dl < today_s else ""
-                    lines.append(f"  {t['title']}{suffix}")
-            if medium:
-                lines.append("")
-                lines.append("⚡ <b>На подходе:</b>")
-                for t in medium:
-                    dl = t.get("deadline", "")
-                    day_label = "завтра" if dl == tomorrow_s else "послезавтра"
-                    lines.append(f"  {t['title']} · {day_label}")
-            if low:
-                lines.append("")
-                lines.append("🌱 <b>В работе:</b>")
-                for t in low[:3]:
-                    dl = t.get("deadline", "")
-                    lines.append(f"  {t['title']} · {dl}")
-                if len(low) > 3:
-                    lines.append(f"  <i>...и ещё {len(low)-3}</i>")
-            if rest and not hot and not medium and not low:
-                lines.append("")
-                for t in rest[:3]:
-                    lines.append(f"  {t['title']}")
-                if len(rest) > 3:
-                    lines.append(f"  <i>...и ещё {len(rest)-3}</i>")
+                hot_titles = ", ".join(t["title"] for t in hot[:3])
+                if len(hot) > 3:
+                    hot_titles += f" +{len(hot)-3}"
+                lines.append(f"🔥 Сегодня: {hot_titles}")
+            if tomorrow_tasks:
+                tm_titles = ", ".join(t["title"] for t in tomorrow_tasks[:3])
+                if len(tomorrow_tasks) > 3:
+                    tm_titles += f" +{len(tomorrow_tasks)-3}"
+                lines.append(f"⚡ Завтра: {tm_titles}")
+            if not hot and not tomorrow_tasks:
+                lines.append(f"Активных задач: {len(active)}")
             lines.append("")
-            lines.append("Что берёшь в работу первым?")
-            lines.append("")
-            lines.append(f"💎 {ach_count} достижений · Резонанс {resonance}%")
+            lines.append(f"💎 {ach_count} · 🔮 {resonance}%")
         else:
             lines.append("")
             lines.append("Активных задач нет — как наполним этот день? 🌱")
@@ -3879,20 +3862,14 @@ async def cmd_archive(message: Message):
 @router.callback_query(F.data == "show_changelog")
 async def cb_show_changelog(callback: CallbackQuery):
     await callback.answer()
-    upd = BOT_LATEST_UPDATE
-    lines_cl = [f"📋 Обновление v{upd['version']} · {upd['date']}\n"]
-    if upd.get("features"):
-        lines_cl.append("Новое:")
-        for feat in upd["features"]:
-            lines_cl.append(f"  · {feat}")
-    if upd.get("fixes"):
-        lines_cl.append("\nИсправлено:")
-        for fix in upd["fixes"]:
-            lines_cl.append(f"  · {fix}")
+    user_id = str(callback.from_user.id)
+    profile = store_get_profile(user_id) or {}
+    name = profile.get("name", "Садовник")
+    text = BOT_LATEST_UPDATE.get("text", "").format(name=name)
     try:
-        await callback.message.edit_text("\n".join(lines_cl), reply_markup=None)
+        await callback.message.edit_text(text, reply_markup=None)
     except Exception:
-        await callback.message.answer("\n".join(lines_cl))
+        await callback.message.answer(text)
 
 
 @router.message(Command("privacy"))
@@ -4035,7 +4012,7 @@ async def _check_version_notify(user_id: str) -> None:
         _kb = InlineKeyboardMarkup(inline_keyboard=[[
             InlineKeyboardButton(text="📋 Что нового →", callback_data="show_changelog")
         ]])
-        _notify_text = f"🌱 Мандала обновилась · v{BOT_VERSION}\n\nПривет, {_name}! Смотри что нового:"
+        _notify_text = BOT_LATEST_UPDATE.get("text", f"🌱 Мандала обновилась · v{BOT_VERSION}\n\nПривет, {{name}}!").format(name=_name)
         await bot.send_message(int(user_id), _notify_text, reply_markup=_kb)
         profile["last_notified_version"] = BOT_VERSION
         store_set_profile(user_id, profile)
