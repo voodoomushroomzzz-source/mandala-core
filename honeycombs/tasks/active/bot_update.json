@@ -1,200 +1,136 @@
+@"
 {
-    "task_id":  "T-20260408-1030",
-    "name":  "Telegram Bot — Gentle Companion for Garden",
-    "status":  "in_progress",
-    "priority":  "HIGH",
-    "deadline":  "2026-06-01",
-    "created":  "2026-04-01",
-    "updated":  "2026-05-05",
-    "description":  "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
-    "tags":  [
-                 "telegram_bot",
-                 "garden",
-                 "companion",
-                 "ahimsa",
-                 "active"
-             ],
-    "progress":  92,
-    "current_version":  "7.31",
-    "garden_ref":  "honeycombs/garden/",
-    "dev_rules":  [
-                      "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
-                      "Update BOT_VERSION and BOT_LATEST_UPDATE on every patch",
-                      "Every patch is applied to the actual bot file — always check for previous patches first",
-                      "Monolithic file — all changes in one bot.py, no split files"
-                  ],
-    "deliverables":  [
-                         "[DONE] /start — onboarding with philosophy + architect request flow",
-                         "[DONE] /profile — resonance, achievements, tasks, groups (5-sphere card)",
-                         "[DONE] /achievements — monthly analytics by sphere",
-                         "[DONE] /resonance — resonance level + growth history",
-                         "[DONE] /ask — free dialogue on any topic (Ahimsa)",
-                         "[DONE] /leave — leave garden with confirmation",
-                         "[DONE] /privacy — data info (stub)",
-                         "[DONE] Proactive messages — morning brief, evening check-in (max 1/day)",
-                         "[DONE] GitHub API — read/write profile.json, workspace.json, memory.json",
-                         "[DONE] Soft-fail when GitHub API is unavailable",
-                         "[DONE] Architect approval gate — whitelist.json + Telegram buttons",
-                         "[DONE] Web search — domain categories, Yandex priority, SR synthesis",
-                         "[DONE] Bulk add tasks — dash/numbered list with deadline",
-                         "[DONE] Bulk edit deadline — multiple tasks or entire group",
-                         "[DONE] Groups — create, move tasks, always visible in profile",
-                         "[DONE] Roadmaps — bulk add tasks, sorted by deadline, progress bars",
-                         "[DONE] Achievements — via chat, by sphere, duplicate protection",
-                         "[DONE] Onboarding — gender, Welcome Flow, deep_profile recording",
-                         "[DONE] Version notifications — BOT_VERSION + changelog on deploy",
-                         "[DONE] Function map in SR prompt — all 35 intents with bulk variants",
-                         "[DONE] Auto-cleanup of empty tasks on load",
-                         "[DONE] 5-Sphere Resonance — health/creativity/work/connections/growth (v7.26+)",
-                         "[DONE] Living Memory — gardener portrait updated daily, interests from tasks/dialogue",
-                         "[DONE] /sr_report (removed in patch 19) — replaced by clickable dashboard",
-                         "[DONE] Checklist system — create, toggle, edit, reorder, 100%→achievement",
-                         "[DONE] Reminder system — once/daily/weekdays, per-user timezone",
-                         "[DONE] Voice messages — Groq Whisper transcription → intent routing",
-                         "[DONE] Deep Profile — streak detection, sphere patterns, reflection hints",
-                         "[DONE] Roadmap task cleanup — orphaned task_ids auto-removed",
-                         "[v7.30.1] Fix: _load_user ready flag only if profile loaded (prevents false onboarding)",
-                         "[v7.30.1] Fix: cmd_start await ensure_user_loaded before profile check (race condition)",
-                         "[IN PROGRESS] /privacy — consent revocation + full data deletion",
-                         "[DONE] v7.31: Critical fixes (patches 18a+18b+18c) — health() endpoint, store_add_resonance race condition, /groups fix",
-                         "[DONE] v7.31: Dead code removal (patch 19) — 5 unused handlers, 3 keyboards, 2 legacy functions",
-                         "[DONE] v7.31: Emotion negation fix (patch 19) — _repair_json fallback, _detect_emotion context negation",
-                         "[DONE] v7.31: UX — welcome flow, morning catch-up (patch 19) — bulk feedback, resilient welcome flow, checklist auto-achievement",
-                         "[PLANNED] v7.31: SR Architecture — split prompt into CORE/INTENT_MAP/CONTEXT (94% token savings)",
-                         "[PLANNED] v7.31: Interest decay — mention counter, auto-remove stale interests",
-                         "[DONE] v7.31: CIS city timezone hardcode (patch 18b) — bypass geopy for 12 cities",
-                         "[PLANNED] v7.31: show_label intent — \"show group Work\" support",
-                         "[DONE] v7.31: Profile unification (patch 18a) — cmd_profile → _build_profile_card",
-                         "[PLANNED] v7.31: Clickable Profile Dashboard (patch 21) — inline keyboard with sphere/roadmap/group buttons",
-                         "[PLANNED] v7.32: SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers",
-                         "[PLANNED] v7.32: /sr_report — SR synthesis every 3 days",
-                         "[PLANNED] v7.32: Voice — compound commands, fuzzy match for task titles"
-                     ],
-    "requires":  [
-                     "gardeners/whitelist.json"
-                 ],
-    "acceptance_criteria":  [
-                                "All /commands respond correctly with gardener data",
-                                "Proactive messages follow silence_policy and ahimsa_guardrails",
-                                "Bot continues in degraded mode when GitHub API is down",
-                                "Gardener can /leave gracefully",
-                                "New gardener sees philosophy intro + explicit consent before onboarding",
-                                "Architect receives Telegram notification on new gardener request",
-                                "Web search returns structured results without Markdown artifacts",
-                                "All 35 intents work correctly including bulk operations",
-                                "Version notifications sent automatically on deploy",
-                                "[v7.31] health() endpoint returns correct status on Render",
-                                "[v7.31] SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced from 8000 to ~500",
-                                "[v7.31] All dead handlers removed, dashboard duplicates unified",
-                                "[v7.31] _city_to_timezone correctly resolves timezone for Almaty, Astana, Kiev, Minsk"
-                            ],
-    "depends_on":  [
-                       "M1-T1 (personal_gardeners/ structure)",
-                       "M1-T2 (achievements catalog)"
-                   ],
-    "changelog":  [
-                      {
-                          "date":  "2026-05-05",
-                          "summary":  "Patches 18a+18b+18c: critical fixes, CIS timezones, _time_matches, bot v7.31. Patch 19: dead code removal, MKB cleanup, /sr_report removed, emotion negation fix, morning catch-up, welcome flow fix, achievement categories updated. Cleaned 12 dead handlers/functions.",
-                          "patches":  "P16-P19"
-                      },
-                      {
-                          "date":  "2026-05-05",
-                          "patches":  "P14-P15",
-                          "summary":  "Hotfix: fixed /start race condition causing profile loss. Restored gardener data after onboarding reset (resonance, roadmaps, sphere_resonance). Fixed timezone for Almaty gardener. v7.31 plan documented with clickable dashboard design. Added future scaling notes."
-                      }
-                  ],
-    "next_steps":  [
-                       "v7.31: Clickable Profile Dashboard (patch 21)",
-                       "v7.31: SR Architecture — split SR_SYSTEM_PROMPT into 3 layers (patch 20)",
-                       "v7.31: Interest decay — mention counter, auto-remove stale interests",
-                       "v7.32: SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers",
-                       "v7.32: Voice — compound commands, fuzzy match for task titles"
-                   ],
-    "health":  {
-                   "status":  "healthy",
-                   "last_check":  "2026-05-05",
-                   "notes":  "Bot v7.31 live with 7.30.1 hotfixes applied. 2 gardeners active (Dima + Yana). Roadmaps restored after onboarding reset. v7.31 plan ready — critical fixes + dead code removal + SR prompt optimization + clickable dashboard."
-               },
-    "future_scaling":  {
-                           "description":  "Notes on scaling Mandala bot from 2 to 100+ gardeners. Architecture decisions, cost estimates, and technical roadmap for when growth demands it.",
-                           "current_state":  {
-                                                 "gardeners":  2,
-                                                 "daily_requests":  "~50-100",
-                                                 "llm_provider":  "OpenRouter (qwen/qwen3.5-flash-02-23, fallback qwen/qwen3.6-plus)",
-                                                 "hosting":  "Render (free tier, 512MB RAM, auto-sleep after 15min idle)",
-                                                 "monthly_cost":  "~$2 (OpenRouter tokens only)"
-                                             },
-                           "rate_limits":  {
-                                               "qwen_flash_alibaba":  "20 requests/min, 200 requests/day (Alibaba Cloud provider limit through OpenRouter)",
-                                               "qwen_plus_fallback":  "Separate quota, auto-switch on 429 error",
-                                               "current_status":  "Fallback handles occasional rate limits. Not critical at 2 gardeners."
-                                           },
-                           "scaling_milestones":  [
-                                                      {
-                                                          "gardeners":  "10+",
-                                                          "action":  "Request queue (Redis/RabbitMQ) between bot and LLM. Rate limiter: max 20 req/min per model. Priority: paying gardeners first.",
-                                                          "version":  "v7.32"
-                                                      },
-                                                      {
-                                                          "gardeners":  "50+",
-                                                          "action":  "Model pool: primary Qwen Flash (Alibaba) → fallback Qwen Plus → fallback Groq (Llama 4, free 14K req/day) → fallback Gemini Flash (free 1500 req/day). Simple intents (\u0027show tasks\u0027) routed to code without LLM.",
-                                                          "version":  "v8.0"
-                                                      },
-                                                      {
-                                                          "gardeners":  "100+",
-                                                          "action":  "Self-hosted vLLM server. Rent GPU instance (RTX 4090, 24GB VRAM), deploy Qwen 3.5 Flash quantized (Q4_K_M, 22GB). OpenAI-compatible API — drop-in replacement for OpenRouter URL. Unlimited requests, fixed cost.",
-                                                          "version":  "v8.5"
-                                                      }
-                                                  ],
-                           "self_hosted_llm":  {
-                                                   "description":  "Replace OpenRouter with self-hosted vLLM inference server. Same model (Qwen 3.5 Flash), same quality, zero rate limits.",
-                                                   "model_size":  {
-                                                                      "original":  "35 GB (BF16)",
-                                                                      "quantized_q4km":  "22 GB — fits single RTX 4090 (24GB VRAM)",
-                                                                      "quantized_4bit":  "~22 GB",
-                                                                      "for_mac_m3":  "5.5 GB (runs on MacBook M3 Max 48GB RAM)"
-                                                                  },
-                                                   "hardware_requirements":  {
-                                                                                 "entry_gpu":  "NVIDIA RTX 4090 (24 GB VRAM) — $0.50-0.80/hr cloud, $30-50/mo reserved",
-                                                                                 "entry_cloud_providers":  [
-                                                                                                               "Spheron",
-                                                                                                               "Lambda Labs",
-                                                                                                               "RunPod"
-                                                                                                           ],
-                                                                                 "note":  "Single RTX 4090 handles 100+ simultaneous gardeners with continuous batching (vLLM PagedAttention)"
-                                                                             },
-                                                   "performance":  {
-                                                                       "vllm_throughput":  "2-4x faster than standard inference due to PagedAttention",
-                                                                       "ttft_improvement":  "2-5x faster time-to-first-token vs OpenRouter (no network hop to Alibaba Cloud)",
-                                                                       "continuous_batching":  "Allows dynamic request insertion — new gardener messages added to current GPU batch instantly"
-                                                                   },
-                                                   "cost_comparison":  {
-                                                                           "openrouter_monthly_100_gardeners":  "~$100/month ($1/gardener for tokens)",
-                                                                           "self_hosted_monthly":  "~$30-50/month (flat GPU rental, unlimited requests)",
-                                                                           "break_even":  "~50 active gardeners"
-                                                                       },
-                                                   "setup_steps":  [
-                                                                       "1. Rent GPU server with RTX 4090 (Spheron/Lambda Labs)",
-                                                                       "2. pip install vllm",
-                                                                       "3. vllm serve qwen/qwen3.5-flash-02-23 --port 8000",
-                                                                       "4. Change bot env: OPENROUTER_URL → http://your-server:8000/v1/chat/completions",
-                                                                       "5. Bot code unchanged — vLLM is OpenAI-compatible"
-                                                                   ],
-                                                   "preserves":  [
-                                                                     "Same model weights → same knowledge, languages, reasoning quality",
-                                                                     "Same SR_SYSTEM_PROMPT → same Mandala personality, values, communication style",
-                                                                     "Same OpenAI-compatible API format → zero code changes in bot.py"
-                                                                 ],
-                                                   "does_not_preserve":  [
-                                                                             "OpenRouter\u0027s built-in caching (can add Redis caching locally)",
-                                                                             "OpenRouter\u0027s automatic provider fallback (can implement multi-model pool instead)"
-                                                                         ]
-                                               },
-                           "architecture_evolution":  {
-                                                          "current":  "Telegram → Render (bot.py) → OpenRouter (LLM) → GitHub (storage)",
-                                                          "v8.0":  "Telegram → Render (bot.py) → Redis Queue → Model Pool (Qwen/Groq/Gemini) → GitHub (storage)",
-                                                          "v8.5":  "Telegram → Render (bot.py) → Self-hosted vLLM (GPU server) → GitHub (storage). Option: move bot.py to same GPU server, remove Render entirely."
-                                                      }
-                       }
+    "task_id": "T-20260408-1030",
+    "name": "Telegram Bot — Gentle Companion for Garden",
+    "status": "in_progress",
+    "priority": "HIGH",
+    "deadline": "2026-06-01",
+    "created": "2026-04-01",
+    "updated": "2026-05-05",
+    "progress": 96,
+    "current_version": "7.31",
+    "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
+
+    "dev_rules": [
+        "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
+        "Update BOT_VERSION and BOT_LATEST_UPDATE on every patch",
+        "Every patch is applied to the actual bot file — always check for previous patches first",
+        "Monolithic file — all changes in one bot.py, no split files"
+    ],
+
+    "done": {
+        "core_features": [
+            "/start — onboarding with philosophy + architect request flow",
+            "/profile — resonance, achievements, tasks, groups (5-sphere card)",
+            "/achievements — monthly analytics by sphere",
+            "/resonance — resonance level + growth history",
+            "/ask — free dialogue on any topic (Ahimsa)",
+            "/leave — leave garden with confirmation",
+            "/privacy — data info (stub)",
+            "Proactive messages — morning brief, evening check-in (max 1/day)",
+            "GitHub API — read/write profile.json, workspace.json, memory.json",
+            "Soft-fail when GitHub API is unavailable",
+            "Architect approval gate — whitelist.json + Telegram buttons",
+            "Web search — domain categories, Yandex priority, SR synthesis",
+            "Bulk add tasks — dash/numbered list with deadline",
+            "Bulk edit deadline — multiple tasks or entire group",
+            "Groups — create, move tasks, always visible in profile",
+            "Roadmaps — bulk add tasks, sorted by deadline, progress bars",
+            "Achievements — via chat, by sphere, duplicate protection",
+            "Onboarding — gender, Welcome Flow, deep_profile recording",
+            "Version notifications — BOT_VERSION + changelog on deploy",
+            "Function map in SR prompt — all 35 intents with bulk variants",
+            "Auto-cleanup of empty tasks on load",
+            "5-Sphere Resonance — health/creativity/work/connections/growth (v7.26+)",
+            "Living Memory — gardener portrait updated daily, interests from tasks/dialogue",
+            "Checklist system — create, toggle, edit, reorder, 100%→achievement",
+            "Reminder system — once/daily/weekdays, per-user timezone",
+            "Voice messages — Groq Whisper transcription → intent routing",
+            "Deep Profile — streak detection, sphere patterns, reflection hints",
+            "Roadmap task cleanup — orphaned task_ids auto-removed"
+        ],
+        "v7_30_fixes": [
+            "Fix: _load_user ready flag only if profile loaded (prevents false onboarding)",
+            "Fix: cmd_start await ensure_user_loaded before profile check (race condition)"
+        ],
+        "v7_31_fixes": [
+            "Critical fixes (patches 18a+18b+18c): health() endpoint, store_add_resonance race condition, /groups fix",
+            "Dead code removal (patch 19): 5 unused handlers, 3 keyboards, 2 legacy functions",
+            "Emotion negation fix (patch 19): _repair_json fallback, _detect_emotion context negation",
+            "UX (patch 19): welcome flow, morning catch-up, bulk feedback, resilient welcome flow, checklist auto-achievement",
+            "CIS timezone hardcode (patch 18b): bypass geopy for 12 cities",
+            "Profile unification (patch 18a): cmd_profile → _build_profile_card"
+        ],
+        "v7_31_patches_today": [
+            "Patch 20: SR Prompt Architecture — split into CORE_PROMPT (always) + INTENT_MAP (every 10 msgs) → 94% token savings",
+            "Patch 20 fix: INTENT_MAP loads on first message + every 10th",
+            "Patch 20b: Reminders timezone — offset storage + tz-aware comparison + SR instruction",
+            "Patch 20b: Interest Decay — confirmed 30d, mentioned 14d auto-removal",
+            "HTML format rule moved to CORE_PROMPT — forbids Markdown (**bold**)",
+            "Post-processing: auto-strip ** and * from SR responses",
+            "Disabled catch-up morning greeting (scheduler only)",
+            "Removed /sr_report mention from info text",
+            "Changed 'наблюдаю' → 'учусь у тебя' in info text",
+            "Removed 8 patcher scripts after all patches applied"
+        ]
+    },
+
+    "observations": {
+        "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Need simpler approach: either context-aware pinned dashboards (show_tasks/sphere/roadmap as inline messages) or Telegram Mini App (WebApp) for full profile.",
+        "markdown_leak": "SR still generates Markdown despite HTML-only rules. Root cause: HTML format rule was only in INTENT_MAP (every 10 msgs), not in CORE_PROMPT (always). Fixed by moving to CORE + adding post-processing strip.",
+        "catchup_annoying": "Morning catch-up on every message after restart irritated users. Disabled — only scheduler now triggers morning greeting.",
+        "rate_limit": "Qwen Flash hits Alibaba Cloud rate limit (200 req/day via OpenRouter). Fallback to Qwen Plus works. Consider direct Alibaba API key or Groq as third fallback.",
+        "reminders_phantom": "Anton (Almaty) created 5 reminders, only 1 saved — 4 were created before timezone fix deployment. Cleaned his memory.json manually. Timezone fix works now."
+    },
+
+    "planned": {
+        "v7_32": [
+            "SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers → SR learns from past interactions",
+            "Voice compound commands — 'добавь задачу купить хлеб на завтра в группу дом' in one phrase",
+            "/sr_report v2 — SR synthesis every 3 days, auto-sent or on-demand"
+        ],
+        "dashboard_v2": [
+            "Context-aware pinned dashboards: show_tasks → inline message with today tasks + keyboard",
+            "Sphere dashboard: resonance details with progress bars, expandable per sphere",
+            "Roadmap dashboard: roadmap list inline, expand to see tasks",
+            "Or: Telegram Mini App (WebApp) — full profile as web page inside Telegram"
+        ],
+        "model_optimization": [
+            "Consider direct Alibaba DashScope API key for Qwen (2000 req/day free tier)",
+            "Or self-hosted vLLM on GPU server (RTX 4090) when scaling to 10+ gardeners",
+            "Current: OpenRouter → Qwen Flash (primary) → Qwen Plus (fallback)"
+        ]
+    },
+
+    "acceptance_criteria": [
+        "All /commands respond correctly with gardener data",
+        "Proactive messages follow silence_policy and ahimsa_guardrails",
+        "Bot continues in degraded mode when GitHub API is down",
+        "Gardener can /leave gracefully",
+        "New gardener sees philosophy intro + explicit consent before onboarding",
+        "Architect receives Telegram notification on new gardener request",
+        "Web search returns structured results without Markdown artifacts",
+        "All 35 intents work correctly including bulk operations",
+        "Version notifications sent automatically on deploy",
+        "SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced from 8000 to ~500",
+        "Reminders respect gardener timezone with offset storage",
+        "SR responses use HTML formatting only, no Markdown"
+    ],
+
+    "health": {
+        "status": "healthy",
+        "last_check": "2026-05-05",
+        "notes": "Bot v7.31 live with all patches applied. 2 gardeners active (Dima + Anton). Split prompt working. Reminders timezone fix deployed. Interest decay added. Dashboard v1 reverted. Patcher scripts cleaned up."
+    },
+
+    "future_scaling": {
+        "current_state": {
+            "gardeners": 2,
+            "daily_requests": "~50-100",
+            "llm_provider": "OpenRouter (qwen/qwen3.5-flash-02-23, fallback qwen/qwen3.6-plus)",
+            "hosting": "Render (free tier, 512MB RAM, auto-sleep after 15min idle)",
+            "monthly_cost": "~$2 (OpenRouter tokens only)"
+        }
+    }
 }
+"@ | Set-Content honeycombs/tasks/active/bot_update.json -Encoding UTF8
