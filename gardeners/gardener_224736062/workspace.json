@@ -562,21 +562,6 @@
       "deadline": null,
       "label_name": null,
       "reminder": null
-    },
-    {
-      "task_id": "task_20260505_044",
-      "title": "тест",
-      "status": "todo",
-      "label_id": "работа",
-      "label_name": "Работа",
-      "life_area": "work",
-      "priority": 7,
-      "deadline": "2026-05-05",
-      "reminder": null,
-      "created": "2026-05-05",
-      "updated": "2026-05-05",
-      "completed": null,
-      "notes": ""
     }
   ],
   "groups": [
