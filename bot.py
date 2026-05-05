@@ -2710,7 +2710,6 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="🔁 Повторение", callback_data="rem_edit_repeat")],
         [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
     ])
-    await state.set_state(ReminderStates.waiting_for_input)
     try:
         await callback.message.edit_text(
             f"✏️ <b>{rem['title']}</b>\n"
@@ -2761,7 +2760,12 @@ async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
     reminders = store_get_reminders(str(callback.from_user.id))
     rem = next((r for r in reminders if r["id"] == rid), None)
     current = rem.get("repeat", "once") if rem else "once"
-    await state.update_data(_rem_dt=rem.get("datetime_iso", ""), _rem_title=rem.get("title", ""), _rem_repeat=current)
+    await state.update_data(
+        _rem_edit_id=rid,
+        _rem_dt=rem.get("datetime_iso", ""),
+        _rem_title=rem.get("title", ""),
+        _rem_repeat=current
+    )
     await state.set_state(ReminderStates.waiting_for_repeat)
     try:
         await callback.message.edit_text(
@@ -3039,22 +3043,34 @@ async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "rem_rp_done", StateFilter(ReminderStates.waiting_for_repeat))
 async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
-    """Return to confirmation screen with updated repeat."""
+    """Return to confirmation screen with updated repeat. Works for both create and edit."""
     await _safe_cb_answer(callback)
     data = await state.get_data()
     title = data.get("_rem_title", "")
     dt_iso = data.get("_rem_dt", "")
     repeat = data.get("_rem_repeat", "once")
+    is_edit = data.get("_rem_edit_id", "")
     dt_display = dt_iso[:16].replace("T", " ")
     rep_display = _repeat_label(repeat)
+    
+    if is_edit:
+        # Edit mode — update existing reminder on confirm
+        confirm_action = "rem_confirm_edit"
+        cancel_action = "menu_reminders_mgmt"
+        header = f"✏️ <b>Редактирование</b>"
+    else:
+        confirm_action = "rem_confirm_create"
+        cancel_action = "menu_reminders_mgmt"
+        header = f"🔔 <b>Новое напоминание</b>"
+    
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
-        [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
-         InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")],
+        [InlineKeyboardButton(text="✅ Готово", callback_data=confirm_action),
+         InlineKeyboardButton(text="❌ Отмена", callback_data=cancel_action)],
     ])
     try:
         await callback.message.edit_text(
-            f"🔔 <b>Новое напоминание</b>\n\n"
+            f"{header}\n\n"
             f"Название: {title}\n"
             f"📅 {dt_display}\n\n"
             f"Повторение: {rep_display}",
@@ -3063,7 +3079,7 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
         )
     except Exception:
         await callback.message.answer(
-            f"🔔 <b>Новое напоминание</b>\n\n"
+            f"{header}\n\n"
             f"Название: {title}\n"
             f"📅 {dt_display}\n\n"
             f"Повторение: {rep_display}",
@@ -3108,6 +3124,36 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
         parse_mode="HTML"
     )
     # Show back to reminders
+    reminders_upd = store_get_reminders(user_id)
+    header = f"🔔 <b>Напоминания</b> ({len(reminders_upd)}/{REMINDER_LIMIT})"
+    await callback.message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders_upd), parse_mode="HTML")
+
+@router.callback_query(F.data == "rem_confirm_edit", StateFilter(ReminderStates.waiting_for_repeat))
+async def cb_rem_confirm_edit(callback: CallbackQuery, state: FSMContext):
+    """Save edited reminder."""
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    edit_id = data.get("_rem_edit_id", "")
+    repeat = data.get("_rem_repeat", "once")
+    
+    reminders = store_get_reminders(user_id)
+    rem = next((r for r in reminders if r["id"] == edit_id), None)
+    if not rem:
+        await callback.answer("Напоминание не найдено", show_alert=True)
+        await state.clear()
+        return
+    
+    rem["repeat"] = repeat
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    await state.clear()
+    
+    rep_display = _repeat_label(repeat)
+    await callback.message.edit_text(
+        f"✅ Повторение обновлено: {rep_display}",
+        parse_mode="HTML"
+    )
     reminders_upd = store_get_reminders(user_id)
     header = f"🔔 <b>Напоминания</b> ({len(reminders_upd)}/{REMINDER_LIMIT})"
     await callback.message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders_upd), parse_mode="HTML")
