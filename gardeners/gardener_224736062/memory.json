@@ -23,6 +23,30 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "удалить checklist тест"
+    },
+    {
+      "role": "assistant",
+      "content": "🗑 Чеклист «тест» удалён."
+    },
+    {
+      "role": "user",
+      "content": "Покажи мои роадмапы."
+    },
+    {
+      "role": "assistant",
+      "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Создай чек-лист «Тест», в него пусть входят «Тест-1», «Тест-2», «Тест-3», «Тест-4»."
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-05-05"
