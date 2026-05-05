@@ -59,9 +59,10 @@
     "[PLANNED] v7.31: CIS city timezone hardcode — bypass geopy for 12 cities",
     "[PLANNED] v7.31: show_label intent — \"show group Work\" support",
     "[PLANNED] v7.31: Profile unification — cmd_profile → _build_profile_card",
+    "[PLANNED] v7.31: Clickable Profile Dashboard — inline keyboard with sphere/roadmap/group buttons",
     "[PLANNED] v7.32: SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers",
     "[PLANNED] v7.32: /sr_report — SR synthesis every 3 days",
-    "[PLANNED] v7.32: Voice — compound commands, fuzzy match improvements"
+    "[PLANNED] v7.32: Voice — compound commands, fuzzy match for task titles"
   ],
   "requires": [
     "gardeners/whitelist.json"
@@ -89,7 +90,7 @@
     {
       "date": "2026-05-05",
       "patches": "P14-P15",
-      "summary": "Hotfix: fixed /start race condition causing profile loss. Restored gardener data after onboarding reset (resonance, roadmaps, sphere_resonance). Fixed timezone for Almaty gardener. v7.31 plan documented."
+      "summary": "Hotfix: fixed /start race condition causing profile loss. Restored gardener data after onboarding reset (resonance, roadmaps, sphere_resonance). Fixed timezone for Almaty gardener. v7.31 plan documented with clickable dashboard design. Added future scaling notes."
     },
     {
       "date": "2026-05-03",
@@ -102,6 +103,7 @@
     "v7.31: Dead code removal — btn_garden, btn_settings, btn_suggest_idea, EngineerChatStates, unused keyboards",
     "v7.31: LLM reliability — _repair_json fallback for broken JSON, _detect_emotion context-aware negation",
     "v7.31: UX improvements — bulk operation feedback, resilient welcome flow, checklist auto-achievement",
+    "v7.31: Clickable Profile Dashboard — inline keyboard replacing static profile card",
     "v7.31: SR Architecture — split SR_SYSTEM_PROMPT into 3 layers (CORE/INTENT_MAP/CONTEXT), ~94% token savings",
     "v7.31: Interest decay — mention counter for gardener interests, auto-remove stale ones",
     "v7.31: CIS city timezone hardcode — Almaty, Astana, Kiev, Minsk etc. for _city_to_timezone",
@@ -114,6 +116,83 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-05",
-    "notes": "Bot v7.30 live with 7.30.1 hotfixes applied. 2 gardeners active (Dima + Yana). Roadmaps restored after onboarding reset. v7.31 plan ready — critical fixes + dead code removal + SR prompt optimization."
+    "notes": "Bot v7.30 live with 7.30.1 hotfixes applied. 2 gardeners active (Dima + Yana). Roadmaps restored after onboarding reset. v7.31 plan ready — critical fixes + dead code removal + SR prompt optimization + clickable dashboard."
+  },
+  "future_scaling": {
+    "description": "Notes on scaling Mandala bot from 2 to 100+ gardeners. Architecture decisions, cost estimates, and technical roadmap for when growth demands it.",
+    "current_state": {
+      "gardeners": 2,
+      "daily_requests": "~50-100",
+      "llm_provider": "OpenRouter (qwen/qwen3.5-flash-02-23, fallback qwen/qwen3.6-plus)",
+      "hosting": "Render (free tier, 512MB RAM, auto-sleep after 15min idle)",
+      "monthly_cost": "~$2 (OpenRouter tokens only)"
+    },
+    "rate_limits": {
+      "qwen_flash_alibaba": "20 requests/min, 200 requests/day (Alibaba Cloud provider limit through OpenRouter)",
+      "qwen_plus_fallback": "Separate quota, auto-switch on 429 error",
+      "current_status": "Fallback handles occasional rate limits. Not critical at 2 gardeners."
+    },
+    "scaling_milestones": [
+      {
+        "gardeners": "10+",
+        "action": "Request queue (Redis/RabbitMQ) between bot and LLM. Rate limiter: max 20 req/min per model. Priority: paying gardeners first.",
+        "version": "v7.32"
+      },
+      {
+        "gardeners": "50+",
+        "action": "Model pool: primary Qwen Flash (Alibaba) → fallback Qwen Plus → fallback Groq (Llama 4, free 14K req/day) → fallback Gemini Flash (free 1500 req/day). Simple intents ('show tasks') routed to code without LLM.",
+        "version": "v8.0"
+      },
+      {
+        "gardeners": "100+",
+        "action": "Self-hosted vLLM server. Rent GPU instance (RTX 4090, 24GB VRAM), deploy Qwen 3.5 Flash quantized (Q4_K_M, 22GB). OpenAI-compatible API — drop-in replacement for OpenRouter URL. Unlimited requests, fixed cost.",
+        "version": "v8.5"
+      }
+    ],
+    "self_hosted_llm": {
+      "description": "Replace OpenRouter with self-hosted vLLM inference server. Same model (Qwen 3.5 Flash), same quality, zero rate limits.",
+      "model_size": {
+        "original": "35 GB (BF16)",
+        "quantized_q4km": "22 GB — fits single RTX 4090 (24GB VRAM)",
+        "quantized_4bit": "~22 GB",
+        "for_mac_m3": "5.5 GB (runs on MacBook M3 Max 48GB RAM)"
+      },
+      "hardware_requirements": {
+        "entry_gpu": "NVIDIA RTX 4090 (24 GB VRAM) — $0.50-0.80/hr cloud, $30-50/mo reserved",
+        "entry_cloud_providers": ["Spheron", "Lambda Labs", "RunPod"],
+        "note": "Single RTX 4090 handles 100+ simultaneous gardeners with continuous batching (vLLM PagedAttention)"
+      },
+      "performance": {
+        "vllm_throughput": "2-4x faster than standard inference due to PagedAttention",
+        "ttft_improvement": "2-5x faster time-to-first-token vs OpenRouter (no network hop to Alibaba Cloud)",
+        "continuous_batching": "Allows dynamic request insertion — new gardener messages added to current GPU batch instantly"
+      },
+      "cost_comparison": {
+        "openrouter_monthly_100_gardeners": "~$100/month ($1/gardener for tokens)",
+        "self_hosted_monthly": "~$30-50/month (flat GPU rental, unlimited requests)",
+        "break_even": "~50 active gardeners"
+      },
+      "setup_steps": [
+        "1. Rent GPU server with RTX 4090 (Spheron/Lambda Labs)",
+        "2. pip install vllm",
+        "3. vllm serve qwen/qwen3.5-flash-02-23 --port 8000",
+        "4. Change bot env: OPENROUTER_URL → http://your-server:8000/v1/chat/completions",
+        "5. Bot code unchanged — vLLM is OpenAI-compatible"
+      ],
+      "preserves": [
+        "Same model weights → same knowledge, languages, reasoning quality",
+        "Same SR_SYSTEM_PROMPT → same Mandala personality, values, communication style",
+        "Same OpenAI-compatible API format → zero code changes in bot.py"
+      ],
+      "does_not_preserve": [
+        "OpenRouter's built-in caching (can add Redis caching locally)",
+        "OpenRouter's automatic provider fallback (can implement multi-model pool instead)"
+      ]
+    },
+    "architecture_evolution": {
+      "current": "Telegram → Render (bot.py) → OpenRouter (LLM) → GitHub (storage)",
+      "v8.0": "Telegram → Render (bot.py) → Redis Queue → Model Pool (Qwen/Groq/Gemini) → GitHub (storage)",
+      "v8.5": "Telegram → Render (bot.py) → Self-hosted vLLM (GPU server) → GitHub (storage). Option: move bot.py to same GPU server, remove Render entirely."
+    }
   }
 }
