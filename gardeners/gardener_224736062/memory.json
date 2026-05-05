@@ -71,6 +71,14 @@
     {
       "role": "assistant",
       "content": "🗑 Роадмап «Развитие Мандалы» удалён и 3 задач."
+    },
+    {
+      "role": "user",
+      "content": "Удали задачу, бот апдейт."
+    },
+    {
+      "role": "assistant",
+      "content": "🗑 Задача «Bot Update» удалена."
     }
   ],
   "updated": "2026-05-05"
