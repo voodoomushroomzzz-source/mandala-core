@@ -526,15 +526,6 @@
       "updated": "2026-05-04",
       "completed": null,
       "notes": ""
-    },
-    {
-      "task_id": "t_e0f3903d",
-      "title": "Bot Update",
-      "status": "active",
-      "created": "2026-05-05",
-      "deadline": null,
-      "label_name": null,
-      "reminder": null
     }
   ],
   "groups": [
@@ -638,15 +629,7 @@
       "created": "2026-05-05"
     }
   ],
-  "reminders": [
-    {
-      "id": "rem_ee7afcc7",
-      "title": "Тест через 5 минут сегодня",
-      "datetime_iso": "2026-05-05T18:51+03:00",
-      "repeat": "once",
-      "active": true
-    }
-  ],
+  "reminders": [],
   "_decay_date": "2026-05-05",
   "roadmaps": [
     {
