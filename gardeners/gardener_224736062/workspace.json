@@ -625,10 +625,21 @@
     }
   ],
   "sphere_resonance": {
-    "health": 33,
+    "health": 36,
     "creativity": 24,
     "work": 52,
     "connections": 26,
     "growth": 26
-  }
+  },
+  "achievements": [
+    {
+      "id": "ach_001",
+      "category": "health",
+      "title": "Прогулка 7000 шагов",
+      "description": "",
+      "completed": "2026-05-05",
+      "resonance_bonus": 3,
+      "icon": "🌿"
+    }
+  ]
 }
