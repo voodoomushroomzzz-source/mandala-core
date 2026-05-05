@@ -2735,6 +2735,7 @@ async def cmd_start(message: Message, state: FSMContext):
             user_profile["resonance_level"] = mean
             store_set_profile(user_id, user_profile)
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
+        await _check_version_notify(user_id)
         return
 
     # Check whitelist
@@ -3905,6 +3906,29 @@ def _add_to_history(user_id: str, role: str, content: str) -> None:
 
 def _clear_history(user_id: str) -> None:
     _sessions.pop(str(user_id), None)
+
+async def _check_version_notify(user_id: str) -> None:
+    """Send update notification if gardener hasn't seen this version yet."""
+    try:
+        profile = store_get_profile(user_id)
+        if not profile:
+            return
+        last_ver = profile.get("last_notified_version", "")
+        if last_ver == BOT_VERSION:
+            return
+        # Send notification
+        _name = profile.get("name", "Садовник")
+        _kb = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(text="📋 Что нового →", callback_data="show_changelog")
+        ]])
+        _notify_text = f"🌱 Мандала обновилась · v{BOT_VERSION}\n\nПривет, {_name}! Смотри что нового:"
+        await bot.send_message(int(user_id), _notify_text, reply_markup=_kb)
+        profile["last_notified_version"] = BOT_VERSION
+        store_set_profile(user_id, profile)
+        _fire_sync()
+        logger.info(f"Version notification sent to {user_id}")
+    except Exception as e:
+        logger.warning(f"Version notify error for {user_id}: {e}")
 
 # ─── SR System Prompt ─────────────────────────────────────────────────────────
 
@@ -5395,6 +5419,7 @@ async def free_conversation(message: Message, state: FSMContext):
 
     # Catch-up morning greeting if missed today
     await send_morning_greeting(user_id)
+    await _check_version_notify(user_id)
 
     # ── Welcome Flow: записываем ответ в deep_profile и задаём следующий вопрос ──
     fsm_data = await state.get_data()
@@ -7123,30 +7148,7 @@ async def on_startup():
         BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
-    # Notify gardeners about version update (60s delay)
-    async def _notify_version():
-        import asyncio as _aio2
-        await _aio2.sleep(5)
-        # Read whitelist to notify ALL approved gardeners, not just those in memory
-        _wl_n = await _github_get("gardeners/whitelist.json") or {}
-        _approved_n = _wl_n.get("approved", []) if isinstance(_wl_n, dict) else []
-        for _uid in _approved_n:
-            try:
-                # Load if not in store yet
-                if not store_get_profile(str(_uid)):
-                    await _load_user(str(_uid))
-                _kb = InlineKeyboardMarkup(inline_keyboard=[[
-                    InlineKeyboardButton(text="📋 Что нового →", callback_data="show_changelog")
-                ]])
-                _architect_id = str(ARCHITECT_TELEGRAM_ID or "224736062")
-                _notify_text = f"🌱 Мандала обновилась · v{BOT_VERSION}"
-                if str(_uid) != _architect_id:
-                    _notify_text += "\n\nЕсли ты получил это сообщение — напиши Диме (@voodoomushroomzzz) что получил 🌿"
-                await bot.send_message(int(_uid), _notify_text, reply_markup=_kb)
-                await _aio2.sleep(2)
-            except Exception as _ve:
-                logger.warning(f"Version notify {_uid}: {_ve}")
-    asyncio.create_task(_notify_version())
+
 
     # Scheduler setup
     scheduler = AsyncIOScheduler(timezone="UTC")
