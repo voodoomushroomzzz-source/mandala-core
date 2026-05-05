@@ -220,104 +220,6 @@
       "notes": ""
     },
     {
-      "task_id": "t_cd992632",
-      "title": "Аудит опыта за 8 лет и перевод в IT-лексику",
-      "status": "active",
-      "created": "2026-05-01",
-      "deadline": "2026-05-05",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-05-03"
-    },
-    {
-      "task_id": "task_20260501_020",
-      "title": "Резюме на hh.ru, Superjob, Работа.ру, Зарплата.ру, Авито, ТрудВсем",
-      "status": "todo",
-      "label_id": "работа",
-      "label_name": "Работа",
-      "life_area": "work",
-      "priority": 5,
-      "deadline": "2026-05-09",
-      "reminder": null,
-      "created": "2026-05-01",
-      "updated": "2026-05-04",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "t_8c10d092",
-      "title": "Профили на LinkedIn и Хабр Карьере",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-07",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_f1d5e4eb",
-      "title": "Регистрация на Geekjob и Getmatch, подписка на 10 Telegram-каналов",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-08",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_bf602b98",
-      "title": "70+ откликов на всех площадках (hh.ru, Superjob, Работа.ру, Getmatch)",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-14",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_e09f124b",
-      "title": "Проверка работодателей через Dream Job",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-14",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_f82dcad6",
-      "title": "Пройти все собесы первой волны",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-21",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_104194fa",
-      "title": "Вторая волна откликов (20-30) и калибровка подачи",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-21",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_223087d3",
-      "title": "Минимум 1 оффер на 80 000+ рублей (или расширение на проекты/контракты)",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-31",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_24e04f34",
-      "title": "Начать Google PM Certificate и зарегистрироваться на COO OTUS",
-      "status": "active",
-      "created": "2026-05-02",
-      "deadline": "2026-05-06",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-05-03"
-    },
-    {
       "task_id": "task_20260502_027",
       "title": "Починить кондиционер на патриках",
       "status": "todo",
@@ -609,25 +511,6 @@
         "t_46f9faf3",
         "t_f89a42e7",
         "t_08b361e6"
-      ],
-      "status": "active"
-    },
-    {
-      "roadmap_id": "rm_5b8c972a",
-      "title": "🚨 Crisis Job Search",
-      "deadline": "2026-05-31",
-      "created": "2026-05-01",
-      "task_ids": [
-        "t_cd992632",
-        "task_20260501_020",
-        "t_8c10d092",
-        "t_f1d5e4eb",
-        "t_bf602b98",
-        "t_e09f124b",
-        "t_f82dcad6",
-        "t_104194fa",
-        "t_223087d3",
-        "t_24e04f34"
       ],
       "status": "active"
     }
