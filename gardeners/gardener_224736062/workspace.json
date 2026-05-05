@@ -629,7 +629,15 @@
       "created": "2026-05-05"
     }
   ],
-  "reminders": [],
+  "reminders": [
+    {
+      "id": "rem_69d0f368",
+      "title": "Тестовое напоминание сегодня через 2 минуты",
+      "datetime_iso": "2026-05-05T18:54+03:00",
+      "repeat": "once",
+      "active": true
+    }
+  ],
   "_decay_date": "2026-05-05",
   "roadmaps": [
     {
