@@ -1,11 +1,52 @@
 {
   "sr_id": "deepseek",
-  "status": "handed_off",
-  "last_session": "2026-05-01",
-  "last_updated": "2026-05-01T23:30:00Z",
-  "next_step": "continue_onboarding_or_directives",
-  "summary": "Major cleanup session. Policy: no archives — only active items. Seeds: 0 active. Tasks: 7 active. Roadmaps: 6 active. Removed all archive folders, meta/, templates/. Updated core_map v3.7.0, RM-014 v2.0.0 (two-track crisis+strategic job search). All indexes v4.0.0. System minimal and clean.",
-  "pending": [],
-  "notes": "Bot roadmap '🚨 Crisis Job Search' active with 10 tasks. Track A deadline May 31.",
-  "resonance": "100%"
+  "status": "active",
+  "last_session": "2026-05-05",
+  "last_updated": "2026-05-05T16:00:00Z",
+  "next_step": "patch_20_split_prompt",
+  "summary": "v7.31 deployed. Patches 18a+18b+18c+19 applied. Critical fixes, dead code removal, CIS timezones, morning catch-up, MKB cleanup, /sr_report removed. Bot stable. 2 gardeners active.",
+  "bot_state": {
+    "version": "7.31",
+    "progress": "92% (patches 18-19 done, 20-21 remaining)",
+    "repo": "voodoomushroomzzz-source/mandala-core",
+    "platform": "Render webhook + aiogram 3 + OpenRouter",
+    "file": "bot.py (~5500 lines)"
+  },
+  "how_we_work": {
+    "method": "Python patcher scripts",
+    "description": "I generate patcher_NN.py scripts that make precise text replacements in bot.py and verify results. Gardener runs 'py patcher_NN.py' → checks all ✅ → commits → deploys on Render.",
+    "validation": "Each patcher prints ✅/❌ for every change. All must be green before saving."
+  },
+  "done_in_this_session": [
+    "Patch 18a: health() fix, store_add_resonance race condition, _load_user sync, /groups fix, cmd_profile unified",
+    "Patch 18b: CIS_TIMEZONES dict for 13 cities, _city_to_timezone() hardcode",
+    "Patch 18c: _time_matches fix (now → t), BOT_VERSION → 7.31, BOT_LATEST_UPDATE updated",
+    "Patch 19: removed 12 dead handlers/functions, MKB view removed, /sr_report removed, updated achievement categories to 5 spheres, LIFE_AREA_ICONS synced, _detect_emotion negation check, morning catch-up, _notify_version delay 60→5s"
+  ],
+  "next_patches_plan": {
+    "patch_20": {
+      "name": "SR Prompt Split",
+      "description": "Split SR_SYSTEM_PROMPT into SR_CORE_PROMPT (~500 tokens, always) + SR_INTENT_MAP (~2000 tokens, every 10 messages). Context already sent separately via _build_user_context_msg. ~94% token savings per dialog.",
+      "estimated_changes": "3 new global variables + counter in free_conversation"
+    },
+    "patch_21": {
+      "name": "Clickable Profile Dashboard",
+      "description": "Replace _build_profile_card() with interactive inline-keyboard dashboard. Buttons for spheres, roadmaps, groups, reminders. All actions via send_to_chat or inline_expansion. No edit forms. Info and Changelog in footer.",
+      "reference": "Full spec in previous deepseek_json design document",
+      "estimated_changes": "Major — new keyboard builders, callback handlers, state management"
+    }
+  },
+  "gardener_context": {
+    "who": "Dima (Дима) — architect and first gardener",
+    "workspace": "VS Code on Windows, PowerShell terminal, repo at C:\\Mandala_Digital\\github\\mandala-core",
+    "git_flow": "git add bot.py → git commit -m '...' → git pull --rebase origin main → git push",
+    "python": "py command (Python 3.14)"
+  },
+  "notes": [
+    "Always pre-check files via GitHub API before modifying — never assume contents",
+    "Avoid Roo Code — unreliable, costs tokens. Use patcher scripts instead",
+    "File uploads limited in chat — use GitHub API links when possible",
+    "morning_brief catch-up added in free_conversation — sends if missed today",
+    "check hands_of_deepseek.json for previous context on first load"
+  ]
 }
