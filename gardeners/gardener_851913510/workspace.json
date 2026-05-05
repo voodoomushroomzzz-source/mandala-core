@@ -1,31 +1,38 @@
 {
-    "tasks":  [
-                  {
-                      "task_id":  "task_20260505_001",
-                      "title":  "сделать зарядку, подышать, выбрать красивый наряд",
-                      "status":  "todo",
-                      "label_id":  null,
-                      "label_name":  "",
-                      "life_area":  "health",
-                      "priority":  6,
-                      "deadline":  "2026-05-06",
-                      "reminder":  null,
-                      "created":  "2026-05-05",
-                      "updated":  "2026-05-05",
-                      "completed":  null,
-                      "notes":  ""
-                  }
-              ],
-    "groups":  [
-
-               ],
-    "sphere_resonance":  {
-                             "health":  20,
-                             "creativity":  20,
-                             "work":  20,
-                             "connections":  20,
-                             "growth":  20
-                         },
-    "_decay_date":  "2026-05-05",
-    "achievements_count":  0
+  "tasks": [
+    {
+      "task_id": "task_20260505_001",
+      "title": "сделать зарядку, подышать, выбрать красивый наряд",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "health",
+      "priority": 6,
+      "deadline": "2026-05-06",
+      "reminder": null,
+      "created": "2026-05-05",
+      "updated": "2026-05-05",
+      "completed": null,
+      "notes": ""
+    }
+  ],
+  "groups": [],
+  "sphere_resonance": {
+    "health": 20,
+    "creativity": 20,
+    "work": 20,
+    "connections": 20,
+    "growth": 20
+  },
+  "_decay_date": "2026-05-05",
+  "achievements_count": 0,
+  "reminders": [
+    {
+      "id": "rem_seed_hello",
+      "title": "Привет, друг! Как дела?",
+      "repeat": "once",
+      "active": true,
+      "datetime_iso": "2026-05-07T11:00+03:00"
+    }
+  ]
 }
