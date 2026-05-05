@@ -381,12 +381,6 @@ def _roadmap_progress_bar(pct: int) -> str:
     empty  = 10 - filled
     return f"{'█' * filled}{'░' * empty} {pct}%"
 
-# Legacy aliases for backward compat during transition
-def store_get_gardener() -> Optional[dict]:
-    return None
-
-def store_set_gardener(g: dict) -> None:
-    pass
 
 # ─── Global HTTP session ───────────────────────────────────────────────────────
 
@@ -637,10 +631,6 @@ async def _check_ready(message: Message, user_id: str = None) -> bool:
 
 # ─── Resonance helpers ────────────────────────────────────────────────────────
 
-def _calculate_initial_resonance(life_areas: dict) -> int:
-    vals = [a.get("current", 5) for a in life_areas.values() if isinstance(a, dict)]
-    avg = sum(vals) / len(vals) if vals else 5
-    return max(10, round(10 + avg / 4 * 2))
 
 def _add_growth_history_entry(gardener: dict, resonance: int, telegram_id: str = "") -> dict:
     history = gardener.get("growth_history", [])
@@ -755,27 +745,6 @@ def _get_session_reflection_hint(telegram_id: str) -> str | None:
         _reflection_sent[telegram_id] = today
     return hint
 
-def _apply_resonance_decay(gardener: dict) -> Tuple[dict, bool]:
-    history = gardener.get("growth_history", [])
-    if not history:
-        return gardener, False
-    try:
-        last_date = datetime.strptime(history[-1].get("date", _today()), "%Y-%m-%d")
-    except Exception:
-        return gardener, False
-    days_silent = (datetime.now() - last_date).days
-    if days_silent < 14:
-        return gardener, False
-    weeks = (days_silent - 14) // 7
-    if weeks < 1:
-        return gardener, False
-    current_res = gardener.get("resonance_level", 13)
-    new_res = max(10, current_res - weeks)
-    if new_res == current_res:
-        return gardener, False
-    gardener["resonance_level"] = new_res
-    gardener["updated"] = _today()
-    return gardener, True
 
 # ── SR Learning Loop helpers ──────────────────────────────────────────────────
 
@@ -836,7 +805,9 @@ def _detect_emotion(text: str) -> str:
                 "не хочу", "бессмысл", "не справл"]
     positive = ["отлично", "супер", "рад ", "радуюсь", "счастлив", "доволен",
                 "получилось", "справился", "гордо", "кайф"]
-    if any(w in text_l for w in negative):
+    # Check negation: "не устал", "не тревожно" — not negative
+    negated = any(text_l.startswith(w) for w in ["не ", "не"]) and any(w in text_l for w in negative)
+    if not negated and any(w in text_l for w in negative):
         return "negative"
     if any(w in text_l for w in positive):
         return "positive"
@@ -985,8 +956,6 @@ class EditProfileStates(StatesGroup):
     waiting_for_new_morning  = State()
     # waiting_for_new_body/spirit/world removed in v7.24.5
 
-class EngineerChatStates(StatesGroup):
-    waiting_for_message = State()
 
 class AchievementStates(StatesGroup):
     waiting_for_category = State()
@@ -1253,15 +1222,9 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
         return
     # Standard grouped view
     view = "mkb" if period == "mkb" else "labels"
-    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
-    toggle_label = "✨ По МКБ" if view == "labels" else "🎨 По группам"
-    toggle_data  = "tasks_view_mkb" if view == "labels" else "tasks_view_labels"
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
-        [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
-    ])
-    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Группы:</b>"
-    await message.answer(header + "\n\n" + body, reply_markup=kb)
+    body = _format_tasks_labels(active, user_id)
+    header = "🌀 <b>Задачи · Группы:</b>"
+    await message.answer(header + "\n\n" + body)
 
 
 # ─── Checklist keyboards ──────────────────────────────────────────────────────
@@ -1336,9 +1299,6 @@ def get_profile_inline() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
     ])
 
-# Keep alias for backwards compat
-def get_garden_inline() -> InlineKeyboardMarkup:
-    return get_profile_inline()
 
 def get_edit_profile_inline() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -1354,15 +1314,15 @@ def get_achievement_category_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🌿 Здоровье",     callback_data="ach_cat_health")],
         [InlineKeyboardButton(text="🔥 Творчество",   callback_data="ach_cat_creativity")],
-        [InlineKeyboardButton(text="📿 Знания",       callback_data="ach_cat_knowledge")],
-        [InlineKeyboardButton(text="🧭 Исследования", callback_data="ach_cat_exploration")],
-        [InlineKeyboardButton(text="🤝 Отношения",    callback_data="ach_cat_relationships")],
+        [InlineKeyboardButton(text="💼 Работа",       callback_data="ach_cat_work")],
+        [InlineKeyboardButton(text="🤝 Связи",        callback_data="ach_cat_connections")],
+        [InlineKeyboardButton(text="🌱 Рост",         callback_data="ach_cat_growth")],
         [InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_achievement")]
     ])
 
 LIFE_AREA_ICONS = {
-    "health": "🌿", "creativity": "🔥", "knowledge": "📿",
-    "exploration": "🧭", "relationships": "🤝", "other": "🌱"
+    "health": "🌿", "creativity": "🔥", "work": "💼",
+    "connections": "🤝", "growth": "🌱", "other": "🌱"
 }
 
 def get_groups_keyboard(groups: list) -> InlineKeyboardMarkup:
@@ -1371,15 +1331,6 @@ def get_groups_keyboard(groups: list) -> InlineKeyboardMarkup:
     btns.append([InlineKeyboardButton(text="❌ Отмена",        callback_data="cancel_task")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
-def get_life_area_keyboard() -> InlineKeyboardMarkup:
-    areas = [
-        ("🌿 Здоровье", "health"), ("🔥 Творчество", "creativity"),
-        ("📿 Знания", "knowledge"), ("🧭 Исследования", "exploration"),
-        ("🤝 Отношения", "relationships"), ("🌱 Другое", "other")
-    ]
-    btns = [[InlineKeyboardButton(text=n, callback_data=f"area_{v}")] for n, v in areas]
-    btns.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")])
-    return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_confirm_task_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -3292,28 +3243,6 @@ def _sort_roadmap_tasks(task_ids: list, all_tasks: list) -> list:
         return (1, dl)
     return sorted(tasks, key=sort_key)
 
-def _format_tasks_mkb(tasks: list) -> str:
-    """Format active tasks grouped by МКБ sphere (3 spheres only)."""
-    mkb_groups = {
-        "health": ("🌿 Тело", []),
-        "spirit": ("🔥 Дух",  []),
-        "world":  ("🤝 Мир",  []),
-    }
-    for t in tasks:
-        area = _auto_merkaba(t.get("title", ""), t.get("label_name", ""))
-        if area not in mkb_groups:
-            area = "world"
-        mkb_groups[area][1].append(t)
-    parts = []
-    for area, (label, items) in mkb_groups.items():
-        if not items:
-            continue
-        parts.append(f"<b>{label}</b>")
-        for t in _sort_by_deadline(items)[:10]:
-            dl  = " · " + t["deadline"] if t.get("deadline") else ""
-            lbl = (" #" + t["label_name"]) if t.get("label_name") else ""
-            ind = _deadline_indicator(t.get("deadline",""))
-            parts.append(f"  • {ind}{t['title']}{lbl}{dl}")
 
 def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
     """Format active tasks grouped by group in workspace order, with unique emojis."""
@@ -3376,35 +3305,12 @@ async def cmd_tasks(message: Message, view: str = "labels"):
         await message.answer("🌀 Активных задач нет.", reply_markup=get_main_keyboard())
         await message.answer("👇", reply_markup=get_tasks_keyboard())
         return
-    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
-    toggle_label = "✨ По МКБ" if view == "labels" else "🎨 По группам"
-    toggle_data  = "tasks_view_mkb" if view == "labels" else "tasks_view_labels"
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
-        [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
-    ])
-    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Группы:</b>"
-    await message.answer(header + "\n\n" + body, reply_markup=kb)
+    body = _format_tasks_labels(active, user_id)
+    header = "🌀 <b>Задачи · Группы:</b>"
+    await message.answer(header + "\n\n" + body)
 
-@router.callback_query(F.data.in_({"tasks_view_mkb", "tasks_view_labels"}))
-async def tasks_toggle_view(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    tasks = store_get_tasks(user_id)
-    active = [t for t in tasks if t.get("status") != "completed"]
-    view = "mkb" if callback.data == "tasks_view_mkb" else "labels"
-    body = _format_tasks_mkb(active) if view == "mkb" else _format_tasks_labels(active, user_id)
-    toggle_label = "✨ По МКБ" if view == "labels" else "🎨 По группам"
-    toggle_data  = "tasks_view_mkb" if view == "labels" else "tasks_view_labels"
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=toggle_label, callback_data=toggle_data)],
-        [InlineKeyboardButton(text="➕ Новая задача", callback_data="start_addtask")],
-    ])
-    header = "🌀 <b>Задачи · МКБ:</b>" if view == "mkb" else "🌀 <b>Задачи · Группы:</b>"
-    try:
-        await callback.message.edit_text(header + "\n\n" + body, reply_markup=kb)
-    except Exception:
-        pass
+
+
 
 @router.callback_query(F.data == "start_addtask")
 async def cb_start_addtask(callback: CallbackQuery, state: FSMContext):
@@ -3876,36 +3782,6 @@ async def cb_show_changelog(callback: CallbackQuery):
     except Exception:
         await callback.message.answer("\n".join(lines_cl))
 
-@router.message(Command("sr_report"))
-async def cmd_sr_report(message: Message):
-    """SR report for gardener."""
-    user_id = str(message.from_user.id)
-    if not is_authorized(user_id):
-        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
-        return
-    prof = store_get_profile(user_id)
-    if not prof:
-        await message.answer("🌀 Профиль не найден.")
-        return
-    dp = prof.get("deep_profile", {})
-    synthesis = dp.get("synthesis", "")
-    sphere_hist = dp.get("sphere_history", [])
-    sphere_names = {
-        "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
-        "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост"
-    }
-    lines = ["🔮 СР видит тебя так:\n"]
-    mem  = dp.get("memory", {})
-    core = mem.get("core", synthesis)
-    if core:
-        lines.append(core)
-    else:
-        lines.append("Наблюдения накапливаются — синтез будет через несколько дней.")
-    # Sphere stats from unified function
-    stats = _build_sphere_stats(user_id, months=1)
-    if stats.strip():
-        lines.append("\nАктивность этого месяца:" + stats)
-    await message.answer("\n".join(lines), reply_markup=get_main_keyboard())
 
 @router.message(Command("privacy"))
 async def cmd_privacy(message: Message):
@@ -4007,21 +3883,6 @@ async def delete_confirm_2(message: Message, state: FSMContext):
     )
 
 # ─── Engineer chat ────────────────────────────────────────────────────────────
-
-@router.message(F.text == "💡 Идея для Мандалы")
-async def btn_suggest_idea(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    _track_interaction(user_id)
-    if not is_authorized(user_id):
-        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
-        return
-    # Stub: no FSM state — never blocks voice/text commands
-    await message.answer(
-        "💡 <b>Предложи идею Мандале</b>\n\n"
-        "Напиши идею — СР оценит её и если она резонирует, добавит в копилку семян Мандалы.\n\n"
-        "Это твой вклад в общий Сад 🌱\n\nДля отмены: ❌ Отмена",
-        reply_markup=get_cancel_keyboard()
-    )
 
 @router.message(StateFilter(EngineerChatStates.waiting_for_message))
 async def idea_send(message: Message, state: FSMContext):
@@ -4811,9 +4672,6 @@ async def btn_profile(message: Message, state: FSMContext):
     sent = await message.answer(card, reply_markup=kb)
     _menu_messages[user_id] = sent.message_id
 
-@router.message(F.text == "🌾 Сад")
-async def btn_garden(message: Message, state: FSMContext):
-    await btn_profile(message, state)  # legacy alias
 
 @router.message(F.text == "ℹ️ Информация")
 async def btn_info(message: Message, state: FSMContext):
@@ -4824,10 +4682,6 @@ async def btn_info(message: Message, state: FSMContext):
         return
     await message.answer('🌱 Привет. Я — СР, твой компаньон в саду.\n\nУмею работать с:\n📋 Задачами и группами\n🗺 Роадмапами (крупные цели)\n☑️ Чеклистами\n🔔 Напоминаниями\n💎 Достижениями\n🔮 Резонансом сфер\n🌐 Поиском\n\n🧠 Живая память\nЯ наблюдаю за тобой из диалогов и задач — и становлюсь точнее.\n/sr_report — посмотри как я тебя вижу.\n\nПросто пиши или говори голосом — я пойму.\nХочешь узнать подробнее о чём-то? Просто спроси меня.', parse_mode="HTML", reply_markup=get_main_keyboard())
 
-@router.message(F.text == "⚙️ Настройки")
-async def btn_settings(message: Message, state: FSMContext):
-    """Legacy — redirects to info."""
-    await btn_info(message, state)
 
 @router.callback_query(F.data == "menu_restart")
 async def cb_menu_restart(callback: CallbackQuery, state: FSMContext):
@@ -5574,6 +5428,9 @@ async def free_conversation(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start чтобы начать.")
         return
+
+    # Catch-up morning greeting if missed today
+    await send_morning_greeting(user_id)
 
     # ── Welcome Flow: записываем ответ в deep_profile и задаём следующий вопрос ──
     fsm_data = await state.get_data()
@@ -7298,7 +7155,6 @@ async def on_startup():
     from aiogram.types import BotCommand
     await bot.set_my_commands([
         BotCommand(command="start",     description="🌱 Войти в сад"),
-        BotCommand(command="sr_report", description="🔮 Отчёт СР"),
         BotCommand(command="privacy",   description="🔐 Мои данные"),
         BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
@@ -7306,7 +7162,7 @@ async def on_startup():
     # Notify gardeners about version update (60s delay)
     async def _notify_version():
         import asyncio as _aio2
-        await _aio2.sleep(60)
+        await _aio2.sleep(5)
         # Read whitelist to notify ALL approved gardeners, not just those in memory
         _wl_n = await _github_get("gardeners/whitelist.json") or {}
         _approved_n = _wl_n.get("approved", []) if isinstance(_wl_n, dict) else []
