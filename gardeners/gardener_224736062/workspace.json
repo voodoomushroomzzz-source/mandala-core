@@ -491,6 +491,13 @@
       "datetime_iso": "2026-05-06T01:30+03:00",
       "repeat": "once",
       "active": true
+    },
+    {
+      "id": "rem_581932ee",
+      "title": "сходить на тренировку (спина+плечи)",
+      "datetime_iso": "2026-05-06T11:00+03:00",
+      "repeat": "once",
+      "active": true
     }
   ],
   "_decay_date": "2026-05-05",
