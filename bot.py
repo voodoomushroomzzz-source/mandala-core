@@ -2114,20 +2114,9 @@ async def cb_profile_achievements(callback: CallbackQuery):
 
 @router.callback_query(F.data == "profile_back")
 async def cb_profile_back(callback: CallbackQuery):
-    """Return from achievements dashboard to profile."""
     await callback.answer()
     user_id = str(callback.from_user.id)
-    card = _build_profile_card(user_id)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="✏️ Профиль", callback_data="menu_edit_profile"),
-            InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
-        ]
-    ])
-    try:
-        await callback.message.edit_text(card, reply_markup=kb, parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(card, reply_markup=kb, parse_mode="HTML")
+    await _show_profile(user_id, callback.message)
 
 
 @router.callback_query(F.data == "cl_create_new")
@@ -2993,7 +2982,18 @@ async def onboard_morning(message: Message, state: FSMContext):
 @router.message(F.text == "🌾 Профиль")
 async def cmd_profile(message: Message, state: FSMContext = None):
     user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+    if not is_authorized(user_id):
+        await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
+        return
+    sr = store_get_sphere_resonance(user_id)
+    mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+    profile = store_get_profile(user_id) or {}
+    profile["resonance_level"] = mean
+    store_set_profile(user_id, profile)
     await _show_profile(user_id, message)
+
+
 @router.message(Command("resonance"))
 @router.message(F.text == "🔮 Резонанс")
 async def cmd_resonance(message: Message):
@@ -4749,12 +4749,7 @@ async def btn_profile(message: Message, state: FSMContext):
             await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
         except Exception:
             pass
-    card = _build_profile_card(user_id)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✏️ Изменить профиль", callback_data="menu_edit_profile")],
-    ])
-    sent = await message.answer(card, reply_markup=kb)
-    _menu_messages[user_id] = sent.message_id
+    await _show_profile(user_id, message)
 
 
 @router.message(F.text == "ℹ️ Информация")
