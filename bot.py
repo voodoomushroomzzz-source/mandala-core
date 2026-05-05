@@ -54,17 +54,17 @@ TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
 GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 SR_MODEL_CHAIN = [
-    "qwen/qwen3.5-flash-02-23",   # primary — fast and cheap
-    "qwen/qwen3.6-plus",           # fallback on rate limit — separate quota
+    "deepseek/deepseek-v4-flash",   # primary — 284B MoE, 13B active, 1M ctx
+    "qwen/qwen3.5-flash-02-23",     # fallback — проверенный боевой
 ]
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.33.1"
+BOT_VERSION = "7.34"
 BOT_LATEST_UPDATE = {
-    "version": "7.33.1",
+    "version": "7.34",
     "date": "2026-05-05",
-    "text": "🌱 Мандала обновилась · v7.33.1\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
+    "text": "🌱 Мандала обновилась · v7.34\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1205,6 +1205,13 @@ def _build_profile_card(user_id: str) -> str:
 
 async def _show_profile(user_id: str, message: Message):
     """Show profile card — used by button, command, voice, intent."""
+    # Delete previous profile message to keep chat clean
+    prev_mid = _profile_messages.get(user_id)
+    if prev_mid:
+        try:
+            await message.bot.delete_message(message.chat.id, prev_mid)
+        except Exception:
+            pass
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
@@ -1212,7 +1219,8 @@ async def _show_profile(user_id: str, message: Message):
             InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
         ]
     ])
-    await message.answer(card, reply_markup=kb)
+    sent = await message.answer(card, reply_markup=kb)
+    _profile_messages[user_id] = sent.message_id
 
 async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels"):
     """Show tasks — used by button, command, voice, intent."""
@@ -3952,6 +3960,7 @@ _sessions: dict = {}
 # Track last menu message per user — delete before showing new menu
 _menu_messages: dict = {}  # {user_id: message_id}
 _checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
+_profile_messages: dict = {}   # {user_id: message_id} — last shown profile
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
 _intent_map_needed: dict = {}  # uid → bool — show full INTENT_MAP on next request
 
