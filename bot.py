@@ -5490,19 +5490,19 @@ async def free_conversation(message: Message, state: FSMContext):
     _hint = _get_session_reflection_hint(user_id)
     _hint_block = f"\n\n[SR reflection hint: {_hint}]" if _hint else ""
 
-        count = _intent_map_msg_count.get(user_id, 0) + 1
-        _intent_map_msg_count[user_id] = count
-        if count % 10 == 0:
-            _intent_map_msg_count[user_id] = 0  # reset cycle after showing map
-        system_content = SR_CORE_PROMPT + ("\n\n" + SR_INTENT_MAP) if (count % 10 == 0) else SR_CORE_PROMPT
-        messages = [
-            {
-                "role": "system",
-                "content": system_content + "\n\n" + ctx_msg + _hint_block
-            },
-            *history,
-            {"role": "user", "content": text}
-        ]
+    count = _intent_map_msg_count.get(user_id, 0) + 1
+    _intent_map_msg_count[user_id] = count
+    if count % 10 == 0:
+        _intent_map_msg_count[user_id] = 0  # reset cycle after showing map
+    system_content = SR_CORE_PROMPT + ("\n\n" + SR_INTENT_MAP) if (count % 10 == 0) else SR_CORE_PROMPT
+    messages = [
+        {
+            "role": "system",
+            "content": system_content + "\n\n" + ctx_msg + _hint_block
+        },
+        *history,
+        {"role": "user", "content": text}
+    ]
 
     reply_text = "🌿 Я здесь, рядом."
     action = None
