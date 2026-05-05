@@ -13,9 +13,6 @@
     "groups":  [
 
                ],
-    "achievements":  [
-
-                     ],
     "updated":  "2026-05-04",
     "sphere_resonance":  {
                              "health":  20,
@@ -44,5 +41,6 @@
                                       ],
                          "status":  "active"
                      }
-                 ]
+                 ],
+    "achievements_count":  0
 }
