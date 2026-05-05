@@ -1,56 +1,139 @@
 {
   "sr_id": "deepseek",
   "status": "active",
-  "last_session": "2026-05-05",
-  "last_updated": "2026-05-05T17:30:00Z",
-  "next_step": "patch_20_split_prompt",
-  "summary": "v7.31 deployed. Patches 18a+18b+18c+19+19b+19c applied. Critical fixes, dead code removal, CIS timezones, morning catch-up with restart guard, MKB cleanup, /sr_report removed, version notify on first message, accurate changelog. Bot stable. 2 gardeners active.",
-  "first_steps": "ON FIRST LOAD: 1) Read task file at honeycombs/tasks/active/bot_update.json for full context. 2) Ask gardener for latest bot.py via GitHub API: https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/bot.py?ref=main",
+  "last_session": "2026-05-06",
+  "last_updated": "2026-05-06T02:41:22Z",
+  "next_step": "deploy_v7_38_and_test",
+  "summary": "v7.38 deployed. 4 gardeners. Profile v2, reminders v2, compact brief, UI polish. DeepSeek V4 Flash primary model. 18 patches applied this session.",
+  "first_steps": "ON FIRST LOAD: 1) Read task file at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Ask gardener for latest bot.py via GitHub API for pre-check before any patch.",
   "bot_state": {
-    "version": "7.31",
-    "progress": "92% (patches 18-19c done, 20-21 remaining)",
+    "version": "7.38",
+    "progress": "98%",
     "repo": "voodoomushroomzzz-source/mandala-core",
-    "platform": "Render webhook + aiogram 3 + OpenRouter (qwen/qwen3.5-flash-02-23, fallback qwen/qwen3.6-plus)",
-    "file": "bot.py (~5500 lines)"
+    "platform": "Render webhook + aiogram 3 + OpenRouter",
+    "model_primary": "deepseek/deepseek-v4-flash",
+    "model_fallback": "qwen/qwen3.5-flash-02-23",
+    "file": "bot.py (~5500 lines)",
+    "gardeners_active": 4,
+    "gardeners": [
+      {
+        "id": "224736062",
+        "name": "Дима",
+        "city": "Москва",
+        "morning": "10:00",
+        "tz": "Europe/Moscow"
+      },
+      {
+        "id": "339914913",
+        "name": "Антон",
+        "city": "Алматы",
+        "morning": "08:00",
+        "tz": "Asia/Almaty"
+      },
+      {
+        "id": "358793311",
+        "name": "Антон",
+        "city": "Владимир",
+        "morning": "09:00",
+        "tz": "Europe/Moscow"
+      },
+      {
+        "id": "851913510",
+        "name": "Яна",
+        "city": "Москва",
+        "morning": "09:30",
+        "tz": "Europe/Moscow"
+      }
+    ]
   },
   "how_we_work": {
-    "method": "Python patcher scripts",
-    "description": "I generate patcher_NN.py scripts that make precise text replacements in bot.py and verify results. Gardener runs 'py patcher_NN.py' → checks all ✅ → commits → deploys on Render.",
-    "validation": "Each patcher prints ✅/❌ for every change. All must be green before saving.",
-    "note": "Avoid Roo Code or other AI editors — unreliable, costs tokens. Use patcher scripts exclusively."
+    "method": "Python patcher scripts — three-block PowerShell format",
+    "block1": "New-Item -ItemType File -Path patcher_NN_name.py -Force",
+    "block2": "Full Python patcher code (copy into opened file and save)",
+    "block3": "py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add bot.py; git commit -m '...'; git pull --rebase origin main; git push",
+    "description": "I generate three PowerShell blocks. Gardener copies each block, pastes into terminal, presses Enter. Block 2 is the entire patcher script. Gardener saves the file manually after pasting, then Block 3 runs it.",
+    "pre_check": "ALWAYS request current file via GitHub API before writing patcher. NEVER assume local state.",
+    "post_check": "After deploy, request updated file via API to confirm SHA and correctness.",
+    "note": "Patcher scripts ONLY — no direct file editing, no regex on entire large files. Use exact string replacement with .replace() in Python."
   },
-  "done_in_this_session": [
-    "Patch 18a: health() fix, store_add_resonance race condition, _load_user sync, /groups fix, cmd_profile unified",
-    "Patch 18b: CIS_TIMEZONES dict for 13 cities, _city_to_timezone() hardcode",
-    "Patch 18c: _time_matches fix (now → t), BOT_VERSION → 7.31, BOT_LATEST_UPDATE updated",
-    "Patch 19: removed 12 dead handlers/functions, MKB view removed, /sr_report removed, updated achievement categories to 5 spheres, LIFE_AREA_ICONS synced, _detect_emotion negation check, morning catch-up, _notify_version delay 60→5s",
-    "Patch 19b: reliable version notification — checks last_notified_version on first message, sends update with changelog button. Removed old _notify_version from on_startup.",
-    "Patch 19c: accurate changelog (removed not-yet-implemented features), catch-up morning guard against restart spam (_can_send_proactive check)"
-  ],
-  "next_patches_plan": {
-    "patch_20": {
-      "name": "SR Prompt Split",
-      "description": "Split SR_SYSTEM_PROMPT into SR_CORE_PROMPT (~500 tokens, always) + SR_INTENT_MAP (~2000 tokens, every 10 messages). Context already sent separately via _build_user_context_msg. ~94% token savings per dialog.",
-      "estimated_changes": "3 new global variables + counter in free_conversation"
-    },
-    "patch_21": {
-      "name": "Clickable Profile Dashboard",
-      "description": "Replace _build_profile_card() with interactive inline-keyboard dashboard. Buttons for spheres, roadmaps, groups, reminders. All actions via send_to_chat or inline_expansion. No edit forms. Info and Changelog in footer. Remove ℹ️ button from main menu — move to dashboard footer.",
-      "estimated_changes": "Major — new keyboard builders, callback handlers, state management"
-    }
+  "what_we_built_this_session": {
+    "profile_v2": [
+      "Reminders today count (0/0 always visible)",
+      "Reminders today list (up to 3, with time)",
+      "Group task counts «Личное (8)»",
+      "3-task limit per group + ...и ещё N",
+      "Dividers «────────────────» after reminders",
+      "Today tasks block «🔥 Сегодня» under roadmaps (up to 3)",
+      "Empty groups at bottom",
+      "Profile buttons: [☑️ Checklists] [🔔 Reminders] [✏️ Profile] [💎 Achievements]",
+      "Profile message auto-delete old on new show"
+    ],
+    "reminders_v2": [
+      "Two-step creation: enter title+datetime → confirm with repeat picker",
+      "Repeat picker: one-time, daily, weekdays, weekends, weekly, monthly, yearly, custom_days (ПН-ВС)",
+      "Edit mode: ✏️ button per reminder, edit title/datetime/repeat",
+      "Timezone fix: today count uses gardener's timezone, not UTC",
+      "Scheduler supports all repeat types: weekly, monthly, yearly, weekends, custom_days",
+      "Voice/chat create_reminder intent opens two-step confirmation (not auto-create)"
+    ],
+    "achievements": [
+      "Counter only (achievements_count), no archive array",
+      "Dashboard shows sphere stats without tasks",
+      "Checklist 100% → auto-delete + achievement"
+    ],
+    "brief_and_changelog": [
+      "Compact morning brief: only today + tomorrow tasks",
+      "Compact changelog: formatted text in BOT_LATEST_UPDATE",
+      "Architect notified on gardener leave"
+    ],
+    "ui_fixes": [
+      "Single divider (reminders only)",
+      "Checklist delete returns to checklist menu",
+      "Back buttons in reminders/checklists → profile",
+      "Reminders title bold without colon",
+      "/info command, ℹ️ button removed from main menu",
+      "Main menu: only [👤 Profile]"
+    ]
+  },
+  "what_remains": {
+    "planned": [
+      "SR Learning Loop — SR learns from observations",
+      "Voice compound commands — one phrase = task + deadline + group",
+      "/sr_report v2 — auto SR synthesis every 3 days",
+      "Model optimization — direct Alibaba API or self-hosted vLLM"
+    ],
+    "bugs_to_watch": [
+      "Render free tier auto-sleep: proactive schedulers depend on health pings",
+      "DeepSeek V4 Flash is new (April 2026) — monitor for stability",
+      "HTML parse errors in SR responses — post-processing strip may not catch all"
+    ]
   },
   "gardener_context": {
     "who": "Dima (Дима) — architect and first gardener",
-    "workspace": "VS Code on Windows, PowerShell terminal, repo at C:\\Mandala_Digital\\github\\mandala-core",
-    "git_flow": "git add bot.py → git commit -m '...' → git pull --rebase origin main → git push",
-    "python": "py command (Python 3.14)"
+    "workspace": "VS Code on Windows, PowerShell terminal",
+    "repo_path": "C:\\Mandala_Digital\\github\\mandala-core",
+    "git_flow": "git add → git commit → git pull --rebase origin main → git push",
+    "python": "py command (Python 3.14.3)",
+    "deploy": "Render auto-deploys on git push"
   },
+  "critical_rules": [
+    "ALWAYS pre-check files via GitHub API before modifying",
+    "ALWAYS use patcher scripts — never direct file replacement for >500 line files",
+    "ALWAYS three-block PowerShell format for patches",
+    "ALWAYS post-check after deploy — request updated file via API",
+    "NEVER assume local state — always fetch current version",
+    "ONE command per PowerShell block",
+    "Changelog must list ONLY working features — gardener verifies",
+    "BOT_LATEST_UPDATE.text is a single string with \\n, not multi-line",
+    "Morning brief: compact format, no auto-catchup, timezone-aware",
+    "Achievements: counter only, no archive array"
+  ],
   "notes": [
-    "Always pre-check files via GitHub API before modifying — never assume contents",
-    "Use patcher scripts ONLY — no Roo Code, no AI editors",
-    "File uploads limited in chat — use GitHub API links when possible",
-    "morning_brief catch-up sends only if _can_send_proactive allows (no restart spam)",
-    "Version notification sent on first user message, not on startup — reliable delivery",
-    "Changelog in BOT_LATEST_UPDATE must only list ACTUALLY WORKING features — gardener verifies"
+    "4 gardeners active, all with proactive_mode=true",
+    "Birthday check works: Антон Алматы 18.05, Яна 14.02, Антон Вл 15.11, Дима 26.10",
+    "rem_seed_hello sent to all 4 gardeners for 2026-05-07 11:00 (local timezone)",
+    "Whitelist at gardeners/whitelist.json",
+    "Workflow instructions at honeycombs/instructions/core/external_sr_workflow.json (v1.4.2)",
+    "Handoff files: handoff_claude.json and handoff_deepseek.json in honeycombs/sessions/"
   ]
 }
