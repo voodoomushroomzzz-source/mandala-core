@@ -5605,6 +5605,14 @@ async def free_conversation(message: Message, state: FSMContext):
                 if parsed is not None:
                     extracted = parsed.get("text", "")
                     reply_text = extracted.strip() if extracted else ""
+                    # Strip markdown: **bold** → bold, *italic* → italic
+                    # Do NOT strip HTML tags which are intentional
+                    if reply_text:
+                        reply_text = reply_text.replace("**", "").replace("__", "")
+                        # Strip list markers: "* " → "• " but only at line start
+                        import re as _re_md
+                        reply_text = _re_md.sub(r'^\* ', '• ', reply_text, flags=_re_md.MULTILINE)
+                        reply_text = _re_md.sub(r'^\- ', '• ', reply_text, flags=_re_md.MULTILINE)
                     action = parsed.get("action")
                     raw_clean = json.dumps(parsed, ensure_ascii=False)
                 else:
