@@ -469,13 +469,6 @@
       "datetime_iso": "2026-05-06T11:00+03:00",
       "repeat": "once",
       "active": true
-    },
-    {
-      "id": "rem_seed_hello",
-      "title": "Привет, друг! Как дела?",
-      "repeat": "once",
-      "active": true,
-      "datetime_iso": "2026-05-07T11:00+03:00"
     }
   ],
   "_decay_date": "2026-05-05",
