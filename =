@@ -1,0 +1,206 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Patcher 20b: Reminder Atomic — _create_reminder_atomic() + intent integration
+Applies on top of patcher_20 (profile already patched)
+"""
+import re
+
+FILE = "bot.py"
+
+with open(FILE, "r", encoding="utf-8") as f:
+    code = f.read()
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 1. ADD _create_reminder_atomic() function before async def _create_task_atomic
+# ═══════════════════════════════════════════════════════════════════════════════
+
+reminder_atomic_func = '''
+async def _create_reminder_atomic(user_id: str, message: Message,
+                                   title: str, datetime_str: str = None,
+                                   repeat: str = "once") -> dict:
+    """Create a reminder instantly from chat/voice without FSM.
+    Cleans title from time phrases, parses natural-language datetime,
+    adds timezone offset from gardener settings. Returns created reminder dict."""
+    import re as _re_rem
+    from datetime import datetime as _dt_rem, timedelta as _td_rem
+    from zoneinfo import ZoneInfo as _ZI_rem
+
+    reminders = store_get_reminders(user_id)
+    if len(reminders) >= REMINDER_LIMIT:
+        return {}
+
+    # ── 1. Clean title: remove time phrases ────────────────────────────────
+    title = title.strip()
+    # Remove trailing time patterns: "в 9", "в 21:00", "завтра в 9", "сегодня в 21:00"
+    title = _re_rem.sub(
+        r'\s+(завтра|сегодня|послезавтра|через\s+\d+\s+(минут|час|часа|часов|дня|дней|неделю|недели))\s*'
+        r'(в\s+\d{1,2}(:\d{2})?\s*)?$',
+        '', title, flags=_re_rem.IGNORECASE
+    ).strip()
+    # Remove standalone time: "в 13:00", "в 9"
+    title = _re_rem.sub(r'\s+в\s+\d{1,2}(:\d{2})?\s*$', '', title, flags=_re_rem.IGNORECASE).strip()
+
+    if not title or len(title) < 2:
+        return {}
+
+    # ── 2. Resolve timezone ────────────────────────────────────────────────
+    profile = store_get_profile(user_id) or {}
+    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz = _ZI_rem(tz_name)
+    except Exception:
+        tz = _ZI_rem("Europe/Moscow")
+    now = _dt_rem.now(tz)
+    today_str = now.strftime("%Y-%m-%d")
+
+    # ── 3. Parse datetime_str ──────────────────────────────────────────────
+    dt_iso = None
+
+    if datetime_str and datetime_str not in ("null", "none", ""):
+        ds = datetime_str.strip()
+        # Already ISO with timezone offset: "2026-05-05T13:00+05:00"
+        if _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}[+-]\d{2}:\d{2}$', ds):
+            dt_iso = ds
+        # ISO without offset: "2026-05-05T13:00" → add offset
+        elif _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$', ds):
+            offset = now.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = f"{ds}{offset_formatted}"
+        # Relative time: "через 30 минут", "через 2 часа"
+        elif (m := _re_rem.match(r'через\s+(\d+)\s+(минут|час|часа|часов|дня|дней|недел[юиь])', ds.lower())):
+            n = int(m.group(1))
+            unit = m.group(2)
+            if unit.startswith("минут"):
+                target = now + _td_rem(minutes=n)
+            elif unit.startswith("час"):
+                target = now + _td_rem(hours=n)
+            elif unit.startswith("дн"):
+                target = now + _td_rem(days=n)
+            elif unit.startswith("недел"):
+                target = now + _td_rem(weeks=n)
+            else:
+                target = now + _td_rem(minutes=30)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+        # "сегодня в 21:00", "завтра в 9"
+        elif (m := _re_rem.match(r'(сегодня|завтра|послезавтра)\s+в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
+            day_map = {"сегодня": 0, "завтра": 1, "послезавтра": 2}
+            day_offset = day_map.get(m.group(1), 0)
+            hh = int(m.group(2))
+            mm = int(m.group(3)) if m.group(3) else 0
+            target = (now + _td_rem(days=day_offset)).replace(hour=hh, minute=mm, second=0, microsecond=0)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+        # "в 21:00", "в 9" (today)
+        elif (m := _re_rem.match(r'в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
+            hh = int(m.group(1))
+            mm = int(m.group(2)) if m.group(2) else 0
+            target = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+            if target <= now:
+                target += _td_rem(days=1)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+
+    # Fallback: if no datetime parsed, set to tomorrow 9:00
+    if not dt_iso:
+        target = (now + _td_rem(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+        offset = target.strftime("%z")
+        offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+        dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+
+    # ── 4. Validate repeat ─────────────────────────────────────────────────
+    if repeat not in ("once", "daily", "weekdays"):
+        repeat = "once"
+
+    # ── 5. Create reminder ─────────────────────────────────────────────────
+    rid = _make_reminder_id(reminders)
+    new_rem = {
+        "id": rid,
+        "title": title,
+        "datetime_iso": dt_iso,
+        "repeat": repeat,
+        "active": True
+    }
+    reminders.append(new_rem)
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    return new_rem
+
+'''
+
+# Insert before _create_task_atomic
+insert_before = "async def _create_task_atomic"
+code = code.replace(insert_before, reminder_atomic_func + insert_before)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 2. REPLACE inline create_reminder in intent router with atomic call
+# ═══════════════════════════════════════════════════════════════════════════════
+
+old_reminder_intent = '''                        elif intent == "create_reminder":
+                            action_r = parsed_check.get("action") or {}
+                            r_title  = action_r.get("title","").strip()
+                            r_dt     = action_r.get("datetime","").strip()
+                            r_repeat = action_r.get("repeat","once").strip()
+                            if r_repeat not in ("once","daily","weekdays"):
+                                r_repeat = "once"
+                            if not r_title:
+                                reply_text = "🔔 Скажи точнее: «напомни мне X завтра в 9:00»"
+                            else:
+                                result = await _create_reminder_atomic(
+                                    user_id, message,
+                                    title=r_title,
+                                    datetime_str=r_dt if r_dt and r_dt not in ("null","none","") else None,
+                                    repeat=r_repeat
+                                )
+                                if result:
+                                    rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(r_repeat,"один раз")
+                                    reply_text = (f"✅ Напоминание: 🔔 {result['title']} · {result['datetime_iso'][:16].replace('T',' ')} · {rep_s}\\n\\n"
+                                                  + _reminder_list_text(store_get_reminders(user_id)))
+                                else:
+                                    reply_text = "🔔 Не удалось создать напоминание."'''
+
+# Find the create_reminder intent block in the intent router
+# This block starts with 'elif intent == "create_reminder":'
+old_reminder_intent_pattern = r'elif intent == "create_reminder":\s*\n\s*action_r = parsed_check\.get\("action"\) or \{\}.*?(?=\n\s*elif intent == "show_reminders")'
+
+match = re.search(old_reminder_intent_pattern, code, re.DOTALL)
+if match:
+    # Replace with simplified version
+    new_reminder_intent = '''                        elif intent == "create_reminder":
+                            action_r = parsed_check.get("action") or {}
+                            r_title  = action_r.get("title","").strip()
+                            r_dt     = action_r.get("datetime","").strip()
+                            r_repeat = action_r.get("repeat","once").strip()
+                            if r_repeat not in ("once","daily","weekdays"):
+                                r_repeat = "once"
+                            if not r_title:
+                                reply_text = "🔔 Скажи точнее: «напомни мне X завтра в 9:00»"
+                            else:
+                                result = await _create_reminder_atomic(
+                                    user_id, message,
+                                    title=r_title,
+                                    datetime_str=r_dt if r_dt and r_dt not in ("null","none","") else None,
+                                    repeat=r_repeat
+                                )
+                                if result:
+                                    rep_s = {"once":"один раз","daily":"ежедневно","weekdays":"по будням"}.get(result.get("repeat","once"),"один раз")
+                                    reply_text = (f"✅ Напоминание: 🔔 {result['title']} · {result['datetime_iso'][:16].replace('T',' ')} · {rep_s}\\n\\n"
+                                                  + _reminder_list_text(store_get_reminders(user_id)))
+                                else:
+                                    reply_text = "🔔 Не удалось создать напоминание."'''
+    code = code.replace(match.group(0), new_reminder_intent)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 3. Bump version to 7.32 (if not already)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+code = code.replace('BOT_VERSION = "7.31"', 'BOT_VERSION = "7.32"')
+
+with open(FILE, "w", encoding="utf-8") as f:
+    f.write(code)
+
+print("✅ Patch 20b applied: _create_reminder_atomic + intent integration")
