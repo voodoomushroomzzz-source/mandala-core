@@ -60,11 +60,11 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.34"
+BOT_VERSION = "7.35"
 BOT_LATEST_UPDATE = {
-    "version": "7.34",
+    "version": "7.35",
     "date": "2026-05-05",
-    "text": "🌱 Мандала обновилась · v7.34\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
+    "text": "🌱 Мандала обновилась · v7.35\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1215,6 +1215,10 @@ async def _show_profile(user_id: str, message: Message):
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
+            InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
+            InlineKeyboardButton(text="🔔 Напоминания", callback_data="menu_reminders_mgmt"),
+        ],
+        [
             InlineKeyboardButton(text="✏️ Профиль", callback_data="menu_edit_profile"),
             InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
         ]
@@ -2104,7 +2108,7 @@ async def cb_profile_achievements(callback: CallbackQuery):
     else:
         text = f"💎 Достижения · всего {ach_count}\n"
         text += "\n📊 Статистика по месяцам:"
-        text += _build_sphere_stats(user_id, months=3)
+        text += _build_sphere_stats(user_id, months=3, show_tasks=False)
         text += "\n\nДобавить: «добавь достижение — [что сделал]»"
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")]
@@ -2245,14 +2249,14 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     if items and all(it.get("done") for it in items):
         count  = store_increment_achievements(user_id)
         cl_res = store_add_sphere_resonance(user_id, "growth", 2)
+        # Auto-delete completed checklist
+        checklists = [c for c in checklists if c["id"] != cl["id"]]
+        store_set_checklists(user_id, checklists)
         _fire_sync()
         try:
             await callback.message.edit_text(
                 f"🎉 <b>{cl['title']}</b> — выполнен полностью!\n"
-                f"💎 +1 достижение · всего {count} · 🔮 +2% → {cl_res}%",
-                reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                    [InlineKeyboardButton(text="🗑 Удалить чеклист", callback_data=f"cl_delete_{cl['id']}")]
-                ])
+                f"💎 +1 достижение · всего {count} · 🔮 +2% → {cl_res}%"
             )
         except Exception:
             pass
@@ -3894,6 +3898,19 @@ async def leave_confirm(callback: CallbackQuery, state: FSMContext):
         g["updated"] = _today()
         store_set_profile(user_id, g)
         _fire_sync()
+        # Notify architect
+        try:
+            name = gardener.get("name", "Садовник")
+            await bot.send_message(
+                int(ARCHITECT_TELEGRAM_ID),
+                f"🌒 <b>Садовник покинул сад</b>\n\n"
+                f"👤 {name}\nID: <code>{user_id}</code>\n"
+                f"Время: {_today()}\n\n"
+                f"Данные сохранены. Может вернуться в любой момент.",
+                parse_mode="HTML"
+            )
+        except Exception as e:
+            logger.error(f"Architect leave notify error: {e}")
     await state.clear()
     await callback.message.edit_text(
         "🌒 <b>Сад засыпает.</b>\n\nДанные сохранены.\nВозвращайся когда захочешь 🌿"
@@ -5252,9 +5269,11 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
 
 # _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
 
-def _build_sphere_stats(user_id: str, months: int = 3) -> str:
+def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False) -> str:
     """Unified sphere stats text for /achievements and /sr_report.
-    Uses sphere_history if available, falls back to achievements array."""
+    Uses sphere_history if available, falls back to achievements array.
+    show_tasks=False — only achievements (profile dashboard)
+    show_tasks=True — tasks + achievements (/sr_report)"""
     _RU_MONTHS_S = {
         1:"Январь",2:"Февраль",3:"Март",4:"Апрель",5:"Май",6:"Июнь",
         7:"Июль",8:"Август",9:"Сентябрь",10:"Октябрь",11:"Ноябрь",12:"Декабрь"
@@ -6053,7 +6072,6 @@ async def free_conversation(message: Message, state: FSMContext):
                             _ach_title = (_ach_act.get("title") or parsed_check.get("text") or "").strip()
                             _ach_sphere = (_ach_act.get("sphere") or "").strip()
                             if _ach_title:
-                                # Определяем сферу — из SR или через _classify_sphere
                                 _sphere_map = {
                                     "health": "health", "creativity": "creativity",
                                     "work": "work", "connections": "connections", "growth": "growth"
@@ -6065,48 +6083,29 @@ async def free_conversation(message: Message, state: FSMContext):
                                     "work": "Работа", "connections": "Связи",
                                     "growth": "Рост", "other": "Другое"
                                 }
-                                _ach_bonus = 3  # стандартный бонус через чат
-                                # Защита от дублей — не добавляем если такое же название уже есть сегодня
-                                _achievements = list(store_get_achievements(user_id))
+                                _ach_bonus = 3
+                                # Защита от дублей через achievements_count
                                 _today_str = _today()
-                                _is_dup = any(
-                                    a.get("title", "").lower().strip() == _ach_title.lower().strip()
-                                    and a.get("completed", "") == _today_str
-                                    for a in _achievements
+                                # Всегда добавляем +1 к счётчику и резонансу без архива
+                                _new_sphere_res = store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
+                                _update_sphere_history(user_id, _ach_cat, achievement=True, resonance_delta=_ach_bonus)
+                                store_increment_achievements(user_id)
+                                _gardener = store_get_profile(user_id)
+                                if _gardener:
+                                    _g = dict(_gardener)
+                                    _prev_res = _g.get("resonance_level", 13)
+                                    _g["resonance_level"] = min(100, _prev_res + _ach_bonus)
+                                    _g["updated"] = _today()
+                                    _g = _add_growth_history_entry(_g, _g["resonance_level"], user_id)
+                                    store_set_profile(user_id, _g)
+                                    _invalidate_auth_cache(user_id)
+                                _fire_sync()
+                                _sname = _sphere_name_map.get(_ach_cat, _ach_cat)
+                                reply_text = (
+                                    f"{_ach_icon} Достижение зафиксировано!\n\n"
+                                    f"{_ach_title}\n"
+                                    f"Сфера: {_sname} · +{_ach_bonus} к резонансу"
                                 )
-                                if _is_dup:
-                                    reply_text = f"{_ach_icon} Достижение «{_ach_title}» уже зафиксировано сегодня."
-                                else:
-                                    _achievements.append({
-                                        "id": f"ach_{len(_achievements)+1:03d}",
-                                        "category": _ach_cat,
-                                        "title": _ach_title,
-                                        "description": "",
-                                        "completed": _today(),
-                                        "resonance_bonus": _ach_bonus,
-                                        "icon": _ach_icon
-                                    })
-                                    store_set_achievements(user_id, _achievements)
-                                    # Обновляем резонанс сферы
-                                    _new_sphere_res = store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
-                                    _update_sphere_history(user_id, _ach_cat, achievement=True, resonance_delta=_ach_bonus)
-                                    _gardener = store_get_profile(user_id)
-                                    if _gardener:
-                                        _g = dict(_gardener)
-                                        _prev_res = _g.get("resonance_level", 13)
-                                        _g["resonance_level"] = min(100, _prev_res + _ach_bonus)
-                                        _g["updated"] = _today()
-                                        _g = _add_growth_history_entry(_g, _g["resonance_level"], user_id)
-                                        store_set_profile(user_id, _g)
-                                        _invalidate_auth_cache(user_id)
-                                    _fire_sync()
-                                    # Reply text generated by code — NOT by SR to avoid hallucination
-                                    _sname = _sphere_name_map.get(_ach_cat, _ach_cat)
-                                    reply_text = (
-                                        f"{_ach_icon} Достижение зафиксировано!\n\n"
-                                        f"{_ach_title}\n"
-                                        f"Сфера: {_sname} · +{_ach_bonus} к резонансу"
-                                    )
                             else:
                                 # Название не распознано — открываем FSM
                                 await cmd_achievements(message)
