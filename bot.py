@@ -2950,7 +2950,6 @@ async def onboard_morning(message: Message, state: FSMContext):
 async def cmd_profile(message: Message, state: FSMContext = None):
     user_id = str(message.from_user.id)
     await _show_profile(user_id, message)
-
 @router.message(Command("resonance"))
 @router.message(F.text == "🔮 Резонанс")
 async def cmd_resonance(message: Message):
@@ -4863,7 +4862,7 @@ async def cb_approve_gardener(callback: CallbackQuery):
     if telegram_id not in whitelist.get("approved", []):
         whitelist.setdefault("approved", []).append(telegram_id)
         _pending_writes["gardeners/whitelist.json"] = whitelist
-        await _sync_pending()  # immediate — don't risk losing on restart
+        _fire_sync()  # fire-and-forget — don't risk losing on restart
     await callback.message.edit_text(
         callback.message.text + "\n\n✅ <b>Врата открыты</b>",
         parse_mode="HTML", reply_markup=None
