@@ -4177,6 +4177,10 @@ SR_INTENT_MAP = """ПЯТЬ СФЕР РЕЗОНАНСА (как они живу�
 - Развёрнутый разговор → абзацы с переносами, никаких стен текста
 
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
+Отвечаешь HTML-тегами для форматирования: <b>жирный</b>, <i>курсив</i>, <code>код</code>.
+Никакого Markdown: ни **, ни *, ни __, ни #, ни --. Совсем. Никогда.
+Списки через • (буллит), без цифр и тире.
+Эмодзи для структуры — не для украшения.
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
   "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
