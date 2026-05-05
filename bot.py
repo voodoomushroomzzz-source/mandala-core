@@ -60,15 +60,15 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.32"
+BOT_VERSION = "7.33"
 BOT_LATEST_UPDATE = {
-    "version": "7.32",
+    "version": "7.33",
     "date": "2026-05-05",
     "features": [
         "Напоминания сегодня в профиле (N/M)",
         "Количество задач в заголовке группы (16)",
         "Лимит 3 задачи на группу + ...и ещё N",
-        "Разделители ──── между группами",
+        "Разделители - - - - - - - - - между блоками",
         "Утренний брифинг с автодогоном — не пропадает после сна бота",
         "Надёжные уведомления об обновлениях — при первом сообщении",
         "Автоопределение часового пояса для 13 городов СНГ",
@@ -1167,7 +1167,7 @@ def _build_profile_card(user_id: str) -> str:
         shown.add(gname)
         emoji = emoji_map.get(g["id"], "🌱")
         if not first_group:
-            lines.append("")
+            lines.append("- - - - - - - - -")
         first_group = False
         lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
         shown_count = 0
@@ -1186,7 +1186,7 @@ def _build_profile_card(user_id: str) -> str:
             continue
         emoji = get_group_emoji(gname)
         if not first_group:
-            lines.append("")
+            lines.append("- - - - - - - - -")
         first_group = False
         lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
         shown_count = 0
@@ -1203,7 +1203,7 @@ def _build_profile_card(user_id: str) -> str:
     unlabeled = by_group.get("", [])
     if unlabeled:
         if not first_group:
-            lines.append("")
+            lines.append("- - - - - - - - -")
         lines.append(f"🌱 <b>Без группы ({len(unlabeled)})</b>")
         shown_ul = 0
         for t in _sort_by_deadline(unlabeled):
@@ -1686,6 +1686,11 @@ async def run_reminder_scheduler() -> None:
 
 async def run_proactive_scheduler() -> None:
     try:
+        # Если _store пуст (бот проснулся после сна Render) — загрузить всех из whitelist
+        if not _store or not any(
+            isinstance(us, dict) and us.get("ready") for us in _store.values()
+        ):
+            await _load_store()
         for uid, user_store in list(_store.items()):
             if not isinstance(user_store, dict) or not user_store.get("ready"):
                 continue
@@ -5323,10 +5328,16 @@ def _build_sphere_stats(user_id: str, months: int = 3) -> str:
                 r_delta = d.get("resonance_delta", 0)
                 if t_cnt > 0 or a_cnt > 0:
                     has_data = True
-                    line = f"  {sname} — {t_cnt} задач · {a_cnt} достижений"
-                    if r_delta > 0:
-                        line += f" · +{r_delta}% резонанс"
-                    lines.append(line)
+                    parts = []
+                    if t_cnt > 0:
+                        parts.append(f"{t_cnt} задач")
+                    if a_cnt > 0:
+                        parts.append(f"{a_cnt} достижений")
+                    if parts:
+                        line = f"  {sname} — {' · '.join(parts)}"
+                        if r_delta > 0:
+                            line += f" · +{r_delta}% резонанс"
+                        lines.append(line)
             if not has_data:
                 lines.append("  нет активности")
         # Analytics
