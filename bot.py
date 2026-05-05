@@ -5270,12 +5270,28 @@ async def _generate_synthesis(user_id: str) -> None:
             snaps.append({"date": _today(), "text": new_snapshot})
             mem["snapshots"] = snaps[-5:]
 
-        # Update interests
+        # Decay stale interests before adding new ones
         interests = mem.setdefault("interests", {"confirmed": [], "mentioned": []})
+        last_updated = interests.get("updated", "")
+        if last_updated:
+            try:
+                from datetime import datetime as _dt_decay
+                last_date = _dt_decay.strptime(last_updated, "%Y-%m-%d")
+                days_since = (_dt_decay.now() - last_date).days
+                if days_since >= 30:
+                    interests["confirmed"] = []
+                if days_since >= 14:
+                    interests["mentioned"] = []
+            except Exception:
+                pass  # If date parsing fails, keep interests as-is
+
+        # Update confirmed interests
         for i in confirmed:
             if i and i not in interests["confirmed"]:
                 interests["confirmed"].append(i)
         interests["confirmed"] = interests["confirmed"][-20:]
+
+        # Update mentioned interests
         for i in mentioned:
             if i and i not in interests["mentioned"] and i not in interests["confirmed"]:
                 interests["mentioned"].append(i)
