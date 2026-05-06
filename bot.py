@@ -2670,6 +2670,19 @@ async def _recover_pending_edit(user_id: str, state: FSMContext) -> dict:
         return pending
     return {}
 
+def _get_rem_repeat(user_id: str, fsm_data: dict) -> str:
+    """Single source of truth for current repeat value.
+    Reads FSM first, then workspace fallbacks."""
+    val = fsm_data.get("_rem_repeat")
+    if val:
+        return val
+    ws = store_get_workspace(user_id) or {}
+    for key in ("_pending_reminder_create", "_pending_reminder_edit"):
+        v = ws.get(key, {}).get("_rem_repeat")
+        if v:
+            return v
+    return "once"
+
 def _make_reminder_id(existing: list) -> str:
     import uuid
     ids = {r["id"] for r in existing}
@@ -3077,8 +3090,9 @@ def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
 async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     await state.set_state(ReminderStates.waiting_for_repeat)
+    user_id = str(callback.from_user.id)
     data = await state.get_data()
-    current = data.get("_rem_repeat", "once")
+    current = _get_rem_repeat(user_id, data)
     try:
         await callback.message.edit_text(
             "🔔 <b>Повторение:</b>",
@@ -3187,17 +3201,19 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
     repeat = data.get("_rem_repeat", "once")
     is_edit = data.get("_rem_edit_id", "")
     # Fallback: if FSM state lost (bot restart / timeout), recover from workspace
+    _uid_done = str(callback.from_user.id)
     if not is_edit and not title:
-        user_id = str(callback.from_user.id)
-        ws = store_get_workspace(user_id) or {}
-        pending = ws.get("_pending_reminder_edit")
+        ws = store_get_workspace(_uid_done) or {}
+        pending = ws.get("_pending_reminder_edit") or ws.get("_pending_reminder_create") or {}
         if pending:
             is_edit = pending.get("_rem_edit_id", "")
             title   = pending.get("_rem_title", "")
             dt_iso  = pending.get("_rem_dt", "")
             repeat  = pending.get("_rem_repeat", "once")
-            # Restore to state
             await state.update_data(_rem_edit_id=is_edit, _rem_title=title, _rem_dt=dt_iso, _rem_repeat=repeat)
+    # Always re-read repeat from workspace if FSM has stale "once"
+    if repeat == "once":
+        repeat = _get_rem_repeat(_uid_done, await state.get_data())
     dt_display = dt_iso[:16].replace("T", " ")
     rep_display = _repeat_label(repeat)
     
@@ -3248,15 +3264,17 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     title = data.get("_rem_title", "")
     dt_iso = data.get("_rem_dt", "")
-    repeat = data.get("_rem_repeat", "once")
-    # Fallback: if FSM state lost, recover from workspace
+    # Always use _get_rem_repeat — reads FSM then workspace, never loses selection
+    repeat = _get_rem_repeat(user_id, data)
+    # Fallback: if FSM state lost, recover title/dt from workspace
     if not title:
         ws_fb = store_get_workspace(user_id) or {}
         pending = ws_fb.get("_pending_reminder_create") or ws_fb.get("_pending_reminder_edit")
         if pending:
             title   = pending.get("_rem_title", "")
             dt_iso  = pending.get("_rem_dt", "")
-            repeat  = pending.get("_rem_repeat", "once")
+            if repeat == "once":
+                repeat = pending.get("_rem_repeat", "once")
     if not title:
         await callback.answer("Данные потеряны. Создайте напоминание заново.", show_alert=True)
         return
@@ -3299,14 +3317,16 @@ async def cb_rem_confirm_edit(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     data = await state.get_data()
     edit_id = data.get("_rem_edit_id", "")
-    repeat = data.get("_rem_repeat", "once")
-    # Fallback: recover from workspace if FSM state lost
+    # Always use _get_rem_repeat — reads FSM then workspace, never loses selection
+    repeat = _get_rem_repeat(user_id, data)
+    # Fallback: recover edit_id from workspace if FSM state lost
     if not edit_id:
         ws_fb = store_get_workspace(user_id) or {}
         pending = ws_fb.get("_pending_reminder_edit")
         if pending:
             edit_id = pending.get("_rem_edit_id", "")
-            repeat  = pending.get("_rem_repeat", "once")
+            if repeat == "once":
+                repeat = pending.get("_rem_repeat", "once")
     if not edit_id:
         await callback.answer("Данные потеряны. Повторите редактирование.", show_alert=True)
         return
