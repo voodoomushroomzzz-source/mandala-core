@@ -353,6 +353,21 @@
       "updated": "2026-05-06",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260506_025",
+      "title": "Провести музыкальную сессию",
+      "status": "todo",
+      "label_id": "творчество",
+      "label_name": "Творчество",
+      "life_area": "health",
+      "priority": 6,
+      "deadline": "2026-05-07",
+      "reminder": null,
+      "created": "2026-05-06",
+      "updated": "2026-05-06",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
