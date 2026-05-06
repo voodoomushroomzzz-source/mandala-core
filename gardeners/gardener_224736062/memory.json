@@ -2,14 +2,6 @@
   "sessions": [
     {
       "role": "user",
-      "content": "Добавить задачу починить кондиционер «Лесная»."
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
       "content": "Покажу задачи в группе работы."
     },
     {
@@ -163,6 +155,10 @@
     {
       "role": "user",
       "content": "Дедлайн завтра"
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-05-06"
