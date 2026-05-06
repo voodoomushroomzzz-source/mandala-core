@@ -2016,7 +2016,7 @@ async def cb_tedit_reminder(callback: CallbackQuery, state: FSMContext):
     except Exception:
         await callback.message.answer("🔔 Выбери напоминание:", reply_markup=get_reminder_keyboard(deadline))
 
-@router.callback_query(F.data.startswith("rem_"), StateFilter(TaskEditStates.editing_reminder))
+@router.callback_query(F.data.startswith("rem_") & ~F.data.startswith("rem_rp_") & ~F.data.startswith("rem_day_") & ~F.data.startswith("rem_noop_") & (F.data != "rem_repeat_pick") & (F.data != "rem_rp_done") & (F.data != "rem_back_to_confirm") & (F.data != "rem_confirm_create") & (F.data != "rem_confirm_edit") & (F.data != "rem_create_new"), StateFilter(TaskEditStates.editing_reminder))
 async def tedit_reminder_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
@@ -2776,9 +2776,9 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
     dt_display = rem.get("datetime_iso", "")[:16].replace("T", " ")
     rep_display = _repeat_label(rem.get("repeat", "once"))
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✏️ Название", callback_data="rem_edit_title"),
-         InlineKeyboardButton(text="📅 Дату/время", callback_data="rem_edit_dt")],
-        [InlineKeyboardButton(text="🔁 Повторение", callback_data="rem_edit_repeat")],
+        [InlineKeyboardButton(text="✏️ Название", callback_data="redit_title"),
+         InlineKeyboardButton(text="📅 Дату/время", callback_data="redit_dt")],
+        [InlineKeyboardButton(text="🔁 Повторение", callback_data="redit_repeat")],
         [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
     ])
     try:
@@ -2797,7 +2797,7 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
             parse_mode="HTML"
         )
 
-@router.callback_query(F.data == "rem_edit_title")
+@router.callback_query(F.data == "redit_title")
 async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
@@ -2815,7 +2815,7 @@ async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer("✏️ Введи новое название:", reply_markup=cancel_kb)
     await state.update_data(_rem_edit_field="title")
 
-@router.callback_query(F.data == "rem_edit_dt")
+@router.callback_query(F.data == "redit_dt")
 async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
@@ -2833,7 +2833,7 @@ async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer("📅 Введи новую дату и время:", reply_markup=cancel_kb)
     await state.update_data(_rem_edit_field="dt")
 
-@router.callback_query(F.data == "rem_edit_repeat")
+@router.callback_query(F.data == "redit_repeat")
 async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
@@ -3079,6 +3079,7 @@ def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
 @router.callback_query(F.data == "rem_repeat_pick")
 async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
+    await state.set_state(ReminderStates.waiting_for_repeat)
     data = await state.get_data()
     current = data.get("_rem_repeat", "once")
     try:
@@ -4198,7 +4199,7 @@ async def task_deadline_text(message: Message, state: FSMContext):
 
 # ── Step 3: Reminder ──────────────────────────────────────────────────────
 
-@router.callback_query(F.data.startswith("rem_"), StateFilter(TaskStates.waiting_for_reminder))
+@router.callback_query(F.data.startswith("rem_") & ~F.data.startswith("rem_rp_") & ~F.data.startswith("rem_day_") & ~F.data.startswith("rem_noop_") & (F.data != "rem_repeat_pick") & (F.data != "rem_rp_done") & (F.data != "rem_back_to_confirm") & (F.data != "rem_confirm_create") & (F.data != "rem_confirm_edit") & (F.data != "rem_create_new"), StateFilter(TaskStates.waiting_for_reminder))
 async def task_reminder_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     val = callback.data[4:]
