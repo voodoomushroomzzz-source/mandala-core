@@ -2789,6 +2789,15 @@ async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
         _rem_title=rem.get("title", ""),
         _rem_repeat=current
     )
+    # Persist to workspace as fallback against FSM state loss
+    ws = store_get_workspace(str(callback.from_user.id)) or {}
+    ws["_pending_reminder_edit"] = {
+        "_rem_edit_id": rid,
+        "_rem_title": rem.get("title", ""),
+        "_rem_dt": rem.get("datetime_iso", ""),
+        "_rem_repeat": current
+    }
+    store_set_workspace(str(callback.from_user.id), ws)
     await state.set_state(ReminderStates.waiting_for_repeat)
     try:
         await callback.message.edit_text(
@@ -3073,6 +3082,18 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
     dt_iso = data.get("_rem_dt", "")
     repeat = data.get("_rem_repeat", "once")
     is_edit = data.get("_rem_edit_id", "")
+    # Fallback: if FSM state lost (bot restart / timeout), recover from workspace
+    if not is_edit and not title:
+        user_id = str(callback.from_user.id)
+        ws = store_get_workspace(user_id) or {}
+        pending = ws.get("_pending_reminder_edit")
+        if pending:
+            is_edit = pending.get("_rem_edit_id", "")
+            title   = pending.get("_rem_title", "")
+            dt_iso  = pending.get("_rem_dt", "")
+            repeat  = pending.get("_rem_repeat", "once")
+            # Restore to state
+            await state.update_data(_rem_edit_id=is_edit, _rem_title=title, _rem_dt=dt_iso, _rem_repeat=repeat)
     dt_display = dt_iso[:16].replace("T", " ")
     rep_display = _repeat_label(repeat)
     
@@ -3137,6 +3158,10 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
         "repeat": repeat, "active": True
     })
     store_set_reminders(user_id, reminders)
+    # Clear workspace fallback
+    ws = store_get_workspace(user_id) or {}
+    ws.pop("_pending_reminder_edit", None)
+    store_set_workspace(user_id, ws)
     _fire_sync()
     await state.clear()
     
@@ -3169,6 +3194,10 @@ async def cb_rem_confirm_edit(callback: CallbackQuery, state: FSMContext):
     
     rem["repeat"] = repeat
     store_set_reminders(user_id, reminders)
+    # Clear workspace fallback
+    ws = store_get_workspace(user_id) or {}
+    ws.pop("_pending_reminder_edit", None)
+    store_set_workspace(user_id, ws)
     _fire_sync()
     await state.clear()
     
