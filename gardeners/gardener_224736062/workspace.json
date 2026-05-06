@@ -265,36 +265,6 @@
       "notes": ""
     },
     {
-      "task_id": "task_20260504_037",
-      "title": "сходить на тренировку (спина+плечи)",
-      "status": "todo",
-      "label_id": "дом",
-      "label_name": "Личное",
-      "life_area": "health",
-      "priority": 6,
-      "deadline": "2026-05-06",
-      "reminder": null,
-      "created": "2026-05-04",
-      "updated": "2026-05-05",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260504_037",
-      "title": "почитать книгу",
-      "status": "todo",
-      "label_id": "дом",
-      "label_name": "Личное",
-      "life_area": "growth",
-      "priority": 6,
-      "deadline": "2026-05-07",
-      "reminder": null,
-      "created": "2026-05-04",
-      "updated": "2026-05-06",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260504_039",
       "title": "проверить систему самообучения и отчета архитектору",
       "status": "todo",
@@ -423,7 +393,7 @@
     }
   ],
   "updated": "2026-04-18",
-  "achievements_count": 52,
+  "achievements_count": 53,
   "checklists": [],
   "reminders": [],
   "_decay_date": "2026-05-06",
@@ -449,7 +419,7 @@
     }
   ],
   "sphere_resonance": {
-    "health": 36,
+    "health": 38,
     "creativity": 24,
     "work": 60,
     "connections": 26,
