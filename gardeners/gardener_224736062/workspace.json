@@ -458,7 +458,7 @@
   "reminders": [
     {
       "id": "rem_7d4f3091",
-      "title": "гг сегодня 10:00",
+      "title": "Гг3",
       "datetime_iso": "2026-05-07T09:00+03:00",
       "repeat": "done",
       "active": true
@@ -498,5 +498,11 @@
     "_rem_title": "Гг 15:00",
     "_rem_dt": "2027-05-02T09:00+03:00",
     "_rem_repeat": "once"
+  },
+  "_pending_reminder_edit": {
+    "_rem_edit_id": "rem_7d4f3091",
+    "_rem_title": "гг сегодня 10:00",
+    "_rem_dt": "2026-05-07T09:00+03:00",
+    "_rem_repeat": "done"
   }
 }
