@@ -60,9 +60,9 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.38.2"
+BOT_VERSION = "7.38.3"
 BOT_LATEST_UPDATE = {
-    "version": "7.38.2",
+    "version": "7.38.3",
     "date": "2026-05-06",
     "text": "🌱 Мандала обновилась · v7.38.2\n\nПривет, {name}! Смотри что нового:\n\n🔧 Исправления:\n  · 🔁 Повторение в напоминаниях работает стабильно\n  · 🌅 Утренний брифинг не пропадает после снаRender\n  · 🕐 Таймзона теперь в брифинге и напоминаниях точнее\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
@@ -2771,33 +2771,29 @@ async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "rem_edit_repeat")
 async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
     data = await state.get_data()
     rid = data.get("_rem_edit_id", "")
     if not rid:
         await callback.answer("Напоминание не найдено", show_alert=True)
         return
-    reminders = store_get_reminders(str(callback.from_user.id))
+    reminders = store_get_reminders(user_id)
     rem = next((r for r in reminders if r["id"] == rid), None)
     if not rem:
         await callback.answer("Напоминание не найдено", show_alert=True)
         return
     current = rem.get("repeat", "once")
-    # update_data BEFORE set_state to ensure data is saved
-    await state.update_data(
-        _rem_edit_id=rid,
-        _rem_dt=rem.get("datetime_iso", ""),
-        _rem_title=rem.get("title", ""),
-        _rem_repeat=current
-    )
-    # Persist to workspace as fallback against FSM state loss
-    ws = store_get_workspace(str(callback.from_user.id)) or {}
-    ws["_pending_reminder_edit"] = {
+    # Persist to BOTH state and workspace
+    pending = {
         "_rem_edit_id": rid,
         "_rem_title": rem.get("title", ""),
         "_rem_dt": rem.get("datetime_iso", ""),
         "_rem_repeat": current
     }
-    store_set_workspace(str(callback.from_user.id), ws)
+    await state.update_data(**pending)
+    ws = store_get_workspace(user_id) or {}
+    ws["_pending_reminder_edit"] = pending
+    store_set_workspace(user_id, ws)
     await state.set_state(ReminderStates.waiting_for_repeat)
     try:
         await callback.message.edit_text(
