@@ -454,36 +454,7 @@
   ],
   "updated": "2026-04-18",
   "achievements_count": 48,
-  "checklists": [
-    {
-      "id": "cl_гг",
-      "title": "Гг",
-      "items": [
-        {
-          "id": "i1",
-          "text": "Гг",
-          "done": false
-        },
-        {
-          "id": "i2",
-          "text": "Гг",
-          "done": false
-        },
-        {
-          "id": "i3",
-          "text": "Гг",
-          "done": false
-        },
-        {
-          "id": "i4",
-          "text": "Гг",
-          "done": false
-        }
-      ],
-      "pinned_message_id": 9594,
-      "created": "2026-05-06"
-    }
-  ],
+  "checklists": [],
   "reminders": [],
   "_decay_date": "2026-05-05",
   "roadmaps": [
