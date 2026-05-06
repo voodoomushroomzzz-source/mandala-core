@@ -60,11 +60,11 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.38"
+BOT_VERSION = "7.38.2"
 BOT_LATEST_UPDATE = {
-    "version": "7.38",
-    "date": "2026-05-05",
-    "text": "🌱 Мандала обновилась · v7.38\n\nПривет, {name}! Смотри что нового:\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
+    "version": "7.38.2",
+    "date": "2026-05-06",
+    "text": "🌱 Мандала обновилась · v7.38.2\n\nПривет, {name}! Смотри что нового:\n\n🔧 Исправления:\n  · 🔁 Повторение в напоминаниях работает стабильно\n  · 🌅 Утренний брифинг не пропадает после снаRender\n  · 🕐 Таймзона теперь в брифинге и напоминаниях точнее\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -924,7 +924,7 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
         now = _dt.now(tz)
         h, m_val = map(int, setting_time.split(":"))
         target = t.replace(hour=h, minute=m_val, second=0, microsecond=0)
-        return abs((now - target).total_seconds()) <= 300  # 5 min window
+        return abs((now - target).total_seconds()) <= 600  # 10 min window
     except Exception:
         return False
 
@@ -1538,6 +1538,10 @@ async def send_morning_greeting(telegram_id: str) -> None:
         if _morning_sent.get(str(telegram_id)) == today_str:
             return
         _morning_sent[str(telegram_id)] = today_str
+        # Persist last_morning_date to workspace for recovery after sleep
+        ws = store_get_workspace(str(telegram_id)) or {}
+        ws["last_morning_date"] = today_str
+        store_set_workspace(str(telegram_id), ws)
         name      = gardener.get("name", "Садовник")
         resonance = gardener.get("resonance_level", 0)
         ach_count = store_get_achievements_count(str(telegram_id))
@@ -1722,7 +1726,25 @@ async def run_proactive_scheduler() -> None:
             if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"], tz_name):
                 await send_morning_greeting(uid)
             else:
-                await check_silence_and_engage(uid, g)
+                # Catch-up: if morning brief was missed (e.g. Render sleep), send it now
+                try:
+                    from zoneinfo import ZoneInfo as _ZI_p
+                    from datetime import datetime as _dt_p
+                    tz_p = _ZI_p(tz_name)
+                    now_p = _dt_p.now(tz_p)
+                    today_p = now_p.strftime("%Y-%m-%d")
+                    morning_h, morning_m = map(int, settings["morning_message_time"].split(":"))
+                    morning_dt = now_p.replace(hour=morning_h, minute=morning_m, second=0, microsecond=0)
+                    ws = store_get_workspace(uid) or {}
+                    last_morning = ws.get("last_morning_date", "")
+                    if (last_morning != today_p and now_p >= morning_dt
+                            and _can_send_proactive(uid)
+                            and _morning_sent.get(uid) != today_p):
+                        await send_morning_greeting(uid)
+                    else:
+                        await check_silence_and_engage(uid, g)
+                except Exception:
+                    await check_silence_and_engage(uid, g)
         # Birthday check
         for uid2, us2 in list(_store.items()):
             if not isinstance(us2, dict) or not us2.get("ready"):
@@ -2695,7 +2717,7 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
     if not rem:
         await callback.answer("Напоминание не найдено", show_alert=True)
         return
-    await state.update_data(_rem_edit_id=rid)
+    await state.update_data(_rem_edit_id=rid, _rem_title=rem.get("title",""), _rem_dt=rem.get("datetime_iso",""), _rem_repeat=rem.get("repeat","once"))
     dt_display = rem.get("datetime_iso", "")[:16].replace("T", " ")
     rep_display = _repeat_label(rem.get("repeat", "once"))
     kb = InlineKeyboardMarkup(inline_keyboard=[
@@ -2704,7 +2726,6 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="🔁 Повторение", callback_data="rem_edit_repeat")],
         [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
     ])
-    await state.clear()
     try:
         await callback.message.edit_text(
             f"✏️ <b>{rem['title']}</b>\n"
@@ -2752,9 +2773,16 @@ async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     data = await state.get_data()
     rid = data.get("_rem_edit_id", "")
+    if not rid:
+        await callback.answer("Напоминание не найдено", show_alert=True)
+        return
     reminders = store_get_reminders(str(callback.from_user.id))
     rem = next((r for r in reminders if r["id"] == rid), None)
-    current = rem.get("repeat", "once") if rem else "once"
+    if not rem:
+        await callback.answer("Напоминание не найдено", show_alert=True)
+        return
+    current = rem.get("repeat", "once")
+    # update_data BEFORE set_state to ensure data is saved
     await state.update_data(
         _rem_edit_id=rid,
         _rem_dt=rem.get("datetime_iso", ""),
