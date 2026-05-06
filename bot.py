@@ -2768,6 +2768,7 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         await callback.answer("Напоминание не найдено", show_alert=True)
         return
     await state.update_data(_rem_edit_id=rid, _rem_title=rem.get("title",""), _rem_dt=rem.get("datetime_iso",""), _rem_repeat=rem.get("repeat","once"))
+    await state.set_state(ReminderStates.waiting_for_input)
     # Save pending to workspace for recovery after state loss
     ws = store_get_workspace(user_id) or {}
     ws["_pending_reminder_edit"] = {"_rem_edit_id": rid, "_rem_title": rem.get("title",""), "_rem_dt": rem.get("datetime_iso",""), "_rem_repeat": rem.get("repeat","once")}
@@ -3098,10 +3099,16 @@ async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     repeat = callback.data[len("rem_rp_"):]
     user_id = str(callback.from_user.id)
-    pending = await _recover_pending_edit(user_id, state)
-    if not pending:
-        await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
-        return
+    data = await state.get_data()
+    # Работает и при создании (_rem_title), и при редактировании (_rem_edit_id)
+    if not data.get("_rem_title") and not data.get("_rem_edit_id"):
+        ws = store_get_workspace(user_id) or {}
+        fallback = ws.get("_pending_reminder_create") or ws.get("_pending_reminder_edit") or {}
+        if fallback:
+            await state.update_data(**fallback)
+        else:
+            await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
+            return
     await state.update_data(_rem_repeat=repeat)
     try:
         await callback.message.edit_text(
@@ -3117,11 +3124,17 @@ async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     day = callback.data[len("rem_day_"):]
     user_id = str(callback.from_user.id)
-    pending = await _recover_pending_edit(user_id, state)
-    if not pending:
-        await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
-        return
     data = await state.get_data()
+    # Работает и при создании (_rem_title), и при редактировании (_rem_edit_id)
+    if not data.get("_rem_title") and not data.get("_rem_edit_id"):
+        ws = store_get_workspace(user_id) or {}
+        fallback = ws.get("_pending_reminder_create") or ws.get("_pending_reminder_edit") or {}
+        if fallback:
+            await state.update_data(**fallback)
+            data = await state.get_data()
+        else:
+            await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
+            return
     current = data.get("_rem_repeat", "once")
     
     days_en = ["mon","tue","wed","thu","fri","sat","sun"]
