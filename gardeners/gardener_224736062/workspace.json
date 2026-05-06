@@ -458,7 +458,7 @@
   "reminders": [
     {
       "id": "rem_3f649f4b",
-      "title": "Тест сегодня 14:00",
+      "title": "Тест",
       "datetime_iso": "2026-05-07T09:00+03:00",
       "repeat": "once",
       "active": true
@@ -493,5 +493,11 @@
     "connections": 26,
     "growth": 26
   },
-  "last_morning_date": "2026-05-06"
+  "last_morning_date": "2026-05-06",
+  "_pending_reminder_edit": {
+    "_rem_edit_id": "rem_3f649f4b",
+    "_rem_title": "Тест сегодня 14:00",
+    "_rem_dt": "2026-05-07T09:00+03:00",
+    "_rem_repeat": "once"
+  }
 }
