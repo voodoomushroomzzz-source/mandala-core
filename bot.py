@@ -60,9 +60,9 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.38.5"
+BOT_VERSION = "7.39.0"
 BOT_LATEST_UPDATE = {
-    "version": "7.38.5",
+    "version": "7.39.0",
     "date": "2026-05-06",
     "text": "🌱 Мандала обновилась · v7.38.2\n\nПривет, {name}! Смотри что нового:\n\n🔧 Исправления:\n  · 🔁 Повторение в напоминаниях работает стабильно\n  · 🌅 Утренний брифинг не пропадает после снаRender\n  · 🕐 Таймзона теперь в брифинге и напоминаниях точнее\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
@@ -2656,6 +2656,23 @@ async def cb_checklists_mgmt(callback: CallbackQuery, state: FSMContext):
 
 # ─── Reminders ────────────────────────────────────────────────────────────────
 
+async def _recover_pending_edit(user_id: str, state: FSMContext) -> dict:
+    """Recover pending reminder edit data. FSM first, then workspace fallback."""
+    data = await state.get_data()
+    rid = data.get("_rem_edit_id", "")
+    title = data.get("_rem_title", "")
+    dt = data.get("_rem_dt", "")
+    repeat = data.get("_rem_repeat", "")
+    if rid and (title or dt):
+        return {"_rem_edit_id": rid, "_rem_title": title, "_rem_dt": dt, "_rem_repeat": repeat or "once"}
+    ws = store_get_workspace(user_id) or {}
+    pending = ws.get("_pending_reminder_edit") or {}
+    if pending.get("_rem_edit_id"):
+        await state.update_data(_rem_edit_id=pending["_rem_edit_id"], _rem_title=pending.get("_rem_title",""), _rem_dt=pending.get("_rem_dt",""), _rem_repeat=pending.get("_rem_repeat","once"))
+        logger.info(f"Recovered pending reminder edit for {user_id} from workspace")
+        return pending
+    return {}
+
 def _make_reminder_id(existing: list) -> str:
     import uuid
     ids = {r["id"] for r in existing}
@@ -2684,6 +2701,10 @@ def get_reminders_mgmt_inline(reminders: list) -> InlineKeyboardMarkup:
 async def cb_reminders_mgmt(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id   = str(callback.from_user.id)
+    # Cleanup pending reminder edit if any
+    ws = store_get_workspace(user_id) or {}
+    ws.pop("_pending_reminder_edit", None)
+    store_set_workspace(user_id, ws)
     reminders = store_get_reminders(user_id)
     header    = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
     try:
@@ -2747,6 +2768,10 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         await callback.answer("Напоминание не найдено", show_alert=True)
         return
     await state.update_data(_rem_edit_id=rid, _rem_title=rem.get("title",""), _rem_dt=rem.get("datetime_iso",""), _rem_repeat=rem.get("repeat","once"))
+    # Save pending to workspace for recovery after state loss
+    ws = store_get_workspace(user_id) or {}
+    ws["_pending_reminder_edit"] = {"_rem_edit_id": rid, "_rem_title": rem.get("title",""), "_rem_dt": rem.get("datetime_iso",""), "_rem_repeat": rem.get("repeat","once")}
+    store_set_workspace(user_id, ws)
     dt_display = rem.get("datetime_iso", "")[:16].replace("T", " ")
     rep_display = _repeat_label(rem.get("repeat", "once"))
     kb = InlineKeyboardMarkup(inline_keyboard=[
@@ -2774,6 +2799,11 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "rem_edit_title")
 async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    pending = await _recover_pending_edit(user_id, state)
+    if not pending or not pending.get("_rem_edit_id"):
+        await callback.answer("🌿 Напоминание не найдено. Начни редактирование заново.", show_alert=True)
+        return
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
     ])
@@ -2787,6 +2817,11 @@ async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "rem_edit_dt")
 async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    pending = await _recover_pending_edit(user_id, state)
+    if not pending or not pending.get("_rem_edit_id"):
+        await callback.answer("🌿 Напоминание не найдено. Начни редактирование заново.", show_alert=True)
+        return
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
     ])
@@ -2803,6 +2838,9 @@ async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     data = await state.get_data()
     rid = data.get("_rem_edit_id", "")
+    if not rid:
+        pending = await _recover_pending_edit(user_id, state)
+        rid = pending.get("_rem_edit_id", "") if pending else ""
     if not rid:
         await callback.answer("Напоминание не найдено", show_alert=True)
         return
@@ -3059,6 +3097,11 @@ async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
 async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     repeat = callback.data[len("rem_rp_"):]
+    user_id = str(callback.from_user.id)
+    pending = await _recover_pending_edit(user_id, state)
+    if not pending:
+        await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
+        return
     await state.update_data(_rem_repeat=repeat)
     try:
         await callback.message.edit_text(
@@ -3073,6 +3116,11 @@ async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
 async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     day = callback.data[len("rem_day_"):]
+    user_id = str(callback.from_user.id)
+    pending = await _recover_pending_edit(user_id, state)
+    if not pending:
+        await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
+        return
     data = await state.get_data()
     current = data.get("_rem_repeat", "once")
     
