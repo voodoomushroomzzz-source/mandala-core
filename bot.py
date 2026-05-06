@@ -2704,6 +2704,7 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="🔁 Повторение", callback_data="rem_edit_repeat")],
         [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
     ])
+    await state.clear()
     try:
         await callback.message.edit_text(
             f"✏️ <b>{rem['title']}</b>\n"
@@ -2966,7 +2967,7 @@ def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 
-@router.callback_query(F.data == "rem_repeat_pick", StateFilter(ReminderStates.waiting_for_repeat))
+@router.callback_query(F.data == "rem_repeat_pick")
 async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     data = await state.get_data()
@@ -2984,7 +2985,7 @@ async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
             parse_mode="HTML"
         )
 
-@router.callback_query(F.data.startswith("rem_rp_"), StateFilter(ReminderStates.waiting_for_repeat))
+@router.callback_query(F.data.startswith("rem_rp_"))
 async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     repeat = callback.data[len("rem_rp_"):]
@@ -2998,7 +2999,7 @@ async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
     except Exception:
         pass
 
-@router.callback_query(F.data.startswith("rem_day_"), StateFilter(ReminderStates.waiting_for_repeat))
+@router.callback_query(F.data.startswith("rem_day_"))
 async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     day = callback.data[len("rem_day_"):]
@@ -3035,7 +3036,7 @@ async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
     except Exception:
         pass
 
-@router.callback_query(F.data == "rem_rp_done", StateFilter(ReminderStates.waiting_for_repeat))
+@router.callback_query(F.data == "rem_rp_done")
 async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
     """Return to confirmation screen with updated repeat. Works for both create and edit."""
     await _safe_cb_answer(callback)
@@ -3081,12 +3082,12 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
             parse_mode="HTML"
         )
 
-@router.callback_query(F.data == "rem_back_to_confirm", StateFilter(ReminderStates.waiting_for_repeat))
+@router.callback_query(F.data == "rem_back_to_confirm")
 async def cb_rem_back_to_confirm(callback: CallbackQuery, state: FSMContext):
     """Back from repeat picker to confirmation."""
     await cb_rem_rp_done(callback, state)
 
-@router.callback_query(F.data == "rem_confirm_create", StateFilter(ReminderStates.waiting_for_repeat))
+@router.callback_query(F.data == "rem_confirm_create")
 async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
     """Create the reminder and show result."""
     await _safe_cb_answer(callback)
@@ -3122,7 +3123,7 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
     header = f"🔔 <b>Напоминания</b> ({len(reminders_upd)}/{REMINDER_LIMIT})"
     await callback.message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders_upd), parse_mode="HTML")
 
-@router.callback_query(F.data == "rem_confirm_edit", StateFilter(ReminderStates.waiting_for_repeat))
+@router.callback_query(F.data == "rem_confirm_edit")
 async def cb_rem_confirm_edit(callback: CallbackQuery, state: FSMContext):
     """Save edited reminder."""
     await _safe_cb_answer(callback)
