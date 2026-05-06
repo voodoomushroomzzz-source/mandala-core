@@ -494,10 +494,9 @@
     "growth": 26
   },
   "last_morning_date": "2026-05-06",
-  "_pending_reminder_edit": {
-    "_rem_edit_id": "rem_428a897d",
+  "_pending_reminder_create": {
     "_rem_title": "Гг сегодня 13:00",
     "_rem_dt": "2026-05-07T09:00+03:00",
-    "_rem_repeat": "done"
+    "_rem_repeat": "once"
   }
 }
