@@ -60,9 +60,9 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.38.4"
+BOT_VERSION = "7.38.5"
 BOT_LATEST_UPDATE = {
-    "version": "7.38.4",
+    "version": "7.38.5",
     "date": "2026-05-06",
     "text": "🌱 Мандала обновилась · v7.38.2\n\nПривет, {name}! Смотри что нового:\n\n🔧 Исправления:\n  · 🔁 Повторение в напоминаниях работает стабильно\n  · 🌅 Утренний брифинг не пропадает после снаRender\n  · 🕐 Таймзона теперь в брифинге и напоминаниях точнее\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
 }
@@ -2962,6 +2962,14 @@ async def rem_text_input(message: Message, state: FSMContext):
         _rem_dt=dt_iso,
         _rem_repeat="once"
     )
+    # Persist to workspace for recovery after bot restart
+    ws = store_get_workspace(user_id) or {}
+    ws["_pending_reminder_create"] = {
+        "_rem_title": title_clean,
+        "_rem_dt": dt_iso,
+        "_rem_repeat": "once"
+    }
+    store_set_workspace(user_id, ws)
     await state.set_state(ReminderStates.waiting_for_repeat)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
@@ -3169,6 +3177,17 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
     title = data.get("_rem_title", "")
     dt_iso = data.get("_rem_dt", "")
     repeat = data.get("_rem_repeat", "once")
+    # Fallback: if FSM state lost, recover from workspace
+    if not title:
+        ws_fb = store_get_workspace(user_id) or {}
+        pending = ws_fb.get("_pending_reminder_create") or ws_fb.get("_pending_reminder_edit")
+        if pending:
+            title   = pending.get("_rem_title", "")
+            dt_iso  = pending.get("_rem_dt", "")
+            repeat  = pending.get("_rem_repeat", "once")
+    if not title:
+        await callback.answer("Данные потеряны. Создайте напоминание заново.", show_alert=True)
+        return
     
     reminders = store_get_reminders(user_id)
     if len(reminders) >= REMINDER_LIMIT:
@@ -3182,9 +3201,10 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
         "repeat": repeat, "active": True
     })
     store_set_reminders(user_id, reminders)
-    # Clear workspace fallback
+    # Clear workspace fallbacks
     ws = store_get_workspace(user_id) or {}
     ws.pop("_pending_reminder_edit", None)
+    ws.pop("_pending_reminder_create", None)
     store_set_workspace(user_id, ws)
     _fire_sync()
     await state.clear()
@@ -3208,6 +3228,16 @@ async def cb_rem_confirm_edit(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     edit_id = data.get("_rem_edit_id", "")
     repeat = data.get("_rem_repeat", "once")
+    # Fallback: recover from workspace if FSM state lost
+    if not edit_id:
+        ws_fb = store_get_workspace(user_id) or {}
+        pending = ws_fb.get("_pending_reminder_edit")
+        if pending:
+            edit_id = pending.get("_rem_edit_id", "")
+            repeat  = pending.get("_rem_repeat", "once")
+    if not edit_id:
+        await callback.answer("Данные потеряны. Повторите редактирование.", show_alert=True)
+        return
     
     reminders = store_get_reminders(user_id)
     rem = next((r for r in reminders if r["id"] == edit_id), None)
