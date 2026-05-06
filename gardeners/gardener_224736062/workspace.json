@@ -383,6 +383,21 @@
       "updated": "2026-05-06",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260507_027",
+      "title": "в инженерный deepseek-v4-pro",
+      "status": "todo",
+      "label_id": "мандала",
+      "label_name": "Мандала",
+      "life_area": "work",
+      "priority": 5,
+      "deadline": "2026-05-14",
+      "reminder": null,
+      "created": "2026-05-07",
+      "updated": "2026-05-07",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
