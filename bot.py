@@ -2103,11 +2103,8 @@ async def cb_back_to_settings(callback: CallbackQuery, state: FSMContext):
 async def cb_edit_profile_back(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
-    card = _build_profile_card(user_id)
-    try:
-        await callback.message.edit_text(card, reply_markup=get_profile_inline(), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(card, reply_markup=get_profile_inline(), parse_mode="HTML")
+    # Показываем новый профиль с полной клавиатурой вместо старого с одной кнопкой
+    await _show_profile(user_id, callback.message)
 
 def _roadmap_card_text(rm: dict, all_tasks: list) -> str:
     """Build roadmap detail text — uses live tasks only, ignores orphaned IDs."""
@@ -5986,7 +5983,7 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
                 if t_cnt > 0 or a_cnt > 0:
                     has_data = True
                     parts = []
-                    if t_cnt > 0:
+                    if show_tasks and t_cnt > 0:
                         parts.append(f"{t_cnt} задач")
                     if a_cnt > 0:
                         parts.append(f"{a_cnt} достижений")
