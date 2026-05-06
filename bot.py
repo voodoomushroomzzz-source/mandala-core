@@ -3111,6 +3111,12 @@ async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
             await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
             return
     await state.update_data(_rem_repeat=repeat)
+    # Синхронизируем repeat в workspace чтобы фоллбэк не затёр выбор
+    _ws1 = store_get_workspace(user_id) or {}
+    for _k in ("_pending_reminder_create", "_pending_reminder_edit"):
+        if _k in _ws1 and isinstance(_ws1[_k], dict):
+            _ws1[_k]["_rem_repeat"] = repeat
+    store_set_workspace(user_id, _ws1)
     try:
         await callback.message.edit_text(
             "🔔 <b>Повторение:</b>",
@@ -3159,6 +3165,12 @@ async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
         new_repeat = "custom_days:" + ",".join(sorted_days)
     
     await state.update_data(_rem_repeat=new_repeat)
+    # Синхронизируем repeat в workspace чтобы фоллбэк не затёр выбор
+    _ws2 = store_get_workspace(user_id) or {}
+    for _k in ("_pending_reminder_create", "_pending_reminder_edit"):
+        if _k in _ws2 and isinstance(_ws2[_k], dict):
+            _ws2[_k]["_rem_repeat"] = new_repeat
+    store_set_workspace(user_id, _ws2)
     try:
         await callback.message.edit_text(
             "🔔 <b>Повторение:</b>",
