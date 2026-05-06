@@ -323,6 +323,21 @@
       "updated": "2026-05-05",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260506_023",
+      "title": "починить кондиционер «Лесная»",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 5,
+      "deadline": null,
+      "reminder": null,
+      "created": "2026-05-06",
+      "updated": "2026-05-06",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
