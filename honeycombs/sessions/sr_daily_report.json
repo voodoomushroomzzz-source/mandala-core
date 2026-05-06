@@ -1,14 +1,64 @@
 {
-  "date": "2026-05-05",
-  "version": "7.32",
+  "date": "2026-05-06",
+  "version": "7.39.0",
   "gardeners": {
     "224736062": {
-      "messages": 1,
-      "tasks_created": 0,
-      "tasks_completed": 0,
+      "messages": 130,
+      "tasks_created": 1,
+      "tasks_completed": 4,
       "achievements": 0,
-      "intents": {}
+      "intents": {
+        "create_reminder": 3,
+        "web_search": 1,
+        "show_tasks": 2,
+        "complete_task": 4,
+        "conversation": 28,
+        "add_task": 4
+      }
     }
   },
-  "issues": []
+  "issues": [
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "complete_task",
+      "count": 2,
+      "context": "повторный complete_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "complete_task",
+      "count": 2,
+      "context": "повторный complete_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "complete_task",
+      "count": 2,
+      "context": "повторный complete_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "create_reminder",
+      "count": 2,
+      "context": "повторный create_reminder"
+    }
+  ]
 }
