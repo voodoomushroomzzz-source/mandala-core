@@ -5020,6 +5020,7 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "перемести задачу X в группу Y", "переместить X в Y", "перенеси задачу X в Y" → move_task, action.title="X", action.label="Y", 0.95
 - "перемести задачи X и Y в группу Z" → move_task, action.titles=["X","Y"], action.label="Z", 0.95
 - "перемести все задачи из группы X в Y" → move_task, action.from_label="X", action.label="Y", 0.95
+- ВАЖНО: любой вопрос о внешнем мире — погода, новости, события, фильмы, места, курсы валют — всегда web_search. Даже "какая погода", "что сегодня в кино", "новости спорта" → web_search, action.query=<нормализованный запрос>, action.search_category=<категория>
 - "найди", "поищи", "погода", "что такое X" → web_search, action.query="нормализованный поисковый запрос на русском", action.search_category="категория", 0.9
   ВАЖНО: action.query — это короткий, чёткий поисковый запрос (3-7 слов), не копия фразы пользователя.
   action.search_category — одно из: weather / cinema / events / concerts / jobs / food / sport / health / news / education / default
