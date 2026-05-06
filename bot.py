@@ -865,6 +865,7 @@ def _make_group_id(name: str, existing: list) -> str:
 
 _proactive_sent_today: dict = {}
 _morning_sent: dict = {}        # uid → date, separate from proactive
+_birthday_sent: dict = {}       # uid → date, separate flag for birthday
 _last_interaction: dict = {}
 
 # ── SR Learning Loop — in-memory, reset daily ──────────────────────────────────
@@ -1762,7 +1763,7 @@ async def run_proactive_scheduler() -> None:
                 now2 = _dt2.now(tz2)
                 today_bday = now2.strftime("%d.%m")
                 # Only at 10:00 in user's timezone
-                if today_bday == bday and now2.hour == 10 and _can_send_proactive(uid2):
+                if today_bday == bday and now2.hour == 10 and _birthday_sent.get(uid2) != today_bday:
                     bname = g2.get("name", "Садовник")
                     # Build personalised birthday greeting via SR
                     sr_ctx = _build_user_context_msg(uid2)
@@ -1794,7 +1795,7 @@ async def run_proactive_scheduler() -> None:
                         bday_msg.strip(),
                         reply_markup=get_main_keyboard()
                     )
-                    _mark_proactive_sent(uid2)
+                    _birthday_sent[uid2] = today_bday
                     # Also store achievement for birthday
                     store_increment_achievements(uid2)
                     store_add_sphere_resonance(uid2, "growth", 5)
