@@ -980,7 +980,6 @@ class ChecklistStates(StatesGroup):
 class ReminderStates(StatesGroup):
     waiting_for_input = State()
     waiting_for_repeat = State()  # v7.37 — выбор повторения
-    waiting_for_weekdays = State()  # v7.40 — текстовый ввод дней недели
 
 class RoadmapStates(StatesGroup):
     waiting_for_title    = State()  # name of new roadmap
@@ -3045,58 +3044,32 @@ def _repeat_label(repeat: str) -> str:
     return labels.get(repeat, "▶ Один раз")
 
 
-def _parse_weekdays(text: str) -> str:
-    """Parse free-form weekday text into custom_days: format.
-    Returns repeat string like 'custom_days:mon,wed,fri' or 'daily' etc.
-    """
-    t = text.lower().strip()
-    day_map = {
-        "пн": "mon", "понедельник": "mon",
-        "вт": "tue", "вторник": "tue",
-        "ср": "wed", "среда": "wed", "среду": "wed",
-        "чт": "thu", "четверг": "thu",
-        "пт": "fri", "пятница": "fri", "пятницу": "fri",
-        "сб": "sat", "суббота": "sat", "субботу": "sat",
-        "вс": "sun", "воскресенье": "sun", "воскресенье": "sun",
-    }
-    days_order = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
-    found = set()
-    # Shortcuts
-    if any(w in t for w in ["каждый день", "ежедневно", "все дни"]):
-        return "daily"
-    if any(w in t for w in ["будние", "будни", "рабочие"]):
-        found.update(["mon", "tue", "wed", "thu", "fri"])
-    if any(w in t for w in ["выходные", "выходных"]):
-        found.update(["sat", "sun"])
-    # Parse individual day names — split by spaces, commas, slashes
-    import re as _re
-    tokens = _re.split(r"[,\s/]+", t)
-    for token in tokens:
-        token = token.strip(".,!?")
-        if token in day_map:
-            found.add(day_map[token])
-    if not found:
-        return "once"
-    sorted_days = sorted(found, key=lambda d: days_order.index(d))
-    if sorted_days == ["mon", "tue", "wed", "thu", "fri"]:
-        return "weekdays"
-    if sorted_days == ["sat", "sun"]:
-        return "weekends"
-    if sorted_days == days_order:
-        return "daily"
-    return "custom_days:" + ",".join(sorted_days)
-
-
 def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
-    """5-button repeat picker. One tap = done (except custom days via text input)."""
+    """Build repeat picker keyboard with current selection highlighted."""
+    mark = lambda val: "✅ " if current == val else ""
     btns = [
-        [InlineKeyboardButton(text="🔁 Каждый день",   callback_data="rem_rp_daily")],
-        [InlineKeyboardButton(text="📅 Каждую неделю", callback_data="rem_rp_weekly")],
-        [InlineKeyboardButton(text="🗓 Каждый месяц",  callback_data="rem_rp_monthly")],
-        [InlineKeyboardButton(text="🌿 Каждый год",    callback_data="rem_rp_yearly")],
-        [InlineKeyboardButton(text="✍️ По дням недели", callback_data="rem_rp_custom")],
-        [InlineKeyboardButton(text="← Назад",          callback_data="rem_back_to_confirm")],
+        [InlineKeyboardButton(text=f"{mark('once')}▶ Один раз", callback_data="rem_rp_once")],
+        [InlineKeyboardButton(text=f"{mark('daily')}🔁 Каждый день", callback_data="rem_rp_daily")],
+        [InlineKeyboardButton(text=f"{mark('weekdays')}📅 По будням", callback_data="rem_rp_weekdays"),
+         InlineKeyboardButton(text=f"{mark('weekends')}🏖 По выходным", callback_data="rem_rp_weekends")],
+        [InlineKeyboardButton(text=f"{mark('weekly')}📆 Раз в неделю", callback_data="rem_rp_weekly"),
+         InlineKeyboardButton(text=f"{mark('monthly')}📆 Раз в месяц", callback_data="rem_rp_monthly")],
+        [InlineKeyboardButton(text=f"{mark('yearly')}📆 Раз в год", callback_data="rem_rp_yearly")],
     ]
+    # Day of week buttons — only show if custom_days or we can toggle
+    days_en = ["mon","tue","wed","thu","fri","sat","sun"]
+    days_ru = ["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"]
+    custom_set = set()
+    if current.startswith("custom_days:"):
+        custom_set = set(current.split(":")[1].split(","))
+    day_row = []
+    for i, (de, dr) in enumerate(zip(days_en, days_ru)):
+        is_set = de in custom_set
+        prefix = "✅ " if is_set else ""
+        day_row.append(InlineKeyboardButton(text=f"{prefix}{dr}", callback_data=f"rem_day_{de}"))
+    btns.append(day_row)
+    btns.append([InlineKeyboardButton(text="✅ Готово", callback_data="rem_rp_done"),
+                 InlineKeyboardButton(text="← Назад", callback_data="rem_back_to_confirm")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 
@@ -3122,60 +3095,33 @@ async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("rem_rp_"))
 async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
+    repeat = callback.data[len("rem_rp_"):]
     user_id = str(callback.from_user.id)
-    action = callback.data[len("rem_rp_"):]
-
-    # Кнопка "По дням недели" — переходим в текстовый ввод
-    if action == "custom":
-        await state.set_state(ReminderStates.waiting_for_weekdays)
-        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="← Назад", callback_data="rem_repeat_pick")]
-        ])
-        try:
-            await callback.message.edit_text(
-                "📅 <b>В какие дни повторять?</b>
-
-"
-                "Напиши дни недели, например:
-"
-                "<code>пн ср пт</code>  или  <code>понедельник среда пятница</code>",
-                reply_markup=cancel_kb,
-                parse_mode="HTML"
-            )
-        except Exception:
-            await callback.message.answer(
-                "📅 <b>В какие дни повторять?</b>
-
-"
-                "Напиши дни недели, например:
-"
-                "<code>пн ср пт</code>  или  <code>понедельник среда пятница</code>",
-                reply_markup=cancel_kb,
-                parse_mode="HTML"
-            )
-        return
-
-    # Кнопки 1-4: одно нажатие — сохраняем и возвращаем к подтверждению
-    repeat = action  # daily / weekly / monthly / yearly
     data = await state.get_data()
+    # Работает и при создании (_rem_title), и при редактировании (_rem_edit_id)
     if not data.get("_rem_title") and not data.get("_rem_edit_id"):
         ws = store_get_workspace(user_id) or {}
         fallback = ws.get("_pending_reminder_create") or ws.get("_pending_reminder_edit") or {}
         if fallback:
             await state.update_data(**fallback)
-            data = await state.get_data()
         else:
             await callback.answer("🌿 Данные потеряны. Начни заново.", show_alert=True)
             return
     await state.update_data(_rem_repeat=repeat)
-    # Sync to workspace
+    # Синхронизируем repeat в workspace чтобы фоллбэк не затёр выбор
     _ws1 = store_get_workspace(user_id) or {}
     for _k in ("_pending_reminder_create", "_pending_reminder_edit"):
         if _k in _ws1 and isinstance(_ws1[_k], dict):
             _ws1[_k]["_rem_repeat"] = repeat
     store_set_workspace(user_id, _ws1)
-    # Сразу показываем экран подтверждения
-    await cb_rem_rp_done(callback, state)
+    try:
+        await callback.message.edit_text(
+            "🔔 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(repeat),
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
 
 @router.callback_query(F.data.startswith("rem_day_"))
 async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
@@ -3231,65 +3177,6 @@ async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
     except Exception:
         pass
 
-@router.message(StateFilter(ReminderStates.waiting_for_weekdays))
-async def cb_rem_weekdays_input(message: Message, state: FSMContext):
-    """Handle free-form weekday text input."""
-    user_id = str(message.from_user.id)
-    repeat = _parse_weekdays(message.text or "")
-    if repeat == "once":
-        await message.answer(
-            "🌿 Не смог разобрать дни. Попробуй ещё раз, например: <code>пн ср пт</code>",
-            parse_mode="HTML"
-        )
-        return
-    data = await state.get_data()
-    if not data.get("_rem_title") and not data.get("_rem_edit_id"):
-        ws = store_get_workspace(user_id) or {}
-        fallback = ws.get("_pending_reminder_create") or ws.get("_pending_reminder_edit") or {}
-        if fallback:
-            await state.update_data(**fallback)
-    await state.update_data(_rem_repeat=repeat)
-    # Sync to workspace
-    _ws = store_get_workspace(user_id) or {}
-    for _k in ("_pending_reminder_create", "_pending_reminder_edit"):
-        if _k in _ws and isinstance(_ws[_k], dict):
-            _ws[_k]["_rem_repeat"] = repeat
-    store_set_workspace(user_id, _ws)
-    # Restore state for confirm screen
-    await state.set_state(ReminderStates.waiting_for_repeat)
-    # Show confirm screen
-    data2 = await state.get_data()
-    title   = data2.get("_rem_title", "")
-    dt_iso  = data2.get("_rem_dt", "")
-    is_edit = data2.get("_rem_edit_id", "")
-    rep_display = _repeat_label(repeat)
-    dt_display  = dt_iso[:16].replace("T", " ") if dt_iso else "—"
-    if is_edit:
-        header = "✏️ <b>Редактирование</b>"
-        confirm_action = "rem_confirm_edit"
-    else:
-        header = "🔔 <b>Новое напоминание</b>"
-        confirm_action = "rem_confirm_create"
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=f"✏️ Изменить повторение", callback_data="rem_repeat_pick")],
-        [InlineKeyboardButton(text="✅ Готово", callback_data=confirm_action),
-         InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")],
-    ])
-    await message.answer(
-        f"{header}
-
-"
-        f"Название: {title}
-"
-        f"📅 {dt_display}
-
-"
-        f"Повторение: {rep_display}",
-        reply_markup=kb,
-        parse_mode="HTML"
-    )
-
-
 @router.callback_query(F.data == "rem_rp_done")
 async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
     """Return to confirmation screen with updated repeat. Works for both create and edit."""
@@ -3324,9 +3211,8 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
         cancel_action = "menu_reminders_mgmt"
         header = f"🔔 <b>Новое напоминание</b>"
     
-    _rep_btn = "✏️ Изменить повторение" if repeat != "once" else "➕ Добавить повторение"
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=_rep_btn, callback_data="rem_repeat_pick")],
+        [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
         [InlineKeyboardButton(text="✅ Готово", callback_data=confirm_action),
          InlineKeyboardButton(text="❌ Отмена", callback_data=cancel_action)],
     ])
