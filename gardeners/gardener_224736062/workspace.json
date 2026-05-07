@@ -414,7 +414,7 @@
     {
       "id": "rem_60c996dc",
       "title": "Тест 10:00",
-      "datetime_iso": "2026-05-08T09:00+03:00",
+      "datetime_iso": "2026-05-08T10:00",
       "repeat": "daily",
       "active": true
     }
@@ -468,5 +468,11 @@
       "resonance_bonus": 3,
       "icon": "🌱"
     }
-  ]
+  ],
+  "_pending_reminder_edit": {
+    "_rem_edit_id": "rem_60c996dc",
+    "_rem_title": "Тест 10:00",
+    "_rem_dt": "2026-05-08T09:00+03:00",
+    "_rem_repeat": "daily"
+  }
 }
