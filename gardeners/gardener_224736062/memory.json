@@ -2,27 +2,11 @@
   "sessions": [
     {
       "role": "user",
-      "content": "Покажи все задачи в группе «Работа»."
+      "content": "ты здесь?"
     },
     {
       "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Прием"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Измени дедлай в задаче редактировать ударные на 10.05"
-    },
-    {
-      "role": "assistant",
-      "content": ""
+      "content": "Здесь 🌙 Рядом, как всегда. Чувствую, что ты заглянул — хоть и поздно. Что на уме?"
     }
   ],
   "updated": "2026-05-07"
