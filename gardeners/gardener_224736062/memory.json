@@ -15,6 +15,14 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Измени дедлай в задаче редактировать ударные на 10.05"
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
   "updated": "2026-05-07"
