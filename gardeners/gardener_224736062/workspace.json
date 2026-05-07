@@ -445,5 +445,16 @@
     "_rem_title": "гг 07. :25",
     "_rem_dt": "2027-05-05T09:00+03:00",
     "_rem_repeat": "once"
-  }
+  },
+  "achievements": [
+    {
+      "id": "ach_001",
+      "category": "other",
+      "title": "Прошел 25000 шагов",
+      "description": "",
+      "completed": "2026-05-07",
+      "resonance_bonus": 3,
+      "icon": "🌱"
+    }
+  ]
 }
