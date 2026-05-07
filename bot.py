@@ -2764,8 +2764,9 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
     if not rem:
         await callback.answer("Напоминание не найдено", show_alert=True)
         return
-    await state.update_data(_rem_edit_id=rid, _rem_title=rem.get("title",""), _rem_dt=rem.get("datetime_iso",""), _rem_repeat=rem.get("repeat","once"))
+    # set_state сначала, потом update_data — иначе set_state сотрёт данные
     await state.set_state(ReminderStates.waiting_for_input)
+    await state.update_data(_rem_edit_id=rid, _rem_title=rem.get("title",""), _rem_dt=rem.get("datetime_iso",""), _rem_repeat=rem.get("repeat","once"))
     # Save pending to workspace for recovery after state loss
     ws = store_get_workspace(user_id) or {}
     ws["_pending_reminder_edit"] = {"_rem_edit_id": rid, "_rem_title": rem.get("title",""), "_rem_dt": rem.get("datetime_iso",""), "_rem_repeat": rem.get("repeat","once")}
@@ -2805,12 +2806,16 @@ async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
     ])
+    # set_state сначала, потом update_data — иначе set_state сотрёт данные
+    _saved_title = await state.get_data()
     await state.set_state(ReminderStates.waiting_for_input)
+    if _saved_title:
+        await state.update_data(**_saved_title)
+    await state.update_data(_rem_edit_field="title")
     try:
         await callback.message.edit_text("✏️ Введи новое название:", reply_markup=cancel_kb)
     except Exception:
         await callback.message.answer("✏️ Введи новое название:", reply_markup=cancel_kb)
-    await state.update_data(_rem_edit_field="title")
 
 @router.callback_query(F.data == "redit_dt")
 async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
@@ -2823,12 +2828,16 @@ async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
     ])
+    # set_state сначала, потом update_data — иначе set_state сотрёт данные
+    _saved_dt = await state.get_data()
     await state.set_state(ReminderStates.waiting_for_input)
+    if _saved_dt:
+        await state.update_data(**_saved_dt)
+    await state.update_data(_rem_edit_field="dt")
     try:
         await callback.message.edit_text("📅 Введи новую дату и время (ДД.ММ.ГГ ЧЧ:ММ):", reply_markup=cancel_kb)
     except Exception:
         await callback.message.answer("📅 Введи новую дату и время:", reply_markup=cancel_kb)
-    await state.update_data(_rem_edit_field="dt")
 
 @router.callback_query(F.data == "redit_repeat")
 async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
@@ -2855,11 +2864,12 @@ async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
         "_rem_dt": rem.get("datetime_iso", ""),
         "_rem_repeat": current
     }
+    # set_state сначала, потом update_data — иначе set_state сотрёт данные
+    await state.set_state(ReminderStates.waiting_for_repeat)
     await state.update_data(**pending)
     ws = store_get_workspace(user_id) or {}
     ws["_pending_reminder_edit"] = pending
     store_set_workspace(user_id, ws)
-    await state.set_state(ReminderStates.waiting_for_repeat)
     try:
         await callback.message.edit_text(
             "🔔 <b>Повторение:</b>",
@@ -3117,9 +3127,13 @@ def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
 @router.callback_query(F.data == "rem_repeat_pick")
 async def cb_rem_repeat_pick(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
+    # Сохраняем данные ДО set_state — в MemoryStorage set_state очищает FSM
+    _saved = await state.get_data()
     await state.set_state(ReminderStates.waiting_for_repeat)
-    data = await state.get_data()
-    current = data.get("_rem_repeat", "once")
+    # Восстанавливаем данные ПОСЛЕ set_state
+    if _saved:
+        await state.update_data(**_saved)
+    current = _saved.get("_rem_repeat", "once")
     try:
         await callback.message.edit_text(
             "🔔 <b>Повторение:</b>",
