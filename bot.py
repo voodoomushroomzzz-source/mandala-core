@@ -2962,6 +2962,46 @@ async def rem_text_input(message: Message, state: FSMContext):
         offset = target.strftime("%z")
         offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
         dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
+    elif _re_parse.search(r'\b(\d{1,2})[.\s](\d{2})(?:[.\s](\d{2,4}))?\s*[,\s]?\s*(\d{1,2})[:\s](\d{2})\b', title_clean):
+        # Format: DD.MM HH:MM | DD MM HH MM | 1705 1400 | 17.05 14:00 etc.
+        _m2 = _re_parse.search(
+            r'\b(\d{1,2})[.\s](\d{2})(?:[.\s](\d{2,4}))?\s*[,\s]?\s*(\d{1,2})[:\s](\d{2})\b',
+            title_clean
+        )
+        if _m2:
+            _dd, _mo = _m2.group(1), _m2.group(2)
+            _yy_raw  = _m2.group(3)
+            _hh, _mi = _m2.group(4), _m2.group(5)
+            _yy = ("20" + _yy_raw if _yy_raw and len(_yy_raw) == 2 else _yy_raw) if _yy_raw else str(now_p.year)
+            try:
+                target = now_p.replace(year=int(_yy), month=int(_mo), day=int(_dd),
+                                       hour=int(_hh), minute=int(_mi), second=0, microsecond=0)
+                if target < now_p:
+                    target = target.replace(year=target.year + 1)
+                offset   = target.strftime("%z")
+                offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+                dt_iso   = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
+                title_clean = (title_clean[:_m2.start()].strip() + " " + title_clean[_m2.end():].strip()).strip()
+            except Exception:
+                dt_iso = None
+    elif _re_parse.search(r'\b(\d{4})\s+(\d{4})\b', title_clean):
+        # Format: 1705 1400  (DDMM HHMM)
+        _m3 = _re_parse.search(r'\b(\d{4})\s+(\d{4})\b', title_clean)
+        if _m3:
+            _ddmm, _hhmm = _m3.group(1), _m3.group(2)
+            try:
+                _dd2, _mo2 = int(_ddmm[:2]), int(_ddmm[2:])
+                _hh2, _mi2 = int(_hhmm[:2]), int(_hhmm[2:])
+                target = now_p.replace(year=now_p.year, month=_mo2, day=_dd2,
+                                       hour=_hh2, minute=_mi2, second=0, microsecond=0)
+                if target < now_p:
+                    target = target.replace(year=target.year + 1)
+                offset   = target.strftime("%z")
+                offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+                dt_iso   = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
+                title_clean = (title_clean[:_m3.start()].strip() + " " + title_clean[_m3.end():].strip()).strip()
+            except Exception:
+                dt_iso = None
     else:
         # Try DD.MM or DD.MM.YY or DD.MM.YYYY with optional time
         m = _re_parse.search(r'(\d{1,2})\s+(\w+)(?:\s+в\s+(\d{1,2})(?::(\d{2}))?)?', title_clean.lower())
@@ -3008,8 +3048,9 @@ async def rem_text_input(message: Message, state: FSMContext):
     }
     store_set_workspace(user_id, ws)
     await state.set_state(ReminderStates.waiting_for_repeat)
+    _rep_btn = "➕ Добавить повторение"
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
+        [InlineKeyboardButton(text=_rep_btn, callback_data="rem_repeat_pick")],
         [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
          InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")],
     ])
@@ -3187,17 +3228,24 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
     repeat = data.get("_rem_repeat", "once")
     is_edit = data.get("_rem_edit_id", "")
     # Fallback: if FSM state lost (bot restart / timeout), recover from workspace
+    _uid_rpd = str(callback.from_user.id)
     if not is_edit and not title:
-        user_id = str(callback.from_user.id)
-        ws = store_get_workspace(user_id) or {}
-        pending = ws.get("_pending_reminder_edit")
+        ws = store_get_workspace(_uid_rpd) or {}
+        pending = ws.get("_pending_reminder_edit") or ws.get("_pending_reminder_create") or {}
         if pending:
             is_edit = pending.get("_rem_edit_id", "")
             title   = pending.get("_rem_title", "")
             dt_iso  = pending.get("_rem_dt", "")
             repeat  = pending.get("_rem_repeat", "once")
-            # Restore to state
             await state.update_data(_rem_edit_id=is_edit, _rem_title=title, _rem_dt=dt_iso, _rem_repeat=repeat)
+    # If repeat still "once" after FSM read, double-check workspace (covers rp_select sync)
+    if repeat == "once":
+        ws2 = store_get_workspace(_uid_rpd) or {}
+        _p2 = ws2.get("_pending_reminder_edit") or ws2.get("_pending_reminder_create") or {}
+        _r2 = _p2.get("_rem_repeat", "once")
+        if _r2 != "once":
+            repeat = _r2
+            await state.update_data(_rem_repeat=repeat)
     dt_display = dt_iso[:16].replace("T", " ")
     rep_display = _repeat_label(repeat)
     
@@ -3211,8 +3259,9 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
         cancel_action = "menu_reminders_mgmt"
         header = f"🔔 <b>Новое напоминание</b>"
     
+    _rep_btn_label = "✏️ Изменить повторение" if repeat != "once" else "➕ Добавить повторение"
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
+        [InlineKeyboardButton(text=_rep_btn_label, callback_data="rem_repeat_pick")],
         [InlineKeyboardButton(text="✅ Готово", callback_data=confirm_action),
          InlineKeyboardButton(text="❌ Отмена", callback_data=cancel_action)],
     ])
