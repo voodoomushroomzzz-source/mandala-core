@@ -410,7 +410,15 @@
   "updated": "2026-04-18",
   "achievements_count": 55,
   "checklists": [],
-  "reminders": [],
+  "reminders": [
+    {
+      "id": "rem_90dac7ac",
+      "title": "Тест сегодня 22:59",
+      "datetime_iso": "2026-05-08T09:00+03:00",
+      "repeat": "weekly",
+      "active": true
+    }
+  ],
   "_decay_date": "2026-05-07",
   "roadmaps": [
     {
@@ -441,11 +449,6 @@
     "growth": 26
   },
   "last_morning_date": "2026-05-07",
-  "_pending_reminder_create": {
-    "_rem_title": "Позвонить маме",
-    "_rem_dt": "2026-05-07T16:00+03:00",
-    "_rem_repeat": "done"
-  },
   "achievements": [
     {
       "id": "ach_001",
