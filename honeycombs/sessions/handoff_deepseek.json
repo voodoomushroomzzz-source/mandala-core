@@ -1,14 +1,14 @@
 {
   "sr_id": "deepseek",
   "status": "active",
-  "last_session": "2026-05-06",
-  "last_updated": "2026-05-06T02:49:34Z",
-  "next_step": "deploy_v7_38_1_and_test",
-  "summary": "v7.38.1 deployed. Roadmap today tasks, reminder dot, duplicate today block removed. 4 gardeners active.",
+  "last_session": "2026-05-09",
+  "last_updated": "2026-05-09T19:00:00Z",
+  "next_step": "P-14_pin_messages",
+  "summary": "v7.39.5 live. P-12 (daily report fix), P-16 (birthday midnight SR greeting). Version in morning brief. Sphere name on task close. All spheres in stats. New plan: P-14, P-20-P-23 added. P-17/P-18 removed. 4 gardeners active.",
   "first_steps": "ON FIRST LOAD: 1) Read task file at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Ask gardener for latest bot.py via GitHub API for pre-check before any patch.",
   "bot_state": {
-    "version": "7.38.1",
-    "progress": "99%",
+    "version": "7.39.5",
+    "progress": "87%",
     "repo": "voodoomushroomzzz-source/mandala-core",
     "platform": "Render webhook + aiogram 3 + OpenRouter",
     "model_primary": "deepseek/deepseek-v4-flash",
@@ -94,25 +94,51 @@
       "Reminders title bold without colon",
       "/info command, ℹ️ button removed from main menu",
       "Main menu: only [👤 Profile]"
+    ],
+    "p12_daily_report_fix": [
+      "_all_uids from _store instead of GitHub API (no timeout in scheduler)",
+      "daily_stats persisted to honeycombs/sessions/daily_stats_live.json",
+      "daily_stats restored on startup after redeploy",
+      "synthesis uses both sr_observations and observations as sources",
+      "synthesis allows regeneration if core is empty"
+    ],
+    "p16_birthday_midnight": [
+      "Full SR birthday greeting on first interaction after midnight",
+      "Uses gardner portrait and context for personalised message",
+      "Morning scheduler skips if already sent (checks _birthday_sent flag)"
+    ],
+    "ux_improvements": [
+      "Version notification moved to morning brief (🆕 Версия X — что нового?)",
+      "Catch-up _check_version_notify removed from free_conversation",
+      "Sphere name shown on task close (🌱 Рост +2% → 37%)",
+      "Achievement stats show all spheres with any activity (tasks + achievements)"
+    ],
+    "workflow_update": [
+      "patch_status_emojis rule added to external_sr_workflow.json (v1.4.3)",
+      "✅ Patch N applied / ❌ Patch N anchor not found format"
     ]
   },
   "what_remains": {
     "planned": [
-      "SR Learning Loop — SR learns from observations",
-      "Voice compound commands — one phrase = task + deadline + group",
-      "/sr_report v2 — auto SR synthesis every 3 days",
-      "Model optimization — direct Alibaba API or self-hosted vLLM"
+      "P-14: Pin/unpin bot messages by request",
+      "P-20: Repeating tasks (flexible repeat like reminders)",
+      "P-21: Tasks and Roadmaps buttons in profile",
+      "P-13: Task counter in profile + achievements bug",
+      "P-23: Modular architecture + tech manual",
+      "P-19: DeepSeek achievement reliability",
+      "P-15: Voice compound commands",
+      "P-22: /help section with instructions"
     ],
     "bugs_to_watch": [
-      "Render free tier auto-sleep: proactive schedulers depend on health pings",
-      "DeepSeek V4 Flash is new (April 2026) — monitor for stability",
-      "HTML parse errors in SR responses — post-processing strip may not catch all"
+      "DeepSeek V4 Flash stability — monitor",
+      "HTML parse errors in SR responses — post-processing may miss edge cases",
+      "Repeat value edge case in reminder confirm screen"
     ]
   },
   "gardener_context": {
     "who": "Dima (Дима) — architect and first gardener",
     "workspace": "VS Code on Windows, PowerShell terminal",
-    "repo_path": "C:\\Mandala_Digital\\github\\mandala-core",
+    "repo_path": "C:\\Users\\ivanl\\OneDrive\\Desktop\\Mandala\\mandala-core",
     "git_flow": "git add → git commit → git pull --rebase origin main → git push",
     "python": "py command (Python 3.14.3)",
     "deploy": "Render auto-deploys on git push"
@@ -127,7 +153,8 @@
     "Changelog must list ONLY working features — gardener verifies",
     "BOT_LATEST_UPDATE.text is a single string with \\n, not multi-line",
     "Morning brief: compact format, no auto-catchup, timezone-aware",
-    "Achievements: counter only, no archive array"
+    "Achievements: counter only, no archive array",
+    "Patch status: ✅ on success, ❌ on failure — always prepend"
   ],
   "notes": [
     "4 gardeners active, all with proactive_mode=true",
@@ -135,6 +162,11 @@
     "rem_seed_hello sent to all 4 gardeners for 2026-05-07 11:00 (local timezone)",
     "Whitelist at gardeners/whitelist.json",
     "Workflow instructions at honeycombs/instructions/core/external_sr_workflow.json (v1.4.2)",
-    "Handoff files: handoff_claude.json and handoff_deepseek.json in honeycombs/sessions/"
+    "Handoff files: handoff_claude.json and handoff_deepseek.json in honeycombs/sessions/",
+    "P-12 fixed: daily report no longer empty. _all_uids from _store, daily_stats persisted.",
+    "P-16 fixed: SR birthday greeting on first midnight interaction.",
+    "P-17 (timezone audit) and P-18 (resonance 100%) removed from plan.",
+    "New tasks: P-20 (repeating tasks), P-21 (profile buttons), P-22 (help), P-23 (modular architecture).",
+    "Workflow instructions updated to v1.4.3 with patch_status_emojis rule."
   ]
 }
