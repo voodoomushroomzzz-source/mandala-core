@@ -401,7 +401,7 @@
       "id": "rem_60c996dc",
       "title": "Тест 10:00",
       "datetime_iso": "2026-05-09T10:00",
-      "repeat": "custom_days:mon,wed,sat",
+      "repeat": "daily",
       "active": true
     }
   ],
@@ -458,6 +458,6 @@
   "_pending_reminder_create": {
     "_rem_title": "Гг",
     "_rem_dt": "2026-05-09T10:01+03:00",
-    "_rem_repeat": "custom_days:mon,wed,sat"
+    "_rem_repeat": "daily"
   }
 }
