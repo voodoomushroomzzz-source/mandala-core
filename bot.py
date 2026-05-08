@@ -2717,6 +2717,13 @@ async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):
     if len(store_get_reminders(user_id)) >= REMINDER_LIMIT:
         await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
         return
+    # Очищаем оба pending — иначе старый _rem_edit_id подхватится в fallback
+    ws_create = store_get_workspace(user_id) or {}
+    ws_create.pop("_pending_reminder_edit", None)
+    ws_create.pop("_pending_reminder_create", None)
+    store_set_workspace(user_id, ws_create)
+    # Очищаем FSM чтобы не было хвостов от предыдущих сессий
+    await state.clear()
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")]
     ])
@@ -3250,6 +3257,10 @@ async def cb_rem_weekdays_input(message: Message, state: FSMContext):
     title   = data2.get("_rem_title", "")
     dt_iso  = data2.get("_rem_dt", "")
     is_edit = data2.get("_rem_edit_id", "")
+    # Если title есть а edit_id нет — это создание. Страхуемся от чужого edit_id.
+    if title and not is_edit:
+        await state.update_data(_rem_edit_id="")
+        is_edit = ""
     rep_display = _repeat_label(repeat)
     dt_display  = dt_iso[:16].replace("T", " ") if dt_iso else "—"
     header = "✏️ <b>Редактирование</b>" if is_edit else "🔔 <b>Новое напоминание</b>"
@@ -3275,17 +3286,21 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
     repeat = data.get("_rem_repeat", "once")
     is_edit = data.get("_rem_edit_id", "")
     # Fallback: if FSM state lost (bot restart / timeout), recover from workspace
+    # ВАЖНО: если title есть — это создание, _pending_reminder_edit не читаем
+    _uid_done = str(callback.from_user.id)
     if not is_edit and not title:
-        user_id = str(callback.from_user.id)
-        ws = store_get_workspace(user_id) or {}
-        pending = ws.get("_pending_reminder_edit")
+        ws = store_get_workspace(_uid_done) or {}
+        # Сначала пробуем create, потом edit — чтобы не подхватить чужой edit_id
+        pending = ws.get("_pending_reminder_create") or ws.get("_pending_reminder_edit") or {}
         if pending:
             is_edit = pending.get("_rem_edit_id", "")
             title   = pending.get("_rem_title", "")
             dt_iso  = pending.get("_rem_dt", "")
             repeat  = pending.get("_rem_repeat", "once")
-            # Restore to state
             await state.update_data(_rem_edit_id=is_edit, _rem_title=title, _rem_dt=dt_iso, _rem_repeat=repeat)
+    elif title and not is_edit:
+        # Есть title, нет edit_id — точно создание, сбрасываем edit_id на всякий случай
+        await state.update_data(_rem_edit_id="")
     dt_display = dt_iso[:16].replace("T", " ")
     rep_display = _repeat_label(repeat)
     
@@ -3338,10 +3353,11 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
     title = data.get("_rem_title", "")
     dt_iso = data.get("_rem_dt", "")
     repeat = data.get("_rem_repeat", "once")
-    # Fallback: if FSM state lost, recover from workspace
+    # Fallback: при создании читаем ТОЛЬКО _pending_reminder_create
+    # _pending_reminder_edit не трогаем — там чужой edit_id
     if not title:
         ws_fb = store_get_workspace(user_id) or {}
-        pending = ws_fb.get("_pending_reminder_create") or ws_fb.get("_pending_reminder_edit")
+        pending = ws_fb.get("_pending_reminder_create") or {}
         if pending:
             title   = pending.get("_rem_title", "")
             dt_iso  = pending.get("_rem_dt", "")
