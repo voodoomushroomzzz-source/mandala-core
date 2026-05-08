@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.4"
+BOT_VERSION = "7.39.5"
 BOT_LATEST_UPDATE = {
     "version": "7.39.0",
     "date": "2026-05-06",
@@ -6484,6 +6484,52 @@ async def free_conversation(message: Message, state: FSMContext):
         return
 
     # Version notification moved to morning brief — no catch-up needed
+
+    # ── Birthday check: full SR greeting if first interaction after midnight ──
+    try:
+        _prof_bday = store_get_profile(user_id)
+        if _prof_bday:
+            _bday = _prof_bday.get("companion_settings", {}).get("birthday", "")
+            if _bday:
+                from zoneinfo import ZoneInfo as _ZI_bday
+                from datetime import datetime as _dt_bday
+                _tz_bday = _ZI_bday(_prof_bday.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
+                _now_bday = _dt_bday.now(_tz_bday)
+                _today_bday = _now_bday.strftime("%d.%m")
+                if _today_bday == _bday and _birthday_sent.get(user_id) != _today_bday:
+                    _bname = _prof_bday.get("name", "Садовник")
+                    # Build personalised greeting via SR
+                    _sr_ctx = _build_user_context_msg(user_id)
+                    _dp_bday = _get_deep_profile(user_id)
+                    _core_bday = _dp_bday.get("memory", {}).get("core", "")
+                    _ach_bday = store_get_achievements_count(user_id)
+                    _bday_prompt = (
+                        f"Сегодня день рождения садовника {_bname}.\n"
+                        f"Портрет: {_core_bday[:300] if _core_bday else 'пока формируется'}\n"
+                        f"Достижений: {_ach_bday}\n"
+                        f"Контекст:\n{_sr_ctx[:800]}\n\n"
+                        f"Напиши тёплое персонализированное поздравление с днём рождения (3-4 предложения). "
+                        f"Отрази рост садовника за прошедший год. "
+                        f"Используй эмодзи. Будь как мудрый друг который видит путь человека. "
+                        f"Ответь ТОЛЬКО текстом поздравления, без JSON."
+                    )
+                    _bday_msg = await _call_openrouter([
+                        {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском."},
+                        {"role": "user", "content": _bday_prompt}
+                    ])
+                    if not _bday_msg or len(_bday_msg.strip()) < 10:
+                        _bday_msg = (
+                            f"🎂 С днём рождения, {_bname}!\n\n"
+                            f"Пусть этот год будет годом роста во всех сферах.\n"
+                            f"Сад помнит этот день. 🌿"
+                        )
+                    await message.answer(_bday_msg.strip(), reply_markup=get_main_keyboard())
+                    _birthday_sent[user_id] = _today_bday
+                    store_increment_achievements(user_id)
+                    store_add_sphere_resonance(user_id, "growth", 5)
+                    _fire_sync()
+    except Exception:
+        pass
 
     # ── Welcome Flow: записываем ответ в deep_profile и задаём следующий вопрос ──
     fsm_data = await state.get_data()
