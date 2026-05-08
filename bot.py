@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.2"
+BOT_VERSION = "7.39.3"
 BOT_LATEST_UPDATE = {
     "version": "7.39.0",
     "date": "2026-05-06",
@@ -7010,13 +7010,15 @@ async def free_conversation(message: Message, state: FSMContext):
                                 count_now = store_get_achievements_count(user_id)
                                 new_res2  = store_get_profile(user_id).get("resonance_level", 0)
                                 await _sync_pending()
+                                # Get sphere of last closed task for display
+                                _last_sphere = _classify_sphere(to_close[-1].get("title",""), to_close[-1].get("label_name",""))
                                 if len(to_close) == 1:
                                     reply_text = (f"✅ Готово: {to_close[0]['title']} · "
-                                                  f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
+                                                  f"💎 {count_now} · {SPHERE_EMOJI[_last_sphere]} {SPHERE_NAME_RU[_last_sphere]} +{total_res}% → {new_res2}%")
                                 else:
                                     names = ", ".join(t["title"] for t in to_close)
                                     reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
-                                                  f"💎 {count_now} · 🔮 +{total_res}% → {new_res2}%")
+                                                  f"💎 {count_now} · {SPHERE_EMOJI[_last_sphere]} {SPHERE_NAME_RU[_last_sphere]} +{total_res}% → {new_res2}%")
                                 # Auto-show roadmap if closed task belongs to one, else profile
                                 _closed_ids_set = {t.get("task_id") for t in to_close}
                                 _roadmaps_upd = store_get_roadmaps(user_id)
