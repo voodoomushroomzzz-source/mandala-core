@@ -6179,7 +6179,8 @@ async def _generate_synthesis(user_id: str) -> None:
     dp = prof.setdefault("deep_profile", {})
 
     # Daily guard — run only once per day
-    if dp.get("synthesis_date") == _today():
+    # Daily guard removed — allow regeneration if core is empty
+    if dp.get("synthesis_date") == _today() and mem.get("core"):
         return
 
     # Дистилляция если наблюдений накопилось много
