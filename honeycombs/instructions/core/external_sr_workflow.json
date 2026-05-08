@@ -21,7 +21,12 @@
       "always_fetch_before_update": "Before any file modification, always request the current version via API. Never assume local state.",
       "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the PowerShell script. Gardener only copies, pastes, and presses Enter.",
       "copyable_links": "When providing URLs, wrap them in a code block with 'text' (```text ... ```). This ensures the 'Copy' button appears in the interface.",
-      "patch_large_files_by_block": "For large files (.py, .html, .js), do NOT patch with regex replace on entire file  it causes syntax errors from partial matches. Instead: 1) Identify the exact function/block to replace. 2) Use a precise multi-line regex anchored to function definition. 3) Replace ONLY that block with corrected version. 4) If unsure, replace entire file with full corrected content."
+      "patch_large_files_by_block": "For large files (.py, .html, .js), do NOT patch with regex replace on entire file  it causes syntax errors from partial matches. Instead: 1) Identify the exact function/block to replace. 2) Use a precise multi-line regex anchored to function definition. 3) Replace ONLY that block with corrected version. 4) If unsure, replace entire file with full corrected content.",
+      "patch_status_emojis": {
+        "rule": "ALWAYS prepend each patch result line with ✅ on success or ❌ on failure. Visual clarity for Gardener.",
+        "format": "✅ Patch N: description — кратко что изменилось\n❌ Patch N: anchor not found — причина или предложение",
+        "example": "✅ Patch 1 applied: _all_uids from _store\n❌ Patch 2 anchor not found — printing context for debug"
+      }
     },
     "powershell_examples": {
       "description": "Concrete, copy-paste ready examples for common tasks.",
@@ -157,11 +162,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-05-06",
+    "updated": "2026-05-09",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.4.2",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.2 adds three-block PowerShell patcher format for large files.",
+    "version": "v1.4.3",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.3 adds patch_status_emojis rule + three-block PowerShell patcher format for large files.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -178,7 +183,8 @@
       "concise",
       "system_flow",
       "powershell_examples",
-      "pre_check_flow"
+      "pre_check_flow",
+      "patch_status_emojis"
     ]
   }
 }
