@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.5"
+BOT_VERSION = "7.39.6"
 BOT_LATEST_UPDATE = {
     "version": "7.39.0",
     "date": "2026-05-06",
@@ -5886,7 +5886,10 @@ async def cb_edit_name(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.edit_reply_markup(reply_markup=None)
     await state.set_state(EditProfileStates.waiting_for_new_name)
-    await callback.message.answer("👤 Новое имя:", reply_markup=get_cancel_keyboard())
+    back_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад", callback_data="menu_edit_profile")]
+    ])
+    await callback.message.answer("👤 Новое имя:", reply_markup=back_kb)
 
 @router.callback_query(F.data == "edit_city")
 async def cb_edit_city(callback: CallbackQuery, state: FSMContext):
@@ -5896,9 +5899,12 @@ async def cb_edit_city(callback: CallbackQuery, state: FSMContext):
     cur = profile.get("companion_settings", {}).get("city", "не указан")
     await callback.message.edit_reply_markup(reply_markup=None)
     await state.set_state(EditProfileStates.waiting_for_new_city)
+    back_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад", callback_data="menu_edit_profile")]
+    ])
     await callback.message.answer(
         f"📍 Город сейчас: <b>{cur}</b>\n\nНапиши новый:",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+        parse_mode="HTML", reply_markup=back_kb
     )
 
 
@@ -5913,9 +5919,12 @@ async def cb_edit_morning(callback: CallbackQuery, state: FSMContext):
     cur = profile.get("companion_settings", {}).get("morning_message_time", "10:00")
     await callback.message.edit_reply_markup(reply_markup=None)
     await state.set_state(EditProfileStates.waiting_for_new_morning)
+    back_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад", callback_data="menu_edit_profile")]
+    ])
     await callback.message.answer(
         f"⏰ Время утреннего сообщения — сейчас: <b>{cur}</b>\n\nНапиши новое (ЧЧ:ММ):",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+        parse_mode="HTML", reply_markup=back_kb
     )
 
 
@@ -5993,11 +6002,14 @@ async def cb_edit_birthday(callback: CallbackQuery, state: FSMContext):
     cur = profile.get("companion_settings", {}).get("birthday", "не указан")
     await callback.message.edit_reply_markup(reply_markup=None)
     await state.set_state(EditProfileStates.waiting_for_new_birthday)
+    back_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад", callback_data="menu_edit_profile")]
+    ])
     await callback.message.answer(
         f"🎂 День рождения сейчас: <b>{cur}</b>\n\n"
         f"Напиши новый в формате ДД.ММ или ДД.ММ.ГГГГ\n"
-        f"Для отмены: пропустить",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+        f"Для отмены нажми кнопку назад",
+        parse_mode="HTML", reply_markup=back_kb
     )
 
 
