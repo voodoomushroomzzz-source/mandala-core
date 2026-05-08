@@ -1,11 +1,9 @@
 {
   "224736062": {
-    "messages": 3,
+    "messages": 1,
     "tasks_created": 0,
-    "tasks_completed": 1,
+    "tasks_completed": 0,
     "achievements": 0,
-    "intents": {
-      "complete_task": 1
-    }
+    "intents": {}
   }
 }
