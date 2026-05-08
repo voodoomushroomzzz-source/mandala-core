@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.0"
+BOT_VERSION = "7.39.1"
 BOT_LATEST_UPDATE = {
     "version": "7.39.0",
     "date": "2026-05-06",
@@ -6335,12 +6335,9 @@ async def _send_daily_report() -> None:
                 await _generate_synthesis(_uid)
 
         lines = [f"📊 Отчёт СР · {_today()} · v{BOT_VERSION}\n"]
-        # Load all from whitelist
-        _wl_rep = await _github_get("gardeners/whitelist.json") or {}
-        _all_uids = _wl_rep.get("approved", []) if isinstance(_wl_rep, dict) else []
-        for _ru in _all_uids:
-            if not store_get_profile(str(_ru)):
-                await _load_user(str(_ru))
+        # Load all from _store memory (avoids GitHub API timeout in scheduler)
+        _all_uids = [uid for uid, us in _store.items()
+                    if isinstance(us, dict) and us.get("ready")]
         # Activity — all from whitelist
         lines.append("👥 Активность:")
         for uid in _all_uids:
@@ -6396,7 +6393,7 @@ async def _send_daily_report() -> None:
         _daily_stats.clear()
         _daily_issues.clear()
         # Clear persisted stats after successful report
-        _pending_writes["honeycombs/sessions/daily_stats_live.json"] = {"_date": today_s}
+        _pending_writes["honeycombs/sessions/daily_stats_live.json"] = {"_date": _today()}
         for uid in list(_intent_tracker.keys()):
             _intent_tracker[uid] = []
         logger.info("Daily report sent to architect")
