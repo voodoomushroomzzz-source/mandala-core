@@ -457,13 +457,7 @@
   ],
   "_pending_reminder_create": {
     "_rem_title": "тест 2",
-    "_rem_dt": "2026-05-09T10:00+03:00",
-    "_rem_repeat": "custom_days:mon,sat"
-  },
-  "_pending_reminder_edit": {
-    "_rem_edit_id": "rem_60c996dc",
-    "_rem_title": "Тест 10:00",
-    "_rem_dt": "2026-05-09T10:00",
+    "_rem_dt": "2026-05-09T10:01+03:00",
     "_rem_repeat": "custom_days:mon,sat"
   }
 }
