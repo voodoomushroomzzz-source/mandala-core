@@ -882,6 +882,8 @@ def _track_interaction(telegram_id: str, intent: str = "", msg_type: str = "mess
     _daily_stats[uid]["messages"] += 1
     if intent:
         _daily_stats[uid]["intents"][intent] = _daily_stats[uid]["intents"].get(intent, 0) + 1
+    # Persist daily_stats for crash/redeploy recovery
+    _pending_writes["honeycombs/sessions/daily_stats_live.json"] = dict(_daily_stats)
     # Intent repeat detection (possible failed request)
     if intent and intent not in ("conversation", "show_tasks", "show_profile"):
         _intent_tracker.setdefault(uid, [])
@@ -6184,9 +6186,23 @@ async def _generate_synthesis(user_id: str) -> None:
     await _distill_observations(user_id, dp)
 
     # Собираем входные данные
-    obs = dp.get("sr_observations", [])[-10:]
-    if len(obs) < 2:
-        return
+    sr_obs = dp.get("sr_observations", [])[-10:]
+    old_obs = dp.get("observations", [])[-5:]
+    # Format old observations to match sr_observations structure
+    formatted_old = []
+    for o in old_obs:
+        if isinstance(o, str):
+            formatted_old.append({"date": o[:10] if len(o) > 10 else "", "text": o})
+        elif isinstance(o, dict):
+            formatted_old.append(o)
+    obs = sr_obs + formatted_old
+    if len(obs) < 2 and mem.get("core"):
+        return  # keep existing core, not enough new data
+    if len(obs) < 2 and not mem.get("core"):
+        # Generate initial core from profile data even without observations
+        obs = [{"date": _today(), "text": f"Садовник активен. Резонанс: {profile.get('resonance_level', 0)}%"}]
+        if len(obs) < 2:
+            obs.append({"date": _today(), "text": "Начало пути в Мандале"})
 
     mem = dp.setdefault("memory", {})
     core     = mem.get("core", "")
@@ -6378,6 +6394,8 @@ async def _send_daily_report() -> None:
         # Reset daily counters
         _daily_stats.clear()
         _daily_issues.clear()
+        # Clear persisted stats after successful report
+        _pending_writes["honeycombs/sessions/daily_stats_live.json"] = {"_date": today_s}
         for uid in list(_intent_tracker.keys()):
             _intent_tracker[uid] = []
         logger.info("Daily report sent to architect")
@@ -8195,6 +8213,17 @@ async def _check_webhook() -> None:
 async def on_startup():
     """Called when bot starts."""
     await _load_store()
+    # Restore daily_stats after redeploy/crash
+    try:
+        live = await _github_get("honeycombs/sessions/daily_stats_live.json", force=True)
+        from datetime import datetime as _dt_restore
+        today_restore = _dt_restore.now().strftime("%Y-%m-%d")
+        if isinstance(live, dict) and live.get("_date") == today_restore:
+            restored = {k: v for k, v in live.items() if k != "_date"}
+            _daily_stats.update(restored)
+            logger.info(f"Daily stats restored: {len(restored)} gardener(s)")
+    except Exception as e:
+        logger.warning(f"Daily stats restore skipped: {e}")
     await bot.set_webhook(WEBHOOK_URL)
     logger.info(f"Webhook set: {WEBHOOK_URL}")
     # Регистрируем команды в меню Telegram
