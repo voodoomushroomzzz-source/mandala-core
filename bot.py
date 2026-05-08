@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.1"
+BOT_VERSION = "7.39.2"
 BOT_LATEST_UPDATE = {
     "version": "7.39.0",
     "date": "2026-05-06",
@@ -1586,8 +1586,14 @@ async def send_morning_greeting(telegram_id: str) -> None:
         else:
             lines.append("")
             lines.append("Активных задач нет — как наполним этот день? 🌱")
+        # Version line — shown only if gardener hasn't seen this version yet
+        last_ver = gardener.get("last_notified_version", "")
+        if last_ver != BOT_VERSION:
+            lines.append(f"🆕 Версия {BOT_VERSION} — <a href='https://t.me/{BOT_USERNAME}'>что нового?</a>")
+            gardener["last_notified_version"] = BOT_VERSION
+            store_set_profile(str(telegram_id), gardener)
         text = "\n".join(lines)
-        await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard())
+        await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard(), disable_web_page_preview=True)
         _mark_proactive_sent(telegram_id)
     except Exception as e:
         logger.error(f"Morning brief error: {e}")
@@ -6474,8 +6480,7 @@ async def free_conversation(message: Message, state: FSMContext):
         await message.answer("🌿 Используй /start чтобы начать.")
         return
 
-    # Catch-up disabled — morning greeting only via scheduler
-    await _check_version_notify(user_id)
+    # Version notification moved to morning brief — no catch-up needed
 
     # ── Welcome Flow: записываем ответ в deep_profile и задаём следующий вопрос ──
     fsm_data = await state.get_data()
