@@ -2724,7 +2724,7 @@ async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(
             "🔔 <b>Новое напоминание</b>\n\n"
             "Напиши название, дату и время в свободной форме.\n"
-            "<i>Пример: Позвонить маме 7 мая в 9:00</i>",
+            "<i>Пример: Купить продукты завтра в 10:00</i>",
             reply_markup=cancel_kb
         )
         msg_id  = callback.message.message_id
@@ -2952,35 +2952,58 @@ async def rem_text_input(message: Message, state: FSMContext):
     title_clean = raw.strip()
     dt_iso = None
     
-    # Try to extract date and time
-    # "завтра в 9", "7 мая в 9:00", "сегодня в 21:00"
-    m = _re_parse.search(r'(завтра|сегодня|послезавтра)\s+в\s+(\d{1,2})(?::(\d{2}))?', title_clean.lower())
+    # Try to extract date and time — order matters: most specific patterns first
+    MONTHS_P = {"января":1,"февраля":2,"марта":3,"апреля":4,"мая":5,"июня":6,
+                "июля":7,"августа":8,"сентября":9,"октября":10,"ноября":11,"декабря":12}
+
+    # Pattern 1: "сегодня/завтра/послезавтра в ЧЧ:ММ" OR "сегодня/завтра ЧЧ:ММ" (with comma or space)
+    m = _re_parse.search(
+        r'(завтра|сегодня|послезавтра)[,\s]+(?:в\s+)?(\d{1,2}):(\d{2})',
+        title_clean.lower()
+    )
     if m:
-        day_word, hh, mm = m.group(1), m.group(2), m.group(3) or "0"
-        title_clean = title_clean[:m.start()].strip() + " " + title_clean[m.end():].strip()
+        day_word, hh, mm = m.group(1), m.group(2), m.group(3)
+        title_clean = (title_clean[:m.start()].strip() + " " + title_clean[m.end():].strip()).strip()
         days_offset = {"сегодня": 0, "завтра": 1, "послезавтра": 2}.get(day_word, 0)
-        target = (now_p + _td_parse(days=days_offset)).replace(hour=int(hh), minute=int(mm), second=0, microsecond=0)
+        target = (now_p + _td_parse(days=days_offset)).replace(
+            hour=int(hh), minute=int(mm), second=0, microsecond=0)
         offset = target.strftime("%z")
         offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
         dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
     else:
-        # Try DD.MM or DD.MM.YY or DD.MM.YYYY with optional time
-        m = _re_parse.search(r'(\d{1,2})\s+(\w+)(?:\s+в\s+(\d{1,2})(?::(\d{2}))?)?', title_clean.lower())
+        # Pattern 2: "сегодня/завтра в Ч" (без минут)
+        m = _re_parse.search(
+            r'(завтра|сегодня|послезавтра)[,\s]+(?:в\s+)?(\d{1,2})(?!:)(\s|$)',
+            title_clean.lower()
+        )
         if m:
-            day, month_str = m.group(1), m.group(2)
-            hh2, mm2 = m.group(3) or "9", m.group(4) or "0"
-            MONTHS = {"января":1,"февраля":2,"марта":3,"апреля":4,"мая":5,"июня":6,
-                      "июля":7,"августа":8,"сентября":9,"октября":10,"ноября":11,"декабря":12}
-            month_num = MONTHS.get(month_str, now_p.month)
-            target = now_p.replace(year=now_p.year, month=month_num, day=int(day),
-                                   hour=int(hh2), minute=int(mm2), second=0, microsecond=0)
-            if target < now_p:
-                target = target.replace(year=target.year + 1)
+            day_word, hh = m.group(1), m.group(2)
+            title_clean = (title_clean[:m.start()].strip() + " " + title_clean[m.end():].strip()).strip()
+            days_offset = {"сегодня": 0, "завтра": 1, "послезавтра": 2}.get(day_word, 0)
+            target = (now_p + _td_parse(days=days_offset)).replace(
+                hour=int(hh), minute=0, second=0, microsecond=0)
             offset = target.strftime("%z")
             offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
             dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
-            # Clean title
-            title_clean = title_clean[:m.start()].strip() + " " + title_clean[m.end():].strip()
+        else:
+            # Pattern 3: "7 мая в 9:00" или "7 мая в 9"
+            m = _re_parse.search(
+                r'(\d{1,2})\s+(января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)'
+                r'(?:\s+в\s+(\d{1,2})(?::(\d{2}))?)?',
+                title_clean.lower()
+            )
+            if m:
+                day, month_str = m.group(1), m.group(2)
+                hh2, mm2 = m.group(3) or "9", m.group(4) or "0"
+                month_num = MONTHS_P.get(month_str, now_p.month)
+                target = now_p.replace(year=now_p.year, month=month_num, day=int(day),
+                                       hour=int(hh2), minute=int(mm2), second=0, microsecond=0)
+                if target < now_p:
+                    target = target.replace(year=target.year + 1)
+                offset = target.strftime("%z")
+                offset_f = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+                dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_f}")
+                title_clean = (title_clean[:m.start()].strip() + " " + title_clean[m.end():].strip()).strip()
     
     if not dt_iso:
         target = (now_p + _td_parse(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
@@ -2990,7 +3013,7 @@ async def rem_text_input(message: Message, state: FSMContext):
     
     title_clean = title_clean.strip().rstrip(".,;!")
     if not title_clean or len(title_clean) < 2:
-        await message.answer("🔔 Не поняла. Напиши: <b>Позвонить маме 7 мая в 9:00</b>", parse_mode="HTML")
+        await message.answer("🔔 Не поняла. Напиши: <b>Купить продукты 7 мая в 9:00</b>", parse_mode="HTML")
         await state.clear()
         return
     
@@ -3084,12 +3107,12 @@ def _parse_weekdays(text: str) -> str:
 
 def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
     btns = [
-        [InlineKeyboardButton(text="🔁 Каждый день",   callback_data="rem_rp_daily")],
-        [InlineKeyboardButton(text="📅 Каждую неделю", callback_data="rem_rp_weekly")],
-        [InlineKeyboardButton(text="🗓 Каждый месяц",  callback_data="rem_rp_monthly")],
-        [InlineKeyboardButton(text="🌿 Каждый год",    callback_data="rem_rp_yearly")],
+        [InlineKeyboardButton(text="🔁 Каждый день",    callback_data="rem_rp_daily")],
+        [InlineKeyboardButton(text="📅 Раз в неделю",   callback_data="rem_rp_weekly")],
+        [InlineKeyboardButton(text="🗓 Раз в месяц",    callback_data="rem_rp_monthly")],
+        [InlineKeyboardButton(text="🌿 Раз в год",      callback_data="rem_rp_yearly")],
         [InlineKeyboardButton(text="✍️ По дням недели", callback_data="rem_rp_custom")],
-        [InlineKeyboardButton(text="← Назад",          callback_data="rem_back_to_confirm")],
+        [InlineKeyboardButton(text="← Назад",           callback_data="rem_back_to_confirm")],
     ]
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
@@ -4720,6 +4743,20 @@ async def delete_confirm_2(message: Message, state: FSMContext):
 # ─── Engineer chat ────────────────────────────────────────────────────────────
 
 
+
+
+
+@router.message(Command("restart"))
+async def cmd_restart(message: Message, state: FSMContext):
+    """Soft restart — clears FSM state and shows main menu."""
+    await state.clear()
+    user_id = str(message.from_user.id)
+    _clear_history(user_id)
+    await message.answer(
+        "🔄 Бот перезагружен. Всё в порядке!",
+        reply_markup=get_main_keyboard()
+    )
+    await _show_profile(user_id, message)
 
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
@@ -8148,7 +8185,7 @@ async def on_startup():
     from aiogram.types import BotCommand
     await bot.set_my_commands([
         BotCommand(command="start",     description="🌱 Войти в сад"),
-        BotCommand(command="info",      description="ℹ️ Возможности"),
+        BotCommand(command="restart",   description="🔄 Перезагрузить бота"),
         BotCommand(command="privacy",   description="🔐 Мои данные"),
         BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
