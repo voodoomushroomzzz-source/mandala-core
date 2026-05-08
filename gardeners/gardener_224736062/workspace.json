@@ -403,6 +403,13 @@
       "datetime_iso": "2026-05-09T10:00",
       "repeat": "custom_days:mon,sat",
       "active": true
+    },
+    {
+      "id": "rem_724419c7",
+      "title": "гг",
+      "datetime_iso": "2026-05-09T10:00+03:00",
+      "repeat": "once",
+      "active": true
     }
   ],
   "_decay_date": "2026-05-08",
@@ -454,10 +461,5 @@
       "resonance_bonus": 3,
       "icon": "🌱"
     }
-  ],
-  "_pending_reminder_create": {
-    "_rem_title": "гг",
-    "_rem_dt": "2026-05-09T10:01+03:00",
-    "_rem_repeat": "custom_days:mon,sat"
-  }
+  ]
 }
