@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.3"
+BOT_VERSION = "7.39.4"
 BOT_LATEST_UPDATE = {
     "version": "7.39.0",
     "date": "2026-05-06",
@@ -6107,10 +6107,10 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
                 t_cnt = d.get("tasks", 0)
                 a_cnt = d.get("achievements", 0)
                 r_delta = d.get("resonance_delta", 0)
-                if t_cnt > 0 or a_cnt > 0:
+                if t_cnt > 0 or a_cnt > 0 or r_delta > 0:
                     has_data = True
                     parts = []
-                    if show_tasks and t_cnt > 0:
+                    if t_cnt > 0:
                         parts.append(f"{t_cnt} задач")
                     if a_cnt > 0:
                         parts.append(f"{a_cnt} достижений")
@@ -6119,6 +6119,9 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
                         if r_delta > 0:
                             line += f" · +{r_delta}% резонанс"
                         lines.append(line)
+                    else:
+                        # Only resonance delta, no tasks/achievements
+                        lines.append(f"  {sname} — +{r_delta}% резонанс")
             if not has_data:
                 lines.append("  нет активности")
         # Analytics
