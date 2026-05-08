@@ -410,6 +410,13 @@
       "datetime_iso": "2026-05-09T10:00+03:00",
       "repeat": "once",
       "active": true
+    },
+    {
+      "id": "rem_41767a14",
+      "title": "шме",
+      "datetime_iso": "2026-05-09T10:00+03:00",
+      "repeat": "custom_days:mon,sat",
+      "active": true
     }
   ],
   "_decay_date": "2026-05-08",
