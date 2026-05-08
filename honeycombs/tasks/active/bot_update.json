@@ -1,128 +1,190 @@
 {
-    "task_id": "T-20260408-1030",
-    "name": "Telegram Bot — Gentle Companion for Garden",
-    "status": "in_progress",
-    "priority": "HIGH",
-    "deadline": "2026-06-01",
-    "created": "2026-04-01",
-    "updated": "2026-05-06",
-    "progress": 99,
-    "current_version": "7.38.1",
-    "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
-    "dev_rules": [
-        "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
-        "Update BOT_VERSION and BOT_LATEST_UPDATE on every patch",
-        "Every patch is applied to the actual bot file — always check for previous patches first",
-        "Monolithic file — all changes in one bot.py, no split files"
+  "task_id": "T-20260408-1030",
+  "name": "Telegram Bot — Gentle Companion for Garden",
+  "status": "in_progress",
+  "priority": "HIGH",
+  "deadline": "2026-06-01",
+  "created": "2026-04-01",
+  "updated": "2026-05-08",
+  "progress": 78,
+  "current_version": "7.40.0",
+  "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
+  "dev_rules": [
+    "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
+    "Update BOT_VERSION and BOT_LATEST_UPDATE on every patch",
+    "Every patch is applied to the actual bot file — always check for previous patches first",
+    "Monolithic file — all changes in one bot.py, no split files",
+    "All patches applied via patcher scripts — never edit bot.py directly",
+    "Each patcher targets one bot.py from GitHub — always git pull before running",
+    "Deploy and test after each patcher — do not stack unverified patches"
+  ],
+  "done": {
+    "core_features": [
+      "/start — onboarding with philosophy + architect request flow",
+      "/profile — resonance, achievements, tasks, groups (5-sphere card)",
+      "/achievements — monthly analytics by sphere",
+      "/resonance — resonance level + growth history",
+      "/ask — free dialogue on any topic (Ahimsa)",
+      "/leave — leave garden with confirmation",
+      "/privacy — data info (stub)",
+      "Proactive messages — morning brief, evening check-in (max 1/day)",
+      "GitHub API — read/write profile.json, workspace.json, memory.json",
+      "Soft-fail when GitHub API is unavailable",
+      "Architect approval gate — whitelist.json + Telegram buttons",
+      "Web search — domain categories, Yandex priority, SR synthesis",
+      "Bulk add tasks — dash/numbered list with deadline",
+      "Bulk edit deadline — multiple tasks or entire group",
+      "Groups — create, move tasks, always visible in profile",
+      "Roadmaps — bulk add tasks, sorted by deadline, progress bars",
+      "Achievements — via chat, by sphere, duplicate protection",
+      "Onboarding — gender, Welcome Flow, deep_profile recording",
+      "Version notifications — BOT_VERSION + changelog on deploy",
+      "Function map in SR prompt — all 35 intents with bulk variants",
+      "Auto-cleanup of empty tasks on load",
+      "5-Sphere Resonance — health/creativity/work/connections/growth",
+      "Living Memory — gardener portrait updated daily",
+      "Checklist system — create, toggle, edit, reorder, 100%→achievement",
+      "Reminder system — once/daily/weekdays, per-user timezone",
+      "Voice messages — Groq Whisper transcription → intent routing",
+      "Deep Profile — streak detection, sphere patterns, reflection hints",
+      "Roadmap task cleanup — orphaned task_ids auto-removed"
     ],
-    "done": {
-        "core_features": [
-            "/start — onboarding with philosophy + architect request flow",
-            "/profile — resonance, achievements, tasks, groups (5-sphere card)",
-            "/achievements — monthly analytics by sphere",
-            "/resonance — resonance level + growth history",
-            "/ask — free dialogue on any topic (Ahimsa)",
-            "/leave — leave garden with confirmation",
-            "/privacy — data info (stub)",
-            "Proactive messages — morning brief, evening check-in (max 1/day)",
-            "GitHub API — read/write profile.json, workspace.json, memory.json",
-            "Soft-fail when GitHub API is unavailable",
-            "Architect approval gate — whitelist.json + Telegram buttons",
-            "Web search — domain categories, Yandex priority, SR synthesis",
-            "Bulk add tasks — dash/numbered list with deadline",
-            "Bulk edit deadline — multiple tasks or entire group",
-            "Groups — create, move tasks, always visible in profile",
-            "Roadmaps — bulk add tasks, sorted by deadline, progress bars",
-            "Achievements — via chat, by sphere, duplicate protection",
-            "Onboarding — gender, Welcome Flow, deep_profile recording",
-            "Version notifications — BOT_VERSION + changelog on deploy",
-            "Function map in SR prompt — all 35 intents with bulk variants",
-            "Auto-cleanup of empty tasks on load",
-            "5-Sphere Resonance — health/creativity/work/connections/growth (v7.26+)",
-            "Living Memory — gardener portrait updated daily, interests from tasks/dialogue",
-            "Checklist system — create, toggle, edit, reorder, 100%→achievement",
-            "Reminder system — once/daily/weekdays, per-user timezone",
-            "Voice messages — Groq Whisper transcription → intent routing",
-            "Deep Profile — streak detection, sphere patterns, reflection hints",
-            "Roadmap task cleanup — orphaned task_ids auto-removed"
-        ],
-        "v7_30_fixes": [
-            "Fix: _load_user ready flag only if profile loaded (prevents false onboarding)",
-            "Fix: cmd_start await ensure_user_loaded before profile check (race condition)"
-        ],
-        "v7_31_fixes": [
-            "Critical fixes (patches 18a+18b+18c): health() endpoint, store_add_resonance race condition, /groups fix",
-            "Dead code removal (patch 19): 5 unused handlers, 3 keyboards, 2 legacy functions",
-            "Emotion negation fix (patch 19): _repair_json fallback, _detect_emotion context negation",
-            "UX (patch 19): welcome flow, morning catch-up, bulk feedback, resilient welcome flow, checklist auto-achievement",
-            "CIS timezone hardcode (patch 18b): bypass geopy for 12 cities",
-            "Profile unification (patch 18a): cmd_profile → _build_profile_card"
-        ],
-        "v7_31_patches_today": [
-            "Patch 20: SR Prompt Architecture — split into CORE_PROMPT + INTENT_MAP, 94% token savings",
-            "Patch 20b: Reminders timezone fix, Interest Decay (30d/14d)",
-            "HTML format rule in CORE_PROMPT, post-processing strip",
-            "Disabled catch-up morning greeting (scheduler only)",
-            "Changed 'наблюдаю' → 'учусь у тебя' in info text",
-            "Removed /sr_report mention from info text"
-        ],
-        "v7_32_to_v7_38": [
-            "v7.32: Profile unification + 5-sphere sync in profile",
-            "v7.33: Profile v2 — reminders today count, group task counts, 3-task limit, dividers, compact brief",
-            "v7.34: Model swap to DeepSeek V4 Flash, profile message cleanup, divider spacing",
-            "v7.35: Profile buttons, achievements counter only, auto-delete checklist, leave architect notify",
-            "v7.36: Bug fixes — single divider, checklist delete returns to menu, back buttons → profile, bold reminders",
-            "v7.37: Reminders v2 — two-step creation, repeat picker (weekly/monthly/yearly/weekends/custom_days), edit mode, timezone fix",
-            "v7.38: Reminders today list in profile, today tasks block, fix duplicates, voice repeat picker, /info command, simplified main menu",
-            "v7.38.1: Roadmap today tasks under progress bar, reminder dot instead of bell, removed duplicate today block"
-        ]
+    "v7_38_to_v7_40": [
+      "v7.38: Reminders today list in profile, today tasks block, fix duplicates, voice repeat picker",
+      "v7.38.1: Roadmap today tasks under progress bar, reminder dot, removed duplicate today block",
+      "v7.39: Achievements screen — tasks hidden (show_tasks=False fixed)",
+      "v7.39: Back nav from profile edit → new full profile (fixed old single-button profile)",
+      "v7.39: Callback collision fix — rem_edit_title/dt/repeat renamed to redit_title/dt/repeat",
+      "v7.39: FSM routing fix — TaskEditStates and TaskStates rem_ filters narrowed to avoid swallowing reminder callbacks",
+      "v7.39: cb_rem_repeat_pick — set_state now preserves FSM data",
+      "v7.40: Repeat picker redesigned — 5 buttons (daily/weekly/monthly/yearly/custom days), one tap = done",
+      "v7.40: Text input for custom weekdays — parses пн/вт/ср, будние, выходные, full names",
+      "v7.40: Date parser improved — smarter regex order, 'название сегодня 22:59' now parses correctly",
+      "v7.40: Reminder example changed to neutral 'Купить продукты'",
+      "v7.40: Repeat button labels — 'Раз в неделю/месяц/год' instead of 'Каждую'",
+      "v7.40: /restart command added (soft FSM clear + profile show), /info removed from menu"
+    ]
+  },
+  "known_issues": [
+    "Repeat value edge case: on confirm screen repeat may show 'once' if FSM and workspace are both stale — under investigation",
+    "Daily SR report arrives empty (Активность/Портреты empty) — _daily_stats lost on Render restart before 21:00",
+    "Voice commands: compound phrases like 'перенеси дедлайн задачи X на воскресенье' not recognized consistently",
+    "Resonance shows 100% incorrectly for some gardeners — calculation logic needs audit",
+    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute the intent",
+    "Birthday greeting sent at morning brief time even if user is active after 00:00"
+  ],
+  "observations": {
+    "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
+    "markdown_leak": "SR still generates Markdown despite HTML-only rules. Fixed by moving format rule to CORE_PROMPT + post-processing strip.",
+    "catchup_annoying": "Morning catch-up on every message after restart irritated users. Disabled — only scheduler now triggers morning greeting.",
+    "rate_limit": "Qwen Flash hits rate limit (200 req/day). DeepSeek V4 Flash now primary.",
+    "reminders_phantom": "Anton (Almaty) created reminders before timezone fix. Cleaned manually.",
+    "render_sleep": "Render free tier sleeps after 15min idle — _daily_stats in-memory dict resets. Need persistence layer for daily stats.",
+    "setstate_fsm": "aiogram 3 MemoryStorage does NOT clear data on set_state — confirmed. Repeat loss was caused by workspace/FSM desync, not set_state behavior."
+  },
+  "planned_patches": {
+    "P-12": {
+      "name": "Пустые отчёты СР — персистентность daily_stats",
+      "priority": "HIGH",
+      "problem": "Render free tier перезапускает бот каждые ~1ч при отсутствии трафика. _daily_stats — это dict в памяти Python, он обнуляется при каждом перезапуске. К 21:00 (время отправки отчёта) stats уже пустые — отчёт показывает только 'Всё остальное в норме'.",
+      "solution": "При каждом _track_interaction добавлять запись в _pending_writes['honeycombs/sessions/daily_stats_live.json']. При старте бота в on_startup — загружать daily_stats_live.json если его дата совпадает с today(). При отправке отчёта — сбрасывать файл.",
+      "files_affected": ["bot.py: _track_interaction, on_startup, _send_daily_report"],
+      "risk": "medium"
     },
-    "observations": {
-        "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
-        "markdown_leak": "SR still generates Markdown despite HTML-only rules. Fixed by moving format rule to CORE_PROMPT + post-processing strip.",
-        "catchup_annoying": "Morning catch-up on every message after restart irritated users. Disabled — only scheduler now triggers morning greeting.",
-        "rate_limit": "Qwen Flash hits rate limit (200 req/day). DeepSeek V4 Flash now primary. Consider direct Alibaba API key or self-hosted vLLM.",
-        "reminders_phantom": "Anton (Almaty) created reminders before timezone fix. Cleaned manually. Timezone fix works now."
+    "P-13": {
+      "name": "Счётчик задач в профиле + баг закрытых задач в достижениях",
+      "priority": "MEDIUM",
+      "problem": "1) В шапке профиля нет общего счётчика задач (есть только по группам). У роадмапов и напоминаний счётчик есть (X/Y), у задач — нет. 2) Закрытые задачи не появляются в статистике достижений за месяц — скорее всего monthly stats не пишутся при завершении задачи через ИИ (только через кнопку).",
+      "solution": "1) В _build_profile_card добавить строку 'X активных задач · Y всего' в шапку. 2) Найти все места где задача помечается выполненной (intent complete_task, кнопка done) и убедиться что _daily_stats[uid]['tasks_completed'] инкрементируется везде.",
+      "files_affected": ["bot.py: _build_profile_card, free_conversation intent handler"],
+      "risk": "low"
     },
-    "planned": {
-        "v7_39": [
-            "SR Learning Loop — sr_observations[], sphere_history[], emotional_signal markers → SR learns from past interactions",
-            "Voice compound commands — 'добавь задачу купить хлеб на завтра в группу дом' in one phrase",
-            "/sr_report v2 — SR synthesis every 3 days, auto-sent or on-demand"
-        ],
-        "model_optimization": [
-            "Direct Alibaba DashScope API key for Qwen (2000 req/day free tier)",
-            "Or self-hosted vLLM on GPU server (RTX 4090) when scaling to 10+ gardeners",
-            "Current: OpenRouter → DeepSeek V4 Flash (primary) → Qwen Flash (fallback)"
-        ]
+    "P-14": {
+      "name": "Закрепление сообщений по запросу",
+      "priority": "MEDIUM",
+      "problem": "Пользователь хочет закрепить любое сообщение бота командой в диалоге ('закрепи это'). Сейчас такого intent'а нет. Закреплённое сообщение должно: 1) не удаляться ботом при чистке, 2) храниться в workspace['pinned_message'] с message_id и текстом, 3) открепляться если попросить закрепить другое.",
+      "solution": "Добавить intent 'pin_message' в SR промпт. В free_conversation при этом intent'е: вызвать bot.pin_chat_message(message_id), сохранить в workspace['pinned_message'] = {id, text, date}. При новом закрепе — unpin старый. При удалении сообщений — проверять pinned_message_id и пропускать его.",
+      "files_affected": ["bot.py: SR_SYSTEM_PROMPT intent map, free_conversation handler, message cleanup logic"],
+      "risk": "medium"
     },
-    "acceptance_criteria": [
-        "All /commands respond correctly with gardener data",
-        "Proactive messages follow silence_policy and ahimsa_guardrails",
-        "Bot continues in degraded mode when GitHub API is down",
-        "Gardener can /leave gracefully",
-        "New gardener sees philosophy intro + explicit consent before onboarding",
-        "Architect receives Telegram notification on new gardener request",
-        "Web search returns structured results without Markdown artifacts",
-        "All 35 intents work correctly including bulk operations",
-        "Version notifications sent automatically on deploy",
-        "SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced from 8000 to ~500",
-        "Reminders respect gardener timezone with offset storage",
-        "SR responses use HTML formatting only, no Markdown",
-        "Profile shows fresh resonance from 5 spheres"
-    ],
-    "health": {
-        "status": "healthy",
-        "last_check": "2026-05-06",
-        "notes": "Bot v7.38.1 live. Roadmap today tasks visible under progress bar. Reminder list uses dot instead of bell. Duplicate today block removed. 4 gardeners active. DeepSeek V4 Flash primary."
+    "P-15": {
+      "name": "Голосовые команды — улучшение распознавания intent'ов",
+      "priority": "MEDIUM",
+      "problem": "Сложные голосовые команды ('перенеси дедлайн задачи X на воскресенье', 'добавь в роадмап') не распознаются с первого раза. Бот отвечает 'не смог распознать команду'. Причина: промпт не содержит достаточно примеров для сложных составных фраз. Также голосовые команды для напоминаний и роадмапов всегда идут в free_conversation вместо специализированных handlers.",
+      "solution": "1) Расширить примеры в INTENT_MAP для задач/роадмап/напоминаний/чеклистов — добавить 5-7 составных фраз на каждый intent. 2) В handle_voice добавить маршрутизацию в reminder/roadmap FSM состояния если intent распознан. 3) Улучшить промпт понимания дат и дней недели в контексте задач.",
+      "files_affected": ["bot.py: SR_SYSTEM_PROMPT INTENT_MAP, handle_voice, free_conversation"],
+      "risk": "medium"
     },
-    "future_scaling": {
-        "current_state": {
-            "gardeners": 4,
-            "daily_requests": "~50-100",
-            "llm_provider": "OpenRouter (deepseek/deepseek-v4-flash primary, qwen/qwen3.5-flash-02-23 fallback)",
-            "hosting": "Render (free tier, 512MB RAM, auto-sleep after 15min idle)",
-            "monthly_cost": "~$2 (OpenRouter tokens only)"
-        }
+    "P-16": {
+      "name": "День рождения — поздравление сразу после 00:00",
+      "priority": "LOW",
+      "problem": "Поздравление с днём рождения отправляется только в момент утреннего брифа (scheduled). Если пользователь пишет после 00:00 в свой день рождения — бот не поздравляет до утра. Это выглядит странно.",
+      "solution": "В _track_interaction или в начале free_conversation проверять: если today() == birthday пользователя и поздравление ещё не отправлено сегодня (флаг в _proactive_sent_today) — отправить поздравление немедленно перед обработкой сообщения.",
+      "files_affected": ["bot.py: free_conversation или _track_interaction"],
+      "risk": "low"
+    },
+    "P-17": {
+      "name": "Аудит тайм-зон",
+      "priority": "MEDIUM",
+      "problem": "Несколько мест в боте используют Europe/Moscow захардкоженно вместо персональной тайм-зоны пользователя. Это критично для дедлайнов задач (показывают 'просроченные' хотя в тайм-зоне пользователя ещё сегодня), дней рождения (поздравление приходит не в полночь по местному времени), и _today() вызывается без tz в некоторых местах.",
+      "solution": "Аудит всех вызовов _today(), datetime.now(), strftime в боте. Везде где нужна дата/время пользователя — использовать store_get_profile(uid).companion_settings.timezone. Добавить helper _today_for_user(uid) который использует персональный tz.",
+      "files_affected": ["bot.py: _today, _build_profile_card, run_reminder_scheduler, _send_daily_report, birthday check"],
+      "risk": "medium"
+    },
+    "P-18": {
+      "name": "Резонанс 100% — аудит расчёта",
+      "priority": "MEDIUM",
+      "problem": "У некоторых садовников резонанс показывает 100% хотя это не соответствует реальности. Скорее всего накопилось большое число достижений/действий без decay, или формула расчёта имеет потолок который достигается слишком легко.",
+      "solution": "Изучить функцию расчёта резонанса и run_resonance_decay. Проверить: 1) правильно ли применяется decay, 2) есть ли cap на 100 и как он достигается, 3) нет ли двойного счёта при добавлении достижений. Откалибровать формулу.",
+      "files_affected": ["bot.py: store_add_resonance, run_resonance_decay, _build_profile_card resonance display"],
+      "risk": "medium"
+    },
+    "P-19": {
+      "name": "Достижения через DeepSeek — надёжность выполнения",
+      "priority": "MEDIUM",
+      "problem": "При добавлении достижений через голос или текст DeepSeek иногда генерирует ответ 'Достижение добавлено!' но intent не выполняется — достижение не сохраняется. Причина: модель отвечает в диалоговом стиле не возвращая структурированный JSON с action.",
+      "solution": "1) Добавить проверку: если intent=add_achievement но achievement не появился в store — повторить вызов с более строгим промптом. 2) Улучшить промпт для DeepSeek с явным требованием JSON-ответа при action-intent'ах. 3) Добавить логирование факта сохранения достижения.",
+      "files_affected": ["bot.py: free_conversation achievement handler, SR_SYSTEM_PROMPT"],
+      "risk": "medium"
     }
+  },
+  "acceptance_criteria": [
+    "All /commands respond correctly with gardener data",
+    "Proactive messages follow silence_policy and ahimsa_guardrails",
+    "Bot continues in degraded mode when GitHub API is down",
+    "Gardener can /leave gracefully",
+    "New gardener sees philosophy intro + explicit consent before onboarding",
+    "Architect receives Telegram notification on new gardener request",
+    "Web search returns structured results without Markdown artifacts",
+    "All 35 intents work correctly including bulk operations",
+    "Version notifications sent automatically on deploy",
+    "SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced",
+    "Reminders respect gardener timezone with offset storage",
+    "SR responses use HTML formatting only, no Markdown",
+    "Profile shows fresh resonance from 5 spheres",
+    "Repeat picker works correctly for all 5 modes including custom days",
+    "Daily SR report shows actual activity data"
+  ],
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-05-08",
+    "notes": "Bot v7.40 live. Repeat picker redesigned to 5-button UX. Date parser improved. /restart added. 4 gardeners active. Known issues: SR report empty, resonance 100% bug, voice compound commands. Next priority: P-12 (SR report persistence) and P-13 (task counter + achievements bug)."
+  },
+  "future_scaling": {
+    "current_state": {
+      "gardeners": 4,
+      "daily_requests": "~50-100",
+      "llm_provider": "OpenRouter (deepseek/deepseek-v4-flash primary, qwen fallback)",
+      "hosting": "Render (free tier, 512MB RAM, auto-sleep after 15min idle)",
+      "monthly_cost": "~$2 (OpenRouter tokens only)"
+    },
+    "next_milestone": {
+      "gardeners_target": 10,
+      "required_changes": [
+        "Persistent storage (Redis or PostgreSQL) instead of in-memory dicts",
+        "Direct DashScope API key for Qwen (2000 req/day free tier)",
+        "Render paid tier or VPS to eliminate auto-sleep"
+      ]
+    }
+  }
 }
