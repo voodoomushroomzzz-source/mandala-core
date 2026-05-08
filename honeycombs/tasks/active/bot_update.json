@@ -6,8 +6,8 @@
   "deadline": "2026-06-01",
   "created": "2026-04-01",
   "updated": "2026-05-09",
-  "progress": 85,
-  "current_version": "7.39.4",
+  "progress": 87,
+  "current_version": "7.39.5",
   "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
   "dev_rules": [
     "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
@@ -68,16 +68,15 @@
       "v7.39.1: P-12 fix — _all_uids from _store, daily_stats persistence, synthesis from observations",
       "v7.39.2: Version notification moved to morning brief, catch-up removed",
       "v7.39.3: Sphere name in close task reply (🌱 Рост +2% → 37%)",
-      "v7.39.4: Achievement stats show all spheres with any activity (tasks + achievements)"
+      "v7.39.4: Achievement stats show all spheres with any activity (tasks + achievements)",
+      "v7.39.5: P-16 done — full SR birthday greeting on first midnight interaction"
     ]
   },
   "known_issues": [
     "Repeat value edge case: on confirm screen repeat may show 'once' if FSM and workspace are both stale — under investigation",
-    "Daily SR report arrives empty (Активность/Портреты empty) — _daily_stats lost on Render restart before 21:00",
     "Voice commands: compound phrases like 'перенеси дедлайн задачи X на воскресенье' not recognized consistently",
     "Resonance shows 100% incorrectly for some gardeners — calculation logic needs audit",
-    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute the intent",
-    "Birthday greeting sent at morning brief time even if user is active after 00:00"
+    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute the intent"
   ],
   "observations": {
     "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
@@ -139,27 +138,9 @@
       "files_affected": [
         "bot.py: free_conversation или _track_interaction"
       ],
-      "risk": "low"
-    },
-    "P-17": {
-      "name": "Аудит тайм-зон",
-      "priority": "MEDIUM",
-      "problem": "Несколько мест в боте используют Europe/Moscow захардкоженно вместо персональной тайм-зоны пользователя. Это критично для дедлайнов задач (показывают 'просроченные' хотя в тайм-зоне пользователя ещё сегодня), дней рождения (поздравление приходит не в полночь по местному времени), и _today() вызывается без tz в некоторых местах.",
-      "solution": "Аудит всех вызовов _today(), datetime.now(), strftime в боте. Везде где нужна дата/время пользователя — использовать store_get_profile(uid).companion_settings.timezone. Добавить helper _today_for_user(uid) который использует персональный tz.",
-      "files_affected": [
-        "bot.py: _today, _build_profile_card, run_reminder_scheduler, _send_daily_report, birthday check"
-      ],
-      "risk": "medium"
-    },
-    "P-18": {
-      "name": "Резонанс 100% — аудит расчёта",
-      "priority": "MEDIUM",
-      "problem": "У некоторых садовников резонанс показывает 100% хотя это не соответствует реальности. Скорее всего накопилось большое число достижений/действий без decay, или формула расчёта имеет потолок который достигается слишком легко.",
-      "solution": "Изучить функцию расчёта резонанса и run_resonance_decay. Проверить: 1) правильно ли применяется decay, 2) есть ли cap на 100 и как он достигается, 3) нет ли двойного счёта при добавлении достижений. Откалибровать формулу.",
-      "files_affected": [
-        "bot.py: store_add_resonance, run_resonance_decay, _build_profile_card resonance display"
-      ],
-      "risk": "medium"
+      "risk": "low",
+      "status": "done",
+      "resolution": "Patched in v7.39.5: full SR birthday greeting on first interaction after midnight, morning scheduler skips if already sent, +1 achievement +5 growth resonance"
     },
     "P-19": {
       "name": "Достижения через DeepSeek — надёжность выполнения",
@@ -170,6 +151,48 @@
         "bot.py: free_conversation achievement handler, SR_SYSTEM_PROMPT"
       ],
       "risk": "medium"
+    },
+    "P-20": {
+      "name": "Повторяющиеся задачи",
+      "priority": "HIGH",
+      "problem": "Задачи создаются разово. Нет возможности настроить повторение как у напоминаний. После закрытия задачи с повтором — она исчезает, нужно вручную создавать заново.",
+      "solution": "Добавить поле repeat в модель задачи (once/daily/weekdays/weekends/weekly/monthly/yearly/custom_days). При закрытии: +достижение, +резонанс, автосоздание новой задачи с тем же repeat и дедлайном = старый + интервал. При незакрытой задаче с истекшим дедлайном: индикатор просрочки, СР напоминает о важности. Добавить repeat_picker в FSM создания задачи (как у напоминаний).",
+      "files_affected": [
+        "bot.py: TaskStates, _create_task_atomic, confirm_task, complete_task handler"
+      ],
+      "risk": "medium"
+    },
+    "P-21": {
+      "name": "Кнопки Задачи и Роадмапы в профиле",
+      "priority": "HIGH",
+      "problem": "В профиле нет прямого доступа к задачам и роадмапам. Садовник должен использовать голос/текст или помнить команды. Чеклисты и напоминания имеют кнопки, задачи и роадмапы — нет.",
+      "solution": "Добавить новый ряд кнопок под заголовком профиля: 🗂 Задачи и 🗺 Роадмапы. По нажатию — полноценное меню с созданием/редактированием/удалением (как у чеклистов и напоминаний). Остальные кнопки не трогать. Детали UI обсудить перед реализацией.",
+      "files_affected": [
+        "bot.py: _show_profile, _build_profile_card, get_tasks_mgmt_inline, get_roadmaps_mgmt_inline"
+      ],
+      "risk": "medium"
+    },
+    "P-22": {
+      "name": "Раздел инструкции и обучения",
+      "priority": "LOW",
+      "problem": "Новые садовники не знают всех возможностей бота. Нет структурированной справки. SR объясняет возможности в диалоге, но нет единого источника.",
+      "solution": "Команда /help с разделами по темам (задачи, роадмапы, чеклисты, напоминания, достижения, резонанс, поиск). С возможностью углубиться в каждый раздел. Детали и формат обсудить ближе к реализации.",
+      "files_affected": [
+        "bot.py: cmd_help, SR_SYSTEM_PROMPT help section",
+        "honeycombs/instructions/ — новые файлы инструкций"
+      ],
+      "risk": "low"
+    },
+    "P-23": {
+      "name": "Модульная архитектура бота",
+      "priority": "HIGH",
+      "problem": "bot.py — монолит ~3500 строк. Сложно редактировать, тестировать, ревьюить. Высокий порог входа для новых SR. Нет документации по архитектуре.",
+      "solution": "Разбить bot.py на модули: store.py (данные), github_api.py (синхронизация), keyboards.py (клавиатуры), handlers_*.py (обработчики по группам), scheduler.py (шедулеры), sr_prompt.py (промпты). Создать технический мануал со схемой модулей и их связей. Сохранить обратную совместимость — бот должен работать без изменений в логике.",
+      "files_affected": [
+        "bot.py → модули",
+        "docs/bot_architecture.md — техмануал"
+      ],
+      "risk": "high"
     }
   },
   "acceptance_criteria": [
@@ -192,7 +215,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-09",
-    "notes": "Bot v7.39.4 live. P-12 fixed: daily report now pulls _all_uids from _store, daily_stats persisted to GitHub, synthesis uses both observation sources. Version notification moved to morning brief. Sphere name shown on task close. Achievement stats show all spheres with any activity."
+    "notes": "Bot v7.39.5 live. P-12 done (daily report). P-16 done (birthday midnight). P-17/P-18 removed from plan. New: P-20 (repeating tasks), P-21 (Tasks/Roadmaps buttons in profile), P-22 (help section), P-23 (modular architecture)."
   },
   "future_scaling": {
     "current_state": {
