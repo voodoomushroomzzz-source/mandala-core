@@ -1241,15 +1241,16 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
 
 def _task_urgency_emoji(deadline: str) -> str:
     if not deadline:
-        return "\U0001f7e2"
+        return "\U0001f331"  # 🌱
     from datetime import datetime as _dt_urg, timedelta as _td_urg
     today = _dt_urg.now().strftime("%Y-%m-%d")
-    tomorrow = (_dt_urg.now() + _td_urg(days=1)).strftime("%Y-%m-%d")
-    if deadline < today:
-        return "\U0001f534"
-    if deadline <= tomorrow:
-        return "\U0001f7e1"
-    return "\U0001f7e2"
+    day_after = (_dt_urg.now() + _td_urg(days=2)).strftime("%Y-%m-%d")
+    if deadline <= today:
+        return "\U0001f525"  # 🔥
+    if deadline < day_after:
+        return "\u26a1"  # ⚡
+    return "\U0001f331"  # 🌱
+
 
 def _sort_tasks_smart(tasks: list) -> list:
     from datetime import datetime as _dt_st, timedelta as _td_st
@@ -1288,52 +1289,51 @@ def get_groups_list_inline(user_id: str) -> InlineKeyboardMarkup:
                 text=f"{emoji} {gname} ({count})",
                 callback_data=f"tgroup_open|{gid}"
             ),
-            InlineKeyboardButton(text="\u270f\ufe0f", callback_data=f"tgroup_edit|{gid}"),
-            InlineKeyboardButton(text="\U0001f5d1", callback_data=f"tgroup_delete|{gid}"),
         ])
     no_group = by_group.get("", [])
     btns.append([
         InlineKeyboardButton(
-            text=f"📂 Без группы ({len(no_group)})",
+            text=f"\U0001f4c2 \u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b ({len(no_group)})",
             callback_data="tgroup_open|__nogroup__",
         ),
     ])
-    btns.append([InlineKeyboardButton(text="\u2795 Новая группа", callback_data="tgroup_create")])
-    btns.append([InlineKeyboardButton(text="\u2190 Назад в профиль", callback_data="profile_back")])
+    btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0433\u0440\u0443\u043f\u043f\u0430", callback_data="tgroup_create")])
+    btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u0432 \u043f\u0440\u043e\u0444\u0438\u043b\u044c", callback_data="profile_back")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
+
 
 def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMarkup:
     all_tasks = store_get_tasks(user_id)
     groups_data = store_get_groups(user_id).get("groups", [])
     if group_id == "__nogroup__":
-        group_name = "Без группы"
-        # Исключаем задачи которые в роадмапах
+        group_name = "\u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b"
         roadmaps = store_get_roadmaps(user_id)
         rm_task_ids = {tid for rm in roadmaps for tid in rm.get("task_ids", [])}
         tasks = [t for t in all_tasks if t.get("status") != "completed" and not t.get("label_name") and t.get("task_id") not in rm_task_ids]
     else:
         group = next((g for g in groups_data if g["id"] == group_id), None)
-        group_name = group["name"] if group else "Группа"
+        group_name = group["name"] if group else "\u0413\u0440\u0443\u043f\u043f\u0430"
         tasks = [t for t in all_tasks if t.get("status") != "completed" and t.get("label_id") == group_id]
     tasks = _sort_tasks_smart(tasks)
     btns = []
     for t in tasks:
         tid = t.get("task_id", "")
-        title = t.get("title", "-")[:22]
+        title = t.get("title", "-")[:28]
         dl = t.get("deadline", "")
-        dl_short = f" · {dl}" if dl else ""
+        dl_short = f" \u00b7 {dl}" if dl else ""
         emoji = _task_urgency_emoji(dl)
         repeat_str = " \U0001f501" if t.get("repeat") else ""
         label = f"{emoji} {title}{repeat_str}{dl_short}"
         btns.append([
-            InlineKeyboardButton(text=label, callback_data=f"ttask_noop|{tid}"),
-            InlineKeyboardButton(text="\u2705", callback_data=f"ttask_done|{tid}"),
-            InlineKeyboardButton(text="\u270f\ufe0f", callback_data=f"ttask_edit|{tid}"),
-            InlineKeyboardButton(text="\U0001f5d1", callback_data=f"ttask_delete|{tid}"),
+            InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}"),
         ])
-    btns.append([InlineKeyboardButton(text="\u2795 Новая задача", callback_data=f"ttask_create|{group_id}")])
-    btns.append([InlineKeyboardButton(text="\u2190 Назад к группам", callback_data="tgroup_back_to_list")])
+    btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0437\u0430\u0434\u0430\u0447\u0430", callback_data=f"ttask_create|{group_id}")])
+    if group_id != "__nogroup__":
+        btns.append([InlineKeyboardButton(text="\u270f\ufe0f \u041f\u0435\u0440\u0435\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_edit|{group_id}")])
+        btns.append([InlineKeyboardButton(text="\U0001f5d1 \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_delete|{group_id}")])
+    btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u043a \u0433\u0440\u0443\u043f\u043f\u0430\u043c", callback_data="tgroup_back_to_list")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
+
 
 def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
     tasks = store_get_tasks(user_id)
