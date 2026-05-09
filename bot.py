@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.9"
+BOT_VERSION = "7.39.10"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
     "version": "7.39.9",
@@ -1294,7 +1294,7 @@ def get_groups_list_inline(user_id: str) -> InlineKeyboardMarkup:
     no_group = by_group.get("", [])
     btns.append([
         InlineKeyboardButton(
-            text=f"\U0001f4c2 Без группы ({len(no_group)})",
+            text=f"📂 Без группы ({len(no_group)})",
             callback_data="tgroup_open|__nogroup__",
         ),
     ])
@@ -1835,9 +1835,7 @@ async def cb_tgroup_delete_confirm(callback: CallbackQuery, state: FSMContext):
     except Exception:
         await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
 
-@router.callback_query(F.data.startswith("ttask_noop|"))
-async def cb_ttask_noop(callback: CallbackQuery):
-    await callback.answer()
+# ttask_noop removed — tasks are now direct edit buttons
 
 # ─── Checklist keyboards ──────────────────────────────────────────────────────
 
