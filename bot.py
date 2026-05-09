@@ -1299,7 +1299,7 @@ def get_groups_list_inline(user_id: str) -> InlineKeyboardMarkup:
             callback_data="tgroup_open|__nogroup__",
         ),
     ])
-    btns.append([InlineKeyboardButton(text="\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500", callback_data="cl_noop|sep")])
+    btns.append([InlineKeyboardButton(text="\U0001fab6", callback_data="cl_noop|sep")])
     btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0433\u0440\u0443\u043f\u043f\u0430", callback_data="tgroup_create")])
     btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u0432 \u043f\u0440\u043e\u0444\u0438\u043b\u044c", callback_data="profile_back")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
@@ -1328,7 +1328,7 @@ def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMark
         repeat_str = " \U0001f501" if t.get("repeat") else ""
         label = f"{emoji} {title}{repeat_str}{dl_short}"
         btns.append([InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}")])
-    btns.append([InlineKeyboardButton(text="\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500", callback_data="cl_noop|sep")])
+    btns.append([InlineKeyboardButton(text="\U0001fab6", callback_data="cl_noop|sep")])
     btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0437\u0430\u0434\u0430\u0447\u0430", callback_data=f"ttask_create|{group_id}")])
     if group_id != "__nogroup__":
         btns.append([InlineKeyboardButton(text="\u270f\ufe0f \u041f\u0435\u0440\u0435\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_edit|{group_id}")])
