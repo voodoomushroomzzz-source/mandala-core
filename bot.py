@@ -1558,11 +1558,6 @@ async def send_morning_greeting(telegram_id: str) -> None:
         # Use dedicated morning_sent flag — don't block if gardener already interacted today
         if _morning_sent.get(str(telegram_id)) == today_str:
             return
-        _morning_sent[str(telegram_id)] = today_str
-        # Persist last_morning_date to workspace for recovery after sleep
-        ws = store_get_workspace(str(telegram_id)) or {}
-        ws["last_morning_date"] = today_str
-        store_set_workspace(str(telegram_id), ws)
         name      = gardener.get("name", "Садовник")
         resonance = gardener.get("resonance_level", 0)
         ach_count = store_get_achievements_count(str(telegram_id))
@@ -1611,6 +1606,11 @@ async def send_morning_greeting(telegram_id: str) -> None:
             store_set_profile(str(telegram_id), gardener)
         text = "\n".join(lines)
         await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard(), disable_web_page_preview=True)
+        # Mark flags ONLY after successful send
+        _morning_sent[str(telegram_id)] = today_str
+        ws = store_get_workspace(str(telegram_id)) or {}
+        ws["last_morning_date"] = today_str
+        store_set_workspace(str(telegram_id), ws)
         _mark_proactive_sent(telegram_id)
     except Exception as e:
         logger.error(f"Morning brief error: {e}")
