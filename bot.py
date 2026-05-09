@@ -1183,8 +1183,8 @@ async def _show_profile(user_id: str, message: Message):
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="⚡ Задачи", callback_data="menu_tasks_mgmt_v2"),
             InlineKeyboardButton(text="🚀 Роадмапы", callback_data="menu_roadmaps_stub"),
+            InlineKeyboardButton(text="⚡ Задачи", callback_data="menu_tasks_mgmt_v2"),
         ],
         [
             InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
@@ -1307,7 +1307,10 @@ def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMark
     groups_data = store_get_groups(user_id).get("groups", [])
     if group_id == "__nogroup__":
         group_name = "Без группы"
-        tasks = [t for t in all_tasks if t.get("status") != "completed" and not t.get("label_name")]
+        # Исключаем задачи которые в роадмапах
+        roadmaps = store_get_roadmaps(user_id)
+        rm_task_ids = {tid for rm in roadmaps for tid in rm.get("task_ids", [])}
+        tasks = [t for t in all_tasks if t.get("status") != "completed" and not t.get("label_name") and t.get("task_id") not in rm_task_ids]
     else:
         group = next((g for g in groups_data if g["id"] == group_id), None)
         group_name = group["name"] if group else "Группа"
@@ -1597,7 +1600,7 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
             )
     elif field == "repeat":
         current = task.get("repeat", "once")
-        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="repeat")
+        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="repeat", _rem_repeat=current)
         await state.set_state(ReminderStates.waiting_for_repeat)
         try:
             await callback.message.edit_text(
@@ -1818,10 +1821,7 @@ async def cb_tgroup_delete_confirm(callback: CallbackQuery, state: FSMContext):
     g = next((x for x in groups if x["id"] == group_id), None)
     if g:
         tasks = store_get_tasks(user_id)
-        for t in tasks:
-            if t.get("label_id") == group_id:
-                t["label_id"] = None
-                t["label_name"] = ""
+        tasks = [t for t in tasks if t.get("label_id") != group_id]
         store_set_tasks(user_id, tasks)
         groups_data["groups"] = [x for x in groups if x["id"] != group_id]
         store_set_groups(user_id, groups_data)
@@ -4915,6 +4915,8 @@ async def task_deadline_cb(callback: CallbackQuery, state: FSMContext):
             "🔔 <b>Напоминание?</b>",
             reply_markup=get_reminder_keyboard(deadline)
         )
+    # Если создание из меню Задач — сохраняем group_id в FSM
+    # _ttask_create_group уже установлен в cb_ttask_create
 
 @router.message(StateFilter(TaskStates.waiting_for_custom_deadline))
 async def task_custom_deadline_input(message: Message, state: FSMContext):
