@@ -3508,8 +3508,46 @@ async def run_resonance_decay() -> None:
         logger.error(f"Resonance decay error: {e}", exc_info=True)
 
 
+async def _sr_engagement_message(telegram_id: str, days: int) -> str | None:
+    """Generate personalised engagement message via SR. Returns None on failure."""
+    try:
+        profile = store_get_profile(telegram_id) or {}
+        name = profile.get("name", "Садовник")
+        sr = store_get_sphere_resonance(telegram_id)
+        weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
+        tasks = store_get_tasks(telegram_id)
+        active = [t for t in tasks if t.get("status") != "completed"]
+        from datetime import datetime as _dtr_sr
+        today_sr = _dtr_sr.now().strftime("%Y-%m-%d")
+        overdue = [t for t in active if t.get("deadline") and t["deadline"] < today_sr]
+        overdue_titles = ", ".join(t["title"] for t in overdue[:3]) if overdue else "нет"
+        active_titles = ", ".join(t["title"] for t in active[:5]) if active else "нет задач"
+        phase_desc = {3: "лёгкая тишина", 6: "заметная пауза", 9: "неделя без вестей",
+                      12: "долгая тишина", 15: "две недели", 18: "почти три недели",
+                      21: "три недели"}.get(days // 3 * 3, "тишина")
+        weak_info = f"Слабые сферы: {', '.join(weak_spheres)}." if weak_spheres else "Все сферы сбалансированы."
+        prompt = (
+            f"Садовник {name} не писал {days} дней. Фаза: {phase_desc}.\n"
+            f"Активные задачи: {active_titles}.\n"
+            f"Просроченные: {overdue_titles}.\n"
+            f"{weak_info}\n\n"
+            f"Напиши одно тёплое, персонализированное сообщение (1-3 предложения). "
+            f"Будь как друг который заметил отсутствие и рад снова видеть человека. "
+            f"Не дави. Не требуй ответа. Не используй слово «замечаю». "
+            f"Используй эмодзи. Ответь ТОЛЬКО текстом сообщения, без JSON."
+        )
+        msg = await _call_openrouter([
+            {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском."},
+            {"role": "user", "content": prompt}
+        ])
+        if msg and len(msg.strip()) >= 10:
+            return msg.strip()
+    except Exception:
+        pass
+    return None
+
 async def _pick_engagement_message(telegram_id: str, days: int) -> str:
-    """Pick engagement message by silence level and MKB context."""
+    """Fallback engagement message by silence phase: 3/5/7/14/21 days."""
     profile = store_get_profile(telegram_id) or {}
     name    = profile.get("name", "Садовник")
     tasks   = store_get_tasks(telegram_id)
@@ -3517,24 +3555,26 @@ async def _pick_engagement_message(telegram_id: str, days: int) -> str:
     from datetime import datetime as _dtr4
     today_s = _dtr4.now().strftime("%Y-%m-%d")
     overdue = [t for t in active if t.get("deadline") and t["deadline"] < today_s]
+    if days >= 21:
+        return f"🌿"
     if days >= 14:
         return f"Буду здесь, {name}, когда понадоблюсь. 🌱"
     if days >= 7:
-        return (f"{name}, замечаю тишину уже {days} дней. Всё хорошо? 🌿\n\n"
-                f"Иногда молчание — тоже ответ. Просто хочу убедиться.")
+        return (f"{name}, тишина уже неделю. Всё хорошо? 🌿\n\n"
+                f"Просто хочу убедиться — я рядом.")
     if days >= 5:
         if overdue:
             t = overdue[0]
             return f"«{t['title']}» висит уже несколько дней, {name}.\n\nЧто-то изменилось с этим?"
+        sphere_names = {"health": "здоровьем", "creativity": "творчеством", "work": "работой",
+                        "connections": "общением", "growth": "ростом"}
         from collections import Counter
-        areas  = [t.get("life_area", "world") for t in active]
-        sphere = Counter(areas).most_common(1)[0][0] if areas else "world"
-        questions = {
-            "health": "Как с тренировками и энергией на этой неделе?",
-            "spirit": "Что сейчас занимает больше всего в работе и творчестве?",
-            "world":  "Как люди вокруг — всё в порядке?"
-        }
-        return questions.get(sphere, "Что сейчас занимает твоё внимание?") + " 🌿"
+        areas = [t.get("life_area", "work") for t in active]
+        sphere = Counter(areas).most_common(1)[0][0] if areas else "work"
+        topic = sphere_names.get(sphere, "делами")
+        return f"{name}, как у тебя с {topic}? 🌿"
+    if days >= 3:
+        return f"{name}, как ты? Что происходит? 🌿"
     return f"{name}, как ты? 🌿"
 
 
