@@ -2,18 +2,18 @@
   "sr_id": "deepseek",
   "status": "active",
   "last_session": "2026-05-09",
-  "last_updated": "2026-05-09T19:00:00Z",
-  "next_step": "P-14_pin_messages",
-  "summary": "v7.39.5 live. P-12 (daily report fix), P-16 (birthday midnight SR greeting). Version in morning brief. Sphere name on task close. All spheres in stats. New plan: P-14, P-20-P-23 added. P-17/P-18 removed. 4 gardeners active.",
+  "last_updated": "2026-05-09T23:00:00Z",
+  "next_step": "P-19_auto_load_user_after_restart",
+  "summary": "v7.39.8 live. P-1 to P-8 done. Plan renumbered P-9 to P-19. Silence detection with SR-generated messages. Changelog dashboard. Edit profile back buttons. Next: P-19 — auto-load user after bot restart without requiring /start.",
   "first_steps": "ON FIRST LOAD: 1) Read task file at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Ask gardener for latest bot.py via GitHub API for pre-check before any patch.",
   "bot_state": {
-    "version": "7.39.5",
-    "progress": "87%",
+    "version": "7.39.8",
+    "progress": "90%",
     "repo": "voodoomushroomzzz-source/mandala-core",
     "platform": "Render webhook + aiogram 3 + OpenRouter",
     "model_primary": "deepseek/deepseek-v4-flash",
     "model_fallback": "qwen/qwen3.5-flash-02-23",
-    "file": "bot.py (~5500 lines)",
+    "file": "bot.py (~5600 lines)",
     "gardeners_active": 4,
     "gardeners": [
       {
@@ -57,116 +57,219 @@
     "note": "Patcher scripts ONLY — no direct file editing, no regex on entire large files. Use exact string replacement with .replace() in Python."
   },
   "what_we_built_this_session": {
-    "profile_v2": [
-      "Reminders today count (0/0 always visible)",
-      "Reminders today list (up to 3, with time)",
-      "Group task counts «Личное (8)»",
-      "3-task limit per group + ...и ещё N",
-      "Dividers «────────────────» after reminders",
-      "Today tasks block «🔥 Сегодня» under roadmaps (up to 3)",
-      "Empty groups at bottom",
-      "Profile buttons: [☑️ Checklists] [🔔 Reminders] [✏️ Profile] [💎 Achievements]",
-      "Profile message auto-delete old on new show",
-      "Roadmap today tasks under progress bar (up to 3, deadline <= today)"
-    ],
-    "reminders_v2": [
-      "Two-step creation: enter title+datetime → confirm with repeat picker",
-      "Repeat picker: one-time, daily, weekdays, weekends, weekly, monthly, yearly, custom_days (ПН-ВС)",
-      "Edit mode: ✏️ button per reminder, edit title/datetime/repeat",
-      "Timezone fix: today count uses gardener's timezone, not UTC",
-      "Scheduler supports all repeat types: weekly, monthly, yearly, weekends, custom_days",
-      "Voice/chat create_reminder intent opens two-step confirmation (not auto-create)"
-    ],
-    "achievements": [
-      "Counter only (achievements_count), no archive array",
-      "Dashboard shows sphere stats without tasks",
-      "Checklist 100% → auto-delete + achievement"
-    ],
-    "brief_and_changelog": [
-      "Compact morning brief: only today + tomorrow tasks",
-      "Compact changelog: formatted text in BOT_LATEST_UPDATE",
-      "Architect notified on gardener leave"
-    ],
-    "ui_fixes": [
-      "Single divider (reminders only)",
-      "Checklist delete returns to checklist menu",
-      "Back buttons in reminders/checklists → profile",
-      "Reminders title bold without colon",
-      "/info command, ℹ️ button removed from main menu",
-      "Main menu: only [👤 Profile]"
-    ],
-    "p12_daily_report_fix": [
-      "_all_uids from _store instead of GitHub API (no timeout in scheduler)",
-      "daily_stats persisted to honeycombs/sessions/daily_stats_live.json",
-      "daily_stats restored on startup after redeploy",
-      "synthesis uses both sr_observations and observations as sources",
-      "synthesis allows regeneration if core is empty"
-    ],
-    "p16_birthday_midnight": [
-      "Full SR birthday greeting on first interaction after midnight",
-      "Uses gardner portrait and context for personalised message",
-      "Morning scheduler skips if already sent (checks _birthday_sent flag)"
-    ],
-    "ux_improvements": [
-      "Version notification moved to morning brief (🆕 Версия X — что нового?)",
-      "Catch-up _check_version_notify removed from free_conversation",
-      "Sphere name shown on task close (🌱 Рост +2% → 37%)",
-      "Achievement stats show all spheres with any activity (tasks + achievements)"
-    ],
-    "workflow_update": [
-      "patch_status_emojis rule added to external_sr_workflow.json (v1.4.3)",
-      "✅ Patch N applied / ❌ Patch N anchor not found format"
-    ]
+    "session_date": "2026-05-09",
+    "start_version": "7.39.0",
+    "end_version": "7.39.8",
+    "patches_applied": 20,
+    "done": {
+      "p1_daily_report": [
+        "_all_uids from _store instead of GitHub API",
+        "daily_stats persisted to honeycombs/sessions/daily_stats_live.json",
+        "daily_stats restored on startup after redeploy",
+        "synthesis uses both sr_observations and observations",
+        "synthesis allows regeneration if core is empty"
+      ],
+      "p2_birthday": [
+        "Full SR birthday greeting on first interaction after midnight",
+        "Uses gardener portrait and context for personalised message",
+        "Morning scheduler skips if already sent"
+      ],
+      "version_in_brief": [
+        "Version notification moved to morning brief",
+        "🆕 Версия X — что нового? → deep link to /start changelog",
+        "Catch-up _check_version_notify removed from free_conversation"
+      ],
+      "sphere_on_close": [
+        "Sphere name shown on task close: 🌱 Рост +2% → 37%"
+      ],
+      "all_spheres_in_stats": [
+        "Achievement stats show all spheres with any activity (tasks + achievements)"
+      ],
+      "profile_back_buttons": [
+        "All 4 edit profile fields now have inline ← Назад to edit menu"
+      ],
+      "changelog_dashboard": [
+        "/changelog command + 🆕 Обновления in Telegram menu",
+        "Deep link from morning brief: ?start=changelog",
+        "BOT_LATEST_UPDATE refreshed with last 5 versions",
+        "Dev rule: update BOT_LATEST_UPDATE on EVERY patch"
+      ],
+      "silence_detection": [
+        "last_interaction_date persisted to workspace.json",
+        "SR-generated personalised messages on silence",
+        "Fallback templates if SR unavailable",
+        "Phase tracking: one message per phase, no spam",
+        "Rubrics: 3, 6, 9, 12, 15, 18, 21 days"
+      ],
+      "workflow_and_menu": [
+        "patch_status_emojis rule in external_sr_workflow.json v1.4.3",
+        "✅/❌ format for all patch results",
+        "Menu: 🔄 Перезагрузить (was 'Перезагрузить бота')",
+        "Menu: 🆕 Обновления added"
+      ]
+    }
   },
   "what_remains": {
-    "planned": [
-      "P-14: Pin/unpin bot messages by request",
-      "P-20: Repeating tasks (flexible repeat like reminders)",
-      "P-21: Tasks and Roadmaps buttons in profile",
-      "P-13: Task counter in profile + achievements bug",
-      "P-23: Modular architecture + tech manual",
-      "P-19: DeepSeek achievement reliability",
-      "P-15: Voice compound commands",
-      "P-22: /help section with instructions"
+    "plan_order": [
+      "P-19: Auto-load user after bot restart (HIGH)",
+      "P-11: Custom date button in reminder repeat picker (LOW)",
+      "P-9: Morning brief blocked by other proactive messages (HIGH)",
+      "P-10: Pin/unpin bot messages by request (MEDIUM)",
+      "P-12: Repeating tasks + custom date button (HIGH, merged)",
+      "P-13: Tasks and Roadmaps buttons in profile (HIGH)",
+      "P-14: Task counter in profile + achievements bug (MEDIUM)",
+      "P-15: Modular architecture + tech manual (HIGH)",
+      "P-16: DeepSeek achievement reliability (MEDIUM)",
+      "P-17: Voice compound commands (MEDIUM)",
+      "P-18: /help section with instructions (LOW)"
     ],
+    "patches_detail": {
+      "P-19": {
+        "name": "Автозагрузка пользователя после перезапуска",
+        "description": "Сейчас при деплое _store очищается. Первое сообщение получает ответ 'используй /start'. Нужно в free_conversation вызывать ensure_user_loaded автоматически.",
+        "files": [
+          "bot.py: free_conversation"
+        ],
+        "risk": "low"
+      },
+      "P-11": {
+        "name": "Кнопка '📆 Своя дата' в повторениях напоминаний",
+        "description": "В repeat_picker нет кнопки конкретной даты (ДД.ММ). Добавить кнопку, callback, парсинг даты, сохранение как custom_date:MM-DD.",
+        "files": [
+          "bot.py: _repeat_picker_keyboard, cb_rem_rp_select, _parse_weekdays, run_reminder_scheduler"
+        ],
+        "risk": "low"
+      },
+      "P-9": {
+        "name": "Утренний брифинг блокируется",
+        "description": "send_morning_greeting проверяет _can_send_proactive — общий флаг для всех проактивных сообщений. Если было сообщение тишины — брифинг не придёт. Убрать проверку, оставить только _morning_sent.",
+        "files": [
+          "bot.py: send_morning_greeting"
+        ],
+        "risk": "low"
+      },
+      "P-10": {
+        "name": "Закрепление сообщений",
+        "description": "Добавить intent 'pin_message'. При вызове: pin_chat_message, сохранить в workspace. При повторе — unpin старый.",
+        "files": [
+          "bot.py: SR_SYSTEM_PROMPT, free_conversation handler, message cleanup"
+        ],
+        "risk": "medium"
+      },
+      "P-12": {
+        "name": "Повторяющиеся задачи + своя дата",
+        "description": "Добавить repeat в модель задачи. При закрытии: +достижение, +резонанс, автосоздание новой с тем же repeat. При незакрытой — индикатор просрочки. Добавить repeat_picker как у напоминаний включая кнопку '📆 Своя дата'.",
+        "files": [
+          "bot.py: TaskStates, _create_task_atomic, confirm_task, complete_task handler, _repeat_picker_keyboard, _parse_weekdays, run_reminder_scheduler"
+        ],
+        "risk": "medium"
+      },
+      "P-13": {
+        "name": "Кнопки Задачи и Роадмапы в профиле",
+        "description": "Новый ряд кнопок: 🗂 Задачи и 🗺 Роадмапы. По нажатию — меню с созданием/редактированием/удалением как у чеклистов и напоминаний.",
+        "files": [
+          "bot.py: _show_profile, _build_profile_card, get_tasks_mgmt_inline, get_roadmaps_mgmt_inline"
+        ],
+        "risk": "medium"
+      },
+      "P-14": {
+        "name": "Счётчик задач + баг достижений",
+        "description": "В шапку профиля добавить 'X/Y задач'. Починить инкремент tasks_completed в _daily_stats при закрытии задачи.",
+        "files": [
+          "bot.py: _build_profile_card, free_conversation handler"
+        ],
+        "risk": "low"
+      },
+      "P-15": {
+        "name": "Модульная архитектура",
+        "description": "Разбить bot.py (~3500 строк) на модули: store, github_api, keyboards, handlers_*, scheduler, sr_prompt. Создать техмануал.",
+        "files": [
+          "bot.py → модули",
+          "docs/bot_architecture.md"
+        ],
+        "risk": "high"
+      },
+      "P-16": {
+        "name": "DeepSeek достижения",
+        "description": "DeepSeek иногда врёт про сохранение достижений. Добавить проверку: если достижение не в store — повторить с более строгим промптом.",
+        "files": [
+          "bot.py: free_conversation achievement handler, SR_SYSTEM_PROMPT"
+        ],
+        "risk": "medium"
+      },
+      "P-17": {
+        "name": "Голосовые команды",
+        "description": "Составные фразы не распознаются. Расширить INTENT_MAP, добавить маршрутизацию в handle_voice.",
+        "files": [
+          "bot.py: SR_SYSTEM_PROMPT, handle_voice, free_conversation"
+        ],
+        "risk": "medium"
+      },
+      "P-18": {
+        "name": "/help раздел",
+        "description": "Структурированная справка по всем функциям бота. Детали обсудить ближе к реализации.",
+        "files": [
+          "bot.py: cmd_help",
+          "honeycombs/instructions/"
+        ],
+        "risk": "low"
+      }
+    },
     "bugs_to_watch": [
+      "Morning brief blocked by other proactive messages — P-9",
       "DeepSeek V4 Flash stability — monitor",
       "HTML parse errors in SR responses — post-processing may miss edge cases",
-      "Repeat value edge case in reminder confirm screen"
+      "Repeat value edge case in reminder confirm screen",
+      "Resonance shows 100% incorrectly for some gardeners"
+    ],
+    "known_issues": [
+      "При перезапуске бота пользователь должен писать /start — P-19",
+      "Утренний брифинг не приходит если было другое проактивное сообщение — P-9",
+      "В repeat picker нет кнопки 'Своя дата' — P-11",
+      "Нет закрепления сообщений — P-10",
+      "Задачи без повторений — P-12",
+      "Нет кнопок Задачи/Роадмапы в профиле — P-13",
+      "Нет счётчика задач в профиле — P-14"
     ]
   },
   "gardener_context": {
-    "who": "Dima (Дима) — architect and first gardener",
-    "workspace": "VS Code on Windows, PowerShell terminal",
+    "who": "Дима (Dima, Dmitrii Levin) — архитектор и первый садовник",
+    "workspace": "VS Code на Windows, PowerShell терминал",
     "repo_path": "C:\\Users\\ivanl\\OneDrive\\Desktop\\Mandala\\mandala-core",
     "git_flow": "git add → git commit → git pull --rebase origin main → git push",
-    "python": "py command (Python 3.14.3)",
-    "deploy": "Render auto-deploys on git push"
+    "python": "py (Python 3.14.3)",
+    "deploy": "Render auto-deploys on git push к main",
+    "note": "Дима копирует блоки PowerShell и вставляет в терминал. Блок 2 — Python-скрипт, нужно вставить в открытый файл и сохранить перед блоком 3."
   },
   "critical_rules": [
-    "ALWAYS pre-check files via GitHub API before modifying",
+    "⚠️ FIRST: Read honeycombs/tasks/active/bot_update.json for full task context",
+    "ALWAYS pre-check files via GitHub API before modifying — NEVER assume local state",
     "ALWAYS use patcher scripts — never direct file replacement for >500 line files",
-    "ALWAYS three-block PowerShell format for patches",
-    "ALWAYS post-check after deploy — request updated file via API",
-    "NEVER assume local state — always fetch current version",
-    "ONE command per PowerShell block",
-    "Changelog must list ONLY working features — gardener verifies",
+    "ALWAYS three-block PowerShell format: Block 1 (New-Item), Block 2 (Python code), Block 3 (run + git)",
+    "ALWAYS post-check after deploy — request updated file via API to confirm correctness",
+    "ONE command per PowerShell block — gardener copies, pastes, presses Enter",
+    "Patch status: ✅ on success, ❌ on failure with reason — always prepend each line",
+    "Changelog: update BOT_LATEST_UPDATE on EVERY patch, keep last 5 versions, delete oldest",
     "BOT_LATEST_UPDATE.text is a single string with \\n, not multi-line",
-    "Morning brief: compact format, no auto-catchup, timezone-aware",
-    "Achievements: counter only, no archive array",
-    "Patch status: ✅ on success, ❌ on failure — always prepend"
+    "Morning brief: compact format, dedicated _morning_sent flag, timezone-aware",
+    "Achievements: counter only (achievements_count), no archive array",
+    "Silence detection: last_interaction_date in workspace, SR-generated messages, fallback templates",
+    "Never edit bot.py directly — always generate patcher script"
   ],
   "notes": [
-    "4 gardeners active, all with proactive_mode=true",
-    "Birthday check works: Антон Алматы 18.05, Яна 14.02, Антон Вл 15.11, Дима 26.10",
-    "rem_seed_hello sent to all 4 gardeners for 2026-05-07 11:00 (local timezone)",
-    "Whitelist at gardeners/whitelist.json",
-    "Workflow instructions at honeycombs/instructions/core/external_sr_workflow.json (v1.4.2)",
-    "Handoff files: handoff_claude.json and handoff_deepseek.json in honeycombs/sessions/",
-    "P-12 fixed: daily report no longer empty. _all_uids from _store, daily_stats persisted.",
-    "P-16 fixed: SR birthday greeting on first midnight interaction.",
-    "P-17 (timezone audit) and P-18 (resonance 100%) removed from plan.",
-    "New tasks: P-20 (repeating tasks), P-21 (profile buttons), P-22 (help), P-23 (modular architecture).",
-    "Workflow instructions updated to v1.4.3 with patch_status_emojis rule."
+    "4 садовника: Дима (Москва, 10:00), Антон (Алматы, 08:00), Антон (Владимир, 09:00), Яна (Москва, 09:30)",
+    "Whitelist: gardeners/whitelist.json",
+    "Workflow: honeycombs/instructions/core/external_sr_workflow.json (v1.4.3)",
+    "Handoff files: handoff_claude.json и handoff_deepseek.json в honeycombs/sessions/",
+    "v7.39.8 — silence detection with SR messages + fallback, 3/6/9/12/15/18/21 day phases",
+    "v7.39.7 — changelog dashboard, /changelog command, 🆕 Обновления in menu",
+    "v7.39.6 — edit profile back buttons fixed",
+    "v7.39.5 — P-2 birthday midnight SR greeting done",
+    "v7.39.1-4 — P-1 daily report fix, version in brief, sphere on close, all spheres in stats",
+    "Plan renumbered: P-1 to P-8 done, P-9 to P-19 in queue",
+    "P-12+P-13 merged into single P-12 (repeating tasks + custom date button)",
+    "P-17 (timezone audit) и P-18 (resonance 100%) removed from plan",
+    "Next milestone: 10 gardeners, Redis/Persistent DB, DashScope key for Qwen",
+    "Future scaling: Redis on Render for persistent storage when >10 gardeners"
   ]
 }
