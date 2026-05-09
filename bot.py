@@ -4674,6 +4674,15 @@ async def cmd_info(message: Message):
         parse_mode="HTML", reply_markup=get_main_keyboard()
     )
 
+@router.message(Command("changelog"))
+async def cmd_changelog(message: Message):
+    user_id = str(message.from_user.id)
+    _track_interaction(user_id)
+    profile = store_get_profile(user_id) or {}
+    name = profile.get("name", "Садовник")
+    text = BOT_LATEST_UPDATE.get("text", "").format(name=name)
+    await message.answer(text, reply_markup=get_main_keyboard())
+
 @router.message(Command("privacy"))
 async def cmd_privacy(message: Message):
     user_id = str(message.from_user.id)
@@ -8318,8 +8327,9 @@ async def on_startup():
     from aiogram.types import BotCommand
     await bot.set_my_commands([
         BotCommand(command="start",     description="🌱 Войти в сад"),
-        BotCommand(command="restart",   description="🔄 Перезагрузить бота"),
+        BotCommand(command="restart",   description="🔄 Перезагрузить"),
         BotCommand(command="privacy",   description="🔐 Мои данные"),
+        BotCommand(command="changelog", description="🆕 Обновления"),
         BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
