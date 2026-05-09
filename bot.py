@@ -63,7 +63,7 @@ SESSION_MAX_MESSAGES = 40
 BOT_VERSION = "7.39.10"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.9",
+    "version": "7.39.10",
     "date": "2026-05-09",
     "text": "🌱 Мандала · Что нового\
 \
@@ -1346,7 +1346,11 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
     group_name = task.get("label_name") or "Без группы"
     btns = [
         [InlineKeyboardButton(
-            text=f"\u270f\ufe0f Название: {task.get('title','-')[:18]}",
+            text=f"\u2705 Выполнить: {task.get('title','-')[:25]}",
+            callback_data=f"ttask_done|{task_id}"
+        )],
+        [InlineKeyboardButton(
+            text=f"\u270f\ufe0f Название: {task.get('title','-')[:28]}",
             callback_data=f"ttask_edit_field|{task_id}|title"
         )],
         [InlineKeyboardButton(
@@ -1807,7 +1811,7 @@ async def cb_tgroup_delete(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="\u2190 Назад", callback_data="tgroup_back_to_list")],
     ])
     await callback.message.edit_text(
-        f"\U0001f5d1 <b>Удалить группу «{g['name']}»?</b>\\n\\n{count} задач переместятся в «Без группы»",
+        f"\U0001f5d1 <b>Удалить группу «{g['name']}»?</b>\\n\\n{count} задач будут удалены",
         reply_markup=kb, parse_mode="HTML"
     )
 
@@ -3720,6 +3724,12 @@ async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
         return
     repeat = action
     data = await state.get_data()
+    _ttask_id_rps = data.get("_ttask_edit_id", "")
+    _ttask_field_rps = data.get("_ttask_edit_field", "")
+    if _ttask_id_rps and _ttask_field_rps == "repeat":
+        await state.update_data(_rem_repeat=repeat)
+        await cb_rem_rp_done(callback, state)
+        return
     if not data.get("_rem_title") and not data.get("_rem_edit_id"):
         ws = store_get_workspace(user_id) or {}
         fallback = ws.get("_pending_reminder_create") or ws.get("_pending_reminder_edit") or {}
