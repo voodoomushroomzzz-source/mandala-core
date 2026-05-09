@@ -60,26 +60,23 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.7"
+BOT_VERSION = "7.39.8"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.6",
+    "version": "7.39.8",
     "date": "2026-05-09",
     "text": "🌱 Мандала · Что нового\n\n"
+            "v7.39.8 · 09.05.2026\n"
+            "  · Обнаружение тишины: СР пишет сам если садовник молчит 3+ дня\n"
+            "  · Сообщения тишины генерируются через SR, уникальные под пользователя\n\n"
+            "v7.39.7 · 09.05.2026\n"
+            "  · Чейнджлог-дашборд: /changelog, 🆕 Обновления в меню\n\n"
             "v7.39.6 · 09.05.2026\n"
             "  · Кнопки редактирования профиля с возвратом в меню\n\n"
             "v7.39.5 · 09.05.2026\n"
             "  · СР поздравляет с днём рождения при первом контакте после 00:00\n\n"
             "v7.39.4 · 09.05.2026\n"
-            "  · Все сферы в статистике достижений (задачи + достижения)\n\n"
-            "v7.39.3 · 09.05.2026\n"
-            "  · Сфера при закрытии задачи (🌱 Рост +2% → 37%)\n\n"
-            "v7.39.2 · 09.05.2026\n"
-            "  · Версия в утреннем брифинге, догонялка убрана\n\n"
-            "v7.39.1 · 09.05.2026\n"
-            "  · P-12: Пустые отчёты СР исправлены\n"
-            "  · daily_stats сохраняются при сне бота\n"
-            "  · Портреты садовников формируются из всех наблюдений",
+            "  · Все сферы в статистике достижений (задачи + достижения)",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -890,7 +887,12 @@ _intent_tracker: dict = {}  # uid → [last_intent, last_intent] for repeat dete
 
 def _track_interaction(telegram_id: str, intent: str = "", msg_type: str = "message") -> None:
     uid = str(telegram_id)
-    _last_interaction[uid] = _today()
+    today_str = _today()
+    _last_interaction[uid] = today_str
+    # Persist to workspace for silence detection
+    ws = store_get_workspace(uid) or {}
+    ws["last_interaction_date"] = today_str
+    store_set_workspace(uid, ws)
     # Daily stats
     if uid not in _daily_stats:
         _daily_stats[uid] = {"messages": 0, "tasks_created": 0, "tasks_completed": 0, "achievements": 0, "intents": {}}
@@ -3539,22 +3541,42 @@ async def _pick_engagement_message(telegram_id: str, days: int) -> str:
 async def check_silence_and_engage(telegram_id: str, gardener: dict) -> None:
     """Send proactive message if user silent 3+ days. Respects quiet hours."""
     try:
-        days = _days_since_last_interaction(telegram_id)
-        if days < 3 or days >= 15:
+        # Read last interaction from workspace (survives restarts)
+        ws = store_get_workspace(str(telegram_id)) or {}
+        last_str = ws.get("last_interaction_date", "")
+        if not last_str:
+            return  # no data yet
+        from datetime import datetime as _dse
+        try:
+            last_dt = _dse.strptime(last_str, "%Y-%m-%d")
+            days = (_dse.now() - last_dt).days
+        except Exception:
             return
+        if days < 3 or days >= 22:
+            return
+        # Only send once per silence phase
+        phase_key = f"silence_phase_{days // 3 * 3}"  # 3, 6, 9, 12, 15, 18, 21
+        if ws.get(phase_key):
+            return  # already sent for this phase
         if not _can_send_proactive(telegram_id):
             return
         from zoneinfo import ZoneInfo
-        from datetime import datetime as _dtr5
-        tz   = ZoneInfo(gardener.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
-        now_h = _dtr5.now(tz).hour
+        tz = ZoneInfo(gardener.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
+        now_h = _dse.now(tz).hour
         if now_h >= 22 or now_h < 9:
             return
-        text = await _pick_engagement_message(telegram_id, days)
+        # Try SR-generated message first, fallback to template
+        text = await _sr_engagement_message(telegram_id, days)
+        if not text:
+            text = await _pick_engagement_message(telegram_id, days)
         await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
         _mark_proactive_sent(telegram_id)
         if days >= 3:
             store_add_resonance(telegram_id, 1)
+        # Mark phase as sent
+        ws[phase_key] = True
+        store_set_workspace(str(telegram_id), ws)
+        _fire_sync()
     except Exception as e:
         logger.error(f"Engagement error {telegram_id}: {e}")
 
