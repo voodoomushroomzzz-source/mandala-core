@@ -373,7 +373,7 @@
       "id": "rem_60c996dc",
       "title": "Тест",
       "datetime_iso": "2026-05-10T10:00",
-      "repeat": "daily",
+      "repeat": "custom_date:2026-05-11",
       "active": true
     },
     {
