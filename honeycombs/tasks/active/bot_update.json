@@ -7,7 +7,7 @@
   "created": "2026-04-01",
   "updated": "2026-05-09",
   "progress": 90,
-  "current_version": "7.39.7",
+  "current_version": "7.39.8",
   "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
   "dev_rules": [
     "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
@@ -73,14 +73,16 @@
       "v7.39.4: Achievement stats show all spheres with any activity (tasks + achievements)",
       "v7.39.5: P-16 done — full SR birthday greeting on first midnight interaction",
       "v7.39.6: Edit profile fields — inline back buttons to edit menu",
-      "v7.39.7: Changelog dashboard via deep link, /changelog command in menu, BOT_LATEST_UPDATE refreshed with last 5 versions"
+      "v7.39.7: Changelog dashboard via deep link, /changelog command in menu, BOT_LATEST_UPDATE refreshed with last 5 versions",
+      "v7.39.8: Silence detection — workspace persistence, SR-generated engagement messages with fallback, 3/6/9/12/15/18/21 day phases"
     ]
   },
   "known_issues": [
-    "Repeat value edge case: on confirm screen repeat may show 'once' if FSM and workspace are both stale — under investigation",
-    "Voice commands: compound phrases like 'перенеси дедлайн задачи X на воскресенье' not recognized consistently",
+    "Morning brief blocked by other proactive messages — P-9",
+    "Repeat value edge case: on confirm screen repeat may show 'once' if FSM and workspace are both stale",
+    "Voice commands: compound phrases not recognized consistently",
     "Resonance shows 100% incorrectly for some gardeners — calculation logic needs audit",
-    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute the intent"
+    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute intent"
   ],
   "observations": {
     "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
@@ -92,7 +94,7 @@
     "setstate_fsm": "aiogram 3 MemoryStorage does NOT clear data on set_state — confirmed. Repeat loss was caused by workspace/FSM desync, not set_state behavior."
   },
   "planned_patches": {
-    "P-12": {
+    "P-1": {
       "name": "Пустые отчёты СР — персистентность daily_stats",
       "priority": "HIGH",
       "problem": "Render free tier перезапускает бот каждые ~1ч при отсутствии трафика. _daily_stats — это dict в памяти Python, он обнуляется при каждом перезапуске. К 21:00 (время отправки отчёта) stats уже пустые — отчёт показывает только 'Всё остальное в норме'.",
@@ -104,37 +106,7 @@
       "status": "done",
       "resolution": "Patched in v7.39.1-v7.39.4: _all_uids from _store, daily_stats persistence, synthesis from observations, sphere name in close reply, version in morning brief"
     },
-    "P-13": {
-      "name": "Счётчик задач в профиле + баг закрытых задач в достижениях",
-      "priority": "MEDIUM",
-      "problem": "1) В шапке профиля нет общего счётчика задач (есть только по группам). У роадмапов и напоминаний счётчик есть (X/Y), у задач — нет. 2) Закрытые задачи не появляются в статистике достижений за месяц — скорее всего monthly stats не пишутся при завершении задачи через ИИ (только через кнопку).",
-      "solution": "1) В _build_profile_card добавить строку 'X активных задач · Y всего' в шапку. 2) Найти все места где задача помечается выполненной (intent complete_task, кнопка done) и убедиться что _daily_stats[uid]['tasks_completed'] инкрементируется везде.",
-      "files_affected": [
-        "bot.py: _build_profile_card, free_conversation intent handler"
-      ],
-      "risk": "low"
-    },
-    "P-14": {
-      "name": "Закрепление сообщений по запросу",
-      "priority": "MEDIUM",
-      "problem": "Пользователь хочет закрепить любое сообщение бота командой в диалоге ('закрепи это'). Сейчас такого intent'а нет. Закреплённое сообщение должно: 1) не удаляться ботом при чистке, 2) храниться в workspace['pinned_message'] с message_id и текстом, 3) открепляться если попросить закрепить другое.",
-      "solution": "Добавить intent 'pin_message' в SR промпт. В free_conversation при этом intent'е: вызвать bot.pin_chat_message(message_id), сохранить в workspace['pinned_message'] = {id, text, date}. При новом закрепе — unpin старый. При удалении сообщений — проверять pinned_message_id и пропускать его.",
-      "files_affected": [
-        "bot.py: SR_SYSTEM_PROMPT intent map, free_conversation handler, message cleanup logic"
-      ],
-      "risk": "medium"
-    },
-    "P-15": {
-      "name": "Голосовые команды — улучшение распознавания intent'ов",
-      "priority": "MEDIUM",
-      "problem": "Сложные голосовые команды ('перенеси дедлайн задачи X на воскресенье', 'добавь в роадмап') не распознаются с первого раза. Бот отвечает 'не смог распознать команду'. Причина: промпт не содержит достаточно примеров для сложных составных фраз. Также голосовые команды для напоминаний и роадмапов всегда идут в free_conversation вместо специализированных handlers.",
-      "solution": "1) Расширить примеры в INTENT_MAP для задач/роадмап/напоминаний/чеклистов — добавить 5-7 составных фраз на каждый intent. 2) В handle_voice добавить маршрутизацию в reminder/roadmap FSM состояния если intent распознан. 3) Улучшить промпт понимания дат и дней недели в контексте задач.",
-      "files_affected": [
-        "bot.py: SR_SYSTEM_PROMPT INTENT_MAP, handle_voice, free_conversation"
-      ],
-      "risk": "medium"
-    },
-    "P-16": {
+    "P-2": {
       "name": "День рождения — поздравление сразу после 00:00",
       "priority": "LOW",
       "problem": "Поздравление с днём рождения отправляется только в момент утреннего брифа (scheduled). Если пользователь пишет после 00:00 в свой день рождения — бот не поздравляет до утра. Это выглядит странно.",
@@ -146,27 +118,47 @@
       "status": "done",
       "resolution": "Patched in v7.39.5: full SR birthday greeting on first interaction after midnight, morning scheduler skips if already sent, +1 achievement +5 growth resonance"
     },
-    "P-19": {
-      "name": "Достижения через DeepSeek — надёжность выполнения",
-      "priority": "MEDIUM",
-      "problem": "При добавлении достижений через голос или текст DeepSeek иногда генерирует ответ 'Достижение добавлено!' но intent не выполняется — достижение не сохраняется. Причина: модель отвечает в диалоговом стиле не возвращая структурированный JSON с action.",
-      "solution": "1) Добавить проверку: если intent=add_achievement но achievement не появился в store — повторить вызов с более строгим промптом. 2) Улучшить промпт для DeepSeek с явным требованием JSON-ответа при action-intent'ах. 3) Добавить логирование факта сохранения достижения.",
-      "files_affected": [
-        "bot.py: free_conversation achievement handler, SR_SYSTEM_PROMPT"
-      ],
-      "risk": "medium"
-    },
-    "P-20": {
-      "name": "Повторяющиеся задачи",
+    "P-9": {
+      "name": "Утренний брифинг блокируется другими проактивными сообщениями",
       "priority": "HIGH",
-      "problem": "Задачи создаются разово. Нет возможности настроить повторение как у напоминаний. После закрытия задачи с повтором — она исчезает, нужно вручную создавать заново.",
-      "solution": "Добавить поле repeat в модель задачи (once/daily/weekdays/weekends/weekly/monthly/yearly/custom_days). При закрытии: +достижение, +резонанс, автосоздание новой задачи с тем же repeat и дедлайном = старый + интервал. При незакрытой задаче с истекшим дедлайном: индикатор просрочки, СР напоминает о важности. Добавить repeat_picker в FSM создания задачи (как у напоминаний).",
+      "problem": "Утренний брифинг использует флаг _can_send_proactive, который общий для всех типов проактивных сообщений. Если бот уже отправил сообщение тишины или вечерний чекин — утренний брифинг не приходит.",
+      "solution": "Убрать проверку _can_send_proactive из send_morning_greeting. Утренний брифинг имеет свой флаг _morning_sent который и так предотвращает повторную отправку.",
       "files_affected": [
-        "bot.py: TaskStates, _create_task_atomic, confirm_task, complete_task handler"
+        "bot.py: send_morning_greeting"
+      ],
+      "risk": "low"
+    },
+    "P-10": {
+      "name": "Закрепление/открепление сообщений бота по запросу",
+      "priority": "MEDIUM",
+      "problem": "Пользователь хочет закрепить сообщение бота в диалоге. Сейчас такого intent'а нет. Закреплённое сообщение должно: 1) не удаляться ботом при чистке, 2) храниться в workspace['pinned_message'], 3) открепляться по запросу.",
+      "solution": "Добавить intent 'pin_message' в SR промпт. В free_conversation при этом intent: вызвать bot.pin_chat_message(message_id), сохранить в workspace['pinned_message'] = {id, text, date}. При новом закрепе — unpin старый. При удалении — проверять pinned_message_id.",
+      "files_affected": [
+        "bot.py: SR_SYSTEM_PROMPT intent map, free_conversation handler, message cleanup logic"
       ],
       "risk": "medium"
     },
-    "P-21": {
+    "P-11": {
+      "name": "Кнопка '📆 Своя дата' в повторениях напоминаний",
+      "priority": "LOW",
+      "problem": "В repeat_picker напоминаний нет кнопки выбора своей даты. Есть: каждый день, раз в неделю, раз в месяц, раз в год, по дням недели. Нет: конкретная дата (ДД.ММ) для ежегодного повторения.",
+      "solution": "Добавить кнопку '📆 Своя дата' в _repeat_picker_keyboard. Добавить callback 'rem_rp_custom_date' с состоянием ввода даты. Парсить ввод в формате ДД.ММ или ДД.ММ.ГГ. Сохранять как custom_date:MM-DD. В scheduler добавить обработчик yearly+1 для custom_date.",
+      "files_affected": [
+        "bot.py: _repeat_picker_keyboard, cb_rem_rp_select, _parse_weekdays, run_reminder_scheduler"
+      ],
+      "risk": "low"
+    },
+    "P-12": {
+      "name": "Повторяющиеся задачи + кнопка '📆 Своя дата'",
+      "priority": "HIGH",
+      "problem": "Задачи создаются разово. Нет возможности настроить повторение как у напоминаний. После закрытия задачи с повтором — она исчезает, нужно вручную создавать заново. Нет кнопки 'Своя дата' для ежегодных повторений.",
+      "solution": "Добавить поле repeat в модель задачи (once/daily/weekdays/weekends/weekly/monthly/yearly/custom_days/custom_date). При закрытии: +достижение, +резонанс, автосоздание новой задачи с тем же repeat и дедлайном = старый + интервал. При незакрытой задаче с истекшим дедлайном: индикатор просрочки, СР напоминает о важности. Добавить repeat_picker в FSM создания задачи (как у напоминаний) включая кнопку '📆 Своя дата'. Один патч на всё.",
+      "files_affected": [
+        "bot.py: TaskStates, _create_task_atomic, confirm_task, complete_task handler, _repeat_picker_keyboard, _parse_weekdays, run_reminder_scheduler"
+      ],
+      "risk": "medium"
+    },
+    "P-13": {
       "name": "Кнопки Задачи и Роадмапы в профиле",
       "priority": "HIGH",
       "problem": "В профиле нет прямого доступа к задачам и роадмапам. Садовник должен использовать голос/текст или помнить команды. Чеклисты и напоминания имеют кнопки, задачи и роадмапы — нет.",
@@ -176,8 +168,49 @@
       ],
       "risk": "medium"
     },
-    "P-22": {
-      "name": "Раздел инструкции и обучения",
+    "P-14": {
+      "name": "Счётчик задач в профиле + баг закрытых задач в достижениях",
+      "priority": "MEDIUM",
+      "problem": "1) В шапке профиля нет общего счётчика задач (только по группам). У роадмапов и напоминаний счётчик есть, у задач — нет. 2) Закрытые задачи не появляются в monthly stats — счётчик tasks_completed в _daily_stats[uid] не инкрементится при complete_task.",
+      "solution": "1) В _build_profile_card добавить строку 'X активных задач · Y всего' в шапку. 2) Найти все места где задача помечается выполненной, инкрементировать _daily_stats[uid]['tasks_completed'].",
+      "files_affected": [
+        "bot.py: _build_profile_card, free_conversation intent handler"
+      ],
+      "risk": "low"
+    },
+    "P-15": {
+      "name": "Модульная архитектура бота + техмануал",
+      "priority": "HIGH",
+      "problem": "bot.py — монолит ~3500 строк. Сложно редактировать, тестировать, ревьюить. Высокий порог входа для новых SR. Нет документации по архитектуре.",
+      "solution": "Разбить bot.py на модули: store.py (данные), github_api.py (синхронизация), keyboards.py (клавиатуры), handlers_*.py (обработчики по группам), scheduler.py (шедулеры), sr_prompt.py (промпты). Создать технический мануал со схемой модулей и их связей. Сохранить обратную совместимость.",
+      "files_affected": [
+        "bot.py → модули",
+        "docs/bot_architecture.md — техмануал"
+      ],
+      "risk": "high"
+    },
+    "P-16": {
+      "name": "DeepSeek — надёжность выполнения достижений",
+      "priority": "MEDIUM",
+      "problem": "При добавлении достижений через DeepSeek модель иногда генерирует ответ 'Достижение добавлено!' но intent add_achievement не выполняется. Модель возвращает диалоговый ответ вместо JSON с action.",
+      "solution": "Добавить проверку: если intent=add_achievement но achievement не появился в store — повторить вызов с более строгим промптом. Для DeepSeek усилить требование JSON-ответа при action-intent'ах. Добавить логирование факта сохранения достижения.",
+      "files_affected": [
+        "bot.py: free_conversation achievement handler, SR_SYSTEM_PROMPT"
+      ],
+      "risk": "medium"
+    },
+    "P-17": {
+      "name": "Голосовые команды — улучшение распознавания intent'ов",
+      "priority": "MEDIUM",
+      "problem": "Сложные голосовые команды не распознаются. Бот отвечает 'не смог распознать команду'. Причина: промпт не содержит достаточно примеров для составных фраз. Голосовые команды для напоминаний и роадмапов идут в free_conversation вместо специализированных handler'ов.",
+      "solution": "Расширить INTENT_MAP примерами для задач/роадмапов/напоминаний/чеклистов. В handle_voice добавить маршрутизацию в reminder/roadmap FSM. Улучшить промпт понимания дат и дней недели в контексте задач.",
+      "files_affected": [
+        "bot.py: SR_SYSTEM_PROMPT INTENT_MAP, handle_voice, free_conversation"
+      ],
+      "risk": "medium"
+    },
+    "P-18": {
+      "name": "Раздел инструкции /help",
       "priority": "LOW",
       "problem": "Новые садовники не знают всех возможностей бота. Нет структурированной справки. SR объясняет возможности в диалоге, но нет единого источника.",
       "solution": "Команда /help с разделами по темам (задачи, роадмапы, чеклисты, напоминания, достижения, резонанс, поиск). С возможностью углубиться в каждый раздел. Детали и формат обсудить ближе к реализации.",
@@ -187,16 +220,15 @@
       ],
       "risk": "low"
     },
-    "P-23": {
-      "name": "Модульная архитектура бота",
+    "P-19": {
+      "name": "Автозагрузка пользователя при первом сообщении после перезапуска",
       "priority": "HIGH",
-      "problem": "bot.py — монолит ~3500 строк. Сложно редактировать, тестировать, ревьюить. Высокий порог входа для новых SR. Нет документации по архитектуре.",
-      "solution": "Разбить bot.py на модули: store.py (данные), github_api.py (синхронизация), keyboards.py (клавиатуры), handlers_*.py (обработчики по группам), scheduler.py (шедулеры), sr_prompt.py (промпты). Создать технический мануал со схемой модулей и их связей. Сохранить обратную совместимость — бот должен работать без изменений в логике.",
+      "problem": "При перезапуске бота (деплой) _store в памяти очищается. Если пользователь пишет первым после перезапуска, бот отвечает '🌿 Используй /start чтобы начать.' — потому что _store[uid] пуст и is_authorized возвращает False.",
+      "solution": "В free_conversation при первом сообщении после перезапуска автоматически вызывать ensure_user_loaded(user_id) для загрузки данных пользователя из GitHub без требования писать /start.",
       "files_affected": [
-        "bot.py → модули",
-        "docs/bot_architecture.md — техмануал"
+        "bot.py: free_conversation"
       ],
-      "risk": "high"
+      "risk": "low"
     }
   },
   "acceptance_criteria": [
@@ -219,7 +251,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-09",
-    "notes": "Bot v7.39.7 live. Changelog dashboard via /changelog or morning brief deep link. Edit profile back buttons fixed. Menu updated with 🆕 Обновления. BOT_LATEST_UPDATE refreshed, dev rule added to update on every patch."
+    "notes": "Bot v7.39.8 live. Silence detection with SR-generated messages + fallback. Plan renumbered P-9 to P-19. Next: P-19 (auto-load user after restart). P-12+P-13 merged (repeating tasks + custom date). Known issues: morning brief blocked (P-9), DeepSeek achievements (P-16), voice commands (P-17), resonance 100% bug."
   },
   "future_scaling": {
     "current_state": {
