@@ -21,13 +21,6 @@
   },
   "reminders": [
     {
-      "id": "rem_989b762e",
-      "title": "Python: функциональное программирование",
-      "datetime_iso": "2026-05-05T20:00+05:00",
-      "repeat": "daily",
-      "active": true
-    },
-    {
       "id": "rem_seed_hello",
       "title": "Привет, друг! Как дела?",
       "repeat": "once",
