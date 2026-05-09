@@ -5,26 +5,9 @@
     "creativity": 20,
     "work": 20,
     "connections": 20,
-    "growth": 20
+    "growth": 22
   },
-  "checklists": [
-    {
-      "id": "cl_покупки",
-      "title": "Покупки в магазине",
-      "items": [
-        {
-          "id": "i1",
-          "text": "Молоко",
-          "done": true
-        },
-        {
-          "id": "i2",
-          "text": "Йогурт питьевой",
-          "done": false
-        }
-      ],
-      "pinned_message_id": 10328,
-      "created": "2026-05-09"
-    }
-  ]
+  "checklists": [],
+  "achievements_count": 1,
+  "last_morning_date": "2026-05-09"
 }
