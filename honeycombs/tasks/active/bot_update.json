@@ -88,7 +88,8 @@
     "Repeat value edge case: on confirm screen repeat may show 'once' if FSM and workspace are both stale",
     "Voice commands: compound phrases not recognized consistently",
     "Resonance shows 100% incorrectly for some gardeners — calculation logic needs audit",
-    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute intent"
+    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute intent",
+    "Changelog /start: BOT_LATEST_UPDATE склеен в сплошняк без переносов строк, cm_start всё ещё вызывает _check_version_notify (должен только утренний бриф). Нужно заменить BOT_LATEST_UPDATE на многострочник с \\n и убрать вызов из /start."
   ],
   "observations": {
     "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
