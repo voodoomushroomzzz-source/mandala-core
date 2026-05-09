@@ -344,8 +344,8 @@
       "task_id": "task_20260509_024",
       "title": "Тест",
       "status": "todo",
-      "label_id": "тест",
-      "label_name": "Тест2",
+      "label_id": null,
+      "label_name": "",
       "life_area": "work",
       "priority": 6,
       "deadline": "2026-05-10",
@@ -376,11 +376,6 @@
       "id": "работа",
       "name": "Работа",
       "created": "2026-04-19"
-    },
-    {
-      "id": "тест",
-      "name": "Тест2",
-      "created": "2026-05-09"
     }
   ],
   "updated": "2026-04-18",
