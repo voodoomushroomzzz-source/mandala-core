@@ -1,3 +1,30 @@
 {
-  "last_interaction_date": "2026-05-09"
+  "last_interaction_date": "2026-05-09",
+  "sphere_resonance": {
+    "health": 20,
+    "creativity": 20,
+    "work": 20,
+    "connections": 20,
+    "growth": 20
+  },
+  "checklists": [
+    {
+      "id": "cl_покупки",
+      "title": "Покупки в магазине",
+      "items": [
+        {
+          "id": "i1",
+          "text": "Молоко",
+          "done": false
+        },
+        {
+          "id": "i2",
+          "text": "Йогурт питьевой",
+          "done": false
+        }
+      ],
+      "pinned_message_id": null,
+      "created": "2026-05-09"
+    }
+  ]
 }
