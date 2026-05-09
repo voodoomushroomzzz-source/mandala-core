@@ -5,9 +5,9 @@
   "priority": "HIGH",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-09",
-  "progress": 93,
-  "current_version": "7.39.8",
+  "updated": "2026-05-10",
+  "progress": 95,
+  "current_version": "7.39.12",
   "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
   "dev_rules": [
     "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
@@ -75,6 +75,12 @@
       "v7.39.6: Edit profile fields — inline back buttons to edit menu",
       "v7.39.7: Changelog dashboard via deep link, /changelog command in menu, BOT_LATEST_UPDATE refreshed with last 5 versions",
       "v7.39.8: Silence detection — workspace persistence, SR-generated engagement messages with fallback, 3/6/9/12/15/18/21 day phases"
+    ],
+    "v7_39_9_to_v7_39_12": [
+      "v7.39.9: P-13a done — Меню Задач v2 (Клод)",
+      "v7.39.10: P-13a fix apply — 8 функций исправлено (Клод)",
+      "v7.39.11: Меню Достижений — кнопка Добавить + авто-сфера + фикс навигации чеклистов + отчёт СР неактивные",
+      "v7.39.12: _classify_sphere — connections/growth перед work + отчёт СР догрузка через whitelist"
     ]
   },
   "known_issues": [
@@ -235,6 +241,16 @@
       "risk": "low",
       "status": "done",
       "resolution": "free_conversation вызывает ensure_user_loaded вместо is_authorized. После рестарта садовники пишут без /start."
+    },
+    "P-20": {
+      "name": "Сверка функционала — кнопки vs чат vs голос",
+      "priority": "HIGH",
+      "problem": "Не проверено что все функции доступны одинаково через: 1) кнопки в меню, 2) текст в чате (через SR intent router), 3) голосовые сообщения. Где-то могут быть пропуски — например, удаление задачи или редактирование профиля работает через кнопки, но не через голос.",
+      "solution": "Пройти полный список функций из SR_INTENT_MAP и проверить наличие каждого intent в free_conversation router + наличие кнопочного пути. Составить таблицу gaps, закрыть недостающие.",
+      "files_affected": [
+        "bot.py: SR_INTENT_MAP, free_conversation intent router, keyboard handlers"
+      ],
+      "risk": "medium"
     }
   },
   "acceptance_criteria": [
@@ -256,8 +272,8 @@
   ],
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-09",
-    "notes": "v7.39.8. P-19, P-9, P-14 done. Профиль компактный. Брифинг надёжный. Автозагрузка после рестарта. Next: P-13 (кнопки задач/роадмапов в профиле)."
+    "last_check": "2026-05-10",
+    "notes": "v7.39.12. P-13a done (Клод). P-20 added. Progress 95%."
   },
   "future_scaling": {
     "current_state": {
