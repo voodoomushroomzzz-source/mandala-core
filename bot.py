@@ -7171,8 +7171,6 @@ async def _send_daily_report() -> None:
                 )
             else:
                 lines.append(f"  {name}: неактивен")
-            else:
-                lines.append(f"  {name}: неактивен")
         # Issues
         if _daily_issues:
             lines.append("\n⚠️ Проблемы:")
