@@ -6,8 +6,8 @@
   "deadline": "2026-06-01",
   "created": "2026-04-01",
   "updated": "2026-05-09",
-  "progress": 87,
-  "current_version": "7.39.5",
+  "progress": 90,
+  "current_version": "7.39.7",
   "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
   "dev_rules": [
     "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
@@ -48,7 +48,8 @@
       "Reminder system — once/daily/weekdays, per-user timezone",
       "Voice messages — Groq Whisper transcription → intent routing",
       "Deep Profile — streak detection, sphere patterns, reflection hints",
-      "Roadmap task cleanup — orphaned task_ids auto-removed"
+      "Roadmap task cleanup — orphaned task_ids auto-removed",
+      "Changelog dashboard — /changelog command + deep link from morning brief"
     ],
     "v7_38_to_v7_40": [
       "v7.38: Reminders today list in profile, today tasks block, fix duplicates, voice repeat picker",
@@ -70,7 +71,9 @@
       "v7.39.2: Version notification moved to morning brief, catch-up removed",
       "v7.39.3: Sphere name in close task reply (🌱 Рост +2% → 37%)",
       "v7.39.4: Achievement stats show all spheres with any activity (tasks + achievements)",
-      "v7.39.5: P-16 done — full SR birthday greeting on first midnight interaction"
+      "v7.39.5: P-16 done — full SR birthday greeting on first midnight interaction",
+      "v7.39.6: Edit profile fields — inline back buttons to edit menu",
+      "v7.39.7: Changelog dashboard via deep link, /changelog command in menu, BOT_LATEST_UPDATE refreshed with last 5 versions"
     ]
   },
   "known_issues": [
@@ -216,7 +219,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-09",
-    "notes": "Bot v7.39.5 live. P-12 done (daily report). P-16 done (birthday midnight). P-17/P-18 removed from plan. New: P-20 (repeating tasks), P-21 (Tasks/Roadmaps buttons in profile), P-22 (help section), P-23 (modular architecture)."
+    "notes": "Bot v7.39.7 live. Changelog dashboard via /changelog or morning brief deep link. Edit profile back buttons fixed. Menu updated with 🆕 Обновления. BOT_LATEST_UPDATE refreshed, dev rule added to update on every patch."
   },
   "future_scaling": {
     "current_state": {
