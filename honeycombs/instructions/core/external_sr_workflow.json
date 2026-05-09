@@ -26,6 +26,14 @@
         "rule": "ALWAYS prepend each patch result line with ✅ on success or ❌ on failure. Visual clarity for Gardener.",
         "format": "✅ Patch N: description — кратко что изменилось\n❌ Patch N: anchor not found — причина или предложение",
         "example": "✅ Patch 1 applied: _all_uids from _store\n❌ Patch 2 anchor not found — printing context for debug"
+      },
+      "three_blocks_one_message": {
+        "rule": "CRITICAL. All three PowerShell blocks MUST be in ONE message. Never split Block 1, Block 2, Block 3 across multiple messages. Gardener copies entire message once.",
+        "why": "Splitting blocks across messages causes confusion, partial execution, and version skew. One message = one atomic patcher delivery."
+      },
+      "post_check_large_files": {
+        "rule": "For files >100 KB (bot.py, *.html, *.js, *.css), do NOT request via API for post-check. Verify success by: 1) PowerShell output (no SyntaxError), 2) Render logs (no crash on deploy).",
+        "why": "Large files time out or get truncated via API/raw URLs. PowerShell exit code + Render deploy log = sufficient confirmation."
       }
     },
     "powershell_examples": {
@@ -162,11 +170,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-05-09",
+    "updated": "2026-05-10",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.4.3",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.3 adds patch_status_emojis rule + three-block PowerShell patcher format for large files.",
+    "version": "v1.4.4",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.4 adds three_blocks_one_message rule + post_check_large_files rule.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
