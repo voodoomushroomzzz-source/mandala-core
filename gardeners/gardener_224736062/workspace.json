@@ -339,6 +339,21 @@
       "updated": "2026-05-07",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260509_024",
+      "title": "Тест",
+      "status": "todo",
+      "label_id": "тест",
+      "label_name": "Тест2",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-05-10",
+      "reminder": "2026-05-10",
+      "created": "2026-05-09",
+      "updated": "2026-05-09",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
