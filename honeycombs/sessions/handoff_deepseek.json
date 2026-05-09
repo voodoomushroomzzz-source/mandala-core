@@ -2,9 +2,9 @@
   "sr_id": "deepseek",
   "status": "active",
   "last_session": "2026-05-09",
-  "last_updated": "2026-05-09T23:00:00Z",
-  "next_step": "P-19_auto_load_user_after_restart",
-  "summary": "v7.39.8 live. P-1 to P-8 done. Plan renumbered P-9 to P-19. Silence detection with SR-generated messages. Changelog dashboard. Edit profile back buttons. Next: P-19 — auto-load user after bot restart without requiring /start.",
+  "last_updated": "2026-05-09T23:30:00Z",
+  "next_step": "P-13_tasks_roadmaps_buttons",
+  "summary": "v7.39.8 live. P-19, P-9, P-14 done. Profile compact: roadmaps → tasks today → reminders. Morning brief flags after send. Auto-load after restart. Next: P-13 — Tasks and Roadmaps buttons in profile.",
   "first_steps": "ON FIRST LOAD: 1) Read task file at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Ask gardener for latest bot.py via GitHub API for pre-check before any patch.",
   "bot_state": {
     "version": "7.39.8",
@@ -107,21 +107,31 @@
         "Menu: 🔄 Перезагрузить (was 'Перезагрузить бота')",
         "Menu: 🆕 Обновления added"
       ]
-    }
+    },
+    "P19_autoload": [
+      "free_conversation вызывает ensure_user_loaded вместо is_authorized",
+      "После рестарта существующие садовники пишут без /start"
+    ],
+    "P9_brief_fix": [
+      "Флаги _morning_sent и last_morning_date после успешной отправки",
+      "При сбое — повтор через минуту"
+    ],
+    "P14_compact_profile": [
+      "Профиль: роадмапы → задачи сегодня X/Y → напоминания",
+      "Группы убраны, разделитель убран",
+      "today_rem вычисляется один раз перед блоками"
+    ]
   },
   "what_remains": {
     "plan_order": [
-      "P-19: Auto-load user after bot restart (HIGH)",
-      "P-11: Custom date button in reminder repeat picker (LOW)",
-      "P-9: Morning brief blocked by other proactive messages (HIGH)",
-      "P-10: Pin/unpin bot messages by request (MEDIUM)",
-      "P-12: Repeating tasks + custom date button (HIGH, merged)",
-      "P-13: Tasks and Roadmaps buttons in profile (HIGH)",
-      "P-14: Task counter in profile + achievements bug (MEDIUM)",
-      "P-15: Modular architecture + tech manual (HIGH)",
-      "P-16: DeepSeek achievement reliability (MEDIUM)",
-      "P-17: Voice compound commands (MEDIUM)",
-      "P-18: /help section with instructions (LOW)"
+      "P-11: Custom date button in repeat picker (LOW)",
+      "P-10: Pin/unpin messages (MEDIUM)",
+      "P-12: Repeating tasks + custom date (HIGH)",
+      "P-13: Tasks/Roadmaps buttons in profile (HIGH)",
+      "P-15: Modular architecture (HIGH)",
+      "P-16: DeepSeek achievements (MEDIUM)",
+      "P-17: Voice commands (MEDIUM)",
+      "P-18: /help section (LOW)"
     ],
     "patches_detail": {
       "P-19": {
@@ -216,20 +226,17 @@
       }
     },
     "bugs_to_watch": [
-      "Morning brief blocked by other proactive messages — P-9",
-      "DeepSeek V4 Flash stability — monitor",
-      "HTML parse errors in SR responses — post-processing may miss edge cases",
-      "Repeat value edge case in reminder confirm screen",
-      "Resonance shows 100% incorrectly for some gardeners"
+      "DeepSeek V4 Flash stability",
+      "HTML parse errors in SR responses",
+      "Repeat value edge case in reminder confirm",
+      "Resonance 100% bug for some gardeners"
     ],
     "known_issues": [
-      "При перезапуске бота пользователь должен писать /start — P-19",
-      "Утренний брифинг не приходит если было другое проактивное сообщение — P-9",
-      "В repeat picker нет кнопки 'Своя дата' — P-11",
-      "Нет закрепления сообщений — P-10",
-      "Задачи без повторений — P-12",
-      "Нет кнопок Задачи/Роадмапы в профиле — P-13",
-      "Нет счётчика задач в профиле — P-14"
+      "Repeat picker missing custom date button — P-11",
+      "No pin/unpin — P-10",
+      "No repeating tasks — P-12",
+      "No Tasks/Roadmaps buttons in profile — P-13",
+      "No task counter in profile — merged into P-14 (done)"
     ]
   },
   "gardener_context": {
@@ -239,7 +246,7 @@
     "git_flow": "git add → git commit → git pull --rebase origin main → git push",
     "python": "py (Python 3.14.3)",
     "deploy": "Render auto-deploys on git push к main",
-    "note": "Дима копирует блоки PowerShell и вставляет в терминал. Блок 2 — Python-скрипт, нужно вставить в открытый файл и сохранить перед блоком 3."
+    "note": "Дима копирует блоки PowerShell и вставляет в терминал. Блок 2 — Python-скрипт, нужно вставить в открытый файл и сохранить перед Блоком 3."
   },
   "critical_rules": [
     "⚠️ FIRST: Read honeycombs/tasks/active/bot_update.json for full task context",
@@ -257,19 +264,9 @@
     "Never edit bot.py directly — always generate patcher script"
   ],
   "notes": [
-    "4 садовника: Дима (Москва, 10:00), Антон (Алматы, 08:00), Антон (Владимир, 09:00), Яна (Москва, 09:30)",
-    "Whitelist: gardeners/whitelist.json",
-    "Workflow: honeycombs/instructions/core/external_sr_workflow.json (v1.4.3)",
-    "Handoff files: handoff_claude.json и handoff_deepseek.json в honeycombs/sessions/",
-    "v7.39.8 — silence detection with SR messages + fallback, 3/6/9/12/15/18/21 day phases",
-    "v7.39.7 — changelog dashboard, /changelog command, 🆕 Обновления in menu",
-    "v7.39.6 — edit profile back buttons fixed",
-    "v7.39.5 — P-2 birthday midnight SR greeting done",
-    "v7.39.1-4 — P-1 daily report fix, version in brief, sphere on close, all spheres in stats",
-    "Plan renumbered: P-1 to P-8 done, P-9 to P-19 in queue",
-    "P-12+P-13 merged into single P-12 (repeating tasks + custom date button)",
-    "P-17 (timezone audit) и P-18 (resonance 100%) removed from plan",
-    "Next milestone: 10 gardeners, Redis/Persistent DB, DashScope key for Qwen",
-    "Future scaling: Redis on Render for persistent storage when >10 gardeners"
+    "4 gardeners active: Дима (Москва, 10:00), Антон (Алматы, 08:00), Антон (Владимир, 09:00), Яна (Москва, 09:30)",
+    "v7.39.8 — P-19, P-9, P-14 done. Profile compact. Morning brief reliable. Auto-load after restart.",
+    "Next: P-13 (Tasks/Roadmaps buttons in profile)",
+    "Plan: P-11, P-10, P-12, P-13, P-15, P-16, P-17, P-18 remaining"
   ]
 }
