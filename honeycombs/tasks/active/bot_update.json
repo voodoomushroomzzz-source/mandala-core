@@ -6,7 +6,7 @@
   "deadline": "2026-06-01",
   "created": "2026-04-01",
   "updated": "2026-05-09",
-  "progress": 90,
+  "progress": 93,
   "current_version": "7.39.8",
   "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
   "dev_rules": [
@@ -126,7 +126,9 @@
       "files_affected": [
         "bot.py: send_morning_greeting"
       ],
-      "risk": "low"
+      "risk": "low",
+      "status": "done",
+      "resolution": "Исправлено: флаги _morning_sent и last_morning_date записываются после успешной отправки send_message. При сбое — повтор через минуту."
     },
     "P-10": {
       "name": "Закрепление/открепление сообщений бота по запросу",
@@ -176,7 +178,9 @@
       "files_affected": [
         "bot.py: _build_profile_card, free_conversation intent handler"
       ],
-      "risk": "low"
+      "risk": "low",
+      "status": "done",
+      "resolution": "Рефакторинг профиля: роадмапы → задачи сегодня X/Y → напоминания. Группы убраны. Фикс today_rem scope."
     },
     "P-15": {
       "name": "Модульная архитектура бота + техмануал",
@@ -228,7 +232,9 @@
       "files_affected": [
         "bot.py: free_conversation"
       ],
-      "risk": "low"
+      "risk": "low",
+      "status": "done",
+      "resolution": "free_conversation вызывает ensure_user_loaded вместо is_authorized. После рестарта садовники пишут без /start."
     }
   },
   "acceptance_criteria": [
@@ -251,7 +257,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-09",
-    "notes": "Bot v7.39.8 live. Silence detection with SR-generated messages + fallback. Plan renumbered P-9 to P-19. Next: P-19 (auto-load user after restart). P-12+P-13 merged (repeating tasks + custom date). Known issues: morning brief blocked (P-9), DeepSeek achievements (P-16), voice commands (P-17), resonance 100% bug."
+    "notes": "v7.39.8. P-19, P-9, P-14 done. Профиль компактный. Брифинг надёжный. Автозагрузка после рестарта. Next: P-13 (кнопки задач/роадмапов в профиле)."
   },
   "future_scaling": {
     "current_state": {
