@@ -2,18 +2,18 @@
   "sr_id": "deepseek",
   "status": "active",
   "last_session": "2026-05-09",
-  "last_updated": "2026-05-09T23:30:00Z",
-  "next_step": "P-13_tasks_roadmaps_buttons",
-  "summary": "v7.39.8 live. P-19, P-9, P-14 done. Profile compact: roadmaps → tasks today → reminders. Morning brief flags after send. Auto-load after restart. Next: P-13 — Tasks and Roadmaps buttons in profile.",
-  "first_steps": "ON FIRST LOAD: 1) Read task file at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Ask gardener for latest bot.py via GitHub API for pre-check before any patch.",
+  "last_updated": "2026-05-09T23:59:00Z",
+  "next_step": "P-13a_fix_apply",
+  "summary": "v7.39.10. P-13a меню Задач: дизайн согласован, 5 патчей, баги с .replace(). Нужен ручной патч.",
+  "first_steps": "ON FIRST LOAD: 1) Read bot_update.json at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Read current bot.py via GitHub API before any modifications.",
   "bot_state": {
-    "version": "7.39.8",
-    "progress": "90%",
+    "version": "7.39.10",
+    "progress": "93%",
     "repo": "voodoomushroomzzz-source/mandala-core",
     "platform": "Render webhook + aiogram 3 + OpenRouter",
     "model_primary": "deepseek/deepseek-v4-flash",
     "model_fallback": "qwen/qwen3.5-flash-02-23",
-    "file": "bot.py (~5600 lines)",
+    "file": "bot.py (~5700 lines)",
     "gardeners_active": 4,
     "gardeners": [
       {
@@ -46,198 +46,67 @@
       }
     ]
   },
+  "what_we_are_building": {
+    "task": "P-13a: Меню Задач v2 + заглушка Роадмапов",
+    "description": "Полное меню управления задачами через inline-кнопки: группы, список задач внутри группы, редактирование, повторения. Кнопка Роадмапы пока заглушка.",
+    "design_approved": true,
+    "screens": {
+      "1_groups": "Список групп с эмодзи и счётчиком задач. Без кнопок ✏️🗑. Группа 'Без группы' не учитывает задачи из роадмапов.",
+      "2_tasks_in_group": "Список задач с индикаторами 🔥⚡🌱. Нажатие на задачу → экран редактирования. Снизу: ➕ Новая задача, ✏️ Переименовать группу, 🗑 Удалить группу, ← Назад к группам.",
+      "3_task_edit": "⚙️ Заголовок. ✅ Выполнить. ✏️ Название. 📅 Дедлайн. 🎨 Группа. 🔁 Повтор (с кнопкой 📆 Своя дата). ← Назад к списку.",
+      "4_task_done": "При ✅ выполнении: +достижение, +резонанс. Если есть repeat — автосоздание новой задачи со следующим дедлайном."
+    }
+  },
+  "critical_problem": {
+    "title": "ПАТЧИ НЕ ПРИМЕНЯЮТСЯ КОРРЕКТНО",
+    "description": "Мы сделали 5 версий патчера (P13a_v1...v5). Каждый применяется через Python .replace() на bot.py. Но часть замен НЕ СРАБАТЫВАЕТ — строки не совпадают из-за экранирования Unicode, разных кавычек, пробелов. В результате в коде остаётся смесь старого и нового дизайна.",
+    "symptoms": [
+      "Кнопки ✏️🗑 всё ещё видны в группах (должны быть скрыты)",
+      "Кнопки ✅✏️🗑 всё ещё видны у задач (должна быть одна кнопка-название)",
+      "get_task_edit_inline не имеет кнопки ✅ Выполнить",
+      "cb_rem_rp_select не проверяет _ttask_edit_id — повторы задач не работают",
+      "Удаление группы переносит задачи в Без группы вместо удаления",
+      "_task_urgency_emoji всё ещё с кружками вместо индикаторов"
+    ],
+    "root_cause": "Метод .replace() в Python требует ТОЧНОГО совпадения строк. Unicode-последовательности (\\U0001f5d1 и т.д.) в файле и в патчере могут отличаться из-за разных способов экранирования в разных редакторах.",
+    "solution": "НУЖЕН РУЧНОЙ ПАТЧ. Садовник откроет bot.py в VS Code и вручную заменит 5 функций + 3 обработчика. Либо новый SR напишет патчер с более надёжным методом замены (поиск по уникальным маркерам, а не полным строкам)."
+  },
+  "files_to_fix_manually": {
+    "1_get_groups_list_inline": "Убрать кнопки ✏️🗑 у каждой группы. Добавить фильтр rm_task_ids для 'Без группы'. Группа 'Без группы' — одна кнопка на всю строку.",
+    "2_get_tasks_in_group_inline": "Убрать ✅✏️🗑. Каждая задача — ОДНА кнопка с названием + дедлайном + индикатором. Добавить 4 кнопки снизу: ➕ Новая задача, ✏️ Переименовать, 🗑 Удалить, ← Назад.",
+    "3_get_task_edit_inline": "Добавить первой строкой ✅ Выполнить: [task title]. Заголовок экрана редактирования — ⚙️ вместо ✏️.",
+    "4_cb_rem_rp_select": "Вставить проверку: если _ttask_edit_id и _ttask_edit_field=='repeat' — сохранить repeat в FSM и вызвать cb_rem_rp_done, return.",
+    "5_tgroup_delete_confirm": "Заменить перенос задач (t['label_id']=None) на удаление (tasks = [t for t in tasks if t.get('label_id') != group_id]).",
+    "6_cb_tgroup_delete": "Текст: 'задач будут удалены' вместо 'задач переместятся в Без группы'.",
+    "7__task_urgency_emoji": "Заменить кружки на индикаторы: 🔴→🔥, 🟡→⚡, 🟢→🌱.",
+    "8_cb_ttask_edit_field_repeat": "При field=='repeat' установить _rem_repeat=current в state.update_data."
+  },
+  "repeat_logic_fix": {
+    "problem": "Кнопки повторов задач не работают — при нажатии любой кнопки повтора (daily/weekly/...) выкидывает в напоминания или теряет данные.",
+    "cause": "cb_rem_rp_select проверяет _rem_title и _rem_edit_id (из логики напоминаний). При редактировании задачи там пусто. Нужна проверка _ttask_edit_id.",
+    "fix": "Добавить в cb_rem_rp_select перед основной логикой: if _ttask_id and _ttask_field=='repeat': сохранить repeat в state, вызвать cb_rem_rp_done, return."
+  },
+  "plan_after_fix": {
+    "next": "P-13b: Меню Роадмапов (аналогичное меню как у Задач)",
+    "remaining": [
+      "P-12 (повторяющиеся задачи + своя дата)",
+      "P-11 (кнопка Своя дата в repeat_picker)",
+      "P-10 (pin/unpin)",
+      "P-15 (модульная архитектура)",
+      "P-16 (DeepSeek достижения)",
+      "P-17 (голосовые команды)",
+      "P-18 (/help раздел)"
+    ]
+  },
   "how_we_work": {
     "method": "Python patcher scripts — three-block PowerShell format",
     "block1": "New-Item -ItemType File -Path patcher_NN_name.py -Force",
     "block2": "Full Python patcher code (copy into opened file and save)",
     "block3": "py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add bot.py; git commit -m '...'; git pull --rebase origin main; git push",
-    "description": "I generate three PowerShell blocks. Gardener copies each block, pastes into terminal, presses Enter. Block 2 is the entire patcher script. Gardener saves the file manually after pasting, then Block 3 runs it.",
+    "rule": "Gardener copies each block, pastes into terminal, presses Enter. Block 2 is the entire patcher script. Gardener saves manually after pasting, then Block 3 runs it.",
     "pre_check": "ALWAYS request current file via GitHub API before writing patcher. NEVER assume local state.",
     "post_check": "After deploy, request updated file via API to confirm SHA and correctness.",
     "note": "Patcher scripts ONLY — no direct file editing, no regex on entire large files. Use exact string replacement with .replace() in Python."
-  },
-  "what_we_built_this_session": {
-    "session_date": "2026-05-09",
-    "start_version": "7.39.0",
-    "end_version": "7.39.8",
-    "patches_applied": 20,
-    "done": {
-      "p1_daily_report": [
-        "_all_uids from _store instead of GitHub API",
-        "daily_stats persisted to honeycombs/sessions/daily_stats_live.json",
-        "daily_stats restored on startup after redeploy",
-        "synthesis uses both sr_observations and observations",
-        "synthesis allows regeneration if core is empty"
-      ],
-      "p2_birthday": [
-        "Full SR birthday greeting on first interaction after midnight",
-        "Uses gardener portrait and context for personalised message",
-        "Morning scheduler skips if already sent"
-      ],
-      "version_in_brief": [
-        "Version notification moved to morning brief",
-        "🆕 Версия X — что нового? → deep link to /start changelog",
-        "Catch-up _check_version_notify removed from free_conversation"
-      ],
-      "sphere_on_close": [
-        "Sphere name shown on task close: 🌱 Рост +2% → 37%"
-      ],
-      "all_spheres_in_stats": [
-        "Achievement stats show all spheres with any activity (tasks + achievements)"
-      ],
-      "profile_back_buttons": [
-        "All 4 edit profile fields now have inline ← Назад to edit menu"
-      ],
-      "changelog_dashboard": [
-        "/changelog command + 🆕 Обновления in Telegram menu",
-        "Deep link from morning brief: ?start=changelog",
-        "BOT_LATEST_UPDATE refreshed with last 5 versions",
-        "Dev rule: update BOT_LATEST_UPDATE on EVERY patch"
-      ],
-      "silence_detection": [
-        "last_interaction_date persisted to workspace.json",
-        "SR-generated personalised messages on silence",
-        "Fallback templates if SR unavailable",
-        "Phase tracking: one message per phase, no spam",
-        "Rubrics: 3, 6, 9, 12, 15, 18, 21 days"
-      ],
-      "workflow_and_menu": [
-        "patch_status_emojis rule in external_sr_workflow.json v1.4.3",
-        "✅/❌ format for all patch results",
-        "Menu: 🔄 Перезагрузить (was 'Перезагрузить бота')",
-        "Menu: 🆕 Обновления added"
-      ]
-    },
-    "P19_autoload": [
-      "free_conversation вызывает ensure_user_loaded вместо is_authorized",
-      "После рестарта существующие садовники пишут без /start"
-    ],
-    "P9_brief_fix": [
-      "Флаги _morning_sent и last_morning_date после успешной отправки",
-      "При сбое — повтор через минуту"
-    ],
-    "P14_compact_profile": [
-      "Профиль: роадмапы → задачи сегодня X/Y → напоминания",
-      "Группы убраны, разделитель убран",
-      "today_rem вычисляется один раз перед блоками"
-    ]
-  },
-  "what_remains": {
-    "plan_order": [
-      "P-11: Custom date button in repeat picker (LOW)",
-      "P-10: Pin/unpin messages (MEDIUM)",
-      "P-12: Repeating tasks + custom date (HIGH)",
-      "P-13: Tasks/Roadmaps buttons in profile (HIGH)",
-      "P-15: Modular architecture (HIGH)",
-      "P-16: DeepSeek achievements (MEDIUM)",
-      "P-17: Voice commands (MEDIUM)",
-      "P-18: /help section (LOW)"
-    ],
-    "patches_detail": {
-      "P-19": {
-        "name": "Автозагрузка пользователя после перезапуска",
-        "description": "Сейчас при деплое _store очищается. Первое сообщение получает ответ 'используй /start'. Нужно в free_conversation вызывать ensure_user_loaded автоматически.",
-        "files": [
-          "bot.py: free_conversation"
-        ],
-        "risk": "low"
-      },
-      "P-11": {
-        "name": "Кнопка '📆 Своя дата' в повторениях напоминаний",
-        "description": "В repeat_picker нет кнопки конкретной даты (ДД.ММ). Добавить кнопку, callback, парсинг даты, сохранение как custom_date:MM-DD.",
-        "files": [
-          "bot.py: _repeat_picker_keyboard, cb_rem_rp_select, _parse_weekdays, run_reminder_scheduler"
-        ],
-        "risk": "low"
-      },
-      "P-9": {
-        "name": "Утренний брифинг блокируется",
-        "description": "send_morning_greeting проверяет _can_send_proactive — общий флаг для всех проактивных сообщений. Если было сообщение тишины — брифинг не придёт. Убрать проверку, оставить только _morning_sent.",
-        "files": [
-          "bot.py: send_morning_greeting"
-        ],
-        "risk": "low"
-      },
-      "P-10": {
-        "name": "Закрепление сообщений",
-        "description": "Добавить intent 'pin_message'. При вызове: pin_chat_message, сохранить в workspace. При повторе — unpin старый.",
-        "files": [
-          "bot.py: SR_SYSTEM_PROMPT, free_conversation handler, message cleanup"
-        ],
-        "risk": "medium"
-      },
-      "P-12": {
-        "name": "Повторяющиеся задачи + своя дата",
-        "description": "Добавить repeat в модель задачи. При закрытии: +достижение, +резонанс, автосоздание новой с тем же repeat. При незакрытой — индикатор просрочки. Добавить repeat_picker как у напоминаний включая кнопку '📆 Своя дата'.",
-        "files": [
-          "bot.py: TaskStates, _create_task_atomic, confirm_task, complete_task handler, _repeat_picker_keyboard, _parse_weekdays, run_reminder_scheduler"
-        ],
-        "risk": "medium"
-      },
-      "P-13": {
-        "name": "Кнопки Задачи и Роадмапы в профиле",
-        "description": "Новый ряд кнопок: 🗂 Задачи и 🗺 Роадмапы. По нажатию — меню с созданием/редактированием/удалением как у чеклистов и напоминаний.",
-        "files": [
-          "bot.py: _show_profile, _build_profile_card, get_tasks_mgmt_inline, get_roadmaps_mgmt_inline"
-        ],
-        "risk": "medium"
-      },
-      "P-14": {
-        "name": "Счётчик задач + баг достижений",
-        "description": "В шапку профиля добавить 'X/Y задач'. Починить инкремент tasks_completed в _daily_stats при закрытии задачи.",
-        "files": [
-          "bot.py: _build_profile_card, free_conversation handler"
-        ],
-        "risk": "low"
-      },
-      "P-15": {
-        "name": "Модульная архитектура",
-        "description": "Разбить bot.py (~3500 строк) на модули: store, github_api, keyboards, handlers_*, scheduler, sr_prompt. Создать техмануал.",
-        "files": [
-          "bot.py → модули",
-          "docs/bot_architecture.md"
-        ],
-        "risk": "high"
-      },
-      "P-16": {
-        "name": "DeepSeek достижения",
-        "description": "DeepSeek иногда врёт про сохранение достижений. Добавить проверку: если достижение не в store — повторить с более строгим промптом.",
-        "files": [
-          "bot.py: free_conversation achievement handler, SR_SYSTEM_PROMPT"
-        ],
-        "risk": "medium"
-      },
-      "P-17": {
-        "name": "Голосовые команды",
-        "description": "Составные фразы не распознаются. Расширить INTENT_MAP, добавить маршрутизацию в handle_voice.",
-        "files": [
-          "bot.py: SR_SYSTEM_PROMPT, handle_voice, free_conversation"
-        ],
-        "risk": "medium"
-      },
-      "P-18": {
-        "name": "/help раздел",
-        "description": "Структурированная справка по всем функциям бота. Детали обсудить ближе к реализации.",
-        "files": [
-          "bot.py: cmd_help",
-          "honeycombs/instructions/"
-        ],
-        "risk": "low"
-      }
-    },
-    "bugs_to_watch": [
-      "DeepSeek V4 Flash stability",
-      "HTML parse errors in SR responses",
-      "Repeat value edge case in reminder confirm",
-      "Resonance 100% bug for some gardeners"
-    ],
-    "known_issues": [
-      "Repeat picker missing custom date button — P-11",
-      "No pin/unpin — P-10",
-      "No repeating tasks — P-12",
-      "No Tasks/Roadmaps buttons in profile — P-13",
-      "No task counter in profile — merged into P-14 (done)"
-    ]
   },
   "gardener_context": {
     "who": "Дима (Dima, Dmitrii Levin) — архитектор и первый садовник",
@@ -245,28 +114,20 @@
     "repo_path": "C:\\Users\\ivanl\\OneDrive\\Desktop\\Mandala\\mandala-core",
     "git_flow": "git add → git commit → git pull --rebase origin main → git push",
     "python": "py (Python 3.14.3)",
-    "deploy": "Render auto-deploys on git push к main",
-    "note": "Дима копирует блоки PowerShell и вставляет в терминал. Блок 2 — Python-скрипт, нужно вставить в открытый файл и сохранить перед Блоком 3."
+    "deploy": "Render auto-deploys on git push к main"
   },
   "critical_rules": [
-    "⚠️ FIRST: Read honeycombs/tasks/active/bot_update.json for full task context",
-    "ALWAYS pre-check files via GitHub API before modifying — NEVER assume local state",
+    "ALWAYS pre-check files via GitHub API before modifying",
     "ALWAYS use patcher scripts — never direct file replacement for >500 line files",
-    "ALWAYS three-block PowerShell format: Block 1 (New-Item), Block 2 (Python code), Block 3 (run + git)",
-    "ALWAYS post-check after deploy — request updated file via API to confirm correctness",
-    "ONE command per PowerShell block — gardener copies, pastes, presses Enter",
-    "Patch status: ✅ on success, ❌ on failure with reason — always prepend each line",
-    "Changelog: update BOT_LATEST_UPDATE on EVERY patch, keep last 5 versions, delete oldest",
-    "BOT_LATEST_UPDATE.text is a single string with \\n, not multi-line",
-    "Morning brief: compact format, dedicated _morning_sent flag, timezone-aware",
-    "Achievements: counter only (achievements_count), no archive array",
-    "Silence detection: last_interaction_date in workspace, SR-generated messages, fallback templates",
-    "Never edit bot.py directly — always generate patcher script"
+    "ALWAYS three-block PowerShell format",
+    "ALWAYS post-check after deploy",
+    "ONE command per PowerShell block",
+    "Match EXACT strings for .replace() — unicode escapes are tricky"
   ],
-  "notes": [
-    "4 gardeners active: Дима (Москва, 10:00), Антон (Алматы, 08:00), Антон (Владимир, 09:00), Яна (Москва, 09:30)",
-    "v7.39.8 — P-19, P-9, P-14 done. Profile compact. Morning brief reliable. Auto-load after restart.",
-    "Next: P-13 (Tasks/Roadmaps buttons in profile)",
-    "Plan: P-11, P-10, P-12, P-13, P-15, P-16, P-17, P-18 remaining"
+  "session_notes": [
+    "2026-05-09: P-13a дизайн согласован. 5 патчей (v1→v5). v5 применился частично, нужен ручной фикс.",
+    "Проблема: .replace() не находит строки из-за Unicode-экранирования.",
+    "Решение: либо ручной патч в VS Code, либо патчер с поиском по маркерам вместо полных строк.",
+    "Следующий шаг: применить исправления вручную или новым патчером с маркерами."
   ]
 }
