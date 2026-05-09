@@ -1099,39 +1099,9 @@ def _build_profile_card(user_id: str) -> str:
         "",
     ]
 
-    # ── Reminders block ────────────────────────────────────────────────
-    reminders = store_get_reminders(user_id)
-    from datetime import datetime as _dt_rem
-    from zoneinfo import ZoneInfo as _ZI_rem
-    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
-    try:
-        tz_rem = _ZI_rem(tz_name)
-    except Exception:
-        tz_rem = _ZI_rem("Europe/Moscow")
-    today_rem = _dt_rem.now(tz_rem).strftime("%Y-%m-%d")
-    today_count = sum(1 for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem)
-    total_rem = len(reminders)
-    lines.append(f"🔔 <b>Напоминания сегодня</b> {today_count}/{total_rem}")
-    # Show up to 3 reminders for today
-    today_reminders = [r for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem]
-    for r in today_reminders[:3]:
-        dt = (r.get("datetime_iso","") or "")
-        time_part = dt[11:16] if len(dt) >= 16 and dt[10] == "T" else ""
-        time_str = f" · {time_part}" if time_part else ""
-        lines.append(f"  · {r['title']}{time_str}")
-    lines.append("────────────────")
-
-    # Collect all task_ids that belong to any roadmap
+    # ── Roadmaps block (first) ───────────────────────────────────────
     roadmaps = store_get_roadmaps(user_id)
-    # Sort roadmaps by deadline ASC (nearest first, null → last)
     roadmaps = sorted(roadmaps, key=lambda r: (r.get("deadline") or "9999-99-99"))
-    roadmap_task_ids: set = set()
-    task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
-    for rm in roadmaps:
-        for tid in rm.get("task_ids", []):
-            roadmap_task_ids.add(tid)
-
-    # Roadmaps block — compact one-liner per roadmap, tasks hidden
     if roadmaps:
         for rm in roadmaps:
             if rm.get("status") != "active":
@@ -1143,7 +1113,6 @@ def _build_profile_card(user_id: str) -> str:
             bar      = _roadmap_progress_bar(pct)
             dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
             lines.append(f"🗺 <b>{rm['title']}</b>  {done_cnt}/{total}  {pct}%{dl}")
-            # Show up to 3 tasks due today or overdue
             roadmap_today = [
                 t for t in all_tasks
                 if t.get("task_id") in rm.get("task_ids", [])
@@ -1156,92 +1125,39 @@ def _build_profile_card(user_id: str) -> str:
                 lines.append(f"  · 🔥 {rt['title']}{overdue_str}")
         lines.append("")
 
-    # Active tasks NOT in any roadmap
-    active = [t for t in all_tasks
-              if t.get("status") != "completed"
-              and t.get("task_id") not in roadmap_task_ids]
-    if not active and not roadmaps:
-        lines.append("🌀 Активных задач нет")
-        return "\n".join(lines)
+    # ── Tasks today block ────────────────────────────────────────────────
+    from datetime import datetime as _dt_rem
+    from zoneinfo import ZoneInfo as _ZI_rem
+    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz_rem = _ZI_rem(tz_name)
+    except Exception:
+        tz_rem = _ZI_rem("Europe/Moscow")
+    today_rem = _dt_rem.now(tz_rem).strftime("%Y-%m-%d")
 
-    groups_data = store_get_groups(user_id).get("groups", [])
-    emoji_map   = _assign_group_emojis(groups_data)
-    by_group: dict = {}
-    for t in active:
-        key = t.get("label_name") or ""
-        by_group.setdefault(key, []).append(t)
+    active_all = [t for t in all_tasks if t.get("status") != "completed"]
+    total_tasks = len(active_all)
+    today_tasks = [t for t in active_all if t.get("deadline") and t["deadline"] <= today_rem]
+    today_count = len(today_tasks)
+    lines.append(f"📋 <b>Задачи сегодня</b> {today_count}/{total_tasks}")
+    for t in sorted(today_tasks, key=lambda x: x.get("deadline") or "9999")[:3]:
+        ind = _deadline_indicator(t.get("deadline", ""))
+        dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+        lines.append(f"  · {ind}{t['title']}{dl}")
+    lines.append("")
 
-    def get_group_emoji(gname: str) -> str:
-        for g in groups_data:
-            if g.get("name") == gname:
-                return emoji_map.get(g["id"], "🌱")
-        return _group_emoji(gname) or "🌱"
+    # ── Reminders block ──────────────────────────────────────────────────
+    reminders = store_get_reminders(user_id)
+    today_reminders = [r for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem]
+    total_rem = len(reminders)
+    today_rem_count = len(today_reminders)
+    lines.append(f"🔔 <b>Напоминания сегодня</b> {today_rem_count}/{total_rem}")
+    for r in today_reminders[:3]:
+        dt = (r.get("datetime_iso","") or "")
+        time_part = dt[11:16] if len(dt) >= 16 and dt[10] == "T" else ""
+        time_str = f" · {time_part}" if time_part else ""
+        lines.append(f"  · {r['title']}{time_str}")
 
-    shown = set()
-    first_group = True
-
-    for g in groups_data:
-        gname = g.get("name", "")
-        items = by_group.get(gname, [])
-        if not items:
-            continue
-        shown.add(gname)
-        emoji = emoji_map.get(g["id"], "🌱")
-        if not first_group:
-            lines.append("")
-        first_group = False
-        lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
-        shown_count = 0
-        for t in _sort_by_deadline(items):
-            if shown_count >= 3:
-                break
-            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
-            ind = _deadline_indicator(t.get("deadline", ""))
-            lines.append(f"  · {ind}{t['title']}{dl}")
-            shown_count += 1
-        remaining = len(items) - shown_count
-        if remaining > 0:
-            lines.append(f"  <i>...и ещё {remaining}</i>")
-    for gname, items in by_group.items():
-        if not gname or gname in shown:
-            continue
-        emoji = get_group_emoji(gname)
-        if not first_group:
-            lines.append("")
-        first_group = False
-        lines.append(f"{emoji} <b>{gname} ({len(items)})</b>")
-        shown_count = 0
-        for t in _sort_by_deadline(items):
-            if shown_count >= 3:
-                break
-            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
-            ind = _deadline_indicator(t.get("deadline", ""))
-            lines.append(f"  · {ind}{t['title']}{dl}")
-            shown_count += 1
-        remaining = len(items) - shown_count
-        if remaining > 0:
-            lines.append(f"  <i>...и ещё {remaining}</i>")
-    unlabeled = by_group.get("", [])
-    if unlabeled:
-        if not first_group:
-            lines.append("")
-        lines.append(f"🌱 <b>Без группы ({len(unlabeled)})</b>")
-        shown_ul = 0
-        for t in _sort_by_deadline(unlabeled):
-            if shown_ul >= 3:
-                break
-            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
-            ind = _deadline_indicator(t.get("deadline", ""))
-            lines.append(f"  · {ind}{t['title']}{dl}")
-            shown_ul += 1
-        remaining_ul = len(unlabeled) - shown_ul
-        if remaining_ul > 0:
-            lines.append(f"  <i>...и ещё {remaining_ul}</i>")
-    # Empty groups at the bottom
-    empty_groups = [g.get("name","") for g in groups_data if not by_group.get(g.get("name",""))]
-    if empty_groups:
-        lines.append("")
-        lines.append(f"🎨 {' · '.join(empty_groups)}")
     return "\n".join(lines)
 
 
