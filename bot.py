@@ -60,23 +60,29 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.8"
+BOT_VERSION = "7.39.9"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.8",
+    "version": "7.39.9",
     "date": "2026-05-09",
-    "text": "🌱 Мандала · Что нового\n\n"
-            "v7.39.8 · 09.05.2026\n"
-            "  · Обнаружение тишины: СР пишет сам если садовник молчит 3+ дня\n"
-            "  · Сообщения тишины генерируются через SR, уникальные под пользователя\n\n"
-            "v7.39.7 · 09.05.2026\n"
-            "  · Чейнджлог-дашборд: /changelog, 🆕 Обновления в меню\n\n"
-            "v7.39.6 · 09.05.2026\n"
-            "  · Кнопки редактирования профиля с возвратом в меню\n\n"
-            "v7.39.5 · 09.05.2026\n"
-            "  · СР поздравляет с днём рождения при первом контакте после 00:00\n\n"
-            "v7.39.4 · 09.05.2026\n"
-            "  · Все сферы в статистике достижений (задачи + достижения)",
+    "text": "🌱 Мандала · Что нового\
+\
+" "v7.39.9 · 09.05.2026\
+" "  · Меню Задач: группы, список задач, повторы, своя дата\
+" "  · Кнопка Роадмапы в профиле (заглушка — скоро меню)\
+\
+" "v7.39.8 · 09.05.2026\
+" "  · Обнаружение тишины: СР пишет сам если садовник молчит 3+ дня\
+" "  · Сообщения тишины генерируются через SR, уникальные под пользователя\
+\
+" "v7.39.7 · 09.05.2026\
+" "  · Чейнджлог-дашборд: /changelog, 🆕 Обновления в меню\
+\
+" "v7.39.6 · 09.05.2026\
+" "  · Кнопки редактирования профиля с возвратом в меню\
+\
+" "v7.39.5 · 09.05.2026\
+" "  · СР поздравляет с днём рождения при первом контакте после 00:00",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1177,6 +1183,10 @@ async def _show_profile(user_id: str, message: Message):
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
+            InlineKeyboardButton(text="⚡ Задачи", callback_data="menu_tasks_mgmt_v2"),
+            InlineKeyboardButton(text="🚀 Роадмапы", callback_data="menu_roadmaps_stub"),
+        ],
+        [
             InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
             InlineKeyboardButton(text="🔔 Напоминания", callback_data="menu_reminders_mgmt"),
         ],
@@ -1224,6 +1234,610 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     header = "🌀 <b>Задачи · Группы:</b>"
     await message.answer(header + "\n\n" + body)
 
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# P-13a: Меню Задач v2 — группы + список задач внутри группы + repeat
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def _task_urgency_emoji(deadline: str) -> str:
+    if not deadline:
+        return "\U0001f7e2"
+    from datetime import datetime as _dt_urg, timedelta as _td_urg
+    today = _dt_urg.now().strftime("%Y-%m-%d")
+    tomorrow = (_dt_urg.now() + _td_urg(days=1)).strftime("%Y-%m-%d")
+    if deadline < today:
+        return "\U0001f534"
+    if deadline <= tomorrow:
+        return "\U0001f7e1"
+    return "\U0001f7e2"
+
+def _sort_tasks_smart(tasks: list) -> list:
+    from datetime import datetime as _dt_st, timedelta as _td_st
+    today = _dt_st.now().strftime("%Y-%m-%d")
+    tomorrow = (_dt_st.now() + _td_st(days=1)).strftime("%Y-%m-%d")
+    def key(t):
+        dl = t.get("deadline")
+        if not dl:
+            return (4, "9999")
+        if dl < today:
+            return (0, dl)
+        if dl == today:
+            return (1, dl)
+        if dl == tomorrow:
+            return (2, dl)
+        return (3, dl)
+    return sorted(tasks, key=key)
+
+def get_groups_list_inline(user_id: str) -> InlineKeyboardMarkup:
+    groups_data = store_get_groups(user_id).get("groups", [])
+    all_tasks = store_get_tasks(user_id)
+    active = [t for t in all_tasks if t.get("status") != "completed"]
+    by_group = {}
+    for t in active:
+        gname = t.get("label_name") or ""
+        by_group.setdefault(gname, []).append(t)
+    emoji_map = _assign_group_emojis(groups_data)
+    btns = []
+    for g in groups_data:
+        gname = g["name"]
+        gid = g["id"]
+        count = len(by_group.get(gname, []))
+        emoji = emoji_map.get(gid, "\U0001f4c2")
+        btns.append([
+            InlineKeyboardButton(
+                text=f"{emoji} {gname} ({count})",
+                callback_data=f"tgroup_open|{gid}"
+            ),
+            InlineKeyboardButton(text="\u270f\ufe0f", callback_data=f"tgroup_edit|{gid}"),
+            InlineKeyboardButton(text="\U0001f5d1", callback_data=f"tgroup_delete|{gid}"),
+        ])
+    no_group = by_group.get("", [])
+    btns.append([
+        InlineKeyboardButton(
+            text=f"\U0001f4c2 Без группы ({len(no_group)})",
+            callback_data="tgroup_open|__nogroup__",
+        ),
+    ])
+    btns.append([InlineKeyboardButton(text="\u2795 Новая группа", callback_data="tgroup_create")])
+    btns.append([InlineKeyboardButton(text="\u2190 Назад в профиль", callback_data="profile_back")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMarkup:
+    all_tasks = store_get_tasks(user_id)
+    groups_data = store_get_groups(user_id).get("groups", [])
+    if group_id == "__nogroup__":
+        group_name = "Без группы"
+        tasks = [t for t in all_tasks if t.get("status") != "completed" and not t.get("label_name")]
+    else:
+        group = next((g for g in groups_data if g["id"] == group_id), None)
+        group_name = group["name"] if group else "Группа"
+        tasks = [t for t in all_tasks if t.get("status") != "completed" and t.get("label_id") == group_id]
+    tasks = _sort_tasks_smart(tasks)
+    btns = []
+    for t in tasks:
+        tid = t.get("task_id", "")
+        title = t.get("title", "-")[:22]
+        dl = t.get("deadline", "")
+        dl_short = f" · {dl}" if dl else ""
+        emoji = _task_urgency_emoji(dl)
+        repeat_str = " \U0001f501" if t.get("repeat") else ""
+        label = f"{emoji} {title}{repeat_str}{dl_short}"
+        btns.append([
+            InlineKeyboardButton(text=label, callback_data=f"ttask_noop|{tid}"),
+            InlineKeyboardButton(text="\u2705", callback_data=f"ttask_done|{tid}"),
+            InlineKeyboardButton(text="\u270f\ufe0f", callback_data=f"ttask_edit|{tid}"),
+            InlineKeyboardButton(text="\U0001f5d1", callback_data=f"ttask_delete|{tid}"),
+        ])
+    btns.append([InlineKeyboardButton(text="\u2795 Новая задача", callback_data=f"ttask_create|{group_id}")])
+    btns.append([InlineKeyboardButton(text="\u2190 Назад к группам", callback_data="tgroup_back_to_list")])
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        return InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="\u2190 Назад", callback_data="tgroup_back_to_list")]
+        ])
+    repeat_label = _repeat_label(task.get("repeat") or "once")
+    group_name = task.get("label_name") or "Без группы"
+    btns = [
+        [InlineKeyboardButton(
+            text=f"\u270f\ufe0f Название: {task.get('title','-')[:18]}",
+            callback_data=f"ttask_edit_field|{task_id}|title"
+        )],
+        [InlineKeyboardButton(
+            text=f"\U0001f4c5 Дедлайн: {task.get('deadline') or 'нет'}",
+            callback_data=f"ttask_edit_field|{task_id}|deadline"
+        )],
+        [InlineKeyboardButton(
+            text=f"\U0001f3a8 Группа: {group_name}",
+            callback_data=f"ttask_edit_field|{task_id}|group"
+        )],
+        [InlineKeyboardButton(
+            text=f"\U0001f501 Повтор: {repeat_label}",
+            callback_data=f"ttask_edit_field|{task_id}|repeat"
+        )],
+        [InlineKeyboardButton(text="\u2190 Назад к списку", callback_data=f"tgroup_open|{task.get('label_id') or '__nogroup__'}")],
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=btns)
+
+@router.callback_query(F.data == "menu_roadmaps_stub")
+async def cb_roadmaps_stub(callback: CallbackQuery):
+    await callback.answer("\U0001f5fa Роадмапы — в разработке \U0001f331", show_alert=True)
+
+@router.callback_query(F.data == "menu_tasks_mgmt_v2")
+async def cb_tasks_mgmt_v2(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    if not is_authorized(user_id):
+        await callback.message.answer("\U0001f331 Используй /start")
+        return
+    groups_data = store_get_groups(user_id).get("groups", [])
+    all_tasks = store_get_tasks(user_id)
+    active = [t for t in all_tasks if t.get("status") != "completed"]
+    header = f"\U0001f5c2 <b>Задачи</b> · {len(groups_data)} групп · {len(active)} активных"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_groups_list_inline(user_id))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
+
+@router.callback_query(F.data == "tgroup_back_to_list")
+async def cb_tgroup_back_to_list(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    groups_data = store_get_groups(user_id).get("groups", [])
+    all_tasks = store_get_tasks(user_id)
+    active = [t for t in all_tasks if t.get("status") != "completed"]
+    header = f"\U0001f5c2 <b>Задачи</b> · {len(groups_data)} групп · {len(active)} активных"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_groups_list_inline(user_id))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
+
+@router.callback_query(F.data.startswith("tgroup_open|"))
+async def cb_tgroup_open(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    group_id = callback.data.split("|")[1]
+    all_tasks = store_get_tasks(user_id)
+    groups_data = store_get_groups(user_id).get("groups", [])
+    if group_id == "__nogroup__":
+        group_name = "Без группы"
+        tasks = [t for t in all_tasks if t.get("status") != "completed" and not t.get("label_name")]
+    else:
+        group = next((g for g in groups_data if g["id"] == group_id), None)
+        group_name = group["name"] if group else "Группа"
+        tasks = [t for t in all_tasks if t.get("status") != "completed" and t.get("label_id") == group_id]
+    header = f"\U0001f5c2 <b>{group_name}</b> · {len(tasks)} задач"
+    try:
+        await callback.message.edit_text(
+            header, reply_markup=get_tasks_in_group_inline(user_id, group_id), parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            header, reply_markup=get_tasks_in_group_inline(user_id, group_id), parse_mode="HTML"
+        )
+
+@router.callback_query(F.data.startswith("ttask_done|"))
+async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
+    user_id = str(callback.from_user.id)
+    task_id = callback.data.split("|")[1]
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    group_id = task.get("label_id") or "__nogroup__"
+    repeat = task.get("repeat")
+    tasks = [t for t in tasks if t.get("task_id") != task_id]
+    new_task_created = False
+    if repeat and repeat != "once":
+        from datetime import datetime as _dt_rep, timedelta as _td_rep
+        today = _dt_rep.now().strftime("%Y-%m-%d")
+        new_dl = None
+        if repeat == "daily":
+            new_dl = (_dt_rep.now() + _td_rep(days=1)).strftime("%Y-%m-%d")
+        elif repeat == "weekly":
+            new_dl = (_dt_rep.now() + _td_rep(days=7)).strftime("%Y-%m-%d")
+        elif repeat == "weekdays":
+            d = _dt_rep.now() + _td_rep(days=1)
+            while d.weekday() >= 5:
+                d += _td_rep(days=1)
+            new_dl = d.strftime("%Y-%m-%d")
+        elif repeat == "monthly":
+            new_dl = (_dt_rep.now() + _td_rep(days=30)).strftime("%Y-%m-%d")
+        elif repeat == "yearly":
+            new_dl = (_dt_rep.now() + _td_rep(days=365)).strftime("%Y-%m-%d")
+        elif repeat.startswith("custom_days:"):
+            days_str = repeat.split(":")[1]
+            days_list = days_str.split(",")
+            day_names = ["mon","tue","wed","thu","fri","sat","sun"]
+            d = _dt_rep.now() + _td_rep(days=1)
+            while day_names[d.weekday()] not in days_list:
+                d += _td_rep(days=1)
+            new_dl = d.strftime("%Y-%m-%d")
+        elif repeat.startswith("custom_date:"):
+            date_str = repeat.split(":")[1]
+            try:
+                dt = _dt_rep.strptime(date_str, "%Y-%m-%d")
+                dt = dt.replace(year=dt.year + 1)
+                new_dl = dt.strftime("%Y-%m-%d")
+            except Exception:
+                new_dl = (_dt_rep.now() + _td_rep(days=365)).strftime("%Y-%m-%d")
+        if new_dl:
+            import uuid
+            new_tid = "task_" + _today().replace("-","") + "_" + str(len(tasks)+1).zfill(3)
+            new_task = {
+                "task_id": new_tid,
+                "title": task.get("title",""),
+                "status": "todo",
+                "label_id": task.get("label_id"),
+                "label_name": task.get("label_name",""),
+                "life_area": task.get("life_area","work"),
+                "priority": calculate_priority(new_dl),
+                "deadline": new_dl,
+                "reminder": task.get("reminder"),
+                "repeat": repeat,
+                "created": _today(),
+                "updated": _today(),
+                "completed": None,
+                "notes": ""
+            }
+            tasks.append(new_task)
+            new_task_created = True
+    store_set_tasks(user_id, tasks)
+    store_increment_achievements(user_id)
+    sphere = _classify_sphere(task.get("title",""), task.get("label_name",""))
+    store_add_sphere_resonance(user_id, sphere, 2)
+    _update_sphere_history(user_id, sphere, task=True, resonance_delta=2)
+    _update_deep_profile(user_id)
+    _fire_sync()
+    await callback.answer("\u2705 Выполнено!")
+    all_tasks2 = store_get_tasks(user_id)
+    tasks_in_group = [t for t in all_tasks2 if t.get("status") != "completed" and (
+        (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
+    )]
+    group_name2 = "Без группы" if group_id == "__nogroup__" else next(
+        (g["name"] for g in store_get_groups(user_id).get("groups", []) if g["id"] == group_id), "Группа"
+    )
+    repeat_note = " \U0001f501 Новая задача создана" if new_task_created else ""
+    header = f"\U0001f5c2 <b>{group_name2}</b> · {len(tasks_in_group)} задач{repeat_note}"
+    try:
+        await callback.message.edit_text(
+            header,
+            reply_markup=get_tasks_in_group_inline(user_id, group_id),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            header,
+            reply_markup=get_tasks_in_group_inline(user_id, group_id),
+            parse_mode="HTML"
+        )
+
+@router.callback_query(F.data.startswith("ttask_edit|"))
+async def cb_ttask_edit(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    task_id = callback.data.split("|")[1]
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    header = f"\u270f\ufe0f <b>{task.get('title','-')}</b>"
+    try:
+        await callback.message.edit_text(
+            header,
+            reply_markup=get_task_edit_inline(user_id, task_id),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            header,
+            reply_markup=get_task_edit_inline(user_id, task_id),
+            parse_mode="HTML"
+        )
+
+@router.callback_query(F.data.startswith("ttask_edit_field|"))
+async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    parts = callback.data.split("|")
+    task_id = parts[1]
+    field = parts[2]
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    if field == "title":
+        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="title")
+        await state.set_state(TaskEditStates.editing_title)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="\u2190 Назад", callback_data=f"ttask_edit|{task_id}")]
+        ])
+        try:
+            await callback.message.edit_text(
+                f"\u270f\ufe0f Новое название для «{task.get('title','')}»:",
+                reply_markup=cancel_kb
+            )
+        except Exception:
+            await callback.message.answer(
+                f"\u270f\ufe0f Новое название для «{task.get('title','')}»:",
+                reply_markup=cancel_kb
+            )
+    elif field == "deadline":
+        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="deadline")
+        await state.set_state(TaskEditStates.editing_deadline)
+        try:
+            await callback.message.edit_text(
+                "\U0001f4c5 Выбери новый дедлайн:",
+                reply_markup=get_deadline_keyboard()
+            )
+        except Exception:
+            await callback.message.answer(
+                "\U0001f4c5 Выбери новый дедлайн:",
+                reply_markup=get_deadline_keyboard()
+            )
+    elif field == "group":
+        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="group")
+        await state.set_state(TaskEditStates.editing_group)
+        groups = store_get_groups(user_id).get("groups", [])
+        try:
+            await callback.message.edit_text(
+                "\U0001f3a8 Выбери группу:",
+                reply_markup=get_labels_keyboard(groups)
+            )
+        except Exception:
+            await callback.message.answer(
+                "\U0001f3a8 Выбери группу:",
+                reply_markup=get_labels_keyboard(groups)
+            )
+    elif field == "repeat":
+        current = task.get("repeat", "once")
+        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="repeat")
+        await state.set_state(ReminderStates.waiting_for_repeat)
+        try:
+            await callback.message.edit_text(
+                "\U0001f501 <b>Повторение:</b>",
+                reply_markup=_repeat_picker_keyboard(current),
+                parse_mode="HTML"
+            )
+        except Exception:
+            await callback.message.answer(
+                "\U0001f501 <b>Повторение:</b>",
+                reply_markup=_repeat_picker_keyboard(current),
+                parse_mode="HTML"
+            )
+
+@router.callback_query(F.data.startswith("dl_"), StateFilter(TaskEditStates.editing_deadline))
+async def ttask_deadline_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    tid = data.get("_ttask_edit_id") or data.get("edit_task_id", "")
+    val = callback.data[3:]
+    if val == "custom":
+        await state.set_state(TaskEditStates.waiting_for_custom_deadline)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="\u2190 Назад", callback_data=f"ttask_edit|{tid}")]
+        ])
+        try:
+            await callback.message.edit_text(
+                "\u270f\ufe0f Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
+                parse_mode="HTML", reply_markup=cancel_kb
+            )
+        except Exception:
+            await callback.message.answer(
+                "\u270f\ufe0f Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
+                parse_mode="HTML", reply_markup=cancel_kb
+            )
+        return
+    deadline = None if val == "skip" else val
+    tasks = store_get_tasks(user_id)
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["deadline"] = deadline
+            t["updated"] = _today()
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    dl_str = deadline or "убран"
+    group_id = next((t.get("label_id") or "__nogroup__" for t in tasks if t.get("task_id") == tid), "__nogroup__")
+    group_name = "Без группы" if group_id == "__nogroup__" else next(
+        (g["name"] for g in store_get_groups(user_id).get("groups", []) if g["id"] == group_id), "Группа"
+    )
+    tasks_in_group = [t for t in tasks if t.get("status") != "completed" and (
+        (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
+    )]
+    await callback.message.edit_text(
+        f"\U0001f5c2 <b>{group_name}</b> · {len(tasks_in_group)} задач\\n<i>\u2705 Дедлайн → {dl_str}</i>",
+        reply_markup=get_tasks_in_group_inline(user_id, group_id),
+        parse_mode="HTML"
+    )
+
+@router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskEditStates.editing_group))
+async def ttask_group_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    tid = data.get("_ttask_edit_id") or data.get("edit_task_id", "")
+    val = callback.data[4:]
+    if val in ("new", "skip"):
+        label_id, label_name = None, ""
+    else:
+        labels = store_get_groups(user_id).get("groups", [])
+        lb = next((l for l in labels if l["id"] == val), None)
+        label_id = val
+        label_name = lb["name"] if lb else ""
+    tasks = store_get_tasks(user_id)
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["label_id"] = label_id
+            t["label_name"] = label_name
+            t["updated"] = _today()
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    await callback.message.edit_text(
+        f"\u270f\ufe0f <b>{next((t.get('title','-') for t in tasks if t.get('task_id')==tid), '-')}</b>\\n<i>\u2705 Группа → {label_name or 'Без группы'}</i>",
+        reply_markup=get_task_edit_inline(user_id, tid),
+        parse_mode="HTML"
+    )
+
+@router.callback_query(F.data.startswith("ttask_delete|"))
+async def cb_ttask_delete(callback: CallbackQuery, state: FSMContext):
+    user_id = str(callback.from_user.id)
+    task_id = callback.data.split("|")[1]
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    group_id = task.get("label_id") or "__nogroup__"
+    tasks = [t for t in tasks if t.get("task_id") != task_id]
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await callback.answer("\U0001f5d1 Удалено")
+    tasks_in_group = [t for t in tasks if t.get("status") != "completed" and (
+        (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
+    )]
+    group_name = "Без группы" if group_id == "__nogroup__" else next(
+        (g["name"] for g in store_get_groups(user_id).get("groups", []) if g["id"] == group_id), "Группа"
+    )
+    header = f"\U0001f5c2 <b>{group_name}</b> · {len(tasks_in_group)} задач"
+    try:
+        await callback.message.edit_text(
+            header,
+            reply_markup=get_tasks_in_group_inline(user_id, group_id),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            header,
+            reply_markup=get_tasks_in_group_inline(user_id, group_id),
+            parse_mode="HTML"
+        )
+
+@router.callback_query(F.data.startswith("ttask_create|"))
+async def cb_ttask_create(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    group_id = callback.data.split("|")[1]
+    if group_id == "__nogroup__":
+        label_id = None
+        label_name = ""
+        group_display = "Без группы"
+    else:
+        groups = store_get_groups(user_id).get("groups", [])
+        g = next((x for x in groups if x["id"] == group_id), None)
+        label_id = group_id
+        label_name = g["name"] if g else ""
+        group_display = label_name
+    await state.update_data(
+        _ttask_create_group=group_id,
+        _ttask_create_label_id=label_id,
+        _ttask_create_label_name=label_name
+    )
+    await state.set_state(TaskStates.waiting_for_title)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="\u2190 Назад", callback_data=f"tgroup_open|{group_id}")]
+    ])
+    await callback.message.edit_text(
+        f"\u2795 <b>Новая задача в «{group_display}»</b>\\n\\nВведи название:",
+        reply_markup=cancel_kb, parse_mode="HTML"
+    )
+
+@router.callback_query(F.data == "tgroup_create")
+async def cb_tgroup_create(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    groups = store_get_groups(user_id).get("groups", [])
+    if len(groups) >= LABEL_LIMIT_HARD:
+        await callback.answer(f"\u26a0\ufe0f Лимит групп: {LABEL_LIMIT_HARD}", show_alert=True)
+        return
+    await state.set_state(TaskStates.waiting_for_new_group)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="\u2190 Назад", callback_data="tgroup_back_to_list")]
+    ])
+    await callback.message.edit_text(
+        "\u2795 <b>Новая группа</b>\\n\\nВведи название:",
+        reply_markup=cancel_kb, parse_mode="HTML"
+    )
+
+@router.callback_query(F.data.startswith("tgroup_edit|"))
+async def cb_tgroup_edit_start(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    group_id = callback.data.split("|")[1]
+    groups = store_get_groups(user_id).get("groups", [])
+    g = next((x for x in groups if x["id"] == group_id), None)
+    if not g:
+        await callback.answer("Группа не найдена", show_alert=True)
+        return
+    await state.set_state(TaskStates.waiting_for_new_group)
+    await state.update_data(_tgroup_edit_id=group_id)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="\u2190 Назад", callback_data="tgroup_back_to_list")]
+    ])
+    await callback.message.edit_text(
+        f"\u270f\ufe0f Новое название для «{g['name']}»:",
+        reply_markup=cancel_kb
+    )
+
+@router.callback_query(F.data.startswith("tgroup_delete|"))
+async def cb_tgroup_delete(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    group_id = callback.data.split("|")[1]
+    groups = store_get_groups(user_id).get("groups", [])
+    g = next((x for x in groups if x["id"] == group_id), None)
+    if not g:
+        await callback.answer("Группа не найдена", show_alert=True)
+        return
+    tasks = store_get_tasks(user_id)
+    count = len([t for t in tasks if t.get("label_id") == group_id])
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="\u2705 Да, удалить", callback_data=f"tgroup_delete_confirm|{group_id}")],
+        [InlineKeyboardButton(text="\u2190 Назад", callback_data="tgroup_back_to_list")],
+    ])
+    await callback.message.edit_text(
+        f"\U0001f5d1 <b>Удалить группу «{g['name']}»?</b>\\n\\n{count} задач переместятся в «Без группы»",
+        reply_markup=kb, parse_mode="HTML"
+    )
+
+@router.callback_query(F.data.startswith("tgroup_delete_confirm|"))
+async def cb_tgroup_delete_confirm(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    group_id = callback.data.split("|")[1]
+    groups_data = store_get_groups(user_id)
+    groups = groups_data.get("groups", [])
+    g = next((x for x in groups if x["id"] == group_id), None)
+    if g:
+        tasks = store_get_tasks(user_id)
+        for t in tasks:
+            if t.get("label_id") == group_id:
+                t["label_id"] = None
+                t["label_name"] = ""
+        store_set_tasks(user_id, tasks)
+        groups_data["groups"] = [x for x in groups if x["id"] != group_id]
+        store_set_groups(user_id, groups_data)
+        _fire_sync()
+    groups_data2 = store_get_groups(user_id).get("groups", [])
+    all_tasks2 = store_get_tasks(user_id)
+    active2 = [t for t in all_tasks2 if t.get("status") != "completed"]
+    header = f"\U0001f5c2 <b>Задачи</b> · {len(groups_data2)} групп · {len(active2)} активных"
+    try:
+        await callback.message.edit_text(header, reply_markup=get_groups_list_inline(user_id))
+    except Exception:
+        await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
+
+@router.callback_query(F.data.startswith("ttask_noop|"))
+async def cb_ttask_noop(callback: CallbackQuery):
+    await callback.answer()
 
 # ─── Checklist keyboards ──────────────────────────────────────────────────────
 
@@ -3011,6 +3625,9 @@ def _repeat_label(repeat: str) -> str:
         "monthly": "📆 Раз в месяц",
         "yearly": "📆 Раз в год",
     }
+    if repeat.startswith("custom_date:"):
+        date_str = repeat.split(":")[1]
+        return "📆 " + date_str
     if repeat.startswith("custom_days:"):
         days = repeat.split(":")[1]
         day_names = {"mon":"пн","tue":"вт","wed":"ср","thu":"чт","fri":"пт","sat":"сб","sun":"вс"}
@@ -3062,6 +3679,7 @@ def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🗓 Раз в месяц",    callback_data="rem_rp_monthly")],
         [InlineKeyboardButton(text="🌿 Раз в год",      callback_data="rem_rp_yearly")],
         [InlineKeyboardButton(text="✍️ По дням недели", callback_data="rem_rp_custom")],
+        [InlineKeyboardButton(text="📆 Своя дата",      callback_data="rem_rp_custom_date")],
         [InlineKeyboardButton(text="← Назад",           callback_data="rem_back_to_confirm")],
     ]
     return InlineKeyboardMarkup(inline_keyboard=btns)
@@ -3178,11 +3796,19 @@ async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
 @router.message(StateFilter(ReminderStates.waiting_for_weekdays))
 async def cb_rem_weekdays_input(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
-    repeat = _parse_weekdays(message.text or "")
-    if repeat == "once":
-        err_txt = "🌿 Не смог разобрать дни. Попробуй ещё раз, например: <code>пн ср пт</code>"
-        await message.answer(err_txt, parse_mode="HTML")
-        return
+    raw = (message.text or "").strip()
+    import re as _re_cd
+    _m_cd = _re_cd.match(r"^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$", raw)
+    if _m_cd:
+        dd, mm, yy = _m_cd.groups()
+        yy = "20" + yy if len(yy) == 2 else yy
+        repeat = f"custom_date:{yy}-{mm.zfill(2)}-{dd.zfill(2)}"
+    else:
+        repeat = _parse_weekdays(raw)
+        if repeat == "once" and not _m_cd:
+            err_txt = "🌿 Не смог разобрать. Введи дни недели (пн ср пт) или дату (ДД.ММ.ГГ)"
+            await message.answer(err_txt, parse_mode="HTML")
+            return
     data = await state.get_data()
     if not data.get("_rem_title") and not data.get("_rem_edit_id"):
         ws = store_get_workspace(user_id) or {}
@@ -3221,9 +3847,30 @@ async def cb_rem_weekdays_input(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "rem_rp_done")
 async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
-    """Return to confirmation screen with updated repeat. Works for both create and edit."""
+    """Return to confirmation screen with updated repeat. Works for both create and edit.
+    Also supports task repeat editing via _ttask_edit_id."""
     await _safe_cb_answer(callback)
     data = await state.get_data()
+    _ttask_id = data.get("_ttask_edit_id", "")
+    _ttask_field = data.get("_ttask_edit_field", "")
+    if _ttask_id and _ttask_field == "repeat":
+        user_id = str(callback.from_user.id)
+        repeat = data.get("_rem_repeat", "once")
+        tasks = store_get_tasks(user_id)
+        for t in tasks:
+            if t.get("task_id") == _ttask_id:
+                t["repeat"] = repeat if repeat != "once" else None
+                t["updated"] = _today()
+        store_set_tasks(user_id, tasks)
+        _fire_sync()
+        await state.clear()
+        await callback.message.edit_text(
+            f"✏️ <b>{next((t.get('title','-') for t in tasks if t.get('task_id')==_ttask_id), '-')}</b>\
+<i>✅ Повтор → {_repeat_label(repeat)}</i>",
+            reply_markup=get_task_edit_inline(user_id, _ttask_id),
+            parse_mode="HTML"
+        )
+        return
     title = data.get("_rem_title", "")
     dt_iso = data.get("_rem_dt", "")
     repeat = data.get("_rem_repeat", "once")
@@ -4423,29 +5070,58 @@ async def task_label_cb(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(TaskStates.waiting_for_new_group))
 async def task_new_label_input(message: Message, state: FSMContext):
-    if message.text and message.text.strip() == "❌ Отмена":
-        await state.clear()
-        await message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
-        return
     user_id = str(message.from_user.id)
     name = (message.text or "").strip()
     if len(name) < 1:
         await message.answer("🏷 Введи название группы.")
         return
+    data = await state.get_data()
+    _edit_group_id = data.get("_tgroup_edit_id", "")
+    if _edit_group_id:
+        groups_data = store_get_groups(user_id)
+        groups = groups_data.get("groups", [])
+        g = next((x for x in groups if x["id"] == _edit_group_id), None)
+        if g:
+            old_name = g["name"]
+            g["name"] = name
+            store_set_groups(user_id, groups_data)
+            tasks = store_get_tasks(user_id)
+            for t in tasks:
+                if t.get("label_id") == _edit_group_id:
+                    t["label_name"] = name
+            store_set_tasks(user_id, tasks)
+            _fire_sync()
+            await state.clear()
+            await message.answer(f"✅ Группа «{old_name}» → «{name}»", reply_markup=get_main_keyboard())
+            groups_data2 = store_get_groups(user_id).get("groups", [])
+            all_tasks2 = store_get_tasks(user_id)
+            active2 = [t for t in all_tasks2 if t.get("status") != "completed"]
+            header2 = f"🗂 <b>Задачи</b> · {len(groups_data2)} групп · {len(active2)} активных"
+            await message.answer(header2, reply_markup=get_groups_list_inline(user_id))
+            return
+        else:
+            await state.clear()
+            await message.answer("🌀 Группа не найдена.", reply_markup=get_main_keyboard())
+            return
     data_store = store_get_groups(user_id)
     labels = data_store.get("groups", [])
     if len(labels) >= LABEL_LIMIT_HARD:
         await message.answer(f"⚠️ Лимит групп: {LABEL_LIMIT_HARD}. Удали или переименуй существующий.")
+        await state.clear()
         return
     gid = _make_group_id(name, labels)
     labels.append({"id": gid, "name": name, "created": _today()})
     data_store["groups"] = labels
     store_set_groups(user_id, data_store)
     _fire_sync()
-    await state.update_data(label_id=gid, label_name=name)
+    await state.clear()
     suffix = f" Осталось {LABEL_LIMIT_HARD - len(labels)} слота." if len(labels) >= LABEL_LIMIT_SOFT else ""
-    await message.answer("✅ Группа «" + name + "» создана!" + suffix)
-    await _show_task_confirm(message, state, edit=False)
+    await message.answer("✅ Группа «" + name + "» создана!" + suffix, reply_markup=get_main_keyboard())
+    groups_data3 = store_get_groups(user_id).get("groups", [])
+    all_tasks3 = store_get_tasks(user_id)
+    active3 = [t for t in all_tasks3 if t.get("status") != "completed"]
+    header3 = f"🗂 <b>Задачи</b> · {len(groups_data3)} групп · {len(active3)} активных"
+    await message.answer(header3, reply_markup=get_groups_list_inline(user_id))
 
 async def _show_task_confirm(message: Message, state: FSMContext, edit: bool = False):
     await state.set_state(TaskStates.waiting_for_confirm)
