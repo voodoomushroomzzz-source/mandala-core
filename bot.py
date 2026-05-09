@@ -1099,6 +1099,16 @@ def _build_profile_card(user_id: str) -> str:
         "",
     ]
 
+    # ── Resolve today in gardener timezone (used by roadmaps + tasks) ─
+    from datetime import datetime as _dt_rem
+    from zoneinfo import ZoneInfo as _ZI_rem
+    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz_rem = _ZI_rem(tz_name)
+    except Exception:
+        tz_rem = _ZI_rem("Europe/Moscow")
+    today_rem = _dt_rem.now(tz_rem).strftime("%Y-%m-%d")
+
     # ── Roadmaps block (first) ───────────────────────────────────────
     roadmaps = store_get_roadmaps(user_id)
     roadmaps = sorted(roadmaps, key=lambda r: (r.get("deadline") or "9999-99-99"))
@@ -1126,14 +1136,6 @@ def _build_profile_card(user_id: str) -> str:
         lines.append("")
 
     # ── Tasks today block ────────────────────────────────────────────────
-    from datetime import datetime as _dt_rem
-    from zoneinfo import ZoneInfo as _ZI_rem
-    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
-    try:
-        tz_rem = _ZI_rem(tz_name)
-    except Exception:
-        tz_rem = _ZI_rem("Europe/Moscow")
-    today_rem = _dt_rem.now(tz_rem).strftime("%Y-%m-%d")
 
     active_all = [t for t in all_tasks if t.get("status") != "completed"]
     total_tasks = len(active_all)
