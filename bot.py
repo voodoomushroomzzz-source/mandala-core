@@ -6584,7 +6584,7 @@ async def free_conversation(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     _track_interaction(user_id)
 
-    if not is_authorized(user_id):
+    if not await ensure_user_loaded(user_id):
         await message.answer("🌿 Используй /start чтобы начать.")
         return
 
