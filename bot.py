@@ -60,11 +60,11 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.10"
+BOT_VERSION = "7.39.11"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.10",
-    "date": "2026-05-09",
+    "version": "7.39.11",
+    "date": "2026-05-10",
     "text": "🌱 Мандала · Что нового\
 \
 " "v7.39.9 · 09.05.2026\
@@ -1877,6 +1877,7 @@ def get_checklist_inline(checklist: dict) -> InlineKeyboardMarkup:
         InlineKeyboardButton(text="✏️ Ред.",   callback_data=f"cl_edit_{cid}"),
         InlineKeyboardButton(text="🗑 Удалить", callback_data=f"cl_delete_{cid}"),
     ])
+    btns.append([InlineKeyboardButton(text="← Назад к чеклистам", callback_data="menu_checklists_mgmt")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 def get_checklists_mgmt_inline(checklists: list) -> InlineKeyboardMarkup:
@@ -2767,13 +2768,13 @@ async def cb_profile_achievements(callback: CallbackQuery):
     user_id = str(callback.from_user.id)
     ach_count = store_get_achievements_count(user_id)
     if ach_count == 0:
-        text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу.\nПросто скажи: «добавь достижение — пробежал 5 км»"
+        text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу."
     else:
         text = f"💎 Достижения · всего {ach_count}\n"
         text += "\n📊 Статистика по месяцам:"
         text += _build_sphere_stats(user_id, months=3, show_tasks=False)
-        text += "\n\nДобавить: «добавь достижение — [что сделал]»"
     kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="ach_add_from_menu")],
         [InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")]
     ])
     try:
@@ -2787,6 +2788,30 @@ async def cb_profile_back(callback: CallbackQuery):
     await callback.answer()
     user_id = str(callback.from_user.id)
     await _show_profile(user_id, callback.message)
+
+
+@router.callback_query(F.data == "ach_add_from_menu")
+async def cb_ach_add_from_menu(callback: CallbackQuery, state: FSMContext):
+    """Start add achievement FSM from achievements menu."""
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    if not is_authorized(user_id):
+        await callback.message.answer("🌿 Используй /start")
+        return
+    await state.set_state(AchievementStates.waiting_for_title)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад к достижениям", callback_data="profile_achievements")]
+    ])
+    try:
+        await callback.message.edit_text(
+            "💎 <b>Что сделано?</b>\n\n<i>Напиши одним предложением.</i>",
+            reply_markup=cancel_kb, parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            "💎 <b>Что сделано?</b>\n\n<i>Напиши одним предложением.</i>",
+            reply_markup=cancel_kb, parse_mode="HTML"
+        )
 
 
 @router.callback_query(F.data == "cl_create_new")
@@ -2876,11 +2901,7 @@ async def cl_items_input(message: Message, state: FSMContext):
 async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await state.clear()
-    try:
-        await callback.message.edit_text("❌ Отменено.")
-    except Exception:
-        pass
-    await callback.message.answer("Возвращаемся 🌿", reply_markup=get_main_keyboard())
+    await cb_checklists_mgmt(callback, state)
 
 # ─── Checklist — Toggle item ──────────────────────────────────────────────────
 
@@ -4601,9 +4622,39 @@ async def ach_category(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(AchievementStates.waiting_for_title))
 async def ach_title(message: Message, state: FSMContext):
-    await state.update_data(title=message.text.strip())
-    await state.set_state(AchievementStates.waiting_for_description)
-    await message.answer("🌱 Расскажи подробнее (или '-' чтобы пропустить):")
+    title = (message.text or "").strip()
+    if not title or len(title) < 2:
+        await message.answer("💎 Напиши, что именно сделано (минимум 2 символа).")
+        return
+    sphere = _classify_sphere(title, "")
+    bonus = 3
+    user_id = str(message.from_user.id)
+    icon = LIFE_AREA_ICONS.get(sphere, "🌱")
+    sname = {"health":"Здоровье","creativity":"Творчество","work":"Работа","connections":"Связи","growth":"Рост"}.get(sphere, sphere)
+    store_add_sphere_resonance(user_id, sphere, bonus)
+    _update_sphere_history(user_id, sphere, achievement=True, resonance_delta=bonus)
+    store_increment_achievements(user_id)
+    gardener = store_get_profile(user_id)
+    if gardener:
+        g = dict(gardener)
+        prev_res = g.get("resonance_level", 13)
+        new_res = min(100, prev_res + bonus)
+        g["resonance_level"] = new_res
+        g["updated"] = _today()
+        g = _add_growth_history_entry(g, new_res, user_id)
+        store_set_profile(user_id, g)
+        _invalidate_auth_cache(user_id)
+    _fire_sync()
+    await state.clear()
+    text = (
+        f"{icon} <b>Достижение зафиксировано!</b>\n\n"
+        f"«{title}»\n"
+        f"Сфера: {icon} {sname} · +{bonus} к резонансу"
+    )
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад к достижениям", callback_data="profile_achievements")]
+    ])
+    await message.answer(text, reply_markup=kb, parse_mode="HTML")
 
 @router.message(StateFilter(AchievementStates.waiting_for_description))
 async def ach_description(message: Message, state: FSMContext):
@@ -7118,6 +7169,8 @@ async def _send_daily_report() -> None:
                     f"{stats.get('tasks_completed',0)} закрыто · "
                     f"{stats.get('achievements',0)} достижений"
                 )
+            else:
+                lines.append(f"  {name}: неактивен")
             else:
                 lines.append(f"  {name}: неактивен")
         # Issues
