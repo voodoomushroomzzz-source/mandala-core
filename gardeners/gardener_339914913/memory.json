@@ -23,7 +23,15 @@
     {
       "role": "assistant",
       "content": ""
+    },
+    {
+      "role": "user",
+      "content": "Какие у меня задачи"
+    },
+    {
+      "role": "assistant",
+      "content": ""
     }
   ],
-  "updated": "2026-05-08"
+  "updated": "2026-05-09"
 }
