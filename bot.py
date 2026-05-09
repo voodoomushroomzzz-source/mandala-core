@@ -1273,6 +1273,8 @@ def get_groups_list_inline(user_id: str) -> InlineKeyboardMarkup:
     groups_data = store_get_groups(user_id).get("groups", [])
     all_tasks = store_get_tasks(user_id)
     active = [t for t in all_tasks if t.get("status") != "completed"]
+    roadmaps_g = store_get_roadmaps(user_id)
+    rm_task_ids_g = {tid for rm in roadmaps_g for tid in rm.get("task_ids", [])}
     by_group = {}
     for t in active:
         gname = t.get("label_name") or ""
@@ -1290,13 +1292,14 @@ def get_groups_list_inline(user_id: str) -> InlineKeyboardMarkup:
                 callback_data=f"tgroup_open|{gid}"
             ),
         ])
-    no_group = by_group.get("", [])
+    no_group_tasks = [t for t in active if not t.get("label_name") and t.get("task_id") not in rm_task_ids_g]
     btns.append([
         InlineKeyboardButton(
-            text=f"\U0001f4c2 \u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b ({len(no_group)})",
+            text=f"\U0001f4c2 \u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b ({len(no_group_tasks)})",
             callback_data="tgroup_open|__nogroup__",
         ),
     ])
+    btns.append([InlineKeyboardButton(text="\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500", callback_data="cl_noop|sep")])
     btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0433\u0440\u0443\u043f\u043f\u0430", callback_data="tgroup_create")])
     btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u0432 \u043f\u0440\u043e\u0444\u0438\u043b\u044c", callback_data="profile_back")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
@@ -1324,9 +1327,8 @@ def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMark
         emoji = _task_urgency_emoji(dl)
         repeat_str = " \U0001f501" if t.get("repeat") else ""
         label = f"{emoji} {title}{repeat_str}{dl_short}"
-        btns.append([
-            InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}"),
-        ])
+        btns.append([InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}")])
+    btns.append([InlineKeyboardButton(text="\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500", callback_data="cl_noop|sep")])
     btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0437\u0430\u0434\u0430\u0447\u0430", callback_data=f"ttask_create|{group_id}")])
     if group_id != "__nogroup__":
         btns.append([InlineKeyboardButton(text="\u270f\ufe0f \u041f\u0435\u0440\u0435\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_edit|{group_id}")])
@@ -3676,14 +3678,16 @@ def _parse_weekdays(text: str) -> str:
 
 def _repeat_picker_keyboard(current: str = "once") -> InlineKeyboardMarkup:
     btns = [
-        [InlineKeyboardButton(text="🔁 Каждый день",    callback_data="rem_rp_daily")],
-        [InlineKeyboardButton(text="📅 Раз в неделю",   callback_data="rem_rp_weekly")],
-        [InlineKeyboardButton(text="🗓 Раз в месяц",    callback_data="rem_rp_monthly")],
-        [InlineKeyboardButton(text="🌿 Раз в год",      callback_data="rem_rp_yearly")],
-        [InlineKeyboardButton(text="✍️ По дням недели", callback_data="rem_rp_custom")],
-        [InlineKeyboardButton(text="📆 Своя дата",      callback_data="rem_rp_custom_date")],
-        [InlineKeyboardButton(text="← Назад",           callback_data="rem_back_to_confirm")],
+        [InlineKeyboardButton(text="\U0001f501 \u041a\u0430\u0436\u0434\u044b\u0439 \u0434\u0435\u043d\u044c",    callback_data="rem_rp_daily")],
+        [InlineKeyboardButton(text="\U0001f4c5 \u0420\u0430\u0437 \u0432 \u043d\u0435\u0434\u0435\u043b\u044e",   callback_data="rem_rp_weekly")],
+        [InlineKeyboardButton(text="\U0001f5d3 \u0420\u0430\u0437 \u0432 \u043c\u0435\u0441\u044f\u0446",    callback_data="rem_rp_monthly")],
+        [InlineKeyboardButton(text="\U0001f33f \u0420\u0430\u0437 \u0432 \u0433\u043e\u0434",      callback_data="rem_rp_yearly")],
+        [InlineKeyboardButton(text="\u270d\ufe0f \u041f\u043e \u0434\u043d\u044f\u043c \u043d\u0435\u0434\u0435\u043b\u0438", callback_data="rem_rp_custom")],
+        [InlineKeyboardButton(text="\U0001f4c6 \u0421\u0432\u043e\u044f \u0434\u0430\u0442\u0430",      callback_data="rem_rp_custom_date")],
     ]
+    if current and current != "once":
+        btns.append([InlineKeyboardButton(text="\u274c \u0423\u0431\u0440\u0430\u0442\u044c \u043f\u043e\u0432\u0442\u043e\u0440", callback_data="rem_rp_once")])
+    btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434",           callback_data="rem_back_to_confirm")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 
@@ -3711,7 +3715,19 @@ async def cb_rem_rp_select(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
     action = callback.data[len("rem_rp_"):]
+    if action == "custom_date":
+        await state.set_state(ReminderStates.waiting_for_weekdays)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="rem_repeat_pick")]
+        ])
+        txt = "\U0001f4c6 <b>\u0421\u0432\u043e\u044f \u0434\u0430\u0442\u0430 \u043f\u043e\u0432\u0442\u043e\u0440\u0435\u043d\u0438\u044f:</b>\n\n\u0412\u0432\u0435\u0434\u0438 \u0434\u0430\u0442\u0443 \u0432 \u0444\u043e\u0440\u043c\u0430\u0442\u0435 <code>\u0414\u0414.\u041c\u041c.\u0413\u0413</code>\n\u041d\u0430\u043f\u0440\u0438\u043c\u0435\u0440: <code>25.06.26</code>"
+        try:
+            await callback.message.edit_text(txt, reply_markup=cancel_kb, parse_mode="HTML")
+        except Exception:
+            await callback.message.answer(txt, reply_markup=cancel_kb, parse_mode="HTML")
+        return
     if action == "custom":
+
         await state.set_state(ReminderStates.waiting_for_weekdays)
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="← Назад", callback_data="rem_repeat_pick")]
@@ -3805,6 +3821,38 @@ async def cb_rem_day_toggle(callback: CallbackQuery, state: FSMContext):
 async def cb_rem_weekdays_input(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
     raw = (message.text or "").strip()
+    # ── task repeat context ──
+    import re as _re_wd
+    _data_wd = await state.get_data()
+    _tt_id_wd = _data_wd.get("_ttask_edit_id", "")
+    _tt_field_wd = _data_wd.get("_ttask_edit_field", "")
+    if _tt_id_wd and _tt_field_wd == "repeat":
+        _m_wd = _re_wd.match(r"^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$", raw)
+        if _m_wd:
+            _dd, _mm, _yy = _m_wd.groups()
+            _yy = "20" + _yy if len(_yy) == 2 else _yy
+            _repeat_wd = f"custom_date:{_yy}-{_mm.zfill(2)}-{_dd.zfill(2)}"
+        else:
+            _repeat_wd = _parse_weekdays(raw)
+        if _repeat_wd == "once":
+            await message.answer("\U0001f33f \u041d\u0435 \u0441\u043c\u043e\u0433 \u0440\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c. \u0412\u0432\u0435\u0434\u0438 \u0434\u0430\u0442\u0443 (\u0414\u0414.\u041c\u041c.\u0413\u0413) \u0438\u043b\u0438 \u0434\u043d\u0438 \u043d\u0435\u0434\u0435\u043b\u0438 (\u043f\u043d \u0441\u0440 \u043f\u0442)")
+            return
+        _tasks_wd = store_get_tasks(user_id)
+        _task_title_wd = "-"
+        for _t_wd in _tasks_wd:
+            if _t_wd.get("task_id") == _tt_id_wd:
+                _t_wd["repeat"] = _repeat_wd
+                _t_wd["updated"] = _today()
+                _task_title_wd = _t_wd.get("title", "-")
+        store_set_tasks(user_id, _tasks_wd)
+        _fire_sync()
+        await state.clear()
+        await message.answer(
+            f"\u270f\ufe0f <b>{_task_title_wd}</b>\n<i>\u2705 \u041f\u043e\u0432\u0442\u043e\u0440 \u2192 {_repeat_label(_repeat_wd)}</i>",
+            reply_markup=get_task_edit_inline(user_id, _tt_id_wd),
+            parse_mode="HTML"
+        )
+        return
     import re as _re_cd
     _m_cd = _re_cd.match(r"^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$", raw)
     if _m_cd:
