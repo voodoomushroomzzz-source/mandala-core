@@ -4304,6 +4304,7 @@ async def cmd_start(message: Message, state: FSMContext):
             await message.answer("🌿 Чем могу помочь?", reply_markup=get_main_keyboard())
             return
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
+        await _check_version_notify(user_id)
         return
 
     # Check whitelist
