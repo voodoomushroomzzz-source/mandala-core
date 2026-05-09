@@ -60,11 +60,26 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.6"
+BOT_VERSION = "7.39.7"
+# ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.0",
-    "date": "2026-05-06",
-    "text": "🌱 Мандала обновилась · v7.38.2\n\nПривет, {name}! Смотри что нового:\n\n🔧 Исправления:\n  · 🔁 Повторение в напоминаниях работает стабильно\n  · 🌅 Утренний брифинг не пропадает после снаRender\n  · 🕐 Таймзона теперь в брифинге и напоминаниях точнее\n\n🪪 Профиль стал понятнее:\n  · Напоминания на сегодня прямо в профиле (всегда видны, даже если 0/0)\n  · Задачи сгруппированы, до 3 на группу\n  · Разделители между блоками для ясности\n\n🔔 Оповещения:\n  · Утренний брифинг — компактный, только важное\n  · Уведомления об обновлениях при первом сообщении\n\n🛠 Улучшения:\n  · Часовые пояса для 13 городов СНГ\n  · Профиль унифицирован, убраны дубликаты\n  · Мёртвый код удалён, бот легче и быстрее",
+    "version": "7.39.6",
+    "date": "2026-05-09",
+    "text": "🌱 Мандала · Что нового\n\n"
+            "v7.39.6 · 09.05.2026\n"
+            "  · Кнопки редактирования профиля с возвратом в меню\n\n"
+            "v7.39.5 · 09.05.2026\n"
+            "  · СР поздравляет с днём рождения при первом контакте после 00:00\n\n"
+            "v7.39.4 · 09.05.2026\n"
+            "  · Все сферы в статистике достижений (задачи + достижения)\n\n"
+            "v7.39.3 · 09.05.2026\n"
+            "  · Сфера при закрытии задачи (🌱 Рост +2% → 37%)\n\n"
+            "v7.39.2 · 09.05.2026\n"
+            "  · Версия в утреннем брифинге, догонялка убрана\n\n"
+            "v7.39.1 · 09.05.2026\n"
+            "  · P-12: Пустые отчёты СР исправлены\n"
+            "  · daily_stats сохраняются при сне бота\n"
+            "  · Портреты садовников формируются из всех наблюдений",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1589,7 +1604,7 @@ async def send_morning_greeting(telegram_id: str) -> None:
         # Version line — shown only if gardener hasn't seen this version yet
         last_ver = gardener.get("last_notified_version", "")
         if last_ver != BOT_VERSION:
-            lines.append(f"🆕 Версия {BOT_VERSION} — <a href='https://t.me/{BOT_USERNAME}'>что нового?</a>")
+            lines.append(f"🆕 Версия {BOT_VERSION} — <a href='https://t.me/{BOT_USERNAME}?start=changelog'>что нового?</a>")
             gardener["last_notified_version"] = BOT_VERSION
             store_set_profile(str(telegram_id), gardener)
         text = "\n".join(lines)
@@ -3576,6 +3591,13 @@ async def cmd_start(message: Message, state: FSMContext):
         if abs(mean - int(user_profile.get("resonance_level", 5))) > 2:
             user_profile["resonance_level"] = mean
             store_set_profile(user_id, user_profile)
+        # Changelog deep link — show dashboard immediately
+        if password and password.lower() == "changelog":
+            name = user_profile.get("name", "Садовник")
+            text = BOT_LATEST_UPDATE.get("text", "").format(name=name)
+            await message.answer(text, reply_markup=None)
+            await message.answer("🌿 Чем могу помочь?", reply_markup=get_main_keyboard())
+            return
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
         await _check_version_notify(user_id)
         return

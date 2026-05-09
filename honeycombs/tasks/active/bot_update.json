@@ -16,7 +16,8 @@
     "Monolithic file — all changes in one bot.py, no split files",
     "All patches applied via patcher scripts — never edit bot.py directly",
     "Each patcher targets one bot.py from GitHub — always git pull before running",
-    "Deploy and test after each patcher — do not stack unverified patches"
+    "Deploy and test after each patcher — do not stack unverified patches",
+    "⚠️ Update BOT_LATEST_UPDATE on EVERY patch. Keep last 5 versions. Delete oldest. Add new on top."
   ],
   "done": {
     "core_features": [
