@@ -60,10 +60,10 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.11"
+BOT_VERSION = "7.39.12"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.11",
+    "version": "7.39.12",
     "date": "2026-05-10",
     "text": "🌱 Мандала · Что нового\
 \
@@ -2058,8 +2058,8 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
     ]
     if any(k in text for k in health_kw):      return "health"
     if any(k in text for k in creativity_kw):  return "creativity"
-    if any(k in text for k in growth_kw):      return "growth"
     if any(k in text for k in connections_kw): return "connections"
+    if any(k in text for k in growth_kw):      return "growth"
     if any(k in text for k in work_kw):        return "work"
     return "work"  # default
 
@@ -7152,9 +7152,12 @@ async def _send_daily_report() -> None:
                 await _generate_synthesis(_uid)
 
         lines = [f"📊 Отчёт СР · {_today()} · v{BOT_VERSION}\n"]
-        # Load all from _store memory (avoids GitHub API timeout in scheduler)
-        _all_uids = [uid for uid, us in _store.items()
-                    if isinstance(us, dict) and us.get("ready")]
+        # Догружаем всех из whitelist если кого-то нет в _store
+        await _load_store()
+        # Load all from whitelist (not just _store — catches non-active gardeners)
+        whitelist_r = await _github_get("gardeners/whitelist.json") or {}
+        approved_r = whitelist_r.get("approved", []) if isinstance(whitelist_r, dict) else []
+        _all_uids = [str(uid) for uid in approved_r]
         # Activity — all from whitelist
         lines.append("👥 Активность:")
         for uid in _all_uids:
