@@ -450,5 +450,11 @@
       "icon": "🌱"
     }
   ],
-  "last_interaction_date": "2026-05-10"
+  "last_interaction_date": "2026-05-10",
+  "_pending_reminder_edit": {
+    "_rem_edit_id": "rem_673846b6",
+    "_rem_title": "Гг2",
+    "_rem_dt": "2026-06-09T10:02",
+    "_rem_repeat": "monthly"
+  }
 }
