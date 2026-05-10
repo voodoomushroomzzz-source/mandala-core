@@ -7797,10 +7797,8 @@ async def handle_voice(message: Message, state: FSMContext):
             await task_title(message, state)
         elif current_state == TaskStates.waiting_for_custom_deadline.state:
             await task_custom_deadline_input(message, state)
-        elif current_state == ReminderStates.waiting_for_title.state:
-            await cb_reminder_title_input(message, state)
-        elif current_state == ReminderStates.waiting_for_datetime.state:
-            await cb_reminder_datetime_input(message, state)
+        elif current_state == ReminderStates.waiting_for_input.state:
+            await rem_text_input(message, state)
         elif current_state == ReminderStates.waiting_for_weekdays.state:
             await cb_rem_weekdays_input(message, state)
         elif current_state == RoadmapStates.waiting_for_title.state:
