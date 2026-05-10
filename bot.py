@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.16"
+BOT_VERSION = "7.39.17"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
     "version": "7.39.13",
@@ -6798,6 +6798,21 @@ def _build_user_context_msg(telegram_id: str) -> str:
     if obs_list:
         dp_block = f"\n[Паттерны садовника:\n" + "\n".join(f"  - {o}" for o in obs_list[-10:]) + "\n]"
 
+    # Build timestamp summary from session history for SR
+    _ts_summary = ""
+    if _recent_msgs:
+        _ts_parts = []
+        for _m in _recent_msgs:
+            _role = "Садовник" if _m.get("role") == "user" else "СР"
+            try:
+                _ts_dt = datetime.fromisoformat(_m.get("ts", ""))
+                _ts_str = _ts_dt.strftime("%H:%M:%S")
+            except Exception:
+                _ts_str = "??:??:??"
+            _txt_short = _m.get("content", "")[:60].replace("\n", " ")
+            _ts_parts.append(f"  [{_ts_str}] {_role}: {_txt_short}")
+        _ts_summary = "\n[Хронология диалога:\n" + "\n".join(_ts_parts) + "\n]"
+
     _msg = (
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
@@ -6806,6 +6821,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
         f"[Роадмапы:\n{roadmaps_block}\n]"
         f"{_ts_block}"
+        f"{_ts_summary}"
         f"{dp_block}"
     )
     return _msg
