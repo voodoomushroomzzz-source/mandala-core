@@ -60,12 +60,19 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.12"
+BOT_VERSION = "7.39.13"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.12",
+    "version": "7.39.13",
     "date": "2026-05-10",
     "text": "🌱 Мандала · Что нового\
+\
+" "v7.39.13 · 10.05.2026\
+" "  · Меню Роадмапов: полное меню вместо заглушки\
+" "  · 📌 Место задачи: переносить между группами и роадмапами\
+" "  · Задачи роадмапов скрыты из общего счётчика и профиля\
+" "  · После деплоя кнопки работают без нажатия /start\
+" "  · Лог обновлений только в утреннем брифе\
 \
 " "v7.39.9 · 09.05.2026\
 " "  · Меню Задач: группы, список задач, повторы, своя дата\
@@ -79,10 +86,7 @@ BOT_LATEST_UPDATE = {
 " "  · Чейнджлог-дашборд: /changelog, 🆕 Обновления в меню\
 \
 " "v7.39.6 · 09.05.2026\
-" "  · Кнопки редактирования профиля с возвратом в меню\
-\
-" "v7.39.5 · 09.05.2026\
-" "  · СР поздравляет с днём рождения при первом контакте после 00:00",
+" "  · Кнопки редактирования профиля с возвратом в меню",
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -1175,7 +1179,8 @@ def _build_profile_card(user_id: str) -> str:
 
     # ── Tasks today block ────────────────────────────────────────────────
 
-    active_all = [t for t in all_tasks if t.get("status") != "completed"]
+    _rm_task_ids_pc = {tid for rm in roadmaps for tid in rm.get("task_ids", [])}
+    active_all = [t for t in all_tasks if t.get("status") != "completed" and t.get("task_id") not in _rm_task_ids_pc]
     total_tasks = len(active_all)
     today_tasks = [t for t in active_all if t.get("deadline") and t["deadline"] <= today_rem]
     today_count = len(today_tasks)
