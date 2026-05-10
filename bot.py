@@ -114,6 +114,34 @@ dp = Dispatcher()
 router = Router()
 dp.include_router(router)
 
+# ── AutoLoad Middleware ────────────────────────────────────────────────────
+# If user store is not ready (e.g. after redeploy), load user data on demand
+# before any handler runs. Fixes "dead buttons" after Render restart.
+from aiogram import BaseMiddleware
+from typing import Callable, Dict, Any, Awaitable
+from aiogram.types import TelegramObject
+
+class AutoLoadMiddleware(BaseMiddleware):
+    async def __call__(
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any]
+    ) -> Any:
+        try:
+            user = getattr(event, "from_user", None)
+            if user:
+                uid = str(user.id)
+                store = _get_user_store(uid)
+                if not store.get("ready"):
+                    await _load_user(uid)
+        except Exception:
+            pass
+        return await handler(event, data)
+
+dp.message.middleware(AutoLoadMiddleware())
+dp.callback_query.middleware(AutoLoadMiddleware())
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # IN-MEMORY STORE
 # Single source of truth during runtime. GitHub = persistent backup.
@@ -1355,17 +1383,19 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
     else:
         place_label = task.get("label_name") or "\u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b"
         back_cb = f"tgroup_open|{task.get('label_id') or '__nogroup__'}"
+    _te_title = task.get("title", "-")
+    _te_dl    = task.get("deadline") or "\u043d\u0435\u0442"
     btns = [
         [InlineKeyboardButton(
-            text=f"\u2705 \u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c: {task.get('title','-')[:25]}",
+            text=f"\u2705 \u0412\u044b\u043f\u043e\u043b\u043d\u0438\u0442\u044c: {_te_title[:25]}",
             callback_data=f"ttask_done|{task_id}"
         )],
         [InlineKeyboardButton(
-            text=f"\u270f\ufe0f \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435: {task.get('title','-')[:28]}",
+            text=f"\u270f\ufe0f \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435: {_te_title[:28]}",
             callback_data=f"ttask_edit_field|{task_id}|title"
         )],
         [InlineKeyboardButton(
-            text=f"\U0001f4c5 \u0414\u0435\u0434\u043b\u0430\u0439\u043d: {task.get('deadline') or '\u043d\u0435\u0442'}",
+            text=f"\U0001f4c5 \u0414\u0435\u0434\u043b\u0430\u0439\u043d: {_te_dl}",
             callback_data=f"ttask_edit_field|{task_id}|deadline"
         )],
         [InlineKeyboardButton(
@@ -1387,9 +1417,12 @@ def get_place_keyboard(user_id: str, task_id: str) -> InlineKeyboardMarkup:
     roadmaps = store_get_roadmaps(user_id)
     emoji_map = _assign_group_emojis(groups)
     btns = []
+    _plc_folder = "\U0001f4c2"
     for g in groups:
+        _plc_em = emoji_map.get(g["id"], _plc_folder)
+        _plc_nm = g["name"]
         btns.append([InlineKeyboardButton(
-            text=f"{emoji_map.get(g['id'], '\U0001f4c2')} {g['name']}",
+            text=f"{_plc_em} {_plc_nm}",
             callback_data=f"plc_grp|{g['id']}"
         )])
     btns.append([InlineKeyboardButton(
@@ -2814,7 +2847,14 @@ async def run_proactive_scheduler() -> None:
             await _load_store()
         for uid, user_store in list(_store.items()):
             if not isinstance(user_store, dict) or not user_store.get("ready"):
-                continue
+                # Retry loading user if not ready (e.g. GitHub API failed at startup)
+                try:
+                    await _load_user(uid)
+                    user_store = _get_user_store(uid)
+                except Exception:
+                    pass
+                if not user_store.get("ready"):
+                    continue
             g = user_store.get("profile")
             if not g:
                 continue
@@ -4836,7 +4876,6 @@ async def cmd_start(message: Message, state: FSMContext):
             await message.answer("🌿 Чем могу помочь?", reply_markup=get_main_keyboard())
             return
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
-        await _check_version_notify(user_id)
         return
 
     # Check whitelist
