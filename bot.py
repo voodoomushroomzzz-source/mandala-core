@@ -6175,7 +6175,7 @@ def _add_to_history(user_id: str, role: str, content: str) -> None:
     uid = str(user_id)
     if uid not in _sessions:
         _sessions[uid] = []
-    _sessions[uid].append({"role": role, "content": content})
+    _sessions[uid].append({"role": role, "content": content, "ts": datetime.now().isoformat()})
     if len(_sessions[uid]) > SESSION_MAX_MESSAGES:
         _sessions[uid] = _sessions[uid][-SESSION_MAX_MESSAGES:]
 
@@ -6726,6 +6726,17 @@ def _build_user_context_msg(telegram_id: str) -> str:
         label = t.get("label_name") or "без группы"
         dl = t.get("deadline") or "без даты"
         task_lines.append(f"  - {t['title']} | группа: {label} | дедлайн: {dl}")
+    # Last 5 messages with timestamps for SR context
+    _recent_msgs = _sessions.get(telegram_id, [])[-5:]
+    _ts_block = ""
+    if _recent_msgs:
+        _ts_lines = []
+        for _m in _recent_msgs:
+            _role_icon = "🧑" if _m.get("role") == "user" else "🌿"
+            _ts = _m.get("ts", "")[:19].replace("T", " ")
+            _txt = _m.get("content", "")[:80].replace("\n", " ")
+            _ts_lines.append(f"  {_role_icon} {_ts} | {_txt}")
+        _ts_block = "\n[Последние сообщения:\n" + "\n".join(_ts_lines) + "\n]"
     tasks_block = "\n".join(task_lines) if task_lines else "  нет активных задач"
 
     # Groups list
@@ -6793,7 +6804,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
-        f"[Роадмапы:\n{roadmaps_block}\n]"
+        f"[Роадмапы:\n{roadmaps_block}\n]" + _ts_block
         f"{dp_block}"
     )
 
