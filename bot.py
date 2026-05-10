@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.14"
+BOT_VERSION = "7.39.15"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
     "version": "7.39.13",
@@ -6982,7 +6982,7 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
                 json={
                     "model": model,
                     "messages": messages,
-                    "max_tokens": 600,
+                    "max_tokens": 1024,
                     "temperature": 0.85
                 }
             )
