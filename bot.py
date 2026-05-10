@@ -6780,11 +6780,6 @@ def _build_user_context_msg(telegram_id: str) -> str:
     _pinned = _pinned_ws.get("pinned_message")
     _pinned_block = f"\n[📌 Закреплено садовником: {_pinned['text'][:300]}]" if _pinned and _pinned.get("text") else ""
 
-    # Pinned message block for SR context
-    _pinned_ws = store_get_workspace(telegram_id) or {}
-    _pinned = _pinned_ws.get("pinned_message")
-    _pinned_block = f"\n[📌 Закреплено садовником: {_pinned['text'][:300]}]" if _pinned and _pinned.get("text") else ""
-
     # Deep profile observations
     dp = _get_deep_profile(telegram_id)
     obs_list = dp.get("observations", [])
