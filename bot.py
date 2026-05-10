@@ -7977,6 +7977,9 @@ async def free_conversation(message: Message, state: FSMContext):
         else:
             _mode_kw = None
         await message.answer(reply_text, parse_mode=_mode_kw)
+        # Записать в сессию — SR увидит закреп в истории
+        _add_to_history(user_id, "user", text)
+        _add_to_history(user_id, "assistant", reply_text)
         return
     if any(k in _kw_lower for k in _unpin_kw):
         _ws_unpin_kw = store_get_workspace(user_id) or {}
@@ -7998,6 +8001,9 @@ async def free_conversation(message: Message, state: FSMContext):
         else:
             _mode_unpin = None
         await message.answer(reply_text, parse_mode=_mode_unpin)
+        # Записать в сессию — SR увидит откреп в истории
+        _add_to_history(user_id, "user", text)
+        _add_to_history(user_id, "assistant", reply_text)
         return
 
     await message.bot.send_chat_action(message.chat.id, "typing")
