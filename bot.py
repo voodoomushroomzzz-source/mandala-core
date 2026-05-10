@@ -155,6 +155,7 @@ dp.callback_query.middleware(AutoLoadMiddleware())
 
 # Multi-user store: {telegram_id: {"profile": dict, "workspace": dict, "ready": bool}}
 _store: dict = {}
+_last_bot_message: dict = {}  # {uid: {"message_id": int, "text": str}}
 
 def _get_user_store(telegram_id: str) -> dict:
     uid = str(telegram_id)
@@ -6843,7 +6844,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         dp_block = f"\n[Паттерны садовника:\n" + "\n".join(f"  - {o}" for o in obs_list[-10:]) + "\n]"
 
     return (
-        f"[Профиль садовника:\n{profile_block}\n]\n"
+        f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
         f"[Группы задач: {groups_list}]\n"
