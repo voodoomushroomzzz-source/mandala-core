@@ -6719,7 +6719,8 @@ def _build_user_context_msg(telegram_id: str) -> str:
 
     # Build full task list with label and deadline
     tasks = workspace.get("tasks", [])
-    active = [t for t in tasks if t.get("status") != "completed"]
+    _rm_ids_ctx = {tid for rm in store_get_roadmaps(telegram_id) for tid in rm.get("task_ids", [])}
+    active = [t for t in tasks if t.get("status") != "completed" and t.get("task_id") not in _rm_ids_ctx]
     task_lines = []
     for t in active:
         label = t.get("label_name") or "без группы"
@@ -8320,6 +8321,44 @@ async def free_conversation(message: Message, state: FSMContext):
                                 # Название не распознано — открываем FSM
                                 await cmd_achievements(message)
                                 reply_text = ""
+                        elif intent == "pin_message":
+                            _pin_data = _last_bot_message.get(user_id)
+                            if _pin_data:
+                                _ws_pin = store_get_workspace(user_id) or {}
+                                _old_pin = _ws_pin.get("pinned_message")
+                                if _old_pin and _old_pin.get("message_id"):
+                                    try:
+                                        await bot.unpin_chat_message(message.chat.id, _old_pin["message_id"])
+                                    except Exception:
+                                        pass
+                                try:
+                                    await bot.pin_chat_message(message.chat.id, _pin_data["message_id"])
+                                    _ws_pin["pinned_message"] = {
+                                        "message_id": _pin_data["message_id"],
+                                        "text": _pin_data["text"][:500],
+                                        "date": _today()
+                                    }
+                                    store_set_workspace(user_id, _ws_pin)
+                                    _fire_sync()
+                                    reply_text = "\U0001f4cc \u0417\u0430\u043a\u0440\u0435\u043f\u043b\u0435\u043d\u043e"
+                                except Exception as _pe:
+                                    reply_text = f"\U0001f331 \u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c: {_pe}"
+                            else:
+                                reply_text = "\U0001f331 \u041d\u0435\u0442 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u0434\u043b\u044f \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0435\u043d\u0438\u044f"
+                        elif intent == "unpin_message":
+                            _ws_unpin = store_get_workspace(user_id) or {}
+                            _pin_rm = _ws_unpin.get("pinned_message")
+                            if _pin_rm and _pin_rm.get("message_id"):
+                                try:
+                                    await bot.unpin_chat_message(message.chat.id, _pin_rm["message_id"])
+                                except Exception:
+                                    pass
+                                _ws_unpin["pinned_message"] = None
+                                store_set_workspace(user_id, _ws_unpin)
+                                _fire_sync()
+                                reply_text = "\U0001f4cc \u0417\u0430\u043a\u0440\u0435\u043f \u0441\u043d\u044f\u0442"
+                            else:
+                                reply_text = "\U0001f331 \u041d\u0435\u0442 \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0451\u043d\u043d\u044b\u0445"
                         elif intent == "web_search":
                             _ws_act = parsed_check.get("action") or {}
                             # Нормализованный запрос от SR
@@ -9530,8 +9569,17 @@ async def free_conversation(message: Message, state: FSMContext):
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
         _has_html = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
-        _mode = "HTML" if _has_html else None
-        await message.answer(reply_text, reply_markup=kb if kb else None, parse_mode=_mode)
+        if _has_html:
+            # Fallback: if HTML tags are unbalanced Telegram will reject — try HTML first, fallback to None
+            try:
+                _sent_msg = await message.answer(reply_text, reply_markup=kb if kb else None, parse_mode="HTML")
+            except Exception:
+                import re as _re_html
+                _clean = _re_html.sub(r"<[^>]+>", "", reply_text)
+                _sent_msg = await message.answer(_clean, reply_markup=kb if kb else None)
+        else:
+            _sent_msg = await message.answer(reply_text, reply_markup=kb if kb else None)
+        _last_bot_message[str(message.from_user.id)] = {"message_id": _sent_msg.message_id, "text": reply_text}
 
 @router.callback_query(F.data.startswith("qt:"))
 async def quick_add_task(callback: CallbackQuery):
