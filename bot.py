@@ -6798,15 +6798,17 @@ def _build_user_context_msg(telegram_id: str) -> str:
     if obs_list:
         dp_block = f"\n[Паттерны садовника:\n" + "\n".join(f"  - {o}" for o in obs_list[-10:]) + "\n]"
 
-    return (
+    _msg = (
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
-        f"[Роадмапы:\n{roadmaps_block}\n]" + _ts_block
+        f"[Роадмапы:\n{roadmaps_block}\n]"
+        f"{_ts_block}"
         f"{dp_block}"
     )
+    return _msg
 
 
 def _classify_query_complexity(query: str) -> int:
