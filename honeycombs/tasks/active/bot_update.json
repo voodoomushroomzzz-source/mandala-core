@@ -6,8 +6,8 @@
   "deadline": "2026-06-01",
   "created": "2026-04-01",
   "updated": "2026-05-10",
-  "progress": 95,
-  "current_version": "7.39.12",
+  "progress": 97,
+  "current_version": "7.39.13",
   "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
   "dev_rules": [
     "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
@@ -81,6 +81,15 @@
       "v7.39.10: P-13a fix apply — 8 функций исправлено (Клод)",
       "v7.39.11: Меню Достижений — кнопка Добавить + авто-сфера + фикс навигации чеклистов + отчёт СР неактивные",
       "v7.39.12: _classify_sphere — connections/growth перед work + отчёт СР догрузка через whitelist"
+    ],
+    "v7_39_13": [
+      "v7.39.13: P-14 -- Polnoe menyu Roudmapov (spisok, detali, dobavit/sozdat zadachu, pereimenovat, dedlayn, udalit)",
+      "v7.39.13: P-14 -- Mesto zadachi: perenosit mezhdu gruppami i roudmapami. TASK_CTX_FREE/ROADMAP konstanty",
+      "v7.39.13: P-15 -- SyntaxError Python 3.11 fix (backslash v f-string na Render)",
+      "v7.39.13: P-15 -- AutoLoadMiddleware: knopki rabotayut srazu posle deploya bez /start",
+      "v7.39.13: P-15 -- Scheduler retry: not-ready polzovateli podgruzhayutsya pri sleduyuschem tike",
+      "v7.39.13: P-15 -- Changelog ubran iz /start, tolko v utrennem brife",
+      "v7.39.13: P-16 -- Zadachi roudmapov skryty iz schetchika profilya i bloka Zadachi segodnya"
     ]
   },
   "known_issues": [
@@ -88,8 +97,7 @@
     "Repeat value edge case: on confirm screen repeat may show 'once' if FSM and workspace are both stale",
     "Voice commands: compound phrases not recognized consistently",
     "Resonance shows 100% incorrectly for some gardeners — calculation logic needs audit",
-    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute intent",
-    "Changelog /start: BOT_LATEST_UPDATE склеен в сплошняк без переносов строк, cm_start всё ещё вызывает _check_version_notify (должен только утренний бриф). Нужно заменить BOT_LATEST_UPDATE на многострочник с \\n и убрать вызов из /start."
+    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute intent"
   ],
   "observations": {
     "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
@@ -175,7 +183,9 @@
       "files_affected": [
         "bot.py: _show_profile, _build_profile_card, get_tasks_mgmt_inline, get_roadmaps_mgmt_inline"
       ],
-      "risk": "medium"
+      "risk": "medium",
+      "status": "done",
+      "resolution": "v7.39.9-13: Menu Zadach v2 + polnoe Menu Roudmapov + Mesto zadachi. TASK_CTX_FREE/ROADMAP."
     },
     "P-14": {
       "name": "Счётчик задач в профиле + баг закрытых задач в достижениях",
@@ -241,7 +251,7 @@
       ],
       "risk": "low",
       "status": "done",
-      "resolution": "free_conversation вызывает ensure_user_loaded вместо is_authorized. После рестарта садовники пишут без /start."
+      "resolution": "P-15: AutoLoadMiddleware + Scheduler retry. Posle restarta knopki rabotayut bez /start, brief dokhodit."
     },
     "P-20": {
       "name": "Сверка функционала — кнопки vs чат vs голос",
@@ -274,7 +284,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-10",
-    "notes": "v7.39.12. P-13a done (Клод). P-20 added. Progress 95%."
+    "notes": "v7.39.13. P-13+14+15+16 done (Klod). Roudmapy, Mesto zadachi, AutoLoad, py311 fix. Progress 97%."
   },
   "future_scaling": {
     "current_state": {
