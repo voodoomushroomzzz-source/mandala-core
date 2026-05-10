@@ -60,7 +60,7 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.13"
+BOT_VERSION = "7.39.14"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
     "version": "7.39.13",
@@ -6780,6 +6780,11 @@ def _build_user_context_msg(telegram_id: str) -> str:
     _pinned = _pinned_ws.get("pinned_message")
     _pinned_block = f"\n[📌 Закреплено садовником: {_pinned['text'][:300]}]" if _pinned and _pinned.get("text") else ""
 
+    # Pinned message block for SR context
+    _pinned_ws = store_get_workspace(telegram_id) or {}
+    _pinned = _pinned_ws.get("pinned_message")
+    _pinned_block = f"\n[📌 Закреплено садовником: {_pinned['text'][:300]}]" if _pinned and _pinned.get("text") else ""
+
     # Deep profile observations
     dp = _get_deep_profile(telegram_id)
     obs_list = dp.get("observations", [])
@@ -7929,6 +7934,63 @@ async def free_conversation(message: Message, state: FSMContext):
 
     ctx_msg = _build_user_context_msg(user_id)
     history = _get_history(user_id)
+
+    # ── Keyword pre-detection: pin/unpin (v7.39.14) ─────────────────────
+    _kw_lower = text.lower().strip()
+    _pin_kw = ["закрепи это", "закрепи последнее", "закрепи сообщение", "запомни это"]
+    _unpin_kw = ["открепи", "убери закреп", "сними закреп"]
+    if any(k in _kw_lower for k in _pin_kw):
+        _pin_data = _last_bot_message.get(user_id)
+        if _pin_data:
+            _ws_pin_kw = store_get_workspace(user_id) or {}
+            _old_pin_kw = _ws_pin_kw.get("pinned_message")
+            if _old_pin_kw and _old_pin_kw.get("message_id"):
+                try:
+                    await bot.unpin_chat_message(message.chat.id, _old_pin_kw["message_id"])
+                except Exception:
+                    pass
+            try:
+                await bot.pin_chat_message(message.chat.id, _pin_data["message_id"])
+                _ws_pin_kw["pinned_message"] = {
+                    "message_id": _pin_data["message_id"],
+                    "text": _pin_data["text"][:500],
+                    "date": _today()
+                }
+                store_set_workspace(user_id, _ws_pin_kw)
+                _fire_sync()
+                reply_text = "📌 Закреплено \u2728"
+            except Exception as _pe_kw:
+                reply_text = f"🌱 Не удалось закрепить: {_pe_kw}"
+        else:
+            reply_text = "🌱 Нет сообщения для закрепления"
+        _has_html_pin = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
+        if _has_html_pin:
+            _mode_kw = "HTML"
+        else:
+            _mode_kw = None
+        await message.answer(reply_text, parse_mode=_mode_kw)
+        return
+    if any(k in _kw_lower for k in _unpin_kw):
+        _ws_unpin_kw = store_get_workspace(user_id) or {}
+        _pin_rm_kw = _ws_unpin_kw.get("pinned_message")
+        if _pin_rm_kw and _pin_rm_kw.get("message_id"):
+            try:
+                await bot.unpin_chat_message(message.chat.id, _pin_rm_kw["message_id"])
+            except Exception:
+                pass
+            _ws_unpin_kw["pinned_message"] = None
+            store_set_workspace(user_id, _ws_unpin_kw)
+            _fire_sync()
+            reply_text = "📌 Закреп снят"
+        else:
+            reply_text = "🌱 Нет закреплённых"
+        _has_html_unpin = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
+        if _has_html_unpin:
+            _mode_unpin = "HTML"
+        else:
+            _mode_unpin = None
+        await message.answer(reply_text, parse_mode=_mode_unpin)
+        return
 
     await message.bot.send_chat_action(message.chat.id, "typing")
 
@@ -9560,6 +9622,7 @@ async def free_conversation(message: Message, state: FSMContext):
                 "sessions": _sessions.get(user_id, []),
                 "updated": _today()
             }
+            _fire_sync()  # immediate sync — don't lose history on Render sleep
         else:
             reply_text = "🌿 СР временно недоступен. Попробуй чуть позже."
     except Exception as e:
