@@ -6473,7 +6473,9 @@ async def _create_checklist_atomic(user_id: str, message: Message,
     if len(checklists) >= CHECKLIST_LIMIT:
         await message.answer(f"⚠️ Лимит {CHECKLIST_LIMIT} чеклистов. Удали один сначала.")
         return {}
-    item_texts = [i.strip() for i in items_raw.split("|") if i.strip()] if items_raw else []
+    # BUG-CL1 fix: split on | OR newline (multiline input support)
+    import re as _re_cl
+    item_texts = [i.strip() for i in _re_cl.split(r'[|\n]', items_raw) if i.strip()] if items_raw else []
     item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT]
     items  = [{"id": f"i{i+1}", "text": t, "done": False} for i, t in enumerate(item_texts)]
     cid    = _make_checklist_id(title, checklists)
@@ -6569,6 +6571,8 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - ВАЖНО: если в системном сообщении есть [SR reflection hint] — SR может один раз органично вплести это наблюдение в ответ. Не цитировать дословно, не повторять если садовник не реагирует. Один вопрос максимум. Ахимса.
 - "достижения" → show_achievements, 0.95
 - "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
+- Перечисление задач через перенос строки (без маркеров) = список → add_task, action.tasks=[...]
+  Пример: "добавь задачи\nкупить молоко\nзаписаться к врачу" → tasks=[{title:"купить молоко"},{title:"записаться к врачу"}]
   Извлекай из сообщения ВСЁ что найдёшь:
   action.deadline = дата в ISO (YYYY-MM-DD) или null
   action.reminder = дата+время ISO или null  
@@ -8279,6 +8283,7 @@ async def free_conversation(message: Message, state: FSMContext):
                     "изменено дедлайн", "дедлайн задачи", "изменила дедлайн",
                     "перенесла", "изменила", "команда:", "**команда",
                     "сделала это", "выполнила", "изменила срок",
+                    "создаю чеклист", "создаю задачу", "создаю роадмап",
                 )
                 if intent == "conversation" and any(
                     m in reply_text.lower() for m in _ACTION_FAKE_MARKERS
