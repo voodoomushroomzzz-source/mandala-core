@@ -2073,7 +2073,27 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
     _update_sphere_history(user_id, sphere, task=True, resonance_delta=2)
     _update_deep_profile(user_id)
     _fire_sync()
-    await callback.answer("\u2705 Выполнено!")
+    # P-25: sphere feedback message
+    _sphere_labels = {
+        "health": "🌿 Здоровье",
+        "creativity": "🎨 Творчество",
+        "work": "⚡ Работа",
+        "connections": "💫 Связи",
+        "growth": "🌱 Рост",
+    }
+    _sr_after = store_get_sphere_resonance(user_id)
+    _sphere_val = _sr_after.get(sphere, 0)
+    _sphere_lbl = _sphere_labels.get(sphere, "🌱 Рост")
+    _done_title = task.get("title", "")[:40]
+    _done_msg = (
+        f"✅ <b>{_done_title}</b> — закрыта\n"
+        f"{_sphere_lbl} +2% → {_sphere_val}%"
+    )
+    await callback.answer("")
+    try:
+        await callback.message.answer(_done_msg, parse_mode="HTML")
+    except Exception:
+        pass
     all_tasks2 = store_get_tasks(user_id)
     tasks_in_group = [t for t in all_tasks2 if t.get("status") != "completed" and (
         (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
@@ -2628,11 +2648,19 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
         "план жизн","цел","смысл","ценност","философи","психолог","терапи","коучинг",
         "язык","английск","иностранн","онлайн-курс","сертификат","диплом"
     ]
-    if any(k in text for k in health_kw):      return "health"
+    # P-25: two-pass — title first (authoritative), then full text
+    # Fixes: task in roadmap with health-keyword in roadmap name
+    title_only = title.lower()
+    if any(k in title_only for k in creativity_kw):  return "creativity"
+    if any(k in title_only for k in health_kw):      return "health"
+    if any(k in title_only for k in connections_kw): return "connections"
+    if any(k in title_only for k in growth_kw):      return "growth"
+    if any(k in title_only for k in work_kw):        return "work"
+    # Pass 2: full text including label_name
     if any(k in text for k in creativity_kw):  return "creativity"
+    if any(k in text for k in health_kw):      return "health"
     if any(k in text for k in connections_kw): return "connections"
     if any(k in text for k in growth_kw):      return "growth"
-    if any(k in text for k in work_kw):        return "work"
     return "work"  # default
 
 # Keep old name as alias for backward compat
