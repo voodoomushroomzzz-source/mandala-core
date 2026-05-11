@@ -639,7 +639,14 @@ async def _load_store() -> None:
     whitelist = await _github_get("gardeners/whitelist.json") or {}
     approved = whitelist.get("approved", ["224736062"]) if isinstance(whitelist, dict) else ["224736062"]
     # P-24: parallel load via asyncio.gather
-    await asyncio.gather(*[_load_user(str(uid)) for uid in approved], return_exceptions=True)
+    _gather_results = await asyncio.gather(
+        *[_load_user(str(uid)) for uid in approved],
+        return_exceptions=True
+    )
+    # Log any exceptions from gather (were silently swallowed before)
+    for uid, result in zip(approved, _gather_results):
+        if isinstance(result, Exception):
+            logger.error(f"_load_user failed for {uid}: {result}")
     # P-25r: one-time recalc resonance_level from sphere_resonance mean (fix inflated values)
     for uid in approved:
         try:
@@ -652,7 +659,11 @@ async def _load_store() -> None:
                 logger.info(f"Resonance recalc: {uid} → {mean}%")
         except Exception as e:
             logger.warning(f"Resonance recalc failed for {uid}: {e}")
-    logger.info(f"Store ready — {len(approved)} gardener(s)")
+    _loaded_count = sum(
+        1 for uid in approved
+        if _get_user_store(str(uid)).get("ready")
+    )
+    logger.info(f"Store ready — {_loaded_count}/{len(approved)} gardener(s) loaded")
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
 
