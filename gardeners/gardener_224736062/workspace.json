@@ -367,7 +367,7 @@
       "priority": 5,
       "deadline": "2027-05-12",
       "reminder": null,
-      "repeat": "custom_date:2026-05-12",
+      "repeat": "custom_days:mon,wed,fri",
       "created": "2026-05-11",
       "updated": "2026-05-11",
       "completed": null,
