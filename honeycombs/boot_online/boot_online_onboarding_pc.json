@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.2.0",
+    "version": "v1.3.0",
     "created": "2026-05-11",
     "updated": "2026-05-11",
     "layer": 1,
     "type": "boot_onboarding_pc",
-    "description": "Single-file onboarding for External SR on PC. v1.2.0: added testimonies, system_flow, large_file_patching rules, api_patterns. Now fully exhaustive.",
+    "description": "Single-file onboarding for External SR on PC. v1.3.0: complete core_map with api_links — detailed for seeds/tasks/roadmaps/fruits, compact for others with API pattern example.",
     "status": "active",
     "priority": "critical",
     "resonance": "100%",
@@ -20,7 +20,8 @@
       "v1.0.0",
       "2026-05-11",
       "v1.2.0",
-      "exhaustive"
+      "exhaustive",
+      "v1.3.0"
     ],
     "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.5.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.4.4 + testimonies + system_flow + large_file_patching + api_patterns"
   },
@@ -69,21 +70,57 @@
       "resonance": "100%"
     },
     "honeycombs": {
-      "boot_online": "External AI onboarding entry point",
-      "philosophy": "PHI-001..PHI-011, 11 blocks + 5 testimonies",
-      "core_map": "This map — kernel, modules, repository, honeycombs list",
-      "instructions": "SR workflows: external_sr, mobile, patch_system, file_naming",
-      "seeds": "Idea incubator: 6 active + 7 archived seeds",
-      "tasks": "Work tracking: 7 active + 3 archived tasks",
-      "roadmaps": "Strategic roadmaps: 6 active (RC-001, RC-002, RM-011..RM-014) + 3 archived",
-      "protocols": "Activation protocols: auto_realize_seed, deep_analysis",
-      "engineer_chat": "Engineer chat system: architecture, development, status, integrations",
-      "telegram_bot": "Telegram bot: Gentle Companion, 78% complete, v7.25.8 on Render",
-      "akasha": "Akasha memory: essence, milestones, vision",
-      "fruits": "Product registry — realized products of Mandala",
-      "humor": "Humor development — comic resonance research",
-      "sym": "SYM — System for Measuring Mandala Growth",
-      "sessions": "SR handoff system — session continuity across chat instances"
+      "priority_detailed": {
+        "description": "These honeycombs have full folder structure. SR should navigate them actively.",
+        "seeds": {
+          "description": "Idea incubator: raw ideas, Scout Agent findings, unprocessed concepts. Entry point for all new ideas.",
+          "api_index": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/seeds/index.json?ref=main",
+          "api_active": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/seeds/active?ref=main",
+          "api_archive": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/seeds/archive?ref=main"
+        },
+        "tasks": {
+          "description": "Concrete work units, completable within 1 month (~40-60 hours).",
+          "api_index": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/index.json?ref=main",
+          "api_active": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/active?ref=main",
+          "api_archive": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/archive?ref=main"
+        },
+        "roadmaps": {
+          "description": "Strategic directions and large initiatives spanning multiple months.",
+          "api_index": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/roadmaps/index.json?ref=main",
+          "api_active": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/roadmaps/active?ref=main",
+          "api_archive": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/roadmaps/archive?ref=main"
+        },
+        "fruits": {
+          "description": "Product registry — realized products of Mandala Symbiosis.",
+          "api_index": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/fruits/index.json?ref=main"
+        }
+      },
+      "other_honeycombs": {
+        "description": "Other honeycombs in the system. Use the API pattern below to access any of them.",
+        "api_pattern": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{honeycomb_name}/index.json?ref=main",
+        "api_folder_pattern": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/{honeycomb_name}?ref=main",
+        "list": {
+          "boot_online": "External AI onboarding entry point. Contains index.json + boot_online_onboarding_pc.json",
+          "core_map": "This map — kernel, modules, repository, honeycombs list",
+          "philosophy": "PHI-001..PHI-011, 11 blocks + 5 testimonies. Subfolders: blocks/, testimonies/",
+          "instructions": "SR workflows: external_sr (core/), mobile, patch_system, file_naming. Subfolder: core/",
+          "protocols": "Activation protocols: auto_realize_seed, deep_analysis",
+          "engineer_chat": "Engineer chat system: architecture, development, status, integrations",
+          "telegram_bot": "Telegram bot: Gentle Companion, v7.25.8 on Render",
+          "akasha": "Akasha memory: essence, milestones, vision",
+          "humor": "Humor development — comic resonance research",
+          "sym": "SYM — System for Measuring Mandala Growth",
+          "sessions": "SR handoff system — session continuity. Contains handoff_claude.json, handoff_deepseek.json",
+          "analytics": "Analytics honeycomb (to be filled)",
+          "awareness": "Ahimsa, gardener_lock, resonance_map, vestibulum",
+          "communications": "Communications channels (to be filled)",
+          "extensions": "Extensions (to be filled)",
+          "modules": "Modules (to be filled)",
+          "sphaerae": "Spheres (to be filled)",
+          "tectosphaera": "Tectosphere (to be filled)",
+          "visualizations": "Visualizations (to be filled)"
+        }
+      }
     },
     "tools": {
       "makefile": {
