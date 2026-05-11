@@ -632,13 +632,24 @@ async def _load_user(telegram_id: str) -> None:
             _seed_sphere_history_from_achievements(uid, _achs)
 
 async def _load_store() -> None:
-    """Load all approved gardeners from whitelist on startup."""
+    """Load all approved gardeners from whitelist on startup (parallel)."""
     logger.info("Loading store from GitHub...")
     whitelist = await _github_get("gardeners/whitelist.json") or {}
     approved = whitelist.get("approved", ["224736062"]) if isinstance(whitelist, dict) else ["224736062"]
+    # P-24: parallel load via asyncio.gather
+    await asyncio.gather(*[_load_user(str(uid)) for uid in approved], return_exceptions=True)
+    # P-25r: one-time recalc resonance_level from sphere_resonance mean (fix inflated values)
     for uid in approved:
-        await _load_user(str(uid))
-        logger.info(f"Loaded gardener {uid}")
+        try:
+            sr = store_get_sphere_resonance(str(uid))
+            mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+            prof = store_get_profile(str(uid))
+            if prof and prof.get("resonance_level", 0) != mean:
+                prof["resonance_level"] = mean
+                store_set_profile(str(uid), prof)
+                logger.info(f"Resonance recalc: {uid} → {mean}%")
+        except Exception as e:
+            logger.warning(f"Resonance recalc failed for {uid}: {e}")
     logger.info(f"Store ready — {len(approved)} gardener(s)")
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -9743,16 +9754,13 @@ async def quick_add_achievement(callback: CallbackQuery):
         "icon": "🌱"
     })
     store_set_achievements(user_id, achievements)
-    # Update resonance
+    # P-25r: use store_add_sphere_resonance (syncs both sphere + resonance_level correctly)
+    new_res = store_add_sphere_resonance(user_id, "growth", 3)
     gardener = store_get_profile(user_id)
     if gardener:
-        g = dict(gardener)
-        current_res = g.get("resonance_level", 13)
-        new_res = min(100, current_res + 3)
-        g["resonance_level"] = new_res
-        g["updated"] = _today()
-        g = _add_growth_history_entry(g, new_res)
-        store_set_profile(user_id, g)
+        gardener["updated"] = _today()
+        gardener = _add_growth_history_entry(gardener, new_res, user_id)
+        store_set_profile(user_id, gardener)
         _invalidate_auth_cache(user_id)
     _fire_sync()
     try:
