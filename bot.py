@@ -636,7 +636,7 @@ async def _load_user(telegram_id: str) -> None:
 async def _load_store() -> None:
     """Load all approved gardeners from whitelist on startup (parallel)."""
     logger.info("Loading store from GitHub...")
-    whitelist = await _github_get("gardeners/whitelist.json") or {}
+    whitelist = await _github_get("gardeners/whitelist.json", force=True) or {}
     approved = whitelist.get("approved", ["224736062"]) if isinstance(whitelist, dict) else ["224736062"]
     # P-24: parallel load via asyncio.gather
     _gather_results = await asyncio.gather(
