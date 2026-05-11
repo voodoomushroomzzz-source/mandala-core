@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "TASKS-MANIFEST-004",
     "name": "Tasks Honeycomb Manifest",
-    "version": "v4.3.0",
+    "version": "v4.3.1",
     "created": "2026-03-01",
     "updated": "2026-05-11",
     "layer": 1,
@@ -34,10 +34,10 @@
             "task_id": "T-20260408-1030",
             "name": "Telegram Bot — Gentle Companion for Garden",
             "status": "in_progress",
-            "progress": 87,
-            "priority": "HIGH",
+            "progress": 92,
+            "priority": "HIGHEST",
             "deadline": "2026-06-01",
-            "description": "Core bot development: 5-sphere resonance, living memory, checklists, reminders, voice, onboarding 2.0. v7.30 live with 7.30.1 hotfixes. v7.31 plan: critical fixes, dead code removal, SR prompt optimization."
+            "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life. Monolithic bot.py — all changes in one file via patcher scripts. v7.39.17 on Render. 11 known bugs documented, 11 patches planned (P-21 to P-31) across 3 sprints."
           },
           {
             "file": "scout_agent.json",
@@ -137,7 +137,7 @@
   "registry": {
     "total_files": 9,
     "last_updated": "2026-05-11",
-    "notes": "v4.3.0: added Engineer Chat and Architect Bot tasks. 9 active tasks. All three Mandala layers covered."
+    "notes": "v4.3.1: updated bot_update progress to 92% and description to match actual task file."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -147,6 +147,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-11",
-    "notes": "v4.3.0: 9 active tasks. Core trio: Gentle Companion (bot), Engineer Chat (brain), Manus (hands). Architect Bot (mobile brain interface)."
+    "notes": "v4.3.1: 9 active tasks. bot_update at 92% — 11 known bugs documented, 11 patches planned across 3 sprints."
   }
 }
