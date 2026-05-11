@@ -6820,7 +6820,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         for _m in _recent_msgs:
             _role_icon = "🧑" if _m.get("role") == "user" else "🌿"
             _ts = _m.get("ts", "")[:19].replace("T", " ")
-            _txt = _m.get("content", "")[:80].replace("\n", " ")
+            _txt = (_m.get("content") or "")[:80].replace("\n", " ")
             _ts_lines.append(f"  {_role_icon} {_ts} | {_txt}")
         _ts_block = "\n[Последние сообщения:\n" + "\n".join(_ts_lines) + "\n]"
     tasks_block = "\n".join(task_lines) if task_lines else "  нет активных задач"
@@ -6895,7 +6895,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
                 _ts_str = _ts_dt.strftime("%H:%M:%S")
             except Exception:
                 _ts_str = "??:??:??"
-            _txt_short = _m.get("content", "")[:60].replace("\n", " ")
+            _txt_short = (_m.get("content") or "")[:60].replace("\n", " ")
             _ts_parts.append(f"  [{_ts_str}] {_role}: {_txt_short}")
         _ts_summary = "\n[Хронология диалога:\n" + "\n".join(_ts_parts) + "\n]"
 
@@ -8125,7 +8125,16 @@ async def free_conversation(message: Message, state: FSMContext):
         _add_to_history(user_id, "assistant", reply_text)
         return
 
-    await message.bot.send_chat_action(message.chat.id, "typing")
+    # Typing keep-alive: обновляется каждые 4 сек пока LLM думает
+    _typing_stop = asyncio.Event()
+    async def _keep_typing():
+        while not _typing_stop.is_set():
+            try:
+                await message.bot.send_chat_action(message.chat.id, "typing")
+            except Exception:
+                pass
+            await asyncio.sleep(4)
+    _typing_task = asyncio.create_task(_keep_typing())
 
     # Deep profile reflection hint — once per session
     _hint = _get_session_reflection_hint(user_id)
@@ -8152,6 +8161,7 @@ async def free_conversation(message: Message, state: FSMContext):
 
     try:
         raw = await _call_openrouter(messages)
+        _typing_stop.set()
         if raw:
             # 1. Strip <think>...</think>
             raw_clean = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
@@ -9771,6 +9781,9 @@ async def free_conversation(message: Message, state: FSMContext):
     except Exception as e:
         logger.error("Free conversation error: " + str(e))
         reply_text = "🌿 Связь прервалась. Попробуй ещё раз."
+    finally:
+        _typing_stop.set()
+        _typing_task.cancel()
 
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
