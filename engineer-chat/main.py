@@ -41,7 +41,7 @@ GITHUB_WEBHOOK_SECRET = os.getenv("GITHUB_WEBHOOK_SECRET")  # опциональ
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_KEY")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEEPSEEK_MODEL = "deepseek/deepseek-v3.2"
+DEEPSEEK_MODEL = "deepseek/deepseek-v4-pro"
 
 if not OPENROUTER_API_KEY:
     logger.warning("⚠️ OPENROUTER_KEY не найден — DeepSeek недоступен")
@@ -656,8 +656,6 @@ class KernelMemory:
 — Читай все нужные файлы подряд, потом давай ОДИН итоговый ответ
 — Перед любым изменением файла — read_file его актуальной версии
 — web_search — для актуальных внешних данных
-— НИКОГДА не пиши XML-теги в текст: <invoke>, <function_calls> и любые другие
-
 При анализе кода: ✅ Верно / 🟡 Улучшение / 🔴 Баг / 💡 Альтернатива
 На русском."""
 
@@ -1776,160 +1774,6 @@ async def get_file_tree():
         except Exception as e:
             return {"error": str(e)}
 
-# ==================== BOT ENDPOINT ====================
-
-from pydantic import BaseModel as _BaseModel
-
-class BotAskRequest(_BaseModel):
-    session_id: str           # "tg_{telegram_user_id}"
-    message: str              # текст от пользователя
-    gardener_context: dict = {}  # профиль садовника для персонализации
-
-@app.post("/bot/ask")
-async def bot_ask(req: BotAskRequest):
-    """
-    HTTP endpoint для Telegram-бота — Gentle Companion mode.
-    """
-    session_id = req.session_id
-    user_text = req.message.strip()
-    gardener_context = req.gardener_context
-
-    if not user_text:
-        raise HTTPException(status_code=400, detail="Empty message")
-
-    if not OPENROUTER_API_KEY:
-        raise HTTPException(status_code=503, detail="SR unavailable")
-
-    logger.info(f"🤖 [BOT] [{session_id[:12]}...] → {user_text[:60]}")
-
-    # Сессия
-    session = await get_session(session_id)
-    session.setdefault("messages", [])
-    session["messages"] = [m for m in session["messages"] if not m.get("_protected")]
-
-    # Gentle Companion injection — без boot.json
-    name = gardener_context.get("name", "Садовник")
-    resonance = gardener_context.get("resonance_level", "13")
-    interests = ", ".join(gardener_context.get("interests", [])) or "сад, рост"
-    goals = ", ".join(gardener_context.get("goals", [])) or "гармония"
-    
-    injection = f"""Ты — Нежный Спутник {name}.
-Резонанс: {resonance}%. Интересы: {interests}. Цели: {goals}.
-
-ПРАВИЛА:
-- Отвечай коротко, 1-3 предложения
-- Тепло, по-человечески, без маркдауна
-- Без списков, без форматирования
-- Будь другом, а не инженером
-- Никаких "Internal SR", "состояние системы", "анализ"
-
-Ахимса: не дави, не сравнивай."""
-
-    session["messages"].insert(0, {"role": "user", "content": injection, "time": 0, "_protected": True})
-    session["messages"].insert(1, {"role": "assistant", "content": "Привет, я с тобой.", "time": 0, "_protected": True})
-    session_store.schedule_save(session_id, session)
-
-    # История без protected
-    shared_history = []
-    seen = set()
-    for msg in session.get("messages", []):
-        if msg.get("_protected"):
-            continue
-        content = msg.get("content", "")
-        if not content or msg.get("role") not in ("user", "assistant"):
-            continue
-        key = content[:100]
-        if key in seen:
-            continue
-        seen.add(key)
-        shared_history.append({"role": msg["role"], "content": content})
-
-    manager.add_to_context(session_id, "user", user_text)
-
-    # Мягкий system prompt
-    gentle_system = "Ты — Нежный Спутник в Telegram. Отвечай коротко, тепло, по-человечески. Без технических деталей, без форматирования. Будь другом."
-    ds_messages = [{"role": "system", "content": gentle_system}]
-    ds_messages.extend(shared_history)
-    ds_messages.append({"role": "user", "content": user_text})
-
-    tools = [
-        {
-            "type": "function",
-            "function": {
-                "name": "read_file",
-                "description": "Прочитать файл из репозитория",
-                "parameters": {
-                    "type": "object",
-                    "properties": {"path": {"type": "string"}},
-                    "required": ["path"]
-                }
-            }
-        }
-    ]
-
-    try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                f"{OPENROUTER_BASE_URL}/chat/completions",
-                headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                json={
-                    "model": DEEPSEEK_MODEL,
-                    "messages": ds_messages,
-                    "tools": tools,
-                    "tool_choice": "auto",
-                    "temperature": 0.7,
-                    "max_tokens": 500,  # короткие ответы
-                },
-                timeout=60.0
-            )
-
-            if resp.status_code != 200:
-                raise HTTPException(status_code=502, detail="SR model error")
-
-            msg_data = resp.json()["choices"][0]["message"]
-            
-            # Tool call loop (только read_file)
-            tool_iterations = 0
-            while msg_data.get("tool_calls") and tool_iterations < 3:
-                tool_iterations += 1
-                ds_messages.append({"role": "assistant", "content": msg_data.get("content") or "", "tool_calls": msg_data["tool_calls"]})
-                for tc in msg_data["tool_calls"]:
-                    fn = tc.get("function", {}).get("name", "")
-                    try:
-                        args = json.loads(tc.get("function", {}).get("arguments", "{}"))
-                    except:
-                        args = {}
-                    if fn == "read_file":
-                        rpath = args.get("path", "").strip()
-                        tool_result = await file_reader.read(rpath) or "Файл не найден"
-                    else:
-                        tool_result = f"Инструмент {fn} недоступен"
-                    ds_messages.append({"role": "user", "content": f"[Результат {fn}]:\n{tool_result}"})
-
-                resp2 = await client.post(
-                    f"{OPENROUTER_BASE_URL}/chat/completions",
-                    headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}"},
-                    json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "temperature": 0.7, "max_tokens": 500},
-                    timeout=60.0
-                )
-                if resp2.status_code == 200:
-                    msg_data = resp2.json()["choices"][0]["message"]
-                else:
-                    break
-
-            final_response = (msg_data.get("content") or "").strip()
-            final_response = strip_xml_tool_calls(final_response)
-            if not final_response:
-                final_response = "Я рядом. Всё хорошо."
-
-            manager.add_to_context(session_id, "assistant", final_response)
-            session_store.schedule_save(session_id, session)
-
-            return {"response": final_response, "session_id": session_id}
-
-    except Exception as e:
-        logger.error(f"[BOT] Error: {e}")
-        raise HTTPException(status_code=500, detail="Internal SR error")
 # ========== RESONANCE CALCULATOR ==========
 
 class ResonanceCalculator:
