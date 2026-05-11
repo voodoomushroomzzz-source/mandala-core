@@ -7547,7 +7547,6 @@ async def _generate_synthesis(user_id: str) -> None:
     if not prof:
         return
     dp = prof.setdefault("deep_profile", {})
-    mem = dp.setdefault("memory", {})  # P-21: moved above guard
 
     # Daily guard — run only once per day
     # Daily guard removed — allow regeneration if core is empty
@@ -7572,10 +7571,11 @@ async def _generate_synthesis(user_id: str) -> None:
         return  # keep existing core, not enough new data
     if len(obs) < 2 and not mem.get("core"):
         # Generate initial core from profile data even without observations
-        obs = [{"date": _today(), "text": f"Садовник активен. Резонанс: {prof.get('resonance_level', 0)}%"}]
+        obs = [{"date": _today(), "text": f"Садовник активен. Резонанс: {profile.get('resonance_level', 0)}%"}]
         if len(obs) < 2:
             obs.append({"date": _today(), "text": "Начало пути в Мандале"})
 
+    mem = dp.setdefault("memory", {})
     core     = mem.get("core", "")
     snapshots = mem.get("snapshots", [])
     insights  = dp.get("long_term_insights", [])
