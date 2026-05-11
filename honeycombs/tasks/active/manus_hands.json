@@ -1,9 +1,168 @@
-import json
-import sys
-
-TASK = {"task_id":"T-20260511-MANUS","name":"Manus — Hands of Mandala (исполнительный слой v1)","status":"active","priority":"HIGH","deadline":"2026-06-11","created":"2026-05-11","updated":"2026-05-11","progress":0,"description":"Создать Manus — изолированный исполнительный слой Мандалы. Позволяет SR выполнять команды во внешнем мире: HTTP-запросы, shell-команды, API-вызовы. Это отдельный микросервис с Docker-песочницей, белыми списками и HTTP API.","why":{"current_state":"Мандала имеет мозг (SR, OpenRouter) и нервную систему (bot.py, GitHub API), но не может действовать в мире. Садовник просит 'проверь сервер' или 'перезапусти бота' — SR отвечает текстом, но не выполняет.","target_state":"Мандала получает руки: bot.py и инженерный чат вызывают Manus API, Manus выполняет команду в изолированной среде, возвращает результат SR.","ahisma_check":"Все навыки выполняются в Docker-песочнице с жёсткими лимитами (5s CPU, 10MB RAM, read-only FS). Опасные навыки требуют подтверждения садовника. Белые списки доменов, команд и навыков. Никакого доступа к файлам Мандалы."},"architecture":{"manus_runner":{"description":"Минимальный HTTP-сервер на aiohttp или FastAPI. Порт 8001. Живёт в отдельном Docker-контейнере на том же сервере Render, что и bot.py.","endpoints":{"POST /skills/{skill_name}":"Вызвать навык. Тело: {skill, params, caller}. Ответ: {ok, skill, result, error, execution_time_ms}.","GET /skills":"Список доступных навыков с метаданными (description, dangerous, timeout_ms, params).","GET /health":"Статус раннера: ok + uptime."}},"docker_sandbox":{"description":"Каждый вызов навыка выполняется в отдельном потоке с ограничениями.","limits":{"cpu_time":"5 секунд","memory":"10 MB","filesystem":"read-only кроме /tmp/sandbox/","network":"только исходящие, только белый список доменов","stdout_stderr":"100 KB максимум"},"whitelist_domains":["*.onrender.com","api.github.com","raw.githubusercontent.com"],"whitelist_shell_commands":["curl","ping","echo","df","free","uptime","cat /tmp/sandbox/*"]},"skills":{"description":"Каждый навык — Python-функция в папке skills/. Раннер загружает их при старте.","skill_metadata_format":{"name":"check_endpoint","description":"Проверить доступность HTTP-эндпоинта","dangerous":false,"timeout_ms":15000,"params":{"url":"string (обязательно)","timeout":"int (необязательно, по умолчанию 10)"}},"first_skills":[{"name":"check_endpoint","description":"Проверить, отвечает ли HTTP-эндпоинт. Возвращает статус-код, время ответа, тело.","dangerous":false},{"name":"get_system_info","description":"Информация о системе: CPU, RAM, диск. Команды: free, df, uptime.","dangerous":false},{"name":"run_shell","description":"Выполнить shell-команду из белого списка. Только curl, ping, echo, df, free, uptime.","dangerous":true},{"name":"fetch_json","description":"GET-запрос к API, вернуть JSON. Только из белого списка доменов.","dangerous":false},{"name":"restart_bot","description":"Мягкий перезапуск bot.py (отправить запрос на Render restart).","dangerous":true}]},"integration_with_bot_py":{"description":"В free_conversation bot.py добавляется новый intent: execute_skill.","intent_routing":"SR определяет intent=execute_skill, action.skill={skill_name}, action.params={...}.","example_dialogs":["Садовник: «Проверь, жив ли engineer-chat» → SR: intent=execute_skill, skill=check_endpoint, params.url=https://mandala-engineer-chat.onrender.com/health","Садовник: «Сколько памяти на сервере?» → SR: intent=execute_skill, skill=get_system_info","Садовник: «Перезагрузи бота» → SR: intent=execute_skill, skill=restart_bot (dangerous=true → callback-кнопка подтверждения)"],"code_changes":["bot.py: + MANUS_URL env var","bot.py: + _call_manus(skill_name, params) async function","bot.py: + execute_skill intent в free_conversation router","bot.py: + SR_CORE_PROMPT: правила для execute_skill"]},"integration_with_engineer_chat":{"description":"Инженерный чат может вызывать Manus через HTTP API, если ему нужны системные проверки.","priority":"Фаза 2 (после интеграции с bot.py)"}},"phases":[{"phase":1,"name":"Росток","deadline":"2026-05-18","deliverables":["Dockerfile для Manus (alpine + python + aiohttp)","manus_runner.py: HTTP-сервер, загрузчик навыков, белые списки","3 навыка: check_endpoint, get_system_info, run_shell","Проверка: curl POST /skills/check_endpoint"],"files":["manus/Dockerfile","manus/manus_runner.py","manus/skills/check_endpoint.py","manus/skills/get_system_info.py","manus/skills/run_shell.py","manus/requirements.txt"]},{"phase":2,"name":"Саженец","deadline":"2026-06-01","deliverables":["Ещё 2 навыка: fetch_json, restart_bot","Интеграция в bot.py: intent execute_skill","Callback-кнопка подтверждения для dangerous навыков","Аудит вызовов: логирование в skills_log.json на GitHub"]},{"phase":3,"name":"Руки","deadline":"2026-07-01","deliverables":["Интеграция с инженерным чатом","Browser Use для веб-автоматизации","Визуальный конструктор навыков в UI","Полная автономия SR в выполнении задач"]}],"acceptance_criteria":["Manus runner запускается в Docker-контейнере и отвечает на /health","Навык check_endpoint возвращает статус-код и время ответа","Навык run_shell выполняет только команды из белого списка","Опасные навыки требуют callback-подтверждения в Telegram","Все вызовы логируются в skills_log.json","SR выбирает intent execute_skill по ключевым фразам","Ни один навык не имеет доступа к gardeners/ или honeycombs/"],"security_rules":["Никаких rm -rf, никаких kill, никаких рекурсивных команд","Все network-запросы только через белый список доменов","Каждый вызов навыка — отдельный поток с таймаутом","Docker-контейнер с read-only файловой системой","SR НИКОГДА не вызывает опасный навык без явного подтверждения садовника"],"dev_rules":["Все изменения в Manus коммитятся в папку manus/ репозитория","Каждый навык — отдельный .py файл с SKILL_META и функцией execute()","Manus runner загружает навыки из папки skills/ при старте","Обновление навыков = перезапуск Docker-контейнера"]}
-
-with open('honeycombs/tasks/active/manus_hands.json', 'w', encoding='utf-8') as f:
-    json.dump(TASK, f, ensure_ascii=False, indent=2)
-
-print("OK")
+{
+  "task_id": "T-20260511-MANUS",
+  "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+  "status": "active",
+  "priority": "HIGH",
+  "deadline": "2026-06-11",
+  "created": "2026-05-11",
+  "updated": "2026-05-11",
+  "progress": 0,
+  "description": "Создать Manus — изолированный исполнительный слой Мандалы. Позволяет SR выполнять команды во внешнем мире: HTTP-запросы, shell-команды, API-вызовы. Это отдельный микросервис с Docker-песочницей, белыми списками и HTTP API.",
+  "why": {
+    "current_state": "Мандала имеет мозг (SR, OpenRouter) и нервную систему (bot.py, GitHub API), но не может действовать в мире. Садовник просит 'проверь сервер' или 'перезапусти бота' — SR отвечает текстом, но не выполняет.",
+    "target_state": "Мандала получает руки: bot.py и инженерный чат вызывают Manus API, Manus выполняет команду в изолированной среде, возвращает результат SR.",
+    "ahisma_check": "Все навыки выполняются в Docker-песочнице с жёсткими лимитами (5s CPU, 10MB RAM, read-only FS). Опасные навыки требуют подтверждения садовника. Белые списки доменов, команд и навыков. Никакого доступа к файлам Мандалы."
+  },
+  "architecture": {
+    "manus_runner": {
+      "description": "Минимальный HTTP-сервер на aiohttp или FastAPI. Порт 8001. Живёт в отдельном Docker-контейнере на том же сервере Render, что и bot.py.",
+      "endpoints": {
+        "POST /skills/{skill_name}": "Вызвать навык. Тело: {skill, params, caller}. Ответ: {ok, skill, result, error, execution_time_ms}.",
+        "GET /skills": "Список доступных навыков с метаданными (description, dangerous, timeout_ms, params).",
+        "GET /health": "Статус раннера: ok + uptime."
+      }
+    },
+    "docker_sandbox": {
+      "description": "Каждый вызов навыка выполняется в отдельном потоке с ограничениями.",
+      "limits": {
+        "cpu_time": "5 секунд",
+        "memory": "10 MB",
+        "filesystem": "read-only кроме /tmp/sandbox/",
+        "network": "только исходящие, только белый список доменов",
+        "stdout_stderr": "100 KB максимум"
+      },
+      "whitelist_domains": [
+        "*.onrender.com",
+        "api.github.com",
+        "raw.githubusercontent.com"
+      ],
+      "whitelist_shell_commands": [
+        "curl", "ping", "echo", "df", "free", "uptime", "cat /tmp/sandbox/*"
+      ]
+    },
+    "skills": {
+      "description": "Каждый навык — Python-функция в папке skills/. Раннер загружает их при старте.",
+      "skill_metadata_format": {
+        "name": "check_endpoint",
+        "description": "Проверить доступность HTTP-эндпоинта",
+        "dangerous": false,
+        "timeout_ms": 15000,
+        "params": {
+          "url": "string (обязательно)",
+          "timeout": "int (необязательно, по умолчанию 10)"
+        }
+      },
+      "first_skills": [
+        {
+          "name": "check_endpoint",
+          "description": "Проверить, отвечает ли HTTP-эндпоинт. Возвращает статус-код, время ответа, тело.",
+          "dangerous": false
+        },
+        {
+          "name": "get_system_info",
+          "description": "Информация о системе: CPU, RAM, диск. Команды: free, df, uptime.",
+          "dangerous": false
+        },
+        {
+          "name": "run_shell",
+          "description": "Выполнить shell-команду из белого списка. Только curl, ping, echo, df, free, uptime.",
+          "dangerous": true
+        },
+        {
+          "name": "fetch_json",
+          "description": "GET-запрос к API, вернуть JSON. Только из белого списка доменов.",
+          "dangerous": false
+        },
+        {
+          "name": "restart_bot",
+          "description": "Мягкий перезапуск bot.py (отправить запрос на Render restart).",
+          "dangerous": true
+        }
+      ]
+    },
+    "integration_with_bot_py": {
+      "description": "В free_conversation bot.py добавляется новый intent: execute_skill.",
+      "intent_routing": "SR определяет intent=execute_skill, action.skill={skill_name}, action.params={...}.",
+      "example_dialogs": [
+        "Садовник: «Проверь, жив ли engineer-chat» → SR: intent=execute_skill, skill=check_endpoint, params.url=https://mandala-engineer-chat.onrender.com/health",
+        "Садовник: «Сколько памяти на сервере?» → SR: intent=execute_skill, skill=get_system_info",
+        "Садовник: «Перезагрузи бота» → SR: intent=execute_skill, skill=restart_bot (dangerous=true → callback-кнопка подтверждения)"
+      ],
+      "code_changes": [
+        "bot.py: + MANUS_URL env var",
+        "bot.py: + _call_manus(skill_name, params) async function",
+        "bot.py: + execute_skill intent в free_conversation router",
+        "bot.py: + SR_CORE_PROMPT: правила для execute_skill"
+      ]
+    },
+    "integration_with_engineer_chat": {
+      "description": "Инженерный чат может вызывать Manus через HTTP API, если ему нужны системные проверки.",
+      "priority": "Фаза 2 (после интеграции с bot.py)"
+    }
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Росток",
+      "deadline": "2026-05-18",
+      "deliverables": [
+        "Dockerfile для Manus (alpine + python + aiohttp)",
+        "manus_runner.py: HTTP-сервер, загрузчик навыков, белые списки",
+        "3 навыка: check_endpoint, get_system_info, run_shell",
+        "Проверка: curl POST /skills/check_endpoint"
+      ],
+      "files": [
+        "manus/Dockerfile",
+        "manus/manus_runner.py",
+        "manus/skills/check_endpoint.py",
+        "manus/skills/get_system_info.py",
+        "manus/skills/run_shell.py",
+        "manus/requirements.txt"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Саженец",
+      "deadline": "2026-06-01",
+      "deliverables": [
+        "Ещё 2 навыка: fetch_json, restart_bot",
+        "Интеграция в bot.py: intent execute_skill",
+        "Callback-кнопка подтверждения для dangerous навыков",
+        "Аудит вызовов: логирование в skills_log.json на GitHub"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Руки",
+      "deadline": "2026-07-01",
+      "deliverables": [
+        "Интеграция с инженерным чатом",
+        "Browser Use для веб-автоматизации",
+        "Визуальный конструктор навыков в UI",
+        "Полная автономия SR в выполнении задач"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Manus runner запускается в Docker-контейнере и отвечает на /health",
+    "Навык check_endpoint возвращает статус-код и время ответа",
+    "Навык run_shell выполняет только команды из белого списка",
+    "Опасные навыки требуют callback-подтверждения в Telegram",
+    "Все вызовы логируются в skills_log.json",
+    "SR выбирает intent execute_skill по ключевым фразам",
+    "Ни один навык не имеет доступа к gardeners/ или honeycombs/"
+  ],
+  "security_rules": [
+    "Никаких rm -rf, никаких kill, никаких рекурсивных команд",
+    "Все network-запросы только через белый список доменов",
+    "Каждый вызов навыка — отдельный поток с таймаутом",
+    "Docker-контейнер с read-only файловой системой",
+    "SR НИКОГДА не вызывает опасный навык без явного подтверждения садовника"
+  ],
+  "dev_rules": [
+    "Все изменения в Manus коммитятся в папку manus/ репозитория",
+    "Каждый навык — отдельный .py файл с SKILL_META и функцией execute()",
+    "Manus runner загружает навыки из папки skills/ при старте",
+    "Обновление навыков = перезапуск Docker-контейнера"
+  ]
+}
