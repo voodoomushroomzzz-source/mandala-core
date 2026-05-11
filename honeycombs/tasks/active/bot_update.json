@@ -5,11 +5,10 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-11",
-  "progress": 94,
-  "current_version": "7.39.17",
-  "note_version": "BOT_VERSION в коде не обновлён — ждёт P-23. Реальная версия с патчами ~7.39.21",
-
+  "updated": "2026-05-12",
+  "progress": 97,
+  "current_version": "7.39.23",
+  "note_version": "Реальная версия с патчами ~7.39.32",
   "dev_rules": [
     "ВСЕГДА обновлять BOT_VERSION и BOT_LATEST_UPDATE на каждом патче",
     "BOT_LATEST_UPDATE text — ТОЛЬКО через \\n в строках или тройные кавычки. НИКОГДА \\ в конце строки (это string continuation без \\n!)",
@@ -22,7 +21,6 @@
     "Деплоить и тестировать после каждого патча — не стекировать непроверенные",
     "Последние 5 версий в BOT_LATEST_UPDATE — удалять старую, добавлять новую"
   ],
-
   "architecture": {
     "style": "monolithic (bot.py ~9835 строк)",
     "llm": "OpenRouter deepseek/deepseek-v4-flash (primary), qwen/qwen3.5-flash-02-23 (fallback)",
@@ -31,34 +29,130 @@
     "hosting": "Render free tier, sleep after 15min idle",
     "environment": "Windows, VS Code, PowerShell, py 3.14.3, path C:\\Mandala_Digital\\github\\mandala-core"
   },
-
   "done_patches": {
     "P-21": {
       "name": "Fix Living Memory — UnboundLocalError в _generate_synthesis",
       "date": "2026-05-11",
-      "commit": "2c432293",
-      "notes": "mem = dp.setdefault('memory', {}) перемещён выше guard-а. profile.get → prof.get. Синтез живого портрета теперь работает."
+      "commit": "2c432293"
     },
     "HOTFIX_classify_none": {
       "name": "Hotfix: _classify_sphere None guard",
       "date": "2026-05-11",
-      "commit": "5e654fd0",
-      "notes": "TypeError при закрытии задач без группы. Добавлены guards: title = title or '', label_name = label_name or ''."
+      "commit": "5e654fd0"
     },
-    "P-25_sphere_and_done": {
+    "P-25_sphere": {
       "name": "Fix _classify_sphere two-pass + task done feedback",
       "date": "2026-05-11",
-      "commit": "03b61450",
-      "notes": "1. two-pass: title проверяется первым (creativity перед health). Фикс: музыкальная сессия в роадмапе Беги больше не попадает в health. 2. cb_ttask_done: добавлено сообщение '✅ Название — закрыта / 🎨 Творчество +2% → 41%'."
+      "commit": "03b61450"
     },
     "P-26_gear": {
       "name": "Fix gear icon в cb_roadmap_task_open",
       "date": "2026-05-11",
-      "commit": "67afb1e9",
-      "notes": "Заменён текст '⚙️' на нормальный заголовок '✏️ <b>Название задачи</b>'. Кнопки больше не сплющиваются на десктопе."
+      "commit": "67afb1e9"
+    },
+    "P-22": {
+      "name": "Fix Morning Brief — now.replace + убрать _can_send_proactive guard",
+      "date": "2026-05-11",
+      "commit": "68783d0f",
+      "bugs_fixed": [
+        "BUG-A1",
+        "BUG-A2"
+      ]
+    },
+    "P-24": {
+      "name": "Параллельная загрузка садовников — asyncio.gather в _load_store",
+      "date": "2026-05-11",
+      "commit": "5db13e87"
+    },
+    "P-25r": {
+      "name": "Fix резонанс от достижений — quick_add_achievement → store_add_sphere_resonance",
+      "date": "2026-05-11",
+      "commit": "5db13e87",
+      "bugs_fixed": [
+        "BUG-E"
+      ]
+    },
+    "P-26b": {
+      "name": "Fix кнопка Дополнить → ttask_edit handler (5 кнопок)",
+      "date": "2026-05-11",
+      "commit": "33a4cef9",
+      "bugs_fixed": [
+        "BUG-F"
+      ]
+    },
+    "P-27": {
+      "name": "Fix портреты в вечернем отчёте — все садовники из whitelist + сферы резонанса",
+      "date": "2026-05-11",
+      "commit": "33a4cef9"
+    },
+    "P-28": {
+      "name": "Fix Groq Whisper — run_in_executor (разблокировать event loop)",
+      "date": "2026-05-11",
+      "commit": "e7bef877",
+      "bugs_fixed": [
+        "BUG-H"
+      ]
+    },
+    "P-23": {
+      "name": "Fix BOT_VERSION 7.39.22 + BOT_LATEST_UPDATE через явные \\n",
+      "date": "2026-05-11",
+      "commit": "e7bef877",
+      "bugs_fixed": [
+        "BUG-B"
+      ]
+    },
+    "HOTFIX_gather_log": {
+      "name": "Hotfix: логировать исключения из asyncio.gather + счётчик реально загруженных",
+      "date": "2026-05-12",
+      "commit": "0446b040"
+    },
+    "HOTFIX_whitelist_force": {
+      "name": "Hotfix: whitelist.json force=True — не использовать SHA-кэш при загрузке",
+      "date": "2026-05-12",
+      "commit": "0446b040"
+    },
+    "HOTFIX_bom": {
+      "name": "Hotfix: utf-8-sig в _github_get — BOM больше не ломает загрузку. Store ready 4/4",
+      "date": "2026-05-12",
+      "commit": "cd41e16c"
+    },
+    "FEAT_profile_card": {
+      "name": "Профиль: Ближайшие задачи (5/N) + Ближайшие напоминания (3/N) + _normalize_time",
+      "date": "2026-05-12",
+      "commit": "e3bed563"
+    },
+    "RESET_gardeners": {
+      "name": "Сброс workspace + memory для 3 садовников (Антон×2, Яна). Профили сохранены.",
+      "date": "2026-05-12",
+      "script": "reset_gardeners.py"
+    },
+    "V7_39_23": {
+      "name": "BOT_VERSION 7.39.23 — changelog с заметкой о сбросе данных",
+      "date": "2026-05-12",
+      "commit": "68a3ae5e"
+    },
+    "HOTFIX_checklist_multiline": {
+      "name": "Fix чеклист multiline: items_raw split на | ИЛИ \\n",
+      "date": "2026-05-12",
+      "commit": "ce26afa9",
+      "bugs_fixed": [
+        "BUG-CL1"
+      ]
+    },
+    "HOTFIX_fake_markers": {
+      "name": "Fix fake markers: добавлены создаю чеклист/задачу/роадмап",
+      "date": "2026-05-12",
+      "commit": "ce26afa9",
+      "bugs_fixed": [
+        "BUG-CL2"
+      ]
+    },
+    "FEAT_prompt_newline": {
+      "name": "SR_INTENT_LIGHT: перенос строки без маркеров = список задач",
+      "date": "2026-05-12",
+      "commit": "ce26afa9"
     }
   },
-
   "known_bugs": {
     "BUG_A1": {
       "id": "BUG-A1",
@@ -162,105 +256,99 @@
       "fix": "cache_key = md5(f'{q}|{category}'.encode()).hexdigest()"
     }
   },
-
   "patches_plan": {
-    "SPRINT_1_CRITICAL": {
-      "P-21": { "status": "✅ DONE 2026-05-11", "commit": "2c432293" },
-      "P-22": {
-        "status": "⏳ NEXT",
-        "name": "Fix Morning Brief",
-        "priority": "CRITICAL",
-        "bug_ref": "BUG-A1, BUG-A2",
-        "location": "bot.py: _time_matches строка 988, send_morning_greeting строка 2654",
-        "tz": "1. строка 988: t.replace( → now.replace(\n2. send_morning_greeting: удалить строки 2654-2655 (if not _can_send_proactive)"
-      },
-      "P-23": {
+    "SPRINT_3_MEDIUM": {
+      "P-29": {
         "status": "⏳ TODO",
-        "name": "Fix BOT_LATEST_UPDATE + BOT_VERSION",
-        "bug_ref": "BUG-B",
-        "tz": "BOT_VERSION = '7.39.21'. BOT_LATEST_UPDATE text через явные \\n с последними 5 патчами."
+        "name": "SR Achievement History в контексте",
+        "bug_ref": "BUG-G"
+      },
+      "P-30": {
+        "status": "⏳ TODO",
+        "name": "Fix add_achievement archive object",
+        "bug_ref": "BUG-J"
+      },
+      "P-31": {
+        "status": "⏳ TODO",
+        "name": "Synthesis trigger from free_conversation"
       }
     },
-    "SPRINT_2_HIGH": {
-      "P-24": { "status": "⏳ TODO", "name": "Fix Groq Voice blocking", "bug_ref": "BUG-H" },
-      "P-25_resonance": { "status": "⏳ TODO", "name": "Fix Resonance 100%", "bug_ref": "BUG-E" },
-      "P-26_button": { "status": "⏳ TODO", "name": "Fix Дополнить button", "bug_ref": "BUG-F" },
-      "P-27": { "status": "⏳ TODO", "name": "Fix Pinned Message persistence", "bug_ref": "BUG-C" },
-      "P-28": { "status": "⏳ TODO", "name": "Fix Timestamps timezone", "bug_ref": "BUG-D" }
-    },
-    "SPRINT_3_MEDIUM": {
-      "P-29": { "status": "⏳ TODO", "name": "SR Achievement History in context", "bug_ref": "BUG-G" },
-      "P-30": { "status": "⏳ TODO", "name": "Fix add_achievement archive", "bug_ref": "BUG-J" },
-      "P-31": { "status": "⏳ TODO", "name": "Synthesis trigger from free_conversation", "note": "Зависит от P-21 (выполнен)" }
-    },
     "SPRINT_4_LOW": {
-      "P-32": { "status": "⏳ TODO", "name": "Fix deadline timezone", "bug_ref": "BUG-K" },
-      "P-33": { "status": "⏳ TODO", "name": "Fix search cache key", "bug_ref": "BUG-L" },
-      "P-34": { "status": "⏳ TODO", "name": "SR Prompt Audit", "bug_ref": "BUG-I" }
-    },
-    "BACKLOG": {
-      "P-11": "Кнопка 'Своя дата' в repeat_picker напоминаний",
-      "P-12": "Повторяющиеся задачи + своя дата",
-      "P-15": "Модульная архитектура",
-      "P-17": "Голосовые команды — составные фразы",
-      "P-18": "/help команда",
-      "P-20": "Сверка функционал кнопки vs чат vs голос"
+      "P-32": {
+        "status": "⏳ TODO",
+        "name": "Fix timestamps → ZoneInfo садовника",
+        "bug_ref": "BUG-D"
+      },
+      "P-33": {
+        "status": "⏳ TODO",
+        "name": "Fix pinned message persistence",
+        "bug_ref": "BUG-C"
+      },
+      "P-34": {
+        "status": "⏳ TODO",
+        "name": "SR Prompt Audit + NoneType guard в _call_openrouter",
+        "bug_ref": "BUG-I, NOTE-01"
+      },
+      "P-35": {
+        "status": "⏳ TODO",
+        "name": "Fix deadline timezone",
+        "bug_ref": "BUG-K"
+      },
+      "P-36": {
+        "status": "⏳ TODO",
+        "name": "Fix search cache key + category",
+        "bug_ref": "BUG-L"
+      }
     }
   },
-
   "execution_order": [
-    "P-21 ✅ DONE — Fix synthesis (2026-05-11)",
-    "HOTFIX ✅ DONE — _classify_sphere None guard (2026-05-11)",
-    "P-25_sphere ✅ DONE — classify two-pass + task done feedback (2026-05-11)",
-    "P-26_gear ✅ DONE — gear icon fix (2026-05-11)",
-    "P-22 ⏳ NEXT — Fix morning brief (CRITICAL)",
-    "P-23 ⏳ — Fix changelog + BOT_VERSION",
-    "P-24 ⏳ — Fix Groq voice blocking",
-    "P-25_resonance ⏳ — Fix resonance 100%",
-    "P-26_button ⏳ — Fix Дополнить button",
-    "P-27 ⏳ — Fix pinned message",
-    "P-28 ⏳ — Fix timestamps timezone",
-    "P-29 ⏳ — SR achievement history",
-    "P-30 ⏳ — Fix add_achievement archive",
-    "P-31 ⏳ — Synthesis from free_conversation",
-    "P-32 ⏳ — Fix deadline timezone",
-    "P-33 ⏳ — Fix search cache",
-    "P-34 ⏳ — SR Prompt Audit"
+    "P-21 ✅ DONE (2026-05-11)",
+    "HOTFIX_classify_none ✅ DONE (2026-05-11)",
+    "P-25_sphere ✅ DONE (2026-05-11)",
+    "P-26_gear ✅ DONE (2026-05-11)",
+    "P-22 ✅ DONE (2026-05-11)",
+    "P-24 ✅ DONE (2026-05-11)",
+    "P-25r ✅ DONE (2026-05-11)",
+    "P-26b ✅ DONE (2026-05-11)",
+    "P-27 ✅ DONE (2026-05-11)",
+    "P-28 ✅ DONE (2026-05-11)",
+    "P-23 ✅ DONE (2026-05-11)",
+    "HOTFIX_gather_log ✅ DONE (2026-05-12)",
+    "HOTFIX_whitelist_force ✅ DONE (2026-05-12)",
+    "HOTFIX_bom ✅ DONE (2026-05-12)",
+    "FEAT_profile_card ✅ DONE (2026-05-12)",
+    "RESET_gardeners ✅ DONE (2026-05-12)",
+    "V7_39_23 ✅ DONE (2026-05-12)",
+    "HOTFIX_checklist_multiline ✅ DONE (2026-05-12)",
+    "HOTFIX_fake_markers ✅ DONE (2026-05-12)",
+    "FEAT_prompt_newline ✅ DONE (2026-05-12)",
+    "P-29 ⏳ TODO — SR Achievement History",
+    "P-30 ⏳ TODO — Fix add_achievement archive",
+    "P-31 ⏳ TODO — Synthesis trigger",
+    "P-32 ⏳ TODO — Fix timestamps tz",
+    "P-33 ⏳ TODO — Fix pinned message",
+    "P-34 ⏳ TODO — SR Prompt Audit + NoneType guard",
+    "P-35 ⏳ TODO — Fix deadline tz",
+    "P-36 ⏳ TODO — Fix search cache"
   ],
-
   "health": {
-    "status": "improving",
-    "last_check": "2026-05-11",
-    "critical_broken": [
-      "Morning briefs — не доходят другим пользователям (P-22 NEXT)"
+    "status": "healthy",
+    "last_check": "2026-05-12",
+    "gardeners_loaded": "4/4 при старте ✅",
+    "critical_broken": [],
+    "fixed_today_2026_05_12": [
+      "BOM fix → utf-8-sig → Store ready 4/4",
+      "Утренние брифы доходят всем садовникам",
+      "Резонанс синхронизирован через store_add_sphere_resonance",
+      "Голос не блокирует event loop (Groq в executor)",
+      "Профиль: ближайшие задачи 5/N + напоминания 3/N",
+      "Сброс данных 3 садовников — чистый старт",
+      "Чеклист через голос и multiline работает",
+      "Задачи через перенос строки в промпте",
+      "Fake markers расширены"
     ],
-    "fixed_today_2026_05_11": [
-      "Living Memory синтез — P-21",
-      "_classify_sphere None guard — hotfix",
-      "Классификация сфер title-first — P-25_sphere",
-      "Фидбек закрытия задачи (+сфера +%) — P-25_sphere",
-      "Шестерёнка в меню задачи из роадмапа — P-26_gear"
-    ],
-    "still_pending_high": [
-      "Morning briefs (P-22)",
-      "Changelog форматирование + BOT_VERSION (P-23)",
-      "Resonance 100% при достижении (P-25_resonance)",
-      "Кнопка Дополнить → старое меню (P-26_button)"
-    ],
-    "working_well": [
-      "GitHub sync (SHA-кэш)",
-      "AutoLoadMiddleware",
-      "Fuzzy task matching",
-      "JSON repair",
-      "Roadmaps / Tasks / Checklists / Reminders CRUD",
-      "_ACTION_FAKE_MARKERS",
-      "Per-user timezone",
-      "Silence detection",
-      "_classify_sphere two-pass (после P-25_sphere)"
-    ],
-    "estimated_readiness": "94%"
+    "estimated_readiness": "97%"
   },
-
   "context_for_new_sr": {
     "note": "Если ты SR без предыдущего контекста — прочитай это.",
     "system_overview": "bot.py — монолит ~9835 строк. aiogram 3, aiohttp webhook, APScheduler. Данные: profile.json, workspace.json, memory.json на GitHub. _store — RAM cache, синх каждые 2 мин.",
@@ -269,5 +357,15 @@
     "sphere_classification": "_classify_sphere(title, label_name): two-pass. Сначала только title (creativity первой), потом label_name. Оба аргумента защищены от None.",
     "sr_identity": "SR — женский род. Ахимса как фильтр.",
     "key_functions": "_build_user_context_msg, _generate_synthesis, store_add_sphere_resonance, _fire_sync"
-  }
+  },
+  "notes_for_next_session": [
+    {
+      "id": "NOTE-01",
+      "priority": "LOW",
+      "location": "bot.py: _call_openrouter",
+      "title": "NoneType guard в _call_openrouter",
+      "description": "'NoneType' object has no attribute 'strip' — content[0].text приходит как None при перегрузке deepseek. Fallback отрабатывает корректно, но ошибка логируется. Нужен guard: text = (content[0].text or '').strip(). Войдёт в P-34 (SR Prompt Audit).",
+      "fix": "text = (content[0].text or '').strip() вместо content[0].text.strip()"
+    }
+  ]
 }
