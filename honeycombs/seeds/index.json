@@ -4,13 +4,19 @@
     "name": "Seeds Honeycomb Manifest",
     "version": "v2.0.0",
     "created": "2026-03-01",
-    "updated": "2026-05-01",
+    "updated": "2026-05-11",
     "layer": 1,
     "type": "honeycomb_manifest",
     "description": "Seeds honeycomb: active/ folder for idea incubation. Archive removed. Only active seeds.",
     "status": "active",
     "priority": "high",
-    "tags": ["seeds", "simple", "workflow", "minimal", "no_archive"],
+    "tags": [
+      "seeds",
+      "simple",
+      "workflow",
+      "minimal",
+      "no_archive"
+    ],
     "resonance": "100%"
   },
   "structure": {
@@ -24,7 +30,11 @@
   },
   "rule": {
     "policy": "No archived seeds. Seeds are either active or deleted. When realized, becomes task/roadmap. When irrelevant, deleted.",
-    "applies_to": ["seeds", "tasks", "roadmaps"]
+    "applies_to": [
+      "seeds",
+      "tasks",
+      "roadmaps"
+    ]
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json"
@@ -43,5 +53,11 @@
     "status": "healthy",
     "last_check": "2026-05-01",
     "notes": "v2.0.0: 0 active seeds. No archive."
+  },
+  "meta": {
+    "description": "Seeds are raw ideas, unprocessed concepts, and Scout Agent findings. They are the entry point for all new ideas in Mandala. Seeds that grow become tasks or roadmaps. Seeds that don't resonate are deleted.",
+    "how_to_use": "Each seed is a JSON file in active/ folder. When a seed matures, it is promoted to a task or roadmap and removed from seeds.",
+    "change_requires": "gardener_approval",
+    "guardian_lock": true
   }
 }
