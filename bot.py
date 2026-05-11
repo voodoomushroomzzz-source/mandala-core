@@ -447,6 +447,14 @@ def _today(tz_name: str = "Europe/Moscow") -> str:
     except Exception:
         return datetime.now(ZoneInfo("Europe/Moscow")).strftime("%Y-%m-%d")
 
+def _normalize_time(t: str) -> str:
+    """Normalize time string to HH:MM with leading zero. '9:00' → '09:00'"""
+    try:
+        h, m = t.strip().split(":")
+        return f"{int(h):02d}:{m.zfill(2)}"
+    except Exception:
+        return t
+
 
 CIS_TIMEZONES = {
     "алматы": "Asia/Almaty", "алмата": "Asia/Almaty",
@@ -1207,26 +1215,40 @@ def _build_profile_card(user_id: str) -> str:
     _rm_task_ids_pc = {tid for rm in roadmaps for tid in rm.get("task_ids", [])}
     active_all = [t for t in all_tasks if t.get("status") != "completed" and t.get("task_id") not in _rm_task_ids_pc]
     total_tasks = len(active_all)
-    today_tasks = [t for t in active_all if t.get("deadline") and t["deadline"] <= today_rem]
-    today_count = len(today_tasks)
-    lines.append(f"📋 <b>Задачи сегодня</b> {today_count}/{total_tasks}")
-    for t in sorted(today_tasks, key=lambda x: x.get("deadline") or "9999")[:3]:
+    # Ближайшие 5 задач по дедлайну (сначала просроченные и сегодня, потом будущие, потом без дедлайна)
+    def _task_sort_key(t):
+        dl = t.get("deadline")
+        return (0, dl) if dl and dl <= today_rem else (1, dl or "9999")
+    nearest_tasks = sorted(active_all, key=_task_sort_key)[:5]
+    shown_tasks = len(nearest_tasks)
+    lines.append(f"📋 <b>Ближайшие задачи</b> {shown_tasks}/{total_tasks}")
+    for t in nearest_tasks:
         ind = _deadline_indicator(t.get("deadline", ""))
         dl  = f" · {t['deadline']}" if t.get("deadline") else ""
         lines.append(f"  · {ind}{t['title']}{dl}")
+    if not nearest_tasks:
+        lines.append("  · задач нет 🌱")
     lines.append("")
 
     # ── Reminders block ──────────────────────────────────────────────────
     reminders = store_get_reminders(user_id)
-    today_reminders = [r for r in reminders if (r.get("datetime_iso","") or "")[:10] == today_rem]
-    total_rem = len(reminders)
-    today_rem_count = len(today_reminders)
-    lines.append(f"🔔 <b>Напоминания сегодня</b> {today_rem_count}/{total_rem}")
-    for r in today_reminders[:3]:
+    active_reminders = [r for r in reminders if r.get("active", True)]
+    total_rem = len(active_reminders)
+    # 3 ближайших по datetime_iso
+    nearest_rem = sorted(
+        active_reminders,
+        key=lambda r: (r.get("datetime_iso") or "9999")
+    )[:3]
+    shown_rem = len(nearest_rem)
+    lines.append(f"🔔 <b>Ближайшие напоминания</b> {shown_rem}/{total_rem}")
+    for r in nearest_rem:
         dt = (r.get("datetime_iso","") or "")
         time_part = dt[11:16] if len(dt) >= 16 and dt[10] == "T" else ""
-        time_str = f" · {time_part}" if time_part else ""
-        lines.append(f"  · {r['title']}{time_str}")
+        date_part = dt[:10] if len(dt) >= 10 else ""
+        when = f" · {date_part} {time_part}".strip() if date_part else ""
+        lines.append(f"  · {r['title']}{when}")
+    if not nearest_rem:
+        lines.append("  · напоминаний нет 🌱")
 
     return "\n".join(lines)
 
@@ -5074,7 +5096,7 @@ async def onboard_morning(message: Message, state: FSMContext):
         "updated": _today(),
         "personal_info": {"life_areas": life_areas},
         "companion_settings": {
-            "morning_message_time": morning,
+            "morning_message_time": _normalize_time(morning),
             "proactive_mode": True,
             "timezone": "Europe/Moscow",
             "city": city,
@@ -7389,7 +7411,7 @@ async def ep_morning(message: Message, state: FSMContext):
         await message.answer("Формат: ЧЧ:ММ (например 09:00)\nДля отмены: ❌ Отмена")
         return
     g = store_get_profile(user_id) or {}
-    g.setdefault("companion_settings", {})["morning_message_time"] = t
+    g.setdefault("companion_settings", {})["morning_message_time"] = _normalize_time(t)
     g["updated"] = _today()
     store_set_profile(user_id, g)
     _fire_sync()
