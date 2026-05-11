@@ -1,0 +1,138 @@
+{
+  "task_id": "T-20260511-ARCHBOT",
+  "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
+  "status": "active",
+  "priority": "HIGH",
+  "deadline": "2026-06-11",
+  "created": "2026-05-11",
+  "updated": "2026-05-11",
+  "progress": 0,
+  "description": "Develop Architect Bot — a personal Telegram bot for the Architect (Dima) that serves as a mobile interface to Engineer Chat and Manus. Unlike the Gentle Companion (which is a sandbox for external gardeners), Architect Bot is an engineer's tool with elevated rights, direct access to Mandala's core, and the ability to control Manus and view sandbox analytics.",
+  "why": {
+    "current_state": "The Architect manages Mandala through Engineer Chat (WebSocket + Monaco Editor in a browser). This requires opening a laptop. There is no mobile interface for checking system health, viewing sandbox metrics, or calling Manus skills on the go.",
+    "target_state": "Architect opens Telegram on a phone and can: check service health via Manus, view daily stats from the sandbox, receive notifications about new gardeners and system issues, control Manus skills directly, and chat with the SR brain of Mandala.",
+    "how_it_differs_from_gentle_companion": "Architect Bot is NOT a warmer Gentle Companion. It is an engineer's tool with a Telegram interface. Key differences: (1) connected to Engineer Chat WebSocket, not standalone; (2) elevated rights — can call dangerous Manus skills without confirmation; (3) sees aggregated sandbox data (patterns, not personal data); (4) receives system notifications; (5) its SR knows it is part of Mandala's core.",
+    "ahisma_check": "Architect Bot has elevated rights but operates within Mandala's Ahimsa principles. It does not expose gardener personal data — only aggregated patterns. Dangerous Manus skills are logged. The Architect is the Gardener of Mandala — this is his tool for nurturing the system."
+  },
+  "architecture": {
+    "overview": "Architect Bot is a Telegram bot that connects to Engineer Chat via WebSocket. It shares the same session and SR brain as Engineer Chat. Commands from Telegram are forwarded to Engineer Chat, processed by DeepSeek, and responses are returned to Telegram.",
+    "connection_to_engineer_chat": {
+      "description": "Architect Bot maintains a persistent WebSocket connection to Engineer Chat. This gives it access to: the same SR brain (DeepSeek via OpenRouter), the same KernelMemory (all Mandala modules), the same tools (read_file, web_search), and direct Manus control.",
+      "websocket_flow": [
+        "1. Architect sends message in Telegram → Architect Bot receives it",
+        "2. Architect Bot forwards to Engineer Chat WebSocket as type: 'ask'",
+        "3. Engineer Chat processes via DeepSeek (with full Mandala context)",
+        "4. Response streams back via WebSocket → Architect Bot sends to Telegram",
+        "5. Manus calls work the same way: Engineer Chat → WebSocket → Manus → result → Telegram"
+      ]
+    },
+    "commands": {
+      "description": "Architect Bot supports both free-form chat (forwarded to Engineer Chat SR) and explicit bot commands for quick actions.",
+      "list": [
+        {
+          "command": "/status",
+          "description": "Quick system health check via Manus. Shows: bot.py alive?, Engineer Chat alive?, Manus alive?, Render status, recent errors."
+        },
+        {
+          "command": "/report",
+          "description": "Daily or weekly sandbox report. Shows: active gardeners count, total messages, tasks created/completed, resonance averages, new seeds."
+        },
+        {
+          "command": "/patterns",
+          "description": "Aggregated patterns from the sandbox (last 7 days). Shows: popular intents, common questions, gardener activity by time, weak spheres across gardeners."
+        },
+        {
+          "command": "/seeds",
+          "description": "List recent seeds from the sandbox. Option to promote a seed to a task."
+        },
+        {
+          "command": "/manus",
+          "description": "Execute a Manus skill. Usage: /manus check_endpoint url=https://... or /manus restart_bot. Dangerous skills show confirmation button."
+        },
+        {
+          "command": "/sync",
+          "description": "Force sync Engineer Chat kernel with GitHub (re-read all modules)."
+        }
+      ]
+    },
+    "notifications": {
+      "description": "Architect Bot proactively sends notifications about important Mandala events.",
+      "events": [
+        "New gardener request (whitelist approval needed)",
+        "Gardener left the garden (/leave triggered)",
+        "System error (bot.py crash, Engineer Chat down, Manus failure)",
+        "Daily report summary (21:00 MSK, compact version of /report)",
+        "New seed added by a gardener",
+        "Critical bug detected (from daily_issues)"
+      ]
+    },
+    "technical_implementation": {
+      "description": "Architect Bot is a Python module within the existing Engineer Chat server (main.py), not a separate service. It uses python-telegram-bot or aiogram to handle Telegram messages and maintains a WebSocket client connection to Engineer Chat.",
+      "approach": "Add a Telegram bot handler inside main.py that connects to its own WebSocket as a client. This avoids running a separate process and keeps all logic in one place.",
+      "key_components": [
+        "aiogram Bot + Dispatcher for Telegram message handling",
+        "WebSocket client (aiohttp) connecting to localhost:8000/ws",
+        "Session ID: 'architect_tg_{telegram_id}' — separate from Web UI sessions",
+        "Notification queue: asyncio.Queue for proactive messages",
+        "Elevated rights flag in session data — allows dangerous Manus skills without confirmation"
+      ]
+    }
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Foundation",
+      "deadline": "2026-05-25",
+      "deliverables": [
+        "Telegram bot skeleton inside main.py (aiogram, connects to own WebSocket)",
+        "Basic /status command via Manus (check_endpoint for all services)",
+        "Free-form chat forwarded to Engineer Chat SR",
+        "Session separation: architect sessions vs web UI sessions"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Commands + Notifications",
+      "deadline": "2026-06-08",
+      "deliverables": [
+        "/report command — daily/weekly sandbox metrics",
+        "/patterns command — aggregated gardener patterns (anonymized)",
+        "/seeds command — list and promote seeds",
+        "/manus command — execute Manus skills from Telegram",
+        "Proactive notifications: new gardener, system errors, daily summary"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Deep Integration",
+      "deadline": "2026-07-01",
+      "deliverables": [
+        "Full Manus control parity with Engineer Chat Web UI",
+        "Dashboards as Telegram inline keyboards (metrics, charts as text)",
+        "Gardener management: approve/deny, view profiles (aggregated)",
+        "Auto-suggestions based on sandbox patterns"
+      ]
+    }
+  ],
+  "integration_with_other_products": {
+    "gentle_companion": "Architect Bot reads sandbox data (daily_stats, sr_observations, seeds) but does NOT access individual gardener profiles. It sees patterns, not people.",
+    "engineer_chat": "Architect Bot IS Engineer Chat — accessed through Telegram instead of Web UI. Same SR brain, same tools, same Manus.",
+    "manus": "Architect Bot can call ALL Manus skills, including dangerous ones. The /manus command is the primary interface for mobile execution."
+  },
+  "acceptance_criteria": [
+    "Architect can send a message in Telegram and receive a response from Engineer Chat SR",
+    "/status returns health check for all Mandala services via Manus",
+    "/report shows yesterday's sandbox metrics",
+    "New gardener request triggers a Telegram notification to Architect",
+    "Architect Bot sessions are separate from Web UI sessions",
+    "Dangerous Manus skills show a callback confirmation button",
+    "Architect Bot continues working when Web UI is not open"
+  ],
+  "dev_rules": [
+    "Architect Bot code lives in main.py — not a separate file",
+    "Uses the same ENV variables as Engineer Chat (BOT_TOKEN is Architect Bot token)",
+    "WebSocket connection to Engineer Chat is persistent with auto-reconnect",
+    "All Architect Bot interactions are logged to the same session store",
+    "Elevated rights are enforced by session flag, not by code duplication"
+  ]
+}
