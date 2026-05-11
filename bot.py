@@ -512,7 +512,7 @@ async def _github_get(file_path: str, force: bool = False) -> Optional[Any]:
                     logger.debug(f"SHA cache hit: {file_path}")
                     return None  # caller should use cached value
                 _sha_cache[file_path] = new_sha
-                content = base64.b64decode(data["content"]).decode("utf-8")
+                content = base64.b64decode(data["content"]).decode("utf-8-sig")  # utf-8-sig strips BOM
                 try:
                     return json.loads(content)
                 except Exception:
