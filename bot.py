@@ -1640,13 +1640,18 @@ async def cb_roadmap_task_open(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     task_id = callback.data.split("|")[2]
+    tasks_g = store_get_tasks(user_id)
+    task_g = next((t for t in tasks_g if t.get("task_id") == task_id), None)
+    _g_title = task_g.get("title", "-") if task_g else "-"
+    _g_header = f"\u270f\ufe0f <b>{_g_title}</b>"  # P-26: replaced gear
     try:
         await callback.message.edit_text(
-            "\u2699\ufe0f",
-            reply_markup=get_task_edit_inline(user_id, task_id)
+            _g_header,
+            reply_markup=get_task_edit_inline(user_id, task_id),
+            parse_mode="HTML"
         )
     except Exception:
-        await callback.message.answer("\u2699\ufe0f", reply_markup=get_task_edit_inline(user_id, task_id))
+        await callback.message.answer(_g_header, reply_markup=get_task_edit_inline(user_id, task_id), parse_mode="HTML")
 
 
 @router.callback_query(F.data.startswith("rm_add_task|"))
