@@ -1,0 +1,124 @@
+{
+  "task_id": "T-20260511-ENGCHAT",
+  "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
+  "status": "active",
+  "priority": "HIGH",
+  "deadline": "2026-06-11",
+  "created": "2026-05-11",
+  "updated": "2026-05-11",
+  "progress": 0,
+  "description": "Transform Engineer Chat from a standalone WebSocket analysis tool into the central integration hub of Mandala. Engineer Chat is already live (v4.0.0-simbiosis, main.py on Render) and serves as the Architect's primary interface for repository analysis, code review, and web search. This task adds: Architect Bot WebSocket integration, Manus direct control, sandbox analytics dashboards, and the data pipeline from Gentle Companion observations into actionable insights.",
+  "why": {
+    "current_state": "Engineer Chat works as a standalone WebSocket chat with DeepSeek. It reads files from GitHub, searches the web via Tavily/DuckDuckGo, and analyzes code. But it is isolated — it does not receive Architect Bot connections, cannot control Manus, and does not display sandbox analytics.",
+    "target_state": "Engineer Chat is the central nervous system of Mandala. It accepts Architect Bot WebSocket connections, executes Manus skills and returns results, reads sandbox data (daily_stats, sr_observations, seeds) and displays them as dashboards, and serves as the integration point where all three Mandala layers meet.",
+    "role_in_mandala": "Engineer Chat is the Brain (Layer 2). It sits between the Sandbox (Gentle Companion) and the Hands (Manus). It analyzes data flowing from the sandbox, identifies patterns, and directs Manus to act. Architect Bot is its mobile interface."
+  },
+  "current_features": {
+    "description": "What Engineer Chat already does (working, live on Render).",
+    "list": [
+      "WebSocket chat with DeepSeek via OpenRouter",
+      "KernelMemory — loads Mandala modules from GitHub with polling and webhook auto-refresh",
+      "File reading via GitHub Contents API (read_file tool)",
+      "Web search via Tavily/DuckDuckGo (web_search tool)",
+      "XML/DSML/JSON tool call parsing for DeepSeek non-standard formats",
+      "Session persistence on GitHub (sessions/{id}.json)",
+      "Dynamic context trimming (163K token window management)",
+      "Bot endpoint /bot/ask for Gentle Companion SR",
+      "GitHub webhook for instant module refresh on push",
+      "Resonance calculator (keyword-based)"
+    ]
+  },
+  "required_work": {
+    "architect_bot_integration": {
+      "description": "Enable Architect Bot to connect to Engineer Chat via WebSocket and use all the same tools.",
+      "tasks": [
+        "Add WebSocket client handler in main.py for Architect Bot connections (separate session prefix: 'architect_tg_{id}')",
+        "Implement elevated rights flag — Architect Bot sessions bypass dangerous skill confirmation",
+        "Add notification queue for proactive messages (new gardener, system errors, daily summary)",
+        "Handle Telegram-specific message formatting (HTML, length limits, inline keyboards)"
+      ]
+    },
+    "manus_integration": {
+      "description": "Engineer Chat must be able to call Manus skills and return results to the caller (Web UI or Architect Bot).",
+      "tasks": [
+        "Add Manus HTTP client to main.py (POST to Manus /skills/{name})",
+        "Add 'execute_skill' as a tool in DeepSeek function calling (alongside read_file, web_search)",
+        "Handle dangerous skill confirmation: if caller is Web UI — ask in chat; if Architect Bot — callback button in Telegram",
+        "Log all Manus calls to skills_log.json",
+        "Expose Manus skill list in /status and /health endpoints"
+      ]
+    },
+    "sandbox_analytics": {
+      "description": "Read data from the Gentle Companion sandbox and display it as structured dashboards.",
+      "tasks": [
+        "Read daily_stats from honeycombs/sessions/daily_stats_live.json",
+        "Read sr_observations from gardener deep_profiles (aggregated, anonymized)",
+        "Read seeds from honeycombs/seeds/",
+        "Build a /dashboard WebSocket message type that returns structured analytics",
+        "Display: active gardeners, messages per day, tasks created/completed, popular intents, weak spheres, new seeds",
+        "Auto-suggest improvements based on patterns (e.g., 'gardeners often ask about motivation — consider adding a motivation module to SR prompt')"
+      ]
+    },
+    "data_pipeline": {
+      "description": "Create the automated flow from sandbox observations to actionable improvements.",
+      "tasks": [
+        "Add a scheduler job that reads sandbox data daily and generates an insights report",
+        "Store insights in honeycombs/sessions/sandbox_insights.json",
+        "Use DeepSeek to analyze patterns and suggest concrete SR prompt improvements",
+        "Expose insights via WebSocket and Architect Bot /patterns command"
+      ]
+    }
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Architect Bot Connection",
+      "deadline": "2026-05-25",
+      "deliverables": [
+        "WebSocket handler for Architect Bot sessions in main.py",
+        "Elevated rights flag for architect sessions",
+        "Notification queue for proactive messages",
+        "Basic /status command via WebSocket (forwards to Manus when ready)"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Manus Control + Sandbox Dashboards",
+      "deadline": "2026-06-08",
+      "deliverables": [
+        "Manus HTTP client in main.py",
+        "execute_skill tool in DeepSeek function calling",
+        "Dangerous skill confirmation flow (Web UI + Telegram callback)",
+        "Sandbox analytics dashboard (WebSocket /dashboard message type)",
+        "Daily insights report from sandbox data"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Full Integration Hub",
+      "deadline": "2026-07-01",
+      "deliverables": [
+        "Auto-improvement pipeline: patterns → SR prompt updates → deploy",
+        "Visual dashboards in Web UI (resonance charts, activity heatmaps)",
+        "Gardener management interface (view aggregated profiles, approve/deny)",
+        "Complete data loop: Sandbox → Brain → Hands → Sandbox (improved)"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Architect Bot can connect to Engineer Chat WebSocket and send/receive messages",
+    "Engineer Chat can call Manus check_endpoint and return the result to the caller",
+    "Dangerous Manus skills show confirmation in Web UI and callback button in Telegram",
+    "Sandbox dashboard shows: active gardeners, messages count, tasks created/completed, new seeds",
+    "Daily insights report is generated and accessible via Architect Bot /patterns",
+    "All Manus calls are logged to skills_log.json",
+    "Engineer Chat continues to work as before (file reading, web search, chat with DeepSeek)"
+  ],
+  "dev_rules": [
+    "All changes are in main.py — Engineer Chat remains a single-file server",
+    "Architect Bot and Web UI share the same DeepSeek brain and tools",
+    "Manus is called via HTTP, not imported as a library (separate containers)",
+    "Sandbox data is read from GitHub, not from bot.py directly",
+    "WebSocket message types are documented in the code as comments"
+  ]
+}
