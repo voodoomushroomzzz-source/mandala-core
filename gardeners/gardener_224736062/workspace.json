@@ -341,6 +341,21 @@
       "updated": "2026-05-07",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260511_024",
+      "title": "закупка маленьких коробок",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-05-13",
+      "reminder": null,
+      "created": "2026-05-11",
+      "updated": "2026-05-11",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
