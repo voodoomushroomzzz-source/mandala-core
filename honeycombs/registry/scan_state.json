@@ -1,5 +1,5 @@
 ﻿{
-  "last_scan": "2026-05-11T15:43:34.750908",
+  "last_scan": "2026-05-11T15:46:01.355767",
   "honeycomb_hashes": {
     "akasha": "938d9a020ac360bc5d157c023fce7621",
     "analytics": "d7267eeb9431eab01bd550f1f3b7ba7a",
@@ -34,8 +34,8 @@
     "registry/extensions": "6ef53c7a5f8bc742d9987ac00c4ab430",
     "registry/modules": "8e56fb420ef6a803d0e7d88c96a45834",
     "registry/notifications": "a45d68483e1cd793f4142cd7fd814321",
-    "roadmaps": "566780d8b8a9869802e4ac6da634941f",
-    "seeds": "65f9a7c83be87d7794ea61b7f7e4b373",
+    "roadmaps": "51086041be22110ed07b05706238d80d",
+    "seeds": "d3d42c2f0062c566d965a499b0acffd0",
     "sessions": "676e443ea43942ae919837475f6c9bbd",
     "sphaerae": "7b72cd32406baf1cdc88938e6a9fa83e",
     "sym": "892b09f32abe87de96e2a6426cea472a",
@@ -45,12 +45,12 @@
   },
   "statistics": {
     "total_scanned": 41,
-    "valid_v2": 39,
-    "invalid_v2": 2,
+    "valid_v2": 41,
+    "invalid_v2": 0,
     "errors": 0,
-    "warnings": 2,
+    "warnings": 0,
     "total_files": 224,
-    "total_size_kb": 1496.7699999999998
+    "total_size_kb": 1496.6799999999998
   },
   "scanner_config": {
     "updated": "2026-04-09",
