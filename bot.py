@@ -60,33 +60,35 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 40
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.17"
+BOT_VERSION = "7.39.22"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.13",
-    "date": "2026-05-10",
-    "text": "🌱 Мандала · Что нового\
-\
-" "v7.39.13 · 10.05.2026\
-" "  · Меню Роадмапов: полное меню вместо заглушки\
-" "  · 📌 Место задачи: переносить между группами и роадмапами\
-" "  · Задачи роадмапов скрыты из общего счётчика и профиля\
-" "  · После деплоя кнопки работают без нажатия /start\
-" "  · Лог обновлений только в утреннем брифе\
-\
-" "v7.39.9 · 09.05.2026\
-" "  · Меню Задач: группы, список задач, повторы, своя дата\
-" "  · Кнопка Роадмапы в профиле (заглушка — скоро меню)\
-\
-" "v7.39.8 · 09.05.2026\
-" "  · Обнаружение тишины: СР пишет сам если садовник молчит 3+ дня\
-" "  · Сообщения тишины генерируются через SR, уникальные под пользователя\
-\
-" "v7.39.7 · 09.05.2026\
-" "  · Чейнджлог-дашборд: /changelog, 🆕 Обновления в меню\
-\
-" "v7.39.6 · 09.05.2026\
-" "  · Кнопки редактирования профиля с возвратом в меню",
+    "version": "7.39.22",
+    "date": "2026-05-11",
+    "text": (
+        "🌱 Мандала · Что нового\n"
+        "\n"
+        "v7.39.22 · 11.05.2026\n"
+        "  · Параллельная загрузка садовников при старте\n"
+        "  · Резонанс через сферы — больше не раздувается от достижений\n"
+        "  · Кнопка Дополнить → полное меню редактирования\n"
+        "  · Вечерний отчёт — все садовники + сферы резонанса\n"
+        "  · Голос не блокирует бот (Groq в executor)\n"
+        "\n"
+        "v7.39.21 · 11.05.2026\n"
+        "  · Утренние брифы приходят всем садовникам\n"
+        "  · Исправлен now.replace() в планировщике\n"
+        "\n"
+        "v7.39.13 · 10.05.2026\n"
+        "  · Меню Роадмапов: полное меню вместо заглушки\n"
+        "  · 📌 Место задачи: переносить между группами и роадмапами\n"
+        "\n"
+        "v7.39.9 · 09.05.2026\n"
+        "  · Меню Задач: группы, список задач, повторы, своя дата\n"
+        "\n"
+        "v7.39.8 · 09.05.2026\n"
+        "  · Обнаружение тишины: СР пишет сам если молчит 3+ дня"
+    ),
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
@@ -7851,12 +7853,16 @@ async def handle_voice(message: Message, state: FSMContext):
         from groq import Groq as _Groq
         import io as _io
         client = _Groq(api_key=GROQ_API_KEY)
-        transcription = client.audio.transcriptions.create(
-            file=("voice.ogg", _io.BytesIO(ogg_bytes), "audio/ogg"),
-            model="whisper-large-v3-turbo",
-            language="ru",
-            response_format="text"
-        )
+        # P-28: run_in_executor — Groq Whisper is sync, must not block event loop
+        _ogg_buf = _io.BytesIO(ogg_bytes)
+        def _transcribe():
+            return client.audio.transcriptions.create(
+                file=("voice.ogg", _ogg_buf, "audio/ogg"),
+                model="whisper-large-v3-turbo",
+                language="ru",
+                response_format="text"
+            )
+        transcription = await asyncio.get_event_loop().run_in_executor(None, _transcribe)
         text = transcription.strip() if isinstance(transcription, str) else transcription.text.strip()
         if not text:
             await status_msg.edit_text("🎙 Не расслышала. Попробуй ещё раз 🌿")
