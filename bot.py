@@ -985,7 +985,7 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
         tz = ZoneInfo(timezone)
         now = _dt.now(tz)
         h, m_val = map(int, setting_time.split(":"))
-        target = t.replace(hour=h, minute=m_val, second=0, microsecond=0)
+        target = now.replace(hour=h, minute=m_val, second=0, microsecond=0)
         return abs((now - target).total_seconds()) <= 600  # 10 min window
     except Exception:
         return False
@@ -2686,8 +2686,6 @@ def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
 async def send_morning_greeting(telegram_id: str) -> None:
     """Morning brief v2: daily analytics digest. Always sends — if no tasks, proposes to fill the day."""
     try:
-        if not _can_send_proactive(telegram_id):
-            return
         gardener = store_get_profile(str(telegram_id))
         if not gardener:
             return
