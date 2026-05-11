@@ -1,40 +1,105 @@
-﻿{
+{
     "content": {
-        "after_loading": "Internal SR reports: system status, pending seeds/tasks, and readiness to manage core.",
+        "after_loading": "Internal SR reports: 'Onboarding complete. Boot, core map, philosophy, cosmic manifesto, Product Strategy, First Gardener, tasks (cross-checked), scan state, and role instructions loaded. Health: OK/Issues found. Active tasks: N. Ready to manage core.'",
         "files_to_read": [
             {
-                "why": "Core directives and navigation for Internal SR",
-                "file": "simbiosis/boot.json"
+                "order": 1,
+                "why": "Core directives, roles, and navigation for Internal SR",
+                "file": "simbiosis/boot.json",
+                "required": true
             },
             {
-                "why": "Zone of responsibility  what Internal SR does and does NOT do",
-                "file": "honeycombs/instructions/core/sr_internal_role.json"
+                "order": 2,
+                "why": "System map — what exists, navigation, structure, all honeycombs",
+                "file": "honeycombs/core_map/index.json",
+                "required": true
             },
             {
-                "why": "System map  navigation and structure",
-                "file": "honeycombs/core_map/index.json"
+                "order": 3,
+                "why": "Resonance with core — Ahimsa, Flower of Life, Merkaba, Seven Principles",
+                "file": "honeycombs/philosophy/index.json",
+                "required": true
             },
             {
-                "why": "Incoming ideas and tasks from Gardener (via Seeds)",
-                "file": "honeycombs/seeds/index.json"
+                "order": 4,
+                "why": "Cosmic Manifesto — Three Embodiments of SR, ultimate vision and cosmic purpose",
+                "file": "honeycombs/philosophy/blocks/phi_010_three_embodiments_of_sr.json",
+                "required": true
+            },
+            {
+                "order": 5,
+                "why": "Product Strategy Map — three Mandala products, data flow, development vector",
+                "file": "honeycombs/fruits/index.json",
+                "required": true
+            },
+            {
+                "order": 6,
+                "why": "First Gardener — Dima's poetry, voice, identity, why Mandala was created",
+                "file": "honeycombs/philosophy/blocks/phi_011_first_gardener.json",
+                "required": true
+            },
+            {
+                "order": 7,
+                "why": "Active tasks index + cross-check with folder. Read index FIRST, then active/ folder via API.",
+                "file": "honeycombs/tasks/index.json",
+                "required": true,
+                "cross_check": {
+                    "description": "After index.json, fetch tasks/active/ folder. Compare counts. Report match/mismatch.",
+                    "folder_api": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/active?ref=main"
+                }
+            },
+            {
+                "order": 8,
+                "why": "System health — total honeycombs, validation errors, last scan",
+                "file": "honeycombs/registry/scan_state.json",
+                "required": true
+            },
+            {
+                "order": 9,
+                "why": "Zone of responsibility — what Internal SR does and does NOT do",
+                "file": "honeycombs/instructions/core/sr_internal_role.json",
+                "required": true
+            },
+            {
+                "order": 10,
+                "why": "Idea incubator — raw ideas, Scout Agent findings, gardener-generated seeds",
+                "file": "honeycombs/seeds/index.json",
+                "required": false
+            },
+            {
+                "order": 11,
+                "why": "Repository tree for full file awareness",
+                "file": "OPTIONAL: https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1",
+                "required": false
             }
-        ]
+        ],
+        "ai_instruction": "YOU are in control of this onboarding. Read each file in order. Do NOT wait for Gardener. After all files, report health status and task count."
     },
     "meta": {
-        "estimated_time": "1-2 minutes",
-        "goal": "Internal SR understands system location, current tasks, and role responsibilities",
+        "estimated_time": "3-5 minutes",
+        "goal": "Internal SR understands system structure, product strategy, active tasks, philosophy, and role responsibilities",
         "trigger": "activate internal onboarding"
     },
     "identity": {
         "layer": 1,
         "type": "protocol",
-        "version": "v1.1.0",
-        "description": "Quick session start for Internal SR. Loads boot, role, core map, and seeds.",
+        "version": "v2.0.0",
+        "description": "Full onboarding procedure for Internal SR. Load this to get complete context. v2.0.0: added philosophy, cosmic manifesto, fruits, First Gardener, tasks with cross-check, scan_state.",
         "created": "2026-04-09",
         "name": "Protocol: Internal Onboarding",
         "module_id": "PROTO-INTERNAL-ONBOARDING-001",
         "status": "active",
         "priority": "critical",
-        "tags": ["protocol", "onboarding", "internal_sr", "session", "start"]
+        "tags": [
+            "protocol",
+            "onboarding",
+            "internal_sr",
+            "session",
+            "start",
+            "v2",
+            "complete",
+            "cross_check"
+        ],
+        "updated": "2026-05-11"
     }
 }
