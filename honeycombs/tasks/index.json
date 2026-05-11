@@ -27,7 +27,7 @@
       "active_tasks": {
         "folder": "active/",
         "description": "Currently active tasks",
-        "files_count": 7,
+        "files_count": 8,
         "tasks": [
           {
             "file": "bot_update.json",
@@ -98,6 +98,16 @@
             "priority": "HIGH",
             "deadline": "2026-06-11",
             "description": "Isolated skill runner in Docker sandbox. HTTP API for SR to execute shell commands, check endpoints, fetch APIs. Phase 1: 3 skills (check_endpoint, get_system_info, run_shell)."
+          },
+          {
+            "file": "architect_bot.json",
+            "task_id": "T-20260511-ARCHBOT",
+            "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
+            "status": "active",
+            "progress": 0,
+            "priority": "HIGH",
+            "deadline": "2026-06-11",
+            "description": "Personal Telegram bot for the Architect connected to Engineer Chat WebSocket. Mobile interface to Mandala's brain: /status, /report, /patterns, /seeds, /manus commands. Proactive notifications for new gardeners, system errors, daily summaries."
           }
         ]
       }
@@ -115,9 +125,9 @@
     "parent_map": "honeycombs/core_map/index.json"
   },
   "registry": {
-    "total_files": 7,
+    "total_files": 8,
     "last_updated": "2026-05-11",
-    "notes": "v4.1.0: added Manus task. 7 active tasks."
+    "notes": "v4.2.0: added Architect Bot task. 8 active tasks."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -127,6 +137,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-11",
-    "notes": "v4.1.0: 7 active tasks. Manus added as HIGH priority — hands of Mandala."
+    "notes": "v4.2.0: 8 active tasks. Architect Bot added as HIGH priority — personal Telegram bot for Architect with deep Mandala integration."
   }
 }
