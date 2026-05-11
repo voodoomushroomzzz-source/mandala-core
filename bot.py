@@ -7784,16 +7784,22 @@ async def _send_daily_report() -> None:
                     lines.append(f"  · {name}: {issue['type']} — {issue['context']}")
         # Unused intents (7 days check)
         # Add memory cores to report
+        # P-27: iterate _all_uids (whitelist) — not just _store.keys() (active only)
         lines.append("\n🔮 Портреты садовников:")
-        for _uid in list(_store.keys()):
-            _rp = store_get_profile(_uid)
+        for _uid in _all_uids:
+            _rp = store_get_profile(str(_uid))
             if not _rp:
                 continue
-            _rname = _rp.get("name", _uid)
+            _rname = _rp.get("name", str(_uid))
             _rmem  = _rp.get("deep_profile", {}).get("memory", {})
             _rcore = _rmem.get("core", "")
+            # Also show sphere resonance for accuracy
+            _sr_rep = store_get_sphere_resonance(str(_uid))
+            _sr_line = "  ".join(f"{SPHERE_EMOJI[s]}{_sr_rep.get(s,20)}%" for s in SPHERES)
             if _rcore:
-                lines.append(f"  {_rname}: {_rcore[:200]}...")
+                lines.append(f"  {_rname} [{_sr_line}]: {_rcore[:200]}...")
+            else:
+                lines.append(f"  {_rname} [{_sr_line}]: портрет формируется")
         lines.append("\n🌱 Всё остальное в норме.")
         text = "\n".join(lines)
         await bot.send_message(int(ARCHITECT_TELEGRAM_ID), text)
@@ -9668,7 +9674,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
                                             InlineKeyboardButton(
                                                 text="✏️ Дополнить",
-                                                callback_data=f"task_edit_{tid_edited}"
+                                                callback_data=f"ttask_edit|{tid_edited}"
                                             )
                                         ]])
                                         reply_text += f"\n<i>Можно также добавить: {suggest}</i>"
