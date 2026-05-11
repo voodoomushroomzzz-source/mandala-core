@@ -6246,6 +6246,7 @@ _checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
 _profile_messages: dict = {}   # {user_id: message_id} — last shown profile
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
 _intent_map_needed: dict = {}  # uid → bool — show full INTENT_MAP on next request
+_sphere_history_needed: dict = {}  # uid → int — countdown: include full sphere_history in context
 
 
 def _get_history(user_id: str) -> list:
@@ -6565,9 +6566,10 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "все задачи на завтра" → show_tasks, period=tomorrow (НЕ complete_task). "все" при показе = показать все
 - если спрашивает о задачах → всегда show_tasks с нужным параметром, не отвечай текстом из контекста
 - "мой профиль" → show_profile, 0.95
-- "резонанс", "мой уровень" → show_resonance, 0.95
-- "баланс сфер", "расскажи про баланс", "как мои сферы", "покажи резонанс подробно", "что с балансом" → show_resonance_detail, 0.95
+- "резонанс", "мой уровень", "мой резонанс" → show_resonance, 0.95
+- "баланс сфер", "расскажи про баланс", "как мои сферы", "покажи резонанс подробно", "что с балансом", "как я развиваюсь", "моя статистика", "анализ сфер", "динамика резонанса", "покажи прогресс", "мои достижения", "что с достижениями" → show_resonance_detail, 0.95
 - ВАЖНО: SR видит [Резонанс по сферам] в контексте. Если есть слабые сферы — SR может мягко (1 раз за сессию) упомянуть это в разговоре. Не навязывать, Ахимса.
+- При show_resonance или show_resonance_detail: SR видит [История активности по сферам] в контексте. SR даёт живой текстовый анализ — что растёт, что просело, какие паттерны видит, конкретные рекомендации. БЕЗ таблиц и дашбордов. Тёплый тон, как мудрый друг который видит твой путь.
 - ВАЖНО: если в системном сообщении есть [SR reflection hint] — SR может один раз органично вплести это наблюдение в ответ. Не цитировать дословно, не повторять если садовник не реагирует. Один вопрос максимум. Ахимса.
 - "достижения" → show_achievements, 0.95
 - "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
@@ -6897,6 +6899,12 @@ def _build_user_context_msg(telegram_id: str) -> str:
             _ts_parts.append(f"  [{_ts_str}] {_role}: {_txt_short}")
         _ts_summary = "\n[Хронология диалога:\n" + "\n".join(_ts_parts) + "\n]"
 
+    # P-29: sphere history block — only when requested
+    _sphere_hist_block = ""
+    if _sphere_history_needed.get(telegram_id, 0) > 0:
+        _sphere_hist_block = "\n" + _build_sphere_stats(telegram_id, months=12, show_tasks=True)
+        _sphere_hist_block = f"[История активности по сферам за 12 месяцев:{_sphere_hist_block}\n]"
+
     _msg = (
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
@@ -6904,6 +6912,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
         f"[Роадмапы:\n{roadmaps_block}\n]"
+        f"{_sphere_hist_block}"
         f"{_ts_block}"
         f"{_ts_summary}"
         f"{dp_block}"
@@ -8381,16 +8390,19 @@ async def free_conversation(message: Message, state: FSMContext):
                             await _show_profile(user_id, message)
                             reply_text = ""
                         elif intent == "show_resonance":
-                            await cmd_resonance(message)
-                            reply_text = ""
+                            # P-29: redirect → SR анализирует с историей
+                            _sphere_history_needed[user_id] = 4
+                            reply_text = None
 
                         elif intent == "show_resonance_detail":
-                            sr = store_get_sphere_resonance(user_id)
-                            overall = store_get_profile(user_id).get("resonance_level", 0)
-                            reply_text = _sphere_detail_text(sr, overall)
+                            # P-29: подгрузить историю сфер — SR анализирует сам
+                            _sphere_history_needed[user_id] = 4
+                            # reply_text остаётся None — SR сгенерирует анализ из контекста
+                            reply_text = None
                         elif intent == "show_achievements":
-                            await cmd_achievements(message)
-                            reply_text = ""
+                            # P-29: подгрузить историю — SR даёт анализ достижений
+                            _sphere_history_needed[user_id] = 4
+                            reply_text = None
                         elif intent == "add_task":
                             action_data = parsed_check.get("action") or {}
                             bulk_tasks  = action_data.get("tasks") or []
@@ -9741,6 +9753,10 @@ async def free_conversation(message: Message, state: FSMContext):
                         _intent_map_needed[user_id] = current - 1  # countdown
             except Exception:
                 _intent_map_needed[user_id] = 0
+            # P-29: countdown sphere_history_needed
+            sh_current = _sphere_history_needed.get(user_id, 0)
+            if sh_current > 0:
+                _sphere_history_needed[user_id] = sh_current - 1
             _add_to_history(user_id, "assistant", reply_text)
             # Persist memory to GitHub (fire-and-forget)
             _pending_writes[f"{_user_path(user_id)}/memory.json"] = {
