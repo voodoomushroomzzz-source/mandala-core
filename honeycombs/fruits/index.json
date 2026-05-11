@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry & Strategy Map",
-    "version": "v2.0.0",
+    "version": "v2.1.0",
     "created": "2026-04-17",
     "updated": "2026-05-11",
     "layer": 2,
     "type": "registry_index",
-    "description": "Registry of Mandala products and strategic map of their interaction. v2.0.0: added Product Strategy — description of three products (Gentle Companion, Engineer Chat, Manus) and Architect Bot, their roles, interconnections, data flow, and development vector.",
+    "description": "Registry of Mandala products and strategic map of their interaction. v2.1.0: added active task links for each product, realistic execution timeline with dependencies, and SR execution order guide.",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -142,35 +142,158 @@
         ]
       },
       "development_vector": {
-        "title": "Development Vector: From Three Products to Personal Mandala",
-        "current_phase": {
-          "name": "Foundation (May-June 2026)",
-          "focus": "Complete the core loop: Gentle Companion → Engineer Chat → Manus",
-          "key_tasks": [
-            "Fix critical bug in living memory synthesis (bot.py)",
-            "Manus Phase 1 — first skills in Docker sandbox",
-            "Architect Bot — Telegram interface for Engineer Chat",
-            "Data pipeline: sandbox observations → visible in Engineer Chat"
-          ]
-        },
-        "next_phase": {
-          "name": "Integration (July-August 2026)",
-          "focus": "Unify Engineer Chat + Architect Bot into a single PWA control panel",
-          "key_tasks": [
-            "Web/PWA application combining chat + dashboards",
-            "Dashboards: sandbox metrics, gardener resonance, seed activity",
-            "Manus Phase 2 — full integration with bot.py intent router",
-            "Auto-improvement: SR prompts updated based on sandbox patterns"
-          ]
-        },
-        "future_phase": {
-          "name": "Personal Mandala (September-December 2026)",
-          "focus": "Self-hosted Mandala instances for anyone",
-          "key_tasks": [
-            "Docker Compose: one command to launch a personal Mandala",
-            "Each instance: own Engineer Chat, own Manus, own Telegram bot",
-            "Home Assistant integration for smart home (not building our own)",
-            "Federated learning: anonymous pattern sharing between instances"
+        "title": "Development Timeline — Realistic Solo Development Pace",
+        "principle": "One Architect (Dima) working part-time. Each phase delivers working functionality, not just progress toward a distant goal. Phases are sequential where dependencies exist, parallel where possible.",
+        "phases": [
+          {
+            "phase": 1,
+            "name": "Foundation — Engineer Chat + Manus Core",
+            "timeline": "May 11 — June 8, 2026 (4 weeks)",
+            "description": "Make Engineer Chat the integration hub. Give Mandala its first hands. This phase unblocks both Architect Bot and Gentle Companion Manus integration.",
+            "tasks": [
+              {
+                "task_id": "T-20260511-ENGCHAT",
+                "file": "engineer_chat.json",
+                "priority": "HIGH",
+                "deliverables": [
+                  "Architect Bot WebSocket handler in main.py",
+                  "Manus HTTP client in main.py",
+                  "execute_skill tool in DeepSeek function calling",
+                  "Sandbox analytics dashboard (WebSocket /dashboard type)",
+                  "Daily insights report from sandbox data"
+                ]
+              },
+              {
+                "task_id": "T-20260511-MANUS",
+                "file": "manus_hands.json",
+                "priority": "HIGH",
+                "deliverables": [
+                  "Dockerfile (alpine + python + aiohttp)",
+                  "manus_runner.py — HTTP server with skill loader and whitelists",
+                  "3 skills: check_endpoint, get_system_info, run_shell",
+                  "2 skills: fetch_json, restart_bot"
+                ]
+              }
+            ]
+          },
+          {
+            "phase": 2,
+            "name": "Connection — Architect Bot + Gentle Companion Fixes",
+            "timeline": "June 8 — July 6, 2026 (4 weeks)",
+            "description": "Connect Architect Bot to Engineer Chat. Fix critical bugs in Gentle Companion. Enable Gentle Companion to call Manus.",
+            "tasks": [
+              {
+                "task_id": "T-20260511-ARCHBOT",
+                "file": "architect_bot.json",
+                "priority": "HIGH",
+                "deliverables": [
+                  "Telegram bot for Architect inside main.py",
+                  "WebSocket client connecting to Engineer Chat",
+                  "/status, /report, /patterns, /seeds, /manus commands",
+                  "Proactive notifications (new gardener, system errors, daily summary)",
+                  "Dangerous skill confirmation via callback buttons"
+                ]
+              },
+              {
+                "task_id": "T-20260408-1030",
+                "file": "bot_update.json",
+                "priority": "HIGH",
+                "deliverables": [
+                  "Fix critical bug in _generate_synthesis (UnboundLocalError)",
+                  "Manus intent router in free_conversation (execute_skill)",
+                  "Callback confirmation for dangerous skills from Gentle Companion",
+                  "Update BOT_LATEST_UPDATE changelog"
+                ]
+              }
+            ]
+          },
+          {
+            "phase": 3,
+            "name": "Intelligence — Sandbox Learning Loop",
+            "timeline": "July 6 — August 3, 2026 (4 weeks)",
+            "description": "Close the data loop. Sandbox observations flow to Engineer Chat, which analyzes patterns and suggests SR prompt improvements. Architect Bot gets full dashboards.",
+            "tasks": [
+              {
+                "task_id": "T-20260511-ENGCHAT",
+                "file": "engineer_chat.json",
+                "priority": "MEDIUM",
+                "deliverables": [
+                  "Auto-improvement pipeline: patterns to SR prompt updates to deploy",
+                  "Visual dashboards in Web UI (resonance charts, activity heatmaps)",
+                  "Gardener management interface (view aggregated profiles)",
+                  "Complete data loop: Sandbox to GitHub to Brain to Hands to Sandbox (improved)"
+                ]
+              },
+              {
+                "task_id": "T-20260511-ARCHBOT",
+                "file": "architect_bot.json",
+                "priority": "MEDIUM",
+                "deliverables": [
+                  "Full Manus control parity with Engineer Chat Web UI",
+                  "Dashboards as Telegram inline keyboards (metrics, charts)",
+                  "Gardener management: approve/deny from Telegram",
+                  "Auto-suggestions based on sandbox patterns"
+                ]
+              }
+            ]
+          },
+          {
+            "phase": 4,
+            "name": "Expansion — PWA + Browser Use",
+            "timeline": "August 3 — September 7, 2026 (5 weeks)",
+            "description": "Unify Engineer Chat + Architect Bot into a PWA. Add Browser Use to Manus. Prepare for self-hosted Personal Mandalas.",
+            "tasks": [
+              {
+                "task_id": "T-20260511-MANUS",
+                "file": "manus_hands.json",
+                "priority": "MEDIUM",
+                "deliverables": [
+                  "Browser Use integration for web automation",
+                  "Skill constructor in Web UI",
+                  "Self-hosted Docker Compose file"
+                ]
+              },
+              {
+                "task_id": "T-20260423-0751",
+                "file": "flutter_app.json",
+                "priority": "LOW",
+                "deliverables": [
+                  "PWA shell for Engineer Chat with dashboards",
+                  "Mobile-friendly Web UI with offline support"
+                ],
+                "note": "Start after Phase 3. Flutter native app is optional — PWA may be sufficient."
+              }
+            ]
+          }
+        ],
+        "execution_order_for_sr": {
+          "description": "For SR: follow this order when implementing tasks. Dependencies are documented to avoid blocked work.",
+          "order": [
+            {
+              "position": 1,
+              "task": "Engineer Chat (T-20260511-ENGCHAT)",
+              "reason": "Bottleneck. Architect Bot and Manus integration depend on Engineer Chat being ready to accept WebSocket connections and call Manus HTTP API. Already live — needs specific features added."
+            },
+            {
+              "position": 2,
+              "task": "Manus (T-20260511-MANUS)",
+              "reason": "Can run in parallel with Engineer Chat. Phase 1 (Docker + 3 skills) has no dependencies. Phase 2 also independent. Only Phase 3 (Browser Use) waits for Engineer Chat integration."
+            },
+            {
+              "position": 3,
+              "task": "Architect Bot (T-20260511-ARCHBOT)",
+              "reason": "Depends on Engineer Chat WebSocket handler (position 1). Once Engineer Chat accepts architect connections, Architect Bot can be built."
+            },
+            {
+              "position": 4,
+              "task": "Gentle Companion (T-20260408-1030)",
+              "reason": "Critical bug fix (living memory) is independent and urgent. Manus integration (execute_skill intent) waits for Manus Phase 2. Other improvements can proceed in parallel."
+            }
+          ],
+          "parallel_work": [
+            "Engineer Chat + Manus Phase 1 during May 11 — June 8",
+            "Architect Bot Phase 1 + Gentle Companion bug fixes during June 8 — July 6",
+            "All remaining tasks during July 6 — September 7"
           ]
         }
       },
@@ -199,7 +322,7 @@
         "updated": "2026-05-11",
         "platform": "Telegram Bot",
         "url": "https://t.me/MandalasGardener_bot",
-        "detail_file": "bot_update.json (task)",
+        "detail_file": "bot_update.json",
         "icon": "🌿",
         "tags": [
           "bot",
@@ -210,7 +333,9 @@
         ],
         "gardeners": 4,
         "code_location": "bot.py",
-        "layer": "Sandbox (Layer 1)"
+        "layer": "Sandbox (Layer 1)",
+        "task_id": "T-20260408-1030",
+        "task_file": "honeycombs/tasks/active/bot_update.json"
       },
       "engineer_chat": {
         "id": "fruit-engineer-chat-001",
@@ -223,7 +348,7 @@
         "updated": "2026-05-11",
         "platform": "Web (WebSocket) + Telegram Bot (Architect)",
         "url": "https://mandala-engineer-chat.onrender.com",
-        "detail_file": "engineer_chat.json (to be created)",
+        "detail_file": "engineer_chat.json",
         "icon": "🧠",
         "tags": [
           "engineer",
@@ -234,7 +359,9 @@
           "control_panel"
         ],
         "code_location": "main.py",
-        "layer": "Brain (Layer 2)"
+        "layer": "Brain (Layer 2)",
+        "task_id": "T-20260511-ENGCHAT",
+        "task_file": "honeycombs/tasks/active/engineer_chat.json"
       },
       "manus": {
         "id": "fruit-manus-001",
@@ -258,14 +385,40 @@
         ],
         "code_location": "manus/ (to be created)",
         "layer": "Hands (Layer 3)",
-        "task_id": "T-20260511-MANUS"
+        "task_id": "T-20260511-MANUS",
+        "task_file": "honeycombs/tasks/active/manus_hands.json"
+      },
+      "architect_bot": {
+        "id": "fruit-architect-bot-001",
+        "name": "Architect Bot — Mobile Brain Interface",
+        "short_description": "Personal Telegram bot for the Architect. Mobile interface to Engineer Chat and Manus with elevated rights, sandbox analytics, and proactive notifications.",
+        "problem_solved": "The Architect currently manages Mandala through a browser-based WebSocket chat. Architect Bot gives mobile access via Telegram — check system health, view sandbox metrics, control Manus, and receive notifications on the go.",
+        "status": "in_development",
+        "version": "v0.0.0",
+        "released": "TBD",
+        "updated": "2026-05-11",
+        "platform": "Telegram Bot (integrated in main.py)",
+        "url": "TBD",
+        "detail_file": "architect_bot.json",
+        "task_id": "T-20260511-ARCHBOT",
+        "task_file": "honeycombs/tasks/active/architect_bot.json",
+        "icon": "📱",
+        "tags": [
+          "architect",
+          "bot",
+          "telegram",
+          "mobile",
+          "control_panel"
+        ],
+        "code_location": "main.py (inside Engineer Chat server)",
+        "layer": "Brain (Layer 2) — Mobile Interface"
       }
     }
   },
   "metrics": {
-    "total_fruits": 2,
+    "total_fruits": 3,
     "active": 2,
-    "in_development": 1,
+    "in_development": 2,
     "archived": 0,
     "examples": 0
   },
@@ -287,6 +440,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-05-11",
-    "notes": "v2.0.0: Product Strategy added. 2 active fruits (Gentle Companion, Engineer Chat), 1 in development (Manus). Architect Bot planned for June 2026 integration with Engineer Chat."
+    "notes": "v2.1.0: added task links to each fruit, Architect Bot as separate fruit, realistic 4-phase timeline for solo development, SR execution order with dependencies."
   }
 }
