@@ -2611,6 +2611,8 @@ def get_labels_keyboard(labels: list) -> InlineKeyboardMarkup:
 
 def _classify_sphere(title: str, label_name: str = "") -> str:
     """Classify task into one of 5 spheres. Returns sphere key."""
+    title = title or ""
+    label_name = label_name or ""  # hotfix: None guard
     text = (title + " " + label_name).lower()
     health_kw = [
         "здоровье","спорт","сон","питание","бег","врач","зал","тренировка","трениров",
