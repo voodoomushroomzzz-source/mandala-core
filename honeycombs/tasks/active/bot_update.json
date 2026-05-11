@@ -1,306 +1,363 @@
 {
   "task_id": "T-20260408-1030",
-  "name": "Telegram Bot — Gentle Companion for Garden",
+  "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
   "status": "in_progress",
-  "priority": "HIGH",
+  "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-10",
-  "progress": 97,
-  "current_version": "7.39.13",
-  "description": "Evolve Telegram bot into Gentle Companion for Garden. Implement Garden-specific commands, proactive messaging with Ahimsa, and GitHub API integration for sota sync.",
+  "updated": "2026-05-11",
+  "progress": 92,
+  "current_version": "7.39.17",
+  "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life. Monolithic bot.py — all changes in one file via patcher scripts.",
+
   "dev_rules": [
-    "When adding a new function to code — always add it to the FUNCTION MAP in SR_SYSTEM_PROMPT",
-    "Update BOT_VERSION and BOT_LATEST_UPDATE on every patch",
-    "Every patch is applied to the actual bot file — always check for previous patches first",
-    "Monolithic file — all changes in one bot.py, no split files",
-    "All patches applied via patcher scripts — never edit bot.py directly",
-    "Each patcher targets one bot.py from GitHub — always git pull before running",
-    "Deploy and test after each patcher — do not stack unverified patches",
-    "⚠️ Update BOT_LATEST_UPDATE on EVERY patch. Keep last 5 versions. Delete oldest. Add new on top."
+    "ВСЕГДА обновлять BOT_VERSION и BOT_LATEST_UPDATE на каждом патче",
+    "BOT_LATEST_UPDATE text — ТОЛЬКО через \\n в строках или тройные кавычки. НИКОГДА \\ в конце строки (это string continuation без \\n!)",
+    "Перед патчем: получить актуальный bot.py с GitHub через API",
+    "После патча: запросить обновлённый файл, прочитать, подтвердить SHA и версию",
+    "Большие файлы >500 строк — ТОЛЬКО через patcher-скрипты, никогда полной заменой",
+    "Новые функции → добавлять в INTENT_MAP в SR промпте",
+    "datetime.now() ВСЕГДА с timezone садовника. Исключение: _today() которая уже обрабатывает tz",
+    "store_set_* функции НЕ должны создавать fallback workspace без проверки существующих данных (потеря pinned_message и других полей)",
+    "Деплоить и тестировать после каждого патча — не стекировать непроверенные",
+    "Последние 5 версий в BOT_LATEST_UPDATE — удалять старую, добавлять новую"
   ],
-  "done": {
-    "core_features": [
-      "/start — onboarding with philosophy + architect request flow",
-      "/profile — resonance, achievements, tasks, groups (5-sphere card)",
-      "/achievements — monthly analytics by sphere",
-      "/resonance — resonance level + growth history",
-      "/ask — free dialogue on any topic (Ahimsa)",
-      "/leave — leave garden with confirmation",
-      "/privacy — data info (stub)",
-      "Proactive messages — morning brief, evening check-in (max 1/day)",
-      "GitHub API — read/write profile.json, workspace.json, memory.json",
-      "Soft-fail when GitHub API is unavailable",
-      "Architect approval gate — whitelist.json + Telegram buttons",
-      "Web search — domain categories, Yandex priority, SR synthesis",
-      "Bulk add tasks — dash/numbered list with deadline",
-      "Bulk edit deadline — multiple tasks or entire group",
-      "Groups — create, move tasks, always visible in profile",
-      "Roadmaps — bulk add tasks, sorted by deadline, progress bars",
-      "Achievements — via chat, by sphere, duplicate protection",
-      "Onboarding — gender, Welcome Flow, deep_profile recording",
-      "Version notifications — BOT_VERSION + changelog on deploy",
-      "Function map in SR prompt — all 35 intents with bulk variants",
-      "Auto-cleanup of empty tasks on load",
-      "5-Sphere Resonance — health/creativity/work/connections/growth",
-      "Living Memory — gardener portrait updated daily",
-      "Checklist system — create, toggle, edit, reorder, 100%→achievement",
-      "Reminder system — once/daily/weekdays, per-user timezone",
-      "Voice messages — Groq Whisper transcription → intent routing",
-      "Deep Profile — streak detection, sphere patterns, reflection hints",
-      "Roadmap task cleanup — orphaned task_ids auto-removed",
-      "Changelog dashboard — /changelog command + deep link from morning brief"
-    ],
-    "v7_38_to_v7_40": [
-      "v7.38: Reminders today list in profile, today tasks block, fix duplicates, voice repeat picker",
-      "v7.38.1: Roadmap today tasks under progress bar, reminder dot, removed duplicate today block",
-      "v7.39: Achievements screen — tasks hidden (show_tasks=False fixed)",
-      "v7.39: Back nav from profile edit → new full profile (fixed old single-button profile)",
-      "v7.39: Callback collision fix — rem_edit_title/dt/repeat renamed to redit_title/dt/repeat",
-      "v7.39: FSM routing fix — TaskEditStates and TaskStates rem_ filters narrowed to avoid swallowing reminder callbacks",
-      "v7.39: cb_rem_repeat_pick — set_state now preserves FSM data",
-      "v7.40: Repeat picker redesigned — 5 buttons (daily/weekly/monthly/yearly/custom days), one tap = done",
-      "v7.40: Text input for custom weekdays — parses пн/вт/ср, будние, выходные, full names",
-      "v7.40: Date parser improved — smarter regex order, 'название сегодня 22:59' now parses correctly",
-      "v7.40: Reminder example changed to neutral 'Купить продукты'",
-      "v7.40: Repeat button labels — 'Раз в неделю/месяц/год' instead of 'Каждую'",
-      "v7.40: /restart command added (soft FSM clear + profile show), /info removed from menu"
-    ],
-    "v7_39_x": [
-      "v7.39.1: P-12 fix — _all_uids from _store, daily_stats persistence, synthesis from observations",
-      "v7.39.2: Version notification moved to morning brief, catch-up removed",
-      "v7.39.3: Sphere name in close task reply (🌱 Рост +2% → 37%)",
-      "v7.39.4: Achievement stats show all spheres with any activity (tasks + achievements)",
-      "v7.39.5: P-16 done — full SR birthday greeting on first midnight interaction",
-      "v7.39.6: Edit profile fields — inline back buttons to edit menu",
-      "v7.39.7: Changelog dashboard via deep link, /changelog command in menu, BOT_LATEST_UPDATE refreshed with last 5 versions",
-      "v7.39.8: Silence detection — workspace persistence, SR-generated engagement messages with fallback, 3/6/9/12/15/18/21 day phases"
-    ],
-    "v7_39_9_to_v7_39_12": [
-      "v7.39.9: P-13a done — Меню Задач v2 (Клод)",
-      "v7.39.10: P-13a fix apply — 8 функций исправлено (Клод)",
-      "v7.39.11: Меню Достижений — кнопка Добавить + авто-сфера + фикс навигации чеклистов + отчёт СР неактивные",
-      "v7.39.12: _classify_sphere — connections/growth перед work + отчёт СР догрузка через whitelist"
-    ],
-    "v7_39_13": [
-      "v7.39.13: P-14 -- Polnoe menyu Roudmapov (spisok, detali, dobavit/sozdat zadachu, pereimenovat, dedlayn, udalit)",
-      "v7.39.13: P-14 -- Mesto zadachi: perenosit mezhdu gruppami i roudmapami. TASK_CTX_FREE/ROADMAP konstanty",
-      "v7.39.13: P-15 -- SyntaxError Python 3.11 fix (backslash v f-string na Render)",
-      "v7.39.13: P-15 -- AutoLoadMiddleware: knopki rabotayut srazu posle deploya bez /start",
-      "v7.39.13: P-15 -- Scheduler retry: not-ready polzovateli podgruzhayutsya pri sleduyuschem tike",
-      "v7.39.13: P-15 -- Changelog ubran iz /start, tolko v utrennem brife",
-      "v7.39.13: P-16 -- Zadachi roudmapov skryty iz schetchika profilya i bloka Zadachi segodnya"
-    ]
+
+  "architecture": {
+    "style": "monolithic (bot.py ~9835 строк)",
+    "llm": "OpenRouter deepseek/deepseek-v4-flash (primary), qwen/qwen3.5-flash-02-23 (fallback)",
+    "memory": "_sessions RAM + memory.json GitHub, restored on restart",
+    "store": "Multi-user _store{uid:{profile,workspace,ready}} + 2min GitHub sync",
+    "hosting": "Render free tier, sleep after 15min idle",
+    "environment": "Windows, VS Code, PowerShell, py 3.14.3, path C:\\Mandala_Digital\\github\\mandala-core"
   },
-  "known_issues": [
-    "Morning brief blocked by other proactive messages — P-9",
-    "Repeat value edge case: on confirm screen repeat may show 'once' if FSM and workspace are both stale",
-    "Voice commands: compound phrases not recognized consistently",
-    "Resonance shows 100% incorrectly for some gardeners — calculation logic needs audit",
-    "Achievements via DeepSeek: model sometimes pretends to save but doesn't execute intent"
-  ],
-  "observations": {
-    "dashboard_v1_failed": "First inline dashboard was too complex — too many buttons, too many edit_text calls. Reverted.",
-    "markdown_leak": "SR still generates Markdown despite HTML-only rules. Fixed by moving format rule to CORE_PROMPT + post-processing strip.",
-    "catchup_annoying": "Morning catch-up on every message after restart irritated users. Disabled — only scheduler now triggers morning greeting.",
-    "rate_limit": "Qwen Flash hits rate limit (200 req/day). DeepSeek V4 Flash now primary.",
-    "reminders_phantom": "Anton (Almaty) created reminders before timezone fix. Cleaned manually.",
-    "render_sleep": "Render free tier sleeps after 15min idle — _daily_stats in-memory dict resets. Need persistence layer for daily stats.",
-    "setstate_fsm": "aiogram 3 MemoryStorage does NOT clear data on set_state — confirmed. Repeat loss was caused by workspace/FSM desync, not set_state behavior."
-  },
-  "planned_patches": {
-    "P-1": {
-      "name": "Пустые отчёты СР — персистентность daily_stats",
-      "priority": "HIGH",
-      "problem": "Render free tier перезапускает бот каждые ~1ч при отсутствии трафика. _daily_stats — это dict в памяти Python, он обнуляется при каждом перезапуске. К 21:00 (время отправки отчёта) stats уже пустые — отчёт показывает только 'Всё остальное в норме'.",
-      "solution": "При каждом _track_interaction добавлять запись в _pending_writes['honeycombs/sessions/daily_stats_live.json']. При старте бота в on_startup — загружать daily_stats_live.json если его дата совпадает с today(). При отправке отчёта — сбрасывать файл.",
-      "files_affected": [
-        "bot.py: _track_interaction, on_startup, _send_daily_report"
-      ],
-      "risk": "medium",
-      "status": "done",
-      "resolution": "Patched in v7.39.1-v7.39.4: _all_uids from _store, daily_stats persistence, synthesis from observations, sphere name in close reply, version in morning brief"
+
+  "known_bugs": {
+    "BUG_001": {
+      "id": "BUG-001",
+      "severity": "CRITICAL",
+      "location": "bot.py: _generate_synthesis, ~строка 7553",
+      "title": "Living Memory — синтез никогда не выполняется (UnboundLocalError)",
+      "problem": "Переменная mem используется в guard-е ДО её присвоения:\n  if dp.get('synthesis_date') == _today() and mem.get('core'):  ← NameError!\n  ...\n  mem = dp.setdefault('memory', {})  ← присваивается ЗДЕСЬ\nExcept поглощает ошибку. Живой портрет садовника (memory.core) никогда не формируется и не обновляется.",
+      "fix": "Переместить строку `mem = dp.setdefault('memory', {})` ВЫШЕ guard-а synthesis_date. Одно перемещение строки."
     },
-    "P-2": {
-      "name": "День рождения — поздравление сразу после 00:00",
-      "priority": "LOW",
-      "problem": "Поздравление с днём рождения отправляется только в момент утреннего брифа (scheduled). Если пользователь пишет после 00:00 в свой день рождения — бот не поздравляет до утра. Это выглядит странно.",
-      "solution": "В _track_interaction или в начале free_conversation проверять: если today() == birthday пользователя и поздравление ещё не отправлено сегодня (флаг в _proactive_sent_today) — отправить поздравление немедленно перед обработкой сообщения.",
-      "files_affected": [
-        "bot.py: free_conversation или _track_interaction"
-      ],
-      "risk": "low",
-      "status": "done",
-      "resolution": "Patched in v7.39.5: full SR birthday greeting on first interaction after midnight, morning scheduler skips if already sent, +1 achievement +5 growth resonance"
+    "BUG_A1": {
+      "id": "BUG-A1",
+      "severity": "CRITICAL",
+      "location": "bot.py: _time_matches(), строка 988",
+      "title": "Утренние брифы не приходят по расписанию (NameError в _time_matches)",
+      "problem": "Функция _time_matches всегда возвращает False:\n  target = t.replace(hour=h, minute=m_val...)  ← переменная t не определена!\nexcept Exception: return False  ← NameError тихо поглощается\nВсе пользователи попадают в catch-up ветку вместо точного времени.",
+      "fix": "Заменить `t.replace(` на `now.replace(` в строке 988."
     },
-    "P-9": {
-      "name": "Утренний брифинг блокируется другими проактивными сообщениями",
-      "priority": "HIGH",
-      "problem": "Утренний брифинг использует флаг _can_send_proactive, который общий для всех типов проактивных сообщений. Если бот уже отправил сообщение тишины или вечерний чекин — утренний брифинг не приходит.",
-      "solution": "Убрать проверку _can_send_proactive из send_morning_greeting. Утренний брифинг имеет свой флаг _morning_sent который и так предотвращает повторную отправку.",
-      "files_affected": [
-        "bot.py: send_morning_greeting"
-      ],
-      "risk": "low",
-      "status": "done",
-      "resolution": "Исправлено: флаги _morning_sent и last_morning_date записываются после успешной отправки send_message. При сбое — повтор через минуту."
+    "BUG_A2": {
+      "id": "BUG-A2",
+      "severity": "CRITICAL",
+      "location": "bot.py: send_morning_greeting(), строка 2654",
+      "title": "Утренние брифы не доходят другим пользователям (блокировка _can_send_proactive)",
+      "problem": "send_morning_greeting начинается с:\n  if not _can_send_proactive(telegram_id): return\nЕсли раньше было отправлено silence-сообщение или evening check-in,\n_mark_proactive_sent уже вызван → _can_send_proactive = False → бриф не приходит.\nАрхитектор активен → silence ему не шлётся → _can_send_proactive = True → получает.\nДругие пользователи (менее активные) → silence отправлен → брифа нет.",
+      "fix": "Убрать строки 2654-2655:\n  if not _can_send_proactive(telegram_id):\n    return\nДостаточно guard-а _morning_sent (строка 2668). После успешной отправки _mark_proactive_sent всё равно вызывается (строка 2723)."
     },
-    "P-10": {
-      "name": "Закрепление/открепление сообщений бота по запросу",
-      "priority": "MEDIUM",
-      "problem": "Пользователь хочет закрепить сообщение бота в диалоге. Сейчас такого intent'а нет. Закреплённое сообщение должно: 1) не удаляться ботом при чистке, 2) храниться в workspace['pinned_message'], 3) открепляться по запросу.",
-      "solution": "Добавить intent 'pin_message' в SR промпт. В free_conversation при этом intent: вызвать bot.pin_chat_message(message_id), сохранить в workspace['pinned_message'] = {id, text, date}. При новом закрепе — unpin старый. При удалении — проверять pinned_message_id.",
-      "files_affected": [
-        "bot.py: SR_SYSTEM_PROMPT intent map, free_conversation handler, message cleanup logic"
-      ],
-      "risk": "medium"
+    "BUG_B": {
+      "id": "BUG-B",
+      "severity": "HIGH",
+      "location": "bot.py: BOT_LATEST_UPDATE, строки 66-89",
+      "title": "Changelog — текст идёт сплошняком без переносов строк",
+      "problem": "Текущий код использует `\\` + перенос строки для многострочности:\n  'text': '🌱 Мандала\\  ← string continuation, НЕ \\n!\n  ' 'v7.39.13...\nВ Python \\ + newline = просто продолжение строки. Итог: весь changelog в одну строку без форматирования.",
+      "fix": "Переписать через явные \\n:\n  'text': (\n    '🌱 <b>Мандала · Что нового</b>\\n'\n    '\\n'\n    '<b>v7.39.17 · 11.05.2026</b>\\n'\n    '  · [описание]\\n'\n  )\nДобавить parse_mode='HTML' в cmd_changelog и cb_show_changelog если отсутствует.\nОдновременно: обновить BOT_VERSION до актуального + BOT_LATEST_UPDATE['version'] до того же значения."
     },
-    "P-11": {
-      "name": "Кнопка '📆 Своя дата' в повторениях напоминаний",
-      "priority": "LOW",
-      "problem": "В repeat_picker напоминаний нет кнопки выбора своей даты. Есть: каждый день, раз в неделю, раз в месяц, раз в год, по дням недели. Нет: конкретная дата (ДД.ММ) для ежегодного повторения.",
-      "solution": "Добавить кнопку '📆 Своя дата' в _repeat_picker_keyboard. Добавить callback 'rem_rp_custom_date' с состоянием ввода даты. Парсить ввод в формате ДД.ММ или ДД.ММ.ГГ. Сохранять как custom_date:MM-DD. В scheduler добавить обработчик yearly+1 для custom_date.",
-      "files_affected": [
-        "bot.py: _repeat_picker_keyboard, cb_rem_rp_select, _parse_weekdays, run_reminder_scheduler"
-      ],
-      "risk": "low"
+    "BUG_C": {
+      "id": "BUG-C",
+      "severity": "MEDIUM",
+      "location": "bot.py: все store_set_* функции, _load_user",
+      "title": "Закреплённое сообщение теряется при fallback workspace",
+      "problem": "В store_set_tasks / store_set_reminders / store_set_roadmaps / store_set_checklists используется:\n  ws = store_get_workspace(uid) or {'tasks': [], 'groups': [], 'achievements': []}\nЕсли store_get_workspace вернул None (пользователь не загружен) → fallback создаёт\nпустой workspace БЕЗ pinned_message, reminders и других полей → при store_set_workspace\nэти поля исчезают из GitHub.\n\nДополнительно: _last_bot_message — in-memory dict. После рестарта Render пуст.\nЕсли садовник говорит 'закрепи это' после рестарта → 'нет сообщения для закрепления'.",
+      "fix_1": "Изменить паттерн fallback во ВСЕХ store_set_* функциях:\n  БЫЛО: ws = store_get_workspace(uid) or {'tasks': []...}\n  СТАЛО:\n    ws = store_get_workspace(uid)\n    if ws is None: ws = {}\n    ws.setdefault('tasks', [])\n    ws.setdefault('groups', [])\n    ws.setdefault('achievements', [])\n    # pinned_message и другие поля НЕ перезаписываются",
+      "fix_2": "В _load_user после загрузки workspace (~строка 619) восстанавливать _last_bot_message:\n  _pinned = _ws.get('pinned_message')\n  if _pinned and _pinned.get('message_id') and _pinned.get('text'):\n    _last_bot_message[uid] = {'message_id': _pinned['message_id'], 'text': _pinned['text']}",
+      "fix_3": "В _build_user_context_msg усилить описание закрепа для SR:\n  _pinned_block = f'\\n[📌 ВАЖНЫЙ КОНТЕКСТ — Садовник закрепил это сообщение ({date}):\\n{text[:500]}\\nSR помнит и может ссылаться без явного напоминания.]'"
     },
-    "P-12": {
-      "name": "Повторяющиеся задачи + кнопка '📆 Своя дата'",
-      "priority": "HIGH",
-      "problem": "Задачи создаются разово. Нет возможности настроить повторение как у напоминаний. После закрытия задачи с повтором — она исчезает, нужно вручную создавать заново. Нет кнопки 'Своя дата' для ежегодных повторений.",
-      "solution": "Добавить поле repeat в модель задачи (once/daily/weekdays/weekends/weekly/monthly/yearly/custom_days/custom_date). При закрытии: +достижение, +резонанс, автосоздание новой задачи с тем же repeat и дедлайном = старый + интервал. При незакрытой задаче с истекшим дедлайном: индикатор просрочки, СР напоминает о важности. Добавить repeat_picker в FSM создания задачи (как у напоминаний) включая кнопку '📆 Своя дата'. Один патч на всё.",
-      "files_affected": [
-        "bot.py: TaskStates, _create_task_atomic, confirm_task, complete_task handler, _repeat_picker_keyboard, _parse_weekdays, run_reminder_scheduler"
-      ],
-      "risk": "medium"
+    "BUG_D": {
+      "id": "BUG-D",
+      "severity": "MEDIUM",
+      "location": "bot.py: _build_user_context_msg, строки 6800-6826",
+      "title": "SR не видит временну́ю динамику — timestamps в UTC вместо timezone садовника",
+      "problem": "_add_to_history записывает datetime.now().isoformat() — UTC время сервера Render.\n_ts_summary отображает без конвертации: _ts_dt.strftime('%H:%M:%S') — UTC.\nСадовник в Москве (UTC+3) отправляет в 15:00, SR видит 12:00:00 → не понимает\n'написал утром', 'ответил вечером', временну́ю динамику сессии.\n\nДополнительно: _ts_block И _ts_summary оба включены в контекст — дублирование.",
+      "fix": "В _build_user_context_msg конвертировать ts в timezone садовника:\n  _ts_dt = datetime.fromisoformat(_m.get('ts', ''))\n  if _ts_dt.tzinfo is None:\n    _ts_dt = _ts_dt.replace(tzinfo=timezone.utc)\n  _ts_local = _ts_dt.astimezone(ZoneInfo(tz_name))\n  _ts_str = _ts_local.strftime('%H:%M')  # HH:MM в timezone садовника\nУбрать _ts_block из _msg (дублирует). Оставить только _ts_summary с меткой timezone."
     },
-    "P-13": {
-      "name": "Кнопки Задачи и Роадмапы в профиле",
-      "priority": "HIGH",
-      "problem": "В профиле нет прямого доступа к задачам и роадмапам. Садовник должен использовать голос/текст или помнить команды. Чеклисты и напоминания имеют кнопки, задачи и роадмапы — нет.",
-      "solution": "Добавить новый ряд кнопок под заголовком профиля: 🗂 Задачи и 🗺 Роадмапы. По нажатию — полноценное меню с созданием/редактированием/удалением (как у чеклистов и напоминаний). Остальные кнопки не трогать. Детали UI обсудить перед реализацией.",
-      "files_affected": [
-        "bot.py: _show_profile, _build_profile_card, get_tasks_mgmt_inline, get_roadmaps_mgmt_inline"
-      ],
-      "risk": "medium",
-      "status": "done",
-      "resolution": "v7.39.9-13: Menu Zadach v2 + polnoe Menu Roudmapov + Mesto zadachi. TASK_CTX_FREE/ROADMAP."
+    "BUG_E": {
+      "id": "BUG-E",
+      "severity": "HIGH",
+      "location": "bot.py: quick_add_achievement (~строка 9717), intent router add_achievement",
+      "title": "Резонанс 100% после добавления достижения через кнопку",
+      "problem": "Два конкурирующих механизма расчёта резонанса:\n\n1. quick_add_achievement (кнопка qa:) использует:\n   current_res = g.get('resonance_level', 13)\n   new_res = min(100, current_res + 3)  ← прямое добавление, обходит сферы\n   Проблема: если resonance_level уже был 97 → +3 = 100.\n\n2. intent router add_achievement вызывает store_increment_achievements →\n   _recalc_resonance_from_achievements → new_val = max(5, min(100, count * 2))\n   При 50+ достижениях: 50 * 2 = 100 → принудительно устанавливает 100.\n\nСистема 5 сфер (store_add_sphere_resonance) — единственный правильный источник правды\nдля resonance_level, но обе ветки её обходят.",
+      "fix": "В quick_add_achievement заменить прямое изменение resonance_level на:\n  sphere = action.get('sphere', 'growth')  # сфера из контекста или 'other'\n  store_add_sphere_resonance(user_id, sphere, +3)\nЭто обновит конкретную сферу И пересчитает overall = среднее 5 сфер.\n\nЗакомментировать или удалить _recalc_resonance_from_achievements — формула count*2\nнесовместима с 5-сферной системой.\n\nВ intent router add_achievement: тоже использовать store_add_sphere_resonance."
     },
-    "P-14": {
-      "name": "Счётчик задач в профиле + баг закрытых задач в достижениях",
-      "priority": "MEDIUM",
-      "problem": "1) В шапке профиля нет общего счётчика задач (только по группам). У роадмапов и напоминаний счётчик есть, у задач — нет. 2) Закрытые задачи не появляются в monthly stats — счётчик tasks_completed в _daily_stats[uid] не инкрементится при complete_task.",
-      "solution": "1) В _build_profile_card добавить строку 'X активных задач · Y всего' в шапку. 2) Найти все места где задача помечается выполненной, инкрементировать _daily_stats[uid]['tasks_completed'].",
-      "files_affected": [
-        "bot.py: _build_profile_card, free_conversation intent handler"
-      ],
-      "risk": "low",
-      "status": "done",
-      "resolution": "Рефакторинг профиля: роадмапы → задачи сегодня X/Y → напоминания. Группы убраны. Фикс today_rem scope."
+    "BUG_F": {
+      "id": "BUG-F",
+      "severity": "HIGH",
+      "location": "bot.py: intent router edit_task, строка 9624-9628. Функция cb_task_edit_start и _task_edit_field_kb",
+      "title": "Кнопка 'Дополнить' после создания задачи открывает старое меню без повторений",
+      "problem": "После создания задачи голосом или через чат SR показывает:\n  '✅ Задача создана\\n<i>Можно добавить: 📅 дедлайн, 🎨 группу</i>'\nС кнопкой callback_data=f'task_edit_{tid_edited}'\n\nЭта кнопка ведёт на СТАРЫЙ обработчик cb_task_edit_start → _task_edit_field_kb:\n  4 кнопки: Название, Дедлайн, Напомин., Группа\n  НЕТ кнопки Повтор (Repeat)\n  НЕТ кнопки Место (Place/Roadmap)\n  Старый стиль без полного функционала\n\nНОВОЕ меню редактирования — get_task_edit_inline (callback: ttask_edit|{tid}):\n  5 кнопок: Выполнить, Название, Дедлайн, Место, Повтор\n  Полный функционал с поддержкой roadmap, repeat_picker",
+      "fix": "В intent router (строка 9627) изменить callback_data кнопки 'Дополнить':\n  БЫЛО: callback_data=f'task_edit_{tid_edited}'\n  СТАЛО: callback_data=f'ttask_edit|{tid_edited}'\n\nДополнительно: проверить все другие места где создаётся кнопка редактирования\nзадачи — убедиться что везде используется новый callback ttask_edit|"
     },
-    "P-15": {
-      "name": "Модульная архитектура бота + техмануал",
-      "priority": "HIGH",
-      "problem": "bot.py — монолит ~3500 строк. Сложно редактировать, тестировать, ревьюить. Высокий порог входа для новых SR. Нет документации по архитектуре.",
-      "solution": "Разбить bot.py на модули: store.py (данные), github_api.py (синхронизация), keyboards.py (клавиатуры), handlers_*.py (обработчики по группам), scheduler.py (шедулеры), sr_prompt.py (промпты). Создать технический мануал со схемой модулей и их связей. Сохранить обратную совместимость.",
-      "files_affected": [
-        "bot.py → модули",
-        "docs/bot_architecture.md — техмануал"
-      ],
-      "risk": "high"
+    "BUG_G": {
+      "id": "BUG-G",
+      "severity": "HIGH",
+      "location": "bot.py: _build_user_context_msg (~строка 6705), SR промпт",
+      "title": "SR не видит историю достижений — только общее число",
+      "problem": "В _build_user_context_msg передаётся только:\n  ach_count = workspace.get('achievements_count', 0)\n  '  достижений: {ach_count}\\n'  ← только цифра!\n\nSR не знает:\n  - Какие именно достижения есть\n  - По каким сферам\n  - Когда были достигнуты\n  - Динамику (было 60 → стало 65 за неделю)\n  - sphere_history (закрытые задачи и достижения по месяцам)\n\nСкриншот подтверждает: садовник спросил 'видишь достижения только за май или ещё есть?'\nSR: 'вижу общее число 65, детальной разбивки нет' — это правда,\nно должно быть иначе.",
+      "fix": "В _build_user_context_msg добавить блок достижений:\n\n  # Recent achievements (last 10)\n  achievements = store_get_achievements(user_id)\n  recent_achs = sorted(achievements, key=lambda a: a.get('completed',''), reverse=True)[:10]\n  ach_lines = []\n  for a in recent_achs:\n    ach_lines.append(f\"  - {a['title']} | {a.get('category','other')} | {a.get('completed','')}\")\n  ach_block = '\\n'.join(ach_lines) if ach_lines else '  нет данных'\n\n  # Sphere stats from sphere_history (last 3 months)\n  dp = _get_deep_profile(user_id)\n  sphere_hist = dp.get('sphere_history', [])[-3:]\n  sphere_summary_lines = []\n  for month_data in reversed(sphere_hist):\n    m = month_data.get('month', '')\n    parts = []\n    for s in SPHERES:\n      t_cnt = month_data.get(s, {}).get('tasks', 0)\n      a_cnt = month_data.get(s, {}).get('achievements', 0)\n      if t_cnt > 0 or a_cnt > 0:\n        parts.append(f\"{SPHERE_NAME_RU[s]}: {t_cnt}з/{a_cnt}д\")\n    if parts:\n      sphere_summary_lines.append(f\"  {m}: {', '.join(parts)}\")\n\n  ach_context = (\n    f\"[Достижения ({ach_count} всего):\\n\"\n    f\"{ach_block}\\n\"\n    f\"\\nАктивность по сферам (последние месяцы):\\n\"\n    + ('\\n'.join(sphere_summary_lines) if sphere_summary_lines else '  нет данных') +\n    \"\\n]\"\n  )\n\nДобавить ach_context в _msg."
     },
-    "P-16": {
-      "name": "DeepSeek — надёжность выполнения достижений",
-      "priority": "MEDIUM",
-      "problem": "При добавлении достижений через DeepSeek модель иногда генерирует ответ 'Достижение добавлено!' но intent add_achievement не выполняется. Модель возвращает диалоговый ответ вместо JSON с action.",
-      "solution": "Добавить проверку: если intent=add_achievement но achievement не появился в store — повторить вызов с более строгим промптом. Для DeepSeek усилить требование JSON-ответа при action-intent'ах. Добавить логирование факта сохранения достижения.",
-      "files_affected": [
-        "bot.py: free_conversation achievement handler, SR_SYSTEM_PROMPT"
-      ],
-      "risk": "medium"
+    "BUG_H": {
+      "id": "BUG-H",
+      "severity": "MEDIUM",
+      "location": "bot.py: handle_voice (~строка 7804)",
+      "title": "Groq Whisper блокирует event loop (синхронный вызов в async handler)",
+      "problem": "client.audio.transcriptions.create() — синхронный вызов Groq SDK.\nВызывается напрямую из async handler, блокирует весь event loop на 1-5 сек.\nВсе другие пользователи зависают пока идёт транскрипция.",
+      "fix": "Обернуть в run_in_executor:\n  transcription = await asyncio.get_event_loop().run_in_executor(\n    None,\n    lambda: client.audio.transcriptions.create(\n      file=('voice.ogg', _io.BytesIO(ogg_bytes), 'audio/ogg'),\n      model='whisper-large-v3-turbo',\n      language='ru',\n      response_format='text'\n    )\n  )"
     },
-    "P-17": {
-      "name": "Голосовые команды — улучшение распознавания intent'ов",
-      "priority": "MEDIUM",
-      "problem": "Сложные голосовые команды не распознаются. Бот отвечает 'не смог распознать команду'. Причина: промпт не содержит достаточно примеров для составных фраз. Голосовые команды для напоминаний и роадмапов идут в free_conversation вместо специализированных handler'ов.",
-      "solution": "Расширить INTENT_MAP примерами для задач/роадмапов/напоминаний/чеклистов. В handle_voice добавить маршрутизацию в reminder/roadmap FSM. Улучшить промпт понимания дат и дней недели в контексте задач.",
-      "files_affected": [
-        "bot.py: SR_SYSTEM_PROMPT INTENT_MAP, handle_voice, free_conversation"
-      ],
-      "risk": "medium"
+    "BUG_I": {
+      "id": "BUG-I",
+      "severity": "MEDIUM",
+      "location": "bot.py: SR промпт (SR_CORE_PROMPT, SR_INTENT_LIGHT, SR_INTENT_MAP)",
+      "title": "SR не умеет работать со всеми данными пользователя через чат так же как через кнопки",
+      "problem": "Аудит INTENT_MAP выявил потенциальные пробелы:\n1. SR не видит историю достижений → не может рассказать что было достигнуто в определённый период\n2. SR не знает про sphere_history → не может ответить 'когда был самый активный месяц'\n3. Интент show_achievements показывает только кнопки достижений, не текст\n4. Нет интента get_achievement_stats / show_achievement_history\n5. SR не умеет работать с личной памятью (mem.core, sr_observations) — не показывает\n   их садовнику и не ссылается явно\n6. Часть функций доступна только через кнопки, не через чат:\n   - Редактирование повтора задачи (только ttask_edit_field|repeat)\n   - Переименование роадмапа (только кнопка в меню)\n   - Смена места задачи (только кнопка Place)",
+      "fix": "1. Добавить ach_context в _build_user_context_msg (см. BUG-G)\n2. Добавить в SR_INTENT_LIGHT:\n   - 'какие достижения за [месяц/период]', 'покажи историю достижений' → show_achievements + period\n   - 'что знаешь обо мне', 'расскажи мой портрет' → conversation (SR читает mem.core из контекста)\n3. В SR_INTENT_MAP добавить примеры для:\n   - Установки повтора задачи через чат: 'задача X — повторять каждый день'\n   - Переименования роадмапа через чат\n   - Перемещения задачи в роадмап через чат (уже есть roadmap_add_task — проверить)\n4. Провести полный аудит: для каждого из 35+ интентов проверить есть ли пример в INTENT_MAP"
     },
-    "P-18": {
-      "name": "Раздел инструкции /help",
-      "priority": "LOW",
-      "problem": "Новые садовники не знают всех возможностей бота. Нет структурированной справки. SR объясняет возможности в диалоге, но нет единого источника.",
-      "solution": "Команда /help с разделами по темам (задачи, роадмапы, чеклисты, напоминания, достижения, резонанс, поиск). С возможностью углубиться в каждый раздел. Детали и формат обсудить ближе к реализации.",
-      "files_affected": [
-        "bot.py: cmd_help, SR_SYSTEM_PROMPT help section",
-        "honeycombs/instructions/ — новые файлы инструкций"
-      ],
-      "risk": "low"
+    "BUG_J": {
+      "id": "BUG-J",
+      "severity": "LOW",
+      "location": "bot.py: intent router add_achievement (~строка 8380-8415)",
+      "title": "add_achievement через чат не сохраняет объект достижения в архив",
+      "problem": "Intent add_achievement вызывает store_increment_achievements (счётчик +1),\nно НЕ добавляет объект {id, title, category, completed...} в массив achievements.\nПри просмотре /achievements список пуст, хотя счётчик растёт.",
+      "fix": "После store_increment_achievements добавить:\n  _ach_obj = {\n    'id': f'ach_{store_get_achievements_count(user_id):03d}',\n    'category': _ach_cat,\n    'title': _ach_title,\n    'description': '',\n    'completed': _today(),\n    'resonance_bonus': _ach_bonus,\n    'icon': _ach_icon\n  }\n  _current_achs = store_get_achievements(user_id)\n  _current_achs.append(_ach_obj)\n  store_set_achievements(user_id, _current_achs)"
     },
-    "P-19": {
-      "name": "Автозагрузка пользователя при первом сообщении после перезапуска",
-      "priority": "HIGH",
-      "problem": "При перезапуске бота (деплой) _store в памяти очищается. Если пользователь пишет первым после перезапуска, бот отвечает '🌿 Используй /start чтобы начать.' — потому что _store[uid] пуст и is_authorized возвращает False.",
-      "solution": "В free_conversation при первом сообщении после перезапуска автоматически вызывать ensure_user_loaded(user_id) для загрузки данных пользователя из GitHub без требования писать /start.",
-      "files_affected": [
-        "bot.py: free_conversation"
-      ],
-      "risk": "low",
-      "status": "done",
-      "resolution": "P-15: AutoLoadMiddleware + Scheduler retry. Posle restarta knopki rabotayut bez /start, brief dokhodit."
+    "BUG_K": {
+      "id": "BUG-K",
+      "severity": "LOW",
+      "location": "bot.py: bulk edit_task, ~строка 9485. Также проверить все datetime.now() без tz",
+      "title": "edit_task deadline 'завтра' без timezone садовника",
+      "problem": "В bulk edit_task:\n  _dl_b = (datetime.now() + _td_b(1)).strftime('%Y-%m-%d')  ← UTC, не timezone!\nЕсли садовник в Москве (UTC+3) и сейчас 23:30 Moscow, datetime.now() = 20:30 UTC\n→ 'завтра' UTC = сегодня Moscow. Дедлайн будет на день раньше.",
+      "fix": "Везде где нужна дата 'сегодня/завтра' для задач:\n  from zoneinfo import ZoneInfo as _ZI\n  _tz = _ZI(store_get_profile(uid).get('companion_settings',{}).get('timezone','Europe/Moscow'))\n  _now = datetime.now(_tz)\n  'завтра' → (_now + timedelta(1)).strftime('%Y-%m-%d')"
     },
-    "P-20": {
-      "name": "Сверка функционала — кнопки vs чат vs голос",
-      "priority": "HIGH",
-      "problem": "Не проверено что все функции доступны одинаково через: 1) кнопки в меню, 2) текст в чате (через SR intent router), 3) голосовые сообщения. Где-то могут быть пропуски — например, удаление задачи или редактирование профиля работает через кнопки, но не через голос.",
-      "solution": "Пройти полный список функций из SR_INTENT_MAP и проверить наличие каждого intent в free_conversation router + наличие кнопочного пути. Составить таблицу gaps, закрыть недостающие.",
-      "files_affected": [
-        "bot.py: SR_INTENT_MAP, free_conversation intent router, keyboard handlers"
-      ],
-      "risk": "medium"
+    "BUG_L": {
+      "id": "BUG-L",
+      "severity": "LOW",
+      "location": "bot.py: _tavily_search_raw, ~строка 6887",
+      "title": "Web search cache не учитывает category в ключе",
+      "problem": "cache_key = md5(q.encode()) — только по тексту запроса.\nЗапрос 'афиша Москва' с category=cinema и category=events дадут одинаковый ключ\n→ второй запрос получит кэш первого, данные могут быть неверными.",
+      "fix": "cache_key = md5(f'{q}|{category}'.encode()).hexdigest()"
     }
   },
-  "acceptance_criteria": [
-    "All /commands respond correctly with gardener data",
-    "Proactive messages follow silence_policy and ahimsa_guardrails",
-    "Bot continues in degraded mode when GitHub API is down",
-    "Gardener can /leave gracefully",
-    "New gardener sees philosophy intro + explicit consent before onboarding",
-    "Architect receives Telegram notification on new gardener request",
-    "Web search returns structured results without Markdown artifacts",
-    "All 35 intents work correctly including bulk operations",
-    "Version notifications sent automatically on deploy",
-    "SR_SYSTEM_PROMPT split into 3 layers, per-dialog tokens reduced",
-    "Reminders respect gardener timezone with offset storage",
-    "SR responses use HTML formatting only, no Markdown",
-    "Profile shows fresh resonance from 5 spheres",
-    "Repeat picker works correctly for all 5 modes including custom days",
-    "Daily SR report shows actual activity data"
+
+  "patches_plan": {
+    "SPRINT_1_CRITICAL": {
+      "description": "Критические баги — делать немедленно, по порядку",
+      "patches": {
+        "P-21": {
+          "name": "Fix Living Memory — UnboundLocalError в _generate_synthesis",
+          "priority": "CRITICAL",
+          "bug_ref": "BUG-001",
+          "estimated_lines": 1,
+          "location": "bot.py: функция _generate_synthesis, ~строка 7553",
+          "tz": "Найти строку `if dp.get('synthesis_date') == _today() and mem.get('core'):`\nПеренести строку `mem = dp.setdefault('memory', {})` ВЫШЕ этой проверки.\nБольше ничего не менять.",
+          "test": "После деплоя написать садовнику сообщение. Проверить в daily report наличие 'Портреты садовников' с непустым текстом. Или вызвать _generate_synthesis вручную в логах.",
+          "risk": "Низкий"
+        },
+        "P-22": {
+          "name": "Fix Morning Brief — два независимых фикса",
+          "priority": "CRITICAL",
+          "bug_ref": "BUG-A1, BUG-A2",
+          "estimated_lines": 3,
+          "location": "bot.py: _time_matches (строка 988), send_morning_greeting (строка 2654)",
+          "tz": "ИЗМЕНЕНИЕ 1 — _time_matches():\n  Строка 988: `target = t.replace(` → `target = now.replace(`\n\nИЗМЕНЕНИЕ 2 — send_morning_greeting():\n  Удалить строки 2654-2655:\n    if not _can_send_proactive(telegram_id):\n      return\n  Оставить как есть guard `if _morning_sent.get(str(telegram_id)) == today_str: return`\n  Он достаточен. _mark_proactive_sent вызывается после успешной отправки (строка 2723).\n\nОба изменения в одном патче.",
+          "test": "Установить morning_message_time = текущее время + 2 минуты у тестового пользователя.\nЧерез 2-3 минуты бриф должен прийти.\nПроверить у нескольких пользователей с разными timezone.",
+          "risk": "Низкий"
+        },
+        "P-23": {
+          "name": "Fix BOT_LATEST_UPDATE Formatting + Sync Version",
+          "priority": "HIGH",
+          "bug_ref": "BUG-B",
+          "estimated_lines": 25,
+          "location": "bot.py: начало файла, строки 63-89",
+          "tz": "1. Обновить BOT_VERSION = '7.39.XX' (актуальная версия патча)\n2. Переписать BOT_LATEST_UPDATE:\n   BOT_LATEST_UPDATE = {\n     'version': '7.39.XX',\n     'date': 'YYYY-MM-DD',\n     'text': (\n       '🌱 <b>Мандала · Что нового</b>\\n'\n       '\\n'\n       '<b>vX.XX.XX · ДД.ММ.ГГГГ</b>\\n'\n       '  · Описание изменения 1\\n'\n       '  · Описание изменения 2\\n'\n       '\\n'\n       '<b>vX.XX.YY · ДД.ММ.ГГГГ</b>\\n'\n       '  · Описание\\n'\n       ... (5 последних версий)\n     )\n   }\n3. В cmd_changelog (строка ~6028): убедиться parse_mode='HTML'\n4. В cb_show_changelog (строка ~5994): убедиться parse_mode='HTML'",
+          "test": "Написать /changelog — текст должен быть с переносами строк и жирным шрифтом.",
+          "risk": "Низкий"
+        }
+      }
+    },
+    "SPRINT_2_HIGH": {
+      "description": "Важные улучшения пользовательского опыта",
+      "patches": {
+        "P-24": {
+          "name": "Fix Groq Voice — unblock event loop",
+          "priority": "HIGH",
+          "bug_ref": "BUG-H",
+          "estimated_lines": 8,
+          "location": "bot.py: handle_voice, ~строка 7804",
+          "tz": "Обернуть синхронный вызов Groq в asyncio.run_in_executor:\n\n  import asyncio as _asyncio_voice\n  transcription = await _asyncio_voice.get_event_loop().run_in_executor(\n    None,\n    lambda: client.audio.transcriptions.create(\n      file=('voice.ogg', _io.BytesIO(ogg_bytes), 'audio/ogg'),\n      model='whisper-large-v3-turbo',\n      language='ru',\n      response_format='text'\n    )\n  )\n\nЗаменить существующие строки 7804-7809.",
+          "risk": "Низкий"
+        },
+        "P-25": {
+          "name": "Fix Resonance 100% Bug — унифицировать расчёт через 5 сфер",
+          "priority": "HIGH",
+          "bug_ref": "BUG-E",
+          "estimated_lines": 20,
+          "location": "bot.py: quick_add_achievement (~9712), intent router add_achievement (~8380), _recalc_resonance_from_achievements",
+          "tz": "ИЗМЕНЕНИЕ 1 — quick_add_achievement (callback qa:):\n  Убрать прямое изменение resonance_level:\n    УДАЛИТЬ строки:\n      current_res = g.get('resonance_level', 13)\n      new_res = min(100, current_res + 3)\n      g['resonance_level'] = new_res\n      g['updated'] = _today()\n      g = _add_growth_history_entry(g, new_res)\n      store_set_profile(user_id, g)\n      _invalidate_auth_cache(user_id)\n    ЗАМЕНИТЬ на:\n      sphere = 'growth'  # default для кнопки без контекста\n      store_add_sphere_resonance(user_id, sphere, 3)\n      _update_sphere_history(user_id, sphere, achievement=True, resonance_delta=3)\n\nИЗМЕНЕНИЕ 2 — intent router add_achievement:\n  Заменить вызов store_increment_achievements + _ach_bonus логику на:\n    store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)\n    _update_sphere_history(user_id, _ach_cat, achievement=True, resonance_delta=_ach_bonus)\n    store_increment_achievements(user_id)  # счётчик оставить\n\nИЗМЕНЕНИЕ 3 — _recalc_resonance_from_achievements:\n  Закомментировать или удалить (несовместима с 5-сферной системой).\n  Если нужна — переписать как: mean of 5 spheres.\n\nПроверить что store_increment_achievements больше НЕ вызывает _recalc_resonance_from_achievements.",
+          "test": "1. Добавить достижение через кнопку 💎 Достижения → Добавить\n2. Проверить профиль — резонанс должен вырасти на 2-3%, не прыгнуть к 100%\n3. Проверить что сфера изменилась в /resonance",
+          "risk": "Средний — затрагивает логику резонанса, проверить все ветки"
+        },
+        "P-26": {
+          "name": "Fix кнопка 'Дополнить' — открывать новое меню задачи",
+          "priority": "HIGH",
+          "bug_ref": "BUG-F",
+          "estimated_lines": 5,
+          "location": "bot.py: intent router строка 9627. Проверить все аналогичные места.",
+          "tz": "ИЗМЕНЕНИЕ 1 — intent router edit_task, строка 9627:\n  БЫЛО: callback_data=f'task_edit_{tid_edited}'\n  СТАЛО: callback_data=f'ttask_edit|{tid_edited}'\n\nИЗМЕНЕНИЕ 2 — Аналогично проверить и исправить в других местах где создаётся кнопка\nредактирования после создания задачи:\n  - confirm_task callback (~строка 5880)\n  - inline keyboard после bulk add_task\n  Убедиться что везде используется ttask_edit| (новый), не task_edit_ (старый)\n\nСтарый обработчик cb_task_edit_start и _task_edit_field_kb можно оставить\n(используется в legacy контексте) или пометить @deprecated.",
+          "test": "Создать задачу голосом. Нажать 'Дополнить'. Должно открыться меню с 5 кнопками:\nВыполнить, Название, Дедлайн, Место, Повтор.",
+          "risk": "Низкий"
+        },
+        "P-27": {
+          "name": "Fix Pinned Message — persistence и SR awareness",
+          "priority": "MEDIUM",
+          "bug_ref": "BUG-C",
+          "estimated_lines": 30,
+          "location": "bot.py: все store_set_* функции, _load_user, _build_user_context_msg",
+          "tz": "ИЗМЕНЕНИЕ 1 — store_set_tasks, store_set_reminders, store_set_roadmaps,\nstore_set_checklists, store_set_achievements — изменить паттерн fallback:\n  БЫЛО: ws = store_get_workspace(uid) or {'tasks': []...}\n  СТАЛО:\n    ws = store_get_workspace(uid)\n    if ws is None:\n      ws = {}\n    ws.setdefault('tasks', [])\n    ws.setdefault('groups', [])\n    ws.setdefault('achievements', [])\n    # НЕ добавлять setdefault для pinned_message и других полей\n    # — они сохраняются автоматически\n\nИЗМЕНЕНИЕ 2 — _load_user (после строки ~619):\n  # Восстановить _last_bot_message из pinned_message при загрузке\n  _pinned_restore = _ws.get('pinned_message')\n  if _pinned_restore and _pinned_restore.get('message_id') and _pinned_restore.get('text'):\n    _last_bot_message[uid] = {\n      'message_id': _pinned_restore['message_id'],\n      'text': _pinned_restore['text']\n    }\n\nИЗМЕНЕНИЕ 3 — _build_user_context_msg (~строка 6792):\n  _pinned_block = (\n    f'\\n[📌 ВАЖНЫЙ КОНТЕКСТ — Садовник закрепил это сообщение'\n    f' ({_pinned.get(\"date\", \"\")}):'\n    f'\\n{_pinned[\"text\"][:500]}'\n    f'\\nSR помнит и может ссылаться на него без явного напоминания.]'\n  ) if _pinned and _pinned.get('text') else ''",
+          "risk": "Средний — затрагивает 5+ функций"
+        },
+        "P-28": {
+          "name": "Fix Timestamps in SR Context — конвертация в timezone садовника",
+          "priority": "MEDIUM",
+          "bug_ref": "BUG-D",
+          "estimated_lines": 20,
+          "location": "bot.py: _build_user_context_msg, строки 6800-6826",
+          "tz": "ИЗМЕНЕНИЕ 1 — переписать _ts_summary с конвертацией timezone:\n  _ts_summary = ''\n  if _recent_msgs:\n    from zoneinfo import ZoneInfo as _ZI_ts\n    from datetime import timezone as _dtz_ts\n    try:\n      _tz_ts_obj = _ZI_ts(tz_name)  # tz_name уже вычислен выше\n    except Exception:\n      _tz_ts_obj = _ZI_ts('Europe/Moscow')\n    _ts_parts = []\n    for _m in _recent_msgs:\n      _role = 'Садовник' if _m.get('role') == 'user' else 'СР'\n      try:\n        _ts_dt = datetime.fromisoformat(_m.get('ts', ''))\n        if _ts_dt.tzinfo is None:\n          _ts_dt = _ts_dt.replace(tzinfo=_dtz_ts.utc)\n        _ts_local = _ts_dt.astimezone(_tz_ts_obj)\n        _ts_str = _ts_local.strftime('%H:%M')\n      except Exception:\n        _ts_str = '??:??'\n      _txt_short = _m.get('content', '')[:80].replace('\\n', ' ')\n      _ts_parts.append(f'  [{_ts_str}] {_role}: {_txt_short}')\n    _ts_summary = (\n      f'\\n[Хронология диалога (время садовника, {tz_name}):\\n'\n      + '\\n'.join(_ts_parts) + '\\n]'\n    )\n\nИЗМЕНЕНИЕ 2 — удалить _ts_block из _msg (дублирует _ts_summary):\n  В строке ~6823 убрать {_ts_block}",
+          "risk": "Низкий"
+        }
+      }
+    },
+    "SPRINT_3_MEDIUM": {
+      "description": "Обогащение данных и улучшение работы SR",
+      "patches": {
+        "P-29": {
+          "name": "SR Achievement History — добавить историю в контекст",
+          "priority": "HIGH",
+          "bug_ref": "BUG-G",
+          "estimated_lines": 35,
+          "location": "bot.py: _build_user_context_msg (~строка 6718), SR_INTENT_LIGHT",
+          "tz": "ИЗМЕНЕНИЕ 1 — _build_user_context_msg добавить ach_context после ach_count:\n\n  # Recent achievements (last 10, sorted by date)\n  achievements = store_get_achievements(user_id)\n  recent_achs = sorted(\n    achievements,\n    key=lambda a: a.get('completed', ''),\n    reverse=True\n  )[:10]\n  ach_lines = []\n  for a in recent_achs:\n    ach_lines.append(\n      f\"  - {a['title']} | {a.get('category','other')} | {a.get('completed','')}\"\n    )\n  ach_block = '\\n'.join(ach_lines) if ach_lines else '  нет данных'\n\n  # Sphere activity from sphere_history\n  dp_ctx = _get_deep_profile(user_id)\n  sphere_hist = dp_ctx.get('sphere_history', [])[-3:]\n  sphere_ctx_lines = []\n  for month_data in reversed(sphere_hist):\n    m_str = month_data.get('month', '')\n    parts = []\n    for s in SPHERES:\n      t_cnt = month_data.get(s, {}).get('tasks', 0)\n      a_cnt = month_data.get(s, {}).get('achievements', 0)\n      if t_cnt > 0 or a_cnt > 0:\n        parts.append(f'{SPHERE_NAME_RU[s]}: {t_cnt}з+{a_cnt}д')\n    if parts:\n      sphere_ctx_lines.append(f'  {m_str}: {chr(44).join(parts)}')\n  sphere_activity = '\\n'.join(sphere_ctx_lines) if sphere_ctx_lines else '  нет данных'\n\n  ach_context = (\n    f'[Достижения ({ach_count} всего, последние 10):\\n{ach_block}\\n'\n    f'\\nАктивность по сферам (последние 3 месяца):\\n{sphere_activity}\\n]'\n  )\n\n  Добавить {ach_context} в _msg.\n\nИЗМЕНЕНИЕ 2 — SR_INTENT_LIGHT добавить:\n  - 'покажи достижения за [месяц]', 'достижения в [сфере]', 'история достижений' → show_achievements, action.period='month:YYYY-MM' или action.sphere='health'\n  - 'что ты знаешь обо мне', 'мой портрет', 'расскажи про меня' → conversation (SR читает mem.core и sr_observations из контекста)",
+          "test": "Спросить бота: 'видишь ли ты мои достижения за апрель?'\nSR должен ответить конкретно, перечислив достижения с датами.",
+          "risk": "Низкий"
+        },
+        "P-30": {
+          "name": "Fix add_achievement — сохранять объект в архив",
+          "priority": "MEDIUM",
+          "bug_ref": "BUG-J",
+          "estimated_lines": 12,
+          "location": "bot.py: intent router add_achievement (~строка 8380-8415)",
+          "tz": "В блоке intent == 'add_achievement' после store_increment_achievements:\n\n  # Сохранить объект достижения в архив\n  _ach_obj = {\n    'id': f'ach_{store_get_achievements_count(user_id):03d}',\n    'category': _ach_cat,\n    'title': _ach_title,\n    'description': '',\n    'completed': _today(),\n    'resonance_bonus': _ach_bonus,\n    'icon': _ach_icon\n  }\n  _current_achs = store_get_achievements(user_id)\n  # Защита от дублей\n  if not any(a.get('title') == _ach_title and a.get('completed') == _today()\n              for a in _current_achs):\n    _current_achs.append(_ach_obj)\n    store_set_achievements(user_id, _current_achs)\n\nДобавить после существующей логики store_increment_achievements.",
+          "risk": "Низкий"
+        },
+        "P-31": {
+          "name": "Trigger Synthesis from free_conversation (резервный запуск)",
+          "priority": "MEDIUM",
+          "bug_ref": "BUG-001 followup",
+          "estimated_lines": 15,
+          "location": "bot.py: конец free_conversation после _add_to_history",
+          "tz": "Добавить в free_conversation после `_add_to_history(user_id, 'assistant', reply_text)`:\n\n  # Запускать синтез живой памяти не чаще 1 раза в 6 часов при активности\n  # Резервный запуск — основной через daily_report\n  try:\n    _prof_syn = store_get_profile(user_id)\n    if _prof_syn:\n      _dp_syn = _prof_syn.get('deep_profile', {})\n      _syn_date_s = _dp_syn.get('synthesis_date', '')\n      _syn_hour_s = int(_dp_syn.get('synthesis_hour', -99))\n      _now_syn = datetime.now()\n      _need_syn = (\n        _syn_date_s != _today() or\n        abs(_now_syn.hour - _syn_hour_s) >= 6\n      )\n      if _need_syn and len(_sessions.get(user_id, [])) >= 4:\n        asyncio.create_task(_generate_synthesis(user_id))\n        _dp_syn['synthesis_hour'] = _now_syn.hour\n        _prof_syn['deep_profile'] = _dp_syn\n        store_set_profile(user_id, _prof_syn)\n  except Exception:\n    pass  # не блокировать основной поток\n\nЗАВИСИТ ОТ P-21 — должен быть выполнен первым.",
+          "risk": "Низкий — fire-and-forget"
+        }
+      }
+    },
+    "SPRINT_4_LOW": {
+      "description": "Мелкие фиксы и технический долг",
+      "patches": {
+        "P-32": {
+          "name": "Fix edit_task deadline без timezone садовника",
+          "priority": "LOW",
+          "bug_ref": "BUG-K",
+          "estimated_lines": 10,
+          "location": "bot.py: bulk edit_task ~строка 9485. Аудит всех datetime.now() без tz.",
+          "tz": "В bulk edit_task (~строка 9485) заменить:\n  БЫЛО: _dl_b = (datetime.now() + _td_b(1)).strftime('%Y-%m-%d')\n  СТАЛО:\n    from zoneinfo import ZoneInfo as _ZI_et\n    _tz_et = _ZI_et(store_get_profile(user_id).get(\n      'companion_settings', {}).get('timezone', 'Europe/Moscow'))\n    _dl_b = (datetime.now(_tz_et) + _td_b(1)).strftime('%Y-%m-%d')\n\nАналогично проверить SINGLE edit_task ~строка 9549 (уже использует _now_e — корректно).\nПроверить все `datetime.now()` без tz кроме тех что в _today() и UTC-специфических.",
+          "risk": "Низкий"
+        },
+        "P-33": {
+          "name": "Fix web search cache key — добавить category",
+          "priority": "LOW",
+          "bug_ref": "BUG-L",
+          "estimated_lines": 2,
+          "location": "bot.py: _tavily_search_raw, ~строка 6887",
+          "tz": "  БЫЛО: cache_key = _hashlib.md5(q.encode()).hexdigest()\n  СТАЛО: cache_key = _hashlib.md5(f'{q}|{category}'.encode()).hexdigest()",
+          "risk": "Низкий"
+        },
+        "P-34": {
+          "name": "SR Prompt Audit — полный аудит покрытия функций",
+          "priority": "MEDIUM",
+          "bug_ref": "BUG-I",
+          "estimated_lines": 50,
+          "location": "bot.py: SR_INTENT_LIGHT, SR_INTENT_MAP",
+          "tz": "Провести полный аудит INTENT_MAP:\n1. Создать таблицу: каждый intent → есть ли пример в INTENT_MAP → работает ли через голос\n2. Добавить недостающие примеры для:\n   - Установка повтора задачи: 'задача X — повторять каждый день' → edit_task field=repeat\n   - show_achievements с периодом: 'достижения за апрель' → show_achievements, period\n   - Голосовые примеры для roadmap интентов\n3. В SR_INTENT_LIGHT добавить правило:\n   'что ты знаешь обо мне', 'мой портрет', 'расскажи про меня' →\n   conversation (SR читает mem.core из [Профиль садовника] в контексте)\n4. Проверить что SR правильно обрабатывает вопросы про:\n   - историю достижений (BUG-G решает доступность данных)\n   - сферы резонанса по периодам\n   - паттерны активности из deep_profile",
+          "risk": "Средний — изменения в промпте могут повлиять на все интенты"
+        }
+      }
+    },
+    "BACKLOG": {
+      "description": "Запланированные функции (не баги)",
+      "P-11": "Кнопка 'Своя дата' в repeat_picker напоминаний",
+      "P-12": "Повторяющиеся задачи + своя дата",
+      "P-15": "Модульная архитектура (после стабилизации): store.py, github_api.py, keyboards.py, handlers_*.py, sr_memory.py",
+      "P-17": "Голосовые команды — составные фразы и лучшее распознавание",
+      "P-18": "/help команда с разделами",
+      "P-20": "Полная сверка функционал кнопки vs чат vs голос"
+    }
+  },
+
+  "execution_order": [
+    "P-21 → Fix synthesis (1 строка, критично)",
+    "P-22 → Fix morning brief (3 строки, критично)",
+    "P-23 → Fix changelog format + sync version",
+    "P-24 → Fix Groq blocking",
+    "P-25 → Fix resonance 100%",
+    "P-26 → Fix Дополнить button",
+    "P-27 → Fix pinned message persistence",
+    "P-28 → Fix timestamps timezone",
+    "P-29 → SR achievement history in context",
+    "P-30 → Fix add_achievement archive",
+    "P-31 → Trigger synthesis from free_conversation (after P-21)",
+    "P-32 → Fix deadline timezone",
+    "P-33 → Fix search cache key",
+    "P-34 → SR Prompt Audit"
   ],
+
   "health": {
-    "status": "healthy",
-    "last_check": "2026-05-10",
-    "notes": "v7.39.13. P-13+14+15+16 done (Klod). Roudmapy, Mesto zadachi, AutoLoad, py311 fix. Progress 97%."
+    "status": "degraded",
+    "last_check": "2026-05-11",
+    "critical_broken": [
+      "Living Memory (synthesis) — никогда не работала из-за BUG-001",
+      "Morning briefs — не доходят другим пользователям из-за BUG-A1+A2",
+      "Changelog formatting — текст без переносов"
+    ],
+    "working_well": [
+      "GitHub sync (SHA-кэш, deduplicated writes)",
+      "AutoLoadMiddleware — кнопки после рестарта",
+      "Fuzzy task matching (LCS алгоритм)",
+      "JSON repair (3-уровневый парсинг)",
+      "Roadmaps, Tasks, Checklists, Reminders CRUD",
+      "_ACTION_FAKE_MARKERS — защита от галлюцинаций SR",
+      "Per-user timezone для напоминаний",
+      "Проактивные сообщения тишины (silence detection)"
+    ],
+    "estimated_readiness_after_sprint1": "94%",
+    "estimated_readiness_after_sprint2": "97%"
   },
-  "future_scaling": {
-    "current_state": {
-      "gardeners": 4,
-      "daily_requests": "~50-100",
-      "llm_provider": "OpenRouter (deepseek/deepseek-v4-flash primary, qwen fallback)",
-      "hosting": "Render (free tier, 512MB RAM, auto-sleep after 15min idle)",
-      "monthly_cost": "~$2 (OpenRouter tokens only)"
-    },
-    "next_milestone": {
-      "gardeners_target": 10,
-      "required_changes": [
-        "Persistent storage (Redis or PostgreSQL) instead of in-memory dicts",
-        "Direct DashScope API key for Qwen (2000 req/day free tier)",
-        "Render paid tier or VPS to eliminate auto-sleep"
-      ]
-    }
+
+  "context_for_new_sr": {
+    "note": "Если ты SR который не участвовал в предыдущих сессиях — прочитай это.",
+    "system_overview": "bot.py — монолитный файл ~9835 строк. Telegram бот с aiogram 3, aiohttp webhook, APScheduler. Данные каждого пользователя в GitHub: profile.json, workspace.json, memory.json. In-memory _store — RAM cache, синхронизируется каждые 2 мин.",
+    "memory_system": "3 уровня: RAM (_store + _sessions), GitHub (profile/workspace/memory.json), deep_profile (sr_observations, sphere_history, synthesis/core). _generate_synthesis создаёт 'живой портрет' садовника ежедневно через LLM.",
+    "resonance_system": "5 сфер: health, creativity, work, connections, growth. Каждое закрытие задачи добавляет +1-2% в соответствующую сферу. resonance_level = среднее 5 сфер. Всегда использовать store_add_sphere_resonance, НЕ прямое изменение resonance_level.",
+    "sr_identity": "SR — женский род. 'я заметила', 'мне важно'. Действия: 'удалено', 'сделано' (безличные). Ахимса как фильтр — не навязывать, не давить.",
+    "key_functions": "_build_user_context_msg — контекст садовника для SR промпта. _generate_synthesis — живая память. _track_interaction — статистика. store_add_sphere_resonance — единственный правильный способ менять resonance. _fire_sync — отложенная синхронизация с GitHub."
   }
 }
