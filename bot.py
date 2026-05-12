@@ -2662,7 +2662,7 @@ async def tedit_custom_deadline_input(message: Message, state: FSMContext):
     from datetime import datetime as _dttc
     user_id = str(message.from_user.id)
     data = await state.get_data()
-    tid = data.get("edit_task_id", "")
+    tid = data.get("edit_task_id", "") or data.get("_ttask_edit_id", "")
     raw = (message.text or "").strip()
     _dl = None
     import re as _rec
