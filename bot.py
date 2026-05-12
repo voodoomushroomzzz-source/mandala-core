@@ -91,7 +91,6 @@ BOT_LATEST_UPDATE = {
 
 # ─── Business limits ──────────────────────────────────────────────────────────
 TASK_CTX_FREE    = "free"      # task visible in tasks menu
-TASK_CTX_ROADMAP = "roadmap"   # task embedded in roadmap, hidden from tasks menu
 
 TASK_LIMIT_HARD  = 50
 TASK_LIMIT_SOFT  = 40
@@ -382,48 +381,7 @@ def store_set_reminders(telegram_id: str, reminders: list) -> None:
     ws["reminders"] = reminders
     store_set_workspace(telegram_id, ws)
 
-def store_get_roadmaps(telegram_id: str) -> list:
-    ws = store_get_workspace(telegram_id)
-    return copy.deepcopy(ws.get("roadmaps", [])) if ws else []
 
-def store_set_roadmaps(telegram_id: str, roadmaps: list) -> None:
-    ws = store_get_workspace(telegram_id) or {"tasks":[],"groups":[],"achievements":[],"reminders":[],"roadmaps":[]}
-    ws["roadmaps"] = roadmaps
-    store_set_workspace(telegram_id, ws)
-
-def _calc_roadmap_progress(roadmap: dict, all_tasks: list) -> int:
-    """Calculate roadmap progress % based on completed tasks. Returns 0-100."""
-    task_ids = roadmap.get("task_ids", [])
-    if not task_ids:
-        return 0
-    # Only count task_ids that still exist
-    existing = {t["task_id"]: t for t in all_tasks if t.get("task_id")}
-    relevant = [existing[tid] for tid in task_ids if tid in existing]
-    if not relevant:
-        return 0
-    done = sum(1 for t in relevant if t.get("status") == "completed")
-    return round(done / len(relevant) * 100)
-
-def _roadmap_live_tasks(roadmap: dict, all_tasks: list) -> list:
-    """Return only existing tasks for a roadmap (filters orphaned task_ids)."""
-    existing = {t["task_id"]: t for t in all_tasks if t.get("task_id")}
-    return [existing[tid] for tid in roadmap.get("task_ids", []) if tid in existing]
-
-def _clean_roadmap_task_ids(roadmap: dict, all_tasks: list) -> bool:
-    """Remove dead task_ids from roadmap in-place. Returns True if changed."""
-    existing_ids = {t["task_id"] for t in all_tasks if t.get("task_id")}
-    before = roadmap.get("task_ids", [])
-    after  = [tid for tid in before if tid in existing_ids]
-    if len(after) != len(before):
-        roadmap["task_ids"] = after
-        return True
-    return False
-
-def _roadmap_progress_bar(pct: int) -> str:
-    """Return visual progress bar string: ████░░░░ 75%"""
-    filled = round(pct / 10)
-    empty  = 10 - filled
-    return f"{'█' * filled}{'░' * empty} {pct}%"
 
 
 # ─── Global HTTP session ───────────────────────────────────────────────────────
@@ -1044,14 +1002,6 @@ class ReminderStates(StatesGroup):
     waiting_for_repeat = State()  # v7.37 — выбор повторения
     waiting_for_weekdays = State()  # v7.40 — текстовый ввод дней недели
 
-class RoadmapStates(StatesGroup):
-    waiting_for_title    = State()  # name of new roadmap
-    waiting_for_tasks    = State()  # comma-separated task list
-    waiting_for_deadline = State()  # deadline for roadmap
-    waiting_for_rename   = State()  # new name
-    waiting_for_add_task = State()  # task name to link
-    confirm_delete       = State()  # confirm roadmap deletion
-
 class AskStates(StatesGroup):
     waiting_for_question = State()
 
@@ -1142,7 +1092,7 @@ def _build_profile_card(user_id: str) -> str:
         "",
     ]
 
-    # ── Resolve today in gardener timezone (used by roadmaps + tasks) ─
+    # ── Resolve today in gardener timezone ─
     from datetime import datetime as _dt_rem
     from zoneinfo import ZoneInfo as _ZI_rem
     tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
@@ -1420,7 +1370,6 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
 
 def get_place_keyboard(user_id: str, task_id: str) -> InlineKeyboardMarkup:
     groups = store_get_groups(user_id).get("groups", [])
-    roadmaps = store_get_roadmaps(user_id)
     emoji_map = _assign_group_emojis(groups)
     btns = []
     _plc_folder = "\U0001f4c2"
@@ -1435,18 +1384,6 @@ def get_place_keyboard(user_id: str, task_id: str) -> InlineKeyboardMarkup:
         text="\U0001f4c2 \u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b",
         callback_data="plc_grp|__nogroup__"
     )])
-    if roadmaps:
-        btns.append([InlineKeyboardButton(
-            text="\u2500\u2500 \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u044b \u2500\u2500",
-            callback_data="cl_noop|sep"
-        )])
-        all_tasks_pk = store_get_tasks(user_id)
-        for rm in roadmaps:
-            pct = _calc_roadmap_progress(rm, all_tasks_pk)
-            btns.append([InlineKeyboardButton(
-                text=f"\U0001f5fa {rm['title']}  {_roadmap_progress_bar(pct)}",
-                callback_data=f"plc_rm|{rm['roadmap_id']}"
-            )])
     btns.append([InlineKeyboardButton(
         text="\u2190 \u041d\u0430\u0437\u0430\u0434",
         callback_data=f"ttask_edit|{task_id}"
@@ -1463,41 +1400,23 @@ async def cb_ttask_place_cb(callback: CallbackQuery, state: FSMContext):
     raw = callback.data[4:]
     tasks = store_get_tasks(user_id)
     task_title = next((t.get("title", "-") for t in tasks if t.get("task_id") == tid), "-")
-    roadmaps = store_get_roadmaps(user_id)
-    for rm in roadmaps:
-        if tid in rm.get("task_ids", []):
-            rm["task_ids"] = [x for x in rm["task_ids"] if x != tid]
-    if raw.startswith("grp|"):
-        gid = raw[4:]
-        if gid == "__nogroup__":
-            label_id, label_name = None, ""
-        else:
-            gs = store_get_groups(user_id).get("groups", [])
-            g = next((x for x in gs if x["id"] == gid), None)
-            label_id, label_name = gid, (g["name"] if g else "")
-        for t in tasks:
-            if t.get("task_id") == tid:
-                t["label_id"] = label_id
-                t["label_name"] = label_name
-                t["context"] = TASK_CTX_FREE
-                t["updated"] = _today()
-        store_set_roadmaps(user_id, roadmaps)
-        store_set_tasks(user_id, tasks)
-        place_display = label_name or "\u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b"
+    gid = raw[4:] if raw.startswith("grp|") else None
+    if gid is None:
+        await callback.answer("Неверный формат", show_alert=True)
+        return
+    if gid == "__nogroup__":
+        label_id, label_name = None, ""
     else:
-        rmid = raw[3:]
-        target = next((r for r in roadmaps if r["roadmap_id"] == rmid), None)
-        if target:
-            target.setdefault("task_ids", []).append(tid)
-        for t in tasks:
-            if t.get("task_id") == tid:
-                t["label_id"] = None
-                t["label_name"] = ""
-                t["context"] = TASK_CTX_ROADMAP
-                t["updated"] = _today()
-        store_set_roadmaps(user_id, roadmaps)
-        store_set_tasks(user_id, tasks)
-        place_display = target["title"] if target else "\u0420\u043e\u0430\u0434\u043c\u0430\u043f"
+        gs = store_get_groups(user_id).get("groups", [])
+        g = next((x for x in gs if x["id"] == gid), None)
+        label_id, label_name = gid, (g["name"] if g else "")
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["label_id"] = label_id
+            t["label_name"] = label_name
+            t["updated"] = _today()
+    store_set_tasks(user_id, tasks)
+    place_display = label_name or "\u0411\u0435\u0437 \u0433\u0440\u0443\u043f\u043f\u044b"
     _fire_sync()
     await state.clear()
     await callback.message.edit_text(
@@ -1507,442 +1426,6 @@ async def cb_ttask_place_cb(callback: CallbackQuery, state: FSMContext):
     )
 
 
-# ─── Roadmap inline keyboards ─────────────────────────────────────────────────
-
-def get_roadmaps_list_inline(user_id: str) -> InlineKeyboardMarkup:
-    roadmaps = store_get_roadmaps(user_id)
-    all_tasks = store_get_tasks(user_id)
-    roadmaps_s = sorted(roadmaps, key=lambda r: r.get("deadline") or "9999-99-99")
-    btns = []
-    for rm in roadmaps_s:
-        pct = _calc_roadmap_progress(rm, all_tasks)
-        bar = _roadmap_progress_bar(pct)
-        dl = f" \u00b7 \u0434\u043e {rm['deadline']}" if rm.get("deadline") else ""
-        btns.append([InlineKeyboardButton(
-            text=f"\U0001f5fa {rm['title']}  {bar}{dl}",
-            callback_data=f"rm_open|{rm['roadmap_id']}"
-        )])
-    btns.append([InlineKeyboardButton(
-        text="\u2795 \u041d\u043e\u0432\u044b\u0439 \u0440\u043e\u0430\u0434\u043c\u0430\u043f",
-        callback_data="rm_create"
-    )])
-    btns.append([InlineKeyboardButton(
-        text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u0432 \u043f\u0440\u043e\u0444\u0438\u043b\u044c",
-        callback_data="profile_back"
-    )])
-    return InlineKeyboardMarkup(inline_keyboard=btns)
-
-
-def get_roadmap_detail_inline(user_id: str, rm_id: str) -> InlineKeyboardMarkup:
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if not rm:
-        return InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="rm_list")
-        ]])
-    all_tasks = store_get_tasks(user_id)
-    live = _roadmap_live_tasks(rm, all_tasks)
-    live_sorted = _sort_tasks_smart(live)
-    btns = []
-    for t in live_sorted:
-        tid = t.get("task_id", "")
-        title = t.get("title", "-")[:28]
-        dl = t.get("deadline", "")
-        dl_short = f" \u00b7 {dl}" if dl else ""
-        emoji = "\u2705" if t.get("status") == "completed" else _task_urgency_emoji(dl)
-        btns.append([InlineKeyboardButton(
-            text=f"{emoji} {title}{dl_short}",
-            callback_data=f"rm_task|{rm_id}|{tid}"
-        )])
-    dl_label = rm.get("deadline") or "\u043d\u0435\u0442"
-    btns.append([InlineKeyboardButton(text="\u2795 \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443", callback_data=f"rm_add_task|{rm_id}")])
-    btns.append([InlineKeyboardButton(text="\u270f\ufe0f \u041f\u0435\u0440\u0435\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u0442\u044c", callback_data=f"rm_rename|{rm_id}")])
-    btns.append([InlineKeyboardButton(text=f"\U0001f4c5 \u0414\u0435\u0434\u043b\u0430\u0439\u043d: {dl_label}", callback_data=f"rm_deadline|{rm_id}")])
-    btns.append([InlineKeyboardButton(text="\U0001f5d1 \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0440\u043e\u0430\u0434\u043c\u0430\u043f", callback_data=f"rm_delete|{rm_id}")])
-    btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u043a \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u0430\u043c", callback_data="rm_list")])
-    return InlineKeyboardMarkup(inline_keyboard=btns)
-
-
-def get_roadmap_add_task_inline(user_id: str, rm_id: str) -> InlineKeyboardMarkup:
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    rm_task_ids = set(rm.get("task_ids", [])) if rm else set()
-    all_tasks = store_get_tasks(user_id)
-    free_tasks = [
-        t for t in all_tasks
-        if t.get("status") != "completed"
-        and t.get("task_id") not in rm_task_ids
-        and t.get("context") != TASK_CTX_ROADMAP
-    ]
-    free_tasks = _sort_tasks_smart(free_tasks)
-    btns = []
-    btns.append([InlineKeyboardButton(
-        text="\u270f\ufe0f \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u0443\u044e \u0437\u0430\u0434\u0430\u0447\u0443",
-        callback_data=f"rm_new_task|{rm_id}"
-    )])
-    if free_tasks:
-        btns.append([InlineKeyboardButton(text="\u2500\u2500 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u2500\u2500", callback_data="cl_noop|sep")])
-        for t in free_tasks[:10]:
-            tid = t.get("task_id", "")
-            title = t.get("title", "-")[:30]
-            emoji = _task_urgency_emoji(t.get("deadline", ""))
-            btns.append([InlineKeyboardButton(
-                text=f"{emoji} {title}",
-                callback_data=f"rm_link|{rm_id}|{tid}"
-            )])
-    btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data=f"rm_open|{rm_id}")])
-    return InlineKeyboardMarkup(inline_keyboard=btns)
-
-
-# ─── Roadmap handlers ─────────────────────────────────────────────────────────
-
-@router.callback_query(F.data == "rm_list")
-async def cb_roadmaps_menu(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    await state.clear()
-    user_id = str(callback.from_user.id)
-    roadmaps = store_get_roadmaps(user_id)
-    count = len(roadmaps)
-    header = (
-        f"\U0001f5fa <b>\u0420\u043e\u0430\u0434\u043c\u0430\u043f\u044b</b> \u00b7 {count} \u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0445"
-        if count else
-        "\U0001f5fa <b>\u0420\u043e\u0430\u0434\u043c\u0430\u043f\u044b</b>\n\n\u041f\u043e\u043a\u0430 \u043f\u0443\u0441\u0442\u043e. \u0421\u043e\u0437\u0434\u0430\u0439 \u043f\u0435\u0440\u0432\u044b\u0439!"
-    )
-    try:
-        await callback.message.edit_text(header, reply_markup=get_roadmaps_list_inline(user_id), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_roadmaps_list_inline(user_id), parse_mode="HTML")
-
-
-@router.callback_query(F.data.startswith("rm_open|"))
-async def cb_roadmap_open(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    await state.clear()
-    user_id = str(callback.from_user.id)
-    rm_id = callback.data.split("|")[1]
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if not rm:
-        await callback.answer("\U0001f331 \u041d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", show_alert=True)
-        return
-    all_tasks = store_get_tasks(user_id)
-    _clean_roadmap_task_ids(rm, all_tasks)
-    store_set_roadmaps(user_id, roadmaps)
-    text = _roadmap_card_text(rm, all_tasks)
-    try:
-        await callback.message.edit_text(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-
-
-@router.callback_query(F.data.startswith("rm_task|"))
-async def cb_roadmap_task_open(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    task_id = callback.data.split("|")[2]
-    try:
-        await callback.message.edit_text(
-            "\u2699\ufe0f",
-            reply_markup=get_task_edit_inline(user_id, task_id)
-        )
-    except Exception:
-        await callback.message.answer("\u2699\ufe0f", reply_markup=get_task_edit_inline(user_id, task_id))
-
-
-@router.callback_query(F.data.startswith("rm_add_task|"))
-async def cb_roadmap_add_task(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    rm_id = callback.data.split("|")[1]
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    rm_title = rm["title"] if rm else "\u0440\u043e\u0430\u0434\u043c\u0430\u043f"
-    try:
-        await callback.message.edit_text(
-            f"\u2795 <b>\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0432 \u00ab{rm_title}\u00bb:</b>",
-            reply_markup=get_roadmap_add_task_inline(user_id, rm_id),
-            parse_mode="HTML"
-        )
-    except Exception:
-        await callback.message.answer(
-            f"\u2795 <b>\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0432 \u00ab{rm_title}\u00bb:</b>",
-            reply_markup=get_roadmap_add_task_inline(user_id, rm_id),
-            parse_mode="HTML"
-        )
-
-
-@router.callback_query(F.data.startswith("rm_link|"))
-async def cb_roadmap_link_task(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    parts = callback.data.split("|")
-    rm_id, task_id = parts[1], parts[2]
-    roadmaps = store_get_roadmaps(user_id)
-    tasks = store_get_tasks(user_id)
-    for rm in roadmaps:
-        if task_id in rm.get("task_ids", []):
-            rm["task_ids"] = [x for x in rm["task_ids"] if x != task_id]
-    target = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if target:
-        target.setdefault("task_ids", []).append(task_id)
-    for t in tasks:
-        if t.get("task_id") == task_id:
-            t["label_id"] = None
-            t["label_name"] = ""
-            t["context"] = TASK_CTX_ROADMAP
-            t["updated"] = _today()
-    store_set_roadmaps(user_id, roadmaps)
-    store_set_tasks(user_id, tasks)
-    _fire_sync()
-    all_t2 = store_get_tasks(user_id)
-    text = _roadmap_card_text(target, all_t2) if target else "\U0001f5fa"
-    try:
-        await callback.message.edit_text(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-
-
-@router.callback_query(F.data.startswith("rm_new_task|"))
-async def cb_roadmap_new_task_start(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    rm_id = callback.data.split("|")[1]
-    await state.set_state(RoadmapStates.waiting_for_add_task)
-    await state.update_data(_rm_target_id=rm_id)
-    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data=f"rm_add_task|{rm_id}")
-    ]])
-    try:
-        await callback.message.edit_text("\u270f\ufe0f \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0439 \u0437\u0430\u0434\u0430\u0447\u0438:", reply_markup=cancel_kb)
-    except Exception:
-        await callback.message.answer("\u270f\ufe0f \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0439 \u0437\u0430\u0434\u0430\u0447\u0438:", reply_markup=cancel_kb)
-
-
-@router.message(StateFilter(RoadmapStates.waiting_for_add_task))
-async def cb_roadmap_new_task_input(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    data = await state.get_data()
-    rm_id = data.get("_rm_target_id", "")
-    title = (message.text or "").strip()
-    if not title:
-        await message.answer("\U0001f331 \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u0435 \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043f\u0443\u0441\u0442\u044b\u043c")
-        return
-    import uuid as _uuid_rm
-    tasks = store_get_tasks(user_id)
-    new_task = {
-        "task_id": f"t_{_uuid_rm.uuid4().hex[:8]}",
-        "title": title,
-        "status": "active",
-        "context": TASK_CTX_ROADMAP,
-        "label_id": None,
-        "label_name": "",
-        "deadline": None,
-        "repeat": None,
-        "created": _today(),
-        "updated": _today(),
-    }
-    tasks.append(new_task)
-    store_set_tasks(user_id, tasks)
-    roadmaps = store_get_roadmaps(user_id)
-    target = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if target:
-        target.setdefault("task_ids", []).append(new_task["task_id"])
-    store_set_roadmaps(user_id, roadmaps)
-    _fire_sync()
-    await state.clear()
-    all_t = store_get_tasks(user_id)
-    text = _roadmap_card_text(target, all_t) if target else "\U0001f5fa"
-    await message.answer(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-
-
-@router.callback_query(F.data.startswith("rm_rename|"))
-async def cb_roadmap_rename_start(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    rm_id = callback.data.split("|")[1]
-    await state.set_state(RoadmapStates.waiting_for_rename)
-    await state.update_data(_rm_target_id=rm_id)
-    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data=f"rm_open|{rm_id}")
-    ]])
-    try:
-        await callback.message.edit_text("\u270f\ufe0f \u041d\u043e\u0432\u043e\u0435 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u0430:", reply_markup=cancel_kb)
-    except Exception:
-        await callback.message.answer("\u270f\ufe0f \u041d\u043e\u0432\u043e\u0435 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u0430:", reply_markup=cancel_kb)
-
-
-@router.message(StateFilter(RoadmapStates.waiting_for_rename))
-async def cb_roadmap_rename_input(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    data = await state.get_data()
-    rm_id = data.get("_rm_target_id", "")
-    name = (message.text or "").strip()
-    if not name:
-        await message.answer("\U0001f331 \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u0435 \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043f\u0443\u0441\u0442\u044b\u043c")
-        return
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if rm:
-        rm["title"] = name
-    store_set_roadmaps(user_id, roadmaps)
-    _fire_sync()
-    await state.clear()
-    all_t = store_get_tasks(user_id)
-    text = _roadmap_card_text(rm, all_t) if rm else "\U0001f5fa"
-    await message.answer(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-
-
-@router.callback_query(F.data.startswith("rm_deadline|"))
-async def cb_roadmap_deadline_start(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    rm_id = callback.data.split("|")[1]
-    await state.set_state(RoadmapStates.waiting_for_deadline)
-    await state.update_data(_rm_target_id=rm_id)
-    from datetime import datetime as _dt_rmd, timedelta as _td_rmd
-    t = _dt_rmd.now()
-    f = lambda d: d.strftime("%Y-%m-%d")
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\U0001f4c5 +\u043d\u0435\u0434\u0435\u043b\u044f",    callback_data=f"rmd_{f(t+_td_rmd(days=7))}|{rm_id}")],
-        [InlineKeyboardButton(text="\U0001f4c5 +\u043c\u0435\u0441\u044f\u0446",     callback_data=f"rmd_{f(t+_td_rmd(days=30))}|{rm_id}")],
-        [InlineKeyboardButton(text="\U0001f4c5 +3 \u043c\u0435\u0441\u044f\u0446\u0430", callback_data=f"rmd_{f(t+_td_rmd(days=90))}|{rm_id}")],
-        [InlineKeyboardButton(text="\u270f\ufe0f \u0421\u0432\u043e\u044f \u0434\u0430\u0442\u0430",  callback_data=f"rmd_custom|{rm_id}")],
-        [InlineKeyboardButton(text="\u23ed \u0423\u0431\u0440\u0430\u0442\u044c \u0434\u0435\u0434\u043b\u0430\u0439\u043d", callback_data=f"rmd_none|{rm_id}")],
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data=f"rm_open|{rm_id}")],
-    ])
-    try:
-        await callback.message.edit_text("\U0001f4c5 \u0414\u0435\u0434\u043b\u0430\u0439\u043d \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u0430:", reply_markup=kb)
-    except Exception:
-        await callback.message.answer("\U0001f4c5 \u0414\u0435\u0434\u043b\u0430\u0439\u043d \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u0430:", reply_markup=kb)
-
-
-@router.callback_query(F.data.startswith("rmd_"), StateFilter(RoadmapStates.waiting_for_deadline))
-async def cb_roadmap_deadline_pick(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    data = await state.get_data()
-    rm_id = data.get("_rm_target_id") or callback.data.split("|")[-1]
-    val = callback.data[4:].split("|")[0]
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if val == "none":
-        if rm: rm["deadline"] = None
-        store_set_roadmaps(user_id, roadmaps)
-        _fire_sync()
-        await state.clear()
-    elif val == "custom":
-        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data=f"rm_open|{rm_id}")
-        ]])
-        try:
-            await callback.message.edit_text(
-                "\u270f\ufe0f \u0412\u0432\u0435\u0434\u0438 \u0434\u0430\u0442\u0443: <code>\u0414\u0414.\u041c\u041c.\u0413\u0413</code>",
-                reply_markup=cancel_kb, parse_mode="HTML"
-            )
-        except Exception:
-            await callback.message.answer(
-                "\u270f\ufe0f \u0412\u0432\u0435\u0434\u0438 \u0434\u0430\u0442\u0443: <code>\u0414\u0414.\u041c\u041c.\u0413\u0413</code>",
-                reply_markup=cancel_kb, parse_mode="HTML"
-            )
-        return
-    else:
-        if rm: rm["deadline"] = val
-        store_set_roadmaps(user_id, roadmaps)
-        _fire_sync()
-        await state.clear()
-    all_t = store_get_tasks(user_id)
-    text = _roadmap_card_text(rm, all_t) if rm else "\U0001f5fa"
-    try:
-        await callback.message.edit_text(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=get_roadmap_detail_inline(user_id, rm_id), parse_mode="HTML")
-
-
-@router.callback_query(F.data.startswith("rm_delete|"))
-async def cb_roadmap_delete_screen(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    rm_id = callback.data.split("|")[1]
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if not rm:
-        await callback.answer("\U0001f331 \u041d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", show_alert=True)
-        return
-    all_tasks = store_get_tasks(user_id)
-    count = len(_roadmap_live_tasks(rm, all_tasks))
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="\u2705 \u0414\u0430, \u0443\u0434\u0430\u043b\u0438\u0442\u044c", callback_data=f"rm_delete_confirm|{rm_id}")],
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data=f"rm_open|{rm_id}")],
-    ])
-    await callback.message.edit_text(
-        f"\U0001f5d1 <b>\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u00ab{rm['title']}\u00bb?</b>\n\n{count} \u0437\u0430\u0434\u0430\u0447 \u0431\u0443\u0434\u0443\u0442 \u0443\u0434\u0430\u043b\u0435\u043d\u044b",
-        reply_markup=kb, parse_mode="HTML"
-    )
-
-
-@router.callback_query(F.data.startswith("rm_delete_confirm|"))
-async def cb_roadmap_delete_do(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    user_id = str(callback.from_user.id)
-    rm_id = callback.data.split("|")[1]
-    roadmaps = store_get_roadmaps(user_id)
-    rm = next((r for r in roadmaps if r["roadmap_id"] == rm_id), None)
-    if rm:
-        dead_ids = set(rm.get("task_ids", []))
-        tasks = store_get_tasks(user_id)
-        tasks = [t for t in tasks if t.get("task_id") not in dead_ids]
-        store_set_tasks(user_id, tasks)
-        roadmaps = [r for r in roadmaps if r["roadmap_id"] != rm_id]
-        store_set_roadmaps(user_id, roadmaps)
-        _fire_sync()
-    count = len(roadmaps)
-    header = (
-        f"\U0001f5fa <b>\u0420\u043e\u0430\u0434\u043c\u0430\u043f\u044b</b> \u00b7 {count} \u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0445"
-        if count else
-        "\U0001f5fa <b>\u0420\u043e\u0430\u0434\u043c\u0430\u043f\u044b</b>\n\n\u041f\u043e\u043a\u0430 \u043f\u0443\u0441\u0442\u043e."
-    )
-    try:
-        await callback.message.edit_text(header, reply_markup=get_roadmaps_list_inline(user_id), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_roadmaps_list_inline(user_id), parse_mode="HTML")
-
-
-@router.callback_query(F.data == "rm_create")
-async def cb_roadmap_create_start(callback: CallbackQuery, state: FSMContext):
-    await callback.answer()
-    await state.set_state(RoadmapStates.waiting_for_title)
-    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434", callback_data="rm_list")
-    ]])
-    try:
-        await callback.message.edit_text("\U0001f5fa \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0433\u043e \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u0430:", reply_markup=cancel_kb)
-    except Exception:
-        await callback.message.answer("\U0001f5fa \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0433\u043e \u0440\u043e\u0430\u0434\u043c\u0430\u043f\u0430:", reply_markup=cancel_kb)
-
-
-@router.message(StateFilter(RoadmapStates.waiting_for_title))
-async def cb_roadmap_create_input(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    data = await state.get_data()
-    if data.get("_rm_from_llm"):
-        return
-    title = (message.text or "").strip()
-    if not title:
-        await message.answer("\U0001f331 \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u043d\u0435 \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043f\u0443\u0441\u0442\u044b\u043c")
-        return
-    import uuid as _uuid_rmc
-    roadmaps = store_get_roadmaps(user_id)
-    new_rm = {
-        "roadmap_id": f"rm_{_uuid_rmc.uuid4().hex[:8]}",
-        "title": title,
-        "deadline": None,
-        "task_ids": [],
-        "created": _today(),
-    }
-    roadmaps.append(new_rm)
-    store_set_roadmaps(user_id, roadmaps)
-    _fire_sync()
-    await state.clear()
-    all_t = store_get_tasks(user_id)
-    text = _roadmap_card_text(new_rm, all_t)
-    await message.answer(text, reply_markup=get_roadmap_detail_inline(user_id, new_rm["roadmap_id"]), parse_mode="HTML")
 
 @router.callback_query(F.data == "menu_tasks_mgmt_v2")
 async def cb_tasks_mgmt_v2(callback: CallbackQuery, state: FSMContext):
@@ -3247,34 +2730,6 @@ async def cb_edit_profile_back(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     # Показываем новый профиль с полной клавиатурой вместо старого с одной кнопкой
     await _show_profile(user_id, callback.message)
-
-def _roadmap_card_text(rm: dict, all_tasks: list) -> str:
-    """Build roadmap detail text — uses live tasks only, ignores orphaned IDs."""
-    live  = _roadmap_live_tasks(rm, all_tasks)
-    total = len(live)
-    done_cnt = sum(1 for t in live if t.get("status") == "completed")
-    pct   = round(done_cnt / total * 100) if total else 0
-    bar   = _roadmap_progress_bar(pct)
-    dl    = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-    lines = [
-        f"🗺 <b>{rm['title']}</b>",
-        f"{bar}  {done_cnt}/{total}  {pct}%{dl}",
-        ""
-    ]
-    for t in sorted(live, key=lambda t: (
-        3 if t.get("status") == "completed" else
-        2 if not t.get("deadline") else
-        (0 if t["deadline"] <= _today() else 1),
-        t.get("deadline") or "9999-99-99"
-    )):
-        if t.get("status") == "completed":
-            lines.append(f"  ✅ {t['title']}")
-        else:
-            t_dl = f" · {t['deadline']}" if t.get("deadline") else ""
-            ind  = _deadline_indicator(t.get("deadline", ""))
-            lines.append(f"  {ind}· {t['title']}{t_dl}")
-    return "\n".join(lines)
-
 
 # ─── Checklist unified show function ──────────────────────────────────────────
 
@@ -5414,22 +4869,6 @@ def _sort_by_deadline(tasks: list) -> list:
         return dl if dl else "9999-99-99"
     return sorted(tasks, key=key)
 
-def _sort_roadmap_tasks(task_ids: list, all_tasks: list) -> list:
-    """Sort roadmap tasks: urgent → by date → no deadline → completed last."""
-    task_by_id = {t.get("task_id"): t for t in all_tasks if t.get("task_id")}
-    tasks = [task_by_id[tid] for tid in task_ids if tid in task_by_id]
-    from datetime import datetime as _dts
-    today = _dts.now().strftime("%Y-%m-%d")
-    def sort_key(t):
-        if t.get("status") == "completed":
-            return (3, "9999-99-99")
-        dl = t.get("deadline")
-        if not dl:
-            return (2, "9999-99-99")
-        if dl <= today:
-            return (0, dl)  # urgent/overdue first
-        return (1, dl)
-    return sorted(tasks, key=sort_key)
 
 
 def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
@@ -7831,12 +7270,6 @@ async def handle_voice(message: Message, state: FSMContext):
             await rem_text_input(message, state)
         elif current_state == ReminderStates.waiting_for_weekdays.state:
             await cb_rem_weekdays_input(message, state)
-        elif current_state == RoadmapStates.waiting_for_title.state:
-            await cb_roadmap_create_input(message, state)
-        elif current_state == RoadmapStates.waiting_for_rename.state:
-            await cb_roadmap_rename_input(message, state)
-        elif current_state == RoadmapStates.waiting_for_add_task.state:
-            await cb_roadmap_new_task_input(message, state)
         else:
             # No active FSM — route to free conversation
             await free_conversation(message, state)
@@ -8212,7 +7645,6 @@ async def free_conversation(message: Message, state: FSMContext):
                         "GardenOnboardingStates:", "EditProfileStates:",
                         "TaskStates:", "TaskEditStates:", "ChecklistStates:",
                         "ReminderStates:", "LeaveStates:",
-                        "RoadmapStates:",
                     )
                     _is_blocked = current_state and any(
                         current_state.startswith(p) for p in _BLOCKING_PREFIXES
@@ -8506,18 +7938,8 @@ async def free_conversation(message: Message, state: FSMContext):
 
                             if to_close:
                                 closed_ids = {t.get("task_id") for t in to_close}
-                                # Tasks in roadmaps: mark completed. Others: remove.
-                                _roadmaps_all = store_get_roadmaps(user_id)
-                                _rm_task_ids = {tid3 for rm in _roadmaps_all for tid3 in rm.get("task_ids", [])}
-                                new_tasks = []
-                                for t in tasks:
-                                    if t.get("task_id") in closed_ids:
-                                        if t.get("task_id") in _rm_task_ids:
-                                            t["status"] = "completed"  # keep in roadmap
-                                            new_tasks.append(t)
-                                        # else: drop (normal task)
-                                    else:
-                                        new_tasks.append(t)
+                                # All tasks: drop on close (no roadmap logic)
+                                new_tasks = [t for t in tasks if t.get("task_id") not in closed_ids]
                                 store_set_tasks(user_id, new_tasks)
                                 total_res = 0
                                 for tc in to_close:
