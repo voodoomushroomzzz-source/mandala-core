@@ -891,11 +891,13 @@ def _seed_sphere_history_from_achievements(user_id: str, achievements: list) -> 
 
 # ─── Task helpers ─────────────────────────────────────────────────────────────
 
-def calculate_priority(deadline: str = None) -> int:
+def calculate_priority(deadline: str = None, tz_name: str = "Europe/Moscow") -> int:
     p = 5
     if deadline:
         try:
-            days = (datetime.fromisoformat(deadline) - datetime.now()).days
+            from zoneinfo import ZoneInfo as _ZI_cp
+            now = datetime.now(_ZI_cp(tz_name))
+            days = (datetime.fromisoformat(deadline) - now).days
             p += 2 if days < 0 else (1 if days <= 3 else 0)
         except Exception:
             pass
@@ -6542,7 +6544,7 @@ async def _tavily_search_raw(query: str, city: str = "", category: str = "defaul
     import hashlib as _hashlib
 
     q = f"{query} {city}".strip() if city else query
-    cache_key = _hashlib.md5(q.encode()).hexdigest()
+    cache_key = _hashlib.md5(f"{q}|{category}".encode()).hexdigest()
 
     # Проверяем кэш
     if cache_key in _search_cache:
