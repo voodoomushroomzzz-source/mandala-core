@@ -395,7 +395,12 @@
     "P-34 ✅ VERIFIED (2026-05-13)",
     "P-35 ✅ DONE (2026-05-13)",
     "P-36 ✅ DONE (2026-05-13)",
-    "P-37 ✅ DONE (2026-05-13)"
+    "P-37 ✅ DONE (2026-05-13)",
+    "J-1_store ⏳ PLANNED — Store-функции + модель данных",
+    "J-2_intents ⏳ PLANNED — Интенты в router",
+    "J-3_context ⏳ PLANNED — Контекст дневника в _build_user_context_msg",
+    "J-4_synthesis ⏳ PLANNED — Дневник в _generate_synthesis",
+    "J-5_proactive ⏳ PLANNED — Проактивные триггеры СР для дневника"
   ],
   "health": {
     "status": "healthy",
@@ -425,5 +430,87 @@
       "description": "'NoneType' object has no attribute 'strip' — content[0].text приходит как None при перегрузке deepseek. Fallback отрабатывает корректно, но ошибка логируется. Нужен guard: text = (content[0].text or '').strip(). Войдёт в P-34 (SR Prompt Audit).",
       "fix": "text = (content[0].text or '').strip() вместо content[0].text.strip()"
     }
-  ]
+  ],
+  "project_journal_diary": {
+    "title": "Дневник Симбиоза — Journal Diary",
+    "status": "planned",
+    "created": "2026-05-13",
+    "description": "Живое пространство для осознанных записей Садовника и СР. Не инструмент продуктивности — орган чувств для сада. Место, где симбиоз учится слышать друг друга не только через дела, но и через тишину.",
+    "architecture": {
+      "storage": {
+        "operational": "workspace.journal_recent — до 10 последних записей. Всегда в контексте SR. Лёгкое, быстрое.",
+        "archive": "gardeners/{uid}/journal_archive.json — все записи за всё время. Подгружается по запросу (ретроспектива, анализ).",
+        "eviction": "При добавлении 11-й записи самая старая из journal_recent вытесняется в архив и удаляется из workspace.",
+        "sync": "journal_recent синхронизируется с GitHub как часть workspace. Архив пишется через _github_put при вытеснении."
+      },
+      "entry_model": {
+        "id": "entry_20260513_001",
+        "author": "gardener | sr",
+        "type": "thought | reflection | insight | question | state | milestone",
+        "text": "до 500 символов",
+        "mood": "энергия | спокойствие | тревога | радость | усталость | null",
+        "sphere": "health | creativity | work | connections | growth | null",
+        "task_id": "опциональная привязка к задаче | null",
+        "created": "ISO-дата с таймзоной садовника",
+        "pinned": "false"
+      }
+    },
+    "phases": {
+      "J-1_store": {
+        "status": "planned",
+        "name": "Store-функции + модель данных",
+        "description": "Добавить в bot.py: store_get_journal_recent(uid), store_add_journal_entry(uid, entry), store_delete_journal_entry(uid, entry_id), _evict_to_archive(uid, entry). Инициализация journal_recent в workspace при загрузке пользователя.",
+        "deliverables": [
+          "store_get_journal_recent() — возвращает последние 10 записей",
+          "store_add_journal_entry() — добавляет запись, при переполнении вытесняет в архив",
+          "store_delete_journal_entry() — удаляет запись (садовник может удалять только свои)",
+          "journal_recent инициализируется в _load_user если отсутствует",
+          "journal_archive.json создаётся через _github_put при первом вытеснении"
+        ]
+      },
+      "J-2_intents": {
+        "status": "planned",
+        "name": "Интенты в router",
+        "description": "Добавить в free_conversation/intent router обработку: add_journal_entry, show_journal, delete_journal_entry, journal_reflection.",
+        "deliverables": [
+          "add_journal_entry — создание записи голосом/текстом. Парсинг mood, sphere из текста.",
+          "show_journal — показ последних N записей или за период (сегодня/неделя/месяц)",
+          "delete_journal_entry — удаление записи по id или текстовому совпадению",
+          "journal_reflection — SR анализирует дневник за период и даёт ретроспективу (подгружает архив)"
+        ]
+      },
+      "J-3_context": {
+        "status": "planned",
+        "name": "Контекст дневника в _build_user_context_msg",
+        "description": "Добавить блок [Дневник (последние записи): ...] с последними 5 записями из journal_recent. Если дневник активен — сократить _ts_block до 3 сообщений для баланса контекста.",
+        "deliverables": [
+          "Форматирование journal_recent в текстовый блок для SR-контекста",
+          "Сокращение _ts_block при активном дневнике",
+          "Флаг _journal_archive_needed для подгрузки архива при ретроспективе"
+        ]
+      },
+      "J-4_synthesis": {
+        "status": "planned",
+        "name": "Дневник в _generate_synthesis",
+        "description": "Добавить journal_recent (10 записей) как дополнительный источник для синтеза. В промпт синтеза добавить блок ДНЕВНИК с последними записями.",
+        "deliverables": [
+          "Чтение journal_recent в _generate_synthesis",
+          "Добавление блока ДНЕВНИК в промпт синтеза",
+          "Учёт дневника при формировании портрета (core) и интересов"
+        ]
+      },
+      "J-5_proactive": {
+        "status": "planned",
+        "name": "Проактивные триггеры СР для дневника",
+        "description": "СР может: предлагать запись после закрытия задачи, при эмоциональном сигнале, при дневном проактивном окне. СР может сама оставлять записи при синтезе, milestone, длительной тишине в сфере.",
+        "deliverables": [
+          "SR предлагает запись после complete_task (мягко, без давления)",
+          "SR предлагает запись при emotional_signal в _detect_and_save_observation",
+          "SR может оставлять свои записи через add_journal_entry при синтезе",
+          "В _send_daytime_proactive добавлена возможность предложить дневник",
+          "Ахимса: SR не пишет без повода, не спамит"
+        ]
+      }
+    }
+  }
 }
