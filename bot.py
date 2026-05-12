@@ -5342,6 +5342,11 @@ async def task_repeat_custom_days_input(message: Message, state: FSMContext):
     """Ввод дней недели для повторения задачи."""
     user_id = str(message.from_user.id)
     text = (message.text or "").strip()
+    # Allow text-based back navigation as fallback
+    if text.lower() in ("назад", "отмена", "back", "cancel"):
+        await state.set_state(TaskStates.waiting_for_repeat)
+        await _ask_repeat_task(message, state, edit=False)
+        return
     # reuse reminder days parser
     try:
         repeat = _parse_weekdays(text.lower())
@@ -5359,6 +5364,11 @@ async def task_repeat_custom_date_input(message: Message, state: FSMContext):
     import re as _re_td
     user_id = str(message.from_user.id)
     text = (message.text or "").strip()
+    # Allow text-based back navigation as fallback
+    if text.lower() in ("назад", "отмена", "back", "cancel"):
+        await state.set_state(TaskStates.waiting_for_repeat)
+        await _ask_repeat_task(message, state, edit=False)
+        return
     m = _re_td.match(r"(\d{2})\.(\d{2})\.(\d{2,4})$", text)
     if not m:
         await message.answer("🌀 Формат: <code>ДД.ММ.ГГ</code>  например <code>25.06.26</code>", parse_mode="HTML")
