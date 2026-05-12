@@ -932,6 +932,14 @@ def _track_interaction(telegram_id: str, intent: str = "", msg_type: str = "mess
     # Persist to workspace for silence detection
     ws = store_get_workspace(uid) or {}
     ws["last_interaction_date"] = today_str
+    # P-37: store exact datetime for daytime proactive window
+    from zoneinfo import ZoneInfo as _ZI_track
+    from datetime import datetime as _dt_track
+    try:
+        _tz_track = (store_get_profile(uid) or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        ws["last_interaction_datetime"] = _dt_track.now(_ZI_track(_tz_track)).isoformat()
+    except Exception:
+        ws["last_interaction_datetime"] = _dt_track.now().isoformat()
     store_set_workspace(uid, ws)
     # Daily stats
     if uid not in _daily_stats:
@@ -2427,6 +2435,8 @@ async def run_proactive_scheduler() -> None:
                         await check_silence_and_engage(uid, g)
                 except Exception:
                     await check_silence_and_engage(uid, g)
+            # P-37: daytime proactive window (12-19, 3h silence)
+            await _send_daytime_proactive(uid)
         # Birthday check
         for uid2, us2 in list(_store.items()):
             if not isinstance(us2, dict) or not us2.get("ready"):
@@ -4373,6 +4383,91 @@ async def _pick_engagement_message(telegram_id: str, days: int) -> str:
         return f"{name}, как ты? Что происходит? 🌿"
     return f"{name}, как ты? 🌿"
 
+
+async def _send_daytime_proactive(telegram_id: str) -> bool:
+    """Send proactive message during daytime window (12-19, 3h silence).
+    Returns True if message was sent."""
+    try:
+        uid = str(telegram_id)
+        ws = store_get_workspace(uid) or {}
+        # Already sent today?
+        if ws.get("_day_proactive_sent_date") == _today():
+            return False
+        prof = store_get_profile(uid)
+        if not prof:
+            return False
+        name = prof.get("name", "Садовник")
+        tz_name = prof.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        from zoneinfo import ZoneInfo as _ZI_dp
+        from datetime import datetime as _dt_dp, timedelta as _td_dp
+        try:
+            tz = _ZI_dp(tz_name)
+        except Exception:
+            tz = _ZI_dp("Europe/Moscow")
+        now = _dt_dp.now(tz)
+        hour = now.hour
+        # Window: 12:00–19:00
+        if hour < 12 or hour >= 19:
+            return False
+        # Check 3 hours since last interaction
+        last_dt_str = ws.get("last_interaction_datetime", "")
+        if last_dt_str:
+            try:
+                last_dt = _dt_dp.fromisoformat(last_dt_str)
+                if last_dt.tzinfo is None:
+                    last_dt = last_dt.replace(tzinfo=tz)
+                if (now - last_dt) < _td_dp(hours=3):
+                    return False
+            except Exception:
+                pass  # if parse fails, proceed
+        # Build context for SR
+        history = _get_history(uid)
+        recent = history[-10:] if history else []
+        history_text = "\n".join(
+            f"{'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')[:100]}"
+            for m in recent
+        ) if recent else "диалога ещё нет"
+        core = prof.get("deep_profile", {}).get("memory", {}).get("core", "")
+        interests = prof.get("deep_profile", {}).get("memory", {}).get("interests", {})
+        confirmed = interests.get("confirmed", [])
+        tasks = store_get_tasks(uid)
+        active = [t for t in tasks if t.get("status") != "completed"]
+        today_str = now.strftime("%Y-%m-%d")
+        hot = [t for t in active if t.get("deadline") and t["deadline"] <= today_str]
+        tomorrow_str = (now + _td_dp(days=1)).strftime("%Y-%m-%d")
+        tomorrow_tasks = [t for t in active if t.get("deadline") == tomorrow_str]
+        tasks_context = ""
+        if hot:
+            tasks_context += f"\nГорящие (сегодня/просрочены): {', '.join(t['title'] for t in hot[:3])}"
+        if tomorrow_tasks:
+            tasks_context += f"\nНа завтра: {', '.join(t['title'] for t in tomorrow_tasks[:3])}"
+        current_time = f"{now.strftime('%H:%M')}, {['пн','вт','ср','чт','пт','сб','вс'][now.weekday()]}"
+        prompt = (
+            f"Ты — СР, дух сада. Ты чувствуешь что садовник {name} не писал 3 часа.\n"
+            f"Сегодня вы уже общались — вот последний диалог:\n{history_text}\n\n"
+            f"Портрет садовника: {core[:400] if core else 'формируется'}\n"
+            f"Интересы: {', '.join(confirmed[:5]) if confirmed else 'не определены'}\n"
+            f"Активные задачи:{tasks_context if tasks_context else ' нет активных задач'}\n"
+            f"Текущее время: {current_time} (таймзона {tz_name})\n\n"
+            f"Руководствуясь ахимсой, напиши одно тёплое сообщение садовнику.\n"
+            f"Если чувствуешь что повода нет — верни "SKIP".\n"
+            f"Ответь ТОЛЬКО текстом сообщения или "SKIP". Без JSON."
+        )
+        msg = await _call_openrouter([
+            {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском. Руководствуйся ахимсой."},
+            {"role": "user", "content": prompt}
+        ])
+        if msg and msg.strip().upper() != "SKIP" and len(msg.strip()) >= 5:
+            await bot.send_message(int(uid), msg.strip(), reply_markup=get_main_keyboard())
+            ws["_day_proactive_sent_date"] = _today()
+            store_set_workspace(uid, ws)
+            _fire_sync()
+            logger.info(f"Daytime proactive sent to {uid}")
+            return True
+        return False
+    except Exception as e:
+        logger.error(f"Daytime proactive error for {telegram_id}: {e}")
+        return False
 
 async def check_silence_and_engage(telegram_id: str, gardener: dict) -> None:
     """Send proactive message if user silent 3+ days. Respects quiet hours."""
