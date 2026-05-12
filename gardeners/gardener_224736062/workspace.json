@@ -47,52 +47,6 @@
       "repeat": null
     },
     {
-      "task_id": "t_6835ebf3",
-      "title": "Свести",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-06-01",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-04-28"
-    },
-    {
-      "task_id": "t_a018b24a",
-      "title": "Сделать мастеринг",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_87e68797",
-      "title": "Сделать обложку",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_1dd4a5e1",
-      "title": "Опубликовать",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_4dc7d659",
-      "title": "Подготовить промокомпанию",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
       "task_id": "task_20260427_021",
       "title": "сходить в театр",
       "status": "todo",
@@ -107,65 +61,6 @@
       "completed": null,
       "notes": "",
       "repeat": null
-    },
-    {
-      "task_id": "task_20260427_022",
-      "title": "устроить свидание",
-      "status": "completed",
-      "label_id": "дом",
-      "label_name": "Личное",
-      "life_area": "connections",
-      "priority": 5,
-      "deadline": "2026-05-11",
-      "reminder": null,
-      "created": "2026-04-27",
-      "updated": "2026-04-27",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260427_022",
-      "title": "Записать минус",
-      "status": "completed",
-      "label_id": "творчество",
-      "label_name": "Творчество",
-      "life_area": "creativity",
-      "priority": 7,
-      "deadline": "2026-04-27",
-      "reminder": null,
-      "created": "2026-04-27",
-      "updated": "2026-04-27",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "t_46f9faf3",
-      "title": "Запись сессия 1",
-      "status": "completed",
-      "created": "2026-04-27",
-      "deadline": "2026-04-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_f89a42e7",
-      "title": "дополнить синтезаторы",
-      "status": "active",
-      "created": "2026-04-28",
-      "deadline": "2026-06-01",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-04-28"
-    },
-    {
-      "task_id": "t_08b361e6",
-      "title": "Студия вокал",
-      "status": "active",
-      "created": "2026-04-28",
-      "deadline": "2026-05-20",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-05-07"
     },
     {
       "task_id": "task_20260428_019",
@@ -353,26 +248,7 @@
     }
   ],
   "_decay_date": "2026-05-12",
-  "roadmaps": [
-    {
-      "roadmap_id": "rm_cbb8d586",
-      "title": "Выпустить трек \"Беги\"",
-      "deadline": "2026-07-27",
-      "created": "2026-04-26",
-      "task_ids": [
-        "t_6835ebf3",
-        "t_a018b24a",
-        "t_87e68797",
-        "t_1dd4a5e1",
-        "t_4dc7d659",
-        "task_20260427_022",
-        "t_46f9faf3",
-        "t_f89a42e7",
-        "t_08b361e6"
-      ],
-      "status": "active"
-    }
-  ],
+  "roadmaps": [],
   "sphere_resonance": {
     "health": 52,
     "creativity": 32,
