@@ -4735,8 +4735,8 @@ async def cmd_achievements(message: Message):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start")
         return
-    achievements = store_get_achievements(user_id)
-    if not achievements:
+    ach_count = store_get_achievements_count(user_id)
+    if not ach_count:
         await message.answer(
             "💎 Достижений пока нет.\n\nКаждое достижение добавляет слой к твоему резонансу.\n"
             "Просто напиши или скажи голосом: «добавь достижение — пробежал 5 км»",
@@ -4744,7 +4744,7 @@ async def cmd_achievements(message: Message):
         )
         return
 
-    text = f"<b>💎 Достижения · всего {len(achievements)}</b>"
+    text = f"<b>💎 Достижения · всего {ach_count}</b>"
     text += _build_sphere_stats(user_id, months=3)
     text += "\n\nДобавить: «добавь достижение — [что сделал]»"
     await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
@@ -4827,18 +4827,6 @@ async def ach_bonus(message: Message, state: FSMContext):
     icon = LIFE_AREA_ICONS.get(category, "🌱")
 
     user_id = str(message.from_user.id)
-    # Update store immediately
-    achievements = list(store_get_achievements(user_id))
-    achievements.append({
-        "id": f"ach_{len(achievements)+1:03d}",
-        "category": category,
-        "title": data.get("title", ""),
-        "description": data.get("description", ""),
-        "completed": _today(),
-        "resonance_bonus": bonus,
-        "icon": icon
-    })
-    store_set_achievements(user_id, achievements)
 
     # Update gardener resonance
     gardener = store_get_profile(user_id)
@@ -8971,17 +8959,6 @@ async def quick_add_achievement(callback: CallbackQuery):
     await callback.answer()
     user_id = str(callback.from_user.id)
     title = callback.data[3:]
-    achievements = list(store_get_achievements(user_id))
-    achievements.append({
-        "id": f"ach_{len(achievements)+1:03d}",
-        "category": "other",
-        "title": title,
-        "description": "",
-        "completed": _today(),
-        "resonance_bonus": 3,
-        "icon": "🌱"
-    })
-    store_set_achievements(user_id, achievements)
     # P-25r: use store_add_sphere_resonance (syncs both sphere + resonance_level correctly)
     new_res = store_add_sphere_resonance(user_id, "growth", 3)
     gardener = store_get_profile(user_id)
