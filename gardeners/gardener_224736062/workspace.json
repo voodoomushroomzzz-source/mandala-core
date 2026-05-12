@@ -47,52 +47,6 @@
       "repeat": null
     },
     {
-      "task_id": "t_6835ebf3",
-      "title": "Свести",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-06-01",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-04-28"
-    },
-    {
-      "task_id": "t_a018b24a",
-      "title": "Сделать мастеринг",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_87e68797",
-      "title": "Сделать обложку",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_1dd4a5e1",
-      "title": "Опубликовать",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_4dc7d659",
-      "title": "Подготовить промокомпанию",
-      "status": "active",
-      "created": "2026-04-26",
-      "deadline": "2026-07-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
       "task_id": "task_20260427_021",
       "title": "сходить в театр",
       "status": "todo",
@@ -109,75 +63,6 @@
       "repeat": null
     },
     {
-      "task_id": "task_20260427_022",
-      "title": "устроить свидание",
-      "status": "completed",
-      "label_id": "дом",
-      "label_name": "Личное",
-      "life_area": "connections",
-      "priority": 5,
-      "deadline": "2026-05-11",
-      "reminder": null,
-      "created": "2026-04-27",
-      "updated": "2026-04-27",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260427_022",
-      "title": "Записать минус",
-      "status": "completed",
-      "label_id": "творчество",
-      "label_name": "Творчество",
-      "life_area": "creativity",
-      "priority": 7,
-      "deadline": "2026-04-27",
-      "reminder": null,
-      "created": "2026-04-27",
-      "updated": "2026-04-27",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "t_eafdaa59",
-      "title": "Редактировать ударные",
-      "status": "active",
-      "created": "2026-04-27",
-      "deadline": "2026-05-17",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-05-10"
-    },
-    {
-      "task_id": "t_46f9faf3",
-      "title": "Запись сессия 1",
-      "status": "completed",
-      "created": "2026-04-27",
-      "deadline": "2026-04-27",
-      "label_name": null,
-      "reminder": null
-    },
-    {
-      "task_id": "t_f89a42e7",
-      "title": "дополнить синтезаторы",
-      "status": "active",
-      "created": "2026-04-28",
-      "deadline": "2026-06-01",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-04-28"
-    },
-    {
-      "task_id": "t_08b361e6",
-      "title": "Студия вокал",
-      "status": "active",
-      "created": "2026-04-28",
-      "deadline": "2026-05-20",
-      "label_name": null,
-      "reminder": null,
-      "updated": "2026-05-07"
-    },
-    {
       "task_id": "task_20260428_019",
       "title": "перепечатать все в меню",
       "status": "todo",
@@ -188,21 +73,6 @@
       "deadline": "2026-05-17",
       "reminder": null,
       "created": "2026-04-28",
-      "updated": "2026-05-09",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260429_020",
-      "title": "возместить два документа",
-      "status": "todo",
-      "label_id": "работа",
-      "label_name": "Работа",
-      "life_area": "work",
-      "priority": 7,
-      "deadline": "2026-05-17",
-      "reminder": null,
-      "created": "2026-04-29",
       "updated": "2026-05-09",
       "completed": null,
       "notes": ""
@@ -230,21 +100,6 @@
       "label_name": "Мандала",
       "life_area": "work",
       "priority": 5,
-      "deadline": "2026-05-17",
-      "reminder": null,
-      "created": "2026-05-04",
-      "updated": "2026-05-09",
-      "completed": null,
-      "notes": ""
-    },
-    {
-      "task_id": "task_20260504_034",
-      "title": "распечатать договор повара",
-      "status": "todo",
-      "label_id": "работа",
-      "label_name": "Работа",
-      "life_area": "work",
-      "priority": 7,
       "deadline": "2026-05-17",
       "reminder": null,
       "created": "2026-05-04",
@@ -298,21 +153,6 @@
       "notes": ""
     },
     {
-      "task_id": "task_20260506_025",
-      "title": "Провести музыкальную сессию",
-      "status": "todo",
-      "label_id": "творчество",
-      "label_name": "Творчество",
-      "life_area": "health",
-      "priority": 6,
-      "deadline": "2026-05-10",
-      "reminder": null,
-      "created": "2026-05-06",
-      "updated": "2026-05-07",
-      "completed": null,
-      "notes": ""
-    },
-    {
       "task_id": "task_20260506_026",
       "title": "загрузить новые фотографии на патрике Яндекс",
       "status": "todo",
@@ -328,17 +168,77 @@
       "notes": ""
     },
     {
-      "task_id": "task_20260507_027",
-      "title": "в инженерный deepseek-v4-pro",
+      "task_id": "task_20260511_024",
+      "title": "закупка маленьких коробок",
       "status": "todo",
-      "label_id": "мандала",
-      "label_name": "Мандала",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-05-19",
+      "reminder": null,
+      "created": "2026-05-11",
+      "updated": "2026-05-12",
+      "completed": null,
+      "notes": ""
+    },
+    {
+      "task_id": "task_20260511_025",
+      "title": "сходить на тренировку",
+      "status": "todo",
+      "label_id": "дом",
+      "label_name": "Личное",
+      "life_area": "health",
+      "priority": 6,
+      "deadline": "2026-05-13",
+      "reminder": null,
+      "created": "2026-05-11",
+      "updated": "2026-05-11",
+      "completed": null,
+      "notes": ""
+    },
+    {
+      "task_id": "task_20260512_023",
+      "title": "Выдать зп",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 7,
+      "deadline": "2026-05-12",
+      "reminder": null,
+      "created": "2026-05-12",
+      "updated": "2026-05-12",
+      "completed": null,
+      "notes": ""
+    },
+    {
+      "task_id": "task_20260512_015",
+      "title": "Пофиксить дверь на Бауманской",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-05-13",
+      "reminder": null,
+      "created": "2026-05-12",
+      "updated": "2026-05-12",
+      "completed": null,
+      "notes": ""
+    },
+    {
+      "task_id": "task_20260512_016",
+      "title": "завершить бонусную систему",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
       "life_area": "work",
       "priority": 5,
-      "deadline": "2026-05-14",
+      "deadline": "2026-05-31",
       "reminder": null,
-      "created": "2026-05-07",
-      "updated": "2026-05-07",
+      "created": "2026-05-12",
+      "updated": "2026-05-12",
       "completed": null,
       "notes": ""
     }
@@ -366,61 +266,27 @@
     }
   ],
   "updated": "2026-04-18",
-  "achievements_count": 65,
+  "achievements_count": 81,
   "checklists": [],
   "reminders": [
     {
-      "id": "rem_60c996dc",
-      "title": "Тест",
-      "datetime_iso": "2026-05-10T10:00",
-      "repeat": "custom_date:2026-05-11",
-      "active": true
-    },
-    {
-      "id": "rem_58cafe7f",
-      "title": "Гг",
-      "datetime_iso": "2026-05-11T10:01",
-      "repeat": "custom_days:mon,wed,sat",
-      "active": true
-    },
-    {
-      "id": "rem_673846b6",
-      "title": "Гг2",
-      "datetime_iso": "2026-06-09T10:02",
-      "repeat": "monthly",
+      "id": "rem_11bb5cb9",
+      "title": "Кондей лесная",
+      "datetime_iso": "2026-05-14T11:00",
+      "repeat": "once",
       "active": true
     }
   ],
-  "_decay_date": "2026-05-10",
-  "roadmaps": [
-    {
-      "roadmap_id": "rm_cbb8d586",
-      "title": "Выпустить трек \"Беги\"",
-      "deadline": "2026-07-27",
-      "created": "2026-04-26",
-      "task_ids": [
-        "t_6835ebf3",
-        "t_a018b24a",
-        "t_87e68797",
-        "t_1dd4a5e1",
-        "t_4dc7d659",
-        "task_20260427_022",
-        "t_eafdaa59",
-        "t_46f9faf3",
-        "t_f89a42e7",
-        "t_08b361e6"
-      ],
-      "status": "active"
-    }
-  ],
+  "_decay_date": "2026-05-12",
+  "roadmaps": [],
   "sphere_resonance": {
-    "health": 46,
-    "creativity": 24,
-    "work": 71,
-    "connections": 32,
+    "health": 52,
+    "creativity": 32,
+    "work": 86,
+    "connections": 38,
     "growth": 36
   },
-  "last_morning_date": "2026-05-10",
+  "last_morning_date": "2026-05-12",
   "achievements": [
     {
       "id": "ach_001",
@@ -450,13 +316,7 @@
       "icon": "🌱"
     }
   ],
-  "last_interaction_date": "2026-05-10",
-  "_pending_reminder_edit": {
-    "_rem_edit_id": "rem_673846b6",
-    "_rem_title": "Гг2",
-    "_rem_dt": "2026-06-09T10:02",
-    "_rem_repeat": "monthly"
-  },
+  "last_interaction_date": "2026-05-12",
   "pinned_message": {
     "message_id": 10549,
     "text": "Вот полный сад твоих активных задач, Дима 🌿\n\n<b>Личное 🏡</b>\n• подготовить резюме на удаленку — до 17 мая\n• Переделать загранпаспорт — до 21 мая\n• Купить линзы — до 15 мая\n• сходить в театр — до 27 мая\n• открыть скейт-сезон — до 20 мая\n\n<b>Работа 💼</b>\n• перепечатать все в меню — до 17 мая\n• возместить два документа — до 17 мая\n• Починить кондиционер на патриках — до 17 мая\n• распечатать договор повара — до 17 мая\n• загрузить новые фотографии на патрике Яндекс — до 17 мая\n\n<b>Мандала 🔮</b>\n• про",

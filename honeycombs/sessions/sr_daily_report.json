@@ -1,13 +1,14 @@
 {
-  "date": "2026-05-10",
-  "version": "7.39.13",
+  "date": "2026-05-11",
+  "version": "7.39.17",
   "gardeners": {
     "224736062": {
-      "messages": 15,
+      "messages": 21,
       "tasks_created": 0,
       "tasks_completed": 0,
       "achievements": 0,
       "intents": {
+        "add_task": 1,
         "conversation": 5
       }
     }

@@ -1,13 +1,18 @@
 {
-  "last_interaction_date": "2026-05-10",
+  "tasks": [],
+  "groups": [],
+  "achievements": [],
   "sphere_resonance": {
     "health": 20,
     "creativity": 20,
     "work": 20,
     "connections": 20,
-    "growth": 22
+    "growth": 20
   },
+  "reminders": [],
   "checklists": [],
-  "achievements_count": 1,
-  "last_morning_date": "2026-05-10"
+  "roadmaps": [],
+  "updated": "2026-05-12",
+  "last_morning_date": "2026-05-12",
+  "_decay_date": "2026-05-12"
 }

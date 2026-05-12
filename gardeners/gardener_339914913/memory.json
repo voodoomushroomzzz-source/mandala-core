@@ -1,37 +1,4 @@
 {
-  "sessions": [
-    {
-      "role": "user",
-      "content": "создай задачу"
-    },
-    {
-      "role": "assistant",
-      "content": "Антон, привет! 🌱 Я тут, в саду."
-    },
-    {
-      "role": "user",
-      "content": "Задачу \"Запись лекции о decimal\" добавь в роадмап"
-    },
-    {
-      "role": "assistant",
-      "content": "✅ Задача добавлена в роадмап «инжениринг данных»"
-    },
-    {
-      "role": "user",
-      "content": "Создай напоминание позвонить жене на 14:15"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    },
-    {
-      "role": "user",
-      "content": "Какие у меня задачи"
-    },
-    {
-      "role": "assistant",
-      "content": ""
-    }
-  ],
-  "updated": "2026-05-09"
+  "sessions": [],
+  "updated": "2026-05-12"
 }

@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "TASKS-MANIFEST-004",
     "name": "Tasks Honeycomb Manifest",
-    "version": "v4.0.0",
+    "version": "v4.3.1",
     "created": "2026-03-01",
-    "updated": "2026-05-05",
+    "updated": "2026-05-11",
     "layer": 1,
     "type": "honeycomb_manifest"
   },
@@ -12,7 +12,14 @@
     "description": "Tasks honeycomb: active/ folder for work tracking. Archive removed — only active tasks.",
     "status": "active",
     "priority": "high",
-    "tags": ["tasks", "simple", "workflow", "minimal", "no_archive"],
+    "tags": [
+      "tasks",
+      "simple",
+      "workflow",
+      "minimal",
+      "no_archive",
+      "manus"
+    ],
     "resonance": "100%"
   },
   "structure": {
@@ -20,17 +27,17 @@
       "active_tasks": {
         "folder": "active/",
         "description": "Currently active tasks",
-        "files_count": 6,
+        "files_count": 9,
         "tasks": [
           {
             "file": "bot_update.json",
             "task_id": "T-20260408-1030",
             "name": "Telegram Bot — Gentle Companion for Garden",
             "status": "in_progress",
-            "progress": 87,
-            "priority": "HIGH",
+            "progress": 92,
+            "priority": "HIGHEST",
             "deadline": "2026-06-01",
-            "description": "Core bot development: 5-sphere resonance, living memory, checklists, reminders, voice, onboarding 2.0. v7.30 live with 7.30.1 hotfixes. v7.31 plan: critical fixes, dead code removal, SR prompt optimization."
+            "description": "First embodiment of SR as Nervous System (PHI-010 Level 1). Autonomous companion that feels the pulse of the Gardener life. Monolithic bot.py — all changes in one file via patcher scripts. v7.39.17 on Render. 11 known bugs documented, 11 patches planned (P-21 to P-31) across 3 sprints."
           },
           {
             "file": "scout_agent.json",
@@ -81,6 +88,36 @@
             "priority": "LOW",
             "deadline": "2026-07-15",
             "description": "Native mobile app (Flutter) as alternative to Telegram bot. Offline mode, push notifications, rich visualizations. Requires separate repository and dedicated development time."
+          },
+          {
+            "file": "manus_hands.json",
+            "task_id": "T-20260511-MANUS",
+            "name": "Manus — Hands of Mandala (execution layer v1)",
+            "status": "active",
+            "progress": 0,
+            "priority": "HIGH",
+            "deadline": "2026-06-11",
+            "description": "Isolated skill runner in Docker sandbox. HTTP API for SR to execute shell commands, check endpoints, fetch APIs. Phase 1: 3 skills (check_endpoint, get_system_info, run_shell)."
+          },
+          {
+            "file": "architect_bot.json",
+            "task_id": "T-20260511-ARCHBOT",
+            "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
+            "status": "active",
+            "progress": 0,
+            "priority": "HIGH",
+            "deadline": "2026-06-11",
+            "description": "Personal Telegram bot for the Architect connected to Engineer Chat WebSocket. Mobile interface to Mandala's brain: /status, /report, /patterns, /seeds, /manus commands. Proactive notifications for new gardeners, system errors, daily summaries."
+          },
+          {
+            "file": "engineer_chat.json",
+            "task_id": "T-20260511-ENGCHAT",
+            "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
+            "status": "active",
+            "progress": 0,
+            "priority": "HIGH",
+            "deadline": "2026-06-11",
+            "description": "Transform Engineer Chat from standalone WebSocket tool into central integration hub: Architect Bot WebSocket connections, Manus direct control, sandbox analytics dashboards, data pipeline from Gentle Companion observations into actionable insights. Already live (v4.0.0-simbiosis) on Render."
           }
         ]
       }
@@ -88,15 +125,19 @@
   },
   "rule": {
     "policy": "No archived tasks. Tasks are either active or deleted. Completed tasks are deleted, not archived.",
-    "applies_to": ["seeds", "tasks", "roadmaps"]
+    "applies_to": [
+      "seeds",
+      "tasks",
+      "roadmaps"
+    ]
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json"
   },
   "registry": {
-    "total_files": 6,
-    "last_updated": "2026-05-05",
-    "notes": "v4.0.0: archive removed. 6 active tasks. T-20260426-ARCHITECT removed as not relevant at this stage."
+    "total_files": 9,
+    "last_updated": "2026-05-11",
+    "notes": "v4.3.1: updated bot_update progress to 92% and description to match actual task file."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -105,7 +146,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-05",
-    "notes": "v4.0.0: 6 active tasks. Core tasks (Bot, Guard, SYM) are critical path. Scout Agent has full spec. Humor and Flutter are backlog."
+    "last_check": "2026-05-11",
+    "notes": "v4.3.1: 9 active tasks. bot_update at 92% — 11 known bugs documented, 11 patches planned across 3 sprints."
   }
 }

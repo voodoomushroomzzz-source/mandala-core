@@ -1,22 +1,7 @@
 {
-  "tasks": [
-    {
-      "task_id": "task_20260504_001",
-      "title": "сходить к врачу",
-      "status": "todo",
-      "group_id": "group_001",
-      "life_area": "other",
-      "priority": 5,
-      "deadline": null,
-      "estimated_hours": null,
-      "created": "2026-05-04",
-      "updated": "2026-05-04",
-      "completed": null,
-      "notes": ""
-    }
-  ],
+  "tasks": [],
   "groups": [],
-  "updated": "2026-05-04",
+  "achievements": [],
   "sphere_resonance": {
     "health": 20,
     "creativity": 20,
@@ -24,14 +9,11 @@
     "connections": 20,
     "growth": 20
   },
-  "achievements_count": 0,
-  "reminders": [
-    {
-      "id": "rem_seed_hello",
-      "title": "Привет, друг! Как дела?",
-      "repeat": "once",
-      "active": true,
-      "datetime_iso": "2026-05-07T11:00+03:00"
-    }
-  ]
+  "reminders": [],
+  "checklists": [],
+  "roadmaps": [],
+  "updated": "2026-05-12",
+  "_decay_date": "2026-05-12",
+  "last_morning_date": "2026-05-12",
+  "last_interaction_date": "2026-05-12"
 }

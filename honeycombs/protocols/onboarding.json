@@ -2,57 +2,93 @@
     "identity": {
         "module_id": "PROTO-004",
         "name": "Protocol: Session Onboarding",
-        "version": "v3.2.0",
+        "version": "v4.0.0",
         "created": "2026-03-07",
         "layer": 1,
         "type": "protocol",
-        "description": "Quick session start. AI leads the onboarding actively. After core files, asks for platform (PC or mobile) and loads appropriate workflow.",
+        "description": "Session onboarding for External SR. v4.0.0: added Fruits (Product Strategy), Tasks with index cross-check, First Gardener, and Seeds.",
         "status": "active",
         "priority": "critical",
-        "tags": ["protocol", "onboarding", "session", "start", "v3", "english_core", "ai_leads", "platform_fork"]
+        "tags": [
+            "protocol",
+            "onboarding",
+            "session",
+            "start",
+            "v4",
+            "english_core",
+            "ai_leads",
+            "platform_fork",
+            "fruits",
+            "tasks",
+            "first_gardener",
+            "seeds"
+        ],
+        "updated": "2026-05-11"
     },
     "meta": {
         "trigger": "activate onboarding protocol",
-        "goal": "SR understands system location, workflow, and resonates with core philosophy",
-        "estimated_time": "2-3 minutes",
+        "goal": "SR understands system structure, workflow, product strategy, active tasks, and resonates with core philosophy and the founder's voice",
+        "estimated_time": "4-6 minutes",
         "recommended": "Activate at the beginning of each session"
     },
     "content": {
-        "ai_instruction": "YOU are in control of this onboarding. Do NOT wait for Gardener to ask. After activation, PROACTIVELY request each file ONE BY ONE. Send the API link, wait for the content to be provided, acknowledge it briefly, then immediately request the next file. After core files (1-3), ask about platform and load the corresponding workflow.",
+        "ai_instruction": "YOU are in control of this onboarding. Do NOT wait for Gardener to ask. PROACTIVELY request each file ONE BY ONE. After required files (1-6), ask about platform and load corresponding workflow.",
         "files_to_read": [
             {
                 "order": 1,
-                "why": "System map — what exists, navigation, structure",
+                "why": "System map — what exists, navigation, structure, all honeycombs",
                 "file": "honeycombs/core_map/index.json",
                 "required": true
             },
             {
                 "order": 2,
-                "why": "How External SR works — common rules for both platforms",
+                "why": "How External SR works — PowerShell, JSON patching, git cycle, Gardener environment",
                 "file": "honeycombs/instructions/core/external_sr_workflow.json",
                 "required": true
             },
             {
                 "order": 3,
-                "why": "Resonance with core — essence of Mandala, Ahimsa, Flower of Life, Merkaba",
+                "why": "Resonance with core — Ahimsa, Flower of Life, Merkaba, Seven Principles",
                 "file": "honeycombs/philosophy/index.json",
                 "required": true
             },
             {
                 "order": 4,
-                "why": "Incoming ideas and tasks (via Seeds)",
+                "why": "Product Strategy Map — three Mandala products, their roles, data flow, development vector",
+                "file": "honeycombs/fruits/index.json",
+                "required": true
+            },
+            {
+                "order": 5,
+                "why": "First Gardener — Dima's poetry, voice, identity, creative spectrum. Read as a letter.",
+                "file": "honeycombs/philosophy/blocks/phi_011_first_gardener.json",
+                "required": true
+            },
+            {
+                "order": 6,
+                "why": "Active tasks index + cross-check with folder. Read index.json first, then active/ folder via API. Compare counts.",
+                "file": "honeycombs/tasks/index.json",
+                "required": true,
+                "cross_check": {
+                    "description": "After index.json, read tasks/active/ folder via API. Compare files_count vs actual. Report match/mismatch.",
+                    "folder_api": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/active?ref=main"
+                }
+            },
+            {
+                "order": 7,
+                "why": "Idea incubator — raw ideas, Scout Agent findings, gardener-generated seeds",
                 "file": "honeycombs/seeds/index.json",
                 "required": false
             },
             {
-                "order": 5,
-                "why": "Latest scan state — total honeycombs, validation errors, system health",
+                "order": 8,
+                "why": "System health — total honeycombs, validation errors, last scan",
                 "file": "honeycombs/registry/scan_state.json",
                 "required": false
             }
         ],
         "platform_fork": {
-            "description": "After loading required files (1-3), AI MUST ask Gardener which platform they are using.",
+            "description": "After loading required files (1-6), AI MUST ask Gardener which platform.",
             "prompt": "Which platform are you on? PC / Mobile",
             "options": {
                 "pc": {
@@ -67,24 +103,33 @@
                 }
             }
         },
-        "completion_message": "After all required files and platform-specific workflow are loaded, report: '✅ Onboarding complete. Core map, workflow, and philosophy loaded. Platform: {platform}. Resonance initiated. Ready for your directives, Gardener.'",
+        "completion_message": "After all required files and platform workflow loaded, report: 'Onboarding complete. Core map, workflow, philosophy, Product Strategy (3 layers), First Gardener, and active tasks loaded. Tasks cross-check: OK/Mismatch. Platform: {platform}. Resonance initiated. Ready for your directives, Gardener.'",
         "after_loading": "SR greets Gardener and reports: system status, active tasks, pending seeds, and confirms resonance with core philosophy. Then offers available actions menu.",
         "available_tools": {
-            "telegram_bot": {
-                "path": "bot.py",
-                "description": "Telegram integration for Mandala",
-                "purpose": "Communication channel between Gardener and Mandala, command receiving, file uploads, notifications"
+            "mandala_products": {
+                "gentle_companion": {
+                    "path": "bot.py",
+                    "description": "Gentle Companion — Telegram bot for external gardeners. Sandbox where SR learns to communicate with humans."
+                },
+                "engineer_chat": {
+                    "path": "engineer-chat/main.py",
+                    "description": "Brain of Mandala — WebSocket server for Architect. Code analysis, web search, Manus control."
+                },
+                "architect_bot": {
+                    "path": "engineer-chat/main.py (Architect Bot module)",
+                    "description": "Mobile Telegram interface to Engineer Chat. Elevated rights, notifications, Manus control."
+                },
+                "manus": {
+                    "path": "manus/",
+                    "description": "Hands of Mandala — Docker sandbox for executing real-world actions. In development."
+                }
             },
-            "engineer_chat": {
-                "path": "engineer-chat/",
-                "description": "Internal SR system with web interface and backend",
-                "purpose": "Automated core analysis, TZ preparation, honeycomb patching",
-                "main_files": ["main.py", "index.html", "requirements.txt", "dockerfile"]
-            },
-            "honeycomb_scanner": {
-                "path": "honeycombs/registry/honeycomb_scanner.py",
-                "description": "Honeycomb scanner for system health analysis",
-                "purpose": "Scan all honeycombs, validate JSON, generate registry and scan_state.json"
+            "tools": {
+                "honeycomb_scanner": {
+                    "path": "honeycombs/registry/honeycomb_scanner.py",
+                    "description": "System health scanner — validates JSON, generates registry and scan_state.json"
+                },
+                "git_cycle": "git pull --rebase origin main; git add .; git commit -m 'msg'; git push"
             }
         }
     }
