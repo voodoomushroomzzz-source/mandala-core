@@ -5298,7 +5298,7 @@ async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
         # Показать выбор дней недели через текстовый ввод
         await state.set_state(TaskStates.waiting_for_repeat)
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="← Назад", callback_data="trep_back")]
+            [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")]
         ])
         try:
             await callback.message.edit_text(
@@ -5314,7 +5314,7 @@ async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
         return
     if val == "custom_date":
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="← Назад", callback_data="trep_back")]
+            [InlineKeyboardButton(text="❌ Отмена", callback_data="cancel_task")]
         ])
         try:
             await callback.message.edit_text(
@@ -5328,10 +5328,7 @@ async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
             )
         await state.set_state(TaskStates.waiting_for_repeat_custom_date)
         return
-    if val == "back":
-        await state.clear()
-        await callback.message.answer("🌿 Возвращаемся", reply_markup=get_main_keyboard())
-        return
+# trep_back removed — handled by cancel_task via FSM state clear
     repeat = None if val == "once" else val
     await state.update_data(repeat=repeat)
     user_id = str(callback.from_user.id)
