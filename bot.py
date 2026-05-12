@@ -5330,7 +5330,7 @@ async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
         return
     if val == "back":
         await state.set_state(TaskStates.waiting_for_repeat)
-        await _ask_repeat_task(callback.message, state, edit=True)
+        await _ask_repeat_task(callback.message, state, edit=False)
         return
     repeat = None if val == "once" else val
     await state.update_data(repeat=repeat)
