@@ -571,7 +571,7 @@ async def _load_user(telegram_id: str) -> None:
     store = _get_user_store(uid)
     store["ready"] = False
     store["profile"]   = profile if isinstance(profile, dict) else None
-    _ws = workspace if isinstance(workspace, dict) else {"tasks": [], "groups": [], "achievements": []}
+    _ws = workspace if isinstance(workspace, dict) else {"tasks": [], "groups": []}
     # Auto-cleanup: remove tasks with empty or very short title
     _raw_tasks = _ws.get("tasks", [])
     _clean_tasks = [t for t in _raw_tasks if len((t.get("title") or "").strip()) >= 2]
