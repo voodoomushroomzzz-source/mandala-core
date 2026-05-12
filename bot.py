@@ -2625,6 +2625,7 @@ async def tedit_deadline_cb(callback: CallbackQuery, state: FSMContext):
 
     # Custom date — ask for text input
     if val == "custom":
+        await state.update_data(edit_task_id=tid)
         await state.set_state(TaskEditStates.waiting_for_custom_deadline)
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="❌ Отмена", callback_data=f"task_edit_{tid}")]
