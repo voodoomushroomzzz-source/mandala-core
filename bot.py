@@ -6761,7 +6761,8 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
                 }
             )
             if resp.status_code == 200:
-                return resp.json()["choices"][0]["message"]["content"].strip()
+                content = resp.json()["choices"][0]["message"]["content"]
+                return (content or "").strip()
             elif resp.status_code == 429:
                 logger.warning(f"Rate limit on {model} (idx={model_idx}), trying next")
                 return await _call_openrouter(messages, model_idx + 1)
