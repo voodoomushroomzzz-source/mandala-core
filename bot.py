@@ -5329,6 +5329,7 @@ async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
         await state.set_state(TaskStates.waiting_for_repeat_custom_date)
         return
     if val == "back":
+        await state.set_state(TaskStates.waiting_for_repeat)
         await _ask_repeat_task(callback.message, state, edit=True)
         return
     repeat = None if val == "once" else val
@@ -5343,10 +5344,10 @@ async def task_repeat_custom_days_input(message: Message, state: FSMContext):
     text = (message.text or "").strip()
     # reuse reminder days parser
     try:
-        repeat = _parse_custom_days(text)
+        repeat = _parse_weekdays(text.lower())
     except Exception:
         repeat = None
-    if not repeat or repeat == "custom_days:":
+    if not repeat or repeat == "custom_days:" or repeat == "once":
         await message.answer("🌀 Не понял дни. Попробуй: <code>пн ср пт</code>", parse_mode="HTML")
         return
     await state.update_data(repeat=repeat)
@@ -9031,9 +9032,7 @@ async def on_startup():
     from aiogram.types import BotCommand
     await bot.set_my_commands([
         BotCommand(command="start",     description="🌱 Войти в сад"),
-        BotCommand(command="restart",   description="🔄 Перезагрузить"),
         BotCommand(command="privacy",   description="🔐 Мои данные"),
-        BotCommand(command="changelog", description="🆕 Обновления"),
         BotCommand(command="leave",     description="🚪 Покинуть сад"),
     ])
     logger.info("Bot commands registered")
