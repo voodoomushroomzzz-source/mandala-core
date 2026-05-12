@@ -1269,7 +1269,6 @@ async def _show_profile(user_id: str, message: Message):
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="🚀 Роадмапы", callback_data="rm_list"),
             InlineKeyboardButton(text="⚡ Задачи", callback_data="menu_tasks_mgmt_v2"),
         ],
         [
@@ -6664,7 +6663,7 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|create_label|move_task|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task|pin_message|unpin_message",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|create_label|move_task|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|pin_message|unpin_message",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|...", "tasks": [{"title":"...","deadline":"YYYY-MM-DD|null","label":"...|null"}]} или null
@@ -6764,22 +6763,6 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "покажи напоминания", "мои напоминания" → show_reminders, 0.95
 - "удали напоминание X" → delete_reminder, action.title=X, 0.95
 
-РОАДМАПЫ (цели с задачами):
-- "покажи роадмапы", "мои цели", "что в роадмапах" → show_roadmaps, 0.95
-- "создай роадмап X" → create_roadmap, action.title="X", 0.9
-- "роадмап X: задача1, задача2, задача3" → create_roadmap, action.title="X", action.tasks=["задача1","задача2","задача3"], 0.95
-- "добавь задачу X в роадмап Y" → roadmap_add_task, action.roadmap="Y", action.title="X", 0.95
-- "создай задачу X в роадмап Y", "добавь в роадмап Y задачу X с дедлайном Z" → roadmap_add_task, action.roadmap="Y", action.title="X", action.deadline="Z", 0.95
-- "добавь сюда задачу X", "создай в нём задачу X" (роадмап ясен из контекста) → roadmap_add_task, action.roadmap="", action.title="X", action.deadline="Z если указан", 0.95
-- ВАЖНО: если садовник говорит «сюда», «в него», «в этот роадмап» — action.roadmap="" (пустое), SR определит роадмап по контексту
-- список задач для роадмапа (нумерованный, с дедлайнами) → roadmap_add_task, action.roadmap="Y", action.tasks=[{"title":"X1","deadline":"YYYY-MM-DD"},{"title":"X2","deadline":"YYYY-MM-DD"},...]
-  Пример: "добавь задачи в роадмап Y: 1. задача A до 05.05, 2. задача B до 10.05" → roadmap_add_task, action.roadmap="Y", action.tasks=[{"title":"задача A","deadline":"2026-05-05"},{"title":"задача B","deadline":"2026-05-10"}]
-- "убери задачу X из роадмапа Y" → roadmap_remove_task, action.roadmap="Y", action.title="X", 0.95
-- "удали роадмап X" → delete_roadmap, action.title="X", 0.95
-- "переименуй роадмап X в Y" → rename_roadmap, action.title="X", action.value="Y", 0.95
-- "поставь дедлайн роадмапа X на Y" → roadmap_set_deadline, action.title="X", action.value="Y", 0.95
-- "как дела с роадмапом X", "прогресс по X" → show_roadmaps, action.title="X", 0.9
-- ВАЖНО: роадмап — это цель с задачами, не просто задача. Максимум 3 роадмапа одновременно.
 - "закрой задачи X и Y", "закрой обе" → complete_task, action.titles=["X","Y"], 0.95
 - "закрой все задачи на сегодня" → complete_task, action.period=today, 0.95
 - "закрой все задачи группы X", "закрыть всё в группе X" → complete_task, action.label="X", 0.95
@@ -6879,7 +6862,7 @@ SR_INTENT_MAP = """ПЯТЬ СФЕР РЕЗОНАНСА (как они живу�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|show_roadmaps|create_roadmap|delete_roadmap|rename_roadmap|roadmap_set_deadline|roadmap_add_task|roadmap_remove_task",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|...", "tasks": [{"title":"...","deadline":"YYYY-MM-DD|null","label":"...|null"}]} или null
@@ -7031,8 +7014,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
         f"[Группы задач: {groups_list}]\n"
-        f"[Активные задачи ({len(active)}):\n{tasks_block}\n]\n"
-        f"[Роадмапы:\n{roadmaps_block}\n]"
+        f"[Активные задачи ({len(active)}):\n{tasks_block}\n]"
         f"{_sphere_hist_block}"
         f"{_ts_block}"
         f"{_ts_summary}"
