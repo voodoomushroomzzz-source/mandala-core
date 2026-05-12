@@ -3441,8 +3441,7 @@ async def cb_profile_achievements(callback: CallbackQuery):
     if ach_count == 0:
         text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу."
     else:
-        text = f"<b>💎 Достижения · всего {ach_count}</b>\n"
-        text += "\n<b>📊 Статистика по месяцам:</b>"
+        text = f"<b>💎 Достижения · всего {ach_count}</b>"
         text += _build_sphere_stats(user_id, months=3, show_tasks=False)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="ach_add_from_menu")],
@@ -5326,8 +5325,7 @@ async def cmd_achievements(message: Message):
         )
         return
 
-    text = f"<b>💎 Достижения · всего {len(achievements)}</b>\n"
-    text += "\n<b>📊 Статистика по месяцам:</b>"
+    text = f"<b>💎 Достижения · всего {len(achievements)}</b>"
     text += _build_sphere_stats(user_id, months=3)
     text += "\n\nДобавить: «добавь достижение — [что сделал]»"
     await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
@@ -5876,13 +5874,15 @@ async def task_reminder_text(message: Message, state: FSMContext):
     await _ask_repeat_task(message, state, edit=False)
 
 def _get_repeat_task_keyboard() -> InlineKeyboardMarkup:
-    """Simple repeat picker for task FSM."""
+    """Full repeat picker for task FSM — same options as task edit."""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="1️⃣ Однократно", callback_data="trep_once")],
-        [InlineKeyboardButton(text="🔁 Каждый день", callback_data="trep_daily")],
-        [InlineKeyboardButton(text="📅 Раз в неделю", callback_data="trep_weekly")],
-        [InlineKeyboardButton(text="🗓 Раз в месяц", callback_data="trep_monthly")],
-        [InlineKeyboardButton(text="⏭ Пропустить", callback_data="trep_skip")],
+        [InlineKeyboardButton(text="1️⃣ Однократно",       callback_data="trep_once")],
+        [InlineKeyboardButton(text="🔁 Каждый день",       callback_data="trep_daily")],
+        [InlineKeyboardButton(text="📅 По будням",         callback_data="trep_weekdays")],
+        [InlineKeyboardButton(text="🏖 По выходным",       callback_data="trep_weekends")],
+        [InlineKeyboardButton(text="📆 Раз в неделю",      callback_data="trep_weekly")],
+        [InlineKeyboardButton(text="🗓 Раз в месяц",       callback_data="trep_monthly")],
+        [InlineKeyboardButton(text="🌿 Раз в год",         callback_data="trep_yearly")],
     ])
 
 async def _ask_repeat_task(message: Message, state: FSMContext, edit: bool = False):
@@ -5901,8 +5901,8 @@ async def _ask_repeat_task(message: Message, state: FSMContext, edit: bool = Fal
 @router.callback_query(F.data.startswith("trep_"), StateFilter(TaskStates.waiting_for_repeat))
 async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    val = callback.data[5:]  # once / daily / weekly / monthly / skip
-    repeat = None if val == "skip" else (None if val == "once" else val)
+    val = callback.data[5:]  # once / daily / weekdays / weekends / weekly / monthly / yearly
+    repeat = None if val == "once" else val
     await state.update_data(repeat=repeat)
     user_id = str(callback.from_user.id)
     await _ask_group(callback.message, state, user_id, edit=True)
@@ -7657,7 +7657,7 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
                 m_label = f"{_RU_MONTHS_S[m_num]} {m_year}"
             except Exception:
                 m_label = m_str
-            lines.append(f"\n\n{m_label}:")
+            lines.append(f"\n\n<b>{m_label}:</b>")
             has_data = False
             for sphere, sname in sphere_names.items():
                 d = month_data.get(sphere, {})
