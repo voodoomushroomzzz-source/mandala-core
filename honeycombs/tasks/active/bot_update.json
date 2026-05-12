@@ -8,7 +8,7 @@
   "updated": "2026-05-12",
   "progress": 97,
   "current_version": "7.39.23",
-  "note_version": "Реальная версия с патчами ~7.39.32",
+  "note_version": "Актуальная версия с патчами ~7.39.38",
   "dev_rules": [
     "ВСЕГДА обновлять BOT_VERSION и BOT_LATEST_UPDATE на каждом патче",
     "BOT_LATEST_UPDATE text — ТОЛЬКО через \\n в строках или тройные кавычки. НИКОГДА \\ в конце строки (это string continuation без \\n!)",
@@ -151,6 +151,56 @@
       "name": "SR_INTENT_LIGHT: перенос строки без маркеров = список задач",
       "date": "2026-05-12",
       "commit": "ce26afa9"
+    },
+    "H1_roadmaps_cleanup": {
+      "name": "H-1a/b: Убраны _roadmaps_upd/_rms_upd из complete_task и edit_task",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "H2_timezone_history": {
+      "name": "H-2a/b: История сообщений + _ts_summary → timezone садовника",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "H3_repeat_keyboard": {
+      "name": "H-3: Repeat keyboard → дни недели + своя дата (7 вариантов), FSM-состояния, handlers",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "H4_dedup_add_task": {
+      "name": "H-4: Dedup при add_task — точные дубли блокируются",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "G1_G6_roadmaps_full_removal": {
+      "name": "G1-G6: Полная зачистка роадмапов — константы, store, FSM, handlers, фильтры, place picker, intent router, промпты",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "PATCHER_A_tasks_ux": {
+      "name": "Патчер A: Tasks UX (14 изменений) — новая задача с главного экрана, +Напоминание +Удалить, FSM с повтором, возврат в группу, Дополнить через чат, меню напоминаний",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "PATCHER_B_achievements": {
+      "name": "Патчер B: Достижения — жирный заголовок + отступы между месяцами",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "PATCHER_E_roadmaps_ui_prompt": {
+      "name": "Патчер E: Роадмапы убраны из UI + промпта + контекста",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "PATCHER_C_full_repeat_fsm": {
+      "name": "Патчер C: Полные повторения в FSM (7 вариантов)",
+      "date": "2026-05-12",
+      "commit": "claude-session"
+    },
+    "PATCHER_D_achievements_no_stats_header": {
+      "name": "Патчер D: Достижения — без 'Статистика по месяцам' + месяца жирным",
+      "date": "2026-05-12",
+      "commit": "claude-session"
     }
   },
   "known_bugs": {
@@ -322,6 +372,16 @@
     "HOTFIX_checklist_multiline ✅ DONE (2026-05-12)",
     "HOTFIX_fake_markers ✅ DONE (2026-05-12)",
     "FEAT_prompt_newline ✅ DONE (2026-05-12)",
+    "H1_roadmaps_cleanup ✅ DONE (2026-05-12)",
+    "H2_timezone_history ✅ DONE (2026-05-12)",
+    "H3_repeat_keyboard ✅ DONE (2026-05-12)",
+    "H4_dedup_add_task ✅ DONE (2026-05-12)",
+    "G1_G6_roadmaps_full_removal ✅ DONE (2026-05-12)",
+    "PATCHER_A_tasks_ux ✅ DONE (2026-05-12)",
+    "PATCHER_B_achievements ✅ DONE (2026-05-12)",
+    "PATCHER_E_roadmaps_ui_prompt ✅ DONE (2026-05-12)",
+    "PATCHER_C_full_repeat_fsm ✅ DONE (2026-05-12)",
+    "PATCHER_D_achievements_no_stats_header ✅ DONE (2026-05-12)",
     "P-29 ⏳ TODO — SR Achievement History",
     "P-30 ⏳ TODO — Fix add_achievement archive",
     "P-31 ⏳ TODO — Synthesis trigger",
@@ -345,7 +405,17 @@
       "Сброс данных 3 садовников — чистый старт",
       "Чеклист через голос и multiline работает",
       "Задачи через перенос строки в промпте",
-      "Fake markers расширены"
+      "Fake markers расширены",
+      "H-1a/b: Убрана логика роадмапов из complete_task/edit_task",
+      "H-2a/b: История чата и ts_summary в timezone садовника",
+      "H-3: Repeat picker — 7 вариантов (дни недели + своя дата)",
+      "H-4: Dedup при создании задач",
+      "G1-G6: Полная зачистка роадмапов из кода",
+      "Патчер A: Tasks UX — 14 улучшений",
+      "Патчер B: Достижения — форматирование",
+      "Патчер E: Роадмапы из UI/промпта/контекста",
+      "Патчер C: Полные повторения в FSM",
+      "Патчер D: Достижения — заголовки месяцев"
     ],
     "estimated_readiness": "97%"
   },
