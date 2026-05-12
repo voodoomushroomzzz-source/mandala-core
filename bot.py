@@ -3442,8 +3442,8 @@ async def cb_profile_achievements(callback: CallbackQuery):
     if ach_count == 0:
         text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу."
     else:
-        text = f"💎 Достижения · всего {ach_count}\n"
-        text += "\n📊 Статистика по месяцам:"
+        text = f"<b>💎 Достижения · всего {ach_count}</b>\n"
+        text += "\n<b>📊 Статистика по месяцам:</b>"
         text += _build_sphere_stats(user_id, months=3, show_tasks=False)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="ach_add_from_menu")],
@@ -5327,11 +5327,11 @@ async def cmd_achievements(message: Message):
         )
         return
 
-    text = f"💎 Достижения · всего {len(achievements)}\n"
-    text += "\n📊 Статистика по месяцам:"
+    text = f"<b>💎 Достижения · всего {len(achievements)}</b>\n"
+    text += "\n<b>📊 Статистика по месяцам:</b>"
     text += _build_sphere_stats(user_id, months=3)
     text += "\n\nДобавить: «добавь достижение — [что сделал]»"
-    await message.answer(text, reply_markup=get_main_keyboard())
+    await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
 
 @router.callback_query(F.data == "add_achievement")
 async def cb_add_achievement(callback: CallbackQuery, state: FSMContext):
@@ -7675,7 +7675,7 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
                 m_label = f"{_RU_MONTHS_S[m_num]} {m_year}"
             except Exception:
                 m_label = m_str
-            lines.append(f"\n{m_label}:")
+            lines.append(f"\n\n{m_label}:")
             has_data = False
             for sphere, sname in sphere_names.items():
                 d = month_data.get(sphere, {})
