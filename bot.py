@@ -83,10 +83,6 @@ BOT_LATEST_UPDATE = {
         "v7.39.21 · 11.05.2026\n"
         "  · Утренние брифы приходят всем садовникам\n"
         "\n"
-        "v7.39.13 · 10.05.2026\n"
-        "  · Меню Роадмапов: полное меню вместо заглушки\n"
-        "  · 📌 Место задачи: переносить между группами и роадмапами\n"
-        "\n"
         "v7.39.9 · 09.05.2026\n"
         "  · Меню Задач: группы, список задач, повторы, своя дата"
     ),
@@ -1186,32 +1182,6 @@ def _build_profile_card(user_id: str) -> str:
         tz_rem = _ZI_rem("Europe/Moscow")
     today_rem = _dt_rem.now(tz_rem).strftime("%Y-%m-%d")
 
-    # ── Roadmaps block (first) ───────────────────────────────────────
-    roadmaps = store_get_roadmaps(user_id)
-    roadmaps = sorted(roadmaps, key=lambda r: (r.get("deadline") or "9999-99-99"))
-    if roadmaps:
-        for rm in roadmaps:
-            if rm.get("status") != "active":
-                continue
-            live     = _roadmap_live_tasks(rm, all_tasks)
-            total    = len(live)
-            done_cnt = sum(1 for t in live if t.get("status") == "completed")
-            pct      = round(done_cnt / total * 100) if total else 0
-            bar      = _roadmap_progress_bar(pct)
-            dl       = f" · до {rm['deadline']}" if rm.get("deadline") else ""
-            lines.append(f"🗺 <b>{rm['title']}</b>  {done_cnt}/{total}  {pct}%{dl}")
-            roadmap_today = [
-                t for t in all_tasks
-                if t.get("task_id") in rm.get("task_ids", [])
-                and t.get("status") != "completed"
-                and t.get("deadline") and t["deadline"] <= today_rem
-            ]
-            for rt in sorted(roadmap_today, key=lambda x: x.get("deadline") or "9999")[:3]:
-                rt_dl = rt.get("deadline", "")
-                overdue_str = " · просрочено" if rt_dl < today_rem else ""
-                lines.append(f"  · 🔥 {rt['title']}{overdue_str}")
-        lines.append("")
-
     # ── Tasks today block ────────────────────────────────────────────────
 
     _rm_task_ids_pc = {tid for rm in roadmaps for tid in rm.get("task_ids", [])}
@@ -1269,7 +1239,7 @@ async def _show_profile(user_id: str, message: Message):
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="⚡ Задачи", callback_data="menu_tasks_mgmt_v2"),
+            InlineKeyboardButton(text="🚀 Задачи 🚀", callback_data="menu_tasks_mgmt_v2"),
         ],
         [
             InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
@@ -6206,7 +6176,6 @@ async def cmd_info(message: Message):
         '🌱 Привет. Я — СР, твой компаньон в саду.\n\n'
         'Умею работать с:\n'
         '📋 Задачами и группами\n'
-        '🗺 Роадмапами (крупные цели)\n'
         '☑️ Чеклистами\n'
         '🔔 Напоминаниями\n'
         '💎 Достижениями\n'
@@ -6955,21 +6924,6 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"  часовой пояс: {tz_name}\n"
         f"  обращение: {'мужской род — «ты сделал», «Садовник»' if (profile or {}).get('companion_settings', {}).get('gender') == 'male' else 'женский род — «ты сделала», «Садовница»' if (profile or {}).get('companion_settings', {}).get('gender') == 'female' else 'нейтрально — «ты сделал(а)», «Садовник»'}"
     )
-
-    # Roadmaps block for SR context
-    roadmaps = store_get_roadmaps(telegram_id)
-    # Sort roadmaps by deadline ASC (nearest first, null → last)
-    roadmaps = sorted(roadmaps, key=lambda r: (r.get("deadline") or "9999-99-99"))
-    if roadmaps:
-        rm_lines = []
-        for rm in roadmaps:
-            pct = _calc_roadmap_progress(rm, tasks)
-            dl  = rm.get("deadline") or "нет"
-            n   = len(rm.get("task_ids", []))
-            rm_lines.append(f"  - {rm['title']} | прогресс: {pct}% | дедлайн: {dl} | задач: {n}")
-        roadmaps_block = "\n".join(rm_lines)
-    else:
-        roadmaps_block = "  нет активных роадмапов"
 
     sr = store_get_sphere_resonance(telegram_id)
     sr_context = "  ".join(f"{SPHERE_EMOJI[s]} {SPHERE_NAME_RU[s]} {sr.get(s,20)}%" for s in SPHERES)
