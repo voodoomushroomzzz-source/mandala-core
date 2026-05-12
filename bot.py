@@ -1056,6 +1056,7 @@ class TaskStates(StatesGroup):
     waiting_for_custom_reminder = State()
     waiting_for_group           = State()
     waiting_for_new_group       = State()
+    waiting_for_repeat          = State()  # Патчер А: шаг выбора повтора
     waiting_for_confirm         = State()
 
 class TaskEditStates(StatesGroup):
@@ -1384,8 +1385,9 @@ def get_groups_list_inline(user_id: str) -> InlineKeyboardMarkup:
             callback_data="tgroup_open|__nogroup__",
         ),
     ])
-    btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0433\u0440\u0443\u043f\u043f\u0430", callback_data="tgroup_create")])
-    btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u0432 \u043f\u0440\u043e\u0444\u0438\u043b\u044c", callback_data="profile_back")])
+    btns.append([InlineKeyboardButton(text="➕ Новая задача", callback_data="ttask_create|__new__")])
+    btns.append([InlineKeyboardButton(text="➕ Новая группа", callback_data="tgroup_create")])
+    btns.append([InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
 
@@ -1412,7 +1414,6 @@ def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMark
         repeat_str = " \U0001f501" if t.get("repeat") else ""
         label = f"{emoji} {title}{repeat_str}{dl_short}"
         btns.append([InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}")])
-    btns.append([InlineKeyboardButton(text="\u2795 \u041d\u043e\u0432\u0430\u044f \u0437\u0430\u0434\u0430\u0447\u0430", callback_data=f"ttask_create|{group_id}")])
     if group_id != "__nogroup__":
         btns.append([InlineKeyboardButton(text="\u270f\ufe0f \u041f\u0435\u0440\u0435\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_edit|{group_id}")])
         btns.append([InlineKeyboardButton(text="\U0001f5d1 \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_delete|{group_id}")])
@@ -1459,7 +1460,15 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
             text=f"\U0001f501 \u041f\u043e\u0432\u0442\u043e\u0440: {repeat_label}",
             callback_data=f"ttask_edit_field|{task_id}|repeat"
         )],
-        [InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u043a \u0441\u043f\u0438\u0441\u043a\u0443", callback_data=back_cb)],
+        [InlineKeyboardButton(
+            text=f"🔔 Напоминание: {task.get('reminder') or 'нет'}",
+            callback_data=f"ttask_edit_field|{task_id}|reminder"
+        )],
+        [InlineKeyboardButton(
+            text="🗑 Удалить задачу",
+            callback_data=f"ttask_delete|{task_id}"
+        )],
+        [InlineKeyboardButton(text="← Назад к списку", callback_data=back_cb)],
     ]
     return InlineKeyboardMarkup(inline_keyboard=btns)
 
@@ -2377,6 +2386,10 @@ async def cb_ttask_create(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     group_id = callback.data.split("|")[1]
+    # __new__ = создание с главного экрана без привязки к группе
+    if group_id == "__new__":
+        await _start_task_flow(callback.message, state)
+        return
     if group_id == "__nogroup__":
         label_id = None
         label_name = ""
@@ -2397,7 +2410,7 @@ async def cb_ttask_create(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="\u2190 Назад", callback_data=f"tgroup_open|{group_id}")]
     ])
     await callback.message.edit_text(
-        f"\u2795 <b>Новая задача в «{group_display}»</b>\\n\\nВведи название:",
+        f"\u2795 <b>Новая задача в «{group_display}»</b>\n\nВведи название:",
         reply_markup=cancel_kb, parse_mode="HTML"
     )
 
@@ -3922,19 +3935,26 @@ def _make_reminder_id(existing: list) -> str:
     return "rem_" + str(len(existing) + 1)
 
 def get_reminders_mgmt_inline(reminders: list) -> InlineKeyboardMarkup:
+    # Патчер А: только название, тап → меню редактирования
     btns = [[InlineKeyboardButton(text="➕ Новое напоминание", callback_data="rem_create_new")]]
     for r in reminders:
         rid   = r.get("id", "")
-        title = r.get("title", "—")[:22]
-        dt    = r.get("datetime_iso", "")[:16].replace("T", " ")
-        rep   = _repeat_label(r.get("repeat", "once"))
+        title = r.get("title", "—")[:28]
         btns.append([
-            InlineKeyboardButton(text=f"🔔 {title} · {dt}", callback_data=f"rem_noop_{rid}"),
-            InlineKeyboardButton(text="✏️", callback_data=f"rem_edit_{rid}"),
-            InlineKeyboardButton(text="🗑", callback_data=f"rem_del_{rid}"),
+            InlineKeyboardButton(text=f"🔔 {title}", callback_data=f"rem_open_{rid}"),
         ])
     btns.append([InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
+
+def get_reminder_edit_inline(rid: str) -> InlineKeyboardMarkup:
+    """Меню редактирования одного напоминания."""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ Название",     callback_data=f"rem_edit_title_{rid}")],
+        [InlineKeyboardButton(text="📅 Дата/время",   callback_data=f"rem_edit_dt_{rid}")],
+        [InlineKeyboardButton(text="🔁 Повторение",   callback_data=f"rem_edit_repeat_{rid}")],
+        [InlineKeyboardButton(text="🗑 Удалить",      callback_data=f"rem_del_{rid}")],
+        [InlineKeyboardButton(text="← Назад",         callback_data="menu_reminders_mgmt")],
+    ])
 
 @router.callback_query(F.data == "menu_reminders_mgmt")
 async def cb_reminders_mgmt(callback: CallbackQuery, state: FSMContext):
@@ -4125,6 +4145,64 @@ async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("rem_noop_"))
 async def cb_rem_noop(callback: CallbackQuery):
     await _safe_cb_answer(callback)
+
+@router.callback_query(F.data.startswith("rem_open_"))
+async def cb_rem_open(callback: CallbackQuery):
+    """Тап по напоминанию → меню редактирования."""
+    await _safe_cb_answer(callback)
+    rid = callback.data[9:]
+    user_id = str(callback.from_user.id)
+    reminders = store_get_reminders(user_id)
+    rem = next((r for r in reminders if r.get("id") == rid), None)
+    if not rem:
+        await callback.answer("Напоминание не найдено", show_alert=True)
+        return
+    title = rem.get("title", "—")
+    dt = (rem.get("datetime_iso") or "")[:16].replace("T", " ")
+    rep = _repeat_label(rem.get("repeat", "once"))
+    text = f"🔔 <b>{title}</b>\n📅 {dt}\n🔁 {rep}"
+    try:
+        await callback.message.edit_text(text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
+    except Exception:
+        await callback.message.answer(text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
+
+# rem_edit_title_, rem_edit_dt_, rem_edit_repeat_ → редиректим на существующие handlers
+@router.callback_query(F.data.startswith("rem_edit_title_"))
+async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
+    rid = callback.data[15:]
+    await callback.answer()
+    await state.update_data(_rem_edit_id=rid, _rem_edit_field="title")
+    await state.set_state(ReminderStates.waiting_for_input)
+    try:
+        await callback.message.edit_text("✏️ <b>Новое название:</b>", parse_mode="HTML")
+    except Exception:
+        await callback.message.answer("✏️ Введи новое название:")
+
+@router.callback_query(F.data.startswith("rem_edit_dt_"))
+async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
+    rid = callback.data[12:]
+    # Редирект на существующий rem_edit_{rid}
+    callback.data = f"rem_edit_{rid}"
+    await cb_rem_edit_start(callback, state)
+
+@router.callback_query(F.data.startswith("rem_edit_repeat_"))
+async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
+    rid = callback.data[16:]
+    await callback.answer()
+    await state.update_data(_rem_edit_id=rid)
+    await state.set_state(ReminderStates.waiting_for_repeat)
+    user_id = str(callback.from_user.id)
+    reminders = store_get_reminders(user_id)
+    rem = next((r for r in reminders if r.get("id") == rid), None)
+    current = rem.get("repeat", "once") if rem else "once"
+    try:
+        await callback.message.edit_text(
+            "🔁 <b>Повторение:</b>",
+            reply_markup=_repeat_picker_keyboard(current),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer("🔁 Повторение:", reply_markup=_repeat_picker_keyboard(current))
 
 @router.message(StateFilter(ReminderStates.waiting_for_input))
 async def rem_text_input(message: Message, state: FSMContext):
@@ -5760,7 +5838,7 @@ async def task_reminder_cb(callback: CallbackQuery, state: FSMContext):
     reminder = None if val == "skip" else val
     await state.update_data(reminder=reminder)
     user_id = str(callback.from_user.id)
-    await _ask_group(callback.message, state, user_id, edit=True)
+    await _ask_repeat_task(callback.message, state, edit=True)
 
 @router.message(StateFilter(TaskStates.waiting_for_custom_reminder))
 async def task_custom_reminder_input(message: Message, state: FSMContext):
@@ -5786,7 +5864,7 @@ async def task_custom_reminder_input(message: Message, state: FSMContext):
     await state.update_data(reminder=reminder)
     user_id = str(message.from_user.id)
     await message.answer(f"✅ Напоминание: {text}")
-    await _ask_group(message, state, user_id, edit=False)
+    await _ask_repeat_task(message, state, edit=False)
 
 @router.message(StateFilter(TaskStates.waiting_for_reminder))
 async def task_reminder_text(message: Message, state: FSMContext):
@@ -5796,7 +5874,39 @@ async def task_reminder_text(message: Message, state: FSMContext):
         return
     await state.update_data(reminder=None)
     user_id = str(message.from_user.id)
-    await _ask_group(message, state, user_id, edit=False)
+    await _ask_repeat_task(message, state, edit=False)
+
+def _get_repeat_task_keyboard() -> InlineKeyboardMarkup:
+    """Simple repeat picker for task FSM."""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="1️⃣ Однократно", callback_data="trep_once")],
+        [InlineKeyboardButton(text="🔁 Каждый день", callback_data="trep_daily")],
+        [InlineKeyboardButton(text="📅 Раз в неделю", callback_data="trep_weekly")],
+        [InlineKeyboardButton(text="🗓 Раз в месяц", callback_data="trep_monthly")],
+        [InlineKeyboardButton(text="⏭ Пропустить", callback_data="trep_skip")],
+    ])
+
+async def _ask_repeat_task(message: Message, state: FSMContext, edit: bool = False):
+    """Step 3.5 of task FSM: choose repeat."""
+    await state.set_state(TaskStates.waiting_for_repeat)
+    text = "🔁 <b>Повторение?</b>"
+    kb = _get_repeat_task_keyboard()
+    if edit:
+        try:
+            await message.edit_text(text, reply_markup=kb, parse_mode="HTML")
+            return
+        except Exception:
+            pass
+    await message.answer(text, reply_markup=kb, parse_mode="HTML")
+
+@router.callback_query(F.data.startswith("trep_"), StateFilter(TaskStates.waiting_for_repeat))
+async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    val = callback.data[5:]  # once / daily / weekly / monthly / skip
+    repeat = None if val == "skip" else (None if val == "once" else val)
+    await state.update_data(repeat=repeat)
+    user_id = str(callback.from_user.id)
+    await _ask_group(callback.message, state, user_id, edit=True)
 
 async def _ask_group(message: Message, state: FSMContext, user_id: str, edit: bool = False):
     """Step 4 of task FSM: choose group (formerly label)."""
@@ -5963,7 +6073,18 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
         )
     except Exception:
         pass
-    await callback.message.answer("🌱 Задача посеяна в твой Сад.", reply_markup=get_main_keyboard())
+    # Патчер А: возврат в группу после создания задачи
+    _created_group_id = data.get("_ttask_create_group") or data.get("label_id") or "__nogroup__"
+    _created_group_name = data.get("_ttask_create_label_name") or data.get("label_name") or "Без группы"
+    _tasks_in_created = [t for t in store_get_tasks(user_id) if t.get("status") != "completed" and (
+        (t.get("label_id") == _created_group_id) if _created_group_id != "__nogroup__" else not t.get("label_name")
+    )]
+    _header_created = f"\U0001f5c2 <b>{_created_group_name}</b> · {len(_tasks_in_created)} задач"
+    await callback.message.answer(
+        _header_created,
+        reply_markup=get_tasks_in_group_inline(user_id, _created_group_id),
+        parse_mode="HTML"
+    )
 
 @router.callback_query(F.data == "cancel_task")
 async def cancel_task_cb(callback: CallbackQuery, state: FSMContext):
@@ -8484,8 +8605,12 @@ async def free_conversation(message: Message, state: FSMContext):
                                             confirm_text += f"\n<i>Можно добавить: {', '.join(missing)}</i>"
                                         # profile not shown automatically
                                         tid = new_task["task_id"]
+                                        if not new_task.get("reminder"):
+                                            missing.append("🔔 напоминание")
+                                        if not new_task.get("repeat"):
+                                            missing.append("🔁 повтор")
                                         edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
-                                            InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"task_edit_{tid}")
+                                            InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"ttask_edit|{tid}")
                                         ]])
                                         await message.answer(confirm_text, reply_markup=edit_kb, parse_mode="HTML")
                                     reply_text = ""
