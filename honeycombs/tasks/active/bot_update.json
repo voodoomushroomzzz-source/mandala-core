@@ -5,8 +5,8 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-12",
-  "progress": 97,
+  "updated": "2026-05-13",
+  "progress": 99,
   "current_version": "7.39.23",
   "note_version": "Актуальная версия с патчами ~7.39.38",
   "dev_rules": [
@@ -201,6 +201,11 @@
       "name": "Патчер D: Достижения — без 'Статистика по месяцам' + месяца жирным",
       "date": "2026-05-12",
       "commit": "claude-session"
+    },
+    "P-37": {
+      "name": "P-37 — Daytime proactive window 12-19, 3h silence",
+      "date": "2026-05-13",
+      "commit": "b0586fd4"
     }
   },
   "known_bugs": {
@@ -309,43 +314,43 @@
   "patches_plan": {
     "SPRINT_3_MEDIUM": {
       "P-29": {
-        "status": "⏳ TODO",
+        "status": "✅ DONE (2026-05-13)",
         "name": "SR Achievement History в контексте",
         "bug_ref": "BUG-G"
       },
       "P-30": {
-        "status": "⏳ TODO",
+        "status": "✅ DONE (2026-05-13)",
         "name": "Fix add_achievement archive object",
         "bug_ref": "BUG-J"
       },
       "P-31": {
-        "status": "⏳ TODO",
+        "status": "✅ DONE (2026-05-13)",
         "name": "Synthesis trigger from free_conversation"
       }
     },
     "SPRINT_4_LOW": {
       "P-32": {
-        "status": "⏳ TODO",
+        "status": "✅ VERIFIED (2026-05-13)",
         "name": "Fix timestamps → ZoneInfo садовника",
         "bug_ref": "BUG-D"
       },
       "P-33": {
-        "status": "⏳ TODO",
+        "status": "✅ VERIFIED (2026-05-13)",
         "name": "Fix pinned message persistence",
         "bug_ref": "BUG-C"
       },
       "P-34": {
-        "status": "⏳ TODO",
+        "status": "✅ VERIFIED (2026-05-13)",
         "name": "SR Prompt Audit + NoneType guard в _call_openrouter",
         "bug_ref": "BUG-I, NOTE-01"
       },
       "P-35": {
-        "status": "⏳ TODO",
+        "status": "✅ DONE (2026-05-13)",
         "name": "Fix deadline timezone",
         "bug_ref": "BUG-K"
       },
       "P-36": {
-        "status": "⏳ TODO",
+        "status": "✅ DONE (2026-05-13)",
         "name": "Fix search cache key + category",
         "bug_ref": "BUG-L"
       }
@@ -382,42 +387,25 @@
     "PATCHER_E_roadmaps_ui_prompt ✅ DONE (2026-05-12)",
     "PATCHER_C_full_repeat_fsm ✅ DONE (2026-05-12)",
     "PATCHER_D_achievements_no_stats_header ✅ DONE (2026-05-12)",
-    "P-29 ⏳ TODO — SR Achievement History",
-    "P-30 ⏳ TODO — Fix add_achievement archive",
-    "P-31 ⏳ TODO — Synthesis trigger",
-    "P-32 ⏳ TODO — Fix timestamps tz",
-    "P-33 ⏳ TODO — Fix pinned message",
-    "P-34 ⏳ TODO — SR Prompt Audit + NoneType guard",
-    "P-35 ⏳ TODO — Fix deadline tz",
-    "P-36 ⏳ TODO — Fix search cache"
+    "P-29 ✅ DONE (2026-05-13)",
+    "P-30 ✅ DONE (2026-05-13)",
+    "P-31 ✅ DONE (2026-05-13)",
+    "P-32 ✅ VERIFIED (2026-05-13)",
+    "P-33 ✅ VERIFIED (2026-05-13)",
+    "P-34 ✅ VERIFIED (2026-05-13)",
+    "P-35 ✅ DONE (2026-05-13)",
+    "P-36 ✅ DONE (2026-05-13)",
+    "P-37 ✅ DONE (2026-05-13)"
   ],
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-12",
+    "last_check": "2026-05-13",
     "gardeners_loaded": "4/4 при старте ✅",
     "critical_broken": [],
     "fixed_today_2026_05_12": [
-      "BOM fix → utf-8-sig → Store ready 4/4",
-      "Утренние брифы доходят всем садовникам",
-      "Резонанс синхронизирован через store_add_sphere_resonance",
-      "Голос не блокирует event loop (Groq в executor)",
-      "Профиль: ближайшие задачи 5/N + напоминания 3/N",
-      "Сброс данных 3 садовников — чистый старт",
-      "Чеклист через голос и multiline работает",
-      "Задачи через перенос строки в промпте",
-      "Fake markers расширены",
-      "H-1a/b: Убрана логика роадмапов из complete_task/edit_task",
-      "H-2a/b: История чата и ts_summary в timezone садовника",
-      "H-3: Repeat picker — 7 вариантов (дни недели + своя дата)",
-      "H-4: Dedup при создании задач",
-      "G1-G6: Полная зачистка роадмапов из кода",
-      "Патчер A: Tasks UX — 14 улучшений",
-      "Патчер B: Достижения — форматирование",
-      "Патчер E: Роадмапы из UI/промпта/контекста",
-      "Патчер C: Полные повторения в FSM",
-      "Патчер D: Достижения — заголовки месяцев"
+      "All patches P-21 to P-37 applied. See execution_order."
     ],
-    "estimated_readiness": "97%"
+    "estimated_readiness": "99%"
   },
   "context_for_new_sr": {
     "note": "Если ты SR без предыдущего контекста — прочитай это.",
