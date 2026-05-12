@@ -1010,8 +1010,10 @@ class TaskStates(StatesGroup):
     waiting_for_custom_reminder = State()
     waiting_for_group           = State()
     waiting_for_new_group       = State()
-    waiting_for_repeat          = State()  # Патчер А: шаг выбора повтора
-    waiting_for_confirm         = State()
+    waiting_for_repeat               = State()  # Патчер А: шаг выбора повтора
+    waiting_for_repeat_custom_days   = State()  # H: ввод дней недели
+    waiting_for_repeat_custom_date   = State()  # H: ввод своей даты
+    waiting_for_confirm              = State()
 
 class TaskEditStates(StatesGroup):
     waiting_for_field        = State()   # field selector shown
@@ -5264,15 +5266,15 @@ async def task_reminder_text(message: Message, state: FSMContext):
     await _ask_repeat_task(message, state, edit=False)
 
 def _get_repeat_task_keyboard() -> InlineKeyboardMarkup:
-    """Full repeat picker for task FSM — same options as task edit."""
+    """Repeat picker for task FSM — дни недели + своя дата."""
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="1️⃣ Однократно",       callback_data="trep_once")],
         [InlineKeyboardButton(text="🔁 Каждый день",       callback_data="trep_daily")],
-        [InlineKeyboardButton(text="📅 По будням",         callback_data="trep_weekdays")],
-        [InlineKeyboardButton(text="🏖 По выходным",       callback_data="trep_weekends")],
-        [InlineKeyboardButton(text="📆 Раз в неделю",      callback_data="trep_weekly")],
+        [InlineKeyboardButton(text="📅 Раз в неделю",      callback_data="trep_weekly")],
         [InlineKeyboardButton(text="🗓 Раз в месяц",       callback_data="trep_monthly")],
         [InlineKeyboardButton(text="🌿 Раз в год",         callback_data="trep_yearly")],
+        [InlineKeyboardButton(text="📆 Выбрать дни недели", callback_data="trep_weekdays_pick")],
+        [InlineKeyboardButton(text="🗒 Своя дата",         callback_data="trep_custom_date")],
     ])
 
 async def _ask_repeat_task(message: Message, state: FSMContext, edit: bool = False):
@@ -5291,11 +5293,81 @@ async def _ask_repeat_task(message: Message, state: FSMContext, edit: bool = Fal
 @router.callback_query(F.data.startswith("trep_"), StateFilter(TaskStates.waiting_for_repeat))
 async def task_repeat_cb(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    val = callback.data[5:]  # once / daily / weekdays / weekends / weekly / monthly / yearly
+    val = callback.data[5:]  # once / daily / weekly / monthly / yearly / weekdays_pick / custom_date
+    if val == "weekdays_pick":
+        # Показать выбор дней недели через текстовый ввод
+        await state.set_state(TaskStates.waiting_for_repeat)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="← Назад", callback_data="trep_back")]
+        ])
+        try:
+            await callback.message.edit_text(
+                "📅 <b>Дни недели:</b>\n\nНапиши дни, например:\n<code>пн ср пт</code>",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        except Exception:
+            await callback.message.answer(
+                "📅 <b>Дни недели:</b>\n\nНапиши дни, например:\n<code>пн ср пт</code>",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        await state.set_state(TaskStates.waiting_for_repeat_custom_days)
+        return
+    if val == "custom_date":
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="← Назад", callback_data="trep_back")]
+        ])
+        try:
+            await callback.message.edit_text(
+                "🗒 <b>Своя дата повторения:</b>\n\nВведи дату: <code>ДД.ММ.ГГ</code>\nНапример: <code>25.06.26</code>",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        except Exception:
+            await callback.message.answer(
+                "🗒 <b>Своя дата повторения:</b>\n\nВведи дату: <code>ДД.ММ.ГГ</code>",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        await state.set_state(TaskStates.waiting_for_repeat_custom_date)
+        return
+    if val == "back":
+        await _ask_repeat_task(callback.message, state, edit=True)
+        return
     repeat = None if val == "once" else val
     await state.update_data(repeat=repeat)
     user_id = str(callback.from_user.id)
     await _ask_group(callback.message, state, user_id, edit=True)
+
+@router.message(StateFilter(TaskStates.waiting_for_repeat_custom_days))
+async def task_repeat_custom_days_input(message: Message, state: FSMContext):
+    """Ввод дней недели для повторения задачи."""
+    user_id = str(message.from_user.id)
+    text = (message.text or "").strip()
+    # reuse reminder days parser
+    try:
+        repeat = _parse_custom_days(text)
+    except Exception:
+        repeat = None
+    if not repeat or repeat == "custom_days:":
+        await message.answer("🌀 Не понял дни. Попробуй: <code>пн ср пт</code>", parse_mode="HTML")
+        return
+    await state.update_data(repeat=repeat)
+    await _ask_group(message, state, user_id, edit=False)
+
+@router.message(StateFilter(TaskStates.waiting_for_repeat_custom_date))
+async def task_repeat_custom_date_input(message: Message, state: FSMContext):
+    """Ввод своей даты для повторения задачи."""
+    import re as _re_td
+    user_id = str(message.from_user.id)
+    text = (message.text or "").strip()
+    m = _re_td.match(r"(\d{2})\.(\d{2})\.(\d{2,4})$", text)
+    if not m:
+        await message.answer("🌀 Формат: <code>ДД.ММ.ГГ</code>  например <code>25.06.26</code>", parse_mode="HTML")
+        return
+    d, mo, y = m.group(1), m.group(2), m.group(3)
+    if len(y) == 2:
+        y = "20" + y
+    repeat = f"custom_date:{y}-{mo}-{d}"
+    await state.update_data(repeat=repeat)
+    await _ask_group(message, state, user_id, edit=False)
 
 async def _ask_group(message: Message, state: FSMContext, user_id: str, edit: bool = False):
     """Step 4 of task FSM: choose group (formerly label)."""
@@ -5763,7 +5835,15 @@ def _add_to_history(user_id: str, role: str, content: str) -> None:
     uid = str(user_id)
     if uid not in _sessions:
         _sessions[uid] = []
-    _sessions[uid].append({"role": role, "content": content, "ts": datetime.now().isoformat()})
+    # H-2: timezone садовника для корректного времени в истории
+    try:
+        from zoneinfo import ZoneInfo as _ZI_hist
+        _prof_hist = store_get_profile(uid)
+        _tz_hist = (_prof_hist or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        _ts_hist = datetime.now(_ZI_hist(_tz_hist)).isoformat()
+    except Exception:
+        _ts_hist = datetime.now().isoformat()
+    _sessions[uid].append({"role": role, "content": content, "ts": _ts_hist})
     if len(_sessions[uid]) > SESSION_MAX_MESSAGES:
         _sessions[uid] = _sessions[uid][-SESSION_MAX_MESSAGES:]
 
@@ -6367,9 +6447,13 @@ def _build_user_context_msg(telegram_id: str) -> str:
             _role = "Садовник" if _m.get("role") == "user" else "СР"
             try:
                 _ts_dt = datetime.fromisoformat(_m.get("ts", ""))
-                _ts_str = _ts_dt.strftime("%H:%M:%S")
+                # Если UTC (naive) — добавляем tzinfo для корректного вывода
+                if _ts_dt.tzinfo is None:
+                    from zoneinfo import ZoneInfo as _ZI_ts
+                    _ts_dt = _ts_dt.replace(tzinfo=_ZI_ts(tz_name))
+                _ts_str = _ts_dt.strftime("%H:%M")
             except Exception:
-                _ts_str = "??:??:??"
+                _ts_str = "??:??"
             _txt_short = (_m.get("content") or "")[:60].replace("\n", " ")
             _ts_parts.append(f"  [{_ts_str}] {_role}: {_txt_short}")
         _ts_summary = "\n[Хронология диалога:\n" + "\n".join(_ts_parts) + "\n]"
@@ -7923,14 +8007,26 @@ async def free_conversation(message: Message, state: FSMContext):
                                     await cb_start_addtask_msg(message, state, pre_title="")
                                     reply_text = ""
                                 else:
-                                    # Atomic creation — no FSM needed
-                                    new_task = await _create_task_atomic(
-                                        user_id, message,
-                                        title=title,
-                                        deadline=deadline or None,
-                                        reminder=reminder or None,
-                                        label_name=label or None
+                                    # H-4: dedup — блокировать точные дубли
+                                    _existing_t = store_get_tasks(user_id)
+                                    _dup = next(
+                                        (t for t in _existing_t
+                                         if t.get("status") != "completed"
+                                         and t.get("title","").lower().strip() == title.lower().strip()),
+                                        None
                                     )
+                                    if _dup:
+                                        _dup_dl = f" · до {_dup['deadline']}" if _dup.get("deadline") else ""
+                                        _dup_gr = f" · {_dup['label_name']}" if _dup.get("label_name") else ""
+                                        reply_text = f"✅ «{title}» уже есть в саду{_dup_dl}{_dup_gr} — не создала повторно"
+                                    else:
+                                        new_task = await _create_task_atomic(
+                                            user_id, message,
+                                            title=title,
+                                            deadline=deadline or None,
+                                            reminder=reminder or None,
+                                            label_name=label or None
+                                        )
                                     if new_task:
                                         # Build confirmation message
                                         parts = [f"✅ Задача «{new_task['title']}» создана"]
@@ -8123,19 +8219,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     names = ", ".join(t["title"] for t in to_close)
                                     reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
                                                   f"💎 {count_now} · {SPHERE_EMOJI[_last_sphere]} {SPHERE_NAME_RU[_last_sphere]} +{total_res}% → {new_res2}%")
-                                # Auto-show roadmap if closed task belongs to one, else profile
-                                _closed_ids_set = {t.get("task_id") for t in to_close}
-                                _roadmaps_upd = store_get_roadmaps(user_id)
-                                _affected_rm = next(
-                                    (rm for rm in _roadmaps_upd
-                                     if any(tid in _closed_ids_set for tid in rm.get("task_ids", []))),
-                                    None
-                                )
-                                if _affected_rm:
-                                    _all_tasks_upd = store_get_tasks(user_id)
-                                    reply_text += "\n\n" + _roadmap_card_text(_affected_rm, _all_tasks_upd)
-                                else:
-                                    pass  # profile not shown automatically
+                                pass  # profile not shown automatically
                             elif tasks:
                                 # Smart clarification: find top fuzzy candidates
                                 _candidates = []
@@ -8785,17 +8869,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         last_task_id=tid_edited,
                                         last_task_title=t.get("title","")
                                     )
-                                    # Auto-show: roadmap if task is in one, else profile
-                                    _rms_upd = store_get_roadmaps(user_id)
-                                    _all_t_upd = store_get_tasks(user_id)
-                                    _task_rm = next(
-                                        (rm for rm in _rms_upd if tid_edited in rm.get("task_ids",[])),
-                                        None
-                                    )
-                                    if _task_rm:
-                                        reply_text += "\n\n" + _roadmap_card_text(_task_rm, _all_t_upd)
-                                    else:
-                                        pass  # profile not shown automatically
+                                    pass  # profile not shown automatically
                                     missing = []
                                     if not t.get("deadline"):
                                         missing.append("📅 дедлайн")
