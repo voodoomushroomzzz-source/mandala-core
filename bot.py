@@ -1184,7 +1184,8 @@ def _build_profile_card(user_id: str) -> str:
 
     # ── Tasks today block ────────────────────────────────────────────────
 
-    _rm_task_ids_pc = {tid for rm in roadmaps for tid in rm.get("task_ids", [])}
+    _roadmaps_pc = store_get_roadmaps(user_id)
+    _rm_task_ids_pc = {tid for rm in _roadmaps_pc for tid in rm.get("task_ids", [])}
     active_all = [t for t in all_tasks if t.get("status") != "completed" and t.get("task_id") not in _rm_task_ids_pc]
     total_tasks = len(active_all)
     # Ближайшие 5 задач по дедлайну (сначала просроченные и сегодня, потом будущие, потом без дедлайна)
