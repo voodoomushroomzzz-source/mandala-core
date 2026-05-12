@@ -226,6 +226,21 @@
       "updated": "2026-05-12",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260512_016",
+      "title": "Музыкальная сессия",
+      "status": "todo",
+      "label_id": "творчество",
+      "label_name": "Творчество",
+      "life_area": "creativity",
+      "priority": 6,
+      "deadline": "2026-05-13",
+      "reminder": null,
+      "created": "2026-05-12",
+      "updated": "2026-05-12",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
