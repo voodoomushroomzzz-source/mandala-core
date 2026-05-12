@@ -812,7 +812,8 @@ def _update_sphere_history(user_id: str, sphere: str, task: bool = False,
 
 def _add_sr_observation(user_id: str, obs_type: str, text: str,
                         sphere: str = None) -> None:
-    """Write SR observation to deep_profile.sr_observations[]."""
+    """Write SR observation to deep_profile.sr_observations[].
+    Triggers synthesis every 2 new observations."""
     prof = store_get_profile(user_id)
     if not prof:
         return
@@ -827,6 +828,14 @@ def _add_sr_observation(user_id: str, obs_type: str, text: str,
     # Keep last 50 observations
     dp["sr_observations"] = obs[-50:]
     store_set_profile(user_id, prof)
+    # P-31: observation-based synthesis trigger
+    ws = store_get_workspace(user_id) or {}
+    count = ws.get("_pending_synthesis_count", 0) + 1
+    ws["_pending_synthesis_count"] = count
+    store_set_workspace(user_id, ws)
+    if count >= 2:
+        import asyncio as _asyncio_syn
+        _asyncio_syn.create_task(_generate_synthesis(user_id))
 
 def _detect_emotion(text: str) -> str:
     """Detect emotional signal in text. Returns signal type or empty string."""
@@ -7328,6 +7337,10 @@ async def _generate_synthesis(user_id: str) -> None:
         dp["synthesis"] = new_core  # backward compat
         dp["synthesis_date"] = _today()
         store_set_profile(user_id, prof)
+        # P-31: reset pending synthesis counter after successful synthesis
+        ws_syn = store_get_workspace(user_id) or {}
+        ws_syn["_pending_synthesis_count"] = 0
+        store_set_workspace(user_id, ws_syn)
         logger.info(f"Living memory updated for {user_id}")
     except Exception as e:
         logger.warning(f"Synthesis parse error for {user_id}: {e}")
@@ -7344,39 +7357,47 @@ async def _detect_and_save_observation(user_id: str, text: str) -> None:
 
 async def _send_daily_report() -> None:
     """Send daily report to architect at 21:00 MSK.
-    Also triggers living memory synthesis for active gardeners."""
+    Reads gardener state from files — survives restarts."""
     if not ARCHITECT_TELEGRAM_ID:
         return
     try:
-        # Generate living memory for active gardeners before report
-        for _uid in list(_store.keys()):
-            if _daily_stats.get(_uid, {}).get("messages", 0) > 0:
-                await _generate_synthesis(_uid)
+        today = _today()
+        lines = [f"📊 Отчёт СР · {today} · v{BOT_VERSION}\n"]
 
-        lines = [f"📊 Отчёт СР · {_today()} · v{BOT_VERSION}\n"]
-        # Догружаем всех из whitelist если кого-то нет в _store
+        # Load all gardeners from whitelist
         await _load_store()
-        # Load all from whitelist (not just _store — catches non-active gardeners)
         whitelist_r = await _github_get("gardeners/whitelist.json") or {}
         approved_r = whitelist_r.get("approved", []) if isinstance(whitelist_r, dict) else []
         _all_uids = [str(uid) for uid in approved_r]
-        # Activity — all from whitelist
-        lines.append("👥 Активность:")
+
+        # ── Gardener list ─────────────────────────────────────────────────
+        lines.append("👥 Садовники:")
         for uid in _all_uids:
-            prof  = store_get_profile(str(uid))
-            name  = prof.get("name", str(uid)) if prof else str(uid)
-            stats = _daily_stats.get(str(uid), {})
-            msgs  = stats.get("messages", 0)
-            if msgs > 0:
-                lines.append(
-                    f"  {name}: {msgs} сообщений · "
-                    f"{stats.get('tasks_created',0)} создано · "
-                    f"{stats.get('tasks_completed',0)} закрыто · "
-                    f"{stats.get('achievements',0)} достижений"
-                )
+            prof = store_get_profile(str(uid))
+            ws   = store_get_workspace(str(uid)) or {}
+            name = prof.get("name", str(uid)) if prof else str(uid)
+
+            # Activity: based on last_interaction_date in workspace (survives restarts)
+            last_inter = ws.get("last_interaction_date", "")
+            active_today = (last_inter == today)
+            status = "активен" if active_today else "неактивен"
+
+            # Portrait: based on synthesis_date in deep_profile
+            if prof:
+                dp = prof.get("deep_profile", {})
+                syn_date = dp.get("synthesis_date", "")
             else:
-                lines.append(f"  {name}: неактивен")
-        # Issues
+                syn_date = ""
+            if syn_date == today:
+                portrait = "портрет обновлён сегодня"
+            elif syn_date:
+                portrait = f"портрет от {syn_date[8:]}.{syn_date[5:7]}"
+            else:
+                portrait = "портрет формируется"
+
+            lines.append(f"  {name}: {status} · {portrait}")
+
+        # ── Issues ────────────────────────────────────────────────────────
         if _daily_issues:
             lines.append("\n⚠️ Проблемы:")
             seen = set()
@@ -7387,41 +7408,27 @@ async def _send_daily_report() -> None:
                     prof = store_get_profile(issue["user_id"])
                     name = prof.get("name", issue["user_id"]) if prof else issue["user_id"]
                     lines.append(f"  · {name}: {issue['type']} — {issue['context']}")
-        # Unused intents (7 days check)
-        # Add memory cores to report
-        # P-27: iterate _all_uids (whitelist) — not just _store.keys() (active only)
-        lines.append("\n🔮 Портреты садовников:")
-        for _uid in _all_uids:
-            _rp = store_get_profile(str(_uid))
-            if not _rp:
-                continue
-            _rname = _rp.get("name", str(_uid))
-            _rmem  = _rp.get("deep_profile", {}).get("memory", {})
-            _rcore = _rmem.get("core", "")
-            # Also show sphere resonance for accuracy
-            _sr_rep = store_get_sphere_resonance(str(_uid))
-            _sr_line = "  ".join(f"{SPHERE_EMOJI[s]}{_sr_rep.get(s,20)}%" for s in SPHERES)
-            if _rcore:
-                lines.append(f"  {_rname} [{_sr_line}]: {_rcore[:200]}...")
-            else:
-                lines.append(f"  {_rname} [{_sr_line}]: портрет формируется")
+
         lines.append("\n🌱 Всё остальное в норме.")
         text = "\n".join(lines)
         await bot.send_message(int(ARCHITECT_TELEGRAM_ID), text)
-        # Save to GitHub
+
+        # Save report to GitHub
         report = {
-            "date": _today(),
+            "date": today,
             "version": BOT_VERSION,
-            "gardeners": _daily_stats,
+            "gardeners": {uid: {
+                "name": (store_get_profile(str(uid)) or {}).get("name", str(uid)),
+                "active": (store_get_workspace(str(uid)) or {}).get("last_interaction_date", "") == today,
+                "synthesis_date": (store_get_profile(str(uid)) or {}).get("deep_profile", {}).get("synthesis_date", ""),
+            } for uid in _all_uids},
             "issues": _daily_issues,
         }
         _pending_writes["honeycombs/sessions/sr_daily_report.json"] = report
         await _sync_pending()
-        # Reset daily counters
-        _daily_stats.clear()
+
+        # Reset daily issues only (stats are file-based, no reset needed)
         _daily_issues.clear()
-        # Clear persisted stats after successful report
-        _pending_writes["honeycombs/sessions/daily_stats_live.json"] = {"_date": _today()}
         for uid in list(_intent_tracker.keys()):
             _intent_tracker[uid] = []
         logger.info("Daily report sent to architect")
