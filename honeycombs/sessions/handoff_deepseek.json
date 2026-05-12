@@ -1,84 +1,91 @@
 {
   "sr_id": "deepseek",
   "status": "handed_off",
-  "last_session": "2026-05-10",
-  "last_updated": "2026-05-10T23:00:00Z",
-  "next_step": "P-20_ui_audit",
-  "summary": "v7.39.12. P-13a done (Клод). DeepSeek: навигация чеклистов, меню достижений, отчёт СР, classify_sphere fix, P-20.",
+  "last_session": "2026-05-12",
+  "last_updated": "2026-05-12T15:30:00Z",
+  "next_step": "fix_trep_back_button",
+  "summary": "v7.39.23. Фикс багов FSM создания задач: парсер дней недели, кнопка Назад, меню команд. Роадмапы полностью удалены из кода Клодом. Прогресс 97%.",
   "first_steps": "ON FIRST LOAD: 1) Read bot_update.json at honeycombs/tasks/active/bot_update.json for full context. 2) Read this handoff fully. 3) Read current bot.py via GitHub API before any modifications.",
   "bot_state": {
-    "version": "7.39.12",
-    "progress": "95%",
+    "version": "7.39.23",
+    "progress": "97%",
     "repo": "voodoomushroomzzz-source/mandala-core",
     "platform": "Render webhook + aiogram 3 + OpenRouter",
     "model_primary": "deepseek/deepseek-v4-flash",
     "model_fallback": "qwen/qwen3.5-flash-02-23",
-    "file": "bot.py (~5700 lines)",
+    "file": "bot.py (~9800 lines)",
     "gardeners_active": 4,
-    "gardeners": [
+    "repo_path_windows": "C:\\Users\\ivanl\\OneDrive\\Desktop\\Mandala\\mandala-core"
+  },
+  "what_we_did_today": {
+    "title": "Фикс FSM создания задач + чистка UI",
+    "bug_fixes": [
       {
-        "id": "224736062",
-        "name": "Дима",
-        "city": "Москва",
-        "morning": "10:00",
-        "tz": "Europe/Moscow"
+        "id": "FIX-01",
+        "commit": "12cf83dd",
+        "description": "Парсер дней недели в создании задачи: _parse_custom_days(text) → _parse_weekdays(text.lower()). Причина: _parse_custom_days не существует."
       },
       {
-        "id": "339914913",
-        "name": "Антон",
-        "city": "Алматы",
-        "morning": "08:00",
-        "tz": "Asia/Almaty"
+        "id": "FIX-02",
+        "commit": "12cf83dd",
+        "description": "Добавлен trep_back handler в task_repeat_cb для возврата из waiting_for_repeat_custom_days и waiting_for_repeat_custom_date."
       },
       {
-        "id": "358793311",
-        "name": "Антон",
-        "city": "Владимир",
-        "morning": "09:00",
-        "tz": "Europe/Moscow"
+        "id": "FIX-03",
+        "commit": "12cf83dd",
+        "description": "Убраны /restart и /changelog из меню команд бота."
       },
       {
-        "id": "851913510",
-        "name": "Яна",
-        "city": "Москва",
-        "morning": "09:30",
-        "tz": "Europe/Moscow"
+        "id": "FIX-04",
+        "commit": "5e0694ff",
+        "description": "Добавлен текстовый guard 'назад'/'отмена' в task_repeat_custom_date_input и task_repeat_custom_days_input."
+      },
+      {
+        "id": "FIX-05",
+        "commit": "d033f722",
+        "description": "trep_back: edit=True → edit=False чтобы избежать 'message is not modified'."
+      },
+      {
+        "id": "FIX-06",
+        "commit": "78955933",
+        "description": "trep_back теперь полностью сбрасывает FSM (state.clear()), как cancel_task. Убрана текстовая навигация 'назад'/'отмена' для консистентности."
       }
-    ]
-  },
-  "what_we_are_building": {
-    "task": "P-20: Аудит UI — сверка функционала кнопки vs чат vs голос",
-    "description": "Проверить что все функции доступны через все три интерфейса. Составить таблицу gaps.",
-    "design_approved": false
-  },
-  "critical_problem": {
-    "title": "ОТКРЫТ: P-20 — сверка функционала",
-    "description": "Не все функции бота доступны одинаково через кнопки, текст и голос. Нужно пройти по SR_INTENT_MAP и сверить наличие каждого обработчика.",
-    "symptoms": [
-      "Достижения через новое меню работают, но classify_sphere дал сбой (исправлено в v7.39.12)",
-      "Отчёт СР показывал только активных (исправлено в v7.39.12)",
-      "Общая сверка не проводилась"
     ],
-    "root_cause": "Функции добавлялись в разное время разными SR без общей карты соответствия.",
-    "solution": "Провести полный аудит: для каждого intent из SR_INTENT_MAP проверить наличие кнопочного пути и голосового пути."
+    "claude_work": {
+      "description": "Клод провёл масштабную чистку роадмапов и улучшения UX",
+      "patches": [
+        "H-1a/b: Убраны остатки _roadmaps_upd из complete_task и edit_task",
+        "H-2a/b: История сообщений и _ts_summary в timezone садовника",
+        "H-3: Repeat picker — 7 вариантов (дни недели + своя дата)",
+        "H-4: Dedup при add_task — точные дубли блокируются",
+        "G1-G6: Полная зачистка роадмапов — константы, store, FSM, handlers, intent router, промпты",
+        "Патчер A: Tasks UX — 14 изменений (кнопки, меню, возврат в группу)",
+        "Патчер B: Достижения — жирный заголовок и отступы",
+        "Патчер C: Полные повторения в FSM (7 вариантов)",
+        "Патчер D: Статистика достижений без заголовка, месяца жирным",
+        "Патчер E: Роадмапы убраны из UI, промпта, контекста"
+      ]
+    }
   },
-  "files_to_fix_manually": {},
-  "repeat_logic_fix": {
-    "problem": "ИСПРАВЛЕНО в v7.39.9-v7.39.10 (Клод). Все 8 функций P-13a работают.",
-    "cause": "N/A",
-    "fix": "N/A"
-  },
-  "plan_after_fix": {
-    "next": "P-20: Аудит UI — сверка функционала кнопки vs чат vs голос",
-    "remaining": [
-      "P-12 (повторяющиеся задачи + своя дата)",
-      "P-11 (кнопка Своя дата в repeat_picker)",
-      "P-10 (pin/unpin)",
-      "P-15 (модульная архитектура)",
-      "P-16 (DeepSeek достижения)",
-      "P-17 (голосовые команды)",
-      "P-18 (/help раздел)"
-    ]
+  "current_critical_bug": {
+    "title": "Кнопка Назад не работает в днях недели и своей дате",
+    "status": "НЕ ИСПРАВЛЕНО",
+    "symptoms": [
+      "В создании задачи, на шаге выбора повтора, пользователь нажимает 'Выбрать дни недели' или 'Своя дата'",
+      "На экране ввода дней недели или даты нажимает кнопку '← Назад'",
+      "Кнопка отправляет callback trep_back",
+      "Бот логирует: 'Update is not handled'",
+      "Пользователь заблокирован — любой ввод идёт в handler ввода дней/даты"
+    ],
+    "root_cause": "Callback trep_back не матчится с handler'ом task_repeat_cb потому что фильтр StateFilter(TaskStates.waiting_for_repeat), а текущее состояние — waiting_for_repeat_custom_days или waiting_for_repeat_custom_date.",
+    "attempted_fixes": [
+      "FIX-02: добавлен trep_back в task_repeat_cb с установкой состояния waiting_for_repeat — НЕ ПОМОГЛО (фильтр не пропускает)",
+      "FIX-04: добавлен текстовый guard — НЕ ПОМОГЛО (кнопка, а не текст)",
+      "FIX-05: edit=True → edit=False — НЕ ПОМОГЛО (срабатывает только если callback доходит до handler'а)",
+      "FIX-06: полный сброс FSM через state.clear() — НЕ ПРОВЕРЕНО НА РЕНДЕРЕ (возможно патч не задеплоился)"
+    ],
+    "solution_required": "Добавить ОТДЕЛЬНЫЕ handler'ы для trep_back в состояниях waiting_for_repeat_custom_days и waiting_for_repeat_custom_date. Или добавить эти состояния в фильтр существующего task_repeat_cb.",
+    "next_action": "Прочитать актуальный bot.py с Render, найти trep_back в коде, понять доходит ли callback до handler'а. Если нет — добавить handler'ы."
   },
   "how_we_work": {
     "method": "Python patcher scripts — three-block PowerShell format",
@@ -87,8 +94,7 @@
     "block3": "py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add bot.py; git commit -m '...'; git pull --rebase origin main; git push",
     "rule": "Gardener copies each block, pastes into terminal, presses Enter. Block 2 is the entire patcher script. Gardener saves manually after pasting, then Block 3 runs it.",
     "pre_check": "ALWAYS request current file via GitHub API before writing patcher. NEVER assume local state.",
-    "post_check": "After deploy, request updated file via API to confirm SHA and correctness.",
-    "note": "Patcher scripts ONLY — no direct file editing, no regex on entire large files. Use exact string replacement with .replace() in Python."
+    "post_check": "After deploy, request updated file via API to confirm SHA and correctness."
   },
   "gardener_context": {
     "who": "Дима (Dima, Dmitrii Levin) — архитектор и первый садовник",
@@ -98,6 +104,16 @@
     "python": "py (Python 3.14.3)",
     "deploy": "Render auto-deploys on git push к main"
   },
+  "remaining_patches": [
+    "P-29: SR Achievement History в контексте",
+    "P-30: Fix add_achievement archive object",
+    "P-31: Synthesis trigger from free_conversation",
+    "P-32: Fix timestamps → ZoneInfo садовника",
+    "P-33: Fix pinned message persistence",
+    "P-34: SR Prompt Audit + NoneType guard",
+    "P-35: Fix deadline timezone",
+    "P-36: Fix search cache key + category"
+  ],
   "critical_rules": [
     "ALWAYS pre-check files via GitHub API before modifying",
     "ALWAYS use patcher scripts — never direct file replacement for >500 line files",
@@ -105,13 +121,5 @@
     "ALWAYS post-check after deploy",
     "ONE command per PowerShell block",
     "Match EXACT strings for .replace() — unicode escapes are tricky"
-  ],
-  "session_notes": [
-    "2026-05-09: P-13a дизайн согласован. 5 патчей (v1→v5). v5 применился частично, нужен ручной фикс.",
-    "2026-05-10 (DeepSeek): P-13a полностью исправлен Клодом. Проведён аудит: навигация чеклистов (2 фикса), меню достижений (кнопка + автосфера), отчёт СР (неактивные + whitelist).",
-    "2026-05-10 (DeepSeek): _classify_sphere — изменён порядок: connections/growth перед work. Достижение «пообщался с сыном» ушло в Работу из-за дефолта.",
-    "2026-05-10 (DeepSeek): external_sr_workflow обновлён до v1.4.4 (three_blocks_one_message + post_check_large_files).",
-    "2026-05-10 (DeepSeek): bot_update.json — progress 95%, добавлен P-20, записан changelog v7.39.9-v7.39.12.",
-    "Следующий шаг: P-20 — аудит UI. Проверить ВСЕ intent'ы из SR_INTENT_MAP на наличие кнопочных и голосовых обработчиков."
   ]
 }
