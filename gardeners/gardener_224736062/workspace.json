@@ -241,6 +241,21 @@
       "updated": "2026-05-12",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260512_017",
+      "title": "Напечатать соленая карамель",
+      "status": "todo",
+      "label_id": "работа",
+      "label_name": "Работа",
+      "life_area": "work",
+      "priority": 6,
+      "deadline": "2026-05-13",
+      "reminder": null,
+      "created": "2026-05-12",
+      "updated": "2026-05-12",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
