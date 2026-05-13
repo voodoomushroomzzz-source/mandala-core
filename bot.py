@@ -1570,7 +1570,7 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
                 new_dl = (_dt_rep.now() + _td_rep(days=365)).strftime("%Y-%m-%d")
         if new_dl:
             import uuid
-            new_tid = "task_" + _today().replace("-","") + "_" + str(len(tasks)+1).zfill(3)
+            new_tid = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
             new_task = {
                 "task_id": new_tid,
                 "title": task.get("title",""),
@@ -5567,7 +5567,7 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
         except Exception:
             await callback.message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач достигнут.")
         return
-    task_id = "task_" + _today().replace("-", "") + "_" + str(active_count+1).zfill(3)
+    task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
     title   = data.get("title", "Задача")
     merkaba = _auto_merkaba(title, data.get("label_name", ""))
     new_task = {
@@ -6097,7 +6097,7 @@ async def _create_task_atomic(user_id: str, message: Message,
             deadline = f"{yy}-{mm}-{dd}"
         # if already ISO YYYY-MM-DD → keep as-is
     merkaba = _auto_merkaba(title, resolved_label)
-    task_id = "task_" + _today().replace("-","") + "_" + str(active_count+1).zfill(3)
+    task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
     new_task = {
         "task_id":    task_id,
         "title":      title,
@@ -9018,7 +9018,7 @@ async def quick_add_task(callback: CallbackQuery):
     user_id = str(callback.from_user.id)
     title = callback.data[3:]
     tasks = list(store_get_tasks(user_id))
-    task_id = "task_" + _today().replace("-", "") + "_" + str(len(tasks)+1).zfill(3)
+    task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
     tasks.append({
         "task_id": task_id, "title": title, "status": "todo",
         "group_id": "group_001", "life_area": "other", "priority": 5,
