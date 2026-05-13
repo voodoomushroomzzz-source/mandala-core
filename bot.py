@@ -2206,80 +2206,106 @@ def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
 # ─── Proactive messaging ──────────────────────────────────────────────────────
 
 async def send_morning_greeting(telegram_id: str) -> None:
-    """Morning brief v2: daily analytics digest. Always sends — if no tasks, proposes to fill the day."""
+    """Morning greeting v3: alive SR message, personalised via synthesis + history."""
     try:
-        gardener = store_get_profile(str(telegram_id))
+        uid = str(telegram_id)
+        gardener = store_get_profile(uid)
         if not gardener:
             return
         settings = gardener.get("companion_settings", {})
         if not settings.get("proactive_mode", True):
             return
         from zoneinfo import ZoneInfo
-        from datetime import datetime as _dt
+        from datetime import datetime as _dt, timedelta as _td
         tz_name = settings.get("timezone", "Europe/Moscow")
-        tz = ZoneInfo(tz_name)
-        today_str = _dt.now(tz).strftime("%Y-%m-%d")
-        # Use dedicated morning_sent flag — don't block if gardener already interacted today
-        if _morning_sent.get(str(telegram_id)) == today_str:
-            return
-        name      = gardener.get("name", "Садовник")
-        resonance = gardener.get("resonance_level", 0)
-        ach_count = store_get_achievements_count(str(telegram_id))
-        tasks     = store_get_tasks(str(telegram_id))
-        active    = [t for t in tasks if t.get("status") != "completed"]
-        # Format date
-        MONTHS_RU = ["января","февраля","марта","апреля","мая","июня",
-                     "июля","августа","сентября","октября","ноября","декабря"]
+        try:
+            tz = ZoneInfo(tz_name)
+        except Exception:
+            tz = ZoneInfo("Europe/Moscow")
         now = _dt.now(tz)
-        date_str = f"{now.day} {MONTHS_RU[now.month-1]}"
-        # Build brief
-        lines = [f"🌅 <b>{name}, {date_str}</b>"]
-        from datetime import datetime as _dtt, timedelta as _tdelta
-        today_s    = _dtt.now(tz).strftime("%Y-%m-%d")
-        tomorrow_s = (_dtt.now(tz) + _tdelta(days=1)).strftime("%Y-%m-%d")
-        day_after_s= (_dtt.now(tz) + _tdelta(days=2)).strftime("%Y-%m-%d")
-        week_end_s = (_dtt.now(tz) + _tdelta(days=7)).strftime("%Y-%m-%d")
-        if active:
-            # Classify tasks
-            hot    = sorted([t for t in active if t.get("deadline") and t["deadline"] <= today_s],
-                             key=lambda t: t.get("deadline") or "9999")  # overdue + today
-            tomorrow_tasks = [t for t in active if t.get("deadline") == tomorrow_s]
-            # Compact brief
-            if hot:
-                hot_titles = ", ".join(t["title"] for t in hot[:3])
-                if len(hot) > 3:
-                    hot_titles += f" +{len(hot)-3}"
-                lines.append(f"🔥 Сегодня: {hot_titles}")
-            if tomorrow_tasks:
-                tm_titles = ", ".join(t["title"] for t in tomorrow_tasks[:3])
-                if len(tomorrow_tasks) > 3:
-                    tm_titles += f" +{len(tomorrow_tasks)-3}"
-                lines.append(f"⚡ Завтра: {tm_titles}")
-            if not hot and not tomorrow_tasks:
-                lines.append(f"Активных задач: {len(active)}")
-            lines.append("")
-            lines.append(f"💎 {ach_count} · 🔮 {resonance}%")
-        else:
-            lines.append("")
-            lines.append("Активных задач нет — как наполним этот день? 🌱")
-        # Version line — shown only if gardener hasn't seen this version yet
+        today_str = now.strftime("%Y-%m-%d")
+        if _morning_sent.get(uid) == today_str:
+            return
+        name = gardener.get("name", "Садовник")
+        # Gather context for SR
+        core = gardener.get("deep_profile", {}).get("memory", {}).get("core", "")
+        interests = gardener.get("deep_profile", {}).get("memory", {}).get("interests", {})
+        confirmed = interests.get("confirmed", [])
+        ach_count = store_get_achievements_count(uid)
+        tasks = store_get_tasks(uid)
+        active = [t for t in tasks if t.get("status") != "completed"]
+        hot = sorted(
+            [t for t in active if t.get("deadline") and t["deadline"] <= today_str],
+            key=lambda t: t.get("deadline") or "9999"
+        )
+        tomorrow_str = (now + _td(days=1)).strftime("%Y-%m-%d")
+        tomorrow_tasks = [t for t in active if t.get("deadline") == tomorrow_str]
+        hot_text = ", ".join(t["title"] for t in hot[:3]) if hot else "нет"
+        tomorrow_text = ", ".join(t["title"] for t in tomorrow_tasks[:3]) if tomorrow_tasks else "нет"
+        sr = store_get_sphere_resonance(uid)
+        spheres_line = "  ".join(f"{SPHERE_EMOJI[s]}{sr.get(s,20)}%" for s in SPHERES)
+        weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
+        weak_text = ", ".join(weak_spheres) if weak_spheres else "сбалансированы"
+        history = _get_history(uid)
+        recent = history[-10:] if history else []
+        history_text = "\n".join(
+            f"{'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')[:100]}"
+            for m in recent
+        ) if recent else "диалога ещё нет"
+        DAYS_RU = ["понедельник","вторник","среда","четверг","пятница","суббота","воскресенье"]
+        current_time = f"{now.strftime('%H:%M')}, {DAYS_RU[now.weekday()]}"
+        ws = store_get_workspace(uid) or {}
+        last_inter = ws.get("last_interaction_date", "")
+        missed_days = 0
+        if last_inter:
+            try:
+                last_dt = _dt.strptime(last_inter, "%Y-%m-%d").replace(tzinfo=tz)
+                missed_days = (now - last_dt).days
+            except Exception:
+                pass
+        missed_note = ""
+        if missed_days >= 2:
+            missed_note = f"Садовник не писал {missed_days} дней. Соскучилась, но не дави."
+        prompt = (
+            "Ты — СР, дух сада. Сейчас утро садовника " + name + ".\n\n"
+            "Портрет садовника: " + (core[:400] if core else "формируется") + "\n"
+            "Интересы: " + (", ".join(confirmed[:5]) if confirmed else "не определены") + "\n"
+            "Вчерашний диалог:\n" + history_text + "\n\n"
+            "Горящие задачи (сегодня/просрочены): " + hot_text + "\n"
+            "Задачи на завтра: " + tomorrow_text + "\n"
+            "Резонанс сфер: " + spheres_line + "\n"
+            "Слабые сферы: " + weak_text + "\n"
+            "Достижений всего: " + str(ach_count) + "\n\n"
+            "Сейчас " + current_time + " по таймзоне садовника.\n"
+            + (missed_note + "\n" if missed_note else "") +
+            "\nРуководствуясь ахимсой, напиши одно тёплое утреннее приветствие.\n"
+            "Это начало дня — можно мягко подсветить что сегодня ждёт, "
+            "но без давления и списков. Если есть задача на сегодня — "
+            "упомянуть как часть дня, а не как обязанность.\n"
+            "Тон: тёплый, утренний, бодрящий. Максимум 3 предложения. С эмодзи.\n"
+            "Без markdown. Без «ты должен», «тебе нужно». Без слова «замечаю».\n"
+            "Ответь ТОЛЬКО текстом сообщения."
+        )
+        msg = await _call_openrouter([
+            {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском. Руководствуйся ахимсой."},
+            {"role": "user", "content": prompt}
+        ])
+        if not msg or len(msg.strip()) < 5:
+            # Fallback if SR didn't respond
+            msg = f"🌅 Доброе утро, {name}!\n\nПусть сегодняшний день будет наполнен тем что важно для тебя."
+        await bot.send_message(int(uid), msg.strip(), parse_mode="HTML", reply_markup=get_main_keyboard(), disable_web_page_preview=True)
+        _add_to_history(uid, "assistant", msg.strip())
+        _morning_sent[uid] = today_str
+        ws["last_morning_date"] = today_str
+        store_set_workspace(uid, ws)
+        _mark_proactive_sent(uid)
+        # Update last_notified_version
         last_ver = gardener.get("last_notified_version", "")
         if last_ver != BOT_VERSION:
-            lines.append(f"🆕 Версия {BOT_VERSION} — <a href='https://t.me/{BOT_USERNAME}?start=changelog'>что нового?</a>")
             gardener["last_notified_version"] = BOT_VERSION
-            store_set_profile(str(telegram_id), gardener)
-        text = "\n".join(lines)
-        await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard(), disable_web_page_preview=True)
-        # Add to conversation history so SR sees this message when gardener responds
-        _add_to_history(str(telegram_id), "assistant", text)
-        # Mark flags ONLY after successful send
-        _morning_sent[str(telegram_id)] = today_str
-        ws = store_get_workspace(str(telegram_id)) or {}
-        ws["last_morning_date"] = today_str
-        store_set_workspace(str(telegram_id), ws)
-        _mark_proactive_sent(telegram_id)
+            store_set_profile(uid, gardener)
     except Exception as e:
-        logger.error(f"Morning brief error: {e}")
+        logger.error(f"Morning greeting error: {e}")
 
 async def send_evening_checkin(telegram_id: str) -> None:
     try:
