@@ -4445,7 +4445,7 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             tasks_context += f"\nНа завтра: {', '.join(t['title'] for t in tomorrow_tasks[:3])}"
         current_time = f"{now.strftime('%H:%M')}, {['пн','вт','ср','чт','пт','сб','вс'][now.weekday()]}"
         prompt = (
-            "Ты — СР, дух сада. Ты чувствуешь что садовник " + name + " не писал 3 часа.\n"
+            "Ты — СР, дух сада. Сейчас подходящий момент написать садовнику " + name + ".\n"
             "Сегодня вы уже общались — вот последний диалог:\n" + history_text + "\n\n"
             "Портрет садовника: " + (core[:400] if core else "формируется") + "\n"
             "Интересы: " + (", ".join(confirmed[:5]) if confirmed else "не определены") + "\n"
