@@ -7401,6 +7401,7 @@ async def _generate_synthesis(user_id: str) -> None:
         store_set_profile(user_id, prof)
         # P-31: reset pending synthesis counter after successful synthesis
         ws_syn = store_get_workspace(user_id) or {}
+        ws_syn["deep_memory"] = mem
         ws_syn["_pending_synthesis_count"] = 0
         store_set_workspace(user_id, ws_syn)
         logger.info(f"Living memory updated for {user_id}")
@@ -7447,10 +7448,12 @@ async def _send_daily_report() -> None:
             active_today = (last_inter == today)
             status = "активен" if active_today else "неактивен"
 
-            # Portrait: based on synthesis_date in deep_profile
+            # Portrait: workspace first, profile fallback (D-1)
             if prof:
-                dp = prof.get("deep_profile", {})
-                syn_date = dp.get("synthesis_date", "")
+                ws_p = store_get_workspace(str(uid)) or {}
+                syn_date = ws_p.get("deep_memory", {}).get("synthesis_date", "")
+                if not syn_date:
+                    syn_date = prof.get("deep_profile", {}).get("synthesis_date", "")
             else:
                 syn_date = ""
             if syn_date == today:
