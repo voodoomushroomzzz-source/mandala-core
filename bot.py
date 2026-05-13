@@ -4422,16 +4422,30 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
                     return False
             except Exception:
                 pass  # if parse fails, proceed
-        # Build context for SR
+        # Build context for SR — P-38: умный фарш
+        dp = prof.get("deep_profile", {})
+        mem = dp.get("memory", {})
         history = _get_history(uid)
-        recent = history[-10:] if history else []
+        recent = history[-20:] if history else []
         history_text = "\n".join(
-            f"{'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')[:100]}"
+            f"{'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')}"
             for m in recent
         ) if recent else "диалога ещё нет"
-        core = prof.get("deep_profile", {}).get("memory", {}).get("core", "")
-        interests = prof.get("deep_profile", {}).get("memory", {}).get("interests", {})
+        core = mem.get("core", "")
+        interests = mem.get("interests", {})
         confirmed = interests.get("confirmed", [])
+        snapshots = mem.get("snapshots", [])[-3:]
+        snapshots_text = "\n".join(f"- {s.get('date','')}: {s.get('text','')}" for s in snapshots) if snapshots else ""
+        sr_obs = dp.get("sr_observations", [])[-5:]
+        obs_text = "\n".join(f"- {o.get('date','')}: {o.get('text','')}" for o in sr_obs) if sr_obs else ""
+        from datetime import date as _date_dp
+        three_months_ago = (_date_dp.today().replace(day=1) - _td_dp(days=1)).replace(day=1)
+        cutoff = three_months_ago.strftime("%Y-%m")
+        sphere_hist = [s for s in dp.get("sphere_history", []) if s.get("month", "") >= cutoff]
+        sphere_text = "\n".join(
+            f"- {s.get('month')}: {s.get('sphere')} {s.get('resonance_level', 0)}%"
+            for s in sphere_hist
+        ) if sphere_hist else ""
         tasks = store_get_tasks(uid)
         active = [t for t in tasks if t.get("status") != "completed"]
         today_str = now.strftime("%Y-%m-%d")
@@ -4444,19 +4458,32 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         if tomorrow_tasks:
             tasks_context += f"\nНа завтра: {', '.join(t['title'] for t in tomorrow_tasks[:3])}"
         current_time = f"{now.strftime('%H:%M')}, {['пн','вт','ср','чт','пт','сб','вс'][now.weekday()]}"
-        prompt = (
-            "Ты — СР, дух сада. Сейчас подходящий момент написать садовнику " + name + ".\n"
-            "Сегодня вы уже общались — вот последний диалог:\n" + history_text + "\n\n"
-            "Портрет садовника: " + (core[:400] if core else "формируется") + "\n"
-            "Интересы: " + (", ".join(confirmed[:5]) if confirmed else "не определены") + "\n"
-            "Активные задачи:" + (tasks_context if tasks_context else " нет активных задач") + "\n"
-            "Текущее время: " + current_time + " (таймзона " + tz_name + ")\n\n"
-            "Руководствуясь ахимсой, напиши одно тёплое сообщение садовнику.\n"
-            "Если чувствуешь что повода нет — верни \"SKIP\".\n"
-            "Ответь ТОЛЬКО текстом сообщения или \"SKIP\". Без JSON."
-        )
+        prompt_parts = [
+            f"Сейчас {current_time} (таймзона {tz_name}). Подходящий момент написать садовнику {name}.",
+            "",
+            f"ЖИВОЙ ПОРТРЕТ:\n{core if core else 'формируется'}",
+        ]
+        if snapshots_text:
+            prompt_parts += ["", f"ЧТО ИЗМЕНИЛОСЬ В ПОСЛЕДНИЕ ДНИ:\n{snapshots_text}"]
+        if obs_text:
+            prompt_parts += ["", f"НАБЛЮДЕНИЯ ИЗ ДИАЛОГОВ:\n{obs_text}"]
+        if sphere_text:
+            prompt_parts += ["", f"ДИНАМИКА СФЕР (3 мес):\n{sphere_text}"]
+        if confirmed:
+            prompt_parts += ["", f"ИНТЕРЕСЫ: {', '.join(confirmed[:10])}"]
+        prompt_parts += [
+            "",
+            f"ПОСЛЕДНИЕ 20 СООБЩЕНИЙ:\n{history_text}",
+            "",
+            f"АКТИВНЫЕ ЗАДАЧИ:{tasks_context if tasks_context else ' нет'}",
+            "",
+            "Руководствуясь ахимсой, напиши одно тёплое сообщение садовнику.",
+            "Если чувствуешь что повода нет — верни \"SKIP\".",
+            "Ответь ТОЛЬКО текстом сообщения или \"SKIP\". Без JSON.",
+        ]
+        prompt = "\n".join(prompt_parts)
         msg = await _call_openrouter([
-            {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском. Руководствуйся ахимсой."},
+            {"role": "system", "content": SR_CORE_PROMPT},
             {"role": "user", "content": prompt}
         ])
         if msg and msg.strip().upper() != "SKIP" and len(msg.strip()) >= 5:
