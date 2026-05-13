@@ -1161,11 +1161,11 @@ def _build_profile_card(user_id: str) -> str:
     def _task_sort_key(t):
         dl = t.get("deadline")
         return (0, dl) if dl and dl <= today_rem else (1, dl or "9999")
-    nearest_tasks = sorted(active_all, key=_task_sort_key)[:5]
+    nearest_tasks = sorted(active_all, key=_task_sort_key)[:7]
     shown_tasks = len(nearest_tasks)
     lines.append(f"📋 <b>Ближайшие задачи</b> {shown_tasks}/{total_tasks}")
     for t in nearest_tasks:
-        ind = _deadline_indicator(t.get("deadline", ""))
+        ind = _deadline_indicator(t.get("deadline", ""), tz_name)
         dl  = f" · {t['deadline']}" if t.get("deadline") else ""
         lines.append(f"  · {ind}{t['title']}{dl}")
     if not nearest_tasks:
@@ -1264,12 +1264,18 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
 # P-13a: Меню Задач v2 — группы + список задач внутри группы + repeat
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def _task_urgency_emoji(deadline: str) -> str:
+def _task_urgency_emoji(deadline: str, tz_name: str = "Europe/Moscow") -> str:
     if not deadline:
         return "\U0001f331"  # 🌱
     from datetime import datetime as _dt_urg, timedelta as _td_urg
-    today = _dt_urg.now().strftime("%Y-%m-%d")
-    day_after = (_dt_urg.now() + _td_urg(days=2)).strftime("%Y-%m-%d")
+    from zoneinfo import ZoneInfo as _ZI_urg
+    try:
+        _tz_urg = _ZI_urg(tz_name)
+    except Exception:
+        _tz_urg = _ZI_urg("Europe/Moscow")
+    _now_urg = _dt_urg.now(_tz_urg)
+    today = _now_urg.strftime("%Y-%m-%d")
+    day_after = (_now_urg + _td_urg(days=2)).strftime("%Y-%m-%d")
     if deadline <= today:
         return "\U0001f525"  # 🔥
     if deadline < day_after:
@@ -1339,13 +1345,14 @@ def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMark
         group_name = group["name"] if group else "\u0413\u0440\u0443\u043f\u043f\u0430"
         tasks = [t for t in all_tasks if t.get("status") != "completed" and t.get("label_id") == group_id]
     tasks = _sort_tasks_smart(tasks)
+    _tz_gi = (store_get_profile(user_id) or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
     btns = []
     for t in tasks:
         tid = t.get("task_id", "")
         title = t.get("title", "-")[:28]
         dl = t.get("deadline", "")
         dl_short = f" \u00b7 {dl}" if dl else ""
-        emoji = _task_urgency_emoji(dl)
+        emoji = _task_urgency_emoji(dl, _tz_gi)
         repeat_str = " \U0001f501" if t.get("repeat") else ""
         label = f"{emoji} {title}{repeat_str}{dl_short}"
         btns.append([InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}")])
