@@ -1,21 +1,28 @@
 {
-  "date": "2026-05-12",
+  "date": "2026-05-13",
   "version": "7.39.23",
-  "gardeners": {
-    "8274257926": {
-      "messages": 2,
-      "tasks_created": 0,
-      "tasks_completed": 0,
-      "achievements": 0,
-      "intents": {}
+  "gardeners": {},
+  "issues": [
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
     },
-    "224736062": {
-      "messages": 1,
-      "tasks_created": 0,
-      "tasks_completed": 0,
-      "achievements": 0,
-      "intents": {}
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
     }
-  },
-  "issues": []
+  ]
 }
