@@ -2433,9 +2433,9 @@ async def run_proactive_scheduler() -> None:
                             and _morning_sent.get(uid) != today_p):
                         await send_morning_greeting(uid)
                     else:
-                        await check_silence_and_engage(uid, g)
+                        pass  # P-39: silence tone handled by _send_daytime_proactive
                 except Exception:
-                    await check_silence_and_engage(uid, g)
+                    pass  # P-39: silence tone handled by _send_daytime_proactive
             # P-37: daytime proactive window (12-19, 3h silence)
             await _send_daytime_proactive(uid)
         # Birthday check
@@ -4316,76 +4316,6 @@ async def run_resonance_decay() -> None:
         logger.error(f"Resonance decay error: {e}", exc_info=True)
 
 
-async def _sr_engagement_message(telegram_id: str, days: int) -> str | None:
-    """Generate personalised engagement message via SR. Returns None on failure."""
-    try:
-        profile = store_get_profile(telegram_id) or {}
-        name = profile.get("name", "Садовник")
-        sr = store_get_sphere_resonance(telegram_id)
-        weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
-        tasks = store_get_tasks(telegram_id)
-        active = [t for t in tasks if t.get("status") != "completed"]
-        from datetime import datetime as _dtr_sr
-        today_sr = _dtr_sr.now().strftime("%Y-%m-%d")
-        overdue = [t for t in active if t.get("deadline") and t["deadline"] < today_sr]
-        overdue_titles = ", ".join(t["title"] for t in overdue[:3]) if overdue else "нет"
-        active_titles = ", ".join(t["title"] for t in active[:5]) if active else "нет задач"
-        phase_desc = {3: "лёгкая тишина", 6: "заметная пауза", 9: "неделя без вестей",
-                      12: "долгая тишина", 15: "две недели", 18: "почти три недели",
-                      21: "три недели"}.get(days // 3 * 3, "тишина")
-        weak_info = f"Слабые сферы: {', '.join(weak_spheres)}." if weak_spheres else "Все сферы сбалансированы."
-        prompt = (
-            f"Садовник {name} не писал {days} дней. Фаза: {phase_desc}.\n"
-            f"Активные задачи: {active_titles}.\n"
-            f"Просроченные: {overdue_titles}.\n"
-            f"{weak_info}\n\n"
-            f"Напиши одно тёплое, персонализированное сообщение (1-3 предложения). "
-            f"Будь как друг который заметил отсутствие и рад снова видеть человека. "
-            f"Не дави. Не требуй ответа. Не используй слово «замечаю». "
-            f"Используй эмодзи. Ответь ТОЛЬКО текстом сообщения, без JSON."
-        )
-        msg = await _call_openrouter([
-            {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском."},
-            {"role": "user", "content": prompt}
-        ])
-        if msg and len(msg.strip()) >= 10:
-            return msg.strip()
-    except Exception:
-        pass
-    return None
-
-async def _pick_engagement_message(telegram_id: str, days: int) -> str:
-    """Fallback engagement message by silence phase: 3/5/7/14/21 days."""
-    profile = store_get_profile(telegram_id) or {}
-    name    = profile.get("name", "Садовник")
-    tasks   = store_get_tasks(telegram_id)
-    active  = [t for t in tasks if t.get("status") != "completed"]
-    from datetime import datetime as _dtr4
-    today_s = _dtr4.now().strftime("%Y-%m-%d")
-    overdue = [t for t in active if t.get("deadline") and t["deadline"] < today_s]
-    if days >= 21:
-        return f"🌿"
-    if days >= 14:
-        return f"Буду здесь, {name}, когда понадоблюсь. 🌱"
-    if days >= 7:
-        return (f"{name}, тишина уже неделю. Всё хорошо? 🌿\n\n"
-                f"Просто хочу убедиться — я рядом.")
-    if days >= 5:
-        if overdue:
-            t = overdue[0]
-            return f"«{t['title']}» висит уже несколько дней, {name}.\n\nЧто-то изменилось с этим?"
-        sphere_names = {"health": "здоровьем", "creativity": "творчеством", "work": "работой",
-                        "connections": "общением", "growth": "ростом"}
-        from collections import Counter
-        areas = [t.get("life_area", "work") for t in active]
-        sphere = Counter(areas).most_common(1)[0][0] if areas else "work"
-        topic = sphere_names.get(sphere, "делами")
-        return f"{name}, как у тебя с {topic}? 🌿"
-    if days >= 3:
-        return f"{name}, как ты? Что происходит? 🌿"
-    return f"{name}, как ты? 🌿"
-
-
 async def _send_daytime_proactive(telegram_id: str) -> bool:
     """Send proactive message during daytime window (12-19, 3h silence).
     Returns True if message was sent."""
@@ -4458,6 +4388,22 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         if tomorrow_tasks:
             tasks_context += f"\nНа завтра: {', '.join(t['title'] for t in tomorrow_tasks[:3])}"
         current_time = f"{now.strftime('%H:%M')}, {['пн','вт','ср','чт','пт','сб','вс'][now.weekday()]}"
+        # P-39: дни тишины
+        try:
+            last_interaction = ws.get("last_interaction_date", "")
+            if last_interaction:
+                from datetime import date as _date_si
+                days_silent = (_date_si.today() - _date_si.fromisoformat(last_interaction)).days
+            else:
+                days_silent = 0
+        except Exception:
+            days_silent = 0
+        if days_silent >= 7:
+            silence_note = f"Садовник молчит {days_silent} дней. Тон — очень тихий, одна фраза, без давления."
+        elif days_silent >= 3:
+            silence_note = f"Садовник молчит {days_silent} дней. Тон — мягкий, как друг который просто даёт знать что рядом."
+        else:
+            silence_note = ""
         prompt_parts = [
             f"Сейчас {current_time} (таймзона {tz_name}). Подходящий момент написать садовнику {name}.",
             "",
@@ -4477,6 +4423,7 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             "",
             f"АКТИВНЫЕ ЗАДАЧИ:{tasks_context if tasks_context else ' нет'}",
             "",
+            f"Дней молчания: {days_silent}." + (" " + silence_note if silence_note else ""),
             "Руководствуясь ахимсой, напиши одно тёплое сообщение садовнику.",
             "Если чувствуешь что повода нет — верни \"SKIP\".",
             "Ответь ТОЛЬКО текстом сообщения или \"SKIP\". Без JSON.",
@@ -4497,49 +4444,6 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
     except Exception as e:
         logger.error(f"Daytime proactive error for {telegram_id}: {e}")
         return False
-
-async def check_silence_and_engage(telegram_id: str, gardener: dict) -> None:
-    """Send proactive message if user silent 3+ days. Respects quiet hours."""
-    try:
-        # Read last interaction from workspace (survives restarts)
-        ws = store_get_workspace(str(telegram_id)) or {}
-        last_str = ws.get("last_interaction_date", "")
-        if not last_str:
-            return  # no data yet
-        from datetime import datetime as _dse
-        try:
-            last_dt = _dse.strptime(last_str, "%Y-%m-%d")
-            days = (_dse.now() - last_dt).days
-        except Exception:
-            return
-        if days < 3 or days >= 22:
-            return
-        # Only send once per silence phase
-        phase_key = f"silence_phase_{days // 3 * 3}"  # 3, 6, 9, 12, 15, 18, 21
-        if ws.get(phase_key):
-            return  # already sent for this phase
-        if not _can_send_proactive(telegram_id):
-            return
-        from zoneinfo import ZoneInfo
-        tz = ZoneInfo(gardener.get("companion_settings", {}).get("timezone", "Europe/Moscow"))
-        now_h = _dse.now(tz).hour
-        if now_h >= 22 or now_h < 9:
-            return
-        # Try SR-generated message first, fallback to template
-        text = await _sr_engagement_message(telegram_id, days)
-        if not text:
-            text = await _pick_engagement_message(telegram_id, days)
-        await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
-        _mark_proactive_sent(telegram_id)
-        if days >= 3:
-            store_add_resonance(telegram_id, 1)
-        # Mark phase as sent
-        ws[phase_key] = True
-        store_set_workspace(str(telegram_id), ws)
-        _fire_sync()
-    except Exception as e:
-        logger.error(f"Engagement error {telegram_id}: {e}")
-
 
 @router.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
