@@ -2228,8 +2228,11 @@ async def send_morning_greeting(telegram_id: str) -> None:
             return
         name = gardener.get("name", "Садовник")
         # Gather context for SR
-        core = gardener.get("deep_profile", {}).get("memory", {}).get("core", "")
-        interests = gardener.get("deep_profile", {}).get("memory", {}).get("interests", {})
+        # D-1: workspace first, profile fallback
+        ws_mg = store_get_workspace(uid) or {}
+        deep_mem_mg = ws_mg.get("deep_memory") or gardener.get("deep_profile", {}).get("memory", {})
+        core = deep_mem_mg.get("core", "")
+        interests = deep_mem_mg.get("interests", {})
         confirmed = interests.get("confirmed", [])
         ach_count = store_get_achievements_count(uid)
         tasks = store_get_tasks(uid)
@@ -4388,8 +4391,9 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             except Exception:
                 pass  # if parse fails, proceed
         # Build context for SR — P-38: умный фарш
-        dp = prof.get("deep_profile", {})
-        mem = dp.get("memory", {})
+        # D-1: workspace first, profile fallback
+        ws_dp = store_get_workspace(uid) or {}
+        mem = ws_dp.get("deep_memory") or prof.get("deep_profile", {}).get("memory", {})
         history = _get_history(uid)
         recent = history[-20:] if history else []
         history_text = "\n".join(
@@ -7104,6 +7108,9 @@ def _build_sr_context(user_id: str) -> dict:
     dp = gardener.get("deep_profile", {})
     mem = dp.get("memory", {})
     # Core portrait (living memory)
+    # D-1: workspace first, profile fallback
+    ws_sr_ctx = store_get_workspace(user_id) or {}
+    mem = ws_sr_ctx.get("deep_memory") or mem
     core = mem.get("core", dp.get("synthesis", ""))
     # Interests from living memory
     interests_data = mem.get("interests", {})
