@@ -2,9 +2,9 @@
   "gardener_id": "gardener_224736062",
   "telegram_id": "224736062",
   "name": "Дима",
-  "resonance_level": 50,
+  "resonance_level": 100,
   "created": "2026-04-18",
-  "updated": "2026-05-12",
+  "updated": "2026-05-13",
   "personal_info": {
     "life_areas": {
       "body": {
@@ -70,6 +70,11 @@
       "date": "2026-05-12",
       "resonance": 100,
       "achievements_count": 82
+    },
+    {
+      "date": "2026-05-13",
+      "resonance": 100,
+      "achievements_count": 85
     }
   ],
   "deep_profile": {
@@ -146,8 +151,8 @@
         },
         "connections": {
           "tasks": 0,
-          "achievements": 6,
-          "resonance_delta": 18
+          "achievements": 7,
+          "resonance_delta": 21
         },
         "growth": {
           "tasks": 1,
