@@ -206,6 +206,41 @@
       "name": "P-37 — Daytime proactive window 12-19, 3h silence",
       "date": "2026-05-13",
       "commit": "b0586fd4"
+    },
+    "P-38": {
+      "name": "P-38 — Daily report fix (_store.keys) + synthesis for active only",
+      "date": "2026-05-13",
+      "commit": "b51e0ecf"
+    },
+    "P-39": {
+      "name": "P-39 — Morning greeting v3 (alive SR message via synthesis)",
+      "date": "2026-05-13",
+      "commit": "e2035c70"
+    },
+    "P-40": {
+      "name": "P-40 — NOTE-01 fix (NoneType guard in _call_openrouter)",
+      "date": "2026-05-13",
+      "commit": "e4972344"
+    },
+    "P-41": {
+      "name": "P-41 — Proactive message history fix (_add_to_history)",
+      "date": "2026-05-13",
+      "commit": "1010b4e3"
+    },
+    "P-42": {
+      "name": "P-42 — Proactive tone fix (remove 3h silence mention)",
+      "date": "2026-05-13",
+      "commit": "cc16c777"
+    },
+    "P-43": {
+      "name": "P-43 — Profile: 7 tasks + tz-aware deadline emoji everywhere",
+      "date": "2026-05-13",
+      "commit": "c00e8d28"
+    },
+    "P-44": {
+      "name": "P-44 — Custom date fix: tedit + ttask FSM state preservation",
+      "date": "2026-05-13",
+      "commit": "3f69fe8b"
     }
   },
   "known_bugs": {
@@ -400,7 +435,14 @@
     "J-2_intents ⏳ PLANNED — Интенты в router",
     "J-3_context ⏳ PLANNED — Контекст дневника в _build_user_context_msg",
     "J-4_synthesis ⏳ PLANNED — Дневник в _generate_synthesis",
-    "J-5_proactive ⏳ PLANNED — Проактивные триггеры СР для дневника"
+    "J-5_proactive ⏳ PLANNED — Проактивные триггеры СР для дневника",
+    "P-38 ✅ DONE (2026-05-13) — Daily report _store.keys + synthesis active only",
+    "P-39 ✅ DONE (2026-05-13) — Morning greeting v3 alive SR",
+    "P-40 ✅ DONE (2026-05-13) — NOTE-01 NoneType guard",
+    "P-41 ✅ DONE (2026-05-13) — Proactive _add_to_history",
+    "P-42 ✅ DONE (2026-05-13) — Proactive tone fix",
+    "P-43 ✅ DONE (2026-05-13) — Profile 7 tasks + tz emoji",
+    "P-44 ✅ DONE (2026-05-13) — Custom date FSM fix"
   ],
   "health": {
     "status": "healthy",
