@@ -442,7 +442,13 @@
     "P-41 ✅ DONE (2026-05-13) — Proactive _add_to_history",
     "P-42 ✅ DONE (2026-05-13) — Proactive tone fix",
     "P-43 ✅ DONE (2026-05-13) — Profile 7 tasks + tz emoji",
-    "P-44 ✅ DONE (2026-05-13) — Custom date FSM fix"
+    "P-44 ✅ DONE (2026-05-13) — Custom date FSM fix",
+    "D-1_synthesis_to_workspace ✅ DONE (2026-05-13) — Перенос synthesis в workspace",
+    "D-2_cleanup_profile ⏳ PLANNED — Очистка старого synthesis из profile",
+    "D-3_deep_synthesis_method ⏳ PLANNED — Метод глубинного синтеза",
+    "D-4_milestone_detection ⏳ PLANNED — Система milestone'ов",
+    "D-5_monthly_review ⏳ PLANNED — Подведение итогов месяца",
+    "D-6_sr_usage ⏳ PLANNED — Как SR использует deep_synthesis"
   ],
   "health": {
     "status": "healthy",
@@ -551,6 +557,81 @@
           "SR может оставлять свои записи через add_journal_entry при синтезе",
           "В _send_daytime_proactive добавлена возможность предложить дневник",
           "Ахимса: SR не пишет без повода, не спамит"
+        ]
+      }
+    }
+  },
+  "project_deep_synthesis": {
+    "title": "Deep Synthesis & Milestones — глубинная память сада",
+    "status": "in_progress",
+    "created": "2026-05-13",
+    "description": "Два слоя памяти — динамический (workspace, каждый день) и глубинный (profile, раз в месяц). Вместе они дают SR видеть не только «кто садовник сегодня», но и «как он меняется со временем». Плюс система milestone'ов для значимых событий и ежемесячные итоги.",
+    "phases": {
+      "D-1_synthesis_to_workspace": {
+        "status": "✅ DONE (2026-05-13)",
+        "name": "Перенос synthesis в workspace",
+        "description": "Патч bot.py: _generate_synthesis пишет deep_memory в workspace. Чтение с fallback'ом: workspace → profile.",
+        "deliverables": [
+          "_generate_synthesis — параллельная запись ws['deep_memory'] = mem",
+          "Все чтения core/interests/synthesis_date — сначала workspace, потом profile",
+          "Тест на профиле Димы 1-2 дня"
+        ]
+      },
+      "D-2_cleanup_profile": {
+        "status": "planned",
+        "name": "Очистка старого synthesis из profile",
+        "description": "Убрать fallback'и в bot.py. Патчером удалить deep_profile.memory и deep_profile.synthesis из profile.json всех садовников.",
+        "deliverables": [
+          "Убрать fallback'и на profile",
+          "Очистить profile.json через patcher",
+          "profile.json уменьшен, всё работает"
+        ]
+      },
+      "D-3_deep_synthesis_method": {
+        "status": "planned",
+        "name": "Метод глубинного синтеза",
+        "description": "_generate_deep_synthesis(uid) — читает workspace.deep_memory.snapshots за месяц, сравнивает с предыдущим profile.deep_synthesis, формирует мета-портрет.",
+        "deliverables": [
+          "Новый метод _generate_deep_synthesis",
+          "Чтение истории snapshots за месяц",
+          "Сравнение с предыдущим глубинным срезом",
+          "Сохранение в profile.deep_synthesis[]",
+          "Вызов раз в 2-4 недели (1-го и 15-го числа)"
+        ]
+      },
+      "D-4_milestone_detection": {
+        "status": "planned",
+        "name": "Система milestone'ов",
+        "description": "Формализовать типы milestone'ов: количественные (100 задач, 50 достижений), качественные (смена доминантной сферы), временные (месяц в саду, день рождения). Детекция при deep_synthesis + при событиях.",
+        "deliverables": [
+          "Формализация типов milestone'ов",
+          "Детекция при deep_synthesis",
+          "Детекция при complete_task, synthesis",
+          "Запись в profile.milestones[]",
+          "SR видит milestone'ы в контексте"
+        ]
+      },
+      "D-5_monthly_review": {
+        "status": "planned",
+        "name": "Подведение итогов месяца",
+        "description": "Метод _generate_monthly_review или интент monthly_review. SR формирует живой рассказ о прошедшем месяце: глубинный портрет, milestone'ы, статистика сфер, тренды.",
+        "deliverables": [
+          "Метод или интент monthly_review",
+          "Сбор данных за месяц",
+          "SR пишет живую рефлексию (не отчёт)",
+          "Может предлагать темы для дневника"
+        ]
+      },
+      "D-6_sr_usage": {
+        "status": "planned",
+        "name": "Как SR использует deep_synthesis",
+        "description": "В _build_user_context_msg — флаг _deep_synthesis_needed. При запросе ретроспективы, milestone'е, итогах месяца. Не чаще раза в неделю в обычном общении (ахимса).",
+        "deliverables": [
+          "Флаг _deep_synthesis_needed в контексте",
+          "Использование при запросе ретроспективы",
+          "Использование при milestone'ах",
+          "SR может сравнить «тогда» и «сейчас»",
+          "Ахимса: не чаще раза в неделю"
         ]
       }
     }
