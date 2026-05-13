@@ -7396,6 +7396,9 @@ async def _send_daily_report() -> None:
         # Load all gardeners from whitelist
         await _load_store()
         _all_uids = [str(uid) for uid in _store.keys()]
+        # P-31: ensure fresh synthesis for all gardeners before report
+        for _uid in _all_uids:
+            await _generate_synthesis(_uid)
 
         # ── Gardener list ─────────────────────────────────────────────────
         lines.append("👥 Садовники:")
@@ -9063,8 +9066,8 @@ async def on_startup():
     scheduler.add_job(run_reminder_scheduler, "interval", minutes=1, id="reminders")
     scheduler.add_job(run_proactive_scheduler, "interval", minutes=1, id="proactive")
     scheduler.add_job(run_resonance_decay, "cron", hour=3, minute=0, id="decay")
-    scheduler.add_job(_send_daily_report, "cron", hour=19, minute=5, id="daily_report",
-                      timezone="UTC")  # 19:05 UTC = 22:05 MSK (TEST)
+    scheduler.add_job(_send_daily_report, "cron", hour=19, minute=15, id="daily_report",
+                      timezone="UTC")  # 19:15 UTC = 22:15 MSK (TEST)
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
     scheduler.add_job(_check_webhook, "interval", minutes=5, id="webhook_check")
     scheduler.start()
