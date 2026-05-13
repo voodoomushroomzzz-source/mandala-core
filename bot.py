@@ -2270,6 +2270,8 @@ async def send_morning_greeting(telegram_id: str) -> None:
             store_set_profile(str(telegram_id), gardener)
         text = "\n".join(lines)
         await bot.send_message(int(telegram_id), text, parse_mode="HTML", reply_markup=get_main_keyboard(), disable_web_page_preview=True)
+        # Add to conversation history so SR sees this message when gardener responds
+        _add_to_history(str(telegram_id), "assistant", text)
         # Mark flags ONLY after successful send
         _morning_sent[str(telegram_id)] = today_str
         ws = store_get_workspace(str(telegram_id)) or {}
@@ -4442,6 +4444,7 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         ])
         if msg and msg.strip().upper() != "SKIP" and len(msg.strip()) >= 5:
             await bot.send_message(int(uid), msg.strip(), reply_markup=get_main_keyboard())
+            _add_to_history(uid, "assistant", msg.strip())
             ws["_day_proactive_sent_date"] = _today()
             store_set_workspace(uid, ws)
             _fire_sync()
