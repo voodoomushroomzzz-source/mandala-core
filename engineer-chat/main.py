@@ -41,7 +41,7 @@ GITHUB_WEBHOOK_SECRET = os.getenv("GITHUB_WEBHOOK_SECRET")  # опциональ
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_KEY")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEEPSEEK_MODEL = "deepseek/deepseek-v4-pro"
+DEEPSEEK_MODEL = "deepseek/deepseek-v3.2"
 
 if not OPENROUTER_API_KEY:
     logger.warning("⚠️ OPENROUTER_KEY не найден — DeepSeek недоступен")
