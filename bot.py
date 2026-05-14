@@ -57,7 +57,7 @@ SR_MODEL_CHAIN = [
     "deepseek/deepseek-v4-flash",   # primary — 284B MoE, 13B active, 1M ctx
     "qwen/qwen3.5-flash-02-23",     # fallback — проверенный боевой
 ]
-SESSION_MAX_MESSAGES = 40
+SESSION_MAX_MESSAGES = 100
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
 BOT_VERSION = "7.39.23"
@@ -6534,10 +6534,42 @@ def _build_user_context_msg(telegram_id: str) -> str:
     _greeting_ws = store_get_workspace(telegram_id) or {}
     _greeting_flag = _greeting_ws.get("_greeting_sent_date", "") == _today()
     _greeting_block = f"\n[Приветствие сегодня: {'уже было — НЕ здоровайся снова. Если садовник пишет привет с вопросом — отвечай на вопрос. Если просто привет — можно пошутить или перейти к контексту его дня.' if _greeting_flag else 'ещё нет — можно поздороваться'}]"
+    # P-44: живой портрет + интересы + медиа в каждый ответ
+    _dm_ctx = (_greeting_ws.get("deep_memory") or
+               (_get_deep_profile(telegram_id) or {}).get("memory", {}))
+    _core_ctx = _dm_ctx.get("core", "")
+    _core_block = f"\n[Живой портрет садовника: {_core_ctx}]" if _core_ctx else ""
+    def _fmt_item_ctx(i):
+        if isinstance(i, dict):
+            return f"{i.get('name','?')} (×{i.get('count',1)}, {i.get('last_seen','')})"  
+        return str(i)
+    _int_ctx = _dm_ctx.get("interests", {})
+    _int_conf = [_fmt_item_ctx(i) for i in _int_ctx.get("confirmed", [])]
+    _int_ment = [_fmt_item_ctx(i) for i in _int_ctx.get("mentioned", [])]
+    _interests_block = ""
+    if _int_conf or _int_ment:
+        _interests_block = (
+            "\n[Интересы садовника:\n"
+            f"  confirmed: {chr(44).join(_int_conf) if _int_conf else 'нет'}\n"
+            f"  mentioned: {chr(44).join(_int_ment) if _int_ment else 'нет'}\n]"
+        )
+    _med_ctx = _dm_ctx.get("media", {})
+    _med_conf = [_fmt_item_ctx(i) for i in _med_ctx.get("confirmed", [])]
+    _med_ment = [_fmt_item_ctx(i) for i in _med_ctx.get("mentioned", [])]
+    _media_block = ""
+    if _med_conf or _med_ment:
+        _media_block = (
+            "\n[Медиа садовника (книги/фильмы/музыка):\n"
+            f"  confirmed: {chr(44).join(_med_conf) if _med_conf else 'нет'}\n"
+            f"  mentioned: {chr(44).join(_med_ment) if _med_ment else 'нет'}\n]"
+        )
     _msg = (
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
+        f"{_core_block}"
+        f"{_interests_block}"
+        f"{_media_block}"
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]"
         f"{_sphere_hist_block}"
@@ -7317,6 +7349,25 @@ async def _generate_synthesis(user_id: str) -> None:
     snapshots_text = "\n".join(f"- {s['date']}: {s['text']}" for s in snapshots[-5:]) if snapshots else "нет"
     old_obs_text  = "\n".join(f"- {o}" for o in old_obs) if old_obs else "нет"
 
+    # P-44: полная история диалога — источник интересов, тем, медиа
+    _hist_syn = _get_history(user_id)
+    dialog_text = "\n".join(
+        f"{'Садовник' if m.get('role') == 'user' else 'СР'}: {(m.get('content') or '')[:200]}"
+        for m in _hist_syn
+    ) if _hist_syn else "нет"
+
+    # Текущие интересы и медиа для SR
+    def _fmt_syn_item(i):
+        if isinstance(i, dict):
+            return f"{i.get('name','?')} (×{i.get('count',1)}, last:{i.get('last_seen','')})"
+        return str(i)
+    _cur_interests = mem.get("interests", {})
+    _cur_media = mem.get("media", {})
+    _int_conf_txt = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("confirmed", [])) or "нет"
+    _int_ment_txt = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("mentioned", [])) or "нет"
+    _med_conf_txt = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("confirmed", [])) or "нет"
+    _med_ment_txt = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("mentioned", [])) or "нет"
+
     prompt = f"""ТЕКУЩИЙ ПОРТРЕТ:
 {core if core else "пока не сформирован"}
 
@@ -7335,12 +7386,32 @@ async def _generate_synthesis(user_id: str) -> None:
 ЗАКРЫТЫЕ ЗАДАЧИ:
 {tasks_text}
 
+ТЕКУЩИЕ ИНТЕРЕСЫ:
+  confirmed: {_int_conf_txt}
+  mentioned: {_int_ment_txt}
+
+ТЕКУЩИЕ МЕДИА (книги/фильмы/музыка):
+  confirmed: {_med_conf_txt}
+  mentioned: {_med_ment_txt}
+
+ЖИВОЙ ДИАЛОГ (все сообщения — главный источник интересов, тем, медиа):
+{dialog_text}
+
+ПРАВИЛА обновления интересов и медиа:
+- confirmed макс 20 интересов, 10 медиа. mentioned макс 20 и 10.
+- Если confirmed не упоминался 30+ дней — перемести в mentioned.
+- Если mentioned не упоминался 15+ дней — удали.
+- Остальные решения о перемещении — на твоё усмотрение по count и last_seen.
+- Медиа: тип film/book/music/podcast/series — определяй из контекста.
+
 Ответь строго в JSON (без markdown):
 {{
-  "core": "живой портрет 4-6 предложений — состояние, ценности, стиль общения, паттерны, вектор роста. Пиши как будто объясняешь другу кто этот человек.",
+  "core": "живой портрет 4-6 предложений — состояние, ценности, стиль общения, паттерны, вектор роста.",
   "snapshot": "1-2 предложения — что изменилось или подтвердилось сегодня",
   "confirmed_interests": ["интерес1", "интерес2"],
-  "mentioned_interests": ["интерес3"]
+  "mentioned_interests": ["интерес3"],
+  "confirmed_media": [{{"name": "Название", "type": "film"}}],
+  "mentioned_media": [{{"name": "Название", "type": "book"}}]
 }}"""
 
     import json as _json_s
@@ -7373,33 +7444,89 @@ async def _generate_synthesis(user_id: str) -> None:
             snaps.append({"date": _today(), "text": new_snapshot})
             mem["snapshots"] = snaps[-5:]
 
-        # Decay stale interests before adding new ones
+        # P-44: per-item интересы с count/last_seen + медиа
+        from datetime import date as _date_syn
+        _today_syn = _today()
+
+        def _update_items(current_list, new_names, max_count):
+            """Обновить список объектов: count++ если есть, добавить если нет."""
+            # Нормализуем старый формат (строки → объекты)
+            normalized = []
+            for item in current_list:
+                if isinstance(item, str):
+                    normalized.append({"name": item, "count": 1, "last_seen": _today_syn})
+                else:
+                    normalized.append(item)
+            # Обновляем count и last_seen для упомянутых
+            existing_names = {i["name"].lower(): i for i in normalized}
+            for name in new_names:
+                if not name:
+                    continue
+                key = name.lower()
+                if key in existing_names:
+                    existing_names[key]["count"] = existing_names[key].get("count", 1) + 1
+                    existing_names[key]["last_seen"] = _today_syn
+                else:
+                    normalized.append({"name": name, "count": 1, "last_seen": _today_syn})
+            # Обрезаем по last_seen (вытесняем самые старые)
+            normalized.sort(key=lambda x: x.get("last_seen", ""), reverse=True)
+            return normalized[:max_count]
+
+        def _decay_items(items, max_days):
+            """Удалить элементы старше max_days дней."""
+            result = []
+            for item in items:
+                if isinstance(item, str):
+                    result.append({"name": item, "count": 1, "last_seen": _today_syn})
+                    continue
+                try:
+                    days = (_date_syn.today() - _date_syn.fromisoformat(item.get("last_seen", _today_syn))).days
+                    if days < max_days:
+                        result.append(item)
+                except Exception:
+                    result.append(item)
+            return result
+
+        # Интересы
         interests = mem.setdefault("interests", {"confirmed": [], "mentioned": []})
-        last_updated = interests.get("updated", "")
-        if last_updated:
-            try:
-                from datetime import datetime as _dt_decay
-                last_date = _dt_decay.strptime(last_updated, "%Y-%m-%d")
-                days_since = (_dt_decay.now() - last_date).days
-                if days_since >= 30:
-                    interests["confirmed"] = []
-                if days_since >= 14:
-                    interests["mentioned"] = []
-            except Exception:
-                pass  # If date parsing fails, keep interests as-is
+        interests["confirmed"] = _decay_items(interests.get("confirmed", []), 30)
+        interests["mentioned"] = _decay_items(interests.get("mentioned", []), 15)
+        conf_names = [i if isinstance(i, str) else i.get("name","") for i in interests["confirmed"]]
+        ment_new = [n for n in mentioned if n and n.lower() not in [c.lower() for c in conf_names]]
+        interests["confirmed"] = _update_items(interests["confirmed"], confirmed, 20)
+        interests["mentioned"] = _update_items(interests["mentioned"], ment_new, 20)
 
-        # Update confirmed interests
-        for i in confirmed:
-            if i and i not in interests["confirmed"]:
-                interests["confirmed"].append(i)
-        interests["confirmed"] = interests["confirmed"][-20:]
-
-        # Update mentioned interests
-        for i in mentioned:
-            if i and i not in interests["mentioned"] and i not in interests["confirmed"]:
-                interests["mentioned"].append(i)
-        interests["mentioned"] = interests["mentioned"][-20:]
-        interests["updated"] = _today()
+        # Медиа
+        media = mem.setdefault("media", {"confirmed": [], "mentioned": []})
+        conf_media_raw = result.get("confirmed_media", [])
+        ment_media_raw = result.get("mentioned_media", [])
+        conf_media_names = [m.get("name","") if isinstance(m,dict) else m for m in conf_media_raw]
+        ment_media_names = [m.get("name","") if isinstance(m,dict) else m for m in ment_media_raw]
+        # Сохраняем тип медиа при добавлении
+        media["confirmed"] = _decay_items(media.get("confirmed", []), 30)
+        media["mentioned"] = _decay_items(media.get("mentioned", []), 15)
+        for m in conf_media_raw:
+            if isinstance(m, dict) and m.get("name"):
+                key = m["name"].lower()
+                existing = next((x for x in media["confirmed"] if isinstance(x,dict) and x.get("name","").lower()==key), None)
+                if existing:
+                    existing["count"] = existing.get("count",1) + 1
+                    existing["last_seen"] = _today_syn
+                else:
+                    media["confirmed"].append({"name": m["name"], "type": m.get("type","unknown"), "count": 1, "last_seen": _today_syn})
+        for m in ment_media_raw:
+            if isinstance(m, dict) and m.get("name"):
+                key = m["name"].lower()
+                in_conf = any(isinstance(x,dict) and x.get("name","").lower()==key for x in media["confirmed"])
+                if not in_conf:
+                    existing = next((x for x in media["mentioned"] if isinstance(x,dict) and x.get("name","").lower()==key), None)
+                    if existing:
+                        existing["count"] = existing.get("count",1) + 1
+                        existing["last_seen"] = _today_syn
+                    else:
+                        media["mentioned"].append({"name": m["name"], "type": m.get("type","unknown"), "count": 1, "last_seen": _today_syn})
+        media["confirmed"] = sorted(media["confirmed"], key=lambda x: x.get("last_seen",""), reverse=True)[:10]
+        media["mentioned"] = sorted(media["mentioned"], key=lambda x: x.get("last_seen",""), reverse=True)[:10]
 
         dp["memory"] = mem
         dp["synthesis"] = new_core  # backward compat
@@ -7797,7 +7924,7 @@ async def free_conversation(message: Message, state: FSMContext):
             "role": "system",
             "content": system_content + "\n\n" + ctx_msg + _hint_block
         },
-        *history,
+        *history[-20:],  # P-44: последние 20 в промпт
         {"role": "user", "content": text}
     ]
 
