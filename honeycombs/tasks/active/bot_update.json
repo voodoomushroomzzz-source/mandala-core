@@ -266,6 +266,21 @@
       "name": "P-49 — P-44 redux: SESSION 40→100, history[-20:], core+interests+media in context, per-item interests v2, media slot",
       "date": "2026-05-14",
       "commit": "claude-session"
+    },
+    "P-50": {
+      "name": "P-50 — SR_CORE_PROMPT rewrite (poetic, living, Genius Loci)",
+      "date": "2026-05-14",
+      "commit": "claude-session"
+    },
+    "P-51": {
+      "name": "P-51 — P-46: per-sphere decay, sphere_last_active, recent_completed, imbalance alerts, max_tokens 1024→1500",
+      "date": "2026-05-14",
+      "commit": "claude-session"
+    },
+    "P-52": {
+      "name": "P-52 — Cultural experience: media → культурный опыт, 10 типов искусства",
+      "date": "2026-05-14",
+      "commit": "claude-session"
     }
   },
   "known_bugs": {
@@ -478,7 +493,10 @@
     "P-46 ✅ DONE (2026-05-14) — Fix duplicate IDs in workspace",
     "P-47 ✅ DONE (2026-05-14) — Smart greeting system",
     "P-48 ✅ DONE (2026-05-14) — Greeting joke hint",
-    "P-49 ✅ DONE (2026-05-14) — P-44 redux: history/interests/media upgrade"
+    "P-49 ✅ DONE (2026-05-14) — P-44 redux: history/interests/media upgrade",
+    "P-50 ✅ DONE (2026-05-14) — SR_CORE_PROMPT poetic rewrite",
+    "P-51 ✅ DONE (2026-05-14) — P-46: per-sphere decay + sphere alerts + recent_completed",
+    "P-52 ✅ DONE (2026-05-14) — Cultural experience: 10 art types"
   ],
   "health": {
     "status": "healthy",
