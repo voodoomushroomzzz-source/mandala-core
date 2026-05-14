@@ -7698,6 +7698,10 @@ async def free_conversation(message: Message, state: FSMContext):
     _greeting_already = _fc_ws.get("_greeting_sent_date", "") == _today()
 
     ctx_msg = _build_user_context_msg(user_id)
+    # P-42: если садовник снова здоровается — дать SR подсказку пошутить
+    if _is_greeting and _greeting_already:
+        ctx_msg += "
+[Садовник снова поздоровался, хотя вы уже виделись сегодня — можно мягко пошутить об этом: 'мы уже здоровались сегодня 😄', 'у тебя новый день наступил?' и т.п. Тепло, без сарказма.]"
     history = _get_history(user_id)
 
     # ── Keyword pre-detection: pin/unpin (v7.39.14) ─────────────────────
