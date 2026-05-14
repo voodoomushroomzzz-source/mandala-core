@@ -1,5 +1,21 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "task_id": "task_20260514062117520",
+      "title": "сделать возмещение мамонтову",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "work",
+      "priority": 5,
+      "deadline": null,
+      "reminder": null,
+      "created": "2026-05-14",
+      "updated": "2026-05-14",
+      "completed": null,
+      "notes": ""
+    }
+  ],
   "groups": [],
   "achievements": [],
   "sphere_resonance": {
@@ -18,5 +34,5 @@
   "_day_proactive_sent_date": "2026-05-13",
   "_pending_synthesis_count": 0,
   "last_interaction_date": "2026-05-14",
-  "last_interaction_datetime": "2026-05-14T09:21:04.793996+03:00"
+  "last_interaction_datetime": "2026-05-14T09:21:17.519974+03:00"
 }
