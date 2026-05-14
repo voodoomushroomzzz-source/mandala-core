@@ -5,7 +5,7 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-13",
+  "updated": "2026-05-14",
   "progress": 99,
   "current_version": "7.39.23",
   "note_version": "Актуальная версия с патчами ~7.39.38",
@@ -241,6 +241,31 @@
       "name": "P-44 — Custom date fix: tedit + ttask FSM state preservation",
       "date": "2026-05-13",
       "commit": "3f69fe8b"
+    },
+    "P-45": {
+      "name": "P-45 — Unique task_id with microseconds (prevent duplicates)",
+      "date": "2026-05-14",
+      "commit": "cbd38464"
+    },
+    "P-46": {
+      "name": "P-46 — Fix duplicate task_ids in Dimas workspace",
+      "date": "2026-05-14",
+      "commit": "7aed05f7"
+    },
+    "P-47": {
+      "name": "P-47 — Smart greeting system (flag + context + detection)",
+      "date": "2026-05-14",
+      "commit": "30fbf722"
+    },
+    "P-48": {
+      "name": "P-48 — Greeting joke hint (warm humor on repeat greeting)",
+      "date": "2026-05-14",
+      "commit": "262d81f7"
+    },
+    "P-49": {
+      "name": "P-49 — P-44 redux: SESSION 40→100, history[-20:], core+interests+media in context, per-item interests v2, media slot",
+      "date": "2026-05-14",
+      "commit": "claude-session"
     }
   },
   "known_bugs": {
@@ -448,11 +473,16 @@
     "D-3_deep_synthesis_method ⏳ PLANNED — Метод глубинного синтеза",
     "D-4_milestone_detection ⏳ PLANNED — Система milestone'ов",
     "D-5_monthly_review ⏳ PLANNED — Подведение итогов месяца",
-    "D-6_sr_usage ⏳ PLANNED — Как SR использует deep_synthesis"
+    "D-6_sr_usage ⏳ PLANNED — Как SR использует deep_synthesis",
+    "P-45 ✅ DONE (2026-05-14) — Unique task_id with microseconds",
+    "P-46 ✅ DONE (2026-05-14) — Fix duplicate IDs in workspace",
+    "P-47 ✅ DONE (2026-05-14) — Smart greeting system",
+    "P-48 ✅ DONE (2026-05-14) — Greeting joke hint",
+    "P-49 ✅ DONE (2026-05-14) — P-44 redux: history/interests/media upgrade"
   ],
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-13",
+    "last_check": "2026-05-14",
     "gardeners_loaded": "4/4 при старте ✅",
     "critical_broken": [],
     "fixed_today_2026_05_12": [
