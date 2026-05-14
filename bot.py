@@ -2300,6 +2300,7 @@ async def send_morning_greeting(telegram_id: str) -> None:
         _add_to_history(uid, "assistant", msg.strip())
         _morning_sent[uid] = today_str
         ws["last_morning_date"] = today_str
+        ws["_greeting_sent_date"] = today_str  # P-41: greeting flag
         store_set_workspace(uid, ws)
         _mark_proactive_sent(uid)
         # Update last_notified_version
@@ -6530,6 +6531,9 @@ def _build_user_context_msg(telegram_id: str) -> str:
         _sphere_hist_block = "\n" + _build_sphere_stats(telegram_id, months=12, show_tasks=True)
         _sphere_hist_block = f"[История активности по сферам за 12 месяцев:{_sphere_hist_block}\n]"
 
+    _greeting_ws = store_get_workspace(telegram_id) or {}
+    _greeting_flag = _greeting_ws.get("_greeting_sent_date", "") == _today()
+    _greeting_block = f"\n[Приветствие сегодня: {'уже было — не начинай ответ с приветствия' if _greeting_flag else 'ещё нет — можно поздороваться'}]"
     _msg = (
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
@@ -6540,6 +6544,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"{_ts_block}"
         f"{_ts_summary}"
         f"{dp_block}"
+        f"{_greeting_block}"
     )
     return _msg
 
@@ -7684,6 +7689,13 @@ async def free_conversation(message: Message, state: FSMContext):
         text = _fix_layout(text)
     if not text:
         return
+
+    # P-41: детект приветствия от садовника
+    _fc_kw = text.lower().strip()
+    _greeting_kws = ["привет", "доброе утро", "добрый день", "добрый вечер", "здравствуй", "хай", " ку ", "hello", "hi", "здарова", "салют", "приветствую"]
+    _is_greeting = any(k in _fc_kw for k in _greeting_kws) or _fc_kw in ["ку", "hi", "хай"]
+    _fc_ws = store_get_workspace(user_id) or {}
+    _greeting_already = _fc_ws.get("_greeting_sent_date", "") == _today()
 
     ctx_msg = _build_user_context_msg(user_id)
     history = _get_history(user_id)
@@ -8965,6 +8977,14 @@ async def free_conversation(message: Message, state: FSMContext):
                 logger.warning(f"Intent router error: {e}")
             # ──────────────────────────────────────────────────────────────
 
+            # P-41: взвод флага приветствия если садовник поздоровался и SR ответил
+            if _is_greeting and not _greeting_already:
+                try:
+                    _fc_ws2 = store_get_workspace(user_id) or {}
+                    _fc_ws2["_greeting_sent_date"] = _today()
+                    store_set_workspace(user_id, _fc_ws2)
+                except Exception:
+                    pass
             _add_to_history(user_id, "user", text)
             # Track if next request needs full INTENT_MAP
             # Keep map active for 3 messages after any action intent
