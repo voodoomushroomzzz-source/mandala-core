@@ -6533,7 +6533,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
 
     _greeting_ws = store_get_workspace(telegram_id) or {}
     _greeting_flag = _greeting_ws.get("_greeting_sent_date", "") == _today()
-    _greeting_block = f"\n[Приветствие сегодня: {'уже было — не начинай ответ с приветствия' if _greeting_flag else 'ещё нет — можно поздороваться'}]"
+    _greeting_block = f"\n[Приветствие сегодня: {'уже было — НЕ здоровайся снова. Если садовник пишет привет с вопросом — отвечай на вопрос. Если просто привет — можно пошутить или перейти к контексту его дня.' if _greeting_flag else 'ещё нет — можно поздороваться'}]"
     _msg = (
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
@@ -7698,14 +7698,14 @@ async def free_conversation(message: Message, state: FSMContext):
     _greeting_already = _fc_ws.get("_greeting_sent_date", "") == _today()
 
     ctx_msg = _build_user_context_msg(user_id)
-    # P-42: если садовник снова здоровается — дать SR подсказку пошутить
-    if _is_greeting and _greeting_already:
-        _joke_hint = (
-            "[Садовник снова поздоровался, хотя вы уже виделись сегодня"
-            " — можно мягко пошутить: мы уже здоровались сегодня,"
-            " у тебя новый день наступил? и т.п. Тепло, без сарказма.]"
-        )
-        ctx_msg += "\n" + _joke_hint
+    # P-43: если садовник пишет чисто "привет" (без содержания) и уже виделись — подсказка SR
+    _pure_greeting_kws = ["привет", "доброе утро", "добрый день", "добрый вечер",
+                          "здравствуй", "хай", "ку", "hello", "hi", "здарова", "салют", "приветствую"]
+    _is_pure_greeting = _fc_kw.strip("!.)( ") in _pure_greeting_kws
+    if _is_greeting and _greeting_already and _is_pure_greeting:
+        ctx_msg += ("\n[Садовник написал только приветствие — без вопроса и без задачи. "
+                    "Мы уже виделись сегодня. Выбери сам: пошути тепло, спроси как идёт день, "
+                    "или напомни что-то из его контекста. Не здоровайся снова.]")
     history = _get_history(user_id)
 
     # ── Keyword pre-detection: pin/unpin (v7.39.14) ─────────────────────
