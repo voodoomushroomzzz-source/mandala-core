@@ -23,10 +23,12 @@
     }
   },
   "851913510": {
-    "messages": 2,
+    "messages": 3,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
-    "intents": {}
+    "intents": {
+      "add_task": 1
+    }
   }
 }
