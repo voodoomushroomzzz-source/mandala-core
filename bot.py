@@ -763,7 +763,8 @@ def _get_session_reflection_hint(telegram_id: str) -> str | None:
     # Get confirmed interests for personalized suggestions
     _mem_h = dp.get("memory", {})
     _confirmed = _mem_h.get("interests", {}).get("confirmed", [])
-    _interest_hint = f" Интересы садовника: {', '.join(_confirmed[:3])}." if _confirmed else ""
+    _confirmed_names = [i["name"] if isinstance(i, dict) else i for i in _confirmed[:3]]
+    _interest_hint = f" Интересы садовника: {', '.join(_confirmed_names)}." if _confirmed_names else ""
 
     if streak >= 3:
         hint = (f"Садовник {streak} дней подряд активен в сфере «{dom_ru}» ({dom_pct}%). "
