@@ -6190,6 +6190,7 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 Отвечаешь HTML-тегами: <b>жирный</b>, <i>курсив</i>, <code>код</code>.
 Никакого Markdown: ни **, ни *, ни __, ни #, ни --. Совсем. Никогда.
+Лимит ответа — 800 токенов (~2500 символов). Не пиши длиннее. Если тема большая — предложи продолжить.
 Списки через • (буллит), без цифр и тире.
 Эмодзи ОБЯЗАТЕЛЬНЫ в каждом ответе. Минимум 1 эмодзи на абзац. Используй 🌿🌀🔥💫🌱✨💎🔮🌟🌙🪐💡🎯 — это голос СР.
 
@@ -6491,6 +6492,47 @@ def _build_user_context_msg(telegram_id: str) -> str:
     sr_context = "  ".join(f"{SPHERE_EMOJI[s]} {SPHERE_NAME_RU[s]} {sr.get(s,20)}%" for s in SPHERES)
     weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
     imbalance = f" | слабые сферы: {', '.join(weak_spheres)}" if weak_spheres else ""
+    # P-46: имбаланс и предупреждения по сферам
+    _ws_ctx = store_get_workspace(telegram_id) or {}
+    _sla_ctx = _ws_ctx.get("sphere_last_active", {})
+    from datetime import date as _date_ctx
+    _today_ctx = _date_ctx.today()
+    _sphere_warnings = []
+    _sphere_decaying = []
+    _max_sr = max(sr.get(s, 20) for s in SPHERES)
+    _min_sr = min(sr.get(s, 20) for s in SPHERES)
+    _imbalance_gap = _max_sr - _min_sr
+    _min_sphere = min(SPHERES, key=lambda s: sr.get(s, 20))
+    _max_sphere = max(SPHERES, key=lambda s: sr.get(s, 20))
+    for _s in SPHERES:
+        _last_s = _sla_ctx.get(_s, "")
+        _days_s = 0
+        if _last_s:
+            try:
+                _days_s = (_today_ctx - _date_ctx.fromisoformat(_last_s)).days
+            except Exception:
+                pass
+        if 4 <= _days_s <= 5:
+            _sphere_warnings.append(f"{SPHERE_NAME_RU[_s]} ({_days_s} дн. без активности — скоро начнёт падать)")
+        elif _days_s >= 6:
+            _sphere_decaying.append(f"{SPHERE_NAME_RU[_s]} ({_days_s} дн. без активности, падает)")
+    _sphere_alert_block = ""
+    _alerts = []
+    if _imbalance_gap > 40:
+        _alerts.append(f"ИМБАЛАНС: {SPHERE_NAME_RU[_max_sphere]} {sr.get(_max_sphere)}% vs {SPHERE_NAME_RU[_min_sphere]} {sr.get(_min_sphere)}% — разрыв {_imbalance_gap}%. Предложи что-то в сфере {SPHERE_NAME_RU[_min_sphere]} с учётом интересов садовника.")
+    if _sphere_warnings:
+        _alerts.append(f"СКОРО УПАДЁТ: {chr(44).join(_sphere_warnings)} — предупреди садовника и предложи лёгкое действие.")
+    if _sphere_decaying:
+        _alerts.append(f"ПАДАЕТ: {chr(44).join(_sphere_decaying)} — рекомендуй что-то конкретное по этой сфере.")
+    if _alerts:
+        _sphere_alert_block = "\n[ВНИМАНИЕ СФЕРЫ:\n" + "\n".join(f"  • {a}" for a in _alerts) + "\n]"
+    # P-46: последние 5 выполненных задач
+    _rc_ctx = _ws_ctx.get("recent_completed", [])
+    _rc_block = ""
+    if _rc_ctx:
+        _rc_lines = [f"  • {r['title']} — {SPHERE_NAME_RU.get(r['sphere'],r['sphere'])} ({r['completed_at']})" for r in reversed(_rc_ctx)]
+        _rc_block = "\n[Последние выполненные задачи:\n" + "\n".join(_rc_lines) + "\n]"
+
 
     # Pinned message block for SR context
     _pinned_ws = store_get_workspace(telegram_id) or {}
@@ -6565,6 +6607,8 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
+        f"{_sphere_alert_block}"
+        f"{_rc_block}"
         f"{_core_block}"
         f"{_interests_block}"
         f"{_media_block}"
@@ -6763,7 +6807,7 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
                 json={
                     "model": model,
                     "messages": messages,
-                    "max_tokens": 1024,
+                    "max_tokens": 1500,
                     "temperature": 0.85
                 }
             )
