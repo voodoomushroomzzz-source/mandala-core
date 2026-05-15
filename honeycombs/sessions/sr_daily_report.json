@@ -1,31 +1,31 @@
 {
-  "date": "2026-05-14",
+  "date": "2026-05-15",
   "version": "7.39.23",
   "gardeners": {
-    "224736062": {
-      "name": "Дима",
-      "active": true,
-      "synthesis_date": "2026-05-14"
-    },
-    "358793311": {
-      "name": "Антон",
-      "active": false,
-      "synthesis_date": "2026-05-13"
-    },
-    "851913510": {
-      "name": "Яна",
-      "active": true,
-      "synthesis_date": "2026-05-14"
-    },
     "339914913": {
       "name": "Антон",
       "active": true,
+      "synthesis_date": "2026-05-15"
+    },
+    "358793311": {
+      "name": "Антон",
+      "active": true,
+      "synthesis_date": "2026-05-15"
+    },
+    "851913510": {
+      "name": "Яна",
+      "active": false,
       "synthesis_date": "2026-05-14"
+    },
+    "224736062": {
+      "name": "Дима",
+      "active": true,
+      "synthesis_date": "2026-05-15"
     }
   },
   "issues": [
     {
-      "user_id": "224736062",
+      "user_id": "339914913",
       "type": "repeated_request",
       "intent": "create_reminder",
       "count": 2,
