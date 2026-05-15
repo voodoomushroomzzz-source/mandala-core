@@ -7797,7 +7797,7 @@ async def _classify_intent(uid: str, text: str) -> dict | None:
             {"role": "system", "content": _CLASSIFIER_PROMPT + f"\n\n{time_ctx}"},
             {"role": "user", "content": text}
         ]
-        raw_cl = await _call_openrouter(messages_cl, model_idx=1)
+        raw_cl = await _call_openrouter(messages_cl, model_idx=0)
         if not raw_cl:
             return None
         raw_cl = re.sub(r"<think>.*?</think>", "", raw_cl, flags=re.DOTALL).strip()
