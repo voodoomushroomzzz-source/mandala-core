@@ -16,6 +16,13 @@
       "datetime_iso": "2026-05-15T16:45",
       "repeat": "once",
       "active": true
+    },
+    {
+      "id": "rem_18207b00",
+      "title": "собрать вещи на завтра",
+      "datetime_iso": "2026-05-15T20:00",
+      "repeat": "once",
+      "active": true
     }
   ],
   "checklists": [],
