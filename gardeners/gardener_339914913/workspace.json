@@ -9,7 +9,15 @@
     "connections": 20,
     "growth": 20
   },
-  "reminders": [],
+  "reminders": [
+    {
+      "id": "rem_cd7bc111",
+      "title": "позвонить Кассиет",
+      "datetime_iso": "2026-05-15T16:45",
+      "repeat": "once",
+      "active": true
+    }
+  ],
   "checklists": [],
   "roadmaps": [],
   "updated": "2026-05-12",
