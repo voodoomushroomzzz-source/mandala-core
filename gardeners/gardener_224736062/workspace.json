@@ -323,19 +323,11 @@
           "done": false
         }
       ],
-      "pinned_message_id": null,
+      "pinned_message_id": 11652,
       "created": "2026-05-15"
     }
   ],
-  "reminders": [
-    {
-      "id": "rem_51441aaf",
-      "title": "тест",
-      "datetime_iso": "2026-05-15T13:08",
-      "repeat": "once",
-      "active": true
-    }
-  ],
+  "reminders": [],
   "_decay_date": "2026-05-15",
   "roadmaps": [],
   "sphere_resonance": {
