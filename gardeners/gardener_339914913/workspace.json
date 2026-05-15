@@ -13,7 +13,7 @@
   "checklists": [],
   "roadmaps": [],
   "updated": "2026-05-12",
-  "last_morning_date": "2026-05-14",
+  "last_morning_date": "2026-05-15",
   "_decay_date": "2026-05-15",
   "_day_proactive_sent_date": "2026-05-14",
   "last_interaction_date": "2026-05-15",
@@ -56,5 +56,6 @@
       "confirmed": [],
       "mentioned": []
     }
-  }
+  },
+  "_greeting_sent_date": "2026-05-15"
 }
