@@ -7768,6 +7768,50 @@ async def handle_voice(message: Message, state: FSMContext):
             await message.answer("🎙 Не расслышала. Попробуй ещё раз 🌿")
 
 @router.message(F.text & ~F.text.startswith("/"))
+
+# ─── Intent Classifier (Step 1 — observation mode) ───────────────────────────
+_CLASSIFIER_PROMPT = """Ты — классификатор намерений. Только JSON, без лишних слов.
+
+""" + SR_INTENT_LIGHT + """
+
+Верни строго JSON:
+{"intent": "<intent или none>", "action": {<параметры или пусто>}, "confidence": <0.0-1.0>}
+
+Если не уверен или это разговор — верни: {"intent": "none", "action": {}, "confidence": 1.0}
+Никакого текста вне JSON. Никаких пояснений."""
+
+async def _classify_intent(uid: str, text: str) -> dict | None:
+    """Step 1: observation-only classifier. Calls fast model, logs result.
+    Does NOT affect bot behaviour yet — only collects data."""
+    try:
+        profile_cl = store_get_profile(uid) or {}
+        tz_cl = profile_cl.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        from zoneinfo import ZoneInfo as _ZI_cl
+        from datetime import datetime as _dt_cl
+        try:
+            now_cl = _dt_cl.now(_ZI_cl(tz_cl))
+        except Exception:
+            now_cl = _dt_cl.now()
+        time_ctx = f"Сейчас у садовника: {now_cl.strftime('%Y-%m-%d %H:%M')} ({tz_cl})"
+        messages_cl = [
+            {"role": "system", "content": _CLASSIFIER_PROMPT + f"\n\n{time_ctx}"},
+            {"role": "user", "content": text}
+        ]
+        raw_cl = await _call_openrouter(messages_cl, model_idx=1)
+        if not raw_cl:
+            return None
+        raw_cl = re.sub(r"<think>.*?</think>", "", raw_cl, flags=re.DOTALL).strip()
+        raw_cl = re.sub(r"^```(?:json)?\s*", "", raw_cl)
+        raw_cl = re.sub(r"\s*```\s*$", "", raw_cl).strip()
+        brace = raw_cl.find("{")
+        if brace > 0:
+            raw_cl = raw_cl[brace:]
+        result = json.loads(raw_cl) if raw_cl.startswith("{") else None
+        return result
+    except Exception as e:
+        logger.debug(f"Classifier error: {e}")
+        return None
+
 async def free_conversation(message: Message, state: FSMContext):
     """Catches any plain text not handled above. MUST be last message handler."""
     user_id = str(message.from_user.id)
@@ -7990,6 +8034,23 @@ async def free_conversation(message: Message, state: FSMContext):
     reply_text = "🌿 Я здесь, рядом."
     action = None
     parsed = None  # will hold decoded JSON dict
+
+    # P-56: Step 1 — classifier observation (does not affect behaviour)
+    try:
+        _cl_result = await _classify_intent(user_id, text)
+        if _cl_result:
+            _cl_intent = _cl_result.get("intent", "none")
+            _cl_conf   = float(_cl_result.get("confidence", 1.0))
+            _daily_issues.append({
+                "user_id": user_id,
+                "type": "classifier_observation",
+                "intent": _cl_intent,
+                "confidence": _cl_conf,
+                "text_preview": text[:60]
+            })
+            logger.info(f"[Classifier] uid={user_id} intent={_cl_intent} conf={_cl_conf:.2f} text='{text[:40]}'")
+    except Exception as _cl_e:
+        logger.debug(f"Classifier call failed: {_cl_e}")
 
     try:
         raw = await _call_openrouter(messages)
