@@ -4407,12 +4407,13 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         confirmed = interests.get("confirmed", [])
         snapshots = mem.get("snapshots", [])[-3:]
         snapshots_text = "\n".join(f"- {s.get('date','')}: {s.get('text','')}" for s in snapshots) if snapshots else ""
-        sr_obs = dp.get("sr_observations", [])[-5:]
+        _dp_dp = prof.get("deep_profile", {})  # P-55: fix NameError (was using global Dispatcher)
+        sr_obs = _dp_dp.get("sr_observations", [])[-5:]
         obs_text = "\n".join(f"- {o.get('date','')}: {o.get('text','')}" for o in sr_obs) if sr_obs else ""
         from datetime import date as _date_dp
         three_months_ago = (_date_dp.today().replace(day=1) - _td_dp(days=1)).replace(day=1)
         cutoff = three_months_ago.strftime("%Y-%m")
-        sphere_hist = [s for s in dp.get("sphere_history", []) if s.get("month", "") >= cutoff]
+        sphere_hist = [s for s in _dp_dp.get("sphere_history", []) if s.get("month", "") >= cutoff]
         sphere_text = "\n".join(
             f"- {s.get('month')}: {s.get('sphere')} {s.get('resonance_level', 0)}%"
             for s in sphere_hist
