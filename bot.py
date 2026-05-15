@@ -8035,25 +8035,39 @@ async def free_conversation(message: Message, state: FSMContext):
     action = None
     parsed = None  # will hold decoded JSON dict
 
-    # P-56: Step 1 — classifier observation (does not affect behaviour)
+    # P-57: Step 2 — classifier active (short-circuits SR for action intents)
+    _cl_short_circuit = None  # if set -> use classifier result, skip SR call
     try:
         _cl_result = await _classify_intent(user_id, text)
         if _cl_result:
             _cl_intent = _cl_result.get("intent", "none")
             _cl_conf   = float(_cl_result.get("confidence", 1.0))
-            _daily_issues.append({
-                "user_id": user_id,
-                "type": "classifier_observation",
-                "intent": _cl_intent,
-                "confidence": _cl_conf,
-                "text_preview": text[:60]
-            })
             logger.info(f"[Classifier] uid={user_id} intent={_cl_intent} conf={_cl_conf:.2f} text='{text[:40]}'")
+            _SR_ONLY = {"none", "conversation", "show_resonance", "show_resonance_detail", "show_achievements"}
+            if _cl_intent not in _SR_ONLY and _cl_conf >= 0.85:
+                _cl_short_circuit = json.dumps({
+                    "intent": _cl_intent,
+                    "action": _cl_result.get("action") or {},
+                    "confidence": _cl_conf,
+                    "text": ""
+                }, ensure_ascii=False)
+                logger.info(f"[Classifier] SHORT-CIRCUIT intent={_cl_intent} - SR skipped")
+            else:
+                _daily_issues.append({
+                    "user_id": user_id,
+                    "type": "classifier_pass_to_sr",
+                    "intent": _cl_intent,
+                    "confidence": _cl_conf,
+                    "text_preview": text[:60]
+                })
     except Exception as _cl_e:
         logger.debug(f"Classifier call failed: {_cl_e}")
 
     try:
-        raw = await _call_openrouter(messages)
+        if _cl_short_circuit:
+            raw = _cl_short_circuit
+        else:
+            raw = await _call_openrouter(messages)
         _typing_stop.set()
         if raw:
             # 1. Strip <think>...</think>
@@ -8194,6 +8208,7 @@ async def free_conversation(message: Message, state: FSMContext):
                 _ACTION_FAKE_MARKERS = (
                     "✅ готово", "✅ изменено", "✅ изменён", "✅ дедлайн",
                     "задача закрыта", "задача добавлена", "задача удалена",
+                    "добавила задачу", "создала задачу", "задача создана",
                     "напоминание создано", "напоминание удалено",
                     "добавлено напоминание", "добавила напоминание",
                     "напоминание добавлено", "поставила напоминание",
