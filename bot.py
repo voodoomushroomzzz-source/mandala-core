@@ -7767,8 +7767,6 @@ async def handle_voice(message: Message, state: FSMContext):
         except Exception:
             await message.answer("🎙 Не расслышала. Попробуй ещё раз 🌿")
 
-@router.message(F.text & ~F.text.startswith("/"))
-
 # ─── Intent Classifier (Step 1 — observation mode) ───────────────────────────
 _CLASSIFIER_PROMPT = """Ты — классификатор намерений. Только JSON, без лишних слов.
 
@@ -7812,6 +7810,8 @@ async def _classify_intent(uid: str, text: str) -> dict | None:
         logger.debug(f"Classifier error: {e}")
         return None
 
+
+@router.message(F.text & ~F.text.startswith("/"))
 async def free_conversation(message: Message, state: FSMContext):
     """Catches any plain text not handled above. MUST be last message handler."""
     user_id = str(message.from_user.id)
