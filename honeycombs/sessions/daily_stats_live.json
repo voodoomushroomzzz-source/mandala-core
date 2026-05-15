@@ -10,5 +10,14 @@
       "create_checklist": 1,
       "delete_task": 1
     }
+  },
+  "339914913": {
+    "messages": 4,
+    "tasks_created": 0,
+    "tasks_completed": 0,
+    "achievements": 0,
+    "intents": {
+      "create_reminder": 1
+    }
   }
 }
