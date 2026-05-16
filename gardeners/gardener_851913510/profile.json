@@ -2,9 +2,9 @@
   "gardener_id": "gardener_851913510",
   "telegram_id": "851913510",
   "name": "Яна",
-  "resonance_level": 17,
+  "resonance_level": 8,
   "created": "2026-05-02",
-  "updated": "2026-05-03",
+  "updated": "2026-05-16",
   "personal_info": {
     "life_areas": {
       "body": {
@@ -40,6 +40,11 @@
       "date": "2026-05-03",
       "resonance": 8,
       "achievements_count": 0
+    },
+    {
+      "date": "2026-05-16",
+      "resonance": 8,
+      "achievements_count": 1
     }
   ],
   "deep_profile": {
@@ -118,7 +123,42 @@
       }
     },
     "synthesis": "Яна — садовница, в которой соединились практичность управляющей кофейней и глубина экзистенциального аналитика. Сегодня она открылась через поэзию и эмоциональное совпадение с Владимиром — городом, где Даниил Андреев писал «Розу мира». Ценит осмысленность, верит, что свет начинается изнутри и распространяется вовне. Её стиль общения — эмпатичный, рефлексивный, с лёгкой уязвимостью. Вектор роста — интеграция психологии, поэзии и личной реализации, движение от совмещения ролей к целостности.",
-    "synthesis_date": "2026-05-14"
+    "synthesis_date": "2026-05-14",
+    "sphere_history": [
+      {
+        "month": "2026-05",
+        "health": {
+          "tasks": 0,
+          "achievements": 1,
+          "resonance_delta": 3
+        },
+        "creativity": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "work": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "connections": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "growth": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "other": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        }
+      }
+    ]
   },
   "last_notified_version": "7.39.23"
 }
