@@ -1,47 +1,9 @@
 {
   "224736062": {
-    "messages": 45,
-    "tasks_created": 0,
-    "tasks_completed": 2,
-    "achievements": 0,
-    "intents": {
-      "add_task": 3,
-      "create_reminder": 2,
-      "create_checklist": 1,
-      "delete_task": 1,
-      "complete_task": 2,
-      "edit_task": 2,
-      "conversation": 2
-    }
-  },
-  "339914913": {
-    "messages": 6,
+    "messages": 1,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
-    "intents": {
-      "create_reminder": 2
-    }
-  },
-  "358793311": {
-    "messages": 24,
-    "tasks_created": 0,
-    "tasks_completed": 0,
-    "achievements": 0,
-    "intents": {
-      "conversation": 10,
-      "show_tasks": 1,
-      "web_search": 1
-    }
-  },
-  "851913510": {
-    "messages": 12,
-    "tasks_created": 0,
-    "tasks_completed": 0,
-    "achievements": 0,
-    "intents": {
-      "conversation": 2,
-      "add_achievement": 2
-    }
+    "intents": {}
   }
 }
