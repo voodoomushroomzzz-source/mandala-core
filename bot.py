@@ -91,13 +91,13 @@ BOT_LATEST_UPDATE = {
 # ─── Business limits ──────────────────────────────────────────────────────────
 TASK_CTX_FREE    = "free"      # task visible in tasks menu
 
-TASK_LIMIT_HARD  = 30
+TASK_LIMIT_HARD  = 50
 TASK_LIMIT_SOFT  = 40
 LABEL_LIMIT_HARD = 7
 LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
 CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
-REMINDER_LIMIT         = 20  # max reminders per user
+REMINDER_LIMIT         = 10  # max reminders per user
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -2355,17 +2355,6 @@ async def run_reminder_scheduler() -> None:
             now_dt = _dtr6.now(_tz6)
             now_str = now_dt.strftime("%Y-%m-%dT%H:%M")
             changed = False
-            # P-58b: auto-purge past once-reminders (>24h old)
-            for r in list(reminders):
-                if r.get("repeat", "once") == "once" and r.get("active"):
-                    r_dt_raw = r.get("datetime_iso", "")[:16]
-                    try:
-                        r_dt_past = _dtr6.strptime(r_dt_raw, "%Y-%m-%dT%H:%M").replace(tzinfo=_tz6)
-                    except Exception:
-                        r_dt_past = None
-                    if r_dt_past and (now_dt - r_dt_past).total_seconds() > 86400:
-                        reminders.remove(r)
-                        changed = True
             for r in list(reminders):
                 if not r.get("active"):
                     continue
@@ -4390,7 +4379,7 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         now = _dt_dp.now(tz)
         hour = now.hour
         # Window: 12:00–19:00
-        if hour < 14 or hour >= 21:  # P-58f: window 14-21
+        if hour < 12 or hour >= 19:
             return False
         # Check 3 hours since last interaction
         last_dt_str = ws.get("last_interaction_datetime", "")
@@ -8028,22 +8017,15 @@ async def free_conversation(message: Message, state: FSMContext):
     _hint_block = f"\n\n[SR reflection hint: {_hint}]" if _hint else ""
 
     # Always: CORE + INTENT_LIGHT. INTENT_MAP only on demand (first msg or after action)
-    # P-58e: classifier handles intents, SR = pure conversationalist
-    system_content = SR_CORE_PROMPT
-    # P-58g: current date/time in SR prompt
-    try:
-        from zoneinfo import ZoneInfo as _ZI_sr
-        from datetime import datetime as _dt_sr
-        _prof_sr = store_get_profile(user_id) or {}
-        _tz_sr = _prof_sr.get("companion_settings", {}).get("timezone", "Europe/Moscow")
-        _now_sr = _dt_sr.now(_ZI_sr(_tz_sr))
-        _dt_block = f"[Сейчас: {_now_sr.strftime('%A %d %B %Y, %H:%M')} ({_tz_sr}). Используй эту дату как точку отсчёта. Не путай прошлые события с сегодняшними.]"
-    except Exception:
-        _dt_block = ""
+    need_map = _intent_map_needed.get(user_id, True)  # True = first message
+    if need_map:
+        system_content = SR_CORE_PROMPT + "\n\n" + SR_INTENT_LIGHT + "\n\n" + SR_INTENT_MAP
+    else:
+        system_content = SR_CORE_PROMPT + "\n\n" + SR_INTENT_LIGHT
     messages = [
         {
             "role": "system",
-            "content": system_content + "\n\n" + _dt_block + "\n\n" + ctx_msg + _hint_block
+            "content": system_content + "\n\n" + ctx_msg + _hint_block
         },
         *history[-20:],  # P-44: последние 20 в промпт
         {"role": "user", "content": text}
@@ -8061,7 +8043,7 @@ async def free_conversation(message: Message, state: FSMContext):
             _cl_intent = _cl_result.get("intent", "none")
             _cl_conf   = float(_cl_result.get("confidence", 1.0))
             logger.info(f"[Classifier] uid={user_id} intent={_cl_intent} conf={_cl_conf:.2f} text='{text[:40]}'")
-            _SR_ONLY = {"none", "conversation"}
+            _SR_ONLY = {"none", "conversation", "show_resonance", "show_resonance_detail", "show_achievements"}
             if _cl_intent not in _SR_ONLY and _cl_conf >= 0.85:
                 _cl_short_circuit = json.dumps({
                     "intent": _cl_intent,
@@ -8350,13 +8332,8 @@ async def free_conversation(message: Message, state: FSMContext):
                             _sphere_history_needed[user_id] = 4
                             reply_text = None
                         elif intent == "add_task":
-                            # P-58c: task limit check
-                            _active_count_cl = sum(1 for t in store_get_tasks(user_id) if t.get("status") != "completed")
-                            if _active_count_cl >= TASK_LIMIT_HARD:
-                                reply_text = f"⚠️ Лимит {TASK_LIMIT_HARD} активных задач. Заверши что-нибудь сначала."
-                            else:
-                             action_data = parsed_check.get("action") or {}
-                             bulk_tasks  = action_data.get("tasks") or []
+                            action_data = parsed_check.get("action") or {}
+                            bulk_tasks  = action_data.get("tasks") or []
                             if bulk_tasks and isinstance(bulk_tasks, list):
                                 # ── Bulk add: несколько задач за раз ──────────────
                                 created_lines = []
@@ -9001,26 +8978,28 @@ async def free_conversation(message: Message, state: FSMContext):
                                     offset_cr = target_cr.strftime("%z")
                                     offset_f_cr = offset_cr[:3] + ":" + offset_cr[3:] if offset_cr else "+00:00"
                                     dt_iso_cr = target_cr.strftime(f"%Y-%m-%dT%H:%M{offset_f_cr}")
-                                # P-58a: classifier path - create immediately, no confirmation
-                                reminders_cr = store_get_reminders(user_id)
-                                if len(reminders_cr) >= REMINDER_LIMIT:
-                                    reply_text = f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые."
-                                else:
-                                    rid_cr = _make_reminder_id(reminders_cr)
-                                    new_rem = {"id": rid_cr, "title": r_title, "datetime_iso": dt_iso_cr, "repeat": r_repeat, "active": True}
-                                    reminders_cr.append(new_rem)
-                                    store_set_reminders(user_id, reminders_cr)
-                                    _fire_sync()
-                                    dt_display_cr = dt_iso_cr[:16].replace("T", " ")
-                                    rep_display_cr = _repeat_label(r_repeat)
-                                    kb_edit_cr = InlineKeyboardMarkup(inline_keyboard=[
-                                        [InlineKeyboardButton(text="✏️ Изменить", callback_data=f"rem_edit_{rid_cr}")]
-                                    ])
-                                    await message.answer(
-                                        f"✅ Напоминание создано:\n🔔 {r_title}\n📅 {dt_display_cr} · {rep_display_cr}",
-                                        reply_markup=kb_edit_cr, parse_mode="HTML"
-                                    )
-                                    reply_text = ""
+                                # Store in state and show two-step confirmation
+                                await state.update_data(
+                                    _rem_title=r_title,
+                                    _rem_dt=dt_iso_cr,
+                                    _rem_repeat=r_repeat
+                                )
+                                await state.set_state(ReminderStates.waiting_for_repeat)
+                                dt_display_cr = dt_iso_cr[:16].replace("T", " ")
+                                kb_cr = InlineKeyboardMarkup(inline_keyboard=[
+                                    [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
+                                    [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
+                                     InlineKeyboardButton(text="❌ Отмена", callback_data="qdismiss")],
+                                ])
+                                await message.answer(
+                                    f"🔔 <b>Новое напоминание</b>\n\n"
+                                    f"Название: {r_title}\n"
+                                    f"📅 {dt_display_cr}\n\n"
+                                    f"Повторение: {_repeat_label(r_repeat)}",
+                                    reply_markup=kb_cr,
+                                    parse_mode="HTML"
+                                )
+                                reply_text = ""
                         elif intent == "show_reminders":
                             reminders = store_get_reminders(user_id)
                             if not reminders:
