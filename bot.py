@@ -8043,7 +8043,7 @@ async def free_conversation(message: Message, state: FSMContext):
             _cl_intent = _cl_result.get("intent", "none")
             _cl_conf   = float(_cl_result.get("confidence", 1.0))
             logger.info(f"[Classifier] uid={user_id} intent={_cl_intent} conf={_cl_conf:.2f} text='{text[:40]}'")
-            _SR_ONLY = {"none", "conversation", "show_resonance", "show_resonance_detail", "show_achievements"}
+            _SR_ONLY = {"none", "conversation"}
             if _cl_intent not in _SR_ONLY and _cl_conf >= 0.85:
                 _cl_short_circuit = json.dumps({
                     "intent": _cl_intent,
