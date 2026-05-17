@@ -7667,7 +7667,8 @@ async def _send_daily_report() -> None:
                     seen.add(key)
                     prof = store_get_profile(issue["user_id"])
                     name = prof.get("name", issue["user_id"]) if prof else issue["user_id"]
-                    lines.append(f"  · {name}: {issue['type']} — {issue['context']}")
+                    _issue_ctx = issue.get('context') or issue.get('text_preview') or issue.get('intent') or ''
+                    lines.append(f"  · {name}: {issue['type']} — {_issue_ctx}")
 
         lines.append("\n🌱 Всё остальное в норме.")
         text = "\n".join(lines)
