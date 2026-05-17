@@ -1,5 +1,21 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "task_id": "task_20260517065439741",
+      "title": "убраться дома",
+      "status": "todo",
+      "label_id": null,
+      "label_name": "",
+      "life_area": "connections",
+      "priority": 5,
+      "deadline": "2026-05-17",
+      "reminder": null,
+      "created": "2026-05-17",
+      "updated": "2026-05-17",
+      "completed": null,
+      "notes": ""
+    }
+  ],
   "groups": [],
   "achievements": [],
   "sphere_resonance": {
@@ -16,8 +32,8 @@
   "last_morning_date": "2026-05-17",
   "_decay_date": "2026-05-17",
   "_day_proactive_sent_date": "2026-05-16",
-  "last_interaction_date": "2026-05-15",
-  "last_interaction_datetime": "2026-05-15T18:33:02.924276+05:00",
+  "last_interaction_date": "2026-05-17",
+  "last_interaction_datetime": "2026-05-17T11:54:39.741215+05:00",
   "_pending_synthesis_count": 0,
   "deep_memory": {
     "core": "Антон — аналитик и практик, работающий в data governance и data engineering. Его повседневность пронизана стремлением упорядочивать — от данных до бытовых задач. Он ценит чёткость и структуру, предпочитает рациональный, деловой тон с фокусом на конкретные действия. Пока находится в фазе поиска большой цели, но активно внедряет системность в жизнь через напоминания и планирование. Вектор развития — от профессиональной системности к личной гармонии и осознанности в быту.",
