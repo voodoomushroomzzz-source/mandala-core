@@ -211,6 +211,20 @@
       "updated": "2026-05-15",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260518202809849",
+      "title": "Записаться к стоматологу",
+      "status": "todo",
+      "group_id": "group_001",
+      "life_area": "other",
+      "priority": 5,
+      "deadline": null,
+      "estimated_hours": null,
+      "created": "2026-05-18",
+      "updated": "2026-05-18",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
