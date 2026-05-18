@@ -7281,6 +7281,11 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
             [InlineKeyboardButton(text="💎 Зафиксировать достижение", callback_data="qa:" + label)],
             [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
         ])
+    if kind == "create_reminder":
+        return InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🔔 Создать напоминание", callback_data="qr:" + label)],
+            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
+        ])
     if kind == "web_search":
         return None  # поиск уже выполнен — кнопки не нужны
     return None
@@ -7812,6 +7817,16 @@ _CLASSIFIER_PROMPT = """Ты — классификатор намерений. 
 
 """ + SR_INTENT_LIGHT + """
 
+ДОПОЛНИТЕЛЬНЫЙ INTENT — suggest_action:
+Используй когда садовник НАМЕКАЕТ на намерение, но НЕ даёт чёткую команду.
+Примеры:
+- "надо бы записаться к врачу" → suggest_action, action.type="add_task", action.title="Записаться к врачу", 0.7
+- "стоит позвонить маме" → suggest_action, action.type="add_task", action.title="Позвонить маме", 0.7
+- "хочу начать бегать" → suggest_action, action.type="add_task", action.title="Начать бегать", 0.65
+- "прошёл 10 км сегодня" → suggest_action, action.type="add_achievement", action.title="10 км пешком", action.sphere="health", 0.7
+- "не забыть завтра встретить друга" → suggest_action, action.type="create_reminder", action.title="Встретить друга", 0.7
+ВАЖНО: suggest_action только если намерение неявное. Если команда чёткая — используй прямой intent.
+
 Верни строго JSON:
 {"intent": "<intent или none>", "action": {<параметры или пусто>}, "confidence": <0.0-1.0>}
 
@@ -8088,6 +8103,7 @@ async def free_conversation(message: Message, state: FSMContext):
     reply_text = "🌿 Я здесь, рядом."
     action = None
     parsed = None  # will hold decoded JSON dict
+    _suggest_action_kb = None  # P-70: suggest action keyboard
 
     # P-57: Step 2 — classifier active (short-circuits SR for action intents)
     _cl_short_circuit = None  # if set -> use classifier result, skip SR call
@@ -8098,7 +8114,18 @@ async def free_conversation(message: Message, state: FSMContext):
             _cl_conf   = float(_cl_result.get("confidence", 1.0))
             logger.info(f"[Classifier] uid={user_id} intent={_cl_intent} conf={_cl_conf:.2f} text='{text[:40]}'")
             _SR_ONLY = {"none", "conversation", "show_resonance", "show_resonance_detail", "show_achievements"}
-            if _cl_intent not in _SR_ONLY and _cl_conf >= 0.85:
+            # P-70: suggest_action — pass hint to SR, show action button
+            if _cl_intent == "suggest_action" and _cl_conf >= 0.60:
+                _sg_action = _cl_result.get("action") or {}
+                _sg_type = _sg_action.get("type", "")
+                _sg_title = _sg_action.get("title", "")
+                _sg_labels = {"add_task": "добавить задачу", "add_achievement": "зафиксировать достижение", "create_reminder": "создать напоминание"}
+                _sg_hint = f"[Подсказка: садовник намекает на намерение — {_sg_labels.get(_sg_type, _sg_type)} «{_sg_title}». Если это уместно — мягко предложи добавить. Не навязывай.]"
+                messages[0]["content"] += f"\n\n{_sg_hint}"
+                _suggest_action_kb = _sg_action
+            else:
+                _suggest_action_kb = None
+            if _cl_intent not in _SR_ONLY and _cl_intent != "suggest_action" and _cl_conf >= 0.85:
                 _cl_short_circuit = json.dumps({
                     "intent": _cl_intent,
                     "action": _cl_result.get("action") or {},
@@ -8475,7 +8502,18 @@ async def free_conversation(message: Message, state: FSMContext):
                                         if new_task.get("label_name"):
                                             parts.append(f"🎨 {new_task['label_name']}")
                                         if new_task.get("reminder"):
-                                            parts.append(f"🔔 {new_task['reminder']}")
+                                            _rem_raw = new_task["reminder"]
+                                            try:
+                                                _rem_dt = _rem_raw[:16].replace("T", " ")
+                                                _rem_parts = _rem_dt.split(" ")
+                                                _rem_date = _rem_parts[0] if len(_rem_parts) > 0 else ""
+                                                _rem_time = _rem_parts[1] if len(_rem_parts) > 1 else ""
+                                                _RU_MON = {"01":"янв","02":"фев","03":"мар","04":"апр","05":"май","06":"июн","07":"июл","08":"авг","09":"сен","10":"окт","11":"ноя","12":"дек"}
+                                                _rd = _rem_date.split("-")
+                                                _rem_pretty = f"{int(_rd[2])} {_RU_MON.get(_rd[1], _rd[1])} в {_rem_time}" if len(_rd) == 3 else _rem_dt
+                                            except Exception:
+                                                _rem_pretty = _rem_raw[:16].replace("T", " ")
+                                            parts.append(f"🔔 {_rem_pretty}")
                                         missing = []
                                         if not new_task.get("deadline"):
                                             missing.append("📅 дедлайн")
@@ -9358,6 +9396,9 @@ async def free_conversation(message: Message, state: FSMContext):
         _typing_stop.set()
         _typing_task.cancel()
 
+    # P-70d: apply suggest keyboard if no action from router
+    if _suggest_action_kb and not action:
+        action = _suggest_action_kb
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
         _has_html = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
@@ -9412,6 +9453,30 @@ async def quick_add_achievement(callback: CallbackQuery):
     except Exception:
         pass
 
+
+@router.callback_query(F.data.startswith("qr:"))
+async def quick_add_reminder(callback: CallbackQuery):
+    """P-70: quick reminder from suggest button."""
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    title = callback.data[3:]
+    reminders = store_get_reminders(user_id)
+    if len(reminders) >= REMINDER_LIMIT:
+        try:
+            await callback.message.edit_text(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
+        except Exception:
+            pass
+        return
+    try:
+        await callback.message.edit_text(
+            f"🔔 Создаём напоминание <b>{title}</b>\n\nНапиши время: <b>завтра в 9:00</b> или <b>19 мая в 10:30</b>",
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            f"🔔 Напиши время для напоминания <b>{title}</b>: например <b>завтра в 9:00</b>",
+            parse_mode="HTML"
+        )
 
 @router.callback_query(F.data == "qdismiss")
 async def quick_dismiss(callback: CallbackQuery):
