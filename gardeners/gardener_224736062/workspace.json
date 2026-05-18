@@ -226,6 +226,23 @@
       "updated": "2026-05-18",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260518204537304",
+      "title": "Позвонить в банк",
+      "status": "todo",
+      "label_id": null,
+      "label_name": null,
+      "life_area": "other",
+      "priority": 5,
+      "deadline": null,
+      "estimated_hours": null,
+      "created": "2026-05-18",
+      "updated": "2026-05-18",
+      "completed": null,
+      "notes": "",
+      "merkaba": "connections",
+      "repeat": "once"
     }
   ],
   "groups": [
