@@ -57,7 +57,7 @@ SR_MODEL_CHAIN = [
     "deepseek/deepseek-v4-flash",   # primary — 284B MoE, 13B active, 1M ctx
     "qwen/qwen3.5-flash-02-23",     # fallback — проверенный боевой
 ]
-SESSION_MAX_MESSAGES = 100
+SESSION_MAX_MESSAGES = 50
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
 BOT_VERSION = "7.39.23"
@@ -224,8 +224,7 @@ def store_increment_achievements(telegram_id: str) -> int:
     count = int(ws.get("achievements_count", 0)) + 1
     ws["achievements_count"] = count
     store_set_workspace(telegram_id, ws)
-    # Keep resonance in sync: each achievement adds 2% (min 5, max 100)
-    _recalc_resonance_from_achievements(telegram_id)
+    # P-63: removed _recalc_resonance_from_achievements (count*2 override — BUG-E)
     return count
 
 def store_add_resonance(telegram_id: str, delta: int) -> int:
@@ -4409,9 +4408,6 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         # Window: 14:00–21:00 (P-69)
         if hour < 14 or hour >= 21:
             return False
-        # P-62: skip if morning greeting already sent today
-        if ws.get("_greeting_sent_date") == _today(tz_name):
-            return False
         # Check 3 hours since last interaction
         last_dt_str = ws.get("last_interaction_datetime", "")
         if last_dt_str:
@@ -4477,6 +4473,13 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             silence_note = f"Садовник молчит {days_silent} дней. Тон — мягкий, как друг который просто даёт знать что рядом."
         else:
             silence_note = ""
+        # P-62fix: передаём флаг приветствия в промпт
+        _dp_greeting_flag = ws.get("_greeting_sent_date", "") == _today(tz_name)
+        _dp_greeting_note = (
+            "[Утреннее приветствие сегодня уже было — НЕ начинай с приветствия. "
+            "Начни сразу с наблюдения, вопроса или контекста дня садовника.]"
+            if _dp_greeting_flag else ""
+        )
         prompt_parts = [
             f"Сейчас {current_time} (таймзона {tz_name}). Подходящий момент написать садовнику {name}.",
             "",
@@ -4497,6 +4500,7 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             f"АКТИВНЫЕ ЗАДАЧИ:{tasks_context if tasks_context else ' нет'}",
             "",
             f"Дней молчания: {days_silent}." + (" " + silence_note if silence_note else ""),
+        ] + ([_dp_greeting_note] if _dp_greeting_note else []) + [
             "Руководствуясь ахимсой, напиши одно тёплое сообщение садовнику.",
             "Если чувствуешь что повода нет — верни \"SKIP\".",
             "Ответь ТОЛЬКО текстом сообщения или \"SKIP\". Без JSON.",
@@ -8061,10 +8065,27 @@ async def free_conversation(message: Message, state: FSMContext):
         system_content = SR_CORE_PROMPT + "\n\n" + SR_INTENT_LIGHT + "\n\n" + SR_INTENT_MAP
     else:
         system_content = SR_CORE_PROMPT + "\n\n" + SR_INTENT_LIGHT
+    # P-66: inject current date/time so SR doesn't confuse past events with today
+    try:
+        from zoneinfo import ZoneInfo as _ZI_sr
+        from datetime import datetime as _dt_sr
+        _prof_sr = store_get_profile(user_id) or {}
+        _tz_sr = _prof_sr.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        _now_sr = _dt_sr.now(_ZI_sr(_tz_sr))
+        _weekdays_ru = ["понедельник","вторник","среда","четверг","пятница","суббота","воскресенье"]
+        _dt_block = (
+            f"[Сейчас: {_weekdays_ru[_now_sr.weekday()]}, "
+            f"{_now_sr.strftime('%d.%m.%Y %H:%M')} ({_tz_sr}). "
+            f"Это актуальная дата и время садовника. "
+            f"Не путай прошлые события с сегодняшними. "
+            f"Всё что было раньше этой даты — прошлое.]"
+        )
+    except Exception:
+        _dt_block = ""
     messages = [
         {
             "role": "system",
-            "content": system_content + "\n\n" + ctx_msg + _hint_block
+            "content": system_content + "\n\n" + _dt_block + "\n\n" + ctx_msg + _hint_block
         },
         *history[-20:],  # P-44: последние 20 в промпт
         {"role": "user", "content": text}
@@ -8480,16 +8501,16 @@ async def free_conversation(message: Message, state: FSMContext):
                                 # Защита от дублей через achievements_count
                                 _today_str = _today()
                                 # Всегда добавляем +1 к счётчику и резонансу без архива
+                                # P-63: store_add_sphere_resonance recalculates mean correctly
                                 _new_sphere_res = store_add_sphere_resonance(user_id, _ach_cat, _ach_bonus)
                                 _update_sphere_history(user_id, _ach_cat, achievement=True, resonance_delta=_ach_bonus)
                                 store_increment_achievements(user_id)
+                                # P-63: update only non-resonance fields
                                 _gardener = store_get_profile(user_id)
                                 if _gardener:
                                     _g = dict(_gardener)
-                                    _prev_res = _g.get("resonance_level", 13)
-                                    _g["resonance_level"] = min(100, _prev_res + _ach_bonus)
                                     _g["updated"] = _today()
-                                    _g = _add_growth_history_entry(_g, _g["resonance_level"], user_id)
+                                    _g = _add_growth_history_entry(_g, _new_sphere_res, user_id)
                                     store_set_profile(user_id, _g)
                                     _invalidate_auth_cache(user_id)
                                 _fire_sync()
