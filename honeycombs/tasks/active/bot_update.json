@@ -5,10 +5,10 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-14",
+  "updated": "2026-05-18",
   "progress": 99,
   "current_version": "7.39.23",
-  "note_version": "Актуальная версия с патчами ~7.39.38",
+  "note_version": "Реальная версия с патчами ~7.39.75+",
   "dev_rules": [
     "ВСЕГДА обновлять BOT_VERSION и BOT_LATEST_UPDATE на каждом патче",
     "BOT_LATEST_UPDATE text — ТОЛЬКО через \\n в строках или тройные кавычки. НИКОГДА \\ в конце строки (это string continuation без \\n!)",
@@ -500,12 +500,7 @@
   ],
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-14",
-    "gardeners_loaded": "4/4 при старте ✅",
-    "critical_broken": [],
-    "fixed_today_2026_05_12": [
-      "All patches P-21 to P-37 applied. See execution_order."
-    ],
+    "last_check": "2026-05-18",
     "estimated_readiness": "99%"
   },
   "context_for_new_sr": {
@@ -683,5 +678,24 @@
         ]
       }
     }
-  }
+  },
+  "current_state": {
+    "classifier": "active, SHORT-CIRCUIT>=0.85, suggest_action>=0.60",
+    "sr_prompt": "CORE only (P-64)",
+    "daytime_window": "14-21 gardener TZ",
+    "session_max": 50,
+    "limits": {
+      "tasks_hard": 30,
+      "tasks_soft": 25,
+      "reminders_hard": 20,
+      "reminders_soft": 15
+    },
+    "reminder_flow": "direct — no confirmation"
+  },
+  "next_steps": [
+    "Тестирование suggest_action 1-2 дня",
+    "BOT_VERSION обновить",
+    "Journal Diary J-1..J-5",
+    "D-2..D-6 Deep Synthesis"
+  ]
 }

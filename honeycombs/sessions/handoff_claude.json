@@ -1,70 +1,63 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-05-15",
-  "updated": "2026-05-15",
+  "session_id": "2026-05-18",
+  "updated": "2026-05-18",
   "status": "handoff",
   "current_task": "T-20260408-1030 — Telegram Bot SR Gentle Companion",
-  "last_action": "P-49: правило — либо выполни функцию, либо уточни параметры, третьего нет",
-  "next_step": "Реализация двухслойной архитектуры: Классификатор интентов + SR как чистый собеседник. JSON с описанием идеи отправлен DeepSeek на анализ.",
-  "session_mood": "продуктивная, глубокая",
-  "gardener_state": "активен, строит Мандалу, сегодня 16K шагов",
+  "last_action": "P-70fix2: suggest_action fallback text when SR returns empty",
+  "next_step": "Тестирование suggest_action 1-2 дня. Затем Journal Diary (J-1..J-5).",
+  "session_mood": "продуктивная, масштабная",
+  "gardener_state": "активен, строит Мандалу",
   "files_touched": [
-    "honeycombs/bot.py",
-    "engineer-chat/main.py",
-    "honeycombs/registry/registry.json",
-    "honeycombs/registry/scan_state.json"
+    "bot.py"
   ],
   "open_questions": [
-    "Какую модель использовать для классификатора?",
-    "SR писать подтверждение после классификатора или системное сообщение?",
-    "show_* интенты через классификатор или SR?",
-    "Как логировать промахи классификатора?"
+    "suggest_action conf=0.60 — не слишком ли низкий порог?",
+    "BOT_VERSION не обновлялся с P-53 — поднять в следующей сессии"
   ],
   "completed": [
-    "P-37: Daytime proactive window 12-19, 3h silence",
-    "P-38: Умный фарш в _send_daytime_proactive (20 msg, core, snapshots, obs, sphere_history, SR_CORE_PROMPT)",
-    "P-39: Удалён check_silence_and_engage, дни тишины и тон в промпте",
-    "P-40: Запрет Доброе утро в дневном проактивном (→ заменён P-43)",
-    "P-41: Greeting flag system — ws._greeting_sent_date",
-    "P-42/b: Шутка при повторном привете, только чистые приветствия",
-    "P-43: Умная логика приветствий",
-    "P-44: SESSION 100, history[-20] в промпт, история в синтез, core+интересы+медиа в каждый ответ, per-item decay, медиа слот",
-    "P-45: Новый SR_CORE_PROMPT (без PHI, диалог как зеркало, живая память) + фикс **",
-    "P-46: sphere_last_active, recent_completed, per-sphere decay, пороги 6 дней, _track_interaction в кнопках",
-    "P-46b: Имбаланс сфер, предупреждения, recent_completed в контексте, max_tokens 1500",
-    "P-47: Культурный опыт расширен — театр, балет, искусство, архитектура, игры, выставки",
-    "P-48: Честность про достижения, add_achievement confidence 0.92, двухшаговое подтверждение",
-    "P-49: Правило — либо выполни функцию, либо уточни параметры",
-    "HOTFIX: _get_session_reflection_hint — guard для интересов dict после P-44",
-    "engineer-chat: deepseek-v4-pro → deepseek-v3.2",
-    "scan: registry updated — 41 honeycombs, 0 errors"
+    "P-53: fake markers + промпт усилен",
+    "P-54: confirmed dict join fix",
+    "P-55: dp=Dispatcher NameError fix",
+    "P-56/57: классификатор Step 1+2 SHORT-CIRCUIT",
+    "P-59: daily report KeyError",
+    "P-60: once reminder delete fix",
+    "P-61: repeat task timezone fix",
+    "P-62fix: greeting_block в дневном проактиве",
+    "P-63: BUG-E резонанс тройная запись убрана",
+    "P-64: SR промпт = CORE only",
+    "P-65: history после SHORT-CIRCUIT",
+    "P-66: дата/время в SR промпт",
+    "P-67: лимиты hard/soft задачи и напоминания",
+    "P-68: автоочистка просроченных напоминаний",
+    "P-69: дневное окно 14-21",
+    "P-70+fixes: suggest_action + qt/qa/qr handlers",
+    "P-71: напоминание без подтверждения",
+    "SESSION=50"
   ],
   "in_progress": [
-    "Двухслойная архитектура: Классификатор + SR — проектирование, ждём ответа DeepSeek",
-    "Обновление bot_update.json в репо"
+    "Тестирование suggest_action в боевых условиях",
+    "Наблюдение за дневными проактивными сообщениями"
   ],
   "architecture_state": {
-    "bot_version": "7.39.23 (реально ~7.39.49+)",
-    "bot_size": "~10000+ строк",
-    "session_max": 100,
-    "history_in_prompt": 20,
-    "sr_core_prompt": "переписан — диалог как зеркало, живая память, без PHI",
-    "interests_structure": "per-item {name, count, last_seen} — decay 15/30 дней",
-    "media_structure": "confirmed(10) + mentioned(10) — культурный опыт",
-    "sphere_decay": "per-sphere, 6 дней тишины → -1%/день",
-    "greeting_flag": "ws._greeting_sent_date — флаг приветствия на день",
-    "classifier": "не реализован — в проектировании"
+    "bot_version": "7.39.23 (реально ~7.39.75+)",
+    "bot_size": "~9600 строк",
+    "session_max": 50,
+    "sr_prompt": "SR_CORE_PROMPT only — SR чистый собеседник",
+    "classifier": "deepseek, SHORT-CIRCUIT>=0.85, suggest_action>=0.60",
+    "sr_only_intents": "none, conversation",
+    "reminder_creation": "прямое создание без подтверждения",
+    "daytime_window": "14-21 TZ садовника",
+    "limits": "tasks: soft=25 hard=30, reminders: soft=15 hard=20"
   },
   "key_files": {
-    "bot": "honeycombs/bot.py",
-    "bot_task": "honeycombs/tasks/active/bot_update.json",
-    "engineer_chat": "engineer-chat/main.py",
-    "handoff_deepseek": "honeycombs/sessions/handoff_deepseek.json"
+    "bot": "bot.py",
+    "bot_task": "honeycombs/tasks/active/bot_update.json"
   },
-  "gardener_notes": "Дима. Большая сессия — 14 патчей за день. Симбиоз стал значительно глубже. SR теперь видит культурный опыт, интересы с весами, портрет в каждом ответе. Следующий большой шаг — классификатор который освободит SR от роли роутера.",
+  "gardener_notes": "Дима. Масштабная сессия. Классификатор полностью внедрён (Step 1→2→3). SR стал чистым собеседником. Suggest_action работает. Напоминания мгновенные. Следующий блок — Journal Diary.",
   "handoff_validation": {
     "stale_threshold_hours": 24,
-    "last_validated": "2026-05-15",
+    "last_validated": "2026-05-18",
     "stale_detected": false
   }
 }
