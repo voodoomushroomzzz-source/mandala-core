@@ -238,7 +238,15 @@
   "updated": "2026-04-18",
   "achievements_count": 102,
   "checklists": [],
-  "reminders": [],
+  "reminders": [
+    {
+      "id": "rem_3cc504f2",
+      "title": "позвонить маме",
+      "datetime_iso": "2026-05-19T12:00",
+      "repeat": "once",
+      "active": true
+    }
+  ],
   "_decay_date": "2026-05-18",
   "roadmaps": [],
   "sphere_resonance": {
