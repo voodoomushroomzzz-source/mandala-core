@@ -8056,12 +8056,9 @@ async def free_conversation(message: Message, state: FSMContext):
     _hint = _get_session_reflection_hint(user_id)
     _hint_block = f"\n\n[SR reflection hint: {_hint}]" if _hint else ""
 
-    # Always: CORE + INTENT_LIGHT. INTENT_MAP only on demand (first msg or after action)
-    need_map = _intent_map_needed.get(user_id, True)  # True = first message
-    if need_map:
-        system_content = SR_CORE_PROMPT + "\n\n" + SR_INTENT_LIGHT + "\n\n" + SR_INTENT_MAP
-    else:
-        system_content = SR_CORE_PROMPT + "\n\n" + SR_INTENT_LIGHT
+    # P-64: classifier handles all intents — SR is pure conversationalist
+    # SR_INTENT_LIGHT and SR_INTENT_MAP removed — SR returns plain text, not JSON
+    system_content = SR_CORE_PROMPT
     # P-66: inject current date/time so SR doesn't confuse past events with today
     try:
         from zoneinfo import ZoneInfo as _ZI_sr
@@ -8109,6 +8106,26 @@ async def free_conversation(message: Message, state: FSMContext):
                     "text": ""
                 }, ensure_ascii=False)
                 logger.info(f"[Classifier] SHORT-CIRCUIT intent={_cl_intent} - SR skipped")
+                # P-65: record classifier action in history so SR sees it next message
+                _action_labels = {
+                    "add_task": "задача создана",
+                    "complete_task": "задача закрыта",
+                    "delete_task": "задача удалена",
+                    "edit_task": "задача изменена",
+                    "create_reminder": "напоминание создано",
+                    "delete_reminder": "напоминание удалено",
+                    "add_achievement": "достижение зафиксировано",
+                    "create_checklist": "чеклист создан",
+                    "show_tasks": "показаны задачи",
+                    "show_profile": "показан профиль",
+                    "show_resonance": "показан резонанс",
+                    "show_achievements": "показаны достижения",
+                }
+                _cl_action_data = _cl_result.get("action") or {}
+                _cl_action_title = _cl_action_data.get("title") or ""
+                _cl_label = _action_labels.get(_cl_intent, _cl_intent)
+                _cl_hist_note = f"[Система: {_cl_label}" + (f" — {_cl_action_title}" if _cl_action_title else "") + "]"
+                _add_to_history(user_id, "system", _cl_hist_note)
             else:
                 _daily_issues.append({
                     "user_id": user_id,
@@ -9320,18 +9337,7 @@ async def free_conversation(message: Message, state: FSMContext):
                 except Exception:
                     pass
             _add_to_history(user_id, "user", text)
-            # Track if next request needs full INTENT_MAP
-            # Keep map active for 3 messages after any action intent
-            try:
-                _last_intent = parsed.get("intent", "conversation") if parsed else "conversation"
-                if _last_intent != "conversation":
-                    _intent_map_needed[user_id] = 3  # keep map for 3 more messages
-                else:
-                    current = _intent_map_needed.get(user_id, 0)
-                    if current > 0:
-                        _intent_map_needed[user_id] = current - 1  # countdown
-            except Exception:
-                _intent_map_needed[user_id] = 0
+            # P-64b: _intent_map_needed removed — classifier handles routing
             # P-29: countdown sphere_history_needed
             sh_current = _sphere_history_needed.get(user_id, 0)
             if sh_current > 0:
