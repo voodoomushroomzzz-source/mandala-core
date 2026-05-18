@@ -91,13 +91,13 @@ BOT_LATEST_UPDATE = {
 # ─── Business limits ──────────────────────────────────────────────────────────
 TASK_CTX_FREE    = "free"      # task visible in tasks menu
 
-TASK_LIMIT_HARD  = 50
+TASK_LIMIT_HARD  = 30  # P-67
 TASK_LIMIT_SOFT  = 40
 LABEL_LIMIT_HARD = 7
 LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
 CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
-REMINDER_LIMIT         = 10  # max reminders per user
+REMINDER_LIMIT         = 20  # max reminders per user — P-67
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -2355,6 +2355,18 @@ async def run_reminder_scheduler() -> None:
             now_dt = _dtr6.now(_tz6)
             now_str = now_dt.strftime("%Y-%m-%dT%H:%M")
             changed = False
+            # P-68: auto-purge once-reminders older than 24h
+            for r in list(reminders):
+                if r.get("repeat", "once") == "once" and r.get("active", True):
+                    _r_dt_raw = r.get("datetime_iso", "")[:16]
+                    try:
+                        _r_dt_past = _dtr6.strptime(_r_dt_raw, "%Y-%m-%dT%H:%M").replace(tzinfo=_tz6)
+                        if (now_dt - _r_dt_past).total_seconds() > 86400:
+                            reminders.remove(r)
+                            changed = True
+                            continue
+                    except Exception:
+                        pass
             for r in list(reminders):
                 if not r.get("active"):
                     continue
@@ -2386,6 +2398,7 @@ async def run_reminder_scheduler() -> None:
                 repeat = r.get("repeat", "once")
                 if repeat == "once":
                     reminders.remove(r)
+                    changed = True  # P-60: fix — was missing, once reminder never saved
                 elif repeat == "daily":
                     d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
                     r["datetime_iso"] = (d + _td6(days=1)).strftime("%Y-%m-%dT%H:%M")
