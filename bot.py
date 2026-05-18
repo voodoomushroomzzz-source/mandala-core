@@ -7270,15 +7270,20 @@ def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
     if not action:
         return None
     kind = action.get("type", "")
-    label = (action.get("title") or action.get("query") or "")[:50]
+    # Telegram callback_data limit = 64 bytes
+    _raw_label = (action.get("title") or action.get("query") or "")
+    _label_bytes = _raw_label.encode("utf-8")[:58]
+    label = _label_bytes.decode("utf-8", errors="ignore").strip()
     if kind == "add_task":
         return InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✅ Добавить задачу", callback_data="qt:" + label)],
             [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
         ])
     if kind == "add_achievement":
+        _sphere_qa = (action.get("sphere") or "growth")[:10]
+        _qa_data = ("qa:" + label + "|" + _sphere_qa)[:64]
         return InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="💎 Зафиксировать достижение", callback_data="qa:" + label)],
+            [InlineKeyboardButton(text="💎 Зафиксировать достижение", callback_data=_qa_data)],
             [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
         ])
     if kind == "create_reminder":
@@ -9421,26 +9426,39 @@ async def quick_add_task(callback: CallbackQuery):
     title = callback.data[3:]
     tasks = list(store_get_tasks(user_id))
     task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
-    tasks.append({
+    merkaba = _auto_merkaba(title, "")
+    new_t = {
         "task_id": task_id, "title": title, "status": "todo",
-        "group_id": "group_001", "life_area": "other", "priority": 5,
-        "deadline": None, "estimated_hours": None,
-        "created": _today(), "updated": _today(), "completed": None, "notes": ""
-    })
+        "label_id": None, "label_name": None, "life_area": "other",
+        "priority": 5, "deadline": None, "estimated_hours": None,
+        "created": _today(), "updated": _today(), "completed": None,
+        "notes": "", "merkaba": merkaba, "repeat": "once"
+    }
+    tasks.append(new_t)
     store_set_tasks(user_id, tasks)
     _fire_sync()
+    edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"ttask_edit|{task_id}")
+    ]])
+    confirm = f"✅ Задача «{title}» создана\n<i>Можно добавить: 📅 дедлайн, 🎨 группа</i>"
     try:
-        await callback.message.edit_text("✅ Задача добавлена: <b>" + title + "</b>\n<code>" + task_id + "</code>", parse_mode="HTML")
+        await callback.message.edit_text(confirm, reply_markup=edit_kb, parse_mode="HTML")
     except Exception:
-        pass
+        await callback.message.answer(confirm, reply_markup=edit_kb, parse_mode="HTML")
 
 @router.callback_query(F.data.startswith("qa:"))
 async def quick_add_achievement(callback: CallbackQuery):
     await callback.answer()
     user_id = str(callback.from_user.id)
-    title = callback.data[3:]
-    # P-25r: use store_add_sphere_resonance (syncs both sphere + resonance_level correctly)
-    new_res = store_add_sphere_resonance(user_id, "growth", 3)
+    _qa_raw = callback.data[3:]
+    if "|" in _qa_raw:
+        title, _qa_sphere = _qa_raw.rsplit("|", 1)
+    else:
+        title, _qa_sphere = _qa_raw, "growth"
+    _sphere_names_ru = {"health": "Здоровье 🌿", "creativity": "Творчество 🔥",
+                        "work": "Дело 💼", "connections": "Связи 🤝", "growth": "Рост 🌱"}
+    new_res = store_add_sphere_resonance(user_id, _qa_sphere, 3)
+    store_increment_achievements(user_id)
     gardener = store_get_profile(user_id)
     if gardener:
         gardener["updated"] = _today()
@@ -9448,10 +9466,12 @@ async def quick_add_achievement(callback: CallbackQuery):
         store_set_profile(user_id, gardener)
         _invalidate_auth_cache(user_id)
     _fire_sync()
+    _sphere_display = _sphere_names_ru.get(_qa_sphere, _qa_sphere)
+    _ach_msg = f"💎 Достижение зафиксировано!\n\n{title}\nСфера: {_sphere_display} · +3 к резонансу"
     try:
-        await callback.message.edit_text("💎 Достижение зафиксировано: <b>" + title + "</b>\n🔮 +3 к резонансу", parse_mode="HTML")
+        await callback.message.edit_text(_ach_msg, parse_mode="HTML")
     except Exception:
-        pass
+        await callback.message.answer(_ach_msg, parse_mode="HTML")
 
 
 @router.callback_query(F.data.startswith("qr:"))
