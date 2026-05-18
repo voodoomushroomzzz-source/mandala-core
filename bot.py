@@ -3838,32 +3838,29 @@ async def rem_text_input(message: Message, state: FSMContext):
         return
     
     dt_display = dt_iso[:16].replace("T", " ")
-    await state.update_data(
-        _rem_title=title_clean,
-        _rem_dt=dt_iso,
-        _rem_repeat="once"
-    )
-    # Persist to workspace for recovery after bot restart
-    ws = store_get_workspace(user_id) or {}
-    ws["_pending_reminder_create"] = {
-        "_rem_title": title_clean,
-        "_rem_dt": dt_iso,
-        "_rem_repeat": "once"
-    }
-    store_set_workspace(user_id, ws)
-    await state.set_state(ReminderStates.waiting_for_repeat)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
-        [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
-         InlineKeyboardButton(text="❌ Отмена", callback_data="menu_reminders_mgmt")],
+    # P-71a: direct create — no confirmation step
+    reminders_71 = store_get_reminders(user_id)
+    if len(reminders_71) >= REMINDER_LIMIT:
+        await state.clear()
+        await message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
+        return
+    if len(reminders_71) >= REMINDER_LIMIT_SOFT:
+        await message.answer(f"⚠️ Почти лимит: {len(reminders_71)}/{REMINDER_LIMIT} напоминаний.")
+    rid_71 = _make_reminder_id(reminders_71)
+    reminders_71.append({"id": rid_71, "title": title_clean, "datetime_iso": dt_iso, "repeat": "once", "active": True})
+    store_set_reminders(user_id, reminders_71)
+    ws_71 = store_get_workspace(user_id) or {}
+    ws_71.pop("_pending_reminder_create", None)
+    ws_71.pop("_pending_reminder_edit", None)
+    store_set_workspace(user_id, ws_71)
+    _fire_sync()
+    await state.clear()
+    kb_71 = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✏️ Изменить", callback_data=f"rem_edit_{rid_71}")]
     ])
     await message.answer(
-        f"🔔 <b>Новое напоминание</b>\n\n"
-        f"Название: {title_clean}\n"
-        f"📅 {dt_display}\n\n"
-        f"Повторение: один раз",
-        reply_markup=kb,
-        parse_mode="HTML"
+        f"✅ Напоминание создано:\n🔔 {title_clean}\n📅 {dt_display} · ▶ Один раз",
+        reply_markup=kb_71, parse_mode="HTML"
     )
 
 
@@ -9038,28 +9035,26 @@ async def free_conversation(message: Message, state: FSMContext):
                                     offset_cr = target_cr.strftime("%z")
                                     offset_f_cr = offset_cr[:3] + ":" + offset_cr[3:] if offset_cr else "+00:00"
                                     dt_iso_cr = target_cr.strftime(f"%Y-%m-%dT%H:%M{offset_f_cr}")
-                                # Store in state and show two-step confirmation
-                                await state.update_data(
-                                    _rem_title=r_title,
-                                    _rem_dt=dt_iso_cr,
-                                    _rem_repeat=r_repeat
-                                )
-                                await state.set_state(ReminderStates.waiting_for_repeat)
-                                dt_display_cr = dt_iso_cr[:16].replace("T", " ")
-                                kb_cr = InlineKeyboardMarkup(inline_keyboard=[
-                                    [InlineKeyboardButton(text="➕ Добавить повторение", callback_data="rem_repeat_pick")],
-                                    [InlineKeyboardButton(text="✅ Создать", callback_data="rem_confirm_create"),
-                                     InlineKeyboardButton(text="❌ Отмена", callback_data="qdismiss")],
-                                ])
-                                await message.answer(
-                                    f"🔔 <b>Новое напоминание</b>\n\n"
-                                    f"Название: {r_title}\n"
-                                    f"📅 {dt_display_cr}\n\n"
-                                    f"Повторение: {_repeat_label(r_repeat)}",
-                                    reply_markup=kb_cr,
-                                    parse_mode="HTML"
-                                )
-                                reply_text = ""
+                                # P-71b: direct create — no confirmation
+                                reminders_cl = store_get_reminders(user_id)
+                                if len(reminders_cl) >= REMINDER_LIMIT:
+                                    reply_text = f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые."
+                                else:
+                                    if len(reminders_cl) >= REMINDER_LIMIT_SOFT:
+                                        await message.answer(f"⚠️ Почти лимит: {len(reminders_cl)}/{REMINDER_LIMIT} напоминаний.")
+                                    rid_cl = _make_reminder_id(reminders_cl)
+                                    reminders_cl.append({"id": rid_cl, "title": r_title, "datetime_iso": dt_iso_cr, "repeat": r_repeat, "active": True})
+                                    store_set_reminders(user_id, reminders_cl)
+                                    _fire_sync()
+                                    dt_display_cr = dt_iso_cr[:16].replace("T", " ")
+                                    kb_cl = InlineKeyboardMarkup(inline_keyboard=[
+                                        [InlineKeyboardButton(text="✏️ Изменить", callback_data=f"rem_edit_{rid_cl}")]
+                                    ])
+                                    await message.answer(
+                                        f"✅ Напоминание создано:\n🔔 {r_title}\n📅 {dt_display_cr} · {_repeat_label(r_repeat)}",
+                                        reply_markup=kb_cl, parse_mode="HTML"
+                                    )
+                                    reply_text = ""
                         elif intent == "show_reminders":
                             reminders = store_get_reminders(user_id)
                             if not reminders:
