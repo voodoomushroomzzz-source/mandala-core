@@ -8109,6 +8109,7 @@ async def free_conversation(message: Message, state: FSMContext):
     action = None
     parsed = None  # will hold decoded JSON dict
     _suggest_action_kb = None  # P-70: suggest action keyboard
+    _suggest_fallback_text = None  # P-70: fallback text if SR returns empty
 
     # P-57: Step 2 — classifier active (short-circuits SR for action intents)
     _cl_short_circuit = None  # if set -> use classifier result, skip SR call
@@ -8128,8 +8129,15 @@ async def free_conversation(message: Message, state: FSMContext):
                 _sg_hint = f"[Подсказка: садовник намекает на намерение — {_sg_labels.get(_sg_type, _sg_type)} «{_sg_title}». Если это уместно — мягко предложи добавить. Не навязывай.]"
                 messages[0]["content"] += f"\n\n{_sg_hint}"
                 _suggest_action_kb = _sg_action
+                _sg_fallbacks = {
+                    "add_task": f"Может добавить «{_sg_title}» как задачу?",
+                    "add_achievement": f"Зафиксируем «{_sg_title}» как достижение?",
+                    "create_reminder": f"Напомнить «{_sg_title}»?",
+                }
+                _suggest_fallback_text = _sg_fallbacks.get(_sg_type, f"Добавить «{_sg_title}»?")
             else:
                 _suggest_action_kb = None
+                _suggest_fallback_text = None
             if _cl_intent not in _SR_ONLY and _cl_intent != "suggest_action" and _cl_conf >= 0.85:
                 _cl_short_circuit = json.dumps({
                     "intent": _cl_intent,
@@ -9404,6 +9412,8 @@ async def free_conversation(message: Message, state: FSMContext):
     # P-70d: apply suggest keyboard if no action from router
     if _suggest_action_kb and not action:
         action = _suggest_action_kb
+        if (not reply_text or not reply_text.strip() or reply_text == "🌿 Я здесь, рядом.") and _suggest_fallback_text:
+            reply_text = _suggest_fallback_text
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
         _has_html = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
