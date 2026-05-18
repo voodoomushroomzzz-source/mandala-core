@@ -1,77 +1,35 @@
 {
-  "date": "2026-05-17",
+  "date": "2026-05-18",
   "version": "7.39.23",
   "gardeners": {
+    "339914913": {
+      "name": "Антон",
+      "active": false,
+      "synthesis_date": "2026-05-17"
+    },
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-05-17"
-    },
-    "339914913": {
-      "name": "Антон",
-      "active": true,
-      "synthesis_date": "2026-05-17"
-    },
-    "851913510": {
-      "name": "Яна",
-      "active": true,
-      "synthesis_date": "2026-05-17"
+      "synthesis_date": "2026-05-18"
     },
     "358793311": {
       "name": "Антон",
       "active": false,
       "synthesis_date": "2026-05-16"
+    },
+    "851913510": {
+      "name": "Яна",
+      "active": true,
+      "synthesis_date": "2026-05-18"
     }
   },
   "issues": [
     {
-      "user_id": "851913510",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Привет \n\nВчера я еще сходила на концерт в любимым музыкантам"
-    },
-    {
-      "user_id": "851913510",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "Это осознание точно принесло облегчение, и я не один раз выб"
-    },
-    {
-      "user_id": "851913510",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Сейчас мне нравится мужчина, который подходит под сценарий н"
-    },
-    {
-      "user_id": "851913510",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "Нам нужно было заякорить эту мысль"
-    },
-    {
-      "user_id": "851913510",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "Спасибо"
-    },
-    {
       "user_id": "224736062",
       "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "2"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "complete_task",
-      "count": 2,
-      "context": "повторный complete_task"
+      "intent": "delete_task",
+      "confidence": 0.5,
+      "text_preview": "Удали задача."
     }
   ]
 }
