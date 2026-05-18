@@ -92,12 +92,13 @@ BOT_LATEST_UPDATE = {
 TASK_CTX_FREE    = "free"      # task visible in tasks menu
 
 TASK_LIMIT_HARD  = 30  # P-67
-TASK_LIMIT_SOFT  = 40
+TASK_LIMIT_SOFT  = 25  # warn when approaching hard limit
 LABEL_LIMIT_HARD = 7
 LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
 CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
 REMINDER_LIMIT         = 20  # max reminders per user — P-67
+REMINDER_LIMIT_SOFT    = 15  # warn when approaching reminder limit
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -1538,26 +1539,35 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
     new_task_created = False
     if repeat and repeat != "once":
         from datetime import datetime as _dt_rep, timedelta as _td_rep
-        today = _dt_rep.now().strftime("%Y-%m-%d")
+        from zoneinfo import ZoneInfo as _ZI_rep
+        # P-61: gardener timezone so deadline is correct locally
+        _prof_rep = store_get_profile(user_id) or {}
+        _tz_rep_name = _prof_rep.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        try:
+            _tz_rep = _ZI_rep(_tz_rep_name)
+        except Exception:
+            _tz_rep = _ZI_rep("Europe/Moscow")
+        _now_rep = _dt_rep.now(_tz_rep)
+        today = _now_rep.strftime("%Y-%m-%d")
         new_dl = None
         if repeat == "daily":
-            new_dl = (_dt_rep.now() + _td_rep(days=1)).strftime("%Y-%m-%d")
+            new_dl = (_now_rep + _td_rep(days=1)).strftime("%Y-%m-%d")
         elif repeat == "weekly":
-            new_dl = (_dt_rep.now() + _td_rep(days=7)).strftime("%Y-%m-%d")
+            new_dl = (_now_rep + _td_rep(days=7)).strftime("%Y-%m-%d")
         elif repeat == "weekdays":
-            d = _dt_rep.now() + _td_rep(days=1)
+            d = _now_rep + _td_rep(days=1)
             while d.weekday() >= 5:
                 d += _td_rep(days=1)
             new_dl = d.strftime("%Y-%m-%d")
         elif repeat == "monthly":
-            new_dl = (_dt_rep.now() + _td_rep(days=30)).strftime("%Y-%m-%d")
+            new_dl = (_now_rep + _td_rep(days=30)).strftime("%Y-%m-%d")
         elif repeat == "yearly":
-            new_dl = (_dt_rep.now() + _td_rep(days=365)).strftime("%Y-%m-%d")
+            new_dl = (_now_rep + _td_rep(days=365)).strftime("%Y-%m-%d")
         elif repeat.startswith("custom_days:"):
             days_str = repeat.split(":")[1]
             days_list = days_str.split(",")
             day_names = ["mon","tue","wed","thu","fri","sat","sun"]
-            d = _dt_rep.now() + _td_rep(days=1)
+            d = _now_rep + _td_rep(days=1)
             while day_names[d.weekday()] not in days_list:
                 d += _td_rep(days=1)
             new_dl = d.strftime("%Y-%m-%d")
@@ -3457,9 +3467,12 @@ async def cb_reminders_mgmt(callback: CallbackQuery, state: FSMContext):
 async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
-    if len(store_get_reminders(user_id)) >= REMINDER_LIMIT:
-        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
+    _rem_count_s1 = len(store_get_reminders(user_id))
+    if _rem_count_s1 >= REMINDER_LIMIT:
+        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
         return
+    elif _rem_count_s1 >= REMINDER_LIMIT_SOFT:
+        await callback.message.answer(f"⚠️ Почти лимит: {_rem_count_s1}/{REMINDER_LIMIT} напоминаний.")
     # Очищаем оба pending — иначе старый _rem_edit_id подхватится в fallback
     ws_create = store_get_workspace(user_id) or {}
     ws_create.pop("_pending_reminder_edit", None)
@@ -4254,9 +4267,11 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
     
     reminders = store_get_reminders(user_id)
     if len(reminders) >= REMINDER_LIMIT:
-        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний.")
+        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
         await state.clear()
         return
+    elif len(reminders) >= REMINDER_LIMIT_SOFT:
+        await callback.message.answer(f"⚠️ Почти лимит: {len(reminders)}/{REMINDER_LIMIT} напоминаний.")
     
     rid = _make_reminder_id(reminders)
     reminders.append({
@@ -4391,8 +4406,11 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             tz = _ZI_dp("Europe/Moscow")
         now = _dt_dp.now(tz)
         hour = now.hour
-        # Window: 12:00–19:00
-        if hour < 12 or hour >= 19:
+        # Window: 14:00–21:00 (P-69)
+        if hour < 14 or hour >= 21:
+            return False
+        # P-62: skip if morning greeting already sent today
+        if ws.get("_greeting_sent_date") == _today(tz_name):
             return False
         # Check 3 hours since last interaction
         last_dt_str = ws.get("last_interaction_datetime", "")
@@ -5583,6 +5601,11 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
         except Exception:
             await callback.message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач достигнут.")
         return
+    elif active_count >= TASK_LIMIT_SOFT:
+        try:
+            await callback.message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач.")
+        except Exception:
+            pass
     task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
     title   = data.get("title", "Задача")
     merkaba = _auto_merkaba(title, data.get("label_name", ""))
@@ -6085,6 +6108,8 @@ async def _create_task_atomic(user_id: str, message: Message,
     active_count = len([t for t in tasks if t.get("status") != "completed"])
     if active_count >= TASK_LIMIT_HARD:
         await message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач. Заверши что-нибудь сначала.")
+    elif active_count >= TASK_LIMIT_SOFT:
+        await message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач. Скоро не смогу добавлять новые.")
         return {}
     # Resolve label
     label_id, resolved_label = None, ""
