@@ -1,35 +1,27 @@
 {
-  "date": "2026-05-18",
+  "date": "2026-05-19",
   "version": "7.39.23",
   "gardeners": {
-    "339914913": {
-      "name": "Антон",
-      "active": false,
-      "synthesis_date": "2026-05-17"
-    },
     "224736062": {
       "name": "Дима",
       "active": true,
       "synthesis_date": "2026-05-18"
     },
-    "358793311": {
+    "339914913": {
       "name": "Антон",
       "active": false,
-      "synthesis_date": "2026-05-16"
+      "synthesis_date": "2026-05-17"
     },
     "851913510": {
       "name": "Яна",
       "active": true,
-      "synthesis_date": "2026-05-18"
+      "synthesis_date": "2026-05-19"
+    },
+    "358793311": {
+      "name": "Антон",
+      "active": false,
+      "synthesis_date": "2026-05-16"
     }
   },
-  "issues": [
-    {
-      "user_id": "224736062",
-      "type": "classifier_pass_to_sr",
-      "intent": "delete_task",
-      "confidence": 0.5,
-      "text_preview": "Удали задача."
-    }
-  ]
+  "issues": []
 }
