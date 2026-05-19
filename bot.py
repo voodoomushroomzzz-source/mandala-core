@@ -5933,6 +5933,7 @@ _checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
 _profile_messages: dict = {}   # {user_id: message_id} — last shown profile
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
 _intent_map_needed: dict = {}  # uid → bool — show full INTENT_MAP on next request
+_pending_suggest: dict = {}  # uid → {type, title, sphere} — last suggest_action waiting confirm
 _sphere_history_needed: dict = {}  # uid → int — countdown: include full sphere_history in context
 
 
@@ -7828,6 +7829,10 @@ _CLASSIFIER_PROMPT = """Ты — классификатор намерений. 
 - "не забыть завтра встретить друга" → suggest_action, action.type="create_reminder", action.title="Встретить друга", 0.7
 ВАЖНО: suggest_action только если намерение неявное. Если команда чёткая — используй прямой intent.
 
+ДОПОЛНИТЕЛЬНЫЙ INTENT — confirm_suggest:
+Используй когда садовник подтверждает предложение. Признаки: «да», «давай», «добавь», «ок», «хорошо», «давай добавим».
+Важно: только если в контексте есть [Ожидание подтверждения]. Иначе — не используй.
+
 Верни строго JSON:
 {"intent": "<intent или none>", "action": {<параметры или пусто>}, "confidence": <0.0-1.0>}
 
@@ -7847,8 +7852,14 @@ async def _classify_intent(uid: str, text: str) -> dict | None:
         except Exception:
             now_cl = _dt_cl.now()
         time_ctx = f"Сейчас у садовника: {now_cl.strftime('%Y-%m-%d %H:%M')} ({tz_cl})"
+        # P-72: inject pending context
+        _cl_pending_ctx = ""
+        if user_id in _pending_suggest:
+            _ps_p = _pending_suggest[user_id]
+            _ps_lb = {"add_task": "добавить задачу", "add_achievement": "зафиксировать достижение", "create_reminder": "создать напоминание"}
+            _cl_pending_ctx = f"\n\n[Ожидание подтверждения: {_ps_lb.get(_ps_p.get('type',''), _ps_p.get('type',''))} «{_ps_p.get('title','')}»]"
         messages_cl = [
-            {"role": "system", "content": _CLASSIFIER_PROMPT + f"\n\n{time_ctx}"},
+            {"role": "system", "content": _CLASSIFIER_PROMPT + f"\n\n{time_ctx}" + _cl_pending_ctx},
             {"role": "user", "content": text}
         ]
         raw_cl = await _call_openrouter(messages_cl, model_idx=0)
@@ -8131,9 +8142,26 @@ async def free_conversation(message: Message, state: FSMContext):
                     "create_reminder": f"Напомнить «{_sg_title}»?",
                 }
                 _suggest_fallback_text = _sg_fallbacks.get(_sg_type, f"Добавить «{_sg_title}»?")
+                # P-72: save pending for voice confirmation
+                _pending_suggest[user_id] = {
+                    "type": _sg_type, "title": _sg_title,
+                    "sphere": _sg_action.get("sphere", "growth"),
+                    "deadline": _sg_action.get("deadline"),
+                }
             else:
                 _suggest_action_kb = None
                 _suggest_fallback_text = None
+                if _cl_intent not in ("suggest_action", "confirm_suggest", "none", "conversation"):
+                    _pending_suggest.pop(user_id, None)
+            # P-72: confirm_suggest — execute pending action
+            if _cl_intent == "confirm_suggest" and user_id in _pending_suggest:
+                _ps = _pending_suggest.pop(user_id)
+                _cl_short_circuit = json.dumps({
+                    "intent": _ps.get("type", ""),
+                    "action": {"title": _ps.get("title", ""), "sphere": _ps.get("sphere", "growth"), "deadline": _ps.get("deadline")},
+                    "confidence": 0.95, "text": ""
+                }, ensure_ascii=False)
+                logger.info(f"[Classifier] CONFIRM-SUGGEST type={_ps.get('type')} title='{_ps.get('title')}'")
             if _cl_intent not in _SR_ONLY and _cl_intent != "suggest_action" and _cl_conf >= 0.85:
                 _cl_short_circuit = json.dumps({
                     "intent": _cl_intent,
