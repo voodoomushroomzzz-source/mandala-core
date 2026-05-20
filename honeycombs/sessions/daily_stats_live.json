@@ -1,16 +1,11 @@
 {
   "224736062": {
-    "messages": 30,
+    "messages": 4,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
-      "add_task": 1,
-      "delete_task": 1,
-      "create_reminder": 1,
-      "show_profile": 1,
-      "delete_reminder": 2,
-      "conversation": 3
+      "edit_task": 1
     }
   }
 }
