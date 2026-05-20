@@ -247,7 +247,7 @@
       "title": "Попеть под гитару",
       "status": "todo",
       "label_id": "творчество",
-      "label_name": "Творчество",
+      "label_name": "👤 Профиль",
       "life_area": "creativity",
       "priority": 5,
       "deadline": "2026-05-20",
@@ -292,7 +292,7 @@
       "title": "музыкальная сессия",
       "status": "todo",
       "label_id": "творчество",
-      "label_name": "Творчество",
+      "label_name": "👤 Профиль",
       "life_area": "creativity",
       "priority": 5,
       "deadline": "2026-05-21",
@@ -307,7 +307,7 @@
       "title": "записать вокал",
       "status": "todo",
       "label_id": "творчество",
-      "label_name": "Творчество",
+      "label_name": "👤 Профиль",
       "life_area": "creativity",
       "priority": 5,
       "deadline": "2026-05-27",
@@ -367,7 +367,7 @@
     },
     {
       "id": "творчество",
-      "name": "Творчество",
+      "name": "👤 Профиль",
       "created": "2026-05-12"
     }
   ],
