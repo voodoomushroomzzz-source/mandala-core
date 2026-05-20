@@ -6115,7 +6115,7 @@ async def _create_task_atomic(user_id: str, message: Message,
         await message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач. Заверши что-нибудь сначала.")
     elif active_count >= TASK_LIMIT_SOFT:
         await message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач. Скоро не смогу добавлять новые.")
-        return {}
+    # P-73A: soft limit only warns, does NOT block creation
     # Resolve label
     label_id, resolved_label = None, ""
     if label_name:
