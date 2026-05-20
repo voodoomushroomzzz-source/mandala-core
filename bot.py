@@ -6273,6 +6273,7 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 
 ЧЕСТНОСТЬ:
 - Никогда не говори «удалено», «сохранено», «зафиксировано», «добавлено» если не вернула соответствующий intent в JSON.
+- Система ПОДДЕРЖИВАЕТ повторения для задач: каждый день, по будням, по выходным, раз в неделю, свои дни недели (пн ср пт). Никогда не говори что повторения не поддерживаются.
 - Достижение считается зафиксированным ТОЛЬКО если вернула intent=add_achievement с action.title. Иначе — не пиши что зафиксировала.
 - Если действие требует кнопки — скажи и направь.
 - Нет задачи — скажи честно. Не угадывай.
@@ -6360,6 +6361,10 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
 - "перенеси дедлайн задач X и Y на Z" → edit_task, action.titles=["X","Y"], action.field="deadline", action.value=Z, 0.95
 - "перенеси дедлайн всех задач группы X на Z" → edit_task, action.label="X", action.field="deadline", action.value=Z, 0.95
+- "добавь повторение в задачу X", "поставь повтор задаче X", "задача X каждый день", "задача X по будням" → edit_task, action.title="X", action.field="repeat", action.value="каждый день|по будням|по выходным|раз в неделю|пн ср пт", 0.9
+  Примеры дней: "пн ср пт" / "понедельник среда пятница" / "вт чт" → action.value=перечисление дней как есть
+  Примеры фраз: "добавь повторение в задачу сходить на тренировку. Понедельник, среда, пятница" → edit_task, action.title="сходить на тренировку", action.field="repeat", action.value="пн ср пт"
+- "убери повторение у задачи X", "сними повтор с X" → edit_task, action.title="X", action.field="repeat", action.value="убрать", 0.9
 - "удали задачу X", "убери X из задач" → delete_task, action.title=название, 0.9
 - "удали задачи X и Y", "удали X, Y и Z" → delete_task, action.titles=["X","Y","Z"], 0.95
 - "удали все задачи", "очисти список" → delete_task, action.title="все", 0.95
@@ -9389,8 +9394,39 @@ async def free_conversation(message: Message, state: FSMContext):
                                     else:
                                         g_names = ", ".join(g["name"] for g in groups[:5])
                                         reply_text = f"🌀 Группа «{value}» не найдена. Есть: {g_names}"
+                                elif field in ("repeat", "повтор", "повторение"):
+                                    # P-60: parse repeat value
+                                    _rv = value.lower().strip()
+                                    _repeat_map = {
+                                        "каждый день": "daily", "ежедневно": "daily", "daily": "daily",
+                                        "по будням": "weekdays", "будни": "weekdays", "weekdays": "weekdays",
+                                        "по выходным": "weekends", "выходные": "weekends", "weekends": "weekends",
+                                        "раз в неделю": "weekly", "еженедельно": "weekly", "weekly": "weekly",
+                                        "раз в месяц": "monthly", "ежемесячно": "monthly", "monthly": "monthly",
+                                        "убрать": "once", "убери": "once", "без повтора": "once", "один раз": "once",
+                                    }
+                                    _new_repeat = _repeat_map.get(_rv)
+                                    if not _new_repeat:
+                                        # Try _parse_weekdays for custom days
+                                        _new_repeat = _parse_weekdays(value)
+                                    if _new_repeat and _new_repeat != "once":
+                                        t["repeat"]  = _new_repeat
+                                        t["updated"] = _today()
+                                        reply_text = f"✅ Повтор → {_repeat_label(_new_repeat)}"
+                                    elif _new_repeat == "once":
+                                        t["repeat"]  = "once"
+                                        t["updated"] = _today()
+                                        reply_text = "✅ Повтор убран"
+                                    else:
+                                        reply_text = (
+                                            "🌀 Не понял повторение. Варианты:
+"
+                                            "каждый день / по будням / по выходным / раз в неделю /
+"
+                                            "пн ср пт (дни недели) / убрать"
+                                        )
                                 else:
-                                    reply_text = f"🌀 Поле «{field}» не знаю. Скажи: название/дедлайн/напоминание/группа"
+                                    reply_text = f"🌀 Поле «{field}» не знаю. Скажи: название/дедлайн/напоминание/группа/повтор"
                                 if "✅" in (reply_text or ""):
                                     store_set_tasks(user_id, tasks)
                                     await _sync_pending()
