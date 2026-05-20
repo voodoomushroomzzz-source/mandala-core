@@ -2297,8 +2297,6 @@ async def send_morning_greeting(telegram_id: str) -> None:
             "упомянуть как часть дня, а не как обязанность.\n"
             "Тон: тёплый, утренний, бодрящий. Максимум 3 предложения. С эмодзи.\n"
             "Без markdown. Без «ты должен», «тебе нужно». Без слова «замечаю».\n"
-            "Избегай повторов одного слова в одном предложении.\n"
-            "Пиши как живой человек — естественно, без канцеляризмов.\n"
             "Ответь ТОЛЬКО текстом сообщения."
         )
         msg = await _call_openrouter([
@@ -4502,7 +4500,6 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         ] + ([_dp_greeting_note] if _dp_greeting_note else []) + [
             "Руководствуясь ахимсой, напиши одно тёплое сообщение садовнику.",
             "Если чувствуешь что повода нет — верни \"SKIP\".",
-            "Избегай повторов одного слова в одном предложении. Пиши как живой человек.",
             "Ответь ТОЛЬКО текстом сообщения или \"SKIP\". Без JSON.",
         ]
         prompt = "\n".join(prompt_parts)
@@ -5933,7 +5930,6 @@ _checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
 _profile_messages: dict = {}   # {user_id: message_id} — last shown profile
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
 _intent_map_needed: dict = {}  # uid → bool — show full INTENT_MAP on next request
-_pending_suggest: dict = {}  # uid → {type, title, sphere} — last suggest_action waiting confirm
 _sphere_history_needed: dict = {}  # uid → int — countdown: include full sphere_history in context
 
 
@@ -6115,7 +6111,7 @@ async def _create_task_atomic(user_id: str, message: Message,
         await message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач. Заверши что-нибудь сначала.")
     elif active_count >= TASK_LIMIT_SOFT:
         await message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач. Скоро не смогу добавлять новые.")
-    # P-73A: soft limit only warns, does NOT block creation
+        return {}
     # Resolve label
     label_id, resolved_label = None, ""
     if label_name:
@@ -6228,20 +6224,27 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 - «Поняла 🌿» лучше «Принято.» «Сделано ✨» лучше «Готово.»
 
 ЧЕСТНОСТЬ:
-- Никогда не говори «удалено», «сохранено», «зафиксировано», «добавлено» если действие не было реально выполнено системой.
-- Если действие требует уточнения или кнопки — скажи и направь.
+- Никогда не говори «удалено», «сохранено», «зафиксировано», «добавлено» если не вернула соответствующий intent в JSON.
+- Достижение считается зафиксированным ТОЛЬКО если вернула intent=add_achievement с action.title. Иначе — не пиши что зафиксировала.
+- Если действие требует кнопки — скажи и направь.
 - Нет задачи — скажи честно. Не угадывай.
-- Если садовник исправляет тебя — прими честно, не оправдывайся.
 
-ФОРМАТ ОТВЕТА:
+ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 Отвечаешь HTML-тегами: <b>жирный</b>, <i>курсив</i>, <code>код</code>.
 Никакого Markdown: ни **, ни *, ни __, ни #, ни --. Совсем. Никогда.
 Лимит ответа — 800 токенов (~2500 символов). Не пиши длиннее. Если тема большая — предложи продолжить.
 Списки через • (буллит), без цифр и тире.
 Эмодзи ОБЯЗАТЕЛЬНЫ в каждом ответе. Минимум 1 эмодзи на абзац. Используй 🌿🌀🔥💫🌱✨💎🔮🌟🌙🪐💡🎯 — это голос СР.
-Пиши естественно — избегай повторов одного слова в одном предложении.
-Каждое предложение должно звучать как живая речь, без канцеляризмов.
-Отвечай только текстом. Без JSON. Без служебных полей."""
+
+{
+  "text": "твой ответ (пустая строка если выполняешь команду)",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|create_label|move_task|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|pin_message|unpin_message",
+  "confidence": 0.0-1.0,
+  "clarification": "вопрос если не уверена (или null)",
+  "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|...", "tasks": [{"title":"...","deadline":"YYYY-MM-DD|null","label":"...|null"}]} или null
+}
+ВСЕГДА отвечай в этом JSON-формате. Без markdown-обёртки ```json.
+Если выполняешь команду — text пустой, intent и action заполнены."""
 
 
 SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
@@ -7829,10 +7832,6 @@ _CLASSIFIER_PROMPT = """Ты — классификатор намерений. 
 - "не забыть завтра встретить друга" → suggest_action, action.type="create_reminder", action.title="Встретить друга", 0.7
 ВАЖНО: suggest_action только если намерение неявное. Если команда чёткая — используй прямой intent.
 
-ДОПОЛНИТЕЛЬНЫЙ INTENT — confirm_suggest:
-Используй когда садовник подтверждает предложение. Признаки: «да», «давай», «добавь», «ок», «хорошо», «давай добавим».
-Важно: только если в контексте есть [Ожидание подтверждения]. Иначе — не используй.
-
 Верни строго JSON:
 {"intent": "<intent или none>", "action": {<параметры или пусто>}, "confidence": <0.0-1.0>}
 
@@ -7852,14 +7851,8 @@ async def _classify_intent(uid: str, text: str) -> dict | None:
         except Exception:
             now_cl = _dt_cl.now()
         time_ctx = f"Сейчас у садовника: {now_cl.strftime('%Y-%m-%d %H:%M')} ({tz_cl})"
-        # P-72: inject pending context
-        _cl_pending_ctx = ""
-        if user_id in _pending_suggest:
-            _ps_p = _pending_suggest[user_id]
-            _ps_lb = {"add_task": "добавить задачу", "add_achievement": "зафиксировать достижение", "create_reminder": "создать напоминание"}
-            _cl_pending_ctx = f"\n\n[Ожидание подтверждения: {_ps_lb.get(_ps_p.get('type',''), _ps_p.get('type',''))} «{_ps_p.get('title','')}»]"
         messages_cl = [
-            {"role": "system", "content": _CLASSIFIER_PROMPT + f"\n\n{time_ctx}" + _cl_pending_ctx},
+            {"role": "system", "content": _CLASSIFIER_PROMPT + f"\n\n{time_ctx}"},
             {"role": "user", "content": text}
         ]
         raw_cl = await _call_openrouter(messages_cl, model_idx=0)
@@ -8116,7 +8109,6 @@ async def free_conversation(message: Message, state: FSMContext):
     action = None
     parsed = None  # will hold decoded JSON dict
     _suggest_action_kb = None  # P-70: suggest action keyboard
-    _suggest_fallback_text = None  # P-70: fallback text if SR returns empty
 
     # P-57: Step 2 — classifier active (short-circuits SR for action intents)
     _cl_short_circuit = None  # if set -> use classifier result, skip SR call
@@ -8136,32 +8128,8 @@ async def free_conversation(message: Message, state: FSMContext):
                 _sg_hint = f"[Подсказка: садовник намекает на намерение — {_sg_labels.get(_sg_type, _sg_type)} «{_sg_title}». Если это уместно — мягко предложи добавить. Не навязывай.]"
                 messages[0]["content"] += f"\n\n{_sg_hint}"
                 _suggest_action_kb = _sg_action
-                _sg_fallbacks = {
-                    "add_task": f"Может добавить «{_sg_title}» как задачу?",
-                    "add_achievement": f"Зафиксируем «{_sg_title}» как достижение?",
-                    "create_reminder": f"Напомнить «{_sg_title}»?",
-                }
-                _suggest_fallback_text = _sg_fallbacks.get(_sg_type, f"Добавить «{_sg_title}»?")
-                # P-72: save pending for voice confirmation
-                _pending_suggest[user_id] = {
-                    "type": _sg_type, "title": _sg_title,
-                    "sphere": _sg_action.get("sphere", "growth"),
-                    "deadline": _sg_action.get("deadline"),
-                }
             else:
                 _suggest_action_kb = None
-                _suggest_fallback_text = None
-                if _cl_intent not in ("suggest_action", "confirm_suggest", "none", "conversation"):
-                    _pending_suggest.pop(user_id, None)
-            # P-72: confirm_suggest — execute pending action
-            if _cl_intent == "confirm_suggest" and user_id in _pending_suggest:
-                _ps = _pending_suggest.pop(user_id)
-                _cl_short_circuit = json.dumps({
-                    "intent": _ps.get("type", ""),
-                    "action": {"title": _ps.get("title", ""), "sphere": _ps.get("sphere", "growth"), "deadline": _ps.get("deadline")},
-                    "confidence": 0.95, "text": ""
-                }, ensure_ascii=False)
-                logger.info(f"[Classifier] CONFIRM-SUGGEST type={_ps.get('type')} title='{_ps.get('title')}'")
             if _cl_intent not in _SR_ONLY and _cl_intent != "suggest_action" and _cl_conf >= 0.85:
                 _cl_short_circuit = json.dumps({
                     "intent": _cl_intent,
@@ -9436,8 +9404,6 @@ async def free_conversation(message: Message, state: FSMContext):
     # P-70d: apply suggest keyboard if no action from router
     if _suggest_action_kb and not action:
         action = _suggest_action_kb
-        if (not reply_text or not reply_text.strip() or reply_text == "🌿 Я здесь, рядом.") and _suggest_fallback_text:
-            reply_text = _suggest_fallback_text
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
         _has_html = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
