@@ -347,22 +347,6 @@
       "updated": "2026-05-20",
       "completed": null,
       "notes": ""
-    },
-    {
-      "task_id": "task_20260520182233465",
-      "title": "досмотреть сериал Fallout",
-      "status": "todo",
-      "label_id": "личная",
-      "label_name": "личная",
-      "life_area": "work",
-      "priority": 5,
-      "deadline": "2026-05-21",
-      "reminder": null,
-      "repeat": "daily",
-      "created": "2026-05-20",
-      "updated": "2026-05-20",
-      "completed": null,
-      "notes": ""
     }
   ],
   "groups": [
@@ -385,11 +369,6 @@
       "id": "творчество",
       "name": "Творчество",
       "created": "2026-05-12"
-    },
-    {
-      "id": "личная",
-      "name": "личная",
-      "created": "2026-05-20"
     }
   ],
   "updated": "2026-04-18",
