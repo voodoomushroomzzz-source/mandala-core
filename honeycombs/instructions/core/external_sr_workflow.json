@@ -157,7 +157,14 @@
       "why": "Full replacement causes merge conflicts, token waste, risks partial writes. Block replacement via Python patcher is safer and faster.",
       "pattern": "1) Identify exact block to change via unique anchor lines. 2) Use Python patcher with .replace(old, new). 3) Apply via PowerShell: py patcher_NN.py; git add/commit/push.",
       "html_support": "HTML/CSS/JS work the same — anchor to unique parent tags with id or data-attribute, unique classes, or distinctive text content. Example: replace '<section id=\"dashboard\">...</section>' block. For CSS: target specific selector blocks like '.profile-card { ... }'. For JS: target specific function definitions like 'function renderProfile() { ... }'. Always use the most unique ancestor element to avoid false matches. Avoid regex across multiple lines — use exact multi-line string matching.",
-      "powershell_three_block": "For large files (bot.py, engineer-chat, HTML), ALWAYS provide patcher as three PowerShell blocks:\nBLOCK 1: New-Item -ItemType File -Path patcher_NN_name.py -Force  (creates empty file)\nBLOCK 2: Full Python patcher code (copy-paste into the opened file and save)\nBLOCK 3: py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add bot.py; git commit -m '...'; git pull --rebase origin main; git push\n\nCRITICAL: Gardener only copies, pastes, presses Enter. Each block is ONE action.\nBlock 2 is the entire patcher script — ready to save and execute. Never split patcher code across multiple messages."
+      "powershell_three_block": "For large files (bot.py, engineer-chat, HTML), ALWAYS provide patcher as three PowerShell blocks:\nBLOCK 1: New-Item -ItemType File -Path patcher_NN_name.py -Force  (creates empty file)\nBLOCK 2: Full Python patcher code (copy-paste into the opened file and save)\nBLOCK 3: py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add bot.py; git commit -m '...'; git pull --rebase origin main; git push\n\nCRITICAL: Gardener only copies, pastes, presses Enter. Each block is ONE action.\nBlock 2 is the entire patcher script — ready to save and execute. Never split patcher code across multiple messages.",
+      "patcher_safety": {
+        "no_cyrillic_in_string_literals": "NEVER put Cyrillic or emoji directly inside patcher string literals. On Windows the file encoding mismatch (CP1251 vs UTF-8) corrupts the characters when the patcher writes bot.py. Use string concatenation instead: \"text\" + variable + \"text\".",
+        "no_newlines_in_fstrings": "NEVER use \\n inside multiline f-string literals in patcher code. Python interprets them as real newlines, breaking string syntax on the target file. Use explicit string concatenation across lines.",
+        "syntax_check_mandatory": "ALWAYS add to BLOCK 3: python -c \"import ast; ast.parse(open('bot.py').read()); print('Syntax OK')\" — commit ONLY after Syntax OK is confirmed. This prevents broken deploys.",
+        "anchor_verification": "ALWAYS add assert before replace: assert old in src, \"Anchor not found\". Never patch blindly — if anchor is missing the script must fail loudly, not silently skip.",
+        "test_before_commit": "Pattern: 1) apply patcher 2) run syntax check 3) only then git add/commit/push. Never skip step 2."
+      }
     }
   },
   "meta": {
@@ -170,11 +177,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-05-10",
+    "updated": "2026-05-20",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.4.4",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.4 adds three_blocks_one_message rule + post_check_large_files rule.",
+    "version": "v1.4.5",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -192,7 +199,8 @@
       "system_flow",
       "powershell_examples",
       "pre_check_flow",
-      "patch_status_emojis"
+      "patch_status_emojis",
+      "patcher_safety"
     ]
   }
 }
