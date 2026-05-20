@@ -9424,9 +9424,6 @@ async def free_conversation(message: Message, state: FSMContext):
                                             "раз в неделю / "
                                             "пн ср пт (дни недели) / убрать"
                                         )
-"
-                                            "пн ср пт (дни недели) / убрать"
-                                        )
                                 else:
                                     reply_text = f"🌀 Поле «{field}» не знаю. Скажи: название/дедлайн/напоминание/группа/повтор"
                                 if "✅" in (reply_text or ""):
