@@ -4226,18 +4226,13 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
         _dt_sv = (_rem_sv.get("datetime_iso","") if _rem_sv else dt_iso)[:16].replace("T"," ")
         _ttl_sv = _rem_sv.get("title","") if _rem_sv else title
         try:
-            await callback.message.edit_text(
-        _sv_text = "\u2705 \u041f\u043e\u0432\u0442\u043e\u0440\u0435\u043d\u0438\u0435 \u2192 " + _rep_sv + "\n\n\U0001f514 <b>" + _ttl_sv + "</b>\n\U0001f4c5 " + _dt_sv + "\n\U0001f501 " + _rep_sv
+        _sv_msg = ("✅ Повторение → " + _rep_sv
+                   + "\n\n🔔 <b>" + _ttl_sv + "</b>"
+                   + "\n📅 " + _dt_sv + "\n🔁 " + _rep_sv)
         try:
-            await callback.message.edit_text(_sv_text, reply_markup=get_reminder_edit_inline(is_edit), parse_mode="HTML")
+            await callback.message.edit_text(_sv_msg, reply_markup=get_reminder_edit_inline(is_edit), parse_mode="HTML")
         except Exception:
-            await callback.message.answer("\u2705 " + _rep_sv, reply_markup=get_reminder_edit_inline(is_edit), parse_mode="HTML")
-        except Exception:
-            await callback.message.answer(
-                f"✅ Повторение → {_rep_sv}",
-                reply_markup=get_reminder_edit_inline(is_edit),
-                parse_mode="HTML"
-            )
+            await callback.message.answer(_sv_msg, reply_markup=get_reminder_edit_inline(is_edit), parse_mode="HTML")
         return
     else:
         confirm_action = "rem_confirm_create"
