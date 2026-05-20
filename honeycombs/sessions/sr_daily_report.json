@@ -1,27 +1,112 @@
 {
-  "date": "2026-05-19",
+  "date": "2026-05-20",
   "version": "7.39.23",
   "gardeners": {
-    "224736062": {
-      "name": "Дима",
-      "active": true,
-      "synthesis_date": "2026-05-18"
-    },
     "339914913": {
       "name": "Антон",
-      "active": false,
-      "synthesis_date": "2026-05-17"
-    },
-    "851913510": {
-      "name": "Яна",
       "active": true,
-      "synthesis_date": "2026-05-19"
+      "synthesis_date": "2026-05-20"
     },
     "358793311": {
       "name": "Антон",
       "active": false,
       "synthesis_date": "2026-05-16"
+    },
+    "851913510": {
+      "name": "Яна",
+      "active": false,
+      "synthesis_date": "2026-05-19"
+    },
+    "224736062": {
+      "name": "Дима",
+      "active": true,
+      "synthesis_date": "2026-05-18"
     }
   },
-  "issues": []
+  "issues": [
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 0.5,
+      "text_preview": "добавь к ней напоминание на 25.05 на 12:00"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 1.0,
+      "text_preview": "И группа личная."
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    }
+  ]
 }
