@@ -1182,7 +1182,7 @@ def _build_profile_card(user_id: str) -> str:
     nearest_rem = sorted(
         active_reminders,
         key=lambda r: (r.get("datetime_iso") or "9999")
-    )[:3]
+    )[:5]
     shown_rem = len(nearest_rem)
     lines.append(f"🔔 <b>Ближайшие напоминания</b> {shown_rem}/{total_rem}")
     for r in nearest_rem:
@@ -1190,7 +1190,9 @@ def _build_profile_card(user_id: str) -> str:
         time_part = dt[11:16] if len(dt) >= 16 and dt[10] == "T" else ""
         date_part = dt[:10] if len(dt) >= 10 else ""
         when = f" · {date_part} {time_part}".strip() if date_part else ""
-        lines.append(f"  · {r['title']}{when}")
+        _r_rep = r.get("repeat", "once")
+        _r_rep_icon = " 🔁" if _r_rep and _r_rep != "once" else ""
+        lines.append(f"  · {r['title']}{_r_rep_icon}{when}")
     if not nearest_rem:
         lines.append("  · напоминаний нет 🌱")
 
@@ -1942,7 +1944,7 @@ async def cb_tgroup_delete(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="\u2190 Назад", callback_data="tgroup_back_to_list")],
     ])
     await callback.message.edit_text(
-        f"\U0001f5d1 <b>Удалить группу «{g['name']}»?</b>\\n\\n{count} задач будут удалены",
+        f"\U0001f5d1 <b>Удалить группу «{g['name']}»?</b>\n\n{count} задач будут удалены",
         reply_markup=kb, parse_mode="HTML"
     )
 
@@ -3668,17 +3670,27 @@ async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await state.update_data(_rem_edit_id=rid, _rem_edit_field="title")
     await state.set_state(ReminderStates.waiting_for_input)
+    _back_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад", callback_data=f"rem_open_{rid}")]
+    ])
     try:
-        await callback.message.edit_text("✏️ <b>Новое название:</b>", parse_mode="HTML")
+        await callback.message.edit_text("✏️ <b>Новое название:</b>", reply_markup=_back_kb, parse_mode="HTML")
     except Exception:
-        await callback.message.answer("✏️ Введи новое название:")
+        await callback.message.answer("✏️ Введи новое название:", reply_markup=_back_kb)
 
 @router.callback_query(F.data.startswith("rem_edit_dt_"))
 async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
     rid = callback.data[12:]
-    # Редирект на существующий rem_edit_{rid}
-    callback.data = f"rem_edit_{rid}"
-    await cb_rem_edit_start(callback, state)
+    await callback.answer()
+    await state.update_data(_rem_edit_id=rid, _rem_edit_field="dt")
+    await state.set_state(ReminderStates.waiting_for_input)
+    _back_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад", callback_data=f"rem_open_{rid}")]
+    ])
+    try:
+        await callback.message.edit_text("📅 <b>Новая дата и время (ДД.ММ.ГГ ЧЧ:ММ):</b>", reply_markup=_back_kb, parse_mode="HTML")
+    except Exception:
+        await callback.message.answer("📅 Введи дату и время (ДД.ММ.ГГ ЧЧ:ММ):", reply_markup=_back_kb)
 
 @router.callback_query(F.data.startswith("rem_edit_repeat_"))
 async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
@@ -4201,10 +4213,35 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
     rep_display = _repeat_label(repeat)
     
     if is_edit:
-        # Edit mode — update existing reminder on confirm
-        confirm_action = "rem_confirm_edit"
-        cancel_action = "menu_reminders_mgmt"
-        header = f"✏️ <b>Редактирование</b>"
+        # Edit mode — immediately save repeat and return to reminder menu
+        _uid_sv = str(callback.from_user.id)
+        _rems_sv = store_get_reminders(_uid_sv)
+        _rem_sv = next((r for r in _rems_sv if r["id"] == is_edit), None)
+        if _rem_sv:
+            _rem_sv["repeat"] = repeat
+            store_set_reminders(_uid_sv, _rems_sv)
+            _fire_sync()
+        await state.clear()
+        _rep_sv = _repeat_label(repeat)
+        _dt_sv = (_rem_sv.get("datetime_iso","") if _rem_sv else dt_iso)[:16].replace("T"," ")
+        _ttl_sv = _rem_sv.get("title","") if _rem_sv else title
+        try:
+            await callback.message.edit_text(
+                f"✅ Повторение → {_rep_sv}
+
+🔔 <b>{_ttl_sv}</b>
+📅 {_dt_sv}
+🔁 {_rep_sv}",
+                reply_markup=get_reminder_edit_inline(is_edit),
+                parse_mode="HTML"
+            )
+        except Exception:
+            await callback.message.answer(
+                f"✅ Повторение → {_rep_sv}",
+                reply_markup=get_reminder_edit_inline(is_edit),
+                parse_mode="HTML"
+            )
+        return
     else:
         confirm_action = "rem_confirm_create"
         cancel_action = "menu_reminders_mgmt"
@@ -6118,7 +6155,15 @@ async def _create_task_atomic(user_id: str, message: Message,
     label_id, resolved_label = None, ""
     if label_name:
         groups = store_get_groups(user_id).get("groups", [])
-        grp = next((g for g in groups if label_name.lower() in g.get("name","").lower()), None)
+        grp = next((g for g in groups
+                    if label_name.lower() in g.get("name","").lower()
+                    or g.get("name","").lower() in label_name.lower()), None)
+        if not grp:
+            import difflib as _dl
+            _names = [g.get("name","") for g in groups]
+            _close = _dl.get_close_matches(label_name, _names, n=1, cutoff=0.5)
+            if _close:
+                grp = next((g for g in groups if g.get("name","") == _close[0]), None)
         if grp:
             label_id       = grp["id"]
             resolved_label = grp["name"]
