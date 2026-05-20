@@ -1,6 +1,6 @@
 {
   "224736062": {
-    "messages": 32,
+    "messages": 34,
     "tasks_created": 2,
     "tasks_completed": 1,
     "achievements": 0,
@@ -9,7 +9,8 @@
       "complete_task": 1,
       "edit_task": 6,
       "add_task": 3,
-      "add_achievement": 1
+      "add_achievement": 1,
+      "show_tasks": 1
     }
   }
 }
