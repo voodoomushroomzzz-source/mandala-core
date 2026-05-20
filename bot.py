@@ -1168,7 +1168,8 @@ def _build_profile_card(user_id: str) -> str:
     for t in nearest_tasks:
         ind = _deadline_indicator(t.get("deadline", ""), tz_name)
         dl  = f" · {t['deadline']}" if t.get("deadline") else ""
-        lines.append(f"  · {ind}{t['title']}{dl}")
+        _rep_icon = " 🔁" if t.get("repeat") and t.get("repeat") != "once" else ""
+        lines.append(f"  · {ind}{t['title']}{_rep_icon}{dl}")
     if not nearest_tasks:
         lines.append("  · задач нет 🌱")
     lines.append("")
@@ -3517,7 +3518,7 @@ async def cb_rem_delete(callback: CallbackQuery, state: FSMContext):
 
 # ─── Reminder Edit (v7.37) ─────────────────────────────────────────────────
 
-@router.callback_query(F.data.startswith("rem_edit_"))
+@router.callback_query(F.data.startswith("rem_edit_") & ~F.data.startswith("rem_edit_title_") & ~F.data.startswith("rem_edit_dt_") & ~F.data.startswith("rem_edit_repeat_"))
 async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
@@ -6098,7 +6099,8 @@ async def _create_reminder_atomic(user_id: str, message: Message,
 
 async def _create_task_atomic(user_id: str, message: Message,
                                title: str, deadline: str = None,
-                               reminder: str = None, label_name: str = None) -> dict:
+                               reminder: str = None, label_name: str = None,
+                               repeat: str = None) -> dict:
     """Create a task instantly from chat/voice without FSM. Returns created task dict."""
     from datetime import datetime, timedelta
     # Защита от пустого или слишком короткого названия
@@ -6118,8 +6120,17 @@ async def _create_task_atomic(user_id: str, message: Message,
         groups = store_get_groups(user_id).get("groups", [])
         grp = next((g for g in groups if label_name.lower() in g.get("name","").lower()), None)
         if grp:
-            label_id      = grp["id"]
+            label_id       = grp["id"]
             resolved_label = grp["name"]
+        else:
+            # P-56: группа не найдена — создаём автоматически
+            _new_gid = _make_group_id(label_name, groups)
+            groups.append({"id": _new_gid, "name": label_name, "created": _today()})
+            _gd = store_get_groups(user_id)
+            _gd["groups"] = groups
+            store_set_groups(user_id, _gd)
+            label_id       = _new_gid
+            resolved_label = label_name
     # Parse natural-language deadline if needed
     if deadline:
         import re as _re
@@ -6150,6 +6161,7 @@ async def _create_task_atomic(user_id: str, message: Message,
         "priority":   calculate_priority(deadline),
         "deadline":   deadline,
         "reminder":   reminder,
+        "repeat":     repeat if repeat and repeat != "once" else "once",
         "created":    _today(),
         "updated":    _today(),
         "completed":  None,
@@ -8473,6 +8485,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 deadline = action_data.get("deadline", "") or ""
                                 reminder = action_data.get("reminder", "") or ""
                                 label    = action_data.get("label", "") or ""
+                                repeat   = action_data.get("repeat", "") or ""
                                 if not title:
                                     # No title extracted — fall back to FSM
                                     await cb_start_addtask_msg(message, state, pre_title="")
@@ -8496,7 +8509,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                             title=title,
                                             deadline=deadline or None,
                                             reminder=reminder or None,
-                                            label_name=label or None
+                                            label_name=label or None,
+                                            repeat=repeat or None
                                         )
                                     if new_task:
                                         # Build confirmation message
