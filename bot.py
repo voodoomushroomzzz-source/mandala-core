@@ -4225,7 +4225,6 @@ async def cb_rem_rp_done(callback: CallbackQuery, state: FSMContext):
         _rep_sv = _repeat_label(repeat)
         _dt_sv = (_rem_sv.get("datetime_iso","") if _rem_sv else dt_iso)[:16].replace("T"," ")
         _ttl_sv = _rem_sv.get("title","") if _rem_sv else title
-        try:
         _sv_msg = ("✅ Повторение → " + _rep_sv
                    + "\n\n🔔 <b>" + _ttl_sv + "</b>"
                    + "\n📅 " + _dt_sv + "\n🔁 " + _rep_sv)
