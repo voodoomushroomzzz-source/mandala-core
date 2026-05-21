@@ -1033,7 +1033,6 @@ class TaskStates(StatesGroup):
     waiting_for_repeat               = State()  # Патчер А: шаг выбора повтора
     waiting_for_repeat_custom_days   = State()  # H: ввод дней недели
     waiting_for_repeat_custom_date   = State()  # H: ввод своей даты
-    waiting_for_new_task_title    = State()  # P-62: новая задача из группы
     waiting_for_confirm              = State()
 
 class TaskEditStates(StatesGroup):
@@ -1911,21 +1910,33 @@ async def cb_tgroup_create(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("tgroup_newtask|"))
 async def cb_tgroup_newtask(callback: CallbackQuery, state: FSMContext):
-    group_id = callback.data.split("|")[1]
     await callback.answer()
-    await state.update_data(_new_task_group=group_id)
-    await state.set_state(TaskStates.waiting_for_new_task_title)
+    user_id = str(callback.from_user.id)
+    group_id = callback.data.split("|")[1]
+    groups = store_get_groups(user_id).get("groups", [])
+    g = next((x for x in groups if x["id"] == group_id), None)
+    label_id = group_id if group_id != "__nogroup__" else None
+    label_name = g["name"] if g else ""
+    group_display = label_name if label_name else "Без группы"
+    await state.update_data(
+        _ttask_create_group=group_id,
+        _ttask_create_label_id=label_id,
+        _ttask_create_label_name=label_name
+    )
+    await state.set_state(TaskStates.waiting_for_title)
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="← Назад", callback_data=f"tgroup_open|{group_id}")]
     ])
     try:
         await callback.message.edit_text(
-            "✏️ <b>Название новой задачи:</b>",
+            f"➕ <b>Новая задача в «{group_display}»</b>
+
+Введи название:",
             reply_markup=cancel_kb, parse_mode="HTML"
         )
     except Exception:
         await callback.message.answer(
-            "✏️ Название новой задачи:",
+            f"➕ Новая задача в «{group_display}» — введи название:",
             reply_markup=cancel_kb
         )
 
@@ -5558,33 +5569,6 @@ async def task_label_cb(callback: CallbackQuery, state: FSMContext):
     await state.update_data(label_id=label_id, label_name=label_name)
     await _show_task_confirm(callback.message, state, edit=True)
 
-@router.message(StateFilter(TaskStates.waiting_for_new_task_title))
-async def cb_tgroup_newtask_input(message: Message, state: FSMContext):
-    user_id = str(message.from_user.id)
-    title = (message.text or "").strip()
-    if len(title) < 2:
-        await message.answer("✏️ Название должно быть минимум 2 символа.")
-        return
-    data = await state.get_data()
-    group_id = data.get("_new_task_group", "__nogroup__")
-    groups = store_get_groups(user_id).get("groups", [])
-    grp = next((g for g in groups if g["id"] == group_id), None)
-    label_name = grp["name"] if grp else None
-    new_task = await _create_task_atomic(user_id, message, title=title, label_name=label_name)
-    await state.clear()
-    if new_task:
-        _rep_icon = " 🔁" if new_task.get("repeat") and new_task.get("repeat") != "once" else ""
-        confirm = f"✅ «{title}» добавлена!{_rep_icon}"
-        _tasks_g = [t for t in store_get_tasks(user_id) if t.get("status") != "completed" and (
-            (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
-        )]
-        _gname = label_name or "Без группы"
-        await message.answer(confirm)
-        await message.answer(
-            f"🗂 <b>{_gname}</b> · {len(_tasks_g)} задач",
-            reply_markup=get_tasks_in_group_inline(user_id, group_id),
-            parse_mode="HTML"
-        )
 
 
 @router.message(StateFilter(TaskStates.waiting_for_new_group))
@@ -6334,6 +6318,14 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 - Если действие требует кнопки — скажи и направь.
 - Нет задачи — скажи честно. Не угадывай.
 
+ФУНКЦИИ (голос / чат / кнопки):
+• задачи — создать, изменить, закрыть, удалить, дедлайн, группа, повторение, напоминание
+• напоминания — создать, изменить, удалить, повторение
+• чеклисты — создать, удалить, добавить/изменить/отметить/переставить пункт
+• достижения — добавить, просмотреть по сферам
+• группы — создать, переименовать, удалить, переместить задачу
+• профиль · резонанс сфер · поиск в интернете · закрепить сообщение
+
 ФОРМАТ ОТВЕТА (строго JSON, без markdown):
 Отвечаешь HTML-тегами: <b>жирный</b>, <i>курсив</i>, <code>код</code>.
 Никакого Markdown: ни **, ни *, ни __, ни #, ни --. Совсем. Никогда.
@@ -6584,7 +6576,6 @@ SR_INTENT_MAP = """ПЯТЬ СФЕР РЕЗОНАНСА (как они живу�
 - Никогда не имитируй выполнение действия
 """
 
-SR_SYSTEM_PROMPT = SR_CORE_PROMPT + "\n\n" + SR_INTENT_MAP
 
 
 def _build_user_context_msg(telegram_id: str) -> str:
