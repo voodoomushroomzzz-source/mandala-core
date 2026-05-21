@@ -1903,9 +1903,30 @@ async def cb_tgroup_create(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="\u2190 Назад", callback_data="tgroup_back_to_list")]
     ])
     await callback.message.edit_text(
-        "\u2795 <b>Новая группа</b>\\n\\nВведи название:",
+        "\u2795 <b>Новая группа</b>\n\nВведи название:",
         reply_markup=cancel_kb, parse_mode="HTML"
     )
+
+@router.callback_query(F.data.startswith("tgroup_newtask|"))
+async def cb_tgroup_newtask(callback: CallbackQuery, state: FSMContext):
+    group_id = callback.data.split("|")[1]
+    await callback.answer()
+    await state.update_data(_new_task_group=group_id)
+    await state.set_state(TaskStates.waiting_for_new_task_title)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад", callback_data=f"tgroup_open|{group_id}")]
+    ])
+    try:
+        await callback.message.edit_text(
+            "✏️ <b>Название новой задачи:</b>",
+            reply_markup=cancel_kb, parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            "✏️ Название новой задачи:",
+            reply_markup=cancel_kb
+        )
+
 
 @router.callback_query(F.data.startswith("tgroup_edit|"))
 async def cb_tgroup_edit_start(callback: CallbackQuery, state: FSMContext):
