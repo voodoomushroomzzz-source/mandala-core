@@ -1362,6 +1362,7 @@ def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMark
         btns.append([InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}")])
     if group_id != "__nogroup__":
         btns.append([InlineKeyboardButton(text="\u270f\ufe0f \u041f\u0435\u0440\u0435\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_edit|{group_id}")])
+    btns.append([InlineKeyboardButton(text="➕ Новая задача", callback_data=f"tgroup_newtask|{group_id}")])
         btns.append([InlineKeyboardButton(text="\U0001f5d1 \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_delete|{group_id}")])
     btns.append([InlineKeyboardButton(text="\u2190 \u041d\u0430\u0437\u0430\u0434 \u043a \u0433\u0440\u0443\u043f\u043f\u0430\u043c", callback_data="tgroup_back_to_list")])
     return InlineKeyboardMarkup(inline_keyboard=btns)
@@ -8596,6 +8597,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                                 _rem_pretty = _rem_raw[:16].replace("T", " ")
                                             parts.append(f"🔔 {_rem_pretty}")
                                         missing = []
+                                        if new_task.get("repeat") and new_task.get("repeat") != "once":
+                                            parts.append("🔁 " + _repeat_label(new_task["repeat"]))
                                         if not new_task.get("deadline"):
                                             missing.append("📅 дедлайн")
                                         if not new_task.get("label_name"):
