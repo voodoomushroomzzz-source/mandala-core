@@ -6238,6 +6238,10 @@ async def _create_task_atomic(user_id: str, message: Message,
             deadline = f"{yy}-{mm}-{dd}"
         # if already ISO YYYY-MM-DD → keep as-is
     merkaba = _auto_merkaba(title, resolved_label)
+    # P-62: parse natural-language repeat if not already normalized
+    if repeat and repeat not in ("once", "daily", "weekdays", "weekends", "weekly") \
+            and not repeat.startswith("custom_days:"):
+        repeat = _parse_weekdays(repeat)
     task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
     new_task = {
         "task_id":    task_id,
@@ -6249,9 +6253,6 @@ async def _create_task_atomic(user_id: str, message: Message,
         "priority":   calculate_priority(deadline),
         "deadline":   deadline,
         "reminder":   reminder,
-    # P-62: parse natural-language repeat if not already normalized
-    if repeat and repeat not in ("once", "daily", "weekdays", "weekends", "weekly") and not repeat.startswith("custom_days:"):
-        repeat = _parse_weekdays(repeat)
         "repeat":     repeat if repeat and repeat != "once" else "once",
         "created":    _today(),
         "updated":    _today(),
