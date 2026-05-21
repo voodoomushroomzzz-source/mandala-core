@@ -12,11 +12,13 @@
     }
   },
   "339914913": {
-    "messages": 2,
+    "messages": 4,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
-    "intents": {}
+    "intents": {
+      "add_task": 1
+    }
   },
   "8274257926": {
     "messages": 3,
