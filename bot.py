@@ -1929,8 +1929,7 @@ async def cb_tgroup_newtask(callback: CallbackQuery, state: FSMContext):
     ])
     try:
         await callback.message.edit_text(
-            f"➕ <b>Новая задача в «{group_display}»</b>
-
+            f"➕ <b>Новая задача в «{group_display}»</b>\n\nВведи название:",
 Введи название:",
             reply_markup=cancel_kb, parse_mode="HTML"
         )
