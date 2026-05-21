@@ -1033,6 +1033,7 @@ class TaskStates(StatesGroup):
     waiting_for_repeat               = State()  # Патчер А: шаг выбора повтора
     waiting_for_repeat_custom_days   = State()  # H: ввод дней недели
     waiting_for_repeat_custom_date   = State()  # H: ввод своей даты
+    waiting_for_new_task_title    = State()  # P-62: новая задача из группы
     waiting_for_confirm              = State()
 
 class TaskEditStates(StatesGroup):
@@ -5557,6 +5558,35 @@ async def task_label_cb(callback: CallbackQuery, state: FSMContext):
     await state.update_data(label_id=label_id, label_name=label_name)
     await _show_task_confirm(callback.message, state, edit=True)
 
+@router.message(StateFilter(TaskStates.waiting_for_new_task_title))
+async def cb_tgroup_newtask_input(message: Message, state: FSMContext):
+    user_id = str(message.from_user.id)
+    title = (message.text or "").strip()
+    if len(title) < 2:
+        await message.answer("✏️ Название должно быть минимум 2 символа.")
+        return
+    data = await state.get_data()
+    group_id = data.get("_new_task_group", "__nogroup__")
+    groups = store_get_groups(user_id).get("groups", [])
+    grp = next((g for g in groups if g["id"] == group_id), None)
+    label_name = grp["name"] if grp else None
+    new_task = await _create_task_atomic(user_id, message, title=title, label_name=label_name)
+    await state.clear()
+    if new_task:
+        _rep_icon = " 🔁" if new_task.get("repeat") and new_task.get("repeat") != "once" else ""
+        confirm = f"✅ «{title}» добавлена!{_rep_icon}"
+        _tasks_g = [t for t in store_get_tasks(user_id) if t.get("status") != "completed" and (
+            (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
+        )]
+        _gname = label_name or "Без группы"
+        await message.answer(confirm)
+        await message.answer(
+            f"🗂 <b>{_gname}</b> · {len(_tasks_g)} задач",
+            reply_markup=get_tasks_in_group_inline(user_id, group_id),
+            parse_mode="HTML"
+        )
+
+
 @router.message(StateFilter(TaskStates.waiting_for_new_group))
 async def task_new_label_input(message: Message, state: FSMContext):
     user_id = str(message.from_user.id)
@@ -5684,7 +5714,7 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
     try:
         await callback.message.edit_text(
             "✅ <b>" + title + "</b> добавлена!\n"
-            "<code>" + task_id + "</code> · " + mkb_icons.get(merkaba, "🌱")
+            "🌿 " + mkb_icons.get(merkaba, "🌱")
         )
     except Exception:
         pass
@@ -6219,6 +6249,9 @@ async def _create_task_atomic(user_id: str, message: Message,
         "priority":   calculate_priority(deadline),
         "deadline":   deadline,
         "reminder":   reminder,
+    # P-62: parse natural-language repeat if not already normalized
+    if repeat and repeat not in ("once", "daily", "weekdays", "weekends", "weekly") and not repeat.startswith("custom_days:"):
+        repeat = _parse_weekdays(repeat)
         "repeat":     repeat if repeat and repeat != "once" else "once",
         "created":    _today(),
         "updated":    _today(),
