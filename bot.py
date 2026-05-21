@@ -9549,7 +9549,7 @@ async def quick_add_task(callback: CallbackQuery):
     edit_kb = InlineKeyboardMarkup(inline_keyboard=[[
         InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"ttask_edit|{task_id}")
     ]])
-    confirm = f"✅ Задача «{title}» создана\n<i>Можно добавить: 📅 дедлайн, 🎨 группа</i>"
+    confirm = f"✅ «{title}» добавлена! 🌿\n<i>Можно добавить: 📅 дедлайн, 🎨 группа</i>"
     try:
         await callback.message.edit_text(confirm, reply_markup=edit_kb, parse_mode="HTML")
     except Exception:
