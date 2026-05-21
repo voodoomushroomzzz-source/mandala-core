@@ -1,6 +1,12 @@
 {
   "tasks": [],
-  "groups": [],
+  "groups": [
+    {
+      "id": "работа",
+      "name": "Работа",
+      "created": "2026-05-21"
+    }
+  ],
   "achievements": [],
   "sphere_resonance": {
     "health": 20,
