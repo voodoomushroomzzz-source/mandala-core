@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC вЂ” All-in-One Heuristic File",
-    "version": "v1.5.1",
+    "version": "v1.5.2",
     "created": "2026-05-11",
-    "updated": "2026-05-20",
+    "updated": "2026-05-21",
     "layer": 1,
     "type": "boot_onboarding_pc",
-    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5.",
+    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5. v1.5.2: + anchor_by_content_not_line & insert_outside_structures rules.",
     "status": "active",
     "priority": "critical",
     "resonance": "100%",
@@ -27,7 +27,8 @@
       "tasks_cross_check",
       "v1.5.0",
       "patcher_safety",
-      "v1.5.1"
+      "v1.5.1",
+      "v1.5.2"
     ],
     "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.5.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.4.5 + testimonies + system_flow + large_file_patching + api_patterns"
   },
@@ -405,7 +406,9 @@
         "no_newlines_in_fstrings": "NEVER use \\n inside multiline f-string literals in patcher code. Python interprets them as real newlines, breaking string syntax on the target file. Use explicit string concatenation across lines.",
         "syntax_check_mandatory": "ALWAYS add to BLOCK 3: python -c \"import ast; ast.parse(open('bot.py').read()); print('Syntax OK')\" — commit ONLY after Syntax OK is confirmed. This prevents broken deploys.",
         "anchor_verification": "ALWAYS add assert before replace: assert old in src, \"Anchor not found\". Never patch blindly — if anchor is missing the script must fail loudly, not silently skip.",
-        "test_before_commit": "Pattern: 1) apply patcher 2) run syntax check 3) only then git add/commit/push. Never skip step 2."
+        "test_before_commit": "Pattern: 1) apply patcher 2) run syntax check 3) only then git add/commit/push. Never skip step 2.",
+        "anchor_by_content_not_line": "NEVER use hardcoded line numbers to find insertion points. Line numbers shift after every insert/delete. ALWAYS search by unique string content: for i, line in enumerate(lines): if 'unique anchor text' in line: ...",
+        "insert_outside_structures": "When inserting code, verify the insertion point is OUTSIDE dict literals, function args, and other structures. Always print 3 lines before and after insertion to verify correct context."
       }
     }
   },
