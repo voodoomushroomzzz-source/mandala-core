@@ -10,5 +10,14 @@
       "conversation": 6,
       "add_achievement": 1
     }
+  },
+  "851913510": {
+    "messages": 2,
+    "tasks_created": 0,
+    "tasks_completed": 0,
+    "achievements": 0,
+    "intents": {
+      "show_tasks": 1
+    }
   }
 }
