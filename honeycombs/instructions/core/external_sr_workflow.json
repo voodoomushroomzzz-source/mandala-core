@@ -165,6 +165,92 @@
         "anchor_verification": "ALWAYS add assert before replace: assert old in src, \"Anchor not found\". Never patch blindly — if anchor is missing the script must fail loudly, not silently skip.",
         "test_before_commit": "Pattern: 1) apply patcher 2) run syntax check 3) only then git add/commit/push. Never skip step 2."
       }
+    },
+    "hetzner_vps": {
+      "server_info": {
+        "provider": "Hetzner Cloud",
+        "project": "mandala",
+        "server_name": "mandala-core",
+        "plan": "CPX22",
+        "specs": {
+          "cpu": "2 vCPU x86 AMD",
+          "ram": "4 GB",
+          "ssd": "80 GB NVMe",
+          "traffic": "20 TB/mo"
+        },
+        "location": "Falkenstein, Germany (eu-central)",
+        "ip": "91.99.149.226",
+        "domain": "91-99-149-226.nip.io",
+        "os": "Ubuntu 24.04 LTS",
+        "cost": "$10.09/mo (server $9.49 + IPv4 $0.60)",
+        "console": "https://console.hetzner.cloud",
+        "ssh": "ssh root@91.99.149.226"
+      },
+      "stack": {
+        "python": "3.12.3",
+        "venv": "/opt/mandala/venv",
+        "app_path": "/opt/mandala",
+        "bot_entry": "/opt/mandala/bot.py",
+        "env_file": "/opt/mandala/.env",
+        "web_server": "nginx",
+        "ssl": "Let's Encrypt (certbot), expires 2026-08-21, auto-renew enabled",
+        "process_manager": "systemd (mandala-bot.service)",
+        "webhook_url": "https://91-99-149-226.nip.io/webhook",
+        "bot_port": 10000
+      },
+      "env_vars": [
+        "ALLOWED_PASSWORD",
+        "ARCHITECT_TELEGRAM_ID",
+        "BOT_TOKEN",
+        "BOT_USERNAME",
+        "ENGINEER_CHAT_URL",
+        "GITHUB_TOKEN",
+        "GROQ_API_KEY",
+        "OPENROUTER_KEY",
+        "RENDER_EXTERNAL_URL",
+        "REPO_NAME",
+        "TAVILY_API_KEY",
+        "USE_TAVILY"
+      ],
+      "useful_commands": {
+        "ssh_connect": "ssh root@91.99.149.226",
+        "bot_status": "systemctl status mandala-bot",
+        "bot_start": "systemctl start mandala-bot",
+        "bot_stop": "systemctl stop mandala-bot",
+        "bot_restart": "systemctl restart mandala-bot",
+        "bot_logs_live": "journalctl -u mandala-bot -f",
+        "bot_logs_last_100": "journalctl -u mandala-bot -n 100",
+        "bot_logs_errors": "journalctl -u mandala-bot -p err",
+        "update_bot": "cd /opt/mandala && git pull && systemctl restart mandala-bot",
+        "nginx_status": "systemctl status nginx",
+        "nginx_reload": "systemctl reload nginx",
+        "nginx_config": "cat /etc/nginx/sites-available/mandala",
+        "ssl_renew_check": "certbot renew --dry-run",
+        "edit_env": "nano /opt/mandala/.env && systemctl restart mandala-bot",
+        "server_resources": "htop",
+        "disk_usage": "df -h",
+        "memory_usage": "free -h"
+      },
+      "deployment_flow": {
+        "description": "How to deploy new bot version after GitHub push",
+        "steps": [
+          "1. Push changes to GitHub as usual",
+          "2. Connect to server: ssh root@91.99.149.226",
+          "3. cd /opt/mandala && git pull",
+          "4. systemctl restart mandala-bot",
+          "5. systemctl status mandala-bot — verify active (running)",
+          "6. journalctl -u mandala-bot -f — check logs"
+        ]
+      },
+      "notes": [
+        "nip.io domain is free — works as long as IP doesn't change",
+        "SSL auto-renews via certbot (cron job already configured)",
+        "If server IP changes — update RENDER_EXTERNAL_URL in .env and renew SSL",
+        "Bot auto-restarts on crash (Restart=always in systemd)",
+        "Bot auto-starts after server reboot (systemctl enable)",
+        "Render Free Tier exhausted 750h/month — Hetzner permanent hosting, no limits",
+        "Future: GitHub Actions for auto-deploy without SSH"
+      ]
     }
   },
   "meta": {
@@ -177,11 +263,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-05-20",
+    "updated": "2026-05-23",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.4.5",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule.",
+    "version": "v1.5.0",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -200,7 +286,9 @@
       "powershell_examples",
       "pre_check_flow",
       "patch_status_emojis",
-      "patcher_safety"
+      "patcher_safety",
+      "v1.5.0",
+      "hetzner_vps"
     ]
   }
 }
