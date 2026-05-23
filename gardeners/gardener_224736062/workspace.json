@@ -338,7 +338,7 @@
         {
           "id": "i1",
           "text": "тест 1",
-          "done": false
+          "done": true
         },
         {
           "id": "i2",
@@ -356,7 +356,7 @@
           "done": false
         }
       ],
-      "pinned_message_id": null,
+      "pinned_message_id": 12517,
       "created": "2026-05-23"
     }
   ],
