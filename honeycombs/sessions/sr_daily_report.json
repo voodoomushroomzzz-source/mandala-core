@@ -1,35 +1,42 @@
 {
-  "date": "2026-05-20",
+  "date": "2026-05-23",
   "version": "7.39.23",
   "gardeners": {
     "339914913": {
       "name": "Антон",
-      "active": true,
+      "active": false,
       "synthesis_date": "2026-05-20"
+    },
+    "851913510": {
+      "name": "Яна",
+      "active": true,
+      "synthesis_date": "2026-05-23"
     },
     "358793311": {
       "name": "Антон",
       "active": false,
       "synthesis_date": "2026-05-16"
     },
-    "851913510": {
-      "name": "Яна",
-      "active": false,
-      "synthesis_date": "2026-05-19"
-    },
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-05-18"
+      "synthesis_date": "2026-05-23"
     }
   },
   "issues": [
     {
       "user_id": "224736062",
       "type": "repeated_request",
-      "intent": "edit_task",
+      "intent": "complete_task",
       "count": 2,
-      "context": "повторный edit_task"
+      "context": "повторный complete_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "edit_task",
+      "confidence": 0.8,
+      "text_preview": "Перенеси дедлайн задачи «Подготовить резюме на удаленку», пе"
     },
     {
       "user_id": "224736062",
@@ -62,51 +69,156 @@
     {
       "user_id": "224736062",
       "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 0.5,
-      "text_preview": "добавь к ней напоминание на 25.05 на 12:00"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "add_task",
-      "count": 2,
-      "context": "повторный add_task"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "add_task",
-      "count": 2,
-      "context": "повторный add_task"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "add_task",
-      "count": 2,
-      "context": "повторный add_task"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "add_task",
-      "count": 2,
-      "context": "повторный add_task"
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "А расскажи, а что ты умеешь?"
     },
     {
       "user_id": "224736062",
       "type": "classifier_pass_to_sr",
       "intent": "none",
       "confidence": 1.0,
-      "text_preview": "И группа личная."
+      "text_preview": "Отлично, проверяю ответы)"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Это не команда, просто написал, что я проверяю твои ответы"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 1.0,
+      "text_preview": "Нет, все хорошо. Мы достаточно неплохо поработали над тобой,"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Конечно, продолжаем. Видишь, я уже там и сериал посмотрел. И"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Досмотрел Fallout, ты можешь увидеть это в закрытых задачах."
     },
     {
       "user_id": "224736062",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "add_achievement",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный add_achievement"
+    },
+    {
+      "user_id": "851913510",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Что ты имела ввиду?"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_achievement",
+      "count": 2,
+      "context": "повторный add_achievement"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Так, а теперь вернемся к разговору. Fallout мне понравился, "
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "web_search",
+      "count": 2,
+      "context": "повторный web_search"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Ого, как интересно. Давай вернемся к этому вопросу чуть попо"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Кто знает, кто знает, может быть и станет."
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Вот видишь новую задачку?"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 1.0,
+      "text_preview": "Видишь задачу, которую только что мы создали в истории?"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Вот смотри, у нас такая тема. Я работал, ну сейчас еще пока "
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 1.0,
+      "text_preview": "Но всё же при этом творчество и связи по чуть-чуть тоже коро"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Ой, а ты знаешь про переезд? Я тебе что-то говорил про перее"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 1.0,
+      "text_preview": "А, прикольно. Не, просто интересно было, как это... Классно,"
+    },
+    {
+      "user_id": "851913510",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 1.0,
+      "text_preview": "мне понравилось что ты задала вопрос что тебе интересно здес"
+    },
+    {
+      "user_id": "851913510",
+      "type": "classifier_pass_to_sr",
+      "intent": "none",
+      "confidence": 1.0,
+      "text_preview": "Думаю я смогу обсудить это вечером, когда вернусь домой"
+    },
+    {
+      "user_id": "224736062",
+      "type": "classifier_pass_to_sr",
+      "intent": "conversation",
+      "confidence": 1.0,
+      "text_preview": "Все хорошо. Вот гонял по делам, гонял в аэропорт, просили за"
     }
   ]
 }
