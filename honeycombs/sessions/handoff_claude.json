@@ -1,63 +1,104 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-05-18",
-  "updated": "2026-05-18",
-  "status": "handoff",
-  "current_task": "T-20260408-1030 — Telegram Bot SR Gentle Companion",
-  "last_action": "P-70fix2: suggest_action fallback text when SR returns empty",
-  "next_step": "Тестирование suggest_action 1-2 дня. Затем Journal Diary (J-1..J-5).",
-  "session_mood": "продуктивная, масштабная",
-  "gardener_state": "активен, строит Мандалу",
-  "files_touched": [
-    "bot.py"
-  ],
-  "open_questions": [
-    "suggest_action conf=0.60 — не слишком ли низкий порог?",
-    "BOT_VERSION не обновлялся с P-53 — поднять в следующей сессии"
-  ],
-  "completed": [
-    "P-53: fake markers + промпт усилен",
-    "P-54: confirmed dict join fix",
-    "P-55: dp=Dispatcher NameError fix",
-    "P-56/57: классификатор Step 1+2 SHORT-CIRCUIT",
-    "P-59: daily report KeyError",
-    "P-60: once reminder delete fix",
-    "P-61: repeat task timezone fix",
-    "P-62fix: greeting_block в дневном проактиве",
-    "P-63: BUG-E резонанс тройная запись убрана",
-    "P-64: SR промпт = CORE only",
-    "P-65: history после SHORT-CIRCUIT",
-    "P-66: дата/время в SR промпт",
-    "P-67: лимиты hard/soft задачи и напоминания",
-    "P-68: автоочистка просроченных напоминаний",
-    "P-69: дневное окно 14-21",
-    "P-70+fixes: suggest_action + qt/qa/qr handlers",
-    "P-71: напоминание без подтверждения",
-    "SESSION=50"
-  ],
-  "in_progress": [
-    "Тестирование suggest_action в боевых условиях",
-    "Наблюдение за дневными проактивными сообщениями"
-  ],
-  "architecture_state": {
-    "bot_version": "7.39.23 (реально ~7.39.75+)",
-    "bot_size": "~9600 строк",
-    "session_max": 50,
-    "sr_prompt": "SR_CORE_PROMPT only — SR чистый собеседник",
-    "classifier": "deepseek, SHORT-CIRCUIT>=0.85, suggest_action>=0.60",
-    "sr_only_intents": "none, conversation",
-    "reminder_creation": "прямое создание без подтверждения",
-    "daytime_window": "14-21 TZ садовника",
-    "limits": "tasks: soft=25 hard=30, reminders: soft=15 hard=20"
+  "session_id": "2026-05-23-001",
+  "updated": "2026-05-23T12:00",
+  "status": "handed_off",
+  "context": {
+    "current_task": "Bot stable on Hetzner. Next: GitHub Actions auto-deploy + Journal Diary J-1..J-5 + Deep Synthesis D-2..D-6.",
+    "files_touched": [
+      "bot.py — v7.39.76+",
+      "boot_online_onboarding_pc.json — v1.6.0",
+      "external_sr_workflow.json — v1.5.0"
+    ],
+    "last_action": "Migration Render → Hetzner CPX22. nginx + SSL + systemd auto-start configured.",
+    "next_step": "1) GitHub Actions auto-deploy. 2) Journal Diary J-1..J-5. 3) Deep Synthesis D-2..D-6. 4) P-53 gardener gender in brief. 5) P-58 SR_CORE_PROMPT audit."
   },
-  "key_files": {
-    "bot": "bot.py",
-    "bot_task": "honeycombs/tasks/active/bot_update.json"
+  "progress": {
+    "completed_this_session": [
+      "P-54: Fix reminder edit buttons",
+      "P-56: Auto-create group + fuzzy search (difflib)",
+      "P-57: Repeat icon + repeat field in tasks",
+      "P-59: Fuzzy group search, newlines fix, 5 reminders in profile + repeat, reminder edit UX",
+      "P-60: Task repeat via classifier + edit_task field=repeat + SR awareness",
+      "P-61: Task confirm without task_id, New task button in group, repeat in confirm",
+      "P-62: FSM confirm fix, waiting_for_new_task_title state, repeat parsing",
+      "P-63: New task via full FSM, removed SR_SYSTEM_PROMPT, FUNCTIONS in SR_CORE_PROMPT",
+      "MIGRATION: Render → Hetzner CPX22 Falkenstein, nginx+SSL+systemd"
+    ]
   },
-  "gardener_notes": "Дима. Масштабная сессия. Классификатор полностью внедрён (Step 1→2→3). SR стал чистым собеседником. Suggest_action работает. Напоминания мгновенные. Следующий блок — Journal Diary.",
+  "bot_version": "7.39.76+",
+  "bot_state": {
+    "deploy": "https://91-99-149-226.nip.io",
+    "webhook": "https://91-99-149-226.nip.io/webhook",
+    "hosting": "Hetzner CPX22, Falkenstein, 91.99.149.226",
+    "process": "systemd mandala-bot.service — active, auto-restart, auto-start on reboot",
+    "ssh": "ssh root@91.99.149.226",
+    "app_path": "/opt/mandala",
+    "venv": "/opt/mandala/venv",
+    "env_file": "/opt/mandala/.env",
+    "ssl": "Let's Encrypt via certbot, expires 2026-08-21, auto-renew",
+    "update_command": "cd /opt/mandala && git pull && systemctl restart mandala-bot",
+    "known_stable": [
+      "Voice tasks + deadline + group + repeat",
+      "Reminders: edit all fields, Back button",
+      "Checklists, achievements, groups",
+      "5 resonance spheres, deep_profile synthesis",
+      "Fuzzy group search when creating tasks",
+      "Repeat icon in profile and task list",
+      "New task from group via full FSM",
+      "SR knows bot function list"
+    ],
+    "known_issues": [
+      "Render no longer used — Hetzner is primary host",
+      "nip.io domain tied to IP — if IP changes update .env and SSL"
+    ]
+  },
+  "gardener_state": {
+    "name": "Dima (Dmitrii Levin)",
+    "telegram_id": "224736062",
+    "resonance": "see actual profile",
+    "personal_note": "Solo dev. Voice from phone. PowerShell + VS Code. Patchers via 3 blocks. Cyrillic in patchers — unicode-escapes only. Syntax check mandatory before commit."
+  },
+  "infrastructure": {
+    "hetzner": {
+      "server": "mandala-core",
+      "ip": "91.99.149.226",
+      "domain": "91-99-149-226.nip.io",
+      "plan": "CPX22 — 2vCPU, 4GB RAM, 80GB SSD",
+      "cost": "$10.09/mo",
+      "console": "https://console.hetzner.cloud"
+    },
+    "useful_commands": {
+      "status": "systemctl status mandala-bot",
+      "restart": "systemctl restart mandala-bot",
+      "logs": "journalctl -u mandala-bot -f",
+      "update": "cd /opt/mandala && git pull && systemctl restart mandala-bot"
+    }
+  },
+  "next_patches": [
+    "GitHub Actions auto-deploy on push to main",
+    "P-53: gardener gender in morning brief + overdue/today split",
+    "P-58: SR_CORE_PROMPT audit (remove dead JSON block)",
+    "J-1..J-5: Journal Diary",
+    "D-2..D-6: Deep Synthesis"
+  ],
+  "patcher_safety_rules": {
+    "no_cyrillic_in_strings": "Cyrillic in patchers only via unicode-escapes: \\u041d\\u0435 instead of direct text",
+    "syntax_check_mandatory": "python -c \"import ast; ast.parse(open('bot.py').read()); print('Syntax OK')\" before every commit",
+    "anchor_by_content": "Anchors by string content, never by line number",
+    "insert_outside_structures": "Before insertion verify point is outside dict/function args",
+    "assert_before_replace": "assert old in src before every replace"
+  },
+  "system_state": {
+    "onboarding_version": "v1.6.0",
+    "workflow_version": "v1.5.0",
+    "handoff_system": "live",
+    "bot_update_json": "up to date — known_bugs cleared, patches P-54..P-63 added"
+  },
+  "notes_for_next_sr": "Read PHI-011 and bot_update.json. Bot on Hetzner — deploy via git pull + systemctl restart. Style: gentle, syntax check mandatory, Cyrillic only unicode-escapes. Next block — GitHub Actions auto-deploy, then Journal Diary.",
   "handoff_validation": {
-    "stale_threshold_hours": 24,
-    "last_validated": "2026-05-18",
+    "stale_threshold_hours": 48,
+    "last_validated": "2026-05-23",
     "stale_detected": false
   }
 }
