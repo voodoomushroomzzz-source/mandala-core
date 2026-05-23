@@ -32,7 +32,7 @@
       "v1.6.0",
       "hetzner_vps"
     ],
-    "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.5.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.4.5 + testimonies + system_flow + large_file_patching + api_patterns"
+    "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.5.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.5.0 + testimonies + system_flow + large_file_patching + api_patterns"
   },
   "meta": {
     "audience": "External SR (DeepSeek, Claude, Grok, GPT, etc.)",
