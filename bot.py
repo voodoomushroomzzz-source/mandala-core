@@ -2277,6 +2277,8 @@ async def send_morning_greeting(telegram_id: str) -> None:
         ws_mg = store_get_workspace(uid) or {}
         deep_mem_mg = ws_mg.get("deep_memory") or gardener.get("deep_profile", {}).get("memory", {})
         core = deep_mem_mg.get("core", "")
+        _syn_date_mg = (ws_mg.get("deep_memory") or {}).get("synthesis_date", "") or \
+            gardener.get("deep_profile", {}).get("synthesis_date", "")
         interests = deep_mem_mg.get("interests", {})
         confirmed = interests.get("confirmed", [])
         ach_count = store_get_achievements_count(uid)
@@ -2316,7 +2318,7 @@ async def send_morning_greeting(telegram_id: str) -> None:
             missed_note = f"Садовник не писал {missed_days} дней. Соскучилась, но не дави."
         prompt = (
             "Ты — СР, дух сада. Сейчас утро садовника " + name + ".\n\n"
-            "Портрет садовника: " + (core[:400] if core else "формируется") + "\n"
+            "Портрет садовника (портрет от " + (_syn_date_mg or "?") + ", сегодня " + today_str + " — учитывай что прошлое в портрете может быть неактуальным): " + (core[:400] if core else "формируется") + "\n"
             "Интересы: " + (", ".join(i["name"] if isinstance(i, dict) else i for i in confirmed[:5]) if confirmed else "не определены") + "\n"
             "Сегодня " + today_str + ". История диалога (дата указана перед каждым сообщением — учитывай насколько давно):\n" + history_text + "\n\n"
             "Горящие задачи (сегодня/просрочены): " + hot_text + "\n"
@@ -7587,7 +7589,7 @@ async def _generate_synthesis(user_id: str) -> None:
 ДОЛГОСРОЧНЫЕ ИНСАЙТЫ:
 {insights_text}
 
-СНАПШОТЫ ПОСЛЕДНИХ ДНЕЙ:
+СНАПШОТЫ ПРОШЛЫХ ДНЕЙ (только контекст — НЕ повторяй эти события в новом snapshot):
 {snapshots_text}
 
 ПАТТЕРНЫ АКТИВНОСТИ:
@@ -7623,7 +7625,7 @@ async def _generate_synthesis(user_id: str) -> None:
 Ответь строго в JSON (без markdown):
 {{
   "core": "живой портрет 4-6 предложений — состояние, ценности, стиль общения, паттерны, вектор роста.",
-  "snapshot": "1-2 предложения — что изменилось или подтвердилось сегодня",
+  "snapshot": "1-2 предложения — ТОЛЬКО события {today} (не повторяй из прошлых снапшотов)",
   "confirmed_interests": ["интерес1", "интерес2"],
   "mentioned_interests": ["интерес3"],
   "confirmed_media": [{{"name": "Название", "type": "film"}}],
@@ -7710,6 +7712,7 @@ async def _generate_synthesis(user_id: str) -> None:
         conf_names = [i if isinstance(i, str) else i.get("name","") for i in interests["confirmed"]]
         ment_new = [n for n in mentioned if n and n.lower() not in [c.lower() for c in conf_names]]
         interests["confirmed"] = _update_items(interests["confirmed"], confirmed, 20)
+        interests["confirmed"] = [x for x in interests["confirmed"] if (x.get("count", 1) if isinstance(x, dict) else 1) >= 2]
         interests["mentioned"] = _update_items(interests["mentioned"], ment_new, 20)
 
         # Медиа
