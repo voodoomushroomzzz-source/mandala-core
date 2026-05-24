@@ -6709,7 +6709,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
                 if _ts_dt.tzinfo is None:
                     from zoneinfo import ZoneInfo as _ZI_ts
                     _ts_dt = _ts_dt.replace(tzinfo=_ZI_ts(tz_name))
-                _ts_str = _ts_dt.strftime("%H:%M")
+                _ts_str = _ts_dt.strftime("%d.%m %H:%M")
             except Exception:
                 _ts_str = "??:??"
             _txt_short = (_m.get("content") or "")[:60].replace("\n", " ")
@@ -6754,6 +6754,15 @@ def _build_user_context_msg(telegram_id: str) -> str:
             f"  confirmed: {chr(44).join(_med_conf) if _med_conf else 'нет'}\n"
             f"  mentioned: {chr(44).join(_med_ment) if _med_ment else 'нет'}\n]"
         )
+    _checklists_ctx = store_get_checklists(telegram_id)
+    _cl_block = ""
+    if _checklists_ctx:
+        _cl_lines = []
+        for _cl_i in _checklists_ctx:
+            _cl_items = _cl_i.get("items", [])
+            _cl_done = sum(1 for it in _cl_items if it.get("done"))
+            _cl_lines.append(f"  - {_cl_i['title']} ({_cl_done}/{len(_cl_items)})")
+        _cl_block = "\n[Чеклисты:\n" + "\n".join(_cl_lines) + "\n]"
     _msg = (
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
@@ -6765,6 +6774,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
         f"{_media_block}"
         f"[Группы задач: {groups_list}]\n"
         f"[Активные задачи ({len(active)}):\n{tasks_block}\n]"
+        f"{_cl_block}"
         f"{_sphere_hist_block}"
         f"{_ts_block}"
         f"{_ts_summary}"
