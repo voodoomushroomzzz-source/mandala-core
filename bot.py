@@ -2245,7 +2245,7 @@ def _auto_merkaba(title: str, label_name: str = "") -> str:
 
 def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✅ Да, архивировать", callback_data="leave_confirm")],
+        [InlineKeyboardButton(text="🌑 Да, удалить всё", callback_data="leave_confirm")],
         [InlineKeyboardButton(text="❌ Нет, остаюсь",     callback_data="leave_cancel")]
     ])
 
@@ -5869,13 +5869,17 @@ async def cmd_privacy(message: Message):
         return
     await message.answer(
         "🔐 Мои данные\n\n"
-        "СР хранит:\n"
-        "· задачи и дедлайны\n"
-        "· историю разговоров (40 сообщений)\n"
-        "· достижения и резонанс\n"
-        "· наблюдения о твоих паттернах\n\n"
-        "Хочешь покинуть сад и удалить данные — /leave\n\n"
-        "🔧 Расширенное управление данными — в разработке",
+        "Что хранится:\n"
+        "· Профиль — имя, город, дата рождения, настройки\n"
+        "· Задачи, напоминания, чеклисты, достижения\n"
+        "· Последние 50 сообщений в памяти сессии (RAM)\n"
+        "  сбрасываются при перезапуске бота\n"
+        "· Синтез — живой портрет, обновляется раз в сутки\n\n"
+        "Где хранится:\n"
+        "Приватный GitHub-репозиторий.\n"
+        "Данные не передаются третьим сторонам.\n\n"
+        "🌑 /leave — полное удаление данных и выход из сада.\n"
+        "  При возвращении нужно будет начать заново.",
         reply_markup=get_main_keyboard()
     )
 
@@ -5886,10 +5890,10 @@ async def cmd_leave(message: Message, state: FSMContext):
         return
     await state.set_state(LeaveStates.waiting_for_confirm)
     await message.answer(
-        "🌒 <b>Архивировать свой Сад?</b>\n\n"
-        "Данные сохранятся. Companion перестанет писать первым.\n"
-        "Вернуться можно в любой момент.\n\n<i>Это пауза, не конец.</i>",
-        reply_markup=get_leave_confirm_keyboard()
+        "🌑 <b>Покинуть Сад?</b>\n\n"
+        "Все данные будут удалены: задачи, история, достижения, профиль.\n"
+        "Вернуться можно, но нужно будет начать заново.\n\n<i>Это необратимо.</i>",
+        reply_markup=get_leave_confirm_keyboard(), parse_mode="HTML"
     )
 
 @router.callback_query(F.data == "leave_confirm")
@@ -5897,29 +5901,45 @@ async def leave_confirm(callback: CallbackQuery, state: FSMContext):
     await callback.answer()  # FIRST
     user_id = str(callback.from_user.id)
     gardener = store_get_profile(user_id)
-    if gardener:
-        g = dict(gardener)
-        g.setdefault("companion_settings", {})["proactive_mode"] = False
-        g["updated"] = _today()
-        store_set_profile(user_id, g)
-        _fire_sync()
-        # Notify architect
-        try:
-            name = gardener.get("name", "Садовник")
-            await bot.send_message(
-                int(ARCHITECT_TELEGRAM_ID),
-                f"🌒 <b>Садовник покинул сад</b>\n\n"
-                f"👤 {name}\nID: <code>{user_id}</code>\n"
-                f"Время: {_today()}\n\n"
-                f"Данные сохранены. Может вернуться в любой момент.",
-                parse_mode="HTML"
-            )
-        except Exception as e:
-            logger.error(f"Architect leave notify error: {e}")
+    name = (gardener or {}).get("name", "Садовник")
+    # 1. Remove from whitelist so next /start requires re-consent
+    try:
+        wl = await _github_get("gardeners/whitelist.json") or {"approved": []}
+        if not isinstance(wl, dict):
+            wl = {"approved": []}
+        if user_id in wl.get("approved", []):
+            wl["approved"].remove(user_id)
+            _pending_writes["gardeners/whitelist.json"] = wl
+    except Exception as e:
+        logger.error(f"Leave whitelist error: {e}")
+    # 2. Clear RAM
+    _store.pop(user_id, None)
+    _sessions.pop(user_id, None)
+    # 3. Wipe GitHub files
+    base = _user_path(user_id)
+    asyncio.create_task(_github_put(f"{base}/profile.json", {}))
+    asyncio.create_task(_github_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
+    asyncio.create_task(_github_put(f"{base}/memory.json", {"sessions": []}))
+    _fire_sync()
+    # 4. Notify architect
+    try:
+        await bot.send_message(
+            int(ARCHITECT_TELEGRAM_ID),
+            f"🌑 <b>Садовник покинул сад (удаление)</b>\n\n"
+            f"👤 {name}\nID: <code>{user_id}</code>\n"
+            f"Время: {_today()}. Данные удалены.",
+            parse_mode="HTML"
+        )
+    except Exception as e:
+        logger.error(f"Architect leave notify error: {e}")
     await state.clear()
-    await callback.message.edit_text(
-        "🌒 <b>Сад засыпает.</b>\n\nДанные сохранены.\nВозвращайся когда захочешь 🌿"
-    )
+    try:
+        await callback.message.edit_text(
+            "🌑 Данные удалены.\n\nЕсли захочешь вернуться — /start 🌱",
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
 
 @router.callback_query(F.data == "leave_cancel")
 async def leave_cancel(callback: CallbackQuery, state: FSMContext):
