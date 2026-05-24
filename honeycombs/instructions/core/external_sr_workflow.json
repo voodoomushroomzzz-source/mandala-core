@@ -163,7 +163,9 @@
         "no_newlines_in_fstrings": "NEVER use \\n inside multiline f-string literals in patcher code. Python interprets them as real newlines, breaking string syntax on the target file. Use explicit string concatenation across lines.",
         "syntax_check_mandatory": "ALWAYS add to BLOCK 3: python -c \"import ast; ast.parse(open('bot.py').read()); print('Syntax OK')\" — commit ONLY after Syntax OK is confirmed. This prevents broken deploys.",
         "anchor_verification": "ALWAYS add assert before replace: assert old in src, \"Anchor not found\". Never patch blindly — if anchor is missing the script must fail loudly, not silently skip.",
-        "test_before_commit": "Pattern: 1) apply patcher 2) run syntax check 3) only then git add/commit/push. Never skip step 2."
+        "test_before_commit": "Pattern: 1) apply patcher 2) run syntax check 3) only then git add/commit/push. Never skip step 2.",
+        "repr_before_patcher": "ALWAYS read target lines via python3 -c \"with open('bot.py', encoding='utf-8') as f: lines=f.readlines(); print(repr(lines[N]))\" before building any patcher. Never construct anchors from sed output or visual inspection — encoding mismatches cause silent anchor failures.",
+        "check_logs_after_restart": "ALWAYS append log check to BLOCK 3 after systemctl restart. Pattern: ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 50 --no-pager\". Never report deploy success without seeing logs."
       }
     },
     "hetzner_vps": {
@@ -263,11 +265,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-05-23",
+    "updated": "2026-05-24",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.5.0",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info.",
+    "version": "v1.5.1",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + repr_before_patcher & check_logs_after_restart rules.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -288,7 +290,8 @@
       "patch_status_emojis",
       "patcher_safety",
       "v1.5.0",
-      "hetzner_vps"
+      "hetzner_vps",
+      "v1.5.1"
     ]
   }
 }
