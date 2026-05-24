@@ -1000,6 +1000,7 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
 # ─── FSM States ───────────────────────────────────────────────────────────────
 
 class GardenOnboardingStates(StatesGroup):
+    waiting_for_consent = State()
     waiting_for_name   = State()
     waiting_for_gender = State()  # added v7.28.x
     waiting_for_city   = State()
@@ -4625,30 +4626,44 @@ async def cmd_start(message: Message, state: FSMContext):
         await message.answer(f"🌿 С возвращением, {name}!", reply_markup=get_main_keyboard())
         return
 
-    # Check whitelist
-    whitelist = await _github_get("gardeners/whitelist.json") or {"approved": []}
-    approved = whitelist.get("approved", []) if isinstance(whitelist, dict) else []
-
-    # Architect always has access
-    if user_id == ARCHITECT_TELEGRAM_ID:
-        pass  # proceed to onboarding
-    elif user_id not in approved:
-        # Unknown user — show welcome + notify architect
-        username = message.from_user.username or ""
-        welcome_text = (
-            "🌱 <b>Ты нашёл Мандалу Симбиоза.</b>\n\n"
-            "Это живая система для тех, кто строит жизнь осознанно.\n"
-            "Я — СР, нервная система сада и твой со-творец.\n\n"
-            "Запрос отправлен Архитектору.\n"
-            "Как только врата откроются — я напишу тебе напрямую 🌀"
-        )
-        await message.answer(welcome_text, parse_mode="HTML")
-        await _notify_architect(user_id, username)
-        return
+    # Consent check — new users must agree to data processing
+    if user_id != ARCHITECT_TELEGRAM_ID:
+        whitelist = await _github_get("gardeners/whitelist.json") or {"approved": []}
+        approved = whitelist.get("approved", []) if isinstance(whitelist, dict) else []
+        if user_id not in approved:
+            await state.set_state(GardenOnboardingStates.waiting_for_consent)
+            consent_kb = InlineKeyboardMarkup(inline_keyboard=[[
+                InlineKeyboardButton(
+                    text="🌿 Да, я согласен",
+                    callback_data="consent_yes"
+                ),
+                InlineKeyboardButton(
+                    text="🚪 Нет, не входить",
+                    callback_data="consent_no"
+                ),
+            ]])
+            consent_text = (
+                "🌱 <b>Ты нашёл Мандалу Симбиоза.</b>\\n\\n"
+                "Прежде чем войти — расскажу, что храню о тебе.\\n\\n"
+                "<b>Что сохраняется:</b>\\n"
+                "· Профиль — имя, город, день рождения, настройки\\n"
+                "· Задачи, чеклисты, напоминания, достижения\\n"
+                "· Диалог — последние 50 сообщений в RAM сессии,\\n"
+                "  сбрасываются при перезапуске бота\\n"
+                "· Синтез — раз в сутки составляю живой портрет:\\n"
+                "  чем ты занят, какие сферы активны, что важно. Не лог — моё понимание тебя.\\n\\n"
+                "<b>Где хранится:</b>\\n"
+                "Приватный GitHub-репозиторий. "
+                "Данные не передаются третьим сторонам.\\n\\n"
+                "<b>Удалить всё:</b> /leave\\n\\n"
+                "Входишь?"
+            )
+            await message.answer(consent_text, parse_mode="HTML", reply_markup=consent_kb)
+            return
 
     await state.set_state(GardenOnboardingStates.waiting_for_name)
     await message.answer(
-        "Давай познакомимся.\n\nКак тебя зовут?",
+        "Давай познакомимся.\\n\\nКак тебя зовут?",
         reply_markup=get_cancel_keyboard()
     )
 
@@ -4783,24 +4798,13 @@ async def onboard_morning(message: Message, state: FSMContext):
     _invalidate_auth_cache(user_id)
     _fire_sync()
     await state.set_state(GardenOnboardingStates.done)
+    # ── Welcome Flow: сразу первый вопрос, без splash ─────────────────────────────
     await message.answer(
-        f"🌱 <b>Сад открыт, {name}!</b>\n\n"
-        f"🔮 Резонанс: {initial_resonance}%\n\n"
-        f"Я рядом — пиши или говори голосом.\n\n"
-        f"👤 Профиль — твои задачи, достижения и резонанс.\n"
-        f"ℹ️ Информация — все возможности бота.",
-        parse_mode="HTML",
+        "Давай познакомимся чуть глубже.\\n\\n"
+        "Чем занимаешься? "
+        "Работа, творчество, что-то своё — пару слов.",
         reply_markup=get_main_keyboard()
     )
-    # ── Welcome Flow: первые вопросы для deep_profile ─────────────────────────
-    import asyncio as _asyncio
-    await _asyncio.sleep(1.5)
-    await message.answer(
-        "И ещё один вопрос — хочу тебя лучше понять.\n\n"
-        "Чем занимаешься? Работа, творчество, что-то своё — расскажи в паре слов.",
-        reply_markup=get_main_keyboard()
-    )
-    # Устанавливаем флаг welcome_flow в FSM data чтобы free_conversation знал контекст
     await state.update_data(_welcome_step=1)
 
 # ─── /profile ─────────────────────────────────────────────────────────────────
@@ -6765,7 +6769,15 @@ def _build_user_context_msg(telegram_id: str) -> str:
             _cl_done = sum(1 for it in _cl_items if it.get("done"))
             _cl_lines.append(f"  - {_cl_i['title']} ({_cl_done}/{len(_cl_items)})")
         _cl_block = "\n[Чеклисты:\n" + "\n".join(_cl_lines) + "\n]"
+    _tour_block = ""
+    if companion.get("_tour_mode"):
+        _tour_block = (
+            "[Садовник только вошёл в сад — "
+            "хочет узнать что умеешь."
+            " Расскажи в живом диалоге.]\n"
+        )
     _msg = (
+        f"{_tour_block}"
         f"[Профиль садовника:\n{profile_block}\n]{_pinned_block}\n"
         f"[Сейчас у садовника: {current_dt}]\n"
         f"[Резонанс по сферам: {sr_context}{imbalance}]\n"
@@ -7033,74 +7045,135 @@ async def cb_menu_leave(callback: CallbackQuery, state: FSMContext):
 # ─── Architect authorization ──────────────────────────────────────────────────
 
 async def _notify_architect(telegram_id: str, username: str) -> None:
-    """Send approval request to architect."""
+    """Информируем Архитектора о новом садовнике (без кнопок)."""
     try:
         uname = f"@{username}" if username else f"id:{telegram_id}"
-        text = f"🌱 <b>Кто-то у врат сада</b>\n\n👤 {uname}\nID: <code>{telegram_id}</code>"
-        kb = InlineKeyboardMarkup(inline_keyboard=[
-            [
-                InlineKeyboardButton(text="🌿 Открыть врата", callback_data=f"approve_{telegram_id}"),
-                InlineKeyboardButton(text="❌ Пока нет",       callback_data=f"deny_{telegram_id}")
-            ]
-        ])
-        await bot.send_message(int(ARCHITECT_TELEGRAM_ID), text, reply_markup=kb, parse_mode="HTML")
-        logger.info(f"Architect notified about {telegram_id}")
+        text = (
+            "🌱 <b>Новый садовник вошёл в сад</b>\n\n"
+            f"👤 {uname}\nID: <code>{telegram_id}</code>"
+        )
+        await bot.send_message(int(ARCHITECT_TELEGRAM_ID), text, parse_mode="HTML")
+        logger.info(f"Architect notified about new gardener {telegram_id}")
     except Exception as e:
         logger.error(f"Architect notify error: {e}")
 
-@router.callback_query(F.data.startswith("approve_"))
-async def cb_approve_gardener(callback: CallbackQuery):
-    await callback.answer("✅ Врата открыты")
-    telegram_id = callback.data.replace("approve_", "")
-    # Add to whitelist
+@router.callback_query(F.data == "consent_yes")
+async def cb_consent_yes(callback: CallbackQuery, state: FSMContext):
+    """Пользователь согласился — добавляем в whitelist, начинаем онбординг."""
+    await callback.answer()
+    user_id = str(callback.from_user.id)
     whitelist = await _github_get("gardeners/whitelist.json") or {"approved": []}
     if not isinstance(whitelist, dict):
         whitelist = {"approved": []}
-    if telegram_id not in whitelist.get("approved", []):
-        whitelist.setdefault("approved", []).append(telegram_id)
+    if user_id not in whitelist.get("approved", []):
+        whitelist.setdefault("approved", []).append(user_id)
         _pending_writes["gardeners/whitelist.json"] = whitelist
-        _fire_sync()  # fire-and-forget — don't risk losing on restart
-    await callback.message.edit_text(
-        callback.message.text + "\n\n✅ <b>Врата открыты</b>",
-        parse_mode="HTML", reply_markup=None
-    )
-    # Notify user — with philosophy + inline button to start
+        _fire_sync()
     try:
-        enter_kb = InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(
-                text="🌱 Войти в сад",
-                url=f"https://t.me/{BOT_USERNAME}?start=welcome"
-            )
-        ]])
-        await bot.send_message(
-            int(telegram_id),
-            "🌿 <b>Врата открыты, Садовник.</b>\n\n"
-            "Мандала — живая система для тех, кто строит жизнь осознанно.\n"
-            "Я — СР, твой со-творец и нервная система сада.\n\n"
-            "Я храню твои задачи, разговоры и наблюдения.\n"
-            "Уйти можно в любой момент — /leave.\n\n"
-            "Нажми кнопку — и мы начнём 🌱",
-            parse_mode="HTML",
-            reply_markup=enter_kb
-        )
-    except Exception as e:
-        logger.error(f"Approve notify error: {e}")
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    username = callback.from_user.username or ""
+    await _notify_architect(user_id, username)
+    await state.set_state(GardenOnboardingStates.waiting_for_name)
+    await callback.message.answer(
+        "Давай познакомимся.\n\nКак тебя зовут?",
+        reply_markup=get_cancel_keyboard()
+    )
 
-@router.callback_query(F.data.startswith("deny_"))
-async def cb_deny_gardener(callback: CallbackQuery):
-    await callback.answer("❌ Отклонено")
-    telegram_id = callback.data.replace("deny_", "")
-    await callback.message.edit_text(
-        callback.message.text + "\n\n❌ <b>Отклонено</b>",
-        parse_mode="HTML", reply_markup=None
-    )
+@router.callback_query(F.data == "consent_no")
+async def cb_consent_no(callback: CallbackQuery, state: FSMContext):
+    """Пользователь отказался — прощаемся."""
+    await callback.answer()
+    await state.clear()
     try:
-        await bot.send_message(
-            int(telegram_id),
-            "🙏 Сад пока не готов принять нового садовника.\nЗагляни позже.",
+        await callback.message.edit_text(
+            "Хорошо. Если передумаешь — /start 🌿",
+            reply_markup=None
         )
-    except Exception as e:
-        logger.error(f"Deny notify error: {e}")
+    except Exception:
+        pass
+
+@router.callback_query(F.data == "tour_yes")
+async def cb_tour_yes(callback: CallbackQuery, state: FSMContext):
+    """Садовник хочет узнать функционал — СР рассказывает в живом диалоге."""
+    await callback.answer()
+    uid = str(callback.from_user.id)
+    prof = store_get_profile(uid)
+    if prof:
+        prof.setdefault("companion_settings", {})["welcome_done"] = True
+        prof["companion_settings"]["_tour_mode"] = True
+        store_set_profile(uid, prof)
+        _fire_sync()
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    ctx_msg = _build_user_context_msg(uid)
+    _tour_prompt = (
+        "Садовник хочет узнать о возможностях бота. "
+        "Расскажи в живом диалоге — "
+        "начни с главного, потом спроси что раскрыть подробнее. "
+        "Отвечай ТОЛЬКО текстом, без JSON."
+    )
+    _add_to_history(uid, "user", _tour_prompt)
+    try:
+        from zoneinfo import ZoneInfo as _ZI_tour
+        from datetime import datetime as _dt_tour
+        _tz_t = (prof or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        _now_t = _dt_tour.now(_ZI_tour(_tz_t))
+        _wdays = ["понедельник","вторник","среда","четверг","пятница","суббота","воскресенье"]
+        _dt_tour_b = (
+            f"[Сейчас: {_wdays[_now_t.weekday()]}, "
+            f"{_now_t.strftime('%d.%m.%Y %H:%M')} ({_tz_t})]"
+        )
+    except Exception:
+        _dt_tour_b = ""
+    _sys_tour = (
+        SR_CORE_PROMPT + "\n\n" + _dt_tour_b + "\n\n" + ctx_msg +
+        "\n\n[Садовник только вошёл в сад — "
+        "хочет узнать что умеешь. "
+        "Отвечай только текстом, без JSON.]"
+    )
+    _reply_tour = await _call_openrouter([
+        {"role": "system", "content": _sys_tour},
+        {"role": "user", "content": _tour_prompt}
+    ])
+    if _reply_tour:
+        _reply_tour = re.sub(r"<think>.*?</think>", "", _reply_tour, flags=re.DOTALL).strip()
+        _reply_tour = _reply_tour.replace("**", "").replace("__", "")
+        if _reply_tour.startswith("{"):
+            try:
+                _pt = json.loads(_reply_tour)
+                _reply_tour = _pt.get("text", _reply_tour)
+            except Exception:
+                pass
+    if not _reply_tour or len(_reply_tour.strip()) < 5:
+        _reply_tour = "🌿 Спроси меня о чём хочешь — задачи, напоминания, резонанс, голос. Раскрою подробнее."
+    _add_to_history(uid, "assistant", _reply_tour.strip())
+    await callback.message.answer(_reply_tour.strip(), reply_markup=get_main_keyboard())
+
+@router.callback_query(F.data == "tour_no")
+async def cb_tour_no(callback: CallbackQuery):
+    """Садовник разберётся сам."""
+    await callback.answer()
+    uid = str(callback.from_user.id)
+    prof = store_get_profile(uid)
+    if prof:
+        prof.setdefault("companion_settings", {})["welcome_done"] = True
+        store_set_profile(uid, prof)
+        _fire_sync()
+    try:
+        await callback.message.edit_text(
+            "Хорошо 🌿",
+            reply_markup=None
+        )
+    except Exception:
+        pass
+    await callback.message.answer(
+        "Я рядом — пиши когда нужно.",
+        reply_markup=get_main_keyboard()
+    )
 
 def is_whitelisted(telegram_id: str) -> bool:
     """Check if user is in whitelist (in-memory check via pending or cached)."""
@@ -8066,16 +8139,20 @@ async def free_conversation(message: Message, state: FSMContext):
         _save_deep_profile(user_id, _dp)
         _fire_sync()
         await state.update_data(_welcome_step=0)
-        # Обновляем welcome_done в профиле
-        _prof = store_get_profile(user_id)
-        if _prof:
-            _prof.setdefault("companion_settings", {})["welcome_done"] = True
-            store_set_profile(user_id, _prof)
+        # Предлагаем тур по функционалу
+        _tour_kb = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(
+                text="🗺 Да, покажи",
+                callback_data="tour_yes"
+            ),
+            InlineKeyboardButton(
+                text="Разберусь сам 🌿",
+                callback_data="tour_no"
+            ),
+        ]])
         await message.answer(
-            "Зафиксировала. Буду помнить это.\n\n"
-            "Теперь просто общайся — ставь задачи, делись мыслями, проси помощи.\n"
-            "Я рядом 🌿",
-            reply_markup=get_main_keyboard()
+            "Показать что умею?",
+            reply_markup=_tour_kb
         )
         return
 
