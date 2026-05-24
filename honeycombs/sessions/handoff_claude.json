@@ -1,104 +1,55 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-05-23-001",
-  "updated": "2026-05-23T12:00",
+  "session_id": "2026-05-24-001",
+  "updated": "2026-05-24T14:00",
   "status": "handed_off",
   "context": {
-    "current_task": "Bot stable on Hetzner. Next: GitHub Actions auto-deploy + Journal Diary J-1..J-5 + Deep Synthesis D-2..D-6.",
+    "current_task": "Memory & dialog quality fixes. Next: GitHub Actions auto-deploy + BUTTON_DATA_INVALID fix + Journal Diary J-1..J-5 + Deep Synthesis D-2..D-6",
     "files_touched": [
-      "bot.py — v7.39.76+",
-      "boot_online_onboarding_pc.json — v1.6.0",
-      "external_sr_workflow.json — v1.5.0"
+      "bot.py — 5 patches",
+      "handoff_claude.json",
+      "bot_update.json"
     ],
-    "last_action": "Migration Render → Hetzner CPX22. nginx + SSL + systemd auto-start configured.",
-    "next_step": "1) GitHub Actions auto-deploy. 2) Journal Diary J-1..J-5. 3) Deep Synthesis D-2..D-6. 4) P-53 gardener gender in brief. 5) P-58 SR_CORE_PROMPT audit."
+    "last_action": "5 bot patches: history with dates in briefs, checklists in SR context, synthesis fix, SR fallback instead of classifier error",
+    "next_step": "1) BUTTON_DATA_INVALID fix. 2) GitHub Actions auto-deploy. 3) Journal Diary J-1..J-5. 4) Deep Synthesis D-2..D-6. 5) P-53. 6) P-58."
   },
   "progress": {
     "completed_this_session": [
-      "P-54: Fix reminder edit buttons",
-      "P-56: Auto-create group + fuzzy search (difflib)",
-      "P-57: Repeat icon + repeat field in tasks",
-      "P-59: Fuzzy group search, newlines fix, 5 reminders in profile + repeat, reminder edit UX",
-      "P-60: Task repeat via classifier + edit_task field=repeat + SR awareness",
-      "P-61: Task confirm without task_id, New task button in group, repeat in confirm",
-      "P-62: FSM confirm fix, waiting_for_new_task_title state, repeat parsing",
-      "P-63: New task via full FSM, removed SR_SYSTEM_PROMPT, FUNCTIONS in SR_CORE_PROMPT",
-      "MIGRATION: Render → Hetzner CPX22 Falkenstein, nginx+SSL+systemd"
+      "fix: morning brief — history with timestamps (874efdf8)",
+      "fix: daytime proactive — history with timestamps (4c04ca86)",
+      "fix: checklists in SR context + date in ts_summary (6724d425)",
+      "fix: synthesis snapshot date guard + core date + confirmed interests filter (d6843829)",
+      "fix: SR fallback instead of classifier error (534197d7)"
     ]
   },
-  "bot_version": "7.39.76+",
+  "bot_version": "7.39.23",
   "bot_state": {
     "deploy": "https://91-99-149-226.nip.io",
-    "webhook": "https://91-99-149-226.nip.io/webhook",
-    "hosting": "Hetzner CPX22, Falkenstein, 91.99.149.226",
-    "process": "systemd mandala-bot.service — active, auto-restart, auto-start on reboot",
-    "ssh": "ssh root@91.99.149.226",
-    "app_path": "/opt/mandala",
-    "venv": "/opt/mandala/venv",
-    "env_file": "/opt/mandala/.env",
-    "ssl": "Let's Encrypt via certbot, expires 2026-08-21, auto-renew",
-    "update_command": "cd /opt/mandala && git pull && systemctl restart mandala-bot",
-    "known_stable": [
-      "Voice tasks + deadline + group + repeat",
-      "Reminders: edit all fields, Back button",
-      "Checklists, achievements, groups",
-      "5 resonance spheres, deep_profile synthesis",
-      "Fuzzy group search when creating tasks",
-      "Repeat icon in profile and task list",
-      "New task from group via full FSM",
-      "SR knows bot function list"
-    ],
-    "known_issues": [
-      "Render no longer used — Hetzner is primary host",
-      "nip.io domain tied to IP — if IP changes update .env and SSL"
-    ]
+    "hosting": "Hetzner CPX22, 91.99.149.226",
+    "process": "systemd mandala-bot.service — active",
+    "update_command": "cd /opt/mandala && git pull && systemctl restart mandala-bot"
   },
-  "gardener_state": {
-    "name": "Dima (Dmitrii Levin)",
-    "telegram_id": "224736062",
-    "resonance": "see actual profile",
-    "personal_note": "Solo dev. Voice from phone. PowerShell + VS Code. Patchers via 3 blocks. Cyrillic in patchers — unicode-escapes only. Syntax check mandatory before commit."
-  },
-  "infrastructure": {
-    "hetzner": {
-      "server": "mandala-core",
-      "ip": "91.99.149.226",
-      "domain": "91-99-149-226.nip.io",
-      "plan": "CPX22 — 2vCPU, 4GB RAM, 80GB SSD",
-      "cost": "$10.09/mo",
-      "console": "https://console.hetzner.cloud"
-    },
-    "useful_commands": {
-      "status": "systemctl status mandala-bot",
-      "restart": "systemctl restart mandala-bot",
-      "logs": "journalctl -u mandala-bot -f",
-      "update": "cd /opt/mandala && git pull && systemctl restart mandala-bot"
-    }
-  },
-  "next_patches": [
-    "GitHub Actions auto-deploy on push to main",
-    "P-53: gardener gender in morning brief + overdue/today split",
-    "P-58: SR_CORE_PROMPT audit (remove dead JSON block)",
-    "J-1..J-5: Journal Diary",
-    "D-2..D-6: Deep Synthesis"
+  "known_issues": [
+    "BUTTON_DATA_INVALID — callback_data byte truncation fix ready, not deployed"
+  ],
+  "session_observations": [
+    "repr() before patcher is mandatory — anchors break on emoji/escaping without it",
+    "Self-reproducing memory error: old snapshot events copied to new without date guard — fixed",
+    "SR couldn't see checklists in context — fixed via _build_user_context_msg block",
+    "confirmed interests accumulated one-time events — fixed with count >= 2 filter",
+    "Classifier returned stub instead of falling back to SR — fixed with pure conversation retry"
   ],
   "patcher_safety_rules": {
-    "no_cyrillic_in_strings": "Cyrillic in patchers only via unicode-escapes: \\u041d\\u0435 instead of direct text",
-    "syntax_check_mandatory": "python -c \"import ast; ast.parse(open('bot.py').read()); print('Syntax OK')\" before every commit",
-    "anchor_by_content": "Anchors by string content, never by line number",
-    "insert_outside_structures": "Before insertion verify point is outside dict/function args",
+    "repr_before_patcher": "ALWAYS read target lines via python3 -c \"...\" before building anchors",
+    "check_logs_after_restart": "ALWAYS append log check after systemctl restart",
+    "no_cyrillic_in_strings": "Cyrillic only via unicode-escapes",
+    "syntax_check_mandatory": "python -c \"import ast; ast.parse(...)\" before commit",
+    "anchor_by_content": "Anchors by content, never by line number",
     "assert_before_replace": "assert old in src before every replace"
   },
-  "system_state": {
-    "onboarding_version": "v1.6.0",
-    "workflow_version": "v1.5.0",
-    "handoff_system": "live",
-    "bot_update_json": "up to date — known_bugs cleared, patches P-54..P-63 added"
-  },
-  "notes_for_next_sr": "Read PHI-011 and bot_update.json. Bot on Hetzner — deploy via git pull + systemctl restart. Style: gentle, syntax check mandatory, Cyrillic only unicode-escapes. Next block — GitHub Actions auto-deploy, then Journal Diary.",
   "handoff_validation": {
     "stale_threshold_hours": 48,
-    "last_validated": "2026-05-23",
+    "last_validated": "2026-05-24",
     "stale_detected": false
   }
 }

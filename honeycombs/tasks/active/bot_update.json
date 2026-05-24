@@ -5,7 +5,7 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-18",
+  "updated": "2026-05-24",
   "progress": 99,
   "current_version": "7.39.23",
   "note_version": "Реальная версия с патчами ~7.39.75+",
@@ -281,6 +281,36 @@
       "name": "P-52 — Cultural experience: media → культурный опыт, 10 типов искусства",
       "date": "2026-05-14",
       "commit": "claude-session"
+    },
+    "P-71": {
+      "name": "fix: morning brief — history with timestamps",
+      "date": "2026-05-24",
+      "commit": "874efdf8"
+    },
+    "P-72": {
+      "name": "fix: daytime proactive — history with timestamps and today date",
+      "date": "2026-05-24",
+      "commit": "4c04ca86"
+    },
+    "P-73": {
+      "name": "fix: checklists in SR context + date in ts_summary",
+      "date": "2026-05-24",
+      "commit": "6724d425"
+    },
+    "P-74": {
+      "name": "fix: synthesis — snapshot date guard, core date, confirmed interests count>=2",
+      "date": "2026-05-24",
+      "commit": "d6843829"
+    },
+    "P-75": {
+      "name": "fix: SR fallback instead of classifier stub — pure conversation retry",
+      "date": "2026-05-24",
+      "commit": "534197d7"
+    },
+    "P-76": {
+      "name": "fix: BUTTON_DATA_INVALID — callback_data byte truncation (ready, not deployed)",
+      "date": null,
+      "commit": null
     }
   },
   "known_bugs": {},
