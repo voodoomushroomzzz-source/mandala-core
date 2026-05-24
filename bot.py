@@ -4484,7 +4484,7 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         history = _get_history(uid)
         recent = history[-20:] if history else []
         history_text = "\n".join(
-            f"{'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')}"
+            f"[{m.get('ts','')[:10]}] {'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')}"
             for m in recent
         ) if recent else "диалога ещё нет"
         core = mem.get("core", "")
@@ -4553,7 +4553,7 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             prompt_parts += ["", f"ИНТЕРЕСЫ: {', '.join(i['name'] if isinstance(i, dict) else i for i in confirmed[:10])}"]
         prompt_parts += [
             "",
-            f"ПОСЛЕДНИЕ 20 СООБЩЕНИЙ:\n{history_text}",
+            f"Сегодня {today_str}. ПОСЛЕДНИЕ 20 СООБЩЕНИЙ (дата указана перед каждым — учитывай насколько давно):\n{history_text}",
             "",
             f"АКТИВНЫЕ ЗАДАЧИ:{tasks_context if tasks_context else ' нет'}",
             "",
