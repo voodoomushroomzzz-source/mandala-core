@@ -8443,12 +8443,24 @@ async def free_conversation(message: Message, state: FSMContext):
                 if intent == "conversation" and any(
                     m in reply_text.lower() for m in _ACTION_FAKE_MARKERS
                 ):
-                    reply_text = ("🌀 Не смогла распознать команду точно. "
-                                  "Попробуй ещё раз или уточни что именно нужно сделать.")
+                    _fb_history = _get_history(user_id)
+                    _fb_reply = await _call_openrouter([
+                        {"role": "system", "content": SR_CORE_PROMPT + "\n\n" + ctx_msg
+                            + "\n\n[Отвечай только текстом, без JSON. Свободный диалог.]"},
+                        *_fb_history[-10:],
+                        {"role": "user", "content": text}
+                    ])
+                    reply_text = _fb_reply.strip() if _fb_reply and _fb_reply.strip() else "🌿 Я здесь, слушаю тебя."
                 # Bare "готово" with no action markers is also suspicious when intent=conversation
                 if intent == "conversation" and reply_text.lower().strip() in ("готово", "готово.", "done", "ok", "ок"):
-                    reply_text = ("🌀 Не смогла распознать команду точно. "
-                                  "Попробуй ещё раз или уточни что именно нужно сделать.")
+                    _fb_history = _get_history(user_id)
+                    _fb_reply = await _call_openrouter([
+                        {"role": "system", "content": SR_CORE_PROMPT + "\n\n" + ctx_msg
+                            + "\n\n[Отвечай только текстом, без JSON. Свободный диалог.]"},
+                        *_fb_history[-10:],
+                        {"role": "user", "content": text}
+                    ])
+                    reply_text = _fb_reply.strip() if _fb_reply and _fb_reply.strip() else "🌿 Я здесь, слушаю тебя."
 
                 if confidence < 0.7 and clarification:
                     # Not sure — ask clarification
