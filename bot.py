@@ -2297,7 +2297,7 @@ async def send_morning_greeting(telegram_id: str) -> None:
         history = _get_history(uid)
         recent = history[-10:] if history else []
         history_text = "\n".join(
-            f"{'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')[:100]}"
+            f"[{m.get('ts','')[:10]}] {'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')[:100]}"
             for m in recent
         ) if recent else "диалога ещё нет"
         DAYS_RU = ["понедельник","вторник","среда","четверг","пятница","суббота","воскресенье"]
@@ -2318,7 +2318,7 @@ async def send_morning_greeting(telegram_id: str) -> None:
             "Ты — СР, дух сада. Сейчас утро садовника " + name + ".\n\n"
             "Портрет садовника: " + (core[:400] if core else "формируется") + "\n"
             "Интересы: " + (", ".join(i["name"] if isinstance(i, dict) else i for i in confirmed[:5]) if confirmed else "не определены") + "\n"
-            "Вчерашний диалог:\n" + history_text + "\n\n"
+            "Сегодня " + today_str + ". История диалога (дата указана перед каждым сообщением — учитывай насколько давно):\n" + history_text + "\n\n"
             "Горящие задачи (сегодня/просрочены): " + hot_text + "\n"
             "Задачи на завтра: " + tomorrow_text + "\n"
             "Резонанс сфер: " + spheres_line + "\n"
