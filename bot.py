@@ -2218,24 +2218,29 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
         "сын","дочь","общался","разговор","поговорил","бесед","встретил","подруг"
     ]
     growth_kw = [
-        "учить","изучить","курс","книг","читать","обучен","навык","развит","рост",
+        "учить","изучить","курс","книг","обучен","навык","развит","рост",
         "саморазвит","личностн","духовн","практик","осознанн","рефлекси","дневник",
         "план жизн","цел","смысл","ценност","философи","психолог","терапи","коучинг",
         "язык","английск","иностранн","онлайн-курс","сертификат","диплом"
     ]
+    # "читать" removed from growth_kw — substring of "пересчитать"/"рассчитать"
+    # Use regex to detect real reading verbs only
+    import re as _re_sph
+    def _is_reading(t: str) -> bool:
+        return bool(_re_sph.search(r'(?:^|\s)читать|прочит|перечит|почит|вычит', t))
     # P-25: two-pass — title first (authoritative), then full text
     # Fixes: task in roadmap with health-keyword in roadmap name
     title_only = title.lower()
     if any(k in title_only for k in creativity_kw):  return "creativity"
     if any(k in title_only for k in health_kw):      return "health"
     if any(k in title_only for k in connections_kw): return "connections"
-    if any(k in title_only for k in growth_kw):      return "growth"
+    if any(k in title_only for k in growth_kw) or _is_reading(title_only): return "growth"
     if any(k in title_only for k in work_kw):        return "work"
     # Pass 2: full text including label_name
     if any(k in text for k in creativity_kw):  return "creativity"
     if any(k in text for k in health_kw):      return "health"
     if any(k in text for k in connections_kw): return "connections"
-    if any(k in text for k in growth_kw):      return "growth"
+    if any(k in text for k in growth_kw) or _is_reading(text): return "growth"
     return "work"  # default
 
 # Keep old name as alias for backward compat
@@ -6625,17 +6630,26 @@ def _build_user_context_msg(telegram_id: str) -> str:
         label = t.get("label_name") or "без группы"
         dl = t.get("deadline") or "без даты"
         task_lines.append(f"  - {t['title']} | группа: {label} | дедлайн: {dl}")
-    # Last 5 messages with timestamps for SR context
-    _recent_msgs = _sessions.get(telegram_id, [])[-5:]
+    # Last 20 messages with tz-aware timestamps — full temporal picture for SR
+    _all_session_msgs = _sessions.get(telegram_id, [])[-20:]
+    _recent_msgs = _all_session_msgs  # kept for _ts_summary ref below
     _ts_block = ""
-    if _recent_msgs:
+    if _all_session_msgs:
         _ts_lines = []
-        for _m in _recent_msgs:
+        for _m in _all_session_msgs:
             _role_icon = "🧑" if _m.get("role") == "user" else "🌿"
-            _ts = _m.get("ts", "")[:19].replace("T", " ")
-            _txt = (_m.get("content") or "")[:80].replace("\n", " ")
-            _ts_lines.append(f"  {_role_icon} {_ts} | {_txt}")
-        _ts_block = "\n[Последние сообщения:\n" + "\n".join(_ts_lines) + "\n]"
+            _ts_raw = _m.get("ts", "")
+            try:
+                from zoneinfo import ZoneInfo as _ZI_ts2
+                _ts_dt2 = datetime.fromisoformat(_ts_raw)
+                if _ts_dt2.tzinfo is None:
+                    _ts_dt2 = _ts_dt2.replace(tzinfo=_ZI_ts2(tz_name))
+                _ts = _ts_dt2.strftime("%d.%m %H:%M")
+            except Exception:
+                _ts = _ts_raw[:16].replace("T", " ")
+            _txt = (_m.get("content") or "")[:100].replace("\n", " ")
+            _ts_lines.append(f"  {_role_icon} [{_ts}] {_txt}")
+        _ts_block = "\n[Хронология диалога (последние 20 сообщений):\n" + "\n".join(_ts_lines) + "\n]"
     tasks_block = "\n".join(task_lines) if task_lines else "  нет активных задач"
 
     # Groups list
@@ -6723,24 +6737,8 @@ def _build_user_context_msg(telegram_id: str) -> str:
     if obs_list:
         dp_block = f"\n[Паттерны садовника:\n" + "\n".join(f"  - {o}" for o in obs_list[-10:]) + "\n]"
 
-    # Build timestamp summary from session history for SR
-    _ts_summary = ""
-    if _recent_msgs:
-        _ts_parts = []
-        for _m in _recent_msgs:
-            _role = "Садовник" if _m.get("role") == "user" else "СР"
-            try:
-                _ts_dt = datetime.fromisoformat(_m.get("ts", ""))
-                # Если UTC (naive) — добавляем tzinfo для корректного вывода
-                if _ts_dt.tzinfo is None:
-                    from zoneinfo import ZoneInfo as _ZI_ts
-                    _ts_dt = _ts_dt.replace(tzinfo=_ZI_ts(tz_name))
-                _ts_str = _ts_dt.strftime("%d.%m %H:%M")
-            except Exception:
-                _ts_str = "??:??"
-            _txt_short = (_m.get("content") or "")[:60].replace("\n", " ")
-            _ts_parts.append(f"  [{_ts_str}] {_role}: {_txt_short}")
-        _ts_summary = "\n[Хронология диалога:\n" + "\n".join(_ts_parts) + "\n]"
+    # _ts_summary removed — _ts_block now covers full 20-msg window with timestamps
+    _ts_summary = ""  # kept as empty — still referenced in _msg template
 
     # P-29: sphere history block — only when requested
     _sphere_hist_block = ""
@@ -7718,7 +7716,7 @@ async def _generate_synthesis(user_id: str) -> None:
 Ответь строго в JSON (без markdown):
 {{
   "core": "живой портрет 4-6 предложений — состояние, ценности, стиль общения, паттерны, вектор роста.",
-  "snapshot": "1-2 предложения — ТОЛЬКО события {today} (не повторяй из прошлых снапшотов)",
+  "snapshot": "1-2 предложения — ТОЛЬКО события {_today()} (не повторяй из прошлых снапшотов)",
   "confirmed_interests": ["интерес1", "интерес2"],
   "mentioned_interests": ["интерес3"],
   "confirmed_media": [{{"name": "Название", "type": "film"}}],
@@ -7886,6 +7884,8 @@ async def _send_daily_report() -> None:
         for uid in _all_uids:
             prof = store_get_profile(str(uid))
             ws   = store_get_workspace(str(uid)) or {}
+            if not prof or not prof.get("name"):
+                continue  # skip empty/deleted profiles (e.g. after /leave)
             name = prof.get("name", str(uid)) if prof else str(uid)
 
             # Activity: based on last_interaction_date in workspace (survives restarts)
