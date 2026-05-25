@@ -1,21 +1,5 @@
 {
-  "tasks": [
-    {
-      "task_id": "task_20260521043646222",
-      "title": "Встреча с Артёмом Эйнвальдом",
-      "status": "todo",
-      "label_id": "работа",
-      "label_name": "Работа",
-      "life_area": "creativity",
-      "priority": 5,
-      "deadline": null,
-      "reminder": null,
-      "created": "2026-05-21",
-      "updated": "2026-05-21",
-      "completed": null,
-      "notes": ""
-    }
-  ],
+  "tasks": [],
   "groups": [
     {
       "id": "работа",
@@ -26,7 +10,7 @@
   "achievements": [],
   "sphere_resonance": {
     "health": 20,
-    "creativity": 20,
+    "creativity": 22,
     "work": 22,
     "connections": 20,
     "growth": 22
@@ -92,5 +76,5 @@
     }
   },
   "_greeting_sent_date": "2026-05-25",
-  "achievements_count": 2
+  "achievements_count": 3
 }
