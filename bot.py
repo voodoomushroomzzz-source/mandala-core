@@ -44,6 +44,9 @@ BOT_TOKEN    = os.getenv("BOT_TOKEN")
 BOT_USERNAME = os.getenv("BOT_USERNAME", "MandalasGardener_bot")  # для deep link
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_NAME = os.getenv("REPO_NAME", "voodoomushroomzzz-source/mandala-core")
+# Separate repo for gardener data
+GARDENERS_TOKEN = os.getenv("GARDENERS_TOKEN", GITHUB_TOKEN)
+GARDENERS_REPO  = os.getenv("GARDENERS_REPO",  "voodoomushroomzzz-source/mandala-gardeners")
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
 ALLOWED_PASSWORD = os.getenv("ALLOWED_PASSWORD", "mandala")
 ARCHITECT_TELEGRAM_ID = os.getenv("ARCHITECT_TELEGRAM_ID", "224736062")
@@ -525,6 +528,81 @@ async def _github_put(path: str, content: Any, _retry: int = 0) -> bool:
         logger.error(f"GitHub PUT error [{path}]: {e}")
         return False
 
+# ─── Gardeners-repo API (separate private repo for user data) ─────────────────
+
+async def _gardeners_get(file_path: str, force: bool = False) -> Optional[Any]:
+    """GET a file from mandala-gardeners repo."""
+    if not GARDENERS_TOKEN:
+        return None
+    url = f"https://api.github.com/repos/{GARDENERS_REPO}/contents/{file_path}?ref=main"
+    headers = {
+        "Authorization": f"token {GARDENERS_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "MandalaGardenBot/7.3.0"
+    }
+    session = await get_http_session()
+    try:
+        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=6)) as resp:
+            if resp.status == 200:
+                data = await resp.json()
+                new_sha = data.get("sha", "")
+                cache_key = f"g:{file_path}"
+                if not force and _sha_cache.get(cache_key) == new_sha:
+                    logger.debug(f"SHA cache hit (gardeners): {file_path}")
+                    return None
+                _sha_cache[cache_key] = new_sha
+                content = base64.b64decode(data["content"]).decode("utf-8-sig")
+                try:
+                    return json.loads(content)
+                except Exception:
+                    return content
+            return None
+    except Exception as e:
+        logger.error(f"Gardeners GET error [{file_path}]: {e}")
+        return None
+
+async def _gardeners_put(path: str, content: Any, _retry: int = 0) -> bool:
+    """PUT a file to mandala-gardeners repo."""
+    if not GARDENERS_TOKEN or _retry > 1:
+        return False
+    url = f"https://api.github.com/repos/{GARDENERS_REPO}/contents/{path}"
+    headers = {
+        "Authorization": f"token {GARDENERS_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "MandalaGardenBot/7.11.0"
+    }
+    session = await get_http_session()
+    cache_key = f"g:{path}"
+    sha = None
+    try:
+        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+            if resp.status == 200:
+                data = await resp.json()
+                sha = data.get("sha")
+                _sha_cache[cache_key] = sha
+    except Exception:
+        pass
+    content_b64 = base64.b64encode(_json_dumps(content).encode("utf-8")).decode("utf-8")
+    payload = {"message": f"bot: sync {path}", "content": content_b64, "branch": "main"}
+    if sha:
+        payload["sha"] = sha
+    try:
+        async with session.put(url, headers=headers, json=payload,
+                               timeout=aiohttp.ClientTimeout(total=10)) as resp:
+            if resp.status in [200, 201]:
+                return True
+            if resp.status == 409:
+                _sha_cache.pop(cache_key, None)
+                logger.warning(f"SHA conflict (gardeners) on {path}, retrying...")
+                await asyncio.sleep(0.5)
+                return await _gardeners_put(path, content, _retry + 1)
+            logger.error(f"Gardeners PUT {resp.status} [{path}]")
+            return False
+    except Exception as e:
+        logger.error(f"Gardeners PUT error [{path}]: {e}")
+        return False
+
+
 # ─── Background sync ──────────────────────────────────────────────────────────
 
 async def _sync_pending() -> None:
@@ -540,7 +618,10 @@ async def _sync_pending() -> None:
             logger.info(f"Syncing {len(batch)} file(s) to GitHub...")
 
             async def _put_one(path, data):
-                ok = await _github_put(path, data)
+                if path.startswith("gardeners/"):
+                    ok = await _gardeners_put(path, data)
+                else:
+                    ok = await _github_put(path, data)
                 if not ok:
                     logger.warning(f"Sync failed for {path}, re-queuing")
                     _pending_writes.setdefault(path, data)
@@ -562,9 +643,9 @@ async def _load_user(telegram_id: str) -> None:
     uid = str(telegram_id)
     base = _user_path(uid)
     results = await asyncio.gather(
-        _github_get(f"{base}/profile.json", force=True),
-        _github_get(f"{base}/workspace.json", force=True),
-        _github_get(f"{base}/memory.json", force=True),
+        _gardeners_get(f"{base}/profile.json", force=True),
+        _gardeners_get(f"{base}/workspace.json", force=True),
+        _gardeners_get(f"{base}/memory.json", force=True),
         return_exceptions=True
     )
     profile, workspace, memory = results
@@ -599,7 +680,7 @@ async def _load_user(telegram_id: str) -> None:
 async def _load_store() -> None:
     """Load all approved gardeners from whitelist on startup (parallel)."""
     logger.info("Loading store from GitHub...")
-    whitelist = await _github_get("gardeners/whitelist.json", force=True) or {}
+    whitelist = await _gardeners_get("gardeners/whitelist.json", force=True) or {}
     approved = whitelist.get("approved", ["224736062"]) if isinstance(whitelist, dict) else ["224736062"]
     # P-24: parallel load via asyncio.gather
     _gather_results = await asyncio.gather(
@@ -4633,7 +4714,7 @@ async def cmd_start(message: Message, state: FSMContext):
 
     # Consent check — new users must agree to data processing
     if user_id != ARCHITECT_TELEGRAM_ID:
-        whitelist = await _github_get("gardeners/whitelist.json") or {"approved": []}
+        whitelist = await _gardeners_get("gardeners/whitelist.json") or {"approved": []}
         approved = whitelist.get("approved", []) if isinstance(whitelist, dict) else []
         if user_id not in approved:
             await state.set_state(GardenOnboardingStates.waiting_for_consent)
@@ -5909,7 +5990,7 @@ async def leave_confirm(callback: CallbackQuery, state: FSMContext):
     name = (gardener or {}).get("name", "Садовник")
     # 1. Remove from whitelist so next /start requires re-consent
     try:
-        wl = await _github_get("gardeners/whitelist.json") or {"approved": []}
+        wl = await _gardeners_get("gardeners/whitelist.json") or {"approved": []}
         if not isinstance(wl, dict):
             wl = {"approved": []}
         if user_id in wl.get("approved", []):
@@ -5922,9 +6003,9 @@ async def leave_confirm(callback: CallbackQuery, state: FSMContext):
     _sessions.pop(user_id, None)
     # 3. Wipe GitHub files
     base = _user_path(user_id)
-    asyncio.create_task(_github_put(f"{base}/profile.json", {}))
-    asyncio.create_task(_github_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
-    asyncio.create_task(_github_put(f"{base}/memory.json", {"sessions": []}))
+    asyncio.create_task(_gardeners_put(f"{base}/profile.json", {}))
+    asyncio.create_task(_gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
+    asyncio.create_task(_gardeners_put(f"{base}/memory.json", {"sessions": []}))
     _fire_sync()
     # 4. Notify architect
     try:
@@ -5987,9 +6068,9 @@ async def delete_confirm_2(message: Message, state: FSMContext):
         del _store[user_id]
     # Clear on GitHub — new file structure
     base = _user_path(user_id)
-    asyncio.create_task(_github_put(f"{base}/profile.json", {}))
-    asyncio.create_task(_github_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
-    asyncio.create_task(_github_put(f"{base}/memory.json", {"sessions": []}))
+    asyncio.create_task(_gardeners_put(f"{base}/profile.json", {}))
+    asyncio.create_task(_gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
+    asyncio.create_task(_gardeners_put(f"{base}/memory.json", {"sessions": []}))
     await state.clear()
     await message.answer(
         "🌑 Сад очищен.\n\nНачать заново: /start 🌱",
@@ -7080,7 +7161,7 @@ async def cb_consent_yes(callback: CallbackQuery, state: FSMContext):
     """Пользователь согласился — добавляем в whitelist, начинаем онбординг."""
     await callback.answer()
     user_id = str(callback.from_user.id)
-    whitelist = await _github_get("gardeners/whitelist.json") or {"approved": []}
+    whitelist = await _gardeners_get("gardeners/whitelist.json") or {"approved": []}
     if not isinstance(whitelist, dict):
         whitelist = {"approved": []}
     if user_id not in whitelist.get("approved", []):
