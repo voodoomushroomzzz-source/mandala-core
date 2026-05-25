@@ -274,6 +274,22 @@
       "updated": "2026-05-23",
       "completed": null,
       "notes": ""
+    },
+    {
+      "task_id": "task_20260525090103819",
+      "title": "концерт столярка",
+      "status": "todo",
+      "label_id": "дом",
+      "label_name": "Личное",
+      "life_area": "creativity",
+      "priority": 5,
+      "deadline": "2026-05-29",
+      "reminder": "2026-05-29T19:00",
+      "repeat": "once",
+      "created": "2026-05-25",
+      "updated": "2026-05-25",
+      "completed": null,
+      "notes": ""
     }
   ],
   "groups": [
@@ -343,7 +359,7 @@
   ],
   "last_interaction_date": "2026-05-25",
   "pinned_message": null,
-  "last_interaction_datetime": "2026-05-25T10:43:24.691653+03:00",
+  "last_interaction_datetime": "2026-05-25T12:01:03.818617+03:00",
   "_day_proactive_sent_date": "2026-05-24",
   "_pending_synthesis_count": 0,
   "_greeting_sent_date": "2026-05-25",
