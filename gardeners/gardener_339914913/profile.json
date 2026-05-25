@@ -2,7 +2,7 @@
   "gardener_id": "gardener_339914913",
   "telegram_id": "339914913",
   "name": "Антон",
-  "resonance_level": 15,
+  "resonance_level": 20,
   "created": "2026-05-04",
   "updated": "2026-05-05",
   "personal_info": {
@@ -38,11 +38,11 @@
     }
   ],
   "deep_profile": {
-    "dominant_sphere": null,
-    "weak_sphere": null,
-    "streak_days": 0,
-    "streak_sphere": null,
-    "last_reflection_date": null,
+    "dominant_sphere": "work",
+    "weak_sphere": "health",
+    "streak_days": 1,
+    "streak_sphere": "work",
+    "last_reflection_date": "2026-05-25",
     "observations": [
       "2026-05-04 [onboarding]: деятельность — Работа: data governance и data engineering. Хобби на текущий момент времени: организация хаоса жизни и выстраивание проч",
       "2026-05-04 [onboarding]: большая цель — пока нет"
@@ -98,7 +98,42 @@
       }
     },
     "synthesis": "Антон продолжает путь от профессиональной системности к гармонии в быту. Воскресное утро он начинает с практичного планирования: создаёт задачу убраться дома, встраивая порядок в ритм выходного дня. Его стиль общения остаётся деловым и конкретным — просьбы о напоминаниях и задачах чётки, без лишних деталей. Видно, что он ценит структуру не только в данных, но и в повседневных делах, постепенно превращая организацию из рабочего инструмента в жизненную философию. Сегодня он добавил в расписание участие в митапе по Data Governance, что подтверждает его профессиональный интерес и стремление к росту.",
-    "synthesis_date": "2026-05-20"
+    "synthesis_date": "2026-05-20",
+    "sphere_history": [
+      {
+        "month": "2026-05",
+        "health": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "creativity": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "work": {
+          "tasks": 1,
+          "achievements": 0,
+          "resonance_delta": 2
+        },
+        "connections": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "growth": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        },
+        "other": {
+          "tasks": 0,
+          "achievements": 0,
+          "resonance_delta": 0
+        }
+      }
+    ]
   },
   "last_notified_version": "7.39.23"
 }
