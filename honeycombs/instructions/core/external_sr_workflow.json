@@ -253,6 +253,48 @@
         "Render Free Tier exhausted 750h/month — Hetzner permanent hosting, no limits",
         "Future: GitHub Actions for auto-deploy without SSH"
       ]
+    },
+    "github_dual_repo": {
+      "description": "Mandala uses TWO GitHub repositories. Route correctly.",
+      "repositories": {
+        "mandala-core": {
+          "url": "https://github.com/voodoomushroomzzz-source/mandala-core",
+          "purpose": "Bot code (bot.py), honeycombs, instructions, tasks, sessions",
+          "env_var": "REPO_NAME",
+          "token_env": "GITHUB_TOKEN",
+          "contains": [
+            "bot.py",
+            "honeycombs/",
+            "archive/"
+          ]
+        },
+        "mandala-gardeners": {
+          "url": "https://github.com/voodoomushroomzzz-source/mandala-gardeners",
+          "purpose": "Gardener data — profile.json, workspace.json, memory.json, whitelist.json",
+          "env_var": "GARDENERS_REPO",
+          "token_env": "GARDENERS_TOKEN",
+          "visibility": "private",
+          "contains": [
+            "gardeners/whitelist.json",
+            "gardeners/gardener_{id}/profile.json",
+            "gardeners/gardener_{id}/workspace.json",
+            "gardeners/gardener_{id}/memory.json"
+          ]
+        }
+      },
+      "api_routing": {
+        "rule": "ALL paths starting with 'gardeners/' → mandala-gardeners repo",
+        "gardeners_read": "_gardeners_get(path, force=False)",
+        "gardeners_write": "_gardeners_put(path, content)",
+        "core_read": "_github_get(path, force=False)",
+        "core_write": "_github_put(path, content)",
+        "critical": "NEVER use _github_get for gardeners/ paths. NEVER use _gardeners_get for honeycombs/ paths."
+      },
+      "env_vars_added": {
+        "GARDENERS_TOKEN": "Token for mandala-gardeners (Read/Write contents). Stored in /opt/mandala/.env on server.",
+        "GARDENERS_REPO": "voodoomushroomzzz-source/mandala-gardeners (optional, has default)",
+        "fallback": "If GARDENERS_TOKEN not set — uses GITHUB_TOKEN (graceful degradation)"
+      }
     }
   },
   "meta": {
@@ -265,11 +307,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-05-24",
+    "updated": "2026-05-25",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.5.1",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + repr_before_patcher & check_logs_after_restart rules.",
+    "version": "v1.6.0",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners).",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -291,7 +333,9 @@
       "patcher_safety",
       "v1.5.0",
       "hetzner_vps",
-      "v1.5.1"
+      "v1.5.1",
+      "v1.6.0",
+      "dual_repo"
     ]
   }
 }

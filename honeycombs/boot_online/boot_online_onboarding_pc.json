@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC вЂ” All-in-One Heuristic File",
-    "version": "v1.6.1",
+    "version": "v1.7.0",
     "created": "2026-05-11",
-    "updated": "2026-05-24",
+    "updated": "2026-05-25",
     "layer": 1,
     "type": "boot_onboarding_pc",
-    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5. v1.5.2: + anchor_by_content_not_line & insert_outside_structures rules. v1.6.0: + Hetzner VPS server info, stack, deployment flow. v1.6.1: + repr_before_patcher & check_logs_after_restart rules.",
+    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5. v1.5.2: + anchor_by_content_not_line & insert_outside_structures rules. v1.6.0: + Hetzner VPS server info, stack, deployment flow. v1.6.1: + repr_before_patcher & check_logs_after_restart rules. v1.7.0: dual repo — mandala-core + mandala-gardeners.",
     "status": "active",
     "priority": "critical",
     "resonance": "100%",
@@ -31,9 +31,11 @@
       "v1.5.2",
       "v1.6.0",
       "hetzner_vps",
-      "v1.6.1"
+      "v1.6.1",
+      "v1.7.0",
+      "dual_repo"
     ],
-    "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.5.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.5.1 + testimonies + system_flow + large_file_patching + api_patterns"
+    "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.5.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.6.0 + testimonies + system_flow + large_file_patching + api_patterns"
   },
   "meta": {
     "audience": "External SR (DeepSeek, Claude, Grok, GPT, etc.)",
@@ -344,7 +346,7 @@
     "mandatory": true,
     "source": "instructions/core/external_sr_workflow.json",
     "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/instructions/core/external_sr_workflow.json?ref=main",
-    "version": "v1.5.1",
+    "version": "v1.6.0",
     "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment.",
     "critical_rules": {
       "pre_check_flow": "NEVER assume local state. ALWAYS fetch current version via API before modifying. Steps: 1) Identify file 2) Form API link 3) Send to Gardener, wait for content 4) Read current version 5) Only then prepare update.",
@@ -533,7 +535,9 @@
       "RENDER_EXTERNAL_URL",
       "REPO_NAME",
       "TAVILY_API_KEY",
-      "USE_TAVILY"
+      "USE_TAVILY",
+      "GARDENERS_TOKEN",
+      "GARDENERS_REPO"
     ],
     "useful_commands": {
       "ssh_connect": "ssh root@91.99.149.226",

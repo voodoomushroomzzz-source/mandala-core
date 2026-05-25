@@ -5,7 +5,7 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-24",
+  "updated": "2026-05-25",
   "progress": 99,
   "current_version": "7.39.23",
   "note_version": "Реальная версия с патчами ~7.39.75+",
@@ -27,7 +27,12 @@
     "memory": "_sessions RAM + memory.json GitHub, restored on restart",
     "store": "Multi-user _store{uid:{profile,workspace,ready}} + 2min GitHub sync",
     "hosting": "Render free tier, sleep after 15min idle",
-    "environment": "Windows, VS Code, PowerShell, py 3.14.3, path C:\\Mandala_Digital\\github\\mandala-core"
+    "environment": "Windows, VS Code, PowerShell, py 3.14.3, path C:\\Mandala_Digital\\github\\mandala-core",
+    "storage": "Dual GitHub repos: mandala-core (code) + mandala-gardeners (gardener data). Routing in _sync_pending by path prefix.",
+    "repositories": {
+      "mandala-core": "Code, honeycombs, tasks, sessions",
+      "mandala-gardeners": "Private — profile.json, workspace.json, memory.json, whitelist.json"
+    }
   },
   "done_patches": {
     "P-21": {
