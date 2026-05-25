@@ -1,0 +1,17 @@
+{
+  "module_id": "03_helpers",
+  "name": "Helpers & Auth",
+  "target_file": "helpers.py",
+  "status": "planned",
+  "bot_lines": "639–1080",
+  "current_size_kb": 25,
+  "target_size_kb": 30,
+  "depends_on": [
+    "config.py",
+    "store.py",
+    "github_api.py"
+  ],
+  "key_functions": [],
+  "migration_notes": "",
+  "last_updated": "2026-05-25"
+}

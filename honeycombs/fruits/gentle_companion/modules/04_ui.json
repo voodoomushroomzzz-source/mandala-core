@@ -1,0 +1,17 @@
+{
+  "module_id": "04_ui",
+  "name": "UI — Keyboards & Profile Card",
+  "target_file": "ui.py",
+  "status": "planned",
+  "bot_lines": "1081–1348",
+  "current_size_kb": 18,
+  "target_size_kb": 25,
+  "depends_on": [
+    "config.py",
+    "store.py",
+    "helpers.py"
+  ],
+  "key_functions": [],
+  "migration_notes": "",
+  "last_updated": "2026-05-25"
+}

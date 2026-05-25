@@ -1,0 +1,19 @@
+{
+  "module_id": "05_handlers_tasks",
+  "name": "Handlers — Tasks",
+  "target_file": "handlers/tasks.py",
+  "status": "planned",
+  "bot_lines": "1349–2090, 2687–2987, 5120–5865",
+  "current_size_kb": 81,
+  "target_size_kb": 80,
+  "depends_on": [
+    "config.py",
+    "store.py",
+    "helpers.py",
+    "ui.py",
+    "sr_memory.py"
+  ],
+  "key_functions": [],
+  "migration_notes": "",
+  "last_updated": "2026-05-25"
+}

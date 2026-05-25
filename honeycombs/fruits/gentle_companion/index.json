@@ -1,5 +1,5 @@
 {
-  "honeycomb": "bot_architecture",
+  "honeycomb": "fruits/gentle_companion",
   "version": "1.0.0",
   "created": "2026-05-25",
   "authors": [
@@ -454,5 +454,13 @@
       "*"
     ]
   },
-  "last_updated": "2026-05-25"
+  "last_updated": "2026-05-25",
+  "navigation": {
+    "parent": "honeycombs/fruits/index.json",
+    "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
+    "siblings": [
+      "honeycombs/fruits/ — other Mandala products",
+      "honeycombs/tasks/active/bot_update.json — active bot task"
+    ]
+  }
 }

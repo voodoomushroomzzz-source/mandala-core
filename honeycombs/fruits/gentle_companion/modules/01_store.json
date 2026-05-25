@@ -1,0 +1,15 @@
+{
+  "module_id": "01_store",
+  "name": "Store Layer",
+  "target_file": "store.py",
+  "status": "planned",
+  "bot_lines": "161–388",
+  "current_size_kb": 9,
+  "target_size_kb": 15,
+  "depends_on": [
+    "config.py"
+  ],
+  "key_functions": [],
+  "migration_notes": "",
+  "last_updated": "2026-05-25"
+}

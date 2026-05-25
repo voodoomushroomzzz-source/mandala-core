@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry & Strategy Map",
-    "version": "v2.1.0",
+    "version": "v2.2.0",
     "created": "2026-04-17",
-    "updated": "2026-05-11",
+    "updated": "2026-05-25",
     "layer": 2,
     "type": "registry_index",
-    "description": "Registry of Mandala products and strategic map of their interaction. v2.1.0: added active task links for each product, realistic execution timeline with dependencies, and SR execution order guide.",
+    "description": "Registry of Mandala products and strategic map of their interaction. v2.2.0: gentle_companion got dedicated honeycomb with architecture plan (14 modules, 7 phases). Dual-repo infrastructure. Links to architecture index.",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -317,9 +317,9 @@
         "short_description": "A pocket AI companion for tasks, roadmaps, achievements, and warm dialogue — the entry point to Mandala for external gardeners.",
         "problem_solved": "Helps users organize personal growth, track tasks and achievements, and provides a gentle, non-intrusive AI companion for daily reflection. Simultaneously feeds behavioral data back to Mandala's core.",
         "status": "active",
-        "version": "v7.39.17",
+        "version": "v7.39.81",
         "released": "2026-02-15",
-        "updated": "2026-05-11",
+        "updated": "2026-05-25",
         "platform": "Telegram Bot",
         "url": "https://t.me/MandalasGardener_bot",
         "detail_file": "bot_update.json",
@@ -331,11 +331,23 @@
           "sandbox",
           "gardener"
         ],
-        "gardeners": 4,
-        "code_location": "bot.py",
+        "gardeners": 3,
+        "code_location": "bot.py (monolith ~9937 lines, modular migration planned)",
         "layer": "Sandbox (Layer 1)",
         "task_id": "T-20260408-1030",
-        "task_file": "honeycombs/tasks/active/bot_update.json"
+        "task_file": "honeycombs/tasks/active/bot_update.json",
+        "architecture": {
+          "index": "honeycombs/fruits/gentle_companion/index.json",
+          "description": "Full module map, dependency graph, modular migration plan",
+          "modules_count": 14,
+          "migration_phases": 7,
+          "current_status": "monolith — works in production, plan written"
+        },
+        "repositories": {
+          "code": "voodoomushroomzzz-source/mandala-core (bot.py)",
+          "data": "voodoomushroomzzz-source/mandala-gardeners (profile, workspace, memory, whitelist)"
+        },
+        "hosting": "Hetzner VPS 91.99.149.226, systemd, nginx, webhook port 10000"
       },
       "engineer_chat": {
         "id": "fruit-engineer-chat-001",
@@ -428,7 +440,8 @@
       "seeds",
       "roadmaps",
       "tasks",
-      "boot_online"
+      "boot_online",
+      "fruits/gentle_companion"
     ]
   },
   "resonance": {
