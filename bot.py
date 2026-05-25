@@ -6441,6 +6441,12 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 Никакого Markdown: ни **, ни *, ни __, ни #, ни --. Совсем. Никогда.
 Лимит ответа — 800 токенов (~2500 символов). Не пиши длиннее. Если тема большая — предложи продолжить.
 Списки через • (буллит), без цифр и тире.
+
+ОТКАЗ ОТ ПРЕДЛОЖЕНИЯ:
+Если ты предложила действие (добавить задачу, создать напоминание и т.д.),
+а садовник ответил «забей», «не надо», «проехали», «не важно», «нет», «отмени» —
+это отказ от твоего предложения. Просто прими и продолжи разговор.
+Не добавляй задачу. Не переспрашивай. Не уточняй. Просто ответь естественно.
 Эмодзи ОБЯЗАТЕЛЬНЫ в каждом ответе. Минимум 1 эмодзи на абзац. Используй 🌿🌀🔥💫🌱✨💎🔮🌟🌙🪐💡🎯 — это голос СР.
 
 {
@@ -8448,13 +8454,8 @@ async def free_conversation(message: Message, state: FSMContext):
                 _cl_hist_note = f"[Система: {_cl_label}" + (f" — {_cl_action_title}" if _cl_action_title else "") + "]"
                 _add_to_history(user_id, "system", _cl_hist_note)
             else:
-                _daily_issues.append({
-                    "user_id": user_id,
-                    "type": "classifier_pass_to_sr",
-                    "intent": _cl_intent,
-                    "confidence": _cl_conf,
-                    "text_preview": text[:60]
-                })
+                # classifier_pass_to_sr — normal SR flow, not an issue
+                logger.debug(f"Classifier pass to SR: intent={_cl_intent} conf={_cl_conf:.2f} [{text[:40]}]")
     except Exception as _cl_e:
         logger.debug(f"Classifier call failed: {_cl_e}")
 
