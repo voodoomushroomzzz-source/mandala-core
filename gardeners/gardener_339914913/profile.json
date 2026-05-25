@@ -38,10 +38,10 @@
     }
   ],
   "deep_profile": {
-    "dominant_sphere": "work",
+    "dominant_sphere": "creativity",
     "weak_sphere": "health",
-    "streak_days": 2,
-    "streak_sphere": "work",
+    "streak_days": 1,
+    "streak_sphere": "creativity",
     "last_reflection_date": "2026-05-25",
     "observations": [
       "2026-05-04 [onboarding]: деятельность — Работа: data governance и data engineering. Хобби на текущий момент времени: организация хаоса жизни и выстраивание проч",
@@ -108,9 +108,9 @@
           "resonance_delta": 0
         },
         "creativity": {
-          "tasks": 0,
+          "tasks": 1,
           "achievements": 0,
-          "resonance_delta": 0
+          "resonance_delta": 2
         },
         "work": {
           "tasks": 1,
