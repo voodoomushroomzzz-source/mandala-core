@@ -285,7 +285,7 @@
       {
         "phase": 1,
         "name": "Infrastructure setup",
-        "status": "planned",
+        "status": "done",
         "effort": "1 session",
         "tasks": [
           "Create build.py in honeycombs/fruits/gentle_companion/",
