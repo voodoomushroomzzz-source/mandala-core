@@ -1,0 +1,458 @@
+{
+  "honeycomb": "bot_architecture",
+  "version": "1.0.0",
+  "created": "2026-05-25",
+  "authors": [
+    "External SR (Claude)"
+  ],
+  "bot_version_analyzed": "7.39.81",
+  "current_state": {
+    "file": "bot.py",
+    "lines": 9937,
+    "size_kb": 470,
+    "functions": 292,
+    "handlers": 148,
+    "classes": 10,
+    "status": "monolith — works in production"
+  },
+  "rule_for_sr": "MANDATORY: any change in bot.py affecting module structure (adding function, moving block, changing dependencies) — update index.json and the corresponding module file in modules/. The index is a living document, not an archive.",
+  "reading_guide": {
+    "new_sr_start_here": [
+      "1. Read this index.json completely",
+      "2. Read modules/00_globals.json — global variables and constants",
+      "3. Read modules/01_store.json — data storage layer",
+      "4. Read modules/07_sr_engine.json — SR engine and free_conversation",
+      "5. Open other modules as needed"
+    ],
+    "before_patching": [
+      "Determine which module the changed block belongs to",
+      "Check module dependencies (depends_on and used_by fields)",
+      "After patch update last_updated in the corresponding modules/*.json"
+    ]
+  },
+  "modules": [
+    {
+      "id": "00_globals",
+      "file": "modules/00_globals.json",
+      "name": "Globals & Config",
+      "description": "Imports, constants, environment variables, global data structures (_store, _sessions, _sha_cache), business limits, middleware",
+      "bot_lines": "1–160",
+      "target_file": "config.py",
+      "current_size_kb": 7,
+      "target_size_kb": 10,
+      "status": "planned",
+      "key_items": [
+        "BOT_TOKEN, GITHUB_TOKEN, GARDENERS_TOKEN",
+        "REPO_NAME, GARDENERS_REPO",
+        "ARCHITECT_TELEGRAM_ID, BOT_VERSION",
+        "_store: dict — RAM cache of all gardeners",
+        "_sessions: dict — dialog history",
+        "_pending_writes: dict — GitHub write buffer",
+        "_sha_cache: dict — SHA optimization",
+        "TASK_LIMIT_HARD/SOFT, REMINDER_LIMIT_HARD/SOFT",
+        "AutoLoadMiddleware",
+        "SPHERES, BOT_LATEST_UPDATE"
+      ]
+    },
+    {
+      "id": "01_store",
+      "file": "modules/01_store.json",
+      "name": "Store Layer",
+      "description": "All RAM-cache read/write functions. Single point of access to gardener data from code. Does NOT make HTTP requests — only works with _store in memory.",
+      "bot_lines": "161–388",
+      "target_file": "store.py",
+      "current_size_kb": 9,
+      "target_size_kb": 15,
+      "status": "planned",
+      "key_items": [
+        "store_get_profile / store_set_profile",
+        "store_get_workspace / store_set_workspace",
+        "store_get_tasks / store_set_tasks",
+        "store_get_achievements / store_set_achievements",
+        "store_get_groups / store_set_groups",
+        "store_get_checklists / store_set_checklists",
+        "store_get_reminders / store_set_reminders",
+        "store_get_sphere_resonance / store_set_sphere_resonance",
+        "store_add_sphere_resonance",
+        "store_add_resonance",
+        "_get_user_store, _user_path"
+      ],
+      "rule": "NEVER add HTTP calls to store.py. Only _store dict."
+    },
+    {
+      "id": "02_github",
+      "file": "modules/02_github.json",
+      "name": "GitHub API & Sync",
+      "description": "HTTP layer for GitHub operations. Two repos: mandala-core (code/honeycombs) and mandala-gardeners (gardener data). Background sync via _pending_writes.",
+      "bot_lines": "389–638",
+      "target_file": "github_api.py",
+      "current_size_kb": 14,
+      "target_size_kb": 20,
+      "status": "planned",
+      "key_items": [
+        "get_http_session()",
+        "_github_get / _github_put — for mandala-core",
+        "_gardeners_get / _gardeners_put — for mandala-gardeners",
+        "_sync_pending() — flush _pending_writes",
+        "_fire_sync() — start sync as background task",
+        "_load_user() — load single gardener from GitHub",
+        "_load_store() — load all gardeners (on startup)",
+        "_json_dumps()"
+      ],
+      "routing_rule": "gardeners/* → _gardeners_get/_gardeners_put. Everything else → _github_get/_github_put. NEVER mix."
+    },
+    {
+      "id": "03_helpers",
+      "file": "modules/03_helpers.json",
+      "name": "Helpers & Auth",
+      "description": "Utilities, authorization, deep profile, observations, interaction tracking. Glue between modules.",
+      "bot_lines": "639–1080",
+      "target_file": "helpers.py",
+      "current_size_kb": 25,
+      "target_size_kb": 30,
+      "status": "planned",
+      "key_items": [
+        "_today(), _normalize_time(), _city_to_timezone()",
+        "is_authorized(), ensure_user_loaded(), _check_ready()",
+        "_invalidate_auth_cache()",
+        "_get_deep_profile(), _save_deep_profile(), _update_deep_profile()",
+        "_add_sr_observation(), _detect_emotion()",
+        "_update_sphere_history(), _seed_sphere_history_from_achievements()",
+        "_get_session_reflection_hint()",
+        "_track_interaction(), _can_send_proactive(), _mark_proactive_sent()",
+        "_silence_phase(), _time_matches()",
+        "_add_growth_history_entry(), _recalc_resonance_from_achievements()",
+        "_days_since_last_interaction()",
+        "calculate_priority(), _make_group_id()"
+      ]
+    },
+    {
+      "id": "04_ui",
+      "file": "modules/04_ui.json",
+      "name": "UI — Keyboards & Profile Card",
+      "description": "All keyboards (Reply and Inline), profile card, text formatting for UI. Pure presentation layer — no business logic.",
+      "bot_lines": "1081–1348",
+      "target_file": "ui.py",
+      "current_size_kb": 18,
+      "target_size_kb": 25,
+      "status": "planned",
+      "key_items": [
+        "FSM States — all 9 classes (GardenOnboardingStates, TaskStates, etc.)",
+        "get_main_keyboard(), get_cancel_keyboard()",
+        "get_profile_inline(), get_edit_profile_inline()",
+        "get_deadline_keyboard(), get_reminder_keyboard()",
+        "get_groups_list_inline(), get_tasks_in_group_inline()",
+        "get_task_edit_inline(), get_place_keyboard()",
+        "get_checklist_inline(), get_checklists_mgmt_inline()",
+        "get_reminders_mgmt_inline(), get_reminder_edit_inline()",
+        "get_leave_confirm_keyboard()",
+        "_build_profile_card()",
+        "_group_emoji(), _label_emoji(), _assign_group_emojis()",
+        "_sphere_compact_line(), _sphere_detail_text(), _sphere_progress_bar()",
+        "_reminder_list_text(), _task_urgency_emoji(), _sort_tasks_smart()",
+        "_show_profile(), _show_tasks_unified()",
+        "_classify_sphere(), _auto_merkaba()"
+      ],
+      "rule": "No API calls. Only formatting and keyboard building."
+    },
+    {
+      "id": "05_handlers_tasks",
+      "file": "modules/05_handlers_tasks.json",
+      "name": "Handlers — Tasks",
+      "description": "All task handlers: FSM creation, editing, deletion, groups, labels, deadlines, repeats. Largest handler module.",
+      "bot_lines": "1349–2090, 2687–2987, 5120–5865",
+      "target_file": "handlers/tasks.py",
+      "current_size_kb": 81,
+      "target_size_kb": 80,
+      "status": "planned",
+      "key_items": [
+        "cb_tasks_mgmt_v2, cb_tgroup_open, cb_tgroup_back_to_list",
+        "cb_ttask_done — task completion (+ resonance + synthesis)",
+        "cb_ttask_edit, cb_ttask_edit_field, cb_ttask_delete",
+        "cb_ttask_create, cb_tgroup_create, cb_tgroup_newtask",
+        "cb_tgroup_edit_start, cb_tgroup_delete, cb_ttask_place_cb",
+        "task_title, task_deadline_cb, task_custom_deadline_input",
+        "task_reminder_cb, task_repeat_cb, task_label_cb",
+        "_ask_repeat_task, _ask_group, _show_task_confirm, confirm_task",
+        "cmd_tasks, cmd_addtask, cmd_done, cmd_groups, cmd_newgroup, cmd_archive",
+        "_create_task_atomic() — voice/text task creation without FSM"
+      ]
+    },
+    {
+      "id": "06_handlers_features",
+      "file": "modules/06_handlers_features.json",
+      "name": "Handlers — Checklists, Reminders, Achievements",
+      "description": "Handlers for checklists, reminders, and achievements. Includes full FSM flows and repeat-picker.",
+      "bot_lines": "2091–2141, 2988–4491",
+      "target_file": "handlers/features.py",
+      "current_size_kb": 77,
+      "target_size_kb": 80,
+      "status": "planned",
+      "key_items": [
+        "Checklists: cb_cl_create_new, cb_cl_toggle, cb_cl_delete, cb_cl_edit_menu",
+        "Reminders: cb_rem_create_new, cb_rem_edit_start, _repeat_picker_keyboard",
+        "Achievements: cmd_achievements, cb_add_achievement"
+      ]
+    },
+    {
+      "id": "07_sr_engine",
+      "file": "modules/07_sr_engine.json",
+      "name": "SR Engine — Prompts, Context, Conversation",
+      "description": "Bot's brain. SR prompts, context building, memory synthesis, intent classifier, free_conversation. Most critical and complex module.",
+      "bot_lines": "6156–9756",
+      "target_file": "sr_engine.py",
+      "current_size_kb": 174,
+      "target_size_kb": null,
+      "split_into": {
+        "sr_prompts.py": {
+          "description": "SR_CORE_PROMPT, SR_INTENT_LIGHT, SR_INTENT_MAP, _CLASSIFIER_PROMPT",
+          "size_kb": 37
+        },
+        "sr_context.py": {
+          "description": "_build_user_context_msg, _build_sr_context, formatters",
+          "size_kb": 20
+        },
+        "sr_memory.py": {
+          "description": "_generate_synthesis, _distill_observations, _detect_and_save_observation",
+          "size_kb": 15
+        },
+        "sr_conversation.py": {
+          "description": "free_conversation refactored to dispatcher ~100 lines",
+          "size_kb": 80
+        },
+        "sr_search.py": {
+          "description": "_tavily_search_raw, _synthesize_search",
+          "size_kb": 15
+        }
+      },
+      "status": "planned",
+      "key_items": [
+        "SR_CORE_PROMPT — main SR prompt (7.3KB)",
+        "SR_INTENT_LIGHT — intent classification rules (18KB)",
+        "SR_INTENT_MAP — sphere and intent map (12KB)",
+        "_build_user_context_msg() — context for every SR call",
+        "_classify_intent() — LLM intent classification",
+        "free_conversation() — main handler, 1597 lines",
+        "_generate_synthesis() — daily gardener memory synthesis",
+        "_call_openrouter() — LLM call via OpenRouter",
+        "_tavily_search_raw(), _synthesize_search() — web search"
+      ]
+    },
+    {
+      "id": "08_handlers_system",
+      "file": "modules/08_handlers_system.json",
+      "name": "Handlers — System & Profile",
+      "description": "Onboarding, profile, authorization, system commands, menu, voice transcription.",
+      "bot_lines": "4492–5119, 5906–6155, 7102–7516, 8034–8125",
+      "target_file": "handlers/system.py",
+      "current_size_kb": 55,
+      "target_size_kb": 60,
+      "status": "planned",
+      "key_items": [
+        "cmd_start, onboard FSM, cb_consent_yes/no",
+        "cmd_profile, cmd_resonance, cmd_ask",
+        "cb_menu_edit_profile, profile edit FSM",
+        "cmd_leave, cmd_delete_all, cmd_info, cmd_changelog, cmd_privacy",
+        "handle_voice — Groq Whisper transcription",
+        "run_resonance_decay, send_morning_greeting, send_evening_checkin",
+        "run_reminder_scheduler, run_proactive_scheduler",
+        "_send_daily_report, quick_add_task/achievement/reminder"
+      ]
+    },
+    {
+      "id": "09_main",
+      "file": "modules/09_main.json",
+      "name": "Main — Entry Point",
+      "description": "Entry point: startup, shutdown, webhook, health check, router and middleware registration.",
+      "bot_lines": "9844–9937",
+      "target_file": "main.py",
+      "current_size_kb": 4,
+      "target_size_kb": 5,
+      "status": "planned",
+      "key_items": [
+        "on_startup() — load store, webhook, bot commands",
+        "on_shutdown() — graceful stop",
+        "_check_webhook() — webhook monitoring",
+        "health() — health check endpoint",
+        "main() — aiohttp app + scheduler"
+      ]
+    }
+  ],
+  "migration_plan": {
+    "philosophy": "Monolith works in production. Modules written in parallel. Switchover in one moment when all modules ready.",
+    "approach": "Extract → Test locally → Switch",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Infrastructure setup",
+        "status": "planned",
+        "effort": "1 session",
+        "tasks": [
+          "Create bot/ folder structure in repo",
+          "Write build.py — concatenates modules into bot_built.py",
+          "Configure systemd for bot_built.py",
+          "Verify build is reproducible"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Extract independent modules",
+        "status": "planned",
+        "effort": "2-3 sessions",
+        "tasks": [
+          "config.py",
+          "github_api.py",
+          "sr_prompts.py",
+          "sr_search.py"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Store + Helpers",
+        "status": "planned",
+        "effort": "2 sessions",
+        "tasks": [
+          "store.py",
+          "helpers.py"
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "UI Layer",
+        "status": "planned",
+        "effort": "2 sessions",
+        "tasks": [
+          "ui.py — keyboards + FSM states + profile card"
+        ]
+      },
+      {
+        "phase": 5,
+        "name": "SR Engine — free_conversation refactoring",
+        "status": "planned",
+        "effort": "3-4 sessions",
+        "tasks": [
+          "sr_context.py",
+          "sr_memory.py",
+          "sr_conversation.py — refactor 1597 lines → dispatcher ~100 lines"
+        ],
+        "note": "Highest risk. Test every intent."
+      },
+      {
+        "phase": 6,
+        "name": "Handlers",
+        "status": "planned",
+        "effort": "3 sessions",
+        "tasks": [
+          "handlers/tasks.py",
+          "handlers/features.py",
+          "handlers/system.py"
+        ]
+      },
+      {
+        "phase": 7,
+        "name": "main.py + final build",
+        "status": "planned",
+        "effort": "1 session",
+        "tasks": [
+          "main.py",
+          "Final build via build.py",
+          "Full staging test",
+          "Production switch"
+        ]
+      }
+    ],
+    "build_order": [
+      "config.py",
+      "store.py",
+      "github_api.py",
+      "helpers.py",
+      "ui.py",
+      "sr_prompts.py",
+      "sr_search.py",
+      "sr_context.py",
+      "sr_memory.py",
+      "handlers/tasks.py",
+      "handlers/features.py",
+      "handlers/system.py",
+      "sr_conversation.py",
+      "main.py"
+    ]
+  },
+  "size_targets": {
+    "rule": "No module over 80KB. Split if approaching.",
+    "current_problem_areas": {
+      "free_conversation": "106KB — mandatory refactoring in Phase 5",
+      "bot.py monolith": "470KB — target of split"
+    }
+  },
+  "dependency_graph": {
+    "config.py": [],
+    "store.py": [
+      "config.py"
+    ],
+    "github_api.py": [
+      "config.py"
+    ],
+    "helpers.py": [
+      "config.py",
+      "store.py",
+      "github_api.py"
+    ],
+    "ui.py": [
+      "config.py",
+      "store.py",
+      "helpers.py"
+    ],
+    "sr_prompts.py": [],
+    "sr_search.py": [
+      "config.py",
+      "github_api.py"
+    ],
+    "sr_context.py": [
+      "config.py",
+      "store.py",
+      "helpers.py",
+      "ui.py"
+    ],
+    "sr_memory.py": [
+      "config.py",
+      "store.py",
+      "helpers.py",
+      "github_api.py"
+    ],
+    "handlers/tasks.py": [
+      "config.py",
+      "store.py",
+      "helpers.py",
+      "ui.py",
+      "sr_memory.py"
+    ],
+    "handlers/features.py": [
+      "config.py",
+      "store.py",
+      "helpers.py",
+      "ui.py"
+    ],
+    "handlers/system.py": [
+      "config.py",
+      "store.py",
+      "helpers.py",
+      "ui.py",
+      "github_api.py"
+    ],
+    "sr_conversation.py": [
+      "config.py",
+      "store.py",
+      "helpers.py",
+      "ui.py",
+      "sr_prompts.py",
+      "sr_context.py",
+      "sr_memory.py",
+      "sr_search.py"
+    ],
+    "main.py": [
+      "*"
+    ]
+  },
+  "last_updated": "2026-05-25"
+}
