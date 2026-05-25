@@ -13,27 +13,27 @@
     "functions": 292,
     "handlers": 148,
     "classes": 10,
-    "status": "monolith — works in production"
+    "status": "monolith — works in production",
+    "structure": "honeycombs/fruits/gentle_companion/ — module code + index.json + build.py"
   },
   "rule_for_sr": "MANDATORY: any change in bot.py affecting module structure (adding function, moving block, changing dependencies) — update index.json and the corresponding module file in modules/. The index is a living document, not an archive.",
   "reading_guide": {
     "new_sr_start_here": [
       "1. Read this index.json completely",
-      "2. Read modules/00_globals.json — global variables and constants",
-      "3. Read modules/01_store.json — data storage layer",
-      "4. Read modules/07_sr_engine.json — SR engine and free_conversation",
-      "5. Open other modules as needed"
+      "2. Code lives in honeycombs/fruits/gentle_companion/ — config.py, store.py, github_api.py, etc.",
+      "3. Read sr_engine section for SR prompts and free_conversation",
+      "4. Open other module files as needed"
     ],
     "before_patching": [
       "Determine which module the changed block belongs to",
-      "Check module dependencies (depends_on and used_by fields)",
-      "After patch update last_updated in the corresponding modules/*.json"
+      "Check module dependencies (depends_on in index.json dependency_graph)",
+      "After patch update last_updated in index.json"
     ]
   },
   "modules": [
     {
       "id": "00_globals",
-      "file": "modules/00_globals.json",
+      "file": "00_globals.json",
       "name": "Globals & Config",
       "description": "Imports, constants, environment variables, global data structures (_store, _sessions, _sha_cache), business limits, middleware",
       "bot_lines": "1–160",
@@ -56,7 +56,7 @@
     },
     {
       "id": "01_store",
-      "file": "modules/01_store.json",
+      "file": "01_store.json",
       "name": "Store Layer",
       "description": "All RAM-cache read/write functions. Single point of access to gardener data from code. Does NOT make HTTP requests — only works with _store in memory.",
       "bot_lines": "161–388",
@@ -81,7 +81,7 @@
     },
     {
       "id": "02_github",
-      "file": "modules/02_github.json",
+      "file": "02_github.json",
       "name": "GitHub API & Sync",
       "description": "HTTP layer for GitHub operations. Two repos: mandala-core (code/honeycombs) and mandala-gardeners (gardener data). Background sync via _pending_writes.",
       "bot_lines": "389–638",
@@ -103,7 +103,7 @@
     },
     {
       "id": "03_helpers",
-      "file": "modules/03_helpers.json",
+      "file": "03_helpers.json",
       "name": "Helpers & Auth",
       "description": "Utilities, authorization, deep profile, observations, interaction tracking. Glue between modules.",
       "bot_lines": "639–1080",
@@ -128,7 +128,7 @@
     },
     {
       "id": "04_ui",
-      "file": "modules/04_ui.json",
+      "file": "04_ui.json",
       "name": "UI — Keyboards & Profile Card",
       "description": "All keyboards (Reply and Inline), profile card, text formatting for UI. Pure presentation layer — no business logic.",
       "bot_lines": "1081–1348",
@@ -157,7 +157,7 @@
     },
     {
       "id": "05_handlers_tasks",
-      "file": "modules/05_handlers_tasks.json",
+      "file": "05_handlers_tasks.json",
       "name": "Handlers — Tasks",
       "description": "All task handlers: FSM creation, editing, deletion, groups, labels, deadlines, repeats. Largest handler module.",
       "bot_lines": "1349–2090, 2687–2987, 5120–5865",
@@ -180,7 +180,7 @@
     },
     {
       "id": "06_handlers_features",
-      "file": "modules/06_handlers_features.json",
+      "file": "06_handlers_features.json",
       "name": "Handlers — Checklists, Reminders, Achievements",
       "description": "Handlers for checklists, reminders, and achievements. Includes full FSM flows and repeat-picker.",
       "bot_lines": "2091–2141, 2988–4491",
@@ -196,7 +196,7 @@
     },
     {
       "id": "07_sr_engine",
-      "file": "modules/07_sr_engine.json",
+      "file": "07_sr_engine.json",
       "name": "SR Engine — Prompts, Context, Conversation",
       "description": "Bot's brain. SR prompts, context building, memory synthesis, intent classifier, free_conversation. Most critical and complex module.",
       "bot_lines": "6156–9756",
@@ -240,7 +240,7 @@
     },
     {
       "id": "08_handlers_system",
-      "file": "modules/08_handlers_system.json",
+      "file": "08_handlers_system.json",
       "name": "Handlers — System & Profile",
       "description": "Onboarding, profile, authorization, system commands, menu, voice transcription.",
       "bot_lines": "4492–5119, 5906–6155, 7102–7516, 8034–8125",
@@ -261,7 +261,7 @@
     },
     {
       "id": "09_main",
-      "file": "modules/09_main.json",
+      "file": "09_main.json",
       "name": "Main — Entry Point",
       "description": "Entry point: startup, shutdown, webhook, health check, router and middleware registration.",
       "bot_lines": "9844–9937",
@@ -288,10 +288,10 @@
         "status": "planned",
         "effort": "1 session",
         "tasks": [
-          "Create bot/ folder structure in repo",
-          "Write build.py — concatenates modules into bot_built.py",
-          "Configure systemd for bot_built.py",
-          "Verify build is reproducible"
+          "Create build.py in honeycombs/fruits/gentle_companion/",
+          "build.py reads modules in correct order and concatenates into bot_built.py in repo root",
+          "Switch systemd to bot_built.py (change ExecStart in /etc/systemd/system/mandala-bot.service)",
+          "Verify build is reproducible and bot_built.py is identical to current bot.py"
         ]
       },
       {

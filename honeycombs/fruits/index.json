@@ -332,7 +332,7 @@
           "gardener"
         ],
         "gardeners": 3,
-        "code_location": "bot.py (monolith ~9937 lines, modular migration planned)",
+        "code_location": "honeycombs/fruits/gentle_companion/ (modules) → bot_built.py (build)",
         "layer": "Sandbox (Layer 1)",
         "task_id": "T-20260408-1030",
         "task_file": "honeycombs/tasks/active/bot_update.json",
