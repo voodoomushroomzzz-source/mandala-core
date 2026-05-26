@@ -6,7 +6,7 @@ Phase 7: all modules extracted, assembly from source files.
 
 Location: honeycombs/fruits/gentle_companion/build.py
 Run from repo root: python honeycombs/fruits/gentle_companion/build.py
-Output: bot_built.py (repo root)
+Output: gentle_companion.py (repo root)
 """
 
 import os
@@ -19,7 +19,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT   = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", ".."))
 MODULE_DIR  = SCRIPT_DIR
 BOT_SRC     = os.path.join(REPO_ROOT, "bot.py")
-BOT_BUILT   = os.path.join(REPO_ROOT, "bot_built.py")
+BOT_BUILT   = os.path.join(REPO_ROOT, "gentle_companion.py")
 
 # Build order — all "ready"
 BUILD_ORDER = [
@@ -100,7 +100,7 @@ def build():
         output = lines[0] + "\n" + header + "\n".join(lines[1:])
         with open(BOT_BUILT, "w", encoding="utf-8", newline="\n") as f:
             f.write(output)
-        print(f"  ✅ bot_built.py written (Phase 1 mode)")
+        print(f"  ✅ gentle_companion.py written (Phase 1 mode)")
         return
 
     # Phase 7: assemble all modules
@@ -152,14 +152,14 @@ def build():
     built_size = os.path.getsize(BOT_BUILT)
     built_sha  = _sha256(output)
 
-    print(f"\n  ✅ bot_built.py assembled")
+    print(f"\n  ✅ gentle_companion.py assembled")
     print(f"     Modules: {len(BUILD_ORDER)}")
     print(f"     Output:  {built_size:,} bytes  (SHA: {built_sha})")
     if src_size:
         diff = built_size - src_size
         print(f"     vs bot.py: {src_size:,} bytes  (diff: {diff:+,})")
     print(f"\n  To switch server:")
-    print(f'    ssh root@91.99.149.226 "sed -i \'s|bot.py|bot_built.py|\' /etc/systemd/system/mandala-bot.service && systemctl daemon-reload && systemctl restart mandala-bot"')
+    print(f'    ssh root@91.99.149.226 "sed -i \'s|bot.py|gentle_companion.py|\' /etc/systemd/system/mandala-bot.service && systemctl daemon-reload && systemctl restart mandala-bot"')
 
 
 if __name__ == "__main__":
