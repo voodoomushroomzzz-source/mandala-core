@@ -7071,7 +7071,7 @@ async def _synthesize_search(query: str, sources: list) -> str:
     first = sources[0]
     return f"{first['content']}\n\nИсточники:\n{source_links}"
 
-async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
+async def _call_openrouter(messages: list, model_idx: int = 0, max_tokens: int = 1500) -> str:
     if not OPENROUTER_KEY or model_idx >= len(SR_MODEL_CHAIN):
         return ""
     model = SR_MODEL_CHAIN[model_idx]
@@ -7087,7 +7087,7 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
                 json={
                     "model": model,
                     "messages": messages,
-                    "max_tokens": 1500,
+                    "max_tokens": max_tokens,
                     "temperature": 0.85
                 }
             )
@@ -7818,7 +7818,7 @@ async def _generate_synthesis(user_id: str) -> None:
             "Отвечай только JSON без markdown."
         )},
         {"role": "user", "content": prompt}
-    ])
+    ], max_tokens=3000)  # synthesis needs more tokens — not sent to Telegram
 
     if not raw:
         return
