@@ -1,1 +1,195 @@
-# -*- coding: utf-8 -*-"""config.py òÀÔ Globals & ConfigurationImports, constants, environment variables, bot/dispatcher init,global data structures (_store, _sessions, _sha_cache), middleware.Part of: honeycombs/fruits/gentle_companion/Phase: 2 (no dependencies òÀÔ entry point for all other modules)Key globals:  BOT_TOKEN, GITHUB_TOKEN, GARDENERS_TOKEN òÀÔ credentials  REPO_NAME, GARDENERS_REPO               òÀÔ repository routing  ARCHITECT_TELEGRAM_ID, BOT_VERSION      òÀÔ identity  bot, dp, router                         òÀÔ aiogram instances  _store, _sessions, _pending_writes      òÀÔ runtime data  _sha_cache, _sync_lock                  òÀÔ sync helpers  AutoLoadMiddleware                      òÀÔ auto-load on demand"""#!/usr/bin/env python3import reimport osimport sysimport jsonimport loggingimport base64import asyncioimport timeimport copyfrom datetime import datetimefrom typing import Optional, Any, Tuplefrom aiohttp import webfrom aiogram import Bot, Dispatcher, Router, Ffrom aiogram.enums import ParseModefrom aiogram.filters import Command, StateFilterfrom aiogram.fsm.context import FSMContextfrom aiogram.fsm.state import State, StatesGroupfrom aiogram.types import (    Message, ReplyKeyboardMarkup, KeyboardButton,    InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery)from aiogram.client.default import DefaultBotPropertiesfrom aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicationimport aiohttpimport httpxfrom dotenv import load_dotenvfrom apscheduler.schedulers.asyncio import AsyncIOSchedulerfrom apscheduler.triggers.cron import CronTriggerlogging.basicConfig(    level=logging.INFO,    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',    handlers=[logging.StreamHandler(sys.stdout)])logger = logging.getLogger(__name__)load_dotenv()BOT_TOKEN    = os.getenv("BOT_TOKEN")BOT_USERNAME = os.getenv("BOT_USERNAME", "MandalasGardener_bot")  # ¦+¦¬TÏ deep linkGITHUB_TOKEN = os.getenv("GITHUB_TOKEN")REPO_NAME = os.getenv("REPO_NAME", "voodoomushroomzzz-source/mandala-core")# Separate repo for gardener dataGARDENERS_TOKEN = os.getenv("GARDENERS_TOKEN", GITHUB_TOKEN)GARDENERS_REPO  = os.getenv("GARDENERS_REPO",  "voodoomushroomzzz-source/mandala-gardeners")RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")ALLOWED_PASSWORD = os.getenv("ALLOWED_PASSWORD", "mandala")ARCHITECT_TELEGRAM_ID = os.getenv("ARCHITECT_TELEGRAM_ID", "224736062")ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"SR_MODEL_CHAIN = [    "deepseek/deepseek-v4-flash",   # primary òÀÔ 284B MoE, 13B active, 1M ctx    "qwen/qwen3.5-flash-02-23",     # fallback òÀÔ ¦¬TÀ¦-¦-¦¦TÀ¦¦¦-¦-TË¦¦ ¦-¦-¦¦¦-¦-¦¦]SESSION_MAX_MESSAGES = 50# òÔÀòÔÀ ¦Ò¦¦TÀTÁ¦¬TÏ ¦-¦-TÂ¦- òÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀBOT_VERSION = "7.39.23"# òÚàÿ¬Ï DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.BOT_LATEST_UPDATE = {    "version": "7.39.23",    "date": "2026-05-12",    "text": (        "¨ßÌ- ¦Ü¦-¦-¦+¦-¦¬¦- T¬ ¦çTÂ¦- ¦-¦-¦-¦-¦¦¦-\n"        "\n"        "v7.39.23 T¬ 12.05.2026\n"        "  T¬ ¨ßÔÄ ¦Ô¦-¦-¦-TË¦¦ ¦¬¦-¦+¦-TÇ ¦¬ ¦¬TÁTÂ¦-TÀ¦¬TÏ TÇ¦-TÂ¦- ¦-¦-¦-¦-¦-¦¬¦¦¦-TË òÀÔ ¦-¦-TÇ¦¬¦-¦-¦¦¦- TÁ TÇ¦¬TÁTÂ¦-¦¦¦- ¦¬¦¬TÁTÂ¦-\n"        "  T¬ ¦ßTÀ¦-TÄ¦¬¦¬TÌ ¦¬ ¦-¦-TÁTÂTÀ¦-¦¦¦¦¦¬ TÁ¦-TÅTÀ¦-¦-¦¦¦-TË\n"        "  T¬ ¦ßTÀ¦-TÄ¦¬¦¬TÌ: ¦-¦¬¦¬¦¦¦-¦¦TÈ¦¬¦¦ ¦¬¦-¦+¦-TÇ¦¬ (5) ¦¬ ¦-¦-¦¬¦-¦-¦¬¦-¦-¦-¦¬TÏ (3)\n"        "  T¬ ¦ÒTÁ¦¦ TÁ¦-¦+¦-¦-¦-¦¬¦¦¦¬ ¦¬¦-¦¦TÀTÃ¦¦¦-TÎTÂTÁTÏ ¦¬TÀ¦¬ TÁTÂ¦-TÀTÂ¦¦\n"        "\n"        "v7.39.22 T¬ 11.05.2026\n"        "  T¬ ¦ß¦-TÀ¦-¦¬¦¬¦¦¦¬TÌ¦-¦-TÏ ¦¬¦-¦¦TÀTÃ¦¬¦¦¦- TÁ¦-¦+¦-¦-¦-¦¬¦¦¦-¦- ¦¬TÀ¦¬ TÁTÂ¦-TÀTÂ¦¦\n"        "  T¬ ¦à¦¦¦¬¦-¦-¦-¦-TÁ TÇ¦¦TÀ¦¦¦¬ TÁTÄ¦¦TÀTË òÀÔ ¦-¦-¦¬TÌTÈ¦¦ ¦-¦¦ TÀ¦-¦¬¦+TÃ¦-¦-¦¦TÂTÁTÏ ¦-TÂ ¦+¦-TÁTÂ¦¬¦¦¦¦¦-¦¬¦¦\n"        "  T¬ ¦Ú¦-¦-¦¬¦¦¦- ¦Ô¦-¦¬¦-¦¬¦-¦¬TÂTÌ òÆÒ ¦¬¦-¦¬¦-¦-¦¦ ¦-¦¦¦-TÎ TÀ¦¦¦+¦-¦¦TÂ¦¬TÀ¦-¦-¦-¦-¦¬TÏ\n"        "  T¬ ¦Ó¦-¦¬¦-TÁ ¦-¦¦ ¦-¦¬¦-¦¦¦¬TÀTÃ¦¦TÂ ¦-¦-TÂ (Groq ¦- executor)\n"        "\n"        "v7.39.21 T¬ 11.05.2026\n"        "  T¬ ¦ãTÂTÀ¦¦¦-¦-¦¬¦¦ ¦-TÀ¦¬TÄTË ¦¬TÀ¦¬TÅ¦-¦+TÏTÂ ¦-TÁ¦¦¦- TÁ¦-¦+¦-¦-¦-¦¬¦¦¦-¦-\n"        "\n"        "v7.39.9 T¬ 09.05.2026\n"        "  T¬ ¦Ü¦¦¦-TÎ ¦×¦-¦+¦-TÇ: ¦¦TÀTÃ¦¬¦¬TË, TÁ¦¬¦¬TÁ¦-¦¦ ¦¬¦-¦+¦-TÇ, ¦¬¦-¦-TÂ¦-TÀTË, TÁ¦-¦-TÏ ¦+¦-TÂ¦-"    ),}# òÔÀòÔÀòÔÀ Business limits òÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀTASK_CTX_FREE    = "free"      # task visible in tasks menuTASK_LIMIT_HARD  = 30  # P-67TASK_LIMIT_SOFT  = 25  # warn when approaching hard limitLABEL_LIMIT_HARD = 7LABEL_LIMIT_SOFT = 6CHECKLIST_LIMIT      = 3    # max checklists per userCHECKLIST_ITEMS_LIMIT = 20  # max items per checklistREMINDER_LIMIT         = 20  # max reminders per user òÀÔ P-67REMINDER_LIMIT_SOFT    = 15  # warn when approaching reminder limitPORT = 10000WEBHOOK_PATH = "/webhook"WEBHOOK_SECRET = ""  # No secret òÀÔ HTTPS on Render is sufficientGARDENERS_ROOT = "gardeners"  # gardeners/{telegram_id}/profile.json etcif not BOT_TOKEN or not RENDER_EXTERNAL_URL:    logger.error("Missing BOT_TOKEN or RENDER_EXTERNAL_URL")    sys.exit(1)WEBHOOK_URL = f"{RENDER_EXTERNAL_URL}{WEBHOOK_PATH}"bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))dp = Dispatcher()router = Router()dp.include_router(router)# òÔÀòÔÀ AutoLoad Middleware òÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀòÔÀ# If user store is not ready (e.g. after redeploy), load user data on demand# before any handler runs. Fixes "dead buttons" after Render restart.from aiogram import BaseMiddlewarefrom typing import Callable, Dict, Any, Awaitablefrom aiogram.types import TelegramObjectclass AutoLoadMiddleware(BaseMiddleware):    async def __call__(        self,        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],        event: TelegramObject,        data: Dict[str, Any]    ) -> Any:        try:            user = getattr(event, "from_user", None)            if user:                uid = str(user.id)                store = _get_user_store(uid)                if not store.get("ready"):                    await _load_user(uid)        except Exception:            pass        return await handler(event, data)dp.message.middleware(AutoLoadMiddleware())dp.callback_query.middleware(AutoLoadMiddleware())# òÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐ# IN-MEMORY STORE# Single source of truth during runtime. GitHub = persistent backup.# READ  òÆÒ always from _store (instant)# WRITE òÆÒ update _store òÆÒ respond to user òÆÒ sync GitHub in background# òÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐòÕÐ# Multi-user store: {telegram_id: {"profile": dict, "workspace": dict, "ready": bool}}_store: dict = {}_last_bot_message: dict = {}  # {uid: {"message_id": int, "text": str}}def _get_user_store(telegram_id: str) -> dict:    uid = str(telegram_id)    if uid not in _store:        _store[uid] = {"profile": None, "workspace": None, "ready": False}    return _store[uid]# pending GitHub writes: {path: content} òÀÔ deduplicated by path_pending_writes: dict = {}# SHA cache: {path: sha} òÀÔ skip download if SHA unchanged_sha_cache: dict = {}_write_lock = asyncio.Lock() if False else None  # initialized in on_startup_sync_lock   = asyncio.Lock()  # prevents parallel GitHub syncsdef _user_path(telegram_id: str) -> str:    return f"{GARDENERS_ROOT}/gardener_{telegram_id}"
+# -*- coding: utf-8 -*-
+"""
+config.py â€” Globals & Configuration
+Imports, constants, environment variables, bot/dispatcher init,
+global data structures (_store, _sessions, _sha_cache), middleware.
+
+Part of: honeycombs/fruits/gentle_companion/
+Phase: 2 (no dependencies â€” entry point for all other modules)
+
+Key globals:
+  BOT_TOKEN, GITHUB_TOKEN, GARDENERS_TOKEN â€” credentials
+  REPO_NAME, GARDENERS_REPO               â€” repository routing
+  ARCHITECT_TELEGRAM_ID, BOT_VERSION      â€” identity
+  bot, dp, router                         â€” aiogram instances
+  _store, _sessions, _pending_writes      â€” runtime data
+  _sha_cache, _sync_lock                  â€” sync helpers
+  AutoLoadMiddleware                      â€” auto-load on demand
+"""
+
+#!/usr/bin/env python3
+
+import re
+import os
+import sys
+import json
+import logging
+import base64
+import asyncio
+import time
+import copy
+from datetime import datetime
+from typing import Optional, Any, Tuple
+
+from aiohttp import web
+from aiogram import Bot, Dispatcher, Router, F
+from aiogram.enums import ParseMode
+from aiogram.filters import Command, StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import (
+    Message, ReplyKeyboardMarkup, KeyboardButton,
+    InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+)
+from aiogram.client.default import DefaultBotProperties
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+
+import aiohttp
+import httpx
+from dotenv import load_dotenv
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger(__name__)
+
+load_dotenv()
+
+BOT_TOKEN    = os.getenv("BOT_TOKEN")
+BOT_USERNAME = os.getenv("BOT_USERNAME", "MandalasGardener_bot")  # Ð´Ð»Ñ deep link
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_NAME = os.getenv("REPO_NAME", "voodoomushroomzzz-source/mandala-core")
+# Separate repo for gardener data
+GARDENERS_TOKEN = os.getenv("GARDENERS_TOKEN", GITHUB_TOKEN)
+GARDENERS_REPO  = os.getenv("GARDENERS_REPO",  "voodoomushroomzzz-source/mandala-gardeners")
+RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
+ALLOWED_PASSWORD = os.getenv("ALLOWED_PASSWORD", "mandala")
+ARCHITECT_TELEGRAM_ID = os.getenv("ARCHITECT_TELEGRAM_ID", "224736062")
+ENGINEER_CHAT_URL = os.getenv("ENGINEER_CHAT_URL", "https://mandala-engineer-chat.onrender.com")
+SR_BACKEND_URL = os.getenv("SR_BACKEND_URL", f"{ENGINEER_CHAT_URL}/bot/ask")
+OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
+GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+SR_MODEL_CHAIN = [
+    "deepseek/deepseek-v4-flash",   # primary â€” 284B MoE, 13B active, 1M ctx
+    "qwen/qwen3.5-flash-02-23",     # fallback â€” Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐµÐ½Ð½Ñ‹Ð¹ Ð±Ð¾ÐµÐ²Ð¾Ð¹
+]
+SESSION_MAX_MESSAGES = 50
+
+# â”€â”€ Ð’ÐµÑ€ÑÐ¸Ñ Ð±Ð¾Ñ‚Ð° â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+BOT_VERSION = "7.39.23"
+# âš ï¸ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
+BOT_LATEST_UPDATE = {
+    "version": "7.39.23",
+    "date": "2026-05-12",
+    "text": (
+        "ðŸŒ± ÐœÐ°Ð½Ð´Ð°Ð»Ð° Â· Ð§Ñ‚Ð¾ Ð½Ð¾Ð²Ð¾Ð³Ð¾\n"
+        "\n"
+        "v7.39.23 Â· 12.05.2026\n"
+        "  Â· ðŸ”„ Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð·Ð°Ð´Ð°Ñ‡ Ð¸ Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ñ Ñ‡Ð°Ñ‚Ð° Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ñ‹ â€” Ð½Ð°Ñ‡Ð¸Ð½Ð°ÐµÐ¼ Ñ Ñ‡Ð¸ÑÑ‚Ð¾Ð³Ð¾ Ð»Ð¸ÑÑ‚Ð°\n"
+        "  Â· ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ Ð¸ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ñ‹\n"
+        "  Â· ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ: Ð±Ð»Ð¸Ð¶Ð°Ð¹ÑˆÐ¸Ðµ Ð·Ð°Ð´Ð°Ñ‡Ð¸ (5) Ð¸ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ (3)\n"
+        "  Â· Ð’ÑÐµ ÑÐ°Ð´Ð¾Ð²Ð½Ð¸ÐºÐ¸ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°ÑŽÑ‚ÑÑ Ð¿Ñ€Ð¸ ÑÑ‚Ð°Ñ€Ñ‚Ðµ\n"
+        "\n"
+        "v7.39.22 Â· 11.05.2026\n"
+        "  Â· ÐŸÐ°Ñ€Ð°Ð»Ð»ÐµÐ»ÑŒÐ½Ð°Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÑÐ°Ð´Ð¾Ð²Ð½Ð¸ÐºÐ¾Ð² Ð¿Ñ€Ð¸ ÑÑ‚Ð°Ñ€Ñ‚Ðµ\n"
+        "  Â· Ð ÐµÐ·Ð¾Ð½Ð°Ð½Ñ Ñ‡ÐµÑ€ÐµÐ· ÑÑ„ÐµÑ€Ñ‹ â€” Ð±Ð¾Ð»ÑŒÑˆÐµ Ð½Ðµ Ñ€Ð°Ð·Ð´ÑƒÐ²Ð°ÐµÑ‚ÑÑ Ð¾Ñ‚ Ð´Ð¾ÑÑ‚Ð¸Ð¶ÐµÐ½Ð¸Ð¹\n"
+        "  Â· ÐšÐ½Ð¾Ð¿ÐºÐ° Ð”Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ â†’ Ð¿Ð¾Ð»Ð½Ð¾Ðµ Ð¼ÐµÐ½ÑŽ Ñ€ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ\n"
+        "  Â· Ð“Ð¾Ð»Ð¾Ñ Ð½Ðµ Ð±Ð»Ð¾ÐºÐ¸Ñ€ÑƒÐµÑ‚ Ð±Ð¾Ñ‚ (Groq Ð² executor)\n"
+        "\n"
+        "v7.39.21 Â· 11.05.2026\n"
+        "  Â· Ð£Ñ‚Ñ€ÐµÐ½Ð½Ð¸Ðµ Ð±Ñ€Ð¸Ñ„Ñ‹ Ð¿Ñ€Ð¸Ñ…Ð¾Ð´ÑÑ‚ Ð²ÑÐµÐ¼ ÑÐ°Ð´Ð¾Ð²Ð½Ð¸ÐºÐ°Ð¼\n"
+        "\n"
+        "v7.39.9 Â· 09.05.2026\n"
+        "  Â· ÐœÐµÐ½ÑŽ Ð—Ð°Ð´Ð°Ñ‡: Ð³Ñ€ÑƒÐ¿Ð¿Ñ‹, ÑÐ¿Ð¸ÑÐ¾Ðº Ð·Ð°Ð´Ð°Ñ‡, Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ñ‹, ÑÐ²Ð¾Ñ Ð´Ð°Ñ‚Ð°"
+    ),
+}
+
+# â”€â”€â”€ Business limits â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+TASK_CTX_FREE    = "free"      # task visible in tasks menu
+
+TASK_LIMIT_HARD  = 30  # P-67
+TASK_LIMIT_SOFT  = 25  # warn when approaching hard limit
+LABEL_LIMIT_HARD = 7
+LABEL_LIMIT_SOFT = 6
+CHECKLIST_LIMIT      = 3    # max checklists per user
+CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
+REMINDER_LIMIT         = 20  # max reminders per user â€” P-67
+REMINDER_LIMIT_SOFT    = 15  # warn when approaching reminder limit
+
+PORT = 10000
+WEBHOOK_PATH = "/webhook"
+WEBHOOK_SECRET = ""  # No secret â€” HTTPS on Render is sufficient
+
+GARDENERS_ROOT = "gardeners"  # gardeners/{telegram_id}/profile.json etc
+
+if not BOT_TOKEN or not RENDER_EXTERNAL_URL:
+    logger.error("Missing BOT_TOKEN or RENDER_EXTERNAL_URL")
+    sys.exit(1)
+
+WEBHOOK_URL = f"{RENDER_EXTERNAL_URL}{WEBHOOK_PATH}"
+
+bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+dp = Dispatcher()
+router = Router()
+dp.include_router(router)
+
+# â”€â”€ AutoLoad Middleware â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# If user store is not ready (e.g. after redeploy), load user data on demand
+# before any handler runs. Fixes "dead buttons" after Render restart.
+from aiogram import BaseMiddleware
+from typing import Callable, Dict, Any, Awaitable
+from aiogram.types import TelegramObject
+
+class AutoLoadMiddleware(BaseMiddleware):
+    async def __call__(
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any]
+    ) -> Any:
+        try:
+            user = getattr(event, "from_user", None)
+            if user:
+                uid = str(user.id)
+                store = _get_user_store(uid)
+                if not store.get("ready"):
+                    await _load_user(uid)
+        except Exception:
+            pass
+        return await handler(event, data)
+
+dp.message.middleware(AutoLoadMiddleware())
+dp.callback_query.middleware(AutoLoadMiddleware())
+
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# IN-MEMORY STORE
+# Single source of truth during runtime. GitHub = persistent backup.
+# READ  â†’ always from _store (instant)
+# WRITE â†’ update _store â†’ respond to user â†’ sync GitHub in background
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+# Multi-user store: {telegram_id: {"profile": dict, "workspace": dict, "ready": bool}}
+_store: dict = {}
+_last_bot_message: dict = {}  # {uid: {"message_id": int, "text": str}}
+
+def _get_user_store(telegram_id: str) -> dict:
+    uid = str(telegram_id)
+    if uid not in _store:
+        _store[uid] = {"profile": None, "workspace": None, "ready": False}
+    return _store[uid]
+
+# pending GitHub writes: {path: content} â€” deduplicated by path
+_pending_writes: dict = {}
+# SHA cache: {path: sha} â€” skip download if SHA unchanged
+_sha_cache: dict = {}
+_write_lock = asyncio.Lock() if False else None  # initialized in on_startup
+_sync_lock   = asyncio.Lock()  # prevents parallel GitHub syncs
+
+def _user_path(telegram_id: str) -> str:
+    return f"{GARDENERS_ROOT}/gardener_{telegram_id}"
