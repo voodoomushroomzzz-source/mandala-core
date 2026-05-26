@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-sr_memory.py — SR Memory & Synthesis
-Daily synthesis, observation distillation, observation detection.
-
-Part of: honeycombs/fruits/gentle_companion/
-Phase: 5 (depends on config.py, store.py, helpers.py, github_api.py)
-
-Key functions:
-  _distill_observations()         — compress old observations into insights
-  _generate_synthesis()           — daily living portrait of gardener
-  _detect_and_save_observation()  — detect patterns in gardener messages
+sr_memory.py -- SR Memory & Synthesis
+Phase: 5. Updated: 2026-05-26 -- _generate_synthesis uses max_tokens=3000.
 """
 
 async def _distill_observations(user_id: str, dp: dict) -> None:
@@ -160,7 +152,7 @@ async def _generate_synthesis(user_id: str) -> None:
             "Отвечай только JSON без markdown."
         )},
         {"role": "user", "content": prompt}
-    ])
+    ], max_tokens=3000)  # synthesis needs more tokens — not sent to Telegram
 
     if not raw:
         return
