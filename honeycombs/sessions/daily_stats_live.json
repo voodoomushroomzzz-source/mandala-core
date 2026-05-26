@@ -21,13 +21,14 @@
     }
   },
   "358793311": {
-    "messages": 26,
+    "messages": 28,
     "tasks_created": 2,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
       "conversation": 12,
-      "add_task": 1
+      "add_task": 1,
+      "web_search": 1
     }
   }
 }
