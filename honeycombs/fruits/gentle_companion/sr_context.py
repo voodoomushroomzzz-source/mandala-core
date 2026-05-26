@@ -1,25 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-sr_context.py — SR Context Builder
-Session history, user context message, OpenRouter LLM call, sphere stats.
-
-Part of: honeycombs/fruits/gentle_companion/
-Phase: 5 (depends on config.py, store.py, helpers.py, ui.py)
-
-Key functions:
-  _get_history / _add_to_history / _clear_history — sliding window session
-  _check_version_notify()      — send update notification to gardener
-  _build_user_context_msg()    — full SR context string for every LLM call
-  _call_openrouter()           — LLM API call with fallback model chain
-  _build_sr_context()          — structured context dict for SR
-  _get_action_keyboard()       — build inline keyboard from SR action
-  _build_sphere_stats()        — sphere history text for /achievements
-
-Globals:
-  _sessions          — sliding window conversation history
-  _menu_messages     — track last menu message per user
-  _checklist_messages, _profile_messages
-  _intent_map_needed, _sphere_history_needed
+sr_context.py -- SR Context Builder
+Phase: 5. Updated: 2026-05-26.
 """
 
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
@@ -290,7 +272,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
 
 
 
-async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
+async def _call_openrouter(messages: list, model_idx: int = 0, max_tokens: int = 1500) -> str:
     if not OPENROUTER_KEY or model_idx >= len(SR_MODEL_CHAIN):
         return ""
     model = SR_MODEL_CHAIN[model_idx]
@@ -306,7 +288,7 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
                 json={
                     "model": model,
                     "messages": messages,
-                    "max_tokens": 1500,
+                    "max_tokens": max_tokens,
                     "temperature": 0.85
                 }
             )
@@ -324,7 +306,15 @@ async def _call_openrouter(messages: list, model_idx: int = 0) -> str:
         return await _call_openrouter(messages, model_idx + 1)
 
 
+# ─── Menu button handlers ─────────────────────────────────────────────────────
 
+
+
+    await state.clear()
+    result = bday if bday else "не указан"
+    await message.answer(f"✅ День рождения: {result}", reply_markup=get_main_keyboard())
+
+# ─── Free dialogue ────────────────────────────────────────────────────────────
 
 def _build_sr_context(user_id: str) -> dict:
     gardener = store_get_profile(user_id) or {}
@@ -469,8 +459,3 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
         if this_month:
             m_num = _dt_fb.now().month
             lines.append(f"\n{_RU_MONTHS_S[m_num]} (из архива):")
-            sorted_s = sorted(by_sphere.items(), key=lambda x: x[1], reverse=True)
-            for cat, cnt in sorted_s:
-                if cat in sphere_names:
-                    lines.append(f"  {sphere_names[cat]} — {cnt}")
-    return "\n".join(lines)
