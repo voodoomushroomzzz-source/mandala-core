@@ -1,126 +1,17 @@
 {
-  "date": "2026-05-25",
+  "date": "2026-05-27",
   "version": "7.39.23",
   "gardeners": {
-    "339914913": {
-      "name": "Антон",
+    "1485954655": {
+      "name": "Полина",
       "active": true,
-      "synthesis_date": "2026-05-25"
-    },
-    "358793311": {
-      "name": "Антон",
-      "active": true,
-      "synthesis_date": "2026-05-25"
+      "synthesis_date": "2026-05-27"
     },
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-05-25"
-    },
-    "1485954655": {
-      "name": "Полина",
-      "active": true,
-      "synthesis_date": "2026-05-25"
+      "synthesis_date": "2026-05-27"
     }
   },
-  "issues": [
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Братан, вот я тебе писал и задавал вопросы. Что ты можешь об"
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Братан, спасибо! Ну вот что мне с этим делать? Я бы хотел ра"
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Хочу детальный план, чтобы успокоиться и тупо следовать ему."
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Я думал по программированию собрать локальную сборку с pi de"
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "Забей с этой задачей"
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "А блин, я ещё и блог хотел. Это ппц не слоу лайф уже? Ну жиз"
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "add_task",
-      "confidence": 0.7,
-      "text_preview": "Блин, давай \"технический ренессанс \""
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "В"
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "Поехали, братан"
-    },
-    {
-      "user_id": "358793311",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "Братан, я бы денег ещё хотел больше зарабатывать с этим всем"
-    },
-    {
-      "user_id": "1485954655",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Я напишу тебе свою заметку сегодняшнюю. Можешь, пожалуйста, "
-    },
-    {
-      "user_id": "1485954655",
-      "type": "classifier_pass_to_sr",
-      "intent": "none",
-      "confidence": 1.0,
-      "text_preview": "Я глупая и смешная, стесняюсь. Мне это близко, кажется я тол"
-    },
-    {
-      "user_id": "1485954655",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Я чувствую себя неопределенно, не женщиной, не мамой, не жен"
-    },
-    {
-      "user_id": "1485954655",
-      "type": "classifier_pass_to_sr",
-      "intent": "conversation",
-      "confidence": 1.0,
-      "text_preview": "Я бы хотела больше правды, а не вежливости"
-    }
-  ]
+  "issues": []
 }
