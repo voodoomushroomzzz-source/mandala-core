@@ -1,22 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-sr_conversation.py — SR Intent Classifier & Free Conversation
-Main conversation handler, intent classification, action routing.
-
-Part of: honeycombs/fruits/gentle_companion/
-Phase: 5 (depends on config.py, store.py, helpers.py, ui.py,
-         sr_prompts.py, sr_context.py, sr_memory.py, sr_search.py)
-
-Key functions:
-  _CLASSIFIER_PROMPT    — re-referenced from sr_prompts
-  _classify_intent()    — LLM intent classification (Step 1)
-  free_conversation()   — main handler: routes all text/voice messages
-                          classifier → action handlers → SR response
-
-Note on refactoring (Phase 5 goal):
-  free_conversation is currently 1597 lines.
-  Target: split each intent into _handle_intent_* functions (~100 lines dispatcher).
-  This is tracked in honeycombs/fruits/gentle_companion/index.json Phase 5.
+sr_conversation.py -- SR Intent Classifier & Free Conversation. Phase: 5.
 """
 
 # ─── Intent Classifier (Step 1 — observation mode) ───────────────────────────
@@ -606,8 +590,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 else:
                                     reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
                             elif period == "all" or not period:
-                                # No filter — show profile (tasks embedded there)
-                                await _show_profile(user_id, message)
+                                # Show ALL tasks as flat list
+                                await _show_tasks_unified(user_id, message, "all")
                             else:
                                 # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
@@ -891,8 +875,54 @@ async def free_conversation(message: Message, state: FSMContext):
 
                             if to_close:
                                 closed_ids = {t.get("task_id") for t in to_close}
-                                # All tasks: drop on close (no roadmap logic)
+                                # Keep non-closed tasks + reschedule repeating ones
+                                from datetime import datetime as _dt_r, timedelta as _td_r
+                                from zoneinfo import ZoneInfo as _ZI_r
+                                _prof_r = store_get_profile(user_id) or {}
+                                _tz_r_name = _prof_r.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+                                try: _tz_r = _ZI_r(_tz_r_name)
+                                except Exception: _tz_r = _ZI_r("Europe/Moscow")
+                                _now_r = _dt_r.now(_tz_r)
                                 new_tasks = [t for t in tasks if t.get("task_id") not in closed_ids]
+                                for _tc in to_close:
+                                    _rep = _tc.get("repeat")
+                                    if not _rep or _rep == "once":
+                                        continue
+                                    _new_dl = None
+                                    if _rep == "daily":
+                                        _new_dl = (_now_r + _td_r(days=1)).strftime("%Y-%m-%d")
+                                    elif _rep == "weekly":
+                                        _new_dl = (_now_r + _td_r(days=7)).strftime("%Y-%m-%d")
+                                    elif _rep == "weekdays":
+                                        _d = _now_r + _td_r(days=1)
+                                        while _d.weekday() >= 5: _d += _td_r(days=1)
+                                        _new_dl = _d.strftime("%Y-%m-%d")
+                                    elif _rep == "monthly":
+                                        _new_dl = (_now_r + _td_r(days=30)).strftime("%Y-%m-%d")
+                                    elif _rep.startswith("custom_days:"):
+                                        _days_l = _rep.split(":")[1].split(",")
+                                        _day_n = ["mon","tue","wed","thu","fri","sat","sun"]
+                                        _d = _now_r + _td_r(days=1)
+                                        while _day_n[_d.weekday()] not in _days_l: _d += _td_r(days=1)
+                                        _new_dl = _d.strftime("%Y-%m-%d")
+                                    if _new_dl:
+                                        _new_t = {
+                                            "task_id": "task_" + _dt_r.now().strftime("%Y%m%d%H%M%S%f")[:17],
+                                            "title": _tc.get("title",""),
+                                            "status": "todo",
+                                            "label_id": _tc.get("label_id"),
+                                            "label_name": _tc.get("label_name",""),
+                                            "life_area": _tc.get("life_area","work"),
+                                            "priority": calculate_priority(_new_dl),
+                                            "deadline": _new_dl,
+                                            "reminder": _tc.get("reminder"),
+                                            "repeat": _rep,
+                                            "created": _today(),
+                                            "updated": _today(),
+                                            "completed": None,
+                                            "notes": ""
+                                        }
+                                        new_tasks.append(_new_t)
                                 store_set_tasks(user_id, new_tasks)
                                 total_res = 0
                                 for tc in to_close:

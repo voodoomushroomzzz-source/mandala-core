@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ui.py -- UI Layer: Keyboards, FSM, Formatters. Phase: 4.
+ui.py -- UI Layer. Phase: 4.
 """
 
 def _sphere_compact_line(sr: dict) -> str:
@@ -669,10 +669,17 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
     ]
     creativity_kw = [
         "музык","трек","альбом","запис","сведен","мастеринг","обложк","клип","видео",
-        "рисовать","рисунок","арт","дизайн","творч","хобби","фото","съемк","монтаж",
-        "стих","поэзи","проза","роман","пьес","сценар","игра","игр","танц","песн",
+        "рисовать","рисунок","дизайн","творч","хобби","фото","съемк","монтаж",
+        "стих","поэзи","проза","роман","пьес","сценар","танц","песн",
         "инструмент","гитар","пианин","барабан","студи","репетиц","концерт","выставк"
     ]
+    # "арт","игра","игр","запис" — removed (substring in квартира/игра/запись)
+    # Use regex word-boundary for short/ambiguous creativity words
+    import re as _re_cr
+    def _is_art(t: str) -> bool:
+        return bool(_re_cr.search(r'(?:^|\s)арт(?:\s|$)|\bарт-', t))
+    def _is_game(t: str) -> bool:
+        return bool(_re_cr.search(r'(?:^|\s)игр[аыу]?(?:\s|$)|\bигровой', t))
     work_kw = [
         "работа","проект","задач","код","программ","бот","разраб","запуск","бизнес",
         "клиент","встреч","переговор","контракт","договор","счёт","оплатить","зп",
@@ -701,13 +708,13 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
     # P-25: two-pass — title first (authoritative), then full text
     # Fixes: task in roadmap with health-keyword in roadmap name
     title_only = title.lower()
-    if any(k in title_only for k in creativity_kw):  return "creativity"
+    if any(k in title_only for k in creativity_kw) or _is_art(title_only) or _is_game(title_only):  return "creativity"
     if any(k in title_only for k in health_kw):      return "health"
     if any(k in title_only for k in connections_kw): return "connections"
     if any(k in title_only for k in growth_kw) or _is_reading(title_only): return "growth"
     if any(k in title_only for k in work_kw):        return "work"
     # Pass 2: full text including label_name
-    if any(k in text for k in creativity_kw):  return "creativity"
+    if any(k in text for k in creativity_kw) or _is_art(text) or _is_game(text):  return "creativity"
     if any(k in text for k in health_kw):      return "health"
     if any(k in text for k in connections_kw): return "connections"
     if any(k in text for k in growth_kw) or _is_reading(text): return "growth"
