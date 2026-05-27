@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-27 12:59:51 ──
+# ── BUILT by build.py ── 2026-05-27 18:46:02 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1091,7 +1091,7 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
 # ───────────────────────────────────────────────────────
 # -*- coding: utf-8 -*-
 """
-ui.py -- UI Layer: Keyboards, FSM, Formatters. Phase: 4.
+ui.py -- UI Layer. Phase: 4.
 """
 
 def _sphere_compact_line(sr: dict) -> str:
@@ -1760,10 +1760,17 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
     ]
     creativity_kw = [
         "музык","трек","альбом","запис","сведен","мастеринг","обложк","клип","видео",
-        "рисовать","рисунок","арт","дизайн","творч","хобби","фото","съемк","монтаж",
-        "стих","поэзи","проза","роман","пьес","сценар","игра","игр","танц","песн",
+        "рисовать","рисунок","дизайн","творч","хобби","фото","съемк","монтаж",
+        "стих","поэзи","проза","роман","пьес","сценар","танц","песн",
         "инструмент","гитар","пианин","барабан","студи","репетиц","концерт","выставк"
     ]
+    # "арт","игра","игр","запис" — removed (substring in квартира/игра/запись)
+    # Use regex word-boundary for short/ambiguous creativity words
+    import re as _re_cr
+    def _is_art(t: str) -> bool:
+        return bool(_re_cr.search(r'(?:^|\s)арт(?:\s|$)|\bарт-', t))
+    def _is_game(t: str) -> bool:
+        return bool(_re_cr.search(r'(?:^|\s)игр[аыу]?(?:\s|$)|\bигровой', t))
     work_kw = [
         "работа","проект","задач","код","программ","бот","разраб","запуск","бизнес",
         "клиент","встреч","переговор","контракт","договор","счёт","оплатить","зп",
@@ -1792,13 +1799,13 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
     # P-25: two-pass — title first (authoritative), then full text
     # Fixes: task in roadmap with health-keyword in roadmap name
     title_only = title.lower()
-    if any(k in title_only for k in creativity_kw):  return "creativity"
+    if any(k in title_only for k in creativity_kw) or _is_art(title_only) or _is_game(title_only):  return "creativity"
     if any(k in title_only for k in health_kw):      return "health"
     if any(k in title_only for k in connections_kw): return "connections"
     if any(k in title_only for k in growth_kw) or _is_reading(title_only): return "growth"
     if any(k in title_only for k in work_kw):        return "work"
     # Pass 2: full text including label_name
-    if any(k in text for k in creativity_kw):  return "creativity"
+    if any(k in text for k in creativity_kw) or _is_art(text) or _is_game(text):  return "creativity"
     if any(k in text for k in health_kw):      return "health"
     if any(k in text for k in connections_kw): return "connections"
     if any(k in text for k in growth_kw) or _is_reading(text): return "growth"
@@ -4978,24 +4985,7 @@ async def cmd_archive(message: Message):
 # ───────────────────────────────────────────────────────
 # -*- coding: utf-8 -*-
 """
-handlers/features.py — Checklists, Reminders, Achievements
-Full FSM flows, repeat picker, atomic creation.
-
-Part of: honeycombs/fruits/gentle_companion/
-Phase: 6 (depends on config.py, store.py, helpers.py, ui.py)
-
-Key handlers:
-  Checklists: _show_checklist, _start_checklist_create,
-              cb_cl_create_new, cl_title_input, cl_items_input,
-              cb_cl_toggle, cb_cl_open, cb_cl_pin, cb_cl_delete,
-              cb_cl_edit_menu, cb_cl_move_item, cb_cl_add_item_start,
-              cb_cl_edititem_start, cb_cl_delitem, cb_checklists_mgmt
-  Reminders:  cb_reminders_mgmt, cb_rem_create_new, cb_rem_delete,
-              cb_rem_edit_start, rem_text_input,
-              _repeat_picker_keyboard, cb_rem_repeat_pick, cb_rem_rp_select,
-              cb_rem_day_toggle, cb_rem_rp_done, cb_rem_confirm_create,
-              _create_reminder_atomic
-  Achievements: cmd_achievements, cb_add_achievement, ach_category, ach_title
+handlers/features.py -- Checklists, Reminders, Achievements. Phase: 6.
 """
 
 async def _show_checklist(cl: dict, message: Message, edit: bool = False):
@@ -5544,14 +5534,14 @@ async def _recover_pending_edit(user_id: str, state: FSMContext) -> dict:
     if rid and (title or dt):
         return {"_rem_edit_id": rid, "_rem_title": title, "_rem_dt": dt, "_rem_repeat": repeat or "once"}
     ws = store_get_workspace(user_id) or {}
+
+
     pending = ws.get("_pending_reminder_edit") or {}
     if pending.get("_rem_edit_id"):
         await state.update_data(_rem_edit_id=pending["_rem_edit_id"], _rem_title=pending.get("_rem_title",""), _rem_dt=pending.get("_rem_dt",""), _rem_repeat=pending.get("_rem_repeat","once"))
         logger.info(f"Recovered pending reminder edit for {user_id} from workspace")
         return pending
     return {}
-
-
 
 def _make_reminder_id(existing: list) -> str:
     import uuid
@@ -6504,6 +6494,13 @@ async def cb_rem_confirm_edit(callback: CallbackQuery, state: FSMContext):
 
 
 
+    await state.clear()
+    await message.answer(reply, reply_markup=get_main_keyboard())
+
+# ─── /achievements ────────────────────────────────────────────────────────────
+
+@router.message(Command("achievements"))
+@router.message(F.text == "💎 Достижения")
 async def cmd_achievements(message: Message):
     if not await _check_ready(message):
         return
@@ -6638,127 +6635,110 @@ async def cb_cancel_achievement(callback: CallbackQuery, state: FSMContext):
     except Exception:
         pass
 
-# ─── /tasks ───────────────────────────────────────────────────────────────────
 
-@router.message(Command("tasks"))
-@router.message(F.text == "🌀 Задачи")
-
-
-
-
-async def _create_reminder_atomic(user_id: str, message: Message,
-                                   title: str, datetime_str: str = None,
-                                   repeat: str = "once") -> dict:
-    """Create a reminder instantly from chat/voice without FSM.
-    Cleans title from time phrases, parses natural-language datetime,
-    adds timezone offset from gardener settings. Returns created reminder dict."""
-    import re as _re_rem
-    from datetime import datetime as _dt_rem, timedelta as _td_rem
-    from zoneinfo import ZoneInfo as _ZI_rem
-
-    reminders = store_get_reminders(user_id)
-    if len(reminders) >= REMINDER_LIMIT:
+async def _create_task_atomic(user_id: str, message: Message,
+                               title: str, deadline: str = None,
+                               reminder: str = None, label_name: str = None,
+                               repeat: str = None) -> dict:
+    """Create a task instantly from chat/voice without FSM. Returns created task dict."""
+    from datetime import datetime, timedelta
+    # Защита от пустого или слишком короткого названия
+    if not title or len(title.strip()) < 2:
         return {}
-
-    # ── 1. Clean title: remove time phrases ────────────────────────────────
     title = title.strip()
-    # Remove trailing time patterns: "в 9", "в 21:00", "завтра в 9", "сегодня в 21:00"
-    title = _re_rem.sub(
-        r'\s+(завтра|сегодня|послезавтра|через\s+\d+\s+(минут|час|часа|часов|дня|дней|неделю|недели))\s*'
-        r'(в\s+\d{1,2}(:\d{2})?\s*)?$',
-        '', title, flags=_re_rem.IGNORECASE
-    ).strip()
-    # Remove standalone time: "в 13:00", "в 9"
-    title = _re_rem.sub(r'\s+в\s+\d{1,2}(:\d{2})?\s*$', '', title, flags=_re_rem.IGNORECASE).strip()
-
-    if not title or len(title) < 2:
+    tasks = store_get_tasks(user_id)
+    active_count = len([t for t in tasks if t.get("status") != "completed"])
+    if active_count >= TASK_LIMIT_HARD:
+        await message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач. Заверши что-нибудь сначала.")
+    elif active_count >= TASK_LIMIT_SOFT:
+        await message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач. Скоро не смогу добавлять новые.")
         return {}
-
-    # ── 2. Resolve timezone ────────────────────────────────────────────────
-    profile = store_get_profile(user_id) or {}
-    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
-    try:
-        tz = _ZI_rem(tz_name)
-    except Exception:
-        tz = _ZI_rem("Europe/Moscow")
-    now = _dt_rem.now(tz)
-    today_str = now.strftime("%Y-%m-%d")
-
-    # ── 3. Parse datetime_str ──────────────────────────────────────────────
-    dt_iso = None
-
-    if datetime_str and datetime_str not in ("null", "none", ""):
-        ds = datetime_str.strip()
-        # Already ISO with timezone offset: "2026-05-05T13:00+05:00"
-        if _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}[+-]\d{2}:\d{2}$', ds):
-            dt_iso = ds
-        # ISO without offset: "2026-05-05T13:00" → add offset
-        elif _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$', ds):
-            offset = now.strftime("%z")
-            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
-            dt_iso = f"{ds}{offset_formatted}"
-        # Relative time: "через 30 минут", "через 2 часа"
-        elif (m := _re_rem.match(r'через\s+(\d+)\s+(минут|час|часа|часов|дня|дней|недел[юиь])', ds.lower())):
-            n = int(m.group(1))
-            unit = m.group(2)
-            if unit.startswith("минут"):
-                target = now + _td_rem(minutes=n)
-            elif unit.startswith("час"):
-                target = now + _td_rem(hours=n)
-            elif unit.startswith("дн"):
-                target = now + _td_rem(days=n)
-            elif unit.startswith("недел"):
-                target = now + _td_rem(weeks=n)
-            else:
-                target = now + _td_rem(minutes=30)
-            offset = target.strftime("%z")
-            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
-            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
-        # "сегодня в 21:00", "завтра в 9"
-        elif (m := _re_rem.match(r'(сегодня|завтра|послезавтра)\s+в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
-            day_map = {"сегодня": 0, "завтра": 1, "послезавтра": 2}
-            day_offset = day_map.get(m.group(1), 0)
-            hh = int(m.group(2))
-            mm = int(m.group(3)) if m.group(3) else 0
-            target = (now + _td_rem(days=day_offset)).replace(hour=hh, minute=mm, second=0, microsecond=0)
-            offset = target.strftime("%z")
-            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
-            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
-        # "в 21:00", "в 9" (today)
-        elif (m := _re_rem.match(r'в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
-            hh = int(m.group(1))
-            mm = int(m.group(2)) if m.group(2) else 0
-            target = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
-            if target <= now:
-                target += _td_rem(days=1)
-            offset = target.strftime("%z")
-            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
-            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
-
-    # Fallback: if no datetime parsed, set to tomorrow 9:00
-    if not dt_iso:
-        target = (now + _td_rem(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
-        offset = target.strftime("%z")
-        offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
-        dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
-
-    # ── 4. Validate repeat ─────────────────────────────────────────────────
-    if repeat not in ("once", "daily", "weekdays"):
-        repeat = "once"
-
-    # ── 5. Create reminder ─────────────────────────────────────────────────
-    rid = _make_reminder_id(reminders)
-    new_rem = {
-        "id": rid,
-        "title": title,
-        "datetime_iso": dt_iso,
-        "repeat": repeat,
-        "active": True
+    # Resolve label
+    label_id, resolved_label = None, ""
+    if label_name:
+        groups = store_get_groups(user_id).get("groups", [])
+        grp = next((g for g in groups
+                    if label_name.lower() in g.get("name","").lower()
+                    or g.get("name","").lower() in label_name.lower()), None)
+        if not grp:
+            import difflib as _dl
+            _names = [g.get("name","") for g in groups]
+            _close = _dl.get_close_matches(label_name, _names, n=1, cutoff=0.5)
+            if _close:
+                grp = next((g for g in groups if g.get("name","") == _close[0]), None)
+        if grp:
+            label_id       = grp["id"]
+            resolved_label = grp["name"]
+        else:
+            # P-56: группа не найдена — создаём автоматически
+            _new_gid = _make_group_id(label_name, groups)
+            groups.append({"id": _new_gid, "name": label_name, "created": _today()})
+            _gd = store_get_groups(user_id)
+            _gd["groups"] = groups
+            store_set_groups(user_id, _gd)
+            label_id       = _new_gid
+            resolved_label = label_name
+    # Parse natural-language deadline if needed
+    if deadline:
+        import re as _re
+        from datetime import datetime as _dt2, timedelta as _td2
+        _dl = deadline.strip().lower()
+        if _dl in ("завтра", "tomorrow"):
+            deadline = (_dt2.now() + _td2(days=1)).strftime("%Y-%m-%d")
+        elif _dl in ("сегодня", "today"):
+            deadline = _dt2.now().strftime("%Y-%m-%d")
+        elif _dl in ("послезавтра",):
+            deadline = (_dt2.now() + _td2(days=2)).strftime("%Y-%m-%d")
+        elif _re.match(r"^(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?$", deadline):
+            m = _re.match(r"^(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?$", deadline)
+            dd, mm = m.group(1).zfill(2), m.group(2).zfill(2)
+            yy = m.group(3) or str(_dt2.now().year)
+            yy = "20"+yy if len(yy)==2 else yy
+            deadline = f"{yy}-{mm}-{dd}"
+        # if already ISO YYYY-MM-DD → keep as-is
+    merkaba = _auto_merkaba(title, resolved_label)
+    # P-62: parse natural-language repeat if not already normalized
+    if repeat and repeat not in ("once", "daily", "weekdays", "weekends", "weekly") \
+            and not repeat.startswith("custom_days:"):
+        repeat = _parse_weekdays(repeat)
+    task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
+    new_task = {
+        "task_id":    task_id,
+        "title":      title,
+        "status":     "todo",
+        "label_id":   label_id,
+        "label_name": resolved_label,
+        "life_area":  merkaba,
+        "priority":   calculate_priority(deadline),
+        "deadline":   deadline,
+        "reminder":   reminder,
+        "repeat":     repeat if repeat and repeat != "once" else "once",
+        "created":    _today(),
+        "updated":    _today(),
+        "completed":  None,
+        "notes":      ""
     }
-    reminders.append(new_rem)
-    store_set_reminders(user_id, reminders)
+    tasks.append(new_task)
+    store_set_tasks(user_id, tasks)
+    # If reminder set on task — also add to reminders list so it appears in /reminders
+    if reminder:
+        try:
+            _ws_r = store_get_workspace(user_id) or {}
+            _rems = _ws_r.get("reminders", [])
+            _rems.append({
+                "id": "rem_" + task_id,
+                "title": title,
+                "datetime_iso": reminder,
+                "repeat": repeat if repeat and repeat != "once" else "once",
+                "active": True,
+                "task_id": task_id
+            })
+            _ws_r["reminders"] = _rems
+            store_set_workspace(user_id, _ws_r)
+        except Exception as _e_r:
+            logger.warning(f"Failed to add task reminder to list: {_e_r}")
     _fire_sync()
-    return new_rem
+    return new_task
 
 
 # ───────────────────────────────────────────────────────
@@ -8771,23 +8751,7 @@ async def quick_dismiss(callback: CallbackQuery):
 # ───────────────────────────────────────────────────────
 # -*- coding: utf-8 -*-
 """
-sr_conversation.py — SR Intent Classifier & Free Conversation
-Main conversation handler, intent classification, action routing.
-
-Part of: honeycombs/fruits/gentle_companion/
-Phase: 5 (depends on config.py, store.py, helpers.py, ui.py,
-         sr_prompts.py, sr_context.py, sr_memory.py, sr_search.py)
-
-Key functions:
-  _CLASSIFIER_PROMPT    — re-referenced from sr_prompts
-  _classify_intent()    — LLM intent classification (Step 1)
-  free_conversation()   — main handler: routes all text/voice messages
-                          classifier → action handlers → SR response
-
-Note on refactoring (Phase 5 goal):
-  free_conversation is currently 1597 lines.
-  Target: split each intent into _handle_intent_* functions (~100 lines dispatcher).
-  This is tracked in honeycombs/fruits/gentle_companion/index.json Phase 5.
+sr_conversation.py -- SR Intent Classifier & Free Conversation. Phase: 5.
 """
 
 # ─── Intent Classifier (Step 1 — observation mode) ───────────────────────────
@@ -9377,8 +9341,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 else:
                                     reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
                             elif period == "all" or not period:
-                                # No filter — show profile (tasks embedded there)
-                                await _show_profile(user_id, message)
+                                # Show ALL tasks as flat list
+                                await _show_tasks_unified(user_id, message, "all")
                             else:
                                 # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
@@ -9662,8 +9626,54 @@ async def free_conversation(message: Message, state: FSMContext):
 
                             if to_close:
                                 closed_ids = {t.get("task_id") for t in to_close}
-                                # All tasks: drop on close (no roadmap logic)
+                                # Keep non-closed tasks + reschedule repeating ones
+                                from datetime import datetime as _dt_r, timedelta as _td_r
+                                from zoneinfo import ZoneInfo as _ZI_r
+                                _prof_r = store_get_profile(user_id) or {}
+                                _tz_r_name = _prof_r.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+                                try: _tz_r = _ZI_r(_tz_r_name)
+                                except Exception: _tz_r = _ZI_r("Europe/Moscow")
+                                _now_r = _dt_r.now(_tz_r)
                                 new_tasks = [t for t in tasks if t.get("task_id") not in closed_ids]
+                                for _tc in to_close:
+                                    _rep = _tc.get("repeat")
+                                    if not _rep or _rep == "once":
+                                        continue
+                                    _new_dl = None
+                                    if _rep == "daily":
+                                        _new_dl = (_now_r + _td_r(days=1)).strftime("%Y-%m-%d")
+                                    elif _rep == "weekly":
+                                        _new_dl = (_now_r + _td_r(days=7)).strftime("%Y-%m-%d")
+                                    elif _rep == "weekdays":
+                                        _d = _now_r + _td_r(days=1)
+                                        while _d.weekday() >= 5: _d += _td_r(days=1)
+                                        _new_dl = _d.strftime("%Y-%m-%d")
+                                    elif _rep == "monthly":
+                                        _new_dl = (_now_r + _td_r(days=30)).strftime("%Y-%m-%d")
+                                    elif _rep.startswith("custom_days:"):
+                                        _days_l = _rep.split(":")[1].split(",")
+                                        _day_n = ["mon","tue","wed","thu","fri","sat","sun"]
+                                        _d = _now_r + _td_r(days=1)
+                                        while _day_n[_d.weekday()] not in _days_l: _d += _td_r(days=1)
+                                        _new_dl = _d.strftime("%Y-%m-%d")
+                                    if _new_dl:
+                                        _new_t = {
+                                            "task_id": "task_" + _dt_r.now().strftime("%Y%m%d%H%M%S%f")[:17],
+                                            "title": _tc.get("title",""),
+                                            "status": "todo",
+                                            "label_id": _tc.get("label_id"),
+                                            "label_name": _tc.get("label_name",""),
+                                            "life_area": _tc.get("life_area","work"),
+                                            "priority": calculate_priority(_new_dl),
+                                            "deadline": _new_dl,
+                                            "reminder": _tc.get("reminder"),
+                                            "repeat": _rep,
+                                            "created": _today(),
+                                            "updated": _today(),
+                                            "completed": None,
+                                            "notes": ""
+                                        }
+                                        new_tasks.append(_new_t)
                                 store_set_tasks(user_id, new_tasks)
                                 total_res = 0
                                 for tc in to_close:
