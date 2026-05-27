@@ -1226,7 +1226,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "tools": tools,
                             "tool_choice": "auto",
                             "temperature": 0.8,
-                            "max_tokens": 60_000,
+                            "max_tokens": 4_000,
                         },
                         timeout=300.0
                     )
@@ -1327,7 +1327,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             resp2 = await client.post(
                                 f"{OPENROUTER_BASE_URL}/chat/completions",
                                 headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "temperature": 0.8, "max_tokens": 60_000},
+                                json={"model": DEEPSEEK_MODEL, "messages": ds_messages, "tools": tools, "tool_choice": "auto", "max_tokens": 4_000},
                                 timeout=300.0
                             )
                             if resp2.status_code == 200:
@@ -1394,7 +1394,7 @@ async def handle_ask(message: dict, websocket: WebSocket):
                                 resp_retry = await client.post(
                                     f"{OPENROUTER_BASE_URL}/chat/completions",
                                     headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"},
-                                    json={"model": DEEPSEEK_MODEL, "messages": retry_msgs, "temperature": 0.8, "max_tokens": 32_000},
+                                    json={"model": DEEPSEEK_MODEL, "messages": retry_msgs, "max_tokens": 4_000},
                                     timeout=120.0
                                 )
                                 if resp_retry.status_code == 200:
