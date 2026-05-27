@@ -5,9 +5,9 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-25",
+  "updated": "2026-05-27",
   "progress": 99,
-  "current_version": "7.39.23",
+  "current_version": "7.39.76+",
   "note_version": "Реальная версия с патчами ~7.39.75+",
   "dev_rules": [
     "ВСЕГДА обновлять BOT_VERSION и BOT_LATEST_UPDATE на каждом патче",
@@ -26,13 +26,19 @@
     "llm": "OpenRouter deepseek/deepseek-v4-flash (primary), qwen/qwen3.5-flash-02-23 (fallback)",
     "memory": "_sessions RAM + memory.json GitHub, restored on restart",
     "store": "Multi-user _store{uid:{profile,workspace,ready}} + 2min GitHub sync",
-    "hosting": "Render free tier, sleep after 15min idle",
+    "hosting": "Hetzner VPS 91.99.149.226",
     "environment": "Windows, VS Code, PowerShell, py 3.14.3, path C:\\Mandala_Digital\\github\\mandala-core",
-    "storage": "Dual GitHub repos: mandala-core (code) + mandala-gardeners (gardener data). Routing in _sync_pending by path prefix.",
+    "storage": "Dual GitHub repos: mandala-core (code, honeycombs) + mandala-gardeners (gardener data).",
     "repositories": {
-      "mandala-core": "Code, honeycombs, tasks, sessions",
-      "mandala-gardeners": "Private — profile.json, workspace.json, memory.json, whitelist.json"
-    }
+      "code": "voodoomushroomzzz-source/mandala-core",
+      "data": "voodoomushroomzzz-source/mandala-gardeners (private)"
+    },
+    "modular_architecture": {
+      "status": "done — 14 modules",
+      "build": "build.py → bot_built.py",
+      "ci": ".github/workflows/build_bot.yml"
+    },
+    "gardeners": 4
   },
   "done_patches": {
     "P-21": {
@@ -316,6 +322,41 @@
       "name": "fix: BUTTON_DATA_INVALID — callback_data byte truncation (ready, not deployed)",
       "date": null,
       "commit": null
+    },
+    "P-74_v2": {
+      "name": "Онбординг — consent flow (согласие вместо одобрения)",
+      "date": "2026-05-25",
+      "commit": "claude-session"
+    },
+    "P-75_v2": {
+      "name": "Dual repo — mandala-gardeners (данные в приватный репо)",
+      "date": "2026-05-25",
+      "commit": "claude-session"
+    },
+    "P-76_v2": {
+      "name": "Synthesis fix — max_tokens 3000 + {_today()} fix",
+      "date": "2026-05-25",
+      "commit": "claude-session"
+    },
+    "P-77_v2": {
+      "name": "Sphere classification fix + SR context",
+      "date": "2026-05-25",
+      "commit": "claude-session"
+    },
+    "P-78_v2": {
+      "name": "Repeat tasks in free_conversation + web search voice",
+      "date": "2026-05-26",
+      "commit": "claude-session"
+    },
+    "P-79_v2": {
+      "name": "show_tasks fix + creativity sphere regex + task reminder",
+      "date": "2026-05-27",
+      "commit": "claude-session"
+    },
+    "P-80_v2": {
+      "name": "Whitelist fix — 4 садовника восстановлены",
+      "date": "2026-05-27",
+      "commit": "claude-session"
     }
   },
   "known_bugs": {},
@@ -626,9 +667,14 @@
     "reminder_flow": "direct — no confirmation"
   },
   "next_steps": [
-    "Тестирование suggest_action 1-2 дня",
-    "BOT_VERSION обновить",
     "Journal Diary J-1..J-5",
     "D-2..D-6 Deep Synthesis"
+  ],
+  "pending_tasks": [
+    {
+      "id": "ARCH-1",
+      "title": "Переключить сервер на bot_built.py",
+      "priority": "high"
+    }
   ]
 }
