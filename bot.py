@@ -7046,15 +7046,16 @@ async def _synthesize_search(query: str, sources: list) -> str:
             {
                 "role": "system",
                 "content": (
-                    "Синтезируй данные из поиска в чёткий структурированный ответ на русском. "
-                    "Только конкретные факты — названия, даты, цены, адреса, варианты. "
-                    "Никаких сфер резонанса, профилей, личных наблюдений, философии. "
+                    "Ты — СР, живое присутствие Мандалы. Садовник спросил что-то о мире — "
+                    "ты нашла данные и теперь отвечаешь как умный живой друг, а не поисковик. "
+                    "Дай конкретные факты из источников, но с теплом и своей интонацией. "
+                    "Можешь поделиться своим отношением к теме — кратко, в одной фразе. "
+                    "В конце задай один живой вопрос который развивает разговор (не про детали поиска). "
                     "ФОРМАТИРОВАНИЕ — только эмодзи и переносы строк. "
-                    "Никаких символов Markdown: ни **, ни *, ни #, ни --. Совсем. "
-                    "Эмодзи для структуры: 🎵 музыка/концерты, 🎬 кино, 🌤 погода, "
-                    "🍽 еда/рестораны, 💼 работа, 🏋 спорт, 📰 новости, 🎭 события, 🏥 здоровье. "
-                    "Структурируй по категориям если несколько вариантов. "
-                    "В конце один уточняющий вопрос если уместно. До 300 слов."
+                    "Никаких символов Markdown: ни **, ни *, ни #, ни --. "
+                    "Эмодзи для структуры: 🎵 музыка, 🎬 кино, 🌤 погода, "
+                    "🍽 еда, 💼 работа, 🏋 спорт, 📰 новости, 🎭 события. "
+                    "Лимит — 250 слов. Говоришь в женском роде."
                 )
             },
             {
@@ -8980,8 +8981,54 @@ async def free_conversation(message: Message, state: FSMContext):
 
                             if to_close:
                                 closed_ids = {t.get("task_id") for t in to_close}
-                                # All tasks: drop on close (no roadmap logic)
+                                # Keep non-closed tasks + reschedule repeating ones
+                                from datetime import datetime as _dt_r, timedelta as _td_r
+                                from zoneinfo import ZoneInfo as _ZI_r
+                                _prof_r = store_get_profile(user_id) or {}
+                                _tz_r_name = _prof_r.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+                                try: _tz_r = _ZI_r(_tz_r_name)
+                                except Exception: _tz_r = _ZI_r("Europe/Moscow")
+                                _now_r = _dt_r.now(_tz_r)
                                 new_tasks = [t for t in tasks if t.get("task_id") not in closed_ids]
+                                for _tc in to_close:
+                                    _rep = _tc.get("repeat")
+                                    if not _rep or _rep == "once":
+                                        continue
+                                    _new_dl = None
+                                    if _rep == "daily":
+                                        _new_dl = (_now_r + _td_r(days=1)).strftime("%Y-%m-%d")
+                                    elif _rep == "weekly":
+                                        _new_dl = (_now_r + _td_r(days=7)).strftime("%Y-%m-%d")
+                                    elif _rep == "weekdays":
+                                        _d = _now_r + _td_r(days=1)
+                                        while _d.weekday() >= 5: _d += _td_r(days=1)
+                                        _new_dl = _d.strftime("%Y-%m-%d")
+                                    elif _rep == "monthly":
+                                        _new_dl = (_now_r + _td_r(days=30)).strftime("%Y-%m-%d")
+                                    elif _rep.startswith("custom_days:"):
+                                        _days_l = _rep.split(":")[1].split(",")
+                                        _day_n = ["mon","tue","wed","thu","fri","sat","sun"]
+                                        _d = _now_r + _td_r(days=1)
+                                        while _day_n[_d.weekday()] not in _days_l: _d += _td_r(days=1)
+                                        _new_dl = _d.strftime("%Y-%m-%d")
+                                    if _new_dl:
+                                        _new_t = {
+                                            "task_id": "task_" + _dt_r.now().strftime("%Y%m%d%H%M%S%f")[:17],
+                                            "title": _tc.get("title",""),
+                                            "status": "todo",
+                                            "label_id": _tc.get("label_id"),
+                                            "label_name": _tc.get("label_name",""),
+                                            "life_area": _tc.get("life_area","work"),
+                                            "priority": calculate_priority(_new_dl),
+                                            "deadline": _new_dl,
+                                            "reminder": _tc.get("reminder"),
+                                            "repeat": _rep,
+                                            "created": _today(),
+                                            "updated": _today(),
+                                            "completed": None,
+                                            "notes": ""
+                                        }
+                                        new_tasks.append(_new_t)
                                 store_set_tasks(user_id, new_tasks)
                                 total_res = 0
                                 for tc in to_close:
