@@ -2280,10 +2280,17 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
     ]
     creativity_kw = [
         "музык","трек","альбом","запис","сведен","мастеринг","обложк","клип","видео",
-        "рисовать","рисунок","арт","дизайн","творч","хобби","фото","съемк","монтаж",
-        "стих","поэзи","проза","роман","пьес","сценар","игра","игр","танц","песн",
+        "рисовать","рисунок","дизайн","творч","хобби","фото","съемк","монтаж",
+        "стих","поэзи","проза","роман","пьес","сценар","танц","песн",
         "инструмент","гитар","пианин","барабан","студи","репетиц","концерт","выставк"
     ]
+    # "арт","игра","игр","запис" — removed (substring in квартира/игра/запись)
+    # Use regex word-boundary for short/ambiguous creativity words
+    import re as _re_cr
+    def _is_art(t: str) -> bool:
+        return bool(_re_cr.search(r'(?:^|\s)арт(?:\s|$)|\bарт-', t))
+    def _is_game(t: str) -> bool:
+        return bool(_re_cr.search(r'(?:^|\s)игр[аыу]?(?:\s|$)|\bигровой', t))
     work_kw = [
         "работа","проект","задач","код","программ","бот","разраб","запуск","бизнес",
         "клиент","встреч","переговор","контракт","договор","счёт","оплатить","зп",
@@ -2312,13 +2319,13 @@ def _classify_sphere(title: str, label_name: str = "") -> str:
     # P-25: two-pass — title first (authoritative), then full text
     # Fixes: task in roadmap with health-keyword in roadmap name
     title_only = title.lower()
-    if any(k in title_only for k in creativity_kw):  return "creativity"
+    if any(k in title_only for k in creativity_kw) or _is_art(title_only) or _is_game(title_only):  return "creativity"
     if any(k in title_only for k in health_kw):      return "health"
     if any(k in title_only for k in connections_kw): return "connections"
     if any(k in title_only for k in growth_kw) or _is_reading(title_only): return "growth"
     if any(k in title_only for k in work_kw):        return "work"
     # Pass 2: full text including label_name
-    if any(k in text for k in creativity_kw):  return "creativity"
+    if any(k in text for k in creativity_kw) or _is_art(text) or _is_game(text):  return "creativity"
     if any(k in text for k in health_kw):      return "health"
     if any(k in text for k in connections_kw): return "connections"
     if any(k in text for k in growth_kw) or _is_reading(text): return "growth"
@@ -6355,6 +6362,23 @@ async def _create_task_atomic(user_id: str, message: Message,
     }
     tasks.append(new_task)
     store_set_tasks(user_id, tasks)
+    # If reminder set on task — also add to reminders list so it appears in /reminders
+    if reminder:
+        try:
+            _ws_r = store_get_workspace(user_id) or {}
+            _rems = _ws_r.get("reminders", [])
+            _rems.append({
+                "id": "rem_" + task_id,
+                "title": title,
+                "datetime_iso": reminder,
+                "repeat": repeat if repeat and repeat != "once" else "once",
+                "active": True,
+                "task_id": task_id
+            })
+            _ws_r["reminders"] = _rems
+            store_set_workspace(user_id, _ws_r)
+        except Exception as _e_r:
+            logger.warning(f"Failed to add task reminder to list: {_e_r}")
     _fire_sync()
     return new_task
 
@@ -8696,8 +8720,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 else:
                                     reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
                             elif period == "all" or not period:
-                                # No filter — show profile (tasks embedded there)
-                                await _show_profile(user_id, message)
+                                # Show ALL tasks as flat list
+                                await _show_tasks_unified(user_id, message, "all")
                             else:
                                 # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
