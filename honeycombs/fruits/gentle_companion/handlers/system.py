@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-handlers/system.py — System, Onboarding, Profile, Schedulers, Voice
-Phase: 6 (depends on config.py, store.py, helpers.py, ui.py, github_api.py)
+handlers/system.py -- System, Onboarding, Profile, Schedulers, Voice. Phase: 6.
 """
 
 async def send_morning_greeting(telegram_id: str) -> None:
@@ -1467,160 +1466,7 @@ async def ep_birthday(message: Message, state: FSMContext):
     g["updated"] = _today()
     store_set_profile(user_id, g)
     _fire_sync()
-    await state.clear()
-    result = bday if bday else "не указан"
-    await message.answer(f"✅ День рождения: {result}", reply_markup=get_main_keyboard())
 
-# ─── Free dialogue ────────────────────────────────────────────────────────────
-
-def _build_sr_context(user_id: str) -> dict:
-    gardener = store_get_profile(user_id) or {}
-    tasks = store_get_tasks(user_id)
-    achievements = store_get_achievements(user_id)
-    active = [t for t in tasks if t.get("status") != "completed"]
-    dp = gardener.get("deep_profile", {})
-    mem = dp.get("memory", {})
-    # Core portrait (living memory)
-    # D-1: workspace first, profile fallback
-    ws_sr_ctx = store_get_workspace(user_id) or {}
-    mem = ws_sr_ctx.get("deep_memory") or mem
-    core = mem.get("core", dp.get("synthesis", ""))
-    # Interests from living memory
-    interests_data = mem.get("interests", {})
-    confirmed_interests = interests_data.get("confirmed", [])
-    # Recent sr_observations
-    recent_obs = dp.get("sr_observations", [])[-5:]
-    obs_lines = [f"{o['date']}: {o['text']}" for o in recent_obs] if recent_obs else []
-    # Old observations (streak/sphere patterns)
-    old_obs = dp.get("observations", [])[-3:]
-    return {
-        "name": gardener.get("name", "Садовник"),
-        "resonance": gardener.get("resonance_level", 13),
-        "interests": confirmed_interests,
-        "active_tasks": [{"title": t["title"], "priority": t.get("priority", 5)} for t in active[:5]],
-        "achievements_count": len(achievements),
-        "life_areas": gardener.get("personal_info", {}).get("life_areas", {}),
-        "sr_observations": obs_lines,
-        "sphere_patterns": old_obs,
-        "core": core,
-        "gender": gardener.get("companion_settings", {}).get("gender", "neutral"),
-    }
-
-def _get_action_keyboard(action: dict) -> Optional[InlineKeyboardMarkup]:
-    if not action:
-        return None
-    kind = action.get("type", "")
-    # Telegram callback_data limit = 64 bytes
-    _raw_label = (action.get("title") or action.get("query") or "")
-    _label_bytes = _raw_label.encode("utf-8")[:58]
-    label = _label_bytes.decode("utf-8", errors="ignore").strip()
-    if kind == "add_task":
-        return InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✅ Добавить задачу", callback_data="qt:" + label)],
-            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
-        ])
-    if kind == "add_achievement":
-        _sphere_qa = (action.get("sphere") or "growth")[:10]
-        _qa_data = ("qa:" + label + "|" + _sphere_qa)[:64]
-        return InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="💎 Зафиксировать достижение", callback_data=_qa_data)],
-            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
-        ])
-    if kind == "create_reminder":
-        return InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="🔔 Создать напоминание", callback_data="qr:" + label)],
-            [InlineKeyboardButton(text="❌ Не надо", callback_data="qdismiss")]
-        ])
-    if kind == "web_search":
-        return None  # поиск уже выполнен — кнопки не нужны
-    return None
-
-# _build_prompt replaced by _build_user_context_msg + sliding window in free_conversation
-
-def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False) -> str:
-    """Unified sphere stats text for /achievements and /sr_report.
-    Uses sphere_history if available, falls back to achievements array.
-    show_tasks=False — only achievements (profile dashboard)
-    show_tasks=True — tasks + achievements (/sr_report)"""
-    _RU_MONTHS_S = {
-        1:"Январь",2:"Февраль",3:"Март",4:"Апрель",5:"Май",6:"Июнь",
-        7:"Июль",8:"Август",9:"Сентябрь",10:"Октябрь",11:"Ноябрь",12:"Декабрь"
-    }
-    sphere_names = {
-        "health": "🌿 Здоровье", "creativity": "🔥 Творчество",
-        "work": "💼 Работа", "connections": "🤝 Связи", "growth": "🌱 Рост"
-    }
-    prof = store_get_profile(user_id) or {}
-    dp   = prof.get("deep_profile", {})
-    sphere_hist = dp.get("sphere_history", [])
-    lines = []
-
-    if sphere_hist:
-        for month_data in reversed(sphere_hist[-months:]):
-            m_str = month_data.get("month", "")
-            try:
-                m_num  = int(m_str.split("-")[1])
-                m_year = m_str.split("-")[0]
-                m_label = f"{_RU_MONTHS_S[m_num]} {m_year}"
-            except Exception:
-                m_label = m_str
-            lines.append(f"\n\n<b>{m_label}:</b>")
-            has_data = False
-            for sphere, sname in sphere_names.items():
-                d = month_data.get(sphere, {})
-                t_cnt = d.get("tasks", 0)
-                a_cnt = d.get("achievements", 0)
-                r_delta = d.get("resonance_delta", 0)
-                if t_cnt > 0 or a_cnt > 0 or r_delta > 0:
-                    has_data = True
-                    parts = []
-                    if t_cnt > 0:
-                        parts.append(f"{t_cnt} задач")
-                    if a_cnt > 0:
-                        parts.append(f"{a_cnt} достижений")
-                    if parts:
-                        line = f"  {sname} — {' · '.join(parts)}"
-                        if r_delta > 0:
-                            line += f" · +{r_delta}% резонанс"
-                        lines.append(line)
-                    else:
-                        # Only resonance delta, no tasks/achievements
-                        lines.append(f"  {sname} — +{r_delta}% резонанс")
-            if not has_data:
-                lines.append("  нет активности")
-        # Analytics
-        cur = sphere_hist[-1]
-        top = max(
-            [(s, cur.get(s,{}).get("tasks",0) + cur.get(s,{}).get("achievements",0))
-             for s in sphere_names],
-            key=lambda x: x[1]
-        )
-        quiet = [sphere_names[s] for s, cnt in
-            [(s, cur.get(s,{}).get("tasks",0) + cur.get(s,{}).get("achievements",0))
-             for s in sphere_names] if cnt == 0]
-        if top[1] > 0:
-            lines.append(f"\n💡 {sphere_names.get(top[0], top[0])} — сильнейшая сфера.")
-        if quiet:
-            lines.append(f"   {', '.join(quiet[:2])} — без движения.")
-    else:
-        # Fallback: count from achievements array
-        from datetime import datetime as _dt_fb
-        achievements = store_get_achievements(user_id)
-        cur_month = _dt_fb.now().strftime("%Y-%m")
-        this_month = [a for a in achievements if (a.get("completed") or "").startswith(cur_month)]
-        by_sphere: dict = {}
-        for ach in achievements:
-            cat = ach.get("category", "other")
-            by_sphere.setdefault(cat, 0)
-            by_sphere[cat] += 1
-        if this_month:
-            m_num = _dt_fb.now().month
-            lines.append(f"\n{_RU_MONTHS_S[m_num]} (из архива):")
-            sorted_s = sorted(by_sphere.items(), key=lambda x: x[1], reverse=True)
-            for cat, cnt in sorted_s:
-                if cat in sphere_names:
-                    lines.append(f"  {sphere_names[cat]} — {cnt}")
-    return "\n".join(lines)
 
 async def _distill_observations(user_id: str, dp: dict) -> None:
     """Distill old sr_observations into long_term_insights before they are dropped."""
@@ -1770,7 +1616,7 @@ async def _generate_synthesis(user_id: str) -> None:
             "Отвечай только JSON без markdown."
         )},
         {"role": "user", "content": prompt}
-    ])
+    ], max_tokens=3000)  # synthesis needs more tokens — not sent to Telegram
 
     if not raw:
         return

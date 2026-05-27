@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ui.py — UI Layer: Keyboards, FSM States, Profile Card, Formatters
-Pure presentation layer. No HTTP calls. No business logic.
-
-Part of: honeycombs/fruits/gentle_companion/
-Phase: 4 (depends on config.py, store.py, helpers.py)
+ui.py -- UI Layer: Keyboards, FSM, Formatters. Phase: 4.
 """
 
 def _sphere_compact_line(sr: dict) -> str:
@@ -729,29 +725,3 @@ def get_leave_confirm_keyboard() -> InlineKeyboardMarkup:
     ])
 
 # ─── Proactive messaging ──────────────────────────────────────────────────────
-
-async def send_morning_greeting(telegram_id: str) -> None:
-    """Morning greeting v3: alive SR message, personalised via synthesis + history."""
-
-
-def get_reminders_mgmt_inline(reminders: list) -> InlineKeyboardMarkup:
-    # Патчер А: только название, тап → меню редактирования
-    btns = [[InlineKeyboardButton(text="➕ Новое напоминание", callback_data="rem_create_new")]]
-    for r in reminders:
-        rid   = r.get("id", "")
-        title = r.get("title", "—")[:28]
-        btns.append([
-            InlineKeyboardButton(text=f"🔔 {title}", callback_data=f"rem_open_{rid}"),
-        ])
-    btns.append([InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")])
-    return InlineKeyboardMarkup(inline_keyboard=btns)
-
-def get_reminder_edit_inline(rid: str) -> InlineKeyboardMarkup:
-    """Меню редактирования одного напоминания."""
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✏️ Название",     callback_data=f"rem_edit_title_{rid}")],
-        [InlineKeyboardButton(text="📅 Дата/время",   callback_data=f"rem_edit_dt_{rid}")],
-        [InlineKeyboardButton(text="🔁 Повторение",   callback_data=f"rem_edit_repeat_{rid}")],
-        [InlineKeyboardButton(text="🗑 Удалить",      callback_data=f"rem_del_{rid}")],
-        [InlineKeyboardButton(text="← Назад",         callback_data="menu_reminders_mgmt")],
-    ])
