@@ -1225,7 +1225,6 @@ async def handle_ask(message: dict, websocket: WebSocket):
                             "messages": ds_messages,
                             "tools": tools,
                             "tool_choice": "auto",
-                            "temperature": 0.8,
                             "max_tokens": 4_000,
                         },
                         timeout=300.0
