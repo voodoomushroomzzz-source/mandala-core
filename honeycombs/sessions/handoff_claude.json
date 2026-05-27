@@ -1,55 +1,100 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-05-24-001",
-  "updated": "2026-05-24T14:00",
+  "session_id": "2026-05-27-001",
+  "updated": "2026-05-27T20:00",
   "status": "handed_off",
-  "context": {
-    "current_task": "Memory & dialog quality fixes. Next: GitHub Actions auto-deploy + BUTTON_DATA_INVALID fix + Journal Diary J-1..J-5 + Deep Synthesis D-2..D-6",
-    "files_touched": [
-      "bot.py — 5 patches",
-      "handoff_claude.json",
-      "bot_update.json"
-    ],
-    "last_action": "5 bot patches: history with dates in briefs, checklists in SR context, synthesis fix, SR fallback instead of classifier error",
-    "next_step": "1) BUTTON_DATA_INVALID fix. 2) GitHub Actions auto-deploy. 3) Journal Diary J-1..J-5. 4) Deep Synthesis D-2..D-6. 5) P-53. 6) P-58."
+  "session_duration": "~3 days (2026-05-24 — 2026-05-27)",
+  "current_state": {
+    "bot_version": "v7.39.27",
+    "bot_file": "bot.py (running on server)",
+    "modular_file": "gentle_companion.py (built from 14 modules, NOT yet deployed)",
+    "server": "91.99.149.226",
+    "gardeners": 4,
+    "whitelist_fixed": true,
+    "store_ready": "4/4"
   },
-  "progress": {
-    "completed_this_session": [
-      "fix: morning brief — history with timestamps (874efdf8)",
-      "fix: daytime proactive — history with timestamps (4c04ca86)",
-      "fix: checklists in SR context + date in ts_summary (6724d425)",
-      "fix: synthesis snapshot date guard + core date + confirmed interests filter (d6843829)",
-      "fix: SR fallback instead of classifier error (534197d7)"
-    ]
+  "next_session_plan": {
+    "priority_1": {
+      "title": "Verify bot.py vs gentle_companion.py",
+      "description": "Check that gentle_companion.py build contains all patches from bot.py. Especially check for duplicate functions.",
+      "command": "python honeycombs/fruits/gentle_companion/build.py",
+      "check": "py -c \"import ast; ast.parse(open('gentle_companion.py',encoding='utf-8').read()); print('Syntax OK')\"",
+      "verify_patches": [
+        "max_tokens=3000 in _generate_synthesis",
+        "_is_art/_is_game word-boundary in _classify_sphere",
+        "show_tasks all → _show_tasks_unified('all')",
+        "task reminder → ws['reminders']",
+        "repeat tasks rescheduled on complete",
+        "warm SR voice in _synthesize_search",
+        "classifier_pass_to_sr → debug log only",
+        "REFUSAL hint in SR_CORE_PROMPT"
+      ]
+    },
+    "priority_2": {
+      "title": "Switch server to gentle_companion.py",
+      "description": "After successful verification — switch systemd from bot.py to gentle_companion.py",
+      "command": "ssh root@91.99.149.226 \"sed -i 's|bot.py|gentle_companion.py|' /etc/systemd/system/mandala-bot.service && systemctl daemon-reload && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\"",
+      "verify": "Store ready — 4/4 gardener(s) loaded"
+    }
   },
-  "bot_version": "7.39.23",
-  "bot_state": {
-    "deploy": "https://91-99-149-226.nip.io",
-    "hosting": "Hetzner CPX22, 91.99.149.226",
-    "process": "systemd mandala-bot.service — active",
-    "update_command": "cd /opt/mandala && git pull && systemctl restart mandala-bot"
+  "infrastructure": {
+    "repositories": {
+      "code": "voodoomushroomzzz-source/mandala-core (bot.py, gentle_companion.py, honeycombs)",
+      "data": "voodoomushroomzzz-source/mandala-gardeners (profile, workspace, memory, whitelist)"
+    },
+    "env_vars_on_server": {
+      "path": "/opt/mandala/.env",
+      "vars": [
+        "GITHUB_TOKEN",
+        "REPO_NAME",
+        "GARDENERS_TOKEN",
+        "GARDENERS_REPO",
+        "BOT_TOKEN",
+        "OPENROUTER_KEY",
+        "TAVILY_API_KEY"
+      ]
+    },
+    "ci": {
+      "workflow": ".github/workflows/build_bot.yml",
+      "trigger": "push to honeycombs/fruits/gentle_companion/**.py",
+      "output": "gentle_companion.py (repo root)",
+      "status": "active"
+    },
+    "modules": {
+      "location": "honeycombs/fruits/gentle_companion/",
+      "count": 14,
+      "build_script": "honeycombs/fruits/gentle_companion/build.py",
+      "index": "honeycombs/fruits/gentle_companion/index.json"
+    }
   },
+  "completed_this_session": [
+    "P-74: Onboarding consent flow",
+    "P-75: Dual repo mandala-gardeners",
+    "P-76: Synthesis max_tokens 1500→3000 + {today} fix",
+    "P-77: Sphere classification fix + ts_block 20 msgs",
+    "P-78: Repeat tasks rescheduled + warm search voice",
+    "P-79: show_tasks all, creativity fix, task reminder",
+    "P-80: Whitelist fix — 4 gardeners",
+    "ARCH: 14 modules extracted to gentle_companion/",
+    "ARCH: build.py + GitHub Actions CI",
+    "ARCH: gentle_companion/index.json v2.0.0 — 14 modules, phases 1-6 done"
+  ],
   "known_issues": [
-    "BUTTON_DATA_INVALID — callback_data byte truncation fix ready, not deployed"
+    "gentle_companion.py not yet running on server — switch pending",
+    "handlers/system.py > 80KB (103KB) — acceptable, split planned"
   ],
-  "session_observations": [
-    "repr() before patcher is mandatory — anchors break on emoji/escaping without it",
-    "Self-reproducing memory error: old snapshot events copied to new without date guard — fixed",
-    "SR couldn't see checklists in context — fixed via _build_user_context_msg block",
-    "confirmed interests accumulated one-time events — fixed with count >= 2 filter",
-    "Classifier returned stub instead of falling back to SR — fixed with pure conversation retry"
-  ],
-  "patcher_safety_rules": {
-    "repr_before_patcher": "ALWAYS read target lines via python3 -c \"...\" before building anchors",
-    "check_logs_after_restart": "ALWAYS append log check after systemctl restart",
-    "no_cyrillic_in_strings": "Cyrillic only via unicode-escapes",
-    "syntax_check_mandatory": "python -c \"import ast; ast.parse(...)\" before commit",
-    "anchor_by_content": "Anchors by content, never by line number",
-    "assert_before_replace": "assert old in src before every replace"
+  "dev_rules": {
+    "patcher_safety": "ALWAYS assert old in src and src.count(old) == 1 before replace",
+    "anchor_by_content": "Anchors by code strings, never by line numbers",
+    "syntax_check": "py -c \"import ast; ast.parse(open('bot.py').read()); print('Syntax OK')\" before every commit",
+    "deploy_block": "git pull --rebase origin main; git push — always after commit",
+    "server_deploy": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 15 --no-pager\"",
+    "gardeners_routing": "gardeners/* → _gardeners_get/_gardeners_put. honeycombs/* → _github_get/_github_put. NEVER mix.",
+    "module_sync": "When changing bot.py — update corresponding module in gentle_companion/ and push (CI rebuilds gentle_companion.py)"
   },
   "handoff_validation": {
     "stale_threshold_hours": 48,
-    "last_validated": "2026-05-24",
+    "last_validated": "2026-05-27",
     "stale_detected": false
   }
 }
