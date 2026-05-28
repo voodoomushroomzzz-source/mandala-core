@@ -1,28 +1,11 @@
 {
-  "358793311": {
-    "messages": 4,
-    "tasks_created": 0,
-    "tasks_completed": 0,
-    "achievements": 0,
-    "intents": {
-      "conversation": 2
-    }
-  },
   "224736062": {
-    "messages": 13,
+    "messages": 3,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
-      "web_search": 1,
-      "conversation": 5
+      "create_checklist": 1
     }
-  },
-  "339914913": {
-    "messages": 1,
-    "tasks_created": 0,
-    "tasks_completed": 0,
-    "achievements": 0,
-    "intents": {}
   }
 }
