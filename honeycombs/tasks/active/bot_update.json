@@ -381,6 +381,27 @@
         "sr_memory.py",
         "gentle_companion.py"
       ]
+    },
+    "P-82": {
+      "name": "feat: context-aware classifier — enriched text + 0.75 threshold for action intents",
+      "date": "2026-05-28",
+      "commit": "e90e9a9d",
+      "description": "Classifier now gets dialog context (last 3 utterances) instead of bare text. _build_enriched_text() added. SHORT_CIRCUIT threshold lowered 0.85→0.75 for action intents.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/sr_conversation.py",
+        "gentle_companion.py"
+      ],
+      "deploy_status": "deployed"
+    },
+    "P-83": {
+      "name": "fix: date priority rule in SR_CORE_PROMPT — today/tomorrow distinction",
+      "date": "2026-05-28",
+      "commit": "2a85ae33",
+      "description": "Added section 'DATE AND TIME (absolute priority)' to SR_CORE_PROMPT. 5 rules forcing SR to check [Current time for gardener:] before analyzing tasks. Forbids confusing today/tomorrow.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/sr_prompts.py"
+      ],
+      "deploy_status": "pushed — requires CI rebuild + server deploy"
     }
   },
   "known_bugs": {},
@@ -696,16 +717,22 @@
   ],
   "pending_tasks": [
     {
-      "id": "DEPLOY-1",
-      "title": "Задеплоить P-81 на сервер",
+      "id": "DEPLOY-2",
+      "title": "Deploy P-83 to server after CI rebuild",
       "priority": "high",
       "command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\""
     },
     {
-      "id": "TEST-1",
-      "title": "Проверить date fix в утреннем приветствии",
+      "id": "TEST-2",
+      "title": "Test context classifier",
       "priority": "medium",
-      "description": "SR должна корректно различать 'сегодня'/'завтра'"
+      "description": "Test: talk about a task → short command → verify classifier recognizes edit_task with correct title from context."
+    },
+    {
+      "id": "TEST-3",
+      "title": "Test date fix in live conversation",
+      "priority": "medium",
+      "description": "SR must not say 'dates not visible'. Tomorrow tasks = 'tomorrow', today = 'today'."
     }
   ]
 }

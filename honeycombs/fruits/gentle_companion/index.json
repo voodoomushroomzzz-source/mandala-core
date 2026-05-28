@@ -162,7 +162,8 @@
         "SR_CORE_PROMPT (7.3KB)",
         "SR_INTENT_LIGHT (18KB)",
         "SR_INTENT_MAP (12KB)",
-        "_CLASSIFIER_PROMPT"
+        "_CLASSIFIER_PROMPT",
+        "DATE AND TIME (absolute priority) — rule in SR_CORE_PROMPT: SR checks [Current time] first, never confuses today/tomorrow (P-83, 2026-05-28)"
       ]
     },
     {
@@ -244,7 +245,9 @@
       ],
       "key_items": [
         "_classify_intent()",
-        "free_conversation() — 1597 lines, refactoring planned"
+        "free_conversation() — 1597 lines, refactoring planned",
+        "_build_enriched_text() — enriches classifier query with dialog context (P-82, 2026-05-28)",
+        "_CONTEXT_INTENTS — SHORT_CIRCUIT 0.75 for action intents (edit_task, create_reminder, checklists, achievements) (P-82)"
       ]
     },
     {
