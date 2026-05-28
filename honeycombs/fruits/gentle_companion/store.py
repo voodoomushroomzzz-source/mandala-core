@@ -122,3 +122,32 @@ def store_add_sphere_resonance(telegram_id: str, sphere: str, delta: int) -> int
     profile["resonance_level"] = mean
     store_set_profile(telegram_id, profile)
     return mean
+
+def store_get_groups(telegram_id: str) -> dict:
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy({"groups": ws.get("groups", [])}) if ws else {"groups": []}
+
+def store_set_groups(telegram_id: str, g: dict) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": []}
+    ws["groups"] = g.get("groups", g) if isinstance(g, dict) else g
+    store_set_workspace(telegram_id, ws)
+
+def store_get_checklists(telegram_id: str) -> list:
+    """Return checklists list from workspace."""
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("checklists", [])) if ws else []
+
+def store_set_checklists(telegram_id: str, checklists: list) -> None:
+    """Save checklists list to workspace."""
+    ws = store_get_workspace(telegram_id) or {"tasks": [], "groups": [], "achievements": [], "checklists": []}
+    ws["checklists"] = checklists
+    store_set_workspace(telegram_id, ws)
+
+def store_get_reminders(telegram_id: str) -> list:
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("reminders", [])) if ws else []
+
+def store_set_reminders(telegram_id: str, reminders: list) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks":[],"groups":[],"achievements":[],"reminders":[]}
+    ws["reminders"] = reminders
+    store_set_workspace(telegram_id, ws)
