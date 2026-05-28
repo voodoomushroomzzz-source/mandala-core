@@ -329,6 +329,43 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
                 reply_markup=_repeat_picker_keyboard(current),
                 parse_mode="HTML"
             )
+    elif field == "reminder":
+        # Создаём напоминание мгновенно (или находим существующее)
+        # и открываем экран выбора времени
+        import uuid as _uuid_tr
+        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="reminder")
+        await state.set_state(TaskEditStates.editing_reminder)
+        # Сохраняем task_id в стейт для tedit_reminder_cb
+        await state.update_data(edit_task_id=task_id)
+        deadline = task.get("deadline")
+        rem_label = task.get("reminder") or "нет"
+        header = (
+            f"🔔 <b>Напоминание для «{task.get('title', '')[:30]}»</b>\n"
+            f"Сейчас: {rem_label}\n"
+            f"Выбери время:"
+        )
+        back_kb_row = [InlineKeyboardButton(
+            text="← Назад к задаче",
+            callback_data=f"ttask_edit|{task_id}"
+        )]
+        from aiogram.types import InlineKeyboardMarkup as _IKM_tr
+        kb = get_reminder_keyboard(deadline)
+        # Добавляем кнопку «Убрать» если напоминание уже есть
+        if task.get("reminder"):
+            extra_rows = [[InlineKeyboardButton(
+                text="🗑 Убрать напоминание",
+                callback_data=f"ttask_rem_clear|{task_id}"
+            )], back_kb_row]
+        else:
+            extra_rows = [back_kb_row]
+        new_kb = _IKM_tr(
+            inline_keyboard=kb.inline_keyboard[:-1] + extra_rows
+        )
+        try:
+            await callback.message.edit_text(header, reply_markup=new_kb, parse_mode="HTML")
+        except Exception:
+            await callback.message.answer(header, reply_markup=new_kb, parse_mode="HTML")
+
 
 @router.callback_query(F.data.startswith("dl_"), StateFilter(TaskEditStates.editing_deadline))
 async def ttask_deadline_cb(callback: CallbackQuery, state: FSMContext):
@@ -418,6 +455,10 @@ async def cb_ttask_delete(callback: CallbackQuery, state: FSMContext):
     group_id = task.get("label_id") or "__nogroup__"
     tasks = [t for t in tasks if t.get("task_id") != task_id]
     store_set_tasks(user_id, tasks)
+    # Удалить связанное напоминание если есть
+    _rems_del = store_get_reminders(user_id)
+    _rems_del = [r for r in _rems_del if r.get("task_id") != task_id]
+    store_set_reminders(user_id, _rems_del)
     _fire_sync()
     await callback.answer("\U0001f5d1 Удалено")
     tasks_in_group = [t for t in tasks if t.get("status") != "completed" and (
@@ -845,10 +886,81 @@ async def tedit_reminder_cb(callback: CallbackQuery, state: FSMContext):
             t["updated"]  = _today()
     store_set_tasks(user_id, tasks)
     _fire_sync()
+    # Создать/обновить запись в ws['reminders'] с привязкой к задаче
+    tasks_tr = store_get_tasks(user_id)
+    task_tr = next((t for t in tasks_tr if t.get("task_id") == tid), None)
+    task_title_tr = task_tr.get("title", "") if task_tr else ""
+    task_repeat_tr = task_tr.get("repeat", "once") if task_tr else "once"
+
+    reminders_tr = store_get_reminders(user_id)
+    # Удалить старое напоминание этой задачи если есть
+    reminders_tr = [r for r in reminders_tr if r.get("task_id") != tid]
+    if reminder:
+        import uuid as _uuid_tr2
+        rid_tr = "rem_" + str(_uuid_tr2.uuid4())[:8]
+        reminders_tr.append({
+            "id": rid_tr,
+            "title": task_title_tr,
+            "datetime_iso": reminder,
+            "repeat": task_repeat_tr if task_repeat_tr != "once" else "once",
+            "active": True,
+            "task_id": tid,
+        })
+    store_set_reminders(user_id, reminders_tr)
+
     await state.clear()
-    r_str = reminder or "убрано"
-    await callback.message.edit_text(f"✅ Напоминание → {r_str}")
-    await callback.message.answer("🌿", reply_markup=get_main_keyboard())
+    r_str = reminder[:16].replace("T", " ") if reminder else "убрано"
+    await callback.answer(f"✅ Напоминание → {r_str}")
+    try:
+        await callback.message.edit_text(
+            f"✏️ <b>{task_title_tr}</b>",
+            reply_markup=get_task_edit_inline(user_id, tid),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            f"✏️ <b>{task_title_tr}</b>",
+            reply_markup=get_task_edit_inline(user_id, tid),
+            parse_mode="HTML"
+        )
+
+@router.callback_query(F.data.startswith("ttask_rem_clear|"))
+async def cb_ttask_rem_clear(callback: CallbackQuery, state: FSMContext):
+    """Убрать напоминание с задачи и удалить из ws['reminders']."""
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    task_id = callback.data.split("|")[1]
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    # Удалить из ws['reminders'] если есть
+    reminders = store_get_reminders(user_id)
+    reminders = [r for r in reminders if r.get("task_id") != task_id]
+    store_set_reminders(user_id, reminders)
+    # Очистить поле reminder в задаче
+    for t in tasks:
+        if t.get("task_id") == task_id:
+            t["reminder"] = None
+            t["updated"] = _today()
+    store_set_tasks(user_id, tasks)
+    _fire_sync()
+    await state.clear()
+    await callback.answer("🗑 Напоминание убрано")
+    try:
+        await callback.message.edit_text(
+            f"✏️ <b>{task.get('title', '—')}</b>",
+            reply_markup=get_task_edit_inline(user_id, task_id),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            f"✏️ <b>{task.get('title', '—')}</b>",
+            reply_markup=get_task_edit_inline(user_id, task_id),
+            parse_mode="HTML"
+        )
+
 
 @router.callback_query(F.data.startswith("tedit_group_"))
 async def cb_tedit_group(callback: CallbackQuery, state: FSMContext):
