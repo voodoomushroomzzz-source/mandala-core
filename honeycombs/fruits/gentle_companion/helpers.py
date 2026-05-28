@@ -392,3 +392,14 @@ def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
         return abs((now - target).total_seconds()) <= 600  # 10 min window
     except Exception:
         return False
+
+def _days_since_last_interaction(telegram_id: str) -> int:
+    """Days since last user message. 0=today, 999=never."""
+    last = _last_interaction.get(str(telegram_id))
+    if not last:
+        return 999
+    try:
+        from datetime import datetime as _dti
+        return (_dti.now() - _dti.strptime(last, "%Y-%m-%d")).days
+    except Exception:
+        return 999
