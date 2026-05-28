@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-28 07:26:40 ──
+# ── BUILT by build.py ── 2026-05-28 07:27:09 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -6932,6 +6932,9 @@ async def send_morning_greeting(telegram_id: str) -> None:
             "Это начало дня — можно мягко подсветить что сегодня ждёт, "
             "но без давления и списков. Если есть задача на сегодня — "
             "упомянуть как часть дня, а не как обязанность.\n"
+            "ВАЖНО: сегодня " + today_str + ", завтра " + tomorrow_str + ". "
+            "Чётко различай: задача на сегодня — говори 'сегодня', "
+            "на завтра — говори 'завтра'. НИКОГДА не называй завтрашнюю задачу событием сегодняшнего дня.\n"
             "Тон: тёплый, утренний, бодрящий. Максимум 3 предложения. С эмодзи.\n"
             "Без markdown. Без «ты должен», «тебе нужно». Без слова «замечаю».\n"
             "Ответь ТОЛЬКО текстом сообщения."
@@ -7358,6 +7361,10 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
             f"Сегодня {today_str}. ПОСЛЕДНИЕ 20 СООБЩЕНИЙ (дата указана перед каждым — учитывай насколько давно):\n{history_text}",
             "",
             f"АКТИВНЫЕ ЗАДАЧИ:{tasks_context if tasks_context else ' нет'}",
+            "",
+            f"Сегодня {today_str}, завтра {tomorrow_str}. "
+            "Чётко различай: задача на сегодня — говори 'сегодня', "
+            "на завтра — 'завтра'. НИКОГДА не называй завтрашнюю задачу событием сегодняшнего дня.",
             "",
             f"Дней молчания: {days_silent}." + (" " + silence_note if silence_note else ""),
         ] + ([_dp_greeting_note] if _dp_greeting_note else []) + [
@@ -8057,6 +8064,17 @@ async def cb_tour_yes(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer(_reply_tour.strip(), reply_markup=get_main_keyboard())
 
 @router.callback_query(F.data == "tour_no")
+async def _check_webhook() -> None:
+    """Restore webhook if missing — runs every 5 min via scheduler."""
+    try:
+        info = await bot.get_webhook_info()
+        if not info.url:
+            await bot.set_webhook(WEBHOOK_URL)
+            logger.info("Webhook restored by scheduler")
+    except Exception as e:
+        logger.error(f"Webhook check error: {e}")
+
+
 async def cb_tour_no(callback: CallbackQuery):
     """Садовник разберётся сам."""
     await callback.answer()
