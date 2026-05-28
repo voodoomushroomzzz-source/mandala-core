@@ -24,6 +24,26 @@ _CLASSIFIER_PROMPT = """Ты — классификатор намерений. 
 Если не уверен или это разговор — верни: {"intent": "none", "action": {}, "confidence": 1.0}
 Никакого текста вне JSON. Никаких пояснений."""
 
+def _build_enriched_text(history: list, current_text: str, n: int = 3) -> str:
+    """Enriches classifier input with recent dialog context.
+    Helps classifier resolve short/contextual messages like 'перенесем на 10.06'
+    by including the preceding conversation turns.
+    """
+    recent = history[-n:] if len(history) >= n else history
+    if not recent:
+        return current_text
+    ctx_lines = []
+    for m in recent:
+        role = "SR" if m.get("role") == "assistant" else "Садовник"
+        content = (m.get("content") or "")[:150].strip()
+        if content and not content.startswith("[Система:"):
+            ctx_lines.append(f"{role}: {content}")
+    if not ctx_lines:
+        return current_text
+    ctx = "\n".join(ctx_lines)
+    return f"[Контекст диалога:\n{ctx}]\nТекущее сообщение: {current_text}"
+
+
 async def _classify_intent(uid: str, text: str) -> dict | None:
     """Step 1: observation-only classifier. Calls fast model, logs result.
     Does NOT affect bot behaviour yet — only collects data."""
@@ -303,7 +323,8 @@ async def free_conversation(message: Message, state: FSMContext):
     # P-57: Step 2 — classifier active (short-circuits SR for action intents)
     _cl_short_circuit = None  # if set -> use classifier result, skip SR call
     try:
-        _cl_result = await _classify_intent(user_id, text)
+        _cl_enriched = _build_enriched_text(history, text)
+        _cl_result = await _classify_intent(user_id, _cl_enriched)
         if _cl_result:
             _cl_intent = _cl_result.get("intent", "none")
             _cl_conf   = float(_cl_result.get("confidence", 1.0))
@@ -320,7 +341,18 @@ async def free_conversation(message: Message, state: FSMContext):
                 _suggest_action_kb = _sg_action
             else:
                 _suggest_action_kb = None
-            if _cl_intent not in _SR_ONLY and _cl_intent != "suggest_action" and _cl_conf >= 0.85:
+            # Action intents benefit from enriched context — lower threshold
+            _CONTEXT_INTENTS = {
+                "edit_task", "complete_task", "delete_task", "add_task",
+                "create_reminder", "delete_reminder",
+                "create_checklist", "delete_checklist",
+                "checklist_add_item", "checklist_toggle_item",
+                "checklist_delete_item", "checklist_edit_item",
+                "add_achievement",
+                "move_task",
+            }
+            _cl_threshold = 0.75 if _cl_intent in _CONTEXT_INTENTS else 0.85
+            if _cl_intent not in _SR_ONLY and _cl_intent != "suggest_action" and _cl_conf >= _cl_threshold:
                 _cl_short_circuit = json.dumps({
                     "intent": _cl_intent,
                     "action": _cl_result.get("action") or {},
