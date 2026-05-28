@@ -1,40 +1,30 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-05-27-001",
-  "updated": "2026-05-27T20:00",
+  "session_id": "2026-05-28-001",
+  "updated": "2026-05-28T12:00",
   "status": "handed_off",
-  "session_duration": "~3 days (2026-05-24 — 2026-05-27)",
+  "session_duration": "~4h (2026-05-28 08:00 — 12:00)",
   "current_state": {
-    "bot_version": "v7.39.27",
-    "bot_file": "bot.py (running on server)",
+    "bot_version": "v7.39.23",
+    "bot_file": "gentle_companion.py (running on server — switched 2026-05-28)",
     "modular_file": "gentle_companion.py (built from 14 modules, NOT yet deployed)",
     "server": "91.99.149.226",
     "gardeners": 4,
     "whitelist_fixed": true,
-    "store_ready": "4/4"
+    "store_ready": "4/4",
+    "modules_clean": true,
+    "ci_output": "gentle_companion.py — builds cleanly, 0 dups, 309 unique funcs"
   },
   "next_session_plan": {
     "priority_1": {
-      "title": "Verify bot.py vs gentle_companion.py",
-      "description": "Check that gentle_companion.py build contains all patches from bot.py. Especially check for duplicate functions.",
-      "command": "python honeycombs/fruits/gentle_companion/build.py",
-      "check": "py -c \"import ast; ast.parse(open('gentle_companion.py',encoding='utf-8').read()); print('Syntax OK')\"",
-      "verify_patches": [
-        "max_tokens=3000 in _generate_synthesis",
-        "_is_art/_is_game word-boundary in _classify_sphere",
-        "show_tasks all → _show_tasks_unified('all')",
-        "task reminder → ws['reminders']",
-        "repeat tasks rescheduled on complete",
-        "warm SR voice in _synthesize_search",
-        "classifier_pass_to_sr → debug log only",
-        "REFUSAL hint in SR_CORE_PROMPT"
-      ]
+      "title": "Monitor bot in production",
+      "description": "gentle_companion.py is live. Watch for errors in journalctl. Verify checklists, reminders, groups work for all 4 gardeners.",
+      "check": "ssh root@91.99.149.226 \"journalctl -u mandala-bot -n 50 --no-pager | grep -i error\""
     },
     "priority_2": {
-      "title": "Switch server to gentle_companion.py",
-      "description": "After successful verification — switch systemd from bot.py to gentle_companion.py",
-      "command": "ssh root@91.99.149.226 \"sed -i 's|bot.py|gentle_companion.py|' /etc/systemd/system/mandala-bot.service && systemctl daemon-reload && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\"",
-      "verify": "Store ready — 4/4 gardener(s) loaded"
+      "title": "Check date fix in morning greeting",
+      "description": "Next morning verify SR correctly says 'today'/'tomorrow' for tasks with deadlines.",
+      "fixed_in": "send_morning_greeting + _send_daytime_proactive in handlers/system.py"
     }
   },
   "infrastructure": {
@@ -68,21 +58,18 @@
     }
   },
   "completed_this_session": [
-    "P-74: Onboarding consent flow",
-    "P-75: Dual repo mandala-gardeners",
-    "P-76: Synthesis max_tokens 1500→3000 + {today} fix",
-    "P-77: Sphere classification fix + ts_block 20 msgs",
-    "P-78: Repeat tasks rescheduled + warm search voice",
-    "P-79: show_tasks all, creativity fix, task reminder",
-    "P-80: Whitelist fix — 4 gardeners",
-    "ARCH: 14 modules extracted to gentle_companion/",
-    "ARCH: build.py + GitHub Actions CI",
-    "ARCH: gentle_companion/index.json v2.0.0 — 14 modules, phases 1-6 done"
+    "VERIFY: comprehensive gentle_companion.py vs bot.py — 10 missing + 13 duplicates found",
+    "FIX: restored 10 missing functions",
+    "FIX: removed 13 duplicates from gentle_companion.py",
+    "FIX: removed 9 foreign functions from handlers/system.py module",
+    "FIX: removed _send_daily_report + handle_voice from sr_memory.py module",
+    "FIX: removed 3 duplicates from handlers/features.py module",
+    "PATCH: date fix in send_morning_greeting — today/tomorrow distinction",
+    "PATCH: date fix in _send_daytime_proactive",
+    "DEPLOY: server switched to gentle_companion.py — Store ready 4/4, 0 errors",
+    "VERIFIED: final build — 10232 lines, 309 unique functions, 0 duplicates"
   ],
-  "known_issues": [
-    "gentle_companion.py not yet running on server — switch pending",
-    "handlers/system.py > 80KB (103KB) — acceptable, split planned"
-  ],
+  "known_issues": [],
   "dev_rules": {
     "patcher_safety": "ALWAYS assert old in src and src.count(old) == 1 before replace",
     "anchor_by_content": "Anchors by code strings, never by line numbers",
@@ -90,11 +77,12 @@
     "deploy_block": "git pull --rebase origin main; git push — always after commit",
     "server_deploy": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 15 --no-pager\"",
     "gardeners_routing": "gardeners/* → _gardeners_get/_gardeners_put. honeycombs/* → _github_get/_github_put. NEVER mix.",
-    "module_sync": "When changing bot.py — update corresponding module in gentle_companion/ and push (CI rebuilds gentle_companion.py)"
+    "module_sync": "When changing bot.py — update corresponding module in gentle_companion/ and push (CI rebuilds gentle_companion.py)",
+    "module_integrity": "When adding functions to gentle_companion.py — immediately add to corresponding module file. Otherwise next CI build will break production."
   },
   "handoff_validation": {
     "stale_threshold_hours": 48,
-    "last_validated": "2026-05-27",
+    "last_validated": "2026-05-28",
     "stale_detected": false
   }
 }

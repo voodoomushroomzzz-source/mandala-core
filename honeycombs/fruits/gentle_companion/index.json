@@ -7,15 +7,16 @@
   ],
   "bot_version_analyzed": "7.39.81",
   "current_state": {
-    "file": "bot.py",
-    "lines": 9937,
+    "file": "gentle_companion.py (running on server)",
+    "lines": 10232,
     "size_kb": 470,
-    "functions": 292,
+    "functions": 309,
     "handlers": 148,
     "classes": 10,
-    "status": "all modules extracted — ready for server switch",
+    "status": "running on server — gentle_companion.py is production since 2026-05-28",
     "structure": "honeycombs/fruits/gentle_companion/ — module code + index.json + build.py",
-    "phases_complete": "7/7"
+    "phases_complete": "7/7 — COMPLETE",
+    "bot_version_analyzed": "7.39.23"
   },
   "rule_for_sr": "MANDATORY: any change in bot.py affecting module structure (adding function, moving block, changing dependencies) — update index.json and the corresponding module file in modules/. The index is a living document, not an archive.",
   "reading_guide": {
@@ -61,7 +62,8 @@
       "key_items": [
         "store_get/set: profile, workspace, tasks, achievements, groups, checklists, reminders, sphere_resonance",
         "store_add_sphere_resonance, store_add_resonance",
-        "_get_user_store, _user_path"
+        "_get_user_store, _user_path",
+        "store_get/set_groups, store_get/set_checklists, store_get/set_reminders (restored 2026-05-28)"
       ]
     },
     {
@@ -95,7 +97,8 @@
         "_get/save/update_deep_profile()",
         "_add_sr_observation(), _detect_emotion()",
         "_track_interaction(), _can_send_proactive()",
-        "calculate_priority(), _make_group_id()"
+        "calculate_priority(), _make_group_id()",
+        "_days_since_last_interaction() (restored 2026-05-28)"
       ]
     },
     {
@@ -141,7 +144,8 @@
       "key_items": [
         "Checklists: cb_cl_create/toggle/delete/edit",
         "Reminders: cb_rem_create/edit, _repeat_picker_keyboard",
-        "Achievements: cmd_achievements, cb_add_achievement"
+        "Achievements: cmd_achievements, cb_add_achievement",
+        "_create_reminder_atomic(), _create_checklist_atomic() — atomic creation from voice/text (restored 2026-05-28)"
       ]
     },
     {
@@ -196,7 +200,8 @@
       "key_items": [
         "_generate_synthesis() (max_tokens=3000)",
         "_distill_observations()",
-        "_detect_and_save_observation()"
+        "_detect_and_save_observation()",
+        "NOTE: _send_daily_report and handle_voice removed (belong to handlers/system.py) — 2026-05-28"
       ]
     },
     {
@@ -254,7 +259,9 @@
         "cmd_leave/delete_all/info/changelog/privacy",
         "handle_voice — Groq Whisper",
         "run_resonance_decay, send_morning/evening",
-        "run_reminder/proactive_scheduler"
+        "run_reminder/proactive_scheduler",
+        "_check_webhook() — periodic webhook health monitor (added 2026-05-28)",
+        "date fix in send_morning_greeting + _send_daytime_proactive: today/tomorrow distinction (patched 2026-05-28)"
       ]
     },
     {
@@ -347,13 +354,14 @@
       {
         "phase": 7,
         "name": "main.py + final build",
-        "status": "in_progress",
+        "status": "done",
         "effort": "1 session",
         "tasks": [
           "main.py extracted",
           "build.py works",
-          "CI auto-build active",
-          "server switch pending verification"
+          "CI auto-build active — output: gentle_companion.py",
+          "server switched to gentle_companion.py — 2026-05-28",
+          "Store ready 4/4, 0 errors on startup"
         ]
       }
     ],
@@ -450,7 +458,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-05-26",
+  "last_updated": "2026-05-28",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
@@ -462,7 +470,7 @@
   "ci": {
     "workflow": ".github/workflows/build_bot.yml",
     "trigger": "push to honeycombs/fruits/gentle_companion/**.py",
-    "output": "bot_built.py (repo root)",
+    "output": "gentle_companion.py (repo root)",
     "status": "active"
   }
 }
