@@ -8,9 +8,9 @@
   "bot_version_analyzed": "7.39.81",
   "current_state": {
     "file": "gentle_companion.py (running on server)",
-    "lines": 10232,
+    "lines": 10344,
     "size_kb": 470,
-    "functions": 309,
+    "functions": 310,
     "handlers": 148,
     "classes": 10,
     "status": "running on server — gentle_companion.py is production since 2026-05-28",
@@ -130,7 +130,9 @@
         "cb_ttask_done (+ resonance + synthesis)",
         "cb_ttask_edit/delete/create",
         "task_title/deadline/reminder/repeat/label FSM",
-        "_create_task_atomic() — voice/text without FSM"
+        "_create_task_atomic() — voice/text without FSM",
+        "cb_ttask_rem_clear() — delete reminder from task (P-81, 2026-05-28)",
+        "task-reminder link: task['reminder'] ↔ reminders[task_id] — delete task deletes reminder (P-81)"
       ]
     },
     {

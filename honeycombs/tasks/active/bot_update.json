@@ -5,7 +5,7 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-27",
+  "updated": "2026-05-28",
   "progress": 99,
   "current_version": "7.39.76+",
   "note_version": "Реальная версия с патчами ~7.39.75+",
@@ -357,6 +357,30 @@
       "name": "Whitelist fix — 4 садовника восстановлены",
       "date": "2026-05-27",
       "commit": "claude-session"
+    },
+    "P-81": {
+      "name": "fix: task reminder button — create/link/delete reminder from task edit screen",
+      "date": "2026-05-28",
+      "commit": "1efd8716",
+      "description": "Кнопка '🔔 Напоминание' в меню редактирования задачи была мёртвой. Добавлены: elif reminder branch, cb_ttask_rem_clear, tedit_reminder_cb, cb_ttask_delete удаляет связанное напоминание",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/handlers/tasks.py"
+      ],
+      "deploy_status": "pending — SSH недоступен"
+    },
+    "ARCH-2": {
+      "name": "fix: module files root cause — restored missing functions, removed duplicates",
+      "date": "2026-05-28",
+      "commit": "93a8fc79",
+      "description": "Починены 5 модульных файлов. CI пересобрал gentle_companion.py: 10344 строк, 310 функций, 0 дублей.",
+      "files_changed": [
+        "store.py",
+        "helpers.py",
+        "handlers/features.py",
+        "handlers/system.py",
+        "sr_memory.py",
+        "gentle_companion.py"
+      ]
     }
   },
   "known_bugs": {},
@@ -672,9 +696,16 @@
   ],
   "pending_tasks": [
     {
-      "id": "ARCH-1",
-      "title": "Переключить сервер на bot_built.py",
-      "priority": "high"
+      "id": "DEPLOY-1",
+      "title": "Задеплоить P-81 на сервер",
+      "priority": "high",
+      "command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\""
+    },
+    {
+      "id": "TEST-1",
+      "title": "Проверить date fix в утреннем приветствии",
+      "priority": "medium",
+      "description": "SR должна корректно различать 'сегодня'/'завтра'"
     }
   ]
 }

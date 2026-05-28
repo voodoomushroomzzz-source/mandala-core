@@ -1,12 +1,12 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-05-28-001",
-  "updated": "2026-05-28T12:00",
+  "session_id": "2026-05-28-002",
+  "updated": "2026-05-28T22:00",
   "status": "handed_off",
   "session_duration": "~4h (2026-05-28 08:00 — 12:00)",
   "current_state": {
-    "bot_version": "v7.39.23",
-    "bot_file": "gentle_companion.py (running on server — switched 2026-05-28)",
+    "bot_version": "v7.39.23 + P-81 (task reminder fix, pending deploy)",
+    "bot_file": "gentle_companion.py (running on server) — P-81 запушен, деплой pending",
     "modular_file": "gentle_companion.py (built from 14 modules, NOT yet deployed)",
     "server": "91.99.149.226",
     "gardeners": 4,
@@ -17,14 +17,13 @@
   },
   "next_session_plan": {
     "priority_1": {
-      "title": "Monitor bot in production",
-      "description": "gentle_companion.py is live. Watch for errors in journalctl. Verify checklists, reminders, groups work for all 4 gardeners.",
-      "check": "ssh root@91.99.149.226 \"journalctl -u mandala-bot -n 50 --no-pager | grep -i error\""
+      "title": "Deploy P-81 to server",
+      "command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\"",
+      "verify": "Store ready 4/4, no errors in logs"
     },
     "priority_2": {
-      "title": "Check date fix in morning greeting",
-      "description": "Next morning verify SR correctly says 'today'/'tomorrow' for tasks with deadlines.",
-      "fixed_in": "send_morning_greeting + _send_daytime_proactive in handlers/system.py"
+      "title": "Test reminder button in tasks",
+      "description": "Full flow: 🔔 Reminder → choose time → verify in /reminders → delete task → verify reminder deleted too"
     }
   },
   "infrastructure": {
@@ -58,18 +57,21 @@
     }
   },
   "completed_this_session": [
-    "VERIFY: comprehensive gentle_companion.py vs bot.py — 10 missing + 13 duplicates found",
-    "FIX: restored 10 missing functions",
-    "FIX: removed 13 duplicates from gentle_companion.py",
-    "FIX: removed 9 foreign functions from handlers/system.py module",
-    "FIX: removed _send_daily_report + handle_voice from sr_memory.py module",
-    "FIX: removed 3 duplicates from handlers/features.py module",
-    "PATCH: date fix in send_morning_greeting — today/tomorrow distinction",
-    "PATCH: date fix in _send_daytime_proactive",
-    "DEPLOY: server switched to gentle_companion.py — Store ready 4/4, 0 errors",
-    "VERIFIED: final build — 10232 lines, 309 unique functions, 0 duplicates"
+    "VERIFY: comprehensive gentle_companion.py v4 — all P-74..P-80 confirmed",
+    "FIX MODULES: store.py +6 store_get/set, helpers.py +_days_since_last_interaction",
+    "FIX MODULES: features.py -3 dups +_create_reminder/checklist_atomic",
+    "FIX MODULES: system.py -9 foreign funcs +_check_webhook +date fix",
+    "FIX MODULES: sr_memory.py -_send_daily_report -handle_voice",
+    "DEPLOY: gentle_companion.py CI rebuild — 10344 lines, 310 funcs, 0 dups, Store 4/4",
+    "P-81: fixed task reminder button — create/link/delete reminder",
+    "P-81: pushed to repo (commit 1efd8716), deploy pending (SSH unavailable)"
   ],
-  "known_issues": [],
+  "known_issues": [
+    {
+      "id": "PENDING-DEPLOY",
+      "description": "P-81 pushed but not deployed — SSH unavailable from laptop. Deploy from main PC."
+    }
+  ],
   "dev_rules": {
     "patcher_safety": "ALWAYS assert old in src and src.count(old) == 1 before replace",
     "anchor_by_content": "Anchors by code strings, never by line numbers",
