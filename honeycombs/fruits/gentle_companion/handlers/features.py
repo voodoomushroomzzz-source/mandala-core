@@ -699,6 +699,108 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
             parse_mode="HTML"
         )
 
+
+
+async def _create_reminder_atomic(user_id: str, message,
+                                   title: str, datetime_str: str = None,
+                                   repeat: str = "once") -> dict:
+    """Create a reminder instantly from chat/voice without FSM."""
+    import re as _re_rem
+    from datetime import datetime as _dt_rem, timedelta as _td_rem
+    from zoneinfo import ZoneInfo as _ZI_rem
+
+    reminders = store_get_reminders(user_id)
+    if len(reminders) >= REMINDER_LIMIT:
+        return {}
+
+    title = title.strip()
+    title = _re_rem.sub(
+        r'\s+(завтра|сегодня|послезавтра|через\s+\d+\s+(минут|час|часа|часов|дня|дней|неделю|недели))\s*'
+        r'(в\s+\d{1,2}(:\d{2})?\s*)?$',
+        '', title, flags=_re_rem.IGNORECASE
+    ).strip()
+    title = _re_rem.sub(r'\s+в\s+\d{1,2}(:\d{2})?\s*$', '', title, flags=_re_rem.IGNORECASE).strip()
+    if not title or len(title) < 2:
+        return {}
+
+    profile = store_get_profile(user_id) or {}
+    tz_name = profile.get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    try:
+        tz = _ZI_rem(tz_name)
+    except Exception:
+        tz = _ZI_rem("Europe/Moscow")
+    now = _dt_rem.now(tz)
+
+    dt_iso = None
+    if datetime_str and datetime_str not in ("null", "none", ""):
+        ds = datetime_str.strip()
+        if _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}[+-]\d{2}:\d{2}$', ds):
+            dt_iso = ds
+        elif _re_rem.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$', ds):
+            offset = now.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = f"{ds}{offset_formatted}"
+        elif (m := _re_rem.match(r'через\s+(\d+)\s+(минут|час|часа|часов|дня|дней|недел[юиь])', ds.lower())):
+            n = int(m.group(1))
+            unit = m.group(2)
+            if unit.startswith("минут"): target = now + _td_rem(minutes=n)
+            elif unit.startswith("час"): target = now + _td_rem(hours=n)
+            elif unit.startswith("дн"): target = now + _td_rem(days=n)
+            elif unit.startswith("недел"): target = now + _td_rem(weeks=n)
+            else: target = now + _td_rem(minutes=30)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+        elif (m := _re_rem.match(r'(сегодня|завтра|послезавтра)\s+в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
+            day_map = {"сегодня": 0, "завтра": 1, "послезавтра": 2}
+            target = (now + _td_rem(days=day_map.get(m.group(1), 0))).replace(
+                hour=int(m.group(2)), minute=int(m.group(3)) if m.group(3) else 0, second=0, microsecond=0)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+        elif (m := _re_rem.match(r'в\s+(\d{1,2})(?::(\d{2}))?', ds.lower())):
+            target = now.replace(hour=int(m.group(1)), minute=int(m.group(2)) if m.group(2) else 0, second=0, microsecond=0)
+            if target <= now:
+                target += _td_rem(days=1)
+            offset = target.strftime("%z")
+            offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+            dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+    if not dt_iso:
+        target = (now + _td_rem(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+        offset = target.strftime("%z")
+        offset_formatted = offset[:3] + ":" + offset[3:] if offset else "+00:00"
+        dt_iso = target.strftime(f"%Y-%m-%dT%H:%M{offset_formatted}")
+
+    if repeat not in ("once", "daily", "weekdays"):
+        repeat = "once"
+
+    rid = _make_reminder_id(reminders)
+    new_rem = {"id": rid, "title": title, "datetime_iso": dt_iso, "repeat": repeat, "active": True}
+    reminders.append(new_rem)
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    return new_rem
+
+
+async def _create_checklist_atomic(user_id: str, message,
+                                    title: str, items_raw: str = "") -> dict:
+    """Create a checklist instantly from chat/voice without FSM."""
+    checklists = store_get_checklists(user_id)
+    if len(checklists) >= CHECKLIST_LIMIT:
+        await message.answer(f"⚠️ Лимит {CHECKLIST_LIMIT} чеклистов. Удали один сначала.")
+        return {}
+    import re as _re_cl
+    item_texts = [i.strip() for i in _re_cl.split(r'[|\n]', items_raw) if i.strip()] if items_raw else []
+    item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT]
+    items = [{"id": f"i{i+1}", "text": t, "done": False} for i, t in enumerate(item_texts)]
+    cid = _make_checklist_id(title, checklists)
+    new_cl = {"id": cid, "title": title, "items": items,
+              "pinned_message_id": None, "created": _today()}
+    checklists.append(new_cl)
+    store_set_checklists(user_id, checklists)
+    _fire_sync()
+    return new_cl
+
 @router.callback_query(F.data == "redit_title")
 async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
@@ -804,51 +906,10 @@ async def cb_rem_open(callback: CallbackQuery):
 
 # rem_edit_title_, rem_edit_dt_, rem_edit_repeat_ → редиректим на существующие handlers
 @router.callback_query(F.data.startswith("rem_edit_title_"))
-async def cb_rem_edit_title(callback: CallbackQuery, state: FSMContext):
-    rid = callback.data[15:]
-    await callback.answer()
-    await state.update_data(_rem_edit_id=rid, _rem_edit_field="title")
-    await state.set_state(ReminderStates.waiting_for_input)
-    _back_kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="← Назад", callback_data=f"rem_open_{rid}")]
-    ])
-    try:
-        await callback.message.edit_text("✏️ <b>Новое название:</b>", reply_markup=_back_kb, parse_mode="HTML")
-    except Exception:
-        await callback.message.answer("✏️ Введи новое название:", reply_markup=_back_kb)
 
 @router.callback_query(F.data.startswith("rem_edit_dt_"))
-async def cb_rem_edit_dt(callback: CallbackQuery, state: FSMContext):
-    rid = callback.data[12:]
-    await callback.answer()
-    await state.update_data(_rem_edit_id=rid, _rem_edit_field="dt")
-    await state.set_state(ReminderStates.waiting_for_input)
-    _back_kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="← Назад", callback_data=f"rem_open_{rid}")]
-    ])
-    try:
-        await callback.message.edit_text("📅 <b>Новая дата и время (ДД.ММ.ГГ ЧЧ:ММ):</b>", reply_markup=_back_kb, parse_mode="HTML")
-    except Exception:
-        await callback.message.answer("📅 Введи дату и время (ДД.ММ.ГГ ЧЧ:ММ):", reply_markup=_back_kb)
 
 @router.callback_query(F.data.startswith("rem_edit_repeat_"))
-async def cb_rem_edit_repeat(callback: CallbackQuery, state: FSMContext):
-    rid = callback.data[16:]
-    await callback.answer()
-    await state.update_data(_rem_edit_id=rid)
-    await state.set_state(ReminderStates.waiting_for_repeat)
-    user_id = str(callback.from_user.id)
-    reminders = store_get_reminders(user_id)
-    rem = next((r for r in reminders if r.get("id") == rid), None)
-    current = rem.get("repeat", "once") if rem else "once"
-    try:
-        await callback.message.edit_text(
-            "🔁 <b>Повторение:</b>",
-            reply_markup=_repeat_picker_keyboard(current),
-            parse_mode="HTML"
-        )
-    except Exception:
-        await callback.message.answer("🔁 Повторение:", reply_markup=_repeat_picker_keyboard(current))
 
 @router.message(StateFilter(ReminderStates.waiting_for_input))
 async def rem_text_input(message: Message, state: FSMContext):
