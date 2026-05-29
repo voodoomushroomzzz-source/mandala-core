@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-29 09:00:25 ──
+# ── BUILT by build.py ── 2026-05-29 09:07:43 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -2650,14 +2650,16 @@ def _build_user_context_msg(telegram_id: str) -> str:
             f"  fresh: {chr(44).join(_int_fresh) if _int_fresh else 'нет'}\n]"
         )
     _med_ctx = _dm_ctx.get("media", {})
-    _med_conf = [_fmt_item_ctx(i) for i in _med_ctx.get("confirmed", [])]
-    _med_ment = [_fmt_item_ctx(i) for i in _med_ctx.get("mentioned", [])]
+    _med_conf  = [_fmt_item_ctx(i) for i in _med_ctx.get("confirmed", [])]
+    _med_ment  = [_fmt_item_ctx(i) for i in _med_ctx.get("mentioned", [])]
+    _med_fresh = [_fmt_item_ctx(i) for i in _med_ctx.get("fresh", [])]
     _media_block = ""
-    if _med_conf or _med_ment:
+    if _med_conf or _med_ment or _med_fresh:
         _media_block = (
             "\n[Культурный опыт садовника (книги/фильмы/музыка/театр/искусство и др.):\n"
             f"  confirmed: {chr(44).join(_med_conf) if _med_conf else 'нет'}\n"
-            f"  mentioned: {chr(44).join(_med_ment) if _med_ment else 'нет'}\n]"
+            f"  mentioned: {chr(44).join(_med_ment) if _med_ment else 'нет'}\n"
+            f"  fresh: {chr(44).join(_med_fresh) if _med_fresh else 'нет'}\n]"
         )
     _checklists_ctx = store_get_checklists(telegram_id)
     _cl_block = ""
@@ -2988,6 +2990,7 @@ async def _generate_synthesis(user_id: str) -> None:
     _int_fresh_txt = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("fresh", []))    or "нет"
     _med_conf_txt  = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("confirmed", []))    or "нет"
     _med_ment_txt  = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("mentioned", []))    or "нет"
+    _med_fresh_txt = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("fresh", []))        or "нет"
 
     prompt = f"""ТЕКУЩИЙ ПОРТРЕТ:
 {core if core else "пока не сформирован"}
@@ -3013,8 +3016,9 @@ async def _generate_synthesis(user_id: str) -> None:
   fresh (новые, огород, топ-15): {_int_fresh_txt}
 
 ТЕКУЩИЕ МЕДИА (книги/фильмы/музыка):
-  confirmed: {_med_conf_txt}
-  mentioned: {_med_ment_txt}
+  confirmed (активно читается/смотрится, топ-10): {_med_conf_txt}
+  mentioned (недавно упоминалось, топ-10): {_med_ment_txt}
+  fresh (новое, огород, топ-15): {_med_fresh_txt}
 
 ЖИВОЙ ДИАЛОГ (все сообщения — главный источник интересов, тем, медиа):
 {dialog_text}
@@ -3024,10 +3028,14 @@ async def _generate_synthesis(user_id: str) -> None:
   Система сама распределит их по группам (fresh/mentioned/confirmed). Тебе не нужно управлять переходами.
 - confirmed_interests: интересы которые явно и активно присутствуют в диалоге сегодня.
 - mentioned_interests: интересы которые мелькнули, упомянуты вскользь.
-- Медиа (confirmed макс 10, mentioned макс 10). Культурный опыт: определяй тип из контекста:
-  film (фильм/документалка), series (сериал), book (книга/поэзия), music (музыка/альбом/концерт),
-  podcast (подкаст/лекция), art (картина/скульптура/фото), theatre (спектакль/балет/опера),
-  architecture (здание/памятник/чудо света), game (игра), exhibition (выставка/музей/инсталляция).
+- Медиа: называй только то что РЕАЛЬНО звучало в диалоге сегодня.
+  confirmed_media — активно обсуждается прямо сейчас (читает/смотрит/слушает).
+  mentioned_media — упомянул вскользь, в прошедшем времени или как намерение.
+  Система сама распределит по группам (fresh/mentioned/confirmed). Не управляй переходами.
+  Тип медиа из контекста: film (фильм/документалка), series (сериал), book (книга/поэзия),
+  music (музыка/альбом/концерт), podcast (подкаст/лекция), art (картина/скульптура/фото),
+  theatre (спектакль/балет/опера), architecture (здание/памятник), game (игра),
+  exhibition (выставка/музей/инсталляция).
 
 Ответь строго в JSON (без markdown):
 {{
@@ -3261,11 +3269,20 @@ async def _generate_synthesis(user_id: str) -> None:
             reverse=True
         )[:_CONFIRMED_LIMIT]
 
-        # Медиа (логика не изменилась)
-        media = mem.setdefault("media", {"confirmed": [], "mentioned": []})
+        # ── Медиа: трёхуровневая система (fresh/mentioned/confirmed) ────────
+        _MED_FRESH_LIMIT     = 15
+        _MED_MENTIONED_LIMIT = 10
+        _MED_CONFIRMED_LIMIT = 10
+        _MED_MENTIONED_DECAY = 15   # дней без упоминания → fresh, count=0
+
+        media = mem.setdefault("media", {"confirmed": [], "mentioned": [], "fresh": []})
+        if "fresh" not in media:
+            media["fresh"] = []
+
         conf_media_raw = result.get("confirmed_media", [])
         ment_media_raw = result.get("mentioned_media", [])
 
+        # Нормализация: строки → объекты
         def _norm_media(lst):
             return [
                 {"name": i, "type": "unknown", "count": 1, "last_seen": _today_syn}
@@ -3274,58 +3291,154 @@ async def _generate_synthesis(user_id: str) -> None:
             ]
         media["confirmed"] = _norm_media(media.get("confirmed", []))
         media["mentioned"] = _norm_media(media.get("mentioned", []))
+        media["fresh"]     = _norm_media(media.get("fresh", []))
 
-        # Decay медиа
-        def _decay_media(lst, max_days):
-            result_m = []
-            for item in lst:
-                try:
-                    days = (_date_syn.today() - _date_syn.fromisoformat(
-                        item.get("last_seen", _today_syn))).days
-                    if days < max_days:
-                        result_m.append(item)
-                except Exception:
-                    result_m.append(item)
-            return result_m
-        media["confirmed"] = _decay_media(media["confirmed"], 30)
-        media["mentioned"] = _decay_media(media["mentioned"], 15)
+        def _med_find(lst, name):
+            key = name.lower()
+            for idx, item in enumerate(lst):
+                if item.get("name", "").lower() == key:
+                    return idx, item
+            return None, None
 
+        def _med_make(name, mtype="unknown", count=0):
+            return {"name": name, "type": mtype, "count": count, "last_seen": _today_syn}
+
+        def _med_weakest_confirmed():
+            if not media["confirmed"]:
+                return None, None
+            idx, obj = min(
+                enumerate(media["confirmed"]),
+                key=lambda x: (x[1].get("count", 0), x[1].get("last_seen", ""))
+            )
+            return idx, obj
+
+        # Шаг 1: Decay mentioned → fresh (15 дней, count=0)
+        still_med_ment = []
+        for item in media["mentioned"]:
+            try:
+                days = (_date_syn.today() - _date_syn.fromisoformat(
+                    item.get("last_seen", _today_syn))).days
+            except Exception:
+                days = 0
+            if days >= _MED_MENTIONED_DECAY:
+                fi, _ = _med_find(media["fresh"], item["name"])
+                if fi is None:
+                    media["fresh"].append(_med_make(item["name"], item.get("type", "unknown"), count=0))
+            else:
+                still_med_ment.append(item)
+        media["mentioned"] = still_med_ment
+
+        # Шаг 2: Trim fresh по last_seen (FIFO)
+        media["fresh"] = sorted(
+            media["fresh"], key=lambda x: x.get("last_seen", ""), reverse=True
+        )[:_MED_FRESH_LIMIT]
+
+        # Шаг 3: Обработать confirmed_media от LLM
         for m in conf_media_raw:
-            if isinstance(m, dict) and m.get("name"):
-                key = m["name"].lower()
-                existing = next(
-                    (x for x in media["confirmed"]
-                     if isinstance(x, dict) and x.get("name", "").lower() == key), None)
-                if existing:
-                    existing["count"] = existing.get("count", 1) + 1
-                    existing["last_seen"] = _today_syn
-                else:
-                    media["confirmed"].append({
-                        "name": m["name"], "type": m.get("type", "unknown"),
-                        "count": 1, "last_seen": _today_syn
-                    })
+            if not isinstance(m, dict) or not m.get("name"):
+                continue
+            mname = m["name"]
+            mtype = m.get("type", "unknown")
+            # Уже в confirmed → count++
+            ci, cobj = _med_find(media["confirmed"], mname)
+            if ci is not None:
+                cobj["count"] += 1
+                cobj["last_seen"] = _today_syn
+                continue
+            # Уже в mentioned → count++
+            mi, mobj = _med_find(media["mentioned"], mname)
+            if mi is not None:
+                mobj["count"] += 1
+                mobj["last_seen"] = _today_syn
+                continue
+            # Уже во fresh → count++
+            fi, fobj = _med_find(media["fresh"], mname)
+            if fi is not None:
+                fobj["count"] += 1
+                fobj["last_seen"] = _today_syn
+            else:
+                # Новое → во fresh, count=1
+                media["fresh"].append(_med_make(mname, mtype, count=1))
+
+        # Шаг 4: Обработать mentioned_media от LLM → только во fresh если нигде нет
         for m in ment_media_raw:
-            if isinstance(m, dict) and m.get("name"):
-                key = m["name"].lower()
-                in_conf = any(
-                    isinstance(x, dict) and x.get("name", "").lower() == key
-                    for x in media["confirmed"])
-                if not in_conf:
-                    existing = next(
-                        (x for x in media["mentioned"]
-                         if isinstance(x, dict) and x.get("name", "").lower() == key), None)
-                    if existing:
-                        existing["count"] = existing.get("count", 1) + 1
-                        existing["last_seen"] = _today_syn
+            if not isinstance(m, dict) or not m.get("name"):
+                continue
+            mname = m["name"]
+            mtype = m.get("type", "unknown")
+            _, cobj = _med_find(media["confirmed"], mname)
+            if cobj:
+                continue
+            _, mobj = _med_find(media["mentioned"], mname)
+            if mobj:
+                continue
+            _, fobj = _med_find(media["fresh"], mname)
+            if fobj:
+                continue
+            media["fresh"].append(_med_make(mname, mtype, count=0))
+
+        # Шаг 5: Promote fresh → mentioned (count >= 2)
+        still_med_fresh = []
+        for item in media["fresh"]:
+            if item.get("count", 0) >= 2:
+                if len(media["mentioned"]) < _MED_MENTIONED_LIMIT:
+                    item["last_seen"] = _today_syn
+                    media["mentioned"].append(item)
+                else:
+                    weakest_m = min(
+                        media["mentioned"],
+                        key=lambda x: (x.get("count", 0), x.get("last_seen", ""))
+                    )
+                    if (item.get("count", 0) > weakest_m.get("count", 0) or (
+                        item.get("count", 0) == weakest_m.get("count", 0) and
+                        item.get("last_seen", "") > weakest_m.get("last_seen", "")
+                    )):
+                        media["mentioned"].remove(weakest_m)
+                        media["fresh"].append(_med_make(
+                            weakest_m["name"], weakest_m.get("type", "unknown"), count=0))
+                        item["last_seen"] = _today_syn
+                        media["mentioned"].append(item)
                     else:
-                        media["mentioned"].append({
-                            "name": m["name"], "type": m.get("type", "unknown"),
-                            "count": 1, "last_seen": _today_syn
-                        })
-        media["confirmed"] = sorted(
-            media["confirmed"], key=lambda x: x.get("last_seen", ""), reverse=True)[:10]
+                        still_med_fresh.append(item)
+            else:
+                still_med_fresh.append(item)
+        media["fresh"] = still_med_fresh
+
+        # Шаг 6: Swap mentioned → confirmed
+        if media["mentioned"]:
+            strongest_m = max(
+                media["mentioned"],
+                key=lambda x: (x.get("count", 0), x.get("last_seen", ""))
+            )
+            wi, weakest_c = _med_weakest_confirmed()
+            if wi is None:
+                media["mentioned"].remove(strongest_m)
+                strongest_m["last_seen"] = _today_syn
+                media["confirmed"].append(strongest_m)
+            elif len(media["confirmed"]) < _MED_CONFIRMED_LIMIT:
+                media["mentioned"].remove(strongest_m)
+                strongest_m["last_seen"] = _today_syn
+                media["confirmed"].append(strongest_m)
+            elif strongest_m.get("count", 0) >= weakest_c.get("count", 0):
+                media["confirmed"].pop(wi)
+                media["fresh"].append(_med_make(
+                    weakest_c["name"], weakest_c.get("type", "unknown"), count=0))
+                media["mentioned"].remove(strongest_m)
+                strongest_m["last_seen"] = _today_syn
+                media["confirmed"].append(strongest_m)
+
+        # Шаг 7: Финальный trim
+        media["fresh"] = sorted(
+            media["fresh"], key=lambda x: x.get("last_seen", ""), reverse=True
+        )[:_MED_FRESH_LIMIT]
         media["mentioned"] = sorted(
-            media["mentioned"], key=lambda x: x.get("last_seen", ""), reverse=True)[:10]
+            media["mentioned"],
+            key=lambda x: (-x.get("count", 0), x.get("last_seen", "")),
+            reverse=False
+        )[:_MED_MENTIONED_LIMIT]
+        media["confirmed"] = sorted(
+            media["confirmed"], key=lambda x: x.get("count", 0), reverse=True
+        )[:_MED_CONFIRMED_LIMIT]
 
         dp["memory"] = mem
         dp["synthesis"] = new_core  # backward compat
