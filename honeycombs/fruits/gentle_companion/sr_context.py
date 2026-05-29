@@ -214,14 +214,16 @@ def _build_user_context_msg(telegram_id: str) -> str:
             return f"{i.get('name','?')} (×{i.get('count',1)}, {i.get('last_seen','')})"  
         return str(i)
     _int_ctx = _dm_ctx.get("interests", {})
-    _int_conf = [_fmt_item_ctx(i) for i in _int_ctx.get("confirmed", [])]
-    _int_ment = [_fmt_item_ctx(i) for i in _int_ctx.get("mentioned", [])]
+    _int_conf  = [_fmt_item_ctx(i) for i in _int_ctx.get("confirmed", [])]
+    _int_ment  = [_fmt_item_ctx(i) for i in _int_ctx.get("mentioned", [])]
+    _int_fresh = [_fmt_item_ctx(i) for i in _int_ctx.get("fresh", [])]
     _interests_block = ""
-    if _int_conf or _int_ment:
+    if _int_conf or _int_ment or _int_fresh:
         _interests_block = (
             "\n[Интересы садовника:\n"
             f"  confirmed: {chr(44).join(_int_conf) if _int_conf else 'нет'}\n"
-            f"  mentioned: {chr(44).join(_int_ment) if _int_ment else 'нет'}\n]"
+            f"  mentioned: {chr(44).join(_int_ment) if _int_ment else 'нет'}\n"
+            f"  fresh: {chr(44).join(_int_fresh) if _int_fresh else 'нет'}\n]"
         )
     _med_ctx = _dm_ctx.get("media", {})
     _med_conf = [_fmt_item_ctx(i) for i in _med_ctx.get("confirmed", [])]
