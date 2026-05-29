@@ -1,27 +1,35 @@
 {
-  "date": "2026-05-28",
+  "date": "2026-05-29",
   "version": "7.39.23",
   "gardeners": {
-    "1485954655": {
-      "name": "Полина",
+    "224736062": {
+      "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-05-28"
+      "synthesis_date": "2026-05-29"
     },
     "339914913": {
       "name": "Антон",
-      "active": true,
+      "active": false,
       "synthesis_date": "2026-05-28"
     },
     "358793311": {
       "name": "Антон",
-      "active": true,
+      "active": false,
       "synthesis_date": "2026-05-28"
     },
-    "224736062": {
-      "name": "Дима",
-      "active": true,
+    "1485954655": {
+      "name": "Полина",
+      "active": false,
       "synthesis_date": "2026-05-28"
     }
   },
-  "issues": []
+  "issues": [
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    }
+  ]
 }
