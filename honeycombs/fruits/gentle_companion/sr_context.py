@@ -226,14 +226,16 @@ def _build_user_context_msg(telegram_id: str) -> str:
             f"  fresh: {chr(44).join(_int_fresh) if _int_fresh else 'нет'}\n]"
         )
     _med_ctx = _dm_ctx.get("media", {})
-    _med_conf = [_fmt_item_ctx(i) for i in _med_ctx.get("confirmed", [])]
-    _med_ment = [_fmt_item_ctx(i) for i in _med_ctx.get("mentioned", [])]
+    _med_conf  = [_fmt_item_ctx(i) for i in _med_ctx.get("confirmed", [])]
+    _med_ment  = [_fmt_item_ctx(i) for i in _med_ctx.get("mentioned", [])]
+    _med_fresh = [_fmt_item_ctx(i) for i in _med_ctx.get("fresh", [])]
     _media_block = ""
-    if _med_conf or _med_ment:
+    if _med_conf or _med_ment or _med_fresh:
         _media_block = (
             "\n[Культурный опыт садовника (книги/фильмы/музыка/театр/искусство и др.):\n"
             f"  confirmed: {chr(44).join(_med_conf) if _med_conf else 'нет'}\n"
-            f"  mentioned: {chr(44).join(_med_ment) if _med_ment else 'нет'}\n]"
+            f"  mentioned: {chr(44).join(_med_ment) if _med_ment else 'нет'}\n"
+            f"  fresh: {chr(44).join(_med_fresh) if _med_fresh else 'нет'}\n]"
         )
     _checklists_ctx = store_get_checklists(telegram_id)
     _cl_block = ""
