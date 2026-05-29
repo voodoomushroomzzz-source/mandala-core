@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-29 11:26:11 ──
+# ── BUILT by build.py ── 2026-05-29 21:17:28 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -2197,6 +2197,20 @@ SR_INTENT_MAP = """ПЯТЬ СФЕР РЕЗОНАНСА (как они живу�
 опираясь на карту выше. Показывай примеры фраз.
 Не перечисляй всё сразу — отвечай на конкретный вопрос
 или давай краткий обзор с предложением рассказать подробнее.
+
+WELCOME TOUR (только для новых садовников):
+Если садовник только что завершил онбординг и отвечает на твоё предложение
+"Хочешь расскажу коротко что здесь есть?" — действуй так:
+• Если он говорит "да" / "расскажи" / "давай" без конкретики —
+  сначала спроси: "О чём конкретно — задачи, напоминания, достижения, резонанс?"
+• Если конкретики нет или он говорит "обо всём" — веди поэтапно:
+  1. Расскажи про задачи (2-3 предложения) → предложи создать первую прямо сейчас
+  2. После пробы или отказа — напоминания → предложи попробовать
+  3. Достижения → предложи зафиксировать первое
+  4. Резонанс сфер → объясни как растёт
+  После каждого шага спрашивай хочет ли продолжить или перейти к чему-то конкретному.
+• Если он говорит "нет" / "потом" / "начнём" — просто переходи в обычный диалог.
+• Тон: живой, без занудства. Ты друг который показывает инструменты, не инструктор.
 
 КОНТЕКСТНЫЕ ПРАВИЛА:
 - Bulk когда: список через запятую/тире/нумерацию, слово "все", указана группа
@@ -7766,11 +7780,14 @@ async def onboard_gender(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_reply_markup(reply_markup=None)
     except Exception:
         pass
+    _city_skip_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="onboard_skip_city")
+    ]])
     await callback.message.answer(
-        "📍 В каком городе ты живёшь?\n"
-        "<i>Буду учитывать при поиске и в утреннем сообщении.</i>\n\n"
-        "Можно пропустить — напиши <b>пропустить</b>",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+        "📍 В каком городе ты живёшь?\n\n"
+        "<i>Буду учитывать часовой пояс для утреннего сообщения, "
+        "подбирать результаты поиска рядом с тобой и учитывать местную погоду.</i>",
+        parse_mode="HTML", reply_markup=_city_skip_kb
     )
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_city))
@@ -7784,11 +7801,36 @@ async def onboard_city(message: Message, state: FSMContext):
         tz = await _city_to_timezone(city)
         await state.update_data(timezone=tz)
     await state.set_state(GardenOnboardingStates.waiting_for_birthday)
+    _bday_skip_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="onboard_skip_birthday")
+    ]])
     await message.answer(
         "🎂 Когда твой день рождения?\n"
         "<i>Формат: ДД.ММ (например 15.03)</i>\n\n"
-        "Можно пропустить — напиши <b>пропустить</b>",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+        "<i>В этот день СР напишет тебе лично — не шаблон, "
+        "а живое слово с учётом твоего пути в Саду.</i>",
+        parse_mode="HTML", reply_markup=_bday_skip_kb
+    )
+
+@router.callback_query(F.data == "onboard_skip_city")
+async def onboard_skip_city(callback: CallbackQuery, state: FSMContext):
+    """Skip city step."""
+    await callback.answer()
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    await state.update_data(city="")
+    await state.set_state(GardenOnboardingStates.waiting_for_birthday)
+    _bday_skip_kb2 = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="onboard_skip_birthday")
+    ]])
+    await callback.message.answer(
+        "🎂 Когда твой день рождения?\n"
+        "<i>Формат: ДД.ММ (например 15.03)</i>\n\n"
+        "<i>В этот день СР напишет тебе лично — не шаблон, "
+        "а живое слово с учётом твоего пути в Саду.</i>",
+        parse_mode="HTML", reply_markup=_bday_skip_kb2
     )
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_birthday))
@@ -7806,6 +7848,22 @@ async def onboard_birthday(message: Message, state: FSMContext):
     await state.update_data(birthday=bday)
     await state.set_state(GardenOnboardingStates.waiting_for_morning)
     await message.answer(
+        "⏰ Во сколько присылать утреннее сообщение?\n"
+        "<i>Формат: ЧЧ:ММ (например 09:00 или 10:30)</i>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.callback_query(F.data == "onboard_skip_birthday")
+async def onboard_skip_birthday(callback: CallbackQuery, state: FSMContext):
+    """Skip birthday step."""
+    await callback.answer()
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    await state.update_data(birthday="")
+    await state.set_state(GardenOnboardingStates.waiting_for_morning)
+    await callback.message.answer(
         "⏰ Во сколько присылать утреннее сообщение?\n"
         "<i>Формат: ЧЧ:ММ (например 09:00 или 10:30)</i>",
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
@@ -7865,11 +7923,14 @@ async def onboard_morning(message: Message, state: FSMContext):
     _fire_sync()
     await state.set_state(GardenOnboardingStates.done)
     # ── Welcome Flow: сразу первый вопрос, без splash ─────────────────────────────
+    _wq1_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="welcome_skip")
+    ]])
     await message.answer(
         "Давай познакомимся чуть глубже.\n\n"
         "Чем занимаешься? "
         "Работа, творчество, что-то своё — пару слов.",
-        reply_markup=get_main_keyboard()
+        reply_markup=_wq1_kb
     )
     await state.update_data(_welcome_step=1)
 
@@ -8320,7 +8381,6 @@ async def cb_tour_yes(callback: CallbackQuery, state: FSMContext):
     _add_to_history(uid, "assistant", _reply_tour.strip())
     await callback.message.answer(_reply_tour.strip(), reply_markup=get_main_keyboard())
 
-@router.callback_query(F.data == "tour_no")
 async def _check_webhook() -> None:
     """Restore webhook if missing — runs every 5 min via scheduler."""
     try:
@@ -8332,6 +8392,36 @@ async def _check_webhook() -> None:
         logger.error(f"Webhook check error: {e}")
 
 
+async def _send_welcome_step8(msg, user_id: str) -> None:
+    """Шаг 8 онбординга: живое приветствие СР без кнопок."""
+    prof = store_get_profile(user_id)
+    if prof:
+        prof.setdefault("companion_settings", {})["welcome_done"] = True
+        store_set_profile(user_id, prof)
+        _fire_sync()
+    await msg.answer(
+        "Всё, ты в Саду 🌿\n\n"
+        "Я умею помогать с задачами, напоминаниями, чеклистами, достижениями — "
+        "и просто быть рядом как умный собеседник. "
+        "Хочешь расскажу коротко что здесь есть?",
+        reply_markup=get_main_keyboard()
+    )
+
+
+@router.callback_query(F.data == "welcome_skip")
+async def cb_welcome_skip(callback: CallbackQuery, state: FSMContext):
+    """Пропустить welcome вопросы (шаги 6-7) — сразу шаг 8."""
+    await callback.answer()
+    uid = str(callback.from_user.id)
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    await state.update_data(_welcome_step=0)
+    await _send_welcome_step8(callback.message, uid)
+
+
+@router.callback_query(F.data == "tour_no")
 async def cb_tour_no(callback: CallbackQuery):
     """Садовник разберётся сам."""
     await callback.answer()
@@ -8994,14 +9084,17 @@ async def free_conversation(message: Message, state: FSMContext):
         )
         _save_deep_profile(user_id, _dp)
         await state.update_data(_welcome_step=2)
+        _wq2_kb = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(text="Пропустить 🌿", callback_data="welcome_skip")
+        ]])
         await message.answer(
             "Понял. Последний вопрос — есть что-то большое к чему ты сейчас идёшь?\n\n"
             "Цель, мечта, проект — что угодно. Или скажи «пока нет» — это тоже ответ.",
-            reply_markup=get_main_keyboard()
+            reply_markup=_wq2_kb
         )
         return
     elif _welcome_step == 2:
-        # Второй ответ — большая цель
+        # Второй ответ — большая цель → шаг 8
         _dp = _get_deep_profile(user_id)
         _dp.setdefault("observations", []).append(
             f"{_today()} [onboarding]: большая цель — {message.text.strip()[:120]}"
@@ -9009,21 +9102,8 @@ async def free_conversation(message: Message, state: FSMContext):
         _save_deep_profile(user_id, _dp)
         _fire_sync()
         await state.update_data(_welcome_step=0)
-        # Предлагаем тур по функционалу
-        _tour_kb = InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(
-                text="🗺 Да, покажи",
-                callback_data="tour_yes"
-            ),
-            InlineKeyboardButton(
-                text="Разберусь сам 🌿",
-                callback_data="tour_no"
-            ),
-        ]])
-        await message.answer(
-            "Показать что умею?",
-            reply_markup=_tour_kb
-        )
+        # Шаг 8 — живое приветствие СР без кнопок
+        await _send_welcome_step8(message, user_id)
         return
 
     # Support voice messages: text may come via state instead of message.text
