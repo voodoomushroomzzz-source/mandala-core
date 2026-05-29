@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-29 21:29:54 ──
+# ── BUILT by build.py ── 2026-05-29 21:46:36 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -2985,6 +2985,29 @@ async def _generate_synthesis(user_id: str) -> None:
     completed = [t for t in tasks if t.get("status") == "completed"][-15:]
     tasks_text = "\n".join(f"- {t['title']}" for t in completed) if completed else "нет"
 
+    # Рост по сферам за последние 3 месяца
+    _sphere_names_syn = {
+        "health": "Здоровье", "creativity": "Творчество",
+        "work": "Работа", "connections": "Связи", "growth": "Рост"
+    }
+    _sphere_hist_raw = dp.get("sphere_history", [])[-3:]
+    _sphere_hist_lines = []
+    for _sh_month in _sphere_hist_raw:
+        _sh_m = _sh_month.get("month", "")
+        _sh_parts = []
+        for _sp, _sn in _sphere_names_syn.items():
+            _sd = _sh_month.get(_sp, {})
+            _st = _sd.get("tasks", 0)
+            _sa = _sd.get("achievements", 0)
+            _sr = _sd.get("resonance_delta", 0)
+            if _st > 0 or _sa > 0 or _sr > 0:
+                _sh_parts.append(
+                    f"{_sn}: {_st} задач, {_sa} достижений, +{_sr}% резонанс"
+                )
+        if _sh_parts:
+            _sphere_hist_lines.append(f"{_sh_m}: " + " | ".join(_sh_parts))
+    sphere_hist_text = "\n".join(_sphere_hist_lines) if _sphere_hist_lines else "нет данных"
+
     obs_text       = "\n".join(f"- {o['date']}: {o['text']}" for o in obs)
     insights_text  = "\n".join(f"- {i['date']}: {i['text']}" for i in insights) if insights else "нет"
     snapshots_text = "\n".join(f"- {s['date']}: {s['text']}" for s in snapshots[-5:]) if snapshots else "нет"
@@ -3029,6 +3052,9 @@ async def _generate_synthesis(user_id: str) -> None:
 
 ЗАКРЫТЫЕ ЗАДАЧИ:
 {tasks_text}
+
+РОСТ ПО СФЕРАМ (последние 3 месяца — задачи, достижения, резонанс):
+{sphere_hist_text}
 
 ТЕКУЩИЕ ИНТЕРЕСЫ:
   confirmed (стабильные, топ-10): {_int_conf_txt}
@@ -9140,6 +9166,16 @@ async def free_conversation(message: Message, state: FSMContext):
     _kw_lower = text.lower().strip()
     _pin_kw = ["закрепи это", "закрепи последнее", "закрепи сообщение", "запомни это"]
     _unpin_kw = ["открепи", "убери закреп", "сними закреп"]
+
+    # ── Keyword pre-detection: analytics request → load full sphere_history ──
+    _analytics_kw = [
+        "анализ", "аналитик", "прогресс", "статистик",
+        "достижени", "по сферам", "мой рост", "как я",
+        "что изменилось", "динамик", "за месяц", "за год",
+        "сферы жизни", "резонанс сфер"
+    ]
+    if any(k in _kw_lower for k in _analytics_kw):
+        _sphere_history_needed[user_id] = 2  # next 2 messages include full 12-month history
     if any(k in _kw_lower for k in _pin_kw):
         _pin_data = _last_bot_message.get(user_id)
         if _pin_data:
