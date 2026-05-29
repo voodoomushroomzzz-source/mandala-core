@@ -424,6 +424,16 @@
         "honeycombs/fruits/gentle_companion/sr_context.py"
       ],
       "deploy_status": "deployed"
+    },
+    "P-86": {
+      "name": "refactor: remove dead achievements[] array from workspace templates",
+      "date": "2026-05-29",
+      "commit": "b8182e7d",
+      "description": "Removed achievements[] array from workspace creation in onboarding, cmd_leave, cmd_delete_all. New gardeners no longer get the dead array. Existing gardeners unaffected. Core achievements system (achievements_count + sphere_history) unchanged.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/handlers/system.py"
+      ],
+      "deploy_status": "deployed"
     }
   },
   "known_bugs": {},

@@ -271,8 +271,10 @@
         "run_resonance_decay, send_morning/evening",
         "run_reminder/proactive_scheduler",
         "_check_webhook() — periodic webhook health monitor (added 2026-05-28)",
-        "date fix in send_morning_greeting + _send_daytime_proactive: today/tomorrow distinction (patched 2026-05-28)"
-      ]
+        "date fix in send_morning_greeting + _send_daytime_proactive: today/tomorrow distinction (patched 2026-05-28)",
+        "achievements[] array removed from workspace templates in onboarding/leave/delete_all — new gardeners get clean workspace (P-86, 2026-05-29)"
+      ],
+      "last_updated": "2026-05-29"
     },
     {
       "id": "09_main",
