@@ -660,11 +660,14 @@ async def onboard_gender(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_reply_markup(reply_markup=None)
     except Exception:
         pass
+    _city_skip_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="onboard_skip_city")
+    ]])
     await callback.message.answer(
-        "📍 В каком городе ты живёшь?\n"
-        "<i>Буду учитывать при поиске и в утреннем сообщении.</i>\n\n"
-        "Можно пропустить — напиши <b>пропустить</b>",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+        "📍 В каком городе ты живёшь?\n\n"
+        "<i>Буду учитывать часовой пояс для утреннего сообщения, "
+        "подбирать результаты поиска рядом с тобой и учитывать местную погоду.</i>",
+        parse_mode="HTML", reply_markup=_city_skip_kb
     )
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_city))
@@ -678,11 +681,36 @@ async def onboard_city(message: Message, state: FSMContext):
         tz = await _city_to_timezone(city)
         await state.update_data(timezone=tz)
     await state.set_state(GardenOnboardingStates.waiting_for_birthday)
+    _bday_skip_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="onboard_skip_birthday")
+    ]])
     await message.answer(
         "🎂 Когда твой день рождения?\n"
         "<i>Формат: ДД.ММ (например 15.03)</i>\n\n"
-        "Можно пропустить — напиши <b>пропустить</b>",
-        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+        "<i>В этот день СР напишет тебе лично — не шаблон, "
+        "а живое слово с учётом твоего пути в Саду.</i>",
+        parse_mode="HTML", reply_markup=_bday_skip_kb
+    )
+
+@router.callback_query(F.data == "onboard_skip_city")
+async def onboard_skip_city(callback: CallbackQuery, state: FSMContext):
+    """Skip city step."""
+    await callback.answer()
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    await state.update_data(city="")
+    await state.set_state(GardenOnboardingStates.waiting_for_birthday)
+    _bday_skip_kb2 = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="onboard_skip_birthday")
+    ]])
+    await callback.message.answer(
+        "🎂 Когда твой день рождения?\n"
+        "<i>Формат: ДД.ММ (например 15.03)</i>\n\n"
+        "<i>В этот день СР напишет тебе лично — не шаблон, "
+        "а живое слово с учётом твоего пути в Саду.</i>",
+        parse_mode="HTML", reply_markup=_bday_skip_kb2
     )
 
 @router.message(StateFilter(GardenOnboardingStates.waiting_for_birthday))
@@ -700,6 +728,22 @@ async def onboard_birthday(message: Message, state: FSMContext):
     await state.update_data(birthday=bday)
     await state.set_state(GardenOnboardingStates.waiting_for_morning)
     await message.answer(
+        "⏰ Во сколько присылать утреннее сообщение?\n"
+        "<i>Формат: ЧЧ:ММ (например 09:00 или 10:30)</i>",
+        parse_mode="HTML", reply_markup=get_cancel_keyboard()
+    )
+
+@router.callback_query(F.data == "onboard_skip_birthday")
+async def onboard_skip_birthday(callback: CallbackQuery, state: FSMContext):
+    """Skip birthday step."""
+    await callback.answer()
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    await state.update_data(birthday="")
+    await state.set_state(GardenOnboardingStates.waiting_for_morning)
+    await callback.message.answer(
         "⏰ Во сколько присылать утреннее сообщение?\n"
         "<i>Формат: ЧЧ:ММ (например 09:00 или 10:30)</i>",
         parse_mode="HTML", reply_markup=get_cancel_keyboard()
@@ -759,11 +803,14 @@ async def onboard_morning(message: Message, state: FSMContext):
     _fire_sync()
     await state.set_state(GardenOnboardingStates.done)
     # ── Welcome Flow: сразу первый вопрос, без splash ─────────────────────────────
+    _wq1_kb = InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="Пропустить 🌿", callback_data="welcome_skip")
+    ]])
     await message.answer(
         "Давай познакомимся чуть глубже.\n\n"
         "Чем занимаешься? "
         "Работа, творчество, что-то своё — пару слов.",
-        reply_markup=get_main_keyboard()
+        reply_markup=_wq1_kb
     )
     await state.update_data(_welcome_step=1)
 
@@ -1214,7 +1261,6 @@ async def cb_tour_yes(callback: CallbackQuery, state: FSMContext):
     _add_to_history(uid, "assistant", _reply_tour.strip())
     await callback.message.answer(_reply_tour.strip(), reply_markup=get_main_keyboard())
 
-@router.callback_query(F.data == "tour_no")
 async def _check_webhook() -> None:
     """Restore webhook if missing — runs every 5 min via scheduler."""
     try:
@@ -1226,6 +1272,36 @@ async def _check_webhook() -> None:
         logger.error(f"Webhook check error: {e}")
 
 
+async def _send_welcome_step8(msg, user_id: str) -> None:
+    """Шаг 8 онбординга: живое приветствие СР без кнопок."""
+    prof = store_get_profile(user_id)
+    if prof:
+        prof.setdefault("companion_settings", {})["welcome_done"] = True
+        store_set_profile(user_id, prof)
+        _fire_sync()
+    await msg.answer(
+        "Всё, ты в Саду 🌿\n\n"
+        "Я умею помогать с задачами, напоминаниями, чеклистами, достижениями — "
+        "и просто быть рядом как умный собеседник. "
+        "Хочешь расскажу коротко что здесь есть?",
+        reply_markup=get_main_keyboard()
+    )
+
+
+@router.callback_query(F.data == "welcome_skip")
+async def cb_welcome_skip(callback: CallbackQuery, state: FSMContext):
+    """Пропустить welcome вопросы (шаги 6-7) — сразу шаг 8."""
+    await callback.answer()
+    uid = str(callback.from_user.id)
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)
+    except Exception:
+        pass
+    await state.update_data(_welcome_step=0)
+    await _send_welcome_step8(callback.message, uid)
+
+
+@router.callback_query(F.data == "tour_no")
 async def cb_tour_no(callback: CallbackQuery):
     """Садовник разберётся сам."""
     await callback.answer()

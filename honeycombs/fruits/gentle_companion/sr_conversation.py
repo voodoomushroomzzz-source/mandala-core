@@ -146,14 +146,17 @@ async def free_conversation(message: Message, state: FSMContext):
         )
         _save_deep_profile(user_id, _dp)
         await state.update_data(_welcome_step=2)
+        _wq2_kb = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(text="Пропустить 🌿", callback_data="welcome_skip")
+        ]])
         await message.answer(
             "Понял. Последний вопрос — есть что-то большое к чему ты сейчас идёшь?\n\n"
             "Цель, мечта, проект — что угодно. Или скажи «пока нет» — это тоже ответ.",
-            reply_markup=get_main_keyboard()
+            reply_markup=_wq2_kb
         )
         return
     elif _welcome_step == 2:
-        # Второй ответ — большая цель
+        # Второй ответ — большая цель → шаг 8
         _dp = _get_deep_profile(user_id)
         _dp.setdefault("observations", []).append(
             f"{_today()} [onboarding]: большая цель — {message.text.strip()[:120]}"
@@ -161,21 +164,8 @@ async def free_conversation(message: Message, state: FSMContext):
         _save_deep_profile(user_id, _dp)
         _fire_sync()
         await state.update_data(_welcome_step=0)
-        # Предлагаем тур по функционалу
-        _tour_kb = InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(
-                text="🗺 Да, покажи",
-                callback_data="tour_yes"
-            ),
-            InlineKeyboardButton(
-                text="Разберусь сам 🌿",
-                callback_data="tour_no"
-            ),
-        ]])
-        await message.answer(
-            "Показать что умею?",
-            reply_markup=_tour_kb
-        )
+        # Шаг 8 — живое приветствие СР без кнопок
+        await _send_welcome_step8(message, user_id)
         return
 
     # Support voice messages: text may come via state instead of message.text
