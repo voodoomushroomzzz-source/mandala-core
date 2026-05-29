@@ -1722,9 +1722,7 @@ async def free_conversation(message: Message, state: FSMContext):
         _typing_stop.set()
         _typing_task.cancel()
 
-    # P-70d: apply suggest keyboard if no action from router
-    if _suggest_action_kb and not action:
-        action = _suggest_action_kb
+    # P-70d: suggest_action keyboard removed (P-89) — SR handles suggestion verbally
     kb = _get_action_keyboard(action)
     if reply_text and reply_text.strip():
         _has_html = any(tag in reply_text for tag in ["<b>", "<a href", "<i>"])
