@@ -445,6 +445,39 @@
         "honeycombs/fruits/gentle_companion/sr_prompts.py"
       ],
       "deploy_status": "deployed"
+    },
+    "P-88": {
+      "name": "feat: onboarding improvements — skip buttons, explanations, step8 welcome tour",
+      "date": "2026-05-29",
+      "commit": "cf3f946e",
+      "description": "Step 3 (city): skip button + explanation (timezone, search, weather). Step 4 (birthday): skip button + explanation (personal SR message on birthday). Steps 6-7 (welcome questions): skip button — pressing on step 6 skips both to step 8. Step 8: new live SR welcome message without buttons — live dialog. Fixed: cb_tour_no decorator was incorrectly bound to _check_webhook.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/handlers/system.py",
+        "honeycombs/fruits/gentle_companion/sr_conversation.py",
+        "honeycombs/fruits/gentle_companion/sr_prompts.py"
+      ],
+      "deploy_status": "deployed"
+    },
+    "P-89": {
+      "name": "refactor: remove suggest_action keyboard — SR handles verbally",
+      "date": "2026-05-29",
+      "commit": "42b47019",
+      "description": "Removed suggest_action inline buttons (Добавить задачу / Не надо) from free_conversation. SR already verbally suggests the action — buttons were redundant and broke dialog flow.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/sr_conversation.py"
+      ],
+      "deploy_status": "deployed"
+    },
+    "P-90": {
+      "name": "feat: sphere_history in synthesis + analytics keyword detection",
+      "date": "2026-05-29",
+      "commit": "137966b4",
+      "description": "sr_memory: added sphere_history[-3:] to synthesis prompt — SR now accounts for real sphere growth (tasks/achievements/resonance) when building portrait. sr_conversation: keyword detection for analytics requests (анализ/прогресс/достижения/рост/статистика/по сферам) — triggers _sphere_history_needed=2 so SR gets full 12-month history in context.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/sr_memory.py",
+        "honeycombs/fruits/gentle_companion/sr_conversation.py"
+      ],
+      "deploy_status": "deployed"
     }
   },
   "known_bugs": {},

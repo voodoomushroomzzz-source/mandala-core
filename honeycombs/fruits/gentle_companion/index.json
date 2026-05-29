@@ -164,7 +164,8 @@
         "SR_INTENT_MAP (12KB)",
         "_CLASSIFIER_PROMPT",
         "DATE AND TIME (absolute priority) — rule in SR_CORE_PROMPT: SR checks [Current time] first, never confuses today/tomorrow (P-83, 2026-05-28)",
-        "SR_INTENT_LIGHT: multi-query examples added for comparative search (action.queries[] instead of action.query) (P-87, 2026-05-29)"
+        "SR_INTENT_LIGHT: multi-query examples added for comparative search (action.queries[] instead of action.query) (P-87, 2026-05-29)",
+        "WELCOME TOUR block added: SR guides new gardeners through features step by step with offer to try each one (P-88, 2026-05-29)"
       ],
       "last_updated": "2026-05-29"
     },
@@ -210,7 +211,8 @@
         "_detect_and_save_observation()",
         "NOTE: _send_daily_report and handle_voice removed (belong to handlers/system.py) — 2026-05-28",
         "Three-tier interest system: fresh(15)/mentioned(10, decay 15d)/confirmed(10, swap) — LLM only names, code manages tiers (P-84, 2026-05-29)",
-        "Three-tier media system: same logic as interests, type field preserved — fixed self-reinforcing loop (P-85, 2026-05-29)"
+        "Three-tier media system: same logic as interests, type field preserved — fixed self-reinforcing loop (P-85, 2026-05-29)",
+        "sphere_history[-3:] added to synthesis prompt: РОСТ ПО СФЕРАМ block (tasks/achievements/resonance per sphere per month) (P-90, 2026-05-29)"
       ],
       "last_updated": "2026-05-29"
     },
@@ -256,7 +258,9 @@
         "_build_enriched_text() — enriches classifier query with dialog context (P-82, 2026-05-28)",
         "_CONTEXT_INTENTS — SHORT_CIRCUIT 0.75 for action intents (edit_task, create_reminder, checklists, achievements) (P-82)",
         "web_search routed through SR with full context — no more _synthesize_search, SR responds with dialog history + profile awareness (P-87, 2026-05-29)",
-        "multi-query support: action.queries[] for comparative requests — parallel Tavily searches, results merged before SR call (P-87, 2026-05-29)"
+        "multi-query support: action.queries[] for comparative requests — parallel Tavily searches, results merged before SR call (P-87, 2026-05-29)",
+        "suggest_action keyboard removed — SR suggests actions verbally (P-89, 2026-05-29)",
+        "Analytics keyword detection: анализ/прогресс/достижения/рост → _sphere_history_needed=2 (full 12-month history in context) (P-90, 2026-05-29)"
       ],
       "last_updated": "2026-05-29"
     },
@@ -277,7 +281,9 @@
         "run_reminder/proactive_scheduler",
         "_check_webhook() — periodic webhook health monitor (added 2026-05-28)",
         "date fix in send_morning_greeting + _send_daytime_proactive: today/tomorrow distinction (patched 2026-05-28)",
-        "achievements[] array removed from workspace templates in onboarding/leave/delete_all — new gardeners get clean workspace (P-86, 2026-05-29)"
+        "achievements[] array removed from workspace templates in onboarding/leave/delete_all — new gardeners get clean workspace (P-86, 2026-05-29)",
+        "Onboarding skip buttons: city, birthday, welcome q1/q2 — pressing skip on q1 jumps directly to step 8 (P-88, 2026-05-29)",
+        "_send_welcome_step8(): live SR welcome without buttons — starts natural dialog. Fixed cb_tour_no decorator bug (P-88, 2026-05-29)"
       ],
       "last_updated": "2026-05-29"
     },
