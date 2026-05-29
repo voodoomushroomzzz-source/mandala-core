@@ -202,6 +202,16 @@ async def free_conversation(message: Message, state: FSMContext):
     _kw_lower = text.lower().strip()
     _pin_kw = ["закрепи это", "закрепи последнее", "закрепи сообщение", "запомни это"]
     _unpin_kw = ["открепи", "убери закреп", "сними закреп"]
+
+    # ── Keyword pre-detection: analytics request → load full sphere_history ──
+    _analytics_kw = [
+        "анализ", "аналитик", "прогресс", "статистик",
+        "достижени", "по сферам", "мой рост", "как я",
+        "что изменилось", "динамик", "за месяц", "за год",
+        "сферы жизни", "резонанс сфер"
+    ]
+    if any(k in _kw_lower for k in _analytics_kw):
+        _sphere_history_needed[user_id] = 2  # next 2 messages include full 12-month history
     if any(k in _kw_lower for k in _pin_kw):
         _pin_data = _last_bot_message.get(user_id)
         if _pin_data:
