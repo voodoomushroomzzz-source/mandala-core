@@ -745,14 +745,12 @@ async def onboard_morning(message: Message, state: FSMContext):
         },
         "growth_history": [{"date": _today(), "resonance": initial_resonance, "event": "onboarding"}],
     }
-    # Preserve existing tasks and achievements — only reset on first onboarding
+    # Preserve existing tasks — only reset on first onboarding
     existing_ws = store_get_workspace(user_id) or {}
     existing_tasks = existing_ws.get("tasks", [])
-    existing_achievements = existing_ws.get("achievements", [])
     workspace = {
         "tasks": existing_tasks,
         "groups": existing_ws.get("groups", []),
-        "achievements": existing_achievements,
         "updated": _today()
     }
     store_set_profile(user_id, gardener)
@@ -959,7 +957,7 @@ async def leave_confirm(callback: CallbackQuery, state: FSMContext):
     # 3. Wipe GitHub files
     base = _user_path(user_id)
     asyncio.create_task(_gardeners_put(f"{base}/profile.json", {}))
-    asyncio.create_task(_gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
+    asyncio.create_task(_gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": []}))
     asyncio.create_task(_gardeners_put(f"{base}/memory.json", {"sessions": []}))
     _fire_sync()
     # 4. Notify architect
@@ -1024,7 +1022,7 @@ async def delete_confirm_2(message: Message, state: FSMContext):
     # Clear on GitHub — new file structure
     base = _user_path(user_id)
     asyncio.create_task(_gardeners_put(f"{base}/profile.json", {}))
-    asyncio.create_task(_gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": [], "achievements": []}))
+    asyncio.create_task(_gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": []}))
     asyncio.create_task(_gardeners_put(f"{base}/memory.json", {"sessions": []}))
     await state.clear()
     await message.answer(
