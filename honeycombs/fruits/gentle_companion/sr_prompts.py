@@ -189,6 +189,12 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
   Пример: "что идёт в кино" → action.query="кино {city} афиша сегодня", action.search_category="cinema"
   Пример: "найди вакансии разработчика" → action.query="вакансии разработчик {city}", action.search_category="jobs"
   В поле text пиши ТОЛЬКО нормализованный запрос — без анализа сфер, профиля, философии.
+- СРАВНИТЕЛЬНЫЕ ЗАПРОСЫ (два объекта, два периода, вчера/сегодня, X vs Y) → web_search с action.queries=["запрос1", "запрос2"] вместо action.query.
+  Каждый запрос в списке — отдельный поисковый запрос (3-7 слов). Система выполнит их параллельно и объединит результаты.
+  Пример: "сравни погоду вчера и сегодня" → action.queries=["погода {city} сегодня", "погода {city} вчера"], action.search_category="weather"
+  Пример: "что лучше iPhone или Samsung" → action.queries=["iPhone 15 характеристики", "Samsung S24 характеристики"], action.search_category="default"
+  Пример: "как доллар изменился за неделю" → action.queries=["курс доллара сегодня", "курс доллара неделю назад"], action.search_category="default"
+  Пример: "новости спорта за вчера и сегодня" → action.queries=["спорт новости сегодня", "спорт новости вчера"], action.search_category="sport"
 - "напомни мне X завтра в 9", "поставь напоминание X" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM", action.repeat=once/daily/weekdays, 0.95
   datetime ВСЕГДА в локальном времени из [Сейчас у садовника]. НЕ переводи в UTC.
 - "напомни через 30 минут", "через 2 часа напомни X" → create_reminder, action.title=X, action.datetime=текущее_время+N_минут/часов в ISO формате, 0.95
