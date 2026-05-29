@@ -5,14 +5,15 @@
   "to": "Claude (External SR, next session)",
   "onboarding_file": "honeycombs/boot_online/boot_online_onboarding_pc.json",
 
-  "session_summary": "Deep audit of _generate_synthesis and achievements system. Designed and deployed three-tier interest + media system (fresh/mentioned/confirmed). Cleaned up dead achievements[] array from workspace templates.",
+  "session_summary": "Deep audit of _generate_synthesis and achievements system. Designed and deployed three-tier interest + media system (fresh/mentioned/confirmed). Cleaned up dead achievements[] array. Fixed web_search: now routed through SR with full context + multi-query for comparative requests.",
 
   "system_state": {
     "bot_version": "7.39.76+ (gentle_companion.py, modular build)",
     "hosting": "Hetzner VPS 91.99.149.226, systemd, healthy",
-    "last_deploy": "2026-05-29 09:24:47",
+    "last_verified_monolith": "2026-05-29 11:26:11",
+    "all_patches_deployed": "P-84 P-85 P-86 deployed. P-87 pushed to GitHub, awaiting deploy from home/hotspot (corporate network blocks SSH port 22).",
     "monolith_verified": true,
-    "all_patches_deployed": true
+    "patches_verified": "15/15 anchors present"
   },
 
   "completed_this_session": [
@@ -21,21 +22,32 @@
       "what": "Three-tier interest system",
       "details": "fresh(15, FIFO) / mentioned(10, decay 15d) / confirmed(10, swap). LLM only names what it sees in dialog. All transitions deterministic code. Backward compat: old string format auto-normalized, missing 'fresh' key auto-initialized.",
       "files": ["sr_memory.py", "sr_context.py"],
-      "commit": "3473b36f"
+      "commit": "3473b36f",
+      "deploy": "done"
     },
     {
       "id": "P-85",
       "what": "Three-tier media system",
       "details": "Same fresh/mentioned/confirmed logic applied to media. type field (film/series/book/etc) preserved through tier transitions. Fixed self-reinforcing loop: LLM was refreshing last_seen on items it saw in prompt without real dialog mention.",
       "files": ["sr_memory.py", "sr_context.py"],
-      "commit": "df99f3cb"
+      "commit": "df99f3cb",
+      "deploy": "done"
     },
     {
       "id": "P-86",
       "what": "Remove dead achievements[] array from workspace templates",
       "details": "Removed from onboarding, cmd_leave, cmd_delete_all. New gardeners get clean workspace. Core system (achievements_count + sphere_history) unchanged and working correctly.",
       "files": ["handlers/system.py"],
-      "commit": "b8182e7d"
+      "commit": "b8182e7d",
+      "deploy": "done"
+    },
+    {
+      "id": "P-87",
+      "what": "web_search routed through SR with full context + multi-query support",
+      "details": "web_search results now passed to SR as [Данные из поиска] context block. SR responds with full dialog history, tone, profile — no more 'Привет' mid-dialog. Added action.queries[] for comparative requests — parallel Tavily searches, results merged, SR synthesizes. _synthesize_search no longer called (dead code, kept in sr_search.py).",
+      "files": ["sr_conversation.py", "sr_prompts.py"],
+      "commit": "69a2fe0c",
+      "deploy": "PENDING — pushed to GitHub, needs deploy from non-corporate network"
     }
   ],
 
@@ -48,27 +60,30 @@
       "llm_role": "LLM names confirmed_interests (active in dialog) and mentioned_interests (vague). Code does all transitions."
     },
     "media_tiers": "Identical logic to interests. 15/10/10. type field preserved.",
-    "achievements_system": "achievements_count (counter, never resets) + sphere_history (monthly aggregates in deep_profile, 12-month rolling). achievements[] array is dead legacy — existing users keep it, new users don't get it.",
+    "achievements_system": "achievements_count (counter, never resets) + sphere_history (monthly aggregates in deep_profile, 12-month rolling). achievements[] array is dead legacy — existing users keep it, new users do not get it.",
+    "web_search_flow": "Classifier → web_search intent → parallel _tavily_search_raw (supports queries[]) → data block appended to SR messages[0] → SR responds with full context. _synthesize_search is dead code.",
     "synthesis_trigger": "Reactive: every 2 sr_observations via _add_sr_observation. Also forced at 21:00 in _send_daily_report for active gardeners.",
-    "synthesis_save": "Dual write: profile.deep_profile.memory (source of truth) + workspace.deep_memory (RAM cache for fast scheduler access). synthesis_date only in profile — ws branch in send_morning_greeting always falls back to profile.",
     "ram_github": "All data loaded to RAM on startup (_store). GitHub sync every 2 minutes. GitHub is archive, RAM is working storage."
+  },
+
+  "pending_deploy": {
+    "commit": "69a2fe0c",
+    "command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\"",
+    "note": "Corporate network blocks port 22. Use home network or mobile hotspot."
   },
 
   "open_issues_low_priority": [
     {
+      "issue": "_synthesize_search is now dead code in sr_search.py",
+      "action": "Optional cleanup: remove function or add deprecated comment"
+    },
+    {
       "issue": "synthesis_date not written to workspace.deep_memory",
-      "impact": "ws branch in send_morning_greeting always falls back to profile. Dead code line. Not breaking.",
-      "action": "Either remove ws branch or add synthesis_date to ws write in _generate_synthesis"
+      "action": "Either remove ws branch in send_morning_greeting or add synthesis_date to ws write"
     },
     {
       "issue": "old_obs variable defined twice in _generate_synthesis",
-      "impact": "Dead code, not breaking",
-      "action": "Remove second definition (line ~67 in sr_memory.py)"
-    },
-    {
-      "issue": "store_set_achievements still references achievements[] in fallback workspace",
-      "impact": "Called only by legacy ach_bonus FSM handler which is rarely used. Not breaking.",
-      "action": "Optional: clean up store_set_achievements and ach_bonus handler"
+      "action": "Remove second definition"
     }
   ],
 
@@ -80,13 +95,13 @@
       "architect_bot.json — T-20260511-ARCHBOT",
       "manus_hands.json — T-20260511-MANUS"
     ],
-    "gardeners": 4,
-    "dima_profile_note": "confirmed interests now correctly capped at 10 (was 20 with duplicates like творчество/творчество музыка/музыка). First synthesis after this session will trim and reorganize."
+    "gardeners": 4
   },
 
   "files_to_load_on_start": [
     "honeycombs/fruits/gentle_companion/index.json",
     "honeycombs/tasks/active/bot_update.json",
-    "honeycombs/fruits/gentle_companion/sr_memory.py"
+    "honeycombs/fruits/gentle_companion/sr_memory.py",
+    "honeycombs/fruits/gentle_companion/sr_conversation.py"
   ]
 }

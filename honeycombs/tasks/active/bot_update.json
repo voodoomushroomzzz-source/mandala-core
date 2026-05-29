@@ -434,6 +434,17 @@
         "honeycombs/fruits/gentle_companion/handlers/system.py"
       ],
       "deploy_status": "deployed"
+    },
+    "P-87": {
+      "name": "feat: web_search routed through SR with full context + multi-query support",
+      "date": "2026-05-29",
+      "commit": "69a2fe0c",
+      "description": "web_search results now passed to SR as context block instead of separate _synthesize_search call. SR responds with full dialog history, tone and profile awareness — no more 'Привет' mid-dialog. Added multi-query support (action.queries[]) for comparative requests: 'сравни погоду вчера и сегодня' → parallel Tavily searches, results merged, SR synthesizes.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/sr_conversation.py",
+        "honeycombs/fruits/gentle_companion/sr_prompts.py"
+      ],
+      "deploy_status": "deployed"
     }
   },
   "known_bugs": {},

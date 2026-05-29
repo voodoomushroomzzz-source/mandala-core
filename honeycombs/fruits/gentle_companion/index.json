@@ -163,8 +163,10 @@
         "SR_INTENT_LIGHT (18KB)",
         "SR_INTENT_MAP (12KB)",
         "_CLASSIFIER_PROMPT",
-        "DATE AND TIME (absolute priority) — rule in SR_CORE_PROMPT: SR checks [Current time] first, never confuses today/tomorrow (P-83, 2026-05-28)"
-      ]
+        "DATE AND TIME (absolute priority) — rule in SR_CORE_PROMPT: SR checks [Current time] first, never confuses today/tomorrow (P-83, 2026-05-28)",
+        "SR_INTENT_LIGHT: multi-query examples added for comparative search (action.queries[] instead of action.query) (P-87, 2026-05-29)"
+      ],
+      "last_updated": "2026-05-29"
     },
     {
       "id": "sr_context",
@@ -252,8 +254,11 @@
         "_classify_intent()",
         "free_conversation() — 1597 lines, refactoring planned",
         "_build_enriched_text() — enriches classifier query with dialog context (P-82, 2026-05-28)",
-        "_CONTEXT_INTENTS — SHORT_CIRCUIT 0.75 for action intents (edit_task, create_reminder, checklists, achievements) (P-82)"
-      ]
+        "_CONTEXT_INTENTS — SHORT_CIRCUIT 0.75 for action intents (edit_task, create_reminder, checklists, achievements) (P-82)",
+        "web_search routed through SR with full context — no more _synthesize_search, SR responds with dialog history + profile awareness (P-87, 2026-05-29)",
+        "multi-query support: action.queries[] for comparative requests — parallel Tavily searches, results merged before SR call (P-87, 2026-05-29)"
+      ],
+      "last_updated": "2026-05-29"
     },
     {
       "id": "08_handlers_system",
