@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 sr_memory.py -- SR Memory & Synthesis
-Phase: 5. Updated: 2026-05-26 -- _generate_synthesis uses max_tokens=3000.
+Phase: 5. Updated: 2026-05-29 -- three-tier interest system (fresh/mentioned/confirmed).
 """
 
 async def _distill_observations(user_id: str, dp: dict) -> None:
@@ -61,7 +61,7 @@ async def _generate_synthesis(user_id: str) -> None:
         if len(obs) < 2:
             obs.append({"date": _today(), "text": "Начало пути в Мандале"})
 
-    core     = mem.get("core", "")
+    core      = mem.get("core", "")
     snapshots = mem.get("snapshots", [])
     insights  = dp.get("long_term_insights", [])
     old_obs   = dp.get("observations", [])[-5:]  # streak/sphere observations
@@ -71,10 +71,10 @@ async def _generate_synthesis(user_id: str) -> None:
     completed = [t for t in tasks if t.get("status") == "completed"][-15:]
     tasks_text = "\n".join(f"- {t['title']}" for t in completed) if completed else "нет"
 
-    obs_text      = "\n".join(f"- {o['date']}: {o['text']}" for o in obs)
-    insights_text = "\n".join(f"- {i['date']}: {i['text']}" for i in insights) if insights else "нет"
+    obs_text       = "\n".join(f"- {o['date']}: {o['text']}" for o in obs)
+    insights_text  = "\n".join(f"- {i['date']}: {i['text']}" for i in insights) if insights else "нет"
     snapshots_text = "\n".join(f"- {s['date']}: {s['text']}" for s in snapshots[-5:]) if snapshots else "нет"
-    old_obs_text  = "\n".join(f"- {o}" for o in old_obs) if old_obs else "нет"
+    old_obs_text   = "\n".join(f"- {o}" for o in old_obs) if old_obs else "нет"
 
     # P-44: полная история диалога — источник интересов, тем, медиа
     _hist_syn = _get_history(user_id)
@@ -88,12 +88,14 @@ async def _generate_synthesis(user_id: str) -> None:
         if isinstance(i, dict):
             return f"{i.get('name','?')} (×{i.get('count',1)}, last:{i.get('last_seen','')})"
         return str(i)
+
     _cur_interests = mem.get("interests", {})
-    _cur_media = mem.get("media", {})
-    _int_conf_txt = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("confirmed", [])) or "нет"
-    _int_ment_txt = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("mentioned", [])) or "нет"
-    _med_conf_txt = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("confirmed", [])) or "нет"
-    _med_ment_txt = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("mentioned", [])) or "нет"
+    _cur_media     = mem.get("media", {})
+    _int_conf_txt  = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("confirmed", [])) or "нет"
+    _int_ment_txt  = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("mentioned", [])) or "нет"
+    _int_fresh_txt = ", ".join(_fmt_syn_item(i) for i in _cur_interests.get("fresh", []))    or "нет"
+    _med_conf_txt  = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("confirmed", []))    or "нет"
+    _med_ment_txt  = ", ".join(_fmt_syn_item(i) for i in _cur_media.get("mentioned", []))    or "нет"
 
     prompt = f"""ТЕКУЩИЙ ПОРТРЕТ:
 {core if core else "пока не сформирован"}
@@ -114,8 +116,9 @@ async def _generate_synthesis(user_id: str) -> None:
 {tasks_text}
 
 ТЕКУЩИЕ ИНТЕРЕСЫ:
-  confirmed: {_int_conf_txt}
-  mentioned: {_int_ment_txt}
+  confirmed (стабильные, топ-10): {_int_conf_txt}
+  mentioned (соревнуются, топ-10): {_int_ment_txt}
+  fresh (новые, огород, топ-15): {_int_fresh_txt}
 
 ТЕКУЩИЕ МЕДИА (книги/фильмы/музыка):
   confirmed: {_med_conf_txt}
@@ -125,11 +128,11 @@ async def _generate_synthesis(user_id: str) -> None:
 {dialog_text}
 
 ПРАВИЛА обновления интересов и медиа:
-- confirmed макс 20 интересов, 10 медиа. mentioned макс 20 и 10.
-- Если confirmed не упоминался 30+ дней — перемести в mentioned.
-- Если mentioned не упоминался 15+ дней — удали.
-- Остальные решения о перемещении — на твоё усмотрение по count и last_seen.
-- Культурный опыт: определяй тип из контекста:
+- Интересы которые ВИДИШЬ В ДИАЛОГЕ — называй в confirmed_interests или mentioned_interests.
+  Система сама распределит их по группам (fresh/mentioned/confirmed). Тебе не нужно управлять переходами.
+- confirmed_interests: интересы которые явно и активно присутствуют в диалоге сегодня.
+- mentioned_interests: интересы которые мелькнули, упомянуты вскользь.
+- Медиа (confirmed макс 10, mentioned макс 10). Культурный опыт: определяй тип из контекста:
   film (фильм/документалка), series (сериал), book (книга/поэзия), music (музыка/альбом/концерт),
   podcast (подкаст/лекция), art (картина/скульптура/фото), theatre (спектакль/балет/опера),
   architecture (здание/памятник/чудо света), game (игра), exhibition (выставка/музей/инсталляция).
@@ -178,86 +181,259 @@ async def _generate_synthesis(user_id: str) -> None:
         from datetime import date as _date_syn
         _today_syn = _today()
 
-        def _update_items(current_list, new_names, max_count):
-            """Обновить список объектов: count++ если есть, добавить если нет."""
-            # Нормализуем старый формат (строки → объекты)
-            normalized = []
-            for item in current_list:
-                if isinstance(item, str):
-                    normalized.append({"name": item, "count": 1, "last_seen": _today_syn})
+        # ── Константы групп интересов ─────────────────────────────────────────
+        _FRESH_LIMIT     = 15   # огород: новые без подтверждений
+        _MENTIONED_LIMIT = 10   # соревнование: набирают count
+        _CONFIRMED_LIMIT = 10   # стабильное ядро
+        _MENTIONED_DECAY = 15   # дней без упоминания → падает во fresh
+
+        # ── Инициализация структуры (backward compat: если нет fresh) ─────────
+        interests = mem.setdefault("interests", {"confirmed": [], "mentioned": [], "fresh": []})
+        if "fresh" not in interests:
+            interests["fresh"] = []
+
+        # Нормализация: старый формат строк → объекты
+        def _norm(lst):
+            return [
+                {"name": i, "count": 1, "last_seen": _today_syn} if isinstance(i, str) else i
+                for i in lst
+            ]
+        interests["confirmed"] = _norm(interests.get("confirmed", []))
+        interests["mentioned"] = _norm(interests.get("mentioned", []))
+        interests["fresh"]     = _norm(interests.get("fresh", []))
+
+        # ── Вспомогательные функции ───────────────────────────────────────────
+        def _find(lst, name):
+            """Найти объект по имени (case-insensitive). Вернуть (index, obj) или (None, None)."""
+            key = name.lower()
+            for idx, item in enumerate(lst):
+                if item.get("name", "").lower() == key:
+                    return idx, item
+            return None, None
+
+        def _make_item(name, count=0):
+            return {"name": name, "count": count, "last_seen": _today_syn}
+
+        def _weakest_confirmed():
+            """Вернуть (index, obj) слабейшего в confirmed: min count, при равенстве min last_seen."""
+            if not interests["confirmed"]:
+                return None, None
+            idx, obj = min(
+                enumerate(interests["confirmed"]),
+                key=lambda x: (x[1].get("count", 0), x[1].get("last_seen", ""))
+            )
+            return idx, obj
+
+        # ── Шаг 1: Decay mentioned → fresh ───────────────────────────────────
+        # Не упоминался 15 дней → падает во fresh с count=0
+        still_mentioned = []
+        for item in interests["mentioned"]:
+            try:
+                days = (_date_syn.today() - _date_syn.fromisoformat(
+                    item.get("last_seen", _today_syn))).days
+            except Exception:
+                days = 0
+            if days >= _MENTIONED_DECAY:
+                # Перекладываем во fresh с обнулением count (если там ещё нет)
+                fi, _ = _find(interests["fresh"], item["name"])
+                if fi is None:
+                    interests["fresh"].append(_make_item(item["name"], count=0))
+            else:
+                still_mentioned.append(item)
+        interests["mentioned"] = still_mentioned
+
+        # ── Шаг 2: Trim fresh по last_seen (FIFO, count игнорируется) ─────────
+        interests["fresh"] = sorted(
+            interests["fresh"],
+            key=lambda x: x.get("last_seen", ""),
+            reverse=True
+        )[:_FRESH_LIMIT]
+
+        # ── Шаг 3: Обработать confirmed_interests от LLM ──────────────────────
+        for name in confirmed:
+            if not name:
+                continue
+            # Уже в confirmed → count++, last_seen
+            ci, cobj = _find(interests["confirmed"], name)
+            if ci is not None:
+                cobj["count"] += 1
+                cobj["last_seen"] = _today_syn
+                continue
+            # Уже в mentioned → count++, last_seen (swap проверим на шаге 6)
+            mi, mobj = _find(interests["mentioned"], name)
+            if mi is not None:
+                mobj["count"] += 1
+                mobj["last_seen"] = _today_syn
+                continue
+            # Уже во fresh → count++, last_seen
+            fi, fobj = _find(interests["fresh"], name)
+            if fi is not None:
+                fobj["count"] += 1
+                fobj["last_seen"] = _today_syn
+            else:
+                # Совсем новый → во fresh, count=1 (первое упоминание)
+                interests["fresh"].append(_make_item(name, count=1))
+
+        # ── Шаг 4: Обработать mentioned_interests от LLM ──────────────────────
+        # Только если нигде нет → во fresh с count=0
+        for name in mentioned:
+            if not name:
+                continue
+            _, cobj = _find(interests["confirmed"], name)
+            if cobj:
+                continue
+            _, mobj = _find(interests["mentioned"], name)
+            if mobj:
+                continue
+            _, fobj = _find(interests["fresh"], name)
+            if fobj:
+                continue
+            interests["fresh"].append(_make_item(name, count=0))
+
+        # ── Шаг 5: Promote fresh → mentioned (count >= 2) ─────────────────────
+        still_fresh = []
+        for item in interests["fresh"]:
+            if item.get("count", 0) >= 2:
+                if len(interests["mentioned"]) < _MENTIONED_LIMIT:
+                    # Есть свободное место
+                    item["last_seen"] = _today_syn
+                    interests["mentioned"].append(item)
                 else:
-                    normalized.append(item)
-            # Обновляем count и last_seen для упомянутых
-            existing_names = {i["name"].lower(): i for i in normalized}
-            for name in new_names:
-                if not name:
-                    continue
-                key = name.lower()
-                if key in existing_names:
-                    existing_names[key]["count"] = existing_names[key].get("count", 1) + 1
-                    existing_names[key]["last_seen"] = _today_syn
-                else:
-                    normalized.append({"name": name, "count": 1, "last_seen": _today_syn})
-            # Обрезаем по last_seen (вытесняем самые старые)
-            normalized.sort(key=lambda x: x.get("last_seen", ""), reverse=True)
-            return normalized[:max_count]
+                    # Нет места → сравниваем со слабейшим в mentioned
+                    weakest_m = min(
+                        interests["mentioned"],
+                        key=lambda x: (x.get("count", 0), x.get("last_seen", ""))
+                    )
+                    if (item.get("count", 0) > weakest_m.get("count", 0) or (
+                        item.get("count", 0) == weakest_m.get("count", 0) and
+                        item.get("last_seen", "") > weakest_m.get("last_seen", "")
+                    )):
+                        # Вытесняем слабейший → fresh с count=0
+                        interests["mentioned"].remove(weakest_m)
+                        interests["fresh"].append(_make_item(weakest_m["name"], count=0))
+                        item["last_seen"] = _today_syn
+                        interests["mentioned"].append(item)
+                    else:
+                        # Не смог вытеснить — остаётся во fresh
+                        still_fresh.append(item)
+            else:
+                still_fresh.append(item)
+        interests["fresh"] = still_fresh
 
-        def _decay_items(items, max_days):
-            """Удалить элементы старше max_days дней."""
-            result = []
-            for item in items:
-                if isinstance(item, str):
-                    result.append({"name": item, "count": 1, "last_seen": _today_syn})
-                    continue
-                try:
-                    days = (_date_syn.today() - _date_syn.fromisoformat(item.get("last_seen", _today_syn))).days
-                    if days < max_days:
-                        result.append(item)
-                except Exception:
-                    result.append(item)
-            return result
+        # ── Шаг 6: Swap mentioned → confirmed ─────────────────────────────────
+        # Сильнейший из mentioned vs слабейший из confirmed
+        if interests["mentioned"]:
+            strongest_m = max(
+                interests["mentioned"],
+                key=lambda x: (x.get("count", 0), x.get("last_seen", ""))
+            )
+            wi, weakest_c = _weakest_confirmed()
 
-        # Интересы
-        interests = mem.setdefault("interests", {"confirmed": [], "mentioned": []})
-        interests["confirmed"] = _decay_items(interests.get("confirmed", []), 30)
-        interests["mentioned"] = _decay_items(interests.get("mentioned", []), 15)
-        conf_names = [i if isinstance(i, str) else i.get("name","") for i in interests["confirmed"]]
-        ment_new = [n for n in mentioned if n and n.lower() not in [c.lower() for c in conf_names]]
-        interests["confirmed"] = _update_items(interests["confirmed"], confirmed, 20)
-        interests["confirmed"] = [x for x in interests["confirmed"] if (x.get("count", 1) if isinstance(x, dict) else 1) >= 2]
-        interests["mentioned"] = _update_items(interests["mentioned"], ment_new, 20)
+            if wi is None:
+                # confirmed пуст — просто добавляем
+                interests["mentioned"].remove(strongest_m)
+                strongest_m["last_seen"] = _today_syn
+                interests["confirmed"].append(strongest_m)
+            elif len(interests["confirmed"]) < _CONFIRMED_LIMIT:
+                # Есть свободное место в confirmed
+                interests["mentioned"].remove(strongest_m)
+                strongest_m["last_seen"] = _today_syn
+                interests["confirmed"].append(strongest_m)
+            elif strongest_m.get("count", 0) >= weakest_c.get("count", 0):
+                # Swap: слабый confirmed → fresh count=0
+                interests["confirmed"].pop(wi)
+                interests["fresh"].append(_make_item(weakest_c["name"], count=0))
+                # Сильный mentioned → confirmed
+                interests["mentioned"].remove(strongest_m)
+                strongest_m["last_seen"] = _today_syn
+                interests["confirmed"].append(strongest_m)
+            # Иначе: нет достаточно сильного кандидата — confirmed остаётся статичным
 
-        # Медиа
+        # ── Шаг 7: Финальный trim ─────────────────────────────────────────────
+        # fresh: по last_seen DESC (FIFO), держим 15
+        interests["fresh"] = sorted(
+            interests["fresh"],
+            key=lambda x: x.get("last_seen", ""),
+            reverse=True
+        )[:_FRESH_LIMIT]
+        # mentioned: по count DESC, при равенстве last_seen DESC, держим 10
+        interests["mentioned"] = sorted(
+            interests["mentioned"],
+            key=lambda x: (-x.get("count", 0), x.get("last_seen", "")),
+            reverse=False
+        )[:_MENTIONED_LIMIT]
+        # confirmed: по count DESC, держим 10
+        interests["confirmed"] = sorted(
+            interests["confirmed"],
+            key=lambda x: x.get("count", 0),
+            reverse=True
+        )[:_CONFIRMED_LIMIT]
+
+        # Медиа (логика не изменилась)
         media = mem.setdefault("media", {"confirmed": [], "mentioned": []})
         conf_media_raw = result.get("confirmed_media", [])
         ment_media_raw = result.get("mentioned_media", [])
-        conf_media_names = [m.get("name","") if isinstance(m,dict) else m for m in conf_media_raw]
-        ment_media_names = [m.get("name","") if isinstance(m,dict) else m for m in ment_media_raw]
-        # Сохраняем тип медиа при добавлении
-        media["confirmed"] = _decay_items(media.get("confirmed", []), 30)
-        media["mentioned"] = _decay_items(media.get("mentioned", []), 15)
+
+        def _norm_media(lst):
+            return [
+                {"name": i, "type": "unknown", "count": 1, "last_seen": _today_syn}
+                if isinstance(i, str) else i
+                for i in lst
+            ]
+        media["confirmed"] = _norm_media(media.get("confirmed", []))
+        media["mentioned"] = _norm_media(media.get("mentioned", []))
+
+        # Decay медиа
+        def _decay_media(lst, max_days):
+            result_m = []
+            for item in lst:
+                try:
+                    days = (_date_syn.today() - _date_syn.fromisoformat(
+                        item.get("last_seen", _today_syn))).days
+                    if days < max_days:
+                        result_m.append(item)
+                except Exception:
+                    result_m.append(item)
+            return result_m
+        media["confirmed"] = _decay_media(media["confirmed"], 30)
+        media["mentioned"] = _decay_media(media["mentioned"], 15)
+
         for m in conf_media_raw:
             if isinstance(m, dict) and m.get("name"):
                 key = m["name"].lower()
-                existing = next((x for x in media["confirmed"] if isinstance(x,dict) and x.get("name","").lower()==key), None)
+                existing = next(
+                    (x for x in media["confirmed"]
+                     if isinstance(x, dict) and x.get("name", "").lower() == key), None)
                 if existing:
-                    existing["count"] = existing.get("count",1) + 1
+                    existing["count"] = existing.get("count", 1) + 1
                     existing["last_seen"] = _today_syn
                 else:
-                    media["confirmed"].append({"name": m["name"], "type": m.get("type","unknown"), "count": 1, "last_seen": _today_syn})
+                    media["confirmed"].append({
+                        "name": m["name"], "type": m.get("type", "unknown"),
+                        "count": 1, "last_seen": _today_syn
+                    })
         for m in ment_media_raw:
             if isinstance(m, dict) and m.get("name"):
                 key = m["name"].lower()
-                in_conf = any(isinstance(x,dict) and x.get("name","").lower()==key for x in media["confirmed"])
+                in_conf = any(
+                    isinstance(x, dict) and x.get("name", "").lower() == key
+                    for x in media["confirmed"])
                 if not in_conf:
-                    existing = next((x for x in media["mentioned"] if isinstance(x,dict) and x.get("name","").lower()==key), None)
+                    existing = next(
+                        (x for x in media["mentioned"]
+                         if isinstance(x, dict) and x.get("name", "").lower() == key), None)
                     if existing:
-                        existing["count"] = existing.get("count",1) + 1
+                        existing["count"] = existing.get("count", 1) + 1
                         existing["last_seen"] = _today_syn
                     else:
-                        media["mentioned"].append({"name": m["name"], "type": m.get("type","unknown"), "count": 1, "last_seen": _today_syn})
-        media["confirmed"] = sorted(media["confirmed"], key=lambda x: x.get("last_seen",""), reverse=True)[:10]
-        media["mentioned"] = sorted(media["mentioned"], key=lambda x: x.get("last_seen",""), reverse=True)[:10]
+                        media["mentioned"].append({
+                            "name": m["name"], "type": m.get("type", "unknown"),
+                            "count": 1, "last_seen": _today_syn
+                        })
+        media["confirmed"] = sorted(
+            media["confirmed"], key=lambda x: x.get("last_seen", ""), reverse=True)[:10]
+        media["mentioned"] = sorted(
+            media["mentioned"], key=lambda x: x.get("last_seen", ""), reverse=True)[:10]
 
         dp["memory"] = mem
         dp["synthesis"] = new_core  # backward compat
@@ -271,6 +447,7 @@ async def _generate_synthesis(user_id: str) -> None:
         logger.info(f"Living memory updated for {user_id}")
     except Exception as e:
         logger.warning(f"Synthesis parse error for {user_id}: {e}")
+
 
 async def _detect_and_save_observation(user_id: str, text: str) -> None:
     """Detect significant signals in user message and save to sr_observations."""
