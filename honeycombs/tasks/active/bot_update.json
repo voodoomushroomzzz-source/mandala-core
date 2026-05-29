@@ -5,7 +5,7 @@
   "priority": "highest",
   "deadline": "2026-06-01",
   "created": "2026-04-01",
-  "updated": "2026-05-28",
+  "updated": "2026-05-29",
   "progress": 99,
   "current_version": "7.39.76+",
   "note_version": "Реальная версия с патчами ~7.39.75+",
@@ -402,6 +402,28 @@
         "honeycombs/fruits/gentle_companion/sr_prompts.py"
       ],
       "deploy_status": "pushed — requires CI rebuild + server deploy"
+    },
+    "P-84": {
+      "name": "feat: three-tier interests system — fresh/mentioned/confirmed",
+      "date": "2026-05-29",
+      "commit": "3473b36f",
+      "description": "Replaced two-tier with three-tier: fresh(15 slots, FIFO) / mentioned(10, decay 15d) / confirmed(10, swap logic). LLM only names what it sees in dialog. All tier transitions are deterministic code.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/sr_memory.py",
+        "honeycombs/fruits/gentle_companion/sr_context.py"
+      ],
+      "deploy_status": "deployed"
+    },
+    "P-85": {
+      "name": "feat: three-tier media system — fresh/mentioned/confirmed",
+      "date": "2026-05-29",
+      "commit": "df99f3cb",
+      "description": "Same three-tier system applied to media (book/film/series/music etc). Bug fixed: self-reinforcing loop where LLM refreshed last_seen without real dialog mention. type field preserved through all tier transitions.",
+      "files_changed": [
+        "honeycombs/fruits/gentle_companion/sr_memory.py",
+        "honeycombs/fruits/gentle_companion/sr_context.py"
+      ],
+      "deploy_status": "deployed"
     }
   },
   "known_bugs": {},

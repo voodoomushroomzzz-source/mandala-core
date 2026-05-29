@@ -183,13 +183,15 @@
       "key_items": [
         "_build_user_context_msg()",
         "_build_sr_context()",
-        "_call_openrouter()"
-      ]
+        "_call_openrouter()",
+        "fresh/mentioned/confirmed groups shown in [Интересы садовника] and [Культурный опыт] context blocks (P-84/P-85, 2026-05-29)"
+      ],
+      "last_updated": "2026-05-29"
     },
     {
       "id": "sr_memory",
       "name": "SR Memory & Synthesis",
-      "description": "_distill_observations, _generate_synthesis, _detect_and_save_observation",
+      "description": "_distill_observations, _generate_synthesis, _detect_and_save_observation, three-tier interest + media system (fresh/mentioned/confirmed)",
       "target_file": "sr_memory.py",
       "current_size_kb": 22,
       "status": "done",
@@ -204,8 +206,11 @@
         "_generate_synthesis() (max_tokens=3000)",
         "_distill_observations()",
         "_detect_and_save_observation()",
-        "NOTE: _send_daily_report and handle_voice removed (belong to handlers/system.py) — 2026-05-28"
-      ]
+        "NOTE: _send_daily_report and handle_voice removed (belong to handlers/system.py) — 2026-05-28",
+        "Three-tier interest system: fresh(15)/mentioned(10, decay 15d)/confirmed(10, swap) — LLM only names, code manages tiers (P-84, 2026-05-29)",
+        "Three-tier media system: same logic as interests, type field preserved — fixed self-reinforcing loop (P-85, 2026-05-29)"
+      ],
+      "last_updated": "2026-05-29"
     },
     {
       "id": "sr_search",
@@ -463,7 +468,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-05-28",
+  "last_updated": "2026-05-29",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
