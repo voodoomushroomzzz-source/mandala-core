@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-29 09:24:35 ──
+# ── BUILT by build.py ── 2026-05-29 11:26:11 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -2059,6 +2059,12 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
   Пример: "что идёт в кино" → action.query="кино {city} афиша сегодня", action.search_category="cinema"
   Пример: "найди вакансии разработчика" → action.query="вакансии разработчик {city}", action.search_category="jobs"
   В поле text пиши ТОЛЬКО нормализованный запрос — без анализа сфер, профиля, философии.
+- СРАВНИТЕЛЬНЫЕ ЗАПРОСЫ (два объекта, два периода, вчера/сегодня, X vs Y) → web_search с action.queries=["запрос1", "запрос2"] вместо action.query.
+  Каждый запрос в списке — отдельный поисковый запрос (3-7 слов). Система выполнит их параллельно и объединит результаты.
+  Пример: "сравни погоду вчера и сегодня" → action.queries=["погода {city} сегодня", "погода {city} вчера"], action.search_category="weather"
+  Пример: "что лучше iPhone или Samsung" → action.queries=["iPhone 15 характеристики", "Samsung S24 характеристики"], action.search_category="default"
+  Пример: "как доллар изменился за неделю" → action.queries=["курс доллара сегодня", "курс доллара неделю назад"], action.search_category="default"
+  Пример: "новости спорта за вчера и сегодня" → action.queries=["спорт новости сегодня", "спорт новости вчера"], action.search_category="sport"
 - "напомни мне X завтра в 9", "поставь напоминание X" → create_reminder, action.title=X, action.datetime="YYYY-MM-DDTHH:MM", action.repeat=once/daily/weekdays, 0.95
   datetime ВСЕГДА в локальном времени из [Сейчас у садовника]. НЕ переводи в UTC.
 - "напомни через 30 минут", "через 2 часа напомни X" → create_reminder, action.title=X, action.datetime=текущее_время+N_минут/часов в ISO формате, 0.95
@@ -9696,26 +9702,48 @@ async def free_conversation(message: Message, state: FSMContext):
                                 reply_text = "\U0001f331 \u041d\u0435\u0442 \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0451\u043d\u043d\u044b\u0445"
                         elif intent == "web_search":
                             _ws_act = parsed_check.get("action") or {}
-                            # Нормализованный запрос от SR
-                            q = (_ws_act.get("query") or _ws_act.get("title") or "").strip() or text
                             cat = (_ws_act.get("search_category") or "default").strip()
                             prof = store_get_profile(user_id)
                             city = (prof or {}).get("companion_settings", {}).get("city", "")
-                            # Показываем нормализованный запрос
+                            # Поддержка multi-query (сравнительные запросы)
+                            _qs_raw = _ws_act.get("queries")
+                            if _qs_raw and isinstance(_qs_raw, list) and len(_qs_raw) > 1:
+                                queries = [str(q_i).strip() for q_i in _qs_raw if str(q_i).strip()]
+                                q = " + ".join(queries)  # для отображения
+                            else:
+                                q = (_ws_act.get("query") or _ws_act.get("title") or "").strip() or text
+                                queries = [q]
+                            # Показываем запрос
                             sm = await message.answer(f"🔍 Ищу: <i>{q}</i>", parse_mode="HTML")
-                            # Получаем raw данные из Tavily
-                            raw_sources = await _tavily_search_raw(q, city, category=cat)
+                            # Параллельный поиск по всем запросам
+                            import asyncio as _asyncio_ws
+                            _search_results = await _asyncio_ws.gather(
+                                *[_tavily_search_raw(q_i, city, category=cat) for q_i in queries]
+                            )
+                            raw_sources = []
+                            for _sr_batch in _search_results:
+                                raw_sources.extend(_sr_batch)
                             try: await sm.delete()
                             except Exception: pass
                             if raw_sources:
-                                total_content = " ".join(s.get("content","") for s in raw_sources)
+                                total_content = " ".join(s.get("content", "") for s in raw_sources)
                                 if len(total_content.strip()) >= 100:
-                                    # SR синтезирует результаты
-                                    reply_text = await _synthesize_search(q, raw_sources)
-                                    if not reply_text:
-                                        reply_text = "🔍 Не удалось обработать результаты. Попробуй переформулировать запрос."
+                                    # Передаём данные поиска в SR — он отвечает с полным контекстом диалога
+                                    _search_ctx = "\n\n".join(
+                                        f"{s['title']}\n{s['content']}" for s in raw_sources
+                                    )
+                                    _source_links = "\n".join(
+                                        f'• <a href="{s["url"]}">{s["title"]}</a>' for s in raw_sources
+                                    )
+                                    messages[0]["content"] += (
+                                        f"\n\n[Данные из поиска по запросу «{q}»:\n{_search_ctx}\n\n"
+                                        f"Используй эти данные чтобы ответить на вопрос садовника. "
+                                        f"Отвечай в своём обычном тоне, не здоровайся, продолжай диалог. "
+                                        f"В конце ответа добавь источники:\n{_source_links}]"
+                                    )
+                                    reply_text = await _call_openrouter(messages) or \
+                                        "🔍 Не удалось обработать результаты. Попробуй переформулировать запрос."
                                 else:
-                                    # Мало контента — честный fallback
                                     reply_text = f"🔍 Не нашла актуальных данных по запросу «{q}». Попробуй уточнить или задать вопрос иначе."
                             else:
                                 reply_text = f"🔍 Ничего не нашла по запросу «{q}». Попробуй переформулировать."
