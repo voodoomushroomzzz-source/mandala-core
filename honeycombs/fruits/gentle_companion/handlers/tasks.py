@@ -361,10 +361,17 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
         new_kb = _IKM_tr(
             inline_keyboard=kb.inline_keyboard[:-1] + extra_rows
         )
+        logger.info(f"reminder_open: uid={user_id} task_id={task_id} state=editing_reminder")
         try:
             await callback.message.edit_text(header, reply_markup=new_kb, parse_mode="HTML")
-        except Exception:
-            await callback.message.answer(header, reply_markup=new_kb, parse_mode="HTML")
+            logger.info(f"reminder_open: edit_text OK")
+        except Exception as _e_rem:
+            logger.warning(f"reminder_open: edit_text FAILED: {_e_rem!r}")
+            try:
+                await callback.message.answer(header, reply_markup=new_kb, parse_mode="HTML")
+                logger.info(f"reminder_open: answer OK")
+            except Exception as _e_rem2:
+                logger.error(f"reminder_open: answer FAILED: {_e_rem2!r}")
 
 
 @router.callback_query(F.data.startswith("dl_"), StateFilter(TaskEditStates.editing_deadline))
