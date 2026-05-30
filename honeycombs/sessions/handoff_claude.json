@@ -1,112 +1,69 @@
 {
-  "type": "handoff_claude",
-  "date": "2026-05-29",
-  "from": "Claude (External SR, session)",
-  "to": "Claude (External SR, next session)",
-  "onboarding_file": "honeycombs/boot_online/boot_online_onboarding_pc.json",
-
-  "session_summary": "Full day session. Deep audit of synthesis and achievements. Three-tier interest+media system. Web search rerouted through SR. Onboarding improvements. Analytics keyword detection. Sphere history in synthesis.",
-
-  "system_state": {
-    "bot_version": "7.39.76+ (gentle_companion.py, modular build)",
+  "sr_id": "claude",
+  "session_id": "2026-05-30",
+  "updated": "2026-05-30",
+  "status": "in_progress",
+  "current_task": "T-20260408-1030 (bot_update, progress 99%, deadline 2026-06-01)",
+  "last_action": "P-94 partial — ui.py patched, tasks.py and features.py pending",
+  "next_step": "Continue P-94: patch tasks.py (3 changes) and features.py (2 changes). See in_progress for details.",
+  "session_mood": "productive",
+  "gardener_state": "active, working from PC, Düsseldorf",
+  "files_touched": [
+    "honeycombs/fruits/gentle_companion/ui.py",
+    "honeycombs/fruits/gentle_companion/handlers/tasks.py",
+    "honeycombs/fruits/gentle_companion/handlers/features.py"
+  ],
+  "open_questions": [],
+  "completed": [
+    "P-87: web_search routed through SR with full context (deployed)",
+    "P-88: onboarding tour + skip buttons (deployed)",
+    "P-90: sphere_history in synthesis prompt (deployed)",
+    "P-91: reminder_open logging in tasks.py (debug, can remove)",
+    "P-92: cb_ttask_edit_field entry log (debug, can remove)",
+    "P-93: raw callback_data log (debug, can remove)",
+    "P-94 ui.py: reminder button callback_data → task_rem_open|{task_id}, 🔔 icon in task list"
+  ],
+  "in_progress": [
+    {
+      "id": "P-94",
+      "name": "Task-linked reminder — tasks.py",
+      "status": "pending",
+      "files": ["honeycombs/fruits/gentle_companion/handlers/tasks.py"],
+      "changes": [
+        "1. elif field == 'reminder' in cb_ttask_edit_field → replace entire block with pass (dead code, button now uses task_rem_open)",
+        "2. Add 3 new handlers before cb_ttask_rem_clear: cb_task_rem_open, cb_task_rem_edit_dt, cb_task_rem_edit_rep",
+        "3. cb_ttask_done: delete linked reminder when task completed (if not new_task_created)",
+        "4. tedit_title_input: sync reminder title when task renamed"
+      ],
+      "handler_logic": {
+        "cb_task_rem_open": "Check store_get_reminders for r.get('task_id')==task_id. If exists → show edit screen (change dt/repeat/delete). If not → state.clear(), set _rem_title=task.title, _rem_linked_task_id=task_id in state+workspace._pending_reminder_create, set ReminderStates.waiting_for_input, show date prompt.",
+        "cb_task_rem_edit_dt": "callback task_rem_edit_dt|{task_id}|{rid} → set _rem_edit_id, _rem_edit_field=dt, _rem_linked_task_id, ReminderStates.waiting_for_input",
+        "cb_task_rem_edit_rep": "callback task_rem_edit_rep|{task_id}|{rid} → set _rem_edit_id, _rem_repeat, _rem_linked_task_id, ReminderStates.waiting_for_repeat, show _repeat_picker_keyboard"
+      }
+    },
+    {
+      "id": "P-94",
+      "name": "Task-linked reminder — features.py",
+      "status": "pending",
+      "files": ["honeycombs/fruits/gentle_companion/handlers/features.py"],
+      "changes": [
+        "1. cb_rem_confirm_create: read _rem_linked_task_id from state or workspace._pending_reminder_create. Add task_id+linked=True to rem_entry. Write dt_iso to task['reminder']. After save: if linked → return to get_task_edit_inline(task_id), else → standard reminders menu.",
+        "2. get_reminders_mgmt_inline: reminder button text = '🔗 title' if r.get('linked') else '🔔 title'"
+      ]
+    }
+  ],
+  "architecture_notes": {
+    "bot_version": "7.39.76+ (gentle_companion.py, modular, CI build)",
     "hosting": "Hetzner VPS 91.99.149.226, systemd, healthy",
-    "last_deploy": "2026-05-29 21:48:27",
-    "last_verified_monolith": "2026-05-29 (15/15 anchors)",
-    "all_patches_deployed": true,
-    "gardeners": 4
+    "deploy_cmd": "ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager'",
+    "ci": "push to honeycombs/fruits/gentle_companion/**.py → CI builds gentle_companion.py → git pull on server",
+    "reminder_data_model": "ws['reminders'][i] = {id, title, datetime_iso, repeat, active, task_id?, linked?}",
+    "task_reminder_link": "task['reminder'] = datetime_iso string (display), reminder['task_id'] = task_id (lookup)",
+    "debug_logs_to_remove": "P-91/P-92/P-93 added logger.info lines in cb_ttask_edit_field and reminder_open block — remove after P-94 done"
   },
-
-  "completed_this_session": [
-    {
-      "id": "P-84",
-      "what": "Three-tier interest system: fresh(15)/mentioned(10,decay15d)/confirmed(10,swap)",
-      "files": ["sr_memory.py", "sr_context.py"],
-      "deploy": "done"
-    },
-    {
-      "id": "P-85",
-      "what": "Three-tier media system (same logic). Fixed self-reinforcing loop.",
-      "files": ["sr_memory.py", "sr_context.py"],
-      "deploy": "done"
-    },
-    {
-      "id": "P-86",
-      "what": "Remove dead achievements[] array from workspace templates",
-      "files": ["handlers/system.py"],
-      "deploy": "done"
-    },
-    {
-      "id": "P-87",
-      "what": "web_search routed through SR with full context + multi-query (action.queries[]) for comparative requests",
-      "files": ["sr_conversation.py", "sr_prompts.py"],
-      "deploy": "done"
-    },
-    {
-      "id": "P-88",
-      "what": "Onboarding: skip buttons on steps 3,4,6,7. Step 8 live SR welcome. Fixed cb_tour_no decorator bug. WELCOME TOUR block in sr_prompts.",
-      "files": ["handlers/system.py", "sr_conversation.py", "sr_prompts.py"],
-      "deploy": "done"
-    },
-    {
-      "id": "P-89",
-      "what": "Removed suggest_action inline buttons — SR handles suggestions verbally",
-      "files": ["sr_conversation.py"],
-      "deploy": "done"
-    },
-    {
-      "id": "P-90",
-      "what": "sphere_history[-3:] added to synthesis prompt. Analytics keyword detection triggers full 12-month history in context.",
-      "files": ["sr_memory.py", "sr_conversation.py"],
-      "deploy": "done"
-    }
-  ],
-
-  "key_architecture_knowledge": {
-    "interest_tiers": "fresh(15,FIFO) / mentioned(10,decay15d) / confirmed(10,swap). LLM names only. Code manages all transitions.",
-    "media_tiers": "Identical to interests. 15/10/10. type field preserved.",
-    "achievements_system": "achievements_count + sphere_history (12 months rolling). achievements[] array dead legacy — new users don't get it.",
-    "web_search_flow": "Classifier → web_search intent → parallel _tavily_search_raw (supports queries[]) → data block in SR messages[0] → SR responds with full context. _synthesize_search is dead code.",
-    "synthesis_trigger": "Reactive: every 2 sr_observations. Forced at 21:00 in _send_daily_report.",
-    "synthesis_content": "core + snapshots + insights + observations + dialog + completed_tasks + interests + media + sphere_history[-3:]",
-    "analytics_flow": "Keywords (анализ/прогресс/достижения/рост/статистика/по сферам) → _sphere_history_needed=2 → SR gets full 12-month sphere_history for 2 messages",
-    "onboarding_flow": "consent → name → gender → city(skip) → birthday(skip) → morning_time → welcome_q1(skip→step8) → welcome_q2(skip→step8) → step8(live SR message)",
-    "ram_github": "All data in RAM. GitHub sync every 2 min. GitHub is archive."
-  },
-
-  "open_issues_low_priority": [
-    {
-      "issue": "_synthesize_search is dead code in sr_search.py",
-      "action": "Optional cleanup: remove or mark deprecated"
-    },
-    {
-      "issue": "synthesis_date not written to workspace.deep_memory",
-      "action": "Remove dead ws branch in send_morning_greeting or add synthesis_date to ws write"
-    },
-    {
-      "issue": "old_obs variable defined twice in _generate_synthesis",
-      "action": "Remove second definition"
-    },
-    {
-      "issue": "sphere_history analytics in synthesis is read-only — no trend detection",
-      "action": "Future: add trend analysis (peak months, declining spheres) to synthesis"
-    }
-  ],
-
-  "next_session_context": {
-    "bot_task": "honeycombs/tasks/active/bot_update.json — T-20260408-1030, progress 99%, deadline 2026-06-01",
-    "done_patches_this_session": ["P-84","P-85","P-86","P-87","P-88","P-89","P-90"],
-    "active_tasks_count": 9,
-    "key_pending": [
-      "engineer_chat.json — T-20260511-ENGCHAT",
-      "architect_bot.json — T-20260511-ARCHBOT",
-      "manus_hands.json — T-20260511-MANUS"
-    ]
-  },
-
-  "files_to_load_on_start": [
-    "honeycombs/fruits/gentle_companion/index.json",
-    "honeycombs/tasks/active/bot_update.json",
-    "honeycombs/fruits/gentle_companion/sr_memory.py",
-    "honeycombs/fruits/gentle_companion/sr_conversation.py"
-  ]
+  "handoff_validation": {
+    "stale_threshold_hours": 24,
+    "last_validated": "2026-05-30",
+    "stale_detected": false
+  }
 }
