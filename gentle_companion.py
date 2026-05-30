@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-30 10:38:39 ──
+# ── BUILT by build.py ── 2026-05-30 10:54:08 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -3756,7 +3756,6 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("ttask_edit|"))
 async def cb_ttask_edit(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    logger.info(f"RAW cb_ttask_edit data={callback.data!r}")
     user_id = str(callback.from_user.id)
     task_id = callback.data.split("|")[1]
     tasks = store_get_tasks(user_id)
@@ -3781,12 +3780,10 @@ async def cb_ttask_edit(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("ttask_edit_field|"))
 async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    logger.info(f"RAW cb_ttask_edit_field data={callback.data!r}")
     user_id = str(callback.from_user.id)
     parts = callback.data.split("|")
     task_id = parts[1]
     field = parts[2]
-    logger.info(f"cb_ttask_edit_field CALLED: uid={user_id} task_id={task_id} field={field}")
     tasks = store_get_tasks(user_id)
     task = next((t for t in tasks if t.get("task_id") == task_id), None)
     if not task:
@@ -3882,17 +3879,10 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
         new_kb = _IKM_tr(
             inline_keyboard=kb.inline_keyboard[:-1] + extra_rows
         )
-        logger.info(f"reminder_open: uid={user_id} task_id={task_id} state=editing_reminder")
         try:
             await callback.message.edit_text(header, reply_markup=new_kb, parse_mode="HTML")
-            logger.info(f"reminder_open: edit_text OK")
-        except Exception as _e_rem:
-            logger.warning(f"reminder_open: edit_text FAILED: {_e_rem!r}")
-            try:
-                await callback.message.answer(header, reply_markup=new_kb, parse_mode="HTML")
-                logger.info(f"reminder_open: answer OK")
-            except Exception as _e_rem2:
-                logger.error(f"reminder_open: answer FAILED: {_e_rem2!r}")
+        except Exception:
+            await callback.message.answer(header, reply_markup=new_kb, parse_mode="HTML")
 
 
 @router.callback_query(F.data.startswith("dl_"), StateFilter(TaskEditStates.editing_deadline))
