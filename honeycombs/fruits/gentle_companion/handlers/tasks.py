@@ -238,6 +238,7 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("ttask_edit|"))
 async def cb_ttask_edit(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    logger.info(f"RAW cb_ttask_edit data={callback.data!r}")
     user_id = str(callback.from_user.id)
     task_id = callback.data.split("|")[1]
     tasks = store_get_tasks(user_id)
@@ -262,6 +263,7 @@ async def cb_ttask_edit(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("ttask_edit_field|"))
 async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    logger.info(f"RAW cb_ttask_edit_field data={callback.data!r}")
     user_id = str(callback.from_user.id)
     parts = callback.data.split("|")
     task_id = parts[1]
