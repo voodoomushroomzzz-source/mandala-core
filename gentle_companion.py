@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-30 10:22:01 ──
+# ── BUILT by build.py ── 2026-05-30 10:38:39 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1542,7 +1542,8 @@ def get_tasks_in_group_inline(user_id: str, group_id: str) -> InlineKeyboardMark
         dl_short = f" \u00b7 {dl}" if dl else ""
         emoji = _task_urgency_emoji(dl, _tz_gi)
         repeat_str = " \U0001f501" if t.get("repeat") else ""
-        label = f"{emoji} {title}{repeat_str}{dl_short}"
+        rem_str = " \U0001f514" if t.get("reminder") else ""
+        label = f"{emoji} {title}{repeat_str}{rem_str}{dl_short}"
         btns.append([InlineKeyboardButton(text=label, callback_data=f"ttask_edit|{tid}")])
     if group_id != "__nogroup__":
         btns.append([InlineKeyboardButton(text="\u270f\ufe0f \u041f\u0435\u0440\u0435\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u0442\u044c \u0433\u0440\u0443\u043f\u043f\u0443", callback_data=f"tgroup_edit|{group_id}")])
@@ -1586,8 +1587,9 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
             callback_data=f"ttask_edit_field|{task_id}|repeat"
         )],
         [InlineKeyboardButton(
-            text=f"🔔 Напоминание: {task.get('reminder') or 'нет'}",
-            callback_data=f"ttask_edit_field|{task_id}|reminder"
+            text=("🔔 Напоминание: 🔗 " + task["reminder"][:16].replace("T", " "))
+                 if task.get("reminder") else "🔔 Напоминание: нет",
+            callback_data=f"task_rem_open|{task_id}"
         )],
         [InlineKeyboardButton(
             text="🗑 Удалить задачу",
