@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-30 10:05:16 ──
+# ── BUILT by build.py ── 2026-05-30 10:16:48 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -3782,6 +3782,7 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
     parts = callback.data.split("|")
     task_id = parts[1]
     field = parts[2]
+    logger.info(f"cb_ttask_edit_field CALLED: uid={user_id} task_id={task_id} field={field}")
     tasks = store_get_tasks(user_id)
     task = next((t for t in tasks if t.get("task_id") == task_id), None)
     if not task:
