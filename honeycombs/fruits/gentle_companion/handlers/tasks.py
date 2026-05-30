@@ -266,6 +266,7 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
     parts = callback.data.split("|")
     task_id = parts[1]
     field = parts[2]
+    logger.info(f"cb_ttask_edit_field CALLED: uid={user_id} task_id={task_id} field={field}")
     tasks = store_get_tasks(user_id)
     task = next((t for t in tasks if t.get("task_id") == task_id), None)
     if not task:
