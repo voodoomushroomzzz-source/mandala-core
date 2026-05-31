@@ -23,13 +23,14 @@
     }
   },
   "1485954655": {
-    "messages": 26,
+    "messages": 28,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
       "conversation": 12,
-      "web_search": 1
+      "web_search": 1,
+      "delete_task": 1
     }
   }
 }
