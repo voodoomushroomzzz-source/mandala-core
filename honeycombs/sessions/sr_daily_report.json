@@ -1,5 +1,5 @@
 {
-  "date": "2026-05-30",
+  "date": "2026-05-31",
   "version": "7.39.23",
   "gardeners": {
     "339914913": {
@@ -7,20 +7,20 @@
       "active": false,
       "synthesis_date": "2026-05-28"
     },
-    "1485954655": {
-      "name": "Полина",
-      "active": false,
-      "synthesis_date": "2026-05-28"
-    },
-    "358793311": {
-      "name": "Антон",
-      "active": false,
-      "synthesis_date": "2026-05-28"
-    },
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-05-30"
+      "synthesis_date": "2026-05-31"
+    },
+    "1485954655": {
+      "name": "Полина",
+      "active": true,
+      "synthesis_date": "2026-05-31"
+    },
+    "358793311": {
+      "name": "Антон",
+      "active": true,
+      "synthesis_date": "2026-05-31"
     }
   },
   "issues": []
