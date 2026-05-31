@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-31 12:54:15 ──
+# ── BUILT by build.py ── 2026-05-31 13:19:42 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -5198,6 +5198,20 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
     }
     tasks.append(new_task)
     store_set_tasks(user_id, tasks)
+    # P-92: sync reminder to reminders list so it appears in /reminders
+    _reminder_val = data.get("reminder")
+    if _reminder_val:
+        _rems_fsm = store_get_reminders(user_id)
+        _rems_fsm = [r for r in _rems_fsm if r.get("task_id") != task_id]
+        _rems_fsm.append({
+            "id": "rem_" + task_id,
+            "title": title,
+            "datetime_iso": _reminder_val,
+            "repeat": data.get("repeat", "once") or "once",
+            "active": True,
+            "task_id": task_id,
+        })
+        store_set_reminders(user_id, _rems_fsm)
     _fire_sync()
     await state.clear()
     mkb_icons = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир"}
