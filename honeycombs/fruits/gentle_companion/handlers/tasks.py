@@ -962,6 +962,45 @@ async def cb_ttask_rem_clear(callback: CallbackQuery, state: FSMContext):
         )
 
 
+# P-93: add reminder from task menu — simple flow, no task binding
+@router.callback_query(F.data.startswith("task_add_reminder|"))
+async def cb_task_add_reminder(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    task_id = callback.data.split("|")[1]
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    _rem_count = len(store_get_reminders(user_id))
+    if _rem_count >= REMINDER_LIMIT:
+        await callback.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний", show_alert=True)
+        return
+    await state.clear()
+    title = task.get("title", "")
+    await state.set_state(ReminderStates.waiting_for_input)
+    await state.update_data(_rem_prefill_title=title)
+    cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="← Назад к задаче", callback_data=f"ttask_edit|{task_id}")]
+    ])
+    try:
+        await callback.message.edit_text(
+            f"🔔 <b>Напоминание: {title[:40]}</b>\n\n"
+            "Напиши дату и время:\n"
+            "<i>Пример: завтра в 10:00</i>",
+            reply_markup=cancel_kb,
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            f"🔔 <b>Напоминание: {title[:40]}</b>\n\n"
+            "Напиши дату и время:",
+            reply_markup=cancel_kb,
+            parse_mode="HTML"
+        )
+
+
 @router.callback_query(F.data.startswith("tedit_group_"))
 async def cb_tedit_group(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
@@ -1682,20 +1721,6 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
     }
     tasks.append(new_task)
     store_set_tasks(user_id, tasks)
-    # P-92: sync reminder to reminders list so it appears in /reminders
-    _reminder_val = data.get("reminder")
-    if _reminder_val:
-        _rems_fsm = store_get_reminders(user_id)
-        _rems_fsm = [r for r in _rems_fsm if r.get("task_id") != task_id]
-        _rems_fsm.append({
-            "id": "rem_" + task_id,
-            "title": title,
-            "datetime_iso": _reminder_val,
-            "repeat": data.get("repeat", "once") or "once",
-            "active": True,
-            "task_id": task_id,
-        })
-        store_set_reminders(user_id, _rems_fsm)
     _fire_sync()
     await state.clear()
     mkb_icons = {"health": "🌿 Тело", "spirit": "🔥 Дух", "world": "🤝 Мир"}

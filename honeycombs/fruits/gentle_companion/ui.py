@@ -456,7 +456,7 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
         )],
         [InlineKeyboardButton(
             text=f"🔔 Напоминание: {task.get('reminder') or 'нет'}",
-            callback_data=f"ttask_edit_field|{task_id}|reminder"
+            callback_data=f"task_add_reminder|{task_id}"
         )],
         [InlineKeyboardButton(
             text="🗑 Удалить задачу",
