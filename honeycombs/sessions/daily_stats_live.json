@@ -7,12 +7,13 @@
     "intents": {}
   },
   "1485954655": {
-    "messages": 27,
+    "messages": 29,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
-      "conversation": 13
+      "conversation": 13,
+      "web_search": 1
     }
   },
   "358793311": {
