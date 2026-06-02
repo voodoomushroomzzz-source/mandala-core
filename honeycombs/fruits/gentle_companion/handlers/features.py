@@ -981,11 +981,6 @@ async def rem_text_input(message: Message, state: FSMContext):
         tz_p = _ZI_parse("Europe/Moscow")
     now_p = _dt_parse.now(tz_p)
     
-    # P-93: prefill title from task reminder button
-    _prefill_title = data.get("_rem_prefill_title", "")
-    if _prefill_title:
-        await state.update_data(_rem_prefill_title=None)
-
     # Parse title and datetime from raw text
     title_clean = raw.strip()
     dt_iso = None
@@ -1056,9 +1051,6 @@ async def rem_text_input(message: Message, state: FSMContext):
         return
     
     dt_display = dt_iso[:16].replace("T", " ")
-    # P-93: override title with prefill if set
-    if _prefill_title:
-        title_clean = _prefill_title
     # P-71a: direct create — no confirmation step
     reminders_71 = store_get_reminders(user_id)
     if len(reminders_71) >= REMINDER_LIMIT:
