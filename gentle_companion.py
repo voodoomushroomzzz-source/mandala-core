@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-05-31 13:48:53 ──
+# ── BUILT by build.py ── 2026-06-02 14:26:26 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1584,10 +1584,6 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(
             text=f"\U0001f501 \u041f\u043e\u0432\u0442\u043e\u0440: {repeat_label}",
             callback_data=f"ttask_edit_field|{task_id}|repeat"
-        )],
-        [InlineKeyboardButton(
-            text=f"🔔 Напоминание: {task.get('reminder') or 'нет'}",
-            callback_data=f"task_add_reminder|{task_id}"
         )],
         [InlineKeyboardButton(
             text="🗑 Удалить задачу",
