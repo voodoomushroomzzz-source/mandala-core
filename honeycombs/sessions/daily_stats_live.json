@@ -10,7 +10,7 @@
     }
   },
   "1485954655": {
-    "messages": 10,
+    "messages": 12,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
@@ -18,7 +18,8 @@
       "delete_task": 1,
       "edit_task": 1,
       "conversation": 2,
-      "create_reminder": 1
+      "create_reminder": 1,
+      "show_tasks": 1
     }
   }
 }
