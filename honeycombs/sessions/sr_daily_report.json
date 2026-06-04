@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-03",
+  "date": "2026-06-04",
   "version": "7.39.23",
   "gardeners": {
     "339914913": {
@@ -7,29 +7,21 @@
       "active": false,
       "synthesis_date": "2026-05-28"
     },
-    "224736062": {
-      "name": "Дима",
-      "active": true,
-      "synthesis_date": "2026-06-03"
-    },
-    "1485954655": {
-      "name": "Полина",
-      "active": true,
-      "synthesis_date": "2026-06-03"
-    },
     "358793311": {
       "name": "Антон",
       "active": false,
       "synthesis_date": "2026-06-01"
+    },
+    "1485954655": {
+      "name": "Полина",
+      "active": true,
+      "synthesis_date": "2026-06-04"
+    },
+    "224736062": {
+      "name": "Дима",
+      "active": true,
+      "synthesis_date": "2026-06-04"
     }
   },
-  "issues": [
-    {
-      "user_id": "1485954655",
-      "type": "repeated_request",
-      "intent": "add_task",
-      "count": 2,
-      "context": "повторный add_task"
-    }
-  ]
+  "issues": []
 }
