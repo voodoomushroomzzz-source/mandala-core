@@ -221,7 +221,8 @@ def _build_profile_card(user_id: str) -> str:
         ind = _deadline_indicator(t.get("deadline", ""), tz_name)
         dl  = f" · {t['deadline']}" if t.get("deadline") else ""
         _rep_icon = " 🔁" if t.get("repeat") and t.get("repeat") != "once" else ""
-        lines.append(f"  · {ind}{t['title']}{_rep_icon}{dl}")
+        _task_link_icon = " 🔗" if t.get("reminder") else ""
+        lines.append(f"  · {ind}{t['title']}{_rep_icon}{_task_link_icon}{dl}")
     if not nearest_tasks:
         lines.append("  · задач нет 🌱")
     lines.append("")
@@ -620,7 +621,7 @@ def get_reminder_keyboard(deadline: str = None) -> InlineKeyboardMarkup:
             days_left = (dl - today).days
             btns.append([InlineKeyboardButton(
                 text=f"📅 В день задачи",
-                callback_data="rem_" + fmt(dl)
+                callback_data="rem_deadline|" + fmt(dl)
             )])
             if days_left > 3:
                 remind3 = dl - timedelta(days=3)
