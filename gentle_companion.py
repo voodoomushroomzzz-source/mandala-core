@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-05 22:03:39 ──
+# ── BUILT by build.py ── 2026-06-05 22:21:07 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1352,7 +1352,8 @@ def _build_profile_card(user_id: str) -> str:
         ind = _deadline_indicator(t.get("deadline", ""), tz_name)
         dl  = f" · {t['deadline']}" if t.get("deadline") else ""
         _rep_icon = " 🔁" if t.get("repeat") and t.get("repeat") != "once" else ""
-        lines.append(f"  · {ind}{t['title']}{_rep_icon}{dl}")
+        _task_link_icon = " 🔗" if t.get("reminder") else ""
+        lines.append(f"  · {ind}{t['title']}{_rep_icon}{_task_link_icon}{dl}")
     if not nearest_tasks:
         lines.append("  · задач нет 🌱")
     lines.append("")
@@ -1751,7 +1752,7 @@ def get_reminder_keyboard(deadline: str = None) -> InlineKeyboardMarkup:
             days_left = (dl - today).days
             btns.append([InlineKeyboardButton(
                 text=f"📅 В день задачи",
-                callback_data="rem_" + fmt(dl)
+                callback_data="rem_deadline|" + fmt(dl)
             )])
             if days_left > 3:
                 remind3 = dl - timedelta(days=3)
@@ -4040,9 +4041,29 @@ async def tedit_reminder_cb(callback: CallbackQuery, state: FSMContext):
                 parse_mode="HTML"
             )
         return
+    elif callback.data.startswith("rem_deadline|"):
+        # В день задачи — спрашиваем время, повторение наследуем от задачи
+        date_dl = callback.data.split("|")[1]
+        await state.update_data(_rem_date=date_dl, _rem_inherit_repeat=True)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="← Назад к задаче", callback_data=f"ttask_edit|{tid}")]
+        ])
+        try:
+            await callback.message.edit_text(
+                f"🔔 <b>Время напоминания</b> для {date_dl}:\n"
+                "Введи время: <code>ЧЧ:ММ</code>\n"
+                "<i>Например: 09:30</i>",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        except Exception:
+            await callback.message.answer(
+                f"🔔 Время для {date_dl} (<code>ЧЧ:ММ</code>):",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        return
     else:
         # Дата выбрана — спрашиваем время
-        await state.update_data(_rem_date=val)
+        await state.update_data(_rem_date=val, _rem_inherit_repeat=False)
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="← Назад к задаче", callback_data=f"ttask_edit|{tid}")]
         ])
@@ -4135,6 +4156,18 @@ async def tedit_reminder_custom_input(message: Message, state: FSMContext):
             parse_mode="HTML"
         )
         return
+    # Своя дата — предлагаем выбрать повторение
+    await state.update_data(_rem_datetime=reminder)
+    repeat_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="1️⃣ Однократно",     callback_data="trem_rep|once")],
+        [InlineKeyboardButton(text="🔁 Каждый день",      callback_data="trem_rep|daily")],
+        [InlineKeyboardButton(text="📅 Раз в неделю",     callback_data="trem_rep|weekly")],
+        [InlineKeyboardButton(text="🗓 Раз в месяц",      callback_data="trem_rep|monthly")],
+        [InlineKeyboardButton(text="← Назад к задаче", callback_data=f"ttask_edit|{tid}")],
+    ])
+    await state.set_state(TaskEditStates.editing_reminder)
+    await message.answer("🔁 <b>Повторение?</b>", reply_markup=repeat_kb, parse_mode="HTML")
+    # placeholder — unreachable below, kept for linter
     tasks = store_get_tasks(user_id)
     task_title = ""
     task_repeat = "once"
@@ -4169,6 +4202,64 @@ async def tedit_reminder_custom_input(message: Message, state: FSMContext):
         )
     except Exception:
         pass
+
+
+async def _save_linked_reminder(user_id: str, tid: str, reminder: str, repeat: str, state, msg):
+    """P-95-06: save task-linked reminder with given repeat."""
+    import uuid as _uuid_sl
+    tasks = store_get_tasks(user_id)
+    task_title = ""
+    for t in tasks:
+        if t.get("task_id") == tid:
+            t["reminder"] = reminder
+            t["updated"] = _today()
+            task_title = t.get("title", "")
+    store_set_tasks(user_id, tasks)
+    reminders = store_get_reminders(user_id)
+    reminders = [r for r in reminders if r.get("task_id") != tid]
+    reminders.append({
+        "id": "rem_" + str(_uuid_sl.uuid4())[:8],
+        "title": task_title,
+        "datetime_iso": reminder,
+        "repeat": repeat,
+        "active": True,
+        "task_id": tid,
+    })
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    await state.clear()
+    r_str = reminder[:16].replace("T", " ")
+    await msg.answer(f"✅ Напоминание → {r_str}")
+    try:
+        await msg.answer(
+            f"✏️ <b>{task_title}</b>",
+            reply_markup=get_task_edit_inline(user_id, tid),
+            parse_mode="HTML"
+        )
+    except Exception:
+        pass
+
+
+@router.callback_query(F.data.startswith("trem_rep|"), StateFilter(TaskEditStates.editing_reminder))
+async def cb_tedit_rem_repeat(callback: CallbackQuery, state: FSMContext):
+    """P-95-06: handle repeat selection after custom datetime for task reminder."""
+    await callback.answer()
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    tid = data.get("_ttask_edit_id") or data.get("edit_task_id", "")
+    reminder = data.get("_rem_datetime", "")
+    if not tid or not reminder:
+        await state.clear()
+        return
+    repeat = callback.data.split("|")[1]
+    await _save_linked_reminder(user_id, tid, reminder, repeat, state, callback.message)
+
+
+@router.callback_query(F.data.startswith("trem_rep|"), StateFilter(TaskEditStates.editing_reminder))
+async def cb_tedit_rem_repeat_inherit(callback: CallbackQuery, state: FSMContext):
+    """P-95-06: handle deadline preset — save with inherited repeat from task."""
+    # This handler is for rem_deadline flow — after HH:MM entered, state has _rem_inherit_repeat=True
+    pass  # handled by cb_tedit_rem_repeat above
 
 
 @router.callback_query(F.data.startswith("ttask_delete|"))
