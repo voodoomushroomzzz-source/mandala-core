@@ -407,6 +407,50 @@ async def ttask_group_cb(callback: CallbackQuery, state: FSMContext):
         parse_mode="HTML"
     )
 
+@router.callback_query(F.data.startswith("task_rem_open|"))
+async def cb_task_rem_open(callback: CallbackQuery, state: FSMContext):
+    """P-95: open reminder picker from task edit menu."""
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    task_id = callback.data.split("|")[1]
+    tasks = store_get_tasks(user_id)
+    task = next((t for t in tasks if t.get("task_id") == task_id), None)
+    if not task:
+        await callback.answer("Задача не найдена", show_alert=True)
+        return
+    await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="reminder", edit_task_id=task_id)
+    await state.set_state(TaskEditStates.editing_reminder)
+    deadline = task.get("deadline")
+    rem_val = task.get("reminder")
+    rem_label = rem_val[:16].replace("T", " ") if rem_val else "нет"
+    header = (
+        f"🔔 <b>Напоминание для «{task.get('title', '')[:30]}»</b>\n"
+        f"Сейчас: {rem_label}\n"
+        f"Выбери время:"
+    )
+    from aiogram.types import InlineKeyboardMarkup as _IKM_ro
+    kb = get_reminder_keyboard(deadline)
+    back_row = [InlineKeyboardButton(
+        text="← Назад к задаче",
+        callback_data=f"ttask_edit|{task_id}"
+    )]
+    if rem_val:
+        extra_rows = [
+            [InlineKeyboardButton(
+                text="🗑 Убрать напоминание",
+                callback_data=f"ttask_rem_clear|{task_id}"
+            )],
+            back_row
+        ]
+    else:
+        extra_rows = [back_row]
+    new_kb = _IKM_ro(inline_keyboard=kb.inline_keyboard[:-1] + extra_rows)
+    try:
+        await callback.message.edit_text(header, reply_markup=new_kb, parse_mode="HTML")
+    except Exception:
+        await callback.message.answer(header, reply_markup=new_kb, parse_mode="HTML")
+
+
 @router.callback_query(F.data.startswith("ttask_delete|"))
 async def cb_ttask_delete(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
