@@ -455,6 +455,11 @@ def get_task_edit_inline(user_id: str, task_id: str) -> InlineKeyboardMarkup:
             callback_data=f"ttask_edit_field|{task_id}|repeat"
         )],
         [InlineKeyboardButton(
+            text=("🔔 Напоминание: 🔗 " + task["reminder"][:16].replace("T", " "))
+                 if task.get("reminder") else "🔔 Напоминание: нет",
+            callback_data=f"task_rem_open|{task_id}"
+        )],
+        [InlineKeyboardButton(
             text="🗑 Удалить задачу",
             callback_data=f"ttask_delete|{task_id}"
         )],
