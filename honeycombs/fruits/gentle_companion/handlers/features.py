@@ -648,7 +648,17 @@ async def cb_rem_delete(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id   = str(callback.from_user.id)
     rid       = callback.data[len("rem_del_"):]
-    reminders = [r for r in store_get_reminders(user_id) if r["id"] != rid]
+    all_rems  = store_get_reminders(user_id)
+    # P-95-08: if reminder linked to task — clear task reminder field
+    _del_rem  = next((r for r in all_rems if r["id"] == rid), None)
+    if _del_rem and _del_rem.get("task_id"):
+        _tasks_dr = store_get_tasks(user_id)
+        for _t_dr in _tasks_dr:
+            if _t_dr.get("task_id") == _del_rem["task_id"]:
+                _t_dr["reminder"] = None
+                _t_dr["updated"] = _today()
+        store_set_tasks(user_id, _tasks_dr)
+    reminders = [r for r in all_rems if r["id"] != rid]
     store_set_reminders(user_id, reminders)
     _fire_sync()
     header = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
