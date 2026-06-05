@@ -1074,6 +1074,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                 if _deleted:
                                     tasks = [t for t in tasks if t.get("task_id") not in _ids_to_del]
                                     store_set_tasks(user_id, tasks)
+                                    # P-95-09: delete linked reminders for batch deleted tasks
+                                    _rems_bt = store_get_reminders(user_id)
+                                    _rems_bt = [r for r in _rems_bt if r.get("task_id") not in _ids_to_del]
+                                    store_set_reminders(user_id, _rems_bt)
                                     await _sync_pending()
                                     reply_text = f"🗑 Удалено задач: {', '.join(_deleted)}"
                                 else:
@@ -1092,6 +1096,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                     t = matched[0]
                                     new_tasks = [x for x in tasks if x.get("task_id") != t.get("task_id")]
                                     store_set_tasks(user_id, new_tasks)
+                                    # P-95-09: delete linked reminder if exists
+                                    _rems_dt = store_get_reminders(user_id)
+                                    _rems_dt = [r for r in _rems_dt if r.get("task_id") != t.get("task_id")]
+                                    store_set_reminders(user_id, _rems_dt)
                                     await _sync_pending()
                                     reply_text = f"🗑 Задача удалена: {t['title']}"
                                 elif tasks:
@@ -1452,6 +1460,14 @@ async def free_conversation(message: Message, state: FSMContext):
                             reminders = store_get_reminders(user_id)
                             rem = next((r for r in reminders if target_r and target_r in r.get("title","").lower()), None)
                             if rem:
+                                # P-95-09: clear task reminder field if linked
+                                if rem.get("task_id"):
+                                    _tasks_dr = store_get_tasks(user_id)
+                                    for _t_dr in _tasks_dr:
+                                        if _t_dr.get("task_id") == rem["task_id"]:
+                                            _t_dr["reminder"] = None
+                                            _t_dr["updated"] = _today()
+                                    store_set_tasks(user_id, _tasks_dr)
                                 reminders = [r for r in reminders if r["id"] != rem["id"]]
                                 store_set_reminders(user_id, reminders)
                                 await _sync_pending()
