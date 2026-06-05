@@ -491,7 +491,56 @@ async def tedit_reminder_cb(callback: CallbackQuery, state: FSMContext):
                 reply_markup=cancel_kb, parse_mode="HTML"
             )
         return
-    reminder = None if val == "skip" else val
+    if val == "skip":
+        reminder = None
+        # Убрать напоминание если есть
+        tasks = store_get_tasks(user_id)
+        task_title = ""
+        for t in tasks:
+            if t.get("task_id") == tid:
+                t["reminder"] = None
+                t["updated"] = _today()
+                task_title = t.get("title", "")
+        store_set_tasks(user_id, tasks)
+        reminders = store_get_reminders(user_id)
+        reminders = [r for r in reminders if r.get("task_id") != tid]
+        store_set_reminders(user_id, reminders)
+        _fire_sync()
+        await state.clear()
+        await callback.answer("🗑 Напоминание убрано")
+        try:
+            await callback.message.edit_text(
+                f"✏️ <b>{task_title}</b>",
+                reply_markup=get_task_edit_inline(user_id, tid),
+                parse_mode="HTML"
+            )
+        except Exception:
+            await callback.message.answer(
+                f"✏️ <b>{task_title}</b>",
+                reply_markup=get_task_edit_inline(user_id, tid),
+                parse_mode="HTML"
+            )
+        return
+    else:
+        # Дата выбрана — спрашиваем время
+        await state.update_data(_rem_date=val)
+        cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="← Назад к задаче", callback_data=f"ttask_edit|{tid}")]
+        ])
+        try:
+            await callback.message.edit_text(
+                f"🔔 <b>Время напоминания</b> для {val}:\n"
+                "Введи время: <code>ЧЧ:ММ</code>\n"
+                "<i>Например: 09:30</i>",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        except Exception:
+            await callback.message.answer(
+                f"🔔 Время для {val} (<code>ЧЧ:ММ</code>):",
+                reply_markup=cancel_kb, parse_mode="HTML"
+            )
+        return
+    reminder = None  # unreachable, kept for linter
     # Сохранить reminder в задаче
     tasks = store_get_tasks(user_id)
     task_title = ""
@@ -537,23 +586,33 @@ async def tedit_reminder_cb(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(TaskEditStates.editing_reminder))
 async def tedit_reminder_custom_input(message: Message, state: FSMContext):
-    """P-95: handle custom date input for task-linked reminder."""
+    """P-95: handle HH:MM or DD.MM.YY HH:MM input for task-linked reminder."""
     user_id = str(message.from_user.id)
     data = await state.get_data()
     tid = data.get("_ttask_edit_id") or data.get("edit_task_id", "")
+    date_val = data.get("_rem_date", "")
     if not tid:
         await state.clear()
         return
     text = (message.text or "").strip()
     import re as _re_tr
     reminder = None
+    # Полный формат ДД.ММ.ГГ ЧЧ:ММ
     m = _re_tr.match(r"^(\d{2})\.(\d{2})\.(\d{2})\s+(\d{2}):(\d{2})$", text)
     if m:
         dd, mm, yy, hh, mi = m.groups()
         reminder = f"20{yy}-{mm}-{dd}T{hh}:{mi}"
+    else:
+        # Только время ЧЧ:ММ — если дата уже выбрана
+        m_t = _re_tr.match(r"^(\d{1,2}):(\d{2})$", text)
+        if m_t and date_val:
+            hh, mi = m_t.groups()
+            reminder = f"{date_val}T{hh.zfill(2)}:{mi}"
     if not reminder:
+        hint = f" для {date_val}" if date_val else ""
         await message.answer(
-            "⚠️ Не понял формат. Введи: <code>ДД.ММ.ГГ ЧЧ:ММ</code>",
+            f"⚠️ Не понял формат. Введи время{hint}: <code>ЧЧ:ММ</code>\n"
+            "<i>Например: 09:30</i>",
             parse_mode="HTML"
         )
         return
