@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-05 22:27:40 ──
+# ── BUILT by build.py ── 2026-06-05 22:42:44 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -10548,15 +10548,34 @@ async def free_conversation(message: Message, state: FSMContext):
                                     if len(reminders_cl) >= REMINDER_LIMIT_SOFT:
                                         await message.answer(f"⚠️ Почти лимит: {len(reminders_cl)}/{REMINDER_LIMIT} напоминаний.")
                                     rid_cl = _make_reminder_id(reminders_cl)
-                                    reminders_cl.append({"id": rid_cl, "title": r_title, "datetime_iso": dt_iso_cr, "repeat": r_repeat, "active": True})
+                                    # P-95-07: search for matching task to link
+                                    _tasks_cr = store_get_tasks(user_id)
+                                    _linked_task_id = None
+                                    _r_title_lower = r_title.lower()
+                                    for _t_cr in _tasks_cr:
+                                        _t_title = _t_cr.get("title", "").lower()
+                                        if _t_title and (_t_title in _r_title_lower or _r_title_lower in _t_title):
+                                            _linked_task_id = _t_cr.get("task_id")
+                                            break
+                                    _new_rem_cr = {"id": rid_cl, "title": r_title, "datetime_iso": dt_iso_cr, "repeat": r_repeat, "active": True}
+                                    if _linked_task_id:
+                                        _new_rem_cr["task_id"] = _linked_task_id
+                                        # Update task's reminder field
+                                        for _t_cr2 in _tasks_cr:
+                                            if _t_cr2.get("task_id") == _linked_task_id:
+                                                _t_cr2["reminder"] = dt_iso_cr
+                                                _t_cr2["updated"] = _today()
+                                        store_set_tasks(user_id, _tasks_cr)
+                                    reminders_cl.append(_new_rem_cr)
                                     store_set_reminders(user_id, reminders_cl)
                                     _fire_sync()
                                     dt_display_cr = dt_iso_cr[:16].replace("T", " ")
+                                    _link_icon_cr = " 🔗" if _linked_task_id else ""
                                     kb_cl = InlineKeyboardMarkup(inline_keyboard=[
                                         [InlineKeyboardButton(text="✏️ Изменить", callback_data=f"rem_edit_{rid_cl}")]
                                     ])
                                     await message.answer(
-                                        f"✅ Напоминание создано:\n🔔 {r_title}\n📅 {dt_display_cr} · {_repeat_label(r_repeat)}",
+                                        f"✅ Напоминание создано{_link_icon_cr}:\n🔔 {r_title}\n📅 {dt_display_cr} · {_repeat_label(r_repeat)}",
                                         reply_markup=kb_cl, parse_mode="HTML"
                                     )
                                     reply_text = ""
