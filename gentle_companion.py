@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-05 22:25:00 ──
+# ── BUILT by build.py ── 2026-06-05 22:27:40 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -8889,8 +8889,8 @@ async def ep_birthday(message: Message, state: FSMContext):
 
 @router.message(F.content_type == "voice")
 async def cb_voice_message(message: Message, state: FSMContext):
-    """Голосовые сообщения пока не поддерживаются."""
-    await message.answer("🎙 Голосовые сообщения пока не поддерживаются — напиши текстом 🌱")
+    """Route voice messages to Groq Whisper transcription."""
+    await handle_voice(message, state)
 
 
 # ─── Intent Classifier (Step 1 — observation mode) ───────────────────────────
