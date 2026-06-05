@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-05 21:59:29 ──
+# ── BUILT by build.py ── 2026-06-05 22:03:39 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1153,7 +1153,8 @@ def _reminder_list_text(reminders: list) -> str:
         else:
             dt = dt_iso[:16].replace("T"," ")
         rep = {"once":"1×","daily":"ежедн.","weekdays":"пн-пт"}.get(r.get("repeat","once"),"1×")
-        lines.append(f"  🔔 {r['title']} · {dt} ({rep})")
+        _link_icon = " 🔗" if r.get("task_id") else ""
+        lines.append(f"  🔔 {r['title']}{_link_icon} · {dt} ({rep})")
     return "\n".join(lines)
 
 def _sphere_progress_bar(pct: int) -> str:
@@ -1374,7 +1375,8 @@ def _build_profile_card(user_id: str) -> str:
         when = f" · {date_part} {time_part}".strip() if date_part else ""
         _r_rep = r.get("repeat", "once")
         _r_rep_icon = " 🔁" if _r_rep and _r_rep != "once" else ""
-        lines.append(f"  · {r['title']}{_r_rep_icon}{when}")
+        _r_link_icon = " 🔗" if r.get("task_id") else ""
+        lines.append(f"  · {r['title']}{_r_rep_icon}{_r_link_icon}{when}")
     if not nearest_rem:
         lines.append("  · напоминаний нет 🌱")
 
