@@ -1003,6 +1003,12 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
                                                   f"💎 {count_now} · {SPHERE_EMOJI[_last_sphere]} {SPHERE_NAME_RU[_last_sphere]} +{total_res}% → {new_res2}%")
                                 pass  # profile not shown automatically
+                                # P-97: SR progress reaction for chat-based task completion
+                                _ct_titles = ", ".join(f"«{t['title']}»" for t in to_close)
+                                asyncio.create_task(_sr_progress_reaction_send(
+                                    message, user_id,
+                                    f"[Системное событие] Садовник закрыл задачу: {_ct_titles}"
+                                ))
                             elif tasks:
                                 # Smart clarification: find top fuzzy candidates
                                 _candidates = []
