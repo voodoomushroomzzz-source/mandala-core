@@ -1,6 +1,6 @@
 {
   "honeycomb": "fruits/gentle_companion",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "created": "2026-05-25",
   "authors": [
     "External SR (Claude)"
@@ -8,7 +8,7 @@
   "bot_version_analyzed": "7.39.81",
   "current_state": {
     "file": "gentle_companion.py (running on server)",
-    "lines": 10344,
+    "lines": 10877,
     "size_kb": 470,
     "functions": 310,
     "handlers": 148,
@@ -16,7 +16,8 @@
     "status": "running on server — gentle_companion.py is production since 2026-05-28",
     "structure": "honeycombs/fruits/gentle_companion/ — module code + index.json + build.py",
     "phases_complete": "7/7 — COMPLETE",
-    "bot_version_analyzed": "7.39.23"
+    "bot_version_analyzed": "7.39.23",
+    "server_entry": "ExecStart=/opt/mandala/venv/bin/python3 /opt/mandala/gentle_companion.py (switched from bot.py — 2026-06-05)"
   },
   "rule_for_sr": "MANDATORY: any change in bot.py affecting module structure (adding function, moving block, changing dependencies) — update index.json and the corresponding module file in modules/. The index is a living document, not an archive.",
   "reading_guide": {
@@ -29,7 +30,9 @@
     "before_patching": [
       "Determine which module the changed block belongs to",
       "Check module dependencies (depends_on in index.json dependency_graph)",
-      "After patch update last_updated in index.json"
+      "After patch update last_updated in index.json",
+      "ALWAYS request actual module files before patching — never use cached/uploaded versions",
+      "Block 3 ALWAYS includes full deploy: py patcher.py; Remove-Item patcher.py; git add <files>; git commit -m '<msg>'; git pull --rebase origin main; git push; ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 5 --no-pager'"
     ]
   },
   "modules": [
@@ -114,15 +117,19 @@
         "get_main/cancel/profile/deadline/reminder_keyboard()",
         "get_groups/tasks/checklist/reminder inline keyboards",
         "_build_profile_card()",
-        "_classify_sphere(), _auto_merkaba()"
-      ]
+        "_classify_sphere(), _auto_merkaba()",
+        "get_task_edit_inline(): reminder button 🔔 with callback task_rem_open|{task_id} (P-95-02)",
+        "Profile card: 🔗 emoji on tasks with linked reminder (P-95-05/06)",
+        "get_reminder_keyboard(): \"В день задачи\" uses rem_deadline|DATE callback (P-95-06)"
+      ],
+      "last_updated": "2026-06-06"
     },
     {
       "id": "05_handlers_tasks",
       "name": "Handlers — Tasks",
       "description": "Task handlers: FSM creation, editing, deletion, groups, labels, deadlines, repeats.",
       "target_file": "handlers/tasks.py",
-      "current_size_kb": 81,
+      "current_size_kb": 95,
       "status": "done",
       "phase": 6,
       "key_items": [
@@ -131,9 +138,13 @@
         "cb_ttask_edit/delete/create",
         "task_title/deadline/reminder/repeat/label FSM",
         "_create_task_atomic() — voice/text without FSM",
-        "cb_ttask_rem_clear() — delete reminder from task (P-81, 2026-05-28)",
-        "task-reminder link: task['reminder'] ↔ reminders[task_id] — delete task deletes reminder (P-81)"
-      ]
+        "cb_task_rem_open() — linked reminder picker from task menu (P-95-01)",
+        "tedit_reminder_cb() — time preset; rem_deadline|DATE inherits repeat (P-95-03/04)",
+        "_save_linked_reminder() — saves to task + ws['reminders'] with task_id (P-95-06)",
+        "cb_ttask_rem_clear() — clears linked reminder from task AND reminders (P-95)",
+        "P-95: 1 reminder per task max, delete task → delete reminder, delete reminder → clear task"
+      ],
+      "last_updated": "2026-06-06"
     },
     {
       "id": "06_handlers_features",
@@ -147,8 +158,10 @@
         "Checklists: cb_cl_create/toggle/delete/edit",
         "Reminders: cb_rem_create/edit, _repeat_picker_keyboard",
         "Achievements: cmd_achievements, cb_add_achievement",
-        "_create_reminder_atomic(), _create_checklist_atomic() — atomic creation from voice/text (restored 2026-05-28)"
-      ]
+        "_create_reminder_atomic(), _create_checklist_atomic() — atomic creation from voice/text (restored 2026-05-28)",
+        "cb_rem_delete: if reminder has task_id — clears task['reminder'] (P-95-08)"
+      ],
+      "last_updated": "2026-06-06"
     },
     {
       "id": "07_sr_engine",
@@ -165,9 +178,10 @@
         "_CLASSIFIER_PROMPT",
         "DATE AND TIME (absolute priority) — rule in SR_CORE_PROMPT: SR checks [Current time] first, never confuses today/tomorrow (P-83, 2026-05-28)",
         "SR_INTENT_LIGHT: multi-query examples added for comparative search (action.queries[] instead of action.query) (P-87, 2026-05-29)",
-        "WELCOME TOUR block added: SR guides new gardeners through features step by step with offer to try each one (P-88, 2026-05-29)"
+        "WELCOME TOUR block added: SR guides new gardeners through features step by step with offer to try each one (P-88, 2026-05-29)",
+        "add_task intent: reminder field examples — atomic task+reminder creation (P-95-11)"
       ],
-      "last_updated": "2026-05-29"
+      "last_updated": "2026-06-06"
     },
     {
       "id": "sr_context",
@@ -260,9 +274,13 @@
         "web_search routed through SR with full context — no more _synthesize_search, SR responds with dialog history + profile awareness (P-87, 2026-05-29)",
         "multi-query support: action.queries[] for comparative requests — parallel Tavily searches, results merged before SR call (P-87, 2026-05-29)",
         "suggest_action keyboard removed — SR suggests actions verbally (P-89, 2026-05-29)",
-        "Analytics keyword detection: анализ/прогресс/достижения/рост → _sphere_history_needed=2 (full 12-month history in context) (P-90, 2026-05-29)"
+        "Analytics keyword detection: анализ/прогресс/достижения/рост → _sphere_history_needed=2 (full 12-month history in context) (P-90, 2026-05-29)",
+        "create_reminder: auto-links to task by title match (P-95-07); blocks duplicate if task has reminder (P-95-10)",
+        "delete_reminder: clears task['reminder'] if set (P-95-09)",
+        "delete_task: deletes linked reminders from ws['reminders'] (P-95-09)",
+        "add_task: passes reminder field → auto-linked reminder created (P-95-11)"
       ],
-      "last_updated": "2026-05-29"
+      "last_updated": "2026-06-06"
     },
     {
       "id": "08_handlers_system",
@@ -276,7 +294,7 @@
         "cmd_start, onboard FSM, cb_consent_yes/no",
         "cmd_profile/resonance/ask",
         "cmd_leave/delete_all/info/changelog/privacy",
-        "handle_voice — Groq Whisper",
+        "handle_voice — Groq Whisper (restored after floating decorator bug 2026-06-06)",
         "run_resonance_decay, send_morning/evening",
         "run_reminder/proactive_scheduler",
         "_check_webhook() — periodic webhook health monitor (added 2026-05-28)",
@@ -285,7 +303,7 @@
         "Onboarding skip buttons: city, birthday, welcome q1/q2 — pressing skip on q1 jumps directly to step 8 (P-88, 2026-05-29)",
         "_send_welcome_step8(): live SR welcome without buttons — starts natural dialog. Fixed cb_tour_no decorator bug (P-88, 2026-05-29)"
       ],
-      "last_updated": "2026-05-29"
+      "last_updated": "2026-06-06"
     },
     {
       "id": "09_main",
@@ -481,7 +499,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-05-29",
+  "last_updated": "2026-06-06",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
@@ -495,5 +513,25 @@
     "trigger": "push to honeycombs/fruits/gentle_companion/**.py",
     "output": "gentle_companion.py (repo root)",
     "status": "active"
+  },
+  "linked_reminders_system": {
+    "description": "P-95 feature — task-linked reminders. 2026-06-05/06.",
+    "rules": [
+      "1 reminder per task max",
+      "reminder.task_id → links to task",
+      "task['reminder'] = ISO datetime",
+      "delete reminder → clears task",
+      "delete task → deletes linked reminder",
+      "🔗 emoji on linked items"
+    ],
+    "entry_points": [
+      "Task edit → 🔔 → cb_task_rem_open",
+      "SR create_reminder + title match → auto-link",
+      "SR add_task with reminder → _create_task_atomic → auto-link"
+    ],
+    "time_picker_flow": [
+      "В день задачи: rem_deadline|DATE → HH:MM → save with repeat",
+      "Своя дата: rem_YYYY-MM-DD → HH:MM → repeat → save"
+    ]
   }
 }

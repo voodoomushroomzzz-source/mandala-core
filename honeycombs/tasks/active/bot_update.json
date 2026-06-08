@@ -3,16 +3,16 @@
   "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
   "status": "in_progress",
   "priority": "highest",
-  "deadline": "2026-06-01",
+  "deadline": "2026-07-01",
   "created": "2026-04-01",
-  "updated": "2026-05-29",
+  "updated": "2026-06-06",
   "progress": 99,
   "current_version": "7.39.76+",
   "note_version": "Реальная версия с патчами ~7.39.75+",
   "dev_rules": [
-    "ВСЕГДА обновлять BOT_VERSION и BOT_LATEST_UPDATE на каждом патче",
-    "BOT_LATEST_UPDATE text — ТОЛЬКО через \\n в строках или тройные кавычки. НИКОГДА \\ в конце строки (это string continuation без \\n!)",
-    "Перед патчем: получить актуальный bot.py с GitHub через API",
+    "Сервер запускает gentle_companion.py — НЕ bot.py (переключено 2026-06-05)",
+    "ВСЕГДА запрашивать актуальные модули перед патчем — никогда не использовать кэш",
+    "Block 3 ВСЕГДА включает деплой одной командой: py patcher.py; Remove-Item patcher.py; git add <files>; git commit -m '<msg>'; git pull --rebase origin main; git push; ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 5 --no-pager'",
     "После патча: запросить обновлённый файл, прочитать, подтвердить SHA и версию",
     "Большие файлы >500 строк — ТОЛЬКО через patcher-скрипты, никогда полной заменой",
     "Новые функции → добавлять в INTENT_MAP в SR промпте",
@@ -22,7 +22,7 @@
     "Последние 5 версий в BOT_LATEST_UPDATE — удалять старую, добавлять новую"
   ],
   "architecture": {
-    "style": "monolithic (bot.py ~9835 строк)",
+    "style": "modular (14 modules → CI builds gentle_companion.py)",
     "llm": "OpenRouter deepseek/deepseek-v4-flash (primary), qwen/qwen3.5-flash-02-23 (fallback)",
     "memory": "_sessions RAM + memory.json GitHub, restored on restart",
     "store": "Multi-user _store{uid:{profile,workspace,ready}} + 2min GitHub sync",
@@ -38,7 +38,8 @@
       "build": "build.py → bot_built.py",
       "ci": ".github/workflows/build_bot.yml"
     },
-    "gardeners": 4
+    "gardeners": 4,
+    "bot_entry": "/opt/mandala/gentle_companion.py (NOT bot.py — switched 2026-06-05)"
   },
   "done_patches": {
     "P-21": {
@@ -478,6 +479,67 @@
         "honeycombs/fruits/gentle_companion/sr_conversation.py"
       ],
       "deploy_status": "deployed"
+    },
+    "P-94": {
+      "name": "Remove broken reminder flow, add task_rem_open| callback",
+      "date": "2026-06-05",
+      "files": [
+        "ui.py",
+        "handlers/tasks.py",
+        "handlers/features.py"
+      ]
+    },
+    "P-95-01": {
+      "name": "cb_task_rem_open handler — linked reminder picker",
+      "date": "2026-06-05"
+    },
+    "P-95-02": {
+      "name": "🔔 button in get_task_edit_inline",
+      "date": "2026-06-05"
+    },
+    "P-95-03": {
+      "name": "Restore tedit_reminder_cb for editing_reminder state",
+      "date": "2026-06-05"
+    },
+    "P-95-04": {
+      "name": "Date preset → HH:MM; custom input handles HH:MM",
+      "date": "2026-06-05"
+    },
+    "P-95-05": {
+      "name": "🔗 emoji on linked reminders",
+      "date": "2026-06-05"
+    },
+    "P-95-06": {
+      "name": "🔗 on tasks, rem_deadline|DATE, repeat picker",
+      "date": "2026-06-06"
+    },
+    "P-95-07": {
+      "name": "create_reminder via SR auto-links to task",
+      "date": "2026-06-06"
+    },
+    "P-95-08": {
+      "name": "cb_rem_delete clears task['reminder']",
+      "date": "2026-06-06"
+    },
+    "P-95-09": {
+      "name": "delete_reminder/delete_task syncs linked fields",
+      "date": "2026-06-06"
+    },
+    "P-95-10": {
+      "name": "1 reminder per task — edit button if linked",
+      "date": "2026-06-06"
+    },
+    "P-95-11": {
+      "name": "add_task: reminder examples, atomic creation",
+      "date": "2026-06-06"
+    },
+    "BUGFIX-voice": {
+      "name": "Restore Groq Whisper — floating decorator fix",
+      "date": "2026-06-06"
+    },
+    "SERVER-SWITCH": {
+      "name": "systemd switched from bot.py to gentle_companion.py",
+      "date": "2026-06-05"
     }
   },
   "known_bugs": {},
@@ -788,27 +850,16 @@
     "reminder_flow": "direct — no confirmation"
   },
   "next_steps": [
-    "Journal Diary J-1..J-5",
-    "D-2..D-6 Deep Synthesis"
+    "Fix BUG-double-confirmation (high)",
+    "Journal Diary J-1..J-5 (medium)",
+    "Deep Synthesis D-2..D-6 (low)"
   ],
-  "pending_tasks": [
+  "pending_tasks": [],
+  "open_bugs": [
     {
-      "id": "DEPLOY-2",
-      "title": "Deploy P-83 to server after CI rebuild",
+      "id": "BUG-double-confirmation",
       "priority": "high",
-      "command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\""
-    },
-    {
-      "id": "TEST-2",
-      "title": "Test context classifier",
-      "priority": "medium",
-      "description": "Test: talk about a task → short command → verify classifier recognizes edit_task with correct title from context."
-    },
-    {
-      "id": "TEST-3",
-      "title": "Test date fix in live conversation",
-      "priority": "medium",
-      "description": "SR must not say 'dates not visible'. Tomorrow tasks = 'tomorrow', today = 'today'."
+      "description": "SR answers text preamble then classifier executes separately. Fix in sr_prompts.py."
     }
   ]
 }
