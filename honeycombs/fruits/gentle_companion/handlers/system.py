@@ -249,6 +249,15 @@ async def run_reminder_scheduler() -> None:
                             break
                         skip += 1
                     r["datetime_iso"] = next_d.strftime("%Y-%m-%dT%H:%M")
+                # P-95: sync task["reminder"] with new rescheduled datetime
+                _tid_resched = r.get("task_id")
+                if _tid_resched:
+                    _tasks_resched = store_get_tasks(uid)
+                    for _t_resched in _tasks_resched:
+                        if _t_resched.get("task_id") == _tid_resched:
+                            _t_resched["reminder"] = r["datetime_iso"]
+                            break
+                    store_set_tasks(uid, _tasks_resched)
                 changed = True
             if changed:
                 store_set_reminders(uid, reminders)
