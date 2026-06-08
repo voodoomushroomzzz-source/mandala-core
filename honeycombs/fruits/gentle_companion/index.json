@@ -142,7 +142,9 @@
         "tedit_reminder_cb() — time preset; rem_deadline|DATE inherits repeat (P-95-03/04)",
         "_save_linked_reminder() — saves to task + ws['reminders'] with task_id (P-95-06)",
         "cb_ttask_rem_clear() — clears linked reminder from task AND reminders (P-95)",
-        "P-95: 1 reminder per task max, delete task → delete reminder, delete reminder → clear task"
+        "P-95: 1 reminder per task max, delete task → delete reminder, delete reminder → clear task",
+        "cb_ttask_rem_clear() — clears linked reminder, StateFilter(TaskEditStates.editing_reminder) (P-95)",
+        "_sr_progress_reaction_send() — fires SR reaction after task completion (P-97)"
       ],
       "last_updated": "2026-06-06"
     },
@@ -159,7 +161,8 @@
         "Reminders: cb_rem_create/edit, _repeat_picker_keyboard",
         "Achievements: cmd_achievements, cb_add_achievement",
         "_create_reminder_atomic(), _create_checklist_atomic() — atomic creation from voice/text (restored 2026-05-28)",
-        "cb_rem_delete: if reminder has task_id — clears task['reminder'] (P-95-08)"
+        "cb_rem_delete: if reminder has task_id — clears task['reminder'] (P-95-08)",
+        "_sr_progress_reaction_send() — fires SR reaction after checklist/achievement (P-97)"
       ],
       "last_updated": "2026-06-06"
     },
@@ -201,7 +204,8 @@
         "_build_user_context_msg()",
         "_build_sr_context()",
         "_call_openrouter()",
-        "fresh/mentioned/confirmed groups shown in [Интересы садовника] and [Культурный опыт] context blocks (P-84/P-85, 2026-05-29)"
+        "fresh/mentioned/confirmed groups shown in [Интересы садовника] and [Культурный опыт] context blocks (P-84/P-85, 2026-05-29)",
+        "_sr_progress_reaction(user_id, event_text) — calls SR with full context, parses JSON, returns clean text (P-97)"
       ],
       "last_updated": "2026-05-29"
     },
@@ -499,7 +503,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-06-06",
+  "last_updated": "2026-06-09",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
@@ -522,7 +526,10 @@
       "task['reminder'] = ISO datetime",
       "delete reminder → clears task",
       "delete task → deletes linked reminder",
-      "🔗 emoji on linked items"
+      "🔗 emoji on linked items",
+      "one-time reminder fires → task['reminder'] cleared (P-95)",
+      "repeating reminder fires → task['reminder'] updated to new datetime (P-95)",
+      "cb_ttask_rem_clear handler with StateFilter(TaskEditStates.editing_reminder) (P-95)"
     ],
     "entry_points": [
       "Task edit → 🔔 → cb_task_rem_open",

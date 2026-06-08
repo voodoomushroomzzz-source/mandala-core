@@ -5,7 +5,7 @@
   "priority": "highest",
   "deadline": "2026-07-01",
   "created": "2026-04-01",
-  "updated": "2026-06-06",
+  "updated": "2026-06-09",
   "progress": 99,
   "current_version": "7.39.76+",
   "note_version": "Реальная версия с патчами ~7.39.75+",
@@ -540,6 +540,21 @@
     "SERVER-SWITCH": {
       "name": "systemd switched from bot.py to gentle_companion.py",
       "date": "2026-06-05"
+    },
+    "P-95": {
+      "name": "Linked reminders — full sync fix",
+      "date": "2026-06-09",
+      "details": "Fixed: one-time reminder clears task['reminder'] after firing. Repeating reminder syncs new datetime. Added cb_ttask_rem_clear with StateFilter."
+    },
+    "P-96": {
+      "name": "SR silent farewell guard",
+      "date": "2026-06-09",
+      "details": "Code-level guard in sr_conversation.py: if last bot message was farewell and gardener replies with farewell token — bot stays silent."
+    },
+    "P-97": {
+      "name": "SR progress reaction",
+      "date": "2026-06-09",
+      "details": "SR reacts to: task done, checklist completed, achievement added. _sr_progress_reaction() in sr_context.py — calls SR with full context, parses JSON response."
     }
   },
   "known_bugs": {},
