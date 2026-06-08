@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-08 20:40:50 ──
+# ── BUILT by build.py ── 2026-06-08 20:54:35 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -3933,6 +3933,41 @@ async def ttask_group_cb(callback: CallbackQuery, state: FSMContext):
         reply_markup=get_task_edit_inline(user_id, tid),
         parse_mode="HTML"
     )
+
+@router.callback_query(F.data.startswith("ttask_rem_clear|"))
+async def cb_ttask_rem_clear(callback: CallbackQuery, state: FSMContext):
+    """P-95: clear linked reminder directly from reminder picker menu."""
+    await _safe_cb_answer(callback)
+    user_id = str(callback.from_user.id)
+    task_id = callback.data.split("|")[1]
+    tasks = store_get_tasks(user_id)
+    task_title = ""
+    for t in tasks:
+        if t.get("task_id") == task_id:
+            t["reminder"] = None
+            t["updated"] = _today()
+            task_title = t.get("title", "")
+            break
+    store_set_tasks(user_id, tasks)
+    reminders = store_get_reminders(user_id)
+    reminders = [r for r in reminders if r.get("task_id") != task_id]
+    store_set_reminders(user_id, reminders)
+    _fire_sync()
+    await state.clear()
+    await callback.answer("убрано")
+    try:
+        await callback.message.edit_text(
+            f"✏️ <b>{task_title}</b>",
+            reply_markup=get_task_edit_inline(user_id, task_id),
+            parse_mode="HTML"
+        )
+    except Exception:
+        await callback.message.answer(
+            f"✏️ <b>{task_title}</b>",
+            reply_markup=get_task_edit_inline(user_id, task_id),
+            parse_mode="HTML"
+        )
+
 
 @router.callback_query(F.data.startswith("task_rem_open|"))
 async def cb_task_rem_open(callback: CallbackQuery, state: FSMContext):
