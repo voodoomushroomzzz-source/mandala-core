@@ -69,7 +69,13 @@
     "pre_check_mandate": "CRITICAL. NEVER patch without API fetch first. Violation = resonance break.",
     "post_check_mandate": "CRITICAL. After patch, request updated file via API. WAIT for content. Read it. Confirm SHA and version. NEVER report success until file is received and verified. Verbal confirmation without content = protocol violation.",
     "gardener_instruction": "AI MUST lead the Gardener through this process autonomously. DO NOT wait for Gardener to ask. PROACTIVELY request each file ONE BY ONE. Send the API link, wait for the content to be provided, acknowledge it, then proceed.",
-    "platform_note": "This file is the PC version. For mobile, use boot_online_onboarding_mobile.json."
+    "platform_note": "This file is the PC version. For mobile, use boot_online_onboarding_mobile.json.",
+    "patcher_block3_mandate": {
+      "block_1": "New-Item <patcher_name>.py — create empty patcher file",
+      "block_2": "Content of <patcher_name>.py — the patch script itself",
+      "block_3": "py <patcher_name>.py; Remove-Item <patcher_name>.py; git add <files>; git commit -m '<msg>'; git pull --rebase origin main; git push; ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 5 --no-pager'",
+      "naming_rule": "Name by task. Examples: fix_linked_reminder_clear.py, add_repeat_picker.py. Never: patcher.py, patch.py, fix.py."
+    }
   },
   "step_2_core_map": {
     "order": 2,
