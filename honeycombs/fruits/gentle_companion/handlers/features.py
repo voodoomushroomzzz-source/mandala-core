@@ -208,6 +208,19 @@ async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
 
 # ─── Checklist — Toggle item ──────────────────────────────────────────────────
 
+
+async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str) -> None:
+    """P-97: get SR reaction and send as separate message."""
+    try:
+        reply = await _sr_progress_reaction(user_id, event_text)
+        if reply and reply.strip():
+            if hasattr(callback_or_msg, 'message'):
+                await callback_or_msg.message.answer(reply)
+            else:
+                await callback_or_msg.answer(reply)
+    except Exception:
+        pass
+
 @router.callback_query(F.data.startswith("cl_toggle|"))
 async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
@@ -247,6 +260,11 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
             )
         except Exception:
             pass
+        # P-97: SR progress reaction
+        asyncio.create_task(_sr_progress_reaction_send(
+            callback, user_id,
+            f"[Системное событие] Садовник выполнил чеклист полностью: «{cl['title']}»"
+        ))
         return
     try:
         await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl))
@@ -1667,6 +1685,11 @@ async def ach_title(message: Message, state: FSMContext):
         [InlineKeyboardButton(text="← Назад к достижениям", callback_data="profile_achievements")]
     ])
     await message.answer(text, reply_markup=kb, parse_mode="HTML")
+    # P-97: SR progress reaction
+    asyncio.create_task(_sr_progress_reaction_send(
+        message, user_id,
+        f"[Системное событие] Садовник зафиксировал достижение: «{title}», сфера: {sname}"
+    ))
 
 @router.message(StateFilter(AchievementStates.waiting_for_description))
 async def ach_description(message: Message, state: FSMContext):

@@ -463,3 +463,25 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
         if this_month:
             m_num = _dt_fb.now().month
             lines.append(f"\n{_RU_MONTHS_S[m_num]} (из архива):")
+
+
+async def _sr_progress_reaction(user_id: str, event_text: str) -> str:
+    """P-97: call SR with full context after a progress event. Returns SR reply or empty string."""
+    try:
+        ctx = _build_user_context_msg(user_id)
+        messages = [
+            {"role": "system", "content": SR_CORE_PROMPT + "\n\n" + ctx +
+             "\n\n[ВАЖНО: это системное событие прогресса садовника, не сообщение в чате. "
+             "Отвечай ТОЛЬКО текстом — коротко, тепло, живо. Без JSON. Без markdown. "
+             "Можно промолчать (вернуть пустую строку) если нечего добавить.]"},
+            {"role": "user", "content": event_text}
+        ]
+        reply = await _call_openrouter(messages, max_tokens=300)
+        if not reply:
+            return ""
+        reply = reply.strip()
+        if reply.startswith("{") or reply.startswith("```"):
+            return ""
+        return reply
+    except Exception:
+        return ""

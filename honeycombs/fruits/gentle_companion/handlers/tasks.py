@@ -109,6 +109,19 @@ async def cb_tgroup_open(callback: CallbackQuery, state: FSMContext):
             header, reply_markup=get_tasks_in_group_inline(user_id, group_id), parse_mode="HTML"
         )
 
+
+async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str) -> None:
+    """P-97: get SR reaction and send as separate message."""
+    try:
+        reply = await _sr_progress_reaction(user_id, event_text)
+        if reply and reply.strip():
+            if hasattr(callback_or_msg, 'message'):
+                await callback_or_msg.message.answer(reply)
+            else:
+                await callback_or_msg.answer(reply)
+    except Exception:
+        pass
+
 @router.callback_query(F.data.startswith("ttask_done|"))
 async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
@@ -213,6 +226,11 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer(_done_msg, parse_mode="HTML")
     except Exception:
         pass
+    # P-97: SR progress reaction
+    asyncio.create_task(_sr_progress_reaction_send(
+        callback, user_id,
+        f"[Системное событие] Садовник закрыл задачу: «{_done_title}»"
+    ))
     all_tasks2 = store_get_tasks(user_id)
     tasks_in_group = [t for t in all_tasks2 if t.get("status") != "completed" and (
         (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
