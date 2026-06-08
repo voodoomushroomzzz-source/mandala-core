@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-08 20:54:35 ──
+# ── BUILT by build.py ── 2026-06-08 20:58:43 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -3934,7 +3934,7 @@ async def ttask_group_cb(callback: CallbackQuery, state: FSMContext):
         parse_mode="HTML"
     )
 
-@router.callback_query(F.data.startswith("ttask_rem_clear|"))
+@router.callback_query(F.data.startswith("ttask_rem_clear|"), StateFilter(TaskEditStates.editing_reminder))
 async def cb_ttask_rem_clear(callback: CallbackQuery, state: FSMContext):
     """P-95: clear linked reminder directly from reminder picker menu."""
     await _safe_cb_answer(callback)
