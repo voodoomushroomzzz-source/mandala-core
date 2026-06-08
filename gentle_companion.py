@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-08 21:51:02 ──
+# ── BUILT by build.py ── 2026-06-08 22:05:15 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -2923,6 +2923,28 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
             lines.append(f"\n{_RU_MONTHS_S[m_num]} (из архива):")
 
 
+async def _sr_progress_reaction(user_id: str, event_text: str) -> str:
+    """P-97: call SR with full context after a progress event. Returns SR reply or empty string."""
+    try:
+        ctx = _build_user_context_msg(user_id)
+        messages = [
+            {"role": "system", "content": SR_CORE_PROMPT + "\n\n" + ctx +
+             "\n\n[ВАЖНО: это системное событие прогресса садовника, не сообщение в чате. "
+             "Отвечай ТОЛЬКО текстом — коротко, тепло, живо. Без JSON. Без markdown. "
+             "Можно промолчать (вернуть пустую строку) если нечего добавить.]"},
+            {"role": "user", "content": event_text}
+        ]
+        reply = await _call_openrouter(messages, max_tokens=300)
+        if not reply:
+            return ""
+        reply = reply.strip()
+        if reply.startswith("{") or reply.startswith("```"):
+            return ""
+        return reply
+    except Exception:
+        return ""
+
+
 # ───────────────────────────────────────────────────────
 # MODULE: sr_memory.py  (Phase 5)
 # ───────────────────────────────────────────────────────
@@ -3639,6 +3661,19 @@ async def cb_tgroup_open(callback: CallbackQuery, state: FSMContext):
             header, reply_markup=get_tasks_in_group_inline(user_id, group_id), parse_mode="HTML"
         )
 
+
+async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str) -> None:
+    """P-97: get SR reaction and send as separate message."""
+    try:
+        reply = await _sr_progress_reaction(user_id, event_text)
+        if reply and reply.strip():
+            if hasattr(callback_or_msg, 'message'):
+                await callback_or_msg.message.answer(reply)
+            else:
+                await callback_or_msg.answer(reply)
+    except Exception:
+        pass
+
 @router.callback_query(F.data.startswith("ttask_done|"))
 async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
@@ -3743,6 +3778,11 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer(_done_msg, parse_mode="HTML")
     except Exception:
         pass
+    # P-97: SR progress reaction
+    asyncio.create_task(_sr_progress_reaction_send(
+        callback, user_id,
+        f"[Системное событие] Садовник закрыл задачу: «{_done_title}»"
+    ))
     all_tasks2 = store_get_tasks(user_id)
     tasks_in_group = [t for t in all_tasks2 if t.get("status") != "completed" and (
         (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
@@ -5753,6 +5793,19 @@ async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
 
 # ─── Checklist — Toggle item ──────────────────────────────────────────────────
 
+
+async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str) -> None:
+    """P-97: get SR reaction and send as separate message."""
+    try:
+        reply = await _sr_progress_reaction(user_id, event_text)
+        if reply and reply.strip():
+            if hasattr(callback_or_msg, 'message'):
+                await callback_or_msg.message.answer(reply)
+            else:
+                await callback_or_msg.answer(reply)
+    except Exception:
+        pass
+
 @router.callback_query(F.data.startswith("cl_toggle|"))
 async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
@@ -5792,6 +5845,11 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
             )
         except Exception:
             pass
+        # P-97: SR progress reaction
+        asyncio.create_task(_sr_progress_reaction_send(
+            callback, user_id,
+            f"[Системное событие] Садовник выполнил чеклист полностью: «{cl['title']}»"
+        ))
         return
     try:
         await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl))
@@ -7212,6 +7270,11 @@ async def ach_title(message: Message, state: FSMContext):
         [InlineKeyboardButton(text="← Назад к достижениям", callback_data="profile_achievements")]
     ])
     await message.answer(text, reply_markup=kb, parse_mode="HTML")
+    # P-97: SR progress reaction
+    asyncio.create_task(_sr_progress_reaction_send(
+        message, user_id,
+        f"[Системное событие] Садовник зафиксировал достижение: «{title}», сфера: {sname}"
+    ))
 
 @router.message(StateFilter(AchievementStates.waiting_for_description))
 async def ach_description(message: Message, state: FSMContext):
