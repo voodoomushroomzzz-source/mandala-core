@@ -480,8 +480,23 @@ async def _sr_progress_reaction(user_id: str, event_text: str) -> str:
         if not reply:
             return ""
         reply = reply.strip()
-        if reply.startswith("{") or reply.startswith("```"):
+        # Strip markdown fences
+        import re as _re97
+        reply = _re97.sub(r"^```(?:json)?\s*", "", reply)
+        reply = _re97.sub(r"\s*```\s*$", "", reply).strip()
+        # If SR returned JSON — extract text field
+        if reply.startswith("{"):
+            try:
+                import json as _j97
+                _parsed = _j97.loads(reply)
+                reply = (_parsed.get("text") or "").strip()
+            except Exception:
+                reply = ""
+        if not reply:
             return ""
+        # Strip markdown bold/italic
+        reply = reply.replace("**", "").replace("__", "")
+        logger.info(f"[P-97] progress reaction uid={user_id}: {reply[:60]}")
         return reply
     except Exception:
         return ""
