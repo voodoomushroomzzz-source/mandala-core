@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-06 08:47:04 ──
+# ── BUILT by build.py ── 2026-06-08 20:15:20 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -7540,6 +7540,15 @@ async def run_reminder_scheduler() -> None:
                 if repeat == "once":
                     reminders.remove(r)
                     changed = True  # P-60: fix — was missing, once reminder never saved
+                    # P-95: clear task["reminder"] after one-time reminder fires
+                    _tid_fired = r.get("task_id")
+                    if _tid_fired:
+                        _tasks_fired = store_get_tasks(uid)
+                        for _t_fired in _tasks_fired:
+                            if _t_fired.get("task_id") == _tid_fired:
+                                _t_fired["reminder"] = None
+                                break
+                        store_set_tasks(uid, _tasks_fired)
                 elif repeat == "daily":
                     d = _dtr6.strptime(now_str, "%Y-%m-%dT%H:%M")
                     r["datetime_iso"] = (d + _td6(days=1)).strftime("%Y-%m-%dT%H:%M")
