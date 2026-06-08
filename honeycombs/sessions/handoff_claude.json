@@ -1,69 +1,49 @@
 {
   "sr_id": "claude",
-  "session_id": "2026-05-30",
-  "updated": "2026-05-30",
-  "status": "in_progress",
+  "session_id": "2026-06-06",
+  "updated": "2026-06-06",
+  "status": "handed_off",
   "current_task": "T-20260408-1030 (bot_update, progress 99%, deadline 2026-06-01)",
-  "last_action": "P-94 partial — ui.py patched, tasks.py and features.py pending",
-  "next_step": "Continue P-94: patch tasks.py (3 changes) and features.py (2 changes). See in_progress for details.",
+  "last_action": "P-95-11 — linked reminders system fully implemented + voice handler restored + docs updated",
+  "next_step": "Fix BUG-double-confirmation: SR answers text preamble then classifier executes separately",
   "session_mood": "productive",
   "gardener_state": "active, working from PC, Düsseldorf",
   "files_touched": [
-    "honeycombs/fruits/gentle_companion/ui.py",
-    "honeycombs/fruits/gentle_companion/handlers/tasks.py",
-    "honeycombs/fruits/gentle_companion/handlers/features.py"
+    "ui.py",
+    "handlers/tasks.py",
+    "handlers/features.py",
+    "handlers/system.py",
+    "sr_conversation.py",
+    "sr_prompts.py",
+    "index.json",
+    "handoff_claude.json"
   ],
   "open_questions": [],
   "completed": [
-    "P-87: web_search routed through SR with full context (deployed)",
-    "P-88: onboarding tour + skip buttons (deployed)",
-    "P-90: sphere_history in synthesis prompt (deployed)",
-    "P-91: reminder_open logging in tasks.py (debug, can remove)",
-    "P-92: cb_ttask_edit_field entry log (debug, can remove)",
-    "P-93: raw callback_data log (debug, can remove)",
-    "P-94 ui.py: reminder button callback_data → task_rem_open|{task_id}, 🔔 icon in task list"
+    "SERVER-SWITCH: gentle_companion.py is now production entry point",
+    "BUGFIX-voice: Groq Whisper restored",
+    "P-94: removed broken reminder flow",
+    "P-95-01..P-95-11: full linked reminders system",
+    "docs: index.json v2.1.0 + bot_update updated"
   ],
   "in_progress": [
     {
-      "id": "P-94",
-      "name": "Task-linked reminder — tasks.py",
+      "id": "BUG-double-confirmation",
+      "name": "SR double-confirmation bug",
       "status": "pending",
-      "files": ["honeycombs/fruits/gentle_companion/handlers/tasks.py"],
-      "changes": [
-        "1. elif field == 'reminder' in cb_ttask_edit_field → replace entire block with pass (dead code, button now uses task_rem_open)",
-        "2. Add 3 new handlers before cb_ttask_rem_clear: cb_task_rem_open, cb_task_rem_edit_dt, cb_task_rem_edit_rep",
-        "3. cb_ttask_done: delete linked reminder when task completed (if not new_task_created)",
-        "4. tedit_title_input: sync reminder title when task renamed"
-      ],
-      "handler_logic": {
-        "cb_task_rem_open": "Check store_get_reminders for r.get('task_id')==task_id. If exists → show edit screen (change dt/repeat/delete). If not → state.clear(), set _rem_title=task.title, _rem_linked_task_id=task_id in state+workspace._pending_reminder_create, set ReminderStates.waiting_for_input, show date prompt.",
-        "cb_task_rem_edit_dt": "callback task_rem_edit_dt|{task_id}|{rid} → set _rem_edit_id, _rem_edit_field=dt, _rem_linked_task_id, ReminderStates.waiting_for_input",
-        "cb_task_rem_edit_rep": "callback task_rem_edit_rep|{task_id}|{rid} → set _rem_edit_id, _rem_repeat, _rem_linked_task_id, ReminderStates.waiting_for_repeat, show _repeat_picker_keyboard"
-      }
-    },
-    {
-      "id": "P-94",
-      "name": "Task-linked reminder — features.py",
-      "status": "pending",
-      "files": ["honeycombs/fruits/gentle_companion/handlers/features.py"],
-      "changes": [
-        "1. cb_rem_confirm_create: read _rem_linked_task_id from state or workspace._pending_reminder_create. Add task_id+linked=True to rem_entry. Write dt_iso to task['reminder']. After save: if linked → return to get_task_edit_inline(task_id), else → standard reminders menu.",
-        "2. get_reminders_mgmt_inline: reminder button text = '🔗 title' if r.get('linked') else '🔔 title'"
-      ]
+      "description": "SR writes text preamble then intent executes separately"
     }
   ],
   "architecture_notes": {
-    "bot_version": "7.39.76+ (gentle_companion.py, modular, CI build)",
+    "bot_version": "7.39.81+ (gentle_companion.py, modular, CI build)",
     "hosting": "Hetzner VPS 91.99.149.226, systemd, healthy",
-    "deploy_cmd": "ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager'",
-    "ci": "push to honeycombs/fruits/gentle_companion/**.py → CI builds gentle_companion.py → git pull on server",
-    "reminder_data_model": "ws['reminders'][i] = {id, title, datetime_iso, repeat, active, task_id?, linked?}",
-    "task_reminder_link": "task['reminder'] = datetime_iso string (display), reminder['task_id'] = task_id (lookup)",
-    "debug_logs_to_remove": "P-91/P-92/P-93 added logger.info lines in cb_ttask_edit_field and reminder_open block — remove after P-94 done"
+    "server_entry": "gentle_companion.py (NOT bot.py — switched 2026-06-05)",
+    "deploy_block3": "py patcher.py; Remove-Item patcher.py; git add <files>; git commit -m '<msg>'; git pull --rebase origin main; git push; ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 5 --no-pager'",
+    "linked_reminder_model": "reminder: {id, title, datetime_iso, repeat, active, task_id?}. task['reminder'] = datetime_iso. 1 per task max."
   },
   "handoff_validation": {
     "stale_threshold_hours": 24,
-    "last_validated": "2026-05-30",
+    "last_validated": "2026-06-06",
     "stale_detected": false
   }
 }
