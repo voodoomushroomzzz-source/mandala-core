@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-09",
+  "date": "2026-06-10",
   "version": "7.39.23",
   "gardeners": {
     "339914913": {
@@ -15,22 +15,15 @@
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-06-09"
+      "synthesis_date": "2026-06-10"
     },
     "1485954655": {
       "name": "Полина",
       "active": true,
-      "synthesis_date": "2026-06-09"
+      "synthesis_date": "2026-06-10"
     }
   },
   "issues": [
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "complete_task",
-      "count": 2,
-      "context": "повторный complete_task"
-    },
     {
       "user_id": "224736062",
       "type": "repeated_request",
