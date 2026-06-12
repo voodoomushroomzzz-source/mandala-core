@@ -1929,6 +1929,13 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
         reply_markup=get_tasks_in_group_inline(user_id, _created_group_id),
         parse_mode="HTML"
     )
+    # P-98: SR progress reaction
+    asyncio.create_task(_sr_progress_reaction_send(
+        callback, user_id,
+        f"[Системное событие] Садовник создал задачу: «{title}»" +
+        (f", дедлайн {new_task['deadline']}" if new_task.get("deadline") else "") +
+        (f", группа {new_task['label_name']}" if new_task.get("label_name") else "")
+    ))
 
 @router.callback_query(F.data == "cancel_task")
 async def cancel_task_cb(callback: CallbackQuery, state: FSMContext):

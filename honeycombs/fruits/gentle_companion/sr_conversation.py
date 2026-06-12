@@ -180,6 +180,22 @@ async def free_conversation(message: Message, state: FSMContext):
     if not text:
         return
 
+    # P-96: silent farewell guard
+    _fw_user = [
+        "спокойной ночи", "доброй ночи", "спасибо", "пока",
+        "до утра", "до завтра", "до свидания", "ночи", "доброночи", "ok", "ок", "окей",
+    ]
+    _fw_bot = [
+        "спокойной ночи", "доброй ночи", "сладких снов", "до утра", "до завтра", "с тобой до",
+    ]
+    _p96_last = _last_bot_message.get(user_id, {}).get("text", "").lower()
+    _p96_bot_fw = any(k in _p96_last for k in _fw_bot)
+    _p96_user = text.lower().strip().strip("!).( ")
+    _p96_user_fw = any(_p96_user == t or _p96_user.startswith(t) for t in _fw_user)
+    if _p96_bot_fw and _p96_user_fw:
+        _add_to_history(user_id, "user", text)
+        return  # P-96: stay silent after farewell
+
     # P-41: детект приветствия от садовника
     _fc_kw = text.lower().strip()
     _greeting_kws = ["привет", "доброе утро", "добрый день", "добрый вечер", "здравствуй", "хай", " ку ", "hello", "hi", "здарова", "салют", "приветствую"]
@@ -770,6 +786,13 @@ async def free_conversation(message: Message, state: FSMContext):
                                             InlineKeyboardButton(text="✏️ Дополнить", callback_data=f"ttask_edit|{tid}")
                                         ]])
                                         await message.answer(confirm_text, reply_markup=edit_kb, parse_mode="HTML")
+                                        # P-98: SR progress reaction
+                                        asyncio.create_task(_sr_progress_reaction_send(
+                                            message, user_id,
+                                            f"[Системное событие] Садовник создал задачу: «{new_task['title']}»" +
+                                            (f", дедлайн {new_task['deadline']}" if new_task.get("deadline") else "") +
+                                            (f", группа {new_task['label_name']}" if new_task.get("label_name") else "")
+                                        ))
                                     reply_text = ""
                         elif intent == "add_achievement":
                             _ach_act   = parsed_check.get("action") or {}
@@ -1221,6 +1244,12 @@ async def free_conversation(message: Message, state: FSMContext):
                                             "<i>Чеклист пустой — добавь пункты:</i>",
                                             reply_markup=edit_kb
                                         )
+                                # P-98: SR progress reaction
+                                if new_cl:
+                                    asyncio.create_task(_sr_progress_reaction_send(
+                                        message, user_id,
+                                        f"[Системное событие] Садовник создал чеклист: «{title}» с {len(new_cl.get('items', []))} пунктами"
+                                    ))
                                 reply_text = ""
 
                         elif intent == "delete_checklist":

@@ -199,6 +199,11 @@ async def cl_items_input(message: Message, state: FSMContext):
     new_cl["pinned_message_id"] = sent.message_id
     store_set_checklists(user_id, checklists)
     _fire_sync()
+    # P-98: SR progress reaction
+    asyncio.create_task(_sr_progress_reaction_send(
+        message, user_id,
+        f"[Системное событие] Садовник создал чеклист: «{title}» с {len(items)} пунктами"
+    ))
 
 @router.callback_query(F.data == "cl_cancel_fsm")
 async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
