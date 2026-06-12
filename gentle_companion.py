@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-12 10:24:32 ──
+# ── BUILT by build.py ── 2026-06-12 11:53:02 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1412,7 +1412,7 @@ async def _show_profile(user_id: str, message: Message):
     sent = await message.answer(card, reply_markup=kb)
     _profile_messages[user_id] = sent.message_id
 
-async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels"):
+async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels", sr_react: bool = False):
     """Show tasks — used by button, command, voice, intent."""
     tasks  = store_get_tasks(user_id)
     active = [t for t in tasks if t.get("status") != "completed"]
@@ -1447,6 +1447,12 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     body = _format_tasks_labels(active, user_id)
     header = "🌀 <b>Задачи · Группы:</b>"
     await message.answer(header + "\n\n" + body)
+    # P-99: SR live comment on grouped tasks view (chat-only, opt-in)
+    if sr_react:
+        asyncio.create_task(_sr_progress_reaction_send(
+            message, user_id,
+            "[Системное событие] Садовник попросил видеть все задачи по группам"
+        ))
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -9943,11 +9949,16 @@ async def free_conversation(message: Message, state: FSMContext):
                                         ind = _deadline_indicator(t.get("deadline", ""))
                                         lines.append(f"  • {ind}{t['title']}{dl}")
                                     reply_text = "\n".join(lines)
+                                    # P-99: SR live comment on grouped tasks view
+                                    asyncio.create_task(_sr_progress_reaction_send(
+                                        message, user_id,
+                                        f"[Системное событие] Садовник посмотрел задачи группы «{label_display}» ({len(filtered)} задач)"
+                                    ))
                                 else:
                                     reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
                             elif period == "all" or not period:
                                 # Show ALL tasks as flat list
-                                await _show_tasks_unified(user_id, message, "all")
+                                await _show_tasks_unified(user_id, message, "all", sr_react=True)
                             else:
                                 # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
@@ -9972,6 +9983,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                         ind = _deadline_indicator(t.get("deadline",""))
                                         lines.append(f"  • {ind}{t['title']}{grp}{dl}")
                                     reply_text = "\n".join(lines)
+                                    # P-99: SR live comment on period tasks view
+                                    asyncio.create_task(_sr_progress_reaction_send(
+                                        message, user_id,
+                                        f"[Системное событие] Садовник посмотрел задачи ({period_ru.strip()}) — {len(filtered)} задач"
+                                    ))
                             reply_text = reply_text if (period != "all" or action_label) else ""
                         elif intent == "show_profile":
                             await _show_profile(user_id, message)
