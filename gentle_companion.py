@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-12 11:53:02 ──
+# ── BUILT by build.py ── 2026-06-12 21:08:55 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -9302,7 +9302,8 @@ async def handle_voice(message: Message, state: FSMContext):
             # No active FSM — route to free conversation
             await free_conversation(message, state)
     except Exception as e:
-        logger.error(f"Voice handler error: {e}")
+        import traceback as _tb99
+        logger.error(f"Voice handler error: {e}\n{_tb99.format_exc()}")
         try:
             await status_msg.edit_text("🎙 Не расслышала. Попробуй ещё раз 🌿")
         except Exception:
