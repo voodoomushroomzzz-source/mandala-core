@@ -635,11 +635,16 @@ async def free_conversation(message: Message, state: FSMContext):
                                         ind = _deadline_indicator(t.get("deadline", ""))
                                         lines.append(f"  • {ind}{t['title']}{dl}")
                                     reply_text = "\n".join(lines)
+                                    # P-99: SR live comment on grouped tasks view
+                                    asyncio.create_task(_sr_progress_reaction_send(
+                                        message, user_id,
+                                        f"[Системное событие] Садовник посмотрел задачи группы «{label_display}» ({len(filtered)} задач)"
+                                    ))
                                 else:
                                     reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
                             elif period == "all" or not period:
                                 # Show ALL tasks as flat list
-                                await _show_tasks_unified(user_id, message, "all")
+                                await _show_tasks_unified(user_id, message, "all", sr_react=True)
                             else:
                                 # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
@@ -664,6 +669,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                         ind = _deadline_indicator(t.get("deadline",""))
                                         lines.append(f"  • {ind}{t['title']}{grp}{dl}")
                                     reply_text = "\n".join(lines)
+                                    # P-99: SR live comment on period tasks view
+                                    asyncio.create_task(_sr_progress_reaction_send(
+                                        message, user_id,
+                                        f"[Системное событие] Садовник посмотрел задачи ({period_ru.strip()}) — {len(filtered)} задач"
+                                    ))
                             reply_text = reply_text if (period != "all" or action_label) else ""
                         elif intent == "show_profile":
                             await _show_profile(user_id, message)
