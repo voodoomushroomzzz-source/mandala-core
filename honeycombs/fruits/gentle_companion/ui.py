@@ -281,7 +281,7 @@ async def _show_profile(user_id: str, message: Message):
     sent = await message.answer(card, reply_markup=kb)
     _profile_messages[user_id] = sent.message_id
 
-async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels"):
+async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels", sr_react: bool = False):
     """Show tasks — used by button, command, voice, intent."""
     tasks  = store_get_tasks(user_id)
     active = [t for t in tasks if t.get("status") != "completed"]
@@ -316,6 +316,12 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     body = _format_tasks_labels(active, user_id)
     header = "🌀 <b>Задачи · Группы:</b>"
     await message.answer(header + "\n\n" + body)
+    # P-99: SR live comment on grouped tasks view (chat-only, opt-in)
+    if sr_react:
+        asyncio.create_task(_sr_progress_reaction_send(
+            message, user_id,
+            "[Системное событие] Садовник попросил видеть все задачи по группам""
+        ))
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
