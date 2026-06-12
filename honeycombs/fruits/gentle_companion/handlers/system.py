@@ -1829,7 +1829,8 @@ async def handle_voice(message: Message, state: FSMContext):
             # No active FSM — route to free conversation
             await free_conversation(message, state)
     except Exception as e:
-        logger.error(f"Voice handler error: {e}")
+        import traceback as _tb99
+        logger.error(f"Voice handler error: {e}\n{_tb99.format_exc()}")
         try:
             await status_msg.edit_text("🎙 Не расслышала. Попробуй ещё раз 🌿")
         except Exception:
