@@ -9,12 +9,13 @@
     }
   },
   "1485954655": {
-    "messages": 2,
-    "tasks_created": 0,
+    "messages": 4,
+    "tasks_created": 2,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
-      "add_achievement": 1
+      "add_achievement": 1,
+      "add_task": 1
     }
   }
 }
