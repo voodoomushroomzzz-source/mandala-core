@@ -320,7 +320,7 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     if sr_react:
         asyncio.create_task(_sr_progress_reaction_send(
             message, user_id,
-            "[Системное событие] Садовник попросил видеть все задачи по группам""
+            "[Системное событие] Садовник попросил видеть все задачи по группам"
         ))
 
 
