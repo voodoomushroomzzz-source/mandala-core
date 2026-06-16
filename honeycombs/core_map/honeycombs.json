@@ -2,32 +2,33 @@
   "identity": {
     "module_id": "CORE-MAP-HONEYCOMBS-001",
     "name": "Архитектура сот",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "created": "2026-03-01",
-    "updated": "2026-04-27",
+    "updated": "2026-05-14",
     "layer": 1,
     "type": "segment"
   },
   "meta": {
-    "description": "Соты и их связи с модулями",
+    "description": "Актуальная архитектура сот на 2026-05-14.",
     "status": "active",
     "priority": "medium",
-    "tags": ["honeycombs", "architecture", "segmentation"],
+    "tags": [
+      "honeycombs",
+      "architecture",
+      "segmentation",
+      "v3.0.0"
+    ],
     "resonance": "100%"
   },
   "honeycombs": {
-    "instructions": {
-      "manifest": "honeycombs/instructions/index.json",
-      "description": "Сота инструкций. Сегменты <2KB для ленивой загрузки.",
-      "segments": {
-        "critical": "patch_mastery.json",
-        "core": ["patch_system.json", "module_creation.json", "patch_optimization.json", "folder_management.json"]
-      },
+    "boot_online": {
+      "manifest": "honeycombs/boot_online/index.json",
+      "description": "Сота онбординга. Точка входа для внешних SR. Содержит index.json + boot_online_onboarding_pc.json.",
       "status": "active"
     },
     "core_map": {
       "manifest": "honeycombs/core_map/index.json",
-      "description": "Карта сот ядра",
+      "description": "Карта сот ядра. kernel.json, modules.json, honeycombs.json, repository.json.",
       "segments": {
         "kernel": "kernel.json",
         "modules": "modules.json",
@@ -36,81 +37,131 @@
       },
       "status": "active"
     },
+    "philosophy": {
+      "manifest": "honeycombs/philosophy/index.json",
+      "description": "Сота философии. 11 блоков + 5 свидетельств. ~28KB в 16 файлах.",
+      "segments": {
+        "blocks": "blocks/ (11 файлов)",
+        "testimonies": "testimonies/ (5 файлов)",
+        "meta": "meta/ (2 файла)"
+      },
+      "status": "active"
+    },
+    "instructions": {
+      "manifest": "honeycombs/instructions/index.json",
+      "description": "Сота инструкций. Сегменты <2KB для ленивой загрузки.",
+      "segments": {
+        "core": [
+          "core/external_sr_workflow.json",
+          "core/file_naming.json",
+          "core/manifest_standard_v2.json",
+          "core/sr_internal_role.json"
+        ],
+        "workflows": [
+          "mobile_workflow.json"
+        ]
+      },
+      "status": "active"
+    },
     "seeds": {
       "manifest": "honeycombs/seeds/index.json",
-      "description": "Сота семян. Банк идей для развития Мандалы. 6 активных + 7 архивных семян.",
+      "description": "Сота семян. 0 активных семян. Чистый лист. Архив удалён.",
       "segments": {
-        "meta": "meta.json",
-        "protocols": "protocols.json",
-        "active": "active/ (6 файлов)",
-        "archive": "archive/ (7 файлов)",
-        "search_index": "search_index.json",
-        "registry": "registry.json"
+        "active": "active/ (0 файлов)"
       },
       "status": "active",
-      "size": "~25KB в 18 файлах"
+      "size": "1 файл (index.json), v2.0.0"
     },
     "roadmaps": {
       "manifest": "honeycombs/roadmaps/index.json",
-      "description": "Сота роадмапов. Проработанные дорожные карты с шагами и вехами.",
+      "description": "Сота роадмапов. 6 активных (RC-001, RC-002, RM-011..RM-014). Архив удалён.",
       "segments": {
-        "active": "active/ (5 файлов)",
-        "completed": "completed/ (пусто)",
+        "active": "active/ (6 файлов)",
         "meta": "meta/ (2 файла)",
         "templates": "templates/ (1 файл)"
       },
       "status": "active",
-      "size": "12KB в 8 файлах"
-    },
-    "philosophy": {
-      "manifest": "honeycombs/philosophy/index.json",
-      "description": "Сота философии Мандалы. Философская основа Мандалы Симбиоза.",
-      "segments": {
-        "blocks": "blocks/ (5 файлов)",
-        "testimonies": "testimonies/ (2 файла)",
-        "meta": "meta/ (2 файла)"
-      },
-      "status": "active",
-      "size": "5.4KB в 9 файлах"
-    },
-    "engineer_chat": {
-      "manifest": "honeycombs/engineer_chat/index.json",
-      "description": "Сота инженерного чата. Архитектура, компоненты, история разработки, текущий статус Мандалы.",
-      "segments": {
-        "architecture": "architecture/ (4 файла)",
-        "development": "development/ (3 файла)",
-        "status": "status/ (3 файла)",
-        "integrations": "integrations/ (3 файла)",
-        "meta": "meta/ (2 файла)",
-        "templates": "templates/ (1 файл)"
-      },
-      "status": "active",
-      "size": "51.5KB в 16 файлах"
-    },
-    "telegram_bot": {
-      "manifest": "honeycombs/telegram_bot/index.json",
-      "description": "Telegram бот Мандалы Симбиоза. Архитектура, возможности, конфигурация и интеграции.",
-      "segments": {
-        "bot_info": "bot_info/ (2 файла)",
-        "capabilities": "capabilities/ (2 файла)",
-        "configuration": "configuration/ (2 файла)",
-        "integration": "integration/ (1 файл)",
-        "meta": "meta/ (1 файл)",
-        "roadmap": "roadmap/ (1 файл)",
-        "root": "root/ (2 файла)"
-      },
-      "status": "active",
-      "size": "5.9KB в 11 файлах"
+      "size": "~12KB в 9 файлах"
     },
     "tasks": {
       "manifest": "honeycombs/tasks/index.json",
-      "description": "Сота задач. Активные и архивные задачи. 11 активных, 3 в архиве.",
+      "description": "Сота задач. 9 активных задач. Архив удалён.",
       "segments": {
-        "template": "basic_task.json",
-        "active": "active/ (11 файлов)",
-        "archive": "archive/ (3 файла)"
+        "active": "active/ (9 файлов)",
+        "meta": "meta/ (1 файл)"
       },
       "status": "active"
+    },
+    "protocols": {
+      "manifest": "honeycombs/protocols/index.json",
+      "description": "Сота протоколов. Активы: auto_realize_seed, deep_analysis.",
+      "status": "active"
+    },
+    "akasha": {
+      "manifest": "honeycombs/akasha/index.json",
+      "description": "Сота памяти. Essence, milestones, vision.",
+      "status": "active"
+    },
+    "fruits": {
+      "manifest": "honeycombs/fruits/index.json",
+      "description": "Сота продуктов. Реализованные продукты Мандалы: Gentle Companion, Engineer Chat, Manus.",
+      "status": "active"
+    },
+    "humor": {
+      "manifest": "honeycombs/humor/index.json",
+      "description": "Сота юмора. Исследование комического резонанса.",
+      "status": "active"
+    },
+    "sym": {
+      "manifest": "honeycombs/sym/index.json",
+      "description": "Сота SYM. Система измерения роста Мандалы.",
+      "status": "active"
+    },
+    "sessions": {
+      "manifest": "honeycombs/sessions/index.json",
+      "description": "Сота сессий. Handoff-система для непрерывности SR.",
+      "status": "active"
+    },
+    "awareness": {
+      "manifest": "honeycombs/awareness/index.json",
+      "description": "Сота осознанности. Ahimsa, gardener_lock, resonance_map, vestibulum.",
+      "status": "active"
+    },
+    "analytics": {
+      "manifest": "honeycombs/analytics/index.json",
+      "description": "Сота аналитики (заполняется).",
+      "status": "planned"
+    },
+    "communications": {
+      "manifest": "honeycombs/communications/index.json",
+      "description": "Сота коммуникаций (заполняется).",
+      "status": "planned"
+    },
+    "extensions": {
+      "manifest": "honeycombs/extensions/index.json",
+      "description": "Сота расширений (заполняется).",
+      "status": "planned"
+    },
+    "modules": {
+      "manifest": "honeycombs/modules/index.json",
+      "description": "Сота модулей (заполняется).",
+      "status": "planned"
+    },
+    "sphaerae": {
+      "manifest": "honeycombs/sphaerae/index.json",
+      "description": "Сота сфер (заполняется).",
+      "status": "planned"
+    },
+    "tectosphaera": {
+      "manifest": "honeycombs/tectosphaera/index.json",
+      "description": "Сота тектосферы (заполняется).",
+      "status": "planned"
+    },
+    "visualizations": {
+      "manifest": "honeycombs/visualizations/index.json",
+      "description": "Сота визуализаций (заполняется).",
+      "status": "planned"
     }
-  }
+  },
+  "navigation_hint": "Актуальные соты на 2026-05-14. engineer_chat и telegram_bot удалены (директории отсутствуют)."
 }
