@@ -1,4 +1,31 @@
 {
+  "identity": {
+    "module_id": "FRUIT-GENTLE-COMPANION-001",
+    "name": "Gentle Companion — Modular Architecture",
+    "version": "2.1.0",
+    "created": "2026-05-25",
+    "updated": "2026-06-17",
+    "layer": 2,
+    "type": "fruits_index",
+    "description": "Modular architecture index for Gentle Companion bot. 14 modules, 7 migration phases complete. Production on Hetzner VPS.",
+    "status": "active",
+    "priority": "critical",
+    "tags": [
+      "gentle_companion",
+      "modules",
+      "architecture",
+      "migration",
+      "production"
+    ],
+    "resonance": "100%"
+  },
+  "meta": {
+    "description": "Complete module map, dependency graph, and migration plan for Gentle Companion.",
+    "audience": "External SR (Claude, DeepSeek, etc.)",
+    "how_to_use": "Read this index first to understand module structure. Then read individual module files for details.",
+    "gardener_approval_required": false,
+    "change_requires": "gardener_approval"
+  },
   "honeycomb": "fruits/gentle_companion",
   "version": "2.1.0",
   "created": "2026-05-25",
