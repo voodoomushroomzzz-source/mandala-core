@@ -493,10 +493,14 @@ async def _sr_progress_reaction(user_id: str, event_text: str) -> str:
             except Exception:
                 reply = ""
         if not reply:
+            logger.info(f"[P-97] progress reaction EMPTY uid={user_id}: SR returned nothing")
             return ""
         # Strip markdown bold/italic
         reply = reply.replace("**", "").replace("__", "")
         logger.info(f"[P-97] progress reaction uid={user_id}: {reply[:60]}")
         return reply
-    except Exception:
+    except Exception as _e97:
+        logger.error(f"[P-97] progress reaction ERROR uid={user_id}: {_e97}")
+        import traceback as _tb97
+        logger.error(_tb97.format_exc())
         return ""
