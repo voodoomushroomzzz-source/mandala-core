@@ -1207,6 +1207,7 @@
             flex-direction: column;
             border-right: 1px solid #0f2518;
             overflow: hidden;
+            user-select: none;
         }
         #hiveListMeta {
             flex-shrink: 0;
@@ -1278,7 +1279,7 @@
         .hive-list-sub {
             font-family: var(--mono);
             font-size: 8px;
-            color: #254535;
+            color: #4a7a5a;
             margin-top: 1px;
             white-space: nowrap;
             overflow: hidden;
@@ -1306,6 +1307,7 @@
             flex-direction: column;
             overflow: hidden;
             position: relative;
+            border-top: 1px solid #0f2518;
         }
         #globeTitle {
             position: absolute;
@@ -1351,7 +1353,7 @@
         #hiveCard {
             flex-shrink: 0;
             background: rgba(3,13,9,0.98);
-            border-bottom: 1px solid #0f2518;
+            border-bottom: 1px solid #1a4a2a;
             padding: 12px 16px;
             display: none;
         }
@@ -2895,8 +2897,8 @@
         function hiveListHighlight(idx) {
             const scroll = document.getElementById('hiveListScroll');
             if (!scroll) return;
-            scroll.querySelectorAll('.hive-list-item').forEach((el, i) => {
-                el.classList.toggle('hovered', i === idx);
+            scroll.querySelectorAll('.hive-list-item').forEach((el) => {
+                el.classList.toggle('hovered', parseInt(el.dataset.idx) === idx);
                 if (i === idx) {
                     // Скроллим к элементу если не виден
                     const elTop    = el.offsetTop;
@@ -3023,6 +3025,7 @@
                 });
             });
             initGlobe(data);
+            if (data.length > 0) showHiveCard(0);
         }
 
         function hiveSearchFilter(q) {
