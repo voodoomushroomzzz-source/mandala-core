@@ -198,7 +198,7 @@ def _build_user_context_msg(telegram_id: str) -> str:
     # P-29: sphere history block — only when requested
     _sphere_hist_block = ""
     if _sphere_history_needed.get(telegram_id, 0) > 0:
-        _sphere_hist_block = "\n" + _build_sphere_stats(telegram_id, months=12, show_tasks=True)
+        _sphere_hist_block = "\n" + (_build_sphere_stats(telegram_id, months=12, show_tasks=True) or "")
         _sphere_hist_block = f"[История активности по сферам за 12 месяцев:{_sphere_hist_block}\n]"
 
     _greeting_ws = store_get_workspace(telegram_id) or {}
@@ -463,6 +463,7 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
         if this_month:
             m_num = _dt_fb.now().month
             lines.append(f"\n{_RU_MONTHS_S[m_num]} (из архива):")
+    return "\n".join(lines)
 
 
 async def _sr_progress_reaction(user_id: str, event_text: str) -> str:
