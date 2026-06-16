@@ -5,7 +5,7 @@
   "priority": "HIGH",
   "deadline": "2026-06-11",
   "created": "2026-05-11",
-  "updated": "2026-05-11",
+  "updated": "2026-06-17",
   "progress": 0,
   "description": "Develop Architect Bot — a personal Telegram bot for the Architect (Dima) that serves as a mobile interface to Engineer Chat and Manus. Unlike the Gentle Companion (which is a sandbox for external gardeners), Architect Bot is an engineer's tool with elevated rights, direct access to Mandala's core, and the ability to control Manus and view sandbox analytics.",
   "why": {
@@ -99,7 +99,8 @@
         "/patterns command — aggregated gardener patterns (anonymized)",
         "/seeds command — list and promote seeds",
         "/manus command — execute Manus skills from Telegram",
-        "Proactive notifications: new gardener, system errors, daily summary"
+        "Proactive notifications: new gardener, system errors, daily summary",
+        "Honeycomb scan notifications: results from honeycomb-scan.yml"
       ]
     },
     {
@@ -126,7 +127,8 @@
     "New gardener request triggers a Telegram notification to Architect",
     "Architect Bot sessions are separate from Web UI sessions",
     "Dangerous Manus skills show a callback confirmation button",
-    "Architect Bot continues working when Web UI is not open"
+    "Architect Bot continues working when Web UI is not open",
+    "Architect receives Telegram notification about honeycomb scan results after each workflow run"
   ],
   "dev_rules": [
     "Architect Bot code lives in main.py — not a separate file",
