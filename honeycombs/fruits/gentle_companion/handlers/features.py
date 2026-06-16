@@ -215,10 +215,11 @@ async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
 # ─── Checklist — Toggle item ──────────────────────────────────────────────────
 
 
-async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str) -> None:
-    """P-97: get SR reaction and send as separate message."""
+async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str, must_reply: bool = False) -> None:
+    """P-97: get SR reaction and send as separate message.
+    must_reply=True: SR must always respond (no silent option)."""
     try:
-        reply = await _sr_progress_reaction(user_id, event_text)
+        reply = await _sr_progress_reaction(user_id, event_text, must_reply=must_reply)
         if reply and reply.strip():
             if hasattr(callback_or_msg, 'message'):
                 await callback_or_msg.message.answer(reply)

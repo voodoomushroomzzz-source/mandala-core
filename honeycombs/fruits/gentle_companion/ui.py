@@ -325,9 +325,8 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
         _summary_str = ", ".join(f"{g}: {c}" for g, c in _groups_summary.items())
         asyncio.create_task(_sr_progress_reaction_send(
             message, user_id,
-            f"[Системное событие] Садовник открыл список всех задач ({len(active)} шт.): {_summary_str}. "
-            "Не перечисляй задачи — садовник уже видит список. "
-            "Скажи что-то живое: наблюдение, анализ распределения, поддержку."
+            f"[Системное событие] Садовник открыл список всех задач ({len(active)} шт.): {_summary_str}.",
+            must_reply=True
         ))
 
 
