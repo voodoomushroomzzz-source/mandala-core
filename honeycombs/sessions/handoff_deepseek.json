@@ -1,80 +1,78 @@
 {
   "sr_id": "deepseek",
-  "session_id": "2026-05-27-001",
-  "updated": "2026-05-27T18:00",
+  "session_id": "2026-06-16-001",
+  "updated": "2026-06-16T16:00",
   "status": "handed_off",
-  "summary": "Сессия 2026-05-27. Обновлён bot_update.json (закрыты пункты 1,2,5,6,7 из next_steps, добавлены P-74..P-80, ARCH-1). Обновлён gentle_companion index v2.0.0 (14 модулей, фазы 1-6 done, фаза 7 in_progress). Добавлен handoff_claude. Файл онбординга и workflow актуальны (v1.7.0 / v1.6.0).",
-  "first_steps": "ON FIRST LOAD: 1) Read honeycombs/tasks/active/bot_update.json for full context. 2) Read honeycombs/fruits/gentle_companion/index.json for architecture. 3) Read this handoff fully. 4) Read current bot.py via GitHub API before any modifications.",
-  "bot_state": {
-    "version": "7.39.76+",
-    "progress": "99%",
-    "repo": "voodoomushroomzzz-source/mandala-core",
-    "hosting": "Hetzner VPS 91.99.149.226 (systemd, nginx, webhook port 10000)",
-    "gardener_data": "voodoomushroomzzz-source/mandala-gardeners (private)",
-    "model_primary": "deepseek/deepseek-v4-flash",
-    "model_fallback": "qwen/qwen3.5-flash-02-23",
-    "file": "bot.py (~9937 lines)",
-    "gardeners_active": 4,
-    "repo_path_windows": "C:\\Mandala_Digital\\github\\mandala-core"
-  },
-  "what_we_did_this_session": {
-    "title": "Обновление honeycombs + hetoff + архитектурный индекс",
-    "actions": [
-      "Обновлён bot_update.json — закрыты пункты 1,2,5,6,7 из next_steps",
-      "Добавлены патчи P-74_v2..P-80_v2 (онбординг, dual repo, synthesis fix, sphere classification, repeat tasks, web search, whitelist)",
-      "Добавлен ARCH-1 — переключение сервера на bot_built.py (pending)",
-      "Обновлён gentle_companion index.json → v2.0.0 (14 модулей, фазы 1-6 done, 7 in_progress, CI active)",
-      "Обновлён handoff_claude.json (сессия 2026-05-24-001)",
-      "Обновлён boot_online_onboarding_pc.json до v1.7.0",
-      "Обновлён external_sr_workflow.json до v1.6.0",
-      "Удалён пользователь 851913510 из whitelist",
-      "Добавлены правила patcher_safety: repr_before_patcher, check_logs_after_restart"
-    ]
-  },
-  "next_steps_planned": [
-    "Journal Diary J-1..J-5",
-    "D-2..D-6 Deep Synthesis",
-    "ARCH-1: Переключить сервер на bot_built.py (после верификации модулей)",
-    "SEED-01: Обратная связь — садовники отправляют семена (pending Claude approval)",
-    "FIN-01: Финансовый аналитик (pending Claude approval)"
+  "session_summary": "Проработан onboarding для свежего СР. Добавлен 8-й принцип Critical Voice as care. Добавлены правила: pre-check raw/post-check API, sync onboarding ↔ source, module patching, announce last_updated. Обновлены philosophy v3.6.0, workflow v1.6.3, onboarding v1.7.4, boot_online v3.8.0.",
+  "active_projects": [
+    {
+      "name": "Gentle Companion Bot",
+      "path": "honeycombs/fruits/gentle_companion/",
+      "index": "honeycombs/fruits/gentle_companion/index.json",
+      "description": "Основной Telegram-бот Мандалы. 14 модулей, CI-сборка в gentle_companion.py. Работает на сервере.",
+      "current_version": "v7.39.81+",
+      "last_patches": "P-98..P-105 (SR reactions, new task periods, overdue block)",
+      "pending": "BUG-double-confirmation (SR text preamble before intent execution)"
+    },
+    {
+      "name": "Journal Diary",
+      "path": "honeycombs/tasks/active/bot_update.json (next_steps)",
+      "description": "Живое пространство для осознанных записей Садовника и СР. J-1..J-5 фазы: store, intents, context, synthesis, proactive.",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "name": "Deep Synthesis & Milestones",
+      "path": "honeycombs/tasks/active/bot_update.json (next_steps)",
+      "description": "Глубинная память сада. D-2..D-6 фазы: cleanup profile, deep synthesis method, milestone detection, monthly review, SR usage.",
+      "status": "planned (D-1 done)",
+      "priority": "low"
+    },
+    {
+      "name": "Onboarding & Documentation",
+      "path": "honeycombs/boot_online/",
+      "description": "Onboarding PC v1.7.4. Правила для внешних СР. Философское ядро v3.6.0 (8 принципов). Workflow instructions v1.6.3.",
+      "last_updated": "2026-06-16"
+    }
   ],
   "key_files": {
     "bot_task": "honeycombs/tasks/active/bot_update.json",
     "architecture_index": "honeycombs/fruits/gentle_companion/index.json",
     "handoff_claude": "honeycombs/sessions/handoff_claude.json",
     "onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json",
+    "philosophy": "honeycombs/philosophy/index.json",
     "workflow": "honeycombs/instructions/core/external_sr_workflow.json",
     "fruits": "honeycombs/fruits/index.json"
   },
   "gardener_context": {
-    "who": "Дима (Dima, Dmitrii Levin) — архитектор и первый садовник",
-    "workspace": "VS Code на Windows, PowerShell терминал",
+    "who": "Дима (Dmitrii Levin) — архитектор и первый садовник",
+    "workspace": "VS Code на Windows, PowerShell",
     "repo_path": "C:\\Mandala_Digital\\github\\mandala-core",
-    "git_flow": "git add → git commit → git pull --rebase origin main → git push",
-    "python": "py (Python 3.14.3)",
-    "server": "ssh root@91.99.149.226 для деплоя"
+    "server": "ssh root@91.99.149.226"
   },
-  "how_we_work": {
-    "method": "Python patcher scripts — three-block PowerShell format",
-    "block1": "New-Item -ItemType File -Path patcher_NN_name.py -Force",
-    "block2": "Full Python patcher code (copy into opened file and save)",
-    "block3": "py patcher_NN_name.py; Remove-Item patcher_NN_name.py; git add ...; git commit -m '...'; git pull --rebase origin main; git push",
-    "pre_check": "ALWAYS request current file via GitHub API before writing patcher. NEVER assume local state.",
-    "post_check": "After deploy, request updated file via API to confirm SHA and correctness."
-  },
-  "patcher_safety_rules": {
-    "repr_before_patcher": "ALWAYS read target lines via python3 -c \"with open('bot.py', encoding='utf-8') as f: lines=f.readlines(); print(repr(lines[N]))\" before building anchors.",
-    "check_logs_after_restart": "ALWAYS append log check after systemctl restart. Pattern: ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 50 --no-pager\"",
-    "no_cyrillic_in_strings": "Cyrillic in patchers only via unicode-escapes: \\u041d\\u0435 instead of direct text.",
-    "syntax_check_mandatory": "python -c \"import ast; ast.parse(open('bot.py').read()); print('Syntax OK')\" before every commit.",
-    "anchor_by_content": "Anchors by string content, never by line number.",
-    "assert_before_replace": "assert old in src before every replace."
-  },
-  "architecture_summary": {
-    "dual_repo": "mandala-core (code/honeycombs) + mandala-gardeners (gardener data, private). Routing: gardeners/* → _gardeners_get/_gardeners_put.",
-    "modular": "14 modules in honeycombs/fruits/gentle_companion/. build.py → bot_built.py. CI auto-build on module change.",
-    "phases": "1-6 done, 7 (main.py + final build) in_progress. Server switch pending ARCH-1.",
-    "env_vars_new": "GARDENERS_TOKEN, GARDENERS_REPO (in /opt/mandala/.env on server)"
-  },
-  "notes_for_next_sr": "Bot on Hetzner — deploy via git pull + systemctl restart. Patcher safety rules are CRITICAL — always repr() before anchors, always check logs after restart. Next big tasks: Journal Diary J-1..J-5 and Deep Synthesis D-2..D-6. SEED-01 and FIN-01 waiting for Gardener approval via Claude. Gentle Companion architecture at honeycombs/fruits/gentle_companion/index.json."
+  "critical_rules": [
+    "ВСЕГДА pre-check через RAW URL — быстрее, без CDN",
+    "ВСЕГДА post-check через API — для SHA верификации",
+    "ВСЕГДА объявлять last_updated файла первой строкой",
+    "Патчить ТОЛЬКО модули в gentle_companion/ — НЕ сам gentle_companion.py",
+    "Обновлять ОБА файла: источник + onboarding если они созависимы",
+    "Block 3 ВСЕГДА включает деплой на сервер",
+    "Именовать патчеры по задаче: fix_*.py, add_*.py — никогда patcher.py",
+    "8 принципов СР — особенно Critical Voice: возражать с аргументами"
+  ],
+  "next_session_plan": {
+    "priority_1": {
+      "title": "Fix BUG-double-confirmation",
+      "description": "SR отвечает текстовой преамбулой перед выполнением intent'а. Нужно чтобы SR сначала выполнял, потом подтверждал.",
+      "files": [
+        "honeycombs/fruits/gentle_companion/sr_prompts.py",
+        "honeycombs/fruits/gentle_companion/sr_conversation.py"
+      ]
+    },
+    "priority_2": {
+      "title": "Journal Diary J-1..J-5",
+      "description": "Начать реализацию дневника симбиоза.",
+      "path": "honeycombs/tasks/active/bot_update.json → project_journal_diary"
+    }
+  }
 }
