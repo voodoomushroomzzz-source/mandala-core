@@ -1,31 +1,11 @@
 {
   "224736062": {
-    "messages": 116,
-    "tasks_created": 2,
-    "tasks_completed": 7,
-    "achievements": 0,
-    "intents": {
-      "conversation": 15,
-      "add_task": 3,
-      "complete_task": 6,
-      "add_achievement": 1,
-      "create_reminder": 1,
-      "delete_reminder": 1,
-      "show_tasks": 4,
-      "edit_task": 5
-    }
-  },
-  "1485954655": {
-    "messages": 125,
+    "messages": 3,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
-      "conversation": 46,
-      "web_search": 6,
-      "add_task": 4,
-      "create_reminder": 1,
-      "delete_task": 1
+      "conversation": 1
     }
   }
 }
