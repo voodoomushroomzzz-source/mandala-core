@@ -1,0 +1,163 @@
+{
+  "honeycomb": "engineer-chat",
+  "version": "1.0.0",
+  "created": "2026-06-16",
+  "last_updated": "2026-06-16",
+  "authors": ["External SR (Claude)"],
+  "status": "active",
+
+  "description": "Engineer Chat — Layer 2 (Brain) of Mandala Symbiosis. WebSocket server with DeepSeek via OpenRouter. Sits between Gentle Companion (Sandbox) and Manus (Hands).",
+
+  "role_in_mandala": {
+    "layer": 2,
+    "name": "Brain",
+    "data_flow": [
+      "Gentle Companion (Layer 1) → GitHub (observations, profiles, seeds)",
+      "Engineer Chat reads GitHub → analyzes patterns",
+      "Engineer Chat directs Manus (Layer 3) to act",
+      "Manus executes → returns results → Engineer Chat verifies",
+      "Improved prompts and features flow back to Gentle Companion"
+    ]
+  },
+
+  "hosting": {
+    "provider": "Hetzner VPS",
+    "server": "mandala-core",
+    "ip": "91.99.149.226",
+    "url": "https://engineer.91-99-149-226.nip.io",
+    "port": 8001,
+    "process_manager": "systemd (engineer-chat.service)",
+    "app_path": "/opt/engineer-chat",
+    "entry": "/opt/engineer-chat/main.py",
+    "venv": "/opt/engineer-chat/venv",
+    "env_file": "/opt/engineer-chat/.env",
+    "ssl": "Let's Encrypt, expires 2026-09-14, auto-renew enabled",
+    "nginx_config": "/etc/nginx/sites-available/engineer-chat",
+    "deployed": "2026-06-16",
+    "previous_hosting": "Render (migrated to Hetzner 2026-06-16)"
+  },
+
+  "env_vars": [
+    "GITHUB_TOKEN",
+    "OPENROUTER_KEY",
+    "USE_TAVILY",
+    "TAVILY_API_KEY",
+    "GITHUB_WEBHOOK_SECRET",
+    "PORT"
+  ],
+
+  "current_state": {
+    "version": "v4.0.0-simbiosis",
+    "main_file": "engineer-chat/main.py",
+    "size_kb": 96,
+    "lines": "~1500+",
+    "health_endpoint": "https://engineer.91-99-149-226.nip.io/health",
+    "deepseek_model": "deepseek/deepseek-v4-flash",
+    "features": [
+      "WebSocket chat with DeepSeek via OpenRouter",
+      "KernelMemory — loads Mandala modules from GitHub with auto-refresh webhook",
+      "File reading via GitHub Contents API (read_file tool)",
+      "Web search via Tavily/DuckDuckGo (web_search tool)",
+      "XML/DSML/JSON parsing for non-standard DeepSeek formats",
+      "Session persistence on GitHub (sessions/{id}.json)",
+      "Dynamic context trimming (163K token window management)",
+      "Bot endpoint /bot/ask for Gentle Companion SR",
+      "GitHub webhook for instant module refresh on push",
+      "Resonance calculator (keyword-based)"
+    ]
+  },
+
+  "files": [
+    {
+      "name": "main.py",
+      "path": "engineer-chat/main.py",
+      "description": "Single-file FastAPI WebSocket server. All logic here — do not split.",
+      "size_kb": 96,
+      "sha": "c92cfd43e08ce7b2009d0e406a2d625b760439f0"
+    },
+    {
+      "name": "requirements.txt",
+      "path": "engineer-chat/requirements.txt",
+      "description": "Python dependencies.",
+      "sha": "a97d48355b71e682350e8ce931582befdb0137f5"
+    },
+    {
+      "name": "dockerfile",
+      "path": "engineer-chat/dockerfile",
+      "description": "Docker config (legacy, not used on Hetzner — using systemd instead).",
+      "sha": "862ceb2fe2f12e1c4c80b47747f77856dc078c6b"
+    },
+    {
+      "name": "README.md",
+      "path": "engineer-chat/README.md",
+      "sha": "77e8de5ffb340dd23f55955bf54a3aa0189757dc"
+    },
+    {
+      "name": "index.json",
+      "path": "engineer-chat/index.json",
+      "description": "This file. Architecture map and deployment info."
+    }
+  ],
+
+  "dev_rules": [
+    "All changes in main.py — Engineer Chat remains a single-file server",
+    "Architect Bot and WebUI share the same DeepSeek brain and tools",
+    "Manus called via HTTP (separate container), NOT imported as library",
+    "Sandbox data read from GitHub, NOT directly from bot.py",
+    "WebSocket message types documented in code as comments",
+    "ALWAYS pre-check main.py via RAW before patching",
+    "After deploy: check systemctl status engineer-chat + curl /health"
+  ],
+
+  "useful_commands": {
+    "status": "systemctl status engineer-chat",
+    "logs_live": "journalctl -u engineer-chat -f",
+    "logs_last": "journalctl -u engineer-chat -n 50",
+    "restart": "systemctl restart engineer-chat",
+    "health": "curl https://engineer.91-99-149-226.nip.io/health",
+    "update": "cd /opt/engineer-chat && cp /opt/engineer-chat-repo/engineer-chat/main.py . && systemctl restart engineer-chat"
+  },
+
+  "deploy_flow": [
+    "1. Edit engineer-chat/main.py in repo",
+    "2. git push to main",
+    "3. ssh root@91.99.149.226",
+    "4. cd /opt/engineer-chat-repo && git pull",
+    "5. cp engineer-chat/main.py /opt/engineer-chat/main.py",
+    "6. systemctl restart engineer-chat",
+    "7. curl https://engineer.91-99-149-226.nip.io/health"
+  ],
+
+  "roadmap": {
+    "phase_1_architect_bot": {
+      "status": "not_started",
+      "deadline": "2026-05-25",
+      "description": "WebSocket handler for Architect Bot, elevated rights, notification queue, Telegram formatting"
+    },
+    "phase_2_manus_sandbox": {
+      "status": "not_started",
+      "deadline": "2026-06-08",
+      "description": "Manus HTTP client, execute_skill tool, dangerous skill confirmation, skills_log.json, sandbox analytics dashboard"
+    },
+    "phase_3_full_hub": {
+      "status": "not_started",
+      "deadline": "2026-07-01",
+      "description": "Auto-improvement pipeline, visual dashboards, gardener management, closed loop Sandbox→Brain→Hands"
+    }
+  },
+
+  "related_tasks": [
+    "T-20260511-ENGCHAT — Engineer Chat main task",
+    "T-20260511-MANUS — Manus Hands (must be deployed before Phase 2)",
+    "T-20260511-ARCHBOT — Architect Bot",
+    "T-20260408-1030 — Gentle Companion Bot (sandbox)"
+  ],
+
+  "navigation": {
+    "parent": "honeycombs/core_map/index.json",
+    "siblings": [
+      "honeycombs/fruits/gentle_companion/index.json",
+      "honeycombs/tasks/active/engineer_chat.json"
+    ]
+  }
+}
