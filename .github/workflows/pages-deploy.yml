@@ -1,35 +1,40 @@
 name: Deploy Pages
 
 on:
-  workflow_dispatch:  # Только ручной запуск
+  workflow_dispatch:
   push:
     paths:
       - 'docs/**'
       - '**.md'
       - 'honeycombs/**/index.json'
-      - '!engineer-chat/index.json'  # Не обновлять индекс Engineer Chat
+      - '!engineer-chat/index.json'
       - '!honeycombs/registry/**'
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
-    runs-on: ubuntu-latest`n    permissions:`n      contents: read`n      pages: write`n      id-token: write
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
-      
+
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./
           destination: ./_site
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
-      
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v5
