@@ -2942,8 +2942,6 @@
             }).join('');
             document.getElementById('hiveCardFiles').innerHTML = visibleFiles;
 
-            readBtn.style.color = col;
-
             document.getElementById('hiveCard').classList.add('show');
         }
 
@@ -3104,7 +3102,7 @@
                     tip.textContent = found.d.name + ' ' + Math.round(found.d.resonance*100) + '%';
                     document.querySelectorAll('.hive-list-item').forEach(el => {
                         const nm = el.querySelector('.hive-list-name');
-                        el.classList.toggle('hovered', nm && nm.textContent.trim() === found.d.name.replace(/_/g,' '));
+                        el.classList.toggle('hovered', nm && nm.textContent.trim().toLowerCase() === found.d.name.replace(/_/g,' ').toLowerCase());
                     });
                 } else {
                     _globeHovered = null;
