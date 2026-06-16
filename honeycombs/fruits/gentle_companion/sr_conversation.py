@@ -685,35 +685,29 @@ async def free_conversation(message: Message, state: FSMContext):
                                 elif period.startswith("range:"):
                                     _rp = period[6:].split(":")
                                     period_ru = f"📅 {_rp[0]} — {_rp[1]}" if len(_rp) == 2 else "📅 Период"
-                                if not filtered:
+                                from datetime import datetime as _dt105b
+                                _today105b = _dt105b.now().strftime("%Y-%m-%d")
+                                _all_active105 = [t for t in uid_tasks if t.get("status") != "completed"]
+                                _ov105b = [] if period in ("overdue", "hot") else [
+                                    t for t in _all_active105 if t.get("deadline") and t["deadline"] < _today105b
+                                ]
+                                if not filtered and not _ov105b:
                                     reply_text = f"{period_ru}: задач нет 🌱"
                                 else:
-                                    from datetime import datetime as _dt105b
-                                    _today105b = _dt105b.now().strftime("%Y-%m-%d")
                                     lines = [f"<b>{period_ru}:</b>"]
-                                    if period not in ("overdue", "hot"):
-                                        # P-105: overdue always first from ALL tasks, not just filtered period
-                                        _all_active105 = [t for t in uid_tasks if t.get("status") != "completed"]
-                                        _ov105b = [t for t in _all_active105 if t.get("deadline") and t["deadline"] < _today105b]
-                                        if _ov105b:
-                                            lines.append("<b>⚠️ Просроченные</b>")
-                                            for t in _sort_by_deadline(_ov105b):
-                                                dl = f" · {t['deadline']}" if t.get("deadline") else ""
-                                                grp = f" #{t['label_name']}" if t.get("label_name") else ""
-                                                lines.append(f"  • {t['title']}{grp}{dl}")
-                                            if filtered:
-                                                lines.append("")
-                                        for t in _sort_by_deadline(filtered):
-                                            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+                                    if _ov105b:
+                                        lines.append("<b>⚠️ Просроченные</b>")
+                                        for t in _sort_by_deadline(_ov105b):
+                                            dl = f" · {t['deadline']}" if t.get("deadline") else ""
                                             grp = f" #{t['label_name']}" if t.get("label_name") else ""
-                                            ind = _deadline_indicator(t.get("deadline",""))
-                                            lines.append(f"  • {ind}{t['title']}{grp}{dl}")
-                                    else:
-                                        for t in _sort_by_deadline(filtered):
-                                            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
-                                            grp = f" #{t['label_name']}" if t.get("label_name") else ""
-                                            ind = _deadline_indicator(t.get("deadline",""))
-                                            lines.append(f"  • {ind}{t['title']}{grp}{dl}")
+                                            lines.append(f"  • {t['title']}{grp}{dl}")
+                                        if filtered:
+                                            lines.append("")
+                                    for t in _sort_by_deadline(filtered):
+                                        dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+                                        grp = f" #{t['label_name']}" if t.get("label_name") else ""
+                                        ind = _deadline_indicator(t.get("deadline",""))
+                                        lines.append(f"  • {ind}{t['title']}{grp}{dl}")
                                     reply_text = "\n".join(lines)
                                     asyncio.create_task(_sr_progress_reaction_send(
                                         message, user_id,
