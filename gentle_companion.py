@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 17:25:30 ──
+# ── BUILT by build.py ── 2026-06-16 17:42:38 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -9474,6 +9474,46 @@ _CLASSIFIER_PROMPT = """Ты — классификатор намерений. 
 Если не уверен или это разговор — верни: {"intent": "none", "action": {}, "confidence": 1.0}
 Никакого текста вне JSON. Никаких пояснений."""
 
+_TRANSLIT_MAP = {
+    "a": "а", "b": "б", "v": "в", "g": "г", "d": "д", "e": "е", "yo": "ё",
+    "zh": "ж", "z": "з", "i": "и", "j": "й", "k": "к", "l": "л", "m": "м",
+    "n": "н", "o": "о", "p": "п", "r": "р", "s": "с", "t": "т", "u": "у",
+    "f": "ф", "h": "х", "ts": "ц", "ch": "ч", "sh": "ш", "sch": "щ",
+    "yu": "ю", "ya": "я", "y": "ы",
+}
+
+def _translit_to_ru(s: str) -> str:
+    """Transliterate latin string to Russian approximation."""
+    s = s.lower()
+    result = ""
+    i = 0
+    while i < len(s):
+        if s[i:i+3] in _TRANSLIT_MAP:
+            result += _TRANSLIT_MAP[s[i:i+3]]; i += 3
+        elif s[i:i+2] in _TRANSLIT_MAP:
+            result += _TRANSLIT_MAP[s[i:i+2]]; i += 2
+        elif s[i:i+1] in _TRANSLIT_MAP:
+            result += _TRANSLIT_MAP[s[i:i+1]]; i += 1
+        else:
+            result += s[i]; i += 1
+    return result
+
+def _label_match(query: str, name: str) -> bool:
+    """Match label name against query — tries direct + translit fallback."""
+    q = query.lower()
+    n = name.lower()
+    if q in n:
+        return True
+    # try translit: query latin → cyrillic
+    q_ru = _translit_to_ru(q)
+    if q_ru in n:
+        return True
+    # try translit: name latin → cyrillic (edge case)
+    n_ru = _translit_to_ru(n)
+    if q in n_ru:
+        return True
+    return False
+
 def _build_enriched_text(history: list, current_text: str, n: int = 3) -> str:
     """Enriches classifier input with recent dialog context.
     Helps classifier resolve short/contextual messages like 'перенесем на 10.06'
@@ -10067,11 +10107,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                 uid_tasks = store_get_tasks(user_id)
                                 candidates = [t for t in uid_tasks
                                               if t.get("status") != "completed"
-                                              and action_label.lower() in (t.get("label_name") or "").lower()]
+                                              and _label_match(action_label, t.get("label_name") or "")]
                                 if not candidates:
                                     groups_data = store_get_groups(user_id).get("groups", [])
                                     matched_g = next((g["name"] for g in groups_data
-                                                      if action_label.lower() in g.get("name","").lower()), None)
+                                                      if _label_match(action_label, g.get("name",""))), None)
                                     if matched_g:
                                         candidates = [t for t in uid_tasks
                                                       if t.get("status") != "completed"
