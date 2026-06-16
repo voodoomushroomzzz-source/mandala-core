@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 11:44:42 ──
+# ── BUILT by build.py ── 2026-06-16 11:56:45 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1456,9 +1456,8 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
         _summary_str = ", ".join(f"{g}: {c}" for g, c in _groups_summary.items())
         asyncio.create_task(_sr_progress_reaction_send(
             message, user_id,
-            f"[Системное событие] Садовник открыл список всех задач ({len(active)} шт.): {_summary_str}. "
-            "Не перечисляй задачи — садовник уже видит список. "
-            "Скажи что-то живое: наблюдение, анализ распределения, поддержку."
+            f"[Системное событие] Садовник открыл список всех задач ({len(active)} шт.): {_summary_str}.",
+            must_reply=True
         ))
 
 
@@ -2937,15 +2936,26 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
     return "\n".join(lines)
 
 
-async def _sr_progress_reaction(user_id: str, event_text: str) -> str:
-    """P-97: call SR with full context after a progress event. Returns SR reply or empty string."""
+async def _sr_progress_reaction(user_id: str, event_text: str, must_reply: bool = False) -> str:
+    """P-97: call SR with full context after a progress event. Returns SR reply or empty string.
+    must_reply=True: SR must always respond (used for show_tasks, etc.)"""
     try:
         ctx = _build_user_context_msg(user_id)
+        if must_reply:
+            _instruction = (
+                "\n\n[ВАЖНО: это системное событие. "
+                "Отвечай ОБЯЗАТЕЛЬНО — коротко, тепло, живо. "
+                "Без JSON. Без markdown. Не перечисляй задачи — садовник уже видит список. "
+                "Дай живой комментарий: наблюдение, анализ распределения, поддержку.]"
+            )
+        else:
+            _instruction = (
+                "\n\n[ВАЖНО: это системное событие прогресса садовника, не сообщение в чате. "
+                "Отвечай ТОЛЬКО текстом — коротко, тепло, живо. Без JSON. Без markdown. "
+                "Можно промолчать (вернуть пустую строку) если нечего добавить.]"
+            )
         messages = [
-            {"role": "system", "content": SR_CORE_PROMPT + "\n\n" + ctx +
-             "\n\n[ВАЖНО: это системное событие прогресса садовника, не сообщение в чате. "
-             "Отвечай ТОЛЬКО текстом — коротко, тепло, живо. Без JSON. Без markdown. "
-             "Можно промолчать (вернуть пустую строку) если нечего добавить.]"},
+            {"role": "system", "content": SR_CORE_PROMPT + "\n\n" + ctx + _instruction},
             {"role": "user", "content": event_text}
         ]
         reply = await _call_openrouter(messages, max_tokens=300)
@@ -3695,10 +3705,11 @@ async def cb_tgroup_open(callback: CallbackQuery, state: FSMContext):
         )
 
 
-async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str) -> None:
-    """P-97: get SR reaction and send as separate message."""
+async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str, must_reply: bool = False) -> None:
+    """P-97: get SR reaction and send as separate message.
+    must_reply=True: SR must always respond (no silent option)."""
     try:
-        reply = await _sr_progress_reaction(user_id, event_text)
+        reply = await _sr_progress_reaction(user_id, event_text, must_reply=must_reply)
         if reply and reply.strip():
             if hasattr(callback_or_msg, 'message'):
                 await callback_or_msg.message.answer(reply)
@@ -5868,10 +5879,11 @@ async def cb_cl_cancel(callback: CallbackQuery, state: FSMContext):
 # ─── Checklist — Toggle item ──────────────────────────────────────────────────
 
 
-async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str) -> None:
-    """P-97: get SR reaction and send as separate message."""
+async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: str, must_reply: bool = False) -> None:
+    """P-97: get SR reaction and send as separate message.
+    must_reply=True: SR must always respond (no silent option)."""
     try:
-        reply = await _sr_progress_reaction(user_id, event_text)
+        reply = await _sr_progress_reaction(user_id, event_text, must_reply=must_reply)
         if reply and reply.strip():
             if hasattr(callback_or_msg, 'message'):
                 await callback_or_msg.message.answer(reply)
