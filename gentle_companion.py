@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 10:58:00 ──
+# ── BUILT by build.py ── 2026-06-16 11:06:15 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -10159,6 +10159,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                     f"{_ach_title}\n"
                                     f"Сфера: {_sname} · +{_ach_bonus} к резонансу"
                                 )
+                                # P-98: SR progress reaction for chat-based achievement
+                                asyncio.create_task(_sr_progress_reaction_send(
+                                    message, user_id,
+                                    f"[Системное событие] Садовник зафиксировал достижение: «{_ach_title}», сфера: {_sname}"
+                                ))
                             else:
                                 # Название не распознано — открываем FSM
                                 await cmd_achievements(message)
