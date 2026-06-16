@@ -34,7 +34,10 @@
       "post_check_large_files": {
         "rule": "For files >100 KB (bot.py, *.html, *.js, *.css), do NOT request via API for post-check. Verify success by: 1) PowerShell output (no SyntaxError), 2) Render logs (no crash on deploy).",
         "why": "Large files time out or get truncated via API/raw URLs. PowerShell exit code + Render deploy log = sufficient confirmation."
-      }
+      },
+      "pre_check_via_raw": "ALWAYS pre-check via RAW URL (raw.githubusercontent.com) — bypasses CDN cache. API URLs have 5-10 min delay. Raw is instant.",
+      "post_check_via_api": "ALWAYS post-check via API (api.github.com) — returns SHA for verification. Raw may still be cached.",
+      "report_last_updated": "ALWAYS report the file's last_updated/updated date when reading. Format: 'File: X, last updated: YYYY-MM-DD'. Gardener needs to know how fresh the data is."
     },
     "powershell_examples": {
       "description": "Concrete, copy-paste ready examples for common tasks.",
@@ -307,11 +310,11 @@
     ]
   },
   "identity": {
-    "updated": "2026-05-25",
+    "updated": "2026-06-16",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.6.0",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners).",
+    "version": "v1.6.1",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.1: + pre-check raw, post-check API, report last_updated rules.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -335,7 +338,8 @@
       "hetzner_vps",
       "v1.5.1",
       "v1.6.0",
-      "dual_repo"
+      "dual_repo",
+      "v1.6.1"
     ]
   }
 }

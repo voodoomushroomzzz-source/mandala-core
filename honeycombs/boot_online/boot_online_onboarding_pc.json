@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC вЂ” All-in-One Heuristic File",
-    "version": "v1.7.0",
+    "version": "v1.7.1",
     "created": "2026-05-11",
-    "updated": "2026-05-25",
+    "updated": "2026-06-16",
     "layer": 1,
     "type": "boot_onboarding_pc",
-    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5. v1.5.2: + anchor_by_content_not_line & insert_outside_structures rules. v1.6.0: + Hetzner VPS server info, stack, deployment flow. v1.6.1: + repr_before_patcher & check_logs_after_restart rules. v1.7.0: dual repo — mandala-core + mandala-gardeners.",
+    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5. v1.5.2: + anchor_by_content_not_line & insert_outside_structures rules. v1.6.0: + Hetzner VPS server info, stack, deployment flow. v1.6.1: + repr_before_patcher & check_logs_after_restart rules. v1.7.0: dual repo — mandala-core + mandala-gardeners. v1.7.1: + pre-check raw, post-check API, report last_updated rules.",
     "status": "active",
     "priority": "critical",
     "resonance": "100%",
@@ -33,7 +33,8 @@
       "hetzner_vps",
       "v1.6.1",
       "v1.7.0",
-      "dual_repo"
+      "dual_repo",
+      "v1.7.1"
     ],
     "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.5.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.6.0 + testimonies + system_flow + large_file_patching + api_patterns"
   },
@@ -75,7 +76,10 @@
       "block_2": "Content of <patcher_name>.py — the patch script itself",
       "block_3": "py <patcher_name>.py; Remove-Item <patcher_name>.py; git add <files>; git commit -m '<msg>'; git pull --rebase origin main; git push; ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 5 --no-pager'",
       "naming_rule": "Name by task. Examples: fix_linked_reminder_clear.py, add_repeat_picker.py. Never: patcher.py, patch.py, fix.py."
-    }
+    },
+    "pre_check_via_raw": "ALWAYS pre-check via RAW URL (raw.githubusercontent.com) — bypasses CDN cache. API has 5-10 min delay. Raw is instant.",
+    "post_check_via_api": "ALWAYS post-check via API (api.github.com) — returns SHA for verification. Raw may still be cached.",
+    "report_last_updated": "ALWAYS report file's last_updated/updated date when reading. Format: 'last updated: YYYY-MM-DD'. Gardener needs to know data freshness."
   },
   "step_2_core_map": {
     "order": 2,
