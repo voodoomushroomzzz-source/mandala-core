@@ -318,9 +318,16 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     await message.answer(header + "\n\n" + body)
     # P-99: SR live comment on grouped tasks view (chat-only, opt-in)
     if sr_react:
+        _groups_summary = {}
+        for _t99 in active:
+            _g99 = _t99.get("label_name") or "Без группы"
+            _groups_summary[_g99] = _groups_summary.get(_g99, 0) + 1
+        _summary_str = ", ".join(f"{g}: {c}" for g, c in _groups_summary.items())
         asyncio.create_task(_sr_progress_reaction_send(
             message, user_id,
-            "[Системное событие] Садовник попросил видеть все задачи по группам"
+            f"[Системное событие] Садовник открыл список всех задач ({len(active)} шт.): {_summary_str}. "
+            "Не перечисляй задачи — садовник уже видит список. "
+            "Скажи что-то живое: наблюдение, анализ распределения, поддержку."
         ))
 
 
