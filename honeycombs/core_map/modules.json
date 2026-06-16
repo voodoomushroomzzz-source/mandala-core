@@ -2,205 +2,59 @@
   "identity": {
     "module_id": "CORE-MAP-MODULES-001",
     "name": "Модули Мандалы",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "created": "2026-03-01",
     "layer": 1,
-    "type": "segment"
+    "type": "segment",
+    "updated": "2026-05-14"
   },
   "meta": {
-    "description": "Все модули simbiosis/ с путями",
+    "description": "Единая карта мигрированных модулей. Все simbiosis-ссылки заменены на honeycombs-пути.",
     "status": "active",
     "priority": "high",
     "tags": [
       "modules",
-      "simbiosis",
-      "structure"
+      "honeycombs",
+      "migration",
+      "completed",
+      "clean"
     ],
     "resonance": "100%"
   },
-  "modules": {
+  "honeycombs": {
     "seeds": {
-      "file": "simbiosis/seeds.json",
-      "description": "Банк семян. Зачатки идей, резонансные находки, результаты поиска агента.",
+      "manifest": "honeycombs/seeds/index.json",
+      "description": "Сота семян. 0 активных семян. Чистый лист. Архив удалён.",
       "status": "active",
-      "size_kb": "?",
-      "migration_status": "pending"
+      "size": "1 файл (index.json), v2.0.0",
+      "migration_status": "completed"
     },
     "roadmaps": {
-      "file": "simbiosis/roadmaps.json",
-      "description": "Проработанные дорожные карты. Идеи с шагами и вехами, готовые к реализации.",
+      "manifest": "honeycombs/roadmaps/index.json",
+      "description": "Сота роадмапов. 6 активных (RC-001, RC-002, RM-011..RM-014). Архив удалён.",
       "status": "active",
-      "size_kb": "?",
-      "migration_status": "pending"
-    },
-    "engineer_chat": {
-      "file": "simbiosis/engineer_chat.json",
-      "description": "Модуль инженерного чата. Архитектура, компоненты, история разработки, текущий статус.",
-      "status": "active",
-      "size_kb": "?",
-      "migration_status": "pending"
-    },
-    "telegram_bot": {
-      "file": "simbiosis/telegram_bot.json",
-      "description": "Модуль Telegram бота. Архитектура bot.py, возможности, статус, история.",
-      "status": "active",
-      "size_kb": "?",
-      "migration_status": "pending"
+      "size": "~12KB в 8 файлах",
+      "migration_status": "completed"
     },
     "tasks": {
-      "file": "simbiosis/tasks.json",
-      "description": "Модуль задач Мандалы Симбиоза.",
+      "manifest": "honeycombs/tasks/index.json",
+      "description": "Сота задач. 9 активных задач. Архив удалён.",
       "status": "active",
-      "size_kb": "?",
-      "migration_status": "pending"
-    }
-  },
-  "honeycombs": {
+      "size": "9 файлов, v4.3.1",
+      "migration_status": "completed"
+    },
     "philosophy": {
       "manifest": "honeycombs/philosophy/index.json",
-      "description": "Сота философии Мандалы. Сегменты <1KB для ленивой загрузки.",
+      "description": "Сота философии. 11 блоков + 5 свидетельств. ~28KB в 16 файлах.",
       "status": "active",
-      "migration_date": "2026-03-01",
-      "size": "5.8KB в 10 файлах"
+      "migration_status": "completed"
     },
     "instructions": {
       "manifest": "honeycombs/instructions/index.json",
-      "description": "Сота инструкций. Сегменты <2KB для ленивой загрузки.",
+      "description": "Сота инструкций. 2 сегмента: core/ (4 файла) + workflows/ (1 файл).",
       "status": "active",
-      "migration_date": "2026-03-01"
+      "migration_status": "completed"
     }
   },
-  "navigation_hint": "philosophy и instructions мигрированы в соты. Остальные модули в simbiosis/ ждут миграции.",
-  "/modules/seeds": {
-    "file": "honeycombs/seeds/index.json",
-    "description": "Сота семян. Банк идей для развития Мандалы. 6 активных + 7 архивных семян.",
-    "status": "active",
-    "size_kb": "~25KB",
-    "migration_status": "completed",
-    "honeycomb_path": "honeycombs/seeds/"
-  },
-  "/honeycombs/seeds": {
-    "manifest": "honeycombs/seeds/index.json",
-    "description": "Сота семян. Банк идей для развития Мандалы. 6 активных + 7 архивных семян.",
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "~25KB в 18 файлах",
-    "segments": {
-      "meta": "meta.json",
-      "protocols": "protocols.json",
-      "active": "active/ (6 файлов)",
-      "archive": "archive/ (7 файлов)",
-      "search_index": "search_index.json",
-      "registry": "registry.json"
-    }
-  },
-  "/modules/engineer_chat": {
-    "file": "honeycombs/engineer_chat/index.json",
-    "description": "Сота инженерного чата. Архитектура, компоненты, история разработки, текущий статус Мандалы. Сегменты <1KB.",
-    "status": "active",
-    "size_kb": "51.5KB",
-    "migration_status": "completed",
-    "honeycomb_path": "honeycombs/engineer_chat/"
-  },
-  "/honeycombs/engineer_chat": {
-    "manifest": "honeycombs/engineer_chat/index.json",
-    "description": "Архитектура, компоненты, история разработки, текущий статус Мандалы. 16 файлов в 6 сегментах.",
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "51.5KB в 16 файлах",
-    "segments": {
-      "architecture": "architecture/ (4 файла)",
-      "development": "development/ (3 файла)",
-      "status": "status/ (3 файла)",
-      "integrations": "integrations/ (3 файла)",
-      "meta": "meta/ (2 файла)",
-      "templates": "templates/ (1 файл)"
-    }
-  },
-  "/modules/roadmaps": {
-    "file": "honeycombs/roadmaps/index.json",
-    "description": "Сота роадмапов. Проработанные дорожные карты с шагами и вехами.",
-    "status": "active",
-    "size_kb": "12KB",
-    "migration_status": "completed",
-    "honeycomb_path": "honeycombs/roadmaps/"
-  },
-  "/honeycombs/roadmaps": {
-    "manifest": "honeycombs/roadmaps/index.json",
-    "description": "Проработанные дорожные карты с шагами и вехами. 8 файлов в 4 сегментах.",
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "12KB в 8 файлах",
-    "segments": {
-      "active": "active/ (5 файлов)",
-      "completed": "completed/ (пусто)",
-      "meta": "meta/ (2 файла)",
-      "templates": "templates/ (1 файл)"
-    }
-  },
-  "/modules/philosophy": {
-    "file": "honeycombs/philosophy/index.json",
-    "description": "Сота философии Мандалы. Философская основа Мандалы Симбиоза. Сегменты <1KB для ленивой загрузки.",
-    "status": "active",
-    "size_kb": "5.4KB",
-    "migration_status": "completed",
-    "honeycomb_path": "honeycombs/philosophy/"
-  },
-  "/honeycombs/philosophy": {
-    "manifest": "honeycombs/philosophy/index.json",
-    "description": "Философская основа Мандалы Симбиоза. 9 файлов в 3 сегментах.",
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "5.4KB в 9 файлах",
-    "segments": {
-      "blocks": "blocks/ (5 файлов)",
-      "testimonies": "testimonies/ (2 файла)",
-      "meta": "meta/ (2 файла)"
-    }
-  },
-  "/modules/telegram_bot": {
-    "file": "honeycombs/telegram_bot/index.json",
-    "description": "Сота Telegram бота. Архитектура, возможности, конфигурация и интеграции.",
-    "status": "active",
-    "size_kb": "5.9KB",
-    "migration_status": "completed",
-    "honeycomb_path": "honeycombs/telegram_bot/"
-  },
-  "/honeycombs/telegram_bot": {
-    "manifest": "honeycombs/telegram_bot/index.json",
-    "description": "Telegram бот Мандалы Симбиоза. 11 файлов в 7 сегментах.",
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "5.9KB в 11 файлах",
-    "segments": {
-      "bot_info": "bot_info/ (2 файла)",
-      "capabilities": "capabilities/ (2 файла)",
-      "configuration": "configuration/ (2 файла)",
-      "integration": "integration/ (1 файл)",
-      "meta": "meta/ (1 файл)",
-      "roadmap": "roadmap/ (1 файл)",
-      "root": "root/ (2 файла)"
-    }
-  },
-  "/modules/tasks": {
-    "file": "honeycombs/tasks/index.json",
-    "description": "Сота задач Мандалы Симбиоза. Активные и завершенные задачи.",
-    "status": "active",
-    "size_kb": "8.8KB",
-    "migration_status": "completed",
-    "honeycomb_path": "honeycombs/tasks/"
-  },
-  "/honeycombs/tasks": {
-    "manifest": "honeycombs/tasks/index.json",
-    "description": "Задачи Мандалы Симбиоза. 9 файлов в 4 сегментах.",
-    "status": "active",
-    "migration_date": "2026-03-01",
-    "size": "8.8KB в 9 файлах",
-    "segments": {
-      "active": "active/ (5 файлов)",
-      "completed": "completed/ (2 файла)",
-      "meta": "meta/ (1 файл)",
-      "templates": "templates/ (1 файл)"
-    }
-  }
+  "navigation_hint": "Все модули мигрированы в соты honeycombs/. Симбиозные .json файлы больше не используются."
 }
