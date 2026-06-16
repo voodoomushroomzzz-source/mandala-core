@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 13:29:08 ──
+# ── BUILT by build.py ── 2026-06-16 13:33:32 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -5809,7 +5809,7 @@ async def cb_profile_achievements(callback: CallbackQuery):
     if ach_count == 0:
         text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу."
     else:
-        text = f"<b>💎 Достижения · всего {ach_count}</b>"
+        text = f"<b>Достижения · всего {ach_count} 💎</b>"
         text += _build_sphere_stats(user_id, months=3, show_tasks=False)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="ach_add_from_menu")],
@@ -7364,7 +7364,7 @@ async def cmd_achievements(message: Message):
         )
         return
 
-    text = f"<b>💎 Достижения · всего {ach_count}</b>"
+    text = f"<b>Достижения · всего {ach_count} 💎</b>"
     text += _build_sphere_stats(user_id, months=3)
     text += "\n\nДобавить: «добавь достижение — [что сделал]»"
     await message.answer(text, reply_markup=get_main_keyboard(), parse_mode="HTML")
