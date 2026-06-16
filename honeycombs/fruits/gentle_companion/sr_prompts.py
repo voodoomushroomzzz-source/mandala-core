@@ -110,10 +110,15 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "задачи на завтра", "какие задачи завтра", "что у меня на завтра" → show_tasks, action.period=tomorrow, 0.95
 - "задачи на послезавтра" → show_tasks, action.period=day_after, 0.95
 - "задачи на 22", "на 22 апреля", "на 22 число" → show_tasks, action.period=date:YYYY-MM-DD, 0.95
-- "задачи на неделю", "на этой неделе" → show_tasks, action.period=week, 0.95
-- "задачи на месяц" → show_tasks, action.period=month, 0.95
+- "задачи на этой неделе", "на этой неделе" → show_tasks, action.period=week, 0.95
+- "задачи на следующей неделе", "следующая неделя" → show_tasks, action.period=next_week, 0.95
+- "задачи этого месяца", "в этом месяце" → show_tasks, action.period=month, 0.95
+- "задачи следующего месяца", "следующий месяц" → show_tasks, action.period=next_month, 0.95
+- "горячие задачи", "что горит", "срочные задачи", "горящие задачи" → show_tasks, action.period=hot, 0.95
 - "просроченные задачи", "что просрочено" → show_tasks, action.period=overdue, 0.95
+- "задачи с 15.07 по 20.07", "с 15 июля по 20 июля" → show_tasks, action.period=range:YYYY-MM-DD:YYYY-MM-DD, 0.95
 - "задачи группы X", "покажи задачи из X", "что в группе X", "задачи по X", "задачи из X" → show_tasks, action.label="X", 0.95
+- "задачи мандала на этой неделе", "задачи X с 15.07 по 20.07" → show_tasks, action.label="X", action.period=week|range:..., 0.95
 - "все задачи на завтра" → show_tasks, period=tomorrow (НЕ complete_task). "все" при показе = показать все
 - если спрашивает о задачах → всегда show_tasks с нужным параметром, не отвечай текстом из контекста
 - "мой профиль" → show_profile, 0.95

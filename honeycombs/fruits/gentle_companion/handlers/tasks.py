@@ -1251,10 +1251,12 @@ async def cb_edit_profile_back(callback: CallbackQuery, state: FSMContext):
 
 def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Moscow") -> list:
     """Filter active tasks by deadline period.
-    period: today | tomorrow | week | month | overdue | all
+    period: today | tomorrow | day_after | week | next_week | month | next_month |
+            overdue | hot | date:YYYY-MM-DD | range:YYYY-MM-DD:YYYY-MM-DD | all
     """
     from datetime import datetime, timedelta
     from zoneinfo import ZoneInfo
+    import calendar as _cal
     try:
         _tz = ZoneInfo(tz_name)
     except Exception:
@@ -1262,9 +1264,26 @@ def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Mos
     _now      = datetime.now(_tz)
     today     = _now.strftime("%Y-%m-%d")
     tomorrow  = (_now + timedelta(days=1)).strftime("%Y-%m-%d")
-    week_end  = (_now + timedelta(days=7)).strftime("%Y-%m-%d")
-    month_end = (_now + timedelta(days=30)).strftime("%Y-%m-%d")
     day_after = (_now + timedelta(days=2)).strftime("%Y-%m-%d")
+    hot_end   = (_now + timedelta(days=3)).strftime("%Y-%m-%d")
+    week_end  = (_now + timedelta(days=7)).strftime("%Y-%m-%d")
+    # This month: today to end of current month
+    _month_last = _cal.monthrange(_now.year, _now.month)[1]
+    month_end = _now.replace(day=_month_last).strftime("%Y-%m-%d")
+    # Next week: next Mon to next Sun
+    _days_to_mon = (7 - _now.weekday()) % 7 or 7
+    _next_mon = _now + timedelta(days=_days_to_mon)
+    next_week_start = _next_mon.strftime("%Y-%m-%d")
+    next_week_end   = (_next_mon + timedelta(days=6)).strftime("%Y-%m-%d")
+    # Next month
+    if _now.month == 12:
+        _nm_year, _nm_month = _now.year + 1, 1
+    else:
+        _nm_year, _nm_month = _now.year, _now.month + 1
+    _nm_last = _cal.monthrange(_nm_year, _nm_month)[1]
+    next_month_start = f"{_nm_year}-{_nm_month:02d}-01"
+    next_month_end   = f"{_nm_year}-{_nm_month:02d}-{_nm_last:02d}"
+
     active = [t for t in tasks if t.get("status") != "completed"]
     if period == "today":
         return [t for t in active if t.get("deadline") == today]
@@ -1272,37 +1291,76 @@ def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Mos
         return [t for t in active if t.get("deadline") == tomorrow]
     elif period == "day_after":
         return [t for t in active if t.get("deadline") == day_after]
+    elif period == "hot":
+        return [t for t in active if t.get("deadline") and t["deadline"] <= hot_end]
+    elif period == "overdue":
+        return [t for t in active if t.get("deadline") and t["deadline"] < today]
+    elif period == "week":
+        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= week_end]
+    elif period == "next_week":
+        return [t for t in active if t.get("deadline") and next_week_start <= t["deadline"] <= next_week_end]
+    elif period == "month":
+        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= month_end]
+    elif period == "next_month":
+        return [t for t in active if t.get("deadline") and next_month_start <= t["deadline"] <= next_month_end]
     elif period.startswith("date:"):
         target = period[5:]
         return [t for t in active if t.get("deadline") == target]
-    elif period == "week":
-        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= week_end]
-    elif period == "month":
-        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= month_end]
-    elif period == "overdue":
-        return [t for t in active if t.get("deadline") and t["deadline"] < today]
+    elif period.startswith("range:"):
+        parts = period[6:].split(":")
+        if len(parts) == 2:
+            d_from, d_to = parts[0], parts[1]
+            return [t for t in active if t.get("deadline") and d_from <= t["deadline"] <= d_to]
     return active  # "all"
 
 def _detect_task_period(text: str) -> str:
-    """Detect time period from user query. Returns period key or date:YYYY-MM-DD."""
+    """Detect time period from user query. Returns period key."""
     import re as _re
     from datetime import datetime, timedelta
     t = text.lower()
+    if any(k in t for k in ["горящие", "горят", "срочные", "hot"]):
+        return "hot"
+    if any(k in t for k in ["просрочен", "overdue", "прошли", "устарел", "истёк"]):
+        return "overdue"
     if any(k in t for k in ["сегодня", "today", "на сегодня"]):
         return "today"
     if any(k in t for k in ["послезавтра", "day after tomorrow"]):
         return "day_after"
     if any(k in t for k in ["завтра", "tomorrow", "на завтра"]):
         return "tomorrow"
+    if any(k in t for k in ["следующей недели", "след. неделе", "next week"]):
+        return "next_week"
     if any(k in t for k in ["неделю", "неделя", "на неделе", "на этой неделе", "week"]):
         return "week"
+    if any(k in t for k in ["следующего месяца", "след. месяце", "next month"]):
+        return "next_month"
     if any(k in t for k in ["месяц", "month", "на месяц"]):
         return "month"
-    if any(k in t for k in ["просрочен", "overdue", "прошли", "устарел", "истёк"]):
-        return "overdue"
-    # Specific date: "на 22", "на 22 апреля", "на 22 число"
     MONTHS_RU = {"январ":1,"феврал":2,"март":3,"апрел":4,"май":5,"мая":5,
                  "июн":6,"июл":7,"август":8,"сентябр":9,"октябр":10,"ноябр":11,"декабр":12}
+    # range: "с 15.07 по 20.07", "с 15 июля по 20 июля"
+    _rm = _re.search(r"с\s+(\d{1,2})[.\s](\d{1,2}|\w+)?\s*по\s+(\d{1,2})[.\s](\d{1,2}|\w+)?", t)
+    if _rm:
+        try:
+            _d1, _m1s, _d2, _m2s = _rm.group(1), _rm.group(2), _rm.group(3), _rm.group(4)
+            _now = datetime.now()
+            def _resolve_month(ms):
+                if ms and ms.isdigit(): return int(ms)
+                if ms:
+                    for mn, mv in MONTHS_RU.items():
+                        if mn in ms.lower(): return mv
+                return _now.month
+            _m1 = _resolve_month(_m1s)
+            _m2 = _resolve_month(_m2s)
+            _yr = _now.year
+            d_from = f"{_yr}-{_m1:02d}-{int(_d1):02d}"
+            d_to   = f"{_yr}-{_m2:02d}-{int(_d2):02d}"
+            datetime.strptime(d_from, "%Y-%m-%d")
+            datetime.strptime(d_to, "%Y-%m-%d")
+            return f"range:{d_from}:{d_to}"
+        except Exception:
+            pass
+    # Specific date: "на 22", "на 22 апреля", "на 22 число"
     m = _re.search(r"на\s+(\d{1,2})(?:\s+(\w+))?", t)
     if m:
         day = int(m.group(1))
@@ -1316,7 +1374,7 @@ def _detect_task_period(text: str) -> str:
                         break
             try:
                 date_str = f"{year}-{month:02d}-{day:02d}"
-                datetime.strptime(date_str, "%Y-%m-%d")  # validate
+                datetime.strptime(date_str, "%Y-%m-%d")
                 return f"date:{date_str}"
             except ValueError:
                 pass
