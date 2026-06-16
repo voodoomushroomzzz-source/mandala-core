@@ -87,8 +87,9 @@ async def cb_profile_achievements(callback: CallbackQuery):
 
 
 @router.callback_query(F.data == "profile_back")
-async def cb_profile_back(callback: CallbackQuery):
+async def cb_profile_back(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    await state.clear()  # fix: clear any active FSM (reminders, tasks, etc.)
     user_id = str(callback.from_user.id)
     await _show_profile(user_id, callback.message)
 
