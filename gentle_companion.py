@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 11:56:45 ──
+# ── BUILT by build.py ── 2026-06-16 12:05:04 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -2959,6 +2959,7 @@ async def _sr_progress_reaction(user_id: str, event_text: str, must_reply: bool 
             {"role": "user", "content": event_text}
         ]
         reply = await _call_openrouter(messages, max_tokens=300)
+        logger.info(f"[P-97] raw reply uid={user_id}: {repr((reply or '')[:120])}")
         if not reply:
             return ""
         reply = reply.strip()
@@ -2972,6 +2973,7 @@ async def _sr_progress_reaction(user_id: str, event_text: str, must_reply: bool 
                 import json as _j97
                 _parsed = _j97.loads(reply)
                 reply = (_parsed.get("text") or "").strip()
+                logger.info(f"[P-97] parsed JSON text uid={user_id}: {repr(reply[:80])}")
             except Exception:
                 reply = ""
         if not reply:
