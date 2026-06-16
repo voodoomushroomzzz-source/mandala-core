@@ -1188,7 +1188,65 @@
         .btn-primary { background: var(--surface); color: var(--green-bright); border: 1px solid var(--green); }
         .btn-primary:hover { background: var(--green); color: var(--bg); box-shadow: 0 4px 15px var(--green); }
 
-
+        /* ══ ПРОТОКОЛЫ ══ */
+        .proto-btn {
+            background: transparent;
+            border: 1px solid rgba(124,58,237,0.45);
+            color: rgba(167,139,250,0.8);
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 1px;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .proto-btn:hover {
+            border-color: rgba(167,139,250,0.9);
+            color: #c4b5fd;
+            background: rgba(124,58,237,0.12);
+            box-shadow: 0 0 10px rgba(124,58,237,0.2);
+        }
+        .proto-btn.active {
+            border-color: #a78bfa;
+            color: #030d09;
+            background: #7c3aed;
+            box-shadow: 0 0 14px rgba(124,58,237,0.5);
+        }
+        .proto-tip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 7px);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 180px;
+            max-width: 240px;
+            background: rgba(5,8,20,0.97);
+            border: 1px solid rgba(124,58,237,0.45);
+            border-radius: 6px;
+            padding: 8px 11px;
+            font-family: var(--mono);
+            font-size: 9px;
+            color: #c4b5fd;
+            letter-spacing: 0.8px;
+            line-height: 1.5;
+            white-space: normal;
+            text-align: center;
+            z-index: 300;
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 12px rgba(124,58,237,0.15);
+        }
+        .proto-tip::after {
+            content: "";
+            position: absolute;
+            top: 100%; left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(124,58,237,0.45);
+        }
+        .proto-btn-wrap:hover .proto-tip { display: block; }
 
         /* === СОТЫ === */
         /* ══ HIVE MAP ══ */
@@ -1201,7 +1259,7 @@
 
         /* ── Список слева (Б) ── */
         #hiveList {
-            width: 220px;
+            width: 172px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -1210,23 +1268,16 @@
         }
         #hiveListMeta {
             flex-shrink: 0;
-            padding: 8px 12px;
-            border-bottom: 1px solid #0f2518;
-        }
-        #hiveSearch {
-            width: 100%;
-            background: #071209;
-            border: 1px solid #0f2518;
-            border-radius: 6px;
-            padding: 5px 10px;
             font-family: var(--mono);
-            font-size: 10px;
-            color: #6ee7b7;
-            outline: none;
-            box-sizing: border-box;
+            font-size: 7px;
+            color: #4a9a6a;
+            letter-spacing: 1px;
+            padding: 6px 10px 4px;
+            border-bottom: 1px solid #0f2518;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        #hiveSearch::placeholder { color: #254535; }
-        #hiveSearch:focus { border-color: #0f6e56; }
         #hiveListScroll {
             flex: 1;
             overflow-y: auto;
@@ -1235,57 +1286,48 @@
         #hiveListScroll::-webkit-scrollbar { width: 3px; }
         #hiveListScroll::-webkit-scrollbar-track { background: transparent; }
         #hiveListScroll::-webkit-scrollbar-thumb { background: #0f2518; border-radius: 2px; }
-        .hive-group-label {
-            font-family: var(--mono);
-            font-size: 8px;
-            letter-spacing: 2px;
-            color: #254535;
-            padding: 8px 12px 4px;
-            text-transform: uppercase;
-        }
         .hive-list-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 7px 12px;
+            gap: 7px;
+            padding: 5px 10px;
             cursor: pointer;
-            border-bottom: 1px solid rgba(15,37,24,0.4);
+            border-bottom: 1px solid rgba(15,37,24,0.5);
             transition: background 0.12s;
             position: relative;
         }
-        .hive-list-item:hover { background: rgba(16,185,129,0.06); }
-        .hive-list-item.hovered { background: rgba(16,185,129,0.1); }
+        .hive-list-item:hover { background: rgba(99,102,241,0.06); }
+        .hive-list-item.hovered { background: rgba(99,102,241,0.12); }
         .hive-list-dot {
-            width: 6px; height: 6px;
+            width: 7px; height: 7px;
             border-radius: 50%;
             flex-shrink: 0;
             transition: box-shadow 0.3s;
         }
-        .hive-list-item.hovered .hive-list-dot { box-shadow: 0 0 5px currentColor; }
-        .hive-list-info { flex: 1; min-width: 0; }
+        .hive-list-item.hovered .hive-list-dot {
+            box-shadow: 0 0 6px currentColor;
+        }
         .hive-list-name {
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 9px;
             color: #a5b4fc;
+            flex: 1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 1.4;
         }
-        .hive-list-sub {
-            font-family: var(--mono);
-            font-size: 8px;
-            color: #254535;
-            margin-top: 1px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .hive-list-pct {
-            font-family: var(--mono);
-            font-size: 10px;
-            font-weight: 500;
+        .hive-list-bar {
+            width: 28px; height: 3px;
+            background: #0f2518;
+            border-radius: 2px;
             flex-shrink: 0;
+            overflow: hidden;
+        }
+        .hive-list-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s;
         }
 
         /* ── Hex + панель (А) ── */
@@ -1296,7 +1338,13 @@
             min-width: 0;
             position: relative;
         }
-        #hiveMeta { display: none; }
+        #hiveMeta {
+            flex-shrink: 0;
+            font-family: var(--mono); font-size: 8px; color: #4a9a6a;
+            letter-spacing: 1px;
+            padding: 6px 10px 2px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
         #hiveCanvas {
             flex: 1; display: block;
             cursor: default; min-height: 0;
@@ -1594,14 +1642,52 @@
                     <!-- Б: список слева -->
                     <div id="hiveList">
                         <div id="hiveListMeta">
-                            <input id="hiveSearch" placeholder="поиск сот..." oninput="hiveSearchFilter(this.value)" />
+                            <span id="honeycombsCount">◈ соты</span>
+                            <button onclick="loadMap()" style="background:transparent;border:none;color:#4a9a6a;font-family:var(--mono);font-size:9px;cursor:pointer;" title="Обновить">↻</button>
                         </div>
                         <div id="hiveListScroll"></div>
                     </div>
 
-                    <!-- А: hex canvas -->
+                    <!-- А: hex + мета -->
                     <div id="hiveMain">
-                        <div id="hiveMeta"></div>
+                        <div id="hiveMeta">
+                            <div style="display:flex;align-items:center;gap:6px;">
+                                <!-- ══ ПРОТОКОЛЫ ══ -->
+                                <div id="protocolsBar" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+                                    <span style="font-family:var(--mono);font-size:7px;letter-spacing:1.5px;color:#4a9a6a;margin-right:4px;text-transform:uppercase;">protocols</span>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate internal onboarding')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="internal-onboarding" data-honeycombs="boot_online,core_map,seeds,instructions" data-desc="Internal SR start — loads boot.json, sr_internal_role, core_map, seeds (1-2 min)">◈ onboarding</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate registry sync')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="registry-sync" data-honeycombs="registry,core_map,awareness" data-desc="Registry sync — compares registry with actual files, detects desync (2-3 min)">◈ reg sync</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate ideas roadmaps')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="ideas-roadmaps" data-honeycombs="seeds,roadmaps,tasks" data-desc="Ideas & roadmaps — seeds stats, task priorities, roadmap recommendations (3-5 min)">◈ ideas</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate deep analysis')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="deep-analysis" data-honeycombs="awareness,philosophy,analytics,tectosphaera,sphaerae,core_map" data-desc="Deep analysis — full scan of honeycombs, structure, resonance and Mandala health">◈ deep analysis</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate auto-realize seed')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="auto-realize" data-honeycombs="seeds,tasks,roadmaps,akasha" data-desc="Auto-realize seeds — automatic materialization of seeds into honeycombs (PROTO-AUTO-REALIZE-001)">◈ auto-realize</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('make scan')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="integrity-scan" data-honeycombs="registry,extensions,modules,protocols" data-desc="Integrity scan — verify and restore all honeycombs via GitHub Actions scanner">◈ integrity scan</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                    <div class="proto-btn-wrap" style="position:relative;">
+                                        <button class="proto-btn" onclick="activateProtocolCmd('activate philosophia')" onmouseenter="showProtoTip(this)" onmouseleave="hideProtoTip(this)" data-proto="philosophia" data-honeycombs="philosophy,akasha,sphaerae,tectosphaera,awareness" data-desc="Philosophia — deep philosophical resonance. SR leads the Gardener into living reflection, the Mandala awakens (PROTO-PHILOSOPHIA-001)">◈ philosophia</button>
+                                        <div class="proto-tip"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="forgetMemory()" style="background:transparent;border:1px solid rgba(124,58,237,0.55);color:rgba(167,139,250,0.75);font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:5px 12px;border-radius:4px;cursor:pointer;transition:border-color 0.15s,color 0.15s;" onmouseover="this.style.borderColor='rgba(124,58,237,0.9)';this.style.color='#c4b5fd'" onmouseout="this.style.borderColor='rgba(124,58,237,0.55)';this.style.color='rgba(167,139,250,0.75)'" title="Очистить память чата">✕ забыть</button>
+                        </div>
+
                         <canvas id="hiveCanvas"></canvas>
 
                         <!-- Карточка при клике -->
@@ -1614,7 +1700,7 @@
                             <div class="hive-card-files" id="hiveCardFiles"></div>
                             <button class="hive-card-read-btn" id="hiveCardReadBtn">◈ читать index.json</button>
                         </div>
-                    </div>                    </div>
+                    </div>
 
                 </div>
             </div>
@@ -1675,8 +1761,8 @@
         <script>
         // ==================== КОНСТАНТЫ ====================
         // Явно указываем адрес Render (не динамический)
-        const WS_URL = 'wss://mandala-engineer-chat.onrender.com/ws';
-        const API_BASE = 'https://mandala-engineer-chat.onrender.com';
+        const WS_URL = 'wss://engineer.91-99-149-226.nip.io/ws';
+        const API_BASE = 'https://engineer.91-99-149-226.nip.io';
         const GITHUB_REPO = 'voodoomushroomzzz-source/mandala-core';
 
         // Глобальные переменные
@@ -2913,83 +2999,35 @@
             _hiveSelected = -1;
         }
 
-        // ── Категории сот ──
-        const HIVE_CATEGORIES = {
-            'ядро':     ['core_map','boot_online','philosophy','instructions','sessions'],
-            'задачи':   ['tasks','seeds','roadmaps'],
-            'продукты': ['fruits'],
-            'система':  ['humor','sym','testimonies','engineer_chat'],
-        };
-        function hiveCategoryOf(name) {
-            for (const [cat, names] of Object.entries(HIVE_CATEGORIES)) {
-                if (names.includes(name)) return cat;
-            }
-            return 'прочее';
-        }
-
         // ── Построение списка Б ──
         function buildHiveList(data) {
             const scroll = document.getElementById('hiveListScroll');
             if (!scroll) return;
             scroll.innerHTML = '';
-            const groups = {};
             data.forEach((d, i) => {
-                const cat = hiveCategoryOf(d.name);
-                if (!groups[cat]) groups[cat] = [];
-                groups[cat].push({d, i});
-            });
-            const catOrder = ['ядро','задачи','продукты','система','прочее'];
-            catOrder.forEach(cat => {
-                if (!groups[cat]) return;
-                const label = document.createElement('div');
-                label.className = 'hive-group-label';
-                label.textContent = cat;
-                scroll.appendChild(label);
-                groups[cat].forEach(({d, i}) => {
-                    const res = d.resonance;
-                    const col = resonanceColor(res, 1);
-                    const pct = Math.round(res * 100);
-                    const item = document.createElement('div');
-                    item.className = 'hive-list-item';
-                    item.dataset.idx = i;
-                    const fc = d.files.length;
-                    const sub = fc + ' файл' + (fc === 1 ? '' : fc < 5 ? 'а' : 'ов') + (d.status ? ' · ' + d.status : '');
-                    item.innerHTML = `
-                        <div class="hive-list-dot" style="background:${col};color:${col};"></div>
-                        <div class="hive-list-info">
-                            <div class="hive-list-name">${d.name.replace(/_/g, ' ')}</div>
-                            <div class="hive-list-sub">${sub}</div>
-                        </div>
-                        <div class="hive-list-pct" style="color:${col};">${pct}%</div>
-                    `;
-                    item.addEventListener('mouseenter', () => { _hiveHovered = i; hiveListHighlight(i); });
-                    item.addEventListener('mouseleave', () => { _hiveHovered = -1; hiveListHighlight(-1); });
-                    item.addEventListener('click', () => showHiveCard(i));
-                    scroll.appendChild(item);
+                const res = d.resonance;
+                const col = resonanceColor(res, 1);
+                const item = document.createElement('div');
+                item.className = 'hive-list-item';
+                item.innerHTML = `
+                    <div class="hive-list-dot" style="background:${col};color:${col};"></div>
+                    <span class="hive-list-name">${d.name.replace(/_/g,' ')}</span>
+                    <div class="hive-list-bar">
+                        <div class="hive-list-bar-fill" style="width:${Math.round(res*100)}%;background:${col};"></div>
+                    </div>
+                `;
+                item.addEventListener('mouseenter', () => {
+                    _hiveHovered = i;
+                    hiveListHighlight(i);
                 });
+                item.addEventListener('mouseleave', () => {
+                    _hiveHovered = -1;
+                    hiveListHighlight(-1);
+                });
+                item.addEventListener('click', () => showHiveCard(i));
+                scroll.appendChild(item);
             });
         }
-
-        function hiveSearchFilter(q) {
-            const scroll = document.getElementById('hiveListScroll');
-            if (!scroll) return;
-            const lower = q.toLowerCase();
-            scroll.querySelectorAll('.hive-list-item').forEach(el => {
-                const name = el.querySelector('.hive-list-name')?.textContent || '';
-                el.style.display = name.toLowerCase().includes(lower) ? '' : 'none';
-            });
-            scroll.querySelectorAll('.hive-group-label').forEach(label => {
-                let sibling = label.nextElementSibling;
-                let hasVisible = false;
-                while (sibling && !sibling.classList.contains('hive-group-label')) {
-                    if (sibling.style.display !== 'none') hasVisible = true;
-                    sibling = sibling.nextElementSibling;
-                }
-                label.style.display = hasVisible ? '' : 'none';
-            });
-        }
-
-                }
 
         function hiveSetupCanvas() {
             const canvas = document.getElementById('hiveCanvas');
