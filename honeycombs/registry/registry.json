@@ -156,7 +156,7 @@
           "last_modified": 1776065984.5542898,
           "file_count": 4,
           "total_size_kb": 11.16,
-          "scan_timestamp": "2026-05-14T22:46:37.486777"
+          "scan_timestamp": "2026-06-17T00:06:22.514115"
         },
         {
           "honeycomb_id": "analytics",
@@ -188,7 +188,7 @@
           "last_modified": 1776065984.5542898,
           "file_count": 1,
           "total_size_kb": 2.33,
-          "scan_timestamp": "2026-05-14T22:46:37.506141"
+          "scan_timestamp": "2026-06-17T00:06:22.552214"
         },
         {
           "honeycomb_id": "awareness",
@@ -220,7 +220,7 @@
           "last_modified": 1775858049.0389352,
           "file_count": 5,
           "total_size_kb": 9.57,
-          "scan_timestamp": "2026-05-14T22:46:37.523421"
+          "scan_timestamp": "2026-06-17T00:06:22.650265"
         },
         {
           "honeycomb_id": "boot_online",
@@ -276,8 +276,8 @@
           "hash": "07fc8f87ab1abfc5071c44e2f6e50850",
           "last_modified": 1777116302.8617656,
           "file_count": 2,
-          "total_size_kb": 43.03,
-          "scan_timestamp": "2026-05-14T22:46:37.542465"
+          "total_size_kb": 52.75,
+          "scan_timestamp": "2026-06-17T00:06:22.937361"
         },
         {
           "honeycomb_id": "communications",
@@ -312,7 +312,7 @@
           "last_modified": 1776065984.5991342,
           "file_count": 1,
           "total_size_kb": 1.97,
-          "scan_timestamp": "2026-05-14T22:46:37.558827"
+          "scan_timestamp": "2026-06-17T00:06:22.952757"
         },
         {
           "honeycomb_id": "core_map",
@@ -320,16 +320,16 @@
           "relative_path": "core_map",
           "name": "Core System Map",
           "module_id": "HONEYCOMB-CORE-MAP-001",
-          "version": "v3.7.0",
+          "version": "v3.8.0",
           "layer": 1,
           "type": "critical_directive",
           "status": "active",
-          "description": "Base map of all Mandala Symbiosis components. Updated May 2026: removed garden, added roadmaps, engineer_chat, telegram_bot, fruits, humor, sym, sessions.",
+          "description": "Base map of all Mandala Symbiosis components. Updated May 2026: removed garden, added roadmaps, fruits, humor, sym, sessions. Removed engineer_chat and telegram_bot (directories not exist).",
           "tags": [
             "core",
             "map",
             "critical",
-            "v3.7.0",
+            "v3.8.0",
             "english_core",
             "sessions",
             "handoff"
@@ -344,11 +344,11 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "4226a42d291c6aaac7c2fd201d7bab44",
-          "last_modified": 1777721369.7536707,
+          "hash": "da01ae3ab712c5440e0d5d3f15190183",
+          "last_modified": 1781638766.904115,
           "file_count": 88,
-          "total_size_kb": 637.06,
-          "scan_timestamp": "2026-05-14T22:46:37.608830"
+          "total_size_kb": 632.56,
+          "scan_timestamp": "2026-06-17T00:06:22.985107"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final",
@@ -379,7 +379,7 @@
           "last_modified": 1775725800.8565779,
           "file_count": 1,
           "total_size_kb": 16.38,
-          "scan_timestamp": "2026-05-14T22:46:37.638050"
+          "scan_timestamp": "2026-06-17T00:06:23.026563"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-35-16_phase2_step3",
@@ -410,7 +410,7 @@
           "last_modified": 1775725800.861863,
           "file_count": 1,
           "total_size_kb": 16.38,
-          "scan_timestamp": "2026-05-14T22:46:37.693438"
+          "scan_timestamp": "2026-06-17T00:06:23.419271"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-38-24_roadmaps_full",
@@ -441,7 +441,7 @@
           "last_modified": 1775725800.8662515,
           "file_count": 1,
           "total_size_kb": 24.02,
-          "scan_timestamp": "2026-05-14T22:46:37.708677"
+          "scan_timestamp": "2026-06-17T00:06:23.508033"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final",
@@ -472,7 +472,7 @@
           "last_modified": 1775725800.8712285,
           "file_count": 1,
           "total_size_kb": 24.02,
-          "scan_timestamp": "2026-05-14T22:46:37.722052"
+          "scan_timestamp": "2026-06-17T00:06:23.523749"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_00-45-04_protocol_cleanup",
@@ -506,7 +506,7 @@
           "last_modified": 1775725800.8772266,
           "file_count": 1,
           "total_size_kb": 11.31,
-          "scan_timestamp": "2026-05-14T22:46:37.738498"
+          "scan_timestamp": "2026-06-17T00:06:23.572534"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup",
@@ -540,7 +540,7 @@
           "last_modified": 1775725800.8832483,
           "file_count": 1,
           "total_size_kb": 13.64,
-          "scan_timestamp": "2026-05-14T22:46:37.761964"
+          "scan_timestamp": "2026-06-17T00:06:23.588388"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_09-23-57_protocols_final",
@@ -574,7 +574,7 @@
           "last_modified": 1775725800.890477,
           "file_count": 1,
           "total_size_kb": 13.64,
-          "scan_timestamp": "2026-05-14T22:46:37.777476"
+          "scan_timestamp": "2026-06-17T00:06:23.601485"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-30-04_rm011_bot",
@@ -605,7 +605,7 @@
           "last_modified": 1775725800.895375,
           "file_count": 1,
           "total_size_kb": 24.02,
-          "scan_timestamp": "2026-05-14T22:46:37.795260"
+          "scan_timestamp": "2026-06-17T00:06:23.616686"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-36-49_rm012_chat",
@@ -636,7 +636,7 @@
           "last_modified": 1775725800.9028213,
           "file_count": 1,
           "total_size_kb": 24.02,
-          "scan_timestamp": "2026-05-14T22:46:37.813481"
+          "scan_timestamp": "2026-06-17T00:06:23.631714"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-45-58_rm012_fixed",
@@ -667,7 +667,7 @@
           "last_modified": 1775725800.90808,
           "file_count": 1,
           "total_size_kb": 24.02,
-          "scan_timestamp": "2026-05-14T22:46:37.833366"
+          "scan_timestamp": "2026-06-17T00:06:23.647685"
         },
         {
           "honeycomb_id": "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
@@ -698,7 +698,7 @@
           "last_modified": 1775725800.922073,
           "file_count": 1,
           "total_size_kb": 24.02,
-          "scan_timestamp": "2026-05-14T22:46:37.852320"
+          "scan_timestamp": "2026-06-17T00:06:23.662811"
         },
         {
           "honeycomb_id": "extensions",
@@ -729,7 +729,7 @@
           "last_modified": 1776065984.5991342,
           "file_count": 1,
           "total_size_kb": 1.76,
-          "scan_timestamp": "2026-05-14T22:46:37.872959"
+          "scan_timestamp": "2026-06-17T00:06:23.929977"
         },
         {
           "honeycomb_id": "fruits",
@@ -737,11 +737,11 @@
           "relative_path": "fruits",
           "name": "Fruits — Product Registry & Strategy Map",
           "module_id": "FRUITS-REGISTRY-001",
-          "version": "v2.1.0",
+          "version": "v2.2.0",
           "layer": 2,
           "type": "registry_index",
           "status": "active",
-          "description": "Registry of Mandala products and strategic map of their interaction. v2.1.0: added active task links for each product, realistic execution timeline with dependencies, and SR execution order guide.",
+          "description": "Registry of Mandala products and strategic map of their interaction. v2.2.0: gentle_companion got dedicated honeycomb with architecture plan (14 modules, 7 phases). Dual-repo infrastructure. Links to architecture index.",
           "tags": [
             "fruits",
             "products",
@@ -758,11 +758,43 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "dd3b49af5147cdca08905695a8f64c75",
-          "last_modified": 1778500279.9605591,
-          "file_count": 2,
-          "total_size_kb": 29.67,
-          "scan_timestamp": "2026-05-14T22:46:37.888802"
+          "hash": "1a5549f2c4719fc197dfb8a16d8e8c02",
+          "last_modified": 1779822694.036532,
+          "file_count": 3,
+          "total_size_kb": 52.33,
+          "scan_timestamp": "2026-06-17T00:06:23.947035"
+        },
+        {
+          "honeycomb_id": "fruits/gentle_companion",
+          "path": "honeycombs\\fruits\\gentle_companion\\index.json",
+          "relative_path": "fruits\\gentle_companion",
+          "name": "Unknown",
+          "module_id": "Unknown",
+          "version": "Unknown",
+          "layer": 0,
+          "type": "Unknown",
+          "status": "active",
+          "description": "",
+          "tags": [],
+          "resonance": "0%",
+          "is_v2_compliant": false,
+          "validation_details": {
+            "errors": [
+              "Missing required section: identity",
+              "Missing required section: meta"
+            ],
+            "warnings": [],
+            "missing_sections": [
+              "identity",
+              "meta"
+            ],
+            "missing_fields": []
+          },
+          "hash": "7fe1e922cd48bb82d6eeb251c73aa234",
+          "last_modified": 1781613808.9043524,
+          "file_count": 1,
+          "total_size_kb": 21.92,
+          "scan_timestamp": "2026-06-17T00:06:24.111887"
         },
         {
           "honeycomb_id": "humor",
@@ -798,7 +830,7 @@
           "last_modified": 1776531921.925712,
           "file_count": 1,
           "total_size_kb": 8.43,
-          "scan_timestamp": "2026-05-14T22:46:37.902507"
+          "scan_timestamp": "2026-06-17T00:06:24.159203"
         },
         {
           "honeycomb_id": "instructions",
@@ -833,8 +865,8 @@
           "hash": "82629ec0e138d9b7615c70407a9e7ae3",
           "last_modified": 1776020283.1192937,
           "file_count": 6,
-          "total_size_kb": 40.49,
-          "scan_timestamp": "2026-05-14T22:46:37.914391"
+          "total_size_kb": 49.85,
+          "scan_timestamp": "2026-06-17T00:06:24.171730"
         },
         {
           "honeycomb_id": "modules",
@@ -865,7 +897,7 @@
           "last_modified": 1776065984.6358008,
           "file_count": 1,
           "total_size_kb": 1.96,
-          "scan_timestamp": "2026-05-14T22:46:37.925680"
+          "scan_timestamp": "2026-06-17T00:06:24.182899"
         },
         {
           "honeycomb_id": "philosophy",
@@ -873,7 +905,7 @@
           "relative_path": "philosophy",
           "name": "Philosophy — Core of Mandala Symbiosis",
           "module_id": "HONEYCOMB-PHILOSOPHY-001",
-          "version": "v3.5.0",
+          "version": "v3.6.0",
           "layer": 1,
           "type": "honeycomb_manifest",
           "status": "active",
@@ -899,11 +931,11 @@
             "missing_sections": [],
             "missing_fields": []
           },
-          "hash": "e17c25c89089dbc39a40394f2016d22e",
-          "last_modified": 1777114617.6188498,
+          "hash": "5a37dbaf725e5b3941a8f45b90ad17b0",
+          "last_modified": 1781615088.5234463,
           "file_count": 19,
-          "total_size_kb": 61.8,
-          "scan_timestamp": "2026-05-14T22:46:37.946601"
+          "total_size_kb": 63.4,
+          "scan_timestamp": "2026-06-17T00:06:24.199324"
         },
         {
           "honeycomb_id": "protocols",
@@ -939,7 +971,7 @@
           "last_modified": 1775863510.4518094,
           "file_count": 9,
           "total_size_kb": 29.26,
-          "scan_timestamp": "2026-05-14T22:46:37.970715"
+          "scan_timestamp": "2026-06-17T00:06:24.221827"
         },
         {
           "honeycomb_id": "protocols/auto_realize_seed",
@@ -974,7 +1006,7 @@
           "last_modified": 1775755983.760714,
           "file_count": 1,
           "total_size_kb": 2.22,
-          "scan_timestamp": "2026-05-14T22:46:37.980180"
+          "scan_timestamp": "2026-06-17T00:06:24.238247"
         },
         {
           "honeycomb_id": "protocols/deep_analysis",
@@ -1009,7 +1041,7 @@
           "last_modified": 1775756100.3275778,
           "file_count": 1,
           "total_size_kb": 2.38,
-          "scan_timestamp": "2026-05-14T22:46:37.993827"
+          "scan_timestamp": "2026-06-17T00:06:24.248118"
         },
         {
           "honeycomb_id": "registry",
@@ -1043,7 +1075,7 @@
           "last_modified": 1777056690.700606,
           "file_count": 22,
           "total_size_kb": 148.49,
-          "scan_timestamp": "2026-05-14T22:46:38.015676"
+          "scan_timestamp": "2026-06-17T00:06:24.269166"
         },
         {
           "honeycomb_id": "registry/backups",
@@ -1076,7 +1108,7 @@
           "last_modified": 1775725800.993521,
           "file_count": 2,
           "total_size_kb": 9.7,
-          "scan_timestamp": "2026-05-14T22:46:38.034195"
+          "scan_timestamp": "2026-06-17T00:06:24.283788"
         },
         {
           "honeycomb_id": "registry/core",
@@ -1109,7 +1141,7 @@
           "last_modified": 1775725800.998716,
           "file_count": 6,
           "total_size_kb": 17.67,
-          "scan_timestamp": "2026-05-14T22:46:38.053848"
+          "scan_timestamp": "2026-06-17T00:06:24.298854"
         },
         {
           "honeycomb_id": "registry/dashboard",
@@ -1142,7 +1174,7 @@
           "last_modified": 1775725801.0062516,
           "file_count": 1,
           "total_size_kb": 8.86,
-          "scan_timestamp": "2026-05-14T22:46:38.070262"
+          "scan_timestamp": "2026-06-17T00:06:24.330821"
         },
         {
           "honeycomb_id": "registry/extensions",
@@ -1174,7 +1206,7 @@
           "last_modified": 1775725801.0142765,
           "file_count": 1,
           "total_size_kb": 1.99,
-          "scan_timestamp": "2026-05-14T22:46:38.086764"
+          "scan_timestamp": "2026-06-17T00:06:24.352526"
         },
         {
           "honeycomb_id": "registry/modules",
@@ -1206,7 +1238,7 @@
           "last_modified": 1775725801.0172696,
           "file_count": 2,
           "total_size_kb": 3.81,
-          "scan_timestamp": "2026-05-14T22:46:38.104066"
+          "scan_timestamp": "2026-06-17T00:06:24.372952"
         },
         {
           "honeycomb_id": "registry/notifications",
@@ -1239,7 +1271,7 @@
           "last_modified": 1775725801.0217044,
           "file_count": 1,
           "total_size_kb": 5.58,
-          "scan_timestamp": "2026-05-14T22:46:38.118748"
+          "scan_timestamp": "2026-06-17T00:06:24.389197"
         },
         {
           "honeycomb_id": "roadmaps",
@@ -1271,7 +1303,7 @@
           "last_modified": 1778503536.367241,
           "file_count": 7,
           "total_size_kb": 47.42,
-          "scan_timestamp": "2026-05-14T22:46:38.133128"
+          "scan_timestamp": "2026-06-17T00:06:24.409088"
         },
         {
           "honeycomb_id": "seeds",
@@ -1303,7 +1335,7 @@
           "last_modified": 1778503536.3677447,
           "file_count": 1,
           "total_size_kb": 1.85,
-          "scan_timestamp": "2026-05-14T22:46:38.144915"
+          "scan_timestamp": "2026-06-17T00:06:24.422723"
         },
         {
           "honeycomb_id": "sessions",
@@ -1334,10 +1366,10 @@
             "missing_fields": []
           },
           "hash": "676e443ea43942ae919837475f6c9bbd",
-          "last_modified": 1777115966.9849238,
+          "last_modified": 1780949017.985348,
           "file_count": 5,
-          "total_size_kb": 16.96,
-          "scan_timestamp": "2026-05-14T22:46:38.159326"
+          "total_size_kb": 11.63,
+          "scan_timestamp": "2026-06-17T00:06:24.439386"
         },
         {
           "honeycomb_id": "sphaerae",
@@ -1371,7 +1403,7 @@
           "last_modified": 1775725801.0373237,
           "file_count": 3,
           "total_size_kb": 15.41,
-          "scan_timestamp": "2026-05-14T22:46:38.183977"
+          "scan_timestamp": "2026-06-17T00:06:24.488680"
         },
         {
           "honeycomb_id": "sym",
@@ -1406,7 +1438,7 @@
           "last_modified": 1776531921.9301836,
           "file_count": 4,
           "total_size_kb": 4.28,
-          "scan_timestamp": "2026-05-14T22:46:38.197575"
+          "scan_timestamp": "2026-06-17T00:06:24.502406"
         },
         {
           "honeycomb_id": "tasks",
@@ -1431,8 +1463,8 @@
           "hash": "0740923e390caa2db3bac836b1d266d4",
           "last_modified": 1778786221.8222296,
           "file_count": 11,
-          "total_size_kb": 87.25,
-          "scan_timestamp": "2026-05-14T22:46:38.202906"
+          "total_size_kb": 96.74,
+          "scan_timestamp": "2026-06-17T00:06:24.522005"
         },
         {
           "honeycomb_id": "tectosphaera",
@@ -1467,7 +1499,7 @@
           "last_modified": 1775725801.069883,
           "file_count": 4,
           "total_size_kb": 17.73,
-          "scan_timestamp": "2026-05-14T22:46:38.225088"
+          "scan_timestamp": "2026-06-17T00:06:24.543688"
         },
         {
           "honeycomb_id": "visualizations",
@@ -1499,25 +1531,35 @@
           "last_modified": 1776065984.6659522,
           "file_count": 1,
           "total_size_kb": 2.28,
-          "scan_timestamp": "2026-05-14T22:46:38.240097"
+          "scan_timestamp": "2026-06-17T00:06:24.556840"
         }
       ],
       "statistics": {
-        "total_honeycombs": 41,
+        "total_honeycombs": 42,
         "valid_v2": 41,
-        "invalid_v2": 0,
-        "total_files": 224,
-        "total_size_kb": 1487.84,
-        "new_honeycombs": 41,
+        "invalid_v2": 1,
+        "total_files": 226,
+        "total_size_kb": 1552.76,
+        "new_honeycombs": 42,
         "modified_honeycombs": 0,
         "deleted_honeycombs": 0,
-        "validation_errors": 0,
+        "validation_errors": 1,
         "scan_errors": 0,
-        "last_scan_timestamp": "2026-05-14T22:46:38.257477"
+        "last_scan_timestamp": "2026-06-17T00:06:24.575834"
       },
       "health_status": {
         "status": "healthy",
-        "validation_errors": [],
+        "validation_errors": [
+          {
+            "honeycomb_id": "fruits/gentle_companion",
+            "name": "Unknown",
+            "errors": [
+              "Missing required section: identity",
+              "Missing required section: meta"
+            ],
+            "warnings": []
+          }
+        ],
         "new_honeycombs": [
           "akasha",
           "analytics",
@@ -1538,6 +1580,7 @@
           "core_map/registry/backups/2026-04-08_10-54-30_rm012_fixed2",
           "extensions",
           "fruits",
+          "fruits/gentle_companion",
           "humor",
           "instructions",
           "modules",
@@ -1564,7 +1607,7 @@
         "modified_honeycombs": [],
         "deleted_honeycombs": []
       },
-      "last_updated": "2026-05-14T22:46:38.257490",
+      "last_updated": "2026-06-17T00:06:24.575843",
       "scanner_version": "v1.2.0"
     }
   }
