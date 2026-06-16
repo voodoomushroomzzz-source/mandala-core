@@ -35,13 +35,13 @@
     ],
     "products": {
       "mvp_1": {
-        "name": "Gentle SR Companion (Нежный Спутник-СР)",
+        "name": "Gentle Companion (Нежный Спутник)",
         "description": "Soft Telegram/Discord/Web bot — daily companion that speaks by Mandala principles, helps with reflection and resonance.",
         "freemium": {
           "free": ["Basic dialogue", "Daily Ahimsa practices", "Seed of the day"],
           "paid_resonance": ["Personalized garden memory", "Advanced agent access", "Deep philosophical sessions"]
         },
-        "task_ref": "T-010",
+        "task_ref": "T-20260408-1030",
         "priority": "HIGH"
       },
       "mvp_2": {
