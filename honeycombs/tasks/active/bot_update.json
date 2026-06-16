@@ -757,7 +757,7 @@
   },
   "context_for_new_sr": {
     "note": "Если ты SR без предыдущего контекста — прочитай это.",
-    "system_overview": "bot.py — монолит ~9835 строк. aiogram 3, aiohttp webhook, APScheduler. Данные: profile.json, workspace.json, memory.json на GitHub. _store — RAM cache, синх каждые 2 мин.",
+    "system_overview": "gentle_companion.py — монолит ~10877 строк (CI-сборка из 14 модулей). aiogram 3, aiohttp webhook, APScheduler. Данные: profile.json, workspace.json, memory.json на GitHub. _store — RAM cache, синх каждые 2 мин.",
     "memory_system": "3 уровня: RAM (_store + _sessions), GitHub, deep_profile (sr_observations, sphere_history, synthesis/core). _generate_synthesis = живой портрет ежедневно. P-21 исправил критический баг — синтез работает.",
     "resonance_system": "5 сфер: health, creativity, work, connections, growth. +2% при закрытии задачи через store_add_sphere_resonance. resonance_level = среднее 5 сфер. НИКОГДА не менять resonance_level напрямую.",
     "sphere_classification": "_classify_sphere(title, label_name): two-pass. Сначала только title (creativity первой), потом label_name. Оба аргумента защищены от None.",
@@ -768,7 +768,7 @@
     {
       "id": "NOTE-01",
       "priority": "LOW",
-      "location": "bot.py: _call_openrouter",
+      "location": "gentle_companion.py: _call_openrouter",
       "title": "NoneType guard в _call_openrouter",
       "description": "'NoneType' object has no attribute 'strip' — content[0].text приходит как None при перегрузке deepseek. Fallback отрабатывает корректно, но ошибка логируется. Нужен guard: text = (content[0].text or '').strip(). Войдёт в P-34 (SR Prompt Audit).",
       "fix": "text = (content[0].text or '').strip() вместо content[0].text.strip()"
