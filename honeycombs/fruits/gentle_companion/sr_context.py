@@ -411,7 +411,13 @@ def _build_sphere_stats(user_id: str, months: int = 3, show_tasks: bool = False)
                 m_label = f"{_RU_MONTHS_S[m_num]} {m_year}"
             except Exception:
                 m_label = m_str
-            lines.append(f"\n\n<b>{m_label}:</b>")
+            # P-106: total activity count for month header
+            _total_month = sum(
+                month_data.get(s, {}).get("tasks", 0) + month_data.get(s, {}).get("achievements", 0)
+                for s in sphere_names
+            )
+            _total_str = f" · Всего {_total_month} 💎" if _total_month > 0 else ""
+            lines.append(f"\n\n<b>{m_label}{_total_str}:</b>")
             has_data = False
             for sphere, sname in sphere_names.items():
                 d = month_data.get(sphere, {})
