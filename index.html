@@ -3115,6 +3115,10 @@
                 document.getElementById('globeTooltip').style.display = 'none';
                 document.querySelectorAll('.hive-list-item').forEach(el => el.classList.remove('hovered'));
             };
+            canvas.onwheel = e => {
+                e.preventDefault();
+                _globeScale = Math.max(0.3, Math.min(3.0, _globeScale * (e.deltaY < 0 ? 1.12 : 0.89)));
+            };
             drawGlobe();
         }
 
