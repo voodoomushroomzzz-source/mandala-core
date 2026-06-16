@@ -546,11 +546,22 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         ]
         prompt = "\n".join(prompt_parts)
         msg = await _call_openrouter([
-            {"role": "system", "content": SR_CORE_PROMPT},
+            {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском. Руководствуйся ахимсой. Отвечай ТОЛЬКО текстом — без JSON, без markdown."},
             {"role": "user", "content": prompt}
         ])
         if msg and msg.strip().upper() != "SKIP" and len(msg.strip()) >= 5:
-            await bot.send_message(int(uid), msg.strip(), reply_markup=get_main_keyboard())
+            # strip JSON if model still returns it
+            _msg_clean = msg.strip()
+            if _msg_clean.startswith("{"):
+                try:
+                    import json as _json
+                    _parsed = _json.loads(_msg_clean)
+                    _msg_clean = _parsed.get("text", "").strip()
+                except Exception:
+                    pass
+            if not _msg_clean or len(_msg_clean) < 5:
+                return False
+            await bot.send_message(int(uid), _msg_clean, reply_markup=get_main_keyboard())
             _add_to_history(uid, "assistant", msg.strip())
             ws["_day_proactive_sent_date"] = _today()
             store_set_workspace(uid, ws)
