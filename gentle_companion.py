@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 12:15:41 ──
+# ── BUILT by build.py ── 2026-06-16 12:25:49 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -10125,15 +10125,18 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _today105b = _dt105b.now().strftime("%Y-%m-%d")
                                     lines = [f"<b>{period_ru}:</b>"]
                                     if period not in ("overdue", "hot"):
-                                        _ov105b = [t for t in filtered if t.get("deadline") and t["deadline"] < _today105b]
-                                        _act105b = [t for t in filtered if t not in _ov105b]
+                                        # P-105: overdue always first from ALL tasks, not just filtered period
+                                        _all_active105 = [t for t in uid_tasks if t.get("status") != "completed"]
+                                        _ov105b = [t for t in _all_active105 if t.get("deadline") and t["deadline"] < _today105b]
                                         if _ov105b:
-                                            lines.append("  <b>⚠️ Просроченные</b>")
+                                            lines.append("<b>⚠️ Просроченные</b>")
                                             for t in _sort_by_deadline(_ov105b):
                                                 dl = f" · {t['deadline']}" if t.get("deadline") else ""
                                                 grp = f" #{t['label_name']}" if t.get("label_name") else ""
                                                 lines.append(f"  • {t['title']}{grp}{dl}")
-                                        for t in _sort_by_deadline(_act105b):
+                                            if filtered:
+                                                lines.append("")
+                                        for t in _sort_by_deadline(filtered):
                                             dl  = f" · {t['deadline']}" if t.get("deadline") else ""
                                             grp = f" #{t['label_name']}" if t.get("label_name") else ""
                                             ind = _deadline_indicator(t.get("deadline",""))
