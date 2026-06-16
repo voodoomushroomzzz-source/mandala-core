@@ -1260,7 +1260,8 @@
             font-family: var(--mono);
             font-size: 8px;
             letter-spacing: 2px;
-            color: #254535;
+            color: #6ee7b7;
+            opacity: 0.6;
             padding: 8px 12px 4px;
             text-transform: uppercase;
         }
@@ -1300,33 +1301,32 @@
         }
         #hiveMeta { display: none; }
         #globePanel {
-            position: absolute;
-            bottom: 80px;
-            right: 12px;
-            width: 220px;
-            background: rgba(3,13,9,0.92);
-            border: 1px solid #0f2518;
-            border-radius: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            z-index: 10;
+            position: relative;
         }
         #globeTitle {
+            position: absolute;
+            top: 8px; left: 12px;
             font-family: var(--mono);
-            font-size: 8px;
+            font-size: 7px;
             letter-spacing: 2px;
-            color: #4a9a6a;
-            padding: 7px 12px;
-            border-bottom: 1px solid #0f2518;
+            color: #254535;
             text-transform: uppercase;
+            z-index: 2;
+            pointer-events: none;
         }
-        #globeCanvas { display: block; cursor: grab; }
+        #globeCanvas { display: block; width: 100%; height: 100%; cursor: grab; }
         #globeCanvas:active { cursor: grabbing; }
         #globeHint {
+            position: absolute;
+            bottom: 6px; right: 10px;
             font-family: var(--mono);
-            font-size: 8px;
-            color: #254535;
-            text-align: center;
-            padding: 4px;
+            font-size: 7px;
+            color: #1a3a28;
+            pointer-events: none;
         }
         #globeTooltip {
             position: absolute;
@@ -1349,13 +1349,11 @@
 
         /* ── Карточка при клике (детали соты) ── */
         #hiveCard {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(5,10,18,0.97);
-            border-top: 1px solid rgba(99,102,241,0.25);
-            padding: 12px 16px 14px;
+            flex-shrink: 0;
+            background: rgba(3,13,9,0.98);
+            border-bottom: 1px solid #0f2518;
+            padding: 12px 16px;
             display: none;
-            z-index: 40;
         }
         #hiveCard.show { display: block; }
         .hive-card-head {
@@ -1644,7 +1642,7 @@
                     </div>
                     <div id="hiveMain">
                         <div id="hiveMeta"></div>
-                        <canvas id="hiveCanvas"></canvas>
+                        <canvas id="hiveCanvas" style="display:none;"></canvas>
                         <div id="hiveCard">
                             <div class="hive-card-head">
                                 <span class="hive-card-name" id="hiveCardName"></span>
@@ -1652,7 +1650,7 @@
                             </div>
                             <div class="hive-card-grid" id="hiveCardGrid"></div>
                             <div class="hive-card-files" id="hiveCardFiles"></div>
-                            <button class="hive-card-read-btn" id="hiveCardReadBtn">◈ читать index.json</button>
+
                         </div>
                         <div id="globePanel">
                             <div id="globeTitle">◈ созвездие</div>
@@ -3047,6 +3045,16 @@
             });
         }
 
+        function readHiveFile(hive, file) {
+            const d = _hiveData.find(x => x.name === hive);
+            if (!d) return;
+            const path = d.indexPath ? d.indexPath.replace('index.json', file) : 'honeycombs/' + hive + '/' + file;
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'message', text: '◈ читай файл ' + path }));
+                switchTab('chat');
+            }
+        }
+
         // ── 3D Созвездие ──
         let _globePts = [], _globeRotX = 0.3, _globeRotY = 0.5;
         let _globeDrag = false, _globeLX = 0, _globeLY = 0;
@@ -3056,6 +3064,9 @@
             const canvas = document.getElementById('globeCanvas');
             if (!canvas) return;
             if (_globeRAF) cancelAnimationFrame(_globeRAF);
+            function resizeGlobe() { canvas.width=canvas.offsetWidth||600; canvas.height=canvas.offsetHeight||300; }
+            resizeGlobe();
+            window.addEventListener('resize', resizeGlobe);
             _globePts = data.map((d, i) => {
                 const phi = Math.acos(-1 + (2*i) / Math.max(data.length-1,1));
                 const theta = Math.sqrt(data.length * Math.PI) * phi;
@@ -3123,7 +3134,7 @@
             const canvas = document.getElementById('globeCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            const W=220, H=220, CX=110, CY=110;
+            const W=canvas.width||600, H=canvas.height||300, CX=W/2, CY=H/2;
             ctx.clearRect(0,0,W,H);
             _globeProjected = _globePts.map(p => {
                 const r = globeRot(p.ox, p.oy, p.oz);
