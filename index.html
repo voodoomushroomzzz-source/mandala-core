@@ -357,7 +357,7 @@
             height: 42px;
             border-bottom: 1px solid var(--line);
             display: flex; align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             padding: 0 22px;
             flex-shrink: 0;
             gap: 2px;
@@ -1201,7 +1201,7 @@
 
         /* ── Список слева (Б) ── */
         #hiveList {
-            width: 220px;
+            width: 240px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -1299,6 +1299,49 @@
             position: relative;
         }
         #hiveMeta { display: none; }
+        #globePanel {
+            position: absolute;
+            bottom: 80px;
+            right: 12px;
+            width: 220px;
+            background: rgba(3,13,9,0.92);
+            border: 1px solid #0f2518;
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 10;
+        }
+        #globeTitle {
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 2px;
+            color: #4a9a6a;
+            padding: 7px 12px;
+            border-bottom: 1px solid #0f2518;
+            text-transform: uppercase;
+        }
+        #globeCanvas { display: block; cursor: grab; }
+        #globeCanvas:active { cursor: grabbing; }
+        #globeHint {
+            font-family: var(--mono);
+            font-size: 8px;
+            color: #254535;
+            text-align: center;
+            padding: 4px;
+        }
+        #globeTooltip {
+            position: absolute;
+            background: rgba(3,13,9,0.95);
+            border: 1px solid #0f6e56;
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-family: var(--mono);
+            font-size: 9px;
+            color: #6ee7b7;
+            pointer-events: none;
+            display: none;
+            z-index: 20;
+            white-space: nowrap;
+        }
         #hiveCanvas {
             flex: 1; display: block;
             cursor: default; min-height: 0;
@@ -1546,6 +1589,7 @@
                 <button class="tab active" data-tab="chat">◈ чат</button>
                 <button class="tab" data-tab="map">◈ карта</button>
                 <button class="tab" data-tab="pulse">◈ пульс</button>
+                <button class="tab" onclick="forgetMemory()" style="margin-left:auto;color:#E24B4A;opacity:0.8;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">◈ забыть</button>
             </div>
 
             <!-- Вкладка чата -->
@@ -1592,38 +1636,35 @@
             <!-- Вкладка карты ядра -->
             <div class="tab-content" id="tab-map">
                 <div class="hive-wrap" id="mapContainer">
-
-                    <!-- Б: список слева -->
                     <div id="hiveList">
                         <div id="hiveListMeta">
                             <input id="hiveSearch" placeholder="поиск сот..." oninput="hiveSearchFilter(this.value)" />
                         </div>
                         <div id="hiveListScroll"></div>
                     </div>
-
-                    <!-- А: hex + мета -->
                     <div id="hiveMain">
                         <div id="hiveMeta"></div>
-
                         <canvas id="hiveCanvas"></canvas>
-
-                        <!-- Карточка при клике -->
                         <div id="hiveCard">
                             <div class="hive-card-head">
                                 <span class="hive-card-name" id="hiveCardName"></span>
-                                <button class="hive-card-close" onclick="closeHiveCard()">×</button>
+                                <button class="hive-card-close" onclick="closeHiveCard()">x</button>
                             </div>
                             <div class="hive-card-grid" id="hiveCardGrid"></div>
                             <div class="hive-card-files" id="hiveCardFiles"></div>
                             <button class="hive-card-read-btn" id="hiveCardReadBtn">◈ читать index.json</button>
                         </div>
+                        <div id="globePanel">
+                            <div id="globeTitle">◈ созвездие</div>
+                            <canvas id="globeCanvas" width="220" height="220"></canvas>
+                            <div id="globeHint">перетащи чтобы вращать</div>
+                            <div id="globeTooltip"></div>
+                        </div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- Вкладка ПУЛЬС -->
-            <div class="tab-content" id="tab-pulse">
+            class="tab-content" id="tab-pulse">
                 <div id="pulseWrap">
                     <div id="pulseCounters">
                         <div class="pulse-counter" id="pcTotal">
@@ -2916,12 +2957,16 @@
             _hiveSelected = -1;
         }
 
-        // ── Категории сот ──
+        // ── Категории ──
         const HIVE_CATEGORIES = {
             'ядро':     ['core_map','boot_online','philosophy','instructions','sessions'],
             'задачи':   ['tasks','seeds','roadmaps'],
             'продукты': ['fruits'],
             'система':  ['humor','sym','testimonies','engineer_chat'],
+        };
+        const CAT_COLOR = {
+            'ядро': '#1D9E75', 'задачи': '#378ADD',
+            'продукты': '#9F77DD', 'система': '#EF9F27', 'прочее': '#888780',
         };
         function hiveCategoryOf(name) {
             for (const [cat, names] of Object.entries(HIVE_CATEGORIES)) {
@@ -2930,7 +2975,7 @@
             return 'прочее';
         }
 
-        // ── Построение списка Б ──
+        // ── Построение списка ──
         function buildHiveList(data) {
             const scroll = document.getElementById('hiveListScroll');
             if (!scroll) return;
@@ -2950,17 +2995,17 @@
                 scroll.appendChild(label);
                 groups[cat].forEach(({d, i}) => {
                     const res = d.resonance;
-                    const col = resonanceColor(res, 1);
+                    const cat2 = hiveCategoryOf(d.name);
+                    const col = res > 0 ? (CAT_COLOR[cat2] || '#1D9E75') : '#E24B4A';
                     const pct = Math.round(res * 100);
                     const item = document.createElement('div');
                     item.className = 'hive-list-item';
                     item.dataset.idx = i;
                     const fc = d.files.length;
-                    const sub = fc + ' файл' + (fc === 1 ? '' : fc < 5 ? 'а' : 'ов') + (d.status ? ' · ' + d.status : '');
+                    const sub = fc + ' файл' + (fc===1?'':fc<5?'а':'ов') + (d.status?' · '+d.status:'');
                     const dot = document.createElement('div');
                     dot.className = 'hive-list-dot';
                     dot.style.background = col;
-                    dot.style.color = col;
                     const info = document.createElement('div');
                     info.className = 'hive-list-info';
                     const nameEl = document.createElement('div');
@@ -2978,12 +3023,13 @@
                     item.appendChild(dot);
                     item.appendChild(info);
                     item.appendChild(pctEl);
-                    item.addEventListener('mouseenter', () => { _hiveHovered = i; hiveListHighlight(i); });
-                    item.addEventListener('mouseleave', () => { _hiveHovered = -1; hiveListHighlight(-1); });
+                    item.addEventListener('mouseenter', () => { _hiveHovered = i; hiveListHighlight(i); globeHighlight(d.name); });
+                    item.addEventListener('mouseleave', () => { _hiveHovered = -1; hiveListHighlight(-1); globeHighlight(null); });
                     item.addEventListener('click', () => showHiveCard(i));
                     scroll.appendChild(item);
                 });
             });
+            initGlobe(data);
         }
 
         function hiveSearchFilter(q) {
@@ -2995,14 +3041,135 @@
                 el.style.display = name.toLowerCase().includes(lower) ? '' : 'none';
             });
             scroll.querySelectorAll('.hive-group-label').forEach(label => {
-                let sibling = label.nextElementSibling;
-                let hasVisible = false;
-                while (sibling && !sibling.classList.contains('hive-group-label')) {
-                    if (sibling.style.display !== 'none') hasVisible = true;
-                    sibling = sibling.nextElementSibling;
+                let sib = label.nextElementSibling; let vis = false;
+                while (sib && !sib.classList.contains('hive-group-label')) {
+                    if (sib.style.display !== 'none') vis = true;
+                    sib = sib.nextElementSibling;
                 }
-                label.style.display = hasVisible ? '' : 'none';
+                label.style.display = vis ? '' : 'none';
             });
+        }
+
+        // ── 3D Созвездие ──
+        let _globePts = [], _globeRotX = 0.3, _globeRotY = 0.5;
+        let _globeDrag = false, _globeLX = 0, _globeLY = 0;
+        let _globeHovered = null, _globeRAF = null, _globeProjected = [];
+
+        function initGlobe(data) {
+            const canvas = document.getElementById('globeCanvas');
+            if (!canvas) return;
+            if (_globeRAF) cancelAnimationFrame(_globeRAF);
+            _globePts = data.map((d, i) => {
+                const phi = Math.acos(-1 + (2*i) / Math.max(data.length-1,1));
+                const theta = Math.sqrt(data.length * Math.PI) * phi;
+                const r = 70;
+                return {
+                    d,
+                    ox: r * Math.sin(phi) * Math.cos(theta),
+                    oy: r * Math.sin(phi) * Math.sin(theta),
+                    oz: r * Math.cos(phi),
+                };
+            });
+            canvas.onmousedown = e => { _globeDrag=true; _globeLX=e.clientX; _globeLY=e.clientY; };
+            window.onmouseup = () => _globeDrag=false;
+            window.onmousemove = e => {
+                if (_globeDrag) {
+                    _globeRotY += (e.clientX-_globeLX)*0.012;
+                    _globeRotX += (e.clientY-_globeLY)*0.012;
+                    _globeLX=e.clientX; _globeLY=e.clientY;
+                }
+            };
+            canvas.onmousemove = e => {
+                const rect = canvas.getBoundingClientRect();
+                const mx = e.clientX-rect.left, my = e.clientY-rect.top;
+                let found = null, minD = 12;
+                _globeProjected.forEach(p => {
+                    const dist = Math.hypot(p.sx-mx, p.sy-my);
+                    if (dist < minD) { minD=dist; found=p; }
+                });
+                const tip = document.getElementById('globeTooltip');
+                if (found) {
+                    _globeHovered = found.d.name;
+                    tip.style.display = 'block';
+                    tip.style.left = (found.sx+8)+'px';
+                    tip.style.top = (found.sy-18)+'px';
+                    tip.textContent = found.d.name + ' ' + Math.round(found.d.resonance*100) + '%';
+                    document.querySelectorAll('.hive-list-item').forEach(el => {
+                        const nm = el.querySelector('.hive-list-name');
+                        el.classList.toggle('hovered', nm && nm.textContent.trim() === found.d.name.replace(/_/g,' '));
+                    });
+                } else {
+                    _globeHovered = null;
+                    tip.style.display = 'none';
+                    document.querySelectorAll('.hive-list-item').forEach(el => el.classList.remove('hovered'));
+                }
+            };
+            canvas.onmouseleave = () => {
+                _globeHovered = null;
+                document.getElementById('globeTooltip').style.display = 'none';
+                document.querySelectorAll('.hive-list-item').forEach(el => el.classList.remove('hovered'));
+            };
+            drawGlobe();
+        }
+
+        function globeHighlight(name) { _globeHovered = name; }
+
+        function globeRot(x, y, z) {
+            const y1 = y*Math.cos(_globeRotX) - z*Math.sin(_globeRotX);
+            const z1 = y*Math.sin(_globeRotX) + z*Math.cos(_globeRotX);
+            const x2 = x*Math.cos(_globeRotY) + z1*Math.sin(_globeRotY);
+            const z2 = -x*Math.sin(_globeRotY) + z1*Math.cos(_globeRotY);
+            return {x:x2, y:y1, z:z2};
+        }
+
+        function drawGlobe() {
+            const canvas = document.getElementById('globeCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const W=220, H=220, CX=110, CY=110;
+            ctx.clearRect(0,0,W,H);
+            _globeProjected = _globePts.map(p => {
+                const r = globeRot(p.ox, p.oy, p.oz);
+                const fov=200, s=fov/(fov+r.z+100);
+                return {...p, sx:CX+r.x*s, sy:CY+r.y*s, s, rz:r.z};
+            });
+            // edges within categories
+            const catGroups = {};
+            _globeProjected.forEach(p => {
+                const cat = hiveCategoryOf(p.d.name);
+                if (!catGroups[cat]) catGroups[cat]=[];
+                catGroups[cat].push(p);
+            });
+            Object.entries(catGroups).forEach(([cat, grp]) => {
+                const col = CAT_COLOR[cat] || '#888780';
+                for (let i=0;i<grp.length-1;i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(grp[i].sx, grp[i].sy);
+                    ctx.lineTo(grp[i+1].sx, grp[i+1].sy);
+                    ctx.strokeStyle = col + '33';
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+            });
+            // nodes back to front
+            const sorted = [..._globeProjected].sort((a,b)=>a.rz-b.rz);
+            sorted.forEach(p => {
+                const cat = hiveCategoryOf(p.d.name);
+                const col = p.d.resonance > 0 ? (CAT_COLOR[cat]||'#888780') : '#E24B4A';
+                const isHov = p.d.name === _globeHovered;
+                const nodeR = (3 + p.s*3) * (isHov ? 1.8 : 1);
+                ctx.beginPath();
+                ctx.arc(p.sx, p.sy, nodeR, 0, Math.PI*2);
+                ctx.fillStyle = col + (isHov ? 'ff' : 'cc');
+                ctx.fill();
+                if (isHov || p.s > 0.95) {
+                    ctx.fillStyle = isHov ? '#ffffff' : col;
+                    ctx.font = (isHov?'10':'8')+'px monospace';
+                    ctx.fillText(p.d.name.replace(/_/g,' '), p.sx+nodeR+2, p.sy+3);
+                }
+            });
+            if (!_globeDrag) _globeRotY += 0.003;
+            _globeRAF = requestAnimationFrame(drawGlobe);
         }
 
                 function hiveSetupCanvas() {
