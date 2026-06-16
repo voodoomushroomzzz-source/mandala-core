@@ -41,7 +41,8 @@
       "gentle_companion_note": "The production file on server is gentle_companion.py (modular build from honeycombs/fruits/gentle_companion/). NEVER patch gentle_companion.py directly — patch the MODULE files in honeycombs/fruits/gentle_companion/. CI rebuilds gentle_companion.py automatically.",
       "module_location": "Bot modules live in honeycombs/fruits/gentle_companion/ — config.py, store.py, github_api.py, helpers.py, ui.py, sr_prompts.py, sr_search.py, sr_context.py, sr_memory.py, handlers/tasks.py, handlers/features.py, handlers/system.py, sr_conversation.py, main.py. Read honeycombs/fruits/gentle_companion/index.json for full architecture map.",
       "session_context": "Read honeycombs/sessions/handoff_claude.json and/or handoff_deepseek.json for previous session context before starting any work.",
-      "announce_last_updated": "ALWAYS announce the file's last_updated date in your FIRST response. Format: 'Read {filename} — last updated: YYYY-MM-DD'. Gardener must see data freshness immediately."
+      "announce_last_updated": "ALWAYS announce the file's last_updated date in your FIRST response. Format: 'Read {filename} — last updated: YYYY-MM-DD'. Gardener must see data freshness immediately.",
+      "sync_onboarding_and_source": "CRITICAL: When updating any source honeycomb that is embedded in boot_online_onboarding_pc.json (philosophy/index.json, core_map/index.json, boot_online/index.json, instructions/core/external_sr_workflow.json, phi_010, phi_011, fruits/index.json, tasks/index.json) — ALWAYS update BOTH the source file AND the onboarding file. They are co-dependent. Updating one without the other breaks sync."
     },
     "powershell_examples": {
       "description": "Concrete, copy-paste ready examples for common tasks.",
@@ -317,8 +318,8 @@
     "updated": "2026-06-16",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.6.2",
-    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.2: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated.",
+    "version": "v1.6.3",
+    "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
     "module_id": "INSTR-EXT-SR-WORKFLOW-001",
@@ -344,7 +345,8 @@
       "v1.6.0",
       "dual_repo",
       "v1.6.1",
-      "v1.6.2"
+      "v1.6.2",
+      "v1.6.3"
     ]
   }
 }

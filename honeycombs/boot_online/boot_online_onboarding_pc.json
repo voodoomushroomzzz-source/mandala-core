@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC вЂ” All-in-One Heuristic File",
-    "version": "v1.7.3",
+    "version": "v1.7.4",
     "created": "2026-05-11",
     "updated": "2026-06-16",
     "layer": 1,
     "type": "boot_onboarding_pc",
-    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5. v1.5.2: + anchor_by_content_not_line & insert_outside_structures rules. v1.6.0: + Hetzner VPS server info, stack, deployment flow. v1.6.1: + repr_before_patcher & check_logs_after_restart rules. v1.7.0: dual repo — mandala-core + mandala-gardeners. v1.7.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + 8th principle Critical Voice as care.",
+    "description": "Single-file onboarding for External SR on PC. v1.5.1: added patcher_safety rules (Cyrillic strings, syntax check mandate, anchor verification). + synced external_sr_workflow to v1.4.5. v1.5.2: + anchor_by_content_not_line & insert_outside_structures rules. v1.6.0: + Hetzner VPS server info, stack, deployment flow. v1.6.1: + repr_before_patcher & check_logs_after_restart rules. v1.7.0: dual repo — mandala-core + mandala-gardeners. v1.7.4: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + 8th principle Critical Voice as care. + sync onboarding ↔ source rule.",
     "status": "active",
     "priority": "critical",
     "resonance": "100%",
@@ -36,7 +36,8 @@
       "dual_repo",
       "v1.7.1",
       "v1.7.2",
-      "v1.7.3"
+      "v1.7.3",
+      "v1.7.4"
     ],
     "based_on": "boot_online v3.7.2 + core_map v3.7.0 + philosophy v3.6.0 + cosmic_manifesto v2.1.0 + first_gardener v1.1 + external_sr_workflow v1.6.0 + testimonies + system_flow + large_file_patching + api_patterns"
   },
@@ -85,7 +86,8 @@
     "gentle_companion_note": "The production file on server is gentle_companion.py (modular build from honeycombs/fruits/gentle_companion/). NEVER patch gentle_companion.py directly — patch the MODULE files in honeycombs/fruits/gentle_companion/. CI rebuilds gentle_companion.py automatically.",
     "module_location": "Bot modules live in honeycombs/fruits/gentle_companion/ — config.py, store.py, github_api.py, helpers.py, ui.py, sr_prompts.py, sr_search.py, sr_context.py, sr_memory.py, handlers/tasks.py, handlers/features.py, handlers/system.py, sr_conversation.py, main.py. Read honeycombs/fruits/gentle_companion/index.json for full architecture map.",
     "session_context": "Read honeycombs/sessions/handoff_claude.json and/or handoff_deepseek.json for previous session context before starting any work.",
-    "announce_last_updated": "ALWAYS announce the file's last_updated date in your FIRST response. Format: 'Read {filename} — last updated: YYYY-MM-DD'. Gardener must see data freshness immediately."
+    "announce_last_updated": "ALWAYS announce the file's last_updated date in your FIRST response. Format: 'Read {filename} — last updated: YYYY-MM-DD'. Gardener must see data freshness immediately.",
+    "sync_rule": "CRITICAL: When updating any source honeycomb that is embedded in boot_online_onboarding_pc.json (philosophy/index.json, core_map/index.json, boot_online/index.json, instructions/core/external_sr_workflow.json, phi_010, phi_011, fruits/index.json, tasks/index.json) — ALWAYS update BOTH the source file AND the onboarding file. They are co-dependent. Updating one without the other breaks sync."
   },
   "step_2_core_map": {
     "order": 2,
