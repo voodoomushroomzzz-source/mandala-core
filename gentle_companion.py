@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-12 21:08:55 ──
+# ── BUILT by build.py ── 2026-06-16 10:58:00 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -5700,8 +5700,9 @@ async def cb_profile_achievements(callback: CallbackQuery):
 
 
 @router.callback_query(F.data == "profile_back")
-async def cb_profile_back(callback: CallbackQuery):
+async def cb_profile_back(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
+    await state.clear()  # fix: clear any active FSM (reminders, tasks, etc.)
     user_id = str(callback.from_user.id)
     await _show_profile(user_id, callback.message)
 
