@@ -2944,9 +2944,6 @@
             }).join('');
             document.getElementById('hiveCardFiles').innerHTML = visibleFiles;
 
-            const readBtn = document.getElementById('hiveCardReadBtn');
-            readBtn.onclick = () => requestFileRead(d.indexPath, d.name);
-            readBtn.style.borderColor = resonanceColor(res, 0.5);
             readBtn.style.color = col;
 
             document.getElementById('hiveCard').classList.add('show');
