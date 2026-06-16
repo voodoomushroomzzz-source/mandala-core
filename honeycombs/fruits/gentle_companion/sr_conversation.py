@@ -1084,7 +1084,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 _ct_titles = ", ".join(f"«{t['title']}»" for t in to_close)
                                 asyncio.create_task(_sr_progress_reaction_send(
                                     message, user_id,
-                                    f"[Системное событие] Садовник закрыл задачу: {_ct_titles}"
+                                    f"[Системное событие] Садовник закрыл задачу: {_ct_titles}",
+                                    must_reply=True
                                 ))
                             elif tasks:
                                 # Smart clarification: find top fuzzy candidates
