@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 13:33:32 ──
+# ── BUILT by build.py ── 2026-06-16 13:41:08 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -10523,7 +10523,8 @@ async def free_conversation(message: Message, state: FSMContext):
                                 _ct_titles = ", ".join(f"«{t['title']}»" for t in to_close)
                                 asyncio.create_task(_sr_progress_reaction_send(
                                     message, user_id,
-                                    f"[Системное событие] Садовник закрыл задачу: {_ct_titles}"
+                                    f"[Системное событие] Садовник закрыл задачу: {_ct_titles}",
+                                    must_reply=True
                                 ))
                             elif tasks:
                                 # Smart clarification: find top fuzzy candidates
