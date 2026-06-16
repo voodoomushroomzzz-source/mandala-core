@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 12:05:04 ──
+# ── BUILT by build.py ── 2026-06-16 12:15:41 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1996,10 +1996,15 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "задачи на завтра", "какие задачи завтра", "что у меня на завтра" → show_tasks, action.period=tomorrow, 0.95
 - "задачи на послезавтра" → show_tasks, action.period=day_after, 0.95
 - "задачи на 22", "на 22 апреля", "на 22 число" → show_tasks, action.period=date:YYYY-MM-DD, 0.95
-- "задачи на неделю", "на этой неделе" → show_tasks, action.period=week, 0.95
-- "задачи на месяц" → show_tasks, action.period=month, 0.95
+- "задачи на этой неделе", "на этой неделе" → show_tasks, action.period=week, 0.95
+- "задачи на следующей неделе", "следующая неделя" → show_tasks, action.period=next_week, 0.95
+- "задачи этого месяца", "в этом месяце" → show_tasks, action.period=month, 0.95
+- "задачи следующего месяца", "следующий месяц" → show_tasks, action.period=next_month, 0.95
+- "горячие задачи", "что горит", "срочные задачи", "горящие задачи" → show_tasks, action.period=hot, 0.95
 - "просроченные задачи", "что просрочено" → show_tasks, action.period=overdue, 0.95
+- "задачи с 15.07 по 20.07", "с 15 июля по 20 июля" → show_tasks, action.period=range:YYYY-MM-DD:YYYY-MM-DD, 0.95
 - "задачи группы X", "покажи задачи из X", "что в группе X", "задачи по X", "задачи из X" → show_tasks, action.label="X", 0.95
+- "задачи мандала на этой неделе", "задачи X с 15.07 по 20.07" → show_tasks, action.label="X", action.period=week|range:..., 0.95
 - "все задачи на завтра" → show_tasks, period=tomorrow (НЕ complete_task). "все" при показе = показать все
 - если спрашивает о задачах → всегда show_tasks с нужным параметром, не отвечай текстом из контекста
 - "мой профиль" → show_profile, 0.95
@@ -4848,10 +4853,12 @@ async def cb_edit_profile_back(callback: CallbackQuery, state: FSMContext):
 
 def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Moscow") -> list:
     """Filter active tasks by deadline period.
-    period: today | tomorrow | week | month | overdue | all
+    period: today | tomorrow | day_after | week | next_week | month | next_month |
+            overdue | hot | date:YYYY-MM-DD | range:YYYY-MM-DD:YYYY-MM-DD | all
     """
     from datetime import datetime, timedelta
     from zoneinfo import ZoneInfo
+    import calendar as _cal
     try:
         _tz = ZoneInfo(tz_name)
     except Exception:
@@ -4859,9 +4866,26 @@ def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Mos
     _now      = datetime.now(_tz)
     today     = _now.strftime("%Y-%m-%d")
     tomorrow  = (_now + timedelta(days=1)).strftime("%Y-%m-%d")
-    week_end  = (_now + timedelta(days=7)).strftime("%Y-%m-%d")
-    month_end = (_now + timedelta(days=30)).strftime("%Y-%m-%d")
     day_after = (_now + timedelta(days=2)).strftime("%Y-%m-%d")
+    hot_end   = (_now + timedelta(days=3)).strftime("%Y-%m-%d")
+    week_end  = (_now + timedelta(days=7)).strftime("%Y-%m-%d")
+    # This month: today to end of current month
+    _month_last = _cal.monthrange(_now.year, _now.month)[1]
+    month_end = _now.replace(day=_month_last).strftime("%Y-%m-%d")
+    # Next week: next Mon to next Sun
+    _days_to_mon = (7 - _now.weekday()) % 7 or 7
+    _next_mon = _now + timedelta(days=_days_to_mon)
+    next_week_start = _next_mon.strftime("%Y-%m-%d")
+    next_week_end   = (_next_mon + timedelta(days=6)).strftime("%Y-%m-%d")
+    # Next month
+    if _now.month == 12:
+        _nm_year, _nm_month = _now.year + 1, 1
+    else:
+        _nm_year, _nm_month = _now.year, _now.month + 1
+    _nm_last = _cal.monthrange(_nm_year, _nm_month)[1]
+    next_month_start = f"{_nm_year}-{_nm_month:02d}-01"
+    next_month_end   = f"{_nm_year}-{_nm_month:02d}-{_nm_last:02d}"
+
     active = [t for t in tasks if t.get("status") != "completed"]
     if period == "today":
         return [t for t in active if t.get("deadline") == today]
@@ -4869,37 +4893,76 @@ def _filter_tasks_by_period(tasks: list, period: str, tz_name: str = "Europe/Mos
         return [t for t in active if t.get("deadline") == tomorrow]
     elif period == "day_after":
         return [t for t in active if t.get("deadline") == day_after]
+    elif period == "hot":
+        return [t for t in active if t.get("deadline") and t["deadline"] <= hot_end]
+    elif period == "overdue":
+        return [t for t in active if t.get("deadline") and t["deadline"] < today]
+    elif period == "week":
+        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= week_end]
+    elif period == "next_week":
+        return [t for t in active if t.get("deadline") and next_week_start <= t["deadline"] <= next_week_end]
+    elif period == "month":
+        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= month_end]
+    elif period == "next_month":
+        return [t for t in active if t.get("deadline") and next_month_start <= t["deadline"] <= next_month_end]
     elif period.startswith("date:"):
         target = period[5:]
         return [t for t in active if t.get("deadline") == target]
-    elif period == "week":
-        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= week_end]
-    elif period == "month":
-        return [t for t in active if t.get("deadline") and today <= t["deadline"] <= month_end]
-    elif period == "overdue":
-        return [t for t in active if t.get("deadline") and t["deadline"] < today]
+    elif period.startswith("range:"):
+        parts = period[6:].split(":")
+        if len(parts) == 2:
+            d_from, d_to = parts[0], parts[1]
+            return [t for t in active if t.get("deadline") and d_from <= t["deadline"] <= d_to]
     return active  # "all"
 
 def _detect_task_period(text: str) -> str:
-    """Detect time period from user query. Returns period key or date:YYYY-MM-DD."""
+    """Detect time period from user query. Returns period key."""
     import re as _re
     from datetime import datetime, timedelta
     t = text.lower()
+    if any(k in t for k in ["горящие", "горят", "срочные", "hot"]):
+        return "hot"
+    if any(k in t for k in ["просрочен", "overdue", "прошли", "устарел", "истёк"]):
+        return "overdue"
     if any(k in t for k in ["сегодня", "today", "на сегодня"]):
         return "today"
     if any(k in t for k in ["послезавтра", "day after tomorrow"]):
         return "day_after"
     if any(k in t for k in ["завтра", "tomorrow", "на завтра"]):
         return "tomorrow"
+    if any(k in t for k in ["следующей недели", "след. неделе", "next week"]):
+        return "next_week"
     if any(k in t for k in ["неделю", "неделя", "на неделе", "на этой неделе", "week"]):
         return "week"
+    if any(k in t for k in ["следующего месяца", "след. месяце", "next month"]):
+        return "next_month"
     if any(k in t for k in ["месяц", "month", "на месяц"]):
         return "month"
-    if any(k in t for k in ["просрочен", "overdue", "прошли", "устарел", "истёк"]):
-        return "overdue"
-    # Specific date: "на 22", "на 22 апреля", "на 22 число"
     MONTHS_RU = {"январ":1,"феврал":2,"март":3,"апрел":4,"май":5,"мая":5,
                  "июн":6,"июл":7,"август":8,"сентябр":9,"октябр":10,"ноябр":11,"декабр":12}
+    # range: "с 15.07 по 20.07", "с 15 июля по 20 июля"
+    _rm = _re.search(r"с\s+(\d{1,2})[.\s](\d{1,2}|\w+)?\s*по\s+(\d{1,2})[.\s](\d{1,2}|\w+)?", t)
+    if _rm:
+        try:
+            _d1, _m1s, _d2, _m2s = _rm.group(1), _rm.group(2), _rm.group(3), _rm.group(4)
+            _now = datetime.now()
+            def _resolve_month(ms):
+                if ms and ms.isdigit(): return int(ms)
+                if ms:
+                    for mn, mv in MONTHS_RU.items():
+                        if mn in ms.lower(): return mv
+                return _now.month
+            _m1 = _resolve_month(_m1s)
+            _m2 = _resolve_month(_m2s)
+            _yr = _now.year
+            d_from = f"{_yr}-{_m1:02d}-{int(_d1):02d}"
+            d_to   = f"{_yr}-{_m2:02d}-{int(_d2):02d}"
+            datetime.strptime(d_from, "%Y-%m-%d")
+            datetime.strptime(d_to, "%Y-%m-%d")
+            return f"range:{d_from}:{d_to}"
+        except Exception:
+            pass
+    # Specific date: "на 22", "на 22 апреля", "на 22 число"
     m = _re.search(r"на\s+(\d{1,2})(?:\s+(\w+))?", t)
     if m:
         day = int(m.group(1))
@@ -4913,7 +4976,7 @@ def _detect_task_period(text: str) -> str:
                         break
             try:
                 date_str = f"{year}-{month:02d}-{day:02d}"
-                datetime.strptime(date_str, "%Y-%m-%d")  # validate
+                datetime.strptime(date_str, "%Y-%m-%d")
                 return f"date:{date_str}"
             except ValueError:
                 pass
@@ -9983,66 +10046,108 @@ async def free_conversation(message: Message, state: FSMContext):
                             if action_period and action_period != "all":
                                 period = action_period
                             if action_label:
-                                # Filter by group label
+                                # P-104: filter by label, optionally combined with period
                                 uid_tasks = store_get_tasks(user_id)
-                                filtered = [t for t in uid_tasks
-                                            if t.get("status") != "completed"
-                                            and action_label.lower() in (t.get("label_name") or "").lower()]
-                                if not filtered:
-                                    # Try fuzzy group match
+                                candidates = [t for t in uid_tasks
+                                              if t.get("status") != "completed"
+                                              and action_label.lower() in (t.get("label_name") or "").lower()]
+                                if not candidates:
                                     groups_data = store_get_groups(user_id).get("groups", [])
                                     matched_g = next((g["name"] for g in groups_data
                                                       if action_label.lower() in g.get("name","").lower()), None)
                                     if matched_g:
-                                        filtered = [t for t in uid_tasks
-                                                    if t.get("status") != "completed"
-                                                    and (t.get("label_name") or "") == matched_g]
+                                        candidates = [t for t in uid_tasks
+                                                      if t.get("status") != "completed"
+                                                      and (t.get("label_name") or "") == matched_g]
+                                if candidates and period and period != "all":
+                                    filtered = _filter_tasks_by_period(candidates, period)
+                                else:
+                                    filtered = candidates
                                 if filtered:
                                     label_display = filtered[0].get("label_name") or action_label
-                                    lines = [f"<b>🗂 {label_display}:</b>"]
-                                    for t in _sort_by_deadline(filtered):
+                                    _p104_labels = {
+                                        "today": "сегодня", "tomorrow": "завтра",
+                                        "week": "эта неделя", "next_week": "след. неделя",
+                                        "month": "этот месяц", "next_month": "след. месяц",
+                                        "overdue": "просроченные", "hot": "горящие",
+                                    }
+                                    _p104_per = _p104_labels.get(period, "")
+                                    if not _p104_per and period and period.startswith("range:"):
+                                        _rp2 = period[6:].split(":")
+                                        _p104_per = f"{_rp2[0]}—{_rp2[1]}" if len(_rp2) == 2 else ""
+                                    _hdr = f"🗂 {label_display}" + (f" · {_p104_per}" if _p104_per else "")
+                                    from datetime import datetime as _dt105
+                                    _today105 = _dt105.now().strftime("%Y-%m-%d")
+                                    _ov105 = [t for t in filtered if t.get("deadline") and t["deadline"] < _today105]
+                                    _act105 = [t for t in filtered if t not in _ov105]
+                                    lines = [f"<b>{_hdr}:</b>"]
+                                    if _ov105:
+                                        lines.append("  <b>⚠️ Просроченные</b>")
+                                        for t in _sort_by_deadline(_ov105):
+                                            dl = f" · {t['deadline']}" if t.get("deadline") else ""
+                                            lines.append(f"  • {t['title']}{dl}")
+                                    for t in _sort_by_deadline(_act105):
                                         dl  = f" · {t['deadline']}" if t.get("deadline") else ""
                                         ind = _deadline_indicator(t.get("deadline", ""))
                                         lines.append(f"  • {ind}{t['title']}{dl}")
                                     reply_text = "\n".join(lines)
-                                    # P-99: SR live comment on grouped tasks view
                                     asyncio.create_task(_sr_progress_reaction_send(
                                         message, user_id,
-                                        f"[Системное событие] Садовник посмотрел задачи группы «{label_display}» ({len(filtered)} задач)"
+                                        f"[Системное событие] Садовник посмотрел задачи группы «{label_display}» ({len(filtered)} шт.)"
                                     ))
                                 else:
-                                    reply_text = f"🌀 Задач в группе «{action_label}» не нашла."
+                                    reply_text = f"🌀 Задач не нашла."
                             elif period == "all" or not period:
-                                # Show ALL tasks as flat list
                                 await _show_tasks_unified(user_id, message, "all", sr_react=True)
                             else:
-                                # Filtered view — text list, not menu
                                 uid_tasks = store_get_tasks(user_id)
                                 filtered  = _filter_tasks_by_period(uid_tasks, period)
                                 period_ru = {
-                                    "today":    "📅 Сегодня",
-                                    "tomorrow": "📅 Завтра",
-                                    "day_after":"📅 Послезавтра",
-                                    "week":     "📅 На неделе",
-                                    "month":    "📅 В этом месяце",
-                                    "overdue":  "⚠️ Просроченные",
+                                    "today":      "📅 Сегодня",
+                                    "tomorrow":   "📅 Завтра",
+                                    "day_after":  "📅 Послезавтра",
+                                    "week":       "📅 Эта неделя",
+                                    "next_week":  "📅 Следующая неделя",
+                                    "month":      "📅 Этот месяц",
+                                    "next_month": "📅 Следующий месяц",
+                                    "overdue":    "⚠️ Просроченные",
+                                    "hot":        "🔥 Горящие (3 дня)",
                                 }.get(period, "🌀 Задачи")
                                 if period.startswith("date:"):
                                     period_ru = f"📅 {period[5:]}"
+                                elif period.startswith("range:"):
+                                    _rp = period[6:].split(":")
+                                    period_ru = f"📅 {_rp[0]} — {_rp[1]}" if len(_rp) == 2 else "📅 Период"
                                 if not filtered:
                                     reply_text = f"{period_ru}: задач нет 🌱"
                                 else:
+                                    from datetime import datetime as _dt105b
+                                    _today105b = _dt105b.now().strftime("%Y-%m-%d")
                                     lines = [f"<b>{period_ru}:</b>"]
-                                    for t in _sort_by_deadline(filtered):
-                                        dl  = f" · {t['deadline']}" if t.get("deadline") else ""
-                                        grp = f" #{t['label_name']}" if t.get("label_name") else ""
-                                        ind = _deadline_indicator(t.get("deadline",""))
-                                        lines.append(f"  • {ind}{t['title']}{grp}{dl}")
+                                    if period not in ("overdue", "hot"):
+                                        _ov105b = [t for t in filtered if t.get("deadline") and t["deadline"] < _today105b]
+                                        _act105b = [t for t in filtered if t not in _ov105b]
+                                        if _ov105b:
+                                            lines.append("  <b>⚠️ Просроченные</b>")
+                                            for t in _sort_by_deadline(_ov105b):
+                                                dl = f" · {t['deadline']}" if t.get("deadline") else ""
+                                                grp = f" #{t['label_name']}" if t.get("label_name") else ""
+                                                lines.append(f"  • {t['title']}{grp}{dl}")
+                                        for t in _sort_by_deadline(_act105b):
+                                            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+                                            grp = f" #{t['label_name']}" if t.get("label_name") else ""
+                                            ind = _deadline_indicator(t.get("deadline",""))
+                                            lines.append(f"  • {ind}{t['title']}{grp}{dl}")
+                                    else:
+                                        for t in _sort_by_deadline(filtered):
+                                            dl  = f" · {t['deadline']}" if t.get("deadline") else ""
+                                            grp = f" #{t['label_name']}" if t.get("label_name") else ""
+                                            ind = _deadline_indicator(t.get("deadline",""))
+                                            lines.append(f"  • {ind}{t['title']}{grp}{dl}")
                                     reply_text = "\n".join(lines)
-                                    # P-99: SR live comment on period tasks view
                                     asyncio.create_task(_sr_progress_reaction_send(
                                         message, user_id,
-                                        f"[Системное событие] Садовник посмотрел задачи ({period_ru.strip()}) — {len(filtered)} задач"
+                                        f"[Системное событие] Садовник посмотрел задачи ({period_ru.strip()}) — {len(filtered)} шт."
                                     ))
                             reply_text = reply_text if (period != "all" or action_label) else ""
                         elif intent == "show_profile":
