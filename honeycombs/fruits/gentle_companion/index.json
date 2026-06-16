@@ -120,7 +120,8 @@
         "_classify_sphere(), _auto_merkaba()",
         "get_task_edit_inline(): reminder button 🔔 with callback task_rem_open|{task_id} (P-95-02)",
         "Profile card: 🔗 emoji on tasks with linked reminder (P-95-05/06)",
-        "get_reminder_keyboard(): \"В день задачи\" uses rem_deadline|DATE callback (P-95-06)"
+        "get_reminder_keyboard(): \"В день задачи\" uses rem_deadline|DATE callback (P-95-06)",
+        "_show_tasks_unified(sr_react) — P-99/P-101: smart group count summary to SR"
       ],
       "last_updated": "2026-06-06"
     },
@@ -144,7 +145,12 @@
         "cb_ttask_rem_clear() — clears linked reminder from task AND reminders (P-95)",
         "P-95: 1 reminder per task max, delete task → delete reminder, delete reminder → clear task",
         "cb_ttask_rem_clear() — clears linked reminder, StateFilter(TaskEditStates.editing_reminder) (P-95)",
-        "_sr_progress_reaction_send() — fires SR reaction after task completion (P-97)"
+        "_sr_progress_reaction_send() — fires SR reaction after task completion (P-97)",
+        "_sr_progress_reaction_send() — P-98: SR reaction on task creation (button + chat)",
+        "_show_tasks_unified(sr_react) — P-99/P-101: smart summary to SR, must_reply=True",
+        "_format_tasks_labels() — P-100/P-102: blank lines between groups + overdue block first",
+        "_filter_tasks_by_period() — P-103: hot, next_week, next_month, range:YYYY-MM-DD:YYYY-MM-DD",
+        "_detect_task_period() — P-103: detects new period types from text"
       ],
       "last_updated": "2026-06-06"
     },
@@ -162,7 +168,10 @@
         "Achievements: cmd_achievements, cb_add_achievement",
         "_create_reminder_atomic(), _create_checklist_atomic() — atomic creation from voice/text (restored 2026-05-28)",
         "cb_rem_delete: if reminder has task_id — clears task['reminder'] (P-95-08)",
-        "_sr_progress_reaction_send() — fires SR reaction after checklist/achievement (P-97)"
+        "_sr_progress_reaction_send() — fires SR reaction after checklist/achievement (P-97)",
+        "_sr_progress_reaction_send() — P-98: SR reaction on checklist/achievement creation",
+        "cb_profile_back() — fix: clears FSM state on back to profile (2026-06-16)",
+        "_sr_progress_reaction_send(must_reply=False) — P-101: must_reply parameter"
       ],
       "last_updated": "2026-06-06"
     },
@@ -182,7 +191,8 @@
         "DATE AND TIME (absolute priority) — rule in SR_CORE_PROMPT: SR checks [Current time] first, never confuses today/tomorrow (P-83, 2026-05-28)",
         "SR_INTENT_LIGHT: multi-query examples added for comparative search (action.queries[] instead of action.query) (P-87, 2026-05-29)",
         "WELCOME TOUR block added: SR guides new gardeners through features step by step with offer to try each one (P-88, 2026-05-29)",
-        "add_task intent: reminder field examples — atomic task+reminder creation (P-95-11)"
+        "add_task intent: reminder field examples — atomic task+reminder creation (P-95-11)",
+        "SR_INTENT_LIGHT: P-103/P-104 new period examples + label+period combined"
       ],
       "last_updated": "2026-06-06"
     },
@@ -205,7 +215,10 @@
         "_build_sr_context()",
         "_call_openrouter()",
         "fresh/mentioned/confirmed groups shown in [Интересы садовника] and [Культурный опыт] context blocks (P-84/P-85, 2026-05-29)",
-        "_sr_progress_reaction(user_id, event_text) — calls SR with full context, parses JSON, returns clean text (P-97)"
+        "_sr_progress_reaction(user_id, event_text) — calls SR with full context, parses JSON, returns clean text (P-97)",
+        "_sr_progress_reaction(must_reply=False) — P-101: forced reply mode",
+        "_sr_progress_reaction_send(must_reply=False) — P-101",
+        "_build_sphere_stats() — fixed: now always returns str (was returning None)"
       ],
       "last_updated": "2026-05-29"
     },
@@ -282,7 +295,11 @@
         "create_reminder: auto-links to task by title match (P-95-07); blocks duplicate if task has reminder (P-95-10)",
         "delete_reminder: clears task['reminder'] if set (P-95-09)",
         "delete_task: deletes linked reminders from ws['reminders'] (P-95-09)",
-        "add_task: passes reminder field → auto-linked reminder created (P-95-11)"
+        "add_task: passes reminder field → auto-linked reminder created (P-95-11)",
+        "show_tasks: P-103 new periods in period_ru map (hot, next_week, next_month, range)",
+        "show_tasks: P-104 label+period combined filter",
+        "show_tasks: P-105 overdue from all tasks always first, even when period empty",
+        "add_achievement intent: P-98 — SR reaction on achievement creation via chat"
       ],
       "last_updated": "2026-06-06"
     },
@@ -503,7 +520,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-06-09",
+  "last_updated": "2026-06-16",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",

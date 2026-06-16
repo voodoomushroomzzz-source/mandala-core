@@ -5,7 +5,7 @@
   "priority": "highest",
   "deadline": "2026-07-01",
   "created": "2026-04-01",
-  "updated": "2026-06-09",
+  "updated": "2026-06-16",
   "progress": 99,
   "current_version": "7.39.76+",
   "note_version": "Реальная версия с патчами ~7.39.75+",
@@ -555,6 +555,86 @@
       "name": "SR progress reaction",
       "date": "2026-06-09",
       "details": "SR reacts to: task done, checklist completed, achievement added. _sr_progress_reaction() in sr_context.py — calls SR with full context, parses JSON response."
+    },
+    "P-98": {
+      "name": "SR reacts to task/checklist/achievement creation",
+      "date": "2026-06-12",
+      "modules": [
+        "05_handlers_tasks",
+        "06_handlers_features",
+        "sr_conversation"
+      ],
+      "details": "SR fires live reaction after: task created (button + chat), checklist created (FSM + chat), achievement created (button + chat). Chat path for achievement was missing — added to add_achievement intent."
+    },
+    "P-99": {
+      "name": "SR live comment after show_tasks (all groups view)",
+      "date": "2026-06-12",
+      "modules": [
+        "ui",
+        "sr_conversation"
+      ],
+      "details": "After _show_tasks_unified() with sr_react=True, SR receives smart group count summary (not HTML list) and gives live analysis. must_reply=True forces SR to always respond."
+    },
+    "P-100": {
+      "name": "Blank line between task groups",
+      "date": "2026-06-16",
+      "modules": [
+        "05_handlers_tasks"
+      ],
+      "details": "_format_tasks_labels() now adds empty line between each group header for readability."
+    },
+    "P-101": {
+      "name": "SR smart summary for show_tasks — no HTML duplication",
+      "date": "2026-06-16",
+      "modules": [
+        "ui",
+        "sr_context",
+        "05_handlers_tasks",
+        "06_handlers_features"
+      ],
+      "details": "SR receives group count summary instead of HTML task list. must_reply param added. _build_sphere_stats() fixed: missing return statement caused TypeError."
+    },
+    "P-102": {
+      "name": "Overdue block always first in group view",
+      "date": "2026-06-16",
+      "modules": [
+        "05_handlers_tasks"
+      ],
+      "details": "_format_tasks_labels() extracts all overdue tasks into ⚠️ Просроченные block at top. Overdue tasks removed from their own groups."
+    },
+    "P-103": {
+      "name": "New task filter periods",
+      "date": "2026-06-16",
+      "modules": [
+        "05_handlers_tasks",
+        "sr_prompts",
+        "sr_conversation",
+        "ui"
+      ],
+      "details": "New periods: hot (overdue+today+3days), next_week, next_month, range:YYYY-MM-DD:YYYY-MM-DD."
+    },
+    "P-104": {
+      "name": "Label + period combined filter",
+      "date": "2026-06-16",
+      "modules": [
+        "sr_conversation",
+        "sr_prompts"
+      ],
+      "details": "show_tasks now supports simultaneous label + period filtering. SR_INTENT_LIGHT updated with combined examples."
+    },
+    "P-105": {
+      "name": "Overdue always first in any period view",
+      "date": "2026-06-16",
+      "modules": [
+        "sr_conversation"
+      ],
+      "details": "In any period view, overdue tasks from ALL tasks shown first regardless of requested period. Early return only when both filtered AND overdue are empty."
+    },
+    "fix-profile-back": {
+      "name": "cb_profile_back clears FSM state",
+      "date": "2026-06-16",
+      "module": "06_handlers_features",
+      "details": "cb_profile_back() now calls state.clear(). Fixes ghost creation on next input after ← Назад."
     }
   },
   "known_bugs": {},
