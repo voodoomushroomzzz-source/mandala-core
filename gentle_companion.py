@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-06-16 11:16:34 ──
+# ── BUILT by build.py ── 2026-06-16 11:44:42 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1449,9 +1449,16 @@ async def _show_tasks_unified(user_id: str, message: Message, period: str = "lab
     await message.answer(header + "\n\n" + body)
     # P-99: SR live comment on grouped tasks view (chat-only, opt-in)
     if sr_react:
+        _groups_summary = {}
+        for _t99 in active:
+            _g99 = _t99.get("label_name") or "Без группы"
+            _groups_summary[_g99] = _groups_summary.get(_g99, 0) + 1
+        _summary_str = ", ".join(f"{g}: {c}" for g, c in _groups_summary.items())
         asyncio.create_task(_sr_progress_reaction_send(
             message, user_id,
-            "[Системное событие] Садовник попросил видеть все задачи по группам"
+            f"[Системное событие] Садовник открыл список всех задач ({len(active)} шт.): {_summary_str}. "
+            "Не перечисляй задачи — садовник уже видит список. "
+            "Скажи что-то живое: наблюдение, анализ распределения, поддержку."
         ))
 
 
@@ -4938,9 +4945,22 @@ def _sort_by_deadline(tasks: list) -> list:
 
 
 def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
-    """Format active tasks grouped by group in workspace order, with unique emojis."""
+    """Format active tasks grouped by group in workspace order, with unique emojis.
+    P-102: overdue tasks always shown first in a separate block, removed from their groups."""
+    from datetime import datetime as _dt_fmt
+    try:
+        from zoneinfo import ZoneInfo as _ZI_fmt
+        _today_fmt = _dt_fmt.now(_ZI_fmt("Europe/Moscow")).strftime("%Y-%m-%d")
+    except Exception:
+        _today_fmt = _dt_fmt.now().strftime("%Y-%m-%d")
+
+    # Split overdue vs active
+    overdue = [t for t in tasks if t.get("deadline") and t["deadline"] < _today_fmt]
+    overdue_ids = {id(t) for t in overdue}
+    active_tasks = [t for t in tasks if id(t) not in overdue_ids]
+
     by_group: dict = {}
-    for t in tasks:
+    for t in active_tasks:
         key = t.get("label_name") or ""
         by_group.setdefault(key, []).append(t)
     groups_data = store_get_groups(user_id).get("groups", []) if user_id else []
@@ -4951,6 +4971,14 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
                 return emoji_map.get(g["id"], "🌱")
         return _group_emoji(gname) or "🌱"
     parts = []
+
+    # P-102: overdue block first
+    if overdue:
+        parts.append("<b>⚠️ Просроченные</b>")
+        for t in _sort_by_deadline(overdue):
+            dl  = " · " + t["deadline"] if t.get("deadline") else ""
+            parts.append(f"  • {t['title']}{dl}")
+
     shown = set()
     # Iterate in stored groups order
     for g in groups_data:
@@ -4960,6 +4988,9 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
             continue
         shown.add(gname)
         emoji = emoji_map.get(g["id"], "🌱")
+        # P-100: blank line before each group
+        if parts:
+            parts.append("")
         parts.append(f"<b>{emoji} {gname}</b>")
         for t in _sort_by_deadline(items)[:10]:
             dl  = " · " + t["deadline"] if t.get("deadline") else ""
@@ -4970,6 +5001,8 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
         if not gname or gname in shown:
             continue
         emoji = get_emoji(gname)
+        if parts:
+            parts.append("")
         parts.append(f"<b>{emoji} {gname}</b>")
         for t in _sort_by_deadline(items)[:10]:
             dl  = " · " + t["deadline"] if t.get("deadline") else ""
@@ -4977,6 +5010,8 @@ def _format_tasks_labels(tasks: list, user_id: str = "") -> str:
             parts.append(f"  • {ind}{t['title']}{dl}")
     no_group = by_group.get("", [])
     if no_group:
+        if parts:
+            parts.append("")
         parts.append("<b>🌱 Без группы</b>")
         for t in _sort_by_deadline(no_group)[:5]:
             dl  = " · " + t["deadline"] if t.get("deadline") else ""
