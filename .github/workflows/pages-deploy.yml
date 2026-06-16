@@ -4,11 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'docs/**'
-      - '**.md'
-      - 'honeycombs/**/index.json'
-      - '!engineer-chat/index.json'
-      - '!honeycombs/registry/**'
+      - 'index.html'
+      - 'engineer-chat/main.py'
     branches:
       - main
 
