@@ -2954,14 +2954,14 @@
                     item.dataset.idx = i;
                     const fc = d.files.length;
                     const sub = fc + ' файл' + (fc === 1 ? '' : fc < 5 ? 'а' : 'ов') + (d.status ? ' · ' + d.status : '');
-                    item.innerHTML = \`
-                        <div class="hive-list-dot" style="background:\${col};color:\${col};"></div>
+                    item.innerHTML = `
+                        <div class="hive-list-dot" style="background:${col};color:${col};"></div>
                         <div class="hive-list-info">
-                            <div class="hive-list-name">\${d.name.replace(/_/g,' ')}</div>
-                            <div class="hive-list-sub">\${sub}</div>
+                            <div class="hive-list-name">${d.name.replace(/_/g,' ')}</div>
+                            <div class="hive-list-sub">${sub}</div>
                         </div>
-                        <div class="hive-list-pct" style="color:\${col};">\${pct}%</div>
-                    \`;
+                        <div class="hive-list-pct" style="color:${col};">${pct}%</div>
+                    `;
                     item.addEventListener('mouseenter', () => { _hiveHovered = i; hiveListHighlight(i); });
                     item.addEventListener('mouseleave', () => { _hiveHovered = -1; hiveListHighlight(-1); });
                     item.addEventListener('click', () => showHiveCard(i));
