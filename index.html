@@ -3096,7 +3096,7 @@
         // ── 3D Созвездие ──
         function loadHoneycombs() {
             const _apiBase = window.location.hostname === '91.99.149.226' || window.location.hostname.includes('91-99-149-226') ? '' : 'https://engineer.91-99-149-226.nip.io';
-            fetch(_apiBase + '/api/tree').then(r => r.json()).then(tree => {
+            fetch(_apiBase + '/api/honeycombs').then(r => r.json()).then(tree => {
                 _hiveData = (tree.honeycombs || []).map(h => ({
                     name: h.name || h.id || '',
                     path: h.path || '',
