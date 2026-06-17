@@ -1310,7 +1310,8 @@
             border-top: 1px solid #0f2518;
         }
         #globePanel {
-            flex: 1;
+            flex: 0 0 auto;
+            aspect-ratio: 1 / 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -1318,8 +1319,8 @@
             border-right: 1px solid #0f2518;
         }
         #dashPanel {
-            width: 420px;
-            flex-shrink: 0;
+            flex: 1;
+            min-width: 0;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -1329,17 +1330,35 @@
             font-family: var(--mono);
             font-size: 7px;
             letter-spacing: 2px;
-            color: #254535;
+            color: #4a9a6a;
             padding: 7px 12px;
             border-bottom: 1px solid #0f2518;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         #dashContent {
             flex: 1;
+            overflow-y: auto;
+            padding: 10px 12px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
         }
+        #dashContent::-webkit-scrollbar { width: 3px; }
+        #dashContent::-webkit-scrollbar-thumb { background: #0f2518; }
+        .dash-stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
+        .dash-stat { background: rgba(16,185,129,.06); border: 0.5px solid #0f2518; border-radius: 4px; padding: 6px 8px; }
+        .dash-stat-v { font-family: var(--mono); font-size: 16px; color: #6ee7b7; }
+        .dash-stat-l { font-family: var(--mono); font-size: 7px; color: #4a9a6a; letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
+        .dash-scan-row { display: flex; align-items: center; gap: 8px; background: rgba(15,37,24,.4); border: 0.5px solid #0f2518; border-radius: 4px; padding: 6px 8px; }
+        .dash-scan-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .dash-scan-txt { font-family: var(--mono); font-size: 8px; color: #4a9a6a; flex: 1; }
+        .dash-scan-val { font-family: var(--mono); font-size: 8px; color: #6ee7b7; }
+        .dash-btn-scan { font-family: var(--mono); font-size: 8px; letter-spacing: 1px; color: #c4b5fd; border: 0.5px solid rgba(124,58,237,.5); background: rgba(124,58,237,.08); border-radius: 4px; padding: 3px 10px; cursor: pointer; text-transform: uppercase; transition: all .15s; }
+        .dash-btn-scan:hover { border-color: #a78bfa; color: #a78bfa; background: rgba(124,58,237,.15); }
+        .dash-btn-scan:disabled { opacity: .4; cursor: default; }
         #globeTitle {
             position: absolute;
             top: 8px; left: 12px;
@@ -1693,8 +1712,8 @@
                                 <div id="globeTooltip"></div>
                             </div>
                             <div id="dashPanel">
-                                <div id="dashTitle">◈ пульс / сканер</div>
-                                <div id="dashContent"></div>
+                                <div id="dashTitle">◈ пульс / сканер<button class="dash-btn-scan" id="dashScanBtn" onclick="triggerScan()">▶ сканировать</button></div>
+                                <div id="dashContent"><div style="font-family:var(--mono);font-size:8px;color:#254535;text-align:center;margin:auto">◈ загрузка...</div></div>
                             </div>
                         </div>
                     </div>
@@ -3272,6 +3291,60 @@
             _globeRAF=requestAnimationFrame(drawGlobe);
         }
 
+        // ── ДАШБОРД ──
+        async function loadScannerDash() {
+            const content = document.getElementById('dashContent');
+            if (!content) return;
+            const base = window.location.hostname.includes('91-99-149-226') || window.location.hostname === '91.99.149.226' ? '' : 'https://engineer.91-99-149-226.nip.io';
+            try {
+                const [hRes, sRes] = await Promise.all([
+                    fetch(base + '/api/honeycombs').then(r => r.json()),
+                    fetch(base + '/api/scan/status').then(r => r.json()),
+                ]);
+                const hives = hRes.honeycombs || [];
+                const total = hives.length;
+                const active = hives.filter(h => h.status === 'active').length;
+                const full = hives.filter(h => h.resonance >= 1.0).length;
+                const warn = hives.filter(h => h.resonance < 1.0).length;
+                const scanStatus = sRes.conclusion || sRes.status || '—';
+                const scanTime = sRes.updated_at ? sRes.updated_at.replace('T',' ').slice(0,16) : '—';
+                const scanOk = sRes.conclusion === 'success';
+                content.innerHTML = `
+                    <div class="dash-stat-row">
+                        <div class="dash-stat"><div class="dash-stat-v">${total}</div><div class="dash-stat-l">всего сот</div></div>
+                        <div class="dash-stat"><div class="dash-stat-v">${active}</div><div class="dash-stat-l">активных</div></div>
+                        <div class="dash-stat"><div class="dash-stat-v">${full}</div><div class="dash-stat-l">резонанс 100%</div></div>
+                        <div class="dash-stat"><div class="dash-stat-v" style="color:${warn>0?'#E24B4A':'#6ee7b7'}">${warn}</div><div class="dash-stat-l">внимание</div></div>
+                    </div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#1D9E75"></div><div class="dash-scan-txt">honeycomb scanner</div><div class="dash-scan-val">последний: ${scanTime}</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#378ADD"></div><div class="dash-scan-txt">scanned</div><div class="dash-scan-val">${total} honeycombs</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${warn>0?'#E24B4A':'#1D9E75'}"></div><div class="dash-scan-txt">errors</div><div class="dash-scan-val">${warn} honeycombs</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${scanOk?'#1D9E75':'#EF9F27'}"></div><div class="dash-scan-txt">status</div><div class="dash-scan-val">${scanStatus}</div></div>
+                `;
+            } catch(e) {
+                content.innerHTML = '<div style="font-family:var(--mono);font-size:8px;color:#E24B4A;padding:8px">⚠ нет связи</div>';
+            }
+        }
+
+        async function triggerScan() {
+            const btn = document.getElementById('dashScanBtn');
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ запуск...'; }
+            const base = window.location.hostname.includes('91-99-149-226') || window.location.hostname === '91.99.149.226' ? '' : 'https://engineer.91-99-149-226.nip.io';
+            try {
+                const r = await fetch(base + '/api/scan', { method: 'POST' });
+                const d = await r.json();
+                if (d.ok) {
+                    if (btn) btn.textContent = '✓ запущено';
+                    setTimeout(() => { if(btn){btn.disabled=false;btn.textContent='▶ сканировать';} loadScannerDash(); }, 30000);
+                } else {
+                    if (btn) { btn.disabled=false; btn.textContent='✕ ошибка'; }
+                    setTimeout(() => { if(btn){btn.textContent='▶ сканировать';} }, 3000);
+                }
+            } catch(e) {
+                if (btn) { btn.disabled=false; btn.textContent='▶ сканировать'; }
+            }
+        }
+
         // ==================== ПУЛЬС ====================
 
         function resonanceColorForPulse(r) { return resonanceColor(r, 1); }
@@ -3548,7 +3621,7 @@
                     tab.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
-                    if (tabName === 'map')   loadMap();
+                    if (tabName === 'map')   { loadMap(); loadScannerDash(); }
                     if (tabName === 'pulse') { if (!_hiveData.length) loadMap(); loadScannerDash(); }
                 });
             });
