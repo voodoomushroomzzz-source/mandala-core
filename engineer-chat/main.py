@@ -1811,9 +1811,11 @@ async def get_honeycombs():
                     honeycombs.append({
                         "name": name,
                         "path": f"honeycombs/{name}",
-                        "resonance": content.get("resonance", 1.0),
-                        "files": [f.get("name", f) if isinstance(f, dict) else f
-                                  for f in content.get("files", [])],
+                        "resonance": (content.get("resonance", 1.0)
+                                       if isinstance(content.get("resonance"), (int, float))
+                                       else 1.0),
+                        "files": [f.get("name", f) if isinstance(f, dict) else str(f)
+                                  for f in (content.get("files") or content.get("file_list") or [])],
                         "version": content.get("version", ""),
                         "layer": content.get("layer"),
                         "status": content.get("status", "active"),
