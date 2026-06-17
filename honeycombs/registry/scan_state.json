@@ -1,7 +1,7 @@
 ﻿{
-  "last_scan": "2026-06-16T21:26:18.385382",
+  "last_scan": "2026-06-17T10:29:05.786014",
   "honeycomb_hashes": {
-    "core_map": "da01ae3ab712c5440e0d5d3f15190183",
+    "core_map": "8dbae289db27f48eb814eef6e15a0ce4",
     "core_map/registry/backups/2026-04-08_01-38-52_protocols_cleanup": "d30b6502f97f9756f025f537c6f274c5",
     "core_map/registry/backups/2026-04-08_00-39-25_roadmaps_final": "ac5a8b6d43e69b4426397bc86f9809b5",
     "core_map/registry/backups/2026-04-08_00-11-57_phase1.5_final": "eb7d2a64070d5e84cad2fddefac65021",
@@ -39,7 +39,7 @@
     "boot_online": "07fc8f87ab1abfc5071c44e2f6e50850",
     "sessions": "676e443ea43942ae919837475f6c9bbd",
     "seeds": "d3d42c2f0062c566d965a499b0acffd0",
-    "fruits": "1a5549f2c4719fc197dfb8a16d8e8c02",
+    "fruits": "de0ed5e9388aa4465129b9464458f35c",
     "fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456",
     "awareness": "28082dae1444ddf3524dd17aff70c583",
     "tasks": "0740923e390caa2db3bac836b1d266d4"
@@ -51,7 +51,7 @@
     "errors": 0,
     "warnings": 0,
     "total_files": 226,
-    "total_size_kb": 1538.5399999999997
+    "total_size_kb": 1538.9099999999996
   },
   "scanner_config": {
     "updated": "2026-04-09",
