@@ -1774,6 +1774,69 @@ async def get_file_tree():
         except Exception as e:
             return {"error": str(e)}
 
+@app.get("/api/honeycombs")
+async def get_honeycombs():
+    """Return list of honeycombs with metadata from their index.json files."""
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
+    headers["Accept"] = "application/vnd.github.v3+json"
+    import base64, json as _json
+
+    # 1. Get list of dirs in honeycombs/
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.get(
+                f"https://api.github.com/repos/{GITHUB_REPO}/contents/honeycombs",
+                headers=headers, timeout=15.0
+            )
+            if resp.status_code != 200:
+                return {"honeycombs": [], "error": f"GitHub {resp.status_code}"}
+            entries = resp.json()
+        except Exception as e:
+            return {"honeycombs": [], "error": str(e)}
+
+        honeycombs = []
+        for entry in entries:
+            if entry.get("type") != "dir":
+                continue
+            name = entry["name"]
+            path_idx = f"honeycombs/{name}/index.json"
+            try:
+                r2 = await client.get(
+                    f"https://api.github.com/repos/{GITHUB_REPO}/contents/{path_idx}",
+                    headers=headers, timeout=10.0
+                )
+                if r2.status_code == 200:
+                    data = r2.json()
+                    content = _json.loads(base64.b64decode(data["content"]).decode("utf-8"))
+                    honeycombs.append({
+                        "name": name,
+                        "path": f"honeycombs/{name}",
+                        "resonance": content.get("resonance", 1.0),
+                        "files": [f.get("name", f) if isinstance(f, dict) else f
+                                  for f in content.get("files", [])],
+                        "version": content.get("version", ""),
+                        "layer": content.get("layer"),
+                        "status": content.get("status", "active"),
+                        "last_check": content.get("last_updated", content.get("last_check", "")),
+                        "index_path": path_idx,
+                    })
+                else:
+                    honeycombs.append({
+                        "name": name,
+                        "path": f"honeycombs/{name}",
+                        "resonance": 0.0,
+                        "files": [],
+                        "version": "",
+                        "layer": None,
+                        "status": "empty",
+                        "last_check": "",
+                        "index_path": path_idx,
+                    })
+            except Exception:
+                pass
+
+        return {"honeycombs": honeycombs}
+
 # ========== RESONANCE CALCULATOR ==========
 
 class ResonanceCalculator:
