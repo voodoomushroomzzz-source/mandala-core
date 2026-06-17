@@ -2779,13 +2779,13 @@
             const scroll = document.getElementById('hiveListScroll');
             if (!scroll) return;
             scroll.querySelectorAll('.hive-list-item').forEach((el) => {
-                el.classList.toggle('hovered', parseInt(el.dataset.idx) === idx);
-                if (i === idx) {
-                    // Скроллим к элементу если не виден
-                    const elTop    = el.offsetTop;
-                    const elBot    = elTop + el.offsetHeight;
-                    const scrTop   = scroll.scrollTop;
-                    const scrBot   = scrTop + scroll.offsetHeight;
+                const elIdx = parseInt(el.dataset.idx);
+                el.classList.toggle('hovered', elIdx === idx);
+                if (elIdx === idx) {
+                    const elTop  = el.offsetTop;
+                    const elBot  = elTop + el.offsetHeight;
+                    const scrTop = scroll.scrollTop;
+                    const scrBot = scrTop + scroll.offsetHeight;
                     if (elTop < scrTop || elBot > scrBot) {
                         el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                     }
@@ -2994,7 +2994,8 @@
             };
             canvas.onmousemove = e => {
                 const rect=canvas.getBoundingClientRect();
-                const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+                const scaleX=canvas.width/rect.width, scaleY=canvas.height/rect.height;
+                const mx=(e.clientX-rect.left)*scaleX, my=(e.clientY-rect.top)*scaleY;
                 let found=null, minD=28;
                 _globeProjected.forEach(p=>{ const d=Math.hypot(p.sx-mx,p.sy-my); if(d<minD){minD=d;found=p;} });
                 const tip=document.getElementById('globeTooltip');
@@ -3002,9 +3003,15 @@
                     _globeHovered=found.d.name;
                     if(tip){tip.style.display='block';tip.style.left=(found.sx+10)+'px';tip.style.top=(found.sy-18)+'px';
                     tip.textContent=found.d.name.replace(/_/g,' ')+' '+Math.round(found.d.resonance*100)+'%';}
+                    const foundName=found.d.name.replace(/_/g,' ').toLowerCase();
                     document.querySelectorAll('.hive-list-item').forEach(el=>{
                         const nm=el.querySelector('.hive-list-name');
-                        el.classList.toggle('hovered',nm&&nm.textContent.trim().toLowerCase()===found.d.name.replace(/_/g,' ').toLowerCase());
+                        const match=nm&&nm.textContent.trim().toLowerCase()===foundName;
+                        el.classList.toggle('hovered',match);
+                        if(match){
+                            const scroll=document.getElementById('hiveListScroll');
+                            if(scroll){const t=el.offsetTop,b=t+el.offsetHeight,st=scroll.scrollTop,sb=st+scroll.offsetHeight;if(t<st||b>sb)el.scrollIntoView({block:'nearest',behavior:'smooth'});}
+                        }
                     });
                 } else {
                     _globeHovered=null;
@@ -3098,7 +3105,7 @@
             [..._globeProjected].sort((a,b)=>a.rz-b.rz).forEach(p=>{
                 const cat=hiveCategoryOf(p.d.name);
                 const col=p.d.resonance>0?(_CAT_COLOR[cat]||'#888'):'#E24B4A';
-                const isH=p.d.name===_globeHovered;
+                const isH=_globeHovered&&p.d.name===_globeHovered;
                 const sz=(2.5+p.s*4)*(isH?1.6:1);
                 _drawOctahedron(ctx,p.sx,p.sy,sz,col,isH);
                 if(isH||p.s>0.93){
@@ -3308,7 +3315,15 @@
                     tab.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
-                    if (tabName === 'map')   { loadMap(); loadScannerDash(); setTimeout(()=>{ const cv=document.getElementById('globeCanvas'); if(cv&&cv.offsetWidth){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;} }, 80); }
+                    if (tabName === 'map')   { loadMap(); setTimeout(()=>loadScannerDash(),200); setTimeout(()=>{
+                    const cv=document.getElementById('globeCanvas');
+                    if(cv){
+                        const panel=document.getElementById('globePanel');
+                        const w=panel?panel.offsetWidth:cv.offsetWidth;
+                        const h=panel?panel.offsetHeight:cv.offsetHeight;
+                        if(w>0){cv.width=w;cv.height=h;}
+                    }
+                }, 300); }
                 });
             });
         }
