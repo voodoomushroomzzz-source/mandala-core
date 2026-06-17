@@ -1906,6 +1906,29 @@ async def scan_status():
         except Exception as e:
             return {"status": "error", "error": str(e)}
 
+@app.get("/api/scan/results")
+async def scan_results():
+    """Read scan_state.json from registry."""
+    import base64, json as _json
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
+    headers["Accept"] = "application/vnd.github.v3+json"
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.get(
+                f"https://api.github.com/repos/{GITHUB_REPO}/contents/honeycombs/registry/scan_state.json",
+                headers=headers, timeout=10.0
+            )
+            if resp.status_code == 200:
+                content = _json.loads(base64.b64decode(resp.json()["content"]).decode("utf-8"))
+                return {
+                    "ok": True,
+                    "last_scan": content.get("last_scan", ""),
+                    "statistics": content.get("statistics", {}),
+                }
+            return {"ok": False, "error": f"GitHub {resp.status_code}"}
+        except Exception as e:
+            return {"ok": False, "error": str(e)}
+
 # ========== RESONANCE CALCULATOR ==========
 
 class ResonanceCalculator:
