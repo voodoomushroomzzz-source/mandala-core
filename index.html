@@ -1007,137 +1007,8 @@
         .msg-pin-btn.pinned { opacity: 1; color: #10b981; }
 
         /* ══ ПУЛЬС ══ */
-        #tab-pulse { overflow-y: auto; }
-        #pulseWrap {
-            padding: 14px 18px;
-            display: flex; flex-direction: column; gap: 16px;
-            min-height: 100%;
-        }
-        #pulseCounters {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-        .pulse-counter {
-            background: var(--surface-2);
-            border: 1px solid var(--line-2);
-            border-radius: 8px;
-            padding: 12px 14px;
-            display: flex; flex-direction: column; gap: 4px;
-        }
-        .pulse-counter-val {
-            font-family: var(--mono);
-            font-size: 26px;
-            font-weight: 400;
-            color: var(--green-bright);
-            line-height: 1;
-        }
-        #pcZero .pulse-counter-val { color: #f87171; }
+    
 
-        /* ══ SCANNER DASHBOARD — VARIANT B ══ */
-        #scannerDash { margin-top: 0; }
-        .scan-dash-title {
-            font-family: var(--mono); font-size: 9px; letter-spacing: 2px;
-            color: #4a9a6a; text-transform: uppercase; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-        }
-        .scan-top-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .scan-top-card {
-            background: var(--surface-2); border: 1px solid var(--line-2);
-            border-radius: 8px; padding: 12px 14px;
-        }
-        .scan-top-val {
-            font-family: var(--mono); font-size: 22px; color: var(--green-bright);
-            line-height: 1; margin-bottom: 4px;
-        }
-        .scan-top-sub {
-            font-family: var(--mono); font-size: 8px; letter-spacing: 1.5px;
-            color: #4a9a6a; text-transform: uppercase;
-        }
-        .scan-top-bar { margin-top: 10px; height: 3px; background: var(--line-2); border-radius: 2px; overflow: hidden; }
-        .scan-top-bar-fill { height: 100%; border-radius: 2px; background: #10b981; transition: width 0.8s ease; }
-        .scan-layers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .scan-layer-card {
-            background: var(--surface-2); border: 1px solid var(--line-2);
-            border-radius: 8px; padding: 10px 12px;
-        }
-        .scan-layer-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-        .scan-layer-lbl { font-family: var(--mono); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: #4a9a6a; }
-        .scan-layer-pct { font-family: var(--mono); font-size: 14px; }
-        .scan-cells { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 6px; }
-        .scan-cell {
-            width: 22px; height: 22px; border-radius: 3px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--mono); font-size: 8px;
-            position: relative; cursor: default; transition: opacity 0.15s;
-        }
-        .scan-cell:hover { opacity: 0.75; }
-        .scan-cell:hover .scan-cell-tip { display: block; }
-        .scan-cell-tip {
-            display: none; position: absolute; bottom: calc(100% + 5px); left: 50%;
-            transform: translateX(-50%); white-space: nowrap;
-            background: var(--surface); border: 1px solid var(--line-2);
-            border-radius: 4px; padding: 3px 8px;
-            font-family: var(--mono); font-size: 8px; color: var(--text); z-index: 20;
-        }
-        .scan-layer-sub { font-family: var(--mono); font-size: 8px; color: #4a9a6a; }
-        .scan-loading { font-family: var(--mono); font-size: 9px; color: #4a9a6a; letter-spacing: 1.5px; padding: 12px 0; }
-        #pulseCharts {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 12px;
-            align-items: stretch;
-        }
-        .pulse-panel {
-            background: var(--surface-2);
-            border: 1px solid var(--line-2);
-            border-radius: 8px;
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-        }
-        .pulse-panel-title {
-            font-family: var(--mono);
-            font-size: 9px;
-            letter-spacing: 2px;
-            color: #4a9a6a;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            flex-shrink: 0;
-        }
-        /* pulse counter label brighter */
-        .pulse-counter-label {
-            font-family: var(--mono);
-            font-size: 8px;
-            letter-spacing: 1px;
-            color: #4a9a6a;
-            text-transform: uppercase;
-        }
-        #pulseRadar { display: block; margin: 0 auto; }
-        #pulseTimeline {
-            display: flex; flex-direction: column; gap: 5px;
-            max-height: 280px; overflow-y: auto;
-        }
-        #pulseTimeline::-webkit-scrollbar { width: 3px; }
-        #pulseTimeline::-webkit-scrollbar-thumb { background: #0f2518; border-radius: 2px; }
-        .pulse-tl-row {
-            display: flex; align-items: center; gap: 8px;
-        }
-        .pulse-tl-dot {
-            width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-        }
-        .pulse-tl-name {
-            font-family: var(--mono); font-size: 9px; color: #a5b4fc;
-            width: 110px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .pulse-tl-bar-wrap {
-            flex: 1; height: 4px; background: #0f2518; border-radius: 2px; overflow: hidden;
-        }
-        .pulse-tl-bar { height: 100%; border-radius: 2px; }
-        .pulse-tl-date {
-            font-family: var(--mono); font-size: 8px; color: #4a9a6a;
-            width: 68px; text-align: right; flex-shrink: 0;
-        }
 
         /* Modals */
         .modal-overlay {
@@ -1638,7 +1509,6 @@
             <div class="tabs">
                 <button class="tab active" data-tab="chat">◈ чат</button>
                 <button class="tab" data-tab="map">◈ карта</button>
-                <button class="tab" data-tab="pulse">◈ пульс</button>
                 <button class="tab" onclick="forgetMemory()" style="position:absolute;right:22px;color:#E24B4A;opacity:0.8;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">◈ забыть</button>
             </div>
 
@@ -1720,51 +1590,6 @@
                 </div>
             </div>
 
-            <div class="tab-content" id="tab-pulse">
-                <div id="pulseWrap">
-                    <div id="pulseCounters">
-                        <div class="pulse-counter" id="pcTotal">
-                            <div class="pulse-counter-val" id="pcTotalVal">—</div>
-                            <div class="pulse-counter-label">всего сот</div>
-                        </div>
-                        <div class="pulse-counter" id="pcActive">
-                            <div class="pulse-counter-val" id="pcActiveVal">—</div>
-                            <div class="pulse-counter-label">активных</div>
-                        </div>
-                        <div class="pulse-counter" id="pcFull">
-                            <div class="pulse-counter-val" id="pcFullVal">—</div>
-                            <div class="pulse-counter-label">резонанс 100%</div>
-                        </div>
-                        <div class="pulse-counter" id="pcZero">
-                            <div class="pulse-counter-val" id="pcZeroVal">—</div>
-                            <div class="pulse-counter-label">требуют внимания</div>
-                        </div>
-                    </div>
-                    <div id="pulseCharts">
-                        <div class="pulse-panel">
-                            <div class="pulse-panel-title">◈ радар резонанса по слоям</div>
-                            <canvas id="pulseRadar" width="300" height="260"></canvas>
-                        </div>
-                        <div class="pulse-panel" id="scannerDash" style="overflow-y:auto;">
-                        <div class="scan-dash-title">◈ honeycomb scanner</div>
-                        <div class="scan-top-row">
-                            <div class="scan-top-card">
-                                <div class="scan-top-val" id="scanTotal">—</div>
-                                <div class="scan-top-sub" id="scanTotalSub">scanned · — files · —kb</div>
-                                <div class="scan-top-bar"><div class="scan-top-bar-fill" id="scanBar" style="width:0%"></div></div>
-                            </div>
-                            <div class="scan-top-card">
-                                <div class="scan-top-val" id="scanLastTime">—</div>
-                                <div class="scan-top-sub" id="scanMeta">last scan · — errors</div>
-                            </div>
-                        </div>
-                        <div class="scan-layers-grid" id="scanLayersGrid">
-                            <div class="scan-loading" style="grid-column:1/-1">loading...</div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>
@@ -3167,14 +2992,10 @@
                     _globeLX=e.clientX; _globeLY=e.clientY;
                 }
             };
-            canvas.onwheel = e => {
-                e.preventDefault();
-                _globeScale=Math.max(0.3,Math.min(3.0,_globeScale*(e.deltaY<0?1.1:0.91)));
-            };
             canvas.onmousemove = e => {
                 const rect=canvas.getBoundingClientRect();
                 const mx=e.clientX-rect.left, my=e.clientY-rect.top;
-                let found=null, minD=16;
+                let found=null, minD=28;
                 _globeProjected.forEach(p=>{ const d=Math.hypot(p.sx-mx,p.sy-my); if(d<minD){minD=d;found=p;} });
                 const tip=document.getElementById('globeTooltip');
                 if (found) {
@@ -3297,32 +3118,37 @@
             if (!content) return;
             const base = window.location.hostname.includes('91-99-149-226') || window.location.hostname === '91.99.149.226' ? '' : 'https://engineer.91-99-149-226.nip.io';
             try {
-                const [hRes, sRes] = await Promise.all([
+                const [hRes, sRes, rRes] = await Promise.all([
                     fetch(base + '/api/honeycombs').then(r => r.json()),
                     fetch(base + '/api/scan/status').then(r => r.json()),
+                    fetch(base + '/api/scan/results').then(r => r.json()),
                 ]);
                 const hives = hRes.honeycombs || [];
                 const total = hives.length;
                 const active = hives.filter(h => h.status === 'active').length;
                 const full = hives.filter(h => h.resonance >= 1.0).length;
                 const warn = hives.filter(h => h.resonance < 1.0).length;
-                const scanStatus = sRes.conclusion || sRes.status || '—';
-                const scanTime = sRes.updated_at ? sRes.updated_at.replace('T',' ').slice(0,16) : '—';
+                const stats = rRes.statistics || {};
+                const lastScan = (rRes.last_scan || '').replace('T', ' ').slice(0, 16);
+                const scanConclusion = sRes.conclusion || sRes.status || '—';
                 const scanOk = sRes.conclusion === 'success';
+                const totalFiles = stats.total_files || '—';
+                const totalSizeKb = stats.total_size_kb ? Math.round(stats.total_size_kb) + ' KB' : '—';
+                const errors = stats.errors || 0;
                 content.innerHTML = `
                     <div class="dash-stat-row">
                         <div class="dash-stat"><div class="dash-stat-v">${total}</div><div class="dash-stat-l">всего сот</div></div>
                         <div class="dash-stat"><div class="dash-stat-v">${active}</div><div class="dash-stat-l">активных</div></div>
                         <div class="dash-stat"><div class="dash-stat-v">${full}</div><div class="dash-stat-l">резонанс 100%</div></div>
-                        <div class="dash-stat"><div class="dash-stat-v" style="color:${warn>0?'#E24B4A':'#6ee7b7'}">${warn}</div><div class="dash-stat-l">внимание</div></div>
+                        <div class="dash-stat"><div class="dash-stat-v" style="color:${errors>0||warn>0?'#E24B4A':'#6ee7b7'}">${errors||warn}</div><div class="dash-stat-l">ошибки</div></div>
                     </div>
-                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#1D9E75"></div><div class="dash-scan-txt">honeycomb scanner</div><div class="dash-scan-val">последний: ${scanTime}</div></div>
-                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#378ADD"></div><div class="dash-scan-txt">scanned</div><div class="dash-scan-val">${total} honeycombs</div></div>
-                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${warn>0?'#E24B4A':'#1D9E75'}"></div><div class="dash-scan-txt">errors</div><div class="dash-scan-val">${warn} honeycombs</div></div>
-                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${scanOk?'#1D9E75':'#EF9F27'}"></div><div class="dash-scan-txt">status</div><div class="dash-scan-val">${scanStatus}</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#1D9E75"></div><div class="dash-scan-txt">honeycomb scanner</div><div class="dash-scan-val">последний: ${lastScan}</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#378ADD"></div><div class="dash-scan-txt">scanned</div><div class="dash-scan-val">${stats.total_scanned||total} сот · ${totalFiles} файлов · ${totalSizeKb}</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${errors>0?'#E24B4A':'#1D9E75'}"></div><div class="dash-scan-txt">errors</div><div class="dash-scan-val">${errors} ошибок</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${scanOk?'#1D9E75':'#EF9F27'}"></div><div class="dash-scan-txt">status</div><div class="dash-scan-val">${scanConclusion}</div></div>
                 `;
             } catch(e) {
-                content.innerHTML = '<div style="font-family:var(--mono);font-size:8px;color:#E24B4A;padding:8px">⚠ нет связи</div>';
+                content.innerHTML = '<div style="font-family:var(--mono);font-size:8px;color:#E24B4A;padding:8px">⚠ нет связи: ' + e.message + '</div>';
             }
         }
 
@@ -3348,145 +3174,6 @@
         // ==================== ПУЛЬС ====================
 
         function resonanceColorForPulse(r) { return resonanceColor(r, 1); }
-
-        function drawRadar(canvas, layerData) {
-            const dpr = window.devicePixelRatio || 1;
-            const W = 300, H = 260;
-            canvas.width  = W * dpr; canvas.height = H * dpr;
-            canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-            const ctx = canvas.getContext('2d');
-            ctx.scale(dpr, dpr);
-            ctx.clearRect(0, 0, W, H);
-
-            const cx = W / 2, cy = H / 2 + 10;
-            const maxR = 100;
-            const layers = Object.keys(layerData).sort();
-            const n = layers.length;
-            if (!n) return;
-
-            // Сетка
-            [0.25, 0.5, 0.75, 1.0].forEach(t => {
-                ctx.beginPath();
-                for (let i = 0; i < n; i++) {
-                    const a = (Math.PI * 2 * i / n) - Math.PI / 2;
-                    const x = cx + maxR * t * Math.cos(a);
-                    const y = cy + maxR * t * Math.sin(a);
-                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                }
-                ctx.closePath();
-                ctx.strokeStyle = 'rgba(15,37,24,0.8)';
-                ctx.lineWidth = 0.8; ctx.stroke();
-                // % метка
-                ctx.font = '7px "Fira Mono",monospace';
-                ctx.fillStyle = 'rgba(58,106,74,0.6)';
-                ctx.textAlign = 'center';
-                ctx.fillText(Math.round(t*100)+'%', cx, cy - maxR * t - 3);
-            });
-
-            // Оси
-            layers.forEach((lyr, i) => {
-                const a = (Math.PI * 2 * i / n) - Math.PI / 2;
-                ctx.beginPath();
-                ctx.moveTo(cx, cy);
-                ctx.lineTo(cx + maxR * Math.cos(a), cy + maxR * Math.sin(a));
-                ctx.strokeStyle = 'rgba(15,37,24,0.6)'; ctx.lineWidth = 0.8; ctx.stroke();
-                // label
-                const lx = cx + (maxR + 14) * Math.cos(a);
-                const ly = cy + (maxR + 14) * Math.sin(a);
-                ctx.font = '8px "Fira Mono",monospace';
-                ctx.fillStyle = 'rgba(99,102,241,0.7)';
-                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillText('L' + lyr, lx, ly);
-            });
-
-            // Данные
-            ctx.beginPath();
-            layers.forEach((lyr, i) => {
-                const val = layerData[lyr].avg;
-                const a = (Math.PI * 2 * i / n) - Math.PI / 2;
-                const x = cx + maxR * val * Math.cos(a);
-                const y = cy + maxR * val * Math.sin(a);
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(16,185,129,0.12)'; ctx.fill();
-            ctx.strokeStyle = 'rgba(16,185,129,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
-
-            // Точки
-            layers.forEach((lyr, i) => {
-                const val = layerData[lyr].avg;
-                const a = (Math.PI * 2 * i / n) - Math.PI / 2;
-                const x = cx + maxR * val * Math.cos(a);
-                const y = cy + maxR * val * Math.sin(a);
-                ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI*2);
-                ctx.fillStyle = resonanceColor(val, 1); ctx.fill();
-            });
-        }
-
-        function buildTimeline(data) {
-            const tl = document.getElementById('pulseTimeline');
-            if (!tl) return;
-            // Сортируем по last_check (новые первые)
-            const sorted = [...data].sort((a, b) => {
-                if (a.last_check === '—' && b.last_check === '—') return 0;
-                if (a.last_check === '—') return 1;
-                if (b.last_check === '—') return -1;
-                return b.last_check.localeCompare(a.last_check);
-            });
-            tl.innerHTML = sorted.map(d => {
-                const col = resonanceColor(d.resonance, 1);
-                const pct = Math.round(d.resonance * 100);
-                return `<div class="pulse-tl-row">
-                    <div class="pulse-tl-dot" style="background:${col};"></div>
-                    <span class="pulse-tl-name">${d.name.replace(/_/g,' ')}</span>
-                    <div class="pulse-tl-bar-wrap">
-                        <div class="pulse-tl-bar" style="width:${pct}%;background:${col};"></div>
-                    </div>
-                    <span class="pulse-tl-date">${d.last_check !== '—' ? d.last_check : '—'}</span>
-                </div>`;
-            }).join('');
-        }
-
-        function updatePulse(data) {
-            if (!data || !data.length) return;
-
-            // Счётчики
-            const total  = data.length;
-            const active = data.filter(d => d.status === 'active').length;
-            const full   = data.filter(d => d.resonance >= 0.99).length;
-            const zero   = data.filter(d => d.resonance <= 0.01).length;
-
-            const animCounter = (el, target) => {
-                let cur = 0;
-                const step = Math.ceil(target / 20);
-                const iv = setInterval(() => {
-                    cur = Math.min(cur + step, target);
-                    el.textContent = cur;
-                    if (cur >= target) clearInterval(iv);
-                }, 40);
-            };
-            animCounter(document.getElementById('pcTotalVal'),  total);
-            animCounter(document.getElementById('pcActiveVal'), active);
-            animCounter(document.getElementById('pcFullVal'),   full);
-            animCounter(document.getElementById('pcZeroVal'),   zero);
-
-            // Радар по слоям
-            const layerData = {};
-            data.forEach(d => {
-                const l = d.layer !== undefined ? String(d.layer) : '?';
-                if (!layerData[l]) layerData[l] = { sum: 0, count: 0 };
-                layerData[l].sum   += d.resonance;
-                layerData[l].count += 1;
-            });
-            Object.keys(layerData).forEach(l => {
-                layerData[l].avg = layerData[l].sum / layerData[l].count;
-            });
-            const radar = document.getElementById('pulseRadar');
-            if (radar) drawRadar(radar, layerData);
-
-            // Таймлайн
-            buildTimeline(data);
-        }
 
         // ══ ПРОТОКОЛЫ ══
         function showProtoTip(btn) {
@@ -3621,8 +3308,7 @@
                     tab.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
-                    if (tabName === 'map')   { loadMap(); loadScannerDash(); }
-                    if (tabName === 'pulse') { if (!_hiveData.length) loadMap(); loadScannerDash(); }
+                    if (tabName === 'map')   { loadMap(); loadScannerDash(); setTimeout(()=>{ const cv=document.getElementById('globeCanvas'); if(cv&&cv.offsetWidth){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;} }, 80); }
                 });
             });
         }
