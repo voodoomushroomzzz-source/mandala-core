@@ -3056,6 +3056,23 @@
             }
         }
 
+        function loadHoneycombs() {
+            fetch('/api/tree').then(r => r.json()).then(tree => {
+                _hiveData = (tree.honeycombs || []).map(h => ({
+                    name: h.name || h.id || '',
+                    path: h.path || '',
+                    resonance: typeof h.resonance === 'number' ? h.resonance : 1.0,
+                    files: Array.isArray(h.files) ? h.files : [],
+                    version: h.version || '',
+                    layer: h.layer,
+                    status: h.status || 'active',
+                    last_check: h.last_check || '',
+                    indexPath: h.index_path || (h.path ? h.path + '/index.json' : ''),
+                }));
+                buildHiveList(_hiveData);
+            }).catch(err => console.warn('loadHoneycombs:', err));
+        }
+
         // ── 3D Созвездие ──
         // ── 3D Октаэдр + Цветок Жизни ──
         const _CAT_COLOR = {
