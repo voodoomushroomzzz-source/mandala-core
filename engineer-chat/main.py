@@ -1858,6 +1858,54 @@ async def get_honeycombs():
 
         return {"honeycombs": honeycombs}
 
+@app.post("/api/scan")
+async def trigger_scan():
+    """Trigger honeycomb-scan GitHub Action."""
+    if not GITHUB_TOKEN:
+        return {"ok": False, "error": "no github token"}
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/workflows/honeycomb-scan.yml/dispatches"
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.post(url, headers=headers, json={"ref": "main"}, timeout=10.0)
+            if resp.status_code == 204:
+                return {"ok": True, "message": "scan triggered"}
+            else:
+                return {"ok": False, "error": f"GitHub {resp.status_code}", "body": resp.text}
+        except Exception as e:
+            return {"ok": False, "error": str(e)}
+
+@app.get("/api/scan/status")
+async def scan_status():
+    """Get last honeycomb-scan workflow run status."""
+    if not GITHUB_TOKEN:
+        return {"status": "unknown"}
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/workflows/honeycomb-scan.yml/runs?per_page=1"
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.get(url, headers=headers, timeout=10.0)
+            if resp.status_code == 200:
+                runs = resp.json().get("workflow_runs", [])
+                if runs:
+                    r = runs[0]
+                    return {
+                        "status": r.get("status"),
+                        "conclusion": r.get("conclusion"),
+                        "created_at": r.get("created_at"),
+                        "updated_at": r.get("updated_at"),
+                        "run_number": r.get("run_number"),
+                    }
+            return {"status": "unknown"}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+
 # ========== RESONANCE CALCULATOR ==========
 
 class ResonanceCalculator:
