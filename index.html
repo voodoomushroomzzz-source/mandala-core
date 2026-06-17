@@ -3057,9 +3057,15 @@
         }
 
         // ── 3D Созвездие ──
-        let _globePts = [], _globeRotX = 0.3, _globeRotY = 0.5;
-        let _globeDrag = false, _globeLX = 0, _globeLY = 0;
-        let _globeHovered = null, _globeRAF = null, _globeProjected = [];
+        // ── 3D Октаэдр + Цветок Жизни ──
+        const _CAT_COLOR = {
+            'ядро':'#85B7EB','задачи':'#5DCAA5','продукты':'#c4b5fd',
+            'система':'#FAC775','прочее':'#6b7280',
+        };
+        let _globePts=[], _globeRotX=0.4, _globeRotY=0.5, _globeScale=1.0;
+        let _globeDrag=false, _globeLX=0, _globeLY=0;
+        let _globeHovered=null, _globeRAF=null, _globeProjected=[];
+        let _globeStars=[];
 
         function initGlobe(data) {
             const canvas = document.getElementById('globeCanvas');
@@ -3068,223 +3074,168 @@
             function resizeGlobe() { canvas.width=canvas.offsetWidth||600; canvas.height=canvas.offsetHeight||300; }
             resizeGlobe();
             window.addEventListener('resize', resizeGlobe);
-            _globePts = data.map((d, i) => {
-                const phi = Math.acos(-1 + (2*i) / Math.max(data.length-1,1));
-                const theta = Math.sqrt(data.length * Math.PI) * phi;
-                const r = 70;
-                return {
-                    d,
-                    ox: r * Math.sin(phi) * Math.cos(theta),
-                    oy: r * Math.sin(phi) * Math.sin(theta),
-                    oz: r * Math.cos(phi),
-                };
+
+            _globePts = data.map((d,i) => {
+                const phi=Math.acos(-1+(2*i)/Math.max(data.length-1,1));
+                const th=Math.sqrt(data.length*Math.PI)*phi, r=72;
+                return {d, ox:r*Math.sin(phi)*Math.cos(th), oy:r*Math.sin(phi)*Math.sin(th), oz:r*Math.cos(phi)};
             });
+
+            _globeStars = Array.from({length:60},()=>({
+                x:Math.random(), y:Math.random(), r:Math.random()*1.2, b:Math.random()*Math.PI*2
+            }));
+
             canvas.onmousedown = e => { _globeDrag=true; _globeLX=e.clientX; _globeLY=e.clientY; };
             window.onmouseup = () => _globeDrag=false;
             window.onmousemove = e => {
                 if (_globeDrag) {
-                    _globeRotY += (e.clientX-_globeLX)*0.012;
-                    _globeRotX += (e.clientY-_globeLY)*0.012;
+                    _globeRotY += (e.clientX-_globeLX)*0.011;
+                    _globeRotX += (e.clientY-_globeLY)*0.011;
                     _globeLX=e.clientX; _globeLY=e.clientY;
                 }
             };
+            canvas.onwheel = e => {
+                e.preventDefault();
+                _globeScale = Math.max(0.3, Math.min(3.0, _globeScale*(e.deltaY<0?1.1:0.91)));
+            };
             canvas.onmousemove = e => {
-                const rect = canvas.getBoundingClientRect();
-                const mx = e.clientX-rect.left, my = e.clientY-rect.top;
-                let found = null, minD = 12;
+                const rect=canvas.getBoundingClientRect(), mx=e.clientX-rect.left, my=e.clientY-rect.top;
+                let found=null, minD=16;
                 _globeProjected.forEach(p => {
-                    const dist = Math.hypot(p.sx-mx, p.sy-my);
-                    if (dist < minD) { minD=dist; found=p; }
+                    const d=Math.hypot(p.sx-mx,p.sy-my);
+                    if (d<minD) { minD=d; found=p; }
                 });
-                const tip = document.getElementById('globeTooltip');
+                const tip=document.getElementById('globeTooltip');
                 if (found) {
-                    _globeHovered = found.d.name;
-                    tip.style.display = 'block';
-                    tip.style.left = (found.sx+8)+'px';
-                    tip.style.top = (found.sy-18)+'px';
-                    tip.textContent = found.d.name + ' ' + Math.round(found.d.resonance*100) + '%';
-                    document.querySelectorAll('.hive-list-item').forEach(el => {
-                        const nm = el.querySelector('.hive-list-name');
-                        el.classList.toggle('hovered', nm && nm.textContent.trim().toLowerCase() === found.d.name.replace(/_/g,' ').toLowerCase());
+                    _globeHovered=found.d.name;
+                    tip.style.display='block';
+                    tip.style.left=(found.sx+10)+'px';
+                    tip.style.top=(found.sy-18)+'px';
+                    tip.textContent=found.d.name.replace(/_/g,' ')+' '+Math.round(found.d.resonance*100)+'%';
+                    document.querySelectorAll('.hive-list-item').forEach(el=>{
+                        const nm=el.querySelector('.hive-list-name');
+                        el.classList.toggle('hovered', nm&&nm.textContent.trim().toLowerCase()===found.d.name.replace(/_/g,' ').toLowerCase());
                     });
                 } else {
-                    _globeHovered = null;
-                    tip.style.display = 'none';
-                    document.querySelectorAll('.hive-list-item').forEach(el => el.classList.remove('hovered'));
+                    _globeHovered=null;
+                    tip.style.display='none';
+                    document.querySelectorAll('.hive-list-item').forEach(el=>el.classList.remove('hovered'));
                 }
             };
             canvas.onmouseleave = () => {
-                _globeHovered = null;
-                document.getElementById('globeTooltip').style.display = 'none';
-                document.querySelectorAll('.hive-list-item').forEach(el => el.classList.remove('hovered'));
-            };
-            canvas.onwheel = e => {
-                e.preventDefault();
-                _globeScale = Math.max(0.3, Math.min(3.0, _globeScale * (e.deltaY < 0 ? 1.12 : 0.89)));
+                _globeHovered=null;
+                const tip=document.getElementById('globeTooltip');
+                if(tip) tip.style.display='none';
+                document.querySelectorAll('.hive-list-item').forEach(el=>el.classList.remove('hovered'));
             };
             drawGlobe();
         }
 
-        function globeHighlight(name) { _globeHovered = name; }
+        function globeHighlight(name) { _globeHovered=name; }
 
-        function globeRot(x, y, z) {
-            const y1 = y*Math.cos(_globeRotX) - z*Math.sin(_globeRotX);
-            const z1 = y*Math.sin(_globeRotX) + z*Math.cos(_globeRotX);
-            const x2 = x*Math.cos(_globeRotY) + z1*Math.sin(_globeRotY);
-            const z2 = -x*Math.sin(_globeRotY) + z1*Math.cos(_globeRotY);
+        function globeRot(x,y,z) {
+            const y1=y*Math.cos(_globeRotX)-z*Math.sin(_globeRotX);
+            const z1=y*Math.sin(_globeRotX)+z*Math.cos(_globeRotX);
+            const x2=x*Math.cos(_globeRotY)+z1*Math.sin(_globeRotY);
+            const z2=-x*Math.sin(_globeRotY)+z1*Math.cos(_globeRotY);
             return {x:x2, y:y1, z:z2};
         }
 
-        function drawGlobe() {
-            const canvas = document.getElementById('globeCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const W=canvas.width||600, H=canvas.height||300, CX=W/2, CY=H/2;
-            ctx.clearRect(0,0,W,H);
-            _globeProjected = _globePts.map(p => {
-                const r = globeRot(p.ox, p.oy, p.oz);
-                const fov=200, s=fov/(fov+r.z+100);
-                return {...p, sx:CX+r.x*s, sy:CY+r.y*s, s, rz:r.z};
-            });
-            // edges within categories
-            const catGroups = {};
-            _globeProjected.forEach(p => {
-                const cat = hiveCategoryOf(p.d.name);
-                if (!catGroups[cat]) catGroups[cat]=[];
-                catGroups[cat].push(p);
-            });
-            Object.entries(catGroups).forEach(([cat, grp]) => {
-                const col = CAT_COLOR[cat] || '#888780';
-                for (let i=0;i<grp.length-1;i++) {
-                    ctx.beginPath();
-                    ctx.moveTo(grp[i].sx, grp[i].sy);
-                    ctx.lineTo(grp[i+1].sx, grp[i+1].sy);
-                    ctx.strokeStyle = col + '33';
-                    ctx.lineWidth = 0.8;
-                    ctx.stroke();
-                }
-            });
-            // nodes back to front
-            const sorted = [..._globeProjected].sort((a,b)=>a.rz-b.rz);
-            sorted.forEach(p => {
-                const cat = hiveCategoryOf(p.d.name);
-                const col = p.d.resonance > 0 ? (CAT_COLOR[cat]||'#888780') : '#E24B4A';
-                const isHov = p.d.name === _globeHovered;
-                const nodeR = (3 + p.s*3) * (isHov ? 1.8 : 1);
+        function _drawFlowerCircle(ctx,cx,cy,r,alpha) {
+            ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+            ctx.strokeStyle='rgba(100,150,255,'+alpha+')';
+            ctx.lineWidth=0.4; ctx.stroke();
+        }
+
+        function _drawOctahedron(ctx,x,y,sz,col,isHov) {
+            const angles=[0, Math.PI/2, Math.PI/4, 3*Math.PI/4];
+            angles.forEach(angle => {
+                ctx.save(); ctx.translate(x,y); ctx.rotate(angle);
                 ctx.beginPath();
-                ctx.arc(p.sx, p.sy, nodeR, 0, Math.PI*2);
-                ctx.fillStyle = col + (isHov ? 'ff' : 'cc');
+                ctx.moveTo(0,-sz*1.4); ctx.lineTo(sz*0.5,0);
+                ctx.lineTo(0,sz*1.4); ctx.lineTo(-sz*0.5,0);
+                ctx.closePath();
+                ctx.fillStyle=col+(isHov?'28':'14');
                 ctx.fill();
-                if (isHov || p.s > 0.95) {
-                    ctx.fillStyle = isHov ? '#ffffff' : col;
-                    ctx.font = (isHov?'10':'8')+'px monospace';
-                    ctx.fillText(p.d.name.replace(/_/g,' '), p.sx+nodeR+2, p.sy+3);
-                }
+                ctx.strokeStyle=col+(isHov?'cc':'66');
+                ctx.lineWidth=isHov?0.9:0.5;
+                ctx.stroke();
+                ctx.restore();
             });
-            if (!_globeDrag) _globeRotY += 0.003;
-            _globeRAF = requestAnimationFrame(drawGlobe);
-        }
-
-                function hiveSetupCanvas() {
-            const canvas = document.getElementById('hiveCanvas');
-            if (!canvas || canvas._hiveReady) return;
-            canvas._hiveReady = true;
-            hiveResize();
-            canvas.addEventListener('mousemove', e => {
-                const idx = hiveGetIdx(e.clientX, e.clientY);
-                if (idx !== _hiveHovered) {
-                    _hiveHovered = idx;
-                    hiveListHighlight(idx);
-                    canvas.style.cursor = idx >= 0 ? 'pointer' : 'default';
-                }
-            });
-            canvas.addEventListener('mouseleave', () => {
-                _hiveHovered = -1;
-                hiveListHighlight(-1);
-                canvas.style.cursor = 'default';
-            });
-            canvas.addEventListener('click', e => {
-                const idx = hiveGetIdx(e.clientX, e.clientY);
-                if (idx >= 0 && idx < _hiveData.length) {
-                    if (_hiveSelected === idx) {
-                        closeHiveCard();
-                    } else {
-                        showHiveCard(idx);
-                    }
-                }
-            });
-            const ro = new ResizeObserver(() => { hiveResize(); });
-            ro.observe(canvas);
-            if (!_hiveAnimId) hiveAnimate();
-        }
-
-        async function loadHoneycombs() {
-            const countEl = document.getElementById('honeycombsCount');
-            try {
-                const treeResp = await fetch("https://api.github.com/repos/" + GITHUB_REPO + "/git/trees/main?recursive=1");
-                if (!treeResp.ok) throw new Error("GitHub API: " + treeResp.status);
-                const allPaths = (await treeResp.json()).tree || [];
-                const folders = {};
-                allPaths.forEach(item => {
-                    if (!item.path.startsWith("honeycombs/")) return;
-                    const rest   = item.path.slice(11);
-                    const folder = rest.split("/")[0];
-                    if (!folder) return;
-                    if (!folders[folder]) folders[folder] = { files: [], indexPath: null };
-                    if (item.type === "blob") {
-                        folders[folder].files.push(item.path);
-                        if (rest === folder + "/index.json") folders[folder].indexPath = item.path;
-                    }
-                });
-                const names = Object.keys(folders).sort();
-                if (countEl) countEl.textContent = names.length + ' сот';
-                const metas = await Promise.allSettled(names.map(async name => {
-                    const idx = folders[name].indexPath;
-                    if (!idx) return null;
-                    const r = await fetch("https://raw.githubusercontent.com/" + GITHUB_REPO + "/main/" + idx);
-                    return r.ok ? r.json() : null;
-                }));
-                _hiveData = names.map((name, i) => {
-                    const meta = metas[i].status === "fulfilled" ? metas[i].value : null;
-                    const hc   = folders[name];
-                    const statusFreq = {active:3, draft:2, archived:1};
-                    const status = meta?.meta?.status || meta?.identity?.status || 'active';
-                    const freq = meta?.meta?.frequency ?? meta?.meta?.usage_count ?? statusFreq[status] ?? 1;
-
-                    // Резонанс: ищем в разных полях
-                    let res = 0;
-                    const rawRes = meta?.meta?.resonance || meta?.health?.resonance || meta?.identity?.resonance;
-                    if (rawRes !== undefined && rawRes !== null) {
-                        const r = typeof rawRes === 'string' ? parseFloat(rawRes) : rawRes;
-                        res = isNaN(r) ? 0 : (r > 1 ? r / 100 : r);
-                    }
-
-                    return {
-                        name,
-                        desc:       meta?.meta?.description || meta?.identity?.name || name.replace(/_/g,' '),
-                        status,
-                        freq,
-                        resonance:  res,
-                        version:    meta?.identity?.version || meta?.meta?.version || '—',
-                        layer:      meta?.identity?.layer   || meta?.meta?.layer,
-                        last_check: meta?.health?.last_check || '—',
-                        files:      hc.files,
-                        indexPath:  hc.indexPath || ('honeycombs/' + name + '/index.json'),
-                    };
-                });
-                // Центр = самые частые
-                _hiveData.sort((a, b) => b.freq - a.freq);
-                buildHiveList(_hiveData);
-                hiveSetupCanvas();
-                // Обновляем пульс теми же данными
-                updatePulse(_hiveData);
-            } catch(e) {
-                if (countEl) countEl.textContent = '× ' + e.message;
+            ctx.beginPath(); ctx.arc(x,y,sz*0.32,0,Math.PI*2);
+            ctx.fillStyle=col+(isHov?'ff':'cc');
+            ctx.fill();
+            if (isHov) {
+                ctx.beginPath(); ctx.arc(x,y,sz*0.55,0,Math.PI*2);
+                ctx.strokeStyle=col+'44'; ctx.lineWidth=0.6; ctx.stroke();
             }
         }
-        window.loadHoneycombs = loadHoneycombs;
 
-        // ==================== ПУЛЬС ====================
+        let _globeT=0;
+        function drawGlobe() {
+            const canvas=document.getElementById('globeCanvas');
+            if (!canvas) return;
+            const ctx=canvas.getContext('2d');
+            const W=canvas.width||600, H=canvas.height||300, CX=W/2, CY=H/2;
+            ctx.clearRect(0,0,W,H);
+
+            // stars
+            _globeStars.forEach(s=>{
+                const a=0.08+0.1*Math.sin(_globeT*0.025+s.b);
+                ctx.beginPath(); ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
+                ctx.fillStyle='rgba(180,200,255,'+a.toFixed(2)+')'; ctx.fill();
+            });
+
+            // flower of life bg
+            const fr=Math.min(W,H)*0.09;
+            _drawFlowerCircle(ctx,CX,CY,fr,0.07);
+            for(let i=0;i<6;i++){const a=i*Math.PI/3;_drawFlowerCircle(ctx,CX+fr*Math.cos(a),CY+fr*Math.sin(a),fr,0.045);}
+            for(let i=0;i<6;i++){const a=i*Math.PI/3+Math.PI/6;_drawFlowerCircle(ctx,CX+fr*1.73*Math.cos(a),CY+fr*1.73*Math.sin(a),fr,0.025);}
+            for(let i=0;i<6;i++){const a=i*Math.PI/3;_drawFlowerCircle(ctx,CX+fr*2*Math.cos(a),CY+fr*2*Math.sin(a),fr,0.018);}
+
+            _globeProjected = _globePts.map(p=>{
+                const r=globeRot(p.ox,p.oy,p.oz);
+                const fov=185, s=(fov/(fov+r.z+90))*_globeScale;
+                return {...p, sx:CX+r.x*s, sy:CY+r.y*s, s, rz:r.z};
+            });
+
+            // category connectors
+            const cats={};
+            _globeProjected.forEach(p=>{
+                const c=hiveCategoryOf(p.d.name);
+                if(!cats[c]) cats[c]=[];
+                cats[c].push(p);
+            });
+            Object.entries(cats).forEach(([c,g])=>{
+                const col=_CAT_COLOR[c]||'#888';
+                g.forEach((a,i)=>g.forEach((b,j)=>{
+                    if(j<=i) return;
+                    ctx.beginPath(); ctx.moveTo(a.sx,a.sy); ctx.lineTo(b.sx,b.sy);
+                    ctx.strokeStyle=col+'14'; ctx.lineWidth=0.5; ctx.stroke();
+                }));
+            });
+
+            // nodes back to front
+            const sorted=[..._globeProjected].sort((a,b)=>a.rz-b.rz);
+            sorted.forEach(p=>{
+                const cat=hiveCategoryOf(p.d.name);
+                const col=p.d.resonance>0?(_CAT_COLOR[cat]||'#888'):'#E24B4A';
+                const isH=p.d.name===_globeHovered;
+                const sz=(2.5+p.s*4)*(isH?1.5:1);
+                _drawOctahedron(ctx,p.sx,p.sy,sz,col,isH);
+                if(isH||p.s>0.93){
+                    ctx.fillStyle=isH?'#ffffff':'#b5d4f4cc';
+                    ctx.font=(isH?'10':'8')+'px monospace';
+                    ctx.fillText(p.d.name.replace(/_/g,' '),p.sx+sz+4,p.sy+3);
+                }
+            });
+
+            if(!_globeDrag) _globeRotY+=0.003;
+            _globeT++;
+            _globeRAF=requestAnimationFrame(drawGlobe);
+        }
+
+                // ==================== ПУЛЬС ====================
 
         function resonanceColorForPulse(r) { return resonanceColor(r, 1); }
 
