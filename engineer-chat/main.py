@@ -1774,6 +1774,22 @@ async def get_file_tree():
         except Exception as e:
             return {"error": str(e)}
 
+def _extract_hive_files(content: dict) -> list:
+    """Extract file list from various index.json structures."""
+    # Direct files array
+    if content.get("files") and isinstance(content["files"], list):
+        return [f.get("name", f) if isinstance(f, dict) else str(f) for f in content["files"]]
+    # Nested content keys as file names
+    files = []
+    for key in ["content", "fruits", "seeds", "data"]:
+        if key in content and isinstance(content[key], dict):
+            files.extend(list(content[key].keys()))
+    # file_list
+    if content.get("file_list"):
+        files.extend([f if isinstance(f, str) else str(f) for f in content["file_list"]])
+    # Deduplicate and return
+    return list(dict.fromkeys(files)) if files else []
+
 @app.get("/api/honeycombs")
 async def get_honeycombs():
     """Return list of honeycombs with metadata from their index.json files."""
@@ -1814,12 +1830,15 @@ async def get_honeycombs():
                         "resonance": (content.get("resonance", 1.0)
                                        if isinstance(content.get("resonance"), (int, float))
                                        else 1.0),
-                        "files": [f.get("name", f) if isinstance(f, dict) else str(f)
-                                  for f in (content.get("files") or content.get("file_list") or [])],
-                        "version": content.get("version", ""),
-                        "layer": content.get("layer"),
-                        "status": content.get("status", "active"),
-                        "last_check": content.get("last_updated", content.get("last_check", "")),
+                        "files": _extract_hive_files(content),
+                        "version": (content.get("identity", {}).get("version", "") or
+                                    content.get("version", "")),
+                        "layer": (content.get("identity", {}).get("layer") or
+                                  content.get("layer")),
+                        "status": (content.get("identity", {}).get("status", "active") or
+                                   content.get("status", "active")),
+                        "last_check": (content.get("health", {}).get("last_check", "") or
+                                       content.get("last_updated", content.get("last_check", ""))),
                         "index_path": path_idx,
                     })
                 else:
