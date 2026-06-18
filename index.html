@@ -3156,31 +3156,18 @@
                 const totalFiles = stats.total_files || '—';
                 const totalSizeKb = stats.total_size_kb ? Math.round(stats.total_size_kb) + ' KB' : '—';
                 const errors = stats.errors || 0;
-                                const hashes = rRes.honeycomb_hashes || {};
-                const topHives = Object.keys(hashes).filter(k => !k.includes('/')).sort();
-                const hiveRows = topHives.map(name => {
-                    const h = hives.find(x => x.name === name);
-                    const res = h ? Math.round(h.resonance*100) : 100;
-                    const col = res >= 100 ? '#1D9E75' : res > 0 ? '#EF9F27' : '#E24B4A';
-                    return '<div class="dash-scan-row" style="padding:3px 8px">'
-                        + '<div class="dash-scan-dot" style="background:'+col+'"></div>'
-                        + '<div class="dash-scan-txt">'+name+'</div>'
-                        + '<div class="dash-scan-val" style="color:'+col+'">'+res+'%</div>'
-                        + '</div>';
-                }).join('');
-                content.innerHTML = '<div class="dash-stat-row">'
-                    + '<div class="dash-stat"><div class="dash-stat-v">'+(stats.total_scanned||total)+'</div><div class="dash-stat-l">сканировано</div></div>'
-                    + '<div class="dash-stat"><div class="dash-stat-v">'+totalFiles+'</div><div class="dash-stat-l">файлов</div></div>'
-                    + '<div class="dash-stat"><div class="dash-stat-v">'+totalSizeKb+'</div><div class="dash-stat-l">размер</div></div>'
-                    + '<div class="dash-stat"><div class="dash-stat-v" style="color:'+(errors>0?'#E24B4A':'#1D9E75')+'">'+errors+'</div><div class="dash-stat-l">ошибок</div></div>'
-                    + '</div>'
-                    + '<div class="dash-scan-row" style="background:rgba(29,158,117,0.06)">'
-                    + '<div class="dash-scan-dot" style="background:'+(scanOk?'#1D9E75':'#EF9F27')+'"></div>'
-                    + '<div class="dash-scan-txt">последний скан: '+lastScan+'</div>'
-                    + '<div class="dash-scan-val" style="color:'+(scanOk?'#1D9E75':'#EF9F27')+'">'+scanConclusion+'</div>'
-                    + '</div>'
-                    + '<div style="font-family:var(--mono);font-size:7px;letter-spacing:1px;color:#4a9a6a;padding:6px 8px 3px;text-transform:uppercase">соты (' + topHives.length + ')</div>'
-                    + hiveRows;
+                content.innerHTML = `
+                    <div class="dash-stat-row">
+                        <div class="dash-stat"><div class="dash-stat-v">${total}</div><div class="dash-stat-l">всего сот</div></div>
+                        <div class="dash-stat"><div class="dash-stat-v">${active}</div><div class="dash-stat-l">активных</div></div>
+                        <div class="dash-stat"><div class="dash-stat-v">${full}</div><div class="dash-stat-l">резонанс 100%</div></div>
+                        <div class="dash-stat"><div class="dash-stat-v" style="color:${errors>0||warn>0?'#E24B4A':'#6ee7b7'}">${errors||warn}</div><div class="dash-stat-l">ошибки</div></div>
+                    </div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#1D9E75"></div><div class="dash-scan-txt">honeycomb scanner</div><div class="dash-scan-val">последний: ${lastScan}</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:#378ADD"></div><div class="dash-scan-txt">scanned</div><div class="dash-scan-val">${stats.total_scanned||total} сот · ${totalFiles} файлов · ${totalSizeKb}</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${errors>0?'#E24B4A':'#1D9E75'}"></div><div class="dash-scan-txt">errors</div><div class="dash-scan-val">${errors} ошибок</div></div>
+                    <div class="dash-scan-row"><div class="dash-scan-dot" style="background:${scanOk?'#1D9E75':'#EF9F27'}"></div><div class="dash-scan-txt">status</div><div class="dash-scan-val">${scanConclusion}</div></div>
+                `;
             } catch(e) {
                 content.innerHTML = '<div style="font-family:var(--mono);font-size:8px;color:#E24B4A;padding:8px">⚠ нет связи: ' + e.message + '</div>';
             }
