@@ -15,7 +15,7 @@
     }
   },
   "1485954655": {
-    "messages": 54,
+    "messages": 56,
     "tasks_created": 4,
     "tasks_completed": 1,
     "achievements": 0,
@@ -23,7 +23,8 @@
       "conversation": 17,
       "add_task": 8,
       "add_achievement": 1,
-      "complete_task": 1
+      "complete_task": 1,
+      "web_search": 1
     }
   }
 }
