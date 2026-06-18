@@ -3122,7 +3122,7 @@
                 if(isH||p.s>0.93){
                     ctx.fillStyle=isH?'#ffffff':'#b5d4f4bb';
                     ctx.font=(isH?'10':'8')+'px monospace';
-                    ctx.fillText(p.d.name.replace(/_/g,' '),p.sx+sz+4,p.sy+3);
+                    ctx.fillText(p.d.name.replace(/_/g,' '),p.sx+sz*0.5+3,p.sy+4);
                 }
             });
             if(!_globeDrag) _globeRotY+=0.003;
@@ -3429,111 +3429,7 @@
         }
 
         // ==================== SCANNER DASHBOARD — VARIANT B ====================
-        async function loadScannerDash() {
-            const BASE = 'https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/registry/';
-            const grid = document.getElementById('scanLayersGrid');
-            const totalEl = document.getElementById('scanTotal');
-            const totalSub = document.getElementById('scanTotalSub');
-            const lastEl = document.getElementById('scanLastTime');
-            const metaEl = document.getElementById('scanMeta');
-            const barEl  = document.getElementById('scanBar');
 
-            let scanState = null, registry = null;
-            try {
-                const [sr, rr] = await Promise.all([
-                    fetch(BASE + 'scan_state.json?t=' + Date.now()),
-                    fetch(BASE + 'registry.json?t=' + Date.now())
-                ]);
-                if (sr.ok) scanState = await sr.json();
-                if (rr.ok) registry  = await rr.json();
-            } catch(e) {
-                if (grid) grid.innerHTML = '<div class="scan-loading">unavailable</div>';
-                return;
-            }
-
-            // ── Top cards ──
-            if (scanState && scanState.statistics) {
-                const st = scanState.statistics;
-                if (totalEl) totalEl.textContent = st.total_scanned || '—';
-                if (totalSub) totalSub.textContent = `scanned · ${st.total_files || '—'} files · ${Math.round(st.total_size_kb || 0)}kb`;
-                if (metaEl) metaEl.textContent = `last scan · ${st.errors || 0} errors · ${st.warnings || 0} warnings`;
-            }
-            if (scanState && scanState.last_scan) {
-                const d = new Date(scanState.last_scan);
-                if (lastEl) lastEl.textContent = isNaN(d) ? scanState.last_scan.slice(0,10)
-                    : d.toLocaleDateString('ru', { day:'2-digit', month:'2-digit' }) + ' ' + d.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' });
-            }
-
-            // ── Parse honeycombs from registry ──
-            let honeycombs = [];
-            if (registry && registry.content && registry.content.registry && registry.content.registry.honeycombs) {
-                honeycombs = registry.content.registry.honeycombs;
-            }
-
-            // Filter out backup entries
-            const mainHC = honeycombs.filter(h => !String(h.honeycomb_id || '').includes('backup'));
-
-            // Resonance bar
-            if (barEl && mainHC.length) {
-                const full = mainHC.filter(h => h.resonance === '100%' || h.resonance === 100).length;
-                barEl.style.width = Math.round(full / mainHC.length * 100) + '%';
-            }
-
-            if (!grid || !mainHC.length) {
-                if (grid) grid.innerHTML = '<div class="scan-loading">no data</div>';
-                return;
-            }
-
-            // ── Group by layer ──
-            const byLayer = {};
-            mainHC.forEach(h => {
-                const l = h.layer !== undefined ? String(h.layer) : '?';
-                if (!byLayer[l]) byLayer[l] = [];
-                byLayer[l].push(h);
-            });
-
-            function resColor(r) {
-                const val = parseFloat(r);
-                if (val >= 100) return { bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.4)', text: '#34d399' };
-                if (val >= 50)  return { bg: 'rgba(251,191,36,0.1)',  border: 'rgba(251,191,36,0.4)',  text: '#fbbf24' };
-                return             { bg: 'rgba(248,113,113,0.1)',  border: 'rgba(248,113,113,0.35)', text: '#f87171' };
-            }
-
-            const layerOrder = Object.keys(byLayer).sort((a,b) => {
-                const na = isNaN(a) ? 99 : Number(a);
-                const nb = isNaN(b) ? 99 : Number(b);
-                return na - nb;
-            });
-
-            grid.innerHTML = layerOrder.map(l => {
-                const items = byLayer[l];
-                const fullCount = items.filter(h => parseFloat(h.resonance) >= 100).length;
-                const pct = Math.round(fullCount / items.length * 100);
-                const pctColor = resColor(pct).text;
-
-                const cells = items.map(h => {
-                    const r = parseFloat(h.resonance) || 0;
-                    const c = resColor(r);
-                    const label = r >= 100 ? '✓' : '○';
-                    // Clean name: use honeycomb_id, strip path
-                    const rawName = String(h.honeycomb_id || h.name || '?');
-                    const shortName = rawName.split('/').pop().replace(/_/g,' ');
-                    return `<div class="scan-cell" style="background:${c.bg};border:1px solid ${c.border};color:${c.text};">
-                        ${label}
-                        <span class="scan-cell-tip">${shortName} · ${h.resonance}</span>
-                    </div>`;
-                }).join('');
-
-                return `<div class="scan-layer-card">
-                    <div class="scan-layer-head">
-                        <span class="scan-layer-lbl">${({'1':'L1 · foundation','2':'L2 · system','3':'L3 · protocols','4':'L4 · extensions','core':'core','foundation':'foundation'})[l] || ('layer '+l)}</span>
-                        <span class="scan-layer-pct" style="color:${pctColor}">${pct}%</span>
-                    </div>
-                    <div class="scan-cells">${cells}</div>
-                    <div class="scan-layer-sub">${fullCount}/${items.length} resonant</div>
-                </div>`;
-            }).join('');
-        }
 
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         function init() {
