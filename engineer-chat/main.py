@@ -1924,6 +1924,7 @@ async def scan_results():
                     "ok": True,
                     "last_scan": content.get("last_scan", ""),
                     "statistics": content.get("statistics", {}),
+                    "honeycomb_hashes": content.get("honeycomb_hashes", {}),
                 }
             return {"ok": False, "error": f"GitHub {resp.status_code}"}
         except Exception as e:
