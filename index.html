@@ -2965,21 +2965,32 @@
         let _globeHovered=null, _globeRAF=null, _globeProjected=[];
         let _globeStars=[], _globeT=0;
 
+        function _buildGlobePts(data, r) {
+            return data.map((d,i) => {
+                const phi=Math.acos(-1+(2*i)/Math.max(data.length-1,1));
+                const th=Math.sqrt(data.length*Math.PI)*phi;
+                return {d, ox:r*Math.sin(phi)*Math.cos(th), oy:r*Math.sin(phi)*Math.sin(th), oz:r*Math.cos(phi)};
+            });
+        }
+
         function initGlobe(data) {
             const canvas = document.getElementById('globeCanvas');
             if (!canvas) return;
             if (_globeRAF) { cancelAnimationFrame(_globeRAF); _globeRAF=null; }
+            // Resize canvas to actual panel size FIRST
             function resizeGlobe() {
-                canvas.width = canvas.offsetWidth || 400;
-                canvas.height = canvas.offsetHeight || 300;
+                const panel = document.getElementById('globePanel');
+                const w = (panel ? panel.offsetWidth : 0) || canvas.offsetWidth || 400;
+                const h = (panel ? panel.offsetHeight : 0) || canvas.offsetHeight || 400;
+                canvas.width = w;
+                canvas.height = h;
+                // Rebuild pts with new radius
+                const r = Math.min(w, h) * 0.35;
+                _globePts = _buildGlobePts(data, r);
             }
             resizeGlobe();
             window.addEventListener('resize', resizeGlobe);
-            _globePts = data.map((d,i) => {
-                const phi=Math.acos(-1+(2*i)/Math.max(data.length-1,1));
-                const th=Math.sqrt(data.length*Math.PI)*phi, r=72;
-                return {d, ox:r*Math.sin(phi)*Math.cos(th), oy:r*Math.sin(phi)*Math.sin(th), oz:r*Math.cos(phi)};
-            });
+            _globePts = _globePts.length ? _globePts : _buildGlobePts(data, 72);
             _globeStars = Array.from({length:70},()=>({
                 x:Math.random(), y:Math.random(), r:Math.random()*1.3, b:Math.random()*Math.PI*2
             }));
@@ -3125,11 +3136,14 @@
             if (!content) return;
             const base = window.location.hostname.includes('91-99-149-226') || window.location.hostname === '91.99.149.226' ? '' : 'https://engineer.91-99-149-226.nip.io';
             try {
-                const [hRes, sRes, rRes] = await Promise.all([
+                const [hSettled, sSettled, rSettled] = await Promise.allSettled([
                     fetch(base + '/api/honeycombs').then(r => r.json()),
                     fetch(base + '/api/scan/status').then(r => r.json()),
                     fetch(base + '/api/scan/results').then(r => r.json()),
                 ]);
+                const hRes = hSettled.status === 'fulfilled' ? hSettled.value : {};
+                const sRes = sSettled.status === 'fulfilled' ? sSettled.value : {};
+                const rRes = rSettled.status === 'fulfilled' ? rSettled.value : {};
                 const hives = hRes.honeycombs || [];
                 const total = hives.length;
                 const active = hives.filter(h => h.status === 'active').length;
@@ -3315,15 +3329,7 @@
                     tab.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     document.getElementById(`tab-${tabName}`).classList.add('active');
-                    if (tabName === 'map')   { loadMap(); setTimeout(()=>loadScannerDash(),200); setTimeout(()=>{
-                    const cv=document.getElementById('globeCanvas');
-                    if(cv){
-                        const panel=document.getElementById('globePanel');
-                        const w=panel?panel.offsetWidth:cv.offsetWidth;
-                        const h=panel?panel.offsetHeight:cv.offsetHeight;
-                        if(w>0){cv.width=w;cv.height=h;}
-                    }
-                }, 300); }
+                    if (tabName === 'map')   { loadMap(); setTimeout(()=>loadScannerDash(),200);  }
                 });
             });
         }
