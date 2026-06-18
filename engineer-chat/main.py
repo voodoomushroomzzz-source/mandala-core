@@ -1919,7 +1919,7 @@ async def scan_results():
                 headers=headers, timeout=10.0
             )
             if resp.status_code == 200:
-                content = _json.loads(base64.b64decode(resp.json()["content"]).decode("utf-8"))
+                content = _json.loads(base64.b64decode(resp.json()["content"]).decode("utf-8-sig"))
                 return {
                     "ok": True,
                     "last_scan": content.get("last_scan", ""),
