@@ -29,12 +29,13 @@
     }
   },
   "339914913": {
-    "messages": 4,
+    "messages": 7,
     "tasks_created": 0,
     "tasks_completed": 0,
     "achievements": 0,
     "intents": {
-      "create_reminder": 2
+      "create_reminder": 2,
+      "add_task": 1
     }
   }
 }
