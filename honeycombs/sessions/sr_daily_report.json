@@ -1,21 +1,21 @@
 {
-  "date": "2026-06-18",
+  "date": "2026-06-19",
   "version": "7.39.23",
   "gardeners": {
     "339914913": {
       "name": "Антон",
-      "active": false,
-      "synthesis_date": "2026-05-28"
+      "active": true,
+      "synthesis_date": "2026-06-19"
     },
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-06-18"
+      "synthesis_date": "2026-06-19"
     },
     "1485954655": {
       "name": "Полина",
       "active": true,
-      "synthesis_date": "2026-06-18"
+      "synthesis_date": "2026-06-19"
     },
     "358793311": {
       "name": "Антон",
@@ -25,46 +25,46 @@
   },
   "issues": [
     {
-      "user_id": "224736062",
+      "user_id": "339914913",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "create_reminder",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный create_reminder"
     },
     {
       "user_id": "224736062",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "create_reminder",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный create_reminder"
     },
     {
       "user_id": "1485954655",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "delete_task",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный delete_task"
     },
     {
       "user_id": "1485954655",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "delete_task",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный delete_task"
     },
     {
       "user_id": "1485954655",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "delete_task",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный delete_task"
     },
     {
-      "user_id": "1485954655",
+      "user_id": "224736062",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "create_reminder",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный create_reminder"
     }
   ]
 }
