@@ -1,70 +1,32 @@
 {
-  "date": "2026-06-19",
+  "date": "2026-06-20",
   "version": "7.39.23",
   "gardeners": {
     "339914913": {
       "name": "Антон",
-      "active": true,
+      "active": false,
       "synthesis_date": "2026-06-19"
     },
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-06-19"
+      "synthesis_date": "2026-06-20"
     },
     "1485954655": {
       "name": "Полина",
       "active": true,
-      "synthesis_date": "2026-06-19"
+      "synthesis_date": "2026-06-20"
     },
     "358793311": {
       "name": "Антон",
       "active": false,
       "synthesis_date": "2026-06-01"
+    },
+    "491567470": {
+      "name": "Виктор",
+      "active": false,
+      "synthesis_date": ""
     }
   },
-  "issues": [
-    {
-      "user_id": "339914913",
-      "type": "repeated_request",
-      "intent": "create_reminder",
-      "count": 2,
-      "context": "повторный create_reminder"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "create_reminder",
-      "count": 2,
-      "context": "повторный create_reminder"
-    },
-    {
-      "user_id": "1485954655",
-      "type": "repeated_request",
-      "intent": "delete_task",
-      "count": 2,
-      "context": "повторный delete_task"
-    },
-    {
-      "user_id": "1485954655",
-      "type": "repeated_request",
-      "intent": "delete_task",
-      "count": 2,
-      "context": "повторный delete_task"
-    },
-    {
-      "user_id": "1485954655",
-      "type": "repeated_request",
-      "intent": "delete_task",
-      "count": 2,
-      "context": "повторный delete_task"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "create_reminder",
-      "count": 2,
-      "context": "повторный create_reminder"
-    }
-  ]
+  "issues": []
 }
