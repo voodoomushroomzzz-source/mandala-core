@@ -2,12 +2,12 @@
   "identity": {
     "roadmap_id": "RM-014",
     "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-    "version": "v3.0.0",
+    "version": "v4.0.0",
     "created": "2026-04-16",
-    "updated": "2026-07-03",
+    "updated": "2026-07-06",
     "layer": 2,
     "type": "roadmap",
-    "description": "Two-track roadmap. Track A: remote job from 100 000 RUB by July 31, 2026. Track B: AI Operations & Agent Management — global remote from 250 000–300 000 RUB by January 2027. Leverages Mandala as portfolio proof.",
+    "description": "Two-track roadmap with detailed task tracker. Track A: remote job from 100 000 RUB by July 31, 2026. Track B: AI Operations & Agent Management — global remote from 250 000–300 000 RUB by January 2027. Leverages Mandala as portfolio proof. v4.0.0: added task tracker, updated metrics, Mandala Symbiosis project block, IT/AI skills.",
     "status": "active",
     "priority": "HIGH",
     "tags": ["personal", "career", "ai", "agent_management", "operations", "remote", "relocation", "vietnam"],
@@ -35,32 +35,36 @@
       "bot_roadmap": "🚨 Crisis Job Search — 100k Remote",
       "milestones": {
         "m1_packaging": {
-          "name": "Packaging (July 3-7)",
+          "name": "Packaging (July 6-10)",
           "tasks": [
-            "Experience audit + IT/AI translation",
-            "Resume on hh.ru, Superjob, Rabota.ru, Zarplata.ru, Avito, TrudVsem — deadline July 7",
-            "LinkedIn + Habr Career + TenChat profiles — deadline July 7",
-            "Geekjob + Getmatch + 10+ Telegram channels — deadline July 8"
+            "Experience audit + IT/AI translation (COMPLETED)",
+            "Core resume (Russian) preparation (COMPLETED)",
+            "Adapt resume for hh.ru, Superjob, Rabota.ru, Zarplata.ru",
+            "Adapt resume for Avito, TrudVsem",
+            "Create LinkedIn profile (English version)",
+            "Create Habr Career, TenChat profiles",
+            "Subscribe to 10+ Telegram channels",
+            "Integrate HyperCareer company list into job search database"
           ]
         },
         "m2_first_wave": {
-          "name": "First Wave (July 8-14)",
+          "name": "First Wave (July 11-17)",
           "tasks": [
-            "70+ applications across all platforms — deadline July 14",
-            "Employer verification via Dream Job — deadline July 14"
+            "70+ applications across all platforms",
+            "Employer verification via Dream Job"
           ]
         },
         "m3_interviews": {
-          "name": "Interviews (July 15-21)",
+          "name": "Interviews (July 18-24)",
           "tasks": [
-            "All first-wave interviews — deadline July 21",
-            "Second wave 20-30 applications + pitch calibration — deadline July 21"
+            "All first-wave interviews",
+            "Second wave 20-30 applications + pitch calibration"
           ]
         },
         "m4_offer": {
-          "name": "Offer (July 22-31)",
+          "name": "Offer (July 25-31)",
           "tasks": [
-            "Minimum 1 written offer 100 000+ RUB (or expand to projects/contracts) — deadline July 31"
+            "Minimum 1 written offer 100 000+ RUB (or expand to projects/contracts)"
           ]
         }
       }
@@ -118,6 +122,112 @@
       }
     }
   },
+  "task_tracker": {
+    "description": "Detailed task board for Track A packaging phase. Statuses: pending, in_progress, done.",
+    "packaging_tasks": [
+      {
+        "id": "A-TASK-001",
+        "name": "Audit of experience for IT/AI translation",
+        "status": "done",
+        "priority": "HIGH",
+        "output": "Core experience document"
+      },
+      {
+        "id": "A-TASK-002",
+        "name": "Prepare 'Core Resume' (ATS-optimized, Russian)",
+        "status": "done",
+        "priority": "HIGH",
+        "deadline": "2026-07-06",
+        "output": "Core resume text"
+      },
+      {
+        "id": "A-TASK-003",
+        "name": "Adapt resume for Russian job boards",
+        "status": "in_progress",
+        "subtasks": [
+          "hh.ru adaptation",
+          "Superjob adaptation",
+          "Rabota.ru, Zarplata.ru, Avito, TrudVsem adaptation"
+        ],
+        "deadline": "2026-07-08",
+        "output": "Ready-to-use profiles on each platform"
+      },
+      {
+        "id": "A-TASK-004",
+        "name": "Create international/professional profiles",
+        "status": "pending",
+        "subtasks": [
+          "LinkedIn profile (English)",
+          "Habr Career profile",
+          "TenChat profile"
+        ],
+        "deadline": "2026-07-08"
+      },
+      {
+        "id": "A-TASK-005",
+        "name": "Subscribe to 10+ Telegram job channels",
+        "status": "pending",
+        "deadline": "2026-07-09"
+      },
+      {
+        "id": "A-TASK-006",
+        "name": "Integrate HyperCareer company list",
+        "status": "pending",
+        "deadline": "2026-07-10"
+      }
+    ]
+  },
+  "skills": {
+    "management": [
+      "Operations Management",
+      "Project Management (Agile, Scrum, Kanban)",
+      "Budget Management (P&L)",
+      "Team Leadership (up to 30 people)",
+      "Process Optimization",
+      "SOP Development",
+      "Quality Management"
+    ],
+    "it_tools": [
+      "Notion (task management, documentation)",
+      "Asana",
+      "1C",
+      "iiko",
+      "MS Office",
+      "Electronic Document Management (EDO)",
+      "Git"
+    ],
+    "ai_automation": [
+      "AI Agents (GPT, Claude, DeepSeek)",
+      "Agentic Workflows",
+      "AI Integration & Automation",
+      "Prompt Engineering",
+      "API Integration",
+      "Linux Server Administration (Ubuntu, systemd)"
+    ]
+  },
+  "mandala_project": {
+    "name": "Mandala Symbiosis",
+    "role": "Architect and Operational Manager",
+    "period": "2025 – present",
+    "description": "Project to create a living AI ecosystem that unites several AI agents (GPT, Claude, DeepSeek) to solve management and automation tasks.",
+    "achievements": [
+      "Built agent system architecture for task management, analytics, planning",
+      "Developed task management system via Notion and API",
+      "Created external products: Telegram bot 'Gentle Companion' (MVP, 7 active users) and Engineer Chat for agent coordination",
+      "Deployed products on external server (Ubuntu, systemd, Git)"
+    ],
+    "tech_stack": [
+      "OpenAI API",
+      "Claude API",
+      "DeepSeek API",
+      "Python",
+      "Notion API",
+      "Git",
+      "Telegram Bot API",
+      "Linux (Ubuntu)",
+      "systemd"
+    ]
+  },
   "courses": {
     "strategy": "Start immediately in July. OpenAI Academy is priority #1. Progress in gaps between Track A applications. Complete by Track B Phase 2-3.",
     "list": [
@@ -167,7 +277,7 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-07-03",
-    "notes": "v3.0.0: Major restructure. Track A: 100k deadline July 31. Track B: AI Operations & Agent Management focus. OpenAI Academy priority #1. All resources integrated. AI-centric positioning."
+    "last_check": "2026-07-06",
+    "notes": "v4.0.0: Added detailed task tracker for packaging phase, updated metrics for New Normal (15% annual growth, 40-45% total over 3 years, 10-20% cost reduction), added Raw to go metrics, added Mandala Symbiosis project block with products and tech stack, added IT/AI skills section, synced dates to July 6-10."
   }
 }
