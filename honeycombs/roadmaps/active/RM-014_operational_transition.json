@@ -1,146 +1,173 @@
 {
   "identity": {
     "roadmap_id": "RM-014",
-    "name": "RM-014: From HoReCa to IT Operations — A Gardener's Personal Transition",
-    "version": "v2.0.0",
+    "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
+    "version": "v3.0.0",
     "created": "2026-04-16",
-    "updated": "2026-05-01",
+    "updated": "2026-07-03",
     "layer": 2,
     "type": "roadmap",
-    "description": "Two-track strategic roadmap. Track A: crisis job search (May 2026, any remote 80k+ RUB). Track B: strategic transition to IT Operations Manager (June 2026+, 120k+ RUB). Ultimate goal: location-independent lifestyle with trial relocation to Vietnam.",
+    "description": "Two-track roadmap. Track A: remote job from 100 000 RUB by July 31, 2026. Track B: AI Operations & Agent Management — global remote from 250 000–300 000 RUB by January 2027. Leverages Mandala as portfolio proof.",
     "status": "active",
     "priority": "HIGH",
-    "tags": ["personal", "career", "operations", "management", "IT", "relocation", "vietnam", "crisis", "two_track", "job_search"],
+    "tags": ["personal", "career", "ai", "agent_management", "operations", "remote", "relocation", "vietnam"],
     "resonance": "100%"
   },
   "meta": {
-    "purpose": "Two-track survival-to-strategy roadmap. Track A secures income within 30 days. Track B builds long-term IT career. Courses run in parallel.",
+    "purpose": "Two-track survival-to-strategy roadmap. Track A secures income by July 31. Track B builds AI Operations career. Courses run in parallel.",
     "context_for_sr": {
       "who": "Voodoo (Dima), Gardener and co-creator of Mandala Symbiosis. 8+ years managing multi-location coffee business in Russia.",
-      "situation": "Current employer failing. Hard deadline: May 31, 2026 to find new income source.",
-      "strategy": "Two parallel tracks. Track A: any remote 80k+ RUB immediately. Track B: IT Operations Manager 120k+ RUB from June 2026.",
-      "mandala_lever": "Mandala project is portfolio proof of IT competence — architecting systems, using PM tools, full development lifecycle.",
-      "courses_parallel": "Google PM Certificate + COO OTUS start immediately. Do not wait for Track A completion. Progress during gaps between applications."
+      "situation": "Current employer failing. Hard deadline: July 31, 2026 to find new income source.",
+      "strategy": "Two parallel tracks. Track A: any remote 100 000+ RUB immediately. Track B: AI Operations Manager / Agent Orchestrator 250 000–300 000 RUB from January 2027.",
+      "mandala_lever": "Mandala is portfolio proof of AI/IT competence — building a living symbiosis with AI, using PM tools, full development lifecycle. Central case for Track B.",
+      "ai_focus": "All learning and positioning is now AI-centric. OpenAI Academy is priority #1. Mandala is the practice ground for agent orchestration.",
+      "courses_parallel": "OpenAI Academy + Google PM + COO OTUS start immediately. Do not wait for Track A completion. Progress during gaps between applications."
     },
-    "horizon": "30 days (Track A) + 6-8 months (Track B)",
+    "horizon": "30 days (Track A) + 6 months (Track B)",
     "owner": "Gardener (Voodoo) + External SR"
   },
   "tracks": {
     "track_a": {
-      "name": "Track A: Crisis Job Search",
-      "deadline": "2026-05-31",
-      "goal": "Any remote job with 80 000+ RUB income",
-      "reasoning": "30 days is too short for IT industry entry. Leverage 8-year HoReCa operations experience. Target: operations, administration, Chief of Staff in any sector.",
-      "bot_roadmap": "🚨 Crisis Job Search",
+      "name": "Track A: Crisis Job Search — Remote 100k",
+      "deadline": "2026-07-31",
+      "goal": "Any remote job with 100 000+ RUB income",
+      "reasoning": "Immediate income needed. Leverage 8-year operations experience. Target: operations, administration, Chief of Staff in any sector, with focus on IT/tech companies where possible.",
+      "bot_roadmap": "🚨 Crisis Job Search — 100k Remote",
       "milestones": {
         "m1_packaging": {
-          "name": "Packaging (May 1-7)",
+          "name": "Packaging (July 3-7)",
           "tasks": [
-            "Experience audit + IT translation — deadline 02.05",
-            "Resume on hh.ru, Superjob, Rabota.ru, Zarplata.ru, Avito, TrudVsem — deadline 05.05",
-            "LinkedIn + Habr Career profiles — deadline 07.05",
-            "Geekjob + Getmatch + 10 Telegram channels — deadline 08.05"
+            "Experience audit + IT/AI translation",
+            "Resume on hh.ru, Superjob, Rabota.ru, Zarplata.ru, Avito, TrudVsem — deadline July 7",
+            "LinkedIn + Habr Career + TenChat profiles — deadline July 7",
+            "Geekjob + Getmatch + 10+ Telegram channels — deadline July 8"
           ]
         },
         "m2_first_wave": {
-          "name": "First Wave (May 8-14)",
+          "name": "First Wave (July 8-14)",
           "tasks": [
-            "70+ applications across all platforms — deadline 14.05",
-            "Employer verification via Dream Job — deadline 14.05"
+            "70+ applications across all platforms — deadline July 14",
+            "Employer verification via Dream Job — deadline July 14"
           ]
         },
         "m3_interviews": {
-          "name": "Interviews (May 15-21)",
+          "name": "Interviews (July 15-21)",
           "tasks": [
-            "All first-wave interviews — deadline 21.05",
-            "Second wave 20-30 applications + pitch calibration — deadline 21.05"
+            "All first-wave interviews — deadline July 21",
+            "Second wave 20-30 applications + pitch calibration — deadline July 21"
           ]
         },
         "m4_offer": {
-          "name": "Offer (May 22-31)",
+          "name": "Offer (July 22-31)",
           "tasks": [
-            "Minimum 1 written offer 80 000+ RUB (or expand to projects/contracts) — deadline 31.05"
+            "Minimum 1 written offer 100 000+ RUB (or expand to projects/contracts) — deadline July 31"
           ]
         }
       }
     },
     "track_b": {
-      "name": "Track B: Strategic IT Transition",
-      "start": "2026-06-01",
-      "goal": "Remote Operations Manager in IT, 120 000+ RUB",
-      "reasoning": "After Track A income stabilised. Leverage Mandala portfolio + ongoing certifications + 8-year operations experience translated to IT context.",
+      "name": "Track B: AI Operations & Agent Management — Global Remote",
+      "start": "2026-07-03",
+      "goal": "Remote AI Operations Manager / Agent Orchestrator in global companies, 250 000–300 000+ RUB",
+      "reasoning": "After Track A income stabilised. Leverage Mandala as AI portfolio + OpenAI certifications + operations experience translated to AI context. Focus on agent orchestration, AI workflows, and human-AI symbiosis.",
+      "ai_emphasis": "All learning and positioning is AI-centric. OpenAI Academy is priority #1. Mandala is the practice ground for agent orchestration.",
       "phases": {
         "phase_1": {
-          "name": "Foundation (June-July 2026)",
+          "name": "Foundation — AI & Ops (July-August 2026)",
           "duration": "Month 1-2",
           "tasks": [
-            "Continue Google PM Certificate (started May) — first 2 modules complete",
-            "Continue COO OTUS (started May) — in progress, 4-month program",
-            "Weekly Mandala devlog — public IT project timeline",
-            "Business English 2-3 sessions/week",
-            "Re-audit experience into IT language v2"
+            "🔥 OpenAI Academy: AI Foundations — complete (priority #1)",
+            "Google PM Certificate — first 2 modules complete",
+            "COO OTUS — in progress, 4-month program",
+            "Business English 2-3 sessions/week (technical AI/ML vocabulary)",
+            "Weekly Mandala devlog — public AI project timeline",
+            "Re-audit experience into IT/AI language v2"
           ]
         },
         "phase_2": {
-          "name": "Packaging (August-September 2026)",
+          "name": "Deepening — Agents & Workflows (September-October 2026)",
           "duration": "Month 3-4",
           "tasks": [
-            "Professional Mandala GitHub README (English)",
-            "LinkedIn optimized for IT Operations Manager",
+            "🔥 OpenAI Academy: Applied AI Foundations — complete",
+            "🔥 OpenAI Academy: Agents and Workflows — complete",
             "Start Lean Six Sigma Yellow Belt certification",
-            "IT-focused resume v2"
+            "Deepen agent architecture through Mandala (LangChain/LlamaIndex practice)",
+            "IT-focused resume v2 with AI/agent emphasis"
           ]
         },
         "phase_3": {
-          "name": "Active Search (October-November 2026)",
+          "name": "Packaging — AI Portfolio (November-December 2026)",
           "duration": "Month 5-6",
           "tasks": [
-            "Active applications on hh.ru, Habr Career, Superjob, Geekjob, Getmatch",
-            "Networking via TenChat, 'Setka' (HH), LinkedIn",
-            "Employer due diligence via Dream Job",
-            "Target: offer 120 000+ RUB as IT Operations Manager"
+            "Professional Mandala GitHub README (English) — AI case study",
+            "LinkedIn optimized for AI Operations / Agent Management",
+            "OpenAI badges (Credly) in profile",
+            "AI-focused resume v3 for global market"
           ]
         },
         "phase_4": {
-          "name": "Relocation Trial (December 2026+)",
+          "name": "Active Search — Global AI Market (December 2026-January 2027)",
           "duration": "Month 7-8",
           "tasks": [
-            "Visa, housing, logistics for 1-2 months in Vietnam",
-            "Stable remote work routine from new location",
-            "Continue Mandala development + devlog",
-            "Conscious decision: extend / return / next country"
+            "Active applications on global platforms (LinkedIn, WWR, RemoteOK, etc.)",
+            "Networking via LinkedIn, AI communities",
+            "Target: offer 250 000–300 000+ RUB as AI Operations / Agent Orchestrator",
+            "Relocation trial: Vietnam (1-2 months) — stable remote work from new location"
           ]
         }
       }
     }
   },
   "courses": {
-    "strategy": "Start immediately in May, progress in gaps between Track A applications. Complete by Track B Phase 2-3.",
+    "strategy": "Start immediately in July. OpenAI Academy is priority #1. Progress in gaps between Track A applications. Complete by Track B Phase 2-3.",
     "list": [
-      { "priority": 1, "name": "Google Project Management Certificate", "platform": "Coursera", "duration": "3-6 months", "start": "2026-05-03" },
-      { "priority": 1, "name": "COO / Операционный директор в IT", "platform": "OTUS", "duration": "4 months", "start": "2026-05-03" },
-      { "priority": 2, "name": "Lean Six Sigma Yellow Belt", "platform": "TUM / ASQ", "duration": "5-6 months", "start": "2026-08" },
-      { "priority": 2, "name": "Chief of Staff 101", "platform": "Udemy", "duration": "2-3 hours" },
-      { "priority": 2, "name": "Certified Chief of Staff", "platform": "Udemy", "duration": "2-3 hours" }
+      { "priority": "🔥 HIGH", "name": "OpenAI Academy: AI Foundations", "platform": "OpenAI", "duration": "2-4 weeks", "start": "July 2026", "status": "not_started", "certificate": "Credly badge" },
+      { "priority": "🔥 HIGH", "name": "OpenAI Academy: Applied AI Foundations", "platform": "OpenAI", "duration": "3-4 weeks", "start": "September 2026", "status": "not_started", "certificate": "Credly badge" },
+      { "priority": "🔥 HIGH", "name": "OpenAI Academy: Agents and Workflows", "platform": "OpenAI", "duration": "3-4 weeks", "start": "October 2026", "status": "not_started", "certificate": "Credly badge" },
+      { "priority": "HIGH", "name": "Google Project Management Certificate", "platform": "Coursera", "duration": "3-6 months", "start": "July 2026", "status": "not_started" },
+      { "priority": "HIGH", "name": "COO / Операционный директор в IT", "platform": "OTUS", "duration": "4 months", "start": "July 2026", "status": "not_started" },
+      { "priority": "MEDIUM", "name": "Lean Six Sigma Yellow Belt", "platform": "TUM / ASQ", "duration": "5-6 months", "start": "August 2026", "status": "not_started" },
+      { "priority": "HIGH", "name": "English (B2→C1, technical AI/ML vocabulary)", "platform": "Regular sessions", "duration": "Ongoing", "start": "July 2026", "status": "not_started" }
+    ],
+    "additional_ai_resources": [
+      "DeepLearning.AI — courses on AI, LLM, agents (free)",
+      "LangChain / LlamaIndex — documentation and tutorials (practice via Mandala)",
+      "OpenRouter / OpenAI API — deepen agent orchestration through Mandala"
     ]
   },
   "job_search_platforms": {
-    "primary": ["hh.ru", "Superjob", "Rabota.ru", "Zarplata.ru", "Avito", "TrudVsem"],
-    "it_specific": ["Habr Career", "Geekjob", "Getmatch", "TenChat"],
-    "telegram": "10+ thematic channels (auto-crosspost via Geekjob)",
-    "networking": ["LinkedIn", "Setka (HH)", "Habr portal"],
+    "track_a_russian": {
+      "primary": ["hh.ru", "Superjob", "Rabota.ru", "Zarplata.ru", "Avito", "TrudVsem"],
+      "it_specific": ["Habr Career", "GeekJOB", "Getmatch", "TenChat"],
+      "niche_aggregators": ["Jobster", "hirify", "hirehi", "careerspace", "finder"],
+      "temporary_projects": ["Kwork", "FL.ru", "Workspace", "SolarStaff"]
+    },
+    "track_b_global": {
+      "international": ["LinkedIn (global)", "We Work Remotely (WWR)", "RemoteOK", "NoDesk", "Himalayas", "Working Nomads", "Remote.co"],
+      "ai_specific": ["Toptal", "Arc.dev", "Turing", "Crossover"],
+      "personalized": ["Otta", "wantapply.com", "Wellfound (AngelList)"],
+      "cis_it": ["Djinni"]
+    },
+    "telegram_channels": {
+      "priority_1": ["@management_jobs / @projects_jobs_feed", "@benchmark_executive", "@newhribb"],
+      "priority_2": ["@vacansii_bezbariera", "@finexecutive", "WORK ON", "Удалёнка без опыта"],
+      "additional": ["@tools_hacks (getmatch)", "«Карьера» The Blueprint"],
+      "resume_channels": ["Резюме ⚡ Маркетинг, СММ, Digital, Продажи"]
+    },
+    "networking": ["LinkedIn", "TenChat", "Setka (HH)", "Habr portal", "Professional Slack communities"],
     "verification": ["Dream Job", "Glassdoor"],
     "salary_data": ["Getmatch calculator", "Levels.fyi (VPN)"]
   },
   "success_metrics": {
-    "track_a": "Written job offer 80 000+ RUB by May 31, 2026",
-    "track_b": "IT Operations Manager offer 120 000+ RUB by December 2026",
-    "courses": "Google PM Certificate and COO OTUS in progress by end of May 2026",
+    "track_a": "Written job offer 100 000+ RUB by July 31, 2026",
+    "track_b": "AI Operations / Agent Orchestrator offer 250 000–300 000+ RUB by January 2027",
+    "courses": "OpenAI Academy: AI Foundations complete by end of July 2026",
+    "certificates": "OpenAI badges (Credly) in LinkedIn profile by September 2026",
     "relocation": "1+ month successful remote work from Vietnam"
   },
   "health": {
     "status": "active",
-    "last_check": "2026-05-01",
-    "notes": "v2.0.0: Major restructure. Split into two tracks (A: crisis, B: strategic). Track A deadline May 31. Courses run parallel. Bot roadmap '🚨 Crisis Job Search' created with 10 tasks."
+    "last_check": "2026-07-03",
+    "notes": "v3.0.0: Major restructure. Track A: 100k deadline July 31. Track B: AI Operations & Agent Management focus. OpenAI Academy priority #1. All resources integrated. AI-centric positioning."
   }
 }
