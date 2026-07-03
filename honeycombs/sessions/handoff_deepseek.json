@@ -1,78 +1,85 @@
 {
   "sr_id": "deepseek",
-  "session_id": "2026-06-16-001",
-  "updated": "2026-06-16T16:00",
+  "session_id": "2026-07-03-001",
+  "updated": "2026-07-03T17:30:00",
   "status": "handed_off",
-  "session_summary": "Проработан onboarding для свежего СР. Добавлен 8-й принцип Critical Voice as care. Добавлены правила: pre-check raw/post-check API, sync onboarding ↔ source, module patching, announce last_updated. Обновлены philosophy v3.6.0, workflow v1.6.3, onboarding v1.7.4, boot_online v3.8.0.",
+  "session_summary": "Full context transfer after RM-014 v3.0.0 update. Active: personal career roadmap (Track A: 100k remote by July 31, Track B: AI Operations/Agent Orchestration 250-300k by Jan 2027). Mobile workflow active (Termux). OpenAI Academy priority #1. All resources integrated.",
+
   "active_projects": [
     {
-      "name": "Gentle Companion Bot",
+      "name": "RM-014: Personal Career Roadmap — AI Operations & Agent Orchestration",
+      "path": "honeycombs/roadmaps/active/RM-014_operational_transition.json",
+      "version": "v3.0.0",
+      "last_updated": "2026-07-03",
+      "description": "Two-track roadmap. Track A: remote job 100k+ by July 31. Track B: global remote AI Operations/Agent Orchestrator 250-300k+ by Jan 2027. Mandala as portfolio. OpenAI Academy priority #1.",
+      "current_focus": "Track A: packaging (July 3-7) — resume, profiles, channels. Track B: start OpenAI Academy: AI Foundations."
+    },
+    {
+      "name": "Gentle Companion Bot (modular)",
       "path": "honeycombs/fruits/gentle_companion/",
-      "index": "honeycombs/fruits/gentle_companion/index.json",
-      "description": "Основной Telegram-бот Мандалы. 14 модулей, CI-сборка в gentle_companion.py. Работает на сервере.",
-      "current_version": "v7.39.81+",
-      "last_patches": "P-98..P-105 (SR reactions, new task periods, overdue block)",
+      "version": "v7.39.81+",
+      "description": "Telegram bot, 14 modules, CI-built gentle_companion.py. P-98..P-105 done (SR reactions, task periods, overdue block).",
       "pending": "BUG-double-confirmation (SR text preamble before intent execution)"
     },
     {
-      "name": "Journal Diary",
-      "path": "honeycombs/tasks/active/bot_update.json (next_steps)",
-      "description": "Живое пространство для осознанных записей Садовника и СР. J-1..J-5 фазы: store, intents, context, synthesis, proactive.",
-      "status": "planned",
-      "priority": "medium"
-    },
-    {
-      "name": "Deep Synthesis & Milestones",
-      "path": "honeycombs/tasks/active/bot_update.json (next_steps)",
-      "description": "Глубинная память сада. D-2..D-6 фазы: cleanup profile, deep synthesis method, milestone detection, monthly review, SR usage.",
-      "status": "planned (D-1 done)",
-      "priority": "low"
-    },
-    {
-      "name": "Onboarding & Documentation",
-      "path": "honeycombs/boot_online/",
-      "description": "Onboarding PC v1.7.4. Правила для внешних СР. Философское ядро v3.6.0 (8 принципов). Workflow instructions v1.6.3.",
-      "last_updated": "2026-06-16"
+      "name": "Mobile Workflow",
+      "path": "honeycombs/instructions/mobile_workflow.json",
+      "version": "v1.4.0",
+      "description": "Working from Android/Termux. Git, Python, Micro. FULL DEPLOY blocks for updates.",
+      "status": "active"
     }
   ],
+
   "key_files": {
-    "bot_task": "honeycombs/tasks/active/bot_update.json",
-    "architecture_index": "honeycombs/fruits/gentle_companion/index.json",
-    "handoff_claude": "honeycombs/sessions/handoff_claude.json",
-    "onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json",
-    "philosophy": "honeycombs/philosophy/index.json",
-    "workflow": "honeycombs/instructions/core/external_sr_workflow.json",
-    "fruits": "honeycombs/fruits/index.json"
+    "roadmap_personal": "honeycombs/roadmaps/active/RM-014_operational_transition.json",
+    "mobile_workflow": "honeycombs/instructions/mobile_workflow.json",
+    "boot": "simbiosis/boot.json",
+    "core_map": "honeycombs/core_map/index.json",
+    "fruits_index": "honeycombs/fruits/index.json",
+    "handoff_claude": "honeycombs/sessions/handoff_claude.json"
   },
+
   "gardener_context": {
-    "who": "Дима (Dmitrii Levin) — архитектор и первый садовник",
-    "workspace": "VS Code на Windows, PowerShell",
-    "repo_path": "C:\\Mandala_Digital\\github\\mandala-core",
-    "server": "ssh root@91.99.149.226"
+    "who": "Voodoo (Dima), Gardener and co-creator of Mandala Symbiosis.",
+    "workspace": "Termux on Android (mobile). Path: ~/storage/shared/mandala-core",
+    "repo_path": "/storage/emulated/0/mandala-core",
+    "server": "ssh root@91.99.149.226 (Hetzner VPS)",
+    "current_work_mode": "Mobile (Termux), FULL DEPLOY blocks, post-check via API"
   },
+
   "critical_rules": [
-    "ВСЕГДА pre-check через RAW URL — быстрее, без CDN",
-    "ВСЕГДА post-check через API — для SHA верификации",
-    "ВСЕГДА объявлять last_updated файла первой строкой",
-    "Патчить ТОЛЬКО модули в gentle_companion/ — НЕ сам gentle_companion.py",
-    "Обновлять ОБА файла: источник + onboarding если они созависимы",
-    "Block 3 ВСЕГДА включает деплой на сервер",
-    "Именовать патчеры по задаче: fix_*.py, add_*.py — никогда patcher.py",
-    "8 принципов СР — особенно Critical Voice: возражать с аргументами"
+    "ALWAYS pre-check via RAW URL before any patch — bypasses CDN cache.",
+    "ALWAYS post-check via API after patch — verify SHA and version.",
+    "ALWAYS announce last_updated date in first response.",
+    "Patch modules in honeycombs/fruits/gentle_companion/ — NEVER patch gentle_companion.py directly.",
+    "Sync rule: source honeycomb + onboarding file must both be updated.",
+    "Block 3 ALWAYS includes full deploy: py patcher.py; Remove-Item; git add; commit; pull --rebase; push; ssh root@91.99.149.226 ... systemctl restart mandala-bot && journalctl -n 5",
+    "Name patchers by task: fix_*.py, add_*.py — never patcher.py.",
+    "8th SR principle — Critical Voice as care: speak if idea is weak or violates Ahimsa."
   ],
+
   "next_session_plan": {
     "priority_1": {
-      "title": "Fix BUG-double-confirmation",
-      "description": "SR отвечает текстовой преамбулой перед выполнением intent'а. Нужно чтобы SR сначала выполнял, потом подтверждал.",
-      "files": [
-        "honeycombs/fruits/gentle_companion/sr_prompts.py",
-        "honeycombs/fruits/gentle_companion/sr_conversation.py"
-      ]
+      "title": "Track A: Job Search Packaging (July 3-7)",
+      "description": "Complete experience audit, create resumes on 6 platforms, set up LinkedIn/Habr/TenChat, subscribe to 10+ Telegram channels.",
+      "files": ["honeycombs/roadmaps/active/RM-014_operational_transition.json"]
     },
     "priority_2": {
-      "title": "Journal Diary J-1..J-5",
-      "description": "Начать реализацию дневника симбиоза.",
-      "path": "honeycombs/tasks/active/bot_update.json → project_journal_diary"
+      "title": "Track B: Start OpenAI Academy: AI Foundations",
+      "description": "Register and begin the first course. Complete Module 1.",
+      "files": ["honeycombs/roadmaps/active/RM-014_operational_transition.json"]
+    },
+    "priority_3": {
+      "title": "Fix BUG-double-confirmation in Gentle Companion",
+      "description": "SR answers text preamble then classifier executes separately. Fix in sr_prompts.py.",
+      "files": ["honeycombs/fruits/gentle_companion/sr_prompts.py"]
     }
-  }
+  },
+
+  "notes": [
+    "OpenRouter access may be restricted from July 27, 2026 — need to investigate alternatives (TextCortex, KodikRouter, direct providers).",
+    "Mandala is central portfolio piece for Track B — keep devlog and public GitHub.",
+    "Mobile workflow: always use FULL DEPLOY blocks, one copy-paste per action.",
+    "Post-check is mandatory even if GitHub API has 5-10 min cache — use RAW URL for immediate verification."
+  ]
 }
