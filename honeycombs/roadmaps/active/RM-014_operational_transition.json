@@ -280,21 +280,103 @@
     ]
   },
   "courses": {
-    "strategy": "Start immediately in July. OpenAI Academy is priority #1. Progress in gaps between Track A applications. Complete by Track B Phase 2-3.",
-    "list": [
-      { "priority": "🔥 HIGH", "name": "OpenAI Academy: AI Foundations", "platform": "OpenAI", "duration": "2-4 weeks", "start": "July 2026", "status": "not_started", "certificate": "Credly badge" },
-      { "priority": "🔥 HIGH", "name": "OpenAI Academy: Applied AI Foundations", "platform": "OpenAI", "duration": "3-4 weeks", "start": "September 2026", "status": "not_started", "certificate": "Credly badge" },
-      { "priority": "🔥 HIGH", "name": "OpenAI Academy: Agents and Workflows", "platform": "OpenAI", "duration": "3-4 weeks", "start": "October 2026", "status": "not_started", "certificate": "Credly badge" },
-      { "priority": "HIGH", "name": "PMI-CPMAI (AI Project Management)", "platform": "PMI", "duration": "2-3 months", "start": "July 2026", "status": "not_started" },
-      { "priority": "HIGH", "name": "Google Project Management Certificate", "platform": "Coursera", "duration": "3-6 months", "start": "July 2026", "status": "not_started" },
-      { "priority": "HIGH", "name": "COO / Операционный директор в IT", "platform": "OTUS", "duration": "4 months", "start": "July 2026", "status": "not_started" },
-      { "priority": "MEDIUM", "name": "Lean Six Sigma Yellow Belt", "platform": "TUM / ASQ", "duration": "5-6 months", "start": "August 2026", "status": "not_started" },
-      { "priority": "HIGH", "name": "English (B2→C1, technical AI/ML vocabulary)", "platform": "Regular sessions", "duration": "Ongoing", "start": "July 2026", "status": "not_started" }
-    ],
+    "strategy": "Priority: free and critical first (OpenAI Academy) → free and useful second → paid after finding a job. Start immediately with OpenAI Academy.",
+    "priority_levels": {
+      "critical_free": {
+        "description": "🔥 Free, start now. Immediate value for resume and skills.",
+        "list": [
+          {
+            "name": "OpenAI Academy: AI Foundations",
+            "platform": "OpenAI",
+            "duration": "2-4 weeks",
+            "start": "July 2026",
+            "status": "not_started",
+            "certificate": "Credly badge",
+            "why": "Fundamental prompt engineering. Fastest AI credential."
+          },
+          {
+            "name": "OpenAI Academy: Applied AI Foundations",
+            "platform": "OpenAI",
+            "duration": "3-4 weeks",
+            "start": "September 2026",
+            "status": "not_started",
+            "certificate": "Credly badge",
+            "why": "Transition from user to architect. Build repeatable AI workflows."
+          },
+          {
+            "name": "OpenAI Academy: Agents and Workflows",
+            "platform": "OpenAI",
+            "duration": "3-4 weeks",
+            "start": "October 2026",
+            "status": "not_started",
+            "certificate": "Credly badge",
+            "why": "Direct path to Agentic Orchestration roles."
+          }
+        ]
+      },
+      "secondary_free": {
+        "description": "📈 Free, useful for deepening skills.",
+        "list": [
+          {
+            "name": "DeepLearning.AI — AI, LLM, agents courses",
+            "platform": "DeepLearning.AI",
+            "duration": "Varies",
+            "why": "Excellent free supplement."
+          },
+          {
+            "name": "LangChain / LlamaIndex documentation",
+            "platform": "Open source",
+            "duration": "Ongoing",
+            "why": "Hands-on practice via Mandala."
+          },
+          {
+            "name": "English (B2→C1, technical AI/ML)",
+            "platform": "Free resources",
+            "duration": "Ongoing",
+            "start": "July 2026",
+            "status": "not_started",
+            "why": "Critical for global market."
+          }
+        ]
+      },
+      "paid_after_work": {
+        "description": "💎 Paid certifications. Invest after securing income.",
+        "list": [
+          {
+            "name": "PMI-CPMAI (AI Project Management)",
+            "platform": "PMI",
+            "duration": "2-3 months",
+            "cost": "~$500-800",
+            "why": "Gold standard for AI PM. High ROI."
+          },
+          {
+            "name": "Google Project Management Certificate",
+            "platform": "Coursera",
+            "duration": "3-6 months",
+            "cost": "~$40/month",
+            "why": "Solid PM foundation."
+          },
+          {
+            "name": "COO / Операционный директор в IT",
+            "platform": "OTUS",
+            "duration": "4 months",
+            "cost": "~100 000+ RUB",
+            "why": "Deepens operational knowledge in IT."
+          },
+          {
+            "name": "Lean Six Sigma Yellow Belt",
+            "platform": "TUM / ASQ",
+            "duration": "5-6 months",
+            "cost": "~$100-300",
+            "why": "Process optimization methodology."
+          }
+        ]
+      }
+    },
     "additional_ai_resources": [
-      "DeepLearning.AI — courses on AI, LLM, agents (free)",
-      "LangChain / LlamaIndex — documentation and tutorials (practice via Mandala)",
-      "OpenRouter / OpenAI API — deepen agent orchestration through Mandala"
+      "OpenRouter / OpenAI API — deepen agent orchestration via Mandala",
+      "GitHub — explore AI agent open-source projects",
+      "Hugging Face — free models and datasets"
     ]
   },
   "job_search_platforms": {
