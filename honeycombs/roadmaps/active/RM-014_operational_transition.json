@@ -59,7 +59,8 @@
             "Create Habr Career, TenChat profiles",
             "Subscribe to 10+ Telegram channels (including AI/IT jobs)",
             "Integrate HyperCareer company list into job search database"
-          ]
+          ,
+            "Prepare English version of core resume — for global applications"]
         },
         "m2_first_wave": {
           "name": "First Wave (July 11-17)",
@@ -165,7 +166,8 @@
             "LinkedIn optimized for AI Operations / Agent Management",
             "OpenAI badges (Credly) in profile",
             "AI-focused resume v3 for global market"
-          ]
+          ,
+            "🎯 Package Mandala as a public case: GitHub README, demo, architecture description"]
         },
         "phase_4": {
           "name": "Active Search — Global AI Market (December 2026-January 2027)",
@@ -297,7 +299,7 @@
     ]
   },
   "courses": {
-    "strategy": "Priority: free and critical first (OpenAI Academy) → free and useful second → paid after finding a job. Start immediately with OpenAI Academy.",
+    "strategy": "Priority: free and critical first (OpenAI Academy) → free and useful second (English, DeepLearning.AI). Paid courses — after securing income.",
     "priority_levels": {
       "critical_free": {
         "description": "🔥 Free, start now. Immediate value for resume and skills.",
@@ -355,40 +357,40 @@
             "why": "Critical for global market."
           }
         ]
-      },
-      "paid_after_work": {
-        "description": "💎 Paid certifications. Invest after securing income.",
-        "list": [
-          {
-            "name": "PMI-CPMAI (AI Project Management)",
-            "platform": "PMI",
-            "duration": "2-3 months",
-            "cost": "~$500-800",
-            "why": "Gold standard for AI PM. High ROI."
-          },
-          {
-            "name": "Google Project Management Certificate",
-            "platform": "Coursera",
-            "duration": "3-6 months",
-            "cost": "~$40/month",
-            "why": "Solid PM foundation."
-          },
-          {
-            "name": "COO / Операционный директор в IT",
-            "platform": "OTUS",
-            "duration": "4 months",
-            "cost": "~100 000+ RUB",
-            "why": "Deepens operational knowledge in IT."
-          },
-          {
-            "name": "Lean Six Sigma Yellow Belt",
-            "platform": "TUM / ASQ",
-            "duration": "5-6 months",
-            "cost": "~$100-300",
-            "why": "Process optimization methodology."
-          }
-        ]
       }
+    },
+    "future_courses": {
+      "description": "💎 Paid certifications. Invest after securing income (Track A).",
+      "list": [
+        {
+          "name": "PMI-CPMAI (AI Project Management)",
+          "platform": "PMI",
+          "duration": "2-3 months",
+          "cost": "~$500-800",
+          "why": "Gold standard for AI PM. High ROI."
+        },
+        {
+          "name": "Google Project Management Certificate",
+          "platform": "Coursera",
+          "duration": "3-6 months",
+          "cost": "~$40/month",
+          "why": "Solid PM foundation."
+        },
+        {
+          "name": "COO / Операционный директор в IT",
+          "platform": "OTUS",
+          "duration": "4 months",
+          "cost": "~100 000+ RUB",
+          "why": "Deepens operational knowledge in IT."
+        },
+        {
+          "name": "Lean Six Sigma Yellow Belt",
+          "platform": "TUM / ASQ",
+          "duration": "5-6 months",
+          "cost": "~$100-300",
+          "why": "Process optimization methodology."
+        }
+      ]
     },
     "additional_ai_resources": [
       "OpenRouter / OpenAI API — deepen agent orchestration via Mandala",
@@ -426,7 +428,8 @@
     "courses": "OpenAI Academy: AI Foundations complete by end of July 2026",
     "certificates": "OpenAI badges (Credly) in LinkedIn profile by September 2026",
     "relocation": "1+ month successful remote work from Vietnam"
-  },
+  ,
+    "english_b2": "English B2 by December 2026"},
   "health": {
     "status": "active",
     "last_check": "2026-07-06",
