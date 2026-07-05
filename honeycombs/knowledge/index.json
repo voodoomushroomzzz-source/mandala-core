@@ -1,0 +1,41 @@
+{
+  "identity": {
+    "module_id": "KNOWLEDGE-INDEX-001",
+    "name": "Knowledge Base — Curated Resources",
+    "version": "v1.0.0",
+    "created": "2026-07-05",
+    "updated": "2026-07-05",
+    "layer": 1,
+    "type": "knowledge_index",
+    "status": "active",
+    "priority": "medium",
+    "tags": ["knowledge", "resources", "curated"]
+  },
+  "meta": {
+    "description": "Structured useful information: tools, references, guides, and external resources.",
+    "how_to_use": "Each file in the root of knowledge/ is a curated collection. SR can propose new categories and update existing ones."
+  },
+  "contents": [
+    {
+      "id": "ai_tools",
+      "name": "AI Tools Catalog",
+      "file": "ai_tools.json",
+      "description": "Curated list of AI tools by category from Instagram source (ksafaraliev_ai)",
+      "source": "Instagram (@ksafaraliev_ai)",
+      "date_added": "2026-07-05"
+    }
+  ],
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related": ["seeds", "fruits", "instructions"]
+  },
+  "metrics": {
+    "total_resources": 1,
+    "last_updated": "2026-07-05"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-07-05",
+    "notes": "Initial creation"
+  }
+}

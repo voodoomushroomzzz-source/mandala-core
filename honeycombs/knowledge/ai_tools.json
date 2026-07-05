@@ -1,0 +1,146 @@
+{
+  "id": "ai_tools_catalog",
+  "name": "AI Tools Catalog",
+  "source": "Instagram (@ksafaraliev_ai)",
+  "date_added": "2026-07-05",
+  "categories": [
+    {
+      "category": "Чат-боты",
+      "tools": [
+        {"name": "ChatGPT", "url": "https://chatgpt.com"},
+        {"name": "Claude", "url": "https://claude.ai"},
+        {"name": "DeepSeek", "url": "https://www.deepseek.com"},
+        {"name": "Gemini", "url": "https://gemini.google.com"},
+        {"name": "Grok", "url": "https://grok.com"},
+        {"name": "Meta AI", "url": "https://www.meta.ai"},
+        {"name": "MS Copilot", "url": "https://copilot.microsoft.com"},
+        {"name": "Perplexity", "url": "https://www.perplexity.ai"}
+      ]
+    },
+    {
+      "category": "Презентации",
+      "tools": [
+        {"name": "Gamma", "url": "https://gamma.app"},
+        {"name": "Pitch", "url": "https://pitch.com"},
+        {"name": "Plus AI", "url": "https://www.plusdocs.com"},
+        {"name": "PopAI", "url": "https://www.popai.pro"},
+        {"name": "Slidesgo", "url": "https://slidesgo.com"},
+        {"name": "Tome", "url": "https://tome.app"},
+        {"name": "Beautiful.ai", "url": "https://www.beautiful.ai"},
+        {"name": "PresentationsAI", "url": "https://presentations.ai"}
+      ]
+    },
+    {
+      "category": "Кодинг",
+      "tools": [
+        {"name": "AskCodi", "url": "https://www.askcodi.com"},
+        {"name": "Codiga", "url": "https://www.codiga.io"},
+        {"name": "Cursor", "url": "https://www.cursor.com"},
+        {"name": "Qodo", "url": "https://www.qodo.ai"},
+        {"name": "Replit", "url": "https://replit.com"},
+        {"name": "Tabnine", "url": "https://www.tabnine.com"},
+        {"name": "GitHub Copilot", "url": "https://github.com/features/copilot"},
+        {"name": "Bolt", "url": "https://bolt.new"},
+        {"name": "Loveable", "url": "https://lovable.dev"},
+        {"name": "Windsurf", "url": "https://windsurf.com"}
+      ]
+    },
+    {
+      "category": "Почта",
+      "tools": [
+        {"name": "Cliipt AI", "url": "https://www.cliipt.ai"},
+        {"name": "Friday", "url": "https://www.friday.co"},
+        {"name": "MailMaestro", "url": "https://www.maestrolabs.com"},
+        {"name": "Shortwave", "url": "https://www.shortwave.com"},
+        {"name": "Superhuman", "url": "https://superhuman.com"}
+      ]
+    },
+    {
+      "category": "Изображения",
+      "tools": [
+        {"name": "Adobe Firefly", "url": "https://firefly.adobe.com"},
+        {"name": "FLUX.1", "url": "https://blackforestlabs.ai"},
+        {"name": "Ideogram", "url": "https://ideogram.ai"},
+        {"name": "Midjourney", "url": "https://www.midjourney.com"},
+        {"name": "Recraft", "url": "https://www.recraft.ai"},
+        {"name": "Stable Diffusion", "url": "https://stability.ai"},
+        {"name": "LucidPic", "url": "https://lucidpic.com"},
+        {"name": "Leonardo AI", "url": "https://leonardo.ai"}
+      ]
+    },
+    {
+      "category": "Таблицы",
+      "tools": [
+        {"name": "Bricks", "url": "https://www.thebricks.com"},
+        {"name": "Formula Bot", "url": "https://formulabot.com"},
+        {"name": "Gigasheet", "url": "https://www.gigasheet.com"},
+        {"name": "Rows AI", "url": "https://rows.com"},
+        {"name": "SheetAI", "url": "https://www.sheetai.app"}
+      ]
+    },
+    {
+      "category": "Встречи",
+      "tools": [
+        {"name": "Avoma", "url": "https://www.avoma.com"},
+        {"name": "Equal Time", "url": "https://www.equaltime.ai"},
+        {"name": "Fathom", "url": "https://fathom.video"},
+        {"name": "Fellow.app", "url": "https://fellow.app"},
+        {"name": "Fireflies", "url": "https://fireflies.ai"},
+        {"name": "Krisp", "url": "https://krisp.ai"},
+        {"name": "Otter.ai", "url": "https://otter.ai"}
+      ]
+    },
+    {
+      "category": "Автоматизация",
+      "tools": [
+        {"name": "Integrately", "url": "https://integrately.com"},
+        {"name": "Make", "url": "https://www.make.com"},
+        {"name": "Monday.com", "url": "https://monday.com"},
+        {"name": "n8n", "url": "https://n8n.io"},
+        {"name": "Wrike", "url": "https://www.wrike.com"},
+        {"name": "Zapier", "url": "https://zapier.com"}
+      ]
+    },
+    {
+      "category": "Письмо",
+      "tools": [
+        {"name": "Copy.ai", "url": "https://www.copy.ai"},
+        {"name": "Grammarly", "url": "https://www.grammarly.com"},
+        {"name": "Jasper", "url": "https://www.jasper.ai"},
+        {"name": "JetBot", "url": "https://www.jetbot.ai"},
+        {"name": "Quarkle", "url": "https://www.quarkle.ai"},
+        {"name": "QuillBot", "url": "https://quillbot.com"},
+        {"name": "Rytr", "url": "https://rytr.me"},
+        {"name": "Sudowrite", "url": "https://www.sudowrite.com"},
+        {"name": "Writesonic", "url": "https://writesonic.com"},
+        {"name": "Jenni AI", "url": "https://jenni.ai"},
+        {"name": "Hix", "url": "https://hix.ai"}
+      ]
+    },
+    {
+      "category": "Планирование",
+      "tools": [
+        {"name": "Calendly", "url": "https://calendly.com"},
+        {"name": "Clockwise", "url": "https://www.getclockwise.com"},
+        {"name": "Motion", "url": "https://www.usemotion.com"},
+        {"name": "Reclaim AI", "url": "https://reclaim.ai"},
+        {"name": "Taskade", "url": "https://www.taskade.com"},
+        {"name": "Trevor AI", "url": "https://trevorai.com"}
+      ]
+    },
+    {
+      "category": "Видео",
+      "tools": [
+        {"name": "Descript", "url": "https://www.descript.com"},
+        {"name": "Haiper AI", "url": "https://haiper.ai"},
+        {"name": "Kling", "url": "https://klingai.com"},
+        {"name": "Krea AI", "url": "https://www.krea.ai"},
+        {"name": "LTX Studio", "url": "https://ltx.studio"},
+        {"name": "Luma AI", "url": "https://lumalabs.ai"},
+        {"name": "Pika", "url": "https://pika.art"},
+        {"name": "Runway", "url": "https://runwayml.com"},
+        {"name": "DeepAI", "url": "https://deepai.org"}
+      ]
+    }
+  ]
+}
