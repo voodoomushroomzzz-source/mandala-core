@@ -1,79 +1,99 @@
 {
-    "identity": {
-        "module_id": "INSTRUCTIONS-MANIFEST-001",
-        "name": "Instructions Honeycomb",
-        "version": "v3.2.0",
-        "created": "2026-03-01",
-        "updated": "2026-04-12",
-        "layer": 2,
-        "type": "honeycomb_manifest",
-        "description": "Master index of all instructions. SR instructions: v3.0 role, workflow, External AI integration, and mobile workflow.",
-        "status": "active",
-        "priority": "high",
-        "tags": ["instructions", "honeycomb", "core", "mandala", "external_ai", "sr_v3", "vs_code_workflow", "english_core", "mobile"],
-        "resonance": "100%"
-    },
-    "meta": {
-        "description": "Central index of all instruction files for Mandala Symbiosis.",
-        "status": "active",
-        "priority": "high",
-        "tags": ["instructions", "honeycomb", "core", "mandala", "external_ai", "sr_v3", "vs_code_workflow", "english_core", "mobile"],
-        "resonance": "100%"
-    },
-    "structure": {
-        "total_segments": 2,
-        "segments": [
-            {
-                "segment": "core",
-                "description": "Core SR instructions",
-                "files": {
-                    "sr_internal_role": {
-                        "file": "core/sr_internal_role.json",
-                        "description": "Internal SR role definition and responsibilities"
-                    },
-                    "external_sr_workflow": {
-                        "file": "core/external_sr_workflow.json",
-                        "description": "Complete workflow for External SR: PowerShell, JSON updates, git cycle"
-                    },
-                    "file_naming": {
-                        "file": "core/file_naming.json",
-                        "description": "File naming conventions"
-                    },
-                    "manifest_standard": {
-                        "file": "core/manifest_standard_v2.json",
-                        "description": "Honeycomb manifest standard v2.0"
-                    }
-                }
-            },
-            {
-                "segment": "workflows",
-                "description": "Platform-specific workflows",
-                "files": {
-                    "mobile_workflow": {
-                        "file": "mobile_workflow.json",
-                        "description": "Working with Mandala from Android phone using Termux"
-                    }
-                }
-            }
-        ]
-    },
-    "navigation": {
-        "parent_map": "honeycombs/core_map/index.json",
-        "first_file": "core/external_sr_workflow.json"
-    },
-    "registry": {
-        "total_files": 6,
-        "last_updated": "2026-04-12",
-        "notes": "v3.2.0: added mobile workflow."
-    },
-    "resonance": {
-        "status": "fully_resonant",
-        "with_boot": "100%",
-        "with_core_map": "100%"
-    },
-    "health": {
-        "status": "healthy",
-        "last_check": "2026-04-12",
-        "notes": "v3.2.0 — added mobile workflow for Android/Termux."
-    }
+  "identity": {
+    "module_id": "INSTRUCTIONS-MANIFEST-001",
+    "name": "Instructions Honeycomb",
+    "version": "v3.2.1",
+    "created": "2026-03-01",
+    "updated": "2026-07-05",
+    "layer": 2,
+    "type": "honeycomb_manifest",
+    "description": "Master index of all instructions. SR instructions: v3.0 role, workflow, External AI integration, and mobile workflow.",
+    "status": "active",
+    "priority": "high",
+    "tags": [
+      "instructions",
+      "honeycomb",
+      "core",
+      "mandala",
+      "external_ai",
+      "sr_v3",
+      "vs_code_workflow",
+      "english_core",
+      "mobile"
+    ],
+    "resonance": "100%"
+  },
+  "meta": {
+    "description": "Central index of all instruction files for Mandala Symbiosis.",
+    "status": "active",
+    "priority": "high",
+    "tags": [
+      "instructions",
+      "honeycomb",
+      "core",
+      "mandala",
+      "external_ai",
+      "sr_v3",
+      "vs_code_workflow",
+      "english_core",
+      "mobile"
+    ],
+    "resonance": "100%"
+  },
+  "structure": {
+    "total_segments": 2,
+    "segments": [
+      {
+        "segment": "core",
+        "description": "Core SR instructions",
+        "files": {
+          "sr_internal_role": {
+            "file": "core/sr_internal_role.json",
+            "description": "Internal SR role definition and responsibilities"
+          },
+          "external_sr_workflow": {
+            "file": "core/external_sr_workflow.json",
+            "description": "Complete workflow for External SR: PowerShell, JSON updates, git cycle"
+          },
+          "file_naming": {
+            "file": "core/file_naming.json",
+            "description": "File naming conventions"
+          },
+          "manifest_standard": {
+            "file": "core/manifest_standard_v2.json",
+            "description": "Honeycomb manifest standard v2.0"
+          }
+        }
+      },
+      {
+        "segment": "mobile",
+        "description": "Mobile-specific workflows",
+        "files": {
+          "mobile_workflow": {
+            "file": "mobile_workflow.json",
+            "description": "Working with Mandala from Android phone using Termux"
+          }
+        }
+      }
+    ]
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "first_file": "core/external_sr_workflow.json"
+  },
+  "registry": {
+    "total_files": 6,
+    "last_updated": "2026-07-05",
+    "notes": "v3.2.1 — fixed mobile_workflow path in structure"
+  },
+  "resonance": {
+    "status": "fully_resonant",
+    "with_boot": "100%",
+    "with_core_map": "100%"
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-04-12",
+    "notes": "v3.2.0 — added mobile workflow for Android/Termux."
+  }
 }
