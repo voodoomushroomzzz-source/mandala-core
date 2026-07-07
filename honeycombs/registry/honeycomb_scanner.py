@@ -151,7 +151,7 @@ class AhimsaFilter:
                 if file.name == 'index.json':
                     continue
                 # Check for empty files (<1000 bytes)
-                if file.stat().st_size < 1000:
+                if file.stat().st_size < 100:
                     self.noise_files.append({
                         'path': str(file),
                         'size': file.stat().st_size,
