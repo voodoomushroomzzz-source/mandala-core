@@ -1,26 +1,16 @@
 {
-  "date": "2026-07-05",
+  "date": "2026-07-07",
   "version": "7.39.23",
   "gardeners": {
-    "339914913": {
-      "name": "Антон",
-      "active": false,
-      "synthesis_date": "2026-06-19"
-    },
-    "224736062": {
-      "name": "Дима",
-      "active": true,
-      "synthesis_date": "2026-07-05"
-    },
-    "358793311": {
-      "name": "Антон",
-      "active": false,
-      "synthesis_date": "2026-06-22"
-    },
     "491567470": {
       "name": "Виктор",
       "active": false,
       "synthesis_date": ""
+    },
+    "224736062": {
+      "name": "Дима",
+      "active": true,
+      "synthesis_date": "2026-07-07"
     }
   },
   "issues": []
