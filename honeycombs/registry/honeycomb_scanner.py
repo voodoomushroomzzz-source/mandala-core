@@ -157,6 +157,48 @@ class AhimsaFilter:
                         'size': file.stat().st_size,
                         'reason': 'empty file (<1000 bytes)'
                     })
+    
+    def _validate_index(self, index_file: Path):
+        """Validate index.json structure"""
+        try:
+            with open(index_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            # Check required sections
+            if 'identity' not in data:
+                self.errors.append(f"{index_file.parent.name}/index.json: missing 'identity'")
+                return
+            
+            identity = data['identity']
+            
+            # Check required identity fields
+            for field in ['module_id', 'name', 'version', 'layer', 'type']:
+                if field not in identity:
+                    self.errors.append(f"{index_file.parent.name}: missing identity.{field}")
+            
+            # Check layer
+            layer = identity.get('layer')
+            if layer and layer not in self.valid_layers:
+                self.warnings.append(f"{index_file.parent.name}: invalid layer {layer}")
+            
+            # Check resonance
+            resonance = identity.get('resonance')
+            if resonance == "0%" or resonance == "0":
+                self.warnings.append(f"{index_file.parent.name}: zero resonance")
+            
+            # Check meta
+            if 'meta' in data:
+                meta = data['meta']
+                if 'description' not in meta:
+                    self.warnings.append(f"{index_file.parent.name}: missing meta.description")
+            else:
+                self.warnings.append(f"{index_file.parent.name}: missing meta section")
+                
+        except json.JSONDecodeError:
+            self.errors.append(f"{index_file.parent.name}/index.json: invalid JSON")
+        except Exception as e:
+            self.errors.append(f"{index_file.parent.name}/index.json: {str(e)}")
+    
     def _report(self) -> Dict:
         return {
             'errors': self.errors,
