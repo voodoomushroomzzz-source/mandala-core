@@ -409,9 +409,13 @@
       "temporary_projects": ["Kwork", "FL.ru", "Workspace", "SolarStaff"]
     },
     "track_b_global": {
-      "international": ["LinkedIn (global)", "We Work Remotely (WWR)", "RemoteOK", "NoDesk", "Himalayas", "Working Nomads", "Remote.co"],
+      "international": ["LinkedIn (global)", "We Work Remotely (WWR)", "RemoteOK", "NoDesk", "Himalayas", "Working Nomads", "Remote.co",
+      "Remotive",
+      "NoDesk",
+      "Truly Remote"],
       "ai_specific": ["Toptal", "Arc.dev", "Turing", "Crossover"],
-      "personalized": ["Otta", "wantapply.com", "Wellfound (AngelList)"],
+      "personalized": ["Otta", "wantapply.com", "Wellfound (AngelList)",
+      "Welcome to the Jungle"],
       "cis_it": ["Djinni"]
     },
     "telegram_channels": {
