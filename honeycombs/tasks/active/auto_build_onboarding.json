@@ -7,13 +7,20 @@
   "updated": "2026-07-07",
   "deadline": "2026-07-14",
   "progress": 0,
-  "description": "Создать систему автоматической сборки boot_online_onboarding_pc.json из составных модулей при пуше в любой из них.",
-  "goal": "Устранить ручную склейку онбординга. Любое изменение в core_map, philosophy, boot_online, external_sr_workflow, fruits, tasks, protocols автоматически обновляет boot_online_onboarding_pc.json.",
+  "description": "Создать систему автоматической сборки boot_online_onboarding_pc.json из составных модулей при пуше в любой из них. Включает external_sr_workflow и mobile_workflow как вшитые блоки.",
+  "goal": "Устранить ручную склейку онбординга. Любое изменение в core_map, philosophy, boot_online, external_sr_workflow, mobile_workflow, fruits, tasks, protocols автоматически обновляет boot_online_onboarding_pc.json.",
   "architecture": {
     "builder_file": "honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
     "builder_script": "honeycombs/scripts/build_onboarding.py",
     "github_workflow": ".github/workflows/build-onboarding.yml",
-    "target_file": "honeycombs/boot_online/boot_online_onboarding_pc.json"
+    "target_file": "honeycombs/boot_online/boot_online_onboarding_pc.json",
+    "source_modules": {
+      "mobile_workflow": {
+        "path": "honeycombs/instructions/mobile_workflow.json",
+        "section": "content",
+        "embedded": true
+      }
+    }
   },
   "triggers": [
     "honeycombs/boot_online/index.json",
@@ -24,7 +31,8 @@
     "honeycombs/instructions/core/external_sr_workflow.json",
     "honeycombs/fruits/index.json",
     "honeycombs/tasks/index.json",
-    "honeycombs/protocols/index.json"
+    "honeycombs/protocols/index.json",
+    "honeycombs/instructions/mobile_workflow.json"
   ],
   "phases": [
     {
@@ -115,7 +123,11 @@
       "workflow": ".github/workflows/build-onboarding.yml",
       "target": "honeycombs/boot_online/boot_online_onboarding_pc.json"
     },
-    "how_to_help": "Следуй плану в phases. Каждый phase имеет deliverables. Выполняй последовательно. После завершения phase — обновляй статус в задаче."
+    "how_to_help": "Следуй плану в phases. Каждый phase имеет deliverables. Выполняй последовательно. После завершения phase — обновляй статус в задаче.",
+    "mobile_workflow": {
+      "path": "honeycombs/instructions/mobile_workflow.json",
+      "note": "Вшивается в онбординг как embedded-блок. Синхронизируется с источником при каждой сборке."
+    }
   },
   "health": {
     "status": "healthy",
