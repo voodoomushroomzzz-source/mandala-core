@@ -1,0 +1,144 @@
+{
+  "id": "product_audit_framework",
+  "name": "Product Audit Framework — 5 Zones of Risk",
+  "version": "v1.0.0",
+  "created": "2026-07-07",
+  "updated": "2026-07-07",
+  "source": "Gardener (Voodoo/Dima)",
+  "description": "A diagnostic framework for analyzing product health across 5 key risk zones. Each zone contains diagnostic questions, metrics to check, red flags, and actionable recommendations. Designed for both human and AI use.",
+  "what": "A structured tool for auditing any product or product idea. It helps identify the most critical weakness in a product's current state — whether it's awareness, audience fit, value clarity, differentiation, or market timing.",
+  "when": "Before launching a new product, during a product review, when a product shows signs of stagnation, or as part of a routine health check. Also useful for auditing ideas in seeds/ before they become tasks.",
+  "zones": [
+    {
+      "id": 1,
+      "name": "Awareness Problem",
+      "core_question": "People won't buy what they don't know exists.",
+      "diagnostic_questions": [
+        "Where does the target audience physically live (platforms, communities, channels)?",
+        "Does the brand appear there regularly or sporadically?",
+        "What % of the target audience has even heard of the product?"
+      ],
+      "metrics": [
+        "Brand awareness / aided & unaided recall (% of TA)",
+        "Impressions / Reach over period",
+        "Share of voice vs competitors",
+        "Frequency of touches per user",
+        "Organic traffic on brand queries (Google/Yandex Wordstat)"
+      ],
+      "red_flags": [
+        "Presence on only 1 channel",
+        "Irregular posts (less than 2-3x/week on active channels)",
+        "No brand search traffic at all"
+      ],
+      "recommendation": "AI should give: 2-3 specific channels where TA already exists, and posting frequency."
+    },
+    {
+      "id": 2,
+      "name": "Audience Fit Problem",
+      "core_question": "Advertising to the wrong people = weak response.",
+      "diagnostic_questions": [
+        "Is TA described as one specific segment or 'everyone who might fit'?",
+        "Is there data on who actually buys / converts?"
+      ],
+      "metrics": [
+        "CTR by audience segments (comparison)",
+        "CPL / CPA by audience segments",
+        "Conversion to target action by each segment",
+        "% of audience mismatch — traffic is there, conversions aren't",
+        "LTV/CAC by segments"
+      ],
+      "red_flags": [
+        "TA described demographically without a job-to-be-done (JTBD)",
+        "One ad message for all segments",
+        "High traffic with low conversion (>3x below niche norm)"
+      ],
+      "recommendation": "AI should give: the best converting segment + narrow targeting to it."
+    },
+    {
+      "id": 3,
+      "name": "Value Clarity Problem",
+      "core_question": "People don't understand how the product is useful.",
+      "diagnostic_questions": [
+        "Can the product be explained in one phrase: 'for whom + what does it solve'?",
+        "Does how the company describes the product match how customers describe it in reviews?"
+      ],
+      "metrics": [
+        "Time to value understanding (seconds/words to grasp the offer — landing page test)",
+        "Bounce rate on homepage / landing page",
+        "% of users reaching target action after first touch",
+        "Card sorting / 5-second test results (can people retell the value after a quick view)",
+        "NPS / reviews with phrasing like 'didn't get what this is for'"
+      ],
+      "red_flags": [
+        "Bounce rate >70% on landing page",
+        "Product description only has features, no client result",
+        "Value proposition longer than one sentence"
+      ],
+      "recommendation": "AI should give: reformulated value proposition in format: 'Helps [whom] [do what] without [pain].'"
+    },
+    {
+      "id": 4,
+      "name": "Differentiation Problem",
+      "core_question": "You sound like everyone else and blend into the market.",
+      "diagnostic_questions": [
+        "How is the product different from 3 closest competitors — can it be summed up in one word/angle?",
+        "Is this angle repeated across all touchpoints (site, socials, ads, packaging)?"
+      ],
+      "metrics": [
+        "Competitive positioning analysis (table: competitor → claimed angle)",
+        "Consistency score — % of channels broadcasting the same message",
+        "Brand associations in surveys (what first word is associated with the product)",
+        "Price/conversion gap vs direct analogs (weak positioning → price competition)"
+      ],
+      "red_flags": [
+        "Different slogan/angle on each channel",
+        "In competitive analysis, the angle matches 2+ competitors verbatim",
+        "Sales only happen via discounts/dumping"
+      ],
+      "recommendation": "AI should give: one strong differentiating angle + where to lock it in (site headline, bio, offer)."
+    },
+    {
+      "id": 5,
+      "name": "Market Timing Problem",
+      "core_question": "Even a good product will fail if the market isn't ready.",
+      "diagnostic_questions": [
+        "Is there growing demand for this category right now (trend/season/event)?",
+        "Does the product solve a problem that is already recognized by the market, or does it still need to be explained?"
+      ],
+      "metrics": [
+        "Search query dynamics on the topic (Google Trends / Wordstat, 6-12 month trend)",
+        "Category growth/decline from industry reports",
+        "Speed of first sales after launch (first 2 weeks — indicator of market readiness)",
+        "Level of 'educational' sales — % of deals where you need to spend a long time explaining why this is needed"
+      ],
+      "red_flags": [
+        "Declining or flat search query trend",
+        "Long sales cycle due to needing to 'explain' the category",
+        "Competitors are massively leaving the market or scaling back marketing in the niche"
+      ],
+      "recommendation": "AI should give: conclusion — window is open/closed/needs waiting, and what to do in each case."
+    }
+  ],
+  "how_to_use": {
+    "steps": [
+      "1. Apply the framework sequentially across all 5 zones.",
+      "2. For each zone — request or evaluate available metrics (if no data, clearly state this as a gap, do not invent).",
+      "3. Note any red flags found.",
+      "4. Give 1 specific recommendation per zone (not generic — with action and success metric).",
+      "5. Final summary: which of the 5 zones is most critical right now (not all 5 are equally important at the moment)."
+    ]
+  },
+  "limitations": [
+    "This is a diagnostic screening tool, not a substitute for deep research (customer development, unit economics).",
+    "Metrics need to be calibrated to the niche — CTR/CPA norms differ between B2B and e-commerce.",
+    "Without real data (analytics, customer interviews), the AI can only hypothesize — clearly separate 'fact' and 'assumption' in conclusions."
+  ],
+  "integration_with_mandala": {
+    "seeds": "Use this framework to audit raw ideas before they become tasks.",
+    "tasks": "Use during product development to validate direction.",
+    "fruits": "Use as a health check for existing products.",
+    "roadmaps": "Use to identify the most critical risk zone before strategic shifts.",
+    "scout_agent": "Can use this framework for initial market scans.",
+    "symbiosis_guard": "Can act as a quality control layer, running products through this checklist."
+  }
+}

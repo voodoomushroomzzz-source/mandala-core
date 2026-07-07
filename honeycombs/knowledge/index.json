@@ -37,6 +37,17 @@
       "source": "Instagram (@ksafaraliev_ai, @potapovfx) + верификация",
       "date_added": "2026-07-07",
       "version": "v1.0.0"
+    },
+    {
+      "id": "product_audit_framework",
+      "name": "Product Audit Framework — 5 Zones of Risk",
+      "file": "product_audit_framework.json",
+      "description": "Диагностический фреймворк для аудита продуктов по 5 зонам риска (Awareness, Audience Fit, Value Clarity, Differentiation, Market Timing). Содержит вопросы, метрики, красные флаги и рекомендации.",
+      "source": "Gardener (Voodoo/Dima)",
+      "date_added": "2026-07-07",
+      "version": "v1.0.0",
+      "how_to_use_in_mandala": "Используй для аудита идей (seeds), активных задач (tasks), существующих продуктов (fruits) и стратегических роадмапов. Особенно полезен при принятии решений о запуске или изменении направления.",
+      "when_to_use": "Перед запуском нового продукта, при ревью продукта, при признаках стагнации, в рамках рутинного чека здоровья. Также для проверки идей из seeds/ до того, как они станут задачами."
     }
   ],
   "navigation": {
@@ -48,7 +59,7 @@
     ]
   },
   "metrics": {
-    "total_resources": 2,
+    "total_resources": 3,
     "last_updated": "2026-07-07"
   },
   "health": {
