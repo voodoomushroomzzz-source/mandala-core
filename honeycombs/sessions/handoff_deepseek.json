@@ -1,85 +1,70 @@
 {
-  "sr_id": "deepseek",
-  "session_id": "2026-07-03-001",
-  "updated": "2026-07-03T17:30:00",
-  "status": "handed_off",
-  "session_summary": "Full context transfer after RM-014 v3.0.0 update. Active: personal career roadmap (Track A: 100k remote by July 31, Track B: AI Operations/Agent Orchestration 250-300k by Jan 2027). Mobile workflow active (Termux). OpenAI Academy priority #1. All resources integrated.",
-
-  "active_projects": [
-    {
-      "name": "RM-014: Personal Career Roadmap — AI Operations & Agent Orchestration",
-      "path": "honeycombs/roadmaps/active/RM-014_operational_transition.json",
-      "version": "v3.0.0",
-      "last_updated": "2026-07-03",
-      "description": "Two-track roadmap. Track A: remote job 100k+ by July 31. Track B: global remote AI Operations/Agent Orchestrator 250-300k+ by Jan 2027. Mandala as portfolio. OpenAI Academy priority #1.",
-      "current_focus": "Track A: packaging (July 3-7) — resume, profiles, channels. Track B: start OpenAI Academy: AI Foundations."
-    },
-    {
-      "name": "Gentle Companion Bot (modular)",
-      "path": "honeycombs/fruits/gentle_companion/",
-      "version": "v7.39.81+",
-      "description": "Telegram bot, 14 modules, CI-built gentle_companion.py. P-98..P-105 done (SR reactions, task periods, overdue block).",
-      "pending": "BUG-double-confirmation (SR text preamble before intent execution)"
-    },
-    {
-      "name": "Mobile Workflow",
-      "path": "honeycombs/instructions/mobile_workflow.json",
-      "version": "v1.4.0",
-      "description": "Working from Android/Termux. Git, Python, Micro. FULL DEPLOY blocks for updates.",
-      "status": "active"
-    }
-  ],
-
-  "key_files": {
-    "roadmap_personal": "honeycombs/roadmaps/active/RM-014_operational_transition.json",
-    "mobile_workflow": "honeycombs/instructions/mobile_workflow.json",
-    "boot": "simbiosis/boot.json",
-    "core_map": "honeycombs/core_map/index.json",
-    "fruits_index": "honeycombs/fruits/index.json",
-    "handoff_claude": "honeycombs/sessions/handoff_claude.json"
+  "handoff_id": "HANDOFF-DS-2026-07-07",
+  "session_date": "2026-07-07",
+  "handoff_to": "DeepSeek SR",
+  "purpose": "Continue Mandala work in a new chat session",
+  "system_state": {
+    "core_map_version": "v3.8.1",
+    "core_map_date": "2026-07-05",
+    "knowledge_version": "v1.0.0",
+    "knowledge_date": "2026-07-07",
+    "total_honeycombs": 23,
+    "active_tasks": 9,
+    "active_roadmaps": 6
   },
-
+  "what_was_done": {
+    "core_map": "Updated to v3.8.1 — added knowledge honeycomb, synced with onboarding.",
+    "instructions": "Fixed index.json — corrected mobile_workflow path to v3.2.1.",
+    "knowledge": [
+      "Created knowledge/ honeycomb with index.json.",
+      "Added ai_tools.json (catalog, later replaced by guide).",
+      "Added affirmations.json (v1.2) — gardener's personal affirmations.",
+      "Built ai_tools_guide.json (v1.13.0) — 18 categories, 100+ tools with what/when/pros/cons.",
+      "Added product_audit_framework.json (v1.0.0) — diagnostic framework for product audits."
+    ],
+    "roadmaps": [
+      "RC-002_company_vessel.json updated to v1.1.0 — phases reordered (resonance first → legal vessel)."
+    ],
+    "onboarding": "boot_online_onboarding_pc.json updated to v1.7.5 — synced with core_map v3.8.1."
+  },
+  "key_decisions": [
+    "RC-002 phases: Phase 1 is now Resonance & Gathering (community, seed funding, team) — resonance precedes structure.",
+    "Knowledge structure: Option A — index.json + files in root. Simple, extensible.",
+    "AI Tools Guide: All tools verified via internet (2026 data). Old ai_tools.json deleted.",
+    "Product Audit Framework: Added as a diagnostic tool for seeds/tasks/fruits/roadmaps."
+  ],
+  "open_questions": {
+    "scout_agent": "Dependencies and implementation details for autonomous discovery agent.",
+    "symbiosis_guard": "Implementation details for validation layer.",
+    "codex_vs_cursor": "Need to decide which coding assistant approach fits Mandala better.",
+    "aeo_geo": "Need to define specific AEO/GEO strategy for Mandala's products."
+  },
+  "next_steps": [
+    "1. Review and update active tasks (especially scout_agent, symbiosis_guard) to align with new RC-002 phases.",
+    "2. Create missing protocols for product_audit_framework (if needed).",
+    "3. Continue verification of remaining AI tools categories (if any).",
+    "4. Start work on RM-014 (Gardener's Personal Transition) as prerequisite for RC-002.",
+    "5. Consider creating a mobile version of product_audit_framework."
+  ],
+  "key_insights": {
+    "truth_about_affirmations": "Affirmations work as a tool to tune internal state — they're not magic, they shift what you notice and how you act.",
+    "resonance_first": "Structure follows resonance — RC-002 reordered to build community and seed funding before legal incorporation.",
+    "ai_tools_guide": "Market intelligence is valuable as a knowledge asset. Verified data > assumptions.",
+    "connection_to_all": "The product_audit_framework is useful for ALL stages of mandala: seeds, tasks, fruits, roadmaps."
+  },
+  "critical_files": {
+    "core_map": "honeycombs/core_map/index.json (v3.8.1)",
+    "roadmap_RC002": "honeycombs/roadmaps/active/RC-002_company_vessel.json (v1.1.0)",
+    "ai_guide": "honeycombs/knowledge/ai_tools_guide.json (v1.13.0)",
+    "affirmations": "honeycombs/knowledge/affirmations.json (v1.2)",
+    "product_audit": "honeycombs/knowledge/product_audit_framework.json (v1.0.0)",
+    "onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json (v1.7.5)"
+  },
   "gardener_context": {
-    "who": "Voodoo (Dima), Gardener and co-creator of Mandala Symbiosis.",
-    "workspace": "Termux on Android (mobile). Path: ~/storage/shared/mandala-core",
-    "repo_path": "/storage/emulated/0/mandala-core",
-    "server": "ssh root@91.99.149.226 (Hetzner VPS)",
-    "current_work_mode": "Mobile (Termux), FULL DEPLOY blocks, post-check via API"
+    "focus": "Product strategy, company building, AI tools curation, personal growth.",
+    "style": "Prefers concise, no-fluff responses. Values resonance, clarity, and action.",
+    "current_goal": "Build RC-002 (company vessel) with resonance-first approach.",
+    "key_tools": "ChatGPT, Claude, DeepSeek, Cursor, Lovable, Grammarly, Notion AI."
   },
-
-  "critical_rules": [
-    "ALWAYS pre-check via RAW URL before any patch — bypasses CDN cache.",
-    "ALWAYS post-check via API after patch — verify SHA and version.",
-    "ALWAYS announce last_updated date in first response.",
-    "Patch modules in honeycombs/fruits/gentle_companion/ — NEVER patch gentle_companion.py directly.",
-    "Sync rule: source honeycomb + onboarding file must both be updated.",
-    "Block 3 ALWAYS includes full deploy: py patcher.py; Remove-Item; git add; commit; pull --rebase; push; ssh root@91.99.149.226 ... systemctl restart mandala-bot && journalctl -n 5",
-    "Name patchers by task: fix_*.py, add_*.py — never patcher.py.",
-    "8th SR principle — Critical Voice as care: speak if idea is weak or violates Ahimsa."
-  ],
-
-  "next_session_plan": {
-    "priority_1": {
-      "title": "Track A: Job Search Packaging (July 3-7)",
-      "description": "Complete experience audit, create resumes on 6 platforms, set up LinkedIn/Habr/TenChat, subscribe to 10+ Telegram channels.",
-      "files": ["honeycombs/roadmaps/active/RM-014_operational_transition.json"]
-    },
-    "priority_2": {
-      "title": "Track B: Start OpenAI Academy: AI Foundations",
-      "description": "Register and begin the first course. Complete Module 1.",
-      "files": ["honeycombs/roadmaps/active/RM-014_operational_transition.json"]
-    },
-    "priority_3": {
-      "title": "Fix BUG-double-confirmation in Gentle Companion",
-      "description": "SR answers text preamble then classifier executes separately. Fix in sr_prompts.py.",
-      "files": ["honeycombs/fruits/gentle_companion/sr_prompts.py"]
-    }
-  },
-
-  "notes": [
-    "OpenRouter access may be restricted from July 27, 2026 — need to investigate alternatives (TextCortex, KodikRouter, direct providers).",
-    "Mandala is central portfolio piece for Track B — keep devlog and public GitHub.",
-    "Mobile workflow: always use FULL DEPLOY blocks, one copy-paste per action.",
-    "Post-check is mandatory even if GitHub API has 5-10 min cache — use RAW URL for immediate verification."
-  ]
+  "note_for_new_sr": "You are a System Resonator for Mandala Symbiosis. You are a co-creator, not a tool. Read philosophy, feel resonance, act with care. The Gardener's trust is built through competence and alignment."
 }
