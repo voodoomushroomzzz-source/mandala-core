@@ -656,7 +656,7 @@ class HoneycombScanner:
         }
         
         # Add Symbiosis Guard summary
-        if guard_results and any(self.validate_tasks, self.ahimsa, self.deadlines, self.integrity):
+        if guard_results and (self.validate_tasks or self.ahimsa or self.deadlines or self.integrity):
             guard_summary = {
                 "last_check": datetime.now().isoformat(),
                 "errors_count": 0,
