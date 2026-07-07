@@ -403,7 +403,7 @@
   },
   "job_search_platforms": {
     "track_a_russian": {
-      "primary": ["hh.ru", "Superjob", "Rabota.ru", "Zarplata.ru", "Avito", "TrudVsem"],
+      "primary": ["hh.ru", "Superjob"],
       "it_specific": ["Habr Career", "GeekJOB", "Getmatch", "TenChat"],
       "niche_aggregators": ["Jobster", "hirify", "hirehi", "careerspace", "finder"],
       "temporary_projects": ["Kwork", "FL.ru", "Workspace", "SolarStaff"]
