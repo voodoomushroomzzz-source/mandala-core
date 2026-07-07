@@ -24,9 +24,11 @@
       "id": "ai_tools",
       "name": "AI Tools Catalog",
       "file": "ai_tools.json",
-      "description": "Curated list of AI tools by category from Instagram source (ksafaraliev_ai)",
+      "description": "Curated list of AI tools by category from Instagram sources (ksafaraliev_ai, potapovfx). Updated with new categories and tools.",
       "source": "Instagram (@ksafaraliev_ai)",
-      "date_added": "2026-07-05"
+      "date_added": "2026-07-05",
+      "version": "v2.0.0",
+      "updated": "2026-07-07"
     },
     {
       "id": "affirmations",
@@ -48,7 +50,7 @@
   },
   "metrics": {
     "total_resources": 2,
-    "last_updated": "2026-07-06"
+    "last_updated": "2026-07-07"
   },
   "health": {
     "status": "healthy",

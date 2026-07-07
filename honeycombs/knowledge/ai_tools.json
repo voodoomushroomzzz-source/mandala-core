@@ -1,8 +1,10 @@
 {
   "id": "ai_tools_catalog",
   "name": "AI Tools Catalog",
-  "source": "Instagram (@ksafaraliev_ai)",
+  "source": "Instagram (@ksafaraliev_ai) + potapovfx",
   "date_added": "2026-07-05",
+  "updated": "2026-07-07",
+  "version": "v2.0.0",
   "categories": [
     {
       "category": "Чат-боты",
@@ -42,7 +44,9 @@
         {"name": "GitHub Copilot", "url": "https://github.com/features/copilot"},
         {"name": "Bolt", "url": "https://bolt.new"},
         {"name": "Loveable", "url": "https://lovable.dev"},
-        {"name": "Windsurf", "url": "https://windsurf.com"}
+        {"name": "Windsurf", "url": "https://windsurf.com"},
+        {"name": "OpenAI Codex", "url": "https://platform.openai.com"},
+        {"name": "Claude Code", "url": "https://claude.com/claude-code"}
       ]
     },
     {
@@ -98,7 +102,8 @@
         {"name": "Monday.com", "url": "https://monday.com"},
         {"name": "n8n", "url": "https://n8n.io"},
         {"name": "Wrike", "url": "https://www.wrike.com"},
-        {"name": "Zapier", "url": "https://zapier.com"}
+        {"name": "Zapier", "url": "https://zapier.com"},
+        {"name": "Gumloop", "url": "https://www.gumloop.com"}
       ]
     },
     {
@@ -140,6 +145,69 @@
         {"name": "Pika", "url": "https://pika.art"},
         {"name": "Runway", "url": "https://runwayml.com"},
         {"name": "DeepAI", "url": "https://deepai.org"}
+      ]
+    },
+    {
+      "category": "ИИ-агенты",
+      "tools": [
+        {"name": "AgentKit", "url": "https://platform.openai.com"},
+        {"name": "LangGraph", "url": "https://www.langchain.com/langgraph"},
+        {"name": "CrewAI", "url": "https://crewai.com"},
+        {"name": "LangChain", "url": "https://langchain.com"}
+      ]
+    },
+    {
+      "category": "ИИ-конструкторы приложений",
+      "tools": [
+        {"name": "Lovable", "url": "https://lovable.dev"},
+        {"name": "Google Antigravity", "url": "https://antigravity.google"},
+        {"name": "Replit", "url": "https://replit.com"},
+        {"name": "Emergent", "url": null}
+      ]
+    },
+    {
+      "category": "RAG (Retrieval-Augmented Generation)",
+      "tools": [
+        {"name": "Pinecone", "url": "https://www.pinecone.io"},
+        {"name": "LlamaIndex", "url": "https://www.llamaindex.ai"},
+        {"name": "Haystack", "url": "https://haystack.deepset.ai"},
+        {"name": "Milvus", "url": "https://milvus.io"}
+      ]
+    },
+    {
+      "category": "AEO/GEO (оптимизация под ИИ-поиск)",
+      "tools": [
+        {"name": "Searchable", "url": null},
+        {"name": "Surfer SEO", "url": "https://surferseo.com"},
+        {"name": "Writesonic", "url": "https://writesonic.com"},
+        {"name": "AirOps", "url": "https://www.airops.com"}
+      ]
+    },
+    {
+      "category": "Связки ИИ-инструментов",
+      "tools": [
+        {"name": "Notion AI", "url": "https://www.notion.so"},
+        {"name": "HighLevel", "url": "https://www.gohighlevel.com"},
+        {"name": "ClickUp AI", "url": "https://clickup.com"},
+        {"name": "Airtable AI", "url": "https://airtable.com"}
+      ]
+    },
+    {
+      "category": "ИИ-генерация контента",
+      "tools": [
+        {"name": "OpusClip", "url": "https://www.opus.pro"},
+        {"name": "HeyGen", "url": "https://www.heygen.com"},
+        {"name": "ElevenLabs", "url": "https://elevenlabs.io"},
+        {"name": "Canva", "url": "https://www.canva.com"}
+      ]
+    },
+    {
+      "category": "LLM Ops / Observability",
+      "tools": [
+        {"name": "Arize AI", "url": "https://arize.com"},
+        {"name": "Langfuse", "url": "https://langfuse.com"},
+        {"name": "Helicone", "url": "https://helicone.ai"},
+        {"name": "Weights & Biases", "url": "https://wandb.ai"}
       ]
     }
   ]
