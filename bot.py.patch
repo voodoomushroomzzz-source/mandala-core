@@ -1,0 +1,11 @@
+--- a/bot.py
++++ b/bot.py
+@@ -540,8 +540,8 @@ async def is_authorized(telegram_id: str) -> bool:
+ 
+ async def load_tasks() -> list[dict]:
+-    tasks = await read_gardener_file("tasks.json")
+-    return tasks if isinstance(tasks, list) else []
++    # TEMPORARY: bypass GitHub API to test hanging
++    return []
+ 
+ async def save_tasks(tasks: list[dict]) -> bool:
