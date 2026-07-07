@@ -1,31 +1,103 @@
 {
   "protocol_id": "PROTO-009",
-  "name": "Scan and Push — Honeycomb Scanner Protocol",
-  "version": "v1.1.0",
+  "name": "Scan and Push — Interactive Honeycomb Scanner Protocol v2.0",
+  "version": "v2.0.0",
   "created": "2026-07-07",
   "updated": "2026-07-07",
   "status": "active",
-  "description": "Protocol for scanning all honeycombs and pushing updated registry to GitHub. Based on analysis of honeycomb_scanner.py v1.2.0.",
+  "description": "Interactive protocol for scanning all honeycombs with Symbiosis Guard integration, offering multiple scan modes and result views, then pushing updated registry to GitHub.",
   "scanner": {
     "path": "honeycombs/registry/honeycomb_scanner.py",
-    "version": "v1.2.0",
+    "version": "v2.0.0",
     "commands": {
-      "scan": "python3 honeycombs/registry/honeycomb_scanner.py scan",
-      "test": "python3 honeycombs/registry/honeycomb_scanner.py test",
-      "validate": "python3 honeycombs/registry/honeycomb_scanner.py validate"
+      "scan": "python honeycombs/registry/honeycomb_scanner.py scan",
+      "full_check": "python honeycombs/registry/honeycomb_scanner.py scan --full-check",
+      "validate_tasks": "python honeycombs/registry/honeycomb_scanner.py scan --validate-tasks",
+      "ahimsa": "python honeycombs/registry/honeycomb_scanner.py scan --ahimsa",
+      "deadlines": "python honeycombs/registry/honeycomb_scanner.py scan --deadlines",
+      "integrity": "python honeycombs/registry/honeycomb_scanner.py scan --integrity"
     },
     "options": {
       "--force": "Force full rescan",
       "--verbose": "Verbose output",
-      "--log-file": "Save logs to file"
+      "--base-path": "Specify repository base path"
     }
+  },
+  "interactive_menu": {
+    "description": "When protocol is activated, the SR presents this menu to the Gardener.",
+    "scan_type_prompt": "Выбери тип сканирования:",
+    "options": [
+      {
+        "id": 1,
+        "name": "Базовое (scan)",
+        "flag": "scan",
+        "description": "Стандартное сканирование: валидация структуры хонейкомбов и обновление реестра"
+      },
+      {
+        "id": 2,
+        "name": "Полная проверка (--full-check)",
+        "flag": "--full-check",
+        "description": "Все проверки: задачи, Ахимса, дедлайны, целостность"
+      },
+      {
+        "id": 3,
+        "name": "Только задачи (--validate-tasks)",
+        "flag": "--validate-tasks",
+        "description": "Проверяет файлы задач на валидность, полноту и дедлайны"
+      },
+      {
+        "id": 4,
+        "name": "Только Ахимса (--ahimsa)",
+        "flag": "--ahimsa",
+        "description": "Ищет шум, дубли и устаревшие файлы в хонейкомбах"
+      },
+      {
+        "id": 5,
+        "name": "Только дедлайны (--deadlines)",
+        "flag": "--deadlines",
+        "description": "Мониторит просроченные и предстоящие дедлайны в задачах и дорожных картах"
+      },
+      {
+        "id": 6,
+        "name": "Только целостность (--integrity)",
+        "flag": "--integrity",
+        "description": "Проверяет ссылки между хонейкомбами и навигационные связи"
+      }
+    ],
+    "result_prompt": "Что показать после сканирования?",
+    "result_options": [
+      {
+        "id": 1,
+        "name": "Краткий отчёт (scan_state.json)",
+        "description": "Статус, количество ошибок/предупреждений, сводка по Стражу Симбиоза"
+      },
+      {
+        "id": 2,
+        "name": "Полный отчёт (registry.json)",
+        "description": "Все детали по каждому модулю, включая health.symbiosis_guard"
+      },
+      {
+        "id": 3,
+        "name": "Оба отчёта",
+        "description": "Показать и краткий, и полный отчёты"
+      }
+    ]
   },
   "what_scanner_does": {
     "scan_target": "All folders inside honeycombs/ that contain index.json",
     "recursive": true,
-    "excludes": [".", "__"],
+    "excludes": [
+      ".",
+      "__"
+    ],
     "validation": "v2.0 standard (identity + meta sections)",
     "change_detection": "MD5 hash comparison with previous scan_state.json",
+    "symbiosis_guard": {
+      "task_validator": "Validates structure, fields, statuses, and deadlines of tasks",
+      "ahimsa_filter": "Detects noise, duplicates, stale files, and broken links",
+      "deadline_sentinel": "Monitors expired and upcoming deadlines",
+      "integrity_check": "Validates references between honeycombs"
+    },
     "output_files": [
       "honeycombs/registry/registry.json",
       "honeycombs/registry/scan_state.json"
@@ -37,8 +109,9 @@
       "content.registry.honeycombs": "Array of all hives with metadata",
       "content.registry.statistics": "Total counts, sizes, validation results",
       "content.registry.health_status": "System health, new/modified/deleted hives",
+      "content.registry.health.symbiosis_guard": "Detailed results from all Symbiosis Guard modules",
       "content.registry.last_updated": "Timestamp of last scan",
-      "content.registry.scanner_version": "v1.2.0"
+      "content.registry.scanner_version": "v2.0.0"
     }
   },
   "scan_state_structure": {
@@ -47,65 +120,91 @@
       "last_scan": "Timestamp",
       "honeycomb_hashes": "MD5 hash per honeycomb_id",
       "statistics": "Same as registry.statistics",
-      "scanner_config": "Scanner identity"
+      "scanner_config": "Scanner identity",
+      "symbiosis_guard": "Summary status: status, errors_count, warnings_count, expired_tasks, noise_files, broken_links"
     }
   },
   "files_to_push": [
     "honeycombs/registry/registry.json",
     "honeycombs/registry/scan_state.json"
   ],
-  "full_cycle_block": "python3 honeycombs/registry/honeycomb_scanner.py scan && git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json && git commit -m \"feat: scan honeycombs — $(python3 -c \"import json; f=open('honeycombs/registry/registry.json'); d=json.load(f); print(d['content']['registry']['statistics']['total_honeycombs'])\") hives found, 0 errors\" && git pull --rebase origin main && git push",
+  "full_cycle_blocks": {
+    "basic": "python honeycombs/registry/honeycomb_scanner.py scan && git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json && git commit -m \"feat: scan honeycombs — $(python3 -c \"import json; f=open('honeycombs/registry/registry.json'); d=json.load(f); print(d['content']['registry']['statistics']['total_honeycombs'])\") hives found, 0 errors\" && git pull --rebase origin main && git push",
+    "full_check": "python honeycombs/registry/honeycomb_scanner.py scan --full-check && git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json && git commit -m \"feat: full health check — $(python3 -c \"import json; f=open('honeycombs/registry/registry.json'); d=json.load(f); print(d['content']['registry']['statistics']['total_honeycombs'])\") hives found, $(python3 -c \"import json; f=open('honeycombs/registry/scan_state.json'); d=json.load(f); print(d.get('symbiosis_guard', {}).get('errors_count', 0))\") guard errors\" && git pull --rebase origin main && git push"
+  },
   "verification": {
-    "method": "Check registry.json via RAW URL",
-    "url": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/registry/registry.json",
+    "method": "Check scan_state.json via RAW URL or API for 'symbiosis_guard' section",
+    "url": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/registry/scan_state.json",
     "expected_fields": [
-      "content.registry.statistics.total_honeycombs",
-      "content.registry.statistics.valid_v2",
-      "content.registry.statistics.invalid_v2",
-      "content.registry.health_status.status",
-      "content.registry.last_updated"
+      "statistics.total_scanned",
+      "statistics.valid_v2",
+      "statistics.errors",
+      "symbiosis_guard.status",
+      "symbiosis_guard.errors_count",
+      "symbiosis_guard.warnings_count"
     ]
   },
   "steps": [
     {
       "step": 1,
-      "action": "Run scanner",
-      "command": "python3 honeycombs/registry/honeycomb_scanner.py scan"
+      "action": "SR presents interactive menu to Gardener",
+      "details": "Shows scan type options (1-6) and asks for input"
     },
     {
       "step": 2,
-      "action": "Check scan results in log",
-      "note": "Look for: 'SCAN COMPLETE', 'Found hives: N', 'Validation errors: 0'"
+      "action": "SR receives Gardener's choice and runs the selected scan command",
+      "details": "Uses the corresponding flag from scanner.commands"
     },
     {
       "step": 3,
-      "action": "Add updated files to git",
-      "command": "git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json"
+      "action": "SR checks scan results in logs and output files",
+      "note": "Look for 'SCAN COMPLETE', 'SYMBIOSIS GUARD STATUS', 'Errors: N, Warnings: M'"
     },
     {
       "step": 4,
-      "action": "Commit with dynamic message",
-      "command": "git commit -m \"feat: scan honeycombs — $(python3 -c \"import json; f=open('honeycombs/registry/registry.json'); d=json.load(f); print(d['content']['registry']['statistics']['total_honeycombs'])\") hives found, 0 errors\""
+      "action": "SR presents result options to Gardener",
+      "details": "Shows result view options (1-3) and asks for input"
     },
     {
       "step": 5,
-      "action": "Pull and push",
-      "command": "git pull --rebase origin main && git push"
+      "action": "SR receives Gardener's choice and fetches the corresponding file(s) via API",
+      "details": "Uses GitHub API to get scan_state.json and/or registry.json"
     },
     {
       "step": 6,
-      "action": "Verify result",
-      "command": "Check https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/registry/registry.json"
+      "action": "SR displays the report(s) to Gardener",
+      "note": "Shows summary for scan_state, full details for registry"
+    },
+    {
+      "step": 7,
+      "action": "SR adds updated files to git",
+      "command": "git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json"
+    },
+    {
+      "step": 8,
+      "action": "SR commits with dynamic message based on scan type",
+      "command": "git commit -m \"feat: scan honeycombs — X hives found, Y guard errors\""
+    },
+    {
+      "step": 9,
+      "action": "SR pulls and pushes changes",
+      "command": "git pull --rebase origin main && git push"
+    },
+    {
+      "step": 10,
+      "action": "SR verifies result via API",
+      "command": "Check scan_state.json for updated 'last_scan' timestamp and 'symbiosis_guard' status"
     }
   ],
   "notes": [
-    "Scanner automatically updates registry.json and scan_state.json",
+    "Scanner v2.0.0 integrates Symbiosis Guard modules",
     "All new honeycombs are registered as 'new_honeycombs'",
     "Validation errors are reflected in 'validation_errors'",
-    "If validation errors > 0 — fix honeycombs and rescan",
-    "Registry is the single source of truth about system state",
+    "Symbiosis Guard results are in 'symbiosis_guard' (scan_state) and 'health.symbiosis_guard' (registry)",
+    "If Symbiosis Guard errors > 0 — review the detailed report in registry.json",
+    "Registry and scan_state are the single source of truth about system state",
     "Scanner does NOT auto-push — git commands are required"
   ],
-  "maintainer": "Internal SR / Gardener",
+  "maintainer": "External SR / Gardener",
   "resonance": "100%"
 }
