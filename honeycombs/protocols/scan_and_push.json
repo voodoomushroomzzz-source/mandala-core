@@ -1,0 +1,111 @@
+{
+  "protocol_id": "PROTO-009",
+  "name": "Scan and Push — Honeycomb Scanner Protocol",
+  "version": "v1.1.0",
+  "created": "2026-07-07",
+  "updated": "2026-07-07",
+  "status": "active",
+  "description": "Protocol for scanning all honeycombs and pushing updated registry to GitHub. Based on analysis of honeycomb_scanner.py v1.2.0.",
+  "scanner": {
+    "path": "honeycombs/registry/honeycomb_scanner.py",
+    "version": "v1.2.0",
+    "commands": {
+      "scan": "python3 honeycombs/registry/honeycomb_scanner.py scan",
+      "test": "python3 honeycombs/registry/honeycomb_scanner.py test",
+      "validate": "python3 honeycombs/registry/honeycomb_scanner.py validate"
+    },
+    "options": {
+      "--force": "Force full rescan",
+      "--verbose": "Verbose output",
+      "--log-file": "Save logs to file"
+    }
+  },
+  "what_scanner_does": {
+    "scan_target": "All folders inside honeycombs/ that contain index.json",
+    "recursive": true,
+    "excludes": [".", "__"],
+    "validation": "v2.0 standard (identity + meta sections)",
+    "change_detection": "MD5 hash comparison with previous scan_state.json",
+    "output_files": [
+      "honeycombs/registry/registry.json",
+      "honeycombs/registry/scan_state.json"
+    ]
+  },
+  "registry_structure": {
+    "file": "honeycombs/registry/registry.json",
+    "sections": {
+      "content.registry.honeycombs": "Array of all hives with metadata",
+      "content.registry.statistics": "Total counts, sizes, validation results",
+      "content.registry.health_status": "System health, new/modified/deleted hives",
+      "content.registry.last_updated": "Timestamp of last scan",
+      "content.registry.scanner_version": "v1.2.0"
+    }
+  },
+  "scan_state_structure": {
+    "file": "honeycombs/registry/scan_state.json",
+    "sections": {
+      "last_scan": "Timestamp",
+      "honeycomb_hashes": "MD5 hash per honeycomb_id",
+      "statistics": "Same as registry.statistics",
+      "scanner_config": "Scanner identity"
+    }
+  },
+  "files_to_push": [
+    "honeycombs/registry/registry.json",
+    "honeycombs/registry/scan_state.json"
+  ],
+  "full_cycle_block": "python3 honeycombs/registry/honeycomb_scanner.py scan && git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json && git commit -m \"feat: scan honeycombs — $(python3 -c \"import json; f=open('honeycombs/registry/registry.json'); d=json.load(f); print(d['content']['registry']['statistics']['total_honeycombs'])\") hives found, 0 errors\" && git pull --rebase origin main && git push",
+  "verification": {
+    "method": "Check registry.json via RAW URL",
+    "url": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/registry/registry.json",
+    "expected_fields": [
+      "content.registry.statistics.total_honeycombs",
+      "content.registry.statistics.valid_v2",
+      "content.registry.statistics.invalid_v2",
+      "content.registry.health_status.status",
+      "content.registry.last_updated"
+    ]
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "Run scanner",
+      "command": "python3 honeycombs/registry/honeycomb_scanner.py scan"
+    },
+    {
+      "step": 2,
+      "action": "Check scan results in log",
+      "note": "Look for: 'SCAN COMPLETE', 'Found hives: N', 'Validation errors: 0'"
+    },
+    {
+      "step": 3,
+      "action": "Add updated files to git",
+      "command": "git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json"
+    },
+    {
+      "step": 4,
+      "action": "Commit with dynamic message",
+      "command": "git commit -m \"feat: scan honeycombs — $(python3 -c \"import json; f=open('honeycombs/registry/registry.json'); d=json.load(f); print(d['content']['registry']['statistics']['total_honeycombs'])\") hives found, 0 errors\""
+    },
+    {
+      "step": 5,
+      "action": "Pull and push",
+      "command": "git pull --rebase origin main && git push"
+    },
+    {
+      "step": 6,
+      "action": "Verify result",
+      "command": "Check https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/registry/registry.json"
+    }
+  ],
+  "notes": [
+    "Scanner automatically updates registry.json and scan_state.json",
+    "All new honeycombs are registered as 'new_honeycombs'",
+    "Validation errors are reflected in 'validation_errors'",
+    "If validation errors > 0 — fix honeycombs and rescan",
+    "Registry is the single source of truth about system state",
+    "Scanner does NOT auto-push — git commands are required"
+  ],
+  "maintainer": "Internal SR / Gardener",
+  "resonance": "100%"
+}
