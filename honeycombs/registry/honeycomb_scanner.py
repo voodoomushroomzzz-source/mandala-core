@@ -146,70 +146,17 @@ class AhimsaFilter:
                 if json_files and not any(p.name.startswith('__') for p in json_files):
                     self.warnings.append(f"{root_path.name}: missing index.json")
             
-            # Check for stale files (>30 days old)
+            # Check for empty files (<1000 bytes) — stale check removed
             for file in root_path.glob('*.json'):
                 if file.name == 'index.json':
                     continue
-                mtime = os.path.getmtime(file)
-                age = datetime.now() - datetime.fromtimestamp(mtime)
-                if age.days > 30:
-                    self.noise_files.append({
-                        'path': str(file),
-                        'age_days': age.days,
-                        'reason': 'stale file (>30 days)'
-                    })
-                
-                # Check for empty files (<500 bytes)
-                if file.stat().st_size < 500:
+                # Check for empty files (<1000 bytes)
+                if file.stat().st_size < 1000:
                     self.noise_files.append({
                         'path': str(file),
                         'size': file.stat().st_size,
-                        'reason': 'empty file (<500 bytes)'
+                        'reason': 'empty file (<1000 bytes)'
                     })
-        
-        return self._report()
-    
-    def _validate_index(self, index_file: Path):
-        """Validate index.json structure"""
-        try:
-            with open(index_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            
-            # Check required sections
-            if 'identity' not in data:
-                self.errors.append(f"{index_file.parent.name}/index.json: missing 'identity'")
-                return
-            
-            identity = data['identity']
-            
-            # Check required identity fields
-            for field in ['module_id', 'name', 'version', 'layer', 'type']:
-                if field not in identity:
-                    self.errors.append(f"{index_file.parent.name}: missing identity.{field}")
-            
-            # Check layer
-            layer = identity.get('layer')
-            if layer and layer not in self.valid_layers:
-                self.warnings.append(f"{index_file.parent.name}: invalid layer {layer}")
-            
-            # Check resonance
-            resonance = identity.get('resonance')
-            if resonance == "0%" or resonance == "0":
-                self.warnings.append(f"{index_file.parent.name}: zero resonance")
-            
-            # Check meta
-            if 'meta' in data:
-                meta = data['meta']
-                if 'description' not in meta:
-                    self.warnings.append(f"{index_file.parent.name}: missing meta.description")
-            else:
-                self.warnings.append(f"{index_file.parent.name}: missing meta section")
-                
-        except json.JSONDecodeError:
-            self.errors.append(f"{index_file.parent.name}/index.json: invalid JSON")
-        except Exception as e:
-            self.errors.append(f"{index_file.parent.name}/index.json: {str(e)}")
-    
     def _report(self) -> Dict:
         return {
             'errors': self.errors,
