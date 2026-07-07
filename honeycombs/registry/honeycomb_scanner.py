@@ -475,7 +475,7 @@ class HoneycombScanner:
     def _analyze_honeycomb(self, index_path: Path):
         """Analyze a single honeycomb"""
         try:
-            with open(index_path, 'r', encoding='utf-8') as f:
+            with open(index_path, 'r', encoding='utf-8-sig') as f:
                 data = json.load(f)
             
             honeycomb_dir = index_path.parent
