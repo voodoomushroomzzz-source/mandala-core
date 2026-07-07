@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-07-07T22:09:01.638567",
+  "last_scan": "2026-07-07T22:20:02.317384",
   "honeycomb_hashes": {
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
     "honeycombs/boot_online": "07fc8f87ab1abfc5071c44e2f6e50850",
@@ -25,10 +25,10 @@
     "errors": 1,
     "warnings": 0,
     "total_files": 89,
-    "total_size_kb": 777.74
+    "total_size_kb": 760.58
   },
   "symbiosis_guard": {
-    "last_check": "2026-07-07T22:09:01.638593",
+    "last_check": "2026-07-07T22:20:02.317415",
     "errors_count": 0,
     "warnings_count": 13,
     "expired_tasks": 6,
