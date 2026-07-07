@@ -1,0 +1,56 @@
+name: Build Onboarding PC
+
+on:
+  push:
+    paths:
+      - 'honeycombs/boot_online/index.json'
+      - 'honeycombs/core_map/index.json'
+      - 'honeycombs/philosophy/index.json'
+      - 'honeycombs/philosophy/blocks/phi_010_three_embodiments_of_sr.json'
+      - 'honeycombs/philosophy/blocks/phi_011_first_gardener.json'
+      - 'honeycombs/instructions/core/external_sr_workflow.json'
+      - 'honeycombs/instructions/mobile_workflow.json'
+      - 'honeycombs/fruits/index.json'
+      - 'honeycombs/tasks/index.json'
+      - 'honeycombs/protocols/index.json'
+      - 'honeycombs/boot_online/boot_online_onboarding_pc_builder.json'
+      - 'honeycombs/boot_online/builder/build_onboarding.py'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run auto-build script
+        id: build
+        run: |
+          python3 honeycombs/boot_online/builder/build_onboarding.py
+
+      - name: Check if target file changed
+        id: check_changes
+        run: |
+          if git diff --quiet honeycombs/boot_online/boot_online_onboarding_pc.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push if changed
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "Mandala Bot"
+          git config user.email "bot@mandala.symbiosis"
+          git add honeycombs/boot_online/boot_online_onboarding_pc.json
+          git commit -m "chore: auto-build onboarding — $(grep -o '"version": "[^"]*"' honeycombs/boot_online/boot_online_onboarding_pc.json | head -1 | sed 's/"version": "//;s/"//')"
+          git push
