@@ -393,7 +393,7 @@ class HoneycombScanner:
     
     def _load_config(self) -> Dict:
         """Load scanner configuration"""
-        config_path = self.base_path / 'registry' / 'scanner.json'
+        config_path = self.base_path / 'honeycombs' / 'registry' / 'scanner.json'
         try:
             with open(config_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
@@ -402,7 +402,7 @@ class HoneycombScanner:
     
     def _load_previous_state(self):
         """Load previous scan state"""
-        state_path = self.base_path / 'registry' / 'scan_state.json'
+        state_path = self.base_path / 'honeycombs' / 'registry' / 'scan_state.json'
         try:
             if state_path.exists():
                 with open(state_path, 'r', encoding='utf-8') as f:
@@ -634,7 +634,7 @@ class HoneycombScanner:
     
     def _save_scan_state(self, guard_results: Dict = None):
         """Save scan state to scan_state.json with Symbiosis Guard status"""
-        state_path = self.base_path / 'registry' / 'scan_state.json'
+        state_path = self.base_path / 'honeycombs' / 'registry' / 'scan_state.json'
         
         # Build honeycomb hashes
         hashes = {}
@@ -696,7 +696,7 @@ class HoneycombScanner:
     
     def _save_registry(self):
         """Save main registry with health details"""
-        registry_path = self.base_path / 'registry' / 'registry.json'
+        registry_path = self.base_path / 'honeycombs' / 'registry' / 'registry.json'
         
         registry = {
             "identity": {
