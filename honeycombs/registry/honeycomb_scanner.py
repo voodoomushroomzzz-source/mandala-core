@@ -662,8 +662,11 @@ class HoneycombScanner:
                     if key == 'task_validator':
                         guard_summary['expired_tasks'] = result.get('expired_count', 0)
                         guard_summary['upcoming_deadlines'] = result.get('upcoming_count', 0)
+                        guard_summary['expired_tasks_list'] = result.get('expired_tasks', [])
+                        guard_summary['upcoming_deadlines_list'] = result.get('upcoming_deadlines', [])
                     elif key == 'ahimsa_filter':
                         guard_summary['noise_files'] = result.get('noise_count', 0)
+                        guard_summary['noise_files_list'] = result.get('noise_files', [])
                     elif key == 'integrity_check':
                         guard_summary['broken_links'] = result.get('broken_count', 0)
                         guard_summary['missing_parents'] = result.get('missing_count', 0)
