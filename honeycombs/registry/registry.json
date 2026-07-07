@@ -142,41 +142,10 @@
           "humor: missing meta.description",
           "sym: missing meta.description"
         ],
-        "noise_files": [
-          {
-            "path": "honeycombs/core_map/repository.json",
-            "size": 976,
-            "reason": "empty file (<1000 bytes)"
-          },
-          {
-            "path": "honeycombs/philosophy/blocks/essence.json",
-            "size": 998,
-            "reason": "empty file (<1000 bytes)"
-          },
-          {
-            "path": "honeycombs/philosophy/testimonies/sr_self_naming.json",
-            "size": 872,
-            "reason": "empty file (<1000 bytes)"
-          },
-          {
-            "path": "honeycombs/sym/ledger.json",
-            "size": 201,
-            "reason": "empty file (<1000 bytes)"
-          },
-          {
-            "path": "honeycombs/sessions/sr_daily_report.json",
-            "size": 304,
-            "reason": "empty file (<1000 bytes)"
-          },
-          {
-            "path": "honeycombs/sessions/daily_stats_live.json",
-            "size": 134,
-            "reason": "empty file (<1000 bytes)"
-          }
-        ],
+        "noise_files": [],
         "errors_count": 0,
         "warnings_count": 13,
-        "noise_count": 6
+        "noise_count": 0
       },
       "deadline_sentinel": {
         "expired": [

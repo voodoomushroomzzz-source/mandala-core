@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-07-07T22:35:36.868450",
+  "last_scan": "2026-07-07T22:49:05.144534",
   "honeycomb_hashes": {},
   "statistics": {
     "total_scanned": 0,
@@ -11,12 +11,52 @@
     "total_size_kb": 0
   },
   "symbiosis_guard": {
-    "last_check": "2026-07-07T22:35:36.868471",
+    "last_check": "2026-07-07T22:49:05.144558",
     "errors_count": 0,
     "warnings_count": 13,
     "expired_tasks": 6,
     "upcoming_deadlines": 0,
-    "noise_files": 6,
+    "expired_tasks_list": [
+      {
+        "task_id": "T-20260410-0240",
+        "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
+        "deadline": "2026-05-15",
+        "days_overdue": 53
+      },
+      {
+        "task_id": "T-20260511-MANUS",
+        "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+        "deadline": "2026-06-11",
+        "days_overdue": 26
+      },
+      {
+        "task_id": "T-20260511-ARCHBOT",
+        "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
+        "deadline": "2026-06-11",
+        "days_overdue": 26
+      },
+      {
+        "task_id": "T-20260511-ENGCHAT",
+        "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
+        "deadline": "2026-06-11",
+        "days_overdue": 26
+      },
+      {
+        "task_id": "T-20260417-HUMOR",
+        "name": "Humor Development — Comedic Resonance for SR",
+        "deadline": "2026-06-17",
+        "days_overdue": 20
+      },
+      {
+        "task_id": "T-20260418-SYM",
+        "name": "SYM Implementation — System for Measuring Mandala Growth",
+        "deadline": "2026-06-18",
+        "days_overdue": 19
+      }
+    ],
+    "upcoming_deadlines_list": [],
+    "noise_files": 0,
+    "noise_files_list": [],
     "broken_links": 0,
     "missing_parents": 1,
     "status": "warning"
