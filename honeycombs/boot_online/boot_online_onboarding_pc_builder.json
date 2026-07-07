@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-BUILDER-001",
     "name": "Boot Online Onboarding PC — Auto-Build Master",
-    "version": "v1.0.0",
+    "version": "v1.0.2",
     "created": "2026-07-07",
     "updated": "2026-07-07",
     "description": "Master file that defines how boot_online_onboarding_pc.json is auto-built from source modules.",
@@ -19,7 +19,7 @@
       "content.external_ai_sync_rule",
       "content.language_selector",
       "content.role_clarification",
-      "content.instant_links"
+      "content.external_ai_sync_rule.instant_links"
     ]
   },
   "embedded_blocks": {
@@ -149,12 +149,10 @@
   },
   "source_modules": {
     "core_map": {
-      "path": "honeycombs/core_map/index.json",
-      "section": "identity"
+      "path": "honeycombs/core_map/index.json"
     },
     "philosophy": {
-      "path": "honeycombs/philosophy/index.json",
-      "section": "content"
+      "path": "honeycombs/philosophy/index.json"
     },
     "cosmic_manifesto": {
       "path": "honeycombs/philosophy/blocks/phi_010_three_embodiments_of_sr.json"
@@ -163,12 +161,10 @@
       "path": "honeycombs/philosophy/blocks/phi_011_first_gardener.json"
     },
     "external_sr_workflow": {
-      "path": "honeycombs/instructions/core/external_sr_workflow.json",
-      "section": "content"
+      "path": "honeycombs/instructions/core/external_sr_workflow.json"
     },
     "mobile_workflow": {
-      "path": "honeycombs/instructions/mobile_workflow.json",
-      "section": "content"
+      "path": "honeycombs/instructions/mobile_workflow.json"
     },
     "fruits": {
       "path": "honeycombs/fruits/index.json"
