@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "TASKS-MANIFEST-004",
     "name": "Tasks Honeycomb Manifest",
-    "version": "v4.3.1",
+    "version": "v4.4.0",
     "created": "2026-03-01",
-    "updated": "2026-05-14",
+    "updated": "2026-07-07",
     "layer": 1,
     "type": "honeycomb_manifest"
   },
@@ -27,7 +27,7 @@
       "active_tasks": {
         "folder": "active/",
         "description": "Currently active tasks",
-        "files_count": 9,
+        "files_count": 10,
         "tasks": [
           {
             "file": "bot_update.json",
@@ -118,6 +118,16 @@
             "priority": "HIGH",
             "deadline": "2026-06-11",
             "description": "Transform Engineer Chat from standalone WebSocket tool into central integration hub: Architect Bot WebSocket connections, Manus direct control, sandbox analytics dashboards, data pipeline from Gentle Companion observations into actionable insights. Already live (v4.0.0-simbiosis) on Render."
+          },
+          {
+            "file": "auto_build_onboarding.json",
+            "task_id": "T-20260707-AUTO-BUILD",
+            "name": "Автосборка boot_online_onboarding_pc.json",
+            "status": "in_progress",
+            "progress": 0,
+            "priority": "HIGH",
+            "deadline": "2026-07-14",
+            "description": "Создать систему автоматической сборки boot_online_onboarding_pc.json из составных модулей при пуше в любой из них. SR обязан спросить Садовника о платформе (компьютер/телефон). Включает external_sr_workflow и mobile_workflow как вшитые блоки."
           }
         ]
       }
@@ -135,9 +145,9 @@
     "parent_map": "honeycombs/core_map/index.json"
   },
   "registry": {
-    "total_files": 9,
-    "last_updated": "2026-05-14",
-    "notes": "v4.3.1: 9 active tasks. bot_update at 99% — P-52 done, Deep Synthesis in progress."
+    "total_files": 10,
+    "last_updated": "2026-07-07",
+    "notes": "v4.4.0: 10 active tasks. Added T-20260707-AUTO-BUILD (auto-build onboarding)."
   },
   "resonance": {
     "status": "fully_resonant",
@@ -146,7 +156,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-14",
-    "notes": "v4.3.1: 9 active tasks. bot_update at 99% — P-21..P-52 done. Deep Synthesis D-1 done."
+    "last_check": "2026-07-07",
+    "notes": "v4.4.0: 10 active tasks. Added auto-build onboarding task."
   }
 }
