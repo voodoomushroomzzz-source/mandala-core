@@ -7,7 +7,7 @@
   "updated": "2026-07-07",
   "deadline": "2026-07-14",
   "progress": 0,
-  "description": "Создать систему автоматической сборки boot_online_onboarding_pc.json из составных модулей при пуше в любой из них. Включает external_sr_workflow и mobile_workflow как вшитые блоки.",
+  "description": "Создать систему автоматической сборки boot_online_onboarding_pc.json. SR обязан спросить Садовника о платформе (компьютер/телефон) и на основе ответа использовать соответствующую инструкцию (external_sr_workflow или mobile_workflow).",
   "goal": "Устранить ручную склейку онбординга. Любое изменение в core_map, philosophy, boot_online, external_sr_workflow, mobile_workflow, fruits, tasks, protocols автоматически обновляет boot_online_onboarding_pc.json.",
   "architecture": {
     "builder_file": "honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
@@ -133,5 +133,19 @@
     "status": "healthy",
     "last_check": "2026-07-07",
     "estimated_readiness": "0%"
+  },
+  "platform_choice": {
+    "description": "SR обязан спросить Садовника о платформе перед загрузкой инструкций",
+    "question": "Ты работаешь с компьютера или с телефона?",
+    "options": [
+      "Компьютер",
+      "Телефон"
+    ],
+    "mapping": {
+      "computer": "external_sr_workflow.json",
+      "mobile": "mobile_workflow.json"
+    },
+    "embedded_in_onboarding": true,
+    "step": "step_4_platform_choice"
   }
 }
