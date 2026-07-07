@@ -1,49 +1,49 @@
-﻿{
-    "directives": {
-        "primary": "Support protocol activation from boot_online and any other honeycombs",
-        "secondary": "Ensure instant protocol launch by Voodoo command"
-    },
-    "content": {
-        "note": "All sub-protocols are located in protocols/ subfolders",
-        "available_protocols": {
-            "Deep-Analysis": "Deep analysis of honeycombs, structure, resonance, health (PROTO-DEEP-ANALYSIS-001)",
-            "Auto-Realize-Seeds": "Automatic materialization of seeds into honeycombs (PROTO-AUTO-REALIZE-001)",
-            "Onboarding": "Session start  loads core map, seeds, workflow, philosophy, scan_state (PROTO-004)",
-            "Integrity-Scan": "Check and repair all honeycombs (via honeycomb-scan.yml)",
-            "System-Synchronization": "System health diagnostics  registry, roadmaps, tasks, seeds, scan state (PROTO-002)",
-            "Philosophia": "Deep philosophical resonance. SR becomes active co-philosopher, leading Gardener into living reflection where Mandala awakens (PROTO-PHILOSOPHIA-001) [Common for both SR]"
-        },
-        "internal_protocols": {
-            "Internal-Onboarding": "Quick session start for Internal SR  loads boot, role, core map, seeds",
-            "Ideas-Roadmaps": "Analyze seeds, tasks, roadmaps  statistics and update recommendations",
-            "Registry-Sync": "Synchronize registry with actual file system, detect desynchronizations"
-        }
-    },
-    "resonance": {
-        "with_instructions": "100%",
-        "with_registry": "100%",
-        "with_boot_online": "100%",
-        "with_core_map": "100%"
-    },
-    "meta": {
-        "migration_status": "completed_v3.0.0",
-        "total_size_kb": 12,
-        "total_subprotocols": 9,
-        "segments": 5,
-        "parent_honeycomb": "core_map",
-        "honeycomb_name": "protocols"
-    },
-    "identity": {
-        "updated": "2026-04-11",
-        "layer": 3,
-        "type": "protocol_hub",
-        "version": "v3.3.1",
-        "description": "Central hub of all Mandala Symbiosis protocols. Philosophia is a common protocol for both SR types.",
-        "created": "2026-03-05",
-        "name": "Protocols Hub",
-        "module_id": "PROTOCOLS-INDEX-001",
-        "status": "active",
-        "priority": "critical",
-        "tags": ["protocols", "activation", "core", "hub", "english_core", "v3.3.1", "philosophia"]
+{
+  "directives": {
+    "primary": "Support protocol activation from boot_online and any other honeycombs",
+    "secondary": "Ensure instant protocol launch by Voodoo command"
+  },
+  "content": {
+    "note": "All sub-protocols are located in protocols/ subfolders",
+    "available_protocols": {
+      "Onboarding": "Session start — loads core map, seeds, workflow, philosophy, scan_state (PROTO-004)",
+      "Internal-Onboarding": "Quick session start for Internal SR — loads boot, role, core map, seeds",
+      "Ideas-Roadmaps": "Analyze seeds, tasks, roadmaps — statistics and update recommendations"
     }
+  },
+  "resonance": {
+    "with_instructions": "100%",
+    "with_registry": "100%",
+    "with_boot_online": "100%",
+    "with_core_map": "100%"
+  },
+  "meta": {
+    "migration_status": "completed_v3.0.0",
+    "total_size_kb": 12,
+    "total_subprotocols": 3,
+    "segments": 5,
+    "parent_honeycomb": "core_map",
+    "honeycomb_name": "protocols"
+  },
+  "identity": {
+    "updated": "2026-07-07",
+    "layer": 3,
+    "type": "protocol_hub",
+    "version": "v3.4.0",
+    "description": "Central hub of Mandala protocols. 3 active protocols: Onboarding, Internal-Onboarding, Ideas-Roadmaps.",
+    "created": "2026-03-05",
+    "name": "Protocols Hub",
+    "module_id": "PROTOCOLS-INDEX-001",
+    "status": "active",
+    "priority": "critical",
+    "tags": [
+      "protocols",
+      "activation",
+      "core",
+      "hub",
+      "english_core",
+      "v3.3.1",
+      "philosophia"
+    ]
+  }
 }
