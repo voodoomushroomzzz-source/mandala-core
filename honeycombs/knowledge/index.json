@@ -38,6 +38,15 @@
       "source": "Gardener (Voodoo)",
       "date_added": "2026-07-06",
       "version": "v1.2"
+    },
+    {
+      "id": "ai_tools_guide",
+      "name": "AI Tools Guide — Расширенное руководство",
+      "file": "ai_tools_guide.json",
+      "description": "Полное руководство по ИИ-инструментам с контекстом использования (what, when, pros/cons)",
+      "source": "Instagram (@ksafaraliev_ai, @potapovfx) + верификация",
+      "date_added": "2026-07-07",
+      "version": "v1.0.0"
     }
   ],
   "navigation": {
@@ -49,7 +58,7 @@
     ]
   },
   "metrics": {
-    "total_resources": 2,
+    "total_resources": 3,
     "last_updated": "2026-07-07"
   },
   "health": {
