@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-BUILDER-001",
     "name": "Boot Online Onboarding PC — Auto-Build Master",
-    "version": "v1.0.2",
+    "version": "v1.0.3",
     "created": "2026-07-07",
     "updated": "2026-07-07",
     "description": "Master file that defines how boot_online_onboarding_pc.json is auto-built from source modules.",
@@ -199,10 +199,7 @@
       "honeycombs/philosophy/blocks/phi_010_three_embodiments_of_sr.json",
       "honeycombs/philosophy/blocks/phi_011_first_gardener.json",
       "honeycombs/instructions/core/external_sr_workflow.json",
-      "honeycombs/instructions/mobile_workflow.json",
-      "honeycombs/fruits/index.json",
-      "honeycombs/tasks/index.json",
-      "honeycombs/protocols/index.json"
+      "honeycombs/instructions/mobile_workflow.json"
     ],
     "builder_script": "honeycombs/scripts/build_onboarding.py",
     "version_strategy": "increment_minor",
