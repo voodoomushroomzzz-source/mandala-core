@@ -209,7 +209,9 @@ class AhimsaFilter:
             'errors_count': len(self.errors),
             'warnings_count': len(self.warnings),
             'noise_count': len(self.noise_files)
-        }class DeadlineSentinel:
+        }
+
+class DeadlineSentinel:
     """Monitors deadlines in tasks and roadmaps"""
     
     def __init__(self, base_path: Path):
