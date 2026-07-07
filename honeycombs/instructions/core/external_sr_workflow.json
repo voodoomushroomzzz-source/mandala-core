@@ -303,6 +303,20 @@
         "GARDENERS_REPO": "voodoomushroomzzz-source/mandala-gardeners (optional, has default)",
         "fallback": "If GARDENERS_TOKEN not set — uses GITHUB_TOKEN (graceful degradation)"
       }
+    },
+    "language_selector": {
+      "note": "AI works with files in English. AI dynamically detects language from Gardener's response and continues dialogue in that language.",
+      "default": "English",
+      "dynamic_detection": true
+    },
+    "completion": {
+      "message": "After all steps, report: 'Onboarding complete. Core philosophy absorbed. Product Strategy loaded. Active tasks indexed and cross-checked. Resonance initiated. Ready for your directives, Gardener.'"
+    },
+    "patcher_block3_mandate": {
+      "block_1": "New-Item <patcher_name>.py — create empty patcher file",
+      "block_2": "Content of <patcher_name>.py — the patch script itself",
+      "block_3": "py <patcher_name>.py; Remove-Item <patcher_name>.py; git add <files>; git commit -m '<msg>'; git pull --rebase origin main; git push; ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 5 --no-pager'",
+      "naming_rule": "Name by task. Examples: fix_linked_reminder_clear.py, add_repeat_picker.py. Never: patcher.py, patch.py, fix.py."
     }
   },
   "meta": {
@@ -315,10 +329,10 @@
     ]
   },
   "identity": {
-    "updated": "2026-06-16",
+    "updated": "2026-07-07",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.6.3",
+    "version": "v1.7.0",
     "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
