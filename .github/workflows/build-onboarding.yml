@@ -10,9 +10,6 @@ on:
       - 'honeycombs/philosophy/blocks/phi_011_first_gardener.json'
       - 'honeycombs/instructions/core/external_sr_workflow.json'
       - 'honeycombs/instructions/mobile_workflow.json'
-      - 'honeycombs/fruits/index.json'
-      - 'honeycombs/tasks/index.json'
-      - 'honeycombs/protocols/index.json'
       - 'honeycombs/boot_online/boot_online_onboarding_pc_builder.json'
       - 'honeycombs/boot_online/builder/build_onboarding.py'
 
