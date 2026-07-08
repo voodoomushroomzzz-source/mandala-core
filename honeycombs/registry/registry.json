@@ -21,8 +21,8 @@
     "honeycomb_name": "registry",
     "parent_honeycomb": "core_map",
     "segments": 6,
-    "total_files": 0,
-    "total_size_kb": 0,
+    "total_files": 15,
+    "total_size_kb": 664.99,
     "purpose": "The registry is the single source of truth about the state of all honeycombs. It is updated automatically by honeycomb_scanner.py on every scan.",
     "lifecycle": "The registry is updated automatically on every scan. Manual changes are only allowed through patch protocols.",
     "change_requires": "gardener_approval",
@@ -63,8 +63,8 @@
     }
   },
   "registry": {
-    "total_files": 0,
-    "total_size_kb": 0,
+    "total_files": 15,
+    "total_size_kb": 664.99,
     "last_updated": "2026-07-08",
     "honeycomb_id": "HONEYCOMB-REGISTRY-001",
     "status": "active",
@@ -72,9 +72,25 @@
     "source_of_truth": "Individual honeycomb manifests (index.json in each honeycomb folder). This file stores only registry metadata and aggregated statistics."
   },
   "health": {
-    "status": "error",
+    "status": "healthy",
     "validation_errors": [],
-    "new_honeycombs": [],
+    "new_honeycombs": [
+      "honeycombs/akasha",
+      "honeycombs/works",
+      "honeycombs/boot_online",
+      "honeycombs/core_map",
+      "honeycombs/instructions",
+      "honeycombs/philosophy",
+      "honeycombs/protocols",
+      "honeycombs/registry",
+      "honeycombs/seeds",
+      "honeycombs/knowledge",
+      "honeycombs/fruits",
+      "honeycombs/fruits/gentle_companion",
+      "honeycombs/humor",
+      "honeycombs/sym",
+      "honeycombs/sessions"
+    ],
     "modified_honeycombs": [],
     "deleted_honeycombs": [],
     "symbiosis_guard": {
