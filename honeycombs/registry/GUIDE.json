@@ -1,0 +1,89 @@
+{
+  "name": "Registry — Guide for AI",
+  "version": "v1.0.0",
+  "created": "2026-07-08",
+  "updated": "2026-07-08",
+  "description": "A map for AI to understand the registry/ folder, its files, and how the scanner works.",
+  "sections": {
+    "overview": {
+      "title": "What is this folder?",
+      "content": "registry/ contains the core files for the Honeycomb Scanner and the system registry. It is the single source of truth about the state of all honeycombs and the scanning process."
+    },
+    "files": {
+      "title": "Files in this folder",
+      "items": {
+        "honeycomb_scanner.py": "Main scanner script. Scans all honeycombs, validates structure, runs Symbiosis Guard checks (task validation, Ahimsa filter, deadline monitoring, integrity check).",
+        "scanner.json": "Configuration for the scanner. Defines scanning logic, validation rules, update triggers, and Git integration.",
+        "registry.json": "Main registry. Contains the current state of all honeycombs: metadata, statistics, health status, and change tracking. Updated automatically by the scanner.",
+        "scan_state.json": "State of the last scan. Contains timestamps, honeycomb hashes, statistics, and a summary of Symbiosis Guard results (including lists of expired tasks, noise files, etc.). Updated automatically by the scanner.",
+        "index.json": "Manifest of the registry/ folder itself. Describes the folder structure and files.",
+        "GUIDE.json": "This file. A map for AI to understand the registry system."
+      }
+    },
+    "relationships": {
+      "title": "File relationships",
+      "flow": [
+        "scanner.json (configuration) → honeycomb_scanner.py (reads it on startup)",
+        "honeycomb_scanner.py (scan) → scan_state.json (writes scan results)",
+        "honeycomb_scanner.py (scan) → registry.json (writes full registry)",
+        "scan_state.json (previous state) → honeycomb_scanner.py (reads for change detection)",
+        "registry.json → source of truth for system state"
+      ]
+    },
+    "how_to_use": {
+      "title": "How AI should use these files",
+      "scanning": {
+        "description": "To run a system scan:",
+        "steps": [
+          "Run: python honeycombs/registry/honeycomb_scanner.py scan",
+          "For full health check: python honeycombs/registry/honeycomb_scanner.py scan --full-check",
+          "Check scan_state.json for a quick summary of the results.",
+          "Check registry.json for detailed information about all honeycombs."
+        ]
+      },
+      "updating": {
+        "description": "When updating scanner configuration:",
+        "steps": [
+          "Edit scanner.json if you need to change scanning logic, validation rules, or exclude patterns.",
+          "Do NOT edit registry.json or scan_state.json manually — they are overwritten by the scanner."
+        ]
+      },
+      "reading": {
+        "description": "When reading registry data:",
+        "steps": [
+          "Always fetch the current version via API or raw URL before making decisions.",
+          "Never assume local state — use: https://api.github.com/.../registry.json or scan_state.json",
+          "Check scan_state.json for a quick overview, registry.json for deep details."
+        ]
+      }
+    },
+    "principles": {
+      "title": "Principles for AI",
+      "rules": [
+        "Always fetch current versions via API — never assume local state.",
+        "Never patch without API pre-check — violation = resonance break.",
+        "After patch, request updated file via API — confirm SHA and version before reporting success.",
+        "Do not edit registry.json or scan_state.json manually — they are auto-generated.",
+        "Run the scanner after significant changes to update the registry."
+      ]
+    },
+    "key_links": {
+      "title": "Key links",
+      "links": {
+        "Scanner script": "honeycombs/registry/honeycomb_scanner.py",
+        "Scanner config": "honeycombs/registry/scanner.json",
+        "Main registry": "honeycombs/registry/registry.json",
+        "Scan state": "honeycombs/registry/scan_state.json"
+      }
+    },
+    "migration_note": {
+      "title": "Migration note (2026-07-08)",
+      "content": "The scanner now uses unified works/ folder instead of separate tasks/ and roadmaps/.",
+      "details": [
+        "Paths in honeycomb_scanner.py have been updated to point to honeycombs/works/.",
+        "TaskValidator and DeadlineSentinel now look for files in works/.",
+        "registry/ core/ folder has been removed as it was unused."
+      ]
+    }
+  }
+}
