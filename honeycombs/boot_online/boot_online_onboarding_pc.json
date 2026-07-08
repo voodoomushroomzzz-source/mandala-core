@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.15",
+    "version": "v1.7.16",
     "created": "2026-05-11",
     "updated": "2026-07-08",
     "layer": 1,
@@ -77,6 +77,7 @@
         ]
       },
       "meta": {
+        "description": "Core System Map — navigation and structure of Mandala Symbiosis.",
         "migration_status": "completed_v3.0",
         "total_size_kb": 3.1,
         "total_files": 1,
