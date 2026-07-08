@@ -26,7 +26,7 @@ class Colors:
     UNDERLINE = '\033[4m'
 
 class TaskValidator:
-    """Validates task files in honeycombs/tasks/active/"""
+    """Validates task files in honeycombs/works/"""
     
     def __init__(self, base_path: Path):
         self.base_path = base_path
@@ -39,7 +39,7 @@ class TaskValidator:
     
     def validate(self) -> Dict:
         """Run all task validations"""
-        tasks_path = self.base_path / 'honeycombs' / 'tasks' / 'active'
+        tasks_path = self.base_path / 'honeycombs' / 'works'
         if not tasks_path.exists():
             self.warnings.append("Tasks folder not found")
             return self._report()
@@ -223,7 +223,7 @@ class DeadlineSentinel:
     def check(self) -> Dict:
         """Check all deadlines"""
         # Check tasks
-        tasks_path = self.base_path / 'honeycombs' / 'tasks' / 'active'
+        tasks_path = self.base_path / 'honeycombs' / 'works'
         if tasks_path.exists():
             for task_file in tasks_path.glob('*.json'):
                 try:
@@ -234,7 +234,7 @@ class DeadlineSentinel:
                     pass
         
         # Check roadmaps
-        roadmaps_path = self.base_path / 'honeycombs' / 'roadmaps' / 'active'
+        roadmaps_path = self.base_path / 'honeycombs' / 'works'
         if roadmaps_path.exists():
             for roadmap_file in roadmaps_path.glob('*.json'):
                 try:
