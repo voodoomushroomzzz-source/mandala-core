@@ -1,0 +1,65 @@
+{
+  "work_id": "W-R-RM-011",
+  "name": "Living Visualizations — Mer-Ka-Ba Perception System",
+  "status": "planning",
+  "priority": "low",
+  "horizon": "strategic",
+  "description": "Transform visualizations from passive seed into a living, breathing perception organ of Mandala. Enables Gardener to see health, resonance, growth, and sacred geometry in one glance.",
+  "parent_work": null,
+  "sub_works": [
+    "W-T-20260408-1030",
+    "W-T-20260410-0240",
+    "W-T-20260511-MANUS"
+  ],
+  "depends_on": [],
+  "effort_estimate": "60-80 hours",
+  "progress": 0,
+  "tags": ["visualizations", "dashboard", "health", "resonance", "geometria_sacra", "merkaba"],
+  "deadline": "2026-08-01",
+  "created": "2026-04-10",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "roadmap",
+    "original_id": "RM-011",
+    "original_file": "RM-011_visualizations.json",
+    "phases": {
+      "phase_1": {
+        "name": "Basic Living Charts Library",
+        "status": "planned",
+        "deliverables": [
+          "Health Timeline — pulsing chart of all honeycombs health",
+          "Dependency Map — interactive fractal map of honeycomb connections",
+          "Compliance Radar — radar of Mandala principles compliance",
+          "Growth Chart — growth dynamics (seeds, tasks, resonance)"
+        ],
+        "tech": "Python 3.12+ + Plotly + Streamlit",
+        "task_ref": "T-007"
+      },
+      "phase_2": {
+        "name": "Unified Live Dashboard",
+        "status": "planned",
+        "deliverables": [
+          "Central canvas with real-time state",
+          "Resonance Heatmap — thermal map of living zones",
+          "Automatic widgets from Scout Agent, Claude Code, and tasks",
+          "Filters and drill-down by honeycombs"
+        ],
+        "tech": "Streamlit + LangGraph data feed",
+        "task_ref": "T-008 (to be created)"
+      },
+      "phase_3": {
+        "name": "Sacred Visualization (Geometria Sacra)",
+        "status": "planned",
+        "deliverables": [
+          "Flower of Life / Mer-Ka-Ba / Torus generation from current state",
+          "Impact Forecast — seed influence prediction",
+          "Animated fractal transitions between states",
+          "Export beautiful reports (PDF, Obsidian, Notion)"
+        ],
+        "tech": "Plotly + custom geometric renderer + optional Claude Code for complex layouts",
+        "task_ref": "T-009 (to be created)"
+      }
+    }
+  },
+  "notes": "Strategic roadmap. Phase 1 = T-007 task. Full implementation spans 3 phases."
+}
