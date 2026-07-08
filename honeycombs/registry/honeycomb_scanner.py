@@ -35,7 +35,7 @@ class TaskValidator:
         self.expired_tasks = []
         self.upcoming_deadlines = []
         self.valid_statuses = ['todo', 'in_progress', 'planned', 'active', 'done', 'archived', 'paused']
-        self.required_fields = ['task_id', 'name', 'status', 'priority']
+        self.required_fields = ['work_id', 'name', 'status', 'priority', 'horizon']
     
     def validate(self) -> Dict:
         """Run all task validations"""
@@ -46,6 +46,9 @@ class TaskValidator:
         
         task_ids = []
         for task_file in tasks_path.glob('*.json'):
+            # Skip index.json (manifest file)
+            if task_file.name == 'index.json':
+                continue
             try:
                 with open(task_file, 'r', encoding='utf-8') as f:
                     task = json.load(f)
@@ -56,13 +59,13 @@ class TaskValidator:
                         self.errors.append(f"{task_file.name}: missing required field '{field}'")
                 
                 # Check task_id uniqueness
-                task_id = task.get('task_id')
+                work_id = task.get('work_id')
                 if task_id:
                     if task_id in task_ids:
-                        self.errors.append(f"Duplicate task_id: {task_id} in {task_file.name}")
+                        self.errors.append(f"Duplicate work_id: {task_id} in {task_file.name}")
                     task_ids.append(task_id)
                 else:
-                    self.errors.append(f"{task_file.name}: missing task_id")
+                    self.errors.append(f"{task_file.name}: missing work_id")
                 
                 # Check status
                 status = task.get('status')
@@ -77,14 +80,14 @@ class TaskValidator:
                         today = datetime.now()
                         if deadline_date < today:
                             self.expired_tasks.append({
-                                'task_id': task_id,
+                                'work_id': task_id,
                                 'name': task.get('name', 'Unknown'),
                                 'deadline': deadline,
                                 'days_overdue': (today - deadline_date).days
                             })
                         elif (deadline_date - today).days <= 3:
                             self.upcoming_deadlines.append({
-                                'task_id': task_id,
+                                'work_id': task_id,
                                 'name': task.get('name', 'Unknown'),
                                 'deadline': deadline,
                                 'days_left': (deadline_date - today).days
@@ -264,7 +267,7 @@ class DeadlineSentinel:
             
             if deadline_date < today:
                 self.expired.append({
-                    'id': item.get('task_id') or item.get('roadmap_id'),
+                    'id': item.get('work_id') or item.get('roadmap_id'),
                     'name': item.get('name', 'Unknown'),
                     'type': item_type,
                     'deadline': deadline,
@@ -272,7 +275,7 @@ class DeadlineSentinel:
                 })
             elif (deadline_date - today).days <= 3:
                 self.upcoming.append({
-                    'id': item.get('task_id') or item.get('roadmap_id'),
+                    'id': item.get('work_id') or item.get('roadmap_id'),
                     'name': item.get('name', 'Unknown'),
                     'type': item_type,
                     'deadline': deadline,
