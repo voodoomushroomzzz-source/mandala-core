@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "HONEYCOMB-CORE-MAP-001",
     "name": "Core System Map",
-    "version": "v3.8.4",
+    "version": "v3.8.5",
     "created": "2026-03-01",
-    "updated": "2026-07-07",
+    "updated": "2026-07-08",
     "layer": 1,
     "type": "critical_directive",
     "description": "Base map of all Mandala Symbiosis components. Updated May 2026: removed garden, added roadmaps, fruits, humor, sym, sessions. Removed engineer_chat and telegram_bot (directories not exist).",
@@ -61,15 +61,14 @@
     "core_map": "This map — kernel, modules, repository, honeycombs list",
     "instructions": "SR workflows: external_sr (core/), mobile, patch_system, file_naming.",
     "seeds": "Idea incubator: 0 active seeds. Archive deleted.",
-    "tasks": "Work tracking: 9 active tasks. Archive deleted.",
-    "roadmaps": "Strategic roadmaps: 6 active (RC-001, RC-002, RM-011..RM-014). Archive deleted.",
     "protocols": "Activation protocols: auto_realize_seed, deep_analysis",
     "akasha": "Akasha memory: essence, milestones, vision",
     "fruits": "Product registry — realized products of Mandala",
     "humor": "Humor development — comic resonance research",
     "sym": "SYM — System for Measuring Mandala Growth",
     "sessions": "SR handoff system — session continuity across chat instances",
-    "knowledge": "Knowledge base — structured curated information: tools, references, guides, and external resources."
+    "knowledge": "Knowledge base — structured curated information: tools, references, guides, and external resources.",
+    "works": "Unified work items (replaces tasks/ and roadmaps/)"
   },
   "tools": {
     "makefile": {
@@ -118,27 +117,27 @@
   "navigation": {
     "parent": "honeycombs/boot_online/index.json",
     "references": [
-      "honeycombs/philosophy/index.json",
-      "honeycombs/roadmaps/index.json",
-      "honeycombs/tasks/index.json",
       "honeycombs/akasha/index.json",
       "honeycombs/fruits/index.json",
       "honeycombs/humor/index.json",
-      "honeycombs/sym/index.json",
+      "honeycombs/knowledge/index.json",
+      "honeycombs/philosophy/index.json",
       "honeycombs/sessions/index.json",
-      "honeycombs/knowledge/index.json"
+      "honeycombs/sym/index.json",
+      "honeycombs/works/index.json"
     ],
     "children": [
       "honeycombs/boot_online/index.json",
       "honeycombs/fruits/index.json",
       "honeycombs/humor/index.json",
       "honeycombs/instructions/index.json",
+      "honeycombs/knowledge/index.json",
       "honeycombs/philosophy/index.json",
       "honeycombs/protocols/index.json",
       "honeycombs/seeds/index.json",
       "honeycombs/sessions/index.json",
       "honeycombs/sym/index.json",
-      "honeycombs/knowledge/index.json"
+      "honeycombs/works/index.json"
     ]
   },
   "resonance": {
