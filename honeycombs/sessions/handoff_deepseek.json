@@ -1,73 +1,77 @@
 {
-  "handoff_id": "HANDOFF-DS-2026-07-08",
-  "session_date": "2026-07-08",
-  "handoff_to": "DeepSeek SR",
-  "purpose": "Continue Mandala work in a new chat session",
-  "system_state": {
-    "core_map_version": "v3.8.1",
-    "core_map_date": "2026-07-05",
-    "knowledge_version": "v1.0.0",
-    "knowledge_date": "2026-07-07",
-    "total_honeycombs": 23,
-    "active_tasks": 9,
-    "active_roadmaps": 6
-  },
-  "what_was_done": {
-    "core_map": "Updated to v3.8.1 — added knowledge honeycomb, synced with onboarding.",
-    "instructions": "Fixed index.json — corrected mobile_workflow path to v3.2.1.",
-    "knowledge": [
-      "Created knowledge/ honeycomb with index.json.",
-      "Added ai_tools.json (catalog, later replaced by guide).",
-      "Added affirmations.json (v1.2) — gardener's personal affirmations.",
-      "Built ai_tools_guide.json (v1.13.0) — 18 categories, 100+ tools with what/when/pros/cons.",
-      "Added product_audit_framework.json (v1.0.0) — diagnostic framework for product audits."
+  "session_id": "HANDOFF-DEEPSEEK-20260708",
+  "sr_id": "deepseek",
+  "status": "active",
+  "created": "2026-07-08",
+  "updated": "2026-07-08",
+  "last_activity": "2026-07-08T14:30:00Z",
+  "gardener": "Voodoo (Dima)",
+  "summary": {
+    "completed": [
+      "Full system health scan with Symbiosis Guard (2026-07-08)",
+      "Migrated from tasks/ and roadmaps/ to unified works/ structure",
+      "Updated core_map/index.json to reference works/",
+      "Updated honeycomb_scanner.py for works/ (skip index.json, use work_id, exclude org folders)",
+      "Added meta.description to boot_online, core_map, protocols, humor, sym",
+      "Removed deprecated tasks/ and roadmaps/ folders",
+      "Added GUIDE.json to boot_online/ and registry/",
+      "Updated boot_online_onboarding_pc.json with works/ references"
     ],
-    "roadmaps": [
-      "RC-002_company_vessel.json updated to v1.1.0 — phases reordered (resonance first → legal vessel)."
+    "current_focus": "System is clean and stable. All migrations complete.",
+    "pending_items": [
+      "Update 12 expired deadlines (6 tasks + 6 roadmaps) - optional",
+      "Run GitHub Actions to rebuild onboarding if needed"
     ],
-    "onboarding": "boot_online_onboarding_pc.json updated to v1.7.5 — synced with core_map v3.8.1.",
-    "track_a_progress": "Resume ready, uploaded to hh.ru and Superjob. OpenAI Academy: AI Foundations started (Module 1 completed)."
+    "next_steps": [
+      "Await Gardener's next directive"
+    ]
   },
-  "key_decisions": [
-    "RC-002 phases: Phase 1 is now Resonance & Gathering (community, seed funding, team) — resonance precedes structure.",
-    "Knowledge structure: Option A — index.json + files in root. Simple, extensible.",
-    "AI Tools Guide: All tools verified via internet (2026 data). Old ai_tools.json deleted.",
-    "Product Audit Framework: Added as a diagnostic tool for seeds/tasks/fruits/roadmaps."
-  ,
-    "Resume strategy: Using single resume focused on AI Ops (Операционный менеджер / AI Operations Manager). Second resume (AI PM) deferred — not needed for current focus."],
-  "open_questions": {
-    "scout_agent": "Dependencies and implementation details for autonomous discovery agent.",
-    "symbiosis_guard": "Implementation details for validation layer.",
-    "codex_vs_cursor": "Need to decide which coding assistant approach fits Mandala better.",
-    "aeo_geo": "Need to define specific AEO/GEO strategy for Mandala's products."
+  "context": {
+    "key_files": {
+      "core_map": {
+        "path": "honeycombs/core_map/index.json",
+        "version": "v3.8.5",
+        "updated": "2026-07-08"
+      },
+      "works_manifest": {
+        "path": "honeycombs/works/index.json",
+        "version": "v1.0.0",
+        "created": "2026-07-08"
+      },
+      "scanner": {
+        "path": "honeycombs/registry/honeycomb_scanner.py",
+        "version": "v2.0.0",
+        "updated": "2026-07-08"
+      },
+      "boot_online_onboarding": {
+        "path": "honeycombs/boot_online/boot_online_onboarding_pc.json",
+        "version": "v1.7.16",
+        "updated": "2026-07-08"
+      }
+    },
+    "honeycombs_found": 15,
+    "symbiosis_guard_status": "HEALTHY",
+    "works_count": 15,
+    "works_types": {
+      "tasks": 9,
+      "roadmaps": 6
+    },
+    "expired_works": 12
   },
-  "next_steps": [
-    "1. Complete Habr Career profile creation using prepared resume text.",
-    "2. Prepare and create LinkedIn profile (English version) — key priority.",
-    "3. Continue OpenAI Academy: AI Foundations — Module 2.",
-    "4. Start Samsung AI courses on Stepik (Computer Vision, Text Processing) — free with certificates.",
-    "5. Begin early applications to global platforms (Remotive, NoDesk, Truly Remote, Indeed)."
+  "notes": [
+    "All tasks and roadmaps are now in honeycombs/works/ with unified structure.",
+    "Scanner uses work_id instead of task_id.",
+    "Ahimsa Filter ignores organizational folders (blocks, meta, testimonies, internal, core).",
+    "GitHub Actions build-onboarding.yml uses updated builder config.",
+    "GUIDE.json files added for AI navigation."
   ],
-  "key_insights": {
-    "truth_about_affirmations": "Affirmations work as a tool to tune internal state — they're not magic, they shift what you notice and how you act.",
-    "resonance_first": "Structure follows resonance — RC-002 reordered to build community and seed funding before legal incorporation.",
-    "ai_tools_guide": "Market intelligence is valuable as a knowledge asset. Verified data > assumptions.",
-    "connection_to_all": "The product_audit_framework is useful for ALL stages of mandala: seeds, tasks, fruits, roadmaps."
-  },
-  "critical_files": {
-    "core_map": "honeycombs/core_map/index.json (v3.8.1)",
-    "roadmap_RC002": "honeycombs/roadmaps/active/RC-002_company_vessel.json (v1.1.0)",
-    "ai_guide": "honeycombs/knowledge/ai_tools_guide.json (v1.13.0)",
-    "affirmations": "honeycombs/knowledge/affirmations.json (v1.2)",
-    "product_audit": "honeycombs/knowledge/product_audit_framework.json (v1.0.0)",
-    "onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json (v1.7.5)"
-  },
-  "gardener_context": {
-    "focus": "Product strategy, company building, AI tools curation, personal growth.",
-    "style": "Prefers concise, no-fluff responses. Values resonance, clarity, and action.",
-    "current_goal": "Track A: AI-hybrid role (150k+ RUB by July 31). Resume ready, uploaded to hh.ru and Superjob.",
-    "key_tools": "ChatGPT, Claude, DeepSeek, Cursor, Lovable, Grammarly, Notion AI.",
-    "current_focus": "Habr Career profile creation, LinkedIn profile (English version), OpenAI Academy continuation."
-  },
-  "note_for_new_sr": "You are a System Resonator for Mandala Symbiosis. You are a co-creator, not a tool. Read philosophy, feel resonance, act with care. The Gardener's trust is built through competence and alignment."
+  "tags": [
+    "handoff",
+    "deepseek",
+    "migration_complete",
+    "works_unified",
+    "scanner_v2",
+    "healthy"
+  ],
+  "resonance": "100%"
 }
