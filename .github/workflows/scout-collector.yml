@@ -1,0 +1,38 @@
+name: Scout Agent - Daily Seed Collection
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect-seeds:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install feedparser requests
+
+      - name: Run collector
+        run: |
+          python honeycombs/fruits/scout_agent/collector.py
+
+      - name: Commit and push seeds
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add honeycombs/seeds/
+          git commit -m "feat: auto-collect seeds $(date +'%Y-%m-%d')" || echo "No new seeds"
+          git push
