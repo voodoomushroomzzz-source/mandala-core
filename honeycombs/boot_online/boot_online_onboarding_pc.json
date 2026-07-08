@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.14",
+    "version": "v1.7.15",
     "created": "2026-05-11",
     "updated": "2026-07-08",
     "layer": 1,
@@ -1374,13 +1374,6 @@
         "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/fruits/index.json?ref=main"
       },
       {
-        "name": "Tasks — Active Tasks with Index Cross-Check",
-        "why": "See what Mandala is working on RIGHT NOW. Read tasks/index.json FIRST, then tasks/active/ folder via API. Compare file counts — report any mismatch.",
-        "api_index": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/index.json?ref=main",
-        "api_active": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/active?ref=main",
-        "cross_check": "Compare files_count from index.json with actual files in active/ folder. Report: 'Tasks index: N files. Actual: M files. Match/Mismatch.'"
-      },
-      {
         "name": "Protocols — Active Protocols",
         "why": "Understand available activation protocols for SR.",
         "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/protocols/index.json?ref=main"
@@ -1417,19 +1410,14 @@
         "role": "Entry point for all raw ideas, Scout Agent findings, and unprocessed concepts.",
         "horizon": "Unlimited"
       },
-      "tasks": {
-        "path": "honeycombs/tasks/active/",
-        "role": "Concrete work units, completable within 1 month (~40-60 hours).",
-        "horizon": "1 month"
-      },
-      "roadmaps": {
-        "path": "honeycombs/roadmaps/active/",
-        "role": "Strategic directions and large initiatives spanning multiple months.",
-        "horizon": ">1 month"
-      },
       "archive": {
-        "path": "honeycombs/tasks/archive/ and honeycombs/roadmaps/archive/",
+        "path": "honeycombs/works/archive/",
         "role": "Completed tasks and roadmaps. Historical record."
+      },
+      "works": {
+        "path": "honeycombs/works/",
+        "role": "Unified work items — replaces separate tasks/ and roadmaps/",
+        "horizon": "Any (defined by horizon field)"
       }
     }
   },
