@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry & Strategy Map",
-    "version": "v2.2.0",
+    "version": "v2.3.0",
     "created": "2026-04-17",
-    "updated": "2026-05-25",
+    "updated": "2026-07-08",
     "layer": 2,
     "type": "registry_index",
     "description": "Registry of Mandala products and strategic map of their interaction. v2.2.0: gentle_companion got dedicated honeycomb with architecture plan (14 modules, 7 phases). Dual-repo infrastructure. Links to architecture index.",
@@ -424,13 +424,36 @@
         ],
         "code_location": "main.py (inside Engineer Chat server)",
         "layer": "Brain (Layer 2) — Mobile Interface"
+      },
+      "scout_agent": {
+        "id": "fruit-scout-agent-001",
+        "name": "Scout Agent — Autonomous Seed Collector",
+        "short_description": "Собирает семена из внешних источников (гранты, наука, AI, GitHub) и сохраняет в honeycombs/seeds/.",
+        "status": "in_progress",
+        "version": "v0.1.0",
+        "released": "2026-07-08",
+        "updated": "2026-07-08",
+        "platform": "Termux (Python)",
+        "url": "honeycombs/fruits/scout_agent/",
+        "detail_file": "honeycombs/fruits/scout_agent/index.json",
+        "icon": "🌱",
+        "tags": [
+          "scout",
+          "collector",
+          "seeds",
+          "rss",
+          "automation"
+        ],
+        "layer": "Seed Collector (Layer 0)",
+        "task_id": "W-T-20260410-0240",
+        "task_file": "honeycombs/works/W-T-20260410-0240__scout_agent.json"
       }
     }
   },
   "metrics": {
-    "total_fruits": 3,
+    "total_fruits": 5,
     "active": 2,
-    "in_development": 2,
+    "in_development": 1,
     "archived": 0,
     "examples": 0
   },
@@ -452,7 +475,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-11",
-    "notes": "v2.1.0: added task links to each fruit, Architect Bot as separate fruit, realistic 4-phase timeline for solo development, SR execution order with dependencies."
+    "last_check": "2026-07-08",
+    "notes": "Added Scout Agent to fruits registry"
   }
 }
