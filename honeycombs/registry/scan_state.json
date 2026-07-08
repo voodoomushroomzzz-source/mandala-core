@@ -1,29 +1,64 @@
 {
-  "last_scan": "2026-07-08T10:53:06.565072",
-  "honeycomb_hashes": {
-    "honeycombs/works": "8228f0f4455461ed50877c08192f43ce",
-    "honeycombs/core_map": "4d74beaa4826bb425bbb92bf70c92e22",
-    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
-    "honeycombs/sym": "69d113778cf7dc0e0666d66ae3f38b1b",
-    "honeycombs/knowledge": "3805eb3697ac79804653faf74405a7db",
-    "honeycombs/protocols": "2d8e2b50ab90bde61bf116baa967389f",
-    "honeycombs/registry": "cb382d41ea2333bcfdfec52b2dab9466",
-    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
-    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
-    "honeycombs/humor": "9e5f5751aa63bd64813ed7cf36175cfc",
-    "honeycombs/boot_online": "466faeb68e8c977a9dc154d17fbd270c",
-    "honeycombs/sessions": "676e443ea43942ae919837475f6c9bbd",
-    "honeycombs/seeds": "d3d42c2f0062c566d965a499b0acffd0",
-    "honeycombs/fruits": "de0ed5e9388aa4465129b9464458f35c",
-    "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456"
-  },
+  "last_scan": "2026-07-08T13:55:47.743827",
+  "honeycomb_hashes": {},
   "statistics": {
-    "total_scanned": 15,
-    "valid_v2": 15,
+    "total_scanned": 0,
+    "valid_v2": 0,
     "invalid_v2": 0,
-    "errors": 0,
+    "errors": 15,
     "warnings": 0,
-    "total_files": 83,
-    "total_size_kb": 664.99
+    "total_files": 0,
+    "total_size_kb": 0
+  },
+  "symbiosis_guard": {
+    "last_check": "2026-07-08T13:55:47.743853",
+    "errors_count": 0,
+    "warnings_count": 0,
+    "expired_tasks": 6,
+    "upcoming_deadlines": 0,
+    "expired_tasks_list": [
+      {
+        "work_id": "W-T-20260410-0240",
+        "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
+        "deadline": "2026-05-15",
+        "days_overdue": 54
+      },
+      {
+        "work_id": "W-T-20260511-MANUS",
+        "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+        "deadline": "2026-06-11",
+        "days_overdue": 27
+      },
+      {
+        "work_id": "W-T-20260511-ARCHBOT",
+        "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
+        "deadline": "2026-06-11",
+        "days_overdue": 27
+      },
+      {
+        "work_id": "W-T-20260511-ENGCHAT",
+        "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
+        "deadline": "2026-06-11",
+        "days_overdue": 27
+      },
+      {
+        "work_id": "W-T-20260417-HUMOR",
+        "name": "Humor Development — Comedic Resonance for SR",
+        "deadline": "2026-06-17",
+        "days_overdue": 21
+      },
+      {
+        "work_id": "W-T-20260418-SYM",
+        "name": "SYM Implementation — System for Measuring Mandala Growth",
+        "deadline": "2026-06-18",
+        "days_overdue": 20
+      }
+    ],
+    "upcoming_deadlines_list": [],
+    "noise_files": 0,
+    "noise_files_list": [],
+    "broken_links": 0,
+    "missing_parents": 0,
+    "status": "healthy"
   }
 }
