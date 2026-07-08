@@ -58,11 +58,11 @@ class TaskValidator:
                     if field not in task:
                         self.errors.append(f"{task_file.name}: missing required field '{field}'")
                 
-                # Check task_id uniqueness
+                # Check work_id uniqueness
                 work_id = task.get('work_id')
                 if work_id:
                     if work_id in task_ids:
-                        self.errors.append(f"Duplicate work_id: {task_id} in {task_file.name}")
+                        self.errors.append(f"Duplicate work_id: {work_id} in {task_file.name}")
                     task_ids.append(work_id)
                 else:
                     self.errors.append(f"{task_file.name}: missing work_id")
@@ -80,14 +80,14 @@ class TaskValidator:
                         today = datetime.now()
                         if deadline_date < today:
                             self.expired_tasks.append({
-                                'work_id': task_id,
+                                'work_id': work_id,
                                 'name': task.get('name', 'Unknown'),
                                 'deadline': deadline,
                                 'days_overdue': (today - deadline_date).days
                             })
                         elif (deadline_date - today).days <= 3:
                             self.upcoming_deadlines.append({
-                                'work_id': task_id,
+                                'work_id': work_id,
                                 'name': task.get('name', 'Unknown'),
                                 'deadline': deadline,
                                 'days_left': (deadline_date - today).days
