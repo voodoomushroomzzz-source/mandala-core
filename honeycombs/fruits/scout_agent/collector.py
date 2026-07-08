@@ -21,6 +21,28 @@ def get_seed_id():
     counter += 1
     return f"SEED-{datetime.now().strftime('%Y%m%d')}-{datetime.now().strftime('%H%M%S')}-{counter:03d}"
 
+
+def collect_api(url):
+    """Собирает данные из JSON API (GitHub Trending)"""
+    try:
+        import requests
+        response = requests.get(url, timeout=10)
+        data = response.json()
+        items = []
+        if isinstance(data, list):
+            for item in data:
+                items.append({
+                    "title": f"{item.get('repositoryName', '')} ({item.get('language', '')})",
+                    "url": item.get('url', ''),
+                    "description": item.get('description', '')[:300],
+                    "published": item.get('builtBy', [{}])[0].get('username', '') if 'builtBy' in item else ''
+                })
+        return items
+    except Exception as e:
+        print(f"⚠️ Ошибка API {url}: {e}")
+        return []
+
+
 def collect_rss(url):
     """Парсит RSS-ленту, возвращает список записей"""
     try:
@@ -61,7 +83,10 @@ def main():
         if not source.get("enabled", True):
             continue
         print(f"📡 Сбор: {source['name']}")
-        items = collect_rss(source["url"])
+        if source["type"] == "api":
+            items = collect_api(source["url"])
+        else:
+            items = collect_rss(source["url"])
         for item in items:
             save_seed(item, source["name"])
             total += 1
