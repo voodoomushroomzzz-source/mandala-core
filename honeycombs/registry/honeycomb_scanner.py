@@ -134,7 +134,7 @@ class AhimsaFilter:
 
         for root, dirs, files in os.walk(honeycombs_path):
             # Skip registry and __pycache__
-            if 'registry' in root or '__pycache__' in root or 'backups' in root:
+            if 'registry' in root or '__pycache__' in root or 'backups' in root or 'blocks' in root or 'meta' in root or 'testimonies' in root or 'internal' in root or 'core' in root:
                 continue
 
             root_path = Path(root)
