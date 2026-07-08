@@ -116,7 +116,7 @@
     "notes": "v3.8.3: removed 8 empty reserve honeycombs (analytics, communications, extensions, modules, sphaerae, tectosphaera, visualizations, awareness). Total: 14 active honeycombs. [TRIGGER TEST]"
   },
   "navigation": {
-    "parent": "honeycombs/boot.json",
+    "parent": "honeycombs/boot_online/index.json",
     "references": [
       "honeycombs/philosophy/index.json",
       "honeycombs/roadmaps/index.json",
