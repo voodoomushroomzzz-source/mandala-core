@@ -1,0 +1,637 @@
+{
+  "work_id": "W-R-RM-014",
+  "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
+  "status": "active",
+  "priority": "high",
+  "horizon": "strategic",
+  "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 0,
+  "tags": ["personal", "career", "ai", "agent_management", "operations", "remote", "relocation", "vietnam", "ai_ops", "agentic"],
+  "deadline": null,
+  "created": "2026-04-16",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "roadmap",
+    "original_id": "RM-014",
+    "original_file": "RM-014_operational_transition.json",
+    "full_content": {
+      "identity": {
+        "roadmap_id": "RM-014",
+        "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
+        "version": "v4.1.1",
+        "created": "2026-04-16",
+        "updated": "2026-07-08",
+        "layer": 2,
+        "type": "roadmap",
+        "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
+        "status": "active",
+        "priority": "HIGH",
+        "tags": ["personal", "career", "ai", "agent_management", "operations", "remote", "relocation", "vietnam", "ai_ops", "agentic"],
+        "resonance": "100%"
+      },
+      "meta": {
+        "purpose": "AI-focused two-track roadmap. Track A secures income via AI-hybrid role by July 31. Track B builds professional AI career for global market.",
+        "working_principles": {
+          "sr_role": "Thinking partner, not executor. SR provides honest feedback, constructive criticism, and alternative paths.",
+          "critical_voice": "SR speaks directly if vector is suboptimal, risks are visible, or simpler path exists. Silence in face of bad idea = neglect.",
+          "corrections": "SR accepts and fixes corrections (e.g., 'Ahimsa' spelling) immediately. No ego, only accuracy.",
+          "focus": "SR keeps Gardener focused on results, not agreement."
+        },
+        "context_for_sr": {
+          "who": "Voodoo (Dima), Gardener and co-creator of Mandala Symbiosis. 8+ years managing multi-location coffee business in Russia.",
+          "situation": "Current employer failing. Hard deadline: July 31, 2026 to find new income source.",
+          "strategy": "Two AI-centric parallel tracks. Track A: AI-hybrid role (AI Ops, AI PM, Automation Manager) 150 000+ RUB immediately. Track B: Professional AI role (AI Ops Manager, Agentic Engineer, AI PM) for global market from January 2027.",
+          "mandala_lever": "Mandala is portfolio proof of AI/IT competence — building a living symbiosis with AI, using PM tools, full development lifecycle. Central case for both tracks.",
+          "ai_focus": "All learning and positioning is AI-centric. OpenAI Academy is priority #1. Mandala is the practice ground for agent orchestration.",
+          "courses_parallel": "OpenAI Academy + Google PM + COO OTUS start immediately. Do not wait for Track A completion. Progress during gaps between applications."
+        },
+        "horizon": "30 days (Track A) + 6 months (Track B)",
+        "owner": "Gardener (Voodoo) + External SR"
+      },
+      "tracks": {
+        "track_a": {
+          "name": "Track A: AI-Hybrid Role — 150k+ RUB",
+          "deadline": "2026-07-31",
+          "goal": "AI-hybrid role (AI Operations, AI Project Management, Automation Manager) with 150 000+ RUB income",
+          "reasoning": "Immediate income needed. Leverage 8-year operations experience + AI skills. Target: companies adopting AI, roles combining management and AI implementation. Higher salary ceiling than traditional roles.",
+          "target_roles": [
+            "AI Operations Manager",
+            "AI Project Manager",
+            "Automation Manager",
+            "AI Product Manager (junior/mid)",
+            "Head of AI Implementation (small teams)"
+          ],
+          "salary_range": "150 000 — 250 000+ RUB",
+          "bot_roadmap": "🤖 AI-Hybrid Job Search — 150k+",
+          "milestones": {
+            "m1_packaging": {
+              "name": "Packaging (July 6-8)",
+              "tasks": [
+                "Experience audit + IT/AI translation (COMPLETED)",
+                "Core resume (Russian) preparation (COMPLETED)",
+                "Adapt resume for hh.ru, Superjob, Rabota.ru, Zarplata.ru — with AI focus",
+                "Adapt resume for Avito, TrudVsem — with AI focus",
+                "Create LinkedIn profile (English) — AI-optimized",
+                "Create Habr Career, TenChat profiles",
+                "Subscribe to 10+ Telegram channels (including AI/IT jobs)",
+                "Integrate HyperCareer company list into job search database",
+                "Prepare English version of core resume — for global applications"
+              ]
+            },
+            "m2_first_wave": {
+              "name": "First Wave (July 11-17)",
+              "tasks": [
+                "70+ applications across all platforms (prioritize AI-hybrid roles)",
+                "Employer verification via Dream Job"
+              ]
+            },
+            "m3_interviews": {
+              "name": "Interviews (July 18-24)",
+              "tasks": [
+                "All first-wave interviews",
+                "Second wave 20-30 applications + pitch calibration (AI focus)"
+              ]
+            },
+            "m4_offer": {
+              "name": "Offer (July 25-31)",
+              "tasks": [
+                "Minimum 1 written offer 150 000+ RUB for AI-hybrid role (or expand to projects/contracts)"
+              ]
+            }
+          }
+        },
+        "track_b": {
+          "name": "Track B: Professional AI Role — Global Market",
+          "start": "2026-07-03",
+          "goal": "Professional AI role (AI Operations Manager, Agentic Orchestration Engineer, AI Product/Project Manager) in global companies",
+          "salary_ranges": {
+            "usa": "$8,000 — $15,000+ / month",
+            "uk": "£5,000 — £10,000+ / month",
+            "remote_global": "competitive with US/UK rates"
+          },
+          "reasoning": "After Track A income stabilized. Leverage Mandala as AI portfolio + Open AI certifications + operations experience translated to AI context. Focus on agent orchestration, AI workflows, and human-AI symbiosis.",
+          "early_global_outreach": {
+            "description": "Start testing global market early, in parallel with Track A. Goal: understand demand, get familiar with application process, collect feedback.",
+            "timing": "After packaging phase (from July 11)",
+            "actions": [
+              "Prepare English version of core resume",
+              "Submit 5-10 test applications to global platforms (LinkedIn, WWR, RemoteOK)",
+              "Track responses and collect requirements from real job descriptions",
+              "Use feedback to improve resume and positioning"
+            ]
+          },
+          "target_roles": [
+            {
+              "title": "AI Operations Manager",
+              "description": "Manage deployment and operations of AI systems, CI/CD pipelines, scalability, and reliability.",
+              "salary_usa": "$133,500 — $241,900 / year",
+              "salary_uk": "£55,000 — £75,000 / year"
+            },
+            {
+              "title": "Agentic Orchestration Engineer",
+              "description": "Design and build multi-module AI agent systems using LangChain, LangGraph, and similar frameworks.",
+              "salary_usa": "$133,000 — $156,500 / year",
+              "salary_uk": "£60,000 — £90,000 / year"
+            },
+            {
+              "title": "AI Product Manager",
+              "description": "Define AI products, strategy, market analysis, and cross-functional team coordination.",
+              "salary_usa": "$145,000 — $190,000 / year",
+              "salary_uk": "£80,000 — £110,000 / year"
+            },
+            {
+              "title": "AI Project Manager",
+              "description": "Manage full-cycle AI projects with PMI-CPMAI certification.",
+              "salary_usa": "$120,000 — $160,000 / year",
+              "salary_uk": "£70,000 — £95,000 / year"
+            }
+          ],
+          "ai_emphasis": "All learning and positioning is AI-centric. Open AI Academy is priority #1. Mandala is the practice ground for agent orchestration.",
+          "phases": {
+            "phase_1": {
+              "name": "Foundation — AI & Ops (July-August 2026)",
+              "duration": "Month 1-2",
+              "tasks": [
+                "✅ OpenAI Academy: AI Foundations — complete (priority #1)",
+                "🔄 Start PMI-CPMAI (AI Project Management) certification",
+                "🔄 Google PM Certificate — first 2 modules complete",
+                "🔄 COO OTUS — in progress, 4-month program",
+                "⏳ Daily English practice: 10-15 min with SR (cover letters, pitch, interview answers) — start immediately",
+                "⏳ Early market testing: 5-10 applications to global platforms (LinkedIn, WWR, RemoteOK) — after July 10",
+                "⏳ Weekly Mandala devlog — public AI project timeline",
+                "⏳ Re-audit experience into IT/AI language v2",
+                "🔄 Samsung: 'Neural networks and machine learning' — started, certification from Samsung (Stepik)",
+                "🔄 Samsung: 'Neural networks and text processing' — started, certification from Samsung (Stepik)",
+                "⏳ Besplatny angliyazychny kurs po AI (MIT Universal AI / analog) — dopolnitelnaya praktika yazyka"
+              ]
+            },
+            "phase_2": {
+              "name": "Deepening — Agents & Workflows (September-October 2026)",
+              "duration": "Month 3-4",
+              "tasks": [
+                "🔄 OpenAI Academy: Applied AI Foundations — complete",
+                "🔄 OpenAI Academy: Agents and Workflows — complete",
+                "🔄 PMI-CPMAI — complete (if started)",
+                "⏳ Start Lean Six Sigma Yellow Belt certification",
+                "⏳ Deepen agent architecture through Mandala (LangChain/LlamaIndex practice)",
+                "⏳ IT-focused resume v2 with AI/agent emphasis"
+              ]
+            },
+            "phase_3": {
+              "name": "Packaging — AI Portfolio (November-December 2026)",
+              "duration": "Month 5-6",
+              "tasks": [
+                "⏳ Professional Mandala GitHub README (English) — AI case study",
+                "⏳ LinkedIn optimized for AI Operations / Agent Management",
+                "⏳ Open AI badges (Credly) in profile",
+                "⏳ AI-focused resume v3 for global market",
+                "⏳ Package Mandala as a public case: GitHub README, demo, architecture description"
+              ]
+            },
+            "phase_4": {
+              "name": "Active Search — Global AI Market (December 2026-January 2027)",
+              "duration": "Month 7-8",
+              "tasks": [
+                "⏳ Active applications on global platforms (LinkedIn, WWR, RemoteOK, etc.)",
+                "⏳ Networking via LinkedIn, AI communities",
+                "⏳ Target: offer 250 000—300 000+ RUB as AI Operations / Agent Orchestrator",
+                "⏳ Relocation trial: Vietnam (1-2 months) — stable remote work from new location"
+              ]
+            }
+          }
+        }
+      },
+      "task_tracker": {
+        "description": "Detailed task board for Track A packaging phase. Statuses: pending, in_progress, done.",
+        "packaging_tasks": [
+          {
+            "id": "A-TASK-001",
+            "name": "Audit of experience for IT/AI translation",
+            "status": "done",
+            "priority": "HIGH",
+            "output": "Core experience document"
+          },
+          {
+            "id": "A-TASK-002",
+            "name": "Prepare 'Core Resume' (ATS-optimized, Russian, AI-focused)",
+            "status": "done",
+            "deadline": "2026-07-06",
+            "output": "Core resume text with AI skills"
+          },
+          {
+            "id": "A-TASK-003",
+            "name": "Adapt resume for Russian job boards (AI focus)",
+            "status": "in_progress",
+            "subtasks": [
+              "hh.ru adaptation — highlight AI-hybrid skills",
+              "Superjob adaptation",
+              "Rabota.ru, Zarplata.ru, Avito, TrudVsem adaptation"
+            ],
+            "deadline": "2026-07-08",
+            "output": "Ready-to-use profiles on each platform"
+          },
+          {
+            "id": "A-TASK-004",
+            "name": "Create international/professional profiles (AI focus)",
+            "status": "pending",
+            "subtasks": [
+              "LinkedIn profile (English, AI-optimized)",
+              "Habr Career profile",
+              "TenChat profile"
+            ],
+            "deadline": "2026-07-08"
+          },
+          {
+            "id": "A-TASK-005",
+            "name": "Subscribe to 10+ Telegram job channels (include AI/IT channels)",
+            "status": "pending",
+            "deadline": "2026-07-09"
+          },
+          {
+            "id": "A-TASK-006",
+            "name": "Integrate HyperCareer company list",
+            "status": "pending",
+            "deadline": "2026-07-10"
+          }
+        ]
+      },
+      "core_resume_habr_adapted": {
+        "version": "v1.0",
+        "created": "2026-07-08",
+        "source": "Адаптировано из ядра резюме для Хабр Карьеры.",
+        "sections": {
+          "about": "Операционный менеджер с 8+ годами управления многопрофильными проектами (производство, ритейл, HoReCa). Специализация: систематизация процессов, оптимизация затрат, управление командами и бюджетами. Имею практический опыт разработки и внедрения AI-инструментов в операционные процессы: создал Telegram-бота на Python для управления задачами, интегрировал AI-агентов через API, разработал веб-интерфейс для инженерного чата. Целевые роли: AI Operations Manager, Automation Manager, руководитель проектов по автоматизации.",
+          "experience": [
+            {
+              "company": "Raw to go, Москва",
+              "position": "Территориальный управляющий",
+              "period": "Ноябрь 2025 – настоящее время",
+              "description": "Сеть из 5 кафе и производств. Команда до 30 человек.",
+              "achievements": [
+                "Управлял операционной деятельностью сети, включая контроль стандартов, логистику и выполнение KPI.",
+                "Оптимизировал закупочную деятельность, снизив прямые затраты на сырьё на 10–15%.",
+                "Стабилизировал команду: снизил текучку, выстроил систему обучения и мотивации, оптимизировал ФОТ на 2–5%.",
+                "Организовал переезд и запуск крупного производства на новую локацию (подготовка, логистика, монтаж, наладка).",
+                "Участвовал в полном цикле открытия и закрытия проектов."
+              ]
+            },
+            {
+              "company": "ООО 'Нью Нормал', Москва",
+              "position": "Менеджер проекта / Управляющий",
+              "period": "Апрель 2022 – Ноябрь 2025",
+              "description": "Полная перестройка операционных и финансовых процессов.",
+              "achievements": [
+                "Внедрил с нуля систему инвентаризации, документооборот (включая ЭДО) и управленческую бухгалтерию.",
+                "Обеспечил среднегодовой рост выручки на 15% (суммарно ~40–45% за 3 года), вывел проект с убытка -10% на стабильную прибыль 10–15%.",
+                "Оптимизировал закупки и операционную модель, сократив расходы на 10–20%, в том числе за счёт интеграции сервисов и пересмотра ролей.",
+                "Внедрил таск-борд в Notion, построил систему управления задачами.",
+                "Управлял полным бюджетом компании, обеспечивал отчётность для инвесторов."
+              ]
+            },
+            {
+              "company": "Куртош и Кофе, Владимир",
+              "position": "Управляющий (в команде учредителей)",
+              "period": "Май 2018 – Март 2022",
+              "description": "Сеть кофеен. Полный цикл: от привлечения инвестиций до операционного управления.",
+              "achievements": [
+                "Привлёк инвестиции на открытие первой точки, вывел проект на окупаемость за 1 год.",
+                "Открыл 2 точки с нуля (подбор локаций, ремонт, оснащение, запуск).",
+                "Разработал и внедрил регламенты, KPI, систему мотивации для команды.",
+                "Сформировал стабильную команду, обеспечил устойчивую прибыльность и рыночное лидерство по качеству продукта."
+              ]
+            }
+          ],
+          "skills": [
+            "Операционный менеджмент",
+            "Управление проектами",
+            "Бюджетирование и управление P&L",
+            "Управление командой до 30 человек",
+            "Оптимизация бизнес-процессов",
+            "Разработка SOP и регламентов",
+            "Внедрение систем учёта (1С, iiko, Notion)",
+            "Управление закупками и логистика",
+            "Python, API, HTML",
+            "Интеграция AI-агентов (GPT, Claude, DeepSeek, Kimi, Grok)",
+            "Промпт-инжиниринг",
+            "Работа с LLM",
+            "Linux и системное администрирование",
+            "Внедрение систем автоматизации"
+          ],
+          "personal_project": {
+            "name": "Mandala Symbiosis",
+            "period": "2025 – настоящее время",
+            "description": "Разработка AI-экосистемы для автоматизации управления и аналитики.",
+            "achievements": [
+              "Разработал Telegram-бота 'Gentle Companion' на Python (MVP, 7 пользователей) с функционалом: создание задач, контроль дедлайнов, напоминания, чек-листы.",
+              "Создал веб-интерфейс для инженерного чата (HTML), обеспечивающего координацию AI-агентов.",
+              "Интегрировал AI-агентов (GPT, Claude, DeepSeek и другие LLM) через API, настроил промпт-инжиниринг для управления задачами и аналитики.",
+              "Развернул и запустил продукты на внешнем сервере (настройка окружения, деплой, автоматизация обновлений)."
+            ]
+          },
+          "education": [
+            "Владимирский государственный университет (неоконченное высшее, юриспруденция)",
+            "Hawking School, Менеджер проектов (2019)",
+            "OpenAI Academy: AI Foundations (в процессе)"
+          ],
+          "additional": [
+            "Английский — B1 (Intermediate, чтение технической документации)",
+            "Водительские права — категория B"
+          ]
+        }
+      },
+      "ai_career_path": {
+        "summary": "AI is reshaping the job market. AI-hybrid roles (combining management with AI literacy) have higher salaries and lower competition. This roadmap positions Voodoo as an 'AI-literate manager' — a rare and valuable hybrid.",
+        "key_insights": [
+          "AI skills provide a 62% salary premium on average.",
+          "AI-hybrid roles (AI Ops, AI PM) have lower competition than traditional management roles.",
+          "Practical AI project (Mandala Symbiosis) is a unique portfolio piece.",
+          "OpenAI Academy certifications are globally recognized and free."
+        ]
+      },
+      "skills": {
+        "management": [
+          "Operations Management",
+          "Project Management (Agile, Scrum, Kanban)",
+          "Budget Management (P&L)",
+          "Team Leadership (up to 30 people)",
+          "Process Optimization",
+          "SOP Development",
+          "Quality Management"
+        ],
+        "it_tools": [
+          "Notion (task management, documentation)",
+          "Asana",
+          "1C",
+          "iiko",
+          "MS Office",
+          "Electronic Document Management (EDO)",
+          "Git"
+        ],
+        "ai_automation": [
+          "AI Agents (GPT, Claude, DeepSeek)",
+          "Agentic Workflows",
+          "AI Integration & Automation",
+          "Prompt Engineering",
+          "API Integration",
+          "Linux Server Administration (Ubuntu, systemd)",
+          "AI Project Management"
+        ]
+      },
+      "mandala_project": {
+        "name": "Mandala Symbiosis",
+        "role": "Architect and Operational Manager",
+        "period": "2025 — present",
+        "description": "Project to create a living AI ecosystem that unites several AI agents (GPT, Claude, DeepSeek) to solve management and automation tasks.",
+        "achievements": [
+          "Built agent system architecture for task management, analytics, planning",
+          "Developed task management system via Notion and API",
+          "Created external products: Telegram bot 'Gentle Companion' (MVP, 7 active users) and Engineer Chat for agent coordination",
+          "Deployed products on external server (Ubuntu, systemd, Git)"
+        ],
+        "tech_stack": [
+          "OpenAI API",
+          "Claude API",
+          "DeepSeek API",
+          "Python",
+          "Notion API",
+          "Git",
+          "Telegram Bot API",
+          "Linux (Ubuntu)",
+          "systemd"
+        ]
+      },
+      "courses": {
+        "strategy": "Priority: free and critical first (OpenAI Academy) → free and useful second (English, DeepLearning.AI). Paid courses — after securing income (Track A).",
+        "priority_levels": {
+          "critical_free": {
+            "description": "✅ Free, start now. Immediate value for resume and skills.",
+            "list": [
+              {
+                "name": "OpenAI Academy: AI Foundations",
+                "platform": "OpenAI",
+                "duration": "2-4 weeks",
+                "start": "July 2026",
+                "status": "in_progress",
+                "certificate": "Credly badge",
+                "why": "Fundamental prompt engineering. Fastest AI credential."
+              },
+              {
+                "name": "OpenAI Academy: Applied AI Foundations",
+                "platform": "OpenAI",
+                "duration": "3-4 weeks",
+                "start": "September 2026",
+                "status": "not_started",
+                "certificate": "Credly badge",
+                "why": "Transition from user to architect. Build repeatable AI workflows."
+              },
+              {
+                "name": "OpenAI Academy: Agents and Workflows",
+                "platform": "OpenAI",
+                "duration": "3-4 weeks",
+                "start": "October 2026",
+                "status": "not_started",
+                "certificate": "Credly badge",
+                "why": "Direct path to Agentic Orchestration roles."
+              }
+            ]
+          },
+          "secondary_free": {
+            "description": "📚 Free, useful for deepening skills.",
+            "list": [
+              {
+                "name": "DeepLearning.AI — AI, LLM, agents courses",
+                "platform": "DeepLearning.AI",
+                "duration": "Varied",
+                "why": "Excellent free supplement."
+              },
+              {
+                "name": "LangChain / LlamaIndex documentation",
+                "platform": "Open source",
+                "duration": "Ongoing",
+                "why": "Hands-on practice via Mandala."
+              },
+              {
+                "name": "English (B2→C1, technical AI/ML)",
+                "platform": "Free resources",
+                "duration": "Ongoing",
+                "start": "July 2026",
+                "status": "not_started",
+                "why": "Critical for global market."
+              }
+            ]
+          },
+          "future_courses": {
+            "description": "📌 Paid certifications. Invest after securing income (Track A).",
+            "list": [
+              {
+                "name": "PMI-CPMAI (AI Project Management)",
+                "platform": "PMI",
+                "duration": "2-3 months",
+                "cost": "~$500-800",
+                "why": "Gold standard for AI PM. High ROI."
+              },
+              {
+                "name": "Google Project Management Certificate",
+                "platform": "Coursera",
+                "duration": "3-6 months",
+                "cost": "~$40/month",
+                "why": "Solid PM foundation."
+              },
+              {
+                "name": "COO / Operational Director in IT",
+                "platform": "OTUS",
+                "duration": "4 months",
+                "cost": "~100 000+ RUB",
+                "why": "Deepens operational knowledge in IT."
+              },
+              {
+                "name": "Lean Six Sigma Yellow Belt",
+                "platform": "TUM / ASQ",
+                "duration": "5-6 months",
+                "cost": "~$100-300",
+                "why": "Process optimization methodology."
+              }
+            ]
+          },
+          "additional_ai_resources": [
+            "OpenRouter / OpenAI API — deepen agent orchestration via Mandala",
+            "GitHub — explore AI agent open-source projects",
+            "Hugging Face — free models and datasets"
+          ]
+        }
+      },
+      "job_search_platforms": {
+        "track_a_russian": {
+          "primary": ["hh.ru", "Superjob"],
+          "it_specific": ["Habr Career", "GeekJOB", "Getmatch", "TenChat"],
+          "niche_aggregators": ["Jobster", "hirify", "hirehi", "careerspace", "finder"],
+          "temporary_projects": ["Kwork", "FL.ru", "Workspace", "SolarStaff"]
+        },
+        "track_b_global": {
+          "international": ["LinkedIn (global)", "We Work Remotely (WWR)", "RemoteOK", "NoDesk", "Himalayas", "Working Nomads", "Remote.co"],
+          "remote": [
+            "Remotive",
+            "NoDesk",
+            "Truely Remote",
+            "Indeed",
+            "JustRemote",
+            "DailyRemote",
+            "Virtual Vocations"
+          ],
+          "ai_specific": ["TopTal", "Arc.dev", "Turing", "Crossover", "AI Jobs"],
+          "personalized": ["Otta", "wantapply.com", "Wellfound (AngelList)", "Welcome to the Jungle", "Y Combinator Jobs", "Deel Jobs", "Oyster Jobs"],
+          "cis_it": ["Djinni"]
+        },
+        "telegram_channels": {
+          "priority_1": ["@management_jobs / @projects_jobs_feed", "@benchmark_executive", "@newhribb"],
+          "priority_2": ["@vacansii_bezbariera", "@finexecutive", "WORK ON", "Удалёнка без опыта"],
+          "additional": ["@tools_hacks (getmatch)", "©Карьера® The Blueprint"],
+          "resume_channels": ["Резюме 🚀 Маркетинга, СММ, Digital, Продажи"],
+          "ai_specific": ["@ai_jobs", "@mlops_jobs", "@datascience_jobs"]
+        },
+        "networking": ["LinkedIn", "TenChat", "Setka (HH)", "Habr portal", "Professional Slack communities", "AI-focused Discord servers"],
+        "verification": ["Dream Job", "Glassdoor"],
+        "salary_data": ["Getmatch calculator", "Levels.fyi (VPN)"]
+      },
+      "core_resume_ai_ops": {
+        "title": "Операционный менеджер / AI Operations Manager",
+        "salary": "150 000 — 200 000 ₽",
+        "summary": "Операционный менеджер с опытом более 8 лет в управлении многопрофильными проектами (производство, ритейл, HoReCa). Специализация: систематизация процессов, оптимизация затрат, управление командами и бюджетами. Имею практический опыт разработки и внедрения AI-инструментов в операционные процессы: создал Telegram-бота на Python для управления задачами, интегрировал AI-агентов через API, разработал веб-интерфейс для инженерного чата. Целевые роли: AI Operations Manager, Automation Manager, руководитель проектов по автоматизации.",
+        "personal_project": {
+          "name": "Mandala Symbiosis",
+          "period": "2025 – настоящее время",
+          "description": "Разработка AI-экосистемы для автоматизации управления и аналитики.",
+          "achievements": [
+            "Разработал Telegram-бота 'Gentle Companion' на Python (MVP, 7 пользователей) с функционалом: создание задач, контроль дедлайнов, напоминания, чек-листы.",
+            "Создал веб-интерфейс для инженерного чата (HTML), обеспечивающего координацию AI-агентов.",
+            "Интегрировал AI-агентов (GPT, Claude, DeepSeek и другие LLM) через API, настроил промпт-инжиниринг для управления задачами и аналитики.",
+            "Развернул и запустил продукты на внешнем сервере (настройка окружения, деплой, автоматизация обновлений)."
+          ]
+        },
+        "experience": [
+          {
+            "company": "Raw to go, Москва",
+            "position": "Территориальный управляющий",
+            "period": "Ноябрь 2025 – настоящее время",
+            "description": "Сеть из 5 кафе и производств. Команда до 30 человек.",
+            "achievements": [
+              "Управлял операционной деятельностью сети, включая контроль стандартов, логистику и выполнение KPI.",
+              "Оптимизировал закупочную деятельность, снизив прямые затраты на сырьё на 10–15%.",
+              "Стабилизировал команду: снизил текучку, выстроил систему обучения и мотивации, оптимизировал ФОТ на 2–5%.",
+              "Организовал переезд и запуск крупного производства на новую локацию (подготовка, логистика, монтаж, наладка).",
+              "Участвовал в полном цикле открытия и закрытия проектов."
+            ]
+          },
+          {
+            "company": "ООО 'Нью Нормал', Москва",
+            "position": "Менеджер проекта / Управляющий",
+            "period": "Апрель 2022 – Ноябрь 2025",
+            "description": "Полная перестройка операционных и финансовых процессов.",
+            "achievements": [
+              "Внедрил с нуля систему инвентаризации, документооборот (включая ЭДО) и управленческую бухгалтерию.",
+              "Обеспечил среднегодовой рост выручки на 15% (суммарно ~40–45% за 3 года), вывел проект с убытка -10% на стабильную прибыль 10–15%.",
+              "Оптимизировал закупки и операционную модель, сократив расходы на 10–20%, в том числе за счёт интеграции сервисов и пересмотра ролей.",
+              "Внедрил таск-борд в Notion, построил систему управления задачами.",
+              "Управлял полным бюджетом компании, обеспечивал отчётность для инвесторов."
+            ]
+          },
+          {
+            "company": "Куртош и Кофе, Владимир",
+            "position": "Управляющий (в команде учредителей)",
+            "period": "Май 2018 – Март 2022",
+            "description": "Сеть кофеен. Полный цикл: от привлечения инвестиций до операционного управления.",
+            "achievements": [
+              "Привлёк инвестиции на открытие первой точки, вывел проект на окупаемость за 1 год.",
+              "Открыл 2 точки с нуля (подбор локаций, ремонт, оснащение, запуск).",
+              "Разработал и внедрил регламенты, KPI, систему мотивации для команды.",
+              "Сформировал стабильную команду, обеспечил устойчивую прибыльность и рыночное лидерство по качеству продукта."
+            ]
+          }
+        ],
+        "skills": [
+          "Операционный менеджмент",
+          "Управление проектами",
+          "Бюджетирование и управление P&L",
+          "Управление командой до 30 человек",
+          "Оптимизация бизнес-процессов",
+          "Разработка SOP и регламентов",
+          "Внедрение систем учёта (1С, iiko, Notion)",
+          "Управление закупками и логистика",
+          "Python, API, HTML",
+          "Интеграция AI-агентов (GPT, Claude, DeepSeek, Kimi, Grok)",
+          "Промпт-инжиниринг",
+          "Работа с LLM",
+          "Linux и системное администрирование",
+          "Внедрение систем автоматизации"
+        ],
+        "education": [
+          "Владимирский государственный университет (неоконченное высшее, юриспруденция)",
+          "Hawking School, Менеджер проектов (2019)",
+          "OpenAI Academy: AI Foundations (в процессе)"
+        ],
+        "additional": [
+          "Английский — B1 (Intermediate, чтение технической документации)",
+          "Водительские права — категория B"
+        ]
+      },
+      "success_metrics": {
+        "track_a": "Written job offer 150 000+ RUB for AI-hybrid role by July 31, 2026",
+        "track_b": "Professional AI role offer (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027",
+        "courses": "OpenAI Academy: AI Foundations complete by end of July 2026",
+        "certificates": "OpenAI badges (Credly) in LinkedIn profile by September 2026",
+        "relocation": "1+ month successful remote work from Vietnam",
+        "english_b2": "English B2 by December 2026"
+      },
+      "health": {
+        "status": "active",
+        "last_check": "2026-07-08",
+        "notes": "v4.1.1: Added core_resume_habr_adapted block — full Habr Career adaptation. Updated version and last_check date."
+      }
+    }
+  },
+  "notes": "Full migration of RM-014 with all data preserved in source.full_content."
+}
