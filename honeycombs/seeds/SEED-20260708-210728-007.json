@@ -1,0 +1,9 @@
+{
+  "seed_id": "SEED-20260708-210728-007",
+  "title": "Memory in the Loop: In-Process Retrieval as ExtendedWorking Memory for Language Agents",
+  "url": "https://arxiv.org/abs/2607.05690",
+  "description": "arXiv:2607.05690v1 Announce Type: new \nAbstract: Language agents run a loop - observe, reason, act - but the memory they reason over sits outside it: a store queried at most once per turn. We study the regime where memory moves inside the loop, read and written on every step. The obstacle has always",
+  "source": "arXiv AI",
+  "collected_at": "2026-07-08T21:07:28.273368",
+  "status": "raw"
+}
