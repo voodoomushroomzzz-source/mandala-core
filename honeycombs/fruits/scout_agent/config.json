@@ -19,10 +19,10 @@
       "enabled": true
     },
     {
-      "name": "GitHub Trending",
-      "type": "api",
-      "url": "https://github.com/trending",
-      "enabled": false
+      "name": "GitHub Trending Python (RSS)",
+      "type": "rss",
+      "url": "https://github.com/trending/python.rss",
+      "enabled": true
     }
   ],
   "output_dir": "honeycombs/seeds/",
