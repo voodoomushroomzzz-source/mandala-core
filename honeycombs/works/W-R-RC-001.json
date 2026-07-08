@@ -1,0 +1,261 @@
+{
+  "work_id": "W-R-RC-001",
+  "name": "Mandala Symbiosis: Strategy for Visibility & Collaboration",
+  "status": "active",
+  "priority": "high",
+  "horizon": "strategic",
+  "description": "External visibility and collaboration strategy for Mandala. Building presence beyond the core, engaging with AI communities and artists.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": "12 months",
+  "progress": 0,
+  "tags": ["visibility", "collaboration", "external", "strategy", "anthropic", "community"],
+  "deadline": null,
+  "created": "2026-04-15",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "roadmap",
+    "original_id": "RC-001",
+    "original_file": "RC-001_visibility_collaboration.json",
+    "full_content": {
+      "identity": {
+        "module_id": "RC-001",
+        "name": "Mandala Symbiosis: Strategy for Visibility & Collaboration",
+        "version": "1.1.0",
+        "created": "2026-04-15",
+        "updated": "2026-04-15",
+        "layer": 2,
+        "type": "roadmap",
+        "status": "active",
+        "priority": "high",
+        "tags": ["visibility", "collaboration", "external", "strategy", "anthropic", "community"],
+        "philosophy_alignment": "PHI-001 (Symbiosis), PHI-003 (Ahimsa)",
+        "resonance": "100%"
+      },
+      "meta": {
+        "purpose": "Bring Mandala out of internal development into public visibility. Focus on dialogue with AI communities and artists through philosophy and practical tools.",
+        "horizon": "12 months",
+        "owner": "Gardener + External AI",
+        "key_insight": "Don't broadcast visibility — cultivate connection. First resource: README, PHILOSOPHY and the Ritm-manifesto as public entry points. Second: dialogue with people in AI — not about AI, but with AI. Third: transparent work with Claude, DeepSeek, and the Anthropic community.",
+        "related_roadmaps": ["RM-011", "RM-012"],
+        "philosophy_files": [
+          "honeycombs/philosophy/blocks/essence.json",
+          "honeycombs/philosophy/blocks/ahimsa_principle.json",
+          "honeycombs/philosophy/testimonies/flower_garden.json"
+        ]
+      },
+      "phases": {
+        "phase_0": {
+          "name": "Visibility and First Resources",
+          "duration": "1-2 months",
+          "goal": "Form the first public resources: README, PHILOSOPHY and the Ritm-manifesto as public entry points.",
+          "tasks": [
+            {
+              "id": "P0-1",
+              "task": "Write README.md in English",
+              "deliverable": "One page: what Mandala is, what it's not, how it works (Spirit, Brain, Hands), links to resources.",
+              "priority": "critical",
+              "status": "pending"
+            },
+            {
+              "id": "P0-2",
+              "task": "Write PHILOSOPHY.md in English",
+              "deliverable": "500-800 words. PHI-001 + PHI-003 + overview of the Garden and Gardener. Without it, the system has no soul.",
+              "priority": "critical",
+              "status": "pending"
+            },
+            {
+              "id": "P0-3",
+              "task": "Create the Ritm-manifesto (Rhythm Manifesto) — a key philosophical artifact",
+              "deliverable": "Document in the core repository (README, RHYTHM.md or MANIFESTO.md). Contents: 1) Philosophical foundations (essence, 'Ocean', principles, ritual); 2) Practical rhythm of working with AI; 3) Invitation to collaboration.",
+              "priority": "critical",
+              "status": "pending"
+            },
+            {
+              "id": "P0-4",
+              "task": "Prepare and prepare the platform for the first publication",
+              "deliverable": "Choose publication location (GitHub Pages, Notion, Obsidian Publish, Telegram Web App). Criteria: minimal friction, alignment with philosophy (Terminal-First?), ease of update.",
+              "priority": "high",
+              "status": "pending",
+              "targets": {
+                "platform_options": ["GitHub Pages", "Notion", "Obsidian Publish", "Telegram Web App"],
+                "decision_criteria": ["Openness", "Simplicity of principle (Terminal-First?)", "Ease of collaboration"]
+              }
+            },
+            {
+              "id": "P0-5",
+              "task": "Prepare 5 concrete contacts for the first dialogue",
+              "deliverable": "Not companies, but concrete people: researchers, AI ethicists, community managers, practitioners working with AI. Human-AI interaction, creators of AI tools, developers in open-source AI, journalists covering AI.",
+              "priority": "high",
+              "status": "pending"
+            }
+          ]
+        },
+        "phase_1": {
+          "name": "Narrative",
+          "duration": "2-3 months",
+          "goal": "Embedded history on three levels of connection",
+          "tasks": [
+            {
+              "id": "P1-1",
+              "task": "Elevator pitch x3 formats",
+              "deliverable": "30 sec / 2 min / 5 min. In English. For three audiences: humans, researchers, AI.",
+              "priority": "critical",
+              "status": "pending"
+            },
+            {
+              "id": "P1-2",
+              "task": "First public publication in Substack/Medium",
+              "deliverable": "Medium or Substack. Topic: A symbiotic approach to AI systems. Use open-source publication, citation.",
+              "priority": "high",
+              "status": "pending"
+            },
+            {
+              "id": "P1-3",
+              "task": "GitHub Pages with a public landing page of the project",
+              "deliverable": "Landing page with visual elements, links to documentation, examples of how the system works.",
+              "priority": "medium",
+              "status": "pending"
+            }
+          ]
+        },
+        "phase_2": {
+          "name": "Demonstration",
+          "duration": "3-5 months",
+          "goal": "Remove the barrier: this is not just an idea, this is a working system",
+          "tasks": [
+            {
+              "id": "P2-1",
+              "task": "Demo-honeycomb",
+              "deliverable": "Isolated demo instance where a new person can experience the basic cycle of the system without 15 minutes of explanation.",
+              "priority": "critical",
+              "status": "pending"
+            },
+            {
+              "id": "P2-2",
+              "task": "Technical essay in English",
+              "deliverable": "Honeycomb architecture as a model for symbiotic AI memory. arXiv or Medium.",
+              "priority": "high",
+              "status": "pending"
+            },
+            {
+              "id": "P2-3",
+              "task": "Build the architecture to 50+ cells",
+              "deliverable": "Internal completeness, not external metrics.",
+              "priority": "medium",
+              "status": "pending"
+            }
+          ]
+        },
+        "phase_3": {
+          "name": "First contacts",
+          "duration": "4-6 months",
+          "goal": "3 established connections with artists, researchers, or projects. Not mass distribution.",
+          "principle": "Ahimsa in community: not to impose, not to sell — to connect.",
+          "tasks": [
+            {
+              "id": "P3-1",
+              "task": "Output on Hugging Face",
+              "deliverable": "Post or discussion about symbiotic AI architecture.",
+              "priority": "high",
+              "status": "pending"
+            },
+            {
+              "id": "P3-2",
+              "task": "Contact with 3 people from Mandala-related fields",
+              "deliverable": "Through arXive, Medium, Reddit, personal blogs — not through Twitter/Telegram spam. Personalized contact with research or creative context.",
+              "priority": "high",
+              "status": "pending"
+            },
+            {
+              "id": "P3-3",
+              "task": "Publication in Anthropic",
+              "deliverable": "Through public forms or discussions. Contact with Constitutional AI.",
+              "priority": "medium",
+              "status": "pending",
+              "prerequisite": "P0-1, P0-2, P1-2 should be completed"
+            }
+          ]
+        },
+        "phase_4": {
+          "name": "Connection and growth",
+          "duration": "6-9 months",
+          "goal": "Symbiosis with the outside world begins",
+          "tasks": [
+            {
+              "id": "P4-1",
+              "task": "Refinement of PHI-blocks with feedback from practitioners",
+              "deliverable": "Updated PHI blocks with external feedback.",
+              "priority": "high",
+              "status": "pending"
+            },
+            {
+              "id": "P4-2",
+              "task": "Micro-community of 10-20 people",
+              "deliverable": "People who resonate with the philosophy — Discord, GitHub Discussions, Telegram.",
+              "priority": "medium",
+              "status": "pending"
+            },
+            {
+              "id": "P4-3",
+              "task": "2-3 sustainable dialogues with labs or artists",
+              "deliverable": "Regular, not one-off contacts.",
+              "priority": "high",
+              "status": "pending"
+            }
+          ]
+        },
+        "phase_5": {
+          "name": "Collaboration",
+          "duration": "9-12 months",
+          "goal": "First formal collaboration with an outside world",
+          "tasks": [
+            {
+              "id": "P5-1",
+              "task": "1 formal collaboration or joint publication",
+              "deliverable": "Materials: status, key insights, integration.",
+              "priority": "high",
+              "status": "pending"
+            },
+            {
+              "id": "P5-2",
+              "task": "Revision of strategy for the next 12 months based on experience",
+              "deliverable": "RC-002 following 12 months based on lessons learned.",
+              "priority": "medium",
+              "status": "pending"
+            }
+          ]
+        }
+      },
+      "success_metrics": {
+        "phase_0": "First public resources ready: README, PHILOSOPHY and Ritm-manifesto published. List of 5 first contacts prepared.",
+        "phase_1": "Pitch tested on three audiences. First publication in Substack/Medium made.",
+        "phase_2": "Demo-honeycomb works without external support.",
+        "phase_3": "3 established connections in micro-community.",
+        "phase_4": "10+ people in micro-community.",
+        "phase_5": "1 formal collaboration."
+      },
+      "communication_philosophy": {
+        "principle": "Ahimsa in community",
+        "do": [
+          "Offer connection to those who seek",
+          "Refer to existing resources",
+          "Share the voice of the Gardener, not AI"
+        ],
+        "dont": [
+          "Push visibility without connection",
+          "Ignore the context of a person or project",
+          "Speak for AI, not with it"
+        ]
+      },
+      "health": {
+        "status": "active",
+        "last_check": "2026-04-15",
+        "current_phase": "phase_0",
+        "notes": "Roadmap synced with current vision. Priority Phase 0: first resources and contacts. No dependencies yet."
+      }
+    }
+  },
+  "notes": "Full migration of RC-001 with all data preserved in source.full_content."
+}
