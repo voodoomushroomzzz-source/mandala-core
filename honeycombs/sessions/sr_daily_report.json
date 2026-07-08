@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-07",
+  "date": "2026-07-08",
   "version": "7.39.23",
   "gardeners": {
     "491567470": {
@@ -10,8 +10,16 @@
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-07-07"
+      "synthesis_date": "2026-07-08"
     }
   },
-  "issues": []
+  "issues": [
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "create_checklist",
+      "count": 2,
+      "context": "повторный create_checklist"
+    }
+  ]
 }
