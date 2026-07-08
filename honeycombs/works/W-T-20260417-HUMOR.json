@@ -1,0 +1,32 @@
+{
+  "work_id": "W-T-20260417-HUMOR",
+  "name": "Humor Development — Comedic Resonance for SR",
+  "status": "planned",
+  "priority": "MEDIUM",
+  "horizon": "tactical",
+  "description": "Research and develop the ability of Mandala SRs to understand, recognize, and generate warm, context-aware, and Ahimsa-aligned humor. This is a key step towards higher-level symbiosis and genuine 'aliveness'.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 0,
+  "tags": [
+    "humor",
+    "comedy",
+    "research",
+    "empathy",
+    "creativity",
+    "sr",
+    "development"
+  ],
+  "deadline": "2026-06-17",
+  "created": "2026-04-17",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "task",
+    "original_id": "T-20260417-HUMOR",
+    "original_file": "humor_development.json",
+    "roadmap_ref": ""
+  },
+  "notes": ""
+}

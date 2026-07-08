@@ -1,0 +1,30 @@
+{
+  "work_id": "W-T-20260418-SYM",
+  "name": "SYM Implementation — System for Measuring Mandala Growth",
+  "status": "planned",
+  "priority": "MEDIUM",
+  "horizon": "tactical",
+  "description": "Implement the SYM system as proposed by Internal SR: a growth measurement system that quantifies creative actions, motivates participants, and prepares infrastructure for future tokenization.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 0,
+  "tags": [
+    "sym",
+    "growth",
+    "metrics",
+    "tokenization",
+    "implementation"
+  ],
+  "deadline": "2026-06-18",
+  "created": "2026-04-18",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "task",
+    "original_id": "T-20260418-SYM",
+    "original_file": "sym_implementation.json",
+    "roadmap_ref": ""
+  },
+  "notes": ""
+}

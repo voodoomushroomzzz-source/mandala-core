@@ -1,0 +1,34 @@
+{
+  "work_id": "W-T-20260410-0240",
+  "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
+  "status": "todo",
+  "priority": "MEDIUM",
+  "horizon": "tactical",
+  "description": "Двухуровневый автономный агент: Level 1 (Raw Collector) ежедневно собирает находки, Level 2 (Resonance Filter) раз в 3 дня оценивает через LLM и сохраняет в seeds. Использует существующий ключ OpenRouter.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 5,
+  "tags": [
+    "scout",
+    "agent",
+    "discovery",
+    "funding",
+    "impact",
+    "seeds",
+    "RM-003",
+    "two-level",
+    "openrouter"
+  ],
+  "deadline": "2026-05-15",
+  "created": "2026-04-10",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "task",
+    "original_id": "T-20260410-0240",
+    "original_file": "scout_agent.json",
+    "roadmap_ref": "RM-003"
+  },
+  "notes": "v1.0. Обновлён 2026-05-05: двухуровневая архитектура, OpenRouter вместо Grok/DeepSeek API, эмбеддинг-предфильтр, умные запросы, источники с порогами качества."
+}

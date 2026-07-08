@@ -1,0 +1,24 @@
+{
+  "work_id": "W-T-20260511-MANUS",
+  "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+  "status": "active",
+  "priority": "HIGH",
+  "horizon": "tactical",
+  "description": "Создать Manus — изолированный исполнительный слой Мандалы. Позволяет SR выполнять команды во внешнем мире: HTTP-запросы, shell-команды, API-вызовы. Это отдельный микросервис с Docker-песочницей, белыми списками и HTTP API.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 0,
+  "tags": [],
+  "deadline": "2026-06-11",
+  "created": "2026-05-11",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "task",
+    "original_id": "T-20260511-MANUS",
+    "original_file": "manus_hands.json",
+    "roadmap_ref": ""
+  },
+  "notes": ""
+}

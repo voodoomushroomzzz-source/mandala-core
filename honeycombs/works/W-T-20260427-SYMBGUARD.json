@@ -1,0 +1,32 @@
+{
+  "work_id": "W-T-20260427-SYMBGUARD",
+  "name": "Symbiosis Guard — Universal System Health Scanner (v2.0)",
+  "status": "in_progress",
+  "priority": "HIGH",
+  "horizon": "tactical",
+  "description": "Unified system health scanner integrated into honeycomb_scanner.py. Replaces separate task_scanner, ahimsa_filter, deadline_sentinel. One command — full system check.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 10,
+  "tags": [
+    "symbiosis_guard",
+    "scanner",
+    "validation",
+    "quality",
+    "automation",
+    "RM-013",
+    "refactor"
+  ],
+  "deadline": "2026-07-30",
+  "created": "2026-04-27",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "task",
+    "original_id": "T-20260427-SYMBGUARD",
+    "original_file": "symbiosis_guard.json",
+    "roadmap_ref": "RM-013"
+  },
+  "notes": "Task redesigned: all checks integrated into honeycomb_scanner.py as modules. Old task_scanner (90%) code will be merged into new architecture. Ahimsa Filter and Deadline Sentinel planned as new classes."
+}

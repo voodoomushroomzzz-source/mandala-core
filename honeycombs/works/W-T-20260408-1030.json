@@ -1,0 +1,24 @@
+{
+  "work_id": "W-T-20260408-1030",
+  "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+  "status": "in_progress",
+  "priority": "highest",
+  "horizon": "tactical",
+  "description": "",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 79,
+  "tags": [],
+  "deadline": "2026-08-31",
+  "created": "2026-04-01",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "task",
+    "original_id": "T-20260408-1030",
+    "original_file": "bot_update.json",
+    "roadmap_ref": ""
+  },
+  "notes": ""
+}
