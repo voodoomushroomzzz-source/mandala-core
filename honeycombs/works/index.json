@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.1",
+    "version": "v1.0.2",
     "created": "2026-07-08",
     "updated": "2026-07-08",
     "layer": 1,
@@ -106,20 +106,20 @@
       "low": 2
     },
     "works_list": [
-      "W-R-RC-001",
-      "W-R-RC-002",
-      "W-R-RM-011",
-      "W-R-RM-012",
-      "W-R-RM-013",
-      "W-R-RM-014",
-      "W-T-20260408-1030",
-      "W-T-20260410-0240",
-      "W-T-20260417-HUMOR",
-      "W-T-20260418-SYM",
-      "W-T-20260427-FLUTTER",
-      "W-T-20260511-ARCHBOT",
-      "W-T-20260511-ENGCHAT",
-      "W-T-20260511-MANUS"
+      "W-R-RC-001__visibility_strategy",
+      "W-R-RC-002__company_vessel",
+      "W-R-RM-011__merkaba_visualizations",
+      "W-R-RM-012__living_products_mvps",
+      "W-R-RM-013__symbiosis_guard",
+      "W-R-RM-014__gardener_transition",
+      "W-T-20260408-1030__gentle_companion_bot",
+      "W-T-20260410-0240__scout_agent",
+      "W-T-20260417-HUMOR__humor_development",
+      "W-T-20260418-SYM__sym_growth_system",
+      "W-T-20260427-FLUTTER__flutter_app",
+      "W-T-20260511-ARCHBOT__architect_bot",
+      "W-T-20260511-ENGCHAT__engineer_chat",
+      "W-T-20260511-MANUS__manus_hands"
     ]
   },
   "navigation": {
