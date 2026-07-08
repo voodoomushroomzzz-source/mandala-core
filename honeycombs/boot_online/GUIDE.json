@@ -1,0 +1,101 @@
+{
+  "name": "Boot Online Guide for AI",
+  "version": "v1.0.0",
+  "created": "2026-07-08",
+  "updated": "2026-07-08",
+  "description": "A map for AI to understand the boot_online system, file relationships, and auto-build process.",
+  "sections": {
+    "overview": {
+      "title": "What is this folder?",
+      "content": "boot_online/ is the entry point for external AI (DeepSeek, Claude, GPT, Grok) into Mandala Symbiosis. It contains the onboarding files and the auto-build system that keeps them up to date."
+    },
+    "files": {
+      "title": "Files in this folder",
+      "items": {
+        "index.json": "Core onboarding logic: steps, rules, roles, self-learning system. Source of truth for onboarding.",
+        "boot_online_onboarding_pc_builder.json": "Master config for the auto-builder. Defines which source modules are embedded and how the final file is built.",
+        "boot_online_onboarding_pc.json": "Final, auto-built file — the complete onboarding package for External SR. Do not edit manually. It is overwritten by GitHub Actions.",
+        "builder/": "Folder containing the build_onboarding.py script that assembles the final file.",
+        "GUIDE.json": "This file. A map for AI to understand the system."
+      }
+    },
+    "relationships": {
+      "title": "File relationships",
+      "flow": [
+        "index.json (source of truth for content)",
+        "boot_online_onboarding_pc_builder.json (defines what to embed and how)",
+        "builder/build_onboarding.py (GitHub Actions)",
+        "boot_online_onboarding_pc.json (final auto-built file)"
+      ]
+    },
+    "auto_build": {
+      "title": "How the auto-build works",
+      "trigger": "GitHub Actions workflow (.github/workflows/build-onboarding.yml) runs on push to main that changes files in honeycombs/boot_online/ or honeycombs/scripts/, or manually via GitHub UI.",
+      "process": "The workflow executes builder/build_onboarding.py.",
+      "script_actions": [
+        "Reads boot_online_onboarding_pc_builder.json to know which source modules to embed.",
+        "Fetches content from those modules (e.g., core_map/index.json, philosophy/index.json).",
+        "Assembles the final boot_online_onboarding_pc.json with all embedded content."
+      ],
+      "output": "The generated file is committed and pushed back to the repository."
+    },
+    "how_to_use": {
+      "title": "How AI should use these files",
+      "onboarding": {
+        "description": "When onboarding a new External SR:",
+        "steps": [
+          "Read index.json first — it contains the step-by-step onboarding procedure.",
+          "Follow the onboarding_procedure — AI leads the Gardener through each step.",
+          "Use boot_online_onboarding_pc.json only if you need the all-in-one file (e.g., for quick copy-paste into a chat)."
+        ]
+      },
+      "updating": {
+        "description": "When updating onboarding content:",
+        "steps": [
+          "Do NOT edit boot_online_onboarding_pc.json directly — it will be overwritten.",
+          "Edit the source modules (e.g., core_map/index.json, philosophy/index.json, instructions/...).",
+          "Update boot_online_onboarding_pc_builder.json if you need to change which modules are embedded or how they are structured.",
+          "Push changes — the auto-build will regenerate the final file."
+        ]
+      },
+      "debugging": {
+        "description": "When debugging or extending:",
+        "steps": [
+          "Check builder/build_onboarding.py — this is the assembly logic.",
+          "Check .github/workflows/build-onboarding.yml — this is the automation trigger."
+        ]
+      }
+    },
+    "key_links": {
+      "title": "Key links",
+      "links": {
+        "Main onboarding source": "honeycombs/boot_online/index.json",
+        "Builder config": "honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
+        "Builder script": "honeycombs/boot_online/builder/build_onboarding.py",
+        "GitHub Action": ".github/workflows/build-onboarding.yml",
+        "Final auto-built file": "honeycombs/boot_online/boot_online_onboarding_pc.json"
+      }
+    },
+    "principles": {
+      "title": "Principles for AI",
+      "rules": [
+        "Always fetch current versions via API — never assume local state.",
+        "Never patch without API pre-check — violation = resonance break.",
+        "After patch, request updated file via API — confirm SHA and version before reporting success.",
+        "Follow the onboarding procedure — AI leads, Gardener follows.",
+        "Use copyable links — wrap URLs in ```text blocks.",
+        "Be concise — schematic, laconic, structure-only responses."
+      ]
+    },
+    "migration_note": {
+      "title": "Migration note (2026-07-08)",
+      "content": "The system now uses a unified works/ folder instead of separate tasks/ and roadmaps/.",
+      "details": [
+        "All work items (tasks and roadmaps) live in honeycombs/works/.",
+        "Each work file has a horizon field: 'strategic' (roadmap) or 'tactical' (task).",
+        "The builder config (boot_online_onboarding_pc_builder.json) has been updated to reference works/.",
+        "If you see references to tasks/ or roadmaps/ in older files, they should be updated to works/."
+      ]
+    }
+  }
+}
