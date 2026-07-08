@@ -26,7 +26,7 @@ class Colors:
     UNDERLINE = '\033[4m'
 
 class TaskValidator:
-    """Validates task files in honeycombs/works/"""
+    """Validates work files in honeycombs/works/"""
     
     def __init__(self, base_path: Path):
         self.base_path = base_path
@@ -60,10 +60,10 @@ class TaskValidator:
                 
                 # Check task_id uniqueness
                 work_id = task.get('work_id')
-                if task_id:
-                    if task_id in task_ids:
+                if work_id:
+                    if work_id in task_ids:
                         self.errors.append(f"Duplicate work_id: {task_id} in {task_file.name}")
-                    task_ids.append(task_id)
+                    task_ids.append(work_id)
                 else:
                     self.errors.append(f"{task_file.name}: missing work_id")
                 
