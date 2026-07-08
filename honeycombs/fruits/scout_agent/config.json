@@ -1,0 +1,30 @@
+{
+  "sources": [
+    {
+      "name": "AI Opportunity Radar",
+      "type": "rss",
+      "url": "https://preetharaj.github.io/AI-Opportunity-Radar/feed.xml",
+      "enabled": true
+    },
+    {
+      "name": "ТАСС Наука",
+      "type": "rss",
+      "url": "https://tass.ru/rss/v2/nauka.xml",
+      "enabled": true
+    },
+    {
+      "name": "arXiv AI",
+      "type": "rss",
+      "url": "https://arxiv.org/rss/cs.AI",
+      "enabled": true
+    },
+    {
+      "name": "GitHub Trending",
+      "type": "api",
+      "url": "https://github.com/trending",
+      "enabled": false
+    }
+  ],
+  "output_dir": "honeycombs/seeds/",
+  "collect_interval": "daily"
+}

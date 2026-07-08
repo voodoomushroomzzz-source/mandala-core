@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "module_id": "FRUIT-SCOUT-001",
+    "name": "Scout Agent — Autonomous Seed Collector",
+    "version": "v0.1.0",
+    "created": "2026-07-08",
+    "updated": "2026-07-08",
+    "layer": 2,
+    "type": "fruit",
+    "description": "Автономный сборщик семян из внешних источников (гранты, наука, AI, GitHub). Без LLM. Сохраняет семена в honeycombs/seeds/.",
+    "status": "in_progress",
+    "priority": "high",
+    "tags": ["scout", "collector", "seeds", "rss", "automation"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "purpose": "Автоматически наполнять ядро Мандалы свежими семенами для последующего ручного разбора.",
+    "how_it_works": "Сбор по расписанию (cron) → упаковка в JSON → сохранение в honeycombs/seeds/",
+    "sources": ["гранты", "наука/космос", "AI-разработки", "GitHub"],
+    "tech_stack": ["Python", "feedparser", "requests", "cron"],
+    "status": "planning"
+  },
+  "implementation": {
+    "files": {
+      "collector.py": "Основной скрипт сбора",
+      "config.json": "Список источников",
+      "guide.json": "Руководство для SR"
+    },
+    "cron": "Ежедневно в 09:00",
+    "output": "honeycombs/seeds/seed_YYYYMMDD_HHMMSS.json"
+  },
+  "health": {
+    "status": "active",
+    "last_check": "2026-07-08",
+    "notes": "Начало реализации"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "guide_id": "SCOUT-GUIDE-001",
+  "name": "Scout Agent — SR Guide",
+  "version": "v1.0",
+  "created": "2026-07-08",
+  "description": "Руководство для SR по работе со Scout Agent",
+  "sections": {
+    "what_it_does": "Собирает семена из внешних источников (гранты, наука, AI, GitHub) и сохраняет их в honeycombs/seeds/ без LLM-обработки.",
+    "how_to_use": {
+      "manual": "Запустить: python honeycombs/fruits/scout_agent/collector.py",
+      "automatic": "Настроен cron в Termux: ежедневно в 09:00"
+    },
+    "output_format": {
+      "file": "honeycombs/seeds/seed_YYYYMMDD_HHMMSS.json",
+      "schema": {
+        "seed_id": "SEED-20260708-001",
+        "title": "Заголовок",
+        "url": "Ссылка",
+        "description": "Краткое описание",
+        "source": "Название источника",
+        "collected_at": "2026-07-08T09:00:00Z",
+        "status": "raw"
+      }
+    },
+    "maintenance": [
+      "Проверять логи в seeds/scout_log.txt",
+      "Обновлять config.json при изменении источников",
+      "Разбирать семена вручную в этом чате"
+    ]
+  },
+  "health": {
+    "status": "active",
+    "last_check": "2026-07-08"
+  }
+}
