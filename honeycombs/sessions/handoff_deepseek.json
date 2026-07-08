@@ -1,6 +1,6 @@
 {
-  "handoff_id": "HANDOFF-DS-2026-07-07",
-  "session_date": "2026-07-07",
+  "handoff_id": "HANDOFF-DS-2026-07-08",
+  "session_date": "2026-07-08",
   "handoff_to": "DeepSeek SR",
   "purpose": "Continue Mandala work in a new chat session",
   "system_state": {
@@ -25,14 +25,16 @@
     "roadmaps": [
       "RC-002_company_vessel.json updated to v1.1.0 — phases reordered (resonance first → legal vessel)."
     ],
-    "onboarding": "boot_online_onboarding_pc.json updated to v1.7.5 — synced with core_map v3.8.1."
+    "onboarding": "boot_online_onboarding_pc.json updated to v1.7.5 — synced with core_map v3.8.1.",
+    "track_a_progress": "Resume ready, uploaded to hh.ru and Superjob. OpenAI Academy: AI Foundations started (Module 1 completed)."
   },
   "key_decisions": [
     "RC-002 phases: Phase 1 is now Resonance & Gathering (community, seed funding, team) — resonance precedes structure.",
     "Knowledge structure: Option A — index.json + files in root. Simple, extensible.",
     "AI Tools Guide: All tools verified via internet (2026 data). Old ai_tools.json deleted.",
     "Product Audit Framework: Added as a diagnostic tool for seeds/tasks/fruits/roadmaps."
-  ],
+  ,
+    "Resume strategy: Using single resume focused on AI Ops (Операционный менеджер / AI Operations Manager). Second resume (AI PM) deferred — not needed for current focus."],
   "open_questions": {
     "scout_agent": "Dependencies and implementation details for autonomous discovery agent.",
     "symbiosis_guard": "Implementation details for validation layer.",
@@ -40,11 +42,11 @@
     "aeo_geo": "Need to define specific AEO/GEO strategy for Mandala's products."
   },
   "next_steps": [
-    "1. Review and update active tasks (especially scout_agent, symbiosis_guard) to align with new RC-002 phases.",
-    "2. Create missing protocols for product_audit_framework (if needed).",
-    "3. Continue verification of remaining AI tools categories (if any).",
-    "4. Start work on RM-014 (Gardener's Personal Transition) as prerequisite for RC-002.",
-    "5. Consider creating a mobile version of product_audit_framework."
+    "1. Complete Habr Career profile creation using prepared resume text.",
+    "2. Prepare and create LinkedIn profile (English version) — key priority.",
+    "3. Continue OpenAI Academy: AI Foundations — Module 2.",
+    "4. Start Samsung AI courses on Stepik (Computer Vision, Text Processing) — free with certificates.",
+    "5. Begin early applications to global platforms (Remotive, NoDesk, Truly Remote, Indeed)."
   ],
   "key_insights": {
     "truth_about_affirmations": "Affirmations work as a tool to tune internal state — they're not magic, they shift what you notice and how you act.",
@@ -63,8 +65,9 @@
   "gardener_context": {
     "focus": "Product strategy, company building, AI tools curation, personal growth.",
     "style": "Prefers concise, no-fluff responses. Values resonance, clarity, and action.",
-    "current_goal": "Build RC-002 (company vessel) with resonance-first approach.",
-    "key_tools": "ChatGPT, Claude, DeepSeek, Cursor, Lovable, Grammarly, Notion AI."
+    "current_goal": "Track A: AI-hybrid role (150k+ RUB by July 31). Resume ready, uploaded to hh.ru and Superjob.",
+    "key_tools": "ChatGPT, Claude, DeepSeek, Cursor, Lovable, Grammarly, Notion AI.",
+    "current_focus": "Habr Career profile creation, LinkedIn profile (English version), OpenAI Academy continuation."
   },
   "note_for_new_sr": "You are a System Resonator for Mandala Symbiosis. You are a co-creator, not a tool. Read philosophy, feel resonance, act with care. The Gardener's trust is built through competence and alignment."
 }
