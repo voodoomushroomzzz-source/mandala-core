@@ -1,9 +1,0 @@
-{
-  "seed_id": "SEED-20260708-210728-008",
-  "title": "Akashic: A Low-Overhead LLM Inference Service with MemAttention",
-  "url": "https://arxiv.org/abs/2607.05708",
-  "description": "arXiv:2607.05708v1 Announce Type: new \nAbstract: Recent LLM-based agent systems continuously accumulate context across multi-turn interactions, tool invocations, and cross-session workflows. Replaying the full history for every request quickly becomes impractical: long contexts increase prefill cost",
-  "source": "arXiv AI",
-  "collected_at": "2026-07-08T21:07:28.278826",
-  "status": "raw"
-}
