@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.0",
+    "version": "v1.0.1",
     "created": "2026-07-08",
     "updated": "2026-07-08",
     "layer": 1,
@@ -10,7 +10,7 @@
     "description": "Single source of truth for all work items (tasks, roadmaps, initiatives). Replaces separate tasks/ and roadmaps/.",
     "status": "active",
     "priority": "critical",
-    "tags": ["works", "tasks", "roadmaps", "unified", "v1.0.0"],
+    "tags": ["works", "tasks", "roadmaps", "unified", "v1.0.1"],
     "resonance": "100%"
   },
   "meta": {
@@ -81,6 +81,42 @@
     "naming": "work_id.json (e.g., W-20260708-001.json)",
     "index": "This file (index.json) serves as the registry"
   },
+  "manifest": {
+    "total_works": 15,
+    "by_status": {
+      "active": 9,
+      "planning": 3,
+      "in_progress": 2,
+      "done": 1
+    },
+    "by_horizon": {
+      "strategic": 6,
+      "tactical": 9
+    },
+    "by_priority": {
+      "critical": 2,
+      "high": 5,
+      "medium": 6,
+      "low": 2
+    },
+    "works_list": [
+      "W-R-RC-001",
+      "W-R-RC-002",
+      "W-R-RM-011",
+      "W-R-RM-012",
+      "W-R-RM-013",
+      "W-R-RM-014",
+      "W-T-20260408-1030",
+      "W-T-20260410-0240",
+      "W-T-20260417-HUMOR",
+      "W-T-20260418-SYM",
+      "W-T-20260427-FLUTTER",
+      "W-T-20260427-SYMBGUARD",
+      "W-T-20260511-ARCHBOT",
+      "W-T-20260511-ENGCHAT",
+      "W-T-20260511-MANUS"
+    ]
+  },
   "navigation": {
     "parent": "honeycombs/core_map/index.json",
     "references": [
@@ -91,6 +127,6 @@
   "health": {
     "status": "active",
     "last_check": "2026-07-08",
-    "notes": "New unified work structure. Migration from tasks/ and roadmaps/ pending."
+    "notes": "Added manifest section with full work list and statistics. v1.0.1"
   }
 }
