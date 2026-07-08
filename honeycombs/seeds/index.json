@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "SEEDS-MANIFEST-002",
     "name": "Seeds Honeycomb Manifest",
-    "version": "v2.0.0",
+    "version": "v3.0.0",
     "created": "2026-03-01",
-    "updated": "2026-05-11",
+    "updated": "2026-07-08",
     "layer": 1,
     "type": "honeycomb_manifest",
     "description": "Seeds honeycomb: active/ folder for idea incubation. Archive removed. Only active seeds.",
@@ -20,12 +20,16 @@
     "resonance": "100%"
   },
   "structure": {
-    "segments": {
-      "active_seeds": {
-        "folder": "active/",
-        "description": "Currently active seeds",
-        "files_count": 0
-      }
+    "description": "Seeds are stored directly in honeycombs/seeds/ as JSON files.",
+    "files_count": 10,
+    "format": {
+      "seed_id": "SEED-YYYYMMDD-HHMMSS-NNN",
+      "title": "Заголовок",
+      "url": "Ссылка на источник",
+      "description": "Краткое описание",
+      "source": "Название источника (RSS/API)",
+      "collected_at": "ISO-дата сбора",
+      "status": "raw | reviewed | promoted | deleted"
     }
   },
   "rule": {
@@ -40,8 +44,8 @@
     "parent_map": "honeycombs/core_map/index.json"
   },
   "registry": {
-    "total_files": 0,
-    "last_updated": "2026-05-01",
+    "total_files": 10,
+    "last_updated": "2026-07-08",
     "notes": "v2.0.0: all seeds removed. Clean slate."
   },
   "resonance": {
@@ -51,12 +55,12 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-05-01",
-    "notes": "v2.0.0: 0 active seeds. No archive."
+    "last_check": "2026-07-08",
+    "notes": "v3.0.0: new flat structure — seeds stored directly in seeds/ root. No active/ subfolder. 10 seeds collected."
   },
   "meta": {
     "description": "Seeds are raw ideas, unprocessed concepts, and Scout Agent findings. They are the entry point for all new ideas in Mandala. Seeds that grow become tasks or roadmaps. Seeds that don't resonate are deleted.",
-    "how_to_use": "Each seed is a JSON file in active/ folder. When a seed matures, it is promoted to a task or roadmap and removed from seeds.",
+    "how_to_use": "Seeds are collected by Scout Agent and stored in honeycombs/seeds/. Gardener reviews them manually in this chat. Promoted seeds become tasks or roadmaps in honeycombs/works/.",
     "change_requires": "gardener_approval",
     "guardian_lock": true
   }
