@@ -1,10 +1,10 @@
 {
   "work_id": "W-T-20260410-0240",
   "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
-  "status": "todo",
+  "status": "in_progress",
   "priority": "MEDIUM",
   "horizon": "tactical",
-  "description": "Двухуровневый автономный агент: Level 1 (Raw Collector) ежедневно собирает находки, Level 2 (Resonance Filter) раз в 3 дня оценивает через LLM и сохраняет в seeds. Использует существующий ключ OpenRouter.",
+  "description": "Автономный сбор и упаковка семян из внешних источников (гранты, наука/космос, AI-разработки, GitHub). Без LLM. Семена сохраняются напрямую в honeycombs/seeds/.",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
@@ -21,7 +21,7 @@
     "two-level",
     "openrouter"
   ],
-  "deadline": "2026-05-15",
+  "deadline": "2026-08-15",
   "created": "2026-04-10",
   "updated": "2026-07-08",
   "source": {
@@ -30,5 +30,5 @@
     "original_file": "scout_agent.json",
     "roadmap_ref": "RM-003"
   },
-  "notes": "v1.0. Обновлён 2026-05-05: двухуровневая архитектура, OpenRouter вместо Grok/DeepSeek API, эмбеддинг-предфильтр, умные запросы, источники с порогами качества."
+  "notes": "План: 1) источники (гранты, наука/космос, AI, GitHub), 2) collector.py, 3) тест, 4) cron, 5) docs. Папка inbox не используется."
 }
