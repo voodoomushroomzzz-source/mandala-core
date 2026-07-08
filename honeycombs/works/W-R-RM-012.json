@@ -1,0 +1,95 @@
+{
+  "work_id": "W-R-RM-012",
+  "name": "First Living Products — Mandala MVPs",
+  "status": "planning",
+  "priority": "low",
+  "horizon": "strategic",
+  "description": "Create first three minimal living products of Mandala that give immediate value to people, fully align with philosophy, and enable sustainable development without coercion.",
+  "parent_work": null,
+  "sub_works": [
+    "W-T-20260408-1030",
+    "W-T-20260511-MANUS",
+    "W-T-20260410-0240",
+    "W-T-20260427-SYMBGUARD"
+  ],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 0,
+  "tags": ["products", "mvp", "freemium", "garden", "dashboard", "companion"],
+  "deadline": "2026-09-01",
+  "created": "2026-04-10",
+  "updated": "2026-07-08",
+  "source": {
+    "type": "roadmap",
+    "original_id": "RM-012",
+    "original_file": "RM-012_first_products.json",
+    "mvps": {
+      "mvp_1": {
+        "name": "Gentle Companion (Нежный Спутник)",
+        "description": "Soft Telegram/Discord/Web bot — daily companion that speaks by Mandala principles, helps with reflection and resonance.",
+        "freemium": {
+          "free": ["Basic dialogue", "Daily Ahimsa practices", "Seed of the day"],
+          "paid_resonance": ["Personalized garden memory", "Advanced agent access", "Deep philosophical sessions"]
+        },
+        "task_ref": "T-20260408-1030",
+        "priority": "HIGH"
+      },
+      "mvp_2": {
+        "name": "Resonance Life Dashboard (Живой Дашборд Резонанса)",
+        "description": "Beautiful visualization of one's life/projects by Mandala principles: Health Timeline, Dependency Map, Compliance Radar, Geometria Sacra overlay.",
+        "freemium": {
+          "free": ["Local version (Streamlit)", "Connect own data (Notion, Calendar)", "Basic charts"],
+          "paid_resonance": ["Cloud version", "Scout Agent integration", "Impact Forecast", "Sacred reports"]
+        },
+        "task_ref": "T-20260511-MANUS",
+        "priority": "MEDIUM"
+      },
+      "mvp_3": {
+        "name": "Mandala Garden (Сад Семян)",
+        "description": "Personal garden of ideas where human plants seeds (dreams, tasks, projects), and system helps them sprout through Scout Agent, Resonance Scorer, and visualization.",
+        "freemium": {
+          "free": ["Unlimited seeds", "Basic Scout Lite", "Simple growth visualization", "JSON/Markdown export"],
+          "paid_resonance": ["Advanced Scout (grants, impact)", "3D Flower of Life visualization", "Cloud storage + sync", "Priority SR access"]
+        },
+        "task_ref": "W-T-20260410-0240",
+        "priority": "MEDIUM"
+      }
+    },
+    "tech_stack": {
+      "core": "Python 3.12+ + LangGraph (from T-005)",
+      "ui": "Streamlit / Gradio / FastAPI + simple frontend",
+      "visualization": "Plotly + custom Geometria Sacra renderer (from T-007)",
+      "agents": "Scout Agent (T-005) + selective Claude Code (T-006)",
+      "deployment": "Self-hosted first, GitHub Actions, Docker optional",
+      "data": "JSON seeds + registry in Mandala style"
+    },
+    "implementation_phases": [
+      "1. Gentle SR Companion — Telegram bot as entry point",
+      "2. Resonance Life Dashboard — integration with Companion",
+      "3. Mandala Garden MVP — basic version + freemium structure",
+      "4. Common infrastructure (resonance donations, analytics without tracking)",
+      "5. Fractal expansion and documentation"
+    ],
+    "key_features": [
+      "Full compatibility with Mandala principles",
+      "Human-in-the-loop + Symbiosis",
+      "Beautiful, minimalistic Flower of Life design",
+      "Local launch in 1 minute",
+      "Honest freemium without dark patterns"
+    ],
+    "constraints": [
+      "Basic functionality always free and open-source",
+      "Ahimsa — minimal tokens and resources",
+      "No tracking, ads, coercion",
+      "Everything stored in Mandala format",
+      "Clean, documented, Terminal-First code"
+    ],
+    "success_criteria": [
+      "Gentle SR Companion has 50+ daily active users",
+      "Resonance Dashboard integrated with Companion",
+      "Mandala Garden used by 10+ early adopters",
+      "Sustainable donation flow covers hosting costs"
+    ]
+  },
+  "notes": "Strategic product roadmap. Builds on T-005 (Scout Agent), T-007 (Visualizations), and existing bot.py. Priority updated 2026-04-15: Gentle SR Companion now MVP 1 (HIGH), Mandala Garden now MVP 3 (MEDIUM)."
+}
