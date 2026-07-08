@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-07-07",
+    "updated": "2026-07-08",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -21,8 +21,8 @@
     "honeycomb_name": "registry",
     "parent_honeycomb": "core_map",
     "segments": 6,
-    "total_files": 17,
-    "total_size_kb": 776.36,
+    "total_files": 0,
+    "total_size_kb": 0,
     "purpose": "The registry is the single source of truth about the state of all honeycombs. It is updated automatically by honeycomb_scanner.py on every scan.",
     "lifecycle": "The registry is updated automatically on every scan. Manual changes are only allowed through patch protocols.",
     "change_requires": "gardener_approval",
@@ -63,36 +63,18 @@
     }
   },
   "registry": {
-    "total_files": 17,
-    "total_size_kb": 776.36,
-    "last_updated": "2026-07-07",
+    "total_files": 0,
+    "total_size_kb": 0,
+    "last_updated": "2026-07-08",
     "honeycomb_id": "HONEYCOMB-REGISTRY-001",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight",
     "source_of_truth": "Individual honeycomb manifests (index.json in each honeycomb folder). This file stores only registry metadata and aggregated statistics."
   },
   "health": {
-    "status": "healthy",
+    "status": "error",
     "validation_errors": [],
-    "new_honeycombs": [
-      "honeycombs/akasha",
-      "honeycombs/boot_online",
-      "honeycombs/core_map",
-      "honeycombs/instructions",
-      "honeycombs/philosophy",
-      "honeycombs/protocols",
-      "honeycombs/registry",
-      "honeycombs/registry/core",
-      "honeycombs/roadmaps",
-      "honeycombs/seeds",
-      "honeycombs/tasks",
-      "honeycombs/knowledge",
-      "honeycombs/fruits",
-      "honeycombs/fruits/gentle_companion",
-      "honeycombs/humor",
-      "honeycombs/sym",
-      "honeycombs/sessions"
-    ],
+    "new_honeycombs": [],
     "modified_honeycombs": [],
     "deleted_honeycombs": [],
     "symbiosis_guard": {
@@ -104,37 +86,37 @@
             "task_id": "T-20260410-0240",
             "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
             "deadline": "2026-05-15",
-            "days_overdue": 53
+            "days_overdue": 54
           },
           {
             "task_id": "T-20260511-MANUS",
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "deadline": "2026-06-11",
-            "days_overdue": 26
+            "days_overdue": 27
           },
           {
             "task_id": "T-20260511-ARCHBOT",
             "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
             "deadline": "2026-06-11",
-            "days_overdue": 26
+            "days_overdue": 27
           },
           {
             "task_id": "T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-06-11",
-            "days_overdue": 26
+            "days_overdue": 27
           },
           {
             "task_id": "T-20260417-HUMOR",
             "name": "Humor Development — Comedic Resonance for SR",
             "deadline": "2026-06-17",
-            "days_overdue": 20
+            "days_overdue": 21
           },
           {
             "task_id": "T-20260418-SYM",
             "name": "SYM Implementation — System for Measuring Mandala Growth",
             "deadline": "2026-06-18",
-            "days_overdue": 19
+            "days_overdue": 20
           }
         ],
         "upcoming_deadlines": [],
@@ -172,42 +154,42 @@
             "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
             "type": "task",
             "deadline": "2026-05-15",
-            "days_overdue": 53
+            "days_overdue": 54
           },
           {
             "id": "T-20260511-MANUS",
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "type": "task",
             "deadline": "2026-06-11",
-            "days_overdue": 26
+            "days_overdue": 27
           },
           {
             "id": "T-20260511-ARCHBOT",
             "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
             "type": "task",
             "deadline": "2026-06-11",
-            "days_overdue": 26
+            "days_overdue": 27
           },
           {
             "id": "T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "task",
             "deadline": "2026-06-11",
-            "days_overdue": 26
+            "days_overdue": 27
           },
           {
             "id": "T-20260417-HUMOR",
             "name": "Humor Development — Comedic Resonance for SR",
             "type": "task",
             "deadline": "2026-06-17",
-            "days_overdue": 20
+            "days_overdue": 21
           },
           {
             "id": "T-20260418-SYM",
             "name": "SYM Implementation — System for Measuring Mandala Growth",
             "type": "task",
             "deadline": "2026-06-18",
-            "days_overdue": 19
+            "days_overdue": 20
           }
         ],
         "upcoming": [],
@@ -218,12 +200,10 @@
       "integrity_check": {
         "errors": [],
         "broken_refs": [],
-        "missing_parents": [
-          "honeycombs/boot.json"
-        ],
+        "missing_parents": [],
         "errors_count": 0,
         "broken_count": 0,
-        "missing_count": 1
+        "missing_count": 0
       }
     }
   },

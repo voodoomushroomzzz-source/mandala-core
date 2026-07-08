@@ -1,35 +1,17 @@
 {
-  "last_scan": "2026-07-07T22:53:09.007573",
-  "honeycomb_hashes": {
-    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
-    "honeycombs/boot_online": "07fc8f87ab1abfc5071c44e2f6e50850",
-    "honeycombs/core_map": "45529fba62d4c6df5bd02b8afaccecdd",
-    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
-    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
-    "honeycombs/protocols": "7ca9910cb03e8f40332fdb9531614789",
-    "honeycombs/registry": "cb382d41ea2333bcfdfec52b2dab9466",
-    "honeycombs/registry/core": "f3e7962228de4e85f2d66995cb2f08fe",
-    "honeycombs/roadmaps": "51086041be22110ed07b05706238d80d",
-    "honeycombs/seeds": "d3d42c2f0062c566d965a499b0acffd0",
-    "honeycombs/tasks": "f770cdf6dfae6b87a6b85f17e120160f",
-    "honeycombs/knowledge": "3805eb3697ac79804653faf74405a7db",
-    "honeycombs/fruits": "de0ed5e9388aa4465129b9464458f35c",
-    "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456",
-    "honeycombs/humor": "4107e446a930400d09916afe15bd33ad",
-    "honeycombs/sym": "892b09f32abe87de96e2a6426cea472a",
-    "honeycombs/sessions": "676e443ea43942ae919837475f6c9bbd"
-  },
+  "last_scan": "2026-07-08T09:48:50.512243",
+  "honeycomb_hashes": {},
   "statistics": {
-    "total_scanned": 17,
-    "valid_v2": 17,
+    "total_scanned": 0,
+    "valid_v2": 0,
     "invalid_v2": 0,
-    "errors": 0,
+    "errors": 17,
     "warnings": 0,
-    "total_files": 95,
-    "total_size_kb": 776.36
+    "total_files": 0,
+    "total_size_kb": 0
   },
   "symbiosis_guard": {
-    "last_check": "2026-07-07T22:53:09.007605",
+    "last_check": "2026-07-08T09:48:50.512302",
     "errors_count": 0,
     "warnings_count": 13,
     "expired_tasks": 6,
@@ -39,44 +21,44 @@
         "task_id": "T-20260410-0240",
         "name": "Scout Agent — Автономное Открытие (Идеи, Финансирование, Импакт)",
         "deadline": "2026-05-15",
-        "days_overdue": 53
+        "days_overdue": 54
       },
       {
         "task_id": "T-20260511-MANUS",
         "name": "Manus — Hands of Mandala (исполнительный слой v1)",
         "deadline": "2026-06-11",
-        "days_overdue": 26
+        "days_overdue": 27
       },
       {
         "task_id": "T-20260511-ARCHBOT",
         "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
         "deadline": "2026-06-11",
-        "days_overdue": 26
+        "days_overdue": 27
       },
       {
         "task_id": "T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-06-11",
-        "days_overdue": 26
+        "days_overdue": 27
       },
       {
         "task_id": "T-20260417-HUMOR",
         "name": "Humor Development — Comedic Resonance for SR",
         "deadline": "2026-06-17",
-        "days_overdue": 20
+        "days_overdue": 21
       },
       {
         "task_id": "T-20260418-SYM",
         "name": "SYM Implementation — System for Measuring Mandala Growth",
         "deadline": "2026-06-18",
-        "days_overdue": 19
+        "days_overdue": 20
       }
     ],
     "upcoming_deadlines_list": [],
     "noise_files": 0,
     "noise_files_list": [],
     "broken_links": 0,
-    "missing_parents": 1,
+    "missing_parents": 0,
     "status": "warning"
   }
 }
