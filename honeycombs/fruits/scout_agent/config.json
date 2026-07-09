@@ -19,9 +19,9 @@
       "enabled": true
     },
     {
-      "name": "Lobsters",
-      "type": "rss",
-      "url": "https://lobste.rs/rss",
+      "name": "GitHub Trending Python (API)",
+      "type": "api",
+      "url": "https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15",
       "enabled": true
     },
     {
