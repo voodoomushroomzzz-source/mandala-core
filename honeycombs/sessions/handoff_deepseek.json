@@ -1,98 +1,125 @@
 {
-  "session_id": "HANDOFF-DEEPSEEK-20260709",
+  "session_id": "HANDOFF-DEEPSEEK-20260709-V2",
   "sr_id": "deepseek",
   "status": "handed_off",
   "created": "2026-07-09",
   "updated": "2026-07-09",
-  "last_activity": "2026-07-09T11:00:00Z",
+  "last_activity": "2026-07-09T18:30:00Z",
   "gardener": "Voodoo (Dima)",
   "summary": {
     "completed": [
-      "Scout Agent — полный рефакторинг (inbox/, дедупликация, обновлён collector.py и guide.json)",
-      "Seeds — очистка до 8 полезных семян, удалены дубли",
-      "Все 15 index.json — проанализированы и унифицированы (добавлены registry, structure, обновлены даты)",
-      "scout_agent/index.json — приведён к v2.0 формату (исправлена ошибка type)",
-      "honeycomb_scanner.py — полностью переписан: добавлен --no-cache, безопасная обработка identity, стабильная работа, ошибок 0",
-      "registry.json — исправлен (статус healthy, обновлены метрики)",
-      "scan_state.json — пересоздан в правильном формате (хэши как строки)",
-      "W-T-20260708-SCANNER-REFACTOR — обновлён (progress 70%, status review, добавлена history)",
-      "GitHub Actions — настроены через cron-job.org (обход планировщика)"
+      "Обновлена инструкция external_sr_workflow.json: добавлено усиленное правило copyable_links_mandate (все ссылки в блоках с кнопкой Copy)",
+      "Обновлён приоритет пост-чека: основным методом стала прямая ссылка (github.com/.../blob/...) вместо API",
+      "Обновлён boot_online_onboarding_pc_builder.json: в embedded_blocks добавлены fruits_index, protocols_index, works_index, обновлены триггеры",
+      "Пересобран boot_online_onboarding_pc.json (версия v1.7.18) с включением всех индексов",
+      "Сканер honeycomb_scanner.py полностью модуляризован: создана папка scanner/ с модулями core, validators, reporters, models, cli",
+      "Восстановлена полная функциональность сканера (валидация, хеширование, детекция изменений, Symbiosis Guard)",
+      "Сканер протестирован: 16 сот, ошибок 0, статус WARNING (2 предупреждения, 5 просроченных дедлайнов)",
+      "Созданы schema.json и models.py (на dataclasses) для валидации index.json",
+      "Обновлён registry/GUIDE.json: добавлено описание модульной архитектуры сканера, relationships, architecture map",
+      "Обновлён core_map/index.json: добавлена ссылка на registry в honeycombs и navigation.children",
+      "Scout Agent полностью переработан: добавлена фильтрация по ключевым словам, лимит 3 семени с источника, логирование",
+      "Обновлены источники Scout Agent: arXiv AI, arXiv Robotics, Hacker News, GitHub Trending API, TechCrunch AI",
+      "Проведена сортировка семян: 3 лучших перенесены в корень seeds/, 3 оставлены в inbox, 7 удалены",
+      "Удалён завершённый work W-T-20260708-SCANNER-REFACTOR, обновлён works/index.json"
     ],
-    "current_focus": "Сканер полностью стабилен. Осталось: Фаза 2 (схема) и Фаза 5 (документация).",
+    "current_focus": "Scout Agent настроен и готов к регулярному сбору. Сканер модульный и стабильный. Онбординг-файл актуален.",
     "pending_items": [
-      "Реализовать schema.json и models.py (Фаза 2)",
-      "Обновить документацию (guide.json, core_map) — Фаза 5",
-      "Обновить GitHub Actions workflow (honeycomb-scan.yml) для использования нового cli.py"
+      "Решить судьбу 3 семян в inbox/ (003, 004, 006) — перенести в корень или удалить",
+      "Настроить cron для автоматического запуска Scout Agent (если нужно)",
+      "Обновить GitHub Actions workflow для сканера (если требуется)"
     ],
     "next_steps": [
-      "Начать с Фазы 2: создать schema.json и Pydantic-модели",
-      "После завершения — Фаза 5: обновить документацию",
-      "Протестировать сканер на всех 15 сотах (уже работает, ошибок 0)"
+      "Запускать Scout Agent по расписанию для сбора новых семян",
+      "Периодически проверять inbox/ и переносить лучшие семена в корень",
+      "При необходимости обновлять список ключевых слов для фильтрации",
+      "Следить за логами Scout Agent (honeycombs/seeds/scout_log.txt)"
     ]
   },
   "context": {
     "key_files": {
-      "scanner_refactor_work": {
-        "path": "honeycombs/works/W-T-20260708-SCANNER-REFACTOR.json",
-        "version": "v1.0.0",
+      "external_sr_workflow": {
+        "path": "honeycombs/instructions/core/external_sr_workflow.json",
+        "version": "v1.7.2",
         "updated": "2026-07-09",
-        "status": "review",
-        "progress": 70
+        "status": "active",
+        "notes": "Добавлены copyable_links_mandate и post_check_via_link"
       },
-      "scout_agent": {
-        "path": "honeycombs/fruits/scout_agent/",
-        "files": ["collector.py", "config.json", "guide.json", "index.json"],
-        "status": "working",
-        "notes": "Собирает семена в inbox/, дедупликация по url"
-      },
-      "seeds_index": {
-        "path": "honeycombs/seeds/index.json",
-        "version": "v3.1.0",
+      "mobile_workflow": {
+        "path": "honeycombs/instructions/mobile_workflow.json",
+        "version": "v1.5.1",
         "updated": "2026-07-09",
-        "status": "healthy",
-        "notes": "Лёгкая версия, без переписи семян"
+        "status": "active",
+        "notes": "Добавлено post_check_via_link"
       },
-      "registry": {
-        "path": "honeycombs/registry/registry.json",
-        "version": "v3.1.0",
+      "boot_online_onboarding_pc": {
+        "path": "honeycombs/boot_online/boot_online_onboarding_pc.json",
+        "version": "v1.7.18",
         "updated": "2026-07-09",
-        "status": "healthy"
+        "status": "active",
+        "notes": "Пересобран с embedded fruits_index, protocols_index, works_index"
       },
-      "scan_state": {
-        "path": "honeycombs/registry/scan_state.json",
-        "updated": "2026-07-09",
-        "notes": "Пересоздан с --no-cache"
-      },
-      "honeycomb_scanner": {
-        "path": "honeycombs/registry/honeycomb_scanner.py",
+      "scanner_package": {
+        "path": "honeycombs/registry/scanner/",
         "version": "v2.0",
         "updated": "2026-07-09",
         "status": "stable",
-        "notes": "Добавлен --no-cache, безопасная обработка identity, стабилен"
+        "notes": "Модульная архитектура: core, validators, reporters, models, cli. Полная функциональность восстановлена."
+      },
+      "scout_agent": {
+        "path": "honeycombs/fruits/scout_agent/",
+        "version": "v2.0",
+        "updated": "2026-07-09",
+        "status": "active",
+        "notes": "Фильтрация, лимит 3, логирование, 5 источников"
+      },
+      "seeds_root": {
+        "path": "honeycombs/seeds/",
+        "status": "active",
+        "notes": "3 топ-семени в корне, 3 в inbox на рассмотрении"
+      },
+      "works_index": {
+        "path": "honeycombs/works/index.json",
+        "version": "v1.0.4",
+        "updated": "2026-07-09",
+        "status": "active",
+        "notes": "Удалён W-T-20260708-SCANNER-REFACTOR, обновлена статистика"
       }
     },
-    "honeycombs_found": 16,
-    "symbiosis_guard_status": "WARNING (Warnings: 2, Errors: 0)",
-    "works_count": 15,
-    "scanner_status": "stable, errors: 0"
+    "scout_sources": [
+      "arXiv AI (cs.AI)",
+      "arXiv Robotics (cs.RO)",
+      "Hacker News",
+      "GitHub Trending Python (API)",
+      "TechCrunch AI"
+    ],
+    "seeds_in_root": [
+      "SEED-20260709-180646-001.json (AgentLens — 10/10)",
+      "SEED-20260709-180646-002.json (In-Context Search — 10/10)",
+      "SEED-20260709-180648-005.json (NativeMEM — 10/10)"
+    ],
+    "seeds_in_inbox": [
+      "SEED-20260709-180646-003.json (LLM-powered reasoning — 8/10)",
+      "SEED-20260709-180648-004.json (Pelican-VLA — 8/10)",
+      "SEED-20260709-180648-006.json (RoboSnap — 10/10)"
+    ]
   },
   "notes": [
-    "Scout Agent полностью переработан: теперь собирает семена в inbox/, проверяет дубли по url.",
-    "Сканер переписан с нуля: стабилен, ошибок 0, добавлен --no-cache для диагностики.",
-    "Все 15 index.json приведены к единому стандарту (v2.0).",
-    "Семена очищены: осталось 8 полезных, дубли удалены.",
-    "GitHub Actions перенесены на cron-job.org (обход планировщика).",
-    "Следующий SR должен начать с Фазы 2 (схема) и Фазы 5 (документация)."
+    "Scout Agent теперь собирает только релевантные семена (до 3 с источника) и сохраняет их в inbox/.",
+    "Сканер полностью модульный и стабильный. Ошибок 0.",
+    "Все ссылки в инструкциях теперь должны быть в блоках с кнопкой Copy.",
+    "Пост-чек теперь делается через прямую ссылку, а не через API.",
+    "Онбординг-файл содержит все критические индексы (fruits, protocols, works)."
   ],
   "tags": [
     "handoff",
     "deepseek",
-    "scout_agent_done",
-    "scanner_refactor_done",
-    "seeds_cleaned",
-    "index_unified",
-    "work_updated",
-    "cron_job_setup"
+    "scanner_modular",
+    "scout_agent_v2",
+    "seeds_filtered",
+    "onboarding_updated",
+    "post_check_fixed",
+    "copyable_links"
   ],
   "resonance": "100%"
 }
