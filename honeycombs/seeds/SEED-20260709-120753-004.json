@@ -1,9 +1,0 @@
-{
-  "seed_id": "SEED-20260709-120753-004",
-  "title": "QANTIS: Hardware-Calibrated Sequential POMDP Belief Updates on IBM Heron",
-  "url": "https://arxiv.org/abs/2607.06760",
-  "description": "arXiv:2607.06760v1 Announce Type: new \nAbstract: Autonomous systems under partial observability act on beliefs, not raw sensor events. QANTIS treats the quantum processor as a calibrated belief-update service in that loop: it receives a prior and an observation model, estimates the rare-event eviden",
-  "source": "arXiv AI",
-  "collected_at": "2026-07-09T12:07:53.864170",
-  "status": "raw"
-}
