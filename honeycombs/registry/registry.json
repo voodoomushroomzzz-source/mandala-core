@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 16,
-    "total_size_kb": 710.1,
+    "total_size_kb": 727.03,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 16,
-    "total_size_kb": 710.1,
+    "total_size_kb": 727.03,
     "last_updated": "2026-07-09",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -101,11 +101,12 @@
         "errors": [],
         "warnings": [
           "seeds: missing meta section",
+          "inbox: missing index.json",
           "scout_agent: missing meta.description"
         ],
         "noise_files": [],
         "errors_count": 0,
-        "warnings_count": 2,
+        "warnings_count": 3,
         "noise_count": 0
       },
       "deadline_sentinel": {
@@ -158,7 +159,27 @@
         "errors_count": 0,
         "broken_count": 0,
         "missing_count": 0
+      },
+      "seed_count_validator": {
+        "root_count": 3,
+        "root_threshold": 10,
+        "root_status": "ok",
+        "inbox_count": 4,
+        "inbox_threshold": 20,
+        "inbox_status": "ok",
+        "warnings": [],
+        "status": "ok"
       }
+    },
+    "seeds_health": {
+      "root_count": 3,
+      "root_threshold": 10,
+      "root_status": "ok",
+      "inbox_count": 4,
+      "inbox_threshold": 20,
+      "inbox_status": "ok",
+      "warnings": [],
+      "status": "ok"
     }
   },
   "resonance": {

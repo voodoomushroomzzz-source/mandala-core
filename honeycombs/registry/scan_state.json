@@ -1,10 +1,10 @@
 {
-  "last_scan": "2026-07-09T17:04:43.424134",
+  "last_scan": "2026-07-09T23:21:11.511552",
   "honeycomb_hashes": {
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
-    "honeycombs/works": "80b15d15cafefcde7691e377f76a8bab",
+    "honeycombs/works": "18722a882ea76b457f4c8509a94d5dc2",
     "honeycombs/boot_online": "466faeb68e8c977a9dc154d17fbd270c",
-    "honeycombs/core_map": "eaa42ec4adda8cd8c37d08160b6c339f",
+    "honeycombs/core_map": "8e6d260a7f9cd1811519842bb114764f",
     "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
     "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
     "honeycombs/protocols": "ccf5c4159a7cf0b1e0b87b3a7c22ce28",
@@ -24,13 +24,23 @@
     "invalid_v2": 1,
     "errors": 0,
     "warnings": 1,
-    "total_files": 108,
-    "total_size_kb": 710.1
+    "total_files": 95,
+    "total_size_kb": 727.03
+  },
+  "seeds_health": {
+    "root_count": 3,
+    "root_threshold": 10,
+    "root_status": "ok",
+    "inbox_count": 4,
+    "inbox_threshold": 20,
+    "inbox_status": "ok",
+    "warnings": [],
+    "status": "ok"
   },
   "symbiosis_guard": {
-    "last_check": "2026-07-09T17:04:43.424156",
+    "last_check": "2026-07-09T23:21:11.511633",
     "errors_count": 0,
-    "warnings_count": 2,
+    "warnings_count": 3,
     "expired_tasks": 5,
     "upcoming_deadlines": 0,
     "expired_tasks_list": [
