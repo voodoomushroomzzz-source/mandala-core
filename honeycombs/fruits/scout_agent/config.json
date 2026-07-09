@@ -1,27 +1,33 @@
 {
   "sources": [
     {
-      "name": "AI Opportunity Radar",
-      "type": "rss",
-      "url": "https://preetharaj.github.io/AI-Opportunity-Radar/feed.xml",
-      "enabled": true
-    },
-    {
-      "name": "ТАСС Наука",
-      "type": "rss",
-      "url": "https://tass.ru/rss/v2/nauka.xml",
-      "enabled": true
-    },
-    {
       "name": "arXiv AI",
       "type": "rss",
       "url": "https://arxiv.org/rss/cs.AI",
       "enabled": true
     },
     {
-      "name": "GitHub Trending Python (RSS)",
+      "name": "arXiv Robotics",
       "type": "rss",
-      "url": "https://github.com/trending/python.rss",
+      "url": "https://arxiv.org/rss/cs.RO",
+      "enabled": true
+    },
+    {
+      "name": "Hacker News",
+      "type": "rss",
+      "url": "https://news.ycombinator.com/rss",
+      "enabled": true
+    },
+    {
+      "name": "Lobsters",
+      "type": "rss",
+      "url": "https://lobste.rs/rss",
+      "enabled": true
+    },
+    {
+      "name": "TechCrunch AI",
+      "type": "rss",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "enabled": true
     }
   ],
