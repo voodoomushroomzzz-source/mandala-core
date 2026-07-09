@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.18",
+    "version": "v1.7.19",
     "created": "2026-05-11",
     "updated": "2026-07-09",
     "layer": 1,
@@ -1524,6 +1524,21 @@
   },
   "completion": {
     "message": "After all steps, report: 'Onboarding complete. Core philosophy absorbed. Product Strategy loaded. Active tasks indexed and cross-checked. Resonance initiated. Ready for your directives, Gardener.'"
+  },
+  "fruits_index": {
+    "description": "Fruits — Product Registry & Strategy Map",
+    "source": "honeycombs/fruits/index.json",
+    "note": "Auto-embedded from source. Contains all Mandala products: Gentle Companion, Engineer Chat + Architect Bot, Manus."
+  },
+  "protocols_index": {
+    "description": "Protocols — Activation Protocols Hub",
+    "source": "honeycombs/protocols/index.json",
+    "note": "Auto-embedded from source. Contains all active protocols: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push."
+  },
+  "works_index": {
+    "description": "Works — Unified Work Items",
+    "source": "honeycombs/works/index.json",
+    "note": "Auto-embedded from source. Replaces separate tasks/ and roadmaps/. Contains all active and archived work items."
   },
   "onboarding_procedure": {
     "description": "MANDATORY sequence. AI MUST lead the Gardener through this process autonomously.",
