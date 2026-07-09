@@ -27,15 +27,12 @@ def is_duplicate(url):
 
 # Загружаем конфиг
 CONFIG_PATH = Path(__file__).parent / "config.json"
-SEEDS_DIR.mkdir(parents=True, exist_ok=True)
-SEEDS_DIR.mkdir(parents=True, exist_ok=True)
-
 with open(CONFIG_PATH, 'r') as f:
+    config = json.load(f)
 
 # Путь для сохранения семян (из конфига)
 SEEDS_DIR = Path(config.get("output_dir", "honeycombs/seeds/inbox"))
 SEEDS_DIR.mkdir(parents=True, exist_ok=True)
-    config = json.load(f)
 
 counter = 0
 
@@ -88,13 +85,13 @@ def save_seed(item, source_name):
 
     # Проверка на дубликат
     if is_duplicate(item["url"]):
-        print(f"⏭️ Пропущен дубликат: {item["title"][:50]}...")
+        print(f"⏭️ Пропущен дубликат: {item['title'][:50]}...")
         return
 
     seed_id = get_seed_id()
     seed = {
         "seed_id": seed_id,
-        "title": item["title"],
+        "title": item['title'],
         "url": item["url"],
         "description": item["description"],
         "source": source_name,
