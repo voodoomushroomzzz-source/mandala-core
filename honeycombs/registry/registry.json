@@ -22,87 +22,37 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 16,
-    "total_size_kb": 696.31,
-    "purpose": "The registry is the single source of truth about the state of all honeycombs. It is updated automatically by honeycomb_scanner.py on every scan.",
-    "lifecycle": "The registry is updated automatically on every scan. Manual changes are only allowed through patch protocols.",
+    "total_size_kb": 710.1,
+    "purpose": "The registry is the single source of truth about the state of all honeycombs.",
+    "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
     "guardian_lock": true
   },
   "structure": {
     "segments": {
       "core": {
-        "description": "Core registry files: current state, configuration, change log.",
+        "description": "Core registry files.",
         "files": {
           "scan_state": {
             "file": "scan_state.json",
-            "description": "Current state: last scan timestamp, honeycomb hashes, statistics, scanner config.",
+            "description": "Current state: last scan timestamp, honeycomb hashes, statistics.",
             "load_priority": "high"
-          },
-          "scanner_config": {
-            "file": "scanner.json",
-            "description": "Scanner configuration: scanning logic, validation rules, update triggers.",
-            "load_priority": "medium"
           }
         }
-      },
-      "backups": {
-        "description": "Backup copies of the registry before significant changes. Stored with timestamps."
-      },
-      "dashboard": {
-        "description": "HTML dashboard for visualizing the state of honeycombs."
-      },
-      "modules": {
-        "description": "Registry of modules — larger functional blocks composed of multiple honeycombs."
-      },
-      "extensions": {
-        "description": "Registry of extensions — pluggable modules that extend core functionality."
-      },
-      "notifications": {
-        "description": "Notification rules and templates for system events."
       }
     }
   },
   "registry": {
     "total_files": 16,
-    "total_size_kb": 696.31,
+    "total_size_kb": 710.1,
     "last_updated": "2026-07-09",
-    "honeycomb_id": "HONEYCOMB-REGISTRY-001",
     "status": "active",
-    "compliance_status": "v3.1.0_lightweight",
-    "source_of_truth": "Individual honeycomb manifests (index.json in each honeycomb folder). This file stores only registry metadata and aggregated statistics."
+    "compliance_status": "v3.1.0_lightweight"
   },
   "health": {
     "status": "healthy",
-    "validation_errors": [
-      {
-        "honeycomb_id": "honeycombs/seeds",
-        "name": "Seeds Honeycomb — Idea Incubator",
-        "errors": [
-          "Missing required section: meta"
-        ],
-        "warnings": [
-          "meta section is missing"
-        ]
-      }
-    ],
-    "new_honeycombs": [
-      "honeycombs/akasha",
-      "honeycombs/works",
-      "honeycombs/boot_online",
-      "honeycombs/core_map",
-      "honeycombs/instructions",
-      "honeycombs/philosophy",
-      "honeycombs/protocols",
-      "honeycombs/registry",
-      "honeycombs/seeds",
-      "honeycombs/knowledge",
-      "honeycombs/fruits",
-      "honeycombs/fruits/gentle_companion",
-      "honeycombs/fruits/scout_agent",
-      "honeycombs/humor",
-      "honeycombs/sym",
-      "honeycombs/sessions"
-    ],
+    "validation_errors": [],
+    "new_honeycombs": [],
     "modified_honeycombs": [],
     "deleted_honeycombs": [],
     "symbiosis_guard": {
@@ -214,7 +164,6 @@
   "resonance": {
     "with_boot": "100%",
     "with_core_map": "100%",
-    "with_parent": "100%",
     "status": "fully_resonant"
   }
 }
