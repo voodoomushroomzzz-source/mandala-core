@@ -352,13 +352,15 @@ class HoneycombScanner:
     
     def __init__(self, base_path: str = "honeycombs", full_check: bool = False,
                  validate_tasks: bool = False, ahimsa: bool = False,
-                 deadlines: bool = False, integrity: bool = False):
+                 deadlines: bool = False, integrity: bool = False,
+                 no_cache: bool = False):
         self.base_path = Path(base_path)
         self.full_check = full_check
         self.validate_tasks = validate_tasks or full_check
         self.ahimsa = ahimsa or full_check
         self.deadlines = deadlines or full_check
         self.integrity = integrity or full_check
+        self.no_cache = no_cache
         
         self.honeycombs = []
         self.new_honeycombs = []
@@ -392,17 +394,33 @@ class HoneycombScanner:
             return {}
     
     def _load_previous_state(self):
-        """Load previous scan state"""
+        """Load previous scan state.
+
+        This is used ONLY to populate the informational new/modified/deleted
+        changelog. It never determines which files get scanned or how they
+        are validated — every index.json is always read and analyzed fresh,
+        every run, regardless of this cache's presence or contents. If the
+        cache is missing, empty, or malformed, the scan result (errors,
+        warnings, valid/invalid counts) is completely unaffected.
+        """
+        if self.no_cache:
+            print("--no-cache set: skipping previous-state load (change tracking disabled)")
+            return
+
         state_path = self.base_path / 'honeycombs' / 'registry' / 'scan_state.json'
         try:
             if state_path.exists():
                 with open(state_path, 'r', encoding='utf-8') as f:
                     state = json.load(f)
-                    if 'honeycomb_hashes' in state:
-                        self.previous_scan_cache = state['honeycomb_hashes']
+                    cache = state.get('honeycomb_hashes')
+                    if isinstance(cache, dict):
+                        self.previous_scan_cache = cache
                         print(f"Loaded {len(self.previous_scan_cache)} entries from previous registry")
+                    else:
+                        print("Previous state has no usable honeycomb_hashes; change tracking will show everything as new")
         except Exception as e:
-            print(f"Error loading previous state: {e}")
+            print(f"Error loading previous state (ignored, scan is unaffected): {e}")
+            self.previous_scan_cache = {}
     
     def _calculate_hash(self, data: Dict) -> str:
         """Calculate MD5 hash of JSON data"""
@@ -468,15 +486,34 @@ class HoneycombScanner:
         return file_count, total_size_kb
     
     def _detect_changes(self, honeycomb_id: str, honeycomb_info: Dict):
-        """Detect if honeycomb is new or modified"""
-        if honeycomb_id in self.previous_scan_cache:
-            previous = self.previous_scan_cache[honeycomb_id]
-            if previous.get("hash") != honeycomb_info["hash"]:
-                self.modified_honeycombs.append(honeycomb_id)
-                print(f"   Modified: {honeycomb_id}")
-        else:
-            self.new_honeycombs.append(honeycomb_id)
-            print(f"   + New: {honeycomb_id}")
+        """Detect if honeycomb is new or modified.
+
+        This is PURELY informational (for the changelog in registry.json) and
+        must never be able to raise — it must not affect scanning, validation,
+        or error counts in any way, and must not depend on whether the cache
+        file exists, is stale, or has a different internal shape.
+        """
+        try:
+            if honeycomb_id in self.previous_scan_cache:
+                previous = self.previous_scan_cache[honeycomb_id]
+                # Cache has historically been stored both as a plain hash
+                # string and as a dict like {"hash": ...}. Accept either.
+                if isinstance(previous, dict):
+                    previous_hash = previous.get("hash")
+                elif isinstance(previous, str):
+                    previous_hash = previous
+                else:
+                    previous_hash = None
+
+                if previous_hash != honeycomb_info["hash"]:
+                    self.modified_honeycombs.append(honeycomb_id)
+                    print(f"   Modified: {honeycomb_id}")
+            else:
+                self.new_honeycombs.append(honeycomb_id)
+                print(f"   + New: {honeycomb_id}")
+        except Exception as e:
+            # Change-tracking must never be able to break or destabilize a scan.
+            print(f"   (change detection skipped for {honeycomb_id}: {e})")
     
     def _analyze_honeycomb(self, index_path: Path):
         """Analyze a single honeycomb with safe error handling"""
@@ -532,13 +569,17 @@ class HoneycombScanner:
                 "scan_timestamp": datetime.now().isoformat()
             }
             
-            # Detect changes
-            self._detect_changes(honeycomb_id, honeycomb_info)
-            
+            # Record the honeycomb FIRST — this is the authoritative scan
+            # result and must never depend on (or be lost because of) the
+            # optional change-tracking step below.
             self.honeycombs.append(honeycomb_info)
             self.stats["total_scanned"] += 1
             self.stats["total_files"] += file_count
             self.stats["total_size_kb"] += total_size_kb
+
+            # Detect changes vs previous cache — informational only, never
+            # allowed to affect the scan result (see _detect_changes).
+            self._detect_changes(honeycomb_id, honeycomb_info)
             
             if is_valid:
                 self.stats["valid_v2"] += 1
@@ -906,6 +947,11 @@ def main():
         help='Force full rescan'
     )
     parser.add_argument(
+        '--no-cache',
+        action='store_true',
+        help='Ignore scan_state.json entirely (change tracking will show everything as new)'
+    )
+    parser.add_argument(
         '--verbose',
         action='store_true',
         help='Verbose output'
@@ -922,7 +968,8 @@ def main():
         validate_tasks=args.validate_tasks,
         ahimsa=args.ahimsa,
         deadlines=args.deadlines,
-        integrity=args.integrity
+        integrity=args.integrity,
+        no_cache=args.no_cache
     )
     
     scanner.scan_all_honeycombs()
