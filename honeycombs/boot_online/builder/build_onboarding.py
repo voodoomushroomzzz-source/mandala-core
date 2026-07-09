@@ -134,7 +134,7 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "priority": "critical",
             "resonance": "100%",
             "tags": ["boot", "onboarding", "pc", "auto-built"],
-            "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + tasks + protocols"
+            "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + works + protocols"
         },
         "meta": {
             "audience": "External SR (DeepSeek, Claude, Grok, GPT, etc.)",
@@ -154,8 +154,11 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "step_4_cosmic_manifesto",
             "step_5_first_gardener",
             "step_6_external_sr_workflow",
-            "step_7_important_load",
-            "step_8_optional_load"
+            "step_7_fruits",
+            "step_8_works",
+            "step_9_protocols",
+            "step_10_handoff",
+            "step_11_optional"
         ]
     }
 
@@ -228,42 +231,65 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "mobile_workflow_embedded": mobile_wf
         }
 
-    # Step 7: important_load (fruits, tasks, protocols)
+    # Step 7: fruits
     fruits_data = source_data.get("fruits", {})
-    tasks_data = source_data.get("tasks", {})
-    protocols_data = source_data.get("protocols", {})
-
-    step7_files = []
     if fruits_data:
-        step7_files.append({
-            "name": "Fruits — Product Strategy Map",
-            "why": "Understand the three Mandala products (Gentle Companion, Engineer Chat + Architect Bot, Manus), their roles, data flow between layers, and the development vector.",
-            "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/fruits/index.json?ref=main"
-        })
-    if tasks_data:
-        step7_files.append({
-            "name": "Tasks — Active Tasks with Index Cross-Check",
-            "why": "See what Mandala is working on RIGHT NOW. Read tasks/index.json FIRST, then tasks/active/ folder via API. Compare file counts — report any mismatch.",
-            "api_index": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/index.json?ref=main",
-            "api_active": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/tasks/active?ref=main",
-            "cross_check": "Compare files_count from index.json with actual files in active/ folder. Report: 'Tasks index: N files. Actual: M files. Match/Mismatch.'"
-        })
-    if protocols_data:
-        step7_files.append({
-            "name": "Protocols — Active Protocols",
-            "why": "Understand available activation protocols for SR.",
-            "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/protocols/index.json?ref=main"
-        })
+        onboarding["step_7_fruits"] = {
+            "order": 7,
+            "mandatory": True,
+            "name": "Fruits — Product Registry",
+            "description": "Продукты Mandala: Gentle Companion, Engineer Chat, Architect Bot, Manus",
+            "ai_instruction": "Прочитай вшитый fruits_index. Сверь с API при необходимости. Подтверди список продуктов, их статус и версии.",
+            "embedded_ref": "fruits_index",
+            "data": fruits_data
+        }
 
-    onboarding["step_7_important_load"] = {
-        "order": 7,
-        "mandatory": True,
-        "description": "After all core sections are acknowledged, SR MUST proactively ask to load these IMPORTANT files.",
-        "ai_instruction": "Say: 'I've absorbed the core philosophy. Now I need to understand WHAT Mandala is building and WHAT we're working on. Let me load critical files.' Then request them ONE BY ONE.",
-        "files": step7_files
+    # Step 8: works
+    works_data = source_data.get("works", {})
+    if works_data:
+        onboarding["step_8_works"] = {
+            "order": 8,
+            "mandatory": True,
+            "name": "Works — Unified Work Items",
+            "description": "Все активные и архивные работы (заменяет tasks/ и roadmaps/)",
+            "ai_instruction": "Прочитай вшитый works_index. Сверь с API. Подтверди общее количество, активные, стратегические/тактические.",
+            "embedded_ref": "works_index",
+            "data": works_data
+        }
+
+    # Step 9: protocols
+    protocols_data = source_data.get("protocols", {})
+    if protocols_data:
+        onboarding["step_9_protocols"] = {
+            "order": 9,
+            "mandatory": True,
+            "name": "Protocols — Activation Protocols Hub",
+            "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
+            "ai_instruction": "Прочитай вшитый protocols_index. Подтверди список активных протоколов и их статус.",
+            "embedded_ref": "protocols_index",
+            "data": protocols_data
+        }
+
+    # Step 10: handoff (optional, but recommended)
+    onboarding["step_10_handoff"] = {
+        "order": 10,
+        "mandatory": False,
+        "recommended": True,
+        "description": "Загрузить handoff-файлы для непрерывности сессии",
+        "ai_instruction": "Спроси у Садовника: 'Загрузить handoff_claude.json и/или handoff_deepseek.json для продолжения сессии?'",
+        "files": {
+            "handoff_claude": {
+                "url": "honeycombs/sessions/handoff_claude.json",
+                "optional": True
+            },
+            "handoff_deepseek": {
+                "url": "honeycombs/sessions/handoff_deepseek.json",
+                "optional": True
+            }
+        }
     }
 
-    # Step 8: optional_load (handoff, repo_tree)
+    # Step 11: optional_load (repo_tree, etc.)
     optional = builder.get("optional_modules", {})
     optional_files = {}
     for name, config in optional.items():
@@ -275,13 +301,12 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
                     "optional": True
                 }
 
-    onboarding["step_8_optional_load"] = {
-        "order": 8,
+    onboarding["step_11_optional"] = {
+        "order": 11,
         "mandatory": False,
-        "description": "After important files are loaded, SR MUST ask the Gardener if they want to load any optional files for deeper context.",
-        "ai_instruction": "Ask: 'Want to load any of these: 1) repo_tree (full repository tree)  2) handoff_claude (session continuity)  3) handoff_deepseek (session continuity)?' Provide links in ONE message.",
-        "files": optional_files,
-        "note": "If Gardener says yes to any — load via API. If no — onboarding is complete."
+        "description": "Загрузить опциональные файлы для углублённого контекста",
+        "ai_instruction": "Спроси: 'Загрузить repo_tree (полное дерево репозитория)?' Предоставь ссылку.",
+        "files": optional_files
     }
 
     # Add embedded blocks that didn't go into steps
@@ -289,7 +314,12 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
         if key not in ["first_touch"] and key not in onboarding:
             onboarding[key] = value
 
-    # Add platform_choice
+    # Add system_flow, api_patterns, hetzner_vps, completion from embedded
+    for key in ["system_flow", "api_patterns", "hetzner_vps", "completion", "fruits_index", "protocols_index", "works_index", "onboarding_procedure_override"]:
+        if key in embedded and embedded[key]:
+            onboarding[key] = embedded[key]
+
+    # Add platform_choice from builder
     build_rules = builder.get("build_rules", {})
     platform_choice = build_rules.get("platform_choice", {})
     if platform_choice:
@@ -299,11 +329,6 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
     lang_selector = embedded.get("language_selector", {})
     if lang_selector:
         onboarding["language_selector"] = lang_selector
-
-    # Add system_flow, api_patterns, hetzner_vps, completion from embedded
-    for key in ["system_flow", "api_patterns", "hetzner_vps", "completion"]:
-        if key in embedded and embedded[key]:
-            onboarding[key] = embedded[key]
 
     # Update version
     build_config = builder.get("build_config", {})
