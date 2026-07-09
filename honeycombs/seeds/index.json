@@ -1,0 +1,48 @@
+{
+  "identity": {
+    "module_id": "SEEDS-MANIFEST-001",
+    "name": "Seeds Honeycomb — Idea Incubator",
+    "version": "v3.1.0",
+    "created": "2026-03-01",
+    "updated": "2026-07-09",
+    "layer": 1,
+    "type": "honeycomb_manifest",
+    "description": "Seeds are raw ideas, unprocessed concepts, and Scout Agent findings. They are stored as individual JSON files in honeycombs/seeds/. New seeds are collected into inbox/ for review, then promoted to root or deleted.",
+    "status": "active",
+    "priority": "high",
+    "tags": ["seeds", "ideas", "inbox", "scout-agent", "v3.1.0"],
+    "resonance": "100%"
+  },
+  "structure": {
+    "description": "Seeds are stored directly in honeycombs/seeds/ as JSON files. No subfolders except inbox/ for new seeds.",
+    "file_format": {
+      "seed_id": "SEED-YYYYMMDD-HHMMSS-XXX",
+      "title": "Seed title",
+      "url": "Source URL",
+      "description": "Brief description",
+      "source": "Source name",
+      "collected_at": "ISO timestamp",
+      "status": "raw | reviewed | promoted | deleted"
+    },
+    "lifecycle": {
+      "inbox": "New seeds from Scout Agent go to honeycombs/seeds/inbox/",
+      "review": "Gardener reviews seeds manually",
+      "promote": "Useful seeds moved to honeycombs/seeds/ (root)",
+      "delete": "Unuseful seeds removed from inbox/"
+    }
+  },
+  "rules": {
+    "duplicate_check": "Scout Agent checks url against all seeds in inbox/ and seeds/ before saving",
+    "manual_review": "All seeds must be reviewed by Gardener before promotion",
+    "no_archive": "Seeds are either active (in root) or deleted. No archive subfolder."
+  },
+  "navigation": {
+    "parent_map": "honeycombs/core_map/index.json",
+    "related": ["honeycombs/works", "honeycombs/fruits/scout_agent"]
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-07-09",
+    "notes": "v3.1.0: simplified index, moved seed inventory to individual files, added inbox/ workflow"
+  }
+}
