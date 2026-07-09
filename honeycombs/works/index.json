@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.3",
+    "version": "v1.0.4",
     "created": "2026-07-08",
-    "updated": "2026-07-08",
+    "updated": "2026-07-09",
     "layer": 1,
     "type": "work_manifest",
     "description": "Single source of truth for all work items (tasks, roadmaps, initiatives). Replaces separate tasks/ and roadmaps/.",
@@ -88,11 +88,11 @@
     "index": "This file (index.json) serves as the registry"
   },
   "manifest": {
-    "total_works": 15,
+    "total_works": 14,
     "by_status": {
       "active": 9,
       "planning": 3,
-      "in_progress": 2,
+      "in_progress": 1,
       "done": 1
     },
     "by_horizon": {
@@ -119,8 +119,7 @@
       "W-T-20260427-FLUTTER__flutter_app",
       "W-T-20260511-ARCHBOT__architect_bot",
       "W-T-20260511-ENGCHAT__engineer_chat",
-      "W-T-20260511-MANUS__manus_hands",
-      "W-T-20260708-SCANNER-REFACTOR"
+      "W-T-20260511-MANUS__manus_hands"
     ]
   },
   "navigation": {
