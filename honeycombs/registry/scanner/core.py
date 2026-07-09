@@ -9,7 +9,7 @@ import hashlib
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
-from .validators import TaskValidator, AhimsaFilter, DeadlineSentinel, IntegrityCheck
+from .validators import TaskValidator, AhimsaFilter, DeadlineSentinel, IntegrityCheck, SeedCountValidator
 from .reporters import save_scan_state, save_registry
 
 class Colors:
@@ -257,6 +257,18 @@ class HoneycombScanner:
             integrity = IntegrityCheck(self.base_path)
             results['integrity_check'] = integrity.check()
             print(f"    Errors: {results['integrity_check']['errors_count']}, Broken refs: {results['integrity_check']['broken_count']}, Missing parents: {results['integrity_check']['missing_count']}")
+
+        if self.ahimsa or self.full_check:
+            print("\n[5] Seed Count Validator...")
+            from .validators import SeedCountValidator
+            seeds_health = SeedCountValidator.check()
+            results['seed_count_validator'] = seeds_health
+            print(f"    Корень: {seeds_health['root_count']}/{seeds_health['root_threshold']} {'✅' if seeds_health['root_status'] == 'ok' else '⚠️'}")
+            print(f"    Inbox:  {seeds_health['inbox_count']}/{seeds_health['inbox_threshold']} {'✅' if seeds_health['inbox_status'] == 'ok' else '⚠️'}")
+            if seeds_health['warnings']:
+                for w in seeds_health['warnings']:
+                    print(f"    ⚠️ {w}")
+
         
         self.guard_results = results
         

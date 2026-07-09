@@ -291,3 +291,52 @@ class IntegrityCheck:
             'broken_count': len(self.broken_refs),
             'missing_count': len(self.missing_parents)
         }
+
+
+
+class SeedCountValidator:
+    """Проверяет количество семян в корне и inbox."""
+    ROOT_SEEDS_PATH = "honeycombs/seeds"
+    INBOX_SEEDS_PATH = "honeycombs/seeds/inbox"
+    ROOT_THRESHOLD = 10
+    INBOX_THRESHOLD = 20
+
+    @staticmethod
+    def check() -> dict:
+        from pathlib import Path
+        root_path = Path(SeedCountValidator.ROOT_SEEDS_PATH)
+        inbox_path = Path(SeedCountValidator.INBOX_SEEDS_PATH)
+
+        # Считаем JSON-файлы в корне (исключая папки и index.json)
+        root_count = 0
+        if root_path.exists():
+            root_count = sum(
+                1 for f in root_path.iterdir()
+                if f.is_file() and f.suffix == ".json" and f.name != "index.json"
+            )
+
+        # Считаем JSON-файлы в inbox
+        inbox_count = 0
+        if inbox_path.exists():
+            inbox_count = sum(1 for f in inbox_path.iterdir() if f.is_file() and f.suffix == ".json")
+
+        root_warning = root_count > SeedCountValidator.ROOT_THRESHOLD
+        inbox_warning = inbox_count > SeedCountValidator.INBOX_THRESHOLD
+
+        warnings = []
+        if root_warning:
+            warnings.append(f"Корень seeds/: {root_count} файлов (порог {SeedCountValidator.ROOT_THRESHOLD})")
+        if inbox_warning:
+            warnings.append(f"Inbox: {inbox_count} файлов (порог {SeedCountValidator.INBOX_THRESHOLD})")
+
+        return {
+            "root_count": root_count,
+            "root_threshold": SeedCountValidator.ROOT_THRESHOLD,
+            "root_status": "warning" if root_warning else "ok",
+            "inbox_count": inbox_count,
+            "inbox_threshold": SeedCountValidator.INBOX_THRESHOLD,
+            "inbox_status": "warning" if inbox_warning else "ok",
+            "warnings": warnings,
+            "status": "warning" if (root_warning or inbox_warning) else "ok"
+        }
+

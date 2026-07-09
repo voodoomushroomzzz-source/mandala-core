@@ -32,6 +32,11 @@ def save_scan_state(base_path: Path, honeycombs: List, stats: Dict, guard_result
     }
     
     if guard_results and (validate_tasks or ahimsa or deadlines or integrity):
+
+        # Добавляем seeds_health
+        if guard_results and 'seed_count_validator' in guard_results:
+            state['seeds_health'] = guard_results['seed_count_validator']
+
         guard_summary = {
             "last_check": datetime.now().isoformat(),
             "errors_count": 0,
@@ -135,6 +140,10 @@ def save_registry(base_path: Path, honeycombs: List, stats: Dict, guard_results:
     
     if guard_results:
         registry['health']['symbiosis_guard'] = guard_results
+
+    if guard_results and 'seed_count_validator' in guard_results:
+        registry['health']['seeds_health'] = guard_results['seed_count_validator']
+
     
     with open(registry_path, 'w', encoding='utf-8') as f:
         json.dump(registry, f, indent=2, ensure_ascii=False)
