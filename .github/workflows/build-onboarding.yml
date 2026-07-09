@@ -12,6 +12,9 @@ on:
       - 'honeycombs/instructions/mobile_workflow.json'
       - 'honeycombs/boot_online/boot_online_onboarding_pc_builder.json'
       - 'honeycombs/boot_online/builder/build_onboarding.py'
+      - 'honeycombs/fruits/index.json'
+      - 'honeycombs/protocols/index.json'
+      - 'honeycombs/works/index.json'
 
 jobs:
   build:
