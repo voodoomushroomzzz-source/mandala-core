@@ -1,6 +1,6 @@
 {
   "name": "Registry — Guide for AI",
-  "version": "v1.1.0",
+  "version": "v1.2.0",
   "created": "2026-07-08",
   "updated": "2026-07-09",
   "description": "A map for AI to understand the registry/ folder, its files, and how the scanner works.",
@@ -12,23 +12,26 @@
     "files": {
       "title": "Files in this folder",
       "items": {
-        "honeycomb_scanner.py": "Main scanner script. Scans all honeycombs, validates structure, runs Symbiosis Guard checks (task validation, Ahimsa filter, deadline monitoring, integrity check).",
+        "honeycomb_scanner.py": "Wrapper script that imports and runs the modular scanner from scanner/ package. Main entry point for GitHub Actions and CLI.",
         "scanner.json": "Configuration for the scanner. Defines scanning logic, validation rules, update triggers, and Git integration.",
         "registry.json": "Main registry. Contains the current state of all honeycombs: metadata, statistics, health status, and change tracking. Updated automatically by the scanner.",
         "scan_state.json": "State of the last scan. Contains timestamps, honeycomb hashes, statistics, and a summary of Symbiosis Guard results (including lists of expired tasks, noise files, etc.). Updated automatically by the scanner.",
         "index.json": "Manifest of the registry/ folder itself. Describes the folder structure and files.",
         "GUIDE.json": "This file. A map for AI to understand the registry system.",
         "schema.json": "JSON Schema for validating all honeycomb index.json files. Defines required fields, types, and structure for every index.json in the system.",
-        "models.py": "Pydantic models for type-safe validation of honeycomb data. Used by the scanner for structured validation."
+        "models.py": "Pydantic models for type-safe validation of honeycomb data. Used by the scanner for structured validation.",
+        "scanner/": "Modular scanner package. Contains core.py (main logic), validators.py (Symbiosis Guard checks), reporters.py (save state/registry), models.py (dataclasses), and cli.py (command-line interface)."
       }
     },
     "relationships": {
       "title": "File relationships",
       "flow": [
-        "scanner.json (configuration) → honeycomb_scanner.py (reads it on startup)",
-        "honeycomb_scanner.py (scan) → scan_state.json (writes scan results)",
-        "honeycomb_scanner.py (scan) → registry.json (writes full registry)",
-        "scan_state.json (previous state) → honeycomb_scanner.py (reads for change detection)",
+        "scanner.json (configuration) → scanner/core.py (reads on startup)",
+        "scanner/core.py (scan) → scanner/validators.py (runs Symbiosis Guard checks)",
+        "scanner/core.py (scan) → scanner/reporters.py (saves results)",
+        "scanner/reporters.py → scan_state.json (writes scan results)",
+        "scanner/reporters.py → registry.json (writes full registry)",
+        "scan_state.json (previous state) → scanner/core.py (reads for change detection)",
         "registry.json → source of truth for system state"
       ]
     },
@@ -37,7 +40,7 @@
       "scanning": {
         "description": "To run a system scan:",
         "steps": [
-          "Run: python honeycombs/registry/honeycomb_scanner.py scan",
+          "Run: python honeycombs/registry/honeycomb_scanner.py scan (uses modular scanner)",
           "For full health check: python honeycombs/registry/honeycomb_scanner.py scan --full-check",
           "Check scan_state.json for a quick summary of the results.",
           "Check registry.json for detailed information about all honeycombs."
@@ -47,6 +50,7 @@
         "description": "When updating scanner configuration:",
         "steps": [
           "Edit scanner.json if you need to change scanning logic, validation rules, or exclude patterns.",
+          "Edit modules in scanner/ (core.py, validators.py, reporters.py, models.py, cli.py) to modify scanner behavior.",
           "Do NOT edit registry.json or scan_state.json manually — they are overwritten by the scanner."
         ]
       },
@@ -75,7 +79,9 @@
         "Scanner script": "honeycombs/registry/honeycomb_scanner.py",
         "Scanner config": "honeycombs/registry/scanner.json",
         "Main registry": "honeycombs/registry/registry.json",
-        "Scan state": "honeycombs/registry/scan_state.json"
+        "Scan state": "honeycombs/registry/scan_state.json",
+        "Scanner package": "honeycombs/registry/scanner/",
+        "Scanner wrapper": "honeycombs/registry/honeycomb_scanner.py"
       }
     },
     "migration_note": {
