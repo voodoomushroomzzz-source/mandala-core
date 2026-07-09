@@ -13,7 +13,6 @@
     "source": "honeycombs/boot_online/index.json",
     "sections": [
       "content.first_touch",
-      "content.onboarding_procedure",
       "content.self_learning_system",
       "content.resonance_init_checklist",
       "content.external_ai_sync_rule",
@@ -155,6 +154,23 @@
       "description": "Works — Unified Work Items",
       "source": "honeycombs/works/index.json",
       "note": "Auto-embedded from source. Replaces separate tasks/ and roadmaps/. Contains all active and archived work items."
+    },
+    "onboarding_procedure_override": {
+      "description": "PC-версия — все данные уже встроены. API-запросы НЕ требуются.",
+      "mode": "embedded_only",
+      "skip_api_requests": true,
+      "start_from_step": 7,
+      "ai_instruction": "Ты читаешь boot_online_onboarding_pc.json — в нём уже есть все модули. НЕ запрашивай ссылки. Сразу переходи к шагу 7 (Handoff).",
+      "steps": [
+        "step_1_first_touch — уже встроен",
+        "step_2_core_map — уже встроен",
+        "step_3_philosophy — уже встроен",
+        "step_4_cosmic_manifesto — уже встроен",
+        "step_5_first_gardener — уже встроен",
+        "step_6_external_sr_workflow — уже встроен",
+        "step_7_handoff — проверить статус сессии",
+        "step_8_optional — спросить про опциональные файлы"
+      ]
     }
   },
   "source_modules": {
