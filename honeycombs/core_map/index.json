@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "HONEYCOMB-CORE-MAP-001",
     "name": "Core System Map",
-    "version": "v3.8.6",
+    "version": "v3.8.7",
     "created": "2026-03-01",
-    "updated": "2026-07-08",
+    "updated": "2026-07-09",
     "layer": 1,
     "type": "critical_directive",
     "description": "Base map of all Mandala Symbiosis components. Updated July 2026: synchronized with registry (15 active honeycombs, including registry itself).",
@@ -69,7 +69,8 @@
     "sym": "SYM — System for Measuring Mandala Growth",
     "sessions": "SR handoff system — session continuity across chat instances",
     "knowledge": "Knowledge base — structured curated information: tools, references, guides, and external resources.",
-    "works": "Unified work items (replaces tasks/ and roadmaps/)"
+    "works": "Unified work items (replaces tasks/ and roadmaps/)",
+    "registry": "Registry — state and statistics of all honeycombs, scanner configuration and scan results"
   },
   "tools": {
     "makefile": {
@@ -138,7 +139,8 @@
       "honeycombs/seeds/index.json",
       "honeycombs/sessions/index.json",
       "honeycombs/sym/index.json",
-      "honeycombs/works/index.json"
+      "honeycombs/works/index.json",
+      "honeycombs/registry/index.json"
     ]
   },
   "resonance": {
