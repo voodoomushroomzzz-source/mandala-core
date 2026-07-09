@@ -1,8 +1,8 @@
 {
   "name": "Registry — Guide for AI",
-  "version": "v1.0.0",
+  "version": "v1.1.0",
   "created": "2026-07-08",
-  "updated": "2026-07-08",
+  "updated": "2026-07-09",
   "description": "A map for AI to understand the registry/ folder, its files, and how the scanner works.",
   "sections": {
     "overview": {
@@ -17,7 +17,9 @@
         "registry.json": "Main registry. Contains the current state of all honeycombs: metadata, statistics, health status, and change tracking. Updated automatically by the scanner.",
         "scan_state.json": "State of the last scan. Contains timestamps, honeycomb hashes, statistics, and a summary of Symbiosis Guard results (including lists of expired tasks, noise files, etc.). Updated automatically by the scanner.",
         "index.json": "Manifest of the registry/ folder itself. Describes the folder structure and files.",
-        "GUIDE.json": "This file. A map for AI to understand the registry system."
+        "GUIDE.json": "This file. A map for AI to understand the registry system.",
+        "schema.json": "JSON Schema for validating all honeycomb index.json files. Defines required fields, types, and structure for every index.json in the system.",
+        "models.py": "Pydantic models for type-safe validation of honeycomb data. Used by the scanner for structured validation."
       }
     },
     "relationships": {

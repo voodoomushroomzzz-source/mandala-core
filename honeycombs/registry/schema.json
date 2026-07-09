@@ -1,0 +1,242 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Honeycomb Index Schema v2.0",
+  "description": "Schema for validating honeycomb index.json files in Mandala Symbiosis",
+  "type": "object",
+  "required": [
+    "identity",
+    "meta"
+  ],
+  "properties": {
+    "identity": {
+      "type": "object",
+      "required": [
+        "module_id",
+        "name",
+        "version",
+        "layer",
+        "type"
+      ],
+      "properties": {
+        "module_id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^v\\d+\\.\\d+\\.\\d+$"
+        },
+        "created": {
+          "type": "string",
+          "format": "date"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date"
+        },
+        "layer": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "critical_directive",
+            "honeycomb_manifest",
+            "philosophical_block",
+            "workflow_guide",
+            "boot_onboarding_pc",
+            "registry_index",
+            "honeycomb_manifest",
+            "gardener_origin_seed"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "in_progress",
+            "archived",
+            "deprecated"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "resonance": {
+          "type": "string",
+          "pattern": "^\\d+%$"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audience": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "how_to_use": {
+          "type": "string"
+        },
+        "change_requires": {
+          "type": "string",
+          "enum": [
+            "gardener_approval",
+            "sr_proposal",
+            "auto"
+          ]
+        },
+        "guardian_lock": {
+          "type": "boolean"
+        },
+        "total_size_kb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "total_files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "segments": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parent_honeycomb": {
+          "type": "string"
+        },
+        "honeycomb_name": {
+          "type": "string"
+        },
+        "resonance_with_awareness": {
+          "type": "string",
+          "pattern": "^\\d+%"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "in_progress",
+            "archived",
+            "deprecated"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ]
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "structure": {
+      "type": "object",
+      "properties": {
+        "segments": {
+          "type": "object"
+        },
+        "critical_dependencies": {
+          "type": "object"
+        },
+        "navigation": {
+          "type": "object"
+        }
+      }
+    },
+    "resonance": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "fully_resonant",
+            "partial",
+            "critical"
+          ]
+        },
+        "with_boot": {
+          "type": "string",
+          "pattern": "^\\d+%$"
+        },
+        "with_core_map": {
+          "type": "string",
+          "pattern": "^\\d+%$"
+        }
+      }
+    },
+    "health": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "healthy",
+            "warning",
+            "critical"
+          ]
+        },
+        "last_check": {
+          "type": "string",
+          "format": "date"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "registry": {
+      "type": "object",
+      "properties": {
+        "total_blocks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_testimonies": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    }
+  }
+}

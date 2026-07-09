@@ -1,72 +1,75 @@
 {
-    "git_integration":  {
-                            "require_token":  true,
-                            "push_enabled":  true,
-                            "auto_commit":  true,
-                            "commit_message_template":  "Auto-scan: {timestamp}"
-                        },
-    "validation":  {
-                       "strict_mode":  false,
-                       "recommended_meta_fields":  [
-                                                       "description",
-                                                       "status",
-                                                       "priority",
-                                                       "tags"
-                                                   ],
-                       "resonance_threshold":  "100%",
-                       "required_identity_fields":  [
-                                                        "module_id",
-                                                        "name",
-                                                        "version",
-                                                        "layer",
-                                                        "type"
-                                                    ]
-                   },
-    "scanning_logic":  {
-                           "exclude_patterns":  [
-                                                    ".*",
-                                                    "__*",
-                                                    "*.log",
-                                                    "*.tmp"
-                                                ],
-                           "validation_rules":  [
-                                                    "v2_structure_check",
-                                                    "required_fields_check",
-                                                    "module_id_format_check"
-                                                ],
-                           "depth":  "recursive_all_levels",
-                           "target_files":  [
-                                                "index.json"
-                                            ],
-                           "update_triggers":  [
-                                                   "new_honeycomb_detected",
-                                                   "honeycomb_modified",
-                                                   "content_hash_changed"
-                                               ]
-                       },
-    "reporting":  {
-                      "reports_dir":  "reports",
-                      "generate_json":  true,
-                      "max_errors_in_summary":  10,
-                      "generate_markdown":  true
-                  },
-    "identity":  {
-                     "updated":  "2026-04-09",
-                     "layer":  "core",
-                     "type":  "scanner_config",
-                     "version":  "v1.0.0",
-                     "description":  "Configuration file for honeycomb_scanner.py. Defines scanning logic, validation rules, and update triggers.",
-                     "created":  "2026-04-09",
-                     "name":  "Honeycomb Scanner Configuration",
-                     "module_id":  "SCANNER-CONFIG-001",
-                     "resonance":  "100%",
-                     "status":  "active",
-                     "priority":  "high",
-                     "tags":  [
-                                  "scanner",
-                                  "config",
-                                  "registry",
-                                  "automation"
-                              ]
-                 }
+    "git_integration": {
+        "require_token": true,
+        "push_enabled": true,
+        "auto_commit": true,
+        "commit_message_template": "Auto-scan: {timestamp}"
+    },
+    "validation": {
+        "strict_mode": false,
+        "recommended_meta_fields": [
+            "description",
+            "status",
+            "priority",
+            "tags"
+        ],
+        "resonance_threshold": "100%",
+        "required_identity_fields": [
+            "module_id",
+            "name",
+            "version",
+            "layer",
+            "type"
+        ],
+        "schema_path": "honeycombs/registry/schema.json",
+        "models_path": "honeycombs/registry/models.py",
+        "use_pydantic": true
+    },
+    "scanning_logic": {
+        "exclude_patterns": [
+            ".*",
+            "__*",
+            "*.log",
+            "*.tmp"
+        ],
+        "validation_rules": [
+            "v2_structure_check",
+            "required_fields_check",
+            "module_id_format_check"
+        ],
+        "depth": "recursive_all_levels",
+        "target_files": [
+            "index.json"
+        ],
+        "update_triggers": [
+            "new_honeycomb_detected",
+            "honeycomb_modified",
+            "content_hash_changed"
+        ]
+    },
+    "reporting": {
+        "reports_dir": "reports",
+        "generate_json": true,
+        "max_errors_in_summary": 10,
+        "generate_markdown": true
+    },
+    "identity": {
+        "updated": "2026-07-09",
+        "layer": "core",
+        "type": "scanner_config",
+        "version": "v1.1.0",
+        "description": "Configuration file for honeycomb_scanner.py. Defines scanning logic, validation rules, and update triggers.",
+        "created": "2026-04-09",
+        "name": "Honeycomb Scanner Configuration",
+        "module_id": "SCANNER-CONFIG-001",
+        "resonance": "100%",
+        "status": "active",
+        "priority": "high",
+        "tags": [
+            "scanner",
+            "config",
+            "registry",
+            "automation"
+        ]
+    }
 }
