@@ -1,6 +1,6 @@
 {
   "name": "Registry — Guide for AI",
-  "version": "v1.2.0",
+  "version": "v1.3.0",
   "created": "2026-07-08",
   "updated": "2026-07-09",
   "description": "A map for AI to understand the registry/ folder, its files, and how the scanner works.",
@@ -27,12 +27,14 @@
       "title": "File relationships",
       "flow": [
         "scanner.json (configuration) → scanner/core.py (reads on startup)",
-        "scanner/core.py (scan) → scanner/validators.py (runs Symbiosis Guard checks)",
+        "scanner/core.py (scan) → scanner/validators.py (runs TaskValidator, AhimsaFilter, DeadlineSentinel, IntegrityCheck)",
         "scanner/core.py (scan) → scanner/reporters.py (saves results)",
-        "scanner/reporters.py → scan_state.json (writes scan results)",
-        "scanner/reporters.py → registry.json (writes full registry)",
+        "scanner/reporters.py → scan_state.json (writes scan state with hashes and Symbiosis Guard summary)",
+        "scanner/reporters.py → registry.json (writes full registry with health status)",
         "scan_state.json (previous state) → scanner/core.py (reads for change detection)",
-        "registry.json → source of truth for system state"
+        "scanner/core.py → scanner/models.py (uses dataclasses for structured data)",
+        "registry.json → source of truth for system state",
+        "honeycomb_scanner.py (wrapper) → scanner/cli.py (entry point)"
       ]
     },
     "how_to_use": {
@@ -91,6 +93,28 @@
         "Paths in honeycomb_scanner.py have been updated to point to honeycombs/works/.",
         "TaskValidator and DeadlineSentinel now look for files in works/.",
         "registry/ core/ folder has been removed as it was unused."
+      ]
+    },
+    "architecture": {
+      "title": "Scanner Package Architecture (scanner/)",
+      "description": "The scanner is modularized into the following components:",
+      "components": {
+        "cli.py": "Command-line interface. Parses arguments and initializes HoneycombScanner.",
+        "core.py": "Core logic. Contains HoneycombScanner class with scan, validation, and change detection methods.",
+        "validators.py": "Symbiosis Guard checks: TaskValidator, AhimsaFilter, DeadlineSentinel, IntegrityCheck.",
+        "reporters.py": "Saves scan results to scan_state.json and registry.json.",
+        "models.py": "Dataclasses for structured data (Identity, Meta, Resonance, Health, etc.).",
+        "__init__.py": "Exports public API (HoneycombScanner, validators, models, main)."
+      },
+      "data_flow": [
+        "1. CLI parses args → calls HoneycombScanner",
+        "2. Core loads config (scanner.json) and previous state (scan_state.json)",
+        "3. Core scans all honeycombs (_recursive_scan → _analyze_honeycomb)",
+        "4. Core validates each honeycomb (_validate_v2_structure) and calculates hash",
+        "5. Core detects changes vs previous state (_detect_changes)",
+        "6. If --full-check or specific flags: Core runs Symbiosis Guard checks (validators.py)",
+        "7. Core saves results via reporters.py → scan_state.json and registry.json",
+        "8. Core prints summary"
       ]
     }
   }
