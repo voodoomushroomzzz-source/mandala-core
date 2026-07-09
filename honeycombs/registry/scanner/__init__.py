@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Scanner package for Mandala Symbiosis.
-Contains core scanning logic, validators, reporters, and CLI.
 """
 from .core import HoneycombScanner
 from .validators import TaskValidator, AhimsaFilter, DeadlineSentinel, IntegrityCheck

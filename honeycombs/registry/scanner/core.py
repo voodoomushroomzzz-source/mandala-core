@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from .validators import TaskValidator, AhimsaFilter, DeadlineSentinel, IntegrityCheck
 from .reporters import save_scan_state, save_registry
-from .models import HoneycombIndex
+from .models import HoneycombIndex, Identity, Meta
 
 class Colors:
     HEADER = '\033[95m'
@@ -73,7 +73,7 @@ class HoneycombScanner:
             with open(index_path, 'r', encoding='utf-8-sig') as f:
                 data = json.load(f)
             honeycomb_id = str(index_path.parent.relative_to(self.base_path))
-            self.honeycombs.append({"id": honeycomb_id, "path": str(index_path)})
+            self.honeycombs.append({"id": honeycomb_id, "path": str(index_path), "data": data})
             self.stats["total_scanned"] += 1
             print(f"[OK] {honeycomb_id}")
         except Exception as e:

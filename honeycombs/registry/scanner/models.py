@@ -1,64 +1,62 @@
 #!/usr/bin/env python3
 """
-Pydantic models for honeycomb index.json validation.
+Simple dataclass models for honeycomb index.json (no external dependencies).
 """
+from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
-from datetime import date
-from pydantic import BaseModel, Field, field_validator
-import re
 
-class Identity(BaseModel):
-    module_id: str = Field(..., pattern=r'^[A-Z0-9-]+$')
-    name: str = Field(..., min_length=1)
-    version: str = Field(..., pattern=r'^v\d+\.\d+\.\d+$')
-    created: Optional[date] = None
-    updated: Optional[date] = None
-    layer: int = Field(..., ge=1, le=5)
-    type: str = Field(..., pattern=r'^[a-z_]+$')
-    description: str = Field(..., min_length=1)
-    status: Optional[str] = Field(None, pattern=r'^(active|in_progress|archived|deprecated)$')
-    priority: Optional[str] = Field(None, pattern=r'^(critical|high|medium|low)$')
-    resonance: Optional[str] = Field(None, pattern=r'^\d+%$')
-    tags: Optional[List[str]] = None
+@dataclass
+class Identity:
+    module_id: str = ""
+    name: str = ""
+    version: str = ""
+    created: Optional[str] = None
+    updated: Optional[str] = None
+    layer: int = 0
+    type: str = ""
+    description: str = ""
+    status: Optional[str] = None
+    priority: Optional[str] = None
+    resonance: Optional[str] = None
+    tags: Optional[List[str]] = field(default_factory=list)
 
-    @field_validator('version')
-    def validate_version(cls, v):
-        if not re.match(r'^v\d+\.\d+\.\d+$', v):
-            raise ValueError(f'Version must be in format vX.Y.Z, got {v}')
-        return v
-
-class Meta(BaseModel):
-    description: str = Field(..., min_length=1)
+@dataclass
+class Meta:
+    description: str = ""
     audience: Optional[str] = None
     purpose: Optional[str] = None
     how_to_use: Optional[str] = None
-    change_requires: Optional[str] = Field(None, pattern=r'^(gardener_approval|sr_proposal|auto)$')
-    guardian_lock: Optional[bool] = False
-    total_size_kb: Optional[float] = Field(None, ge=0)
-    total_files: Optional[int] = Field(None, ge=0)
-    segments: Optional[int] = Field(None, ge=0)
+    change_requires: Optional[str] = None
+    guardian_lock: bool = False
+    total_size_kb: Optional[float] = None
+    total_files: Optional[int] = None
+    segments: Optional[int] = None
     parent_honeycomb: Optional[str] = None
     honeycomb_name: Optional[str] = None
-    resonance_with_awareness: Optional[str] = Field(None, pattern=r'^\d+%$')
-    status: Optional[str] = Field(None, pattern=r'^(active|in_progress|archived|deprecated)$')
-    priority: Optional[str] = Field(None, pattern=r'^(critical|high|medium|low)$')
+    resonance_with_awareness: Optional[str] = None
+    status: Optional[str] = None
+    priority: Optional[str] = None
 
-class Resonance(BaseModel):
-    status: Optional[str] = Field(None, pattern=r'^(fully_resonant|partial|critical)$')
-    with_boot: Optional[str] = Field(None, pattern=r'^\d+%$')
-    with_core_map: Optional[str] = Field(None, pattern=r'^\d+%$')
+@dataclass
+class Resonance:
+    status: Optional[str] = None
+    with_boot: Optional[str] = None
+    with_core_map: Optional[str] = None
 
-class Health(BaseModel):
-    status: Optional[str] = Field(None, pattern=r'^(healthy|warning|critical)$')
-    last_check: Optional[date] = None
+@dataclass
+class Health:
+    status: Optional[str] = None
+    last_check: Optional[str] = None
     notes: Optional[str] = None
 
-class RegistryStats(BaseModel):
-    total_blocks: Optional[int] = Field(None, ge=0)
-    total_testimonies: Optional[int] = Field(None, ge=0)
-    last_updated: Optional[date] = None
+@dataclass
+class RegistryStats:
+    total_blocks: Optional[int] = None
+    total_testimonies: Optional[int] = None
+    last_updated: Optional[str] = None
 
-class HoneycombIndex(BaseModel):
+@dataclass
+class HoneycombIndex:
     identity: Identity
     meta: Meta
     content: Optional[Dict[str, Any]] = None
