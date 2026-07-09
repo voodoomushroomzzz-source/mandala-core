@@ -1,0 +1,9 @@
+{
+  "seed_id": "SEED-20260709-180648-005",
+  "title": "NativeMEM: Native Memory Compression for Long-Horizon Robotic Manipulation",
+  "url": "https://arxiv.org/abs/2607.06678",
+  "description": "arXiv:2607.06678v1 Announce Type: new \nAbstract: How can pretrained Vision-Language-Action (VLA) models retain long-horizon visual histories with high-frequency updates without sacrificing efficiency? Existing approaches rely on external memory management, which restrains either the memory horizon or the reactiveness of pretrained policies. To this end, we present NativeMEM, a VLA policy that features long-term and real-time updated memory. At its core is an efficient memory encoding scheme, Nat",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-07-09T18:06:48.691835",
+  "status": "raw"
+}
