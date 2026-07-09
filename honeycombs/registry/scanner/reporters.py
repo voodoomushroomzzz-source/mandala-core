@@ -31,7 +31,7 @@ def save_scan_state(base_path: Path, honeycombs: List, stats: Dict, guard_result
         }
     }
     
-    if guard_results and (validate_tasks or ahimsa or deadlines or integrity):
+    if guard_results and (validate_tasks or ahimsa or deadlines or integrity or 'seed_count_validator' in guard_results):
 
         # Добавляем seeds_health
         if guard_results and 'seed_count_validator' in guard_results:
