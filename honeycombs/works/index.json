@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.4",
+    "version": "v1.0.5",
     "created": "2026-07-08",
     "updated": "2026-07-09",
     "layer": 1,
@@ -88,21 +88,21 @@
     "index": "This file (index.json) serves as the registry"
   },
   "manifest": {
-    "total_works": 14,
+    "total_works": 13,
     "by_status": {
-      "active": 9,
+      "active": 8,
       "planning": 3,
       "in_progress": 1,
       "done": 1
     },
     "by_horizon": {
       "strategic": 6,
-      "tactical": 9
+      "tactical": 7
     },
     "by_priority": {
       "critical": 2,
-      "high": 5,
-      "medium": 6,
+      "high": 4,
+      "medium": 5,
       "low": 2
     },
     "works_list": [
@@ -113,7 +113,6 @@
       "W-R-RM-013__symbiosis_guard",
       "W-R-RM-014__gardener_transition",
       "W-T-20260408-1030__gentle_companion_bot",
-      "W-T-20260410-0240__scout_agent",
       "W-T-20260417-HUMOR__humor_development",
       "W-T-20260418-SYM__sym_growth_system",
       "W-T-20260427-FLUTTER__flutter_app",
@@ -131,7 +130,7 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-07-08",
-    "notes": "Added manifest section with full work list and statistics. v1.0.1"
+    "last_check": "2026-07-09",
+    "notes": "v1.0.5: removed completed scout_agent task. Total works: 13."
   }
 }
