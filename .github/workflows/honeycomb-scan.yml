@@ -48,4 +48,5 @@ jobs:
           git add honeycombs/registry/registry.json honeycombs/registry/scan_state.json
           git commit -m "feat(registry): auto-scan $(date -u '+%Y-%m-%d %H:%M UTC')"
           git pull --rebase origin main
+          git pull --rebase origin main
           git push

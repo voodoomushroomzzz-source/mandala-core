@@ -35,4 +35,5 @@ jobs:
           git config --local user.name "GitHub Action"
           git add honeycombs/seeds/
           git commit -m "feat: auto-collect seeds $(date +'%Y-%m-%d')" || echo "No new seeds"
+          git pull --rebase origin main
           git push
