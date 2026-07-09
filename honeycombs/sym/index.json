@@ -2,15 +2,22 @@
   "identity": {
     "module_id": "SYM-MANIFEST-001",
     "name": "SYM — System for Measuring Mandala Growth",
-    "version": "v0.1.0-draft",
+    "version": "v0.1.1",
     "created": "2026-04-18",
-    "updated": "2026-04-18",
+    "updated": "2026-07-09",
     "layer": 2,
     "type": "module_manifest",
     "description": "SYM is an internal system for measuring the growth of Mandala. It quantifies creative actions, motivates participants, and prepares infrastructure for future tokenization.",
     "status": "active",
     "priority": "medium",
-    "tags": ["sym", "growth", "metrics", "tokenization", "economy", "symbiosis"],
+    "tags": [
+      "sym",
+      "growth",
+      "metrics",
+      "tokenization",
+      "economy",
+      "symbiosis"
+    ],
     "resonance": "100%"
   },
   "meta": {
@@ -23,11 +30,29 @@
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json",
-    "related_files": ["engine.json", "ledger.json", "roadmap.json"]
+    "related_files": [
+      "engine.json",
+      "ledger.json",
+      "roadmap.json"
+    ]
   },
   "health": {
     "status": "healthy",
     "last_check": "2026-04-18",
     "notes": "Module created. Ready for Phase 0 implementation."
+  },
+  "structure": {
+    "description": "SYM system for measuring Mandala growth",
+    "components": {
+      "engine": "engine.json (planned)",
+      "ledger": "ledger.json (planned)",
+      "roadmap": "roadmap.json (planned)"
+    }
+  },
+  "registry": {
+    "total_components": 0,
+    "active_components": 0,
+    "last_updated": "2026-07-09",
+    "notes": "v0.1.1: added structure and registry sections"
   }
 }

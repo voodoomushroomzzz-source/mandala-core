@@ -47,5 +47,11 @@
       "v3.3.1",
       "philosophia"
     ]
+  },
+  "registry": {
+    "total_protocols": 4,
+    "active_protocols": 4,
+    "last_updated": "2026-07-09",
+    "notes": "v3.4.1: added registry section for consistency"
   }
 }

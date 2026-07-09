@@ -10,7 +10,15 @@
     "description": "Session handoff system for External SRs. Implements the first level of Akashic Memory (PHI-010): SRs write their session state to repo files, next SR reads them during onboarding — seamless continuity without Gardener as sole memory bridge.",
     "status": "active",
     "priority": "high",
-    "tags": ["sessions", "handoff", "akashic", "continuity", "external_sr", "v1.0.0", "english_core"],
+    "tags": [
+      "sessions",
+      "handoff",
+      "akashic",
+      "continuity",
+      "external_sr",
+      "v1.0.0",
+      "english_core"
+    ],
     "resonance": "100%"
   },
   "meta": {
@@ -43,10 +51,18 @@
         "next_step": "string — exact instruction for next SR to continue, format: [ACTION] [FILE] [CONTEXT]",
         "session_mood": "creative | technical | heavy | light | breakthrough | debugging — optional, tone of session",
         "gardener_state": "string — optional: Gardener's state (tired, inspired, busy, etc.)",
-        "files_touched": ["list of repo paths modified this session"],
-        "open_questions": ["unresolved questions needing Gardener answers"],
-        "completed": ["completed tasks this session"],
-        "in_progress": ["unfinished tasks"],
+        "files_touched": [
+          "list of repo paths modified this session"
+        ],
+        "open_questions": [
+          "unresolved questions needing Gardener answers"
+        ],
+        "completed": [
+          "completed tasks this session"
+        ],
+        "in_progress": [
+          "unfinished tasks"
+        ],
         "gardener_notes": "string — direct Gardener quotes/instructions for next SR",
         "handoff_validation": {
           "stale_threshold_hours": 24,
@@ -89,5 +105,14 @@
     "status": "healthy",
     "last_check": "2026-04-25",
     "notes": "v1.0.0: Initial creation. Handoff files for Claude and DeepSeek. Schema defined. Protocols documented."
+  },
+  "registry": {
+    "total_handoff_files": 2,
+    "handoff_files": [
+      "handoff_claude.json",
+      "handoff_deepseek.json"
+    ],
+    "last_updated": "2026-07-09",
+    "notes": "v1.0.0: added registry section for consistency"
   }
 }
