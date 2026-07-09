@@ -1,7 +1,7 @@
 {
   "guide_id": "SCOUT-GUIDE-001",
   "name": "Scout Agent — SR Guide",
-  "version": "v1.0",
+  "version": "v1.1.0",
   "created": "2026-07-08",
   "description": "Руководство для SR по работе со Scout Agent",
   "sections": {
@@ -31,5 +31,17 @@
   "health": {
     "status": "active",
     "last_check": "2026-07-08"
-  }
+  },
+  "workflow": {
+    "description": "Двухэтапный сбор семян: сначала в inbox/, потом ручной перенос в корень",
+    "steps": [
+      "1. Сбор семян в honeycombs/seeds/inbox/",
+      "2. Автоматическая проверка на дубликаты (по url) с семенами в inbox/ и seeds/",
+      "3. Пропуск дубликатов с логированием в консоль",
+      "4. Ручной просмотр семян в папке inbox/",
+      "5. Перенос одобренных семян в корень seeds/, удаление остальных"
+    ],
+    "duplicate_check": "Проверка по полю url во всех JSON-файлах в папках inbox/ и seeds/"
+  },
+  "updated": "2026-07-09"
 }

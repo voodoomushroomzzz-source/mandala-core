@@ -5,10 +5,30 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+import json
+
+
+def is_duplicate(url):
+    """Проверяет, есть ли уже семя с таким url в inbox/ или seeds/"""
+    for folder in ["honeycombs/seeds/inbox", "honeycombs/seeds"]:
+        folder_path = Path(folder)
+        if not folder_path.exists():
+            continue
+        for file in folder_path.glob("*.json"):
+            try:
+                with open(file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    if data.get("url") == url:
+                        return True
+            except:
+                continue
+    return False
+
 
 # Загружаем конфиг
 CONFIG_PATH = Path(__file__).parent / "config.json"
-SEEDS_DIR = Path("honeycombs/seeds")
+SEEDS_DIR = Path("honeycombs/seeds/inbox")
+SEEDS_DIR.mkdir(parents=True, exist_ok=True)
 SEEDS_DIR.mkdir(parents=True, exist_ok=True)
 
 with open(CONFIG_PATH, 'r') as f:
@@ -62,6 +82,12 @@ def collect_rss(url):
 
 def save_seed(item, source_name):
     """Сохраняет семя в honeycombs/seeds/"""
+
+    # Проверка на дубликат
+    if is_duplicate(item["url"]):
+        print(f"⏭️ Пропущен дубликат: {item["title"][:50]}...")
+        return
+
     seed_id = get_seed_id()
     seed = {
         "seed_id": seed_id,
