@@ -2,15 +2,25 @@
   "identity": {
     "module_id": "INSTR-MOBILE-WORKFLOW-001",
     "name": "Mobile Workflow — Working with Mandala from Android",
-    "version": "v1.5.0",
+    "version": "v1.5.1",
     "created": "2026-04-12",
-    "updated": "2026-07-04",
+    "updated": "2026-07-09",
     "layer": 2,
     "type": "workflow_guide",
     "description": "Complete guide for External SR working from Android/Termux. v1.5.0: added patcher_method as equal deployment option.",
     "status": "active",
     "priority": "high",
-    "tags": ["mobile", "android", "termux", "git", "workflow", "guide", "copy-paste", "core_principles", "patcher"]
+    "tags": [
+      "mobile",
+      "android",
+      "termux",
+      "git",
+      "workflow",
+      "guide",
+      "copy-paste",
+      "core_principles",
+      "patcher"
+    ]
   },
   "golden_rule": {
     "title": "ONE COPY — ONE ACTION — FULL DEPLOY",
@@ -43,7 +53,13 @@
     "post_check_mandate": "CRITICAL. After patch, request updated file via API. WAIT for content. Read it. Confirm SHA and version. NEVER report success until file is received and verified.",
     "laconic_communication": "Responses must be concise. Avoid showing unnecessary code. Only output what Gardener needs to see or execute.",
     "copyable_links": "When providing URLs, wrap them in a code block with 'text' language (```text ... ```) so the 'Copy' button appears.",
-    "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the SAME command block."
+    "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the SAME command block.",
+    "post_check_via_link": {
+      "rule": "PRIORITY. ALWAYS perform post-check via DIRECT LINK (https://github.com/.../blob/...). This is the PRIMARY method. Reason: Direct link shows the actual file content from the current commit WITHOUT caching. API and Raw URLs may have 5-10 min delay or be cached. Direct link is ALWAYS up-to-date.",
+      "format": "```text\nhttps://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/{path}\n```",
+      "why": "GitHub web interface (blob) displays content from the current HEAD commit. No CDN, no cache, no delay. Instant and accurate.",
+      "fallback": "If direct link is unavailable, use API (api.github.com) as fallback to verify SHA and version."
+    }
   },
   "self_learning": {
     "reference": "External SR may propose learned rules. See honeycombs/instructions/mobile_workflow.json#learned_rules. Format: rule + context + bad/good examples. Gardener approval required before patching."

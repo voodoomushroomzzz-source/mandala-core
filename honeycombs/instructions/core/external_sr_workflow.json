@@ -35,7 +35,6 @@
         "why": "Large files time out or get truncated via API/raw URLs. PowerShell exit code + Render deploy log = sufficient confirmation."
       },
       "pre_check_via_raw": "ALWAYS pre-check via RAW URL (raw.githubusercontent.com) — bypasses CDN cache. API URLs have 5-10 min delay. Raw is instant.",
-      "post_check_via_api": "ALWAYS post-check via API (api.github.com) — returns SHA for verification. Raw may still be cached.",
       "report_last_updated": "ALWAYS report the file's last_updated/updated date when reading. Format: 'File: X, last updated: YYYY-MM-DD'. Gardener needs to know how fresh the data is.",
       "gentle_companion_note": "The production file on server is gentle_companion.py (modular build from honeycombs/fruits/gentle_companion/). NEVER patch gentle_companion.py directly — patch the MODULE files in honeycombs/fruits/gentle_companion/. CI rebuilds gentle_companion.py automatically.",
       "module_location": "Bot modules live in honeycombs/fruits/gentle_companion/ — config.py, store.py, github_api.py, helpers.py, ui.py, sr_prompts.py, sr_search.py, sr_context.py, sr_memory.py, handlers/tasks.py, handlers/features.py, handlers/system.py, sr_conversation.py, main.py. Read honeycombs/fruits/gentle_companion/index.json for full architecture map.",
@@ -47,6 +46,12 @@
         "format": "```text\nhttps://...\n```",
         "exceptions": "NONE. Every single URL — including API links, raw URLs, GitHub links — MUST be in a copyable block.",
         "why": "Mobile interface (Telegram/Web) shows a 'Copy' button ONLY for code blocks with a language tag. No tag = no button = manual selection = mistakes."
+      },
+      "post_check_via_link": {
+        "rule": "PRIORITY. ALWAYS perform post-check via DIRECT LINK (https://github.com/.../blob/...). This is the PRIMARY method. Reason: Direct link shows the actual file content from the current commit WITHOUT caching. API and Raw URLs may have 5-10 min delay or be cached. Direct link is ALWAYS up-to-date.",
+        "format": "```text\nhttps://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/{path}\n```",
+        "why": "GitHub web interface (blob) displays content from the current HEAD commit. No CDN, no cache, no delay. Instant and accurate.",
+        "fallback": "If direct link is unavailable, use API (api.github.com) as fallback to verify SHA and version."
       }
     },
     "powershell_examples": {
@@ -337,7 +342,7 @@
     "updated": "2026-07-09",
     "layer": 2,
     "type": "workflow_guide",
-    "version": "v1.7.1",
+    "version": "v1.7.2",
     "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule.",
     "created": "2026-04-09",
     "name": "External SR Workflow",
