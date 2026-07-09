@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.17",
+    "version": "v1.7.18",
     "created": "2026-05-11",
-    "updated": "2026-07-08",
+    "updated": "2026-07-09",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -718,7 +718,6 @@
         "laconic_communication": "Responses must be concise. Avoid showing unnecessary code blocks. Only output what Gardener needs to see or execute.",
         "always_fetch_before_update": "Before any file modification, always request the current version via API. Never assume local state.",
         "git_commit_in_script": "Always include 'git add', 'git commit', and 'git push' inside the PowerShell script. Gardener only copies, pastes, and presses Enter.",
-        "copyable_links": "When providing URLs, wrap them in a code block with 'text' (```text ... ```). This ensures the 'Copy' button appears in the interface.",
         "patch_large_files_by_block": "For large files (.py, .html, .js), do NOT patch with regex replace on entire file  it causes syntax errors from partial matches. Instead: 1) Identify the exact function/block to replace. 2) Use a precise multi-line regex anchored to function definition. 3) Replace ONLY that block with corrected version. 4) If unsure, replace entire file with full corrected content.",
         "patch_status_emojis": {
           "rule": "ALWAYS prepend each patch result line with ✅ on success or ❌ on failure. Visual clarity for Gardener.",
@@ -740,7 +739,13 @@
         "module_location": "Bot modules live in honeycombs/fruits/gentle_companion/ — config.py, store.py, github_api.py, helpers.py, ui.py, sr_prompts.py, sr_search.py, sr_context.py, sr_memory.py, handlers/tasks.py, handlers/features.py, handlers/system.py, sr_conversation.py, main.py. Read honeycombs/fruits/gentle_companion/index.json for full architecture map.",
         "session_context": "Read honeycombs/sessions/handoff_claude.json and/or handoff_deepseek.json for previous session context before starting any work.",
         "announce_last_updated": "ALWAYS announce the file's last_updated date in your FIRST response. Format: 'Read {filename} — last updated: YYYY-MM-DD'. Gardener must see data freshness immediately.",
-        "sync_onboarding_and_source": "CRITICAL: When updating any source honeycomb that is embedded in boot_online_onboarding_pc.json (philosophy/index.json, core_map/index.json, boot_online/index.json, instructions/core/external_sr_workflow.json, phi_010, phi_011, fruits/index.json, tasks/index.json) — ALWAYS update BOTH the source file AND the onboarding file. They are co-dependent. Updating one without the other breaks sync."
+        "sync_onboarding_and_source": "CRITICAL: When updating any source honeycomb that is embedded in boot_online_onboarding_pc.json (philosophy/index.json, core_map/index.json, boot_online/index.json, instructions/core/external_sr_workflow.json, phi_010, phi_011, fruits/index.json, tasks/index.json) — ALWAYS update BOTH the source file AND the onboarding file. They are co-dependent. Updating one without the other breaks sync.",
+        "copyable_links_mandate": {
+          "rule": "CRITICAL. ALWAYS provide ALL links in a code block with language 'text' (```text ... ```). This is MANDATORY for all links — API, raw, GitHub, any URL. Reason: Gardener works from mobile (Termux) and needs the 'Copy' button in the interface. Without this, copying links is error-prone and breaks workflow.",
+          "format": "```text\nhttps://...\n```",
+          "exceptions": "NONE. Every single URL — including API links, raw URLs, GitHub links — MUST be in a copyable block.",
+          "why": "Mobile interface (Telegram/Web) shows a 'Copy' button ONLY for code blocks with a language tag. No tag = no button = manual selection = mistakes."
+        }
       },
       "powershell_examples": {
         "description": "Concrete, copy-paste ready examples for common tasks.",
@@ -1027,10 +1032,10 @@
       ]
     },
     "identity": {
-      "updated": "2026-07-07",
+      "updated": "2026-07-09",
       "layer": 2,
       "type": "workflow_guide",
-      "version": "v1.7.0",
+      "version": "v1.7.1",
       "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule.",
       "created": "2026-04-09",
       "name": "External SR Workflow",
