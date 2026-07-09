@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.26",
+    "version": "v1.7.27",
     "created": "2026-05-11",
     "updated": "2026-07-09",
     "layer": 1,
@@ -1884,9 +1884,9 @@
       "identity": {
         "module_id": "WORKS-MANIFEST-001",
         "name": "Works — Unified System of Work Items",
-        "version": "v1.0.5",
+        "version": "v1.0.6",
         "created": "2026-07-08",
-        "updated": "2026-07-09",
+        "updated": "2026-07-10",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items (tasks, roadmaps, initiatives). Replaces separate tasks/ and roadmaps/.",
@@ -1970,21 +1970,21 @@
         "index": "This file (index.json) serves as the registry"
       },
       "manifest": {
-        "total_works": 13,
+        "total_works": 12,
         "by_status": {
           "active": 8,
           "planning": 3,
-          "in_progress": 1,
+          "in_progress": 0,
           "done": 1
         },
         "by_horizon": {
-          "strategic": 6,
+          "strategic": 5,
           "tactical": 7
         },
         "by_priority": {
           "critical": 2,
           "high": 4,
-          "medium": 5,
+          "medium": 4,
           "low": 2
         },
         "works_list": [
@@ -1992,7 +1992,6 @@
           "W-R-RC-002__company_vessel",
           "W-R-RM-011__merkaba_visualizations",
           "W-R-RM-012__living_products_mvps",
-          "W-R-RM-013__symbiosis_guard",
           "W-R-RM-014__gardener_transition",
           "W-T-20260408-1030__gentle_companion_bot",
           "W-T-20260417-HUMOR__humor_development",
@@ -2012,8 +2011,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-09",
-        "notes": "v1.0.5: removed completed scout_agent task. Total works: 13."
+        "last_check": "2026-07-10",
+        "notes": "v1.0.6: removed completed RM-013 (Symbiosis Guard). Total works: 12."
       }
     }
   },
