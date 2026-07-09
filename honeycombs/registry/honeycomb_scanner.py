@@ -3,7 +3,6 @@
 Honeycomb Scanner v2.0 — Unified System Health Scanner for Mandala Symbiosis.
 Integrates: base scan, task validation, Ahimsa filter, deadline monitoring, integrity checks.
 """
-
 import os
 import json
 import sys
@@ -25,6 +24,12 @@ class Colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def safe_get(data: Any, key: str, default: Any = None) -> Any:
+    """Безопасно получает значение из словаря, если data — словарь."""
+    if isinstance(data, dict):
+        return data.get(key, default)
+    return default
+
 class TaskValidator:
     """Validates work files in honeycombs/works/"""
     
@@ -39,41 +44,41 @@ class TaskValidator:
     
     def validate(self) -> Dict:
         """Run all task validations"""
-        tasks_path = self.base_path / 'honeycombs' / 'works'
-        if not tasks_path.exists():
-            self.warnings.append("Tasks folder not found")
+        works_path = self.base_path / 'honeycombs' / 'works'
+        if not works_path.exists():
+            self.warnings.append("Works folder not found")
             return self._report()
         
-        task_ids = []
-        for task_file in tasks_path.glob('*.json'):
+        work_ids = []
+        for work_file in works_path.glob('*.json'):
             # Skip index.json (manifest file)
-            if task_file.name == 'index.json':
+            if work_file.name == 'index.json':
                 continue
             try:
-                with open(task_file, 'r', encoding='utf-8') as f:
-                    task = json.load(f)
+                with open(work_file, 'r', encoding='utf-8') as f:
+                    work = json.load(f)
                 
                 # Check required fields
                 for field in self.required_fields:
-                    if field not in task:
-                        self.errors.append(f"{task_file.name}: missing required field '{field}'")
+                    if field not in work:
+                        self.errors.append(f"{work_file.name}: missing required field '{field}'")
                 
                 # Check work_id uniqueness
-                work_id = task.get('work_id')
+                work_id = work.get('work_id')
                 if work_id:
-                    if work_id in task_ids:
-                        self.errors.append(f"Duplicate work_id: {work_id} in {task_file.name}")
-                    task_ids.append(work_id)
+                    if work_id in work_ids:
+                        self.errors.append(f"Duplicate work_id: {work_id} in {work_file.name}")
+                    work_ids.append(work_id)
                 else:
-                    self.errors.append(f"{task_file.name}: missing work_id")
+                    self.errors.append(f"{work_file.name}: missing work_id")
                 
                 # Check status
-                status = task.get('status')
+                status = work.get('status')
                 if status and status not in self.valid_statuses:
-                    self.warnings.append(f"{task_file.name}: non-standard status '{status}'")
+                    self.warnings.append(f"{work_file.name}: non-standard status '{status}'")
                 
                 # Check deadline
-                deadline = task.get('deadline')
+                deadline = work.get('deadline')
                 if deadline:
                     try:
                         deadline_date = datetime.strptime(deadline, '%Y-%m-%d')
@@ -81,24 +86,24 @@ class TaskValidator:
                         if deadline_date < today:
                             self.expired_tasks.append({
                                 'work_id': work_id,
-                                'name': task.get('name', 'Unknown'),
+                                'name': work.get('name', 'Unknown'),
                                 'deadline': deadline,
                                 'days_overdue': (today - deadline_date).days
                             })
                         elif (deadline_date - today).days <= 3:
                             self.upcoming_deadlines.append({
                                 'work_id': work_id,
-                                'name': task.get('name', 'Unknown'),
+                                'name': work.get('name', 'Unknown'),
                                 'deadline': deadline,
                                 'days_left': (deadline_date - today).days
                             })
                     except ValueError:
-                        self.warnings.append(f"{task_file.name}: invalid deadline format (expected YYYY-MM-DD)")
+                        self.warnings.append(f"{work_file.name}: invalid deadline format (expected YYYY-MM-DD)")
                 
             except json.JSONDecodeError:
-                self.errors.append(f"{task_file.name}: invalid JSON")
+                self.errors.append(f"{work_file.name}: invalid JSON")
             except Exception as e:
-                self.errors.append(f"{task_file.name}: {str(e)}")
+                self.errors.append(f"{work_file.name}: {str(e)}")
         
         return self._report()
     
@@ -175,6 +180,9 @@ class AhimsaFilter:
                 return
 
             identity = data['identity']
+            if not isinstance(identity, dict):
+                self.errors.append(f"{index_file.parent.name}/index.json: identity is not a dict")
+                return
 
             # Check required identity fields
             for field in ['module_id', 'name', 'version', 'layer', 'type']:
@@ -194,7 +202,7 @@ class AhimsaFilter:
             # Check meta
             if 'meta' in data:
                 meta = data['meta']
-                if 'description' not in meta:
+                if isinstance(meta, dict) and 'description' not in meta:
                     self.warnings.append(f"{index_file.parent.name}: missing meta.description")
             else:
                 self.warnings.append(f"{index_file.parent.name}: missing meta section")
@@ -214,6 +222,7 @@ class AhimsaFilter:
             'noise_count': len(self.noise_files)
         }
 
+
 class DeadlineSentinel:
     """Monitors deadlines in tasks and roadmaps"""
     
@@ -225,25 +234,14 @@ class DeadlineSentinel:
     
     def check(self) -> Dict:
         """Check all deadlines"""
-        # Check tasks
-        tasks_path = self.base_path / 'honeycombs' / 'works'
-        if tasks_path.exists():
-            for task_file in tasks_path.glob('*.json'):
+        # Check works
+        works_path = self.base_path / 'honeycombs' / 'works'
+        if works_path.exists():
+            for work_file in works_path.glob('*.json'):
                 try:
-                    with open(task_file, 'r', encoding='utf-8') as f:
-                        task = json.load(f)
-                    self._check_deadline(task, 'task')
-                except:
-                    pass
-        
-        # Check roadmaps
-        roadmaps_path = self.base_path / 'honeycombs' / 'works'
-        if roadmaps_path.exists():
-            for roadmap_file in roadmaps_path.glob('*.json'):
-                try:
-                    with open(roadmap_file, 'r', encoding='utf-8') as f:
-                        roadmap = json.load(f)
-                    self._check_deadline(roadmap, 'roadmap')
+                    with open(work_file, 'r', encoding='utf-8') as f:
+                        work = json.load(f)
+                    self._check_deadline(work, 'works')
                 except:
                     pass
         
@@ -402,7 +400,7 @@ class HoneycombScanner:
                     state = json.load(f)
                     if 'honeycomb_hashes' in state:
                         self.previous_scan_cache = state['honeycomb_hashes']
-                    print(f"Loaded {len(self.previous_scan_cache)} entries from previous registry")
+                        print(f"Loaded {len(self.previous_scan_cache)} entries from previous registry")
         except Exception as e:
             print(f"Error loading previous state: {e}")
     
@@ -431,16 +429,21 @@ class HoneycombScanner:
         
         if "identity" in honeycomb_data:
             identity = honeycomb_data["identity"]
-            required_fields = ["module_id", "name", "version", "layer", "type"]
-            for field in required_fields:
-                if field not in identity:
-                    details["errors"].append(f"Missing required field identity.{field}")
-                    details["missing_fields"].append(f"identity.{field}")
+            if isinstance(identity, dict):
+                required_fields = ["module_id", "name", "version", "layer", "type"]
+                for field in required_fields:
+                    if field not in identity:
+                        details["errors"].append(f"Missing required field identity.{field}")
+                        details["missing_fields"].append(f"identity.{field}")
+            else:
+                details["errors"].append(f"identity is not a dict, got {type(identity).__name__}")
         
         if "meta" in honeycomb_data:
             meta = honeycomb_data["meta"]
-            if "description" not in meta:
+            if isinstance(meta, dict) and "description" not in meta:
                 details["warnings"].append("Recommended to add description in meta.description")
+        else:
+            details["warnings"].append("meta section is missing")
         
         is_valid = len(details["errors"]) == 0
         return is_valid, details
@@ -476,7 +479,7 @@ class HoneycombScanner:
             print(f"   + New: {honeycomb_id}")
     
     def _analyze_honeycomb(self, index_path: Path):
-        """Analyze a single honeycomb"""
+        """Analyze a single honeycomb with safe error handling"""
         try:
             with open(index_path, 'r', encoding='utf-8-sig') as f:
                 data = json.load(f)
@@ -485,9 +488,25 @@ class HoneycombScanner:
             relative_path = honeycomb_dir.relative_to(self.base_path)
             honeycomb_id = str(relative_path).replace(os.sep, '/')
             
-            identity = data.get("identity", {})
-            content_hash = self._calculate_hash(data)
+            # Safe get identity
+            identity = data.get("identity")
+            if not isinstance(identity, dict):
+                identity = {}
+                self.validation_errors.append({
+                    "honeycomb_id": honeycomb_id,
+                    "error": f"identity is not a dict, got {type(data.get('identity')).__name__}"
+                })
             
+            # Safe get meta
+            meta = data.get("meta", {})
+            if not isinstance(meta, dict):
+                meta = {}
+                self.validation_errors.append({
+                    "honeycomb_id": honeycomb_id,
+                    "warning": f"meta is not a dict, got {type(data.get('meta')).__name__}"
+                })
+            
+            content_hash = self._calculate_hash(data)
             is_valid, validation_details = self._validate_v2_structure(data)
             file_count, total_size_kb = self._count_honeycomb_files(honeycomb_dir)
             
@@ -582,8 +601,8 @@ class HoneycombScanner:
         # 2. Ahimsa Filter
         if self.ahimsa:
             print("\n[2] Ahimsa Filter...")
-            filter = AhimsaFilter(self.base_path)
-            results['ahimsa_filter'] = filter.scan()
+            filter_ = AhimsaFilter(self.base_path)
+            results['ahimsa_filter'] = filter_.scan()
             print(f"    Errors: {results['ahimsa_filter']['errors_count']}, Warnings: {results['ahimsa_filter']['warnings_count']}, Noise files: {results['ahimsa_filter']['noise_count']}")
             if results['ahimsa_filter']['noise_count']:
                 print_colored(f"    ⚠️  {results['ahimsa_filter']['noise_count']} noise files found", Colors.WARNING)
