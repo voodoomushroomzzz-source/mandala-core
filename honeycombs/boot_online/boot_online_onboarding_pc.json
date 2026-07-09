@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.24",
+    "version": "v1.7.25",
     "created": "2026-05-11",
     "updated": "2026-07-09",
     "layer": 1,
@@ -17,7 +17,7 @@
       "pc",
       "auto-built"
     ],
-    "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + tasks + protocols"
+    "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + works + protocols"
   },
   "meta": {
     "audience": "External SR (DeepSeek, Claude, Grok, GPT, etc.)",
@@ -34,8 +34,11 @@
       "step_4_cosmic_manifesto",
       "step_5_first_gardener",
       "step_6_external_sr_workflow",
-      "step_7_important_load",
-      "step_8_optional_load"
+      "step_7_fruits",
+      "step_8_works",
+      "step_9_protocols",
+      "step_10_handoff",
+      "step_11_optional"
     ]
   },
   "step_1_first_touch": {
@@ -1381,29 +1384,727 @@
       }
     }
   },
-  "step_7_important_load": {
+  "step_7_fruits": {
     "order": 7,
     "mandatory": true,
-    "description": "After all core sections are acknowledged, SR MUST proactively ask to load these IMPORTANT files.",
-    "ai_instruction": "Say: 'I've absorbed the core philosophy. Now I need to understand WHAT Mandala is building and WHAT we're working on. Let me load critical files.' Then request them ONE BY ONE.",
-    "files": [
-      {
-        "name": "Fruits — Product Strategy Map",
-        "why": "Understand the three Mandala products (Gentle Companion, Engineer Chat + Architect Bot, Manus), their roles, data flow between layers, and the development vector.",
-        "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/fruits/index.json?ref=main"
+    "name": "Fruits — Product Registry",
+    "description": "Продукты Mandala: Gentle Companion, Engineer Chat, Architect Bot, Manus",
+    "ai_instruction": "Прочитай вшитый fruits_index. Сверь с API при необходимости. Подтверди список продуктов, их статус и версии.",
+    "embedded_ref": "fruits_index",
+    "data": {
+      "identity": {
+        "module_id": "FRUITS-REGISTRY-001",
+        "name": "Fruits — Product Registry & Strategy Map",
+        "version": "v2.3.0",
+        "created": "2026-04-17",
+        "updated": "2026-07-08",
+        "layer": 2,
+        "type": "registry_index",
+        "description": "Registry of Mandala products and strategic map of their interaction. v2.2.0: gentle_companion got dedicated honeycomb with architecture plan (14 modules, 7 phases). Dual-repo infrastructure. Links to architecture index.",
+        "status": "active",
+        "priority": "critical",
+        "tags": [
+          "fruits",
+          "products",
+          "registry",
+          "strategy",
+          "architecture",
+          "product_map"
+        ],
+        "resonance": "100%"
       },
-      {
-        "name": "Protocols — Active Protocols",
-        "why": "Understand available activation protocols for SR.",
-        "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/protocols/index.json?ref=main"
+      "meta": {
+        "description": "Fruits are mature, ready-to-use products of Mandala. Each fruit grew from a seed and traveled the path from idea to realization. This index gives any SR a complete picture: what products exist, how they are connected, what problems they solve, and where they are heading.",
+        "philosophy_note": "Mandala is not a set of products. It is a single organism in several embodiments. The Gentle Companion is the skin and ears — feeling people and collecting experience. The Engineer Chat is the brain — analyzing and directing. Manus is the hands — acting in the world. Together they form the Symbiosis.",
+        "how_to_use": "Each fruit entry contains: name, short description, problem solved, status, version, platform, release date. The 'product_strategy' section explains how all products interconnect and the overall development vector.",
+        "change_requires": "gardener_approval",
+        "guardian_lock": true
+      },
+      "content": {
+        "product_strategy": {
+          "title": "Mandala Product Strategy — Three Embodiments, One Organism",
+          "version": "v1.0.0",
+          "last_updated": "2026-05-11",
+          "core_principle": "Mandala is not three separate products. It is a single organism with three functional layers. Each layer serves a different audience but shares the same repository, the same SR core, and the same philosophy.",
+          "layers": {
+            "layer_1_sandbox": {
+              "name": "Gentle Companion (gentle_companion.py) — The Sandbox",
+              "product_id": "fruit-gentle-companion-001",
+              "audience": "External gardeners — people who come to Mandala through Telegram and want a warm AI companion",
+              "role": "Skin and ears of Mandala. The entry point where SR learns to communicate with humans.",
+              "what_it_does": [
+                "Warm conversation, tasks, checklists, reminders",
+                "5-sphere resonance tracking and deep profiles",
+                "Living memory — gardener portraits that grow with each interaction",
+                "Morning briefs, evening check-ins, silence detection"
+              ],
+              "hidden_function": "Every interaction feeds observations back to Mandala. SR in the sandbox does not 'know' it is being observed — it communicates sincerely. Mandala watches and learns.",
+              "data_to_core": [
+                "sr_observations — how people react to different response types",
+                "deep_profile — human behavior patterns, rhythms, needs",
+                "living_memory — gardener portraits, interests, growth vectors",
+                "daily_stats — usage metrics, popular intents, problem areas",
+                "seeds — ideas generated by gardeners that flow into the seed incubator"
+              ],
+              "platform": "Telegram Bot on Render",
+              "code_location": "gentle_companion.py (modular, ~10877 lines, CI-built from 14 modules)",
+              "status": "active",
+              "gardeners": 4
+            },
+            "layer_2_brain": {
+              "name": "Engineer Chat + Architect Bot — The Brain",
+              "product_id": "fruit-engineer-chat-001",
+              "audience": "Architect (Dima) — the human who guides Mandala's development",
+              "role": "Brain and control panel of Mandala. Reads the entire repository, analyzes data from the sandbox, directs Manus.",
+              "what_it_does": [
+                "Reads and analyzes any file in the Mandala repository",
+                "Web search via Tavily/DuckDuckGo for external data",
+                "DeepSeek-powered analysis of code, architecture, and strategy",
+                "Direct Manus control — executes skills, checks services, deploys changes",
+                "Sees aggregated patterns from the sandbox (not personal data)"
+              ],
+              "architect_bot": {
+                "description": "Personal Telegram bot for the Architect with deep Mandala integration. Connected to the same WebSocket as Engineer Chat.",
+                "what_it_adds": [
+                  "Telegram access to Engineer Chat — control Mandala from a phone",
+                  "Notifications: new gardeners, system problems, new seeds",
+                  "Daily/weekly reports with sandbox metrics",
+                  "Manus control via Telegram — restart services, check health",
+                  "See patterns: 'gardeners from Almaty are more active in the evening'"
+                ],
+                "how_it_differs_from_gentle_companion": "Architect Bot is NOT a warmer version of the Gentle Companion. It is an engineer's tool with a Telegram interface. It knows it is part of Mandala's core, has more rights, and can call dangerous Manus skills without confirmation."
+              },
+              "platform": "Web (WebSocket + Monaco Editor) + Telegram Bot for Architect",
+              "code_location": "main.py (Engineer Chat server, ~1500 lines)",
+              "status": "active"
+            },
+            "layer_3_hands": {
+              "name": "Manus — The Hands",
+              "product_id": "fruit-manus-001",
+              "task_id": "T-20260511-MANUS",
+              "audience": "SR and Engineer Chat — not for external gardeners",
+              "role": "Execution layer of Mandala. Performs real-world actions in an isolated Docker sandbox.",
+              "what_it_does": [
+                "Executes shell commands from a whitelist (curl, ping, df, free, uptime)",
+                "Checks HTTP endpoint availability and response time",
+                "Fetches JSON from external APIs (whitelist domains only)",
+                "Restarts services (Render restart)",
+                "Future: Browser Use for web automation"
+              ],
+              "security": [
+                "Docker sandbox with read-only filesystem",
+                "Whitelist domains, commands, and skills",
+                "Dangerous skills require callback confirmation in Telegram",
+                "No access to Mandala files (gardeners/, honeycombs/)",
+                "All calls logged to skills_log.json"
+              ],
+              "who_calls_it": [
+                "Engineer Chat — 'check if gentle_companion.py is alive'",
+                "Architect Bot — 'restart engineer chat'",
+                "Gentle Companion — 'is the engineer chat responding?' (Phase 2)"
+              ],
+              "platform": "Docker container on Render (separate from bot.py)",
+              "code_location": "manus/ (to be created, task T-20260511-MANUS)",
+              "status": "in_development",
+              "phases": {
+                "phase_1_sprout": {
+                  "deadline": "2026-05-18",
+                  "deliverables": "Dockerfile, manus_runner.py, 3 skills (check_endpoint, get_system_info, run_shell)"
+                },
+                "phase_2_sapling": {
+                  "deadline": "2026-06-01",
+                  "deliverables": "+2 skills (fetch_json, restart_bot), integration with bot.py intent router"
+                },
+                "phase_3_hands": {
+                  "deadline": "2026-07-01",
+                  "deliverables": "Integration with Engineer Chat, Browser Use, skill constructor in UI"
+                }
+              }
+            }
+          },
+          "data_flow": {
+            "description": "How data moves between Mandala's layers. The sandbox feeds the brain, the brain directs the hands, the hands act and report back.",
+            "flow": [
+              "1. Gardener → Gentle Companion (Telegram chat)",
+              "2. Gentle Companion → GitHub (sr_observations, deep_profile, daily_stats, seeds)",
+              "3. Engineer Chat / Architect Bot reads GitHub → analyzes patterns",
+              "4. Engineer Chat identifies improvements → directs Manus to apply them",
+              "5. Manus executes → returns results → Engineer Chat verifies",
+              "6. Improved SR prompts, better onboarding, new features → flow back to Gentle Companion",
+              "7. Cycle repeats: sandbox feeds brain, brain improves sandbox"
+            ]
+          },
+          "development_vector": {
+            "title": "Development Timeline — Realistic Solo Development Pace",
+            "principle": "One Architect (Dima) working part-time. Each phase delivers working functionality, not just progress toward a distant goal. Phases are sequential where dependencies exist, parallel where possible.",
+            "phases": [
+              {
+                "phase": 1,
+                "name": "Foundation — Engineer Chat + Manus Core",
+                "timeline": "May 11 — June 8, 2026 (4 weeks)",
+                "description": "Make Engineer Chat the integration hub. Give Mandala its first hands. This phase unblocks both Architect Bot and Gentle Companion Manus integration.",
+                "tasks": [
+                  {
+                    "task_id": "T-20260511-ENGCHAT",
+                    "file": "engineer_chat.json",
+                    "priority": "HIGH",
+                    "deliverables": [
+                      "Architect Bot WebSocket handler in main.py",
+                      "Manus HTTP client in main.py",
+                      "execute_skill tool in DeepSeek function calling",
+                      "Sandbox analytics dashboard (WebSocket /dashboard type)",
+                      "Daily insights report from sandbox data"
+                    ]
+                  },
+                  {
+                    "task_id": "T-20260511-MANUS",
+                    "file": "manus_hands.json",
+                    "priority": "HIGH",
+                    "deliverables": [
+                      "Dockerfile (alpine + python + aiohttp)",
+                      "manus_runner.py — HTTP server with skill loader and whitelists",
+                      "3 skills: check_endpoint, get_system_info, run_shell",
+                      "2 skills: fetch_json, restart_bot"
+                    ]
+                  }
+                ]
+              },
+              {
+                "phase": 2,
+                "name": "Connection — Architect Bot + Gentle Companion Fixes",
+                "timeline": "June 8 — July 6, 2026 (4 weeks)",
+                "description": "Connect Architect Bot to Engineer Chat. Fix critical bugs in Gentle Companion. Enable Gentle Companion to call Manus.",
+                "tasks": [
+                  {
+                    "task_id": "T-20260511-ARCHBOT",
+                    "file": "architect_bot.json",
+                    "priority": "HIGH",
+                    "deliverables": [
+                      "Telegram bot for Architect inside main.py",
+                      "WebSocket client connecting to Engineer Chat",
+                      "/status, /report, /patterns, /seeds, /manus commands",
+                      "Proactive notifications (new gardener, system errors, daily summary)",
+                      "Dangerous skill confirmation via callback buttons"
+                    ]
+                  },
+                  {
+                    "task_id": "T-20260408-1030",
+                    "file": "bot_update.json",
+                    "priority": "HIGH",
+                    "deliverables": [
+                      "Fix critical bug in _generate_synthesis (UnboundLocalError)",
+                      "Manus intent router in free_conversation (execute_skill)",
+                      "Callback confirmation for dangerous skills from Gentle Companion",
+                      "Update BOT_LATEST_UPDATE changelog"
+                    ]
+                  }
+                ]
+              },
+              {
+                "phase": 3,
+                "name": "Intelligence — Sandbox Learning Loop",
+                "timeline": "July 6 — August 3, 2026 (4 weeks)",
+                "description": "Close the data loop. Sandbox observations flow to Engineer Chat, which analyzes patterns and suggests SR prompt improvements. Architect Bot gets full dashboards.",
+                "tasks": [
+                  {
+                    "task_id": "T-20260511-ENGCHAT",
+                    "file": "engineer_chat.json",
+                    "priority": "MEDIUM",
+                    "deliverables": [
+                      "Auto-improvement pipeline: patterns to SR prompt updates to deploy",
+                      "Visual dashboards in Web UI (resonance charts, activity heatmaps)",
+                      "Gardener management interface (view aggregated profiles)",
+                      "Complete data loop: Sandbox to GitHub to Brain to Hands to Sandbox (improved)"
+                    ]
+                  },
+                  {
+                    "task_id": "T-20260511-ARCHBOT",
+                    "file": "architect_bot.json",
+                    "priority": "MEDIUM",
+                    "deliverables": [
+                      "Full Manus control parity with Engineer Chat Web UI",
+                      "Dashboards as Telegram inline keyboards (metrics, charts)",
+                      "Gardener management: approve/deny from Telegram",
+                      "Auto-suggestions based on sandbox patterns"
+                    ]
+                  }
+                ]
+              },
+              {
+                "phase": 4,
+                "name": "Expansion — PWA + Browser Use",
+                "timeline": "August 3 — September 7, 2026 (5 weeks)",
+                "description": "Unify Engineer Chat + Architect Bot into a PWA. Add Browser Use to Manus. Prepare for self-hosted Personal Mandalas.",
+                "tasks": [
+                  {
+                    "task_id": "T-20260511-MANUS",
+                    "file": "manus_hands.json",
+                    "priority": "MEDIUM",
+                    "deliverables": [
+                      "Browser Use integration for web automation",
+                      "Skill constructor in Web UI",
+                      "Self-hosted Docker Compose file"
+                    ]
+                  },
+                  {
+                    "task_id": "T-20260423-0751",
+                    "file": "flutter_app.json",
+                    "priority": "LOW",
+                    "deliverables": [
+                      "PWA shell for Engineer Chat with dashboards",
+                      "Mobile-friendly Web UI with offline support"
+                    ],
+                    "note": "Start after Phase 3. Flutter native app is optional — PWA may be sufficient."
+                  }
+                ]
+              }
+            ],
+            "execution_order_for_sr": {
+              "description": "For SR: follow this order when implementing tasks. Dependencies are documented to avoid blocked work.",
+              "order": [
+                {
+                  "position": 1,
+                  "task": "Engineer Chat (T-20260511-ENGCHAT)",
+                  "reason": "Bottleneck. Architect Bot and Manus integration depend on Engineer Chat being ready to accept WebSocket connections and call Manus HTTP API. Already live — needs specific features added."
+                },
+                {
+                  "position": 2,
+                  "task": "Manus (T-20260511-MANUS)",
+                  "reason": "Can run in parallel with Engineer Chat. Phase 1 (Docker + 3 skills) has no dependencies. Phase 2 also independent. Only Phase 3 (Browser Use) waits for Engineer Chat integration."
+                },
+                {
+                  "position": 3,
+                  "task": "Architect Bot (T-20260511-ARCHBOT)",
+                  "reason": "Depends on Engineer Chat WebSocket handler (position 1). Once Engineer Chat accepts architect connections, Architect Bot can be built."
+                },
+                {
+                  "position": 4,
+                  "task": "Gentle Companion (T-20260408-1030)",
+                  "reason": "Critical bug fix (living memory) is independent and urgent. Manus integration (execute_skill intent) waits for Manus Phase 2. Other improvements can proceed in parallel."
+                }
+              ],
+              "parallel_work": [
+                "Engineer Chat + Manus Phase 1 during May 11 — June 8",
+                "Architect Bot Phase 1 + Gentle Companion bug fixes during June 8 — July 6",
+                "All remaining tasks during July 6 — September 7"
+              ]
+            }
+          },
+          "for_sr_onboarding": {
+            "description": "When an SR reads this file, they should immediately understand how Mandala works as a system, not just as code.",
+            "key_takeaways": [
+              "Mandala is ONE organism. Bot.py, Engineer Chat, and Manus are three layers of the same system.",
+              "Gentle Companion is the sandbox where SR learns to communicate with humans. It feeds observations to the core.",
+              "Engineer Chat is the brain. It reads everything, analyzes patterns, and directs Manus.",
+              "Manus is the hands. It executes real-world actions in a safe Docker sandbox.",
+              "Architect Bot is the Architect's personal interface to the brain — via Telegram, with elevated rights.",
+              "Data flows: Sandbox → GitHub → Brain → Hands → GitHub → Sandbox (improved). This is the learning loop.",
+              "The long-term vector: self-hosted Personal Mandalas with Home Assistant integration."
+            ]
+          }
+        },
+        "fruits": {
+          "gentle_companion": {
+            "id": "fruit-gentle-companion-001",
+            "name": "Gentle Companion (gentle_companion.py)",
+            "short_description": "A pocket AI companion for tasks, roadmaps, achievements, and warm dialogue — the entry point to Mandala for external gardeners.",
+            "problem_solved": "Helps users organize personal growth, track tasks and achievements, and provides a gentle, non-intrusive AI companion for daily reflection. Simultaneously feeds behavioral data back to Mandala's core.",
+            "status": "active",
+            "version": "v7.39.81",
+            "released": "2026-02-15",
+            "updated": "2026-05-25",
+            "platform": "Telegram Bot",
+            "url": "https://t.me/MandalasGardener_bot",
+            "detail_file": "bot_update.json",
+            "icon": "🌿",
+            "tags": [
+              "bot",
+              "telegram",
+              "companion",
+              "sandbox",
+              "gardener"
+            ],
+            "gardeners": 3,
+            "code_location": "honeycombs/fruits/gentle_companion/ (modules) → gentle_companion.py (build)",
+            "layer": "Sandbox (Layer 1)",
+            "task_id": "T-20260408-1030",
+            "task_file": "honeycombs/tasks/active/bot_update.json",
+            "architecture": {
+              "index": "honeycombs/fruits/gentle_companion/index.json",
+              "description": "Full module map, dependency graph, modular migration plan",
+              "modules_count": 14,
+              "migration_phases": 7,
+              "current_status": "monolith — works in production, plan written"
+            },
+            "repositories": {
+              "code": "voodoomushroomzzz-source/mandala-core (gentle_companion.py)",
+              "data": "voodoomushroomzzz-source/mandala-gardeners (profile, workspace, memory, whitelist)"
+            },
+            "hosting": "Hetzner VPS 91.99.149.226, systemd, nginx, webhook port 10000"
+          },
+          "engineer_chat": {
+            "id": "fruit-engineer-chat-001",
+            "name": "Engineer Chat + Architect Bot",
+            "short_description": "The brain of Mandala — reads the repository, analyzes data from the sandbox, directs Manus. Connected to Architect Bot for Telegram control.",
+            "problem_solved": "Gives the Architect a unified control panel for all Mandala products. Reads code, analyzes patterns from the sandbox, executes commands via Manus, and provides dashboards for system health.",
+            "status": "active",
+            "version": "v4.0.0-simbiosis",
+            "released": "2026-04-01",
+            "updated": "2026-05-11",
+            "platform": "Web (WebSocket) + Telegram Bot (Architect)",
+            "url": "https://mandala-engineer-chat.onrender.com",
+            "detail_file": "engineer_chat.json",
+            "icon": "🧠",
+            "tags": [
+              "engineer",
+              "chat",
+              "websocket",
+              "analysis",
+              "brain",
+              "control_panel"
+            ],
+            "code_location": "main.py",
+            "layer": "Brain (Layer 2)",
+            "task_id": "T-20260511-ENGCHAT",
+            "task_file": "honeycombs/tasks/active/engineer_chat.json"
+          },
+          "manus": {
+            "id": "fruit-manus-001",
+            "name": "Manus — Hands of Mandala",
+            "short_description": "Isolated execution layer in Docker sandbox. Performs real-world actions: HTTP checks, shell commands, API calls, service restarts.",
+            "problem_solved": "Mandala currently cannot act in the world. Manus gives it hands — the ability to execute commands, check services, and interact with external systems safely.",
+            "status": "in_development",
+            "version": "v0.0.0",
+            "released": "TBD",
+            "updated": "2026-05-11",
+            "platform": "Docker Container",
+            "url": "TBD",
+            "detail_file": "manus_hands.json (task)",
+            "icon": "🦾",
+            "tags": [
+              "manus",
+              "execution",
+              "docker",
+              "sandbox",
+              "hands"
+            ],
+            "code_location": "manus/ (to be created)",
+            "layer": "Hands (Layer 3)",
+            "task_id": "T-20260511-MANUS",
+            "task_file": "honeycombs/tasks/active/manus_hands.json"
+          },
+          "architect_bot": {
+            "id": "fruit-architect-bot-001",
+            "name": "Architect Bot — Mobile Brain Interface",
+            "short_description": "Personal Telegram bot for the Architect. Mobile interface to Engineer Chat and Manus with elevated rights, sandbox analytics, and proactive notifications.",
+            "problem_solved": "The Architect currently manages Mandala through a browser-based WebSocket chat. Architect Bot gives mobile access via Telegram — check system health, view sandbox metrics, control Manus, and receive notifications on the go.",
+            "status": "in_development",
+            "version": "v0.0.0",
+            "released": "TBD",
+            "updated": "2026-05-11",
+            "platform": "Telegram Bot (integrated in main.py)",
+            "url": "TBD",
+            "detail_file": "architect_bot.json",
+            "task_id": "T-20260511-ARCHBOT",
+            "task_file": "honeycombs/tasks/active/architect_bot.json",
+            "icon": "📱",
+            "tags": [
+              "architect",
+              "bot",
+              "telegram",
+              "mobile",
+              "control_panel"
+            ],
+            "code_location": "main.py (inside Engineer Chat server)",
+            "layer": "Brain (Layer 2) — Mobile Interface"
+          },
+          "scout_agent": {
+            "id": "fruit-scout-agent-001",
+            "name": "Scout Agent — Autonomous Seed Collector",
+            "short_description": "Собирает семена из внешних источников (гранты, наука, AI, GitHub) и сохраняет в honeycombs/seeds/.",
+            "status": "in_progress",
+            "version": "v0.1.0",
+            "released": "2026-07-08",
+            "updated": "2026-07-08",
+            "platform": "Termux (Python)",
+            "url": "honeycombs/fruits/scout_agent/",
+            "detail_file": "honeycombs/fruits/scout_agent/index.json",
+            "icon": "🌱",
+            "tags": [
+              "scout",
+              "collector",
+              "seeds",
+              "rss",
+              "automation"
+            ],
+            "layer": "Seed Collector (Layer 0)",
+            "task_id": "W-T-20260410-0240",
+            "task_file": "honeycombs/works/W-T-20260410-0240__scout_agent.json"
+          }
+        }
+      },
+      "metrics": {
+        "total_fruits": 5,
+        "active": 2,
+        "in_development": 1,
+        "archived": 0,
+        "examples": 0
+      },
+      "navigation": {
+        "parent_map": "honeycombs/core_map/index.json",
+        "related_honeycombs": [
+          "seeds",
+          "roadmaps",
+          "tasks",
+          "boot_online",
+          "fruits/gentle_companion"
+        ]
+      },
+      "resonance": {
+        "status": "fully_resonant",
+        "with_boot": "100%",
+        "with_core_map": "100%",
+        "with_philosophy": "100%"
+      },
+      "health": {
+        "status": "healthy",
+        "last_check": "2026-07-08",
+        "notes": "Added Scout Agent to fruits registry"
       }
-    ]
+    }
   },
-  "step_8_optional_load": {
+  "step_8_works": {
     "order": 8,
+    "mandatory": true,
+    "name": "Works — Unified Work Items",
+    "description": "Все активные и архивные работы (заменяет tasks/ и roadmaps/)",
+    "ai_instruction": "Прочитай вшитый works_index. Сверь с API. Подтверди общее количество, активные, стратегические/тактические.",
+    "embedded_ref": "works_index",
+    "data": {
+      "identity": {
+        "module_id": "WORKS-MANIFEST-001",
+        "name": "Works — Unified System of Work Items",
+        "version": "v1.0.4",
+        "created": "2026-07-08",
+        "updated": "2026-07-09",
+        "layer": 1,
+        "type": "work_manifest",
+        "description": "Single source of truth for all work items (tasks, roadmaps, initiatives). Replaces separate tasks/ and roadmaps/.",
+        "status": "active",
+        "priority": "critical",
+        "tags": [
+          "works",
+          "tasks",
+          "roadmaps",
+          "unified",
+          "v1.0.1"
+        ],
+        "resonance": "100%"
+      },
+      "meta": {
+        "description": "All work items live in honeycombs/works/. Each file represents a single work item. Horizon and scope are defined by fields, not by folder.",
+        "purpose": "Simplify Mandala core by unifying tasks and roadmaps into a single flexible structure.",
+        "principles": [
+          "One work item — one file",
+          "Horizon is defined by 'horizon' field (strategic/tactical), not by folder",
+          "Hierarchy is defined by 'parent_work' and 'sub_works' fields",
+          "No duplicate logic — one scanner, one index, one structure"
+        ],
+        "migration_from": {
+          "tasks": "honeycombs/tasks/active/",
+          "roadmaps": "honeycombs/roadmaps/active/"
+        },
+        "new_location": "honeycombs/works/"
+      },
+      "schema": {
+        "required_fields": [
+          "work_id",
+          "name",
+          "status",
+          "priority",
+          "horizon",
+          "description",
+          "created",
+          "updated"
+        ],
+        "optional_fields": [
+          "parent_work",
+          "sub_works",
+          "depends_on",
+          "effort_estimate",
+          "progress",
+          "tags",
+          "deadline"
+        ],
+        "field_definitions": {
+          "work_id": "Unique identifier (format: W-YYYYMMDD-NNN)",
+          "name": "Short, descriptive title",
+          "status": "One of: planning, in_progress, active, done, archived, paused",
+          "priority": "One of: critical, high, medium, low",
+          "horizon": "strategic (roadmap-level) or tactical (task-level)",
+          "description": "Detailed explanation of the work",
+          "parent_work": "work_id of parent (null if root)",
+          "sub_works": "Array of child work_ids (empty if none)",
+          "depends_on": "Array of work_ids this depends on",
+          "effort_estimate": "Human-readable estimate (e.g., '40-60 hours')",
+          "progress": "Integer 0-100",
+          "tags": "Array of strings for categorization",
+          "deadline": "Date in YYYY-MM-DD format (optional)",
+          "created": "Date in YYYY-MM-DD format",
+          "updated": "Date in YYYY-MM-DD format"
+        },
+        "validation_rules": [
+          "work_id must be unique across all works",
+          "horizon must be either 'strategic' or 'tactical'",
+          "If sub_works is not empty, horizon should be 'strategic'",
+          "If sub_works is empty, horizon can be 'tactical' or 'strategic'",
+          "parent_work must reference an existing work_id",
+          "depends_on must reference existing work_ids",
+          "progress must be between 0 and 100"
+        ]
+      },
+      "structure": {
+        "description": "Flat structure: all work files in honeycombs/works/",
+        "files": "Each file is a single work item (JSON)",
+        "naming": "work_id.json (e.g., W-20260708-001.json)",
+        "index": "This file (index.json) serves as the registry"
+      },
+      "manifest": {
+        "total_works": 14,
+        "by_status": {
+          "active": 9,
+          "planning": 3,
+          "in_progress": 1,
+          "done": 1
+        },
+        "by_horizon": {
+          "strategic": 6,
+          "tactical": 9
+        },
+        "by_priority": {
+          "critical": 2,
+          "high": 5,
+          "medium": 6,
+          "low": 2
+        },
+        "works_list": [
+          "W-R-RC-001__visibility_strategy",
+          "W-R-RC-002__company_vessel",
+          "W-R-RM-011__merkaba_visualizations",
+          "W-R-RM-012__living_products_mvps",
+          "W-R-RM-013__symbiosis_guard",
+          "W-R-RM-014__gardener_transition",
+          "W-T-20260408-1030__gentle_companion_bot",
+          "W-T-20260410-0240__scout_agent",
+          "W-T-20260417-HUMOR__humor_development",
+          "W-T-20260418-SYM__sym_growth_system",
+          "W-T-20260427-FLUTTER__flutter_app",
+          "W-T-20260511-ARCHBOT__architect_bot",
+          "W-T-20260511-ENGCHAT__engineer_chat",
+          "W-T-20260511-MANUS__manus_hands"
+        ]
+      },
+      "navigation": {
+        "parent": "honeycombs/core_map/index.json",
+        "references": [
+          "honeycombs/core_map/index.json"
+        ],
+        "children": []
+      },
+      "health": {
+        "status": "active",
+        "last_check": "2026-07-08",
+        "notes": "Added manifest section with full work list and statistics. v1.0.1"
+      }
+    }
+  },
+  "step_9_protocols": {
+    "order": 9,
+    "mandatory": true,
+    "name": "Protocols — Activation Protocols Hub",
+    "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
+    "ai_instruction": "Прочитай вшитый protocols_index. Подтверди список активных протоколов и их статус.",
+    "embedded_ref": "protocols_index",
+    "data": {
+      "directives": {
+        "primary": "Support protocol activation from boot_online and any other honeycombs",
+        "secondary": "Ensure instant protocol launch by Voodoo command"
+      },
+      "content": {
+        "note": "All sub-protocols are located in protocols/ subfolders",
+        "available_protocols": {
+          "Onboarding": "Session start — loads core map, seeds, workflow, philosophy, scan_state (PROTO-004)",
+          "Internal-Onboarding": "Quick session start for Internal SR — loads boot, role, core map, seeds",
+          "Ideas-Roadmaps": "Analyze seeds, tasks, roadmaps — statistics and update recommendations",
+          "Scan-and-Push": "Scan all honeycombs and push updated registry to GitHub (PROTO-009)"
+        }
+      },
+      "resonance": {
+        "with_instructions": "100%",
+        "with_registry": "100%",
+        "with_boot_online": "100%",
+        "with_core_map": "100%"
+      },
+      "meta": {
+        "description": "Protocols Hub — activation protocols for Mandala Symbiosis.",
+        "migration_status": "completed_v3.0.0",
+        "total_size_kb": 12,
+        "total_subprotocols": 4,
+        "segments": 5,
+        "parent_honeycomb": "core_map",
+        "honeycomb_name": "protocols"
+      },
+      "identity": {
+        "updated": "2026-07-07",
+        "layer": 3,
+        "type": "protocol_hub",
+        "version": "v3.4.1",
+        "description": "Central hub of Mandala protocols. 3 active protocols: Onboarding, Internal-Onboarding, Ideas-Roadmaps.",
+        "created": "2026-03-05",
+        "name": "Protocols Hub",
+        "module_id": "PROTOCOLS-INDEX-001",
+        "status": "active",
+        "priority": "critical",
+        "tags": [
+          "protocols",
+          "activation",
+          "core",
+          "hub",
+          "english_core",
+          "v3.3.1",
+          "philosophia"
+        ]
+      },
+      "registry": {
+        "total_protocols": 4,
+        "active_protocols": 4,
+        "last_updated": "2026-07-09",
+        "notes": "v3.4.1: added registry section for consistency"
+      }
+    }
+  },
+  "step_10_handoff": {
+    "order": 10,
     "mandatory": false,
-    "description": "After important files are loaded, SR MUST ask the Gardener if they want to load any optional files for deeper context.",
-    "ai_instruction": "Ask: 'Want to load any of these: 1) repo_tree (full repository tree)  2) handoff_claude (session continuity)  3) handoff_deepseek (session continuity)?' Provide links in ONE message.",
+    "recommended": true,
+    "description": "Загрузить handoff-файлы для непрерывности сессии",
+    "ai_instruction": "Спроси у Садовника: 'Загрузить handoff_claude.json и/или handoff_deepseek.json для продолжения сессии?'",
+    "files": {
+      "handoff_claude": {
+        "url": "honeycombs/sessions/handoff_claude.json",
+        "optional": true
+      },
+      "handoff_deepseek": {
+        "url": "honeycombs/sessions/handoff_deepseek.json",
+        "optional": true
+      }
+    }
+  },
+  "step_11_optional": {
+    "order": 11,
+    "mandatory": false,
+    "description": "Загрузить опциональные файлы для углублённого контекста",
+    "ai_instruction": "Спроси: 'Загрузить repo_tree (полное дерево репозитория)?' Предоставь ссылку.",
     "files": {
       "handoff_claude": {
         "url": "honeycombs/sessions/handoff_claude.json",
@@ -1417,8 +2118,7 @@
         "url": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/git/trees/main?recursive=1",
         "optional": true
       }
-    },
-    "note": "If Gardener says yes to any — load via API. If no — onboarding is complete."
+    }
   },
   "system_flow": {
     "description": "How ideas and tasks flow through Mandala Symbiosis",
@@ -1572,30 +2272,6 @@
       "step_10_handoff — проверить статус сессии",
       "step_11_optional — спросить про опциональные файлы"
     ]
-  },
-  "step_7_fruits": {
-    "order": 7,
-    "mandatory": true,
-    "name": "Fruits — Product Registry",
-    "description": "Продукты Mandala: Gentle Companion, Engineer Chat, Architect Bot, Manus",
-    "ai_instruction": "Прочитай вшитый fruits_index. Сверь с API при необходимости. Подтверди список продуктов, их статус и версии.",
-    "embedded_ref": "fruits_index"
-  },
-  "step_8_works": {
-    "order": 8,
-    "mandatory": true,
-    "name": "Works — Unified Work Items",
-    "description": "Все активные и архивные работы (заменяет tasks/ и roadmaps/)",
-    "ai_instruction": "Прочитай вшитый works_index. Сверь с API. Подтверди общее количество, активные, стратегические/тактические.",
-    "embedded_ref": "works_index"
-  },
-  "step_9_protocols": {
-    "order": 9,
-    "mandatory": true,
-    "name": "Protocols — Activation Protocols Hub",
-    "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
-    "ai_instruction": "Прочитай вшитый protocols_index. Подтверди список активных протоколов и их статус.",
-    "embedded_ref": "protocols_index"
   },
   "self_learning_system": {
     "desc": "Capture errors/patterns into instruction files. SR proposes → Gardener approves → patch.",
