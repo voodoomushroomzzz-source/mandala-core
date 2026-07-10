@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.28",
+    "version": "v1.7.29",
     "created": "2026-05-11",
     "updated": "2026-07-10",
     "layer": 1,
@@ -2075,6 +2075,15 @@
           "version": "v1.0.0",
           "how_to_use_in_mandala": "Используй для аудита идей (seeds), активных задач (tasks), существующих продуктов (fruits) и стратегических роадмапов. Особенно полезен при принятии решений о запуске или изменении направления.",
           "when_to_use": "Перед запуском нового продукта, при ревью продукта, при признаках стагнации, в рамках рутинного чека здоровья. Также для проверки идей из seeds/ до того, как они станут задачами."
+        },
+        {
+          "id": "system_design_primer",
+          "name": "System Design Primer — Архитектурный помощник SR",
+          "file": "system_design_primer.json",
+          "description": "Интерактивный справочник по системному дизайну. Помогает SR принимать архитектурные решения в Mandala. Содержит оглавление, сценарии использования, ссылки на Anki-карточки и разборы реальных систем.",
+          "source": "https://github.com/donnemartin/system-design-primer",
+          "date_added": "2026-07-10",
+          "version": "v1.0.0"
         }
       ],
       "navigation": {
@@ -2086,8 +2095,8 @@
         ]
       },
       "metrics": {
-        "total_resources": 3,
-        "last_updated": "2026-07-07"
+        "total_resources": 4,
+        "last_updated": "2026-07-10"
       },
       "health": {
         "status": "healthy",
