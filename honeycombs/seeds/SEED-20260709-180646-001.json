@@ -11,5 +11,18 @@
     "mandala_relevance": "Оценка траекторий работы кодовых агентов. Напрямую связано с Engineer Chat и Manus. Поможет измерять качество работы SR и улучшать его поведение.",
     "reason_selected": "Ключевое для измерения качества работы кодовых агентов. Позволит внедрить метрики эффективности SR.",
     "action": "create_work"
+  },
+  "promotion_notes": {
+    "promoted_at": "2026-07-10",
+    "promoted_by": "SR",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
   }
 }

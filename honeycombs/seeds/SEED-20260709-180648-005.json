@@ -11,5 +11,18 @@
     "mandala_relevance": "Сжатие памяти для VLA. Критично для Manus и долгосрочных задач в робототехнике. Позволит Manus сохранять контекст длительных операций.",
     "reason_selected": "Обеспечивает долгосрочную память для Manus, что критично для сложных задач.",
     "action": "create_work"
+  },
+  "promotion_notes": {
+    "promoted_at": "2026-07-10",
+    "promoted_by": "SR",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
   }
 }
