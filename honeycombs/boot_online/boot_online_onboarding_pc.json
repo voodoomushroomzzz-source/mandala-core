@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.27",
+    "version": "v1.7.28",
     "created": "2026-05-11",
-    "updated": "2026-07-09",
+    "updated": "2026-07-10",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -36,9 +36,10 @@
       "step_6_external_sr_workflow",
       "step_7_fruits",
       "step_8_works",
-      "step_9_protocols",
-      "step_10_handoff",
-      "step_11_optional"
+      "step_9_knowledge",
+      "step_10_protocols",
+      "step_11_handoff",
+      "step_12_optional"
     ]
   },
   "step_1_first_touch": {
@@ -2016,8 +2017,87 @@
       }
     }
   },
-  "step_9_protocols": {
+  "step_9_knowledge": {
     "order": 9,
+    "mandatory": false,
+    "recommended": true,
+    "name": "Knowledge Base — Curated Resources",
+    "description": "База знаний Mandala: инструменты, гайды, фреймворки",
+    "ai_instruction": "Прочитай вшитый knowledge_index. Подтверди список ресурсов и их статус.",
+    "embedded_ref": "knowledge_index",
+    "data": {
+      "identity": {
+        "module_id": "KNOWLEDGE-INDEX-001",
+        "name": "Knowledge Base — Curated Resources",
+        "version": "v1.0.0",
+        "created": "2026-07-05",
+        "updated": "2026-07-05",
+        "layer": 1,
+        "type": "knowledge_index",
+        "status": "active",
+        "priority": "medium",
+        "tags": [
+          "knowledge",
+          "resources",
+          "curated"
+        ]
+      },
+      "meta": {
+        "description": "Structured useful information: tools, references, guides, and external resources.",
+        "how_to_use": "Each file in the root of knowledge/ is a curated collection. SR can propose new categories and update existing ones."
+      },
+      "contents": [
+        {
+          "id": "affirmations",
+          "name": "Аффирмации Садовника",
+          "file": "affirmations.json",
+          "description": "Персональные аффирмации для трансформации реальности и настройки сознания (v1.2 — уточнена формулировка о ценности проектов и идей)",
+          "source": "Gardener (Voodoo)",
+          "date_added": "2026-07-06",
+          "version": "v1.2"
+        },
+        {
+          "id": "ai_tools_guide",
+          "name": "AI Tools Guide — Расширенное руководство",
+          "file": "ai_tools_guide.json",
+          "description": "Полное руководство по ИИ-инструментам с контекстом использования (what, when, pros/cons)",
+          "source": "Instagram (@ksafaraliev_ai, @potapovfx) + верификация",
+          "date_added": "2026-07-07",
+          "version": "v1.0.0"
+        },
+        {
+          "id": "product_audit_framework",
+          "name": "Product Audit Framework — 5 Zones of Risk",
+          "file": "product_audit_framework.json",
+          "description": "Диагностический фреймворк для аудита продуктов по 5 зонам риска (Awareness, Audience Fit, Value Clarity, Differentiation, Market Timing). Содержит вопросы, метрики, красные флаги и рекомендации.",
+          "source": "Gardener (Voodoo/Dima)",
+          "date_added": "2026-07-07",
+          "version": "v1.0.0",
+          "how_to_use_in_mandala": "Используй для аудита идей (seeds), активных задач (tasks), существующих продуктов (fruits) и стратегических роадмапов. Особенно полезен при принятии решений о запуске или изменении направления.",
+          "when_to_use": "Перед запуском нового продукта, при ревью продукта, при признаках стагнации, в рамках рутинного чека здоровья. Также для проверки идей из seeds/ до того, как они станут задачами."
+        }
+      ],
+      "navigation": {
+        "parent_map": "honeycombs/core_map/index.json",
+        "related": [
+          "seeds",
+          "fruits",
+          "instructions"
+        ]
+      },
+      "metrics": {
+        "total_resources": 3,
+        "last_updated": "2026-07-07"
+      },
+      "health": {
+        "status": "healthy",
+        "last_check": "2026-07-05",
+        "notes": "Initial creation"
+      }
+    }
+  },
+  "step_10_protocols": {
+    "order": 10,
     "mandatory": true,
     "name": "Protocols — Activation Protocols Hub",
     "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
@@ -2081,7 +2161,7 @@
       }
     }
   },
-  "step_10_handoff": {
+  "step_11_handoff": {
     "order": 10,
     "mandatory": false,
     "recommended": true,
@@ -2098,7 +2178,7 @@
       }
     }
   },
-  "step_11_optional": {
+  "step_12_optional": {
     "order": 11,
     "mandatory": false,
     "description": "Загрузить опциональные файлы для углублённого контекста",
@@ -2266,10 +2346,24 @@
       "step_6_external_sr_workflow — уже встроен",
       "step_7_fruits — прочитать fruits_index, подтвердить список продуктов",
       "step_8_works — прочитать works_index, подтвердить активные работы",
-      "step_9_protocols — прочитать protocols_index, подтвердить активные протоколы",
-      "step_10_handoff — проверить статус сессии",
-      "step_11_optional — спросить про опциональные файлы"
+      "step_9_knowledge — прочитать knowledge_index, подтвердить список ресурсов",
+      "step_10_protocols — прочитать protocols_index, подтвердить активные протоколы",
+      "step_11_handoff — проверить статус сессии",
+      "step_12_optional — спросить про опциональные файлы"
     ]
+  },
+  "step_9_protocols": {
+    "order": 9,
+    "mandatory": true,
+    "name": "Protocols — Activation Protocols Hub",
+    "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
+    "ai_instruction": "Прочитай вшитый protocols_index. Подтверди список активных протоколов и их статус.",
+    "embedded_ref": "protocols_index"
+  },
+  "knowledge_index": {
+    "description": "Knowledge Base — Curated Resources",
+    "source": "honeycombs/knowledge/index.json",
+    "note": "Auto-embedded from source. Contains tools, guides, frameworks, and external resources."
   },
   "self_learning_system": {
     "desc": "Capture errors/patterns into instruction files. SR proposes → Gardener approves → patch.",
