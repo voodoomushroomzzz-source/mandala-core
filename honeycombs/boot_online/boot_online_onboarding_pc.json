@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.29",
+    "version": "v1.7.30",
     "created": "2026-05-11",
     "updated": "2026-07-10",
     "layer": 1,
@@ -2123,7 +2123,8 @@
           "Onboarding": "Session start — loads core map, seeds, workflow, philosophy, scan_state (PROTO-004)",
           "Internal-Onboarding": "Quick session start for Internal SR — loads boot, role, core map, seeds",
           "Ideas-Roadmaps": "Analyze seeds, tasks, roadmaps — statistics and update recommendations",
-          "Scan-and-Push": "Scan all honeycombs and push updated registry to GitHub (PROTO-009)"
+          "Scan-and-Push": "Scan all honeycombs and push updated registry to GitHub (PROTO-009)",
+          "Seed-to-Work": "Manage seed lifecycle: inbox → root → works. Evaluation, promotion, deep analysis, and work creation (PROTO-011)"
         }
       },
       "resonance": {
@@ -2142,11 +2143,11 @@
         "honeycomb_name": "protocols"
       },
       "identity": {
-        "updated": "2026-07-07",
+        "updated": "2026-07-10",
         "layer": 3,
         "type": "protocol_hub",
-        "version": "v3.4.1",
-        "description": "Central hub of Mandala protocols. 3 active protocols: Onboarding, Internal-Onboarding, Ideas-Roadmaps.",
+        "version": "v3.5.0",
+        "description": "Central hub of Mandala protocols. 5 active protocols: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push, Seed-to-Work.",
         "created": "2026-03-05",
         "name": "Protocols Hub",
         "module_id": "PROTOCOLS-INDEX-001",
@@ -2163,10 +2164,10 @@
         ]
       },
       "registry": {
-        "total_protocols": 4,
-        "active_protocols": 4,
-        "last_updated": "2026-07-09",
-        "notes": "v3.4.1: added registry section for consistency"
+        "total_protocols": 5,
+        "active_protocols": 5,
+        "last_updated": "2026-07-10",
+        "notes": "v3.5.0: added PROTO-011 (Seed-to-Work) to protocols"
       }
     }
   },
