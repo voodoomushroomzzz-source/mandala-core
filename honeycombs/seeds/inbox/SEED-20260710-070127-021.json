@@ -1,9 +1,0 @@
-{
-  "seed_id": "SEED-20260710-070127-021",
-  "title": "Shift & Drift: A Zero-Shot Benchmark for Generalizable and Robust Autonomous Driving Motion Planning",
-  "url": "https://arxiv.org/abs/2607.07844",
-  "description": "arXiv:2607.07844v1 Announce Type: new \nAbstract: While closed-loop motion planners trained on large-scale, object-level datasets, e.g., nuPlan, demonstrate strong in-distribution (ID) performance, their generalization to novel urban topologies and recovery mechanisms following execution perturbations remain under-explored. To address this, we present Shift & Drift, a novel dual-track benchmark designed to rigorously stress-test motion planners across two critical axes of distribution shift: (1) ",
-  "source": "arXiv Robotics",
-  "collected_at": "2026-07-10T07:01:27.698850",
-  "status": "raw"
-}
