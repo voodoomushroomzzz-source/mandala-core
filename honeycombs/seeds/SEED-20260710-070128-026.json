@@ -5,5 +5,11 @@
   "description": "Learn how to design large-scale systems. Prep for the system design interview.  Includes Anki flashcards.",
   "source": "GitHub Trending Python (API)",
   "collected_at": "2026-07-10T07:01:28.809195",
-  "status": "raw"
+  "status": "evaluated",
+  "evaluation": {
+    "score": 9,
+    "mandala_relevance": "Архитектурная база для системного дизайна. Полезна для всех компонентов Mandala — Engineer Chat, Manus, будущих интеграций.",
+    "reason_selected": "Отличный ресурс, но это справочник, а не активная идея для разработки.",
+    "action": "keep_for_future"
+  }
 }

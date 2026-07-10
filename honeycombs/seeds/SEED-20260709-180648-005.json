@@ -5,5 +5,11 @@
   "description": "arXiv:2607.06678v1 Announce Type: new \nAbstract: How can pretrained Vision-Language-Action (VLA) models retain long-horizon visual histories with high-frequency updates without sacrificing efficiency? Existing approaches rely on external memory management, which restrains either the memory horizon or the reactiveness of pretrained policies. To this end, we present NativeMEM, a VLA policy that features long-term and real-time updated memory. At its core is an efficient memory encoding scheme, Nat",
   "source": "arXiv Robotics",
   "collected_at": "2026-07-09T18:06:48.691835",
-  "status": "raw"
+  "status": "evaluated",
+  "evaluation": {
+    "score": 10,
+    "mandala_relevance": "Сжатие памяти для VLA. Критично для Manus и долгосрочных задач в робототехнике. Позволит Manus сохранять контекст длительных операций.",
+    "reason_selected": "Обеспечивает долгосрочную память для Manus, что критично для сложных задач.",
+    "action": "create_work"
+  }
 }
