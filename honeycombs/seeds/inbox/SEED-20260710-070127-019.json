@@ -1,0 +1,9 @@
+{
+  "seed_id": "SEED-20260710-070127-019",
+  "title": "SASGeo: Stability-Aware Semantic Map Localization for GNSS-Denied UAVs -- A Framework and Synthetic Proof of Concept",
+  "url": "https://arxiv.org/abs/2607.07737",
+  "description": "arXiv:2607.07737v1 Announce Type: new \nAbstract: GNSS-denied unmanned aerial vehicles require occasional absolute position fixes to bound the drift of visual-inertial odometry. Cross-view image retrieval can provide such fixes, but raw appearance is sensitive to season, illumination, viewpoint, map age, and sensor modality. We propose \\sas, a semantic map-localization framework that represents the environment through persistent structures such as roads, buildings, waterways, railways, intersecti",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-07-10T07:01:27.697557",
+  "status": "raw"
+}

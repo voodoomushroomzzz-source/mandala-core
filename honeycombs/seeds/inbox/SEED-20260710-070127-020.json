@@ -1,0 +1,9 @@
+{
+  "seed_id": "SEED-20260710-070127-020",
+  "title": "Physics-Guided Biomechanical Gait Adaptation for Humanoid Locomotion on Extreme Sloped Terrains",
+  "url": "https://arxiv.org/abs/2607.07830",
+  "description": "arXiv:2607.07830v1 Announce Type: new \nAbstract: Model-free reinforcement learning has enabled impressive humanoid locomotion; however, control on steep slopes remains largely unexplored. Unlike flat or discrete terrains, sloped terrains impose a persistent gravitational bias that demands simultaneous stability and posture control. Consequently, under generic reward formulations, policies can converge to slow, conservative low-center-of-mass (CoM) crouched gaits.\n  In this work, we propose a nov",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-07-10T07:01:27.698203",
+  "status": "raw"
+}
