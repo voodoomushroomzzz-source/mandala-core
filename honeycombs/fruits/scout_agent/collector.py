@@ -161,7 +161,30 @@ def save_seed(item, source_name, seed_dir):
         "description": item["description"],
         "source": source_name,
         "collected_at": datetime.now().isoformat(),
-        "status": "raw"
+        "status": "raw",
+        "evaluation": {
+            "score_novelty": 0,
+            "score_feasibility": 0,
+            "score_relevance": 0,
+            "score_impact": 0,
+            "total_score": 0,
+            "mandala_relevance": "",
+            "reason_selected": "",
+            "action": "keep"
+        },
+        "promotion_notes": {
+            "promoted_at": "",
+            "promoted_by": "",
+            "work_created": ""
+        },
+        "work_analysis": {
+            "analysis_date": "",
+            "source_links": [],
+            "research_summary": "",
+            "key_insights": [],
+            "related_work": [],
+            "implementation_notes": ""
+        }
     }
     filename = seed_dir / f"{seed_id}.json"
     with open(filename, 'w', encoding='utf-8') as f:
