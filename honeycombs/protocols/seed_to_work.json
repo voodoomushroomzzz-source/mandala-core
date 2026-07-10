@@ -1,0 +1,237 @@
+{
+  "protocol_id": "PROTO-011",
+  "name": "Seed-to-Work Protocol — Unified Seed Management System",
+  "version": "v1.0.0",
+  "created": "2026-07-10",
+  "updated": "2026-07-10",
+  "status": "active",
+  "description": "Complete protocol for seed evaluation, promotion from inbox to root, and transition from root to works. Replaces ad-hoc seed management with a structured, repeatable process.",
+  "seed_structure": {
+    "description": "Each seed file in inbox/ or seeds/ must follow this structure",
+    "fields": {
+      "seed_id": "Unique identifier (SEED-YYYYMMDD-HHMMSS-NNN)",
+      "title": "Short, descriptive title",
+      "url": "Source URL (arXiv, GitHub, TechCrunch, etc.)",
+      "description": "Abstract or summary",
+      "source": "Source category (arXiv AI, arXiv Robotics, Hacker News, GitHub, TechCrunch)",
+      "collected_at": "ISO timestamp when collected",
+      "status": "raw | evaluated | promoted | rejected | work_created",
+
+      "evaluation": {
+        "score_novelty": "0-10 — novelty of the idea",
+        "score_feasibility": "0-10 — feasibility within Mandala",
+        "score_relevance": "0-10 — relevance to current goals",
+        "score_impact": "0-10 — potential impact",
+        "total_score": "0-40 — sum of all scores",
+        "mandala_relevance": "Description of connection to Mandala",
+        "reason_selected": "Why selected (or rejected)",
+        "action": "promote | keep | reject"
+      },
+
+      "promotion_notes": {
+        "promoted_at": "Date when moved to root",
+        "promoted_by": "SR",
+        "work_created": "Work ID when moved to works (W-T-...)"
+      },
+
+      "work_analysis": {
+        "analysis_date": "Date of deep analysis",
+        "source_links": ["Primary source", "Related works"],
+        "research_summary": "Summary after reading full text",
+        "key_insights": ["Key insight 1", "Key insight 2"],
+        "related_work": ["Related work 1", "Related work 2"],
+        "implementation_notes": "Notes on implementation"
+      }
+    }
+  },
+
+  "phase_1_inbox": {
+    "name": "Inbox Evaluation & Promotion",
+    "description": "Single-pass evaluation of all seeds in inbox/. SR evaluates all seeds in one session.",
+    "steps": [
+      {
+        "step": 1,
+        "action": "Load all seeds from honeycombs/seeds/inbox/",
+        "details": "SR lists all JSON files in inbox/"
+      },
+      {
+        "step": 2,
+        "action": "Quick filter: does the topic relate to Mandala?",
+        "details": "If not — mark as reject (skip further evaluation)"
+      },
+      {
+        "step": 3,
+        "action": "Evaluate by 4 criteria",
+        "criteria": [
+          {"name": "Novelty", "range": "0-10", "question": "How novel is this idea compared to what Mandala already has?"},
+          {"name": "Feasibility", "range": "0-10", "question": "Can it be implemented with current resources?"},
+          {"name": "Relevance", "range": "0-10", "question": "How relevant is it to current Mandala goals (Engineer Chat, Manus, Seeds)?"},
+          {"name": "Impact", "range": "0-10", "question": "What impact will it have on Mandala?"}
+        ]
+      },
+      {
+        "step": 4,
+        "action": "Calculate total_score",
+        "details": "Sum of all 4 scores (0-40)"
+      },
+      {
+        "step": 5,
+        "action": "Decision",
+        "rules": [
+          {"score": "≥ 30", "action": "promote", "details": "Move to root seeds/"},
+          {"score": "20-29", "action": "keep", "details": "Leave in inbox for next iteration"},
+          {"score": "< 20", "action": "reject", "details": "Delete"}
+        ]
+      },
+      {
+        "step": 6,
+        "action": "Document evaluation in seed file",
+        "details": "Add evaluation block with all scores and reasoning"
+      },
+      {
+        "step": 7,
+        "action": "Promote favorites to root",
+        "details": "Move seeds with action=promote to honeycombs/seeds/"
+      },
+      {
+        "step": 8,
+        "action": "Delete rejected seeds",
+        "details": "Remove seeds with action=reject from inbox/"
+      },
+      {
+        "step": 9,
+        "action": "Report summary",
+        "details": "SR reports: N promoted, M kept, K rejected"
+      }
+    ],
+    "output": "Seeds in root/ are promoted; inbox/ contains only kept seeds."
+  },
+
+  "phase_2_root": {
+    "name": "Root Analysis & Work Selection",
+    "description": "Deep analysis of seeds in root/. SR reads full texts, checks external sources, prepares for works.",
+    "trigger": "When gardener says 'разбери корень' or equivalent",
+    "steps": [
+      {
+        "step": 1,
+        "action": "Load all seeds from honeycombs/seeds/",
+        "details": "SR lists all JSON files in seeds/ (excluding inbox/)"
+      },
+      {
+        "step": 2,
+        "action": "For each seed: read full text",
+        "details": "Follow URL, read the full paper/article"
+      },
+      {
+        "step": 3,
+        "action": "For each seed: check external sources",
+        "details": "Search for related works, newer papers, reviews, implementation discussions"
+      },
+      {
+        "step": 4,
+        "action": "For each seed: fill work_analysis block",
+        "fields": ["source_links", "research_summary", "key_insights", "related_work", "implementation_notes"]
+      },
+      {
+        "step": 5,
+        "action": "Overall analysis",
+        "details": "Compare all seeds, identify synergies, conflicts, priorities"
+      },
+      {
+        "step": 6,
+        "action": "Select favorites for Works",
+        "details": "Choose top 1-3 seeds to move to Works"
+      },
+      {
+        "step": 7,
+        "action": "Report summary",
+        "details": "SR reports: analyzed N seeds, selected M for Works, K kept for future"
+      }
+    ],
+    "output": "Seeds in root/ have work_analysis filled; favorites selected for Works."
+  },
+
+  "phase_3_works": {
+    "name": "Work Creation",
+    "description": "Transition from seed to work. Creates work file in honeycombs/works/.",
+    "steps": [
+      {
+        "step": 1,
+        "action": "For each favorite seed: create work file",
+        "details": "Create W-T-YYYYMMDD-NNN.json in honeycombs/works/"
+      },
+      {
+        "step": 2,
+        "action": "Work file structure",
+        "fields": [
+          "work_id",
+          "name",
+          "status: planning",
+          "priority: HIGH",
+          "horizon: tactical",
+          "description: based on research_summary",
+          "seed_reference: SEED-...",
+          "source_links: from work_analysis",
+          "research_findings: from work_analysis",
+          "deliverables: list",
+          "created: YYYY-MM-DD",
+          "updated: YYYY-MM-DD"
+        ]
+      },
+      {
+        "step": 3,
+        "action": "Update seed file",
+        "details": "Set promotion_notes.work_created = W-T-..."
+      },
+      {
+        "step": 4,
+        "action": "Add to works/index.json",
+        "details": "Update total_works, by_status, by_horizon, works_list"
+      },
+      {
+        "step": 5,
+        "action": "Commit and push",
+        "details": "git add honeycombs/works/ && git commit -m 'feat(works): create work from seed SEED-...'"
+      },
+      {
+        "step": 6,
+        "action": "Report summary",
+        "details": "SR reports: created N works from seeds"
+      }
+    ],
+    "output": "Work files created, index updated, seed files updated with work references."
+  },
+
+  "evaluation_criteria_notes": {
+    "novelty": "How different is this from what Mandala already has? 10 = completely new direction, 0 = already implemented",
+    "feasibility": "Can we implement this with current resources? 10 = ready to implement, 0 = requires massive external resources",
+    "relevance": "How tied is this to current Mandala goals? 10 = directly addresses current priorities (Engineer Chat, Manus, Seeds), 0 = unrelated",
+    "impact": "What effect will this have on Mandala? 10 = transformative, 0 = negligible",
+    "total_score_guide": "≥30 = promote to root, 20-29 = keep in inbox, <20 = reject"
+  },
+
+  "seeds_health_integration": {
+    "description": "This protocol integrates with seeds_health monitoring in scanner",
+    "root_threshold": 10,
+    "inbox_threshold": 20,
+    "action": "If inbox exceeds 20, SR should evaluate inbox promptly"
+  },
+
+  "links": {
+    "seeds_folder": "honeycombs/seeds/",
+    "inbox_folder": "honeycombs/seeds/inbox/",
+    "works_folder": "honeycombs/works/",
+    "registry": "honeycombs/registry/scan_state.json#seeds_health"
+  },
+
+  "notes": [
+    "Phase 1 (Inbox) is a single-session activity: evaluate all seeds at once",
+    "Phase 2 (Root) is triggered by gardener request: 'разбери корень' or equivalent",
+    "Phase 3 (Works) follows Phase 2: create work files for selected favorites",
+    "Seeds in root with no work_analysis are pending deep analysis",
+    "Seeds in root with work_analysis and work_created are completed (archived)"
+  ],
+
+  "maintainer": "External SR",
+  "resonance": "100%"
+}
