@@ -156,9 +156,10 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "step_6_external_sr_workflow",
             "step_7_fruits",
             "step_8_works",
-            "step_9_protocols",
-            "step_10_handoff",
-            "step_11_optional"
+            "step_9_knowledge",
+            "step_10_protocols",
+            "step_11_handoff",
+            "step_12_optional"
         ]
     }
 
@@ -257,11 +258,25 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "data": works_data
         }
 
-    # Step 9: protocols
+    # Step 9: knowledge
+    knowledge_data = source_data.get("knowledge", {})
+    if knowledge_data:
+        onboarding["step_9_knowledge"] = {
+            "order": 9,
+            "mandatory": False,
+            "recommended": True,
+            "name": "Knowledge Base — Curated Resources",
+            "description": "База знаний Mandala: инструменты, гайды, фреймворки",
+            "ai_instruction": "Прочитай вшитый knowledge_index. Подтверди список ресурсов и их статус.",
+            "embedded_ref": "knowledge_index",
+            "data": knowledge_data
+        }
+
+    # Step 10: protocols
     protocols_data = source_data.get("protocols", {})
     if protocols_data:
-        onboarding["step_9_protocols"] = {
-            "order": 9,
+        onboarding["step_10_protocols"] = {
+            "order": 10,
             "mandatory": True,
             "name": "Protocols — Activation Protocols Hub",
             "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
@@ -270,8 +285,8 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "data": protocols_data
         }
 
-    # Step 10: handoff (optional, but recommended)
-    onboarding["step_10_handoff"] = {
+    # Step 11: handoff (optional, but recommended)
+    onboarding["step_11_handoff"] = {
         "order": 10,
         "mandatory": False,
         "recommended": True,
@@ -289,7 +304,7 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
         }
     }
 
-    # Step 11: optional_load (repo_tree, etc.)
+    # Step 12: optional_load (repo_tree, etc.)
     optional = builder.get("optional_modules", {})
     optional_files = {}
     for name, config in optional.items():
@@ -301,7 +316,7 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
                     "optional": True
                 }
 
-    onboarding["step_11_optional"] = {
+    onboarding["step_12_optional"] = {
         "order": 11,
         "mandatory": False,
         "description": "Загрузить опциональные файлы для углублённого контекста",

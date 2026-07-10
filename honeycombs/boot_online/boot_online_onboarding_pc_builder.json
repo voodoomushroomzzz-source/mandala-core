@@ -170,9 +170,10 @@
         "step_6_external_sr_workflow — уже встроен",
         "step_7_fruits — прочитать fruits_index, подтвердить список продуктов",
         "step_8_works — прочитать works_index, подтвердить активные работы",
-        "step_9_protocols — прочитать protocols_index, подтвердить активные протоколы",
-        "step_10_handoff — проверить статус сессии",
-        "step_11_optional — спросить про опциональные файлы"
+        "step_9_knowledge — прочитать knowledge_index, подтвердить список ресурсов",
+        "step_10_protocols — прочитать protocols_index, подтвердить активные протоколы",
+        "step_11_handoff — проверить статус сессии",
+        "step_12_optional — спросить про опциональные файлы"
       ]
     },
     "step_7_fruits": {
@@ -198,6 +199,11 @@
       "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
       "ai_instruction": "Прочитай вшитый protocols_index. Подтверди список активных протоколов и их статус.",
       "embedded_ref": "protocols_index"
+    },
+    "knowledge_index": {
+      "description": "Knowledge Base — Curated Resources",
+      "source": "honeycombs/knowledge/index.json",
+      "note": "Auto-embedded from source. Contains tools, guides, frameworks, and external resources."
     }
   },
   "source_modules": {
@@ -227,6 +233,9 @@
     },
     "works": {
       "path": "honeycombs/works/index.json"
+    },
+    "knowledge": {
+      "path": "honeycombs/knowledge/index.json"
     }
   },
   "optional_modules": {
