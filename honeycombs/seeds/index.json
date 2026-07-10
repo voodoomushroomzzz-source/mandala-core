@@ -1,48 +1,70 @@
 {
   "identity": {
-    "module_id": "SEEDS-MANIFEST-001",
-    "name": "Seeds Honeycomb — Idea Incubator",
-    "version": "v3.1.0",
+    "module_id": "SEEDS-INDEX-001",
+    "name": "Seeds — Idea Incubator",
+    "version": "v1.1.0",
     "created": "2026-03-01",
-    "updated": "2026-07-09",
-    "layer": 1,
+    "updated": "2026-07-10",
+    "layer": 2,
     "type": "honeycomb_manifest",
-    "description": "Seeds are raw ideas, unprocessed concepts, and Scout Agent findings. They are stored as individual JSON files in honeycombs/seeds/. New seeds are collected into inbox/ for review, then promoted to root or deleted.",
+    "description": "Seeds are raw ideas collected by Scout Agent or proposed by Gardener/SR. Managed by PROTO-011 (Seed-to-Work Protocol). Each seed goes through: inbox → evaluation → root → work.",
     "status": "active",
-    "priority": "high",
-    "tags": ["seeds", "ideas", "inbox", "scout-agent", "v3.1.0"],
+    "priority": "medium",
+    "tags": ["seeds", "ideas", "incubator", "protocol", "PROTO-011"],
     "resonance": "100%"
   },
+  "meta": {
+    "description": "Seeds are raw, unprocessed ideas. They are the entry point for all new concepts in Mandala. Managed by PROTO-011.",
+    "protocol_ref": "PROTO-011",
+    "lifecycle": "inbox → evaluation → root → work → archive",
+    "how_to_use": "SR reads seeds, evaluates them, promotes best to root, then to works.",
+    "guardian_lock": false
+  },
   "structure": {
-    "description": "Seeds are stored directly in honeycombs/seeds/ as JSON files. No subfolders except inbox/ for new seeds.",
-    "file_format": {
-      "seed_id": "SEED-YYYYMMDD-HHMMSS-XXX",
-      "title": "Seed title",
-      "url": "Source URL",
-      "description": "Brief description",
-      "source": "Source name",
-      "collected_at": "ISO timestamp",
-      "status": "raw | reviewed | promoted | deleted"
+    "inbox": {
+      "path": "honeycombs/seeds/inbox/",
+      "description": "Raw seeds from Scout Agent or manual input. Status: raw.",
+      "max_files": 20
     },
-    "lifecycle": {
-      "inbox": "New seeds from Scout Agent go to honeycombs/seeds/inbox/",
-      "review": "Gardener reviews seeds manually",
-      "promote": "Useful seeds moved to honeycombs/seeds/ (root)",
-      "delete": "Unuseful seeds removed from inbox/"
+    "root": {
+      "path": "honeycombs/seeds/",
+      "description": "Promoted seeds that passed evaluation. Status: evaluated.",
+      "max_files": 10
+    },
+    "archive": {
+      "path": "honeycombs/seeds/archive/",
+      "description": "Seeds that have been converted to works.",
+      "max_files": "unlimited"
     }
   },
-  "rules": {
-    "duplicate_check": "Scout Agent checks url against all seeds in inbox/ and seeds/ before saving",
-    "manual_review": "All seeds must be reviewed by Gardener before promotion",
-    "no_archive": "Seeds are either active (in root) or deleted. No archive subfolder."
+  "evaluation_criteria": {
+    "description": "4 criteria used in Phase 1 (Inbox) of PROTO-011",
+    "criteria": [
+      {"name": "novelty", "range": "0-10", "question": "How novel is this idea?"},
+      {"name": "feasibility", "range": "0-10", "question": "Can it be implemented?"},
+      {"name": "relevance", "range": "0-10", "question": "How relevant to Mandala?"},
+      {"name": "impact", "range": "0-10", "question": "What impact will it have?"}
+    ],
+    "decision_rules": [
+      {"total_score": "≥ 30", "action": "promote", "destination": "root"},
+      {"total_score": "20-29", "action": "keep", "destination": "inbox"},
+      {"total_score": "< 20", "action": "reject", "destination": "delete"}
+    ]
+  },
+  "metrics": {
+    "total_seeds": 6,
+    "in_root": 6,
+    "in_inbox": 0,
+    "archived": 0,
+    "last_updated": "2026-07-10"
   },
   "navigation": {
-    "parent_map": "honeycombs/core_map/index.json",
-    "related": ["honeycombs/works", "honeycombs/fruits/scout_agent"]
+    "parent": "honeycombs/core_map/index.json",
+    "related": ["fruits", "works", "protocols", "instructions"]
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-07-09",
-    "notes": "v3.1.0: simplified index, moved seed inventory to individual files, added inbox/ workflow"
+    "last_check": "2026-07-10",
+    "notes": "Updated to v1.1.0: added PROTO-011 reference, updated lifecycle description."
   }
 }
