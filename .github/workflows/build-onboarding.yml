@@ -15,6 +15,7 @@ on:
       - 'honeycombs/fruits/index.json'
       - 'honeycombs/protocols/index.json'
       - 'honeycombs/works/index.json'
+      - 'honeycombs/knowledge/index.json'
 
 jobs:
   build:
