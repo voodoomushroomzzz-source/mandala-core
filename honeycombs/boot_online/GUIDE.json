@@ -1,8 +1,8 @@
 {
   "name": "Boot Online Guide for AI",
-  "version": "v1.0.0",
+  "version": "v1.1.0",
   "created": "2026-07-08",
-  "updated": "2026-07-08",
+  "updated": "2026-07-10",
   "description": "A map for AI to understand the boot_online system, file relationships, and auto-build process.",
   "sections": {
     "overview": {
@@ -16,13 +16,15 @@
         "boot_online_onboarding_pc_builder.json": "Master config for the auto-builder. Defines which source modules are embedded and how the final file is built.",
         "boot_online_onboarding_pc.json": "Final, auto-built file — the complete onboarding package for External SR. Do not edit manually. It is overwritten by GitHub Actions.",
         "builder/": "Folder containing the build_onboarding.py script that assembles the final file.",
-        "GUIDE.json": "This file. A map for AI to understand the system."
+        "GUIDE.json": "This file. A map for AI to understand the system.",
+        "knowledge/": "Knowledge base folder — curated resources: tools, guides, frameworks, and external resources. Added in v1.1.0."
       }
     },
     "relationships": {
       "title": "File relationships",
       "flow": [
         "index.json (source of truth for content)",
+        "knowledge/ (source module — embedded in onboarding as step 9)",
         "boot_online_onboarding_pc_builder.json (defines what to embed and how)",
         "builder/build_onboarding.py (GitHub Actions)",
         "boot_online_onboarding_pc.json (final auto-built file)"
@@ -89,12 +91,13 @@
     },
     "migration_note": {
       "title": "Migration note (2026-07-08)",
-      "content": "The system now uses a unified works/ folder instead of separate tasks/ and roadmaps/.",
+      "content": "The system now uses a unified works/ folder instead of separate tasks/ and roadmaps/. Added knowledge base integration.",
       "details": [
         "All work items (tasks and roadmaps) live in honeycombs/works/.",
         "Each work file has a horizon field: 'strategic' (roadmap) or 'tactical' (task).",
         "The builder config (boot_online_onboarding_pc_builder.json) has been updated to reference works/.",
-        "If you see references to tasks/ or roadmaps/ in older files, they should be updated to works/."
+        "If you see references to tasks/ or roadmaps/ in older files, they should be updated to works/.",
+        "knowledge/ added as a source module and embedded in onboarding as step_9_knowledge."
       ]
     }
   }
