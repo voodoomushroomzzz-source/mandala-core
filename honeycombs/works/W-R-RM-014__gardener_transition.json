@@ -10,7 +10,18 @@
   "depends_on": [],
   "effort_estimate": null,
   "progress": 0,
-  "tags": ["personal", "career", "ai", "agent_management", "operations", "remote", "relocation", "vietnam", "ai_ops", "agentic"],
+  "tags": [
+    "personal",
+    "career",
+    "ai",
+    "agent_management",
+    "operations",
+    "remote",
+    "relocation",
+    "vietnam",
+    "ai_ops",
+    "agentic"
+  ],
   "deadline": null,
   "created": "2026-04-16",
   "updated": "2026-07-08",
@@ -22,15 +33,26 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v4.1.1",
+        "version": "v4.1.2",
         "created": "2026-04-16",
-        "updated": "2026-07-08",
+        "updated": "2026-07-10",
         "layer": 2,
         "type": "roadmap",
         "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
         "status": "active",
         "priority": "HIGH",
-        "tags": ["personal", "career", "ai", "agent_management", "operations", "remote", "relocation", "vietnam", "ai_ops", "agentic"],
+        "tags": [
+          "personal",
+          "career",
+          "ai",
+          "agent_management",
+          "operations",
+          "remote",
+          "relocation",
+          "vietnam",
+          "ai_ops",
+          "agentic"
+        ],
         "resonance": "100%"
       },
       "meta": {
@@ -506,13 +528,40 @@
       },
       "job_search_platforms": {
         "track_a_russian": {
-          "primary": ["hh.ru", "Superjob"],
-          "it_specific": ["Habr Career", "GeekJOB", "Getmatch", "TenChat"],
-          "niche_aggregators": ["Jobster", "hirify", "hirehi", "careerspace", "finder"],
-          "temporary_projects": ["Kwork", "FL.ru", "Workspace", "SolarStaff"]
+          "primary": [
+            "hh.ru",
+            "Superjob"
+          ],
+          "it_specific": [
+            "Habr Career",
+            "GeekJOB",
+            "Getmatch",
+            "TenChat"
+          ],
+          "niche_aggregators": [
+            "Jobster",
+            "hirify",
+            "hirehi",
+            "careerspace",
+            "finder"
+          ],
+          "temporary_projects": [
+            "Kwork",
+            "FL.ru",
+            "Workspace",
+            "SolarStaff"
+          ]
         },
         "track_b_global": {
-          "international": ["LinkedIn (global)", "We Work Remotely (WWR)", "RemoteOK", "NoDesk", "Himalayas", "Working Nomads", "Remote.co"],
+          "international": [
+            "LinkedIn (global)",
+            "We Work Remotely (WWR)",
+            "RemoteOK",
+            "NoDesk",
+            "Himalayas",
+            "Working Nomads",
+            "Remote.co"
+          ],
           "remote": [
             "Remotive",
             "NoDesk",
@@ -520,22 +569,72 @@
             "Indeed",
             "JustRemote",
             "DailyRemote",
-            "Virtual Vocations"
+            "Virtual Vocations",
+            "Working Nomads",
+            "Remote100k",
+            "SkipTheDrive"
           ],
-          "ai_specific": ["TopTal", "Arc.dev", "Turing", "Crossover", "AI Jobs"],
-          "personalized": ["Otta", "wantapply.com", "Wellfound (AngelList)", "Welcome to the Jungle", "Y Combinator Jobs", "Deel Jobs", "Oyster Jobs"],
-          "cis_it": ["Djinni"]
+          "ai_specific": [
+            "TopTal",
+            "Arc.dev",
+            "Turing",
+            "Crossover",
+            "AI Jobs"
+          ],
+          "personalized": [
+            "Otta",
+            "wantapply.com",
+            "Wellfound (AngelList)",
+            "Welcome to the Jungle",
+            "Y Combinator Jobs",
+            "Deel Jobs",
+            "Oyster Jobs"
+          ],
+          "cis_it": [
+            "Djinni"
+          ]
         },
         "telegram_channels": {
-          "priority_1": ["@management_jobs / @projects_jobs_feed", "@benchmark_executive", "@newhribb"],
-          "priority_2": ["@vacansii_bezbariera", "@finexecutive", "WORK ON", "Удалёнка без опыта"],
-          "additional": ["@tools_hacks (getmatch)", "©Карьера® The Blueprint"],
-          "resume_channels": ["Резюме 🚀 Маркетинга, СММ, Digital, Продажи"],
-          "ai_specific": ["@ai_jobs", "@mlops_jobs", "@datascience_jobs"]
+          "priority_1": [
+            "@management_jobs / @projects_jobs_feed",
+            "@benchmark_executive",
+            "@newhribb"
+          ],
+          "priority_2": [
+            "@vacansii_bezbariera",
+            "@finexecutive",
+            "WORK ON",
+            "Удалёнка без опыта"
+          ],
+          "additional": [
+            "@tools_hacks (getmatch)",
+            "©Карьера® The Blueprint"
+          ],
+          "resume_channels": [
+            "Резюме 🚀 Маркетинга, СММ, Digital, Продажи"
+          ],
+          "ai_specific": [
+            "@ai_jobs",
+            "@mlops_jobs",
+            "@datascience_jobs"
+          ]
         },
-        "networking": ["LinkedIn", "TenChat", "Setka (HH)", "Habr portal", "Professional Slack communities", "AI-focused Discord servers"],
-        "verification": ["Dream Job", "Glassdoor"],
-        "salary_data": ["Getmatch calculator", "Levels.fyi (VPN)"]
+        "networking": [
+          "LinkedIn",
+          "TenChat",
+          "Setka (HH)",
+          "Habr portal",
+          "Professional Slack communities",
+          "AI-focused Discord servers"
+        ],
+        "verification": [
+          "Dream Job",
+          "Glassdoor"
+        ],
+        "salary_data": [
+          "Getmatch calculator",
+          "Levels.fyi (VPN)"
+        ]
       },
       "core_resume_ai_ops": {
         "title": "Операционный менеджер / AI Operations Manager",
@@ -628,8 +727,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-08",
-        "notes": "v4.1.1: Added core_resume_habr_adapted block — full Habr Career adaptation. Updated version and last_check date."
+        "last_check": "2026-07-10",
+        "notes": "v4.1.2: Added 3 new job platforms to track_b_global.remote."
       }
     }
   },
