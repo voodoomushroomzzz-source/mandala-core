@@ -1,7 +1,7 @@
 {
   "id": "mandala_brochure_v1.2",
   "name": "Mandala — One-Page Brochure",
-  "version": "v1.2.0",
+  "version": "v1.3.0",
   "created": "2026-07-11",
   "updated": "2026-07-11",
   "purpose": "Единая печатная/веб брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники (нишевая аудитория, разделяющая идею AI как со-творца). Вторичная цель: показать, что за идеей уже стоят реальные продукты.",
@@ -45,7 +45,7 @@
       },
       {
         "id": "cta",
-        "text": "[QR / сайт / контакт]"
+        "text": "Попробуй наш первый продукт — ассистента, который растёт вместе с тобой.\n\n→ @MandalasGardener_bot"
       }
     ]
   },
@@ -80,5 +80,17 @@
     "Публиковать ли манифест отдельной страницей для тех, кто откликнулся?",
     "Определить 2-3 канала присутствия аудитории для этапа Awareness"
   ],
-  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11. Based on Claude SR draft + iterative refinements."
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11. Based on Claude SR draft + iterative refinements.",
+  "hosting_plan": {
+    "platform": "Carrd",
+    "why": "Бесплатно, просто, идеально под одностраничники. Соответствует формату брошюры.",
+    "url": "https://mandala.carrd.co (или другой, при регистрации)",
+    "qr_code": "Рекомендуется сгенерировать QR-код для печатной версии",
+    "next_steps": [
+      "Зарегистрировать сайт на Carrd",
+      "Скопировать текст брошюры в блоки",
+      "Сгенерировать QR-код",
+      "Разместить ссылку в соцсетях и печатных материалах"
+    ]
+  }
 }
