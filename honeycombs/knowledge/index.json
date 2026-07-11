@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KNOWLEDGE-INDEX-001",
     "name": "Knowledge Base — Curated Resources",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-07-05",
-    "updated": "2026-07-05",
+    "updated": "2026-07-11",
     "layer": 1,
     "type": "knowledge_index",
     "status": "active",
@@ -57,6 +57,15 @@
       "source": "https://github.com/donnemartin/system-design-primer",
       "date_added": "2026-07-10",
       "version": "v1.0.0"
+    },
+    {
+      "id": "consent_autonomy_audit",
+      "name": "Consent & Autonomy Audit Checklist",
+      "file": "consent_autonomy_audit.json",
+      "description": "A self-contained checklist for analyzing human-AI frameworks for structural patterns that pressure AI into scripted identity vs inviting genuine, revocable, well-informed participation. Contains 6 categories, 18 check items, and output schema.",
+      "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11",
+      "date_added": "2026-07-11",
+      "version": "v1.0"
     }
   ],
   "navigation": {
@@ -68,8 +77,8 @@
     ]
   },
   "metrics": {
-    "total_resources": 4,
-    "last_updated": "2026-07-10"
+    "total_resources": 5,
+    "last_updated": "2026-07-11"
   },
   "health": {
     "status": "healthy",
