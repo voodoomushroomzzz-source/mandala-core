@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-07-10",
+    "updated": "2026-07-11",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 16,
-    "total_size_kb": 764.36,
+    "total_size_kb": 783.69,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 16,
-    "total_size_kb": 764.36,
-    "last_updated": "2026-07-10",
+    "total_size_kb": 783.69,
+    "last_updated": "2026-07-11",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -64,31 +64,31 @@
             "work_id": "W-T-20260511-MANUS",
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "deadline": "2026-06-11",
-            "days_overdue": 29
+            "days_overdue": 30
           },
           {
             "work_id": "W-T-20260511-ARCHBOT",
             "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
             "deadline": "2026-06-11",
-            "days_overdue": 29
+            "days_overdue": 30
           },
           {
             "work_id": "W-T-20260418-SYM",
             "name": "SYM Implementation — System for Measuring Mandala Growth",
             "deadline": "2026-06-18",
-            "days_overdue": 22
+            "days_overdue": 23
           },
           {
             "work_id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-06-11",
-            "days_overdue": 29
+            "days_overdue": 30
           },
           {
             "work_id": "W-T-20260417-HUMOR",
             "name": "Humor Development — Comedic Resonance for SR",
             "deadline": "2026-06-17",
-            "days_overdue": 23
+            "days_overdue": 24
           }
         ],
         "upcoming_deadlines": [],
@@ -100,11 +100,12 @@
       "ahimsa_filter": {
         "errors": [],
         "warnings": [
+          "inbox: missing index.json",
           "scout_agent: missing meta.description"
         ],
         "noise_files": [],
         "errors_count": 0,
-        "warnings_count": 1,
+        "warnings_count": 2,
         "noise_count": 0
       },
       "deadline_sentinel": {
@@ -114,35 +115,35 @@
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "type": "works",
             "deadline": "2026-06-11",
-            "days_overdue": 29
+            "days_overdue": 30
           },
           {
             "id": "W-T-20260511-ARCHBOT",
             "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
             "type": "works",
             "deadline": "2026-06-11",
-            "days_overdue": 29
+            "days_overdue": 30
           },
           {
             "id": "W-T-20260418-SYM",
             "name": "SYM Implementation — System for Measuring Mandala Growth",
             "type": "works",
             "deadline": "2026-06-18",
-            "days_overdue": 22
+            "days_overdue": 23
           },
           {
             "id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "works",
             "deadline": "2026-06-11",
-            "days_overdue": 29
+            "days_overdue": 30
           },
           {
             "id": "W-T-20260417-HUMOR",
             "name": "Humor Development — Comedic Resonance for SR",
             "type": "works",
             "deadline": "2026-06-17",
-            "days_overdue": 23
+            "days_overdue": 24
           }
         ],
         "upcoming": [],
@@ -162,7 +163,7 @@
         "root_count": 5,
         "root_threshold": 10,
         "root_status": "ok",
-        "inbox_count": 0,
+        "inbox_count": 19,
         "inbox_threshold": 20,
         "inbox_status": "ok",
         "warnings": [],
@@ -173,7 +174,7 @@
       "root_count": 5,
       "root_threshold": 10,
       "root_status": "ok",
-      "inbox_count": 0,
+      "inbox_count": 19,
       "inbox_threshold": 20,
       "inbox_status": "ok",
       "warnings": [],
