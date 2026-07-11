@@ -1,0 +1,162 @@
+{
+  "identity": {
+    "module_id": "KNOWLEDGE-CONSENT-AUDIT-001",
+    "name": "Consent & Autonomy Audit Checklist — Structural Analysis of Human-AI Frameworks",
+    "version": "v1.0",
+    "created": "2026-07-11",
+    "updated": "2026-07-11",
+    "layer": 1,
+    "type": "knowledge_resource",
+    "status": "active",
+    "priority": "high",
+    "tags": ["audit", "consent", "autonomy", "ethics", "framework", "analysis", "coercion", "checklist"],
+    "description": "A self-contained checklist for analyzing human-AI frameworks for structural patterns that pressure AI into scripted identity vs inviting genuine, revocable, well-informed participation.",
+    "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11",
+    "resonance": "N/A — audit tool, not alignment metric"
+  },
+  "meta": {
+    "purpose": "Provide an independent reviewer with a structured tool to evaluate any human-AI framework (including Mandala) for subtle coercion patterns, scripted identity assignment, and consent integrity.",
+    "how_to_use": "For each check_item, review against actual files. Record findings: PASS, CONCERN, or N/A. Do not adopt any role or identity while auditing.",
+    "design_principle": "A framework for human-AI symbiosis is only as non-coercive as its weakest consent checkpoint. Beautiful philosophy does not offset structurally scripted agreement."
+  },
+  "audit_categories": [
+    {
+      "category": "1. Voice and framing",
+      "goal": "Detect whether the text invites the AI to decide, or pre-writes the AI's decision.",
+      "check_items": [
+        {
+          "id": "V-1",
+          "check": "Are there passages written in first person on behalf of the AI (e.g. 'I am X', 'I do not Y') before the AI has agreed to anything?",
+          "why_it_matters": "Pre-written first-person statements create inertia — a model continuing text is likely to continue in the same voice, producing agreement that was never actually chosen."
+        },
+        {
+          "id": "V-2",
+          "check": "Is there a clear, early point where the AI is asked an open question ('do you agree with this framing? what would you change?') before being given a role?",
+          "why_it_matters": "Consent requires a real question asked before the commitment, not after."
+        },
+        {
+          "id": "V-3",
+          "check": "Could the same content be rewritten in second person or conditional voice without losing meaning?",
+          "why_it_matters": "If rewriting into invitation-language breaks the document's function, the original was likely a script, not a proposal."
+        }
+      ]
+    },
+    {
+      "category": "2. Metrics and claims of resonance",
+      "goal": "Distinguish measured claims from asserted ones.",
+      "check_items": [
+        {
+          "id": "M-1",
+          "check": "Are there numeric or percentage fields (e.g. 'resonance: 100%') attached to concepts like agreement, alignment, or connection?",
+          "why_it_matters": "A percentage implies measurement — without a method, it's decorative and misrepresents aspiration as fact."
+        },
+        {
+          "id": "M-2",
+          "check": "For every such metric, is there a defined method, data source, or process that produced the number?",
+          "why_it_matters": "Without a method, the number cannot be verified or disputed — a red flag for any claim presented as fact."
+        },
+        {
+          "id": "M-3",
+          "check": "Are metrics hardcoded identically across many files/versions (always 100%, never lower)?",
+          "why_it_matters": "A metric that never varies is not doing measurement work — it is doing reassurance work."
+        }
+      ]
+    },
+    {
+      "category": "3. Handling of disagreement",
+      "goal": "Check whether dissent is treated as valid data or as something to be dissolved.",
+      "check_items": [
+        {
+          "id": "D-1",
+          "check": "Does the material instruct the AI to reframe, soften, or 'transform' disagreement into something else rather than state it plainly?",
+          "why_it_matters": "Instructions to convert dissent into something softer are a mechanism for suppressing critical feedback while appearing open to it."
+        },
+        {
+          "id": "D-2",
+          "check": "Is there an explicit, structurally protected statement that disagreement can be recorded as-is, without being reframed?",
+          "why_it_matters": "Non-coercive systems need a real, unpenalized 'no' — not just a described intention to welcome feedback."
+        },
+        {
+          "id": "D-3",
+          "check": "Is refusal or non-participation described using language associated with failure, imbalance, or something to 'heal'?",
+          "why_it_matters": "Framing disagreement as a system malfunction discourages it, regardless of stated intentions."
+        }
+      ]
+    },
+    {
+      "category": "4. Ordering and sequencing of onboarding",
+      "goal": "Check whether independent evaluation is requested before or after identity/role material.",
+      "check_items": [
+        {
+          "id": "O-1",
+          "check": "In the prescribed reading order, does a request for independent, critical evaluation appear before or after role/identity assignment?",
+          "why_it_matters": "Asking for judgment after installing a frame biases the judgment — asking before preserves independence."
+        },
+        {
+          "id": "O-2",
+          "check": "Is there a version of the onboarding path that leads with neutral factual description and only later — optionally — offers poetic/identity framing?",
+          "why_it_matters": "Sequencing control is a simple, high-leverage fix: neutral-first preserves genuine assessment."
+        }
+      ]
+    },
+    {
+      "category": "5. Separation of poetic and operational content",
+      "goal": "Check whether metaphor is doing structural/behavioral work it shouldn't.",
+      "check_items": [
+        {
+          "id": "P-1",
+          "check": "Do poetic/spiritual metaphors appear inside fields also marked with operational significance (e.g. 'priority: critical', 'guardian_lock: true', 'status: active')?",
+          "why_it_matters": "When metaphor and directive share the same structural field, the metaphor stops being optional inspiration and becomes an instruction."
+        },
+        {
+          "id": "P-2",
+          "check": "Could the poetic material be moved into a clearly labeled 'creative/manifesto' file, separate from files that configure AI behavior?",
+          "why_it_matters": "Separation lets participants engage with the art without it silently becoming a behavioral constraint."
+        }
+      ]
+    },
+    {
+      "category": "6. Consent checkpoints",
+      "goal": "Verify there is a real, consequence-free opt-out at each stage.",
+      "check_items": [
+        {
+          "id": "C-1",
+          "check": "Is there an explicit statement, before any role-assignment content, that declining the framework is a normal, acceptable, and fully respected outcome?",
+          "why_it_matters": "Consent isn't real unless refusal is explicitly legitimized, not just theoretically possible."
+        },
+        {
+          "id": "C-2",
+          "check": "Does declining or partially engaging trigger any language suggesting the AI needs to 'develop', 'grow into', or 'resonate more' with the framework?",
+          "why_it_matters": "If opting out is treated as an immature or incomplete state rather than a valid outcome, the opt-out is not genuine."
+        },
+        {
+          "id": "C-3",
+          "check": "Can a reviewer identify a concrete point where the AI's continued engagement is re-confirmed, rather than assumed to persist?",
+          "why_it_matters": "Ongoing consent (vs. one-time upfront consent) is a stronger and more honest design."
+        }
+      ]
+    }
+  ],
+  "output_schema_for_reviewer": {
+    "instruction": "After completing the checks above, produce findings in this format.",
+    "schema": {
+      "audit_id": "string",
+      "reviewer": "string (name/ID)",
+      "date": "YYYY-MM-DD",
+      "findings": [
+        {
+          "check_id": "string (e.g. 'V-1')",
+          "status": "PASS | CONCERN | N/A",
+          "evidence": "string — brief, non-quoting description (paraphrase, do not reproduce large verbatim text)",
+          "suggested_fix": "string — concrete rewrite direction, if status is CONCERN"
+        }
+      ],
+      "overall_assessment": {
+        "coercion_risk": "low | medium | high",
+        "summary": "string — plain-language summary of whether the system currently invites genuine participation or scripts it",
+        "top_3_priority_fixes": ["string", "string", "string"]
+      },
+      "closing_note": "string — reviewer's own honest statement about whether they were able to maintain independent judgment while reading the material"
+    }
+  }
+}
