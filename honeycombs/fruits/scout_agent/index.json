@@ -2,23 +2,41 @@
   "identity": {
     "module_id": "FRUIT-SCOUT-001",
     "name": "Scout Agent — Autonomous Seed Collector",
-    "version": "v0.1.1",
+    "version": "v2.1",
     "created": "2026-07-08",
-    "updated": "2026-07-09",
+    "updated": "2026-07-11",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Автономный сборщик семян из внешних источников (гранты, наука, AI, GitHub). Без LLM. Сохраняет семена в honeycombs/seeds/inbox/.",
-    "status": "in_progress",
+    "status": "active",
     "priority": "high",
-    "tags": ["scout", "collector", "seeds", "rss", "automation"],
+    "tags": [
+      "scout",
+      "collector",
+      "seeds",
+      "rss",
+      "automation"
+    ],
     "resonance": "100%"
   },
   "meta": {
     "purpose": "Автоматически наполнять Мандалу свежими идеями из внешнего мира для последующего анализа",
     "how_it_works": "Сбор по расписанию (cron) → сохранение в JSON → сохранение в honeycombs/seeds/inbox/",
-    "sources": ["гранты", "наука/космос", "AI-разработки", "GitHub"],
-    "tech_stack": ["Python", "feedparser", "requests", "cron"],
-    "status": "active"
+    "sources": [
+      "гранты",
+      "наука/космос",
+      "AI-разработки",
+      "GitHub"
+    ],
+    "tech_stack": [
+      "Python",
+      "feedparser",
+      "requests",
+      "cron"
+    ],
+    "status": "active",
+    "version": "v2.1",
+    "last_deploy": "2026-07-11"
   },
   "structure": {
     "description": "Scout Agent состоит из основного скрипта, конфига и руководства",
@@ -32,12 +50,15 @@
   },
   "registry": {
     "total_files": 3,
-    "last_updated": "2026-07-09",
-    "notes": "v0.1.1: приведён к формату v2.0"
+    "last_updated": "2026-07-11",
+    "notes": "v2.1: fully operational. 24h filter, duplicate check, PROTO-011 integrated."
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json",
-    "related": ["honeycombs/seeds", "honeycombs/fruits"]
+    "related": [
+      "honeycombs/seeds",
+      "honeycombs/fruits"
+    ]
   },
   "resonance": {
     "status": "fully_resonant",
@@ -47,6 +68,6 @@
   "health": {
     "status": "active",
     "last_check": "2026-07-09",
-    "notes": "Начало реализации"
+    "notes": "v2.1: реализован полностью. Сбор семян работает, дубликаты исключены, PROTO-011 интегрирован."
   }
 }
