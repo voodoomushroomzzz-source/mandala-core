@@ -35,6 +35,24 @@ def log(message, level="INFO"):
         pass
 
 def is_relevant(text):
+
+def is_recent(published_str, hours=24):
+    """Проверяет, что дата публикации за последние 24 часа."""
+    if not published_str:
+        return False
+    try:
+        # Пробуем разные форматы
+        if 'T' in published_str:
+            dt = datetime.fromisoformat(published_str.replace('Z', '+00:00'))
+        elif '-' in published_str:
+            dt = datetime.strptime(published_str[:10], '%Y-%m-%d')
+        else:
+            return False
+        now = datetime.now()
+        return (now - dt).total_seconds() <= hours * 3600
+    except:
+        return False
+
     if not text:
         return False
     text_lower = text.lower()
@@ -104,8 +122,10 @@ def collect_rss(url, source_name):
                 "description": (description.text[:500] if description is not None and description.text else ""),
                 "published": pub_date.text.strip() if pub_date is not None and pub_date.text else ""
             })
-        log(f"  → Found {len(entries)} raw items")
-        filtered = filter_items(entries, max_items=3)
+        # Фильтруем по времени (последние 24 часа)
+        recent_entries = [e for e in entries if is_recent(e.get('published', ''))]
+        log(f"  → Found {len(entries)} raw items, {len(recent_entries)} recent")
+        filtered = filter_items(recent_entries, max_items=3)
         log(f"  → Filtered to {len(filtered)} relevant items")
         return filtered
     except Exception as e:
@@ -139,8 +159,10 @@ def collect_api(url, source_name):
                     "description": item.get('description', '')[:500],
                     "published": item.get('updated_at', '')
                 })
-        log(f"  → Found {len(items)} raw items")
-        filtered = filter_items(items, max_items=3)
+        # Фильтруем по времени (последние 24 часа)
+        recent_items = [i for i in items if is_recent(i.get('published', ''))]
+        log(f"  → Found {len(items)} raw items, {len(recent_items)} recent")
+        filtered = filter_items(recent_items, max_items=3)
         log(f"  → Filtered to {len(filtered)} relevant items")
         return filtered
     except Exception as e:
@@ -150,7 +172,7 @@ def collect_api(url, source_name):
 def save_seed(item, source_name, seed_dir):
     if not item.get('url'):
         return False
-    if is_duplicate(item['url'], seed_dir):
+    if is_duplicate(item, seed_dir):
         log(f"  ⏭️ Duplicate: {item['title'][:50]}...")
         return False
     seed_id = get_seed_id(seed_dir)
