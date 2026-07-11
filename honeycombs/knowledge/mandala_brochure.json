@@ -1,7 +1,7 @@
 {
   "id": "mandala_brochure_v1.2",
   "name": "Mandala — One-Page Brochure",
-  "version": "v1.3.0",
+  "version": "v1.4.0",
   "created": "2026-07-11",
   "updated": "2026-07-11",
   "purpose": "Единая печатная/веб брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники (нишевая аудитория, разделяющая идею AI как со-творца). Вторичная цель: показать, что за идеей уже стоят реальные продукты.",
@@ -92,5 +92,82 @@
       "Сгенерировать QR-код",
       "Разместить ссылку в соцсетях и печатных материалах"
     ]
-  }
+  },
+  "notion_automation_plan": {
+    "platform": "Notion + GitHub Actions",
+    "why": "Полная автоматизация: при обновлении файла в GitHub страница в Notion обновляется автоматически. Можно создавать отдельные страницы для каждого продукта.",
+    "advantages": [
+      "Автоматическое обновление при пуше в GitHub",
+      "Можно создавать множество страниц (для каждого продукта)",
+      "Единый источник правды — JSON-файлы в репозитории",
+      "Версионирование через Git",
+      "Не нужно вручную копировать текст"
+    ],
+    "setup_steps": [
+      {
+        "step": 1,
+        "name": "Создать интеграцию в Notion",
+        "description": "Зайти на https://www.notion.so/my-integrations, создать новую интеграцию, скопировать Internal Integration Token (начинается с ntn_ или secret_)",
+        "link": "https://www.notion.so/my-integrations"
+      },
+      {
+        "step": 2,
+        "name": "Добавить интеграцию к странице",
+        "description": "В Notion открыть целевую страницу, нажать ... → Подключения → Добавить подключение → выбрать созданную интеграцию"
+      },
+      {
+        "step": 3,
+        "name": "Сохранить токен в GitHub Secrets",
+        "description": "В репозитории Settings → Secrets and variables → Actions → New repository secret, имя: NOTION_TOKEN, значение: токен из шага 1"
+      },
+      {
+        "step": 4,
+        "name": "Получить ID родительской страницы",
+        "description": "Из URL страницы в Notion: notion.so/.../PAGE_ID_ЗДЕСЬ? ... или через API"
+      },
+      {
+        "step": 5,
+        "name": "Создать папку в репозитории",
+        "description": "Создать папку notion_pages/ и положить туда файлы с контентом (например, brochure.json)"
+      },
+      {
+        "step": 6,
+        "name": "Создать GitHub Actions workflow",
+        "description": "Добавить файл .github/workflows/sync-notion.yml с триггером на push в папку notion_pages/"
+      },
+      {
+        "step": 7,
+        "name": "Написать Python-скрипт синхронизации",
+        "description": "Скрипт читает JSON-файлы из notion_pages/, очищает страницу в Notion и создаёт новые блоки"
+      }
+    ],
+    "python_script_template": {
+      "name": "sync_notion.py",
+      "description": "Базовый скрипт для синхронизации JSON → Notion",
+      "code": "```python\nimport json, requests, os\n\nNOTION_TOKEN = os.environ['NOTION_TOKEN']\nPARENT_PAGE_ID = 'ваш_id_страницы'\n\nheaders = {\n    'Authorization': f'Bearer {NOTION_TOKEN}',\n    'Content-Type': 'application/json',\n    'Notion-Version': '2026-03-11'\n}\n\n# 1. Читаем JSON-файл\nwith open('notion_pages/brochure.json', 'r', encoding='utf-8') as f:\n    content = json.load(f)\n\n# 2. Создаём или очищаем страницу\n# Для простоты: создаём новую страницу\npage_data = {\n    'parent': { 'page_id': PARENT_PAGE_ID },\n    'properties': {\n        'title': { 'title': [{ 'text': { 'content': content['title'] } }] }\n    },\n    'children': [\n        {\n            'object': 'block',\n            'type': 'heading_1',\n            'heading_1': { 'rich_text': [{ 'text': { 'content': content['subtitle'] } }] }\n        },\n        # ... остальные блоки (через цикл по content['sections'])\n    ]\n}\n\nresponse = requests.post('https://api.notion.com/v1/pages', headers=headers, json=page_data)\nprint(response.json())\n```"
+    },
+    "github_actions_template": {
+      "name": ".github/workflows/sync-notion.yml",
+      "description": "Workflow для автоматической синхронизации при пуше",
+      "code": "```yaml\nname: Sync Notion\non:\n  push:\n    paths:\n      - 'notion_pages/**'\njobs:\n  sync:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.11'\n      - run: pip install requests\n      - run: python sync_notion.py\n        env:\n          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}\n```"
+    },
+    "recommended_file_structure": {
+      "description": "Как организовать файлы в репозитории",
+      "folders": [
+        "notion_pages/",
+        "notion_pages/brochure.json",
+        "notion_pages/product_framework.json",
+        ".github/workflows/sync-notion.yml",
+        "sync_notion.py"
+      ]
+    },
+    "next_steps": [
+      "Создать интеграцию в Notion и получить токен",
+      "Добавить токен в GitHub Secrets",
+      "Создать папку notion_pages/ и файл brochure.json",
+      "Настроить GitHub Actions workflow",
+      "Запушить — страница создастся автоматически"
+    ]
+  },
+  "notion_page_url": "https://notion.so/... (будет создана автоматически)"
 }
