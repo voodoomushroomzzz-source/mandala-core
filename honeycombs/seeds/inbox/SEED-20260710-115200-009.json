@@ -1,1 +1,32 @@
-404: Not Found
+{
+  "seed_id": "SEED-20260710-115200-009",
+  "title": "public-apis",
+  "url": "https://github.com/public-apis/public-apis",
+  "description": "A collective list of free APIs",
+  "source": "GitHub Trending Python (API)",
+  "collected_at": "2026-07-10T11:52:00.802094",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
