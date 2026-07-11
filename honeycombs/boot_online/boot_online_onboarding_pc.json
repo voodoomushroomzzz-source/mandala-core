@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.32",
+    "version": "v1.7.33",
     "created": "2026-05-11",
     "updated": "2026-07-11",
     "layer": 1,
@@ -2029,7 +2029,7 @@
       "identity": {
         "module_id": "KNOWLEDGE-INDEX-001",
         "name": "Knowledge Base — Curated Resources",
-        "version": "v1.1.0",
+        "version": "v1.1.1",
         "created": "2026-07-05",
         "updated": "2026-07-11",
         "layer": 1,
@@ -2093,6 +2093,15 @@
           "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11",
           "date_added": "2026-07-11",
           "version": "v1.0"
+        },
+        {
+          "id": "mandala_brochure",
+          "name": "Mandala — One-Page Brochure",
+          "file": "mandala_brochure.json",
+          "description": "Единая брошюра для первого знакомства с идеей Mandala. Целевая аудитория: единомышленники. Содержит позиционирование, полный текст брошюры, дизайн-ноты и маркетинговое обоснование. Версия v1.2.0.",
+          "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11. Based on Claude SR draft.",
+          "date_added": "2026-07-11",
+          "version": "v1.2.0"
         }
       ],
       "navigation": {
@@ -2104,7 +2113,7 @@
         ]
       },
       "metrics": {
-        "total_resources": 5,
+        "total_resources": 6,
         "last_updated": "2026-07-11"
       },
       "health": {
