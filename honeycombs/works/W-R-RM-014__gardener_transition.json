@@ -33,9 +33,9 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v4.1.2",
+        "version": "v4.1.3",
         "created": "2026-04-16",
-        "updated": "2026-07-10",
+        "updated": "2026-07-12",
         "layer": 2,
         "type": "roadmap",
         "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
@@ -224,7 +224,58 @@
                 "⏳ Relocation trial: Vietnam (1-2 months) — stable remote work from new location"
               ]
             }
-          }
+          },
+          "target_companies": [
+            {
+              "name": "RWS Group",
+              "category": "AI",
+              "field": "Локализация, лингвистика, AI",
+              "website": "https://www.rws.com",
+              "description": "Крупнейший в мире поставщик услуг локализации и лингвистических AI-решений. Предлагает AI-инструменты для перевода на 3500+ языковых пар (Trados, Language Weaver, Evolve), совмещая машинный перевод с человеческой экспертизой. Публичная компания, торгуется на Лондонской бирже (LSE: RWS.L)."
+            },
+            {
+              "name": "bolt.new (StackBlitz)",
+              "category": "AI",
+              "field": "SaaS, AI, разработка ПО",
+              "website": "https://bolt.new",
+              "description": "AI-платформа для разработки, превращающая текстовые запросы в готовые full-stack веб-приложения. ИИ-агенты пишут код, устанавливают зависимости и деплоят приложение прямо в браузере (на базе WebContainers от StackBlitz). Привлекла $135M инвестиций, оценка ~$700M."
+            },
+            {
+              "name": "GitLab",
+              "category": "IT-менеджмент",
+              "field": "DevOps, IT",
+              "website": "https://www.gitlab.com",
+              "description": "Платформа DevOps/DevSecOps полного цикла: управление кодом, CI/CD, безопасность и планирование проектов в едином инструменте. Полностью remote-first компания."
+            },
+            {
+              "name": "Scoro",
+              "category": "IT-менеджмент",
+              "field": "Project management, SaaS",
+              "website": "https://www.scoro.com",
+              "description": "SaaS-платформа для управления проектами и работой агентств/консалтинговых компаний: тайм-трекинг, биллинг, CRM и отчётность в одном интерфейсе."
+            },
+            {
+              "name": "Deel",
+              "category": "IT-менеджмент / HR Tech",
+              "field": "HR Tech, EOR",
+              "website": "https://www.deel.com",
+              "description": "HR-tech платформа для найма и управления удалёнными сотрудниками по всему миру (Employer of Record): расчёт зарплат, контракты, комплаенс."
+            },
+            {
+              "name": "Toptal",
+              "category": "IT-менеджмент",
+              "field": "Talent marketplace, IT",
+              "website": "https://www.toptal.com",
+              "description": "Маркетплейс для найма топовых фрилансеров в IT: разработчиков, дизайнеров, финансовых и проектных менеджеров. Строгий отбор специалистов (проходят единицы процентов кандидатов)."
+            },
+            {
+              "name": "Canonical",
+              "category": "IT-менеджмент",
+              "field": "Open source, Linux (Ubuntu)",
+              "website": "https://www.canonical.com",
+              "description": "Разработчик Ubuntu Linux и открытых технологий для облаков и IoT. Полностью remote-first компания, регулярно нанимает менеджеров продуктов и проектов в open source."
+            }
+          ]
         }
       },
       "task_tracker": {
@@ -727,8 +778,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-10",
-        "notes": "v4.1.2: Added 3 new job platforms to track_b_global.remote."
+        "last_check": "2026-07-12",
+        "notes": "v4.1.3: Added target_companies block with 7 companies for Track B."
       }
     }
   },
