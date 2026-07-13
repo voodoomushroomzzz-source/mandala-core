@@ -1,0 +1,86 @@
+{
+  "work_id": "W-R-ECO-001",
+  "name": "Autonomous Ecosystem — From Room to Self-Sustaining Greenhouse",
+  "status": "planning",
+  "priority": "critical",
+  "horizon": "strategic",
+  "description": "Development and implementation of a three-phase autonomous ecosystem under AI control. Phase 1: indoor ecosystem with plant zoning. Phase 2: fully autonomous year-round greenhouse. Phase 3: integration of renewable energy sources (solar, wind, water) for complete energy independence.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": null,
+  "progress": 0,
+  "tags": ["ecosystem", "autonomy", "greenhouse", "AI-control", "energy", "IoT"],
+  "deadline": "2026-12-31",
+  "created": "2026-07-13",
+  "updated": "2026-07-13",
+  "phases": {
+    "phase_1": {
+      "name": "Indoor Ecosystem",
+      "status": "planning",
+      "deadline": "2026-12-31",
+      "description": "Create a working prototype for microclimate control in a single room with plant zoning.",
+      "components": {
+        "hardware": {
+          "controller": "ESP32 — optimal for prototype (Wi-Fi, Bluetooth, low power consumption)",
+          "sensors": [
+            "Soil moisture: capacitive sensors (I2C) — durable and accurate",
+            "Air temperature and humidity: DHT22 or SHT31",
+            "Light level: TSL2561 (lux measurement)"
+          ],
+          "actuators": [
+            "Controllable sockets/relays for watering, misting, lighting, ventilation",
+            "Servo drives for vents/blinds (optional)"
+          ]
+        },
+        "software": {
+          "platform": "Home Assistant — open system with web interface and mobile app",
+          "data_flow": "ESP32 → Wi-Fi → Home Assistant → relays/sockets",
+          "automation": "Rules (trigger → condition → action) and AI integration via AI Tasks"
+        },
+        "deliverables": [
+          "Working prototype with sensors and controllable sockets",
+          "Configured Home Assistant with automations",
+          "AI integration (data reading, control via AI Tasks)",
+          "Setup and configuration documentation"
+        ]
+      }
+    },
+    "phase_2": {
+      "name": "Outdoor Autonomous Greenhouse",
+      "status": "pending",
+      "deadline": null,
+      "description": "Build a fully autonomous year-round greenhouse with AI control, scaling Phase 1 architecture. Starts after Phase 1 completion.",
+      "key_improvements": [
+        "Scaling: replace ESP32 with STM32F103RCT6 or multiple ESP32s per zone",
+        "Increase sensor count (20+), add CO₂ and soil pH sensors",
+        "Use ZigBee for low-power mesh sensor network",
+        "Implement AI algorithms: PID controllers with PSO optimization or reinforcement learning"
+      ],
+      "deliverables": [
+        "Fully automated greenhouse with AI-controlled climate, watering, lighting",
+        "Digital twin for scenario simulation",
+        "Integration with Home Assistant and AI"
+      ]
+    },
+    "phase_3": {
+      "name": "Energy Autonomy",
+      "status": "pending",
+      "deadline": null,
+      "description": "Integrate renewable energy sources to create a fully self-sufficient ecosystem. Starts after Phase 2 completion.",
+      "components": [
+        "Solar panels with tracking system",
+        "Small wind turbine (1-3 kW) for nighttime/winter compensation",
+        "Battery system (LiFePO4) with Energy Management System (EMS)",
+        "Rainwater collection and purification system"
+      ],
+      "integration": "EMS integrates with Home Assistant and AI, which makes decisions based on energy balance (activate/deactivate loads to extend autonomy)",
+      "deliverables": [
+        "Fully energy-independent greenhouse",
+        "AI-optimized energy management system",
+        "Real-time energy monitoring dashboard"
+      ]
+    }
+  },
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13"
+}
