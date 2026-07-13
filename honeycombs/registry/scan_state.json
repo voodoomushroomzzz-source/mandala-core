@@ -1,7 +1,7 @@
 {
-  "last_scan": "2026-07-13T07:11:15.378523",
+  "last_scan": "2026-07-13T11:48:24.872705",
   "honeycomb_hashes": {
-    "honeycombs/works": "058404a56a0376d23a7013a5122db934",
+    "honeycombs/works": "d103bbda94744e7bbde1d29d28f76a69",
     "honeycombs/core_map": "8e6d260a7f9cd1811519842bb114764f",
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
@@ -14,7 +14,7 @@
     "honeycombs/boot_online": "466faeb68e8c977a9dc154d17fbd270c",
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
     "honeycombs/seeds": "a1828531a8ce67ac629c9fd181227d88",
-    "honeycombs/fruits": "7c992374fe2e234860d0b0e3d960ec70",
+    "honeycombs/fruits": "7034f4bab526e43c20f0421571165e03",
     "honeycombs/fruits/scout_agent": "209d3bc31c26d1fc5386709dccd07cba",
     "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456"
   },
@@ -24,57 +24,26 @@
     "invalid_v2": 0,
     "errors": 0,
     "warnings": 0,
-    "total_files": 101,
-    "total_size_kb": 806.04
+    "total_files": 103,
+    "total_size_kb": 793.48
   },
   "seeds_health": {
     "root_count": 5,
     "root_threshold": 10,
     "root_status": "ok",
-    "inbox_count": 5,
+    "inbox_count": 6,
     "inbox_threshold": 20,
     "inbox_status": "ok",
     "warnings": [],
     "status": "ok"
   },
   "symbiosis_guard": {
-    "last_check": "2026-07-13T07:11:15.378533",
+    "last_check": "2026-07-13T11:48:24.872714",
     "errors_count": 0,
-    "warnings_count": 2,
-    "expired_tasks": 5,
+    "warnings_count": 3,
+    "expired_tasks": 0,
     "upcoming_deadlines": 0,
-    "expired_tasks_list": [
-      {
-        "work_id": "W-T-20260511-MANUS",
-        "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-        "deadline": "2026-06-11",
-        "days_overdue": 32
-      },
-      {
-        "work_id": "W-T-20260511-ARCHBOT",
-        "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
-        "deadline": "2026-06-11",
-        "days_overdue": 32
-      },
-      {
-        "work_id": "W-T-20260418-SYM",
-        "name": "SYM Implementation — System for Measuring Mandala Growth",
-        "deadline": "2026-06-18",
-        "days_overdue": 25
-      },
-      {
-        "work_id": "W-T-20260511-ENGCHAT",
-        "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
-        "deadline": "2026-06-11",
-        "days_overdue": 32
-      },
-      {
-        "work_id": "W-T-20260417-HUMOR",
-        "name": "Humor Development — Comedic Resonance for SR",
-        "deadline": "2026-06-17",
-        "days_overdue": 26
-      }
-    ],
+    "expired_tasks_list": [],
     "upcoming_deadlines_list": [],
     "noise_files": 0,
     "noise_files_list": [],

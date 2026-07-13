@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 16,
-    "total_size_kb": 806.04,
+    "total_size_kb": 793.48,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 16,
-    "total_size_kb": 806.04,
+    "total_size_kb": 793.48,
     "last_updated": "2026-07-13",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -58,43 +58,14 @@
     "symbiosis_guard": {
       "task_validator": {
         "errors": [],
-        "warnings": [],
-        "expired_tasks": [
-          {
-            "work_id": "W-T-20260511-MANUS",
-            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-            "deadline": "2026-06-11",
-            "days_overdue": 32
-          },
-          {
-            "work_id": "W-T-20260511-ARCHBOT",
-            "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
-            "deadline": "2026-06-11",
-            "days_overdue": 32
-          },
-          {
-            "work_id": "W-T-20260418-SYM",
-            "name": "SYM Implementation — System for Measuring Mandala Growth",
-            "deadline": "2026-06-18",
-            "days_overdue": 25
-          },
-          {
-            "work_id": "W-T-20260511-ENGCHAT",
-            "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
-            "deadline": "2026-06-11",
-            "days_overdue": 32
-          },
-          {
-            "work_id": "W-T-20260417-HUMOR",
-            "name": "Humor Development — Comedic Resonance for SR",
-            "deadline": "2026-06-17",
-            "days_overdue": 26
-          }
+        "warnings": [
+          "W-R-ECO-001__autonomous_ecosystem.json: non-standard status 'planning'"
         ],
+        "expired_tasks": [],
         "upcoming_deadlines": [],
         "errors_count": 0,
-        "warnings_count": 0,
-        "expired_count": 5,
+        "warnings_count": 1,
+        "expired_count": 0,
         "upcoming_count": 0
       },
       "ahimsa_filter": {
@@ -109,46 +80,10 @@
         "noise_count": 0
       },
       "deadline_sentinel": {
-        "expired": [
-          {
-            "id": "W-T-20260511-MANUS",
-            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-            "type": "works",
-            "deadline": "2026-06-11",
-            "days_overdue": 32
-          },
-          {
-            "id": "W-T-20260511-ARCHBOT",
-            "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
-            "type": "works",
-            "deadline": "2026-06-11",
-            "days_overdue": 32
-          },
-          {
-            "id": "W-T-20260418-SYM",
-            "name": "SYM Implementation — System for Measuring Mandala Growth",
-            "type": "works",
-            "deadline": "2026-06-18",
-            "days_overdue": 25
-          },
-          {
-            "id": "W-T-20260511-ENGCHAT",
-            "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
-            "type": "works",
-            "deadline": "2026-06-11",
-            "days_overdue": 32
-          },
-          {
-            "id": "W-T-20260417-HUMOR",
-            "name": "Humor Development — Comedic Resonance for SR",
-            "type": "works",
-            "deadline": "2026-06-17",
-            "days_overdue": 26
-          }
-        ],
+        "expired": [],
         "upcoming": [],
         "warnings": [],
-        "expired_count": 5,
+        "expired_count": 0,
         "upcoming_count": 0
       },
       "integrity_check": {
@@ -163,7 +98,7 @@
         "root_count": 5,
         "root_threshold": 10,
         "root_status": "ok",
-        "inbox_count": 5,
+        "inbox_count": 6,
         "inbox_threshold": 20,
         "inbox_status": "ok",
         "warnings": [],
@@ -174,7 +109,7 @@
       "root_count": 5,
       "root_threshold": 10,
       "root_status": "ok",
-      "inbox_count": 5,
+      "inbox_count": 6,
       "inbox_threshold": 20,
       "inbox_status": "ok",
       "warnings": [],
