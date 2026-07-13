@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.6",
+    "version": "v1.0.7",
     "created": "2026-07-08",
-    "updated": "2026-07-10",
+    "updated": "2026-07-13",
     "layer": 1,
     "type": "work_manifest",
     "description": "Single source of truth for all work items (tasks, roadmaps, initiatives). Replaces separate tasks/ and roadmaps/.",
@@ -118,7 +118,10 @@
       "W-T-20260511-ARCHBOT__architect_bot",
       "W-T-20260511-ENGCHAT__engineer_chat",
       "W-T-20260511-MANUS__manus_hands"
-    ]
+    ],
+    "deadlines": {
+      "W-T-20260511-MANUS": "2026-08-31"
+    }
   },
   "navigation": {
     "parent": "honeycombs/core_map/index.json",
@@ -129,7 +132,7 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-07-10",
-    "notes": "v1.0.6: removed completed RM-013 (Symbiosis Guard). Total works: 12."
+    "last_check": "2026-07-13",
+    "notes": "v1.0.7: Manus deadline extended to 2026-08-31"
   }
 }
