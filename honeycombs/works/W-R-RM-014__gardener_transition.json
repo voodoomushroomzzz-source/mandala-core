@@ -33,9 +33,9 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v4.1.3",
+        "version": "v4.1.4",
         "created": "2026-04-16",
-        "updated": "2026-07-12",
+        "updated": "2026-07-13",
         "layer": 2,
         "type": "roadmap",
         "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
@@ -509,6 +509,24 @@
                 "status": "not_started",
                 "certificate": "Credly badge",
                 "why": "Direct path to Agentic Orchestration roles."
+              },
+              {
+                "name": "Anthropic Academy — Claude Certification Path",
+                "platform": "Anthropic (Skilljar)",
+                "duration": "~20+ часов (17 курсов)",
+                "start": "July 2026",
+                "status": "not_started",
+                "certificate": "Course completion certificates + CCA-F (Claude Certified Architect – Foundations)",
+                "why": "Официальные бесплатные курсы Anthropic. Прямой путь к CCA-F — первой в мире сертификации по Claude. Модули: Claude 101, AI Fluency, API, MCP, Claude Code, Subagents. Экзамен CCA-F (~60 вопросов, прокторинг) — официальный, запущен 12 марта 2026.",
+                "url": "https://anthropic.skilljar.com",
+                "exam_domains": [
+                  "Agentic Architecture & Orchestration (27%)",
+                  "Claude Code Configuration & Workflows (20%)",
+                  "Prompt Engineering & Structured Output (20%)",
+                  "Tool Design & MCP Integration (18%)",
+                  "Context Management & Reliability (15%)"
+                ],
+                "note": "Курсы бесплатны, не требуют аккаунта Anthropic — только email для Skilljar. Сертификат за курс ≠ CCA-F (это отдельный прокторируемый экзамен)."
               }
             ]
           },
@@ -778,8 +796,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-12",
-        "notes": "v4.1.3: Added target_companies block with 7 companies for Track B."
+        "last_check": "2026-07-13",
+        "notes": "v4.1.4: Added Anthropic Academy to critical_free courses."
       }
     }
   },
