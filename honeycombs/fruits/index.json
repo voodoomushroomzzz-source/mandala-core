@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry & Strategy Map",
-    "version": "v2.3.1",
+    "version": "v2.4.0",
     "created": "2026-04-17",
-    "updated": "2026-07-11",
+    "updated": "2026-07-13",
     "layer": 2,
     "type": "registry_index",
     "description": "Registry of Mandala products and strategic map of their interaction. v2.2.0: gentle_companion got dedicated honeycomb with architecture plan (14 modules, 7 phases). Dual-repo infrastructure. Links to architecture index.",
@@ -447,15 +447,90 @@
         "layer": "Seed Collector (Layer 0)",
         "task_id": "W-T-20260410-0240",
         "task_file": "honeycombs/works/W-T-20260410-0240__scout_agent.json"
+      },
+      "autonomous_ecosystem": {
+        "id": "fruit-autonomous-ecosystem-001",
+        "name": "Autonomous Ecosystem — from Room to Self-Sustaining Greenhouse",
+        "short_description": "A three-phase autonomous ecosystem under AI control: indoor plant zoning → fully automated greenhouse → energy-independent biosphere.",
+        "problem_solved": "Creates a fully self-sustaining environment for plant growth, managed by AI. Eliminates manual intervention in watering, climate control, and energy management.",
+        "status": "planning",
+        "version": "v0.0.0",
+        "released": "TBD",
+        "updated": "2026-07-13",
+        "platform": "IoT + Home Assistant + AI",
+        "url": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json",
+        "detail_file": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json",
+        "icon": "🌿",
+        "tags": [
+          "ecosystem",
+          "autonomy",
+          "greenhouse",
+          "AI-control",
+          "energy",
+          "IoT"
+        ],
+        "layer": "Ecosystem (Layer 4)",
+        "work_id": "W-R-ECO-001",
+        "phases": {
+          "phase_1": {
+            "name": "Indoor Ecosystem",
+            "status": "planning",
+            "deadline": "2026-12-31"
+          },
+          "phase_2": {
+            "name": "Outdoor Autonomous Greenhouse",
+            "status": "pending",
+            "deadline": null
+          },
+          "phase_3": {
+            "name": "Energy Autonomy",
+            "status": "pending",
+            "deadline": null
+          }
+        },
+        "architecture": {
+          "hardware": {
+            "controller": "ESP32 → STM32 (scaling)",
+            "sensors": [
+              "Soil moisture (capacitive, I2C)",
+              "Air temperature and humidity (DHT22/SHT31)",
+              "Light level (TSL2561)",
+              "CO₂, soil pH (Phase 2+)"
+            ],
+            "actuators": [
+              "Relays for watering, misting, lighting, ventilation",
+              "Servo drives for vents/blinds"
+            ]
+          },
+          "software": {
+            "platform": "Home Assistant + AI",
+            "data_flow": "Sensors → ESP32 → Wi-Fi/ZigBee → Home Assistant → AI → Actuators",
+            "ai_integration": "AI reads sensor data via Home Assistant API and controls actuators via rules/AI Tasks"
+          },
+          "energy": {
+            "phase_3": [
+              "Solar panels with tracking system",
+              "Small wind turbine (1-3 kW)",
+              "LiFePO4 battery system with EMS",
+              "Rainwater collection and purification"
+            ]
+          }
+        },
+        "deliverables": [
+          "Phase 1: Working prototype with sensors and controllable sockets",
+          "Phase 2: Fully automated greenhouse with AI climate/pH/lighting control",
+          "Phase 3: Energy-independent ecosystem with AI-optimized power management"
+        ]
       }
     }
   },
   "metrics": {
-    "total_fruits": 5,
+    "total_fruits": 6,
     "active": 2,
-    "in_development": 1,
+    "in_development": 2,
     "archived": 0,
-    "examples": 0
+    "examples": 0,
+    "planning": 1
   },
   "navigation": {
     "parent_map": "honeycombs/core_map/index.json",
