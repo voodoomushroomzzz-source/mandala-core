@@ -4,13 +4,20 @@
   "status": "planning",
   "priority": "critical",
   "horizon": "strategic",
-  "description": "Development and implementation of a three-phase autonomous ecosystem under AI control. Phase 1: indoor ecosystem with plant zoning. Phase 2: fully autonomous year-round greenhouse. Phase 3: integration of renewable energy sources (solar, wind, water) for complete energy independence.",
+  "description": "Development and implementation of a three-phase autonomous ecosystem under AI control. Phase 1: indoor ecosystem with plant zoning (split into 1a: sensors + data collection, 1b: AI control). Phase 2: fully autonomous year-round greenhouse. Phase 3: integration of renewable energy sources (solar, wind, water) for complete energy independence. Includes computer vision for plant health monitoring, real-time dashboard, and Scout Agent integration.",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
   "effort_estimate": null,
-  "progress": 0,
-  "tags": ["ecosystem", "autonomy", "greenhouse", "AI-control", "energy", "IoT"],
+  "progress": 5,
+  "tags": [
+    "ecosystem",
+    "autonomy",
+    "greenhouse",
+    "AI-control",
+    "energy",
+    "IoT"
+  ],
   "deadline": "2026-12-31",
   "created": "2026-07-13",
   "updated": "2026-07-13",
@@ -44,6 +51,26 @@
           "AI integration (data reading, control via AI Tasks)",
           "Setup and configuration documentation"
         ]
+      },
+      "subphases": {
+        "phase_1a": {
+          "name": "Sensors and Data Collection",
+          "description": "Install sensors, connect to Home Assistant, collect baseline data",
+          "deliverables": [
+            "ESP32 with soil moisture, air temp/humidity, light sensors",
+            "Data streaming to Home Assistant",
+            "Basic dashboard"
+          ]
+        },
+        "phase_1b": {
+          "name": "AI Control",
+          "description": "Implement AI-driven decisions based on sensor data",
+          "deliverables": [
+            "AI integration with Home Assistant (AI Tasks/LLM API)",
+            "Automated watering, lighting, ventilation",
+            "Rule-based and AI-driven automations"
+          ]
+        }
       }
     },
     "phase_2": {
@@ -61,7 +88,30 @@
         "Fully automated greenhouse with AI-controlled climate, watering, lighting",
         "Digital twin for scenario simulation",
         "Integration with Home Assistant and AI"
-      ]
+      ],
+      "scout_integration": {
+        "description": "Scout Agent collects external data: weather forecasts, new plant varieties, irrigation tech",
+        "data_flow": "Scout Agent → seeds/ → Engineer Chat → ecosystem decisions"
+      },
+      "dashboard": {
+        "description": "Real-time sensor data visualization in Engineer Chat",
+        "features": [
+          "Live sensor readings",
+          "Historical trends",
+          "AI recommendations",
+          "Manual override controls"
+        ]
+      },
+      "computer_vision": {
+        "description": "Camera-based plant health monitoring",
+        "features": [
+          "Leaf analysis (color, texture, spots)",
+          "Disease detection",
+          "Growth tracking",
+          "Early warning system"
+        ],
+        "hardware": "ESP32-CAM or Raspberry Pi with camera module"
+      }
     },
     "phase_3": {
       "name": "Energy Autonomy",
@@ -82,5 +132,21 @@
       ]
     }
   },
-  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13"
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13",
+  "components": {
+    "computer_vision": "Cameras for plant health monitoring (leaf analysis, disease detection)",
+    "dashboard": "Real-time sensor data visualization in Engineer Chat",
+    "scout_integration": "Scout Agent collects weather data, new plant varieties, and irrigation technologies",
+    "rainwater": "Rainwater collection and purification system (Phase 3)",
+    "success_criteria": [
+      "Phase 1: Working prototype with sensors and controllable sockets",
+      "Phase 2: AI reduces water usage by 20% without loss of yield",
+      "Phase 3: Ecosystem operates 48+ hours without external power"
+    ]
+  },
+  "success_criteria": {
+    "phase_1": "Working prototype with sensors and controllable sockets",
+    "phase_2": "AI reduces water usage by 20% without loss of yield",
+    "phase_3": "Ecosystem operates 48+ hours without external power"
+  }
 }
