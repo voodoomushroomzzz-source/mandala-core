@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.7",
+    "version": "v1.0.8",
     "created": "2026-07-08",
     "updated": "2026-07-13",
     "layer": 1,
@@ -88,20 +88,20 @@
     "index": "This file (index.json) serves as the registry"
   },
   "manifest": {
-    "total_works": 13,
+    "total_works": 14,
     "by_status": {
       "active": 8,
-      "planning": 4,
+      "planning": 5,
       "in_progress": 0,
       "done": 1
     },
     "by_horizon": {
-      "strategic": 6,
+      "strategic": 7,
       "tactical": 7
     },
     "by_priority": {
       "critical": 3,
-      "high": 4,
+      "high": 5,
       "medium": 4,
       "low": 2
     },
@@ -118,10 +118,16 @@
       "W-T-20260511-ARCHBOT__architect_bot",
       "W-T-20260511-ENGCHAT__engineer_chat",
       "W-T-20260511-MANUS__manus_hands",
-      "W-R-ECO-001"
+      "W-R-ECO-001",
+      "W-R-ECOMM-001"
     ],
     "deadlines": {
       "W-T-20260511-MANUS": "2026-08-31"
+    },
+    "related_works": {
+      "W-R-ECOMM-001": [
+        "W-R-RM-014"
+      ]
     }
   },
   "navigation": {
@@ -134,6 +140,6 @@
   "health": {
     "status": "active",
     "last_check": "2026-07-13",
-    "notes": "v1.0.7: added W-R-ECO-001 (Autonomous Ecosystem). Total works: 13."
+    "notes": "v1.0.8: added W-R-ECOMM-001 (China Sourcing & E-commerce). Total works: 14."
   }
 }
