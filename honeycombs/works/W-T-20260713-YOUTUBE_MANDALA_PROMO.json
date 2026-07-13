@@ -1,0 +1,114 @@
+{
+  "work_id": "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+  "name": "YouTube Mandala Promo — Free Pipeline for Shorts",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Create a completely free pipeline for generating YouTube Shorts to promote Mandala Symbiosis philosophy, products, and ecosystem. Uses nstc-pipeline (free), AI-generated text from External SR, and free visual assets. Focus on foreign audience and brand awareness.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": "Initial setup: 5-10 hours. Then 1-2 hours per week for content curation.",
+  "progress": 0,
+  "tags": ["youtube", "shorts", "mandala", "promo", "philosophy", "free", "automation", "brand-awareness"],
+  "deadline": "2026-12-31",
+  "created": "2026-07-13",
+  "updated": "2026-07-13",
+  "tool_stack": {
+    "pipeline": "nstc-pipeline — free, open-source, creates Shorts from text + visuals",
+    "text_generation": "External SR (DeepSeek/Claude) — generate script from Mandala knowledge base",
+    "visuals": "Free stock video libraries (Pexels, Pixabay) + abstract animations",
+    "music": "Free AI music generators (Suno, Udio) or YouTube Audio Library",
+    "upload": "Manual upload via YouTube Studio (or yutu if needed later)",
+    "voiceover": "Free TTS (Edge TTS, Google TTS) or no voiceover — text-only with music"
+  },
+  "phases": {
+    "phase_0_setup": {
+      "name": "Tool Setup & Testing",
+      "description": "Install nstc-pipeline, gather free visual assets, test first Short.",
+      "deadline": "2026-07-31",
+      "tasks": [
+        "Install nstc-pipeline (clone repo, install dependencies)",
+        "Create folder for Mandala assets (logo, colors, fonts)",
+        "Download 50+ free abstract/nature videos for visuals (Pexels, Pixabay)",
+        "Test nstc-pipeline with a simple text and visual",
+        "Create first test Short (manual upload to YouTube)"
+      ],
+      "deliverables": [
+        "Working nstc-pipeline installation",
+        "Library of free visuals for Mandala content",
+        "1 test Short published (unlisted)"
+      ]
+    },
+    "phase_1_content_pipeline": {
+      "name": "Content Pipeline Setup",
+      "description": "Create a workflow for generating scripts and turning them into Shorts.",
+      "deadline": "2026-08-31",
+      "tasks": [
+        "Identify 10 key Mandala concepts for first batch (from PHI blocks)",
+        "Generate scripts using External SR (DeepSeek) — 30-60 seconds each",
+        "Match each script with visual assets (abstract, nature, geometry)",
+        "Generate Shorts using nstc-pipeline",
+        "Set up simple tracking for which concepts perform best"
+      ],
+      "deliverables": [
+        "10+ scripts ready for production",
+        "5+ Shorts published on YouTube",
+        "Initial performance data (views, retention)"
+      ]
+    },
+    "phase_2_optimization": {
+      "name": "Optimization & Scaling",
+      "description": "Analyze performance, optimize format, increase publishing frequency.",
+      "deadline": "2026-10-31",
+      "tasks": [
+        "Analyze best-performing Shorts (topic, length, visual style)",
+        "Refine script templates based on data",
+        "Increase publishing to 3-5 Shorts per week",
+        "Experiment with different visual styles (text-only, voiceover, music)",
+        "Start building a small community (comments, engagement)"
+      ],
+      "deliverables": [
+        "3-5 Shorts per week published",
+        "Refined content format (template)",
+        "100+ subscribers (target)"
+      ]
+    },
+    "phase_3_brand_building": {
+      "name": "Brand Building & Ecosystem Integration",
+      "description": "Link Shorts to other Mandala channels (GitHub, products, community).",
+      "deadline": "2026-12-31",
+      "tasks": [
+        "Add calls-to-action to Mandala products (Gentle Companion, Engineer Chat)",
+        "Create a 'philosophy series' playlist",
+        "Cross-promote with other channels (if any)",
+        "Start using yutu or similar for semi-automated uploads",
+        "Track conversion to Mandala ecosystem (new visitors, GitHub stars, bot users)"
+      ],
+      "deliverables": [
+        "1000+ subscribers (stretch target)",
+        "Active community in comments (10+ engaged users per video)",
+        "Measurable traffic to Mandala ecosystem from YouTube"
+      ]
+    }
+  },
+  "success_metrics": {
+    "phase_0": "nstc-pipeline working, first Short published",
+    "phase_1": "10 Shorts published, average 500+ views per Short",
+    "phase_2": "3-5 Shorts/week, 100+ subscribers",
+    "phase_3": "1000+ subscribers, measurable traffic to Mandala ecosystem"
+  },
+  "financial_note": "This pipeline is designed to be completely free. No paid subscriptions required. All tools have free tiers or are open-source. The goal is brand awareness, not direct monetization (though AdSense can be added later).",
+  "connectivity": {
+    "related_to": ["W-R-RM-014", "W-R-ECOMM-001", "W-T-20260713-YOUTUBE_GAMING_CHANNEL"],
+    "relationship": "Part of the financial sustainability track — builds visibility for Mandala ecosystem."
+  },
+  "notes": [
+    "Start with text-only Shorts (no voiceover) to keep it simple and free.",
+    "Use free visuals from Pexels/Pixabay — search for 'meditation', 'nature', 'abstract', 'geometry'.",
+    "External SR (DeepSeek/Claude) will generate scripts based on Mandala philosophy blocks.",
+    "This is a low-cost, high-visibility experiment. Even modest success (1k subs) creates valuable brand presence.",
+    "Mandala itself is the product — YouTube is the distribution channel."
+  ],
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13"
+}
