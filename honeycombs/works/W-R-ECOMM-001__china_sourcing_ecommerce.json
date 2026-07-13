@@ -4,17 +4,46 @@
   "status": "planning",
   "priority": "high",
   "horizon": "strategic",
-  "description": "Develop a sourcing strategy from Chinese platforms (1688 and alternatives) for non-apparel consumer goods. Create a step-by-step launch plan for Ozon and Yandex Market with minimal upfront inventory risk. This work is a parallel financial sustainability track to W-R-RM-014.",
+  "description": "Develop a sourcing strategy from Chinese platforms (1688 and alternatives) for non-apparel consumer goods. Includes analysis of dropshipping model (no upfront inventory) using professional agents (Zendrop, SourcinBox, BuckyDrop) and direct sourcing. Create a step-by-step launch plan for Ozon (primary) and Yandex Market with minimal financial risk.",
   "parent_work": null,
   "sub_works": [],
-  "depends_on": ["W-R-RM-014"],
+  "depends_on": [
+    "W-R-RM-014"
+  ],
   "effort_estimate": null,
   "progress": 0,
-  "tags": ["ecommerce", "sourcing", "china", "1688", "yiwu", "ozon", "yandex-market", "financial-sustainability"],
-  "deadline": "2026-10-15",
+  "tags": [
+    "ecommerce",
+    "sourcing",
+    "china",
+    "1688",
+    "yiwu",
+    "ozon",
+    "yandex-market",
+    "financial-sustainability",
+    "dropshipping"
+  ],
+  "deadline": "2026-10-31",
   "created": "2026-07-13",
   "updated": "2026-07-13",
   "phases": {
+    "phase_0_dropship_setup": {
+      "name": "Dropshipping Research & Setup",
+      "description": "Research dropshipping agents, select 2-3 suppliers, test order fulfillment process without holding inventory.",
+      "deadline": "2026-07-25",
+      "tasks": [
+        "Research and select 1-2 dropshipping agents (Zendrop, SourcinBox, or BuckyDrop)",
+        "Create accounts on Ozon as a seller",
+        "Select 2-3 test products (no certification required)",
+        "Test ordering process through dropshipping agent",
+        "Set up product listings on Ozon with proper SEO"
+      ],
+      "deliverables": [
+        "Active Ozon seller account",
+        "2-3 test products selected from dropshipping catalog",
+        "Test order completed successfully"
+      ]
+    },
     "phase_1_analysis": {
       "name": "Sourcing Platforms Analysis",
       "description": "Research and compare 1688 and its alternatives: Yiwugo, YiShou (if apparel), JD B2B, and Taobao for specific niches. Assess logistics, payment methods, and language barriers.",
@@ -85,5 +114,54 @@
     "related_to": "W-R-RM-014",
     "relationship": "Both works aim to increase Gardener's financial independence, enabling full-time focus on Mandala Symbiosis."
   },
-  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13"
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13",
+  "dropshipping_analysis": {
+    "description": "Strategy to sell products without holding inventory. Orders are fulfilled directly by suppliers or dropshipping agents.",
+    "advantages": [
+      "Minimal upfront investment",
+      "No warehouse or inventory costs",
+      "Flexibility to test multiple products",
+      "Low risk for beginners"
+    ],
+    "risks": [
+      "Dependence on supplier quality and delivery times",
+      "Longer shipping times (10-20 days from China)",
+      "Complex returns and customer service",
+      "Product certification requirements in Russia"
+    ],
+    "key_platforms_for_russia": {
+      "primary": "Ozon — best for beginners, low entry barrier, cross-border store option",
+      "secondary": "Yandex Market — growing platform, good for certain niches"
+    },
+    "dropshipping_agents": [
+      {
+        "name": "Zendrop",
+        "description": "Popular service with product catalog and automated order fulfillment",
+        "url": "https://zendrop.com"
+      },
+      {
+        "name": "SourcinBox",
+        "description": "Sourcing and fulfillment agent for 1688 and other platforms",
+        "url": "https://sourcinbox.com"
+      },
+      {
+        "name": "BuckyDrop",
+        "description": "WooCommerce integration for importing from Taobao, 1688, Pinduoduo",
+        "url": "https://buckydrop.com"
+      },
+      {
+        "name": "EPROLO",
+        "description": "Dropshipping agent with global fulfillment",
+        "url": "https://eprolo.com"
+      }
+    ],
+    "supplier_platforms": [
+      "1688 — largest B2B platform, lowest prices",
+      "Yiwugo — official platform of Yiwu market, small wholesale",
+      "JD B2B — reliable logistics, quality control",
+      "Taobao — retail platform, good for niche products",
+      "Pinduoduo — group buying platform, lower prices"
+    ],
+    "certification_note": "Certain product categories (electronics, children's goods) require mandatory certification in Russia. Start with categories that don't require certification."
+  }
 }
