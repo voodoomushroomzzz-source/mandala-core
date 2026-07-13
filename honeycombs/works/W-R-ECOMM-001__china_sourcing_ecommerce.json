@@ -1,0 +1,89 @@
+{
+  "work_id": "W-R-ECOMM-001",
+  "name": "China Sourcing & E-commerce Launch — from 1688 to Ozon/Yandex Market",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "strategic",
+  "description": "Develop a sourcing strategy from Chinese platforms (1688 and alternatives) for non-apparel consumer goods. Create a step-by-step launch plan for Ozon and Yandex Market with minimal upfront inventory risk. This work is a parallel financial sustainability track to W-R-RM-014.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": ["W-R-RM-014"],
+  "effort_estimate": null,
+  "progress": 0,
+  "tags": ["ecommerce", "sourcing", "china", "1688", "yiwu", "ozon", "yandex-market", "financial-sustainability"],
+  "deadline": "2026-10-15",
+  "created": "2026-07-13",
+  "updated": "2026-07-13",
+  "phases": {
+    "phase_1_analysis": {
+      "name": "Sourcing Platforms Analysis",
+      "description": "Research and compare 1688 and its alternatives: Yiwugo, YiShou (if apparel), JD B2B, and Taobao for specific niches. Assess logistics, payment methods, and language barriers.",
+      "deadline": "2026-08-01",
+      "key_questions": [
+        "What are the total landed costs (product + freight + customs + fees)?",
+        "Which platform offers the best match for our chosen product categories?",
+        "How to handle communication with suppliers (translators, agents)?"
+      ],
+      "deliverables": [
+        "Shortlist of 2-3 platforms for sourcing",
+        "Cost calculation model (product + logistics + customs)",
+        "List of potential suppliers"
+      ]
+    },
+    "phase_2_product_selection": {
+      "name": "Product Selection and Testing",
+      "description": "Identify 2-3 product categories with good margin potential, low competition on Ozon/Yandex, and manageable shipping. Order samples for quality check.",
+      "deadline": "2026-08-15",
+      "key_questions": [
+        "What are the current top-selling products on Ozon/Yandex?",
+        "What products have a margin of 100%+?",
+        "How to use AI (Scout Agent, LLMs) for product trend analysis?"
+      ],
+      "deliverables": [
+        "Selected 2-3 product categories",
+        "Samples ordered and evaluated",
+        "Preliminary margin calculation"
+      ]
+    },
+    "phase_3_launch_strategy": {
+      "name": "Launch on Ozon/Yandex Market",
+      "description": "Set up seller accounts, product listings, optimize for search, and plan a launch campaign with minimal initial stock.",
+      "deadline": "2026-09-15",
+      "tasks": [
+        "Register as a seller on Ozon and Yandex Market.",
+        "Create product listings with high-quality visuals and SEO-optimized descriptions.",
+        "Plan a small promotional campaign (advertising, discounts)."
+      ],
+      "deliverables": [
+        "Active seller accounts on Ozon and Yandex Market",
+        "Live product listings (3-5 SKUs)",
+        "Launch campaign budget and plan"
+      ]
+    },
+    "phase_4_analysis_and_scale": {
+      "name": "Performance Analysis and Scaling",
+      "description": "Analyze sales data, review customer feedback, and plan for scaling to new products or platforms.",
+      "deadline": "2026-10-15",
+      "tasks": [
+        "Track key metrics: AOV, conversion rate, DRR, profit margin.",
+        "Adjust product strategy based on best-sellers.",
+        "Plan to source new products from 1688."
+      ],
+      "deliverables": [
+        "Performance report with key metrics",
+        "Optimized product portfolio",
+        "Scaling plan for next 3 months"
+      ]
+    }
+  },
+  "notes": [
+    "This work is a parallel financial sustainability track, linked conceptually to W-R-RM-014 but not as a dependency.",
+    "Focus on non-apparel goods to avoid the complexities of fashion sourcing.",
+    "Leverage AI (Scout Agent for market research, LLMs for listing optimization) to minimize manual effort."
+  ],
+  "connectivity": {
+    "related_to": "W-R-RM-014",
+    "relationship": "Both works aim to increase Gardener's financial independence, enabling full-time focus on Mandala Symbiosis."
+  },
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13"
+}
