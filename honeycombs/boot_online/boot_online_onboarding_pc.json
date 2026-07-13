@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.39",
+    "version": "v1.7.40",
     "created": "2026-05-11",
     "updated": "2026-07-13",
     "layer": 1,
@@ -1843,7 +1843,7 @@
       "identity": {
         "module_id": "WORKS-MANIFEST-001",
         "name": "Works — Unified System of Work Items",
-        "version": "v1.0.9",
+        "version": "v1.0.10",
         "created": "2026-07-08",
         "updated": "2026-07-13",
         "layer": 1,
@@ -1929,20 +1929,20 @@
         "index": "This file (index.json) serves as the registry"
       },
       "manifest": {
-        "total_works": 15,
+        "total_works": 16,
         "by_status": {
           "active": 8,
-          "planning": 6,
+          "planning": 7,
           "in_progress": 0,
           "done": 1
         },
         "by_horizon": {
           "strategic": 7,
-          "tactical": 8
+          "tactical": 9
         },
         "by_priority": {
           "critical": 3,
-          "high": 6,
+          "high": 7,
           "medium": 4,
           "low": 2
         },
@@ -1961,7 +1961,8 @@
           "W-T-20260511-MANUS__manus_hands",
           "W-R-ECO-001",
           "W-R-ECOMM-001",
-          "W-T-20260713-YOUTUBE_GAMING_CHANNEL"
+          "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO"
         ],
         "deadlines": {
           "W-T-20260511-MANUS": "2026-08-31"
@@ -1971,6 +1972,10 @@
             "W-R-RM-014"
           ],
           "W-T-20260713-YOUTUBE_GAMING_CHANNEL": [
+            "W-R-RM-014",
+            "W-R-ECOMM-001"
+          ],
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO": [
             "W-R-RM-014",
             "W-R-ECOMM-001"
           ]
@@ -1986,7 +1991,7 @@
       "health": {
         "status": "active",
         "last_check": "2026-07-13",
-        "notes": "v1.0.9: added W-T-20260713-YOUTUBE_GAMING_CHANNEL. Total works: 15."
+        "notes": "v1.0.10: added W-T-20260713-YOUTUBE_MANDALA_PROMO. Total works: 16."
       }
     }
   },
