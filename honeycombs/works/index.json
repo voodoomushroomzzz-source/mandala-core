@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
     "name": "Works — Unified System of Work Items",
-    "version": "v1.0.8",
+    "version": "v1.0.9",
     "created": "2026-07-08",
     "updated": "2026-07-13",
     "layer": 1,
@@ -88,20 +88,20 @@
     "index": "This file (index.json) serves as the registry"
   },
   "manifest": {
-    "total_works": 14,
+    "total_works": 15,
     "by_status": {
       "active": 8,
-      "planning": 5,
+      "planning": 6,
       "in_progress": 0,
       "done": 1
     },
     "by_horizon": {
       "strategic": 7,
-      "tactical": 7
+      "tactical": 8
     },
     "by_priority": {
       "critical": 3,
-      "high": 5,
+      "high": 6,
       "medium": 4,
       "low": 2
     },
@@ -119,7 +119,8 @@
       "W-T-20260511-ENGCHAT__engineer_chat",
       "W-T-20260511-MANUS__manus_hands",
       "W-R-ECO-001",
-      "W-R-ECOMM-001"
+      "W-R-ECOMM-001",
+      "W-T-20260713-YOUTUBE_GAMING_CHANNEL"
     ],
     "deadlines": {
       "W-T-20260511-MANUS": "2026-08-31"
@@ -127,6 +128,10 @@
     "related_works": {
       "W-R-ECOMM-001": [
         "W-R-RM-014"
+      ],
+      "W-T-20260713-YOUTUBE_GAMING_CHANNEL": [
+        "W-R-RM-014",
+        "W-R-ECOMM-001"
       ]
     }
   },
@@ -140,6 +145,6 @@
   "health": {
     "status": "active",
     "last_check": "2026-07-13",
-    "notes": "v1.0.8: added W-R-ECOMM-001 (China Sourcing & E-commerce). Total works: 14."
+    "notes": "v1.0.9: added W-T-20260713-YOUTUBE_GAMING_CHANNEL. Total works: 15."
   }
 }
