@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.44",
+    "version": "v1.7.45",
     "created": "2026-05-11",
     "updated": "2026-07-14",
     "layer": 1,
@@ -1093,9 +1093,9 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.5.1",
+        "version": "v1.6.0",
         "created": "2026-04-12",
-        "updated": "2026-07-09",
+        "updated": "2026-07-14",
         "layer": 2,
         "type": "workflow_guide",
         "description": "Complete guide for External SR working from Android/Termux. v1.5.0: added patcher_method as equal deployment option.",
@@ -1394,6 +1394,48 @@
         "status": "healthy",
         "last_check": "2026-07-04",
         "notes": "v1.5.0: Added patcher_method as equal deployment option in golden_rule and full_deploy_pattern. Updated description and tags."
+      },
+      "notion_api_termux": {
+        "description": "Работа с Notion API через Termux (curl + Python).",
+        "curl_example": "```bash\ncurl -X POST https://api.notion.com/v1/pages \\\n  -H \"Authorization: Bearer $NOTION_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Notion-Version: 2026-03-11\" \\\n  -d '{\"parent\": {\"page_id\": \"...\"}, \"properties\": {...}}'\n```",
+        "python_script": "```python\nimport requests, os\nNOTION_TOKEN = os.environ['NOTION_TOKEN']\n# ...\n```",
+        "setup": "Сохранить NOTION_TOKEN в ~/.bashrc или передавать в скрипт через переменную окружения"
+      },
+      "rose_world_petals_mobile": {
+        "description": "Создание лепестков rose_world/ из Termux.",
+        "commands": [
+          "mkdir -p honeycombs/rose_world",
+          "cat > honeycombs/rose_world/index.json << 'EOF' ... EOF",
+          "cat > honeycombs/rose_world/petal_01_ethics.json << 'EOF' ... EOF"
+        ],
+        "update_core_map": "После создания rose_world/, обновить core_map/index.json (добавить в honeycombs, references, children, critical_dependencies)"
+      },
+      "work_files_mobile": {
+        "description": "Создание work-файлов в Termux.",
+        "create_work": "cat > honeycombs/works/W-XXXXXX-XXX__name.json << 'EOF' ... EOF",
+        "update_index": "Обновить works/index.json: добавить в works_list, увеличить total_works, обновить by_status, by_horizon, by_priority, добавить related_works"
+      },
+      "knowledge_index_mobile": {
+        "description": "Обновление knowledge/index.json из Termux.",
+        "steps": [
+          "Создать файл в honeycombs/knowledge/",
+          "Добавить запись в contents",
+          "Обновить total_resources, last_updated, identity.version"
+        ]
+      },
+      "seed_management_mobile": {
+        "description": "Создание seed-файлов в Termux.",
+        "create_seed": "cat > honeycombs/seeds/inbox/SEED_YYYYMMDD_TOPIC.json << 'EOF' ... EOF",
+        "promotion": "Продвижение семян в work-файлы через PROTO-011"
+      },
+      "youtube_pipeline_mobile": {
+        "description": "Бесплатный конвейер для YouTube Shorts (nstc-pipeline) в Termux.",
+        "setup": [
+          "git clone https://github.com/.../nstc-pipeline",
+          "pip install -r requirements.txt"
+        ],
+        "run": "python -m nstc-pipeline --text '...' --visual '...' --output short.mp4",
+        "manual_approach": "External SR генерирует текст → подбирает визуалы → собирает через nstc-pipeline"
       }
     }
   },
