@@ -4,21 +4,21 @@
   "status": "in_progress",
   "priority": "highest",
   "horizon": "tactical",
-  "description": "",
+  "description": "Основная работа по боту Gentle Companion. Включает разработку, баг-фиксы и внедрение автоочистки неактивных садовников.",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
   "effort_estimate": null,
   "progress": 79,
-  "tags": [],
+  "tags": ["bot", "telegram", "gentle_companion", "cleanup"],
   "deadline": "2026-08-31",
   "created": "2026-04-01",
-  "updated": "2026-07-08",
+  "updated": "2026-07-14",
   "source": {
     "type": "task",
     "original_id": "T-20260408-1030",
     "original_file": "bot_update.json",
     "roadmap_ref": ""
   },
-  "notes": ""
+  "notes": "Добавлена задача по проверке автоочистки неактивных садовников (30 дней молчания). Проверить: отправку уведомлений за 7 и 3 дня до удаления, финальное удаление через 30 дней, корректную работу команды /leave после внедрения универсальной функции _delete_gardener."
 }
