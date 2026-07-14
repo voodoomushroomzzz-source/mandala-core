@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.46",
+    "version": "v1.7.47",
     "created": "2026-05-11",
     "updated": "2026-07-14",
     "layer": 1,
@@ -1093,7 +1093,7 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.7.0",
+        "version": "v1.8.0",
         "created": "2026-04-12",
         "updated": "2026-07-14",
         "layer": 2,
@@ -1127,6 +1127,69 @@
           }
         ],
         "example": "When you see a block starting with 'cat > ... << EOF' or 'python patch_*.py', that's the whole action."
+      },
+      "patching_guide": {
+        "title": "Когда и как патчить — выбор метода",
+        "last_updated": "2026-07-14",
+        "criteria": {
+          "full_replace_cat": {
+            "when": [
+              "Файл маленький (< 200 строк) или это JSON-конфиг",
+              "Нужно полностью перезаписать файл новым содержимым",
+              "Изменение точечное — добавить несколько строк в конец файла (cat >>)",
+              "Правка в одном файле, без зависимостей"
+            ],
+            "template": "cat > honeycombs/path/to/file.py << 'EOF'\n# полное содержимое файла\nEOF\ngit add honeycombs/path/to/file.py\ngit commit -m \"feat: description\"\ngit pull --rebase origin main\ngit push",
+            "example": "cat > honeycombs/fruits/gentle_companion/sr_prompts.py << 'EOF'\n[весь файл с новым правилом]\nEOF"
+          },
+          "patcher_method_python": {
+            "when": [
+              "Несколько файлов нужно изменить одновременно (навигация, роутинг)",
+              "Файл большой (> 500 строк) — sr_conversation.py, handlers/tasks.py, handlers/system.py",
+              "Нужно заменить только конкретный блок, оставив остальное нетронутым",
+              "Изменение сложное — несколько функций, замена через regex",
+              "Предыдущий cat-блок выдал SyntaxError из-за сложных строк"
+            ],
+            "template": "cat > patch_name.py << 'EOF'\n#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\nimport re\n\nFILES = {\n    \"file1\": \"honeycombs/path/to/file1.py\",\n}\n\ndef patch_file1():\n    with open(FILES[\"file1\"], \"r\", encoding=\"utf-8\") as f:\n        content = f.read()\n    if \"искомая_строка\" in content:\n        print(\"✅ file1 уже исправлен\")\n        return\n    old = \"старый текст\"\n    new = \"новый текст\"\n    content = content.replace(old, new)\n    with open(FILES[\"file1\"], \"w\", encoding=\"utf-8\") as f:\n        f.write(content)\n    print(\"✅ file1 обновлён\")\n\nif __name__ == \"__main__\":\n    patch_file1()\nEOF\npython patch_name.py && rm patch_name.py && git add honeycombs/path/to/file1.py && git commit -m \"fix: description\" && git pull --rebase origin main && git push",
+            "example": "Патч навигации (5 файлов, сложные замены через regex) — именно этот метод мы использовали 14.07.2026"
+          }
+        },
+        "decision_tree": [
+          {
+            "question": "Сколько файлов меняем?",
+            "if_one": "→ можно использовать cat (full_replace), если файл не слишком большой",
+            "if_several": "→ используй patcher_method (Python-патчер)"
+          },
+          {
+            "question": "Какой размер файла?",
+            "if_small": "→ можно использовать cat",
+            "if_large": "→ используй patcher_method (безопаснее и надёжнее)"
+          },
+          {
+            "question": "Что именно меняем?",
+            "if_full_replace": "→ cat (полная перезапись)",
+            "if_block_replace": "→ patcher_method (точечная замена)"
+          }
+        ],
+        "prohibited": {
+          "never": [
+            "Не использовать cat для больших файлов с многострочными строками — это вызывает SyntaxError",
+            "Не смешивать cat и patcher_method в одном FULL DEPLOY блоке"
+          ]
+        },
+        "successful_example": {
+          "date": "2026-07-14",
+          "task": "Навигация — замена меню на _replace_menu",
+          "files": "config.py, ui.py, handlers/tasks.py, handlers/features.py, handlers/system.py",
+          "method": "patcher_method (Python-патчер)",
+          "result": "Успешно, 5 файлов обновлены, без ошибок"
+        },
+        "failed_example": {
+          "date": "2026-07-14",
+          "task": "Та же навигация, но попытка через cat с heredoc",
+          "reason": "SyntaxError из-за сложных строк в замене",
+          "lesson": "Для сложных многострочных замен всегда использовать Python-патчер"
+        }
       },
       "self_learning": {
         "reference": "External SR may propose learned rules. See honeycombs/instructions/mobile_workflow.json#learned_rules. Format: rule + context + bad/good examples. Gardener approval required before patching."
@@ -1321,8 +1384,8 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-07-04",
-        "notes": "v1.7.0: удалены дублирующиеся разделы (core_principles, zones_of_responsibility, system_flow, api_patterns). Добавлена ссылка на external_sr_workflow.json. Оставлена только мобильная специфика."
+        "last_check": "2026-07-14",
+        "notes": "v1.8.0: добавлен patching_guide с критериями выбора метода и примерами успешного/неудачного использования. Обновлена дата проверки."
       },
       "notion_api_termux": {
         "description": "Работа с Notion API через Termux (curl + Python).",
