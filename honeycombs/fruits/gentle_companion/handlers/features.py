@@ -282,16 +282,15 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
 async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
-    cid     = callback.data[len("cl_open_"):]
+    cid = callback.data[len("cl_open_"):]
     checklists = store_get_checklists(user_id)
     cl = next((c for c in checklists if c["id"] == cid), None)
     if not cl:
         await callback.answer("Чеклист не найден", show_alert=True)
         return
-    prog   = _checklist_progress(cl)
+    prog = _checklist_progress(cl)
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
-    try:
-        sent = await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
+    await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
         _checklist_messages[user_id] = callback.message.message_id
     except Exception:
         sent = await callback.message.answer(header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
@@ -345,7 +344,6 @@ async def cb_cl_delete(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_edit_"))
 async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
-    """Show edit options for a checklist."""
     await _safe_cb_answer(callback)
     cid = callback.data[len("cl_edit_"):]
     user_id = str(callback.from_user.id)
@@ -355,27 +353,26 @@ async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
         return
     items = cl.get("items", [])
     edit_kb_rows = [
-        [InlineKeyboardButton(text="➕ Добавить пункт",   callback_data=f"cl_add_item_{cid}")],
+        [InlineKeyboardButton(text="➕ Добавить пункт", callback_data=f"cl_add_item_{cid}")],
     ]
     for idx, it in enumerate(items):
-        iid  = it["id"]
+        iid = it["id"]
         mark = "✅" if it.get("done") else "☐"
-        num  = idx + 1
-        text = it["text"][:18]
+        num = idx + 1
+        text_item = it["text"][:18]
         row = [
-            InlineKeyboardButton(text=f"{num}. {mark} {text}", callback_data=f"cl_noop|{cid}|{iid}"),
-            InlineKeyboardButton(text="✏️",  callback_data=f"cl_edititem|{cid}|{iid}"),
-            InlineKeyboardButton(text="🗑",  callback_data=f"cl_delitem|{cid}|{iid}"),
+            InlineKeyboardButton(text=f"{num}. {mark} {text_item}", callback_data=f"cl_noop|{cid}|{iid}"),
+            InlineKeyboardButton(text="✏️", callback_data=f"cl_edititem|{cid}|{iid}"),
+            InlineKeyboardButton(text="🗑", callback_data=f"cl_delitem|{cid}|{iid}"),
         ]
-        # Add up/down arrows
         if idx > 0:
             row.append(InlineKeyboardButton(text="↑", callback_data=f"cl_moveup|{cid}|{iid}"))
         if idx < len(items) - 1:
             row.append(InlineKeyboardButton(text="↓", callback_data=f"cl_movedn|{cid}|{iid}"))
         edit_kb_rows.append(row)
     edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
-    try:
-        await callback.message.edit_text(
+    text = f"✏️ <b>{cl['title']}</b> — редактирование пунктов:"
+    await _replace_menu(user_id, callback.message, text, reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows))
             f"✏️ <b>{cl['title']}</b> — редактирование пунктов:",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows)
         )
@@ -691,7 +688,7 @@ async def cb_rem_delete(callback: CallbackQuery, state: FSMContext):
 async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
-    rid     = callback.data[len("rem_edit_"):]
+    rid = callback.data[len("rem_edit_"):]
     reminders = store_get_reminders(user_id)
     rem = next((r for r in reminders if r["id"] == rid), None)
     if not rem:
@@ -699,7 +696,6 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         return
     await state.update_data(_rem_edit_id=rid, _rem_title=rem.get("title",""), _rem_dt=rem.get("datetime_iso",""), _rem_repeat=rem.get("repeat","once"))
     await state.set_state(ReminderStates.waiting_for_input)
-    # Save pending to workspace for recovery after state loss
     ws = store_get_workspace(user_id) or {}
     ws["_pending_reminder_edit"] = {"_rem_edit_id": rid, "_rem_title": rem.get("title",""), "_rem_dt": rem.get("datetime_iso",""), "_rem_repeat": rem.get("repeat","once")}
     store_set_workspace(user_id, ws)
@@ -711,8 +707,12 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="🔁 Повторение", callback_data="redit_repeat")],
         [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
     ])
-    try:
-        await callback.message.edit_text(
+    text = f"✏️ <b>{rem['title']}</b>
+📅 {dt_display}
+🔁 {rep_display}
+
+Что меняем?"
+    await _replace_menu(user_id, callback.message, text, reply_markup=kb, parse_mode="HTML")
             f"✏️ <b>{rem['title']}</b>\n"
             f"📅 {dt_display}\n"
             f"🔁 {rep_display}\n\n"
@@ -914,7 +914,6 @@ async def cb_rem_noop(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith("rem_open_"))
 async def cb_rem_open(callback: CallbackQuery):
-    """Тап по напоминанию → меню редактирования."""
     await _safe_cb_answer(callback)
     rid = callback.data[9:]
     user_id = str(callback.from_user.id)
@@ -926,9 +925,10 @@ async def cb_rem_open(callback: CallbackQuery):
     title = rem.get("title", "—")
     dt = (rem.get("datetime_iso") or "")[:16].replace("T", " ")
     rep = _repeat_label(rem.get("repeat", "once"))
-    text = f"🔔 <b>{title}</b>\n📅 {dt}\n🔁 {rep}"
-    try:
-        await callback.message.edit_text(text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
+    text = f"🔔 <b>{title}</b>
+📅 {dt}
+🔁 {rep}"
+    await _replace_menu(user_id, callback.message, text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
     except Exception:
         await callback.message.answer(text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
 

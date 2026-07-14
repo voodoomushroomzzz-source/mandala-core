@@ -1382,8 +1382,8 @@ async def cb_menu_edit_profile(callback: CallbackQuery):
     if not is_authorized(user_id):
         await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    try:
-        await callback.message.edit_text("✏️ Что изменить?", reply_markup=get_edit_profile_inline())
+    text = "✏️ Что изменить?"
+    await _replace_menu(user_id, callback.message, text, reply_markup=get_edit_profile_inline())
     except Exception:
         pass
 
