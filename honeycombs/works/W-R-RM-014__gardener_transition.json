@@ -33,9 +33,9 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v4.1.4",
+        "version": "v4.1.5",
         "created": "2026-04-16",
-        "updated": "2026-07-13",
+        "updated": "2026-07-14",
         "layer": 2,
         "type": "roadmap",
         "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
@@ -101,7 +101,8 @@
                 "Create Habr Career, TenChat profiles",
                 "Subscribe to 10+ Telegram channels (including AI/IT jobs)",
                 "Integrate HyperCareer company list into job search database",
-                "Prepare English version of core resume — for global applications"
+                "Prepare English version of core resume — for global applications",
+                "Create alternative resumes for Territorial Manager / Operations Manager roles on hh.ru and jobs — full-time and hybrid, 200k/month — as a fallback option"
               ]
             },
             "m2_first_wave": {
@@ -796,8 +797,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-13",
-        "notes": "v4.1.4: Added Anthropic Academy to critical_free courses."
+        "last_check": "2026-07-14",
+        "notes": "v4.1.5: Added fallback resume task for Territorial Manager roles (200k/month, full-time/hybrid)."
       }
     }
   },
