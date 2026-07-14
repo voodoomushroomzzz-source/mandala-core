@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.41",
+    "version": "v1.7.42",
     "created": "2026-05-11",
     "updated": "2026-07-14",
     "layer": 1,
@@ -1843,9 +1843,9 @@
       "identity": {
         "module_id": "WORKS-MANIFEST-001",
         "name": "Works — Unified System of Work Items",
-        "version": "v1.0.10",
+        "version": "v1.0.11",
         "created": "2026-07-08",
-        "updated": "2026-07-13",
+        "updated": "2026-07-14",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items (tasks, roadmaps, initiatives). Replaces separate tasks/ and roadmaps/.",
@@ -1929,19 +1929,19 @@
         "index": "This file (index.json) serves as the registry"
       },
       "manifest": {
-        "total_works": 16,
+        "total_works": 17,
         "by_status": {
           "active": 8,
-          "planning": 7,
+          "planning": 8,
           "in_progress": 0,
           "done": 1
         },
         "by_horizon": {
-          "strategic": 7,
+          "strategic": 8,
           "tactical": 9
         },
         "by_priority": {
-          "critical": 3,
+          "critical": 4,
           "high": 7,
           "medium": 4,
           "low": 2
@@ -1962,7 +1962,8 @@
           "W-R-ECO-001",
           "W-R-ECOMM-001",
           "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-          "W-T-20260713-YOUTUBE_MANDALA_PROMO"
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO",
+          "W-R-ROSE-001"
         ],
         "deadlines": {
           "W-T-20260511-MANUS": "2026-08-31"
@@ -1978,6 +1979,11 @@
           "W-T-20260713-YOUTUBE_MANDALA_PROMO": [
             "W-R-RM-014",
             "W-R-ECOMM-001"
+          ],
+          "W-R-ROSE-001": [
+            "W-R-RM-014",
+            "W-R-ECOMM-001",
+            "W-T-20260713-YOUTUBE_MANDALA_PROMO"
           ]
         }
       },
@@ -1990,8 +1996,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-13",
-        "notes": "v1.0.10: added W-T-20260713-YOUTUBE_MANDALA_PROMO. Total works: 16."
+        "last_check": "2026-07-14",
+        "notes": "v1.0.11: added W-R-ROSE-001 (Rose World Ethical Filter). Total works: 17."
       }
     }
   },
