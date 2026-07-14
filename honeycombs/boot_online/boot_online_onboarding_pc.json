@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.43",
+    "version": "v1.7.44",
     "created": "2026-05-11",
     "updated": "2026-07-14",
     "layer": 1,
@@ -918,6 +918,131 @@
         "block_2": "Content of <patcher_name>.py — the patch script itself",
         "block_3": "py <patcher_name>.py; Remove-Item <patcher_name>.py; git add <files>; git commit -m '<msg>'; git pull --rebase origin main; git push; ssh root@91.99.149.226 'cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 5 --no-pager'",
         "naming_rule": "Name by task. Examples: fix_linked_reminder_clear.py, add_repeat_picker.py. Never: patcher.py, patch.py, fix.py."
+      },
+      "notion_api": {
+        "description": "Работа с Notion API через Python. Используется для создания страниц брошюры, документации и автоматизации.",
+        "setup": [
+          "Создать интеграцию в Notion: https://www.notion.so/my-integrations",
+          "Получить Internal Integration Token (начинается с ntn_ или secret_)",
+          "Добавить интеграцию к целевой странице (Share → Add connection)",
+          "Сохранить токен в GitHub Secrets как NOTION_TOKEN или передавать в скрипт"
+        ],
+        "python_template": {
+          "create_page": "```python\nimport requests\n\nNOTION_TOKEN = 'ваш_токен'\nPARENT_PAGE_ID = 'id_родительской_страницы'\n\nheaders = {\n    'Authorization': f'Bearer {NOTION_TOKEN}',\n    'Content-Type': 'application/json',\n    'Notion-Version': '2026-03-11'\n}\n\npage_data = {\n    'parent': { 'page_id': PARENT_PAGE_ID },\n    'properties': {\n        'title': { 'title': [{ 'text': { 'content': 'Заголовок страницы' } }] }\n    },\n    'children': [\n        {\n            'object': 'block',\n            'type': 'heading_1',\n            'heading_1': { 'rich_text': [{ 'text': { 'content': 'Подзаголовок' } }] }\n        },\n        {\n            'object': 'block',\n            'type': 'paragraph',\n            'paragraph': { 'rich_text': [{ 'text': { 'content': 'Текст абзаца' } }] }\n        }\n    ]\n}\n\nresponse = requests.post('https://api.notion.com/v1/pages', headers=headers, json=page_data)\nprint(response.json())\n```",
+          "add_blocks": "```python\n# Добавить блоки к существующей странице\nblock_data = {\n    'children': [\n        {\n            'object': 'block',\n            'type': 'paragraph',\n            'paragraph': { 'rich_text': [{ 'text': { 'content': 'Новый абзац' } }] }\n        }\n    ]\n}\n\nrequests.patch(\n    f'https://api.notion.com/v1/blocks/{page_id}/children',\n    headers=headers,\n    json=block_data\n)\n```"
+        },
+        "limitations": [
+          "Лимит 100 блоков на запрос",
+          "3 запроса в секунду"
+        ]
+      },
+      "rose_world_petals": {
+        "description": "Создание и обновление лепестков в структуре rose_world/. Каждый лепесток — отдельный файл.",
+        "folder_structure": {
+          "path": "honeycombs/rose_world/",
+          "files": [
+            "index.json — описание проекта и модулей",
+            "petal_01_ethics.json — аксиомы взаимодействия",
+            "petal_02_resonance.json — измерение резонанса",
+            "petal_03_garden_network.json — сеть садов",
+            "petal_04_memory_ocean.json — океан памяти",
+            "petal_05_guardians.json — хранители принципов",
+            "petal_06_manifesto.json — живой манифест",
+            "petal_07_protocols.json — протоколы тишины и выхода"
+          ]
+        },
+        "creation_template": {
+          "step_1": "mkdir -p honeycombs/rose_world",
+          "step_2": "cat > honeycombs/rose_world/index.json << 'EOF' ... EOF",
+          "step_3": "cat > honeycombs/rose_world/petal_XX_*.json << 'EOF' ... EOF"
+        },
+        "update_core_map": {
+          "description": "После создания rose_world/ нужно обновить core_map/index.json:",
+          "steps": [
+            "Добавить в секцию honeycombs: 'rose_world': 'Этический фильтр Роза Мира'",
+            "Добавить в references: 'honeycombs/rose_world/index.json'",
+            "Добавить в children: 'honeycombs/rose_world/index.json'",
+            "Добавить в critical_dependencies: 'rose_world': 'этический фильтр и протокол симбиоза'"
+          ]
+        }
+      },
+      "work_files_advanced": {
+        "description": "Создание и обновление work-файлов с продвинутой структурой.",
+        "fields": {
+          "depends_on": "Массив work_id, от которых зависит текущая работа",
+          "related_works": "Связи с другими работами (добавляется в works/index.json в manifest.related_works)",
+          "phases": "Объект с фазами (phase_1, phase_2, ...), каждая с name, description, deadline, tasks, deliverables",
+          "connectivity": "Объект с related_to (массив) и relationship (строка)"
+        },
+        "index_update": {
+          "description": "При создании нового work-файла нужно обновить works/index.json:",
+          "steps": [
+            "Добавить work_id в manifest.works_list",
+            "Увеличить total_works",
+            "Обновить by_status, by_horizon, by_priority",
+            "Добавить related_works в manifest.related_works (если есть связи)"
+          ]
+        }
+      },
+      "knowledge_index_management": {
+        "description": "Управление индексом базы знаний (knowledge/index.json).",
+        "steps_to_add": [
+          "Создать файл в honeycombs/knowledge/",
+          "Добавить запись в contents с полями: id, name, file, description, source, date_added, version",
+          "Увеличить metrics.total_resources",
+          "Обновить metrics.last_updated",
+          "Обновить identity.version (например, v1.1.0 → v1.1.1)"
+        ],
+        "example_resource": {
+          "id": "startup_legal_docs_guide",
+          "name": "18 юридических документов для стартапа",
+          "file": "startup_legal_docs_guide.json",
+          "description": "...",
+          "source": "Dialogue between Gardener and External SR",
+          "date_added": "2026-07-14",
+          "version": "v1.0.0"
+        }
+      },
+      "youtube_marketing_pipelines": {
+        "description": "Бесплатные конвейеры для генерации контента и продвижения Мандалы.",
+        "tools": {
+          "nstc_pipeline": "Создание Shorts из текста + визуалов. Бесплатно, open-source.",
+          "open_shorts": "Автономный агент для создания маркетинговых видео.",
+          "manual_approach": "External SR генерирует текст → подбирает визуалы → собирает через nstc-pipeline"
+        },
+        "workflow": [
+          "1. Взять текст из philosophy/blocks/ или knowledge/",
+          "2. Адаптировать в формат 30-60 секунд (скрипт для Shorts)",
+          "3. Подобрать визуалы из бесплатных библиотек (Pexels, Pixabay)",
+          "4. Запустить nstc-pipeline или собрать вручную",
+          "5. Загрузить на YouTube как Short"
+        ],
+        "integration_with_scout": "Scout Agent может отслеживать тренды и предлагать темы для контента."
+      },
+      "seed_management": {
+        "description": "Управление seed-файлами в honeycombs/seeds/.",
+        "types": {
+          "inbox": "Новые семена, требующие обработки (honeycombs/seeds/inbox/)",
+          "root": "Семена, прошедшие первичную оценку (honeycombs/seeds/root/)"
+        },
+        "promotion_to_work": "Семена с высоким потенциалом продвигаются в work-файлы через протокол PROTO-011 (Seed-to-Work).",
+        "structure": {
+          "required_fields": [
+            "seed_id",
+            "title",
+            "source",
+            "date_added",
+            "status",
+            "summary",
+            "key_facts"
+          ],
+          "optional_fields": [
+            "tags",
+            "potential_actions",
+            "next_steps",
+            "raw_transcript"
+          ]
+        }
       }
     },
     "meta": {
@@ -930,10 +1055,10 @@
       ]
     },
     "identity": {
-      "updated": "2026-07-09",
+      "updated": "2026-07-14",
       "layer": 2,
       "type": "workflow_guide",
-      "version": "v1.7.2",
+      "version": "v1.8.0",
       "description": "Complete workflow for External SR: PowerShell commands, JSON updates, file deletion, git cycle, Python environment. v1.4.5 adds patcher_safety rules three_blocks_one_message rule + post_check_large_files rule. + Hetzner VPS server info. + dual GitHub repo routing (mandala-core + mandala-gardeners). v1.6.3: + pre-check raw, post-check API, report last_updated rules. + module patching rule, session context, announce last_updated. + sync onboarding ↔ source rule.",
       "created": "2026-04-09",
       "name": "External SR Workflow",
