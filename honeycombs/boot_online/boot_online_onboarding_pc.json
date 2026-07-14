@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.48",
+    "version": "v1.7.49",
     "created": "2026-05-11",
     "updated": "2026-07-14",
     "layer": 1,
@@ -1093,7 +1093,7 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.9.0",
+        "version": "v1.10.0",
         "created": "2026-04-12",
         "updated": "2026-07-14",
         "layer": 2,
@@ -1385,7 +1385,31 @@
       "health": {
         "status": "healthy",
         "last_check": "2026-07-14",
-        "notes": "v1.8.0: добавлен patching_guide с критериями выбора метода и примерами успешного/неудачного использования. Обновлена дата проверки."
+        "notes": "v1.10.0: добавлен large_files_handling. Обновлена дата проверки."
+      },
+      "large_files_handling": {
+        "title": "Работа с большими файлами",
+        "last_updated": "2026-07-14",
+        "problem": "GitHub raw-ссылки и API имеют ограничения на размер передаваемых файлов. Файлы > 50 КБ могут обрезаться при запросе через raw.githubusercontent.com.",
+        "solution": {
+          "rule": "Для больших файлов (> 50 КБ) НЕ полагайся на raw-ссылку для чтения. Используй локальный репозиторий.",
+          "workflow": [
+            "1. SR запрашивает файл через raw-ссылку для pre-check",
+            "2. Если файл обрезан — Gardener открывает его локально: micro honeycombs/path/to/file.py",
+            "3. SR анализирует локальную версию (она всегда полная)",
+            "4. Патч применяется к локальной версии",
+            "5. git add, commit, push — локальная целая версия отправляется на GitHub"
+          ]
+        },
+        "affected_files": [
+          "handlers/system.py (~55 КБ)",
+          "handlers/tasks.py (~95 КБ)",
+          "sr_conversation.py (~110 КБ)"
+        ],
+        "post_check": {
+          "rule": "После пуша проверять файл по ссылке: https://raw.githubusercontent.com/.../file.py",
+          "if_truncated": "Повторить пуш или использовать GitHub web-интерфейс"
+        }
       },
       "gardeners_repo": {
         "title": "mandala-gardeners — работа с приватным репозиторием",
