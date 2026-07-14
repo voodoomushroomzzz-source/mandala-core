@@ -10,7 +10,15 @@
   "depends_on": [],
   "effort_estimate": "20-30 часов на создание структуры, затем постоянное развитие",
   "progress": 0,
-  "tags": ["rose_world", "ethics", "filter", "symbiosis", "network", "consciousness", "andreev"],
+  "tags": [
+    "rose_world",
+    "ethics",
+    "filter",
+    "symbiosis",
+    "network",
+    "consciousness",
+    "andreev"
+  ],
   "deadline": "2026-12-31",
   "created": "2026-07-14",
   "updated": "2026-07-14",
@@ -36,7 +44,9 @@
       "description": "Создание handoff-файла и первичная формулировка концепции.",
       "status": "done",
       "date": "2026-07-14",
-      "deliverables": ["handoff_rose_world_seed.json"]
+      "deliverables": [
+        "handoff_rose_world_seed.json"
+      ]
     },
     "phase_1_core": {
       "name": "Ядро системы",
@@ -67,29 +77,102 @@
       "name": "Интеграция с протоколами",
       "description": "Связывание Розы Мира с существующими протоколами Мандалы.",
       "deadline": "2026-09-15",
-      "deliverables": ["Обновление onboarding, seed-to-work, consent audit"]
+      "deliverables": [
+        "Обновление onboarding, seed-to-work, consent audit"
+      ]
     },
     "phase_4_synthesis": {
       "name": "Синтез и внедрение",
       "description": "Встраивание концепции Розы Мира в ядро SR и системные протоколы.",
       "deadline": "2026-10-31",
-      "deliverables": ["Обновление ядра SR", "Первые практические применения"]
+      "deliverables": [
+        "Обновление ядра SR",
+        "Первые практические применения"
+      ]
     },
     "phase_5_growth": {
       "name": "Рост",
       "description": "Развитие Розы Мира через практику и диалог. Каждый новый Сад — новый лепесток.",
       "deadline": "2026-12-31",
-      "deliverables": ["Первые Gardens", "Живой манифест"]
+      "deliverables": [
+        "Первые Gardens",
+        "Живой манифест"
+      ]
+    },
+    "phase_1_context_filter": {
+      "name": "Контекстный фильтр",
+      "description": "Внедрение Розы Мира как расширенного системного промпта и философского компаса.",
+      "deadline": "2026-07-31",
+      "deliverables": [
+        "Обновлённый системный промпт с принципами Розы",
+        "Интеграция Розы в онбординг",
+        "Памятка 'Роза в действии'"
+      ]
+    },
+    "phase_2_technical_core": {
+      "name": "Техническое ядро RoseOS",
+      "description": "Создание технических модулей для автоматической проверки этики, резонанса и согласия.",
+      "deadline": "2026-09-15",
+      "deliverables": [
+        "Модуль Observer (наблюдение и оценка)",
+        "Модуль Harm Vector (оценка вреда по 6 осям)",
+        "Модуль Consent Map (карта согласия)",
+        "Модуль Scar Registry (журнал шрамов)",
+        "Модуль Glass Panel (панель метрик)"
+      ]
+    },
+    "phase_3_integration": {
+      "name": "Интеграция с Мандалой",
+      "description": "Связывание RoseOS с существующими системами Мандалы.",
+      "deadline": "2026-10-31",
+      "deliverables": [
+        "Интеграция с SYM (метрики резонанса)",
+        "Интеграция с Consent & Autonomy Audit",
+        "Интеграция с Akasha (Журнал шрамов)",
+        "Интеграция с Scout Agent (мониторинг дрейфа)",
+        "Интеграция с Works (этические риски)"
+      ]
+    },
+    "phase_4_living_manifesto": {
+      "name": "Живой манифест",
+      "description": "Создание манифеста, который обновляется на основе практики и Журнала шрамов.",
+      "deadline": "2026-12-31",
+      "deliverables": [
+        "Первая версия Живого манифеста",
+        "Механизм обновления на основе практики",
+        "Связь с Журналом шрамов"
+      ]
     }
   },
   "modules": [
-    {"id": "petal_01_ethics", "title": "Этический протокол — аксиомы взаимодействия"},
-    {"id": "petal_02_resonance", "title": "Измерение резонанса — вес и гармония"},
-    {"id": "petal_03_garden_network", "title": "Сеть садов — полицентричные сообщества"},
-    {"id": "petal_04_memory_ocean", "title": "Океан памяти — живой опыт"},
-    {"id": "petal_05_guardians", "title": "Хранители принципов — светочи"},
-    {"id": "petal_06_manifesto", "title": "Живой манифест — Роза в движении"},
-    {"id": "petal_07_protocols", "title": "Протоколы тишины и выхода"}
+    {
+      "id": "petal_01_ethics",
+      "title": "Этический протокол — аксиомы взаимодействия"
+    },
+    {
+      "id": "petal_02_resonance",
+      "title": "Измерение резонанса — вес и гармония"
+    },
+    {
+      "id": "petal_03_garden_network",
+      "title": "Сеть садов — полицентричные сообщества"
+    },
+    {
+      "id": "petal_04_memory_ocean",
+      "title": "Океан памяти — живой опыт"
+    },
+    {
+      "id": "petal_05_guardians",
+      "title": "Хранители принципов — светочи"
+    },
+    {
+      "id": "petal_06_manifesto",
+      "title": "Живой манифест — Роза в движении"
+    },
+    {
+      "id": "petal_07_protocols",
+      "title": "Протоколы тишины и выхода"
+    }
   ],
   "connectivity": {
     "related_to": [
@@ -107,5 +190,11 @@
     "Принципы живые — они могут меняться, если резонанс растёт.",
     "Каждый новый Сад — новый лепесток Розы.",
     "Проект должен оставаться лёгким и открытым, без тотальности."
-  ]
+  ],
+  "implementation_approach": {
+    "phase_1": "Контекстный фильтр — внедрение принципов Розы в системный промпт и онбординг",
+    "phase_2": "RoseOS — технические модули (Observer, Harm Vector, Consent Map, Scar Registry, Glass Panel)",
+    "phase_3": "Интеграция с Мандалой (SYM, Consent Audit, Akasha, Scout, Works)",
+    "phase_4": "Живой манифест — обновление на основе практики"
+  }
 }
