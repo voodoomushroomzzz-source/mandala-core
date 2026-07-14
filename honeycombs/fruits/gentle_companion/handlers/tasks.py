@@ -61,16 +61,14 @@ async def cb_tasks_mgmt_v2(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     if not is_authorized(user_id):
-        await callback.message.answer("\U0001f331 Используй /start")
+        await callback.message.answer("🌿 Используй /start")
         return
     groups_data = store_get_groups(user_id).get("groups", [])
     all_tasks = store_get_tasks(user_id)
     active = [t for t in all_tasks if t.get("status") != "completed"]
-    header = f"\U0001f5c2 <b>\u0417\u0430\u0434\u0430\u0447\u0438</b> \u00b7 {len(groups_data)} \u0433\u0440\u0443\u043f\u043f \u00b7 {len(active)} \u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0445"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_groups_list_inline(user_id))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
+    header = f"📂 <b>Задачи</b> · {len(groups_data)} групп · {len(active)} активных"
+    kb = get_groups_list_inline(user_id)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 @router.callback_query(F.data == "tgroup_back_to_list")
 async def cb_tgroup_back_to_list(callback: CallbackQuery, state: FSMContext):
@@ -79,11 +77,9 @@ async def cb_tgroup_back_to_list(callback: CallbackQuery, state: FSMContext):
     groups_data = store_get_groups(user_id).get("groups", [])
     all_tasks = store_get_tasks(user_id)
     active = [t for t in all_tasks if t.get("status") != "completed"]
-    header = f"\U0001f5c2 <b>\u0417\u0430\u0434\u0430\u0447\u0438</b> \u00b7 {len(groups_data)} \u0433\u0440\u0443\u043f\u043f \u00b7 {len(active)} \u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0445"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_groups_list_inline(user_id))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
+    header = f"📂 <b>Задачи</b> · {len(groups_data)} групп · {len(active)} активных"
+    kb = get_groups_list_inline(user_id)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 @router.callback_query(F.data.startswith("tgroup_open|"))
 async def cb_tgroup_open(callback: CallbackQuery, state: FSMContext):

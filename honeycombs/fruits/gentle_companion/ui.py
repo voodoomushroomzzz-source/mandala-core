@@ -181,6 +181,22 @@ def _assign_group_emojis(groups: list) -> dict:
                 result[g["id"]] = "🌱"  # absolute last resort
     return result
 
+
+async def _replace_menu(user_id: str, message: Message, text: str, reply_markup = None, parse_mode: str = "HTML") -> Message:
+    """Универсальная функция для показа меню: удаляет старое и отправляет новое."""
+    prev_mid = _active_menu.get(user_id)
+    if prev_mid:
+        try:
+            await message.bot.delete_message(message.chat.id, prev_mid)
+        except Exception:
+            pass
+    if reply_markup:
+        sent = await message.answer(text, reply_markup=reply_markup, parse_mode=parse_mode)
+    else:
+        sent = await message.answer(text, parse_mode=parse_mode)
+    _active_menu[user_id] = sent.message_id
+    return sent
+
 def _build_profile_card(user_id: str) -> str:
     profile    = store_get_profile(user_id) or {}
     all_tasks  = store_get_tasks(user_id)
@@ -278,8 +294,21 @@ async def _show_profile(user_id: str, message: Message):
             InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
         ]
     ])
-    sent = await message.answer(card, reply_markup=kb)
-    _profile_messages[user_id] = sent.message_id
+    sent =     card = _build_profile_card(user_id)
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="🚀 Задачи 🚀", callback_data="menu_tasks_mgmt_v2"),
+        ],
+        [
+            InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
+            InlineKeyboardButton(text="🔔 Напоминания", callback_data="menu_reminders_mgmt"),
+        ],
+        [
+            InlineKeyboardButton(text="✏️ Профиль", callback_data="menu_edit_profile"),
+            InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
+        ]
+    ])
+    await _replace_menu(user_id, message, card, reply_markup=kb)
 
 async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels", sr_react: bool = False):
     """Show tasks — used by button, command, voice, intent."""

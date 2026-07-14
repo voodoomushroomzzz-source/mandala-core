@@ -1147,11 +1147,6 @@ async def btn_profile(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    if user_id in _menu_messages:
-        try:
-            await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
-        except Exception:
-            pass
     await _show_profile(user_id, message)
 
 

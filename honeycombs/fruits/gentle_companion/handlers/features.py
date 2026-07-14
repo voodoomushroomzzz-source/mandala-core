@@ -67,12 +67,13 @@ async def _start_checklist_create(message: Message, state: FSMContext, pre_title
 
 @router.callback_query(F.data == "profile_achievements")
 async def cb_profile_achievements(callback: CallbackQuery):
-    """Show achievements dashboard inline."""
     await callback.answer()
     user_id = str(callback.from_user.id)
     ach_count = store_get_achievements_count(user_id)
     if ach_count == 0:
-        text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу."
+        text = "💎 Достижений пока нет.
+
+Каждое закрытое дело добавляет слой к твоему резонансу."
     else:
         text = f"<b>Достижения · всего {ach_count} 💎</b>"
         text += _build_sphere_stats(user_id, months=3, show_tasks=False)
@@ -80,16 +81,13 @@ async def cb_profile_achievements(callback: CallbackQuery):
         [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="ach_add_from_menu")],
         [InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")]
     ])
-    try:
-        await callback.message.edit_text(text, reply_markup=kb, parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=kb, parse_mode="HTML")
+    await _replace_menu(user_id, callback.message, text, reply_markup=kb)
 
 
 @router.callback_query(F.data == "profile_back")
 async def cb_profile_back(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await state.clear()  # fix: clear any active FSM (reminders, tasks, etc.)
+    await state.clear()
     user_id = str(callback.from_user.id)
     await _show_profile(user_id, callback.message)
 
@@ -553,13 +551,11 @@ async def cb_cl_noop(callback: CallbackQuery):
 @router.callback_query(F.data == "menu_checklists_mgmt")
 async def cb_checklists_mgmt(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    user_id    = str(callback.from_user.id)
+    user_id = str(callback.from_user.id)
     checklists = store_get_checklists(user_id)
-    header     = f"☑️ <b>Чеклисты</b> ({len(checklists)}/{CHECKLIST_LIMIT})"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_checklists_mgmt_inline(checklists))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_checklists_mgmt_inline(checklists))
+    header = f"☑️ <b>Чеклисты</b> ({len(checklists)}/{CHECKLIST_LIMIT})"
+    kb = get_checklists_mgmt_inline(checklists)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 
 # ─── Reminders ────────────────────────────────────────────────────────────────
@@ -616,18 +612,15 @@ def get_reminder_edit_inline(rid: str) -> InlineKeyboardMarkup:
 
 @router.callback_query(F.data == "menu_reminders_mgmt")
 async def cb_reminders_mgmt(callback: CallbackQuery, state: FSMContext):
-    await _safe_cb_answer(callback)
-    user_id   = str(callback.from_user.id)
-    # Cleanup pending reminder edit if any
+    await callback.answer()
+    user_id = str(callback.from_user.id)
     ws = store_get_workspace(user_id) or {}
     ws.pop("_pending_reminder_edit", None)
     store_set_workspace(user_id, ws)
     reminders = store_get_reminders(user_id)
-    header    = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_reminders_mgmt_inline(reminders))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders))
+    header = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
+    kb = get_reminders_mgmt_inline(reminders)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 @router.callback_query(F.data == "rem_create_new")
 async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):

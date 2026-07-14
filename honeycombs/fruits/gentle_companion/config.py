@@ -188,6 +188,7 @@ def _get_user_store(telegram_id: str) -> dict:
 _pending_writes: dict = {}
 # SHA cache: {path: sha} — skip download if SHA unchanged
 _sha_cache: dict = {}
+_active_menu: dict = {}  # {user_id: message_id} — текущее активное меню
 _write_lock = asyncio.Lock() if False else None  # initialized in on_startup
 _sync_lock   = asyncio.Lock()  # prevents parallel GitHub syncs
 
