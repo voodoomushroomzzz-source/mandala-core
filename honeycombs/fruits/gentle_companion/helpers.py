@@ -403,3 +403,31 @@ def _days_since_last_interaction(telegram_id: str) -> int:
         return (_dti.now() - _dti.strptime(last, "%Y-%m-%d")).days
     except Exception:
         return 999
+
+async def _send_cleanup_warning(uid: str, days_left: int) -> None:
+    """Send a cleanup warning message to the gardener."""
+    try:
+        profile = store_get_profile(uid)
+        if not profile:
+            return
+        name = profile.get("name", "Садовник")
+        if days_left == 7:
+            text = (
+                f"🌱 <b>{name}</b>, я заметила, что тебя давно не было.\n\n"
+                f"Ты не заходил уже 23 дня. Если ты не появишься в ближайшую неделю, "
+                f"твой сад будет удалён.\n\n"
+                f"Просто напиши что-нибудь, чтобы я знала, что ты здесь 🌿"
+            )
+        elif days_left == 3:
+            text = (
+                f"🌿 <b>{name}</b>, осталось всего 3 дня.\n\n"
+                f"Твой сад будет удалён через 3 дня, если ты не напишешь.\n"
+                f"Если хочешь сохранить данные — просто ответь мне. Я рядом 🌸"
+            )
+        else:
+            return
+
+        await bot.send_message(int(uid), text, parse_mode="HTML")
+        logger.info(f"Cleanup warning ({days_left} days) sent to {uid}")
+    except Exception as e:
+        logger.error(f"Failed to send cleanup warning to {uid}: {e}")

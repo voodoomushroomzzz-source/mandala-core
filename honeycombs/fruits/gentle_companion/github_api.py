@@ -243,7 +243,47 @@ async def _gardeners_put(path: str, content: Any, _retry: int = 0) -> bool:
 
 # ─── Background sync ──────────────────────────────────────────────────────────
 
-async def _sync_pending() -> None:
+
+async def _remove_from_whitelist(user_id: str) -> bool:
+    """
+    Атомарно удаляет пользователя из whitelist.json.
+    Читает текущий список, удаляет ID, записывает обратно.
+    """
+    try:
+        # Принудительно читаем актуальную версию
+        whitelist = await _gardeners_get("gardeners/whitelist.json", force=True) or {}
+        if not isinstance(whitelist, dict):
+            whitelist = {"approved": []}
+
+        approved = whitelist.get("approved", [])
+        if user_id not in approved:
+            logger.warning(f"User {user_id} not found in whitelist")
+            return True  # Уже удалён, считаем успехом
+
+        # Удаляем ID
+        approved.remove(user_id)
+        whitelist["approved"] = approved
+
+        # Проверяем, что whitelist не стал пустым
+        if not approved:
+            logger.error(f"Attempted to remove last user from whitelist: {user_id}")
+            return False
+
+        # Записываем обновлённый whitelist
+        success = await _gardeners_put("gardeners/whitelist.json", whitelist)
+        if success:
+            _sha_cache.pop("g:gardeners/whitelist.json", None)
+            logger.info(f"User {user_id} removed from whitelist")
+        else:
+            logger.error(f"Failed to write whitelist after removing {user_id}")
+
+        return success
+
+    except Exception as e:
+        logger.error(f"Remove from whitelist error for {user_id}: {e}")
+        return False
+
+ -> None:
     """Flush all pending writes to GitHub sequentially. Lock prevents parallel syncs."""
     if _sync_lock.locked():
         return  # another sync already running — scheduler will retry next tick

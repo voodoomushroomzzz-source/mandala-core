@@ -120,7 +120,11 @@ LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
 CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
 REMINDER_LIMIT         = 20  # max reminders per user — P-67
-REMINDER_LIMIT_SOFT    = 15  # warn when approaching reminder limit
+REMINDER_LIMIT_SOFT    = 15
+
+# ─── Auto-cleanup ─────────────────────────────────────────────────────────────
+AUTO_CLEANUP_DAYS = 30  # days of silence before auto-delete
+RESONANCE_DECAY_START = 3  # day when resonance starts to drop  # warn when approaching reminder limit
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"

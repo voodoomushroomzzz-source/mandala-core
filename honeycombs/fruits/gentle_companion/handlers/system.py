@@ -417,6 +417,58 @@ async def run_resonance_decay() -> None:
     except Exception as e:
         logger.error(f"Resonance decay error: {e}", exc_info=True)
 
+async def run_auto_cleanup() -> None:
+    """Automatic cleanup of inactive gardeners (30 days of silence)."""
+    try:
+        from datetime import datetime as _dtc
+        today_s = _dtc.now().strftime("%Y-%m-%d")
+
+        for uid, user_store in list(_store.items()):
+            if not isinstance(user_store, dict) or not user_store.get("ready"):
+                continue
+
+            profile = store_get_profile(uid)
+            if not profile:
+                continue
+
+            days_silent = _days_since_last_interaction(uid)
+            name = profile.get("name", "Садовник")
+
+            # Предупреждение за 7 дней (23 дня молчания)
+            if days_silent == 23:
+                await _send_cleanup_warning(uid, days_left=7)
+                logger.info(f"Cleanup warning (7 days) sent to {uid} ({name})")
+
+            # Предупреждение за 3 дня (27 дней молчания)
+            elif days_silent == 27:
+                await _send_cleanup_warning(uid, days_left=3)
+                logger.info(f"Cleanup warning (3 days) sent to {uid} ({name})")
+
+            # Финальное уведомление и удаление (30 дней молчания)
+            elif days_silent >= 30:
+                # 1. Отправляем финальное сообщение
+                final_msg = (
+                    f"🌑 <b>{name}</b>, сегодня твой сад будет удалён.\n\n"
+                    f"Ты не заходил 30 дней. Это необратимо.\n"
+                    f"Если хочешь остаться — напиши что-нибудь прямо сейчас. Я подожду до конца дня 🌸"
+                )
+                try:
+                    await bot.send_message(int(uid), final_msg, parse_mode="HTML")
+                except Exception as e:
+                    logger.error(f"Failed to send final cleanup message to {uid}: {e}")
+
+                # 2. Удаляем профиль
+                await _delete_gardener(uid, notify_architect=False)
+                logger.info(f"Gardener {uid} ({name}) auto-deleted after 30 days of silence")
+
+            # Обновляем дату проверки
+            ws = store_get_workspace(uid) or {}
+            ws["_cleanup_check_date"] = today_s
+            store_set_workspace(uid, ws)
+
+    except Exception as e:
+        logger.error(f"Auto cleanup error: {e}", exc_info=True)
+
 
 async def _send_daytime_proactive(telegram_id: str) -> bool:
     """Send proactive message during daytime window (12-19, 3h silence).
@@ -571,6 +623,58 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         return False
     except Exception as e:
         logger.error(f"Daytime proactive error for {telegram_id}: {e}")
+        return False
+
+async def _delete_gardener(uid: str, notify_architect: bool = True) -> bool:
+    """
+    Универсальная функция удаления садовника.
+    Возвращает True, если удаление прошло успешно.
+    """
+    try:
+        profile = store_get_profile(uid)
+        name = (profile or {}).get("name", "Садовник") if profile else "Неизвестный"
+
+        # 1. Удаляем из whitelist
+        success = await _remove_from_whitelist(uid)
+        if not success:
+            logger.error(f"Failed to remove {uid} from whitelist")
+            return False
+
+        # 2. Очищаем RAM
+        _store.pop(uid, None)
+        _sessions.pop(uid, None)
+
+        # 3. Удаляем файлы на GitHub
+        base = _user_path(uid)
+        tasks = [
+            _gardeners_put(f"{base}/profile.json", {}),
+            _gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": []}),
+            _gardeners_put(f"{base}/memory.json", {"sessions": []}),
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Проверяем, все ли удаления прошли успешно
+        failed = [r for r in results if r is not True]
+        if failed:
+            logger.error(f"Failed to delete some files for {uid}: {failed}")
+
+        # 4. Уведомляем архитектора
+        if notify_architect:
+            try:
+                await bot.send_message(
+                    int(ARCHITECT_TELEGRAM_ID),
+                    f"🌑 <b>Садовник покинул сад (удаление)</b>\n\n"
+                    f"👤 {name}\nID: <code>{uid}</code>\n"
+                    f"Время: {_today()}. Данные удалены.",
+                    parse_mode="HTML"
+                )
+            except Exception as e:
+                logger.error(f"Architect notification error: {e}")
+
+        return True
+
+    except Exception as e:
+        logger.error(f"Delete gardener error for {uid}: {e}")
         return False
 
 @router.message(Command("start"))
