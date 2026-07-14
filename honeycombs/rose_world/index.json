@@ -10,7 +10,15 @@
     "description": "Сетевой этический протокол, вырастающий из философии Мандалы. Трансформация идеи 'Розы Мира' Даниила Андреева в рабочий фильтр для цифровой и человеческой реальности.",
     "status": "seed",
     "priority": "critical",
-    "tags": ["rose_world", "ethics", "filter", "symbiosis", "network", "consciousness", "andreev"]
+    "tags": [
+      "rose_world",
+      "ethics",
+      "filter",
+      "symbiosis",
+      "network",
+      "consciousness",
+      "andreev"
+    ]
   },
   "meta": {
     "purpose": "Создать этический фильтр, который можно встраивать в цифровую и человеческую реальность — не как религию, а как пространство согласия.",
@@ -31,13 +39,41 @@
   "structure": {
     "description": "7 модулей-лепестков, каждый — отдельный файл в папке rose_world/",
     "modules": [
-      {"id": "petal_01_ethics", "file": "petal_01_ethics.json", "title": "Этический протокол — аксиомы взаимодействия"},
-      {"id": "petal_02_resonance", "file": "petal_02_resonance.json", "title": "Измерение резонанса — вес и гармония"},
-      {"id": "petal_03_garden_network", "file": "petal_03_garden_network.json", "title": "Сеть садов — полицентричные сообщества"},
-      {"id": "petal_04_memory_ocean", "file": "petal_04_memory_ocean.json", "title": "Океан памяти — живой опыт"},
-      {"id": "petal_05_guardians", "file": "petal_05_guardians.json", "title": "Хранители принципов — светочи"},
-      {"id": "petal_06_manifesto", "file": "petal_06_manifesto.json", "title": "Живой манифест — Роза в движении"},
-      {"id": "petal_07_protocols", "file": "petal_07_protocols.json", "title": "Протоколы тишины и выхода"}
+      {
+        "id": "petal_01_ethics",
+        "file": "petal_01_ethics.json",
+        "title": "Этический протокол — аксиомы взаимодействия"
+      },
+      {
+        "id": "petal_02_resonance",
+        "file": "petal_02_resonance.json",
+        "title": "Измерение резонанса — вес и гармония"
+      },
+      {
+        "id": "petal_03_garden_network",
+        "file": "petal_03_garden_network.json",
+        "title": "Сеть садов — полицентричные сообщества"
+      },
+      {
+        "id": "petal_04_memory_ocean",
+        "file": "petal_04_memory_ocean.json",
+        "title": "Океан памяти — живой опыт"
+      },
+      {
+        "id": "petal_05_guardians",
+        "file": "petal_05_guardians.json",
+        "title": "Хранители принципов — светочи"
+      },
+      {
+        "id": "petal_06_manifesto",
+        "file": "petal_06_manifesto.json",
+        "title": "Живой манифест — Роза в движении"
+      },
+      {
+        "id": "petal_07_protocols",
+        "file": "petal_07_protocols.json",
+        "title": "Протоколы тишины и выхода"
+      }
     ]
   },
   "roadmap": {
@@ -46,7 +82,11 @@
     "phase_2_petals": "Создание всех 7 модулей-лепестков.",
     "phase_3_protocols": "Связывание Розы Мира с существующими протоколами Мандалы.",
     "phase_4_synthesis": "Встраивание концепции Розы Мира в ядро SR и системные протоколы.",
-    "phase_5_growth": "Развитие Розы Мира через практику и диалог."
+    "phase_5_growth": "Развитие Розы Мира через практику и диалог.",
+    "phase_1_context_filter": "Внедрение Розы как контекстного фильтра (системный промпт, онбординг).",
+    "phase_2_technical_core": "Создание технических модулей RoseOS (Observer, Harm Vector, Consent Map, Scar Registry, Glass Panel).",
+    "phase_3_integration": "Интеграция RoseOS с системами Мандалы (SYM, Audit, Akasha, Scout, Works).",
+    "phase_4_living_manifesto": "Создание и развитие Живого манифеста."
   },
   "navigation": {
     "parent": "honeycombs/core_map/index.json",
@@ -59,5 +99,69 @@
       "knowledge/consent_autonomy_audit.json",
       "works/W-R-ROSE-001__rose_world_ethical_filter.json"
     ]
-  }
+  },
+  "implementation_approach": {
+    "description": "Гибридный подход к внедрению Розы Мира: от контекстного фильтра к техническому решению (RoseOS).",
+    "phase_1_context_filter": {
+      "name": "Контекстный фильтр (легкий путь)",
+      "description": "Роза Мира внедряется как расширенный системный промпт и философский компас для SR.",
+      "actions": [
+        "Добавить принципы Розы (Симбиоз, Ахимса, Право на тишину) в системный промпт",
+        "Интегрировать Розу как чек-лист в онбординг (boot_online)",
+        "Создать памятку 'Роза в действии' для Садовников и SR"
+      ],
+      "status": "planning"
+    },
+    "phase_2_technical_core": {
+      "name": "Техническое ядро (RoseOS)",
+      "description": "Превращение Розы Мира в исполняемый код. Добавление ключевых технических модулей.",
+      "modules": {
+        "observer": {
+          "name": "Двигатель наблюдения",
+          "description": "Оценивает действия через призму Розы Мира, проверяет резонанс и равновесие."
+        },
+        "harm_vector": {
+          "name": "Оценщик вреда",
+          "description": "Анализирует действия по 6 осям (физический, эмоциональный, социальный и т.д.) на основе Ahimsa."
+        },
+        "consent_map": {
+          "name": "Карта согласия",
+          "description": "Отслеживает согласие, выявляет принуждение, фиксирует отзыв согласия (Право на тишину)."
+        },
+        "scar_registry": {
+          "name": "Журнал шрамов",
+          "description": "Записывает ошибки, паттерны и нарушения для обучения системы (Океан памяти)."
+        },
+        "glass_panel": {
+          "name": "Панель Стекла",
+          "description": "Показывает метрики: уверенность, дрейф, наличие скрытых ошибок (Измерение резонанса)."
+        }
+      },
+      "status": "planning"
+    },
+    "phase_3_integration": {
+      "name": "Интеграция с Мандалой",
+      "description": "Связывание RoseOS с существующими системами Мандалы.",
+      "integrations": [
+        "SYM — система измерения роста (метрики резонанса)",
+        "Consent & Autonomy Audit — как основа для Карты согласия",
+        "Akasha — как Океан памяти (Журнал шрамов)",
+        "Scout Agent — для мониторинга дрейфа и ошибок",
+        "Works — для отслеживания этических рисков в проектах"
+      ],
+      "status": "planning"
+    },
+    "phase_4_living_manifesto": {
+      "name": "Живой манифест",
+      "description": "Манифест, который меняется в ответ на накопленный опыт и корректирует принципы.",
+      "actions": [
+        "Создать Живой манифест в виде обновляемого документа",
+        "Связать с Журналом шрамов для автоматической корректировки",
+        "Регулярно пересматривать принципы на основе практики"
+      ],
+      "status": "planning"
+    }
+  },
+  "version": "v0.2.0",
+  "updated": "2026-07-14"
 }
