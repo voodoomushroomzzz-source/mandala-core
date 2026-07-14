@@ -4,7 +4,7 @@
     "name": "Knowledge Base — Curated Resources",
     "version": "v1.1.1",
     "created": "2026-07-05",
-    "updated": "2026-07-11",
+    "updated": "2026-07-14",
     "layer": 1,
     "type": "knowledge_index",
     "status": "active",
@@ -75,6 +75,22 @@
       "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-11. Based on Claude SR draft.",
       "date_added": "2026-07-11",
       "version": "v1.2.0"
+    },
+    {
+      "id": "startup_legal_docs_guide",
+      "name": "18 юридических документов для стартапа (международный стандарт)",
+      "file": "startup_legal_docs_guide.json",
+      "description": "Список 18 ключевых юридических документов для международного стартапа, их актуальность, структура и практические рекомендации на основе анализа 2026 года.",
+      "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-14",
+      "date_added": "2026-07-14",
+      "version": "v1.0.0",
+      "tags": [
+        "legal",
+        "startup",
+        "founder",
+        "documents",
+        "international"
+      ]
     }
   ],
   "navigation": {
@@ -86,8 +102,8 @@
     ]
   },
   "metrics": {
-    "total_resources": 6,
-    "last_updated": "2026-07-11"
+    "total_resources": 7,
+    "last_updated": "2026-07-14"
   },
   "health": {
     "status": "healthy",
