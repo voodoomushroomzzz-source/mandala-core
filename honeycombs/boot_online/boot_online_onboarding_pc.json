@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.47",
+    "version": "v1.7.48",
     "created": "2026-05-11",
     "updated": "2026-07-14",
     "layer": 1,
@@ -1093,7 +1093,7 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.8.0",
+        "version": "v1.9.0",
         "created": "2026-04-12",
         "updated": "2026-07-14",
         "layer": 2,
@@ -1386,6 +1386,25 @@
         "status": "healthy",
         "last_check": "2026-07-14",
         "notes": "v1.8.0: добавлен patching_guide с критериями выбора метода и примерами успешного/неудачного использования. Обновлена дата проверки."
+      },
+      "gardeners_repo": {
+        "title": "mandala-gardeners — работа с приватным репозиторием",
+        "commands": {
+          "clone": "git clone https://github.com/voodoomushroomzzz-source/mandala-gardeners.git",
+          "pull": "git pull",
+          "check_whitelist": "cat gardeners/whitelist.json",
+          "list_gardeners": "ls -la gardeners/ | grep gardener_"
+        },
+        "rules": [
+          "whitelist.json — единственный файл, который правим вручную",
+          "При /leave бот удаляет садовника из whitelist и стирает его папку",
+          "Если кто-то пропал — проверь whitelist и добавь ID обратно",
+          "Не редактируй другие файлы вручную — их пишет бот"
+        ],
+        "recover": {
+          "when": "Садовник есть в папке gardeners/gardener_*, но нет в whitelist",
+          "how": "Добавить его ID в массив approved в whitelist.json"
+        }
       },
       "notion_api_termux": {
         "description": "Работа с Notion API через Termux (curl + Python).",
