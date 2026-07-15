@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 17,
-    "total_size_kb": 893.57,
+    "total_size_kb": 894.52,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 17,
-    "total_size_kb": 893.57,
+    "total_size_kb": 894.52,
     "last_updated": "2026-07-15",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -59,11 +59,11 @@
       "task_validator": {
         "errors": [],
         "warnings": [
-          "W-T-20260713-YOUTUBE_MANDALA_PROMO.json: non-standard status 'planning'",
-          "W-R-ECOMM-001__china_sourcing_ecommerce.json: non-standard status 'planning'",
-          "W-R-ECO-001__autonomous_ecosystem.json: non-standard status 'planning'",
           "W-T-20260713-YOUTUBE_GAMING_CHANNEL.json: non-standard status 'planning'",
-          "W-R-ROSE-001__rose_world_ethical_filter.json: non-standard status 'planning'"
+          "W-R-ROSE-001__rose_world_ethical_filter.json: non-standard status 'planning'",
+          "W-R-ECO-001__autonomous_ecosystem.json: non-standard status 'planning'",
+          "W-R-ECOMM-001__china_sourcing_ecommerce.json: non-standard status 'planning'",
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO.json: non-standard status 'planning'"
         ],
         "expired_tasks": [],
         "upcoming_deadlines": [],
@@ -75,9 +75,9 @@
       "ahimsa_filter": {
         "errors": [],
         "warnings": [
-          "rose_world: missing meta.description",
+          "scout_agent: missing meta.description",
           "inbox: missing index.json",
-          "scout_agent: missing meta.description"
+          "rose_world: missing meta.description"
         ],
         "noise_files": [],
         "errors_count": 0,
