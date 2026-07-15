@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "INSTR-MOBILE-WORKFLOW-001",
     "name": "Mobile Workflow — Working with Mandala from Android",
-    "version": "v1.10.0",
+    "version": "v1.11.0",
     "created": "2026-04-12",
-    "updated": "2026-07-14",
+    "updated": "2026-07-15",
     "layer": 2,
     "type": "workflow_guide",
     "description": "Complete guide for External SR working from Android/Termux. v1.5.0: added patcher_method as equal deployment option.",
@@ -35,7 +35,13 @@
         "description": "Use Python patcher script for targeted block replacement. Recommended for large files (>500 lines) or when only a specific section needs updating. Patcher finds and replaces exact block, leaving rest intact."
       }
     ],
-    "example": "When you see a block starting with 'cat > ... << EOF' or 'python patch_*.py', that's the whole action."
+    "example": "When you see a block starting with 'cat > ... << EOF' or 'python patch_*.py', that's the whole action.",
+    "grouping_rule": {
+      "title": "Объединяй изменения в один блок",
+      "description": "Если нужно выполнить несколько операций (обновить, удалить, переместить файлы) — ОБЪЕДИНЯЙ их в один FULL DEPLOY блок. Это снижает количество действий для Gardener'а и уменьшает риск ошибок.",
+      "principle": "Один блок = одна копипаста = одно выполнение.",
+      "example": "Вместо трёх отдельных блоков на удаление трёх файлов — один блок с тремя командами git rm."
+    }
   },
   "patching_guide": {
     "title": "Когда и как патчить — выбор метода",
