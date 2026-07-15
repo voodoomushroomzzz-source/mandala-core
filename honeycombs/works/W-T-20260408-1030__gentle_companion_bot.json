@@ -10,15 +10,50 @@
   "depends_on": [],
   "effort_estimate": null,
   "progress": 79,
-  "tags": ["bot", "telegram", "gentle_companion", "cleanup"],
+  "tags": [
+    "bot",
+    "telegram",
+    "gentle_companion",
+    "cleanup",
+    "budget",
+    "seeds"
+  ],
   "deadline": "2026-08-31",
   "created": "2026-04-01",
-  "updated": "2026-07-14",
+  "updated": "2026-07-15",
   "source": {
     "type": "task",
     "original_id": "T-20260408-1030",
     "original_file": "bot_update.json",
     "roadmap_ref": ""
   },
-  "notes": "Добавлена задача по проверке автоочистки неактивных садовников (30 дней молчания). Проверить: отправку уведомлений за 7 и 3 дня до удаления, финальное удаление через 30 дней, корректную работу команды /leave после внедрения универсальной функции _delete_gardener."
+  "notes": "Добавлены новые функции: 1) накопление резонанса при закрытии задач (отложено), 2) короткие ответы бота (1 предложение, если запрос не требует большего), 3) функция ведения бюджета, 4) функция отправки семян идей в инбокс Мандалы.",
+  "features": {
+    "pending_resonance": {
+      "status": "pending",
+      "description": "Накопление резонанса при закрытии нескольких задач с отправкой сводки через 5 секунд",
+      "priority": "medium",
+      "blockers": [
+        "Требуется аккуратный точечный патч в handlers/tasks.py"
+      ]
+    },
+    "short_responses": {
+      "status": "todo",
+      "description": "Бот отвечает одним предложением, если запрос не требует развёрнутого ответа. Экономия токенов и внимания Садовника.",
+      "priority": "high",
+      "implementation": "Добавить режим 'лаконичный' в SR промпт или пост-обработку ответа"
+    },
+    "budget": {
+      "status": "todo",
+      "description": "Ведение бюджета: доходы/расходы, категории, отчёты за период",
+      "priority": "medium",
+      "implementation": "Новый модуль, хранение в workspace.json, команды /budget add, /budget report"
+    },
+    "seed_inbox": {
+      "status": "todo",
+      "description": "Любой пользователь может отправить идею → сохраняется в honeycombs/seeds/inbox/ с метаданными",
+      "priority": "high",
+      "implementation": "Новый хендлер, авто-генерация seed-файла с датой, автором, тегами"
+    }
+  }
 }
