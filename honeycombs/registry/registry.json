@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-07-14",
+    "updated": "2026-07-15",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 17,
-    "total_size_kb": 871.15,
+    "total_size_kb": 893.57,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 17,
-    "total_size_kb": 871.15,
-    "last_updated": "2026-07-14",
+    "total_size_kb": 893.57,
+    "last_updated": "2026-07-15",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
