@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "FRUITS-REGISTRY-001",
     "name": "Fruits — Product Registry & Strategy Map",
-    "version": "v2.4.0",
+    "version": "v2.5.0",
     "created": "2026-04-17",
-    "updated": "2026-07-13",
+    "updated": "2026-07-15",
     "layer": 2,
     "type": "registry_index",
     "description": "Registry of Mandala products and strategic map of their interaction. v2.2.0: gentle_companion got dedicated honeycomb with architecture plan (14 modules, 7 phases). Dual-repo infrastructure. Links to architecture index.",
@@ -347,7 +347,8 @@
           "code": "voodoomushroomzzz-source/mandala-core (gentle_companion.py)",
           "data": "voodoomushroomzzz-source/mandala-gardeners (profile, workspace, memory, whitelist)"
         },
-        "hosting": "Hetzner VPS 91.99.149.226, systemd, nginx, webhook port 10000"
+        "hosting": "Hetzner VPS 91.99.149.226, systemd, nginx, webhook port 10000",
+        "path": "honeycombs/fruits/gentle_companion/index.json"
       },
       "engineer_chat": {
         "id": "fruit-engineer-chat-001",
@@ -373,7 +374,8 @@
         "code_location": "main.py",
         "layer": "Brain (Layer 2)",
         "task_id": "T-20260511-ENGCHAT",
-        "task_file": "honeycombs/tasks/active/engineer_chat.json"
+        "task_file": "honeycombs/tasks/active/engineer_chat.json",
+        "path": "honeycombs/works/W-T-20260511-ENGCHAT__engineer_chat.json"
       },
       "manus": {
         "id": "fruit-manus-001",
@@ -398,7 +400,8 @@
         "code_location": "manus/ (to be created)",
         "layer": "Hands (Layer 3)",
         "task_id": "T-20260511-MANUS",
-        "task_file": "honeycombs/tasks/active/manus_hands.json"
+        "task_file": "honeycombs/tasks/active/manus_hands.json",
+        "path": "honeycombs/works/W-T-20260511-MANUS__manus_hands.json"
       },
       "architect_bot": {
         "id": "fruit-architect-bot-001",
@@ -423,7 +426,8 @@
           "control_panel"
         ],
         "code_location": "main.py (inside Engineer Chat server)",
-        "layer": "Brain (Layer 2) — Mobile Interface"
+        "layer": "Brain (Layer 2) — Mobile Interface",
+        "path": "honeycombs/works/W-T-20260511-ARCHBOT__architect_bot.json"
       },
       "scout_agent": {
         "id": "fruit-scout-agent-001",
@@ -446,7 +450,8 @@
         ],
         "layer": "Seed Collector (Layer 0)",
         "task_id": "W-T-20260410-0240",
-        "task_file": "honeycombs/works/W-T-20260410-0240__scout_agent.json"
+        "task_file": "honeycombs/works/W-T-20260410-0240__scout_agent.json",
+        "path": "honeycombs/fruits/scout_agent/index.json"
       },
       "autonomous_ecosystem": {
         "id": "fruit-autonomous-ecosystem-001",
@@ -520,7 +525,8 @@
           "Phase 1: Working prototype with sensors and controllable sockets",
           "Phase 2: Fully automated greenhouse with AI climate/pH/lighting control",
           "Phase 3: Energy-independent ecosystem with AI-optimized power management"
-        ]
+        ],
+        "path": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json"
       }
     }
   },
