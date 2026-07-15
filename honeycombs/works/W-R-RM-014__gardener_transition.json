@@ -33,9 +33,9 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v4.1.6",
+        "version": "v4.1.7",
         "created": "2026-04-16",
-        "updated": "2026-07-14",
+        "updated": "2026-07-15",
         "layer": 2,
         "type": "roadmap",
         "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
@@ -797,8 +797,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-14",
-        "notes": "v4.1.6: Added core_resume_fallback_ops for Territorial Manager roles (200k, full-time/hybrid)."
+        "last_check": "2026-07-15",
+        "notes": "v4.1.7: Added gardener_profile block for instant form filling."
       },
       "core_resume_fallback_ops": {
         "version": "v1.0",
@@ -875,6 +875,172 @@
           "Гибридный формат работы",
           "Готовность к выездам по Москве и области"
         ]
+      },
+      "gardener_profile": {
+        "personal": {
+          "full_name": "Лёвин Дмитрий Александрович",
+          "gender": "Мужской",
+          "age": 36,
+          "telegram": "@dmitriilevin",
+          "phone": "+7 (915) 756-67-87",
+          "email": "stopthemvgic@gmail.com",
+          "location": "Москва, Россия",
+          "hh_resume_url": "https://hh.ru/resume/8993b5ceff09a959820039ed1f7a3734656f62",
+          "linkedin_url": null,
+          "habr_career_url": null
+        },
+        "current_employment": {
+          "status": "active",
+          "company": "Raw to go",
+          "city": "Москва",
+          "position": "Территориальный управляющий",
+          "period": "Ноябрь 2025 – настоящее время",
+          "team_size": 30,
+          "description": "Сеть из 5 кафе и производств. Команда до 30 человек."
+        },
+        "experience_summary": {
+          "total_years": 8,
+          "sectors": [
+            "HoReCa",
+            "ритейл",
+            "производство"
+          ],
+          "key_skills": [
+            "Операционный менеджмент",
+            "Управление командой до 30 человек",
+            "Бюджетирование и управление P&L",
+            "Оптимизация затрат",
+            "Открытие объектов с нуля",
+            "Логистика и закупки",
+            "KPI и система мотивации"
+          ],
+          "achievements": [
+            "Снижение затрат на сырьё на 10–15% (оптимизация закупок)",
+            "Стабилизация команды из 30 человек: снижение текучки, выстраивание системы обучения и мотивации, оптимизация ФОТ на 2–5%",
+            "Организация переезда и запуска крупного производства (подготовка, логистика, монтаж, наладка)",
+            "Обеспечение среднегодового роста выручки на 15% (суммарно ~40–45% за 3 года), вывод проекта с убытка -10% на стабильную прибыль 10–15%",
+            "Сокращение расходов на 10–20% за счёт интеграции сервисов и пересмотра ролей",
+            "Открытие 2 точек с нуля (подбор локаций, ремонт, оснащение, запуск)"
+          ]
+        },
+        "education": {
+          "university": "Владимирский государственный университет (неоконченное высшее, юриспруденция)",
+          "certifications": [
+            {
+              "name": "Менеджер проектов",
+              "institution": "Hawking School",
+              "year": 2019,
+              "type": "course"
+            },
+            {
+              "name": "AI Foundations",
+              "institution": "OpenAI Academy",
+              "status": "in_progress",
+              "year": 2026,
+              "type": "course"
+            }
+          ],
+          "self_education": [
+            "Интеграция AI-агентов (GPT, Claude, DeepSeek) через API",
+            "Промпт-инжиниринг",
+            "Работа с LLM"
+          ]
+        },
+        "additional_skills": {
+          "languages": [
+            {
+              "language": "Английский",
+              "level": "B1 (Intermediate)",
+              "note": "чтение технической документации"
+            },
+            {
+              "language": "Русский",
+              "level": "Родной"
+            }
+          ],
+          "driving_license": "Категория B",
+          "project": {
+            "name": "Mandala Symbiosis",
+            "period": "2025 – настоящее время",
+            "description": "Разработка AI-экосистемы для автоматизации управления и аналитики.",
+            "achievements": [
+              "Разработал Telegram-бота 'Gentle Companion' на Python (MVP, 7 пользователей)",
+              "Создал веб-интерфейс для инженерного чата (HTML)",
+              "Интегрировал AI-агентов (GPT, Claude, DeepSeek) через API",
+              "Развернул и запустил продукты на внешнем сервере (Ubuntu, systemd, Git)"
+            ]
+          }
+        },
+        "job_preferences": {
+          "tracks": {
+            "track_a": {
+              "name": "AI-Hybrid Role",
+              "salary_min": 150000,
+              "salary_max": 250000,
+              "currency": "RUB",
+              "roles": [
+                "AI Operations Manager",
+                "AI Project Manager",
+                "Automation Manager",
+                "AI Product Manager (junior/mid)"
+              ],
+              "employment": [
+                "Полная занятость",
+                "Гибридный формат"
+              ],
+              "priority": "high"
+            },
+            "track_b": {
+              "name": "Professional AI Role — Global",
+              "salary_min": 8000,
+              "salary_max": 15000,
+              "currency": "USD",
+              "roles": [
+                "AI Operations Manager",
+                "Agentic Orchestration Engineer",
+                "AI Product Manager",
+                "AI Project Manager"
+              ],
+              "employment": [
+                "Remote"
+              ],
+              "priority": "medium"
+            },
+            "fallback_ops": {
+              "name": "Operations Manager (Fallback)",
+              "salary_min": 170000,
+              "salary_max": 220000,
+              "currency": "RUB",
+              "roles": [
+                "Территориальный управляющий",
+                "Региональный менеджер",
+                "Руководитель филиала"
+              ],
+              "employment": [
+                "Полная занятость",
+                "Гибридный формат"
+              ],
+              "travel": "Да, по Москве и Московской области",
+              "priority": "low"
+            }
+          }
+        },
+        "ready_to_use_answers": {
+          "about_me": "Управленец с 8+ годами опыта в операционном управлении сетями (HoReCa, ритейл, производство). Полный цикл управления: от открытия новых точек и контроля бюджета до выстраивания систем KPI, мотивации и обучения персонала. Специализация: систематизация процессов, оптимизация затрат, рост прибыли и управление изменениями. Управлял командами до 30 человек и бюджетами проектов. Открыл и запустил 3+ объекта с нуля.",
+          "achievements_3": "1. Оптимизировал закупочную деятельность → снижение прямых затрат на сырьё на 10–15%.\n2. Стабилизировал команду из 30 человек: снизил текучку, выстроил систему обучения и мотивации → оптимизация ФОТ на 2–5%.\n3. Организовал переезд и запуск крупного производства (подготовка, логистика, монтаж, наладка).",
+          "team_size": "от 10 до 30 человек",
+          "salary_ai_ops": "150 000 — 250 000 ₽",
+          "salary_ops": "170 000 — 220 000 ₽",
+          "salary_usd": "$8,000 — $15,000+ / month",
+          "travel_ready": "Да, по Москве и Московской области",
+          "education_last_year": "OpenAI Academy: AI Foundations (в процессе) — фундаментальный курс по промпт-инжинирингу и работе с LLM. Самостоятельное изучение: интеграция AI-агентов (GPT, Claude, DeepSeek) через API, промпт-инжиниринг, работа с LLM в рамках проекта Mandala Symbiosis.",
+          "full_name": "Лёвин Дмитрий Александрович",
+          "telegram": "@dmitriilevin",
+          "phone": "+7 (915) 756-67-87",
+          "email": "stopthemvgic@gmail.com",
+          "hh_resume_url": "https://hh.ru/resume/8993b5ceff09a959820039ed1f7a3734656f62"
+        },
+        "last_updated": "2026-07-15"
       }
     }
   },
