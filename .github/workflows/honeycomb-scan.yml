@@ -34,7 +34,7 @@ jobs:
       - name: Check if registry changed
         id: check_changes
         run: |
-          if git diff --quiet honeycombs/registry/registry.json; then
+          if git diff --quiet honeycombs/registry/scan_state.json; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -49,4 +49,4 @@ jobs:
           git commit -m "feat(registry): auto-scan $(date -u '+%Y-%m-%d %H:%M UTC')"
           git pull --rebase origin main
           git pull --rebase origin main
-          git push
+          git push || (git pull --rebase origin main && git push)
