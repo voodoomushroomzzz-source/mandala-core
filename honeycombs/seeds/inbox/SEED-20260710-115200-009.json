@@ -5,15 +5,15 @@
   "description": "A collective list of free APIs",
   "source": "GitHub Trending Python (API)",
   "collected_at": "2026-07-10T11:52:00.802094",
-  "status": "raw",
+  "status": "evaluated",
   "evaluation": {
-    "score_novelty": 0,
-    "score_feasibility": 0,
-    "score_relevance": 0,
-    "score_impact": 0,
-    "total_score": 0,
-    "mandala_relevance": "",
-    "reason_selected": "",
+    "score_novelty": 2,
+    "score_feasibility": 10,
+    "score_relevance": 6,
+    "score_impact": 4,
+    "total_score": 22,
+    "mandala_relevance": "Полезен как справочник для Manus и Engineer Chat.",
+    "reason_selected": "Полезный, но неприоритетный ресурс. Оставляем в инбоксе.",
     "action": "keep"
   },
   "promotion_notes": {
