@@ -35,6 +35,11 @@ def log(message, level="INFO"):
         pass
 
 def is_relevant(text):
+    """Проверяет текст на наличие ключевых слов."""
+    if not text:
+        return False
+    text_lower = text.lower()
+    return any(kw.lower() in text_lower for kw in RELEVANT_KEYWORDS)
 
 def is_recent(published_str, hours=24):
     """Проверяет, что дата публикации за последние 24 часа."""
