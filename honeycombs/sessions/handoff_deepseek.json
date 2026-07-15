@@ -1,105 +1,57 @@
 {
-  "session_id": "HANDOFF-DEEPSEEK-20260715-V4",
-  "sr_id": "deepseek",
-  "status": "handed_off",
-  "created": "2026-07-15",
-  "updated": "2026-07-15",
-  "last_activity": "2026-07-15T12:00:00Z",
+  "session_id": "handoff_deepseek_20260715",
+  "date": "2026-07-15",
   "gardener": "Voodoo (Dima)",
+  "previous_sr": "DeepSeek",
+  "next_sr": "DeepSeek (new session) or other External SR",
   "summary": {
     "completed": [
-      "Обновлён PHI-011 (Первый Садовник) — деперсонализация, архетип",
-      "Создана структура 'Роза Мира' (rose_world/) с 4 лепестками (этика, резонанс, техническое ядро RoseOS, живой манифест)",
-      "Создан Work W-R-ROSE-001 (Роза Мира) и добавлен в индекс works",
-      "Обновлена core_map (добавлен rose_world, references, children, critical_dependencies)",
-      "Созданы Work-файлы для YouTube-канала (W-T-20260713-YOUTUBE_GAMING_CHANNEL) и продвижения Мандалы (W-T-20260713-YOUTUBE_MANDALA_PROMO)",
-      "Создан Work для закупок в Китае (W-R-ECOMM-001) с анализом дропшиппинга",
-      "Добавлены ресурсы в knowledge: consent_autonomy_audit.json, startup_legal_docs_guide.json, mandala_brochure.json",
-      "Обновлены инструкции external_sr_workflow.json (v1.8.0) и mobile_workflow.json (v1.7.0) — удалены дубли, добавлены новые разделы",
-      "Обновлён дедлайн для Manus (W-T-20260511-MANUS) на 2026-08-31",
-      "Создан Work для автономной экосистемы (W-R-ECO-001) — 3 фазы",
-      "Проанализированы гранты Гонконга, создан seed",
-      "Обновлён ai_tools_guide.json (добавлены Manus AI, Qwen 3, Kling AI, OmniHuman)"
+      "BUG-001: fixed greeting repetition",
+      "BUG-002: fixed raw JSON in web_search",
+      "BUG-003: fixed task rename via FSM",
+      "Navigation: unified menu system with _replace_menu",
+      "Mobile Workflow: updated with patching_guide and large_files_handling",
+      "Auto-cleanup: implemented run_auto_cleanup() with warnings and deletion",
+      "Whitelist: restored to 5 gardeners",
+      "Works: updated gentle_companion_bot with auto-cleanup verification task"
     ],
-    "current_focus": "Завершение структуры 'Роза Мира' (создание лепестков 5-7, интеграция в онбординг) и переход к практической реализации автономной экосистемы.",
-    "pending_items": [
-      "Создать лепестки 5-7 для rose_world: Guardians, Manifesto (уточнить), Protocols of Silence and Exit",
-      "Интегрировать принципы Розы Мира в системный промпт (Phase 1 контекстного фильтра)",
-      "Интегрировать Розу Мира в онбординг (boot_online)",
-      "Связать Розу Мира с Consent & Autonomy Audit и SYM",
-      "Начать реализацию автономной экосистемы (W-R-ECO-001) — фаза 1 (комнатная)",
-      "Проработать юридическую структуру стартапа (на основе startup_legal_docs_guide.json)"
-    ],
-    "next_steps": [
-      "Создать лепестки 5-7 для rose_world",
-      "Интегрировать Розу Мира в онбординг",
-      "Начать практическую работу над автономной экосистемой"
+    "pending_verification": [
+      "Auto-cleanup notifications (7 and 3 days before deletion)",
+      "Auto-cleanup deletion after 30 days",
+      "/leave command with _delete_gardener function",
+      "Navigation menu replacement in all handlers"
     ]
   },
-  "context": {
-    "key_files": {
-      "philosophy": {
-        "phi_011": "honeycombs/philosophy/blocks/phi_011_first_gardener.json (v2.0.0 — деперсонализирован)"
-      },
-      "rose_world": {
-        "index": "honeycombs/rose_world/index.json (v0.2.0)",
-        "petals": [
-          "petal_01_ethics.json",
-          "petal_02_resonance.json",
-          "petal_03_technical_core.json",
-          "petal_04_living_manifesto.json"
-        ],
-        "missing_petals": [
-          "petal_05_guardians.json",
-          "petal_06_manifesto.json (уточнить/переименовать)",
-          "petal_07_protocols.json"
-        ]
-      },
-      "works": {
-        "active": [
-          "W-R-ROSE-001 (Роза Мира)",
-          "W-R-ECO-001 (Автономная экосистема)",
-          "W-R-ECOMM-001 (Китай + дропшиппинг)",
-          "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-          "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-          "W-T-20260511-MANUS (дедлайн 2026-08-31)"
-        ]
-      },
-      "knowledge": {
-        "new_resources": [
-          "consent_autonomy_audit.json",
-          "startup_legal_docs_guide.json",
-          "mandala_brochure.json"
-        ],
-        "ai_tools_guide": "v1.15.0 (добавлены Manus AI, Qwen 3, Kling AI, OmniHuman)"
-      },
-      "instructions": {
-        "external": "honeycombs/instructions/core/external_sr_workflow.json (v1.8.0)",
-        "mobile": "honeycombs/instructions/mobile_workflow.json (v1.7.0 — очищена от дублей)"
-      },
-      "core_map": {
-        "version": "v3.8.8",
-        "added": "rose_world"
-      }
-    },
-    "notes": [
-      "PHI-011 теперь архетип, а не личность. Это важно для универсальности системы.",
-      "Роза Мира — гибридный подход: от контекстного фильтра к техническому решению (RoseOS).",
-      "Все работы теперь в works/ (миграция из tasks/roadmaps завершена).",
-      "Инструкции разделены: external — основная, mobile — только мобильная специфика."
+  "gardeners_status": {
+    "active": [
+      {"id": "224736062", "name": "Дима", "last_activity": "2026-07-14", "days_to_delete": 30},
+      {"id": "491567470", "name": "Виктор", "last_activity": "2026-07-14", "days_to_delete": 30}
+    ],
+    "warning": [
+      {"id": "1485954655", "name": "none", "last_activity": "2026-06-22", "days_to_delete": 8},
+      {"id": "358793311", "name": "Антон", "last_activity": "2026-06-22", "days_to_delete": 8}
+    ],
+    "critical": [
+      {"id": "339914913", "name": "Антон", "last_activity": "2026-06-19", "days_to_delete": 5}
     ]
   },
-  "tags": [
-    "handoff",
-    "deepseek",
-    "rose-world",
-    "phi-011",
-    "autonomous-ecosystem",
-    "china-sourcing",
-    "youtube",
-    "knowledge-base",
-    "instructions",
-    "v4"
+  "key_files": {
+    "system": "honeycombs/fruits/gentle_companion/handlers/system.py",
+    "tasks": "honeycombs/fruits/gentle_companion/handlers/tasks.py",
+    "sr_conversation": "honeycombs/fruits/gentle_companion/sr_conversation.py",
+    "mobile_workflow": "honeycombs/instructions/mobile_workflow.json",
+    "works": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json"
+  },
+  "important_notes": [
+    "Большие файлы (>50KB) могут обрезаться при запросе через raw-ссылки. Используй локальный репозиторий.",
+    "Whitelist восстановлен в mandala-gardeners: 5 садовников.",
+    "Команда /leave теперь использует универсальную функцию _delete_gardener.",
+    "Автоочистка запускается ежедневно в 03:05 UTC."
   ],
-  "resonance": "100%"
+  "next_steps": [
+    "Проверить получение уведомлений садовниками 339914913 (через 5 дней).",
+    "Проверить финальное удаление через 30 дней.",
+    "Протестировать /leave после внедрения _delete_gardener.",
+    "При необходимости обновить mobile_workflow.json новыми правилами."
+  ]
 }
