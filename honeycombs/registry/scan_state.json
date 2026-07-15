@@ -1,23 +1,23 @@
 {
-  "last_scan": "2026-07-15T09:45:51.467731",
+  "last_scan": "2026-07-15T10:40:35.665611",
   "honeycomb_hashes": {
-    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
-    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
-    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
-    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
-    "honeycombs/fruits": "7034f4bab526e43c20f0421571165e03",
-    "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456",
-    "honeycombs/fruits/scout_agent": "209d3bc31c26d1fc5386709dccd07cba",
-    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
-    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
-    "honeycombs/boot_online": "466faeb68e8c977a9dc154d17fbd270c",
-    "honeycombs/seeds": "a1828531a8ce67ac629c9fd181227d88",
-    "honeycombs/knowledge": "d93dd6d2bf4774b9f09fe323d6e76962",
-    "honeycombs/core_map": "5b560cd409bd98b78ff74715ea4ecc98",
     "honeycombs/works": "e92caf1d039f91bd329a1b70300358be",
-    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
     "honeycombs/rose_world": "2ba9308d8feaa1031024f5ad74dfaec5",
-    "honeycombs/protocols": "f044a11d1b5432b8e8ba23ca765379e8"
+    "honeycombs/core_map": "5b560cd409bd98b78ff74715ea4ecc98",
+    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
+    "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
+    "honeycombs/knowledge": "d93dd6d2bf4774b9f09fe323d6e76962",
+    "honeycombs/protocols": "f044a11d1b5432b8e8ba23ca765379e8",
+    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
+    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
+    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
+    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
+    "honeycombs/boot_online": "466faeb68e8c977a9dc154d17fbd270c",
+    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
+    "honeycombs/seeds": "a1828531a8ce67ac629c9fd181227d88",
+    "honeycombs/fruits": "7034f4bab526e43c20f0421571165e03",
+    "honeycombs/fruits/scout_agent": "209d3bc31c26d1fc5386709dccd07cba",
+    "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456"
   },
   "statistics": {
     "total_scanned": 17,
@@ -39,7 +39,7 @@
     "status": "ok"
   },
   "symbiosis_guard": {
-    "last_check": "2026-07-15T09:45:51.467742",
+    "last_check": "2026-07-15T10:40:35.665624",
     "errors_count": 0,
     "warnings_count": 8,
     "expired_tasks": 0,
