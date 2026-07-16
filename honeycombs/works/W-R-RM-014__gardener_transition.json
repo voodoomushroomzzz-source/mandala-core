@@ -33,9 +33,9 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v4.1.7",
+        "version": "v4.1.8",
         "created": "2026-04-16",
-        "updated": "2026-07-15",
+        "updated": "2026-07-17",
         "layer": 2,
         "type": "roadmap",
         "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
@@ -797,8 +797,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-15",
-        "notes": "v4.1.7: Added gardener_profile block for instant form filling."
+        "last_check": "2026-07-17",
+        "notes": "v4.1.8: Added certificates_track block with priority tracking and integration with all tracks."
       },
       "core_resume_fallback_ops": {
         "version": "v1.0",
@@ -1041,6 +1041,107 @@
           "hh_resume_url": "https://hh.ru/resume/8993b5ceff09a959820039ed1f7a3734656f62"
         },
         "last_updated": "2026-07-15"
+      },
+      "certificates_track": {
+        "description": "Приоритетный трек по получению бесплатных сертификатов для усиления резюме. Влияют на прохождение ATS-фильтров и часто спрашиваются на собеседованиях.",
+        "priority": "high",
+        "strategy": "Получать последовательно, начиная с самых быстрых и высокочастотных. Каждый сертификат сразу добавлять в резюме и профили (hh.ru, LinkedIn, Habr).",
+        "total": 5,
+        "list": [
+          {
+            "id": 1,
+            "name": "Google AI Essentials",
+            "url": "https://grow.google/certificates/",
+            "description": "Базовый сертификат по искусственному интеллекту от Google. Часто спрашивают на собеседованиях на технические роли. Можно получить менее чем за час, совершенно бесплатно.",
+            "priority": "critical",
+            "time_estimate": "1 час",
+            "impact": "Высокий — Google узнают все, закрывает базовый AI-порог",
+            "status": "not_started",
+            "added_to_resume": false
+          },
+          {
+            "id": 2,
+            "name": "GitHub Foundations Certification",
+            "url": "https://education.github.com/",
+            "description": "Фундаментальный сертификат по GitHub, без которого практически невозможно пройти ни в одну солидную tech-компанию. Закрывает множество вопросов, связанных с умением пользоваться GitHub. Бесплатно.",
+            "priority": "critical",
+            "time_estimate": "2-3 часа",
+            "impact": "Высокий — закрывает tech-порог для IT-компаний",
+            "status": "not_started",
+            "added_to_resume": false
+          },
+          {
+            "id": 3,
+            "name": "Claude Certified Architect – Foundations (Anthropic)",
+            "url": "https://anthropic-partners.skilljar.com/",
+            "description": "Один из самых сложных сертификатов. Многие компании даже доплачивают бонусы просто за факт его наличия. Экзамены строятся на реальных кейсах, где нужно, например, построить своего AI-агента. Бесплатно.",
+            "priority": "high",
+            "time_estimate": "20+ часов (включая подготовку)",
+            "impact": "Очень высокий — выделяет среди кандидатов, бонусы от компаний",
+            "status": "not_started",
+            "added_to_resume": false
+          },
+          {
+            "id": 4,
+            "name": "HubSpot Digital Marketing Certification",
+            "url": "https://academy.hubspot.com/",
+            "description": "Отличный сертификат для тех, кто метит в маркетологи или Growth-специалисты. Котируется практически в любой компании. Получение занимает около 5 часов, полностью бесплатно.",
+            "priority": "medium",
+            "time_estimate": "5 часов",
+            "impact": "Средний — полезен для ролей, связанных с маркетингом и ростом",
+            "status": "not_started",
+            "added_to_resume": false
+          },
+          {
+            "id": 5,
+            "name": "IBM SkillsBuild — Cybersecurity Track",
+            "url": "https://skillsbuild.org/",
+            "description": "Трек по кибербезопасности от IBM. Открывает ворота в индустрию, где сейчас наблюдается острая нехватка кадров. Бесплатно.",
+            "priority": "low",
+            "time_estimate": "10+ часов",
+            "impact": "Низкий — для основного трека не критичен, но полезен для расширения",
+            "status": "not_started",
+            "added_to_resume": false
+          }
+        ],
+        "recommended_order": [
+          "1. Google AI Essentials — 1 час, сразу в резюме",
+          "2. GitHub Foundations — 2-3 часа, закрывает tech-порог",
+          "3. Claude Certified Architect — 20+ часов, самый сильный",
+          "4. HubSpot Digital Marketing — 5 часов, если есть интерес к маркетингу",
+          "5. IBM SkillsBuild — 10+ часов, если интересна кибербезопасность"
+        ],
+        "integration_with_tracks": {
+          "track_a_ai_hybrid": {
+            "critical": [
+              "Google AI Essentials",
+              "GitHub Foundations"
+            ],
+            "recommended": [
+              "Claude Certified Architect"
+            ]
+          },
+          "track_b_global_ai": {
+            "critical": [
+              "Claude Certified Architect",
+              "Google AI Essentials"
+            ],
+            "recommended": [
+              "GitHub Foundations"
+            ]
+          },
+          "fallback_ops": {
+            "critical": [],
+            "recommended": [
+              "Google AI Essentials"
+            ]
+          }
+        },
+        "tracking": {
+          "last_updated": "2026-07-17",
+          "next_check": "2026-07-24",
+          "status_summary": "0/5 получено"
+        }
       }
     }
   },
