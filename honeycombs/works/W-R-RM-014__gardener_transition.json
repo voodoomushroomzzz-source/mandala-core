@@ -33,7 +33,7 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v4.1.9",
+        "version": "v5.0.0",
         "created": "2026-04-16",
         "updated": "2026-07-17",
         "layer": 2,
@@ -76,10 +76,10 @@
       },
       "tracks": {
         "track_a": {
-          "name": "Track A: AI-Hybrid Role — 150k+ RUB",
+          "name": "Track A: AI Ops / Automation Manager — Быстрый вход в IT",
           "deadline": "2026-07-31",
-          "goal": "AI-hybrid role (AI Operations, AI Project Management, Automation Manager) with 150 000+ RUB income",
-          "reasoning": "Immediate income needed. Leverage 8-year operations experience + AI skills. Target: companies adopting AI, roles combining management and AI implementation. Higher salary ceiling than traditional roles.",
+          "goal": "AI-hybrid role (AI Operations, AI Project Management, Automation Manager) with 150 000+ RUB income. Быстрый вход в IT через AI-гибридные роли.",
+          "reasoning": "Immediate income needed. Leverage 8-year operations experience + AI skills. Target: companies adopting AI, roles combining management and AI implementation.",
           "target_roles": [
             "AI Operations Manager",
             "AI Project Manager",
@@ -88,10 +88,10 @@
             "Head of AI Implementation (small teams)"
           ],
           "salary_range": "150 000 — 250 000+ RUB",
-          "bot_roadmap": "🤖 AI-Hybrid Job Search — 150k+",
+          "priority": "critical",
           "milestones": {
             "m1_packaging": {
-              "name": "Packaging (July 6-8)",
+              "name": "Packaging",
               "tasks": [
                 "Experience audit + IT/AI translation (COMPLETED)",
                 "Core resume (Russian) preparation (COMPLETED)",
@@ -106,177 +106,106 @@
               ]
             },
             "m2_first_wave": {
-              "name": "First Wave (July 11-17)",
+              "name": "First Wave",
               "tasks": [
                 "70+ applications across all platforms (prioritize AI-hybrid roles)",
                 "Employer verification via Dream Job"
               ]
             },
             "m3_interviews": {
-              "name": "Interviews (July 18-24)",
+              "name": "Interviews",
               "tasks": [
                 "All first-wave interviews",
                 "Second wave 20-30 applications + pitch calibration (AI focus)"
               ]
             },
             "m4_offer": {
-              "name": "Offer (July 25-31)",
+              "name": "Offer",
               "tasks": [
-                "Minimum 1 written offer 150 000+ RUB for AI-hybrid role (or expand to projects/contracts)"
+                "Minimum 1 written offer 150 000+ RUB for AI-hybrid role"
               ]
             }
           }
         },
         "track_b": {
-          "name": "Track B: Professional AI Role — Global Market",
-          "start": "2026-07-03",
-          "goal": "Professional AI role (AI Operations Manager, Agentic Orchestration Engineer, AI Product/Project Manager) in global companies",
-          "salary_ranges": {
-            "usa": "$8,000 — $15,000+ / month",
-            "uk": "£5,000 — £10,000+ / month",
-            "remote_global": "competitive with US/UK rates"
+          "name": "Track B: Системный аналитик (с AI-уклоном) — Основной стратегический трек",
+          "start": "2026-07-17",
+          "goal": "Профессиональный вход в IT-архитектуру через системный анализ. Максимально использует опыт перестройки систем.",
+          "salary_range": "150 000 — 250 000+ RUB (начало), 250 000 — 400 000+ RUB (через 2-3 года)",
+          "horizon": "2-4 месяца до первого оффера",
+          "reasoning": "Естественный путь для человека с опытом перестройки систем. Входной порог минимальный, конкуренция низкая, долгосрочный потолок высокий.",
+          "what_to_learn": {
+            "tools": [
+              "UML",
+              "BPMN",
+              "SQL",
+              "Swagger/OpenAPI"
+            ],
+            "skills": [
+              "Написание технической документации",
+              "Работа с требованиями",
+              "Интеграционные карты"
+            ],
+            "ai_advantage": "Способность внедрять AI-инструменты в процесс анализа (генерация требований, автоматизация документации, анализ данных)"
           },
-          "reasoning": "After Track A income stabilized. Leverage Mandala as AI portfolio + Open AI certifications + operations experience translated to AI context. Focus on agent orchestration, AI workflows, and human-AI symbiosis.",
-          "early_global_outreach": {
-            "description": "Start testing global market early, in parallel with Track A. Goal: understand demand, get familiar with application process, collect feedback.",
-            "timing": "After packaging phase (from July 11)",
-            "actions": [
-              "Prepare English version of core resume",
-              "Submit 5-10 test applications to global platforms (LinkedIn, WWR, RemoteOK)",
-              "Track responses and collect requirements from real job descriptions",
-              "Use feedback to improve resume and positioning"
-            ]
-          },
-          "target_roles": [
-            {
-              "title": "AI Operations Manager",
-              "description": "Manage deployment and operations of AI systems, CI/CD pipelines, scalability, and reliability.",
-              "salary_usa": "$133,500 — $241,900 / year",
-              "salary_uk": "£55,000 — £75,000 / year"
-            },
-            {
-              "title": "Agentic Orchestration Engineer",
-              "description": "Design and build multi-module AI agent systems using LangChain, LangGraph, and similar frameworks.",
-              "salary_usa": "$133,000 — $156,500 / year",
-              "salary_uk": "£60,000 — £90,000 / year"
-            },
-            {
-              "title": "AI Product Manager",
-              "description": "Define AI products, strategy, market analysis, and cross-functional team coordination.",
-              "salary_usa": "$145,000 — $190,000 / year",
-              "salary_uk": "£80,000 — £110,000 / year"
-            },
-            {
-              "title": "AI Project Manager",
-              "description": "Manage full-cycle AI projects with PMI-CPMAI certification.",
-              "salary_usa": "$120,000 — $160,000 / year",
-              "salary_uk": "£70,000 — £95,000 / year"
-            }
-          ],
-          "ai_emphasis": "All learning and positioning is AI-centric. Open AI Academy is priority #1. Mandala is the practice ground for agent orchestration.",
           "phases": {
-            "phase_1": {
-              "name": "Foundation — AI & Ops (July-August 2026)",
-              "duration": "Month 1-2",
+            "phase_1_learning": {
+              "name": "Изучение основ (Июль-Август 2026)",
+              "duration": "1-2 месяца",
               "tasks": [
-                "✅ OpenAI Academy: AI Foundations — complete (priority #1)",
-                "🔄 Start PMI-CPMAI (AI Project Management) certification",
-                "🔄 Google PM Certificate — first 2 modules complete",
-                "🔄 COO OTUS — in progress, 4-month program",
-                "⏳ Daily English practice: 10-15 min with SR (cover letters, pitch, interview answers) — start immediately",
-                "⏳ Early market testing: 5-10 applications to global platforms (LinkedIn, WWR, RemoteOK) — after July 10",
-                "⏳ Weekly Mandala devlog — public AI project timeline",
-                "⏳ Re-audit experience into IT/AI language v2",
-                "🔄 Samsung: 'Neural networks and machine learning' — started, certification from Samsung (Stepik)",
-                "🔄 Samsung: 'Neural networks and text processing' — started, certification from Samsung (Stepik)",
-                "⏳ Besplatny angliyazychny kurs po AI (MIT Universal AI / analog) — dopolnitelnaya praktika yazyka"
+                "Завершить OpenAI Foundations (уже в процессе)",
+                "Google AI Essentials (1 час, сертификат)",
+                "Начать изучение UML, BPMN, SQL, Swagger",
+                "Практика на Mandala: описать кейсы как системный анализ"
               ]
             },
-            "phase_2": {
-              "name": "Deepening — Agents & Workflows (September-October 2026)",
-              "duration": "Month 3-4",
+            "phase_2_practice": {
+              "name": "Практика и портфолио (Сентябрь-Октябрь 2026)",
+              "duration": "1-2 месяца",
               "tasks": [
-                "🔄 OpenAI Academy: Applied AI Foundations — complete",
-                "🔄 OpenAI Academy: Agents and Workflows — complete",
-                "🔄 PMI-CPMAI — complete (if started)",
-                "⏳ Start Lean Six Sigma Yellow Belt certification",
-                "⏳ Deepen agent architecture through Mandala (LangChain/LlamaIndex practice)",
-                "⏳ IT-focused resume v2 with AI/agent emphasis"
+                "Описать кейсы 'Нью Нормал' и 'Raw to go' как системный анализ",
+                "Написать ТЗ и спецификации для Mandala",
+                "Начать отклики на аналитические вакансии"
               ]
             },
-            "phase_3": {
-              "name": "Packaging — AI Portfolio (November-December 2026)",
-              "duration": "Month 5-6",
+            "phase_3_entry": {
+              "name": "Вход в аналитику (Ноябрь-Декабрь 2026)",
+              "duration": "1-2 месяца",
               "tasks": [
-                "⏳ Professional Mandala GitHub README (English) — AI case study",
-                "⏳ LinkedIn optimized for AI Operations / Agent Management",
-                "⏳ Open AI badges (Credly) in profile",
-                "⏳ AI-focused resume v3 for global market",
-                "⏳ Package Mandala as a public case: GitHub README, demo, architecture description"
-              ]
-            },
-            "phase_4": {
-              "name": "Active Search — Global AI Market (December 2026-January 2027)",
-              "duration": "Month 7-8",
-              "tasks": [
-                "⏳ Active applications on global platforms (LinkedIn, WWR, RemoteOK, etc.)",
-                "⏳ Networking via LinkedIn, AI communities",
-                "⏳ Target: offer 250 000—300 000+ RUB as AI Operations / Agent Orchestrator",
-                "⏳ Relocation trial: Vietnam (1-2 months) — stable remote work from new location"
+                "Целевой оффер 150-250k RUB как системный аналитик",
+                "Параллельно: AI-навыки для усиления (интеграция AI в аналитику)"
               ]
             }
-          },
-          "target_companies": [
-            {
-              "name": "RWS Group",
-              "category": "AI",
-              "field": "Локализация, лингвистика, AI",
-              "website": "https://www.rws.com",
-              "description": "Крупнейший в мире поставщик услуг локализации и лингвистических AI-решений. Предлагает AI-инструменты для перевода на 3500+ языковых пар (Trados, Language Weaver, Evolve), совмещая машинный перевод с человеческой экспертизой. Публичная компания, торгуется на Лондонской бирже (LSE: RWS.L)."
-            },
-            {
-              "name": "bolt.new (StackBlitz)",
-              "category": "AI",
-              "field": "SaaS, AI, разработка ПО",
-              "website": "https://bolt.new",
-              "description": "AI-платформа для разработки, превращающая текстовые запросы в готовые full-stack веб-приложения. ИИ-агенты пишут код, устанавливают зависимости и деплоят приложение прямо в браузере (на базе WebContainers от StackBlitz). Привлекла $135M инвестиций, оценка ~$700M."
-            },
-            {
-              "name": "GitLab",
-              "category": "IT-менеджмент",
-              "field": "DevOps, IT",
-              "website": "https://www.gitlab.com",
-              "description": "Платформа DevOps/DevSecOps полного цикла: управление кодом, CI/CD, безопасность и планирование проектов в едином инструменте. Полностью remote-first компания."
-            },
-            {
-              "name": "Scoro",
-              "category": "IT-менеджмент",
-              "field": "Project management, SaaS",
-              "website": "https://www.scoro.com",
-              "description": "SaaS-платформа для управления проектами и работой агентств/консалтинговых компаний: тайм-трекинг, биллинг, CRM и отчётность в одном интерфейсе."
-            },
-            {
-              "name": "Deel",
-              "category": "IT-менеджмент / HR Tech",
-              "field": "HR Tech, EOR",
-              "website": "https://www.deel.com",
-              "description": "HR-tech платформа для найма и управления удалёнными сотрудниками по всему миру (Employer of Record): расчёт зарплат, контракты, комплаенс."
-            },
-            {
-              "name": "Toptal",
-              "category": "IT-менеджмент",
-              "field": "Talent marketplace, IT",
-              "website": "https://www.toptal.com",
-              "description": "Маркетплейс для найма топовых фрилансеров в IT: разработчиков, дизайнеров, финансовых и проектных менеджеров. Строгий отбор специалистов (проходят единицы процентов кандидатов)."
-            },
-            {
-              "name": "Canonical",
-              "category": "IT-менеджмент",
-              "field": "Open source, Linux (Ubuntu)",
-              "website": "https://www.canonical.com",
-              "description": "Разработчик Ubuntu Linux и открытых технологий для облаков и IoT. Полностью remote-first компания, регулярно нанимает менеджеров продуктов и проектов в open source."
-            }
+          }
+        },
+        "track_c": {
+          "name": "Track C: Международный AI-специалист — Долгосрочный глобальный трек",
+          "start": "2027-01",
+          "goal": "Выход на глобальный рынок в роли AI-специалиста после укрепления позиций в IT.",
+          "salary_range": "$8,000 — $15,000+ / month",
+          "horizon": "6-12 месяцев после входа в IT",
+          "reasoning": "Долгосрочная цель. Требует подтягивания английского до C1, глубокого AI-портфолио и опыта работы в IT.",
+          "path_from_b": "Системный аналитик с AI-уклоном → Международный AI-специалист. Трек Б даёт базу для международного прыжка.",
+          "requirements": [
+            "Английский C1 (технический, профессиональный)",
+            "Сильное AI-портфолио (проекты, сертификаты CCA-F)",
+            "Опыт работы в IT (2+ года)",
+            "Умение проходить глобальные собеседования"
           ]
+        },
+        "track_d": {
+          "name": "Track D: Территориальный / Региональный управляющий — Запасной трек (100% по опыту)",
+          "goal": "Запасной вариант для быстрого дохода, если AI-треки не сработают.",
+          "salary_range": "170 000 — 220 000 ₽",
+          "reasoning": "Полное соответствие опыту. Быстрый вход, низкий риск.",
+          "roles": [
+            "Территориальный управляющий",
+            "Региональный менеджер",
+            "Руководитель филиала"
+          ],
+          "employment": "Полная занятость, гибридный формат (выезды на объекты + офис/удалёнка)",
+          "travel": "Да, по Москве и Московской области",
+          "when_to_use": "Если Трек А и Трек Б не приносят результатов в течение 2-3 месяцев"
         }
       },
       "task_tracker": {
@@ -798,7 +727,7 @@
       "health": {
         "status": "active",
         "last_check": "2026-07-17",
-        "notes": "v4.1.9: Added unified_certificate_track with 9 certificates in optimized order."
+        "notes": "v5.0.0: Complete tracks restructure: Track A (AI Ops), Track B (System Analyst), Track C (Global AI), Track D (Fallback Ops)."
       },
       "core_resume_fallback_ops": {
         "version": "v1.0",
