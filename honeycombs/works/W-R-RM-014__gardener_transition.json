@@ -33,9 +33,9 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v5.1.0",
+        "version": "v5.1.1",
         "created": "2026-04-16",
-        "updated": "2026-07-17",
+        "updated": "2026-07-18",
         "layer": 2,
         "type": "roadmap",
         "description": "AI-centric two-track roadmap. Track A: AI-hybrid role (150 000+ RUB) by July 31, 2026. Track B: Professional AI role (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027. Leverages Mandala as portfolio proof.",
@@ -542,7 +542,8 @@
             "hirify",
             "hirehi",
             "careerspace",
-            "finder"
+            "finder",
+            "finder.work"
           ],
           "temporary_projects": [
             "Kwork",
@@ -726,8 +727,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-17",
-        "notes": "v5.1.0: Added overall_plan with priority periods and monthly schedule for all tracks."
+        "last_check": "2026-07-18",
+        "notes": "v5.1.1: Added finder.work to job platforms and search_keywords block with queries for all tracks."
       },
       "core_resume_fallback_ops": {
         "version": "v1.0",
@@ -1332,6 +1333,90 @@
           ]
         },
         "last_updated": "2026-07-17"
+      },
+      "search_keywords": {
+        "description": "Ключевые запросы для поиска вакансий по трекам. Использовать на hh.ru, finder.work, Хабр Карьере и других платформах.",
+        "last_updated": "2026-07-18",
+        "track_a_ai_ops": {
+          "primary": [
+            "AI Operations Manager",
+            "Automation Manager",
+            "AI Project Manager",
+            "менеджер по автоматизации",
+            "AI Product Manager"
+          ],
+          "secondary": [
+            "операционный менеджер",
+            "руководитель проектов",
+            "менеджер по внедрению",
+            "AI менеджер",
+            "AI-менеджер"
+          ],
+          "skills_based": [
+            "Python",
+            "API",
+            "нейросети",
+            "автоматизация",
+            "Telegram бот",
+            "LLM",
+            "промпт-инжиниринг"
+          ],
+          "search_queries": [
+            "AI менеджер",
+            "автоматизация + менеджер",
+            "AI Operations",
+            "нейросети + управление",
+            "менеджер + Python"
+          ]
+        },
+        "track_b_system_analyst": {
+          "primary": [
+            "системный аналитик",
+            "System Analyst",
+            "бизнес-аналитик",
+            "Business Analyst",
+            "IT-аналитик"
+          ],
+          "secondary": [
+            "аналитик",
+            "менеджер по требованиям",
+            "аналитик данных",
+            "Data Analyst"
+          ],
+          "skills_based": [
+            "SQL",
+            "BPMN",
+            "UML",
+            "Swagger",
+            "API",
+            "интеграция",
+            "требования"
+          ],
+          "search_queries": [
+            "системный аналитик + SQL",
+            "Business Analyst + API",
+            "аналитик + BPMN",
+            "System Analyst + удаленно"
+          ]
+        },
+        "track_d_ops": {
+          "primary": [
+            "территориальный управляющий",
+            "региональный менеджер",
+            "руководитель филиала",
+            "операционный директор"
+          ],
+          "secondary": [
+            "управляющий",
+            "директор",
+            "менеджер"
+          ],
+          "search_queries": [
+            "территориальный управляющий",
+            "региональный менеджер + Москва",
+            "руководитель филиала + HoReCa"
+          ]
+        }
       }
     }
   },
