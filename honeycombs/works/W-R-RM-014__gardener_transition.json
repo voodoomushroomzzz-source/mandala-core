@@ -33,7 +33,7 @@
       "identity": {
         "roadmap_id": "RM-014",
         "name": "RM-014: From Operations to AI Agent Orchestration — A Gardener's Transition",
-        "version": "v5.1.1",
+        "version": "v5.1.2",
         "created": "2026-04-16",
         "updated": "2026-07-18",
         "layer": 2,
@@ -531,6 +531,9 @@
             "hh.ru",
             "Superjob"
           ],
+          "secondary": [
+            "Работа.ру (job.ru)"
+          ],
           "it_specific": [
             "Habr Career",
             "GeekJOB",
@@ -728,7 +731,7 @@
       "health": {
         "status": "active",
         "last_check": "2026-07-18",
-        "notes": "v5.1.1: Added finder.work to job platforms and search_keywords block with queries for all tracks."
+        "notes": "v5.1.2: Moved Работа.ру to secondary platforms, fixed platform priorities in track_a_russian."
       },
       "core_resume_fallback_ops": {
         "version": "v1.0",
