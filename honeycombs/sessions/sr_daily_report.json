@@ -1,12 +1,7 @@
 {
-  "date": "2026-07-17",
+  "date": "2026-07-18",
   "version": "7.39.23",
   "gardeners": {
-    "1485954655": {
-      "name": "1485954655",
-      "active": false,
-      "synthesis_date": "2026-07-15"
-    },
     "491567470": {
       "name": "Виктор",
       "active": false,
@@ -20,28 +15,33 @@
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-07-17"
+      "synthesis_date": "2026-07-18"
     },
     "358793311": {
       "name": "Антон",
       "active": false,
       "synthesis_date": "2026-06-22"
+    },
+    "1485954655": {
+      "name": "1485954655",
+      "active": false,
+      "synthesis_date": ""
     }
   },
   "issues": [
     {
       "user_id": "224736062",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "complete_task",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный complete_task"
     },
     {
       "user_id": "224736062",
       "type": "repeated_request",
-      "intent": "add_achievement",
+      "intent": "add_task",
       "count": 2,
-      "context": "повторный add_achievement"
+      "context": "повторный add_task"
     }
   ]
 }
