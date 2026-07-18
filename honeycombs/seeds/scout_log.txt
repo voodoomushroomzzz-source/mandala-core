@@ -580,3 +580,41 @@
 [2026-07-18 07:01:05] [INFO]   Total saved: 0
 [2026-07-18 07:01:05] [INFO]   Total duplicates: 0
 [2026-07-18 07:01:05] [INFO] ============================================================
+[2026-07-18 10:17:57] [INFO] ============================================================
+[2026-07-18 10:17:57] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 3 per source)
+[2026-07-18 10:17:57] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-07-18 10:17:57] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-07-18 10:17:58] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 10:17:58] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 10:17:58] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-07-18 10:17:58] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-07-18 10:17:58] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-07-18 10:17:58] [INFO]   → Found 0 raw items, 0 recent
+[2026-07-18 10:17:58] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 10:17:58] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-07-18 10:17:58] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-07-18 10:17:58] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-07-18 10:17:58] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 10:17:58] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 10:17:58] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-07-18 10:17:58] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-07-18 10:17:58] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-07-18 10:17:59] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 10:17:59] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 10:17:59] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 0
+[2026-07-18 10:17:59] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-07-18 10:17:59] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-07-18 10:17:59] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 10:17:59] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 10:17:59] [INFO]   📊 TechCrunch AI: saved 0, duplicates 0
+[2026-07-18 10:17:59] [INFO] 
+============================================================
+[2026-07-18 10:17:59] [INFO] ✅ Scout Agent v2 finished
+[2026-07-18 10:17:59] [INFO]   Total saved: 0
+[2026-07-18 10:17:59] [INFO]   Total duplicates: 0
+[2026-07-18 10:17:59] [INFO] ============================================================
