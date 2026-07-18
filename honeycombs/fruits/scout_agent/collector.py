@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scout Agent v2 — с keyword-фильтром и лимитом 3 семени с источника
+Scout Agent v2 — с keyword-фильтром и лимитом 5 семян с источника
 """
 import json
 import re
@@ -21,7 +21,12 @@ RELEVANT_KEYWORDS = [
     'architecture', 'system', 'consciousness', 'awareness',
     'mandala', 'honeycomb', 'scout', 'seed', 'collector',
     'neural', 'network', 'deep', 'reinforcement', 'cognitive',
-    'emergent', 'collective', 'distributed', 'multi-agent'
+    'emergent', 'collective', 'distributed', 'multi-agent',
+    'artificial intelligence', 'machine learning', 'deep learning',
+    'research', 'paper', 'study', 'model', 'dataset', 'algorithm',
+    'framework', 'tool', 'library', 'api', 'open source', 'github',
+    'innovation', 'breakthrough', 'state-of-the-art', 'sota',
+    'pretrained', 'fine-tune', 'benchmark', 'evaluation'
 ]
 
 def log(message, level="INFO"):
@@ -63,8 +68,8 @@ def is_recent(published_str, hours=24):
     text_lower = text.lower()
     return any(kw.lower() in text_lower for kw in RELEVANT_KEYWORDS)
 
-def filter_items(items, max_items=3):
-    """Оставляет до 3 релевантных семян"""
+def filter_items(items, max_items=5):
+    """Оставляет до 5 релевантных семян"""
     relevant = []
     for item in items:
         title = item.get('title', '')
@@ -130,7 +135,7 @@ def collect_rss(url, source_name):
         # Фильтруем по времени (последние 24 часа)
         recent_entries = [e for e in entries if is_recent(e.get('published', ''))]
         log(f"  → Found {len(entries)} raw items, {len(recent_entries)} recent")
-        filtered = filter_items(recent_entries, max_items=3)
+        filtered = filter_items(recent_entries, max_items=5)
         log(f"  → Filtered to {len(filtered)} relevant items")
         return filtered
     except Exception as e:
@@ -167,7 +172,7 @@ def collect_api(url, source_name):
         # Фильтруем по времени (последние 24 часа)
         recent_items = [i for i in items if is_recent(i.get('published', ''))]
         log(f"  → Found {len(items)} raw items, {len(recent_items)} recent")
-        filtered = filter_items(recent_items, max_items=3)
+        filtered = filter_items(recent_items, max_items=5)
         log(f"  → Filtered to {len(filtered)} relevant items")
         return filtered
     except Exception as e:
@@ -221,29 +226,29 @@ def save_seed(item, source_name, seed_dir):
 
 def main():
     log("=" * 60)
-    log("🚀 Scout Agent v2 started (keyword filter, max 3 per source)")
-    
+    log("🚀 Scout Agent v2 started (keyword filter, max 5 per source)")
+
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         config = json.load(f)
-    
+
     seed_dir = Path(config.get("output_dir", "honeycombs/seeds/inbox"))
     seed_dir.mkdir(parents=True, exist_ok=True)
-    
+
     total_saved = 0
     total_duplicates = 0
-    
+
     for source in config['sources']:
         if not source.get("enabled", True):
             log(f"⏭️ Source disabled: {source['name']}")
             continue
-        
+
         log(f"\n📡 Processing: {source['name']} (type: {source['type']})")
-        
+
         if source["type"] == "api":
             items = collect_api(source["url"], source["name"])
         else:
             items = collect_rss(source["url"], source["name"])
-        
+
         saved = 0
         duplicates = 0
         for item in items:
@@ -251,11 +256,11 @@ def main():
                 saved += 1
             else:
                 duplicates += 1
-        
+
         total_saved += saved
         total_duplicates += duplicates
         log(f"  📊 {source['name']}: saved {saved}, duplicates {duplicates}")
-    
+
     log("\n" + "=" * 60)
     log(f"✅ Scout Agent v2 finished")
     log(f"  Total saved: {total_saved}")
