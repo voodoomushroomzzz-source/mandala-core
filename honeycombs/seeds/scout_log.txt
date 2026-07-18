@@ -656,3 +656,95 @@
 [2026-07-18 15:23:01] [INFO]   Total saved: 0
 [2026-07-18 15:23:01] [INFO]   Total duplicates: 0
 [2026-07-18 15:23:01] [INFO] ============================================================
+[2026-07-18 15:33:56] [INFO] ============================================================
+[2026-07-18 15:33:56] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-07-18 15:33:56] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-07-18 15:33:56] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-07-18 15:33:59] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 15:33:59] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 15:33:59] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-07-18 15:33:59] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-07-18 15:33:59] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-07-18 15:34:00] [INFO]   → Found 0 raw items, 0 recent
+[2026-07-18 15:34:00] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 15:34:00] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-07-18 15:34:00] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-07-18 15:34:00] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-07-18 15:34:01] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 15:34:01] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 15:34:01] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-07-18 15:34:01] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-07-18 15:34:01] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-07-18 15:34:02] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 15:34:02] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 15:34:02] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 0
+[2026-07-18 15:34:02] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-07-18 15:34:02] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-07-18 15:34:03] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-18 15:34:03] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 15:34:03] [INFO]   📊 TechCrunch AI: saved 0, duplicates 0
+[2026-07-18 15:34:03] [INFO] 
+============================================================
+[2026-07-18 15:34:03] [INFO] ✅ Scout Agent v2 finished
+[2026-07-18 15:34:03] [INFO]   Total saved: 0
+[2026-07-18 15:34:03] [INFO]   Total duplicates: 0
+[2026-07-18 15:34:03] [INFO] ============================================================
+[2026-07-18 15:50:05] [INFO] ============================================================
+[2026-07-18 15:50:05] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-07-18 15:50:05] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-07-18 15:50:05] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-07-18 15:50:07] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-18 15:50:07] [INFO]   → Filtered to 5 relevant items
+[2026-07-18 15:50:08] [INFO]   ✅ Saved: SEED-20260718-155008-010.json
+[2026-07-18 15:50:08] [INFO]   ✅ Saved: SEED-20260718-155008-011.json
+[2026-07-18 15:50:08] [INFO]   ✅ Saved: SEED-20260718-155008-012.json
+[2026-07-18 15:50:08] [INFO]   ✅ Saved: SEED-20260718-155008-013.json
+[2026-07-18 15:50:08] [INFO]   ✅ Saved: SEED-20260718-155008-014.json
+[2026-07-18 15:50:08] [INFO]   📊 arXiv AI: saved 5, duplicates 0
+[2026-07-18 15:50:08] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-07-18 15:50:08] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-07-18 15:50:08] [INFO]   → Found 0 raw items, 0 recent
+[2026-07-18 15:50:08] [INFO]   → Filtered to 0 relevant items
+[2026-07-18 15:50:08] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-07-18 15:50:08] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-07-18 15:50:08] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-07-18 15:50:09] [INFO]   → Found 15 raw items, 10 recent
+[2026-07-18 15:50:09] [INFO]   → Filtered to 1 relevant items
+[2026-07-18 15:50:10] [INFO]   ✅ Saved: SEED-20260718-155010-015.json
+[2026-07-18 15:50:10] [INFO]   📊 Hacker News: saved 1, duplicates 0
+[2026-07-18 15:50:10] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-07-18 15:50:10] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-07-18 15:50:11] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-18 15:50:11] [INFO]   → Filtered to 5 relevant items
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-016.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-017.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-018.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-019.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-020.json
+[2026-07-18 15:50:11] [INFO]   📊 GitHub Trending Python (API): saved 5, duplicates 0
+[2026-07-18 15:50:11] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-07-18 15:50:11] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-07-18 15:50:11] [INFO]   → Found 15 raw items, 9 recent
+[2026-07-18 15:50:11] [INFO]   → Filtered to 5 relevant items
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-021.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-022.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-023.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-024.json
+[2026-07-18 15:50:11] [INFO]   ✅ Saved: SEED-20260718-155011-025.json
+[2026-07-18 15:50:11] [INFO]   📊 TechCrunch AI: saved 5, duplicates 0
+[2026-07-18 15:50:11] [INFO] 
+============================================================
+[2026-07-18 15:50:11] [INFO] ✅ Scout Agent v2 finished
+[2026-07-18 15:50:11] [INFO]   Total saved: 16
+[2026-07-18 15:50:11] [INFO]   Total duplicates: 0
+[2026-07-18 15:50:11] [INFO] ============================================================
