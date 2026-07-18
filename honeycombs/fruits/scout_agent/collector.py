@@ -53,20 +53,24 @@ def is_recent(published_str, hours=24):
     try:
         # Пробуем разные форматы
         if 'T' in published_str:
+            # ISO 8601: 2026-07-18T10:21:19+00:00
             dt = datetime.fromisoformat(published_str.replace('Z', '+00:00'))
+        elif ',' in published_str:
+            # RFC 2822: Sat, 18 Jul 2026 10:21:19 +0000
+            dt = datetime.strptime(published_str, '%a, %d %b %Y %H:%M:%S %z')
         elif '-' in published_str:
+            # YYYY-MM-DD
             dt = datetime.strptime(published_str[:10], '%Y-%m-%d')
         else:
             return False
-        now = datetime.now()
+        now = datetime.now().astimezone()
+        # Приводим dt к тому же часовому поясу, что и now
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=now.tzinfo)
         return (now - dt).total_seconds() <= hours * 3600
-    except:
+    except Exception as e:
+        # Если парсинг не удался, считаем статью старой
         return False
-
-    if not text:
-        return False
-    text_lower = text.lower()
-    return any(kw.lower() in text_lower for kw in RELEVANT_KEYWORDS)
 
 def filter_items(items, max_items=5):
     """Оставляет до 5 релевантных семян"""
@@ -117,7 +121,8 @@ def collect_rss(url, source_name):
             'User-Agent': 'Mozilla/5.0 (compatible; ScoutAgent/2.0; +https://mandala.symbiosis)',
             'Accept': 'application/rss+xml, application/xml, text/xml, */*'
         }
-        response = requests.get(url, timeout=15, headers=headers)
+        # allow_redirects=True — для arXiv (302 Found)
+        response = requests.get(url, timeout=15, headers=headers, allow_redirects=True)
         response.raise_for_status()
         root = ET.fromstring(response.content)
         entries = []
