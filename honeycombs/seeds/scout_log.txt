@@ -897,3 +897,62 @@
 [2026-07-20 07:01:04] [INFO]   Total saved: 22
 [2026-07-20 07:01:04] [INFO]   Total duplicates: 0
 [2026-07-20 07:01:04] [INFO] ============================================================
+[2026-07-20 11:44:47] [INFO] ============================================================
+[2026-07-20 11:44:47] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-07-20 11:44:47] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-07-20 11:44:47] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-07-20 11:44:47] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-20 11:44:47] [INFO]   → Filtered to 5 relevant items
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-061.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-062.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-063.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-064.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-065.json
+[2026-07-20 11:44:47] [INFO]   📊 arXiv AI: saved 5, duplicates 0
+[2026-07-20 11:44:47] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-07-20 11:44:47] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-07-20 11:44:47] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-20 11:44:47] [INFO]   → Filtered to 5 relevant items
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-066.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-067.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-068.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-069.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-070.json
+[2026-07-20 11:44:47] [INFO]   📊 arXiv Robotics: saved 5, duplicates 0
+[2026-07-20 11:44:47] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-07-20 11:44:47] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-07-20 11:44:47] [INFO]   → Found 15 raw items, 8 recent
+[2026-07-20 11:44:47] [INFO]   → Filtered to 2 relevant items
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-071.json
+[2026-07-20 11:44:47] [INFO]   ✅ Saved: SEED-20260720-114447-072.json
+[2026-07-20 11:44:47] [INFO]   📊 Hacker News: saved 2, duplicates 0
+[2026-07-20 11:44:47] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-07-20 11:44:47] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-07-20 11:44:48] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-20 11:44:48] [INFO]   → Filtered to 5 relevant items
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-073.json
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-074.json
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-075.json
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-076.json
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-077.json
+[2026-07-20 11:44:48] [INFO]   📊 GitHub Trending Python (API): saved 5, duplicates 0
+[2026-07-20 11:44:48] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-07-20 11:44:48] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-07-20 11:44:48] [INFO]   → Found 15 raw items, 4 recent
+[2026-07-20 11:44:48] [INFO]   → Filtered to 4 relevant items
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-078.json
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-079.json
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-080.json
+[2026-07-20 11:44:48] [INFO]   ✅ Saved: SEED-20260720-114448-081.json
+[2026-07-20 11:44:48] [INFO]   📊 TechCrunch AI: saved 4, duplicates 0
+[2026-07-20 11:44:48] [INFO] 
+============================================================
+[2026-07-20 11:44:48] [INFO] ✅ Scout Agent v2 finished
+[2026-07-20 11:44:48] [INFO]   Total saved: 21
+[2026-07-20 11:44:48] [INFO]   Total duplicates: 0
+[2026-07-20 11:44:48] [INFO] ============================================================
