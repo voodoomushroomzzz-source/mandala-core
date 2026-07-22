@@ -1056,3 +1056,57 @@
 [2026-07-21 11:07:55] [INFO]   Total saved: 11
 [2026-07-21 11:07:55] [INFO]   Total duplicates: 0
 [2026-07-21 11:07:55] [INFO] ============================================================
+[2026-07-22 07:01:04] [INFO] ============================================================
+[2026-07-22 07:01:04] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-07-22 07:01:04] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-07-22 07:01:04] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-07-22 07:01:04] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-22 07:01:04] [INFO]   → Filtered to 5 relevant items
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-106.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-107.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-108.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-109.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-110.json
+[2026-07-22 07:01:04] [INFO]   📊 arXiv AI: saved 5, duplicates 0
+[2026-07-22 07:01:04] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-07-22 07:01:04] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-07-22 07:01:04] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-22 07:01:04] [INFO]   → Filtered to 5 relevant items
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-111.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-112.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-113.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-114.json
+[2026-07-22 07:01:04] [INFO]   ✅ Saved: SEED-20260722-070104-115.json
+[2026-07-22 07:01:04] [INFO]   📊 arXiv Robotics: saved 5, duplicates 0
+[2026-07-22 07:01:04] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-07-22 07:01:04] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-07-22 07:01:05] [INFO]   → Found 15 raw items, 5 recent
+[2026-07-22 07:01:05] [INFO]   → Filtered to 0 relevant items
+[2026-07-22 07:01:05] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-07-22 07:01:05] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-07-22 07:01:05] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-07-22 07:01:05] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-22 07:01:05] [INFO]   → Filtered to 5 relevant items
+[2026-07-22 07:01:05] [INFO]   ✅ Saved: SEED-20260722-070105-116.json
+[2026-07-22 07:01:05] [INFO]   ✅ Saved: SEED-20260722-070105-117.json
+[2026-07-22 07:01:05] [INFO]   ✅ Saved: SEED-20260722-070105-118.json
+[2026-07-22 07:01:05] [INFO]   ✅ Saved: SEED-20260722-070105-119.json
+[2026-07-22 07:01:05] [INFO]   ✅ Saved: SEED-20260722-070105-120.json
+[2026-07-22 07:01:05] [INFO]   📊 GitHub Trending Python (API): saved 5, duplicates 0
+[2026-07-22 07:01:05] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-07-22 07:01:05] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-07-22 07:01:05] [INFO]   → Found 15 raw items, 1 recent
+[2026-07-22 07:01:05] [INFO]   → Filtered to 1 relevant items
+[2026-07-22 07:01:05] [INFO]   ✅ Saved: SEED-20260722-070105-121.json
+[2026-07-22 07:01:05] [INFO]   📊 TechCrunch AI: saved 1, duplicates 0
+[2026-07-22 07:01:05] [INFO] 
+============================================================
+[2026-07-22 07:01:05] [INFO] ✅ Scout Agent v2 finished
+[2026-07-22 07:01:05] [INFO]   Total saved: 16
+[2026-07-22 07:01:05] [INFO]   Total duplicates: 0
+[2026-07-22 07:01:05] [INFO] ============================================================
