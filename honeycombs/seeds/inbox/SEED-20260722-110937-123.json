@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260722-110937-123",
+  "title": "Calibrated Selective Fact-Checking via Evidence Chain Evaluation",
+  "url": "https://arxiv.org/abs/2607.18240",
+  "description": "arXiv:2607.18240v1 Announce Type: new \nAbstract: Large language models (LLMs) can achieve strong fact-checking accuracy, yet forced binary decisions conceal a critical reliability problem: systems may issue confident verdicts even when supporting evidence is weak, sparse, or internally inconsistent. We address this issue through Evidence Chain Evaluation (ECE), a selective fact-checking framework that permits abstention via an uncertain verdict instead of requiring a true/false decision for ever",
+  "source": "arXiv AI",
+  "collected_at": "2026-07-22T11:09:37.667796",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
