@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-07-22",
+    "updated": "2026-07-23",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 17,
-    "total_size_kb": 1042.34,
+    "total_size_kb": 1076.2,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 17,
-    "total_size_kb": 1042.34,
-    "last_updated": "2026-07-22",
+    "total_size_kb": 1076.2,
+    "last_updated": "2026-07-23",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -103,11 +103,11 @@
         "root_count": 6,
         "root_threshold": 10,
         "root_status": "ok",
-        "inbox_count": 114,
+        "inbox_count": 148,
         "inbox_threshold": 20,
         "inbox_status": "warning",
         "warnings": [
-          "Inbox: 114 файлов (порог 20)"
+          "Inbox: 148 файлов (порог 20)"
         ],
         "status": "warning"
       }
@@ -116,11 +116,11 @@
       "root_count": 6,
       "root_threshold": 10,
       "root_status": "ok",
-      "inbox_count": 114,
+      "inbox_count": 148,
       "inbox_threshold": 20,
       "inbox_status": "warning",
       "warnings": [
-        "Inbox: 114 файлов (порог 20)"
+        "Inbox: 148 файлов (порог 20)"
       ],
       "status": "warning"
     }
