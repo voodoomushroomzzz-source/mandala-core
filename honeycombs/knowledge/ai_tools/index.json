@@ -2,155 +2,178 @@
   "identity": {
     "module_id": "KNOWLEDGE-AI-TOOLS-INDEX-001",
     "name": "AI Tools Guide — Index",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-07-24",
     "updated": "2026-07-24",
     "layer": 2,
     "type": "knowledge_index",
     "status": "active",
     "priority": "medium",
-    "description": "Index of all AI tool categories. Each category is a separate file.",
-    "tags": ["ai-tools", "guide", "index", "knowledge"]
+    "description": "Index of all AI tool categories with last_verified dates. Each category is a separate file.",
+    "tags": ["ai-tools", "guide", "index", "knowledge", "verified"]
   },
   "meta": {
-    "description": "Complete index of AI tools organized by category. Each file covers a specific domain: chatbots, coding, design, automation, etc.",
-    "how_to_use": "Browse categories by their description. Each file contains tools with pros/cons and use cases.",
+    "description": "Complete index of AI tools organized by category. Each file covers a specific domain. last_verified indicates when the data was last checked for accuracy (pricing, features, availability).",
+    "how_to_use": "Browse categories by their description. Check last_verified to know which categories need updating. Each file contains tools with pros/cons and use cases.",
     "source": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/knowledge/ai_tools_guide.json (v1.15.0)",
     "version_source": "v1.15.0",
-    "total_categories": 22
+    "total_categories": 22,
+    "verification_policy": "Categories should be verified every 1-3 months. If last_verified is older than 3 months, consider reviewing the data."
   },
   "categories": [
     {
       "id": "chatbots",
       "name": "Чат-боты",
       "file": "chatbots.json",
-      "description": "Универсальные ИИ-ассистенты для диалога, генерации текста, анализа данных, кода и решения задач."
+      "description": "Универсальные ИИ-ассистенты для диалога, генерации текста, анализа данных, кода и решения задач.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "coding-assistants",
       "name": "ИИ-ассистент для кода",
       "file": "coding-assistants.json",
-      "description": "ИИ-инструменты, которые пишут, отлаживают и рефакторят код прямо в редакторе или через CLI."
+      "description": "ИИ-инструменты, которые пишут, отлаживают и рефакторят код прямо в редакторе или через CLI.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "content-generation",
       "name": "ИИ-генерация контента",
       "file": "content-generation.json",
-      "description": "Создание контента в любом объёме: текст, видео, аудио, дизайн."
+      "description": "Создание контента в любом объёме: текст, видео, аудио, дизайн.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "presentations",
       "name": "Презентации",
       "file": "presentations.json",
-      "description": "Инструменты, которые превращают промпт или документ в готовую презентацию за минуты."
+      "description": "Инструменты, которые превращают промпт или документ в готовую презентацию за минуты.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "coding",
       "name": "Кодинг",
       "file": "coding.json",
-      "description": "Инструменты, которые пишут, отлаживают, рефакторят и тестируют код."
+      "description": "Инструменты, которые пишут, отлаживают, рефакторят и тестируют код.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "email",
       "name": "Почта",
       "file": "email.json",
-      "description": "Инструменты, которые помогают управлять почтовым ящиком: пишут, редактируют, резюмируют и организуют письма."
+      "description": "Инструменты, которые помогают управлять почтовым ящиком: пишут, редактируют, резюмируют и организуют письма.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "images",
       "name": "Изображения",
       "file": "images.json",
-      "description": "Инструменты для генерации изображений, цифрового искусства, 3D-моделей и анимации на основе текстовых запросов."
+      "description": "Инструменты для генерации изображений, цифрового искусства, 3D-моделей и анимации на основе текстовых запросов.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "spreadsheets",
       "name": "Таблицы",
       "file": "spreadsheets.json",
-      "description": "Инструменты для работы с таблицами и данными: AI пишет формулы, анализирует данные, строит графики."
+      "description": "Инструменты для работы с таблицами и данными: AI пишет формулы, анализирует данные, строит графики.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "meetings",
       "name": "Встречи",
       "file": "meetings.json",
-      "description": "Инструменты для подготовки, проведения и автоматизации встреч."
+      "description": "Инструменты для подготовки, проведения и автоматизации встреч.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "automation",
       "name": "Автоматизация",
       "file": "automation.json",
-      "description": "Инструменты для автоматизации повторяющихся задач и бизнес-процессов без кода."
+      "description": "Инструменты для автоматизации повторяющихся задач и бизнес-процессов без кода.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "writing",
       "name": "Письмо (текст)",
       "file": "writing.json",
-      "description": "Инструменты для создания, редактирования и оптимизации текстового контента."
+      "description": "Инструменты для создания, редактирования и оптимизации текстового контента.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "planning",
       "name": "Планирование",
       "file": "planning.json",
-      "description": "Инструменты для управления временем, календарями и задачами."
+      "description": "Инструменты для управления временем, календарями и задачами.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "video",
       "name": "Видео",
       "file": "video.json",
-      "description": "Инструменты для генерации и редактирования видео с помощью ИИ."
+      "description": "Инструменты для генерации и редактирования видео с помощью ИИ.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "ai-agents",
       "name": "ИИ-агенты (фреймворки)",
       "file": "ai-agents.json",
-      "description": "Фреймворки и SDK для создания агентов — автономных ИИ-систем, выполняющих многошаговые задачи."
+      "description": "Фреймворки и SDK для создания агентов — автономных ИИ-систем, выполняющих многошаговые задачи.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "app-builders",
       "name": "ИИ-конструкторы приложений",
       "file": "app-builders.json",
-      "description": "Инструменты, которые превращают текстовое описание в работающее веб-приложение."
+      "description": "Инструменты, которые превращают текстовое описание в работающее веб-приложение.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "rag",
       "name": "RAG (Retrieval-Augmented Generation)",
       "file": "rag.json",
-      "description": "Технология, которая учит ИИ отвечать на основе ваших данных."
+      "description": "Технология, которая учит ИИ отвечать на основе ваших данных.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "aeo-geo",
       "name": "AEO/GEO (оптимизация под ИИ-поиск)",
       "file": "aeo-geo.json",
-      "description": "Оптимизация контента для появления в ответах ChatGPT, Perplexity, Gemini и других ИИ-поисковиков."
+      "description": "Оптимизация контента для появления в ответах ChatGPT, Perplexity, Gemini и других ИИ-поисковиков.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "ai-workflows",
       "name": "Связки ИИ-инструментов",
       "file": "ai-workflows.json",
-      "description": "Платформы, где AI — встроенная часть рабочего пространства, а не отдельный чат-бот."
+      "description": "Платформы, где AI — встроенная часть рабочего пространства, а не отдельный чат-бот.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "llm-ops",
       "name": "LLM Ops / Observability",
       "file": "llm-ops.json",
-      "description": "Практика мониторинга, оценки и отладки LLM-приложений."
+      "description": "Практика мониторинга, оценки и отладки LLM-приложений.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "copywriting",
       "name": "Копирайтинг / текст",
       "file": "copywriting.json",
-      "description": "Инструменты для создания текстов с учётом культурных и бизнес-контекстов."
+      "description": "Инструменты для создания текстов с учётом культурных и бизнес-контекстов.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "agents-automation",
       "name": "Агенты и автоматизация",
       "file": "agents-automation.json",
-      "description": "ИИ-агенты, которые выполняют задачи автономно: собирают информацию, разбивают проекты на шаги и выполняют рутинную работу."
+      "description": "ИИ-агенты, которые выполняют задачи автономно: собирают информацию, разбивают проекты на шаги и выполняют рутинную работу.",
+      "last_verified": "2026-07-24"
     },
     {
       "id": "video-generation",
       "name": "Генерация видео",
       "file": "video-generation.json",
-      "description": "ИИ-инструменты для создания и редактирования видео, включая генерацию по тексту, анимацию и обработку."
+      "description": "ИИ-инструменты для создания и редактирования видео, включая генерацию по тексту, анимацию и обработку.",
+      "last_verified": "2026-07-24"
     }
   ]
 }
