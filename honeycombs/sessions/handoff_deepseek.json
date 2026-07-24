@@ -1,57 +1,59 @@
 {
-  "session_id": "handoff_deepseek_20260715",
-  "date": "2026-07-15",
+  "session_id": "HANDOFF-DEEPSEEK-20260724-V5",
+  "sr_id": "deepseek",
+  "status": "handed_off",
+  "created": "2026-07-24",
+  "updated": "2026-07-24",
+  "last_activity": "2026-07-24T18:00:00Z",
   "gardener": "Voodoo (Dima)",
-  "previous_sr": "DeepSeek",
-  "next_sr": "DeepSeek (new session) or other External SR",
   "summary": {
     "completed": [
-      "BUG-001: fixed greeting repetition",
-      "BUG-002: fixed raw JSON in web_search",
-      "BUG-003: fixed task rename via FSM",
-      "Navigation: unified menu system with _replace_menu",
-      "Mobile Workflow: updated with patching_guide and large_files_handling",
-      "Auto-cleanup: implemented run_auto_cleanup() with warnings and deletion",
-      "Whitelist: restored to 5 gardeners",
-      "Works: updated gentle_companion_bot with auto-cleanup verification task"
+      "Полная реструктуризация базы знаний AI Tools (22 категории, модульная структура)",
+      "Обновлён индекс knowledge/index.json (v1.2.0)",
+      "Добавлены новые Google-инструменты в ai_tools (Stitch, Build AI Studio, Opal, Gemini Canvas, NotebookLM, Pomelli)",
+      "Создана категория 'Исследования и работа с документами' (research.json)",
+      "Обновлён Scout Agent (collector.py): добавлено нечёткое сравнение для дубликатов (порог 85%)",
+      "Оценка и очистка инбокса: ~165 семян, 15 продвинуто в корень, остальные удалены",
+      "Топ-5 семян продвинуты в корень seeds/ (106-110)",
+      "Обновлён core_map/index.json (унифицированная структура, пути к сотам, handoff-файлы)",
+      "Обновлён protocols/index.json (добавлены пути к протоколам)",
+      "Обновлён fruits/index.json (добавлены пути к фруктам, v2.5.0)",
+      "Актуализирован scan_state.json"
     ],
-    "pending_verification": [
-      "Auto-cleanup notifications (7 and 3 days before deletion)",
-      "Auto-cleanup deletion after 30 days",
-      "/leave command with _delete_gardener function",
-      "Navigation menu replacement in all handlers"
-    ]
-  },
-  "gardeners_status": {
-    "active": [
-      {"id": "224736062", "name": "Дима", "last_activity": "2026-07-14", "days_to_delete": 30},
-      {"id": "491567470", "name": "Виктор", "last_activity": "2026-07-14", "days_to_delete": 30}
+    "current_state": {
+      "knowledge": "Модульная структура (23 категории), все файлы в ai_tools/ обновлены",
+      "seeds": "Корень: 15 семян (включая топ-5 из 106-110). Инбокс: пуст",
+      "scout_agent": "Обновлён, использует нечёткое сравнение (85%) для дубликатов",
+      "core_map": "v3.9.3, унифицированные пути, handoff-ссылки",
+      "protocols": "v3.6.0, пути ко всем протоколам",
+      "fruits": "v2.5.0, пути ко всем фруктам"
+    },
+    "pending_items": [
+      "Применить PROTO-011 к топ-5 семенам (создать work-файлы)",
+      "Интегрировать Розу Мира в онбординг (boot_online)",
+      "Начать фазу 1 автономной экосистемы (W-R-ECO-001)",
+      "Проверить работу автоочистки неактивных садовников (из предыдущего handoff)"
     ],
-    "warning": [
-      {"id": "1485954655", "name": "none", "last_activity": "2026-06-22", "days_to_delete": 8},
-      {"id": "358793311", "name": "Антон", "last_activity": "2026-06-22", "days_to_delete": 8}
-    ],
-    "critical": [
-      {"id": "339914913", "name": "Антон", "last_activity": "2026-06-19", "days_to_delete": 5}
+    "next_steps": [
+      "Проверить работу Scout Agent (запуск через GitHub Actions или вручную)",
+      "Создать work-файлы для топ-5 семян",
+      "Начать работу над Розой Мира (petals 5-7)"
     ]
   },
   "key_files": {
-    "system": "honeycombs/fruits/gentle_companion/handlers/system.py",
-    "tasks": "honeycombs/fruits/gentle_companion/handlers/tasks.py",
-    "sr_conversation": "honeycombs/fruits/gentle_companion/sr_conversation.py",
-    "mobile_workflow": "honeycombs/instructions/mobile_workflow.json",
-    "works": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json"
+    "core_map": "honeycombs/core_map/index.json (v3.9.3)",
+    "knowledge_index": "honeycombs/knowledge/index.json (v1.2.0)",
+    "ai_tools_index": "honeycombs/knowledge/ai_tools/index.json (v1.2.0)",
+    "scout_collector": "honeycombs/fruits/scout_agent/collector.py (обновлён)",
+    "protocols_index": "honeycombs/protocols/index.json (v3.6.0)",
+    "fruits_index": "honeycombs/fruits/index.json (v2.5.0)",
+    "scan_state": "honeycombs/registry/scan_state.json"
   },
   "important_notes": [
-    "Большие файлы (>50KB) могут обрезаться при запросе через raw-ссылки. Используй локальный репозиторий.",
-    "Whitelist восстановлен в mandala-gardeners: 5 садовников.",
-    "Команда /leave теперь использует универсальную функцию _delete_gardener.",
-    "Автоочистка запускается ежедневно в 03:05 UTC."
+    "Индекс AI Tools содержит 23 категории с полем last_verified",
+    "Scout Agent теперь использует fuzzy-сравнение, должен сократить дубликаты",
+    "Инбокс очищен, все семена оценены",
+    "Топ-5 семян (106-110) требуют создания work-файлов"
   ],
-  "next_steps": [
-    "Проверить получение уведомлений садовниками 339914913 (через 5 дней).",
-    "Проверить финальное удаление через 30 дней.",
-    "Протестировать /leave после внедрения _delete_gardener.",
-    "При необходимости обновить mobile_workflow.json новыми правилами."
-  ]
+  "tags": ["handoff", "deepseek", "v5", "knowledge-base", "scout-agent", "seeds-cleanup", "ai-tools"]
 }
