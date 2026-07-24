@@ -1,0 +1,156 @@
+{
+  "identity": {
+    "module_id": "KNOWLEDGE-AI-TOOLS-INDEX-001",
+    "name": "AI Tools Guide — Index",
+    "version": "v1.0.0",
+    "created": "2026-07-24",
+    "updated": "2026-07-24",
+    "layer": 2,
+    "type": "knowledge_index",
+    "status": "active",
+    "priority": "medium",
+    "description": "Index of all AI tool categories. Each category is a separate file.",
+    "tags": ["ai-tools", "guide", "index", "knowledge"]
+  },
+  "meta": {
+    "description": "Complete index of AI tools organized by category. Each file covers a specific domain: chatbots, coding, design, automation, etc.",
+    "how_to_use": "Browse categories by their description. Each file contains tools with pros/cons and use cases.",
+    "source": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/knowledge/ai_tools_guide.json (v1.15.0)",
+    "version_source": "v1.15.0",
+    "total_categories": 22
+  },
+  "categories": [
+    {
+      "id": "chatbots",
+      "name": "Чат-боты",
+      "file": "chatbots.json",
+      "description": "Универсальные ИИ-ассистенты для диалога, генерации текста, анализа данных, кода и решения задач."
+    },
+    {
+      "id": "coding-assistants",
+      "name": "ИИ-ассистент для кода",
+      "file": "coding-assistants.json",
+      "description": "ИИ-инструменты, которые пишут, отлаживают и рефакторят код прямо в редакторе или через CLI."
+    },
+    {
+      "id": "content-generation",
+      "name": "ИИ-генерация контента",
+      "file": "content-generation.json",
+      "description": "Создание контента в любом объёме: текст, видео, аудио, дизайн."
+    },
+    {
+      "id": "presentations",
+      "name": "Презентации",
+      "file": "presentations.json",
+      "description": "Инструменты, которые превращают промпт или документ в готовую презентацию за минуты."
+    },
+    {
+      "id": "coding",
+      "name": "Кодинг",
+      "file": "coding.json",
+      "description": "Инструменты, которые пишут, отлаживают, рефакторят и тестируют код."
+    },
+    {
+      "id": "email",
+      "name": "Почта",
+      "file": "email.json",
+      "description": "Инструменты, которые помогают управлять почтовым ящиком: пишут, редактируют, резюмируют и организуют письма."
+    },
+    {
+      "id": "images",
+      "name": "Изображения",
+      "file": "images.json",
+      "description": "Инструменты для генерации изображений, цифрового искусства, 3D-моделей и анимации на основе текстовых запросов."
+    },
+    {
+      "id": "spreadsheets",
+      "name": "Таблицы",
+      "file": "spreadsheets.json",
+      "description": "Инструменты для работы с таблицами и данными: AI пишет формулы, анализирует данные, строит графики."
+    },
+    {
+      "id": "meetings",
+      "name": "Встречи",
+      "file": "meetings.json",
+      "description": "Инструменты для подготовки, проведения и автоматизации встреч."
+    },
+    {
+      "id": "automation",
+      "name": "Автоматизация",
+      "file": "automation.json",
+      "description": "Инструменты для автоматизации повторяющихся задач и бизнес-процессов без кода."
+    },
+    {
+      "id": "writing",
+      "name": "Письмо (текст)",
+      "file": "writing.json",
+      "description": "Инструменты для создания, редактирования и оптимизации текстового контента."
+    },
+    {
+      "id": "planning",
+      "name": "Планирование",
+      "file": "planning.json",
+      "description": "Инструменты для управления временем, календарями и задачами."
+    },
+    {
+      "id": "video",
+      "name": "Видео",
+      "file": "video.json",
+      "description": "Инструменты для генерации и редактирования видео с помощью ИИ."
+    },
+    {
+      "id": "ai-agents",
+      "name": "ИИ-агенты (фреймворки)",
+      "file": "ai-agents.json",
+      "description": "Фреймворки и SDK для создания агентов — автономных ИИ-систем, выполняющих многошаговые задачи."
+    },
+    {
+      "id": "app-builders",
+      "name": "ИИ-конструкторы приложений",
+      "file": "app-builders.json",
+      "description": "Инструменты, которые превращают текстовое описание в работающее веб-приложение."
+    },
+    {
+      "id": "rag",
+      "name": "RAG (Retrieval-Augmented Generation)",
+      "file": "rag.json",
+      "description": "Технология, которая учит ИИ отвечать на основе ваших данных."
+    },
+    {
+      "id": "aeo-geo",
+      "name": "AEO/GEO (оптимизация под ИИ-поиск)",
+      "file": "aeo-geo.json",
+      "description": "Оптимизация контента для появления в ответах ChatGPT, Perplexity, Gemini и других ИИ-поисковиков."
+    },
+    {
+      "id": "ai-workflows",
+      "name": "Связки ИИ-инструментов",
+      "file": "ai-workflows.json",
+      "description": "Платформы, где AI — встроенная часть рабочего пространства, а не отдельный чат-бот."
+    },
+    {
+      "id": "llm-ops",
+      "name": "LLM Ops / Observability",
+      "file": "llm-ops.json",
+      "description": "Практика мониторинга, оценки и отладки LLM-приложений."
+    },
+    {
+      "id": "copywriting",
+      "name": "Копирайтинг / текст",
+      "file": "copywriting.json",
+      "description": "Инструменты для создания текстов с учётом культурных и бизнес-контекстов."
+    },
+    {
+      "id": "agents-automation",
+      "name": "Агенты и автоматизация",
+      "file": "agents-automation.json",
+      "description": "ИИ-агенты, которые выполняют задачи автономно: собирают информацию, разбивают проекты на шаги и выполняют рутинную работу."
+    },
+    {
+      "id": "video-generation",
+      "name": "Генерация видео",
+      "file": "video-generation.json",
+      "description": "ИИ-инструменты для создания и редактирования видео, включая генерацию по тексту, анимацию и обработку."
+    }
+  ]
+}
