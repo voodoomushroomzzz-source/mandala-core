@@ -7,6 +7,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 import xml.etree.ElementTree as ET
+from difflib import SequenceMatcher
 import requests
 
 CONFIG_PATH = Path(__file__).parent / "config.json"
@@ -28,6 +29,27 @@ RELEVANT_KEYWORDS = [
     'innovation', 'breakthrough', 'state-of-the-art', 'sota',
     'pretrained', 'fine-tune', 'benchmark', 'evaluation'
 ]
+
+
+def normalize_url(url):
+    """Удаляет параметры запроса из URL для сравнения."""
+    if not url:
+        return url
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}{parsed.path}".lower()
+
+def is_similar(a, b, threshold=0.85):
+    """Проверяет, похожи ли две строки (нечёткое сравнение)."""
+    if not a or not b:
+        return False
+    a_clean = a.lower()[:200].strip()
+    b_clean = b.lower()[:200].strip()
+    if not a_clean or not b_clean:
+        return False
+    if a_clean in b_clean or b_clean in a_clean:
+        return True
+    ratio = SequenceMatcher(None, a_clean, b_clean).ratio()
+    return ratio >= threshold
 
 def log(message, level="INFO"):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -84,7 +106,15 @@ def filter_items(items, max_items=5):
                 break
     return relevant
 
-def is_duplicate(url, seed_dir):
+def is_duplicate(item, seed_dir):
+    """Проверяет дубликаты по URL, заголовку и описанию (с нечётким сравнением)."""
+    url = item.get('url', '')
+    title = item.get('title', '')
+    desc = item.get('description', '')
+
+    # Нормализуем URL
+    url_norm = normalize_url(url) if url else ''
+
     for folder in [seed_dir, Path("honeycombs/seeds")]:
         if not folder.exists():
             continue
@@ -92,12 +122,31 @@ def is_duplicate(url, seed_dir):
             try:
                 with open(file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    if data.get("url") == url:
+
+                    # 1. Проверка по нормализованному URL
+                    data_url = data.get("url", "")
+                    if url_norm and data_url:
+                        data_url_norm = normalize_url(data_url)
+                        if url_norm == data_url_norm:
+                            return True
+
+                    # 2. Проверка по заголовку + описанию (нечёткое)
+                    data_title = data.get("title", "")
+                    data_desc = data.get("description", "")
+
+                    title_similar = is_similar(title, data_title)
+                    desc_similar = is_similar(desc, data_desc)
+
+                    if title_similar and desc_similar:
                         return True
-            except:
+
+                    # 3. Если описания пустые — проверяем только заголовок
+                    if not desc and not data_desc and title_similar:
+                        return True
+
+            except Exception:
                 continue
     return False
-
 def get_seed_id(seed_dir):
     counter = 1
     existing = list(seed_dir.glob("SEED-*.json"))
