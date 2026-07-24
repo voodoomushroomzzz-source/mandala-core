@@ -1,0 +1,51 @@
+{
+  "id": "aeo-geo",
+  "name": "AEO/GEO (оптимизация под ИИ-поиск)",
+  "description": "Answer Engine Optimization и Generative Engine Optimization — оптимизация контента для появления в ответах ChatGPT, Perplexity, Gemini и других ИИ-поисковиков.",
+  "when_to_use": "Мониторинг цитируемости бренда в ИИ-ответах, планирование контента для повышения видимости в AI-поиске.",
+  "tools": [
+    {
+      "name": "AirOps",
+      "url": "https://www.airops.com",
+      "description": "Платформа для контент-операций с ИИ. Автоматизация SEO-воркфлоу через GPT-4, Claude и Gemini.",
+      "pros": [
+        "Автоматизация воркфлоу",
+        "Поддержка нескольких LLM",
+        "1000 бесплатных задач"
+      ],
+      "cons": [
+        "Ориентирован на команды",
+        "Сложный интерфейс",
+        "Меньше известен"
+      ]
+    },
+    {
+      "name": "Writesonic",
+      "url": "https://writesonic.com",
+      "description": "Активно развивает GEO-модуль. Отслеживает видимость бренда в ChatGPT, Perplexity, Google AI Overviews, Gemini, Claude и Copilot.",
+      "pros": [
+        "6+ AI-поисковиков",
+        "Генерация контента + GEO-трекинг",
+        "Актуальное обновление функций"
+      ],
+      "cons": [
+        "Качество контента требует редактуры",
+        "Дороже для соло-пользователей"
+      ]
+    },
+    {
+      "name": "Surfer SEO",
+      "url": "https://surferseo.com",
+      "description": "Классический SEO-инструмент. Добавил AI Tracker — мониторинг видимости в ChatGPT, Perplexity, Google и Gemini.",
+      "pros": [
+        "Оценка контента против топ-10",
+        "AI Tracker на Pro",
+        "Real-time рекомендации"
+      ],
+      "cons": [
+        "Дорого для небольших команд",
+        "AI-трекинг на старших планах"
+      ]
+    }
+  ]
+}

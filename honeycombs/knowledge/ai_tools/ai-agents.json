@@ -1,0 +1,104 @@
+{
+  "id": "ai-agents",
+  "name": "ИИ-агенты (фреймворки)",
+  "description": "Фреймворки и SDK для создания агентов — автономных ИИ-систем, которые выполняют многошаговые задачи без участия человека. В 2026 году рынок разделился на три типа: графовые (LangGraph), ролевые (CrewAI) и провайдер-нейтивы.",
+  "when_to_use": "Создание сложных систем с несколькими агентами, автоматизация длительных процессов (исследования, кодинг, поддержка), интеграция с API и данными.",
+  "tools": [
+    {
+      "name": "LangGraph",
+      "url": "https://www.langchain.com/langgraph",
+      "description": "Low-level фреймворк для построения stateful, графовых агентов с чекпоинтами и time-travel отладкой. Лучший выбор для production-систем.",
+      "pros": [
+        "Графовая модель",
+        "Чекпоинты и time-travel отладка",
+        "Модель-агностик",
+        "Нативная интеграция с LangSmith"
+      ],
+      "cons": [
+        "Самый сложный для старта",
+        "Операционно тяжелый",
+        "Абстракции LangChain"
+      ]
+    },
+    {
+      "name": "CrewAI",
+      "url": "https://crewai.com",
+      "description": "Фреймворк для создания команд агентов с ролями. Самый быстрый старт для multi-agent систем.",
+      "pros": [
+        "Ролевая модель",
+        "Низкий порог входа",
+        "Модель-агностик",
+        "Поддерживает MCP-серверы"
+      ],
+      "cons": [
+        "Меньше контроля на каждом шаге",
+        "Нет чекпоинтов и time-travel",
+        "Токен-оверхед ~3x"
+      ]
+    },
+    {
+      "name": "Microsoft Agent Framework (MAF)",
+      "url": "https://github.com/microsoft/agent-framework",
+      "description": "Рекомендованный наследник AutoGen и Semantic Kernel. Объединяет креативную и детерминированную оркестрацию.",
+      "pros": [
+        "C# и Python parity",
+        "Нативная поддержка A2A-протокола",
+        "Интеграция с Azure AI Foundry",
+        "Human-in-the-loop"
+      ],
+      "cons": [
+        "Самый молодой из мейнстрим-фреймворков",
+        "Привязка к Azure",
+        "Меньше готовых интеграций"
+      ]
+    },
+    {
+      "name": "Google Agent Development Kit (ADK)",
+      "url": "https://google.github.io/adk-docs/",
+      "description": "Фреймворк Google для построения иерархических агентов с нативной Vertex AI интеграцией.",
+      "pros": [
+        "Интеграция с Vertex AI",
+        "Иерархическая модель",
+        "Встроенная отладка",
+        "Поддержка 5+ языков"
+      ],
+      "cons": [
+        "Gemini-ориентирован",
+        "Меньше интеграций вне Google Cloud",
+        "Google lock-in"
+      ]
+    },
+    {
+      "name": "OpenAI Agents SDK",
+      "url": "https://platform.openai.com/docs/agents-sdk",
+      "description": "Provider-native SDK от OpenAI. Нативная MCP-поддержка и улучшенная работа с инструментами.",
+      "pros": [
+        "Самый чистый developer experience",
+        "Нативная поддержка всех новейших функций OpenAI",
+        "Apache 2.0 лицензия",
+        "Хорош для production"
+      ],
+      "cons": [
+        "OpenAI-first по дизайну",
+        "Меньше гибкости для сложных workflow",
+        "Не замена LangGraph"
+      ]
+    },
+    {
+      "name": "LlamaIndex Workflows",
+      "url": "https://www.llamaindex.ai",
+      "description": "Data-first фреймворк для построения агентов на основе документов и данных. Best-in-class для RAG-агентов.",
+      "pros": [
+        "Лучший для knowledge-heavy агентов",
+        "Сильная работа с памятью",
+        "Документация и материалы",
+        "MIT лицензия"
+      ],
+      "cons": [
+        "Слаб для action-heavy систем",
+        "Ограниченная multi-agent оркестрация",
+        "Меньше enterprise-деплоев"
+      ]
+    }
+  ]
+}
