@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.54",
+    "version": "v1.7.55",
     "created": "2026-05-11",
     "updated": "2026-07-24",
     "layer": 1,
@@ -2311,7 +2311,7 @@
       "identity": {
         "module_id": "KNOWLEDGE-INDEX-001",
         "name": "Knowledge Base — Curated Resources",
-        "version": "v1.2.0",
+        "version": "v1.2.1",
         "created": "2026-07-05",
         "updated": "2026-07-24",
         "layer": 1,
@@ -2330,15 +2330,6 @@
         "how_to_use": "Each file in the root of knowledge/ is a curated collection. For AI Tools, see ai_tools/index.json for full category map."
       },
       "contents": [
-        {
-          "id": "affirmations",
-          "name": "Аффирмации Садовника",
-          "file": "affirmations.json",
-          "description": "Персональные аффирмации для трансформации реальности и настройки сознания (v1.2 — уточнена формулировка о ценности проектов и идей)",
-          "source": "Gardener (Voodoo)",
-          "date_added": "2026-07-06",
-          "version": "v1.2"
-        },
         {
           "id": "ai_tools",
           "name": "AI Tools Guide — Полный каталог (22 категории)",
@@ -2413,13 +2404,13 @@
         ]
       },
       "metrics": {
-        "total_resources": 7,
+        "total_resources": 6,
         "last_updated": "2026-07-24"
       },
       "health": {
         "status": "healthy",
         "last_check": "2026-07-24",
-        "notes": "v1.2.0: updated ai_tools entry to point to modular ai_tools/index.json (22 categories)."
+        "notes": "v1.2.1: removed affirmations (affirmations.json deleted). Remaining resources: 6."
       }
     }
   },
