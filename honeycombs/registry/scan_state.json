@@ -1,10 +1,11 @@
 {
-  "last_scan": "2026-07-24T10:52:06.460100",
+  "last_scan": "2026-07-25T07:10:43.304948",
   "honeycomb_hashes": {
     "honeycombs/rose_world": "2ba9308d8feaa1031024f5ad74dfaec5",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
     "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
-    "honeycombs/knowledge": "d93dd6d2bf4774b9f09fe323d6e76962",
+    "honeycombs/knowledge": "29e22087c24941e87b341b5ef7fda114",
+    "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
     "honeycombs/works": "e92caf1d039f91bd329a1b70300358be",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
@@ -20,30 +21,30 @@
     "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8"
   },
   "statistics": {
-    "total_scanned": 17,
-    "valid_v2": 17,
+    "total_scanned": 18,
+    "valid_v2": 18,
     "invalid_v2": 0,
     "errors": 0,
     "warnings": 0,
-    "total_files": 286,
-    "total_size_kb": 1106.63
+    "total_files": 164,
+    "total_size_kb": 1009.69
   },
   "seeds_health": {
-    "root_count": 6,
+    "root_count": 16,
     "root_threshold": 10,
-    "root_status": "ok",
-    "inbox_count": 178,
+    "root_status": "warning",
+    "inbox_count": 0,
     "inbox_threshold": 20,
-    "inbox_status": "warning",
+    "inbox_status": "ok",
     "warnings": [
-      "Inbox: 178 файлов (порог 20)"
+      "Корень seeds/: 16 файлов (порог 10)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-07-24T10:52:06.460115",
+    "last_check": "2026-07-25T07:10:43.304958",
     "errors_count": 0,
-    "warnings_count": 8,
+    "warnings_count": 7,
     "expired_tasks": 0,
     "upcoming_deadlines": 0,
     "expired_tasks_list": [],
