@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-07-27",
+    "updated": "2026-07-28",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -45,7 +45,7 @@
   "registry": {
     "total_files": 18,
     "total_size_kb": 1013.67,
-    "last_updated": "2026-07-27",
+    "last_updated": "2026-07-28",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -66,11 +66,18 @@
           "W-T-20260713-YOUTUBE_MANDALA_PROMO.json: non-standard status 'planning'"
         ],
         "expired_tasks": [],
-        "upcoming_deadlines": [],
+        "upcoming_deadlines": [
+          {
+            "work_id": "W-R-RM-011",
+            "name": "Living Visualizations — Mer-Ka-Ba Perception System",
+            "deadline": "2026-08-01",
+            "days_left": 3
+          }
+        ],
         "errors_count": 0,
         "warnings_count": 5,
         "expired_count": 0,
-        "upcoming_count": 0
+        "upcoming_count": 1
       },
       "ahimsa_filter": {
         "errors": [],
@@ -85,10 +92,18 @@
       },
       "deadline_sentinel": {
         "expired": [],
-        "upcoming": [],
+        "upcoming": [
+          {
+            "id": "W-R-RM-011",
+            "name": "Living Visualizations — Mer-Ka-Ba Perception System",
+            "type": "works",
+            "deadline": "2026-08-01",
+            "days_left": 3
+          }
+        ],
         "warnings": [],
         "expired_count": 0,
-        "upcoming_count": 0
+        "upcoming_count": 1
       },
       "integrity_check": {
         "errors": [],
