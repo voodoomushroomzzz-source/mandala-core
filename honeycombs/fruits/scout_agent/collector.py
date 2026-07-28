@@ -9,6 +9,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 from difflib import SequenceMatcher
 import requests
+from urllib.parse import urlparse
 
 CONFIG_PATH = Path(__file__).parent / "config.json"
 LOG_PATH = Path("honeycombs/seeds/scout_log.txt")
