@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.55",
+    "version": "v1.7.56",
     "created": "2026-05-11",
-    "updated": "2026-07-24",
+    "updated": "2026-07-28",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -2227,21 +2227,21 @@
         "index": "This file (index.json) serves as the registry"
       },
       "manifest": {
-        "total_works": 17,
+        "total_works": 19,
         "by_status": {
           "active": 8,
-          "planning": 8,
+          "planning": 10,
           "in_progress": 0,
           "done": 1
         },
         "by_horizon": {
-          "strategic": 8,
-          "tactical": 9
+          "strategic": 9,
+          "tactical": 10
         },
         "by_priority": {
           "critical": 4,
-          "high": 7,
-          "medium": 4,
+          "high": 8,
+          "medium": 5,
           "low": 2
         },
         "works_list": [
@@ -2261,7 +2261,9 @@
           "W-R-ECOMM-001",
           "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
           "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-          "W-R-ROSE-001"
+          "W-R-ROSE-001",
+          "W-T-20260728-AI-GATEWAY",
+          "W-T-20260728-CYBER-AGENTS"
         ],
         "deadlines": {
           "W-T-20260511-MANUS": "2026-08-31"
@@ -2282,6 +2284,9 @@
             "W-R-RM-014",
             "W-R-ECOMM-001",
             "W-T-20260713-YOUTUBE_MANDALA_PROMO"
+          ],
+          "W-T-20260728-CYBER-AGENTS": [
+            "W-T-20260728-AI-GATEWAY"
           ]
         }
       },
@@ -2296,7 +2301,8 @@
         "status": "active",
         "last_check": "2026-07-14",
         "notes": "v1.0.11: added W-R-ROSE-001 (Rose World Ethical Filter). Total works: 17."
-      }
+      },
+      "updated": "2026-07-28"
     }
   },
   "step_9_knowledge": {
