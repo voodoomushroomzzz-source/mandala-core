@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260728-213200-003",
+  "title": "system-design-primer",
+  "url": "https://github.com/donnemartin/system-design-primer",
+  "description": "Learn how to design large-scale systems. Prep for the system design interview. Includes Anki flashcards.",
+  "source": "GitHub Trending Python (API)",
+  "collected_at": "2026-07-28T21:32:00.971035",
+  "status": "promoted",
+  "evaluation": {
+    "score_novelty": 5,
+    "score_feasibility": 9,
+    "score_relevance": 7,
+    "score_impact": 6,
+    "total_score": 27,
+    "mandala_relevance": "Полезный ресурс для архитекторов и SR при проектировании систем",
+    "reason_selected": "Практический справочник для развития компетенций",
+    "action": "promote"
+  },
+  "promotion_notes": {
+    "promoted_at": "2026-07-28",
+    "promoted_by": "External SR (DeepSeek)",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
