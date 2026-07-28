@@ -1,0 +1,23 @@
+{
+  "work_id": "W-T-20260728-CYBER-AGENTS",
+  "name": "Cybersecurity Agents — Adaptation for Mandala",
+  "status": "planning",
+  "priority": "medium",
+  "horizon": "tactical",
+  "description": "Microsoft запустила первую AI-модель для кибербезопасности и агентную систему. Mandala может адаптировать этот подход: создать агентов для мониторинга, анализа угроз и автоматической реакции в рамках экосистемы.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": ["W-T-20260728-AI-GATEWAY"],
+  "effort_estimate": "60-80 часов",
+  "progress": 0,
+  "tags": ["cybersecurity", "agents", "monitoring", "automation"],
+  "deadline": "2026-10-31",
+  "created": "2026-07-28",
+  "updated": "2026-07-28",
+  "source": {
+    "type": "seed",
+    "seed_id": "SEED-20260728-213202-007",
+    "seed_file": "honeycombs/seeds/root/SEED-20260728-213202-007__cybersecurity_agents.json"
+  },
+  "notes": "Адаптировать подход Microsoft для Mandala: создать агентов, которые следят за безопасностью экосистемы, анализируют логи, предупреждают о угрозах. Интеграция с Manus и Engineer Chat."
+}

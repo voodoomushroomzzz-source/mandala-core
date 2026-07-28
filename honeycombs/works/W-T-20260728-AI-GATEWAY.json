@@ -1,0 +1,23 @@
+{
+  "work_id": "W-T-20260728-AI-GATEWAY",
+  "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "strategic",
+  "description": "На основе идеи Сатьи Наделлы: компании, которые полагаются на одного AI-провайдера, рискуют. Mandala должна развиваться как экосистема, работающая поверх любых моделей (DeepSeek, Claude, Grok, GPT и др.). Это не просто техническая фича — это философский и стратегический принцип.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": "40-60 часов",
+  "progress": 0,
+  "tags": ["strategy", "ai-gateway", "multi-model", "ecosystem", "philosophy"],
+  "deadline": "2026-09-30",
+  "created": "2026-07-28",
+  "updated": "2026-07-28",
+  "source": {
+    "type": "seed",
+    "seed_id": "SEED-20260728-213202-006",
+    "seed_file": "honeycombs/seeds/root/SEED-20260728-213202-006__ai_gateway_strategy.json"
+  },
+  "notes": "Идея: сделать Mandala независимой от конкретного AI-провайдера. Технически: реализовать AI Gateway с роутингом, fallback, кэшированием. Философски: подтвердить принцип 'экосистема, а не инструмент'."
+}
