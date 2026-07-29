@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-07-28",
+    "updated": "2026-07-29",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 18,
-    "total_size_kb": 1014.29,
+    "total_size_kb": 1041.16,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 18,
-    "total_size_kb": 1014.29,
-    "last_updated": "2026-07-28",
+    "total_size_kb": 1041.16,
+    "last_updated": "2026-07-29",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -63,7 +63,9 @@
           "W-R-ROSE-001__rose_world_ethical_filter.json: non-standard status 'planning'",
           "W-R-ECO-001__autonomous_ecosystem.json: non-standard status 'planning'",
           "W-R-ECOMM-001__china_sourcing_ecommerce.json: non-standard status 'planning'",
-          "W-T-20260713-YOUTUBE_MANDALA_PROMO.json: non-standard status 'planning'"
+          "W-T-20260728-CYBER-AGENTS.json: non-standard status 'planning'",
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO.json: non-standard status 'planning'",
+          "W-T-20260728-AI-GATEWAY.json: non-standard status 'planning'"
         ],
         "expired_tasks": [],
         "upcoming_deadlines": [
@@ -71,11 +73,11 @@
             "work_id": "W-R-RM-011",
             "name": "Living Visualizations — Mer-Ka-Ba Perception System",
             "deadline": "2026-08-01",
-            "days_left": 3
+            "days_left": 2
           }
         ],
         "errors_count": 0,
-        "warnings_count": 5,
+        "warnings_count": 7,
         "expired_count": 0,
         "upcoming_count": 1
       },
@@ -83,11 +85,12 @@
         "errors": [],
         "warnings": [
           "rose_world: missing meta.description",
+          "inbox: missing index.json",
           "scout_agent: missing meta.description"
         ],
         "noise_files": [],
         "errors_count": 0,
-        "warnings_count": 2,
+        "warnings_count": 3,
         "noise_count": 0
       },
       "deadline_sentinel": {
@@ -98,7 +101,7 @@
             "name": "Living Visualizations — Mer-Ka-Ba Perception System",
             "type": "works",
             "deadline": "2026-08-01",
-            "days_left": 3
+            "days_left": 2
           }
         ],
         "warnings": [],
@@ -114,27 +117,27 @@
         "missing_count": 0
       },
       "seed_count_validator": {
-        "root_count": 16,
+        "root_count": 19,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 0,
+        "inbox_count": 19,
         "inbox_threshold": 20,
         "inbox_status": "ok",
         "warnings": [
-          "Корень seeds/: 16 файлов (порог 10)"
+          "Корень seeds/: 19 файлов (порог 10)"
         ],
         "status": "warning"
       }
     },
     "seeds_health": {
-      "root_count": 16,
+      "root_count": 19,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 0,
+      "inbox_count": 19,
       "inbox_threshold": 20,
       "inbox_status": "ok",
       "warnings": [
-        "Корень seeds/: 16 файлов (порог 10)"
+        "Корень seeds/: 19 файлов (порог 10)"
       ],
       "status": "warning"
     }
