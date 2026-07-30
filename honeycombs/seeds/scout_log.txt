@@ -1637,3 +1637,54 @@
 [2026-07-30 07:01:00] [INFO]   Total saved: 8
 [2026-07-30 07:01:00] [INFO]   Total duplicates: 5
 [2026-07-30 07:01:00] [INFO] ============================================================
+[2026-07-30 11:07:26] [INFO] ============================================================
+[2026-07-30 11:07:26] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-07-30 11:07:26] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-07-30 11:07:26] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-07-30 11:07:27] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-30 11:07:27] [INFO]   → Filtered to 0 relevant items
+[2026-07-30 11:07:27] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-07-30 11:07:27] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-07-30 11:07:27] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-07-30 11:07:27] [INFO]   → Found 15 raw items, 0 recent
+[2026-07-30 11:07:27] [INFO]   → Filtered to 0 relevant items
+[2026-07-30 11:07:27] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-07-30 11:07:27] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-07-30 11:07:27] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-07-30 11:07:27] [INFO]   → Found 15 raw items, 8 recent
+[2026-07-30 11:07:27] [INFO]   → Filtered to 3 relevant items
+[2026-07-30 11:07:27] [INFO]   ⏭️ Duplicate: AI's top startups are barely publishing their rese...
+[2026-07-30 11:07:27] [INFO]   ⏭️ Duplicate: LLM Honeypot...
+[2026-07-30 11:07:27] [INFO]   ⏭️ Duplicate: The Cold Email...
+[2026-07-30 11:07:27] [INFO]   📊 Hacker News: saved 0, duplicates 3
+[2026-07-30 11:07:27] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-07-30 11:07:27] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-07-30 11:07:28] [INFO]   → Found 15 raw items, 15 recent
+[2026-07-30 11:07:28] [INFO]   → Filtered to 5 relevant items
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-07-30 11:07:28] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-07-30 11:07:28] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-07-30 11:07:28] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-07-30 11:07:28] [INFO]   → Found 15 raw items, 9 recent
+[2026-07-30 11:07:28] [INFO]   → Filtered to 5 relevant items
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: Mark Zuckerberg predicts that billions of people w...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: Microsoft logs $3.2B from Anthropic investment, bu...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: Zuckerberg says Meta’s enterprise AI opportunity e...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: Discover what’s next for AI, from the SaaS reckoni...
+[2026-07-30 11:07:28] [INFO]   ⏭️ Duplicate: Thinking Machines co-founder Lilian Weng left the ...
+[2026-07-30 11:07:28] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-07-30 11:07:28] [INFO] 
+============================================================
+[2026-07-30 11:07:28] [INFO] ✅ Scout Agent v2 finished
+[2026-07-30 11:07:28] [INFO]   Total saved: 0
+[2026-07-30 11:07:28] [INFO]   Total duplicates: 13
+[2026-07-30 11:07:28] [INFO] ============================================================
