@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260731-070058-031",
+  "title": "ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science",
+  "url": "https://arxiv.org/abs/2607.26155",
+  "description": "arXiv:2607.26155v1 Announce Type: new \nAbstract: Clinical data-science agents must transform heterogeneous longitudinal records into auditable analyses, yet existing benchmarks largely isolate medical question answering, structured-table reasoning, or generic scientific repositories. We introduce CLINLENS, a benchmark of 200 executable tasks over five linked MIMIC resources spanning structured electronic health records, notes, electrocardiograms, chest radiographs, and echocardiograms. A 4 x 5 t",
+  "source": "arXiv AI",
+  "collected_at": "2026-07-31T07:00:58.207283",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

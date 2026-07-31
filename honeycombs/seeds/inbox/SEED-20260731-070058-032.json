@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260731-070058-032",
+  "title": "When benchmark inferences do not compose: Projectibility in AI evaluation",
+  "url": "https://arxiv.org/abs/2607.26159",
+  "description": "arXiv:2607.26159v1 Announce Type: new \nAbstract: An AI benchmark result rarely reaches a consequential claim in one step. Evaluators generalize it to further cases, interpret it as evidence of capability, extrapolate it to new tasks, transport it to another system or site, and combine it with assumptions about human review and downstream consequences. Validity-centred approaches require evidence for each claim. This paper identifies a further epistemic problem: warranted links don't automaticall",
+  "source": "arXiv AI",
+  "collected_at": "2026-07-31T07:00:58.236086",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
