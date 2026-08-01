@@ -1852,3 +1852,56 @@
 [2026-08-01 07:01:01] [INFO]   Total saved: 8
 [2026-08-01 07:01:01] [INFO]   Total duplicates: 5
 [2026-08-01 07:01:01] [INFO] ============================================================
+[2026-08-01 10:39:32] [INFO] ============================================================
+[2026-08-01 10:39:32] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-08-01 10:39:32] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-01 10:39:32] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-01 10:39:33] [INFO]   → Found 0 raw items, 0 recent
+[2026-08-01 10:39:33] [INFO]   → Filtered to 0 relevant items
+[2026-08-01 10:39:33] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-01 10:39:33] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-01 10:39:33] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-01 10:39:33] [INFO]   → Found 0 raw items, 0 recent
+[2026-08-01 10:39:33] [INFO]   → Filtered to 0 relevant items
+[2026-08-01 10:39:33] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-01 10:39:33] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-01 10:39:33] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-01 10:39:33] [INFO]   → Found 15 raw items, 11 recent
+[2026-08-01 10:39:33] [INFO]   → Filtered to 5 relevant items
+[2026-08-01 10:39:33] [INFO]   ✅ Saved: SEED-20260801-103933-052.json
+[2026-08-01 10:39:33] [INFO]   ⏭️ Duplicate: Flint: A Visualization Language for the AI Era...
+[2026-08-01 10:39:33] [INFO]   ⏭️ Duplicate: qm – Multiplayer agent harness for work...
+[2026-08-01 10:39:33] [INFO]   ⏭️ Duplicate: The development pipeline is a production system...
+[2026-08-01 10:39:33] [INFO]   ✅ Saved: SEED-20260801-103933-053.json
+[2026-08-01 10:39:33] [INFO]   📊 Hacker News: saved 2, duplicates 3
+[2026-08-01 10:39:33] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-01 10:39:33] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-01 10:39:34] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-01 10:39:34] [INFO]   → Filtered to 5 relevant items
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-01 10:39:34] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-01 10:39:34] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-01 10:39:34] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-01 10:39:34] [INFO]   → Found 15 raw items, 9 recent
+[2026-08-01 10:39:34] [INFO]   → Filtered to 5 relevant items
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: OpenAI reportedly finds evidence that more of its ...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: Google nixes its Earth AI feature one day after la...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: Sam Altman isn’t the only one who wants to pump th...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: Snapchat no longer rewards fully AI-generated Spot...
+[2026-08-01 10:39:34] [INFO]   ⏭️ Duplicate: Siri AI could come with a paywall for power users...
+[2026-08-01 10:39:34] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-08-01 10:39:34] [INFO] 
+============================================================
+[2026-08-01 10:39:34] [INFO] ✅ Scout Agent v2 finished
+[2026-08-01 10:39:34] [INFO]   Total saved: 2
+[2026-08-01 10:39:34] [INFO]   Total duplicates: 13
+[2026-08-01 10:39:34] [INFO] ============================================================
