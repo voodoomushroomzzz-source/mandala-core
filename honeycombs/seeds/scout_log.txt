@@ -1948,3 +1948,52 @@
 [2026-08-02 07:01:07] [INFO]   Total saved: 6
 [2026-08-02 07:01:07] [INFO]   Total duplicates: 0
 [2026-08-02 07:01:07] [INFO] ============================================================
+[2026-08-02 10:40:25] [INFO] ============================================================
+[2026-08-02 10:40:25] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-08-02 10:40:25] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-02 10:40:25] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-02 10:40:26] [INFO]   → Found 0 raw items, 0 recent
+[2026-08-02 10:40:26] [INFO]   → Filtered to 0 relevant items
+[2026-08-02 10:40:26] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-02 10:40:26] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-02 10:40:26] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-02 10:40:26] [INFO]   → Found 0 raw items, 0 recent
+[2026-08-02 10:40:26] [INFO]   → Filtered to 0 relevant items
+[2026-08-02 10:40:26] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-02 10:40:26] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-02 10:40:26] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-02 10:40:26] [INFO]   → Found 15 raw items, 14 recent
+[2026-08-02 10:40:26] [INFO]   → Filtered to 3 relevant items
+[2026-08-02 10:40:26] [INFO]   ⏭️ Duplicate: Seedance 2.5...
+[2026-08-02 10:40:26] [INFO]   ✅ Saved: SEED-20260802-104026-060.json
+[2026-08-02 10:40:26] [INFO]   ⏭️ Duplicate: Deep-sea vehicles spot 'alien' sharks deep beneath...
+[2026-08-02 10:40:26] [INFO]   📊 Hacker News: saved 1, duplicates 2
+[2026-08-02 10:40:26] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-02 10:40:26] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-02 10:40:27] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-02 10:40:27] [INFO]   → Filtered to 5 relevant items
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-02 10:40:27] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-02 10:40:27] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-02 10:40:27] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-02 10:40:27] [INFO]   → Found 15 raw items, 4 recent
+[2026-08-02 10:40:27] [INFO]   → Filtered to 3 relevant items
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: Judge denies xAI’s request to block Minnesota ban ...
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: YouTuber Hank Green says his AI usage is ‘not heal...
+[2026-08-02 10:40:27] [INFO]   ⏭️ Duplicate: Sam Altman is still making the case for parenting ...
+[2026-08-02 10:40:27] [INFO]   📊 TechCrunch AI: saved 0, duplicates 3
+[2026-08-02 10:40:27] [INFO] 
+============================================================
+[2026-08-02 10:40:27] [INFO] ✅ Scout Agent v2 finished
+[2026-08-02 10:40:27] [INFO]   Total saved: 1
+[2026-08-02 10:40:27] [INFO]   Total duplicates: 10
+[2026-08-02 10:40:27] [INFO] ============================================================
