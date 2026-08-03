@@ -3,14 +3,17 @@
 Core scanner logic for Mandala Symbiosis.
 Full functionality from original honeycomb_scanner.py
 """
+
 import os
 import json
 import hashlib
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Tuple, Optional
+
 from .validators import TaskValidator, AhimsaFilter, DeadlineSentinel, IntegrityCheck, SeedCountValidator
 from .reporters import save_scan_state, save_registry
+
 
 class Colors:
     HEADER = '\033[95m'
@@ -23,8 +26,10 @@ class Colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
 def print_colored(text: str, color: str = Colors.OKGREEN):
     print(f"{color}{text}{Colors.ENDC}")
+
 
 class HoneycombScanner:
     def __init__(self, base_path: str = ".", full_check: bool = False,
@@ -39,7 +44,7 @@ class HoneycombScanner:
         self.integrity = integrity or full_check
         self.no_cache = no_cache
         self.verbose = verbose
-        
+
         self.honeycombs = []
         self.new_honeycombs = []
         self.modified_honeycombs = []
@@ -83,13 +88,13 @@ class HoneycombScanner:
 
     def _validate_v2_structure(self, honeycomb_data: Dict) -> Tuple[bool, Dict]:
         details = {"errors": [], "warnings": [], "missing_sections": [], "missing_fields": []}
-        
+
         required_sections = ["identity", "meta"]
         for section in required_sections:
             if section not in honeycomb_data:
                 details["errors"].append(f"Missing required section: {section}")
                 details["missing_sections"].append(section)
-        
+
         if "identity" in honeycomb_data:
             identity = honeycomb_data["identity"]
             if isinstance(identity, dict):
@@ -100,14 +105,14 @@ class HoneycombScanner:
                         details["missing_fields"].append(f"identity.{field}")
             else:
                 details["errors"].append(f"identity is not a dict, got {type(identity).__name__}")
-        
+
         if "meta" in honeycomb_data:
             meta = honeycomb_data["meta"]
             if isinstance(meta, dict) and "description" not in meta:
                 details["warnings"].append("Recommended to add description in meta.description")
         else:
             details["warnings"].append("meta section is missing")
-        
+
         return len(details["errors"]) == 0, details
 
     def _count_honeycomb_files(self, honeycomb_dir: Path) -> Tuple[int, float]:
@@ -135,6 +140,7 @@ class HoneycombScanner:
                     previous_hash = previous
                 else:
                     previous_hash = None
+
                 if previous_hash != honeycomb_info["hash"]:
                     self.modified_honeycombs.append(honeycomb_id)
                     print(f"   Modified: {honeycomb_id}")
@@ -148,11 +154,11 @@ class HoneycombScanner:
         try:
             with open(index_path, 'r', encoding='utf-8-sig') as f:
                 data = json.load(f)
-            
+
             honeycomb_dir = index_path.parent
             relative_path = honeycomb_dir.relative_to(self.base_path)
             honeycomb_id = str(relative_path).replace(os.sep, '/')
-            
+
             identity = data.get("identity", {})
             if not isinstance(identity, dict):
                 identity = {}
@@ -160,47 +166,16 @@ class HoneycombScanner:
                     "honeycomb_id": honeycomb_id,
                     "error": f"identity is not a dict, got {type(data.get('identity')).__name__}"
                 })
-            
+
             content_hash = self._calculate_hash(data)
             is_valid, validation_details = self._validate_v2_structure(data)
             file_count, total_size_kb = self._count_honeycomb_files(honeycomb_dir)
-            
-                        # --- INBOX INDEX SUPPORT ---
+
+            # --- INBOX INDEX SUPPORT (добавлено) ---
+            inbox_extra = {}
             if honeycomb_id == "honeycombs/seeds/inbox":
-                index_path = honeycomb_dir / "index.json"
-                if index_path.exists():
-                    try:
-                        import json as json_mod
-                        with open(index_path, 'r', encoding='utf-8') as f:
-                            index_data = json_mod.load(f)
-                        processed_seeds = set()
-                        processed_seeds.update(index_data.get("promoted_seeds", []))
-                        processed_seeds.update(index_data.get("kept_seeds", []))
-                        processed_seeds.update(index_data.get("rejected_seeds", []))
-                        processed_seeds.update(index_data.get("top_8_copied_to_root", []))
-                        
-                        all_files = [f for f in os.listdir(honeycomb_dir) if f.endswith('.json') and f != 'index.json']
-                        new_seeds = [f for f in all_files if f.replace('.json', '') not in processed_seeds]
-                        processed_count = len(all_files) - len(new_seeds)
-                        
-                        honeycomb_info_extra = {
-                            "inbox_processed_count": processed_count,
-                            "inbox_new_count": len(new_seeds),
-                            "new_seeds_list": new_seeds,
-                            "inbox_total_count": len(all_files)
-                        }
-                    except Exception as e:
-                        print(f"  Warning: Could not read inbox index: {e}")
-                        honeycomb_info_extra = {}
-                else:
-                    honeycomb_info_extra = {}
-            else:
-                honeycomb_info_extra = {}
-                            else:
-                    honeycomb_info_extra = {}
-            else:
-                honeycomb_info_extra = {}
-            
+                inbox_extra = self._process_inbox(honeycomb_dir)
+
             honeycomb_info = {
                 "honeycomb_id": honeycomb_id,
                 "path": str(index_path),
@@ -222,14 +197,16 @@ class HoneycombScanner:
                 "total_size_kb": total_size_kb,
                 "scan_timestamp": datetime.now().isoformat()
             }
-            
+            # Добавляем данные инбокса
+            honeycomb_info.update(inbox_extra)
+
             self.honeycombs.append(honeycomb_info)
             self.stats["total_scanned"] += 1
             self.stats["total_files"] += file_count
             self.stats["total_size_kb"] += total_size_kb
 
             self._detect_changes(honeycomb_id, honeycomb_info)
-            
+
             if is_valid:
                 self.stats["valid_v2"] += 1
                 print(f"[OK] {honeycomb_id}: {identity.get('name', 'Unknown')} v{identity.get('version', 'Unknown')}")
@@ -243,13 +220,50 @@ class HoneycombScanner:
                     "errors": validation_details.get("errors", []),
                     "warnings": validation_details.get("warnings", [])
                 })
-                
+
         except json.JSONDecodeError as e:
             print(f"[ERROR] {index_path}: JSON error: {e}")
             self.stats["errors"] += 1
         except Exception as e:
             print(f"[ERROR] {index_path}: Analysis error: {e}")
             self.stats["errors"] += 1
+
+    def _process_inbox(self, inbox_dir: Path) -> Dict:
+        """Обработка папки inbox с учётом индекса"""
+        result = {}
+        index_path = inbox_dir / "index.json"
+        if index_path.exists():
+            try:
+                with open(index_path, 'r', encoding='utf-8') as f:
+                    index_data = json.load(f)
+
+                processed_seeds = set()
+                processed_seeds.update(index_data.get("promoted_seeds", []))
+                processed_seeds.update(index_data.get("kept_seeds", []))
+                processed_seeds.update(index_data.get("rejected_seeds", []))
+                processed_seeds.update(index_data.get("top_8_copied_to_root", []))
+
+                all_files = [f.name for f in inbox_dir.iterdir() if f.suffix == '.json' and f.name != 'index.json']
+                new_seeds = [f for f in all_files if f.replace('.json', '') not in processed_seeds]
+
+                result["inbox_total_count"] = len(all_files)
+                result["inbox_processed_count"] = len(all_files) - len(new_seeds)
+                result["inbox_new_count"] = len(new_seeds)
+                result["new_seeds_list"] = new_seeds
+
+                print(f"📥 Inbox: {len(all_files)} total, {result['inbox_processed_count']} processed, {len(new_seeds)} new")
+
+            except Exception as e:
+                print(f"⚠️  Could not read inbox index: {e}")
+                self.stats["warnings"] += 1
+        else:
+            # Если index.json нет, считаем всё новым
+            all_files = [f.name for f in inbox_dir.iterdir() if f.suffix == '.json' and f.name != 'index.json']
+            result["inbox_total_count"] = len(all_files)
+            result["inbox_processed_count"] = 0
+            result["inbox_new_count"] = len(all_files)
+            result["new_seeds_list"] = all_files
+        return result
 
     def _recursive_scan(self, directory: Path):
         try:
@@ -267,27 +281,27 @@ class HoneycombScanner:
         print("\n" + "=" * 60)
         print("SYMBIOSIS GUARD — SYSTEM HEALTH CHECK")
         print("=" * 60)
-        
+
         results = {}
-        
+
         if self.validate_tasks:
             print("\n[1] Task Validator...")
             validator = TaskValidator(self.base_path)
             results['task_validator'] = validator.validate()
             print(f"    Errors: {results['task_validator']['errors_count']}, Warnings: {results['task_validator']['warnings_count']}, Expired: {results['task_validator']['expired_count']}")
-        
+
         if self.ahimsa:
             print("\n[2] Ahimsa Filter...")
             filter_ = AhimsaFilter(self.base_path)
             results['ahimsa_filter'] = filter_.scan()
             print(f"    Errors: {results['ahimsa_filter']['errors_count']}, Warnings: {results['ahimsa_filter']['warnings_count']}, Noise files: {results['ahimsa_filter']['noise_count']}")
-        
+
         if self.deadlines:
             print("\n[3] Deadline Sentinel...")
             sentinel = DeadlineSentinel(self.base_path)
             results['deadline_sentinel'] = sentinel.check()
             print(f"    Expired: {results['deadline_sentinel']['expired_count']}, Upcoming: {results['deadline_sentinel']['upcoming_count']}")
-        
+
         if self.integrity:
             print("\n[4] Integrity Check...")
             integrity = IntegrityCheck(self.base_path)
@@ -299,24 +313,23 @@ class HoneycombScanner:
             from .validators import SeedCountValidator
             seeds_health = SeedCountValidator.check()
             results['seed_count_validator'] = seeds_health
-            print(f"    Корень: {seeds_health['root_count']}/{seeds_health['root_threshold']} {'✅' if seeds_health['root_status'] == 'ok' else '⚠️'}")
-            print(f"    Inbox:  {seeds_health['inbox_count']}/{seeds_health['inbox_threshold']} {'✅' if seeds_health['inbox_status'] == 'ok' else '⚠️'}")
+            print(f"    Root: {seeds_health['root_count']}/{seeds_health['root_threshold']} {'✅' if seeds_health['root_status'] == 'ok' else '⚠️'}")
+            print(f"    Inbox: {seeds_health['inbox_count']}/{seeds_health['inbox_threshold']} {'✅' if seeds_health['inbox_status'] == 'ok' else '⚠️'}")
             if seeds_health['warnings']:
                 for w in seeds_health['warnings']:
                     print(f"    ⚠️ {w}")
 
-        
         self.guard_results = results
-        
+
         errors = sum(r.get('errors_count', 0) for r in results.values())
         warnings = sum(r.get('warnings_count', 0) for r in results.values())
         status = "critical" if errors > 0 else ("warning" if warnings > 0 else "healthy")
-        
+
         print("\n" + "=" * 60)
         print_colored(f"SYMBIOSIS GUARD STATUS: {status.upper()}", Colors.BOLD)
         print(f"Errors: {errors}, Warnings: {warnings}")
         print("=" * 60)
-        
+
         return results
 
     def scan_all_honeycombs(self):
@@ -327,9 +340,9 @@ class HoneycombScanner:
         print(f"Full check: {self.full_check}")
         print(f"Flags: validate_tasks={self.validate_tasks}, ahimsa={self.ahimsa}, deadlines={self.deadlines}, integrity={self.integrity}")
         print("=" * 60)
-        
+
         self._load_previous_state()
-        
+
         print("\n📂 Scanning honeycombs...")
         honeycombs_path = self.base_path / 'honeycombs'
         if honeycombs_path.exists():
@@ -337,15 +350,15 @@ class HoneycombScanner:
         else:
             print(f"❌ Honeycombs folder not found: {honeycombs_path}")
             return
-        
+
         guard_results = None
         if self.full_check or self.validate_tasks or self.ahimsa or self.deadlines or self.integrity:
             guard_results = self._run_symbiosis_guard()
-        
+
         save_scan_state(self.base_path, self.honeycombs, self.stats, guard_results,
-                       self.validate_tasks, self.ahimsa, self.deadlines, self.integrity)
+                        self.validate_tasks, self.ahimsa, self.deadlines, self.integrity)
         save_registry(self.base_path, self.honeycombs, self.stats, guard_results)
-        
+
         print("\n" + "=" * 60)
         print_colored("SCAN COMPLETE", Colors.BOLD)
         print("=" * 60)
@@ -356,7 +369,7 @@ class HoneycombScanner:
         print(f"Total errors: {self.stats['errors']}")
         print(f"Total warnings: {self.stats['warnings']}")
         print("=" * 60)
-        
+
         if self.stats["errors"] > 0:
             print_colored("⚠️  Scan completed with ERRORS", Colors.WARNING)
         else:
