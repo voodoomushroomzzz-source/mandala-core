@@ -165,14 +165,14 @@ class HoneycombScanner:
             is_valid, validation_details = self._validate_v2_structure(data)
             file_count, total_size_kb = self._count_honeycomb_files(honeycomb_dir)
             
-            # --- INBOX INDEX SUPPORT ---
+                        # --- INBOX INDEX SUPPORT ---
             if honeycomb_id == "honeycombs/seeds/inbox":
                 index_path = honeycomb_dir / "index.json"
                 if index_path.exists():
                     try:
-                        import json
+                        import json as json_mod
                         with open(index_path, 'r', encoding='utf-8') as f:
-                            index_data = json.load(f)
+                            index_data = json_mod.load(f)
                         processed_seeds = set()
                         processed_seeds.update(index_data.get("promoted_seeds", []))
                         processed_seeds.update(index_data.get("kept_seeds", []))
@@ -193,6 +193,10 @@ class HoneycombScanner:
                         print(f"  Warning: Could not read inbox index: {e}")
                         honeycomb_info_extra = {}
                 else:
+                    honeycomb_info_extra = {}
+            else:
+                honeycomb_info_extra = {}
+                            else:
                     honeycomb_info_extra = {}
             else:
                 honeycomb_info_extra = {}
