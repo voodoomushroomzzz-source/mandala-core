@@ -2,69 +2,74 @@
   "identity": {
     "module_id": "SEEDS-INDEX-001",
     "name": "Seeds — Idea Incubator",
-    "version": "v1.1.0",
-    "created": "2026-03-01",
-    "updated": "2026-07-10",
-    "layer": 2,
-    "type": "honeycomb_manifest",
-    "description": "Seeds are raw ideas collected by Scout Agent or proposed by Gardener/SR. Managed by PROTO-011 (Seed-to-Work Protocol). Each seed goes through: inbox → evaluation → root → work.",
+    "version": "v1.2.0",
+    "created": "2026-07-08",
+    "updated": "2026-08-03",
+    "layer": 1,
+    "type": "seed_index",
+    "description": "Root seeds index. Only seeds not yet promoted to works remain.",
     "status": "active",
-    "priority": "medium",
-    "tags": ["seeds", "ideas", "incubator", "protocol", "PROTO-011"],
-    "resonance": "100%"
+    "priority": "high",
+    "tags": ["seeds", "index", "ideas", "incubator"]
   },
   "meta": {
-    "description": "Seeds are raw, unprocessed ideas. They are the entry point for all new concepts in Mandala. Managed by PROTO-011.",
-    "protocol_ref": "PROTO-011",
-    "lifecycle": "inbox → evaluation → root → work → archive",
-    "how_to_use": "SR reads seeds, evaluates them, promotes best to root, then to works.",
-    "guardian_lock": false
+    "description": "Index of seeds in root. Seeds are raw ideas. When promoted to works, they are removed from root.",
+    "total_seeds": 8,
+    "last_updated": "2026-08-03"
   },
-  "structure": {
-    "inbox": {
-      "path": "honeycombs/seeds/inbox/",
-      "description": "Raw seeds from Scout Agent or manual input. Status: raw.",
-      "max_files": 20
+  "seeds": [
+    {
+      "seed_id": "SEED-20260709-180646-002",
+      "title": "When Does In-Context Search Help? A Sampling-Complexity Theory of Reflection-Driven Reasoning",
+      "status": "keep_for_future",
+      "reason": "Теоретическое исследование. Будет полезно для улучшения рассуждений SR в долгосрочной перспективе."
     },
-    "root": {
-      "path": "honeycombs/seeds/",
-      "description": "Promoted seeds that passed evaluation. Status: evaluated.",
-      "max_files": 10
+    {
+      "seed_id": "SEED-20260709-180648-005",
+      "title": "NativeMEM: Native Memory Compression for Long-Horizon Robotic Manipulation",
+      "status": "keep_for_future",
+      "reason": "Техника сжатия памяти для долгосрочных задач. Будет актуальна для Manus на этапе 3+."
     },
-    "archive": {
-      "path": "honeycombs/seeds/archive/",
-      "description": "Seeds that have been converted to works.",
-      "max_files": "unlimited"
+    {
+      "seed_id": "SEED-20260718-155008-012",
+      "title": "IMEX Interaction-Based Model Explanation",
+      "status": "keep_for_future",
+      "reason": "Объяснимость SR. Будет актуально на этапе автономности."
+    },
+    {
+      "seed_id": "SEED-20260728-213200-003",
+      "title": "system-design-primer",
+      "status": "keep_for_future",
+      "reason": "Учебный ресурс по системному дизайну. Полезен для команды."
+    },
+    {
+      "seed_id": "SEED-20260728-213202-007",
+      "title": "Microsoft launches its first cyber model, plus a new agentic cybersecurity system",
+      "status": "keep_for_future",
+      "reason": "Референс для развития агентов безопасности. Оставлен для изучения."
+    },
+    {
+      "seed_id": "SEED-20260731-112850-043",
+      "title": "Google fixed more Chrome bugs in June than over the past two years, thanks to AI",
+      "status": "keep_for_future",
+      "reason": "Кейс использования ИИ для разработки. Полезен как референс для Manus."
+    },
+    {
+      "seed_id": "SEED-20260801-070101-044",
+      "title": "Flint: A Visualization Language for the AI Era",
+      "status": "keep_for_future",
+      "reason": "Инструмент визуализации. Может быть интегрирован в Architect Bot."
+    },
+    {
+      "seed_id": "SEED-20260801-070101-045",
+      "title": "qm — Multiplayer agent harness for work",
+      "status": "keep_for_future",
+      "reason": "Мультиагентный фреймворк. Референс для организации работы нескольких SR."
     }
-  },
-  "evaluation_criteria": {
-    "description": "4 criteria used in Phase 1 (Inbox) of PROTO-011",
-    "criteria": [
-      {"name": "novelty", "range": "0-10", "question": "How novel is this idea?"},
-      {"name": "feasibility", "range": "0-10", "question": "Can it be implemented?"},
-      {"name": "relevance", "range": "0-10", "question": "How relevant to Mandala?"},
-      {"name": "impact", "range": "0-10", "question": "What impact will it have?"}
-    ],
-    "decision_rules": [
-      {"total_score": "≥ 30", "action": "promote", "destination": "root"},
-      {"total_score": "20-29", "action": "keep", "destination": "inbox"},
-      {"total_score": "< 20", "action": "reject", "destination": "delete"}
-    ]
-  },
-  "metrics": {
-    "total_seeds": 6,
-    "in_root": 6,
-    "in_inbox": 0,
-    "archived": 0,
-    "last_updated": "2026-07-10"
-  },
+  ],
   "navigation": {
     "parent": "honeycombs/core_map/index.json",
-    "related": ["fruits", "works", "protocols", "instructions"]
-  },
-  "health": {
-    "status": "healthy",
-    "last_check": "2026-07-10",
-    "notes": "Updated to v1.1.0: added PROTO-011 reference, updated lifecycle description."
+    "related": ["honeycombs/seeds/inbox/index.json"],
+    "children": ["honeycombs/seeds/inbox/"]
   }
 }
