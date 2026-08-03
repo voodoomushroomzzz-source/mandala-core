@@ -1,0 +1,32 @@
+{
+  "work_id": "W-T-20260803-RL-REASONING",
+  "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Исследование и внедрение RL-подхода для улучшения рассуждений SR. На основе семени 029: 'Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models'. Цель: переключить SR с SFT (заучивание) на RL (обучение через взаимодействие) для более глубокого понимания.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": ["W-T-20260511-ENGCHAT", "W-T-20260511-MANUS"],
+  "effort_estimate": "80-100 часов",
+  "progress": 0,
+  "tags": ["rl", "reasoning", "sr", "learning", "reinforcement"],
+  "deadline": "2026-10-31",
+  "created": "2026-08-03",
+  "updated": "2026-08-03",
+  "source": {
+    "type": "seed",
+    "seed_id": "SEED-20260731-070058-029",
+    "seed_file": "honeycombs/seeds/SEED-20260731-070058-029.json"
+  },
+  "research_seeds": [
+    {
+      "seed_id": "SEED-20260731-070058-029",
+      "title": "Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models",
+      "arxiv_url": "https://arxiv.org/abs/2607.26119",
+      "relevance": "Исходное исследование. Показывает, что RL-модели превосходят SFT в математическом мышлении благодаря качеству внутренних представлений, а не архитектуре. Даёт основу для перехода SR на RL.",
+      "integration": "Провести эксперименты с RL-обучением SR. Сравнить с текущими SFT-подходами. Разработать пайплайн для RL-обучения на основе задач Mandala."
+    }
+  ],
+  "notes": "Критическое исследование для улучшения reasoning-способностей SR. Требует экспериментов и интеграции с Engineer Chat и Manus."
+}
