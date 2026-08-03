@@ -165,6 +165,38 @@ class HoneycombScanner:
             is_valid, validation_details = self._validate_v2_structure(data)
             file_count, total_size_kb = self._count_honeycomb_files(honeycomb_dir)
             
+            # --- INBOX INDEX SUPPORT ---
+            if honeycomb_id == "honeycombs/seeds/inbox":
+                index_path = honeycomb_dir / "index.json"
+                if index_path.exists():
+                    try:
+                        import json
+                        with open(index_path, 'r', encoding='utf-8') as f:
+                            index_data = json.load(f)
+                        processed_seeds = set()
+                        processed_seeds.update(index_data.get("promoted_seeds", []))
+                        processed_seeds.update(index_data.get("kept_seeds", []))
+                        processed_seeds.update(index_data.get("rejected_seeds", []))
+                        processed_seeds.update(index_data.get("top_8_copied_to_root", []))
+                        
+                        all_files = [f for f in os.listdir(honeycomb_dir) if f.endswith('.json') and f != 'index.json']
+                        new_seeds = [f for f in all_files if f.replace('.json', '') not in processed_seeds]
+                        processed_count = len(all_files) - len(new_seeds)
+                        
+                        honeycomb_info_extra = {
+                            "inbox_processed_count": processed_count,
+                            "inbox_new_count": len(new_seeds),
+                            "new_seeds_list": new_seeds,
+                            "inbox_total_count": len(all_files)
+                        }
+                    except Exception as e:
+                        print(f"  Warning: Could not read inbox index: {e}")
+                        honeycomb_info_extra = {}
+                else:
+                    honeycomb_info_extra = {}
+            else:
+                honeycomb_info_extra = {}
+            
             honeycomb_info = {
                 "honeycomb_id": honeycomb_id,
                 "path": str(index_path),
