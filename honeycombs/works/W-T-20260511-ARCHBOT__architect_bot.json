@@ -4,21 +4,37 @@
   "status": "active",
   "priority": "HIGH",
   "horizon": "tactical",
-  "description": "Develop Architect Bot — a personal Telegram bot for the Architect (Dima) that serves as a mobile interface to Engineer Chat and Manus. Unlike the Gentle Companion (which is a sandbox for external gardeners), Architect Bot is an engineer's tool with elevated rights, direct access to Mandala's core, and the ability to control Manus and view sandbox analytics.",
+  "description": "Develop Architect Bot — a personal Telegram bot for the Architect (Dima) that serves as a mobile interface to Engineer Chat and Manus. Unlike the Gentle Companion (which is a sandbox for external gardeners), Architect Bot is an engineer's tool with elevated rights, direct access to Mandala's core, and the ability to control Manus and view sandbox analytics. Архитектура усиливается исследованиями по проактивным агентам и визуализации данных.",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
   "effort_estimate": null,
   "progress": 0,
-  "tags": [],
+  "tags": ["architect_bot", "telegram", "mobile", "control_panel", "proactive", "visualization"],
   "deadline": "2026-09-15",
   "created": "2026-05-11",
-  "updated": "2026-07-13",
+  "updated": "2026-08-03",
   "source": {
     "type": "task",
     "original_id": "T-20260511-ARCHBOT",
     "original_file": "architect_bot.json",
     "roadmap_ref": ""
   },
-  "notes": ""
+  "research_seeds": [
+    {
+      "seed_id": "SEED-20260710-070127-016",
+      "title": "Context Graphs for Proactive Enterprise Agents",
+      "arxiv_url": "https://arxiv.org/abs/2607.07721",
+      "relevance": "Критическое исследование для Architect Bot. Предлагает архитектуру проактивных агентов, которые не ждут запроса, а сами предлагают релевантную информацию. Это превращает Architect Bot из реактивного инструмента в активного помощника.",
+      "integration": "Интегрировать концепцию Context Graphs в Architect Bot. Использовать для построения проактивных уведомлений (системные события, новые семена, отчёты). Реализовать механизм предсказания потребностей Архитектора на основе контекста."
+    },
+    {
+      "seed_id": "SEED-20260801-070101-044",
+      "title": "Flint: A Visualization Language for the AI Era",
+      "github_url": "https://microsoft.github.io/flint-chart/",
+      "relevance": "Исследование для улучшения визуализации данных в Architect Bot. Flint предлагает язык для создания интерактивных визуализаций, адаптированных для эпохи ИИ. Это позволяет Architect Bot отображать сложные данные (состояние системы, метрики, графы) в наглядном виде.",
+      "integration": "Адаптировать Flint для Architect Bot. Использовать для визуализации системных метрик, аналитики песочницы, графов знаний и резонанса. Интегрировать с Telegram (отправка изображений/диаграмм)."
+    }
+  ],
+  "notes": "Интегрированы исследования по проактивным агентам и визуализации данных (016, 044)."
 }
