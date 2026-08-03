@@ -1,0 +1,112 @@
+{
+  "identity": {
+    "module_id": "SEEDS-INBOX-INDEX-001",
+    "name": "Seeds Inbox Index",
+    "version": "v1.0.0",
+    "created": "2026-08-03",
+    "updated": "2026-08-03",
+    "layer": 3,
+    "type": "seed_inbox_index",
+    "status": "active",
+    "description": "Processing log for seeds in inbox. Tracks which seeds were analyzed, promoted, kept, or rejected.",
+    "tags": ["seeds", "inbox", "index", "processing-log"]
+  },
+  "meta": {
+    "description": "Single source of truth for seed processing state. Prevents duplicate analysis and provides continuity across sessions.",
+    "last_processed": "2026-08-03",
+    "processed_by": "DeepSeek SR",
+    "total_seeds_in_inbox": 53,
+    "analyzed": 53
+  },
+  "summary": {
+    "promoted_to_root": 17,
+    "kept_in_inbox": 11,
+    "rejected": 25,
+    "top_8_copied_to_root": 8
+  },
+  "promoted_seeds": [
+    "SEED-20260729-070101-002",
+    "SEED-20260729-070101-014",
+    "SEED-20260729-070101-019",
+    "SEED-20260729-070101-022",
+    "SEED-20260731-070058-029",
+    "SEED-20260731-070058-030",
+    "SEED-20260731-070058-032",
+    "SEED-20260731-070058-039",
+    "SEED-20260731-070058-040",
+    "SEED-20260731-070059-041",
+    "SEED-20260731-112850-042",
+    "SEED-20260731-112850-043",
+    "SEED-20260801-070101-044",
+    "SEED-20260801-070101-045",
+    "SEED-20260801-070101-047",
+    "SEED-20260801-070101-048"
+  ],
+  "kept_seeds": [
+    "SEED-20260729-070101-001",
+    "SEED-20260729-070101-012",
+    "SEED-20260729-070103-015",
+    "SEED-20260730-070059-021",
+    "SEED-20260730-070100-024",
+    "SEED-20260730-070100-026",
+    "SEED-20260731-070058-033",
+    "SEED-20260801-070101-046",
+    "SEED-20260801-070101-049",
+    "SEED-20260801-070101-052",
+    "SEED-20260801-103933-053"
+  ],
+  "rejected_seeds": [
+    "SEED-20260729-070101-003",
+    "SEED-20260729-070101-004",
+    "SEED-20260729-070101-005",
+    "SEED-20260729-070101-006",
+    "SEED-20260729-070101-007",
+    "SEED-20260729-070101-008",
+    "SEED-20260729-070101-009",
+    "SEED-20260729-070101-010",
+    "SEED-20260729-070102-011",
+    "SEED-20260729-070102-013",
+    "SEED-20260729-070103-016",
+    "SEED-20260729-070103-017",
+    "SEED-20260729-070103-018",
+    "SEED-20260729-112543-020",
+    "SEED-20260730-070059-023",
+    "SEED-20260730-070100-025",
+    "SEED-20260730-070100-028",
+    "SEED-20260731-070058-031",
+    "SEED-20260731-070058-034",
+    "SEED-20260731-070058-035",
+    "SEED-20260731-070058-036",
+    "SEED-20260731-070058-037",
+    "SEED-20260731-070058-038",
+    "SEED-20260801-070101-050",
+    "SEED-20260801-070101-051"
+  ],
+  "top_8_copied_to_root": [
+    "SEED-20260731-070058-030",
+    "SEED-20260731-070058-029",
+    "SEED-20260731-070059-041",
+    "SEED-20260801-070101-047",
+    "SEED-20260731-070058-032",
+    "SEED-20260801-070101-045",
+    "SEED-20260801-070101-044",
+    "SEED-20260731-112850-043"
+  ],
+  "next_session": {
+    "instruction": "Read this file before processing inbox/ again. Check 'kept_seeds' and 'rejected_seeds' to avoid duplicates.",
+    "start_from": "kept_seeds",
+    "note": "These seeds need re-evaluation in the next iteration."
+  },
+  "navigation": {
+    "parent": "honeycombs/seeds/index.json",
+    "related": [
+      "honeycombs/seeds/index.json",
+      "honeycombs/registry/scan_state.json"
+    ]
+  },
+  "health": {
+    "status": "ok",
+    "last_check": "2026-08-03",
+    "notes": "First processing session completed. 53 seeds analyzed."
+  }
+}
