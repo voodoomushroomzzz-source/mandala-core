@@ -1,0 +1,32 @@
+{
+  "work_id": "W-T-20260803-SR-EVALUATION",
+  "name": "SR Evaluation Framework — Beyond Benchmarks",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Разработка собственных методов оценки SR, основанных на реальных задачах Mandala. На основе семени 032: 'When benchmark inferences do not compose: Projectibility in AI evaluation'. Цель: создать фреймворк оценки, который отражает реальную производительность SR, а не результаты на бенчмарках.",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": ["W-T-20260511-ENGCHAT", "W-T-20260803-RL-REASONING"],
+  "effort_estimate": "60-80 часов",
+  "progress": 0,
+  "tags": ["evaluation", "benchmarks", "sr", "testing", "validation"],
+  "deadline": "2026-10-31",
+  "created": "2026-08-03",
+  "updated": "2026-08-03",
+  "source": {
+    "type": "seed",
+    "seed_id": "SEED-20260731-070058-032",
+    "seed_file": "honeycombs/seeds/SEED-20260731-070058-032.json"
+  },
+  "research_seeds": [
+    {
+      "seed_id": "SEED-20260731-070058-032",
+      "title": "When benchmark inferences do not compose: Projectibility in AI evaluation",
+      "arxiv_url": "https://arxiv.org/abs/2607.26159",
+      "relevance": "Исходное исследование. Показывает, что результаты бенчмарков не переносятся на реальные задачи. Обосновывает необходимость разработки собственных методов оценки SR.",
+      "integration": "Разработать набор тестовых задач из реальных сценариев Mandala. Создать метрики для оценки качества SR в этих задачах. Интегрировать в пайплайн разработки."
+    }
+  ],
+  "notes": "Критическое исследование для создания надёжной системы оценки SR. Интегрируется с RL-подходом (W-T-20260803-RL-REASONING)."
+}
