@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.58",
+    "version": "v1.7.59",
     "created": "2026-05-11",
     "updated": "2026-08-03",
     "layer": 1,
@@ -1693,12 +1693,12 @@
       "identity": {
         "module_id": "WORKS-MANIFEST-001",
         "name": "Works — Unified System of Work Items",
-        "version": "v1.0.11",
+        "version": "v1.0.12",
         "created": "2026-07-08",
-        "updated": "2026-07-14",
+        "updated": "2026-08-03",
         "layer": 1,
         "type": "work_manifest",
-        "description": "Single source of truth for all work items (tasks, roadmaps, initiatives). Replaces separate tasks/ and roadmaps/.",
+        "description": "Single source of truth for all work items. Updated with new research works for RL and SR evaluation.",
         "status": "active",
         "priority": "critical",
         "tags": [
@@ -1711,19 +1711,14 @@
         "resonance": "100%"
       },
       "meta": {
-        "description": "All work items live in honeycombs/works/. Each file represents a single work item. Horizon and scope are defined by fields, not by folder.",
-        "purpose": "Simplify Mandala core by unifying tasks and roadmaps into a single flexible structure.",
+        "description": "All work items live in honeycombs/works/.",
+        "purpose": "Simplify Mandala core by unifying tasks and roadmaps.",
         "principles": [
           "One work item — one file",
-          "Horizon is defined by 'horizon' field (strategic/tactical), not by folder",
+          "Horizon is defined by 'horizon' field",
           "Hierarchy is defined by 'parent_work' and 'sub_works' fields",
-          "No duplicate logic — one scanner, one index, one structure"
-        ],
-        "migration_from": {
-          "tasks": "honeycombs/tasks/active/",
-          "roadmaps": "honeycombs/roadmaps/active/"
-        },
-        "new_location": "honeycombs/works/"
+          "No duplicate logic"
+        ]
       },
       "schema": {
         "required_fields": [
@@ -1744,55 +1739,23 @@
           "progress",
           "tags",
           "deadline"
-        ],
-        "field_definitions": {
-          "work_id": "Unique identifier (format: W-YYYYMMDD-NNN)",
-          "name": "Short, descriptive title",
-          "status": "One of: planning, in_progress, active, done, archived, paused",
-          "priority": "One of: critical, high, medium, low",
-          "horizon": "strategic (roadmap-level) or tactical (task-level)",
-          "description": "Detailed explanation of the work",
-          "parent_work": "work_id of parent (null if root)",
-          "sub_works": "Array of child work_ids (empty if none)",
-          "depends_on": "Array of work_ids this depends on",
-          "effort_estimate": "Human-readable estimate (e.g., '40-60 hours')",
-          "progress": "Integer 0-100",
-          "tags": "Array of strings for categorization",
-          "deadline": "Date in YYYY-MM-DD format (optional)",
-          "created": "Date in YYYY-MM-DD format",
-          "updated": "Date in YYYY-MM-DD format"
-        },
-        "validation_rules": [
-          "work_id must be unique across all works",
-          "horizon must be either 'strategic' or 'tactical'",
-          "If sub_works is not empty, horizon should be 'strategic'",
-          "If sub_works is empty, horizon can be 'tactical' or 'strategic'",
-          "parent_work must reference an existing work_id",
-          "depends_on must reference existing work_ids",
-          "progress must be between 0 and 100"
         ]
       },
-      "structure": {
-        "description": "Flat structure: all work files in honeycombs/works/",
-        "files": "Each file is a single work item (JSON)",
-        "naming": "work_id.json (e.g., W-20260708-001.json)",
-        "index": "This file (index.json) serves as the registry"
-      },
       "manifest": {
-        "total_works": 20,
+        "total_works": 22,
         "by_status": {
           "active": 8,
-          "planning": 11,
+          "planning": 13,
           "in_progress": 0,
           "done": 1
         },
         "by_horizon": {
           "strategic": 10,
-          "tactical": 10
+          "tactical": 12
         },
         "by_priority": {
           "critical": 5,
-          "high": 8,
+          "high": 10,
           "medium": 5,
           "low": 2
         },
@@ -1816,7 +1779,9 @@
           "W-R-ROSE-001",
           "W-T-20260728-AI-GATEWAY",
           "W-T-20260728-CYBER-AGENTS",
-          "W-R-20260803-KURTOCH-FRANCHISE"
+          "W-R-20260803-KURTOCH-FRANCHISE",
+          "W-T-20260803-RL-REASONING",
+          "W-T-20260803-SR-EVALUATION"
         ],
         "deadlines": {
           "W-T-20260511-MANUS": "2026-08-31"
@@ -1840,6 +1805,14 @@
           ],
           "W-T-20260728-CYBER-AGENTS": [
             "W-T-20260728-AI-GATEWAY"
+          ],
+          "W-T-20260803-RL-REASONING": [
+            "W-T-20260511-ENGCHAT",
+            "W-T-20260511-MANUS"
+          ],
+          "W-T-20260803-SR-EVALUATION": [
+            "W-T-20260511-ENGCHAT",
+            "W-T-20260803-RL-REASONING"
           ]
         }
       },
@@ -1852,10 +1825,10 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-07-14",
-        "notes": "v1.0.11: added W-R-ROSE-001 (Rose World Ethical Filter). Total works: 17."
+        "last_check": "2026-08-03",
+        "notes": "v1.0.12: added W-T-20260803-RL-REASONING and W-T-20260803-SR-EVALUATION. Total works: 22."
       },
-      "updated": "2026-07-28"
+      "updated": "2026-08-03"
     }
   },
   "step_9_knowledge": {
