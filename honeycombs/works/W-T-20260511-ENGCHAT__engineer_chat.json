@@ -4,21 +4,51 @@
   "status": "active",
   "priority": "HIGH",
   "horizon": "tactical",
-  "description": "Transform Engineer Chat from a standalone WebSocket analysis tool into the central integration hub of Mandala. Engineer Chat is already live (v4.0.0-simbiosis, main.py on Render) and serves as the Architect's primary interface for repository analysis, code review, and web search. This task adds: Architect Bot WebSocket integration, Manus direct control, sandbox analytics dashboards, and the data pipeline from Gentle Companion observations into actionable insights.",
+  "description": "Transform Engineer Chat from a standalone WebSocket analysis tool into the central integration hub of Mandala. Engineer Chat is already live (v4.0.0-simbiosis, main.py on Render) and serves as the Architect's primary interface for repository analysis, code review, and web search. This task adds: Architect Bot WebSocket integration, Manus direct control, sandbox analytics dashboards, and the data pipeline from Gentle Companion observations into actionable insights. Архитектура усиливается исследованиями по улучшению работы с графами знаний, причинно-следственными цепочками и проверкой фактов.",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
   "effort_estimate": null,
   "progress": 0,
-  "tags": [],
+  "tags": ["engineer_chat", "integration", "brain", "websocket", "analytics", "knowledge_graph"],
   "deadline": "2026-08-15",
   "created": "2026-05-11",
-  "updated": "2026-07-13",
+  "updated": "2026-08-03",
   "source": {
     "type": "task",
     "original_id": "T-20260511-ENGCHAT",
     "original_file": "engineer_chat.json",
     "roadmap_ref": ""
   },
-  "notes": ""
+  "research_seeds": [
+    {
+      "seed_id": "SEED-20260718-155008-011",
+      "title": "HG-RAG: Hierarchy-Guided Retrieval-Augmented Generation for Structured Knowledge Graphs",
+      "arxiv_url": "https://arxiv.org/abs/2607.14095",
+      "relevance": "Критическое исследование для улучшения работы Engineer Chat с базами знаний. HG-RAG позволяет использовать иерархические графы для более точного извлечения и генерации информации. Это повышает качество ответов на сложные запросы.",
+      "integration": "Интегрировать HG-RAG в модуль поиска Engineer Chat. Использовать для улучшения RAG-пайплайна при работе с repository и документацией. Адаптировать для работы с иерархическими структурами данных в Mandala."
+    },
+    {
+      "seed_id": "SEED-20260720-070103-040",
+      "title": "Causal-Audit: Explicit and Auditable Graph-based Reasoning via Target-Aware Causal Chain Construction",
+      "arxiv_url": "https://arxiv.org/abs/2607.15281",
+      "relevance": "Исследование для улучшения объяснимости Engineer Chat. Позволяет строить явные причинно-следственные цепочки для обоснования решений. Это критически важно для Architect Bot, где нужна прозрачность.",
+      "integration": "Внедрить Causal-Audit в модуль анализа Engineer Chat. Использовать для построения объяснений к ответам и рекомендациям. Интегрировать с существующими механизмами логирования."
+    },
+    {
+      "seed_id": "SEED-20260722-070104-107",
+      "title": "Calibrated Selective Fact-Checking via Evidence Chain Evaluation",
+      "arxiv_url": "https://arxiv.org/abs/2607.18240",
+      "relevance": "Фреймворк для калиброванной проверки фактов. Вместо бинарного 'верно/неверно' выдаёт оценку уверенности на основе цепочки доказательств. Повышает надёжность ответов Engineer Chat.",
+      "integration": "Интегрировать в модуль верификации Engineer Chat. Использовать для оценки уверенности в ответах перед их выдачей. Адаптировать для работы с различными типами источников (код, документация, web)."
+    },
+    {
+      "seed_id": "SEED-20260722-070104-109",
+      "title": "AI Tool Discovery at Scale: All You Need is DNS",
+      "arxiv_url": "https://arxiv.org/abs/2607.18242",
+      "relevance": "Архитектурное решение для обнаружения инструментов через DNS. Позволяет Engineer Chat децентрализованно находить и каталогизировать внешние API и сервисы. Расширяет возможности интеграции.",
+      "integration": "Адаптировать концепцию DNS Discovery для Manus и Engineer Chat. Использовать для динамического обнаружения доступных инструментов и API. Интегрировать с системой белых списков."
+    }
+  ],
+  "notes": "Интегрированы исследования по улучшению работы с графами знаний, причинно-следственными цепочками, проверкой фактов и обнаружением инструментов (011, 040, 107, 109)."
 }
