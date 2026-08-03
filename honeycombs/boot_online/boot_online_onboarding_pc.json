@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.59",
+    "version": "v1.7.60",
     "created": "2026-05-11",
     "updated": "2026-08-03",
     "layer": 1,
@@ -1693,12 +1693,12 @@
       "identity": {
         "module_id": "WORKS-MANIFEST-001",
         "name": "Works — Unified System of Work Items",
-        "version": "v1.0.12",
+        "version": "v1.0.13",
         "created": "2026-07-08",
         "updated": "2026-08-03",
         "layer": 1,
         "type": "work_manifest",
-        "description": "Single source of truth for all work items. Updated with new research works for RL and SR evaluation.",
+        "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
         "status": "active",
         "priority": "critical",
         "tags": [
@@ -1711,7 +1711,7 @@
         "resonance": "100%"
       },
       "meta": {
-        "description": "All work items live in honeycombs/works/.",
+        "description": "All work items live in honeycombs/works/. Each file represents a single work item.",
         "purpose": "Simplify Mandala core by unifying tasks and roadmaps.",
         "principles": [
           "One work item — one file",
@@ -1784,8 +1784,54 @@
           "W-T-20260803-SR-EVALUATION"
         ],
         "deadlines": {
-          "W-T-20260511-MANUS": "2026-08-31"
+          "W-R-RC-001__visibility_strategy": null,
+          "W-R-RC-002__company_vessel": null,
+          "W-R-RM-011__merkaba_visualizations": "2026-08-01",
+          "W-R-RM-012__living_products_mvps": null,
+          "W-R-RM-014__gardener_transition": null,
+          "W-T-20260408-1030__gentle_companion_bot": null,
+          "W-T-20260417-HUMOR__humor_development": null,
+          "W-T-20260418-SYM__sym_growth_system": null,
+          "W-T-20260427-FLUTTER__flutter_app": null,
+          "W-T-20260511-ARCHBOT__architect_bot": "2026-09-15",
+          "W-T-20260511-ENGCHAT__engineer_chat": "2026-08-15",
+          "W-T-20260511-MANUS__manus_hands": "2026-08-31",
+          "W-R-ECO-001": null,
+          "W-R-ECOMM-001": null,
+          "W-T-20260713-YOUTUBE_GAMING_CHANNEL": null,
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO": null,
+          "W-R-ROSE-001": "2026-12-31",
+          "W-T-20260728-AI-GATEWAY": "2026-09-30",
+          "W-T-20260728-CYBER-AGENTS": "2026-10-31",
+          "W-R-20260803-KURTOCH-FRANCHISE": null,
+          "W-T-20260803-RL-REASONING": "2026-10-31",
+          "W-T-20260803-SR-EVALUATION": "2026-10-31"
         },
+        "progress": {
+          "W-R-RC-001__visibility_strategy": 0,
+          "W-R-RC-002__company_vessel": 0,
+          "W-R-RM-011__merkaba_visualizations": 0,
+          "W-R-RM-012__living_products_mvps": 0,
+          "W-R-RM-014__gardener_transition": 0,
+          "W-T-20260408-1030__gentle_companion_bot": 65,
+          "W-T-20260417-HUMOR__humor_development": 0,
+          "W-T-20260418-SYM__sym_growth_system": 0,
+          "W-T-20260427-FLUTTER__flutter_app": 0,
+          "W-T-20260511-ARCHBOT__architect_bot": 0,
+          "W-T-20260511-ENGCHAT__engineer_chat": 0,
+          "W-T-20260511-MANUS__manus_hands": 0,
+          "W-R-ECO-001": 0,
+          "W-R-ECOMM-001": 0,
+          "W-T-20260713-YOUTUBE_GAMING_CHANNEL": 0,
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO": 0,
+          "W-R-ROSE-001": 0,
+          "W-T-20260728-AI-GATEWAY": 0,
+          "W-T-20260728-CYBER-AGENTS": 0,
+          "W-R-20260803-KURTOCH-FRANCHISE": 0,
+          "W-T-20260803-RL-REASONING": 0,
+          "W-T-20260803-SR-EVALUATION": 0
+        },
+        "progress_updated": "2026-08-03",
         "related_works": {
           "W-R-ECOMM-001": [
             "W-R-RM-014"
@@ -1826,7 +1872,7 @@
       "health": {
         "status": "active",
         "last_check": "2026-08-03",
-        "notes": "v1.0.12: added W-T-20260803-RL-REASONING and W-T-20260803-SR-EVALUATION. Total works: 22."
+        "notes": "v1.0.13: added full deadlines and progress for all works. Progress updated for Gentle Companion (65%)."
       },
       "updated": "2026-08-03"
     }
