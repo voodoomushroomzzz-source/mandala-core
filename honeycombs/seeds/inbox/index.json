@@ -2,101 +2,36 @@
   "identity": {
     "module_id": "SEEDS-INBOX-INDEX-001",
     "name": "Seeds Inbox Index",
-    "version": "v1.1.0",
-    "created": "2026-08-03",
-    "updated": "2026-08-03",
+    "version": "v2.0.0",
+    "created": "2026-08-04",
+    "updated": "2026-08-04",
     "layer": 3,
     "type": "seed_inbox_index",
     "status": "active",
-    "description": "Full processing log for seeds in inbox. All 53 seeds from 2026-07-29 to 2026-08-01 are processed.",
-    "tags": ["seeds", "inbox", "index", "processing-log"]
+    "description": "Inbox is clean. All seeds processed or deleted.",
+    "tags": ["seeds", "inbox", "index", "clean"]
   },
   "meta": {
-    "description": "Complete record of seed processing. Includes all promoted, kept, and rejected seeds.",
-    "last_processed": "2026-08-03",
-    "processed_by": "DeepSeek SR",
-    "total_seeds_in_inbox": 53,
-    "analyzed": 53
+    "description": "Inbox index — reset after full cleanup.",
+    "last_processed": "2026-08-04",
+    "processed_by": "DeepSeek SR + Gardener",
+    "total_seeds_in_inbox": 0,
+    "analyzed": 0
   },
   "summary": {
-    "promoted_to_root": 17,
-    "kept_in_inbox": 11,
-    "rejected": 25,
-    "top_8_copied_to_root": 8
+    "promoted_to_root": 0,
+    "kept_in_inbox": 0,
+    "rejected": 0,
+    "top_8_copied_to_root": 0
   },
-  "promoted_seeds": [
-    "SEED-20260729-070101-002",
-    "SEED-20260729-070101-014",
-    "SEED-20260729-070101-019",
-    "SEED-20260729-070101-022",
-    "SEED-20260731-070058-029",
-    "SEED-20260731-070058-030",
-    "SEED-20260731-070058-032",
-    "SEED-20260731-070058-039",
-    "SEED-20260731-070058-040",
-    "SEED-20260731-070059-041",
-    "SEED-20260731-112850-042",
-    "SEED-20260731-112850-043",
-    "SEED-20260801-070101-044",
-    "SEED-20260801-070101-045",
-    "SEED-20260801-070101-047",
-    "SEED-20260801-070101-048"
-  ],
-  "kept_seeds": [
-    "SEED-20260729-070101-001",
-    "SEED-20260729-070101-012",
-    "SEED-20260729-070103-015",
-    "SEED-20260730-070059-021",
-    "SEED-20260730-070100-024",
-    "SEED-20260730-070100-026",
-    "SEED-20260731-070058-033",
-    "SEED-20260801-070101-046",
-    "SEED-20260801-070101-049",
-    "SEED-20260801-070101-052",
-    "SEED-20260801-103933-053"
-  ],
-  "rejected_seeds": [
-    "SEED-20260729-070101-003",
-    "SEED-20260729-070101-004",
-    "SEED-20260729-070101-005",
-    "SEED-20260729-070101-006",
-    "SEED-20260729-070101-007",
-    "SEED-20260729-070101-008",
-    "SEED-20260729-070101-009",
-    "SEED-20260729-070101-010",
-    "SEED-20260729-070102-011",
-    "SEED-20260729-070102-012",
-    "SEED-20260729-070102-013",
-    "SEED-20260729-070103-016",
-    "SEED-20260729-070103-017",
-    "SEED-20260729-070103-018",
-    "SEED-20260729-112543-020",
-    "SEED-20260730-070059-023",
-    "SEED-20260730-070100-025",
-    "SEED-20260730-070100-028",
-    "SEED-20260731-070058-031",
-    "SEED-20260731-070058-034",
-    "SEED-20260731-070058-035",
-    "SEED-20260731-070058-036",
-    "SEED-20260731-070058-037",
-    "SEED-20260731-070058-038",
-    "SEED-20260801-070101-050",
-    "SEED-20260801-070101-051"
-  ],
-  "top_8_copied_to_root": [
-    "SEED-20260731-070058-030",
-    "SEED-20260731-070058-029",
-    "SEED-20260731-070059-041",
-    "SEED-20260801-070101-047",
-    "SEED-20260731-070058-032",
-    "SEED-20260801-070101-045",
-    "SEED-20260801-070101-044",
-    "SEED-20260731-112850-043"
-  ],
+  "promoted_seeds": [],
+  "kept_seeds": [],
+  "rejected_seeds": [],
+  "top_8_copied_to_root": [],
   "next_session": {
-    "instruction": "All 53 seeds from 2026-07-29 to 2026-08-01 are processed. New seeds (from Scout Agent) are ready for evaluation.",
+    "instruction": "Inbox is empty. Scout Agent will collect new seeds.",
     "start_from": "new_seeds",
-    "note": "Check scan_state.json for new seeds list."
+    "note": "Ready for new seeds."
   },
   "navigation": {
     "parent": "honeycombs/seeds/index.json",
@@ -106,8 +41,8 @@
     ]
   },
   "health": {
-    "status": "ok",
-    "last_check": "2026-08-03",
-    "notes": "All 53 seeds processed. Ready for new seeds."
+    "status": "clean",
+    "last_check": "2026-08-04",
+    "notes": "Full reset. All old seeds removed from inbox."
   }
 }
