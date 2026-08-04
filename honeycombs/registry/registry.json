@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 19,
-    "total_size_kb": 1184.53,
+    "total_size_kb": 1184.65,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 19,
-    "total_size_kb": 1184.53,
+    "total_size_kb": 1184.65,
     "last_updated": "2026-08-04",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
