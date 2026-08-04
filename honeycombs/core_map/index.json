@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "HONEYCOMB-CORE-MAP-001",
     "name": "Core System Map",
-    "version": "v3.9.3",
+    "version": "v3.10.0",
     "created": "2026-03-01",
-    "updated": "2026-07-15",
+    "updated": "2026-08-04",
     "layer": 1,
     "type": "critical_directive",
     "description": "Base map of all Mandala Symbiosis components. v3.9.3: added handoff links for session continuity.",
@@ -192,7 +192,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-07-15",
-    "notes": "v3.9.3: unified paths, handoff links, scanner/workflow refs."
+    "notes": "v3.10.0: added rose_world to references and children."
   },
   "navigation": {
     "parent": "honeycombs/boot_online/index.json",

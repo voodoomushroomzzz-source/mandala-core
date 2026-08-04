@@ -62,9 +62,9 @@
       "identity": {
         "module_id": "HONEYCOMB-CORE-MAP-001",
         "name": "Core System Map",
-        "version": "v3.9.3",
+        "version": "v3.10.0",
         "created": "2026-03-01",
-        "updated": "2026-07-15",
+        "updated": "2026-08-04",
         "layer": 1,
         "type": "critical_directive",
         "description": "Base map of all Mandala Symbiosis components. v3.9.3: added handoff links for session continuity.",
@@ -252,7 +252,7 @@
       "health": {
         "status": "healthy",
         "last_check": "2026-07-15",
-        "notes": "v3.9.3: unified paths, handoff links, scanner/workflow refs."
+        "notes": "v3.10.0: added rose_world to references and children."
       },
       "navigation": {
         "parent": "honeycombs/boot_online/index.json",
@@ -2283,6 +2283,11 @@
     "description": "Knowledge Base — Curated Resources",
     "source": "honeycombs/knowledge/index.json",
     "note": "Auto-embedded from source. Contains tools, guides, frameworks, and external resources."
+  },
+  "rose_world_index": {
+    "description": "Rose World — этический фильтр Мандалы Симбиоза",
+    "source": "honeycombs/rose_world/index.json",
+    "note": "Auto-embedded from source. Contains the ethical filter \"Роза Мира\" — 7 petals of symbiosis and consciousness."
   },
   "self_learning_system": {
     "desc": "Capture errors/patterns into instruction files. SR proposes → Gardener approves → patch.",

@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-BUILDER-001",
     "name": "Boot Online Onboarding PC — Auto-Build Master",
-    "version": "v1.2.0",
+    "version": "v1.3.0",
     "created": "2026-07-07",
-    "updated": "2026-07-09",
+    "updated": "2026-08-04",
     "description": "Master file that defines how boot_online_onboarding_pc.json is auto-built from source modules.",
     "status": "active"
   },
@@ -204,6 +204,11 @@
       "description": "Knowledge Base — Curated Resources",
       "source": "honeycombs/knowledge/index.json",
       "note": "Auto-embedded from source. Contains tools, guides, frameworks, and external resources."
+    },
+    "rose_world_index": {
+      "description": "Rose World — этический фильтр Мандалы Симбиоза",
+      "source": "honeycombs/rose_world/index.json",
+      "note": "Auto-embedded from source. Contains the ethical filter \"Роза Мира\" — 7 petals of symbiosis and consciousness."
     }
   },
   "source_modules": {
@@ -236,6 +241,9 @@
     },
     "knowledge": {
       "path": "honeycombs/knowledge/index.json"
+    },
+    "rose_world": {
+      "path": "honeycombs/rose_world/index.json"
     }
   },
   "optional_modules": {
@@ -264,7 +272,8 @@
       "honeycombs/instructions/mobile_workflow.json",
       "honeycombs/works/index.json",
       "honeycombs/fruits/index.json",
-      "honeycombs/protocols/index.json"
+      "honeycombs/protocols/index.json",
+      "honeycombs/rose_world/index.json"
     ],
     "builder_script": "honeycombs/scripts/build_onboarding.py",
     "version_strategy": "increment_minor",
