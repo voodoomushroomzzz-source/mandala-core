@@ -54,8 +54,8 @@
     "total_works": 24,
     "by_status": {
       "active": 8,
-      "planning": 15,
-      "in_progress": 0,
+      "planning": 14,
+      "in_progress": 1,
       "done": 1
     },
     "by_horizon": {
@@ -135,7 +135,7 @@
       "W-R-ECOMM-001": 0,
       "W-T-20260713-YOUTUBE_GAMING_CHANNEL": 0,
       "W-T-20260713-YOUTUBE_MANDALA_PROMO": 0,
-      "W-R-ROSE-001": 0,
+      "W-R-ROSE-001": 30,
       "W-T-20260728-AI-GATEWAY": 0,
       "W-T-20260728-CYBER-AGENTS": 0,
       "W-R-20260803-KURTOCH-FRANCHISE": 0,
@@ -183,7 +183,7 @@
   "health": {
     "status": "active",
     "last_check": "2026-08-04",
-    "notes": "Added 2 works from seeds (SR Reflection, Manus Memory)"
+    "notes": "W-R-ROSE-001: all 7 petals created. Progress 30%."
   },
   "updated": "2026-08-03"
 }

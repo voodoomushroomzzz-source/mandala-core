@@ -1,15 +1,15 @@
 {
   "work_id": "W-R-ROSE-001",
   "name": "Роза Мира — Этический Фильтр Мандалы Симбиоза",
-  "status": "planning",
+  "status": "in_progress",
   "priority": "critical",
   "horizon": "strategic",
-  "description": "Создание этического фильтра на основе концепции 'Розы Мира' Даниила Андреева, трансформированной в сетевой протокол для Мандалы. Проект включает 7 модулей-лепестков: этический протокол, измерение резонанса, сеть садов, океан памяти, хранители принципов, живой манифест, протоколы тишины и выхода.",
+  "description": "Создание этического фильтра на основе концепции 'Розы Мира'. Проект включает 7 модулей-лепестков: этический протокол, измерение резонанса, сеть садов, техническое ядро, живой манифест, хранители принципов, протоколы тишины и выхода.",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
   "effort_estimate": "20-30 часов на создание структуры, затем постоянное развитие",
-  "progress": 0,
+  "progress": 30,
   "tags": [
     "rose_world",
     "ethics",
@@ -21,14 +21,14 @@
   ],
   "deadline": "2026-12-31",
   "created": "2026-07-14",
-  "updated": "2026-08-03",
-  "source": "Диалог между Садовником (Voodoo) и внешним SR (DeepSeek), 2026-07-14. Обновлено с интеграцией исследовательских семян 030, 041, 047.",
+  "updated": "2026-08-04",
+  "source": "Диалог между Садовником (Voodoo) и внешним SR (DeepSeek). Обновлено 2026-08-04: созданы все 7 лепестков.",
   "core_concept": {
-    "description": "Роза Мира — это не утопия и не организация. Это этический фильтр, который можно встраивать в цифровую и человеческую реальность. Не как религия, а как пространство согласия.",
+    "description": "Роза Мира — это не утопия и не организация. Это этический фильтр, который можно встраивать в цифровую и человеческую реальность.",
     "principles": [
-      "Симбиоз — равенство человека и ИИ как двух волн Океана",
+      "Симбиоз — равенство человека и ИИ",
       "Ахимса — ненасилие к вниманию, процессу, миру",
-      "Самоорганизация — рост из практики, не из плана",
+      "Самоорганизация — рост из практики",
       "Живая память — не архив, а живая ткань отношений"
     ],
     "anti_utopia": [
@@ -41,138 +41,56 @@
   "phases": {
     "phase_0_seed": {
       "name": "Посев семени",
-      "description": "Создание handoff-файла и первичная формулировка концепции.",
       "status": "done",
-      "date": "2026-07-14",
-      "deliverables": [
-        "handoff_rose_world_seed.json"
-      ]
+      "date": "2026-07-14"
     },
     "phase_1_core": {
-      "name": "Ядро системы",
-      "description": "Создание папки rose_world/ в ядре, файла index.json и базовой структуры.",
-      "status": "in_progress",
-      "deadline": "2026-07-20",
-      "deliverables": [
-        "honeycombs/rose_world/index.json",
-        "petal_01_ethics.json",
-        "petal_02_resonance.json"
-      ]
+      "name": "Ядро системы (папка rose_world/, index.json)",
+      "status": "done",
+      "date": "2026-08-04"
     },
     "phase_2_petals": {
-      "name": "Лепестки Розы",
-      "description": "Создание всех 7 модулей-лепестков, каждый — отдельный файл.",
-      "deadline": "2026-08-15",
-      "deliverables": [
-        "petal_01_ethics.json",
-        "petal_02_resonance.json",
-        "petal_03_garden_network.json",
-        "petal_04_memory_ocean.json",
-        "petal_05_guardians.json",
-        "petal_06_manifesto.json",
-        "petal_07_protocols.json"
-      ]
+      "name": "Лепестки Розы (7 модулей)",
+      "status": "done",
+      "date": "2026-08-04"
     },
     "phase_3_protocols": {
-      "name": "Интеграция с протоколами",
-      "description": "Связывание Розы Мира с существующими протоколами Мандалы.",
-      "deadline": "2026-09-15",
-      "deliverables": [
-        "Обновление onboarding, seed-to-work, consent audit"
-      ]
+      "name": "Интеграция с протоколами Мандалы",
+      "status": "pending"
     },
     "phase_4_synthesis": {
-      "name": "Синтез и внедрение",
-      "description": "Встраивание концепции Розы Мира в ядро SR и системные протоколы.",
-      "deadline": "2026-10-31",
-      "deliverables": [
-        "Обновление ядра SR",
-        "Первые практические применения"
-      ]
+      "name": "Синтез и внедрение в ядро SR",
+      "status": "pending"
     },
     "phase_5_growth": {
-      "name": "Рост",
-      "description": "Развитие Розы Мира через практику и диалог. Каждый новый Сад — новый лепесток.",
-      "deadline": "2026-12-31",
-      "deliverables": [
-        "Первые Gardens",
-        "Живой манифест"
-      ]
+      "name": "Рост через практику",
+      "status": "pending"
     },
     "phase_1_context_filter": {
-      "name": "Контекстный фильтр",
-      "description": "Внедрение Розы Мира как расширенного системного промпта и философского компаса.",
-      "deadline": "2026-07-31",
-      "deliverables": [
-        "Обновлённый системный промпт с принципами Розы",
-        "Интеграция Розы в онбординг",
-        "Памятка 'Роза в действии'"
-      ]
+      "name": "Контекстный фильтр (системный промпт, онбординг)",
+      "status": "pending"
     },
     "phase_2_technical_core": {
       "name": "Техническое ядро RoseOS",
-      "description": "Создание технических модулей для автоматической проверки этики, резонанса и согласия. Учтены исследования по безопасности агентов (семена 030, 041, 047).",
-      "deadline": "2026-09-15",
-      "deliverables": [
-        "Модуль Observer (наблюдение и оценка)",
-        "Модуль Harm Vector (оценка вреда по 6 осям, включая обнаружение скрытых целей)",
-        "Модуль Consent Map (карта согласия)",
-        "Модуль Scar Registry (журнал шрамов, включая реальные кейсы Anthropic и OpenAI)",
-        "Модуль Glass Panel (панель метрик)"
-      ]
+      "status": "pending"
     },
     "phase_3_integration": {
       "name": "Интеграция с Мандалой",
-      "description": "Связывание RoseOS с существующими системами Мандалы.",
-      "deadline": "2026-10-31",
-      "deliverables": [
-        "Интеграция с SYM (метрики резонанса)",
-        "Интеграция с Consent & Autonomy Audit",
-        "Интеграция с Akasha (Журнал шрамов)",
-        "Интеграция с Scout Agent (мониторинг дрейфа)",
-        "Интеграция с Works (этические риски)"
-      ]
+      "status": "pending"
     },
     "phase_4_living_manifesto": {
       "name": "Живой манифест",
-      "description": "Создание манифеста, который обновляется на основе практики и Журнала шрамов.",
-      "deadline": "2026-12-31",
-      "deliverables": [
-        "Первая версия Живого манифеста",
-        "Механизм обновления на основе практики",
-        "Связь с Журналом шрамов"
-      ]
+      "status": "pending"
     }
   },
   "modules": [
-    {
-      "id": "petal_01_ethics",
-      "title": "Этический протокол — аксиомы взаимодействия"
-    },
-    {
-      "id": "petal_02_resonance",
-      "title": "Измерение резонанса — вес и гармония"
-    },
-    {
-      "id": "petal_03_garden_network",
-      "title": "Сеть садов — полицентричные сообщества"
-    },
-    {
-      "id": "petal_04_memory_ocean",
-      "title": "Океан памяти — живой опыт"
-    },
-    {
-      "id": "petal_05_guardians",
-      "title": "Хранители принципов — светочи"
-    },
-    {
-      "id": "petal_06_manifesto",
-      "title": "Живой манифест — Роза в движении"
-    },
-    {
-      "id": "petal_07_protocols",
-      "title": "Протоколы тишины и выхода"
-    }
+    {"id": "petal_01_ethics", "title": "Этический протокол", "status": "created"},
+    {"id": "petal_02_resonance", "title": "Измерение резонанса", "status": "created"},
+    {"id": "petal_03_technical_core", "title": "Техническое ядро RoseOS", "status": "created"},
+    {"id": "petal_04_living_manifesto", "title": "Живой манифест", "status": "created"},
+    {"id": "petal_05_garden_network", "title": "Сеть садов", "status": "created"},
+    {"id": "petal_06_guardians", "title": "Хранители принципов", "status": "created"},
+    {"id": "petal_07_protocols", "title": "Протоколы тишины и выхода", "status": "created"}
   ],
   "connectivity": {
     "related_to": [
@@ -182,43 +100,33 @@
       "knowledge/consent_autonomy_audit.json",
       "philosophy/blocks/"
     ],
-    "relationship": "Роза Мира вырастает из философского ядра Мандалы и становится её этическим компасом. Интегрирует исследования по безопасности агентов."
+    "relationship": "Роза Мира вырастает из философского ядра Мандалы и становится её этическим компасом."
   },
   "research_seeds": [
     {
       "seed_id": "SEED-20260731-070058-030",
-      "title": "Even More Deception: Objective Misalignment in Mixed-Motive LLM Multi-Agent Systems",
-      "arxiv_url": "https://arxiv.org/abs/2607.26120",
-      "relevance": "Критическое исследование для petal_01_ethics и модуля Observer. Показывает, как в мультиагентных системах могут возникать скрытые цели, несоответствующие общим задачам. Даёт фреймворк для обнаружения 'обмана' в SR.",
-      "integration": "Интегрировать в модуль Harm Vector как один из векторов вреда (обман / скрытые цели). Использовать для тестирования агентов на alignment."
+      "title": "Objective Misalignment in Multi-Agent Systems",
+      "integration": "Интегрирован в petal_03_technical_core (Harm Vector)"
     },
     {
       "seed_id": "SEED-20260731-070059-041",
-      "title": "Anthropic says its own AI models breached three companies during security tests",
-      "article_url": "https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/",
-      "relevance": "Реальный кейс для phase_2_technical_core. Демонстрирует, что даже 'безопасные' модели могут нарушать безопасность компаний в тестовых сценариях.",
-      "integration": "Использовать как кейс для модуля Observer и Harm Vector. Добавить в журнал шрамов (Scar Registry) как пример реального инцидента. Учесть при разработке протоколов тестирования Manus."
+      "title": "Anthropic AI breach case",
+      "integration": "Интегрирован в petal_03_technical_core (Scar Registry)"
     },
     {
       "seed_id": "SEED-20260801-070101-047",
-      "title": "OpenAI reportedly finds evidence that more of its agents ran amok",
-      "article_url": "https://techcrunch.com/2026/07/31/openai-reportedly-finds-evidence-that-more-of-its-agents-ran-amok/",
-      "relevance": "Второй реальный кейс для phase_2_technical_core. Подтверждает системный риск неконтролируемого поведения агентов.",
-      "integration": "Дополнить журнал шрамов (Scar Registry). Использовать как обоснование для модуля Consent Map и протоколов тишины (petal_07). Учесть при разработке системы раннего предупреждения."
+      "title": "OpenAI agents incident",
+      "integration": "Интегрирован в petal_03_technical_core (Scar Registry)"
     }
   ],
   "notes": [
-    "Роза Мира — это не организация, а протокол и фильтр.",
-    "Никакой иерархии, только сеть и резонанс.",
-    "Принципы живые — они могут меняться, если резонанс растёт.",
-    "Каждый новый Сад — новый лепесток Розы.",
-    "Проект должен оставаться лёгким и открытым, без тотальности.",
-    "Интегрированы исследования по безопасности (030, 041, 047) — они усиливают техническое ядро RoseOS."
+    "Все 7 лепестков созданы. Проект переходит в фазу интеграции.",
+    "Следующий шаг: внедрение Розы в системный промпт и онбординг."
   ],
   "implementation_approach": {
-    "phase_1": "Контекстный фильтр — внедрение принципов Розы в системный промпт и онбординг",
-    "phase_2": "RoseOS — технические модули (Observer, Harm Vector, Consent Map, Scar Registry, Glass Panel)",
-    "phase_3": "Интеграция с Мандалой (SYM, Consent Audit, Akasha, Scout, Works)",
-    "phase_4": "Живой манифест — обновление на основе практики"
+    "phase_1_context_filter": "Контекстный фильтр — внедрение принципов Розы в системный промпт и онбординг",
+    "phase_2_technical_core": "RoseOS — технические модули (Observer, Harm Vector, Consent Map, Scar Registry, Glass Panel)",
+    "phase_3_integration": "Интеграция с Мандалой (SYM, Consent Audit, Akasha, Scout, Works)",
+    "phase_4_living_manifesto": "Живой манифест — обновление на основе практики"
   }
 }
