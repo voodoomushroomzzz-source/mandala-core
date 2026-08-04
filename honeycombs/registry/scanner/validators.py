@@ -297,7 +297,7 @@ class SeedCountValidator:
     ROOT_SEEDS_PATH = "honeycombs/seeds"
     INBOX_SEEDS_PATH = "honeycombs/seeds/inbox"
     ROOT_THRESHOLD = 10
-    INBOX_THRESHOLD = 20
+    INBOX_THRESHOLD = 50
 
     @staticmethod
     def check() -> dict:
