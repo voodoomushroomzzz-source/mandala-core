@@ -19,13 +19,13 @@ class TaskValidator:
         self.upcoming_deadlines = []
         self.valid_statuses = ['todo', 'in_progress', 'planned', 'active', 'done', 'archived', 'paused']
         self.required_fields = ['work_id', 'name', 'status', 'priority', 'horizon']
-    
+
     def validate(self) -> Dict:
         works_path = self.base_path / 'honeycombs' / 'works'
         if not works_path.exists():
             self.warnings.append("Works folder not found")
             return self._report()
-        
+
         work_ids = []
         for work_file in works_path.glob('*.json'):
             if work_file.name == 'index.json':
@@ -33,11 +33,11 @@ class TaskValidator:
             try:
                 with open(work_file, 'r', encoding='utf-8') as f:
                     work = json.load(f)
-                
+
                 for field in self.required_fields:
                     if field not in work:
                         self.errors.append(f"{work_file.name}: missing required field '{field}'")
-                
+
                 work_id = work.get('work_id')
                 if work_id:
                     if work_id in work_ids:
@@ -45,11 +45,11 @@ class TaskValidator:
                     work_ids.append(work_id)
                 else:
                     self.errors.append(f"{work_file.name}: missing work_id")
-                
+
                 status = work.get('status')
                 if status and status not in self.valid_statuses:
                     self.warnings.append(f"{work_file.name}: non-standard status '{status}'")
-                
+
                 deadline = work.get('deadline')
                 if deadline:
                     try:
@@ -71,14 +71,14 @@ class TaskValidator:
                             })
                     except ValueError:
                         self.warnings.append(f"{work_file.name}: invalid deadline format (expected YYYY-MM-DD)")
-                
+
             except json.JSONDecodeError:
                 self.errors.append(f"{work_file.name}: invalid JSON")
             except Exception as e:
                 self.errors.append(f"{work_file.name}: {str(e)}")
-        
+
         return self._report()
-    
+
     def _report(self) -> Dict:
         return {
             'errors': self.errors,
@@ -186,7 +186,7 @@ class DeadlineSentinel:
         self.expired = []
         self.upcoming = []
         self.warnings = []
-    
+
     def check(self) -> Dict:
         works_path = self.base_path / 'honeycombs' / 'works'
         if works_path.exists():
@@ -197,7 +197,7 @@ class DeadlineSentinel:
                     self._check_deadline(work, 'works')
                 except:
                     pass
-        
+
         return {
             'expired': self.expired,
             'upcoming': self.upcoming,
@@ -205,16 +205,16 @@ class DeadlineSentinel:
             'expired_count': len(self.expired),
             'upcoming_count': len(self.upcoming)
         }
-    
+
     def _check_deadline(self, item: Dict, item_type: str):
         deadline = item.get('deadline')
         if not deadline:
             return
-        
+
         try:
             deadline_date = datetime.strptime(deadline, '%Y-%m-%d')
             today = datetime.now()
-            
+
             if deadline_date < today:
                 self.expired.append({
                     'id': item.get('work_id') or item.get('roadmap_id'),
@@ -241,24 +241,24 @@ class IntegrityCheck:
         self.broken_refs = []
         self.missing_parents = []
         self.errors = []
-    
+
     def check(self) -> Dict:
         core_map_path = self.base_path / 'honeycombs' / 'core_map' / 'index.json'
         if not core_map_path.exists():
             self.errors.append("core_map/index.json not found")
             return self._report()
-        
+
         try:
             with open(core_map_path, 'r', encoding='utf-8') as f:
                 core_map = json.load(f)
-            
+
             nav = core_map.get('navigation', {})
             parents = nav.get('parent', '')
             if parents:
                 parent_path = self.base_path / parents
                 if not parent_path.exists():
                     self.missing_parents.append(parents)
-            
+
             references = nav.get('references', [])
             for ref in references:
                 ref_path = self.base_path / ref
@@ -267,7 +267,7 @@ class IntegrityCheck:
                         'type': 'reference',
                         'path': ref
                     })
-            
+
             children = nav.get('children', [])
             for child in children:
                 child_path = self.base_path / child
@@ -276,12 +276,12 @@ class IntegrityCheck:
                         'type': 'child',
                         'path': child
                     })
-            
+
         except Exception as e:
             self.errors.append(f"Integrity check error: {str(e)}")
-        
+
         return self._report()
-    
+
     def _report(self) -> Dict:
         return {
             'errors': self.errors,
@@ -292,10 +292,8 @@ class IntegrityCheck:
             'missing_count': len(self.missing_parents)
         }
 
-
-
 class SeedCountValidator:
-    """Проверяет количество семян в корне и inbox."""
+    """Проверяет количество семян в корне и inbox, учитывая индекс обработанных семян."""
     ROOT_SEEDS_PATH = "honeycombs/seeds"
     INBOX_SEEDS_PATH = "honeycombs/seeds/inbox"
     ROOT_THRESHOLD = 10
@@ -315,28 +313,55 @@ class SeedCountValidator:
                 if f.is_file() and f.suffix == ".json" and f.name != "index.json"
             )
 
-        # Считаем JSON-файлы в inbox
-        inbox_count = 0
+        # Считаем НОВЫЕ (необработанные) семена в inbox
+        inbox_new_count = 0
+        total_inbox_files = 0
         if inbox_path.exists():
-            inbox_count = sum(1 for f in inbox_path.iterdir() if f.is_file() and f.suffix == ".json")
+            # Сначала считаем общее количество JSON-файлов
+            all_files = [f for f in inbox_path.iterdir() if f.is_file() and f.suffix == ".json"]
+            total_inbox_files = len(all_files)
+
+            # Проверяем наличие index.json
+            index_path = inbox_path / "index.json"
+            processed_seeds = set()
+
+            if index_path.exists():
+                try:
+                    with open(index_path, 'r', encoding='utf-8') as f:
+                        index_data = json.load(f)
+                    processed_seeds.update(index_data.get("promoted_seeds", []))
+                    processed_seeds.update(index_data.get("kept_seeds", []))
+                    processed_seeds.update(index_data.get("rejected_seeds", []))
+                    processed_seeds.update(index_data.get("top_8_copied_to_root", []))
+                except Exception:
+                    processed_seeds = set()
+
+            # Считаем только те файлы, которых нет в индексе (исключая сам index.json)
+            inbox_new_count = sum(
+                1 for f in all_files
+                if f.name != "index.json" and f.name.replace('.json', '') not in processed_seeds
+            )
 
         root_warning = root_count > SeedCountValidator.ROOT_THRESHOLD
-        inbox_warning = inbox_count > SeedCountValidator.INBOX_THRESHOLD
+        inbox_warning = inbox_new_count > SeedCountValidator.INBOX_THRESHOLD
 
         warnings = []
         if root_warning:
             warnings.append(f"Корень seeds/: {root_count} файлов (порог {SeedCountValidator.ROOT_THRESHOLD})")
         if inbox_warning:
-            warnings.append(f"Inbox: {inbox_count} файлов (порог {SeedCountValidator.INBOX_THRESHOLD})")
+            warnings.append(f"Inbox: {inbox_new_count} новых файлов (порог {SeedCountValidator.INBOX_THRESHOLD})")
+        if total_inbox_files > 0 and inbox_new_count == 0:
+            # Если все файлы обработаны, но общее количество превышает порог — это не проблема
+            pass
 
         return {
             "root_count": root_count,
             "root_threshold": SeedCountValidator.ROOT_THRESHOLD,
             "root_status": "warning" if root_warning else "ok",
-            "inbox_count": inbox_count,
+            "inbox_count": inbox_new_count,
+            "inbox_total_files": total_inbox_files,
             "inbox_threshold": SeedCountValidator.INBOX_THRESHOLD,
             "inbox_status": "warning" if inbox_warning else "ok",
             "warnings": warnings,
             "status": "warning" if (root_warning or inbox_warning) else "ok"
         }
-
