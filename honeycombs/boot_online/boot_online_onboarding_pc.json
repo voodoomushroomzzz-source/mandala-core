@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.60",
+    "version": "v1.7.61",
     "created": "2026-05-11",
-    "updated": "2026-08-03",
+    "updated": "2026-08-04",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1695,7 +1695,7 @@
         "name": "Works — Unified System of Work Items",
         "version": "v1.0.13",
         "created": "2026-07-08",
-        "updated": "2026-08-03",
+        "updated": "2026-08-04",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -1742,20 +1742,20 @@
         ]
       },
       "manifest": {
-        "total_works": 22,
+        "total_works": 24,
         "by_status": {
           "active": 8,
-          "planning": 13,
+          "planning": 15,
           "in_progress": 0,
           "done": 1
         },
         "by_horizon": {
           "strategic": 10,
-          "tactical": 12
+          "tactical": 14
         },
         "by_priority": {
           "critical": 5,
-          "high": 10,
+          "high": 12,
           "medium": 5,
           "low": 2
         },
@@ -1781,7 +1781,9 @@
           "W-T-20260728-CYBER-AGENTS",
           "W-R-20260803-KURTOCH-FRANCHISE",
           "W-T-20260803-RL-REASONING",
-          "W-T-20260803-SR-EVALUATION"
+          "W-T-20260803-SR-EVALUATION",
+          "W-T-20260804-SR-REFLECTION__in_context_search",
+          "W-T-20260804-MANUS-MEMORY__nativemem"
         ],
         "deadlines": {
           "W-R-RC-001__visibility_strategy": null,
@@ -1871,8 +1873,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-08-03",
-        "notes": "v1.0.13: added full deadlines and progress for all works. Progress updated for Gentle Companion (65%)."
+        "last_check": "2026-08-04",
+        "notes": "Added 2 works from seeds (SR Reflection, Manus Memory)"
       },
       "updated": "2026-08-03"
     }
