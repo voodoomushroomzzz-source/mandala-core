@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 19,
-    "total_size_kb": 1184.11,
+    "total_size_kb": 1184.53,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 19,
-    "total_size_kb": 1184.11,
+    "total_size_kb": 1184.53,
     "last_updated": "2026-08-04",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -66,15 +66,15 @@
           "W-R-20260803-KURTOCH-FRANCHISE.json: missing work_id"
         ],
         "warnings": [
-          "W-T-20260713-YOUTUBE_GAMING_CHANNEL.json: non-standard status 'planning'",
-          "W-R-ROSE-001__rose_world_ethical_filter.json: non-standard status 'planning'",
-          "W-T-20260803-SR-EVALUATION.json: non-standard status 'planning'",
           "W-R-ECO-001__autonomous_ecosystem.json: non-standard status 'planning'",
           "W-R-ECOMM-001__china_sourcing_ecommerce.json: non-standard status 'planning'",
-          "W-T-20260728-CYBER-AGENTS.json: non-standard status 'planning'",
+          "W-T-20260713-YOUTUBE_GAMING_CHANNEL.json: non-standard status 'planning'",
           "W-T-20260713-YOUTUBE_MANDALA_PROMO.json: non-standard status 'planning'",
+          "W-R-ROSE-001__rose_world_ethical_filter.json: non-standard status 'planning'",
           "W-T-20260728-AI-GATEWAY.json: non-standard status 'planning'",
-          "W-T-20260803-RL-REASONING.json: non-standard status 'planning'"
+          "W-T-20260728-CYBER-AGENTS.json: non-standard status 'planning'",
+          "W-T-20260803-RL-REASONING.json: non-standard status 'planning'",
+          "W-T-20260803-SR-EVALUATION.json: non-standard status 'planning'"
         ],
         "expired_tasks": [
           {
@@ -128,11 +128,12 @@
         "root_count": 8,
         "root_threshold": 10,
         "root_status": "ok",
-        "inbox_count": 88,
+        "inbox_count": 39,
+        "inbox_total_files": 88,
         "inbox_threshold": 20,
         "inbox_status": "warning",
         "warnings": [
-          "Inbox: 88 файлов (порог 20)"
+          "Inbox: 39 новых файлов (порог 20)"
         ],
         "status": "warning"
       }
@@ -141,11 +142,12 @@
       "root_count": 8,
       "root_threshold": 10,
       "root_status": "ok",
-      "inbox_count": 88,
+      "inbox_count": 39,
+      "inbox_total_files": 88,
       "inbox_threshold": 20,
       "inbox_status": "warning",
       "warnings": [
-        "Inbox: 88 файлов (порог 20)"
+        "Inbox: 39 новых файлов (порог 20)"
       ],
       "status": "warning"
     }
