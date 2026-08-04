@@ -1,25 +1,25 @@
 {
-  "last_scan": "2026-08-03T19:34:57.314421",
+  "last_scan": "2026-08-04T07:10:52.048595",
   "honeycomb_hashes": {
-    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
-    "honeycombs/works": "3ae5f0e0b5867e0e2fc9febc9284315f",
     "honeycombs/rose_world": "2ba9308d8feaa1031024f5ad74dfaec5",
-    "honeycombs/boot_online": "466faeb68e8c977a9dc154d17fbd270c",
-    "honeycombs/core_map": "a4fe6ef1d658645e2427628ac1af6319",
-    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
-    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
-    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
-    "honeycombs/seeds": "a1828531a8ce67ac629c9fd181227d88",
-    "honeycombs/seeds/inbox": "d067e6dcd24bcea26a83bb42e10d1f47",
+    "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
     "honeycombs/knowledge": "29e22087c24941e87b341b5ef7fda114",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
-    "honeycombs/fruits": "4eed3b02ab10068127e420a4bc3c9c10",
-    "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456",
-    "honeycombs/fruits/scout_agent": "209d3bc31c26d1fc5386709dccd07cba",
-    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
+    "honeycombs/works": "afa5c672e5c146b5129ee669f304cdcd",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
-    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b"
+    "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
+    "honeycombs/seeds": "fb6dc8634a4dd5a4477d80e754fa6323",
+    "honeycombs/seeds/inbox": "d067e6dcd24bcea26a83bb42e10d1f47",
+    "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50",
+    "honeycombs/core_map": "a4fe6ef1d658645e2427628ac1af6319",
+    "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
+    "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
+    "honeycombs/boot_online": "466faeb68e8c977a9dc154d17fbd270c",
+    "honeycombs/fruits": "f2c4435c5787c930ba3c75e7e8a8be1d",
+    "honeycombs/fruits/scout_agent": "209d3bc31c26d1fc5386709dccd07cba",
+    "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456",
+    "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8"
   },
   "statistics": {
     "total_scanned": 19,
@@ -27,26 +27,25 @@
     "invalid_v2": 0,
     "errors": 0,
     "warnings": 0,
-    "total_files": 335,
-    "total_size_kb": 1203.83
+    "total_files": 337,
+    "total_size_kb": 1184.11
   },
   "seeds_health": {
-    "root_count": 27,
+    "root_count": 8,
     "root_threshold": 10,
-    "root_status": "warning",
-    "inbox_count": 79,
+    "root_status": "ok",
+    "inbox_count": 88,
     "inbox_threshold": 20,
     "inbox_status": "warning",
     "warnings": [
-      "Корень seeds/: 27 файлов (порог 10)",
-      "Inbox: 79 файлов (порог 20)"
+      "Inbox: 88 файлов (порог 20)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-08-03T19:34:57.314445",
-    "errors_count": 0,
-    "warnings_count": 9,
+    "last_check": "2026-08-04T07:10:52.048603",
+    "errors_count": 6,
+    "warnings_count": 11,
     "expired_tasks": 1,
     "upcoming_deadlines": 0,
     "expired_tasks_list": [
@@ -54,7 +53,7 @@
         "work_id": "W-R-RM-011",
         "name": "Living Visualizations — Mer-Ka-Ba Perception System",
         "deadline": "2026-08-01",
-        "days_overdue": 2
+        "days_overdue": 3
       }
     ],
     "upcoming_deadlines_list": [],
@@ -62,6 +61,6 @@
     "noise_files_list": [],
     "broken_links": 0,
     "missing_parents": 0,
-    "status": "warning"
+    "status": "critical"
   }
 }
