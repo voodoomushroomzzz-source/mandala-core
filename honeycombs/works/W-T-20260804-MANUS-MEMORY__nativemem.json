@@ -1,0 +1,23 @@
+{
+  "work_id": "W-T-20260804-MANUS-MEMORY__nativemem",
+  "name": "NativeMEM — долгосрочная память для Manus",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Интегрировать в Manus механизм сжатия памяти NativeMEM для сохранения контекста длительных операций. Позволит Manus запоминать последовательность действий и состояние среды.",
+  "created": "2026-08-04",
+  "updated": "2026-08-04",
+  "source_seed": "SEED-20260709-180648-005",
+  "tags": ["manus", "memory", "vla", "robotics"],
+  "progress": 0,
+  "deadline": null,
+  "depends_on": ["W-T-20260511-MANUS__manus_hands"],
+  "sub_works": [],
+  "effort_estimate": "high",
+  "key_insights": [
+    "Сжатие каждого кадра в один токен через собственный кодировщик",
+    "Рост успешности с 32% до 98%",
+    "Использует всего 20% данных"
+  ],
+  "implementation_notes": "Интегрировать в архитектуру Manus. Использовать для визуальной памяти в роботизированных задачах."
+}

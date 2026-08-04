@@ -1,0 +1,22 @@
+{
+  "work_id": "W-T-20260804-SR-REFLECTION__in_context_search",
+  "name": "In-Context Search Theory — внедрение саморефлексии в SR",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Внедрить механизм саморефлексии и итеративного поиска решений в работу SR на основе теории in-context search. Улучшить качество рассуждений и способность к самоисправлению.",
+  "created": "2026-08-04",
+  "updated": "2026-08-04",
+  "source_seed": "SEED-20260709-180646-002",
+  "tags": ["sr", "reasoning", "self-reflection", "ai-research"],
+  "progress": 0,
+  "deadline": null,
+  "depends_on": [],
+  "sub_works": [],
+  "effort_estimate": "medium",
+  "key_insights": [
+    "Саморефлексия даёт экспоненциальный прирост качества решений",
+    "Теоретическая модель для итеративного поиска в контексте"
+  ],
+  "implementation_notes": "Добавить шаг 'критика → пересмотр' перед финальным ответом SR. Использовать для сложных задач."
+}

@@ -1,75 +1,42 @@
 {
   "identity": {
     "module_id": "SEEDS-INDEX-001",
-    "name": "Seeds — Idea Incubator",
-    "version": "v1.2.1",
-    "created": "2026-07-08",
-    "updated": "2026-08-03",
-    "layer": 1,
+    "name": "Seeds Index",
+    "version": "v2.0.0",
+    "created": "2026-07-10",
+    "updated": "2026-08-04",
+    "layer": 2,
     "type": "seed_index",
-    "description": "Root seeds index. Only seeds not yet promoted to works remain.",
     "status": "active",
-    "priority": "high",
-    "tags": ["seeds", "index", "ideas", "incubator"]
+    "description": "Index of all seeds in Mandala. Cleaned and updated.",
+    "tags": ["seeds", "index"]
   },
   "meta": {
-    "description": "Index of seeds in root. Seeds are raw ideas. When promoted to works, they are removed from root.",
-    "total_seeds": 8,
-    "last_updated": "2026-08-03"
+    "description": "Seeds are raw ideas collected by Scout Agent or Gardener.",
+    "total_seeds": 2,
+    "last_updated": "2026-08-04"
   },
-  "seeds": [
+  "active_seeds": [
     {
       "seed_id": "SEED-20260709-180646-002",
-      "title": "When Does In-Context Search Help? A Sampling-Complexity Theory of Reflection-Driven Reasoning",
-      "status": "keep_for_future",
-      "reason": "Теоретическое исследование. Будет полезно для улучшения рассуждений SR в долгосрочной перспективе."
+      "title": "In-Context Search Theory",
+      "status": "promoted_to_work",
+      "work_id": "W-T-20260804-SR-REFLECTION__in_context_search"
     },
     {
       "seed_id": "SEED-20260709-180648-005",
-      "title": "NativeMEM: Native Memory Compression for Long-Horizon Robotic Manipulation",
-      "status": "keep_for_future",
-      "reason": "Техника сжатия памяти для долгосрочных задач. Будет актуальна для Manus на этапе 3+."
-    },
-    {
-      "seed_id": "SEED-20260718-155008-012",
-      "title": "IMEX Interaction-Based Model Explanation",
-      "status": "keep_for_future",
-      "reason": "Объяснимость SR. Будет актуально на этапе автономности."
-    },
-    {
-      "seed_id": "SEED-20260728-213200-003",
-      "title": "system-design-primer",
-      "status": "keep_for_future",
-      "reason": "Учебный ресурс по системному дизайну. Полезен для команды."
-    },
-    {
-      "seed_id": "SEED-20260728-213202-007",
-      "title": "Microsoft launches its first cyber model, plus a new agentic cybersecurity system",
-      "status": "keep_for_future",
-      "reason": "Референс для развития агентов безопасности. Оставлен для изучения."
-    },
-    {
-      "seed_id": "SEED-20260731-112850-043",
-      "title": "Google fixed more Chrome bugs in June than over the past two years, thanks to AI",
-      "status": "keep_for_future",
-      "reason": "Кейс использования ИИ для разработки. Полезен как референс для Manus."
-    },
-    {
-      "seed_id": "SEED-20260801-070101-044",
-      "title": "Flint: A Visualization Language for the AI Era",
-      "status": "keep_for_future",
-      "reason": "Инструмент визуализации. Может быть интегрирован в Architect Bot."
-    },
-    {
-      "seed_id": "SEED-20260801-070101-045",
-      "title": "qm — Multiplayer agent harness for work",
-      "status": "keep_for_future",
-      "reason": "Мультиагентный фреймворк. Референс для организации работы нескольких SR."
+      "title": "NativeMEM for Manus",
+      "status": "promoted_to_work",
+      "work_id": "W-T-20260804-MANUS-MEMORY__nativemem"
     }
   ],
   "navigation": {
     "parent": "honeycombs/core_map/index.json",
-    "related": ["honeycombs/seeds/inbox/index.json"],
-    "children": ["honeycombs/seeds/inbox/"]
+    "related": ["honeycombs/works/index.json", "honeycombs/seeds/inbox/index.json"]
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-08-04",
+    "notes": "Cleaned. 2 seeds promoted to works."
   }
 }

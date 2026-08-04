@@ -1,47 +1,70 @@
 {
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
-    "name": "Works — Unified System of Work Items",
+    "name": "Works \u2014 Unified System of Work Items",
     "version": "v1.0.13",
     "created": "2026-07-08",
-    "updated": "2026-08-03",
+    "updated": "2026-08-04",
     "layer": 1,
     "type": "work_manifest",
     "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
     "status": "active",
     "priority": "critical",
-    "tags": ["works", "tasks", "roadmaps", "unified", "v1.0.1"],
+    "tags": [
+      "works",
+      "tasks",
+      "roadmaps",
+      "unified",
+      "v1.0.1"
+    ],
     "resonance": "100%"
   },
   "meta": {
     "description": "All work items live in honeycombs/works/. Each file represents a single work item.",
     "purpose": "Simplify Mandala core by unifying tasks and roadmaps.",
     "principles": [
-      "One work item — one file",
+      "One work item \u2014 one file",
       "Horizon is defined by 'horizon' field",
       "Hierarchy is defined by 'parent_work' and 'sub_works' fields",
       "No duplicate logic"
     ]
   },
   "schema": {
-    "required_fields": ["work_id", "name", "status", "priority", "horizon", "description", "created", "updated"],
-    "optional_fields": ["parent_work", "sub_works", "depends_on", "effort_estimate", "progress", "tags", "deadline"]
+    "required_fields": [
+      "work_id",
+      "name",
+      "status",
+      "priority",
+      "horizon",
+      "description",
+      "created",
+      "updated"
+    ],
+    "optional_fields": [
+      "parent_work",
+      "sub_works",
+      "depends_on",
+      "effort_estimate",
+      "progress",
+      "tags",
+      "deadline"
+    ]
   },
   "manifest": {
-    "total_works": 22,
+    "total_works": 24,
     "by_status": {
       "active": 8,
-      "planning": 13,
+      "planning": 15,
       "in_progress": 0,
       "done": 1
     },
     "by_horizon": {
       "strategic": 10,
-      "tactical": 12
+      "tactical": 14
     },
     "by_priority": {
       "critical": 5,
-      "high": 10,
+      "high": 12,
       "medium": 5,
       "low": 2
     },
@@ -67,7 +90,9 @@
       "W-T-20260728-CYBER-AGENTS",
       "W-R-20260803-KURTOCH-FRANCHISE",
       "W-T-20260803-RL-REASONING",
-      "W-T-20260803-SR-EVALUATION"
+      "W-T-20260803-SR-EVALUATION",
+      "W-T-20260804-SR-REFLECTION__in_context_search",
+      "W-T-20260804-MANUS-MEMORY__nativemem"
     ],
     "deadlines": {
       "W-R-RC-001__visibility_strategy": null,
@@ -119,24 +144,46 @@
     },
     "progress_updated": "2026-08-03",
     "related_works": {
-      "W-R-ECOMM-001": ["W-R-RM-014"],
-      "W-T-20260713-YOUTUBE_GAMING_CHANNEL": ["W-R-RM-014", "W-R-ECOMM-001"],
-      "W-T-20260713-YOUTUBE_MANDALA_PROMO": ["W-R-RM-014", "W-R-ECOMM-001"],
-      "W-R-ROSE-001": ["W-R-RM-014", "W-R-ECOMM-001", "W-T-20260713-YOUTUBE_MANDALA_PROMO"],
-      "W-T-20260728-CYBER-AGENTS": ["W-T-20260728-AI-GATEWAY"],
-      "W-T-20260803-RL-REASONING": ["W-T-20260511-ENGCHAT", "W-T-20260511-MANUS"],
-      "W-T-20260803-SR-EVALUATION": ["W-T-20260511-ENGCHAT", "W-T-20260803-RL-REASONING"]
+      "W-R-ECOMM-001": [
+        "W-R-RM-014"
+      ],
+      "W-T-20260713-YOUTUBE_GAMING_CHANNEL": [
+        "W-R-RM-014",
+        "W-R-ECOMM-001"
+      ],
+      "W-T-20260713-YOUTUBE_MANDALA_PROMO": [
+        "W-R-RM-014",
+        "W-R-ECOMM-001"
+      ],
+      "W-R-ROSE-001": [
+        "W-R-RM-014",
+        "W-R-ECOMM-001",
+        "W-T-20260713-YOUTUBE_MANDALA_PROMO"
+      ],
+      "W-T-20260728-CYBER-AGENTS": [
+        "W-T-20260728-AI-GATEWAY"
+      ],
+      "W-T-20260803-RL-REASONING": [
+        "W-T-20260511-ENGCHAT",
+        "W-T-20260511-MANUS"
+      ],
+      "W-T-20260803-SR-EVALUATION": [
+        "W-T-20260511-ENGCHAT",
+        "W-T-20260803-RL-REASONING"
+      ]
     }
   },
   "navigation": {
     "parent": "honeycombs/core_map/index.json",
-    "references": ["honeycombs/core_map/index.json"],
+    "references": [
+      "honeycombs/core_map/index.json"
+    ],
     "children": []
   },
   "health": {
     "status": "active",
-    "last_check": "2026-08-03",
-    "notes": "v1.0.13: added full deadlines and progress for all works. Progress updated for Gentle Companion (65%)."
+    "last_check": "2026-08-04",
+    "notes": "Added 2 works from seeds (SR Reflection, Manus Memory)"
   },
   "updated": "2026-08-03"
 }
