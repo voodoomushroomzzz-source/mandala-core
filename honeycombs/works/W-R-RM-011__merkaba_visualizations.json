@@ -14,10 +14,17 @@
   "depends_on": [],
   "effort_estimate": "60-80 hours",
   "progress": 0,
-  "tags": ["visualizations", "dashboard", "health", "resonance", "geometria_sacra", "merkaba"],
-  "deadline": "2026-08-01",
+  "tags": [
+    "visualizations",
+    "dashboard",
+    "health",
+    "resonance",
+    "geometria_sacra",
+    "merkaba"
+  ],
+  "deadline": "2026-12-31",
   "created": "2026-04-10",
-  "updated": "2026-07-08",
+  "updated": "2026-08-05",
   "source": {
     "type": "roadmap",
     "original_id": "RM-011",

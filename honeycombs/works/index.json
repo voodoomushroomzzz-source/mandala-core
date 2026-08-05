@@ -1,10 +1,10 @@
 {
   "identity": {
     "module_id": "WORKS-MANIFEST-001",
-    "name": "Works \u2014 Unified System of Work Items",
+    "name": "Works — Unified System of Work Items",
     "version": "v1.0.13",
     "created": "2026-07-08",
-    "updated": "2026-08-04",
+    "updated": "2026-08-05",
     "layer": 1,
     "type": "work_manifest",
     "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -23,7 +23,7 @@
     "description": "All work items live in honeycombs/works/. Each file represents a single work item.",
     "purpose": "Simplify Mandala core by unifying tasks and roadmaps.",
     "principles": [
-      "One work item \u2014 one file",
+      "One work item — one file",
       "Horizon is defined by 'horizon' field",
       "Hierarchy is defined by 'parent_work' and 'sub_works' fields",
       "No duplicate logic"
@@ -182,7 +182,7 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-08-04",
+    "last_check": "2026-08-05",
     "notes": "W-R-ROSE-001: all 7 petals created. Progress 30%."
   },
   "updated": "2026-08-03"
