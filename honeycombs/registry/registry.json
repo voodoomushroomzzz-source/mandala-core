@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-08-04",
+    "updated": "2026-08-05",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 19,
-    "total_size_kb": 1004.13,
+    "total_size_kb": 1050.37,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 19,
-    "total_size_kb": 1004.13,
-    "last_updated": "2026-08-04",
+    "total_size_kb": 1050.37,
+    "last_updated": "2026-08-05",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -82,7 +82,7 @@
             "work_id": "W-R-RM-011",
             "name": "Living Visualizations — Mer-Ka-Ba Perception System",
             "deadline": "2026-08-01",
-            "days_overdue": 3
+            "days_overdue": 4
           }
         ],
         "upcoming_deadlines": [],
@@ -109,7 +109,7 @@
             "name": "Living Visualizations — Mer-Ka-Ba Perception System",
             "type": "works",
             "deadline": "2026-08-01",
-            "days_overdue": 3
+            "days_overdue": 4
           }
         ],
         "upcoming": [],
@@ -129,8 +129,8 @@
         "root_count": 4,
         "root_threshold": 10,
         "root_status": "ok",
-        "inbox_count": 0,
-        "inbox_total_files": 1,
+        "inbox_count": 22,
+        "inbox_total_files": 23,
         "inbox_threshold": 50,
         "inbox_status": "ok",
         "warnings": [],
@@ -141,8 +141,8 @@
       "root_count": 4,
       "root_threshold": 10,
       "root_status": "ok",
-      "inbox_count": 0,
-      "inbox_total_files": 1,
+      "inbox_count": 22,
+      "inbox_total_files": 23,
       "inbox_threshold": 50,
       "inbox_status": "ok",
       "warnings": [],
