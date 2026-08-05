@@ -2,47 +2,72 @@
   "identity": {
     "module_id": "SEEDS-INBOX-INDEX-001",
     "name": "Seeds Inbox Index",
-    "version": "v2.0.0",
-    "created": "2026-08-04",
-    "updated": "2026-08-04",
+    "version": "v1.1.0",
+    "created": "2026-08-05",
+    "updated": "2026-08-05",
     "layer": 3,
     "type": "seed_inbox_index",
     "status": "active",
-    "description": "Inbox is clean. All seeds processed or deleted.",
-    "tags": ["seeds", "inbox", "index", "clean"]
+    "description": "Inbox processing log. 22 seeds evaluated on 2026-08-05.",
+    "tags": ["seeds", "inbox", "index", "processing-log"]
   },
   "meta": {
-    "description": "Inbox index — reset after full cleanup.",
-    "last_processed": "2026-08-04",
-    "processed_by": "DeepSeek SR + Gardener",
-    "total_seeds_in_inbox": 0,
-    "analyzed": 0
+    "description": "Complete record of seed processing. Includes promoted, kept, and rejected seeds.",
+    "last_processed": "2026-08-05",
+    "processed_by": "DeepSeek SR",
+    "total_seeds_in_inbox": 22,
+    "analyzed": 22
   },
   "summary": {
-    "promoted_to_root": 0,
-    "kept_in_inbox": 0,
-    "rejected": 0,
-    "top_8_copied_to_root": 0
+    "promoted_to_root": 1,
+    "kept_in_inbox": 10,
+    "rejected": 11
   },
-  "promoted_seeds": [],
-  "kept_seeds": [],
-  "rejected_seeds": [],
-  "top_8_copied_to_root": [],
+  "promoted_seeds": [
+    "SEED-20260805-070111-022"
+  ],
+  "kept_seeds": [
+    "SEED-20260804-112240-003",
+    "SEED-20260805-070110-012",
+    "SEED-20260805-070110-013",
+    "SEED-20260805-070110-014",
+    "SEED-20260805-070110-015",
+    "SEED-20260805-070110-016",
+    "SEED-20260805-070111-017",
+    "SEED-20260805-070111-018",
+    "SEED-20260805-070111-019",
+    "SEED-20260805-070111-020",
+    "SEED-20260805-070111-021"
+  ],
+  "rejected_seeds": [
+    "SEED-20260804-112239-001",
+    "SEED-20260804-112239-002",
+    "SEED-20260804-112240-004",
+    "SEED-20260804-112240-005",
+    "SEED-20260804-112240-006",
+    "SEED-20260804-112240-007",
+    "SEED-20260804-112240-008",
+    "SEED-20260804-112240-009",
+    "SEED-20260804-112240-010",
+    "SEED-20260804-112240-011",
+    "SEED-20260805-112027-023"
+  ],
   "next_session": {
-    "instruction": "Inbox is empty. Scout Agent will collect new seeds.",
-    "start_from": "new_seeds",
-    "note": "Ready for new seeds."
+    "instruction": "Phase 2 (deep analysis) required for 10 kept seeds.",
+    "start_from": "kept_seeds",
+    "note": "Read full texts, fill work_analysis blocks."
   },
   "navigation": {
     "parent": "honeycombs/seeds/index.json",
     "related": [
       "honeycombs/seeds/index.json",
-      "honeycombs/registry/scan_state.json"
+      "honeycombs/registry/scan_state.json",
+      "honeycombs/protocols/seed_to_work.json"
     ]
   },
   "health": {
-    "status": "clean",
-    "last_check": "2026-08-04",
-    "notes": "Full reset. All old seeds removed from inbox."
+    "status": "ok",
+    "last_check": "2026-08-05",
+    "notes": "22 seeds processed. 1 promoted, 10 kept, 11 rejected."
   }
 }

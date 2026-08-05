@@ -4,16 +4,19 @@
     "name": "Seeds Index",
     "version": "v2.0.0",
     "created": "2026-07-10",
-    "updated": "2026-08-04",
+    "updated": "2026-08-05",
     "layer": 2,
     "type": "seed_index",
     "status": "active",
     "description": "Index of all seeds in Mandala. Cleaned and updated.",
-    "tags": ["seeds", "index"]
+    "tags": [
+      "seeds",
+      "index"
+    ]
   },
   "meta": {
     "description": "Seeds are raw ideas collected by Scout Agent or Gardener.",
-    "total_seeds": 2,
+    "total_seeds": 3,
     "last_updated": "2026-08-04"
   },
   "active_seeds": [
@@ -28,15 +31,24 @@
       "title": "NativeMEM for Manus",
       "status": "promoted_to_work",
       "work_id": "W-T-20260804-MANUS-MEMORY__nativemem"
+    },
+    {
+      "seed_id": "SEED-20260805-070111-022",
+      "title": "Zero-Mem: Zero-Token Memory Operations for LLM Agents",
+      "status": "in_root",
+      "date_added": "2026-08-05"
     }
   ],
   "navigation": {
     "parent": "honeycombs/core_map/index.json",
-    "related": ["honeycombs/works/index.json", "honeycombs/seeds/inbox/index.json"]
+    "related": [
+      "honeycombs/works/index.json",
+      "honeycombs/seeds/inbox/index.json"
+    ]
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-08-04",
-    "notes": "Cleaned. 2 seeds promoted to works."
+    "last_check": "2026-08-05",
+    "notes": "Promoted SEED-20260805-070111-022 (Zero-Mem) to root."
   }
 }
