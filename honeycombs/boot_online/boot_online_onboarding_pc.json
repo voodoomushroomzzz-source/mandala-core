@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.63",
+    "version": "v1.7.64",
     "created": "2026-05-11",
-    "updated": "2026-08-04",
+    "updated": "2026-08-05",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1695,7 +1695,7 @@
         "name": "Works — Unified System of Work Items",
         "version": "v1.0.13",
         "created": "2026-07-08",
-        "updated": "2026-08-04",
+        "updated": "2026-08-05",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -1873,7 +1873,7 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-08-04",
+        "last_check": "2026-08-05",
         "notes": "W-R-ROSE-001: all 7 petals created. Progress 30%."
       },
       "updated": "2026-08-03"
