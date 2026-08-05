@@ -16,22 +16,10 @@
   },
   "meta": {
     "description": "Seeds are raw ideas collected by Scout Agent or Gardener.",
-    "total_seeds": 3,
+    "total_seeds": 1,
     "last_updated": "2026-08-04"
   },
   "active_seeds": [
-    {
-      "seed_id": "SEED-20260709-180646-002",
-      "title": "In-Context Search Theory",
-      "status": "promoted_to_work",
-      "work_id": "W-T-20260804-SR-REFLECTION__in_context_search"
-    },
-    {
-      "seed_id": "SEED-20260709-180648-005",
-      "title": "NativeMEM for Manus",
-      "status": "promoted_to_work",
-      "work_id": "W-T-20260804-MANUS-MEMORY__nativemem"
-    },
     {
       "seed_id": "SEED-20260805-070111-022",
       "title": "Zero-Mem: Zero-Token Memory Operations for LLM Agents",
@@ -49,6 +37,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-08-05",
-    "notes": "Promoted SEED-20260805-070111-022 (Zero-Mem) to root."
+    "notes": "Removed seeds that were already converted to works."
   }
 }
