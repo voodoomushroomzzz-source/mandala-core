@@ -2371,3 +2371,56 @@
 [2026-08-06 07:01:07] [INFO]   Total saved: 13
 [2026-08-06 07:01:07] [INFO]   Total duplicates: 2
 [2026-08-06 07:01:07] [INFO] ============================================================
+[2026-08-06 11:22:21] [INFO] ============================================================
+[2026-08-06 11:22:21] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-08-06 11:22:21] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-06 11:22:21] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-06 11:22:22] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-06 11:22:22] [INFO]   → Filtered to 0 relevant items
+[2026-08-06 11:22:22] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-06 11:22:22] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-06 11:22:22] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-06 11:22:22] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-06 11:22:22] [INFO]   → Filtered to 0 relevant items
+[2026-08-06 11:22:22] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-06 11:22:22] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-06 11:22:22] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-06 11:22:22] [INFO]   → Found 15 raw items, 9 recent
+[2026-08-06 11:22:22] [INFO]   → Filtered to 5 relevant items
+[2026-08-06 11:22:22] [INFO]   ⏭️ Duplicate: Changes at Google DeepMind: Demis Hassabis from CE...
+[2026-08-06 11:22:22] [INFO]   ⏭️ Duplicate: Beating GPT-5.6 Sol on retrieval with 100x cheaper...
+[2026-08-06 11:22:22] [INFO]   ⏭️ Duplicate: Born Against, or why hobby programming communities...
+[2026-08-06 11:22:22] [INFO]   ⏭️ Duplicate: Cloudflare OS: an open platform for agents, apps, ...
+[2026-08-06 11:22:22] [INFO]   ⏭️ Duplicate: Prime Agent: A self-improving RLM agent...
+[2026-08-06 11:22:22] [INFO]   📊 Hacker News: saved 0, duplicates 5
+[2026-08-06 11:22:22] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-06 11:22:22] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-06 11:22:23] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-06 11:22:23] [INFO]   → Filtered to 5 relevant items
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-06 11:22:23] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-06 11:22:23] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-06 11:22:23] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-06 11:22:23] [INFO]   → Found 15 raw items, 8 recent
+[2026-08-06 11:22:23] [INFO]   → Filtered to 5 relevant items
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: Meta launches Muse Code, an AI agent for large cod...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: Klaviyo acquires Elias Torres’ Agency in full-circ...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: Jeff Dean and other top AI researchers are leaving...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: Shopify says AI search is driving more traffic and...
+[2026-08-06 11:22:23] [INFO]   ⏭️ Duplicate: Hark previews its browser use agent for completing...
+[2026-08-06 11:22:23] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-08-06 11:22:23] [INFO] 
+============================================================
+[2026-08-06 11:22:23] [INFO] ✅ Scout Agent v2 finished
+[2026-08-06 11:22:23] [INFO]   Total saved: 0
+[2026-08-06 11:22:23] [INFO]   Total duplicates: 15
+[2026-08-06 11:22:23] [INFO] ============================================================
