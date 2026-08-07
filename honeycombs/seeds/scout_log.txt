@@ -2478,3 +2478,57 @@
 [2026-08-07 07:01:09] [INFO]   Total saved: 11
 [2026-08-07 07:01:09] [INFO]   Total duplicates: 5
 [2026-08-07 07:01:09] [INFO] ============================================================
+[2026-08-07 10:00:50] [INFO] ============================================================
+[2026-08-07 10:00:50] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-08-07 10:00:50] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-07 10:00:50] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-07 10:00:50] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-07 10:00:50] [INFO]   → Filtered to 5 relevant items
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: Agentic Nesting: A New Methodology for Existing En...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: The Ignition Index: Measuring Global Workspace Dyn...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: Woodpecker Distillation: Weak Models Diagnose Reas...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: From Continuous Predictors to Clinical Thresholds:...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: SkillTrace: Multi-Trace Provenance Auditing for LL...
+[2026-08-07 10:00:50] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-08-07 10:00:50] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-07 10:00:50] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-07 10:00:50] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-07 10:00:50] [INFO]   → Filtered to 5 relevant items
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: VLAff: Vision-Language-Affordance Model for Unifie...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: A System for Train Condition Monitoring and Struct...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: Failing Gracefully: Mitigating Impact of Inevitabl...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: Unified Planning-Learning Framework for Robust UUV...
+[2026-08-07 10:00:50] [INFO]   ⏭️ Duplicate: World-to-Wrist: Task-Conditioned Future Wrist Mode...
+[2026-08-07 10:00:50] [INFO]   📊 arXiv Robotics: saved 0, duplicates 5
+[2026-08-07 10:00:50] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-07 10:00:50] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-07 10:00:50] [INFO]   → Found 15 raw items, 2 recent
+[2026-08-07 10:00:50] [INFO]   → Filtered to 1 relevant items
+[2026-08-07 10:00:50] [INFO]   ✅ Saved: SEED-20260807-100050-046.json
+[2026-08-07 10:00:50] [INFO]   📊 Hacker News: saved 1, duplicates 0
+[2026-08-07 10:00:50] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-07 10:00:50] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-07 10:00:51] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-07 10:00:51] [INFO]   → Filtered to 5 relevant items
+[2026-08-07 10:00:51] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-07 10:00:51] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-07 10:00:51] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-07 10:00:51] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-07 10:00:51] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-07 10:00:51] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-07 10:00:51] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-07 10:00:51] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-07 10:00:51] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-07 10:00:51] [INFO]   → Filtered to 0 relevant items
+[2026-08-07 10:00:51] [INFO]   📊 TechCrunch AI: saved 0, duplicates 0
+[2026-08-07 10:00:51] [INFO] 
+============================================================
+[2026-08-07 10:00:51] [INFO] ✅ Scout Agent v2 finished
+[2026-08-07 10:00:51] [INFO]   Total saved: 1
+[2026-08-07 10:00:51] [INFO]   Total duplicates: 15
+[2026-08-07 10:00:51] [INFO] ============================================================
