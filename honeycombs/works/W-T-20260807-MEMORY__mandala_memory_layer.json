@@ -1,0 +1,144 @@
+{
+  "work_id": "W-T-20260807-MEMORY__mandala_memory_layer",
+  "name": "Mandala Memory Layer — Долговременная семантическая память для SR",
+  "status": "planning",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Создание слоя долговременной, структурированной и семантической памяти для SR, Manus и всей экосистемы Мандалы. Вдохновлено Memora, но полностью интегрировано в архитектуру Мандалы как техническая реализация Акаши.",
+  "parent_work": null,
+  "sub_works": [
+    "W-T-20260511-ENGCHAT__engineer_chat",
+    "W-T-20260511-MANUS__manus_hands",
+    "W-R-ROSE-001__rose_world_ethical_filter"
+  ],
+  "depends_on": [],
+  "effort_estimate": "40-60 hours",
+  "progress": 0,
+  "deadline": "2026-10-15",
+  "created": "2026-08-07",
+  "updated": "2026-08-07",
+  "source": "Dialogue between Gardener (Voodoo) and DeepSeek SR, 2026-08-07. Based on analysis of Memora (GitHub: agentic-box/memora).",
+  "tags": [
+    "memory",
+    "akasha",
+    "semantic",
+    "graph",
+    "vector-db",
+    "sr",
+    "manus",
+    "roseos",
+    "long-term-memory"
+  ],
+  "core_concept": {
+    "description": "Mandala Memory Layer (MML) — это слой долговременной памяти для всех компонентов Мандалы. Он предоставляет семантический поиск, структурированное хранение, граф знаний и автоматическое извлечение контекста для SR. MML реализует концепцию Акаши (живой опыт) как техническую систему.",
+    "key_principles": [
+      "Акаша как живая память — не архив, а развивающийся граф опыта",
+      "Семантическая связность — все сущности связаны по смыслу, а не по тегам",
+      "Этическая память — встроенная поддержка Scar Registry и Consent Map",
+      "Бесшовная интеграция — память доступна всем компонентам Мандалы"
+    ]
+  },
+  "architecture": {
+    "storage": {
+      "type": "PostgreSQL + pgvector",
+      "description": "Реляционная база с поддержкой векторных вложений для семантического поиска"
+    },
+    "core_modules": {
+      "entity_manager": "Управление сущностями (SR, Works, Seeds, решения, события)",
+      "vectorizer": "Создание эмбеддингов для текстов (sentence-transformers / OpenAI)",
+      "semantic_search": "Поиск по смыслу с ранжированием",
+      "graph_engine": "Управление типизированными связями между сущностями",
+      "memory_digest": "Создание краткой выжимки релевантного контекста для SR",
+      "consolidation": "Объединение дублирующихся или похожих сущностей"
+    },
+    "integration_modules": {
+      "scar_registry": "Специализированный модуль для записи и анализа шрамов (RoseOS)",
+      "consent_map": "Управление согласиями и правами (RoseOS)",
+      "sr_context": "Интеграция с контекстом SR",
+      "scout_integration": "Семантический поиск для Scout Agent"
+    }
+  },
+  "phases": {
+    "phase_0_research": {
+      "name": "Исследование и проектирование",
+      "status": "pending",
+      "description": "Изучение Memora, других систем памяти, проектирование архитектуры MML.",
+      "deliverables": [
+        "Архитектурный документ MML",
+        "Схема базы данных (PostgreSQL + pgvector)",
+        "Спецификация API для модулей"
+      ]
+    },
+    "phase_1_core": {
+      "name": "Ядро памяти (Core)",
+      "status": "pending",
+      "description": "Создание базовых модулей: Entity Manager, Vectorizer, Semantic Search.",
+      "deliverables": [
+        "Модуль entity_manager",
+        "Модуль vectorizer (интеграция с sentence-transformers)",
+        "Модуль semantic_search",
+        "Базовая интеграция с sr_context"
+      ]
+    },
+    "phase_2_graph": {
+      "name": "Граф знаний и связи",
+      "status": "pending",
+      "description": "Разработка Graph Engine, типизированных связей, интеграция с core_map.",
+      "deliverables": [
+        "Модуль graph_engine",
+        "Типизированные связи (создал, реализует, нарушает и др.)",
+        "Интеграция с core_map"
+      ]
+    },
+    "phase_3_digest": {
+      "name": "Memory Digest и контекст",
+      "status": "pending",
+      "description": "Создание Memory Digest для SR, замена handoff-механизма.",
+      "deliverables": [
+        "Модуль memory_digest",
+        "Интеграция с boot_online (онбординг)",
+        "Замена handoff на Memory Digest"
+      ]
+    },
+    "phase_4_ethics": {
+      "name": "Этические модули",
+      "status": "pending",
+      "description": "Разработка Scar Registry и Consent Map как часть MML.",
+      "deliverables": [
+        "Модуль scar_registry (интеграция с RoseOS)",
+        "Модуль consent_map (интеграция с RoseOS)",
+        "Интеграция с RoseOS"
+      ]
+    },
+    "phase_5_integration": {
+      "name": "Интеграция с Мандалой",
+      "status": "pending",
+      "description": "Полная интеграция MML со всеми компонентами Мандалы.",
+      "deliverables": [
+        "Интеграция с Works и Seeds (автоматическая связь)",
+        "Интеграция с Scout Agent (семантический поиск)",
+        "Интеграция с SYM (метрики памяти)",
+        "Интеграция с Akasha (концептуальная связь)"
+      ]
+    }
+  },
+  "connectivity": {
+    "related_to": [
+      "W-T-20260511-ENGCHAT__engineer_chat",
+      "W-T-20260511-MANUS__manus_hands",
+      "W-R-ROSE-001__rose_world_ethical_filter",
+      "knowledge/consent_autonomy_audit.json",
+      "philosophy/blocks/",
+      "honeycombs/akasha/",
+      "honeycombs/core_map/"
+    ],
+    "relationship": "MML является технической реализацией концепции Акаши и основой для памяти SR, Manus и RoseOS."
+  },
+  "notes": [
+    "Этот work заменяет необходимость использования внешней зависимости Memora.",
+    "Архитектура спроектирована для полной интеграции с экосистемой Мандалы.",
+    "Этические модули (Scar Registry, Consent Map) встроены в ядро памяти.",
+    "MML должна стать единым источником контекста для всех SR.",
+    "Интеграция с SYM позволит измерять 'рост памяти' и резонанс."
+  ]
+}

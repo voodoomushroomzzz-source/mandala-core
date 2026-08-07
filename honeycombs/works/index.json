@@ -4,7 +4,7 @@
     "name": "Works — Unified System of Work Items",
     "version": "v1.0.13",
     "created": "2026-07-08",
-    "updated": "2026-08-05",
+    "updated": "2026-08-07",
     "layer": 1,
     "type": "work_manifest",
     "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -51,20 +51,20 @@
     ]
   },
   "manifest": {
-    "total_works": 24,
+    "total_works": 25,
     "by_status": {
       "active": 8,
-      "planning": 14,
+      "planning": 15,
       "in_progress": 1,
       "done": 1
     },
     "by_horizon": {
       "strategic": 10,
-      "tactical": 14
+      "tactical": 15
     },
     "by_priority": {
       "critical": 5,
-      "high": 12,
+      "high": 13,
       "medium": 5,
       "low": 2
     },
@@ -92,7 +92,8 @@
       "W-T-20260803-RL-REASONING",
       "W-T-20260803-SR-EVALUATION",
       "W-T-20260804-SR-REFLECTION__in_context_search",
-      "W-T-20260804-MANUS-MEMORY__nativemem"
+      "W-T-20260804-MANUS-MEMORY__nativemem",
+      "W-T-20260807-MEMORY__mandala_memory_layer"
     ],
     "deadlines": {
       "W-R-RC-001__visibility_strategy": null,
@@ -116,7 +117,8 @@
       "W-T-20260728-CYBER-AGENTS": "2026-10-31",
       "W-R-20260803-KURTOCH-FRANCHISE": null,
       "W-T-20260803-RL-REASONING": "2026-10-31",
-      "W-T-20260803-SR-EVALUATION": "2026-10-31"
+      "W-T-20260803-SR-EVALUATION": "2026-10-31",
+      "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15"
     },
     "progress": {
       "W-R-RC-001__visibility_strategy": 0,
@@ -140,7 +142,8 @@
       "W-T-20260728-CYBER-AGENTS": 0,
       "W-R-20260803-KURTOCH-FRANCHISE": 0,
       "W-T-20260803-RL-REASONING": 0,
-      "W-T-20260803-SR-EVALUATION": 0
+      "W-T-20260803-SR-EVALUATION": 0,
+      "W-T-20260807-MEMORY__mandala_memory_layer": 0
     },
     "progress_updated": "2026-08-03",
     "related_works": {
@@ -170,6 +173,11 @@
       "W-T-20260803-SR-EVALUATION": [
         "W-T-20260511-ENGCHAT",
         "W-T-20260803-RL-REASONING"
+      ],
+      "W-T-20260807-MEMORY__mandala_memory_layer": [
+        "W-T-20260511-ENGCHAT__engineer_chat",
+        "W-T-20260511-MANUS__manus_hands",
+        "W-R-ROSE-001__rose_world_ethical_filter"
       ]
     }
   },
@@ -182,8 +190,8 @@
   },
   "health": {
     "status": "active",
-    "last_check": "2026-08-05",
-    "notes": "W-R-ROSE-001: all 7 petals created. Progress 30%."
+    "last_check": "2026-08-07",
+    "notes": "Added W-T-20260807-MEMORY__mandala_memory_layer (Mandala Memory Layer)."
   },
   "updated": "2026-08-03"
 }
