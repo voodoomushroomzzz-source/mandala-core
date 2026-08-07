@@ -2,29 +2,31 @@
   "identity": {
     "module_id": "SEEDS-INBOX-INDEX-001",
     "name": "Seeds Inbox Index",
-    "version": "v1.1.0",
-    "created": "2026-08-05",
-    "updated": "2026-08-05",
+    "version": "v1.2.0",
+    "created": "2026-08-07",
+    "updated": "2026-08-07",
     "layer": 3,
     "type": "seed_inbox_index",
     "status": "active",
-    "description": "Inbox processing log. 22 seeds evaluated on 2026-08-05.",
+    "description": "Full inbox processing log. 44 seeds evaluated on 2026-08-07.",
     "tags": ["seeds", "inbox", "index", "processing-log"]
   },
   "meta": {
     "description": "Complete record of seed processing. Includes promoted, kept, and rejected seeds.",
-    "last_processed": "2026-08-05",
+    "last_processed": "2026-08-07",
     "processed_by": "DeepSeek SR",
-    "total_seeds_in_inbox": 22,
-    "analyzed": 22
+    "total_seeds_in_inbox": 44,
+    "analyzed": 44
   },
   "summary": {
-    "promoted_to_root": 1,
-    "kept_in_inbox": 10,
-    "rejected": 11
+    "promoted_to_root": 3,
+    "kept_in_inbox": 21,
+    "rejected": 18
   },
   "promoted_seeds": [
-    "SEED-20260805-070111-022"
+    "SEED-20260806-070104-024",
+    "SEED-20260806-070104-026",
+    "SEED-20260806-070107-030"
   ],
   "kept_seeds": [
     "SEED-20260804-112240-003",
@@ -37,23 +39,35 @@
     "SEED-20260805-070111-018",
     "SEED-20260805-070111-019",
     "SEED-20260805-070111-020",
-    "SEED-20260805-070111-021"
+    "SEED-20260805-070111-021",
+    "SEED-20260806-070104-023",
+    "SEED-20260807-070108-035",
+    "SEED-20260807-070108-036",
+    "SEED-20260807-070108-037",
+    "SEED-20260807-070108-038",
+    "SEED-20260807-070108-039",
+    "SEED-20260807-070108-040",
+    "SEED-20260807-070108-041",
+    "SEED-20260807-070108-042",
+    "SEED-20260807-070108-044"
   ],
   "rejected_seeds": [
-    "SEED-20260804-112239-001",
-    "SEED-20260804-112239-002",
-    "SEED-20260804-112240-004",
-    "SEED-20260804-112240-005",
-    "SEED-20260804-112240-006",
-    "SEED-20260804-112240-007",
-    "SEED-20260804-112240-008",
-    "SEED-20260804-112240-009",
-    "SEED-20260804-112240-010",
-    "SEED-20260804-112240-011",
-    "SEED-20260805-112027-023"
+    "SEED-20260805-070111-021",
+    "SEED-20260806-070104-022",
+    "SEED-20260806-070104-025",
+    "SEED-20260806-070106-027",
+    "SEED-20260806-070106-028",
+    "SEED-20260806-070106-029",
+    "SEED-20260806-070107-031",
+    "SEED-20260806-070107-032",
+    "SEED-20260806-070107-033",
+    "SEED-20260806-070107-034",
+    "SEED-20260807-070108-043",
+    "SEED-20260807-070108-045",
+    "SEED-20260807-100050-046"
   ],
   "next_session": {
-    "instruction": "Phase 2 (deep analysis) required for 10 kept seeds.",
+    "instruction": "Phase 2 (deep analysis) required for 21 kept seeds.",
     "start_from": "kept_seeds",
     "note": "Read full texts, fill work_analysis blocks."
   },
@@ -67,7 +81,7 @@
   },
   "health": {
     "status": "ok",
-    "last_check": "2026-08-05",
-    "notes": "22 seeds processed. 1 promoted, 10 kept, 11 rejected."
+    "last_check": "2026-08-07",
+    "notes": "44 seeds processed. 3 promoted, 21 kept, 18 rejected."
   }
 }

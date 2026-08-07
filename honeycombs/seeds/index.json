@@ -4,7 +4,7 @@
     "name": "Seeds Index",
     "version": "v2.0.0",
     "created": "2026-07-10",
-    "updated": "2026-08-05",
+    "updated": "2026-08-07",
     "layer": 2,
     "type": "seed_index",
     "status": "active",
@@ -16,7 +16,7 @@
   },
   "meta": {
     "description": "Seeds are raw ideas collected by Scout Agent or Gardener.",
-    "total_seeds": 1,
+    "total_seeds": 4,
     "last_updated": "2026-08-04"
   },
   "active_seeds": [
@@ -25,6 +25,24 @@
       "title": "Zero-Mem: Zero-Token Memory Operations for LLM Agents",
       "status": "in_root",
       "date_added": "2026-08-05"
+    },
+    {
+      "seed_id": "SEED-20260806-070104-024",
+      "title": "Prime Agent: A self-improving RLM agent",
+      "status": "in_root",
+      "date_added": "2026-08-07"
+    },
+    {
+      "seed_id": "SEED-20260806-070104-026",
+      "title": "Cloudflare OS: an open platform for agents, apps, and work",
+      "status": "in_root",
+      "date_added": "2026-08-07"
+    },
+    {
+      "seed_id": "SEED-20260806-070107-030",
+      "title": "Meta launches Muse Code, an AI agent for large code bases",
+      "status": "in_root",
+      "date_added": "2026-08-07"
     }
   ],
   "navigation": {
@@ -36,7 +54,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-08-05",
-    "notes": "Removed seeds that were already converted to works."
+    "last_check": "2026-08-07",
+    "notes": "Promoted 3 seeds from inbox to root (Prime Agent, Cloudflare OS, Muse Code)."
   }
 }
