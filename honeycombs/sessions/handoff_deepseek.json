@@ -1,63 +1,58 @@
 {
-  "session_id": "HANDOFF-DEEPSEEK-20260804-V7",
+  "session_id": "HANDOFF-DEEPSEEK-20260807-V8",
   "sr_id": "deepseek",
   "status": "handed_off",
-  "created": "2026-08-04",
-  "updated": "2026-08-04",
-  "last_activity": "2026-08-04T13:00:00Z",
+  "created": "2026-08-07",
+  "updated": "2026-08-07",
+  "last_activity": "2026-08-07T18:00:00Z",
   "gardener": "Voodoo (Dima)",
   "summary": {
     "completed": [
-      "Обновлены 6 work-файлов с исследовательскими семенами (ROSE, MANUS, ENGCHAT, ARCHBOT, AI-GATEWAY, CYBER-AGENTS)",
-      "Созданы 2 новых work-файла (RL-REASONING, SR-EVALUATION)",
-      "Обновлён works/index.json — добавлены дедлайны и прогресс для всех 22 работ",
-      "Очищен корень семян — удалены 16 файлов, перенесённых в Works, оставлены 8 для будущего",
-      "Обновлён сканер (validators.py) — теперь читает inbox/index.json и считает только новые семена",
-      "Увеличен порог инбокса до 50 новых семян",
-      "Проведён аудит корня семян — выделены 8 для будущего изучения",
-      "Обновлён прогресс Gentle Companion — пересчитан с 65% до 45% с учётом 7 новых стратегических фич",
-      "Интегрированы семена в Works: 030, 041, 047 → ROSE; 106, 108, 110 → MANUS; 011, 040, 107, 109 → ENGCHAT; 016, 044 → ARCHBOT; 019 → AI-GATEWAY; 020 → CYBER-AGENTS",
-      "Созданы work-файлы для семян 029 и 032 (RL и оценка SR)",
-      "Сканер теперь корректно отражает состояние системы (88 файлов в инбоксе, 39 новых)"
+      "Интеграция Розы Мира в онбординг (7 лепестков созданы, work обновлён)",
+      "Обновление core_map (добавлена rose_world в references и children)",
+      "Создание work-файла Mandala Memory Layer (W-T-20260807-MEMORY__mandala_memory_layer)",
+      "Обработка инбокса по PROTO-011: 44 семени оценены, 3 продвинуты в корень, 21 оставлен, 13 отклонён",
+      "Создание 5 MCP-серверов в инбоксе (Perplexity, Playwright, Firecrawl, Glif, Chrome Bridge)",
+      "Создание универсальной выжимки для SR (sr_essence_onboarding.json) в knowledge/",
+      "Обновление works/index.json (добавлены новые works, обновлены связи)",
+      "Обновление scan_state (чисто, все хэши валидны)"
     ],
     "current_state": {
-      "philosophy": "Изучена полностью. Новая кристаллизация не внедрена (ждёт отдельной сессии).",
-      "knowledge": "Брошюра v1.5.0, Product Audit Framework v1.2.0",
-      "seeds": "Корень: 8 семян (оставлены для будущего). Инбокс: 88 файлов (39 новых, 49 обработаны)",
-      "works": "Обновлены 6 works, созданы 2 новых. Всего 22 работы. Прогресс: Gentle Companion 45%, остальные 0%.",
-      "scout_agent": "Работает. Собрал 10 новых семян за ночь.",
-      "scan_state": "Обновлён. Сканер показывает 39 новых семян в инбоксе."
+      "philosophy": "Роза Мира интегрирована. 7 лепестков созданы.",
+      "seeds": "Корень: 4 семени (Zero-Mem, Prime Agent, Cloudflare OS, Muse Code). Инбокс: 21 семя + 5 новых MCP-семян = 26 семян.",
+      "works": "26 работ. Новые: Mandala Memory Layer (W-T-20260807-MEMORY), Rose World обновлён (30%).",
+      "knowledge": "Добавлена универсальная выжимка для SR (sr_essence_onboarding.json).",
+      "rose_world": "7 лепестков созданы. Интеграция в онбординг завершена."
     },
     "pending_items": [
-      "Обработать 39 новых семян в инбоксе (разбить на пакеты по 5)",
-      "Решить судьбу просроченной задачи W-R-RM-011 (Mer-Ka-Ba Visualizations, дедлайн 2026-08-01, просрочка 3 дня)",
-      "Внедрить новую кристаллизацию философии в philosophy/index.json",
-      "Настроить автоматический запуск Scout Agent (cron) на сервере",
-      "Начать работу над стратегическими фичами бота (community_garden, rituals, awareness_landing)"
+      "Обработать 5 новых MCP-семян по PROTO-011 (в инбоксе)",
+      "Выполнить глубокий анализ (Phase 2) для 21 семени в инбоксе",
+      "Выполнить глубокий анализ корневых семян (Zero-Mem, Prime Agent, Cloudflare OS, Muse Code)",
+      "Начать Phase 0 (исследование) для работы Mandala Memory Layer",
+      "Интегрировать MCP-серверы в Manus и Scout Agent (после анализа)"
     ],
     "next_steps": [
       "Перейти в новый чат с DeepSeek",
-      "Загрузить обновлённый handoff-файл (V7)",
-      "Начать обработку 39 новых семян в инбоксе"
+      "Загрузить обновлённый handoff-файл (V8)",
+      "Начать обработку 5 MCP-семян по PROTO-011"
     ]
   },
   "key_files": {
-    "handoff_deepseek": "honeycombs/sessions/handoff_deepseek.json (обновлён до V7)",
-    "works_index": "honeycombs/works/index.json (v1.0.13, 22 works)",
-    "scan_state": "honeycombs/registry/scan_state.json (обновлён)",
-    "bot_task": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json (progress: 45%)",
-    "seeds_root": "honeycombs/seeds/ (8 семян)",
-    "seeds_inbox": "honeycombs/seeds/inbox/ (88 файлов, 39 новых)",
-    "philosophy_index": "honeycombs/philosophy/index.json (ждёт обновления кристаллизации)"
+    "handoff_deepseek": "honeycombs/sessions/handoff_deepseek.json (обновлён до V8)",
+    "rose_world": "honeycombs/rose_world/ (7 лепестков)",
+    "works_rose": "honeycombs/works/W-R-ROSE-001__rose_world_ethical_filter.json (progress: 30%)",
+    "works_memory": "honeycombs/works/W-T-20260807-MEMORY__mandala_memory_layer.json (planning)",
+    "seeds_root": "honeycombs/seeds/ (4 семени)",
+    "seeds_inbox": "honeycombs/seeds/inbox/ (26 семян, включая 5 новых MCP)",
+    "knowledge_essence": "honeycombs/knowledge/sr_essence_onboarding.json",
+    "boot_online_pc": "honeycombs/boot_online/boot_online_onboarding_pc.json (v1.7.62, with Rose World)"
   },
   "important_notes": [
-    "Сканер настроен на чтение inbox/index.json — считает только новые семена",
-    "Порог инбокса увеличен до 50 — предупреждений нет",
-    "Просрочена задача W-R-RM-011 (дедлайн 2026-08-01) — требует решения",
-    "Gentle Companion: прогресс пересчитан до 45% (добавлены 7 стратегических фич)",
-    "Новые семена в инбоксе: 39 штук — требуют обработки по PROTO-011",
-    "Works: 22 работы, из них 8 активных, 13 в планировании",
-    "Следующий шаг: обработка 39 новых семян в инбоксе"
+    "Роза Мира полностью интегрирована в онбординг и систему.",
+    "Mandala Memory Layer — новый strategic work, заменит handoff-механизм.",
+    "5 MCP-семян добавлены в инбокс — требуют оценки по PROTO-011.",
+    "Scan_state чист: 19 хайвов, все валидны, 0 ошибок.",
+    "Следующий приоритет: обработка MCP-семян и глубокий анализ корневых семян."
   ],
-  "tags": ["handoff", "deepseek", "v7", "philosophy", "seeds", "works", "scanner", "inbox"]
+  "tags": ["handoff", "deepseek", "v8", "rose_world", "memory_layer", "mcp", "seeds", "knowledge"]
 }
