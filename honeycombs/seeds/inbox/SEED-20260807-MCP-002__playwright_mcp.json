@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260807-MCP-002__playwright_mcp",
+  "title": "Playwright MCP — управление браузером для AI-агентов",
+  "url": "https://github.com/microsoft/playwright-mcp",
+  "description": "MCP-сервер от Microsoft, дающий AI-агенту возможность управлять браузером: открывать страницы, кликать по элементам, заполнять формы, делать скриншоты. Поддерживается Claude Desktop, Claude Code, Cursor, VS Code.",
+  "source": "Video analysis: 'Обзор 5 полезных MCP-серверов'",
+  "collected_at": "2026-08-07T12:00:00",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 8,
+    "score_feasibility": 7,
+    "score_relevance": 9,
+    "score_impact": 9,
+    "total_score": 33,
+    "mandala_relevance": "Прямое применение для Manus — тестирование веб-интерфейсов, парсинг, автоматизация действий в браузере.",
+    "reason_selected": "Критически важно для расширения возможностей Manus в веб-среде",
+    "action": "promote"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": ["https://github.com/microsoft/playwright-mcp", "https://playwright.dev/"],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": ["W-T-20260511-MANUS__manus_hands"],
+    "implementation_notes": "Интегрировать в Manus как модуль для работы с веб-интерфейсами. Использовать для e2e-тестирования и парсинга."
+  }
+}
