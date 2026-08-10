@@ -1,7 +1,7 @@
 {
   "work_id": "W-T-20260804-MANUS-MEMORY__nativemem",
   "name": "NativeMEM — долгосрочная память для Manus",
-  "status": "planning",
+  "status": "active",
   "priority": "high",
   "horizon": "tactical",
   "description": "Интегрировать в Manus механизм сжатия памяти NativeMEM для сохранения контекста длительных операций. Позволит Manus запоминать последовательность действий и состояние среды.",

@@ -1,7 +1,7 @@
 {
   "work_id": "W-T-20260803-SR-EVALUATION",
   "name": "SR Evaluation Framework — Beyond Benchmarks",
-  "status": "planning",
+  "status": "active",
   "priority": "high",
   "horizon": "tactical",
   "description": "Разработка собственных методов оценки SR, основанных на реальных задачах Mandala. На основе семени 032: 'When benchmark inferences do not compose: Projectibility in AI evaluation'. Цель: создать фреймворк оценки, который отражает реальную производительность SR, а не результаты на бенчмарках.",

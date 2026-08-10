@@ -1,7 +1,7 @@
 {
   "work_id": "W-T-20260803-RL-REASONING",
   "name": "RL Reasoning — Reinforcement Learning for SR Reasoning",
-  "status": "planning",
+  "status": "active",
   "priority": "high",
   "horizon": "tactical",
   "description": "Исследование и внедрение RL-подхода для улучшения рассуждений SR. На основе семени 029: 'Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models'. Цель: переключить SR с SFT (заучивание) на RL (обучение через взаимодействие) для более глубокого понимания.",

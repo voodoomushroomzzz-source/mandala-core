@@ -1,73 +1,64 @@
 {
   "identity": {
-    "module_id": "FRUIT-SCOUT-001",
+    "module_id": "FRUIT-SCOUT-AGENT-001",
     "name": "Scout Agent — Autonomous Seed Collector",
     "version": "v2.1",
-    "created": "2026-07-08",
-    "updated": "2026-07-11",
+    "created": "2026-05-20",
+    "updated": "2026-08-10",
     "layer": 2,
-    "type": "honeycomb_manifest",
-    "description": "Автономный сборщик семян из внешних источников (гранты, наука, AI, GitHub). Без LLM. Сохраняет семена в honeycombs/seeds/inbox/.",
+    "type": "fruit_index",
+    "description": "Autonomous agent that collects seeds from external sources and saves them to honeycombs/seeds/.",
     "status": "active",
     "priority": "high",
-    "tags": [
-      "scout",
-      "collector",
-      "seeds",
-      "rss",
-      "automation"
-    ],
+    "tags": ["scout", "seeds", "collector", "autonomous", "agent"],
     "resonance": "100%"
   },
   "meta": {
-    "purpose": "Автоматически наполнять Мандалу свежими идеями из внешнего мира для последующего анализа",
-    "how_it_works": "Сбор по расписанию (cron) → сохранение в JSON → сохранение в honeycombs/seeds/inbox/",
-    "sources": [
-      "гранты",
-      "наука/космос",
-      "AI-разработки",
-      "GitHub"
-    ],
-    "tech_stack": [
-      "Python",
-      "feedparser",
-      "requests",
-      "cron"
-    ],
-    "status": "active",
-    "version": "v2.1",
-    "last_deploy": "2026-07-11"
+    "description": "Scout Agent — автономный сборщик семян. Собирает идеи из внешних источников и сохраняет в honeycombs/seeds/.",
+    "purpose": "Автоматический сбор идей и трендов из внешних источников для обогащения базы семян Мандалы.",
+    "how_to_use": "Запускается автоматически или по команде. Собирает данные и сохраняет в seeds/inbox/."
   },
-  "structure": {
-    "description": "Scout Agent состоит из основного скрипта, конфига и руководства",
-    "files": {
-      "collector.py": "Основной скрипт сбора",
-      "config.json": "Список источников",
-      "guide.json": "Руководство для SR"
+  "architecture": {
+    "entry_point": "scout_agent.py",
+    "modules": [
+      "collectors/",
+      "processors/",
+      "writers/"
+    ],
+    "data_flow": "External sources → Collectors → Processors → seeds/inbox/"
+  },
+  "sources": [
+    {
+      "name": "Telegram Channels",
+      "enabled": true,
+      "config": "config/telegram_sources.json"
     },
-    "cron": "Ежедневно в 09:00",
-    "output": "honeycombs/seeds/inbox/SEED_YYYYMMDD_HHMMSS.json"
-  },
-  "registry": {
-    "total_files": 3,
-    "last_updated": "2026-07-11",
-    "notes": "v2.1: fully operational. 24h filter, duplicate check, PROTO-011 integrated."
-  },
+    {
+      "name": "Reddit",
+      "enabled": false,
+      "config": "config/reddit_sources.json"
+    },
+    {
+      "name": "Twitter/X",
+      "enabled": false,
+      "config": "config/twitter_sources.json"
+    },
+    {
+      "name": "RSS Feeds",
+      "enabled": true,
+      "config": "config/rss_sources.json"
+    }
+  ],
   "navigation": {
-    "parent_map": "honeycombs/core_map/index.json",
+    "parent": "honeycombs/fruits/index.json",
     "related": [
-      "honeycombs/seeds",
-      "honeycombs/fruits"
+      "honeycombs/seeds/",
+      "honeycombs/works/"
     ]
   },
-  "resonance": {
-    "status": "fully_resonant",
-    "with_boot": "100%",
-    "with_core_map": "100%"
-  },
   "health": {
-    "status": "active",
-    "last_check": "2026-07-09",
-    "notes": "v2.1: реализован полностью. Сбор семян работает, дубликаты исключены, PROTO-011 интегрирован."
+    "status": "healthy",
+    "last_check": "2026-08-10",
+    "notes": "v2.1: added meta.description."
   }
 }
