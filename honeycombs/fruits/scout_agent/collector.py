@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Scout Agent v2 — с keyword-фильтром и лимитом 5 семян с источника
+Scout Agent v2.2 — с keyword-фильтром, лимитом 5 семян с источника
+и автоматической очисткой инбокса по индексу
 """
 import json
 import re
@@ -39,6 +40,7 @@ def normalize_url(url):
     parsed = urlparse(url)
     return f"{parsed.scheme}://{parsed.netloc}{parsed.path}".lower()
 
+
 def is_similar(a, b, threshold=0.85):
     """Проверяет, похожи ли две строки (нечёткое сравнение)."""
     if not a or not b:
@@ -52,6 +54,7 @@ def is_similar(a, b, threshold=0.85):
     ratio = SequenceMatcher(None, a_clean, b_clean).ratio()
     return ratio >= threshold
 
+
 def log(message, level="INFO"):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     line = f"[{timestamp}] [{level}] {message}"
@@ -62,12 +65,14 @@ def log(message, level="INFO"):
     except:
         pass
 
+
 def is_relevant(text):
     """Проверяет текст на наличие ключевых слов."""
     if not text:
         return False
     text_lower = text.lower()
     return any(kw.lower() in text_lower for kw in RELEVANT_KEYWORDS)
+
 
 def is_recent(published_str, hours=24):
     """Проверяет, что дата публикации за последние 24 часа."""
@@ -95,6 +100,7 @@ def is_recent(published_str, hours=24):
         # Если парсинг не удался, считаем статью старой
         return False
 
+
 def filter_items(items, max_items=5):
     """Оставляет до 5 релевантных семян"""
     relevant = []
@@ -106,6 +112,7 @@ def filter_items(items, max_items=5):
             if len(relevant) >= max_items:
                 break
     return relevant
+
 
 def is_duplicate(item, seed_dir):
     """Проверяет дубликаты по URL, заголовку и описанию (с нечётким сравнением)."""
@@ -148,6 +155,8 @@ def is_duplicate(item, seed_dir):
             except Exception:
                 continue
     return False
+
+
 def get_seed_id(seed_dir):
     counter = 1
     existing = list(seed_dir.glob("SEED-*.json"))
@@ -164,11 +173,12 @@ def get_seed_id(seed_dir):
             counter = max(nums) + 1
     return f"SEED-{datetime.now().strftime('%Y%m%d')}-{datetime.now().strftime('%H%M%S')}-{counter:03d}"
 
+
 def collect_rss(url, source_name):
     log(f"Fetching RSS: {source_name} ({url})")
     try:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (compatible; ScoutAgent/2.0; +https://mandala.symbiosis)',
+            'User-Agent': 'Mozilla/5.0 (compatible; ScoutAgent/2.2; +https://mandala.symbiosis)',
             'Accept': 'application/rss+xml, application/xml, text/xml, */*'
         }
         # allow_redirects=True — для arXiv (302 Found)
@@ -197,11 +207,12 @@ def collect_rss(url, source_name):
         log(f"  ❌ RSS error: {e}", "ERROR")
         return []
 
+
 def collect_api(url, source_name):
     log(f"Fetching API: {source_name} ({url})")
     try:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (compatible; ScoutAgent/2.0; +https://mandala.symbiosis)',
+            'User-Agent': 'Mozilla/5.0 (compatible; ScoutAgent/2.2; +https://mandala.symbiosis)',
             'Accept': 'application/json'
         }
         response = requests.get(url, timeout=15, headers=headers)
@@ -233,6 +244,7 @@ def collect_api(url, source_name):
     except Exception as e:
         log(f"  ❌ API error: {e}", "ERROR")
         return []
+
 
 def save_seed(item, source_name, seed_dir):
     if not item.get('url'):
@@ -279,9 +291,116 @@ def save_seed(item, source_name, seed_dir):
     log(f"  ✅ Saved: {filename.name}")
     return True
 
+
+def clean_old_seeds(seed_dir):
+    """Удаляет старые семена на основе last_processed из inbox/index.json"""
+    index_path = Path("honeycombs/seeds/inbox/index.json")
+    removed_count = 0
+
+    if not index_path.exists():
+        log("  📝 inbox/index.json not found — skipping cleanup")
+        return 0
+
+    try:
+        with open(index_path, 'r', encoding='utf-8') as f:
+            index = json.load(f)
+
+        last_processed = index.get("meta", {}).get("last_processed")
+        if not last_processed:
+            log("  ⚠️ No last_processed in index — skipping cleanup")
+            return 0
+
+        log(f"  🗑️ Cleaning old seeds (date <= {last_processed})...")
+
+        for file in seed_dir.glob("*.json"):
+            if file.name == "index.json":
+                continue
+            match = re.search(r'(\d{4}-\d{2}-\d{2})', file.name)
+            if match:
+                file_date = match.group(1)
+                if file_date <= last_processed:
+                    file.unlink()
+                    removed_count += 1
+                    log(f"  🗑️ Removed old seed: {file.name}")
+
+        if removed_count > 0:
+            log(f"  ✅ Removed {removed_count} old seeds")
+        else:
+            log("  ✅ No old seeds to remove")
+
+    except Exception as e:
+        log(f"  ⚠️ Error cleaning old seeds: {e}", "WARNING")
+
+    return removed_count
+
+
+def update_inbox_index(total_saved, total_duplicates, removed_count):
+    """Обновляет inbox/index.json с датой обработки"""
+    index_path = Path("honeycombs/seeds/inbox/index.json")
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    try:
+        if index_path.exists():
+            with open(index_path, 'r', encoding='utf-8') as f:
+                index = json.load(f)
+
+            index["meta"]["last_processed"] = today
+            index["meta"]["total_processed"] = index.get("meta", {}).get("total_processed", 0) + total_saved
+            index["meta"]["processed_by"] = "Scout Agent"
+
+            with open(index_path, 'w', encoding='utf-8') as f:
+                json.dump(index, f, indent=2, ensure_ascii=False)
+
+            log(f"  📝 Updated inbox/index.json with last_processed={today}")
+        else:
+            # Создаём новый индекс
+            new_index = {
+                "identity": {
+                    "module_id": "SEEDS-INBOX-INDEX-001",
+                    "name": "Seeds Inbox Index",
+                    "version": "v2.0.0",
+                    "created": today,
+                    "updated": today,
+                    "layer": 3,
+                    "type": "seed_inbox_index",
+                    "status": "active",
+                    "description": "Inbox processing log. Contains last_processed date and promoted seeds list."
+                },
+                "meta": {
+                    "description": "Inbox index for tracking processed seeds. Scout Agent uses last_processed to clean old seeds.",
+                    "last_processed": today,
+                    "processed_by": "Scout Agent",
+                    "total_processed": total_saved,
+                    "promoted_to_root": 0
+                },
+                "promoted_seeds": [],
+                "navigation": {
+                    "parent": "honeycombs/seeds/index.json",
+                    "related": [
+                        "honeycombs/seeds/index.json",
+                        "honeycombs/registry/scan_state.json",
+                        "honeycombs/protocols/seed_to_work.json"
+                    ]
+                },
+                "health": {
+                    "status": "ok",
+                    "last_check": today,
+                    "notes": f"Auto-created by Scout Agent v2.2 on {today}"
+                }
+            }
+
+            with open(index_path, 'w', encoding='utf-8') as f:
+                json.dump(new_index, f, indent=2, ensure_ascii=False)
+
+            log(f"  ✅ Created new inbox/index.json with last_processed={today}")
+
+    except Exception as e:
+        log(f"  ⚠️ Error updating index: {e}", "WARNING")
+
+
 def main():
     log("=" * 60)
-    log("🚀 Scout Agent v2 started (keyword filter, max 5 per source)")
+    log("🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)")
 
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         config = json.load(f)
@@ -292,6 +411,7 @@ def main():
     total_saved = 0
     total_duplicates = 0
 
+    # --- ШАГ 1: Сбор новых семян ---
     for source in config['sources']:
         if not source.get("enabled", True):
             log(f"⏭️ Source disabled: {source['name']}")
@@ -316,11 +436,20 @@ def main():
         total_duplicates += duplicates
         log(f"  📊 {source['name']}: saved {saved}, duplicates {duplicates}")
 
+    # --- ШАГ 2: Удаление старых семян ---
+    removed_count = clean_old_seeds(seed_dir)
+
+    # --- ШАГ 3: Обновление индекса ---
+    update_inbox_index(total_saved, total_duplicates, removed_count)
+
+    # --- Финальный лог ---
     log("\n" + "=" * 60)
-    log(f"✅ Scout Agent v2 finished")
+    log(f"✅ Scout Agent v2.2 finished")
     log(f"  Total saved: {total_saved}")
     log(f"  Total duplicates: {total_duplicates}")
+    log(f"  Total removed (old): {removed_count}")
     log("=" * 60)
+
 
 if __name__ == "__main__":
     main()
