@@ -2726,3 +2726,63 @@
 [2026-08-09 09:38:15] [INFO]   Total saved: 0
 [2026-08-09 09:38:15] [INFO]   Total duplicates: 4
 [2026-08-09 09:38:15] [INFO] ============================================================
+[2026-08-10 07:01:08] [INFO] ============================================================
+[2026-08-10 07:01:08] [INFO] 🚀 Scout Agent v2 started (keyword filter, max 5 per source)
+[2026-08-10 07:01:08] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-10 07:01:08] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-10 07:01:08] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-10 07:01:08] [INFO]   → Filtered to 5 relevant items
+[2026-08-10 07:01:08] [INFO]   ✅ Saved: SEED-20260810-070108-062.json
+[2026-08-10 07:01:08] [INFO]   ✅ Saved: SEED-20260810-070108-063.json
+[2026-08-10 07:01:08] [INFO]   ✅ Saved: SEED-20260810-070108-064.json
+[2026-08-10 07:01:08] [INFO]   ✅ Saved: SEED-20260810-070108-065.json
+[2026-08-10 07:01:08] [INFO]   ✅ Saved: SEED-20260810-070108-066.json
+[2026-08-10 07:01:08] [INFO]   📊 arXiv AI: saved 5, duplicates 0
+[2026-08-10 07:01:08] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-10 07:01:08] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-10 07:01:09] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-10 07:01:09] [INFO]   → Filtered to 5 relevant items
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-067.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-068.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-069.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-070.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-071.json
+[2026-08-10 07:01:09] [INFO]   📊 arXiv Robotics: saved 5, duplicates 0
+[2026-08-10 07:01:09] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-10 07:01:09] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-10 07:01:09] [INFO]   → Found 15 raw items, 11 recent
+[2026-08-10 07:01:09] [INFO]   → Filtered to 5 relevant items
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-072.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-073.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-074.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-075.json
+[2026-08-10 07:01:09] [INFO]   ✅ Saved: SEED-20260810-070109-076.json
+[2026-08-10 07:01:09] [INFO]   📊 Hacker News: saved 5, duplicates 0
+[2026-08-10 07:01:09] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-10 07:01:09] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-10 07:01:10] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-10 07:01:10] [INFO]   → Filtered to 5 relevant items
+[2026-08-10 07:01:10] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-10 07:01:10] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-10 07:01:10] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-10 07:01:10] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-10 07:01:10] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-10 07:01:10] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-10 07:01:10] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-10 07:01:10] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-10 07:01:10] [INFO]   → Found 15 raw items, 4 recent
+[2026-08-10 07:01:10] [INFO]   → Filtered to 2 relevant items
+[2026-08-10 07:01:10] [INFO]   ✅ Saved: SEED-20260810-070110-077.json
+[2026-08-10 07:01:10] [INFO]   ✅ Saved: SEED-20260810-070110-078.json
+[2026-08-10 07:01:10] [INFO]   📊 TechCrunch AI: saved 2, duplicates 0
+[2026-08-10 07:01:10] [INFO] 
+============================================================
+[2026-08-10 07:01:10] [INFO] ✅ Scout Agent v2 finished
+[2026-08-10 07:01:10] [INFO]   Total saved: 17
+[2026-08-10 07:01:10] [INFO]   Total duplicates: 5
+[2026-08-10 07:01:10] [INFO] ============================================================
