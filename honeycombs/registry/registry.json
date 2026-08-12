@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-08-11",
+    "updated": "2026-08-12",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 19,
-    "total_size_kb": 1036.18,
+    "total_size_kb": 1063.52,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 19,
-    "total_size_kb": 1036.18,
-    "last_updated": "2026-08-11",
+    "total_size_kb": 1063.52,
+    "last_updated": "2026-08-12",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -65,7 +65,7 @@
             "work_id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-08-15",
-            "days_left": 3
+            "days_left": 2
           }
         ],
         "errors_count": 0,
@@ -89,7 +89,7 @@
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "works",
             "deadline": "2026-08-15",
-            "days_left": 3
+            "days_left": 2
           }
         ],
         "warnings": [],
@@ -108,8 +108,8 @@
         "root_count": 14,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 12,
-        "inbox_total_files": 13,
+        "inbox_count": 23,
+        "inbox_total_files": 24,
         "inbox_threshold": 50,
         "inbox_status": "ok",
         "warnings": [
@@ -122,8 +122,8 @@
       "root_count": 14,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 12,
-      "inbox_total_files": 13,
+      "inbox_count": 23,
+      "inbox_total_files": 24,
       "inbox_threshold": 50,
       "inbox_status": "ok",
       "warnings": [
