@@ -3127,3 +3127,57 @@
 [2026-08-13 07:01:17] [INFO]   Total duplicates: 4
 [2026-08-13 07:01:17] [INFO]   Total removed (old): 0
 [2026-08-13 07:01:17] [INFO] ============================================================
+[2026-08-13 10:04:54] [INFO] ============================================================
+[2026-08-13 10:04:54] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-13 10:04:54] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-13 10:04:54] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-13 10:04:54] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-13 10:04:54] [INFO]   → Filtered to 0 relevant items
+[2026-08-13 10:04:54] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-13 10:04:54] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-13 10:04:54] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-13 10:04:54] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-13 10:04:54] [INFO]   → Filtered to 0 relevant items
+[2026-08-13 10:04:54] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-13 10:04:54] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-13 10:04:54] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-13 10:04:55] [INFO]   → Found 15 raw items, 11 recent
+[2026-08-13 10:04:55] [INFO]   → Filtered to 2 relevant items
+[2026-08-13 10:04:55] [INFO]   ⏭️ Duplicate: DeepSeek V4 Pro 0813...
+[2026-08-13 10:04:55] [INFO]   ⏭️ Duplicate: Happy 45th Birthday to the IBM PC and Model F/XT...
+[2026-08-13 10:04:55] [INFO]   📊 Hacker News: saved 0, duplicates 2
+[2026-08-13 10:04:55] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-13 10:04:55] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-13 10:04:55] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-13 10:04:55] [INFO]   → Filtered to 5 relevant items
+[2026-08-13 10:04:55] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-13 10:04:55] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-13 10:04:55] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-13 10:04:55] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-13 10:04:55] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-13 10:04:55] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-13 10:04:55] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-13 10:04:55] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-13 10:04:56] [INFO]   → Found 15 raw items, 12 recent
+[2026-08-13 10:04:56] [INFO]   → Filtered to 5 relevant items
+[2026-08-13 10:04:56] [INFO]   ⏭️ Duplicate: Some Claude users are mad that Anthropic’s new wat...
+[2026-08-13 10:04:56] [INFO]   ⏭️ Duplicate: Amazon will train on Twitch streamers’ content by ...
+[2026-08-13 10:04:56] [INFO]   ⏭️ Duplicate: AI coding startup Cognition reportedly already in ...
+[2026-08-13 10:04:56] [INFO]   ⏭️ Duplicate: As AI safety concerns mount, three pioneers make t...
+[2026-08-13 10:04:56] [INFO]   ⏭️ Duplicate: OpenAI-backed Thrive Holdings raises $2B to bring ...
+[2026-08-13 10:04:56] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-08-13 10:04:56] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-13)...
+[2026-08-13 10:04:56] [INFO]   ✅ No old seeds to remove
+[2026-08-13 10:04:56] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-13
+[2026-08-13 10:04:56] [INFO] 
+============================================================
+[2026-08-13 10:04:56] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-13 10:04:56] [INFO]   Total saved: 0
+[2026-08-13 10:04:56] [INFO]   Total duplicates: 12
+[2026-08-13 10:04:56] [INFO]   Total removed (old): 0
+[2026-08-13 10:04:56] [INFO] ============================================================
