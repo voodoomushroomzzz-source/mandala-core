@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-08-13",
+    "updated": "2026-08-14",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -45,7 +45,7 @@
   "registry": {
     "total_files": 19,
     "total_size_kb": 1085.44,
-    "last_updated": "2026-08-13",
+    "last_updated": "2026-08-14",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -65,7 +65,7 @@
             "work_id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-08-15",
-            "days_left": 1
+            "days_left": 0
           }
         ],
         "errors_count": 0,
@@ -89,7 +89,7 @@
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "works",
             "deadline": "2026-08-15",
-            "days_left": 1
+            "days_left": 0
           }
         ],
         "warnings": [],
