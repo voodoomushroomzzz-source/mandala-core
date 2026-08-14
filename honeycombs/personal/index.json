@@ -36,6 +36,13 @@
       "priority": "critical",
       "deadline": null,
       "progress": 15
+    },
+    "learning": {
+      "file": "learning.json",
+      "status": "active",
+      "priority": "high",
+      "deadline": null,
+      "progress": 10
     }
   },
   "last_updated": "2026-08-14"

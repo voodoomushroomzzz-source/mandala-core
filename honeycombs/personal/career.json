@@ -1,0 +1,556 @@
+{
+  "identity": {
+    "name": "Career Vectors — Dima (Gardener)",
+    "version": "v1.0.0",
+    "created": "2026-08-14",
+    "updated": "2026-08-14",
+    "description": "Все карьерные треки, профиль, платформы, ключевые запросы и общий план."
+  },
+  "profile": {
+    "full_name": "Лёвин Дмитрий Александрович",
+    "gender": "Мужской",
+    "age": 36,
+    "telegram": "@dmitriilevin",
+    "phone": "+7 (915) 756-67-87",
+    "email": "stopthemvgic@gmail.com",
+    "location": "Москва, Россия",
+    "hh_resume_url": "https://hh.ru/resume/8993b5ceff09a959820039ed1f7a3734656f62",
+    "current_employment": {
+      "status": "active",
+      "company": "Raw to go",
+      "city": "Москва",
+      "position": "Территориальный управляющий",
+      "period": "Ноябрь 2025 – настоящее время",
+      "team_size": 30,
+      "description": "Сеть из 5 кафе и производств. Команда до 30 человек."
+    }
+  },
+  "tracks": {
+    "track_a": {
+      "name": "Track A: AI Ops / Automation Manager — Быстрый вход в IT",
+      "deadline": "2026-07-31",
+      "goal": "AI-hybrid role (AI Operations, AI Project Management, Automation Manager) with 150 000+ RUB income. Быстрый вход в IT через AI-гибридные роли.",
+      "reasoning": "Immediate income needed. Leverage 8-year operations experience + AI skills. Target: companies adopting AI, roles combining management and AI implementation.",
+      "target_roles": [
+        "AI Operations Manager",
+        "AI Project Manager",
+        "Automation Manager",
+        "AI Product Manager (junior/mid)",
+        "Head of AI Implementation (small teams)"
+      ],
+      "salary_range": "150 000 — 250 000+ RUB",
+      "priority": "critical",
+      "milestones": {
+        "m1_packaging": {
+          "name": "Packaging",
+          "tasks": [
+            "Experience audit + IT/AI translation (COMPLETED)",
+            "Core resume (Russian) preparation (COMPLETED)",
+            "Adapt resume for hh.ru, Superjob, Rabota.ru, Zarplata.ru — with AI focus",
+            "Adapt resume for Avito, TrudVsem — with AI focus",
+            "Create LinkedIn profile (English) — AI-optimized",
+            "Create Habr Career, TenChat profiles",
+            "Subscribe to 10+ Telegram channels (including AI/IT jobs)",
+            "Integrate HyperCareer company list into job search database",
+            "Prepare English version of core resume — for global applications",
+            "Create alternative resumes for Territorial Manager / Operations Manager roles on hh.ru and jobs — full-time and hybrid, 200k/month — as a fallback option"
+          ]
+        },
+        "m2_first_wave": {
+          "name": "First Wave",
+          "tasks": [
+            "70+ applications across all platforms (prioritize AI-hybrid roles)",
+            "Employer verification via Dream Job"
+          ]
+        },
+        "m3_interviews": {
+          "name": "Interviews",
+          "tasks": [
+            "All first-wave interviews",
+            "Second wave 20-30 applications + pitch calibration (AI focus)"
+          ]
+        },
+        "m4_offer": {
+          "name": "Offer",
+          "tasks": [
+            "Minimum 1 written offer 150 000+ RUB for AI-hybrid role"
+          ]
+        }
+      }
+    },
+    "track_b": {
+      "name": "Track B: Системный аналитик (с AI-уклоном) — Основной стратегический трек",
+      "start": "2026-07-17",
+      "goal": "Профессиональный вход в IT-архитектуру через системный анализ. Максимально использует опыт перестройки систем.",
+      "salary_range": "150 000 — 250 000+ RUB (начало), 250 000 — 400 000+ RUB (через 2-3 года)",
+      "horizon": "2-4 месяца до первого оффера",
+      "reasoning": "Естественный путь для человека с опытом перестройки систем. Входной порог минимальный, конкуренция низкая, долгосрочный потолок высокий.",
+      "what_to_learn": {
+        "tools": [
+          "UML",
+          "BPMN",
+          "SQL",
+          "Swagger/OpenAPI"
+        ],
+        "skills": [
+          "Написание технической документации",
+          "Работа с требованиями",
+          "Интеграционные карты"
+        ],
+        "ai_advantage": "Способность внедрять AI-инструменты в процесс анализа (генерация требований, автоматизация документации, анализ данных)"
+      },
+      "phases": {
+        "phase_1_learning": {
+          "name": "Изучение основ (Июль-Август 2026)",
+          "duration": "1-2 месяца",
+          "tasks": [
+            "Завершить OpenAI Foundations (уже в процессе)",
+            "Google AI Essentials (1 час, сертификат)",
+            "Начать изучение UML, BPMN, SQL, Swagger",
+            "Практика на Mandala: описать кейсы как системный анализ"
+          ]
+        },
+        "phase_2_practice": {
+          "name": "Практика и портфолио (Сентябрь-Октябрь 2026)",
+          "duration": "1-2 месяца",
+          "tasks": [
+            "Описать кейсы 'Нью Нормал' и 'Raw to go' как системный анализ",
+            "Написать ТЗ и спецификации для Mandala",
+            "Начать отклики на аналитические вакансии"
+          ]
+        },
+        "phase_3_entry": {
+          "name": "Вход в аналитику (Ноябрь-Декабрь 2026)",
+          "duration": "1-2 месяца",
+          "tasks": [
+            "Целевой оффер 150-250k RUB как системный аналитик",
+            "Параллельно: AI-навыки для усиления (интеграция AI в аналитику)"
+          ]
+        }
+      }
+    },
+    "track_c": {
+      "name": "Track C: Международный AI-специалист — Долгосрочный глобальный трек",
+      "start": "2027-01",
+      "goal": "Выход на глобальный рынок в роли AI-специалиста после укрепления позиций в IT.",
+      "salary_range": "$8,000 — $15,000+ / month",
+      "horizon": "6-12 месяцев после входа в IT",
+      "reasoning": "Долгосрочная цель. Требует подтягивания английского до C1, глубокого AI-портфолио и опыта работы в IT.",
+      "path_from_b": "Системный аналитик с AI-уклоном → Международный AI-специалист. Трек Б даёт базу для международного прыжка.",
+      "requirements": [
+        "Английский C1 (технический, профессиональный)",
+        "Сильное AI-портфолио (проекты, сертификаты CCA-F)",
+        "Опыт работы в IT (2+ года)",
+        "Умение проходить глобальные собеседования"
+      ]
+    },
+    "track_d": {
+      "name": "Track D: Территориальный / Региональный управляющий — Запасной трек (100% по опыту)",
+      "goal": "Запасной вариант для быстрого дохода, если AI-треки не сработают.",
+      "salary_range": "170 000 — 220 000 ₽",
+      "reasoning": "Полное соответствие опыту. Быстрый вход, низкий риск.",
+      "roles": [
+        "Территориальный управляющий",
+        "Региональный менеджер",
+        "Руководитель филиала"
+      ],
+      "employment": "Полная занятость, гибридный формат (выезды на объекты + офис/удалёнка)",
+      "travel": "Да, по Москве и Московской области",
+      "when_to_use": "Если Трек А и Трек Б не приносят результатов в течение 2-3 месяцев"
+    }
+  },
+  "task_tracker": {
+    "description": "Detailed task board for Track A packaging phase. Statuses: pending, in_progress, done.",
+    "packaging_tasks": [
+      {
+        "id": "A-TASK-001",
+        "name": "Audit of experience for IT/AI translation",
+        "status": "done",
+        "priority": "HIGH",
+        "output": "Core experience document"
+      },
+      {
+        "id": "A-TASK-002",
+        "name": "Prepare 'Core Resume' (ATS-optimized, Russian, AI-focused)",
+        "status": "done",
+        "deadline": "2026-07-06",
+        "output": "Core resume text with AI skills"
+      },
+      {
+        "id": "A-TASK-003",
+        "name": "Adapt resume for Russian job boards (AI focus)",
+        "status": "in_progress",
+        "subtasks": [
+          "hh.ru adaptation — highlight AI-hybrid skills",
+          "Superjob adaptation",
+          "Rabota.ru, Zarplata.ru, Avito, TrudVsem adaptation"
+        ],
+        "deadline": "2026-07-08",
+        "output": "Ready-to-use profiles on each platform"
+      },
+      {
+        "id": "A-TASK-004",
+        "name": "Create international/professional profiles (AI focus)",
+        "status": "pending",
+        "subtasks": [
+          "LinkedIn profile (English, AI-optimized)",
+          "Habr Career profile",
+          "TenChat profile"
+        ],
+        "deadline": "2026-07-08"
+      },
+      {
+        "id": "A-TASK-005",
+        "name": "Subscribe to 10+ Telegram job channels (include AI/IT channels)",
+        "status": "pending",
+        "deadline": "2026-07-09"
+      },
+      {
+        "id": "A-TASK-006",
+        "name": "Integrate HyperCareer company list",
+        "status": "pending",
+        "deadline": "2026-07-10"
+      }
+    ]
+  },
+  "job_search_platforms": {
+    "track_a_russian": {
+      "primary": [
+        "hh.ru",
+        "Superjob"
+      ],
+      "secondary": [
+        "Работа.ру (job.ru)"
+      ],
+      "it_specific": [
+        "Habr Career",
+        "GeekJOB",
+        "Getmatch",
+        "TenChat"
+      ],
+      "niche_aggregators": [
+        "Jobster",
+        "hirify",
+        "hirehi",
+        "careerspace",
+        "finder",
+        "finder.work"
+      ],
+      "temporary_projects": [
+        "Kwork",
+        "FL.ru",
+        "Workspace",
+        "SolarStaff"
+      ]
+    },
+    "track_b_global": {
+      "international": [
+        "LinkedIn (global)",
+        "We Work Remotely (WWR)",
+        "RemoteOK",
+        "NoDesk",
+        "Himalayas",
+        "Working Nomads",
+        "Remote.co"
+      ],
+      "remote": [
+        "Remotive",
+        "NoDesk",
+        "Truely Remote",
+        "Indeed",
+        "JustRemote",
+        "DailyRemote",
+        "Virtual Vocations",
+        "Working Nomads",
+        "Remote100k",
+        "SkipTheDrive"
+      ],
+      "ai_specific": [
+        "TopTal",
+        "Arc.dev",
+        "Turing",
+        "Crossover",
+        "AI Jobs"
+      ],
+      "personalized": [
+        "Otta",
+        "wantapply.com",
+        "Wellfound (AngelList)",
+        "Welcome to the Jungle",
+        "Y Combinator Jobs",
+        "Deel Jobs",
+        "Oyster Jobs"
+      ],
+      "cis_it": [
+        "Djinni"
+      ]
+    },
+    "telegram_channels": {
+      "priority_1": [
+        "@management_jobs / @projects_jobs_feed",
+        "@benchmark_executive",
+        "@newhribb"
+      ],
+      "priority_2": [
+        "@vacansii_bezbariera",
+        "@finexecutive",
+        "WORK ON",
+        "Удалёнка без опыта"
+      ],
+      "additional": [
+        "@tools_hacks (getmatch)",
+        "©Карьера® The Blueprint"
+      ],
+      "resume_channels": [
+        "Резюме 🚀 Маркетинга, СММ, Digital, Продажи"
+      ],
+      "ai_specific": [
+        "@ai_jobs",
+        "@mlops_jobs",
+        "@datascience_jobs"
+      ]
+    },
+    "networking": [
+      "LinkedIn",
+      "TenChat",
+      "Setka (HH)",
+      "Habr portal",
+      "Professional Slack communities",
+      "AI-focused Discord servers"
+    ],
+    "verification": [
+      "Dream Job",
+      "Glassdoor"
+    ],
+    "salary_data": [
+      "Getmatch calculator",
+      "Levels.fyi (VPN)"
+    ]
+  },
+  "search_keywords": {
+    "description": "Ключевые запросы для поиска вакансий по трекам. Использовать на hh.ru, finder.work, Хабр Карьере и других платформах.",
+    "last_updated": "2026-07-18",
+    "track_a_ai_ops": {
+      "primary": [
+        "AI Operations Manager",
+        "Automation Manager",
+        "AI Project Manager",
+        "менеджер по автоматизации",
+        "AI Product Manager"
+      ],
+      "secondary": [
+        "операционный менеджер",
+        "руководитель проектов",
+        "менеджер по внедрению",
+        "AI менеджер",
+        "AI-менеджер"
+      ],
+      "skills_based": [
+        "Python",
+        "API",
+        "нейросети",
+        "автоматизация",
+        "Telegram бот",
+        "LLM",
+        "промпт-инжиниринг"
+      ],
+      "search_queries": [
+        "AI менеджер",
+        "автоматизация + менеджер",
+        "AI Operations",
+        "нейросети + управление",
+        "менеджер + Python"
+      ]
+    },
+    "track_b_system_analyst": {
+      "primary": [
+        "системный аналитик",
+        "System Analyst",
+        "бизнес-аналитик",
+        "Business Analyst",
+        "IT-аналитик"
+      ],
+      "secondary": [
+        "аналитик",
+        "менеджер по требованиям",
+        "аналитик данных",
+        "Data Analyst"
+      ],
+      "skills_based": [
+        "SQL",
+        "BPMN",
+        "UML",
+        "Swagger",
+        "API",
+        "интеграция",
+        "требования"
+      ],
+      "search_queries": [
+        "системный аналитик + SQL",
+        "Business Analyst + API",
+        "аналитик + BPMN",
+        "System Analyst + удаленно"
+      ]
+    },
+    "track_d_ops": {
+      "primary": [
+        "территориальный управляющий",
+        "региональный менеджер",
+        "руководитель филиала",
+        "операционный директор"
+      ],
+      "secondary": [
+        "управляющий",
+        "директор",
+        "менеджер"
+      ],
+      "search_queries": [
+        "территориальный управляющий",
+        "региональный менеджер + Москва",
+        "руководитель филиала + HoReCa"
+      ]
+    }
+  },
+  "overall_plan": {
+    "description": "Общий план по всем трекам с приоритетами и временным графиком. Треки не конфликтуют, а поддерживают друг друга.",
+    "key_principle": "Один трек — один фокус. Последовательное наслоение: А → Б → Ц. Д — запасной.",
+    "hard_deadlines": {
+      "income_end": "2026-07-31",
+      "track_a_offer_target": "2026-07-31",
+      "track_b_entry_target": "2026-11-30"
+    },
+    "priority_by_period": {
+      "july_august_2026": {
+        "period": "Июль–Август 2026",
+        "focus": "🔥 90% — Трек А (AI Ops)",
+        "secondary": "📖 10% — Трек Б (чтение/введение)",
+        "other": "❌ Трек Ц — 0%, Трек Д — ждёт",
+        "why": "Быстрый вход в IT. Без денег треки Б и Ц не имеют смысла.",
+        "tasks": [
+          "Завершить OpenAI Academy: AI Foundations (уже в процессе)",
+          "Пройти Google AI Essentials (1 час)",
+          "Пройти GitHub Foundations (2-3 часа)",
+          "Массовые отклики на AI Ops / Automation Manager (70+ заявок)",
+          "Создать LinkedIn (ENG) и Habr Career профили"
+        ],
+        "daily_time": {
+          "track_a": "3-4 часа (отклики) + 1-2 часа (курсы)",
+          "track_b": "15-20 минут (чтение по BPMN/UML)"
+        }
+      },
+      "september_october_2026": {
+        "period": "Сентябрь–Октябрь 2026",
+        "focus": "💼 60% — Трек А (работа) + 📚 40% — Трек Б (обучение)",
+        "other": "❌ Трек Ц — 0%, Трек Д — ждёт",
+        "why": "Доход стабилен (Трек А), можно раскачивать аналитику (Трек Б).",
+        "tasks": [
+          "Работа по Треку А (поддержание дохода)",
+          "Практика BPMN, UML, SQL, Swagger",
+          "Сбор портфолио из кейсов",
+          "Начать отклики на аналитические вакансии (потихоньку)"
+        ],
+        "daily_time": {
+          "track_a": "6-8 часов (работа)",
+          "track_b": "1-2 часа (обучение) + выходные (портфолио)"
+        }
+      },
+      "november_december_2026": {
+        "period": "Ноябрь–Декабрь 2026",
+        "focus": "🔥 60% — Трек Б (выход в аналитику) + 💼 40% — Трек А (поддержка)",
+        "other": "📖 Трек Ц — подготовка (английский)",
+        "why": "Ты уже готов к переходу. Основная цель — оффер по Треку Б.",
+        "tasks": [
+          "Работа по Треку А (поддержание дохода, 4-6 часов в день)",
+          "Активные отклики на аналитические вакансии",
+          "Углублённые курсы (опционально)",
+          "Подготовка к собеседованиям",
+          "Начать подтягивать английский до C1"
+        ],
+        "daily_time": {
+          "track_a": "4-6 часов (работа)",
+          "track_b": "2-3 часа (отклики, подготовка)",
+          "track_c": "1 час (английский)"
+        }
+      },
+      "year_2027": {
+        "period": "2027 год",
+        "focus": "🔥 70% — Трек Ц (глобальный рынок)",
+        "secondary": "💼 Трек Б (работа, опыт)",
+        "why": "Ты уже в IT (Трек А), ты уже аналитик (Трек Б). Можно целиться в международный рынок.",
+        "tasks": [
+          "Работа по Треку Б (доход, опыт)",
+          "Английский C1 (1 час в день)",
+          "Глобальные отклики (LinkedIn, WWR, RemoteOK)",
+          "Целевой оффер $8k-15k+ / месяц"
+        ],
+        "daily_time": {
+          "track_b": "6-8 часов (работа)",
+          "track_c": "1 час (английский) + 2-3 часа (отклики)"
+        }
+      }
+    },
+    "backup_plan_track_d": {
+      "name": "Трек Д (Территориальный управляющий) — запасной",
+      "trigger": "Если Трек А не приносит результатов к концу августа 2026",
+      "action": "Переключиться на Трек Д как основной источник дохода, продолжая изучать Трек Б в свободное время.",
+      "salary_range": "170 000 — 220 000 ₽"
+    },
+    "quick_wins": {
+      "description": "Быстрые победы, которые работают на все треки",
+      "items": [
+        "Google AI Essentials (1 час) — сертификат для всех треков",
+        "GitHub Foundations (2-3 часа) — закрывает tech-порог",
+        "LinkedIn (ENG) — один раз сделать, работает на все треки",
+        "Кейсы из опыта (Нью Нормал, Raw to go) — портфолио для Трека А, Б и Ц"
+      ]
+    },
+    "last_updated": "2026-07-17"
+  },
+  "ai_career_path": {
+    "summary": "AI is reshaping the job market. AI-hybrid roles (combining management with AI literacy) have higher salaries and lower competition. This roadmap positions Voodoo as an 'AI-literate manager' — a rare and valuable hybrid.",
+    "key_insights": [
+      "AI skills provide a 62% salary premium on average.",
+      "AI-hybrid roles (AI Ops, AI PM) have lower competition than traditional management roles.",
+      "Practical AI project (Mandala Symbiosis) is a unique portfolio piece.",
+      "OpenAI Academy certifications are globally recognized and free."
+    ]
+  },
+  "skills": {
+    "management": [
+      "Operations Management",
+      "Project Management (Agile, Scrum, Kanban)",
+      "Budget Management (P&L)",
+      "Team Leadership (up to 30 people)",
+      "Process Optimization",
+      "SOP Development",
+      "Quality Management"
+    ],
+    "it_tools": [
+      "Notion (task management, documentation)",
+      "Asana",
+      "1C",
+      "iiko",
+      "MS Office",
+      "Electronic Document Management (EDO)",
+      "Git"
+    ],
+    "ai_automation": [
+      "AI Agents (GPT, Claude, DeepSeek)",
+      "Agentic Workflows",
+      "AI Integration & Automation",
+      "Prompt Engineering",
+      "API Integration",
+      "Linux Server Administration (Ubuntu, systemd)",
+      "AI Project Management"
+    ]
+  },
+  "success_metrics": {
+    "track_a": "Written job offer 150 000+ RUB for AI-hybrid role by July 31, 2026",
+    "track_b": "Professional AI role offer (USA: $8k-15k/mo, UK: £5k-10k/mo) by January 2027",
+    "courses": "OpenAI Academy: AI Foundations complete by end of July 2026",
+    "certificates": "OpenAI badges (Credly) in LinkedIn profile by September 2026",
+    "relocation": "1+ month successful remote work from Vietnam",
+    "english_b2": "English B2 by December 2026"
+  },
+  "last_updated": "2026-08-14"
+}
