@@ -1,0 +1,42 @@
+{
+  "identity": {
+    "name": "Personal Hub — Dima (Gardener)",
+    "version": "v1.0.0",
+    "created": "2026-08-14",
+    "updated": "2026-08-14",
+    "description": "Личная сота — все личные векторы развития: карьера, YouTube, e-commerce, франшиза."
+  },
+  "profile": "profile.json",
+  "current_focus": "career",
+  "vectors": {
+    "career": {
+      "file": "career.json",
+      "status": "active",
+      "priority": "critical",
+      "deadline": "2026-07-31",
+      "progress": 45
+    },
+    "youtube": {
+      "file": "youtube.json",
+      "status": "planning",
+      "priority": "high",
+      "deadline": "2026-10-31",
+      "progress": 0
+    },
+    "ecommerce": {
+      "file": "ecommerce.json",
+      "status": "planning",
+      "priority": "high",
+      "deadline": "2026-10-31",
+      "progress": 0
+    },
+    "franchise": {
+      "file": "franchise.json",
+      "status": "active",
+      "priority": "critical",
+      "deadline": null,
+      "progress": 15
+    }
+  },
+  "last_updated": "2026-08-14"
+}
