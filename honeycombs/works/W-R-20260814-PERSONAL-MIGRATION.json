@@ -1,0 +1,64 @@
+{
+  "work_id": "W-R-20260814-PERSONAL-MIGRATION",
+  "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзакупки",
+  "status": "active",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Создание и перенос новых личных векторов в honeycombs/personal/: Instagram (контент-план), творчество (поэзия, музыка, проза), госзакупки (44-ФЗ, 223-ФЗ).",
+  "parent_work": null,
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": "4-6 часов",
+  "progress": 0,
+  "tags": [
+    "migration",
+    "personal",
+    "instagram",
+    "creative",
+    "government-procurement"
+  ],
+  "deadline": "2026-08-31",
+  "created": "2026-08-14",
+  "updated": "2026-08-14",
+  "phases": {
+    "phase_1_instagram": {
+      "name": "Вектор: Instagram-контент",
+      "description": "Структурировать контент-план для Instagram (посты, Stories, Reels, стратегия).",
+      "tasks": [
+        "Создать структуру контент-плана (рубрики, частота, темы)",
+        "Описать визуальный стиль и tone of voice",
+        "Собрать идеи для первых 10-20 постов",
+        "Продумать интеграцию с другими векторами (Mandala, YouTube, франшиза)"
+      ],
+      "deliverable": "honeycombs/personal/instagram.json"
+    },
+    "phase_2_creative": {
+      "name": "Вектор: Творчество (поэзия, музыка, проза)",
+      "description": "Структурировать творческое наследие и планы.",
+      "tasks": [
+        "Собрать существующие тексты (поэзия, проза) в структурированном виде",
+        "Описать музыкальные проекты (Dmitrii Levin, Mc Voodookid, Маякома, X Deaddy X)",
+        "Создать план по публикации/архивации творчества",
+        "Связать с философией Mandala"
+      ],
+      "deliverable": "honeycombs/personal/creative.json"
+    },
+    "phase_3_gov_procurement": {
+      "name": "Вектор: Госзакупки (44-ФЗ, 223-ФЗ)",
+      "description": "Анализ и стратегия участия в государственных закупках.",
+      "tasks": [
+        "Изучить текущие требования к участникам",
+        "Проанализировать ниши для участия (AI, IT, услуги)",
+        "Создать план регистрации и первых шагов",
+        "Определить критерии выбора тендеров"
+      ],
+      "deliverable": "honeycombs/personal/gov_procurement.json"
+    }
+  },
+  "notes": [
+    "Этот воркс создан после завершения переноса карьеры, обучения, YouTube, e-commerce и франшизы.",
+    "Цель — завершить структурирование всех личных векторов в единой соте personal/.",
+    "После выполнения этого воркса все личные данные будут в personal/, works/ останется только для проектов Mandala."
+  ],
+  "source": "Диалог Gardener (Voodoo) и External SR (DeepSeek), 2026-08-14"
+}
