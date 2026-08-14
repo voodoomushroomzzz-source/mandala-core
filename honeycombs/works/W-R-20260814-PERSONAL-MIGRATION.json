@@ -1,10 +1,10 @@
 {
   "work_id": "W-R-20260814-PERSONAL-MIGRATION",
-  "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзакупки",
+  "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
   "status": "active",
   "priority": "high",
   "horizon": "tactical",
-  "description": "Создание и перенос новых личных векторов в honeycombs/personal/: Instagram (контент-план), творчество (поэзия, музыка, проза), госзакупки (44-ФЗ, 223-ФЗ).",
+  "description": "Создание и перенос новых личных векторов в honeycombs/personal/: Instagram (контент-план), творчество (поэзия, музыка, проза), госзаказы (44-ФЗ, 223-ФЗ).",
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
@@ -15,7 +15,7 @@
     "personal",
     "instagram",
     "creative",
-    "government-procurement"
+    "government-orders"
   ],
   "deadline": "2026-08-31",
   "created": "2026-08-14",
@@ -44,15 +44,15 @@
       "deliverable": "honeycombs/personal/creative.json"
     },
     "phase_3_gov_procurement": {
-      "name": "Вектор: Госзакупки (44-ФЗ, 223-ФЗ)",
-      "description": "Анализ и стратегия участия в государственных закупках.",
+      "name": "Вектор: Госзаказы (44-ФЗ, 223-ФЗ)",
+      "description": "Анализ и стратегия участия в государственных заказах.",
       "tasks": [
         "Изучить текущие требования к участникам",
         "Проанализировать ниши для участия (AI, IT, услуги)",
         "Создать план регистрации и первых шагов",
         "Определить критерии выбора тендеров"
       ],
-      "deliverable": "honeycombs/personal/gov_procurement.json"
+      "deliverable": "honeycombs/personal/gov_orders.json"
     }
   },
   "notes": [
