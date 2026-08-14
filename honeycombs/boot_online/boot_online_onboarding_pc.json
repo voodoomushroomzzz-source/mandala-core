@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.65",
+    "version": "v1.7.66",
     "created": "2026-05-11",
-    "updated": "2026-08-07",
+    "updated": "2026-08-14",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1742,9 +1742,9 @@
         ]
       },
       "manifest": {
-        "total_works": 25,
+        "total_works": 20,
         "by_status": {
-          "active": 8,
+          "active": 20,
           "planning": 15,
           "in_progress": 1,
           "done": 1
@@ -1764,7 +1764,6 @@
           "W-R-RC-002__company_vessel",
           "W-R-RM-011__merkaba_visualizations",
           "W-R-RM-012__living_products_mvps",
-          "W-R-RM-014__gardener_transition",
           "W-T-20260408-1030__gentle_companion_bot",
           "W-T-20260417-HUMOR__humor_development",
           "W-T-20260418-SYM__sym_growth_system",
@@ -1772,19 +1771,15 @@
           "W-T-20260511-ARCHBOT__architect_bot",
           "W-T-20260511-ENGCHAT__engineer_chat",
           "W-T-20260511-MANUS__manus_hands",
-          "W-R-ECO-001",
-          "W-R-ECOMM-001",
-          "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
-          "W-T-20260713-YOUTUBE_MANDALA_PROMO",
-          "W-R-ROSE-001",
-          "W-T-20260728-AI-GATEWAY",
-          "W-T-20260728-CYBER-AGENTS",
-          "W-R-20260803-KURTOCH-FRANCHISE",
-          "W-T-20260803-RL-REASONING",
-          "W-T-20260803-SR-EVALUATION",
-          "W-T-20260804-SR-REFLECTION__in_context_search",
-          "W-T-20260804-MANUS-MEMORY__nativemem",
-          "W-T-20260807-MEMORY__mandala_memory_layer"
+          "W-R-ECO-001__autonomous_ecosystem",
+          "W-T-20260713-YOUTUBE_MANDALA_PROMO.json",
+          "W-T-20260728-AI-GATEWAY.json",
+          "W-T-20260728-CYBER-AGENTS.json",
+          "W-T-20260803-RL-REASONING.json",
+          "W-T-20260803-SR-EVALUATION.json",
+          "W-T-20260804-MANUS-MEMORY__nativemem.json",
+          "W-T-20260804-SR-REFLECTION__in_context_search.json",
+          "W-T-20260807-MEMORY__mandala_memory_layer.json"
         ],
         "deadlines": {
           "W-R-RC-001__visibility_strategy": null,
@@ -1884,7 +1879,10 @@
         "last_check": "2026-08-07",
         "notes": "Added W-T-20260807-MEMORY__mandala_memory_layer (Mandala Memory Layer)."
       },
-      "updated": "2026-08-03"
+      "updated": "2026-08-14",
+      "notes": {
+        "personal_hub": "Личные векторы (карьера, обучение, YouTube, e-commerce, франшиза) перенесены в honeycombs/personal/."
+      }
     }
   },
   "step_9_knowledge": {
