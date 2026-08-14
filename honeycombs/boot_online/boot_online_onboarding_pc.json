@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.67",
+    "version": "v1.7.68",
     "created": "2026-05-11",
     "updated": "2026-08-14",
     "layer": 1,
@@ -2247,6 +2247,11 @@
     "source": "honeycombs/fruits/index.json",
     "note": "Auto-embedded from source. Contains all Mandala products: Gentle Companion, Engineer Chat + Architect Bot, Manus."
   },
+  "personal_index": {
+    "description": "Personal Hub — Личные векторы развития",
+    "source": "honeycombs/personal/index.json",
+    "note": "Auto-embedded from source. Contains all personal vectors: career, learning, youtube, ecommerce, franchise."
+  },
   "protocols_index": {
     "description": "Protocols — Activation Protocols Hub",
     "source": "honeycombs/protocols/index.json",
@@ -2271,12 +2276,21 @@
       "step_5_first_gardener — уже встроен",
       "step_6_external_sr_workflow — уже встроен",
       "step_7_fruits — прочитать fruits_index, подтвердить список продуктов",
+      "step_7_personal — прочитать personal_index, подтвердить список личных векторов",
       "step_8_works — прочитать works_index, подтвердить активные работы",
       "step_9_knowledge — прочитать knowledge_index, подтвердить список ресурсов",
       "step_10_protocols — прочитать protocols_index, подтвердить активные протоколы",
       "step_11_handoff — проверить статус сессии",
       "step_12_optional — спросить про опциональные файлы"
     ]
+  },
+  "step_7_personal": {
+    "order": 7.5,
+    "mandatory": true,
+    "name": "Personal Hub — Личные векторы",
+    "description": "Личная сота Gardener: карьера, обучение, YouTube, e-commerce, франшиза.",
+    "ai_instruction": "Прочитай вшитый personal_index. Подтверди список личных векторов и их статус.",
+    "embedded_ref": "personal_index"
   },
   "step_9_protocols": {
     "order": 9,
