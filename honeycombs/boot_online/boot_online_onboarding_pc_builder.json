@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-BUILDER-001",
     "name": "Boot Online Onboarding PC — Auto-Build Master",
-    "version": "v1.3.0",
+    "version": "v1.4.0",
     "created": "2026-07-07",
-    "updated": "2026-08-04",
+    "updated": "2026-08-14",
     "description": "Master file that defines how boot_online_onboarding_pc.json is auto-built from source modules.",
     "status": "active"
   },
@@ -145,6 +145,11 @@
       "source": "honeycombs/fruits/index.json",
       "note": "Auto-embedded from source. Contains all Mandala products: Gentle Companion, Engineer Chat + Architect Bot, Manus."
     },
+    "personal_index": {
+      "description": "Personal Hub — Личные векторы развития",
+      "source": "honeycombs/personal/index.json",
+      "note": "Auto-embedded from source. Contains all personal vectors: career, learning, youtube, ecommerce, franchise."
+    },
     "protocols_index": {
       "description": "Protocols — Activation Protocols Hub",
       "source": "honeycombs/protocols/index.json",
@@ -169,6 +174,7 @@
         "step_5_first_gardener — уже встроен",
         "step_6_external_sr_workflow — уже встроен",
         "step_7_fruits — прочитать fruits_index, подтвердить список продуктов",
+        "step_7_personal — прочитать personal_index, подтвердить список личных векторов",
         "step_8_works — прочитать works_index, подтвердить активные работы",
         "step_9_knowledge — прочитать knowledge_index, подтвердить список ресурсов",
         "step_10_protocols — прочитать protocols_index, подтвердить активные протоколы",
@@ -183,6 +189,14 @@
       "description": "Продукты Mandala: Gentle Companion, Engineer Chat, Architect Bot, Manus",
       "ai_instruction": "Прочитай вшитый fruits_index. Сверь с API при необходимости. Подтверди список продуктов, их статус и версии.",
       "embedded_ref": "fruits_index"
+    },
+    "step_7_personal": {
+      "order": 7.5,
+      "mandatory": true,
+      "name": "Personal Hub — Личные векторы",
+      "description": "Личная сота Gardener: карьера, обучение, YouTube, e-commerce, франшиза.",
+      "ai_instruction": "Прочитай вшитый personal_index. Подтверди список личных векторов и их статус.",
+      "embedded_ref": "personal_index"
     },
     "step_8_works": {
       "order": 8,
@@ -233,6 +247,9 @@
     "fruits": {
       "path": "honeycombs/fruits/index.json"
     },
+    "personal": {
+      "path": "honeycombs/personal/index.json"
+    },
     "protocols": {
       "path": "honeycombs/protocols/index.json"
     },
@@ -272,6 +289,7 @@
       "honeycombs/instructions/mobile_workflow.json",
       "honeycombs/works/index.json",
       "honeycombs/fruits/index.json",
+      "honeycombs/personal/index.json",
       "honeycombs/protocols/index.json",
       "honeycombs/rose_world/index.json"
     ],
