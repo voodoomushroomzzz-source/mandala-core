@@ -1,0 +1,155 @@
+{
+  "identity": {
+    "name": "YouTube — Gaming Channel",
+    "version": "v1.0.0",
+    "created": "2026-08-14",
+    "updated": "2026-08-14",
+    "description": "Игровой YouTube-канал (Minecraft/Roblox) с монетизацией."
+  },
+  "work_id": "W-T-20260713-YOUTUBE_GAMING_CHANNEL",
+  "status": "active",
+  "priority": "high",
+  "horizon": "tactical",
+  "description": "Create and monetize a YouTube gaming channel focused on simple, popular games (Minecraft, Roblox, etc.) with a family-friendly/adult audience. Includes full setup, content strategy, monetization (AdSense via foreign bank account), and growth plan.",
+  "deadline": "2026-10-31",
+  "effort_estimate": "20-30 hours initial setup, then 5-10 hours/week",
+  "progress": 0,
+  "tags": [
+    "youtube",
+    "gaming",
+    "minecraft",
+    "roblox",
+    "monetization",
+    "content-creation",
+    "financial-sustainability"
+  ],
+  "phases": {
+    "phase_1_channel_setup": {
+      "name": "Channel Setup & Branding",
+      "description": "Create the YouTube channel, design branding, set up basic equipment.",
+      "deadline": "2026-07-31",
+      "tasks": [
+        "Create YouTube channel with clear niche (Minecraft/Roblox focus)",
+        "Design channel art (avatar, banner, thumbnails style)",
+        "Write channel description and about section",
+        "Set up basic recording/streaming equipment (OBS, microphone, webcam optional)",
+        "Create a content calendar for first month"
+      ],
+      "deliverables": [
+        "Live YouTube channel with branding",
+        "2-3 test videos (private or unlisted)",
+        "Content calendar for first 4 weeks"
+      ]
+    },
+    "phase_2_content_production": {
+      "name": "Content Production & Publishing",
+      "description": "Produce and publish first batch of content (long-form + Shorts).",
+      "deadline": "2026-08-31",
+      "tasks": [
+        "Publish 2 long-form videos per week (10-30 min each)",
+        "Publish 3-5 Shorts per week (clip highlights, memes, comparisons)",
+        "Optimize titles, descriptions, tags, and thumbnails for SEO",
+        "Engage with comments and build community",
+        "Analyze performance and adjust content strategy"
+      ],
+      "deliverables": [
+        "20+ long-form videos published",
+        "30+ Shorts published",
+        "500+ subscribers (target)",
+        "3000+ watch hours (target)"
+      ]
+    },
+    "phase_3_monetization_setup": {
+      "name": "Monetization Setup & Milestone Achievement",
+      "description": "Reach YouTube Partner Program thresholds, set up AdSense with foreign bank account.",
+      "deadline": "2026-09-30",
+      "tasks": [
+        "Reach 500 subscribers and 3000 watch hours for early access",
+        "Reach 1000 subscribers and 4000 watch hours for full monetization",
+        "Set up AdSense account (as 'Individual', not 'Business')",
+        "Link foreign bank account (Wise, Grey, or direct foreign card) to AdSense",
+        "Submit for YouTube Partner Program review"
+      ],
+      "deliverables": [
+        "Approved YouTube Partner Program status",
+        "AdSense account linked to foreign bank account",
+        "First revenue generated"
+      ]
+    },
+    "phase_4_growth_and_optimization": {
+      "name": "Growth & Optimization",
+      "description": "Optimize content strategy for maximum growth and revenue.",
+      "deadline": "2026-10-31",
+      "tasks": [
+        "Analyze best-performing content and double down",
+        "Experiment with new formats (streaming, collaborations)",
+        "Optimize revenue streams (memberships, super chats, sponsorships)",
+        "Explore cross-platform (TikTok, Instagram Reels)",
+        "Scale production to 3-4 long videos per week"
+      ],
+      "deliverables": [
+        "10,000+ subscribers (target)",
+        "Monthly revenue report",
+        "Growth plan for next 3 months"
+      ]
+    }
+  },
+  "monetization_details": {
+    "youtube_thresholds": {
+      "early_access": {
+        "subscribers": 500,
+        "watch_hours": 3000,
+        "shorts_views": 3000000,
+        "features": [
+          "Super Chat",
+          "Channel Memberships",
+          "Merchandise"
+        ]
+      },
+      "full_partner": {
+        "subscribers": 1000,
+        "watch_hours": 4000,
+        "shorts_views": 10000000,
+        "features": [
+          "Ad Revenue (pre-roll, mid-roll, display)",
+          "YouTube Premium Revenue"
+        ]
+      }
+    },
+    "adsense_setup": {
+      "account_type": "Individual (not Business)",
+      "tax_form": "W-8BEN (for non-US residents)",
+      "payout_method": "Foreign bank account (US/Europe/other friendly jurisdiction)",
+      "payout_options": [
+        "Wise",
+        "Grey",
+        "Direct foreign bank account"
+      ],
+      "note": "AdSense account type cannot be changed after creation. Choose 'Individual' for personal tax reporting."
+    },
+    "expected_cpm_rpm": {
+      "gaming_niche": "CPM: $2-$7, RPM: $1.50-$5.50",
+      "us_market": "Higher CPM ($8-$18)",
+      "uk_market": "CPM ~$7-$12",
+      "example_earnings": [
+        "10,000 views/month → $20-$70",
+        "50,000 views/month → $100-$350",
+        "100,000 views/month → $200-$700"
+      ]
+    }
+  },
+  "financial_sustainability_notes": {
+    "purpose": "This work is a parallel financial sustainability track, similar to W-R-ECOMM-001 and W-R-RM-014.",
+    "relationship": "All three works aim to increase Gardener's financial independence, enabling full-time focus on Mandala Symbiosis.",
+    "priority": "This is a 'probe' work — test the waters with minimal investment, scale if successful."
+  },
+  "notes": [
+    "Start with Minecraft and Roblox — they have the largest audience and simplest content requirements.",
+    "Use Shorts as a funnel to long-form videos (Shorts bring subscribers, long videos bring revenue).",
+    "Foreign bank account is critical for payout — Wise or Grey are recommended for beginners.",
+    "AdSense account type must be 'Individual' — Business requires company registration.",
+    "Monitor performance closely and pivot to winning formats early."
+  ],
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13",
+  "last_updated": "2026-08-14"
+}
