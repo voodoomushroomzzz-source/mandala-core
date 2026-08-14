@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.66",
+    "version": "v1.7.67",
     "created": "2026-05-11",
     "updated": "2026-08-14",
     "layer": 1,
@@ -1742,9 +1742,9 @@
         ]
       },
       "manifest": {
-        "total_works": 20,
+        "total_works": 21,
         "by_status": {
-          "active": 20,
+          "active": 21,
           "planning": 15,
           "in_progress": 1,
           "done": 1
@@ -1755,7 +1755,7 @@
         },
         "by_priority": {
           "critical": 5,
-          "high": 13,
+          "high": 14,
           "medium": 5,
           "low": 2
         },
@@ -1779,7 +1779,8 @@
           "W-T-20260803-SR-EVALUATION.json",
           "W-T-20260804-MANUS-MEMORY__nativemem.json",
           "W-T-20260804-SR-REFLECTION__in_context_search.json",
-          "W-T-20260807-MEMORY__mandala_memory_layer.json"
+          "W-T-20260807-MEMORY__mandala_memory_layer.json",
+          "W-R-20260814-PERSONAL-MIGRATION"
         ],
         "deadlines": {
           "W-R-RC-001__visibility_strategy": null,
