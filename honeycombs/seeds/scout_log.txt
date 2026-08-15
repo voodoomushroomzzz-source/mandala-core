@@ -3300,3 +3300,63 @@
 [2026-08-15 07:00:55] [INFO]   Total duplicates: 10
 [2026-08-15 07:00:55] [INFO]   Total removed (old): 0
 [2026-08-15 07:00:55] [INFO] ============================================================
+[2026-08-15 09:25:00] [INFO] ============================================================
+[2026-08-15 09:25:00] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-15 09:25:00] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-15 09:25:00] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-15 09:25:00] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-15 09:25:00] [INFO]   → Filtered to 5 relevant items
+[2026-08-15 09:25:00] [INFO]   ⏭️ Duplicate: Position: Reasoning is a Learnable Rule-Based Proc...
+[2026-08-15 09:25:00] [INFO]   ⏭️ Duplicate: Diagnostic Foundation for Evaluating LLMs' Researc...
+[2026-08-15 09:25:00] [INFO]   ⏭️ Duplicate: Position: The Alignment Community is Unintentional...
+[2026-08-15 09:25:00] [INFO]   ⏭️ Duplicate: Agreement Is Not Alignment: Divergent Moral Ground...
+[2026-08-15 09:25:00] [INFO]   ⏭️ Duplicate: Multi-Agent Scheduling with LLM-Assisted Contract ...
+[2026-08-15 09:25:00] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-08-15 09:25:00] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-15 09:25:00] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-15 09:25:01] [INFO]   → Found 0 raw items, 0 recent
+[2026-08-15 09:25:01] [INFO]   → Filtered to 0 relevant items
+[2026-08-15 09:25:01] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-15 09:25:01] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-15 09:25:01] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-15 09:25:01] [INFO]   → Found 15 raw items, 11 recent
+[2026-08-15 09:25:01] [INFO]   → Filtered to 3 relevant items
+[2026-08-15 09:25:01] [INFO]   ⏭️ Duplicate: Google is making private AI practical with homomor...
+[2026-08-15 09:25:01] [INFO]   ✅ Saved: SEED-20260815-092501-056.json
+[2026-08-15 09:25:01] [INFO]   ⏭️ Duplicate: Show HN: ThoughtDAG – An editable context graph fo...
+[2026-08-15 09:25:01] [INFO]   📊 Hacker News: saved 1, duplicates 2
+[2026-08-15 09:25:01] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-15 09:25:01] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-15 09:25:01] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-15 09:25:01] [INFO]   → Filtered to 5 relevant items
+[2026-08-15 09:25:01] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-15 09:25:01] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-15 09:25:01] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-15 09:25:01] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-15 09:25:01] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-15 09:25:01] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-15 09:25:01] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-15 09:25:01] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-15 09:25:02] [INFO]   → Found 15 raw items, 5 recent
+[2026-08-15 09:25:02] [INFO]   → Filtered to 5 relevant items
+[2026-08-15 09:25:02] [INFO]   ⏭️ Duplicate: Google will now allow users to remove visible wate...
+[2026-08-15 09:25:02] [INFO]   ⏭️ Duplicate: Does Mark Zuckerberg really believe AI is ‘for eve...
+[2026-08-15 09:25:02] [INFO]   ⏭️ Duplicate: Kog is going deeper to squeeze more inference out ...
+[2026-08-15 09:25:02] [INFO]   ⏭️ Duplicate: Hyperscalers might regret embracing natural gas if...
+[2026-08-15 09:25:02] [INFO]   ⏭️ Duplicate: Meta’s ‘open’ AI, and a $250M deal gone very wrong...
+[2026-08-15 09:25:02] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-08-15 09:25:02] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-15)...
+[2026-08-15 09:25:02] [INFO]   ✅ No old seeds to remove
+[2026-08-15 09:25:02] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-15
+[2026-08-15 09:25:02] [INFO] 
+============================================================
+[2026-08-15 09:25:02] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-15 09:25:02] [INFO]   Total saved: 1
+[2026-08-15 09:25:02] [INFO]   Total duplicates: 17
+[2026-08-15 09:25:02] [INFO]   Total removed (old): 0
+[2026-08-15 09:25:02] [INFO] ============================================================
