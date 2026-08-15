@@ -1,18 +1,16 @@
 {
   "boot_id": "BOOT-GENTLE-COMPANION-DEV-001",
   "name": "Boot — Gentle Companion Development Context",
-  "version": "v1.0.0",
+  "version": "v1.0.1",
   "created": "2026-08-15",
   "type": "developer_onboarding",
   "description": "Облегчённый boot-файл для работы над Gentle Companion. Вся необходимая информация о боте, его архитектуре, задачах и правилах работы — в одном файле.",
-
   "mandala_context": {
     "brief": "Мандала — экосистема симбиоза человека и ИИ. Основана на принципах Ахимсы, самоорганизации и резонанса.",
     "role_of_bot": "Gentle Companion — Telegram-бот, точка входа для садовников. Собирает опыт, помогает с задачами, даёт обратную связь.",
     "core_repo": "https://github.com/voodoomushroomzzz-source/mandala-core",
     "data_repo": "https://github.com/voodoomushroomzzz-source/mandala-gardeners"
   },
-
   "gentle_companion": {
     "description": "Telegram-бот на Python (aiogram 3.x). Работает на Hetzner VPS (Ubuntu, systemd, nginx).",
     "entry_point": "gentle_companion.py (сборка из модулей)",
@@ -61,7 +59,6 @@
       "whitelist": "gardeners/whitelist.json"
     }
   },
-
   "current_task": {
     "id": "W-T-20260408-1030",
     "name": "Telegram Bot SR Gentle Companion — Strategic & Tactical Upgrade",
@@ -73,19 +70,31 @@
         "phase": 1,
         "name": "Стратегический фундамент",
         "deadline": "2026-08-15",
-        "features": ["community_garden", "rituals", "awareness_landing"]
+        "features": [
+          "community_garden",
+          "rituals",
+          "awareness_landing"
+        ]
       },
       {
         "phase": 2,
         "name": "Тактические улучшения",
         "deadline": "2026-08-31",
-        "features": ["seed_inbox", "short_responses", "pending_resonance", "proactive_messages", "budget_mvp"]
+        "features": [
+          "seed_inbox",
+          "short_responses",
+          "pending_resonance",
+          "proactive_messages",
+          "budget_mvp"
+        ]
       },
       {
         "phase": 3,
         "name": "Расширение бюджета",
         "deadline": "2026-09-30",
-        "features": ["budget_post_mvp"]
+        "features": [
+          "budget_post_mvp"
+        ]
       }
     ],
     "priority_features": [
@@ -95,7 +104,6 @@
       "short_responses"
     ]
   },
-
   "development_rules": {
     "pre_check": "Перед изменением любого файла — запросить текущую версию через API.",
     "post_check": "После изменения — запросить обновлённый файл и подтвердить SHA.",
@@ -112,9 +120,21 @@
     "examples": {
       "to_fetch_a_file": "Перед изменениями всегда запрашивай актуальную версию файла: используй API-ссылку в кодовом блоке.",
       "to_confirm_an_update": "После патча всегда запрашивай обновлённый файл по прямой ссылке (blob) для верификации SHA и содержимого."
+    },
+    "file_fetching": {
+      "file_fetching": {
+        "rule": "Для больших файлов (модулей бота > 50 КБ) НЕ использовать API или raw-ссылки. Вместо этого: 1) Запросить у Садовника полный файл через закреплённое сообщение в чате. 2) Садовник копирует содержимое файла и отправляет как закреплённое сообщение или отдельным файлом. 3) SR читает содержимое напрямую из сообщения.",
+        "reason": "GitHub API и raw-ссылки обрезают большие файлы (> 50 КБ) из-за ограничений на передачу. Чат гарантирует полную загрузку.",
+        "affected_files": [
+          "handlers/system.py (~55 КБ)",
+          "handlers/tasks.py (~95 КБ)",
+          "sr_conversation.py (~110 КБ)",
+          "gentle_companion.py (сборка, ~100+ КБ)"
+        ],
+        "format": "Садовник отправляет файл как: 1) Закреплённое сообщение с содержимым; 2) Файл, прикреплённый к сообщению; 3) Текстовый блок в чате с пометкой 'полный файл'."
+      }
     }
   },
-
   "useful_links": {
     "task_file": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json",
     "architecture_index": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/fruits/gentle_companion/index.json",
@@ -124,7 +144,6 @@
     "mandala_core": "https://github.com/voodoomushroomzzz-source/mandala-core",
     "mandala_gardeners": "https://github.com/voodoomushroomzzz-source/mandala-gardeners"
   },
-
   "onboarding_instruction": {
     "step_1": "Прочитай этот файл полностью.",
     "step_2": "Сверь актуальные версии файлов по ссылкам.",
@@ -133,8 +152,8 @@
     "step_5": "Начни с Phase 1 (стратегический фундамент) — community_garden.",
     "step_6": "После завершения — сообщи Садовнику, что готов к работе."
   },
-
   "completion": {
     "message": "Boot Gentle Companion Dev загружен. Контекст принят. Готов к разработке."
-  }
+  },
+  "updated": "2026-08-15"
 }
