@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-08-14",
+    "updated": "2026-08-15",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -21,8 +21,8 @@
     "honeycomb_name": "registry",
     "parent_honeycomb": "core_map",
     "segments": 6,
-    "total_files": 19,
-    "total_size_kb": 1085.44,
+    "total_files": 20,
+    "total_size_kb": 1100.1,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -43,9 +43,9 @@
     }
   },
   "registry": {
-    "total_files": 19,
-    "total_size_kb": 1085.44,
-    "last_updated": "2026-08-14",
+    "total_files": 20,
+    "total_size_kb": 1100.1,
+    "last_updated": "2026-08-15",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -59,42 +59,48 @@
       "task_validator": {
         "errors": [],
         "warnings": [],
-        "expired_tasks": [],
-        "upcoming_deadlines": [
+        "expired_tasks": [
           {
             "work_id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-08-15",
-            "days_left": 0
+            "days_overdue": 0
           }
         ],
+        "upcoming_deadlines": [],
         "errors_count": 0,
         "warnings_count": 0,
-        "expired_count": 0,
-        "upcoming_count": 1
+        "expired_count": 1,
+        "upcoming_count": 0
       },
       "ahimsa_filter": {
-        "errors": [],
-        "warnings": [],
+        "errors": [
+          "personal: missing identity.module_id",
+          "personal: missing identity.layer",
+          "personal: missing identity.type"
+        ],
+        "warnings": [
+          "personal: missing meta section"
+        ],
         "noise_files": [],
-        "errors_count": 0,
-        "warnings_count": 0,
+        "errors_count": 3,
+        "warnings_count": 1,
         "noise_count": 0
       },
       "deadline_sentinel": {
-        "expired": [],
-        "upcoming": [
+        "expired": [
           {
             "id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "works",
             "deadline": "2026-08-15",
-            "days_left": 0
+            "days_overdue": 0
           }
         ],
+        "upcoming": [],
         "warnings": [],
-        "expired_count": 0,
-        "upcoming_count": 1
+        "expired_count": 1,
+        "upcoming_count": 0
       },
       "integrity_check": {
         "errors": [],
@@ -108,12 +114,13 @@
         "root_count": 14,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 35,
-        "inbox_total_files": 36,
+        "inbox_count": 55,
+        "inbox_total_files": 56,
         "inbox_threshold": 50,
-        "inbox_status": "ok",
+        "inbox_status": "warning",
         "warnings": [
-          "Корень seeds/: 14 файлов (порог 10)"
+          "Корень seeds/: 14 файлов (порог 10)",
+          "Inbox: 55 новых файлов (порог 50)"
         ],
         "status": "warning"
       }
@@ -122,12 +129,13 @@
       "root_count": 14,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 35,
-      "inbox_total_files": 36,
+      "inbox_count": 55,
+      "inbox_total_files": 56,
       "inbox_threshold": 50,
-      "inbox_status": "ok",
+      "inbox_status": "warning",
       "warnings": [
-        "Корень seeds/: 14 файлов (порог 10)"
+        "Корень seeds/: 14 файлов (порог 10)",
+        "Inbox: 55 новых файлов (порог 50)"
       ],
       "status": "warning"
     }
