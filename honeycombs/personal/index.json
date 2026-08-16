@@ -43,7 +43,14 @@
       "priority": "high",
       "deadline": null,
       "progress": 10
+    },
+    "self_development": {
+      "file": "self_development.json",
+      "status": "planning",
+      "priority": "medium",
+      "deadline": null,
+      "progress": 0
     }
   },
-  "last_updated": "2026-08-14"
+  "last_updated": "2026-08-16"
 }
