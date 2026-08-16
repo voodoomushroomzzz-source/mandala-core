@@ -3412,3 +3412,56 @@
 [2026-08-16 07:00:52] [INFO]   Total duplicates: 5
 [2026-08-16 07:00:52] [INFO]   Total removed (old): 0
 [2026-08-16 07:00:52] [INFO] ============================================================
+[2026-08-16 09:25:59] [INFO] ============================================================
+[2026-08-16 09:25:59] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-16 09:25:59] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-16 09:25:59] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-16 09:25:59] [INFO]   → Found 0 raw items, 0 recent
+[2026-08-16 09:25:59] [INFO]   → Filtered to 0 relevant items
+[2026-08-16 09:25:59] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-16 09:25:59] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-16 09:25:59] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-16 09:25:59] [INFO]   → Found 0 raw items, 0 recent
+[2026-08-16 09:25:59] [INFO]   → Filtered to 0 relevant items
+[2026-08-16 09:25:59] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-16 09:25:59] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-16 09:25:59] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-16 09:26:00] [INFO]   → Found 15 raw items, 10 recent
+[2026-08-16 09:26:00] [INFO]   → Filtered to 3 relevant items
+[2026-08-16 09:26:00] [INFO]   ✅ Saved: SEED-20260816-092600-062.json
+[2026-08-16 09:26:00] [INFO]   ⏭️ Duplicate: Patterns and problems in emerging multi-agent syst...
+[2026-08-16 09:26:00] [INFO]   ⏭️ Duplicate: AI in drug discovery – what it is, where we stand ...
+[2026-08-16 09:26:00] [INFO]   📊 Hacker News: saved 1, duplicates 2
+[2026-08-16 09:26:00] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-16 09:26:00] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-16 09:26:01] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-16 09:26:01] [INFO]   → Filtered to 5 relevant items
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-16 09:26:01] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-16 09:26:01] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-16 09:26:01] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-16 09:26:01] [INFO]   → Found 15 raw items, 3 recent
+[2026-08-16 09:26:01] [INFO]   → Filtered to 3 relevant items
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: Woman claims her stepfather used Grok to transform...
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: Anthropic shares more details about how Claude’s n...
+[2026-08-16 09:26:01] [INFO]   ⏭️ Duplicate: SpaceX officially closes its Cursor acquisition...
+[2026-08-16 09:26:01] [INFO]   📊 TechCrunch AI: saved 0, duplicates 3
+[2026-08-16 09:26:01] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-16)...
+[2026-08-16 09:26:01] [INFO]   ✅ No old seeds to remove
+[2026-08-16 09:26:01] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-16
+[2026-08-16 09:26:01] [INFO] 
+============================================================
+[2026-08-16 09:26:01] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-16 09:26:01] [INFO]   Total saved: 1
+[2026-08-16 09:26:01] [INFO]   Total duplicates: 10
+[2026-08-16 09:26:01] [INFO]   Total removed (old): 0
+[2026-08-16 09:26:01] [INFO] ============================================================
