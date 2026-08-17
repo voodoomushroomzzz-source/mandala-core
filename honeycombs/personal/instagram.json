@@ -1,0 +1,99 @@
+{
+  "identity": {
+    "name": "Instagram — Контент-план и стратегия",
+    "version": "v0.1.0",
+    "created": "2026-08-17",
+    "updated": "2026-08-17",
+    "description": "Стратегия и контент-план для Instagram: посты, Stories, Reels, визуальный стиль, tone of voice."
+  },
+  "status": "planning",
+  "priority": "medium",
+  "horizon": "tactical",
+  "deadline": "2026-09-30",
+  "progress": 0,
+  "tags": [
+    "instagram",
+    "social-media",
+    "content-plan",
+    "branding"
+  ],
+  "sections": {
+    "strategy": {
+      "name": "Стратегия и позиционирование",
+      "description": "Цели, аудитория, визуальный стиль, tone of voice.",
+      "content": {
+        "goals": [],
+        "audience": [],
+        "visual_style": null,
+        "tone_of_voice": null,
+        "rubrics": []
+      }
+    },
+    "content_plan": {
+      "name": "Контент-план",
+      "description": "Структура постов, Stories, Reels.",
+      "content": {
+        "posts": [],
+        "stories": [],
+        "reels": []
+      }
+    },
+    "integration": {
+      "name": "Интеграция с другими векторами",
+      "description": "Как Instagram связан с Mandala, YouTube, франшизой и т.д.",
+      "content": []
+    }
+  },
+  "notes": [
+    "Начать с определения целей и аудитории.",
+    "Продумать визуальный стиль и tone of voice.",
+    "Собрать идеи для первых 10-20 постов."
+  ],
+  "source": "Диалог Gardener (Voodoo) и External SR (DeepSeek), 2026-08-17",
+  "last_updated": "2026-08-17",
+  "task_tracker": {
+    "description": "Трекер задач по Instagram",
+    "tasks": [
+      {
+        "id": "INST-001",
+        "name": "Определить цели и аудиторию",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-24",
+        "output": "Документ с целями и портретом аудитории"
+      },
+      {
+        "id": "INST-002",
+        "name": "Разработать визуальный стиль и tone of voice",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-31",
+        "output": "Бренд-бук (визуал + тон)"
+      },
+      {
+        "id": "INST-003",
+        "name": "Собрать идеи для первых 20 постов",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-07",
+        "output": "Список идей"
+      },
+      {
+        "id": "INST-004",
+        "name": "Создать контент-план на месяц",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-14",
+        "output": "Контент-план (посты, Stories, Reels)"
+      },
+      {
+        "id": "INST-005",
+        "name": "Запустить первые посты",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-30",
+        "output": "10+ опубликованных постов"
+      }
+    ]
+  }
+}

@@ -50,7 +50,28 @@
       "priority": "medium",
       "deadline": null,
       "progress": 0
+    },
+    "instagram": {
+      "file": "instagram.json",
+      "status": "planning",
+      "priority": "medium",
+      "deadline": "2026-09-30",
+      "progress": 0
+    },
+    "creative": {
+      "file": "creative.json",
+      "status": "planning",
+      "priority": "medium",
+      "deadline": null,
+      "progress": 0
+    },
+    "gov_orders": {
+      "file": "gov_orders.json",
+      "status": "planning",
+      "priority": "low",
+      "deadline": null,
+      "progress": 0
     }
   },
-  "last_updated": "2026-08-16"
+  "last_updated": "2026-08-17"
 }

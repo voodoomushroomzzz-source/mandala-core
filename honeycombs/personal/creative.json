@@ -1,0 +1,114 @@
+{
+  "identity": {
+    "name": "Творчество — Поэзия, музыка, проза",
+    "version": "v0.1.0",
+    "created": "2026-08-17",
+    "updated": "2026-08-17",
+    "description": "Структурированное творческое наследие и планы: поэзия, музыкальные проекты, проза."
+  },
+  "status": "planning",
+  "priority": "medium",
+  "horizon": "strategic",
+  "deadline": null,
+  "progress": 0,
+  "tags": [
+    "creative",
+    "poetry",
+    "music",
+    "prose",
+    "first-gardener"
+  ],
+  "sections": {
+    "poetry": {
+      "name": "Поэзия",
+      "description": "Собранные и неопубликованные стихотворения.",
+      "content": {
+        "collected": [],
+        "uncollected": []
+      }
+    },
+    "music_projects": {
+      "name": "Музыкальные проекты",
+      "description": "Творческие проекты и ссылки.",
+      "content": [
+        {
+          "name": "Dmitrii Levin",
+          "description": "Experimental electronics, trip-hop, indietronica, neoclassical, drumbass",
+          "link": "https://music.yandex.ru/artist/7562100"
+        },
+        {
+          "name": "Mc Voodookid",
+          "description": "Ghetto rap with philosophical context",
+          "link": "https://music.yandex.ru/artist/25310735"
+        },
+        {
+          "name": "Маякома (Mayakoma)",
+          "description": "Guitar-driven post-punk project",
+          "link": "https://music.yandex.ru/artist/24144626"
+        },
+        {
+          "name": "X Deaddy X",
+          "description": "Garage rock trio in the spirit of Nirvana",
+          "link": "https://music.yandex.ru/artist/8344952"
+        }
+      ]
+    },
+    "prose": {
+      "name": "Проза",
+      "description": "Ритмическая проза, внутренние монологи, космические письма.",
+      "content": {
+        "collected": [],
+        "uncollected": []
+      }
+    },
+    "publication_plan": {
+      "name": "План публикаций",
+      "description": "Как и где публиковать творчество.",
+      "content": []
+    }
+  },
+  "notes": [
+    "Собрать существующие тексты (поэзия, проза) в структурированном виде.",
+    "Описать музыкальные проекты (Dmitrii Levin, Mc Voodookid, Маякома, X Deaddy X).",
+    "Связать с философией Mandala."
+  ],
+  "source": "Диалог Gardener (Voodoo) и External SR (DeepSeek), 2026-08-17",
+  "last_updated": "2026-08-17",
+  "task_tracker": {
+    "description": "Трекер задач по творчеству",
+    "tasks": [
+      {
+        "id": "CRT-001",
+        "name": "Собрать все стихотворения в единый файл",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-31",
+        "output": "Структурированный сборник поэзии"
+      },
+      {
+        "id": "CRT-002",
+        "name": "Собрать прозу (внутренние монологи, письма)",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-15",
+        "output": "Структурированный сборник прозы"
+      },
+      {
+        "id": "CRT-003",
+        "name": "Описать музыкальные проекты и их связь с Mandala",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-30",
+        "output": "Описание проектов + философская связь"
+      },
+      {
+        "id": "CRT-004",
+        "name": "Создать план публикации творчества",
+        "status": "pending",
+        "priority": "low",
+        "deadline": "2026-10-31",
+        "output": "План публикаций"
+      }
+    ]
+  }
+}

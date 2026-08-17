@@ -1,0 +1,98 @@
+{
+  "identity": {
+    "name": "Госзаказы — 44-ФЗ, 223-ФЗ",
+    "version": "v0.1.0",
+    "created": "2026-08-17",
+    "updated": "2026-08-17",
+    "description": "Анализ и стратегия участия в государственных заказах (44-ФЗ, 223-ФЗ)."
+  },
+  "status": "planning",
+  "priority": "low",
+  "horizon": "strategic",
+  "deadline": null,
+  "progress": 0,
+  "tags": [
+    "government-orders",
+    "44-fz",
+    "223-fz",
+    "tenders",
+    "procurement"
+  ],
+  "sections": {
+    "requirements_analysis": {
+      "name": "Анализ требований",
+      "description": "Изучение текущих требований к участникам госзакупок.",
+      "content": {
+        "general_requirements": [],
+        "specific_niches": []
+      }
+    },
+    "strategy": {
+      "name": "Стратегия участия",
+      "description": "План регистрации, первые шаги, критерии отбора тендеров.",
+      "content": {
+        "registration_plan": [],
+        "first_steps": [],
+        "tender_selection_criteria": []
+      }
+    },
+    "potential_niches": {
+      "name": "Потенциальные ниши",
+      "description": "Ниши для участия: AI, IT, услуги.",
+      "content": []
+    }
+  },
+  "notes": [
+    "Изучить текущие требования к участникам.",
+    "Проанализировать ниши для участия (AI, IT, услуги).",
+    "Создать план регистрации и первых шагов.",
+    "Определить критерии выбора тендеров."
+  ],
+  "source": "Диалог Gardener (Voodoo) и External SR (DeepSeek), 2026-08-17",
+  "last_updated": "2026-08-17",
+  "task_tracker": {
+    "description": "Трекер задач по госзаказам",
+    "tasks": [
+      {
+        "id": "GOV-001",
+        "name": "Изучить требования к участникам 44-ФЗ и 223-ФЗ",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-31",
+        "output": "Список требований и рекомендаций"
+      },
+      {
+        "id": "GOV-002",
+        "name": "Проанализировать ниши (AI, IT, услуги)",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-09-15",
+        "output": "Анализ потенциальных ниш"
+      },
+      {
+        "id": "GOV-003",
+        "name": "Создать план регистрации",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-30",
+        "output": "Пошаговый план регистрации"
+      },
+      {
+        "id": "GOV-004",
+        "name": "Определить критерии отбора тендеров",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-10-15",
+        "output": "Критерии выбора тендеров"
+      },
+      {
+        "id": "GOV-005",
+        "name": "Запустить первую заявку",
+        "status": "pending",
+        "priority": "low",
+        "deadline": "2026-11-30",
+        "output": "Подана первая заявка"
+      }
+    ]
+  }
+}
