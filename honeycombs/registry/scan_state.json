@@ -1,13 +1,13 @@
 {
-  "last_scan": "2026-08-16T09:15:31.708054",
+  "last_scan": "2026-08-17T07:10:33.895470",
   "honeycomb_hashes": {
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
     "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
-    "honeycombs/personal": "beb87b633d5ea6243c0c2d490f03f13e",
+    "honeycombs/personal": "67c8b59a103ab284ce8b48411c3da6db",
     "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
     "honeycombs/seeds": "4dc2b1dadb015cf63137153125295668",
-    "honeycombs/seeds/inbox": "cf4c16a63534817c177ffcfbbfa965d0",
+    "honeycombs/seeds/inbox": "000eb6e8f7eee6141698cac7a47b1c3f",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
     "honeycombs/knowledge": "29e22087c24941e87b341b5ef7fda114",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
@@ -28,25 +28,25 @@
     "invalid_v2": 1,
     "errors": 0,
     "warnings": 1,
-    "total_files": 301,
-    "total_size_kb": 1119.81
+    "total_files": 338,
+    "total_size_kb": 1167.36
   },
   "seeds_health": {
     "root_count": 14,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 61,
-    "inbox_total_files": 62,
+    "inbox_count": 79,
+    "inbox_total_files": 80,
     "inbox_threshold": 50,
     "inbox_status": "warning",
     "warnings": [
       "Корень seeds/: 14 файлов (порог 10)",
-      "Inbox: 61 новых файлов (порог 50)"
+      "Inbox: 79 новых файлов (порог 50)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-08-16T09:15:31.708063",
+    "last_check": "2026-08-17T07:10:33.895479",
     "errors_count": 3,
     "warnings_count": 1,
     "expired_tasks": 1,
@@ -56,7 +56,7 @@
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 1
+        "days_overdue": 2
       }
     ],
     "upcoming_deadlines_list": [],
