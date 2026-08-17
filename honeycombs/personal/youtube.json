@@ -151,5 +151,58 @@
     "Monitor performance closely and pivot to winning formats early."
   ],
   "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-07-13",
-  "last_updated": "2026-08-14"
+  "last_updated": "2026-08-14",
+  "task_tracker": {
+    "description": "Трекер задач по YouTube-каналу (гейминг)",
+    "tasks": [
+      {
+        "id": "YT-001",
+        "name": "Создать YouTube-канал с брендингом",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-07-31",
+        "output": "Live channel"
+      },
+      {
+        "id": "YT-002",
+        "name": "Записать 2-3 тестовых видео",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-15",
+        "output": "Test videos"
+      },
+      {
+        "id": "YT-003",
+        "name": "Опубликовать 2 long-form видео в неделю",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-31",
+        "output": "20+ videos published"
+      },
+      {
+        "id": "YT-004",
+        "name": "Опубликовать 3-5 Shorts в неделю",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-08-31",
+        "output": "30+ Shorts published"
+      },
+      {
+        "id": "YT-005",
+        "name": "Набрать 500+ подписчиков для early access",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-30",
+        "output": "500+ subscribers"
+      },
+      {
+        "id": "YT-006",
+        "name": "Настроить AdSense с иностранным банком",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-10-31",
+        "output": "AdSense linked"
+      }
+    ]
+  }
 }

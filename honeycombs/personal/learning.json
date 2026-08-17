@@ -391,5 +391,58 @@
       }
     }
   },
-  "last_updated": "2026-08-14"
+  "last_updated": "2026-08-14",
+  "task_tracker": {
+    "description": "Трекер обучения и сертификатов",
+    "tasks": [
+      {
+        "id": "LRN-001",
+        "name": "Завершить OpenAI Academy: AI Foundations",
+        "status": "in_progress",
+        "priority": "critical",
+        "deadline": "2026-07-31",
+        "output": "Сертификат Credly"
+      },
+      {
+        "id": "LRN-002",
+        "name": "Пройти Google AI Essentials",
+        "status": "pending",
+        "priority": "critical",
+        "deadline": "2026-08-15",
+        "output": "Сертификат Google"
+      },
+      {
+        "id": "LRN-003",
+        "name": "Пройти GitHub Foundations",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-31",
+        "output": "Сертификат GitHub"
+      },
+      {
+        "id": "LRN-004",
+        "name": "OpenAI Academy: Applied AI Foundations",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-10-15",
+        "output": "Сертификат Credly"
+      },
+      {
+        "id": "LRN-005",
+        "name": "Anthropic Academy — Claude Certification Path",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-11-30",
+        "output": "Course certificates"
+      },
+      {
+        "id": "LRN-006",
+        "name": "Claude Certified Architect (CCA-F)",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-12-31",
+        "output": "Official certification"
+      }
+    ]
+  }
 }

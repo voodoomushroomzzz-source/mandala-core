@@ -162,5 +162,58 @@
     ],
     "certification_note": "Certain product categories (electronics, children's goods) require mandatory certification in Russia. Start with categories that don't require certification."
   },
-  "last_updated": "2026-08-14"
+  "last_updated": "2026-08-14",
+  "task_tracker": {
+    "description": "Трекер задач по e-commerce и Китаю",
+    "tasks": [
+      {
+        "id": "ECO-001",
+        "name": "Выбрать дропшиппинг-агента (Zendrop/SourcinBox)",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-07-25",
+        "output": "Agent selected"
+      },
+      {
+        "id": "ECO-002",
+        "name": "Создать аккаунт продавца на Ozon",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-07-31",
+        "output": "Ozon seller account"
+      },
+      {
+        "id": "ECO-003",
+        "name": "Выбрать 2-3 тестовых продукта",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-15",
+        "output": "Products selected"
+      },
+      {
+        "id": "ECO-004",
+        "name": "Протестировать процесс заказа через агента",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-08-31",
+        "output": "Test order completed"
+      },
+      {
+        "id": "ECO-005",
+        "name": "Создать листинги на Ozon (3-5 SKU)",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-15",
+        "output": "Live listings"
+      },
+      {
+        "id": "ECO-006",
+        "name": "Проанализировать продажи и скорректировать стратегию",
+        "status": "pending",
+        "priority": "low",
+        "deadline": "2026-10-15",
+        "output": "Performance report"
+      }
+    ]
+  }
 }

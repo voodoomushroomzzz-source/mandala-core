@@ -522,5 +522,66 @@
     "phase_3": "После стабилизации MVP (~2–3 месяца после фазы 2)",
     "phase_4": "3–6+ месяцев"
   },
-  "last_updated": "2026-08-14"
+  "last_updated": "2026-08-14",
+  "task_tracker": {
+    "description": "Трекер задач по франшизе 'Куртош'",
+    "tasks": [
+      {
+        "id": "FRN-001",
+        "name": "Собрать все существующие документы (техкарты, чек-листы)",
+        "status": "pending",
+        "priority": "critical",
+        "deadline": "2026-08-20",
+        "output": "Archive of materials"
+      },
+      {
+        "id": "FRN-002",
+        "name": "Описать текущие роли и зоны ответственности",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-08-25",
+        "output": "Roles matrix"
+      },
+      {
+        "id": "FRN-003",
+        "name": "Структурировать номенклатуру в JSON",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-09-15",
+        "output": "Machine-readable nomenclature"
+      },
+      {
+        "id": "FRN-004",
+        "name": "Оформить инструкции и чек-листы",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-09-30",
+        "output": "Instructions database"
+      },
+      {
+        "id": "FRN-005",
+        "name": "Интегрировать бота в чаты (MVP)",
+        "status": "pending",
+        "priority": "high",
+        "deadline": "2026-10-15",
+        "output": "Working bot"
+      },
+      {
+        "id": "FRN-006",
+        "name": "Создать MVP дашбордов для управленцев",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-11-15",
+        "output": "Dashboards"
+      },
+      {
+        "id": "FRN-007",
+        "name": "Разработать пакеты франшизы",
+        "status": "pending",
+        "priority": "medium",
+        "deadline": "2026-12-31",
+        "output": "Franchise packages"
+      }
+    ]
+  }
 }
