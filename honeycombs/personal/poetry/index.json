@@ -214,7 +214,7 @@
           "id": "Na_urovne_dogadki",
           "title": "На уровне догадки",
           "file": "poems/Na_urovne_dogadki.json",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "A_znaesh_prosto_ubey_menya",
@@ -373,7 +373,7 @@
           "status": "pending"
         }
       ],
-      "progress": 12
+      "progress": 13
     },
     "track_b": {
       "name": "Трек B: Систематизация и издание",
