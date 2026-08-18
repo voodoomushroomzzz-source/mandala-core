@@ -71,7 +71,14 @@
       "priority": "low",
       "deadline": null,
       "progress": 0
+    },
+    "poetry": {
+      "file": "poetry.json",
+      "status": "active",
+      "priority": "high",
+      "deadline": "2026-09-15",
+      "progress": 0
     }
   },
-  "last_updated": "2026-08-17"
+  "last_updated": "2026-08-18"
 }
