@@ -232,7 +232,7 @@
           "id": "Pena",
           "title": "Пена...",
           "file": "poems/Pena.json",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "Sotni_putey",
@@ -373,7 +373,7 @@
           "status": "pending"
         }
       ],
-      "progress": 15
+      "progress": 16
     },
     "track_b": {
       "name": "Трек B: Систематизация и издание",
