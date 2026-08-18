@@ -3650,3 +3650,57 @@
 [2026-08-18 07:00:55] [INFO]   Total duplicates: 5
 [2026-08-18 07:00:55] [INFO]   Total removed (old): 0
 [2026-08-18 07:00:55] [INFO] ============================================================
+[2026-08-18 09:32:21] [INFO] ============================================================
+[2026-08-18 09:32:21] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-18 09:32:21] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-18 09:32:21] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-18 09:32:22] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-18 09:32:22] [INFO]   → Filtered to 0 relevant items
+[2026-08-18 09:32:22] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-18 09:32:22] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-18 09:32:22] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-18 09:32:22] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-18 09:32:22] [INFO]   → Filtered to 0 relevant items
+[2026-08-18 09:32:22] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-18 09:32:22] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-18 09:32:22] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-18 09:32:22] [INFO]   → Found 15 raw items, 7 recent
+[2026-08-18 09:32:22] [INFO]   → Filtered to 2 relevant items
+[2026-08-18 09:32:22] [INFO]   ⏭️ Duplicate: Fairphone 6 and PostmarketOS working main camera...
+[2026-08-18 09:32:22] [INFO]   ⏭️ Duplicate: AI-Generated GitHub Copilot “Autofix” Allowed Comp...
+[2026-08-18 09:32:22] [INFO]   📊 Hacker News: saved 0, duplicates 2
+[2026-08-18 09:32:22] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-18 09:32:22] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-18 09:32:23] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-18 09:32:23] [INFO]   → Filtered to 5 relevant items
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-18 09:32:23] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-18 09:32:23] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-18 09:32:23] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-18 09:32:23] [INFO]   → Found 15 raw items, 6 recent
+[2026-08-18 09:32:23] [INFO]   → Filtered to 5 relevant items
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: Anthropic’s annualized revenue surges to $65B...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: AI automation startup Relay shuts down, staff join...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: Amazon, which started off selling books, is destro...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: Groq raises $350M to fuel its pivot from AI chips ...
+[2026-08-18 09:32:23] [INFO]   ⏭️ Duplicate: Nvidia investing $1.5B in SoftBank data center dev...
+[2026-08-18 09:32:23] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-08-18 09:32:23] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-18)...
+[2026-08-18 09:32:23] [INFO]   ✅ No old seeds to remove
+[2026-08-18 09:32:23] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-18
+[2026-08-18 09:32:23] [INFO] 
+============================================================
+[2026-08-18 09:32:23] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-18 09:32:23] [INFO]   Total saved: 0
+[2026-08-18 09:32:23] [INFO]   Total duplicates: 12
+[2026-08-18 09:32:23] [INFO]   Total removed (old): 0
+[2026-08-18 09:32:23] [INFO] ============================================================
