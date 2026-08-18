@@ -150,7 +150,7 @@
           "id": "Ne_posvyatit_tebe_stihi",
           "title": "Не посвятит тебе стихи...",
           "file": "poems/Ne_posvyatit_tebe_stihi.json",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "Ya_pomnyu_kazhduyu_iz_vas",
@@ -363,7 +363,7 @@
           "status": "pending"
         }
       ],
-      "progress": 4
+      "progress": 5
     },
     "track_b": {
       "name": "Трек B: Систематизация и издание",
