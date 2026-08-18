@@ -122,47 +122,248 @@
       "goal": "Расставить пунктуацию во всех 40 стихотворениях, привести к литературной норме",
       "priority": "critical",
       "tasks": [
-        {"id": "Ya_zhdu_tebya_moyo_siyane", "title": "Я жду тебя, моё сиянье...", "file": "poems/Ya_zhdu_tebya_moyo_siyane.json", "status": "pending"},
-        {"id": "Ya_ne_pisal_tebe_uvy_stihi", "title": "Я не писал тебе, увы, стихи...", "file": "poems/Ya_ne_pisal_tebe_uvy_stihi.json", "status": "pending"},
-        {"id": "Prosto_day_ei_idti_svoi_put", "title": "Просто дай ей идти свой путь...", "file": "poems/Prosto_day_ei_idti_svoi_put.json", "status": "pending"},
-        {"id": "Ya_by_hotel_toboy_gorditsya", "title": "Я бы хотел тобой гордиться...", "file": "poems/Ya_by_hotel_toboy_gorditsya.json", "status": "pending"},
-        {"id": "Ne_posvyatit_tebe_stihi", "title": "Не посвятит тебе стихи...", "file": "poems/Ne_posvyatit_tebe_stihi.json", "status": "pending"},
-        {"id": "Ya_pomnyu_kazhduyu_iz_vas", "title": "Я помню каждую из вас...", "file": "poems/Ya_pomnyu_kazhduyu_iz_vas.json", "status": "pending"},
-        {"id": "Narisuy_menya_oseni_kraskami", "title": "Нарисуй меня осени красками...", "file": "poems/Narisuy_menya_oseni_kraskami.json", "status": "pending"},
-        {"id": "Zhizn", "title": "Жизнь", "file": "poems/Zhizn.json", "status": "pending"},
-        {"id": "I_esli_b_tolko_my_moi_drug", "title": "И если б только мы, мой друг...", "file": "poems/I_esli_b_tolko_my_moi_drug.json", "status": "pending"},
-        {"id": "Hochesh_skazat_govori", "title": "Хочешь сказать — говори...", "file": "poems/Hochesh_skazat_govori.json", "status": "pending"},
-        {"id": "Kapali_slezy_kosmosom_glaz", "title": "Капали слёзы космосом глаз...", "file": "poems/Kapali_slezy_kosmosom_glaz.json", "status": "pending"},
-        {"id": "Nas_nesyot_i_my_letim", "title": "Нас несёт и мы летим...", "file": "poems/Nas_nesyot_i_my_letim.json", "status": "pending"},
-        {"id": "Na_nebe_ogni_pogashih_zvyozd", "title": "На небе огни погасших звёзд...", "file": "poems/Na_nebe_ogni_pogashih_zvyozd.json", "status": "pending"},
-        {"id": "Na_urovne_dogadki", "title": "На уровне догадки", "file": "poems/Na_urovne_dogadki.json", "status": "pending"},
-        {"id": "A_znaesh_prosto_ubey_menya", "title": "А знаешь, просто убей меня, чтобы не мучился...", "file": "poems/A_znaesh_prosto_ubey_menya.json", "status": "pending"},
-        {"id": "Kapley_sorvavshis", "title": "Каплей сорвавшись...", "file": "poems/Kapley_sorvavshis.json", "status": "pending"},
-        {"id": "Pena", "title": "Пена...", "file": "poems/Pena.json", "status": "pending"},
-        {"id": "Sotni_putey", "title": "Сотни путей...", "file": "poems/Sotni_putey.json", "status": "pending"},
-        {"id": "Ya_vas_lyubil", "title": "Я вас любил...", "file": "poems/Ya_vas_lyubil.json", "status": "pending"},
-        {"id": "Ya_ne_stal_tebya_menshe_lyubit", "title": "Я не стал тебя меньше любить...", "file": "poems/Ya_ne_stal_tebya_menshe_lyubit.json", "status": "pending"},
-        {"id": "Ya_vnov_grushchu_i_snova_o_tebe", "title": "Я вновь грущу и снова о тебе...", "file": "poems/Ya_vnov_grushchu_i_snova_o_tebe.json", "status": "pending"},
-        {"id": "Ya_stuchus_v_zakrytye_dveri", "title": "Я стучусь в закрытые двери...", "file": "poems/Ya_stuchus_v_zakrytye_dveri.json", "status": "pending"},
-        {"id": "Ne_na_menya_glyadyat_seychas_tvoi_glaza", "title": "Не на меня глядят сейчас твои глаза...", "file": "poems/Ne_na_menya_glyadyat_seychas_tvoi_glaza.json", "status": "pending"},
-        {"id": "Proshchalny", "title": "Прощальный...", "file": "poems/Proshchalny.json", "status": "pending"},
-        {"id": "Vrode_glaza_bolshie_i_dobrye", "title": "Вроде глаза большие и добрые...", "file": "poems/Vrode_glaza_bolshie_i_dobrye.json", "status": "pending"},
-        {"id": "Zhdyom_vesny", "title": "Ждём весны...", "file": "poems/Zhdyom_vesny.json", "status": "pending"},
-        {"id": "Mestami_ne_v_sebe_my_pust", "title": "Местами не в себе мы, пусть...", "file": "poems/Mestami_ne_v_sebe_my_pust.json", "status": "pending"},
-        {"id": "Pust_nebo_okrasit_kipyashchaya_stal", "title": "Пусть небо окрасит кипящая сталь...", "file": "poems/Pust_nebo_okrasit_kipyashchaya_stal.json", "status": "pending"},
-        {"id": "A_mozhet_budem_prosto_smeyatsya", "title": "А может будем просто смеяться?!", "file": "poems/A_mozhet_budem_prosto_smeyatsya.json", "status": "pending"},
-        {"id": "Oblaka_kak_sladkaya_vata", "title": "Облака как сладкая вата...", "file": "poems/Oblaka_kak_sladkaya_vata.json", "status": "pending"},
-        {"id": "Vseh_otpustit_a_tebya_ne_otpustit", "title": "Всех отпустит, а тебя не отпустит...", "file": "poems/Vseh_otpustit_a_tebya_ne_otpustit.json", "status": "pending"},
-        {"id": "Gde_leto", "title": "Где лето...", "file": "poems/Gde_leto.json", "status": "pending"},
-        {"id": "Glazami_zalitymi_krovyu", "title": "Глазами залитыми кровью...", "file": "poems/Glazami_zalitymi_krovyu.json", "status": "pending"},
-        {"id": "Ya_bezdne_mrachnoy_ulybnus", "title": "Я бездне мрачной улыбнусь...", "file": "poems/Ya_bezdne_mrachnoy_ulybnus.json", "status": "pending"},
-        {"id": "S_neba_padaet_sneg", "title": "С неба падает снег...", "file": "poems/S_neba_padaet_sneg.json", "status": "pending"},
-        {"id": "V_grude_oskolkov", "title": "В груде осколков...", "file": "poems/V_grude_oskolkov.json", "status": "pending"},
-        {"id": "Ya_ustal_ot_lyudey", "title": "Я устал от людей...", "file": "poems/Ya_ustal_ot_lyudey.json", "status": "pending"},
-        {"id": "Ya_v_litso_tebe_smeyus", "title": "Я в лицо тебе смеюсь...", "file": "poems/Ya_v_litso_tebe_smeyus.json", "status": "pending"},
-        {"id": "Skazhi_zachem_tak_nuzhno_zhit", "title": "Скажи, зачем так нужно жить...", "file": "poems/Skazhi_zachem_tak_nuzhno_zhit.json", "status": "pending"},
-        {"id": "Zavtra_nikogda_ne_nastupit_eto_uzh_tochno", "title": "Завтра никогда не наступит, это уж точно...", "file": "poems/Zavtra_nikogda_ne_nastupit_eto_uzh_tochno.json", "status": "pending"}
-      ]
+        {
+          "id": "Ya_zhdu_tebya_moyo_siyane",
+          "title": "Я жду тебя, моё сиянье...",
+          "file": "poems/Ya_zhdu_tebya_moyo_siyane.json",
+          "status": "done"
+        },
+        {
+          "id": "Ya_ne_pisal_tebe_uvy_stihi",
+          "title": "Я не писал тебе, увы, стихи...",
+          "file": "poems/Ya_ne_pisal_tebe_uvy_stihi.json",
+          "status": "pending"
+        },
+        {
+          "id": "Prosto_day_ei_idti_svoi_put",
+          "title": "Просто дай ей идти свой путь...",
+          "file": "poems/Prosto_day_ei_idti_svoi_put.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_by_hotel_toboy_gorditsya",
+          "title": "Я бы хотел тобой гордиться...",
+          "file": "poems/Ya_by_hotel_toboy_gorditsya.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ne_posvyatit_tebe_stihi",
+          "title": "Не посвятит тебе стихи...",
+          "file": "poems/Ne_posvyatit_tebe_stihi.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_pomnyu_kazhduyu_iz_vas",
+          "title": "Я помню каждую из вас...",
+          "file": "poems/Ya_pomnyu_kazhduyu_iz_vas.json",
+          "status": "pending"
+        },
+        {
+          "id": "Narisuy_menya_oseni_kraskami",
+          "title": "Нарисуй меня осени красками...",
+          "file": "poems/Narisuy_menya_oseni_kraskami.json",
+          "status": "pending"
+        },
+        {
+          "id": "Zhizn",
+          "title": "Жизнь",
+          "file": "poems/Zhizn.json",
+          "status": "pending"
+        },
+        {
+          "id": "I_esli_b_tolko_my_moi_drug",
+          "title": "И если б только мы, мой друг...",
+          "file": "poems/I_esli_b_tolko_my_moi_drug.json",
+          "status": "pending"
+        },
+        {
+          "id": "Hochesh_skazat_govori",
+          "title": "Хочешь сказать — говори...",
+          "file": "poems/Hochesh_skazat_govori.json",
+          "status": "pending"
+        },
+        {
+          "id": "Kapali_slezy_kosmosom_glaz",
+          "title": "Капали слёзы космосом глаз...",
+          "file": "poems/Kapali_slezy_kosmosom_glaz.json",
+          "status": "pending"
+        },
+        {
+          "id": "Nas_nesyot_i_my_letim",
+          "title": "Нас несёт и мы летим...",
+          "file": "poems/Nas_nesyot_i_my_letim.json",
+          "status": "pending"
+        },
+        {
+          "id": "Na_nebe_ogni_pogashih_zvyozd",
+          "title": "На небе огни погасших звёзд...",
+          "file": "poems/Na_nebe_ogni_pogashih_zvyozd.json",
+          "status": "pending"
+        },
+        {
+          "id": "Na_urovne_dogadki",
+          "title": "На уровне догадки",
+          "file": "poems/Na_urovne_dogadki.json",
+          "status": "pending"
+        },
+        {
+          "id": "A_znaesh_prosto_ubey_menya",
+          "title": "А знаешь, просто убей меня, чтобы не мучился...",
+          "file": "poems/A_znaesh_prosto_ubey_menya.json",
+          "status": "pending"
+        },
+        {
+          "id": "Kapley_sorvavshis",
+          "title": "Каплей сорвавшись...",
+          "file": "poems/Kapley_sorvavshis.json",
+          "status": "pending"
+        },
+        {
+          "id": "Pena",
+          "title": "Пена...",
+          "file": "poems/Pena.json",
+          "status": "pending"
+        },
+        {
+          "id": "Sotni_putey",
+          "title": "Сотни путей...",
+          "file": "poems/Sotni_putey.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_vas_lyubil",
+          "title": "Я вас любил...",
+          "file": "poems/Ya_vas_lyubil.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_ne_stal_tebya_menshe_lyubit",
+          "title": "Я не стал тебя меньше любить...",
+          "file": "poems/Ya_ne_stal_tebya_menshe_lyubit.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_vnov_grushchu_i_snova_o_tebe",
+          "title": "Я вновь грущу и снова о тебе...",
+          "file": "poems/Ya_vnov_grushchu_i_snova_o_tebe.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_stuchus_v_zakrytye_dveri",
+          "title": "Я стучусь в закрытые двери...",
+          "file": "poems/Ya_stuchus_v_zakrytye_dveri.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ne_na_menya_glyadyat_seychas_tvoi_glaza",
+          "title": "Не на меня глядят сейчас твои глаза...",
+          "file": "poems/Ne_na_menya_glyadyat_seychas_tvoi_glaza.json",
+          "status": "pending"
+        },
+        {
+          "id": "Proshchalny",
+          "title": "Прощальный...",
+          "file": "poems/Proshchalny.json",
+          "status": "pending"
+        },
+        {
+          "id": "Vrode_glaza_bolshie_i_dobrye",
+          "title": "Вроде глаза большие и добрые...",
+          "file": "poems/Vrode_glaza_bolshie_i_dobrye.json",
+          "status": "pending"
+        },
+        {
+          "id": "Zhdyom_vesny",
+          "title": "Ждём весны...",
+          "file": "poems/Zhdyom_vesny.json",
+          "status": "pending"
+        },
+        {
+          "id": "Mestami_ne_v_sebe_my_pust",
+          "title": "Местами не в себе мы, пусть...",
+          "file": "poems/Mestami_ne_v_sebe_my_pust.json",
+          "status": "pending"
+        },
+        {
+          "id": "Pust_nebo_okrasit_kipyashchaya_stal",
+          "title": "Пусть небо окрасит кипящая сталь...",
+          "file": "poems/Pust_nebo_okrasit_kipyashchaya_stal.json",
+          "status": "pending"
+        },
+        {
+          "id": "A_mozhet_budem_prosto_smeyatsya",
+          "title": "А может будем просто смеяться?!",
+          "file": "poems/A_mozhet_budem_prosto_smeyatsya.json",
+          "status": "pending"
+        },
+        {
+          "id": "Oblaka_kak_sladkaya_vata",
+          "title": "Облака как сладкая вата...",
+          "file": "poems/Oblaka_kak_sladkaya_vata.json",
+          "status": "pending"
+        },
+        {
+          "id": "Vseh_otpustit_a_tebya_ne_otpustit",
+          "title": "Всех отпустит, а тебя не отпустит...",
+          "file": "poems/Vseh_otpustit_a_tebya_ne_otpustit.json",
+          "status": "pending"
+        },
+        {
+          "id": "Gde_leto",
+          "title": "Где лето...",
+          "file": "poems/Gde_leto.json",
+          "status": "pending"
+        },
+        {
+          "id": "Glazami_zalitymi_krovyu",
+          "title": "Глазами залитыми кровью...",
+          "file": "poems/Glazami_zalitymi_krovyu.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_bezdne_mrachnoy_ulybnus",
+          "title": "Я бездне мрачной улыбнусь...",
+          "file": "poems/Ya_bezdne_mrachnoy_ulybnus.json",
+          "status": "pending"
+        },
+        {
+          "id": "S_neba_padaet_sneg",
+          "title": "С неба падает снег...",
+          "file": "poems/S_neba_padaet_sneg.json",
+          "status": "pending"
+        },
+        {
+          "id": "V_grude_oskolkov",
+          "title": "В груде осколков...",
+          "file": "poems/V_grude_oskolkov.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_ustal_ot_lyudey",
+          "title": "Я устал от людей...",
+          "file": "poems/Ya_ustal_ot_lyudey.json",
+          "status": "pending"
+        },
+        {
+          "id": "Ya_v_litso_tebe_smeyus",
+          "title": "Я в лицо тебе смеюсь...",
+          "file": "poems/Ya_v_litso_tebe_smeyus.json",
+          "status": "pending"
+        },
+        {
+          "id": "Skazhi_zachem_tak_nuzhno_zhit",
+          "title": "Скажи, зачем так нужно жить...",
+          "file": "poems/Skazhi_zachem_tak_nuzhno_zhit.json",
+          "status": "pending"
+        },
+        {
+          "id": "Zavtra_nikogda_ne_nastupit_eto_uzh_tochno",
+          "title": "Завтра никогда не наступит, это уж точно...",
+          "file": "poems/Zavtra_nikogda_ne_nastupit_eto_uzh_tochno.json",
+          "status": "pending"
+        }
+      ],
+      "progress": 2
     },
     "track_b": {
       "name": "Трек B: Систематизация и издание",
@@ -199,15 +400,22 @@
     "priority_by_period": {
       "august_2026": {
         "focus": "90% — Трек А (редактура)",
-        "tasks": ["Начало обработки стихов"]
+        "tasks": [
+          "Начало обработки стихов"
+        ]
       },
       "september_2026": {
         "focus": "60% — Трек А (завершение), 40% — Трек B (группировка)",
-        "tasks": ["Завершить редактуру", "Начать группировку"]
+        "tasks": [
+          "Завершить редактуру",
+          "Начать группировку"
+        ]
       },
       "october_2026": {
         "focus": "100% — Трек B (издание)",
-        "tasks": ["Сформировать сборник"]
+        "tasks": [
+          "Сформировать сборник"
+        ]
       }
     },
     "backup_plan": "При большом объёме — сначала обработать ключевые стихи."
