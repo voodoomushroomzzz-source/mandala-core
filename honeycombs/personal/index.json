@@ -73,10 +73,10 @@
       "progress": 0
     },
     "poetry": {
-      "file": "poetry.json",
+      "file": "poetry/index.json",
       "status": "active",
       "priority": "high",
-      "deadline": "2026-09-15",
+      "deadline": "2026-10-31",
       "progress": 0
     }
   },
