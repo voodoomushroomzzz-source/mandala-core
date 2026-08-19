@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260819-070055-097",
+  "title": "FetchMan: Learning Visual Humanoid Loco-Manipulation Policies from Simulated Experiences",
+  "url": "https://arxiv.org/abs/2608.17027",
+  "description": "arXiv:2608.17027v1 Announce Type: new \nAbstract: Visual loco-manipulation policies that can generalize to novel scenes and objects have long been a goal of robotics research. However, today's data-hungry algorithms make collecting sufficient demonstrations a struggle for tabletop manipulation, and even more so for humanoids that must also walk and balance. Learning from simulated data and transferring that behavior to the real world, as is commonly done in locomotion, sidesteps this struggle, so",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-08-19T07:00:55.992835",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
