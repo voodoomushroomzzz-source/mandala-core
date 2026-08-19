@@ -4,7 +4,7 @@
     "name": "Gentle Companion — Modular Architecture",
     "version": "2.1.0",
     "created": "2026-05-25",
-    "updated": "2026-06-17",
+    "updated": "2026-08-19",
     "layer": 2,
     "type": "fruits_index",
     "description": "Modular architecture index for Gentle Companion bot. 14 modules, 7 migration phases complete. Production on Hetzner VPS.",
@@ -32,18 +32,17 @@
   "authors": [
     "External SR (Claude)"
   ],
-  "bot_version_analyzed": "7.39.81",
+  "bot_version_analyzed": "7.39.23",
   "current_state": {
     "file": "gentle_companion.py (running on server)",
-    "lines": 10877,
-    "size_kb": 470,
+    "lines": 11588,
+    "size_kb": 619,
     "functions": 310,
     "handlers": 148,
     "classes": 10,
-    "status": "running on server — gentle_companion.py is production since 2026-05-28",
+    "status": "running on server — gentle_companion.py is production since 2026-05-28. Rebuilt 2026-08-19 after fixing 15 build-breaking issues from the 2026-07-19 _replace_menu refactor (see changelog).",
     "structure": "honeycombs/fruits/gentle_companion/ — module code + index.json + build.py",
     "phases_complete": "7/7 — COMPLETE",
-    "bot_version_analyzed": "7.39.23",
     "server_entry": "ExecStart=/opt/mandala/venv/bin/python3 /opt/mandala/gentle_companion.py (switched from bot.py — 2026-06-05)"
   },
   "rule_for_sr": "MANDATORY: any change in bot.py affecting module structure (adding function, moving block, changing dependencies) — update index.json and the corresponding module file in modules/. The index is a living document, not an archive.",
@@ -68,7 +67,7 @@
       "name": "Globals & Config",
       "description": "Imports, constants, env vars, _store, _sessions, _sha_cache, limits, middleware",
       "target_file": "config.py",
-      "current_size_kb": 7,
+      "current_size_kb": 8,
       "status": "done",
       "phase": 2,
       "key_items": [
@@ -86,7 +85,7 @@
       "name": "Store Layer",
       "description": "RAM-cache read/write. Single point of access to gardener data.",
       "target_file": "store.py",
-      "current_size_kb": 9,
+      "current_size_kb": 6,
       "status": "done",
       "phase": 3,
       "key_items": [
@@ -101,7 +100,7 @@
       "name": "GitHub API & Sync",
       "description": "HTTP layer for GitHub. Two repos: mandala-core + mandala-gardeners.",
       "target_file": "github_api.py",
-      "current_size_kb": 14,
+      "current_size_kb": 17,
       "status": "done",
       "phase": 2,
       "key_items": [
@@ -110,15 +109,17 @@
         "_gardeners_get/_gardeners_put",
         "_sync_pending(), _fire_sync()",
         "_load_user(), _load_store()",
-        "_json_dumps()"
-      ]
+        "_json_dumps()",
+        "_remove_from_whitelist(user_id) — removes gardener id from gardeners/whitelist.json (added 2026-07-19). NOTE: no real DELETE endpoint yet — _gardeners_delete() planned for PROACTIVE-MESSAGES-001"
+      ],
+      "last_updated": "2026-08-19"
     },
     {
       "id": "03_helpers",
       "name": "Helpers & Auth",
       "description": "Utilities, authorization, deep profile, observations, interaction tracking.",
       "target_file": "helpers.py",
-      "current_size_kb": 25,
+      "current_size_kb": 20,
       "status": "done",
       "phase": 3,
       "key_items": [
@@ -128,15 +129,17 @@
         "_add_sr_observation(), _detect_emotion()",
         "_track_interaction(), _can_send_proactive()",
         "calculate_priority(), _make_group_id()",
-        "_days_since_last_interaction() (restored 2026-05-28)"
-      ]
+        "_days_since_last_interaction() (restored 2026-05-28)",
+        "_send_cleanup_warning() — sends day-23/day-27 silence warning messages (added 2026-07-19, part of run_auto_cleanup flow)"
+      ],
+      "last_updated": "2026-08-19"
     },
     {
       "id": "04_ui",
       "name": "UI — Keyboards & Profile Card",
       "description": "All keyboards, profile card, text formatting. Pure presentation layer.",
       "target_file": "ui.py",
-      "current_size_kb": 18,
+      "current_size_kb": 39,
       "status": "done",
       "phase": 4,
       "key_items": [
@@ -157,7 +160,7 @@
       "name": "Handlers — Tasks",
       "description": "Task handlers: FSM creation, editing, deletion, groups, labels, deadlines, repeats.",
       "target_file": "handlers/tasks.py",
-      "current_size_kb": 95,
+      "current_size_kb": 97,
       "status": "done",
       "phase": 6,
       "key_items": [
@@ -179,14 +182,14 @@
         "_filter_tasks_by_period() — P-103: hot, next_week, next_month, range:YYYY-MM-DD:YYYY-MM-DD",
         "_detect_task_period() — P-103: detects new period types from text"
       ],
-      "last_updated": "2026-06-06"
+      "last_updated": "2026-08-19"
     },
     {
       "id": "06_handlers_features",
       "name": "Handlers — Checklists, Reminders, Achievements",
       "description": "Checklists, reminders, achievements with full FSM flows.",
       "target_file": "handlers/features.py",
-      "current_size_kb": 77,
+      "current_size_kb": 87,
       "status": "done",
       "phase": 6,
       "key_items": [
@@ -200,14 +203,14 @@
         "cb_profile_back() — fix: clears FSM state on back to profile (2026-06-16)",
         "_sr_progress_reaction_send(must_reply=False) — P-101: must_reply parameter"
       ],
-      "last_updated": "2026-06-06"
+      "last_updated": "2026-08-19"
     },
     {
       "id": "07_sr_engine",
       "name": "SR Engine — Prompts",
       "description": "SR_CORE_PROMPT, SR_INTENT_LIGHT, SR_INTENT_MAP, _CLASSIFIER_PROMPT",
       "target_file": "sr_prompts.py",
-      "current_size_kb": 37,
+      "current_size_kb": 46,
       "status": "done",
       "phase": 2,
       "key_items": [
@@ -228,7 +231,7 @@
       "name": "SR Context Builder",
       "description": "Session history, _build_user_context_msg, _call_openrouter",
       "target_file": "sr_context.py",
-      "current_size_kb": 23,
+      "current_size_kb": 27,
       "status": "done",
       "phase": 5,
       "depends_on": [
@@ -254,7 +257,7 @@
       "name": "SR Memory & Synthesis",
       "description": "_distill_observations, _generate_synthesis, _detect_and_save_observation, three-tier interest + media system (fresh/mentioned/confirmed)",
       "target_file": "sr_memory.py",
-      "current_size_kb": 22,
+      "current_size_kb": 29,
       "status": "done",
       "phase": 5,
       "depends_on": [
@@ -297,7 +300,7 @@
       "name": "SR Intent Classifier & Free Conversation",
       "description": "_classify_intent, free_conversation — main handler 1597 lines",
       "target_file": "sr_conversation.py",
-      "current_size_kb": 110,
+      "current_size_kb": 130,
       "status": "done",
       "phase": 5,
       "depends_on": [
@@ -328,14 +331,14 @@
         "show_tasks: P-105 overdue from all tasks always first, even when period empty",
         "add_achievement intent: P-98 — SR reaction on achievement creation via chat"
       ],
-      "last_updated": "2026-06-06"
+      "last_updated": "2026-08-19"
     },
     {
       "id": "08_handlers_system",
       "name": "Handlers — System & Profile",
       "description": "Onboarding, profile, authorization, system commands, menu, voice.",
       "target_file": "handlers/system.py",
-      "current_size_kb": 55,
+      "current_size_kb": 94,
       "status": "done",
       "phase": 6,
       "key_items": [
@@ -349,9 +352,12 @@
         "date fix in send_morning_greeting + _send_daytime_proactive: today/tomorrow distinction (patched 2026-05-28)",
         "achievements[] array removed from workspace templates in onboarding/leave/delete_all — new gardeners get clean workspace (P-86, 2026-05-29)",
         "Onboarding skip buttons: city, birthday, welcome q1/q2 — pressing skip on q1 jumps directly to step 8 (P-88, 2026-05-29)",
-        "_send_welcome_step8(): live SR welcome without buttons — starts natural dialog. Fixed cb_tour_no decorator bug (P-88, 2026-05-29)"
+        "_send_welcome_step8(): live SR welcome without buttons — starts natural dialog. Fixed cb_tour_no decorator bug (P-88, 2026-05-29)",
+        "_replace_menu() — unified menu-replace helper (edit-in-place with answer() fallback), replaces old edit_text/except/answer pattern (added 2026-07-19)",
+        "run_auto_cleanup() — daily cron (03:05 UTC): warns silent gardeners at day 23/27, deletes at day 30 via _delete_gardener() (added 2026-07-19, NOTE: superseded by new silence-escalation system planned — see active task PROACTIVE-MESSAGES-001)",
+        "_delete_gardener(uid, notify_architect=True) — wipes gardener data (currently overwrite-with-empty, not real DELETE — see github_api.py note)"
       ],
-      "last_updated": "2026-06-06"
+      "last_updated": "2026-08-19"
     },
     {
       "id": "09_main",
@@ -474,8 +480,8 @@
   "size_targets": {
     "rule": "No module over 80KB. Split if approaching.",
     "current_problem_areas": {
-      "free_conversation": "106KB — mandatory refactoring in Phase 5",
-      "bot.py monolith": "470KB — target of split"
+      "free_conversation": "106KB in sr_conversation.py (130KB total) — mandatory refactoring still pending",
+      "handlers/system.py": "94KB — grew from 55KB after 2026-07-19 _replace_menu refactor + auto_cleanup addition, approaching 80KB soft limit, consider splitting cleanup logic into handlers/cleanup.py"
     }
   },
   "dependency_graph": {
@@ -547,7 +553,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-06-16",
+  "last_updated": "2026-08-19",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
@@ -584,5 +590,12 @@
       "В день задачи: rem_deadline|DATE → HH:MM → save with repeat",
       "Своя дата: rem_YYYY-MM-DD → HH:MM → repeat → save"
     ]
-  }
+  },
+  "changelog": [
+    {
+      "date": "2026-08-19",
+      "summary": "Fixed 15 build-breaking issues across 5 files (github_api.py, handlers/system.py, handlers/tasks.py, handlers/features.py, sr_conversation.py), introduced by an incomplete 2026-07-19 refactor to _replace_menu(). build.py had been failing silently since 2026-07-19 — production ran the 2026-07-11 build the whole time. Root causes: orphaned try/except tails, literal newlines inside string literals, lost quote characters, one control-byte corruption, and lost `sent =` captures that broke downstream message-id tracking. Verified via ast.parse + py_compile + full build.py assembly, deployed and confirmed healthy via /health and journalctl.",
+      "also_found": "index.json itself was out of sync: duplicate/conflicting bot_version_analyzed key, stale module sizes, undocumented 2026-07-19 functionality (_replace_menu, run_auto_cleanup, _delete_gardener, _remove_from_whitelist). Corrected in this same update per sync_onboarding_and_source rule."
+    }
+  ]
 }
