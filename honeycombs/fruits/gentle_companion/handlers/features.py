@@ -71,9 +71,7 @@ async def cb_profile_achievements(callback: CallbackQuery):
     user_id = str(callback.from_user.id)
     ach_count = store_get_achievements_count(user_id)
     if ach_count == 0:
-        text = "💎 Достижений пока нет.
-
-Каждое закрытое дело добавляет слой к твоему резонансу."
+        text = "💎 Достижений пока нет.\n\nКаждое закрытое дело добавляет слой к твоему резонансу."
     else:
         text = f"<b>Достижения · всего {ach_count} 💎</b>"
         text += _build_sphere_stats(user_id, months=3, show_tasks=False)
@@ -290,11 +288,8 @@ async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
         return
     prog = _checklist_progress(cl)
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
-    await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
-        _checklist_messages[user_id] = callback.message.message_id
-    except Exception:
-        sent = await callback.message.answer(header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
-        _checklist_messages[user_id] = sent.message_id
+    sent = await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
+    _checklist_messages[user_id] = sent.message_id
 
 @router.callback_query(F.data.startswith("cl_pin_"))
 async def cb_cl_pin(callback: CallbackQuery, state: FSMContext):
@@ -373,11 +368,6 @@ async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
     edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
     text = f"✏️ <b>{cl['title']}</b> — редактирование пунктов:"
     await _replace_menu(user_id, callback.message, text, reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows))
-            f"✏️ <b>{cl['title']}</b> — редактирование пунктов:",
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows)
-        )
-    except Exception:
-        pass
 
 @router.callback_query(F.data.startswith("cl_moveup|") | F.data.startswith("cl_movedn|"))
 async def cb_cl_move_item(callback: CallbackQuery, state: FSMContext):
@@ -707,26 +697,8 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="🔁 Повторение", callback_data="redit_repeat")],
         [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
     ])
-    text = f"✏️ <b>{rem['title']}</b>
-📅 {dt_display}
-🔁 {rep_display}
-
-Что меняем?"
+    text = f"✏️ <b>{rem['title']}</b>\n📅 {dt_display}\n🔁 {rep_display}\n\nЧто меняем?"
     await _replace_menu(user_id, callback.message, text, reply_markup=kb, parse_mode="HTML")
-            f"✏️ <b>{rem['title']}</b>\n"
-            f"📅 {dt_display}\n"
-            f"🔁 {rep_display}\n\n"
-            f"Что меняем?",
-            reply_markup=kb,
-            parse_mode="HTML"
-        )
-    except Exception:
-        await callback.message.answer(
-            f"✏️ <b>{rem['title']}</b>\nЧто меняем?",
-            reply_markup=kb,
-            parse_mode="HTML"
-        )
-
 
 
 async def _create_reminder_atomic(user_id: str, message,
@@ -925,12 +897,8 @@ async def cb_rem_open(callback: CallbackQuery):
     title = rem.get("title", "—")
     dt = (rem.get("datetime_iso") or "")[:16].replace("T", " ")
     rep = _repeat_label(rem.get("repeat", "once"))
-    text = f"🔔 <b>{title}</b>
-📅 {dt}
-🔁 {rep}"
+    text = f"🔔 <b>{title}</b>\n📅 {dt}\n🔁 {rep}"
     await _replace_menu(user_id, callback.message, text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
 
 # rem_edit_title_, rem_edit_dt_, rem_edit_repeat_ → редиректим на существующие handlers
 @router.callback_query(F.data.startswith("rem_edit_title_"))

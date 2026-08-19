@@ -283,7 +283,7 @@ async def _remove_from_whitelist(user_id: str) -> bool:
         logger.error(f"Remove from whitelist error for {user_id}: {e}")
         return False
 
- -> None:
+async def _sync_pending() -> None:
     """Flush all pending writes to GitHub sequentially. Lock prevents parallel syncs."""
     if _sync_lock.locked():
         return  # another sync already running — scheduler will retry next tick

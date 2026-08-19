@@ -1004,10 +1004,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                     reply_text = "🔍 Нашла мало данных. Попробуй задать вопрос точнее."
                                 else:
                                     _search_ctx = "\n\n".join(
-                                        f"{s[title]}\n{s[content]}" for s in raw_sources
+                                        f"{s['title']}\n{s['content']}" for s in raw_sources
                                     )
                                     _source_links = "\n".join(
-                                        f• <a href={s[url]}>{s[title]}</a> for s in raw_sources
+                                        f'• <a href="{s["url"]}">{s["title"]}</a>' for s in raw_sources
                                     )
                                     messages[0]["content"] += (
                                         f"\n\n[Данные из поиска по запросу «{q}»:\n{_search_ctx}\n\n"
@@ -1016,9 +1016,6 @@ async def free_conversation(message: Message, state: FSMContext):
                                         f"В конце ответа добавь источники:\n{_source_links}]"
                                     )
                                     reply_text = await _call_openrouter(messages) or "🔍 Не удалось обработать результаты. Попробуй переформулировать запрос."
-                                    reply_text = f"🔍 Не нашла актуальных данных по запросу «{q}». Попробуй уточнить или задать вопрос иначе."
-                            else:
-                                reply_text = f"🔍 Ничего не нашла по запросу «{q}». Попробуй переформулировать."
 
                         elif intent == "complete_task":
                             action_ct   = parsed_check.get("action") or {}

@@ -310,56 +310,6 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
         await state.set_state(ReminderStates.waiting_for_repeat)
         text = "🔁 <b>Повторение:</b>"
         await _replace_menu(user_id, callback.message, text, reply_markup=_repeat_picker_keyboard(current), parse_mode="HTML")
-                f"\u270f\ufe0f Новое название для «{task.get('title','')}»:",
-                reply_markup=cancel_kb
-            )
-        except Exception:
-            await callback.message.answer(
-                f"\u270f\ufe0f Новое название для «{task.get('title','')}»:",
-                reply_markup=cancel_kb
-            )
-    elif field == "deadline":
-        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="deadline")
-        await state.set_state(TaskEditStates.editing_deadline)
-        try:
-            await callback.message.edit_text(
-                "\U0001f4c5 Выбери новый дедлайн:",
-                reply_markup=get_deadline_keyboard()
-            )
-        except Exception:
-            await callback.message.answer(
-                "\U0001f4c5 Выбери новый дедлайн:",
-                reply_markup=get_deadline_keyboard()
-            )
-    elif field == "place":
-        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="place")
-        await state.set_state(TaskEditStates.editing_place)
-        try:
-            await callback.message.edit_text(
-                "\U0001f4cc \u041a\u0443\u0434\u0430 \u043f\u043e\u043c\u0435\u0441\u0442\u0438\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443?",
-                reply_markup=get_place_keyboard(user_id, task_id)
-            )
-        except Exception:
-            await callback.message.answer(
-                "\U0001f4cc \u041a\u0443\u0434\u0430 \u043f\u043e\u043c\u0435\u0441\u0442\u0438\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443?",
-                reply_markup=get_place_keyboard(user_id, task_id)
-            )
-    elif field == "repeat":
-        current = task.get("repeat", "once")
-        await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="repeat", _rem_repeat=current)
-        await state.set_state(ReminderStates.waiting_for_repeat)
-        try:
-            await callback.message.edit_text(
-                "\U0001f501 <b>Повторение:</b>",
-                reply_markup=_repeat_picker_keyboard(current),
-                parse_mode="HTML"
-            )
-        except Exception:
-            await callback.message.answer(
-                "\U0001f501 <b>Повторение:</b>",
-                reply_markup=_repeat_picker_keyboard(current),
-                parse_mode="HTML"
-            )
 
 
 @router.callback_query(F.data.startswith("dl_"), StateFilter(TaskEditStates.editing_deadline))
@@ -395,40 +345,8 @@ async def ttask_deadline_cb(callback: CallbackQuery, state: FSMContext):
     tasks_in_group = [t for t in tasks if t.get("status") != "completed" and (
         (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
     )]
-    text = f"📂 <b>{group_name}</b> · {len(tasks_in_group)} задач
-<i>✅ Дедлайн → {dl_str}</i>"
+    text = f"📂 <b>{group_name}</b> · {len(tasks_in_group)} задач\n<i>✅ Дедлайн → {dl_str}</i>"
     await _replace_menu(user_id, callback.message, text, reply_markup=get_tasks_in_group_inline(user_id, group_id), parse_mode="HTML")
-                "\u270f\ufe0f Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
-                parse_mode="HTML", reply_markup=cancel_kb
-            )
-        except Exception:
-            await callback.message.answer(
-                "\u270f\ufe0f Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
-                parse_mode="HTML", reply_markup=cancel_kb
-            )
-        return
-    deadline = None if val == "skip" else val
-    tasks = store_get_tasks(user_id)
-    for t in tasks:
-        if t.get("task_id") == tid:
-            t["deadline"] = deadline
-            t["updated"] = _today()
-    store_set_tasks(user_id, tasks)
-    _fire_sync()
-    await state.clear()
-    dl_str = deadline or "убран"
-    group_id = next((t.get("label_id") or "__nogroup__" for t in tasks if t.get("task_id") == tid), "__nogroup__")
-    group_name = "Без группы" if group_id == "__nogroup__" else next(
-        (g["name"] for g in store_get_groups(user_id).get("groups", []) if g["id"] == group_id), "Группа"
-    )
-    tasks_in_group = [t for t in tasks if t.get("status") != "completed" and (
-        (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
-    )]
-    await callback.message.edit_text(
-        f"\U0001f5c2 <b>{group_name}</b> · {len(tasks_in_group)} задач\\n<i>\u2705 Дедлайн → {dl_str}</i>",
-        reply_markup=get_tasks_in_group_inline(user_id, group_id),
-        parse_mode="HTML"
-    )
 
 @router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskEditStates.editing_group))
 async def ttask_group_cb(callback: CallbackQuery, state: FSMContext):
@@ -1077,12 +995,8 @@ async def cb_task_edit_start(callback: CallbackQuery, state: FSMContext):
         return
     await state.update_data(edit_task_id=tid)
     await state.set_state(TaskEditStates.waiting_for_field)
-    text = f"✏️ <b>{task.get('title', '—')}</b>
-📅 {task.get('deadline') or 'нет'}  🎨 {task.get('label_name') or 'без группы'}
-Что меняем?"
-    await _replace_menu(user_id, callback.message, text, reply_markup=_task_edit_field_kb(tid))text, reply_markup=_task_edit_field_kb(tid))
-    except Exception:
-        await callback.message.answer(text, reply_markup=_task_edit_field_kb(tid))
+    text = f"✏️ <b>{task.get('title', '—')}</b>\n📅 {task.get('deadline') or 'нет'}  🎨 {task.get('label_name') or 'без группы'}\nЧто меняем?"
+    await _replace_menu(user_id, callback.message, text, reply_markup=_task_edit_field_kb(tid))
 
 @router.callback_query(F.data.startswith("tedit_title_"))
 async def cb_tedit_title(callback: CallbackQuery, state: FSMContext):
@@ -1095,13 +1009,9 @@ async def cb_tedit_title(callback: CallbackQuery, state: FSMContext):
     ])
     user_id = str(callback.from_user.id)
     text = "✏️ Введи новое название задачи:"
-    await _replace_menu(user_id, callback.message, text, reply_markup=cancel_kb)
-        await state.update_data(_tedit_msg_id=callback.message.message_id,
-                                _tedit_chat_id=callback.message.chat.id)
-    except Exception:
-        sent = await callback.message.answer("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
-        await state.update_data(_tedit_msg_id=sent.message_id,
-                                _tedit_chat_id=sent.chat.id)
+    sent = await _replace_menu(user_id, callback.message, text, reply_markup=cancel_kb)
+    await state.update_data(_tedit_msg_id=sent.message_id,
+                            _tedit_chat_id=sent.chat.id)
 
 @router.message(StateFilter(TaskEditStates.editing_title))
 async def tedit_title_input(message: Message, state: FSMContext):
@@ -1228,8 +1138,6 @@ async def cb_tedit_group(callback: CallbackQuery, state: FSMContext):
     labels = store_get_groups(user_id).get("groups", [])
     text = "🎨 Выбери группу:"
     await _replace_menu(user_id, callback.message, text, reply_markup=get_labels_keyboard(labels))
-    except Exception:
-        await callback.message.answer("🎨 Выбери группу:", reply_markup=get_labels_keyboard(labels))
 
 @router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskEditStates.editing_group))
 async def tedit_group_cb(callback: CallbackQuery, state: FSMContext):

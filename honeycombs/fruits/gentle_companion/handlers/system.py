@@ -1488,8 +1488,6 @@ async def cb_menu_edit_profile(callback: CallbackQuery):
         return
     text = "✏️ Что изменить?"
     await _replace_menu(user_id, callback.message, text, reply_markup=get_edit_profile_inline())
-    except Exception:
-        pass
 
 @router.callback_query(F.data == "menu_change_city")
 async def cb_menu_change_city(callback: CallbackQuery, state: FSMContext):
