@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-07-11 18:22:42 ──
+# ── BUILT by build.py ── 2026-08-19 11:06:06 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -130,7 +130,11 @@ LABEL_LIMIT_SOFT = 6
 CHECKLIST_LIMIT      = 3    # max checklists per user
 CHECKLIST_ITEMS_LIMIT = 20  # max items per checklist
 REMINDER_LIMIT         = 20  # max reminders per user — P-67
-REMINDER_LIMIT_SOFT    = 15  # warn when approaching reminder limit
+REMINDER_LIMIT_SOFT    = 15
+
+# ─── Auto-cleanup ─────────────────────────────────────────────────────────────
+AUTO_CLEANUP_DAYS = 30  # days of silence before auto-delete
+RESONANCE_DECAY_START = 3  # day when resonance starts to drop  # warn when approaching reminder limit
 
 PORT = 10000
 WEBHOOK_PATH = "/webhook"
@@ -198,6 +202,7 @@ def _get_user_store(telegram_id: str) -> dict:
 _pending_writes: dict = {}
 # SHA cache: {path: sha} — skip download if SHA unchanged
 _sha_cache: dict = {}
+_active_menu: dict = {}  # {user_id: message_id} — текущее активное меню
 _write_lock = asyncio.Lock() if False else None  # initialized in on_startup
 _sync_lock   = asyncio.Lock()  # prevents parallel GitHub syncs
 
@@ -610,6 +615,46 @@ async def _gardeners_put(path: str, content: Any, _retry: int = 0) -> bool:
 
 
 # ─── Background sync ──────────────────────────────────────────────────────────
+
+
+async def _remove_from_whitelist(user_id: str) -> bool:
+    """
+    Атомарно удаляет пользователя из whitelist.json.
+    Читает текущий список, удаляет ID, записывает обратно.
+    """
+    try:
+        # Принудительно читаем актуальную версию
+        whitelist = await _gardeners_get("gardeners/whitelist.json", force=True) or {}
+        if not isinstance(whitelist, dict):
+            whitelist = {"approved": []}
+
+        approved = whitelist.get("approved", [])
+        if user_id not in approved:
+            logger.warning(f"User {user_id} not found in whitelist")
+            return True  # Уже удалён, считаем успехом
+
+        # Удаляем ID
+        approved.remove(user_id)
+        whitelist["approved"] = approved
+
+        # Проверяем, что whitelist не стал пустым
+        if not approved:
+            logger.error(f"Attempted to remove last user from whitelist: {user_id}")
+            return False
+
+        # Записываем обновлённый whitelist
+        success = await _gardeners_put("gardeners/whitelist.json", whitelist)
+        if success:
+            _sha_cache.pop("g:gardeners/whitelist.json", None)
+            logger.info(f"User {user_id} removed from whitelist")
+        else:
+            logger.error(f"Failed to write whitelist after removing {user_id}")
+
+        return success
+
+    except Exception as e:
+        logger.error(f"Remove from whitelist error for {user_id}: {e}")
+        return False
 
 async def _sync_pending() -> None:
     """Flush all pending writes to GitHub sequentially. Lock prevents parallel syncs."""
@@ -1125,6 +1170,34 @@ def _days_since_last_interaction(telegram_id: str) -> int:
     except Exception:
         return 999
 
+async def _send_cleanup_warning(uid: str, days_left: int) -> None:
+    """Send a cleanup warning message to the gardener."""
+    try:
+        profile = store_get_profile(uid)
+        if not profile:
+            return
+        name = profile.get("name", "Садовник")
+        if days_left == 7:
+            text = (
+                f"🌱 <b>{name}</b>, я заметила, что тебя давно не было.\n\n"
+                f"Ты не заходил уже 23 дня. Если ты не появишься в ближайшую неделю, "
+                f"твой сад будет удалён.\n\n"
+                f"Просто напиши что-нибудь, чтобы я знала, что ты здесь 🌿"
+            )
+        elif days_left == 3:
+            text = (
+                f"🌿 <b>{name}</b>, осталось всего 3 дня.\n\n"
+                f"Твой сад будет удалён через 3 дня, если ты не напишешь.\n"
+                f"Если хочешь сохранить данные — просто ответь мне. Я рядом 🌸"
+            )
+        else:
+            return
+
+        await bot.send_message(int(uid), text, parse_mode="HTML")
+        logger.info(f"Cleanup warning ({days_left} days) sent to {uid}")
+    except Exception as e:
+        logger.error(f"Failed to send cleanup warning to {uid}: {e}")
+
 
 # ───────────────────────────────────────────────────────
 # MODULE: ui.py  (Phase 4)
@@ -1312,6 +1385,22 @@ def _assign_group_emojis(groups: list) -> dict:
                 result[g["id"]] = "🌱"  # absolute last resort
     return result
 
+
+async def _replace_menu(user_id: str, message: Message, text: str, reply_markup = None, parse_mode: str = "HTML") -> Message:
+    """Универсальная функция для показа меню: удаляет старое и отправляет новое."""
+    prev_mid = _active_menu.get(user_id)
+    if prev_mid:
+        try:
+            await message.bot.delete_message(message.chat.id, prev_mid)
+        except Exception:
+            pass
+    if reply_markup:
+        sent = await message.answer(text, reply_markup=reply_markup, parse_mode=parse_mode)
+    else:
+        sent = await message.answer(text, parse_mode=parse_mode)
+    _active_menu[user_id] = sent.message_id
+    return sent
+
 def _build_profile_card(user_id: str) -> str:
     profile    = store_get_profile(user_id) or {}
     all_tasks  = store_get_tasks(user_id)
@@ -1409,8 +1498,21 @@ async def _show_profile(user_id: str, message: Message):
             InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
         ]
     ])
-    sent = await message.answer(card, reply_markup=kb)
-    _profile_messages[user_id] = sent.message_id
+    sent =     card = _build_profile_card(user_id)
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="🚀 Задачи 🚀", callback_data="menu_tasks_mgmt_v2"),
+        ],
+        [
+            InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
+            InlineKeyboardButton(text="🔔 Напоминания", callback_data="menu_reminders_mgmt"),
+        ],
+        [
+            InlineKeyboardButton(text="✏️ Профиль", callback_data="menu_edit_profile"),
+            InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
+        ]
+    ])
+    await _replace_menu(user_id, message, card, reply_markup=kb)
 
 async def _show_tasks_unified(user_id: str, message: Message, period: str = "labels", sr_react: bool = False):
     """Show tasks — used by button, command, voice, intent."""
@@ -3674,16 +3776,14 @@ async def cb_tasks_mgmt_v2(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     if not is_authorized(user_id):
-        await callback.message.answer("\U0001f331 Используй /start")
+        await callback.message.answer("🌿 Используй /start")
         return
     groups_data = store_get_groups(user_id).get("groups", [])
     all_tasks = store_get_tasks(user_id)
     active = [t for t in all_tasks if t.get("status") != "completed"]
-    header = f"\U0001f5c2 <b>\u0417\u0430\u0434\u0430\u0447\u0438</b> \u00b7 {len(groups_data)} \u0433\u0440\u0443\u043f\u043f \u00b7 {len(active)} \u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0445"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_groups_list_inline(user_id))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
+    header = f"📂 <b>Задачи</b> · {len(groups_data)} групп · {len(active)} активных"
+    kb = get_groups_list_inline(user_id)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 @router.callback_query(F.data == "tgroup_back_to_list")
 async def cb_tgroup_back_to_list(callback: CallbackQuery, state: FSMContext):
@@ -3692,11 +3792,9 @@ async def cb_tgroup_back_to_list(callback: CallbackQuery, state: FSMContext):
     groups_data = store_get_groups(user_id).get("groups", [])
     all_tasks = store_get_tasks(user_id)
     active = [t for t in all_tasks if t.get("status") != "completed"]
-    header = f"\U0001f5c2 <b>\u0417\u0430\u0434\u0430\u0447\u0438</b> \u00b7 {len(groups_data)} \u0433\u0440\u0443\u043f\u043f \u00b7 {len(active)} \u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0445"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_groups_list_inline(user_id))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_groups_list_inline(user_id))
+    header = f"📂 <b>Задачи</b> · {len(groups_data)} групп · {len(active)} активных"
+    kb = get_groups_list_inline(user_id)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 @router.callback_query(F.data.startswith("tgroup_open|"))
 async def cb_tgroup_open(callback: CallbackQuery, state: FSMContext):
@@ -3907,60 +4005,26 @@ async def cb_ttask_edit_field(callback: CallbackQuery, state: FSMContext):
         await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="title")
         await state.set_state(TaskEditStates.editing_title)
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="\u2190 Назад", callback_data=f"ttask_edit|{task_id}")]
+            [InlineKeyboardButton(text="← Назад", callback_data=f"ttask_edit|{task_id}")]
         ])
-        try:
-            await callback.message.edit_text(
-                f"\u270f\ufe0f Новое название для «{task.get('title','')}»:",
-                reply_markup=cancel_kb
-            )
-        except Exception:
-            await callback.message.answer(
-                f"\u270f\ufe0f Новое название для «{task.get('title','')}»:",
-                reply_markup=cancel_kb
-            )
+        text = f"✏️ Новое название для «{task.get('title','')}»:"
+        await _replace_menu(user_id, callback.message, text, reply_markup=cancel_kb)
     elif field == "deadline":
         await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="deadline")
         await state.set_state(TaskEditStates.editing_deadline)
-        try:
-            await callback.message.edit_text(
-                "\U0001f4c5 Выбери новый дедлайн:",
-                reply_markup=get_deadline_keyboard()
-            )
-        except Exception:
-            await callback.message.answer(
-                "\U0001f4c5 Выбери новый дедлайн:",
-                reply_markup=get_deadline_keyboard()
-            )
+        text = "📅 Выбери новый дедлайн:"
+        await _replace_menu(user_id, callback.message, text, reply_markup=get_deadline_keyboard())
     elif field == "place":
         await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="place")
         await state.set_state(TaskEditStates.editing_place)
-        try:
-            await callback.message.edit_text(
-                "\U0001f4cc \u041a\u0443\u0434\u0430 \u043f\u043e\u043c\u0435\u0441\u0442\u0438\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443?",
-                reply_markup=get_place_keyboard(user_id, task_id)
-            )
-        except Exception:
-            await callback.message.answer(
-                "\U0001f4cc \u041a\u0443\u0434\u0430 \u043f\u043e\u043c\u0435\u0441\u0442\u0438\u0442\u044c \u0437\u0430\u0434\u0430\u0447\u0443?",
-                reply_markup=get_place_keyboard(user_id, task_id)
-            )
+        text = "📌 Куда поместить задачу?"
+        await _replace_menu(user_id, callback.message, text, reply_markup=get_place_keyboard(user_id, task_id))
     elif field == "repeat":
         current = task.get("repeat", "once")
         await state.update_data(_ttask_edit_id=task_id, _ttask_edit_field="repeat", _rem_repeat=current)
         await state.set_state(ReminderStates.waiting_for_repeat)
-        try:
-            await callback.message.edit_text(
-                "\U0001f501 <b>Повторение:</b>",
-                reply_markup=_repeat_picker_keyboard(current),
-                parse_mode="HTML"
-            )
-        except Exception:
-            await callback.message.answer(
-                "\U0001f501 <b>Повторение:</b>",
-                reply_markup=_repeat_picker_keyboard(current),
-                parse_mode="HTML"
-            )
+        text = "🔁 <b>Повторение:</b>"
+        await _replace_menu(user_id, callback.message, text, reply_markup=_repeat_picker_keyboard(current), parse_mode="HTML")
 
 
 @router.callback_query(F.data.startswith("dl_"), StateFilter(TaskEditStates.editing_deadline))
@@ -3974,18 +4038,10 @@ async def ttask_deadline_cb(callback: CallbackQuery, state: FSMContext):
         await state.update_data(_ttask_edit_id=tid)
         await state.set_state(TaskEditStates.waiting_for_custom_deadline)
         cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="\u2190 Назад", callback_data=f"ttask_edit|{tid}")]
+            [InlineKeyboardButton(text="← Назад", callback_data=f"ttask_edit|{tid}")]
         ])
-        try:
-            await callback.message.edit_text(
-                "\u270f\ufe0f Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
-                parse_mode="HTML", reply_markup=cancel_kb
-            )
-        except Exception:
-            await callback.message.answer(
-                "\u270f\ufe0f Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>",
-                parse_mode="HTML", reply_markup=cancel_kb
-            )
+        text = "✏️ Введи свою дату: <code>ДД.ММ</code> или <code>ДД.ММ.ГГ</code>"
+        await _replace_menu(user_id, callback.message, text, reply_markup=cancel_kb, parse_mode="HTML")
         return
     deadline = None if val == "skip" else val
     tasks = store_get_tasks(user_id)
@@ -4004,11 +4060,8 @@ async def ttask_deadline_cb(callback: CallbackQuery, state: FSMContext):
     tasks_in_group = [t for t in tasks if t.get("status") != "completed" and (
         (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
     )]
-    await callback.message.edit_text(
-        f"\U0001f5c2 <b>{group_name}</b> · {len(tasks_in_group)} задач\\n<i>\u2705 Дедлайн → {dl_str}</i>",
-        reply_markup=get_tasks_in_group_inline(user_id, group_id),
-        parse_mode="HTML"
-    )
+    text = f"📂 <b>{group_name}</b> · {len(tasks_in_group)} задач\n<i>✅ Дедлайн → {dl_str}</i>"
+    await _replace_menu(user_id, callback.message, text, reply_markup=get_tasks_in_group_inline(user_id, group_id), parse_mode="HTML")
 
 @router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskEditStates.editing_group))
 async def ttask_group_cb(callback: CallbackQuery, state: FSMContext):
@@ -4657,16 +4710,8 @@ async def cb_task_edit_start(callback: CallbackQuery, state: FSMContext):
         return
     await state.update_data(edit_task_id=tid)
     await state.set_state(TaskEditStates.waiting_for_field)
-    text = (
-        f"✏️ <b>{task.get('title', '—')}</b>\n"
-        f"📅 {task.get('deadline') or 'нет'}  "
-        f"🎨 {task.get('label_name') or 'без группы'}\n"
-        f"Что меняем?"
-    )
-    try:
-        await callback.message.edit_text(text, reply_markup=_task_edit_field_kb(tid))
-    except Exception:
-        await callback.message.answer(text, reply_markup=_task_edit_field_kb(tid))
+    text = f"✏️ <b>{task.get('title', '—')}</b>\n📅 {task.get('deadline') or 'нет'}  🎨 {task.get('label_name') or 'без группы'}\nЧто меняем?"
+    await _replace_menu(user_id, callback.message, text, reply_markup=_task_edit_field_kb(tid))
 
 @router.callback_query(F.data.startswith("tedit_title_"))
 async def cb_tedit_title(callback: CallbackQuery, state: FSMContext):
@@ -4677,14 +4722,11 @@ async def cb_tedit_title(callback: CallbackQuery, state: FSMContext):
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="❌ Отмена", callback_data=f"task_edit_{tid}")]
     ])
-    try:
-        await callback.message.edit_text("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
-        await state.update_data(_tedit_msg_id=callback.message.message_id,
-                                _tedit_chat_id=callback.message.chat.id)
-    except Exception:
-        sent = await callback.message.answer("✏️ Введи новое название задачи:", reply_markup=cancel_kb)
-        await state.update_data(_tedit_msg_id=sent.message_id,
-                                _tedit_chat_id=sent.chat.id)
+    user_id = str(callback.from_user.id)
+    text = "✏️ Введи новое название задачи:"
+    sent = await _replace_menu(user_id, callback.message, text, reply_markup=cancel_kb)
+    await state.update_data(_tedit_msg_id=sent.message_id,
+                            _tedit_chat_id=sent.chat.id)
 
 @router.message(StateFilter(TaskEditStates.editing_title))
 async def tedit_title_input(message: Message, state: FSMContext):
@@ -4809,10 +4851,8 @@ async def cb_tedit_group(callback: CallbackQuery, state: FSMContext):
     await state.set_state(TaskEditStates.editing_group)
     user_id = str(callback.from_user.id)
     labels = store_get_groups(user_id).get("groups", [])
-    try:
-        await callback.message.edit_text("🎨 Выбери группу:", reply_markup=get_labels_keyboard(labels))
-    except Exception:
-        await callback.message.answer("🎨 Выбери группу:", reply_markup=get_labels_keyboard(labels))
+    text = "🎨 Выбери группу:"
+    await _replace_menu(user_id, callback.message, text, reply_markup=get_labels_keyboard(labels))
 
 @router.callback_query(F.data.startswith("lbl_"), StateFilter(TaskEditStates.editing_group))
 async def tedit_group_cb(callback: CallbackQuery, state: FSMContext):
@@ -5807,7 +5847,6 @@ async def _start_checklist_create(message: Message, state: FSMContext, pre_title
 
 @router.callback_query(F.data == "profile_achievements")
 async def cb_profile_achievements(callback: CallbackQuery):
-    """Show achievements dashboard inline."""
     await callback.answer()
     user_id = str(callback.from_user.id)
     ach_count = store_get_achievements_count(user_id)
@@ -5820,16 +5859,13 @@ async def cb_profile_achievements(callback: CallbackQuery):
         [InlineKeyboardButton(text="➕ Добавить достижение", callback_data="ach_add_from_menu")],
         [InlineKeyboardButton(text="← Назад в профиль", callback_data="profile_back")]
     ])
-    try:
-        await callback.message.edit_text(text, reply_markup=kb, parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=kb, parse_mode="HTML")
+    await _replace_menu(user_id, callback.message, text, reply_markup=kb)
 
 
 @router.callback_query(F.data == "profile_back")
 async def cb_profile_back(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await state.clear()  # fix: clear any active FSM (reminders, tasks, etc.)
+    await state.clear()
     user_id = str(callback.from_user.id)
     await _show_profile(user_id, callback.message)
 
@@ -6024,20 +6060,16 @@ async def cb_cl_toggle(callback: CallbackQuery, state: FSMContext):
 async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
-    cid     = callback.data[len("cl_open_"):]
+    cid = callback.data[len("cl_open_"):]
     checklists = store_get_checklists(user_id)
     cl = next((c for c in checklists if c["id"] == cid), None)
     if not cl:
         await callback.answer("Чеклист не найден", show_alert=True)
         return
-    prog   = _checklist_progress(cl)
+    prog = _checklist_progress(cl)
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
-    try:
-        sent = await callback.message.edit_text(header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
-        _checklist_messages[user_id] = callback.message.message_id
-    except Exception:
-        sent = await callback.message.answer(header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
-        _checklist_messages[user_id] = sent.message_id
+    sent = await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
+    _checklist_messages[user_id] = sent.message_id
 
 @router.callback_query(F.data.startswith("cl_pin_"))
 async def cb_cl_pin(callback: CallbackQuery, state: FSMContext):
@@ -6087,7 +6119,6 @@ async def cb_cl_delete(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("cl_edit_"))
 async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
-    """Show edit options for a checklist."""
     await _safe_cb_answer(callback)
     cid = callback.data[len("cl_edit_"):]
     user_id = str(callback.from_user.id)
@@ -6097,32 +6128,26 @@ async def cb_cl_edit_menu(callback: CallbackQuery, state: FSMContext):
         return
     items = cl.get("items", [])
     edit_kb_rows = [
-        [InlineKeyboardButton(text="➕ Добавить пункт",   callback_data=f"cl_add_item_{cid}")],
+        [InlineKeyboardButton(text="➕ Добавить пункт", callback_data=f"cl_add_item_{cid}")],
     ]
     for idx, it in enumerate(items):
-        iid  = it["id"]
+        iid = it["id"]
         mark = "✅" if it.get("done") else "☐"
-        num  = idx + 1
-        text = it["text"][:18]
+        num = idx + 1
+        text_item = it["text"][:18]
         row = [
-            InlineKeyboardButton(text=f"{num}. {mark} {text}", callback_data=f"cl_noop|{cid}|{iid}"),
-            InlineKeyboardButton(text="✏️",  callback_data=f"cl_edititem|{cid}|{iid}"),
-            InlineKeyboardButton(text="🗑",  callback_data=f"cl_delitem|{cid}|{iid}"),
+            InlineKeyboardButton(text=f"{num}. {mark} {text_item}", callback_data=f"cl_noop|{cid}|{iid}"),
+            InlineKeyboardButton(text="✏️", callback_data=f"cl_edititem|{cid}|{iid}"),
+            InlineKeyboardButton(text="🗑", callback_data=f"cl_delitem|{cid}|{iid}"),
         ]
-        # Add up/down arrows
         if idx > 0:
             row.append(InlineKeyboardButton(text="↑", callback_data=f"cl_moveup|{cid}|{iid}"))
         if idx < len(items) - 1:
             row.append(InlineKeyboardButton(text="↓", callback_data=f"cl_movedn|{cid}|{iid}"))
         edit_kb_rows.append(row)
     edit_kb_rows.append([InlineKeyboardButton(text="← Назад", callback_data=f"cl_open_{cid}")])
-    try:
-        await callback.message.edit_text(
-            f"✏️ <b>{cl['title']}</b> — редактирование пунктов:",
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows)
-        )
-    except Exception:
-        pass
+    text = f"✏️ <b>{cl['title']}</b> — редактирование пунктов:"
+    await _replace_menu(user_id, callback.message, text, reply_markup=InlineKeyboardMarkup(inline_keyboard=edit_kb_rows))
 
 @router.callback_query(F.data.startswith("cl_moveup|") | F.data.startswith("cl_movedn|"))
 async def cb_cl_move_item(callback: CallbackQuery, state: FSMContext):
@@ -6293,13 +6318,11 @@ async def cb_cl_noop(callback: CallbackQuery):
 @router.callback_query(F.data == "menu_checklists_mgmt")
 async def cb_checklists_mgmt(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    user_id    = str(callback.from_user.id)
+    user_id = str(callback.from_user.id)
     checklists = store_get_checklists(user_id)
-    header     = f"☑️ <b>Чеклисты</b> ({len(checklists)}/{CHECKLIST_LIMIT})"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_checklists_mgmt_inline(checklists))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_checklists_mgmt_inline(checklists))
+    header = f"☑️ <b>Чеклисты</b> ({len(checklists)}/{CHECKLIST_LIMIT})"
+    kb = get_checklists_mgmt_inline(checklists)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 
 # ─── Reminders ────────────────────────────────────────────────────────────────
@@ -6356,18 +6379,15 @@ def get_reminder_edit_inline(rid: str) -> InlineKeyboardMarkup:
 
 @router.callback_query(F.data == "menu_reminders_mgmt")
 async def cb_reminders_mgmt(callback: CallbackQuery, state: FSMContext):
-    await _safe_cb_answer(callback)
-    user_id   = str(callback.from_user.id)
-    # Cleanup pending reminder edit if any
+    await callback.answer()
+    user_id = str(callback.from_user.id)
     ws = store_get_workspace(user_id) or {}
     ws.pop("_pending_reminder_edit", None)
     store_set_workspace(user_id, ws)
     reminders = store_get_reminders(user_id)
-    header    = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
-    try:
-        await callback.message.edit_text(header, reply_markup=get_reminders_mgmt_inline(reminders))
-    except Exception:
-        await callback.message.answer(header, reply_markup=get_reminders_mgmt_inline(reminders))
+    header = f"🔔 <b>Напоминания</b> ({len(reminders)}/{REMINDER_LIMIT})"
+    kb = get_reminders_mgmt_inline(reminders)
+    await _replace_menu(user_id, callback.message, header, reply_markup=kb)
 
 @router.callback_query(F.data == "rem_create_new")
 async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):
@@ -6438,7 +6458,7 @@ async def cb_rem_delete(callback: CallbackQuery, state: FSMContext):
 async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
-    rid     = callback.data[len("rem_edit_"):]
+    rid = callback.data[len("rem_edit_"):]
     reminders = store_get_reminders(user_id)
     rem = next((r for r in reminders if r["id"] == rid), None)
     if not rem:
@@ -6446,7 +6466,6 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         return
     await state.update_data(_rem_edit_id=rid, _rem_title=rem.get("title",""), _rem_dt=rem.get("datetime_iso",""), _rem_repeat=rem.get("repeat","once"))
     await state.set_state(ReminderStates.waiting_for_input)
-    # Save pending to workspace for recovery after state loss
     ws = store_get_workspace(user_id) or {}
     ws["_pending_reminder_edit"] = {"_rem_edit_id": rid, "_rem_title": rem.get("title",""), "_rem_dt": rem.get("datetime_iso",""), "_rem_repeat": rem.get("repeat","once")}
     store_set_workspace(user_id, ws)
@@ -6458,22 +6477,8 @@ async def cb_rem_edit_start(callback: CallbackQuery, state: FSMContext):
         [InlineKeyboardButton(text="🔁 Повторение", callback_data="redit_repeat")],
         [InlineKeyboardButton(text="← Назад", callback_data="menu_reminders_mgmt")],
     ])
-    try:
-        await callback.message.edit_text(
-            f"✏️ <b>{rem['title']}</b>\n"
-            f"📅 {dt_display}\n"
-            f"🔁 {rep_display}\n\n"
-            f"Что меняем?",
-            reply_markup=kb,
-            parse_mode="HTML"
-        )
-    except Exception:
-        await callback.message.answer(
-            f"✏️ <b>{rem['title']}</b>\nЧто меняем?",
-            reply_markup=kb,
-            parse_mode="HTML"
-        )
-
+    text = f"✏️ <b>{rem['title']}</b>\n📅 {dt_display}\n🔁 {rep_display}\n\nЧто меняем?"
+    await _replace_menu(user_id, callback.message, text, reply_markup=kb, parse_mode="HTML")
 
 
 async def _create_reminder_atomic(user_id: str, message,
@@ -6661,7 +6666,6 @@ async def cb_rem_noop(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith("rem_open_"))
 async def cb_rem_open(callback: CallbackQuery):
-    """Тап по напоминанию → меню редактирования."""
     await _safe_cb_answer(callback)
     rid = callback.data[9:]
     user_id = str(callback.from_user.id)
@@ -6674,10 +6678,7 @@ async def cb_rem_open(callback: CallbackQuery):
     dt = (rem.get("datetime_iso") or "")[:16].replace("T", " ")
     rep = _repeat_label(rem.get("repeat", "once"))
     text = f"🔔 <b>{title}</b>\n📅 {dt}\n🔁 {rep}"
-    try:
-        await callback.message.edit_text(text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
-    except Exception:
-        await callback.message.answer(text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
+    await _replace_menu(user_id, callback.message, text, reply_markup=get_reminder_edit_inline(rid), parse_mode="HTML")
 
 # rem_edit_title_, rem_edit_dt_, rem_edit_repeat_ → редиректим на существующие handlers
 @router.callback_query(F.data.startswith("rem_edit_title_"))
@@ -8019,6 +8020,58 @@ async def run_resonance_decay() -> None:
     except Exception as e:
         logger.error(f"Resonance decay error: {e}", exc_info=True)
 
+async def run_auto_cleanup() -> None:
+    """Automatic cleanup of inactive gardeners (30 days of silence)."""
+    try:
+        from datetime import datetime as _dtc
+        today_s = _dtc.now().strftime("%Y-%m-%d")
+
+        for uid, user_store in list(_store.items()):
+            if not isinstance(user_store, dict) or not user_store.get("ready"):
+                continue
+
+            profile = store_get_profile(uid)
+            if not profile:
+                continue
+
+            days_silent = _days_since_last_interaction(uid)
+            name = profile.get("name", "Садовник")
+
+            # Предупреждение за 7 дней (23 дня молчания)
+            if days_silent == 23:
+                await _send_cleanup_warning(uid, days_left=7)
+                logger.info(f"Cleanup warning (7 days) sent to {uid} ({name})")
+
+            # Предупреждение за 3 дня (27 дней молчания)
+            elif days_silent == 27:
+                await _send_cleanup_warning(uid, days_left=3)
+                logger.info(f"Cleanup warning (3 days) sent to {uid} ({name})")
+
+            # Финальное уведомление и удаление (30 дней молчания)
+            elif days_silent >= 30:
+                # 1. Отправляем финальное сообщение
+                final_msg = (
+                    f"🌑 <b>{name}</b>, сегодня твой сад будет удалён.\n\n"
+                    f"Ты не заходил 30 дней. Это необратимо.\n"
+                    f"Если хочешь остаться — напиши что-нибудь прямо сейчас. Я подожду до конца дня 🌸"
+                )
+                try:
+                    await bot.send_message(int(uid), final_msg, parse_mode="HTML")
+                except Exception as e:
+                    logger.error(f"Failed to send final cleanup message to {uid}: {e}")
+
+                # 2. Удаляем профиль
+                await _delete_gardener(uid, notify_architect=False)
+                logger.info(f"Gardener {uid} ({name}) auto-deleted after 30 days of silence")
+
+            # Обновляем дату проверки
+            ws = store_get_workspace(uid) or {}
+            ws["_cleanup_check_date"] = today_s
+            store_set_workspace(uid, ws)
+
+    except Exception as e:
+        logger.error(f"Auto cleanup error: {e}", exc_info=True)
+
 
 async def _send_daytime_proactive(telegram_id: str) -> bool:
     """Send proactive message during daytime window (12-19, 3h silence).
@@ -8173,6 +8226,58 @@ async def _send_daytime_proactive(telegram_id: str) -> bool:
         return False
     except Exception as e:
         logger.error(f"Daytime proactive error for {telegram_id}: {e}")
+        return False
+
+async def _delete_gardener(uid: str, notify_architect: bool = True) -> bool:
+    """
+    Универсальная функция удаления садовника.
+    Возвращает True, если удаление прошло успешно.
+    """
+    try:
+        profile = store_get_profile(uid)
+        name = (profile or {}).get("name", "Садовник") if profile else "Неизвестный"
+
+        # 1. Удаляем из whitelist
+        success = await _remove_from_whitelist(uid)
+        if not success:
+            logger.error(f"Failed to remove {uid} from whitelist")
+            return False
+
+        # 2. Очищаем RAM
+        _store.pop(uid, None)
+        _sessions.pop(uid, None)
+
+        # 3. Удаляем файлы на GitHub
+        base = _user_path(uid)
+        tasks = [
+            _gardeners_put(f"{base}/profile.json", {}),
+            _gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": []}),
+            _gardeners_put(f"{base}/memory.json", {"sessions": []}),
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Проверяем, все ли удаления прошли успешно
+        failed = [r for r in results if r is not True]
+        if failed:
+            logger.error(f"Failed to delete some files for {uid}: {failed}")
+
+        # 4. Уведомляем архитектора
+        if notify_architect:
+            try:
+                await bot.send_message(
+                    int(ARCHITECT_TELEGRAM_ID),
+                    f"🌑 <b>Садовник покинул сад (удаление)</b>\n\n"
+                    f"👤 {name}\nID: <code>{uid}</code>\n"
+                    f"Время: {_today()}. Данные удалены.",
+                    parse_mode="HTML"
+                )
+            except Exception as e:
+                logger.error(f"Architect notification error: {e}")
+
+        return True
+
+    except Exception as e:
+        logger.error(f"Delete gardener error for {uid}: {e}")
         return False
 
 @router.message(Command("start"))
@@ -8749,11 +8854,6 @@ async def btn_profile(message: Message, state: FSMContext):
     if not is_authorized(user_id):
         await message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    if user_id in _menu_messages:
-        try:
-            await message.bot.delete_message(message.chat.id, _menu_messages[user_id])
-        except Exception:
-            pass
     await _show_profile(user_id, message)
 
 
@@ -8989,10 +9089,8 @@ async def cb_menu_edit_profile(callback: CallbackQuery):
     if not is_authorized(user_id):
         await callback.message.answer("🌿 Используй /start", reply_markup=get_main_keyboard())
         return
-    try:
-        await callback.message.edit_text("✏️ Что изменить?", reply_markup=get_edit_profile_inline())
-    except Exception:
-        pass
+    text = "✏️ Что изменить?"
+    await _replace_menu(user_id, callback.message, text, reply_markup=get_edit_profile_inline())
 
 @router.callback_query(F.data == "menu_change_city")
 async def cb_menu_change_city(callback: CallbackQuery, state: FSMContext):
@@ -10449,10 +10547,15 @@ async def free_conversation(message: Message, state: FSMContext):
                                 raw_sources.extend(_sr_batch)
                             try: await sm.delete()
                             except Exception: pass
-                            if raw_sources:
+
+                            # BUG-002: fallback, если поиск ничего не дал
+                            if not raw_sources:
+                                reply_text = "🔍 Ничего не нашла по запросу. Попробуй переформулировать или уточни."
+                            else:
                                 total_content = " ".join(s.get("content", "") for s in raw_sources)
-                                if len(total_content.strip()) >= 100:
-                                    # Передаём данные поиска в SR — он отвечает с полным контекстом диалога
+                                if len(total_content.strip()) < 100:
+                                    reply_text = "🔍 Нашла мало данных. Попробуй задать вопрос точнее."
+                                else:
                                     _search_ctx = "\n\n".join(
                                         f"{s['title']}\n{s['content']}" for s in raw_sources
                                     )
@@ -10465,12 +10568,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                         f"Отвечай в своём обычном тоне, не здоровайся, продолжай диалог. "
                                         f"В конце ответа добавь источники:\n{_source_links}]"
                                     )
-                                    reply_text = await _call_openrouter(messages) or \
-                                        "🔍 Не удалось обработать результаты. Попробуй переформулировать запрос."
-                                else:
-                                    reply_text = f"🔍 Не нашла актуальных данных по запросу «{q}». Попробуй уточнить или задать вопрос иначе."
-                            else:
-                                reply_text = f"🔍 Ничего не нашла по запросу «{q}». Попробуй переформулировать."
+                                    reply_text = await _call_openrouter(messages) or "🔍 Не удалось обработать результаты. Попробуй переформулировать запрос."
 
                         elif intent == "complete_task":
                             action_ct   = parsed_check.get("action") or {}
@@ -11441,6 +11539,7 @@ async def on_startup():
                       timezone="UTC")  # 18:00 UTC = 21:00 MSK
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
     scheduler.add_job(_check_webhook, "interval", minutes=5, id="webhook_check")
+    scheduler.add_job(run_auto_cleanup, "cron", hour=3, minute=5, id="auto_cleanup")
     scheduler.start()
     logger.info("Scheduler started")
 
