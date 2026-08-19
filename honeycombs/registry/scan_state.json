@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-08-19T07:10:31.262419",
+  "last_scan": "2026-08-19T09:26:13.538299",
   "honeycomb_hashes": {
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
@@ -15,7 +15,7 @@
     "honeycombs/works": "af48d9cbaeb193693fecb891fde693bd",
     "honeycombs/fruits": "f2c4435c5787c930ba3c75e7e8a8be1d",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
-    "honeycombs/fruits/gentle_companion": "fe79edbb32cbcc7b2c893383b33ab456",
+    "honeycombs/fruits/gentle_companion": "8e8dc952bb5695e4c0af933065af5a7f",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
     "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
@@ -30,7 +30,7 @@
     "errors": 0,
     "warnings": 2,
     "total_files": 466,
-    "total_size_kb": 1473.3
+    "total_size_kb": 1478.37
   },
   "seeds_health": {
     "root_count": 14,
@@ -47,7 +47,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-08-19T07:10:31.262428",
+    "last_check": "2026-08-19T09:26:13.538305",
     "errors_count": 12,
     "warnings_count": 3,
     "expired_tasks": 1,
