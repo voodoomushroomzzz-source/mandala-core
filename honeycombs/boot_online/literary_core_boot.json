@@ -804,6 +804,15 @@
       "poems": 40,
       "prose": 11,
       "works": 51
+    },
+    "literary_core": {
+      "path": "honeycombs/boot_online/literary_core_boot.json",
+      "description": "Собранный слепок всей литературной ветки (стихи + проза + индекс)",
+      "created": "2026-08-20",
+      "updated": "2026-08-20",
+      "size_kb": 302.6,
+      "purpose": "Один файл для загрузки в любой External SR",
+      "source": "Автосборка из honeycombs/personal/poetry/"
     }
   },
   "poems": {
