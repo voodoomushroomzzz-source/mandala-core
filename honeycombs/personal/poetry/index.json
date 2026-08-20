@@ -538,7 +538,7 @@
   "prose": {
     "status": "active",
     "description": "Прозаические тексты Дмитрия Лёвина",
-    "total": 10,
+    "total": 11,
     "works": [
       "Bezmolvnyy_tanets_nebytiya",
       "S_neba_plavno_leteli_prohladnye_kapli_II",
@@ -549,7 +549,8 @@
       "S_neba_plavno_leteli_prohladnye_kapli",
       "Rassekaya_potoki_ubityh_dushnym_bytom",
       "Privet_moy_taynyy_drug",
-      "Dul_legkiy_vesenniy_veter"
+      "Dul_legkiy_vesenniy_veter",
+      "Legko_i_svobodno_v_moem_beskraynem_kosmose"
     ]
   },
   "greeting_text": {
@@ -623,9 +624,15 @@
           "title": "Дул легкий весенний ветер...",
           "file": "prose/Dul_legkiy_vesenniy_veter.json",
           "status": "done"
+        },
+        {
+          "id": "Legko_i_svobodno_v_moem_beskraynem_kosmose",
+          "title": "Легко и свободно в моем бескрайнем космосе...",
+          "file": "prose/Legko_i_svobodno_v_moem_beskraynem_kosmose.json",
+          "status": "done"
         }
       ],
-      "progress": 10
+      "progress": 11
     }
   }
 }
