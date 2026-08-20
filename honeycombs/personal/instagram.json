@@ -1,99 +1,75 @@
 {
   "identity": {
-    "name": "Instagram — Контент-план и стратегия",
-    "version": "v0.1.0",
-    "created": "2026-08-17",
-    "updated": "2026-08-17",
-    "description": "Стратегия и контент-план для Instagram: посты, Stories, Reels, визуальный стиль, tone of voice."
+    "name": "Instagram — позиционирование и контент",
+    "version": "v1.0.0",
+    "created": "2026-08-20",
+    "updated": "2026-08-20",
+    "description": "Стратегия и общая информация по Instagram. Контент-план будет создан на основе опроса о загруженности."
   },
-  "status": "planning",
-  "priority": "medium",
-  "horizon": "tactical",
-  "deadline": "2026-09-30",
-  "progress": 0,
-  "tags": [
-    "instagram",
-    "social-media",
-    "content-plan",
-    "branding"
-  ],
-  "sections": {
-    "strategy": {
-      "name": "Стратегия и позиционирование",
-      "description": "Цели, аудитория, визуальный стиль, tone of voice.",
-      "content": {
-        "goals": [],
-        "audience": [],
-        "visual_style": null,
-        "tone_of_voice": null,
-        "rubrics": []
-      }
-    },
-    "content_plan": {
-      "name": "Контент-план",
-      "description": "Структура постов, Stories, Reels.",
-      "content": {
-        "posts": [],
-        "stories": [],
-        "reels": []
-      }
-    },
-    "integration": {
-      "name": "Интеграция с другими векторами",
-      "description": "Как Instagram связан с Mandala, YouTube, франшизой и т.д.",
-      "content": []
+  "profile": {
+    "handle": "@dmitriilevin",
+    "goal": "Создать единое пространство, раскрывающее личность, Мандалу и творчество.",
+    "current_state": {
+      "stories": "ежедневно",
+      "posts": "1-2 раза в месяц",
+      "reels": 0,
+      "audience": "мало, слабый охват"
     }
   },
-  "notes": [
-    "Начать с определения целей и аудитории.",
-    "Продумать визуальный стиль и tone of voice.",
-    "Собрать идеи для первых 10-20 постов."
+  "formats": [
+    {
+      "name": "Разговорный",
+      "description": "Блогерский формат: о Мандале, философии, стихах, личном.",
+      "examples": "рассказы о продуктах, чтение стихов, размышления",
+      "priority": "high"
+    },
+    {
+      "name": "Музыкальный",
+      "description": "Атмосферные видео под музыку (пейзажи, процесс, просто пение).",
+      "examples": "отрывки песен, клипы, визуалы под треки",
+      "priority": "high"
+    },
+    {
+      "name": "Рабочие процессы",
+      "description": "Закулисье продуктов, демонстрация фич, личные моменты.",
+      "examples": "Gentle Companion, архитектура, быт",
+      "priority": "medium"
+    }
   ],
-  "source": "Диалог Gardener (Voodoo) и External SR (DeepSeek), 2026-08-17",
-  "last_updated": "2026-08-17",
   "task_tracker": {
-    "description": "Трекер задач по Instagram",
+    "description": "Задачи по Instagram",
     "tasks": [
       {
         "id": "INST-001",
-        "name": "Определить цели и аудиторию",
+        "name": "Провести опрос о загруженности для определения реалистичного темпа работы",
         "status": "pending",
-        "priority": "high",
-        "deadline": "2026-08-24",
-        "output": "Документ с целями и портретом аудитории"
+        "priority": "critical",
+        "deadline": "2026-08-25",
+        "description": "Оценить, сколько времени в неделю можно выделить на создание контента для Instagram."
       },
       {
         "id": "INST-002",
-        "name": "Разработать визуальный стиль и tone of voice",
+        "name": "Создать долгосрочный контент-план на основе опроса",
         "status": "pending",
         "priority": "high",
         "deadline": "2026-08-31",
-        "output": "Бренд-бук (визуал + тон)"
+        "depends_on": "INST-001",
+        "description": "План с реалистичной частотой (не каждый день), который можно поддерживать в долгую."
       },
       {
         "id": "INST-003",
-        "name": "Собрать идеи для первых 20 постов",
+        "name": "Начать реализацию контент-плана",
         "status": "pending",
         "priority": "medium",
-        "deadline": "2026-09-07",
-        "output": "Список идей"
-      },
-      {
-        "id": "INST-004",
-        "name": "Создать контент-план на месяц",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-09-14",
-        "output": "Контент-план (посты, Stories, Reels)"
-      },
-      {
-        "id": "INST-005",
-        "name": "Запустить первые посты",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-09-30",
-        "output": "10+ опубликованных постов"
+        "deadline": "2026-09-05",
+        "depends_on": "INST-002"
       }
     ]
-  }
+  },
+  "success_metrics": {
+    "metric_1": "Наличие реалистичного контент-плана на месяц",
+    "metric_2": "Стабильный выход контента (даже если не ежедневно) в течение 2 месяцев",
+    "metric_3": "Рост вовлечённости и охвата за счёт системности"
+  },
+  "last_updated": "2026-08-20"
 }
