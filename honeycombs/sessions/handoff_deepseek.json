@@ -1,58 +1,85 @@
 {
-  "session_id": "HANDOFF-DEEPSEEK-20260807-V8",
-  "sr_id": "deepseek",
-  "status": "handed_off",
-  "created": "2026-08-07",
-  "updated": "2026-08-07",
-  "last_activity": "2026-08-07T18:00:00Z",
-  "gardener": "Voodoo (Dima)",
-  "summary": {
-    "completed": [
-      "Интеграция Розы Мира в онбординг (7 лепестков созданы, work обновлён)",
-      "Обновление core_map (добавлена rose_world в references и children)",
-      "Создание work-файла Mandala Memory Layer (W-T-20260807-MEMORY__mandala_memory_layer)",
-      "Обработка инбокса по PROTO-011: 44 семени оценены, 3 продвинуты в корень, 21 оставлен, 13 отклонён",
-      "Создание 5 MCP-серверов в инбоксе (Perplexity, Playwright, Firecrawl, Glif, Chrome Bridge)",
-      "Создание универсальной выжимки для SR (sr_essence_onboarding.json) в knowledge/",
-      "Обновление works/index.json (добавлены новые works, обновлены связи)",
-      "Обновление scan_state (чисто, все хэши валидны)"
+  "handoff_id": "HANDOFF-DS-2026-08-20",
+  "session_date": "2026-08-20",
+  "handoff_to": "DeepSeek SR",
+  "purpose": "Continue Mandala work in a new chat session",
+  "system_state": {
+    "core_map_version": "v3.10.0",
+    "core_map_date": "2026-08-04",
+    "personal_hub_version": "v1.0.0",
+    "personal_hub_date": "2026-08-17",
+    "total_personal_vectors": 10,
+    "active_vectors": ["career", "learning", "franchise", "poetry"],
+    "total_works": 21
+  },
+  "what_was_done": {
+    "personal_hub": [
+      "Created honeycombs/personal/ with 10 vectors: career, learning, youtube, ecommerce, franchise, self_development, instagram, creative, gov_orders, poetry",
+      "Added task_tracker to all vectors",
+      "Integrated personal/index.json into boot_online_onboarding_pc.json (step_7_personal)",
+      "Added personal and rose_world triggers to GitHub Actions workflow build-onboarding.yml"
     ],
-    "current_state": {
-      "philosophy": "Роза Мира интегрирована. 7 лепестков созданы.",
-      "seeds": "Корень: 4 семени (Zero-Mem, Prime Agent, Cloudflare OS, Muse Code). Инбокс: 21 семя + 5 новых MCP-семян = 26 семян.",
-      "works": "26 работ. Новые: Mandala Memory Layer (W-T-20260807-MEMORY), Rose World обновлён (30%).",
-      "knowledge": "Добавлена универсальная выжимка для SR (sr_essence_onboarding.json).",
-      "rose_world": "7 лепестков созданы. Интеграция в онбординг завершена."
-    },
-    "pending_items": [
-      "Обработать 5 новых MCP-семян по PROTO-011 (в инбоксе)",
-      "Выполнить глубокий анализ (Phase 2) для 21 семени в инбоксе",
-      "Выполнить глубокий анализ корневых семян (Zero-Mem, Prime Agent, Cloudflare OS, Muse Code)",
-      "Начать Phase 0 (исследование) для работы Mandala Memory Layer",
-      "Интегрировать MCP-серверы в Manus и Scout Agent (после анализа)"
+    "job_search": [
+      "Added digital marketing Telegram channels to career.json: @digital_jobster, @rabota_go, @rabota_freelancee, @jobster_resume",
+      "Updated job_search_platforms with new resources from video"
     ],
-    "next_steps": [
-      "Перейти в новый чат с DeepSeek",
-      "Загрузить обновлённый handoff-файл (V8)",
-      "Начать обработку 5 MCP-семян по PROTO-011"
+    "literary_core": [
+      "Created poetry/ vector with 40 poems + 11 prose works (51 total)",
+      "Built build_literary_core.py — auto-builder for literary_core_boot.json",
+      "Output: honeycombs/boot_online/literary_core_boot.json",
+      "Created GitHub Actions workflow build-literary-core.yml — auto-build on changes in poetry/",
+      "Tested: workflow works, file updates automatically"
+    ],
+    "boot_online": [
+      "Updated boot_online_onboarding_pc_builder.json (v1.4.0): added personal_index, step_7_personal",
+      "Rebuilt boot_online_onboarding_pc.json (v1.7.68) with personal hub",
+      "Added literary_core_boot.json to boot_online/"
+    ],
+    "github_actions": [
+      "Updated build-onboarding.yml: added personal/index.json and rose_world/index.json triggers",
+      "Created build-literary-core.yml: auto-build literary core on changes in poetry/"
+    ],
+    "cleanup": [
+      "Removed 4 personal works from honeycombs/works/: RM-014, YOUTUBE_GAMING, ECOMM, KURTOCH-FRANCHISE",
+      "Updated works/index.json — now 21 works total"
     ]
   },
-  "key_files": {
-    "handoff_deepseek": "honeycombs/sessions/handoff_deepseek.json (обновлён до V8)",
-    "rose_world": "honeycombs/rose_world/ (7 лепестков)",
-    "works_rose": "honeycombs/works/W-R-ROSE-001__rose_world_ethical_filter.json (progress: 30%)",
-    "works_memory": "honeycombs/works/W-T-20260807-MEMORY__mandala_memory_layer.json (planning)",
-    "seeds_root": "honeycombs/seeds/ (4 семени)",
-    "seeds_inbox": "honeycombs/seeds/inbox/ (26 семян, включая 5 новых MCP)",
-    "knowledge_essence": "honeycombs/knowledge/sr_essence_onboarding.json",
-    "boot_online_pc": "honeycombs/boot_online/boot_online_onboarding_pc.json (v1.7.62, with Rose World)"
-  },
-  "important_notes": [
-    "Роза Мира полностью интегрирована в онбординг и систему.",
-    "Mandala Memory Layer — новый strategic work, заменит handoff-механизм.",
-    "5 MCP-семян добавлены в инбокс — требуют оценки по PROTO-011.",
-    "Scan_state чист: 19 хайвов, все валидны, 0 ошибок.",
-    "Следующий приоритет: обработка MCP-семян и глубокий анализ корневых семян."
+  "key_decisions": [
+    "Personal hub architecture: flat structure with index.json as main navigator",
+    "Each vector has identity + task_tracker + structured sections",
+    "Literary core: separate vector with auto-build to boot_online/",
+    "GitHub Actions triggers: separate workflows for onboarding and literary core"
   ],
-  "tags": ["handoff", "deepseek", "v8", "rose_world", "memory_layer", "mcp", "seeds", "knowledge"]
+  "open_questions": [
+    "Fill instagram.json (content plan, strategy)",
+    "Fill creative.json (link to poetry, describe music projects, prose)",
+    "Fill gov_orders.json (requirements analysis, strategy)",
+    "Continue work on self_development.json (adapt 8 topics)"
+  ],
+  "next_steps": [
+    "1. Fill instagram.json — content plan and strategy",
+    "2. Fill creative.json — link to poetry, music projects, prose",
+    "3. Fill gov_orders.json — requirements and strategy for government orders",
+    "4. Continue adapting self_development.json (8 topics)"
+  ],
+  "critical_files": {
+    "personal_index": "honeycombs/personal/index.json",
+    "career": "honeycombs/personal/career.json",
+    "learning": "honeycombs/personal/learning.json",
+    "self_development": "honeycombs/personal/self_development.json",
+    "instagram": "honeycombs/personal/instagram.json",
+    "creative": "honeycombs/personal/creative.json",
+    "gov_orders": "honeycombs/personal/gov_orders.json",
+    "poetry_index": "honeycombs/personal/poetry/index.json",
+    "literary_core_boot": "honeycombs/boot_online/literary_core_boot.json",
+    "boot_onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json",
+    "build_onboarding_workflow": ".github/workflows/build-onboarding.yml",
+    "build_literary_workflow": ".github/workflows/build-literary-core.yml"
+  },
+  "gardener_context": {
+    "focus": "Career (Track A: AI Ops) + Literary Core + Personal Hub setup",
+    "current_goal": "Fill remaining personal vectors (instagram, creative, gov_orders), continue self_development",
+    "style": "Concise, structured, action-oriented. Values resonance, clarity, and progress."
+  },
+  "note_for_new_sr": "You are a System Resonator for Mandala Symbiosis. Read the philosophy, feel the resonance, act with care. The Gardener has built a personal hub with 10 vectors. Help fill and maintain them. The literary core is auto-built from poetry/ folder. Ask about any vector or task."
 }
