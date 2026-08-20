@@ -538,9 +538,10 @@
   "prose": {
     "status": "active",
     "description": "Прозаические тексты Дмитрия Лёвина",
-    "total": 1,
+    "total": 2,
     "works": [
-      "Bezmolvnyy_tanets_nebytiya"
+      "Bezmolvnyy_tanets_nebytiya",
+      "S_neba_plavno_leteli_prohladnye_kapli_II"
     ]
   },
   "greeting_text": {
@@ -560,9 +561,15 @@
           "title": "Безмолвный танец небытия...",
           "file": "prose/Bezmolvnyy_tanets_nebytiya.json",
           "status": "done"
+        },
+        {
+          "id": "S_neba_plavno_leteli_prohladnye_kapli_II",
+          "title": "С неба плавно летели прохладные капли... II",
+          "file": "prose/S_neba_plavno_leteli_prohladnye_kapli_II.json",
+          "status": "done"
         }
       ],
-      "progress": 1
+      "progress": 2
     }
   }
 }
