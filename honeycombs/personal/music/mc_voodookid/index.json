@@ -1,0 +1,44 @@
+{
+  "identity": {
+    "name": "MC Voodookid — детальный индекс",
+    "version": "v1.0.0",
+    "created": "2026-08-20",
+    "updated": "2026-08-20",
+    "description": "Детальная информация по проекту MC Voodookid: треки, даты, тексты."
+  },
+  "project_info": {
+    "name": "MC Voodookid",
+    "status": "active",
+    "priority": "medium",
+    "sound": "русскоязычный рэп, агрессивный / философский",
+    "goal": "Доделать фит, записать черновик, выпустить релиз"
+  },
+  "tracks": [
+    {
+      "title": "2 готовых трека",
+      "status": "done"
+    },
+    {
+      "title": "Фит (Питер)",
+      "status": "mixing",
+      "needs": "сведение"
+    },
+    {
+      "title": "Черновик",
+      "status": "draft",
+      "needs": "запись вокала"
+    }
+  ],
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Завершение фита и черновика",
+      "deadline": "2026-08-31",
+      "tasks": [
+        "Свести фит",
+        "Записать вокал на черновик"
+      ]
+    }
+  ],
+  "last_updated": "2026-08-20"
+}

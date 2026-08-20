@@ -1,0 +1,129 @@
+{
+  "identity": {
+    "name": "Music — входной индекс проектов",
+    "version": "v1.0.0",
+    "created": "2026-08-20",
+    "updated": "2026-08-20",
+    "description": "Общая структура музыкальных проектов Дмитрия Лёвина. Для деталей — см. индексы в папках проектов."
+  },
+  "profile": {
+    "artist_name": "Дмитрий Лёвин",
+    "projects": [
+      "mayakoma",
+      "dmitrii_levin",
+      "x_deaddy_x",
+      "mc_voodookid"
+    ],
+    "primary_genre": "инди-поп-рок / электроника / гранж-панк / рэп",
+    "platforms": [
+      "VK Music",
+      "YouTube",
+      "Spotify",
+      "Apple Music",
+      "SoundCloud",
+      "Bandcamp"
+    ],
+    "monthly_listeners_approx": "300-400"
+  },
+  "projects": {
+    "mayakoma": {
+      "name": "Маякома",
+      "path": "music/mayakoma/index.json",
+      "status": "active",
+      "priority": "critical",
+      "deadline": "2026-09-30",
+      "goal": "Широкая русскоязычная аудитория, 3 готовых трека, выход на стриминги",
+      "sound": "инди-поп-рок, светлый гитарный, мелодичный вокал, русский язык",
+      "total_tracks": 3
+    },
+    "dmitrii_levin": {
+      "name": "Dmitrii Levin",
+      "path": "music/dmitrii_levin/index.json",
+      "status": "active",
+      "priority": "high",
+      "deadline": "2026-10-31",
+      "goal": "Систематизировать ~15 синглов, обновить дистрибуцию",
+      "sound": "электроника, глитч-хоп, трип-хоп, атмосфера, космос, экспериментал",
+      "total_tracks": 15
+    },
+    "x_deaddy_x": {
+      "name": "X Deaddy X",
+      "path": "music/x_deaddy_x/index.json",
+      "status": "active",
+      "priority": "high",
+      "deadline": "2026-10-31",
+      "goal": "Завершить «Мечты», провести открытую репетицию и концерт",
+      "sound": "гаражный гранж-панк, живой звук, 50/50 рус/англ",
+      "total_tracks": 10
+    },
+    "mc_voodookid": {
+      "name": "MC Voodookid",
+      "path": "music/mc_voodookid/index.json",
+      "status": "active",
+      "priority": "medium",
+      "deadline": "2026-09-30",
+      "goal": "Доделать фит, записать черновик, выпустить релиз",
+      "sound": "русскоязычный рэп, агрессивный / философский",
+      "total_tracks": 4
+    }
+  },
+  "task_tracker": {
+    "description": "Общие задачи по всем проектам",
+    "tasks": [
+      {
+        "id": "MUSIC-001",
+        "name": "Детализировать проект mayakoma (треки, даты, статусы)",
+        "status": "pending",
+        "project": "mayakoma",
+        "priority": "critical"
+      },
+      {
+        "id": "MUSIC-002",
+        "name": "Детализировать проект dmitrii_levin (треки, даты, статусы)",
+        "status": "pending",
+        "project": "dmitrii_levin",
+        "priority": "high"
+      },
+      {
+        "id": "MUSIC-003",
+        "name": "Детализировать проект x_deaddy_x (треки, даты, статусы)",
+        "status": "pending",
+        "project": "x_deaddy_x",
+        "priority": "high"
+      },
+      {
+        "id": "MUSIC-004",
+        "name": "Детализировать проект mc_voodookid (треки, даты, статусы)",
+        "status": "pending",
+        "project": "mc_voodookid",
+        "priority": "medium"
+      }
+    ]
+  },
+  "overall_plan": {
+    "description": "Общий план по проектам на 2026 год",
+    "key_principle": "Сначала детализация и систематизация, затем продвижение",
+    "priority": {
+      "august_2026": {
+        "focus": "Маякома (завершить «Беги»), MC Voodookid (фит)",
+        "secondary": "Детализация Dmitrii Levin"
+      },
+      "september_2026": {
+        "focus": "Релиз Маякомы, открытая репетиция X Deaddy X",
+        "secondary": "Детализация Dmitrii Levin, запуск рекламы"
+      },
+      "october_2026": {
+        "focus": "Концерт X Deaddy X, релиз MC Voodookid",
+        "secondary": "Систематизация Dmitrii Levin, финальный план продвижения"
+      }
+    }
+  },
+  "success_metrics": {
+    "metric_1": "Релиз 3 треков Маякомы на стримингах",
+    "metric_2": "Проведение концерта X Deaddy X",
+    "metric_3": "Полный трек-лист Dmitrii Levin",
+    "metric_4": "Релиз фита MC Voodookid",
+    "metric_5": "Чёткая карта всех треков с датами и статусами"
+  },
+  "last_updated": "2026-08-20"
+}
