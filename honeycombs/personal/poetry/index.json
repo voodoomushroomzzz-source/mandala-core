@@ -538,12 +538,13 @@
   "prose": {
     "status": "active",
     "description": "Прозаические тексты Дмитрия Лёвина",
-    "total": 4,
+    "total": 5,
     "works": [
       "Bezmolvnyy_tanets_nebytiya",
       "S_neba_plavno_leteli_prohladnye_kapli_II",
       "S_kazhdym_shagom_moi_nogi_utopali",
-      "Mir_pylal_zloboy_gluptsov"
+      "Mir_pylal_zloboy_gluptsov",
+      "Ya_prosto_gulyal_po_oblakam"
     ]
   },
   "greeting_text": {
@@ -581,9 +582,15 @@
           "title": "Мир пылал злобой глупцов...",
           "file": "prose/Mir_pylal_zloboy_gluptsov.json",
           "status": "done"
+        },
+        {
+          "id": "Ya_prosto_gulyal_po_oblakam",
+          "title": "Я просто гулял по облакам...",
+          "file": "prose/Ya_prosto_gulyal_po_oblakam.json",
+          "status": "done"
         }
       ],
-      "progress": 4
+      "progress": 5
     }
   }
 }
