@@ -334,7 +334,7 @@
           "id": "Ya_bezdne_mrachnoy_ulybnus",
           "title": "Я бездне мрачной улыбнусь...",
           "file": "poems/Ya_bezdne_mrachnoy_ulybnus.json",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "S_neba_padaet_sneg",
@@ -373,7 +373,7 @@
           "status": "pending"
         }
       ],
-      "progress": 32
+      "progress": 33
     },
     "track_b": {
       "name": "Трек B: Систематизация и издание",
