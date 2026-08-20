@@ -538,13 +538,14 @@
   "prose": {
     "status": "active",
     "description": "Прозаические тексты Дмитрия Лёвина",
-    "total": 5,
+    "total": 6,
     "works": [
       "Bezmolvnyy_tanets_nebytiya",
       "S_neba_plavno_leteli_prohladnye_kapli_II",
       "S_kazhdym_shagom_moi_nogi_utopali",
       "Mir_pylal_zloboy_gluptsov",
-      "Ya_prosto_gulyal_po_oblakam"
+      "Ya_prosto_gulyal_po_oblakam",
+      "Rano_ili_pozdno_vse_vozvrashchaetsya_k_spokoystviyu"
     ]
   },
   "greeting_text": {
@@ -588,9 +589,15 @@
           "title": "Я просто гулял по облакам...",
           "file": "prose/Ya_prosto_gulyal_po_oblakam.json",
           "status": "done"
+        },
+        {
+          "id": "Rano_ili_pozdno_vse_vozvrashchaetsya_k_spokoystviyu",
+          "title": "Рано или поздно все возвращается к спокойствию...",
+          "file": "prose/Rano_ili_pozdno_vse_vozvrashchaetsya_k_spokoystviyu.json",
+          "status": "done"
         }
       ],
-      "progress": 5
+      "progress": 6
     }
   }
 }
