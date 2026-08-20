@@ -3873,3 +3873,58 @@
 [2026-08-20 07:00:56] [INFO]   Total duplicates: 5
 [2026-08-20 07:00:56] [INFO]   Total removed (old): 0
 [2026-08-20 07:00:56] [INFO] ============================================================
+[2026-08-20 09:33:28] [INFO] ============================================================
+[2026-08-20 09:33:28] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-20 09:33:28] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-20 09:33:28] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-20 09:33:28] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-20 09:33:28] [INFO]   → Filtered to 0 relevant items
+[2026-08-20 09:33:28] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-20 09:33:28] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-20 09:33:28] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-20 09:33:28] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-20 09:33:28] [INFO]   → Filtered to 0 relevant items
+[2026-08-20 09:33:28] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-20 09:33:28] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-20 09:33:28] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-20 09:33:29] [INFO]   → Found 15 raw items, 9 recent
+[2026-08-20 09:33:29] [INFO]   → Filtered to 3 relevant items
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: Manabu Kosaka's Handmade Paper Sculptures...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: A joke domain purchase turned in geopolitical warf...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: Feature Request: Support AGENTS.md...
+[2026-08-20 09:33:29] [INFO]   📊 Hacker News: saved 0, duplicates 3
+[2026-08-20 09:33:29] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-20 09:33:29] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-20 09:33:29] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-20 09:33:29] [INFO]   → Filtered to 5 relevant items
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-20 09:33:29] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-20 09:33:29] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-20 09:33:29] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-20 09:33:29] [INFO]   → Found 15 raw items, 12 recent
+[2026-08-20 09:33:29] [INFO]   → Filtered to 5 relevant items
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: Stripe didn’t really buy OpenRouter because of the...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: OpenAI seeks to one-up Anthropic with new customer...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: Cognition CEO denies report that SpaceX tried to a...
+[2026-08-20 09:33:29] [INFO]   ⏭️ Duplicate: AI was supposed to win people over by now — it has...
+[2026-08-20 09:33:30] [INFO]   ⏭️ Duplicate: Google packs Search and Gemini with new AI study t...
+[2026-08-20 09:33:30] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-08-20 09:33:30] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-20)...
+[2026-08-20 09:33:30] [INFO]   ✅ No old seeds to remove
+[2026-08-20 09:33:30] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-20
+[2026-08-20 09:33:30] [INFO] 
+============================================================
+[2026-08-20 09:33:30] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-20 09:33:30] [INFO]   Total saved: 0
+[2026-08-20 09:33:30] [INFO]   Total duplicates: 13
+[2026-08-20 09:33:30] [INFO]   Total removed (old): 0
+[2026-08-20 09:33:30] [INFO] ============================================================
