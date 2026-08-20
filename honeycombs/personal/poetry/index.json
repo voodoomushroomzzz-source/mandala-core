@@ -538,10 +538,11 @@
   "prose": {
     "status": "active",
     "description": "Прозаические тексты Дмитрия Лёвина",
-    "total": 2,
+    "total": 3,
     "works": [
       "Bezmolvnyy_tanets_nebytiya",
-      "S_neba_plavno_leteli_prohladnye_kapli_II"
+      "S_neba_plavno_leteli_prohladnye_kapli_II",
+      "S_kazhdym_shagom_moi_nogi_utopali"
     ]
   },
   "greeting_text": {
@@ -567,9 +568,15 @@
           "title": "С неба плавно летели прохладные капли... II",
           "file": "prose/S_neba_plavno_leteli_prohladnye_kapli_II.json",
           "status": "done"
+        },
+        {
+          "id": "S_kazhdym_shagom_moi_nogi_utopali",
+          "title": "С каждым шагом мои ноги утопали...",
+          "file": "prose/S_kazhdym_shagom_moi_nogi_utopali.json",
+          "status": "done"
         }
       ],
-      "progress": 2
+      "progress": 3
     }
   }
 }
