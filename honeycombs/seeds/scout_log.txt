@@ -3987,3 +3987,62 @@
 [2026-08-21 07:01:00] [INFO]   Total duplicates: 5
 [2026-08-21 07:01:00] [INFO]   Total removed (old): 0
 [2026-08-21 07:01:00] [INFO] ============================================================
+[2026-08-21 09:35:18] [INFO] ============================================================
+[2026-08-21 09:35:18] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-21 09:35:18] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-21 09:35:18] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-21 09:35:18] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-21 09:35:18] [INFO]   → Filtered to 5 relevant items
+[2026-08-21 09:35:18] [INFO]   ⏭️ Duplicate: Active Inference as Context Acquisition for AI Age...
+[2026-08-21 09:35:18] [INFO]   ⏭️ Duplicate: Robust Metaheuristics under Uncertainty for Berth ...
+[2026-08-21 09:35:18] [INFO]   ⏭️ Duplicate: How to Navigate Uncertainty About AI Consciousness...
+[2026-08-21 09:35:18] [INFO]   ⏭️ Duplicate: Bounded Sovereignty and the Control Tax: Pricing A...
+[2026-08-21 09:35:18] [INFO]   ⏭️ Duplicate: Interaction valence reveals contrasting social net...
+[2026-08-21 09:35:18] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-08-21 09:35:18] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-21 09:35:18] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-21 09:35:19] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-21 09:35:19] [INFO]   → Filtered to 5 relevant items
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: APPROVE: Visual End-User-in-the-Loop Robot Program...
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: The Missing Touch: Spatially Distributed Tactile F...
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: Learning the Right Abstraction: Neural Reduced Dyn...
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: SCAPE: Scenario-Conditioned Simulation-Augmented P...
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: Hybrid Feedback Sampling for Sample-Efficient Mode...
+[2026-08-21 09:35:19] [INFO]   📊 arXiv Robotics: saved 0, duplicates 5
+[2026-08-21 09:35:19] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-21 09:35:19] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-21 09:35:19] [INFO]   → Found 15 raw items, 4 recent
+[2026-08-21 09:35:19] [INFO]   → Filtered to 1 relevant items
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: Japan tried to build an operating system for the w...
+[2026-08-21 09:35:19] [INFO]   📊 Hacker News: saved 0, duplicates 1
+[2026-08-21 09:35:19] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-21 09:35:19] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-21 09:35:19] [INFO]   → Found 15 raw items, 15 recent
+[2026-08-21 09:35:19] [INFO]   → Filtered to 5 relevant items
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-08-21 09:35:19] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-08-21 09:35:20] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-08-21 09:35:20] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-08-21 09:35:20] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-08-21 09:35:20] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-08-21 09:35:20] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-21 09:35:20] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-21 09:35:20] [INFO]   → Found 15 raw items, 1 recent
+[2026-08-21 09:35:20] [INFO]   → Filtered to 1 relevant items
+[2026-08-21 09:35:20] [INFO]   ⏭️ Duplicate: AI data startup Micro1 reaches $500M gross run rat...
+[2026-08-21 09:35:20] [INFO]   📊 TechCrunch AI: saved 0, duplicates 1
+[2026-08-21 09:35:20] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-21)...
+[2026-08-21 09:35:20] [INFO]   ✅ No old seeds to remove
+[2026-08-21 09:35:20] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-21
+[2026-08-21 09:35:20] [INFO] 
+============================================================
+[2026-08-21 09:35:20] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-21 09:35:20] [INFO]   Total saved: 0
+[2026-08-21 09:35:20] [INFO]   Total duplicates: 17
+[2026-08-21 09:35:20] [INFO]   Total removed (old): 0
+[2026-08-21 09:35:20] [INFO] ============================================================
