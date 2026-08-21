@@ -1,14 +1,19 @@
 {
-  "last_scan": "2026-08-20T09:21:29.004990",
+  "last_scan": "2026-08-21T07:10:33.516566",
   "honeycomb_hashes": {
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
     "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
-    "honeycombs/personal": "c4ad84dd27d391893dbba2fbbc4b0366",
-    "honeycombs/personal/poetry": "1f68fa27c735353bed776c73409471d8",
+    "honeycombs/personal": "0ac666cb15d5c3e87efed6ac8bc6c65e",
+    "honeycombs/personal/music": "0e28d6f8aed71b8673a9bbcdba7e9ee2",
+    "honeycombs/personal/music/mc_voodookid": "d7fc9d7a3db7012d3d7d219a9e94bac7",
+    "honeycombs/personal/music/x_deaddy_x": "b6ba4c81fc9184b4f359012af61266ca",
+    "honeycombs/personal/music/mayakoma": "56647ee0e1411622382a32324418cae7",
+    "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
+    "honeycombs/personal/poetry": "5d1f293b703088317cdc2b91b07521a2",
     "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
     "honeycombs/seeds": "4dc2b1dadb015cf63137153125295668",
-    "honeycombs/seeds/inbox": "d691b6176e5061c34f38e9fcba868435",
+    "honeycombs/seeds/inbox": "3493ed83fec547cb26defded3c39aba7",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
     "honeycombs/knowledge": "29e22087c24941e87b341b5ef7fda114",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
@@ -24,32 +29,32 @@
     "honeycombs/philosophy": "061392f777612c375d2ca524d1118b50"
   },
   "statistics": {
-    "total_scanned": 21,
+    "total_scanned": 26,
     "valid_v2": 19,
-    "invalid_v2": 2,
+    "invalid_v2": 7,
     "errors": 0,
-    "warnings": 2,
-    "total_files": 482,
-    "total_size_kb": 1493.48
+    "warnings": 7,
+    "total_files": 543,
+    "total_size_kb": 2159.47
   },
   "seeds_health": {
     "root_count": 14,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 108,
-    "inbox_total_files": 109,
+    "inbox_count": 120,
+    "inbox_total_files": 121,
     "inbox_threshold": 50,
     "inbox_status": "warning",
     "warnings": [
       "Корень seeds/: 14 файлов (порог 10)",
-      "Inbox: 108 новых файлов (порог 50)"
+      "Inbox: 120 новых файлов (порог 50)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-08-20T09:21:29.004998",
-    "errors_count": 12,
-    "warnings_count": 3,
+    "last_check": "2026-08-21T07:10:33.516577",
+    "errors_count": 27,
+    "warnings_count": 9,
     "expired_tasks": 1,
     "upcoming_deadlines": 0,
     "expired_tasks_list": [
@@ -57,7 +62,7 @@
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 5
+        "days_overdue": 6
       }
     ],
     "upcoming_deadlines_list": [],
