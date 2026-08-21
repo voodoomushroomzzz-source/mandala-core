@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260821-070058-117",
+  "title": "SCAPE: Scenario-Conditioned Simulation-Augmented Policy Evaluation",
+  "url": "https://arxiv.org/abs/2608.19425",
+  "description": "arXiv:2608.19425v1 Announce Type: new \nAbstract: Reliable performance evaluation is a central bottleneck for deploying robot-learning policies in real-world conditions. Real-world testing is faithful but costly and difficult to scale, whereas simulation-based testing scales easily but is inevitably biased by the sim-to-real gap. Existing simulation-augmented methods combine limited real-world rollouts with abundant simulation proxies, but focus on performance averaged over initial conditions and",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-08-21T07:00:58.975169",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
