@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260821-070059-118",
+  "title": "Hybrid Feedback Sampling for Sample-Efficient Model Predictive Control",
+  "url": "https://arxiv.org/abs/2608.19443",
+  "description": "arXiv:2608.19443v1 Announce Type: new \nAbstract: Thanks to its parallelizability and flexibility, sampling-based Model Predictive Control (MPC) has become widely popular for controlling real-world robotic systems. However, for high-dimensional and open-loop unstable dynamical systems, the required number of samples to improve the control sequence will grow exponentially with the horizon, leading to poor sample efficiency and numerical instability. This paper investigates the instability of shoot",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-08-21T07:00:59.057575",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
