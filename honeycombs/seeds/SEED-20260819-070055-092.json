@@ -1,0 +1,41 @@
+{
+  "seed_id": "SEED-20260819-070055-092",
+  "title": "Runtime Governance for Agentic AI: Action-Boundary Control with Trusted Provenance and Fail-Closed Execution",
+  "url": "https://arxiv.org/abs/2608.16891",
+  "description": "A runtime governance system that treats model outputs as action proposals and mediates them through a trusted decision layer before tool execution. Fail-closed under uncertainty.",
+  "source": "arXiv AI",
+  "collected_at": "2026-08-19T07:00:55.530501",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 8,
+    "score_feasibility": 6,
+    "score_relevance": 9,
+    "score_impact": 8,
+    "total_score": 31,
+    "mandala_relevance": "Критично для безопасности Manus и Rose World. Обеспечивает контроль действий в реальном времени, fail-closed execution.",
+    "reason_selected": "Система контроля действий агентов в реальном времени.",
+    "action": "promote"
+  },
+  "research_summary": "Aegis — система управления агентами на этапе выполнения. Модель предлагает действие, но решение принимает доверенный слой (trusted runtime). Оценка на 2,100 рядах показала 0 рискованных завершений и 0 проблем с provenance. Использует Senate-style settlement (кворум для сложных действий).",
+  "key_insights": [
+    "Model proposes — trusted runtime decides",
+    "Fail-closed under uncertainty (если не уверен — не выполняет)",
+    "Senate-style settlement для сложных действий",
+    "Trusted provenance — все действия аудируемы",
+    "0 risk events в тестах на 2,100 рядах"
+  ],
+  "implementation_notes": "Интегрировать как слой контроля для Manus. Применить для критических действий (файловая система, сеть). Использовать как основу для Rose World.",
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": ["https://arxiv.org/abs/2608.16891"],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

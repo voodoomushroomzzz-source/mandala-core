@@ -1,0 +1,41 @@
+{
+  "seed_id": "SEED-20260817-070056-067",
+  "title": "Agentao: A Governed Local-First Runtime for Tool-Using LLM Agents",
+  "url": "https://arxiv.org/abs/2608.13574",
+  "description": "A governed local-first runtime for tool-using LLM agents. Separates model-generated action proposals from host-authorized execution through a layered architecture.",
+  "source": "arXiv AI",
+  "collected_at": "2026-08-17T07:00:56.374821",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 8,
+    "score_feasibility": 7,
+    "score_relevance": 9,
+    "score_impact": 7,
+    "total_score": 31,
+    "mandala_relevance": "Критически важно для безопасного выполнения действий Manus. Разделяет генерацию и выполнение, поддерживает permissions, replay, plugins.",
+    "reason_selected": "Архитектура для безопасного выполнения агентских действий.",
+    "action": "promote"
+  },
+  "research_summary": "Agentao — это runtime для агентов, который отделяет 'что агент предложил' от 'что выполняется'. Имеет слоистую архитектуру: host-facing surfaces, host contract, runtime core, permission-mediated tool system. Поддерживает память, replay, plugins, skills, sub-agents, и интеграцию с протоколами.",
+  "key_insights": [
+    "Разделение предложения и выполнения — безопасность по умолчанию",
+    "Permission-mediated tool system — контроль доступа",
+    "Поддержка суб-агентов и плагинов",
+    "Структурированный event-интерфейс для аудита",
+    "Код открыт на GitHub"
+  ],
+  "implementation_notes": "Интегрировать как рантайм для Manus. Использовать permissions для контроля доступа к инструментам. Применить для управления суб-агентами.",
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": ["https://arxiv.org/abs/2608.13574"],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

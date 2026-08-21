@@ -1,0 +1,41 @@
+{
+  "seed_id": "SEED-20260811-070109-002",
+  "title": "Show HN: Needle2 — 14MB agentic LLM for phones, wearables, smart home and robots",
+  "url": "https://cactuscompute.com/needle",
+  "description": "An open 14MB model for tool calling, device use, and structured extraction. Runs on Raspberry Pi 5 (500+ tok/s), ESP32-S3, and budget phones. 45M parameters, 14MB binary, 28MB RAM. Built for edge devices with no GPU/NPU.",
+  "source": "Hacker News",
+  "collected_at": "2026-08-11T07:01:09.196275",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 8,
+    "score_feasibility": 9,
+    "score_relevance": 8,
+    "score_impact": 7,
+    "total_score": 32,
+    "mandala_relevance": "Критично для Manus — позволяет запускать агентов на локальных устройствах без интернета. Подходит для Raspberry Pi, ESP32, бюджетных телефонов.",
+    "reason_selected": "Уникальная модель для edge-устройств с высокой производительностью и малым размером.",
+    "action": "promote"
+  },
+  "research_summary": "Needle 2 — это 14MB модель с 45M параметров, сжатая до CQ2-bit. Специализирована на tool calling и структурированном извлечении. Работает на устройствах с 28MB RAM. Превосходит FunctionGemma 270M и LFM2.5 230M на многих бенчмарках, будучи в 5-70 раз меньше. Поддерживает fine-tuning на локальном ПК. Использует sliding window attention (256 токенов) для ограничения памяти.",
+  "key_insights": [
+    "14MB бинарник, 28MB RAM — работает на ESP32-S3 и Raspberry Pi 5",
+    "500+ токен/сек на Raspberry Pi 5, 400-1500 на VR-устройствах",
+    "Специализирована на tool calling, а не на общих разговорах",
+    "Fine-tuning на ваших данных за несколько часов",
+    "Встроенная оценка уверенности — можно эскалировать в облако"
+  ],
+  "implementation_notes": "Использовать как локальный движок для Manus. Fine-tune на инструментах Mandala. Запускать на Raspberry Pi или бюджетных телефонах для офлайн-работы.",
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": ["https://cactuscompute.com/needle"],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
