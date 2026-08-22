@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-08-21",
+    "updated": "2026-08-22",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 26,
-    "total_size_kb": 2161.32,
+    "total_size_kb": 1937.6,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 26,
-    "total_size_kb": 2161.32,
-    "last_updated": "2026-08-21",
+    "total_size_kb": 1937.6,
+    "last_updated": "2026-08-22",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -71,7 +71,7 @@
             "work_id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-08-15",
-            "days_overdue": 6
+            "days_overdue": 7
           }
         ],
         "upcoming_deadlines": [],
@@ -127,7 +127,7 @@
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "works",
             "deadline": "2026-08-15",
-            "days_overdue": 6
+            "days_overdue": 7
           }
         ],
         "upcoming": [],
@@ -144,31 +144,29 @@
         "missing_count": 0
       },
       "seed_count_validator": {
-        "root_count": 14,
+        "root_count": 19,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 120,
-        "inbox_total_files": 121,
+        "inbox_count": 9,
+        "inbox_total_files": 10,
         "inbox_threshold": 50,
-        "inbox_status": "warning",
+        "inbox_status": "ok",
         "warnings": [
-          "Корень seeds/: 14 файлов (порог 10)",
-          "Inbox: 120 новых файлов (порог 50)"
+          "Корень seeds/: 19 файлов (порог 10)"
         ],
         "status": "warning"
       }
     },
     "seeds_health": {
-      "root_count": 14,
+      "root_count": 19,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 120,
-      "inbox_total_files": 121,
+      "inbox_count": 9,
+      "inbox_total_files": 10,
       "inbox_threshold": 50,
-      "inbox_status": "warning",
+      "inbox_status": "ok",
       "warnings": [
-        "Корень seeds/: 14 файлов (порог 10)",
-        "Inbox: 120 новых файлов (порог 50)"
+        "Корень seeds/: 19 файлов (порог 10)"
       ],
       "status": "warning"
     }
