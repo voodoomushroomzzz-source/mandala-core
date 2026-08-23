@@ -18,6 +18,7 @@ on:
       - 'honeycombs/knowledge/index.json'
       - 'honeycombs/personal/index.json'
       - 'honeycombs/rose_world/index.json'
+      - 'honeycombs/directives/index.json'
 
 jobs:
   build:
