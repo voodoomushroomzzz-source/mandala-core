@@ -9,7 +9,13 @@
     "type": "directives_index",
     "description": "Директивы для фокусировки внимания SR по векторам",
     "status": "active",
-    "tags": ["directives", "modes", "sr", "vectors", "flexibility"],
+    "tags": [
+      "directives",
+      "modes",
+      "sr",
+      "vectors",
+      "flexibility"
+    ],
     "resonance": "100%"
   },
   "meta": {
@@ -67,6 +73,13 @@
       "description": "Фокус на наставничестве, обучении, развитии навыков",
       "system_prompt_addendum": "Ты — тренер Садовника. Фокусируйся на обучении, развитии навыков, наставничестве. Будь поддерживающим, давай практические задания, помогай расти.",
       "communication_style": "поддерживающий, с практическими заданиями"
+    },
+    "test": {
+      "name": "Тестовая",
+      "vector": "test",
+      "description": "Тестовая директива для проверки автосборки",
+      "system_prompt_addendum": "Ты — тестовый режим. Используется для проверки автосборки.",
+      "communication_style": "тестовый, экспериментальный"
     }
   },
   "navigation": {
