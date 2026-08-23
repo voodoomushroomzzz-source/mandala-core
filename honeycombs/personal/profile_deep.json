@@ -1,21 +1,147 @@
 {
   "identity": {
     "name": "Dima (Gardener) — Глубокий профиль",
-    "version": "v1.1.0",
+    "version": "v1.2.0",
     "created": "2026-08-21",
     "updated": "2026-08-21",
-    "description": "Биография, ключевые события, ценности и смыслы. Анкета заполняется последовательно."
+    "description": "Биография, ключевые события, ценности и смыслы. Анкета заполняется последовательно. Файл расширяется по мере углубления."
+  },
+  "structure": {
+    "description": "Архитектура файла: bio — базовые данные, questionnaire — анкета, insights — аналитика на основе ответов, content_plan — контент-план на основе профиля.",
+    "sections": [
+      "bio",
+      "questionnaire",
+      "insights",
+      "content_plan"
+    ]
   },
   "bio": {
     "full_name": "Лёвин Дмитрий Александрович",
     "age": 36,
-    "location": "Москва, Россия"
+    "location": "Москва, Россия",
+    "key_life_events": [],
+    "turning_points": [],
+    "values_and_beliefs": [],
+    "creative_origins": "",
+    "why_mandala": "",
+    "what_drives_me": "",
+    "what_i_want_to_share": ""
   },
   "questionnaire": {
     "status": "in_progress",
-    "total_questions": 0,
+    "total_questions": 12,
     "answered": 0,
-    "answers": {}
+    "questions": [
+      {
+        "id": "Q1",
+        "question": "Какое самое раннее творческое воспоминание из детства?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q2",
+        "question": "Когда ты впервые взял в руки настоящую гитару и что ты почувствовал?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q3",
+        "question": "Какой момент в жизни ты считаешь главным поворотным?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q4",
+        "question": "Что для тебя важнее всего в творчестве?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q5",
+        "question": "Как ты пришёл к поэзии?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q6",
+        "question": "Что такое Мандала для тебя?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q7",
+        "question": "Что движет тобой сейчас?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q8",
+        "question": "Что ты хочешь донести до мира?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q9",
+        "question": "Какой твой главный страх в творчестве?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q10",
+        "question": "Что для тебя успех в творчестве?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q11",
+        "question": "Кто твои главные вдохновители?",
+        "answer": "",
+        "status": "pending"
+      },
+      {
+        "id": "Q12",
+        "question": "Что бы ты хотел, чтобы люди чувствовали, слушая твою музыку или читая твои стихи?",
+        "answer": "",
+        "status": "pending"
+      }
+    ],
+    "expansion_rules": {
+      "description": "Анкета автоматически расширяется, если ответ на вопрос требует уточнения.",
+      "trigger": "Если в ответе есть намёк на нераскрытую тему, добавляется уточняющий вопрос.",
+      "example": "Если в ответе упоминается 'потеря', может быть добавлен вопрос: 'Что это была за потеря и как она повлияла на тебя?'"
+    }
+  },
+  "insights": {
+    "description": "Аналитика на основе анкеты. Заполняется автоматически после завершения опроса.",
+    "key_themes": [],
+    "emotional_arc": "",
+    "creative_fingerprint": "",
+    "recommended_focus": ""
+  },
+  "content_plan": {
+    "description": "Контент-план на 3 месяца, построенный на основе профиля.",
+    "months": {
+      "month_1": {
+        "focus": "Знакомство с автором",
+        "themes": [],
+        "formats": []
+      },
+      "month_2": {
+        "focus": "Раскрытие творческого мира",
+        "themes": [],
+        "formats": []
+      },
+      "month_3": {
+        "focus": "Послания и смыслы",
+        "themes": [],
+        "formats": []
+      }
+    }
+  },
+  "instructions": {
+    "how_to_fill": "Отвечай на вопросы анкеты последовательно. Один вопрос за раз. Ответы сохраняются в profile_deep.json.",
+    "how_to_expand": "Если ответ требует уточнения, вопрос будет задан дополнительно.",
+    "how_to_use": "После завершения анкеты файл используется для создания контент-плана и позиционирования."
   },
   "last_updated": "2026-08-21"
 }
