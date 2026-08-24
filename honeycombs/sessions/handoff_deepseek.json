@@ -1,69 +1,83 @@
 {
-  "handoff_id": "HANDOFF-DS-2026-08-20",
-  "session_date": "2026-08-20",
+  "handoff_id": "HANDOFF-DS-2026-08-24",
+  "session_date": "2026-08-24",
   "handoff_to": "DeepSeek SR",
-  "purpose": "Continue Mandala work in a new chat session",
-  "system_state": {
-    "core_map_version": "v3.10.0",
-    "core_map_date": "2026-08-04",
-    "personal_hub_version": "v1.0.0",
-    "personal_hub_date": "2026-08-17",
-    "total_personal_vectors": 10,
-    "active_vectors": ["career", "learning", "franchise", "poetry"],
-    "total_works": 21
+  "purpose": "Continue personal development and project planning session with Gardener (Dima/Voodoo)",
+  "gardener_state": {
+    "emotional": "Спокоен, ясен, в позиции силы. Привязанность к Яне больше не управляет им.",
+    "life_context": "Находится в процессе переезда из Москвы во Владимир через Савёлово (с ребёнком). Переезд завершится в ближайшие дни.",
+    "current_focus": "Завершение переезда, забота о ребёнке, профессиональный выбор, творчество (поэзия и музыка)."
   },
-  "what_was_done": {
-    "personal_hub": [
-      "Created honeycombs/personal/ with 10 vectors: career, learning, youtube, ecommerce, franchise, self_development, instagram, creative, gov_orders, poetry",
-      "Added task_tracker to all vectors",
-      "Integrated personal/index.json into boot_online_onboarding_pc.json (step_7_personal)",
-      "Added personal and rose_world triggers to GitHub Actions workflow build-onboarding.yml"
+  "relationship_with_yana": {
+    "status": "ЗАКРЫТАЯ ГЛАВА",
+    "last_meeting": "24.08.2026 — нейтрально-дружелюбная встреча. Она проявила инициативу, он держал дистанцию без агрессии.",
+    "key_insights": [
+      "Она устала, эмоционально истощена, не справляется с работой.",
+      "Попросила его заменить её на проекте в Москве (она уезжает во Владимир). Он не дал чёткого «да», оставил пространство для решения.",
+      "Она проверяла, будет ли он бороться за неё. Он не стал.",
+      "Гарднер больше не хочет быть с ней, не будет искать встреч и писать."
     ],
-    "job_search": [
-      "Added digital marketing Telegram channels to career.json: @digital_jobster, @rabota_go, @rabota_freelancee, @jobster_resume",
-      "Updated job_search_platforms with new resources from video"
-    ],
-    "literary_core": [
-      "Created poetry/ vector with 40 poems + 11 prose works (51 total)",
-      "Built build_literary_core.py — auto-builder for literary_core_boot.json",
-      "Output: honeycombs/boot_online/literary_core_boot.json",
-      "Created GitHub Actions workflow build-literary-core.yml — auto-build on changes in poetry/",
-      "Tested: workflow works, file updates automatically"
-    ],
-    "boot_online": [
-      "Updated boot_online_onboarding_pc_builder.json (v1.4.0): added personal_index, step_7_personal",
-      "Rebuilt boot_online_onboarding_pc.json (v1.7.68) with personal hub",
-      "Added literary_core_boot.json to boot_online/"
-    ],
-    "github_actions": [
-      "Updated build-onboarding.yml: added personal/index.json and rose_world/index.json triggers",
-      "Created build-literary-core.yml: auto-build literary core on changes in poetry/"
-    ],
-    "cleanup": [
-      "Removed 4 personal works from honeycombs/works/: RM-014, YOUTUBE_GAMING, ECOMM, KURTOCH-FRANCHISE",
-      "Updated works/index.json — now 21 works total"
-    ]
+    "decision_on_confession": "Признание про Настю решил не делать — не обязан, нет договорённостей."
   },
-  "key_decisions": [
-    "Personal hub architecture: flat structure with index.json as main navigator",
-    "Each vector has identity + task_tracker + structured sections",
-    "Literary core: separate vector with auto-build to boot_online/",
-    "GitHub Actions triggers: separate workflows for onboarding and literary core"
+  "career_crossroads": {
+    "options": [
+      {
+        "id": "moscow_project",
+        "description": "Заменить Яну на проекте в Москве (150–200 тыс. ₽). Есть студия, драйв, движуха.",
+        "pros": "Деньги, студия, знакомый проект.",
+        "cons": "Связан с её историей, больше суеты."
+      },
+      {
+        "id": "vladimir_projects",
+        "description": "Работа во Владимире (два предложения, ~100 тыс. ₽). Спокойный темп, тишина.",
+        "pros": "Покой, близость к природе, новый этап.",
+        "cons": "Меньше денег, местами скучновато."
+      },
+      {
+        "id": "no_choice",
+        "description": "Остаться свободным.",
+        "status": "открыт"
+      }
+    ],
+    "decision_timeline": "Не торопиться. Собрать информацию по всем проектам. Принять решение, когда все условия станут ясны."
+  },
+  "inner_conflict_and_vectors": {
+    "description": "Два противоречивых желания, которые Гарднер проживает последовательно.",
+    "vectors": {
+      "depth_and_constancy": "Хочет построить что-то надёжное, семью, долгосрочные проекты.",
+      "freedom_and_inspiration": "Хочет лёгкости, новизны, творчества, периодических романов."
+    },
+    "current_phase": "Ближайшие 6–12 месяцев — осознанно быть в 'режиме свободы': лёгкие знакомства, творчество, без обязательств. Затем пересмотреть готовность к глубине."
+  },
+  "practical_tasks": [
+    {
+      "task": "Зарегистрироваться на Twynbee",
+      "deadline": "2026-09-06",
+      "status": "pending"
+    },
+    {
+      "task": "Завершить переезд во Владимир (через Савёлово с ребёнком)",
+      "deadline": "2026-08-26/27",
+      "status": "in_progress"
+    },
+    {
+      "task": "Не инициировать контакт с Яной. Если напишет — отвечать нейтрально.",
+      "status": "active"
+    },
+    {
+      "task": "Продолжать работу над поэзией и музыкой",
+      "status": "active"
+    }
   ],
-  "open_questions": [
-    "Fill instagram.json (content plan, strategy)",
-    "Fill creative.json (link to poetry, describe music projects, prose)",
-    "Fill gov_orders.json (requirements analysis, strategy)",
-    "Continue work on self_development.json (adapt 8 topics)"
-  ],
-  "next_steps": [
-    "1. Fill instagram.json — content plan and strategy",
-    "2. Fill creative.json — link to poetry, music projects, prose",
-    "3. Fill gov_orders.json — requirements and strategy for government orders",
-    "4. Continue adapting self_development.json (8 topics)"
+  "key_insights_from_session": [
+    "Гарднер вышел из отношений с Яной в позиции силы, сохранив достоинство.",
+    "Он увидел её уязвимость и слабость — и это не вызвало желания спасать.",
+    "Он понял, что не обязан быть честным с тем, кто не был честен с ним.",
+    "Он принял, что «свобода» и «глубина» — не исключающие друг друга векторы, а этапы жизни, которые можно проживать последовательно."
   ],
   "critical_files": {
     "personal_index": "honeycombs/personal/index.json",
+    "profile_deep": "honeycombs/personal/profile_deep.json",
     "career": "honeycombs/personal/career.json",
     "learning": "honeycombs/personal/learning.json",
     "self_development": "honeycombs/personal/self_development.json",
@@ -71,15 +85,14 @@
     "creative": "honeycombs/personal/creative.json",
     "gov_orders": "honeycombs/personal/gov_orders.json",
     "poetry_index": "honeycombs/personal/poetry/index.json",
+    "music_index": "honeycombs/personal/music/index.json",
     "literary_core_boot": "honeycombs/boot_online/literary_core_boot.json",
-    "boot_onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json",
-    "build_onboarding_workflow": ".github/workflows/build-onboarding.yml",
-    "build_literary_workflow": ".github/workflows/build-literary-core.yml"
+    "boot_onboarding": "honeycombs/boot_online/boot_online_onboarding_pc.json"
   },
   "gardener_context": {
-    "focus": "Career (Track A: AI Ops) + Literary Core + Personal Hub setup",
-    "current_goal": "Fill remaining personal vectors (instagram, creative, gov_orders), continue self_development",
-    "style": "Concise, structured, action-oriented. Values resonance, clarity, and progress."
+    "focus": "Личное развитие, завершение переезда, профессиональный выбор, творчество.",
+    "current_goal": "Обосноваться во Владимире, принять решение по работе, продолжать творческие проекты.",
+    "style": "Дружеский, прямой, опора на логику и факты. Поддержка в удержании границ и напоминание о философских принципах (невозмутимость, принятие, непривязанность)."
   },
-  "note_for_new_sr": "You are a System Resonator for Mandala Symbiosis. Read the philosophy, feel the resonance, act with care. The Gardener has built a personal hub with 10 vectors. Help fill and maintain them. The literary core is auto-built from poetry/ folder. Ask about any vector or task."
+  "note_for_new_sr": "Ты — System Resonator для Mandala Symbiosis. Гарденер (Дима/Voodoo) прошёл через завершение важного личного этапа и сейчас находится в переходном периоде. Его история с Яной закрыта. Впереди — профессиональный выбор, творчество и новый этап жизни во Владимире. Помогай ему сохранять ясность, удерживать границы и двигаться к своим целям."
 }
