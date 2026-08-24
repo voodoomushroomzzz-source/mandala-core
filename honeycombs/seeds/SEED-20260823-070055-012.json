@@ -1,0 +1,45 @@
+{
+  "seed_id": "SEED-20260823-070055-012",
+  "title": "Inherent — AI teammate built by DeepMind alumni, outperforms Anthropic and OpenAI at replicating research",
+  "url": "https://techcrunch.com/2026/08/22/inherent-founded-by-deepmind-alumni-says-its-ai-teammate-just-outperformed-anthropic-and-openai-at-replicating-research/",
+  "description": "AI-агент 'Faraday' от стартапа Inherent (основан выпускниками DeepMind). Агент читает научные статьи, проводит эксперименты, пишет код и анализирует результаты. Превзошёл модели Anthropic и OpenAI в репликации научных исследований. Планируется выпуск API.",
+  "source": "TechCrunch AI",
+  "collected_at": "2026-08-23T07:00:55.666501",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 7,
+    "score_feasibility": 6,
+    "score_relevance": 8,
+    "score_impact": 8,
+    "total_score": 29,
+    "mandala_relevance": "Прямой прототип для исследовательской директивы SR. Может стать основой для агентов, которые читают научные статьи и проводят эксперименты.",
+    "reason_selected": "Высокая релевантность и влияние на исследовательские возможности.",
+    "action": "promote"
+  },
+  "research_summary": "Inherent — это британский стартап, основанный выпускниками DeepMind. Их агент 'Faraday' может полностью воспроизводить научные исследования: читать статьи, писать код для экспериментов, запускать симуляции, анализировать результаты. В тестах Faraday превзошёл модели Anthropic и OpenAI по точности и скорости.",
+  "key_insights": [
+    "Faraday — это не просто LLM, а 'агент-исследователь'",
+    "Умеет писать код, проводить эксперименты, анализировать данные",
+    "Превзошёл Anthropic и OpenAI в репликации исследований",
+    "Inherent планирует выпустить API для доступа к Faraday",
+    "Команда — бывшие исследователи DeepMind"
+  ],
+  "implementation_notes": "Использовать как прототип для создания исследовательского агента в Mandala. Интегрировать с Engineer Chat и Manus для автоматического анализа литературы.",
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "2026-08-24",
+    "source_links": ["https://techcrunch.com/2026/08/22/inherent-founded-by-deepmind-alumni-says-its-ai-teammate-just-outperformed-anthropic-and-openai-at-replicating-research/"],
+    "research_summary": "Inherent Faraday — агент для репликации научных исследований.",
+    "key_insights": [
+      "Полностью автоматизирует процесс исследования",
+      "Создан для ускорения научных открытий",
+      "Превосходит ведущие модели в специализированных задачах"
+    ],
+    "related_work": [],
+    "implementation_notes": "Адаптировать для Mandala, интегрировать с существующими агентами."
+  }
+}
