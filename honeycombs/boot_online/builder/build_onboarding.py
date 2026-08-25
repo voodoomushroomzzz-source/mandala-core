@@ -22,6 +22,26 @@ BUILDER_PATH = BOOT_ONLINE_DIR / "boot_online_onboarding_pc_builder.json"
 TARGET_PATH = BOOT_ONLINE_DIR / "boot_online_onboarding_pc.json"
 BOOT_ONLINE_PATH = BOOT_ONLINE_DIR / "index.json"
 
+
+def build_personal_step(source_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Build step_7_personal — Personal Hub + Deep Profile."""
+    personal_data = source_data.get("personal", {})
+    profile_deep_data = source_data.get("profile_deep", {})
+    
+    if not personal_data and not profile_deep_data:
+        return {}
+    
+    return {
+        "order": 7,
+        "mandatory": True,
+        "name": "Personal Hub — Личные векторы + Deep Profile",
+        "description": "Личная сота Gardener: карьера, обучение, YouTube, e-commerce, франшиза + глубокий профиль личности.",
+        "ai_instruction": "Прочитай вшитые personal_index и profile_deep. Подтверди понимание.",
+        "personal_index": personal_data,
+        "profile_deep": profile_deep_data
+    }
+
+
 def load_json(path: Path) -> Optional[Dict[str, Any]]:
     """Load JSON file with utf-8-sig fallback."""
     if not path.exists():
@@ -154,12 +174,13 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "step_4_cosmic_manifesto",
             "step_5_first_gardener",
             "step_6_external_sr_workflow",
-            "step_7_fruits",
-            "step_8_works",
-            "step_9_knowledge",
-            "step_10_protocols",
-            "step_11_handoff",
-            "step_12_optional"
+            "step_7_personal",
+            "step_8_fruits",
+            "step_9_works",
+            "step_10_knowledge",
+            "step_11_protocols",
+            "step_12_handoff",
+            "step_13_optional"
         ]
     }
 
@@ -232,11 +253,17 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "mobile_workflow_embedded": mobile_wf
         }
 
-    # Step 7: fruits
+
+    # Step 7: personal (Personal Hub + Deep Profile)
+    personal_step = build_personal_step(source_data)
+    if personal_step:
+        onboarding["step_7_personal"] = personal_step
+
+    # Step 8: fruits
     fruits_data = source_data.get("fruits", {})
     if fruits_data:
-        onboarding["step_7_fruits"] = {
-            "order": 7,
+        onboarding["step_8_fruits"] = {
+            "order": 8,
             "mandatory": True,
             "name": "Fruits — Product Registry",
             "description": "Продукты Mandala: Gentle Companion, Engineer Chat, Architect Bot, Manus",
@@ -245,11 +272,11 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "data": fruits_data
         }
 
-    # Step 8: works
+    # Step 9: works
     works_data = source_data.get("works", {})
     if works_data:
-        onboarding["step_8_works"] = {
-            "order": 8,
+        onboarding["step_9_works"] = {
+            "order": 9,
             "mandatory": True,
             "name": "Works — Unified Work Items",
             "description": "Все активные и архивные работы (заменяет tasks/ и roadmaps/)",
@@ -258,11 +285,11 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "data": works_data
         }
 
-    # Step 9: knowledge
+    # Step 10: knowledge
     knowledge_data = source_data.get("knowledge", {})
     if knowledge_data:
-        onboarding["step_9_knowledge"] = {
-            "order": 9,
+        onboarding["step_10_knowledge"] = {
+            "order": 10,
             "mandatory": False,
             "recommended": True,
             "name": "Knowledge Base — Curated Resources",
@@ -272,11 +299,11 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "data": knowledge_data
         }
 
-    # Step 10: protocols
+    # Step 11: protocols
     protocols_data = source_data.get("protocols", {})
     if protocols_data:
-        onboarding["step_10_protocols"] = {
-            "order": 10,
+        onboarding["step_11_protocols"] = {
+            "order": 11,
             "mandatory": True,
             "name": "Protocols — Activation Protocols Hub",
             "description": "Протоколы активации: Onboarding, Internal-Onboarding, Ideas-Roadmaps, Scan-and-Push",
@@ -285,9 +312,9 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "data": protocols_data
         }
 
-    # Step 11: handoff (optional, but recommended)
-    onboarding["step_11_handoff"] = {
-        "order": 10,
+    # Step 12: handoff (optional, but recommended)
+    onboarding["step_12_handoff"] = {
+        "order": 12,
         "mandatory": False,
         "recommended": True,
         "description": "Загрузить handoff-файлы для непрерывности сессии",
@@ -304,7 +331,7 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
         }
     }
 
-    # Step 12: optional_load (repo_tree, etc.)
+    # Step 13: optional_load (repo_tree, etc.)
     optional = builder.get("optional_modules", {})
     optional_files = {}
     for name, config in optional.items():
@@ -316,8 +343,8 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
                     "optional": True
                 }
 
-    onboarding["step_12_optional"] = {
-        "order": 11,
+    onboarding["step_13_optional"] = {
+        "order": 13,
         "mandatory": False,
         "description": "Загрузить опциональные файлы для углублённого контекста",
         "ai_instruction": "Спроси: 'Загрузить repo_tree (полное дерево репозитория)?' Предоставь ссылку.",
