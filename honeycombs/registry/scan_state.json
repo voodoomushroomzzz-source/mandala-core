@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-08-24T09:34:16.210991",
+  "last_scan": "2026-08-25T07:10:32.979934",
   "honeycomb_hashes": {
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
@@ -13,11 +13,11 @@
     "honeycombs/personal/poetry": "f8e7696f1af3d09ab314b8fee4e239e2",
     "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
     "honeycombs/seeds": "4dc2b1dadb015cf63137153125295668",
-    "honeycombs/seeds/inbox": "fbc8bcf75a50bca862b58ac929030541",
+    "honeycombs/seeds/inbox": "164b9764db42d355e343ce47ad1f4f1c",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
     "honeycombs/knowledge": "29e22087c24941e87b341b5ef7fda114",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
-    "honeycombs/directives": "4ddad2a4dadf6b0c0bc94e116a107dfd",
+    "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
     "honeycombs/works": "55c3fe245c212dedfd2d1866b55d9a04",
     "honeycombs/fruits": "f2c4435c5787c930ba3c75e7e8a8be1d",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
@@ -35,15 +35,15 @@
     "invalid_v2": 7,
     "errors": 0,
     "warnings": 7,
-    "total_files": 356,
-    "total_size_kb": 1991.65
+    "total_files": 370,
+    "total_size_kb": 2018.27
   },
   "seeds_health": {
     "root_count": 21,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 22,
-    "inbox_total_files": 23,
+    "inbox_count": 29,
+    "inbox_total_files": 30,
     "inbox_threshold": 50,
     "inbox_status": "ok",
     "warnings": [
@@ -52,7 +52,7 @@
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-08-24T09:34:16.210997",
+    "last_check": "2026-08-25T07:10:32.979944",
     "errors_count": 27,
     "warnings_count": 9,
     "expired_tasks": 1,
@@ -62,7 +62,7 @@
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 9
+        "days_overdue": 10
       }
     ],
     "upcoming_deadlines_list": [],
