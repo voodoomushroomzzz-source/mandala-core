@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 27,
-    "total_size_kb": 2018.27,
+    "total_size_kb": 2027.43,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 27,
-    "total_size_kb": 2018.27,
+    "total_size_kb": 2027.43,
     "last_updated": "2026-08-25",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -82,9 +82,6 @@
       },
       "ahimsa_filter": {
         "errors": [
-          "personal: missing identity.module_id",
-          "personal: missing identity.layer",
-          "personal: missing identity.type",
           "music: missing identity.module_id",
           "music: missing identity.layer",
           "music: missing identity.type",
@@ -105,7 +102,6 @@
           "poetry: missing identity.type"
         ],
         "warnings": [
-          "personal: missing meta section",
           "music: missing meta section",
           "mc_voodookid: missing meta section",
           "x_deaddy_x: missing meta section",
@@ -116,8 +112,8 @@
           "poems: missing index.json"
         ],
         "noise_files": [],
-        "errors_count": 21,
-        "warnings_count": 9,
+        "errors_count": 18,
+        "warnings_count": 8,
         "noise_count": 0
       },
       "deadline_sentinel": {
