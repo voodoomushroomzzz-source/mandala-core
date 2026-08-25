@@ -17,6 +17,7 @@ on:
       - 'honeycombs/works/index.json'
       - 'honeycombs/knowledge/index.json'
       - 'honeycombs/personal/index.json'
+      - 'honeycombs/personal/profile_deep.json'
       - 'honeycombs/rose_world/index.json'
       - 'honeycombs/directives/index.json'
 

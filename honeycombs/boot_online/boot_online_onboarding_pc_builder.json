@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-BUILDER-001",
     "name": "Boot Online Onboarding PC — Auto-Build Master",
-    "version": "v1.5.0",
+    "version": "v1.6.0",
     "created": "2026-07-07",
-    "updated": "2026-08-23",
+    "updated": "2026-08-25",
     "description": "Master file that defines how boot_online_onboarding_pc.json is auto-built from source modules.",
     "status": "active"
   },
@@ -178,6 +178,11 @@
           "action": "Прочитать directives_index, подтвердить список директив и их назначение",
           "details": "SR читает директивы и сообщает Gardener'у о доступных режимах"
         },
+        {
+          "step": "step_6_profile_deep",
+          "action": "Прочитать profile_deep.json — глубокий профиль Gardener",
+          "details": "SR анализирует личность, ценности, архетипы для лучшего взаимодействия."
+        },
         "step_7_fruits — прочитать fruits_index, подтвердить список продуктов",
         "step_7_personal — прочитать personal_index, подтвердить список личных векторов",
         "step_8_works — прочитать works_index, подтвердить активные работы",
@@ -233,6 +238,11 @@
       "description": "Directives — Режимы работы SR",
       "source": "honeycombs/directives/index.json",
       "note": "Auto-embedded from source. Contains 7 directives: architect, personal, creative, researcher, strategist, gardener, coach."
+    },
+    "profile_deep": {
+      "description": "Глубокий профиль Gardener — ядро личности",
+      "source": "honeycombs/personal/profile_deep.json",
+      "note": "Auto-embedded from source. Contains biography, values, synthesis, archetypes."
     }
   },
   "source_modules": {
@@ -274,6 +284,9 @@
     },
     "directives": {
       "path": "honeycombs/directives/index.json"
+    },
+    "profile_deep": {
+      "path": "honeycombs/personal/profile_deep.json"
     }
   },
   "optional_modules": {
