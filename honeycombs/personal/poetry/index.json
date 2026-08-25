@@ -10,10 +10,10 @@
     "name": "Stihi.ru",
     "author": "voodookida",
     "url": "https://stihi.ru/avtor/voodookida",
-    "total_poems": 40,
+    "total_poems": 41,
     "collections": {
       "звездная пыль": 8,
-      "фак т": 8,
+      "фак т": 9,
       "психософия": 10,
       "мнмл": 6,
       "железобетон": 4,
@@ -37,7 +37,7 @@
       "2022": 1,
       "2024": 1,
       "2025": 2,
-      "2026": 4
+      "2026": 5
     }
   },
   "rules": {
@@ -371,9 +371,15 @@
           "title": "Завтра никогда не наступит, это уж точно...",
           "file": "poems/Zavtra_nikogda_ne_nastupit_eto_uzh_tochno.json",
           "status": "done"
+        },
+        {
+          "id": "Teper_ya_vizhu_sny_v_kotoryh_tebya_net",
+          "title": "Теперь я вижу сны в которых тебя нет...",
+          "file": "poems/Teper_ya_vizhu_sny_v_kotoryh_tebya_net.json",
+          "status": "done"
         }
       ],
-      "progress": 40
+      "progress": 41
     },
     "track_b": {
       "name": "Трек B: Систематизация и издание",
@@ -437,7 +443,7 @@
   "related_works": [
     "W-T-20260818-POETRY__poetry_collection"
   ],
-  "last_updated": "2026-08-21",
+  "last_updated": "2026-08-25",
   "collection_summaries": {
     "звездная пыль": {
       "description": "Лирический дневник отношений длиной в 11 лет (2015–2026). 8 стихотворений выстроены в последовательную драматургию: от ожидания и благодарности к принятию разлуки и творческому пересозданию мира. Завершается персонификацией жизни как возлюбленной.",
@@ -492,7 +498,7 @@
     }
   },
   "overall_summary": {
-    "total_poems": 40,
+    "total_poems": 41,
     "collections": 6,
     "years_span": "2015–2026",
     "evolution": {
