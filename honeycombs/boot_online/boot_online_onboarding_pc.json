@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.80",
+    "version": "v1.7.81",
     "created": "2026-05-11",
     "updated": "2026-08-25",
     "layer": 1,
@@ -2289,6 +2289,11 @@
         "action": "Прочитать directives_index, подтвердить список директив и их назначение",
         "details": "SR читает директивы и сообщает Gardener'у о доступных режимах"
       },
+      {
+        "step": "step_6_profile_deep",
+        "action": "Прочитать profile_deep.json — глубокий профиль Gardener",
+        "details": "SR анализирует личность, ценности, архетипы для лучшего взаимодействия."
+      },
       "step_7_fruits — прочитать fruits_index, подтвердить список продуктов",
       "step_7_personal — прочитать personal_index, подтвердить список личных векторов",
       "step_8_works — прочитать works_index, подтвердить активные работы",
@@ -2328,6 +2333,11 @@
     "description": "Directives — Режимы работы SR",
     "source": "honeycombs/directives/index.json",
     "note": "Auto-embedded from source. Contains 7 directives: architect, personal, creative, researcher, strategist, gardener, coach."
+  },
+  "profile_deep": {
+    "description": "Глубокий профиль Gardener — ядро личности",
+    "source": "honeycombs/personal/profile_deep.json",
+    "note": "Auto-embedded from source. Contains biography, values, synthesis, archetypes."
   },
   "self_learning_system": {
     "desc": "Capture errors/patterns into instruction files. SR proposes → Gardener approves → patch.",
