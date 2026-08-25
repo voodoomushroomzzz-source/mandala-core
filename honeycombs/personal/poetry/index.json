@@ -443,7 +443,7 @@
   "related_works": [
     "W-T-20260818-POETRY__poetry_collection"
   ],
-  "last_updated": "2026-08-25",
+  "last_updated": "2026-08-26",
   "collection_summaries": {
     "звездная пыль": {
       "description": "Лирический дневник отношений длиной в 11 лет (2015–2026). 8 стихотворений выстроены в последовательную драматургию: от ожидания и благодарности к принятию разлуки и творческому пересозданию мира. Завершается персонификацией жизни как возлюбленной.",
@@ -748,20 +748,21 @@
         {
           "id": "BUILD-001",
           "title": "Создать скрипт build_literary_core.py",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "BUILD-002",
           "title": "Настроить обновление literary_core.json при изменении файлов",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": "BUILD-003",
           "title": "Добавить литературный слепок в индекс",
-          "status": "pending"
+          "status": "done"
         }
       ],
-      "progress": 0
+      "progress": 3,
+      "status": "done"
     },
     "track_e": {
       "name": "Редакция и подготовка к изданию",
