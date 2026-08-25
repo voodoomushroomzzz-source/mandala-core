@@ -4437,3 +4437,50 @@
 [2026-08-25 07:00:56] [INFO]   Total duplicates: 5
 [2026-08-25 07:00:56] [INFO]   Total removed (old): 0
 [2026-08-25 07:00:56] [INFO] ============================================================
+[2026-08-25 09:34:12] [INFO] ============================================================
+[2026-08-25 09:34:12] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-25 09:34:12] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-25 09:34:12] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-25 09:34:13] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-25 09:34:13] [INFO]   → Filtered to 0 relevant items
+[2026-08-25 09:34:13] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-25 09:34:13] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-25 09:34:13] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-25 09:34:13] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-25 09:34:13] [INFO]   → Filtered to 0 relevant items
+[2026-08-25 09:34:13] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-25 09:34:13] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-25 09:34:13] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-25 09:34:13] [INFO]   → Found 15 raw items, 9 recent
+[2026-08-25 09:34:13] [INFO]   → Filtered to 3 relevant items
+[2026-08-25 09:34:13] [INFO]   ⏭️ Duplicate: iCloud+ Hide My Email addresses will remain on icl...
+[2026-08-25 09:34:13] [INFO]   ⏭️ Duplicate: MS Paint and Photos inivisibly watermark even loca...
+[2026-08-25 09:34:13] [INFO]   ⏭️ Duplicate: Bookshelf – Self-hosted eBook library that runs on...
+[2026-08-25 09:34:13] [INFO]   📊 Hacker News: saved 0, duplicates 3
+[2026-08-25 09:34:13] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-25 09:34:13] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-25 09:34:13] [ERROR]   ❌ API error: 403 Client Error: rate limit exceeded for url: https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15
+[2026-08-25 09:34:13] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 0
+[2026-08-25 09:34:13] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-25 09:34:13] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-25 09:34:13] [INFO]   → Found 15 raw items, 6 recent
+[2026-08-25 09:34:13] [INFO]   → Filtered to 3 relevant items
+[2026-08-25 09:34:13] [INFO]   ⏭️ Duplicate: Instinct’s powerful AI assistant is raising privac...
+[2026-08-25 09:34:13] [INFO]   ⏭️ Duplicate: Valor, Point72 back General Intuition at $6B valua...
+[2026-08-25 09:34:13] [INFO]   ⏭️ Duplicate: OpenAI is building AI agents for everything. Will ...
+[2026-08-25 09:34:13] [INFO]   📊 TechCrunch AI: saved 0, duplicates 3
+[2026-08-25 09:34:13] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-25)...
+[2026-08-25 09:34:13] [INFO]   ✅ No old seeds to remove
+[2026-08-25 09:34:13] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-25
+[2026-08-25 09:34:13] [INFO] 
+============================================================
+[2026-08-25 09:34:13] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-25 09:34:13] [INFO]   Total saved: 0
+[2026-08-25 09:34:13] [INFO]   Total duplicates: 6
+[2026-08-25 09:34:13] [INFO]   Total removed (old): 0
+[2026-08-25 09:34:13] [INFO] ============================================================
