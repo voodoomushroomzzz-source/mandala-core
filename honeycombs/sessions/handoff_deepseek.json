@@ -1,6 +1,6 @@
 {
   "handoff_id": "HANDOFF-DEEPSEEK-2026-08-25-LITERARY",
-  "version": "v1.0.0",
+  "version": "v1.1.0",
   "created": "2026-08-25",
   "updated": "2026-08-25",
   "purpose": "Бесшовный переход в новый чат DeepSeek для продолжения работы над литературным вектором Mandala Symbiosis.",
@@ -12,19 +12,25 @@
       "literary_index": {
         "path": "honeycombs/personal/poetry/index.json",
         "version": "v1.1.1",
-        "link": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/poetry/index.json",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/poetry/index.json",
         "description": "Единый индекс всего литературного наследия (правила, треки, заключения, отчёты)."
       },
       "literary_core_boot": {
         "path": "honeycombs/boot_online/literary_core_boot.json",
-        "link": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/boot_online/literary_core_boot.json",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/literary_core_boot.json",
         "description": "Собранный слепок всей литературной ветки (стихи + проза + индекс) для загрузки в любой External SR."
       },
       "profile_deep": {
         "path": "honeycombs/personal/profile_deep.json",
         "version": "v2.2.0",
-        "link": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/profile_deep.json",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
         "description": "Ядро личности Gardener (архетипы, ценности, текущее состояние)."
+      },
+      "handoff_this": {
+        "path": "honeycombs/sessions/handoff_deepseek.json",
+        "version": "v1.1.0",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_deepseek.json",
+        "description": "Текущий handoff с полной документацией сессии."
       }
     },
     "tracks_status": {
@@ -64,9 +70,9 @@
   },
   "startup_instructions": [
     "1. Прочитай этот handoff полностью.",
-    "2. Загрузи literary_core_boot.json — это собранный слепок всей литературы, он даст полный контекст.",
-    "3. Или загрузи index.json для обзора структуры и треков.",
-    "4. Для понимания личности Gardener — загрузи profile_deep.json.",
+    "2. Загрузи и прочитай profile_deep.json — для понимания личности Gardener.",
+    "3. Загрузи и прочитай literary_core_boot.json — это собранный слепок всей литературы, он даст полный контекст.",
+    "4. Или загрузи index.json для обзора структуры и треков.",
     "5. После прочтения подтверди Gardener'у, что ты готов к работе, и запроси необходимые ссылки для старта."
   ],
   "what_has_been_done": {
@@ -95,10 +101,11 @@
     "description": "Для полного погружения загрузи literary_core_boot.json.",
     "handoff_message": "Привет! Мы с Gardener (Voodoo) завершили большой этап по литературе в Mandala. Вся информация — по ссылкам в этом handoff. Прочитай его, войди в контекст, затем запроси нужные файлы. Готов к продолжению?"
   },
-  "links_to_request": {
-    "literary_index": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/poetry/index.json",
-    "literary_core": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/boot_online/literary_core_boot.json",
-    "profile_deep": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/profile_deep.json"
-  },
-  "last_action": "Handoff создан 25.08.2026. Готов к использованию в новом чате."
+  "links_to_request": [
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/poetry/index.json",
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/literary_core_boot.json",
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_deepseek.json"
+  ],
+  "last_action": "Handoff обновлён 25.08.2026. Готов к использованию в новом чате."
 }
