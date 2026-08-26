@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260826-070055-036",
+  "title": "Macro-Operator Generation and Predicate Selection for TAMP Operator Learning",
+  "url": "https://arxiv.org/abs/2608.23629",
+  "description": "arXiv:2608.23629v1 Announce Type: new \nAbstract: Creating symbolic operators by hand is one of the main bottlenecks in deploying Task and Motion Planning systems (TAMP). Recent works show that these operators can instead be learned directly from demonstration data. Existing methods, however, typically learn each action in isolation and cannot capture the recurring multi-step structure of manipulation tasks, so the search becomes intractable on long sequential tasks. A further inefficiency arises",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-08-26T07:00:55.752916",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
