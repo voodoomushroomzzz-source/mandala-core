@@ -1,11 +1,11 @@
 {
-  "date": "2026-08-25",
+  "date": "2026-08-26",
   "version": "7.39.23",
   "gardeners": {
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-08-25"
+      "synthesis_date": "2026-08-26"
     },
     "358793311": {
       "name": "358793311",
@@ -14,7 +14,7 @@
     },
     "6493359659": {
       "name": "6493359659",
-      "active": true,
+      "active": false,
       "synthesis_date": ""
     },
     "1485954655": {
@@ -33,5 +33,20 @@
       "synthesis_date": ""
     }
   },
-  "issues": []
+  "issues": [
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_achievement",
+      "count": 2,
+      "context": "повторный add_achievement"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_achievement",
+      "count": 2,
+      "context": "повторный add_achievement"
+    }
+  ]
 }
