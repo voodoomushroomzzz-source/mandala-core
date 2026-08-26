@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.84",
+    "version": "v1.7.85",
     "created": "2026-05-11",
-    "updated": "2026-08-25",
+    "updated": "2026-08-26",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1931,10 +1931,34 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-08-25",
+        "last_check": "2026-08-27",
         "notes": "v2.2.0: ядро личности без технических настроек."
       },
-      "last_updated": "2026-08-25"
+      "last_updated": "2026-08-27",
+      "recovery_tracking": {
+        "description": "Трекинг процесса завершения и формирования новых привычек",
+        "phase": "отвыкание от привычки проверять",
+        "start_date": "2026-08-26",
+        "habits": {
+          "checking_social_media": {
+            "description": "Снижение частоты проверки страницы Яны в Instagram и других соцсетях",
+            "status": "active",
+            "strategy": "Техника 'наблюдение без действия' и замена привычки",
+            "note": "Первые 2-3 недели желание будет возникать, важно не превращать его в действие"
+          }
+        },
+        "milestones": [
+          {
+            "date": "2026-08-26",
+            "event": "Начало трекинга. Переезд во Владимир начат."
+          },
+          {
+            "date": "2026-08-27",
+            "event": "Переезд во Владимир завершён (вечер). Новая глава."
+          }
+        ],
+        "last_updated": "2026-08-27"
+      }
     }
   },
   "step_8_fruits": {
