@@ -4658,3 +4658,46 @@
 [2026-08-27 07:00:58] [INFO]   Total duplicates: 5
 [2026-08-27 07:00:58] [INFO]   Total removed (old): 0
 [2026-08-27 07:00:58] [INFO] ============================================================
+[2026-08-27 19:26:32] [INFO] ============================================================
+[2026-08-27 19:26:32] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-08-27 19:26:32] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-08-27 19:26:32] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-08-27 19:26:32] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-27 19:26:32] [INFO]   → Filtered to 0 relevant items
+[2026-08-27 19:26:32] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-08-27 19:26:32] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-08-27 19:26:32] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-08-27 19:26:32] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-27 19:26:32] [INFO]   → Filtered to 0 relevant items
+[2026-08-27 19:26:32] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-08-27 19:26:32] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-08-27 19:26:32] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-08-27 19:26:32] [INFO]   → Found 15 raw items, 0 recent
+[2026-08-27 19:26:32] [INFO]   → Filtered to 0 relevant items
+[2026-08-27 19:26:32] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-08-27 19:26:32] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-08-27 19:26:32] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-08-27 19:26:32] [ERROR]   ❌ API error: 403 Client Error: rate limit exceeded for url: https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15
+[2026-08-27 19:26:32] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 0
+[2026-08-27 19:26:32] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-08-27 19:26:32] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-08-27 19:26:32] [INFO]   → Found 15 raw items, 4 recent
+[2026-08-27 19:26:32] [INFO]   → Filtered to 2 relevant items
+[2026-08-27 19:26:32] [INFO]   ⏭️ Duplicate: Google’s Gemini has a branding problem, and so doe...
+[2026-08-27 19:26:32] [INFO]   ⏭️ Duplicate: How do we explain OpenAI’s executive exodus?...
+[2026-08-27 19:26:32] [INFO]   📊 TechCrunch AI: saved 0, duplicates 2
+[2026-08-27 19:26:32] [INFO]   🗑️ Cleaning old seeds (date <= 2026-08-27)...
+[2026-08-27 19:26:32] [INFO]   ✅ No old seeds to remove
+[2026-08-27 19:26:32] [INFO]   📝 Updated inbox/index.json with last_processed=2026-08-27
+[2026-08-27 19:26:32] [INFO] 
+============================================================
+[2026-08-27 19:26:32] [INFO] ✅ Scout Agent v2.2 finished
+[2026-08-27 19:26:32] [INFO]   Total saved: 0
+[2026-08-27 19:26:32] [INFO]   Total duplicates: 2
+[2026-08-27 19:26:32] [INFO]   Total removed (old): 0
+[2026-08-27 19:26:32] [INFO] ============================================================
