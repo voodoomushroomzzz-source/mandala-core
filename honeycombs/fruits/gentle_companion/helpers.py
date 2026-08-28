@@ -12,15 +12,19 @@ Key items:
   Deep profile: _get_deep_profile, _save_deep_profile, _update_deep_profile
   Observations: _add_sr_observation, _detect_emotion, _update_sphere_history
   Reflection:   _get_session_reflection_hint, _add_growth_history_entry
-  Tracking: _track_interaction, _can_send_proactive, _mark_proactive_sent
-            _silence_phase, _time_matches, _last_interaction
+  Tracking: _track_interaction, _time_matches, _last_interaction
+  Silence escalation (PROACTIVE-MESSAGES-001, 2026-08-19): _days_silent_persistent,
+            _get_silence_tracking, _set_silence_tracking, _next_proactive_milestone
+            — replaces old _can_send_proactive/_mark_proactive_sent/_silence_phase/
+            _send_cleanup_warning. State persisted in profile.json.companion_settings.silence_tracking
+            (not in-memory) so it survives restarts/redeploys.
   Task/group utils: calculate_priority, _make_group_id
   Retroactive: _seed_sphere_history_from_achievements
   Also: _days_since_last_interaction, _recalc_resonance_from_achievements
         (moved here from store.py — they need _last_interaction)
 
 Global trackers (reset daily):
-  _last_interaction, _proactive_sent_today, _morning_sent, _birthday_sent
+  _last_interaction, _morning_sent, _birthday_sent
   _daily_stats, _daily_issues, _intent_tracker
 """
 
@@ -312,7 +316,6 @@ def _make_group_id(name: str, existing: list) -> str:
 
 # ─── Proactive / Silence trackers ─────────────────────────────────────────────
 
-_proactive_sent_today: dict = {}
 _morning_sent: dict = {}        # uid → date, separate from proactive
 _birthday_sent: dict = {}       # uid → date, separate flag for birthday
 _last_interaction: dict = {}
@@ -362,22 +365,6 @@ def _track_interaction(telegram_id: str, intent: str = "", msg_type: str = "mess
                 "context": f"повторный {intent}"
             })
 
-def _can_send_proactive(telegram_id: str) -> bool:
-    return _proactive_sent_today.get(str(telegram_id)) != _today()
-
-def _mark_proactive_sent(telegram_id: str) -> None:
-    _proactive_sent_today[str(telegram_id)] = _today()
-
-def _silence_phase(telegram_id: str) -> int:
-    last = _last_interaction.get(str(telegram_id))
-    if not last:
-        return 1
-    try:
-        days = (datetime.now() - datetime.strptime(last, "%Y-%m-%d")).days
-        return 1 if days <= 7 else (2 if days <= 30 else 3)
-    except Exception:
-        return 1
-
 def _time_matches(setting_time: str, timezone: str = "Europe/Moscow") -> bool:
     """Check if current time in gardener timezone matches setting_time (HH:MM). Window 5 min."""
     if not setting_time:
@@ -404,30 +391,59 @@ def _days_since_last_interaction(telegram_id: str) -> int:
     except Exception:
         return 999
 
-async def _send_cleanup_warning(uid: str, days_left: int) -> None:
-    """Send a cleanup warning message to the gardener."""
+def _days_silent_persistent(telegram_id: str) -> int:
+    """Days since last real activity, based on persisted workspace field (survives restart).
+    Unlike _days_since_last_interaction (in-memory _last_interaction), this reflects
+    the reset condition correctly across bot restarts/redeploys."""
+    uid = str(telegram_id)
+    ws = store_get_workspace(uid) or {}
+    last = ws.get("last_interaction_date", "")
+    if not last:
+        return 0
     try:
-        profile = store_get_profile(uid)
-        if not profile:
-            return
-        name = profile.get("name", "Садовник")
-        if days_left == 7:
-            text = (
-                f"🌱 <b>{name}</b>, я заметила, что тебя давно не было.\n\n"
-                f"Ты не заходил уже 23 дня. Если ты не появишься в ближайшую неделю, "
-                f"твой сад будет удалён.\n\n"
-                f"Просто напиши что-нибудь, чтобы я знала, что ты здесь 🌿"
-            )
-        elif days_left == 3:
-            text = (
-                f"🌿 <b>{name}</b>, осталось всего 3 дня.\n\n"
-                f"Твой сад будет удалён через 3 дня, если ты не напишешь.\n"
-                f"Если хочешь сохранить данные — просто ответь мне. Я рядом 🌸"
-            )
-        else:
-            return
+        from datetime import date as _d_silent
+        return (_d_silent.today() - _d_silent.fromisoformat(last)).days
+    except Exception:
+        return 0
 
-        await bot.send_message(int(uid), text, parse_mode="HTML")
-        logger.info(f"Cleanup warning ({days_left} days) sent to {uid}")
-    except Exception as e:
-        logger.error(f"Failed to send cleanup warning to {uid}: {e}")
+_PROACTIVE_MILESTONES = [1, 3, 7, 15, 30]
+
+def _get_silence_tracking(telegram_id: str) -> dict:
+    uid = str(telegram_id)
+    prof = store_get_profile(uid) or {}
+    return prof.get("companion_settings", {}).get("silence_tracking", {
+        "last_proactive_date": "",
+        "proactive_step": 0,
+    })
+
+def _set_silence_tracking(telegram_id: str, last_proactive_date: str, proactive_step: int) -> None:
+    uid = str(telegram_id)
+    prof = store_get_profile(uid) or {}
+    prof.setdefault("companion_settings", {})["silence_tracking"] = {
+        "last_proactive_date": last_proactive_date,
+        "proactive_step": proactive_step,
+    }
+    store_set_profile(uid, prof)
+
+def _next_proactive_milestone(days_silent: int, last_proactive_date: str) -> int | None:
+    """Which escalation milestone (if any) should fire today.
+    None if already sent today, or no milestone reached."""
+    if last_proactive_date == _today():
+        return None
+    for m in reversed(_PROACTIVE_MILESTONES):
+        if days_silent >= m:
+            return m
+    return None
+
+_MILESTONE_TEXTS = {
+    3: "Не видел тебя пару дней. Всё в порядке? Может, нужна помощь?",
+    7: "Уже неделя тишины. Надеюсь, у тебя всё хорошо. Напомню, я всегда рядом, если что.",
+    15: (
+        "Две недели без весточки. Если ты хочешь, чтобы я не писал — просто скажи. "
+        "Если нет — я буду здесь, когда вернёшься."
+    ),
+    30: (
+        "Это последнее сообщение. Если я не получу ответ, завтра аккаунт будет удалён. "
+        "Твои данные и задачи будут стёрты. Если ты хочешь сохранить их — просто ответь сейчас."
+    ),
+}

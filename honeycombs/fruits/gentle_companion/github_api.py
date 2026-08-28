@@ -241,6 +241,46 @@ async def _gardeners_put(path: str, content: Any, _retry: int = 0) -> bool:
         return False
 
 
+async def _gardeners_delete(path: str) -> bool:
+    """DELETE a file from mandala-gardeners repo. Returns True if deleted or already absent."""
+    if not GARDENERS_TOKEN:
+        return False
+    url = f"https://api.github.com/repos/{GARDENERS_REPO}/contents/{path}"
+    headers = {
+        "Authorization": f"token {GARDENERS_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "MandalaGardenBot/7.11.0"
+    }
+    session = await get_http_session()
+    cache_key = f"g:{path}"
+    sha = None
+    try:
+        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+            if resp.status == 200:
+                data = await resp.json()
+                sha = data.get("sha")
+            elif resp.status == 404:
+                _sha_cache.pop(cache_key, None)
+                return True  # already gone — nothing to delete
+    except Exception as e:
+        logger.error(f"Gardeners DELETE (fetch sha) error [{path}]: {e}")
+        return False
+    if not sha:
+        return False
+    payload = {"message": f"bot: delete {path}", "sha": sha, "branch": "main"}
+    try:
+        async with session.delete(url, headers=headers, json=payload,
+                                   timeout=aiohttp.ClientTimeout(total=10)) as resp:
+            if resp.status in (200, 204):
+                _sha_cache.pop(cache_key, None)
+                return True
+            logger.error(f"Gardeners DELETE {resp.status} [{path}]")
+            return False
+    except Exception as e:
+        logger.error(f"Gardeners DELETE error [{path}]: {e}")
+        return False
+
+
 # ─── Background sync ──────────────────────────────────────────────────────────
 
 

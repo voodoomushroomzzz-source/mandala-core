@@ -3,8 +3,10 @@
 handlers/system.py -- System, Onboarding, Profile, Schedulers, Voice. Phase: 6.
 """
 
-async def send_morning_greeting(telegram_id: str) -> None:
-    """Morning greeting v3: alive SR message, personalised via synthesis + history."""
+async def send_morning_greeting(telegram_id: str, silence_day: int | None = None) -> None:
+    """Morning greeting v3: alive SR message, personalised via synthesis + history.
+    silence_day: if set, this send is part of the silence-escalation schedule
+    (3/7/15 days of silence) — SR gets a note to soften the tone accordingly."""
     try:
         uid = str(telegram_id)
         gardener = store_get_profile(uid)
@@ -67,7 +69,12 @@ async def send_morning_greeting(telegram_id: str) -> None:
             except Exception:
                 pass
         missed_note = ""
-        if missed_days >= 2:
+        if silence_day:
+            missed_note = (
+                f"Садовник не писал {silence_day} дней. Это {silence_day}-й день тишины — "
+                f"тон мягкий, без давления, дай понять что ты рядом."
+            )
+        elif missed_days >= 2:
             missed_note = f"Садовник не писал {missed_days} дней. Соскучилась, но не дави."
         prompt = (
             "Ты — СР, дух сада. Сейчас утро садовника " + name + ".\n\n"
@@ -105,7 +112,6 @@ async def send_morning_greeting(telegram_id: str) -> None:
         ws["last_morning_date"] = today_str
         ws["_greeting_sent_date"] = today_str  # P-41: greeting flag
         store_set_workspace(uid, ws)
-        _mark_proactive_sent(uid)
         # Update last_notified_version
         last_ver = gardener.get("last_notified_version", "")
         if last_ver != BOT_VERSION:
@@ -113,28 +119,6 @@ async def send_morning_greeting(telegram_id: str) -> None:
             store_set_profile(uid, gardener)
     except Exception as e:
         logger.error(f"Morning greeting error: {e}")
-
-async def send_evening_checkin(telegram_id: str) -> None:
-    try:
-        phase = _silence_phase(telegram_id)
-        if phase == 3 or not _can_send_proactive(telegram_id):
-            return
-        gardener = store_get_profile(str(telegram_id))
-        if not gardener:
-            return
-        if not gardener.get("companion_settings", {}).get("proactive_mode", True):
-            return
-        name = gardener.get("name", "Садовник")
-        text = (
-            f"🌒 Добрый вечер, {name}.\n\n"
-            f"Что произошло сегодня? Если было что-то важное — "
-            f"зафиксируй достижение: /achievements\n\nДо завтра 🌿"
-        )
-        await bot.send_message(int(telegram_id), text, reply_markup=get_main_keyboard())
-        _mark_proactive_sent(telegram_id)
-    except Exception as e:
-        logger.error(f"Evening check-in error: {e}")
-
 
 async def run_reminder_scheduler() -> None:
     """Fire reminders every minute. Compares in gardener's local timezone."""
@@ -287,31 +271,33 @@ async def run_proactive_scheduler() -> None:
             if not g:
                 continue
             settings = g.get("companion_settings", {})
+            if not settings.get("proactive_mode", True):
+                continue
             tz_name = settings.get("timezone", "Europe/Moscow")
-            if settings.get("morning_message_time") and _time_matches(settings["morning_message_time"], tz_name):
-                await send_morning_greeting(uid)
+            if not settings.get("morning_message_time") or not _time_matches(settings["morning_message_time"], tz_name):
+                continue  # только утреннее окно по таймзоне садовника — дневных сообщений больше нет
+
+            days_silent = _days_silent_persistent(uid)
+
+            # День 31 тишины → автоудаление, без сообщения (reset_condition делает 31 однозначным:
+            # любой ответ садовника сбрасывает days_silent, так что 31 достижимо только реальным молчанием)
+            if days_silent >= 31:
+                await _delete_gardener(uid, notify_architect=True)
+                continue
+
+            tracking = _get_silence_tracking(uid)
+            milestone = _next_proactive_milestone(days_silent, tracking.get("last_proactive_date", ""))
+            if milestone is None:
+                continue  # не веха — молчим, дневных подталкиваний больше нет
+
+            if milestone == 1:
+                await send_morning_greeting(uid)  # обычное живое приветствие
+            elif milestone == 30:
+                await bot.send_message(int(uid), f"🌒 {_MILESTONE_TEXTS[30]}", reply_markup=get_main_keyboard())
             else:
-                # Catch-up: if morning brief was missed (e.g. Render sleep), send it now
-                try:
-                    from zoneinfo import ZoneInfo as _ZI_p
-                    from datetime import datetime as _dt_p
-                    tz_p = _ZI_p(tz_name)
-                    now_p = _dt_p.now(tz_p)
-                    today_p = now_p.strftime("%Y-%m-%d")
-                    morning_h, morning_m = map(int, settings["morning_message_time"].split(":"))
-                    morning_dt = now_p.replace(hour=morning_h, minute=morning_m, second=0, microsecond=0)
-                    ws = store_get_workspace(uid) or {}
-                    last_morning = ws.get("last_morning_date", "")
-                    if (last_morning != today_p and now_p >= morning_dt
-                            and _can_send_proactive(uid)
-                            and _morning_sent.get(uid) != today_p):
-                        await send_morning_greeting(uid)
-                    else:
-                        pass  # P-39: silence tone handled by _send_daytime_proactive
-                except Exception:
-                    pass  # P-39: silence tone handled by _send_daytime_proactive
-            # P-37: daytime proactive window (12-19, 3h silence)
-            await _send_daytime_proactive(uid)
+                await send_morning_greeting(uid, silence_day=milestone)  # 3/7/15 — с меткой дня тишины
+
+            _set_silence_tracking(uid, _today(), milestone)
         # Birthday check
         for uid2, us2 in list(_store.items()):
             if not isinstance(us2, dict) or not us2.get("ready"):
@@ -417,214 +403,6 @@ async def run_resonance_decay() -> None:
     except Exception as e:
         logger.error(f"Resonance decay error: {e}", exc_info=True)
 
-async def run_auto_cleanup() -> None:
-    """Automatic cleanup of inactive gardeners (30 days of silence)."""
-    try:
-        from datetime import datetime as _dtc
-        today_s = _dtc.now().strftime("%Y-%m-%d")
-
-        for uid, user_store in list(_store.items()):
-            if not isinstance(user_store, dict) or not user_store.get("ready"):
-                continue
-
-            profile = store_get_profile(uid)
-            if not profile:
-                continue
-
-            days_silent = _days_since_last_interaction(uid)
-            name = profile.get("name", "Садовник")
-
-            # Предупреждение за 7 дней (23 дня молчания)
-            if days_silent == 23:
-                await _send_cleanup_warning(uid, days_left=7)
-                logger.info(f"Cleanup warning (7 days) sent to {uid} ({name})")
-
-            # Предупреждение за 3 дня (27 дней молчания)
-            elif days_silent == 27:
-                await _send_cleanup_warning(uid, days_left=3)
-                logger.info(f"Cleanup warning (3 days) sent to {uid} ({name})")
-
-            # Финальное уведомление и удаление (30 дней молчания)
-            elif days_silent >= 30:
-                # 1. Отправляем финальное сообщение
-                final_msg = (
-                    f"🌑 <b>{name}</b>, сегодня твой сад будет удалён.\n\n"
-                    f"Ты не заходил 30 дней. Это необратимо.\n"
-                    f"Если хочешь остаться — напиши что-нибудь прямо сейчас. Я подожду до конца дня 🌸"
-                )
-                try:
-                    await bot.send_message(int(uid), final_msg, parse_mode="HTML")
-                except Exception as e:
-                    logger.error(f"Failed to send final cleanup message to {uid}: {e}")
-
-                # 2. Удаляем профиль
-                await _delete_gardener(uid, notify_architect=False)
-                logger.info(f"Gardener {uid} ({name}) auto-deleted after 30 days of silence")
-
-            # Обновляем дату проверки
-            ws = store_get_workspace(uid) or {}
-            ws["_cleanup_check_date"] = today_s
-            store_set_workspace(uid, ws)
-
-    except Exception as e:
-        logger.error(f"Auto cleanup error: {e}", exc_info=True)
-
-
-async def _send_daytime_proactive(telegram_id: str) -> bool:
-    """Send proactive message during daytime window (12-19, 3h silence).
-    Returns True if message was sent."""
-    try:
-        uid = str(telegram_id)
-        ws = store_get_workspace(uid) or {}
-        # Already sent today?
-        if ws.get("_day_proactive_sent_date") == _today():
-            return False
-        prof = store_get_profile(uid)
-        if not prof:
-            return False
-        name = prof.get("name", "Садовник")
-        tz_name = prof.get("companion_settings", {}).get("timezone", "Europe/Moscow")
-        from zoneinfo import ZoneInfo as _ZI_dp
-        from datetime import datetime as _dt_dp, timedelta as _td_dp
-        try:
-            tz = _ZI_dp(tz_name)
-        except Exception:
-            tz = _ZI_dp("Europe/Moscow")
-        now = _dt_dp.now(tz)
-        hour = now.hour
-        # Window: 14:00–21:00 (P-69)
-        if hour < 14 or hour >= 21:
-            return False
-        # Check 3 hours since last interaction
-        last_dt_str = ws.get("last_interaction_datetime", "")
-        if last_dt_str:
-            try:
-                last_dt = _dt_dp.fromisoformat(last_dt_str)
-                if last_dt.tzinfo is None:
-                    last_dt = last_dt.replace(tzinfo=tz)
-                if (now - last_dt) < _td_dp(hours=3):
-                    return False
-            except Exception:
-                pass  # if parse fails, proceed
-        # Build context for SR — P-38: умный фарш
-        # D-1: workspace first, profile fallback
-        ws_dp = store_get_workspace(uid) or {}
-        mem = ws_dp.get("deep_memory") or prof.get("deep_profile", {}).get("memory", {})
-        history = _get_history(uid)
-        recent = history[-20:] if history else []
-        history_text = "\n".join(
-            f"[{m.get('ts','')[:10]}] {'🧑' if m.get('role')=='user' else '🌿'}: {m.get('content','')}"
-            for m in recent
-        ) if recent else "диалога ещё нет"
-        core = mem.get("core", "")
-        interests = mem.get("interests", {})
-        confirmed = interests.get("confirmed", [])
-        snapshots = mem.get("snapshots", [])[-3:]
-        snapshots_text = "\n".join(f"- {s.get('date','')}: {s.get('text','')}" for s in snapshots) if snapshots else ""
-        _dp_dp = prof.get("deep_profile", {})  # P-55: fix NameError (was using global Dispatcher)
-        sr_obs = _dp_dp.get("sr_observations", [])[-5:]
-        obs_text = "\n".join(f"- {o.get('date','')}: {o.get('text','')}" for o in sr_obs) if sr_obs else ""
-        from datetime import date as _date_dp
-        three_months_ago = (_date_dp.today().replace(day=1) - _td_dp(days=1)).replace(day=1)
-        cutoff = three_months_ago.strftime("%Y-%m")
-        sphere_hist = [s for s in _dp_dp.get("sphere_history", []) if s.get("month", "") >= cutoff]
-        sphere_text = "\n".join(
-            f"- {s.get('month')}: {s.get('sphere')} {s.get('resonance_level', 0)}%"
-            for s in sphere_hist
-        ) if sphere_hist else ""
-        tasks = store_get_tasks(uid)
-        active = [t for t in tasks if t.get("status") != "completed"]
-        today_str = now.strftime("%Y-%m-%d")
-        hot = [t for t in active if t.get("deadline") and t["deadline"] <= today_str]
-        tomorrow_str = (now + _td_dp(days=1)).strftime("%Y-%m-%d")
-        tomorrow_tasks = [t for t in active if t.get("deadline") == tomorrow_str]
-        tasks_context = ""
-        if hot:
-            tasks_context += f"\nГорящие (сегодня/просрочены): {', '.join(t['title'] for t in hot[:3])}"
-        if tomorrow_tasks:
-            tasks_context += f"\nНа завтра: {', '.join(t['title'] for t in tomorrow_tasks[:3])}"
-        current_time = f"{now.strftime('%H:%M')}, {['пн','вт','ср','чт','пт','сб','вс'][now.weekday()]}"
-        # P-39: дни тишины
-        try:
-            last_interaction = ws.get("last_interaction_date", "")
-            if last_interaction:
-                from datetime import date as _date_si
-                days_silent = (_date_si.today() - _date_si.fromisoformat(last_interaction)).days
-            else:
-                days_silent = 0
-        except Exception:
-            days_silent = 0
-        if days_silent >= 7:
-            silence_note = f"Садовник молчит {days_silent} дней. Тон — очень тихий, одна фраза, без давления."
-        elif days_silent >= 3:
-            silence_note = f"Садовник молчит {days_silent} дней. Тон — мягкий, как друг который просто даёт знать что рядом."
-        else:
-            silence_note = ""
-        # P-62fix: передаём флаг приветствия в промпт
-        _dp_greeting_flag = ws.get("_greeting_sent_date", "") == _today(tz_name)
-        _dp_greeting_note = (
-            "[Утреннее приветствие сегодня уже было — НЕ начинай с приветствия. "
-            "Начни сразу с наблюдения, вопроса или контекста дня садовника.]"
-            if _dp_greeting_flag else ""
-        )
-        prompt_parts = [
-            f"Сейчас {current_time} (таймзона {tz_name}). Подходящий момент написать садовнику {name}.",
-            "",
-            f"ЖИВОЙ ПОРТРЕТ:\n{core if core else 'формируется'}",
-        ]
-        if snapshots_text:
-            prompt_parts += ["", f"ЧТО ИЗМЕНИЛОСЬ В ПОСЛЕДНИЕ ДНИ:\n{snapshots_text}"]
-        if obs_text:
-            prompt_parts += ["", f"НАБЛЮДЕНИЯ ИЗ ДИАЛОГОВ:\n{obs_text}"]
-        if sphere_text:
-            prompt_parts += ["", f"ДИНАМИКА СФЕР (3 мес):\n{sphere_text}"]
-        if confirmed:
-            prompt_parts += ["", f"ИНТЕРЕСЫ: {', '.join(i['name'] if isinstance(i, dict) else i for i in confirmed[:10])}"]
-        prompt_parts += [
-            "",
-            f"Сегодня {today_str}. ПОСЛЕДНИЕ 20 СООБЩЕНИЙ (дата указана перед каждым — учитывай насколько давно):\n{history_text}",
-            "",
-            f"АКТИВНЫЕ ЗАДАЧИ:{tasks_context if tasks_context else ' нет'}",
-            "",
-            f"Сегодня {today_str}, завтра {tomorrow_str}. "
-            "Чётко различай: задача на сегодня — говори 'сегодня', "
-            "на завтра — 'завтра'. НИКОГДА не называй завтрашнюю задачу событием сегодняшнего дня.",
-            "",
-            f"Дней молчания: {days_silent}." + (" " + silence_note if silence_note else ""),
-        ] + ([_dp_greeting_note] if _dp_greeting_note else []) + [
-            "Руководствуясь ахимсой, напиши одно тёплое сообщение садовнику.",
-            "Если чувствуешь что повода нет — верни \"SKIP\".",
-            "Ответь ТОЛЬКО текстом сообщения или \"SKIP\". Без JSON.",
-        ]
-        prompt = "\n".join(prompt_parts)
-        msg = await _call_openrouter([
-            {"role": "system", "content": "Ты — СР, дух сада. Пиши тепло, кратко, с эмодзи. На русском. Руководствуйся ахимсой. Отвечай ТОЛЬКО текстом — без JSON, без markdown."},
-            {"role": "user", "content": prompt}
-        ])
-        if msg and msg.strip().upper() != "SKIP" and len(msg.strip()) >= 5:
-            # strip JSON if model still returns it
-            _msg_clean = msg.strip()
-            if _msg_clean.startswith("{"):
-                try:
-                    import json as _json
-                    _parsed = _json.loads(_msg_clean)
-                    _msg_clean = _parsed.get("text", "").strip()
-                except Exception:
-                    pass
-            if not _msg_clean or len(_msg_clean) < 5:
-                return False
-            await bot.send_message(int(uid), _msg_clean, reply_markup=get_main_keyboard())
-            _add_to_history(uid, "assistant", msg.strip())
-            ws["_day_proactive_sent_date"] = _today()
-            store_set_workspace(uid, ws)
-            _fire_sync()
-            logger.info(f"Daytime proactive sent to {uid}")
-            return True
-        return False
-    except Exception as e:
-        logger.error(f"Daytime proactive error for {telegram_id}: {e}")
-        return False
-
 async def _delete_gardener(uid: str, notify_architect: bool = True) -> bool:
     """
     Универсальная функция удаления садовника.
@@ -644,12 +422,12 @@ async def _delete_gardener(uid: str, notify_architect: bool = True) -> bool:
         _store.pop(uid, None)
         _sessions.pop(uid, None)
 
-        # 3. Удаляем файлы на GitHub
+        # 3. Удаляем файлы на GitHub по-настоящему (реальный DELETE, не перезапись пустышкой)
         base = _user_path(uid)
         tasks = [
-            _gardeners_put(f"{base}/profile.json", {}),
-            _gardeners_put(f"{base}/workspace.json", {"tasks": [], "groups": []}),
-            _gardeners_put(f"{base}/memory.json", {"sessions": []}),
+            _gardeners_delete(f"{base}/profile.json"),
+            _gardeners_delete(f"{base}/workspace.json"),
+            _gardeners_delete(f"{base}/memory.json"),
         ]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -657,6 +435,11 @@ async def _delete_gardener(uid: str, notify_architect: bool = True) -> bool:
         failed = [r for r in results if r is not True]
         if failed:
             logger.error(f"Failed to delete some files for {uid}: {failed}")
+
+        # Убираем из очереди любые висящие записи по этому uid — иначе фоновый
+        # _sync_pending() мог бы "воскресить" удалённый файл отправив старый PUT
+        for suffix in ("profile.json", "workspace.json", "memory.json"):
+            _pending_writes.pop(f"{base}/{suffix}", None)
 
         # 4. Уведомляем архитектора
         if notify_architect:

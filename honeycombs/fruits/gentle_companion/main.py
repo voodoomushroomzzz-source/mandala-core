@@ -50,7 +50,6 @@ async def on_startup():
                       timezone="UTC")  # 18:00 UTC = 21:00 MSK
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
     scheduler.add_job(_check_webhook, "interval", minutes=5, id="webhook_check")
-    scheduler.add_job(run_auto_cleanup, "cron", hour=3, minute=5, id="auto_cleanup")
     scheduler.start()
     logger.info("Scheduler started")
 
