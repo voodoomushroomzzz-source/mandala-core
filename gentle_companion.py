@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-08-28 09:15:33 ──
+# ── BUILT by build.py ── 2026-08-28 12:36:40 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -121,6 +121,9 @@ BOT_LATEST_UPDATE = {
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
+ENFORCE_LIMITS   = False  # MVP: limits disabled while there's a single tester.
+                           # Flip to True when paid/free tiers launch — all the
+                           # warning/blocking logic below is already correct and ready.
 TASK_CTX_FREE    = "free"      # task visible in tasks menu
 
 TASK_LIMIT_HARD  = 30  # P-67
@@ -4590,7 +4593,7 @@ async def cb_tgroup_create(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     groups = store_get_groups(user_id).get("groups", [])
-    if len(groups) >= LABEL_LIMIT_HARD:
+    if ENFORCE_LIMITS and len(groups) >= LABEL_LIMIT_HARD:
         await callback.answer(f"\u26a0\ufe0f Лимит групп: {LABEL_LIMIT_HARD}", show_alert=True)
         return
     await state.set_state(TaskStates.waiting_for_new_group)
@@ -5619,7 +5622,7 @@ async def task_new_label_input(message: Message, state: FSMContext):
             return
     data_store = store_get_groups(user_id)
     labels = data_store.get("groups", [])
-    if len(labels) >= LABEL_LIMIT_HARD:
+    if ENFORCE_LIMITS and len(labels) >= LABEL_LIMIT_HARD:
         await message.answer(f"⚠️ Лимит групп: {LABEL_LIMIT_HARD}. Удали или переименуй существующий.")
         await state.clear()
         return
@@ -5629,7 +5632,7 @@ async def task_new_label_input(message: Message, state: FSMContext):
     store_set_groups(user_id, data_store)
     _fire_sync()
     await state.clear()
-    suffix = f" Осталось {LABEL_LIMIT_HARD - len(labels)} слота." if len(labels) >= LABEL_LIMIT_SOFT else ""
+    suffix = f" Осталось {LABEL_LIMIT_HARD - len(labels)} слота." if ENFORCE_LIMITS and len(labels) >= LABEL_LIMIT_SOFT else ""
     await message.answer("✅ Группа «" + name + "» создана!" + suffix, reply_markup=get_main_keyboard())
     groups_data3 = store_get_groups(user_id).get("groups", [])
     all_tasks3 = store_get_tasks(user_id)
@@ -5669,20 +5672,21 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     tasks   = list(store_get_tasks(user_id))
     active_count = len([t for t in tasks if t.get("status") != "completed"])
-    if active_count >= TASK_LIMIT_HARD:
-        await state.clear()
-        try:
-            await callback.message.edit_text(
-                f"⚠️ Лимит: {TASK_LIMIT_HARD} активных задач. Заверши что-нибудь сначала."
-            )
-        except Exception:
-            await callback.message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач достигнут.")
-        return
-    elif active_count >= TASK_LIMIT_SOFT:
-        try:
-            await callback.message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач.")
-        except Exception:
-            pass
+    if ENFORCE_LIMITS:
+        if active_count >= TASK_LIMIT_HARD:
+            await state.clear()
+            try:
+                await callback.message.edit_text(
+                    f"⚠️ Лимит: {TASK_LIMIT_HARD} активных задач. Заверши что-нибудь сначала."
+                )
+            except Exception:
+                await callback.message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач достигнут.")
+            return
+        elif active_count >= TASK_LIMIT_SOFT:
+            try:
+                await callback.message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач.")
+            except Exception:
+                pass
     task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
     title   = data.get("title", "Задача")
     merkaba = _auto_merkaba(title, data.get("label_name", ""))
@@ -5870,7 +5874,7 @@ async def _start_checklist_create(message: Message, state: FSMContext, pre_title
     """Start checklist creation FSM."""
     user_id = str(message.from_user.id)
     checklists = store_get_checklists(user_id)
-    if len(checklists) >= CHECKLIST_LIMIT:
+    if ENFORCE_LIMITS and len(checklists) >= CHECKLIST_LIMIT:
         await message.answer(
             f"⚠️ Лимит чеклистов: {CHECKLIST_LIMIT}. Удали один чтобы создать новый.",
             reply_markup=get_main_keyboard()
@@ -6001,7 +6005,7 @@ async def cl_items_input(message: Message, state: FSMContext):
         return
     # Split by newlines
     item_texts = [line.strip() for line in raw.splitlines() if line.strip()]
-    item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT]
+    item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT] if ENFORCE_LIMITS else item_texts
     checklists = store_get_checklists(user_id)
     cid = _make_checklist_id(title, checklists)
     items = [{"id": f"i{i+1}", "text": t, "done": False} for i, t in enumerate(item_texts)]
@@ -6311,7 +6315,7 @@ async def cl_item_edit_input(message: Message, state: FSMContext):
     else:
         # Add new item
         items = cl.get("items", [])
-        if len(items) >= CHECKLIST_ITEMS_LIMIT:
+        if ENFORCE_LIMITS and len(items) >= CHECKLIST_ITEMS_LIMIT:
             await message.answer(f"⚠️ Лимит пунктов: {CHECKLIST_ITEMS_LIMIT}.")
             await state.clear()
             return
@@ -6450,11 +6454,12 @@ async def cb_rem_create_new(callback: CallbackQuery, state: FSMContext):
     await _safe_cb_answer(callback)
     user_id = str(callback.from_user.id)
     _rem_count_s1 = len(store_get_reminders(user_id))
-    if _rem_count_s1 >= REMINDER_LIMIT:
-        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
-        return
-    elif _rem_count_s1 >= REMINDER_LIMIT_SOFT:
-        await callback.message.answer(f"⚠️ Почти лимит: {_rem_count_s1}/{REMINDER_LIMIT} напоминаний.")
+    if ENFORCE_LIMITS:
+        if _rem_count_s1 >= REMINDER_LIMIT:
+            await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
+            return
+        elif _rem_count_s1 >= REMINDER_LIMIT_SOFT:
+            await callback.message.answer(f"⚠️ Почти лимит: {_rem_count_s1}/{REMINDER_LIMIT} напоминаний.")
     # Очищаем оба pending — иначе старый _rem_edit_id подхватится в fallback
     ws_create = store_get_workspace(user_id) or {}
     ws_create.pop("_pending_reminder_edit", None)
@@ -6546,7 +6551,7 @@ async def _create_reminder_atomic(user_id: str, message,
     from zoneinfo import ZoneInfo as _ZI_rem
 
     reminders = store_get_reminders(user_id)
-    if len(reminders) >= REMINDER_LIMIT:
+    if ENFORCE_LIMITS and len(reminders) >= REMINDER_LIMIT:
         return {}
 
     title = title.strip()
@@ -6622,12 +6627,12 @@ async def _create_checklist_atomic(user_id: str, message,
                                     title: str, items_raw: str = "") -> dict:
     """Create a checklist instantly from chat/voice without FSM."""
     checklists = store_get_checklists(user_id)
-    if len(checklists) >= CHECKLIST_LIMIT:
+    if ENFORCE_LIMITS and len(checklists) >= CHECKLIST_LIMIT:
         await message.answer(f"⚠️ Лимит {CHECKLIST_LIMIT} чеклистов. Удали один сначала.")
         return {}
     import re as _re_cl
     item_texts = [i.strip() for i in _re_cl.split(r'[|\n]', items_raw) if i.strip()] if items_raw else []
-    item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT]
+    item_texts = item_texts[:CHECKLIST_ITEMS_LIMIT] if ENFORCE_LIMITS else item_texts
     items = [{"id": f"i{i+1}", "text": t, "done": False} for i, t in enumerate(item_texts)]
     cid = _make_checklist_id(title, checklists)
     new_cl = {"id": cid, "title": title, "items": items,
@@ -6885,12 +6890,13 @@ async def rem_text_input(message: Message, state: FSMContext):
     dt_display = dt_iso[:16].replace("T", " ")
     # P-71a: direct create — no confirmation step
     reminders_71 = store_get_reminders(user_id)
-    if len(reminders_71) >= REMINDER_LIMIT:
-        await state.clear()
-        await message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
-        return
-    if len(reminders_71) >= REMINDER_LIMIT_SOFT:
-        await message.answer(f"⚠️ Почти лимит: {len(reminders_71)}/{REMINDER_LIMIT} напоминаний.")
+    if ENFORCE_LIMITS:
+        if len(reminders_71) >= REMINDER_LIMIT:
+            await state.clear()
+            await message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
+            return
+        if len(reminders_71) >= REMINDER_LIMIT_SOFT:
+            await message.answer(f"⚠️ Почти лимит: {len(reminders_71)}/{REMINDER_LIMIT} напоминаний.")
     rid_71 = _make_reminder_id(reminders_71)
     reminders_71.append({"id": rid_71, "title": title_clean, "datetime_iso": dt_iso, "repeat": "once", "active": True})
     store_set_reminders(user_id, reminders_71)
@@ -7323,12 +7329,13 @@ async def cb_rem_confirm_create(callback: CallbackQuery, state: FSMContext):
         return
     
     reminders = store_get_reminders(user_id)
-    if len(reminders) >= REMINDER_LIMIT:
-        await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
-        await state.clear()
-        return
-    elif len(reminders) >= REMINDER_LIMIT_SOFT:
-        await callback.message.answer(f"⚠️ Почти лимит: {len(reminders)}/{REMINDER_LIMIT} напоминаний.")
+    if ENFORCE_LIMITS:
+        if len(reminders) >= REMINDER_LIMIT:
+            await callback.message.answer(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
+            await state.clear()
+            return
+        elif len(reminders) >= REMINDER_LIMIT_SOFT:
+            await callback.message.answer(f"⚠️ Почти лимит: {len(reminders)}/{REMINDER_LIMIT} напоминаний.")
     
     rid = _make_reminder_id(reminders)
     reminders.append({
@@ -7561,11 +7568,12 @@ async def _create_task_atomic(user_id: str, message: Message,
     title = title.strip()
     tasks = store_get_tasks(user_id)
     active_count = len([t for t in tasks if t.get("status") != "completed"])
-    if active_count >= TASK_LIMIT_HARD:
-        await message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач. Заверши что-нибудь сначала.")
-    elif active_count >= TASK_LIMIT_SOFT:
-        await message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач. Скоро не смогу добавлять новые.")
-        return {}
+    if ENFORCE_LIMITS:
+        if active_count >= TASK_LIMIT_HARD:
+            await message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач. Заверши что-нибудь сначала.")
+            return {}
+        elif active_count >= TASK_LIMIT_SOFT:
+            await message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач. Скоро не смогу добавлять новые.")
     # Resolve label
     label_id, resolved_label = None, ""
     if label_name:
@@ -9204,7 +9212,7 @@ async def quick_add_reminder(callback: CallbackQuery):
     user_id = str(callback.from_user.id)
     title = callback.data[3:]
     reminders = store_get_reminders(user_id)
-    if len(reminders) >= REMINDER_LIMIT:
+    if ENFORCE_LIMITS and len(reminders) >= REMINDER_LIMIT:
         try:
             await callback.message.edit_text(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
         except Exception:
@@ -10631,7 +10639,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 reply_text = "🎨 Как назовём группу? Напиши название."
                             else:
                                 _cl_groups = store_get_groups(user_id).get("groups", [])
-                                if len(_cl_groups) >= LABEL_LIMIT_HARD:
+                                if ENFORCE_LIMITS and len(_cl_groups) >= LABEL_LIMIT_HARD:
                                     reply_text = f"⚠️ Лимит групп: {LABEL_LIMIT_HARD}. Удали или переименуй существующую."
                                 elif any(g.get("name","").lower() == _cl_title.lower() for g in _cl_groups):
                                     reply_text = f"🎨 Группа «{_cl_title}» уже существует."
@@ -10642,7 +10650,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _cl_data["groups"] = _cl_groups
                                     store_set_groups(user_id, _cl_data)
                                     _fire_sync()
-                                    _suffix = f" Осталось {LABEL_LIMIT_HARD - len(_cl_groups)} слота." if len(_cl_groups) >= LABEL_LIMIT_SOFT else ""
+                                    _suffix = f" Осталось {LABEL_LIMIT_HARD - len(_cl_groups)} слота." if ENFORCE_LIMITS and len(_cl_groups) >= LABEL_LIMIT_SOFT else ""
                                     reply_text = f"✅ Группа «{_cl_title}» создана.{_suffix}\n\nТеперь можешь добавлять задачи: «добавь задачу X в группу {_cl_title}»"
 
                         elif intent == "delete_label":
@@ -10759,7 +10767,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl and new_item:
                                 items = cl.get("items",[])
-                                if len(items) >= CHECKLIST_ITEMS_LIMIT:
+                                if ENFORCE_LIMITS and len(items) >= CHECKLIST_ITEMS_LIMIT:
                                     reply_text = f"⚠️ Лимит пунктов: {CHECKLIST_ITEMS_LIMIT}"
                                 else:
                                     items.append({"id": f"i{len(items)+1}", "text": new_item, "done": False})
@@ -10928,10 +10936,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                     dt_iso_cr = target_cr.strftime(f"%Y-%m-%dT%H:%M{offset_f_cr}")
                                 # P-71b: direct create — no confirmation
                                 reminders_cl = store_get_reminders(user_id)
-                                if len(reminders_cl) >= REMINDER_LIMIT:
+                                if ENFORCE_LIMITS and len(reminders_cl) >= REMINDER_LIMIT:
                                     reply_text = f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые."
                                 else:
-                                    if len(reminders_cl) >= REMINDER_LIMIT_SOFT:
+                                    if ENFORCE_LIMITS and len(reminders_cl) >= REMINDER_LIMIT_SOFT:
                                         await message.answer(f"⚠️ Почти лимит: {len(reminders_cl)}/{REMINDER_LIMIT} напоминаний.")
                                     rid_cl = _make_reminder_id(reminders_cl)
                                     # P-95-07: search for matching task to link

@@ -1545,7 +1545,7 @@ async def quick_add_reminder(callback: CallbackQuery):
     user_id = str(callback.from_user.id)
     title = callback.data[3:]
     reminders = store_get_reminders(user_id)
-    if len(reminders) >= REMINDER_LIMIT:
+    if ENFORCE_LIMITS and len(reminders) >= REMINDER_LIMIT:
         try:
             await callback.message.edit_text(f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые.")
         except Exception:

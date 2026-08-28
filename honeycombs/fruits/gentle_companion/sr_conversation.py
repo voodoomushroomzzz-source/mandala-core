@@ -1239,7 +1239,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                 reply_text = "🎨 Как назовём группу? Напиши название."
                             else:
                                 _cl_groups = store_get_groups(user_id).get("groups", [])
-                                if len(_cl_groups) >= LABEL_LIMIT_HARD:
+                                if ENFORCE_LIMITS and len(_cl_groups) >= LABEL_LIMIT_HARD:
                                     reply_text = f"⚠️ Лимит групп: {LABEL_LIMIT_HARD}. Удали или переименуй существующую."
                                 elif any(g.get("name","").lower() == _cl_title.lower() for g in _cl_groups):
                                     reply_text = f"🎨 Группа «{_cl_title}» уже существует."
@@ -1250,7 +1250,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _cl_data["groups"] = _cl_groups
                                     store_set_groups(user_id, _cl_data)
                                     _fire_sync()
-                                    _suffix = f" Осталось {LABEL_LIMIT_HARD - len(_cl_groups)} слота." if len(_cl_groups) >= LABEL_LIMIT_SOFT else ""
+                                    _suffix = f" Осталось {LABEL_LIMIT_HARD - len(_cl_groups)} слота." if ENFORCE_LIMITS and len(_cl_groups) >= LABEL_LIMIT_SOFT else ""
                                     reply_text = f"✅ Группа «{_cl_title}» создана.{_suffix}\n\nТеперь можешь добавлять задачи: «добавь задачу X в группу {_cl_title}»"
 
                         elif intent == "delete_label":
@@ -1367,7 +1367,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
                             if cl and new_item:
                                 items = cl.get("items",[])
-                                if len(items) >= CHECKLIST_ITEMS_LIMIT:
+                                if ENFORCE_LIMITS and len(items) >= CHECKLIST_ITEMS_LIMIT:
                                     reply_text = f"⚠️ Лимит пунктов: {CHECKLIST_ITEMS_LIMIT}"
                                 else:
                                     items.append({"id": f"i{len(items)+1}", "text": new_item, "done": False})
@@ -1536,10 +1536,10 @@ async def free_conversation(message: Message, state: FSMContext):
                                     dt_iso_cr = target_cr.strftime(f"%Y-%m-%dT%H:%M{offset_f_cr}")
                                 # P-71b: direct create — no confirmation
                                 reminders_cl = store_get_reminders(user_id)
-                                if len(reminders_cl) >= REMINDER_LIMIT:
+                                if ENFORCE_LIMITS and len(reminders_cl) >= REMINDER_LIMIT:
                                     reply_text = f"⚠️ Лимит {REMINDER_LIMIT} напоминаний. Удали старые."
                                 else:
-                                    if len(reminders_cl) >= REMINDER_LIMIT_SOFT:
+                                    if ENFORCE_LIMITS and len(reminders_cl) >= REMINDER_LIMIT_SOFT:
                                         await message.answer(f"⚠️ Почти лимит: {len(reminders_cl)}/{REMINDER_LIMIT} напоминаний.")
                                     rid_cl = _make_reminder_id(reminders_cl)
                                     # P-95-07: search for matching task to link

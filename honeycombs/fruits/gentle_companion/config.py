@@ -111,6 +111,9 @@ BOT_LATEST_UPDATE = {
 }
 
 # ─── Business limits ──────────────────────────────────────────────────────────
+ENFORCE_LIMITS   = False  # MVP: limits disabled while there's a single tester.
+                           # Flip to True when paid/free tiers launch — all the
+                           # warning/blocking logic below is already correct and ready.
 TASK_CTX_FREE    = "free"      # task visible in tasks menu
 
 TASK_LIMIT_HARD  = 30  # P-67

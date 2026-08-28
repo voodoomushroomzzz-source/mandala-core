@@ -819,7 +819,7 @@ async def cb_tgroup_create(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = str(callback.from_user.id)
     groups = store_get_groups(user_id).get("groups", [])
-    if len(groups) >= LABEL_LIMIT_HARD:
+    if ENFORCE_LIMITS and len(groups) >= LABEL_LIMIT_HARD:
         await callback.answer(f"\u26a0\ufe0f Лимит групп: {LABEL_LIMIT_HARD}", show_alert=True)
         return
     await state.set_state(TaskStates.waiting_for_new_group)
@@ -1848,7 +1848,7 @@ async def task_new_label_input(message: Message, state: FSMContext):
             return
     data_store = store_get_groups(user_id)
     labels = data_store.get("groups", [])
-    if len(labels) >= LABEL_LIMIT_HARD:
+    if ENFORCE_LIMITS and len(labels) >= LABEL_LIMIT_HARD:
         await message.answer(f"⚠️ Лимит групп: {LABEL_LIMIT_HARD}. Удали или переименуй существующий.")
         await state.clear()
         return
@@ -1858,7 +1858,7 @@ async def task_new_label_input(message: Message, state: FSMContext):
     store_set_groups(user_id, data_store)
     _fire_sync()
     await state.clear()
-    suffix = f" Осталось {LABEL_LIMIT_HARD - len(labels)} слота." if len(labels) >= LABEL_LIMIT_SOFT else ""
+    suffix = f" Осталось {LABEL_LIMIT_HARD - len(labels)} слота." if ENFORCE_LIMITS and len(labels) >= LABEL_LIMIT_SOFT else ""
     await message.answer("✅ Группа «" + name + "» создана!" + suffix, reply_markup=get_main_keyboard())
     groups_data3 = store_get_groups(user_id).get("groups", [])
     all_tasks3 = store_get_tasks(user_id)
@@ -1898,20 +1898,21 @@ async def confirm_task(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
     tasks   = list(store_get_tasks(user_id))
     active_count = len([t for t in tasks if t.get("status") != "completed"])
-    if active_count >= TASK_LIMIT_HARD:
-        await state.clear()
-        try:
-            await callback.message.edit_text(
-                f"⚠️ Лимит: {TASK_LIMIT_HARD} активных задач. Заверши что-нибудь сначала."
-            )
-        except Exception:
-            await callback.message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач достигнут.")
-        return
-    elif active_count >= TASK_LIMIT_SOFT:
-        try:
-            await callback.message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач.")
-        except Exception:
-            pass
+    if ENFORCE_LIMITS:
+        if active_count >= TASK_LIMIT_HARD:
+            await state.clear()
+            try:
+                await callback.message.edit_text(
+                    f"⚠️ Лимит: {TASK_LIMIT_HARD} активных задач. Заверши что-нибудь сначала."
+                )
+            except Exception:
+                await callback.message.answer(f"⚠️ Лимит {TASK_LIMIT_HARD} задач достигнут.")
+            return
+        elif active_count >= TASK_LIMIT_SOFT:
+            try:
+                await callback.message.answer(f"⚠️ Почти лимит: {active_count}/{TASK_LIMIT_HARD} задач.")
+            except Exception:
+                pass
     task_id = "task_" + datetime.now().strftime("%Y%m%d%H%M%S%f")[:17]
     title   = data.get("title", "Задача")
     merkaba = _auto_merkaba(title, data.get("label_name", ""))
