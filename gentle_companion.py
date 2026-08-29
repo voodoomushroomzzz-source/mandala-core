@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-08-28 09:37:05 ──
+# ── BUILT by build.py ── 2026-08-29 11:50:43 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -144,6 +144,7 @@ WEBHOOK_PATH = "/webhook"
 WEBHOOK_SECRET = ""  # No secret — HTTPS on Render is sufficient
 
 GARDENERS_ROOT = "gardeners"  # gardeners/{telegram_id}/profile.json etc
+CORE_DEEP_PROFILE_PATH = "honeycombs/personal/profile_deep.json"  # Architect-only unified profile (mandala-core, TZ-ARCHITECT-INTEGRATION-003)
 
 if not BOT_TOKEN or not RENDER_EXTERNAL_URL:
     logger.error("Missing BOT_TOKEN or RENDER_EXTERNAL_URL")
@@ -654,6 +655,62 @@ async def _gardeners_delete(path: str) -> bool:
             return False
     except Exception as e:
         logger.error(f"Gardeners DELETE error [{path}]: {e}")
+        return False
+
+
+# ─── Architect deep-profile sync (TZ-ARCHITECT-INTEGRATION-003) ───────────────
+# Writes ONLY section_B_gardener_data and
+# section_C_architect_synthesis.synthesis_layer_2_from_bot.text in profile_deep.json.
+# Never touches section_A, section_D, layer_1, layer_3. Architect-only, no-op otherwise.
+# Read path for Architect is UNCHANGED (still mandala-gardeners) — this is write-only sync.
+
+async def _sync_architect_data() -> bool:
+    """Periodic sync of live bot state into profile_deep.json for the Architect."""
+    uid = ARCHITECT_TELEGRAM_ID
+    if not _get_user_store(uid).get("ready"):
+        return False
+    try:
+        data = await _github_get(CORE_DEEP_PROFILE_PATH, force=True)
+        if not isinstance(data, dict) or "section_B_gardener_data" not in data:
+            logger.error("_sync_architect_data: profile_deep.json missing/malformed, abort")
+            return False
+
+        profile = store_get_profile(uid) or {}
+        workspace = store_get_workspace(uid) or {}
+        companion = profile.get("companion_settings", {}) or {}
+        dm = workspace.get("deep_memory", {}) or {}
+
+        data["section_B_gardener_data"] = {
+            "last_sync": _today(),
+            "profile": {
+                "name": profile.get("name", ""),
+                "resonance_level": profile.get("resonance_level", 0),
+                "city": companion.get("city", ""),
+                "companion_settings": {
+                    "morning_message_time": companion.get("morning_message_time", ""),
+                    "timezone": companion.get("timezone", "Europe/Moscow"),
+                    "gender": companion.get("gender", ""),
+                },
+            },
+            "sphere_resonance": store_get_sphere_resonance(uid),
+            "deep_memory": dm,
+            "growth_history": profile.get("growth_history", []),
+        }
+
+        core_text = dm.get("core", "")
+        if core_text:
+            syn = data.get("section_C_architect_synthesis", {}) or {}
+            layer2 = syn.get("synthesis_layer_2_from_bot", {}) or {}
+            layer2["text"] = core_text
+            syn["synthesis_layer_2_from_bot"] = layer2
+            syn["last_updated"] = _today()
+            data["section_C_architect_synthesis"] = syn
+
+        ok = await _github_put(CORE_DEEP_PROFILE_PATH, data)
+        logger.info(f"Architect profile_deep.json sync: {'ok' if ok else 'FAILED'}")
+        return ok
+    except Exception as e:
+        logger.error(f"_sync_architect_data error: {e}", exc_info=True)
         return False
 
 
@@ -11385,6 +11442,7 @@ async def on_startup():
     scheduler.add_job(_send_daily_report, "cron", hour=18, minute=0, id="daily_report",
                       timezone="UTC")  # 18:00 UTC = 21:00 MSK
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
+    scheduler.add_job(_sync_architect_data, "interval", minutes=3, id="architect_sync")
     scheduler.add_job(_check_webhook, "interval", minutes=5, id="webhook_check")
     scheduler.start()
     logger.info("Scheduler started")
