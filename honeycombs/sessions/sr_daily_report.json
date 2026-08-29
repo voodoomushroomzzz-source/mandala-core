@@ -1,12 +1,27 @@
 {
-  "date": "2026-08-27",
+  "date": "2026-08-29",
   "version": "7.39.23",
   "gardeners": {
     "224736062": {
       "name": "Дима",
-      "active": true,
-      "synthesis_date": "2026-08-27"
+      "active": false,
+      "synthesis_date": "2026-08-28"
     }
   },
-  "issues": []
+  "issues": [
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    }
+  ]
 }
