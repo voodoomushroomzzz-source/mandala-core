@@ -24,21 +24,19 @@ BOOT_ONLINE_PATH = BOOT_ONLINE_DIR / "index.json"
 
 
 def build_personal_step(source_data: Dict[str, Any]) -> Dict[str, Any]:
-    """Build step_7_personal — Personal Hub + Deep Profile."""
+    """Build step_7_personal — Personal Hub (without Deep Profile)."""
     personal_data = source_data.get("personal", {})
-    profile_deep_data = source_data.get("profile_deep", {})
     
-    if not personal_data and not profile_deep_data:
+    if not personal_data:
         return {}
     
     return {
         "order": 7,
         "mandatory": True,
-        "name": "Personal Hub — Личные векторы + Deep Profile",
-        "description": "Личная сота Gardener: карьера, обучение, YouTube, e-commerce, франшиза + глубокий профиль личности.",
-        "ai_instruction": "Прочитай вшитые personal_index и profile_deep. Подтверди понимание.",
-        "personal_index": personal_data,
-        "profile_deep": profile_deep_data
+        "name": "Personal Hub — Личные векторы",
+        "description": "Личная сота Gardener: карьера, обучение, YouTube, e-commerce, франшиза.",
+        "ai_instruction": "Прочитай вшитый personal_index. Подтверди список личных векторов и их статус.",
+        "personal_index": personal_data
     }
 
 
