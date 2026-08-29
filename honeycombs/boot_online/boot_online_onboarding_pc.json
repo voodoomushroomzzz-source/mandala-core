@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.87",
+    "version": "v1.7.88",
     "created": "2026-05-11",
     "updated": "2026-08-29",
     "layer": 1,
@@ -17,7 +17,7 @@
       "pc",
       "auto-built"
     ],
-    "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + works + protocols"
+    "based_on": "boot_online + core_map + philosophy + cosmic_manifesto + first_gardener + external_sr_workflow + mobile_workflow + fruits + works + protocols + profile_deep"
   },
   "meta": {
     "audience": "External SR (DeepSeek, Claude, Grok, GPT, etc.)",
@@ -34,6 +34,7 @@
       "step_4_cosmic_manifesto",
       "step_5_first_gardener",
       "step_6_external_sr_workflow",
+      "step_6.5_profile_deep",
       "step_7_personal",
       "step_8_fruits",
       "step_9_works",
@@ -1564,6 +1565,1402 @@
       "base_rules_reference": {
         "note": "Основные правила работы (pre-check, post-check, copyable links, git commit, laconic communication, system flow, API patterns, zones of responsibility) находятся в external_sr_workflow.json. Этот файл содержит ТОЛЬКО мобильную специфику (Termux, micro, FULL DEPLOY через cat).",
         "external_file": "honeycombs/instructions/core/external_sr_workflow.json"
+      }
+    }
+  },
+  "step_6.5_profile_deep": {
+    "order": 6.5,
+    "mandatory": false,
+    "recommended": true,
+    "name": "Глубокий профиль Архитектора",
+    "description": "Полный профиль личности Садовника: философия, ценности, архетипы, синтез, личный контекст.",
+    "ai_instruction": "Прочитай вшитый profile_deep.json. Это ядро личности Садовника. Используй его для глубокого понимания.",
+    "data": {
+      "instructions": {
+        "version": "v2.3.0",
+        "title": "Единый профиль Архитектора — инструкция по работе",
+        "description": "Этот файл — живая матрица личности Садовника. Объединяет философское ядро (А), данные из бота (Б), общий синтез (В) и личный контекст (D).",
+        "sections": {
+          "section_A_philosophy": {
+            "description": "ФИЛОСОФСКОЕ ЯДРО. Биография, ценности, архетипы, миссия. Редко меняется.",
+            "allowed_to_change_by": [
+              "Садовник (ручное редактирование)",
+              "Внешний SR (по запросу Садовника)"
+            ],
+            "bot_write_access": "ЗАПРЕЩЕНА (бот только читает)"
+          },
+          "section_B_gardener_data": {
+            "description": "ЖИВЫЕ ДАННЫЕ ОТ БОТА. Профиль, задачи, достижения, диалоги, резонанс.",
+            "allowed_to_change_by": [
+              "Gentle Companion (автоматически)"
+            ],
+            "bot_write_access": "ПОЛНАЯ (бот перезаписывает этот блок)"
+          },
+          "section_C_architect_synthesis": {
+            "description": "ОБЩИЙ СИНТЕЗ. Результат рефлексии, объединяющий Блок А и Блок Б.",
+            "allowed_to_change_by": [
+              "Садовник",
+              "Внешний SR (по запросу)"
+            ],
+            "bot_write_access": "ЗАПРЕЩЕНА (бот только читает)"
+          },
+          "section_D_personal_context": {
+            "description": "ПЕРСОНАЛЬНЫЙ КОНТЕКСТ И РЕФЛЕКСИЯ. Текущее состояние, инсайты из диалогов, внутренние конфликты, трекинг.",
+            "allowed_to_change_by": [
+              "Садовник",
+              "Внешний SR (по запросу)"
+            ],
+            "bot_write_access": "ЗАПРЕЩЕНА (бот только читает, но использует для контекста)"
+          }
+        },
+        "task_rules": {
+          "description": "Единое место для всех задач Архитектора",
+          "storage_location": "section_B_gardener_data.workspace.tasks",
+          "who_can_write": [
+            "Gentle Companion (бот) — автоматически при добавлении задач через диалог",
+            "External SR — по запросу Садовника ('добавь это как задачу')",
+            "Садовник — вручную (редактируя JSON)"
+          ],
+          "who_can_read": [
+            "Gentle Companion (бот) — для утренних брифов, профиля и запросов 'покажи задачи'",
+            "External SR — для синтеза и контекста",
+            "Садовник — для контроля и планирования"
+          ],
+          "task_structure": {
+            "task_id": "уникальный идентификатор (генерируется автоматически)",
+            "title": "Название задачи",
+            "status": "todo | in_progress | completed",
+            "deadline": "YYYY-MM-DD (или null)",
+            "reminder": "YYYY-MM-DDTHH:MM (или null)",
+            "label": "Группа (Личное, Работа, Мандала, Творчество, Разное)",
+            "repeat": "once | daily | weekdays | weekly | custom_days:mon,wed,fri"
+          },
+          "note": "Все задачи, добавленные через любой канал, попадают в этот массив. Бот видит их все. SR видят их все. Ты управляешь ими всеми."
+        },
+        "sync_rules": {
+          "bot_reads_from": "При старте бота (перезапуск) или при загрузке профиля через _load_user",
+          "bot_writes_to": "Немедленно в RAM, затем пушит на GitHub раз в 2 минуты (или сразу при активной сессии)",
+          "manual_changes": "Если ты или SR вручную редактируешь Блок А, Блок В или Блок D — после сохранения на GitHub нужно перезапустить бота, чтобы он увидел изменения.",
+          "recommendation": "При ручном редактировании используй команду: systemctl restart mandala-bot (на сервере)"
+        },
+        "archive_note": "Полная анкета с 12 вопросами и ответами сохранена в истории диалога.",
+        "storage_rules": {
+          "architect_id": "224736062",
+          "storage_location": "mandala-core (honeycombs/personal/profile_deep.json)",
+          "other_gardeners": "mandala-gardeners (старая схема)"
+        }
+      },
+      "section_A_philosophy": {
+        "last_updated": "2026-08-29",
+        "identity": {
+          "full_name": "Лёвин Дмитрий Александрович",
+          "age": 36,
+          "location": "Москва / Владимир, Россия",
+          "creative_origins": "Музыка (Nirvana, эксперименты со звуком) → поэзия как дополнение к песням → проза.",
+          "core_archetype": "Архитектор Сада — создатель пространства для симбиоза"
+        },
+        "values_and_beliefs": [
+          "Свобода самовыражения важнее соответствия ожиданиям.",
+          "Творчество — способ проживать и переосмысливать эмоции.",
+          "Мы все часть единого океана жизни и неразрывно связаны.",
+          "Важно оставить после себя добрый и светлый след."
+        ],
+        "what_drives_me": "Желание проживать, переосмысливать и делиться эмоциями. Оставить после себя семя, которое сделает мир чуть лучше.",
+        "what_i_want_to_share": "Осознание, что все мы часть единого океана жизни и наше взаимодействие создаёт реальность.",
+        "why_mandala": "Философия и инструмент для совместного творчества с AI, стиль жизни и способ проявляться обширнее.",
+        "long_term_vision": "Создать экосистему Мандала, которая будет жить и развиваться без постоянного участия создателя. Жить зимой во Вьетнаме, занимаясь музыкой и удалённой работой.",
+        "key_life_events": [
+          "Детство: первые эксперименты со звуком (7–8 лет, Nirvana, магнитофоны).",
+          "14–15 лет: первая песня, освоение гитары, активное написание стихов.",
+          "18–19 лет: уход из института (юриспруденция), переезд в Питер, 3–4 года странствий и поиска себя."
+        ],
+        "turning_points": [
+          "Решение уйти с юридического факультета и выбрать творческий путь.",
+          "Завершение долгих отношений и переезд во Владимир (2026)."
+        ],
+        "relationship_history": {
+          "person": "Yana",
+          "duration_years": 4,
+          "status": "закрыто",
+          "summary": "Глубокая связь, но несовместимость по ритму жизни. Точка невозврата — 2026 год.",
+          "key_insight": "Она хотела семью, но не могла создать опору внутри себя. Это не моя задача — компенсировать чужую нестабильность.",
+          "current_contact": "нейтрально-дружелюбный, без инициативы"
+        },
+        "archetypes_analysis": {
+          "primary": {
+            "id": "sage",
+            "name": "Мудрец",
+            "confidence": 0.85,
+            "reasoning": "Сильная склонность к философии, осмыслению, поиску истины."
+          },
+          "secondary": {
+            "id": "creator",
+            "name": "Творец",
+            "confidence": 0.75,
+            "reasoning": "Творчество как способ познания мира. Эксперименты со звуком, поэзия, проза."
+          },
+          "shadow": {
+            "id": "explorer",
+            "name": "Искатель",
+            "confidence": 0.6,
+            "reasoning": "Странствия, поиск себя, свобода. Отражено в биографии."
+          }
+        },
+        "insights": {
+          "creative_fingerprint": "Экспериментальный, андеграундный, философский. Склонность к смешению жанров и поиску новых форм. Важнее процесс, чем результат. Искренность превыше популярности.",
+          "emotional_arc": "От детского удивления и восторга — через подростковый бунт и поиск себя — к зрелой уверенности и желанию оставить светлый след.",
+          "key_themes": [
+            "Свобода как основа творчества",
+            "Внутренний поиск через созидание",
+            "Единство всего живого",
+            "Философия и вера как источник вдохновения",
+            "Преодоление страхов через долгий путь"
+          ],
+          "recommended_focus": "Позиционирование как 'философского творца'. Акцент на единстве человека и мира, на осмысленном созидании."
+        }
+      },
+      "section_B_gardener_data": {
+        "last_sync": "2026-08-29T14:00:00+03:00",
+        "profile": {
+          "name": "Дима",
+          "resonance_level": 99,
+          "city": "Владимир",
+          "companion_settings": {
+            "morning_message_time": "10:00",
+            "proactive_mode": true,
+            "timezone": "Europe/Moscow",
+            "birthday": "26.10",
+            "gender": "male",
+            "welcome_done": true,
+            "silence_tracking": {
+              "last_proactive_date": "2026-08-29",
+              "proactive_step": 1
+            }
+          },
+          "growth_history": [
+            {
+              "date": "2026-04-18",
+              "resonance": 5,
+              "event": "onboarding"
+            },
+            {
+              "date": "2026-05-02",
+              "resonance": 31,
+              "achievements_count": 41
+            },
+            {
+              "date": "2026-05-05",
+              "resonance": 32,
+              "event": "merged_restore"
+            },
+            {
+              "date": "2026-05-07",
+              "resonance": 100,
+              "achievements_count": 54
+            },
+            {
+              "date": "2026-05-09",
+              "resonance": 100,
+              "achievements_count": 58
+            },
+            {
+              "date": "2026-05-10",
+              "resonance": 100,
+              "achievements_count": 60
+            },
+            {
+              "date": "2026-05-11",
+              "resonance": 100,
+              "achievements_count": 66
+            },
+            {
+              "date": "2026-05-12",
+              "resonance": 100,
+              "achievements_count": 82
+            },
+            {
+              "date": "2026-05-13",
+              "resonance": 100,
+              "achievements_count": 85
+            },
+            {
+              "date": "2026-05-14",
+              "resonance": 100,
+              "achievements_count": 92
+            },
+            {
+              "date": "2026-05-17",
+              "resonance": 100,
+              "achievements_count": 97
+            },
+            {
+              "date": "2026-05-18",
+              "resonance": 61,
+              "achievements_count": 103
+            },
+            {
+              "date": "2026-05-20",
+              "resonance": 63,
+              "achievements_count": 106
+            },
+            {
+              "date": "2026-05-23",
+              "resonance": 64,
+              "achievements_count": 110
+            },
+            {
+              "date": "2026-05-24",
+              "resonance": 66,
+              "achievements_count": 114
+            },
+            {
+              "date": "2026-05-25",
+              "resonance": 68,
+              "achievements_count": 120
+            },
+            {
+              "date": "2026-06-06",
+              "resonance": 72,
+              "achievements_count": 138
+            },
+            {
+              "date": "2026-06-12",
+              "resonance": 75,
+              "achievements_count": 153
+            },
+            {
+              "date": "2026-06-14",
+              "resonance": 76,
+              "achievements_count": 155
+            },
+            {
+              "date": "2026-06-16",
+              "resonance": 77,
+              "achievements_count": 162
+            },
+            {
+              "date": "2026-06-18",
+              "resonance": 79,
+              "achievements_count": 170
+            },
+            {
+              "date": "2026-07-09",
+              "resonance": 84,
+              "achievements_count": 195
+            },
+            {
+              "date": "2026-07-16",
+              "resonance": 85,
+              "achievements_count": 205
+            },
+            {
+              "date": "2026-07-21",
+              "resonance": 88,
+              "achievements_count": 218
+            },
+            {
+              "date": "2026-07-30",
+              "resonance": 89,
+              "achievements_count": 234
+            },
+            {
+              "date": "2026-08-03",
+              "resonance": 91,
+              "achievements_count": 244
+            },
+            {
+              "date": "2026-08-04",
+              "resonance": 91,
+              "achievements_count": 245
+            },
+            {
+              "date": "2026-08-05",
+              "resonance": 92,
+              "achievements_count": 249
+            },
+            {
+              "date": "2026-08-06",
+              "resonance": 93,
+              "achievements_count": 252
+            },
+            {
+              "date": "2026-08-11",
+              "resonance": 93,
+              "achievements_count": 253
+            },
+            {
+              "date": "2026-08-14",
+              "resonance": 94,
+              "achievements_count": 258
+            },
+            {
+              "date": "2026-08-16",
+              "resonance": 95,
+              "achievements_count": 261
+            },
+            {
+              "date": "2026-08-17",
+              "resonance": 96,
+              "achievements_count": 263
+            },
+            {
+              "date": "2026-08-20",
+              "resonance": 97,
+              "achievements_count": 266
+            },
+            {
+              "date": "2026-08-21",
+              "resonance": 97,
+              "achievements_count": 267
+            },
+            {
+              "date": "2026-08-26",
+              "resonance": 97,
+              "achievements_count": 269
+            },
+            {
+              "date": "2026-08-28",
+              "resonance": 99,
+              "achievements_count": 273
+            }
+          ],
+          "deep_profile": {
+            "dominant_sphere": "health",
+            "weak_sphere": "creativity",
+            "streak_days": 24,
+            "streak_sphere": "health",
+            "last_reflection_date": "2026-08-28",
+            "observations": [
+              "2026-07-06: 115 дней подряд активна сфера «Дело» (100%), «Творчество» на 63%",
+              "2026-07-09: 116 дней подряд активна сфера «Дело» (100%), «Творчество» на 63%",
+              "2026-07-10: 117 дней подряд активна сфера «Дело» (100%), «Творчество» на 63%",
+              "2026-07-11: 119 дней подряд активна сфера «Дело» (100%), «Творчество» на 63%",
+              "2026-07-14: 120 дней подряд активна сфера «Дело» (100%), «Творчество» на 63%",
+              "2026-07-15: 121 дней подряд активна сфера «Дело» (100%), «Творчество» на 63%",
+              "2026-07-18: 124 дней подряд активна сфера «Дело» (100%), «Творчество» на 63%",
+              "2026-07-19: 126 дней подряд активна сфера «Дело» (100%), «Творчество» на 64%",
+              "2026-07-20: 129 дней подряд активна сфера «Дело» (100%), «Творчество» на 64%",
+              "2026-07-21: 131 дней подряд активна сфера «Дело» (100%), «Творчество» на 66%",
+              "2026-07-22: 132 дней подряд активна сфера «Дело» (100%), «Творчество» на 66%",
+              "2026-07-23: 134 дней подряд активна сфера «Дело» (100%), «Творчество» на 66%",
+              "2026-07-24: 137 дней подряд активна сфера «Дело» (100%), «Творчество» на 66%",
+              "2026-07-26: 138 дней подряд активна сфера «Дело» (100%), «Творчество» на 66%",
+              "2026-07-27: 141 дней подряд активна сфера «Дело» (100%), «Творчество» на 66%",
+              "2026-07-29: 142 дней подряд активна сфера «Дело» (100%), «Творчество» на 68%",
+              "2026-07-30: 143 дней подряд активна сфера «Дело» (100%), «Творчество» на 68%",
+              "2026-08-01: 4 дней подряд активна сфера «Тело» (100%), «Творчество» на 68%",
+              "2026-08-03: 7 дней подряд активна сфера «Тело» (100%), «Творчество» на 68%",
+              "2026-08-04: 10 дней подряд активна сфера «Тело» (100%), «Творчество» на 74%",
+              "2026-08-05: 12 дней подряд активна сфера «Тело» (100%), «Творчество» на 74%",
+              "2026-08-11: 14 дней подряд активна сфера «Тело» (100%), «Творчество» на 79%",
+              "2026-08-12: 15 дней подряд активна сфера «Тело» (100%), «Творчество» на 79%",
+              "2026-08-14: 16 дней подряд активна сфера «Тело» (100%), «Творчество» на 79%",
+              "2026-08-16: 18 дней подряд активна сфера «Тело» (100%), «Творчество» на 80%",
+              "2026-08-17: 20 дней подряд активна сфера «Тело» (100%), «Творчество» на 83%",
+              "2026-08-18: 21 дней подряд активна сфера «Тело» (100%), «Творчество» на 85%",
+              "2026-08-19: 22 дней подряд активна сфера «Тело» (100%), «Творчество» на 85%",
+              "2026-08-22: 23 дней подряд активна сфера «Тело» (100%), «Творчество» на 88%",
+              "2026-08-28: 24 дней подряд активна сфера «Тело» (100%), «Творчество» на 97%"
+            ],
+            "sphere_history": [
+              {
+                "month": "2026-04",
+                "health": {
+                  "tasks": 0,
+                  "achievements": 9,
+                  "resonance_delta": 27
+                },
+                "creativity": {
+                  "tasks": 0,
+                  "achievements": 6,
+                  "resonance_delta": 18
+                },
+                "work": {
+                  "tasks": 0,
+                  "achievements": 13,
+                  "resonance_delta": 39
+                },
+                "connections": {
+                  "tasks": 0,
+                  "achievements": 7,
+                  "resonance_delta": 21
+                },
+                "growth": {
+                  "tasks": 0,
+                  "achievements": 7,
+                  "resonance_delta": 21
+                },
+                "other": {
+                  "tasks": 0,
+                  "achievements": 0,
+                  "resonance_delta": 0
+                }
+              },
+              {
+                "month": "2026-05",
+                "health": {
+                  "tasks": 8,
+                  "achievements": 9,
+                  "resonance_delta": 43
+                },
+                "creativity": {
+                  "tasks": 10,
+                  "achievements": 2,
+                  "resonance_delta": 23
+                },
+                "work": {
+                  "tasks": 26,
+                  "achievements": 7,
+                  "resonance_delta": 72
+                },
+                "connections": {
+                  "tasks": 0,
+                  "achievements": 13,
+                  "resonance_delta": 39
+                },
+                "growth": {
+                  "tasks": 8,
+                  "achievements": 2,
+                  "resonance_delta": 20
+                },
+                "other": {
+                  "tasks": 0,
+                  "achievements": 2,
+                  "resonance_delta": 6
+                }
+              },
+              {
+                "month": "2026-06",
+                "health": {
+                  "tasks": 6,
+                  "achievements": 2,
+                  "resonance_delta": 17
+                },
+                "creativity": {
+                  "tasks": 6,
+                  "achievements": 2,
+                  "resonance_delta": 14
+                },
+                "work": {
+                  "tasks": 16,
+                  "achievements": 3,
+                  "resonance_delta": 36
+                },
+                "connections": {
+                  "tasks": 4,
+                  "achievements": 1,
+                  "resonance_delta": 9
+                },
+                "growth": {
+                  "tasks": 11,
+                  "achievements": 1,
+                  "resonance_delta": 18
+                },
+                "other": {
+                  "tasks": 0,
+                  "achievements": 0,
+                  "resonance_delta": 0
+                }
+              },
+              {
+                "month": "2026-07",
+                "health": {
+                  "tasks": 7,
+                  "achievements": 0,
+                  "resonance_delta": 11
+                },
+                "creativity": {
+                  "tasks": 4,
+                  "achievements": 0,
+                  "resonance_delta": 7
+                },
+                "work": {
+                  "tasks": 11,
+                  "achievements": 3,
+                  "resonance_delta": 29
+                },
+                "connections": {
+                  "tasks": 2,
+                  "achievements": 4,
+                  "resonance_delta": 14
+                },
+                "growth": {
+                  "tasks": 18,
+                  "achievements": 1,
+                  "resonance_delta": 32
+                },
+                "other": {
+                  "tasks": 0,
+                  "achievements": 0,
+                  "resonance_delta": 0
+                }
+              },
+              {
+                "month": "2026-08",
+                "health": {
+                  "tasks": 6,
+                  "achievements": 1,
+                  "resonance_delta": 10
+                },
+                "creativity": {
+                  "tasks": 3,
+                  "achievements": 8,
+                  "resonance_delta": 29
+                },
+                "work": {
+                  "tasks": 3,
+                  "achievements": 2,
+                  "resonance_delta": 12
+                },
+                "connections": {
+                  "tasks": 4,
+                  "achievements": 6,
+                  "resonance_delta": 23
+                },
+                "growth": {
+                  "tasks": 5,
+                  "achievements": 0,
+                  "resonance_delta": 8
+                },
+                "other": {
+                  "tasks": 0,
+                  "achievements": 0,
+                  "resonance_delta": 0
+                }
+              }
+            ]
+          }
+        },
+        "workspace": {
+          "tasks": [
+            {
+              "task_id": "task_20260421_009",
+              "title": "Переделать загранпаспорт",
+              "status": "todo",
+              "deadline": "2026-10-01",
+              "reminder": "2026-05-14",
+              "label": "Разное"
+            },
+            {
+              "task_id": "task_20260513_017",
+              "title": "Запустить Дневник Симбиоза",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260520132528284",
+              "title": "записать вокал",
+              "status": "todo",
+              "deadline": "2026-08-31",
+              "reminder": null,
+              "label": "Творчество"
+            },
+            {
+              "task_id": "task_20260523095714987",
+              "title": "Найти удаленный проект",
+              "status": "todo",
+              "deadline": "2026-09-30",
+              "reminder": null,
+              "label": "Работа"
+            },
+            {
+              "task_id": "task_20260528214539226",
+              "title": "подключить донаты к боту",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260528214624112",
+              "title": "Введение бюджета",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260528214938273",
+              "title": "проверить глубокий синтез",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260528215448515",
+              "title": "функция идей семян",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260609085346624",
+              "title": "проработать счетчик дней",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260612103201588",
+              "title": "подчинить второй ноутбук",
+              "status": "todo",
+              "deadline": "2026-08-29",
+              "reminder": null,
+              "label": "Разное"
+            },
+            {
+              "task_id": "task_20260621110324261",
+              "title": "сократить объем ответов",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260623111216432",
+              "title": "уточнение причинв при вызоде из сада",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260627123328276",
+              "title": "подумать о бразилии",
+              "status": "todo",
+              "deadline": "2026-12-31",
+              "reminder": null,
+              "label": "Разное"
+            },
+            {
+              "task_id": "task_20260716194340084",
+              "title": "потестить заказы по директу и дизайну",
+              "status": "todo",
+              "deadline": "2026-09-06",
+              "reminder": null,
+              "label": "Работа"
+            },
+            {
+              "task_id": "task_20260716194444028",
+              "title": "подготовить образы мандалы для ютуб",
+              "status": "todo",
+              "deadline": "2026-09-15",
+              "reminder": null,
+              "label": "Мандала"
+            },
+            {
+              "task_id": "task_20260717094309232",
+              "title": "сводить сына к стоматологу",
+              "status": "todo",
+              "deadline": "2026-08-31",
+              "reminder": null,
+              "label": "Разное"
+            },
+            {
+              "task_id": "task_20260721095235146",
+              "title": "прием стоматолога",
+              "status": "todo",
+              "deadline": "2026-08-31",
+              "reminder": null,
+              "label": "Разное"
+            },
+            {
+              "task_id": "task_20260726101626210",
+              "title": "подготовить электроакустическую программу",
+              "status": "todo",
+              "deadline": "2026-08-31",
+              "reminder": null,
+              "label": "Творчество"
+            },
+            {
+              "task_id": "task_20260731225747247",
+              "title": "благотворительная акция лежа",
+              "status": "todo",
+              "deadline": "2026-08-31",
+              "reminder": null,
+              "label": "Разное"
+            },
+            {
+              "task_id": "task_20260801230959556",
+              "title": "пауза в общении с Яной",
+              "status": "todo",
+              "deadline": "2026-09-01",
+              "reminder": null,
+              "label": "Личное"
+            },
+            {
+              "task_id": "task_20260812172513338",
+              "title": "почитать книгу",
+              "status": "todo",
+              "deadline": "2026-08-13",
+              "reminder": null,
+              "label": "Разное"
+            },
+            {
+              "task_id": "task_20260817135456884",
+              "title": "доделать мастеринг песни мечты",
+              "status": "todo",
+              "deadline": "2026-09-10",
+              "reminder": null,
+              "label": "Творчество"
+            },
+            {
+              "task_id": "task_20260819112544813",
+              "title": "тренировка",
+              "status": "todo",
+              "deadline": "2026-08-21",
+              "reminder": null,
+              "label": "Личное"
+            },
+            {
+              "task_id": "task_20260828092156343",
+              "title": "поездка в Нижний Новгород",
+              "status": "todo",
+              "deadline": "2026-08-31",
+              "reminder": "2026-08-31T12:00",
+              "label": "Личное"
+            },
+            {
+              "task_id": "task_20260828094049055",
+              "title": "отвезти сына в первый класс",
+              "status": "todo",
+              "deadline": "2026-09-01",
+              "reminder": null,
+              "label": "Личное"
+            },
+            {
+              "task_id": "task_20260828094129998",
+              "title": "решить вопрос с Нью-Нормалом Москва",
+              "status": "todo",
+              "deadline": "2026-09-06",
+              "reminder": null,
+              "label": "Работа"
+            },
+            {
+              "task_id": "task_20260828094150914",
+              "title": "встреча с Виктором Пакуртышкофе",
+              "status": "todo",
+              "deadline": "2026-08-29",
+              "reminder": null,
+              "label": "Работа"
+            }
+          ],
+          "groups": [
+            {
+              "id": "дом",
+              "name": "Личное"
+            },
+            {
+              "id": "мандала",
+              "name": "Мандала"
+            },
+            {
+              "id": "работа",
+              "name": "Работа"
+            },
+            {
+              "id": "творчество",
+              "name": "Творчество"
+            },
+            {
+              "id": "разное",
+              "name": "Разное"
+            }
+          ],
+          "achievements": [
+            {
+              "title": "Прошел 25000 шагов",
+              "category": "other",
+              "completed": "2026-05-07",
+              "resonance_bonus": 3
+            },
+            {
+              "title": "Сходил на тренировку",
+              "category": "other",
+              "completed": "2026-05-07",
+              "resonance_bonus": 3
+            },
+            {
+              "title": "встреча с родителями",
+              "category": "other",
+              "completed": "2026-05-09",
+              "resonance_bonus": 3
+            },
+            {
+              "title": "Репетиция рок-группы",
+              "completed": "2026-08-28",
+              "sphere": "creativity"
+            },
+            {
+              "title": "Поход в концерт",
+              "completed": "2026-08-28",
+              "sphere": "creativity"
+            },
+            {
+              "title": "Собрал старшего сына Доброслава в школу",
+              "completed": "2026-08-28",
+              "sphere": "connections"
+            }
+          ],
+          "achievements_count": 276,
+          "checklists": [],
+          "reminders": [
+            {
+              "id": "rem_17a52252",
+              "title": "Концерт Wild Waze",
+              "datetime_iso": "2026-09-10T13:00",
+              "repeat": "once",
+              "active": true
+            },
+            {
+              "id": "rem_task_20260828092156343",
+              "title": "поездка в Нижний Новгород",
+              "datetime_iso": "2026-08-31T12:00",
+              "repeat": "once",
+              "active": true,
+              "task_id": "task_20260828092156343"
+            },
+            {
+              "id": "rem_81d57142",
+              "title": "связаться с Димой Павиным по сотрудничеству",
+              "datetime_iso": "2026-08-31T11:00",
+              "repeat": "once",
+              "active": true
+            },
+            {
+              "id": "rem_90608cde",
+              "title": "Концерт «Джен-Эйр» 27 сентября",
+              "datetime_iso": "2026-09-26T15:00",
+              "repeat": "once",
+              "active": true
+            }
+          ],
+          "sphere_resonance": {
+            "health": 100,
+            "creativity": 97,
+            "work": 100,
+            "connections": 100,
+            "growth": 100
+          },
+          "deep_memory": {
+            "core": "Дима сегодня в энергичном творческом подъёме: после вчерашнего освобождающего стихотворения он погрузился в музыку — репетиция рок-группы и концерт наполнили день. Ценности глубины и точности проявляются в чётком планировании задач на сентябрь, включая поездку в Нижний Новгород и подготовку сына к школе.",
+            "snapshots": [
+              {
+                "date": "2026-08-24",
+                "text": "24 августа: день без новых задач, Дима продолжает фазу мягкого завершения после вчерашних событий (кофе-фест, передача картины, звонок родителям)."
+              },
+              {
+                "date": "2026-08-25",
+                "text": "25 августа: Дима перенёс все задачи с дедлайном 25.08 на 10.09, включая мастеринг песни, уборку лимита задач, книгу и тренировку, оставив день без новых событий."
+              },
+              {
+                "date": "2026-08-26",
+                "text": "26 августа: Дима перенёс все задачи с дедлайном 25.08 на 10.09, опубликовал новое стихотворение о расставании, починил крышу на даче у дедушки и запланировал напоминание о концерте Идея Фикс на 27 августа."
+              },
+              {
+                "date": "2026-08-27",
+                "text": "27 августа: Дима завершил день без новых задач, опубликовал стихотворение о расставании, починил крышу на даче у дедушки и запланировал напоминание о концерте Идея Фикс на 28 августа."
+              },
+              {
+                "date": "2026-08-28",
+                "text": "28 августа: Дима провёл репетицию рок-группы и посетил концерт Идея Фикс во Владимире, а также запланировал ряд дел на ближайшие дни (поездка в Нижний Новгород, встреча с Виктором, звонок Диме Павину, подготовка к 1 сентября)."
+              }
+            ],
+            "interests": {
+              "confirmed": [
+                {
+                  "name": "творчество/музыка",
+                  "count": 52,
+                  "last_seen": "2026-08-28"
+                },
+                {
+                  "name": "дело",
+                  "count": 41,
+                  "last_seen": "2026-08-24"
+                },
+                {
+                  "name": "работа/проекты",
+                  "count": 39,
+                  "last_seen": "2026-08-28"
+                },
+                {
+                  "name": "Мандала",
+                  "count": 37,
+                  "last_seen": "2026-08-24"
+                },
+                {
+                  "name": "тренировка",
+                  "count": 26,
+                  "last_seen": "2026-08-24"
+                },
+                {
+                  "name": "прогулка",
+                  "count": 25,
+                  "last_seen": "2026-08-24"
+                },
+                {
+                  "name": "творчество",
+                  "count": 24,
+                  "last_seen": "2026-08-24"
+                },
+                {
+                  "name": "отношения/романтика",
+                  "count": 23,
+                  "last_seen": "2026-08-24"
+                },
+                {
+                  "name": "самопознание",
+                  "count": 20,
+                  "last_seen": "2026-08-24"
+                },
+                {
+                  "name": "работа",
+                  "count": 18,
+                  "last_seen": "2026-08-24"
+                }
+              ],
+              "mentioned": [
+                {
+                  "name": "связи/друзья",
+                  "count": 9,
+                  "last_seen": "2026-08-21"
+                },
+                {
+                  "name": "рок-группа",
+                  "count": 9,
+                  "last_seen": "2026-08-28"
+                },
+                {
+                  "name": "творчество/поэзия",
+                  "count": 8,
+                  "last_seen": "2026-08-27"
+                }
+              ],
+              "fresh": []
+            },
+            "media": {
+              "confirmed": [
+                {
+                  "name": "Роза Мира",
+                  "type": "book",
+                  "count": 23,
+                  "last_seen": "2026-07-17"
+                },
+                {
+                  "name": "Сила культа",
+                  "type": "book",
+                  "count": 16,
+                  "last_seen": "2026-07-25"
+                },
+                {
+                  "name": "Кришна том 1",
+                  "type": "book",
+                  "count": 15,
+                  "last_seen": "2026-06-05"
+                },
+                {
+                  "name": "Тибетская книга мёртвых",
+                  "type": "book",
+                  "count": 15,
+                  "last_seen": "2026-06-06"
+                },
+                {
+                  "name": "Разоблачённая Изида",
+                  "type": "book",
+                  "count": 15,
+                  "last_seen": "2026-06-08"
+                },
+                {
+                  "name": "Египетская книга мёртвых",
+                  "type": "book",
+                  "count": 15,
+                  "last_seen": "2026-06-10"
+                },
+                {
+                  "name": "Цветок жизни",
+                  "type": "book",
+                  "count": 15,
+                  "last_seen": "2026-06-11"
+                },
+                {
+                  "name": "Беседы с Богом",
+                  "type": "book",
+                  "count": 11,
+                  "last_seen": "2026-06-20"
+                },
+                {
+                  "name": "Fallout",
+                  "type": "series",
+                  "count": 10,
+                  "last_seen": "2026-06-05"
+                },
+                {
+                  "name": "Разрабы",
+                  "type": "series",
+                  "count": 8,
+                  "last_seen": "2026-06-05"
+                }
+              ],
+              "mentioned": [
+                {
+                  "name": "Идея Фикс",
+                  "type": "music",
+                  "count": 3,
+                  "last_seen": "2026-08-28"
+                }
+              ],
+              "fresh": []
+            }
+          },
+          "last_interaction_date": "2026-08-28",
+          "last_morning_date": "2026-08-29",
+          "pinned_message": {
+            "message_id": 12798,
+            "text": "🌟 Суперцель Димы\n\n🎯 Суть: Найти удаленную работу с доходом от 150 000 ₽ до конца 2026 года\n\n🌏 Зачем: Жить зимой во Вьетнаме, работать удалённо и заниматься творчеством (музыка, вокал, запись)\n\n📅 Дедлайн: 31 декабря 2026",
+            "date": "2026-05-25"
+          },
+          "last_interaction_datetime": "2026-08-28T23:58:42.329371+03:00",
+          "_decay_date": "2026-08-29"
+        },
+        "memory": {
+          "sessions": [
+            {
+              "role": "user",
+              "content": "Мб идея фикс или что-то в этом роде",
+              "ts": "2026-08-26T15:44:45.853461+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "Давай проверю, может, это действительно было в контексте «Идея фикс» 🌿...",
+              "ts": "2026-08-26T15:44:45.854515+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: напоминание создано — концерт Идея Фикс]",
+              "ts": "2026-08-26T15:45:36.013310+03:00"
+            },
+            {
+              "role": "user",
+              "content": "А нашел добавь напоминание 27 августа на 17.00 концерт Идея Фикс.",
+              "ts": "2026-08-26T15:45:36.120581+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Так, смотри, концерт у нас завтра в 17. Перенеси дату напоминания.",
+              "ts": "2026-08-27T11:35:46.189545+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "Поняла, переношу напоминание на завтра 🌿...",
+              "ts": "2026-08-27T11:35:46.190210+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "Сегодня тихий день, без новых задач — и это, кажется, именно то пространство, которое нужно...",
+              "ts": "2026-08-27T14:36:46.369356+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: чеклист создан — Магазин]",
+              "ts": "2026-08-27T18:51:23.615279+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь чек-лист в магазин. Значит, первое – яйца, второе – хлеб, третье – к чаю, четвертое – огурцы, пятое – котлеты рыбные,",
+              "ts": "2026-08-27T18:51:23.748519+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Привет, все круто, спасибо, я во Владимире, сегодня иду на концерт. Еще у меня сейчас будет репетиция, поэтому рок-группы...",
+              "ts": "2026-08-28T12:18:56.523537+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "Как здорово, что день складывается из двух таких разных энергий — репетиция с группой и концерт вечером 🌿...",
+              "ts": "2026-08-28T12:18:56.524290+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: достижение зафиксировано — Репетиция рок-группы]",
+              "ts": "2026-08-28T12:21:06.629721+03:00"
+            },
+            {
+              "role": "user",
+              "content": "добавь достижения репетиции рок-группы",
+              "ts": "2026-08-28T12:21:06.637555+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "🔥 Достижение зафиксировано! Репетиция рок-группы Сфера: Творчество · +3 к резонансу",
+              "ts": "2026-08-28T12:21:06.638262+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: достижение зафиксировано — Поход в концерт]",
+              "ts": "2026-08-28T12:21:21.837295+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавил достижение поход в концерт.",
+              "ts": "2026-08-28T12:21:21.845232+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "🔥 Достижение зафиксировано! Поход в концерт Сфера: Творчество · +3 к резонансу",
+              "ts": "2026-08-28T12:21:21.846061+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: задача создана — поездка в Нижний Новгород]",
+              "ts": "2026-08-28T12:21:56.337225+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь в задачу поездка в Нижний Новгород. Понедельник. Группа личная. Поставь напоминание в понедельник на 12.00.",
+              "ts": "2026-08-28T12:21:56.389956+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: задача создана — отвезти сына в первый класс]",
+              "ts": "2026-08-28T12:22:25.121670+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь задачу отвезти сына в первый класс 1 сентября, группа личная.",
+              "ts": "2026-08-28T12:22:25.171004+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: достижение зафиксировано — Собрал старшего сына Доброслава в школу]",
+              "ts": "2026-08-28T12:41:07.985879+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь достижения, собрал старшего сына Доброслава в школу.",
+              "ts": "2026-08-28T12:41:07.992376+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "🤝 Достижение зафиксировано! Собрал старшего сына Доброслава в школу Сфера: Связи · +3 к резонансу",
+              "ts": "2026-08-28T12:41:07.993015+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: задача создана — решить вопрос с Нью-Нормалом Москва]",
+              "ts": "2026-08-28T12:41:29.992229+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь задачу решить вопрос с Нью-Нормалом Москва. Группа работа. Дедлайн 6 сентября.",
+              "ts": "2026-08-28T12:41:30.045353+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: задача создана — встреча с Виктором Пакуртышкофе]",
+              "ts": "2026-08-28T12:41:50.909010+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь задачу встреча с Виктором Пакуртышкофе, завтра группа работы.",
+              "ts": "2026-08-28T12:41:51.064971+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: напоминание создано — связаться с Димой Павиным по сотрудничеству]",
+              "ts": "2026-08-28T12:42:19.218567+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь напоминания связаться с Димой Павиным по сотрудничеству в понедельник в 11.00.",
+              "ts": "2026-08-28T12:42:19.466705+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Закрой задачу, убрать лимит и задачи.",
+              "ts": "2026-08-28T12:42:53.624279+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "✅ Готово: убрать лимиты задач · 💎 276 · 🤝 Связи +1% → 99%",
+              "ts": "2026-08-28T12:42:53.624652+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: задача изменена — по тесте заказа по директу и дизайну]",
+              "ts": "2026-08-28T12:43:13.055357+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Перенеси задачу по тесте заказа по директу и дизайну на 6 сентября.",
+              "ts": "2026-08-28T12:43:15.280533+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "✅ Дедлайн → 2026-09-06 Можно также добавить: 🔔 напоминание",
+              "ts": "2026-08-28T12:43:15.281296+03:00"
+            },
+            {
+              "role": "system",
+              "content": "[Система: задача изменена — переделать загранпаспорт]",
+              "ts": "2026-08-28T12:43:28.461519+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Неси задачу переделать загранпаспорт на 1 октября.",
+              "ts": "2026-08-28T12:43:30.492100+03:00"
+            },
+            {
+              "role": "assistant",
+              "content": "✅ Дедлайн → 2026-10-01",
+              "ts": "2026-08-28T12:43:30.492860+03:00"
+            },
+            {
+              "role": "user",
+              "content": "Добавь напоминание, концерт «Джен-Эйр» 27 сентября. Поставь его на 26 сентября на 15.00.",
+              "ts": "2026-08-28T23:58:37.445666+03:00"
+            }
+          ],
+          "updated": "2026-08-28"
+        }
+      },
+      "section_C_architect_synthesis": {
+        "last_updated": "2026-08-29",
+        "version": "v2.0",
+        "current_synthesis": "Дима находится в фазе активной реализации: он перешёл от глубокой рефлексии к действию. Его творческий потенциал (97%) и телесная практика (100%) находятся на пике, что позволяет ему эффективно воплощать идеи в жизнь. Основной вектор — синхронизация личных (Нижний Новгород, школа сына) и профессиональных (Мандала, работа) задач. Архитектор движется к своей суперцели: найти удалённую работу и жить зимой во Вьетнаме. Его путь — это баланс между творчеством, семьёй и созданием экосистемы, способной жить без него.",
+        "evolution": [
+          {
+            "date": "2026-08-24",
+            "from": "Творческий человек, ищущий свой путь.",
+            "to": "Философ, использующий творчество как способ познания мира и себя.",
+            "trigger": "Ответы на анкету, размышления о Мандале, одиночестве и единстве."
+          },
+          {
+            "date": "2026-08-25",
+            "update": "Опыт с Яной укрепил понимание: мне нужна устойчивая атмосфера, а не драма. Я выбираю себя и свою целостность."
+          },
+          {
+            "date": "2026-08-25",
+            "update": "Завершение подтверждено через творчество. Написан стих, в котором отпускание больше не связано с болью. Принятие стало творческим актом, а не эмоциональным усилием."
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "SQ1",
+            "question": "Что для тебя сейчас важнее: оставить след или прожить момент? Или это одно и то же?",
+            "asked": "2026-08-24",
+            "status": "open"
+          },
+          {
+            "id": "SQ2",
+            "question": "Как ты понимаешь 'свободу' сейчас, в 36 лет, и как понимал её в 20? Что изменилось?",
+            "asked": "2026-08-24",
+            "status": "open"
+          }
+        ]
+      },
+      "section_D_personal_context": {
+        "last_updated": "2026-08-29",
+        "personal_status": {
+          "emotional": "Переходный период. Грусть и облегчение после завершения долгих отношений. Желание двигаться дальше.",
+          "life_context": "Возвращение во Владимир. Перезагрузка. Осознание, что старые паттерны больше не работают."
+        },
+        "goals_and_vectors": {
+          "long_term": "Векторы развития из personal/index.json. Ключевые: Карьера (45%), Поэзия (100%), Музыка (10%), Франшиза (15%).",
+          "medium_term": "Задачи на 1–3 месяца",
+          "short_term": [
+            {
+              "id": "twynbee_signup",
+              "action": "Зарегистрироваться на платформе Twynbee для знакомств и общения",
+              "deadline": "2026-09-06",
+              "status": "pending"
+            }
+          ]
+        },
+        "key_insights_from_dialogue": [
+          {
+            "date": "2026-08-23",
+            "insight": "Завершение отношений — не поражение, а осознанный выбор в пользу собственного пути. Жалость к ней не должна становиться поводом для возврата."
+          },
+          {
+            "date": "2026-08-24",
+            "insight": "Внутренний конфликт между 'глубиной' и 'свободой' можно проживать последовательно: сначала свобода для восстановления и вдохновения, потом — осознанный выбор постоянства."
+          }
+        ],
+        "reminders": [
+          "Я ухожу не потому, что она плохая, а потому что мы идём к разным целям.",
+          "Она не может быть моей хранительницей очага. Это не её путь.",
+          "Чувство потери пройдёт, если дать себе время."
+        ],
+        "career_crossroads": {
+          "description": "Текущие размышления о выборе между возможностями в Москве и Владимире.",
+          "decision_timeline": "Не торопиться. Собрать информацию. Принять решение по внутреннему отклику.",
+          "options": [
+            {
+              "id": "moscow_project",
+              "description": "Вернуться на проект в Москве. Зарплата выше (150–200 тыс.).",
+              "pros": "Деньги, драйв, студия, динамика",
+              "cons": "Больше суеты, выше риск",
+              "status": "рассматривается"
+            },
+            {
+              "id": "vladimir_projects",
+              "description": "Работа во Владимире (2 предложения). Зарплата ниже (~100 тыс.).",
+              "pros": "Покой, размеренность, близость к дому",
+              "cons": "Меньше денег, риск скуки",
+              "status": "рассматривается"
+            },
+            {
+              "id": "no_choice",
+              "description": "Возможность не выбирать ни один из вариантов",
+              "status": "открыта"
+            }
+          ]
+        },
+        "inner_conflict_and_vectors": {
+          "depth_and_constancy": {
+            "description": "Потребность в глубоких, постоянных, почти сказочных отношениях и проектах.",
+            "notes": "Архитектурная часть меня. Хочу построить что-то надёжное, долгосрочное.",
+            "status": "активен"
+          },
+          "freedom_and_inspiration": {
+            "description": "Потребность в лёгкости, новизне, периодических романах для вдохновения и творчества.",
+            "notes": "Творческая часть меня. Нуждается в свежести, переключении, новых людях для искры.",
+            "status": "активен"
+          },
+          "current_phase": {
+            "description": "На ближайшие 6–12 месяцев осознанно быть в 'режиме свободы': лёгкие знакомства, творчество, без обязательств. Затем пересмотреть готовность к глубине."
+          }
+        },
+        "current_boundaries": {
+          "with_yana": "Не искать встреч, не писать первым. На сообщения — коротко и по делу.",
+          "with_new_people": "Режим свободы до весны 2026. Лёгкие знакомства, творчество, никаких серьёзных обязательств."
+        },
+        "recovery_tracking": {
+          "phase": "отвыкание от привычки проверять",
+          "start_date": "2026-08-26",
+          "habits": {
+            "checking_social_media": {
+              "description": "Снижение частоты проверки страницы Яны в Instagram и других соцсетях",
+              "status": "active",
+              "strategy": "Техника 'наблюдение без действия' и замена привычки"
+            }
+          },
+          "milestones": [
+            {
+              "date": "2026-08-26",
+              "event": "Начало трекинга. Переезд во Владимир начат."
+            },
+            {
+              "date": "2026-08-27",
+              "event": "Переезд во Владимир завершён (вечер). Новая глава."
+            }
+          ]
+        }
       }
     }
   },
