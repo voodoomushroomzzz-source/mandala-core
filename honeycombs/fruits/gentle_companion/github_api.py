@@ -281,6 +281,62 @@ async def _gardeners_delete(path: str) -> bool:
         return False
 
 
+# ─── Architect deep-profile sync (TZ-ARCHITECT-INTEGRATION-003) ───────────────
+# Writes ONLY section_B_gardener_data and
+# section_C_architect_synthesis.synthesis_layer_2_from_bot.text in profile_deep.json.
+# Never touches section_A, section_D, layer_1, layer_3. Architect-only, no-op otherwise.
+# Read path for Architect is UNCHANGED (still mandala-gardeners) — this is write-only sync.
+
+async def _sync_architect_data() -> bool:
+    """Periodic sync of live bot state into profile_deep.json for the Architect."""
+    uid = ARCHITECT_TELEGRAM_ID
+    if not _get_user_store(uid).get("ready"):
+        return False
+    try:
+        data = await _github_get(CORE_DEEP_PROFILE_PATH, force=True)
+        if not isinstance(data, dict) or "section_B_gardener_data" not in data:
+            logger.error("_sync_architect_data: profile_deep.json missing/malformed, abort")
+            return False
+
+        profile = store_get_profile(uid) or {}
+        workspace = store_get_workspace(uid) or {}
+        companion = profile.get("companion_settings", {}) or {}
+        dm = workspace.get("deep_memory", {}) or {}
+
+        data["section_B_gardener_data"] = {
+            "last_sync": _today(),
+            "profile": {
+                "name": profile.get("name", ""),
+                "resonance_level": profile.get("resonance_level", 0),
+                "city": companion.get("city", ""),
+                "companion_settings": {
+                    "morning_message_time": companion.get("morning_message_time", ""),
+                    "timezone": companion.get("timezone", "Europe/Moscow"),
+                    "gender": companion.get("gender", ""),
+                },
+            },
+            "sphere_resonance": store_get_sphere_resonance(uid),
+            "deep_memory": dm,
+            "growth_history": profile.get("growth_history", []),
+        }
+
+        core_text = dm.get("core", "")
+        if core_text:
+            syn = data.get("section_C_architect_synthesis", {}) or {}
+            layer2 = syn.get("synthesis_layer_2_from_bot", {}) or {}
+            layer2["text"] = core_text
+            syn["synthesis_layer_2_from_bot"] = layer2
+            syn["last_updated"] = _today()
+            data["section_C_architect_synthesis"] = syn
+
+        ok = await _github_put(CORE_DEEP_PROFILE_PATH, data)
+        logger.info(f"Architect profile_deep.json sync: {'ok' if ok else 'FAILED'}")
+        return ok
+    except Exception as e:
+        logger.error(f"_sync_architect_data error: {e}", exc_info=True)
+        return False
+
+
 # ─── Background sync ──────────────────────────────────────────────────────────
 
 

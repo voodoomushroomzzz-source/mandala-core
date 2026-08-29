@@ -134,6 +134,7 @@ WEBHOOK_PATH = "/webhook"
 WEBHOOK_SECRET = ""  # No secret — HTTPS on Render is sufficient
 
 GARDENERS_ROOT = "gardeners"  # gardeners/{telegram_id}/profile.json etc
+CORE_DEEP_PROFILE_PATH = "honeycombs/personal/profile_deep.json"  # Architect-only unified profile (mandala-core, TZ-ARCHITECT-INTEGRATION-003)
 
 if not BOT_TOKEN or not RENDER_EXTERNAL_URL:
     logger.error("Missing BOT_TOKEN or RENDER_EXTERNAL_URL")

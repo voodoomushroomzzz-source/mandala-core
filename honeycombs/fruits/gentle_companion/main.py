@@ -49,6 +49,7 @@ async def on_startup():
     scheduler.add_job(_send_daily_report, "cron", hour=18, minute=0, id="daily_report",
                       timezone="UTC")  # 18:00 UTC = 21:00 MSK
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
+    scheduler.add_job(_sync_architect_data, "interval", minutes=3, id="architect_sync")
     scheduler.add_job(_check_webhook, "interval", minutes=5, id="webhook_check")
     scheduler.start()
     logger.info("Scheduler started")
