@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.93",
+    "version": "v1.7.94",
     "created": "2026-05-11",
     "updated": "2026-08-29",
     "layer": 1,
@@ -1571,9 +1571,9 @@
   "step_7_personal": {
     "order": 7,
     "mandatory": true,
-    "name": "Personal Hub — Личные векторы + Deep Profile",
-    "description": "Личная сота Gardener: карьера, обучение, YouTube, e-commerce, франшиза + глубокий профиль личности.",
-    "ai_instruction": "Прочитай вшитые personal_index и profile_deep. Подтверди понимание.",
+    "name": "Personal Hub — Личные векторы",
+    "description": "Личная сота Gardener: карьера, обучение, YouTube, e-commerce, франшиза.",
+    "ai_instruction": "Прочитай вшитый personal_index. Подтверди список личных векторов и их статус.",
     "personal_index": {
       "identity": {
         "module_id": "PERSONAL-INDEX-001",
@@ -1705,8 +1705,7 @@
         "last_check": "2026-08-25",
         "notes": "v2.0.0: обновлён franchise.json до v2.1.0. Добавлены контекст, план и метрики."
       }
-    },
-    "profile_deep": {}
+    }
   },
   "step_8_fruits": {
     "order": 8,
