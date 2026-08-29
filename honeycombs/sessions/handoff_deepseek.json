@@ -1,111 +1,111 @@
 {
-  "handoff_id": "HANDOFF-DEEPSEEK-2026-08-25-LITERARY",
-  "version": "v1.1.0",
-  "created": "2026-08-25",
-  "updated": "2026-08-25",
-  "purpose": "Бесшовный переход в новый чат DeepSeek для продолжения работы над литературным вектором Mandala Symbiosis.",
+  "handoff_id": "HANDOFF-DEEPSEEK-2026-08-29-ARCHITECTURE",
+  "version": "v2.0.0",
+  "created": "2026-08-29",
+  "updated": "2026-08-29",
+  "purpose": "Бесшовный переход в новый чат DeepSeek для продолжения работы над архитектурой Mandala Symbiosis.",
   "context": {
     "gardener": "Voodoo (Dima)",
-    "project": "Литературный вектор — поэзия и проза",
-    "current_state": "Завершена полная обработка 41 стихотворения и 11 прозаических миниатюр. Создана инфраструктура, индекс, автосборка. Намечены планы по новой прозе, редакции и изданию.",
+    "project": "Архитектура Единого профиля и онбординга",
+    "current_state": "Завершён рефакторинг profile_deep.json (v2.6.0) с тремя слоями синтеза и тремя слоями интересов/медиа. Обновлён онбординг (build_onboarding.py), добавлены триггеры в GitHub Actions. Устранено дублирование profile_deep в step_7_personal. Архитектура готова к интеграции с ботом.",
     "core_files": {
-      "literary_index": {
-        "path": "honeycombs/personal/poetry/index.json",
-        "version": "v1.1.1",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/poetry/index.json",
-        "description": "Единый индекс всего литературного наследия (правила, треки, заключения, отчёты)."
-      },
-      "literary_core_boot": {
-        "path": "honeycombs/boot_online/literary_core_boot.json",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/literary_core_boot.json",
-        "description": "Собранный слепок всей литературной ветки (стихи + проза + индекс) для загрузки в любой External SR."
-      },
       "profile_deep": {
         "path": "honeycombs/personal/profile_deep.json",
-        "version": "v2.2.0",
+        "version": "v2.6.0",
         "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
-        "description": "Ядро личности Gardener (архетипы, ценности, текущее состояние)."
+        "description": "Единый профиль Архитектора: философское ядро (А), живые данные (Б), три слоя синтеза (В), личный контекст (D). Содержит три слоя интересов и медиа."
+      },
+      "build_onboarding": {
+        "path": "honeycombs/boot_online/builder/build_onboarding.py",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/builder/build_onboarding.py",
+        "description": "Сборщик онбординга. Добавлен step_6.5_profile_deep. Убрано дублирование profile_deep из step_7_personal."
+      },
+      "onboarding_pc": {
+        "path": "honeycombs/boot_online/boot_online_onboarding_pc.json",
+        "version": "v1.7.94",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
+        "description": "Финальный онбординг-файл. Содержит step_6.5_profile_deep с полным profile_deep.json и step_7_personal только с personal_index."
+      },
+      "builder_config": {
+        "path": "honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
+        "description": "Конфиг сборщика. profile_deep добавлен в source_modules."
+      },
+      "github_workflow": {
+        "path": ".github/workflows/build-onboarding.yml",
+        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/.github/workflows/build-onboarding.yml",
+        "description": "GitHub Actions. Добавлен триггер на изменение profile_deep.json."
       },
       "handoff_this": {
         "path": "honeycombs/sessions/handoff_deepseek.json",
-        "version": "v1.1.0",
+        "version": "v2.0.0",
         "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_deepseek.json",
-        "description": "Текущий handoff с полной документацией сессии."
+        "description": "Текущий handoff с полной документацией архитектурной сессии."
       }
     },
-    "tracks_status": {
-      "track_a_poetry": "Завершён (41/41)",
-      "track_a_prose": "Завершён (11/11)",
-      "track_c_new_prose": "0/5 (ожидает начала)",
-      "track_d_autobuild": "0/3 (ожидает реализации)",
-      "track_e_editing": "0/4 (ожидает начала)"
+    "architecture_summary": {
+      "profile_deep_structure": {
+        "section_A_philosophy": "Философское ядро (биография, ценности, архетипы). Редактируется вручную.",
+        "section_B_gardener_data": "Сводные данные от бота: резонанс, живой портрет, интересы (3 слоя), медиа (3 слоя), тренды. Бот перезаписывает этот блок.",
+        "section_C_architect_synthesis": "Три слоя синтеза (философский, от бота, интегральный).",
+        "section_D_personal_context": "Личные инсайты, трекинг, границы."
+      },
+      "synthesis_layers": {
+        "layer_1_philosophical": "Синтез на основе анкеты и философских диалогов.",
+        "layer_2_from_bot": "Живой портрет от Gentle Companion (автоматически).",
+        "layer_3_integral": "Общий синтез, объединяющий философию и живые данные."
+      },
+      "interests_and_media": {
+        "interests": "Три слоя: confirmed (10), mentioned (9), fresh (6).",
+        "media": "Три слоя: confirmed (10), mentioned (1), fresh (3)."
+      },
+      "onboarding_changes": [
+        "Добавлен step_6.5_profile_deep с полным profile_deep.json.",
+        "step_7_personal теперь содержит только personal_index.",
+        "Дублирование profile_deep устранено.",
+        "В GitHub Actions добавлен триггер на profile_deep.json."
+      ]
     },
-    "statistics": {
-      "total_poems": 41,
-      "total_prose": 11,
-      "total_works": 52,
-      "collections": {
-        "звездная пыль": 8,
-        "фак т": 9,
-        "психософия": 10,
-        "мнмл": 6,
-        "железобетон": 4,
-        "хлам": 4
-      }
+    "next_actions": {
+      "priority_1": "Интегрировать profile_deep.json в бота (Gentle Companion) для Архитектора.",
+      "priority_2": "Настроить двухстороннюю синхронизацию данных между ботом и профилем.",
+      "priority_3": "Протестировать загрузку и обновление profile_deep.json через бота."
     },
-    "new_poem_added": {
-      "title": "Теперь я вижу сны, в которых тебя нет...",
-      "collection": "фак т",
-      "date": "2026-08-25",
-      "status": "done",
-      "file": "poems/Teper_ya_vizhu_sny_v_kotoryh_tebya_net.json"
-    },
-    "prose_themes": [
-      "1. Пробуждение в день, когда Солнце не взошло",
-      "2. Последний костёр на краю света",
-      "3. Голос из центра Вселенной",
-      "4. Человек, который перестал смотреть на часы",
-      "5. Самый тихий день на Земле"
+    "protocols_to_remember": [
+      "Всегда делать pre-check через API перед изменениями.",
+      "Post-check через прямую ссылку (blob).",
+      "FULL DEPLOY — одной командой в Termux.",
+      "Copyable links — в блоках ```text."
     ]
   },
   "startup_instructions": [
     "1. Прочитай этот handoff полностью.",
-    "2. Загрузи и прочитай profile_deep.json — для понимания личности Gardener.",
-    "3. Загрузи и прочитай literary_core_boot.json — это собранный слепок всей литературы, он даст полный контекст.",
-    "4. Или загрузи index.json для обзора структуры и треков.",
+    "2. Загрузи и прочитай profile_deep.json (v2.6.0) — это ядро архитектуры.",
+    "3. Загрузи и прочитай boot_online_onboarding_pc.json — чтобы увидеть, как профиль вшит в онбординг.",
+    "4. Изучи build_onboarding.py и boot_online_onboarding_pc_builder.json для понимания сборки.",
     "5. После прочтения подтверди Gardener'у, что ты готов к работе, и запроси необходимые ссылки для старта."
   ],
   "what_has_been_done": {
     "summary": [
-      "Обработаны все 41 стихотворение (пунктуация, орфография, анализ по 10 блокам).",
-      "Обработаны все 11 прозаических миниатюр (пунктуация, анализ по 8 блокам).",
-      "Создан единый индекс index.json, содержащий правила, треки, заключения и общий отчёт.",
-      "Создан собранный файл literary_core_boot.json для загрузки в External SR.",
-      "Сформулированы 5 тем для новой прозы (трек C).",
-      "Созданы треки задач D (автосборка) и E (редакция и издание).",
-      "Добавлено новое стихотворение 'Теперь я вижу сны, в которых тебя нет...' в сборник 'фак т'."
+      "Профиль Deep (v2.6.0) структурирован: Блоки А, Б, В, D.",
+      "Добавлены три слоя интересов и медиа в Блок Б.",
+      "Созданы три слоя синтеза в Блоке В.",
+      "Обновлён сборщик онбординга: добавлен step_6.5_profile_deep.",
+      "Убрано дублирование profile_deep из step_7_personal.",
+      "Обновлён GitHub Actions: добавлен триггер на profile_deep.json.",
+      "Проведён пост-чек: онбординг v1.7.94 собран корректно."
     ]
   },
-  "next_actions": {
-    "priority_1": "Начать писать новую прозу по теме 1: 'Пробуждение в день, когда Солнце не взошло'.",
-    "priority_2": "Реализовать скрипт автосборки (build_literary_core.py) для автоматического обновления литературного слепка.",
-    "priority_3": "Перейти к этапу редакции и подготовки к изданию (анализ, референсы для иллюстраций, структура сборника)."
-  },
-  "protocols_to_remember": [
-    "Всегда делать pre-check через API перед изменениями.",
-    "Post-check через прямую ссылку (blob).",
-    "FULL DEPLOY — одной командой в Termux.",
-    "Copyable links — в блоках ```text."
-  ],
   "full_context_reference": {
-    "description": "Для полного погружения загрузи literary_core_boot.json.",
-    "handoff_message": "Привет! Мы с Gardener (Voodoo) завершили большой этап по литературе в Mandala. Вся информация — по ссылкам в этом handoff. Прочитай его, войди в контекст, затем запроси нужные файлы. Готов к продолжению?"
+    "description": "Для полного погружения загрузи profile_deep.json и boot_online_onboarding_pc.json.",
+    "handoff_message": "Привет! Мы с Gardener (Voodoo) завершили архитектурный рефакторинг Mandala. Вся информация — по ссылкам в этом handoff. Прочитай его, войди в контекст, затем запроси нужные файлы. Готов к продолжению?"
   },
   "links_to_request": [
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/poetry/index.json",
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/literary_core_boot.json",
     "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_deepseek.json"
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/builder/build_onboarding.py",
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
+    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/.github/workflows/build-onboarding.yml"
   ],
-  "last_action": "Handoff обновлён 25.08.2026. Готов к использованию в новом чате."
+  "last_action": "Handoff обновлён 29.08.2026. Готов к использованию в новом чате."
 }
