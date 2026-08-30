@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-08-29",
+    "updated": "2026-08-30",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 27,
-    "total_size_kb": 2124.25,
+    "total_size_kb": 2135.51,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 27,
-    "total_size_kb": 2124.25,
-    "last_updated": "2026-08-29",
+    "total_size_kb": 2135.51,
+    "last_updated": "2026-08-30",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -64,7 +64,7 @@
             "work_id": "W-T-20260511-ENGCHAT",
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-08-15",
-            "days_overdue": 14
+            "days_overdue": 15
           }
         ],
         "upcoming_deadlines": [
@@ -72,25 +72,25 @@
             "work_id": "W-R-RM-012",
             "name": "First Living Products — Mandala MVPs",
             "deadline": "2026-09-01",
-            "days_left": 2
+            "days_left": 1
           },
           {
             "work_id": "W-T-20260511-MANUS",
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "deadline": "2026-08-31",
-            "days_left": 1
+            "days_left": 0
           },
           {
             "work_id": "W-R-20260814-PERSONAL-MIGRATION",
             "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
             "deadline": "2026-08-31",
-            "days_left": 1
+            "days_left": 0
           },
           {
             "work_id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "deadline": "2026-08-31",
-            "days_left": 1
+            "days_left": 0
           }
         ],
         "errors_count": 0,
@@ -141,7 +141,7 @@
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "type": "works",
             "deadline": "2026-08-15",
-            "days_overdue": 14
+            "days_overdue": 15
           }
         ],
         "upcoming": [
@@ -150,28 +150,28 @@
             "name": "First Living Products — Mandala MVPs",
             "type": "works",
             "deadline": "2026-09-01",
-            "days_left": 2
+            "days_left": 1
           },
           {
             "id": "W-T-20260511-MANUS",
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "type": "works",
             "deadline": "2026-08-31",
-            "days_left": 1
+            "days_left": 0
           },
           {
             "id": "W-R-20260814-PERSONAL-MIGRATION",
             "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
             "type": "works",
             "deadline": "2026-08-31",
-            "days_left": 1
+            "days_left": 0
           },
           {
             "id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "type": "works",
             "deadline": "2026-08-31",
-            "days_left": 1
+            "days_left": 0
           }
         ],
         "warnings": [],
@@ -190,13 +190,13 @@
         "root_count": 21,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 73,
-        "inbox_total_files": 74,
+        "inbox_count": 78,
+        "inbox_total_files": 79,
         "inbox_threshold": 50,
         "inbox_status": "warning",
         "warnings": [
           "Корень seeds/: 21 файлов (порог 10)",
-          "Inbox: 73 новых файлов (порог 50)"
+          "Inbox: 78 новых файлов (порог 50)"
         ],
         "status": "warning"
       }
@@ -205,13 +205,13 @@
       "root_count": 21,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 73,
-      "inbox_total_files": 74,
+      "inbox_count": 78,
+      "inbox_total_files": 79,
       "inbox_threshold": 50,
       "inbox_status": "warning",
       "warnings": [
         "Корень seeds/: 21 файлов (порог 10)",
-        "Inbox: 73 новых файлов (порог 50)"
+        "Inbox: 78 новых файлов (порог 50)"
       ],
       "status": "warning"
     }
