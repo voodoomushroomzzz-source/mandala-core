@@ -1,20 +1,27 @@
 {
-  "date": "2026-08-29",
+  "date": "2026-08-30",
   "version": "7.39.23",
   "gardeners": {
     "224736062": {
       "name": "Дима",
-      "active": false,
-      "synthesis_date": "2026-08-28"
+      "active": true,
+      "synthesis_date": "2026-08-30"
     }
   },
   "issues": [
     {
       "user_id": "224736062",
       "type": "repeated_request",
-      "intent": "add_task",
+      "intent": "add_achievement",
       "count": 2,
-      "context": "повторный add_task"
+      "context": "повторный add_achievement"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "complete_task",
+      "count": 2,
+      "context": "повторный complete_task"
     },
     {
       "user_id": "224736062",
@@ -22,6 +29,34 @@
       "intent": "edit_task",
       "count": 2,
       "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "edit_task",
+      "count": 2,
+      "context": "повторный edit_task"
+    },
+    {
+      "user_id": "224736062",
+      "type": "repeated_request",
+      "intent": "add_task",
+      "count": 2,
+      "context": "повторный add_task"
     }
   ]
 }
