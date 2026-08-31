@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-08-30T14:02:27.122771",
+  "last_scan": "2026-08-31T07:10:38.470666",
   "honeycomb_hashes": {
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
@@ -13,7 +13,7 @@
     "honeycombs/personal/poetry": "f3662718e141cbfb4514812dd1c7dc9e",
     "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
     "honeycombs/seeds": "4dc2b1dadb015cf63137153125295668",
-    "honeycombs/seeds/inbox": "33590efc529669946a7c9927f56b7142",
+    "honeycombs/seeds/inbox": "017e9ff9a4093649b0ce0e5b0ec8aa91",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
     "honeycombs/knowledge": "29e22087c24941e87b341b5ef7fda114",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
@@ -35,35 +35,53 @@
     "invalid_v2": 6,
     "errors": 0,
     "warnings": 6,
-    "total_files": 469,
-    "total_size_kb": 2165.32
+    "total_files": 495,
+    "total_size_kb": 2192.7
   },
   "seeds_health": {
     "root_count": 21,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 78,
-    "inbox_total_files": 79,
+    "inbox_count": 91,
+    "inbox_total_files": 92,
     "inbox_threshold": 50,
     "inbox_status": "warning",
     "warnings": [
       "Корень seeds/: 21 файлов (порог 10)",
-      "Inbox: 78 новых файлов (порог 50)"
+      "Inbox: 91 новых файлов (порог 50)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-08-30T14:02:27.122780",
+    "last_check": "2026-08-31T07:10:38.470676",
     "errors_count": 18,
     "warnings_count": 8,
-    "expired_tasks": 1,
-    "upcoming_deadlines": 4,
+    "expired_tasks": 4,
+    "upcoming_deadlines": 1,
     "expired_tasks_list": [
+      {
+        "work_id": "W-T-20260511-MANUS",
+        "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+        "deadline": "2026-08-31",
+        "days_overdue": 0
+      },
+      {
+        "work_id": "W-R-20260814-PERSONAL-MIGRATION",
+        "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+        "deadline": "2026-08-31",
+        "days_overdue": 0
+      },
+      {
+        "work_id": "W-T-20260408-1030",
+        "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+        "deadline": "2026-08-31",
+        "days_overdue": 0
+      },
       {
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 15
+        "days_overdue": 16
       }
     ],
     "upcoming_deadlines_list": [
@@ -71,24 +89,6 @@
         "work_id": "W-R-RM-012",
         "name": "First Living Products — Mandala MVPs",
         "deadline": "2026-09-01",
-        "days_left": 1
-      },
-      {
-        "work_id": "W-T-20260511-MANUS",
-        "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-        "deadline": "2026-08-31",
-        "days_left": 0
-      },
-      {
-        "work_id": "W-R-20260814-PERSONAL-MIGRATION",
-        "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-        "deadline": "2026-08-31",
-        "days_left": 0
-      },
-      {
-        "work_id": "W-T-20260408-1030",
-        "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
-        "deadline": "2026-08-31",
         "days_left": 0
       }
     ],
