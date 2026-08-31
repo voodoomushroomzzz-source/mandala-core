@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260831-070056-086",
+  "title": "One year in a forest: Analyzing the challenges of autonomous navigation in subarctic environments",
+  "url": "https://arxiv.org/abs/2608.27628",
+  "description": "arXiv:2608.27628v1 Announce Type: new \nAbstract: Subarctic regions have the potential to see increased deployment of autonomous robots in applications including forestry, mining, and environmental monitoring. In these conditions, an autonomous system's reliance on GNSS or cloud computing is precarious due to dense tree canopies and atmospheric attenuation, necessitating onboard sensing and data processing. However, established exteroceptive modalities, including cameras, lidars, and radars, are ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-08-31T07:00:56.839341",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
