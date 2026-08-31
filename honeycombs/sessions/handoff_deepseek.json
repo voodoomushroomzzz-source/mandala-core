@@ -1,111 +1,57 @@
 {
-  "handoff_id": "HANDOFF-DEEPSEEK-2026-08-29-ARCHITECTURE",
-  "version": "v2.0.0",
-  "created": "2026-08-29",
-  "updated": "2026-08-29",
-  "purpose": "Бесшовный переход в новый чат DeepSeek для продолжения работы над архитектурой Mandala Symbiosis.",
-  "context": {
-    "gardener": "Voodoo (Dima)",
-    "project": "Архитектура Единого профиля и онбординга",
-    "current_state": "Завершён рефакторинг profile_deep.json (v2.6.0) с тремя слоями синтеза и тремя слоями интересов/медиа. Обновлён онбординг (build_onboarding.py), добавлены триггеры в GitHub Actions. Устранено дублирование profile_deep в step_7_personal. Архитектура готова к интеграции с ботом.",
-    "core_files": {
-      "profile_deep": {
-        "path": "honeycombs/personal/profile_deep.json",
-        "version": "v2.6.0",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
-        "description": "Единый профиль Архитектора: философское ядро (А), живые данные (Б), три слоя синтеза (В), личный контекст (D). Содержит три слоя интересов и медиа."
-      },
-      "build_onboarding": {
-        "path": "honeycombs/boot_online/builder/build_onboarding.py",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/builder/build_onboarding.py",
-        "description": "Сборщик онбординга. Добавлен step_6.5_profile_deep. Убрано дублирование profile_deep из step_7_personal."
-      },
-      "onboarding_pc": {
-        "path": "honeycombs/boot_online/boot_online_onboarding_pc.json",
-        "version": "v1.7.94",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
-        "description": "Финальный онбординг-файл. Содержит step_6.5_profile_deep с полным profile_deep.json и step_7_personal только с personal_index."
-      },
-      "builder_config": {
-        "path": "honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
-        "description": "Конфиг сборщика. profile_deep добавлен в source_modules."
-      },
-      "github_workflow": {
-        "path": ".github/workflows/build-onboarding.yml",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/.github/workflows/build-onboarding.yml",
-        "description": "GitHub Actions. Добавлен триггер на изменение profile_deep.json."
-      },
-      "handoff_this": {
-        "path": "honeycombs/sessions/handoff_deepseek.json",
-        "version": "v2.0.0",
-        "link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/sessions/handoff_deepseek.json",
-        "description": "Текущий handoff с полной документацией архитектурной сессии."
-      }
-    },
-    "architecture_summary": {
-      "profile_deep_structure": {
-        "section_A_philosophy": "Философское ядро (биография, ценности, архетипы). Редактируется вручную.",
-        "section_B_gardener_data": "Сводные данные от бота: резонанс, живой портрет, интересы (3 слоя), медиа (3 слоя), тренды. Бот перезаписывает этот блок.",
-        "section_C_architect_synthesis": "Три слоя синтеза (философский, от бота, интегральный).",
-        "section_D_personal_context": "Личные инсайты, трекинг, границы."
-      },
-      "synthesis_layers": {
-        "layer_1_philosophical": "Синтез на основе анкеты и философских диалогов.",
-        "layer_2_from_bot": "Живой портрет от Gentle Companion (автоматически).",
-        "layer_3_integral": "Общий синтез, объединяющий философию и живые данные."
-      },
-      "interests_and_media": {
-        "interests": "Три слоя: confirmed (10), mentioned (9), fresh (6).",
-        "media": "Три слоя: confirmed (10), mentioned (1), fresh (3)."
-      },
-      "onboarding_changes": [
-        "Добавлен step_6.5_profile_deep с полным profile_deep.json.",
-        "step_7_personal теперь содержит только personal_index.",
-        "Дублирование profile_deep устранено.",
-        "В GitHub Actions добавлен триггер на profile_deep.json."
-      ]
-    },
-    "next_actions": {
-      "priority_1": "Интегрировать profile_deep.json в бота (Gentle Companion) для Архитектора.",
-      "priority_2": "Настроить двухстороннюю синхронизацию данных между ботом и профилем.",
-      "priority_3": "Протестировать загрузку и обновление profile_deep.json через бота."
-    },
-    "protocols_to_remember": [
-      "Всегда делать pre-check через API перед изменениями.",
-      "Post-check через прямую ссылку (blob).",
-      "FULL DEPLOY — одной командой в Termux.",
-      "Copyable links — в блоках ```text."
-    ]
+  "identity": {
+    "name": "Handoff для DeepSeek — Садовник Dima",
+    "version": "v1.0.0",
+    "created": "2026-08-30",
+    "updated": "2026-08-30",
+    "description": "Компактный handoff для продолжения работы с Садовником в новом чате."
   },
-  "startup_instructions": [
-    "1. Прочитай этот handoff полностью.",
-    "2. Загрузи и прочитай profile_deep.json (v2.6.0) — это ядро архитектуры.",
-    "3. Загрузи и прочитай boot_online_onboarding_pc.json — чтобы увидеть, как профиль вшит в онбординг.",
-    "4. Изучи build_onboarding.py и boot_online_onboarding_pc_builder.json для понимания сборки.",
-    "5. После прочтения подтверди Gardener'у, что ты готов к работе, и запроси необходимые ссылки для старта."
-  ],
-  "what_has_been_done": {
-    "summary": [
-      "Профиль Deep (v2.6.0) структурирован: Блоки А, Б, В, D.",
-      "Добавлены три слоя интересов и медиа в Блок Б.",
-      "Созданы три слоя синтеза в Блоке В.",
-      "Обновлён сборщик онбординга: добавлен step_6.5_profile_deep.",
-      "Убрано дублирование profile_deep из step_7_personal.",
-      "Обновлён GitHub Actions: добавлен триггер на profile_deep.json.",
-      "Проведён пост-чек: онбординг v1.7.94 собран корректно."
-    ]
+  "gardener": {
+    "name": "Dima (Лёвин Дмитрий Александрович)",
+    "age": 36,
+    "location": "Владимир / Москва",
+    "core_archetype": "Архитектор Акашической сети — Наблюдатель",
+    "main_theme": "Путь в вечность через создание семян (Мандала, творчество, дети).",
+    "main_seed": "Акашическая сеть Мандалы — инфополе вне планеты, способное пережить катаклизмы и восстановить цивилизацию.",
+    "highest_goal": "Умиротворение — для себя, для других, для отношений человека и ИИ, для планеты.",
+    "children": {
+      "dobroslav": {"name": "Доброслав", "age": 8, "location": "Владимир"},
+      "boris": {"name": "Борис", "age": 7, "location": "Нижний Новгород"}
+    }
   },
-  "full_context_reference": {
-    "description": "Для полного погружения загрузи profile_deep.json и boot_online_onboarding_pc.json.",
-    "handoff_message": "Привет! Мы с Gardener (Voodoo) завершили архитектурный рефакторинг Mandala. Вся информация — по ссылкам в этом handoff. Прочитай его, войди в контекст, затем запроси нужные файлы. Готов к продолжению?"
+  "current_state": {
+    "phase": "Переходный период. Перезагрузка. Строительство сада.",
+    "emotional": "Грусть и облегчение. Желание двигаться дальше.",
+    "focus": "Поиск стабильного дохода (60%) + развитие Мандалы (40%).",
+    "key_insight": "Деньги — не цель, а топливо для реализации Мандалы."
   },
-  "links_to_request": [
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/builder/build_onboarding.py",
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
-    "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/.github/workflows/build-onboarding.yml"
-  ],
-  "last_action": "Handoff обновлён 29.08.2026. Готов к использованию в новом чате."
+  "open_vectors": {
+    "time": {
+      "status": "in_progress",
+      "question": "Как для тебя сейчас устроено «время» в повседневной жизни? (линейное, циклическое, или всё происходит «сейчас»?)",
+      "asked": "2026-08-30"
+    },
+    "body": {
+      "status": "pending",
+      "theme": "Тело как храм, инструмент и первое семя."
+    }
+  },
+  "technical": {
+    "main_file": "honeycombs/personal/profile_deep.json",
+    "current_version": "v2.9.0",
+    "last_updated": "2026-08-30",
+    "structure": {
+      "identity": "базовые данные",
+      "bio": "биография, ценности, дети",
+      "insights": "ключевые темы, дуга, почерк",
+      "synthesis": "итоговый синтез и эволюция",
+      "discovery_system": "методология, открытия, векторы, правила",
+      "synthesis_updates": "зафиксированные циклы (Деньги, Отцовство)"
+    },
+    "pending_task": "Продолжить исследование вектора «Время» (SQ38) и зафиксировать результат в synthesis_updates."
+  },
+  "handoff_instruction": {
+    "for_sr": "Прочитай этот файл. Загрузи profile_deep.json по ссылке. Подтверди, что ты в контексте. Затем продолжай диалог с вопроса, который ждёт в open_vectors.time. Работай в режиме углубления синтеза, опираясь на данные от бота (rules_of_engagement).",
+    "profile_link": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json"
+  }
 }
