@@ -13,8 +13,8 @@
   "meta": {
     "description": "Inbox index for tracking processed seeds. Scout Agent uses last_processed to clean old seeds.",
     "last_processed": "2026-09-02",
-    "processed_by": "External SR (DeepSeek)",
-    "total_processed": 114,
+    "processed_by": "Scout Agent",
+    "total_processed": 131,
     "promoted_to_root": 3
   },
   "promoted_seeds": [
