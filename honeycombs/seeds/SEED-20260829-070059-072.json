@@ -1,0 +1,44 @@
+{
+  "seed_id": "SEED-20260829-070059-072",
+  "title": "I accidentally turned LLM memory into program analysis",
+  "url": "https://pwning.systems/posts/llm-memory-program-analysis/",
+  "description": "<a href=\"https://news.ycombinator.com/item?id=49485416\">Comments</a>",
+  "source": "Hacker News",
+  "collected_at": "2026-08-29T07:00:59.740507",
+  "status": "evaluated",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "promote"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "2026-09-02",
+    "source_links": [
+      "https://pwning.systems/posts/llm-memory-program-analysis/"
+    ],
+    "research_summary": "Lemmalog — это Datalog-движок для LLM, который отделяет извлечение фактов от детерминированных вычислений. Позволяет поддерживать состояние, автоматически инвалидировать устаревшие выводы и отслеживать происхождение. Достигает 46.3% F1 на LongMemEval при 38x меньшем контексте.",
+    "key_insights": [
+      "Разделение: LLM извлекает факты, Datalog вычисляет выводы",
+      "Автоматическая инвалидация устаревших выводов",
+      "Отслеживание происхождения (provenance) объясняет выводы",
+      "Превосходит полный контекст на Knowledge Update",
+      "38x меньше контекста при сравнимой точности"
+    ],
+    "related_work": [
+      "Datalog",
+      "LongMemEval",
+      "LoCoMo"
+    ],
+    "implementation_notes": "Для Мандалы: использовать Datalog-движок для управления памятью SR. Интегрировать с Memory Layer для автоматической инвалидации и объяснения выводов."
+  }
+}
