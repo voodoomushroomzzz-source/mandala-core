@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 27,
-    "total_size_kb": 2264.54,
+    "total_size_kb": 2033.77,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 27,
-    "total_size_kb": 2264.54,
+    "total_size_kb": 2033.77,
     "last_updated": "2026-09-02",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -185,31 +185,29 @@
         "missing_count": 0
       },
       "seed_count_validator": {
-        "root_count": 21,
+        "root_count": 24,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 114,
-        "inbox_total_files": 115,
+        "inbox_count": 0,
+        "inbox_total_files": 1,
         "inbox_threshold": 50,
-        "inbox_status": "warning",
+        "inbox_status": "ok",
         "warnings": [
-          "Корень seeds/: 21 файлов (порог 10)",
-          "Inbox: 114 новых файлов (порог 50)"
+          "Корень seeds/: 24 файлов (порог 10)"
         ],
         "status": "warning"
       }
     },
     "seeds_health": {
-      "root_count": 21,
+      "root_count": 24,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 114,
-      "inbox_total_files": 115,
+      "inbox_count": 0,
+      "inbox_total_files": 1,
       "inbox_threshold": 50,
-      "inbox_status": "warning",
+      "inbox_status": "ok",
       "warnings": [
-        "Корень seeds/: 21 файлов (порог 10)",
-        "Inbox: 114 новых файлов (порог 50)"
+        "Корень seeds/: 24 файлов (порог 10)"
       ],
       "status": "warning"
     }
