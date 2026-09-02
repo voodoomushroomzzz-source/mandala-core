@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "SEEDS-INDEX-001",
     "name": "Seeds Index",
-    "version": "v2.0.0",
+    "version": "v2.1.0",
     "created": "2026-07-10",
-    "updated": "2026-08-07",
+    "updated": "2026-09-02",
     "layer": 2,
     "type": "seed_index",
     "status": "active",
@@ -17,7 +17,7 @@
   "meta": {
     "description": "Seeds are raw ideas collected by Scout Agent or Gardener.",
     "total_seeds": 4,
-    "last_updated": "2026-08-04"
+    "last_updated": "2026-09-02"
   },
   "active_seeds": [
     {
@@ -54,7 +54,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-08-07",
-    "notes": "Promoted 3 seeds from inbox to root (Prime Agent, Cloudflare OS, Muse Code)."
+    "last_check": "2026-09-02",
+    "notes": "Updated metadata after removing promoted seeds (Lemmalog, ACM, RENDER). Active seeds: 4."
   }
 }
