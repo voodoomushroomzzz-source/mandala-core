@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "FRUIT-GENTLE-COMPANION-001",
     "name": "Gentle Companion — Modular Architecture",
-    "version": "v2.2.0",
+    "version": "v2.2.1",
     "created": "2026-05-25",
-    "updated": "2026-08-28",
+    "updated": "2026-09-03",
     "layer": 2,
     "type": "fruits_index",
     "description": "Modular architecture index for Gentle Companion bot. 14 modules, 7 migration phases complete. Production on Hetzner VPS.",
@@ -25,7 +25,7 @@
     "how_to_use": "Read this index first to understand module structure. Then read individual module files for details.",
     "gardener_approval_required": false,
     "change_requires": "gardener_approval",
-    "updated": "2026-08-28"
+    "updated": "2026-09-03"
   },
   "honeycomb": "fruits/gentle_companion",
   "version": "2.1.0",
@@ -554,7 +554,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-08-19",
+  "last_updated": "2026-09-03",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
@@ -608,6 +608,18 @@
         "Удалена run_auto_cleanup, заменена на run_proactive_scheduler",
         "Добавлена _gardeners_delete() в github_api.py",
         "Исправлен баг с перепутанными hard/soft лимитами в _create_task_atomic"
+      ]
+    },
+    {
+      "version": "v2.2.1",
+      "date": "2026-09-03",
+      "changes": [
+        "TZ-ARCHITECT-INTEGRATION-003: Добавлена синхронизация данных Архитектора (ID 224736062) в profile_deep.json.",
+        "config.py: добавлена константа CORE_DEEP_PROFILE_PATH.",
+        "github_api.py: добавлена функция _sync_architect_data() — обновляет section_B и synthesis_layer_2.",
+        "main.py: добавлена джоба architect_sync (интервал 3 минуты).",
+        "short_responses: Добавлено правило краткости в боевой SR_CORE_PROMPT (sr_prompts.py).",
+        "Удалён подтверждённо мёртвый код SR_INTENT_MAP (~13 КБ)."
       ]
     }
   ]
