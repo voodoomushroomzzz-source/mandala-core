@@ -9,14 +9,15 @@
   "sub_works": [
     "W-T-20260511-ENGCHAT__engineer_chat",
     "W-T-20260511-MANUS__manus_hands",
-    "W-R-ROSE-001__rose_world_ethical_filter"
+    "W-R-ROSE-001__rose_world_ethical_filter",
+    "W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
   ],
   "depends_on": [],
   "effort_estimate": "40-60 hours",
   "progress": 0,
   "deadline": "2026-10-15",
   "created": "2026-08-07",
-  "updated": "2026-08-07",
+  "updated": "2026-09-02",
   "source": "Dialogue between Gardener (Voodoo) and DeepSeek SR, 2026-08-07. Based on analysis of Memora (GitHub: agentic-box/memora).",
   "tags": [
     "memory",

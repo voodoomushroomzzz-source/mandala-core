@@ -10,10 +10,17 @@
   "depends_on": [],
   "effort_estimate": null,
   "progress": 0,
-  "tags": ["engineer_chat", "integration", "brain", "websocket", "analytics", "knowledge_graph"],
+  "tags": [
+    "engineer_chat",
+    "integration",
+    "brain",
+    "websocket",
+    "analytics",
+    "knowledge_graph"
+  ],
   "deadline": "2026-08-15",
   "created": "2026-05-11",
-  "updated": "2026-08-03",
+  "updated": "2026-09-02",
   "source": {
     "type": "task",
     "original_id": "T-20260511-ENGCHAT",
@@ -50,5 +57,8 @@
       "integration": "Адаптировать концепцию DNS Discovery для Manus и Engineer Chat. Использовать для динамического обнаружения доступных инструментов и API. Интегрировать с системой белых списков."
     }
   ],
-  "notes": "Интегрированы исследования по улучшению работы с графами знаний, причинно-следственными цепочками, проверкой фактов и обнаружением инструментов (011, 040, 107, 109)."
+  "notes": "Интегрированы исследования по улучшению работы с графами знаний, причинно-следственными цепочками, проверкой фактов и обнаружением инструментов (011, 040, 107, 109).",
+  "related_works": [
+    "W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
+  ]
 }

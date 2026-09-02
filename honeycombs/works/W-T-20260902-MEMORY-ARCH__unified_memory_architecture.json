@@ -1,0 +1,136 @@
+{
+  "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+  "name": "Unified Memory Architecture — Lemmalog + ACM + RENDER",
+  "status": "active",
+  "priority": "critical",
+  "horizon": "tactical",
+  "description": "Интеграция трёх подходов к памяти в единую архитектуру: Lemmalog (Datalog-движок для фактов), ACM (жизненный цикл контекста), RENDER (формат представления). Ядро Memory Layer для Мандалы.",
+  "parent_work": "W-T-20260807-MEMORY__mandala_memory_layer",
+  "sub_works": [],
+  "depends_on": [],
+  "effort_estimate": "40-60 hours",
+  "progress": 0,
+  "deadline": "2026-10-15",
+  "created": "2026-09-02",
+  "updated": "2026-09-02",
+  "source": "Dialogue between Gardener (Voodoo) and External SR (DeepSeek), 2026-09-02. Based on seeds: Lemmalog, ACM, RENDER.",
+  "tags": [
+    "memory",
+    "architecture",
+    "datalog",
+    "context-management",
+    "render",
+    "akasha",
+    "integration"
+  ],
+  "core_concept": {
+    "description": "Трёхуровневая архитектура памяти: Lemmalog (факты + вывод), ACM (жизненный цикл), RENDER (представление). Вместе дают законченное решение для Memory Layer.",
+    "layers": {
+      "lemmlog": {
+        "role": "Фактологическое ядро",
+        "description": "Datalog-движок с автоматической инвалидацией и provenance. Хранит факты, применяет правила, отслеживает зависимости.",
+        "key_insights": [
+          "Разделение: LLM извлекает факты, Datalog вычисляет выводы",
+          "Автоматическая инвалидация устаревших выводов",
+          "Provenance для объяснения выводов",
+          "38x меньше контекста при сравнимой точности"
+        ]
+      },
+      "acm": {
+        "role": "Управление жизненным циклом",
+        "description": "Пять примитивов: Architecting, Ingesting, Scoping, Anticipating, Compacting & Consolidation.",
+        "key_insights": [
+          "Управление контекстом — это жизненный цикл, а не хранилище",
+          "Компакция даёт линейный рост стоимости с сохранением точности",
+          "Реализация достигает 92% на LongMemEval"
+        ]
+      },
+      "render": {
+        "role": "Формат представления",
+        "description": "Определяет, как память подаётся модели-читателю. Структурированные записи дают прирост до 72 пунктов.",
+        "key_insights": [
+          "Формат представления критически влияет на качество извлечения",
+          "Структурированные записи (MemGPT-style) значительно эффективнее",
+          "Разница между лучшим и худшим форматом — до 48 пунктов"
+        ]
+      }
+    },
+    "integration_principle": "Три слоя работают согласованно: Lemmalog (нижний слой), ACM (средний слой), RENDER (верхний слой). Каждый слой решает свою задачу, вместе — полная архитектура памяти."
+  },
+  "architecture": {
+    "storage": "PostgreSQL + pgvector (из Memory Layer)",
+    "integration_points": {
+      "memory_layer": "Ядро памяти — интеграция всех трёх подходов",
+      "engineer_chat": "Управление контекстом (ACM) + формат результатов (RENDER)",
+      "manus": "Факты о состоянии выполнения (Lemmalog) + управление контекстом (ACM)",
+      "rose_world": "Provenance для этических решений (Lemmalog)"
+    }
+  },
+  "phases": {
+    "phase_1_design": {
+      "name": "Проектирование архитектуры",
+      "status": "pending",
+      "description": "Детальное проектирование интеграции трёх подходов.",
+      "deliverables": [
+        "Архитектурный документ Unified Memory Architecture",
+        "Схема интеграции с Memory Layer",
+        "Спецификация API для модулей"
+      ]
+    },
+    "phase_2_lemmlog": {
+      "name": "Реализация Lemmalog",
+      "status": "pending",
+      "description": "Создание Datalog-движка как ядра Memory Layer.",
+      "deliverables": [
+        "Datalog-движок (ядро)",
+        "Модуль извлечения фактов",
+        "Provenance-модуль"
+      ]
+    },
+    "phase_3_acm": {
+      "name": "Реализация ACM",
+      "status": "pending",
+      "description": "Внедрение пяти примитивов управления контекстом.",
+      "deliverables": [
+        "Примитивы ACM (5 шт.)",
+        "Стратегия компакции",
+        "Интеграция с Engineer Chat и Manus"
+      ]
+    },
+    "phase_4_render": {
+      "name": "Реализация RENDER",
+      "status": "pending",
+      "description": "Внедрение структурированного формата для памяти.",
+      "deliverables": [
+        "Формат хранения (MemGPT-style)",
+        "Модуль форматирования для разных SR",
+        "Интеграция с Memory Digest"
+      ]
+    },
+    "phase_5_integration": {
+      "name": "Полная интеграция",
+      "status": "pending",
+      "description": "Сборка всех компонентов в единую Memory Layer.",
+      "deliverables": [
+        "Полная интеграция с Memory Layer",
+        "Интеграция с Engineer Chat, Manus, Rose World",
+        "Документация и тесты"
+      ]
+    }
+  },
+  "connectivity": {
+    "related_to": [
+      "W-T-20260807-MEMORY__mandala_memory_layer",
+      "W-T-20260511-ENGCHAT__engineer_chat",
+      "W-T-20260511-MANUS__manus_hands",
+      "W-R-ROSE-001__rose_world_ethical_filter"
+    ],
+    "relationship": "Этот work является специализированной архитектурной реализацией для Memory Layer. Он интегрирует три подхода в единое решение, которое затем используется Engineer Chat, Manus и Rose World."
+  },
+  "notes": [
+    "Этот work создан на основе трёх семян: Lemmalog, ACM, RENDER.",
+    "Он является ядром Memory Layer и должен быть выполнен до Phase 3 Memory Layer.",
+    "Интеграция с Engineer Chat и Manus — критический путь.",
+    "Provenance из Lemmalog будет использоваться в Rose World для объяснения этических решений."
+  ]
+}

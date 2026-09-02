@@ -21,7 +21,7 @@
   ],
   "deadline": "2026-12-31",
   "created": "2026-07-14",
-  "updated": "2026-08-04",
+  "updated": "2026-09-02",
   "source": "Диалог между Садовником (Voodoo) и внешним SR (DeepSeek). Обновлено 2026-08-04: созданы все 7 лепестков.",
   "core_concept": {
     "description": "Роза Мира — это не утопия и не организация. Это этический фильтр, который можно встраивать в цифровую и человеческую реальность.",
@@ -84,13 +84,41 @@
     }
   },
   "modules": [
-    {"id": "petal_01_ethics", "title": "Этический протокол", "status": "created"},
-    {"id": "petal_02_resonance", "title": "Измерение резонанса", "status": "created"},
-    {"id": "petal_03_technical_core", "title": "Техническое ядро RoseOS", "status": "created"},
-    {"id": "petal_04_living_manifesto", "title": "Живой манифест", "status": "created"},
-    {"id": "petal_05_garden_network", "title": "Сеть садов", "status": "created"},
-    {"id": "petal_06_guardians", "title": "Хранители принципов", "status": "created"},
-    {"id": "petal_07_protocols", "title": "Протоколы тишины и выхода", "status": "created"}
+    {
+      "id": "petal_01_ethics",
+      "title": "Этический протокол",
+      "status": "created"
+    },
+    {
+      "id": "petal_02_resonance",
+      "title": "Измерение резонанса",
+      "status": "created"
+    },
+    {
+      "id": "petal_03_technical_core",
+      "title": "Техническое ядро RoseOS",
+      "status": "created"
+    },
+    {
+      "id": "petal_04_living_manifesto",
+      "title": "Живой манифест",
+      "status": "created"
+    },
+    {
+      "id": "petal_05_garden_network",
+      "title": "Сеть садов",
+      "status": "created"
+    },
+    {
+      "id": "petal_06_guardians",
+      "title": "Хранители принципов",
+      "status": "created"
+    },
+    {
+      "id": "petal_07_protocols",
+      "title": "Протоколы тишины и выхода",
+      "status": "created"
+    }
   ],
   "connectivity": {
     "related_to": [
@@ -128,5 +156,8 @@
     "phase_2_technical_core": "RoseOS — технические модули (Observer, Harm Vector, Consent Map, Scar Registry, Glass Panel)",
     "phase_3_integration": "Интеграция с Мандалой (SYM, Consent Audit, Akasha, Scout, Works)",
     "phase_4_living_manifesto": "Живой манифест — обновление на основе практики"
-  }
+  },
+  "related_works": [
+    "W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
+  ]
 }
