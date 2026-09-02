@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.107",
+    "version": "v1.7.108",
     "created": "2026-05-11",
     "updated": "2026-09-02",
     "layer": 1,
@@ -2656,7 +2656,7 @@
         "name": "Works — Unified System of Work Items",
         "version": "v1.0.13",
         "created": "2026-07-08",
-        "updated": "2026-08-07",
+        "updated": "2026-09-02",
         "layer": 1,
         "type": "work_manifest",
         "description": "Single source of truth for all work items. Updated with full deadlines and progress tracking.",
@@ -2703,9 +2703,9 @@
         ]
       },
       "manifest": {
-        "total_works": 23,
+        "total_works": 24,
         "by_status": {
-          "active": 13,
+          "active": 14,
           "in_progress": 2,
           "planned": 5,
           "pending": 3,
@@ -2716,7 +2716,7 @@
           "tactical": 15
         },
         "by_priority": {
-          "critical": 5,
+          "critical": 6,
           "high": 14,
           "medium": 5,
           "low": 2
@@ -2744,7 +2744,8 @@
           "W-T-20260804-MANUS-MEMORY__nativemem",
           "W-T-20260804-SR-REFLECTION__in_context_search",
           "W-T-20260807-MEMORY__mandala_memory_layer",
-          "W-R-20260803-KURTOCH-FRANCHISE"
+          "W-R-20260803-KURTOCH-FRANCHISE",
+          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
         ],
         "deadlines": {
           "W-R-RC-001__visibility_strategy": null,
@@ -2769,7 +2770,8 @@
           "W-R-20260803-KURTOCH-FRANCHISE": null,
           "W-T-20260803-RL-REASONING": "2026-10-31",
           "W-T-20260803-SR-EVALUATION": "2026-10-31",
-          "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15"
+          "W-T-20260807-MEMORY__mandala_memory_layer": "2026-10-15",
+          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": "2026-10-15"
         },
         "progress": {
           "W-R-RC-001__visibility_strategy": 0,
@@ -2794,9 +2796,10 @@
           "W-R-20260803-KURTOCH-FRANCHISE": 0,
           "W-T-20260803-RL-REASONING": 0,
           "W-T-20260803-SR-EVALUATION": 0,
-          "W-T-20260807-MEMORY__mandala_memory_layer": 0
+          "W-T-20260807-MEMORY__mandala_memory_layer": 0,
+          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": 0
         },
-        "progress_updated": "2026-08-03",
+        "progress_updated": "2026-09-02",
         "related_works": {
           "W-R-ECOMM-001": [
             "W-R-RM-014"
@@ -2829,6 +2832,12 @@
             "W-T-20260511-ENGCHAT__engineer_chat",
             "W-T-20260511-MANUS__manus_hands",
             "W-R-ROSE-001__rose_world_ethical_filter"
+          ],
+          "W-T-20260902-MEMORY-ARCH__unified_memory_architecture": [
+            "W-T-20260807-MEMORY__mandala_memory_layer",
+            "W-T-20260511-ENGCHAT__engineer_chat",
+            "W-T-20260511-MANUS__manus_hands",
+            "W-R-ROSE-001__rose_world_ethical_filter"
           ]
         }
       },
@@ -2841,8 +2850,8 @@
       },
       "health": {
         "status": "active",
-        "last_check": "2026-08-21",
-        "notes": "Синхронизирован с реальными файлами в папке works/ (23 работы). Статусы пересчитаны вручную."
+        "last_check": "2026-09-02",
+        "notes": "Added W-T-20260902-MEMORY-ARCH__unified_memory_architecture"
       },
       "updated": "2026-08-21",
       "notes": {
