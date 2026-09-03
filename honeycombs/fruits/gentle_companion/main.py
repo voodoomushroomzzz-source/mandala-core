@@ -45,7 +45,8 @@ async def on_startup():
     scheduler = AsyncIOScheduler(timezone="UTC")
     scheduler.add_job(run_reminder_scheduler, "interval", minutes=1, id="reminders")
     scheduler.add_job(run_proactive_scheduler, "interval", minutes=1, id="proactive")
-    scheduler.add_job(run_resonance_decay, "cron", hour=3, minute=0, id="decay")
+    # run_resonance_decay удалён — падение резонанса теперь по-сферное,
+    # считается внутри run_proactive_scheduler -> _sphere_decay_check() (handlers/system.py)
     scheduler.add_job(_send_daily_report, "cron", hour=18, minute=0, id="daily_report",
                       timezone="UTC")  # 18:00 UTC = 21:00 MSK
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")

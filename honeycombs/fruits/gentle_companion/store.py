@@ -110,14 +110,42 @@ def store_set_sphere_resonance(telegram_id: str, sr: dict) -> None:
     ws["sphere_resonance"] = sr
     store_set_workspace(telegram_id, ws)
 
+def store_get_sphere_meta(telegram_id: str) -> dict:
+    """Get sphere_meta dict: {sphere: {last_active, stage}}.
+    Lazy-inits missing spheres to today/'none' — new gardeners aren't punished retroactively."""
+    ws = store_get_workspace(telegram_id) or {}
+    meta = dict(ws.get("sphere_meta", {}))
+    changed = False
+    today_default = _today()
+    for s in SPHERES:
+        if s not in meta:
+            meta[s] = {"last_active": today_default, "stage": "none"}
+            changed = True
+    if changed:
+        ws["sphere_meta"] = meta
+        store_set_workspace(telegram_id, ws)
+    return meta
+
+def store_set_sphere_meta(telegram_id: str, meta: dict) -> None:
+    ws = store_get_workspace(telegram_id) or {}
+    ws["sphere_meta"] = meta
+    store_set_workspace(telegram_id, ws)
+
 def store_add_sphere_resonance(telegram_id: str, sphere: str, delta: int) -> int:
-    """Add delta to sphere. Clamp 5-100. Recalc overall resonance_level as mean of 5. Returns new overall."""
+    """Add delta to sphere. Clamp 0-100. Recalc overall resonance_level as mean of 5.
+    On positive delta, resets sphere silence tracking (sphere_meta) for that sphere —
+    this IS the "плюс через задачу или достижение", который останавливает падение."""
     if sphere not in SPHERES:
         sphere = "work"
     sr = store_get_sphere_resonance(telegram_id)
-    sr[sphere] = max(5, min(100, sr[sphere] + delta))
+    sr[sphere] = max(0, min(100, sr[sphere] + delta))
     store_set_sphere_resonance(telegram_id, sr)
-    mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+    if delta > 0:
+        tz_name = (store_get_profile(telegram_id) or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        meta = store_get_sphere_meta(telegram_id)
+        meta[sphere] = {"last_active": _today(tz_name), "stage": "none"}
+        store_set_sphere_meta(telegram_id, meta)
+    mean = max(0, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
     profile = store_get_profile(telegram_id) or {}
     profile["resonance_level"] = mean
     store_set_profile(telegram_id, profile)
