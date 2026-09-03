@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-09-02T13:01:41.004903",
+  "last_scan": "2026-09-03T07:10:39.930974",
   "honeycomb_hashes": {
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
     "honeycombs/sym": "27b156a38303db2f2bc218bef41a5d76",
@@ -12,16 +12,16 @@
     "honeycombs/personal/music/dmitrii_levin": "85b8cb9336b2a3c74be80c75b31bf147",
     "honeycombs/personal/poetry": "f3662718e141cbfb4514812dd1c7dc9e",
     "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
-    "honeycombs/seeds": "4dc2b1dadb015cf63137153125295668",
-    "honeycombs/seeds/inbox": "7146330c719c8130df7f809c5b0760d7",
+    "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
+    "honeycombs/seeds/inbox": "d65530ba2d82759fc22f95ec502044dd",
     "honeycombs/humor": "280abf102d430c2c017fa5c5224bafb2",
     "honeycombs/knowledge": "29e22087c24941e87b341b5ef7fda114",
     "honeycombs/knowledge/ai_tools": "2d59ee1b165e13e64c29c1822c683b6a",
     "honeycombs/directives": "dbc3c48c5b13d37df132cf510c2a3e8e",
-    "honeycombs/works": "55c3fe245c212dedfd2d1866b55d9a04",
+    "honeycombs/works": "f8154eced7acea59ecfae9290bb2524c",
     "honeycombs/fruits": "f2c4435c5787c930ba3c75e7e8a8be1d",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
-    "honeycombs/fruits/gentle_companion": "f79b2c6f145f18d24d4dfd3cbbf804de",
+    "honeycombs/fruits/gentle_companion": "0b8bcc92afa6e1dd5ccf8a5d4576ea72",
     "honeycombs/protocols": "67cf1df15cde701e4e26c0eb1f630629",
     "honeycombs/akasha": "938d9a020ac360bc5d157c023fce7621",
     "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
@@ -35,24 +35,24 @@
     "invalid_v2": 6,
     "errors": 0,
     "warnings": 6,
-    "total_files": 316,
-    "total_size_kb": 2033.77
+    "total_files": 364,
+    "total_size_kb": 2096.23
   },
   "seeds_health": {
-    "root_count": 24,
+    "root_count": 21,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 0,
-    "inbox_total_files": 1,
+    "inbox_count": 25,
+    "inbox_total_files": 26,
     "inbox_threshold": 50,
     "inbox_status": "ok",
     "warnings": [
-      "Корень seeds/: 24 файлов (порог 10)"
+      "Корень seeds/: 21 файлов (порог 10)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-09-02T13:01:41.004916",
+    "last_check": "2026-09-03T07:10:39.930983",
     "errors_count": 18,
     "warnings_count": 8,
     "expired_tasks": 5,
@@ -62,31 +62,31 @@
         "work_id": "W-R-RM-012",
         "name": "First Living Products — Mandala MVPs",
         "deadline": "2026-09-01",
-        "days_overdue": 1
+        "days_overdue": 2
       },
       {
         "work_id": "W-T-20260511-MANUS",
         "name": "Manus — Hands of Mandala (исполнительный слой v1)",
         "deadline": "2026-08-31",
-        "days_overdue": 2
+        "days_overdue": 3
       },
       {
         "work_id": "W-R-20260814-PERSONAL-MIGRATION",
         "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
         "deadline": "2026-08-31",
-        "days_overdue": 2
+        "days_overdue": 3
       },
       {
         "work_id": "W-T-20260408-1030",
         "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
         "deadline": "2026-08-31",
-        "days_overdue": 2
+        "days_overdue": 3
       },
       {
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 18
+        "days_overdue": 19
       }
     ],
     "upcoming_deadlines_list": [],
