@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 27,
-    "total_size_kb": 2096.23,
+    "total_size_kb": 2097.1,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 27,
-    "total_size_kb": 2096.23,
+    "total_size_kb": 2097.1,
     "last_updated": "2026-09-03",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -67,18 +67,6 @@
             "days_overdue": 2
           },
           {
-            "work_id": "W-T-20260511-MANUS",
-            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-            "deadline": "2026-08-31",
-            "days_overdue": 3
-          },
-          {
-            "work_id": "W-R-20260814-PERSONAL-MIGRATION",
-            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-            "deadline": "2026-08-31",
-            "days_overdue": 3
-          },
-          {
             "work_id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "deadline": "2026-08-31",
@@ -89,6 +77,18 @@
             "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
             "deadline": "2026-08-15",
             "days_overdue": 19
+          },
+          {
+            "work_id": "W-R-20260814-PERSONAL-MIGRATION",
+            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+            "deadline": "2026-08-31",
+            "days_overdue": 3
+          },
+          {
+            "work_id": "W-T-20260511-MANUS",
+            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+            "deadline": "2026-08-31",
+            "days_overdue": 3
           }
         ],
         "upcoming_deadlines": [],
@@ -99,34 +99,34 @@
       },
       "ahimsa_filter": {
         "errors": [
+          "poetry: missing identity.module_id",
+          "poetry: missing identity.layer",
+          "poetry: missing identity.type",
           "music: missing identity.module_id",
           "music: missing identity.layer",
           "music: missing identity.type",
-          "mc_voodookid: missing identity.module_id",
-          "mc_voodookid: missing identity.layer",
-          "mc_voodookid: missing identity.type",
           "x_deaddy_x: missing identity.module_id",
           "x_deaddy_x: missing identity.layer",
           "x_deaddy_x: missing identity.type",
           "mayakoma: missing identity.module_id",
           "mayakoma: missing identity.layer",
           "mayakoma: missing identity.type",
+          "mc_voodookid: missing identity.module_id",
+          "mc_voodookid: missing identity.layer",
+          "mc_voodookid: missing identity.type",
           "dmitrii_levin: missing identity.module_id",
           "dmitrii_levin: missing identity.layer",
-          "dmitrii_levin: missing identity.type",
-          "poetry: missing identity.module_id",
-          "poetry: missing identity.layer",
-          "poetry: missing identity.type"
+          "dmitrii_levin: missing identity.type"
         ],
         "warnings": [
-          "music: missing meta section",
-          "mc_voodookid: missing meta section",
-          "x_deaddy_x: missing meta section",
-          "mayakoma: missing meta section",
-          "dmitrii_levin: missing meta section",
           "poetry: missing meta section",
           "prose: missing index.json",
-          "poems: missing index.json"
+          "poems: missing index.json",
+          "music: missing meta section",
+          "x_deaddy_x: missing meta section",
+          "mayakoma: missing meta section",
+          "mc_voodookid: missing meta section",
+          "dmitrii_levin: missing meta section"
         ],
         "noise_files": [],
         "errors_count": 18,
@@ -143,20 +143,6 @@
             "days_overdue": 2
           },
           {
-            "id": "W-T-20260511-MANUS",
-            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
-            "type": "works",
-            "deadline": "2026-08-31",
-            "days_overdue": 3
-          },
-          {
-            "id": "W-R-20260814-PERSONAL-MIGRATION",
-            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-            "type": "works",
-            "deadline": "2026-08-31",
-            "days_overdue": 3
-          },
-          {
             "id": "W-T-20260408-1030",
             "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
             "type": "works",
@@ -169,6 +155,20 @@
             "type": "works",
             "deadline": "2026-08-15",
             "days_overdue": 19
+          },
+          {
+            "id": "W-R-20260814-PERSONAL-MIGRATION",
+            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+            "type": "works",
+            "deadline": "2026-08-31",
+            "days_overdue": 3
+          },
+          {
+            "id": "W-T-20260511-MANUS",
+            "name": "Manus — Hands of Mandala (исполнительный слой v1)",
+            "type": "works",
+            "deadline": "2026-08-31",
+            "days_overdue": 3
           }
         ],
         "upcoming": [],
