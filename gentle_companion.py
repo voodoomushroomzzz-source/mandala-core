@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-08-31 08:27:19 ──
+# ── BUILT by build.py ── 2026-09-03 22:57:57 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -329,14 +329,42 @@ def store_set_sphere_resonance(telegram_id: str, sr: dict) -> None:
     ws["sphere_resonance"] = sr
     store_set_workspace(telegram_id, ws)
 
+def store_get_sphere_meta(telegram_id: str) -> dict:
+    """Get sphere_meta dict: {sphere: {last_active, stage}}.
+    Lazy-inits missing spheres to today/'none' — new gardeners aren't punished retroactively."""
+    ws = store_get_workspace(telegram_id) or {}
+    meta = dict(ws.get("sphere_meta", {}))
+    changed = False
+    today_default = _today()
+    for s in SPHERES:
+        if s not in meta:
+            meta[s] = {"last_active": today_default, "stage": "none"}
+            changed = True
+    if changed:
+        ws["sphere_meta"] = meta
+        store_set_workspace(telegram_id, ws)
+    return meta
+
+def store_set_sphere_meta(telegram_id: str, meta: dict) -> None:
+    ws = store_get_workspace(telegram_id) or {}
+    ws["sphere_meta"] = meta
+    store_set_workspace(telegram_id, ws)
+
 def store_add_sphere_resonance(telegram_id: str, sphere: str, delta: int) -> int:
-    """Add delta to sphere. Clamp 5-100. Recalc overall resonance_level as mean of 5. Returns new overall."""
+    """Add delta to sphere. Clamp 0-100. Recalc overall resonance_level as mean of 5.
+    On positive delta, resets sphere silence tracking (sphere_meta) for that sphere —
+    this IS the "плюс через задачу или достижение", который останавливает падение."""
     if sphere not in SPHERES:
         sphere = "work"
     sr = store_get_sphere_resonance(telegram_id)
-    sr[sphere] = max(5, min(100, sr[sphere] + delta))
+    sr[sphere] = max(0, min(100, sr[sphere] + delta))
     store_set_sphere_resonance(telegram_id, sr)
-    mean = max(5, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+    if delta > 0:
+        tz_name = (store_get_profile(telegram_id) or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
+        meta = store_get_sphere_meta(telegram_id)
+        meta[sphere] = {"last_active": _today(tz_name), "stage": "none"}
+        store_set_sphere_meta(telegram_id, meta)
+    mean = max(0, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
     profile = store_get_profile(telegram_id) or {}
     profile["resonance_level"] = mean
     store_set_profile(telegram_id, profile)
@@ -2711,12 +2739,12 @@ def _build_user_context_msg(telegram_id: str) -> str:
     sr_context = "  ".join(f"{SPHERE_EMOJI[s]} {SPHERE_NAME_RU[s]} {sr.get(s,20)}%" for s in SPHERES)
     weak_spheres = [SPHERE_NAME_RU[s] for s in SPHERES if sr.get(s, 20) < 25]
     imbalance = f" | слабые сферы: {', '.join(weak_spheres)}" if weak_spheres else ""
-    # P-46: имбаланс и предупреждения по сферам
-    _ws_ctx = store_get_workspace(telegram_id) or {}
-    _sla_ctx = _ws_ctx.get("sphere_last_active", {})
+    # Имбаланс и предупреждения по сферам (пороги 3/6/7 дней, синхронизировано с _sphere_decay_check)
+    _meta_ctx = store_get_sphere_meta(telegram_id)
     from datetime import date as _date_ctx
     _today_ctx = _date_ctx.today()
-    _sphere_warnings = []
+    _sphere_soon = []
+    _sphere_final = []
     _sphere_decaying = []
     _max_sr = max(sr.get(s, 20) for s in SPHERES)
     _min_sr = min(sr.get(s, 20) for s in SPHERES)
@@ -2724,25 +2752,29 @@ def _build_user_context_msg(telegram_id: str) -> str:
     _min_sphere = min(SPHERES, key=lambda s: sr.get(s, 20))
     _max_sphere = max(SPHERES, key=lambda s: sr.get(s, 20))
     for _s in SPHERES:
-        _last_s = _sla_ctx.get(_s, "")
+        _last_s = _meta_ctx.get(_s, {}).get("last_active", "")
         _days_s = 0
         if _last_s:
             try:
                 _days_s = (_today_ctx - _date_ctx.fromisoformat(_last_s)).days
             except Exception:
                 pass
-        if 4 <= _days_s <= 5:
-            _sphere_warnings.append(f"{SPHERE_NAME_RU[_s]} ({_days_s} дн. без активности — скоро начнёт падать)")
-        elif _days_s >= 6:
-            _sphere_decaying.append(f"{SPHERE_NAME_RU[_s]} ({_days_s} дн. без активности, падает)")
+        if 3 <= _days_s <= 5:
+            _sphere_soon.append(f"{SPHERE_NAME_RU[_s]} ({_days_s} дн.)")
+        elif _days_s == 6:
+            _sphere_final.append(SPHERE_NAME_RU[_s])
+        elif _days_s >= 7:
+            _sphere_decaying.append(f"{SPHERE_NAME_RU[_s]} ({_days_s} дн., -2%/день)")
     _sphere_alert_block = ""
     _alerts = []
     if _imbalance_gap > 40:
         _alerts.append(f"ИМБАЛАНС: {SPHERE_NAME_RU[_max_sphere]} {sr.get(_max_sphere)}% vs {SPHERE_NAME_RU[_min_sphere]} {sr.get(_min_sphere)}% — разрыв {_imbalance_gap}%. Предложи что-то в сфере {SPHERE_NAME_RU[_min_sphere]} с учётом интересов садовника.")
-    if _sphere_warnings:
-        _alerts.append(f"СКОРО УПАДЁТ: {chr(44).join(_sphere_warnings)} — предупреди садовника и предложи лёгкое действие.")
+    if _sphere_soon:
+        _alerts.append(f"СКОРО НАЧНЁТ ПАДАТЬ: {chr(44).join(_sphere_soon)} — мягко упомяни, без давления.")
+    if _sphere_final:
+        _alerts.append(f"ЗАВТРА НАЧНЁТ ПАДАТЬ: {chr(44).join(_sphere_final)} — последний шанс предупредить сегодня.")
     if _sphere_decaying:
-        _alerts.append(f"ПАДАЕТ: {chr(44).join(_sphere_decaying)} — рекомендуй что-то конкретное по этой сфере.")
+        _alerts.append(f"УЖЕ ПАДАЕТ: {chr(44).join(_sphere_decaying)} — рекомендуй конкретное действие по этой сфере.")
     if _alerts:
         _sphere_alert_block = "\n[ВНИМАНИЕ СФЕРЫ:\n" + "\n".join(f"  • {a}" for a in _alerts) + "\n]"
     # P-46: последние 5 выполненных задач
@@ -7602,7 +7634,8 @@ async def _create_task_atomic(user_id: str, message: Message,
 handlers/system.py -- System, Onboarding, Profile, Schedulers, Voice. Phase: 6.
 """
 
-async def send_morning_greeting(telegram_id: str, silence_day: int | None = None) -> None:
+async def send_morning_greeting(telegram_id: str, silence_day: int | None = None,
+                                 sphere_note: str = "", decaying_spheres: list | None = None) -> None:
     """Morning greeting v3: alive SR message, personalised via synthesis + history.
     silence_day: if set, this send is part of the silence-escalation schedule
     (3/7/15 days of silence) — SR gets a note to soften the tone accordingly."""
@@ -7675,6 +7708,14 @@ async def send_morning_greeting(telegram_id: str, silence_day: int | None = None
             )
         elif missed_days >= 2:
             missed_note = f"Садовник не писал {missed_days} дней. Соскучилась, но не дави."
+        decaying_note = ""
+        if decaying_spheres:
+            decaying_names = ", ".join(SPHERE_NAME_RU[s] for s in decaying_spheres)
+            decaying_note = (
+                f"Сферы, где резонанс уже несколько дней подряд падает без действий: {decaying_names}. "
+                f"Можешь мягко, между делом упомянуть об этом — без списков и без давления, "
+                f"просто как часть заботы о садовнике. Естественно, не в каждом слове.\n"
+            )
         prompt = (
             "Ты — СР, дух сада. Сейчас утро садовника " + name + ".\n\n"
             "Портрет садовника (портрет от " + (_syn_date_mg or "?") + ", сегодня " + today_str + " — учитывай что прошлое в портрете может быть неактуальным): " + (core[:400] if core else "формируется") + "\n"
@@ -7686,7 +7727,8 @@ async def send_morning_greeting(telegram_id: str, silence_day: int | None = None
             "Слабые сферы: " + weak_text + "\n"
             "Достижений всего: " + str(ach_count) + "\n\n"
             "Сейчас " + current_time + " по таймзоне садовника.\n"
-            + (missed_note + "\n" if missed_note else "") +
+            + (missed_note + "\n" if missed_note else "")
+            + (decaying_note if decaying_note else "") +
             "\nРуководствуясь ахимсой, напиши одно тёплое утреннее приветствие.\n"
             "Это начало дня — можно мягко подсветить что сегодня ждёт, "
             "но без давления и списков. Если есть задача на сегодня — "
@@ -7705,7 +7747,8 @@ async def send_morning_greeting(telegram_id: str, silence_day: int | None = None
         if not msg or len(msg.strip()) < 5:
             # Fallback if SR didn't respond
             msg = f"🌅 Доброе утро, {name}!\n\nПусть сегодняшний день будет наполнен тем что важно для тебя."
-        await bot.send_message(int(uid), msg.strip(), parse_mode="HTML", reply_markup=get_main_keyboard(), disable_web_page_preview=True)
+        full_msg = msg.strip() + (f"\n\n{sphere_note}" if sphere_note else "")
+        await bot.send_message(int(uid), full_msg, parse_mode="HTML", reply_markup=get_main_keyboard(), disable_web_page_preview=True)
         _add_to_history(uid, "assistant", msg.strip())
         _morning_sent[uid] = today_str
         ws["last_morning_date"] = today_str
@@ -7886,15 +7929,23 @@ async def run_proactive_scheduler() -> None:
 
             tracking = _get_silence_tracking(uid)
             milestone = _next_proactive_milestone(days_silent, tracking.get("last_proactive_date", ""))
+
+            # Падение резонанса по сферам: жёсткие вехи 3/6/7 (sphere_note) +
+            # список сфер, которые падают уже несколько дней (decaying_spheres, для мягкого упоминания СР)
+            sphere_note, decaying_spheres = _sphere_decay_check(uid)
+
             if milestone is None:
+                if sphere_note:  # только гарантированные 3/6/7 — иначе молчим
+                    await bot.send_message(int(uid), sphere_note, reply_markup=get_main_keyboard())
                 continue  # не веха — молчим, дневных подталкиваний больше нет
 
             if milestone == 1:
-                await send_morning_greeting(uid)  # обычное живое приветствие
+                await send_morning_greeting(uid, sphere_note=sphere_note, decaying_spheres=decaying_spheres)
             elif milestone == 30:
-                await bot.send_message(int(uid), f"🌒 {_MILESTONE_TEXTS[30]}", reply_markup=get_main_keyboard())
+                text30 = f"🌒 {_MILESTONE_TEXTS[30]}" + (f"\n\n{sphere_note}" if sphere_note else "")
+                await bot.send_message(int(uid), text30, reply_markup=get_main_keyboard())
             else:
-                await send_morning_greeting(uid, silence_day=milestone)  # 3/7/15 — с меткой дня тишины
+                await send_morning_greeting(uid, silence_day=milestone, sphere_note=sphere_note, decaying_spheres=decaying_spheres)  # 3/7/15 — с меткой дня тишины
 
             _set_silence_tracking(uid, _today(), milestone)
         # Birthday check
@@ -7959,48 +8010,71 @@ async def run_proactive_scheduler() -> None:
 
 # ─── Tasks & Labels management menus ─────────────────────────────────────────
 
-@router.callback_query(F.data == "menu_tasks_mgmt")
+# (Убран дублирующий декоратор @router.callback_query(F.data == "menu_tasks_mgmt") —
+#  настоящий обработчик этой кнопки уже есть выше по файлу; этот экземпляр был мёртвым кодом,
+#  т.к. run_resonance_decay() не принимал callback и упал бы при реальном вызове.)
+_SPHERE_WARN_TEXTS = {
+    "early":    "{emoji} {name} — {days} дня без внимания, но пока держится.",
+    "final":    "⚠️ {emoji} {name} — без действий резонанс начнёт падать уже завтра.",
+    "decaying": "📉 {emoji} {name} начал терять резонанс — здесь давно не было движения.",
+}
 
-
-async def run_resonance_decay() -> None:
-    """Daily resonance decay: silence + overdue tasks. Runs at 03:00."""
-    try:
-        from datetime import datetime as _dtr3
-        today_s = _dtr3.now().strftime("%Y-%m-%d")
-        for uid, user_store in list(_store.items()):
-            if not isinstance(user_store, dict) or not user_store.get("ready"):
-                continue
-            ws = store_get_workspace(uid) or {}
-            if ws.get("_decay_date") == today_s:
-                continue
-            days_silent = _days_since_last_interaction(uid)
-            if days_silent <= 2:
-                decay = 0
-            elif days_silent <= 6:
-                decay = 1
-            elif days_silent <= 13:
-                decay = 2
-            else:
-                decay = 3
-            tasks   = store_get_tasks(uid)
-            overdue = [t for t in tasks
-                       if t.get("deadline") and t["deadline"] < today_s
-                       and t.get("status") != "completed"]
-            decay += len(overdue)
-            if decay > 0:
-                sr = store_get_sphere_resonance(uid)
-                for s in SPHERES:
-                    sr[s] = max(5, sr[s] - decay)
-                store_set_sphere_resonance(uid, sr)
-                mean = max(5, round(sum(sr[s] for s in SPHERES) / len(SPHERES)))
-                profile2 = store_get_profile(uid) or {}
-                profile2["resonance_level"] = mean
-                store_set_profile(uid, profile2)
-            ws["_decay_date"] = today_s
-            store_set_workspace(uid, ws)
-            _fire_sync()
-    except Exception as e:
-        logger.error(f"Resonance decay error: {e}", exc_info=True)
+def _sphere_decay_check(telegram_id: str) -> tuple:
+    """Per-sphere silence check: day 3 early warning, day 6 final warning,
+    day 7 decay-start notice (hard milestones, guaranteed delivery) — plus
+    daily -2% decay (floor 0) while stage == 'decaying'.
+    Called once per day per user (from the morning-window gate in run_proactive_scheduler,
+    which already dedups to once/day) — idempotent via stage tracking.
+    Returns (milestone_text, currently_decaying_spheres):
+      - milestone_text: hard-coded lines, only on day 3/6/7 transitions (append/standalone).
+      - currently_decaying_spheres: sphere ids still decaying today (incl. day 8+),
+        fed into the SR's own morning-greeting prompt for a soft, non-scripted mention."""
+    uid = str(telegram_id)
+    meta = store_get_sphere_meta(uid)
+    sr = store_get_sphere_resonance(uid)
+    tz_name = (store_get_profile(uid) or {}).get("companion_settings", {}).get("timezone", "Europe/Moscow")
+    today_s = _today(tz_name)
+    from datetime import date as _d_sphere
+    lines = []
+    decaying_now = []
+    changed_meta = False
+    changed_sr = False
+    for s in SPHERES:
+        entry = meta.get(s, {"last_active": today_s, "stage": "none"})
+        last = entry.get("last_active", today_s)
+        stage = entry.get("stage", "none")
+        try:
+            days_silent = (_d_sphere.fromisoformat(today_s) - _d_sphere.fromisoformat(last)).days
+        except Exception:
+            days_silent = 0
+        if days_silent >= 7:
+            if stage != "decaying":
+                lines.append(_SPHERE_WARN_TEXTS["decaying"].format(emoji=SPHERE_EMOJI[s], name=SPHERE_NAME_RU[s]))
+                entry["stage"] = "decaying"
+                changed_meta = True
+            sr[s] = max(0, sr.get(s, 20) - 2)
+            changed_sr = True
+            decaying_now.append(s)
+        elif days_silent >= 6:
+            if stage != "final_warned":
+                lines.append(_SPHERE_WARN_TEXTS["final"].format(emoji=SPHERE_EMOJI[s], name=SPHERE_NAME_RU[s]))
+                entry["stage"] = "final_warned"
+                changed_meta = True
+        elif days_silent >= 3:
+            if stage not in ("early_warned", "final_warned"):
+                lines.append(_SPHERE_WARN_TEXTS["early"].format(emoji=SPHERE_EMOJI[s], name=SPHERE_NAME_RU[s], days=days_silent))
+                entry["stage"] = "early_warned"
+                changed_meta = True
+        meta[s] = entry
+    if changed_meta:
+        store_set_sphere_meta(uid, meta)
+    if changed_sr:
+        store_set_sphere_resonance(uid, sr)
+        mean = max(0, min(100, round(sum(sr[s] for s in SPHERES) / len(SPHERES))))
+        profile = store_get_profile(uid) or {}
+        profile["resonance_level"] = mean
+        store_set_profile(uid, profile)
+    return "\n".join(lines), decaying_now
 
 async def _delete_gardener(uid: str, notify_architect: bool = True) -> bool:
     """
@@ -11313,7 +11387,8 @@ async def on_startup():
     scheduler = AsyncIOScheduler(timezone="UTC")
     scheduler.add_job(run_reminder_scheduler, "interval", minutes=1, id="reminders")
     scheduler.add_job(run_proactive_scheduler, "interval", minutes=1, id="proactive")
-    scheduler.add_job(run_resonance_decay, "cron", hour=3, minute=0, id="decay")
+    # run_resonance_decay удалён — падение резонанса теперь по-сферное,
+    # считается внутри run_proactive_scheduler -> _sphere_decay_check() (handlers/system.py)
     scheduler.add_job(_send_daily_report, "cron", hour=18, minute=0, id="daily_report",
                       timezone="UTC")  # 18:00 UTC = 21:00 MSK
     scheduler.add_job(_sync_pending, "interval", minutes=2, id="sync")
