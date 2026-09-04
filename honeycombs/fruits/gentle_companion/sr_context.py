@@ -177,7 +177,8 @@ def _build_user_context_msg(telegram_id: str) -> str:
     if _alerts:
         _sphere_alert_block = "\n[ВНИМАНИЕ СФЕРЫ:\n" + "\n".join(f"  • {a}" for a in _alerts) + "\n]"
     # P-46: последние 5 выполненных задач
-    _rc_ctx = _ws_ctx.get("recent_completed", [])
+    _rc_ctx = workspace.get("recent_completed", [])  # hotfix: _ws_ctx было удалено в sphere-decay патче,
+    # используем уже существующую `workspace` (определена в начале этой функции) вместо мёртвой переменной
     _rc_block = ""
     if _rc_ctx:
         _rc_lines = [f"  • {r['title']} — {SPHERE_NAME_RU.get(r['sphere'],r['sphere'])} ({r['completed_at']})" for r in reversed(_rc_ctx)]
