@@ -175,6 +175,32 @@ class AutoLoadMiddleware(BaseMiddleware):
 dp.message.middleware(AutoLoadMiddleware())
 dp.callback_query.middleware(AutoLoadMiddleware())
 
+# ── Track Interaction Middleware ────────────────────────────────────────────
+# Any gardener activity — free-text chat, commands, AND inline button taps —
+# counts as "the gardener is here": resets the overall silence counter that
+# gates proactive messages and drives the 31-day auto-cleanup. Previously only
+# specific message handlers called _track_interaction() explicitly, so callback
+# buttons (task done, checklist toggle, reminder create, etc.) were invisible
+# to that counter. This middleware makes activity tracking universal and DRY —
+# one registration point instead of patching every individual handler.
+class TrackInteractionMiddleware(BaseMiddleware):
+    async def __call__(
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any]
+    ) -> Any:
+        try:
+            user = getattr(event, "from_user", None)
+            if user:
+                _track_interaction(str(user.id))
+        except Exception:
+            pass
+        return await handler(event, data)
+
+dp.message.middleware(TrackInteractionMiddleware())
+dp.callback_query.middleware(TrackInteractionMiddleware())
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # IN-MEMORY STORE
 # Single source of truth during runtime. GitHub = persistent backup.
