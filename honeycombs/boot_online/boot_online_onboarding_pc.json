@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.114",
+    "version": "v1.7.115",
     "created": "2026-05-11",
-    "updated": "2026-09-03",
+    "updated": "2026-09-04",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1658,7 +1658,7 @@
         "last_sync": "2026-09-04",
         "profile": {
           "name": "Дима",
-          "resonance_level": 100,
+          "resonance_level": 99,
           "city": "Владимир",
           "companion_settings": {
             "morning_message_time": "10:00",
