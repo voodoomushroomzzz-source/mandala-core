@@ -4,7 +4,7 @@
     "name": "Registry — State and Statistics of All Honeycombs",
     "version": "v3.1.0",
     "created": "2026-03-07",
-    "updated": "2026-09-03",
+    "updated": "2026-09-04",
     "layer": 2,
     "type": "honeycomb_manifest",
     "description": "Central registry of the Mandala system. Contains current state of all honeycombs, statistics, health status, and change tracking.",
@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 27,
-    "total_size_kb": 2097.1,
+    "total_size_kb": 2131.95,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,8 +44,8 @@
   },
   "registry": {
     "total_files": 27,
-    "total_size_kb": 2097.1,
-    "last_updated": "2026-09-03",
+    "total_size_kb": 2131.95,
+    "last_updated": "2026-09-04",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
   },
@@ -64,31 +64,31 @@
             "work_id": "W-R-RM-012",
             "name": "First Living Products — Mandala MVPs",
             "deadline": "2026-09-01",
-            "days_overdue": 2
-          },
-          {
-            "work_id": "W-T-20260408-1030",
-            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
-            "deadline": "2026-08-31",
-            "days_overdue": 3
-          },
-          {
-            "work_id": "W-T-20260511-ENGCHAT",
-            "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
-            "deadline": "2026-08-15",
-            "days_overdue": 19
-          },
-          {
-            "work_id": "W-R-20260814-PERSONAL-MIGRATION",
-            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-            "deadline": "2026-08-31",
             "days_overdue": 3
           },
           {
             "work_id": "W-T-20260511-MANUS",
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "deadline": "2026-08-31",
-            "days_overdue": 3
+            "days_overdue": 4
+          },
+          {
+            "work_id": "W-R-20260814-PERSONAL-MIGRATION",
+            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+            "deadline": "2026-08-31",
+            "days_overdue": 4
+          },
+          {
+            "work_id": "W-T-20260408-1030",
+            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+            "deadline": "2026-08-31",
+            "days_overdue": 4
+          },
+          {
+            "work_id": "W-T-20260511-ENGCHAT",
+            "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
+            "deadline": "2026-08-15",
+            "days_overdue": 20
           }
         ],
         "upcoming_deadlines": [],
@@ -99,34 +99,34 @@
       },
       "ahimsa_filter": {
         "errors": [
-          "poetry: missing identity.module_id",
-          "poetry: missing identity.layer",
-          "poetry: missing identity.type",
           "music: missing identity.module_id",
           "music: missing identity.layer",
           "music: missing identity.type",
+          "mc_voodookid: missing identity.module_id",
+          "mc_voodookid: missing identity.layer",
+          "mc_voodookid: missing identity.type",
           "x_deaddy_x: missing identity.module_id",
           "x_deaddy_x: missing identity.layer",
           "x_deaddy_x: missing identity.type",
           "mayakoma: missing identity.module_id",
           "mayakoma: missing identity.layer",
           "mayakoma: missing identity.type",
-          "mc_voodookid: missing identity.module_id",
-          "mc_voodookid: missing identity.layer",
-          "mc_voodookid: missing identity.type",
           "dmitrii_levin: missing identity.module_id",
           "dmitrii_levin: missing identity.layer",
-          "dmitrii_levin: missing identity.type"
+          "dmitrii_levin: missing identity.type",
+          "poetry: missing identity.module_id",
+          "poetry: missing identity.layer",
+          "poetry: missing identity.type"
         ],
         "warnings": [
-          "poetry: missing meta section",
-          "prose: missing index.json",
-          "poems: missing index.json",
           "music: missing meta section",
+          "mc_voodookid: missing meta section",
           "x_deaddy_x: missing meta section",
           "mayakoma: missing meta section",
-          "mc_voodookid: missing meta section",
-          "dmitrii_levin: missing meta section"
+          "dmitrii_levin: missing meta section",
+          "poetry: missing meta section",
+          "prose: missing index.json",
+          "poems: missing index.json"
         ],
         "noise_files": [],
         "errors_count": 18,
@@ -140,27 +140,6 @@
             "name": "First Living Products — Mandala MVPs",
             "type": "works",
             "deadline": "2026-09-01",
-            "days_overdue": 2
-          },
-          {
-            "id": "W-T-20260408-1030",
-            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
-            "type": "works",
-            "deadline": "2026-08-31",
-            "days_overdue": 3
-          },
-          {
-            "id": "W-T-20260511-ENGCHAT",
-            "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
-            "type": "works",
-            "deadline": "2026-08-15",
-            "days_overdue": 19
-          },
-          {
-            "id": "W-R-20260814-PERSONAL-MIGRATION",
-            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
-            "type": "works",
-            "deadline": "2026-08-31",
             "days_overdue": 3
           },
           {
@@ -168,7 +147,28 @@
             "name": "Manus — Hands of Mandala (исполнительный слой v1)",
             "type": "works",
             "deadline": "2026-08-31",
-            "days_overdue": 3
+            "days_overdue": 4
+          },
+          {
+            "id": "W-R-20260814-PERSONAL-MIGRATION",
+            "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
+            "type": "works",
+            "deadline": "2026-08-31",
+            "days_overdue": 4
+          },
+          {
+            "id": "W-T-20260408-1030",
+            "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
+            "type": "works",
+            "deadline": "2026-08-31",
+            "days_overdue": 4
+          },
+          {
+            "id": "W-T-20260511-ENGCHAT",
+            "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
+            "type": "works",
+            "deadline": "2026-08-15",
+            "days_overdue": 20
           }
         ],
         "upcoming": [],
@@ -188,8 +188,8 @@
         "root_count": 21,
         "root_threshold": 10,
         "root_status": "warning",
-        "inbox_count": 25,
-        "inbox_total_files": 26,
+        "inbox_count": 37,
+        "inbox_total_files": 38,
         "inbox_threshold": 50,
         "inbox_status": "ok",
         "warnings": [
@@ -202,8 +202,8 @@
       "root_count": 21,
       "root_threshold": 10,
       "root_status": "warning",
-      "inbox_count": 25,
-      "inbox_total_files": 26,
+      "inbox_count": 37,
+      "inbox_total_files": 38,
       "inbox_threshold": 50,
       "inbox_status": "ok",
       "warnings": [
