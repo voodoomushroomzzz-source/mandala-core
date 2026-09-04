@@ -1,7 +1,7 @@
-{
+﻿{
   "boot_id": "BOOT-GENTLE-COMPANION-DEV-001",
   "name": "Boot — Gentle Companion Development Context",
-  "version": "v2.0.0",
+  "version": "v2.0.1",
   "created": "2026-08-15",
   "updated": "2026-09-04",
   "type": "developer_onboarding",
@@ -21,20 +21,9 @@
       "location": "honeycombs/fruits/gentle_companion/",
       "index": "honeycombs/fruits/gentle_companion/index.json",
       "modules": [
-        "config.py",
-        "store.py",
-        "github_api.py",
-        "helpers.py",
-        "ui.py",
-        "sr_prompts.py",
-        "sr_search.py",
-        "sr_context.py",
-        "sr_memory.py",
-        "sr_conversation.py",
-        "handlers/tasks.py",
-        "handlers/features.py",
-        "handlers/system.py",
-        "main.py"
+        "config.py", "store.py", "github_api.py", "helpers.py", "ui.py",
+        "sr_prompts.py", "sr_search.py", "sr_context.py", "sr_memory.py", "sr_conversation.py",
+        "handlers/tasks.py", "handlers/features.py", "handlers/system.py", "main.py"
       ],
       "key_files": {
         "sr_prompts": "Системные промпты для SR.",
@@ -71,24 +60,9 @@
     "progress": 65,
     "deadline": "2026-08-31",
     "execution_phases": [
-      {
-        "phase": 1,
-        "name": "Стратегический фундамент",
-        "deadline": "2026-08-15",
-        "features": ["community_garden", "rituals", "awareness_landing"]
-      },
-      {
-        "phase": 2,
-        "name": "Тактические улучшения",
-        "deadline": "2026-08-31",
-        "features": ["seed_inbox", "short_responses", "pending_resonance", "proactive_messages", "budget_mvp"]
-      },
-      {
-        "phase": 3,
-        "name": "Расширение бюджета",
-        "deadline": "2026-09-30",
-        "features": ["budget_post_mvp"]
-      }
+      {"phase": 1, "name": "Стратегический фундамент", "deadline": "2026-08-15", "features": ["community_garden", "rituals", "awareness_landing"]},
+      {"phase": 2, "name": "Тактические улучшения", "deadline": "2026-08-31", "features": ["seed_inbox", "short_responses", "pending_resonance", "proactive_messages", "budget_mvp"]},
+      {"phase": 3, "name": "Расширение бюджета", "deadline": "2026-09-30", "features": ["budget_post_mvp"]}
     ],
     "priority_features": ["community_garden", "rituals", "proactive_messages", "short_responses"]
   },
@@ -102,60 +76,20 @@
       "Доступ к репозиторию mandala-core (токен GitHub)"
     ],
     "setup_steps": [
-      {
-        "step": 1,
-        "action": "Клонировать репозиторий",
-        "command": "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git C:\\Mandala_Digital\\github\\mandala-core"
-      },
-      {
-        "step": 2,
-        "action": "Перейти в папку проекта",
-        "command": "cd C:\\Mandala_Digital\\github\\mandala-core"
-      },
-      {
-        "step": 3,
-        "action": "Создать виртуальное окружение",
-        "command": "py -m venv venv"
-      },
-      {
-        "step": 4,
-        "action": "Активировать виртуальное окружение",
-        "command": ".\\venv\\Scripts\\activate"
-      },
-      {
-        "step": 5,
-        "action": "Установить зависимости",
-        "command": "pip install -r requirements.txt"
-      }
+      {"step": 1, "action": "Клонировать репозиторий", "command": "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git C:\\Mandala_Digital\\github\\mandala-core"},
+      {"step": 2, "action": "Перейти в папку проекта", "command": "cd C:\\Mandala_Digital\\github\\mandala-core"},
+      {"step": 3, "action": "Создать виртуальное окружение", "command": "py -m venv venv"},
+      {"step": 4, "action": "Активировать виртуальное окружение", "command": ".\\venv\\Scripts\\activate"},
+      {"step": 5, "action": "Установить зависимости", "command": "pip install -r requirements.txt"}
     ],
     "daily_workflow": {
       "description": "Ежедневный цикл разработки",
       "steps": [
-        {
-          "step": 1,
-          "action": "Открыть проект в VS Code",
-          "command": "code ."
-        },
-        {
-          "step": 2,
-          "action": "Открыть терминал PowerShell (Ctrl+Shift+`)",
-          "note": "Убедиться, что активна виртуальная среда: (venv) в начале строки."
-        },
-        {
-          "step": 3,
-          "action": "Обновить локальный репозиторий",
-          "command": "git pull --rebase origin main"
-        },
-        {
-          "step": 4,
-          "action": "Внести изменения в модули (honeycombs/fruits/gentle_companion/)",
-          "note": "Изменять модули, а не gentle_companion.py (сборка)."
-        },
-        {
-          "step": 5,
-          "action": "Закоммитить и запушить изменения",
-          "command": "git add .; git commit -m \"feat: описание изменений\"; git pull --rebase origin main; git push"
-        }
+        {"step": 1, "action": "Открыть проект в VS Code", "command": "code ."},
+        {"step": 2, "action": "Открыть терминал PowerShell (Ctrl+Shift+`)", "note": "Убедиться, что активна виртуальная среда: (venv) в начале строки."},
+        {"step": 3, "action": "Обновить локальный репозиторий", "command": "git pull --rebase origin main"},
+        {"step": 4, "action": "Внести изменения в модули (honeycombs/fruits/gentle_companion/)", "note": "Изменять модули, а не gentle_companion.py (сборка)."},
+        {"step": 5, "action": "Закоммитить и запушить изменения", "command": "git add .; git commit -m \"feat: описание изменений\"; git pull --rebase origin main; git push"}
       ]
     },
     "useful_commands": {
@@ -168,10 +102,7 @@
 
   "remote_server_hetzner": {
     "description": "Инструкции для работы на Hetzner VPS (Ubuntu 24.04, systemd).",
-    "ssh_connection": {
-      "command": "ssh root@91.99.149.226",
-      "note": "Пароль или ключ — у Gardener'а."
-    },
+    "ssh_connection": {"command": "ssh root@91.99.149.226", "note": "Пароль или ключ — у Gardener'а."},
     "server_paths": {
       "app": "/opt/mandala",
       "venv": "/opt/mandala/venv",
@@ -182,41 +113,13 @@
     "deployment_cycle": {
       "description": "Обновление бота на сервере после пуша в GitHub",
       "steps": [
-        {
-          "step": 1,
-          "action": "Подключиться по SSH",
-          "command": "ssh root@91.99.149.226"
-        },
-        {
-          "step": 2,
-          "action": "Перейти в папку проекта",
-          "command": "cd /opt/mandala"
-        },
-        {
-          "step": 3,
-          "action": "Обновить код из репозитория",
-          "command": "git pull"
-        },
-        {
-          "step": 4,
-          "action": "Активировать виртуальное окружение и обновить зависимости",
-          "command": "source venv/bin/activate && pip install -r requirements.txt"
-        },
-        {
-          "step": 5,
-          "action": "Перезапустить бота",
-          "command": "systemctl restart mandala-bot"
-        },
-        {
-          "step": 6,
-          "action": "Проверить статус",
-          "command": "systemctl status mandala-bot"
-        },
-        {
-          "step": 7,
-          "action": "Проверить логи (на наличие ошибок)",
-          "command": "journalctl -u mandala-bot -n 50 --no-pager"
-        }
+        {"step": 1, "action": "Подключиться по SSH", "command": "ssh root@91.99.149.226"},
+        {"step": 2, "action": "Перейти в папку проекта", "command": "cd /opt/mandala"},
+        {"step": 3, "action": "Обновить код из репозитория", "command": "git pull"},
+        {"step": 4, "action": "Активировать виртуальное окружение и обновить зависимости", "command": "source venv/bin/activate && pip install -r requirements.txt"},
+        {"step": 5, "action": "Перезапустить бота", "command": "systemctl restart mandala-bot"},
+        {"step": 6, "action": "Проверить статус", "command": "systemctl status mandala-bot"},
+        {"step": 7, "action": "Проверить логи (на наличие ошибок)", "command": "journalctl -u mandala-bot -n 50 --no-pager"}
       ],
       "full_update_command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && source venv/bin/activate && pip install -r requirements.txt && systemctl restart mandala-bot && systemctl status mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\""
     },
@@ -242,25 +145,33 @@
   },
 
   "development_rules": {
-    "pre_check": "Перед изменением любого файла — запросить текущую версию через API.",
-    "post_check": "После изменения — запросить обновлённый файл и подтвердить SHA.",
+    "pre_check": "Перед изменением любого файла — запросить текущую версию через API (только если нет прямой raw/блоб-ссылки).",
+    "post_check": "После изменения — запросить обновлённый файл и подтвердить SHA. Использовать прямую blob-ссылку (приоритет) или raw (если blob недоступна).",
     "patch_method": "Для больших файлов (> 500 строк) — использовать Python-патчеры (блочная замена).",
     "git_cycle": "git pull --rebase → изменения → git add → git commit → git push",
     "platforms": ["Windows (PowerShell)", "Android (Termux)"],
     "communication": "Лаконично, по делу, без лишней философии.",
+    "links_priority": {
+      "rule": "ПРИОРИТЕТ ССЫЛОК: 1) blob (github.com/.../blob/...) — для пост-чека и чтения; 2) raw (raw.githubusercontent.com/...) — для быстрого доступа без кэша; 3) API (api.github.com/...) — только если blob/raw недоступны или нужно получить SHA/метаданные.",
+      "why_blob": "Blob-ссылка показывает актуальное содержимое из текущего коммита, без кэша CDN. Это самый надёжный способ проверить изменения.",
+      "why_raw": "Raw-ссылка полезна для быстрого получения содержимого, но может кэшироваться до 5-10 минут.",
+      "why_api": "API использовать только для получения SHA, списка файлов или метаданных, НЕ для чтения содержимого больших файлов."
+    },
     "links_format": {
       "rule": "Все ссылки на файлы, API и репозитории ДОЛЖНЫ быть предоставлены в отдельном кодовом блоке с указанием языка 'text'.",
       "format": "```text\nhttps://...\n```",
       "reason": "Это единственный способ гарантировать, что у пользователя в интерфейсе (особенно на мобильных устройствах) появится кнопка 'Копировать' для безопасного и точного копирования ссылки."
     },
     "file_fetching": {
-      "rule": "Для больших файлов (модулей бота > 50 КБ) НЕ использовать API или raw-ссылки. Вместо этого: 1) Запросить у Садовника полный файл через закреплённое сообщение в чате. 2) Садовник копирует содержимое файла и отправляет как закреплённое сообщение или отдельным файлом. 3) SR читает содержимое напрямую из сообщения.",
-      "reason": "GitHub API и raw-ссылки обрезают большие файлы (> 50 КБ) из-за ограничений на передачу. Чат гарантирует полную загрузку.",
-      "affected_files": [
+      "rule": "Для файлов размером > 30 КБ НЕ использовать API, raw или blob-ссылки для чтения содержимого. Вместо этого: 1) SR определяет размер файла (через API или список файлов). 2) Если файл > 30 КБ — SR говорит: 'Файл {имя} превышает 30 КБ. Пожалуйста, отправь его содержимое в чат (закреплённым сообщением или файлом).' 3) Gardener копирует содержимое файла и отправляет в чат. 4) SR читает содержимое напрямую из сообщения.",
+      "reason": "GitHub API, raw и blob-ссылки могут обрезать или некорректно отображать файлы > 30 КБ из-за ограничений на передачу, кэширования или проблем с кодировкой. Чат гарантирует полную и точную загрузку.",
+      "threshold_kb": 30,
+      "affected_files_examples": [
         "handlers/system.py (~55 КБ)",
         "handlers/tasks.py (~95 КБ)",
         "sr_conversation.py (~110 КБ)",
-        "gentle_companion.py (сборка, ~100+ КБ)"
+        "gentle_companion.py (сборка, ~100+ КБ)",
+        "любые другие .py или .json файлы больше 30 КБ"
       ]
     },
     "module_patching": {
@@ -291,6 +202,6 @@
   },
 
   "completion": {
-    "message": "Boot Gentle Companion Dev v2.0.0 загружен. Контекст принят. Инструкции для локальной и серверной работы изучены. Готов к разработке."
+    "message": "Boot Gentle Companion Dev v2.0.1 загружен. Контекст принят. Инструкции для локальной и серверной работы изучены. Готов к разработке."
   }
 }
