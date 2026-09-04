@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "FRUIT-GENTLE-COMPANION-001",
     "name": "Gentle Companion — Modular Architecture",
-    "version": "v2.2.1",
+    "version": "v2.2.2",
     "created": "2026-05-25",
-    "updated": "2026-09-03",
+    "updated": "2026-09-04",
     "layer": 2,
     "type": "fruits_index",
     "description": "Modular architecture index for Gentle Companion bot. 14 modules, 7 migration phases complete. Production on Hetzner VPS.",
@@ -25,7 +25,7 @@
     "how_to_use": "Read this index first to understand module structure. Then read individual module files for details.",
     "gardener_approval_required": false,
     "change_requires": "gardener_approval",
-    "updated": "2026-09-03"
+    "updated": "2026-09-04"
   },
   "honeycomb": "fruits/gentle_companion",
   "version": "2.1.0",
@@ -554,7 +554,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-09-03",
+  "last_updated": "2026-09-04",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
@@ -620,6 +620,16 @@
         "main.py: добавлена джоба architect_sync (интервал 3 минуты).",
         "short_responses: Добавлено правило краткости в боевой SR_CORE_PROMPT (sr_prompts.py).",
         "Удалён подтверждённо мёртвый код SR_INTENT_MAP (~13 КБ)."
+      ]
+    },
+    {
+      "version": "v2.2.2",
+      "date": "2026-09-04",
+      "changes": [
+        "Sphere resonance decay redesign: полная переработка падения резонанса — по-сферная логика с порогами 3/6/7 дней, -2%/день с 8-го дня, пол 0%.",
+        "Universal activity tracking: добавлена TrackInteractionMiddleware — трекинг активности садовника через любые каналы (чат, команды, кнопки).",
+        "Хотфикс NameError в _build_user_context_msg: _ws_ctx → workspace (исправлена ошибка, уронившая обработку текстовых сообщений).",
+        "Удалён орфанный декоратор @router.callback_query над run_resonance_decay."
       ]
     }
   ]
