@@ -5675,3 +5675,52 @@
 [2026-09-05 07:00:54] [INFO]   Total duplicates: 6
 [2026-09-05 07:00:54] [INFO]   Total removed (old): 0
 [2026-09-05 07:00:54] [INFO] ============================================================
+[2026-09-05 12:24:23] [INFO] ============================================================
+[2026-09-05 12:24:23] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-05 12:24:23] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-05 12:24:23] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-05 12:24:24] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-05 12:24:24] [INFO]   → Filtered to 0 relevant items
+[2026-09-05 12:24:24] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-09-05 12:24:24] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-05 12:24:24] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-05 12:24:24] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-05 12:24:24] [INFO]   → Filtered to 0 relevant items
+[2026-09-05 12:24:24] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-09-05 12:24:24] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-05 12:24:24] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-05 12:24:24] [INFO]   → Found 15 raw items, 11 recent
+[2026-09-05 12:24:24] [INFO]   → Filtered to 3 relevant items
+[2026-09-05 12:24:24] [INFO]   ✅ Saved: SEED-20260905-122424-047.json
+[2026-09-05 12:24:24] [INFO]   ⏭️ Duplicate: Can AI design circuit boards yet?...
+[2026-09-05 12:24:24] [INFO]   ⏭️ Duplicate: GPT-6 Astra in code review: Gains, privacy, and co...
+[2026-09-05 12:24:24] [INFO]   📊 Hacker News: saved 1, duplicates 2
+[2026-09-05 12:24:24] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-05 12:24:24] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-05 12:24:35] [ERROR]   ❌ API error: 504 Server Error: Gateway Timeout for url: https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15
+[2026-09-05 12:24:35] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 0
+[2026-09-05 12:24:35] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-05 12:24:35] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-05 12:24:35] [INFO]   → Found 15 raw items, 8 recent
+[2026-09-05 12:24:35] [INFO]   → Filtered to 5 relevant items
+[2026-09-05 12:24:35] [INFO]   ⏭️ Duplicate: XDOF, just three months out of stealth, is in talk...
+[2026-09-05 12:24:35] [INFO]   ⏭️ Duplicate: OpenAI’s rogue agents keep escaping, with no forma...
+[2026-09-05 12:24:35] [INFO]   ⏭️ Duplicate: AI compute provider Nscale is looking for $3.5B in...
+[2026-09-05 12:24:35] [INFO]   ⏭️ Duplicate: What will Apple’s John Ternus era look like?...
+[2026-09-05 12:24:35] [INFO]   ⏭️ Duplicate: Another swarm of OpenAI agents reached the open in...
+[2026-09-05 12:24:35] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-09-05 12:24:35] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-05)...
+[2026-09-05 12:24:35] [INFO]   ✅ No old seeds to remove
+[2026-09-05 12:24:35] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-05
+[2026-09-05 12:24:35] [INFO] 
+============================================================
+[2026-09-05 12:24:35] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-05 12:24:35] [INFO]   Total saved: 1
+[2026-09-05 12:24:35] [INFO]   Total duplicates: 7
+[2026-09-05 12:24:35] [INFO]   Total removed (old): 0
+[2026-09-05 12:24:35] [INFO] ============================================================
