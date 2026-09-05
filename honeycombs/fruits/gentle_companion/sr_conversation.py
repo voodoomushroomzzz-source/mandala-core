@@ -1095,7 +1095,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                         }
                                         new_tasks.append(_new_t)
                                 store_set_tasks(user_id, new_tasks)
-                                total_res = 0
+                                # pending_resonance parity fix: accumulate deltas PER SPHERE
+                                # instead of attributing everything to the last task's sphere,
+                                # and read real post-close sphere values instead of the
+                                # overall 5-sphere mean (resonance_level) mislabeled as one sphere.
+                                _per_sphere_ct: dict = {}
                                 for tc in to_close:
                                     store_increment_achievements(user_id)
                                     dl2 = tc.get("deadline")
@@ -1105,20 +1109,22 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _update_sphere_history(user_id, sphere2, task=True, resonance_delta=r2)
                                     _daily_stats.setdefault(user_id, {"messages":0,"tasks_created":0,"tasks_completed":0,"achievements":0,"intents":{}})
                                     _daily_stats[user_id]["tasks_completed"] += 1
-                                    total_res += r2
+                                    _per_sphere_ct[sphere2] = _per_sphere_ct.get(sphere2, 0) + r2
                                 _update_deep_profile(user_id)
                                 count_now = store_get_achievements_count(user_id)
-                                new_res2  = store_get_profile(user_id).get("resonance_level", 0)
                                 await _sync_pending()
-                                # Get sphere of last closed task for display
-                                _last_sphere = _classify_sphere(to_close[-1].get("title",""), to_close[-1].get("label_name",""))
+                                _sr_after_ct = store_get_sphere_resonance(user_id)
+                                _sphere_parts = " · ".join(
+                                    f"{SPHERE_EMOJI[s]} {SPHERE_NAME_RU[s]} +{d}% → {_sr_after_ct.get(s, 0)}%"
+                                    for s, d in _per_sphere_ct.items()
+                                )
                                 if len(to_close) == 1:
                                     reply_text = (f"✅ Готово: {to_close[0]['title']} · "
-                                                  f"💎 {count_now} · {SPHERE_EMOJI[_last_sphere]} {SPHERE_NAME_RU[_last_sphere]} +{total_res}% → {new_res2}%")
+                                                  f"💎 {count_now} · {_sphere_parts}")
                                 else:
                                     names = ", ".join(t["title"] for t in to_close)
                                     reply_text = (f"✅ Закрыто {len(to_close)}: {names}\n"
-                                                  f"💎 {count_now} · {SPHERE_EMOJI[_last_sphere]} {SPHERE_NAME_RU[_last_sphere]} +{total_res}% → {new_res2}%")
+                                                  f"💎 {count_now} · {_sphere_parts}")
                                 pass  # profile not shown automatically
                                 # P-97: SR progress reaction for chat-based task completion
                                 _ct_titles = ", ".join(f"«{t['title']}»" for t in to_close)
