@@ -119,6 +119,68 @@ async def _sr_progress_reaction_send(callback_or_msg, user_id: str, event_text: 
     except Exception:
         pass
 
+# ─── pending_resonance — debounced feedback for rapid task completions ────────
+# Tapping "✅ Готово" on several tasks in a row used to fire one message +
+# one SR reaction PER task, spamming the chat. Instead: accumulate completions
+# per user, wait 5s of inactivity, then send ONE summary + ONE SR reaction.
+# {user_id: {"items": [...], "task": <asyncio.Task>, "callback": <CallbackQuery>}}
+_pending_resonance: dict = {}
+PENDING_RESONANCE_DELAY = 5  # seconds of inactivity before flushing the summary
+
+async def _queue_task_resonance_event(user_id: str, callback: CallbackQuery,
+                                       sphere: str, sphere_val: int, delta: int,
+                                       sphere_lbl: str, title: str) -> None:
+    """Queue one task-completion event and (re)start the debounce timer."""
+    entry = _pending_resonance.setdefault(user_id, {"items": [], "task": None, "callback": None})
+    entry["items"].append({
+        "title": title, "sphere": sphere, "sphere_val": sphere_val,
+        "delta": delta, "label": sphere_lbl,
+    })
+    entry["callback"] = callback
+    old_task = entry.get("task")
+    if old_task and not old_task.done():
+        old_task.cancel()
+    entry["task"] = asyncio.create_task(_flush_task_resonance(user_id))
+
+async def _flush_task_resonance(user_id: str) -> None:
+    try:
+        await asyncio.sleep(PENDING_RESONANCE_DELAY)
+    except asyncio.CancelledError:
+        return
+    entry = _pending_resonance.pop(user_id, None)
+    if not entry or not entry.get("items"):
+        return
+    items = entry["items"]
+    callback = entry.get("callback")
+    if not callback:
+        return
+    if len(items) == 1:
+        it = items[0]
+        msg = (
+            f"✅ <b>{it['title']}</b> — закрыта\n"
+            f"{it['label']} +{it['delta']}% → {it['sphere_val']}%"
+        )
+        event_text = f"[Системное событие] Садовник закрыл задачу: «{it['title']}»"
+    else:
+        per_sphere = {}
+        for it in items:
+            s = it["sphere"]
+            slot = per_sphere.setdefault(s, {"delta": 0, "val": it["sphere_val"], "label": it["label"]})
+            slot["delta"] += it["delta"]
+            slot["val"] = it["sphere_val"]  # last event for this sphere = most recent value
+        lines = [f"✅ Закрыто задач подряд: {len(items)}"]
+        for s, d in per_sphere.items():
+            lines.append(f"{d['label']} +{d['delta']}% → {d['val']}%")
+        msg = "\n".join(lines)
+        titles = ", ".join(f"«{it['title']}»" for it in items)
+        event_text = f"[Системное событие] Садовник закрыл {len(items)} задачи подряд: {titles}"
+    try:
+        await callback.message.answer(msg, parse_mode="HTML")
+    except Exception:
+        pass
+    # P-97: SR progress reaction — one call for the whole batch
+    asyncio.create_task(_sr_progress_reaction_send(callback, user_id, event_text))
+
 @router.callback_query(F.data.startswith("ttask_done|"))
 async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
     user_id = str(callback.from_user.id)
@@ -214,20 +276,13 @@ async def cb_ttask_done(callback: CallbackQuery, state: FSMContext):
     _sphere_val = _sr_after.get(sphere, 0)
     _sphere_lbl = _sphere_labels.get(sphere, "🌱 Рост")
     _done_title = task.get("title", "")[:40]
-    _done_msg = (
-        f"✅ <b>{_done_title}</b> — закрыта\n"
-        f"{_sphere_lbl} +2% → {_sphere_val}%"
-    )
     await callback.answer("")
-    try:
-        await callback.message.answer(_done_msg, parse_mode="HTML")
-    except Exception:
-        pass
-    # P-97: SR progress reaction
-    asyncio.create_task(_sr_progress_reaction_send(
-        callback, user_id,
-        f"[Системное событие] Садовник закрыл задачу: «{_done_title}»"
-    ))
+    # pending_resonance: queue instead of sending immediately — if the gardener
+    # closes several tasks in a row, one summary + one SR reaction goes out
+    # after PENDING_RESONANCE_DELAY seconds of inactivity instead of per-tap spam.
+    await _queue_task_resonance_event(
+        user_id, callback, sphere, _sphere_val, 2, _sphere_lbl, _done_title
+    )
     all_tasks2 = store_get_tasks(user_id)
     tasks_in_group = [t for t in all_tasks2 if t.get("status") != "completed" and (
         (t.get("label_id") == group_id) if group_id != "__nogroup__" else not t.get("label_name")
