@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.123",
+    "version": "v1.7.124",
     "created": "2026-05-11",
     "updated": "2026-09-06",
     "layer": 1,
@@ -1660,7 +1660,7 @@
         }
       },
       "section_B_gardener_data": {
-        "last_sync": "2026-09-06",
+        "last_sync": "2026-09-07",
         "profile": {
           "name": "Дима",
           "resonance_level": 100,
@@ -2205,7 +2205,7 @@
         ]
       },
       "section_C_architect_synthesis": {
-        "last_updated": "2026-09-06",
+        "last_updated": "2026-09-07",
         "version": "v2.6.0",
         "synthesis_layer_1_philosophical": {
           "description": "Синтез на основе анкеты и философских диалогов.",
