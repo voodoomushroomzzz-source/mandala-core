@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.121",
+    "version": "v1.7.122",
     "created": "2026-05-11",
     "updated": "2026-09-06",
     "layer": 1,
@@ -2239,7 +2239,8 @@
           "short_term": [
             {
               "action": "Зарегистрироваться на Twynbee",
-              "deadline": "2026-09-06",
+              "deadline": "2026-10-01",
+              "reason": "Перенос — нет ясности, нет необходимости в данный момент",
               "status": "pending"
             }
           ]
