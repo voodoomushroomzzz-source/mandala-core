@@ -33,7 +33,7 @@
   "authors": [
     "External SR (Claude)"
   ],
-  "bot_version_analyzed": "7.39.23",
+  "bot_version_analyzed": "7.39.24",
   "current_state": {
     "file": "gentle_companion.py (running on server)",
     "lines": 11588,
@@ -181,9 +181,10 @@
         "_show_tasks_unified(sr_react) — P-99/P-101: smart summary to SR, must_reply=True",
         "_format_tasks_labels() — P-100/P-102: blank lines between groups + overdue block first",
         "_filter_tasks_by_period() — P-103: hot, next_week, next_month, range:YYYY-MM-DD:YYYY-MM-DD",
-        "_detect_task_period() — P-103: detects new period types from text"
+        "_detect_task_period() — P-103: detects new period types from text",
+        "_pending_resonance dict + _queue_task_resonance_event() + _flush_task_resonance() — debounce 5 сек для cb_ttask_done, одна сводка вместо N сообщений при закрытии подряд (pending_resonance, 05-06.09)"
       ],
-      "last_updated": "2026-08-19"
+      "last_updated": "2026-09-06"
     },
     {
       "id": "06_handlers_features",
@@ -330,9 +331,10 @@
         "show_tasks: P-103 new periods in period_ru map (hot, next_week, next_month, range)",
         "show_tasks: P-104 label+period combined filter",
         "show_tasks: P-105 overdue from all tasks always first, even when period empty",
-        "add_achievement intent: P-98 — SR reaction on achievement creation via chat"
+        "add_achievement intent: P-98 — SR reaction on achievement creation via chat",
+        "complete_task batch-ветка: расчёт резонанса теперь по каждой реально затронутой сфере (_per_sphere_ct), а не по сфере последней задачи + общий средний резонанс (хотфикс, 06.09)"
       ],
-      "last_updated": "2026-08-19"
+      "last_updated": "2026-09-06"
     },
     {
       "id": "08_handlers_system",
