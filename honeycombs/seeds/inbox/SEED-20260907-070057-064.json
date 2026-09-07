@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260907-070057-064",
+  "title": "Achieving Asymptotic Near-Optimality Without $\\delta$-Similarity",
+  "url": "https://arxiv.org/abs/2609.04464",
+  "description": "arXiv:2609.04464v1 Announce Type: new \nAbstract: Sampling-based motion planning algorithms are a popular class of trajectory planning algorithm due to their speed in complex, high-dimensional environments and ability to handle kinodynamic constraints, specifically through the use of forward dynamics propagation. Many such planners claim to achieve asymptotic near-optimality by proving the almost sure sampling of trajectories that are close to an optimal trajectory in the state space, known as $\\",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-07T07:00:57.421964",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
