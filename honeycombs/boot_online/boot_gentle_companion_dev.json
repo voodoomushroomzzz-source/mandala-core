@@ -1,19 +1,17 @@
 {
   "boot_id": "BOOT-GENTLE-COMPANION-DEV-001",
   "name": "Boot — Gentle Companion Development Context",
-  "version": "v2.0.4",
+  "version": "v2.0.5",
   "created": "2026-08-15",
   "updated": "2026-09-07",
   "type": "developer_onboarding",
   "description": "Полный boot-файл для разработки Gentle Companion. Включает архитектуру, правила, инструкции для локальной работы (Windows) и удалённого сервера (Hetzner VPS).",
-
   "mandala_context": {
     "brief": "Мандала — экосистема симбиоза человека и ИИ. Основана на принципах Ахимсы, самоорганизации и резонанса.",
     "role_of_bot": "Gentle Companion — Telegram-бот, точка входа для садовников. Собирает опыт, помогает с задачами, даёт обратную связь.",
     "core_repo": "https://github.com/voodoomushroomzzz-source/mandala-core",
     "data_repo": "https://github.com/voodoomushroomzzz-source/mandala-gardeners"
   },
-
   "gentle_companion": {
     "description": "Telegram-бот на Python (aiogram 3.x). Работает на Hetzner VPS (Ubuntu, systemd, nginx).",
     "entry_point": "gentle_companion.py (сборка из модулей)",
@@ -21,9 +19,20 @@
       "location": "honeycombs/fruits/gentle_companion/",
       "index": "honeycombs/fruits/gentle_companion/index.json",
       "modules": [
-        "config.py", "store.py", "github_api.py", "helpers.py", "ui.py",
-        "sr_prompts.py", "sr_search.py", "sr_context.py", "sr_memory.py", "sr_conversation.py",
-        "handlers/tasks.py", "handlers/features.py", "handlers/system.py", "main.py"
+        "config.py",
+        "store.py",
+        "github_api.py",
+        "helpers.py",
+        "ui.py",
+        "sr_prompts.py",
+        "sr_search.py",
+        "sr_context.py",
+        "sr_memory.py",
+        "sr_conversation.py",
+        "handlers/tasks.py",
+        "handlers/features.py",
+        "handlers/system.py",
+        "main.py"
       ],
       "key_files": {
         "sr_prompts": "Системные промпты для SR.",
@@ -52,7 +61,6 @@
       "whitelist": "gardeners/whitelist.json"
     }
   },
-
   "current_task": {
     "id": "W-T-20260408-1030",
     "name": "Telegram Bot SR Gentle Companion — Strategic & Tactical Upgrade",
@@ -60,36 +68,108 @@
     "progress": 65,
     "deadline": "2026-08-31",
     "execution_phases": [
-      {"phase": 1, "name": "Стратегический фундамент", "deadline": "2026-08-15", "features": ["community_garden", "rituals", "awareness_landing"]},
-      {"phase": 2, "name": "Тактические улучшения", "deadline": "2026-08-31", "features": ["seed_inbox", "short_responses", "pending_resonance", "proactive_messages", "budget_mvp"]},
-      {"phase": 3, "name": "Расширение бюджета", "deadline": "2026-09-30", "features": ["budget_post_mvp"]}
+      {
+        "phase": 1,
+        "name": "Стратегический фундамент",
+        "deadline": "2026-08-15",
+        "features": [
+          "community_garden",
+          "rituals",
+          "awareness_landing"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Тактические улучшения",
+        "deadline": "2026-08-31",
+        "features": [
+          "seed_inbox",
+          "short_responses",
+          "pending_resonance",
+          "proactive_messages",
+          "budget_mvp"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Расширение бюджета",
+        "deadline": "2026-09-30",
+        "features": [
+          "budget_post_mvp"
+        ]
+      }
     ],
-    "priority_features": ["community_garden", "rituals", "proactive_messages", "short_responses"]
+    "priority_features": [
+      "community_garden",
+      "rituals",
+      "proactive_messages",
+      "short_responses"
+    ]
   },
-
   "local_development_windows": {
     "description": "Инструкции для работы на локальном компьютере (Windows 10/11, PowerShell, VS Code).",
     "prerequisites": [
       "Установлен Git (https://git-scm.com/download/win)",
       "Установлен Python 3.14.3 (https://www.python.org/downloads/)",
       "Установлен VS Code (https://code.visualstudio.com/)",
-      "Доступ к репозиторию mandala-core (токен GitHub)"
+      "Доступ к репозиторию mandala-core (токен GitHub)",
+      "КРИТИЧНО: команда 'python' на Windows часто указывает на Microsoft Store alias-заглушку. Использовать ТОЛЬКО 'py' (Python launcher) для всех команд."
     ],
     "setup_steps": [
-      {"step": 1, "action": "Клонировать репозиторий", "command": "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git C:\\Mandala_Digital\\github\\mandala-core"},
-      {"step": 2, "action": "Перейти в папку проекта", "command": "cd C:\\Mandala_Digital\\github\\mandala-core"},
-      {"step": 3, "action": "Создать виртуальное окружение", "command": "py -m venv venv"},
-      {"step": 4, "action": "Активировать виртуальное окружение", "command": ".\\venv\\Scripts\\activate"},
-      {"step": 5, "action": "Установить зависимости", "command": "pip install -r requirements.txt"}
+      {
+        "step": 1,
+        "action": "Клонировать репозиторий",
+        "command": "git clone https://github.com/voodoomushroomzzz-source/mandala-core.git C:\\Mandala_Digital\\github\\mandala-core"
+      },
+      {
+        "step": 2,
+        "action": "Перейти в папку проекта",
+        "command": "cd C:\\Mandala_Digital\\github\\mandala-core"
+      },
+      {
+        "step": 3,
+        "action": "Создать виртуальное окружение",
+        "command": "py -m venv venv"
+      },
+      {
+        "step": 4,
+        "action": "Активировать виртуальное окружение",
+        "command": ".\\venv\\Scripts\\activate"
+      },
+      {
+        "step": 5,
+        "action": "Установить зависимости",
+        "command": "pip install -r requirements.txt"
+      }
     ],
     "daily_workflow": {
       "description": "Ежедневный цикл разработки",
       "steps": [
-        {"step": 1, "action": "Открыть проект в VS Code", "command": "code ."},
-        {"step": 2, "action": "Открыть терминал PowerShell (Ctrl+Shift+`)", "note": "Убедиться, что активна виртуальная среда: (venv) в начале строки."},
-        {"step": 3, "action": "Обновить локальный репозиторий", "command": "git pull --rebase origin main"},
-        {"step": 4, "action": "Внести изменения в модули (honeycombs/fruits/gentle_companion/)", "note": "Изменять модули, а не gentle_companion.py (сборка)."},
-        {"step": 5, "action": "Закоммитить и запушить изменения", "command": "git add .; git commit -m \"feat: описание изменений\"; git pull --rebase origin main; git push"}
+        {
+          "step": 1,
+          "action": "Открыть проект в VS Code",
+          "command": "code ."
+        },
+        {
+          "step": 2,
+          "action": "Открыть терминал PowerShell (Ctrl+Shift+`)",
+          "note": "Убедиться, что активна виртуальная среда: (venv) в начале строки."
+        },
+        {
+          "step": 3,
+          "action": "Обновить локальный репозиторий",
+          "command": "git pull --rebase origin main"
+        },
+        {
+          "step": 4,
+          "action": "Внести изменения в модули (honeycombs/fruits/gentle_companion/)",
+          "note": "Изменять модули, а не gentle_companion.py (сборка)."
+        },
+        {
+          "step": 5,
+          "action": "Закоммитить и запушить изменения",
+          "command": "git add .; git commit -m \"feat: описание изменений\"; git pull --rebase origin main; git push"
+        }
       ]
     },
     "useful_commands": {
@@ -99,10 +179,12 @@
       "validate_json": "py -c \"import json; json.load(open('honeycombs/fruits/gentle_companion/index.json'))\""
     }
   },
-
   "remote_server_hetzner": {
     "description": "Инструкции для работы на Hetzner VPS (Ubuntu 24.04, systemd).",
-    "ssh_connection": {"command": "ssh root@91.99.149.226", "note": "Пароль или ключ — у Gardener'а."},
+    "ssh_connection": {
+      "command": "ssh root@91.99.149.226",
+      "note": "Пароль или ключ — у Gardener'а."
+    },
     "server_paths": {
       "app": "/opt/mandala",
       "venv": "/opt/mandala/venv",
@@ -113,13 +195,41 @@
     "deployment_cycle": {
       "description": "Обновление бота на сервере после пуша в GitHub",
       "steps": [
-        {"step": 1, "action": "Подключиться по SSH", "command": "ssh root@91.99.149.226"},
-        {"step": 2, "action": "Перейти в папку проекта", "command": "cd /opt/mandala"},
-        {"step": 3, "action": "Обновить код из репозитория", "command": "git pull"},
-        {"step": 4, "action": "Активировать виртуальное окружение и обновить зависимости", "command": "source venv/bin/activate && pip install -r requirements.txt"},
-        {"step": 5, "action": "Перезапустить бота", "command": "systemctl restart mandala-bot"},
-        {"step": 6, "action": "Проверить статус", "command": "systemctl status mandala-bot"},
-        {"step": 7, "action": "Проверить логи (на наличие ошибок)", "command": "journalctl -u mandala-bot -n 50 --no-pager"}
+        {
+          "step": 1,
+          "action": "Подключиться по SSH",
+          "command": "ssh root@91.99.149.226"
+        },
+        {
+          "step": 2,
+          "action": "Перейти в папку проекта",
+          "command": "cd /opt/mandala"
+        },
+        {
+          "step": 3,
+          "action": "Обновить код из репозитория",
+          "command": "git pull"
+        },
+        {
+          "step": 4,
+          "action": "Активировать виртуальное окружение и обновить зависимости",
+          "command": "source venv/bin/activate && pip install -r requirements.txt"
+        },
+        {
+          "step": 5,
+          "action": "Перезапустить бота",
+          "command": "systemctl restart mandala-bot"
+        },
+        {
+          "step": 6,
+          "action": "Проверить статус",
+          "command": "systemctl status mandala-bot"
+        },
+        {
+          "step": 7,
+          "action": "Проверить логи (на наличие ошибок)",
+          "command": "journalctl -u mandala-bot -n 50 --no-pager"
+        }
       ],
       "full_update_command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && source venv/bin/activate && pip install -r requirements.txt && systemctl restart mandala-bot && systemctl status mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\""
     },
@@ -143,7 +253,6 @@
       "view_env": "cat /opt/mandala/.env"
     }
   },
-
   "development_rules": {
     "pre_check": "Перед изменением любого файла — запросить текущую версию через API (только если нет прямой raw/blob-ссылки).",
     "post_check": "После изменения — запросить обновлённый файл и подтвердить SHA. Использовать прямую blob-ссылку.",
@@ -193,7 +302,7 @@
       },
       "block_2": {
         "name": "Код патчера (Python)",
-        "template": "# -*- coding: utf-8 -*-\n\"\"\"\nПатчер для {описание}.\nAnchor-based: ищет уникальный блок и заменяет его.\n\"\"\"\n\nimport re\n\nFILE_PATH = \"honeycombs/fruits/gentle_companion/{путь_к_файлу}.py\"\n\n# КРИТИЧНО: OLD_BLOCK должен быть уникальным фрагментом (совпадать ровно один раз).\n# Для сложных замен используйте repr(), чтобы точно скопировать отступы и пробелы.\nOLD_BLOCK = r'''\n{старый_блок_кода}\n'''\n\nNEW_BLOCK = r'''\n{новый_блок_кода}\n'''\n\ndef patch_file():\n    with open(FILE_PATH, \"r\", encoding=\"utf-8\") as f:\n        content = f.read()\n    \n    # Проверка, что якорь существует ровно один раз (assert)\n    assert OLD_BLOCK.strip() in content, \"❌ Anchor not found. Используйте repr() для проверки точного совпадения.\"\n    \n    count = content.count(OLD_BLOCK.strip())\n    if count > 1:\n        print(f\"❌ Anchor найден {count} раза. Требуется уникальный блок.\")\n        return False\n    \n    new_content = content.replace(OLD_BLOCK.strip(), NEW_BLOCK.strip())\n    \n    with open(FILE_PATH, \"w\", encoding=\"utf-8\") as f:\n        f.write(new_content)\n    \n    print(\"✅ Патч применён\")\n    return True\n\nif __name__ == \"__main__\":\n    patch_file()",
+        "template": "# -*- coding: utf-8 -*-\n\"\"\"\nПатчер для {описание}.\nAnchor-based: ищет уникальный блок и заменяет его.\n\"\"\"\n\nimport re\n\nFILE_PATH = \"honeycombs/fruits/gentle_companion/{путь_к_файлу}.py\"\n\nOLD_BLOCK = '''\n{старый_блок_кода}\n'''\n\nNEW_BLOCK = '''\n{новый_блок_кода}\n'''\n\ndef patch_file():\n    with open(FILE_PATH, \"r\", encoding=\"utf-8\") as f:\n        content = f.read()\n    \n    count = content.count(OLD_BLOCK.strip())\n    if count == 0:\n        print(\"ERROR: anchor not found\")\n        return False\n    if count > 1:\n        print(\"ERROR: anchor found multiple times\")\n        return False\n    \n    new_content = content.replace(OLD_BLOCK.strip(), NEW_BLOCK.strip())\n    \n    with open(FILE_PATH, \"w\", encoding=\"utf-8\") as f:\n        f.write(new_content)\n    \n    print(\"OK: patch applied\")\n    return True\n\nif __name__ == \"__main__\":\n    success = patch_file()\n    if not success:\n        raise SystemExit(1)",
         "critical_rules": [
           "Никогда не использовать кириллицу или эмодзи внутри строковых литералов патчера (проблемы с кодировкой CP1251 на Windows).",
           "Не использовать \\n внутри многострочных f-строк.",
@@ -202,22 +311,28 @@
         ]
       },
       "block_3": {
-        "name": "Применить патч, запушить и обновить сервер",
-        "command": "py patcher_NN_task_description.py; Remove-Item patcher_NN_task_description.py; git add honeycombs/fruits/gentle_companion/{путь_к_файлу}.py; git commit -m \"{commit_message}\"; git pull --rebase origin main; git push; ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\"",
-        "note": "Вся команда выполняется одной строкой в PowerShell. После деплоя — обязательно проверить логи.",
-        "critical_rules": [
-          "Перед коммитом — выполнить синтакс-чек: python -c \"import ast; ast.parse(open('{путь_к_файлу}').read()); print('Syntax OK')\"",
-          "git pull --rebase обязателен перед push.",
-          "После деплоя на сервер — проверить логи (journalctl), а не просто сообщать об успехе."
-        ]
+        "name": "Применить патч, закоммитить и запушть (локально)",
+        "command": "py patcher_{name}.py\nif ($?) {\n    py -c \"import ast; ast.parse(open('honeycombs/fruits/gentle_companion/{путь_к_файлу}.py', encoding='utf-8').read()); print('Syntax OK')\"\n    if ($?) {\n        Remove-Item patcher_{name}.py\n        git add honeycombs/fruits/gentle_companion/{путь_к_файлу}.py\n        git commit -m \"{commit_message}\"\n        git pull --rebase origin main\n        git push\n        Write-Host \"DONE: pushed, deploy separately\"\n    } else {\n        Write-Host \"SYNTAX ERROR: fix before commit\"\n    }\n} else {\n    Write-Host \"PATCH FAILED: check anchor\"\n}",
+        "note": "Деплой на сервер — отдельный шаг (block_3b), не обязателен после каждого патча."
       },
       "post_check_instruction": {
         "rule": "После выполнения блока 3 — запросить обновлённый файл по blob-ссылке для подтверждения SHA и содержимого.",
         "example": "```text\nhttps://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/fruits/gentle_companion/{путь_к_файлу}.py\n```"
+      },
+      "block_3b": {
+        "name": "Деплой на сервер (опционально)",
+        "command": "ssh root@91.99.149.226 \"cd /opt/mandala && git pull && systemctl restart mandala-bot && journalctl -u mandala-bot -n 20 --no-pager\"",
+        "note": "Выполнять только когда нужно проверить изменения на проде. Требует SSH-ключа или пароля."
+      },
+      "naming_convention": {
+        "rule": "patcher_NN_task_description.py, где NN — сквозной номер по всему проекту.",
+        "check": "Проверять существующие patcher_*.py в корне репозитория перед созданием нового, чтобы избежать коллизий."
       }
+    },
+    "ssh_authentication": {
+      "note": "Рассмотреть настройку SSH-ключа (ssh-copy-id или вручную через authorized_keys) вместо пароля — устранит интерактивный ввод пароля при каждом деплое и позволит выполнять деплой одной командой."
     }
   },
-
   "useful_links": {
     "task_file": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json",
     "architecture_index": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/fruits/gentle_companion/index.json",
@@ -227,7 +342,6 @@
     "mandala_core": "https://github.com/voodoomushroomzzz-source/mandala-core",
     "mandala_gardeners": "https://github.com/voodoomushroomzzz-source/mandala-gardeners"
   },
-
   "onboarding_instruction": {
     "step_1": "Прочитай этот файл полностью.",
     "step_2": "Изучи архитектуру бота (gentle_companion.architecture).",
@@ -238,7 +352,6 @@
     "step_7": "Начни с Phase 1 (community_garden).",
     "step_8": "После завершения — сообщи Садовнику, что готов к работе."
   },
-
   "completion": {
     "message": "Boot Gentle Companion Dev v2.0.4 загружен. Контекст принят. Инструкции для локальной и серверной работы изучены. Готов к разработке."
   }
