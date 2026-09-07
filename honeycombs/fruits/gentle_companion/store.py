@@ -179,3 +179,36 @@ def store_set_reminders(telegram_id: str, reminders: list) -> None:
     ws = store_get_workspace(telegram_id) or {"tasks":[],"groups":[],"achievements":[],"reminders":[]}
     ws["reminders"] = reminders
     store_set_workspace(telegram_id, ws)
+
+# --- Budget ---
+def store_get_budget_entries(telegram_id: str) -> list:
+    """Return budget entries list from workspace. Lazy -- no init write if missing."""
+    ws = store_get_workspace(telegram_id)
+    return copy.deepcopy(ws.get("budget_entries", [])) if ws else []
+
+def store_set_budget_entries(telegram_id: str, entries: list) -> None:
+    ws = store_get_workspace(telegram_id) or {"tasks":[],"groups":[],"achievements":[],"budget_entries":[]}
+    ws["budget_entries"] = entries
+    store_set_workspace(telegram_id, ws)
+
+def store_add_budget_entry(telegram_id: str, entry: dict) -> dict:
+    """Append one budget entry and persist. entry must already have 'id' set by caller."""
+    entries = store_get_budget_entries(telegram_id)
+    entries.append(entry)
+    store_set_budget_entries(telegram_id, entries)
+    return entry
+
+def store_get_balance(telegram_id: str, currency: str = "RUB") -> int:
+    """Balance = sum(income) - sum(expense) for given currency, derived from entries.
+    No separate balance field -- avoids desync between stored balance and entry history."""
+    entries = store_get_budget_entries(telegram_id)
+    total = 0
+    for e in entries:
+        if e.get("currency", "RUB") != currency:
+            continue
+        amount = e.get("amount", 0)
+        if e.get("type") == "income":
+            total += amount
+        elif e.get("type") == "expense":
+            total -= amount
+    return total
