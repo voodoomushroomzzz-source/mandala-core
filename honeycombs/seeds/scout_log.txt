@@ -5884,3 +5884,67 @@
 [2026-09-07 07:00:58] [INFO]   Total duplicates: 5
 [2026-09-07 07:00:58] [INFO]   Total removed (old): 0
 [2026-09-07 07:00:58] [INFO] ============================================================
+[2026-09-07 14:49:24] [INFO] ============================================================
+[2026-09-07 14:49:24] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-07 14:49:24] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-07 14:49:24] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-07 14:49:25] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-07 14:49:25] [INFO]   → Filtered to 5 relevant items
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: EXAONE Forecast for Finance...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: From Matching Models to Recruiting Agents: A Syste...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: Harbor Adapters and Harbor-Index: Infrastructure a...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: Data-Optimized Contingency Screening: A Machine Le...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: Iris: Climbing to the Search Frontier...
+[2026-09-07 14:49:25] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-09-07 14:49:25] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-07 14:49:25] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-07 14:49:25] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-07 14:49:25] [INFO]   → Filtered to 5 relevant items
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: FailureSpot: Label-Efficient Timestamp-Level Failu...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: VLA-Precision: Asymmetric Co-Bootstrapping for Eff...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: Scalable Edge-assisted Fusion and Path Prediction ...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: AquaBEV: Monocular Underwater BEV Occupancy with 3...
+[2026-09-07 14:49:25] [INFO]   ⏭️ Duplicate: Achieving Asymptotic Near-Optimality Without $\del...
+[2026-09-07 14:49:25] [INFO]   📊 arXiv Robotics: saved 0, duplicates 5
+[2026-09-07 14:49:25] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-07 14:49:25] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-07 14:49:25] [INFO]   → Found 15 raw items, 14 recent
+[2026-09-07 14:49:25] [INFO]   → Filtered to 5 relevant items
+[2026-09-07 14:49:25] [INFO]   ✅ Saved: SEED-20260907-144925-069.json
+[2026-09-07 14:49:25] [INFO]   ✅ Saved: SEED-20260907-144925-070.json
+[2026-09-07 14:49:25] [INFO]   ✅ Saved: SEED-20260907-144925-071.json
+[2026-09-07 14:49:25] [INFO]   ✅ Saved: SEED-20260907-144925-072.json
+[2026-09-07 14:49:25] [INFO]   ✅ Saved: SEED-20260907-144925-073.json
+[2026-09-07 14:49:25] [INFO]   📊 Hacker News: saved 5, duplicates 0
+[2026-09-07 14:49:25] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-07 14:49:25] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-07 14:49:26] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-07 14:49:26] [INFO]   → Filtered to 5 relevant items
+[2026-09-07 14:49:26] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-07 14:49:26] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-07 14:49:26] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-07 14:49:26] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-07 14:49:26] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-07 14:49:26] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-07 14:49:26] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-07 14:49:26] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-07 14:49:26] [INFO]   → Found 15 raw items, 2 recent
+[2026-09-07 14:49:26] [INFO]   → Filtered to 2 relevant items
+[2026-09-07 14:49:26] [INFO]   ⏭️ Duplicate: Authors push back as publishers and agents make cl...
+[2026-09-07 14:49:26] [INFO]   ⏭️ Duplicate: Travis Kalanick’s Atoms might be getting into the ...
+[2026-09-07 14:49:26] [INFO]   📊 TechCrunch AI: saved 0, duplicates 2
+[2026-09-07 14:49:26] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-07)...
+[2026-09-07 14:49:26] [INFO]   ✅ No old seeds to remove
+[2026-09-07 14:49:26] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-07
+[2026-09-07 14:49:26] [INFO] 
+============================================================
+[2026-09-07 14:49:26] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-07 14:49:26] [INFO]   Total saved: 5
+[2026-09-07 14:49:26] [INFO]   Total duplicates: 17
+[2026-09-07 14:49:26] [INFO]   Total removed (old): 0
+[2026-09-07 14:49:26] [INFO] ============================================================
