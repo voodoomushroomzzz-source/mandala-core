@@ -5948,3 +5948,51 @@
 [2026-09-07 14:49:26] [INFO]   Total duplicates: 17
 [2026-09-07 14:49:26] [INFO]   Total removed (old): 0
 [2026-09-07 14:49:26] [INFO] ============================================================
+[2026-09-08 07:00:59] [INFO] ============================================================
+[2026-09-08 07:00:59] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-08 07:00:59] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-08 07:00:59] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-08 07:00:59] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-08 07:00:59] [INFO]   → Filtered to 0 relevant items
+[2026-09-08 07:00:59] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-09-08 07:00:59] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-08 07:00:59] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-08 07:00:59] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-08 07:00:59] [INFO]   → Filtered to 0 relevant items
+[2026-09-08 07:00:59] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-09-08 07:00:59] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-08 07:00:59] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-08 07:00:59] [INFO]   → Found 15 raw items, 3 recent
+[2026-09-08 07:00:59] [INFO]   → Filtered to 0 relevant items
+[2026-09-08 07:00:59] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-09-08 07:00:59] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-08 07:00:59] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-08 07:01:00] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-08 07:01:00] [INFO]   → Filtered to 5 relevant items
+[2026-09-08 07:01:00] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-08 07:01:00] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-08 07:01:00] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-08 07:01:00] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-08 07:01:00] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-08 07:01:00] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-08 07:01:00] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-08 07:01:00] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-08 07:01:00] [INFO]   → Found 15 raw items, 1 recent
+[2026-09-08 07:01:00] [INFO]   → Filtered to 1 relevant items
+[2026-09-08 07:01:00] [INFO]   ✅ Saved: SEED-20260908-070100-074.json
+[2026-09-08 07:01:00] [INFO]   📊 TechCrunch AI: saved 1, duplicates 0
+[2026-09-08 07:01:00] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-07)...
+[2026-09-08 07:01:00] [INFO]   ✅ No old seeds to remove
+[2026-09-08 07:01:00] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-08
+[2026-09-08 07:01:00] [INFO] 
+============================================================
+[2026-09-08 07:01:00] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-08 07:01:00] [INFO]   Total saved: 1
+[2026-09-08 07:01:00] [INFO]   Total duplicates: 5
+[2026-09-08 07:01:00] [INFO]   Total removed (old): 0
+[2026-09-08 07:01:00] [INFO] ============================================================
