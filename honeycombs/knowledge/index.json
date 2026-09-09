@@ -84,6 +84,15 @@
         "documents",
         "international"
       ]
+    },
+    {
+      "id": "deep_questions_for_getting_to_know_someone",
+      "name": "100+ вопросов для глубокого знакомства",
+      "file": "deep_questions_for_getting_to_know_someone.json",
+      "description": "Структурированная коллекция из 56 вопросов для знакомства по уровням глубины — от лёгких до самых личных, чтобы понять внутренний мир человека.",
+      "source": "Интернет-исследования и психологические материалы, структурировано в Mandala",
+      "date_added": "2026-09-10",
+      "version": "v1.0.0"
     }
   ],
   "navigation": {
@@ -95,8 +104,8 @@
     ]
   },
   "metrics": {
-    "total_resources": 6,
-    "last_updated": "2026-07-24"
+    "total_resources": 7,
+    "last_updated": "2026-09-10"
   },
   "health": {
     "status": "healthy",
