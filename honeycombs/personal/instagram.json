@@ -150,9 +150,9 @@
       {
         "id": "CYCLE-001",
         "theme": "Тишина",
-        "status": "completed",
+        "status": "in_progress",
         "start_date": "2026-09-01",
-        "end_date": "2026-09-10",
+        "end_date": null,
         "stories": [
           {
             "date": "2026-09-02",
@@ -184,8 +184,8 @@
       {
         "id": "CYCLE-002",
         "theme": "Движение",
-        "status": "in_progress",
-        "start_date": "2026-09-11",
+        "status": "pending",
+        "start_date": null,
         "end_date": null,
         "stories": [
           {
