@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260911-070101-096",
+  "title": "HuRo: Robotizing Human Videos for Scalable VLA Pretraining",
+  "url": "https://arxiv.org/abs/2609.10706",
+  "description": "arXiv:2609.10706v1 Announce Type: new \nAbstract: Human video datasets have emerged as a compelling alternative to expensive real-robot data, offering rich diversity at scale. To bridge the human-to-robot embodiment gap, existing approaches either robotize videos in task-matched settings or address observation and action alignment separately at scale. In this work, we systematically examine whether robotized human videos can provide effective and scalable supervision for pretraining vision-langua",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-11T07:01:01.783602",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
