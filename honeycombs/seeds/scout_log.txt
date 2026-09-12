@@ -6437,3 +6437,65 @@
 [2026-09-12 07:00:57] [INFO]   Total duplicates: 5
 [2026-09-12 07:00:57] [INFO]   Total removed (old): 0
 [2026-09-12 07:00:57] [INFO] ============================================================
+[2026-09-12 12:38:27] [INFO] ============================================================
+[2026-09-12 12:38:27] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-12 12:38:27] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-12 12:38:27] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-12 12:38:27] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-12 12:38:27] [INFO]   → Filtered to 5 relevant items
+[2026-09-12 12:38:27] [INFO]   ⏭️ Duplicate: Automating Quadratic Unconstrained Binary Optimiza...
+[2026-09-12 12:38:27] [INFO]   ⏭️ Duplicate: A Multi-Stage Rule-Chaining Framework for Composit...
+[2026-09-12 12:38:27] [INFO]   ⏭️ Duplicate: Understanding LoRA Rank Trade-offs in Diffusion Mo...
+[2026-09-12 12:38:27] [INFO]   ⏭️ Duplicate: Quantifying the Memorization-to-Generalization Tra...
+[2026-09-12 12:38:27] [INFO]   ⏭️ Duplicate: An Open Recipe for IMO Gold: Training Nemotron for...
+[2026-09-12 12:38:27] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-09-12 12:38:27] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-12 12:38:27] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-12 12:38:28] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-12 12:38:28] [INFO]   → Filtered to 0 relevant items
+[2026-09-12 12:38:28] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-09-12 12:38:28] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-12 12:38:28] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-12 12:38:28] [INFO]   → Found 15 raw items, 9 recent
+[2026-09-12 12:38:28] [INFO]   → Filtered to 5 relevant items
+[2026-09-12 12:38:28] [INFO]   ✅ Saved: SEED-20260912-123828-121.json
+[2026-09-12 12:38:28] [INFO]   ✅ Saved: SEED-20260912-123828-122.json
+[2026-09-12 12:38:28] [INFO]   ⏭️ Duplicate: A misalignment of AI in mathematics...
+[2026-09-12 12:38:28] [INFO]   ✅ Saved: SEED-20260912-123828-123.json
+[2026-09-12 12:38:28] [INFO]   ⏭️ Duplicate: google.com/goto: Google's anti-scraping update...
+[2026-09-12 12:38:28] [INFO]   📊 Hacker News: saved 3, duplicates 2
+[2026-09-12 12:38:28] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-12 12:38:28] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-12 12:38:29] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-12 12:38:29] [INFO]   → Filtered to 5 relevant items
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-12 12:38:29] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-12 12:38:29] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-12 12:38:29] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-12 12:38:29] [INFO]   → Found 15 raw items, 8 recent
+[2026-09-12 12:38:29] [INFO]   → Filtered to 5 relevant items
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: Mecka AI nears $500M valuation in Sequoia-led deal...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: Y Combinator’s Garry Tan wants US open-weight AI l...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: OpenAI’s feud with mathematicians is only escalati...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: Kimi-maker Moonshot AI targets $2B in annual reven...
+[2026-09-12 12:38:29] [INFO]   ⏭️ Duplicate: An Anthropic researcher’s doomsday warning comes a...
+[2026-09-12 12:38:29] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-09-12 12:38:29] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-12)...
+[2026-09-12 12:38:29] [INFO]   ✅ No old seeds to remove
+[2026-09-12 12:38:29] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-12
+[2026-09-12 12:38:29] [INFO] 
+============================================================
+[2026-09-12 12:38:29] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-12 12:38:29] [INFO]   Total saved: 3
+[2026-09-12 12:38:29] [INFO]   Total duplicates: 17
+[2026-09-12 12:38:29] [INFO]   Total removed (old): 0
+[2026-09-12 12:38:29] [INFO] ============================================================
