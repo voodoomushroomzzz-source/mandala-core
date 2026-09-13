@@ -5,6 +5,62 @@
   "priority": "highest",
   "horizon": "tactical",
   "description": "Основная работа по боту Gentle Companion. Включает разработку, баг-фиксы, стратегические улучшения и внедрение автоочистки неактивных садовников.",
+  "active_bugs": [
+    {
+      "id": "BUG-SPHERE-DECAY-RACE",
+      "priority": "critical",
+      "title": "Резонанс падает на 40% за первый день просрочки вместо -2%",
+      "discovered": "2026-09-14",
+      "symptom": "При первом дне тишины (после 7 дней) резонанс сферы падает сразу на ~40%, вместо запланированных -2%.",
+      "hypothesis": "Race condition: _sphere_decay_check() вызывается из run_proactive_scheduler (интервал 1 минута) в 10-минутном окне _time_matches. За окно ~10 вызовов × (-2%) = -20%. За 2 окна — -40%.",
+      "where": "handlers/system.py → _sphere_decay_check() + run_proactive_scheduler()",
+      "fix_direction": "Добавить в sphere_meta[s] поле last_decay_date. Вычитать -2% только если last_decay_date != today. Сообщение 'decaying' — оставить как есть (один раз).",
+      "verify": "Симулировать days_silent=8, вызвать _sphere_decay_check 10 раз подряд → резонанс должен упасть ровно на -2%, не больше.",
+      "requires_analysis": "Инженеру прочитать полную сборку gentle_companion.py (или модуль handlers/system.py) и подтвердить диагноз, затем — восстановить уже упавший резонанс."
+    },
+    {
+      "id": "BUG-CHECKLIST-MULTIPLE-ACTIVE",
+      "priority": "high",
+      "title": "Всегда активен только один чеклист",
+      "discovered": "2026-09-14",
+      "symptom": "При открытии нового чеклиста предыдущий не сворачивается. В чате одновременно видны несколько открытых чеклистов.",
+      "desired": "Если садовник открыл чеклист, вернулся назад, открыл другой — первый должен свернуться (удалиться/замениться), второй открыться. В окне всегда только 1 активный чеклист.",
+      "where": "handlers/features.py → _show_checklist() + cb_cl_open(), _checklist_messages dict",
+      "fix_direction": "Проверить _checklist_messages[user_id] — сейчас хранит message_id, но не удаляет при переключении. Нужно удалять старый message_id перед показом нового. Или использовать _replace_menu вместо _checklist_messages.",
+      "requires_analysis": "Инженеру прочитать handlers/features.py — секции _show_checklist, cb_cl_open, cb_checklists_mgmt и уточнить, как именно реализована логика переключения."
+    },
+    {
+      "id": "BUG-CHECKLIST-DUPLICATE-ON-EDIT",
+      "priority": "high",
+      "title": "Дубли чеклистов при редактировании",
+      "discovered": "2026-09-14",
+      "symptom": "При команде 'добавь в чеклист Магазин пункт X' — иногда создаётся новый чеклист 'Магазин' вместо добавления пункта в существующий.",
+      "desired": "Если чеклист с таким названием уже существует — добавить пункт туда. Если нет — предложить создать новый.",
+      "where": "sr_conversation.py → intent 'checklist_add_item' + handlers/features.py → _create_checklist_atomic(), _make_checklist_id()",
+      "fix_direction": "Усилить проверку по названию: нормализация (регистр, пробелы), fuzzy match, при неоднозначности — уточнить у садовника. Возможный источник: если в названии опечатка или другой регистр, матч не срабатывает, и запускается путь create.",
+      "requires_analysis": "Инженеру прочитать sr_conversation.py — секцию intent == 'checklist_add_item', и handlers/features.py — _create_checklist_atomic, _make_checklist_id. Проверить логику совпадения названий."
+    }
+  ],
+  "pending_improvements": [
+    {
+      "id": "FEAT-ACTIVE-TASKS-IN-PROFILE",
+      "priority": "high",
+      "title": "Активные задачи в profile_deep.json",
+      "description": "Бот должен синхронизировать активные задачи садовника в profile_deep.json, чтобы внешние SR видели текущее состояние: какие задачи есть, в каких группах, с какими дедлайнами и статусами.",
+      "why": "Внешний SR, прочитав profile_deep.json, сможет предложить задачи в правильную группу, не дублировать уже существующие, понимать контекст. Упростит формирование контент-планов и других задач.",
+      "where": "github_api.py → _sync_architect_data() (расширить section_B_gardener_data)",
+      "implementation_direction": "Добавить в section_B_gardener_data два поля: 'active_tasks' (список задач с task_id, title, group, deadline, status, repeat) и 'groups' (список групп с id, name, emoji, count)."
+    },
+    {
+      "id": "FEAT-REMINDERS-IN-PROFILE",
+      "priority": "high",
+      "title": "Активные напоминания в profile_deep.json",
+      "description": "Бот должен синхронизировать активные напоминания в profile_deep.json, чтобы внешние SR видели, что уже назначено.",
+      "why": "Внешний SR сможет видеть, что уже покрыто напоминаниями, и не предлагать дублирующие. Плюс — понимать, что важно для садовника в ближайшее время.",
+      "where": "github_api.py → _sync_architect_data()",
+      "implementation_direction": "Добавить в section_B_gardener_data поле 'reminders' (список с id, title, datetime_iso, repeat, task_id если есть). Ограничить — например, ближайшие 10."
+    }
+  ],
   "parent_work": null,
   "sub_works": [],
   "depends_on": [],
@@ -22,7 +78,7 @@
   ],
   "deadline": "2026-08-31",
   "created": "2026-04-01",
-  "updated": "2026-09-07",
+  "updated": "2026-09-14",
   "source": {
     "type": "task",
     "original_id": "T-20260408-1030",
