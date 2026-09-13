@@ -7,6 +7,18 @@
   "description": "Основная работа по боту Gentle Companion. Включает разработку, баг-фиксы, стратегические улучшения и внедрение автоочистки неактивных садовников.",
   "active_bugs": [
     {
+      "id": "BUG-TASKS-REMINDERS-BULK",
+      "priority": "high",
+      "title": "Бот не создаёт несколько задач с напоминаниями в одном сообщении",
+      "discovered": "2026-09-14",
+      "symptom": "При bulk-вводе задач с inline-напоминаниями создаются только задачи, напоминания игнорируются. Работает только формат: одна задача + одно напоминание в отдельном сообщении.",
+      "hypothesis": "Парсер sr_conversation.py / handlers/tasks.py не распознаёт мультистрочный формат 'task — date в time — group'. Обработчик напоминаний вызывается только в single-task flow.",
+      "where": "sr_conversation.py → intent task/reminder parser + handlers/tasks.py → reminder handler",
+      "fix_direction": "Расширить парсер: детект префикса 'Создай задачи с напоминаниями:' → режим bulk_with_reminders. Каждая строка → task + reminder. Отчёт: '✅ N задач, ✅ N напоминаний'.",
+      "verify": "3 test_cases: (1) 2 строки с временем → 2 задачи + 2 напоминания; (2) 1 строка без времени → 1 задача без напоминания; (3) смешанный → 2 задачи, 1 напоминание.",
+      "requires_analysis": "Прочитать sr_conversation.py (парсинг intent задач) и handlers/tasks.py (обработчик напоминаний). Найти, где теряется связка task+reminder при bulk-вводе."
+    },
+    {
       "id": "BUG-SPHERE-DECAY-RACE",
       "priority": "critical",
       "title": "Резонанс падает на 40% за первый день просрочки вместо -2%",
