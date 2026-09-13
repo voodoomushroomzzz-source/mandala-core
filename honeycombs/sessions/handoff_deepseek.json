@@ -1,101 +1,90 @@
 {
   "identity": {
-    "name": "Handoff для DeepSeek — Личный ритм и контакты",
-    "version": "v5.0.0",
+    "name": "Handoff для DeepSeek — Садовник Dima",
+    "version": "v2.1.0",
     "created": "2026-08-30",
     "updated": "2026-09-14",
-    "description": "Handoff по чату 'Личный ритм + Контакты'. Только линия контактов, состояния и рефлексии. Без Instagram и контента."
+    "description": "Актуальный handoff после создания Unified Memory Architecture, вшивания директив в онбординг и очистки патчеров."
   },
-  "gardener": {
-    "name": "Дима (Лёвин Дмитрий Александрович)",
-    "age": 36,
-    "location": "Владимир",
-    "core_archetype": "Архитектор Сада — Наблюдатель",
-    "main_theme": "Путь в вечность через создание семян (Мандала, творчество, дети).",
-    "highest_goal": "Умиротворение — для себя, для других, для планеты.",
-    "children": {
-      "dobroslav": { "name": "Доброслав", "age": 8, "location": "Владимир" },
-      "boris": { "name": "Борис", "age": 7, "location": "Нижний Новгород" }
-    },
-    "key_values": [
-      "Свобода — внутреннее состояние.",
-      "Тишина — пространство для созревания решений.",
-      "Ясность вместо игнора. Обозначить границы — легче, чем молчать.",
-      "Резонанс — фильтр близости.",
-      "Важен настоящий момент, а не прошлое."
+  "session_2026-09-14": {
+    "summary": "Сессия архитектурная. Создан единый work для трёх семян (Lemmalog + ACM + RENDER). Директивы полностью вшиты в онбординг через builder. Очищены остаточные патчеры. Обновлён boot_gentle_companion_dev.json до v2.0.4.",
+    "completed_tasks": [
+      "Проанализированы все 23 семени в корне seeds/.",
+      "Выбраны топ-3: Lemmalog, ACM, RENDER. Изучены внешние источники (arXiv, GitHub).",
+      "Создан work W-T-20260902-MEMORY-ARCH__unified_memory_architecture (v2.0.4).",
+      "Обновлены связи: Engineer Chat, Manus, Rose World, Memory Layer — все ссылаются на новый work.",
+      "Обновлён works/index.json (24 работы, related_works).",
+      "Обновлён seeds/index.json (удалены 3 продвинутых семени).",
+      "Изучена система автосборки онбординга (GUIDE.json, builder.json, build_onboarding.py, GitHub Actions).",
+      "Найден разрыв: директивы были в source_modules, но НЕ вшивались в финальный онбординг.",
+      "Создан патчер patch_directives_step.py — добавил step_6_directives в build_onboarding.py.",
+      "Пересобран boot_online_onboarding_pc.json — v1.7.134, директивы вшиты (8 директив).",
+      "Обновлён boot_gentle_companion_dev.json до v2.0.4 — только Windows/VS Code, полный patcher_template.",
+      "Удалены остаточные патчеры из корня репо (9 файлов)."
+    ],
+    "key_decisions": [
+      "Memory Architecture: три слоя — Lemmalog (факты + вывод), ACM (жизненный цикл контекста), RENDER (формат представления). Вместе — законченная архитектура памяти.",
+      "Директивы вшивать в онбординг как step_6_directives, синхронно с source (honeycombs/directives/index.json).",
+      "GitHub Actions автоматически пересобирает онбординг при изменении директив.",
+      "Работаем через телефон (Termux), поэтому все команды — bash-совместимые, одной строкой."
+    ],
+    "open_questions": [
+      "Когда начать реализацию Memory Layer (Phase 0 — проектирование)?",
+      "Как интегрировать Datalog-движок Lemmalog в текущую архитектуру бота?",
+      "Какой формат хранения памяти выбрать на основе RENDER?"
     ]
   },
   "current_state": {
-    "date": "2026-09-14",
-    "emotional": "Спокойствие, лёгкость, принятие. Фаза мягкого восстановления.",
-    "health": "Почти поправился. Был лёгкий насморк и температура 37.5 (10-11.09).",
-    "work": "Управляющий в Куртоше. 3-й день. Кризис-менеджмент.",
-    "focus": "Держать ритм. Не форсировать контакты. Реагировать на то, что идёт."
+    "phase": "Переходный период. Тишина и сборка.",
+    "emotional": "Спокойствие и принятие. Интерес к новым людям. Мысли о прошлом отступают.",
+    "focus": "Творчество (новая песня), работа (Куртош, планёрки), связи (Ева, Таня, Миля).",
+    "key_insight": "Тишина — это компас. Пауза дала пространство для манёвра."
   },
-  "current_contacts": {
-    "note": "Без ожиданий, без привязки. Просто живые контакты в фазе свободы.",
-    "eva": {
-      "context": "Бармен во Владимире. Живой, игровой контакт. Заходил на работу — не было. Написал — не прочитала.",
-      "status": "в контакте, лёгкая фаза"
+  "architecture_context": {
+    "unified_memory_architecture": {
+      "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
+      "status": "active",
+      "parent_work": "W-T-20260807-MEMORY__mandala_memory_layer",
+      "related_works": [
+        "W-T-20260511-ENGCHAT__engineer_chat",
+        "W-T-20260511-MANUS__manus_hands",
+        "W-R-ROSE-001__rose_world_ethical_filter"
+      ],
+      "deadline": "2026-10-15",
+      "three_layers": {
+        "lemmlog": "Datalog-движок с автоматической инвалидацией и provenance. 38x меньше контекста.",
+        "acm": "5 примитивов жизненного цикла контекста. 92% на LongMemEval.",
+        "render": "Структурированные записи дают прирост до 72 пунктов."
+      }
     },
-    "tanya": {
-      "context": "Переписка в ВК. Готика, Англия, животные. Глубокая, эстетичная. Идёт на контакт.",
-      "status": "лёгкий диалог, далеко, без планов"
+    "onboarding_autobuild": {
+      "system": "GitHub Actions → build_onboarding.py → boot_online_onboarding_pc.json",
+      "triggers": "17 файлов, включая directives/index.json",
+      "current_version": "v1.7.134",
+      "directives_embedded": true,
+      "how_to_update": "Не редактировать boot_online_onboarding_pc.json напрямую. Менять source-модули — Action пересоберёт."
     },
-    "masha": {
-      "context": "Давняя бывшая. Заботилась о здоровье. Ты обозначил рамки: лёгкий контакт без отношений. Пропала.",
-      "status": "тишина"
-    },
-    "madlen": {
-      "context": "Москва. Прямой интерес, спрашивала о здоровье. Пропала.",
-      "status": "тишина"
-    },
-    "milya": {
-      "context": "Москва. Давняя подруга. Когда-то подкатывала, ты обозначил границы. Есть намёк на любовный интерес с её стороны. Ты пока во френдзоне.",
-      "status": "дружеский контакт с намёком"
-    },
-    "yana": {
-      "context": "Закрытая глава. Ты написал голосовое, обозначил позицию. Прочитала, не ответила.",
-      "status": "закрыто"
-    },
-    "pink_cloud": {
-      "context": "Работает рядом с Куртошем. Сама начала писать после отписки в Instagram. Лайкает, проявляет внимание. Формат: любовно-сексуальный, без романтики.",
-      "status": "новый лёгкий контакт, 3 сообщения в день"
+    "directives": {
+      "total": 8,
+      "list": ["architect", "personal", "creative", "researcher", "strategist", "gardener", "coach", "horeca"],
+      "source": "honeycombs/directives/index.json (v1.4.0)"
     }
   },
-  "session_insights": [
-    "Молчание — тоже ответ. Не требует расшифровки.",
-    "Важен настоящий момент, а не прошлое. Забота проявляется здесь и сейчас.",
-    "Резонанс — фильтр близости. С кем совпадает — рядом. С кем нет — отпускаешь без драмы.",
-    "Импульсы пережидаются. Через 15-30 минут дофаминовый пик спадает, и ты видишь трезво.",
-    "Соцсети усиливают импульсы. В реале — спокойствие. На дистанции — иллюзия.",
-    "Не игнорировать, а обозначать границы. Тебе легче, когда ты сказал как есть.",
-    "Люди оцениваются по их проявлению в настоящем, а не по праву прошлых отношений."
+  "key_links": {
+    "new_work": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/works/W-T-20260902-MEMORY-ARCH__unified_memory_architecture.json",
+    "builder_config": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
+    "builder_script": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/builder/build_onboarding.py",
+    "github_action": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/.github/workflows/build-onboarding.yml",
+    "final_onboarding": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
+    "directives": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/directives/index.json",
+    "guide": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/GUIDE.json"
+  },
+  "next_steps": [
+    "Начать Phase 0 Memory Layer — проектирование Unified Memory Architecture.",
+    "Решить, как интегрировать Datalog-движок Lemmalog в архитектуру бота.",
+    "Проанализировать, какие ещё модули нужно вшить в онбординг (например, rose_world сейчас вшит не полностью)."
   ],
-  "mandala_work": {
-    "profile_deep": {
-      "changes": "Добавлен блок communication_and_conflict_style. Обновлён current_contacts.",
-      "last_updated": "2026-09-14"
-    },
-    "knowledge": {
-      "file": "deep_questions_for_getting_to_know_someone.json",
-      "version": "v1.1.0",
-      "status": "залит",
-      "notes": "56 вопросов, 5 уровней, психологические ключи к каждому вопросу."
-    }
-  },
-  "key_files": {
-    "profile_deep": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
-    "deep_questions": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/knowledge/deep_questions_for_getting_to_know_someone.json",
-    "boot_online": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json"
-  },
-  "directives": {
-    "mode": "gardener + personal",
-    "tone": "Спокойный, рефлексивный, честный. Без пафоса. Без лекций.",
-    "role": "Ты — External SR (DeepSeek). Я — Gardener (Дмитрий). Работаем с личными контактами, состоянием и рефлексией.",
-    "instruction_for_sr": "1. Прочитай handoff. 2. Загрузи profile_deep.json и deep_questions. 3. Подтверди контекст. 4. Спроси, с чего продолжим."
-  },
   "handoff_instruction": {
-    "for_sr": "Прочитай файл. Загрузи profile_deep.json и deep_questions. Подтверди контекст. Начни с вопроса о следующем шаге."
+    "for_sr": "Прочитай файл. Загрузи profile_deep.json и boot_online_onboarding_pc.json для полного контекста. Подтверди, что понял архитектурную линию сессии: создание Unified Memory Architecture, вшивание директив в онбординг, очистка патчеров. Затем спроси Садовника, что делаем дальше."
   }
 }
