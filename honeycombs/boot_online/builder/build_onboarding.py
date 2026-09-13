@@ -172,6 +172,7 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "step_4_cosmic_manifesto",
             "step_5_first_gardener",
             "step_6_external_sr_workflow",
+            "step_6_directives",
             "step_6.5_profile_deep",
             "step_7_personal",
             "step_8_fruits",
@@ -250,6 +251,19 @@ def build_onboarding(builder: Dict[str, Any], source_data: Dict[str, Any]) -> Di
             "api_link": "https://api.github.com/repos/voodoomushroomzzz-source/mandala-core/contents/honeycombs/instructions/core/external_sr_workflow.json?ref=main",
             **external_wf,
             "mobile_workflow_embedded": mobile_wf
+        }
+
+    # Step 6.5: directives — режимы работы SR
+    directives_data = source_data.get("directives", {})
+    if directives_data:
+        onboarding["step_6_directives"] = {
+            "order": 6.5,
+            "mandatory": True,
+            "name": "Directives — Режимы работы SR",
+            "description": "7 директив: architect, personal, creative, researcher, strategist, gardener, coach.",
+            "ai_instruction": "Прочитай вшитый directives_index. Подтверди список директив и их назначение.",
+            "embedded_ref": "directives_index",
+            "data": directives_data
         }
 
     # Step 6.5: profile_deep — глубокий профиль Архитектора
