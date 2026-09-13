@@ -1,91 +1,295 @@
 {
-  "identity": {
-    "name": "Handoff для DeepSeek — Садовник Дима",
-    "version": "v3.0.0",
-    "created": "2026-08-30",
-    "updated": "2026-09-05",
-    "description": "Актуальный handoff после работы над контент-планом Instagram и циклом «Тишина»."
-  },
-  "gardener": {
-    "name": "Дима (Лёвин Дмитрий Александрович)",
-    "age": 36,
-    "location": "Владимир / Москва",
-    "core_archetype": "Архитектор Сада — Наблюдатель",
-    "main_theme": "Путь в вечность через создание семян (Мандала, творчество, дети).",
-    "main_seed": "Акашическая сеть Мандалы — инфополе вне планеты.",
-    "highest_goal": "Умиротворение — для себя, для других, для планеты.",
-    "children": {
-      "dobroslav": { "name": "Доброслав", "age": 8, "location": "Владимир" },
-      "boris": { "name": "Борис", "age": 7, "location": "Нижний Новгород" }
-    },
-    "key_values": [
-      "Свобода — внутреннее состояние.",
-      "Тишина — пространство для созревания решений.",
-      "Я умею ждать, чтобы услышать свой вектор.",
-      "Творчество — способ проживать жизнь."
-    ]
-  },
-  "current_session": {
-    "date": "2026-09-05",
-    "summary": "Работаем над контент-планом Instagram для @xdeaddyx. Активный цикл «Тишина».",
-    "phase": "Активная работа над контентом и рефлексией.",
-    "emotional": "Спокойствие, рефлексия, лёгкость. Интерес к диалогу с аудиторией.",
-    "focus": "Завершение цикла «Тишина», подготовка итогового Reels."
-  },
-  "instagram_context": {
-    "handle": "@xdeaddyx",
-    "display_name": "Дмитрий Левин",
-    "goal": "Создать единое пространство, раскрывающее личность, Мандалу и творчество.",
-    "current_cycle": {
-      "id": "CYCLE-001",
-      "theme": "Тишина",
-      "status": "in_progress",
-      "start_date": "2026-09-01",
-      "stories": [
-        {
-          "date": "2026-09-02",
-          "topic": "Лето как этап тишины",
-          "status": "published"
-        },
-        {
-          "date": "2026-09-04",
-          "topic": "Наушники и молчание с людьми",
-          "status": "published"
-        },
-        {
-          "date": null,
-          "topic": "Тишина при потерях как почва для нового",
-          "status": "planned"
-        },
-        {
-          "date": null,
-          "topic": "Владимир как тишина",
-          "status": "planned"
-        }
+  "session_id": "handoff_deepseek_20260914",
+  "date": "2026-09-14",
+  "gardener": "Voodoo (Dima)",
+  "previous_sr": "DeepSeek",
+  "next_sr": "DeepSeek (new session) or other External SR",
+  "session_duration_context": "Большая сессия: синхронизация metadata, разбор 3 handoff от Claude, починка profile_deep.json, добавление section_E, фиксация 3 багов + 2 улучшений",
+  "session_blocks": [
+    {
+      "block": 1,
+      "title": "Синхронизация index.json и works",
+      "duration": "начало сессии",
+      "details": [
+        "Pre-check index.json (SHA c936e1b7) и works (SHA b564edd2)",
+        "index.json → v2.2.1 (changelog про TZ-ARCHITECT-INTEGRATION-003 и short_responses)",
+        "works → 35% (запись о TZ-ARCHITECT-INTEGRATION-003)",
+        "Исправлен detached HEAD (git rebase --continue)",
+        "Разрешён конфликт в profile_deep.json"
       ]
     },
-    "published_posts": [
-      { "id": "POST-001", "date": "2026-08-25", "theme": "осенний вайб", "status": "done" },
-      { "id": "POST-002", "date": "2026-09-04", "theme": "ожидание", "text": "Сентябрь поджег, календарь перевернул, детей в школу отправил, фотку на память оставил 😊", "status": "done" }
-    ],
-    "next_steps": [
-      "Подготовить и опубликовать Stories #3 (Тишина при потерях).",
-      "Подготовить и опубликовать Stories #4 (Владимир как тишина).",
-      "После завершения цикла — собрать все тексты и подготовить итоговый разговорный Reels."
+    {
+      "block": 2,
+      "title": "Разбор handoff Claude (2026-09-04)",
+      "duration": "середина сессии",
+      "details": [
+        "Sphere resonance decay redesign",
+        "Universal activity tracking (TrackInteractionMiddleware)",
+        "Хотфикс NameError: _ws_ctx → workspace",
+        "index.json → v2.2.2, works → 57%"
+      ]
+    },
+    {
+      "block": 3,
+      "title": "Разбор handoff Claude (2026-09-06) — pending_resonance",
+      "duration": "середина сессии",
+      "details": [
+        "pending_resonance: debounce в кнопочном флоу",
+        "Хотфикс расчёта сфер в чат-ветке (batch)",
+        "index.json → v2.2.3, works → 70%",
+        "Пересчёт: 65% → 30% → 57% → 70%"
+      ]
+    },
+    {
+      "block": 4,
+      "title": "Пересчёт приоритетов и дедлайнов",
+      "duration": "середина сессии",
+      "details": [
+        "Фаза 1 Личная ценность → 2026-10-31",
+        "Фаза 2 Комьюнити → 2026-11-30",
+        "budget, streak_counter, important_task_label, symbiosis_diary, seed_inbox",
+        "rituals, community_garden",
+        "works → 60%"
+      ]
+    },
+    {
+      "block": 5,
+      "title": "Boot-файл boot_gentle_companion_dev.json",
+      "duration": "середина сессии",
+      "details": [
+        "Добавлен patcher_template — трёхблочный патчер",
+        "Исправлен BOM (utf-8-sig)",
+        "Windows prerequisites: py вместо python",
+        "block_2 без эмодзи/кириллицы, SystemExit(1)",
+        "block_3 разделён на 3a/3b",
+        "naming_convention, ssh_authentication",
+        "Версия v2.0.2 → v2.0.5"
+      ]
+    },
+    {
+      "block": 6,
+      "title": "Обсуждение архитектуры: модульность vs монолит",
+      "duration": "обсуждение",
+      "details": [
+        "До 5000–8000 строк — приемлемо",
+        "У нас уже 10877 строк — перешли границу",
+        "Модули — не роскошь, а необходимость",
+        "План: держать модуль до 8000, дробить дальше"
+      ]
+    },
+    {
+      "block": 7,
+      "title": "Инструкция для внешних SR (section_E)",
+      "duration": "основная работа",
+      "details": [
+        "Анализ полной сборки gentle_companion.py (~5000 строк)",
+        "Извлечены все интенты бота",
+        "Создан section_E_external_sr_guide в profile_deep.json",
+        "Восстановлена валидность JSON (Extra data line 865)",
+        "8 правил + 10 форматов команд",
+        "Список групп: Личное (1), Мандала (10), Работа (3), Творчество (5), Разное (7), Без группы (0)"
+      ]
+    },
+    {
+      "block": 8,
+      "title": "3 бага + 2 улучшения",
+      "duration": "финал сессии",
+      "details": [
+        "BUG-SPHERE-DECAY-RACE (critical)",
+        "BUG-CHECKLIST-MULTIPLE-ACTIVE (high)",
+        "BUG-CHECKLIST-DUPLICATE-ON-EDIT (high)",
+        "FEAT-ACTIVE-TASKS-IN-PROFILE (high)",
+        "FEAT-REMINDERS-IN-PROFILE (high)",
+        "Зафиксированы в works сразу после description"
+      ]
+    },
+    {
+      "block": 9,
+      "title": "Хендоф",
+      "duration": "текущий момент",
+      "details": [
+        "Формирование расширенного handoff для нового SR"
+      ]
+    }
+  ],
+  "session_timeline": [
+    {
+      "step": 1,
+      "title": "Pre-check index.json и works"
+    },
+    {
+      "step": 2,
+      "title": "Обновление index.json → v2.2.1, works → 35%"
+    },
+    {
+      "step": 3,
+      "title": "Разбор handoff Claude (sphere-decay, activity-tracking, hotfix)"
+    },
+    {
+      "step": 4,
+      "title": "index.json → v2.2.2, works → 57%"
+    },
+    {
+      "step": 5,
+      "title": "Разбор handoff Claude (pending_resonance)"
+    },
+    {
+      "step": 6,
+      "title": "index.json → v2.2.3, works → 70%"
+    },
+    {
+      "step": 7,
+      "title": "Пересчёт приоритетов и дедлайнов → works 60%"
+    },
+    {
+      "step": 8,
+      "title": "Обсуждение модульности vs монолита"
+    },
+    {
+      "step": 9,
+      "title": "Добавление patcher_template в boot-файл"
+    },
+    {
+      "step": 10,
+      "title": "Исправление patcher_template (BOM, emoji, py)"
+    },
+    {
+      "step": 11,
+      "title": "Анализ полной сборки gentle_companion.py"
+    },
+    {
+      "step": 12,
+      "title": "Скриншот групп садовника"
+    },
+    {
+      "step": 13,
+      "title": "Диагностика Extra data в profile_deep.json"
+    },
+    {
+      "step": 14,
+      "title": "Восстановление JSON + добавление section_E"
+    },
+    {
+      "step": 15,
+      "title": "Диагностика BUG-SPHERE-DECAY-RACE"
+    },
+    {
+      "step": 16,
+      "title": "Добавление ещё 2 багов + 2 улучшений"
+    },
+    {
+      "step": 17,
+      "title": "Патч works с active_bugs и pending_improvements"
+    },
+    {
+      "step": 18,
+      "title": "Формирование расширенного handoff"
+    }
+  ],
+  "decisions_made": [
+    {
+      "decision": "Не угадывать группу — спрашивать садовника",
+      "rationale": "Уважение выбора"
+    },
+    {
+      "decision": "Список групп включён в section_E",
+      "rationale": "Ориентир для внешнего SR"
+    },
+    {
+      "decision": "Форматы: create/edit/complete/delete",
+      "rationale": "Полный цикл работы с задачами"
+    },
+    {
+      "decision": "active_bugs и pending_improvements в начале works",
+      "rationale": "Видно первым"
+    },
+    {
+      "decision": "Не трогать budget и features сейчас",
+      "rationale": "Отложено по указанию"
+    },
+    {
+      "decision": "Баги фиксируются, а не патчатся сразу",
+      "rationale": "Инженер подтвердит диагноз"
+    }
+  ],
+  "artifacts_created_or_modified": [
+    {
+      "file": "honeycombs/fruits/gentle_companion/index.json",
+      "changes": [
+        "v2.2.0 (фикс сборки, проактивные, лимиты)",
+        "v2.2.1 (TZ-ARCHITECT-INTEGRATION-003 + short_responses)",
+        "v2.2.2 (sphere-decay + activity-tracking + hotfix)",
+        "v2.2.3 (pending_resonance + хотфикс сфер)"
+      ]
+    },
+    {
+      "file": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json",
+      "changes": [
+        "progress: 65% → 30% → 57% → 60% → 70% → 60%",
+        "updated: 2026-08-28 → 2026-09-14",
+        "execution_order: 2 фазы (Личная ценность, Комьюнити)",
+        "active_bugs (3) + pending_improvements (2)"
+      ]
+    },
+    {
+      "file": "honeycombs/personal/profile_deep.json",
+      "changes": [
+        "Восстановлена валидность JSON (Extra data)",
+        "communication_and_conflict_style перемещён внутрь",
+        "Добавлен section_E_external_sr_guide"
+      ]
+    },
+    {
+      "file": "honeycombs/boot_online/boot_gentle_companion_dev.json",
+      "changes": [
+        "v2.0.2 → v2.0.5",
+        "patcher_template добавлен",
+        "Исправления: BOM, emoji, py, SystemExit",
+        "block_3 разделён на 3a/3b",
+        "naming_convention, ssh_authentication"
+      ]
+    },
+    {
+      "file": "honeycombs/sessions/handoff_deepseek.json",
+      "changes": [
+        "Обновлён (текущий handoff)"
+      ]
+    }
+  ],
+  "context_for_next_sr": {
+    "where_we_are": "Инструкция для внешних SR создана. Баги и улучшения зафиксированы. Ждём работу инженера.",
+    "immediate_priority": "Инженер: подтвердить BUG-SPHERE-DECAY-RACE, подготовить патч.",
+    "next_priority": "Баги чеклистов + 2 улучшения (задачи/напоминания в profile_deep).",
+    "open_questions": [
+      "Как восстанавливать упавший резонанс?",
+      "Согласование схемы profile_deep между ботом и DeepSeek"
     ]
   },
   "key_files": {
-    "instagram_plan": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/instagram.json",
-    "profile_deep": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
-    "boot_online": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json"
+    "profile_deep": "honeycombs/personal/profile_deep.json",
+    "works": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json",
+    "index": "honeycombs/fruits/gentle_companion/index.json",
+    "bot_build": "gentle_companion.py",
+    "bot_modules": "honeycombs/fruits/gentle_companion/",
+    "handoff_boot": "honeycombs/boot_online/boot_gentle_companion_dev.json"
   },
-  "directives": {
-    "mode": "gardener + creative",
-    "tone": "Спокойный, рефлексивный, честный. Без пафоса. Без лекций. Просто мысли вслух.",
-    "role": "Ты — Gardener (Дмитрий). Я — External SR (DeepSeek). Работаем над контентом, рефлексией, личными смыслами.",
-    "instruction_for_sr": "1. Прочитай этот handoff. 2. Открой boot_online_onboarding_pc.json (если ещё не загружен). 3. Прочитай instagram.json и profile_deep.json. 4. Подтверди, что ты в контексте. 5. Спроси, с чего продолжим (например, подготовка третьей Stories)."
-  },
-  "handoff_instruction": {
-    "for_sr": "Прочитай файл. Загрузи profile_deep.json и instagram.json. Подтверди контекст. Начни с вопроса о следующем шаге."
-  }
+  "important_notes": [
+    "section_E_external_sr_guide — инструкция для внешних SR (8 правил, 10 форматов).",
+    "5 групп: Личное (1), Мандала (10), Работа (3), Творчество (5), Разное (7). 26 активных.",
+    "works: несоответствия (budget.priority, mvp_plan, отсутствующие features).",
+    "BOT_VERSION = 7.39.23 — не обновлялся.",
+    "Два видения profile_deep.json (section_A/B/C/D vs identity/bio/discovery_system).",
+    "Architecture: 10877 строк → нужен рефакторинг в модули.",
+    "BUG-SPHERE-DECAY-RACE — единственный critical."
+  ],
+  "next_steps": [
+    "Инженер: подтвердить BUG-SPHERE-DECAY-RACE, патч.",
+    "Инженер: разобрать баги чеклистов.",
+    "Инженер: реализовать FEAT-ACTIVE-TASKS-IN-PROFILE, FEAT-REMINDERS-IN-PROFILE.",
+    "Садовник: протестировать section_E с внешним SR.",
+    "Синхронизировать features в works (streak_counter, important_task_label, symbiosis_diary).",
+    "Поправить budget (priority→critical, удалить mvp_plan/post_mvp_plan).",
+    "Обновить BOT_VERSION → 7.39.24.",
+    "Согласовать схему profile_deep.json."
+  ]
 }
