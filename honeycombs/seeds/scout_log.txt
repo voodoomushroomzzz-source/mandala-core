@@ -6553,3 +6553,55 @@
 [2026-09-13 07:01:00] [INFO]   Total duplicates: 5
 [2026-09-13 07:01:00] [INFO]   Total removed (old): 0
 [2026-09-13 07:01:00] [INFO] ============================================================
+[2026-09-13 13:40:40] [INFO] ============================================================
+[2026-09-13 13:40:40] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-13 13:40:40] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-13 13:40:40] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-13 13:40:41] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-13 13:40:41] [INFO]   → Filtered to 0 relevant items
+[2026-09-13 13:40:41] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-09-13 13:40:41] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-13 13:40:41] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-13 13:40:41] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-13 13:40:41] [INFO]   → Filtered to 0 relevant items
+[2026-09-13 13:40:41] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-09-13 13:40:41] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-13 13:40:41] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-13 13:40:41] [INFO]   → Found 15 raw items, 11 recent
+[2026-09-13 13:40:41] [INFO]   → Filtered to 3 relevant items
+[2026-09-13 13:40:41] [INFO]   ⏭️ Duplicate: Why are AI agents lying, cheating and coordinating...
+[2026-09-13 13:40:41] [INFO]   ✅ Saved: SEED-20260913-134041-131.json
+[2026-09-13 13:40:41] [INFO]   ⏭️ Duplicate: Nvidia is the central bank of AI...
+[2026-09-13 13:40:41] [INFO]   📊 Hacker News: saved 1, duplicates 2
+[2026-09-13 13:40:41] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-13 13:40:41] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-13 13:40:42] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-13 13:40:42] [INFO]   → Filtered to 5 relevant items
+[2026-09-13 13:40:42] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-13 13:40:42] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-13 13:40:42] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-13 13:40:42] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-13 13:40:42] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-13 13:40:42] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-13 13:40:42] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-13 13:40:42] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-13 13:40:42] [INFO]   → Found 15 raw items, 2 recent
+[2026-09-13 13:40:42] [INFO]   → Filtered to 2 relevant items
+[2026-09-13 13:40:42] [INFO]   ⏭️ Duplicate: OpenAI’s Sam Altman says it would be ‘ill-advised’...
+[2026-09-13 13:40:42] [INFO]   ⏭️ Duplicate: Anthropic CEO outlines plan to slow AI development...
+[2026-09-13 13:40:42] [INFO]   📊 TechCrunch AI: saved 0, duplicates 2
+[2026-09-13 13:40:42] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-13)...
+[2026-09-13 13:40:42] [INFO]   ✅ No old seeds to remove
+[2026-09-13 13:40:42] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-13
+[2026-09-13 13:40:42] [INFO] 
+============================================================
+[2026-09-13 13:40:42] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-13 13:40:42] [INFO]   Total saved: 1
+[2026-09-13 13:40:42] [INFO]   Total duplicates: 9
+[2026-09-13 13:40:42] [INFO]   Total removed (old): 0
+[2026-09-13 13:40:42] [INFO] ============================================================
