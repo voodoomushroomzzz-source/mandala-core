@@ -1,9 +1,9 @@
 {
   "identity": {
     "name": "Instagram — позиционирование и контент",
-    "version": "v1.9.4",
+    "version": "v1.10.0",
     "created": "2026-08-20",
-    "updated": "2026-09-10",
+    "updated": "2026-09-14",
     "description": "Стратегия и контент-план для Instagram. Работа циклами: Stories → сбор → Reels."
   },
   "profile": {
@@ -66,7 +66,7 @@
         },
         {
           "id": "POST-003",
-          "date": "2026-09-17",
+          "date": "2026-09-30",
           "type": "фото",
           "theme": "философское / личное",
           "status": "planned"
@@ -75,17 +75,25 @@
       "reels": [
         {
           "id": "REEL-001",
-          "date": "2026-09-10",
-          "type": "музыкальный",
+          "date": "2026-09-16",
+          "type": "music",
           "theme": "отрывок песни",
           "status": "planned"
         },
         {
-          "id": "REEL-002",
-          "date": "2026-09-24",
-          "type": "разговорный",
-          "theme": "о Мандале или стихах",
+          "id": "REEL-TISHINA-001",
+          "date": "2026-09-23",
+          "type": "talking_head",
+          "theme": "Тишина — итоговый Reels",
+          "cycle_id": "CYCLE-001",
           "status": "planned"
+        },
+        {
+          "id": "REEL-002",
+          "date": null,
+          "type": "talking_other",
+          "theme": "о Мандале или стихах",
+          "status": "pending"
         }
       ]
     },
@@ -142,7 +150,8 @@
       "10. После публикации Reels: добавь запись в 'reels_from_cycles' и обнови 'content_plan'.",
       "11. Для архивации: сохрани ключевые мысли из цикла в 'stories_archive'.",
       "12. КОГДА ФАЙЛ ДОСТИГНЕТ 30 КБ: создай папку honeycombs/personal/instagram/ и раздели файл на два: 1) instagram_main.json — содержит данные по текущему и следующему месяцу (актуальный план), 2) instagram_archive.json — содержит все завершённые циклы, старые посты и архивные записи (может весить сколько угодно). После разделения обнови пути в этом файле и удали старый instagram.json.",
-      "13. VOICE DYNAMICS FOR TALKING REELS: Use contrast between louder/quieter, faster/slower. Markup: **BOLD** = emphasis, louder, punchy; *italic* = quieter, slower, almost whisper; (пауза) = short pause 1-1.5 sec; (ПАУЗА) = long pause 2-3 sec; //text// = speed up, merge phrases; →text = slow down, stretch. Pauses are part of the style — they create rhythm. Silence in voice works the same as pause. Don't be afraid to slow down on key words. Final question — intimate, not rhetorical."
+      "13. VOICE DYNAMICS FOR TALKING REELS: Use contrast between louder/quieter, faster/slower. Markup: **BOLD** = emphasis, louder, punchy; *italic* = quieter, slower, almost whisper; (пауза) = short pause 1-1.5 sec; (ПАУЗА) = long pause 2-3 sec; //text// = speed up, merge phrases; →text = slow down, stretch. Pauses are part of the style — they create rhythm. Silence in voice works the same as pause. Don't be afraid to slow down on key words. Final question — intimate, not rhetorical.",
+      "14. CONTENT RHYTHM RULE: MIN 7 days between ANY Reels (music, talking_head, talking_other). MIN 7 days between POST and Reels. Max 2 posts with photos per month. 3 Reels per month — one of each type. Живые Stories — ежедневно/по желанию, фон. Stories «Мысли вслух» — 3-5 на цикл, раз в ~10-14 дней."
     ]
   },
   "cycles": {
@@ -190,25 +199,25 @@
         "end_date": null,
         "stories": [
           {
-            "date": null,
+            "date": "2026-09-14",
             "topic": "Вводная: два типа движения — внешнее и внутреннее",
             "text": null,
             "status": "planned"
           },
           {
-            "date": null,
+            "date": "2026-09-18",
             "topic": "Внешнее движение: тело, спорт, дисциплина, достижения",
             "text": null,
             "status": "planned"
           },
           {
-            "date": null,
+            "date": "2026-09-22",
             "topic": "Внутреннее движение: духовный рост, самопознание, путь к себе",
             "text": null,
             "status": "planned"
           },
           {
-            "date": null,
+            "date": "2026-09-25",
             "topic": "Заключение (родится по ходу)",
             "text": null,
             "status": "planned"
@@ -316,5 +325,37 @@
     ],
     "purpose": "Сбор чистой статистики для понимания, какие темы заходят, а какие нет."
   },
-  "last_updated": "2026-09-10"
+  "last_updated": "2026-09-14",
+  "reels_formats": {
+    "description": "Три формата Reels. Каждый — минимум 1 раз в месяц. Дистанция между любыми Reels — минимум 7 дней.",
+    "rule": "MIN 7 DAYS BETWEEN ANY REELS. MIN 7 DAYS BETWEEN POST AND REELS.",
+    "types": [
+      {
+        "id": "talking_head",
+        "name": "Reels «Мысли вслух»",
+        "description": "Итог по завершённому циклу Stories. Сел, записал на мандале, добавил субтитры. Самый лёгкий формат — можно сделать за день.",
+        "difficulty": "easy",
+        "source": "Завершённый цикл Stories",
+        "frequency": "1 в месяц (после каждого цикла)"
+      },
+      {
+        "id": "music",
+        "name": "Музыкальный Reels",
+        "description": "Пение на камеру под музыку. Отрывок песни, визуал под трек. Нужна запись и сведение.",
+        "difficulty": "medium",
+        "source": "Собственная музыка",
+        "frequency": "1 в месяц"
+      },
+      {
+        "id": "talking_other",
+        "name": "Разговорный Reels",
+        "description": "Разговор на камеру: о Мандале, биографии, философии. Без привязки к циклу Stories.",
+        "difficulty": "medium",
+        "source": "Готовый текст",
+        "frequency": "1 в месяц"
+      }
+    ],
+    "monthly_total": "3 Reels (по 1 каждого типа)",
+    "monthly_posts": "2 поста с фото (максимум)"
+  }
 }
