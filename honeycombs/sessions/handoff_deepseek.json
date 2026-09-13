@@ -1,295 +1,287 @@
 {
-  "session_id": "handoff_deepseek_20260914",
-  "date": "2026-09-14",
-  "gardener": "Voodoo (Dima)",
-  "previous_sr": "DeepSeek",
-  "next_sr": "DeepSeek (new session) or other External SR",
-  "session_duration_context": "Большая сессия: синхронизация metadata, разбор 3 handoff от Claude, починка profile_deep.json, добавление section_E, фиксация 3 багов + 2 улучшений",
-  "session_blocks": [
-    {
-      "block": 1,
-      "title": "Синхронизация index.json и works",
-      "duration": "начало сессии",
-      "details": [
-        "Pre-check index.json (SHA c936e1b7) и works (SHA b564edd2)",
-        "index.json → v2.2.1 (changelog про TZ-ARCHITECT-INTEGRATION-003 и short_responses)",
-        "works → 35% (запись о TZ-ARCHITECT-INTEGRATION-003)",
-        "Исправлен detached HEAD (git rebase --continue)",
-        "Разрешён конфликт в profile_deep.json"
-      ]
-    },
-    {
-      "block": 2,
-      "title": "Разбор handoff Claude (2026-09-04)",
-      "duration": "середина сессии",
-      "details": [
-        "Sphere resonance decay redesign",
-        "Universal activity tracking (TrackInteractionMiddleware)",
-        "Хотфикс NameError: _ws_ctx → workspace",
-        "index.json → v2.2.2, works → 57%"
-      ]
-    },
-    {
-      "block": 3,
-      "title": "Разбор handoff Claude (2026-09-06) — pending_resonance",
-      "duration": "середина сессии",
-      "details": [
-        "pending_resonance: debounce в кнопочном флоу",
-        "Хотфикс расчёта сфер в чат-ветке (batch)",
-        "index.json → v2.2.3, works → 70%",
-        "Пересчёт: 65% → 30% → 57% → 70%"
-      ]
-    },
-    {
-      "block": 4,
-      "title": "Пересчёт приоритетов и дедлайнов",
-      "duration": "середина сессии",
-      "details": [
-        "Фаза 1 Личная ценность → 2026-10-31",
-        "Фаза 2 Комьюнити → 2026-11-30",
-        "budget, streak_counter, important_task_label, symbiosis_diary, seed_inbox",
-        "rituals, community_garden",
-        "works → 60%"
-      ]
-    },
-    {
-      "block": 5,
-      "title": "Boot-файл boot_gentle_companion_dev.json",
-      "duration": "середина сессии",
-      "details": [
-        "Добавлен patcher_template — трёхблочный патчер",
-        "Исправлен BOM (utf-8-sig)",
-        "Windows prerequisites: py вместо python",
-        "block_2 без эмодзи/кириллицы, SystemExit(1)",
-        "block_3 разделён на 3a/3b",
-        "naming_convention, ssh_authentication",
-        "Версия v2.0.2 → v2.0.5"
-      ]
-    },
-    {
-      "block": 6,
-      "title": "Обсуждение архитектуры: модульность vs монолит",
-      "duration": "обсуждение",
-      "details": [
-        "До 5000–8000 строк — приемлемо",
-        "У нас уже 10877 строк — перешли границу",
-        "Модули — не роскошь, а необходимость",
-        "План: держать модуль до 8000, дробить дальше"
-      ]
-    },
-    {
-      "block": 7,
-      "title": "Инструкция для внешних SR (section_E)",
-      "duration": "основная работа",
-      "details": [
-        "Анализ полной сборки gentle_companion.py (~5000 строк)",
-        "Извлечены все интенты бота",
-        "Создан section_E_external_sr_guide в profile_deep.json",
-        "Восстановлена валидность JSON (Extra data line 865)",
-        "8 правил + 10 форматов команд",
-        "Список групп: Личное (1), Мандала (10), Работа (3), Творчество (5), Разное (7), Без группы (0)"
-      ]
-    },
-    {
-      "block": 8,
-      "title": "3 бага + 2 улучшения",
-      "duration": "финал сессии",
-      "details": [
-        "BUG-SPHERE-DECAY-RACE (critical)",
-        "BUG-CHECKLIST-MULTIPLE-ACTIVE (high)",
-        "BUG-CHECKLIST-DUPLICATE-ON-EDIT (high)",
-        "FEAT-ACTIVE-TASKS-IN-PROFILE (high)",
-        "FEAT-REMINDERS-IN-PROFILE (high)",
-        "Зафиксированы в works сразу после description"
-      ]
-    },
-    {
-      "block": 9,
-      "title": "Хендоф",
-      "duration": "текущий момент",
-      "details": [
-        "Формирование расширенного handoff для нового SR"
-      ]
-    }
-  ],
-  "session_timeline": [
-    {
-      "step": 1,
-      "title": "Pre-check index.json и works"
-    },
-    {
-      "step": 2,
-      "title": "Обновление index.json → v2.2.1, works → 35%"
-    },
-    {
-      "step": 3,
-      "title": "Разбор handoff Claude (sphere-decay, activity-tracking, hotfix)"
-    },
-    {
-      "step": 4,
-      "title": "index.json → v2.2.2, works → 57%"
-    },
-    {
-      "step": 5,
-      "title": "Разбор handoff Claude (pending_resonance)"
-    },
-    {
-      "step": 6,
-      "title": "index.json → v2.2.3, works → 70%"
-    },
-    {
-      "step": 7,
-      "title": "Пересчёт приоритетов и дедлайнов → works 60%"
-    },
-    {
-      "step": 8,
-      "title": "Обсуждение модульности vs монолита"
-    },
-    {
-      "step": 9,
-      "title": "Добавление patcher_template в boot-файл"
-    },
-    {
-      "step": 10,
-      "title": "Исправление patcher_template (BOM, emoji, py)"
-    },
-    {
-      "step": 11,
-      "title": "Анализ полной сборки gentle_companion.py"
-    },
-    {
-      "step": 12,
-      "title": "Скриншот групп садовника"
-    },
-    {
-      "step": 13,
-      "title": "Диагностика Extra data в profile_deep.json"
-    },
-    {
-      "step": 14,
-      "title": "Восстановление JSON + добавление section_E"
-    },
-    {
-      "step": 15,
-      "title": "Диагностика BUG-SPHERE-DECAY-RACE"
-    },
-    {
-      "step": 16,
-      "title": "Добавление ещё 2 багов + 2 улучшений"
-    },
-    {
-      "step": 17,
-      "title": "Патч works с active_bugs и pending_improvements"
-    },
-    {
-      "step": 18,
-      "title": "Формирование расширенного handoff"
-    }
-  ],
-  "decisions_made": [
-    {
-      "decision": "Не угадывать группу — спрашивать садовника",
-      "rationale": "Уважение выбора"
-    },
-    {
-      "decision": "Список групп включён в section_E",
-      "rationale": "Ориентир для внешнего SR"
-    },
-    {
-      "decision": "Форматы: create/edit/complete/delete",
-      "rationale": "Полный цикл работы с задачами"
-    },
-    {
-      "decision": "active_bugs и pending_improvements в начале works",
-      "rationale": "Видно первым"
-    },
-    {
-      "decision": "Не трогать budget и features сейчас",
-      "rationale": "Отложено по указанию"
-    },
-    {
-      "decision": "Баги фиксируются, а не патчатся сразу",
-      "rationale": "Инженер подтвердит диагноз"
-    }
-  ],
-  "artifacts_created_or_modified": [
-    {
-      "file": "honeycombs/fruits/gentle_companion/index.json",
-      "changes": [
-        "v2.2.0 (фикс сборки, проактивные, лимиты)",
-        "v2.2.1 (TZ-ARCHITECT-INTEGRATION-003 + short_responses)",
-        "v2.2.2 (sphere-decay + activity-tracking + hotfix)",
-        "v2.2.3 (pending_resonance + хотфикс сфер)"
-      ]
-    },
-    {
-      "file": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json",
-      "changes": [
-        "progress: 65% → 30% → 57% → 60% → 70% → 60%",
-        "updated: 2026-08-28 → 2026-09-14",
-        "execution_order: 2 фазы (Личная ценность, Комьюнити)",
-        "active_bugs (3) + pending_improvements (2)"
-      ]
-    },
-    {
-      "file": "honeycombs/personal/profile_deep.json",
-      "changes": [
-        "Восстановлена валидность JSON (Extra data)",
-        "communication_and_conflict_style перемещён внутрь",
-        "Добавлен section_E_external_sr_guide"
-      ]
-    },
-    {
-      "file": "honeycombs/boot_online/boot_gentle_companion_dev.json",
-      "changes": [
-        "v2.0.2 → v2.0.5",
-        "patcher_template добавлен",
-        "Исправления: BOM, emoji, py, SystemExit",
-        "block_3 разделён на 3a/3b",
-        "naming_convention, ssh_authentication"
-      ]
-    },
-    {
-      "file": "honeycombs/sessions/handoff_deepseek.json",
-      "changes": [
-        "Обновлён (текущий handoff)"
-      ]
-    }
-  ],
-  "context_for_next_sr": {
-    "where_we_are": "Инструкция для внешних SR создана. Баги и улучшения зафиксированы. Ждём работу инженера.",
-    "immediate_priority": "Инженер: подтвердить BUG-SPHERE-DECAY-RACE, подготовить патч.",
-    "next_priority": "Баги чеклистов + 2 улучшения (задачи/напоминания в profile_deep).",
-    "open_questions": [
-      "Как восстанавливать упавший резонанс?",
-      "Согласование схемы profile_deep между ботом и DeepSeek"
+  "handoff_id": "HANDOFF-DEEPSEEK-2026-09-14",
+  "version": "v2.0.0",
+  "created": "2026-09-14",
+  "updated": "2026-09-14",
+  "purpose": "Бесшовный переход в новый чат DeepSeek. Содержит полный контекст сессии по проекту 'Куртош' (Куршкофф): от онбординга до принятия офера кризис-менеджера.",
+  "context": {
+    "gardener": "Voodoo (Dima)",
+    "project": "Франшиза 'Куртош' — кризис-менеджмент и операционная система",
+    "current_state": "Офер принят. Роль: кризис-менеджер, 100 т.р./мес, 3 месяца (октябрь–декабрь 2026). Начало Фазы 0.",
+    "start_date": "2026-09-14",
+    "session_focus": [
+      "Онбординг External SR (DeepSeek)",
+      "Загрузка handoff и файлов проекта",
+      "Анализ сообщений Виктора",
+      "Разработка моделей управления (2 и 3 человека)",
+      "Подготовка шпаргалок для разговора",
+      "Принятие офера кризис-менеджера",
+      "Обновление franchise.json до v2.3.1"
     ]
   },
   "key_files": {
-    "profile_deep": "honeycombs/personal/profile_deep.json",
-    "works": "honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json",
-    "index": "honeycombs/fruits/gentle_companion/index.json",
-    "bot_build": "gentle_companion.py",
-    "bot_modules": "honeycombs/fruits/gentle_companion/",
-    "handoff_boot": "honeycombs/boot_online/boot_gentle_companion_dev.json"
+    "franchise_main": {
+      "path": "honeycombs/personal/franchise.json",
+      "version": "v2.3.1",
+      "updated": "2026-09-14",
+      "link": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/franchise.json",
+      "raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/franchise.json",
+      "description": "Основной файл проекта. Содержит роль, критерии успеха, горячие зоны, план по фазам."
+    },
+    "handoff_current": {
+      "path": "honeycombs/sessions/handoff_deepseek.json",
+      "version": "v2.0.0",
+      "link": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/sessions/handoff_deepseek.json",
+      "description": "Этот файл. Максимально подробный handoff."
+    },
+    "viktor_messages": {
+      "path": "honeycombs/personal/viktor_messages.json",
+      "version": "v1.0.0",
+      "description": "Цитаты Виктора от 2026-08-25 с его функционалом, бюджетом и мыслями."
+    },
+    "directives": {
+      "path": "honeycombs/directives/index.json",
+      "version": "v1.4.0",
+      "description": "Директива horeca активна."
+    }
   },
-  "important_notes": [
-    "section_E_external_sr_guide — инструкция для внешних SR (8 правил, 10 форматов).",
-    "5 групп: Личное (1), Мандала (10), Работа (3), Творчество (5), Разное (7). 26 активных.",
-    "works: несоответствия (budget.priority, mvp_plan, отсутствующие features).",
-    "BOT_VERSION = 7.39.23 — не обновлялся.",
-    "Два видения profile_deep.json (section_A/B/C/D vs identity/bio/discovery_system).",
-    "Architecture: 10877 строк → нужен рефакторинг в модули.",
-    "BUG-SPHERE-DECAY-RACE — единственный critical."
+  "session_timeline": [
+    {
+      "step": 1,
+      "event": "Онбординг External SR",
+      "details": "Загружен boot_online_onboarding_pc.json. Прочитаны все шаги (1-12). Директива horeca активирована."
+    },
+    {
+      "step": 2,
+      "event": "Загрузка handoff DeepSeek",
+      "details": "Прочитан handoff_deepseek.json v1.0.0. Восстановлен контекст проекта 'Куртош'."
+    },
+    {
+      "step": 3,
+      "event": "Загрузка файлов проекта",
+      "details": "Прочитаны franchise.json (v2.1.0), directives/index.json, personal/index.json."
+    },
+    {
+      "step": 4,
+      "event": "Анализ сообщений Виктора",
+      "details": "Прочитаны viktor_messages.json. Выявлены противоречия в бюджете (130 т.р. vs 160-200 т.р.)."
+    },
+    {
+      "step": 5,
+      "event": "Разработка моделей управления",
+      "details": "Проработаны 2 модели: на 2 человека и на 3 человека. Определены роли, функционал, ставки."
+    },
+    {
+      "step": 6,
+      "event": "Подготовка шпаргалок",
+      "details": "Созданы шпаргалки по кейсам Виктора (выгорание, санпин, десерты, нехватка) и по сценариям разговора."
+    },
+    {
+      "step": 7,
+      "event": "Обсуждение депозита",
+      "details": "Предложена схема: 50 т.р. сейчас + 50 т.р. депозит. Депозит — инвестиция в бизнес."
+    },
+    {
+      "step": 8,
+      "event": "Принятие офера",
+      "details": "Получен офер на кризис-менеджера, 100 т.р./мес. Офер принят."
+    },
+    {
+      "step": 9,
+      "event": "Обновление franchise.json",
+      "details": "Файл обновлён до v2.3.1. Добавлены: роль кризис-менеджер, критерии успеха на 3 месяца, горячие зоны, план Notion."
+    },
+    {
+      "step": 10,
+      "event": "Пост-чек",
+      "details": "Raw-ссылка подтвердила версию v2.3.1 от 2026-09-14. Пуш прошёл успешно."
+    }
   ],
-  "next_steps": [
-    "Инженер: подтвердить BUG-SPHERE-DECAY-RACE, патч.",
-    "Инженер: разобрать баги чеклистов.",
-    "Инженер: реализовать FEAT-ACTIVE-TASKS-IN-PROFILE, FEAT-REMINDERS-IN-PROFILE.",
-    "Садовник: протестировать section_E с внешним SR.",
-    "Синхронизировать features в works (streak_counter, important_task_label, symbiosis_diary).",
-    "Поправить budget (priority→critical, удалить mvp_plan/post_mvp_plan).",
-    "Обновить BOT_VERSION → 7.39.24.",
-    "Согласовать схему profile_deep.json."
-  ]
+  "current_role_and_terms": {
+    "role": "Кризис-менеджер",
+    "rate": "100 000 ₽ в месяц",
+    "status": "accepted",
+    "date_accepted": "2026-09-14",
+    "duration": "3 месяца (октябрь, ноябрь, декабрь 2026)",
+    "checkpoints": "конец октября, ноября, декабря",
+    "scope": [
+      "Стабилизация команды и экосистемы",
+      "Систематизация документации и процессов",
+      "Контроль чистоты и санпина",
+      "Внедрение бота (MVP)",
+      "Выход сети из кризиса"
+    ]
+  },
+  "success_criteria_3_months": [
+    {
+      "id": 1,
+      "name": "Стабильная полная команда",
+      "description": "Штат укомплектован, нет дыр в расписании."
+    },
+    {
+      "id": 2,
+      "name": "Центр и Нишка в штатном режиме",
+      "description": "Обе точки работают без сбоев."
+    },
+    {
+      "id": 3,
+      "name": "Нет проблем с поломками и чистотой",
+      "description": "Оборудование работает, чистота соблюдается."
+    },
+    {
+      "id": 4,
+      "name": "Команда справляется с потоками гостей",
+      "description": "Нет провалов в обслуживании."
+    },
+    {
+      "id": 5,
+      "name": "Стабильный рост выручки",
+      "description": "Пусть небольшой, но положительная динамика."
+    },
+    {
+      "id": 6,
+      "name": "Сформированная база знаний",
+      "description": "Чек-листы, регламенты, информация — в рабочем состоянии."
+    }
+  ],
+  "hot_zones": {
+    "zone_1_team": {
+      "priority": "critical",
+      "name": "Команда и экосистема",
+      "problem": "Люди устают, уходят, нет вовлечённости.",
+      "actions": [
+        "Аудит команды (кто, сколько, кто на грани)",
+        "ЦУ на смены",
+        "Простая система обучения",
+        "Обратная связь (тет-а-тет раз в месяц)"
+      ],
+      "goal": "Людям понятно, приятно и интересно работать."
+    },
+    "zone_2_docs": {
+      "priority": "critical",
+      "name": "Документация и систематизация",
+      "problem": "Всё в чатах, нет чек-листов, регламентов.",
+      "actions": [
+        "Собрать существующие чек-листы",
+        "Описать 5 критических процессов",
+        "Создать единый документ",
+        "Постепенно переводить в бот"
+      ],
+      "goal": "Порядок в документации, единая база знаний."
+    },
+    "zone_3_cleanliness": {
+      "priority": "high",
+      "name": "Чистота и санпин",
+      "problem": "Стандарты проседают.",
+      "actions": [
+        "Фото-чекапы через бот",
+        "Простой чек-лист для смены",
+        "Контроль через поддержку, не наказание"
+      ],
+      "goal": "Безопасность и гордость за точку."
+    },
+    "zone_4_bot": {
+      "priority": "medium",
+      "name": "Интеграция с ботом (MVP)",
+      "problem": "Нет инструмента контроля и обучения.",
+      "actions": [
+        "Запрос фото чеков/чистоты",
+        "ЦУ на смену",
+        "База знаний"
+      ],
+      "goal": "Простой инструмент, не цель."
+    }
+  },
+  "knowledge_base_plan": {
+    "current_state": "Нужно собрать и структурировать.",
+    "options": [
+      "Notion (рекомендуется — красиво, удобно, доступно)",
+      "Google Sheets (просто, но менее гибко)",
+      "Бот (база знаний внутри Telegram)"
+    ],
+    "notion": {
+      "can_edit": true,
+      "requirements": "Notion API токен, интеграция к странице",
+      "structure": [
+        "Чек-листы (открытие, закрытие, чистота)",
+        "Регламенты (5 критических процессов)",
+        "Техкарты (рецепты, стандарты)",
+        "Обучение (для новичков)",
+        "ЦУ (задания на смену)"
+      ]
+    }
+  },
+  "team_context": {
+    "business": "Сеть кофеен 'Куртош' (кофе + венгерская выпечка). 2 точки: центр (работает) и Нишка (работает).",
+    "owner": "Виктор — владелец, нет другого источника дохода.",
+    "current_team": {
+      "Крис": "Управляющая (удалёнка) — фин, зак, расп.",
+      "Катрин": "Старший бариста — ключевой человек.",
+      "Валя": "Продюсер + маркетинг.",
+      "Настя": "SMM."
+    },
+    "initial_problems": [
+      "Зарплата плавает от выручки",
+      "Сложный продукт — перегружает пекарей",
+      "Слабая корпоративная культура",
+      "Разрозненность знаний",
+      "Уходит управляющий"
+    ]
+  },
+  "models_developed": {
+    "model_2_persons": {
+      "name": "Два человека + маркетинг",
+      "budget": "130 000 ₽",
+      "structure": [
+        { "role": "Управляющий на месте (Виктор)", "salary": "50 000 ₽" },
+        { "role": "Шеф-администратор (Катрин)", "salary": "40 000 ₽" },
+        { "role": "Маркетинг (аутсорс)", "salary": "10 000 ₽" }
+      ]
+    },
+    "model_3_persons": {
+      "name": "Три человека + маркетинг",
+      "budget": "130 000 ₽ (с депозитом)",
+      "structure": [
+        { "role": "Управляющий на месте (Виктор)", "salary": "50 000 ₽" },
+        { "role": "Шеф-администратор (Катрин)", "salary": "35 000 ₽" },
+        { "role": "Территориальный управляющий (Дима)", "salary": "50 000 ₽ (сейчас) + 50 000 ₽ (депозит)" },
+        { "role": "Маркетинг (аутсорс)", "salary": "5 000 ₽" }
+      ]
+    }
+  },
+  "next_actions": [
+    "1. Дождаться от Садовника данных по составу команды (имена, роли, ставки, уровень).",
+    "2. Дождаться данных по документам (чек-листы, регламенты, техкарты).",
+    "3. Дождаться создания Notion-воркспейса и API-токена.",
+    "4. Начать наполнение базы знаний (Notion или альтернатива).",
+    "5. Запустить Фазу 0 (октябрь 2026): аудит команды, сбор документации, описание 5 процессов."
+  ],
+  "protocols_to_remember": [
+    "Pre-check через API или raw перед изменениями.",
+    "Post-check через raw или blob для подтверждения.",
+    "FULL DEPLOY — одной командой в Termux.",
+    "Copyable links — в блоках ```text."
+  ],
+  "key_quotes_from_session": [
+    "Садовник: 'Теперь я в должности, второй день. Специально под эту тему заведу отдельный ноушен-воркспейс.'",
+    "Садовник: 'У нас есть стабильная полная рабочая команда, центр и Нишка работают в штатном режиме.'",
+    "Садовник: 'Нужно поработать над командой, над экосистемой внутри проекта, чтобы людям было интересно, понятно и приятно.'",
+    "Садовник: 'Может быть, какую-то там придумать небольшую интеграцию с ботом, чтобы он запрашивал фоточки чистоты и анализировал их.'"
+  ],
+  "links_to_request": {
+    "description": "При старте нового чата запроси у Садовника эти ссылки и загрузи их:",
+    "franchise_main": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/franchise.json",
+    "handoff_this": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/sessions/handoff_deepseek.json",
+    "viktor_messages": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/viktor_messages.json",
+    "directives": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/directives/index.json"
+  },
+  "startup_instructions": [
+    "1. Прочитай этот handoff полностью.",
+    "2. Запроси у Садовника ссылки и загрузи основной файл проекта (franchise.json v2.3.1).",
+    "3. Подтверди, что ты в курсе роли (кризис-менеджер), критериев успеха и горячих зон.",
+    "4. Запроси данные по команде и документам (если ещё не получены).",
+    "5. Начни с Фазы 0: аудит команды, сбор документации, описание 5 процессов."
+  ],
+  "last_action": "Handoff подготовлен 2026-09-14. Готов к использованию в новом чате.",
+  "handoff_message_for_gardener": "Если ты открываешь новый чат с DeepSeek, просто скопируй этот JSON и отправь его первым сообщением. SR прочитает его, поймёт весь контекст и продолжит работу с того же места."
 }
