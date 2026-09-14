@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.3.1",
+    "version": "v2.4.0",
     "created": "2026-08-14",
     "updated": "2026-09-14",
-    "description": "Офер получен. Роль: кризис-менеджер, 100 т.р./мес. Срок: 3 месяца (октябрь–декабрь). Фокус: команда, документация, чистота, бот. Добавлены критерии успеха."
+    "description": "Офер получен. Роль: кризис-менеджер, 100 т.р./мес. Срок: 3 месяца (октябрь–декабрь). Фокус: команда, документация, чистота, бот. Добавлены критерии успеха. Добавлен taskboard."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -228,6 +228,123 @@
       "Notion — вариант для базы знаний."
     ]
   },
+  "taskboard": {
+    "description": "Внутренний таскборд Куртош. Зеркало для Notion. Мэтчится с задачами бота. Делится на стратегические (phase_*) и тактические (day-to-day) единицы.",
+    "version": "v1.0.0",
+    "created": "2026-09-14",
+    "updated": "2026-09-14",
+    "legend": {
+      "priority": {
+        "critical": "Горит. Сегодня-завтра.",
+        "high": "Важно. На этой неделе.",
+        "medium": "Среднее. 1-2 недели.",
+        "low": "Фоновое. Когда есть окно."
+      },
+      "status": {
+        "todo": "Не начато",
+        "in_progress": "В работе",
+        "blocked": "Заблокировано (ждём данные, человека, решение)",
+        "done": "Закрыто",
+        "cancelled": "Отменено"
+      },
+      "horizon": {
+        "strategic": "Часть большой фазы (phase_0..phase_3). См. plan.",
+        "tactical": "Конкретная задача на день-неделю."
+      }
+    },
+    "tasks": [
+      {
+        "id": "K-001",
+        "title": "Taskboard Notion Куртош",
+        "description": "Создать воркспейс в Notion: единая картина для Виктора и Димы. Структура — см. knowledge_base_plan.notion.structure.",
+        "priority": "critical",
+        "status": "in_progress",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-14",
+        "reminder": "11:00",
+        "depends_on": [],
+        "related_to": [
+          "K-002",
+          "K-004"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-002",
+        "title": "Вопросы к планёрке",
+        "description": "Подготовить вопросы и структуру планёрки с командой. Генуборка во вторник. Учесть историю: усталость, уходит управляющий, зарплата плавает, разрозненность знаний.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-14",
+        "reminder": "11:00",
+        "depends_on": [],
+        "related_to": [
+          "K-001",
+          "K-003"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-003",
+        "title": "Планёрка с командой",
+        "description": "Провести планёрку (генуборка). Проговорить важные моменты с учётом истории команды.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-15",
+        "reminder": "11:00",
+        "depends_on": [
+          "K-002"
+        ],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      }
+    ],
+    "counters": {
+      "total": 3,
+      "by_status": {
+        "todo": 2,
+        "in_progress": 1,
+        "blocked": 0,
+        "done": 0,
+        "cancelled": 0
+      },
+      "by_priority": {
+        "critical": 3,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "by_phase": {
+        "phase_0": 3
+      }
+    }
+  },
   "risks": [
     {
       "id": "R1",
@@ -286,6 +403,10 @@
     {
       "date": "2026-09-14",
       "event": "Добавлены критерии успеха на 3 месяца (октябрь–декабрь), блок Notion. Версия v2.3.1."
+    },
+    {
+      "date": "2026-09-14",
+      "event": "Добавлен taskboard (v1.0.0): 3 тактические задачи Фазы 0 (K-001..K-003). Версия v2.4.0."
     }
   ]
 }
