@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-14 11:31:39 ──
+# ── BUILT by build.py ── 2026-09-14 11:44:46 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1612,8 +1612,10 @@ def _build_profile_card(user_id: str) -> str:
     city       = profile.get("companion_settings", {}).get("city", "")
     ach_count  = store_get_achievements_count(user_id)
     city_part  = f" · {city}" if city else ""
+    balance    = store_get_balance(user_id)
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
+        f"💰 Баланс: {balance} ₽",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
         _sphere_compact_line(store_get_sphere_resonance(user_id)),
         "",
@@ -1690,21 +1692,8 @@ async def _show_profile(user_id: str, message: Message):
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="🚀 Задачи 🚀", callback_data="menu_tasks_mgmt_v2"),
-        ],
-        [
-            InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
-            InlineKeyboardButton(text="🔔 Напоминания", callback_data="menu_reminders_mgmt"),
-        ],
-        [
-            InlineKeyboardButton(text="✏️ Профиль", callback_data="menu_edit_profile"),
-            InlineKeyboardButton(text="💎 Достижения", callback_data="profile_achievements"),
-        ]
-    ])
-    sent =     card = _build_profile_card(user_id)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="🚀 Задачи 🚀", callback_data="menu_tasks_mgmt_v2"),
+            InlineKeyboardButton(text="🚀 Задачи", callback_data="menu_tasks_mgmt_v2"),
+            InlineKeyboardButton(text="💰 Бюджет", callback_data="menu_budget_mgmt"),
         ],
         [
             InlineKeyboardButton(text="☑️ Чеклисты", callback_data="menu_checklists_mgmt"),
