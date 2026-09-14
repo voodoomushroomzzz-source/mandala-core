@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.4.0",
+    "version": "v2.5.0",
     "created": "2026-08-14",
     "updated": "2026-09-14",
-    "description": "Офер получен. Роль: кризис-менеджер, 100 т.р./мес. Срок: 3 месяца (октябрь–декабрь). Фокус: команда, документация, чистота, бот. Добавлены критерии успеха. Добавлен taskboard."
+    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -26,8 +26,8 @@
   "offer": {
     "rate": "100 000 ₽ в месяц",
     "status": "accepted",
-    "date_accepted": "2026-09-14",
-    "duration": "3 месяца (октябрь, ноябрь, декабрь 2026)",
+    "date_accepted": "2026-09-11",
+    "duration": "11.09.2026 – 11.12.2026 (3 месяца)",
     "role": "Кризис-менеджер",
     "scope": [
       "Стабилизация команды и экосистемы",
@@ -35,11 +35,17 @@
       "Контроль чистоты и санпина",
       "Внедрение бота (MVP)",
       "Выход сети из кризиса"
-    ]
+    ],
+    "payment_structure": {
+      "total_monthly": "100 000 ₽",
+      "cash": "50 000 ₽ (кеш)",
+      "accumulation": "50 000 ₽ (накопление до лучших времён)",
+      "note": "Детализация накопления — уточняется (депозит / оборот / иначе)."
+    }
   },
   "success_criteria_3_months": {
-    "deadline": "2026-12-31",
-    "checkpoints": "конец октября, ноября, декабря",
+    "deadline": "2026-12-11",
+    "checkpoints": "конец октября, конец ноября, 11.12.2026",
     "criteria": [
       {
         "id": 1,
@@ -160,7 +166,7 @@
   "plan": {
     "phase_0": {
       "name": "Вход и быстрые победы",
-      "duration": "Октябрь 2026",
+      "duration": "Сентябрь–Октябрь 2026 (старт 11.09)",
       "tasks": [
         "Аудит команды",
         "Сбор документации",
@@ -217,20 +223,22 @@
   },
   "current_status": {
     "phase": "phase_0",
-    "progress": 5,
+    "progress": 10,
     "date": "2026-09-14",
     "last_action": "Офер принят. Роль: кризис-менеджер. Начало Фазы 0.",
-    "next_action": "Аудит команды, сбор документации.",
+    "next_action": "Рабочий чат команды, штатка, условия сотрудников, аудит операционки.",
     "blockers": [],
     "notes": [
       "Фокус: команда, документация, чистота, бот.",
-      "Ждём данные по составу команды и документам.",
+      "OPEN: 'Дни рождественский бонус' — уточнить у Виктора.",
+      "OPEN: ключи Центр/Нишка — проверить систему доступа.",
+      "OPEN: накопление 50к — уточнить механику (депозит/оборот).",
       "Notion — вариант для базы знаний."
     ]
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. Мэтчится с задачами бота. Делится на стратегические (phase_*) и тактические (day-to-day) единицы.",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-09-14",
     "updated": "2026-09-14",
     "legend": {
@@ -323,25 +331,440 @@
           "bot_task_id": null,
           "notion_page_id": null
         }
+      },
+      {
+        "id": "K-004",
+        "title": "Рабочий чат команды",
+        "description": "Создать рабочий чат для команды и кризис-менеджера. Единая точка связи.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-15",
+        "reminder": "11:00",
+        "depends_on": [],
+        "related_to": [
+          "K-001"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-005",
+        "title": "Реальная штатка + план + дефицит",
+        "description": "Составить реальную штатку (ФИО, должность, уровень). Сравнить с планом. Выявить дефицит.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-18",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-015"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-006",
+        "title": "Условия сотрудников",
+        "description": "Собрать условия по сотрудникам: зп/ставки, отпуска, больничные, бонусы, планы.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-18",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-007",
+        "title": "Точная дата входа",
+        "description": "Зафиксировать точную дату входа в должность. Выяснить формальные условия старта.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-14",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-008",
+        "title": "Ссылки на узлы",
+        "description": "Собрать ссылки на таблицы, расписания, документы. Единая навигация по экосистеме.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-17",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-018"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-009",
+        "title": "Важные контакты",
+        "description": "Собрать важные контакты: поставщики, персонал, сервисы.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-17",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-018"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-010",
+        "title": "Чек-листы и карты процессов",
+        "description": "Собрать существующие чек-листы и карты процессов. Основа для систематизации.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-21",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-021"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-011",
+        "title": "День генуборки",
+        "description": "Выбрать фиксированный день недели для генуборки.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-16",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-012"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-012",
+        "title": "Еженедельная планёрка",
+        "description": "Определить день и время еженедельной планёрки. Ввести в регулярный ритм.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-003",
+          "K-011"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-013",
+        "title": "Исправить время в меню",
+        "description": "Исправить время первых куртошей в новом меню: 8:15 → 9:00.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-014",
+        "title": "Операционка: поломки, экстренные",
+        "description": "Неделя 1: знакомство с операционкой. Поломки, экстренные ситуации.",
+        "priority": "critical",
+        "status": "in_progress",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-015",
+        "title": "Анализ сотрудников",
+        "description": "Неделя 1: анализ сотрудников, выводы. Кто на грани, кто ключевой.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-21",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-005",
+          "K-006"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-016",
+        "title": "Чистота и качество",
+        "description": "Контроль чистоты и качества. Чек-чекапы.",
+        "priority": "high",
+        "status": "in_progress",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-017",
+        "title": "Закрытие точек (Центр/Нишка)",
+        "description": "Аудит процесса закрытия Центра и Нишки. Проверить стандарты.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-20",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-018",
+        "title": "Таблицы документации",
+        "description": "Собрать таблицы с важной информацией: аккаунты, контакты, доступы.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-19",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-019",
+        "title": "Закупка (аудит)",
+        "description": "Неделя 2: аудит процесса закупки.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-22",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-020",
+        "title": "Расписание (аудит)",
+        "description": "Неделя 2: аудит расписания смен.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-22",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-021",
+        "title": "Разработка инструкций",
+        "description": "Разработка инструкций для команды по ключевым процессам.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-28",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-010"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
+      },
+      {
+        "id": "K-022",
+        "title": "Перехват найма",
+        "description": "Перехват процесса найма (2–3 неделя). Взять под контроль.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-29",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null
+        }
       }
     ],
     "counters": {
-      "total": 3,
+      "total": 22,
       "by_status": {
-        "todo": 2,
-        "in_progress": 1,
-        "blocked": 0,
-        "done": 0,
-        "cancelled": 0
+        "in_progress": 3,
+        "todo": 19
       },
       "by_priority": {
-        "critical": 3,
-        "high": 0,
-        "medium": 0,
-        "low": 0
+        "critical": 9,
+        "high": 12,
+        "medium": 1
       },
       "by_phase": {
-        "phase_0": 3
+        "phase_0": 22
       }
     }
   },
@@ -407,6 +830,14 @@
     {
       "date": "2026-09-14",
       "event": "Добавлен taskboard (v1.0.0): 3 тактические задачи Фазы 0 (K-001..K-003). Версия v2.4.0."
+    },
+    {
+      "date": "2026-09-14",
+      "event": "Уточнён offer: дата входа 11.09.2026, срок 11.09–11.12.2026, структура оплаты 50 кеш + 50 накопление. Версия v2.5.0."
+    },
+    {
+      "date": "2026-09-14",
+      "event": "Taskboard v1.1.0: добавлены 19 задач (K-004..K-022) по первым касаниям и плану Фазы 0. Итого 22 задачи."
     }
   ]
 }
