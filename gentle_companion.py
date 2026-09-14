@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-07 16:07:57 ──
+# ── BUILT by build.py ── 2026-09-14 11:31:39 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -8167,8 +8167,13 @@ def _sphere_decay_check(telegram_id: str) -> tuple:
                 lines.append(_SPHERE_WARN_TEXTS["decaying"].format(emoji=SPHERE_EMOJI[s], name=SPHERE_NAME_RU[s]))
                 entry["stage"] = "decaying"
                 changed_meta = True
-            sr[s] = max(0, sr.get(s, 20) - 2)
-            changed_sr = True
+            # BUG-SPHERE-DECAY-RACE hotfix: _time_matches — окно ~20 минут, run_proactive_scheduler
+            # тикает каждую минуту → без этой проверки -2% списывалось до ~20 раз за одно окно.
+            if entry.get("last_decay_date") != today_s:
+                sr[s] = max(0, sr.get(s, 20) - 2)
+                changed_sr = True
+                entry["last_decay_date"] = today_s
+                changed_meta = True
             decaying_now.append(s)
         elif days_silent >= 6:
             if stage != "final_warned":
