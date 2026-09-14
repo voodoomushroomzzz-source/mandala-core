@@ -34,6 +34,7 @@ BUILD_ORDER = [
     ("sr_memory.py",           5, "ready"),
     ("handlers/tasks.py",      6, "ready"),
     ("handlers/features.py",   6, "ready"),
+    ("handlers/budget.py",     6, "ready"),
     ("handlers/system.py",     6, "ready"),
     ("sr_conversation.py",     5, "ready"),
     ("main.py",                7, "ready"),
