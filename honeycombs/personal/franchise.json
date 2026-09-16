@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.6.1",
+    "version": "v2.6.2",
     "created": "2026-08-14",
-    "updated": "2026-09-14",
-    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0."
+    "updated": "2026-09-16",
+    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена)."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -851,17 +851,21 @@
     {
       "date": "2026-09-14",
       "event": "Taskboard: K-005 (Реальная штатка) и K-015 (Анализ сотрудников) отмечены done. Картотека team_roster — источник. Версия v2.6.1."
+    },
+    {
+      "date": "2026-09-16",
+      "event": "team_roster: добавлен EMP-016 Оля (стажёр, от Маши, пробная смена в вс, опыт по кофе). Версия v2.6.2."
     }
   ],
   "team_roster": {
-    "last_updated": "2026-09-14",
-    "total_employees": 15,
+    "last_updated": "2026-09-16",
+    "total_employees": 16,
     "by_status": {
       "core": 1,
       "working": 6,
       "runner": 2,
       "attestation": 1,
-      "trainee": 1,
+      "trainee": 2,
       "leaving": 1,
       "substitute": 3
     },
@@ -1519,6 +1523,54 @@
         "notes": null,
         "data_gaps": [
           "nijka.attitude"
+        ]
+      },
+      {
+        "id": "EMP-016",
+        "name": "Оля",
+        "role": "Стажёр (пробная смена)",
+        "contacts": {
+          "phone": null,
+          "telegram": null
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "пробная смена в воскресенье",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "unknown",
+          "pechka": "unknown",
+          "coffee": "yes",
+          "kassa": "unknown",
+          "notes": "опыт по кофе есть; готовила калачи"
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч (пока стажёр)",
+          "bonuses": [],
+          "extra": null,
+          "notes": null
+        },
+        "status": "trainee",
+        "risks": [
+          "ищет сейчас другую работу; готова поработать у нас пока"
+        ],
+        "notes": "пришла от Маши; пробная смена в воскресенье",
+        "data_gaps": [
+          "contacts.phone",
+          "contacts.telegram",
+          "schedule.notes",
+          "skills.pechka",
+          "skills.kassa",
+          "nijka.attitude",
+          "trial_result"
         ]
       }
     ],
