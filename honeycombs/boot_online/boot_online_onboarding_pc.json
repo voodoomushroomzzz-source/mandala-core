@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.140",
+    "version": "v1.7.141",
     "created": "2026-05-11",
     "updated": "2026-09-16",
     "layer": 1,
@@ -1769,7 +1769,7 @@
         "last_sync": "2026-09-16",
         "profile": {
           "name": "Дима",
-          "resonance_level": 86,
+          "resonance_level": 87,
           "city": "Владимир",
           "companion_settings": {
             "morning_message_time": "10:00",
@@ -1780,7 +1780,7 @@
         "sphere_resonance": {
           "health": 100,
           "creativity": 100,
-          "work": 69,
+          "work": 71,
           "connections": 63,
           "growth": 100
         },
