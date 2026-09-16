@@ -582,7 +582,7 @@
       "*"
     ]
   },
-  "last_updated": "2026-09-06",
+  "last_updated": "2026-09-16",
   "navigation": {
     "parent": "honeycombs/fruits/index.json",
     "parent_description": "Fruits — Product Registry (read first for Mandala overview)",
@@ -666,6 +666,20 @@
       "changes": [
         "pending_resonance: debounce-сводка резонанса в кнопочном флоу (handlers/tasks.py) — 5 сек накопления, одна сводка + одна SR-реакция вместо N.",
         "Хотфикс: batch-закрытие задач через чат/голос (sr_conversation.py, intent complete_task) — расчёт резонанса теперь по каждой реально затронутой сфере, а не по сфере последней задачи + общий средний резонанс, ошибочно подписанный как значение сферы."
+      ]
+    },
+    {
+      "version": "v2.3.0",
+      "date": "2026-09-16",
+      "changes": [
+        "Budget module added: handlers/budget.py (13 KB) — income/expense entries, sphere-linked categories (17), monthly report, balance derived from entries (no separate field, avoids desync).",
+        "BUG-20260907 fixed: handlers/budget.py was not registered in build.py BUILD_ORDER — CI silently omitted it from gentle_companion.py. Added to BUILD_ORDER after handlers/features.py.",
+        "store.py: +4 budget functions (store_get/set_budget_entries, store_add_budget_entry, store_get_balance).",
+        "helpers.py: +_format_money(value, symbol='₽') — 500 → '500 ₽', 499.5 → '499.50 ₽'. Fixes '-500.0 ₽' display bug.",
+        "ui.py: balance in profile card (via _format_money), '💰 Бюджет' button next to '🚀 Задачи'. Removed dead code in _show_profile().",
+        "sr_prompts.py: intents add_budget_entry / show_budget added to JSON schema + classification examples.",
+        "sr_conversation.py: intent branches add_budget_entry (create entry from chat/voice) and show_budget (monthly report).",
+        "current_state metrics updated: 11852 lines, 620 KB, 326 functions, 159 handlers, 12 classes, 15 MODULE headers."
       ]
     }
   ]
