@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "FRUIT-GENTLE-COMPANION-001",
     "name": "Gentle Companion — Modular Architecture",
-    "version": "v2.2.3",
+    "version": "v2.3.0",
     "created": "2026-05-25",
-    "updated": "2026-09-06",
+    "updated": "2026-09-16",
     "layer": 2,
     "type": "fruits_index",
-    "description": "Modular architecture index for Gentle Companion bot. 14 modules, 7 migration phases complete. Production on Hetzner VPS.",
+    "description": "Modular architecture index for Gentle Companion bot. 15 modules, 7 migration phases complete. Production on Hetzner VPS. v2.3.0: Budget module (handlers/budget.py) added — 5 patches deployed; BUG-20260907 fixed in build.py BUILD_ORDER.",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -25,7 +25,7 @@
     "how_to_use": "Read this index first to understand module structure. Then read individual module files for details.",
     "gardener_approval_required": false,
     "change_requires": "gardener_approval",
-    "updated": "2026-09-06"
+    "updated": "2026-09-16"
   },
   "honeycomb": "fruits/gentle_companion",
   "version": "2.1.0",
@@ -36,12 +36,12 @@
   "bot_version_analyzed": "7.39.24",
   "current_state": {
     "file": "gentle_companion.py (running on server)",
-    "lines": 11588,
-    "size_kb": 619,
-    "functions": 310,
-    "handlers": 148,
-    "classes": 10,
-    "status": "running on server — gentle_companion.py is production since 2026-05-28. Rebuilt 2026-08-19 after fixing 15 build-breaking issues from the 2026-07-19 _replace_menu refactor (see changelog).",
+    "lines": 11852,
+    "size_kb": 620,
+    "functions": 326,
+    "handlers": 159,
+    "classes": 12,
+    "status": "running on server — gentle_companion.py is production since 2026-05-28. Rebuilt 2026-09-16 (build.py) after adding handlers/budget.py to BUILD_ORDER and deploying 5 budget patches. 15 MODULE headers, 12 classes (BudgetStates added).",
     "structure": "honeycombs/fruits/gentle_companion/ — module code + index.json + build.py",
     "phases_complete": "7/7 — COMPLETE",
     "server_entry": "ExecStart=/opt/mandala/venv/bin/python3 /opt/mandala/gentle_companion.py (switched from bot.py — 2026-06-05)"
@@ -86,15 +86,17 @@
       "name": "Store Layer",
       "description": "RAM-cache read/write. Single point of access to gardener data.",
       "target_file": "store.py",
-      "current_size_kb": 6,
+      "current_size_kb": 9,
       "status": "done",
       "phase": 3,
       "key_items": [
         "store_get/set: profile, workspace, tasks, achievements, groups, checklists, reminders, sphere_resonance",
         "store_add_sphere_resonance, store_add_resonance",
         "_get_user_store, _user_path",
-        "store_get/set_groups, store_get/set_checklists, store_get/set_reminders (restored 2026-05-28)"
-      ]
+        "store_get/set_groups, store_get/set_checklists, store_get/set_reminders (restored 2026-05-28)",
+        "Budget: store_get/set_budget_entries, store_add_budget_entry, store_get_balance (derived)"
+      ],
+      "last_updated": "2026-09-16"
     },
     {
       "id": "02_github",
@@ -120,7 +122,7 @@
       "name": "Helpers & Auth",
       "description": "Utilities, authorization, deep profile, observations, interaction tracking.",
       "target_file": "helpers.py",
-      "current_size_kb": 20,
+      "current_size_kb": 21,
       "status": "done",
       "phase": 3,
       "key_items": [
@@ -131,16 +133,17 @@
         "_track_interaction(), _can_send_proactive()",
         "calculate_priority(), _make_group_id()",
         "_days_since_last_interaction() (restored 2026-05-28)",
-        "_send_cleanup_warning() — sends day-23/day-27 silence warning messages (added 2026-07-19, part of run_auto_cleanup flow)"
+        "_send_cleanup_warning() — sends day-23/day-27 silence warning messages (added 2026-07-19, part of run_auto_cleanup flow)",
+        "_format_money(value, symbol='₽') — 500 → '500 ₽', 499.5 → '499.50 ₽'"
       ],
-      "last_updated": "2026-08-19"
+      "last_updated": "2026-09-16"
     },
     {
       "id": "04_ui",
       "name": "UI — Keyboards & Profile Card",
       "description": "All keyboards, profile card, text formatting. Pure presentation layer.",
       "target_file": "ui.py",
-      "current_size_kb": 39,
+      "current_size_kb": 40,
       "status": "done",
       "phase": 4,
       "key_items": [
@@ -152,9 +155,11 @@
         "get_task_edit_inline(): reminder button 🔔 with callback task_rem_open|{task_id} (P-95-02)",
         "Profile card: 🔗 emoji on tasks with linked reminder (P-95-05/06)",
         "get_reminder_keyboard(): \"В день задачи\" uses rem_deadline|DATE callback (P-95-06)",
-        "_show_tasks_unified(sr_react) — P-99/P-101: smart group count summary to SR"
+        "_show_tasks_unified(sr_react) — P-99/P-101: smart group count summary to SR",
+        "Профиль: баланс (_format_money) 2-й строкой, кнопка '💰 Бюджет'",
+        "Удалён мёртвый код _show_profile() (задвоение kb/card)"
       ],
-      "last_updated": "2026-06-06"
+      "last_updated": "2026-09-16"
     },
     {
       "id": "05_handlers_tasks",
@@ -208,6 +213,25 @@
       "last_updated": "2026-08-19"
     },
     {
+      "id": "handlers_budget",
+      "name": "Handlers — Budget",
+      "description": "Budget tracking: income/expense entries, sphere-linked categories, monthly report. Balance derived from entries (no separate field).",
+      "target_file": "handlers/budget.py",
+      "current_size_kb": 13,
+      "status": "done",
+      "phase": 6,
+      "key_items": [
+        "BudgetStates (single-state FSM: waiting_for_input)",
+        "_create_budget_entry_atomic, _classify_budget_category",
+        "CATEGORY_META (17 categories, sphere-linked)",
+        "_format_budget_header, _budget_month_report",
+        "cb_budget_mgmt, cb_budget_add, budget_text_input, cb_budget_report",
+        "get_budget_mgmt_inline, _format_money used for all displays",
+        "Registered in build.py BUILD_ORDER (BUG-20260907 fix)"
+      ],
+      "last_updated": "2026-09-16"
+    },
+    {
       "id": "07_sr_engine",
       "name": "SR Engine — Prompts",
       "description": "SR_CORE_PROMPT, SR_INTENT_LIGHT, SR_INTENT_MAP, _CLASSIFIER_PROMPT",
@@ -224,9 +248,10 @@
         "SR_INTENT_LIGHT: multi-query examples added for comparative search (action.queries[] instead of action.query) (P-87, 2026-05-29)",
         "WELCOME TOUR block added: SR guides new gardeners through features step by step with offer to try each one (P-88, 2026-05-29)",
         "add_task intent: reminder field examples — atomic task+reminder creation (P-95-11)",
-        "SR_INTENT_LIGHT: P-103/P-104 new period examples + label+period combined"
+        "SR_INTENT_LIGHT: P-103/P-104 new period examples + label+period combined",
+        "Intents add_budget_entry / show_budget в JSON-схеме + примеры классификации"
       ],
-      "last_updated": "2026-06-06"
+      "last_updated": "2026-09-16"
     },
     {
       "id": "sr_context",
@@ -332,9 +357,10 @@
         "show_tasks: P-104 label+period combined filter",
         "show_tasks: P-105 overdue from all tasks always first, even when period empty",
         "add_achievement intent: P-98 — SR reaction on achievement creation via chat",
-        "complete_task batch-ветка: расчёт резонанса теперь по каждой реально затронутой сфере (_per_sphere_ct), а не по сфере последней задачи + общий средний резонанс (хотфикс, 06.09)"
+        "complete_task batch-ветка: расчёт резонанса теперь по каждой реально затронутой сфере (_per_sphere_ct), а не по сфере последней задачи + общий средний резонанс (хотфикс, 06.09)",
+        "Ветки add_budget_entry (создание записи из чата/голоса) и show_budget (месячный отчёт)"
       ],
-      "last_updated": "2026-09-06"
+      "last_updated": "2026-09-16"
     },
     {
       "id": "08_handlers_system",
