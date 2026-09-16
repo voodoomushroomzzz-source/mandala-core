@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260916-070056-159",
+  "title": "Optimal Pruning for Neural Architectures using Fisher Information Distances",
+  "url": "https://arxiv.org/abs/2609.16129",
+  "description": "arXiv:2609.16129v1 Announce Type: new \nAbstract: A new scheme for parameter pruning is introduced, derived from the differential-geometric distance in model space. Pruning a parameter sets its value to zero, representing a displacement of the model to the hypersurface on which that parameter vanishes. The minimal distance from the unpruned model to this hypersurface is naturally computed via the geodesic distance in the model space as determined by the Fisher information metric. This distance de",
+  "source": "arXiv AI",
+  "collected_at": "2026-09-16T07:00:56.154300",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260916-070056-163",
+  "title": "Calibrate, Then Route: A Measured Study of Learned Request Routing for Disaggregated LLM Serving",
+  "url": "https://arxiv.org/abs/2609.16206",
+  "description": "arXiv:2609.16206v1 Announce Type: new \nAbstract: Disaggregated LLM serving places compute heavy prefill and memory heavy decode on separate GPU pools. Systems such as DistServe, Splitwise, and Mooncake make this separation fast, but routing still determines which instances handle each request. We study a router that estimates the additional completion time on each instance using exact prompt length, predicted output length, post admission KV cache pressure, and SLO class. We develop the policy i",
+  "source": "arXiv AI",
+  "collected_at": "2026-09-16T07:00:56.610494",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

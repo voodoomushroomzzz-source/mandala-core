@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260916-070056-164",
+  "title": "Bi-MoDe: Bilateral Control-based Imitation Learning via Modifier-Conditioned Decoding for Modulation of Execution Speed and Contact Intensity",
+  "url": "https://arxiv.org/abs/2609.16040",
+  "description": "arXiv:2609.16040v1 Announce Type: new \nAbstract: Bilateral control-based imitation learning captures both position and force information, making it well suited to contact-rich manipulation. However, existing approaches provide limited means for an operator to specify how a learned task should be executed at inference time, such as slowly or quickly, gently or firmly. We propose Bi-MoDe, a modifier-conditioned decoding framework that injects a constrained latent into every layer of the Transforme",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-16T07:00:56.886967",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
