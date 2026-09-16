@@ -1,41 +1,12 @@
 {
-  "date": "2026-09-15",
+  "date": "2026-09-16",
   "version": "7.39.23",
   "gardeners": {
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-09-15"
+      "synthesis_date": "2026-09-16"
     }
   },
-  "issues": [
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "create_reminder",
-      "count": 2,
-      "context": "повторный create_reminder"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "create_reminder",
-      "count": 2,
-      "context": "повторный create_reminder"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "create_reminder",
-      "count": 2,
-      "context": "повторный create_reminder"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "create_reminder",
-      "count": 2,
-      "context": "повторный create_reminder"
-    }
-  ]
+  "issues": []
 }
