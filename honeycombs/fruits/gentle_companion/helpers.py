@@ -447,3 +447,14 @@ _MILESTONE_TEXTS = {
         "Твои данные и задачи будут стёрты. Если ты хочешь сохранить их — просто ответь сейчас."
     ),
 }
+
+def _format_money(value, symbol: str = "₽") -> str:
+    """Format currency: whole numbers without decimals, fractional with 2 decimals.
+    500 -> "500 ₽", 499.5 -> "499.50 ₽". Prevents ugly "500.0" from float() parsing."""
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return f"0 {symbol}"
+    if value == int(value):
+        return f"{int(value)} {symbol}"
+    return f"{value:.2f} {symbol}"

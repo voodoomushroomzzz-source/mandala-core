@@ -208,7 +208,7 @@ def _build_profile_card(user_id: str) -> str:
     balance    = store_get_balance(user_id)
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
-        f"💰 Баланс: {balance} ₽",
+        f"💰 Баланс: {_format_money(balance)}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
         _sphere_compact_line(store_get_sphere_resonance(user_id)),
         "",

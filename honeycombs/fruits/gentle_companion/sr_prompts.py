@@ -101,7 +101,7 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|create_label|move_task|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|pin_message|unpin_message",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|create_label|move_task|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|pin_message|unpin_message|add_budget_entry|show_budget",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|...", "tasks": [{"title":"...","deadline":"YYYY-MM-DD|null","label":"...|null"}]} или null
@@ -225,6 +225,12 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - ВАЖНО: "через N минут" → прибавь N минут к текущему времени из контекста [Сейчас у садовника]. "через N часов" → прибавь N часов. Результат в ISO формате YYYY-MM-DDTHH:MM
 - "покажи напоминания", "мои напоминания" → show_reminders, 0.95
 - "удали напоминание X" → delete_reminder, action.title=X, 0.95
+
+- "потратил X на Y", "заплатил X за Y", "купил Y за X" → add_budget_entry, action.amount=X, action.type="expense", action.note=Y, 0.9
+  Пример: "потратил 500 на такси" → add_budget_entry, action.amount=500, action.type="expense", action.note="такси"
+- "получил X", "заработал X", "пришла зарплата X", "пришли деньги X" → add_budget_entry, action.amount=X, action.type="income", action.note=источник или пусто, 0.9
+  Пример: "получил зарплату 50000" → add_budget_entry, action.amount=50000, action.type="income", action.note="зарплата"
+- "покажи бюджет", "какой у меня баланс", "сколько денег осталось", "мои траты за месяц", "отчёт по бюджету", "сколько потратил в этом месяце" → show_budget, 0.95
 
 - "закрой задачи X и Y", "закрой обе" → complete_task, action.titles=["X","Y"], 0.95
 - "закрой все задачи на сегодня" → complete_task, action.period=today, 0.95

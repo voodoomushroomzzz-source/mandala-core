@@ -100,13 +100,13 @@ def _format_budget_header(user_id: str) -> str:
     balance = store_get_balance(user_id)
     entries = store_get_budget_entries(user_id)
     recent = sorted(entries, key=lambda e: e.get("date", ""), reverse=True)[:5]
-    lines = [f"💰 <b>Бюджет</b>", f"Баланс: {balance} ₽", ""]
+    lines = [f"💰 <b>Бюджет</b>", f"Баланс: {_format_money(balance)}", ""]
     if recent:
         lines.append("Последние операции:")
         for e in recent:
             meta = CATEGORY_META.get(e.get("category", "other"), CATEGORY_META["other"])
             sign = "+" if e.get("type") == "income" else "-"
-            entry_line = f"{sign}{e.get('amount', 0)} ₽ · {meta['emoji']} {meta['name_ru']}"
+            entry_line = f"{sign}{_format_money(e.get('amount', 0))} · {meta['emoji']} {meta['name_ru']}"
             if e.get("note"):
                 entry_line += f" · {e['note']}"
             lines.append(entry_line)
@@ -133,16 +133,16 @@ def _budget_month_report(user_id: str) -> str:
     top3 = sorted(by_category.items(), key=lambda x: -x[1])[:3]
     lines = [
         f"📊 <b>Отчёт за {current_month}</b>",
-        f"Доходы: +{income} ₽",
-        f"Расходы: -{expense} ₽",
-        f"Баланс месяца: {income - expense} ₽",
+        f"Доходы: +{_format_money(income)}",
+        f"Расходы: -{_format_money(expense)}",
+        f"Баланс месяца: {_format_money(income - expense)}",
     ]
     if top3:
         lines.append("")
         lines.append("Топ категорий трат:")
         for cat, amt in top3:
             meta = CATEGORY_META.get(cat, CATEGORY_META["other"])
-            lines.append(f"{meta['emoji']} {meta['name_ru']}: {amt} ₽")
+            lines.append(f"{meta['emoji']} {meta['name_ru']}: {_format_money(amt)}")
     return "\n".join(lines)
 
 
@@ -215,7 +215,7 @@ async def budget_text_input(message: Message, state: FSMContext):
     meta = CATEGORY_META.get(category, CATEGORY_META["other"])
     sign = "+" if entry_type == "income" else "-"
     await message.answer(
-        f"✅ {sign}{amount:g} ₽ · {meta['emoji']} {meta['name_ru']} → баланс: {balance} ₽",
+        f"✅ {sign}{_format_money(amount)} · {meta['emoji']} {meta['name_ru']} → баланс: {_format_money(balance)}",
         reply_markup=get_budget_mgmt_inline()
     )
 

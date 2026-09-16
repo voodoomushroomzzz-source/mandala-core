@@ -1629,6 +1629,37 @@ async def free_conversation(message: Message, state: FSMContext):
                             else:
                                 reply_text = f"🌀 Напоминание «{target_r}» не найдено."
 
+                        elif intent == "add_budget_entry":
+                            _bg_action = parsed_check.get("action") or {}
+                            _bg_amount = _bg_action.get("amount")
+                            _bg_type   = (_bg_action.get("type") or "expense").lower().strip()
+                            _bg_note   = (_bg_action.get("note") or "").strip()
+                            try:
+                                _bg_amount = float(_bg_amount)
+                            except (TypeError, ValueError):
+                                _bg_amount = None
+                            if not _bg_amount or _bg_amount <= 0:
+                                reply_text = "🌀 Не понял сумму, уточни: «потратил 500 на такси»"
+                            else:
+                                if _bg_type not in ("income", "expense"):
+                                    _bg_type = "expense"
+                                _bg_category = _classify_budget_category(_bg_note)
+                                _bg_entry = await _create_budget_entry_atomic(
+                                    user_id, _bg_amount, _bg_type, category=_bg_category, note=_bg_note
+                                )
+                                if _bg_entry:
+                                    _bg_balance = store_get_balance(user_id)
+                                    _bg_meta = CATEGORY_META.get(_bg_category, CATEGORY_META["other"])
+                                    _bg_sign = "+" if _bg_type == "income" else "-"
+                                    reply_text = (f"✅ {_bg_sign}{_format_money(_bg_amount)} · "
+                                                  f"{_bg_meta['emoji']} {_bg_meta['name_ru']} → "
+                                                  f"баланс: {_format_money(_bg_balance)}")
+                                else:
+                                    reply_text = "🌀 Не получилось сохранить операцию."
+
+                        elif intent == "show_budget":
+                            reply_text = _budget_month_report(user_id)
+
                         elif intent == "move_task":
                             _mt_act        = parsed_check.get("action") or {}
                             _mt_title      = (_mt_act.get("title") or "").strip()
