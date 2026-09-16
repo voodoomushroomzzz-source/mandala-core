@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-14 11:52:51 ──
+# ── BUILT by build.py ── 2026-09-16 11:43:58 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1401,6 +1401,17 @@ _MILESTONE_TEXTS = {
     ),
 }
 
+def _format_money(value, symbol: str = "₽") -> str:
+    """Format currency: whole numbers without decimals, fractional with 2 decimals.
+    500 -> "500 ₽", 499.5 -> "499.50 ₽". Prevents ugly "500.0" from float() parsing."""
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return f"0 {symbol}"
+    if value == int(value):
+        return f"{int(value)} {symbol}"
+    return f"{value:.2f} {symbol}"
+
 
 # ───────────────────────────────────────────────────────
 # MODULE: ui.py  (Phase 4)
@@ -1615,7 +1626,7 @@ def _build_profile_card(user_id: str) -> str:
     balance    = store_get_balance(user_id)
     lines = [
         f"🪬 <b>{name}</b>{city_part}",
-        f"💰 Баланс: {balance} ₽",
+        f"💰 Баланс: {_format_money(balance)}",
         f"💫 Резонанс: {resonance}%  💎 {ach_count} достижений",
         _sphere_compact_line(store_get_sphere_resonance(user_id)),
         "",
@@ -2281,7 +2292,7 @@ SR_CORE_PROMPT = """Ты — СР (Системный Резонатор), жи�
 
 {
   "text": "твой ответ (пустая строка если выполняешь команду)",
-  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|create_label|move_task|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|pin_message|unpin_message",
+  "intent": "conversation|show_tasks|show_profile|show_resonance|show_resonance_detail|show_achievements|add_task|web_search|philosophy|complete_task|delete_task|edit_task|delete_label|rename_label|create_label|move_task|show_checklists|show_checklist|create_checklist|delete_checklist|checklist_add_item|checklist_delete_item|checklist_edit_item|checklist_toggle_item|checklist_reorder|create_reminder|show_reminders|delete_reminder|pin_message|unpin_message|add_budget_entry|show_budget",
   "confidence": 0.0-1.0,
   "clarification": "вопрос если не уверена (или null)",
   "action": {"type": "add_task|...", "title": "...", "deadline": "YYYY-MM-DD|null", "reminder": "YYYY-MM-DDTHH:MM|null", "label": "название группы|null", "items": "A|B|C|null", "period": "today|tomorrow|...", "tasks": [{"title":"...","deadline":"YYYY-MM-DD|null","label":"...|null"}]} или null
@@ -2405,6 +2416,12 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - ВАЖНО: "через N минут" → прибавь N минут к текущему времени из контекста [Сейчас у садовника]. "через N часов" → прибавь N часов. Результат в ISO формате YYYY-MM-DDTHH:MM
 - "покажи напоминания", "мои напоминания" → show_reminders, 0.95
 - "удали напоминание X" → delete_reminder, action.title=X, 0.95
+
+- "потратил X на Y", "заплатил X за Y", "купил Y за X" → add_budget_entry, action.amount=X, action.type="expense", action.note=Y, 0.9
+  Пример: "потратил 500 на такси" → add_budget_entry, action.amount=500, action.type="expense", action.note="такси"
+- "получил X", "заработал X", "пришла зарплата X", "пришли деньги X" → add_budget_entry, action.amount=X, action.type="income", action.note=источник или пусто, 0.9
+  Пример: "получил зарплату 50000" → add_budget_entry, action.amount=50000, action.type="income", action.note="зарплата"
+- "покажи бюджет", "какой у меня баланс", "сколько денег осталось", "мои траты за месяц", "отчёт по бюджету", "сколько потратил в этом месяце" → show_budget, 0.95
 
 - "закрой задачи X и Y", "закрой обе" → complete_task, action.titles=["X","Y"], 0.95
 - "закрой все задачи на сегодня" → complete_task, action.period=today, 0.95
@@ -7835,13 +7852,13 @@ def _format_budget_header(user_id: str) -> str:
     balance = store_get_balance(user_id)
     entries = store_get_budget_entries(user_id)
     recent = sorted(entries, key=lambda e: e.get("date", ""), reverse=True)[:5]
-    lines = [f"💰 <b>Бюджет</b>", f"Баланс: {balance} ₽", ""]
+    lines = [f"💰 <b>Бюджет</b>", f"Баланс: {_format_money(balance)}", ""]
     if recent:
         lines.append("Последние операции:")
         for e in recent:
             meta = CATEGORY_META.get(e.get("category", "other"), CATEGORY_META["other"])
             sign = "+" if e.get("type") == "income" else "-"
-            entry_line = f"{sign}{e.get('amount', 0)} ₽ · {meta['emoji']} {meta['name_ru']}"
+            entry_line = f"{sign}{_format_money(e.get('amount', 0))} · {meta['emoji']} {meta['name_ru']}"
             if e.get("note"):
                 entry_line += f" · {e['note']}"
             lines.append(entry_line)
@@ -7868,16 +7885,16 @@ def _budget_month_report(user_id: str) -> str:
     top3 = sorted(by_category.items(), key=lambda x: -x[1])[:3]
     lines = [
         f"📊 <b>Отчёт за {current_month}</b>",
-        f"Доходы: +{income} ₽",
-        f"Расходы: -{expense} ₽",
-        f"Баланс месяца: {income - expense} ₽",
+        f"Доходы: +{_format_money(income)}",
+        f"Расходы: -{_format_money(expense)}",
+        f"Баланс месяца: {_format_money(income - expense)}",
     ]
     if top3:
         lines.append("")
         lines.append("Топ категорий трат:")
         for cat, amt in top3:
             meta = CATEGORY_META.get(cat, CATEGORY_META["other"])
-            lines.append(f"{meta['emoji']} {meta['name_ru']}: {amt} ₽")
+            lines.append(f"{meta['emoji']} {meta['name_ru']}: {_format_money(amt)}")
     return "\n".join(lines)
 
 
@@ -7950,7 +7967,7 @@ async def budget_text_input(message: Message, state: FSMContext):
     meta = CATEGORY_META.get(category, CATEGORY_META["other"])
     sign = "+" if entry_type == "income" else "-"
     await message.answer(
-        f"✅ {sign}{amount:g} ₽ · {meta['emoji']} {meta['name_ru']} → баланс: {balance} ₽",
+        f"✅ {sign}{_format_money(amount)} · {meta['emoji']} {meta['name_ru']} → баланс: {_format_money(balance)}",
         reply_markup=get_budget_mgmt_inline()
     )
 
@@ -11379,6 +11396,37 @@ async def free_conversation(message: Message, state: FSMContext):
                                               + _reminder_list_text(reminders))
                             else:
                                 reply_text = f"🌀 Напоминание «{target_r}» не найдено."
+
+                        elif intent == "add_budget_entry":
+                            _bg_action = parsed_check.get("action") or {}
+                            _bg_amount = _bg_action.get("amount")
+                            _bg_type   = (_bg_action.get("type") or "expense").lower().strip()
+                            _bg_note   = (_bg_action.get("note") or "").strip()
+                            try:
+                                _bg_amount = float(_bg_amount)
+                            except (TypeError, ValueError):
+                                _bg_amount = None
+                            if not _bg_amount or _bg_amount <= 0:
+                                reply_text = "🌀 Не понял сумму, уточни: «потратил 500 на такси»"
+                            else:
+                                if _bg_type not in ("income", "expense"):
+                                    _bg_type = "expense"
+                                _bg_category = _classify_budget_category(_bg_note)
+                                _bg_entry = await _create_budget_entry_atomic(
+                                    user_id, _bg_amount, _bg_type, category=_bg_category, note=_bg_note
+                                )
+                                if _bg_entry:
+                                    _bg_balance = store_get_balance(user_id)
+                                    _bg_meta = CATEGORY_META.get(_bg_category, CATEGORY_META["other"])
+                                    _bg_sign = "+" if _bg_type == "income" else "-"
+                                    reply_text = (f"✅ {_bg_sign}{_format_money(_bg_amount)} · "
+                                                  f"{_bg_meta['emoji']} {_bg_meta['name_ru']} → "
+                                                  f"баланс: {_format_money(_bg_balance)}")
+                                else:
+                                    reply_text = "🌀 Не получилось сохранить операцию."
+
+                        elif intent == "show_budget":
+                            reply_text = _budget_month_report(user_id)
 
                         elif intent == "move_task":
                             _mt_act        = parsed_check.get("action") or {}
