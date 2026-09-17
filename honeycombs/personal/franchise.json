@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.7.0",
+    "version": "v2.8.0",
     "created": "2026-08-14",
     "updated": "2026-09-17",
-    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0."
+    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0. v2.8.0: синхронизация taskboard с Notion. 5 задач → done (K-007, K-009, K-011, K-014, K-026). Удалена K-017 (Закрытие точек)."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -223,9 +223,9 @@
   },
   "current_status": {
     "phase": "phase_0",
-    "progress": 20,
+    "progress": 30,
     "date": "2026-09-17",
-    "last_action": "Создан воркспейс Notion Куртош: главная + Taskboard + подстранички. Планёрка с командой проведена. 4 операционные задачи добавлены.",
+    "last_action": "Синхронизация taskboard с Notion: 5 задач закрыто, K-017 удалена. Taskboard v1.4.0.",
     "next_action": "Заполнить Taskboard в Notion задачами. Собрать документацию. Перейти к ЦУ и фото-чекапам.",
     "blockers": [],
     "notes": [
@@ -238,7 +238,7 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. Мэтчится с задачами бота. Делится на стратегические (phase_*) и тактические (day-to-day) единицы.",
-    "version": "v1.3.0",
+    "version": "v1.4.0",
     "created": "2026-09-14",
     "updated": "2026-09-17",
     "legend": {
@@ -404,7 +404,7 @@
         "title": "Точная дата входа",
         "description": "Зафиксировать точную дату входа в должность. Выяснить формальные условия старта.",
         "priority": "critical",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-09-14",
@@ -412,8 +412,8 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -448,7 +448,7 @@
         "title": "Важные контакты",
         "description": "Собрать важные контакты: поставщики, персонал, сервисы.",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-09-17",
@@ -458,8 +458,8 @@
           "K-018"
         ],
         "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -494,7 +494,7 @@
         "title": "День генуборки",
         "description": "Выбрать фиксированный день недели для генуборки.",
         "priority": "medium",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-09-16",
@@ -504,8 +504,8 @@
           "K-012"
         ],
         "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -562,7 +562,7 @@
         "title": "Операционка: поломки, экстренные",
         "description": "Неделя 1: знакомство с операционкой. Поломки, экстренные ситуации.",
         "priority": "critical",
-        "status": "in_progress",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": null,
@@ -570,8 +570,8 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -611,27 +611,6 @@
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null
-        }
-      },
-      {
-        "id": "K-017",
-        "title": "Закрытие точек (Центр/Нишка)",
-        "description": "Аудит процесса закрытия Центра и Нишки. Проверить стандарты.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-20",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
@@ -822,7 +801,7 @@
         "title": "Таскборд",
         "description": "Довести таскборд до финала — заполнение, проверка видов.",
         "priority": "critical",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": null,
@@ -833,7 +812,7 @@
         ],
         "created": "2026-09-17",
         "updated": "2026-09-17",
-        "completed": null,
+        "completed": "2026-09-17",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -843,15 +822,15 @@
       }
     ],
     "counters": {
-      "total": 26,
+      "total": 25,
       "by_status": {
-        "done": 5,
-        "todo": 19,
-        "in_progress": 2
+        "done": 10,
+        "todo": 14,
+        "in_progress": 1
       },
       "by_priority": {
-        "critical": 9,
-        "high": 12,
+        "critical": 10,
+        "high": 14,
         "medium": 1
       },
       "by_phase": {
@@ -952,6 +931,10 @@
     {
       "date": "2026-09-17",
       "event": "v2.7.0: +4 операционные задачи (K-023..K-026). K-001/K-002/K-003 → done. taskboard v1.3.0. progress 20%."
+    },
+    {
+      "date": "2026-09-17",
+      "event": "v2.8.0: sync с Notion. Done: K-007, K-009, K-011, K-014, K-026. Удалена K-017. taskboard v1.4.0. progress 30%."
     }
   ],
   "team_roster": {
