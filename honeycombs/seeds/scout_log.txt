@@ -7010,3 +7010,56 @@
 [2026-09-17 07:01:00] [INFO]   Total duplicates: 5
 [2026-09-17 07:01:00] [INFO]   Total removed (old): 0
 [2026-09-17 07:01:00] [INFO] ============================================================
+[2026-09-17 14:07:39] [INFO] ============================================================
+[2026-09-17 14:07:39] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-17 14:07:39] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-17 14:07:39] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-17 14:07:40] [INFO]   → Found 15 raw items, 0 recent
+[2026-09-17 14:07:40] [INFO]   → Filtered to 0 relevant items
+[2026-09-17 14:07:40] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-09-17 14:07:40] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-17 14:07:40] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-17 14:07:40] [INFO]   → Found 15 raw items, 0 recent
+[2026-09-17 14:07:40] [INFO]   → Filtered to 0 relevant items
+[2026-09-17 14:07:40] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-09-17 14:07:40] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-17 14:07:40] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-17 14:07:40] [INFO]   → Found 15 raw items, 1 recent
+[2026-09-17 14:07:40] [INFO]   → Filtered to 1 relevant items
+[2026-09-17 14:07:40] [INFO]   ⏭️ Duplicate: Training a 4B model to produce 81% faster query pl...
+[2026-09-17 14:07:40] [INFO]   📊 Hacker News: saved 0, duplicates 1
+[2026-09-17 14:07:40] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-17 14:07:40] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-17 14:07:41] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-17 14:07:41] [INFO]   → Filtered to 5 relevant items
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-17 14:07:41] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-17 14:07:41] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-17 14:07:41] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-17 14:07:41] [INFO]   → Found 15 raw items, 8 recent
+[2026-09-17 14:07:41] [INFO]   → Filtered to 5 relevant items
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: Al Gore says the real AI risk isn’t data centers...
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: Anthropic and OpenAI want to embed safety evaluato...
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: After accusations of selling ‘perv glasses,’ Meta ...
+[2026-09-17 14:07:41] [INFO]   ⏭️ Duplicate: AI labs want in-house auditors — but maybe they sh...
+[2026-09-17 14:07:42] [INFO]   ⏭️ Duplicate: Your AI agents can now control your Google Home de...
+[2026-09-17 14:07:42] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-09-17 14:07:42] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-17)...
+[2026-09-17 14:07:42] [INFO]   ✅ No old seeds to remove
+[2026-09-17 14:07:42] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-17
+[2026-09-17 14:07:42] [INFO] 
+============================================================
+[2026-09-17 14:07:42] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-17 14:07:42] [INFO]   Total saved: 0
+[2026-09-17 14:07:42] [INFO]   Total duplicates: 11
+[2026-09-17 14:07:42] [INFO]   Total removed (old): 0
+[2026-09-17 14:07:42] [INFO] ============================================================
