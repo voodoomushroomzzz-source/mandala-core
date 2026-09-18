@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260918-070058-195",
+  "title": "4D Radar Perception Algorithms for Autonomous Driving: A Review",
+  "url": "https://arxiv.org/abs/2609.19216",
+  "description": "arXiv:2609.19216v1 Announce Type: new \nAbstract: Research on 4D millimeter-wave radar perception algorithms has flourished in recent years, extending from signal processing and object detection to semantic segmentation, motion estimation, occupancy prediction, and dynamic scene reconstruction. This review organizes the field according to the evolution of perception tasks and algorithms. It first introduces radar fundamentals, data representations, and quality-enhancement methods, and then review",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-18T07:00:58.262148",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

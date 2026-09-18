@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260918-070057-189",
+  "title": "Position: It is Time to Virtualize Foundation Models with a Self-evolving Operating System Layer",
+  "url": "https://arxiv.org/abs/2609.19203",
+  "description": "arXiv:2609.19203v1 Announce Type: new \nAbstract: AI applications have shifted from single, monolithic foundation models (FM) to compound agentic systems. Yet today's stacks remain fragmented: even as protocols (e.g., MCP, A2A) ease tool/agent connectivity, each framework embeds an implicit runtime for state, memory, budgets, and guardrails, making behavior non-portable and governance brittle. It mirrors computing before operating systems, when every program re-implemented basic services. This po",
+  "source": "arXiv AI",
+  "collected_at": "2026-09-18T07:00:57.332491",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

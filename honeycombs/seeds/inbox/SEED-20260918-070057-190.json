@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260918-070057-190",
+  "title": "What Do Current Systematic Generalization Tasks Miss? A Reasoning-Centered Analysis",
+  "url": "https://arxiv.org/abs/2609.19212",
+  "description": "arXiv:2609.19212v1 Announce Type: new \nAbstract: Systematic generalization, the ability to solve novel problems by recombining known atomic elements, is central to human intelligence but difficult to study rigorously under controlled settings. Existing studies therefore rely on simplifications such as approximately linear action composition, productivity-based tests, and action-explicit goals, which make systematic generalization easier to study but omit some essential aspects of this capability",
+  "source": "arXiv AI",
+  "collected_at": "2026-09-18T07:00:57.464785",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
