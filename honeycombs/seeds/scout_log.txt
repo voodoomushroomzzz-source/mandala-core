@@ -7122,3 +7122,63 @@
 [2026-09-18 07:00:59] [INFO]   Total duplicates: 5
 [2026-09-18 07:00:59] [INFO]   Total removed (old): 0
 [2026-09-18 07:00:59] [INFO] ============================================================
+[2026-09-18 13:24:48] [INFO] ============================================================
+[2026-09-18 13:24:48] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-18 13:24:48] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-18 13:24:48] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-18 13:24:48] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-18 13:24:48] [INFO]   → Filtered to 5 relevant items
+[2026-09-18 13:24:48] [INFO]   ⏭️ Duplicate: Regularized Emphatic Temporal-Difference Learning:...
+[2026-09-18 13:24:48] [INFO]   ⏭️ Duplicate: BioPhys-Bridge: A Benchmark for Interdisciplinary ...
+[2026-09-18 13:24:48] [INFO]   ⏭️ Duplicate: What Do We Expect from LLMs? Mapping the Design of...
+[2026-09-18 13:24:48] [INFO]   ⏭️ Duplicate: Position: It is Time to Virtualize Foundation Mode...
+[2026-09-18 13:24:48] [INFO]   ⏭️ Duplicate: What Do Current Systematic Generalization Tasks Mi...
+[2026-09-18 13:24:48] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-09-18 13:24:48] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-18 13:24:48] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-18 13:24:49] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-18 13:24:49] [INFO]   → Filtered to 5 relevant items
+[2026-09-18 13:24:49] [INFO]   ⏭️ Duplicate: AthenaZero: A low-inertia, bimanual robot for dyna...
+[2026-09-18 13:24:49] [INFO]   ⏭️ Duplicate: DITTO: Dexterous Interface for Transparent TeleOpe...
+[2026-09-18 13:24:49] [INFO]   ⏭️ Duplicate: ULOHA: An Underwater Bimanual Robot System for Rob...
+[2026-09-18 13:24:49] [INFO]   ⏭️ Duplicate: REACT: A Fully Spiking State-Space Model for Real-...
+[2026-09-18 13:24:49] [INFO]   ⏭️ Duplicate: 4D Radar Perception Algorithms for Autonomous Driv...
+[2026-09-18 13:24:49] [INFO]   📊 arXiv Robotics: saved 0, duplicates 5
+[2026-09-18 13:24:49] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-18 13:24:49] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-18 13:24:49] [INFO]   → Found 15 raw items, 9 recent
+[2026-09-18 13:24:49] [INFO]   → Filtered to 3 relevant items
+[2026-09-18 13:24:49] [INFO]   ✅ Saved: SEED-20260918-132449-198.json
+[2026-09-18 13:24:49] [INFO]   ✅ Saved: SEED-20260918-132449-199.json
+[2026-09-18 13:24:49] [INFO]   ✅ Saved: SEED-20260918-132449-200.json
+[2026-09-18 13:24:49] [INFO]   📊 Hacker News: saved 3, duplicates 0
+[2026-09-18 13:24:49] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-18 13:24:49] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-18 13:24:50] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-18 13:24:50] [INFO]   → Filtered to 5 relevant items
+[2026-09-18 13:24:50] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-18 13:24:50] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-18 13:24:50] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-18 13:24:50] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-18 13:24:50] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-18 13:24:50] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-18 13:24:50] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-18 13:24:50] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-18 13:24:50] [INFO]   → Found 15 raw items, 0 recent
+[2026-09-18 13:24:50] [INFO]   → Filtered to 0 relevant items
+[2026-09-18 13:24:50] [INFO]   📊 TechCrunch AI: saved 0, duplicates 0
+[2026-09-18 13:24:50] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-18)...
+[2026-09-18 13:24:50] [INFO]   ✅ No old seeds to remove
+[2026-09-18 13:24:50] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-18
+[2026-09-18 13:24:50] [INFO] 
+============================================================
+[2026-09-18 13:24:50] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-18 13:24:50] [INFO]   Total saved: 3
+[2026-09-18 13:24:50] [INFO]   Total duplicates: 15
+[2026-09-18 13:24:50] [INFO]   Total removed (old): 0
+[2026-09-18 13:24:50] [INFO] ============================================================
