@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.11.0",
+    "version": "v2.12.0",
     "created": "2026-08-14",
-    "updated": "2026-09-17",
-    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0. v2.8.0: синхронизация taskboard с Notion. 5 задач → done (K-007, K-009, K-011, K-014, K-026). Удалена K-017 (Закрытие точек). v2.9.0: 4 столбца (strategic/center/nizhka/common), распределение задач, правило синхронности Notion ↔ franchise. v2.10.0: Notion Taskboard синхронизирован (25 задач, 4 столбца, поле Статус, callout синхронности). 1:1 совпадение. v2.11.0: добавлен workspace_mirror — зеркало структуры Notion-воркспейса (8 разделов со статусами active/partial/empty, data_gaps, data_priority)."
+    "updated": "2026-09-18",
+    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0. v2.8.0: синхронизация taskboard с Notion. 5 задач → done (K-007, K-009, K-011, K-014, K-026). Удалена K-017 (Закрытие точек). v2.9.0: 4 столбца (strategic/center/nizhka/common), распределение задач, правило синхронности Notion ↔ franchise. v2.10.0: Notion Taskboard синхронизирован (25 задач, 4 столбца, поле Статус, callout синхронности). 1:1 совпадение. v2.11.0: добавлен workspace_mirror — зеркало структуры Notion-воркспейса (8 разделов со статусами active/partial/empty, data_gaps, data_priority). v2.12.0: +3 задачи (K-027 Расчёт ЗП, K-028 Сессионные, K-029 Зима/штатка). Taskboard v1.6.0, total 28."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -238,9 +238,9 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. Мэтчится с задачами бота. Делится на стратегические (phase_*) и тактические (day-to-day) единицы.",
-    "version": "v1.5.0",
+    "version": "v1.6.0",
     "created": "2026-09-14",
-    "updated": "2026-09-17",
+    "updated": "2026-09-18",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -840,13 +840,79 @@
           "notion_page_id": null,
           "column": "Стратегические"
         }
+      },
+      {
+        "id": "K-027",
+        "title": "Расчёт ЗП авто по сменам",
+        "description": "Сделать автоматический расчёт зарплаты по сменам. Предварительный расчёт показывать сотрудникам до финального начисления.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-18",
+        "updated": "2026-09-18",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-028",
+        "title": "Сессионные — договорённости",
+        "description": "Договориться с сессионными ребятами (Денис, Маша, Оля, Аня) о сроке работы. Правило: предупреждать за месяц.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-18",
+        "updated": "2026-09-18",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
+      },
+      {
+        "id": "K-029",
+        "title": "Подготовка к зиме: штатка",
+        "description": "Рассчитать штатку на зиму. Прошлой зимой работали 1.5 человека в Центре. Если поставить 2 — может быть перегруз по финансам. Найти баланс.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-18",
+        "updated": "2026-09-18",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
       }
     ],
     "counters": {
-      "total": 25,
+      "total": 28,
       "by_status": {
         "done": 10,
-        "todo": 14,
+        "todo": 17,
         "in_progress": 1
       },
       "by_priority": {
@@ -869,7 +935,7 @@
     },
     "sync_rule": "CRITICAL: Notion и franchise.json должны быть всегда синхронны. При любом изменении в Notion — обновить franchise.json. И наоборот. Расхождения недопустимы.",
     "notion_sync": {
-      "last_sync": "2026-09-17",
+      "last_sync": "2026-09-18",
       "status": "synced",
       "notion_workspace": "Куртош & Кофе",
       "notion_database": "📋 Куртош — Taskboard",
@@ -877,10 +943,10 @@
       "notion_ai_status_property": "Статус (todo/in_progress/done)",
       "note": "Notion ↔ franchise.json синхронизированы. При любом изменении — обновлять обе стороны.",
       "sync_stats": {
-        "total_tasks": 25,
+        "total_tasks": 28,
         "done": 10,
         "in_progress": 1,
-        "todo": 14
+        "todo": 17
       }
     }
   },
@@ -990,6 +1056,10 @@
     {
       "date": "2026-09-17",
       "event": "v2.11.0: добавлен workspace_mirror — зеркало Notion-воркспейса. 8 разделов: taskboard (active), employees (partial), knowledge_base, metrics, menu_tech_cards, suppliers, accesses_accounts, contacts. Data-priority список для поэтапного заполнения."
+    },
+    {
+      "date": "2026-09-18",
+      "event": "v2.12.0: +3 задачи (K-027 Расчёт ЗП авто, K-028 Сессионные — договорённости, K-029 Подготовка к зиме: штатка). Taskboard v1.6.0. Всего 28 задач."
     }
   ],
   "team_roster": {
