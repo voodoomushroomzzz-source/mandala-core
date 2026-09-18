@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-16 12:06:58 ──
+# ── BUILT by build.py ── 2026-09-18 09:49:07 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -11511,8 +11511,76 @@ async def free_conversation(message: Message, state: FSMContext):
                             value       = (action_data.get("value") or "").strip()
                             tasks       = store_get_tasks(user_id)
 
-                            # ── BULK edit по списку или группе ────────────────
-                            if (_et_titles or _et_label) and field in ("deadline","дедлайн","срок","дата") and value:
+                            # ── BATCH + BULK edit ────────────────
+                            # ── BATCH edit: несколько строк, у каждой свой дедлайн ──
+                            # BUG-EDIT-TASK-BATCH-001: classifier возвращает ОДИН
+                            # value на весь action — multi-line с разными
+                            # дедлайнами парсим из text сами, fail-closed.
+                            _et_batch_handled = False
+                            if field in ("deadline", "дедлайн", "срок", "дата"):
+                                _et_lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
+                                if len(_et_lines) > 1:
+                                    import re as _re_batch
+                                    _et_pair_re = _re_batch.compile(
+                                        r'^(?P<title>.+?)\s*(?:\u2192|->|\u2014|-|:|\u043d\u0430)\s*'
+                                        r'(?P<date>\d{4}-\d{2}-\d{2}|\d{1,2}\.\d{1,2}(?:\.\d{2,4})?|\u0441\u0435\u0433\u043e\u0434\u043d\u044f|\u0437\u0430\u0432\u0442\u0440\u0430)\s*$',
+                                        _re_batch.IGNORECASE
+                                    )
+                                    def _et_parse_date(_v):
+                                        _v = _v.lower().strip()
+                                        if _v in ("сегодня", "today"):
+                                            return _today()
+                                        if _v in ("завтра", "tomorrow"):
+                                            from datetime import timedelta as _td_bt
+                                            return (datetime.now() + _td_bt(1)).strftime("%Y-%m-%d")
+                                        if _re_batch.match(r"^\d{4}-\d{2}-\d{2}$", _v):
+                                            return _v
+                                        _m_bt = _re_batch.match(r"(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?", _v)
+                                        if _m_bt:
+                                            _dd_bt = _m_bt.group(1).zfill(2)
+                                            _mm_bt = _m_bt.group(2).zfill(2)
+                                            _yy_bt = _m_bt.group(3) or str(datetime.now().year)
+                                            _yy_bt = "20" + _yy_bt if len(_yy_bt) == 2 else _yy_bt
+                                            return f"{_yy_bt}-{_mm_bt}-{_dd_bt}"
+                                        return None
+                                    _et_pairs = []
+                                    _et_parse_ok = True
+                                    for _et_ln in _et_lines:
+                                        _et_pm = _et_pair_re.match(_et_ln)
+                                        if not _et_pm:
+                                            _et_parse_ok = False
+                                            break
+                                        _et_pairs.append((_et_pm.group("title").strip(), _et_pm.group("date").strip()))
+                                    if _et_parse_ok and len(_et_pairs) > 1:
+                                        _et_resolved = []
+                                        _et_unmatched = []
+                                        for _et_title_raw, _et_date_raw in _et_pairs:
+                                            _et_found = _fuzzy_match_tasks(_et_title_raw, tasks)
+                                            _et_dl = _et_parse_date(_et_date_raw)
+                                            if _et_found and _et_dl:
+                                                _et_resolved.append((_et_found[0], _et_dl))
+                                            else:
+                                                _et_unmatched.append(_et_title_raw)
+                                        if _et_unmatched or len(_et_resolved) != len(_et_pairs):
+                                            _et_miss = ", ".join(_et_unmatched) if _et_unmatched else "формат не распознан"
+                                            reply_text = (
+                                                f"🌀 Не смогла однозначно разобрать несколько дедлайнов "
+                                                f"в одном сообщении (не нашла/не поняла: {_et_miss}). "
+                                                f"Ничего не меняю — отправь, пожалуйста, по одной задаче за сообщение."
+                                            )
+                                        else:
+                                            for _et_t, _et_dl in _et_resolved:
+                                                _et_t["deadline"] = _et_dl
+                                                _et_t["updated"] = _today()
+                                            store_set_tasks(user_id, tasks)
+                                            _fire_sync()
+                                            _et_summary = ", ".join(f"{t['title']} \u2192 {dl}" for t, dl in _et_resolved)
+                                            reply_text = f"✅ Обновлено {len(_et_resolved)} задач: {_et_summary}"
+                                        _et_batch_handled = True
+
+                            if _et_batch_handled:
+                                pass
+                            elif (_et_titles or _et_label) and field in ("deadline","дедлайн","срок","дата") and value:
                                 if _et_titles:
                                     _et_m = []
                                     for _etn in _et_titles:
