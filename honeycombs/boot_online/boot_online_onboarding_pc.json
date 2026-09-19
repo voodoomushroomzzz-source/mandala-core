@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.152",
+    "version": "v1.7.153",
     "created": "2026-05-11",
     "updated": "2026-09-19",
     "layer": 1,
@@ -2807,7 +2807,7 @@
       "identity": {
         "module_id": "FRUITS-REGISTRY-001",
         "name": "Fruits — Product Registry",
-        "version": "v2.7.0",
+        "version": "v2.8.0",
         "created": "2026-04-17",
         "updated": "2026-09-19",
         "layer": 2,
@@ -2831,8 +2831,8 @@
       "fruits": [
         {
           "id": "fruit-gentle-companion-001",
-          "name": "Gentle Companion",
-          "short_description": "A pocket AI companion for tasks, roadmaps, achievements, and warm dialogue — the entry point to Mandala for external gardeners.",
+          "name": "Architect Bot — Gentle Companion",
+          "short_description": "A closed architectural module of Mandala Symbiosis — personal bot for the Architect. Публичный Gentle Companion для широкого круга будет выделен позже.",
           "status": "active",
           "version": "v7.39.81",
           "layer": "Sandbox (Layer 1)",
@@ -2888,6 +2888,17 @@
           "layer": "Ecosystem (Layer 4)",
           "path": "honeycombs/works/W-R-ECO-001__autonomous_ecosystem.json",
           "icon": "🌿"
+        },
+        {
+          "id": "fruit-gentle-companion-public-001",
+          "name": "Gentle Companion (Public)",
+          "short_description": "Public AI companion for the wide audience — будет выделен из Architect Bot после завершения его полной разработки. Урезанный функционал для широкого круга.",
+          "status": "planned",
+          "version": "v0.0.0",
+          "layer": "Sandbox (Layer 1) — Public",
+          "path": null,
+          "icon": "🌱",
+          "note": "Not yet extracted. Future product."
         }
       ],
       "bot_chat_context": {
@@ -2898,7 +2909,7 @@
           "type": "chat_context_instruction",
           "trigger_phrase": "Этот чат — для работы с ботом"
         },
-        "when_triggered": "Садовник говорит 'этот чат для работы с ботом' — SR немедленно загружает ссылки ниже и принимает роль стратегического менеджера проекта Gentle Companion.",
+        "when_triggered": "Садовник говорит 'этот чат для работы с ботом' — SR немедленно загружает ссылки ниже и принимает роль стратегического менеджера проекта Architect Bot — Gentle Companion.",
         "mandatory_load": [
           "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/fruits/gentle_companion/index.json",
           "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json"
@@ -2939,10 +2950,10 @@
         }
       },
       "metrics": {
-        "total_fruits": 6,
+        "total_fruits": 7,
         "active": 3,
         "in_development": 2,
-        "planning": 1
+        "planning": 2
       },
       "navigation": {
         "parent_map": "honeycombs/core_map/index.json",
