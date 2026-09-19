@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "FRUIT-GENTLE-COMPANION-001",
     "name": "Gentle Companion — Modular Architecture",
-    "version": "v2.3.0",
+    "version": "v2.4.0",
     "created": "2026-05-25",
-    "updated": "2026-09-16",
+    "updated": "2026-09-19",
     "layer": 2,
     "type": "fruits_index",
-    "description": "Modular architecture index for Gentle Companion bot. 15 modules, 7 migration phases complete. Production on Hetzner VPS. v2.3.0: Budget module (handlers/budget.py) added — 5 patches deployed; BUG-20260907 fixed in build.py BUILD_ORDER.",
+    "description": "Modular architecture index for Gentle Companion bot. 15 modules, 7 migration phases complete. Production on Hetzner VPS. v2.3.0: Budget module (handlers/budget.py) added — 5 patches deployed; BUG-20260907 fixed in build.py BUILD_ORDER. Also known as Architect Bot — closed architectural module. Public Gentle Companion will be extracted in future.",
     "status": "active",
     "priority": "critical",
     "tags": [
@@ -25,7 +25,8 @@
     "how_to_use": "Read this index first to understand module structure. Then read individual module files for details.",
     "gardener_approval_required": false,
     "change_requires": "gardener_approval",
-    "updated": "2026-09-16"
+    "updated": "2026-09-19",
+    "also_known_as": "Architect Bot"
   },
   "honeycomb": "fruits/gentle_companion",
   "version": "2.1.0",
