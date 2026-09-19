@@ -1732,21 +1732,37 @@ async def free_conversation(message: Message, state: FSMContext):
                             value       = (action_data.get("value") or "").strip()
                             tasks       = store_get_tasks(user_id)
 
-                            # ── BATCH + BULK edit ────────────────
-                            # ── BATCH edit: несколько строк, у каждой свой дедлайн ──
-                            # BUG-EDIT-TASK-BATCH-001: classifier возвращает ОДИН
-                            # value на весь action — multi-line с разными
-                            # дедлайнами парсим из text сами, fail-closed.
+                            # ── BATCH edit v2: несколько строк, у каждой свой дедлайн ──
+                            # BUG-EDIT-TASK-BATCH-001 (v2 fix): classifier для этого
+                            # multi-line ввода часто не даёт надёжный field/value вообще (бывает
+                            # пустой field=""). v1 гейтился на field == deadline и пропускал
+                            # этот случай насквозь. v2: пробуем распознать батч прямо
+                            # из сырого text по intent=="edit_task" + multi-line, независимо от field/value.
+                            # Два формата на строку: (1) title -> date / title: date /
+                            # title — date, (2) "… задачи «title» … на date" (цитаты в ёлочках/кавычках).
+                            # Fail-closed: либо все строки однозначно разобраны, либо ничего не меняем.
                             _et_batch_handled = False
-                            if field in ("deadline", "дедлайн", "срок", "дата"):
+                            if intent == "edit_task":
                                 _et_lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
                                 if len(_et_lines) > 1:
                                     import re as _re_batch
-                                    _et_pair_re = _re_batch.compile(
-                                        r'^(?P<title>.+?)\s*(?:\u2192|->|\u2014|-|:|\u043d\u0430)\s*'
-                                        r'(?P<date>\d{4}-\d{2}-\d{2}|\d{1,2}\.\d{1,2}(?:\.\d{2,4})?|\u0441\u0435\u0433\u043e\u0434\u043d\u044f|\u0437\u0430\u0432\u0442\u0440\u0430)\s*$',
+                                    _et_date_pat = r'(\d{4}-\d{2}-\d{2}|\d{1,2}\.\d{1,2}(?:\.\d{2,4})?|\u0441\u0435\u0433\u043e\u0434\u043d\u044f|\u0437\u0430\u0432\u0442\u0440\u0430)'
+                                    _et_pat_quoted = _re_batch.compile(
+                                        r'[\u00ab"](?P<title>[^\u00bb"]+)[\u00bb"].*?' + _et_date_pat + r'\s*\.?\s*$',
                                         _re_batch.IGNORECASE
                                     )
+                                    _et_pat_short = _re_batch.compile(
+                                        r'^(?P<title>.+?)\s*(?:\u2192|->|\u2014|-|:|\b\u043d\u0430\b)\s*' + _et_date_pat + r'\s*$',
+                                        _re_batch.IGNORECASE
+                                    )
+                                    def _et_parse_line(_ln):
+                                        _pm = _et_pat_quoted.search(_ln)
+                                        if _pm:
+                                            return _pm.group("title").strip(), _pm.group(2).strip()
+                                        _pm = _et_pat_short.match(_ln)
+                                        if _pm:
+                                            return _pm.group("title").strip(), _pm.group(2).strip()
+                                        return None
                                     def _et_parse_date(_v):
                                         _v = _v.lower().strip()
                                         if _v in ("сегодня", "today"):
@@ -1767,11 +1783,11 @@ async def free_conversation(message: Message, state: FSMContext):
                                     _et_pairs = []
                                     _et_parse_ok = True
                                     for _et_ln in _et_lines:
-                                        _et_pm = _et_pair_re.match(_et_ln)
-                                        if not _et_pm:
+                                        _et_r = _et_parse_line(_et_ln)
+                                        if not _et_r:
                                             _et_parse_ok = False
                                             break
-                                        _et_pairs.append((_et_pm.group("title").strip(), _et_pm.group("date").strip()))
+                                        _et_pairs.append(_et_r)
                                     if _et_parse_ok and len(_et_pairs) > 1:
                                         _et_resolved = []
                                         _et_unmatched = []
