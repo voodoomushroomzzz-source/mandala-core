@@ -189,6 +189,15 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
 - "перенеси дедлайн задач X и Y на Z" → edit_task, action.titles=["X","Y"], action.field="deadline", action.value=Z, 0.95
 - "перенеси дедлайн всех задач группы X на Z" → edit_task, action.label="X", action.field="deadline", action.value=Z, 0.95
+- НЕСКОЛЬКО edit_task-команд в одном сообщении, У КАЖДОЙ СВОЙ field/value (каждая строка/предложение — отдельная независимая правка) → edit_task, action.edits=[{"title":X,"field":Y,"value":Z}, ...], 0.95
+  ОТЛИЧИЕ от action.titles выше: titles — одно значение на ВСЕ задачи; edits — у каждой задачи СВОЁ значение.
+  Используй edits ТОЛЬКО если у разных задач РАЗНЫЕ field или РАЗНЫЕ value. Если значение одно на всех — используй titles (см. выше), не edits.
+  Пример: "Перенеси дедлайн задачи «X» на 25.09\nПеренеси дедлайн задачи «Y» на 26.09"
+  → edit_task, action.edits=[{"title":"X","field":"deadline","value":"25.09"},{"title":"Y","field":"deadline","value":"26.09"}]
+  Пример короткого формата: "X -> 25.09\nY -> 26.09"
+  → edit_task, action.edits=[{"title":"X","field":"deadline","value":"25.09"},{"title":"Y","field":"deadline","value":"26.09"}]
+  Пример смешанных полей: "Переименуй X в X2\nПоставь напоминание задаче Y в 15:00"
+  → edit_task, action.edits=[{"title":"X","field":"title","value":"X2"},{"title":"Y","field":"reminder","value":"15:00"}]
 - "добавь повторение в задачу X", "поставь повтор задаче X", "задача X каждый день", "задача X по будням" → edit_task, action.title="X", action.field="repeat", action.value="каждый день|по будням|по выходным|раз в неделю|пн ср пт", 0.9
   Примеры дней: "пн ср пт" / "понедельник среда пятница" / "вт чт" → action.value=перечисление дней как есть
   Примеры фраз: "добавь повторение в задачу сходить на тренировку. Понедельник, среда, пятница" → edit_task, action.title="сходить на тренировку", action.field="repeat", action.value="пн ср пт"
