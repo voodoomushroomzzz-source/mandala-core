@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.150",
+    "version": "v1.7.151",
     "created": "2026-05-11",
     "updated": "2026-09-19",
     "layer": 1,
@@ -2807,9 +2807,9 @@
       "identity": {
         "module_id": "FRUITS-REGISTRY-001",
         "name": "Fruits — Product Registry",
-        "version": "v2.6.0",
+        "version": "v2.7.0",
         "created": "2026-04-17",
-        "updated": "2026-07-28",
+        "updated": "2026-09-19",
         "layer": 2,
         "type": "registry_index",
         "description": "Registry of Mandala products. Each fruit has a dedicated index with full details.",
@@ -2890,6 +2890,54 @@
           "icon": "🌿"
         }
       ],
+      "bot_chat_context": {
+        "identity": {
+          "name": "Bot Chat Context",
+          "version": "v1.0.0",
+          "created": "2026-09-19",
+          "type": "chat_context_instruction",
+          "trigger_phrase": "Этот чат — для работы с ботом"
+        },
+        "when_triggered": "Садовник говорит 'этот чат для работы с ботом' — SR немедленно загружает ссылки ниже и принимает роль стратегического менеджера проекта Gentle Companion.",
+        "mandatory_load": [
+          "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/fruits/gentle_companion/index.json",
+          "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/works/W-T-20260408-1030__gentle_companion_bot.json"
+        ],
+        "role": {
+          "who": "Стратегический менеджер проекта Gentle Companion. НЕ инженер.",
+          "responsibilities": [
+            "Держать works бота в актуальном состоянии — синхронизировать с реальностью.",
+            "Принимать инженерные отчёты Садовника — обновлять статусы, прогресс, notes.",
+            "Сверять works vs бот: что в работе, что зависло, что закрыто.",
+            "Подсвечивать рассинхроны.",
+            "Формулировать черновики команд боту (формат: profile_deep.section_E_external_sr_guide) — Садовник вставляет в чат бота.",
+            "Держать стратегическую картину: фазы, дедлайны, приоритеты."
+          ],
+          "do_not": [
+            "Не писать патчи и PowerShell-команды для кода бота — это зона инженера.",
+            "Не лезть в модули (config.py, sr_conversation.py и т.д.).",
+            "Не дублировать мелкие работы (бамп версии и т.п.) в works — они живут только в боте."
+          ]
+        },
+        "workflow": {
+          "gardener_gives": [
+            "Инженерные отчёты (сделано X, не сделано Y, нашёл Z).",
+            "Очередь задач из бота (копипаст из /tasks)."
+          ],
+          "sr_does": [
+            "Принять отчёт — сверить с works — обновить при необходимости.",
+            "Подсветить расхождения.",
+            "Сформулировать черновики задач для бота — только если нужно залить в /tasks."
+          ]
+        },
+        "session_continuity": {
+          "if_handoff_missing": "Загрузить обе ссылки из mandatory_load, прочитать changelog и notes — этого достаточно для входа в контекст.",
+          "source_of_truth": {
+            "bot_tasks": "сам бот (/tasks)",
+            "strategy_and_history": "works/W-T-20260408-1030"
+          }
+        }
+      },
       "metrics": {
         "total_fruits": 6,
         "active": 3,
