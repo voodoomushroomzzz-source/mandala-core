@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-19 11:28:17 ──
+# ── BUILT by build.py ── 2026-09-19 11:47:19 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -2380,6 +2380,15 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - ВАЖНО: любое изменение даты/срока/дедлайна задачи — всегда edit_task с field=deadline, НИКОГДА не conversation
 - "перенеси дедлайн задач X и Y на Z" → edit_task, action.titles=["X","Y"], action.field="deadline", action.value=Z, 0.95
 - "перенеси дедлайн всех задач группы X на Z" → edit_task, action.label="X", action.field="deadline", action.value=Z, 0.95
+- НЕСКОЛЬКО edit_task-команд в одном сообщении, У КАЖДОЙ СВОЙ field/value (каждая строка/предложение — отдельная независимая правка) → edit_task, action.edits=[{"title":X,"field":Y,"value":Z}, ...], 0.95
+  ОТЛИЧИЕ от action.titles выше: titles — одно значение на ВСЕ задачи; edits — у каждой задачи СВОЁ значение.
+  Используй edits ТОЛЬКО если у разных задач РАЗНЫЕ field или РАЗНЫЕ value. Если значение одно на всех — используй titles (см. выше), не edits.
+  Пример: "Перенеси дедлайн задачи «X» на 25.09\nПеренеси дедлайн задачи «Y» на 26.09"
+  → edit_task, action.edits=[{"title":"X","field":"deadline","value":"25.09"},{"title":"Y","field":"deadline","value":"26.09"}]
+  Пример короткого формата: "X -> 25.09\nY -> 26.09"
+  → edit_task, action.edits=[{"title":"X","field":"deadline","value":"25.09"},{"title":"Y","field":"deadline","value":"26.09"}]
+  Пример смешанных полей: "Переименуй X в X2\nПоставь напоминание задаче Y в 15:00"
+  → edit_task, action.edits=[{"title":"X","field":"title","value":"X2"},{"title":"Y","field":"reminder","value":"15:00"}]
 - "добавь повторение в задачу X", "поставь повтор задаче X", "задача X каждый день", "задача X по будням" → edit_task, action.title="X", action.field="repeat", action.value="каждый день|по будням|по выходным|раз в неделю|пн ср пт", 0.9
   Примеры дней: "пн ср пт" / "понедельник среда пятница" / "вт чт" → action.value=перечисление дней как есть
   Примеры фраз: "добавь повторение в задачу сходить на тренировку. Понедельник, среда, пятница" → edit_task, action.title="сходить на тренировку", action.field="repeat", action.value="пн ср пт"
@@ -11510,8 +11519,83 @@ async def free_conversation(message: Message, state: FSMContext):
                             field       = (action_data.get("field") or "").lower().strip()
                             value       = (action_data.get("value") or "").strip()
                             tasks       = store_get_tasks(user_id)
+                            _et_edits   = action_data.get("edits") or []
 
-                            # ── BATCH edit v2: несколько строк, у каждой свой дедлайн ──
+                            # ── STRUCTURED EDITS (v3, primary path) ──
+                            # BUG-EDIT-TASK-BATCH-001 root cause (confirmed via journalctl):
+                            # classifier возвращал intent=none для multi-line сообщений с
+                            # разными field/value на разные задачи — в промпте не было
+                            # такого примера (есть только "один общий value на N титлов" для
+                            # titles=[...]). Фикс на уровне промпта (sr_prompts.py) добавил парный
+                            # к add_task.tasks=[...] паттерн: action.edits=[{title,field,value}, ...].
+                            # Этот блок — основной путь обработки batch-редактирования;
+                            # regex-парсер ниже (v2) остаётся safety-net на случай, если classifier
+                            # всё же вернёт плоский формат вместо edits. Fail-closed как и везде.
+                            _et_batch_handled = False
+                            if _et_edits and isinstance(_et_edits, list) and len(_et_edits) > 1:
+                                import re as _re_ed
+                                def _et_parse_date_ed(_v):
+                                    _v = (_v or "").lower().strip()
+                                    if _v in ("сегодня", "today"):
+                                        return _today()
+                                    if _v in ("завтра", "tomorrow"):
+                                        from datetime import timedelta as _td_ed
+                                        return (datetime.now() + _td_ed(1)).strftime("%Y-%m-%d")
+                                    if _re_ed.match(r"^\d{4}-\d{2}-\d{2}$", _v):
+                                        return _v
+                                    _m_ed = _re_ed.match(r"(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?", _v)
+                                    if _m_ed:
+                                        _dd_ed = _m_ed.group(1).zfill(2)
+                                        _mm_ed = _m_ed.group(2).zfill(2)
+                                        _yy_ed = _m_ed.group(3) or str(datetime.now().year)
+                                        _yy_ed = "20" + _yy_ed if len(_yy_ed) == 2 else _yy_ed
+                                        return f"{_yy_ed}-{_mm_ed}-{_dd_ed}"
+                                    return None
+                                _eted_resolved = []
+                                _eted_unmatched = []
+                                for _ed in _et_edits:
+                                    _ed_title = (_ed.get("title") or "").strip()
+                                    _ed_field = (_ed.get("field") or "").lower().strip()
+                                    _ed_value = (_ed.get("value") or "").strip()
+                                    _ed_found = _fuzzy_match_tasks(_ed_title, tasks) if _ed_title else []
+                                    if not (_ed_title and _ed_field and _ed_value and _ed_found):
+                                        _eted_unmatched.append(_ed_title or "?")
+                                        continue
+                                    _eted_resolved.append((_ed_found[0], _ed_field, _ed_value))
+                                if _eted_unmatched or len(_eted_resolved) != len(_et_edits):
+                                    _eted_miss = ", ".join(_eted_unmatched) if _eted_unmatched else "формат не распознан"
+                                    reply_text = (
+                                        f"🌀 Не смогла однозначно применить все правки "
+                                        f"({len(_eted_resolved)}/{len(_et_edits)} ок, проблема: {_eted_miss}). "
+                                        f"Ничего не меняю — отправь, пожалуйста, по одной задаче за сообщение."
+                                    )
+                                else:
+                                    _eted_applied = []
+                                    for _ed_t, _ed_field, _ed_value in _eted_resolved:
+                                        if _ed_field in ("deadline", "дедлайн", "срок", "дата"):
+                                            _dl_ed = _et_parse_date_ed(_ed_value)
+                                            if _dl_ed:
+                                                _ed_t["deadline"] = _dl_ed
+                                                _ed_t["updated"] = _today()
+                                                _eted_applied.append(f"{_ed_t['title']} \u2192 {_dl_ed}")
+                                        elif _ed_field in ("reminder", "напоминание", "напомни"):
+                                            _ed_t["reminder"] = _ed_value
+                                            _ed_t["updated"] = _today()
+                                            _eted_applied.append(f"{_ed_t['title']} 🔔 {_ed_value}")
+                                        elif _ed_field in ("title", "название"):
+                                            _eted_old_title = _ed_t["title"]
+                                            _ed_t["title"] = _ed_value
+                                            _ed_t["updated"] = _today()
+                                            _eted_applied.append(f"{_eted_old_title} \u2192 {_ed_value}")
+                                    if _eted_applied:
+                                        store_set_tasks(user_id, tasks)
+                                        _fire_sync()
+                                        reply_text = f"✅ Обновлено {len(_eted_applied)} задач: " + ", ".join(_eted_applied)
+                                    else:
+                                        reply_text = "🌀 Не смогла применить ни одной правки (неизвестное поле)."
+                                _et_batch_handled = True
+
+                            # ── BATCH edit v2 (safety-net): несколько строк, у каждой свой дедлайн ──
                             # BUG-EDIT-TASK-BATCH-001 (v2 fix): classifier для этого
                             # multi-line ввода часто не даёт надёжный field/value вообще (бывает
                             # пустой field=""). v1 гейтился на field == deadline и пропускал
@@ -11520,8 +11604,7 @@ async def free_conversation(message: Message, state: FSMContext):
                             # Два формата на строку: (1) title -> date / title: date /
                             # title — date, (2) "… задачи «title» … на date" (цитаты в ёлочках/кавычках).
                             # Fail-closed: либо все строки однозначно разобраны, либо ничего не меняем.
-                            _et_batch_handled = False
-                            if intent == "edit_task":
+                            if not _et_batch_handled and intent == "edit_task":
                                 _et_lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
                                 if len(_et_lines) > 1:
                                     import re as _re_batch
