@@ -1,11 +1,11 @@
 {
-  "date": "2026-09-19",
+  "date": "2026-09-20",
   "version": "7.39.23",
   "gardeners": {
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-09-19"
+      "synthesis_date": "2026-09-20"
     }
   },
   "issues": [
@@ -15,13 +15,6 @@
       "intent": "add_task",
       "count": 2,
       "context": "повторный add_task"
-    },
-    {
-      "user_id": "224736062",
-      "type": "repeated_request",
-      "intent": "add_achievement",
-      "count": 2,
-      "context": "повторный add_achievement"
     }
   ]
 }
