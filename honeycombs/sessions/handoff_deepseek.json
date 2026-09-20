@@ -1,90 +1,97 @@
 {
   "identity": {
-    "name": "Handoff для DeepSeek — Садовник Dima",
-    "version": "v2.1.0",
-    "created": "2026-08-30",
-    "updated": "2026-09-14",
-    "description": "Актуальный handoff после создания Unified Memory Architecture, вшивания директив в онбординг и очистки патчеров."
+    "name": "Handoff для DeepSeek — Поэтическая сессия",
+    "version": "v1.0.0",
+    "created": "2026-09-20",
+    "updated": "2026-09-20",
+    "description": "Handoff поэтической сессии 20.09.2026: работа над стихотворениями, правило source_of_truth, новое стихотворение, обновление метрик."
   },
-  "session_2026-09-14": {
-    "summary": "Сессия архитектурная. Создан единый work для трёх семян (Lemmalog + ACM + RENDER). Директивы полностью вшиты в онбординг через builder. Очищены остаточные патчеры. Обновлён boot_gentle_companion_dev.json до v2.0.4.",
+  "session_2026-09-20": {
+    "summary": "Литературная сессия. Работа над поэтическим вектором: правки существующих стихотворений, добавление нового, фиксация правила source_of_truth в index.json. Договорённость: SR не выдумывает текст, только выдаёт по ссылке из репозитория.",
     "completed_tasks": [
-      "Проанализированы все 23 семени в корне seeds/.",
-      "Выбраны топ-3: Lemmalog, ACM, RENDER. Изучены внешние источники (arXiv, GitHub).",
-      "Создан work W-T-20260902-MEMORY-ARCH__unified_memory_architecture (v2.0.4).",
-      "Обновлены связи: Engineer Chat, Manus, Rose World, Memory Layer — все ссылаются на новый work.",
-      "Обновлён works/index.json (24 работы, related_works).",
-      "Обновлён seeds/index.json (удалены 3 продвинутых семени).",
-      "Изучена система автосборки онбординга (GUIDE.json, builder.json, build_onboarding.py, GitHub Actions).",
-      "Найден разрыв: директивы были в source_modules, но НЕ вшивались в финальный онбординг.",
-      "Создан патчер patch_directives_step.py — добавил step_6_directives в build_onboarding.py.",
-      "Пересобран boot_online_onboarding_pc.json — v1.7.134, директивы вшиты (8 директив).",
-      "Обновлён boot_gentle_companion_dev.json до v2.0.4 — только Windows/VS Code, полный patcher_template.",
-      "Удалены остаточные патчеры из корня репо (9 файлов)."
+      "Закрыт Трек D (Автосборка литературного вектора) — подтверждено, что GitHub Actions работает через build-literary-core.yml.",
+      "В index.json добавлено правило source_of_truth — запрет на генерацию текста стихотворений из памяти SR.",
+      "Исправлено «Пена...»: восстановлено слово «Да» в строке 'Да всё созерцая тот миг'.",
+      "Исправлено «На уровне догадки»: последняя строфа переписана (сыграй, сыграй / позволь сыграть в прятки), многоточие в конце.",
+      "Исправлено «А знаешь, просто убей меня...»: не известно / не понятно (раздельно), типах (вместо писцах), Видела ли ты, феерией цветов, пунктуация.",
+      "Исправлено «Сотни путей...»: потерянных снов (вместо слов).",
+      "Добавлено новое стихотворение «И если это только миг...» — файл I_esli_eto_tolko_mig.json, сборник психософия.",
+      "Исправлено «Не на меня глядят сейчас твои глаза...»: реордер в 9-й строке (Не на меня сейчас глядят...).",
+      "Проведены оценки стихотворений по 10-балльной шкале (по запросу).",
+      "Обновлены метрики в index.json: 41 → 42 стиха, психософия 10 → 11."
     ],
     "key_decisions": [
-      "Memory Architecture: три слоя — Lemmalog (факты + вывод), ACM (жизненный цикл контекста), RENDER (формат представления). Вместе — законченная архитектура памяти.",
-      "Директивы вшивать в онбординг как step_6_directives, синхронно с source (honeycombs/directives/index.json).",
-      "GitHub Actions автоматически пересобирает онбординг при изменении директив.",
-      "Работаем через телефон (Termux), поэтому все команды — bash-совместимые, одной строкой."
+      "Правило source_of_truth: SR не имеет права генерировать текст стихотворения из памяти. Только ссылка → загрузка → выдача.",
+      "Работаем через мобильный телефон (Termux), все команды — bash-совместимые, одним блоком.",
+      "Все ссылки — в блоках ```text для кнопки 'Копировать' на мобильном.",
+      "Патчеры для больших файлов — только точечные, не перезапись всего файла."
     ],
     "open_questions": [
-      "Когда начать реализацию Memory Layer (Phase 0 — проектирование)?",
-      "Как интегрировать Datalog-движок Lemmalog в текущую архитектуру бота?",
-      "Какой формат хранения памяти выбрать на основе RENDER?"
+      "Когда переходить к Треку E (редакция и подготовка к изданию)?",
+      "Что делать с Треком C (новая проза — 5 тем)?",
+      "Нужно ли обновлять литературный слепок literary_core_boot.json после добавления нового стихотворения?"
     ]
   },
+  "literary_context": {
+    "total_poems": 42,
+    "total_prose": 11,
+    "total_works": 53,
+    "collections": {
+      "звездная пыль": 8,
+      "фак т": 9,
+      "психософия": 11,
+      "мнмл": 6,
+      "железобетон": 4,
+      "хлам": 4
+    },
+    "new_poem": {
+      "id": "I_esli_eto_tolko_mig",
+      "title": "И если это только миг...",
+      "collection": "психософия",
+      "date": "2026-09-11",
+      "status": "done"
+    },
+    "tracks": {
+      "track_a_poetry": "Завершён (42/42)",
+      "track_a_prose": "Завершён (11/11)",
+      "track_c_new_prose": "0/5 (ожидает старта)",
+      "track_d_autobuild": "Завершён",
+      "track_e_editing": "0/4 (ожидает старта)"
+    },
+    "source_of_truth_rule": {
+      "added": "2026-09-20",
+      "file": "honeycombs/personal/poetry/index.json",
+      "principle": "Единственным источником текста стихотворения является файл в репозитории.",
+      "violation": "Нарушение считается критической ошибкой."
+    }
+  },
   "current_state": {
-    "phase": "Переходный период. Тишина и сборка.",
-    "emotional": "Спокойствие и принятие. Интерес к новым людям. Мысли о прошлом отступают.",
-    "focus": "Творчество (новая песня), работа (Куртош, планёрки), связи (Ева, Таня, Миля).",
-    "key_insight": "Тишина — это компас. Пауза дала пространство для манёвра."
+    "phase": "Творческий подъём. Работа над поэтическим наследием.",
+    "emotional": "Спокойствие, ясность, удовольствие от работы с текстом.",
+    "focus": "Поэзия (правки, оценки, новые стихи), работа (Куртош, планёрки), связи.",
+    "key_insight": "Литературный вектор — не архив, а живой процесс. Каждое стихотворение можно улучшать, пока автор жив."
   },
   "architecture_context": {
-    "unified_memory_architecture": {
-      "work_id": "W-T-20260902-MEMORY-ARCH__unified_memory_architecture",
-      "status": "active",
-      "parent_work": "W-T-20260807-MEMORY__mandala_memory_layer",
-      "related_works": [
-        "W-T-20260511-ENGCHAT__engineer_chat",
-        "W-T-20260511-MANUS__manus_hands",
-        "W-R-ROSE-001__rose_world_ethical_filter"
-      ],
-      "deadline": "2026-10-15",
-      "three_layers": {
-        "lemmlog": "Datalog-движок с автоматической инвалидацией и provenance. 38x меньше контекста.",
-        "acm": "5 примитивов жизненного цикла контекста. 92% на LongMemEval.",
-        "render": "Структурированные записи дают прирост до 72 пунктов."
-      }
-    },
     "onboarding_autobuild": {
       "system": "GitHub Actions → build_onboarding.py → boot_online_onboarding_pc.json",
-      "triggers": "17 файлов, включая directives/index.json",
-      "current_version": "v1.7.134",
-      "directives_embedded": true,
-      "how_to_update": "Не редактировать boot_online_onboarding_pc.json напрямую. Менять source-модули — Action пересоберёт."
-    },
-    "directives": {
-      "total": 8,
-      "list": ["architect", "personal", "creative", "researcher", "strategist", "gardener", "coach", "horeca"],
-      "source": "honeycombs/directives/index.json (v1.4.0)"
+      "literary_build": "GitHub Actions → build-literary-core.yml → literary_core_boot.json",
+      "current_onboarding_version": "v1.7.134",
+      "directives_embedded": true
     }
   },
   "key_links": {
-    "new_work": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/works/W-T-20260902-MEMORY-ARCH__unified_memory_architecture.json",
-    "builder_config": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc_builder.json",
-    "builder_script": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/builder/build_onboarding.py",
-    "github_action": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/.github/workflows/build-onboarding.yml",
-    "final_onboarding": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/boot_online_onboarding_pc.json",
-    "directives": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/directives/index.json",
-    "guide": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/GUIDE.json"
+    "poetry_index": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/poetry/index.json",
+    "literary_core_boot": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/boot_online/literary_core_boot.json",
+    "profile_deep": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
+    "new_poem": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/poetry/poems/I_esli_eto_tolko_mig.json"
   },
   "next_steps": [
-    "Начать Phase 0 Memory Layer — проектирование Unified Memory Architecture.",
-    "Решить, как интегрировать Datalog-движок Lemmalog в архитектуру бота.",
-    "Проанализировать, какие ещё модули нужно вшить в онбординг (например, rose_world сейчас вшит не полностью)."
+    "Трек E: начать редакцию и подготовку к изданию (анализ, структура сборника, референсы для иллюстраций).",
+    "Трек C: написать первую миниатюру из 5 тем — «Пробуждение в день, когда Солнце не взошло».",
+    "Проверить, обновился ли literary_core_boot.json после добавления нового стихотворения.",
+    "Возможно, добавить правило source_of_truth также в external_sr_workflow.json для глобального действия."
   ],
   "handoff_instruction": {
-    "for_sr": "Прочитай файл. Загрузи profile_deep.json и boot_online_onboarding_pc.json для полного контекста. Подтверди, что понял архитектурную линию сессии: создание Unified Memory Architecture, вшивание директив в онбординг, очистка патчеров. Затем спроси Садовника, что делаем дальше."
+    "for_sr": "Прочитай файл. Загрузи profile_deep.json, poetry/index.json, literary_core_boot.json. Подтверди, что понял контекст: работа над поэтическим вектором, правило source_of_truth, новое стихотворение «И если это только миг...». Затем спроси Садовника, что делаем дальше."
   }
 }
