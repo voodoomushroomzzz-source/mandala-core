@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.13.5",
+    "version": "v2.14.0",
     "created": "2026-08-14",
     "updated": "2026-09-21",
-    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 33 задачи (taskboard v1.7.0), 16 сотрудников (team_roster). Notion-воркспейс синхронизирован, workspace_mirror — 8 разделов. Progress 40%. Финальная полировка."
+    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 42 задачи (taskboard v1.8.0), 16 сотрудников. Notion синхронизирован 1:1, workspace_mirror — 8 разделов. Progress 40%. ЗП-система описана."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -83,12 +83,13 @@
     "zone_1_team": {
       "priority": "critical",
       "name": "Команда и экосистема",
-      "problem": "Люди устают, уходят, нет вовлечённости.",
+      "problem": "Люди устают, уходят, нет вовлечённости. Переходный период управления (Витя → такси?, Дима → управляющий). Финансовое давление зимой.",
       "actions": [
         "Аудит команды (кто, сколько, кто на грани)",
         "ЦУ на смены",
         "Простая система обучения",
-        "Обратная связь (тет-а-тет раз в месяц)"
+        "Обратная связь (тет-а-тет раз в месяц)",
+        "Описать ЗП-систему в единый документ (см. compensation_system)"
       ],
       "goal": "Людям понятно, приятно и интересно работать."
     },
@@ -225,20 +226,22 @@
     "phase": "phase_0",
     "progress": 40,
     "date": "2026-09-21",
-    "last_action": "Notion Taskboard синхронизирован (33 задачи, 4 столбца). Картотека актуализирована: Юля аттестована, Ксюша left, Оля и Саша — печка (обучение), Оля likes нижку.",
-    "next_action": "Разобраться с кассами (обе точки + Нижка). Провести дезинсекцию Центра. Выдать расчёт Владе. Собрать чек-листы и карты процессов (K-010). Описать 5 критических процессов (K-021). Перейти к ЦУ и фото-чекапам.",
+    "last_action": "Notion синхронизирован: 42 задачи (7 новых из диалога с Юлей + 2 закрытые/добавленные). Описана ЗП-система (база + 5 бонусов + 2 старших). Карточка Юли актуализирована.",
+    "next_action": "Разговор с командой об условиях (K-035). Аттестация Юли 25.09 (K-040). Процесс аттестации + график (K-041). Генуборка Нижки с разморозкой (K-038). Кассы (K-030, K-033). Дезинсекция Центра (K-031). Расчёт Владе (K-032).",
     "blockers": [],
     "notes": [
       "Фокус: команда, документация, чистота, бот.",
       "OPEN: 'Дни рождественский бонус' — уточнить у Виктора.",
       "OPEN: ключи Центр/Нишка — проверить систему доступа.",
       "OPEN: накопление 50к — уточнить механику (депозит/оборот).",
+      "OPEN: ЗП-система — описать в единый документ (в compensation_system).",
+      "OPEN: Переходный период управления — стабилизация процессов.",
       "Notion — вариант для базы знаний."
     ]
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v1.7.0",
+    "version": "v1.8.0",
     "created": "2026-09-14",
     "updated": "2026-09-21",
     "legend": {
@@ -754,7 +757,7 @@
       {
         "id": "K-023",
         "title": "Валики Нижка",
-        "description": "Операционка Нижка — валики.",
+        "description": "Сломаны валики для еды. Есть запас на складе — подклеить красным герметиком, либо новые (сделаны вручную на том же клее — риск). Дима берёт на себя.",
         "priority": "high",
         "status": "todo",
         "horizon": "tactical",
@@ -764,7 +767,7 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-17",
-        "updated": "2026-09-17",
+        "updated": "2026-09-21",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -998,7 +1001,205 @@
       {
         "id": "K-034",
         "title": "Туалет Нижка: пищит при сливе",
-        "description": "Туалет на Нижке пищит при сливе. Нужно посмотреть сантехнику.",
+        "description": "Гудит и плохо уходит вода. Мастер найден (Юля через бабушку — может дешевле). Вызвать, назовёт цену. Бюджет есть.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-035",
+        "title": "Разговор с командой: условия",
+        "description": "Поговорить с каждым сотрудником: сколько может/планирует работать, понимает ли ставки, знает ли про бонусы, есть ли вопросы по условиям.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-036",
+        "title": "Холодильник Нижка: разморозка",
+        "description": "Холодильник под раскаточной зоной (белый, без дверки морозилки). Замерзает после разморозки. Нужна полная разморозка на сутки. Возможно, отрегулировать температуру.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-037",
+        "title": "Лампочки бар Нижка",
+        "description": "Часть лампочек на баре не работает. Запасные на складе/балконе (2-3 шт). Если нет — купить в магазине напротив. Совпадение по температуре и мощности.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-038",
+        "title": "Генуборка Нижка (расширенная)",
+        "description": "Расширенная генуборка на Нишке. Юля — куратор точки. Включить разморозку холодильника под раскаточной зоной (оставить на ночь). Витя организует.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-039",
+        "title": "Обучение сезонке + onboarding-чек-листы",
+        "description": "Обучающие материалы по сезонке для новичков (тренинг 31.08 не состоялся). Чек-листы для новых: поломки печки, что делать с сезонкой, чему учить.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-040",
+        "title": "Аттестация Юли (с Кристиной)",
+        "description": "Формальная аттестация Юли с Кристиной. Подтверждение что Юля всё знает. После — полная ставка + бонусы.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-25",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-041",
+        "title": "Аттестация — процесс + график",
+        "description": "Большая задача. Создать единый процесс аттестации: 1) типовой процесс для новых, 2) график аттестаций действующих, 3) чек-лист (что проверять).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-042",
+        "title": "Колонка провод посмотреть",
+        "description": "Колонка на Нижке — проверить провод. Закрыта по итогу осмотра.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": "2026-09-21",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-043",
+        "title": "Поломанные весы",
+        "description": "Поломанные весы на Нижке. Заменить или отремонтировать.",
         "priority": "high",
         "status": "todo",
         "horizon": "tactical",
@@ -1019,19 +1220,19 @@
       }
     ],
     "counters": {
-      "total": 33,
+      "total": 42,
       "by_status": {
-        "done": 10,
-        "todo": 22,
+        "done": 11,
+        "todo": 30,
         "in_progress": 1
       },
       "by_priority": {
         "critical": 11,
-        "high": 21,
+        "high": 30,
         "medium": 1
       },
       "by_phase": {
-        "phase_0": 33
+        "phase_0": 42
       }
     },
     "notes": {
@@ -1053,10 +1254,10 @@
       "notion_ai_status_property": "Статус (todo/in_progress/done)",
       "note": "Notion ↔ franchise.json синхронизированы. При любом изменении — обновлять обе стороны.",
       "sync_stats": {
-        "total_tasks": 33,
-        "done": 10,
+        "total_tasks": 42,
+        "done": 11,
         "in_progress": 1,
-        "todo": 22
+        "todo": 30
       }
     }
   },
@@ -1194,6 +1395,10 @@
     {
       "date": "2026-09-21",
       "event": "v2.13.5: финальная полировка. Юля pay.extra (аттестована), Ксюша skills.notes, nijka_summary.unknown очищен, workspace_mirror.employees.data_gaps обновлён, current_status.next_action дополнен."
+    },
+    {
+      "date": "2026-09-21",
+      "event": "v2.14.0: +9 задач (K-035..K-043): из диалога с Юлей + 2 из Notion. Обновлены K-023/K-034. Добавлен compensation_system (ЗП-система). Юля pay.extra + skills.notes. hot_zones.zone_1_team дополнен. Taskboard v1.8.0. Всего 42."
     }
   ],
   "team_roster": {
@@ -1578,7 +1783,7 @@
           "pechka": "yes",
           "coffee": "yes",
           "kassa": "yes",
-          "notes": null
+          "notes": "Универсал ✅. Аттестация запланирована на 25.09."
         },
         "nijka": {
           "attitude": "likes",
@@ -1590,7 +1795,7 @@
             "+5к за штатку",
             "+5к за киай и от адм (-250 руб/ч)"
           ],
-          "extra": "аттестована ✅",
+          "extra": "Все самостоятельные смены — полная ставка. Аттестация (формальность) с Кристиной — 25.09.",
           "notes": null
         },
         "status": "working",
@@ -2126,5 +2331,31 @@
       }
     ],
     "sr_workflow": "Когда Gardener говорит: 'работаем по блоку X' — SR смотрит workspace_mirror.sections.X.status → data_gaps → запрашивает данные → патчит → меняет status. Если блок 'empty' — начинаем с нуля. Если 'partial' — достраиваем пробелы. Если 'active' — поддерживаем."
+  },
+  "compensation_system": {
+    "base_rate": "200 ₽/час",
+    "shift_rate": "2600 ₽/смена (13 ч)",
+    "level_1_regular": {
+      "performance_5000": "Передача смены, закрытие, заготовки, списания, сервис, санпины. Оспаривается.",
+      "genuborka_5000": "Генуборка + собрания"
+    },
+    "level_2_senior": {
+      "service_5000": "Сервис + продажи",
+      "training_5000": "Обучение + координация смены",
+      "note": "Старший получает всё из уровня 1 + 2 дополнительных бонуса."
+    },
+    "payment_dates": {
+      "advance_24": "24-е — аванс за период 1–15",
+      "main_9": "9-е — основная ЗП за период 16–31",
+      "bonuses_9": "9-е — все бонусы"
+    },
+    "seniors_current": [
+      "Маша",
+      "Катрин"
+    ],
+    "total_15_shifts": {
+      "regular": "~49 000 ₽/мес",
+      "senior": "~59 000 ₽/мес"
+    }
   }
 }
