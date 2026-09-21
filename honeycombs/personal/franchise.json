@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.13.3",
+    "version": "v2.13.4",
     "created": "2026-08-14",
     "updated": "2026-09-21",
-    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 33 задачи (taskboard v1.7.0), 16 сотрудников (team_roster). Notion-воркспейс синхронизирован, workspace_mirror — 8 разделов. Progress 40%."
+    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 33 задачи (taskboard v1.7.0), 16 сотрудников (team_roster). Notion-воркспейс синхронизирован, workspace_mirror — 8 разделов. Progress 40%. Финальная косметика."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -1186,6 +1186,10 @@
     {
       "date": "2026-09-21",
       "event": "v2.13.3: полная косметика. Укорочен identity.description. Пересобраны critical_gaps (nijka ✅, veronika telegram ✅, ksusha left). Обновлены data_gaps у 16 сотрудников. workspace_mirror.sections.employees → active. Обновлены current_status.last_action и taskboard.description."
+    },
+    {
+      "date": "2026-09-21",
+      "event": "v2.13.4: финал. Убран устаревший risk у Вероники (TG добавлен). Финальная чистка data_gaps."
     }
   ],
   "team_roster": {
@@ -1379,9 +1383,7 @@
           "notes": null
         },
         "status": "working",
-        "risks": [
-          "нет Telegram — вне бот-коммуникации"
-        ],
+        "risks": [],
         "notes": null,
         "data_gaps": [
           "nijka.attitude",
@@ -1888,8 +1890,8 @@
         ],
         "notes": "пришла от Маши; пробная смена в воскресенье",
         "data_gaps": [
-          "nijka.attitude",
-          "trial_result"
+          "trial_result",
+          "schedule.notes"
         ]
       }
     ],
