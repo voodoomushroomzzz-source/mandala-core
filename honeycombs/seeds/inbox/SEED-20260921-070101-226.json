@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260921-070101-226",
+  "title": "AeRove: A Compact Bimodal Aerial-Terrestrial Drone with Rapid Bistable Reconfiguration for Close-Range Pipeline Inspection",
+  "url": "https://arxiv.org/abs/2609.20965",
+  "description": "arXiv:2609.20965v1 Announce Type: new \nAbstract: Close-proximity pipeline inspection is challenging for standard drones due to high hovering power consumption, airflow sensitivity, and propeller wash interference with gas sensing. To address this, we present AeRove, a compact bimodal aerial-terrestrial robot. AeRove uses its propeller guards as wheels to roll along pipes and employs a spring-loaded bistable mechanism to reconfigure between ground and flight modes in 200 ms without continuous act",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-21T07:01:01.272623",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
