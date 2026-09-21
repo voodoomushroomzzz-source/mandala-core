@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.158",
+    "version": "v1.7.159",
     "created": "2026-05-11",
-    "updated": "2026-09-20",
+    "updated": "2026-09-21",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1769,7 +1769,7 @@
         "last_sync": "2026-09-21",
         "profile": {
           "name": "Дима",
-          "resonance_level": 88,
+          "resonance_level": 87,
           "city": "Владимир",
           "companion_settings": {
             "morning_message_time": "10:00",
@@ -1782,7 +1782,7 @@
           "creativity": 100,
           "work": 72,
           "connections": 67,
-          "growth": 100
+          "growth": 98
         },
         "deep_memory": {
           "core": "Дима в фазе мягкого восстановления, активно пересобирает систему под себя, перенося дедлайны batch-задач и создавая архитектурные задачи. Стиль общения деловой, команды чёткие, без лишней эмоциональности. Виден вектор на баланс между восстановлением и развитием — он закрывает мастеринг и фиксирует личные достижения (ребёнок, концерт), не перегружая себя. Чувствуется системный подход и стремление к устойчивому росту.",
