@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.12.0",
+    "version": "v2.13.0",
     "created": "2026-08-14",
-    "updated": "2026-09-18",
-    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0. v2.8.0: синхронизация taskboard с Notion. 5 задач → done (K-007, K-009, K-011, K-014, K-026). Удалена K-017 (Закрытие точек). v2.9.0: 4 столбца (strategic/center/nizhka/common), распределение задач, правило синхронности Notion ↔ franchise. v2.10.0: Notion Taskboard синхронизирован (25 задач, 4 столбца, поле Статус, callout синхронности). 1:1 совпадение. v2.11.0: добавлен workspace_mirror — зеркало структуры Notion-воркспейса (8 разделов со статусами active/partial/empty, data_gaps, data_priority). v2.12.0: +3 задачи (K-027 Расчёт ЗП, K-028 Сессионные, K-029 Зима/штатка). Taskboard v1.6.0, total 28."
+    "updated": "2026-09-21",
+    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0. v2.8.0: синхронизация taskboard с Notion. 5 задач → done (K-007, K-009, K-011, K-014, K-026). Удалена K-017 (Закрытие точек). v2.9.0: 4 столбца (strategic/center/nizhka/common), распределение задач, правило синхронности Notion ↔ franchise. v2.10.0: Notion Taskboard синхронизирован (25 задач, 4 столбца, поле Статус, callout синхронности). 1:1 совпадение. v2.11.0: добавлен workspace_mirror — зеркало структуры Notion-воркспейса (8 разделов со статусами active/partial/empty, data_gaps, data_priority). v2.12.0: +3 задачи (K-027 Расчёт ЗП, K-028 Сессионные, K-029 Зима/штатка). Taskboard v1.6.0, total 28. v2.13.0: +5 задач (K-030 Кассы, K-031 Дезинсекция, K-032 Расчёт Владе, K-033 Касса Нижка, K-034 Туалет Нижка). Влада → leaving. Taskboard v1.7.0, total 33."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -238,9 +238,9 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. Мэтчится с задачами бота. Делится на стратегические (phase_*) и тактические (day-to-day) единицы.",
-    "version": "v1.6.0",
+    "version": "v1.7.0",
     "created": "2026-09-14",
-    "updated": "2026-09-18",
+    "updated": "2026-09-21",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -906,13 +906,123 @@
           "notion_page_id": null,
           "column": "Стратегические"
         }
+      },
+      {
+        "id": "K-030",
+        "title": "Кассы: сбои (обе точки)",
+        "description": "Кассы часто глючат и вылетают на обеих точках. Сотрудники мучаются. Нужно разобраться с причиной и решить системно.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-031",
+        "title": "Дезинсекция — Центр",
+        "description": "Провести дезинсекцию в Центре.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-01",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
+      },
+      {
+        "id": "K-032",
+        "title": "Расчёт Владе (увольнение)",
+        "description": "Выдать расчёт Владе — стажёр, увольняется.",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-21",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-033",
+        "title": "Касса Нижка: не заряжается",
+        "description": "Касса на Нижке плохо заряжается. Предположительно: проблема в самой кассе, либо в переходнике (через него идут провода), либо и то, и другое.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-034",
+        "title": "Туалет Нижка: пищит при сливе",
+        "description": "Туалет на Нижке пищит при сливе. Нужно посмотреть сантехнику.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
       }
     ],
     "counters": {
-      "total": 28,
+      "total": 33,
       "by_status": {
         "done": 10,
-        "todo": 17,
+        "todo": 22,
         "in_progress": 1
       },
       "by_priority": {
@@ -935,7 +1045,7 @@
     },
     "sync_rule": "CRITICAL: Notion и franchise.json должны быть всегда синхронны. При любом изменении в Notion — обновить franchise.json. И наоборот. Расхождения недопустимы.",
     "notion_sync": {
-      "last_sync": "2026-09-18",
+      "last_sync": "2026-09-21",
       "status": "synced",
       "notion_workspace": "Куртош & Кофе",
       "notion_database": "📋 Куртош — Taskboard",
@@ -943,10 +1053,10 @@
       "notion_ai_status_property": "Статус (todo/in_progress/done)",
       "note": "Notion ↔ franchise.json синхронизированы. При любом изменении — обновлять обе стороны.",
       "sync_stats": {
-        "total_tasks": 28,
+        "total_tasks": 33,
         "done": 10,
         "in_progress": 1,
-        "todo": 17
+        "todo": 22
       }
     }
   },
@@ -1060,6 +1170,10 @@
     {
       "date": "2026-09-18",
       "event": "v2.12.0: +3 задачи (K-027 Расчёт ЗП авто, K-028 Сессионные — договорённости, K-029 Подготовка к зиме: штатка). Taskboard v1.6.0. Всего 28 задач."
+    },
+    {
+      "date": "2026-09-21",
+      "event": "v2.13.0: +5 задач (K-030..K-034). Влада (EMP-012) → leaving. Taskboard v1.7.0. Всего 33 задачи."
     }
   ],
   "team_roster": {
@@ -1067,11 +1181,11 @@
     "total_employees": 16,
     "by_status": {
       "core": 1,
-      "working": 6,
+      "working": 5,
       "runner": 2,
       "attestation": 1,
       "trainee": 2,
-      "leaving": 1,
+      "leaving": 2,
       "substitute": 3
     },
     "skill_ladder": {
@@ -1589,9 +1703,11 @@
           "extra": "пока стажёр",
           "notes": null
         },
-        "status": "working",
-        "risks": [],
-        "notes": "обучается; хорошо получается накрутка куртошей, но долго реагирует на порядок действий; работает пока",
+        "status": "leaving",
+        "risks": [
+          "увольняется"
+        ],
+        "notes": "обучается; хорошо получается накрутка куртошей, но долго реагирует на порядок действий; работает пока Увольняется.",
         "data_gaps": [
           "contacts.phone",
           "nijka.attitude"
