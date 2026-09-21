@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.13.1",
+    "version": "v2.13.2",
     "created": "2026-08-14",
     "updated": "2026-09-21",
-    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0. v2.8.0: синхронизация taskboard с Notion. 5 задач → done (K-007, K-009, K-011, K-014, K-026). Удалена K-017 (Закрытие точек). v2.9.0: 4 столбца (strategic/center/nizhka/common), распределение задач, правило синхронности Notion ↔ franchise. v2.10.0: Notion Taskboard синхронизирован (25 задач, 4 столбца, поле Статус, callout синхронности). 1:1 совпадение. v2.11.0: добавлен workspace_mirror — зеркало структуры Notion-воркспейса (8 разделов со статусами active/partial/empty, data_gaps, data_priority). v2.12.0: +3 задачи (K-027 Расчёт ЗП, K-028 Сессионные, K-029 Зима/штатка). Taskboard v1.6.0, total 28. v2.13.0: +5 задач (K-030 Кассы, K-031 Дезинсекция, K-032 Расчёт Владе, K-033 Касса Нижка, K-034 Туалет Нижка). Влада → leaving. Taskboard v1.7.0, total 33. v2.13.1: косметика. Актуализированы counters, current_status, workspace_mirror (last_sync, note). progress 40%."
+    "description": "Офер принят 11.09.2026. Роль: кризис-менеджер, 100 т.р./мес (50+50). Срок: 11.09–11.12.2026. Фокус: команда, документация, чистота, бот. Taskboard v1.1.0 — 22 задачи. Добавлена полная картотека команды (team_roster, 15 человек, единая схема навыков). Отмечены done: K-005 (штатка), K-015 (анализ сотрудников). Taskboard v1.2.0. Добавлен сотрудник EMP-016 Оля (стажёр, пробная смена). v2.7.0: +4 операционные задачи (Валики/Лампочки/Расписание/Таскборд), K-001/K-002/K-003 done, taskboard v1.3.0. v2.8.0: синхронизация taskboard с Notion. 5 задач → done (K-007, K-009, K-011, K-014, K-026). Удалена K-017 (Закрытие точек). v2.9.0: 4 столбца (strategic/center/nizhka/common), распределение задач, правило синхронности Notion ↔ franchise. v2.10.0: Notion Taskboard синхронизирован (25 задач, 4 столбца, поле Статус, callout синхронности). 1:1 совпадение. v2.11.0: добавлен workspace_mirror — зеркало структуры Notion-воркспейса (8 разделов со статусами active/partial/empty, data_gaps, data_priority). v2.12.0: +3 задачи (K-027 Расчёт ЗП, K-028 Сессионные, K-029 Зима/штатка). Taskboard v1.6.0, total 28. v2.13.0: +5 задач (K-030 Кассы, K-031 Дезинсекция, K-032 Расчёт Владе, K-033 Касса Нижка, K-034 Туалет Нижка). Влада → leaving. Taskboard v1.7.0, total 33. v2.13.1: косметика. Актуализированы counters, current_status, workspace_mirror (last_sync, note). progress 40%. v2.13.2: актуализация картотеки. Юля → working (аттестована), Ксюша → left, Влада → leaving. Контакты (Вероника, Саша, Денис, Арина, Оля). Skills (Вероника, Анна — печка пройдена; Оля, Саша — обучаются печке)."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -1178,18 +1178,22 @@
     {
       "date": "2026-09-21",
       "event": "v2.13.1: косметика. Актуализированы counters (by_priority, by_phase), current_status (progress 40%, last_action, next_action), workspace_mirror (last_sync, taskboard.note)."
+    },
+    {
+      "date": "2026-09-21",
+      "event": "v2.13.2: актуализация team_roster. Статусы (Юля working, Ксюша left). Контакты (Вероника, Саша, Денис, Арина, Оля). Skills (Вероника/Анна печка ✅, Оля/Саша обучаются печке). Оля — likes нижку."
     }
   ],
   "team_roster": {
-    "last_updated": "2026-09-16",
+    "last_updated": "2026-09-21",
     "total_employees": 16,
     "by_status": {
       "core": 1,
-      "working": 5,
+      "working": 6,
       "runner": 2,
-      "attestation": 1,
       "trainee": 2,
-      "leaving": 2,
+      "left": 1,
+      "leaving": 1,
       "substitute": 3
     },
     "skill_ladder": {
@@ -1286,7 +1290,7 @@
         },
         "status": "working",
         "risks": [],
-        "notes": "недавно закончил обучение в Куртоше, учится",
+        "notes": "Недавно закончил обучение в Куртоше, учится.",
         "data_gaps": [
           "schedule.availability"
         ]
@@ -1332,7 +1336,7 @@
           "часто болеет",
           "бывали невыходы и опоздания"
         ],
-        "notes": "на сменах ответственна, чистолюбива, немного задачлива",
+        "notes": "На сменах ответственна, чистолюбива.",
         "data_gaps": [
           "schedule.availability",
           "nijka.attitude"
@@ -1344,7 +1348,7 @@
         "role": "Стажёр",
         "contacts": {
           "phone": "8 993 748 64 42",
-          "telegram": null
+          "telegram": "@Veronika_Mor"
         },
         "functions": [
           "смены"
@@ -1355,11 +1359,11 @@
           "availability": null
         },
         "skills": {
-          "stage": "pechka_training",
-          "pechka": "training",
-          "coffee": "no",
-          "kassa": "no",
-          "notes": null
+          "stage": "pechka_done",
+          "pechka": "yes",
+          "coffee": "training",
+          "kassa": "training",
+          "notes": "Печка — сама. Обучается кофе и кассе."
         },
         "nijka": {
           "attitude": null,
@@ -1398,11 +1402,11 @@
           "availability": null
         },
         "skills": {
-          "stage": "pechka_training",
-          "pechka": "training",
-          "coffee": "no",
-          "kassa": "no",
-          "notes": null
+          "stage": "pechka_done",
+          "pechka": "yes",
+          "coffee": "training",
+          "kassa": "training",
+          "notes": "Печка — сама. Обучается кофе и кассе."
         },
         "nijka": {
           "attitude": null,
@@ -1416,7 +1420,7 @@
         },
         "status": "working",
         "risks": [],
-        "notes": null,
+        "notes": "2/2, ст. Печка — сама. Обучается кофе и кассе. Готова работать до 6 мес.",
         "data_gaps": [
           "nijka.attitude",
           "schedule.preferences"
@@ -1427,7 +1431,7 @@
         "name": "Саша",
         "role": "Стажёр (лайт)",
         "contacts": {
-          "phone": null,
+          "phone": "89961972167",
           "telegram": "@ilmintra_neek"
         },
         "functions": [
@@ -1439,11 +1443,11 @@
           "availability": null
         },
         "skills": {
-          "stage": "universal",
-          "pechka": "yes",
-          "coffee": "yes",
-          "kassa": "yes",
-          "notes": null
+          "stage": "pechka_training",
+          "pechka": "training",
+          "coffee": "no",
+          "kassa": "no",
+          "notes": "Только начинает обучение на печку."
         },
         "nijka": {
           "attitude": null,
@@ -1457,7 +1461,7 @@
         },
         "status": "working",
         "risks": [],
-        "notes": null,
+        "notes": "Только начинает обучение на печку. Пока ничего не умеет. Возможно лишняя.",
         "data_gaps": [
           "contacts.phone",
           "nijka.attitude"
@@ -1499,7 +1503,7 @@
         },
         "status": "runner",
         "risks": [],
-        "notes": null,
+        "notes": "Бегунок (ранер).",
         "data_gaps": [
           "nijka.attitude"
         ]
@@ -1581,11 +1585,9 @@
           "extra": "выплаты после сдачи аттестации Катрин",
           "notes": null
         },
-        "status": "attestation",
-        "risks": [
-          "аттестация до 3-й недели сентября"
-        ],
-        "notes": "недавно начала работать, несколько лет назад уже работала здесь",
+        "status": "working",
+        "risks": [],
+        "notes": "Работает на нижке. Аттестована ✅",
         "data_gaps": [
           "schedule.availability"
         ]
@@ -1595,7 +1597,7 @@
         "name": "Денис",
         "role": "Стажёр (управляющий др. кофеен)",
         "contacts": {
-          "phone": null,
+          "phone": "79045905029",
           "telegram": "@earcrvsher"
         },
         "functions": [
@@ -1626,7 +1628,7 @@
         },
         "status": "trainee",
         "risks": [],
-        "notes": "действующий управляющий небольших кофеен без посадки; пришёл на период до года",
+        "notes": "Работает на подмоге. Сам печка. До года.",
         "data_gaps": [
           "contacts.phone",
           "nijka.attitude",
@@ -1666,9 +1668,9 @@
           "extra": "пока стажёр",
           "notes": null
         },
-        "status": "leaving",
+        "status": "left",
         "risks": [],
-        "notes": "прощаемся",
+        "notes": "Ушла (left behind).",
         "data_gaps": [
           "schedule.notes",
           "nijka.attitude"
@@ -1711,7 +1713,7 @@
         "risks": [
           "увольняется"
         ],
-        "notes": "обучается; хорошо получается накрутка куртошей, но долго реагирует на порядок действий; работает пока Увольняется.",
+        "notes": "Стажёр вялый. Увольняется. Расчёт 21.09.",
         "data_gaps": [
           "contacts.phone",
           "nijka.attitude"
@@ -1722,7 +1724,7 @@
         "name": "Арина",
         "role": "Сессионник (стажёр)",
         "contacts": {
-          "phone": null,
+          "phone": "89778217241",
           "telegram": "@foreveri_young"
         },
         "functions": [
@@ -1845,7 +1847,7 @@
         "risks": [
           "договорённость только до 3-й недели сентября"
         ],
-        "notes": null,
+        "notes": "Работает 2+/- недели. Нижка.",
         "data_gaps": [
           "nijka.attitude"
         ]
@@ -1855,8 +1857,8 @@
         "name": "Оля",
         "role": "Стажёр (пробная смена)",
         "contacts": {
-          "phone": null,
-          "telegram": null
+          "phone": "+79209204402",
+          "telegram": "@helgadubova"
         },
         "functions": [
           "смены"
@@ -1867,15 +1869,15 @@
           "availability": null
         },
         "skills": {
-          "stage": "unknown",
-          "pechka": "unknown",
+          "stage": "pechka_training",
+          "pechka": "training",
           "coffee": "yes",
           "kassa": "unknown",
-          "notes": "опыт по кофе есть; готовила калачи"
+          "notes": "Опыт по кофе есть. Печка — обучение."
         },
         "nijka": {
-          "attitude": null,
-          "notes": null
+          "attitude": "likes",
+          "notes": "Готова работать на нижке"
         },
         "pay": {
           "base": "200 руб/ч (пока стажёр)",
@@ -1904,25 +1906,27 @@
         "Катрин",
         "Никита",
         "Александра",
-        "Саша",
         "Аня",
         "Светлана",
-        "Юля",
         "Денис",
         "Влада",
         "Арина",
         "Матвей",
         "Маша"
       ],
-      "pechka_training_stage_1": [
+      "pechka_done": [
         "Вероника",
-        "Анна",
-        "Ксюша"
+        "Анна"
+      ],
+      "pechka_training": [
+        "Оля",
+        "Саша"
       ]
     },
     "nijka_summary": {
       "likes": [
-        "Юля"
+        "Юля",
+        "Оля"
       ],
       "dislikes": [
         "Никита",
