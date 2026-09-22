@@ -86,7 +86,7 @@
     "last_sync": "2026-09-22",
     "profile": {
       "name": "Дима",
-      "resonance_level": 87,
+      "resonance_level": 88,
       "city": "Владимир",
       "companion_settings": {
         "morning_message_time": "10:00",
@@ -98,7 +98,7 @@
       "health": 100,
       "creativity": 100,
       "work": 72,
-      "connections": 67,
+      "connections": 70,
       "growth": 96
     },
     "deep_memory": {
@@ -649,6 +649,11 @@
         "date": "2026-09-19",
         "resonance": 87,
         "achievements_count": 311
+      },
+      {
+        "date": "2026-09-22",
+        "resonance": 88,
+        "achievements_count": 316
       }
     ]
   },
