@@ -1,11 +1,16 @@
 {
-  "date": "2026-09-21",
+  "date": "2026-09-22",
   "version": "7.39.23",
   "gardeners": {
+    "358793311": {
+      "name": "братан",
+      "active": false,
+      "synthesis_date": ""
+    },
     "224736062": {
       "name": "Дима",
       "active": true,
-      "synthesis_date": "2026-09-21"
+      "synthesis_date": "2026-09-22"
     }
   },
   "issues": []
