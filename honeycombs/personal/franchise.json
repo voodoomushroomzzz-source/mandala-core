@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.15.0",
+    "version": "v2.16.0",
     "created": "2026-08-14",
-    "updated": "2026-09-21",
-    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 45 задач (taskboard v1.9.0), 16 сотрудников. Notion синхронизирован 1:1, workspace_mirror — 8 разделов. Progress 40%. ЗП-система описана. Диалог с Анной → 3 новые задачи."
+    "updated": "2026-09-22",
+    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 51 задача (taskboard v2.0.0), 16 сотрудников. Notion синхронизирован, workspace_mirror — 8 разделов. Progress 40%. ЗП-система описана. Milestones: nijka_revival, centre_revival."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -241,9 +241,9 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v1.9.0",
+    "version": "v2.0.0",
     "created": "2026-09-14",
-    "updated": "2026-09-21",
+    "updated": "2026-09-22",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1001,7 +1001,7 @@
       {
         "id": "K-034",
         "title": "Туалет Нижка: пищит при сливе",
-        "description": "Гудит и плохо уходит вода. Мастер найден (Юля через бабушку — может дешевле). Вызвать, назовёт цену. Бюджет есть.",
+        "description": "Гудит и плохо уходит вода. Мастер найден (Юля через бабушку — может дешевле). Вызвать, назовёт цену. Бюджет есть. Также: переделать/перенести туалет в соседнее помещение — там стояк ближе к толчку.",
         "priority": "high",
         "status": "todo",
         "horizon": "tactical",
@@ -1011,7 +1011,7 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-21",
-        "updated": "2026-09-21",
+        "updated": "2026-09-22",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1089,7 +1089,7 @@
       {
         "id": "K-038",
         "title": "Генуборка Нижка (расширенная)",
-        "description": "Расширенная генуборка на Нишке. Юля — куратор точки. Включить разморозку холодильника под раскаточной зоной (оставить на ночь). Витя организует.",
+        "description": "Расширенная генуборка на Нишке. Юля — куратор точки. Включить разморозку холодильника под раскаточной зоной (оставить на ночь). Включить: химическая чистка мягкой мебели. Витя организует.",
         "priority": "high",
         "status": "todo",
         "horizon": "tactical",
@@ -1099,7 +1099,7 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-21",
-        "updated": "2026-09-21",
+        "updated": "2026-09-22",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1283,22 +1283,154 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-057",
+        "title": "Зачистить угол окна (вытяжка)",
+        "description": "Зачистить угол окна в зоне вытяжки. Убрать загрязнения/отложения.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-09-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-058",
+        "title": "Кондей в зону бариста",
+        "description": "Повесить кондей в зону бариста для охлаждения сотрудника. Уточнить: новый или переместить существующий.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-09-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-059",
+        "title": "Батареи: убрать/убавить",
+        "description": "Узнать техническую возможность срезать/убавить батареи. Сейчас жарко, зимой будут топить ещё больше. Возможно, часть батарей не нужна.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-09-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-060",
+        "title": "Пандус: доступность",
+        "description": "Пандус для колясок (детских) и инвалидов. Доступность входа для маломобильных гостей.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-09-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-062",
+        "title": "Мусорка на входе: спилить",
+        "description": "Спилить мусорку на входе.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-09-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-063",
+        "title": "Колонки: перевесить",
+        "description": "Перевесить колонки.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-09-22",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
       }
     ],
     "counters": {
-      "total": 45,
+      "total": 51,
       "by_status": {
         "done": 11,
-        "todo": 33,
+        "todo": 39,
         "in_progress": 1
       },
       "by_priority": {
         "critical": 11,
-        "high": 33,
-        "medium": 1
+        "high": 34,
+        "medium": 6
       },
       "by_phase": {
-        "phase_0": 45
+        "phase_0": 51
       }
     },
     "notes": {
@@ -1308,11 +1440,12 @@
       "strategic": "Большие вопросы, документы, разработки, модернизации, аудиты, изучения",
       "operations_center": "Локальные задачи точки Центр (поломки, ремонт, чистота точки)",
       "operations_nizhka": "Локальные задачи точки Нижка (поломки, ремонт, чистота точки)",
-      "operations_common": "Планёрки, расписания, нововведения, стандарты, обучение, общее для обеих точек"
+      "operations_common": "Планёрки, расписания, нововведения, стандарты, обучение, общее для обеих точек",
+      "milestones": "Крупные вехи — большие проекты с фазами"
     },
     "sync_rule": "CRITICAL: Notion и franchise.json должны быть всегда синхронны. При любом изменении в Notion — обновить franchise.json. И наоборот. Расхождения недопустимы.",
     "notion_sync": {
-      "last_sync": "2026-09-21",
+      "last_sync": "2026-09-22",
       "status": "synced",
       "notion_workspace": "Куртош & Кофе",
       "notion_database": "📋 Куртош — Taskboard",
@@ -1320,10 +1453,10 @@
       "notion_ai_status_property": "Статус (todo/in_progress/done)",
       "note": "Notion ↔ franchise.json синхронизированы. При любом изменении — обновлять обе стороны.",
       "sync_stats": {
-        "total_tasks": 45,
+        "total_tasks": 51,
         "done": 11,
         "in_progress": 1,
-        "todo": 33
+        "todo": 39
       }
     }
   },
@@ -1469,6 +1602,10 @@
     {
       "date": "2026-09-21",
       "event": "v2.15.0: +3 задачи (K-044 3-й человек, K-045 Карты/доставка, K-046 График пекаря). Обновлены K-010/K-021 (роли + чек-листы закрытия). Taskboard v1.9.0. Всего 45 задач."
+    },
+    {
+      "date": "2026-09-22",
+      "event": "v2.16.0: +6 задач (K-057..K-063, кроме K-061). Обновлены K-034/K-038/K-048/K-050/K-051. Добавлен milestones (nijka_revival, centre_revival) + столбец «Крупные вехи» в columns_taxonomy. Taskboard v2.0.0. Всего 51 задача."
     }
   ],
   "team_roster": {
@@ -2426,6 +2563,69 @@
     "total_15_shifts": {
       "regular": "~49 000 ₽/мес",
       "senior": "~59 000 ₽/мес"
+    }
+  },
+  "milestones": {
+    "description": "Крупные вехи — большие проекты с фазами и связанными задачами.",
+    "last_updated": "2026-09-22",
+    "milestones": {
+      "nijka_revival": {
+        "title": "Возрождение Нижки",
+        "status": "in_progress",
+        "priority": "high",
+        "goal": "Вывести Нижку из упадка потоков",
+        "phases": [
+          {
+            "phase": 1,
+            "name": "Марафет",
+            "details": "Генуборка, химчистка мебели, мелкий ремонт"
+          },
+          {
+            "phase": 2,
+            "name": "Процессы + меню",
+            "details": "Адаптация под спальный район"
+          },
+          {
+            "phase": 3,
+            "name": "Рост",
+            "details": "Положительные тенденции"
+          },
+          {
+            "phase": 4,
+            "name": "Реорганизация посадки",
+            "details": "K-053"
+          }
+        ],
+        "linked_tasks": [
+          "K-036",
+          "K-037",
+          "K-038",
+          "K-047",
+          "K-049",
+          "K-050",
+          "K-051",
+          "K-052",
+          "K-053",
+          "K-054",
+          "K-055",
+          "K-057",
+          "K-058",
+          "K-059",
+          "K-060",
+          "K-062",
+          "K-063"
+        ]
+      },
+      "centre_revival": {
+        "title": "Возрождение Центра",
+        "status": "planning",
+        "priority": "high",
+        "goal": "План вывода Центра. Фазы уточняются.",
+        "phases": [],
+        "linked_tasks": [
+          "K-048"
+        ]
+      }
     }
   }
 }
