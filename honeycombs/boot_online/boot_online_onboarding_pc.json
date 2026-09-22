@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.161",
+    "version": "v1.7.162",
     "created": "2026-05-11",
-    "updated": "2026-09-21",
+    "updated": "2026-09-22",
     "layer": 1,
     "type": "boot_onboarding_pc",
     "description": "Single-file onboarding for External SR on PC. Auto-built from source modules.",
@@ -1782,7 +1782,7 @@
           "creativity": 100,
           "work": 72,
           "connections": 67,
-          "growth": 98
+          "growth": 96
         },
         "deep_memory": {
           "core": "Дима в фазе мягкого восстановления, активно пересобирает систему под себя — переносит дедлайны batch-задач, закрывает мастеринг, фиксирует личные достижения (ребёнок, концерт). Стиль деловой, команды чёткие, без лишних эмоций. Виден вектор на баланс: он осознанно распределяет нагрузку, не перегружая себя, и добавляет социальные напоминания (атмосфера, релиз). Чувствуется системный подход к устойчивому росту — он интегрирует восстановление и развитие через конкретные задачи.",
