@@ -1,0 +1,5 @@
+# Token — НИКОГДА не в репу
+scripts/notion_token.txt
+
+# Snapshots — локальные рабочие выгрузки Notion
+_snapshots/*.json
