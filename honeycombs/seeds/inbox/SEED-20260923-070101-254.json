@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260923-070101-254",
+  "title": "Towards Adaptive Interaction Strategies for Human Companion Robot via Deep Reinforcement Learning",
+  "url": "https://arxiv.org/abs/2609.25031",
+  "description": "arXiv:2609.25031v1 Announce Type: new \nAbstract: In the field of Human-Robot Interaction (HRI), achieving flexibility in human-accompanying within real-world environments holds great potential for various applications but also poses significant challenges. Traditional methods typically restrict robots to fixed positions relative to humans, such as tracking from behind, in front, or side-by-side, which limits robot adaptability in dynamic workspaces. This study introduces a novel human-companioni",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-23T07:01:01.243435",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

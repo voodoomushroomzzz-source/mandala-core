@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260923-070100-252",
+  "title": "Social Influence and the Allocation of Scientific Attention in AI Populations",
+  "url": "https://arxiv.org/abs/2609.22408",
+  "description": "arXiv:2609.22408v1 Announce Type: new \nAbstract: AI systems are becoming participants in the evaluation and use of scientific research. They encounter citation counts, download statistics and lists of popular articles developed around human readers, but the collective consequences of these signals for artificial readers remain uncertain. This paper adapts the Music Lab design to a market for academic attention. In the first experiment, 1,000 AI agents choose papers from the titles and abstracts ",
+  "source": "arXiv AI",
+  "collected_at": "2026-09-23T07:01:00.691371",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
