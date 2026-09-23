@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.165",
+    "version": "v1.7.166",
     "created": "2026-05-11",
     "updated": "2026-09-23",
     "layer": 1,
@@ -2672,12 +2672,12 @@
       "identity": {
         "module_id": "PERSONAL-INDEX-001",
         "name": "Personal Hub — Карта и инструкция",
-        "version": "v2.0.0",
+        "version": "v2.1.0",
         "created": "2026-08-20",
-        "updated": "2026-08-25",
+        "updated": "2026-09-23",
         "layer": 2,
         "type": "personal_index",
-        "description": "Центральная карта и инструкция для работы с папкой personal/. Описывает структуру, логику и взаимосвязи всех личных файлов.",
+        "description": "Центральная карта и инструкция для работы с папкой personal/. Описывает структуру, логику и взаимосвязи всех личных файлов. v2.1.0: franchise.json -> kurtoch/.",
         "status": "active",
         "priority": "high",
         "tags": [
@@ -2709,11 +2709,6 @@
           "description": "Творчество: поэзия, музыка, проза.",
           "purpose": "Структурирование творческого наследия.",
           "when_to_use": "При работе с творческими проектами."
-        },
-        "franchise.json": {
-          "description": "Франшиза 'Куртош': операционная система, AI-автоматизация, упаковка франшизы.",
-          "purpose": "Стратегический проект по систематизации и масштабированию кофейни.",
-          "when_to_use": "При работе над проектом франшизы 'Куртош'. Версия v2.1.0 от 2026-08-25."
         },
         "instagram.json": {
           "description": "Стратегия Instagram: форматы, частоты, контент-план.",
@@ -2752,6 +2747,13 @@
         "poetry/": {
           "description": "Поэзия: тексты стихов, планы по изданию.",
           "purpose": "Архив поэтических произведений."
+        },
+        "kurtoch/": {
+          "description": "Хаб проекта Куртош — кризис-менеджмент, операционная система, франшиза.",
+          "purpose": "Стратегический проект по систематизации и масштабированию кофейни.",
+          "when_to_use": "При работе над проектом франшизы 'Куртош'. Версия franchise v2.16.0 (миграция на v2.17.0).",
+          "internal_ref": "kurtoch/index.json",
+          "note": "TODO: franchise.json (96 KB) разбить на модули <=30 KB + автосинхронизация с Notion."
         }
       },
       "logic": {
@@ -2783,7 +2785,6 @@
           "profile_deep.json",
           "career.json",
           "creative.json",
-          "franchise.json",
           "instagram.json",
           "youtube.json",
           "ecommerce.json",
@@ -2791,13 +2792,14 @@
           "self_development.json",
           "gov_orders.json",
           "music/",
-          "poetry/"
+          "poetry/",
+          "kurtoch/index.json"
         ]
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-08-25",
-        "notes": "v2.0.0: обновлён franchise.json до v2.1.0. Добавлены контекст, план и метрики."
+        "last_check": "2026-09-23",
+        "notes": "v2.1.0: franchise.json перенесён в kurtoch/. Создан kurtoch/index.json как хаб. TODO: модули <=30 KB + Notion sync."
       }
     }
   },
