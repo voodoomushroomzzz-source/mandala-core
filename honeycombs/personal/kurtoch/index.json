@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.1.0",
+    "version": "v2.1.1",
     "created": "2026-09-23",
     "updated": "2026-09-23",
     "layer": 2,
@@ -72,7 +72,13 @@
         "purpose": "Обёртка: запускает notion_sync.py, логирует, автокоммитит лог, пушит.",
         "status": "done",
         "path": "scripts/notion_runner.sh",
-        "run_example": "./scripts/notion_runner.sh pull_taskboard"
+        "run_example": "bash scripts/notion_runner.sh full_sync",
+        "commands": {
+          "full_sync": "archive_done.py + push_taskboard.py + логи + автокоммит + push",
+          "pull_taskboard": "выгрузка Notion в снапшот",
+          "push_taskboard": "синхронизация Mandala → Notion"
+        },
+        "note": "На Android execute-бит не работает (noexec). Запускать через bash."
       },
       "push_taskboard.py": {
         "purpose": "Скрипт Мандала → Notion: раздаёт K-ID, обновляет столбцы, архивирует.",
@@ -89,6 +95,12 @@
         "purpose": "Служебный: точечный фикс ID для задач с суффиксами в названиях.",
         "status": "done",
         "path": "scripts/fix_two_ids.py"
+      },
+      "archive_done.py": {
+        "purpose": "Переносит done + cancelled задачи из taskboard.json в taskboard_archive.json. Идемпотентно.",
+        "status": "done",
+        "path": "scripts/archive_done.py",
+        "run_example": "python3 scripts/archive_done.py"
       }
     },
     "planned": {
@@ -138,7 +150,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-09-23",
-    "notes": "v2.1.0: M-001/M-002 перенесены в tasks. Архив вынесен в taskboard_archive.json (17 задач). push_taskboard.py читает оба файла. Notion синхронизирован: 62 = 62."
+    "notes": "v2.1.1: archive_done.py + full_sync runner добавлены. K-012 в архиве. Активных 44, архив 18. Notion 62 = 62."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -189,6 +201,11 @@
         "description": "Обновить Notion из Mandala (ID, столбцы, статусы)",
         "command": "python3 scripts/push_taskboard.py",
         "note": "Работает идемпотентно — можно запускать повторно"
+      },
+      "full_sync": {
+        "description": "Полный цикл: архивировать закрытые + синхронизировать с Notion + закоммитить в git",
+        "command": "bash scripts/notion_runner.sh full_sync",
+        "note": "Рекомендуемая команда после закрытия задач. Делает всё за один шаг."
       }
     },
     "sync_rules": {
@@ -796,9 +813,9 @@
     "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
     "taskboard": {
       "file": "taskboard.json",
-      "purpose": "Задачи (59) + крупные вехи (nijka_revival, centre_revival).",
+      "purpose": "Активные задачи (44) + вехи M-001, M-002. Архив — в taskboard_archive.",
       "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
-      "sync": "Notion Taskboard (via scripts/notion_sync.py)"
+      "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
     },
     "team": {
       "file": "team.json",
