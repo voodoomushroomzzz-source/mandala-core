@@ -2,109 +2,111 @@
   "identity": {
     "module_id": "PERSONAL-INDEX-001",
     "name": "Personal Hub — Карта и инструкция",
-    "version": "v2.1.1",
+    "version": "v2.2.0",
     "created": "2026-08-20",
     "updated": "2026-09-23",
     "layer": 2,
     "type": "personal_index",
-    "description": "Центральная карта и инструкция для работы с папкой personal/. Описывает структуру, логику и взаимосвязи всех личных файлов. v2.1.0: franchise.json -> kurtoch/.",
+    "description": "Центральная карта для personal/. v2.2.0: career + learning теперь симбиотичны — взаимные ссылки, единый roadmap карьеры и обучения.",
     "status": "active",
     "priority": "high",
-    "tags": [
-      "personal",
-      "index",
-      "instruction",
-      "gardener",
-      "profile"
-    ],
+    "tags": ["personal", "index", "instruction", "gardener", "profile", "symbiosis"],
     "resonance": "100%"
   },
   "meta": {
-    "description": "Папка personal/ — это единое пространство для всех личных данных Gardener: биография, ценности, карьерные треки, творчество, стратегии для соцсетей, обучение и проекты.",
-    "purpose": "Централизованное хранение и структурирование личной информации для использования SR в различных контекстах.",
-    "how_to_use": "Всегда начинай с чтения profile_deep.json для понимания личности и архетипов. Затем используй соответствующий вектор."
+    "description": "Папка personal/ — единое пространство для личных данных Gardener: биография, ценности, карьерные треки, обучение, творчество, стратегии.",
+    "purpose": "Централизованное хранение и структурирование личной информации для SR.",
+    "how_to_use": "Начинай с profile_deep.json. Для карьеры и обучения — читай оба файла вместе (они в симбиозе).",
+    "change_requires": "gardener_approval"
   },
   "core_files": {
     "profile_deep.json": {
       "description": "Ядро личности. Биография, ценности, синтез, архетипы.",
       "purpose": "Глубокое понимание Gardener.",
-      "when_to_use": "Всегда, когда SR нужно понять личность Gardener."
+      "when_to_use": "Всегда, когда SR нужно понять личность."
     },
     "career.json": {
-      "description": "Карьерные треки: AI Ops, системный аналитик, международный AI-специалист, территориальный управляющий.",
+      "description": "Карьерные треки: AI Ops, системный аналитик, международный AI-специалист, территориальный управляющий. Симбиоз с learning.json.",
       "purpose": "Управление карьерой и профессиональными проектами.",
-      "when_to_use": "При обсуждении карьерных решений."
+      "when_to_use": "При карьерных решениях. Читать ВМЕСТЕ с learning.json.",
+      "symbiosis_partner": "learning.json",
+      "version": "v1.1.0",
+      "updated": "2026-09-23"
+    },
+    "learning.json": {
+      "description": "Обучение: сертификаты (unified_certificate_track, 9 шт), системный анализ (UML/BPMN/SQL/Swagger), английский (B2→C1), OpenAI/Anthropic Academy. Симбиоз с career.json.",
+      "purpose": "Структурирование обучения под карьерные треки.",
+      "when_to_use": "При планировании обучения. Читать ВМЕСТЕ с career.json.",
+      "symbiosis_partner": "career.json",
+      "version": "v1.1.0",
+      "updated": "2026-09-23"
     },
     "creative.json": {
       "description": "Творчество: поэзия, музыка, проза.",
-      "purpose": "Структурирование творческого наследия.",
-      "when_to_use": "При работе с творческими проектами."
+      "purpose": "Структурирование творческого наследия."
     },
     "instagram.json": {
-      "description": "Стратегия Instagram: форматы, частоты, контент-план.",
-      "purpose": "Конкретные настройки и план для ведения Instagram.",
-      "when_to_use": "Когда SR помогает с контентом для Instagram."
+      "description": "Стратегия Instagram: форматы, частоты, контент-план."
     },
     "youtube.json": {
-      "description": "Стратегия YouTube: гейминг-канал, монетизация, фазы роста.",
-      "purpose": "Конкретные настройки и план для ведения YouTube-канала.",
-      "when_to_use": "Когда SR помогает с контентом для YouTube."
+      "description": "Стратегия YouTube: гейминг-канал, монетизация, фазы роста."
     },
     "ecommerce.json": {
-      "description": "E-commerce: стратегия закупок в Китае, выход на Ozon и Яндекс Маркет.",
-      "purpose": "Управление e-commerce инициативами.",
-      "when_to_use": "При работе над e-commerce проектами."
-    },
-    "learning.json": {
-      "description": "Обучение: курсы, сертификаты, трекер задач.",
-      "purpose": "Планирование и трекинг обучения.",
-      "when_to_use": "При планировании обучения."
+      "description": "E-commerce: закупки в Китае, Ozon, Яндекс Маркет."
     },
     "self_development.json": {
-      "description": "Саморазвитие: 8 тем (деньги, психология, общение, ИИ, инвестиции, бизнес, философия, здоровье).",
-      "purpose": "Личностный рост и развитие.",
-      "when_to_use": "При работе над личным развитием."
+      "description": "Саморазвитие: 8 тем (деньги, психология, общение, ИИ, инвестиции, бизнес, философия, здоровье)."
     },
     "gov_orders.json": {
-      "description": "Госзаказы: анализ 44-ФЗ и 223-ФЗ, стратегия участия.",
-      "purpose": "Стратегия участия в государственных заказах.",
-      "when_to_use": "При анализе возможностей в госзакупках."
+      "description": "Госзаказы: 44-ФЗ и 223-ФЗ."
     },
     "music/": {
-      "description": "Музыкальные проекты.",
-      "purpose": "Архив и планы музыкальных проектов."
+      "description": "Музыкальные проекты."
     },
     "poetry/": {
-      "description": "Поэзия: тексты стихов, планы по изданию.",
-      "purpose": "Архив поэтических произведений."
+      "description": "Поэзия: тексты, планы по изданию."
     },
     "kurtoch/": {
       "description": "Хаб проекта Куртош — кризис-менеджмент, операционная система, франшиза.",
-      "purpose": "Стратегический проект по систематизации и масштабированию кофейни.",
-      "when_to_use": "При работе над проектом 'Куртош'. Разбит на модули: taskboard, team, knowledge_base.",
-      "note": "Разбивка завершена: franchise.json удалён, данные в kurtoch/taskboard.json, team.json, knowledge_base.json."
+      "note": "Разбит на модули: taskboard.json, team.json, knowledge_base.json."
+    }
+  },
+  "symbiosis": {
+    "career_learning": {
+      "description": "Career.json и learning.json — единый контур. Карьера задаёт цель, обучение закрывает требования. Обратная связь двусторонняя.",
+      "files": ["career.json", "learning.json"],
+      "tracks_mapping": {
+        "track_a_ai_ops": ["Google AI Essentials", "GitHub Foundations", "OpenAI Foundations"],
+        "track_b_system_analyst": ["UML", "BPMN", "SQL", "Swagger", "OpenAI Applied", "Anthropic Academy"],
+        "track_c_global_ai": ["CCA-F", "English C1", "OpenAI Agents"],
+        "track_d_ops": ["Google AI Essentials (опционально)"]
+      },
+      "key_deadlines": {
+        "track_a_offer": "2026-10-31",
+        "track_b_entry": "2027-02-28",
+        "track_c_entry": "2027-03-01",
+        "track_d_trigger": "2026-10-31"
+      },
+      "rule": "Если career требует навык — он должен быть в learning. Если в learning появился курс — он должен усилить один из треков."
     }
   },
   "logic": {
-    "description": "Пошаговая логика работы SR с personal/ данными.",
+    "description": "Пошаговая логика SR с personal/.",
     "step_1_analyze_personality": {
       "action": "Прочитать profile_deep.json",
-      "focus": "Понять личность, ценности, архетипы.",
       "output": "Глубокое понимание Gardener."
     },
     "step_2_select_vector": {
-      "action": "Определить, с каким вектором работать.",
-      "focus": "Понять задачу Gardener.",
-      "output": "Выбор соответствующего файла."
+      "action": "Определить вектор.",
+      "output": "Выбор файла."
     },
     "step_3_load_vector": {
-      "action": "Загрузить соответствующий файл.",
-      "focus": "Понять технические ограничения, форматы, задачи.",
-      "output": "Конкретные настройки для вектора."
+      "action": "Загрузить файл(ы).",
+      "note": "Если карьера или обучение — загрузить ОБА (career + learning).",
+      "output": "Конкретные настройки."
     },
     "step_4_generate": {
-      "action": "Сгенерировать контент/решение.",
-      "focus": "Создать контент, который резонирует с личностью.",
+      "action": "Сгенерировать решение/контент.",
       "output": "Конкретные идеи."
     }
   },
@@ -113,11 +115,11 @@
     "children": [
       "profile_deep.json",
       "career.json",
+      "learning.json",
       "creative.json",
       "instagram.json",
       "youtube.json",
       "ecommerce.json",
-      "learning.json",
       "self_development.json",
       "gov_orders.json",
       "music/",
@@ -128,6 +130,6 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-09-23",
-    "notes": "v2.1.1: franchise.json разбит на модули (taskboard, team, knowledge_base) и удалён. kurtoch/index.json — входная точка."
+    "notes": "v2.2.0: career + learning объединены в symbiosis-контур. Единый roadmap карьеры и обучения. Убит дубль certificates_track в learning."
   }
 }
