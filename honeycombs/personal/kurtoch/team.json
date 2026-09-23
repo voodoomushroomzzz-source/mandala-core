@@ -1,0 +1,779 @@
+{
+  "identity": {
+    "module_id": "KURTOCH-TEAM-001",
+    "name": "Kurtoch — Team Roster",
+    "version": "v1.0.0",
+    "created": "2026-09-23",
+    "updated": "2026-09-23",
+    "layer": 2,
+    "type": "team_module",
+    "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
+    "status": "active",
+    "priority": "high",
+    "parent": "index.json",
+    "resonance": "100%"
+  },
+  "team_roster": {
+    "last_updated": "2026-09-21",
+    "total_employees": 16,
+    "by_status": {
+      "core": 1,
+      "working": 6,
+      "runner": 2,
+      "trainee": 2,
+      "left": 1,
+      "leaving": 1,
+      "substitute": 3
+    },
+    "skill_ladder": {
+      "order": [
+        "pechka",
+        "coffee",
+        "kassa"
+      ],
+      "rule": "Сначала печка, потом кофе, потом касса. Универсал = прошёл все три этапа.",
+      "note": "Кто без пометки в исходной таблице — универсал. Кто с пометкой 'обуч печка' — на 1-м этапе."
+    },
+    "employees": [
+      {
+        "id": "EMP-001",
+        "name": "Катрин",
+        "role": "Администратор",
+        "contacts": {
+          "phone": "8 930 749 41 91",
+          "telegram": "@katrinzzz_its_i"
+        },
+        "functions": [
+          "закупки",
+          "смены",
+          "обучение стажёров"
+        ],
+        "schedule": {
+          "notes": "пн — админка; может в любые дни; не более 3 смен подряд",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [
+            "+10к команда",
+            "+10к продажи/сервис (-300 руб/ч)"
+          ],
+          "extra": "сентябрь 24к оклад админки; октябрь 16к за инвент и закупки",
+          "notes": null
+        },
+        "status": "core",
+        "risks": [],
+        "notes": null,
+        "data_gaps": [
+          "nijka.attitude",
+          "schedule.preferences"
+        ]
+      },
+      {
+        "id": "EMP-002",
+        "name": "Никита",
+        "role": "Бариста",
+        "contacts": {
+          "phone": "8 980 754 12 82",
+          "telegram": "@Yoshi3313"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "целые смены; не может по четвергам; предпочитает выхи",
+          "preferences": "выхи",
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": "dislikes",
+          "notes": "не любит нижку — скучно, нет потоков"
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [
+            "+5к за штатку",
+            "+5к за киай и от адм (-250 руб/ч)"
+          ],
+          "extra": null,
+          "notes": null
+        },
+        "status": "working",
+        "risks": [],
+        "notes": "Недавно закончил обучение в Куртоше, учится.",
+        "data_gaps": [
+          "schedule.availability"
+        ]
+      },
+      {
+        "id": "EMP-003",
+        "name": "Александра",
+        "role": "Бариста",
+        "contacts": {
+          "phone": "8 999 098 66 61",
+          "telegram": "@spelayavischnyaa"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "не может закрываться; не более 3 смен в неделю; при 4 сменах — невыходы и болезни",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": "dislikes",
+          "notes": "не любит нижку — скучно, нет потоков"
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [
+            "+5к за штатку",
+            "+5к за киай и от адм (-250 руб/ч)"
+          ],
+          "extra": null,
+          "notes": null
+        },
+        "status": "working",
+        "risks": [
+          "часто болеет",
+          "бывали невыходы и опоздания"
+        ],
+        "notes": "На сменах ответственна, чистолюбива.",
+        "data_gaps": [
+          "schedule.availability"
+        ]
+      },
+      {
+        "id": "EMP-004",
+        "name": "Вероника",
+        "role": "Стажёр",
+        "contacts": {
+          "phone": "8 993 748 64 42",
+          "telegram": "@Veronika_Mor"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "2/2, со среды",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "pechka_done",
+          "pechka": "yes",
+          "coffee": "training",
+          "kassa": "training",
+          "notes": "Печка — сама. Обучается кофе и кассе."
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [],
+          "extra": "пока стажёр",
+          "notes": null
+        },
+        "status": "working",
+        "risks": [],
+        "notes": null,
+        "data_gaps": [
+          "nijka.attitude",
+          "schedule.preferences"
+        ]
+      },
+      {
+        "id": "EMP-005",
+        "name": "Анна",
+        "role": "Стажёр",
+        "contacts": {
+          "phone": "8 910 676 12 56",
+          "telegram": "@annnnn_nnnnna"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "2/2; может норм работать",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "pechka_done",
+          "pechka": "yes",
+          "coffee": "training",
+          "kassa": "training",
+          "notes": "Печка — сама. Обучается кофе и кассе."
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [],
+          "extra": "пока стажёр",
+          "notes": null
+        },
+        "status": "working",
+        "risks": [],
+        "notes": "2/2, ст. Печка — сама. Обучается кофе и кассе. Готова работать до 6 мес.",
+        "data_gaps": [
+          "nijka.attitude",
+          "schedule.preferences"
+        ]
+      },
+      {
+        "id": "EMP-006",
+        "name": "Саша",
+        "role": "Стажёр (лайт)",
+        "contacts": {
+          "phone": "89961972167",
+          "telegram": "@ilmintra_neek"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "3 мены в неделю, лайт",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "pechka_training",
+          "pechka": "training",
+          "coffee": "no",
+          "kassa": "no",
+          "notes": "Только начинает обучение на печку."
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [],
+          "extra": "пока стажёр",
+          "notes": null
+        },
+        "status": "working",
+        "risks": [],
+        "notes": "Только начинает обучение на печку. Пока ничего не умеет. Возможно лишняя.",
+        "data_gaps": [
+          "nijka.attitude"
+        ]
+      },
+      {
+        "id": "EMP-007",
+        "name": "Аня",
+        "role": "Ранер",
+        "contacts": {
+          "phone": "8 904 595 25 53",
+          "telegram": "@borschalex"
+        },
+        "functions": [
+          "ранер",
+          "доп. функционал"
+        ],
+        "schedule": {
+          "notes": "с 16 до закрытия; дни уточняет перед составлением графика",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч + 50 руб/ч надбавка",
+          "bonuses": [],
+          "extra": "повышенная ставка бегунка = 250 руб/ч",
+          "notes": null
+        },
+        "status": "runner",
+        "risks": [],
+        "notes": "Бегунок (ранер).",
+        "data_gaps": [
+          "nijka.attitude"
+        ]
+      },
+      {
+        "id": "EMP-008",
+        "name": "Светлана",
+        "role": "Ранер",
+        "contacts": {
+          "phone": "8 904 957 71 65",
+          "telegram": "@mertviy_piero"
+        },
+        "functions": [
+          "ранер",
+          "доп. функционал"
+        ],
+        "schedule": {
+          "notes": "с 16 до закрытия; дни уточняет перед составлением графика",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч + 50 руб/ч надбавка",
+          "bonuses": [],
+          "extra": "повышенная ставка бегунка = 250 руб/ч",
+          "notes": null
+        },
+        "status": "runner",
+        "risks": [],
+        "notes": null,
+        "data_gaps": [
+          "nijka.attitude"
+        ]
+      },
+      {
+        "id": "EMP-009",
+        "name": "Юля",
+        "role": "Бариста (возвращается)",
+        "contacts": {
+          "phone": "8 910 181 27 43",
+          "telegram": "@yurkinnna"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "хочет не менее 4 смен в неделю; предпочтительна Нижка",
+          "preferences": "Нижка",
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": "Универсал ✅. Аттестация запланирована на 25.09."
+        },
+        "nijka": {
+          "attitude": "likes",
+          "notes": "предпочитает Нижку"
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [
+            "+5к за штатку",
+            "+5к за киай и от адм (-250 руб/ч)"
+          ],
+          "extra": "Все самостоятельные смены — полная ставка. Аттестация (формальность) с Кристиной — 25.09.",
+          "notes": null
+        },
+        "status": "working",
+        "risks": [],
+        "notes": "Работает на нижке. Аттестована ✅",
+        "data_gaps": [
+          "schedule.availability"
+        ]
+      },
+      {
+        "id": "EMP-010",
+        "name": "Денис",
+        "role": "Стажёр (управляющий др. кофеен)",
+        "contacts": {
+          "phone": "79045905029",
+          "telegram": "@earcrvsher"
+        },
+        "functions": [
+          "смены",
+          "управление"
+        ],
+        "schedule": {
+          "notes": null,
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [],
+          "extra": "пока стажёр",
+          "notes": null
+        },
+        "status": "trainee",
+        "risks": [],
+        "notes": "Работает на подмоге. Сам печка. До года.",
+        "data_gaps": [
+          "nijka.attitude",
+          "schedule.notes"
+        ]
+      },
+      {
+        "id": "EMP-011",
+        "name": "Ксюша",
+        "role": "Стажёр",
+        "contacts": {
+          "phone": "8 910 189 09 66",
+          "telegram": "@ksushatelegram"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": null,
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "pechka_training",
+          "pechka": "training",
+          "coffee": "no",
+          "kassa": "no",
+          "notes": "Ушла до завершения обучения печке."
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [],
+          "extra": "пока стажёр",
+          "notes": null
+        },
+        "status": "left",
+        "risks": [],
+        "notes": "Ушла (left behind).",
+        "data_gaps": []
+      },
+      {
+        "id": "EMP-012",
+        "name": "Влада",
+        "role": "Стажёр",
+        "contacts": {
+          "phone": null,
+          "telegram": "@assorovav"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "может в любые дни",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [],
+          "extra": "пока стажёр",
+          "notes": null
+        },
+        "status": "leaving",
+        "risks": [
+          "увольняется"
+        ],
+        "notes": "Стажёр вялый. Увольняется. Расчёт 21.09.",
+        "data_gaps": [
+          "nijka.attitude"
+        ]
+      },
+      {
+        "id": "EMP-013",
+        "name": "Арина",
+        "role": "Сессионник (стажёр)",
+        "contacts": {
+          "phone": "89778217241",
+          "telegram": "@foreveri_young"
+        },
+        "functions": [
+          "подмена на запары"
+        ],
+        "schedule": {
+          "notes": "по вызову",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [],
+          "extra": "пока стажёр",
+          "notes": null
+        },
+        "status": "substitute",
+        "risks": [],
+        "notes": null,
+        "data_gaps": [
+          "nijka.attitude"
+        ]
+      },
+      {
+        "id": "EMP-014",
+        "name": "Матвей",
+        "role": "Подменный",
+        "contacts": {
+          "phone": "8 904 261 44 33",
+          "telegram": "@and_komorebi"
+        },
+        "functions": [
+          "перекрытие временно"
+        ],
+        "schedule": {
+          "notes": "не может целыми сменами; о возможностях связываться лично",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [
+            "+5к за штатку",
+            "+5к за киай и от адм (-250 руб/ч)"
+          ],
+          "extra": null,
+          "notes": null
+        },
+        "status": "substitute",
+        "risks": [
+          "только частичные смены"
+        ],
+        "notes": null,
+        "data_gaps": [
+          "nijka.attitude"
+        ]
+      },
+      {
+        "id": "EMP-015",
+        "name": "Маша",
+        "role": "Подменная + обучение стажёров",
+        "contacts": {
+          "phone": "8 999 730 63 51",
+          "telegram": "@Mashundradvo"
+        },
+        "functions": [
+          "подмена",
+          "обучение стажёров",
+          "тест-смены"
+        ],
+        "schedule": {
+          "notes": "работает целыми сменами до 3-й недели сентября включительно; дальше — по договорённости",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "universal",
+          "pechka": "yes",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": null
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч",
+          "bonuses": [
+            "+10к команда",
+            "+10к продажи/сервис (-300 руб/ч)"
+          ],
+          "extra": null,
+          "notes": null
+        },
+        "status": "substitute",
+        "risks": [
+          "договорённость только до 3-й недели сентября"
+        ],
+        "notes": "Работает 2+/- недели. Нижка.",
+        "data_gaps": [
+          "nijka.attitude",
+          "schedule.notes"
+        ]
+      },
+      {
+        "id": "EMP-016",
+        "name": "Оля",
+        "role": "Стажёр (пробная смена)",
+        "contacts": {
+          "phone": "+79209204402",
+          "telegram": "@helgadubova"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "пробная смена в воскресенье",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "pechka_training",
+          "pechka": "training",
+          "coffee": "yes",
+          "kassa": "unknown",
+          "notes": "Опыт по кофе есть. Печка — обучение."
+        },
+        "nijka": {
+          "attitude": "likes",
+          "notes": "Готова работать на нижке"
+        },
+        "pay": {
+          "base": "200 руб/ч (пока стажёр)",
+          "bonuses": [],
+          "extra": null,
+          "notes": null
+        },
+        "status": "trainee",
+        "risks": [
+          "ищет сейчас другую работу; готова поработать у нас пока"
+        ],
+        "notes": "пришла от Маши; пробная смена в воскресенье",
+        "data_gaps": [
+          "trial_result",
+          "schedule.notes"
+        ]
+      }
+    ],
+    "skills_summary": {
+      "universal": [
+        "Катрин",
+        "Никита",
+        "Александра",
+        "Аня",
+        "Светлана",
+        "Денис",
+        "Влада",
+        "Арина",
+        "Матвей",
+        "Маша"
+      ],
+      "pechka_done": [
+        "Вероника",
+        "Анна"
+      ],
+      "pechka_training": [
+        "Оля",
+        "Саша"
+      ]
+    },
+    "nijka_summary": {
+      "likes": [
+        "Юля",
+        "Оля"
+      ],
+      "dislikes": [
+        "Никита",
+        "Александра"
+      ],
+      "unknown": [
+        "Катрин",
+        "Вероника",
+        "Анна",
+        "Саша",
+        "Аня",
+        "Светлана",
+        "Денис",
+        "Влада",
+        "Арина",
+        "Матвей",
+        "Маша"
+      ]
+    },
+    "critical_gaps": {
+      "masha_until_3rd_week_sept": "Маша — целые смены только до 3-й недели сентября. Продление?",
+      "denis_until_year": "Денис — управляющий, но временный (до года).",
+      "vlada_leaving": "Влада — стажёр вялый, увольняется. Расчёт 21.09.",
+      "olya_trial": "Оля — пробная смена, ищет другую работу. Готова работать пока. Печка — обучение."
+    }
+  },
+  "navigation": {
+    "parent": "honeycombs/personal/kurtoch/index.json",
+    "siblings": [
+      "taskboard.json",
+      "knowledge_base.json"
+    ]
+  },
+  "sync_rule": "Mandala (team.json) — эталон. Notion Team — визуальное зеркало (когда создадим базу)."
+}

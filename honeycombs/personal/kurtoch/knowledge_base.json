@@ -1,0 +1,88 @@
+{
+  "identity": {
+    "module_id": "KURTOCH-KB-001",
+    "name": "Kurtoch — Knowledge Base",
+    "version": "v1.0.0",
+    "created": "2026-09-23",
+    "updated": "2026-09-23",
+    "layer": 2,
+    "type": "knowledge_base_module",
+    "description": "База знаний Куртош: чек-листы, регламенты, техкарты, обучение, ЦУ. Пока структура, наполнение — впереди.",
+    "status": "active",
+    "priority": "critical",
+    "parent": "index.json",
+    "resonance": "100%"
+  },
+  "knowledge_base_plan": {
+    "current_state": "Нужно собрать и структурировать.",
+    "options": [
+      "Notion (рекомендуется — красиво, удобно, доступно)",
+      "Google Sheets (просто, но менее гибко)",
+      "Бот (база знаний внутри Telegram)"
+    ],
+    "notion": {
+      "can_edit": true,
+      "requirements": "Notion API токен, интеграция к странице",
+      "structure": [
+        "Чек-листы (открытие, закрытие, чистота)",
+        "Регламенты (5 критических процессов)",
+        "Техкарты (рецепты, стандарты)",
+        "Обучение (для новичков)",
+        "ЦУ (задания на смену)"
+      ]
+    }
+  },
+  "sections": {
+    "checklists_open_close": {
+      "status": "empty",
+      "description": "Чек-листы открытия и закрытия смены",
+      "data_gaps": [
+        "нет содержимого"
+      ]
+    },
+    "checklists_cleanliness": {
+      "status": "empty",
+      "description": "Чек-листы чистоты и санпина",
+      "data_gaps": [
+        "нет содержимого"
+      ]
+    },
+    "regulations_5_processes": {
+      "status": "empty",
+      "description": "5 критических процессов (открытие, закрытие, чистота, касса, обучение)",
+      "data_gaps": [
+        "нет содержимого"
+      ]
+    },
+    "tech_cards": {
+      "status": "empty",
+      "description": "Техкарты — рецепты и стандарты",
+      "data_gaps": [
+        "нет содержимого"
+      ]
+    },
+    "training": {
+      "status": "empty",
+      "description": "Обучение для новичков — материалы, стажировка",
+      "data_gaps": [
+        "нет содержимого"
+      ]
+    },
+    "cu_shift_tasks": {
+      "status": "empty",
+      "description": "ЦУ (центральные указания / задания на смену)",
+      "data_gaps": [
+        "нет содержимого"
+      ]
+    }
+  },
+  "content": {},
+  "navigation": {
+    "parent": "honeycombs/personal/kurtoch/index.json",
+    "siblings": [
+      "taskboard.json",
+      "team.json"
+    ]
+  },
+  "status_note": "Структура готова. Содержимое добавляется постепенно, по мере сбора у команды."
+}
