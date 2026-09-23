@@ -1,234 +1,177 @@
 {
   "identity": {
     "name": "Learning & Certificates — Dima (Gardener)",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-08-14",
-    "updated": "2026-08-14",
-    "description": "Все курсы, сертификаты и обучение."
+    "updated": "2026-09-23",
+    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. Убит дубль certificates_track, добавлен system_analyst_foundation."
+  },
+  "symbiosis": {
+    "partner_file": "honeycombs/personal/career.json",
+    "principle": "Каждый сертификат и навык закрывает конкретный трек карьеры. Обратная связь: карьерный трек требует — обучение закрывает.",
+    "tracks_mapping": {
+      "track_a_ai_ops": ["Google AI Essentials", "GitHub Foundations", "OpenAI Foundations"],
+      "track_b_system_analyst": ["UML", "BPMN", "SQL", "Swagger", "OpenAI Applied", "Anthropic Academy"],
+      "track_c_global_ai": ["CCA-F", "English C1", "OpenAI Agents"]
+    }
   },
   "courses": {
-    "strategy": "Priority: free and critical first (OpenAI Academy) → free and useful second (English, DeepLearning.AI). Paid courses — after securing income (Track A).",
+    "strategy": "Сначала бесплатные и критичные (Google AI, GitHub, OpenAI) → потом системный анализ (UML/BPMN/SQL) → потом углублённые (Anthropic, CCA-F). Платные — только после дохода.",
     "priority_levels": {
-      "critical_free": {
-        "description": "✅ Free, start now. Immediate value for resume and skills.",
+      "critical_free_now": {
+        "description": "✅ Начать сейчас. Прямо влияет на Track A.",
         "list": [
+          {
+            "name": "Google AI Essentials",
+            "platform": "Google",
+            "duration": "1 час",
+            "start": "2026-09-23",
+            "deadline": "2026-09-30",
+            "status": "not_started",
+            "certificate": "Google Certificate",
+            "why": "Самый быстрый сертификат. Закрывает базовый AI-порог. Часто спрашивают на собеседованиях."
+          },
+          {
+            "name": "GitHub Foundations",
+            "platform": "GitHub",
+            "duration": "2-3 часа",
+            "start": "2026-09-23",
+            "deadline": "2026-10-05",
+            "status": "not_started",
+            "certificate": "GitHub Certificate",
+            "why": "Закрывает tech-порог для IT-компаний."
+          },
           {
             "name": "OpenAI Academy: AI Foundations",
             "platform": "OpenAI",
-            "duration": "2-4 weeks",
-            "start": "July 2026",
+            "duration": "2-4 недели",
+            "start": "2026-07-01",
+            "deadline": "2026-10-15",
             "status": "in_progress",
             "certificate": "Credly badge",
-            "why": "Fundamental prompt engineering. Fastest AI credential."
+            "why": "Фундамент промпт-инжиниринга и LLM."
+          }
+        ]
+      },
+      "system_analyst_foundation": {
+        "description": "📚 База для Track B. Бесплатно, на русском. Закрывает разрыв в обучении системного аналитика.",
+        "deadline": "2026-12-15",
+        "list": [
+          {
+            "name": "BPMN 2.0 — Stepik",
+            "platform": "Stepik",
+            "url": "https://stepik.org/course/100356",
+            "duration": "~2 недели",
+            "start": "2026-10-01",
+            "deadline": "2026-10-20",
+            "status": "not_started",
+            "why": "Схемы бизнес-процессов — базовый инструмент аналитика."
           },
           {
-            "name": "OpenAI Academy: Applied AI Foundations",
-            "platform": "OpenAI",
-            "duration": "3-4 weeks",
-            "start": "September 2026",
+            "name": "UML — YouTube + Habr",
+            "platform": "YouTube / Habr",
+            "duration": "~1 неделя",
+            "start": "2026-10-01",
+            "deadline": "2026-10-15",
             "status": "not_started",
-            "certificate": "Credly badge",
-            "why": "Transition from user to architect. Build repeatable AI workflows."
+            "why": "Диаграммы классов, последовательностей, use case."
           },
           {
-            "name": "OpenAI Academy: Agents and Workflows",
-            "platform": "OpenAI",
-            "duration": "3-4 weeks",
-            "start": "October 2026",
+            "name": "SQL для начинающих — Stepik",
+            "platform": "Stepik",
+            "url": "https://stepik.org/course/63054",
+            "duration": "~3 недели",
+            "start": "2026-10-15",
+            "deadline": "2026-11-10",
             "status": "not_started",
-            "certificate": "Credly badge",
-            "why": "Direct path to Agentic Orchestration roles."
+            "why": "Обязательный навык системного аналитика."
           },
           {
-            "name": "Anthropic Academy — Claude Certification Path",
-            "platform": "Anthropic (Skilljar)",
-            "duration": "~20+ часов (17 курсов)",
-            "start": "July 2026",
+            "name": "Swagger / OpenAPI",
+            "platform": "Swagger Editor + Habr",
+            "url": "https://editor.swagger.io/",
+            "duration": "~1 неделя",
+            "start": "2026-11-10",
+            "deadline": "2026-11-20",
             "status": "not_started",
-            "certificate": "Course completion certificates + CCA-F (Claude Certified Architect – Foundations)",
-            "why": "Официальные бесплатные курсы Anthropic. Прямой путь к CCA-F — первой в мире сертификации по Claude. Модули: Claude 101, AI Fluency, API, MCP, Claude Code, Subagents. Экзамен CCA-F (~60 вопросов, прокторинг) — официальный, запущен 12 марта 2026.",
-            "url": "https://anthropic.skilljar.com",
-            "exam_domains": [
-              "Agentic Architecture & Orchestration (27%)",
-              "Claude Code Configuration & Workflows (20%)",
-              "Prompt Engineering & Structured Output (20%)",
-              "Tool Design & MCP Integration (18%)",
-              "Context Management & Reliability (15%)"
-            ],
-            "note": "Курсы бесплатны, не требуют аккаунта Anthropic — только email для Skilljar. Сертификат за курс ≠ CCA-F (это отдельный прокторируемый экзамен)."
+            "why": "Спецификации API — рабочий инструмент аналитика."
           }
         ]
       },
       "secondary_free": {
-        "description": "📚 Free, useful for deepening skills.",
+        "description": "📚 Углубление после базы.",
         "list": [
           {
-            "name": "DeepLearning.AI — AI, LLM, agents courses",
-            "platform": "DeepLearning.AI",
-            "duration": "Varied",
-            "why": "Excellent free supplement."
+            "name": "OpenAI Academy: Applied AI Foundations",
+            "platform": "OpenAI",
+            "duration": "3-4 недели",
+            "start": "2026-11-01",
+            "deadline": "2026-12-15",
+            "status": "not_started",
+            "certificate": "Credly badge",
+            "why": "Переход от пользователя к архитектору."
           },
           {
-            "name": "LangChain / LlamaIndex documentation",
-            "platform": "Open source",
-            "duration": "Ongoing",
-            "why": "Hands-on practice via Mandala."
+            "name": "Anthropic Academy — Claude Certification Path",
+            "platform": "Anthropic (Skilljar)",
+            "url": "https://anthropic.skilljar.com",
+            "duration": "~20+ часов (17 курсов)",
+            "start": "2026-11-15",
+            "deadline": "2027-01-31",
+            "status": "not_started",
+            "certificate": "Course completion + CCA-F",
+            "why": "Путь к CCA-F. Модули: Claude 101, AI Fluency, API, MCP, Claude Code, Subagents."
           },
           {
-            "name": "English (B2→C1, technical AI/ML)",
+            "name": "OpenAI Academy: Agents and Workflows",
+            "platform": "OpenAI",
+            "duration": "3-4 недели",
+            "start": "2027-01-01",
+            "deadline": "2027-02-15",
+            "status": "not_started",
+            "certificate": "Credly badge",
+            "why": "Прямой путь к Agentic Orchestration."
+          },
+          {
+            "name": "English B2 → C1 (technical AI)",
             "platform": "Free resources",
             "duration": "Ongoing",
-            "start": "July 2026",
+            "start": "2026-10-01",
+            "deadline_b2": "2026-12-31",
+            "deadline_c1": "2027-06-30",
             "status": "not_started",
-            "why": "Critical for global market."
+            "why": "Критично для глобального рынка (Track C)."
           }
         ]
       },
-      "future_courses": {
-        "description": "📌 Paid certifications. Invest after securing income (Track A).",
+      "future_paid": {
+        "description": "📌 Платные. Только после дохода Track A.",
         "list": [
           {
             "name": "PMI-CPMAI (AI Project Management)",
             "platform": "PMI",
-            "duration": "2-3 months",
             "cost": "~$500-800",
-            "why": "Gold standard for AI PM. High ROI."
+            "why": "Gold standard для AI PM."
           },
           {
             "name": "Google Project Management Certificate",
             "platform": "Coursera",
-            "duration": "3-6 months",
             "cost": "~$40/month",
-            "why": "Solid PM foundation."
+            "why": "PM фундамент."
           },
           {
             "name": "COO / Operational Director in IT",
             "platform": "OTUS",
-            "duration": "4 months",
-            "cost": "~100 000+ RUB",
-            "why": "Deepens operational knowledge in IT."
-          },
-          {
-            "name": "Lean Six Sigma Yellow Belt",
-            "platform": "TUM / ASQ",
-            "duration": "5-6 months",
-            "cost": "~$100-300",
-            "why": "Process optimization methodology."
+            "cost": "~100 000 RUB",
+            "why": "Углубление операционки в IT."
           }
         ]
-      },
-      "additional_ai_resources": [
-        "OpenRouter / OpenAI API — deepen agent orchestration via Mandala",
-        "GitHub — explore AI agent open-source projects",
-        "Hugging Face — free models and datasets"
-      ]
-    }
-  },
-  "certificates_track": {
-    "description": "Приоритетный трек по получению бесплатных сертификатов для усиления резюме. Влияют на прохождение ATS-фильтров и часто спрашиваются на собеседованиях.",
-    "priority": "high",
-    "strategy": "Получать последовательно, начиная с самых быстрых и высокочастотных. Каждый сертификат сразу добавлять в резюме и профили (hh.ru, LinkedIn, Habr).",
-    "total": 5,
-    "list": [
-      {
-        "id": 1,
-        "name": "Google AI Essentials",
-        "url": "https://grow.google/certificates/",
-        "description": "Базовый сертификат по искусственному интеллекту от Google. Часто спрашивают на собеседованиях на технические роли. Можно получить менее чем за час, совершенно бесплатно.",
-        "priority": "critical",
-        "time_estimate": "1 час",
-        "impact": "Высокий — Google узнают все, закрывает базовый AI-порог",
-        "status": "not_started",
-        "added_to_resume": false
-      },
-      {
-        "id": 2,
-        "name": "GitHub Foundations Certification",
-        "url": "https://education.github.com/",
-        "description": "Фундаментальный сертификат по GitHub, без которого практически невозможно пройти ни в одну солидную tech-компанию. Закрывает множество вопросов, связанных с умением пользоваться GitHub. Бесплатно.",
-        "priority": "critical",
-        "time_estimate": "2-3 часа",
-        "impact": "Высокий — закрывает tech-порог для IT-компаний",
-        "status": "not_started",
-        "added_to_resume": false
-      },
-      {
-        "id": 3,
-        "name": "Claude Certified Architect – Foundations (Anthropic)",
-        "url": "https://anthropic-partners.skilljar.com/",
-        "description": "Один из самых сложных сертификатов. Многие компании даже доплачивают бонусы просто за факт его наличия. Экзамены строятся на реальных кейсах, где нужно, например, построить своего AI-агента. Бесплатно.",
-        "priority": "high",
-        "time_estimate": "20+ часов (включая подготовку)",
-        "impact": "Очень высокий — выделяет среди кандидатов, бонусы от компаний",
-        "status": "not_started",
-        "added_to_resume": false
-      },
-      {
-        "id": 4,
-        "name": "HubSpot Digital Marketing Certification",
-        "url": "https://academy.hubspot.com/",
-        "description": "Отличный сертификат для тех, кто метит в маркетологи или Growth-специалисты. Котируется практически в любой компании. Получение занимает около 5 часов, полностью бесплатно.",
-        "priority": "medium",
-        "time_estimate": "5 часов",
-        "impact": "Средний — полезен для ролей, связанных с маркетингом и ростом",
-        "status": "not_started",
-        "added_to_resume": false
-      },
-      {
-        "id": 5,
-        "name": "IBM SkillsBuild — Cybersecurity Track",
-        "url": "https://skillsbuild.org/",
-        "description": "Трек по кибербезопасности от IBM. Открывает ворота в индустрию, где сейчас наблюдается острая нехватка кадров. Бесплатно.",
-        "priority": "low",
-        "time_estimate": "10+ часов",
-        "impact": "Низкий — для основного трека не критичен, но полезен для расширения",
-        "status": "not_started",
-        "added_to_resume": false
       }
-    ],
-    "recommended_order": [
-      "1. Google AI Essentials — 1 час, сразу в резюме",
-      "2. GitHub Foundations — 2-3 часа, закрывает tech-порог",
-      "3. Claude Certified Architect — 20+ часов, самый сильный",
-      "4. HubSpot Digital Marketing — 5 часов, если есть интерес к маркетингу",
-      "5. IBM SkillsBuild — 10+ часов, если интересна кибербезопасность"
-    ],
-    "integration_with_tracks": {
-      "track_a_ai_hybrid": {
-        "critical": [
-          "Google AI Essentials",
-          "GitHub Foundations"
-        ],
-        "recommended": [
-          "Claude Certified Architect"
-        ]
-      },
-      "track_b_global_ai": {
-        "critical": [
-          "Claude Certified Architect",
-          "Google AI Essentials"
-        ],
-        "recommended": [
-          "GitHub Foundations"
-        ]
-      },
-      "fallback_ops": {
-        "critical": [],
-        "recommended": [
-          "Google AI Essentials"
-        ]
-      }
-    },
-    "tracking": {
-      "last_updated": "2026-07-17",
-      "next_check": "2026-07-24",
-      "status_summary": "0/5 получено"
     }
   },
   "unified_certificate_track": {
-    "description": "Единый приоритетный трек сертификатов. Объединяет OpenAI Academy, Anthropic Academy и отдельные сертификаты в одну последовательность.",
-    "strategy": "Проходить последовательно, начиная с самых быстрых и высокочастотных. Каждый сертификат сразу добавлять в резюме и профили.",
-    "last_updated": "2026-07-17",
+    "description": "Единый трек сертификатов. Заменяет старый certificates_track (удалён — был дубль).",
+    "last_updated": "2026-09-23",
     "total": 9,
     "certificates": [
       {
@@ -236,90 +179,82 @@
         "name": "Google AI Essentials",
         "platform": "Google",
         "url": "https://grow.google/certificates/",
-        "description": "Базовый сертификат по ИИ от Google. 1 час, бесплатно. Часто спрашивают на собеседованиях.",
-        "priority": "critical",
         "time_estimate": "1 час",
+        "deadline": "2026-09-30",
+        "priority": "critical",
         "status": "not_started",
-        "why_in_this_order": "Самый быстрый, даёт мгновенный сертификат для резюме, узнаваемый бренд.",
-        "added_to_resume": false
+        "added_to_resume": false,
+        "why": "Самый быстрый, мгновенный сертификат для резюме."
       },
       {
         "order": 2,
-        "name": "OpenAI Academy: AI Foundations",
-        "platform": "OpenAI",
-        "url": "https://openai.com/",
-        "description": "Фундаментальный курс по промпт-инжинирингу и работе с LLM.",
-        "priority": "critical",
-        "time_estimate": "2-4 недели",
-        "status": "in_progress",
-        "why_in_this_order": "Уже в процессе, фундамент для всего остального.",
-        "added_to_resume": false
-      },
-      {
-        "order": 3,
         "name": "GitHub Foundations Certification",
         "platform": "GitHub",
         "url": "https://education.github.com/",
-        "description": "Фундаментальный сертификат по GitHub. 2-3 часа, бесплатно.",
-        "priority": "high",
         "time_estimate": "2-3 часа",
+        "deadline": "2026-10-05",
+        "priority": "critical",
         "status": "not_started",
-        "why_in_this_order": "Закрывает tech-порог для IT-компаний.",
-        "added_to_resume": false
+        "added_to_resume": false,
+        "why": "Закрывает tech-порог."
+      },
+      {
+        "order": 3,
+        "name": "OpenAI Academy: AI Foundations",
+        "platform": "OpenAI",
+        "url": "https://openai.com/",
+        "time_estimate": "2-4 недели",
+        "deadline": "2026-10-15",
+        "priority": "critical",
+        "status": "in_progress",
+        "added_to_resume": false,
+        "why": "Фундамент."
       },
       {
         "order": 4,
         "name": "OpenAI Academy: Applied AI Foundations",
         "platform": "OpenAI",
         "url": "https://openai.com/",
-        "description": "Переход от пользователя к архитектору. Построение повторяемых AI-воркфлоу.",
-        "priority": "high",
         "time_estimate": "3-4 недели",
+        "deadline": "2026-12-15",
+        "priority": "high",
         "status": "not_started",
-        "why_in_this_order": "Углубление после Foundations.",
-        "added_to_resume": false
+        "added_to_resume": false,
+        "why": "От пользователя к архитектору."
       },
       {
         "order": 5,
         "name": "Anthropic Academy — Claude Certification Path",
         "platform": "Anthropic (Skilljar)",
         "url": "https://anthropic.skilljar.com",
-        "description": "17 бесплатных курсов: Claude 101, AI Fluency, API, MCP, Claude Code, Subagents.",
-        "priority": "high",
         "time_estimate": "20+ часов",
+        "deadline": "2027-01-31",
+        "priority": "high",
         "status": "not_started",
-        "why_in_this_order": "Путь к CCA-F, даёт глубокое понимание Claude.",
         "added_to_resume": false,
-        "exam_domains": [
-          "Agentic Architecture & Orchestration (27%)",
-          "Claude Code Configuration & Workflows (20%)",
-          "Prompt Engineering & Structured Output (20%)",
-          "Tool Design & MCP Integration (18%)",
-          "Context Management & Reliability (15%)"
-        ]
+        "why": "Путь к CCA-F."
       },
       {
         "order": 6,
         "name": "OpenAI Academy: Agents and Workflows",
         "platform": "OpenAI",
         "url": "https://openai.com/",
-        "description": "Прямой путь к ролям Agentic Orchestration.",
-        "priority": "medium",
         "time_estimate": "3-4 недели",
+        "deadline": "2027-02-15",
+        "priority": "medium",
         "status": "not_started",
-        "why_in_this_order": "После Applied — логичный переход к агентам.",
-        "added_to_resume": false
+        "added_to_resume": false,
+        "why": "Agentic Orchestration."
       },
       {
         "order": 7,
         "name": "Claude Certified Architect – Foundations (CCA-F)",
         "platform": "Anthropic",
         "url": "https://anthropic-partners.skilljar.com/",
-        "description": "Официальный прокторируемый экзамен от Anthropic. ~60 вопросов. Запущен 12 марта 2026.",
+        "time_estimate": "Экзамен (~60 вопросов)",
+        "deadline": "2027-03-31",
         "priority": "high",
-        "time_estimate": "Экзамен",
         "status": "not_started",
-        "why_in_this_order": "Самый сильный сертификат, но требует подготовки через курсы Anthropic Academy.",
         "added_to_resume": false,
         "exam_domains": [
           "Agentic Architecture & Orchestration (27%)",
@@ -327,122 +262,139 @@
           "Prompt Engineering & Structured Output (20%)",
           "Tool Design & MCP Integration (18%)",
           "Context Management & Reliability (15%)"
-        ]
+        ],
+        "why": "Самый сильный сертификат."
       },
       {
         "order": 8,
         "name": "HubSpot Digital Marketing Certification",
         "platform": "HubSpot",
         "url": "https://academy.hubspot.com/",
-        "description": "Сертификат для маркетинговых и Growth-ролей. 5 часов, бесплатно.",
-        "priority": "low",
         "time_estimate": "5 часов",
+        "deadline": null,
+        "priority": "low",
         "status": "not_started",
-        "why_in_this_order": "Полезен для расширения, но не критичен для основного трека.",
-        "added_to_resume": false
+        "added_to_resume": false,
+        "why": "Для Growth-ролей. Не критично."
       },
       {
         "order": 9,
         "name": "IBM SkillsBuild — Cybersecurity Track",
         "platform": "IBM",
         "url": "https://skillsbuild.org/",
-        "description": "Трек по кибербезопасности. 10+ часов, бесплатно.",
-        "priority": "low",
         "time_estimate": "10+ часов",
+        "deadline": null,
+        "priority": "low",
         "status": "not_started",
-        "why_in_this_order": "Расширение навыков, не критично для AI-трека.",
-        "added_to_resume": false
+        "added_to_resume": false,
+        "why": "Расширение. Не критично."
       }
     ],
     "quick_wins": [
-      "Google AI Essentials — 1 час, сразу в резюме",
-      "GitHub Foundations — 2-3 часа, закрывает tech-порог"
-    ],
-    "integration_with_tracks": {
-      "track_a_ai_hybrid": {
-        "critical": [
-          "Google AI Essentials",
-          "OpenAI Academy: AI Foundations",
-          "GitHub Foundations"
-        ],
-        "recommended": [
-          "OpenAI Academy: Applied AI Foundations",
-          "Anthropic Academy"
-        ]
-      },
-      "track_b_global_ai": {
-        "critical": [
-          "OpenAI Academy: AI Foundations",
-          "OpenAI Academy: Applied AI Foundations",
-          "Claude Certified Architect"
-        ],
-        "recommended": [
-          "Anthropic Academy",
-          "OpenAI Academy: Agents and Workflows"
-        ]
-      },
-      "fallback_ops": {
-        "critical": [
-          "Google AI Essentials"
-        ],
-        "recommended": [
-          "GitHub Foundations"
-        ]
-      }
-    }
+      "Google AI Essentials — 1 час",
+      "GitHub Foundations — 2-3 часа"
+    ]
   },
-  "last_updated": "2026-08-14",
   "task_tracker": {
-    "description": "Трекер обучения и сертификатов",
+    "description": "Трекер обучения. Выровнен под новые дедлайны (сегодня 2026-09-23).",
     "tasks": [
       {
         "id": "LRN-001",
         "name": "Завершить OpenAI Academy: AI Foundations",
         "status": "in_progress",
         "priority": "critical",
-        "deadline": "2026-07-31",
+        "deadline": "2026-10-15",
         "output": "Сертификат Credly"
       },
       {
         "id": "LRN-002",
         "name": "Пройти Google AI Essentials",
-        "status": "pending",
+        "status": "not_started",
         "priority": "critical",
-        "deadline": "2026-08-15",
+        "deadline": "2026-09-30",
         "output": "Сертификат Google"
       },
       {
         "id": "LRN-003",
         "name": "Пройти GitHub Foundations",
-        "status": "pending",
-        "priority": "high",
-        "deadline": "2026-08-31",
+        "status": "not_started",
+        "priority": "critical",
+        "deadline": "2026-10-05",
         "output": "Сертификат GitHub"
       },
       {
         "id": "LRN-004",
-        "name": "OpenAI Academy: Applied AI Foundations",
-        "status": "pending",
+        "name": "BPMN 2.0 (Stepik)",
+        "status": "not_started",
         "priority": "high",
-        "deadline": "2026-10-15",
-        "output": "Сертификат Credly"
+        "deadline": "2026-10-20",
+        "output": "Практика схем"
       },
       {
         "id": "LRN-005",
-        "name": "Anthropic Academy — Claude Certification Path",
-        "status": "pending",
-        "priority": "medium",
-        "deadline": "2026-11-30",
-        "output": "Course certificates"
+        "name": "UML (YouTube + Habr)",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2026-10-15",
+        "output": "Диаграммы"
       },
       {
         "id": "LRN-006",
-        "name": "Claude Certified Architect (CCA-F)",
-        "status": "pending",
+        "name": "SQL для начинающих (Stepik)",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2026-11-10",
+        "output": "Запросы"
+      },
+      {
+        "id": "LRN-007",
+        "name": "Swagger / OpenAPI",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2026-11-20",
+        "output": "Спецификации"
+      },
+      {
+        "id": "LRN-008",
+        "name": "OpenAI Applied AI Foundations",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2026-12-15",
+        "output": "Credly"
+      },
+      {
+        "id": "LRN-009",
+        "name": "Anthropic Academy Path",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2027-01-31",
+        "output": "Course certificates"
+      },
+      {
+        "id": "LRN-010",
+        "name": "English B2",
+        "status": "not_started",
         "priority": "high",
         "deadline": "2026-12-31",
+        "output": "B2 certificate"
+      },
+      {
+        "id": "LRN-011",
+        "name": "English C1",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2027-06-30",
+        "output": "C1 certificate"
+      },
+      {
+        "id": "LRN-012",
+        "name": "CCA-F экзамен",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2027-03-31",
         "output": "Official certification"
       }
     ]
-  }
+  },
+  "last_updated": "2026-09-23"
 }
