@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Франшиза 'Куртош' — Кризис-менеджмент и операционная система",
-    "version": "v2.16.0",
+    "version": "v2.17.0",
     "created": "2026-08-14",
-    "updated": "2026-09-22",
-    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 51 задача (taskboard v2.0.0), 16 сотрудников. Notion синхронизирован, workspace_mirror — 8 разделов. Progress 40%. ЗП-система описана. Milestones: nijka_revival, centre_revival."
+    "updated": "2026-09-23",
+    "description": "Офер 11.09.2026. Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Фокус: команда, документация, чистота, бот. 59 задач (taskboard v2.1.0), 16 сотрудников. Notion синхронизирован, workspace_mirror — 8 разделов. Progress 40%. ЗП-система описана. Milestones: nijka_revival, centre_revival. v2.17.0: +8 задач K-064..K-071, статус planning, дедлайны синхронизированы с Notion."
   },
   "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
   "status": "active",
@@ -241,9 +241,9 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.0.0",
+    "version": "v2.1.0",
     "created": "2026-09-14",
-    "updated": "2026-09-22",
+    "updated": "2026-09-23",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -256,7 +256,8 @@
         "in_progress": "В работе",
         "blocked": "Заблокировано (ждём данные, человека, решение)",
         "done": "Закрыто",
-        "cancelled": "Отменено"
+        "cancelled": "Отменено",
+        "planning": "В планах (для вех и крупных инициатив)"
       },
       "horizon": {
         "strategic": "Часть большой фазы (phase_0..phase_3). См. plan.",
@@ -486,14 +487,14 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-09-21",
+        "deadline": "2026-10-31",
         "reminder": null,
         "depends_on": [],
         "related_to": [
           "K-021"
         ],
         "created": "2026-09-14",
-        "updated": "2026-09-21",
+        "updated": "2026-09-23",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -628,12 +629,12 @@
         "status": "in_progress",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": null,
+        "deadline": "2026-09-30",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-14",
-        "updated": "2026-09-17",
+        "updated": "2026-09-23",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -691,7 +692,7 @@
         "title": "Расписание (аудит)",
         "description": "Неделя 2: аудит расписания смен.",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-09-22",
@@ -699,8 +700,8 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-14",
-        "updated": "2026-09-17",
-        "completed": null,
+        "updated": "2026-09-23",
+        "completed": "2026-09-22",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -852,12 +853,12 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": null,
+        "deadline": "2026-10-10",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-18",
-        "updated": "2026-09-18",
+        "updated": "2026-09-23",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -874,12 +875,12 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": null,
+        "deadline": "2026-10-10",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-18",
-        "updated": "2026-09-18",
+        "updated": "2026-09-23",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -896,12 +897,12 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": null,
+        "deadline": "2026-10-10",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-18",
-        "updated": "2026-09-18",
+        "updated": "2026-09-23",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1415,22 +1416,206 @@
           "notion_page_id": null,
           "column": "Операционка — Нижка"
         }
+      },
+      {
+        "id": "K-064",
+        "title": "Зона посадки Нижка: перекомпоновка",
+        "description": "Продумать дополнительную удобную зону посадки. Сейчас: 1 стол + диван + 2 кресла (удобно), 2 тумбочки + маленький стол (неудобно), железный стол + 2 стула (± удобно), компьютерная стойка + 2 стула (± удобно, непонятно зачем). Не хватает диванчиковой зоны. Идея: убрать компьютерную зону, перенести в первый зал. Нижка = 2 зала: входной (бар) + посадочный (детская, туалет).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-053"
+        ],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-065",
+        "title": "Уличная вывеска Нижка: новая",
+        "description": "Существующая вывеска над входной зоной НЕ работает для проходных точек. Не видно: издалека на улице, с остановки, с пешеходного потока. Нужно разработать ДОПОЛНИТЕЛЬНУЮ вывеску. Проект: разработать, согласовать, внедрить.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-066",
+        "title": "Цветы: обслуживание",
+        "description": "Обслужить цветы. Было предложение от гостей — кто-то хочет ухаживать. 2 больших цветка за витриной. 6 растений на окне. 1 в посадочной зоне — приуныл. Уход + пересадка.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-067",
+        "title": "Потолок: лампы + чистка + натяжной",
+        "description": "1) Освещение горит не полностью. 2) Потолок грязный (мухи, отложения). 3) Натяжной потолок — узнать стоимость. Вопрос денег, но визуал страдает.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-068",
+        "title": "Вентиляция: вытяжка + починить",
+        "description": "Технический осмотр и починка вентиляции/вытяжки в зоне пекаря. Видимо, не справляется.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-069",
+        "title": "Зеркало: крепление",
+        "description": "Зеркало у стены крепится сверху на скотче к деревянной основе. Выглядит не очень. Заменить крепление — приклеить надёжнее или другой способ.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-070",
+        "title": "Вывеска: «E» отвалилась",
+        "description": "На входной группе вывеска «Kurtage Coffee». Буква «E» отвалилась слегка — не до конца, но висит. Починить/закрепить.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-071",
+        "title": "Сливной стояк / стена колонны",
+        "description": "Сливной стояк в центре помещения с одной стороны раскрыт. Упаковать обратно, сделать красиво. Также: заделать стену колонны.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-23",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 51,
+      "total": 59,
       "by_status": {
-        "done": 11,
-        "todo": 39,
+        "done": 12,
+        "todo": 46,
         "in_progress": 1
       },
       "by_priority": {
         "critical": 11,
-        "high": 34,
-        "medium": 6
+        "high": 38,
+        "medium": 10
+      },
+      "by_column": {
+        "Стратегические": 17,
+        "Операционка — Общая": 18,
+        "Операционка — Нижка": 21,
+        "Операционка — Центр": 3
       },
       "by_phase": {
-        "phase_0": 51
+        "phase_0": 59
       }
     },
     "notes": {
@@ -1445,7 +1630,7 @@
     },
     "sync_rule": "CRITICAL: Notion и franchise.json должны быть всегда синхронны. При любом изменении в Notion — обновить franchise.json. И наоборот. Расхождения недопустимы.",
     "notion_sync": {
-      "last_sync": "2026-09-22",
+      "last_sync": "2026-09-23",
       "status": "synced",
       "notion_workspace": "Куртош & Кофе",
       "notion_database": "📋 Куртош — Taskboard",
@@ -1453,10 +1638,11 @@
       "notion_ai_status_property": "Статус (todo/in_progress/done)",
       "note": "Notion ↔ franchise.json синхронизированы. При любом изменении — обновлять обе стороны.",
       "sync_stats": {
-        "total_tasks": 51,
-        "done": 11,
+        "total_tasks": 59,
+        "done": 12,
         "in_progress": 1,
-        "todo": 39
+        "todo": 46,
+        "planning": 0
       }
     }
   },
@@ -1606,6 +1792,10 @@
     {
       "date": "2026-09-22",
       "event": "v2.16.0: +6 задач (K-057..K-063, кроме K-061). Обновлены K-034/K-038/K-048/K-050/K-051. Добавлен milestones (nijka_revival, centre_revival) + столбец «Крупные вехи» в columns_taxonomy. Taskboard v2.0.0. Всего 51 задача."
+    },
+    {
+      "date": "2026-09-23",
+      "event": "v2.17.0: синхронизация с Notion. +8 задач (K-064..K-071): Зона посадки, Уличная вывеска, Цветы, Потолок, Вентиляция, Зеркало, Вывеска E, Сливной стояк. K-020 → done. Добавлен статус planning. Дедлайны K-010/K-016/K-027/K-028/K-029 синхронизированы. Milestones.linked_tasks пересобраны. Taskboard v2.1.0. Всего 59 задач."
     }
   ],
   "team_roster": {
@@ -2588,7 +2778,7 @@
           {
             "phase": 3,
             "name": "Рост",
-            "details": "Положительные тенденции"
+            "details": "Рост (K-064, K-065 — реорганизация + вывеска)"
           },
           {
             "phase": 4,
@@ -2597,23 +2787,26 @@
           }
         ],
         "linked_tasks": [
+          "K-023",
+          "K-033",
+          "K-034",
           "K-036",
           "K-037",
           "K-038",
-          "K-047",
-          "K-049",
-          "K-050",
-          "K-051",
-          "K-052",
-          "K-053",
-          "K-054",
-          "K-055",
+          "K-043",
           "K-057",
           "K-058",
           "K-059",
           "K-060",
           "K-062",
-          "K-063"
+          "K-063",
+          "K-064",
+          "K-065",
+          "K-066",
+          "K-067",
+          "K-068",
+          "K-069",
+          "K-070"
         ]
       },
       "centre_revival": {
