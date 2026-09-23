@@ -2,15 +2,21 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-09-23",
     "updated": "2026-09-23",
     "layer": 2,
     "type": "personal_subhub_index",
-    "description": "Подпапка проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Включает taskboard, team roster, milestones, compensation system. В будущем — разбивка на модули ≤25-30 КБ с автосинхронизацией с Notion по API.",
+    "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Включает taskboard, team roster, milestones, compensation system. Рабочий скрипт синхронизации с Notion (pull/push). В будущем — разбивка franchise.json на модули ≤25-30 КБ.",
     "status": "active",
     "priority": "critical",
-    "tags": ["personal", "kurtoch", "franchise", "crisis_management", "horeca"],
+    "tags": [
+      "personal",
+      "kurtoch",
+      "franchise",
+      "crisis_management",
+      "horeca"
+    ],
     "resonance": "100%"
   },
   "meta": {
@@ -24,9 +30,10 @@
     "franchise.json": {
       "description": "Главный файл проекта. Сейчас содержит ВСЁ: identity, offer, taskboard, team_roster, milestones, compensation_system, workspace_mirror, history.",
       "purpose": "Единая картина проекта до разбивки на модули.",
-      "version": "v2.16.0",
-      "size_kb": 96,
-      "when_to_use": "Всегда, когда SR работает с проектом Куртош."
+      "version": "v2.17.0",
+      "size_kb": 98,
+      "when_to_use": "Всегда, когда SR работает с проектом Куртош.",
+      "tasks_count": 59
     }
   },
   "planned_modules": {
@@ -82,28 +89,60 @@
     }
   },
   "scripts": {
-    "description": "Скрипты синхронизации и обслуживания. Живут в подпапке scripts/.",
-    "planned": {
+    "description": "Скрипты для работы с Notion и обслуживания хаба. Лежат в scripts/.",
+    "existing": {
       "notion_sync.py": {
-        "purpose": "Двунаправленная синхронизация модулей с Notion по API. Режимы: pull (Notion → snapshot), push (Mandala → Notion).",
-        "status": "planned",
-        "token_source": "~/notion_token.txt (вне репы)",
-        "log_output": "honeycombs/personal/kurtoch/_logs/notion_sync.log"
+        "purpose": "Основной скрипт синхронизации. Читает/пишет данные Notion по API.",
+        "status": "done",
+        "path": "scripts/notion_sync.py",
+        "commands": {
+          "list": "показать список команд",
+          "db_taskboard": "метаданные базы Taskboard",
+          "pull_taskboard": "выгрузить задачи из Notion в снапшот (Notion → Mandala)"
+        },
+        "run_example": "python3 scripts/notion_sync.py pull_taskboard",
+        "token_source": "scripts/notion_token.txt (в .gitignore, не в репе)"
       },
       "notion_runner.sh": {
-        "purpose": "Обёртка для запуска скриптов с логированием в _logs/ и автокоммитом в репу.",
-        "status": "planned"
+        "purpose": "Обёртка: запускает notion_sync.py, логирует, автокоммитит лог, пушит.",
+        "status": "done",
+        "path": "scripts/notion_runner.sh",
+        "run_example": "./scripts/notion_runner.sh pull_taskboard"
+      },
+      "push_taskboard.py": {
+        "purpose": "Скрипт Мандала → Notion: раздаёт K-ID, обновляет столбцы, архивирует.",
+        "status": "done",
+        "path": "scripts/push_taskboard.py",
+        "run_example": "python3 scripts/push_taskboard.py"
+      },
+      "patch_schema.py": {
+        "purpose": "Служебный: добавляет свойства в схему базы Notion (например, ID).",
+        "status": "done",
+        "path": "scripts/patch_schema.py"
+      },
+      "fix_two_ids.py": {
+        "purpose": "Служебный: точечный фикс ID для задач с суффиксами в названиях.",
+        "status": "done",
+        "path": "scripts/fix_two_ids.py"
       }
+    },
+    "planned": {
+      "create_team_db.py": "создать базу сотрудников в Notion",
+      "pull_team.py": "выгрузить сотрудников из Notion",
+      "push_team.py": "обновить сотрудников в Notion",
+      "create_kb_db.py": "создать базу знаний в Notion",
+      "pull_kb.py": "выгрузить базу знаний",
+      "push_kb.py": "обновить базу знаний"
     }
   },
   "logs": {
-    "description": "Логи всех синхронизаций и операций. Коммитятся в репу для прозрачности.",
+    "description": "Логи всех синхронизаций. Коммитятся в репу.",
     "path": "honeycombs/personal/kurtoch/_logs/",
-    "planned_files": [
-      "notion_sync.log — история синхронизаций с Notion",
-      "team_sync.log — история синхронизаций команды (будущее)",
-      "kb_sync.log — история синхронизаций базы знаний (будущее)"
-    ]
+    "files": {
+      "notion_sync.log": "история запусков notion_sync.py",
+      "team_sync.log": "пока нет (будущее)",
+      "kb_sync.log": "пока нет (будущее)"
+    }
   },
   "navigation": {
     "parent": "honeycombs/personal/index.json",
@@ -121,12 +160,98 @@
       "poetry/"
     ],
     "children": [
-      "franchise.json"
+      "index.json",
+      "franchise.json",
+      "scripts/",
+      "_logs/",
+      "_snapshots/"
     ]
   },
   "health": {
     "status": "healthy",
     "last_check": "2026-09-23",
-    "notes": "v1.0.0: создан хаб. TODO: разбить franchise.json (96 KB) на модули ≤30 KB: taskboard, team, knowledge_base, milestones, compensation, history. Реализовать notion_sync.py с автосинхронизацией по API."
+    "notes": "v1.1.0: добавлены workflow_for_new_sr, commands, gitignore_rules, snapshots. Обновлены contents (franchise v2.17.0), scripts (existing + planned). Скрипт notion_sync.py работает."
+  },
+  "snapshots": {
+    "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
+    "path": "honeycombs/personal/kurtoch/_snapshots/",
+    "max_files": 10,
+    "naming": "notion_taskboard_YYYYMMDD_HHMM.json",
+    "rotation": "автоматически, последние 10"
+  },
+  "gitignore_rules": {
+    "file": "honeycombs/personal/kurtoch/.gitignore",
+    "excluded": [
+      "scripts/notion_token.txt — токен Notion, никогда не коммитить",
+      "_snapshots/*.json — рабочие выгрузки, локальные"
+    ],
+    "critical": "Если токен случайно попадёт в git — GitHub автоматически отзовёт его. Немедленно удалить из истории."
+  },
+  "workflow_for_new_sr": {
+    "description": "Пошаговое руководство для нового System Resonator (SR), работающего с проектом Куртош.",
+    "read_me_first": [
+      {
+        "step": 1,
+        "action": "Прочитай этот index.json полностью"
+      },
+      {
+        "step": 2,
+        "action": "Прочитай franchise.json — текущее состояние проекта (59 задач, 16 сотрудников, 2 вехи)"
+      },
+      {
+        "step": 3,
+        "action": "Если нужно обновить Notion — смотри секцию scripts"
+      }
+    ],
+    "how_to_work": {
+      "read_notion_state": {
+        "description": "Прочитать актуальное состояние Notion",
+        "command": "python3 scripts/notion_sync.py pull_taskboard",
+        "result": "создаст снапшот в _snapshots/notion_taskboard_YYYYMMDD_HHMM.json"
+      },
+      "read_with_logging": {
+        "description": "То же, но с логированием и автокоммитом",
+        "command": "./scripts/notion_runner.sh pull_taskboard"
+      },
+      "see_commands": {
+        "description": "Список всех доступных команд",
+        "command": "python3 scripts/notion_sync.py list"
+      },
+      "push_to_notion": {
+        "description": "Обновить Notion из Mandala (ID, столбцы, статусы)",
+        "command": "python3 scripts/push_taskboard.py",
+        "note": "Работает идемпотентно — можно запускать повторно"
+      }
+    },
+    "sync_rules": {
+      "mandala_is_source_of_truth": true,
+      "notion_is_visual_mirror": true,
+      "rule": "Mandala (franchise.json) — эталон. Notion — визуальное зеркало. Если расхождение — правим Notion по Mandala, не наоборот.",
+      "id_conventions": {
+        "tasks": "K-001..K-071 — задачи",
+        "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
+        "next_task_id": "K-072",
+        "next_milestone_id": "M-003"
+      }
+    },
+    "token_instructions": {
+      "location": "scripts/notion_token.txt",
+      "in_git": false,
+      "how_to_create": "read -s -p 'Token: ' T && echo \"$T\" > scripts/notion_token.txt",
+      "how_to_update": "Создать новый коннектор на https://www.notion.so/my-integrations, Regenerate token, заменить содержимое файла",
+      "integration_url": "https://www.notion.so/my-integrations",
+      "warning": "Никогда не коммитить. Никогда не присылать в чат."
+    },
+    "entry_points": {
+      "github_repo": "https://github.com/voodoomushroomzzz-source/mandala-core",
+      "notion_taskboard_url": "https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1",
+      "notion_workspace": "Куртош & Кофе",
+      "notion_database_id": "f6ffa784e7594df9add4fd1c697d4ada"
+    },
+    "directive": {
+      "id": "horeca",
+      "name": "Операционный ассистент HoReCa",
+      "why": "Фокус на операционных процессах кофеен — подходит для проекта Куртош"
+    }
   }
 }
