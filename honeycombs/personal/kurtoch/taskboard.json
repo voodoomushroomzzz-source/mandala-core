@@ -134,31 +134,6 @@
         }
       },
       {
-        "id": "K-012",
-        "title": "Еженедельная планёрка",
-        "description": "Определить день и время еженедельной планёрки. Ввести в регулярный ритм.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-15",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "K-003",
-          "K-011"
-        ],
-        "created": "2026-09-14",
-        "updated": "2026-09-17",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
-        }
-      },
-      {
         "id": "K-013",
         "title": "Исправить время в меню",
         "description": "Исправить время первых куртошей в новом меню: 8:15 → 9:00.",
@@ -166,12 +141,12 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-09-15",
+        "deadline": "2026-10-01",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-14",
-        "updated": "2026-09-17",
+        "updated": "2026-09-23",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1104,26 +1079,26 @@
       }
     ],
     "counters": {
-      "total": 45,
+      "total": 44,
       "by_status": {
-        "todo": 42,
+        "todo": 41,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 34,
+        "high": 33,
         "medium": 9
       },
       "by_column": {
         "Стратегические": 6,
-        "Операционка — Общая": 14,
+        "Операционка — Общая": 13,
         "Операционка — Нижка": 20,
         "Операционка — Центр": 3,
         "Крупные вехи": 2
       },
       "by_phase": {
-        "phase_0": 45
+        "phase_0": 44
       }
     },
     "notes": {

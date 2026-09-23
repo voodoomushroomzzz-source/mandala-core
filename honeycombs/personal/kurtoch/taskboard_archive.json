@@ -423,11 +423,37 @@
           "column": "Операционка — Нижка"
         },
         "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-012",
+        "title": "Еженедельная планёрка",
+        "description": "Определить день и время еженедельной планёрки. Ввести в регулярный ритм.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-003",
+          "K-011"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-23",
+        "completed": "2026-09-23",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-23"
       }
     ],
-    "total": 17,
+    "total": 18,
     "by_status": {
-      "done": 17,
+      "done": 18,
       "cancelled": 0
     }
   },
