@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.166",
+    "version": "v1.7.167",
     "created": "2026-05-11",
     "updated": "2026-09-23",
     "layer": 1,
@@ -2672,7 +2672,7 @@
       "identity": {
         "module_id": "PERSONAL-INDEX-001",
         "name": "Personal Hub — Карта и инструкция",
-        "version": "v2.1.0",
+        "version": "v2.1.1",
         "created": "2026-08-20",
         "updated": "2026-09-23",
         "layer": 2,
@@ -2751,9 +2751,8 @@
         "kurtoch/": {
           "description": "Хаб проекта Куртош — кризис-менеджмент, операционная система, франшиза.",
           "purpose": "Стратегический проект по систематизации и масштабированию кофейни.",
-          "when_to_use": "При работе над проектом франшизы 'Куртош'. Версия franchise v2.16.0 (миграция на v2.17.0).",
-          "internal_ref": "kurtoch/index.json",
-          "note": "TODO: franchise.json (96 KB) разбить на модули <=30 KB + автосинхронизация с Notion."
+          "when_to_use": "При работе над проектом 'Куртош'. Разбит на модули: taskboard, team, knowledge_base.",
+          "note": "Разбивка завершена: franchise.json удалён, данные в kurtoch/taskboard.json, team.json, knowledge_base.json."
         }
       },
       "logic": {
@@ -2799,7 +2798,7 @@
       "health": {
         "status": "healthy",
         "last_check": "2026-09-23",
-        "notes": "v2.1.0: franchise.json перенесён в kurtoch/. Создан kurtoch/index.json как хаб. TODO: модули <=30 KB + Notion sync."
+        "notes": "v2.1.1: franchise.json разбит на модули (taskboard, team, knowledge_base) и удалён. kurtoch/index.json — входная точка."
       }
     }
   },
