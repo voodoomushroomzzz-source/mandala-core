@@ -1,0 +1,132 @@
+{
+  "identity": {
+    "module_id": "PERSONAL-KURTOCH-INDEX-001",
+    "name": "Kurtoch — Franchise & Operations Hub",
+    "version": "v1.0.0",
+    "created": "2026-09-23",
+    "updated": "2026-09-23",
+    "layer": 2,
+    "type": "personal_subhub_index",
+    "description": "Подпапка проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Включает taskboard, team roster, milestones, compensation system. В будущем — разбивка на модули ≤25-30 КБ с автосинхронизацией с Notion по API.",
+    "status": "active",
+    "priority": "critical",
+    "tags": ["personal", "kurtoch", "franchise", "crisis_management", "horeca"],
+    "resonance": "100%"
+  },
+  "meta": {
+    "description": "Hub для всех файлов проекта Куртош. Родительский модуль: personal/index.json.",
+    "purpose": "Структурирование операционной системы Куртош: задачи, команда, документация, milestones.",
+    "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
+    "status_global": "active",
+    "priority_global": "critical"
+  },
+  "contents": {
+    "franchise.json": {
+      "description": "Главный файл проекта. Сейчас содержит ВСЁ: identity, offer, taskboard, team_roster, milestones, compensation_system, workspace_mirror, history.",
+      "purpose": "Единая картина проекта до разбивки на модули.",
+      "version": "v2.16.0",
+      "size_kb": 96,
+      "when_to_use": "Всегда, когда SR работает с проектом Куртош."
+    }
+  },
+  "planned_modules": {
+    "description": "TODO: разбить franchise.json на модули ≤25-30 КБ. Статус: запланировано, не реализовано.",
+    "target_size_kb": "25-30",
+    "current_size_kb": 96,
+    "estimated_modules": 4,
+    "modules": {
+      "index.json": {
+        "purpose": "Манифест подпапки (этот файл).",
+        "status": "created",
+        "size_target_kb": "5-10"
+      },
+      "taskboard.json": {
+        "purpose": "Модуль задач. Синхронизируется с Notion Taskboard по API автоматически при изменении.",
+        "status": "planned",
+        "size_target_kb": "30-40",
+        "notion_database": "📋 Куртош — Taskboard",
+        "notion_database_id": "f6ffa784e7594df9add4fd1c697d4ada",
+        "sync_direction": "bidirectional (но Notion — визуальное зеркало, Mandala — эталон)"
+      },
+      "team.json": {
+        "purpose": "Модуль сотрудников. Синхронизируется с Notion Team по API.",
+        "status": "planned",
+        "size_target_kb": "25-30",
+        "notion_database": "👥 Куртош — Сотрудники",
+        "notion_database_id": "TBD",
+        "sync_direction": "bidirectional"
+      },
+      "knowledge_base.json": {
+        "purpose": "Модуль базы знаний (чек-листы, регламенты, техкарты, обучение, ЦУ). Синхронизируется с Notion Knowledge Base.",
+        "status": "planned",
+        "size_target_kb": "20-30",
+        "notion_database": "📚 Куртош — База знаний",
+        "notion_database_id": "TBD",
+        "sync_direction": "bidirectional"
+      },
+      "milestones.json": {
+        "purpose": "Модуль крупных вех (nijka_revival, centre_revival).",
+        "status": "planned",
+        "size_target_kb": "10-15"
+      },
+      "compensation.json": {
+        "purpose": "Модуль ЗП-системы (база, бонусы, старшие, даты выплат).",
+        "status": "planned",
+        "size_target_kb": "10-15"
+      },
+      "history.json": {
+        "purpose": "История версий franchise.json (все записи из history).",
+        "status": "planned",
+        "size_target_kb": "15-20"
+      }
+    }
+  },
+  "scripts": {
+    "description": "Скрипты синхронизации и обслуживания. Живут в подпапке scripts/.",
+    "planned": {
+      "notion_sync.py": {
+        "purpose": "Двунаправленная синхронизация модулей с Notion по API. Режимы: pull (Notion → snapshot), push (Mandala → Notion).",
+        "status": "planned",
+        "token_source": "~/notion_token.txt (вне репы)",
+        "log_output": "honeycombs/personal/kurtoch/_logs/notion_sync.log"
+      },
+      "notion_runner.sh": {
+        "purpose": "Обёртка для запуска скриптов с логированием в _logs/ и автокоммитом в репу.",
+        "status": "planned"
+      }
+    }
+  },
+  "logs": {
+    "description": "Логи всех синхронизаций и операций. Коммитятся в репу для прозрачности.",
+    "path": "honeycombs/personal/kurtoch/_logs/",
+    "planned_files": [
+      "notion_sync.log — история синхронизаций с Notion",
+      "team_sync.log — история синхронизаций команды (будущее)",
+      "kb_sync.log — история синхронизаций базы знаний (будущее)"
+    ]
+  },
+  "navigation": {
+    "parent": "honeycombs/personal/index.json",
+    "siblings": [
+      "profile_deep.json",
+      "career.json",
+      "creative.json",
+      "instagram.json",
+      "youtube.json",
+      "ecommerce.json",
+      "learning.json",
+      "self_development.json",
+      "gov_orders.json",
+      "music/",
+      "poetry/"
+    ],
+    "children": [
+      "franchise.json"
+    ]
+  },
+  "health": {
+    "status": "healthy",
+    "last_check": "2026-09-23",
+    "notes": "v1.0.0: создан хаб. TODO: разбить franchise.json (96 KB) на модули ≤30 KB: taskboard, team, knowledge_base, milestones, compensation, history. Реализовать notion_sync.py с автосинхронизацией по API."
+  }
+}
