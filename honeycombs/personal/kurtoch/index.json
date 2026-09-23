@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v1.1.0",
+    "version": "v1.1.1",
     "created": "2026-09-23",
     "updated": "2026-09-23",
     "layer": 2,
@@ -39,8 +39,8 @@
   "planned_modules": {
     "description": "TODO: разбить franchise.json на модули ≤25-30 КБ. Статус: запланировано, не реализовано.",
     "target_size_kb": "25-30",
-    "current_size_kb": 96,
-    "estimated_modules": 4,
+    "current_size_kb": 98,
+    "estimated_modules": 6,
     "modules": {
       "index.json": {
         "purpose": "Манифест подпапки (этот файл).",
@@ -170,7 +170,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-09-23",
-    "notes": "v1.1.0: добавлены workflow_for_new_sr, commands, gitignore_rules, snapshots. Обновлены contents (franchise v2.17.0), scripts (existing + planned). Скрипт notion_sync.py работает."
+    "notes": "v1.1.1: уточнены ID-конвенция (пропуски), current_size_kb (98), estimated_modules (6)."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -228,7 +228,7 @@
       "notion_is_visual_mirror": true,
       "rule": "Mandala (franchise.json) — эталон. Notion — визуальное зеркало. Если расхождение — правим Notion по Mandala, не наоборот.",
       "id_conventions": {
-        "tasks": "K-001..K-071 — задачи",
+        "tasks": "K-001..K-071 с пропусками (K-017, K-047..K-056, K-061). Следующий свободный — K-072.",
         "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
         "next_task_id": "K-072",
         "next_milestone_id": "M-003"
