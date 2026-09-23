@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.0.0",
+    "version": "v2.1.0",
     "created": "2026-09-23",
     "updated": "2026-09-23",
     "layer": 2,
@@ -28,10 +28,11 @@
   },
   "contents": {
     "taskboard.json": {
-      "description": "База задач Куртош + крупные вехи.",
+      "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
       "version": "v2.1.0",
-      "tasks_count": 59
+      "tasks_count": 45,
+      "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
       "description": "Картотека сотрудников.",
@@ -44,6 +45,12 @@
       "purpose": "Структура готова, наполнение — по мере сбора.",
       "version": "v1.0.0",
       "sections_count": 6
+    },
+    "taskboard_archive.json": {
+      "description": "Архив завершённых задач (done + cancelled).",
+      "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
+      "version": "v1.0.0",
+      "tasks_count": 17
     }
   },
   "scripts": {
@@ -120,6 +127,7 @@
     "children": [
       "index.json",
       "taskboard.json",
+      "taskboard_archive.json",
       "team.json",
       "knowledge_base.json",
       "scripts/",
@@ -130,7 +138,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-09-23",
-    "notes": "v2.0.0: franchise.json разбит на 3 модуля (taskboard, team, knowledge_base). Блок modules добавлен. franchise.json удалён."
+    "notes": "v2.1.0: M-001/M-002 перенесены в tasks. Архив вынесен в taskboard_archive.json (17 задач). push_taskboard.py читает оба файла. Notion синхронизирован: 62 = 62."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -156,7 +164,7 @@
       },
       {
         "step": 2,
-        "action": "Прочитай taskboard.json (задачи), team.json (сотрудники), knowledge_base.json (база знаний)"
+        "action": "Прочитай taskboard.json (активные задачи), taskboard_archive.json (архив), team.json (сотрудники), knowledge_base.json (база знаний)"
       },
       {
         "step": 3,
@@ -803,6 +811,12 @@
       "purpose": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
       "when_to_use": "Когда нужно добавить/прочитать материал базы знаний.",
       "sync": "Notion Knowledge Base (будет создана)"
+    },
+    "taskboard_archive": {
+      "file": "taskboard_archive.json",
+      "purpose": "Архив завершённых задач (done + cancelled). 17 задач.",
+      "when_to_use": "Когда нужно посмотреть историю завершённых задач.",
+      "sync": "Notion Taskboard (через scripts/push_taskboard.py — читает оба файла)"
     }
   }
 }

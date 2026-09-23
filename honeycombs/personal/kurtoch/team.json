@@ -14,15 +14,15 @@
     "resonance": "100%"
   },
   "team_roster": {
-    "last_updated": "2026-09-21",
+    "last_updated": "2026-09-23",
     "total_employees": 16,
     "by_status": {
       "core": 1,
-      "working": 6,
+      "working": 5,
+      "leaving": 2,
       "runner": 2,
       "trainee": 2,
       "left": 1,
-      "leaving": 1,
       "substitute": 3
     },
     "skill_ladder": {
@@ -203,11 +203,12 @@
           "extra": "пока стажёр",
           "notes": null
         },
-        "status": "working",
-        "risks": [],
-        "notes": null,
+        "status": "leaving",
+        "risks": [
+          "увольняется — последняя смена 26.09.2026"
+        ],
+        "notes": "Увольняется. Последняя смена — пятница 26.09.2026.",
         "data_gaps": [
-          "nijka.attitude",
           "schedule.preferences"
         ]
       },

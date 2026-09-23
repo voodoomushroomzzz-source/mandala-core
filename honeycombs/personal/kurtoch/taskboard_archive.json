@@ -1,0 +1,438 @@
+{
+  "identity": {
+    "module_id": "KURTOCH-TASKBOARD-ARCHIVE-001",
+    "name": "Kurtoch — Taskboard Archive",
+    "version": "v1.0.0",
+    "created": "2026-09-23",
+    "updated": "2026-09-23",
+    "type": "taskboard_archive",
+    "parent": "taskboard.json",
+    "description": "Архив завершённых задач (done + cancelled).",
+    "status": "active",
+    "priority": "medium"
+  },
+  "archive": {
+    "description": "Завершённые задачи. Синхронизируются с Notion тем же скриптом.",
+    "tasks": [
+      {
+        "id": "K-001",
+        "title": "Taskboard Notion Куртош",
+        "description": "Создать воркспейс в Notion: единая картина для Виктора и Димы. Структура — см. knowledge_base_plan.notion.structure.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-14",
+        "reminder": "11:00",
+        "depends_on": [],
+        "related_to": [
+          "K-002",
+          "K-004"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-002",
+        "title": "Вопросы к планёрке",
+        "description": "Подготовить вопросы и структуру планёрки с командой. Генуборка во вторник. Учесть историю: усталость, уходит управляющий, зарплата плавает, разрозненность знаний.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-14",
+        "reminder": "11:00",
+        "depends_on": [],
+        "related_to": [
+          "K-001",
+          "K-003"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-003",
+        "title": "Планёрка с командой",
+        "description": "Провести планёрку (генуборка). Проговорить важные моменты с учётом истории команды.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-15",
+        "reminder": "11:00",
+        "depends_on": [
+          "K-002"
+        ],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-005",
+        "title": "Реальная штатка + план + дефицит",
+        "description": "Составить реальную штатку (ФИО, должность, уровень). Сравнить с планом. Выявить дефицит.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-18",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-015"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": "2026-09-14",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-007",
+        "title": "Точная дата входа",
+        "description": "Зафиксировать точную дату входа в должность. Выяснить формальные условия старта.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-14",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-009",
+        "title": "Важные контакты",
+        "description": "Собрать важные контакты: поставщики, персонал, сервисы.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-17",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-018"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-011",
+        "title": "День генуборки",
+        "description": "Выбрать фиксированный день недели для генуборки.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-16",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-012"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-014",
+        "title": "Операционка: поломки, экстренные",
+        "description": "Неделя 1: знакомство с операционкой. Поломки, экстренные ситуации.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-015",
+        "title": "Анализ сотрудников",
+        "description": "Неделя 1: анализ сотрудников, выводы. Кто на грани, кто ключевой.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-21",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-005",
+          "K-006"
+        ],
+        "created": "2026-09-14",
+        "updated": "2026-09-14",
+        "completed": "2026-09-14",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-020",
+        "title": "Расписание (аудит)",
+        "description": "Неделя 2: аудит расписания смен.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-22",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-23",
+        "completed": "2026-09-22",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-022",
+        "title": "Перехват найма",
+        "description": "Перехват процесса найма (2–3 неделя). Взять под контроль. Перехват найма закрыт. Найм под контролем.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-29",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-23",
+        "completed": "2026-09-23",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-026",
+        "title": "Таскборд",
+        "description": "Довести таскборд до финала — заполнение, проверка видов.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-001"
+        ],
+        "created": "2026-09-17",
+        "updated": "2026-09-17",
+        "completed": "2026-09-17",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-028",
+        "title": "Сессионные — договорённости",
+        "description": "Договориться с сессионными ребятами (Денис, Маша, Оля, Аня) о сроке работы. Правило: предупреждать за месяц. Договорённости с сессионными достигнуты.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-10",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-18",
+        "updated": "2026-09-23",
+        "completed": "2026-09-23",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-030",
+        "title": "Кассы: сбои (обе точки)",
+        "description": "Кассы часто глючат и вылетают на обеих точках. Сотрудники мучаются. Нужно разобраться с причиной и решить системно. Кассы закрыто. Нижка: касса заменена (тормозит, но работает). Центр: вопросы налажены. Проблема больше не блокирует работу.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-23",
+        "completed": "2026-09-23",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-032",
+        "title": "Расчёт Владе (увольнение)",
+        "description": "Выдать расчёт Владе — стажёр, увольняется. Расчёт Владе выдан.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-21",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-23",
+        "completed": "2026-09-23",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-035",
+        "title": "Разговор с командой: условия",
+        "description": "Поговорить с каждым сотрудником: сколько может/планирует работать, понимает ли ставки, знает ли про бонусы, есть ли вопросы по условиям. Разговор с командой об условиях проведён.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-23",
+        "completed": "2026-09-23",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-042",
+        "title": "Колонка провод посмотреть",
+        "description": "Колонка на Нижке — проверить провод. Закрыта по итогу осмотра.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-21",
+        "completed": "2026-09-21",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-09-23"
+      }
+    ],
+    "total": 17,
+    "by_status": {
+      "done": 17,
+      "cancelled": 0
+    }
+  },
+  "navigation": {
+    "parent": "honeycombs/personal/kurtoch/index.json",
+    "sibling": "taskboard.json"
+  }
+}
