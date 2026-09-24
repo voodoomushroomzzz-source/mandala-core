@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "BOOT-ONLINE-ONBOARDING-PC-001",
     "name": "Boot Online Onboarding PC — All-in-One Heuristic File",
-    "version": "v1.7.170",
+    "version": "v1.7.171",
     "created": "2026-05-11",
     "updated": "2026-09-24",
     "layer": 1,
@@ -1178,12 +1178,12 @@
       "identity": {
         "module_id": "INSTR-MOBILE-WORKFLOW-001",
         "name": "Mobile Workflow — Working with Mandala from Android",
-        "version": "v1.11.0",
+        "version": "v1.12.0",
         "created": "2026-04-12",
-        "updated": "2026-07-15",
+        "updated": "2026-09-24",
         "layer": 2,
         "type": "workflow_guide",
-        "description": "Complete guide for External SR working from Android/Termux. v1.5.0: added patcher_method as equal deployment option.",
+        "description": "Complete guide for External SR working from Android/Termux. v1.12.0: добавлен раздел learned_rules_2026_09 (13 практик из реальных сессий Куртош 23-24.09.2026): noexec, абсолютные пути, идемпотентность, retry, pull --rebase, git add папки, обёртки, tee.",
         "status": "active",
         "priority": "high",
         "tags": [
@@ -1280,7 +1280,8 @@
           "task": "Та же навигация, но попытка через cat с heredoc",
           "reason": "SyntaxError из-за сложных строк в замене",
           "lesson": "Для сложных многострочных замен всегда использовать Python-патчер"
-        }
+        },
+        "idempotency_rule": "Любой патч должен безопасно запускаться повторно. Перед изменением — проверка 'уже применено?' → return."
       },
       "self_learning": {
         "reference": "External SR may propose learned rules. See honeycombs/instructions/mobile_workflow.json#learned_rules. Format: rule + context + bad/good examples. Gardener approval required before patching."
@@ -1446,6 +1447,22 @@
           {
             "problem": "Ctrl keys not working",
             "solution": "Use Volume Up as Ctrl."
+          },
+          {
+            "problem": "chmod +x не работает",
+            "solution": "Android noexec. Запускать через bash script.sh"
+          },
+          {
+            "problem": "basename/dirname в скрипте не работает",
+            "solution": "Использовать абсолютные пути /storage/emulated/0/..."
+          },
+          {
+            "problem": "SSL: UNEXPECTED_EOF_WHILE_READING",
+            "solution": "Добавить retry с экспоненциальной паузой"
+          },
+          {
+            "problem": "git push rejected (fetch first)",
+            "solution": "git pull --rebase origin main && git push"
           }
         ]
       },
@@ -1475,8 +1492,8 @@
       },
       "health": {
         "status": "healthy",
-        "last_check": "2026-07-14",
-        "notes": "v1.10.0: добавлен large_files_handling. Обновлена дата проверки."
+        "last_check": "2026-09-24",
+        "notes": "v1.12.0: добавлен раздел learned_rules_2026_09 (13 правил из сессий 23-24.09.2026). Обновлён troubleshooting (+4 пункта). patching_guide: идемпотентность."
       },
       "large_files_handling": {
         "title": "Работа с большими файлами",
@@ -1566,6 +1583,103 @@
       "base_rules_reference": {
         "note": "Основные правила работы (pre-check, post-check, copyable links, git commit, laconic communication, system flow, API patterns, zones of responsibility) находятся в external_sr_workflow.json. Этот файл содержит ТОЛЬКО мобильную специфику (Termux, micro, FULL DEPLOY через cat).",
         "external_file": "honeycombs/instructions/core/external_sr_workflow.json"
+      },
+      "learned_rules_2026_09": {
+        "description": "13 эмпирических правил, выведенных из реальных сессий по проекту Куртош 23-24.09.2026. Дополняют golden_rule и patching_guide. Обязательны для всех External SR на Android.",
+        "added": "2026-09-24",
+        "rules": [
+          {
+            "id": "LR-01",
+            "title": "noexec на /storage/emulated/0",
+            "problem": "chmod +x script.sh не работает. Файлы монтируются с флагом noexec.",
+            "solution": "Запускать через bash: bash script.sh (не ./script.sh)",
+            "example": "bash scripts/notion_runner.sh full_sync"
+          },
+          {
+            "id": "LR-02",
+            "title": "Абсолютные пути в shell-скриптах",
+            "problem": "dirname $0 не работает при запуске через bash file.sh не из папки скрипта.",
+            "solution": "Использовать абсолютные пути: /storage/emulated/0/mandala-core/...",
+            "example": "REPO=\"/storage/emulated/0/mandala-core\"; cd \"$REPO\""
+          },
+          {
+            "id": "LR-03",
+            "title": "Идемпотентность патчей",
+            "problem": "Повторный запуск патча портит данные.",
+            "solution": "Перед изменением проверять: if \"уже применено\" in content: return",
+            "example": "if any(t['id'] == 'K-073' for t in tasks): print('уже есть'); return"
+          },
+          {
+            "id": "LR-04",
+            "title": "Проверка на токен перед коммитом",
+            "problem": "Секреты могут случайно попасть в staged.",
+            "solution": "Перед каждым commit: git diff --cached --name-only | grep -i token",
+            "example": "git diff --cached --name-only | grep -i token && echo 'STOP' || echo '✓ OK'"
+          },
+          {
+            "id": "LR-05",
+            "title": "pull --rebase перед каждым push",
+            "problem": "Бот параллельно пушит — push отклоняется с 'fetch first'.",
+            "solution": "Всегда: git pull --rebase origin main && git push",
+            "example": "git pull --rebase origin main && git push"
+          },
+          {
+            "id": "LR-06",
+            "title": "Retry для HTTP-запросов",
+            "problem": "SSL-обрывы (SSLEOFError) при работе с Notion API на мобильном интернете.",
+            "solution": "Обернуть urlopen в retry с экспоненциальной паузой (1с → 2с → 4с), 3 попытки.",
+            "example": "for attempt in range(3): try: ... except URLError: time.sleep(2 ** attempt)"
+          },
+          {
+            "id": "LR-07",
+            "title": "git add всей папки, не отдельных файлов",
+            "problem": "git add с конкретными файлами — легко забыть один. Потерянные файлы не коммитятся.",
+            "solution": "git add <папка>/ — вся папка. git сам найдёт изменения.",
+            "example": "git add honeycombs/personal/kurtoch/"
+          },
+          {
+            "id": "LR-08",
+            "title": "Обёртки (.sh) для повторяющихся действий",
+            "problem": "Многошаговые действия — ошибки при ручном вводе.",
+            "solution": "Один раз написать script.sh, запускать одной командой.",
+            "example": "bash scripts/notion_runner.sh full_sync (archive + push + commit + push)"
+          },
+          {
+            "id": "LR-09",
+            "title": "Скрипты-патчеры временные",
+            "problem": "Разовые патчи засоряют репу.",
+            "solution": "Для разового — patch.py, запустить, удалить (rm patch.py). Регулярные — оставляем.",
+            "example": "python3 patch_x.py && rm patch_x.py && git add ..."
+          },
+          {
+            "id": "LR-10",
+            "title": "tee для логов длинных скриптов",
+            "problem": "Долгий скрипт «висит» — непонятно работает или нет.",
+            "solution": "python script.py 2>&1 | tee /tmp/log — видно прогресс + сохраняется.",
+            "example": "python3 push_taskboard.py 2>&1 | tee /tmp/push.log"
+          },
+          {
+            "id": "LR-11",
+            "title": "Разбивать длинные heredoc-блоки",
+            "problem": "Копипаста очень длинных (200+ строк) блоков на Android иногда обрезается.",
+            "solution": "Для длинных файлов — разбивать на части или создавать через несколько cat >> (append).",
+            "example": "cat > file.py << EOF # часть 1; cat >> file.py << EOF # часть 2"
+          },
+          {
+            "id": "LR-12",
+            "title": "ls -la после создания файла",
+            "problem": "Heredoc иногда не создаёт файл — а мы думаем, что всё ок.",
+            "solution": "После cat > file: всегда ls -la file — убедиться что файл создан и не пустой.",
+            "example": "cat > x.py << EOF ... EOF; ls -la x.py"
+          },
+          {
+            "id": "LR-13",
+            "title": "Секреты только через .gitignore",
+            "problem": "Токены могут попасть в репу. GitHub автоматически отзывает Notion-токены.",
+            "solution": "Секреты — в файлах под .gitignore. Проверка: git check-ignore file",
+            "example": "git check-ignore scripts/notion_token.txt && echo '✓ ignored'"
+          }
+        ]
       }
     }
   },
