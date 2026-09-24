@@ -2,21 +2,21 @@
   "identity": {
     "module_id": "PERSONAL-INDEX-001",
     "name": "Personal Hub — Карта и инструкция",
-    "version": "v2.2.0",
+    "version": "v2.3.0",
     "created": "2026-08-20",
-    "updated": "2026-09-23",
+    "updated": "2026-09-24",
     "layer": 2,
     "type": "personal_index",
-    "description": "Центральная карта для personal/. v2.2.0: career + learning теперь симбиотичны — взаимные ссылки, единый roadmap карьеры и обучения.",
+    "description": "Центральная карта для personal/. v2.3.0: добавлен pilgrimage.json — долгосрочный проект паломничества. v2.2.0: career + learning теперь симбиотичны — взаимные ссылки, единый roadmap карьеры и обучения.",
     "status": "active",
     "priority": "high",
-    "tags": ["personal", "index", "instruction", "gardener", "profile", "symbiosis"],
+    "tags": ["personal", "index", "instruction", "gardener", "profile", "symbiosis", "pilgrimage"],
     "resonance": "100%"
   },
   "meta": {
-    "description": "Папка personal/ — единое пространство для личных данных Gardener: биография, ценности, карьерные треки, обучение, творчество, стратегии.",
+    "description": "Папка personal/ — единое пространство для личных данных Gardener: биография, ценности, карьерные треки, обучение, творчество, стратегии, долгосрочные проекты.",
     "purpose": "Централизованное хранение и структурирование личной информации для SR.",
-    "how_to_use": "Начинай с profile_deep.json. Для карьеры и обучения — читай оба файла вместе (они в симбиозе).",
+    "how_to_use": "Начинай с profile_deep.json. Для карьеры и обучения — читай оба файла вместе (они в симбиозе). Для долгосрочных личных проектов — pilgrimage.json.",
     "change_requires": "gardener_approval"
   },
   "core_files": {
@@ -59,6 +59,14 @@
     },
     "gov_orders.json": {
       "description": "Госзаказы: 44-ФЗ и 223-ФЗ."
+    },
+    "pilgrimage.json": {
+      "description": "Пешее паломничество Владимир → Варанаси. Путь на доверии к миру: только пожертвования, только входящие предложения помощи, влог в реальном времени. Точка сборки творчества, Мандалы и личного поиска.",
+      "purpose": "Долгосрочный личный проект-паломничество. Встроен в Мандалу.",
+      "status": "seed / first_sketches",
+      "deadline": "2029",
+      "version": "v0.1.0",
+      "updated": "2026-09-24"
     },
     "music/": {
       "description": "Музыкальные проекты."
@@ -122,6 +130,7 @@
       "ecommerce.json",
       "self_development.json",
       "gov_orders.json",
+      "pilgrimage.json",
       "music/",
       "poetry/",
       "kurtoch/index.json"
@@ -129,7 +138,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-09-23",
-    "notes": "v2.2.0: career + learning объединены в symbiosis-контур. Единый roadmap карьеры и обучения. Убит дубль certificates_track в learning."
+    "last_check": "2026-09-24",
+    "notes": "v2.3.0: добавлен pilgrimage.json — долгосрочный проект паломничества (Владимир → Варанаси, до 2029)."
   }
 }
