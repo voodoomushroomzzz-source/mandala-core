@@ -46,7 +46,7 @@ case "$CMD" in
     echo "" | tee -a "$LOG_ABS"
     echo "[3/3] git commit + push" | tee -a "$LOG_ABS"
     cd "$REPO"
-    git add "$KURTOCH_REL/taskboard.json" "$KURTOCH_REL/taskboard_archive.json" "$LOG_REL"
+    git add "$KURTOCH_REL/"
     if ! git diff --cached --quiet 2>/dev/null; then
       git commit -m "chore(kurtoch): full_sync $(date '+%Y-%m-%d %H:%M')" >/dev/null
       git pull --rebase origin main >/dev/null 2>&1 || true
