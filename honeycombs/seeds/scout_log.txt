@@ -7817,3 +7817,57 @@
 [2026-09-24 07:01:05] [INFO]   Total duplicates: 5
 [2026-09-24 07:01:05] [INFO]   Total removed (old): 0
 [2026-09-24 07:01:05] [INFO] ============================================================
+[2026-09-24 14:02:36] [INFO] ============================================================
+[2026-09-24 14:02:36] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-24 14:02:36] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-24 14:02:36] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-24 14:02:37] [INFO]   → Found 15 raw items, 0 recent
+[2026-09-24 14:02:37] [INFO]   → Filtered to 0 relevant items
+[2026-09-24 14:02:37] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-09-24 14:02:37] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-24 14:02:37] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-24 14:02:37] [INFO]   → Found 15 raw items, 0 recent
+[2026-09-24 14:02:37] [INFO]   → Filtered to 0 relevant items
+[2026-09-24 14:02:37] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-09-24 14:02:37] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-24 14:02:37] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-24 14:02:37] [INFO]   → Found 15 raw items, 4 recent
+[2026-09-24 14:02:37] [INFO]   → Filtered to 2 relevant items
+[2026-09-24 14:02:37] [INFO]   ⏭️ Duplicate: Claude discovers a novel enzyme system with CRISPR...
+[2026-09-24 14:02:37] [INFO]   ⏭️ Duplicate: VSCode's SSH Agent Is Bananas (2025)...
+[2026-09-24 14:02:37] [INFO]   📊 Hacker News: saved 0, duplicates 2
+[2026-09-24 14:02:37] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-24 14:02:37] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-24 14:02:38] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-24 14:02:38] [INFO]   → Filtered to 5 relevant items
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-24 14:02:38] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-24 14:02:38] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-24 14:02:38] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-24 14:02:38] [INFO]   → Found 15 raw items, 9 recent
+[2026-09-24 14:02:38] [INFO]   → Filtered to 5 relevant items
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: Meta introduces camera-free AI glasses...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: Enveda secures $311M to bring more nature-derived ...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: ChatGPT mobile app gets voice-based agentic featur...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: Even Americans who use AI every day are worried ab...
+[2026-09-24 14:02:38] [INFO]   ⏭️ Duplicate: YouTube Music gets more conversational with new AI...
+[2026-09-24 14:02:38] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-09-24 14:02:38] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-24)...
+[2026-09-24 14:02:38] [INFO]   ✅ No old seeds to remove
+[2026-09-24 14:02:38] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-24
+[2026-09-24 14:02:38] [INFO] 
+============================================================
+[2026-09-24 14:02:38] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-24 14:02:38] [INFO]   Total saved: 0
+[2026-09-24 14:02:38] [INFO]   Total duplicates: 12
+[2026-09-24 14:02:38] [INFO]   Total removed (old): 0
+[2026-09-24 14:02:38] [INFO] ============================================================
