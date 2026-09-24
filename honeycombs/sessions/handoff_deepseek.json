@@ -1,261 +1,186 @@
 {
-  "handoff_id": "HANDOFF-DEEPSEEK-2026-09-22",
-  "version": "v3.0.0",
-  "created": "2026-09-22",
-  "updated": "2026-09-23",
-  "purpose": "Бесшовный переход в новый чат DeepSeek. Контекст сессии 21-23 сентября: Куртош v2.17.0 (разбит на модули), milestones, 59 задач, диалоги с Юлей и Анной.",
+  "handoff_id": "HANDOFF-DEEPSEEK-2026-09-24",
+  "version": "v4.0.0",
+  "created": "2026-09-24",
+  "updated": "2026-09-24",
+  "purpose": "Бесшовный переход в новый чат. Полный контекст сессии 23-24.09.2026: модульная разбивка Куртоша, Notion-синхронизация, M-003 (оплата кризис-менеджера), K-073 (капинг), K-074 (Анна ключи), K-075 (bundle).",
   "context": {
     "gardener": "Voodoo (Дима)",
     "project": "Куртош — Кризис-менеджмент + операционная система",
-    "current_state": "Кризис-менеджер, 100 т.р./мес, 3 мес (11.09–11.12.2026). Progress 40%. Фаза 0 (окт).",
+    "current_state": "Кризис-менеджер, 100 т.р./мес (50 кеш + 50 накопление), 3 мес (11.09–11.12.2026). Progress 40%. Фаза 0.",
     "session_focus": [
-      "Синхронизация Notion ↔ Mandala",
-      "Миграция в milestones (Крупные вехи)",
-      "Обработка диалогов с Юлей и Анной",
-      "Описание ЗП-системы",
-      "Актуализация картотеки команды"
+      "Разбивка franchise.json (107 КБ) на 5 модулей",
+      "Notion-синхронизация (pull + push + full_sync)",
+      "M-001/M-002 перенесены в tasks",
+      "M-003 — трекер оплаты кризис-менеджера",
+      "K-073, K-074 — новые задачи",
+      "my_terms — условия работы"
     ]
   },
   "current_state_summary": {
-    "franchise_version": "v2.17.0 (разбит на модули)",
-    "taskboard_version": "v2.0.0",
-    "total_tasks": 51,
-    "by_status": {
-      "done": 11,
-      "todo": 39,
-      "in_progress": 1
+    "kurtoch_index_version": "v2.1.4",
+    "taskboard_version": "v2.1.0",
+    "modules": [
+      "index.json",
+      "taskboard.json",
+      "taskboard_archive.json",
+      "team.json",
+      "knowledge_base.json"
+    ],
+    "active_tasks": 47,
+    "archived_tasks": 18,
+    "total": 65,
+    "by_status_active": {
+      "todo": 43,
+      "in_progress": 3,
+      "planning": 1
     },
-    "by_column": {
-      "Стратегические": 17,
-      "Операционка — Общая": 18,
-      "Операционка — Центр": 2,
-      "Операционка — Нижка": 14
+    "by_column_active": {
+      "Стратегические": 6,
+      "Операционка — Общая": 14,
+      "Операционка — Нижка": 20,
+      "Операционка — Центр": 4,
+      "Крупные вехи": 3
     },
     "milestones": [
-      "nijka_revival",
-      "centre_revival"
+      "M-001 (Возрождение Нижки)",
+      "M-002 (Возрождение Центра)",
+      "M-003 (Оплата кризис-менеджера)"
     ],
     "team_roster": 16,
-    "progress": 40,
-    "kurtoch_modules": "taskboard.json, team.json, knowledge_base.json"
+    "team_status": {
+      "core": 1,
+      "working": 5,
+      "leaving": 2,
+      "runner": 2,
+      "trainee": 2,
+      "left": 1,
+      "substitute": 3
+    },
+    "notion_synced": true,
+    "notion_pages": 65,
+    "progress": 40
+  },
+  "architecture": {
+    "mandala_is_source_of_truth": true,
+    "notion_is_visual_mirror": true,
+    "rule": "Правим Notion по Mandala, не наоборот."
   },
   "key_files": {
     "kurtoch_hub": {
       "path": "honeycombs/personal/kurtoch/index.json",
-      "version": "v2.0.0",
-      "link": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/kurtoch/index.json",
+      "version": "v2.1.4",
       "raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/kurtoch/index.json"
     },
     "kurtoch_taskboard": {
       "path": "honeycombs/personal/kurtoch/taskboard.json",
       "version": "v2.1.0",
-      "tasks": 59
+      "active": 47,
+      "raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/kurtoch/taskboard.json"
+    },
+    "kurtoch_taskboard_archive": {
+      "path": "honeycombs/personal/kurtoch/taskboard_archive.json",
+      "archived": 18
     },
     "kurtoch_team": {
       "path": "honeycombs/personal/kurtoch/team.json",
-      "version": "v1.0.0",
       "employees": 16
     },
     "kurtoch_knowledge_base": {
       "path": "honeycombs/personal/kurtoch/knowledge_base.json",
-      "version": "v1.0.0"
-    },
-    "notion_taskboard": {
-      "url": "https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1",
-      "workspace": "Куртош & Кофе",
-      "columns": 5,
-      "total": 53
+      "sections": 6,
+      "content": "empty — ждёт наполнения"
     }
   },
-  "role_and_terms": {
+  "scripts": {
+    "notion_sync.py": "pull Notion -> снапшот",
+    "push_taskboard.py": "Mandala -> Notion (ID, статус, столбец, Срочность, Ответственный)",
+    "notion_runner.sh": "обёртка: full_sync / pull_taskboard / push_taskboard (запускать через bash)",
+    "archive_done.py": "переносит done+cancelled в архив",
+    "patch_schema.py": "служебный",
+    "fix_two_ids.py": "служебный"
+  },
+  "working_command": "bash scripts/notion_runner.sh full_sync",
+  "my_terms": {
     "role": "Кризис-менеджер",
-    "rate": "100 000 ₽/мес (50 кеш + 50 накопление)",
-    "duration": "11.09.2026 – 11.12.2026",
-    "checkpoints": "конец окт, конец ноя, 11.12.2026"
+    "rate_monthly": 100000,
+    "cash_monthly": 50000,
+    "accumulation_monthly": 50000,
+    "start": "2026-09-11",
+    "end": "2026-12-11",
+    "september_total": 66667,
+    "total_planned_to_dec": 366667,
+    "total_accumulation_planned": 166667,
+    "tracker_ref": "M-003 в taskboard.json",
+    "payment_dates": "24-е — аванс, 9-е — остаток + накопление"
   },
-  "success_criteria_3_months": [
-    "Стабильная полная команда",
-    "Центр и Нишка в штатном режиме",
-    "Нет проблем с поломками и чистотой",
-    "Команда справляется с потоками гостей",
-    "Стабильный рост выручки",
-    "Сформированная база знаний"
+  "next_actions": [
+    "1. Реализовать K-075 — Kurtoch bundle (единый файл для онбординга)",
+    "2. Создать базу сотрудников в Notion (👥 Куртош — Сотрудники)",
+    "3. Наполнить knowledge_base (6 секций)",
+    "4. Операционка: K-040 (Аттестация Юли 25.09), K-072 (Увольнение Вероники 26.09), K-074 (Анна ключи 26.09), K-073 (Капинг 01.10)",
+    "5. Фикс push_taskboard.py — авто-обновление блоков у milestone"
   ],
-  "hot_zones": {
-    "zone_1_team": {
-      "priority": "critical",
-      "problem": "Люди устают, уходят. Переходный период управления (Витя → такси?). Финансовое давление зимой.",
-      "actions": [
-        "Аудит команды",
-        "ЦУ",
-        "Обучение",
-        "Обратная связь",
-        "ЗП-система в документ"
-      ]
-    },
-    "zone_2_docs": {
-      "priority": "critical"
-    },
-    "zone_3_cleanliness": {
-      "priority": "high"
-    },
-    "zone_4_bot": {
-      "priority": "medium"
-    }
-  },
-  "compensation_system": {
-    "base_rate": "200 ₽/час",
-    "shift_rate": "2600 ₽/смена (13 ч)",
-    "level_1": {
-      "performance_5000": "Передача смены, закрытие, заготовки, списания, сервис, санпины (оспоримо)",
-      "genuborka_5000": "Генуборка + собрания"
-    },
-    "level_2_senior": {
-      "service_5000": "Сервис + продажи",
-      "training_5000": "Обучение + координация",
-      "seniors_current": [
-        "Маша",
-        "Катрин"
-      ]
-    },
-    "payment_dates": {
-      "advance_24": "24-е — аванс (1–15)",
-      "main_9": "9-е — ЗП (16–31)",
-      "bonuses_9": "9-е — бонусы"
-    },
-    "total_15_shifts": {
-      "regular": "~49 000 ₽",
-      "senior": "~59 000 ₽"
-    }
-  },
-  "milestones": {
-    "nijka_revival": {
-      "title": "Возрождение Нижки",
-      "status": "in_progress",
-      "phases": [
-        "1. Марафет (генуборка, химчистка, ремонт)",
-        "2. Процессы + меню (спальный район)",
-        "3. Рост",
-        "4. Реорганизация посадки"
-      ],
-      "linked_tasks": [
-        "K-036",
-        "K-037",
-        "K-038",
-        "K-047",
-        "K-049",
-        "K-050",
-        "K-051",
-        "K-052",
-        "K-053",
-        "K-054",
-        "K-055",
-        "K-057",
-        "K-058",
-        "K-059",
-        "K-060",
-        "K-062",
-        "K-063"
-      ]
-    },
-    "centre_revival": {
-      "title": "Возрождение Центра",
-      "status": "planning"
-    }
-  },
-  "team_roster_summary": {
-    "total": 16,
-    "by_status": {
-      "core": 1,
-      "working": 6,
-      "runner": 2,
-      "trainee": 2,
-      "left": 1,
-      "leaving": 1,
-      "substitute": 3
-    },
-    "skills_summary": {
-      "universal": [
-        "Катрин",
-        "Никита",
-        "Александра",
-        "Аня",
-        "Светлана",
-        "Денис",
-        "Влада",
-        "Арина",
-        "Матвей",
-        "Маша"
-      ],
-      "pechka_done": [
-        "Вероника",
-        "Анна"
-      ],
-      "pechka_training": [
-        "Оля",
-        "Саша"
-      ]
-    },
-    "nijka": {
-      "likes": [
-        "Юля",
-        "Оля"
-      ],
-      "dislikes": [
-        "Никита",
-        "Александра"
-      ]
-    },
-    "critical_gaps": [
-      "Маша — целые смены до 3-й нед сентября, продление?",
-      "Денис — управляющий, но временный (до года)",
-      "Влада — увольняется, расчёт 21.09",
-      "Оля — пробная смена, ищет работу, готова пока",
-      "Анна — аналитик процессов (потенциал), горизонт до марта-апреля 2027"
-    ]
+  "critical_context": {
+    "expansion_financial": "+500К ₽/мес из-за расширения, выручка не выросла",
+    "nijka_decline": "Нижка −20% выручки",
+    "winter_pressure": "Зимой нагрузка −20%",
+    "management_transition": "Витя → такси, Дима → управляющий",
+    "vlada_leaving": "Влада — ушла",
+    "veronika_leaving": "Вероника — увольняется, последняя смена 26.09"
   },
   "key_people": {
     "Виктор": "Владелец",
-    "Витя": "Управляющий, переходный период, может уйти в такси",
-    "Крис": "Управляющая (удалёнка) — фин, зак, расп",
-    "Катрин": "Старший бариста, потенциал руководителя",
-    "Дима": "Управляющий (я)",
-    "Юля": "Бариста, аттестована ✅, работает на нижке",
-    "Анна (ст)": "Аналитик процессов (потенциал), горизонт до апреля",
-    "Маша": "Подменная + обучение, до 3-й нед сентября",
-    "Денис": "Управляющий др. кофеен, до года",
-    "Оля": "Пробная смена, likes нижку",
-    "Влада": "Увольняется (расчёт 21.09)",
-    "Ксюша": "Left behind"
+    "Витя": "Управляющий (переходный период)",
+    "Крис": "Управляющая (удалёнка)",
+    "Катрин": "Старший бариста (ключевой)",
+    "Дима": "Кризис-менеджер (я)",
+    "Юля": "Бариста, аттестована",
+    "Анна": "Стажёр, получает ключи + сигнализацию Центра",
+    "Вероника": "Увольняется 26.09",
+    "Маша": "Подменная + обучение",
+    "Денис": "Управляющий др. кофеен (до года)",
+    "Оля": "Стажёр, likes Нижку"
   },
-  "critical_context": {
-    "expansion_financial": "Помещение расширилось → +500К ₽/мес, выручка не выросла",
-    "nijka_decline": "Нижка −20% выручки",
-    "winter_pressure": "Зимой нагрузка −20%, финансовое давление",
-    "management_transition": "Витя → такси (подработка), Дима → управляющий",
-    "anna_role": "Анна — временный ресурс (до апреля), «серый кардинал», роль обсуждается"
+  "task_k075_plan": {
+    "id": "K-075",
+    "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
+    "goal": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json для быстрого онбординга новых чатов. Автоматически пересобирать при изменениях.",
+    "location": "honeycombs/boot_online/Personal/kurtoch_bundle.json",
+    "steps": [
+      "1. Создать папку honeycombs/boot_online/Personal/",
+      "2. Написать скрипт honeycombs/personal/kurtoch/scripts/build_bundle.py — собирает bundle (JSON nested) из модулей + scripts",
+      "3. Запустить первый раз — создать kurtoch_bundle.json",
+      "4. Создать GitHub Action .github/workflows/kurtoch_bundle.yml",
+      "5. Триггер: push на honeycombs/personal/kurtoch/** (кроме _snapshots/**, _logs/**, notion_token.txt)",
+      "6. Действие: build_bundle.py → коммит bundle → push (loop-guard: не триггерить от бот-коммита)",
+      "7. Протестировать: изменить что-то в kurtoch → проверить, что bundle обновился",
+      "8. Коммит + push"
+    ],
+    "exclude_from_bundle": [
+      "notion_token.txt",
+      "_snapshots/**",
+      "сам bundle (рекурсия)",
+      "_logs/** (опционально)"
+    ],
+    "include": [
+      "index.json",
+      "taskboard.json",
+      "taskboard_archive.json",
+      "team.json",
+      "knowledge_base.json",
+      "scripts/*.py",
+      "scripts/*.sh"
+    ],
+    "format": "JSON nested: {meta, index, taskboard, taskboard_archive, team, knowledge_base, scripts}"
   },
-  "next_actions": [
-    "1. Дождаться от Notion создания 9 потерянных задач",
-    "2. Полная синхронизация Notion ↔ Mandala (1:1)",
-    "3. Блок knowledge_base (критично для Фазы 0)",
-    "4. Блок accesses_accounts (снимает OPEN в current_status)",
-    "5. Заполнение milestones фазами",
-    "6. Продолжение диалогов с командой (K-035)"
-  ],
-  "protocols_to_remember": [
-    "Pre-check через API/raw перед любым патчем",
-    "Post-check через API после патча",
-    "FULL DEPLOY — одной командой в Termux",
-    "Copyable links — в блоках ```text"
-  ],
   "startup_instructions": [
     "1. Прочитай этот handoff полностью",
-    "2. Прочитай honeycombs/personal/kurtoch/index.json — входная точка проекта Куртош",
-    "3. Модули данных: taskboard.json (задачи), team.json (сотрудники), knowledge_base.json (база знаний)",
-    "4. Скрипты синхронизации: honeycombs/personal/kurtoch/scripts/",
-    "5. Notion = визуальное зеркало, Mandala = эталон"
+    "2. Прочитай honeycombs/personal/kurtoch/index.json — входная точка",
+    "3. Смотри taskboard.json (активные задачи) и taskboard_archive.json (архив)",
+    "4. Рабочая команда: bash scripts/notion_runner.sh full_sync",
+    "5. Notion = зеркало, Mandala = эталон"
   ],
-  "last_action": "v2.17.0 + разбивка franchise.json на 3 модуля (taskboard, team, knowledge_base). Скрипты notion_sync.py + push_taskboard.py работают. Notion синхронизирован (61 страница с ID).",
-  "handoff_message_for_gardener": "Открываешь новый чат с DeepSeek — копируешь этот JSON первым сообщением. SR подхватит контекст и продолжит без потерь."
+  "last_action": "Handoff v4.0.0 подготовлен 24.09.2026. K-075 добавлен. M-003 с кумулятивным накоплением. Notion синхронизирован (65 = 65).",
+  "handoff_message_for_gardener": "Открываешь новый чат с DeepSeek — копируешь этот JSON первым сообщением. SR подхватит контекст и продолжит."
 }
