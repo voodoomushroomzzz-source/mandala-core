@@ -11,6 +11,60 @@ KURTOCH = os.path.dirname(HERE)
 TOKEN_FILE = os.path.join(HERE, "notion_token.txt")
 TB_FILE = os.path.join(KURTOCH, "taskboard.json")
 DB = "f6ffa784e7594df9add4fd1c697d4ada"
+
+# --- Маппинг priority -> Срочность (Notion select) ---
+PRIORITY_TO_URGENCY = {
+    "critical": "\U0001F534 \u0413\u043e\u0440\u0438\u0442",
+    "high":     "\U0001F7E1 \u0421\u0440\u0435\u0434\u043d\u044f\u044f",
+    "medium":   "\U0001F535 \u0424\u043e\u043d",
+    "low":      "\U0001F535 \u0424\u043e\u043d",
+}
+DEFAULT_ASSIGNEE = "\u0414\u043c\u0438\u0442\u0440\u0438\u0439 (\u0443\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0439)"
+
+def build_milestone_blocks(task):
+    """Строит структурированные блоки для milestone с payment_tracker."""
+    blocks = []
+    meta = task.get("metadata", {})
+    phases = meta.get("phases", [])
+    tracker = meta.get("tracker", {})
+    if not phases:
+        return None
+    for ph in phases:
+        # heading
+        h = f"\u0424\u0430\u0437\u0430 {ph.get('phase','?')}: {ph.get('name','')} ({ph.get('period','')})"
+        blocks.append({
+            "object": "block", "type": "heading_3",
+            "heading_3": {"rich_text": [{"text": {"content": h}}]}
+        })
+        # summary
+        summary = f"\u0412\u0441\u0435\u0433\u043e: {ph.get('total',0):,} \u20bd  \u00b7  \u041a\u0435\u0448: {ph.get('cash',0):,} \u20bd  \u00b7  \u041d\u0430\u043a\u043e\u043f\u043b\u0435\u043d\u0438\u0435: {ph.get('accumulation',0):,} \u20bd".replace(",", " ")
+        blocks.append({
+            "object": "block", "type": "paragraph",
+            "paragraph": {"rich_text": [{"text": {"content": summary}}]}
+        })
+        # to-do
+        for p in ph.get("payments", []):
+            check = p.get("status") == "paid"
+            line = f"{p.get('date','')} \u2014 {p.get('amount',0):,} \u20bd \u2014 {p.get('type','')}".replace(",", " ")
+            blocks.append({
+                "object": "block", "type": "to_do",
+                "to_do": {
+                    "rich_text": [{"text": {"content": line}}],
+                    "checked": check
+                }
+            })
+    # итого
+    blocks.append({
+        "object": "block", "type": "divider", "divider": {}
+    })
+    total_line = f"\u0418\u0442\u043e\u0433\u043e: {tracker.get('total_planned',0):,} \u20bd \u00b7 \u041a\u0435\u0448: {tracker.get('total_cash_planned',0):,} \u20bd \u00b7 \u041d\u0430\u043a\u043e\u043f\u043b\u0435\u043d\u0438\u0435: {tracker.get('total_accumulation_planned',0):,} \u20bd".replace(",", " ")
+    blocks.append({
+        "object": "block", "type": "heading_3",
+        "heading_3": {"rich_text": [{"text": {"content": total_line}}]}
+    })
+    return blocks
+
+
 H = {"Authorization": f"Bearer {io.open(TOKEN_FILE, encoding='utf-8').read().strip()}",
      "Notion-Version": "2022-06-28", "Content-Type": "application/json"}
 
@@ -100,12 +154,18 @@ for t in tasks:
                 "ID": {"rich_text": [{"text": {"content": tid}}]},
                 "Статус": {"select": {"name": t["status"]}},
                 "Столбец": {"select": {"name": t["metadata"]["column"]}},
+                "Срочность": {"select": {"name": PRIORITY_TO_URGENCY.get(t.get("priority", "medium"), PRIORITY_TO_URGENCY["medium"])}},
+                "Ответственный": {"select": {"name": t.get("metadata", {}).get("assignee") or DEFAULT_ASSIGNEE}},
                 "Закрыта": {"checkbox": t["status"] == "done"},
             }
         }
+        # milestones — структурированные блоки
+        ms_blocks = build_milestone_blocks(t) if t.get("metadata", {}).get("subtype") == "payment_tracker" else None
+        if ms_blocks:
+            body["children"] = ms_blocks
         if t.get("deadline"):
             body["properties"]["Дедлайн"] = {"date": {"start": t["deadline"]}}
-        if t.get("description"):
+        if t.get("description") and not ms_blocks:
             body["children"] = [{"object": "block", "type": "paragraph",
                 "paragraph": {"rich_text": [{"text": {"content": t["description"]}}]}}]
         api("pages", "POST", body)
@@ -137,6 +197,16 @@ for t in tasks:
     if t.get("deadline") and cur_dl != t["deadline"]:
         props["Дедлайн"] = {"date": {"start": t["deadline"]}}
         updated_date += 1
+
+    # Срочность и Ответственный (всегда проверяем)
+    cur_urg = prop_text(p, "Срочность")
+    need_urg = PRIORITY_TO_URGENCY.get(t.get("priority", "medium"), PRIORITY_TO_URGENCY["medium"])
+    if cur_urg != need_urg:
+        props["Срочность"] = {"select": {"name": need_urg}}
+    cur_resp = prop_text(p, "Ответственный")
+    need_resp = t.get("metadata", {}).get("assignee") or DEFAULT_ASSIGNEE
+    if cur_resp != need_resp:
+        props["Ответственный"] = {"select": {"name": need_resp}}
 
     if props:
         api(f"pages/{p['id']}", "PATCH", {"properties": props})
