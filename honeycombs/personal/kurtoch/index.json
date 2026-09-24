@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.1.4",
+    "version": "v2.1.5",
     "created": "2026-09-23",
     "updated": "2026-09-24",
     "layer": 2,
@@ -31,7 +31,7 @@
       "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
       "version": "v2.1.0",
-      "tasks_count": 45,
+      "tasks_count": 48,
       "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
@@ -150,7 +150,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-09-24",
-    "notes": "v2.1.4: M-003 «Оплата кризис-менеджера» добавлена в taskboard. 4 фазы (сентябрь–декабрь). Трекер выплат. my_terms дополнен."
+    "notes": "v2.1.5: +K-075 (bundle). Handoff v4.0.0. Активных 48, архив 18. Notion 66 = 66."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -613,6 +613,10 @@
     {
       "date": "2026-09-24",
       "event": "v2.1.4: +M-003 «Оплата кризис-менеджера» — трекер выплат на 4 фазы (сентябрь 66 667 ₽ / октябрь–декабрь по 100 000 ₽). Итого к 31.12: 366 667 ₽ (кеш 200 000 + накопление 166 667). Даты: 24-е (аванс) / 9-е (остаток). my_terms дополнен фазами и total_planned."
+    },
+    {
+      "date": "2026-09-24",
+      "event": "v2.1.5: +K-075 «Kurtoch bundle — единый файл для онбординга (автосборка)». Handoff v4.0.0 подготовлен. План: build_bundle.py + GitHub Action для авто-пересборки при изменениях в kurtoch/."
     }
   ],
   "workspace_mirror": {

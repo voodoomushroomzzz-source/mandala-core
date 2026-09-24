@@ -1204,29 +1204,51 @@
           },
           "linked_tasks": []
         }
+      },
+      {
+        "id": "K-075",
+        "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
+        "description": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json — для быстрого онбординга новых чатов.\n\nРасположение: honeycombs/boot_online/Personal/kurtoch_bundle.json\n\nШаги:\n1. Создать папку honeycombs/boot_online/Personal/\n2. Скрипт build_bundle.py — собирает JSON nested из модулей + scripts\n3. Первый запуск — создать bundle\n4. GitHub Action .github/workflows/kurtoch_bundle.yml\n5. Триггер: изменения в honeycombs/personal/kurtoch/** (кроме _snapshots, _logs, token)\n6. Loop-guard: не триггерить от бот-коммита\n7. Тест + коммит\n\nИсключить: notion_token.txt, _snapshots/**, сам bundle.\nВключить: index, taskboard, taskboard_archive, team, knowledge_base, scripts.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-24",
+        "updated": "2026-09-24",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
       }
     ],
     "counters": {
-      "total": 47,
+      "total": 48,
       "by_status": {
-        "todo": 43,
+        "todo": 44,
         "in_progress": 3,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 36,
+        "high": 37,
         "medium": 9
       },
       "by_column": {
-        "Стратегические": 6,
+        "Стратегические": 7,
         "Операционка — Общая": 14,
         "Операционка — Нижка": 20,
         "Операционка — Центр": 4,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 47
+        "phase_0": 48
       }
     },
     "notes": {
