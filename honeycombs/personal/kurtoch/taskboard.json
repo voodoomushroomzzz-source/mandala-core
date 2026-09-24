@@ -1153,24 +1153,8 @@
               "total": 66667,
               "cash": 50000,
               "accumulation": 16667,
-              "payments": [
-                {
-                  "date": "2026-09-24",
-                  "period": "11–15.09",
-                  "amount": 16667,
-                  "type": "аванс (в счёт кеша)",
-                  "status": "pending",
-                  "paid_at": null
-                },
-                {
-                  "date": "2026-10-09",
-                  "period": "16–30.09",
-                  "amount": 50000,
-                  "type": "остаток кеша + накопление",
-                  "status": "pending",
-                  "paid_at": null
-                }
-              ]
+              "accumulation_cumulative": 16667,
+              "phase_status": "open"
             },
             {
               "phase": 2,
@@ -1181,24 +1165,8 @@
               "total": 100000,
               "cash": 50000,
               "accumulation": 50000,
-              "payments": [
-                {
-                  "date": "2026-10-24",
-                  "period": "01–15.10",
-                  "amount": 25000,
-                  "type": "аванс (в счёт кеша)",
-                  "status": "pending",
-                  "paid_at": null
-                },
-                {
-                  "date": "2026-11-09",
-                  "period": "16–31.10",
-                  "amount": 75000,
-                  "type": "остаток кеша + накопление",
-                  "status": "pending",
-                  "paid_at": null
-                }
-              ]
+              "accumulation_cumulative": 66667,
+              "phase_status": "open"
             },
             {
               "phase": 3,
@@ -1209,24 +1177,8 @@
               "total": 100000,
               "cash": 50000,
               "accumulation": 50000,
-              "payments": [
-                {
-                  "date": "2026-11-24",
-                  "period": "01–15.11",
-                  "amount": 25000,
-                  "type": "аванс (в счёт кеша)",
-                  "status": "pending",
-                  "paid_at": null
-                },
-                {
-                  "date": "2026-12-09",
-                  "period": "16–30.11",
-                  "amount": 75000,
-                  "type": "остаток кеша + накопление",
-                  "status": "pending",
-                  "paid_at": null
-                }
-              ]
+              "accumulation_cumulative": 116667,
+              "phase_status": "open"
             },
             {
               "phase": 4,
@@ -1237,24 +1189,8 @@
               "total": 100000,
               "cash": 50000,
               "accumulation": 50000,
-              "payments": [
-                {
-                  "date": "2026-12-24",
-                  "period": "01–15.12",
-                  "amount": 25000,
-                  "type": "аванс (в счёт кеша)",
-                  "status": "pending",
-                  "paid_at": null
-                },
-                {
-                  "date": "2027-01-09",
-                  "period": "16–31.12",
-                  "amount": 75000,
-                  "type": "остаток кеша + накопление",
-                  "status": "pending",
-                  "paid_at": null
-                }
-              ]
+              "accumulation_cumulative": 166667,
+              "phase_status": "open"
             }
           ],
           "tracker": {
@@ -1262,7 +1198,7 @@
             "total_cash_planned": 200000,
             "total_accumulation_planned": 166667,
             "total_paid": 0,
-            "total_accumulated": 0,
+            "total_accumulated": 166667,
             "note": "Обновлять при каждой выплате. total_paid — сколько реально получено. total_accumulated — сколько проект должен (накопилось).",
             "last_updated": "2026-09-24"
           },
