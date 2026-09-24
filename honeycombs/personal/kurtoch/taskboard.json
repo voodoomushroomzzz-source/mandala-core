@@ -1120,18 +1120,166 @@
           "notion_page_id": null,
           "column": "Операционка — Центр"
         }
+      },
+      {
+        "id": "M-003",
+        "title": "Оплата кризис-менеджера",
+        "description": "Трекер выплат по договору 11.09–11.12.2026.\nСтавка: 100 000 ₽/мес (50 000 кеш + 50 000 накопление).\nКеш — фикс 50 000 ₽/мес. Накопление — остаток до 100 000 ₽, висит как долг проекта до лучших времён.\nДаты выплат: 24-е (аванс), 9-е следующего месяца (остаток + накопление).",
+        "priority": "high",
+        "status": "in_progress",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": "2026-12-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-24",
+        "updated": "2026-09-24",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Крупные вехи",
+          "type": "milestone",
+          "subtype": "payment_tracker",
+          "phases": [
+            {
+              "phase": 1,
+              "name": "Сентябрь 2026",
+              "period": "11.09–30.09",
+              "days": 20,
+              "days_in_month": 30,
+              "total": 66667,
+              "cash": 50000,
+              "accumulation": 16667,
+              "payments": [
+                {
+                  "date": "2026-09-24",
+                  "period": "11–15.09",
+                  "amount": 16667,
+                  "type": "аванс (в счёт кеша)",
+                  "status": "pending",
+                  "paid_at": null
+                },
+                {
+                  "date": "2026-10-09",
+                  "period": "16–30.09",
+                  "amount": 50000,
+                  "type": "остаток кеша + накопление",
+                  "status": "pending",
+                  "paid_at": null
+                }
+              ]
+            },
+            {
+              "phase": 2,
+              "name": "Октябрь 2026",
+              "period": "01.10–31.10",
+              "days": 31,
+              "days_in_month": 31,
+              "total": 100000,
+              "cash": 50000,
+              "accumulation": 50000,
+              "payments": [
+                {
+                  "date": "2026-10-24",
+                  "period": "01–15.10",
+                  "amount": 25000,
+                  "type": "аванс (в счёт кеша)",
+                  "status": "pending",
+                  "paid_at": null
+                },
+                {
+                  "date": "2026-11-09",
+                  "period": "16–31.10",
+                  "amount": 75000,
+                  "type": "остаток кеша + накопление",
+                  "status": "pending",
+                  "paid_at": null
+                }
+              ]
+            },
+            {
+              "phase": 3,
+              "name": "Ноябрь 2026",
+              "period": "01.11–30.11",
+              "days": 30,
+              "days_in_month": 30,
+              "total": 100000,
+              "cash": 50000,
+              "accumulation": 50000,
+              "payments": [
+                {
+                  "date": "2026-11-24",
+                  "period": "01–15.11",
+                  "amount": 25000,
+                  "type": "аванс (в счёт кеша)",
+                  "status": "pending",
+                  "paid_at": null
+                },
+                {
+                  "date": "2026-12-09",
+                  "period": "16–30.11",
+                  "amount": 75000,
+                  "type": "остаток кеша + накопление",
+                  "status": "pending",
+                  "paid_at": null
+                }
+              ]
+            },
+            {
+              "phase": 4,
+              "name": "Декабрь 2026",
+              "period": "01.12–31.12",
+              "days": 31,
+              "days_in_month": 31,
+              "total": 100000,
+              "cash": 50000,
+              "accumulation": 50000,
+              "payments": [
+                {
+                  "date": "2026-12-24",
+                  "period": "01–15.12",
+                  "amount": 25000,
+                  "type": "аванс (в счёт кеша)",
+                  "status": "pending",
+                  "paid_at": null
+                },
+                {
+                  "date": "2027-01-09",
+                  "period": "16–31.12",
+                  "amount": 75000,
+                  "type": "остаток кеша + накопление",
+                  "status": "pending",
+                  "paid_at": null
+                }
+              ]
+            }
+          ],
+          "tracker": {
+            "total_planned": 366667,
+            "total_cash_planned": 200000,
+            "total_accumulation_planned": 166667,
+            "total_paid": 0,
+            "total_accumulated": 0,
+            "note": "Обновлять при каждой выплате. total_paid — сколько реально получено. total_accumulated — сколько проект должен (накопилось).",
+            "last_updated": "2026-09-24"
+          },
+          "linked_tasks": []
+        }
       }
     ],
     "counters": {
-      "total": 46,
+      "total": 47,
       "by_status": {
         "todo": 43,
-        "in_progress": 2,
+        "in_progress": 3,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 35,
+        "high": 36,
         "medium": 9
       },
       "by_column": {
@@ -1139,10 +1287,10 @@
         "Операционка — Общая": 14,
         "Операционка — Нижка": 20,
         "Операционка — Центр": 4,
-        "Крупные вехи": 2
+        "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 46
+        "phase_0": 47
       }
     },
     "notes": {
