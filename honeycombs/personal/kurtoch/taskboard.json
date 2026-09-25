@@ -548,28 +548,6 @@
         }
       },
       {
-        "id": "K-062",
-        "title": "Мусорка на входе: спилить",
-        "description": "Спилить мусорку на входе.",
-        "priority": "medium",
-        "status": "done",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-22",
-        "updated": "2026-09-25",
-        "completed": "2026-09-25",
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Нижка"
-        }
-      },
-      {
         "id": "K-063",
         "title": "Колонки: перевесить",
         "description": "Перевесить колонки.",
@@ -1107,27 +1085,26 @@
       }
     ],
     "counters": {
-      "total": 42,
+      "total": 41,
       "by_status": {
         "todo": 38,
-        "done": 1,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
         "high": 31,
-        "medium": 9
+        "medium": 8
       },
       "by_column": {
         "Стратегические": 7,
         "Операционка — Общая": 8,
-        "Операционка — Нижка": 21,
+        "Операционка — Нижка": 20,
         "Операционка — Центр": 3,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 42
+        "phase_0": 41
       }
     },
     "notes": {
