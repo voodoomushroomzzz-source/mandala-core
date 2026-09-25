@@ -11,6 +11,18 @@
     "prose": 11,
     "works": 54
   },
+  "readiness_gate": {
+    "principle": "Минимальный порог готовности сборника к редакции и изданию. Возможно больше по ходу.",
+    "target_poems": 60,
+    "target_prose": 15,
+    "current_poems": 43,
+    "current_prose": 11,
+    "remaining_poems": 17,
+    "remaining_prose": 4,
+    "status": "in_progress",
+    "gate_rule": "Треки B и E не стартуют, пока не достигнуты оба порога",
+    "updated": "2026-09-25"
+  },
   "service": {
     "name": "Stihi.ru",
     "author": "voodookida",
@@ -151,7 +163,7 @@
     "track_a": {
       "name": "Трек А: Редактура и пунктуация",
       "deadline": "2026-09-15",
-      "goal": "Расставить пунктуацию во всех стихотворениях трека, привести к литературной норме",
+      "goal": "Редактура поэзии + наполнение (набор целевого объёма до readiness_gate)",
       "priority": "critical",
       "tasks": [
         {
@@ -437,7 +449,9 @@
             "Написать вступление"
           ]
         }
-      }
+      },
+      "gate": "Не стартует, пока readiness_gate.status != 'ready'",
+      "gate_dependency": "readiness_gate"
     }
   },
   "overall_plan": {
@@ -630,7 +644,7 @@
     "track_c": {
       "name": "Новая проза — 5 тем",
       "deadline": "2026-12-31",
-      "goal": "Написать 5 прозаических текстов по предложенным темам",
+      "goal": "Написать не менее 5 новых миниатюр (цель — 10+, gate — 15 для старта трека E)",
       "priority": "high",
       "tasks": [
         {
@@ -741,7 +755,9 @@
           "status": "pending"
         }
       ],
-      "progress": 0
+      "progress": 0,
+      "gate": "Не стартует, пока readiness_gate.status != 'ready'",
+      "gate_dependency": "readiness_gate"
     }
   },
   "literary_core": {
