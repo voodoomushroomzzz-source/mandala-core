@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-19 11:47:19 ──
+# ── BUILT by build.py ── 2026-09-25 17:33:09 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -92,13 +92,18 @@ SR_MODEL_CHAIN = [
 SESSION_MAX_MESSAGES = 50
 
 # ── Версия бота ───────────────────────────────────────────────────────────────
-BOT_VERSION = "7.39.23"
+BOT_VERSION = "7.39.24"
 # ⚠️ DEV RULE: Update this on EVERY patch. Keep last 5 versions. Delete oldest.
 BOT_LATEST_UPDATE = {
-    "version": "7.39.23",
-    "date": "2026-05-12",
+    "version": "7.39.24",
+    "date": "2026-09-19",
     "text": (
         "🌱 Мандала · Что нового\n"
+        "\n"
+        "v7.39.24 · 19.09.2026\n"
+        "  · 🧠 SR понимает групповые переносы: N задач — у каждой свой дедлайн\n"
+        "  · ✨ Batch-edit: одно сообщение → несколько задач обновляются отдельно\n"
+        "  · 🛡 Safety-net: старый парсер оставлен на случай нестандартного формата\n"
         "\n"
         "v7.39.23 · 12.05.2026\n"
         "  · 🔄 Данные задач и история чата обновлены — начинаем с чистого листа\n"
@@ -113,10 +118,7 @@ BOT_LATEST_UPDATE = {
         "  · Голос не блокирует бот (Groq в executor)\n"
         "\n"
         "v7.39.21 · 11.05.2026\n"
-        "  · Утренние брифы приходят всем садовникам\n"
-        "\n"
-        "v7.39.9 · 09.05.2026\n"
-        "  · Меню Задач: группы, список задач, повторы, своя дата"
+        "  · Утренние брифы приходят всем садовникам"
     ),
 }
 
@@ -2330,6 +2332,7 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
 - Перечисление задач через перенос строки (без маркеров) = список → add_task, action.tasks=[...]
   Пример: "добавь задачи\nкупить молоко\nзаписаться к врачу" → tasks=[{title:"купить молоко"},{title:"записаться к врачу"}]
+  ВАЖНО: если в сообщении есть слово "чеклист" или "чек-лист" — это НЕ add_task, а create_checklist/checklist_add_item, даже при многострочном или порядковом перечислении пунктов (первое/второе/третье, через точку, через дефис).
   Извлекай из сообщения ВСЁ что найдёшь:
   action.deadline = дата в ISO (YYYY-MM-DD) или null
   action.reminder = дата+время ISO или null  
@@ -2361,6 +2364,7 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "создай чеклист X с пунктами A B C" → create_checklist, action.title=X, action.items="A|B|C", 0.95
   Если пункты упомянуты в любом виде — извлекай в action.items через |
   Если пунктов нет — создаём пустой, action.items=""
+  Пример: "Создай чек-лист поход в магазин. Первое – хлеб. Второе – тунец. Третье – сыр." → create_checklist, action.title="поход в магазин", action.items="хлеб|тунец|сыр", 0.95
 - "покажи чеклисты", "мои чеклисты" → show_checklists, 0.95
 - "покажи чеклист X" → show_checklist, action.title=X, 0.95
 - "удали чеклист X" → delete_checklist, action.title=X, 0.95
@@ -11159,6 +11163,12 @@ async def free_conversation(message: Message, state: FSMContext):
                             new_item = (action_data.get("item") or "").strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if not cl and target:
+                                import difflib as _dl
+                                _titles_lower = [c.get("title","").lower() for c in checklists]
+                                _close = _dl.get_close_matches(target, _titles_lower, n=1, cutoff=0.6)
+                                if _close:
+                                    cl = next((c for c in checklists if c.get("title","").lower() == _close[0]), None)
                             if cl and new_item:
                                 items = cl.get("items",[])
                                 if ENFORCE_LIMITS and len(items) >= CHECKLIST_ITEMS_LIMIT:
