@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "INSTR-MOBILE-WORKFLOW-001",
     "name": "Mobile Workflow — Working with Mandala from Android",
-    "version": "v1.12.0",
+    "version": "v1.13.0",
     "created": "2026-04-12",
-    "updated": "2026-09-24",
+    "updated": "2026-09-25",
     "layer": 2,
     "type": "workflow_guide",
-    "description": "Complete guide for External SR working from Android/Termux. v1.12.0: добавлен раздел learned_rules_2026_09 (13 практик из реальных сессий Куртош 23-24.09.2026): noexec, абсолютные пути, идемпотентность, retry, pull --rebase, git add папки, обёртки, tee.",
+    "description": "Complete guide for External SR working from Android/Termux. v1.13.0: +LR-14 (pre-check пути скрипта перед вызовом). ",
     "status": "active",
     "priority": "high",
     "tags": [
@@ -316,8 +316,8 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-09-24",
-    "notes": "v1.12.0: добавлен раздел learned_rules_2026_09 (13 правил из сессий 23-24.09.2026). Обновлён troubleshooting (+4 пункта). patching_guide: идемпотентность."
+    "last_check": "2026-09-25",
+    "notes": "v1.12.0: добавлен раздел learned_rules_2026_09 (13 правил из сессий 23-24.09.2026). Обновлён troubleshooting (+4 пункта). patching_guide: идемпотентность. v1.13.0: +LR-14 (pre-check пути скрипта)."
   },
   "large_files_handling": {
     "title": "Работа с большими файлами",
@@ -409,7 +409,7 @@
     "external_file": "honeycombs/instructions/core/external_sr_workflow.json"
   },
   "learned_rules_2026_09": {
-    "description": "13 эмпирических правил, выведенных из реальных сессий по проекту Куртош 23-24.09.2026. Дополняют golden_rule и patching_guide. Обязательны для всех External SR на Android.",
+    "description": "14 эмпирических правил, выведенных из реальных сессий по проекту Куртош 23-25.09.2026. Дополняют golden_rule и patching_guide. Обязательны для всех External SR на Android.",
     "added": "2026-09-24",
     "rules": [
       {
@@ -502,6 +502,13 @@
         "problem": "Токены могут попасть в репу. GitHub автоматически отзывает Notion-токены.",
         "solution": "Секреты — в файлах под .gitignore. Проверка: git check-ignore file",
         "example": "git check-ignore scripts/notion_token.txt && echo '✓ ignored'"
+      },
+      {
+        "id": "LR-14",
+        "title": "Pre-check пути скрипта перед вызовом",
+        "problem": "Вызов bash script.sh без проверки существования — при неверном пути падает вся хвостовая часть цепочки && (в т.ч. commit/push могут не пройти, если это последние шаги).",
+        "solution": "Перед вызовом любого скрипта через bash/python — сначала ls -la с полным путём от корня репо. Затем — вызов того же полного пути. Правило выведено из сессии 25.09.2026: notion_runner.sh лежал в honeycombs/personal/kurtoch/scripts/, но был вызван как scripts/notion_runner.sh от корня → No such file or directory.",
+        "example": "ls -la honeycombs/personal/kurtoch/scripts/notion_runner.sh && bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync 2>&1 | tee ~/notion_$(date +%Y%m%d_%H%M).log"
       }
     ]
   }
