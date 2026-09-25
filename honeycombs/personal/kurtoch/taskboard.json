@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.4",
+    "version": "v2.2.5",
     "created": "2026-09-14",
     "updated": "2026-09-25",
     "layer": 2,
@@ -1160,29 +1160,53 @@
           "notion_page_id": null,
           "column": "Операционка — Центр"
         }
+      },
+      {
+        "id": "K-083",
+        "title": "Демонтаж конструкции с ведром/водой в складской зоне (Центр)",
+        "description": "Демонтировать конструкцию с ведром/ёмкостью для воды в складской зоне Центра. Привязка к концу октября / следующей генуборке.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-09-25",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 44,
+      "total": 45,
       "by_status": {
-        "todo": 41,
+        "todo": 42,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
         "high": 31,
-        "medium": 11
+        "medium": 12
       },
       "by_column": {
         "Стратегические": 6,
         "Операционка — Общая": 8,
         "Операционка — Нижка": 20,
-        "Операционка — Центр": 7,
+        "Операционка — Центр": 8,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 44
+        "phase_0": 45
       }
     },
     "notes": {
