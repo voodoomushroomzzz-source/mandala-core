@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 HERE = os.path.dirname(os.path.abspath(__file__))
 KURTOCH = os.path.dirname(HERE)
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(KURTOCH)))
-OUTPUT = os.path.join(REPO, "honeycombs", "boot_online", "Personal", "kurtoch_bundle.json")
+OUTPUT = os.path.join(REPO, "honeycombs", "boot_online", "personal", "kurtoch_bundle.json")
 
 MODULES = {
     "index": "index.json",
