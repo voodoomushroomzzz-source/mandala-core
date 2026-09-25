@@ -14,17 +14,17 @@
       "core",
       "map",
       "critical",
-      "v3.9.3",
       "english_core",
       "sessions",
       "handoff",
-      "paths"
+      "paths",
+      "v3.12.0"
     ]
   },
   "meta": {
-    "description": "Core System Map — navigation and structure of Mandala Symbiosis.",
+    "description": "Core System Map — navigation and structure of Mandala Symbiosis. Includes personal/ hub.",
     "migration_status": "completed_v3.0",
-    "total_size_kb": 3.1,
+    "total_size_kb": 9.1,
     "total_files": 1,
     "segments": 1,
     "parent_honeycomb": "boot.json",
