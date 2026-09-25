@@ -22,7 +22,7 @@
     "parent_honeycomb": "core_map",
     "segments": 6,
     "total_files": 28,
-    "total_size_kb": 3088.9,
+    "total_size_kb": 3098.53,
     "purpose": "The registry is the single source of truth about the state of all honeycombs.",
     "lifecycle": "The registry is updated automatically on every scan.",
     "change_requires": "gardener_approval",
@@ -44,7 +44,7 @@
   },
   "registry": {
     "total_files": 28,
-    "total_size_kb": 3088.9,
+    "total_size_kb": 3098.53,
     "last_updated": "2026-09-25",
     "status": "active",
     "compliance_status": "v3.1.0_lightweight"
@@ -125,6 +125,7 @@
           "poetry: missing identity.type"
         ],
         "warnings": [
+          "personal: missing index.json",
           "music: missing meta section",
           "x_deaddy_x: missing meta section",
           "dmitrii_levin: missing meta section",
@@ -136,7 +137,7 @@
         ],
         "noise_files": [],
         "errors_count": 18,
-        "warnings_count": 8,
+        "warnings_count": 9,
         "noise_count": 0
       },
       "deadline_sentinel": {
