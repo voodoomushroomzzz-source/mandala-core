@@ -139,6 +139,7 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "добавь задачу X", "хочу сделать X", "создай задачу X" → add_task, action.title=X, 0.9
 - Перечисление задач через перенос строки (без маркеров) = список → add_task, action.tasks=[...]
   Пример: "добавь задачи\nкупить молоко\nзаписаться к врачу" → tasks=[{title:"купить молоко"},{title:"записаться к врачу"}]
+  ВАЖНО: если в сообщении есть слово "чеклист" или "чек-лист" — это НЕ add_task, а create_checklist/checklist_add_item, даже при многострочном или порядковом перечислении пунктов (первое/второе/третье, через точку, через дефис).
   Извлекай из сообщения ВСЁ что найдёшь:
   action.deadline = дата в ISO (YYYY-MM-DD) или null
   action.reminder = дата+время ISO или null  
@@ -170,6 +171,7 @@ SR_INTENT_LIGHT = """ПРАВИЛА INTENT:
 - "создай чеклист X с пунктами A B C" → create_checklist, action.title=X, action.items="A|B|C", 0.95
   Если пункты упомянуты в любом виде — извлекай в action.items через |
   Если пунктов нет — создаём пустой, action.items=""
+  Пример: "Создай чек-лист поход в магазин. Первое – хлеб. Второе – тунец. Третье – сыр." → create_checklist, action.title="поход в магазин", action.items="хлеб|тунец|сыр", 0.95
 - "покажи чеклисты", "мои чеклисты" → show_checklists, 0.95
 - "покажи чеклист X" → show_checklist, action.title=X, 0.95
 - "удали чеклист X" → delete_checklist, action.title=X, 0.95

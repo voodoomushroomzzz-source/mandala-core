@@ -1371,6 +1371,12 @@ async def free_conversation(message: Message, state: FSMContext):
                             new_item = (action_data.get("item") or "").strip()
                             checklists = store_get_checklists(user_id)
                             cl = next((c for c in checklists if target and target in c.get("title","").lower()), None)
+                            if not cl and target:
+                                import difflib as _dl
+                                _titles_lower = [c.get("title","").lower() for c in checklists]
+                                _close = _dl.get_close_matches(target, _titles_lower, n=1, cutoff=0.6)
+                                if _close:
+                                    cl = next((c for c in checklists if c.get("title","").lower() == _close[0]), None)
                             if cl and new_item:
                                 items = cl.get("items",[])
                                 if ENFORCE_LIMITS and len(items) >= CHECKLIST_ITEMS_LIMIT:
