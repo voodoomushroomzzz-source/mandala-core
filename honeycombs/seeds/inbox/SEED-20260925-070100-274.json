@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260925-070100-274",
+  "title": "When Should Forecasting Agents Reason? Behavioral Stress Tests for Reliability Routing",
+  "url": "https://arxiv.org/abs/2609.28475",
+  "description": "arXiv:2609.28475v1 Announce Type: new \nAbstract: Forecasting agents increasingly combine language-model reasoning, retrieval, ensembling, and calibration, but it remains unclear when each behavior should be trusted. We study this question on ForecastBench-style binary forecasting tasks, treating the choice to retrieve, reason, defer to a market prior, or use a historical analog as an observable agent behavior rather than a hidden implementation detail. Our central finding is that mechanism choic",
+  "source": "arXiv AI",
+  "collected_at": "2026-09-25T07:01:00.622907",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

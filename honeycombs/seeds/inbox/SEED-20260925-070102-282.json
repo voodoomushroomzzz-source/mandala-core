@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260925-070102-282",
+  "title": "Temporal Learning for End-Effector Position Estimation under Aerodynamic Disturbances in Aerial Continuum Manipulation",
+  "url": "https://arxiv.org/abs/2609.28716",
+  "description": "arXiv:2609.28716v1 Announce Type: new \nAbstract: This paper investigates temporal neural networks for \\mbox{end-effector} position \\mbox{estimation} of an aerial continuum manipulator (ACM) operating under aerodynamic effects induced by the unmanned aerial vehicle (UAV). An experimental dataset is collected under stationary (\\mbox{rotor-off}) and \\mbox{free-hovering} conditions across continuum robot (CR) configurations and UAV altitudes, providing \\mbox{end-effector} position measurements with ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-25T07:01:02.261588",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

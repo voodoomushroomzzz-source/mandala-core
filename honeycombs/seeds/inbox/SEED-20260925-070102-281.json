@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260925-070102-281",
+  "title": "OA-MPPI: Occlusion-Aware Model Predictive Path Integral Control for UAV Flight",
+  "url": "https://arxiv.org/abs/2609.28709",
+  "description": "arXiv:2609.28709v1 Announce Type: new \nAbstract: Autonomous UAV flight through cluttered and partially unknown environments requires reasoning not only about observed obstacles but also about occluded regions that the sensor cannot observe. We present OA-MPPI, an obstacle- and occlusion-aware extension of Model Predictive Path Integral (MPPI) control for quadrotor flight that accounts for potential moving agents emerging from these regions into the vehicle's path. At every planning step, we extr",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-25T07:01:02.052008",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

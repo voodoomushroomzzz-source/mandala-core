@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260925-070102-283",
+  "title": "TAPESIM: Efficient Simulation of Adhesive Tape Dispensing for Robotic Manipulation",
+  "url": "https://arxiv.org/abs/2609.28766",
+  "description": "arXiv:2609.28766v1 Announce Type: new \nAbstract: Applying adhesive tape to secure wire harnesses or seal packages requires robots to coordinate a flexible strip, a moving roll, and surfaces that attach and detach. Simulation could make these interactions repeatable for robot development and evaluation, but resolving every adhesive layer is expensive and can suppress roll motion at practical solver tolerances, while a permanently rigid roll cannot release material. We present TapeSim, a tape simu",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-25T07:01:02.454946",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
