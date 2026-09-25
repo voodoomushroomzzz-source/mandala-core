@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-09-25T15:16:38Z",
+    "generated_at": "2026-09-25T16:06:53Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.1.6",
+      "version": "v2.1.7",
       "created": "2026-09-23",
       "updated": "2026-09-25",
       "layer": 2,
@@ -77,6 +77,14 @@
         "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
         "version": "v1.1.0",
         "tasks_count": 25
+      },
+      "kurtoch_bundle.json": {
+        "description": "Единый файл онбординга Куртош (автосборка).",
+        "path": "honeycombs/boot_online/personal/kurtoch_bundle.json",
+        "version": "v1.0.0",
+        "generator": "scripts/build_bundle.py",
+        "auto_rebuild": ".github/workflows/kurtoch_bundle.yml",
+        "size_kb": 197
       }
     },
     "scripts": {
@@ -176,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-09-25",
-      "notes": "v2.1.6: +revenue_target 2,2М. K-071->Нижка. K-072 done. K-076/077/078. Вероника+Влада left. Taskboard v2.2.0."
+      "notes": "v2.1.7: K-075 done — kurtoch_bundle.json + GH Action."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -654,6 +662,10 @@
       {
         "date": "2026-09-25",
         "event": "v2.1.6: revenue_target 2,2М. K-071->Нижка. K-072 done. K-076 консолидация Базы знаний (6 merged). K-077 Крис. K-078 Финансы. Вероника+Влада left."
+      },
+      {
+        "date": "2026-09-25",
+        "event": "v2.1.7: K-075 done — Kurtoch bundle (197 КБ) + build_bundle.py + GH Action."
       }
     ],
     "workspace_mirror": {
@@ -1954,28 +1966,6 @@
           }
         },
         {
-          "id": "K-075",
-          "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
-          "description": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json — для быстрого онбординга новых чатов.\n\nРасположение: honeycombs/boot_online/Personal/kurtoch_bundle.json\n\nШаги:\n1. Создать папку honeycombs/boot_online/Personal/\n2. Скрипт build_bundle.py — собирает JSON nested из модулей + scripts\n3. Первый запуск — создать bundle\n4. GitHub Action .github/workflows/kurtoch_bundle.yml\n5. Триггер: изменения в honeycombs/personal/kurtoch/** (кроме _snapshots, _logs, token)\n6. Loop-guard: не триггерить от бот-коммита\n7. Тест + коммит\n\nИсключить: notion_token.txt, _snapshots/**, сам bundle.\nВключить: index, taskboard, taskboard_archive, team, knowledge_base, scripts.",
-          "priority": "high",
-          "status": "todo",
-          "horizon": "strategic",
-          "phase": "phase_0",
-          "deadline": null,
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-09-24",
-          "updated": "2026-09-24",
-          "completed": null,
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Стратегические"
-          }
-        },
-        {
           "id": "K-076",
           "title": "База знаний и инструкции (консолидация)",
           "description": "Единая стратегическая задача: собрать все документы, чек-листы, регламенты, обучение, таблицы документации в единую базу знаний.\n\nПоглощённые задачи (8): K-006, K-008, K-010, K-016, K-018, K-021, K-039, K-041.\n\nЦель: единая точка входа по документации. Сокращение объёма основного taskboard.",
@@ -2059,26 +2049,26 @@
         }
       ],
       "counters": {
-        "total": 41,
+        "total": 40,
         "by_status": {
-          "todo": 38,
+          "todo": 37,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "critical": 2,
-          "high": 31,
+          "high": 30,
           "medium": 8
         },
         "by_column": {
-          "Стратегические": 7,
+          "Стратегические": 6,
           "Операционка — Общая": 8,
           "Операционка — Нижка": 20,
           "Операционка — Центр": 3,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 41
+          "phase_0": 40
         }
       },
       "notes": {
@@ -2194,7 +2184,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-ARCHIVE-001",
       "name": "Kurtoch — Taskboard Archive",
-      "version": "v1.2.0",
+      "version": "v1.3.0",
       "created": "2026-09-23",
       "updated": "2026-09-25",
       "type": "taskboard_archive",
@@ -2855,11 +2845,34 @@
             "merged_into": "K-076"
           },
           "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-075",
+          "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
+          "description": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json — для быстрого онбординга новых чатов.\n\nРасположение: honeycombs/boot_online/Personal/kurtoch_bundle.json\n\nШаги:\n1. Создать папку honeycombs/boot_online/Personal/\n2. Скрипт build_bundle.py — собирает JSON nested из модулей + scripts\n3. Первый запуск — создать bundle\n4. GitHub Action .github/workflows/kurtoch_bundle.yml\n5. Триггер: изменения в honeycombs/personal/kurtoch/** (кроме _snapshots, _logs, token)\n6. Loop-guard: не триггерить от бот-коммита\n7. Тест + коммит\n\nИсключить: notion_token.txt, _snapshots/**, сам bundle.\nВключить: index, taskboard, taskboard_archive, team, knowledge_base, scripts.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-24",
+          "updated": "2026-09-25",
+          "completed": "2026-09-25",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-25"
         }
       ],
-      "total": 28,
+      "total": 29,
       "by_status": {
-        "done": 20,
+        "done": 21,
         "cancelled": 8
       }
     },
