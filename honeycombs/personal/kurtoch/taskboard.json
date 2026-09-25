@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.2",
+    "version": "v2.2.3",
     "created": "2026-09-14",
     "updated": "2026-09-25",
     "layer": 2,
@@ -1082,29 +1082,51 @@
           "notion_page_id": null,
           "column": "Операционка — Центр"
         }
+      },
+      {
+        "id": "K-079",
+        "title": "Стирка текстиля в Центре",
+        "description": "Постирать подушечки на диванах, подушечки на стульях, занавески в рабочей зоне. Центр.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-25",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 41,
+      "total": 42,
       "by_status": {
-        "todo": 38,
+        "todo": 39,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
         "high": 31,
-        "medium": 8
+        "medium": 9
       },
       "by_column": {
         "Стратегические": 6,
         "Операционка — Общая": 8,
         "Операционка — Нижка": 20,
-        "Операционка — Центр": 4,
+        "Операционка — Центр": 5,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 41
+        "phase_0": 42
       }
     },
     "notes": {
