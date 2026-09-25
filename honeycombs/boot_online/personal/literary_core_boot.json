@@ -774,7 +774,7 @@
       }
     },
     "literary_core": {
-      "path": "honeycombs/personal/literary_core_boot.json",
+      "path": "honeycombs/boot_online/personal/literary_core_boot.json",
       "description": "Собранный слепок всей литературной ветки (стихи + проза + индекс)",
       "created": "2026-08-20",
       "purpose": "Один файл для загрузки в любой External SR",
