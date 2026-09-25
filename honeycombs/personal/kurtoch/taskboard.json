@@ -980,28 +980,6 @@
         }
       },
       {
-        "id": "K-075",
-        "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
-        "description": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json — для быстрого онбординга новых чатов.\n\nРасположение: honeycombs/boot_online/Personal/kurtoch_bundle.json\n\nШаги:\n1. Создать папку honeycombs/boot_online/Personal/\n2. Скрипт build_bundle.py — собирает JSON nested из модулей + scripts\n3. Первый запуск — создать bundle\n4. GitHub Action .github/workflows/kurtoch_bundle.yml\n5. Триггер: изменения в honeycombs/personal/kurtoch/** (кроме _snapshots, _logs, token)\n6. Loop-guard: не триггерить от бот-коммита\n7. Тест + коммит\n\nИсключить: notion_token.txt, _snapshots/**, сам bundle.\nВключить: index, taskboard, taskboard_archive, team, knowledge_base, scripts.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "strategic",
-        "phase": "phase_0",
-        "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-24",
-        "updated": "2026-09-24",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Стратегические"
-        }
-      },
-      {
         "id": "K-076",
         "title": "База знаний и инструкции (консолидация)",
         "description": "Единая стратегическая задача: собрать все документы, чек-листы, регламенты, обучение, таблицы документации в единую базу знаний.\n\nПоглощённые задачи (8): K-006, K-008, K-010, K-016, K-018, K-021, K-039, K-041.\n\nЦель: единая точка входа по документации. Сокращение объёма основного taskboard.",
@@ -1085,26 +1063,26 @@
       }
     ],
     "counters": {
-      "total": 41,
+      "total": 40,
       "by_status": {
-        "todo": 38,
+        "todo": 37,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 31,
+        "high": 30,
         "medium": 8
       },
       "by_column": {
-        "Стратегические": 7,
+        "Стратегические": 6,
         "Операционка — Общая": 8,
         "Операционка — Нижка": 20,
         "Операционка — Центр": 3,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 41
+        "phase_0": 40
       }
     },
     "notes": {

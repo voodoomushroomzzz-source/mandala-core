@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.1.6",
+    "version": "v2.1.7",
     "created": "2026-09-23",
     "updated": "2026-09-25",
     "layer": 2,
@@ -51,6 +51,14 @@
       "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
       "version": "v1.1.0",
       "tasks_count": 25
+    },
+    "kurtoch_bundle.json": {
+      "description": "Единый файл онбординга Куртош (автосборка).",
+      "path": "honeycombs/boot_online/personal/kurtoch_bundle.json",
+      "version": "v1.0.0",
+      "generator": "scripts/build_bundle.py",
+      "auto_rebuild": ".github/workflows/kurtoch_bundle.yml",
+      "size_kb": 197
     }
   },
   "scripts": {
@@ -150,7 +158,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-09-25",
-    "notes": "v2.1.6: +revenue_target 2,2М. K-071->Нижка. K-072 done. K-076/077/078. Вероника+Влада left. Taskboard v2.2.0."
+    "notes": "v2.1.7: K-075 done — kurtoch_bundle.json + GH Action."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -628,6 +636,10 @@
     {
       "date": "2026-09-25",
       "event": "v2.1.6: revenue_target 2,2М. K-071->Нижка. K-072 done. K-076 консолидация Базы знаний (6 merged). K-077 Крис. K-078 Финансы. Вероника+Влада left."
+    },
+    {
+      "date": "2026-09-25",
+      "event": "v2.1.7: K-075 done — Kurtoch bundle (197 КБ) + build_bundle.py + GH Action."
     }
   ],
   "workspace_mirror": {

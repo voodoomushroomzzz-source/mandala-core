@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-ARCHIVE-001",
     "name": "Kurtoch — Taskboard Archive",
-    "version": "v1.2.0",
+    "version": "v1.3.0",
     "created": "2026-09-23",
     "updated": "2026-09-25",
     "type": "taskboard_archive",
@@ -663,11 +663,34 @@
           "merged_into": "K-076"
         },
         "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-075",
+        "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
+        "description": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json — для быстрого онбординга новых чатов.\n\nРасположение: honeycombs/boot_online/Personal/kurtoch_bundle.json\n\nШаги:\n1. Создать папку honeycombs/boot_online/Personal/\n2. Скрипт build_bundle.py — собирает JSON nested из модулей + scripts\n3. Первый запуск — создать bundle\n4. GitHub Action .github/workflows/kurtoch_bundle.yml\n5. Триггер: изменения в honeycombs/personal/kurtoch/** (кроме _snapshots, _logs, token)\n6. Loop-guard: не триггерить от бот-коммита\n7. Тест + коммит\n\nИсключить: notion_token.txt, _snapshots/**, сам bundle.\nВключить: index, taskboard, taskboard_archive, team, knowledge_base, scripts.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-24",
+        "updated": "2026-09-25",
+        "completed": "2026-09-25",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-09-25"
       }
     ],
-    "total": 28,
+    "total": 29,
     "by_status": {
-      "done": 20,
+      "done": 21,
       "cancelled": 8
     }
   },
