@@ -1,0 +1,51 @@
+name: Kurtoch Bundle Auto-Rebuild
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'honeycombs/personal/kurtoch/**'
+      - '!honeycombs/personal/kurtoch/_snapshots/**'
+      - '!honeycombs/personal/kurtoch/_logs/**'
+      - '!honeycombs/personal/kurtoch/scripts/notion_token.txt'
+      - '.github/workflows/kurtoch_bundle.yml'
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Skip if bot commit (loop-guard)
+        id: guard
+        run: |
+          MSG=$(git log -1 --pretty=%B)
+          if echo "$MSG" | grep -q "\[skip-bundle\]\|auto-build bundle"; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Loop-guard: skip"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Build bundle
+        if: steps.guard.outputs.skip == 'false'
+        run: python3 honeycombs/personal/kurtoch/scripts/build_bundle.py
+      - name: Commit bundle (if changed)
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          git config user.name "mandala-bot"
+          git config user.email "bot@mandala.symbiosis"
+          git add honeycombs/boot_online/Personal/kurtoch_bundle.json
+          if git diff --cached --quiet; then
+            echo "Bundle не изменился"
+          else
+            git commit -m "chore(bundle): auto-build kurtoch_bundle.json [skip-bundle]"
+            git pull --rebase origin main || true
+            git push
+          fi

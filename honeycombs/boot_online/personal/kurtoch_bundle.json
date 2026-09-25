@@ -1,0 +1,3753 @@
+{
+  "meta": {
+    "bundle_version": "v1.0.0",
+    "generated_at": "2026-09-25T15:16:38Z",
+    "source": "honeycombs/personal/kurtoch/",
+    "generator": "scripts/build_bundle.py",
+    "modules": [
+      "index",
+      "taskboard",
+      "taskboard_archive",
+      "team",
+      "knowledge_base"
+    ],
+    "scripts_included": [
+      "archive_done.py",
+      "build_bundle.py",
+      "fix_two_ids.py",
+      "notion_runner.sh",
+      "notion_sync.py",
+      "patch_schema.py",
+      "push_taskboard.py",
+      "split_archive.py",
+      "split_franchise.py"
+    ],
+    "note": "Единый файл для онбординга нового SR. Содержит все модули хаба + полные тексты скриптов. Исключены: notion_token.txt, _snapshots/, _logs/, __pycache__/."
+  },
+  "index": {
+    "identity": {
+      "module_id": "PERSONAL-KURTOCH-INDEX-001",
+      "name": "Kurtoch — Franchise & Operations Hub",
+      "version": "v2.1.6",
+      "created": "2026-09-23",
+      "updated": "2026-09-25",
+      "layer": 2,
+      "type": "personal_subhub_index",
+      "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
+      "status": "active",
+      "priority": "critical",
+      "tags": [
+        "personal",
+        "kurtoch",
+        "franchise",
+        "crisis_management",
+        "horeca"
+      ],
+      "resonance": "100%"
+    },
+    "meta": {
+      "description": "Hub для всех файлов проекта Куртош. Родительский модуль: personal/index.json.",
+      "purpose": "Структурирование операционной системы Куртош: задачи, команда, документация, milestones.",
+      "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
+      "status_global": "active",
+      "priority_global": "critical"
+    },
+    "contents": {
+      "taskboard.json": {
+        "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
+        "purpose": "Задачи, milestones, синхронизация с Notion.",
+        "version": "v2.2.0",
+        "tasks_count": 44,
+        "note": "Архивные задачи вынесены в taskboard_archive.json."
+      },
+      "team.json": {
+        "description": "Картотека сотрудников.",
+        "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
+        "version": "v1.1.0",
+        "total_employees": 16
+      },
+      "knowledge_base.json": {
+        "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
+        "purpose": "Структура готова, наполнение — по мере сбора.",
+        "version": "v1.1.0",
+        "sections_count": 6
+      },
+      "taskboard_archive.json": {
+        "description": "Архив завершённых задач (done + cancelled).",
+        "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
+        "version": "v1.1.0",
+        "tasks_count": 25
+      }
+    },
+    "scripts": {
+      "description": "Скрипты для работы с Notion и обслуживания хаба. Лежат в scripts/.",
+      "existing": {
+        "notion_sync.py": {
+          "purpose": "Основной скрипт синхронизации. Читает/пишет данные Notion по API.",
+          "status": "done",
+          "path": "scripts/notion_sync.py",
+          "commands": {
+            "list": "показать список команд",
+            "db_taskboard": "метаданные базы Taskboard",
+            "pull_taskboard": "выгрузить задачи из Notion в снапшот (Notion → Mandala)"
+          },
+          "run_example": "python3 scripts/notion_sync.py pull_taskboard",
+          "token_source": "scripts/notion_token.txt (в .gitignore, не в репе)"
+        },
+        "notion_runner.sh": {
+          "purpose": "Обёртка: запускает notion_sync.py, логирует, автокоммитит лог, пушит.",
+          "status": "done",
+          "path": "scripts/notion_runner.sh",
+          "run_example": "bash scripts/notion_runner.sh full_sync",
+          "commands": {
+            "full_sync": "archive_done.py + push_taskboard.py + логи + автокоммит + push",
+            "pull_taskboard": "выгрузка Notion в снапшот",
+            "push_taskboard": "синхронизация Mandala → Notion"
+          },
+          "note": "На Android execute-бит не работает (noexec). Запускать через bash."
+        },
+        "push_taskboard.py": {
+          "purpose": "Скрипт Мандала → Notion: раздаёт K-ID, обновляет столбцы, архивирует.",
+          "status": "done",
+          "path": "scripts/push_taskboard.py",
+          "run_example": "python3 scripts/push_taskboard.py"
+        },
+        "patch_schema.py": {
+          "purpose": "Служебный: добавляет свойства в схему базы Notion (например, ID).",
+          "status": "done",
+          "path": "scripts/patch_schema.py"
+        },
+        "fix_two_ids.py": {
+          "purpose": "Служебный: точечный фикс ID для задач с суффиксами в названиях.",
+          "status": "done",
+          "path": "scripts/fix_two_ids.py"
+        },
+        "archive_done.py": {
+          "purpose": "Переносит done + cancelled задачи из taskboard.json в taskboard_archive.json. Идемпотентно.",
+          "status": "done",
+          "path": "scripts/archive_done.py",
+          "run_example": "python3 scripts/archive_done.py"
+        }
+      },
+      "planned": {
+        "create_team_db.py": "создать базу сотрудников в Notion",
+        "pull_team.py": "выгрузить сотрудников из Notion",
+        "push_team.py": "обновить сотрудников в Notion",
+        "create_kb_db.py": "создать базу знаний в Notion",
+        "pull_kb.py": "выгрузить базу знаний",
+        "push_kb.py": "обновить базу знаний"
+      }
+    },
+    "logs": {
+      "description": "Логи всех синхронизаций. Коммитятся в репу.",
+      "path": "honeycombs/personal/kurtoch/_logs/",
+      "files": {
+        "notion_sync.log": "история запусков notion_sync.py",
+        "team_sync.log": "пока нет (будущее)",
+        "kb_sync.log": "пока нет (будущее)"
+      }
+    },
+    "navigation": {
+      "parent": "honeycombs/personal/index.json",
+      "siblings": [
+        "profile_deep.json",
+        "career.json",
+        "creative.json",
+        "instagram.json",
+        "youtube.json",
+        "ecommerce.json",
+        "learning.json",
+        "self_development.json",
+        "gov_orders.json",
+        "music/",
+        "poetry/"
+      ],
+      "children": [
+        "index.json",
+        "taskboard.json",
+        "taskboard_archive.json",
+        "team.json",
+        "knowledge_base.json",
+        "scripts/",
+        "_logs/",
+        "_snapshots/"
+      ]
+    },
+    "health": {
+      "status": "healthy",
+      "last_check": "2026-09-25",
+      "notes": "v2.1.6: +revenue_target 2,2М. K-071->Нижка. K-072 done. K-076/077/078. Вероника+Влада left. Taskboard v2.2.0."
+    },
+    "snapshots": {
+      "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
+      "path": "honeycombs/personal/kurtoch/_snapshots/",
+      "max_files": 10,
+      "naming": "notion_taskboard_YYYYMMDD_HHMM.json",
+      "rotation": "автоматически, последние 10"
+    },
+    "gitignore_rules": {
+      "file": "honeycombs/personal/kurtoch/.gitignore",
+      "excluded": [
+        "scripts/notion_token.txt — токен Notion, никогда не коммитить",
+        "_snapshots/*.json — рабочие выгрузки, локальные"
+      ],
+      "critical": "Если токен случайно попадёт в git — GitHub автоматически отзовёт его. Немедленно удалить из истории."
+    },
+    "workflow_for_new_sr": {
+      "description": "Пошаговое руководство для нового System Resonator (SR), работающего с проектом Куртош.",
+      "read_me_first": [
+        {
+          "step": 1,
+          "action": "Прочитай этот index.json полностью"
+        },
+        {
+          "step": 2,
+          "action": "Прочитай taskboard.json (активные задачи), taskboard_archive.json (архив), team.json (сотрудники), knowledge_base.json (база знаний)"
+        },
+        {
+          "step": 3,
+          "action": "Если нужно обновить Notion — смотри секцию scripts"
+        }
+      ],
+      "how_to_work": {
+        "read_notion_state": {
+          "description": "Прочитать актуальное состояние Notion",
+          "command": "python3 scripts/notion_sync.py pull_taskboard",
+          "result": "создаст снапшот в _snapshots/notion_taskboard_YYYYMMDD_HHMM.json"
+        },
+        "read_with_logging": {
+          "description": "То же, но с логированием и автокоммитом",
+          "command": "./scripts/notion_runner.sh pull_taskboard"
+        },
+        "see_commands": {
+          "description": "Список всех доступных команд",
+          "command": "python3 scripts/notion_sync.py list"
+        },
+        "push_to_notion": {
+          "description": "Обновить Notion из Mandala (ID, столбцы, статусы)",
+          "command": "python3 scripts/push_taskboard.py",
+          "note": "Работает идемпотентно — можно запускать повторно"
+        },
+        "full_sync": {
+          "description": "Полный цикл: архивировать закрытые + синхронизировать с Notion + закоммитить в git",
+          "command": "bash scripts/notion_runner.sh full_sync",
+          "note": "Рекомендуемая команда после закрытия задач. Делает всё за один шаг."
+        }
+      },
+      "sync_rules": {
+        "mandala_is_source_of_truth": true,
+        "notion_is_visual_mirror": true,
+        "rule": "Mandala (taskboard.json, team.json, knowledge_base.json) — эталон. Notion — визуальное зеркало. Если расхождение — правим Notion по Mandala, не наоборот.",
+        "id_conventions": {
+          "tasks": "K-001..K-071 с пропусками (K-017, K-047..K-056, K-061). Следующий свободный — K-072.",
+          "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
+          "next_task_id": "K-072",
+          "next_milestone_id": "M-003"
+        }
+      },
+      "token_instructions": {
+        "location": "scripts/notion_token.txt",
+        "in_git": false,
+        "how_to_create": "read -s -p 'Token: ' T && echo \"$T\" > scripts/notion_token.txt",
+        "how_to_update": "Создать новый коннектор на https://www.notion.so/my-integrations, Regenerate token, заменить содержимое файла",
+        "integration_url": "https://www.notion.so/my-integrations",
+        "warning": "Никогда не коммитить. Никогда не присылать в чат."
+      },
+      "entry_points": {
+        "github_repo": "https://github.com/voodoomushroomzzz-source/mandala-core",
+        "notion_taskboard_url": "https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1",
+        "notion_workspace": "Куртош & Кофе",
+        "notion_database_id": "f6ffa784e7594df9add4fd1c697d4ada"
+      },
+      "directive": {
+        "id": "horeca",
+        "name": "Операционный ассистент HoReCa",
+        "why": "Фокус на операционных процессах кофеен — подходит для проекта Куртош"
+      }
+    },
+    "work_context": {
+      "work_id": "W-R-20260803-KURTOCH-FRANCHISE",
+      "status": "active",
+      "priority": "critical",
+      "horizon": "strategic",
+      "owner": "Voodoo (Дима)",
+      "role": "Кризис-менеджер",
+      "key_contacts": {
+        "Виктор": "Владелец",
+        "Катрин": "Старший бариста (потенциал шефа)",
+        "Крис": "Управляющая (функции перераспределяются)"
+      },
+      "directive_used": {
+        "id": "horeca",
+        "name": "Операционный ассистент HoReCa",
+        "description": "Фокус на поддержке операционных процессов в кофейнях.",
+        "why": "Позволяет занять позицию системного архитектора в кризисной ситуации."
+      }
+    },
+    "offer": {
+      "rate": "100 000 ₽ в месяц",
+      "status": "accepted",
+      "date_accepted": "2026-09-11",
+      "duration": "11.09.2026 – 11.12.2026 (3 месяца)",
+      "role": "Кризис-менеджер",
+      "scope": [
+        "Стабилизация команды и экосистемы",
+        "Систематизация документации и процессов",
+        "Контроль чистоты и санпина",
+        "Внедрение бота (MVP)",
+        "Выход сети из кризиса"
+      ],
+      "payment_structure": {
+        "total_monthly": "100 000 ₽",
+        "cash": "50 000 ₽ (кеш)",
+        "accumulation": "50 000 ₽ (накопление до лучших времён)",
+        "note": "Детализация накопления — уточняется (депозит / оборот / иначе)."
+      }
+    },
+    "success_criteria_3_months": {
+      "deadline": "2026-12-11",
+      "checkpoints": "конец октября, конец ноября, 11.12.2026",
+      "criteria": [
+        {
+          "id": 1,
+          "name": "Стабильная полная команда",
+          "description": "Штат укомплектован, нет дыр в расписании."
+        },
+        {
+          "id": 2,
+          "name": "Центр и Нишка в штатном режиме",
+          "description": "Обе точки работают без сбоев."
+        },
+        {
+          "id": 3,
+          "name": "Нет проблем с поломками и чистотой",
+          "description": "Оборудование работает, чистота соблюдается."
+        },
+        {
+          "id": 4,
+          "name": "Команда справляется с потоками гостей",
+          "description": "Нет провалов в обслуживании."
+        },
+        {
+          "id": 5,
+          "name": "Стабильный рост выручки",
+          "description": "Пусть небольшой, но положительная динамика."
+        },
+        {
+          "id": 6,
+          "name": "Сформированная база знаний",
+          "description": "Чек-листы, регламенты, информация — в рабочем состоянии."
+        }
+      ]
+    },
+    "hot_zones": {
+      "zone_1_team": {
+        "priority": "critical",
+        "name": "Команда и экосистема",
+        "problem": "Люди устают, уходят, нет вовлечённости. Переходный период управления (Витя → такси?, Дима → управляющий). Финансовое давление зимой.",
+        "actions": [
+          "Аудит команды (кто, сколько, кто на грани)",
+          "ЦУ на смены",
+          "Простая система обучения",
+          "Обратная связь (тет-а-тет раз в месяц)",
+          "Описать ЗП-систему в единый документ (см. compensation_system)"
+        ],
+        "goal": "Людям понятно, приятно и интересно работать."
+      },
+      "zone_2_docs": {
+        "priority": "critical",
+        "name": "Документация и систематизация",
+        "problem": "Всё в чатах, нет чек-листов, регламентов.",
+        "actions": [
+          "Собрать существующие чек-листы",
+          "Описать 5 критических процессов",
+          "Создать единый документ",
+          "Постепенно переводить в бот"
+        ],
+        "goal": "Порядок в документации, единая база знаний."
+      },
+      "zone_3_cleanliness": {
+        "priority": "high",
+        "name": "Чистота и санпин",
+        "problem": "Стандарты проседают.",
+        "actions": [
+          "Фото-чекапы через бот",
+          "Простой чек-лист для смены",
+          "Контроль через поддержку, не наказание"
+        ],
+        "goal": "Безопасность и гордость за точку."
+      },
+      "zone_4_bot": {
+        "priority": "medium",
+        "name": "Интеграция с ботом (MVP)",
+        "problem": "Нет инструмента контроля и обучения.",
+        "actions": [
+          "Запрос фото чеков/чистоты",
+          "ЦУ на смену",
+          "База знаний"
+        ],
+        "goal": "Простой инструмент, не цель."
+      }
+    },
+    "context": {
+      "business": "Сеть кофеен 'Куртош' (кофе + венгерская выпечка). 2 точки: центр (работает) и Нишка (работает).",
+      "owner": "Виктор — владелец, нет другого источника дохода.",
+      "current_team": {
+        "Крис": "Управляющая (удалёнка) — фин, зак, расп.",
+        "Катрин": "Старший бариста — ключевой человек.",
+        "Валя": "Продюсер + маркетинг.",
+        "Настя": "SMM."
+      },
+      "initial_problems": [
+        "Зарплата плавает от выручки",
+        "Сложный продукт — перегружает пекарей",
+        "Слабая корпоративная культура",
+        "Разрозненность знаний",
+        "Уходит управляющий"
+      ]
+    },
+    "plan": {
+      "phase_0": {
+        "name": "Вход и быстрые победы",
+        "duration": "Сентябрь–Октябрь 2026 (старт 11.09)",
+        "tasks": [
+          "Аудит команды",
+          "Сбор документации",
+          "Описание 5 процессов",
+          "Запуск ЦУ",
+          "Фото-чекапы",
+          "MVP бота"
+        ],
+        "success_criteria": "Команда понимает задачи, чистота контролируется, документация собрана."
+      },
+      "phase_1": {
+        "name": "Автоматизация рутины",
+        "duration": "Ноябрь 2026",
+        "tasks": [
+          "Автоотчёты по сменам",
+          "Скоринг сотрудников",
+          "Прозрачная зарплата"
+        ],
+        "success_criteria": "Рутина снижена на 40%"
+      },
+      "phase_2": {
+        "name": "Культура и продукт",
+        "duration": "Декабрь 2026",
+        "tasks": [
+          "Формализация культурного кода",
+          "Стабилизация точек",
+          "Запуск кухни"
+        ],
+        "success_criteria": "Культура растёт, точки стабилизированы"
+      },
+      "phase_3": {
+        "name": "Франшиза",
+        "duration": "6 месяцев (после декабря)",
+        "tasks": [
+          "Упаковка системы в продукт",
+          "Пилотные продажи"
+        ],
+        "success_criteria": "Франшиза готова"
+      }
+    },
+    "success_metrics": {
+      "short_term": [
+        "Команда стабильна, текучесть снижена",
+        "Чистота и санпин соблюдаются",
+        "Документация собрана"
+      ],
+      "medium_term": [
+        "Выручка растёт на 10–15% в месяц",
+        "Обе точки работают стабильно"
+      ],
+      "long_term": [
+        "Франшиза упакована и продана"
+      ],
+      "revenue_target": {
+        "value_rub_monthly": 2200000,
+        "per_point_rub_monthly": 1100000,
+        "scope": "2 точки (Нижка + Центр)",
+        "note": "Минимум для рабочей экономики. Ключевая метрика для K-078.",
+        "updated": "2026-09-25"
+      }
+    },
+    "current_status": {
+      "phase": "phase_0",
+      "progress": 40,
+      "date": "2026-09-25",
+      "last_action": "25.09 патч: K-071->Нижка, K-072 done+archive, 6 merged в K-076, +K-076/077/078. Вероника+Влада left. revenue_target 2,2М. Косметика: counters, versions.",
+      "next_action": "Today 25.09: K-040 аттестация Юли. 26.09: K-072 расчёт Вероники (already done), K-074 Анна ключи+сигнализация. 28.09: K-021 ушла в K-076. 30.09: K-016 чистота. 01.10: K-031 дезинсекция, K-073 капинг Search Coffee. До 15.10: K-077 Крис-анализ. До 31.10: K-078 финансы+бюджеты, K-010 ушла в K-076. Notion full_sync — сегодня.",
+      "blockers": [],
+      "notes": [
+        "Фокус: команда, документация, чистота, бот.",
+        "OPEN: 'Дни рождественский бонус' — уточнить у Виктора.",
+        "OPEN: ключи Центр/Нишка — проверить систему доступа.",
+        "OPEN: накопление 50к — уточнить механику (депозит/оборот).",
+        "OPEN: ЗП-система — описать в единый документ (в compensation_system).",
+        "OPEN: Переходный период управления — стабилизация процессов.",
+        "Notion — вариант для базы знаний."
+      ]
+    },
+    "risks": [
+      {
+        "id": "R1",
+        "description": "Сопротивление сотрудников изменениям",
+        "probability": "high",
+        "impact": "critical",
+        "mitigation": "Внедрять через экологичные интерфейсы. Подчёркивать пользу.",
+        "owner": "Дима"
+      },
+      {
+        "id": "R2",
+        "description": "Разрозненность знаний",
+        "probability": "high",
+        "impact": "critical",
+        "mitigation": "Тщательная фаза 0. Итеративный сбор.",
+        "owner": "Дима"
+      },
+      {
+        "id": "R3",
+        "description": "Финансовые сложности сети",
+        "probability": "medium",
+        "impact": "high",
+        "mitigation": "3-месячная сбивка — точка пересмотра.",
+        "owner": "Дима + Виктор"
+      }
+    ],
+    "history": [
+      {
+        "date": "2026-08-03",
+        "event": "Создан Work-файл. Анализ переговоров."
+      },
+      {
+        "date": "2026-08-04",
+        "event": "Проведён продукт-аудит."
+      },
+      {
+        "date": "2026-08-18",
+        "event": "Финальная структура: 3 вектора, условия."
+      },
+      {
+        "date": "2026-08-24",
+        "event": "Обновление модели: директива HoReCa, бюджет 130 т.р."
+      },
+      {
+        "date": "2026-08-25",
+        "event": "Добавлены контекст, план по фазам, метрики успеха и план по Дуброве. Версия v2.1.0."
+      },
+      {
+        "date": "2026-09-03",
+        "event": "Обновление модели: ставка 100 т.р. (50 + 50 депозит). Версия v2.2.0."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Офер принят. Роль: кризис-менеджер, 100 т.р./мес. Добавлены горячие зоны. Версия v2.3.0."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Добавлены критерии успеха на 3 месяца (октябрь–декабрь), блок Notion. Версия v2.3.1."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Добавлен taskboard (v1.0.0): 3 тактические задачи Фазы 0 (K-001..K-003). Версия v2.4.0."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Уточнён offer: дата входа 11.09.2026, срок 11.09–11.12.2026, структура оплаты 50 кеш + 50 накопление. Версия v2.5.0."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Taskboard v1.1.0: добавлены 19 задач (K-004..K-022) по первым касаниям и плану Фазы 0. Итого 22 задачи."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Косметика: актуализирован current_status.last_action. Версия v2.5.1."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Добавлена полная картотека команды team_roster: 15 человек, единая схема навыков (лестница печка-кофе-касса). Версия v2.6.0."
+      },
+      {
+        "date": "2026-09-14",
+        "event": "Taskboard: K-005 (Реальная штатка) и K-015 (Анализ сотрудников) отмечены done. Картотека team_roster — источник. Версия v2.6.1."
+      },
+      {
+        "date": "2026-09-16",
+        "event": "team_roster: добавлен EMP-016 Оля (стажёр, от Маши, пробная смена в вс, опыт по кофе). Версия v2.6.2."
+      },
+      {
+        "date": "2026-09-17",
+        "event": "v2.7.0: +4 операционные задачи (K-023..K-026). K-001/K-002/K-003 → done. taskboard v1.3.0. progress 20%."
+      },
+      {
+        "date": "2026-09-17",
+        "event": "v2.8.0: sync с Notion. Done: K-007, K-009, K-011, K-014, K-026. Удалена K-017. taskboard v1.4.0. progress 30%."
+      },
+      {
+        "date": "2026-09-17",
+        "event": "v2.9.0: добавлен 4-й столбец «Операционка — Общая», таксономия столбцов, правило sync Notion ↔ franchise. taskboard v1.5.0."
+      },
+      {
+        "date": "2026-09-17",
+        "event": "v2.10.0: Notion Taskboard синхронизирован. Добавлены K-005/K-015 в Notion, поле Статус, callout синхронности. Итог: 25 задач, 10 done, 1 in_progress, 14 todo. 1:1."
+      },
+      {
+        "date": "2026-09-17",
+        "event": "v2.11.0: добавлен workspace_mirror — зеркало Notion-воркспейса. 8 разделов: taskboard (active), employees (partial), knowledge_base, metrics, menu_tech_cards, suppliers, accesses_accounts, contacts. Data-priority список для поэтапного заполнения."
+      },
+      {
+        "date": "2026-09-18",
+        "event": "v2.12.0: +3 задачи (K-027 Расчёт ЗП авто, K-028 Сессионные — договорённости, K-029 Подготовка к зиме: штатка). Taskboard v1.6.0. Всего 28 задач."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.13.0: +5 задач (K-030..K-034). Влада (EMP-012) → leaving. Taskboard v1.7.0. Всего 33 задачи."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.13.1: косметика. Актуализированы counters (by_priority, by_phase), current_status (progress 40%, last_action, next_action), workspace_mirror (last_sync, taskboard.note)."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.13.2: актуализация team_roster. Статусы (Юля working, Ксюша left). Контакты (Вероника, Саша, Денис, Арина, Оля). Skills (Вероника/Анна печка ✅, Оля/Саша обучаются печке). Оля — likes нижку."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.13.3: полная косметика. Укорочен identity.description. Пересобраны critical_gaps (nijka ✅, veronika telegram ✅, ksusha left). Обновлены data_gaps у 16 сотрудников. workspace_mirror.sections.employees → active. Обновлены current_status.last_action и taskboard.description."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.13.4: финал. Убран устаревший risk у Вероники (TG добавлен). Финальная чистка data_gaps."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.13.5: финальная полировка. Юля pay.extra (аттестована), Ксюша skills.notes, nijka_summary.unknown очищен, workspace_mirror.employees.data_gaps обновлён, current_status.next_action дополнен."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.14.0: +9 задач (K-035..K-043): из диалога с Юлей + 2 из Notion. Обновлены K-023/K-034. Добавлен compensation_system (ЗП-система). Юля pay.extra + skills.notes. hot_zones.zone_1_team дополнен. Taskboard v1.8.0. Всего 42."
+      },
+      {
+        "date": "2026-09-21",
+        "event": "v2.15.0: +3 задачи (K-044 3-й человек, K-045 Карты/доставка, K-046 График пекаря). Обновлены K-010/K-021 (роли + чек-листы закрытия). Taskboard v1.9.0. Всего 45 задач."
+      },
+      {
+        "date": "2026-09-22",
+        "event": "v2.16.0: +6 задач (K-057..K-063, кроме K-061). Обновлены K-034/K-038/K-048/K-050/K-051. Добавлен milestones (nijka_revival, centre_revival) + столбец «Крупные вехи» в columns_taxonomy. Taskboard v2.0.0. Всего 51 задача."
+      },
+      {
+        "date": "2026-09-23",
+        "event": "v2.17.0: синхронизация с Notion. +8 задач (K-064..K-071): Зона посадки, Уличная вывеска, Цветы, Потолок, Вентиляция, Зеркало, Вывеска E, Сливной стояк. K-020 → done. Добавлен статус planning. Дедлайны K-010/K-016/K-027/K-028/K-029 синхронизированы. Milestones.linked_tasks пересобраны. Taskboard v2.1.0. Всего 59 задач."
+      },
+      {
+        "date": "2026-09-24",
+        "event": "v2.1.3: +K-074 (Анна: ключи + сигнализация Центра, самостоятельное открытие смены, дедлайн 26.09). Добавлен блок my_terms: ставка 100к (50к кеш фикс + 50к накопление), расчёт сентября 66 667 ₽ (кеш 50 000 + накопление 16 667). team.json: Анна обновлена."
+      },
+      {
+        "date": "2026-09-24",
+        "event": "v2.1.4: +M-003 «Оплата кризис-менеджера» — трекер выплат на 4 фазы (сентябрь 66 667 ₽ / октябрь–декабрь по 100 000 ₽). Итого к 31.12: 366 667 ₽ (кеш 200 000 + накопление 166 667). Даты: 24-е (аванс) / 9-е (остаток). my_terms дополнен фазами и total_planned."
+      },
+      {
+        "date": "2026-09-24",
+        "event": "v2.1.5: +K-075 «Kurtoch bundle — единый файл для онбординга (автосборка)». Handoff v4.0.0 подготовлен. План: build_bundle.py + GitHub Action для авто-пересборки при изменениях в kurtoch/."
+      },
+      {
+        "date": "2026-09-25",
+        "event": "v2.1.6: revenue_target 2,2М. K-071->Нижка. K-072 done. K-076 консолидация Базы знаний (6 merged). K-077 Крис. K-078 Финансы. Вероника+Влада left."
+      }
+    ],
+    "workspace_mirror": {
+      "purpose": "Зеркало структуры Notion-воркспейса «Куртош & Кофе». Синхронизируется с Notion. Каждый раздел — со статусом заполнения. SR (External) работает по этой структуре: подходит к блоку → смотрит data_gaps → запрашивает данные у Gardener → патчит → статус меняется empty → partial → complete.",
+      "last_sync": "2026-09-21",
+      "sync_with": "Notion workspace «Куртош & Кофе»",
+      "section_status_legend": {
+        "active": "Заполнен и работает",
+        "partial": "Частично заполнен, есть data_gaps",
+        "empty": "Пусто, ждёт данных",
+        "placeholder": "Заглушка"
+      },
+      "sections": {
+        "taskboard": {
+          "status": "active",
+          "notion_page": "📋 Taskboard",
+          "internal_ref": "taskboard",
+          "note": "Уже реализован в этом файле — 33 задачи, 4 столбца."
+        },
+        "employees": {
+          "status": "active",
+          "notion_page": "👥 Сотрудники",
+          "internal_ref": "team_roster",
+          "note": "Картотека 16 человек, контакты + навыки актуальны. Точечные пробелы — в data_gaps.",
+          "data_gaps": [
+            "nijka.attitude — у 12 сотрудников неизвестно",
+            "schedule.preferences / availability — у большинства",
+            "Маша — продлить договорённость?",
+            "Оля — результат пробной смены?"
+          ]
+        },
+        "knowledge_base": {
+          "status": "empty",
+          "notion_page": "📚 База знаний",
+          "note": "Заполним из раздела knowledge_base_plan в этом файле. Нужны данные от Gardener.",
+          "sections": {
+            "checklists_open_close": {
+              "status": "empty",
+              "description": "Чек-листы открытия и закрытия смены",
+              "data_gaps": [
+                "нет содержимого"
+              ]
+            },
+            "checklists_cleanliness": {
+              "status": "empty",
+              "description": "Чек-листы чистоты и санпина",
+              "data_gaps": [
+                "нет содержимого"
+              ]
+            },
+            "regulations_5_processes": {
+              "status": "empty",
+              "description": "5 критических процессов (открытие, закрытие, чистота, касса, обучение)",
+              "data_gaps": [
+                "нет содержимого"
+              ]
+            },
+            "tech_cards": {
+              "status": "empty",
+              "description": "Техкарты — рецепты и стандарты",
+              "data_gaps": [
+                "нет содержимого"
+              ]
+            },
+            "training": {
+              "status": "empty",
+              "description": "Обучение для новичков — материалы, стажировка",
+              "data_gaps": [
+                "нет содержимого"
+              ]
+            },
+            "cu_shift_tasks": {
+              "status": "empty",
+              "description": "ЦУ (центральные указания / задания на смену)",
+              "data_gaps": [
+                "нет содержимого"
+              ]
+            }
+          }
+        },
+        "metrics": {
+          "status": "empty",
+          "notion_page": "📊 Метрики (пока нет)",
+          "note": "Метрики сети: выручка, текучесть, резонанс, выполнение задач.",
+          "data_gaps": [
+            "выручка по точкам (Центр / Нижка) — динамика",
+            "текучесть команды — % в месяц",
+            "выполнение задач — % в неделю",
+            "стабильность смен — недокомплект в днях"
+          ]
+        },
+        "menu_tech_cards": {
+          "status": "empty",
+          "notion_page": "🍽 Меню и техкарты",
+          "note": "Меню обеих точек, техкарты кофе, куртошей, другой выпечки.",
+          "data_gaps": [
+            "меню Центр",
+            "меню Нижка",
+            "техкарты напитков",
+            "техкарты куртошей/выпечки",
+            "сезонные новинки"
+          ]
+        },
+        "suppliers": {
+          "status": "empty",
+          "notion_page": "🤝 Поставщики",
+          "note": "Поставщики сырья и расходников, условия, контакты.",
+          "data_gaps": [
+            "список поставщиков",
+            "условия (цены, сроки, отсрочки)",
+            "контакты (менеджеры, телефоны)",
+            "критические позиции (топ-3)"
+          ]
+        },
+        "accesses_accounts": {
+          "status": "empty",
+          "notion_page": "🔑 Доступы и аккаунты",
+          "note": "Доступы к системам, аккаунты точек, ключи.",
+          "data_gaps": [
+            "ключи Центр / Нижка",
+            "аккаунт POS-системы",
+            "аккаунт Telegram / WhatsApp",
+            "доступ к кассе",
+            "iiko / другая система учёта"
+          ]
+        },
+        "contacts": {
+          "status": "partial",
+          "notion_page": "📞 Контакты",
+          "note": "Часть контактов уже в team_roster (сотрудники). Не хватает внешних.",
+          "data_gaps": [
+            "контакты Виктора (учредитель)",
+            "контакты Крис (управляющая)",
+            "контакты сервисных служб (электрика, сантехника)",
+            "контакты арендодателей",
+            "контакты поставщиков (см. suppliers)"
+          ]
+        }
+      },
+      "data_priority": [
+        {
+          "order": 1,
+          "block": "employees",
+          "reason": "Частично есть — дозаполнить быстрее всего"
+        },
+        {
+          "order": 2,
+          "block": "knowledge_base",
+          "reason": "Критично для Фазы 0 — документация"
+        },
+        {
+          "order": 3,
+          "block": "accesses_accounts",
+          "reason": "Мешает операционке (OPEN в current_status)"
+        },
+        {
+          "order": 4,
+          "block": "suppliers",
+          "reason": "Важно для аудита закупки"
+        },
+        {
+          "order": 5,
+          "block": "contacts",
+          "reason": "Дополняет общую картину"
+        },
+        {
+          "order": 6,
+          "block": "menu_tech_cards",
+          "reason": "Для стандартизации и обучения"
+        },
+        {
+          "order": 7,
+          "block": "metrics",
+          "reason": "Нужно время, чтобы накопить данные"
+        }
+      ],
+      "sr_workflow": "Когда Gardener говорит: 'работаем по блоку X' — SR смотрит workspace_mirror.sections.X.status → data_gaps → запрашивает данные → патчит → меняет status. Если блок 'empty' — начинаем с нуля. Если 'partial' — достраиваем пробелы. Если 'active' — поддерживаем."
+    },
+    "compensation_system": {
+      "base_rate": "200 ₽/час",
+      "shift_rate": "2600 ₽/смена (13 ч)",
+      "level_1_regular": {
+        "performance_5000": "Передача смены, закрытие, заготовки, списания, сервис, санпины. Оспаривается.",
+        "genuborka_5000": "Генуборка + собрания"
+      },
+      "level_2_senior": {
+        "service_5000": "Сервис + продажи",
+        "training_5000": "Обучение + координация смены",
+        "note": "Старший получает всё из уровня 1 + 2 дополнительных бонуса."
+      },
+      "payment_dates": {
+        "advance_24": "24-е — аванс за период 1–15",
+        "main_9": "9-е — основная ЗП за период 16–31",
+        "bonuses_9": "9-е — все бонусы"
+      },
+      "seniors_current": [
+        "Маша",
+        "Катрин"
+      ],
+      "total_15_shifts": {
+        "regular": "~49 000 ₽/мес",
+        "senior": "~59 000 ₽/мес"
+      }
+    },
+    "modules": {
+      "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
+      "taskboard": {
+        "file": "taskboard.json",
+        "purpose": "Активные задачи (44) + вехи M-001, M-002. Архив — в taskboard_archive.",
+        "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
+        "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
+      },
+      "team": {
+        "file": "team.json",
+        "purpose": "Картотека сотрудников (16).",
+        "when_to_use": "Когда нужно посмотреть/обновить данные сотрудника: контакты, навыки, статус.",
+        "sync": "Notion Team (будет создана)"
+      },
+      "knowledge_base": {
+        "file": "knowledge_base.json",
+        "purpose": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
+        "when_to_use": "Когда нужно добавить/прочитать материал базы знаний.",
+        "sync": "Notion Knowledge Base (будет создана)"
+      },
+      "taskboard_archive": {
+        "file": "taskboard_archive.json",
+        "purpose": "Архив завершённых задач (done + cancelled). 25 задач.",
+        "when_to_use": "Когда нужно посмотреть историю завершённых задач.",
+        "sync": "Notion Taskboard (через scripts/push_taskboard.py — читает оба файла)"
+      }
+    },
+    "my_terms": {
+      "role": "Кризис-менеджер",
+      "rate_monthly": 100000,
+      "start_date": "2026-09-11",
+      "end_date": "2026-12-11",
+      "duration_months": 3,
+      "structure": {
+        "cash_monthly": 50000,
+        "accumulation_monthly": 50000,
+        "note": "Кеш — 50 000 ₽ фикс (всегда). Остаток до 100 000 ₽ идёт в накопление до лучших времён (когда проект сможет заплатить)."
+      },
+      "payment_dates": {
+        "advance_24": "24-е — аванс за 1–15",
+        "main_9": "9-е — основная за 16–31",
+        "bonuses_9": "9-е — все бонусы"
+      },
+      "september_2026": {
+        "days_worked": 20,
+        "days_in_month": 30,
+        "proportional_total": 66667,
+        "cash": 50000,
+        "accumulation": 16667,
+        "note": "Пропорциональный расчёт: 100 000 × 20/30 = 66 667 ₽. Кеш — фикс 50 000 ₽, накопление — остаток 16 667 ₽.",
+        "payments": [
+          {
+            "date": "2026-09-24",
+            "period": "11–15.09",
+            "days": 5,
+            "amount": 16667,
+            "comment": "аванс, в счёт кеша"
+          },
+          {
+            "date": "2026-10-09",
+            "period": "16–30.09",
+            "days": 15,
+            "amount": 50000,
+            "comment": "остаток кеша + всё накопление"
+          }
+        ]
+      },
+      "october_2026_expected": {
+        "note": "С октября — полный месяц.",
+        "total": 100000,
+        "cash": 50000,
+        "accumulation": 50000
+      },
+      "accumulation_tracker": {
+        "total_accumulated": 0,
+        "total_paid": 0,
+        "note": "Детальный трекер — в M-003 (taskboard.json). Здесь — сводка.",
+        "last_updated": "2026-09-24"
+      },
+      "phases": {
+        "september_2026": {
+          "period": "11.09–30.09",
+          "total": 66667,
+          "cash": 50000,
+          "accumulation": 16667
+        },
+        "october_2026": {
+          "period": "01.10–31.10",
+          "total": 100000,
+          "cash": 50000,
+          "accumulation": 50000
+        },
+        "november_2026": {
+          "period": "01.11–30.11",
+          "total": 100000,
+          "cash": 50000,
+          "accumulation": 50000
+        },
+        "december_2026": {
+          "period": "01.12–31.12",
+          "total": 100000,
+          "cash": 50000,
+          "accumulation": 50000
+        }
+      },
+      "total_planned": {
+        "period": "11.09.2026–31.12.2026",
+        "total": 366667,
+        "cash": 200000,
+        "accumulation": 166667
+      },
+      "tracker_ref": "taskboard.json → M-003 «Оплата кризис-менеджера»"
+    }
+  },
+  "taskboard": {
+    "identity": {
+      "module_id": "KURTOCH-TASKBOARD-001",
+      "name": "Kurtoch — Taskboard",
+      "version": "v2.2.0",
+      "created": "2026-09-14",
+      "updated": "2026-09-25",
+      "layer": 2,
+      "type": "taskboard_module",
+      "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
+      "status": "active",
+      "priority": "critical",
+      "parent": "index.json",
+      "resonance": "100%"
+    },
+    "taskboard": {
+      "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
+      "version": "v2.2.0",
+      "created": "2026-09-14",
+      "updated": "2026-09-25",
+      "legend": {
+        "priority": {
+          "critical": "Горит. Сегодня-завтра.",
+          "high": "Важно. На этой неделе.",
+          "medium": "Среднее. 1-2 недели.",
+          "low": "Фоновое. Когда есть окно."
+        },
+        "status": {
+          "todo": "Не начато",
+          "in_progress": "В работе",
+          "blocked": "Заблокировано (ждём данные, человека, решение)",
+          "done": "Закрыто",
+          "cancelled": "Отменено",
+          "planning": "В планах (для вех и крупных инициатив)"
+        },
+        "horizon": {
+          "strategic": "Часть большой фазы (phase_0..phase_3). См. plan.",
+          "tactical": "Конкретная задача на день-неделю."
+        }
+      },
+      "tasks": [
+        {
+          "id": "K-004",
+          "title": "Рабочий чат команды",
+          "description": "Создать рабочий чат для команды и кризис-менеджера. Единая точка связи.",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-15",
+          "reminder": "11:00",
+          "depends_on": [],
+          "related_to": [
+            "K-001"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-14",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        },
+        {
+          "id": "K-013",
+          "title": "Исправить время в меню",
+          "description": "Исправить время первых куртошей в новом меню: 8:15 → 9:00.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-01",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-019",
+          "title": "Закупка (аудит)",
+          "description": "Неделя 2: аудит процесса закупки.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-22",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-14",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        },
+        {
+          "id": "K-023",
+          "title": "Валики Нижка",
+          "description": "Сломаны валики для еды. Есть запас на складе — подклеить красным герметиком, либо новые (сделаны вручную на том же клее — риск). Дима берёт на себя.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-17",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-024",
+          "title": "Лампочки Центр",
+          "description": "Операционка Центр — лампочки.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-17",
+          "updated": "2026-09-17",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-025",
+          "title": "Расписание 2 недели",
+          "description": "Составить расписание на 2 недели вперёд.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-24",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-17",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-027",
+          "title": "Расчёт ЗП авто по сменам",
+          "description": "Сделать автоматический расчёт зарплаты по сменам. Предварительный расчёт показывать сотрудникам до финального начисления.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-10",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-18",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-029",
+          "title": "Подготовка к зиме: штатка",
+          "description": "Рассчитать штатку на зиму. Прошлой зимой работали 1.5 человека в Центре. Если поставить 2 — может быть перегруз по финансам. Найти баланс.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-10",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-18",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        },
+        {
+          "id": "K-031",
+          "title": "Дезинсекция — Центр",
+          "description": "Провести дезинсекцию в Центре.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-01",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-033",
+          "title": "Касса Нижка: не заряжается",
+          "description": "Касса на Нижке плохо заряжается. Предположительно: проблема в самой кассе, либо в переходнике (через него идут провода), либо и то, и другое.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-034",
+          "title": "Туалет Нижка: пищит при сливе",
+          "description": "Гудит и плохо уходит вода. Мастер найден (Юля через бабушку — может дешевле). Вызвать, назовёт цену. Бюджет есть. Также: переделать/перенести туалет в соседнее помещение — там стояк ближе к толчку.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-22",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-036",
+          "title": "Холодильник Нижка: разморозка",
+          "description": "Холодильник под раскаточной зоной (белый, без дверки морозилки). Замерзает после разморозки. Нужна полная разморозка на сутки. Возможно, отрегулировать температуру.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-037",
+          "title": "Лампочки бар Нижка",
+          "description": "Часть лампочек на баре не работает. Запасные на складе/балконе (2-3 шт). Если нет — купить в магазине напротив. Совпадение по температуре и мощности.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-038",
+          "title": "Генуборка Нижка (расширенная)",
+          "description": "Расширенная генуборка на Нишке. Юля — куратор точки. Включить разморозку холодильника под раскаточной зоной (оставить на ночь). Включить: химическая чистка мягкой мебели. Витя организует.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-22",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-040",
+          "title": "Аттестация Юли (с Кристиной)",
+          "description": "Формальная аттестация Юли с Кристиной. Подтверждение что Юля всё знает. После — полная ставка + бонусы.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-25",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-043",
+          "title": "Поломанные весы",
+          "description": "Поломанные весы на Нижке. Заменить или отремонтировать.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-044",
+          "title": "Тест: 3-й человек на смену",
+          "description": "Просчитать необходимость 3-го сотрудника на смене (расширение зала, поток туристов, просадка внимания). ВНИМАНИЕ: ограничения по бюджету — +500К ₽/мес из-за расширения, выручка не выросла. Проверить рентабельность. Катрин поддерживает. Витя: «Жёсткий вопрос с деньгами».",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-045",
+          "title": "Карты и доставка: прокачка точки",
+          "description": "Прокачать точку на внешних платформах. Цель — реклама, не источник прибыли. КАРТЫ: Яндекс.Карты (Яндекс.Бизнес), Tripadvisor, 2ГИС — карточка, фото, отзывы. ДОСТАВКА: Яндекс.Доставка (Яндекс.Еда) — как рекламный канал. Дима берёт.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-046",
+          "title": "График пекаря: сдвиг на час раньше",
+          "description": "Текущий график пекаря: приход 8:40, уход 21:30–21:40 (~13 ч). ПРОБЛЕМА: утром бариста ждёт пекаря ~30 мин, к 18:30 бариста уже «закрывает ситуацию», выходит помогать. ПРЕДЛОЖЕНИЕ: сдвинуть на час раньше — приход 7:45, уход 20:45. НАДО ПРОДУМАТЬ: реальность сдвига, спросить Катрин, протестировать, связь с закрытием зала.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-057",
+          "title": "Зачистить угол окна (вытяжка)",
+          "description": "Зачистить угол окна в зоне вытяжки. Убрать загрязнения/отложения.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-22",
+          "updated": "2026-09-22",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-058",
+          "title": "Кондей в зону бариста",
+          "description": "Повесить кондей в зону бариста для охлаждения сотрудника. Уточнить: новый или переместить существующий.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-22",
+          "updated": "2026-09-22",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-059",
+          "title": "Батареи: убрать/убавить",
+          "description": "Узнать техническую возможность срезать/убавить батареи. Сейчас жарко, зимой будут топить ещё больше. Возможно, часть батарей не нужна.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-22",
+          "updated": "2026-09-22",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-060",
+          "title": "Пандус: доступность",
+          "description": "Пандус для колясок (детских) и инвалидов. Доступность входа для маломобильных гостей.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-22",
+          "updated": "2026-09-22",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-063",
+          "title": "Колонки: перевесить",
+          "description": "Перевесить колонки.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-22",
+          "updated": "2026-09-22",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-064",
+          "title": "Зона посадки Нижка: перекомпоновка",
+          "description": "Продумать дополнительную удобную зону посадки. Сейчас: 1 стол + диван + 2 кресла (удобно), 2 тумбочки + маленький стол (неудобно), железный стол + 2 стула (± удобно), компьютерная стойка + 2 стула (± удобно, непонятно зачем). Не хватает диванчиковой зоны. Идея: убрать компьютерную зону, перенести в первый зал. Нижка = 2 зала: входной (бар) + посадочный (детская, туалет).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-053"
+          ],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-065",
+          "title": "Уличная вывеска Нижка: новая",
+          "description": "Существующая вывеска над входной зоной НЕ работает для проходных точек. Не видно: издалека на улице, с остановки, с пешеходного потока. Нужно разработать ДОПОЛНИТЕЛЬНУЮ вывеску. Проект: разработать, согласовать, внедрить.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-066",
+          "title": "Цветы: обслуживание",
+          "description": "Обслужить цветы. Было предложение от гостей — кто-то хочет ухаживать. 2 больших цветка за витриной. 6 растений на окне. 1 в посадочной зоне — приуныл. Уход + пересадка.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-067",
+          "title": "Потолок: лампы + чистка + натяжной",
+          "description": "1) Освещение горит не полностью. 2) Потолок грязный (мухи, отложения). 3) Натяжной потолок — узнать стоимость. Вопрос денег, но визуал страдает.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-068",
+          "title": "Вентиляция: вытяжка + починить",
+          "description": "Технический осмотр и починка вентиляции/вытяжки в зоне пекаря. Видимо, не справляется.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-069",
+          "title": "Зеркало: крепление",
+          "description": "Зеркало у стены крепится сверху на скотче к деревянной основе. Выглядит не очень. Заменить крепление — приклеить надёжнее или другой способ.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-070",
+          "title": "Вывеска: «E» отвалилась",
+          "description": "На входной группе вывеска «Kurtage Coffee». Буква «E» отвалилась слегка — не до конца, но висит. Починить/закрепить.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-071",
+          "title": "Сливной стояк / стена колонны",
+          "description": "Сливной стояк в центре помещения с одной стороны раскрыт. Упаковать обратно, сделать красиво. Также: заделать стену колонны.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "M-001",
+          "title": "Возрождение Нижки",
+          "description": "Вывести Нижку из упадка потоков",
+          "priority": "high",
+          "status": "in_progress",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-023",
+            "K-033",
+            "K-034",
+            "K-036",
+            "K-037"
+          ],
+          "created": "2026-09-22",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Крупные вехи",
+            "type": "milestone",
+            "milestone_key": "nijka_revival",
+            "phases": [
+              {
+                "phase": 1,
+                "name": "Марафет",
+                "details": "Генуборка, химчистка мебели, мелкий ремонт"
+              },
+              {
+                "phase": 2,
+                "name": "Процессы + меню",
+                "details": "Адаптация под спальный район"
+              },
+              {
+                "phase": 3,
+                "name": "Рост",
+                "details": "Рост (K-064, K-065 — реорганизация + вывеска)"
+              },
+              {
+                "phase": 4,
+                "name": "Реорганизация посадки",
+                "details": "K-053"
+              }
+            ],
+            "linked_tasks_full": [
+              "K-023",
+              "K-033",
+              "K-034",
+              "K-036",
+              "K-037",
+              "K-038",
+              "K-043",
+              "K-057",
+              "K-058",
+              "K-059",
+              "K-060",
+              "K-062",
+              "K-063",
+              "K-064",
+              "K-065",
+              "K-066",
+              "K-067",
+              "K-068",
+              "K-069",
+              "K-070"
+            ]
+          }
+        },
+        {
+          "id": "M-002",
+          "title": "Возрождение Центра",
+          "description": "План вывода Центра. Фазы уточняются.",
+          "priority": "high",
+          "status": "planning",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-048"
+          ],
+          "created": "2026-09-22",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Крупные вехи",
+            "type": "milestone",
+            "milestone_key": "centre_revival",
+            "phases": [],
+            "linked_tasks_full": [
+              "K-048"
+            ]
+          }
+        },
+        {
+          "id": "K-073",
+          "title": "Капинг от Search Coffee (Центр)",
+          "description": "Капинг (дегустация) от Search Coffee. Четверг, 01.10.2026, 14:00, Центр.\n\nПодготовка:\n1. Анонс среди друзей-кофейников (приглашения)\n2. Подготовить стафф для капинга (оборудование, посуда, помещение)\n3. Встретить ребят от Search Coffee\n4. SMM-материал с капинга\n5. Собрать списки — кто придёт\n\nФинал:\n6. Выбрать, что заказываем. Договориться о поставках, доставках и прочем.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-01",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-23",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-074",
+          "title": "Анна: ключи + сигнализация Центра",
+          "description": "Анне (стажёр, EMP-005) выдать ключи от входной двери Центра и пароль от сигнализации.\nПричина: в воскресенье 27.09.2026 она самостоятельно открывает смену.\nВыдаёт: Дима.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-26",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-24",
+          "updated": "2026-09-24",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "M-003",
+          "title": "Оплата кризис-менеджера",
+          "description": "Трекер выплат по договору 11.09–11.12.2026.\nСтавка: 100 000 ₽/мес (50 000 кеш + 50 000 накопление).\nКеш — фикс 50 000 ₽/мес. Накопление — остаток до 100 000 ₽, висит как долг проекта до лучших времён.\nДаты выплат: 24-е (аванс), 9-е следующего месяца (остаток + накопление).",
+          "priority": "high",
+          "status": "in_progress",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": "2026-12-31",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-24",
+          "updated": "2026-09-24",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Крупные вехи",
+            "type": "milestone",
+            "subtype": "payment_tracker",
+            "phases": [
+              {
+                "phase": 1,
+                "name": "Сентябрь 2026",
+                "period": "11.09–30.09",
+                "days": 20,
+                "days_in_month": 30,
+                "total": 66667,
+                "cash": 50000,
+                "accumulation": 16667,
+                "accumulation_cumulative": 16667,
+                "phase_status": "open"
+              },
+              {
+                "phase": 2,
+                "name": "Октябрь 2026",
+                "period": "01.10–31.10",
+                "days": 31,
+                "days_in_month": 31,
+                "total": 100000,
+                "cash": 50000,
+                "accumulation": 50000,
+                "accumulation_cumulative": 66667,
+                "phase_status": "open"
+              },
+              {
+                "phase": 3,
+                "name": "Ноябрь 2026",
+                "period": "01.11–30.11",
+                "days": 30,
+                "days_in_month": 30,
+                "total": 100000,
+                "cash": 50000,
+                "accumulation": 50000,
+                "accumulation_cumulative": 116667,
+                "phase_status": "open"
+              },
+              {
+                "phase": 4,
+                "name": "Декабрь 2026",
+                "period": "01.12–31.12",
+                "days": 31,
+                "days_in_month": 31,
+                "total": 100000,
+                "cash": 50000,
+                "accumulation": 50000,
+                "accumulation_cumulative": 166667,
+                "phase_status": "open"
+              }
+            ],
+            "tracker": {
+              "total_planned": 366667,
+              "total_cash_planned": 200000,
+              "total_accumulation_planned": 166667,
+              "total_paid": 0,
+              "total_accumulated": 166667,
+              "note": "Обновлять при каждой выплате. total_paid — сколько реально получено. total_accumulated — сколько проект должен (накопилось).",
+              "last_updated": "2026-09-24"
+            },
+            "linked_tasks": []
+          }
+        },
+        {
+          "id": "K-075",
+          "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
+          "description": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json — для быстрого онбординга новых чатов.\n\nРасположение: honeycombs/boot_online/Personal/kurtoch_bundle.json\n\nШаги:\n1. Создать папку honeycombs/boot_online/Personal/\n2. Скрипт build_bundle.py — собирает JSON nested из модулей + scripts\n3. Первый запуск — создать bundle\n4. GitHub Action .github/workflows/kurtoch_bundle.yml\n5. Триггер: изменения в honeycombs/personal/kurtoch/** (кроме _snapshots, _logs, token)\n6. Loop-guard: не триггерить от бот-коммита\n7. Тест + коммит\n\nИсключить: notion_token.txt, _snapshots/**, сам bundle.\nВключить: index, taskboard, taskboard_archive, team, knowledge_base, scripts.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-24",
+          "updated": "2026-09-24",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        },
+        {
+          "id": "K-076",
+          "title": "База знаний и инструкции (консолидация)",
+          "description": "Единая стратегическая задача: собрать все документы, чек-листы, регламенты, обучение, таблицы документации в единую базу знаний.\n\nПоглощённые задачи (8): K-006, K-008, K-010, K-016, K-018, K-021, K-039, K-041.\n\nЦель: единая точка входа по документации. Сокращение объёма основного taskboard.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-077"
+          ],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические",
+            "sub_tasks": [
+              "K-006",
+              "K-008",
+              "K-010",
+              "K-016",
+              "K-018",
+              "K-021",
+              "K-039",
+              "K-041"
+            ]
+          }
+        },
+        {
+          "id": "K-077",
+          "title": "Крис: анализ загруженности + пересмотр оплаты",
+          "description": "Проанализировать реальную загруженность Крис (управляющая, удалёнка, текущая оплата 40 000 ₽/мес).\n\nКонтекст: расширение +500К ₽/мес при плоской выручке, давление на бюджет.\n\nВопрос: соответствует ли 40К реальному объёму работы? Нужен ли пересмотр условий?\n\nСвязано с K-078 (контроль всех бюджетов).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": "2026-10-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-078"
+          ],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        },
+        {
+          "id": "K-078",
+          "title": "Контроль больших финансов / все бюджеты",
+          "description": "Взять под контроль все бюджеты сети (Нижка + Центр).\n\nЦелевой ориентир: 2 200 000 ₽/мес на 2 точки (1,1 млн на точку).\n\nЗадачи:\n1. Продумать систему учёта (переделка таблиц)\n2. Свести все бюджеты в единый контур\n3. Связать с метрикой выручки (см. index.json success_metrics.revenue_target)\n4. Точка пересмотра — конец октября\n\nСвязано с K-077 (анализ Крис).",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": "2026-10-31",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-077"
+          ],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        }
+      ],
+      "counters": {
+        "total": 41,
+        "by_status": {
+          "todo": 38,
+          "in_progress": 2,
+          "planning": 1
+        },
+        "by_priority": {
+          "critical": 2,
+          "high": 31,
+          "medium": 8
+        },
+        "by_column": {
+          "Стратегические": 7,
+          "Операционка — Общая": 8,
+          "Операционка — Нижка": 20,
+          "Операционка — Центр": 3,
+          "Крупные вехи": 3
+        },
+        "by_phase": {
+          "phase_0": 41
+        }
+      },
+      "notes": {
+        "priority_mode": "manual"
+      },
+      "columns_taxonomy": {
+        "strategic": "Большие вопросы, документы, разработки, модернизации, аудиты, изучения",
+        "operations_center": "Локальные задачи точки Центр (поломки, ремонт, чистота точки)",
+        "operations_nizhka": "Локальные задачи точки Нижка (поломки, ремонт, чистота точки)",
+        "operations_common": "Планёрки, расписания, нововведения, стандарты, обучение, общее для обеих точек",
+        "milestones": "Крупные вехи — большие проекты с фазами"
+      },
+      "sync_rule": "CRITICAL: Mandala (taskboard.json) — эталон. Notion Taskboard — визуальное зеркало. При любом изменении — синхронизировать через scripts/notion_sync.py.",
+      "notion_sync": {
+        "last_sync": "2026-09-23",
+        "status": "pending_resync",
+        "notion_workspace": "Куртош & Кофе",
+        "notion_database": "📋 Куртош — Taskboard",
+        "notion_url": "https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1",
+        "note": "Требуется full_sync после патча. Mandala — эталон."
+      },
+      "archive_ref": "taskboard_archive.json"
+    },
+    "milestones": {
+      "description": "Расширенная карта вех: фазы, связанные задачи. Сами вехи — в taskboard.tasks с ID M-001 (nijka_revival), M-002 (centre_revival).",
+      "last_updated": "2026-09-22",
+      "milestones": {
+        "nijka_revival": {
+          "title": "Возрождение Нижки",
+          "status": "in_progress",
+          "priority": "high",
+          "goal": "Вывести Нижку из упадка потоков",
+          "phases": [
+            {
+              "phase": 1,
+              "name": "Марафет",
+              "details": "Генуборка, химчистка мебели, мелкий ремонт"
+            },
+            {
+              "phase": 2,
+              "name": "Процессы + меню",
+              "details": "Адаптация под спальный район"
+            },
+            {
+              "phase": 3,
+              "name": "Рост",
+              "details": "Рост (K-064, K-065 — реорганизация + вывеска)"
+            },
+            {
+              "phase": 4,
+              "name": "Реорганизация посадки",
+              "details": "K-053"
+            }
+          ],
+          "linked_tasks": [
+            "K-023",
+            "K-033",
+            "K-034",
+            "K-036",
+            "K-037",
+            "K-038",
+            "K-043",
+            "K-057",
+            "K-058",
+            "K-059",
+            "K-060",
+            "K-062",
+            "K-063",
+            "K-064",
+            "K-065",
+            "K-066",
+            "K-067",
+            "K-068",
+            "K-069",
+            "K-070"
+          ],
+          "id": "M-001"
+        },
+        "centre_revival": {
+          "title": "Возрождение Центра",
+          "status": "planning",
+          "priority": "high",
+          "goal": "План вывода Центра. Фазы уточняются.",
+          "phases": [],
+          "linked_tasks": [
+            "K-048"
+          ],
+          "id": "M-002"
+        }
+      }
+    },
+    "navigation": {
+      "parent": "honeycombs/personal/kurtoch/index.json",
+      "siblings": [
+        "team.json",
+        "knowledge_base.json"
+      ],
+      "external": [
+        "Notion Taskboard: https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1"
+      ]
+    },
+    "notion_sync": {
+      "last_sync": "2026-09-23",
+      "status": "pending_resync",
+      "notion_workspace": "Куртош & Кофе",
+      "notion_database": "📋 Куртош — Taskboard",
+      "notion_url": "https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1",
+      "note": "Требуется full_sync после патча. Mandala — эталон."
+    },
+    "sync_rule": "Mandala (taskboard.json) — эталон. Notion Taskboard — визуальное зеркало."
+  },
+  "taskboard_archive": {
+    "identity": {
+      "module_id": "KURTOCH-TASKBOARD-ARCHIVE-001",
+      "name": "Kurtoch — Taskboard Archive",
+      "version": "v1.2.0",
+      "created": "2026-09-23",
+      "updated": "2026-09-25",
+      "type": "taskboard_archive",
+      "parent": "taskboard.json",
+      "description": "Архив завершённых задач (done + cancelled).",
+      "status": "active",
+      "priority": "medium"
+    },
+    "archive": {
+      "description": "Завершённые задачи. Синхронизируются с Notion тем же скриптом.",
+      "tasks": [
+        {
+          "id": "K-001",
+          "title": "Taskboard Notion Куртош",
+          "description": "Создать воркспейс в Notion: единая картина для Виктора и Димы. Структура — см. knowledge_base_plan.notion.structure.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-14",
+          "reminder": "11:00",
+          "depends_on": [],
+          "related_to": [
+            "K-002",
+            "K-004"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-002",
+          "title": "Вопросы к планёрке",
+          "description": "Подготовить вопросы и структуру планёрки с командой. Генуборка во вторник. Учесть историю: усталость, уходит управляющий, зарплата плавает, разрозненность знаний.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-14",
+          "reminder": "11:00",
+          "depends_on": [],
+          "related_to": [
+            "K-001",
+            "K-003"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-003",
+          "title": "Планёрка с командой",
+          "description": "Провести планёрку (генуборка). Проговорить важные моменты с учётом истории команды.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-15",
+          "reminder": "11:00",
+          "depends_on": [
+            "K-002"
+          ],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-005",
+          "title": "Реальная штатка + план + дефицит",
+          "description": "Составить реальную штатку (ФИО, должность, уровень). Сравнить с планом. Выявить дефицит.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-18",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-015"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-14",
+          "completed": "2026-09-14",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-007",
+          "title": "Точная дата входа",
+          "description": "Зафиксировать точную дату входа в должность. Выяснить формальные условия старта.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-14",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-009",
+          "title": "Важные контакты",
+          "description": "Собрать важные контакты: поставщики, персонал, сервисы.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-17",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-018"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-011",
+          "title": "День генуборки",
+          "description": "Выбрать фиксированный день недели для генуборки.",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-16",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-012"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-014",
+          "title": "Операционка: поломки, экстренные",
+          "description": "Неделя 1: знакомство с операционкой. Поломки, экстренные ситуации.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-015",
+          "title": "Анализ сотрудников",
+          "description": "Неделя 1: анализ сотрудников, выводы. Кто на грани, кто ключевой.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-21",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-005",
+            "K-006"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-14",
+          "completed": "2026-09-14",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-020",
+          "title": "Расписание (аудит)",
+          "description": "Неделя 2: аудит расписания смен.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-22",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-23",
+          "completed": "2026-09-22",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-022",
+          "title": "Перехват найма",
+          "description": "Перехват процесса найма (2–3 неделя). Взять под контроль. Перехват найма закрыт. Найм под контролем.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-29",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-23",
+          "completed": "2026-09-23",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-026",
+          "title": "Таскборд",
+          "description": "Довести таскборд до финала — заполнение, проверка видов.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-001"
+          ],
+          "created": "2026-09-17",
+          "updated": "2026-09-17",
+          "completed": "2026-09-17",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-028",
+          "title": "Сессионные — договорённости",
+          "description": "Договориться с сессионными ребятами (Денис, Маша, Оля, Аня) о сроке работы. Правило: предупреждать за месяц. Договорённости с сессионными достигнуты.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-10",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-18",
+          "updated": "2026-09-23",
+          "completed": "2026-09-23",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-030",
+          "title": "Кассы: сбои (обе точки)",
+          "description": "Кассы часто глючат и вылетают на обеих точках. Сотрудники мучаются. Нужно разобраться с причиной и решить системно. Кассы закрыто. Нижка: касса заменена (тормозит, но работает). Центр: вопросы налажены. Проблема больше не блокирует работу.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-23",
+          "completed": "2026-09-23",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-032",
+          "title": "Расчёт Владе (увольнение)",
+          "description": "Выдать расчёт Владе — стажёр, увольняется. Расчёт Владе выдан.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-21",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-23",
+          "completed": "2026-09-23",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-035",
+          "title": "Разговор с командой: условия",
+          "description": "Поговорить с каждым сотрудником: сколько может/планирует работать, понимает ли ставки, знает ли про бонусы, есть ли вопросы по условиям. Разговор с командой об условиях проведён.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-23",
+          "completed": "2026-09-23",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-042",
+          "title": "Колонка провод посмотреть",
+          "description": "Колонка на Нижке — проверить провод. Закрыта по итогу осмотра.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-21",
+          "completed": "2026-09-21",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-012",
+          "title": "Еженедельная планёрка",
+          "description": "Определить день и время еженедельной планёрки. Ввести в регулярный ритм.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-003",
+            "K-011"
+          ],
+          "created": "2026-09-14",
+          "updated": "2026-09-23",
+          "completed": "2026-09-23",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-23"
+        },
+        {
+          "id": "K-072",
+          "title": "Увольнение Вероники",
+          "description": "Вероника увольняется. Последняя смена — пятница 26.09.2026. Выдать расчёт, снять с графика, обновить картотеку.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-26",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-23",
+          "updated": "2026-09-25",
+          "completed": "2026-09-25",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-008",
+          "title": "Ссылки на узлы",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-010",
+          "title": "Чек-листы и карты процессов",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-018",
+          "title": "Таблицы документации",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-021",
+          "title": "Разработка инструкций",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-039",
+          "title": "Обучение сезонке + onboarding-чек-листы",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-041",
+          "title": "Аттестация — процесс + график",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-062",
+          "title": "Мусорка на входе: спилить",
+          "description": "Спилить мусорку на входе.",
+          "priority": "medium",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-22",
+          "updated": "2026-09-25",
+          "completed": "2026-09-25",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-006",
+          "title": "Условия сотрудников",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-016",
+          "title": "Чистота и качество",
+          "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-14",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "column": "Стратегические",
+            "merged_into": "K-076"
+          },
+          "archived_at": "2026-09-25"
+        }
+      ],
+      "total": 28,
+      "by_status": {
+        "done": 20,
+        "cancelled": 8
+      }
+    },
+    "navigation": {
+      "parent": "honeycombs/personal/kurtoch/index.json",
+      "sibling": "taskboard.json"
+    }
+  },
+  "team": {
+    "identity": {
+      "module_id": "KURTOCH-TEAM-001",
+      "name": "Kurtoch — Team Roster",
+      "version": "v1.1.0",
+      "created": "2026-09-23",
+      "updated": "2026-09-25",
+      "layer": 2,
+      "type": "team_module",
+      "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
+      "status": "active",
+      "priority": "high",
+      "parent": "index.json",
+      "resonance": "100%"
+    },
+    "team_roster": {
+      "last_updated": "2026-09-25",
+      "total_employees": 16,
+      "by_status": {
+        "core": 1,
+        "working": 5,
+        "left": 3,
+        "runner": 2,
+        "trainee": 2,
+        "substitute": 3
+      },
+      "skill_ladder": {
+        "order": [
+          "pechka",
+          "coffee",
+          "kassa"
+        ],
+        "rule": "Сначала печка, потом кофе, потом касса. Универсал = прошёл все три этапа.",
+        "note": "Кто без пометки в исходной таблице — универсал. Кто с пометкой 'обуч печка' — на 1-м этапе."
+      },
+      "employees": [
+        {
+          "id": "EMP-001",
+          "name": "Катрин",
+          "role": "Администратор",
+          "contacts": {
+            "phone": "8 930 749 41 91",
+            "telegram": "@katrinzzz_its_i"
+          },
+          "functions": [
+            "закупки",
+            "смены",
+            "обучение стажёров"
+          ],
+          "schedule": {
+            "notes": "пн — админка; может в любые дни; не более 3 смен подряд",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [
+              "+10к команда",
+              "+10к продажи/сервис (-300 руб/ч)"
+            ],
+            "extra": "сентябрь 24к оклад админки; октябрь 16к за инвент и закупки",
+            "notes": null
+          },
+          "status": "core",
+          "risks": [],
+          "notes": null,
+          "data_gaps": [
+            "nijka.attitude",
+            "schedule.preferences"
+          ]
+        },
+        {
+          "id": "EMP-002",
+          "name": "Никита",
+          "role": "Бариста",
+          "contacts": {
+            "phone": "8 980 754 12 82",
+            "telegram": "@Yoshi3313"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "целые смены; не может по четвергам; предпочитает выхи",
+            "preferences": "выхи",
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": "dislikes",
+            "notes": "не любит нижку — скучно, нет потоков"
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [
+              "+5к за штатку",
+              "+5к за киай и от адм (-250 руб/ч)"
+            ],
+            "extra": null,
+            "notes": null
+          },
+          "status": "working",
+          "risks": [],
+          "notes": "Недавно закончил обучение в Куртоше, учится.",
+          "data_gaps": [
+            "schedule.availability"
+          ]
+        },
+        {
+          "id": "EMP-003",
+          "name": "Александра",
+          "role": "Бариста",
+          "contacts": {
+            "phone": "8 999 098 66 61",
+            "telegram": "@spelayavischnyaa"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "не может закрываться; не более 3 смен в неделю; при 4 сменах — невыходы и болезни",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": "dislikes",
+            "notes": "не любит нижку — скучно, нет потоков"
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [
+              "+5к за штатку",
+              "+5к за киай и от адм (-250 руб/ч)"
+            ],
+            "extra": null,
+            "notes": null
+          },
+          "status": "working",
+          "risks": [
+            "часто болеет",
+            "бывали невыходы и опоздания"
+          ],
+          "notes": "На сменах ответственна, чистолюбива.",
+          "data_gaps": [
+            "schedule.availability"
+          ]
+        },
+        {
+          "id": "EMP-004",
+          "name": "Вероника",
+          "role": "Стажёр",
+          "contacts": {
+            "phone": "8 993 748 64 42",
+            "telegram": "@Veronika_Mor"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "2/2, со среды",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "pechka_done",
+            "pechka": "yes",
+            "coffee": "training",
+            "kassa": "training",
+            "notes": "Печка — сама. Обучается кофе и кассе."
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [],
+            "extra": "пока стажёр",
+            "notes": null
+          },
+          "status": "left",
+          "risks": [],
+          "notes": "Уволена 25.09.2026. Рассчитана.",
+          "data_gaps": [
+            "schedule.preferences"
+          ],
+          "settled": true,
+          "settled_date": "2026-09-25"
+        },
+        {
+          "id": "EMP-005",
+          "name": "Анна",
+          "role": "Стажёр",
+          "contacts": {
+            "phone": "8 910 676 12 56",
+            "telegram": "@annnnn_nnnnna"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "2/2; может норм работать; может открывать смену",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "pechka_done",
+            "pechka": "yes",
+            "coffee": "training",
+            "kassa": "training",
+            "notes": "Печка — сама. Обучается кофе и кассе."
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [],
+            "extra": "пока стажёр",
+            "notes": null
+          },
+          "status": "working",
+          "risks": [],
+          "notes": "2/2, ст. Печка — сама. Обучается кофе и кассе. Готова до 6 мес. Получает ключи + пароль от сигнализации Центра. Может самостоятельно открывать смену.",
+          "data_gaps": [
+            "nijka.attitude",
+            "schedule.preferences"
+          ]
+        },
+        {
+          "id": "EMP-006",
+          "name": "Саша",
+          "role": "Стажёр (лайт)",
+          "contacts": {
+            "phone": "89961972167",
+            "telegram": "@ilmintra_neek"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "3 мены в неделю, лайт",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "pechka_training",
+            "pechka": "training",
+            "coffee": "no",
+            "kassa": "no",
+            "notes": "Только начинает обучение на печку."
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [],
+            "extra": "пока стажёр",
+            "notes": null
+          },
+          "status": "working",
+          "risks": [],
+          "notes": "Только начинает обучение на печку. Пока ничего не умеет. Возможно лишняя.",
+          "data_gaps": [
+            "nijka.attitude"
+          ]
+        },
+        {
+          "id": "EMP-007",
+          "name": "Аня",
+          "role": "Ранер",
+          "contacts": {
+            "phone": "8 904 595 25 53",
+            "telegram": "@borschalex"
+          },
+          "functions": [
+            "ранер",
+            "доп. функционал"
+          ],
+          "schedule": {
+            "notes": "с 16 до закрытия; дни уточняет перед составлением графика",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч + 50 руб/ч надбавка",
+            "bonuses": [],
+            "extra": "повышенная ставка бегунка = 250 руб/ч",
+            "notes": null
+          },
+          "status": "runner",
+          "risks": [],
+          "notes": "Бегунок (ранер).",
+          "data_gaps": [
+            "nijka.attitude"
+          ]
+        },
+        {
+          "id": "EMP-008",
+          "name": "Светлана",
+          "role": "Ранер",
+          "contacts": {
+            "phone": "8 904 957 71 65",
+            "telegram": "@mertviy_piero"
+          },
+          "functions": [
+            "ранер",
+            "доп. функционал"
+          ],
+          "schedule": {
+            "notes": "с 16 до закрытия; дни уточняет перед составлением графика",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч + 50 руб/ч надбавка",
+            "bonuses": [],
+            "extra": "повышенная ставка бегунка = 250 руб/ч",
+            "notes": null
+          },
+          "status": "runner",
+          "risks": [],
+          "notes": null,
+          "data_gaps": [
+            "nijka.attitude"
+          ]
+        },
+        {
+          "id": "EMP-009",
+          "name": "Юля",
+          "role": "Бариста (возвращается)",
+          "contacts": {
+            "phone": "8 910 181 27 43",
+            "telegram": "@yurkinnna"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "хочет не менее 4 смен в неделю; предпочтительна Нижка",
+            "preferences": "Нижка",
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": "Универсал ✅. Аттестация запланирована на 25.09."
+          },
+          "nijka": {
+            "attitude": "likes",
+            "notes": "предпочитает Нижку"
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [
+              "+5к за штатку",
+              "+5к за киай и от адм (-250 руб/ч)"
+            ],
+            "extra": "Все самостоятельные смены — полная ставка. Аттестация (формальность) с Кристиной — 25.09.",
+            "notes": null
+          },
+          "status": "working",
+          "risks": [],
+          "notes": "Работает на нижке. Аттестована ✅",
+          "data_gaps": [
+            "schedule.availability"
+          ]
+        },
+        {
+          "id": "EMP-010",
+          "name": "Денис",
+          "role": "Стажёр (управляющий др. кофеен)",
+          "contacts": {
+            "phone": "79045905029",
+            "telegram": "@earcrvsher"
+          },
+          "functions": [
+            "смены",
+            "управление"
+          ],
+          "schedule": {
+            "notes": null,
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [],
+            "extra": "пока стажёр",
+            "notes": null
+          },
+          "status": "trainee",
+          "risks": [],
+          "notes": "Работает на подмоге. Сам печка. До года.",
+          "data_gaps": [
+            "nijka.attitude",
+            "schedule.notes"
+          ]
+        },
+        {
+          "id": "EMP-011",
+          "name": "Ксюша",
+          "role": "Стажёр",
+          "contacts": {
+            "phone": "8 910 189 09 66",
+            "telegram": "@ksushatelegram"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": null,
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "pechka_training",
+            "pechka": "training",
+            "coffee": "no",
+            "kassa": "no",
+            "notes": "Ушла до завершения обучения печке."
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [],
+            "extra": "пока стажёр",
+            "notes": null
+          },
+          "status": "left",
+          "risks": [],
+          "notes": "Ушла (left behind).",
+          "data_gaps": []
+        },
+        {
+          "id": "EMP-012",
+          "name": "Влада",
+          "role": "Стажёр",
+          "contacts": {
+            "phone": null,
+            "telegram": "@assorovav"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "может в любые дни",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [],
+            "extra": "пока стажёр",
+            "notes": null
+          },
+          "status": "left",
+          "risks": [],
+          "notes": "Рассчитана 09.09.2026.",
+          "data_gaps": [
+            "nijka.attitude"
+          ],
+          "settled": true,
+          "settled_date": "2026-09-09"
+        },
+        {
+          "id": "EMP-013",
+          "name": "Арина",
+          "role": "Сессионник (стажёр)",
+          "contacts": {
+            "phone": "89778217241",
+            "telegram": "@foreveri_young"
+          },
+          "functions": [
+            "подмена на запары"
+          ],
+          "schedule": {
+            "notes": "по вызову",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [],
+            "extra": "пока стажёр",
+            "notes": null
+          },
+          "status": "substitute",
+          "risks": [],
+          "notes": null,
+          "data_gaps": [
+            "nijka.attitude"
+          ]
+        },
+        {
+          "id": "EMP-014",
+          "name": "Матвей",
+          "role": "Подменный",
+          "contacts": {
+            "phone": "8 904 261 44 33",
+            "telegram": "@and_komorebi"
+          },
+          "functions": [
+            "перекрытие временно"
+          ],
+          "schedule": {
+            "notes": "не может целыми сменами; о возможностях связываться лично",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [
+              "+5к за штатку",
+              "+5к за киай и от адм (-250 руб/ч)"
+            ],
+            "extra": null,
+            "notes": null
+          },
+          "status": "substitute",
+          "risks": [
+            "только частичные смены"
+          ],
+          "notes": null,
+          "data_gaps": [
+            "nijka.attitude"
+          ]
+        },
+        {
+          "id": "EMP-015",
+          "name": "Маша",
+          "role": "Подменная + обучение стажёров",
+          "contacts": {
+            "phone": "8 999 730 63 51",
+            "telegram": "@Mashundradvo"
+          },
+          "functions": [
+            "подмена",
+            "обучение стажёров",
+            "тест-смены"
+          ],
+          "schedule": {
+            "notes": "работает целыми сменами до 3-й недели сентября включительно; дальше — по договорённости",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "universal",
+            "pechka": "yes",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": null
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч",
+            "bonuses": [
+              "+10к команда",
+              "+10к продажи/сервис (-300 руб/ч)"
+            ],
+            "extra": null,
+            "notes": null
+          },
+          "status": "substitute",
+          "risks": [
+            "договорённость только до 3-й недели сентября"
+          ],
+          "notes": "Работает 2+/- недели. Нижка.",
+          "data_gaps": [
+            "nijka.attitude",
+            "schedule.notes"
+          ]
+        },
+        {
+          "id": "EMP-016",
+          "name": "Оля",
+          "role": "Стажёр (пробная смена)",
+          "contacts": {
+            "phone": "+79209204402",
+            "telegram": "@helgadubova"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "пробная смена в воскресенье",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "pechka_training",
+            "pechka": "training",
+            "coffee": "yes",
+            "kassa": "unknown",
+            "notes": "Опыт по кофе есть. Печка — обучение."
+          },
+          "nijka": {
+            "attitude": "likes",
+            "notes": "Готова работать на нижке"
+          },
+          "pay": {
+            "base": "200 руб/ч (пока стажёр)",
+            "bonuses": [],
+            "extra": null,
+            "notes": null
+          },
+          "status": "trainee",
+          "risks": [
+            "ищет сейчас другую работу; готова поработать у нас пока"
+          ],
+          "notes": "пришла от Маши; пробная смена в воскресенье",
+          "data_gaps": [
+            "trial_result",
+            "schedule.notes"
+          ]
+        }
+      ],
+      "skills_summary": {
+        "universal": [
+          "Катрин",
+          "Никита",
+          "Александра",
+          "Аня",
+          "Светлана",
+          "Денис",
+          "Влада",
+          "Арина",
+          "Матвей",
+          "Маша"
+        ],
+        "pechka_done": [
+          "Вероника",
+          "Анна"
+        ],
+        "pechka_training": [
+          "Оля",
+          "Саша"
+        ]
+      },
+      "nijka_summary": {
+        "likes": [
+          "Юля",
+          "Оля"
+        ],
+        "dislikes": [
+          "Никита",
+          "Александра"
+        ],
+        "unknown": [
+          "Катрин",
+          "Вероника",
+          "Анна",
+          "Саша",
+          "Аня",
+          "Светлана",
+          "Денис",
+          "Влада",
+          "Арина",
+          "Матвей",
+          "Маша"
+        ]
+      },
+      "critical_gaps": {
+        "masha_until_3rd_week_sept": "Маша — целые смены только до 3-й недели сентября. Продление?",
+        "denis_until_year": "Денис — управляющий, но временный (до года).",
+        "vlada_leaving": "Влада — стажёр вялый, увольняется. Расчёт 21.09.",
+        "olya_trial": "Оля — пробная смена, ищет другую работу. Готова работать пока. Печка — обучение."
+      }
+    },
+    "navigation": {
+      "parent": "honeycombs/personal/kurtoch/index.json",
+      "siblings": [
+        "taskboard.json",
+        "knowledge_base.json"
+      ]
+    },
+    "sync_rule": "Mandala (team.json) — эталон. Notion Team — визуальное зеркало (когда создадим базу)."
+  },
+  "knowledge_base": {
+    "identity": {
+      "module_id": "KURTOCH-KB-001",
+      "name": "Kurtoch — Knowledge Base",
+      "version": "v1.1.0",
+      "created": "2026-09-23",
+      "updated": "2026-09-25",
+      "layer": 2,
+      "type": "knowledge_base_module",
+      "description": "База знаний Куртош: чек-листы, регламенты, техкарты, обучение, ЦУ. Пока структура, наполнение — впереди.",
+      "status": "active",
+      "priority": "critical",
+      "parent": "index.json",
+      "resonance": "100%"
+    },
+    "knowledge_base_plan": {
+      "current_state": "Нужно собрать и структурировать.",
+      "options": [
+        "Notion (рекомендуется — красиво, удобно, доступно)",
+        "Google Sheets (просто, но менее гибко)",
+        "Бот (база знаний внутри Telegram)"
+      ],
+      "notion": {
+        "can_edit": true,
+        "requirements": "Notion API токен, интеграция к странице",
+        "structure": [
+          "Чек-листы (открытие, закрытие, чистота)",
+          "Регламенты (5 критических процессов)",
+          "Техкарты (рецепты, стандарты)",
+          "Обучение (для новичков)",
+          "ЦУ (задания на смену)"
+        ]
+      },
+      "consolidation_task": "K-076 — единая стратегическая задача, куда сливаются разрозненные задачи документации."
+    },
+    "sections": {
+      "checklists_open_close": {
+        "status": "empty",
+        "description": "Чек-листы открытия и закрытия смены",
+        "data_gaps": [
+          "нет содержимого"
+        ]
+      },
+      "checklists_cleanliness": {
+        "status": "empty",
+        "description": "Чек-листы чистоты и санпина",
+        "data_gaps": [
+          "нет содержимого"
+        ]
+      },
+      "regulations_5_processes": {
+        "status": "empty",
+        "description": "5 критических процессов (открытие, закрытие, чистота, касса, обучение)",
+        "data_gaps": [
+          "нет содержимого"
+        ]
+      },
+      "tech_cards": {
+        "status": "empty",
+        "description": "Техкарты — рецепты и стандарты",
+        "data_gaps": [
+          "нет содержимого"
+        ]
+      },
+      "training": {
+        "status": "empty",
+        "description": "Обучение для новичков — материалы, стажировка",
+        "data_gaps": [
+          "нет содержимого"
+        ]
+      },
+      "cu_shift_tasks": {
+        "status": "empty",
+        "description": "ЦУ (центральные указания / задания на смену)",
+        "data_gaps": [
+          "нет содержимого"
+        ]
+      }
+    },
+    "content": {},
+    "navigation": {
+      "parent": "honeycombs/personal/kurtoch/index.json",
+      "siblings": [
+        "taskboard.json",
+        "team.json"
+      ]
+    },
+    "status_note": "Структура готова. Содержимое добавляется постепенно, по мере сбора у команды.",
+    "linked_tasks": {
+      "K-076": "База знаний и инструкции — консолидация (поглощает K-008, K-010, K-018, K-021, K-039, K-041)"
+    }
+  },
+  "scripts": {
+    "archive_done.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Переносит done + cancelled из taskboard.json в taskboard_archive.json.\nИдемпотентно. Без интерактива.\"\"\"\nimport io, json, os\nfrom datetime import datetime\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTB = os.path.join(KURTOCH, \"taskboard.json\")\nARCHIVE = os.path.join(KURTOCH, \"taskboard_archive.json\")\nTODAY = datetime.now().strftime(\"%Y-%m-%d\")\n\ndef load(p):\n    with io.open(p, encoding=\"utf-8\") as f:\n        return json.load(f)\n\ndef save(p, d):\n    with io.open(p, \"w\", encoding=\"utf-8\") as f:\n        json.dump(d, f, ensure_ascii=False, indent=2)\n        f.write(\"\\n\")\n\nd = load(TB)\ntasks = d[\"taskboard\"][\"tasks\"]\nARCHIVE_STATUSES = {\"done\", \"cancelled\"}\n\nto_archive = [t for t in tasks if t[\"status\"] in ARCHIVE_STATUSES]\nto_keep = [t for t in tasks if t[\"status\"] not in ARCHIVE_STATUSES]\n\nif not to_archive:\n    print(\"Нет задач для архивации.\")\n    raise SystemExit(0)\n\n# читаем/создаём архив\nif os.path.exists(ARCHIVE):\n    arch = load(ARCHIVE)\n    existing_ids = {t[\"id\"] for t in arch[\"archive\"][\"tasks\"]}\nelse:\n    arch = {\n        \"identity\": {\n            \"module_id\": \"KURTOCH-TASKBOARD-ARCHIVE-001\",\n            \"name\": \"Kurtoch — Taskboard Archive\",\n            \"version\": \"v1.0.0\",\n            \"created\": TODAY, \"updated\": TODAY,\n            \"type\": \"taskboard_archive\",\n            \"parent\": \"taskboard.json\",\n            \"description\": \"Архив завершённых задач (done + cancelled).\",\n            \"status\": \"active\", \"priority\": \"medium\"\n        },\n        \"archive\": {\"description\": \"Завершённые задачи.\", \"tasks\": []},\n        \"navigation\": {\"parent\": \"honeycombs/personal/kurtoch/index.json\", \"sibling\": \"taskboard.json\"}\n    }\n    existing_ids = set()\n\nadded = 0\nfor t in to_archive:\n    if t[\"id\"] in existing_ids:\n        continue\n    t_arch = dict(t)\n    t_arch[\"archived_at\"] = TODAY\n    arch[\"archive\"][\"tasks\"].append(t_arch)\n    added += 1\n    print(f\"  -> архив: {t['id']} {t['title'][:60]}\")\n\narch[\"identity\"][\"updated\"] = TODAY\narch[\"archive\"][\"total\"] = len(arch[\"archive\"][\"tasks\"])\narch[\"archive\"][\"by_status\"] = {\n    \"done\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"done\"),\n    \"cancelled\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"cancelled\")\n}\nsave(ARCHIVE, arch)\n\n# обновляем taskboard.json\nd[\"taskboard\"][\"tasks\"] = to_keep\nby_status, by_priority, by_column = {}, {}, {}\nfor t in to_keep:\n    by_status[t[\"status\"]] = by_status.get(t[\"status\"], 0) + 1\n    by_priority[t[\"priority\"]] = by_priority.get(t[\"priority\"], 0) + 1\n    col = t.get(\"metadata\", {}).get(\"column\", \"—\")\n    by_column[col] = by_column.get(col, 0) + 1\n\nd[\"taskboard\"][\"counters\"] = {\n    \"total\": len(to_keep),\n    \"by_status\": by_status,\n    \"by_priority\": by_priority,\n    \"by_column\": by_column,\n    \"by_phase\": {\"phase_0\": len(to_keep)}\n}\nd[\"taskboard\"][\"updated\"] = TODAY\nsave(TB, d)\n\nprint(f\"\\nOK — архивировано: {added}\")\nprint(f\"  Активных: {len(to_keep)}\")\nprint(f\"  В архиве: {arch['archive']['total']}\")\n",
+    "build_bundle.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"build_bundle.py — собирает kurtoch_bundle.json из всех модулей + скриптов.\n\nНазначение: единый файл для онбординга новых SR-чатов.\nВыход: honeycombs/boot_online/Personal/kurtoch_bundle.json\nИдемпотентно. Запускается вручную или из GitHub Action.\n\"\"\"\nimport io, json, os, sys\nfrom datetime import datetime, timezone\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nREPO = os.path.dirname(os.path.dirname(os.path.dirname(KURTOCH)))\nOUTPUT = os.path.join(REPO, \"honeycombs\", \"boot_online\", \"Personal\", \"kurtoch_bundle.json\")\n\nMODULES = {\n    \"index\": \"index.json\",\n    \"taskboard\": \"taskboard.json\",\n    \"taskboard_archive\": \"taskboard_archive.json\",\n    \"team\": \"team.json\",\n    \"knowledge_base\": \"knowledge_base.json\",\n}\n\nEXCLUDE_SCRIPTS = {\"notion_token.txt\", \"__pycache__\"}\nEXCLUDE_EXT = {\".pyc\"}\n\ndef read_text(path):\n    with io.open(path, \"r\", encoding=\"utf-8\") as f:\n        return f.read()\n\ndef read_json(path):\n    return json.loads(read_text(path))\n\ndef collect_scripts():\n    out = {}\n    for fname in sorted(os.listdir(HERE)):\n        if fname in EXCLUDE_SCRIPTS or fname.startswith(\".\"):\n            continue\n        if any(fname.endswith(e) for e in EXCLUDE_EXT):\n            continue\n        fpath = os.path.join(HERE, fname)\n        if not os.path.isfile(fpath):\n            continue\n        if fname == \"notion_token.txt\":\n            continue\n        try:\n            out[fname] = read_text(fpath)\n        except Exception as e:\n            print(f\"  ! пропущен {fname}: {e}\")\n    return out\n\ndef main():\n    print(f\"Собираю bundle из {KURTOCH}\")\n    bundle = {\n        \"meta\": {\n            \"bundle_version\": \"v1.0.0\",\n            \"generated_at\": datetime.now(timezone.utc).strftime(\"%Y-%m-%dT%H:%M:%SZ\"),\n            \"source\": \"honeycombs/personal/kurtoch/\",\n            \"generator\": \"scripts/build_bundle.py\",\n            \"modules\": list(MODULES.keys()),\n            \"scripts_included\": [],\n            \"note\": \"Единый файл для онбординга нового SR. Содержит все модули хаба + полные тексты скриптов. Исключены: notion_token.txt, _snapshots/, _logs/, __pycache__/.\",\n        }\n    }\n    for key, fname in MODULES.items():\n        path = os.path.join(KURTOCH, fname)\n        if os.path.exists(path):\n            bundle[key] = read_json(path)\n            print(f\"  ✅ {key:20} ({fname})\")\n        else:\n            print(f\"  ⚠  {key:20} — файл не найден: {fname}\")\n\n    scripts = collect_scripts()\n    bundle[\"scripts\"] = scripts\n    bundle[\"meta\"][\"scripts_included\"] = sorted(scripts.keys())\n    print(f\"  ✅ scripts: {len(scripts)} файлов\")\n\n    os.makedirs(os.path.dirname(OUTPUT), exist_ok=True)\n    with io.open(OUTPUT, \"w\", encoding=\"utf-8\") as f:\n        json.dump(bundle, f, ensure_ascii=False, indent=2)\n        f.write(\"\\n\")\n    size = os.path.getsize(OUTPUT)\n    print(f\"\\n✅ saved: {os.path.relpath(OUTPUT, REPO)} ({size:,} байт)\")\n\nif __name__ == \"__main__\":\n    main()\n",
+    "fix_two_ids.py": "import io, json, time, urllib.request\nTOKEN = io.open(\"notion_token.txt\", encoding=\"utf-8\").read().strip()\nDB = \"f6ffa784e7594df9add4fd1c697d4ada\"\nH = {\"Authorization\": f\"Bearer {TOKEN}\", \"Notion-Version\": \"2022-06-28\", \"Content-Type\": \"application/json\"}\n\ndef api(path, method=\"GET\", body=None):\n    req = urllib.request.Request(\n        f\"https://api.notion.com/v1/{path}\",\n        data=json.dumps(body).encode() if body else None,\n        method=method, headers=H,\n    )\n    with urllib.request.urlopen(req) as r:\n        return json.loads(r.read().decode())\n\ndef query_all():\n    out, cursor = [], None\n    while True:\n        body = {\"page_size\": 100}\n        if cursor: body[\"start_cursor\"] = cursor\n        d = api(f\"databases/{DB}/query\", \"POST\", body)\n        out.extend(d.get(\"results\", []))\n        if not d.get(\"has_more\"): break\n        cursor = d.get(\"next_cursor\")\n        time.sleep(0.35)\n    return out\n\nFIXES = {\n    \"Зона посадки Нижка: перекомпоновка (проект)\": \"K-064\",\n    \"Уличная вывеска Нижка: новая (проект)\": \"K-065\",\n}\n\nfor p in query_all():\n    props = p.get(\"properties\", {})\n    title = \"\".join(i[\"plain_text\"] for i in (props.get(\"Название\", {}).get(\"title\") or [])) or None\n    if title not in FIXES:\n        continue\n    new_id = FIXES[title]\n    api(f\"pages/{p['id']}\", \"PATCH\", {\n        \"properties\": {\"ID\": {\"rich_text\": [{\"text\": {\"content\": new_id}}]}}\n    })\n    print(f\"OK: {new_id} -> {title}\")\n    time.sleep(0.35)\n",
+    "notion_runner.sh": "#!/data/data/com.termux/files/usr/bin/bash\n# Обёртка для sync. Запуск: bash notion_runner.sh <command>\n\nset -e\n\n# Всегда работаем от абсолютного пути\nREPO=\"/storage/emulated/0/mandala-core\"\nKURTOCH_REL=\"honeycombs/personal/kurtoch\"\nSCRIPTS=\"$REPO/$KURTOCH_REL/scripts\"\nLOG_REL=\"$KURTOCH_REL/_logs/notion_sync.log\"\n\nif [ -z \"$1\" ]; then\n  echo \"Использование: bash notion_runner.sh <command>\"\n  echo \"  full_sync       — archive + push + логи + коммит\"\n  echo \"  pull_taskboard  — выгрузка Notion\"\n  echo \"  push_taskboard  — push в Notion\"\n  exit 1\nfi\n\nCMD=\"$1\"\nLOG_ABS=\"$REPO/$LOG_REL\"\n\nlog_start() {\n  {\n    echo \"\"\n    echo \"================================================================\"\n    echo \"[$(date '+%Y-%m-%d %H:%M:%S')] runner: $CMD\"\n    echo \"================================================================\"\n  } >> \"$LOG_ABS\"\n}\n\nfilter_token() {\n  sed 's/ntn_[A-Za-z0-9_]*/ntn_***REDACTED***/g'\n}\n\ncd \"$SCRIPTS\"\n\ncase \"$CMD\" in\n  full_sync)\n    log_start\n    echo \"[1/3] archive_done.py\" | tee -a \"$LOG_ABS\"\n    python3 archive_done.py 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    echo \"\" | tee -a \"$LOG_ABS\"\n    echo \"[2/3] push_taskboard.py\" | tee -a \"$LOG_ABS\"\n    python3 push_taskboard.py 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    echo \"\" | tee -a \"$LOG_ABS\"\n    echo \"[3/3] git commit + push\" | tee -a \"$LOG_ABS\"\n    cd \"$REPO\"\n    git add \"$KURTOCH_REL/\"\n    if ! git diff --cached --quiet 2>/dev/null; then\n      git commit -m \"chore(kurtoch): full_sync $(date '+%Y-%m-%d %H:%M')\" >/dev/null\n      git pull --rebase origin main >/dev/null 2>&1 || true\n      git push >/dev/null 2>&1 || true\n      echo \"✓ закоммичено и запушено\"\n    else\n      echo \"  нечего коммитить\"\n    fi\n    ;;\n  pull_taskboard)\n    log_start\n    python3 notion_sync.py pull_taskboard 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    ;;\n  push_taskboard)\n    log_start\n    python3 push_taskboard.py 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    ;;\n  *)\n    log_start\n    python3 notion_sync.py \"$@\" 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    ;;\nesac\n",
+    "notion_sync.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Notion Sync — один скрипт для всех команд.\n\nИспользование:\n    python3 notion_sync.py list\n    python3 notion_sync.py pull_taskboard\n\nТокен читается из scripts/notion_token.txt (в .gitignore, в репу не попадает).\n\"\"\"\nimport io, json, os, sys, time, urllib.request, urllib.error\nfrom datetime import datetime\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTOKEN_FILE = os.path.join(HERE, \"notion_token.txt\")\nSNAPSHOTS = os.path.join(KURTOCH, \"_snapshots\")\nLOGS = os.path.join(KURTOCH, \"_logs\")\n\n# Базы Notion\nDATABASES = {\n    \"taskboard\": \"f6ffa784e7594df9add4fd1c697d4ada\",\n}\n\n# Максимум снапшотов на одну базу\nMAX_SNAPSHOTS = 10\n\ndef load_token():\n    if not os.path.isfile(TOKEN_FILE):\n        fail(f\"Токен не найден: {TOKEN_FILE}\")\n    with io.open(TOKEN_FILE, \"r\", encoding=\"utf-8\") as f:\n        t = f.read().strip()\n    if not t or t.startswith(\"PASTE_\") or t.startswith(\"ВСТАВЬ\"):\n        fail(\"Токен не заменён — всё ещё заглушка.\")\n    return t\n\ndef api(path, token, method=\"GET\", body=None):\n    url = f\"https://api.notion.com/v1/{path}\"\n    data = json.dumps(body).encode(\"utf-8\") if body else None\n    req = urllib.request.Request(\n        url, data=data, method=method,\n        headers={\n            \"Authorization\": f\"Bearer {token}\",\n            \"Notion-Version\": \"2022-06-28\",\n            \"Content-Type\": \"application/json\",\n        },\n    )\n    try:\n        with urllib.request.urlopen(req) as r:\n            return json.loads(r.read().decode(\"utf-8\"))\n    except urllib.error.HTTPError as e:\n        fail(f\"HTTP {e.code}: {e.read().decode('utf-8')}\")\n\ndef fail(msg):\n    print(f\"❌ {msg}\")\n    sys.exit(1)\n\ndef ok(msg):\n    print(f\"✅ {msg}\")\n\ndef query_all(db_id, token):\n    results = []\n    cursor = None\n    while True:\n        body = {\"page_size\": 100}\n        if cursor:\n            body[\"start_cursor\"] = cursor\n        data = api(f\"databases/{db_id}/query\", token, method=\"POST\", body=body)\n        results.extend(data.get(\"results\", []))\n        if not data.get(\"has_more\"):\n            break\n        cursor = data.get(\"next_cursor\")\n        time.sleep(0.4)\n    return results\n\ndef extract(page):\n    p = page.get(\"properties\", {})\n    def txt(prop):\n        if not prop:\n            return None\n        t = prop.get(\"type\")\n        if t == \"title\":\n            return \"\".join(x[\"plain_text\"] for x in prop[\"title\"]) or None\n        if t == \"rich_text\":\n            return \"\".join(x[\"plain_text\"] for x in prop[\"rich_text\"]) or None\n        if t == \"select\":\n            return (prop[\"select\"] or {}).get(\"name\")\n        if t == \"checkbox\":\n            return prop[\"checkbox\"]\n        if t == \"date\":\n            d = prop[\"date\"] or {}\n            return d.get(\"start\")\n        if t == \"last_edited_time\":\n            return prop.get(\"last_edited_time\")\n        return None\n    return {\n        \"notion_page_id\": page[\"id\"],\n        \"title\": txt(p.get(\"Название\")),\n        \"status\": txt(p.get(\"Статус\")),\n        \"column\": txt(p.get(\"Столбец\")),\n        \"urgency\": txt(p.get(\"Срочность\")),\n        \"assignee\": txt(p.get(\"Ответственный\")),\n        \"deadline\": txt(p.get(\"Дедлайн\")),\n        \"closed\": txt(p.get(\"Закрыта\")),\n        \"closed_at\": txt(p.get(\"Дата закрытия\")),\n        \"description\": txt(p.get(\"Описание\")),\n    }\n\ndef rotate_snapshots(prefix):\n    files = sorted(\n        [f for f in os.listdir(SNAPSHOTS) if f.startswith(prefix) and f.endswith(\".json\")]\n    )\n    while len(files) >= MAX_SNAPSHOTS:\n        old = files.pop(0)\n        os.remove(os.path.join(SNAPSHOTS, old))\n        print(f\"  удалён старый снапшот: {old}\")\n\ndef cmd_list(token):\n    print(\"Доступные команды:\")\n    print(\"  list             — этот список\")\n    print(\"  pull_taskboard   — выгрузить задачи Notion в снапшот\")\n    print(\"  db_taskboard     — показать метаданные базы Taskboard\")\n\ndef cmd_db_taskboard(token):\n    db_id = DATABASES[\"taskboard\"]\n    data = api(f\"databases/{db_id}\", token)\n    ok(f\"База: {(data.get('title') or [{}])[0].get('plain_text', '—')}\")\n    print(\"Свойства:\")\n    for name, prop in data.get(\"properties\", {}).items():\n        print(f\"  - {name}: {prop.get('type')}\")\n\ndef cmd_pull_taskboard(token):\n    db_id = DATABASES[\"taskboard\"]\n    print(\"Читаю Taskboard из Notion...\")\n    pages = query_all(db_id, token)\n    print(f\"  получено страниц: {len(pages)}\")\n    items = [extract(p) for p in pages]\n    ts = datetime.now().strftime(\"%Y%m%d_%H%M\")\n    prefix = f\"notion_taskboard_\"\n    rotate_snapshots(prefix)\n    path = os.path.join(SNAPSHOTS, f\"{prefix}{ts}.json\")\n    with io.open(path, \"w\", encoding=\"utf-8\") as f:\n        json.dump({\"timestamp\": ts, \"count\": len(items), \"items\": items}, f, ensure_ascii=False, indent=2)\n    ok(f\"Снапшот сохранён: {os.path.relpath(path, KURTOCH)}\")\n    by_status, by_column = {}, {}\n    for it in items:\n        by_status[it[\"status\"]] = by_status.get(it[\"status\"], 0) + 1\n        by_column[it[\"column\"]] = by_column.get(it[\"column\"], 0) + 1\n    print(\"\\nПо статусам:\")\n    for k, v in sorted(by_status.items(), key=lambda x: -x[1]):\n        print(f\"  {k or '—'}: {v}\")\n    print(\"\\nПо столбцам:\")\n    for k, v in sorted(by_column.items(), key=lambda x: -x[1]):\n        print(f\"  {k or '—'}: {v}\")\n\nCOMMANDS = {\n    \"list\": cmd_list,\n    \"db_taskboard\": cmd_db_taskboard,\n    \"pull_taskboard\": cmd_pull_taskboard,\n}\n\ndef main():\n    if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:\n        print(\"Использование: python3 notion_sync.py <command>\")\n        print(\"Доступные команды:\", \", \".join(COMMANDS.keys()))\n        sys.exit(1)\n    cmd = sys.argv[1]\n    if cmd == \"list\":\n        COMMANDS[cmd](None)\n        return\n    token = load_token()\n    COMMANDS[cmd](token)\n\nif __name__ == \"__main__\":\n    main()\n",
+    "patch_schema.py": "import io, json, sys, urllib.request\nTOKEN = io.open(\"notion_token.txt\", encoding=\"utf-8\").read().strip()\nDB = \"f6ffa784e7594df9add4fd1c697d4ada\"\nH = {\"Authorization\": f\"Bearer {TOKEN}\", \"Notion-Version\": \"2022-06-28\", \"Content-Type\": \"application/json\"}\n\ndef api(path, method=\"GET\", body=None):\n    req = urllib.request.Request(\n        f\"https://api.notion.com/v1/{path}\",\n        data=json.dumps(body).encode() if body else None,\n        method=method, headers=H,\n    )\n    with urllib.request.urlopen(req) as r:\n        return json.loads(r.read().decode())\n\ndb = api(f\"databases/{DB}\")\nprops = db[\"properties\"]\nstatus_opts = [o[\"name\"] for o in props.get(\"Статус\", {}).get(\"select\", {}).get(\"options\", [])]\nprint(\"ID:\", \"есть\" if \"ID\" in props else \"НЕТ\")\nprint(\"planning:\", \"есть\" if \"planning\" in status_opts else \"НЕТ\")\n\npatch = {\"properties\": {}}\nif \"ID\" not in props:\n    patch[\"properties\"][\"ID\"] = {\"rich_text\": {}}\nif \"planning\" not in status_opts:\n    new_opts = [{\"name\": n, \"color\": \"default\"} for n in status_opts] + [{\"name\": \"planning\", \"color\": \"blue\"}]\n    patch[\"properties\"][\"Статус\"] = {\"select\": {\"options\": new_opts}}\n\nif not patch[\"properties\"]:\n    print(\"Нечего менять — уже всё есть.\")\n    sys.exit(0)\n\nprint(\"Отправляю PATCH автоматически...\")\nr = api(f\"databases/{DB}\", \"PATCH\", patch)\np2 = r[\"properties\"]\nprint(\"OK. Свойств:\", len(p2))\nprint(\"ID:\", \"есть\" if \"ID\" in p2 else \"НЕТ\")\nprint(\"Статусы:\", [o[\"name\"] for o in p2.get(\"Статус\", {}).get(\"select\", {}).get(\"options\", [])])\n",
+    "push_taskboard.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Push taskboard.json -> Notion.\nОбновляет: ID, Столбец, Статус, Закрыта, Срочность, Дедлайн.\nСоздаёт новые задачи, если в Mandala есть K-ID, которого нет в Notion.\nИдемпотентно.\"\"\"\nimport io, json, os, sys, time, urllib.request, urllib.error\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTOKEN_FILE = os.path.join(HERE, \"notion_token.txt\")\nTB_FILE = os.path.join(KURTOCH, \"taskboard.json\")\nDB = \"f6ffa784e7594df9add4fd1c697d4ada\"\n\n# --- Маппинг priority -> Срочность (Notion select) ---\nPRIORITY_TO_URGENCY = {\n    \"critical\": \"\\U0001F534 \\u0413\\u043e\\u0440\\u0438\\u0442\",\n    \"high\":     \"\\U0001F7E1 \\u0421\\u0440\\u0435\\u0434\\u043d\\u044f\\u044f\",\n    \"medium\":   \"\\U0001F535 \\u0424\\u043e\\u043d\",\n    \"low\":      \"\\U0001F535 \\u0424\\u043e\\u043d\",\n}\nDEFAULT_ASSIGNEE = \"\\u0414\\u043c\\u0438\\u0442\\u0440\\u0438\\u0439 (\\u0443\\u043f\\u0440\\u0430\\u0432\\u043b\\u044f\\u044e\\u0449\\u0438\\u0439)\"\n\ndef build_milestone_blocks(task):\n    \"\"\"Строит структурированные блоки для milestone с payment_tracker.\"\"\"\n    blocks = []\n    meta = task.get(\"metadata\", {})\n    phases = meta.get(\"phases\", [])\n    tracker = meta.get(\"tracker\", {})\n    if not phases:\n        return None\n    for ph in phases:\n        # heading\n        h = f\"\\u0424\\u0430\\u0437\\u0430 {ph.get('phase','?')}: {ph.get('name','')} ({ph.get('period','')})\"\n        blocks.append({\n            \"object\": \"block\", \"type\": \"heading_3\",\n            \"heading_3\": {\"rich_text\": [{\"text\": {\"content\": h}}]}\n        })\n        # summary\n        summary = f\"\\u0412\\u0441\\u0435\\u0433\\u043e: {ph.get('total',0):,} \\u20bd  \\u00b7  \\u041a\\u0435\\u0448: {ph.get('cash',0):,} \\u20bd  \\u00b7  \\u041d\\u0430\\u043a\\u043e\\u043f\\u043b\\u0435\\u043d\\u0438\\u0435: {ph.get('accumulation',0):,} \\u20bd\".replace(\",\", \" \")\n        blocks.append({\n            \"object\": \"block\", \"type\": \"paragraph\",\n            \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": summary}}]}\n        })\n        # to-do\n        for p in ph.get(\"payments\", []):\n            check = p.get(\"status\") == \"paid\"\n            line = f\"{p.get('date','')} \\u2014 {p.get('amount',0):,} \\u20bd \\u2014 {p.get('type','')}\".replace(\",\", \" \")\n            blocks.append({\n                \"object\": \"block\", \"type\": \"to_do\",\n                \"to_do\": {\n                    \"rich_text\": [{\"text\": {\"content\": line}}],\n                    \"checked\": check\n                }\n            })\n    # итого\n    blocks.append({\n        \"object\": \"block\", \"type\": \"divider\", \"divider\": {}\n    })\n    total_line = f\"\\u0418\\u0442\\u043e\\u0433\\u043e: {tracker.get('total_planned',0):,} \\u20bd \\u00b7 \\u041a\\u0435\\u0448: {tracker.get('total_cash_planned',0):,} \\u20bd \\u00b7 \\u041d\\u0430\\u043a\\u043e\\u043f\\u043b\\u0435\\u043d\\u0438\\u0435: {tracker.get('total_accumulation_planned',0):,} \\u20bd\".replace(\",\", \" \")\n    blocks.append({\n        \"object\": \"block\", \"type\": \"heading_3\",\n        \"heading_3\": {\"rich_text\": [{\"text\": {\"content\": total_line}}]}\n    })\n    return blocks\n\n\nH = {\"Authorization\": f\"Bearer {io.open(TOKEN_FILE, encoding='utf-8').read().strip()}\",\n     \"Notion-Version\": \"2022-06-28\", \"Content-Type\": \"application/json\"}\n\ndef api(path, method=\"GET\", body=None, retries=3):\n    last_err = None\n    for attempt in range(retries):\n        try:\n            req = urllib.request.Request(\n                f\"https://api.notion.com/v1/{path}\",\n                data=json.dumps(body).encode() if body else None,\n                method=method, headers=H)\n            with urllib.request.urlopen(req, timeout=30) as r:\n                return json.loads(r.read().decode())\n        except (urllib.error.URLError, OSError) as e:\n            last_err = e\n            wait = 2 ** attempt\n            print(f\"  ! network error ({e.__class__.__name__}), retry in {wait}s...\")\n            time.sleep(wait)\n    raise last_err\n\ndef prop_text(p, name):\n    x = (p.get(\"properties\") or {}).get(name)\n    if not x: return None\n    t = x.get(\"type\")\n    if t == \"title\": return \"\".join(i[\"plain_text\"] for i in x[\"title\"]) or None\n    if t == \"rich_text\": return \"\".join(i[\"plain_text\"] for i in x[\"rich_text\"]) or None\n    if t == \"select\": return (x[\"select\"] or {}).get(\"name\")\n    if t == \"checkbox\": return x[\"checkbox\"]\n    if t == \"date\": return (x[\"date\"] or {}).get(\"start\")\n    return None\n\ndef normalize(name):\n    if not name: return name\n    return name.replace(\" (проект)\", \"\").strip()\n\ndef build_title(t):\n    \"\"\"Notion-префикс для cancelled-задач. Mandala хранит чистый title.\"\"\"\n    if t.get(\"status\") != \"cancelled\":\n        return t[\"title\"]\n    meta = t.get(\"metadata\", {}) or {}\n    if meta.get(\"merged_into\"):\n        return \"\\U0001F4E6 \\u041f\\u043e\\u0433\\u043b\\u043e\\u0449\\u0435\\u043d\\u0430: \" + t[\"title\"]\n    return \"\\u274C \\u041e\\u0442\\u043c\\u0435\\u043d\\u0435\\u043d\\u0430: \" + t[\"title\"]\n\ndef query_all():\n    out, cursor = [], None\n    while True:\n        body = {\"page_size\": 100}\n        if cursor: body[\"start_cursor\"] = cursor\n        d = api(f\"databases/{DB}/query\", \"POST\", body)\n        out.extend(d.get(\"results\", []))\n        if not d.get(\"has_more\"): break\n        cursor = d.get(\"next_cursor\")\n        time.sleep(0.35)\n    return out\n\n# ===== 1. Читаем Mandala (активные + архив) =====\nARCHIVE_FILE = os.path.join(KURTOCH, \"taskboard_archive.json\")\nf = json.load(io.open(TB_FILE, encoding=\"utf-8\"))\ntasks = list(f[\"taskboard\"][\"tasks\"])\nif os.path.exists(ARCHIVE_FILE):\n    with io.open(ARCHIVE_FILE, encoding=\"utf-8\") as af:\n        arch = json.load(af)\n    tasks.extend(arch[\"archive\"][\"tasks\"])\n    print(f\"  + архив: {len(arch['archive']['tasks'])} задач\")\nby_title_norm = {normalize(t[\"title\"]): t for t in tasks}\nby_id_mandala = {t[\"id\"]: t for t in tasks}\nprint(f\"Mandala: {len(tasks)} задач\")\n\n# ===== 2. Читаем Notion =====\npages = query_all()\nprint(f\"Notion: {len(pages)} страниц\\n\")\n\nnotion_by_id = {}      # K-ID -> page\nnotion_by_title = {}   # normalized title -> page\nfor p in pages:\n    pid = prop_text(p, \"ID\")\n    title = normalize(prop_text(p, \"Название\"))\n    if pid: notion_by_id[pid] = p\n    if title: notion_by_title[title] = p\n\nupdated_status, updated_id, updated_col, updated_date, updated_title, created = 0, 0, 0, 0, 0, 0\nno_match = []\n\nfor t in tasks:\n    tid = t[\"id\"]\n    title_norm = normalize(t[\"title\"])\n    p = notion_by_id.get(tid) or notion_by_title.get(title_norm)\n\n    if not p:\n        # создаём новую задачу\n        body = {\n            \"parent\": {\"database_id\": DB},\n            \"properties\": {\n                \"Название\": {\"title\": [{\"text\": {\"content\": build_title(t)}}]},\n                \"ID\": {\"rich_text\": [{\"text\": {\"content\": tid}}]},\n                \"Статус\": {\"select\": {\"name\": t[\"status\"]}},\n                \"Столбец\": {\"select\": {\"name\": t[\"metadata\"][\"column\"]}},\n                \"Срочность\": {\"select\": {\"name\": PRIORITY_TO_URGENCY.get(t.get(\"priority\", \"medium\"), PRIORITY_TO_URGENCY[\"medium\"])}},\n                \"Ответственный\": {\"select\": {\"name\": t.get(\"metadata\", {}).get(\"assignee\") or DEFAULT_ASSIGNEE}},\n                \"Закрыта\": {\"checkbox\": t[\"status\"] in (\"done\", \"cancelled\")},\n            }\n        }\n        # milestones — структурированные блоки\n        ms_blocks = build_milestone_blocks(t) if t.get(\"metadata\", {}).get(\"subtype\") == \"payment_tracker\" else None\n        if ms_blocks:\n            body[\"children\"] = ms_blocks\n        if t.get(\"deadline\"):\n            body[\"properties\"][\"Дедлайн\"] = {\"date\": {\"start\": t[\"deadline\"]}}\n        if t.get(\"description\") and not ms_blocks:\n            body[\"children\"] = [{\"object\": \"block\", \"type\": \"paragraph\",\n                \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": t[\"description\"]}}]}}]\n        api(\"pages\", \"POST\", body)\n        created += 1\n        print(f\"  [NEW {tid}] {t['title']}\")\n        time.sleep(0.35)\n        continue\n\n    # обновляем свойства, если отличаются\n    props = {}\n    cur_status = prop_text(p, \"Статус\")\n    cur_closed = prop_text(p, \"Закрыта\")\n    cur_id = prop_text(p, \"ID\")\n    cur_col = prop_text(p, \"Столбец\")\n    cur_dl = prop_text(p, \"Дедлайн\")\n\n    cur_title = prop_text(p, \"Название\")\n    need_title = build_title(t)\n    if cur_title != need_title:\n        props[\"Название\"] = {\"title\": [{\"text\": {\"content\": need_title}}]}\n        updated_title += 1\n\n    need_closed = t[\"status\"] in (\"done\", \"cancelled\")\n    if cur_status != t[\"status\"]:\n        props[\"Статус\"] = {\"select\": {\"name\": t[\"status\"]}}\n        updated_status += 1\n    if cur_closed != need_closed:\n        props[\"Закрыта\"] = {\"checkbox\": need_closed}\n    if cur_id != tid:\n        props[\"ID\"] = {\"rich_text\": [{\"text\": {\"content\": tid}}]}\n        updated_id += 1\n    if cur_col != t[\"metadata\"][\"column\"]:\n        props[\"Столбец\"] = {\"select\": {\"name\": t[\"metadata\"][\"column\"]}}\n        updated_col += 1\n    if t.get(\"deadline\") and cur_dl != t[\"deadline\"]:\n        props[\"Дедлайн\"] = {\"date\": {\"start\": t[\"deadline\"]}}\n        updated_date += 1\n\n    # Срочность и Ответственный (всегда проверяем)\n    cur_urg = prop_text(p, \"Срочность\")\n    need_urg = PRIORITY_TO_URGENCY.get(t.get(\"priority\", \"medium\"), PRIORITY_TO_URGENCY[\"medium\"])\n    if cur_urg != need_urg:\n        props[\"Срочность\"] = {\"select\": {\"name\": need_urg}}\n    cur_resp = prop_text(p, \"Ответственный\")\n    need_resp = t.get(\"metadata\", {}).get(\"assignee\") or DEFAULT_ASSIGNEE\n    if cur_resp != need_resp:\n        props[\"Ответственный\"] = {\"select\": {\"name\": need_resp}}\n\n    if props:\n        api(f\"pages/{p['id']}\", \"PATCH\", {\"properties\": props})\n        tag = \", \".join(props.keys())\n        print(f\"  [{tid} | {tag}] {t['title']}\")\n        time.sleep(0.35)\n\n# проверка обратного — что в Notion есть, но в Mandala нет\nnotion_ids = {prop_text(p, \"ID\") for p in pages if prop_text(p, \"ID\")}\nmandala_ids = set(by_id_mandala.keys())\norphans = notion_ids - mandala_ids\n\nprint(f\"\\n=== Итог ===\")\nprint(f\"  Обновлено Статус: {updated_status}\")\nprint(f\"  Обновлено ID: {updated_id}\")\nprint(f\"  Обновлено Столбец: {updated_col}\")\nprint(f\"  Обновлено Дедлайн: {updated_date}\")\nprint(f\"  Обновлено Название (префикс): {updated_title}\")\nprint(f\"  Создано новых: {created}\")\nif orphans:\n    print(f\"  В Notion есть, в Mandala нет: {sorted(orphans)}\")\n",
+    "split_archive.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Выносит done + cancelled из taskboard.json в taskboard_archive.json.\nРежимы:\n  --dry-run  (по умолчанию) — показать, что будет вынесено\n  --apply                    — применить\n\"\"\"\nimport io, json, os, sys\nfrom datetime import datetime\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTB = os.path.join(KURTOCH, \"taskboard.json\")\nARCHIVE = os.path.join(KURTOCH, \"taskboard_archive.json\")\nTODAY = \"2026-09-23\"\nMODE = sys.argv[1] if len(sys.argv) > 1 else \"--dry-run\"\n\nwith io.open(TB, encoding=\"utf-8\") as f:\n    d = json.load(f)\n\ntasks = d[\"taskboard\"][\"tasks\"]\nARCHIVE_STATUSES = {\"done\", \"cancelled\"}\n\nto_archive = [t for t in tasks if t[\"status\"] in ARCHIVE_STATUSES]\nto_keep = [t for t in tasks if t[\"status\"] not in ARCHIVE_STATUSES]\n\nprint(f\"Режим: {MODE}\")\nprint(f\"  Активных (останутся): {len(to_keep)}\")\nprint(f\"  В архив: {len(to_archive)}\")\nprint(f\"    done: {sum(1 for t in to_archive if t['status'] == 'done')}\")\nprint(f\"    cancelled: {sum(1 for t in to_archive if t['status'] == 'cancelled')}\")\nprint(f\"\\nСписок задач в архив:\")\nfor t in to_archive:\n    print(f\"  [{t['status']}] {t['id']}: {t['title'][:60]}\")\n\nif MODE != \"--apply\":\n    print(f\"\\nDRY-RUN — файлы не изменены. Для применения: python3 split_archive.py --apply\")\n    sys.exit(0)\n\n# ===== APPLY =====\n# 1. Читаем существующий архив, если есть\nif os.path.exists(ARCHIVE):\n    with io.open(ARCHIVE, encoding=\"utf-8\") as f:\n        arch = json.load(f)\n    existing_ids = {t[\"id\"] for t in arch[\"archive\"][\"tasks\"]}\nelse:\n    arch = {\n        \"identity\": {\n            \"module_id\": \"KURTOCH-TASKBOARD-ARCHIVE-001\",\n            \"name\": \"Kurtoch — Taskboard Archive\",\n            \"version\": \"v1.0.0\",\n            \"created\": TODAY,\n            \"updated\": TODAY,\n            \"type\": \"taskboard_archive\",\n            \"parent\": \"taskboard.json\",\n            \"description\": \"Архив завершённых задач (done + cancelled).\",\n            \"status\": \"active\",\n            \"priority\": \"medium\"\n        },\n        \"archive\": {\n            \"description\": \"Завершённые задачи. Синхронизируются с Notion тем же скриптом.\",\n            \"tasks\": []\n        },\n        \"navigation\": {\n            \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n            \"sibling\": \"taskboard.json\"\n        }\n    }\n    existing_ids = set()\n\n# 2. Переносим новые задачи в архив\nadded = 0\nfor t in to_archive:\n    t_arch = dict(t)\n    t_arch[\"archived_at\"] = TODAY\n    if t[\"id\"] not in existing_ids:\n        arch[\"archive\"][\"tasks\"].append(t_arch)\n        added += 1\n\n# 3. Обновляем архив\narch[\"identity\"][\"updated\"] = TODAY\narch[\"archive\"][\"total\"] = len(arch[\"archive\"][\"tasks\"])\narch[\"archive\"][\"by_status\"] = {\n    \"done\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"done\"),\n    \"cancelled\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"cancelled\")\n}\n\n# 4. Записываем архив\nwith io.open(ARCHIVE, \"w\", encoding=\"utf-8\") as f:\n    json.dump(arch, f, ensure_ascii=False, indent=2)\n    f.write(\"\\n\")\nprint(f\"\\n  записан: taskboard_archive.json ({os.path.getsize(ARCHIVE)} байт, добавлено {added})\")\n\n# 5. Обновляем taskboard.json — оставляем только активные\nd[\"taskboard\"][\"tasks\"] = to_keep\n\n# пересчёт counters\nby_status, by_priority, by_column = {}, {}, {}\nfor t in to_keep:\n    by_status[t[\"status\"]] = by_status.get(t[\"status\"], 0) + 1\n    by_priority[t[\"priority\"]] = by_priority.get(t[\"priority\"], 0) + 1\n    col = t.get(\"metadata\", {}).get(\"column\", \"—\")\n    by_column[col] = by_column.get(col, 0) + 1\n\nd[\"taskboard\"][\"counters\"] = {\n    \"total\": len(to_keep),\n    \"by_status\": by_status,\n    \"by_priority\": by_priority,\n    \"by_column\": by_column,\n    \"by_phase\": {\"phase_0\": len(to_keep)}\n}\nd[\"taskboard\"][\"archive_ref\"] = \"taskboard_archive.json\"\nd[\"taskboard\"][\"updated\"] = TODAY\n\nwith io.open(TB, \"w\", encoding=\"utf-8\") as f:\n    json.dump(d, f, ensure_ascii=False, indent=2)\n    f.write(\"\\n\")\nprint(f\"  записан: taskboard.json ({os.path.getsize(TB)} байт, активных {len(to_keep)})\")\n\nprint(f\"\\nOK — архив применён\")\n",
+    "split_franchise.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Разбивка franchise.json на модули: taskboard.json, team.json, knowledge_base.json.\nПересобирает kurtoch/index.json -> v2.0.0.\nfranchise.json НЕ трогает, НЕ удаляет, НЕ коммитит.\"\"\"\nimport io, json, os\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nFRANCHISE = os.path.join(KURTOCH, \"franchise.json\")\nINDEX = os.path.join(KURTOCH, \"index.json\")\nTODAY = \"2026-09-23\"\n\ndef load(p):\n    with io.open(p, encoding=\"utf-8\") as f:\n        return json.load(f)\n\ndef save(p, data):\n    with io.open(p, \"w\", encoding=\"utf-8\") as f:\n        json.dump(data, f, ensure_ascii=False, indent=2)\n        f.write(\"\\n\")\n    size = os.path.getsize(p)\n    print(f\"  записан: {os.path.relpath(p, KURTOCH)} ({size} байт)\")\n\nf = load(FRANCHISE)\nold_index = load(INDEX)\nprint(\"Читаю franchise.json и index.json...\")\n\n# =========================================================\n# 1. taskboard.json\n# =========================================================\ntaskboard_module = {\n    \"identity\": {\n        \"module_id\": \"KURTOCH-TASKBOARD-001\",\n        \"name\": \"Kurtoch — Taskboard\",\n        \"version\": f[\"taskboard\"][\"version\"],\n        \"created\": f[\"taskboard\"][\"created\"],\n        \"updated\": TODAY,\n        \"layer\": 2,\n        \"type\": \"taskboard_module\",\n        \"description\": \"База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.\",\n        \"status\": \"active\",\n        \"priority\": \"critical\",\n        \"parent\": \"index.json\",\n        \"resonance\": \"100%\"\n    },\n    \"taskboard\": f[\"taskboard\"],\n    \"milestones\": f[\"milestones\"],\n    \"navigation\": {\n        \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n        \"siblings\": [\"team.json\", \"knowledge_base.json\"],\n        \"external\": [\"Notion Taskboard: https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1\"]\n    },\n    \"notion_sync\": f[\"taskboard\"][\"notion_sync\"],\n    \"sync_rule\": \"Mandala (taskboard.json) — эталон. Notion Taskboard — визуальное зеркало.\"\n}\nsave(os.path.join(KURTOCH, \"taskboard.json\"), taskboard_module)\n\n# =========================================================\n# 2. team.json\n# =========================================================\nteam_module = {\n    \"identity\": {\n        \"module_id\": \"KURTOCH-TEAM-001\",\n        \"name\": \"Kurtoch — Team Roster\",\n        \"version\": \"v1.0.0\",\n        \"created\": TODAY,\n        \"updated\": TODAY,\n        \"layer\": 2,\n        \"type\": \"team_module\",\n        \"description\": \"Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).\",\n        \"status\": \"active\",\n        \"priority\": \"high\",\n        \"parent\": \"index.json\",\n        \"resonance\": \"100%\"\n    },\n    \"team_roster\": f[\"team_roster\"],\n    \"navigation\": {\n        \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n        \"siblings\": [\"taskboard.json\", \"knowledge_base.json\"]\n    },\n    \"sync_rule\": \"Mandala (team.json) — эталон. Notion Team — визуальное зеркало (когда создадим базу).\"\n}\nsave(os.path.join(KURTOCH, \"team.json\"), team_module)\n\n# =========================================================\n# 3. knowledge_base.json\n# =========================================================\nkb_sections = f.get(\"workspace_mirror\", {}).get(\"sections\", {}).get(\"knowledge_base\", {}).get(\"sections\", {})\nkb_module = {\n    \"identity\": {\n        \"module_id\": \"KURTOCH-KB-001\",\n        \"name\": \"Kurtoch — Knowledge Base\",\n        \"version\": \"v1.0.0\",\n        \"created\": TODAY,\n        \"updated\": TODAY,\n        \"layer\": 2,\n        \"type\": \"knowledge_base_module\",\n        \"description\": \"База знаний Куртош: чек-листы, регламенты, техкарты, обучение, ЦУ. Пока структура, наполнение — впереди.\",\n        \"status\": \"active\",\n        \"priority\": \"critical\",\n        \"parent\": \"index.json\",\n        \"resonance\": \"100%\"\n    },\n    \"knowledge_base_plan\": f.get(\"knowledge_base_plan\", {}),\n    \"sections\": kb_sections,\n    \"content\": {},\n    \"navigation\": {\n        \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n        \"siblings\": [\"taskboard.json\", \"team.json\"]\n    },\n    \"status_note\": \"Структура готова. Содержимое добавляется постепенно, по мере сбора у команды.\"\n}\nsave(os.path.join(KURTOCH, \"knowledge_base.json\"), kb_module)\n\n# =========================================================\n# 4. index.json -> v2.0.0\n# =========================================================\nnew_index = dict(old_index)\n\n# identity\nnew_index[\"identity\"][\"version\"] = \"v2.0.0\"\nnew_index[\"identity\"][\"updated\"] = TODAY\nnew_index[\"identity\"][\"description\"] = (\n    \"Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. \"\n    \"Входная точка: контекст, инструкции, ссылки на модули. \"\n    \"Данные разбиты: taskboard.json, team.json, knowledge_base.json.\"\n)\n\n# содержимое: модули вместо franchise\nnew_index[\"contents\"] = {\n    \"taskboard.json\": {\n        \"description\": \"База задач Куртош + крупные вехи.\",\n        \"purpose\": \"Задачи, milestones, синхронизация с Notion.\",\n        \"version\": f[\"taskboard\"][\"version\"],\n        \"tasks_count\": f[\"taskboard\"][\"counters\"][\"total\"]\n    },\n    \"team.json\": {\n        \"description\": \"Картотека сотрудников.\",\n        \"purpose\": \"Все 16 сотрудников: контакты, навыки, статусы.\",\n        \"version\": \"v1.0.0\",\n        \"total_employees\": f[\"team_roster\"][\"total_employees\"]\n    },\n    \"knowledge_base.json\": {\n        \"description\": \"База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.\",\n        \"purpose\": \"Структура готова, наполнение — по мере сбора.\",\n        \"version\": \"v1.0.0\",\n        \"sections_count\": len(kb_sections)\n    }\n}\n\n# контекстные блоки из franchise — в index\nnew_index[\"work_context\"] = {\n    \"work_id\": f.get(\"work_id\"),\n    \"status\": f.get(\"status\"),\n    \"priority\": f.get(\"priority\"),\n    \"horizon\": f.get(\"horizon\"),\n    \"owner\": f.get(\"owner\"),\n    \"role\": f.get(\"role\"),\n    \"key_contacts\": f.get(\"key_contacts\"),\n    \"directive_used\": f.get(\"directive_used\")\n}\nnew_index[\"offer\"] = f.get(\"offer\")\nnew_index[\"success_criteria_3_months\"] = f.get(\"success_criteria_3_months\")\nnew_index[\"hot_zones\"] = f.get(\"hot_zones\")\nnew_index[\"context\"] = f.get(\"context\")\nnew_index[\"plan\"] = f.get(\"plan\")\nnew_index[\"success_metrics\"] = f.get(\"success_metrics\")\nnew_index[\"current_status\"] = f.get(\"current_status\")\nnew_index[\"risks\"] = f.get(\"risks\")\nnew_index[\"history\"] = f.get(\"history\")\nnew_index[\"workspace_mirror\"] = f.get(\"workspace_mirror\")\nnew_index[\"compensation_system\"] = f.get(\"compensation_system\")\n\n# навигация\nnew_index[\"navigation\"][\"children\"] = [\n    \"index.json\",\n    \"taskboard.json\",\n    \"team.json\",\n    \"knowledge_base.json\",\n    \"scripts/\",\n    \"_logs/\",\n    \"_snapshots/\"\n]\n\n# health\nnew_index[\"health\"] = {\n    \"status\": \"healthy\",\n    \"last_check\": TODAY,\n    \"notes\": \"v2.0.0: разбит franchise.json на 3 модуля: taskboard, team, knowledge_base. Контекст перенесён в index. franchise.json пока на месте (удалим после подтверждения).\"\n}\n\nsave(INDEX, new_index)\n\nprint(\"\\nOK — разбивка завершена.\")\nprint(\"franchise.json НЕ тронут (удалим отдельным шагом).\")\nprint(\"\\nСледующий шаг: проверь глазами taskboard.json, team.json, knowledge_base.json, index.json.\")\n"
+  }
+}
