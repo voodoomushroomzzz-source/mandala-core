@@ -100,6 +100,15 @@ def normalize(name):
     if not name: return name
     return name.replace(" (проект)", "").strip()
 
+def build_title(t):
+    """Notion-префикс для cancelled-задач. Mandala хранит чистый title."""
+    if t.get("status") != "cancelled":
+        return t["title"]
+    meta = t.get("metadata", {}) or {}
+    if meta.get("merged_into"):
+        return "\U0001F4E6 \u041f\u043e\u0433\u043b\u043e\u0449\u0435\u043d\u0430: " + t["title"]
+    return "\u274C \u041e\u0442\u043c\u0435\u043d\u0435\u043d\u0430: " + t["title"]
+
 def query_all():
     out, cursor = [], None
     while True:
@@ -137,7 +146,7 @@ for p in pages:
     if pid: notion_by_id[pid] = p
     if title: notion_by_title[title] = p
 
-updated_status, updated_id, updated_col, updated_date, created = 0, 0, 0, 0, 0
+updated_status, updated_id, updated_col, updated_date, updated_title, created = 0, 0, 0, 0, 0, 0
 no_match = []
 
 for t in tasks:
@@ -150,13 +159,13 @@ for t in tasks:
         body = {
             "parent": {"database_id": DB},
             "properties": {
-                "Название": {"title": [{"text": {"content": t["title"]}}]},
+                "Название": {"title": [{"text": {"content": build_title(t)}}]},
                 "ID": {"rich_text": [{"text": {"content": tid}}]},
                 "Статус": {"select": {"name": t["status"]}},
                 "Столбец": {"select": {"name": t["metadata"]["column"]}},
                 "Срочность": {"select": {"name": PRIORITY_TO_URGENCY.get(t.get("priority", "medium"), PRIORITY_TO_URGENCY["medium"])}},
                 "Ответственный": {"select": {"name": t.get("metadata", {}).get("assignee") or DEFAULT_ASSIGNEE}},
-                "Закрыта": {"checkbox": t["status"] == "done"},
+                "Закрыта": {"checkbox": t["status"] in ("done", "cancelled")},
             }
         }
         # milestones — структурированные блоки
@@ -182,7 +191,13 @@ for t in tasks:
     cur_col = prop_text(p, "Столбец")
     cur_dl = prop_text(p, "Дедлайн")
 
-    need_closed = (t["status"] == "done")
+    cur_title = prop_text(p, "Название")
+    need_title = build_title(t)
+    if cur_title != need_title:
+        props["Название"] = {"title": [{"text": {"content": need_title}}]}
+        updated_title += 1
+
+    need_closed = t["status"] in ("done", "cancelled")
     if cur_status != t["status"]:
         props["Статус"] = {"select": {"name": t["status"]}}
         updated_status += 1
@@ -224,6 +239,7 @@ print(f"  Обновлено Статус: {updated_status}")
 print(f"  Обновлено ID: {updated_id}")
 print(f"  Обновлено Столбец: {updated_col}")
 print(f"  Обновлено Дедлайн: {updated_date}")
+print(f"  Обновлено Название (префикс): {updated_title}")
 print(f"  Создано новых: {created}")
 if orphans:
     print(f"  В Notion есть, в Mandala нет: {sorted(orphans)}")
