@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.1.0",
+    "version": "v2.2.0",
     "created": "2026-09-14",
-    "updated": "2026-09-23",
+    "updated": "2026-09-25",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -15,9 +15,9 @@
   },
   "taskboard": {
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
-    "version": "v2.1.0",
+    "version": "v2.2.0",
     "created": "2026-09-14",
-    "updated": "2026-09-24",
+    "updated": "2026-09-25",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -86,54 +86,6 @@
         }
       },
       {
-        "id": "K-008",
-        "title": "Ссылки на узлы",
-        "description": "Собрать ссылки на таблицы, расписания, документы. Единая навигация по экосистеме.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-17",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "K-018"
-        ],
-        "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Стратегические"
-        }
-      },
-      {
-        "id": "K-010",
-        "title": "Чек-листы и карты процессов",
-        "description": "Собрать существующие чек-листы и карты процессов. Основа для систематизации. Включить чек-листы закрытия по зонам: распределение задач по времени и зонам (кто, когда, что делает). Обеспечить равномерную нагрузку. Аня + Катрин — основные исполнители.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-10-31",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "K-021"
-        ],
-        "created": "2026-09-14",
-        "updated": "2026-09-23",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
-        }
-      },
-      {
         "id": "K-013",
         "title": "Исправить время в меню",
         "description": "Исправить время первых куртошей в новом меню: 8:15 → 9:00.",
@@ -178,28 +130,6 @@
         }
       },
       {
-        "id": "K-018",
-        "title": "Таблицы документации",
-        "description": "Собрать таблицы с важной информацией: аккаунты, контакты, доступы.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-19",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Стратегические"
-        }
-      },
-      {
         "id": "K-019",
         "title": "Закупка (аудит)",
         "description": "Неделя 2: аудит процесса закупки.",
@@ -219,30 +149,6 @@
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Стратегические"
-        }
-      },
-      {
-        "id": "K-021",
-        "title": "Разработка инструкций",
-        "description": "Разработка инструкций для команды по ключевым процессам. Включить регламент ролей на смене: 1 голос на печке, 1 на баре, 1 на кассе (старший). Почасовая нагрузка по зонам. Распределение на закрытии: зал — раннеры + бариста (если нет раннера — только бариста). Раньше: пекарь закрывался к 21:00, бариста — касса + своя зона, пекарь играл роль зала. Сейчас: пекарь + бариста синхронно, зал полностью на бариста. Витя: «Надо покурить, спросить Катрин, протестировать. Здравая идея».",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-28",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [
-          "K-010"
-        ],
-        "created": "2026-09-14",
-        "updated": "2026-09-21",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
         }
       },
       {
@@ -488,28 +394,6 @@
         }
       },
       {
-        "id": "K-039",
-        "title": "Обучение сезонке + onboarding-чек-листы",
-        "description": "Обучающие материалы по сезонке для новичков (тренинг 31.08 не состоялся). Чек-листы для новых: поломки печки, что делать с сезонкой, чему учить.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": null,
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-21",
-        "updated": "2026-09-21",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
-        }
-      },
-      {
         "id": "K-040",
         "title": "Аттестация Юли (с Кристиной)",
         "description": "Формальная аттестация Юли с Кристиной. Подтверждение что Юля всё знает. После — полная ставка + бонусы.",
@@ -518,28 +402,6 @@
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-09-25",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-21",
-        "updated": "2026-09-21",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
-        }
-      },
-      {
-        "id": "K-041",
-        "title": "Аттестация — процесс + график",
-        "description": "Большая задача. Создать единый процесс аттестации: 1) типовой процесс для новых, 2) график аттестаций действующих, 3) чек-лист (что проверять).",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": null,
         "reminder": null,
         "depends_on": [],
         "related_to": [],
@@ -942,35 +804,13 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-23",
-        "updated": "2026-09-23",
+        "updated": "2026-09-25",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
-          "column": "Операционка — Центр"
-        }
-      },
-      {
-        "id": "K-072",
-        "title": "Увольнение Вероники",
-        "description": "Вероника увольняется. Последняя смена — пятница 26.09.2026. Выдать расчёт, снять с графика, обновить картотеку.",
-        "priority": "high",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-26",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-23",
-        "updated": "2026-09-23",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
+          "column": "Операционка — Нижка"
         }
       },
       {
@@ -1226,29 +1066,109 @@
           "notion_page_id": null,
           "column": "Стратегические"
         }
+      },
+      {
+        "id": "K-076",
+        "title": "База знаний и инструкции (консолидация)",
+        "description": "Единая стратегическая задача: собрать все документы, чек-листы, регламенты, обучение, таблицы документации в единую базу знаний.\n\nПоглощённые задачи (архивированы с merged_into=K-076): K-008, K-010, K-018, K-021, K-039, K-041.\n\nПодпункты (sub_tasks):\n1. K-008 Ссылки на узлы — навигация по экосистеме\n2. K-010 Чек-листы и карты процессов — по зонам смены\n3. K-018 Таблицы документации — аккаунты, контакты, доступы\n4. K-021 Разработка инструкций — регламент ролей на смене\n5. K-039 Обучение сезонке + onboarding-чек-листы — для новичков\n6. K-041 Аттестация — процесс + график + чек-лист\n\nЦель: единая точка входа по документации. Сокращение объёма основного taskboard.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-077"
+        ],
+        "created": "2026-09-25",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические",
+          "sub_tasks": [
+            "K-008",
+            "K-010",
+            "K-018",
+            "K-021",
+            "K-039",
+            "K-041"
+          ]
+        }
+      },
+      {
+        "id": "K-077",
+        "title": "Крис: анализ загруженности + пересмотр оплаты",
+        "description": "Проанализировать реальную загруженность Крис (управляющая, удалёнка, текущая оплата 40 000 ₽/мес).\n\nКонтекст: расширение +500К ₽/мес при плоской выручке, давление на бюджет.\n\nВопрос: соответствует ли 40К реальному объёму работы? Нужен ли пересмотр условий?\n\nСвязано с K-078 (контроль всех бюджетов).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": "2026-10-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-078"
+        ],
+        "created": "2026-09-25",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
+      },
+      {
+        "id": "K-078",
+        "title": "Контроль больших финансов / все бюджеты",
+        "description": "Взять под контроль все бюджеты сети (Нижка + Центр).\n\nЦелевой ориентир: 2 200 000 ₽/мес на 2 точки (1,1 млн на точку).\n\nЗадачи:\n1. Продумать систему учёта (переделка таблиц)\n2. Свести все бюджеты в единый контур\n3. Связать с метрикой выручки (см. index.json success_metrics.revenue_target)\n4. Точка пересмотра — конец октября\n\nСвязано с K-077 (анализ Крис).",
+        "priority": "critical",
+        "status": "todo",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-077"
+        ],
+        "created": "2026-09-25",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
       }
     ],
     "counters": {
-      "total": 48,
+      "total": 44,
       "by_status": {
-        "todo": 44,
+        "todo": 40,
         "in_progress": 3,
         "planning": 1
       },
       "by_priority": {
-        "critical": 2,
-        "high": 37,
+        "critical": 3,
+        "high": 33,
         "medium": 9
       },
       "by_column": {
-        "Стратегические": 7,
-        "Операционка — Общая": 14,
-        "Операционка — Нижка": 20,
-        "Операционка — Центр": 4,
+        "Стратегические": 8,
+        "Операционка — Общая": 9,
+        "Операционка — Нижка": 21,
+        "Операционка — Центр": 3,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 48
+        "phase_0": 45
       }
     },
     "notes": {
@@ -1264,18 +1184,11 @@
     "sync_rule": "CRITICAL: Mandala (taskboard.json) — эталон. Notion Taskboard — визуальное зеркало. При любом изменении — синхронизировать через scripts/notion_sync.py.",
     "notion_sync": {
       "last_sync": "2026-09-23",
-      "status": "synced",
+      "status": "pending_resync",
       "notion_workspace": "Куртош & Кофе",
       "notion_database": "📋 Куртош — Taskboard",
       "notion_url": "https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1",
-      "notion_ai_status_property": "Статус (todo/in_progress/done)",
-      "note": "Notion ↔ taskboard.json синхронизированы. Mandala — эталон, Notion — зеркало.",
-      "sync_stats": {
-        "total_tasks": 60,
-        "done": 17,
-        "in_progress": 1,
-        "todo": 42
-      }
+      "note": "Требуется full_sync после патча. Mandala — эталон."
     },
     "archive_ref": "taskboard_archive.json"
   },
@@ -1359,19 +1272,11 @@
   },
   "notion_sync": {
     "last_sync": "2026-09-23",
-    "status": "synced",
+    "status": "pending_resync",
     "notion_workspace": "Куртош & Кофе",
     "notion_database": "📋 Куртош — Taskboard",
     "notion_url": "https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1",
-    "notion_ai_status_property": "Статус (todo/in_progress/done)",
-    "note": "Notion ↔ franchise.json синхронизированы. При любом изменении — обновлять обе стороны.",
-    "sync_stats": {
-      "total_tasks": 59,
-      "done": 12,
-      "in_progress": 1,
-      "todo": 46,
-      "planning": 0
-    }
+    "note": "Требуется full_sync после патча. Mandala — эталон."
   },
   "sync_rule": "Mandala (taskboard.json) — эталон. Notion Taskboard — визуальное зеркало."
 }

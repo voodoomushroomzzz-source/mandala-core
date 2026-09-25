@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-ARCHIVE-001",
     "name": "Kurtoch — Taskboard Archive",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-09-23",
-    "updated": "2026-09-23",
+    "updated": "2026-09-25",
     "type": "taskboard_archive",
     "parent": "taskboard.json",
     "description": "Архив завершённых задач (done + cancelled).",
@@ -449,12 +449,161 @@
           "column": "Операционка — Общая"
         },
         "archived_at": "2026-09-23"
+      },
+      {
+        "id": "K-072",
+        "title": "Увольнение Вероники",
+        "description": "Вероника увольняется. Последняя смена — пятница 26.09.2026. Выдать расчёт, снять с графика, обновить картотеку.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-26",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-23",
+        "updated": "2026-09-25",
+        "completed": "2026-09-25",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-008",
+        "title": "Ссылки на узлы",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-010",
+        "title": "Чек-листы и карты процессов",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-018",
+        "title": "Таблицы документации",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-021",
+        "title": "Разработка инструкций",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-039",
+        "title": "Обучение сезонке + onboarding-чек-листы",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-041",
+        "title": "Аттестация — процесс + график",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
       }
     ],
-    "total": 18,
+    "total": 25,
     "by_status": {
-      "done": 18,
-      "cancelled": 0
+      "done": 19,
+      "cancelled": 6
     }
   },
   "navigation": {

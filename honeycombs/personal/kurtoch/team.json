@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TEAM-001",
     "name": "Kurtoch — Team Roster",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "created": "2026-09-23",
-    "updated": "2026-09-23",
+    "updated": "2026-09-25",
     "layer": 2,
     "type": "team_module",
     "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
@@ -14,15 +14,14 @@
     "resonance": "100%"
   },
   "team_roster": {
-    "last_updated": "2026-09-24",
+    "last_updated": "2026-09-25",
     "total_employees": 16,
     "by_status": {
       "core": 1,
       "working": 5,
-      "leaving": 2,
+      "left": 3,
       "runner": 2,
       "trainee": 2,
-      "left": 1,
       "substitute": 3
     },
     "skill_ladder": {
@@ -203,14 +202,14 @@
           "extra": "пока стажёр",
           "notes": null
         },
-        "status": "leaving",
-        "risks": [
-          "увольняется — последняя смена 26.09.2026"
-        ],
+        "status": "left",
+        "risks": [],
         "notes": "Увольняется. Последняя смена — пятница 26.09.2026.",
         "data_gaps": [
           "schedule.preferences"
-        ]
+        ],
+        "settled": true,
+        "settled_date": "2026-09-25"
       },
       {
         "id": "EMP-005",
@@ -531,14 +530,14 @@
           "extra": "пока стажёр",
           "notes": null
         },
-        "status": "leaving",
-        "risks": [
-          "увольняется"
-        ],
+        "status": "left",
+        "risks": [],
         "notes": "Стажёр вялый. Увольняется. Расчёт 21.09.",
         "data_gaps": [
           "nijka.attitude"
-        ]
+        ],
+        "settled": true,
+        "settled_date": "2026-09-09"
       },
       {
         "id": "EMP-013",
