@@ -3,7 +3,7 @@
 """
 Автосборка литературного вектора Mandala Symbiosis.
 Собирает все стихи и прозу из папки poetry/ в единый JSON-файл literary_core_boot.json
-и помещает его в honeycombs/boot_online/.
+и помещает его в honeycombs/personal/.
 """
 
 import json
@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).parent
 POEMS_DIR = BASE_DIR / "poems"
 PROSE_DIR = BASE_DIR / "prose"
 INDEX_PATH = BASE_DIR / "index.json"
-OUTPUT_DIR = Path("honeycombs/boot_online")
+OUTPUT_DIR = Path("honeycombs/personal")
 OUTPUT_PATH = OUTPUT_DIR / "literary_core_boot.json"
 
 def scan_files(directory):
