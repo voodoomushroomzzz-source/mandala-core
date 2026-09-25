@@ -1,25 +1,30 @@
 {
-  "handoff_id": "HANDOFF-DEEPSEEK-2026-09-24",
-  "version": "v4.0.0",
-  "created": "2026-09-24",
-  "updated": "2026-09-24",
-  "purpose": "Бесшовный переход в новый чат. Полный контекст сессии 23-24.09.2026: модульная разбивка Куртоша, Notion-синхронизация, M-003 (оплата кризис-менеджера), K-073 (капинг), K-074 (Анна ключи), K-075 (bundle).",
+  "handoff_id": "HANDOFF-DEEPSEEK-2026-09-25",
+  "version": "v5.0.0",
+  "created": "2026-09-25",
+  "updated": "2026-09-25",
+  "purpose": "Бесшовный переход в новый чат. Полный контекст сессии 25.09.2026: K-071→Нижка, K-072/K-062 done+archive, K-076 консолидация (8 merged), +K-077/K-078, Вероника+Влада left, revenue_target 2.2М, K-075 bundle (GH Action), LR-14, push_taskboard префикс 📦/❌, фикс Android-касинга Personal/personal.",
   "context": {
     "gardener": "Voodoo (Дима)",
     "project": "Куртош — Кризис-менеджмент + операционная система",
     "current_state": "Кризис-менеджер, 100 т.р./мес (50 кеш + 50 накопление), 3 мес (11.09–11.12.2026). Progress 40%. Фаза 0.",
     "session_focus": [
-      "Разбивка franchise.json (107 КБ) на 5 модулей",
-      "Notion-синхронизация (pull + push + full_sync)",
-      "M-001/M-002 перенесены в tasks",
-      "M-003 — трекер оплаты кризис-менеджера",
-      "K-073, K-074 — новые задачи",
-      "my_terms — условия работы"
+      "Разбор входящих задач от Садовника → структурирование в taskboard",
+      "K-076 «База знаний и инструкции» — консолидация 8 задач",
+      "K-077 (Крис), K-078 (финансы) — новые стратегические",
+      "K-075 Kurtoch bundle + GitHub Action автосборки",
+      "push_taskboard.py — префикс 📦/❌ для cancelled, Закрыта=done|cancelled",
+      "LR-14 (pre-check пути скрипта) в mobile_workflow",
+      "Фикс Android-касинга Personal/personal",
+      "Notion full_sync — 69=69"
     ]
   },
   "current_state_summary": {
-    "kurtoch_index_version": "v2.1.4",
-    "taskboard_version": "v2.1.0",
+    "kurtoch_index_version": "v2.1.7",
+    "taskboard_version": "v2.2.0",
+    "taskboard_archive_version": "v1.3.0",
+    "team_version": "v1.1.0",
+    "knowledge_base_version": "v1.1.0",
     "modules": [
       "index.json",
       "taskboard.json",
@@ -27,19 +32,23 @@
       "team.json",
       "knowledge_base.json"
     ],
-    "active_tasks": 47,
-    "archived_tasks": 18,
-    "total": 65,
+    "active_tasks": 40,
+    "archived_tasks": 29,
+    "total": 69,
     "by_status_active": {
-      "todo": 43,
-      "in_progress": 3,
+      "todo": 37,
+      "in_progress": 2,
       "planning": 1
     },
+    "by_status_archive": {
+      "done": 21,
+      "cancelled": 8
+    },
     "by_column_active": {
-      "Стратегические": 6,
-      "Операционка — Общая": 14,
+      "Стратегические": 7,
+      "Операционка — Общая": 8,
       "Операционка — Нижка": 20,
-      "Операционка — Центр": 4,
+      "Операционка — Центр": 3,
       "Крупные вехи": 3
     },
     "milestones": [
@@ -51,56 +60,74 @@
     "team_status": {
       "core": 1,
       "working": 5,
-      "leaving": 2,
+      "left": 3,
       "runner": 2,
       "trainee": 2,
-      "left": 1,
       "substitute": 3
     },
     "notion_synced": true,
-    "notion_pages": 65,
-    "progress": 40
+    "notion_pages": 69,
+    "progress": 40,
+    "revenue_target_rub_monthly": 2200000
   },
   "architecture": {
     "mandala_is_source_of_truth": true,
     "notion_is_visual_mirror": true,
-    "rule": "Правим Notion по Mandala, не наоборот."
+    "rule": "Правим Notion по Mandala, не наоборот.",
+    "notion_archive_view": "Отдельный view в Notion Taskboard, показывает всё с чекбоксом «Закрыта» ☑ (done + cancelled). Основной view — всё с ☐."
   },
   "key_files": {
     "kurtoch_hub": {
       "path": "honeycombs/personal/kurtoch/index.json",
-      "version": "v2.1.4",
+      "version": "v2.1.7",
       "raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/kurtoch/index.json"
     },
     "kurtoch_taskboard": {
       "path": "honeycombs/personal/kurtoch/taskboard.json",
-      "version": "v2.1.0",
-      "active": 47,
+      "version": "v2.2.0",
+      "active": 40,
       "raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/kurtoch/taskboard.json"
     },
     "kurtoch_taskboard_archive": {
       "path": "honeycombs/personal/kurtoch/taskboard_archive.json",
-      "archived": 18
+      "version": "v1.3.0",
+      "archived": 29
     },
     "kurtoch_team": {
       "path": "honeycombs/personal/kurtoch/team.json",
+      "version": "v1.1.0",
       "employees": 16
     },
     "kurtoch_knowledge_base": {
       "path": "honeycombs/personal/kurtoch/knowledge_base.json",
+      "version": "v1.1.0",
       "sections": 6,
-      "content": "empty — ждёт наполнения"
+      "content": "empty — ждёт наполнения через K-076"
+    },
+    "kurtoch_bundle": {
+      "path": "honeycombs/boot_online/personal/kurtoch_bundle.json",
+      "size_kb": 197,
+      "generator": "honeycombs/personal/kurtoch/scripts/build_bundle.py",
+      "auto_rebuild": ".github/workflows/kurtoch_bundle.yml",
+      "purpose": "Единый файл онбординга: 5 модулей + 9 скриптов с полными текстами."
     }
   },
   "scripts": {
     "notion_sync.py": "pull Notion -> снапшот",
-    "push_taskboard.py": "Mandala -> Notion (ID, статус, столбец, Срочность, Ответственный)",
+    "push_taskboard.py": "Mandala -> Notion (ID, статус, столбец, Срочность, Ответственный, префикс 📦/❌ для cancelled)",
     "notion_runner.sh": "обёртка: full_sync / pull_taskboard / push_taskboard (запускать через bash)",
-    "archive_done.py": "переносит done+cancelled в архив",
-    "patch_schema.py": "служебный",
-    "fix_two_ids.py": "служебный"
+    "archive_done.py": "переносит done+cancelled в архив (идемпотентно)",
+    "patch_schema.py": "служебный — добавляет поля в схему Notion",
+    "fix_two_ids.py": "служебный — точечный фикс ID",
+    "split_archive.py": "служебный — вынос в архив",
+    "split_franchise.py": "служебный — разбивка franchise.json",
+    "build_bundle.py": "собирает kurtoch_bundle.json (модули + скрипты)"
   },
-  "working_command": "bash scripts/notion_runner.sh full_sync",
+  "working_commands": {
+    "full_sync": "bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync",
+    "pull_taskboard": "bash honeycombs/personal/kurtoch/scripts/notion_runner.sh pull_taskboard",
+    "build_bundle": "python3 honeycombs/personal/kurtoch/scripts/build_bundle.py"
+  },
   "my_terms": {
     "role": "Кризис-менеджер",
     "rate_monthly": 100000,
@@ -114,73 +141,97 @@
     "tracker_ref": "M-003 в taskboard.json",
     "payment_dates": "24-е — аванс, 9-е — остаток + накопление"
   },
+  "new_tasks_2026_09_25": {
+    "K-076": {
+      "title": "База знаний и инструкции (консолидация)",
+      "priority": "high",
+      "status": "todo",
+      "sub_tasks": ["K-006", "K-008", "K-010", "K-016", "K-018", "K-021", "K-039", "K-041"],
+      "purpose": "Единая точка входа по документации. Сокращение объёма taskboard."
+    },
+    "K-077": {
+      "title": "Крис: анализ загруженности + пересмотр оплаты",
+      "priority": "high",
+      "deadline": "2026-10-15",
+      "context": "Крис — управляющая (удалёнка), 40 000 ₽/мес. Проверить соответствие загрузки оплате."
+    },
+    "K-078": {
+      "title": "Контроль больших финансов / все бюджеты",
+      "priority": "critical",
+      "deadline": "2026-10-31",
+      "target": "2 200 000 ₽/мес на 2 точки",
+      "context": "Расширение +500К ₽/мес при плоской выручке. Переделка таблиц, единый контур."
+    }
+  },
+  "completed_2026_09_25": {
+    "K-071": "Перенесена в колонку Операционка — Нижка",
+    "K-072": "Увольнение Вероники — done 25.09, archive",
+    "K-062": "Мусорка на входе — done 25.09, archive",
+    "K-075": "Kurtoch bundle — done 25.09, archive",
+    "K-006_K-016": "merged в K-076 → archive (cancelled)",
+    "Veronika": "EMP-004 → left, settled 25.09",
+    "Vlada": "EMP-012 → left, settled 09.09",
+    "revenue_target": "2 200 000 ₽/мес добавлен в index.success_metrics"
+  },
+  "commits_2026_09_25": [
+    "9f039ff0b — основной патч Куртош",
+    "2c01b5531 — косметика (counters, versions, current_status)",
+    "cceddacd1 — LR-14 в mobile_workflow",
+    "65b0b3579 — push_taskboard: префикс 📦/❌ + Закрыта=done|cancelled",
+    "47354278c — K-075: build_bundle.py + bundle + GH Action",
+    "b82d24090 — GH Action: auto-build bundle",
+    "2cc7cc4d6 — purge Personal/ (Android casing fix)",
+    "223e47dec — K-075 done + bundle path fix (personal)"
+  ],
+  "lessons_2026_09_25": {
+    "LR-14": "Pre-check пути скрипта перед вызовом (добавлен в mobile_workflow v1.13.0)",
+    "LR-15_candidate": "Единый регистр путей от начала. Personal vs personal на Android → дубликат + rebase-конфликты.",
+    "LR-16_candidate": "Не использовать rm -rf <dir>/ при неоднозначном регистре. ls -la перед удалением.",
+    "LR-17_candidate": "git reset --hard origin/main — чистый способ разрешить сложные rebase-конфликты."
+  },
+  "git_tips_android": {
+    "casing_issue": "Android ФС регистронезависима → Personal и personal = один файл. Git видит их как разные. Проверка: git ls-tree -r origin/main --name-only",
+    "rebase_stuck": "Если git pull --rebase падает с 'rebase-merge directory exists' → rm -rf .git/rebase-merge .git/rebase-apply",
+    "recovery": "git reset --hard origin/main + повтор патча — самый быстрый способ"
+  },
   "next_actions": [
-    "1. Реализовать K-075 — Kurtoch bundle (единый файл для онбординга)",
-    "2. Создать базу сотрудников в Notion (👥 Куртош — Сотрудники)",
-    "3. Наполнить knowledge_base (6 секций)",
-    "4. Операционка: K-040 (Аттестация Юли 25.09), K-072 (Увольнение Вероники 26.09), K-074 (Анна ключи 26.09), K-073 (Капинг 01.10)",
-    "5. Фикс push_taskboard.py — авто-обновление блоков у milestone"
+    "1. Реализовать K-076 — наполнить knowledge_base (6 секций)",
+    "2. Notion: создать базу сотрудников (👥 Куртош — Сотрудники)",
+    "3. K-040 Аттестация Юли (дедлайн 25.09) — проверить/отметить",
+    "4. K-077 (Крис) — до 15.10",
+    "5. K-078 (финансы) — до 31.10",
+    "6. Оформить LR-15/16/17 в mobile_workflow.learned_rules_2026_09"
   ],
   "critical_context": {
     "expansion_financial": "+500К ₽/мес из-за расширения, выручка не выросла",
     "nijka_decline": "Нижка −20% выручки",
     "winter_pressure": "Зимой нагрузка −20%",
     "management_transition": "Витя → такси, Дима → управляющий",
-    "vlada_leaving": "Влада — ушла",
-    "veronika_leaving": "Вероника — увольняется, последняя смена 26.09"
+    "veronika_left": "Вероника уволена 25.09",
+    "vlada_left": "Влада уволена 09.09"
   },
   "key_people": {
     "Виктор": "Владелец",
     "Витя": "Управляющий (переходный период)",
-    "Крис": "Управляющая (удалёнка)",
+    "Крис": "Управляющая (удалёнка, 40К/мес — K-077 анализ)",
     "Катрин": "Старший бариста (ключевой)",
     "Дима": "Кризис-менеджер (я)",
     "Юля": "Бариста, аттестована",
     "Анна": "Стажёр, получает ключи + сигнализацию Центра",
-    "Вероника": "Увольняется 26.09",
     "Маша": "Подменная + обучение",
     "Денис": "Управляющий др. кофеен (до года)",
     "Оля": "Стажёр, likes Нижку"
   },
-  "task_k075_plan": {
-    "id": "K-075",
-    "title": "Kurtoch bundle — единый файл для онбординга (автосборка)",
-    "goal": "Собрать всё содержимое honeycombs/personal/kurtoch/ в один файл kurtoch_bundle.json для быстрого онбординга новых чатов. Автоматически пересобирать при изменениях.",
-    "location": "honeycombs/boot_online/Personal/kurtoch_bundle.json",
-    "steps": [
-      "1. Создать папку honeycombs/boot_online/Personal/",
-      "2. Написать скрипт honeycombs/personal/kurtoch/scripts/build_bundle.py — собирает bundle (JSON nested) из модулей + scripts",
-      "3. Запустить первый раз — создать kurtoch_bundle.json",
-      "4. Создать GitHub Action .github/workflows/kurtoch_bundle.yml",
-      "5. Триггер: push на honeycombs/personal/kurtoch/** (кроме _snapshots/**, _logs/**, notion_token.txt)",
-      "6. Действие: build_bundle.py → коммит bundle → push (loop-guard: не триггерить от бот-коммита)",
-      "7. Протестировать: изменить что-то в kurtoch → проверить, что bundle обновился",
-      "8. Коммит + push"
-    ],
-    "exclude_from_bundle": [
-      "notion_token.txt",
-      "_snapshots/**",
-      "сам bundle (рекурсия)",
-      "_logs/** (опционально)"
-    ],
-    "include": [
-      "index.json",
-      "taskboard.json",
-      "taskboard_archive.json",
-      "team.json",
-      "knowledge_base.json",
-      "scripts/*.py",
-      "scripts/*.sh"
-    ],
-    "format": "JSON nested: {meta, index, taskboard, taskboard_archive, team, knowledge_base, scripts}"
-  },
   "startup_instructions": [
     "1. Прочитай этот handoff полностью",
     "2. Прочитай honeycombs/personal/kurtoch/index.json — входная точка",
-    "3. Смотри taskboard.json (активные задачи) и taskboard_archive.json (архив)",
-    "4. Рабочая команда: bash scripts/notion_runner.sh full_sync",
-    "5. Notion = зеркало, Mandala = эталон"
+    "3. Смотри taskboard.json (40 активных) и taskboard_archive.json (29 архив)",
+    "4. Для быстрого онбординга — honeycombs/boot_online/personal/kurtoch_bundle.json (197 КБ, всё в 1 файле)",
+    "5. Рабочая команда: bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync",
+    "6. Notion = зеркало, Mandala = эталон",
+    "7. LR-14: pre-check пути скрипта через ls -la перед вызовом",
+    "8. При работе с путями на Android — единый регистр (Personal = personal)"
   ],
-  "last_action": "Handoff v4.0.0 подготовлен 24.09.2026. K-075 добавлен. M-003 с кумулятивным накоплением. Notion синхронизирован (65 = 65).",
+  "last_action": "Handoff v5.0.0 подготовлен 25.09.2026. K-075 закрыт, bundle собран и запушен. Notion 69=69. 8 коммитов за сессию.",
   "handoff_message_for_gardener": "Открываешь новый чат с DeepSeek — копируешь этот JSON первым сообщением. SR подхватит контекст и продолжит."
 }
