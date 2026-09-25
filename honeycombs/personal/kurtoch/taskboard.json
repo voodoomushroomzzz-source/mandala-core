@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.0",
+    "version": "v2.2.2",
     "created": "2026-09-14",
     "updated": "2026-09-25",
     "layer": 2,
@@ -1060,29 +1060,51 @@
           "notion_page_id": null,
           "column": "Стратегические"
         }
+      },
+      {
+        "id": "K-080",
+        "title": "Демонтаж разрывной системы струи под раковиной (Центр)",
+        "description": "Полностью демонтировать разрывную систему струи под раковиной. Протекает вода.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-25",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 40,
+      "total": 41,
       "by_status": {
-        "todo": 37,
+        "todo": 38,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 30,
+        "high": 31,
         "medium": 8
       },
       "by_column": {
         "Стратегические": 6,
         "Операционка — Общая": 8,
         "Операционка — Нижка": 20,
-        "Операционка — Центр": 3,
+        "Операционка — Центр": 4,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 40
+        "phase_0": 41
       }
     },
     "notes": {
