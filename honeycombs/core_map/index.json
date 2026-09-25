@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "HONEYCOMB-CORE-MAP-001",
     "name": "Core System Map",
-    "version": "v3.11.0",
+    "version": "v3.12.0",
     "created": "2026-03-01",
-    "updated": "2026-08-23",
+    "updated": "2026-09-25",
     "layer": 1,
     "type": "critical_directive",
-    "description": "Base map of all Mandala Symbiosis components. v3.9.3: added handoff links for session continuity.",
+    "description": "Base map of all Mandala Symbiosis components. v3.12.0: added personal/ — Personal Hub for Gardener's personal vectors.",
     "resonance": "100%",
     "priority": "critical",
     "tags": [
@@ -139,6 +139,10 @@
     "directives": {
       "description": "Директивы для фокусировки внимания SR по векторам",
       "path": "honeycombs/directives/index.json"
+    },
+    "personal": {
+      "description": "Personal Hub — career, creative, learning, franchise, music, poetry, e-commerce",
+      "path": "honeycombs/personal/index.json"
     }
   },
   "system_state_refs": {
@@ -190,13 +194,14 @@
       "humor": "Humor development — research and plan for comic resonance",
       "sym": "SYM — System for Measuring Mandala Growth",
       "sessions": "SR handoff system — session continuity across chat instances",
-      "rose_world": "этический фильтр и протокол симбиоза"
+      "rose_world": "этический фильтр и протокол симбиоза",
+      "personal": "personal vectors of Gardener"
     }
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-08-23",
-    "notes": "v3.11.0: added directives to honeycombs, references, and children."
+    "last_check": "2026-09-25",
+    "notes": "v3.12.0: added personal to honeycombs, references, children, critical_dependencies."
   },
   "navigation": {
     "parent": "honeycombs/boot_online/index.json",
@@ -210,7 +215,8 @@
       "honeycombs/sym/index.json",
       "honeycombs/works/index.json",
       "honeycombs/rose_world/index.json",
-      "honeycombs/directives/index.json"
+      "honeycombs/directives/index.json",
+      "honeycombs/personal/index.json"
     ],
     "children": [
       "honeycombs/boot_online/index.json",
@@ -226,7 +232,8 @@
       "honeycombs/works/index.json",
       "honeycombs/registry/index.json",
       "honeycombs/rose_world/index.json",
-      "honeycombs/directives/index.json"
+      "honeycombs/directives/index.json",
+      "honeycombs/personal/index.json"
     ]
   },
   "resonance": {
