@@ -1104,29 +1104,56 @@
           "notion_page_id": null,
           "column": "Операционка — Центр"
         }
+      },
+      {
+        "id": "K-081",
+        "title": "QR-коды на зоны (Центр)",
+        "description": "Разработать и изготовить QR-коды для основных зон Центра. Сотрудник сканирует камерой → попадает на нужный документ: чек-лист закрытия, ТТК, регламент. Разработка совместно с базой знаний (K-076).",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [
+          "K-076"
+        ],
+        "related_to": [
+          "K-076",
+          "M-002"
+        ],
+        "created": "2026-09-25",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 42,
+      "total": 43,
       "by_status": {
-        "todo": 39,
+        "todo": 40,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
         "high": 31,
-        "medium": 9
+        "medium": 10
       },
       "by_column": {
         "Стратегические": 6,
         "Операционка — Общая": 8,
         "Операционка — Нижка": 20,
-        "Операционка — Центр": 5,
+        "Операционка — Центр": 6,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 42
+        "phase_0": 43
       }
     },
     "notes": {
