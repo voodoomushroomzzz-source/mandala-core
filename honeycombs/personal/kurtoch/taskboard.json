@@ -64,28 +64,6 @@
         }
       },
       {
-        "id": "K-006",
-        "title": "Условия сотрудников",
-        "description": "Собрать условия по сотрудникам: зп/ставки, отпуска, больничные, бонусы, планы.",
-        "priority": "critical",
-        "status": "todo",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-18",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-14",
-        "updated": "2026-09-14",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Стратегические"
-        }
-      },
-      {
         "id": "K-013",
         "title": "Исправить время в меню",
         "description": "Исправить время первых куртошей в новом меню: 8:15 → 9:00.",
@@ -94,28 +72,6 @@
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-01",
-        "reminder": null,
-        "depends_on": [],
-        "related_to": [],
-        "created": "2026-09-14",
-        "updated": "2026-09-23",
-        "completed": null,
-        "metadata": {
-          "bot_group": "Работа",
-          "bot_task_id": null,
-          "notion_page_id": null,
-          "column": "Операционка — Общая"
-        }
-      },
-      {
-        "id": "K-016",
-        "title": "Чистота и качество",
-        "description": "Контроль чистоты и качества. Чек-чекапы.",
-        "priority": "high",
-        "status": "in_progress",
-        "horizon": "tactical",
-        "phase": "phase_0",
-        "deadline": "2026-09-30",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
@@ -596,7 +552,7 @@
         "title": "Мусорка на входе: спилить",
         "description": "Спилить мусорку на входе.",
         "priority": "medium",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": null,
@@ -604,8 +560,8 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-22",
-        "updated": "2026-09-22",
-        "completed": null,
+        "updated": "2026-09-25",
+        "completed": "2026-09-25",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1070,7 +1026,7 @@
       {
         "id": "K-076",
         "title": "База знаний и инструкции (консолидация)",
-        "description": "Единая стратегическая задача: собрать все документы, чек-листы, регламенты, обучение, таблицы документации в единую базу знаний.\n\nПоглощённые задачи (архивированы с merged_into=K-076): K-008, K-010, K-018, K-021, K-039, K-041.\n\nПодпункты (sub_tasks):\n1. K-008 Ссылки на узлы — навигация по экосистеме\n2. K-010 Чек-листы и карты процессов — по зонам смены\n3. K-018 Таблицы документации — аккаунты, контакты, доступы\n4. K-021 Разработка инструкций — регламент ролей на смене\n5. K-039 Обучение сезонке + onboarding-чек-листы — для новичков\n6. K-041 Аттестация — процесс + график + чек-лист\n\nЦель: единая точка входа по документации. Сокращение объёма основного taskboard.",
+        "description": "Единая стратегическая задача: собрать все документы, чек-листы, регламенты, обучение, таблицы документации в единую базу знаний.\n\nПоглощённые задачи (8): K-006, K-008, K-010, K-016, K-018, K-021, K-039, K-041.\n\nЦель: единая точка входа по документации. Сокращение объёма основного taskboard.",
         "priority": "high",
         "status": "todo",
         "horizon": "strategic",
@@ -1090,8 +1046,10 @@
           "notion_page_id": null,
           "column": "Стратегические",
           "sub_tasks": [
+            "K-006",
             "K-008",
             "K-010",
+            "K-016",
             "K-018",
             "K-021",
             "K-039",
@@ -1149,26 +1107,27 @@
       }
     ],
     "counters": {
-      "total": 44,
+      "total": 42,
       "by_status": {
-        "todo": 40,
-        "in_progress": 3,
+        "todo": 38,
+        "done": 1,
+        "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
-        "critical": 3,
-        "high": 33,
+        "critical": 2,
+        "high": 31,
         "medium": 9
       },
       "by_column": {
-        "Стратегические": 8,
-        "Операционка — Общая": 9,
+        "Стратегические": 7,
+        "Операционка — Общая": 8,
         "Операционка — Нижка": 21,
         "Операционка — Центр": 3,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 44
+        "phase_0": 42
       }
     },
     "notes": {

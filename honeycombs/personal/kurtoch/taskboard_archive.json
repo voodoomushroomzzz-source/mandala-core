@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-ARCHIVE-001",
     "name": "Kurtoch — Taskboard Archive",
-    "version": "v1.1.0",
+    "version": "v1.2.0",
     "created": "2026-09-23",
     "updated": "2026-09-25",
     "type": "taskboard_archive",
@@ -598,12 +598,77 @@
           "merged_into": "K-076"
         },
         "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-062",
+        "title": "Мусорка на входе: спилить",
+        "description": "Спилить мусорку на входе.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-09-25",
+        "completed": "2026-09-25",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-006",
+        "title": "Условия сотрудников",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-016",
+        "title": "Чистота и качество",
+        "description": "Поглощена задачей K-076 (База знаний и инструкции).",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-14",
+        "updated": "2026-09-25",
+        "completed": null,
+        "metadata": {
+          "column": "Стратегические",
+          "merged_into": "K-076"
+        },
+        "archived_at": "2026-09-25"
       }
     ],
-    "total": 25,
+    "total": 28,
     "by_status": {
-      "done": 19,
-      "cancelled": 6
+      "done": 20,
+      "cancelled": 8
     }
   },
   "navigation": {
