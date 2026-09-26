@@ -1324,10 +1324,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     await message.answer(confirm, reply_markup=get_main_keyboard())
                                     # Show inline checklist
                                     prog = _checklist_progress(new_cl)
-                                    cl_msg = await message.answer(
-                                        f"☑️ <b>{title}</b>  {prog}",
-                                        reply_markup=get_checklist_inline(new_cl)
-                                    )
+                                    cl_msg = await _replace_menu(user_id, message, f"☑️ <b>{title}</b>  {prog}", reply_markup=get_checklist_inline(new_cl))
                                     # Save msg_id
                                     checklists = store_get_checklists(user_id)
                                     cl_ref = next((c for c in checklists if c["id"] == new_cl["id"]), None)

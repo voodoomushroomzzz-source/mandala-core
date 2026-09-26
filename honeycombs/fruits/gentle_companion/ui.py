@@ -275,13 +275,6 @@ def _build_profile_card(user_id: str) -> str:
 
 async def _show_profile(user_id: str, message: Message):
     """Show profile card — used by button, command, voice, intent."""
-    # Delete previous profile message to keep chat clean
-    prev_mid = _profile_messages.get(user_id)
-    if prev_mid:
-        try:
-            await message.bot.delete_message(message.chat.id, prev_mid)
-        except Exception:
-            pass
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [

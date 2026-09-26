@@ -1063,10 +1063,6 @@ async def cmd_restart(message: Message, state: FSMContext):
 
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
-# Track last menu message per user — delete before showing new menu
-_menu_messages: dict = {}  # {user_id: message_id}
-_checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
-_profile_messages: dict = {}   # {user_id: message_id} — last shown profile
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
 _intent_map_needed: dict = {}  # uid → bool — show full INTENT_MAP on next request
 _sphere_history_needed: dict = {}  # uid → int — countdown: include full sphere_history in context

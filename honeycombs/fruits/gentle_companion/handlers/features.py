@@ -4,29 +4,20 @@ handlers/features.py -- Checklists, Reminders, Achievements. Phase: 6.
 """
 
 async def _show_checklist(cl: dict, message: Message, edit: bool = False):
-    """Show a single checklist as inline message. Deletes previous checklist message."""
+    """Show a single checklist as inline message. Uses the unified _active_menu tracker."""
     user_id = str(message.from_user.id)
     prog    = _checklist_progress(cl)
     title   = cl.get("title", "Чеклист")
     header  = f"☑️ <b>{title}</b>  {prog}"
     kb      = get_checklist_inline(cl)
-    # Delete previous checklist message to keep chat clean
-    prev_mid = _checklist_messages.get(user_id)
-    if prev_mid:
-        try:
-            await message.bot.delete_message(message.chat.id, prev_mid)
-        except Exception:
-            pass
-        _checklist_messages.pop(user_id, None)
     if edit:
         try:
             sent = await message.edit_text(header, reply_markup=kb, parse_mode="HTML")
-            _checklist_messages[user_id] = sent.message_id
+            _active_menu[user_id] = sent.message_id
             return
         except Exception:
             pass
-    sent = await message.answer(header, reply_markup=kb, parse_mode="HTML")
-    _checklist_messages[user_id] = sent.message_id
+    await _replace_menu(user_id, message, header, reply_markup=kb, parse_mode="HTML")
 
 # ─── Checklist FSM — Create ───────────────────────────────────────────────────
 
@@ -188,10 +179,7 @@ async def cl_items_input(message: Message, state: FSMContext):
             pass
     await state.clear()
     await message.answer(f"✅ Чеклист «{title}» создан с {len(items)} пунктами!")
-    sent = await message.answer(
-        f"☑️ <b>{title}</b>  0/{len(items)}",
-        reply_markup=get_checklist_inline(new_cl)
-    )
+    sent = await _replace_menu(user_id, message, f"☑️ <b>{title}</b>  0/{len(items)}", reply_markup=get_checklist_inline(new_cl))
     # Store message_id (no auto-pin — available in menu)
     new_cl["pinned_message_id"] = sent.message_id
     store_set_checklists(user_id, checklists)
@@ -288,8 +276,7 @@ async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
         return
     prog = _checklist_progress(cl)
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
-    sent = await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
-    _checklist_messages[user_id] = sent.message_id
+    await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
 
 @router.callback_query(F.data.startswith("cl_pin_"))
 async def cb_cl_pin(callback: CallbackQuery, state: FSMContext):
