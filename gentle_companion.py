@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# ── BUILT by build.py ── 2026-09-25 17:33:09 ──
+# ── BUILT by build.py ── 2026-09-26 10:15:41 ──
 # Phases complete: 7/7 — all modules assembled
 # ────────────────────────────────────────────────────────────
 
@@ -1695,13 +1695,6 @@ def _build_profile_card(user_id: str) -> str:
 
 async def _show_profile(user_id: str, message: Message):
     """Show profile card — used by button, command, voice, intent."""
-    # Delete previous profile message to keep chat clean
-    prev_mid = _profile_messages.get(user_id)
-    if prev_mid:
-        try:
-            await message.bot.delete_message(message.chat.id, prev_mid)
-        except Exception:
-            pass
     card = _build_profile_card(user_id)
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [
@@ -2685,10 +2678,6 @@ Phase: 5. Updated: 2026-05-26.
 
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
-# Track last menu message per user — delete before showing new menu
-_menu_messages: dict = {}  # {user_id: message_id}
-_checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
-_profile_messages: dict = {}   # {user_id: message_id} — last shown profile
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
 _intent_map_needed: dict = {}  # uid → bool — show full INTENT_MAP on next request
 _sphere_history_needed: dict = {}  # uid → int — countdown: include full sphere_history in context
@@ -5942,29 +5931,20 @@ handlers/features.py -- Checklists, Reminders, Achievements. Phase: 6.
 """
 
 async def _show_checklist(cl: dict, message: Message, edit: bool = False):
-    """Show a single checklist as inline message. Deletes previous checklist message."""
+    """Show a single checklist as inline message. Uses the unified _active_menu tracker."""
     user_id = str(message.from_user.id)
     prog    = _checklist_progress(cl)
     title   = cl.get("title", "Чеклист")
     header  = f"☑️ <b>{title}</b>  {prog}"
     kb      = get_checklist_inline(cl)
-    # Delete previous checklist message to keep chat clean
-    prev_mid = _checklist_messages.get(user_id)
-    if prev_mid:
-        try:
-            await message.bot.delete_message(message.chat.id, prev_mid)
-        except Exception:
-            pass
-        _checklist_messages.pop(user_id, None)
     if edit:
         try:
             sent = await message.edit_text(header, reply_markup=kb, parse_mode="HTML")
-            _checklist_messages[user_id] = sent.message_id
+            _active_menu[user_id] = sent.message_id
             return
         except Exception:
             pass
-    sent = await message.answer(header, reply_markup=kb, parse_mode="HTML")
-    _checklist_messages[user_id] = sent.message_id
+    await _replace_menu(user_id, message, header, reply_markup=kb, parse_mode="HTML")
 
 # ─── Checklist FSM — Create ───────────────────────────────────────────────────
 
@@ -6126,10 +6106,7 @@ async def cl_items_input(message: Message, state: FSMContext):
             pass
     await state.clear()
     await message.answer(f"✅ Чеклист «{title}» создан с {len(items)} пунктами!")
-    sent = await message.answer(
-        f"☑️ <b>{title}</b>  0/{len(items)}",
-        reply_markup=get_checklist_inline(new_cl)
-    )
+    sent = await _replace_menu(user_id, message, f"☑️ <b>{title}</b>  0/{len(items)}", reply_markup=get_checklist_inline(new_cl))
     # Store message_id (no auto-pin — available in menu)
     new_cl["pinned_message_id"] = sent.message_id
     store_set_checklists(user_id, checklists)
@@ -6226,8 +6203,7 @@ async def cb_cl_open(callback: CallbackQuery, state: FSMContext):
         return
     prog = _checklist_progress(cl)
     header = f"☑️ <b>{cl['title']}</b>  {prog}"
-    sent = await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
-    _checklist_messages[user_id] = sent.message_id
+    await _replace_menu(user_id, callback.message, header, reply_markup=get_checklist_inline(cl), parse_mode="HTML")
 
 @router.callback_query(F.data.startswith("cl_pin_"))
 async def cb_cl_pin(callback: CallbackQuery, state: FSMContext):
@@ -9075,10 +9051,6 @@ async def cmd_restart(message: Message, state: FSMContext):
 
 # ─── Chat sessions (sliding window) ──────────────────────────────────────────
 _sessions: dict = {}
-# Track last menu message per user — delete before showing new menu
-_menu_messages: dict = {}  # {user_id: message_id}
-_checklist_messages: dict = {}  # {user_id: message_id} — last shown checklist
-_profile_messages: dict = {}   # {user_id: message_id} — last shown profile
 _intent_map_msg_count: dict = {}  # uid → counter for conditional INTENT_MAP load
 _intent_map_needed: dict = {}  # uid → bool — show full INTENT_MAP on next request
 _sphere_history_needed: dict = {}  # uid → int — countdown: include full sphere_history in context
@@ -11116,10 +11088,7 @@ async def free_conversation(message: Message, state: FSMContext):
                                     await message.answer(confirm, reply_markup=get_main_keyboard())
                                     # Show inline checklist
                                     prog = _checklist_progress(new_cl)
-                                    cl_msg = await message.answer(
-                                        f"☑️ <b>{title}</b>  {prog}",
-                                        reply_markup=get_checklist_inline(new_cl)
-                                    )
+                                    cl_msg = await _replace_menu(user_id, message, f"☑️ <b>{title}</b>  {prog}", reply_markup=get_checklist_inline(new_cl))
                                     # Save msg_id
                                     checklists = store_get_checklists(user_id)
                                     cl_ref = next((c for c in checklists if c["id"] == new_cl["id"]), None)
