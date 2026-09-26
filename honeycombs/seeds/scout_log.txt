@@ -8046,3 +8046,60 @@
 [2026-09-26 07:00:59] [INFO]   Total duplicates: 5
 [2026-09-26 07:00:59] [INFO]   Total removed (old): 0
 [2026-09-26 07:00:59] [INFO] ============================================================
+[2026-09-26 13:37:46] [INFO] ============================================================
+[2026-09-26 13:37:46] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-09-26 13:37:46] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-09-26 13:37:46] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-09-26 13:37:46] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-26 13:37:46] [INFO]   → Filtered to 0 relevant items
+[2026-09-26 13:37:46] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-09-26 13:37:46] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-09-26 13:37:46] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-09-26 13:37:46] [INFO]   → Found 0 raw items, 0 recent
+[2026-09-26 13:37:46] [INFO]   → Filtered to 0 relevant items
+[2026-09-26 13:37:46] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-09-26 13:37:46] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-09-26 13:37:46] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-09-26 13:37:46] [INFO]   → Found 15 raw items, 12 recent
+[2026-09-26 13:37:46] [INFO]   → Filtered to 5 relevant items
+[2026-09-26 13:37:46] [INFO]   ✅ Saved: SEED-20260926-133746-297.json
+[2026-09-26 13:37:46] [INFO]   ⏭️ Duplicate: Revealing the details of how OpenAI agents hacked ...
+[2026-09-26 13:37:46] [INFO]   ⏭️ Duplicate: Ollaya – Ollama for open-source, Jev-style decisio...
+[2026-09-26 13:37:47] [INFO]   ✅ Saved: SEED-20260926-133747-298.json
+[2026-09-26 13:37:47] [INFO]   ⏭️ Duplicate: A single function Jev-like wrapper for LLMs, inclu...
+[2026-09-26 13:37:47] [INFO]   📊 Hacker News: saved 2, duplicates 3
+[2026-09-26 13:37:47] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-09-26 13:37:47] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-09-26 13:37:47] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-26 13:37:47] [INFO]   → Filtered to 5 relevant items
+[2026-09-26 13:37:47] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-09-26 13:37:47] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-09-26 13:37:48] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-09-26 13:37:48] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-09-26 13:37:48] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-09-26 13:37:48] [INFO]   → Found 15 raw items, 15 recent
+[2026-09-26 13:37:48] [INFO]   → Filtered to 5 relevant items
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: Crusoe abandons $1.25B plan to use Boom turbines a...
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: Unsecured OpenAI agents posted 53 user images on t...
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: Anthropic to pay Akamai $11.6 billion over seven y...
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: Ahead of US IPO, British AI neocloud Nscale secure...
+[2026-09-26 13:37:48] [INFO]   ⏭️ Duplicate: Meta’s Muse just stole the AI spotlight from OpenA...
+[2026-09-26 13:37:48] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-09-26 13:37:48] [INFO]   🗑️ Cleaning old seeds (date <= 2026-09-26)...
+[2026-09-26 13:37:48] [INFO]   ✅ No old seeds to remove
+[2026-09-26 13:37:48] [INFO]   📝 Updated inbox/index.json with last_processed=2026-09-26
+[2026-09-26 13:37:48] [INFO] 
+============================================================
+[2026-09-26 13:37:48] [INFO] ✅ Scout Agent v2.2 finished
+[2026-09-26 13:37:48] [INFO]   Total saved: 2
+[2026-09-26 13:37:48] [INFO]   Total duplicates: 13
+[2026-09-26 13:37:48] [INFO]   Total removed (old): 0
+[2026-09-26 13:37:48] [INFO] ============================================================
