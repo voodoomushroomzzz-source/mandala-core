@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.6",
+    "version": "v2.2.7",
     "created": "2026-09-14",
     "updated": "2026-09-27",
     "layer": 2,
@@ -1206,29 +1206,104 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-085",
+        "title": "Резинка на холдере: протечка кофемашины (Мишка/Нижка)",
+        "description": "Протечка на холдере кофемашины — износ групповой прокладки (резинки). Посмотреть, диагностировать, заменить при необходимости. Точка: Мишка (Нижняя Дуброва).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001"
+        ],
+        "created": "2026-09-27",
+        "updated": "2026-09-27",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
+      },
+      {
+        "id": "K-086",
+        "title": "Отпуск Крис: условие — аттестация стажёров",
+        "description": "Отпуск Крис возможен только после того, как все стажёры обучены и сдали аттестацию, стали полноценными сотрудниками. Тогда её можно отпустить. Задача — довести стажёров до аттестации, после чего согласовать отпуск.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [
+          "K-040"
+        ],
+        "related_to": [
+          "K-040",
+          "K-077"
+        ],
+        "created": "2026-09-27",
+        "updated": "2026-09-27",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
+      },
+      {
+        "id": "K-087",
+        "title": "Колонки в зоне бариста (Нижка): перебои в работе",
+        "description": "Колонки в зоне бариста на Нижке плохо работают — отходят, играют с перебоями. Диагностировать, починить или заменить.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001"
+        ],
+        "created": "2026-09-27",
+        "updated": "2026-09-27",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
       }
     ],
     "counters": {
-      "total": 46,
+      "total": 49,
       "by_status": {
-        "todo": 43,
+        "todo": 46,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 32,
-        "medium": 12
+        "high": 34,
+        "medium": 13
       },
       "by_column": {
-        "Стратегические": 6,
+        "Стратегические": 7,
         "Операционка — Общая": 9,
-        "Операционка — Нижка": 20,
+        "Операционка — Нижка": 22,
         "Операционка — Центр": 8,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 46
+        "phase_0": 49
       }
     },
     "notes": {
