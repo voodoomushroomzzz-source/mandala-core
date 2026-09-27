@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.5",
+    "version": "v2.2.6",
     "created": "2026-09-14",
-    "updated": "2026-09-25",
+    "updated": "2026-09-27",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.2.0",
     "created": "2026-09-14",
-    "updated": "2026-09-25",
+    "updated": "2026-09-27",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1184,29 +1184,51 @@
           "notion_page_id": null,
           "column": "Операционка — Центр"
         }
+      },
+      {
+        "id": "K-084",
+        "title": "Запланировать отпуск Катрин",
+        "description": "Запланировать отпуск Катрин. Согласовать даты, закрыть смены, обновить график. Катрин — core, ключевой человек.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-15",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-27",
+        "updated": "2026-09-27",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 45,
+      "total": 46,
       "by_status": {
-        "todo": 42,
+        "todo": 43,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 31,
+        "high": 32,
         "medium": 12
       },
       "by_column": {
         "Стратегические": 6,
-        "Операционка — Общая": 8,
+        "Операционка — Общая": 9,
         "Операционка — Нижка": 20,
         "Операционка — Центр": 8,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 45
+        "phase_0": 46
       }
     },
     "notes": {
