@@ -4,7 +4,7 @@
     "name": "Kurtoch — Taskboard Archive",
     "version": "v1.3.0",
     "created": "2026-09-23",
-    "updated": "2026-09-25",
+    "updated": "2026-09-27",
     "type": "taskboard_archive",
     "parent": "taskboard.json",
     "description": "Архив завершённых задач (done + cancelled).",
@@ -686,12 +686,41 @@
           "column": "Стратегические"
         },
         "archived_at": "2026-09-25"
+      },
+      {
+        "id": "K-086",
+        "title": "Отпуск Крис: условие — аттестация стажёров",
+        "description": "Отпуск Крис возможен только после того, как все стажёры обучены и сдали аттестацию, стали полноценными сотрудниками. Тогда её можно отпустить. Задача — довести стажёров до аттестации, после чего согласовать отпуск.",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [
+          "K-040"
+        ],
+        "related_to": [
+          "K-040",
+          "K-077"
+        ],
+        "created": "2026-09-27",
+        "updated": "2026-09-27",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические",
+          "merged_into": "K-077"
+        },
+        "archived_at": "2026-09-27"
       }
     ],
-    "total": 29,
+    "total": 30,
     "by_status": {
       "done": 21,
-      "cancelled": 8
+      "cancelled": 9
     }
   },
   "navigation": {

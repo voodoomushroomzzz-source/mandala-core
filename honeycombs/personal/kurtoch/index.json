@@ -31,7 +31,7 @@
       "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
       "version": "v2.2.7",
-      "tasks_count": 49,
+      "tasks_count": 48,
       "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
@@ -50,7 +50,7 @@
       "description": "Архив завершённых задач (done + cancelled).",
       "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
       "version": "v1.1.0",
-      "tasks_count": 25
+      "tasks_count": 30
     },
     "kurtoch_bundle.json": {
       "description": "Единый файл онбординга Куртош (автосборка).",
@@ -158,7 +158,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-09-27",
-    "notes": "v2.2.4: +K-085 холдер, +K-086 отпуск Крис, +K-087 колонки Нижка."
+    "notes": "v2.2.4: K-077 extended (merged K-086 отпуск Крис); K-086 -> archive."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
