@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260928-070111-312",
+  "title": "TinyCVIO: A Constellation-Aided Visual-Inertial Odometry System for Nanodrones",
+  "url": "https://arxiv.org/abs/2609.30358",
+  "description": "arXiv:2609.30358v1 Announce Type: new \nAbstract: Nanodrones require accurate, real-time state estimation under severe sensing and computational constraints. We present TinyCVIO, a visual-inertial odometry system that co-designs miniature sensing, visual processing, and estimation for a commodity dual-core microcontroller with 520 kB SRAM. Lightweight LED constellations provide known geometry without surveyed positions or yaw angles, assuming placement on a common level plane. A streaming visual ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-28T07:01:11.600892",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

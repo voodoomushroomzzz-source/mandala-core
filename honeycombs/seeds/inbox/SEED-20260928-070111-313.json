@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260928-070111-313",
+  "title": "POIL: Point-based One-Shot Imitation Learning with Stable Dynamical Systems",
+  "url": "https://arxiv.org/abs/2609.30404",
+  "description": "arXiv:2609.30404v1 Announce Type: new \nAbstract: We present POIL, a point-based one-shot imitation learning framework with stable dynamical systems. While one-shot imitation avoids collecting extensive demonstrations, successful one-shot manipulation requires not only transferring a demonstrated trajectory to a novel object but also executing it robustly under changing scene conditions, grasp configurations, and external disturbances. POIL addresses both problems through a shared representation:",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-28T07:01:11.807124",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
