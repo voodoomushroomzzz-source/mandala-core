@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.7",
+    "version": "v2.2.8",
     "created": "2026-09-14",
-    "updated": "2026-09-27",
+    "updated": "2026-09-28",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.2.0",
     "created": "2026-09-14",
-    "updated": "2026-09-27",
+    "updated": "2026-09-28",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -137,12 +137,12 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": null,
+        "deadline": "2026-09-28",
         "reminder": null,
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-17",
-        "updated": "2026-09-17",
+        "updated": "2026-09-28",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
