@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TEAM-001",
     "name": "Kurtoch — Team Roster",
-    "version": "v1.1.0",
+    "version": "v1.2.0",
     "created": "2026-09-23",
-    "updated": "2026-09-25",
+    "updated": "2026-09-28",
     "layer": 2,
     "type": "team_module",
     "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
@@ -14,14 +14,14 @@
     "resonance": "100%"
   },
   "team_roster": {
-    "last_updated": "2026-09-25",
-    "total_employees": 16,
+    "last_updated": "2026-09-28",
+    "total_employees": 17,
     "by_status": {
       "core": 1,
       "working": 5,
       "left": 3,
       "runner": 2,
-      "trainee": 2,
+      "trainee": 3,
       "substitute": 3
     },
     "skill_ladder": {
@@ -713,6 +713,47 @@
         "data_gaps": [
           "trial_result",
           "schedule.notes"
+        ]
+      },
+      {
+        "id": "EMP-017",
+        "name": "Дарья",
+        "role": "Стажёр",
+        "contacts": {
+          "phone": "89106781928",
+          "telegram": "@wefity"
+        },
+        "functions": [
+          "смены"
+        ],
+        "schedule": {
+          "notes": "будни до 13:00; выходные full-time; может full-time в целом",
+          "preferences": null,
+          "availability": null
+        },
+        "skills": {
+          "stage": "pechka_training",
+          "pechka": "training",
+          "coffee": "yes",
+          "kassa": "yes",
+          "notes": "Опыт: бариста, кофе классика, касса. Обучить калачам."
+        },
+        "nijka": {
+          "attitude": null,
+          "notes": null
+        },
+        "pay": {
+          "base": "200 руб/ч (пока стажёр)",
+          "bonuses": [],
+          "extra": null,
+          "notes": null
+        },
+        "status": "trainee",
+        "risks": [],
+        "notes": "Собеседование 28.09. Договорились на 2 обучающие смены на след. неделе. Обе точки.",
+        "data_gaps": [
+          "nijka.attitude",
+          "schedule.availability"
         ]
       }
     ],

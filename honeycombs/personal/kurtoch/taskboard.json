@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.9",
+    "version": "v2.3.1",
     "created": "2026-09-14",
     "updated": "2026-09-28",
     "layer": 2,
@@ -1265,7 +1265,7 @@
         "title": "Собеседование Дарья (18, бариста с опытом)",
         "description": "Собеседование с Дарьей (18 лет, бариста с опытом). После собеса — написать комментарии, принять решение по сотруднику (брать / не брать / на какую точку).",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-09-28",
@@ -1274,36 +1274,62 @@
         "related_to": [],
         "created": "2026-09-28",
         "updated": "2026-09-28",
-        "completed": null,
+        "completed": "2026-09-28",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-089",
+        "title": "Ежемесячные отчёты (финансы / SMM / персонал)",
+        "description": "Ежемесячные отчёты по трём направлениям. Дедлайн — до 4-го числа следующего месяца.\n\n1) Финансы — от Крис (удалёнка). Бюджеты, фонды, оплата труда, закупки.\n2) SMM — отбивка по контент-плану: что планировалось, что сделано, что изменилось.\n3) Персонал — от шеф-бариста. По сотрудникам: уровень, обучение, кто чему учится.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": "2026-10-04",
+        "depends_on": [],
+        "related_to": [
+          "K-077",
+          "K-078"
+        ],
+        "reminder": null,
+        "created": "2026-09-28",
+        "updated": "2026-09-28",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
       }
     ],
     "counters": {
-      "total": 49,
+      "total": 50,
       "by_status": {
         "todo": 46,
         "in_progress": 2,
-        "planning": 1
+        "planning": 1,
+        "done": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 34,
+        "high": 35,
         "medium": 13
       },
       "by_column": {
-        "Стратегические": 6,
+        "Стратегические": 7,
         "Операционка — Общая": 10,
         "Операционка — Нижка": 22,
         "Операционка — Центр": 8,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 49
+        "phase_0": 50
       }
     },
     "notes": {
