@@ -96,6 +96,24 @@ def build_title(t):
     return "\u274C \u041e\u0442\u043c\u0435\u043d\u0435\u043d\u0430: " + t["title"]
 
 
+def normalize_desc(text):
+    """Нормализация для честного сравнения описаний.
+    Схлопывает любые серии \n в один, убирает пробелы на краях строк."""
+    if not text:
+        return ""
+    lines = [ln.strip() for ln in text.replace("\r\n", "\n").split("\n")]
+    out, prev_empty = [], False
+    for ln in lines:
+        if not ln:
+            if not prev_empty and out:
+                out.append("")
+            prev_empty = True
+        else:
+            out.append(ln)
+            prev_empty = False
+    return "\n".join(out).strip()
+
+
 def get_page_description(page_id):
     try:
         r = api(f"blocks/{page_id}/children?page_size=100")
@@ -266,7 +284,7 @@ for t in tasks:
     need_desc = (t.get("description") or "").strip()
     if need_desc and t.get("metadata", {}).get("subtype") != "payment_tracker":
         cur_desc = get_page_description(p["id"])
-        if cur_desc.strip() != need_desc:
+        if normalize_desc(cur_desc) != normalize_desc(need_desc):
             set_page_description(p["id"], need_desc)
             updated_desc += 1
             print(f"  [{tid} | Описание обновлено] {t['title']}")
