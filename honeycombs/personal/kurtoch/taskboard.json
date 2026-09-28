@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.2.8",
+    "version": "v2.2.9",
     "created": "2026-09-14",
     "updated": "2026-09-28",
     "layer": 2,
@@ -1259,29 +1259,51 @@
           "notion_page_id": null,
           "column": "Операционка — Нижка"
         }
+      },
+      {
+        "id": "K-088",
+        "title": "Собеседование Дарья (18, бариста с опытом)",
+        "description": "Собеседование с Дарьей (18 лет, бариста с опытом). После собеса — написать комментарии, принять решение по сотруднику (брать / не брать / на какую точку).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-28",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-28",
+        "updated": "2026-09-28",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 48,
+      "total": 49,
       "by_status": {
-        "todo": 45,
+        "todo": 46,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 33,
+        "high": 34,
         "medium": 13
       },
       "by_column": {
         "Стратегические": 6,
-        "Операционка — Общая": 9,
+        "Операционка — Общая": 10,
         "Операционка — Нижка": 22,
         "Операционка — Центр": 8,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 48
+        "phase_0": 49
       }
     },
     "notes": {
