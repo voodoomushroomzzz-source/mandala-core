@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.3.4",
+    "version": "v2.3.6",
     "created": "2026-09-14",
-    "updated": "2026-09-28",
+    "updated": "2026-09-29",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1332,29 +1332,79 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-093",
+        "title": "Загерметизировать валики в Центре (как на Нишке)",
+        "description": "Загерметизировать валики для калачей в Центре — так же, как сделано на Нишке. Проблема: ручка отклеилась от основания. Профилактика + ремонт.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-30",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-023",
+          "M-002"
+        ],
+        "created": "2026-09-29",
+        "updated": "2026-09-29",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
+      },
+      {
+        "id": "K-094",
+        "title": "Переговоры с Виктором и Крис: 3-й сотрудник + уход от бегунков",
+        "description": "Переговорить с Виктором и Крис по двум вопросам:\n1. 3-й сотрудник на смене (расширение зала, поток туристов, просадка внимания).\n2. Уход от бегунков (роль ранера, 2 часа закрытия).\nКонтекст: бюджетное давление (+500К из-за расширения), см. KB → staffing_management.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": "2026-09-30",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-044",
+          "K-029"
+        ],
+        "created": "2026-09-29",
+        "updated": "2026-09-29",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
       }
     ],
     "counters": {
-      "total": 51,
+      "total": 53,
       "by_status": {
-        "todo": 48,
+        "todo": 50,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "critical": 2,
-        "high": 34,
+        "high": 36,
         "medium": 15
       },
       "by_column": {
-        "Стратегические": 7,
+        "Стратегические": 8,
         "Операционка — Общая": 10,
         "Операционка — Нижка": 22,
-        "Операционка — Центр": 9,
+        "Операционка — Центр": 10,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 51
+        "phase_0": 53
       }
     },
     "notes": {
