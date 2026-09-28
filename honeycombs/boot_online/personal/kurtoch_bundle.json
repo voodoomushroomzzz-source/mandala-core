@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-09-25T16:06:53Z",
+    "generated_at": "2026-09-28T14:44:58Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,9 +28,9 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.1.7",
+      "version": "v2.3.3",
       "created": "2026-09-23",
-      "updated": "2026-09-25",
+      "updated": "2026-09-28",
       "layer": 2,
       "type": "personal_subhub_index",
       "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -56,27 +56,27 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.2.0",
-        "tasks_count": 44,
+        "version": "v2.3.3",
+        "tasks_count": 50,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
         "description": "Картотека сотрудников.",
         "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-        "version": "v1.1.0",
-        "total_employees": 16
+        "version": "v1.2.0",
+        "total_employees": 17
       },
       "knowledge_base.json": {
         "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
         "purpose": "Структура готова, наполнение — по мере сбора.",
-        "version": "v1.1.0",
-        "sections_count": 6
+        "version": "v2.0.0",
+        "sections_count": 11
       },
       "taskboard_archive.json": {
         "description": "Архив завершённых задач (done + cancelled).",
         "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
         "version": "v1.1.0",
-        "tasks_count": 25
+        "tasks_count": 30
       },
       "kurtoch_bundle.json": {
         "description": "Единый файл онбординга Куртош (автосборка).",
@@ -183,8 +183,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-09-25",
-      "notes": "v2.1.7: K-075 done — kurtoch_bundle.json + GH Action."
+      "last_check": "2026-09-28",
+      "notes": "v2.3.3: +K-091 (убрать летнее на склад Центр, 29.09)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,9 +988,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.2.0",
+      "version": "v2.3.3",
       "created": "2026-09-14",
-      "updated": "2026-09-25",
+      "updated": "2026-09-28",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1003,7 +1003,7 @@
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
       "version": "v2.2.0",
       "created": "2026-09-14",
-      "updated": "2026-09-25",
+      "updated": "2026-09-28",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -1123,12 +1123,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": null,
+          "deadline": "2026-09-28",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-17",
-          "updated": "2026-09-17",
+          "updated": "2026-09-28",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -1162,7 +1162,7 @@
         {
           "id": "K-027",
           "title": "Расчёт ЗП авто по сменам",
-          "description": "Сделать автоматический расчёт зарплаты по сменам. Предварительный расчёт показывать сотрудникам до финального начисления.",
+          "description": "Сделать автоматический расчёт зарплаты по сменам. Предварительный расчёт показывать сотрудникам до финального начисления. Сверка по расчёту — еженедельно (не только в день выдачи). Идеально — показывать ожидаемый расчёт уже в расписании до начала недели. См. KB → salary_transparency.",
           "priority": "high",
           "status": "todo",
           "horizon": "tactical",
@@ -1172,7 +1172,7 @@
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-18",
-          "updated": "2026-09-23",
+          "updated": "2026-09-28",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -1184,7 +1184,7 @@
         {
           "id": "K-029",
           "title": "Подготовка к зиме: штатка",
-          "description": "Рассчитать штатку на зиму. Прошлой зимой работали 1.5 человека в Центре. Если поставить 2 — может быть перегруз по финансам. Найти баланс.",
+          "description": "Рассчитать штатку на зиму. Ноя-фев — низкий сезон, −20% выручки. Прошлой зимой: 1.5 человека в Центре + конвейером отпуска по 2 недели. В этот раз все новенькие — договориться об отпусках зимой на собеседовании. Если ставить 2 — возможен перегруз по финансам. Найти баланс. См. KB → economics.seasonality, staffing_management.",
           "priority": "high",
           "status": "todo",
           "horizon": "tactical",
@@ -1194,7 +1194,7 @@
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-18",
-          "updated": "2026-09-23",
+          "updated": "2026-09-28",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2001,20 +2001,25 @@
         },
         {
           "id": "K-077",
-          "title": "Крис: анализ загруженности + пересмотр оплаты",
-          "description": "Проанализировать реальную загруженность Крис (управляющая, удалёнка, текущая оплата 40 000 ₽/мес).\n\nКонтекст: расширение +500К ₽/мес при плоской выручке, давление на бюджет.\n\nВопрос: соответствует ли 40К реальному объёму работы? Нужен ли пересмотр условий?\n\nСвязано с K-078 (контроль всех бюджетов).",
+          "title": "Крис: анализ загруженности, оплата + условия отпуска",
+          "description": "Комплексная задача по Крис:\n\n1) Анализ загруженности + пересмотр оплаты. Крис — управляющая (удалёнка), текущая оплата 40 000 ₽/мес. Расширение +500К ₽/мес при плоской выручке → давление на бюджет. Вопрос: соответствует ли 40К реальному объёму?\n\n2) Условия отпуска. Отпуск возможен только после того, как все стажёры обучены и сдали аттестацию, стали полноценными сотрудниками. Тогда её можно отпустить. Задача — довести стажёров до аттестации, потом согласовать отпуск.",
           "priority": "high",
           "status": "todo",
           "horizon": "strategic",
           "phase": "phase_0",
           "deadline": "2026-10-15",
           "reminder": null,
-          "depends_on": [],
+          "depends_on": [
+            "K-040"
+          ],
           "related_to": [
-            "K-078"
+            "K-040",
+            "K-078",
+            "M-001",
+            "M-002"
           ],
           "created": "2026-09-25",
-          "updated": "2026-09-25",
+          "updated": "2026-09-27",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2046,29 +2051,272 @@
             "notion_page_id": null,
             "column": "Стратегические"
           }
+        },
+        {
+          "id": "K-080",
+          "title": "Демонтаж разрывной системы струи под раковиной (Центр)",
+          "description": "Полностью демонтировать разрывную систему струи под раковиной. Протекает вода.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-31",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-079",
+          "title": "Стирка текстиля в Центре",
+          "description": "Постирать подушечки на диванах, подушечки на стульях, занавески в рабочей зоне. Центр.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-081",
+          "title": "Информационные QR-коды на зоны (Центр)",
+          "description": "QR-код на каждую зону Центра → ведёт на полезную информацию из базы знаний: чек-лист закрытия, ТТК, регламент. Сотрудник сканирует камерой → сразу открывает нужный документ. Разработка совместно с базой знаний (K-076).",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-31",
+          "reminder": null,
+          "depends_on": [
+            "K-076"
+          ],
+          "related_to": [
+            "K-076",
+            "M-002",
+            "K-082"
+          ],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-082",
+          "title": "Отбивочные QR-коды: контроль зон + статистика (Центр)",
+          "description": "Отдельный тип QR-кода на чек-бокс контроля зоны. Сотрудник на смене сканирует QR → вводит своё имя → отмечает, что зона закрыта. Данные (имя, зона, дата, время) уходят в статистику. Формат отбивки: имя + зона + отметка «закрыл». Приёмник статистики — определить после выбора платформы базы знаний (K-076), чтобы не плодить сервисы. Кандидаты: Google Sheets (таблица с автосводкой) или Notion (страница/база с фильтрами). Цель — простой просмотр отчётов.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-31",
+          "reminder": null,
+          "depends_on": [
+            "K-081"
+          ],
+          "related_to": [
+            "K-081",
+            "K-076",
+            "M-002"
+          ],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-083",
+          "title": "Демонтаж конструкции с ведром/водой в складской зоне (Центр)",
+          "description": "Демонтировать конструкцию с ведром/ёмкостью для воды в складской зоне Центра. Привязка к концу октября / следующей генуборке.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-31",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-09-25",
+          "updated": "2026-09-25",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-084",
+          "title": "Запланировать отпуск Катрин",
+          "description": "Запланировать отпуск Катрин. Согласовать даты, закрыть смены, обновить график. Катрин — core, ключевой человек.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-27",
+          "updated": "2026-09-27",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-085",
+          "title": "Резинка на холдере: протечка кофемашины (Мишка/Нижка)",
+          "description": "Протечка на холдере кофемашины — износ групповой прокладки (резинки). Посмотреть, диагностировать, заменить при необходимости. Точка: Мишка (Нижняя Дуброва).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001"
+          ],
+          "created": "2026-09-27",
+          "updated": "2026-09-27",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-087",
+          "title": "Колонки в зоне бариста (Нижка): перебои в работе",
+          "description": "Колонки в зоне бариста на Нижке плохо работают — отходят, играют с перебоями. Диагностировать, починить или заменить.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001"
+          ],
+          "created": "2026-09-27",
+          "updated": "2026-09-27",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-089",
+          "title": "Ежемесячные отчёты (финансы / SMM / персонал)",
+          "description": "Ежемесячные отчёты по трём направлениям. Дедлайн — до 4-го числа следующего месяца.\n\n1) Финансы — от Крис (удалёнка). Бюджеты, фонды, оплата труда, закупки.\n2) SMM — отбивка по контент-плану: что планировалось, что сделано, что изменилось.\n3) Персонал — от шеф-бариста. По сотрудникам: уровень, обучение, кто чему учится.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": "2026-10-04",
+          "depends_on": [],
+          "related_to": [
+            "K-077",
+            "K-078"
+          ],
+          "reminder": null,
+          "created": "2026-09-28",
+          "updated": "2026-09-28",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        },
+        {
+          "id": "K-091",
+          "title": "Убрать летние приблуды на склад (Центр)",
+          "description": "Убрать летний инвентарь/декор на склад. Центр.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-29",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-09-28",
+          "updated": "2026-09-28",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
         }
       ],
       "counters": {
-        "total": 40,
+        "total": 50,
         "by_status": {
-          "todo": 37,
+          "todo": 47,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "critical": 2,
-          "high": 30,
-          "medium": 8
+          "high": 34,
+          "medium": 14
         },
         "by_column": {
-          "Стратегические": 6,
-          "Операционка — Общая": 8,
-          "Операционка — Нижка": 20,
-          "Операционка — Центр": 3,
+          "Стратегические": 7,
+          "Операционка — Общая": 9,
+          "Операционка — Нижка": 22,
+          "Операционка — Центр": 9,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 40
+          "phase_0": 50
         }
       },
       "notes": {
@@ -2186,7 +2434,7 @@
       "name": "Kurtoch — Taskboard Archive",
       "version": "v1.3.0",
       "created": "2026-09-23",
-      "updated": "2026-09-25",
+      "updated": "2026-09-28",
       "type": "taskboard_archive",
       "parent": "taskboard.json",
       "description": "Архив завершённых задач (done + cancelled).",
@@ -2868,12 +3116,64 @@
             "column": "Стратегические"
           },
           "archived_at": "2026-09-25"
+        },
+        {
+          "id": "K-086",
+          "title": "Отпуск Крис: условие — аттестация стажёров",
+          "description": "Отпуск Крис возможен только после того, как все стажёры обучены и сдали аттестацию, стали полноценными сотрудниками. Тогда её можно отпустить. Задача — довести стажёров до аттестации, после чего согласовать отпуск.",
+          "priority": "high",
+          "status": "cancelled",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [
+            "K-040"
+          ],
+          "related_to": [
+            "K-040",
+            "K-077"
+          ],
+          "created": "2026-09-27",
+          "updated": "2026-09-27",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические",
+            "merged_into": "K-077"
+          },
+          "archived_at": "2026-09-27"
+        },
+        {
+          "id": "K-088",
+          "title": "Собеседование Дарья (18, бариста с опытом)",
+          "description": "Собеседование с Дарьей (18 лет, бариста с опытом). После собеса — написать комментарии, принять решение по сотруднику (брать / не брать / на какую точку).",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-28",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-28",
+          "updated": "2026-09-28",
+          "completed": "2026-09-28",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-28"
         }
       ],
-      "total": 29,
+      "total": 31,
       "by_status": {
-        "done": 21,
-        "cancelled": 8
+        "done": 22,
+        "cancelled": 9
       }
     },
     "navigation": {
@@ -2885,9 +3185,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.1.0",
+      "version": "v1.2.0",
       "created": "2026-09-23",
-      "updated": "2026-09-25",
+      "updated": "2026-09-28",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
@@ -2897,14 +3197,14 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-09-25",
-      "total_employees": 16,
+      "last_updated": "2026-09-28",
+      "total_employees": 17,
       "by_status": {
         "core": 1,
         "working": 5,
         "left": 3,
         "runner": 2,
-        "trainee": 2,
+        "trainee": 3,
         "substitute": 3
       },
       "skill_ladder": {
@@ -3597,6 +3897,47 @@
             "trial_result",
             "schedule.notes"
           ]
+        },
+        {
+          "id": "EMP-017",
+          "name": "Дарья",
+          "role": "Стажёр",
+          "contacts": {
+            "phone": "89106781928",
+            "telegram": "@wefity"
+          },
+          "functions": [
+            "смены"
+          ],
+          "schedule": {
+            "notes": "будни до 13:00; выходные full-time; может full-time в целом",
+            "preferences": null,
+            "availability": null
+          },
+          "skills": {
+            "stage": "pechka_training",
+            "pechka": "training",
+            "coffee": "yes",
+            "kassa": "yes",
+            "notes": "Опыт: бариста, кофе классика, касса. Обучить калачам."
+          },
+          "nijka": {
+            "attitude": null,
+            "notes": null
+          },
+          "pay": {
+            "base": "200 руб/ч (пока стажёр)",
+            "bonuses": [],
+            "extra": null,
+            "notes": null
+          },
+          "status": "trainee",
+          "risks": [],
+          "notes": "Собеседование 28.09. Договорились на 2 обучающие смены на след. неделе. Обе точки.",
+          "data_gaps": [
+            "nijka.attitude",
+            "schedule.availability"
+          ]
         }
       ],
       "skills_summary": {
@@ -3664,12 +4005,12 @@
     "identity": {
       "module_id": "KURTOCH-KB-001",
       "name": "Kurtoch — Knowledge Base",
-      "version": "v1.1.0",
+      "version": "v2.0.0",
       "created": "2026-09-23",
-      "updated": "2026-09-25",
+      "updated": "2026-09-28",
       "layer": 2,
       "type": "knowledge_base_module",
-      "description": "База знаний Куртош: чек-листы, регламенты, техкарты, обучение, ЦУ. Пока структура, наполнение — впереди.",
+      "description": "База знаний Куртош: наполнена — условия найма, экономика, управление штаткой и фондом стажёров, прозрачность ЗП.",
       "status": "active",
       "priority": "critical",
       "parent": "index.json",
@@ -3737,6 +4078,163 @@
         "data_gaps": [
           "нет содержимого"
         ]
+      },
+      "hiring_terms": {
+        "status": "active",
+        "title": "Условия работы и ставки (бариста-пекарь)",
+        "source": "Куртош Тим (управ. Дмитрий), текст вакансии",
+        "date_added": "2026-09-28",
+        "positions": [
+          {
+            "name": "Стажёр",
+            "rate": "200 ₽/час, ~40 000 ₽/мес",
+            "note": "обучение с нуля 1–1,5 месяца"
+          },
+          {
+            "name": "Бариста-пекарь",
+            "rate": "~250 ₽/час, ~50 000 ₽/мес"
+          },
+          {
+            "name": "Старший смены",
+            "rate": "~300 ₽/час, ~60 000 ₽/мес"
+          },
+          {
+            "name": "Помощник",
+            "rate": "150–200 ₽/час",
+            "note": "смены 4–8 ч, студентам/школьникам"
+          }
+        ],
+        "conditions": [
+          "график 2/2 по 13 часов, 3–4 смены в неделю",
+          "ротация на двух точках: Центр и Н. Дуброва",
+          "выплаты 9-го и 24-го",
+          "оплачиваемые больничные и отпуск",
+          "еда и напитки во время смены",
+          "ежемесячный день генеральной уборки и собрания команды",
+          "скидка 20% после увольнения (от 6 мес работы)"
+        ],
+        "candidate_profile": "Не опыт важен, а отношение к работе. Человек, который приходит вовремя, держит слово, не боится физической работы, умеет говорить о проблемах словами и хочет научиться делать дело хорошо. В Куртоше нет «просто за кассой» — длинные смены, много венгерских куртошей, очереди, усталость, много задач одновременно. Нет отдельного человека на уборку — зал, посуда, уборная — общие.",
+        "what_offers": "Научиться варить кофе. Разговаривать с людьми. Выдерживать напряжение. Продавать без впаривания. Принимать обратную связь. Отвечать за решения. Постепенно стать человеком, которому можно доверить целую кофейню. Из команды выросло несколько сильных кофейных проектов и специалистов города.",
+        "contacts": {
+          "telegram": "@kurtoshteam",
+          "phone": "+79190292050"
+        },
+        "raw_text": "Ищем бариста-пекарей в Куртош Кофе. Ставки: стажёр 200 ₽/ч (~40 т.р./м), бариста-пекарь ~250 ₽/ч (~50 т.р./м), старший смены ~300 ₽/ч (~60 т.р./м), помощник 150–200 ₽/ч. График 2/2 по 13 ч, 3-4 смены/нед. Ротация Центр / Н. Дуброва. Выплаты 9 и 24. Больничные и отпуск оплачиваются. Еда и напитки на смене. Ежемесячная генуборка и собрание. Скидка 20% после увольнения (от 6 мес). Нам важнее не опыт, а отношение к работе. @kurtoshteam / +79190292050."
+      },
+      "economics": {
+        "status": "active",
+        "title": "Финансовая модель сети (2 точки)",
+        "source": "Куртош Тим (управ. Дмитрий)",
+        "date_added": "2026-09-28",
+        "revenue_targets": {
+          "min_no_prk": {
+            "rub_per_month": 1647000,
+            "rub_per_week": 411000,
+            "note": "минималка, без ПРК-команды"
+          },
+          "with_prk": {
+            "rub_per_month": "2040000-2214000",
+            "rub_per_week": "510000-553000",
+            "note": "с ПРК-командой и развитием"
+          }
+        },
+        "margin_structure": {
+          "variable_margin": "55%",
+          "variable_costs": {
+            "purchases": "33%",
+            "local_aho": "1-2%",
+            "taxes": "10%"
+          }
+        },
+        "fixed_costs_monthly": {
+          "pst": {
+            "value": 520000,
+            "note": "аренда + ПР + кредит"
+          },
+          "fzp": {
+            "value": "320000-356000",
+            "breakdown": "4×50 + 2×60 + 2 бегунка (36)"
+          },
+          "vacation_pay": {
+            "value": 30000,
+            "note": "8% от ФЗП"
+          },
+          "total_no_prk": {
+            "value": 906000,
+            "rub_per_week": 226000
+          },
+          "formula": "906 ÷ 55% = 1647 т.р./мес"
+        },
+        "prk_costs_monthly": {
+          "trainees": {
+            "value": 36000,
+            "note": "2600/смена, ~18 т.р./нед"
+          },
+          "prk_team": {
+            "value": "160000-256000",
+            "breakdown": {
+              "дима": "50-100",
+              "витя": "50-70",
+              "крис": 40,
+              "катрин": "10-16",
+              "смм": "10-30"
+            }
+          },
+          "development_min": 20000,
+          "total_with_pst": {
+            "value": "1122000-1218000",
+            "rub_per_week": "280000-304000"
+          },
+          "revenue_needed": {
+            "rub_per_month": "2040000-2214000",
+            "rub_per_week": "510000-553000"
+          }
+        },
+        "seasonality": {
+          "low_season": "ноя-фев, −20% выручки",
+          "winter_approach": "1.5 чел в Центре + конвейером отпуска по 2 недели",
+          "rule": "договариваться об отпусках зимой на собеседовании"
+        }
+      },
+      "staffing_management": {
+        "status": "active",
+        "title": "Управление штаткой и ФЗП",
+        "source": "Куртош Тим (управ. Дмитрий)",
+        "date_added": "2026-09-28",
+        "principles": [
+          "ФЗП регулируем количеством людей на смене: 1.5 или 2 чел в Центре, с/без бегунков (или только 2 ч закрытия)",
+          "Оптимизация стажёров",
+          "Каждую неделю контролим %ФЗП в выручке",
+          "Смотрим динамику: сокращать / увеличивать персонал",
+          "Есть ли деньги на орг/ПРК-команду и улучшения/АХО",
+          "Делать доп. действия по увеличению выручки, ПР"
+        ],
+        "workload_rule": "Ребята не должны перегружаться. Бегунков лучше оставить (хотя бы 2 последних часа закрытия). Либо убрать, но сократить процессы / раньше начинать закрытие.",
+        "formula_budget": "ФЗП + стажёрские должны укладываться в маржу"
+      },
+      "trainee_fund": {
+        "status": "active",
+        "title": "Управление фондом стажёров",
+        "source": "Куртош Тим (управ. Дмитрий)",
+        "date_added": "2026-09-28",
+        "goals": [
+          "Быстрый вывод в штат — за 3 смены полное обучение",
+          "Отбор опытных на входе (без вялых новичков)",
+          "«Квалификация лида» — оценка после тест-смены / 1 недели",
+          "Не тратить лишние недели на обучение"
+        ]
+      },
+      "salary_transparency": {
+        "status": "active",
+        "title": "Прозрачность расчёта ЗП и премий",
+        "source": "Куртош Тим (управ. Дмитрий)",
+        "date_added": "2026-09-28",
+        "rules": [
+          "Сверка по ЗП не только в день выдачи",
+          "Круто — еженедельно",
+          "Идеально — в расписании до начала недели показывать ожидаемый расчёт",
+          "Отдельно прояснять критерии премий (в т.ч. ГУ), корректировать"
+        ]
       }
     },
     "content": {},
@@ -3747,19 +4245,19 @@
         "team.json"
       ]
     },
-    "status_note": "Структура готова. Содержимое добавляется постепенно, по мере сбора у команды.",
+    "status_note": "5 секций active. 6 секций empty — ждут данных.",
     "linked_tasks": {
       "K-076": "База знаний и инструкции — консолидация (поглощает K-008, K-010, K-018, K-021, K-039, K-041)"
     }
   },
   "scripts": {
     "archive_done.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Переносит done + cancelled из taskboard.json в taskboard_archive.json.\nИдемпотентно. Без интерактива.\"\"\"\nimport io, json, os\nfrom datetime import datetime\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTB = os.path.join(KURTOCH, \"taskboard.json\")\nARCHIVE = os.path.join(KURTOCH, \"taskboard_archive.json\")\nTODAY = datetime.now().strftime(\"%Y-%m-%d\")\n\ndef load(p):\n    with io.open(p, encoding=\"utf-8\") as f:\n        return json.load(f)\n\ndef save(p, d):\n    with io.open(p, \"w\", encoding=\"utf-8\") as f:\n        json.dump(d, f, ensure_ascii=False, indent=2)\n        f.write(\"\\n\")\n\nd = load(TB)\ntasks = d[\"taskboard\"][\"tasks\"]\nARCHIVE_STATUSES = {\"done\", \"cancelled\"}\n\nto_archive = [t for t in tasks if t[\"status\"] in ARCHIVE_STATUSES]\nto_keep = [t for t in tasks if t[\"status\"] not in ARCHIVE_STATUSES]\n\nif not to_archive:\n    print(\"Нет задач для архивации.\")\n    raise SystemExit(0)\n\n# читаем/создаём архив\nif os.path.exists(ARCHIVE):\n    arch = load(ARCHIVE)\n    existing_ids = {t[\"id\"] for t in arch[\"archive\"][\"tasks\"]}\nelse:\n    arch = {\n        \"identity\": {\n            \"module_id\": \"KURTOCH-TASKBOARD-ARCHIVE-001\",\n            \"name\": \"Kurtoch — Taskboard Archive\",\n            \"version\": \"v1.0.0\",\n            \"created\": TODAY, \"updated\": TODAY,\n            \"type\": \"taskboard_archive\",\n            \"parent\": \"taskboard.json\",\n            \"description\": \"Архив завершённых задач (done + cancelled).\",\n            \"status\": \"active\", \"priority\": \"medium\"\n        },\n        \"archive\": {\"description\": \"Завершённые задачи.\", \"tasks\": []},\n        \"navigation\": {\"parent\": \"honeycombs/personal/kurtoch/index.json\", \"sibling\": \"taskboard.json\"}\n    }\n    existing_ids = set()\n\nadded = 0\nfor t in to_archive:\n    if t[\"id\"] in existing_ids:\n        continue\n    t_arch = dict(t)\n    t_arch[\"archived_at\"] = TODAY\n    arch[\"archive\"][\"tasks\"].append(t_arch)\n    added += 1\n    print(f\"  -> архив: {t['id']} {t['title'][:60]}\")\n\narch[\"identity\"][\"updated\"] = TODAY\narch[\"archive\"][\"total\"] = len(arch[\"archive\"][\"tasks\"])\narch[\"archive\"][\"by_status\"] = {\n    \"done\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"done\"),\n    \"cancelled\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"cancelled\")\n}\nsave(ARCHIVE, arch)\n\n# обновляем taskboard.json\nd[\"taskboard\"][\"tasks\"] = to_keep\nby_status, by_priority, by_column = {}, {}, {}\nfor t in to_keep:\n    by_status[t[\"status\"]] = by_status.get(t[\"status\"], 0) + 1\n    by_priority[t[\"priority\"]] = by_priority.get(t[\"priority\"], 0) + 1\n    col = t.get(\"metadata\", {}).get(\"column\", \"—\")\n    by_column[col] = by_column.get(col, 0) + 1\n\nd[\"taskboard\"][\"counters\"] = {\n    \"total\": len(to_keep),\n    \"by_status\": by_status,\n    \"by_priority\": by_priority,\n    \"by_column\": by_column,\n    \"by_phase\": {\"phase_0\": len(to_keep)}\n}\nd[\"taskboard\"][\"updated\"] = TODAY\nsave(TB, d)\n\nprint(f\"\\nOK — архивировано: {added}\")\nprint(f\"  Активных: {len(to_keep)}\")\nprint(f\"  В архиве: {arch['archive']['total']}\")\n",
-    "build_bundle.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"build_bundle.py — собирает kurtoch_bundle.json из всех модулей + скриптов.\n\nНазначение: единый файл для онбординга новых SR-чатов.\nВыход: honeycombs/boot_online/Personal/kurtoch_bundle.json\nИдемпотентно. Запускается вручную или из GitHub Action.\n\"\"\"\nimport io, json, os, sys\nfrom datetime import datetime, timezone\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nREPO = os.path.dirname(os.path.dirname(os.path.dirname(KURTOCH)))\nOUTPUT = os.path.join(REPO, \"honeycombs\", \"boot_online\", \"Personal\", \"kurtoch_bundle.json\")\n\nMODULES = {\n    \"index\": \"index.json\",\n    \"taskboard\": \"taskboard.json\",\n    \"taskboard_archive\": \"taskboard_archive.json\",\n    \"team\": \"team.json\",\n    \"knowledge_base\": \"knowledge_base.json\",\n}\n\nEXCLUDE_SCRIPTS = {\"notion_token.txt\", \"__pycache__\"}\nEXCLUDE_EXT = {\".pyc\"}\n\ndef read_text(path):\n    with io.open(path, \"r\", encoding=\"utf-8\") as f:\n        return f.read()\n\ndef read_json(path):\n    return json.loads(read_text(path))\n\ndef collect_scripts():\n    out = {}\n    for fname in sorted(os.listdir(HERE)):\n        if fname in EXCLUDE_SCRIPTS or fname.startswith(\".\"):\n            continue\n        if any(fname.endswith(e) for e in EXCLUDE_EXT):\n            continue\n        fpath = os.path.join(HERE, fname)\n        if not os.path.isfile(fpath):\n            continue\n        if fname == \"notion_token.txt\":\n            continue\n        try:\n            out[fname] = read_text(fpath)\n        except Exception as e:\n            print(f\"  ! пропущен {fname}: {e}\")\n    return out\n\ndef main():\n    print(f\"Собираю bundle из {KURTOCH}\")\n    bundle = {\n        \"meta\": {\n            \"bundle_version\": \"v1.0.0\",\n            \"generated_at\": datetime.now(timezone.utc).strftime(\"%Y-%m-%dT%H:%M:%SZ\"),\n            \"source\": \"honeycombs/personal/kurtoch/\",\n            \"generator\": \"scripts/build_bundle.py\",\n            \"modules\": list(MODULES.keys()),\n            \"scripts_included\": [],\n            \"note\": \"Единый файл для онбординга нового SR. Содержит все модули хаба + полные тексты скриптов. Исключены: notion_token.txt, _snapshots/, _logs/, __pycache__/.\",\n        }\n    }\n    for key, fname in MODULES.items():\n        path = os.path.join(KURTOCH, fname)\n        if os.path.exists(path):\n            bundle[key] = read_json(path)\n            print(f\"  ✅ {key:20} ({fname})\")\n        else:\n            print(f\"  ⚠  {key:20} — файл не найден: {fname}\")\n\n    scripts = collect_scripts()\n    bundle[\"scripts\"] = scripts\n    bundle[\"meta\"][\"scripts_included\"] = sorted(scripts.keys())\n    print(f\"  ✅ scripts: {len(scripts)} файлов\")\n\n    os.makedirs(os.path.dirname(OUTPUT), exist_ok=True)\n    with io.open(OUTPUT, \"w\", encoding=\"utf-8\") as f:\n        json.dump(bundle, f, ensure_ascii=False, indent=2)\n        f.write(\"\\n\")\n    size = os.path.getsize(OUTPUT)\n    print(f\"\\n✅ saved: {os.path.relpath(OUTPUT, REPO)} ({size:,} байт)\")\n\nif __name__ == \"__main__\":\n    main()\n",
+    "build_bundle.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"build_bundle.py — собирает kurtoch_bundle.json из всех модулей + скриптов.\n\nНазначение: единый файл для онбординга новых SR-чатов.\nВыход: honeycombs/boot_online/Personal/kurtoch_bundle.json\nИдемпотентно. Запускается вручную или из GitHub Action.\n\"\"\"\nimport io, json, os, sys\nfrom datetime import datetime, timezone\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nREPO = os.path.dirname(os.path.dirname(os.path.dirname(KURTOCH)))\nOUTPUT = os.path.join(REPO, \"honeycombs\", \"boot_online\", \"personal\", \"kurtoch_bundle.json\")\n\nMODULES = {\n    \"index\": \"index.json\",\n    \"taskboard\": \"taskboard.json\",\n    \"taskboard_archive\": \"taskboard_archive.json\",\n    \"team\": \"team.json\",\n    \"knowledge_base\": \"knowledge_base.json\",\n}\n\nEXCLUDE_SCRIPTS = {\"notion_token.txt\", \"__pycache__\"}\nEXCLUDE_EXT = {\".pyc\"}\n\ndef read_text(path):\n    with io.open(path, \"r\", encoding=\"utf-8\") as f:\n        return f.read()\n\ndef read_json(path):\n    return json.loads(read_text(path))\n\ndef collect_scripts():\n    out = {}\n    for fname in sorted(os.listdir(HERE)):\n        if fname in EXCLUDE_SCRIPTS or fname.startswith(\".\"):\n            continue\n        if any(fname.endswith(e) for e in EXCLUDE_EXT):\n            continue\n        fpath = os.path.join(HERE, fname)\n        if not os.path.isfile(fpath):\n            continue\n        if fname == \"notion_token.txt\":\n            continue\n        try:\n            out[fname] = read_text(fpath)\n        except Exception as e:\n            print(f\"  ! пропущен {fname}: {e}\")\n    return out\n\ndef main():\n    print(f\"Собираю bundle из {KURTOCH}\")\n    bundle = {\n        \"meta\": {\n            \"bundle_version\": \"v1.0.0\",\n            \"generated_at\": datetime.now(timezone.utc).strftime(\"%Y-%m-%dT%H:%M:%SZ\"),\n            \"source\": \"honeycombs/personal/kurtoch/\",\n            \"generator\": \"scripts/build_bundle.py\",\n            \"modules\": list(MODULES.keys()),\n            \"scripts_included\": [],\n            \"note\": \"Единый файл для онбординга нового SR. Содержит все модули хаба + полные тексты скриптов. Исключены: notion_token.txt, _snapshots/, _logs/, __pycache__/.\",\n        }\n    }\n    for key, fname in MODULES.items():\n        path = os.path.join(KURTOCH, fname)\n        if os.path.exists(path):\n            bundle[key] = read_json(path)\n            print(f\"  ✅ {key:20} ({fname})\")\n        else:\n            print(f\"  ⚠  {key:20} — файл не найден: {fname}\")\n\n    scripts = collect_scripts()\n    bundle[\"scripts\"] = scripts\n    bundle[\"meta\"][\"scripts_included\"] = sorted(scripts.keys())\n    print(f\"  ✅ scripts: {len(scripts)} файлов\")\n\n    os.makedirs(os.path.dirname(OUTPUT), exist_ok=True)\n    with io.open(OUTPUT, \"w\", encoding=\"utf-8\") as f:\n        json.dump(bundle, f, ensure_ascii=False, indent=2)\n        f.write(\"\\n\")\n    size = os.path.getsize(OUTPUT)\n    print(f\"\\n✅ saved: {os.path.relpath(OUTPUT, REPO)} ({size:,} байт)\")\n\nif __name__ == \"__main__\":\n    main()\n",
     "fix_two_ids.py": "import io, json, time, urllib.request\nTOKEN = io.open(\"notion_token.txt\", encoding=\"utf-8\").read().strip()\nDB = \"f6ffa784e7594df9add4fd1c697d4ada\"\nH = {\"Authorization\": f\"Bearer {TOKEN}\", \"Notion-Version\": \"2022-06-28\", \"Content-Type\": \"application/json\"}\n\ndef api(path, method=\"GET\", body=None):\n    req = urllib.request.Request(\n        f\"https://api.notion.com/v1/{path}\",\n        data=json.dumps(body).encode() if body else None,\n        method=method, headers=H,\n    )\n    with urllib.request.urlopen(req) as r:\n        return json.loads(r.read().decode())\n\ndef query_all():\n    out, cursor = [], None\n    while True:\n        body = {\"page_size\": 100}\n        if cursor: body[\"start_cursor\"] = cursor\n        d = api(f\"databases/{DB}/query\", \"POST\", body)\n        out.extend(d.get(\"results\", []))\n        if not d.get(\"has_more\"): break\n        cursor = d.get(\"next_cursor\")\n        time.sleep(0.35)\n    return out\n\nFIXES = {\n    \"Зона посадки Нижка: перекомпоновка (проект)\": \"K-064\",\n    \"Уличная вывеска Нижка: новая (проект)\": \"K-065\",\n}\n\nfor p in query_all():\n    props = p.get(\"properties\", {})\n    title = \"\".join(i[\"plain_text\"] for i in (props.get(\"Название\", {}).get(\"title\") or [])) or None\n    if title not in FIXES:\n        continue\n    new_id = FIXES[title]\n    api(f\"pages/{p['id']}\", \"PATCH\", {\n        \"properties\": {\"ID\": {\"rich_text\": [{\"text\": {\"content\": new_id}}]}}\n    })\n    print(f\"OK: {new_id} -> {title}\")\n    time.sleep(0.35)\n",
     "notion_runner.sh": "#!/data/data/com.termux/files/usr/bin/bash\n# Обёртка для sync. Запуск: bash notion_runner.sh <command>\n\nset -e\n\n# Всегда работаем от абсолютного пути\nREPO=\"/storage/emulated/0/mandala-core\"\nKURTOCH_REL=\"honeycombs/personal/kurtoch\"\nSCRIPTS=\"$REPO/$KURTOCH_REL/scripts\"\nLOG_REL=\"$KURTOCH_REL/_logs/notion_sync.log\"\n\nif [ -z \"$1\" ]; then\n  echo \"Использование: bash notion_runner.sh <command>\"\n  echo \"  full_sync       — archive + push + логи + коммит\"\n  echo \"  pull_taskboard  — выгрузка Notion\"\n  echo \"  push_taskboard  — push в Notion\"\n  exit 1\nfi\n\nCMD=\"$1\"\nLOG_ABS=\"$REPO/$LOG_REL\"\n\nlog_start() {\n  {\n    echo \"\"\n    echo \"================================================================\"\n    echo \"[$(date '+%Y-%m-%d %H:%M:%S')] runner: $CMD\"\n    echo \"================================================================\"\n  } >> \"$LOG_ABS\"\n}\n\nfilter_token() {\n  sed 's/ntn_[A-Za-z0-9_]*/ntn_***REDACTED***/g'\n}\n\ncd \"$SCRIPTS\"\n\ncase \"$CMD\" in\n  full_sync)\n    log_start\n    echo \"[1/3] archive_done.py\" | tee -a \"$LOG_ABS\"\n    python3 archive_done.py 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    echo \"\" | tee -a \"$LOG_ABS\"\n    echo \"[2/3] push_taskboard.py\" | tee -a \"$LOG_ABS\"\n    python3 push_taskboard.py 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    echo \"\" | tee -a \"$LOG_ABS\"\n    echo \"[3/3] git commit + push\" | tee -a \"$LOG_ABS\"\n    cd \"$REPO\"\n    git add \"$KURTOCH_REL/\"\n    if ! git diff --cached --quiet 2>/dev/null; then\n      git commit -m \"chore(kurtoch): full_sync $(date '+%Y-%m-%d %H:%M')\" >/dev/null\n      git pull --rebase origin main >/dev/null 2>&1 || true\n      git push >/dev/null 2>&1 || true\n      echo \"✓ закоммичено и запушено\"\n    else\n      echo \"  нечего коммитить\"\n    fi\n    ;;\n  pull_taskboard)\n    log_start\n    python3 notion_sync.py pull_taskboard 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    ;;\n  push_taskboard)\n    log_start\n    python3 push_taskboard.py 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    ;;\n  *)\n    log_start\n    python3 notion_sync.py \"$@\" 2>&1 | tee -a \"$LOG_ABS\" | filter_token\n    ;;\nesac\n",
     "notion_sync.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Notion Sync — один скрипт для всех команд.\n\nИспользование:\n    python3 notion_sync.py list\n    python3 notion_sync.py pull_taskboard\n\nТокен читается из scripts/notion_token.txt (в .gitignore, в репу не попадает).\n\"\"\"\nimport io, json, os, sys, time, urllib.request, urllib.error\nfrom datetime import datetime\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTOKEN_FILE = os.path.join(HERE, \"notion_token.txt\")\nSNAPSHOTS = os.path.join(KURTOCH, \"_snapshots\")\nLOGS = os.path.join(KURTOCH, \"_logs\")\n\n# Базы Notion\nDATABASES = {\n    \"taskboard\": \"f6ffa784e7594df9add4fd1c697d4ada\",\n}\n\n# Максимум снапшотов на одну базу\nMAX_SNAPSHOTS = 10\n\ndef load_token():\n    if not os.path.isfile(TOKEN_FILE):\n        fail(f\"Токен не найден: {TOKEN_FILE}\")\n    with io.open(TOKEN_FILE, \"r\", encoding=\"utf-8\") as f:\n        t = f.read().strip()\n    if not t or t.startswith(\"PASTE_\") or t.startswith(\"ВСТАВЬ\"):\n        fail(\"Токен не заменён — всё ещё заглушка.\")\n    return t\n\ndef api(path, token, method=\"GET\", body=None):\n    url = f\"https://api.notion.com/v1/{path}\"\n    data = json.dumps(body).encode(\"utf-8\") if body else None\n    req = urllib.request.Request(\n        url, data=data, method=method,\n        headers={\n            \"Authorization\": f\"Bearer {token}\",\n            \"Notion-Version\": \"2022-06-28\",\n            \"Content-Type\": \"application/json\",\n        },\n    )\n    try:\n        with urllib.request.urlopen(req) as r:\n            return json.loads(r.read().decode(\"utf-8\"))\n    except urllib.error.HTTPError as e:\n        fail(f\"HTTP {e.code}: {e.read().decode('utf-8')}\")\n\ndef fail(msg):\n    print(f\"❌ {msg}\")\n    sys.exit(1)\n\ndef ok(msg):\n    print(f\"✅ {msg}\")\n\ndef query_all(db_id, token):\n    results = []\n    cursor = None\n    while True:\n        body = {\"page_size\": 100}\n        if cursor:\n            body[\"start_cursor\"] = cursor\n        data = api(f\"databases/{db_id}/query\", token, method=\"POST\", body=body)\n        results.extend(data.get(\"results\", []))\n        if not data.get(\"has_more\"):\n            break\n        cursor = data.get(\"next_cursor\")\n        time.sleep(0.4)\n    return results\n\ndef extract(page):\n    p = page.get(\"properties\", {})\n    def txt(prop):\n        if not prop:\n            return None\n        t = prop.get(\"type\")\n        if t == \"title\":\n            return \"\".join(x[\"plain_text\"] for x in prop[\"title\"]) or None\n        if t == \"rich_text\":\n            return \"\".join(x[\"plain_text\"] for x in prop[\"rich_text\"]) or None\n        if t == \"select\":\n            return (prop[\"select\"] or {}).get(\"name\")\n        if t == \"checkbox\":\n            return prop[\"checkbox\"]\n        if t == \"date\":\n            d = prop[\"date\"] or {}\n            return d.get(\"start\")\n        if t == \"last_edited_time\":\n            return prop.get(\"last_edited_time\")\n        return None\n    return {\n        \"notion_page_id\": page[\"id\"],\n        \"title\": txt(p.get(\"Название\")),\n        \"status\": txt(p.get(\"Статус\")),\n        \"column\": txt(p.get(\"Столбец\")),\n        \"urgency\": txt(p.get(\"Срочность\")),\n        \"assignee\": txt(p.get(\"Ответственный\")),\n        \"deadline\": txt(p.get(\"Дедлайн\")),\n        \"closed\": txt(p.get(\"Закрыта\")),\n        \"closed_at\": txt(p.get(\"Дата закрытия\")),\n        \"description\": txt(p.get(\"Описание\")),\n    }\n\ndef rotate_snapshots(prefix):\n    files = sorted(\n        [f for f in os.listdir(SNAPSHOTS) if f.startswith(prefix) and f.endswith(\".json\")]\n    )\n    while len(files) >= MAX_SNAPSHOTS:\n        old = files.pop(0)\n        os.remove(os.path.join(SNAPSHOTS, old))\n        print(f\"  удалён старый снапшот: {old}\")\n\ndef cmd_list(token):\n    print(\"Доступные команды:\")\n    print(\"  list             — этот список\")\n    print(\"  pull_taskboard   — выгрузить задачи Notion в снапшот\")\n    print(\"  db_taskboard     — показать метаданные базы Taskboard\")\n\ndef cmd_db_taskboard(token):\n    db_id = DATABASES[\"taskboard\"]\n    data = api(f\"databases/{db_id}\", token)\n    ok(f\"База: {(data.get('title') or [{}])[0].get('plain_text', '—')}\")\n    print(\"Свойства:\")\n    for name, prop in data.get(\"properties\", {}).items():\n        print(f\"  - {name}: {prop.get('type')}\")\n\ndef cmd_pull_taskboard(token):\n    db_id = DATABASES[\"taskboard\"]\n    print(\"Читаю Taskboard из Notion...\")\n    pages = query_all(db_id, token)\n    print(f\"  получено страниц: {len(pages)}\")\n    items = [extract(p) for p in pages]\n    ts = datetime.now().strftime(\"%Y%m%d_%H%M\")\n    prefix = f\"notion_taskboard_\"\n    rotate_snapshots(prefix)\n    path = os.path.join(SNAPSHOTS, f\"{prefix}{ts}.json\")\n    with io.open(path, \"w\", encoding=\"utf-8\") as f:\n        json.dump({\"timestamp\": ts, \"count\": len(items), \"items\": items}, f, ensure_ascii=False, indent=2)\n    ok(f\"Снапшот сохранён: {os.path.relpath(path, KURTOCH)}\")\n    by_status, by_column = {}, {}\n    for it in items:\n        by_status[it[\"status\"]] = by_status.get(it[\"status\"], 0) + 1\n        by_column[it[\"column\"]] = by_column.get(it[\"column\"], 0) + 1\n    print(\"\\nПо статусам:\")\n    for k, v in sorted(by_status.items(), key=lambda x: -x[1]):\n        print(f\"  {k or '—'}: {v}\")\n    print(\"\\nПо столбцам:\")\n    for k, v in sorted(by_column.items(), key=lambda x: -x[1]):\n        print(f\"  {k or '—'}: {v}\")\n\nCOMMANDS = {\n    \"list\": cmd_list,\n    \"db_taskboard\": cmd_db_taskboard,\n    \"pull_taskboard\": cmd_pull_taskboard,\n}\n\ndef main():\n    if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:\n        print(\"Использование: python3 notion_sync.py <command>\")\n        print(\"Доступные команды:\", \", \".join(COMMANDS.keys()))\n        sys.exit(1)\n    cmd = sys.argv[1]\n    if cmd == \"list\":\n        COMMANDS[cmd](None)\n        return\n    token = load_token()\n    COMMANDS[cmd](token)\n\nif __name__ == \"__main__\":\n    main()\n",
     "patch_schema.py": "import io, json, sys, urllib.request\nTOKEN = io.open(\"notion_token.txt\", encoding=\"utf-8\").read().strip()\nDB = \"f6ffa784e7594df9add4fd1c697d4ada\"\nH = {\"Authorization\": f\"Bearer {TOKEN}\", \"Notion-Version\": \"2022-06-28\", \"Content-Type\": \"application/json\"}\n\ndef api(path, method=\"GET\", body=None):\n    req = urllib.request.Request(\n        f\"https://api.notion.com/v1/{path}\",\n        data=json.dumps(body).encode() if body else None,\n        method=method, headers=H,\n    )\n    with urllib.request.urlopen(req) as r:\n        return json.loads(r.read().decode())\n\ndb = api(f\"databases/{DB}\")\nprops = db[\"properties\"]\nstatus_opts = [o[\"name\"] for o in props.get(\"Статус\", {}).get(\"select\", {}).get(\"options\", [])]\nprint(\"ID:\", \"есть\" if \"ID\" in props else \"НЕТ\")\nprint(\"planning:\", \"есть\" if \"planning\" in status_opts else \"НЕТ\")\n\npatch = {\"properties\": {}}\nif \"ID\" not in props:\n    patch[\"properties\"][\"ID\"] = {\"rich_text\": {}}\nif \"planning\" not in status_opts:\n    new_opts = [{\"name\": n, \"color\": \"default\"} for n in status_opts] + [{\"name\": \"planning\", \"color\": \"blue\"}]\n    patch[\"properties\"][\"Статус\"] = {\"select\": {\"options\": new_opts}}\n\nif not patch[\"properties\"]:\n    print(\"Нечего менять — уже всё есть.\")\n    sys.exit(0)\n\nprint(\"Отправляю PATCH автоматически...\")\nr = api(f\"databases/{DB}\", \"PATCH\", patch)\np2 = r[\"properties\"]\nprint(\"OK. Свойств:\", len(p2))\nprint(\"ID:\", \"есть\" if \"ID\" in p2 else \"НЕТ\")\nprint(\"Статусы:\", [o[\"name\"] for o in p2.get(\"Статус\", {}).get(\"select\", {}).get(\"options\", [])])\n",
-    "push_taskboard.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Push taskboard.json -> Notion.\nОбновляет: ID, Столбец, Статус, Закрыта, Срочность, Дедлайн.\nСоздаёт новые задачи, если в Mandala есть K-ID, которого нет в Notion.\nИдемпотентно.\"\"\"\nimport io, json, os, sys, time, urllib.request, urllib.error\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTOKEN_FILE = os.path.join(HERE, \"notion_token.txt\")\nTB_FILE = os.path.join(KURTOCH, \"taskboard.json\")\nDB = \"f6ffa784e7594df9add4fd1c697d4ada\"\n\n# --- Маппинг priority -> Срочность (Notion select) ---\nPRIORITY_TO_URGENCY = {\n    \"critical\": \"\\U0001F534 \\u0413\\u043e\\u0440\\u0438\\u0442\",\n    \"high\":     \"\\U0001F7E1 \\u0421\\u0440\\u0435\\u0434\\u043d\\u044f\\u044f\",\n    \"medium\":   \"\\U0001F535 \\u0424\\u043e\\u043d\",\n    \"low\":      \"\\U0001F535 \\u0424\\u043e\\u043d\",\n}\nDEFAULT_ASSIGNEE = \"\\u0414\\u043c\\u0438\\u0442\\u0440\\u0438\\u0439 (\\u0443\\u043f\\u0440\\u0430\\u0432\\u043b\\u044f\\u044e\\u0449\\u0438\\u0439)\"\n\ndef build_milestone_blocks(task):\n    \"\"\"Строит структурированные блоки для milestone с payment_tracker.\"\"\"\n    blocks = []\n    meta = task.get(\"metadata\", {})\n    phases = meta.get(\"phases\", [])\n    tracker = meta.get(\"tracker\", {})\n    if not phases:\n        return None\n    for ph in phases:\n        # heading\n        h = f\"\\u0424\\u0430\\u0437\\u0430 {ph.get('phase','?')}: {ph.get('name','')} ({ph.get('period','')})\"\n        blocks.append({\n            \"object\": \"block\", \"type\": \"heading_3\",\n            \"heading_3\": {\"rich_text\": [{\"text\": {\"content\": h}}]}\n        })\n        # summary\n        summary = f\"\\u0412\\u0441\\u0435\\u0433\\u043e: {ph.get('total',0):,} \\u20bd  \\u00b7  \\u041a\\u0435\\u0448: {ph.get('cash',0):,} \\u20bd  \\u00b7  \\u041d\\u0430\\u043a\\u043e\\u043f\\u043b\\u0435\\u043d\\u0438\\u0435: {ph.get('accumulation',0):,} \\u20bd\".replace(\",\", \" \")\n        blocks.append({\n            \"object\": \"block\", \"type\": \"paragraph\",\n            \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": summary}}]}\n        })\n        # to-do\n        for p in ph.get(\"payments\", []):\n            check = p.get(\"status\") == \"paid\"\n            line = f\"{p.get('date','')} \\u2014 {p.get('amount',0):,} \\u20bd \\u2014 {p.get('type','')}\".replace(\",\", \" \")\n            blocks.append({\n                \"object\": \"block\", \"type\": \"to_do\",\n                \"to_do\": {\n                    \"rich_text\": [{\"text\": {\"content\": line}}],\n                    \"checked\": check\n                }\n            })\n    # итого\n    blocks.append({\n        \"object\": \"block\", \"type\": \"divider\", \"divider\": {}\n    })\n    total_line = f\"\\u0418\\u0442\\u043e\\u0433\\u043e: {tracker.get('total_planned',0):,} \\u20bd \\u00b7 \\u041a\\u0435\\u0448: {tracker.get('total_cash_planned',0):,} \\u20bd \\u00b7 \\u041d\\u0430\\u043a\\u043e\\u043f\\u043b\\u0435\\u043d\\u0438\\u0435: {tracker.get('total_accumulation_planned',0):,} \\u20bd\".replace(\",\", \" \")\n    blocks.append({\n        \"object\": \"block\", \"type\": \"heading_3\",\n        \"heading_3\": {\"rich_text\": [{\"text\": {\"content\": total_line}}]}\n    })\n    return blocks\n\n\nH = {\"Authorization\": f\"Bearer {io.open(TOKEN_FILE, encoding='utf-8').read().strip()}\",\n     \"Notion-Version\": \"2022-06-28\", \"Content-Type\": \"application/json\"}\n\ndef api(path, method=\"GET\", body=None, retries=3):\n    last_err = None\n    for attempt in range(retries):\n        try:\n            req = urllib.request.Request(\n                f\"https://api.notion.com/v1/{path}\",\n                data=json.dumps(body).encode() if body else None,\n                method=method, headers=H)\n            with urllib.request.urlopen(req, timeout=30) as r:\n                return json.loads(r.read().decode())\n        except (urllib.error.URLError, OSError) as e:\n            last_err = e\n            wait = 2 ** attempt\n            print(f\"  ! network error ({e.__class__.__name__}), retry in {wait}s...\")\n            time.sleep(wait)\n    raise last_err\n\ndef prop_text(p, name):\n    x = (p.get(\"properties\") or {}).get(name)\n    if not x: return None\n    t = x.get(\"type\")\n    if t == \"title\": return \"\".join(i[\"plain_text\"] for i in x[\"title\"]) or None\n    if t == \"rich_text\": return \"\".join(i[\"plain_text\"] for i in x[\"rich_text\"]) or None\n    if t == \"select\": return (x[\"select\"] or {}).get(\"name\")\n    if t == \"checkbox\": return x[\"checkbox\"]\n    if t == \"date\": return (x[\"date\"] or {}).get(\"start\")\n    return None\n\ndef normalize(name):\n    if not name: return name\n    return name.replace(\" (проект)\", \"\").strip()\n\ndef build_title(t):\n    \"\"\"Notion-префикс для cancelled-задач. Mandala хранит чистый title.\"\"\"\n    if t.get(\"status\") != \"cancelled\":\n        return t[\"title\"]\n    meta = t.get(\"metadata\", {}) or {}\n    if meta.get(\"merged_into\"):\n        return \"\\U0001F4E6 \\u041f\\u043e\\u0433\\u043b\\u043e\\u0449\\u0435\\u043d\\u0430: \" + t[\"title\"]\n    return \"\\u274C \\u041e\\u0442\\u043c\\u0435\\u043d\\u0435\\u043d\\u0430: \" + t[\"title\"]\n\ndef query_all():\n    out, cursor = [], None\n    while True:\n        body = {\"page_size\": 100}\n        if cursor: body[\"start_cursor\"] = cursor\n        d = api(f\"databases/{DB}/query\", \"POST\", body)\n        out.extend(d.get(\"results\", []))\n        if not d.get(\"has_more\"): break\n        cursor = d.get(\"next_cursor\")\n        time.sleep(0.35)\n    return out\n\n# ===== 1. Читаем Mandala (активные + архив) =====\nARCHIVE_FILE = os.path.join(KURTOCH, \"taskboard_archive.json\")\nf = json.load(io.open(TB_FILE, encoding=\"utf-8\"))\ntasks = list(f[\"taskboard\"][\"tasks\"])\nif os.path.exists(ARCHIVE_FILE):\n    with io.open(ARCHIVE_FILE, encoding=\"utf-8\") as af:\n        arch = json.load(af)\n    tasks.extend(arch[\"archive\"][\"tasks\"])\n    print(f\"  + архив: {len(arch['archive']['tasks'])} задач\")\nby_title_norm = {normalize(t[\"title\"]): t for t in tasks}\nby_id_mandala = {t[\"id\"]: t for t in tasks}\nprint(f\"Mandala: {len(tasks)} задач\")\n\n# ===== 2. Читаем Notion =====\npages = query_all()\nprint(f\"Notion: {len(pages)} страниц\\n\")\n\nnotion_by_id = {}      # K-ID -> page\nnotion_by_title = {}   # normalized title -> page\nfor p in pages:\n    pid = prop_text(p, \"ID\")\n    title = normalize(prop_text(p, \"Название\"))\n    if pid: notion_by_id[pid] = p\n    if title: notion_by_title[title] = p\n\nupdated_status, updated_id, updated_col, updated_date, updated_title, created = 0, 0, 0, 0, 0, 0\nno_match = []\n\nfor t in tasks:\n    tid = t[\"id\"]\n    title_norm = normalize(t[\"title\"])\n    p = notion_by_id.get(tid) or notion_by_title.get(title_norm)\n\n    if not p:\n        # создаём новую задачу\n        body = {\n            \"parent\": {\"database_id\": DB},\n            \"properties\": {\n                \"Название\": {\"title\": [{\"text\": {\"content\": build_title(t)}}]},\n                \"ID\": {\"rich_text\": [{\"text\": {\"content\": tid}}]},\n                \"Статус\": {\"select\": {\"name\": t[\"status\"]}},\n                \"Столбец\": {\"select\": {\"name\": t[\"metadata\"][\"column\"]}},\n                \"Срочность\": {\"select\": {\"name\": PRIORITY_TO_URGENCY.get(t.get(\"priority\", \"medium\"), PRIORITY_TO_URGENCY[\"medium\"])}},\n                \"Ответственный\": {\"select\": {\"name\": t.get(\"metadata\", {}).get(\"assignee\") or DEFAULT_ASSIGNEE}},\n                \"Закрыта\": {\"checkbox\": t[\"status\"] in (\"done\", \"cancelled\")},\n            }\n        }\n        # milestones — структурированные блоки\n        ms_blocks = build_milestone_blocks(t) if t.get(\"metadata\", {}).get(\"subtype\") == \"payment_tracker\" else None\n        if ms_blocks:\n            body[\"children\"] = ms_blocks\n        if t.get(\"deadline\"):\n            body[\"properties\"][\"Дедлайн\"] = {\"date\": {\"start\": t[\"deadline\"]}}\n        if t.get(\"description\") and not ms_blocks:\n            body[\"children\"] = [{\"object\": \"block\", \"type\": \"paragraph\",\n                \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": t[\"description\"]}}]}}]\n        api(\"pages\", \"POST\", body)\n        created += 1\n        print(f\"  [NEW {tid}] {t['title']}\")\n        time.sleep(0.35)\n        continue\n\n    # обновляем свойства, если отличаются\n    props = {}\n    cur_status = prop_text(p, \"Статус\")\n    cur_closed = prop_text(p, \"Закрыта\")\n    cur_id = prop_text(p, \"ID\")\n    cur_col = prop_text(p, \"Столбец\")\n    cur_dl = prop_text(p, \"Дедлайн\")\n\n    cur_title = prop_text(p, \"Название\")\n    need_title = build_title(t)\n    if cur_title != need_title:\n        props[\"Название\"] = {\"title\": [{\"text\": {\"content\": need_title}}]}\n        updated_title += 1\n\n    need_closed = t[\"status\"] in (\"done\", \"cancelled\")\n    if cur_status != t[\"status\"]:\n        props[\"Статус\"] = {\"select\": {\"name\": t[\"status\"]}}\n        updated_status += 1\n    if cur_closed != need_closed:\n        props[\"Закрыта\"] = {\"checkbox\": need_closed}\n    if cur_id != tid:\n        props[\"ID\"] = {\"rich_text\": [{\"text\": {\"content\": tid}}]}\n        updated_id += 1\n    if cur_col != t[\"metadata\"][\"column\"]:\n        props[\"Столбец\"] = {\"select\": {\"name\": t[\"metadata\"][\"column\"]}}\n        updated_col += 1\n    if t.get(\"deadline\") and cur_dl != t[\"deadline\"]:\n        props[\"Дедлайн\"] = {\"date\": {\"start\": t[\"deadline\"]}}\n        updated_date += 1\n\n    # Срочность и Ответственный (всегда проверяем)\n    cur_urg = prop_text(p, \"Срочность\")\n    need_urg = PRIORITY_TO_URGENCY.get(t.get(\"priority\", \"medium\"), PRIORITY_TO_URGENCY[\"medium\"])\n    if cur_urg != need_urg:\n        props[\"Срочность\"] = {\"select\": {\"name\": need_urg}}\n    cur_resp = prop_text(p, \"Ответственный\")\n    need_resp = t.get(\"metadata\", {}).get(\"assignee\") or DEFAULT_ASSIGNEE\n    if cur_resp != need_resp:\n        props[\"Ответственный\"] = {\"select\": {\"name\": need_resp}}\n\n    if props:\n        api(f\"pages/{p['id']}\", \"PATCH\", {\"properties\": props})\n        tag = \", \".join(props.keys())\n        print(f\"  [{tid} | {tag}] {t['title']}\")\n        time.sleep(0.35)\n\n# проверка обратного — что в Notion есть, но в Mandala нет\nnotion_ids = {prop_text(p, \"ID\") for p in pages if prop_text(p, \"ID\")}\nmandala_ids = set(by_id_mandala.keys())\norphans = notion_ids - mandala_ids\n\nprint(f\"\\n=== Итог ===\")\nprint(f\"  Обновлено Статус: {updated_status}\")\nprint(f\"  Обновлено ID: {updated_id}\")\nprint(f\"  Обновлено Столбец: {updated_col}\")\nprint(f\"  Обновлено Дедлайн: {updated_date}\")\nprint(f\"  Обновлено Название (префикс): {updated_title}\")\nprint(f\"  Создано новых: {created}\")\nif orphans:\n    print(f\"  В Notion есть, в Mandala нет: {sorted(orphans)}\")\n",
+    "push_taskboard.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Push taskboard.json -> Notion.\nОбновляет: ID, Столбец, Статус, Закрыта, Срочность, Дедлайн, Описание (blocks).\nСоздаёт новые задачи, если в Mandala есть K-ID, которого нет в Notion.\nИдемпотентно.\n\"\"\"\nimport io, json, os, sys, time, urllib.request, urllib.error\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTOKEN_FILE = os.path.join(HERE, \"notion_token.txt\")\nTB_FILE = os.path.join(KURTOCH, \"taskboard.json\")\nDB = \"f6ffa784e7594df9add4fd1c697d4ada\"\n\nPRIORITY_TO_URGENCY = {\n    \"critical\": \"\\U0001F534 \\u0413\\u043e\\u0440\\u0438\\u0442\",\n    \"high\":     \"\\U0001F7E1 \\u0421\\u0440\\u0435\\u0434\\u043d\\u044f\\u044f\",\n    \"medium\":   \"\\U0001F535 \\u0424\\u043e\\u043d\",\n    \"low\":      \"\\U0001F535 \\u0424\\u043e\\u043d\",\n}\nDEFAULT_ASSIGNEE = \"\\u0414\\u043c\\u0438\\u0442\\u0440\\u0438\\u0439 (\\u0443\\u043f\\u0440\\u0430\\u0432\\u043b\\u044f\\u044e\\u0449\\u0438\\u0439)\"\n\n\ndef build_milestone_blocks(task):\n    blocks = []\n    meta = task.get(\"metadata\", {})\n    phases = meta.get(\"phases\", [])\n    tracker = meta.get(\"tracker\", {})\n    if not phases:\n        return None\n    for ph in phases:\n        h = f\"\\u0424\\u0430\\u0437\\u0430 {ph.get('phase','?')}: {ph.get('name','')} ({ph.get('period','')})\"\n        blocks.append({\"object\": \"block\", \"type\": \"heading_3\",\n                       \"heading_3\": {\"rich_text\": [{\"text\": {\"content\": h}}]}})\n        summary = f\"\\u0412\\u0441\\u0435\\u0433\\u043e: {ph.get('total',0):,} \\u20bd \\u00b7 \\u041a\\u0435\\u0448: {ph.get('cash',0):,} \\u20bd \\u00b7 \\u041d\\u0430\\u043a\\u043e\\u043f\\u043b\\u0435\\u043d\\u0438\\u0435: {ph.get('accumulation',0):,} \\u20bd\".replace(\",\", \" \")\n        blocks.append({\"object\": \"block\", \"type\": \"paragraph\",\n                       \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": summary}}]}})\n        for p in ph.get(\"payments\", []):\n            check = p.get(\"status\") == \"paid\"\n            line = f\"{p.get('date','')} \\u2014 {p.get('amount',0):,} \\u20bd \\u2014 {p.get('type','')}\".replace(\",\", \" \")\n            blocks.append({\"object\": \"block\", \"type\": \"to_do\",\n                           \"to_do\": {\"rich_text\": [{\"text\": {\"content\": line}}], \"checked\": check}})\n    blocks.append({\"object\": \"block\", \"type\": \"divider\", \"divider\": {}})\n    total_line = f\"\\u0418\\u0442\\u043e\\u0433\\u043e: {tracker.get('total_planned',0):,} \\u20bd \\u00b7 \\u041a\\u0435\\u0448: {tracker.get('total_cash_planned',0):,} \\u20bd \\u00b7 \\u041d\\u0430\\u043a\\u043e\\u043f\\u043b\\u0435\\u043d\\u0438\\u0435: {tracker.get('total_accumulation_planned',0):,} \\u20bd\".replace(\",\", \" \")\n    blocks.append({\"object\": \"block\", \"type\": \"heading_3\",\n                   \"heading_3\": {\"rich_text\": [{\"text\": {\"content\": total_line}}]}})\n    return blocks\n\n\nH = {\"Authorization\": f\"Bearer {io.open(TOKEN_FILE, encoding='utf-8').read().strip()}\",\n     \"Notion-Version\": \"2022-06-28\", \"Content-Type\": \"application/json\"}\n\n\ndef api(path, method=\"GET\", body=None, retries=3):\n    last_err = None\n    for attempt in range(retries):\n        try:\n            req = urllib.request.Request(\n                f\"https://api.notion.com/v1/{path}\",\n                data=json.dumps(body).encode() if body else None,\n                method=method, headers=H)\n            with urllib.request.urlopen(req, timeout=30) as r:\n                return json.loads(r.read().decode())\n        except (urllib.error.URLError, OSError) as e:\n            last_err = e\n            wait = 2 ** attempt\n            print(f\"  ! network error ({e.__class__.__name__}), retry in {wait}s...\")\n            time.sleep(wait)\n    raise last_err\n\n\ndef prop_text(p, name):\n    x = (p.get(\"properties\") or {}).get(name)\n    if not x: return None\n    t = x.get(\"type\")\n    if t == \"title\": return \"\".join(i[\"plain_text\"] for i in x[\"title\"]) or None\n    if t == \"rich_text\": return \"\".join(i[\"plain_text\"] for i in x[\"rich_text\"]) or None\n    if t == \"select\": return (x[\"select\"] or {}).get(\"name\")\n    if t == \"checkbox\": return x[\"checkbox\"]\n    if t == \"date\": return (x[\"date\"] or {}).get(\"start\")\n    return None\n\n\ndef normalize(name):\n    if not name: return name\n    return name.replace(\" (проект)\", \"\").strip()\n\n\ndef build_title(t):\n    if t.get(\"status\") != \"cancelled\":\n        return t[\"title\"]\n    meta = t.get(\"metadata\", {}) or {}\n    if meta.get(\"merged_into\"):\n        return \"\\U0001F4E6 \\u041f\\u043e\\u0433\\u043b\\u043e\\u0449\\u0435\\u043d\\u0430: \" + t[\"title\"]\n    return \"\\u274C \\u041e\\u0442\\u043c\\u0435\\u043d\\u0435\\u043d\\u0430: \" + t[\"title\"]\n\n\ndef get_page_description(page_id):\n    try:\n        r = api(f\"blocks/{page_id}/children?page_size=100\")\n    except Exception:\n        return \"\"\n    parts = []\n    for b in r.get(\"results\", []):\n        btype = b.get(\"type\")\n        if btype == \"paragraph\":\n            rt = b.get(\"paragraph\", {}).get(\"rich_text\", [])\n            parts.append(\"\".join(x.get(\"plain_text\", \"\") for x in rt))\n        elif btype == \"to_do\":\n            rt = b.get(\"to_do\", {}).get(\"rich_text\", [])\n            parts.append(\"\".join(x.get(\"plain_text\", \"\") for x in rt))\n    return \"\\n\".join(parts).strip()\n\n\ndef delete_all_children(page_id):\n    while True:\n        r = api(f\"blocks/{page_id}/children?page_size=100\")\n        results = r.get(\"results\", [])\n        if not results:\n            break\n        for b in results:\n            try:\n                api(f\"blocks/{b['id']}\", \"DELETE\")\n            except Exception:\n                pass\n        time.sleep(0.2)\n\n\ndef set_page_description(page_id, text):\n    delete_all_children(page_id)\n    if not text:\n        return\n    chunks = []\n    for para in text.split(\"\\n\\n\"):\n        para = para.strip()\n        if not para:\n            continue\n        while len(para) > 1900:\n            chunks.append(para[:1900])\n            para = para[1900:]\n        if para:\n            chunks.append(para)\n    if not chunks:\n        return\n    children = [{\"object\": \"block\", \"type\": \"paragraph\",\n                 \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": c}}]}}\n                for c in chunks[:100]]\n    api(f\"blocks/{page_id}/children\", \"PATCH\", {\"children\": children})\n\n\ndef query_all():\n    out, cursor = [], None\n    while True:\n        body = {\"page_size\": 100}\n        if cursor: body[\"start_cursor\"] = cursor\n        d = api(f\"databases/{DB}/query\", \"POST\", body)\n        out.extend(d.get(\"results\", []))\n        if not d.get(\"has_more\"): break\n        cursor = d.get(\"next_cursor\")\n        time.sleep(0.35)\n    return out\n\n\nARCHIVE_FILE = os.path.join(KURTOCH, \"taskboard_archive.json\")\nf = json.load(io.open(TB_FILE, encoding=\"utf-8\"))\ntasks = list(f[\"taskboard\"][\"tasks\"])\nif os.path.exists(ARCHIVE_FILE):\n    with io.open(ARCHIVE_FILE, encoding=\"utf-8\") as af:\n        arch = json.load(af)\n    tasks.extend(arch[\"archive\"][\"tasks\"])\n    print(f\"  + архив: {len(arch['archive']['tasks'])} задач\")\nby_id_mandala = {t[\"id\"]: t for t in tasks}\nprint(f\"Mandala: {len(tasks)} задач\")\n\npages = query_all()\nprint(f\"Notion: {len(pages)} страниц\\n\")\n\nnotion_by_id = {}\nnotion_by_title = {}\nfor p in pages:\n    pid = prop_text(p, \"ID\")\n    title = normalize(prop_text(p, \"Название\"))\n    if pid: notion_by_id[pid] = p\n    if title: notion_by_title[title] = p\n\nupdated_status, updated_id, updated_col, updated_date, updated_title, updated_desc, created = 0, 0, 0, 0, 0, 0, 0\n\nfor t in tasks:\n    tid = t[\"id\"]\n    title_norm = normalize(t[\"title\"])\n    p = notion_by_id.get(tid) or notion_by_title.get(title_norm)\n\n    if not p:\n        body = {\n            \"parent\": {\"database_id\": DB},\n            \"properties\": {\n                \"Название\": {\"title\": [{\"text\": {\"content\": build_title(t)}}]},\n                \"ID\": {\"rich_text\": [{\"text\": {\"content\": tid}}]},\n                \"Статус\": {\"select\": {\"name\": t[\"status\"]}},\n                \"Столбец\": {\"select\": {\"name\": t[\"metadata\"][\"column\"]}},\n                \"Срочность\": {\"select\": {\"name\": PRIORITY_TO_URGENCY.get(t.get(\"priority\", \"medium\"), PRIORITY_TO_URGENCY[\"medium\"])}},\n                \"Ответственный\": {\"select\": {\"name\": t.get(\"metadata\", {}).get(\"assignee\") or DEFAULT_ASSIGNEE}},\n                \"Закрыта\": {\"checkbox\": t[\"status\"] in (\"done\", \"cancelled\")},\n            }\n        }\n        ms_blocks = build_milestone_blocks(t) if t.get(\"metadata\", {}).get(\"subtype\") == \"payment_tracker\" else None\n        if t.get(\"deadline\"):\n            body[\"properties\"][\"Дедлайн\"] = {\"date\": {\"start\": t[\"deadline\"]}}\n        if ms_blocks:\n            body[\"children\"] = ms_blocks\n        elif t.get(\"description\"):\n            body[\"children\"] = [{\"object\": \"block\", \"type\": \"paragraph\",\n                                 \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": t[\"description\"]}}]}}]\n        api(\"pages\", \"POST\", body)\n        created += 1\n        print(f\"  [NEW {tid}] {t['title']}\")\n        time.sleep(0.35)\n        continue\n\n    props = {}\n    cur_status = prop_text(p, \"Статус\")\n    cur_closed = prop_text(p, \"Закрыта\")\n    cur_id = prop_text(p, \"ID\")\n    cur_col = prop_text(p, \"Столбец\")\n    cur_dl = prop_text(p, \"Дедлайн\")\n    cur_title = prop_text(p, \"Название\")\n    need_title = build_title(t)\n\n    if cur_title != need_title:\n        props[\"Название\"] = {\"title\": [{\"text\": {\"content\": need_title}}]}\n        updated_title += 1\n\n    need_closed = t[\"status\"] in (\"done\", \"cancelled\")\n    if cur_status != t[\"status\"]:\n        props[\"Статус\"] = {\"select\": {\"name\": t[\"status\"]}}\n        updated_status += 1\n    if cur_closed != need_closed:\n        props[\"Закрыта\"] = {\"checkbox\": need_closed}\n    if cur_id != tid:\n        props[\"ID\"] = {\"rich_text\": [{\"text\": {\"content\": tid}}]}\n        updated_id += 1\n    if cur_col != t[\"metadata\"][\"column\"]:\n        props[\"Столбец\"] = {\"select\": {\"name\": t[\"metadata\"][\"column\"]}}\n        updated_col += 1\n    if t.get(\"deadline\") and cur_dl != t[\"deadline\"]:\n        props[\"Дедлайн\"] = {\"date\": {\"start\": t[\"deadline\"]}}\n        updated_date += 1\n\n    cur_urg = prop_text(p, \"Срочность\")\n    need_urg = PRIORITY_TO_URGENCY.get(t.get(\"priority\", \"medium\"), PRIORITY_TO_URGENCY[\"medium\"])\n    if cur_urg != need_urg:\n        props[\"Срочность\"] = {\"select\": {\"name\": need_urg}}\n    cur_resp = prop_text(p, \"Ответственный\")\n    need_resp = t.get(\"metadata\", {}).get(\"assignee\") or DEFAULT_ASSIGNEE\n    if cur_resp != need_resp:\n        props[\"Ответственный\"] = {\"select\": {\"name\": need_resp}}\n\n    if props:\n        api(f\"pages/{p['id']}\", \"PATCH\", {\"properties\": props})\n        tag = \", \".join(props.keys())\n        print(f\"  [{tid} | {tag}] {t['title']}\")\n        time.sleep(0.35)\n\n    # ---- ОПИСАНИЕ ----\n    need_desc = (t.get(\"description\") or \"\").strip()\n    if need_desc and t.get(\"metadata\", {}).get(\"subtype\") != \"payment_tracker\":\n        cur_desc = get_page_description(p[\"id\"])\n        if cur_desc.strip() != need_desc:\n            set_page_description(p[\"id\"], need_desc)\n            updated_desc += 1\n            print(f\"  [{tid} | Описание обновлено] {t['title']}\")\n            time.sleep(0.35)\n\nnotion_ids = {prop_text(p, \"ID\") for p in pages if prop_text(p, \"ID\")}\nmandala_ids = set(by_id_mandala.keys())\norphans = notion_ids - mandala_ids\n\nprint(f\"\\n=== Итог ===\")\nprint(f\"  Обновлено Статус: {updated_status}\")\nprint(f\"  Обновлено ID: {updated_id}\")\nprint(f\"  Обновлено Столбец: {updated_col}\")\nprint(f\"  Обновлено Дедлайн: {updated_date}\")\nprint(f\"  Обновлено Название (префикс): {updated_title}\")\nprint(f\"  Обновлено Описание: {updated_desc}\")\nprint(f\"  Создано новых: {created}\")\nif orphans:\n    print(f\"  В Notion есть, в Mandala нет: {sorted(orphans)}\")\n",
     "split_archive.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Выносит done + cancelled из taskboard.json в taskboard_archive.json.\nРежимы:\n  --dry-run  (по умолчанию) — показать, что будет вынесено\n  --apply                    — применить\n\"\"\"\nimport io, json, os, sys\nfrom datetime import datetime\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nTB = os.path.join(KURTOCH, \"taskboard.json\")\nARCHIVE = os.path.join(KURTOCH, \"taskboard_archive.json\")\nTODAY = \"2026-09-23\"\nMODE = sys.argv[1] if len(sys.argv) > 1 else \"--dry-run\"\n\nwith io.open(TB, encoding=\"utf-8\") as f:\n    d = json.load(f)\n\ntasks = d[\"taskboard\"][\"tasks\"]\nARCHIVE_STATUSES = {\"done\", \"cancelled\"}\n\nto_archive = [t for t in tasks if t[\"status\"] in ARCHIVE_STATUSES]\nto_keep = [t for t in tasks if t[\"status\"] not in ARCHIVE_STATUSES]\n\nprint(f\"Режим: {MODE}\")\nprint(f\"  Активных (останутся): {len(to_keep)}\")\nprint(f\"  В архив: {len(to_archive)}\")\nprint(f\"    done: {sum(1 for t in to_archive if t['status'] == 'done')}\")\nprint(f\"    cancelled: {sum(1 for t in to_archive if t['status'] == 'cancelled')}\")\nprint(f\"\\nСписок задач в архив:\")\nfor t in to_archive:\n    print(f\"  [{t['status']}] {t['id']}: {t['title'][:60]}\")\n\nif MODE != \"--apply\":\n    print(f\"\\nDRY-RUN — файлы не изменены. Для применения: python3 split_archive.py --apply\")\n    sys.exit(0)\n\n# ===== APPLY =====\n# 1. Читаем существующий архив, если есть\nif os.path.exists(ARCHIVE):\n    with io.open(ARCHIVE, encoding=\"utf-8\") as f:\n        arch = json.load(f)\n    existing_ids = {t[\"id\"] for t in arch[\"archive\"][\"tasks\"]}\nelse:\n    arch = {\n        \"identity\": {\n            \"module_id\": \"KURTOCH-TASKBOARD-ARCHIVE-001\",\n            \"name\": \"Kurtoch — Taskboard Archive\",\n            \"version\": \"v1.0.0\",\n            \"created\": TODAY,\n            \"updated\": TODAY,\n            \"type\": \"taskboard_archive\",\n            \"parent\": \"taskboard.json\",\n            \"description\": \"Архив завершённых задач (done + cancelled).\",\n            \"status\": \"active\",\n            \"priority\": \"medium\"\n        },\n        \"archive\": {\n            \"description\": \"Завершённые задачи. Синхронизируются с Notion тем же скриптом.\",\n            \"tasks\": []\n        },\n        \"navigation\": {\n            \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n            \"sibling\": \"taskboard.json\"\n        }\n    }\n    existing_ids = set()\n\n# 2. Переносим новые задачи в архив\nadded = 0\nfor t in to_archive:\n    t_arch = dict(t)\n    t_arch[\"archived_at\"] = TODAY\n    if t[\"id\"] not in existing_ids:\n        arch[\"archive\"][\"tasks\"].append(t_arch)\n        added += 1\n\n# 3. Обновляем архив\narch[\"identity\"][\"updated\"] = TODAY\narch[\"archive\"][\"total\"] = len(arch[\"archive\"][\"tasks\"])\narch[\"archive\"][\"by_status\"] = {\n    \"done\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"done\"),\n    \"cancelled\": sum(1 for t in arch[\"archive\"][\"tasks\"] if t[\"status\"] == \"cancelled\")\n}\n\n# 4. Записываем архив\nwith io.open(ARCHIVE, \"w\", encoding=\"utf-8\") as f:\n    json.dump(arch, f, ensure_ascii=False, indent=2)\n    f.write(\"\\n\")\nprint(f\"\\n  записан: taskboard_archive.json ({os.path.getsize(ARCHIVE)} байт, добавлено {added})\")\n\n# 5. Обновляем taskboard.json — оставляем только активные\nd[\"taskboard\"][\"tasks\"] = to_keep\n\n# пересчёт counters\nby_status, by_priority, by_column = {}, {}, {}\nfor t in to_keep:\n    by_status[t[\"status\"]] = by_status.get(t[\"status\"], 0) + 1\n    by_priority[t[\"priority\"]] = by_priority.get(t[\"priority\"], 0) + 1\n    col = t.get(\"metadata\", {}).get(\"column\", \"—\")\n    by_column[col] = by_column.get(col, 0) + 1\n\nd[\"taskboard\"][\"counters\"] = {\n    \"total\": len(to_keep),\n    \"by_status\": by_status,\n    \"by_priority\": by_priority,\n    \"by_column\": by_column,\n    \"by_phase\": {\"phase_0\": len(to_keep)}\n}\nd[\"taskboard\"][\"archive_ref\"] = \"taskboard_archive.json\"\nd[\"taskboard\"][\"updated\"] = TODAY\n\nwith io.open(TB, \"w\", encoding=\"utf-8\") as f:\n    json.dump(d, f, ensure_ascii=False, indent=2)\n    f.write(\"\\n\")\nprint(f\"  записан: taskboard.json ({os.path.getsize(TB)} байт, активных {len(to_keep)})\")\n\nprint(f\"\\nOK — архив применён\")\n",
     "split_franchise.py": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Разбивка franchise.json на модули: taskboard.json, team.json, knowledge_base.json.\nПересобирает kurtoch/index.json -> v2.0.0.\nfranchise.json НЕ трогает, НЕ удаляет, НЕ коммитит.\"\"\"\nimport io, json, os\n\nHERE = os.path.dirname(os.path.abspath(__file__))\nKURTOCH = os.path.dirname(HERE)\nFRANCHISE = os.path.join(KURTOCH, \"franchise.json\")\nINDEX = os.path.join(KURTOCH, \"index.json\")\nTODAY = \"2026-09-23\"\n\ndef load(p):\n    with io.open(p, encoding=\"utf-8\") as f:\n        return json.load(f)\n\ndef save(p, data):\n    with io.open(p, \"w\", encoding=\"utf-8\") as f:\n        json.dump(data, f, ensure_ascii=False, indent=2)\n        f.write(\"\\n\")\n    size = os.path.getsize(p)\n    print(f\"  записан: {os.path.relpath(p, KURTOCH)} ({size} байт)\")\n\nf = load(FRANCHISE)\nold_index = load(INDEX)\nprint(\"Читаю franchise.json и index.json...\")\n\n# =========================================================\n# 1. taskboard.json\n# =========================================================\ntaskboard_module = {\n    \"identity\": {\n        \"module_id\": \"KURTOCH-TASKBOARD-001\",\n        \"name\": \"Kurtoch — Taskboard\",\n        \"version\": f[\"taskboard\"][\"version\"],\n        \"created\": f[\"taskboard\"][\"created\"],\n        \"updated\": TODAY,\n        \"layer\": 2,\n        \"type\": \"taskboard_module\",\n        \"description\": \"База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.\",\n        \"status\": \"active\",\n        \"priority\": \"critical\",\n        \"parent\": \"index.json\",\n        \"resonance\": \"100%\"\n    },\n    \"taskboard\": f[\"taskboard\"],\n    \"milestones\": f[\"milestones\"],\n    \"navigation\": {\n        \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n        \"siblings\": [\"team.json\", \"knowledge_base.json\"],\n        \"external\": [\"Notion Taskboard: https://app.notion.com/p/Taskboard-aaa1aec62ffe49ab8c393edd4132c1d1\"]\n    },\n    \"notion_sync\": f[\"taskboard\"][\"notion_sync\"],\n    \"sync_rule\": \"Mandala (taskboard.json) — эталон. Notion Taskboard — визуальное зеркало.\"\n}\nsave(os.path.join(KURTOCH, \"taskboard.json\"), taskboard_module)\n\n# =========================================================\n# 2. team.json\n# =========================================================\nteam_module = {\n    \"identity\": {\n        \"module_id\": \"KURTOCH-TEAM-001\",\n        \"name\": \"Kurtoch — Team Roster\",\n        \"version\": \"v1.0.0\",\n        \"created\": TODAY,\n        \"updated\": TODAY,\n        \"layer\": 2,\n        \"type\": \"team_module\",\n        \"description\": \"Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).\",\n        \"status\": \"active\",\n        \"priority\": \"high\",\n        \"parent\": \"index.json\",\n        \"resonance\": \"100%\"\n    },\n    \"team_roster\": f[\"team_roster\"],\n    \"navigation\": {\n        \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n        \"siblings\": [\"taskboard.json\", \"knowledge_base.json\"]\n    },\n    \"sync_rule\": \"Mandala (team.json) — эталон. Notion Team — визуальное зеркало (когда создадим базу).\"\n}\nsave(os.path.join(KURTOCH, \"team.json\"), team_module)\n\n# =========================================================\n# 3. knowledge_base.json\n# =========================================================\nkb_sections = f.get(\"workspace_mirror\", {}).get(\"sections\", {}).get(\"knowledge_base\", {}).get(\"sections\", {})\nkb_module = {\n    \"identity\": {\n        \"module_id\": \"KURTOCH-KB-001\",\n        \"name\": \"Kurtoch — Knowledge Base\",\n        \"version\": \"v1.0.0\",\n        \"created\": TODAY,\n        \"updated\": TODAY,\n        \"layer\": 2,\n        \"type\": \"knowledge_base_module\",\n        \"description\": \"База знаний Куртош: чек-листы, регламенты, техкарты, обучение, ЦУ. Пока структура, наполнение — впереди.\",\n        \"status\": \"active\",\n        \"priority\": \"critical\",\n        \"parent\": \"index.json\",\n        \"resonance\": \"100%\"\n    },\n    \"knowledge_base_plan\": f.get(\"knowledge_base_plan\", {}),\n    \"sections\": kb_sections,\n    \"content\": {},\n    \"navigation\": {\n        \"parent\": \"honeycombs/personal/kurtoch/index.json\",\n        \"siblings\": [\"taskboard.json\", \"team.json\"]\n    },\n    \"status_note\": \"Структура готова. Содержимое добавляется постепенно, по мере сбора у команды.\"\n}\nsave(os.path.join(KURTOCH, \"knowledge_base.json\"), kb_module)\n\n# =========================================================\n# 4. index.json -> v2.0.0\n# =========================================================\nnew_index = dict(old_index)\n\n# identity\nnew_index[\"identity\"][\"version\"] = \"v2.0.0\"\nnew_index[\"identity\"][\"updated\"] = TODAY\nnew_index[\"identity\"][\"description\"] = (\n    \"Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. \"\n    \"Входная точка: контекст, инструкции, ссылки на модули. \"\n    \"Данные разбиты: taskboard.json, team.json, knowledge_base.json.\"\n)\n\n# содержимое: модули вместо franchise\nnew_index[\"contents\"] = {\n    \"taskboard.json\": {\n        \"description\": \"База задач Куртош + крупные вехи.\",\n        \"purpose\": \"Задачи, milestones, синхронизация с Notion.\",\n        \"version\": f[\"taskboard\"][\"version\"],\n        \"tasks_count\": f[\"taskboard\"][\"counters\"][\"total\"]\n    },\n    \"team.json\": {\n        \"description\": \"Картотека сотрудников.\",\n        \"purpose\": \"Все 16 сотрудников: контакты, навыки, статусы.\",\n        \"version\": \"v1.0.0\",\n        \"total_employees\": f[\"team_roster\"][\"total_employees\"]\n    },\n    \"knowledge_base.json\": {\n        \"description\": \"База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.\",\n        \"purpose\": \"Структура готова, наполнение — по мере сбора.\",\n        \"version\": \"v1.0.0\",\n        \"sections_count\": len(kb_sections)\n    }\n}\n\n# контекстные блоки из franchise — в index\nnew_index[\"work_context\"] = {\n    \"work_id\": f.get(\"work_id\"),\n    \"status\": f.get(\"status\"),\n    \"priority\": f.get(\"priority\"),\n    \"horizon\": f.get(\"horizon\"),\n    \"owner\": f.get(\"owner\"),\n    \"role\": f.get(\"role\"),\n    \"key_contacts\": f.get(\"key_contacts\"),\n    \"directive_used\": f.get(\"directive_used\")\n}\nnew_index[\"offer\"] = f.get(\"offer\")\nnew_index[\"success_criteria_3_months\"] = f.get(\"success_criteria_3_months\")\nnew_index[\"hot_zones\"] = f.get(\"hot_zones\")\nnew_index[\"context\"] = f.get(\"context\")\nnew_index[\"plan\"] = f.get(\"plan\")\nnew_index[\"success_metrics\"] = f.get(\"success_metrics\")\nnew_index[\"current_status\"] = f.get(\"current_status\")\nnew_index[\"risks\"] = f.get(\"risks\")\nnew_index[\"history\"] = f.get(\"history\")\nnew_index[\"workspace_mirror\"] = f.get(\"workspace_mirror\")\nnew_index[\"compensation_system\"] = f.get(\"compensation_system\")\n\n# навигация\nnew_index[\"navigation\"][\"children\"] = [\n    \"index.json\",\n    \"taskboard.json\",\n    \"team.json\",\n    \"knowledge_base.json\",\n    \"scripts/\",\n    \"_logs/\",\n    \"_snapshots/\"\n]\n\n# health\nnew_index[\"health\"] = {\n    \"status\": \"healthy\",\n    \"last_check\": TODAY,\n    \"notes\": \"v2.0.0: разбит franchise.json на 3 модуля: taskboard, team, knowledge_base. Контекст перенесён в index. franchise.json пока на месте (удалим после подтверждения).\"\n}\n\nsave(INDEX, new_index)\n\nprint(\"\\nOK — разбивка завершена.\")\nprint(\"franchise.json НЕ тронут (удалим отдельным шагом).\")\nprint(\"\\nСледующий шаг: проверь глазами taskboard.json, team.json, knowledge_base.json, index.json.\")\n"
   }
