@@ -4,7 +4,7 @@
     "name": "Kurtoch — Taskboard Archive",
     "version": "v1.3.0",
     "created": "2026-09-23",
-    "updated": "2026-09-27",
+    "updated": "2026-09-28",
     "type": "taskboard_archive",
     "parent": "taskboard.json",
     "description": "Архив завершённых задач (done + cancelled).",
@@ -715,11 +715,34 @@
           "merged_into": "K-077"
         },
         "archived_at": "2026-09-27"
+      },
+      {
+        "id": "K-088",
+        "title": "Собеседование Дарья (18, бариста с опытом)",
+        "description": "Собеседование с Дарьей (18 лет, бариста с опытом). После собеса — написать комментарии, принять решение по сотруднику (брать / не брать / на какую точку).",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-28",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-28",
+        "updated": "2026-09-28",
+        "completed": "2026-09-28",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-28"
       }
     ],
-    "total": 30,
+    "total": 31,
     "by_status": {
-      "done": 21,
+      "done": 22,
       "cancelled": 9
     }
   },
