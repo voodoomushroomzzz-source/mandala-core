@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.3.4",
+    "version": "v2.3.5",
     "created": "2026-09-23",
-    "updated": "2026-09-28",
+    "updated": "2026-09-29",
     "layer": 2,
     "type": "personal_subhub_index",
     "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -49,8 +49,8 @@
     "taskboard_archive.json": {
       "description": "Архив завершённых задач (done + cancelled).",
       "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
-      "version": "v1.1.0",
-      "tasks_count": 30
+      "version": "v1.3.0",
+      "tasks_count": 31
     },
     "kurtoch_bundle.json": {
       "description": "Единый файл онбординга Куртош (автосборка).",
@@ -157,8 +157,8 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-09-28",
-    "notes": "v2.3.4: +K-092 (проверить скидку экс-управляющих 50%, 30.09)."
+    "last_check": "2026-09-29",
+    "notes": "v2.3.5: sync contents (archive v1.3.0/31), modules. pурposes updated."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -223,8 +223,8 @@
       "id_conventions": {
         "tasks": "K-001..K-071 с пропусками (K-017, K-047..K-056, K-061). Следующий свободный — K-072.",
         "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
-        "next_task_id": "K-072",
-        "next_milestone_id": "M-003"
+        "next_task_id": "K-093",
+        "next_milestone_id": "M-004"
       }
     },
     "token_instructions": {
@@ -848,13 +848,13 @@
     "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
     "taskboard": {
       "file": "taskboard.json",
-      "purpose": "Активные задачи (44) + вехи M-001, M-002. Архив — в taskboard_archive.",
+      "purpose": "Активные задачи (51) + вехи M-001..M-003.",
       "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
       "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
     },
     "team": {
       "file": "team.json",
-      "purpose": "Картотека сотрудников (16).",
+      "purpose": "Картотека сотрудников (17).",
       "when_to_use": "Когда нужно посмотреть/обновить данные сотрудника: контакты, навыки, статус.",
       "sync": "Notion Team (будет создана)"
     },
@@ -866,7 +866,7 @@
     },
     "taskboard_archive": {
       "file": "taskboard_archive.json",
-      "purpose": "Архив завершённых задач (done + cancelled). 25 задач.",
+      "purpose": "Архив завершённых задач (done + cancelled). 31 задача.",
       "when_to_use": "Когда нужно посмотреть историю завершённых задач.",
       "sync": "Notion Taskboard (через scripts/push_taskboard.py — читает оба файла)"
     }
