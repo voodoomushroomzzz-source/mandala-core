@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-09-29T14:49:08Z",
+    "generated_at": "2026-09-29T14:53:48Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1314,28 +1314,6 @@
           }
         },
         {
-          "id": "K-040",
-          "title": "Аттестация Юли (с Кристиной)",
-          "description": "Формальная аттестация Юли с Кристиной. Подтверждение что Юля всё знает. После — полная ставка + бонусы.",
-          "priority": "high",
-          "status": "done",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-09-25",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-09-21",
-          "updated": "2026-09-29",
-          "completed": "2026-09-29",
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
-          }
-        },
-        {
           "id": "K-043",
           "title": "Поломанные весы",
           "description": "Поломанные весы на Нижке. Заменить или отремонтировать.",
@@ -2329,27 +2307,26 @@
         }
       ],
       "counters": {
-        "total": 51,
+        "total": 50,
         "by_status": {
           "todo": 47,
-          "done": 1,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "medium": 16,
-          "high": 33,
+          "high": 32,
           "critical": 2
         },
         "by_column": {
           "Стратегические": 8,
-          "Операционка — Общая": 8,
+          "Операционка — Общая": 7,
           "Операционка — Нижка": 23,
           "Операционка — Центр": 9,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 51
+          "phase_0": 50
         }
       },
       "notes": {
@@ -3345,11 +3322,34 @@
             "column": "Операционка — Общая"
           },
           "archived_at": "2026-09-29"
+        },
+        {
+          "id": "K-040",
+          "title": "Аттестация Юли (с Кристиной)",
+          "description": "Формальная аттестация Юли с Кристиной. Подтверждение что Юля всё знает. После — полная ставка + бонусы.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-09-25",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-21",
+          "updated": "2026-09-29",
+          "completed": "2026-09-29",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-09-29"
         }
       ],
-      "total": 37,
+      "total": 38,
       "by_status": {
-        "done": 28,
+        "done": 29,
         "cancelled": 9
       }
     },
