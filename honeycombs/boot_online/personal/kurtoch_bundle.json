@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-09-28T22:29:00Z",
+    "generated_at": "2026-09-29T11:19:16Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.3.6",
+      "version": "v2.3.7",
       "created": "2026-09-23",
       "updated": "2026-09-29",
       "layer": 2,
@@ -56,14 +56,14 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.3.6",
-        "tasks_count": 53,
+        "version": "v2.3.7",
+        "tasks_count": 54,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
         "description": "Картотека сотрудников.",
         "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-        "version": "v1.2.0",
+        "version": "v1.2.1",
         "total_employees": 17
       },
       "knowledge_base.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-09-29",
-      "notes": "v2.3.6: +K-093 (валики Центр), +K-094 (переговоры 3-й сотрудник)."
+      "notes": "v2.3.7: +K-095 (сигнализация Центр, 01.10), Юля -> paused."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.3.6",
+      "version": "v2.3.7",
       "created": "2026-09-14",
       "updated": "2026-09-29",
       "layer": 2,
@@ -2368,29 +2368,53 @@
             "notion_page_id": null,
             "column": "Стратегические"
           }
+        },
+        {
+          "id": "K-095",
+          "title": "Убавить громкость сигнализации в Центре",
+          "description": "Убавить громкость сигнализации в Центре. Сейчас очень громкая. Сделать до 01.10.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-01",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-09-29",
+          "updated": "2026-09-29",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
         }
       ],
       "counters": {
-        "total": 53,
+        "total": 54,
         "by_status": {
-          "todo": 50,
+          "todo": 51,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "critical": 2,
-          "high": 36,
+          "high": 37,
           "medium": 15
         },
         "by_column": {
           "Стратегические": 8,
           "Операционка — Общая": 10,
           "Операционка — Нижка": 22,
-          "Операционка — Центр": 10,
+          "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 53
+          "phase_0": 54
         }
       },
       "notes": {
@@ -3259,9 +3283,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.2.0",
+      "version": "v1.2.1",
       "created": "2026-09-23",
-      "updated": "2026-09-28",
+      "updated": "2026-09-29",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
@@ -3271,13 +3295,14 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-09-28",
+      "last_updated": "2026-09-29",
       "total_employees": 17,
       "by_status": {
         "core": 1,
-        "working": 5,
+        "working": 4,
         "left": 3,
         "runner": 2,
+        "paused": 1,
         "trainee": 3,
         "substitute": 3
       },
@@ -3643,7 +3668,7 @@
             "смены"
           ],
           "schedule": {
-            "notes": "хочет не менее 4 смен в неделю; предпочтительна Нижка",
+            "notes": "переделано из-за паузы по здоровью",
             "preferences": "Нижка",
             "availability": null
           },
@@ -3667,12 +3692,13 @@
             "extra": "Все самостоятельные смены — полная ставка. Аттестация (формальность) с Кристиной — 25.09.",
             "notes": null
           },
-          "status": "working",
+          "status": "paused",
           "risks": [],
-          "notes": "Работает на нижке. Аттестована ✅",
+          "notes": "По здоровью — на паузе. Минимум 2 недели не работает, возможно вылетает из проекта. Расписание переделано (Дима). Возврат: не раньше 13.10.2026, под вопросом.",
           "data_gaps": [
             "schedule.availability"
-          ]
+          ],
+          "updated": "2026-09-29"
         },
         {
           "id": "EMP-010",
