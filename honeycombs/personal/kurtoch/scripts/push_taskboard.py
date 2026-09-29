@@ -5,7 +5,7 @@
 Создаёт новые задачи, если в Mandala есть K-ID, которого нет в Notion.
 Идемпотентно.
 """
-import io, json, os, sys, time, urllib.request, urllib.error
+import io, json, os, re, sys, time, urllib.request, urllib.error
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 KURTOCH = os.path.dirname(HERE)
@@ -98,20 +98,13 @@ def build_title(t):
 
 def normalize_desc(text):
     """Нормализация для честного сравнения описаний.
-    Схлопывает любые серии \n в один, убирает пробелы на краях строк."""
+    Схлопывает \n\n+ в один \n, множественные пробелы в один."""
     if not text:
         return ""
-    lines = [ln.strip() for ln in text.replace("\r\n", "\n").split("\n")]
-    out, prev_empty = [], False
-    for ln in lines:
-        if not ln:
-            if not prev_empty and out:
-                out.append("")
-            prev_empty = True
-        else:
-            out.append(ln)
-            prev_empty = False
-    return "\n".join(out).strip()
+    t = text.replace("\r\n", "\n")
+    t = re.sub(r"\n\s*\n+", "\n", t)
+    t = re.sub(r"[ \t]+", " ", t)
+    return t.strip()
 
 
 def get_page_description(page_id):
