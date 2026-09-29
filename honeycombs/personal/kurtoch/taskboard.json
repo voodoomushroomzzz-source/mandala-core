@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.3.8",
+    "version": "v2.3.9",
     "created": "2026-09-14",
     "updated": "2026-09-29",
     "layer": 2,
@@ -1318,29 +1318,53 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-099",
+        "title": "Связаться с Екатериной (арендодатель ТЦ) по поводу оплаты",
+        "description": "Связаться с Екатериной — арендодатель торгового центра — по поводу оплаты. Не сотрудник, внешний контакт. Центр.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-30",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-09-29",
+        "updated": "2026-09-29",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 50,
+      "total": 51,
       "by_status": {
-        "todo": 47,
+        "todo": 48,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "medium": 16,
-        "high": 32,
+        "high": 33,
         "critical": 2
       },
       "by_column": {
         "Стратегические": 8,
         "Операционка — Общая": 7,
         "Операционка — Нижка": 23,
-        "Операционка — Центр": 9,
+        "Операционка — Центр": 10,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 50
+        "phase_0": 51
       }
     },
     "notes": {
