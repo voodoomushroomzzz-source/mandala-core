@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-09-29T14:34:37Z",
+    "generated_at": "2026-09-29T14:49:08Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.3.7",
+      "version": "v2.3.8",
       "created": "2026-09-23",
       "updated": "2026-09-29",
       "layer": 2,
@@ -56,8 +56,8 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.3.7",
-        "tasks_count": 54,
+        "version": "v2.3.8",
+        "tasks_count": 51,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-09-29",
-      "notes": "v2.3.7: закрыто 6 (K-025/044/074/083/091/092), обновлены K-023 и K-071."
+      "notes": "v2.3.8: +K-096/097 (цветы), +K-098 (встреча), K-040 done, K-024/027/004 обновлены."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.3.7",
+      "version": "v2.3.8",
       "created": "2026-09-14",
       "updated": "2026-09-29",
       "layer": 2,
@@ -1029,18 +1029,18 @@
           "id": "K-004",
           "title": "Рабочий чат команды",
           "description": "Создать рабочий чат для команды и кризис-менеджера. Единая точка связи.",
-          "priority": "critical",
+          "priority": "medium",
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-09-15",
+          "deadline": "2026-10-31",
           "reminder": "11:00",
           "depends_on": [],
           "related_to": [
             "K-001"
           ],
           "created": "2026-09-14",
-          "updated": "2026-09-14",
+          "updated": "2026-09-29",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -1119,16 +1119,16 @@
           "id": "K-024",
           "title": "Лампочки Центр",
           "description": "Операционка Центр — лампочки.",
-          "priority": "high",
+          "priority": "critical",
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-09-28",
+          "deadline": "2026-10-05",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-17",
-          "updated": "2026-09-28",
+          "updated": "2026-09-29",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -1145,12 +1145,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-10",
+          "deadline": "2026-10-05",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-18",
-          "updated": "2026-09-28",
+          "updated": "2026-09-29",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -1318,7 +1318,7 @@
           "title": "Аттестация Юли (с Кристиной)",
           "description": "Формальная аттестация Юли с Кристиной. Подтверждение что Юля всё знает. После — полная ставка + бонусы.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-09-25",
@@ -1326,8 +1326,8 @@
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-21",
-          "updated": "2026-09-21",
-          "completed": null,
+          "updated": "2026-09-29",
+          "completed": "2026-09-29",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2254,29 +2254,102 @@
             "notion_page_id": null,
             "column": "Операционка — Центр"
           }
+        },
+        {
+          "id": "K-096",
+          "title": "Отфотографировать цветы в Центре",
+          "description": "Отфотографировать все цветы в Центре. Цель — зафиксировать текущее состояние (уход/пересадка). См. K-066.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-05",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-066",
+            "M-002"
+          ],
+          "created": "2026-09-29",
+          "updated": "2026-09-29",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
+        },
+        {
+          "id": "K-097",
+          "title": "Отфотографировать цветы на Нишке",
+          "description": "Отфотографировать все цветы на Нишке. Точка: Мишка (Нижняя Дуброва). См. K-066.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-05",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-066",
+            "M-001"
+          ],
+          "created": "2026-09-29",
+          "updated": "2026-09-29",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
+        },
+        {
+          "id": "K-098",
+          "title": "Встреча с Витей и Валей",
+          "description": "Встреча с Витей (управляющий переходного периода) и Валей (продюсер + маркетинг). Четверг, после катанга.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-01",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-29",
+          "updated": "2026-09-29",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
         }
       ],
       "counters": {
-        "total": 48,
+        "total": 51,
         "by_status": {
-          "todo": 45,
+          "todo": 47,
+          "done": 1,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
-          "critical": 2,
-          "high": 34,
-          "medium": 12
+          "medium": 16,
+          "high": 33,
+          "critical": 2
         },
         "by_column": {
           "Стратегические": 8,
-          "Операционка — Общая": 7,
-          "Операционка — Нижка": 22,
-          "Операционка — Центр": 8,
+          "Операционка — Общая": 8,
+          "Операционка — Нижка": 23,
+          "Операционка — Центр": 9,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 48
+          "phase_0": 51
         }
       },
       "notes": {
