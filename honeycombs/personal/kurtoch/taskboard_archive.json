@@ -882,11 +882,34 @@
           "column": "Операционка — Общая"
         },
         "archived_at": "2026-09-29"
+      },
+      {
+        "id": "K-040",
+        "title": "Аттестация Юли (с Кристиной)",
+        "description": "Формальная аттестация Юли с Кристиной. Подтверждение что Юля всё знает. После — полная ставка + бонусы.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-25",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-09-29",
+        "completed": "2026-09-29",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-09-29"
       }
     ],
-    "total": 37,
+    "total": 38,
     "by_status": {
-      "done": 28,
+      "done": 29,
       "cancelled": 9
     }
   },
