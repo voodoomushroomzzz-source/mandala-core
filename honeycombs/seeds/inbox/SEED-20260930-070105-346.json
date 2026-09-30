@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20260930-070105-346",
+  "title": "In-Context Learning for Robots: Methods and Applications",
+  "url": "https://arxiv.org/abs/2609.36012",
+  "description": "arXiv:2609.36012v1 Announce Type: new \nAbstract: General-purpose robots must infer what a new task requires and translate that understanding into appropriate physical action. In-context learning (ICL) for robots supports this process by using demonstrations and interaction to direct existing competence with neural parameters held fixed during deployment. We organize this literature review around the interfaces connecting contextual evidence to execution, distinguishing four families: context-con",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-09-30T07:01:05.453121",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
