@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-09-30T14:45:16Z",
+    "generated_at": "2026-09-30T16:28:25Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.4.0",
+      "version": "v2.4.1",
       "created": "2026-09-23",
       "updated": "2026-09-30",
       "layer": 2,
@@ -56,8 +56,8 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.4.0",
-        "tasks_count": 55,
+        "version": "v2.4.1",
+        "tasks_count": 57,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-09-30",
-      "notes": "v2.4.0: +K-100/101/103/104, K-078 deadline→15.10."
+      "notes": "v2.4.1: +K-105 (перераспределение Крис), +K-106 (программы обучения)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.4.0",
+      "version": "v2.4.1",
       "created": "2026-09-14",
       "updated": "2026-09-30",
       "layer": 2,
@@ -2429,29 +2429,84 @@
             "notion_page_id": null,
             "column": "Операционка — Общая"
           }
+        },
+        {
+          "id": "K-105",
+          "title": "Перераспределение функционала и бюджета (Крис → Дима + Катрин)",
+          "description": "Перераспределить функционал и бюджет между Димой (кризис-менеджер) и Катрин (старший бариста). Крис — источник, у которой забираем функционал (не путать: Крис ≠ Катрин).\n\nЗабираем у Крис: расписание, полностью обучение.\n\nБюджет (от функционала Крис):\n- Часть -> Катрин (за новый функционал)\n- Часть -> экономия -> в прибыль / выплаты по «фантомной доле» Димы (= накопление 50К/мес, не кэшем)\n\nОбязательно: пообщаться с Крис. Катрин знает (разговор не включён в задачу).\nКрайний срок: 31.10.2026.",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": "2026-10-31",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-077",
+            "K-078",
+            "K-084",
+            "K-094",
+            "K-106"
+          ],
+          "created": "2026-09-30",
+          "updated": "2026-09-30",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
+        },
+        {
+          "id": "K-106",
+          "title": "Разработать программы обучения (для передачи Крис→Катрин)",
+          "description": "Разработать технологические программы обучения. Нужны для передачи функции обучения от Крис к Катрин (см. K-105). Первое наполнение KB -> training (сейчас пустая). Формат/содержание — уточняется.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "strategic",
+          "phase": "phase_0",
+          "deadline": "2026-10-31",
+          "reminder": null,
+          "depends_on": [
+            "K-105"
+          ],
+          "related_to": [
+            "K-105",
+            "K-076"
+          ],
+          "created": "2026-09-30",
+          "updated": "2026-09-30",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Стратегические"
+          }
         }
       ],
       "counters": {
-        "total": 55,
+        "total": 57,
         "by_status": {
-          "todo": 52,
+          "todo": 54,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "medium": 16,
-          "high": 37,
-          "critical": 2
+          "high": 38,
+          "critical": 3
         },
         "by_column": {
-          "Стратегические": 9,
+          "Стратегические": 11,
           "Операционка — Общая": 10,
           "Операционка — Нижка": 23,
           "Операционка — Центр": 10,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 55
+          "phase_0": 57
         }
       },
       "notes": {
