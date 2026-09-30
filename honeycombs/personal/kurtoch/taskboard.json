@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.3.9",
+    "version": "v2.4.0",
     "created": "2026-09-14",
-    "updated": "2026-09-29",
+    "updated": "2026-09-30",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.3.4",
     "created": "2026-09-14",
-    "updated": "2026-09-29",
+    "updated": "2026-09-30",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -957,19 +957,19 @@
       {
         "id": "K-078",
         "title": "Контроль больших финансов / все бюджеты",
-        "description": "Взять под контроль все бюджеты сети (Нижка + Центр).\n\nЦелевой ориентир: 2 200 000 ₽/мес на 2 точки (1,1 млн на точку).\n\nЗадачи:\n1. Продумать систему учёта (переделка таблиц)\n2. Свести все бюджеты в единый контур\n3. Связать с метрикой выручки (см. index.json success_metrics.revenue_target)\n4. Точка пересмотра — конец октября\n\nСвязано с K-077 (анализ Крис).",
+        "description": "Взять под контроль все бюджеты сети (Нижка + Центр).\nЦелевой ориентир: 2 200 000 ₽/мес на 2 точки (1,1 млн на точку).\n\nКлючевые шаги:\n1. Принять решения по бюджетам и финансам (лимиты, направления, оптимизация) — до 15.10\n2. Продумать систему учёта (переделка таблиц)\n3. Свести все бюджеты в единый контур\n4. Связать с метрикой выручки (см. index.json success_metrics.revenue_target)\n\nDeadline: 15.10.2026 — точка решения.\nСвязано с K-077 (анализ Крис).",
         "priority": "critical",
         "status": "todo",
         "horizon": "strategic",
         "phase": "phase_0",
-        "deadline": "2026-10-31",
+        "deadline": "2026-10-15",
         "reminder": null,
         "depends_on": [],
         "related_to": [
           "K-077"
         ],
         "created": "2026-09-25",
-        "updated": "2026-09-25",
+        "updated": "2026-09-30",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1342,29 +1342,130 @@
           "notion_page_id": null,
           "column": "Операционка — Центр"
         }
+      },
+      {
+        "id": "K-100",
+        "title": "Закупка с Крис (Центр + Мишка)",
+        "description": "Закупка с Крис. Провести в Центре и на Мишке (Нижняя Дуброва). Совместная закупка.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-06",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001",
+          "M-002"
+        ],
+        "created": "2026-09-30",
+        "updated": "2026-09-30",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-101",
+        "title": "Отчёт по финансам от Крис",
+        "description": "Получить/проверить отчёт по финансам от Крис. Отдельная задача (не путать с K-089 — общие отчёты). Дедлайн — понедельник 06.10.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-06",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-077",
+          "K-078",
+          "K-089"
+        ],
+        "created": "2026-09-30",
+        "updated": "2026-09-30",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-103",
+        "title": "Сезонка: разработать, протестить, утвердить, запустить",
+        "description": "Сезонное меню. Этапы: 1) разработать (концепция + рецепты), 2) просчитать (себестоимость, маржа, цены), 3) протестить (тестовая партия/дегустация), 4) утвердить, 5) запустить. До конца октября.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-31",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-029"
+        ],
+        "created": "2026-09-30",
+        "updated": "2026-09-30",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        }
+      },
+      {
+        "id": "K-104",
+        "title": "Чистота заведения: серия напоминаний в чате + контроль",
+        "description": "Настроить серию напоминаний в рабочем чате по чистоте заведения + контроль. Формат сейчас (простой): серия сообщений-напоминаний в чате (утро/вечер), контроль без ботов. Будущее: интеграция с ботом (фото-чекапы, автозапросы). Касается обеих точек.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-076",
+          "M-001",
+          "M-002"
+        ],
+        "created": "2026-09-30",
+        "updated": "2026-09-30",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 51,
+      "total": 55,
       "by_status": {
-        "todo": 48,
+        "todo": 52,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "medium": 16,
-        "high": 33,
+        "high": 37,
         "critical": 2
       },
       "by_column": {
-        "Стратегические": 8,
-        "Операционка — Общая": 7,
+        "Стратегические": 9,
+        "Операционка — Общая": 10,
         "Операционка — Нижка": 23,
         "Операционка — Центр": 10,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 51
+        "phase_0": 55
       }
     },
     "notes": {

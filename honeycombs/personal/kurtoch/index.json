@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.3.9",
+    "version": "v2.4.0",
     "created": "2026-09-23",
-    "updated": "2026-09-29",
+    "updated": "2026-09-30",
     "layer": 2,
     "type": "personal_subhub_index",
     "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -30,8 +30,8 @@
     "taskboard.json": {
       "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
-      "version": "v2.3.9",
-      "tasks_count": 51,
+      "version": "v2.4.0",
+      "tasks_count": 55,
       "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
@@ -157,8 +157,8 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-09-29",
-    "notes": "v2.3.9: +K-099 (Екатерина — арендодатель ТЦ, оплата, 30.09)."
+    "last_check": "2026-09-30",
+    "notes": "v2.4.0: +K-100/101/103/104, K-078 deadline→15.10."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
