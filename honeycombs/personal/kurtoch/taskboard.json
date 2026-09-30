@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.4.1",
+    "version": "v2.4.2",
     "created": "2026-09-14",
     "updated": "2026-09-30",
     "layer": 2,
@@ -1498,17 +1498,41 @@
           "notion_page_id": null,
           "column": "Стратегические"
         }
+      },
+      {
+        "id": "K-107",
+        "title": "Обслужить кондиционер в Центре",
+        "description": "Обслужить кондиционер в Центре. Сейчас нормально не работает: включается, но требуется замена (предположительно подшипник или подобное). Точный диагноз — у мастера. Сделать до весны 2027.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2027-03-01",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-09-30",
+        "updated": "2026-09-30",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 57,
+      "total": 58,
       "by_status": {
-        "todo": 54,
+        "todo": 55,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
-        "medium": 16,
+        "medium": 17,
         "high": 38,
         "critical": 3
       },
@@ -1516,11 +1540,11 @@
         "Стратегические": 11,
         "Операционка — Общая": 10,
         "Операционка — Нижка": 23,
-        "Операционка — Центр": 10,
+        "Операционка — Центр": 11,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 57
+        "phase_0": 58
       }
     },
     "notes": {
