@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-09-30T16:34:46Z",
+    "generated_at": "2026-10-01T16:55:47Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,9 +28,9 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.4.2",
+      "version": "v2.4.3",
       "created": "2026-09-23",
-      "updated": "2026-09-30",
+      "updated": "2026-10-01",
       "layer": 2,
       "type": "personal_subhub_index",
       "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -56,8 +56,8 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.4.2",
-        "tasks_count": 58,
+        "version": "v2.4.3",
+        "tasks_count": 60,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
@@ -183,8 +183,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-09-30",
-      "notes": "v2.4.2: +K-107 (кондиционер Центр, к весне 2027)."
+      "last_check": "2026-10-01",
+      "notes": "v2.4.3: +K-108 (планёрка по обучению, 05.10), +K-109 (встреча с Магомедом, 02.10)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,9 +988,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.4.2",
+      "version": "v2.4.3",
       "created": "2026-09-14",
-      "updated": "2026-09-30",
+      "updated": "2026-10-01",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1003,7 +1003,7 @@
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
       "version": "v2.3.4",
       "created": "2026-09-14",
-      "updated": "2026-09-30",
+      "updated": "2026-10-01",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -2508,29 +2508,77 @@
             "notion_page_id": null,
             "column": "Операционка — Центр"
           }
+        },
+        {
+          "id": "K-108",
+          "title": "Планёрка по материалам обучения (сбор кусков + полный план)",
+          "description": "Планёрка по материалам обучения. Участники: Крис, Витя, Дима.\nЦель: собрать все куски обучающих материалов (у кого что лежит) + составить полный план обучения.\nРезультат — входные данные для K-106 (программы обучения) и K-105 (передача функции обучения от Крис к Катрин).",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-05",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-106",
+            "K-105",
+            "K-076"
+          ],
+          "created": "2026-10-01",
+          "updated": "2026-10-01",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-109",
+          "title": "Встреча с Магомедом по кухне",
+          "description": "Встреча с Магомедом по поводу кухни. Пятница 02.10.2026.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-02",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-01",
+          "updated": "2026-10-01",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
         }
       ],
       "counters": {
-        "total": 58,
+        "total": 60,
         "by_status": {
-          "todo": 55,
+          "todo": 57,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "medium": 17,
-          "high": 38,
+          "high": 40,
           "critical": 3
         },
         "by_column": {
           "Стратегические": 11,
-          "Операционка — Общая": 10,
+          "Операционка — Общая": 12,
           "Операционка — Нижка": 23,
           "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 58
+          "phase_0": 60
         }
       },
       "notes": {
