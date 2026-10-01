@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.4.2",
+    "version": "v2.4.3",
     "created": "2026-09-14",
-    "updated": "2026-09-30",
+    "updated": "2026-10-01",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.3.4",
     "created": "2026-09-14",
-    "updated": "2026-09-30",
+    "updated": "2026-10-01",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1522,29 +1522,77 @@
           "notion_page_id": null,
           "column": "Операционка — Центр"
         }
+      },
+      {
+        "id": "K-108",
+        "title": "Планёрка по материалам обучения (сбор кусков + полный план)",
+        "description": "Планёрка по материалам обучения. Участники: Крис, Витя, Дима.\nЦель: собрать все куски обучающих материалов (у кого что лежит) + составить полный план обучения.\nРезультат — входные данные для K-106 (программы обучения) и K-105 (передача функции обучения от Крис к Катрин).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-05",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-106",
+          "K-105",
+          "K-076"
+        ],
+        "created": "2026-10-01",
+        "updated": "2026-10-01",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-109",
+        "title": "Встреча с Магомедом по кухне",
+        "description": "Встреча с Магомедом по поводу кухни. Пятница 02.10.2026.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-02",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-01",
+        "updated": "2026-10-01",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 58,
+      "total": 60,
       "by_status": {
-        "todo": 55,
+        "todo": 57,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "medium": 17,
-        "high": 38,
+        "high": 40,
         "critical": 3
       },
       "by_column": {
         "Стратегические": 11,
-        "Операционка — Общая": 10,
+        "Операционка — Общая": 12,
         "Операционка — Нижка": 23,
         "Операционка — Центр": 11,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 58
+        "phase_0": 60
       }
     },
     "notes": {
