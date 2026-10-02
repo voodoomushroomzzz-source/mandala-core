@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.4.5",
+    "version": "v2.4.6",
     "created": "2026-09-14",
     "updated": "2026-10-02",
     "layer": 2,
@@ -790,7 +790,7 @@
         "title": "Капинг от Search Coffee (Центр)",
         "description": "Капинг (дегустация) от Search Coffee. Четверг, 01.10.2026, 14:00, Центр.\n\nПодготовка:\n1. Анонс среди друзей-кофейников (приглашения)\n2. Подготовить стафф для капинга (оборудование, посуда, помещение)\n3. Встретить ребят от Search Coffee\n4. SMM-материал с капинга\n5. Собрать списки — кто придёт\n\nФинал:\n6. Выбрать, что заказываем. Договориться о поставках, доставках и прочем.",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-01",
@@ -798,8 +798,8 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-23",
-        "updated": "2026-09-23",
-        "completed": null,
+        "updated": "2026-10-02",
+        "completed": "2026-10-02",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1594,29 +1594,54 @@
           "notion_page_id": null,
           "column": "Операционка — Нижка"
         }
+      },
+      {
+        "id": "K-111",
+        "title": "Перепечатать меню на Нижке (новое)",
+        "description": "Перепечатать меню на Нижке (Нижняя Дуброва) на новое.\n\nЧто выяснить:\n- Где макет старого меню (исходник)?\n- Кто разрабатывал?\n- Кто сможет редактировать?\n\nЦель — перепечатать в новом виде.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-11",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001"
+        ],
+        "created": "2026-10-02",
+        "updated": "2026-10-02",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
       }
     ],
     "counters": {
-      "total": 61,
+      "total": 62,
       "by_status": {
         "todo": 58,
         "in_progress": 2,
-        "planning": 1
+        "planning": 1,
+        "done": 1
       },
       "by_priority": {
-        "medium": 17,
+        "medium": 18,
         "high": 41,
         "critical": 3
       },
       "by_column": {
         "Стратегические": 11,
         "Операционка — Общая": 12,
-        "Операционка — Нижка": 24,
+        "Операционка — Нижка": 25,
         "Операционка — Центр": 11,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 61
+        "phase_0": 62
       }
     },
     "notes": {
