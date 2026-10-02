@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-02T08:07:38Z",
+    "generated_at": "2026-10-02T11:58:06Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.4.5",
+      "version": "v2.4.6",
       "created": "2026-09-23",
       "updated": "2026-10-02",
       "layer": 2,
@@ -56,8 +56,8 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.4.5",
-        "tasks_count": 61,
+        "version": "v2.4.6",
+        "tasks_count": 62,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
@@ -69,7 +69,7 @@
       "knowledge_base.json": {
         "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
         "purpose": "Структура готова, наполнение — по мере сбора.",
-        "version": "v2.0.0",
+        "version": "v2.1.0",
         "sections_count": 11
       },
       "taskboard_archive.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-02",
-      "notes": "v2.4.5: fix Мишка->Нижка (опечатка голосового ввода)."
+      "notes": "v2.4.6: KB v2.1.0 (+coffee_suppliers), +K-111 (меню Нижка), K-073 done."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.4.5",
+      "version": "v2.4.6",
       "created": "2026-09-14",
       "updated": "2026-10-02",
       "layer": 2,
@@ -1776,7 +1776,7 @@
           "title": "Капинг от Search Coffee (Центр)",
           "description": "Капинг (дегустация) от Search Coffee. Четверг, 01.10.2026, 14:00, Центр.\n\nПодготовка:\n1. Анонс среди друзей-кофейников (приглашения)\n2. Подготовить стафф для капинга (оборудование, посуда, помещение)\n3. Встретить ребят от Search Coffee\n4. SMM-материал с капинга\n5. Собрать списки — кто придёт\n\nФинал:\n6. Выбрать, что заказываем. Договориться о поставках, доставках и прочем.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-01",
@@ -1784,8 +1784,8 @@
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-23",
-          "updated": "2026-09-23",
-          "completed": null,
+          "updated": "2026-10-02",
+          "completed": "2026-10-02",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2580,29 +2580,54 @@
             "notion_page_id": null,
             "column": "Операционка — Нижка"
           }
+        },
+        {
+          "id": "K-111",
+          "title": "Перепечатать меню на Нижке (новое)",
+          "description": "Перепечатать меню на Нижке (Нижняя Дуброва) на новое.\n\nЧто выяснить:\n- Где макет старого меню (исходник)?\n- Кто разрабатывал?\n- Кто сможет редактировать?\n\nЦель — перепечатать в новом виде.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-11",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001"
+          ],
+          "created": "2026-10-02",
+          "updated": "2026-10-02",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
         }
       ],
       "counters": {
-        "total": 61,
+        "total": 62,
         "by_status": {
           "todo": 58,
           "in_progress": 2,
-          "planning": 1
+          "planning": 1,
+          "done": 1
         },
         "by_priority": {
-          "medium": 17,
+          "medium": 18,
           "high": 41,
           "critical": 3
         },
         "by_column": {
           "Стратегические": 11,
           "Операционка — Общая": 12,
-          "Операционка — Нижка": 24,
+          "Операционка — Нижка": 25,
           "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 61
+          "phase_0": 62
         }
       },
       "notes": {
@@ -4460,9 +4485,9 @@
     "identity": {
       "module_id": "KURTOCH-KB-001",
       "name": "Kurtoch — Knowledge Base",
-      "version": "v2.0.0",
+      "version": "v2.1.0",
       "created": "2026-09-23",
-      "updated": "2026-09-28",
+      "updated": "2026-10-02",
       "layer": 2,
       "type": "knowledge_base_module",
       "description": "База знаний Куртош: наполнена — условия найма, экономика, управление штаткой и фондом стажёров, прозрачность ЗП.",
@@ -4690,6 +4715,25 @@
           "Идеально — в расписании до начала недели показывать ожидаемый расчёт",
           "Отдельно прояснять критерии премий (в т.ч. ГУ), корректировать"
         ]
+      },
+      "coffee_suppliers": {
+        "status": "active",
+        "title": "Поставщики кофе: политика закупки зерна",
+        "source": "Решение Садовника, 02.10.2026",
+        "date_added": "2026-10-02",
+        "espresso": {
+          "nijka": "QQ",
+          "centre": "Search Coffee"
+        },
+        "filter": {
+          "nijka": "50/50: QQ + Search Coffee",
+          "centre": "50/50: QQ + Search Coffee"
+        },
+        "future": "В перспективе — разные обжарщики на обеих точках",
+        "related_to": [
+          "K-073 (капинг Search Coffee — проведён 01.10)"
+        ],
+        "notes": "QQ и Search Coffee — основные партнёры. Фильтр — 50/50."
       }
     },
     "content": {},
@@ -4700,7 +4744,7 @@
         "team.json"
       ]
     },
-    "status_note": "5 секций active. 6 секций empty — ждут данных.",
+    "status_note": "6 активных секций. 6 empty — ждут данных.",
     "linked_tasks": {
       "K-076": "База знаний и инструкции — консолидация (поглощает K-008, K-010, K-018, K-021, K-039, K-041)"
     }
