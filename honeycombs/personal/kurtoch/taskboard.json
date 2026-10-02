@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.4.8",
+    "version": "v2.4.9",
     "created": "2026-09-14",
     "updated": "2026-10-02",
     "layer": 2,
@@ -1666,29 +1666,51 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-115",
+        "title": "Оля: аванс 5000 ₽ вычесть из ЗП",
+        "description": "Оля (EMP-016) — вычесть аванс 5000 ₽ из зарплаты при выплате 09.10.2026.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-09",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-02",
+        "updated": "2026-10-02",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 64,
+      "total": 65,
       "by_status": {
-        "todo": 61,
+        "todo": 62,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "medium": 19,
-        "high": 42,
+        "high": 43,
         "critical": 3
       },
       "by_column": {
         "Стратегические": 11,
-        "Операционка — Общая": 13,
+        "Операционка — Общая": 14,
         "Операционка — Нижка": 26,
         "Операционка — Центр": 11,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 64
+        "phase_0": 65
       }
     },
     "notes": {
