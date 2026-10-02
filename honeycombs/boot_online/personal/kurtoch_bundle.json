@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-02T08:01:49Z",
+    "generated_at": "2026-10-02T08:07:38Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.4.4",
+      "version": "v2.4.5",
       "created": "2026-09-23",
       "updated": "2026-10-02",
       "layer": 2,
@@ -56,7 +56,7 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.4.4",
+        "version": "v2.4.5",
         "tasks_count": 61,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-02",
-      "notes": "v2.4.4: +K-110 (замена фильтра воды на Нижке, 11.10)."
+      "notes": "v2.4.5: fix Мишка->Нижка (опечатка голосового ввода)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.4.4",
+      "version": "v2.4.5",
       "created": "2026-09-14",
       "updated": "2026-10-02",
       "layer": 2,
@@ -2088,8 +2088,8 @@
         },
         {
           "id": "K-085",
-          "title": "Резинка на холдере: протечка кофемашины (Мишка/Нижка)",
-          "description": "Протечка на холдере кофемашины — износ групповой прокладки (резинки). Посмотреть, диагностировать, заменить при необходимости. Точка: Мишка (Нижняя Дуброва).",
+          "title": "Резинка на холдере: протечка кофемашины (Нижка)",
+          "description": "Протечка на холдере кофемашины — износ групповой прокладки (резинки). Посмотреть, диагностировать, заменить при необходимости. Точка: Нижка (Нижняя Дуброва).",
           "priority": "high",
           "status": "todo",
           "horizon": "tactical",
@@ -2101,7 +2101,7 @@
             "M-001"
           ],
           "created": "2026-09-27",
-          "updated": "2026-09-27",
+          "updated": "2026-10-02",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2261,7 +2261,7 @@
         {
           "id": "K-097",
           "title": "Отфотографировать цветы на Нишке",
-          "description": "Отфотографировать все цветы на Нишке. Точка: Мишка (Нижняя Дуброва). См. K-066.",
+          "description": "Отфотографировать все цветы на Нишке. Точка: Нижка (Нижняя Дуброва). См. K-066.",
           "priority": "medium",
           "status": "todo",
           "horizon": "tactical",
@@ -2274,7 +2274,7 @@
             "M-001"
           ],
           "created": "2026-09-29",
-          "updated": "2026-09-29",
+          "updated": "2026-10-02",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2331,8 +2331,8 @@
         },
         {
           "id": "K-100",
-          "title": "Закупка с Крис (Центр + Мишка)",
-          "description": "Закупка с Крис. Провести в Центре и на Мишке (Нижняя Дуброва). Совместная закупка.",
+          "title": "Закупка с Крис (Центр + Нижка)",
+          "description": "Закупка с Крис. Провести в Центре и на Нижке (Нижняя Дуброва). Совместная закупка.",
           "priority": "high",
           "status": "todo",
           "horizon": "tactical",
@@ -2345,7 +2345,7 @@
             "M-002"
           ],
           "created": "2026-09-30",
-          "updated": "2026-09-30",
+          "updated": "2026-10-02",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
