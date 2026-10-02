@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-02T12:09:08Z",
+    "generated_at": "2026-10-02T12:24:37Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.4.7",
+      "version": "v2.4.8",
       "created": "2026-09-23",
       "updated": "2026-10-02",
       "layer": 2,
@@ -56,14 +56,14 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.4.7",
-        "tasks_count": 62,
+        "version": "v2.4.8",
+        "tasks_count": 64,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
         "description": "Картотека сотрудников.",
         "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-        "version": "v1.2.1",
+        "version": "v1.3.0",
         "total_employees": 17
       },
       "knowledge_base.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-02",
-      "notes": "v2.4.7: +K-112 (пометить мусорный бак Нижка)."
+      "notes": "v2.4.8: +K-113 (расчёт Саши), +K-114 (Юля статус), team v1.3.0 (Саша left, Оля working)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.4.7",
+      "version": "v2.4.8",
       "created": "2026-09-14",
       "updated": "2026-10-02",
       "layer": 2,
@@ -2606,29 +2606,75 @@
             "notion_page_id": null,
             "column": "Операционка — Нижка"
           }
+        },
+        {
+          "id": "K-113",
+          "title": "Выдать расчёт Саше",
+          "description": "Выдать расчёт Саше (EMP-006). Расстаёмся — «долго и слабо».",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-02",
+          "updated": "2026-10-02",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-114",
+          "title": "Общение с Юлей: решить статус",
+          "description": "Общение с Юлей (EMP-009, сейчас paused — по здоровью). По итогам — решить статус:\n- Остаётся paused / возвращается working / уходит left\n- Если уходит — расчёт\n- Уточнить сроки возврата (если возвращается)\nАттестация Юли (K-040) — пройдена 29.09.",
+          "priority": "high",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-02",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-040"
+          ],
+          "created": "2026-10-02",
+          "updated": "2026-10-02",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
         }
       ],
       "counters": {
-        "total": 62,
+        "total": 64,
         "by_status": {
-          "todo": 59,
+          "todo": 61,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "medium": 19,
-          "high": 40,
+          "high": 42,
           "critical": 3
         },
         "by_column": {
           "Стратегические": 11,
-          "Операционка — Общая": 11,
+          "Операционка — Общая": 13,
           "Операционка — Нижка": 26,
           "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 62
+          "phase_0": 64
         }
       },
       "notes": {
@@ -3687,9 +3733,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.2.1",
+      "version": "v1.3.0",
       "created": "2026-09-23",
-      "updated": "2026-09-29",
+      "updated": "2026-10-02",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
@@ -3699,15 +3745,15 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-09-29",
+      "last_updated": "2026-10-02",
       "total_employees": 17,
       "by_status": {
         "core": 1,
         "working": 4,
-        "left": 3,
+        "left": 4,
         "runner": 2,
         "paused": 1,
-        "trainee": 3,
+        "trainee": 2,
         "substitute": 3
       },
       "skill_ladder": {
@@ -3971,12 +4017,13 @@
             "extra": "пока стажёр",
             "notes": null
           },
-          "status": "working",
+          "status": "left",
           "risks": [],
-          "notes": "Только начинает обучение на печку. Пока ничего не умеет. Возможно лишняя.",
+          "notes": "Расстаёмся — долго и слабо. Не подходит. Расчёт будет выдан (K-113).",
           "data_gaps": [
             "nijka.attitude"
-          ]
+          ],
+          "updated": "2026-10-02"
         },
         {
           "id": "EMP-007",
@@ -4376,11 +4423,11 @@
             "availability": null
           },
           "skills": {
-            "stage": "pechka_training",
-            "pechka": "training",
-            "coffee": "yes",
-            "kassa": "unknown",
-            "notes": "Опыт по кофе есть. Печка — обучение."
+            "stage": "coffee",
+            "pechka": "yes",
+            "coffee": "training",
+            "kassa": "yes",
+            "notes": "Печка OK, касса OK. Работает самостоятельно. Кофе — доработать."
           },
           "nijka": {
             "attitude": "likes",
@@ -4392,15 +4439,15 @@
             "extra": null,
             "notes": null
           },
-          "status": "trainee",
+          "status": "working",
           "risks": [
             "ищет сейчас другую работу; готова поработать у нас пока"
           ],
           "notes": "пришла от Маши; пробная смена в воскресенье",
           "data_gaps": [
-            "trial_result",
             "schedule.notes"
-          ]
+          ],
+          "updated": "2026-10-02"
         },
         {
           "id": "EMP-017",
