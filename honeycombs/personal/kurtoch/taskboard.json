@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.4.3",
+    "version": "v2.4.4",
     "created": "2026-09-14",
-    "updated": "2026-10-01",
+    "updated": "2026-10-02",
     "layer": 2,
     "type": "taskboard_module",
     "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -17,7 +17,7 @@
     "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
     "version": "v2.3.4",
     "created": "2026-09-14",
-    "updated": "2026-10-01",
+    "updated": "2026-10-02",
     "legend": {
       "priority": {
         "critical": "Горит. Сегодня-завтра.",
@@ -1570,29 +1570,53 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-110",
+        "title": "Заменить фильтр для воды на Нижке",
+        "description": "Заменить фильтр для воды на Нижке (Нижняя Дуброва).",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-11",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001"
+        ],
+        "created": "2026-10-02",
+        "updated": "2026-10-02",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
       }
     ],
     "counters": {
-      "total": 60,
+      "total": 61,
       "by_status": {
-        "todo": 57,
+        "todo": 58,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "medium": 17,
-        "high": 40,
+        "high": 41,
         "critical": 3
       },
       "by_column": {
         "Стратегические": 11,
         "Операционка — Общая": 12,
-        "Операционка — Нижка": 23,
+        "Операционка — Нижка": 24,
         "Операционка — Центр": 11,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 60
+        "phase_0": 61
       }
     },
     "notes": {
