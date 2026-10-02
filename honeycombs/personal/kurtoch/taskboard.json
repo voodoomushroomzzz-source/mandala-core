@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.4.6",
+    "version": "v2.4.7",
     "created": "2026-09-14",
     "updated": "2026-10-02",
     "layer": 2,
@@ -1596,29 +1596,53 @@
           "notion_page_id": null,
           "column": "Операционка — Нижка"
         }
+      },
+      {
+        "id": "K-112",
+        "title": "Пометить мусорный бак на Нижке",
+        "description": "Пометить мусорный бак на Нижке (Нижняя Дуброва).",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001"
+        ],
+        "created": "2026-10-02",
+        "updated": "2026-10-02",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        }
       }
     ],
     "counters": {
-      "total": 61,
+      "total": 62,
       "by_status": {
-        "todo": 58,
+        "todo": 59,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
-        "medium": 18,
+        "medium": 19,
         "high": 40,
         "critical": 3
       },
       "by_column": {
         "Стратегические": 11,
         "Операционка — Общая": 11,
-        "Операционка — Нижка": 25,
+        "Операционка — Нижка": 26,
         "Операционка — Центр": 11,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 61
+        "phase_0": 62
       }
     },
     "notes": {
