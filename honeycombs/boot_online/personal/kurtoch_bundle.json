@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-02T12:02:11Z",
+    "generated_at": "2026-10-02T12:09:08Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.4.6",
+      "version": "v2.4.7",
       "created": "2026-09-23",
       "updated": "2026-10-02",
       "layer": 2,
@@ -56,7 +56,7 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.4.6",
+        "version": "v2.4.7",
         "tasks_count": 62,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-02",
-      "notes": "v2.4.6: KB v2.1.0 (+coffee_suppliers), +K-111 (меню Нижка), K-073 done."
+      "notes": "v2.4.7: +K-112 (пометить мусорный бак Нижка)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.4.6",
+      "version": "v2.4.7",
       "created": "2026-09-14",
       "updated": "2026-10-02",
       "layer": 2,
@@ -2582,29 +2582,53 @@
             "notion_page_id": null,
             "column": "Операционка — Нижка"
           }
+        },
+        {
+          "id": "K-112",
+          "title": "Пометить мусорный бак на Нижке",
+          "description": "Пометить мусорный бак на Нижке (Нижняя Дуброва).",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-001"
+          ],
+          "created": "2026-10-02",
+          "updated": "2026-10-02",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
         }
       ],
       "counters": {
-        "total": 61,
+        "total": 62,
         "by_status": {
-          "todo": 58,
+          "todo": 59,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
-          "medium": 18,
+          "medium": 19,
           "high": 40,
           "critical": 3
         },
         "by_column": {
           "Стратегические": 11,
           "Операционка — Общая": 11,
-          "Операционка — Нижка": 25,
+          "Операционка — Нижка": 26,
           "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 61
+          "phase_0": 62
         }
       },
       "notes": {
