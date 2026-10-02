@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261002-070106-368",
+  "title": "Probabilistic Plan Legibility with Off-the-shelf Planners",
+  "url": "https://arxiv.org/abs/2610.00065",
+  "description": "arXiv:2610.00065v1 Announce Type: new \nAbstract: Legible planning is the creation of plans that best disambiguate their goals from a set of other candidates from an observer's perspective. In this paper we propose a method for legible planning for arbitrary PDDL domains, by extending previous research on legibility to classical planning without requiring to construct ad-hoc planners. We also discuss how the observer perspective may be estimated through a second order theory of mind that connects",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-02T07:01:06.806319",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
