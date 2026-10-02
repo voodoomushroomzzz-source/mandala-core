@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.4.7",
+    "version": "v2.4.8",
     "created": "2026-09-14",
     "updated": "2026-10-02",
     "layer": 2,
@@ -1620,29 +1620,75 @@
           "notion_page_id": null,
           "column": "Операционка — Нижка"
         }
+      },
+      {
+        "id": "K-113",
+        "title": "Выдать расчёт Саше",
+        "description": "Выдать расчёт Саше (EMP-006). Расстаёмся — «долго и слабо».",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-02",
+        "updated": "2026-10-02",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
+      },
+      {
+        "id": "K-114",
+        "title": "Общение с Юлей: решить статус",
+        "description": "Общение с Юлей (EMP-009, сейчас paused — по здоровью). По итогам — решить статус:\n- Остаётся paused / возвращается working / уходит left\n- Если уходит — расчёт\n- Уточнить сроки возврата (если возвращается)\nАттестация Юли (K-040) — пройдена 29.09.",
+        "priority": "high",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-02",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-040"
+        ],
+        "created": "2026-10-02",
+        "updated": "2026-10-02",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        }
       }
     ],
     "counters": {
-      "total": 62,
+      "total": 64,
       "by_status": {
-        "todo": 59,
+        "todo": 61,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
         "medium": 19,
-        "high": 40,
+        "high": 42,
         "critical": 3
       },
       "by_column": {
         "Стратегические": 11,
-        "Операционка — Общая": 11,
+        "Операционка — Общая": 13,
         "Операционка — Нижка": 26,
         "Операционка — Центр": 11,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 62
+        "phase_0": 64
       }
     },
     "notes": {
