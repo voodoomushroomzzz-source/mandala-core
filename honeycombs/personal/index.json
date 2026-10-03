@@ -2,12 +2,12 @@
   "identity": {
     "module_id": "PERSONAL-INDEX-001",
     "name": "Personal Hub — Карта и инструкция",
-    "version": "v2.3.0",
+    "version": "v2.4.0",
     "created": "2026-08-20",
-    "updated": "2026-09-24",
+    "updated": "2026-10-04",
     "layer": 2,
     "type": "personal_index",
-    "description": "Центральная карта для personal/. v2.3.0: добавлен pilgrimage.json — долгосрочный проект паломничества. v2.2.0: career + learning теперь симбиотичны — взаимные ссылки, единый roadmap карьеры и обучения.",
+    "description": "Центральная карта для personal/. v2.4.0: career v1.2.0 + learning v1.2.0 — обновлены дедлайны (Track A 30.11, Track C Q4 2027, English B2 Nov), Track D реализован. v2.3.0: добавлен pilgrimage.json.",
     "status": "active",
     "priority": "high",
     "tags": ["personal", "index", "instruction", "gardener", "profile", "symbiosis", "pilgrimage"],
@@ -26,20 +26,20 @@
       "when_to_use": "Всегда, когда SR нужно понять личность."
     },
     "career.json": {
-      "description": "Карьерные треки: AI Ops, системный аналитик, международный AI-специалист, территориальный управляющий. Симбиоз с learning.json.",
+      "description": "Карьерные треки: AI Ops (удалёнка), системный аналитик, международный AI-специалист. Track D реализован (Куртошкофе — кризис-менеджер / главный управляющий). Симбиоз с learning.json.",
       "purpose": "Управление карьерой и профессиональными проектами.",
       "when_to_use": "При карьерных решениях. Читать ВМЕСТЕ с learning.json.",
       "symbiosis_partner": "learning.json",
-      "version": "v1.1.0",
-      "updated": "2026-09-23"
+      "version": "v1.2.0",
+      "updated": "2026-10-04"
     },
     "learning.json": {
-      "description": "Обучение: сертификаты (unified_certificate_track, 9 шт), системный анализ (UML/BPMN/SQL/Swagger), английский (B2→C1), OpenAI/Anthropic Academy. Симбиоз с career.json.",
+      "description": "Обучение: сертификаты (unified_certificate_track, 9 шт), системный анализ (UML/BPMN/SQL/Swagger), английский (B2 с ноября 2026 → C1 до 30.09.2027), OpenAI/Anthropic Academy. 1 час в будни. Симбиоз с career.json.",
       "purpose": "Структурирование обучения под карьерные треки.",
       "when_to_use": "При планировании обучения. Читать ВМЕСТЕ с career.json.",
       "symbiosis_partner": "career.json",
-      "version": "v1.1.0",
-      "updated": "2026-09-23"
+      "version": "v1.2.0",
+      "updated": "2026-10-04"
     },
     "creative.json": {
       "description": "Творчество: поэзия, музыка, проза.",
@@ -75,25 +75,25 @@
       "description": "Поэзия: тексты, планы по изданию."
     },
     "kurtoch/": {
-      "description": "Хаб проекта Куртош — кризис-менеджмент, операционная система, франшиза.",
+      "description": "Хаб проекта Куртош — кризис-менеджмент, операционная система, франшиза. Текущая работа (с 11.09.2026).",
       "note": "Разбит на модули: taskboard.json, team.json, knowledge_base.json."
     }
   },
   "symbiosis": {
     "career_learning": {
-      "description": "Career.json и learning.json — единый контур. Карьера задаёт цель, обучение закрывает требования. Обратная связь двусторонняя.",
+      "description": "Career.json и learning.json — единый контур. Карьера задаёт цель, обучение закрывает требования. Обратная связь двусторонняя. Track D реализован — фокус на A и B.",
       "files": ["career.json", "learning.json"],
       "tracks_mapping": {
         "track_a_ai_ops": ["Google AI Essentials", "GitHub Foundations", "OpenAI Foundations"],
         "track_b_system_analyst": ["UML", "BPMN", "SQL", "Swagger", "OpenAI Applied", "Anthropic Academy"],
-        "track_c_global_ai": ["CCA-F", "English C1", "OpenAI Agents"],
-        "track_d_ops": ["Google AI Essentials (опционально)"]
+        "track_c_global_ai": ["CCA-F", "English C1", "OpenAI Agents"]
       },
       "key_deadlines": {
-        "track_a_offer": "2026-10-31",
-        "track_b_entry": "2027-02-28",
-        "track_c_entry": "2027-03-01",
-        "track_d_trigger": "2026-10-31"
+        "track_a_offer": "2026-11-30",
+        "track_b_entry": "2027-03-31",
+        "track_c_entry": "2027-10-01",
+        "english_b2": "2027-03-31",
+        "english_c1": "2027-09-30"
       },
       "rule": "Если career требует навык — он должен быть в learning. Если в learning появился курс — он должен усилить один из треков."
     }
@@ -138,7 +138,7 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-09-24",
-    "notes": "v2.3.0: добавлен pilgrimage.json — долгосрочный проект паломничества (Владимир → Варанаси, до 2029)."
+    "last_check": "2026-10-04",
+    "notes": "v2.4.0: career v1.2.0 + learning v1.2.0 синхронизированы. Track D реализован (Куртошкофе). Track A deadline 30.11.2026, Track C Q4 2027. English B2 с ноября 2026. Learning 1ч/будни."
   }
 }
