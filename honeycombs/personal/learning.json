@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Learning & Certificates — Dima (Gardener)",
-    "version": "v1.1.0",
+    "version": "v1.2.0",
     "created": "2026-08-14",
-    "updated": "2026-09-23",
-    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. Убит дубль certificates_track, добавлен system_analyst_foundation."
+    "updated": "2026-10-04",
+    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.2.0: дедлайны под 1ч/будни, Track D убран, English B2 с ноября, C1 до 30.09.2027."
   },
   "symbiosis": {
     "partner_file": "honeycombs/personal/career.json",
@@ -16,27 +16,27 @@
     }
   },
   "courses": {
-    "strategy": "Сначала бесплатные и критичные (Google AI, GitHub, OpenAI) → потом системный анализ (UML/BPMN/SQL) → потом углублённые (Anthropic, CCA-F). Платные — только после дохода.",
+    "strategy": "1 час в будни (Пн-Пт). Сначала бесплатные и критичные (Google AI, GitHub, OpenAI) → потом системный анализ (UML/BPMN/SQL) → потом углублённые (Anthropic, CCA-F). Платные — только после дохода.",
     "priority_levels": {
       "critical_free_now": {
-        "description": "✅ Начать сейчас. Прямо влияет на Track A.",
+        "description": "✅ Октябрь. Прямо влияет на Track A.",
         "list": [
           {
             "name": "Google AI Essentials",
             "platform": "Google",
             "duration": "1 час",
-            "start": "2026-09-23",
-            "deadline": "2026-09-30",
+            "start": "2026-10-06",
+            "deadline": "2026-10-06",
             "status": "not_started",
             "certificate": "Google Certificate",
-            "why": "Самый быстрый сертификат. Закрывает базовый AI-порог. Часто спрашивают на собеседованиях."
+            "why": "Самый быстрый сертификат. Закрывает базовый AI-порог."
           },
           {
             "name": "GitHub Foundations",
             "platform": "GitHub",
             "duration": "2-3 часа",
-            "start": "2026-09-23",
-            "deadline": "2026-10-05",
+            "start": "2026-10-07",
+            "deadline": "2026-10-09",
             "status": "not_started",
             "certificate": "GitHub Certificate",
             "why": "Закрывает tech-порог для IT-компаний."
@@ -44,9 +44,9 @@
           {
             "name": "OpenAI Academy: AI Foundations",
             "platform": "OpenAI",
-            "duration": "2-4 недели",
+            "duration": "~20 часов (in_progress)",
             "start": "2026-07-01",
-            "deadline": "2026-10-15",
+            "deadline": "2026-10-30",
             "status": "in_progress",
             "certificate": "Credly badge",
             "why": "Фундамент промпт-инжиниринга и LLM."
@@ -54,35 +54,35 @@
         ]
       },
       "system_analyst_foundation": {
-        "description": "📚 База для Track B. Бесплатно, на русском. Закрывает разрыв в обучении системного аналитика.",
-        "deadline": "2026-12-15",
+        "description": "📚 Track B. Старт с ноября (после базовых сертификатов).",
+        "deadline": "2027-01-31",
         "list": [
+          {
+            "name": "UML — YouTube + Habr",
+            "platform": "YouTube / Habr",
+            "duration": "~5 дней (1ч/будни)",
+            "start": "2026-11-02",
+            "deadline": "2026-11-15",
+            "status": "not_started",
+            "why": "Диаграммы классов, последовательностей, use case."
+          },
           {
             "name": "BPMN 2.0 — Stepik",
             "platform": "Stepik",
             "url": "https://stepik.org/course/100356",
-            "duration": "~2 недели",
-            "start": "2026-10-01",
-            "deadline": "2026-10-20",
+            "duration": "~10 дней (1ч/будни)",
+            "start": "2026-11-16",
+            "deadline": "2026-11-27",
             "status": "not_started",
             "why": "Схемы бизнес-процессов — базовый инструмент аналитика."
-          },
-          {
-            "name": "UML — YouTube + Habr",
-            "platform": "YouTube / Habr",
-            "duration": "~1 неделя",
-            "start": "2026-10-01",
-            "deadline": "2026-10-15",
-            "status": "not_started",
-            "why": "Диаграммы классов, последовательностей, use case."
           },
           {
             "name": "SQL для начинающих — Stepik",
             "platform": "Stepik",
             "url": "https://stepik.org/course/63054",
-            "duration": "~3 недели",
-            "start": "2026-10-15",
-            "deadline": "2026-11-10",
+            "duration": "~15 дней (1ч/будни)",
+            "start": "2026-11-30",
+            "deadline": "2026-12-20",
             "status": "not_started",
             "why": "Обязательный навык системного аналитика."
           },
@@ -90,9 +90,9 @@
             "name": "Swagger / OpenAPI",
             "platform": "Swagger Editor + Habr",
             "url": "https://editor.swagger.io/",
-            "duration": "~1 неделя",
-            "start": "2026-11-10",
-            "deadline": "2026-11-20",
+            "duration": "~5 дней (1ч/будни)",
+            "start": "2026-12-21",
+            "deadline": "2026-12-27",
             "status": "not_started",
             "why": "Спецификации API — рабочий инструмент аналитика."
           }
@@ -104,9 +104,9 @@
           {
             "name": "OpenAI Academy: Applied AI Foundations",
             "platform": "OpenAI",
-            "duration": "3-4 недели",
-            "start": "2026-11-01",
-            "deadline": "2026-12-15",
+            "duration": "~15 дней (1ч/будни)",
+            "start": "2027-01-04",
+            "deadline": "2027-01-22",
             "status": "not_started",
             "certificate": "Credly badge",
             "why": "Переход от пользователя к архитектору."
@@ -116,31 +116,31 @@
             "platform": "Anthropic (Skilljar)",
             "url": "https://anthropic.skilljar.com",
             "duration": "~20+ часов (17 курсов)",
-            "start": "2026-11-15",
-            "deadline": "2027-01-31",
+            "start": "2027-01-25",
+            "deadline": "2027-03-15",
             "status": "not_started",
             "certificate": "Course completion + CCA-F",
-            "why": "Путь к CCA-F. Модули: Claude 101, AI Fluency, API, MCP, Claude Code, Subagents."
+            "why": "Путь к CCA-F."
           },
           {
             "name": "OpenAI Academy: Agents and Workflows",
             "platform": "OpenAI",
-            "duration": "3-4 недели",
-            "start": "2027-01-01",
-            "deadline": "2027-02-15",
+            "duration": "~15 дней (1ч/будни)",
+            "start": "2027-03-16",
+            "deadline": "2027-04-05",
             "status": "not_started",
             "certificate": "Credly badge",
-            "why": "Прямой путь к Agentic Orchestration."
+            "why": "Agentic Orchestration."
           },
           {
             "name": "English B2 → C1 (technical AI)",
             "platform": "Free resources",
-            "duration": "Ongoing",
-            "start": "2026-10-01",
-            "deadline_b2": "2026-12-31",
-            "deadline_c1": "2027-06-30",
+            "duration": "Ongoing (1ч/будни)",
+            "start": "2026-11-01",
+            "deadline_b2": "2027-03-31",
+            "deadline_c1": "2027-09-30",
             "status": "not_started",
-            "why": "Критично для глобального рынка (Track C)."
+            "why": "B2 — для удалёнки РФ. C1 — для глобалки (Track C, Q4 2027)."
           }
         ]
       },
@@ -171,7 +171,7 @@
   },
   "unified_certificate_track": {
     "description": "Единый трек сертификатов. Заменяет старый certificates_track (удалён — был дубль).",
-    "last_updated": "2026-09-23",
+    "last_updated": "2026-10-04",
     "total": 9,
     "certificates": [
       {
@@ -180,7 +180,7 @@
         "platform": "Google",
         "url": "https://grow.google/certificates/",
         "time_estimate": "1 час",
-        "deadline": "2026-09-30",
+        "deadline": "2026-10-06",
         "priority": "critical",
         "status": "not_started",
         "added_to_resume": false,
@@ -192,7 +192,7 @@
         "platform": "GitHub",
         "url": "https://education.github.com/",
         "time_estimate": "2-3 часа",
-        "deadline": "2026-10-05",
+        "deadline": "2026-10-09",
         "priority": "critical",
         "status": "not_started",
         "added_to_resume": false,
@@ -204,7 +204,7 @@
         "platform": "OpenAI",
         "url": "https://openai.com/",
         "time_estimate": "2-4 недели",
-        "deadline": "2026-10-15",
+        "deadline": "2026-10-30",
         "priority": "critical",
         "status": "in_progress",
         "added_to_resume": false,
@@ -216,7 +216,7 @@
         "platform": "OpenAI",
         "url": "https://openai.com/",
         "time_estimate": "3-4 недели",
-        "deadline": "2026-12-15",
+        "deadline": "2027-01-22",
         "priority": "high",
         "status": "not_started",
         "added_to_resume": false,
@@ -228,7 +228,7 @@
         "platform": "Anthropic (Skilljar)",
         "url": "https://anthropic.skilljar.com",
         "time_estimate": "20+ часов",
-        "deadline": "2027-01-31",
+        "deadline": "2027-03-15",
         "priority": "high",
         "status": "not_started",
         "added_to_resume": false,
@@ -240,7 +240,7 @@
         "platform": "OpenAI",
         "url": "https://openai.com/",
         "time_estimate": "3-4 недели",
-        "deadline": "2027-02-15",
+        "deadline": "2027-04-05",
         "priority": "medium",
         "status": "not_started",
         "added_to_resume": false,
@@ -296,14 +296,14 @@
     ]
   },
   "task_tracker": {
-    "description": "Трекер обучения. Выровнен под новые дедлайны (сегодня 2026-09-23).",
+    "description": "Трекер обучения. Выровнен под 1ч/будни, старт с 06.10.2026.",
     "tasks": [
       {
         "id": "LRN-001",
         "name": "Завершить OpenAI Academy: AI Foundations",
         "status": "in_progress",
         "priority": "critical",
-        "deadline": "2026-10-15",
+        "deadline": "2026-10-30",
         "output": "Сертификат Credly"
       },
       {
@@ -311,7 +311,7 @@
         "name": "Пройти Google AI Essentials",
         "status": "not_started",
         "priority": "critical",
-        "deadline": "2026-09-30",
+        "deadline": "2026-10-06",
         "output": "Сертификат Google"
       },
       {
@@ -319,31 +319,31 @@
         "name": "Пройти GitHub Foundations",
         "status": "not_started",
         "priority": "critical",
-        "deadline": "2026-10-05",
+        "deadline": "2026-10-09",
         "output": "Сертификат GitHub"
       },
       {
         "id": "LRN-004",
-        "name": "BPMN 2.0 (Stepik)",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2026-10-20",
-        "output": "Практика схем"
-      },
-      {
-        "id": "LRN-005",
         "name": "UML (YouTube + Habr)",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2026-10-15",
+        "deadline": "2026-11-15",
         "output": "Диаграммы"
+      },
+      {
+        "id": "LRN-005",
+        "name": "BPMN 2.0 (Stepik)",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2026-11-27",
+        "output": "Практика схем"
       },
       {
         "id": "LRN-006",
         "name": "SQL для начинающих (Stepik)",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2026-11-10",
+        "deadline": "2026-12-20",
         "output": "Запросы"
       },
       {
@@ -351,50 +351,50 @@
         "name": "Swagger / OpenAPI",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2026-11-20",
+        "deadline": "2026-12-27",
         "output": "Спецификации"
       },
       {
         "id": "LRN-008",
-        "name": "OpenAI Applied AI Foundations",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2026-12-15",
-        "output": "Credly"
-      },
-      {
-        "id": "LRN-009",
-        "name": "Anthropic Academy Path",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-01-31",
-        "output": "Course certificates"
-      },
-      {
-        "id": "LRN-010",
         "name": "English B2",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2026-12-31",
+        "deadline": "2027-03-31",
         "output": "B2 certificate"
       },
       {
-        "id": "LRN-011",
-        "name": "English C1",
+        "id": "LRN-009",
+        "name": "OpenAI Applied AI Foundations",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2027-06-30",
-        "output": "C1 certificate"
+        "deadline": "2027-01-22",
+        "output": "Credly"
       },
       {
-        "id": "LRN-012",
+        "id": "LRN-010",
+        "name": "Anthropic Academy Path",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2027-03-15",
+        "output": "Course certificates"
+      },
+      {
+        "id": "LRN-011",
         "name": "CCA-F экзамен",
         "status": "not_started",
         "priority": "high",
         "deadline": "2027-03-31",
         "output": "Official certification"
+      },
+      {
+        "id": "LRN-012",
+        "name": "English C1",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2027-09-30",
+        "output": "C1 certificate"
       }
     ]
   },
-  "last_updated": "2026-09-23"
+  "last_updated": "2026-10-04"
 }
