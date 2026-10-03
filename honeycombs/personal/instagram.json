@@ -409,21 +409,48 @@
     }
   },
   "audience_tracker": {
+    "description": "Трекер динамики аудитории и вовлечённости. SR обновляет периодически.",
+    "update_instructions": {
+      "frequency": "Раз в неделю (по воскресеньям) SR запрашивает у Садовника актуальные цифры",
+      "metrics_to_ask": [
+        "Подписчики Instagram",
+        "Средние просмотры Stories (примерно)",
+        "Метрики новых Reels/видео (просмотры, лайки, досмотры)",
+        "Подписчики TikTok (если есть)",
+        "Метрики Trial Reels (если были)"
+      ],
+      "how_to_update": "SR спрашивает — Садовник присылает скриншот/цифры — SR патчит history"
+    },
     "instagram": {
       "handle": "@xdeaddyx",
-      "current_followers": 244,
-      "last_updated": "2026-10-04",
+      "current": {
+        "followers": 244,
+        "stories_views_avg": 50,
+        "stories_views_avg_previous": 30,
+        "measured_date": "2026-10-04"
+      },
       "history": [
         {
           "date": "2026-10-04",
-          "followers": 244
+          "followers": 244,
+          "stories_views_avg": 50,
+          "stories_views_avg_previous": 30,
+          "notes": "Рост просмотров Stories: 30 → 50+ за 1-2 недели"
         }
       ]
     },
     "tiktok": {
-      "current_followers": 0,
-      "last_updated": "2026-10-04",
+      "current": {
+        "followers": 0,
+        "measured_date": "2026-10-04"
+      },
       "history": []
+    },
+    "growth_metrics": {
+      "stories_views_trend": "up",
+      "followers_trend": "stable",
+      "last_significant_change": "2026-10-04",
+      "notes": "Stories выросли в 1.6x за 2 недели. Подписчики стабильны."
     }
   },
   "ispolnyayu_tracker": {
