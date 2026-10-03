@@ -1,10 +1,10 @@
 {
   "identity": {
     "name": "Career Vectors — Dima (Gardener)",
-    "version": "v1.1.0",
+    "version": "v1.2.0",
     "created": "2026-08-14",
-    "updated": "2026-09-23",
-    "description": "Все карьерные треки, профиль, платформы, ключевые запросы и общий план. Симбиоз с learning.json. Дедлайны выровнены под 2026-09-23."
+    "updated": "2026-10-04",
+    "description": "Карьерные треки, профиль, платформы, ключевые запросы. Симбиоз с learning.json. v1.2.0: Куртошкофе (кризис-менеджер), Track D закрыт (реализован), Track A deadline 30.11.2026, Track C сдвиг на Q4 2027, английский B2 с ноября."
   },
   "symbiosis": {
     "partner_file": "honeycombs/personal/learning.json",
@@ -27,20 +27,31 @@
     "hh_resume_url": "https://hh.ru/resume/8993b5ceff09a959820039ed1f7a3734656f62",
     "current_employment": {
       "status": "active",
-      "company": "Raw to go",
+      "company": "Куртошкофе",
       "city": "Москва",
-      "position": "Территориальный управляющий",
-      "period": "Ноябрь 2025 – настоящее время",
+      "position": "Кризис-менеджер / Главный управляющий",
+      "period": "11 сентября 2026 – настоящее время",
+      "format": "Без фиксированного графика, требуется постоянное присутствие",
       "team_size": 30,
-      "description": "Сеть из 5 кафе и производств. Команда до 30 человек."
-    }
+      "description": "Управление операционными процессами в кризисный период, перестройка систем, внедрение AI-инструментов для автоматизации."
+    },
+    "experience_history": [
+      {
+        "company": "Raw to go",
+        "city": "Москва",
+        "position": "Территориальный управляющий",
+        "period": "Ноябрь 2025 – Сентябрь 2026",
+        "team_size": 30,
+        "description": "Сеть из 5 кафе и производств. Команда до 30 человек."
+      }
+    ]
   },
   "tracks": {
     "track_a": {
       "name": "Track A: AI Ops / Automation Manager — Быстрый вход в IT",
-      "deadline": "2026-10-31",
-      "goal": "AI-hybrid role (AI Operations, AI Project Management, Automation Manager) with 150 000+ RUB income. Быстрый вход в IT через AI-гибридные роли.",
-      "reasoning": "Immediate income needed. Leverage 8-year operations experience + AI skills. Target: companies adopting AI, roles combining management and AI implementation.",
+      "deadline": "2026-11-30",
+      "goal": "AI-hybrid role (AI Operations, AI Project Management, Automation Manager) с доходом 150 000+ RUB. Переход на удалёнку.",
+      "reasoning": "Доход от Куртошкофе есть — спешки нет. Выход на удалёнку — 30.11.2026. Leverage 8+ лет операционного опыта + AI-навыки.",
       "target_roles": [
         "AI Operations Manager",
         "AI Project Manager",
@@ -54,52 +65,50 @@
         "m1_packaging": {
           "name": "Packaging",
           "status": "in_progress",
+          "deadline": "2026-10-20",
           "tasks": [
             "Experience audit + IT/AI translation (DONE)",
-            "Core resume (Russian) preparation (DONE)",
-            "Adapt resume for hh.ru, Superjob, Rabota.ru, Zarplata.ru — AI focus",
-            "Adapt resume for Avito, TrudVsem — AI focus",
-            "Create LinkedIn profile (English) — AI-optimized",
+            "Core resume preparation (DONE)",
+            "Обновить резюме под AI Ops (учесть Куртош, Mandala, новые сертификаты) — deadline 2026-10-13",
+            "Adapt resume for LinkedIn (ENG) — AI-optimized",
             "Create Habr Career, TenChat profiles",
-            "Subscribe to 10+ Telegram channels (AI/IT jobs)",
-            "Integrate HyperCareer company list",
-            "English version of core resume — global applications",
-            "Alternative resumes for Territorial Manager roles (200k/month) — fallback"
+            "Подписка на удалённые платформы: WWR, RemoteOK, Wellfound, Remotive, Himalayas",
+            "Subscribe to 10+ Telegram channels (AI/IT jobs)"
           ]
         },
         "m2_first_wave": {
           "name": "First Wave",
-          "deadline": "2026-10-20",
+          "deadline": "2026-10-31",
           "tasks": [
-            "70+ applications across all platforms (priority: AI-hybrid)",
+            "20-30 пробных откликов (проверка рынка)",
             "Employer verification via Dream Job"
           ]
         },
         "m3_interviews": {
           "name": "Interviews",
-          "deadline": "2026-10-31",
+          "deadline": "2026-11-15",
           "tasks": [
             "All first-wave interviews",
-            "Second wave 20-30 applications + pitch calibration"
+            "Second wave 50+ applications + pitch calibration"
           ]
         },
         "m4_offer": {
           "name": "Offer",
-          "deadline": "2026-10-31",
+          "deadline": "2026-11-30",
           "tasks": [
-            "Minimum 1 written offer 150 000+ RUB for AI-hybrid role"
+            "Minimum 1 written offer 150 000+ RUB для AI-hybrid удалённой роли"
           ]
         }
       },
       "required_learning": [
-        "Google AI Essentials (deadline 2026-09-30)",
-        "GitHub Foundations (deadline 2026-10-05)",
-        "OpenAI Academy: AI Foundations (deadline 2026-10-15)"
+        "Google AI Essentials (deadline 2026-10-06)",
+        "GitHub Foundations (deadline 2026-10-09)",
+        "OpenAI Academy: AI Foundations (deadline 2026-10-30)"
       ]
     },
     "track_b": {
       "name": "Track B: Системный аналитик (с AI-уклоном) — Основной стратегический трек",
-      "start": "2026-10-01",
+      "start": "2026-11-01",
       "goal": "Профессиональный вход в IT-архитектуру через системный анализ. Максимально использует опыт перестройки систем.",
       "salary_range": "150 000 — 250 000+ RUB (начало), 250 000 — 400 000+ RUB (через 2-3 года)",
       "horizon": "3-4 месяца до первого оффера",
@@ -111,31 +120,31 @@
       },
       "phases": {
         "phase_1_learning": {
-          "name": "Изучение основ (Октябрь-Ноябрь 2026)",
-          "duration": "2 месяца",
-          "deadline": "2026-11-30",
+          "name": "Изучение основ (Ноябрь 2026 – Январь 2027)",
+          "duration": "2-3 месяца",
+          "deadline": "2027-01-31",
           "tasks": [
-            "BPMN 2.0 (Stepik) — deadline 2026-10-20",
-            "UML (YouTube + Habr) — deadline 2026-10-15",
-            "SQL для начинающих (Stepik) — deadline 2026-11-10",
-            "Swagger / OpenAPI — deadline 2026-11-20",
+            "BPMN 2.0 (Stepik) — deadline 2026-11-20",
+            "UML (YouTube + Habr) — deadline 2026-11-15",
+            "SQL для начинающих (Stepik) — deadline 2026-12-10",
+            "Swagger / OpenAPI — deadline 2026-12-20",
             "Практика на Mandala: описать кейсы как системный анализ"
           ]
         },
         "phase_2_practice": {
-          "name": "Практика и портфолио (Ноябрь-Декабрь 2026)",
+          "name": "Практика и портфолио (Декабрь 2026 – Январь 2027)",
           "duration": "1-2 месяца",
-          "deadline": "2026-12-31",
+          "deadline": "2027-01-31",
           "tasks": [
-            "Описать кейсы 'Нью Нормал' и 'Raw to go' как системный анализ",
+            "Описать кейсы 'Куртошкофе' и 'Raw to go' как системный анализ",
             "Написать ТЗ и спецификации для Mandala",
             "Начать отклики на аналитические вакансии"
           ]
         },
         "phase_3_entry": {
-          "name": "Вход в аналитику (Январь-Февраль 2027)",
+          "name": "Вход в аналитику (Февраль-Март 2027)",
           "duration": "1-2 месяца",
-          "deadline": "2027-02-28",
+          "deadline": "2027-03-31",
           "tasks": [
             "Целевой оффер 150-250k RUB как системный аналитик",
             "Параллельно: AI-навыки для усиления"
@@ -150,11 +159,11 @@
     },
     "track_c": {
       "name": "Track C: Международный AI-специалист — Долгосрочный глобальный трек",
-      "start": "2027-03-01",
-      "goal": "Выход на глобальный рынок в роли AI-специалиста после укрепления позиций в IT.",
+      "start": "2027-10-01",
+      "goal": "Выход на глобальный рынок в роли AI-специалиста после укрепления позиций в IT и получения английского C1.",
       "salary_range": "$8,000 — $15,000+ / month",
       "horizon": "6-12 месяцев после входа в IT",
-      "reasoning": "Долгосрочная цель. Требует английского C1, глубокого AI-портфолио и опыта работы в IT.",
+      "reasoning": "Долгосрочная цель. Требует английского C1 (до 30.09.2027), глубокого AI-портфолио и опыта работы в IT.",
       "path_from_b": "Системный аналитик с AI-уклоном → Международный AI-специалист.",
       "requirements": [
         "Английский C1 (technical, professional)",
@@ -163,109 +172,130 @@
         "Умение проходить глобальные собеседования"
       ],
       "required_learning": [
-        "English B2 → C1 (B2 deadline 2026-12-31, C1 deadline 2027-06-30)",
+        "English B2 (deadline 2027-03-31) → C1 (deadline 2027-09-30)",
         "OpenAI Academy: Agents and Workflows (deadline 2027-02-15)",
         "CCA-F (deadline 2027-03-31)"
       ]
     },
     "track_d": {
-      "name": "Track D: Территориальный / Региональный управляющий — Запасной трек",
-      "goal": "Запасной вариант для быстрого дохода, если AI-треки не сработают.",
+      "name": "Track D: Территориальный / Региональный управляющий — РЕАЛИЗОВАН",
+      "status": "realized_closed",
+      "goal": "Запасной вариант — реализован через Куртошкофе (кризис-менеджер / главный управляющий).",
       "salary_range": "170 000 — 220 000 ₽",
-      "reasoning": "Полное соответствие опыту. Быстрый вход, низкий риск.",
+      "reasoning": "Полное соответствие опыту. Реализован через текущую позицию.",
       "roles": [
         "Территориальный управляющий",
         "Региональный менеджер",
         "Руководитель филиала"
       ],
-      "employment": "Полная занятость, гибридный формат",
-      "travel": "По Москве и Московской области",
-      "when_to_use": "Если Track A не приносит результата к 31.10.2026"
+      "note": "Закрыт 04.10.2026. Доход есть — Track A и Track B идут параллельно без необходимости backup."
     }
   },
   "overall_plan": {
-    "description": "Общий план по всем трекам. Синхронизирован с learning.json.",
-    "key_principle": "Один трек — один фокус. Последовательное наслоение: А → Б → Ц. Д — запасной.",
-    "last_updated": "2026-09-23",
+    "description": "Общий план по всем трекам. Синхронизирован с learning.json. Track D реализован — план перестроен на параллельную работу.",
+    "key_principle": "Track A и Track B идут параллельно. Доход есть (Куртошкофе) — спешки нет, но темп держим.",
+    "last_updated": "2026-10-04",
     "hard_deadlines": {
-      "track_a_offer_target": "2026-10-31",
-      "track_b_entry_target": "2027-02-28",
-      "track_c_entry_target": "2027-03-01",
-      "track_d_trigger": "2026-10-31"
+      "track_a_offer_target": "2026-11-30",
+      "track_b_entry_target": "2027-03-31",
+      "track_c_entry_target": "2027-10-01"
     },
     "priority_by_period": {
       "october_2026": {
         "period": "Октябрь 2026",
-        "focus": "🔥 80% — Track A (доход) + 📚 20% — сертификаты",
+        "focus": "🔥 60% — Track A (сертификаты + резюме) + 📚 40% — Track B (старт UML/BPMN)",
         "tasks": [
-          "Google AI Essentials (1 час) — 30.09",
-          "GitHub Foundations (2-3 часа) — 05.10",
-          "Завершить OpenAI AI Foundations — 15.10",
-          "Адаптация резюме под все платформы",
-          "Создать LinkedIn (ENG) и Habr Career",
-          "Массовые отклики (70+) на AI Ops / Automation Manager",
-          "Старт BPMN + UML (10% времени)"
+          "Google AI Essentials (1 час) — 06.10",
+          "GitHub Foundations (2-3 часа) — 09.10",
+          "Завершить OpenAI AI Foundations — 30.10",
+          "Обновить резюме под AI Ops — 13.10",
+          "Создать LinkedIn (ENG) и Habr Career — 13.10",
+          "Подписка на WWR, RemoteOK, Wellfound, Remotive, Himalayas",
+          "Старт UML + BPMN (вечерами)"
         ],
         "daily_time": {
-          "track_a": "3-4 часа (отклики) + 1-2 часа (сертификаты)",
-          "track_b": "15-20 минут (BPMN/UML чтение)"
+          "track_a": "1 час (сертификаты) + вечера (резюме)",
+          "track_b": "1 час (UML/BPMN)"
         }
       },
       "november_2026": {
         "period": "Ноябрь 2026",
-        "focus": "💼 60% Track A (работа) + 📚 40% Track B (обучение)",
+        "focus": "🔥 50% — Track A (отклики + оффер) + 📚 50% — Track B (обучение)",
         "tasks": [
-          "Работа по Track A (доход)",
+          "Активные отклики на AI Ops (50+)",
+          "Интервью, питчи",
+          "Целевой оффер 150k+ до 30.11",
           "SQL для начинающих — 10.11",
           "Swagger / OpenAPI — 20.11",
-          "OpenAI Applied AI Foundations — старт 01.11",
-          "Anthropic Academy — старт 15.11",
-          "Практика на Mandala: кейсы как системный анализ"
+          "English B2 — старт 01.11",
+          "OpenAI Applied — старт 01.11"
         ],
         "daily_time": {
-          "track_a": "6-8 часов (работа)",
-          "track_b": "1-2 часа (обучение)"
+          "track_a": "2-3 часа (отклики, интервью)",
+          "track_b": "1 час (SQL/Swagger)",
+          "english": "1 час"
         }
       },
       "december_2026": {
         "period": "Декабрь 2026",
-        "focus": "🔥 60% Track B + 💼 40% Track A + 📖 English",
+        "focus": "💼 40% — Track A (работа) + 🔥 60% — Track B (углубление) + 📖 English",
         "tasks": [
+          "Работа по Track A (если оффер) или продолжение поиска",
           "Завершить system_analyst_foundation",
           "OpenAI Applied AI Foundations — завершить 15.12",
-          "Портфолио кейсов готово",
-          "Активные отклики на аналитические вакансии",
-          "English B2 — дедлайн 31.12",
-          "Подготовка к собеседованиям"
+          "Anthropic Academy — старт 15.11 (продолжение)",
+          "English B2 — продолжение",
+          "Портфолио кейсов (Куртош, Raw to Go, Mandala)"
         ],
         "daily_time": {
           "track_a": "4-6 часов (работа)",
-          "track_b": "2-3 часа (отклики, портфолио)",
+          "track_b": "1 час (обучение)",
           "english": "1 час"
         }
       },
       "q1_2027": {
         "period": "Январь–Март 2027",
-        "focus": "🔥 Track B (оффер аналитика) + Track C (подготовка)",
+        "focus": "🔥 Track B (оффер аналитика) + 📖 English B2 → C1",
         "tasks": [
           "Активные отклики на аналитику",
           "Anthropic Academy — завершить 31.01",
           "OpenAI Agents — 15.02",
           "CCA-F экзамен — 31.03",
-          "English C1 — работа",
-          "Глобальные отклики (LinkedIn, WWR, RemoteOK)"
+          "English B2 — завершить 31.03",
+          "English C1 — старт 01.04"
         ],
         "daily_time": {
-          "track_b": "6-8 часов (работа)",
-          "track_c": "1-2 часа (english) + 2-3 часа (отклики)"
+          "track_b": "2-3 часа (отклики)",
+          "english": "1 час"
         }
+      },
+      "q2_q3_2027": {
+        "period": "Апрель–Сентябрь 2027",
+        "focus": "💼 Track B (работа) + 📖 English C1",
+        "tasks": [
+          "Работа системным аналитиком",
+          "English C1 — завершить 30.09",
+          "Подготовка портфолио для глобалки",
+          "CCA-F получен",
+          "Глобальные отклики (пилотные)"
+        ]
+      },
+      "q4_2027": {
+        "period": "Октябрь–Декабрь 2027",
+        "focus": "🌍 Track C (глобалка)",
+        "tasks": [
+          "Глобальные отклики (LinkedIn, WWR, RemoteOK)",
+          "Целевой оффер $8k-15k+ / месяц",
+          "Английский C1 + CCA-F + портфолио → глобальный рынок"
+        ]
       }
     },
-    "backup_plan_track_d": {
-      "name": "Track D — запасной",
-      "trigger": "Если Track A не приносит результата к 31.10.2026",
-      "action": "Переключиться на Track D как основной доход, продолжить Track B в свободное время.",
-      "salary_range": "170 000 — 220 000 ₽"
+    "track_d_realized": {
+      "name": "Track D — реализован",
+      "status": "realized_closed",
+      "how": "Куртошкофе, кризис-менеджер / главный управляющий, с 11.09.2026",
+      "salary_range": "170 000 — 220 000 ₽",
+      "note": "Запасной трек реализован. Доход есть. Track A и Track B идут параллельно."
     },
     "quick_wins": {
       "description": "Быстрые победы для всех треков",
@@ -273,22 +303,24 @@
         "Google AI Essentials (1 час) — сертификат для всех треков",
         "GitHub Foundations (2-3 часа) — tech-порог",
         "LinkedIn (ENG) — работает на все треки",
-        "Кейсы (Нью Нормал, Raw to go) — портфолио для A, B, C"
+        "Кейсы (Куртошкофе, Raw to Go, Mandala) — портфолио для A, B, C"
       ]
     }
   },
   "ai_career_path": {
-    "summary": "AI перестраивает рынок. AI-гибридные роли (менеджмент + AI-грамотность) дают более высокую зарплату и меньшую конкуренцию.",
+    "summary": "AI перестраивает рынок. AI-гибридные роли (менеджмент + AI-грамотность) дают более высокую зарплату и меньшую конкуренцию. Кризис-менеджер с AI-навыками — редкая комбинация.",
     "key_insights": [
       "AI-навыки дают в среднем +62% к зарплате.",
       "AI-гибридные роли менее конкурентны, чем традиционный менеджмент.",
       "Практический AI-проект (Mandala Symbiosis) — уникальная портфолио-единица.",
+      "Кризис-менеджмент + AI = уникальный профиль, мало у кого есть.",
       "OpenAI Academy сертификаты глобально признаны и бесплатны."
     ]
   },
   "skills": {
     "management": [
       "Operations Management",
+      "Crisis Management",
       "Project Management (Agile, Scrum, Kanban)",
       "Budget Management (P&L)",
       "Team Leadership (up to 30 people)",
@@ -316,25 +348,34 @@
     ]
   },
   "job_search_platforms": {
-    "track_a_russian": {
-      "primary": ["hh.ru", "Superjob"],
-      "secondary": ["Работа.ру (job.ru)"],
-      "it_specific": ["Habr Career", "GeekJOB", "Getmatch", "TenChat"],
-      "niche_aggregators": ["Jobster", "hirify", "hirehi", "careerspace", "finder", "finder.work"],
-      "temporary_projects": ["Kwork", "FL.ru", "Workspace", "SolarStaff"]
+    "remote_primary": {
+      "description": "Основные площадки для удалёнки. hh.ru и Работа.ру исключены (локальный рынок).",
+      "top_5": [
+        "We Work Remotely (weworkremotely.com)",
+        "Remote OK (remoteok.com)",
+        "Wellfound — AngelList (wellfound.com)",
+        "Remotive (remotive.com)",
+        "Himalayas (himalayas.app)"
+      ],
+      "additional": [
+        "LinkedIn Jobs (remote filter)",
+        "Arc.dev",
+        "Turing",
+        "Crossover",
+        "Djinni (CIS IT)"
+      ]
     },
     "track_b_global": {
       "international": ["LinkedIn (global)", "We Work Remotely (WWR)", "RemoteOK", "NoDesk", "Himalayas", "Working Nomads", "Remote.co"],
-      "remote": ["Remotive", "NoDesk", "Truely Remote", "Indeed", "JustRemote", "DailyRemote", "Virtual Vocations", "Working Nomads", "Remote100k", "SkipTheDrive"],
+      "remote": ["Remotive", "Indeed", "JustRemote", "DailyRemote", "Virtual Vocations", "Remote100k", "SkipTheDrive"],
       "ai_specific": ["TopTal", "Arc.dev", "Turing", "Crossover", "AI Jobs"],
-      "personalized": ["Otta", "wantapply.com", "Wellfound (AngelList)", "Welcome to the Jungle", "Y Combinator Jobs", "Deel Jobs", "Oyster Jobs"],
+      "personalized": ["Otta", "Wellfound (AngelList)", "Welcome to the Jungle", "Y Combinator Jobs", "Deel Jobs", "Oyster Jobs"],
       "cis_it": ["Djinni"]
     },
     "telegram_channels": {
       "priority_1": ["@management_jobs / @projects_jobs_feed", "@benchmark_executive", "@newhribb"],
       "priority_2": ["@vacansii_bezbariera", "@finexecutive", "WORK ON", "Удалёнка без опыта"],
-      "additional": ["@tools_hacks (getmatch)", "©Карьера® The Blueprint", "@digital_jobster", "@rabota_go", "@rabota_freelancee", "@jobster_resume"],
-      "resume_channels": ["Резюме 🚀 Маркетинга, СММ, Digital, Продажи"],
+      "additional": ["@tools_hacks (getmatch)", "@digital_jobster", "@rabota_go", "@jobster_resume"],
       "ai_specific": ["@ai_jobs", "@mlops_jobs", "@datascience_jobs"]
     },
     "networking": ["LinkedIn", "TenChat", "Setka (HH)", "Habr portal", "Professional Slack communities", "AI-focused Discord servers"],
@@ -342,45 +383,65 @@
     "salary_data": ["Getmatch calculator", "Levels.fyi (VPN)"]
   },
   "search_keywords": {
-    "description": "Ключевые запросы для поиска вакансий.",
-    "last_updated": "2026-09-23",
+    "description": "Ключевые запросы для поиска вакансий на удалёнку.",
+    "last_updated": "2026-10-04",
     "track_a_ai_ops": {
       "primary": ["AI Operations Manager", "Automation Manager", "AI Project Manager", "менеджер по автоматизации", "AI Product Manager"],
       "secondary": ["операционный менеджер", "руководитель проектов", "менеджер по внедрению", "AI менеджер"],
       "skills_based": ["Python", "API", "нейросети", "автоматизация", "Telegram бот", "LLM", "промпт-инжиниринг"],
-      "search_queries": ["AI менеджер", "автоматизация + менеджер", "AI Operations", "нейросети + управление", "менеджер + Python"]
+      "search_queries": ["AI менеджер удалённо", "автоматизация + менеджер", "AI Operations remote", "нейросети + управление", "менеджер + Python"]
     },
     "track_b_system_analyst": {
       "primary": ["системный аналитик", "System Analyst", "бизнес-аналитик", "Business Analyst", "IT-аналитик"],
       "secondary": ["аналитик", "менеджер по требованиям", "аналитик данных", "Data Analyst"],
       "skills_based": ["SQL", "BPMN", "UML", "Swagger", "API", "интеграция", "требования"],
-      "search_queries": ["системный аналитик + SQL", "Business Analyst + API", "аналитик + BPMN", "System Analyst + удаленно"]
-    },
-    "track_d_ops": {
-      "primary": ["территориальный управляющий", "региональный менеджер", "руководитель филиала", "операционный директор"],
-      "secondary": ["управляющий", "директор", "менеджер"],
-      "search_queries": ["территориальный управляющий", "региональный менеджер + Москва", "руководитель филиала + HoReCa"]
+      "search_queries": ["системный аналитик + SQL удалённо", "Business Analyst + API", "аналитик + BPMN", "System Analyst + remote"]
     }
   },
+  "resume_update": {
+    "status": "pending",
+    "priority": "critical",
+    "deadline": "2026-10-13",
+    "description": "Обновить резюме под AI Ops (удалёнка). Учесть: Куртошкофе (кризис-менеджер / главный управляющий), Mandala Symbiosis (AI-проект), новые сертификаты (Google AI, GitHub, OpenAI), фокус на удалённые роли.",
+    "target_platforms": [
+      "LinkedIn (ENG, AI-optimized)",
+      "We Work Remotely",
+      "Remote OK",
+      "Wellfound",
+      "Remotive",
+      "Himalayas"
+    ],
+    "key_highlights": [
+      "Кризис-менеджер / Главный управляющий в Куртошкофе (с 09.2026)",
+      "8+ лет операционного менеджмента (Raw to Go и др.)",
+      "AI-грамотность: GPT, Claude, DeepSeek, Prompt Engineering",
+      "Практический AI-проект: Mandala Symbiosis (GitHub)",
+      "Linux Server Administration (Ubuntu, systemd)",
+      "Сертификаты: Google AI Essentials, GitHub Foundations, OpenAI Foundations (после получения)"
+    ]
+  },
   "task_tracker": {
-    "description": "Трекер задач Track A packaging phase.",
+    "description": "Трекер задач Track A. Обновлён под новые дедлайны (v1.2.0).",
     "packaging_tasks": [
       {"id": "A-TASK-001", "name": "Audit of experience", "status": "done", "priority": "HIGH"},
       {"id": "A-TASK-002", "name": "Core Resume", "status": "done", "priority": "HIGH"},
-      {"id": "A-TASK-003", "name": "Adapt resume for Russian job boards", "status": "in_progress", "priority": "HIGH", "deadline": "2026-10-10"},
-      {"id": "A-TASK-004", "name": "LinkedIn / Habr Career / TenChat profiles", "status": "pending", "priority": "HIGH", "deadline": "2026-10-10"},
-      {"id": "A-TASK-005", "name": "Subscribe to 10+ Telegram channels", "status": "pending", "priority": "MEDIUM", "deadline": "2026-10-05"},
-      {"id": "A-TASK-006", "name": "Integrate HyperCareer company list", "status": "pending", "priority": "MEDIUM", "deadline": "2026-10-15"}
+      {"id": "A-TASK-003", "name": "Обновить резюме под AI Ops (удалёнка)", "status": "pending", "priority": "CRITICAL", "deadline": "2026-10-13"},
+      {"id": "A-TASK-004", "name": "LinkedIn (ENG) + Habr Career + TenChat", "status": "pending", "priority": "HIGH", "deadline": "2026-10-13"},
+      {"id": "A-TASK-005", "name": "Подписка на WWR, RemoteOK, Wellfound, Remotive, Himalayas", "status": "pending", "priority": "HIGH", "deadline": "2026-10-13"},
+      {"id": "A-TASK-006", "name": "Subscribe to 10+ Telegram channels (AI/IT jobs)", "status": "pending", "priority": "MEDIUM", "deadline": "2026-10-06"},
+      {"id": "A-TASK-007", "name": "First Wave: 20-30 пробных откликов", "status": "pending", "priority": "HIGH", "deadline": "2026-10-31"},
+      {"id": "A-TASK-008", "name": "Interviews + Second Wave (50+)", "status": "pending", "priority": "HIGH", "deadline": "2026-11-15"},
+      {"id": "A-TASK-009", "name": "Целевой оффер 150k+ на удалёнку", "status": "pending", "priority": "CRITICAL", "deadline": "2026-11-30"}
     ]
   },
   "success_metrics": {
-    "track_a": "Written job offer 150 000+ RUB for AI-hybrid role by 2026-10-31",
-    "track_b": "System Analyst offer 150-250k RUB by 2027-02-28",
-    "track_c": "Global AI role offer ($8k-15k/mo) by 2027-06-30",
-    "courses": "OpenAI AI Foundations + Google AI Essentials + GitHub Foundations by 2026-10-15",
+    "track_a": "Written job offer 150 000+ RUB для AI-hybrid удалённой роли by 2026-11-30",
+    "track_b": "System Analyst offer 150-250k RUB by 2027-03-31",
+    "track_c": "Global AI role offer ($8k-15k/mo) by 2027-12-31",
+    "courses": "Google AI Essentials + GitHub Foundations + OpenAI AI Foundations by 2026-10-30",
     "certificates": "CCA-F passed by 2027-03-31",
-    "english": "English B2 by 2026-12-31, C1 by 2027-06-30",
-    "relocation": "1+ month successful remote work from Vietnam by 2027"
+    "english": "English B2 by 2027-03-31, C1 by 2027-09-30",
+    "relocation": "1+ month successful remote work from Vietnam by 2028"
   },
-  "last_updated": "2026-09-23"
+  "last_updated": "2026-10-04"
 }
