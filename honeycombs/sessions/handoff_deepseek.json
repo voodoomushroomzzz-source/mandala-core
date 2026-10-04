@@ -1,90 +1,202 @@
 {
-  "handoff_id": "HANDOFF-DEEPSEEK-SYNTHESIS-2026-10-04",
-  "version": "v1.0.0",
-  "created": "2026-10-04",
+  "handoff_id": "HANDOFF-DEEPSEEK-2026-10-04",
+  "version": "v6.1.0",
+  "created": "2026-09-29",
   "updated": "2026-10-04",
-  "purpose": "Бесшовный переход в новый чат синтеза. Контекст сессии 04.10.2026: углубление profile_deep.json, вектор «Время» исследован и закрыт.",
+  "purpose": "Бесшовный переход в новый чат. Контекст сессии 28.09–04.10.2026: KB v2.1.0 (+coffee_suppliers), 28 новых задач (K-088…K-118), K-077 схлопнута с K-086, 4 инфраструктурных фикса (Personal×2, Описание, normalize_desc), Юля → working, +EMP-017 Дарья, team v1.3.1. Mandala 107 = Notion 107.",
   "context": {
     "gardener": "Voodoo (Дима)",
-    "chat_type": "synthesis",
-    "project": "profile_deep.json — углубление профиля Архитектора",
-    "current_state": "Переходный период. Владимир. Перезагрузка. Строительство сада.",
+    "project": "Куртош — Кризис-менеджмент + операционная система",
+    "current_state": "Кризис-менеджер, 100 т.р./мес (50 кеш + 50 накопление), 3 мес (11.09–11.12.2026). Progress 40%. Фаза 0.",
     "session_focus": [
-      "Синтез вектора «Время» (VEC-003) — три уровня времени",
-      "Добавление записи в synthesis_updates",
-      "Обновление section_D.last_updated → 2026-10-04"
+      "Инфраструктурные фиксы: build_bundle.py и workflow yml — Personal → personal",
+      "push_taskboard.py — патчит Описание (blocks) в Notion",
+      "normalize_desc через regex — фикс сравнения (K-076/K-077 больше не патчатся впустую)",
+      "KB v2.1.0 — 6 активных секций: hiring, economics, staffing, trainee_fund, salary_transparency, coffee_suppliers",
+      "28 задач за сессию (K-088…K-118)",
+      "K-077 расширена (схлопнута с K-086)",
+      "Team: Саша→left, Оля→working, Юля→paused→working, +EMP-017 Дарья",
+      "Bundle auto-rebuild ожил (runs зелёные)",
+      "Массовый sync описаний (~50 задач)"
     ]
   },
-  "session_results": {
-    "vector_time": {
-      "status": "closed",
-      "date": "2026-10-04",
-      "levels": {
-        "cyclic": "Вечерняя молитва (главный якорь), утренняя молитва (в процессе), разминка (намерение), тёплый напиток, благовоние утром.",
-        "linear": "Главный трек 4–5 мес: Вьетнам + доход 150–200К удалённо. Источники: 35К пассив, 50К кэш (кризис-менеджер), 50К долг. План: обучение ИИ → удалённый рынок, английский → зарубежный рынок.",
-        "moment": "Пространство для импровизации, случайности, чудес."
-      },
-      "key_insight": "Ты не выбираешь один режим времени — ты удерживаешь все три одновременно: ритм + направление + открытость."
-    }
-  },
-  "open_vectors": {
-    "money": {
-      "id": "VEC-001",
-      "status": "synthesis_exists_not_closed",
-      "last_synthesis": "2026-08-30",
-      "note": "Синтез есть, но вектор не закрыт. Можно углубить."
-    },
-    "body": {
-      "id": "VEC-002",
-      "status": "not_researched",
-      "description": "Тело как храм, инструмент и первое семя. Как физическая практика поддерживает путь?",
-      "recommended_next": true
-    }
-  },
-  "profile_snapshot": {
-    "version": "v2.6.0",
-    "last_updated_section_D": "2026-10-04",
-    "synthesis_updates_count": 3,
-    "synthesis_updates": [
-      "Деньги (2026-08-30)",
-      "Отцовство (2026-08-30)",
-      "Время (2026-10-04)"
+  "current_state_summary": {
+    "kurtoch_index_version": "v2.5.2",
+    "taskboard_version": "v2.5.2",
+    "taskboard_archive_version": "v1.3.0",
+    "team_version": "v1.3.1",
+    "knowledge_base_version": "v2.1.0",
+    "push_taskboard_version": "обновлён (Описание + normalize_desc regex)",
+    "active_tasks": 66,
+    "archived_tasks": 41,
+    "total": 107,
+    "milestones": [
+      "M-001 (Возрождение Нижки) — in_progress",
+      "M-002 (Возрождение Центра) — planning",
+      "M-003 (Оплата кризис-менеджера) — in_progress"
     ],
-    "discoveries": [
-      "DISC-001: Путь в вечность через создание семян",
-      "DISC-002: Акашическая сеть Мандалы",
-      "DISC-003: Вера, позитивный настрой, воля",
-      "DISC-004: Мы все суть части единого целого",
-      "DISC-005: Умиротворение — высшая цель",
-      "DISC-006: Наблюдатель внутри — вечность"
-    ]
+    "team_roster": 17,
+    "team_status": {
+      "core": 1,
+      "working": 5,
+      "left": 4,
+      "runner": 2,
+      "trainee": 2,
+      "substitute": 3
+    },
+    "notion_synced": true,
+    "notion_pages": 107,
+    "progress": 40,
+    "revenue_target_rub_monthly": 2200000
   },
-  "next_session": {
-    "chat_type": "synthesis",
-    "recommended_first_step": "Начать с вектора «Тело» (VEC-002). Задать вопрос: как телесные практики связаны с твоим путём и умиротворением?",
-    "alternative": "Углубить вектор «Деньги» (VEC-001) — есть синтез, можно добавить слои.",
-    "rules": [
-      "Работаем по одному вопросу за раз.",
-      "Pre-check обязателен перед патчем.",
-      "Post-check через blob-ссылку.",
-      "Мобильная работа — FULL DEPLOY или patcher_method."
-    ]
+  "architecture": {
+    "mandala_is_source_of_truth": true,
+    "notion_is_visual_mirror": true,
+    "rule": "Правим Notion по Mandala, не наоборот.",
+    "notion_archive_view": "Отдельный view показывает всё с чекбоксом «Закрыта» ☑ (done + cancelled). Основной view — всё с ☐.",
+    "description_sync": "Описание задачи (тело страницы) синхронизируется через blocks API. Mandala — источник, Notion — зеркало."
   },
   "key_files": {
-    "profile_deep": {
-      "path": "honeycombs/personal/profile_deep.json",
-      "raw": "https://raw.githubusercontent.com/voodoomushroomzzz-source/mandala-core/main/honeycombs/personal/profile_deep.json",
-      "blob": "https://github.com/voodoomushroomzzz-source/mandala-core/blob/main/honeycombs/personal/profile_deep.json"
+    "kurtoch_hub": {"path": "honeycombs/personal/kurtoch/index.json", "version": "v2.5.2"},
+    "kurtoch_taskboard": {"path": "honeycombs/personal/kurtoch/taskboard.json", "version": "v2.5.2", "active": 66},
+    "kurtoch_taskboard_archive": {"path": "honeycombs/personal/kurtoch/taskboard_archive.json", "version": "v1.3.0", "archived": 41},
+    "kurtoch_team": {"path": "honeycombs/personal/kurtoch/team.json", "version": "v1.3.1", "employees": 17},
+    "kurtoch_knowledge_base": {
+      "path": "honeycombs/personal/kurtoch/knowledge_base.json",
+      "version": "v2.1.0",
+      "sections_total": 12,
+      "sections_active": 6,
+      "sections_empty": 6,
+      "active_sections": ["hiring_terms", "economics", "staffing_management", "trainee_fund", "salary_transparency", "coffee_suppliers"],
+      "empty_sections": ["checklists_open_close", "checklists_cleanliness", "regulations_5_processes", "tech_cards", "training", "cu_shift_tasks"]
+    },
+    "kurtoch_bundle": {
+      "path": "honeycombs/boot_online/personal/kurtoch_bundle.json",
+      "size_kb": 230,
+      "generator": "scripts/build_bundle.py",
+      "auto_rebuild": ".github/workflows/kurtoch_bundle.yml",
+      "status": "auto-rebuild работает",
+      "rule": "НЕ собирать руками. Только push source → Action сам."
     }
+  },
+  "scripts": {
+    "notion_sync.py": "pull Notion -> снапшот",
+    "push_taskboard.py": "Mandala -> Notion (ID, статус, столбец, Срочность, Ответственный, префикс 📦/❌, ОПИСАНИЕ через blocks)",
+    "normalize_desc": "regex-функция — схлопывает \\n\\n+ в \\n для честного сравнения описаний",
+    "notion_runner.sh": "обёртка: full_sync / pull_taskboard / push_taskboard (bash)",
+    "archive_done.py": "переносит done+cancelled в архив (идемпотентно)",
+    "patch_schema.py": "служебный",
+    "fix_two_ids.py": "служебный",
+    "split_archive.py": "служебный",
+    "split_franchise.py": "служебный",
+    "build_bundle.py": "собирает bundle — НЕ запускать руками"
+  },
+  "working_commands": {
+    "full_sync": "bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync",
+    "pull_taskboard": "bash honeycombs/personal/kurtoch/scripts/notion_runner.sh pull_taskboard",
+    "push_taskboard": "python3 honeycombs/personal/kurtoch/scripts/push_taskboard.py",
+    "build_bundle_rule": "НЕ ЗАПУСКАТЬ ВРУЧНУЮ — Action сам"
+  },
+  "my_terms": {
+    "role": "Кризис-менеджер",
+    "rate_monthly": 100000,
+    "cash_monthly": 50000,
+    "accumulation_monthly": 50000,
+    "start": "2026-09-11",
+    "end": "2026-12-11",
+    "september_total": 66667,
+    "total_planned_to_dec": 366667,
+    "total_accumulation_planned": 166667,
+    "tracker_ref": "M-003 в taskboard.json",
+    "payment_dates": "24-е — аванс, 9-е — остаток + накопление",
+    "phantom_share": "накопление 50К/мес (не кэшем) — см. K-105"
+  },
+  "new_tasks_2026_09_28_10_04": {
+    "K-088": "Собеседование Дарья — done → archive",
+    "K-089": "Ежемесячные отчёты (04.10) — high",
+    "K-091": "Убрать летние приблуды (Центр) — done",
+    "K-092": "Проверить скидку экс-управляющих 50% — done",
+    "K-093": "Загерметизировать валики (Центр) — 30.09",
+    "K-094": "Переговоры с Виктором и Крис (3-й сотрудник, бегунки) — 30.09",
+    "K-095": "Убавить громкость сигнализации (Центр) — 01.10",
+    "K-096": "Отфотографировать цветы (Центр) — 05.10",
+    "K-097": "Отфотографировать цветы (Нижка) — 05.10",
+    "K-098": "Встреча с Витей и Валей — 01.10",
+    "K-099": "Связаться с Екатериной (арендодатель ТЦ) по оплате — 30.09",
+    "K-100": "Закупка с Крис (Центр + Нижка) — 06.10",
+    "K-101": "Отчёт по финансам от Крис — 06.10",
+    "K-103": "Сезонка: разработать/протестить/утвердить/запустить — 31.10",
+    "K-104": "Чистота заведения: серия напоминаний + контроль",
+    "K-105": "Перераспределение функционала (Крис → Дима + Катрин) — 31.10, critical",
+    "K-106": "Разработать программы обучения (для Крис→Катрин) — 31.10",
+    "K-107": "Обслужить кондиционер (Центр) — к весне 2027",
+    "K-108": "Планёрка по материалам обучения (Крис, Витя, Дима) — 05.10",
+    "K-109": "Встреча с Магомедом по кухне — 02.10",
+    "K-110": "Заменить фильтр воды (Нижка) — 11.10",
+    "K-111": "Перепечатать меню (Нижка) — 11.10, medium",
+    "K-112": "Пометить мусорный бак (Нижка) — 07.10",
+    "K-113": "Выдать расчёт Саше-стажёру — 09.10",
+    "K-114": "Общение с Юлей — done → archive",
+    "K-115": "Оля: аванс 5000 ₽ вычесть из ЗП — done → archive",
+    "K-116": "Тема «Открытие» в TG + брифинг — 05.10, critical",
+    "K-117": "Правка расписания (Александра + Денис) — 05.10, critical",
+    "K-118": "Генуборка Нижка (16:00–22:00) — 07.10, critical"
+  },
+  "updated_2026_09_28_10_04": {
+    "K-004": "priority medium, deadline 31.10",
+    "K-023": "описание: прошлый способ не помог",
+    "K-024": "priority critical, deadline 05.10",
+    "K-027": "priority high, deadline 05.10",
+    "K-029": "описание с цифрами + KB",
+    "K-071": "описание: первостепенное сделано",
+    "K-077": "схлопнута с K-086 (анализ Крис + отпуск)",
+    "K-078": "deadline 31.10 → 15.10, + описание решений",
+    "K-086": "cancelled → archive (merged в K-077)"
+  },
+  "infrastructure_fixes": {
+    "Personal_to_personal_build_bundle": "11d07be5d",
+    "Personal_to_personal_workflow": "01ccd7a",
+    "push_taskboard_description_patch": "добавлена логика патча Описания",
+    "normalize_desc_regex": "398e39cf2 — баг K-076/K-077 закрыт",
+    "bundle_auto_rebuild": "ожил (runs #19, #20 зелёные)"
+  },
+  "critical_context": {
+    "expansion_financial": "+500К ₽/мес из-за расширения, выручка не выросла",
+    "nijka_decline": "Нижка −20% выручки",
+    "winter_pressure": "Ноя-фев −20%. Договориться об отпусках зимой (K-029)",
+    "management_transition": "Витя → такси, Дима → управляющий",
+    "veronika_left": "Вероника уволена 25.09",
+    "vlada_left": "Влада уволена 09.09",
+    "sasha_student_left": "Саша-стажёр (EMP-006) → left (долго и слабо)",
+    "alexandra_propala": "Александра (EMP-003) — пропала, не выходит на связь (статус пока working)",
+    "julia_working": "Юля — общение 04.10, работает стабильно до февраля, режим 2/2",
+    "revenue_target": "2 200 000 ₽/мес на 2 точки"
+  },
+  "key_people": {
+    "Виктор": "Владелец",
+    "Витя": "Управляющий (переходный период)",
+    "Крис": "Управляющая (удалёнка, 40К/мес — предмет K-077 + K-105)",
+    "Катрин": "Старший бариста (core, ключевой)",
+    "Дима": "Кризис-менеджер (я)",
+    "Юля": "Бариста, working (с 04.10 — стабильно до февраля)",
+    "Александра": "Бариста, работала — пропала, не выходит на связь",
+    "Саша (стажёр)": "left с 02.10",
+    "Анна": "Стажёр с ключами Центра",
+    "Дарья": "Новая стажёрка (EMP-017), @wefity, 89106781928",
+    "Оля": "Стажёр → working (04.10), кофе доработать"
   },
   "startup_instructions": [
     "1. Прочитай этот handoff полностью",
-    "2. Запроси profile_deep.json по ссылке (pre-check)",
-    "3. Подтверди, что ты в контексте синтеза",
-    "4. Начни с вектора «Тело» (VEC-002) или уточни у Садовника",
-    "5. Работай по одному вопросу за раз",
-    "6. После каждого синтеза — обновляй profile_deep.json и handoff"
+    "2. Прочитай honeycombs/personal/kurtoch/index.json — входная точка",
+    "3. Taskboard 66 активных, архив 41",
+    "4. Для онбординга — bundle (230 КБ, всё в 1 файле)",
+    "5. Рабочая команда: bash honeycombs/personal/kurtoch/scripts/notion_runner.sh full_sync",
+    "6. Mandala = эталон, Notion = зеркало",
+    "7. НЕ запускать build_bundle.py руками",
+    "8. LR-15…LR-20 НЕ фиксируем (наблюдения, не правила)",
+    "9. Единый регистр путей (personal с маленькой p)",
+    "10. «Мишка» — опечатка голосового ввода, не существует. Точка = Нижка"
   ],
-  "last_action": "Синтез вектора «Время» закрыт. profile_deep.json обновлён (v2.6.0, section_D last_updated: 2026-10-04). Handoff перезаписан под контекст синтеза.",
-  "handoff_message_for_gardener": "Открываешь новый чат с DeepSeek — копируешь этот JSON первым сообщением. SR подхватит контекст синтеза и продолжит."
+  "last_action": "Handoff v6.1.0 подготовлен 04.10.2026. 28 задач за сессию (K-088…K-118), KB v2.1.0 (+coffee_suppliers), team v1.3.1 (Юля→working). Mandala 107 = Notion 107.",
+  "handoff_message_for_gardener": "Открываешь новый чат с DeepSeek — копируешь этот JSON первым сообщением. SR подхватит контекст и продолжит."
 }
