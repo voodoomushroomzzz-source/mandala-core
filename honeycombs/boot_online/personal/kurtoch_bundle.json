@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-04T10:51:19Z",
+    "generated_at": "2026-10-04T18:38:42Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.5.0",
+      "version": "v2.5.2",
       "created": "2026-09-23",
       "updated": "2026-10-04",
       "layer": 2,
@@ -56,14 +56,14 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.5.0",
-        "tasks_count": 66,
+        "version": "v2.5.2",
+        "tasks_count": 68,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
         "description": "Картотека сотрудников.",
         "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-        "version": "v1.3.0",
+        "version": "v1.3.1",
         "total_employees": 17
       },
       "knowledge_base.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-04",
-      "notes": "v2.5.0: +K-116 (тема Открытие в TG, фотоотчёт открытия смен)."
+      "notes": "v2.5.2: +K-117 (расписание), +K-118 (генуборка Нижка), K-114/K-115 done, K-112/K-113 dl, Юля->working."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,7 +988,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.5.0",
+      "version": "v2.5.2",
       "created": "2026-09-14",
       "updated": "2026-10-04",
       "layer": 2,
@@ -2591,14 +2591,14 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": null,
+          "deadline": "2026-10-07",
           "reminder": null,
           "depends_on": [],
           "related_to": [
             "M-001"
           ],
           "created": "2026-10-02",
-          "updated": "2026-10-02",
+          "updated": "2026-10-04",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2615,12 +2615,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": null,
+          "deadline": "2026-10-09",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-10-02",
-          "updated": "2026-10-02",
+          "updated": "2026-10-04",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2634,7 +2634,7 @@
           "title": "Общение с Юлей: решить статус",
           "description": "Общение с Юлей (EMP-009, сейчас paused — по здоровью). По итогам — решить статус:\n- Остаётся paused / возвращается working / уходит left\n- Если уходит — расчёт\n- Уточнить сроки возврата (если возвращается)\nАттестация Юли (K-040) — пройдена 29.09.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-02",
@@ -2644,8 +2644,8 @@
             "K-040"
           ],
           "created": "2026-10-02",
-          "updated": "2026-10-02",
-          "completed": null,
+          "updated": "2026-10-04",
+          "completed": "2026-10-04",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2658,7 +2658,7 @@
           "title": "Оля: аванс 5000 ₽ вычесть из ЗП",
           "description": "Оля (EMP-016) — вычесть аванс 5000 ₽ из зарплаты при выплате 09.10.2026.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-09",
@@ -2666,8 +2666,8 @@
           "depends_on": [],
           "related_to": [],
           "created": "2026-10-02",
-          "updated": "2026-10-02",
-          "completed": null,
+          "updated": "2026-10-04",
+          "completed": "2026-10-04",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2698,29 +2698,79 @@
             "notion_page_id": null,
             "column": "Операционка — Общая"
           }
+        },
+        {
+          "id": "K-117",
+          "title": "Правка расписания: Александра (не выходит на связь) + Денис (сдвиг смен)",
+          "description": "Правка расписания на следующую неделю. Причины:\n\n1) Александра (Саша, EMP-003) — пропала, не выходит на связь. Сотрудник (working), не стажёр. Скорректировать смены: убрать/перераспределить её часы. Статус в team.json пока не меняем — ждём точной информации.\n\n2) Денис (EMP-010) — попросил сдвиг: пятница-суббота вместо суббота-воскресенье.\n\nСделать до 05.10.",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-05",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-116"
+          ],
+          "created": "2026-10-04",
+          "updated": "2026-10-04",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-118",
+          "title": "Генуборка на Нижке (среда, 16:00–22:00)",
+          "description": "Генуборка на Нижке (Нижняя Дуброва). Среда 07.10.2026, с 16:00 до 22:00.",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-07",
+          "reminder": "16:00",
+          "depends_on": [],
+          "related_to": [
+            "M-001",
+            "K-038"
+          ],
+          "created": "2026-10-04",
+          "updated": "2026-10-04",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Нижка"
+          }
         }
       ],
       "counters": {
-        "total": 66,
+        "total": 68,
         "by_status": {
           "todo": 63,
           "in_progress": 2,
-          "planning": 1
+          "planning": 1,
+          "done": 2
         },
         "by_priority": {
           "medium": 19,
           "high": 43,
-          "critical": 4
+          "critical": 6
         },
         "by_column": {
           "Стратегические": 11,
-          "Операционка — Общая": 15,
-          "Операционка — Нижка": 26,
+          "Операционка — Общая": 16,
+          "Операционка — Нижка": 27,
           "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 66
+          "phase_0": 68
         }
       },
       "notes": {
@@ -3779,9 +3829,9 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.3.0",
+      "version": "v1.3.1",
       "created": "2026-09-23",
-      "updated": "2026-10-02",
+      "updated": "2026-10-04",
       "layer": 2,
       "type": "team_module",
       "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
@@ -3791,14 +3841,13 @@
       "resonance": "100%"
     },
     "team_roster": {
-      "last_updated": "2026-10-02",
+      "last_updated": "2026-10-04",
       "total_employees": 17,
       "by_status": {
         "core": 1,
-        "working": 4,
+        "working": 5,
         "left": 4,
         "runner": 2,
-        "paused": 1,
         "trainee": 2,
         "substitute": 3
       },
@@ -4165,7 +4214,7 @@
             "смены"
           ],
           "schedule": {
-            "notes": "переделано из-за паузы по здоровью",
+            "notes": "2/2, стабильно до февраля",
             "preferences": "Нижка",
             "availability": null
           },
@@ -4189,13 +4238,13 @@
             "extra": "Все самостоятельные смены — полная ставка. Аттестация (формальность) с Кристиной — 25.09.",
             "notes": null
           },
-          "status": "paused",
+          "status": "working",
           "risks": [],
-          "notes": "По здоровью — на паузе. Минимум 2 недели не работает, возможно вылетает из проекта. Расписание переделано (Дима). Возврат: не раньше 13.10.2026, под вопросом.",
+          "notes": "Пообщались 04.10. Работает стабильно, говорит — до февраля точно. Пока поверили. Режим — 2/2. Аттестация пройдена 29.09.",
           "data_gaps": [
             "schedule.availability"
           ],
-          "updated": "2026-09-29"
+          "updated": "2026-10-04"
         },
         {
           "id": "EMP-010",
