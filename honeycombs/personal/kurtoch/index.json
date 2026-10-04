@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.5.0",
+    "version": "v2.5.2",
     "created": "2026-09-23",
     "updated": "2026-10-04",
     "layer": 2,
@@ -30,14 +30,14 @@
     "taskboard.json": {
       "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
-      "version": "v2.5.0",
-      "tasks_count": 66,
+      "version": "v2.5.2",
+      "tasks_count": 68,
       "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
       "description": "Картотека сотрудников.",
       "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-      "version": "v1.3.0",
+      "version": "v1.3.1",
       "total_employees": 17
     },
     "knowledge_base.json": {
@@ -158,7 +158,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-10-04",
-    "notes": "v2.5.0: +K-116 (тема Открытие в TG, фотоотчёт открытия смен)."
+    "notes": "v2.5.2: +K-117 (расписание), +K-118 (генуборка Нижка), K-114/K-115 done, K-112/K-113 dl, Юля->working."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
