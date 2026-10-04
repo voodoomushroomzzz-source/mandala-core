@@ -425,6 +425,7 @@
       "handle": "@xdeaddyx",
       "current": {
         "followers": 244,
+        "followers_gain_30d": 8,
         "stories_views_avg": 50,
         "stories_views_avg_previous": 30,
         "measured_date": "2026-10-04"
@@ -432,10 +433,40 @@
       "history": [
         {
           "date": "2026-10-04",
+          "period": "last_30_days",
           "followers": 244,
-          "stories_views_avg": 50,
-          "stories_views_avg_previous": 30,
-          "notes": "Рост просмотров Stories: 30 → 50+ за 1-2 недели"
+          "followers_gain_30d": 8,
+          "total_views_30d": 5691,
+          "stories_views_30d": 4500,
+          "posts_views_30d": 1100,
+          "reels_views_30d": 69,
+          "viewers_total": 925,
+          "followers_share_pct": 61.4,
+          "non_followers_share_pct": 38.6,
+          "interactions_stories": 285,
+          "interactions_posts": 28,
+          "interactions_reels": 1,
+          "profile_visits": 145,
+          "bio_link_clicks": 3,
+          "top_content": [
+            {
+              "views": 646,
+              "type": "post"
+            },
+            {
+              "views": 273,
+              "type": "post"
+            },
+            {
+              "views": 273,
+              "type": "post"
+            },
+            {
+              "views": 214,
+              "type": "post"
+            }
+          ],
+          "notes": "Stories доминируют (79% охвата). Reels практически не используются. Reach 3.8x от базы."
         }
       ]
     },
@@ -448,9 +479,11 @@
     },
     "growth_metrics": {
       "stories_views_trend": "up",
-      "followers_trend": "stable",
+      "followers_trend": "up",
+      "reach_ratio": 3.8,
+      "stories_dominance_pct": 79,
       "last_significant_change": "2026-10-04",
-      "notes": "Stories выросли в 1.6x за 2 недели. Подписчики стабильны."
+      "notes": "Stories — главный канал (79% охвата). Reels не используются. Reach 3.8x от базы. Конверсия в подписку 0.14% (можно усилить)."
     }
   },
   "ispolnyayu_tracker": {
