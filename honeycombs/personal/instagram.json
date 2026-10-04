@@ -419,7 +419,9 @@
         "Подписчики TikTok (если есть)",
         "Метрики Trial Reels (если были)"
       ],
-      "how_to_update": "SR спрашивает — Садовник присылает скриншот/цифры — SR патчит history"
+      "how_to_update": "SR спрашивает — Садовник присылает скриншот/цифры — SR патчит history",
+      "trial_reels_note": "Trial Reels: 24ч — первый срез, 48-72ч — динамика, 7 дней — финал",
+      "tiktok_note": "TikTok: 24-48ч — пик, 7-10 дней — финал"
     },
     "instagram": {
       "handle": "@xdeaddyx",
@@ -473,7 +475,9 @@
     "tiktok": {
       "current": {
         "followers": 0,
-        "measured_date": "2026-10-04"
+        "measured_date": "2026-10-04",
+        "videos_published": 1,
+        "notes": "ISP-001 опубликован 04.10. Ритм: ~1 видео в неделю."
       },
       "history": []
     },
@@ -483,7 +487,20 @@
       "reach_ratio": 3.8,
       "stories_dominance_pct": 79,
       "last_significant_change": "2026-10-04",
-      "notes": "Stories — главный канал (79% охвата). Reels не используются. Reach 3.8x от базы. Конверсия в подписку 0.14% (можно усилить)."
+      "notes": "Stories — главный канал (79% охвата). Reels не используются. Reach 3.8x от базы. Конверсия в подписку 0.14% (можно усилить).",
+      "historical_context": {
+        "baseline_2_months_ago": {
+          "period": "~2026-08-01",
+          "monthly_views": 1000,
+          "notes": "Средний охват в месяц до начала системной работы"
+        },
+        "current_30d": {
+          "period": "2026-09-04 to 2026-10-04",
+          "views": 5691
+        },
+        "growth_factor": "5.7x",
+        "notes": "Рост охвата в 5.7x за 1.5–2 месяца. Системная работа с циклами Stories + рубрикой Исполняю дала результат."
+      }
     }
   },
   "ispolnyayu_tracker": {
@@ -496,21 +513,74 @@
         "published": [
           "Instagram Trial Reel"
         ],
-        "metrics": {
-          "views": 240,
-          "likes": 1,
-          "comments": 0
+        "platforms": {
+          "instagram": {
+            "type": "Trial Reel",
+            "views": 240,
+            "likes": 1,
+            "comments": 0
+          },
+          "tiktok": {
+            "published": "2026-10-04",
+            "views": null,
+            "likes": null,
+            "comments": null,
+            "note": "Опубликован. Первые данные через 24-48ч."
+          }
         }
       }
     ],
-    "next_planned": {
+    "isp_002": {
       "id": "ISP-002",
       "track": "Eto Leon — Чувства",
-      "planned_date": "2026-10-05",
-      "planned_platforms": [
-        "Instagram Trial Reel",
-        "TikTok (без водяных знаков)"
-      ]
+      "status": "partial",
+      "platforms": {
+        "instagram": {
+          "type": "Trial Reel",
+          "published": "2026-10-04",
+          "views": null,
+          "likes": null,
+          "comments": null,
+          "data_available_at": "2026-10-05"
+        },
+        "tiktok": {
+          "planned_date": "2026-10-11",
+          "published": null,
+          "views": null,
+          "likes": null,
+          "comments": null,
+          "note": "Планируется в конце недели, чтобы сохранить равномерный ритм активности"
+        }
+      }
+    },
+    "publishing_policy": {
+      "rhythm": "~1 видео в неделю на каждой платформе",
+      "rule": "Не увеличивать частоту публикаций, чтобы не создавать пик активности и потом не снижать. Равномерный ритм важнее всплесков."
+    },
+    "statistics_collection": {
+      "trial_reels": {
+        "first_data_at": "~24 часа после публикации",
+        "full_picture_at": "48-72 часа",
+        "final_at": "7 дней",
+        "metrics": [
+          "views",
+          "likes",
+          "comments",
+          "shares",
+          "followers_gained"
+        ]
+      },
+      "tiktok": {
+        "main_peak": "первые 24-48 часов",
+        "long_tail": "до 10 дней",
+        "metrics": [
+          "views",
+          "likes",
+          "comments",
+          "completion_rate"
+        ]
+      },
+      "instruction_for_sr": "Запрашивать актуальные цифры: Trial Reels — на следующий день, TikTok — через 48ч. Заносить в platforms."
     }
   }
 }
