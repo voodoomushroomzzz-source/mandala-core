@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-02T16:19:04Z",
+    "generated_at": "2026-10-04T10:51:19Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,9 +28,9 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.4.9",
+      "version": "v2.5.0",
       "created": "2026-09-23",
-      "updated": "2026-10-02",
+      "updated": "2026-10-04",
       "layer": 2,
       "type": "personal_subhub_index",
       "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -56,8 +56,8 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.4.9",
-        "tasks_count": 65,
+        "version": "v2.5.0",
+        "tasks_count": 66,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
@@ -183,8 +183,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-10-02",
-      "notes": "v2.4.9: +K-115 (Оля аванс 5000 ₽ вычесть из ЗП, 09.10)."
+      "last_check": "2026-10-04",
+      "notes": "v2.5.0: +K-116 (тема Открытие в TG, фотоотчёт открытия смен)."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,9 +988,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.4.9",
+      "version": "v2.5.0",
       "created": "2026-09-14",
-      "updated": "2026-10-02",
+      "updated": "2026-10-04",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1003,7 +1003,7 @@
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
       "version": "v2.3.4",
       "created": "2026-09-14",
-      "updated": "2026-10-02",
+      "updated": "2026-10-04",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -2674,29 +2674,53 @@
             "notion_page_id": null,
             "column": "Операционка — Общая"
           }
+        },
+        {
+          "id": "K-116",
+          "title": "Создать тему «Открытие» в рабочей Telegram-группе + забрифовать команду",
+          "description": "Создать тему «Открытие» в рабочей Telegram-группе.\n\nЗабрифинг: при открытии смены — когда сотрудник приходит в кофейню и открывает смену — скидывает фото в эту тему.\n\nПроблема: участились случаи, когда сотрудник не выходит и не сообщает. Узнаём по факту — особенно в выходные, к обеду. Нужен контроль открытия через фотоотчёт.\n\nСвязь: K-104 (напоминания + контроль в чате).",
+          "priority": "critical",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-05",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-104"
+          ],
+          "created": "2026-10-04",
+          "updated": "2026-10-04",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
         }
       ],
       "counters": {
-        "total": 65,
+        "total": 66,
         "by_status": {
-          "todo": 62,
+          "todo": 63,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "medium": 19,
           "high": 43,
-          "critical": 3
+          "critical": 4
         },
         "by_column": {
           "Стратегические": 11,
-          "Операционка — Общая": 14,
+          "Операционка — Общая": 15,
           "Операционка — Нижка": 26,
           "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 65
+          "phase_0": 66
         }
       },
       "notes": {
