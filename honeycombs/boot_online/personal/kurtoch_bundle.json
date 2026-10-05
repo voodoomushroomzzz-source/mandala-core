@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-05T15:32:40Z",
+    "generated_at": "2026-10-05T16:03:44Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -57,7 +57,7 @@
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
         "version": "v2.5.5",
-        "tasks_count": 63,
+        "tasks_count": 61,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
