@@ -9032,3 +9032,64 @@
 [2026-10-05 07:01:08] [INFO]   Total duplicates: 5
 [2026-10-05 07:01:08] [INFO]   Total removed (old): 0
 [2026-10-05 07:01:08] [INFO] ============================================================
+[2026-10-05 17:57:13] [INFO] ============================================================
+[2026-10-05 17:57:13] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-10-05 17:57:13] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-10-05 17:57:13] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-10-05 17:57:14] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-05 17:57:14] [INFO]   → Filtered to 5 relevant items
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: MintFlow: Minimal Trajectory Intervention for Cons...
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: Fast Models, Slow Evidence: A Paired and Self-Audi...
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: The AI Risk Observatory: What Can We Learn from AI...
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: Keep It CALM: Analyzing the Limits of Global Unsaf...
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: Choosing Before Acting: Comparative Value Estimati...
+[2026-10-05 17:57:14] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-10-05 17:57:14] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-10-05 17:57:14] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-10-05 17:57:14] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-05 17:57:14] [INFO]   → Filtered to 5 relevant items
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: Awomo-SimDataEngine: Agentic Simulation-ReadyWorld...
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: World-Calibrated Proposal-to-Action Flow for Visio...
+[2026-10-05 17:57:14] [INFO]   ⏭️ Duplicate: SoTa: Soft Tactile Skins for Dexterous Manipulatio...
+[2026-10-05 17:57:15] [INFO]   ⏭️ Duplicate: NEEDLEWORK: Offline Rewriting of Robot Data with V...
+[2026-10-05 17:57:15] [INFO]   ⏭️ Duplicate: Filter-Aware Fine-Tuning for Safe Humanoid Whole-B...
+[2026-10-05 17:57:15] [INFO]   📊 arXiv Robotics: saved 0, duplicates 5
+[2026-10-05 17:57:15] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-10-05 17:57:15] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-10-05 17:57:15] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-10-05 17:57:15] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-10-05 17:57:15] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-10-05 17:57:15] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-10-05 17:57:16] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-05 17:57:16] [INFO]   → Filtered to 5 relevant items
+[2026-10-05 17:57:16] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-10-05 17:57:16] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-10-05 17:57:16] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-10-05 17:57:16] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-10-05 17:57:16] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-10-05 17:57:16] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-10-05 17:57:16] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-10-05 17:57:16] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-10-05 17:57:16] [INFO]   → Found 15 raw items, 10 recent
+[2026-10-05 17:57:16] [INFO]   → Filtered to 5 relevant items
+[2026-10-05 17:57:16] [INFO]   ✅ Saved: SEED-20261005-175716-393.json
+[2026-10-05 17:57:16] [INFO]   ✅ Saved: SEED-20261005-175716-394.json
+[2026-10-05 17:57:17] [INFO]   ✅ Saved: SEED-20261005-175717-395.json
+[2026-10-05 17:57:17] [INFO]   ✅ Saved: SEED-20261005-175717-396.json
+[2026-10-05 17:57:17] [INFO]   ✅ Saved: SEED-20261005-175717-397.json
+[2026-10-05 17:57:17] [INFO]   📊 TechCrunch AI: saved 5, duplicates 0
+[2026-10-05 17:57:17] [INFO]   🗑️ Cleaning old seeds (date <= 2026-10-05)...
+[2026-10-05 17:57:17] [INFO]   ✅ No old seeds to remove
+[2026-10-05 17:57:17] [INFO]   📝 Updated inbox/index.json with last_processed=2026-10-05
+[2026-10-05 17:57:17] [INFO] 
+============================================================
+[2026-10-05 17:57:17] [INFO] ✅ Scout Agent v2.2 finished
+[2026-10-05 17:57:17] [INFO]   Total saved: 5
+[2026-10-05 17:57:17] [INFO]   Total duplicates: 15
+[2026-10-05 17:57:17] [INFO]   Total removed (old): 0
+[2026-10-05 17:57:17] [INFO] ============================================================
