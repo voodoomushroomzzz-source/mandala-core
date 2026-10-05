@@ -4,7 +4,7 @@
     "name": "Kurtoch — Taskboard Archive",
     "version": "v1.3.0",
     "created": "2026-09-23",
-    "updated": "2026-10-04",
+    "updated": "2026-10-05",
     "type": "taskboard_archive",
     "parent": "taskboard.json",
     "description": "Архив завершённых задач (done + cancelled).",
@@ -976,11 +976,187 @@
           "column": "Операционка — Общая"
         },
         "archived_at": "2026-10-04"
+      },
+      {
+        "id": "K-093",
+        "title": "Загерметизировать валики в Центре (как на Нишке)",
+        "description": "Загерметизировать валики для калачей в Центре — так же, как сделано на Нишке. Проблема: ручка отклеилась от основания. Профилактика + ремонт.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-09-30",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-023",
+          "M-002"
+        ],
+        "created": "2026-09-29",
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "archived_at": "2026-10-05"
+      },
+      {
+        "id": "K-094",
+        "title": "Переговоры с Виктором и Крис: 3-й сотрудник + уход от бегунков",
+        "description": "Переговорить с Виктором и Крис по двум вопросам:\n1. 3-й сотрудник на смене (расширение зала, поток туристов, просадка внимания).\n2. Уход от бегунков (роль ранера, 2 часа закрытия).\nКонтекст: бюджетное давление (+500К из-за расширения), см. KB → staffing_management.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "strategic",
+        "phase": "phase_0",
+        "deadline": "2026-09-30",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-044",
+          "K-029"
+        ],
+        "created": "2026-09-29",
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Стратегические"
+        },
+        "archived_at": "2026-10-05"
+      },
+      {
+        "id": "K-095",
+        "title": "Убавить громкость сигнализации в Центре",
+        "description": "Убавить громкость сигнализации в Центре. Сейчас очень громкая. Сделать до 01.10.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-01",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-09-29",
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "archived_at": "2026-10-05"
+      },
+      {
+        "id": "K-096",
+        "title": "Отфотографировать цветы в Центре",
+        "description": "Отфотографировать все цветы в Центре. Цель — зафиксировать текущее состояние (уход/пересадка). См. K-066.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-05",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-066",
+          "M-002"
+        ],
+        "created": "2026-09-29",
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        },
+        "archived_at": "2026-10-05"
+      },
+      {
+        "id": "K-098",
+        "title": "Встреча с Витей и Валей",
+        "description": "Встреча с Витей (управляющий переходного периода) и Валей (продюсер + маркетинг). Четверг, после катанга.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-01",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-29",
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-05"
+      },
+      {
+        "id": "K-116",
+        "title": "Создать тему «Открытие» в рабочей Telegram-группе + забрифовать команду",
+        "description": "Создать тему «Открытие» в рабочей Telegram-группе.\n\nЗабрифинг: при открытии смены — когда сотрудник приходит в кофейню и открывает смену — скидывает фото в эту тему.\n\nПроблема: участились случаи, когда сотрудник не выходит и не сообщает. Узнаём по факту — особенно в выходные, к обеду. Нужен контроль открытия через фотоотчёт.\n\nСвязь: K-104 (напоминания + контроль в чате).",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-05",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-104"
+        ],
+        "created": "2026-10-04",
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-05"
+      },
+      {
+        "id": "K-117",
+        "title": "Правка расписания: Александра (не выходит на связь) + Денис (сдвиг смен)",
+        "description": "Правка расписания на следующую неделю. Причины:\n\n1) Александра (Саша, EMP-003) — пропала, не выходит на связь. Сотрудник (working), не стажёр. Скорректировать смены: убрать/перераспределить её часы. Статус в team.json пока не меняем — ждём точной информации.\n\n2) Денис (EMP-010) — попросил сдвиг: пятница-суббота вместо суббота-воскресенье.\n\nСделать до 05.10.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-05",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-116"
+        ],
+        "created": "2026-10-04",
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-05"
       }
     ],
-    "total": 41,
+    "total": 48,
     "by_status": {
-      "done": 32,
+      "done": 39,
       "cancelled": 9
     }
   },
