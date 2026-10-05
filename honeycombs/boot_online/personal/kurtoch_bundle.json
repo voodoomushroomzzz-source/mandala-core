@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-05T14:08:39Z",
+    "generated_at": "2026-10-05T15:28:22Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,7 +28,7 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.5.4",
+      "version": "v2.5.5",
       "created": "2026-09-23",
       "updated": "2026-10-05",
       "layer": 2,
@@ -56,8 +56,8 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.5.4",
-        "tasks_count": 62,
+        "version": "v2.5.5",
+        "tasks_count": 63,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
       "team.json": {
@@ -184,7 +184,7 @@
     "health": {
       "status": "healthy",
       "last_check": "2026-10-05",
-      "notes": "v2.5.4: K-019 обновлён, K-031 dl, K-110 Hiwater, +K-121, KB +procurement, contacts +5."
+      "notes": "v2.5.5: K-024/K-109 done, K-108 dl=07.10, +K-122."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -1024,7 +1024,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.5.4",
+      "version": "v2.5.5",
       "created": "2026-09-14",
       "updated": "2026-10-05",
       "layer": 2,
@@ -1162,7 +1162,7 @@
           "title": "Лампочки Центр",
           "description": "Операционка Центр — лампочки.",
           "priority": "critical",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-05",
@@ -1170,8 +1170,8 @@
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-17",
-          "updated": "2026-09-29",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2416,7 +2416,7 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-05",
+          "deadline": "2026-10-07",
           "reminder": null,
           "depends_on": [],
           "related_to": [
@@ -2425,7 +2425,7 @@
             "K-076"
           ],
           "created": "2026-10-01",
-          "updated": "2026-10-01",
+          "updated": "2026-10-05",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2439,7 +2439,7 @@
           "title": "Встреча с Магомедом по кухне",
           "description": "Встреча с Магомедом по поводу кухни. Пятница 02.10.2026.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": null,
@@ -2448,7 +2448,7 @@
           "related_to": [],
           "created": "2026-10-01",
           "updated": "2026-10-05",
-          "completed": null,
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2646,17 +2646,42 @@
             "notion_page_id": null,
             "column": "Операционка — Общая"
           }
+        },
+        {
+          "id": "K-122",
+          "title": "Починить 1 лампу в Центре",
+          "description": "Починить 1 лампу в Центре — не работает.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "M-002"
+          ],
+          "created": "2026-10-05",
+          "updated": "2026-10-05",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
         }
       ],
       "counters": {
-        "total": 62,
+        "total": 63,
         "by_status": {
-          "todo": 59,
+          "todo": 58,
+          "done": 2,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
-          "medium": 19,
+          "medium": 20,
           "high": 39,
           "critical": 4
         },
@@ -2664,11 +2689,11 @@
           "Стратегические": 9,
           "Операционка — Общая": 15,
           "Операционка — Нижка": 27,
-          "Операционка — Центр": 8,
+          "Операционка — Центр": 9,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 62
+          "phase_0": 63
         }
       },
       "notes": {
