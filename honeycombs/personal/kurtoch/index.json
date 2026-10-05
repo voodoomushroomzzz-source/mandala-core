@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.5.3",
+    "version": "v2.5.4",
     "created": "2026-09-23",
     "updated": "2026-10-05",
     "layer": 2,
@@ -30,8 +30,8 @@
     "taskboard.json": {
       "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
-      "version": "v2.5.3",
-      "tasks_count": 68,
+      "version": "v2.5.4",
+      "tasks_count": 62,
       "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
@@ -43,7 +43,7 @@
     "knowledge_base.json": {
       "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
       "purpose": "Структура готова, наполнение — по мере сбора.",
-      "version": "v2.1.0",
+      "version": "v2.2.0",
       "sections_count": 11
     },
     "taskboard_archive.json": {
@@ -158,7 +158,7 @@
   "health": {
     "status": "healthy",
     "last_check": "2026-10-05",
-    "notes": "v2.5.3: закрыто 7, перенос 5, новые K-119/K-120."
+    "notes": "v2.5.4: K-019 обновлён, K-031 dl, K-110 Hiwater, +K-121, KB +procurement, contacts +5."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -769,13 +769,49 @@
       "contacts": {
         "status": "partial",
         "notion_page": "📞 Контакты",
-        "note": "Часть контактов уже в team_roster (сотрудники). Не хватает внешних.",
+        "note": "5 контактов добавлено (05.10). Ждут: Виктор, Крис, сервисные службы.",
         "data_gaps": [
           "контакты Виктора (учредитель)",
           "контакты Крис (управляющая)",
           "контакты сервисных служб (электрика, сантехника)",
-          "контакты арендодателей",
           "контакты поставщиков (см. suppliers)"
+        ],
+        "items": [
+          {
+            "name": "Екатерина",
+            "role": "Арендодатель торгового центра",
+            "phone": "+7 920 900 3535",
+            "telegram": "@Eka7811",
+            "notes": null
+          },
+          {
+            "name": "Hiwater Рабочий (сервис)",
+            "role": "Сервис фильтров воды (HIWATER RO 400 Lite)",
+            "phone": "+7 (999) 545-27-71",
+            "telegram": null,
+            "notes": "Картриджи: угольный 11 000 ₽ (6-8 мес); осмос 19 500 ₽ (1-2 года). ИП Штефанец В.В., ИНН 782513617177."
+          },
+          {
+            "name": "Саша (менеджер)",
+            "role": "Менеджер ТЦ Гагаринский — техвопросы",
+            "phone": "+7 (961) 111-11-10",
+            "telegram": null,
+            "notes": null
+          },
+          {
+            "name": "Михаил",
+            "role": "Директор ТЦ Гагаринский",
+            "phone": "+7 920 943 96 68",
+            "telegram": null,
+            "notes": null
+          },
+          {
+            "name": "Администратор ТЦ Гагаринский",
+            "role": "Администратор ТЦ Гагаринский",
+            "phone": "+7 (961) 256-28-48",
+            "telegram": null,
+            "notes": null
+          }
         ]
       }
     },
