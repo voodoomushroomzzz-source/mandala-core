@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261005-070106-387",
+  "title": "SoTa: Soft Tactile Skins for Dexterous Manipulation",
+  "url": "https://arxiv.org/abs/2610.02338",
+  "description": "arXiv:2610.02338v1 Announce Type: new \nAbstract: A growing body of work suggests that tactile sensing gives robot policies contact information that complements vision in dexterous manipulation. However, visuo-tactile robot data remains scarce: dexterous demonstrations require teleoperating robots, which limits dataset scale. Human demonstrations are far cheaper to collect and offer a path to scale this data, but only if human and robot hands carry tactile sensors with corresponding signals. This",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-05T07:01:06.064597",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

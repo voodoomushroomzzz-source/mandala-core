@@ -8973,3 +8973,62 @@
 [2026-10-04 14:38:15] [INFO]   Total duplicates: 7
 [2026-10-04 14:38:15] [INFO]   Total removed (old): 0
 [2026-10-04 14:38:15] [INFO] ============================================================
+[2026-10-05 07:01:03] [INFO] ============================================================
+[2026-10-05 07:01:03] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-10-05 07:01:03] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-10-05 07:01:03] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-10-05 07:01:03] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-05 07:01:03] [INFO]   → Filtered to 5 relevant items
+[2026-10-05 07:01:04] [INFO]   ✅ Saved: SEED-20261005-070104-380.json
+[2026-10-05 07:01:04] [INFO]   ✅ Saved: SEED-20261005-070104-381.json
+[2026-10-05 07:01:04] [INFO]   ✅ Saved: SEED-20261005-070104-382.json
+[2026-10-05 07:01:04] [INFO]   ✅ Saved: SEED-20261005-070104-383.json
+[2026-10-05 07:01:05] [INFO]   ✅ Saved: SEED-20261005-070105-384.json
+[2026-10-05 07:01:05] [INFO]   📊 arXiv AI: saved 5, duplicates 0
+[2026-10-05 07:01:05] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-10-05 07:01:05] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-10-05 07:01:05] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-05 07:01:05] [INFO]   → Filtered to 5 relevant items
+[2026-10-05 07:01:05] [INFO]   ✅ Saved: SEED-20261005-070105-385.json
+[2026-10-05 07:01:05] [INFO]   ✅ Saved: SEED-20261005-070105-386.json
+[2026-10-05 07:01:06] [INFO]   ✅ Saved: SEED-20261005-070106-387.json
+[2026-10-05 07:01:06] [INFO]   ✅ Saved: SEED-20261005-070106-388.json
+[2026-10-05 07:01:06] [INFO]   ✅ Saved: SEED-20261005-070106-389.json
+[2026-10-05 07:01:06] [INFO]   📊 arXiv Robotics: saved 5, duplicates 0
+[2026-10-05 07:01:06] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-10-05 07:01:06] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-10-05 07:01:06] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-10-05 07:01:06] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-10-05 07:01:06] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-10-05 07:01:06] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-10-05 07:01:07] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-05 07:01:07] [INFO]   → Filtered to 5 relevant items
+[2026-10-05 07:01:07] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-10-05 07:01:07] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-10-05 07:01:07] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-10-05 07:01:07] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-10-05 07:01:07] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-10-05 07:01:07] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-10-05 07:01:07] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-10-05 07:01:07] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-10-05 07:01:07] [INFO]   → Found 15 raw items, 3 recent
+[2026-10-05 07:01:07] [INFO]   → Filtered to 3 relevant items
+[2026-10-05 07:01:08] [INFO]   ✅ Saved: SEED-20261005-070108-390.json
+[2026-10-05 07:01:08] [INFO]   ✅ Saved: SEED-20261005-070108-391.json
+[2026-10-05 07:01:08] [INFO]   ✅ Saved: SEED-20261005-070108-392.json
+[2026-10-05 07:01:08] [INFO]   📊 TechCrunch AI: saved 3, duplicates 0
+[2026-10-05 07:01:08] [INFO]   🗑️ Cleaning old seeds (date <= 2026-10-04)...
+[2026-10-05 07:01:08] [INFO]   ✅ No old seeds to remove
+[2026-10-05 07:01:08] [INFO]   📝 Updated inbox/index.json with last_processed=2026-10-05
+[2026-10-05 07:01:08] [INFO] 
+============================================================
+[2026-10-05 07:01:08] [INFO] ✅ Scout Agent v2.2 finished
+[2026-10-05 07:01:08] [INFO]   Total saved: 13
+[2026-10-05 07:01:08] [INFO]   Total duplicates: 5
+[2026-10-05 07:01:08] [INFO]   Total removed (old): 0
+[2026-10-05 07:01:08] [INFO] ============================================================

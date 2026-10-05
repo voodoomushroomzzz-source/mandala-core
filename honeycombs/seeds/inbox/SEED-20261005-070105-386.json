@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261005-070105-386",
+  "title": "World-Calibrated Proposal-to-Action Flow for Vision-Language-Action Models",
+  "url": "https://arxiv.org/abs/2610.02323",
+  "description": "arXiv:2610.02323v1 Announce Type: new \nAbstract: Flow-based Vision-Language-Action (VLA) policies generate action chunks by transporting samples from a task-agnostic isotropic Gaussian source. As this source is conditioned on neither recent execution nor predicted future evolution, (i) it discards the local continuity established by recently executed motion. (ii) Even when predictive world representations are introduced, they often only condition the transport dynamics rather than determine wher",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-05T07:01:05.814753",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

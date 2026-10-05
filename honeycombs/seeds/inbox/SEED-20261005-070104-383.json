@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261005-070104-383",
+  "title": "Keep It CALM: Analyzing the Limits of Global Unsafety in Text-to-Image Generation",
+  "url": "https://arxiv.org/abs/2610.02300",
+  "description": "arXiv:2610.02300v1 Announce Type: new \nAbstract: Training-free safeguards for text-to-image generation often rely on a reusable safety signal, such as an unsafe direction or global toxic subspace, applied broadly across prompts. We provide a controlled geometric analysis of this global-unsafety assumption and reveal a consistent coverage-selectivity trade-off: compact unsafe subspaces fail to cover heterogeneous unsafe semantics, whereas broader aggregation increasingly distorts safety-adjacent ",
+  "source": "arXiv AI",
+  "collected_at": "2026-10-05T07:01:04.963245",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

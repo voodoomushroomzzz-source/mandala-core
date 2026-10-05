@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261005-070106-389",
+  "title": "Filter-Aware Fine-Tuning for Safe Humanoid Whole-Body Tracking",
+  "url": "https://arxiv.org/abs/2610.02341",
+  "description": "arXiv:2610.02341v1 Announce Type: new \nAbstract: Safe whole-body motion is essential for deploying humanoid robots in unstructured environments. Modern humanoid control commonly separates reference specification from execution, with a planner, teleoperator, or motion generator providing a reference that a reinforcement-learning policy tracks through dynamically feasible whole-body control. Runtime safety filters, such as control barrier functions (CBFs), offer a promising approach for enforcing ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-05T07:01:06.581439",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
