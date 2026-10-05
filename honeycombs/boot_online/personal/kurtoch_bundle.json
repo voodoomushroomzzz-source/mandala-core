@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-05T15:28:22Z",
+    "generated_at": "2026-10-05T15:32:40Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1155,28 +1155,6 @@
             "bot_task_id": null,
             "notion_page_id": null,
             "column": "Операционка — Нижка"
-          }
-        },
-        {
-          "id": "K-024",
-          "title": "Лампочки Центр",
-          "description": "Операционка Центр — лампочки.",
-          "priority": "critical",
-          "status": "done",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": "2026-10-05",
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-09-17",
-          "updated": "2026-10-05",
-          "completed": "2026-10-05",
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Центр"
           }
         },
         {
@@ -2435,28 +2413,6 @@
           }
         },
         {
-          "id": "K-109",
-          "title": "Встреча с Магомедом по кухне",
-          "description": "Встреча с Магомедом по поводу кухни. Пятница 02.10.2026.",
-          "priority": "high",
-          "status": "done",
-          "horizon": "tactical",
-          "phase": "phase_0",
-          "deadline": null,
-          "reminder": null,
-          "depends_on": [],
-          "related_to": [],
-          "created": "2026-10-01",
-          "updated": "2026-10-05",
-          "completed": "2026-10-05",
-          "metadata": {
-            "bot_group": "Работа",
-            "bot_task_id": null,
-            "notion_page_id": null,
-            "column": "Операционка — Общая"
-          }
-        },
-        {
           "id": "K-110",
           "title": "Заменить фильтр для воды на Нижке",
           "description": "Заменить фильтр для воды на Нижке (Нижняя Дуброва).\n\nСистема: HIWATER RO 400 Lite.\n\nКартриджи:\n- Угольный (двойного действия) — 11 000 ₽, раз в 6-8 месяцев (или 30 тыс. литров)\n- Осмос (мембрана обратного осмоса) — 19 500 ₽, раз в 1-2 года\n\nСервис: Hiwater Рабочий — +7 (999) 545-27-71 (картриджи для фильтров воды)\n\nРеквизиты: ИП Штефанец В.В., ИНН 782513617177, г. Владимир, ул. Гагарина, 5, Куртош Кофе.",
@@ -2673,27 +2629,26 @@
         }
       ],
       "counters": {
-        "total": 63,
+        "total": 61,
         "by_status": {
           "todo": 58,
-          "done": 2,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
           "medium": 20,
-          "high": 39,
-          "critical": 4
+          "high": 38,
+          "critical": 3
         },
         "by_column": {
           "Стратегические": 9,
-          "Операционка — Общая": 15,
+          "Операционка — Общая": 14,
           "Операционка — Нижка": 27,
-          "Операционка — Центр": 9,
+          "Операционка — Центр": 8,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 63
+          "phase_0": 61
         }
       },
       "notes": {
@@ -3959,11 +3914,57 @@
             "column": "Операционка — Общая"
           },
           "archived_at": "2026-10-05"
+        },
+        {
+          "id": "K-024",
+          "title": "Лампочки Центр",
+          "description": "Операционка Центр — лампочки.",
+          "priority": "critical",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-05",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-09-17",
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          },
+          "archived_at": "2026-10-05"
+        },
+        {
+          "id": "K-109",
+          "title": "Встреча с Магомедом по кухне",
+          "description": "Встреча с Магомедом по поводу кухни. Пятница 02.10.2026.",
+          "priority": "high",
+          "status": "done",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": null,
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-01",
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          },
+          "archived_at": "2026-10-05"
         }
       ],
-      "total": 48,
+      "total": 50,
       "by_status": {
-        "done": 39,
+        "done": 41,
         "cancelled": 9
       }
     },
