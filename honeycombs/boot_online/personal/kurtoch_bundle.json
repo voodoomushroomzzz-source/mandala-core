@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-04T18:46:51Z",
+    "generated_at": "2026-10-05T11:34:20Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -28,9 +28,9 @@
     "identity": {
       "module_id": "PERSONAL-KURTOCH-INDEX-001",
       "name": "Kurtoch — Franchise & Operations Hub",
-      "version": "v2.5.2",
+      "version": "v2.5.3",
       "created": "2026-09-23",
-      "updated": "2026-10-04",
+      "updated": "2026-10-05",
       "layer": 2,
       "type": "personal_subhub_index",
       "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -56,7 +56,7 @@
       "taskboard.json": {
         "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
         "purpose": "Задачи, milestones, синхронизация с Notion.",
-        "version": "v2.5.2",
+        "version": "v2.5.3",
         "tasks_count": 68,
         "note": "Архивные задачи вынесены в taskboard_archive.json."
       },
@@ -183,8 +183,8 @@
     },
     "health": {
       "status": "healthy",
-      "last_check": "2026-10-04",
-      "notes": "v2.5.2: +K-117 (расписание), +K-118 (генуборка Нижка), K-114/K-115 done, K-112/K-113 dl, Юля->working."
+      "last_check": "2026-10-05",
+      "notes": "v2.5.3: закрыто 7, перенос 5, новые K-119/K-120."
     },
     "snapshots": {
       "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -988,9 +988,9 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.5.2",
+      "version": "v2.5.3",
       "created": "2026-09-14",
-      "updated": "2026-10-04",
+      "updated": "2026-10-05",
       "layer": 2,
       "type": "taskboard_module",
       "description": "База задач Куртош + крупные вехи. Синхронизируется с Notion Taskboard по API.",
@@ -1003,7 +1003,7 @@
       "description": "Внутренний таскборд Куртош. Зеркало для Notion. 4 столбца: Стратегические, Операционка — Общая / Центр / Нижка. Срочность ставится вручную. При любом изменении — синхронизировать с Notion.",
       "version": "v2.3.4",
       "created": "2026-09-14",
-      "updated": "2026-10-04",
+      "updated": "2026-10-05",
       "legend": {
         "priority": {
           "critical": "Горит. Сегодня-завтра.",
@@ -1145,12 +1145,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-05",
+          "deadline": "2026-10-06",
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-18",
-          "updated": "2026-09-29",
+          "updated": "2026-10-05",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2120,7 +2120,7 @@
           "status": "todo",
           "horizon": "strategic",
           "phase": "phase_0",
-          "deadline": "2026-10-04",
+          "deadline": "2026-10-12",
           "depends_on": [],
           "related_to": [
             "K-077",
@@ -2128,7 +2128,7 @@
           ],
           "reminder": null,
           "created": "2026-09-28",
-          "updated": "2026-09-28",
+          "updated": "2026-10-05",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2142,7 +2142,7 @@
           "title": "Загерметизировать валики в Центре (как на Нишке)",
           "description": "Загерметизировать валики для калачей в Центре — так же, как сделано на Нишке. Проблема: ручка отклеилась от основания. Профилактика + ремонт.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-09-30",
@@ -2153,8 +2153,8 @@
             "M-002"
           ],
           "created": "2026-09-29",
-          "updated": "2026-09-29",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2167,7 +2167,7 @@
           "title": "Переговоры с Виктором и Крис: 3-й сотрудник + уход от бегунков",
           "description": "Переговорить с Виктором и Крис по двум вопросам:\n1. 3-й сотрудник на смене (расширение зала, поток туристов, просадка внимания).\n2. Уход от бегунков (роль ранера, 2 часа закрытия).\nКонтекст: бюджетное давление (+500К из-за расширения), см. KB → staffing_management.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "strategic",
           "phase": "phase_0",
           "deadline": "2026-09-30",
@@ -2178,8 +2178,8 @@
             "K-029"
           ],
           "created": "2026-09-29",
-          "updated": "2026-09-29",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2192,7 +2192,7 @@
           "title": "Убавить громкость сигнализации в Центре",
           "description": "Убавить громкость сигнализации в Центре. Сейчас очень громкая. Сделать до 01.10.",
           "priority": "high",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-01",
@@ -2202,8 +2202,8 @@
             "M-002"
           ],
           "created": "2026-09-29",
-          "updated": "2026-09-29",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2216,7 +2216,7 @@
           "title": "Отфотографировать цветы в Центре",
           "description": "Отфотографировать все цветы в Центре. Цель — зафиксировать текущее состояние (уход/пересадка). См. K-066.",
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-05",
@@ -2227,8 +2227,8 @@
             "M-002"
           ],
           "created": "2026-09-29",
-          "updated": "2026-09-29",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2244,7 +2244,7 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-05",
+          "deadline": "2026-10-07",
           "reminder": null,
           "depends_on": [],
           "related_to": [
@@ -2252,7 +2252,7 @@
             "M-001"
           ],
           "created": "2026-09-29",
-          "updated": "2026-10-02",
+          "updated": "2026-10-05",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2266,7 +2266,7 @@
           "title": "Встреча с Витей и Валей",
           "description": "Встреча с Витей (управляющий переходного периода) и Валей (продюсер + маркетинг). Четверг, после катанга.",
           "priority": "medium",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-01",
@@ -2274,8 +2274,8 @@
           "depends_on": [],
           "related_to": [],
           "created": "2026-09-29",
-          "updated": "2026-09-29",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2291,14 +2291,14 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-09-30",
+          "deadline": "2026-10-06",
           "reminder": null,
           "depends_on": [],
           "related_to": [
             "M-002"
           ],
           "created": "2026-09-29",
-          "updated": "2026-09-29",
+          "updated": "2026-10-05",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2521,12 +2521,12 @@
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-02",
+          "deadline": null,
           "reminder": null,
           "depends_on": [],
           "related_to": [],
           "created": "2026-10-01",
-          "updated": "2026-10-01",
+          "updated": "2026-10-05",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2634,7 +2634,7 @@
           "title": "Создать тему «Открытие» в рабочей Telegram-группе + забрифовать команду",
           "description": "Создать тему «Открытие» в рабочей Telegram-группе.\n\nЗабрифинг: при открытии смены — когда сотрудник приходит в кофейню и открывает смену — скидывает фото в эту тему.\n\nПроблема: участились случаи, когда сотрудник не выходит и не сообщает. Узнаём по факту — особенно в выходные, к обеду. Нужен контроль открытия через фотоотчёт.\n\nСвязь: K-104 (напоминания + контроль в чате).",
           "priority": "critical",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-05",
@@ -2644,8 +2644,8 @@
             "K-104"
           ],
           "created": "2026-10-04",
-          "updated": "2026-10-04",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2658,7 +2658,7 @@
           "title": "Правка расписания: Александра (не выходит на связь) + Денис (сдвиг смен)",
           "description": "Правка расписания на следующую неделю. Причины:\n\n1) Александра (Саша, EMP-003) — пропала, не выходит на связь. Сотрудник (working), не стажёр. Скорректировать смены: убрать/перераспределить её часы. Статус в team.json пока не меняем — ждём точной информации.\n\n2) Денис (EMP-010) — попросил сдвиг: пятница-суббота вместо суббота-воскресенье.\n\nСделать до 05.10.",
           "priority": "critical",
-          "status": "todo",
+          "status": "done",
           "horizon": "tactical",
           "phase": "phase_0",
           "deadline": "2026-10-05",
@@ -2668,8 +2668,8 @@
             "K-116"
           ],
           "created": "2026-10-04",
-          "updated": "2026-10-04",
-          "completed": null,
+          "updated": "2026-10-05",
+          "completed": "2026-10-05",
           "metadata": {
             "bot_group": "Работа",
             "bot_task_id": null,
@@ -2701,29 +2701,77 @@
             "notion_page_id": null,
             "column": "Операционка — Нижка"
           }
+        },
+        {
+          "id": "K-119",
+          "title": "Фильтр-кофе (батч-брю) для сотрудников (в выходной бесплатно)",
+          "description": "Сделать фильтр-кофе из батч-брю напитком для сотрудников — чтобы в выходной день они могли приходить и их могли бесплатно угостить этим напитком.\n\nШаги:\n1. Согласовать с Витей\n2. Скинуть бриф в чат ребятам\n3. Внедрить правило\n\nФормальный дедлайн — 12.10. Попробовать сделать сегодня (05.10).\n\nПримечание: пуровер — слишком заморочисто, не подходит. Используем батч-брю.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-12",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-104",
+            "K-116"
+          ],
+          "created": "2026-10-05",
+          "updated": "2026-10-05",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
+        },
+        {
+          "id": "K-120",
+          "title": "Возмещение за доставку",
+          "description": "Возмещение за доставку. До среды 07.10.",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-07",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [],
+          "created": "2026-10-05",
+          "updated": "2026-10-05",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Общая"
+          }
         }
       ],
       "counters": {
-        "total": 66,
+        "total": 68,
         "by_status": {
-          "todo": 63,
+          "todo": 58,
           "in_progress": 2,
-          "planning": 1
+          "planning": 1,
+          "done": 7
         },
         "by_priority": {
-          "medium": 19,
+          "medium": 21,
           "high": 41,
           "critical": 6
         },
         "by_column": {
           "Стратегические": 11,
-          "Операционка — Общая": 14,
+          "Операционка — Общая": 16,
           "Операционка — Нижка": 27,
           "Операционка — Центр": 11,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 66
+          "phase_0": 68
         }
       },
       "notes": {
