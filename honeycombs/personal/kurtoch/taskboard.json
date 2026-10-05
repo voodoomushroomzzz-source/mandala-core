@@ -2,7 +2,7 @@
   "identity": {
     "module_id": "KURTOCH-TASKBOARD-001",
     "name": "Kurtoch — Taskboard",
-    "version": "v2.5.4",
+    "version": "v2.5.5",
     "created": "2026-09-14",
     "updated": "2026-10-05",
     "layer": 2,
@@ -140,7 +140,7 @@
         "title": "Лампочки Центр",
         "description": "Операционка Центр — лампочки.",
         "priority": "critical",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": "2026-10-05",
@@ -148,8 +148,8 @@
         "depends_on": [],
         "related_to": [],
         "created": "2026-09-17",
-        "updated": "2026-09-29",
-        "completed": null,
+        "updated": "2026-10-05",
+        "completed": "2026-10-05",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1394,7 +1394,7 @@
         "status": "todo",
         "horizon": "tactical",
         "phase": "phase_0",
-        "deadline": "2026-10-05",
+        "deadline": "2026-10-07",
         "reminder": null,
         "depends_on": [],
         "related_to": [
@@ -1403,7 +1403,7 @@
           "K-076"
         ],
         "created": "2026-10-01",
-        "updated": "2026-10-01",
+        "updated": "2026-10-05",
         "completed": null,
         "metadata": {
           "bot_group": "Работа",
@@ -1417,7 +1417,7 @@
         "title": "Встреча с Магомедом по кухне",
         "description": "Встреча с Магомедом по поводу кухни. Пятница 02.10.2026.",
         "priority": "high",
-        "status": "todo",
+        "status": "done",
         "horizon": "tactical",
         "phase": "phase_0",
         "deadline": null,
@@ -1426,7 +1426,7 @@
         "related_to": [],
         "created": "2026-10-01",
         "updated": "2026-10-05",
-        "completed": null,
+        "completed": "2026-10-05",
         "metadata": {
           "bot_group": "Работа",
           "bot_task_id": null,
@@ -1624,17 +1624,42 @@
           "notion_page_id": null,
           "column": "Операционка — Общая"
         }
+      },
+      {
+        "id": "K-122",
+        "title": "Починить 1 лампу в Центре",
+        "description": "Починить 1 лампу в Центре — не работает.",
+        "priority": "medium",
+        "status": "todo",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-002"
+        ],
+        "created": "2026-10-05",
+        "updated": "2026-10-05",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Центр"
+        }
       }
     ],
     "counters": {
-      "total": 62,
+      "total": 63,
       "by_status": {
-        "todo": 59,
+        "todo": 58,
+        "done": 2,
         "in_progress": 2,
         "planning": 1
       },
       "by_priority": {
-        "medium": 19,
+        "medium": 20,
         "high": 39,
         "critical": 4
       },
@@ -1642,11 +1667,11 @@
         "Стратегические": 9,
         "Операционка — Общая": 15,
         "Операционка — Нижка": 27,
-        "Операционка — Центр": 8,
+        "Операционка — Центр": 9,
         "Крупные вехи": 3
       },
       "by_phase": {
-        "phase_0": 62
+        "phase_0": 63
       }
     },
     "notes": {
