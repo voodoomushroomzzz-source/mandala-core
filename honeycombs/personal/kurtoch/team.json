@@ -2,19 +2,19 @@
   "identity": {
     "module_id": "KURTOCH-TEAM-001",
     "name": "Kurtoch — Team Roster",
-    "version": "v1.3.1",
+    "version": "v1.4.0",
     "created": "2026-09-23",
-    "updated": "2026-10-04",
+    "updated": "2026-10-06",
     "layer": 2,
     "type": "team_module",
-    "description": "Картотека сотрудников Куртош. 16 человек. Синхронизируется с Notion Team (в будущем).",
+    "description": "Картотека сотрудников Куртош. 17 человек. Графа vacation — история и планы отпусков. Синхронизируется с Notion Team (в будущем).",
     "status": "active",
     "priority": "high",
     "parent": "index.json",
     "resonance": "100%"
   },
   "team_roster": {
-    "last_updated": "2026-10-04",
+    "last_updated": "2026-10-06",
     "total_employees": 17,
     "by_status": {
       "core": 1,
@@ -78,7 +78,18 @@
         "data_gaps": [
           "nijka.attitude",
           "schedule.preferences"
-        ]
+        ],
+        "vacation": {
+          "planned": [
+            {
+              "start": "2026-10-17",
+              "end": "2026-10-24",
+              "status": "planned",
+              "note": "Отпускные — вопрос с Витей (K-121)"
+            }
+          ],
+          "history": []
+        }
       },
       {
         "id": "EMP-002",
@@ -121,7 +132,11 @@
         "notes": "Недавно закончил обучение в Куртоше, учится.",
         "data_gaps": [
           "schedule.availability"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-003",
@@ -167,7 +182,11 @@
         "notes": "На сменах ответственна, чистолюбива.",
         "data_gaps": [
           "schedule.availability"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-004",
@@ -209,7 +228,11 @@
           "schedule.preferences"
         ],
         "settled": true,
-        "settled_date": "2026-09-25"
+        "settled_date": "2026-09-25",
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-005",
@@ -250,7 +273,11 @@
         "data_gaps": [
           "nijka.attitude",
           "schedule.preferences"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-006",
@@ -291,7 +318,11 @@
         "data_gaps": [
           "nijka.attitude"
         ],
-        "updated": "2026-10-02"
+        "updated": "2026-10-02",
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-007",
@@ -332,7 +363,11 @@
         "notes": "Бегунок (ранер).",
         "data_gaps": [
           "nijka.attitude"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-008",
@@ -373,7 +408,11 @@
         "notes": null,
         "data_gaps": [
           "nijka.attitude"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-009",
@@ -417,7 +456,11 @@
         "data_gaps": [
           "schedule.availability"
         ],
-        "updated": "2026-10-04"
+        "updated": "2026-10-04",
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-010",
@@ -459,7 +502,11 @@
         "data_gaps": [
           "nijka.attitude",
           "schedule.notes"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-011",
@@ -497,7 +544,11 @@
         "status": "left",
         "risks": [],
         "notes": "Ушла (left behind).",
-        "data_gaps": []
+        "data_gaps": [],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-012",
@@ -539,7 +590,11 @@
           "nijka.attitude"
         ],
         "settled": true,
-        "settled_date": "2026-09-09"
+        "settled_date": "2026-09-09",
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-013",
@@ -579,7 +634,11 @@
         "notes": null,
         "data_gaps": [
           "nijka.attitude"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-014",
@@ -624,7 +683,11 @@
         "notes": null,
         "data_gaps": [
           "nijka.attitude"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-015",
@@ -672,7 +735,11 @@
         "data_gaps": [
           "nijka.attitude",
           "schedule.notes"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-016",
@@ -715,7 +782,11 @@
         "data_gaps": [
           "schedule.notes"
         ],
-        "updated": "2026-10-02"
+        "updated": "2026-10-02",
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       },
       {
         "id": "EMP-017",
@@ -756,7 +827,11 @@
         "data_gaps": [
           "nijka.attitude",
           "schedule.availability"
-        ]
+        ],
+        "vacation": {
+          "planned": [],
+          "history": []
+        }
       }
     ],
     "skills_summary": {
