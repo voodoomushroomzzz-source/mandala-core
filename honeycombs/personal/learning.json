@@ -1,298 +1,377 @@
 {
   "identity": {
     "name": "Learning & Certificates — Dima (Gardener)",
-    "version": "v1.2.0",
+    "version": "v1.3.0",
     "created": "2026-08-14",
-    "updated": "2026-10-04",
-    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.2.0: дедлайны под 1ч/будни, Track D убран, English B2 с ноября, C1 до 30.09.2027."
+    "updated": "2026-10-05",
+    "description": "Обучение, сертификаты, английский. Симбиоз с career.json. v1.3.0: полная пересборка под критерий 'есть проверяемый сертификат'. Уровень 1: Elements of AI + Anthropic + Harvard CS50. Уровень 2 (future_paid): Google AI, GitHub, CCAF, Microsoft AI-901. Убраны: OpenAI (badge), Microsoft for Beginners (нет сертификата), CCA-F (недоступен)."
   },
   "symbiosis": {
     "partner_file": "honeycombs/personal/career.json",
     "principle": "Каждый сертификат и навык закрывает конкретный трек карьеры. Обратная связь: карьерный трек требует — обучение закрывает.",
     "tracks_mapping": {
-      "track_a_ai_ops": ["Google AI Essentials", "GitHub Foundations", "OpenAI Foundations"],
-      "track_b_system_analyst": ["UML", "BPMN", "SQL", "Swagger", "OpenAI Applied", "Anthropic Academy"],
-      "track_c_global_ai": ["CCA-F", "English C1", "OpenAI Agents"]
-    }
+      "track_a_ai_ops": ["Elements of AI", "Anthropic Claude 101", "Anthropic Claude Code 101", "Anthropic Building with Claude API"],
+      "track_b_system_analyst": ["UML", "BPMN", "SQL", "Swagger", "Harvard CS50 AI"],
+      "track_c_global_ai": ["CCAF", "English C1", "Harvard CS50 AI", "Claude Certified Architect (future)"]
+    },
+    "key_principle": "Все курсы в плане дают проверяемый сертификат. Курсы без сертификата — удалены."
   },
+  "strategy": "Только курсы с проверяемыми сертификатами. Уровень 1 — бесплатные (Elements of AI, Anthropic, Harvard). Уровень 2 — платные после дохода. Уровень 3 — после входа в IT.",
   "courses": {
-    "strategy": "1 час в будни (Пн-Пт). Сначала бесплатные и критичные (Google AI, GitHub, OpenAI) → потом системный анализ (UML/BPMN/SQL) → потом углублённые (Anthropic, CCA-F). Платные — только после дохода.",
-    "priority_levels": {
-      "critical_free_now": {
-        "description": "✅ Октябрь. Прямо влияет на Track A.",
-        "list": [
-          {
-            "name": "Google AI Essentials",
-            "platform": "Google",
-            "duration": "1 час",
-            "start": "2026-10-06",
-            "deadline": "2026-10-06",
-            "status": "not_started",
-            "certificate": "Google Certificate",
-            "why": "Самый быстрый сертификат. Закрывает базовый AI-порог."
-          },
-          {
-            "name": "GitHub Foundations",
-            "platform": "GitHub",
-            "duration": "2-3 часа",
-            "start": "2026-10-07",
-            "deadline": "2026-10-09",
-            "status": "not_started",
-            "certificate": "GitHub Certificate",
-            "why": "Закрывает tech-порог для IT-компаний."
-          },
-          {
-            "name": "OpenAI Academy: AI Foundations",
-            "platform": "OpenAI",
-            "duration": "~20 часов (in_progress)",
-            "start": "2026-07-01",
-            "deadline": "2026-10-30",
-            "status": "in_progress",
-            "certificate": "Credly badge",
-            "why": "Фундамент промпт-инжиниринга и LLM."
-          }
-        ]
-      },
-      "system_analyst_foundation": {
-        "description": "📚 Track B. Старт с ноября (после базовых сертификатов).",
-        "deadline": "2027-01-31",
-        "list": [
-          {
-            "name": "UML — YouTube + Habr",
-            "platform": "YouTube / Habr",
-            "duration": "~5 дней (1ч/будни)",
-            "start": "2026-11-02",
-            "deadline": "2026-11-15",
-            "status": "not_started",
-            "why": "Диаграммы классов, последовательностей, use case."
-          },
-          {
-            "name": "BPMN 2.0 — Stepik",
-            "platform": "Stepik",
-            "url": "https://stepik.org/course/100356",
-            "duration": "~10 дней (1ч/будни)",
-            "start": "2026-11-16",
-            "deadline": "2026-11-27",
-            "status": "not_started",
-            "why": "Схемы бизнес-процессов — базовый инструмент аналитика."
-          },
-          {
-            "name": "SQL для начинающих — Stepik",
-            "platform": "Stepik",
-            "url": "https://stepik.org/course/63054",
-            "duration": "~15 дней (1ч/будни)",
-            "start": "2026-11-30",
-            "deadline": "2026-12-20",
-            "status": "not_started",
-            "why": "Обязательный навык системного аналитика."
-          },
-          {
-            "name": "Swagger / OpenAPI",
-            "platform": "Swagger Editor + Habr",
-            "url": "https://editor.swagger.io/",
-            "duration": "~5 дней (1ч/будни)",
-            "start": "2026-12-21",
-            "deadline": "2026-12-27",
-            "status": "not_started",
-            "why": "Спецификации API — рабочий инструмент аналитика."
-          }
-        ]
-      },
-      "secondary_free": {
-        "description": "📚 Углубление после базы.",
-        "list": [
-          {
-            "name": "OpenAI Academy: Applied AI Foundations",
-            "platform": "OpenAI",
-            "duration": "~15 дней (1ч/будни)",
-            "start": "2027-01-04",
-            "deadline": "2027-01-22",
-            "status": "not_started",
-            "certificate": "Credly badge",
-            "why": "Переход от пользователя к архитектору."
-          },
-          {
-            "name": "Anthropic Academy — Claude Certification Path",
-            "platform": "Anthropic (Skilljar)",
-            "url": "https://anthropic.skilljar.com",
-            "duration": "~20+ часов (17 курсов)",
-            "start": "2027-01-25",
-            "deadline": "2027-03-15",
-            "status": "not_started",
-            "certificate": "Course completion + CCA-F",
-            "why": "Путь к CCA-F."
-          },
-          {
-            "name": "OpenAI Academy: Agents and Workflows",
-            "platform": "OpenAI",
-            "duration": "~15 дней (1ч/будни)",
-            "start": "2027-03-16",
-            "deadline": "2027-04-05",
-            "status": "not_started",
-            "certificate": "Credly badge",
-            "why": "Agentic Orchestration."
-          },
-          {
-            "name": "English B2 → C1 (technical AI)",
-            "platform": "Free resources",
-            "duration": "Ongoing (1ч/будни)",
-            "start": "2026-11-01",
-            "deadline_b2": "2027-03-31",
-            "deadline_c1": "2027-09-30",
-            "status": "not_started",
-            "why": "B2 — для удалёнки РФ. C1 — для глобалки (Track C, Q4 2027)."
-          }
-        ]
-      },
-      "future_paid": {
-        "description": "📌 Платные. Только после дохода Track A.",
-        "list": [
-          {
-            "name": "PMI-CPMAI (AI Project Management)",
-            "platform": "PMI",
-            "cost": "~$500-800",
-            "why": "Gold standard для AI PM."
-          },
-          {
-            "name": "Google Project Management Certificate",
-            "platform": "Coursera",
-            "cost": "~$40/month",
-            "why": "PM фундамент."
-          },
-          {
-            "name": "COO / Operational Director in IT",
-            "platform": "OTUS",
-            "cost": "~100 000 RUB",
-            "why": "Углубление операционки в IT."
-          }
-        ]
-      }
+    "level_1_free_with_certificate": {
+      "description": "✅ Бесплатные курсы с проверяемыми сертификатами. Начать сейчас.",
+      "list": [
+        {
+          "order": 1,
+          "name": "Elements of AI",
+          "platform": "University of Helsinki",
+          "url": "https://www.elementsofai.com/",
+          "duration": "~30 часов (6 недель по 1ч/будни)",
+          "start": "2026-10-06",
+          "deadline": "2026-11-15",
+          "status": "not_started",
+          "certificate": "Free certificate (University of Helsinki)",
+          "verification": "PDF на profile page + peer-review",
+          "why": "Самый быстрый бесплатный сертификат. Университет Хельсинки. Закрывает базовый AI-порог.",
+          "in_resume": true
+        },
+        {
+          "order": 2,
+          "name": "Anthropic Academy: Claude 101",
+          "platform": "Anthropic (Skilljar)",
+          "url": "https://anthropic.skilljar.com",
+          "duration": "~1 час",
+          "start": "2026-10-27",
+          "deadline": "2026-10-27",
+          "status": "not_started",
+          "certificate": "Course Completion Certificate",
+          "verification": "verify.skilljar.com",
+          "why": "Быстрый сертификат. База Claude.",
+          "in_resume": true
+        },
+        {
+          "order": 3,
+          "name": "Anthropic Academy: Claude Code 101",
+          "platform": "Anthropic (Skilljar)",
+          "url": "https://anthropic.skilljar.com",
+          "duration": "~2 часа",
+          "start": "2026-10-28",
+          "deadline": "2026-10-29",
+          "status": "not_started",
+          "certificate": "Course Completion Certificate",
+          "verification": "verify.skilljar.com",
+          "why": "Быстрый сертификат. Claude Code — для AI Ops.",
+          "in_resume": true
+        },
+        {
+          "order": 4,
+          "name": "Anthropic Academy: Building with Claude API",
+          "platform": "Anthropic (Skilljar)",
+          "url": "https://anthropic.skilljar.com",
+          "duration": "~3 часа",
+          "start": "2026-10-30",
+          "deadline": "2026-11-02",
+          "status": "not_started",
+          "certificate": "Course Completion Certificate",
+          "verification": "verify.skilljar.com",
+          "why": "API-интеграция — прямое попадание в AI Ops.",
+          "in_resume": true
+        },
+        {
+          "order": 5,
+          "name": "Harvard CS50 AI",
+          "platform": "Harvard (edX / cs50.harvard.edu)",
+          "url": "https://cs50.harvard.edu/ai/",
+          "duration": "~70-210 часов (7 недель по 10-30ч)",
+          "start": "2026-11-03",
+          "deadline": "2027-03-31",
+          "status": "not_started",
+          "certificate": "Free CS50 Certificate (Harvard)",
+          "verification": "Gradebook → CS50 Certificate",
+          "why": "Гарвард в резюме. Python, ML, нейросети. Сильная строка.",
+          "in_resume": true,
+          "note": "Долгий курс. Реалистично — 4-5 месяцев при 1ч/будни."
+        }
+      ]
+    },
+    "level_2_paid_after_income": {
+      "description": "💰 Платные курсы с сертификатами. Только после дохода Track A.",
+      "list": [
+        {
+          "order": 6,
+          "name": "Google AI Essentials",
+          "platform": "Coursera",
+          "url": "https://grow.google/certificates/",
+          "cost": "$49 или financial aid",
+          "duration": "~10 часов",
+          "certificate": "Google Certificate",
+          "verification": "Coursera verify",
+          "why": "Google — узнаваемый бренд. Часто спрашивают.",
+          "in_resume": true
+        },
+        {
+          "order": 7,
+          "name": "GitHub Foundations",
+          "platform": "GitHub",
+          "url": "https://education.github.com/",
+          "cost": "$99",
+          "duration": "~20-30 часов подготовки",
+          "certificate": "GitHub Foundations Certificate",
+          "verification": "GitHub verify",
+          "why": "Tech-порог для IT-компаний.",
+          "in_resume": true
+        },
+        {
+          "order": 8,
+          "name": "Claude Certified Associate (CCAF)",
+          "platform": "Anthropic",
+          "url": "https://anthropic.skilljar.com",
+          "cost": "$99",
+          "duration": "Экзамен",
+          "certificate": "Official CCAF Credential",
+          "verification": "Credly badge",
+          "why": "Официальная сертификация Anthropic. Credly badge.",
+          "in_resume": true
+        },
+        {
+          "order": 9,
+          "name": "Microsoft AI-901 (замена AI-900)",
+          "platform": "Microsoft Learn",
+          "url": "https://learn.microsoft.com/credentials/",
+          "cost": "$50-99",
+          "duration": "~10 часов",
+          "certificate": "Microsoft Certified: AI Fundamentals",
+          "verification": "Microsoft Learn credentials",
+          "why": "AI-901 — новая версия после отмены AI-900 (30.06.2026).",
+          "in_resume": true,
+          "note": "AI-900 отменён 30.06.2026. Заменён на AI-901."
+        }
+      ]
+    },
+    "level_3_pro_after_entry": {
+      "description": "🚀 Pro-сертификации. После входа в IT (2027+).",
+      "list": [
+        {
+          "order": 10,
+          "name": "Claude Certified Architect (CCAA)",
+          "platform": "Anthropic",
+          "url": "https://anthropic.skilljar.com",
+          "cost": "$125",
+          "duration": "Экзамен (прокторинг)",
+          "certificate": "Claude Certified Architect",
+          "verification": "Credly badge",
+          "why": "Pro-уровень. Самый сильный сертификат Anthropic.",
+          "in_resume": true
+        },
+        {
+          "order": 11,
+          "name": "Azure AI Engineer (AI-102)",
+          "platform": "Microsoft",
+          "url": "https://learn.microsoft.com/credentials/",
+          "cost": "$165",
+          "duration": "Экзамен",
+          "certificate": "Microsoft Certified: Azure AI Engineer",
+          "verification": "Microsoft Learn credentials",
+          "why": "Для международного рынка.",
+          "in_resume": true
+        },
+        {
+          "order": 12,
+          "name": "Google Professional ML Engineer",
+          "platform": "Google Cloud",
+          "url": "https://cloud.google.com/certification/machine-learning-engineer",
+          "cost": "$200",
+          "duration": "Экзамен",
+          "certificate": "Google Professional ML Engineer",
+          "verification": "Google Cloud certified",
+          "why": "Высшая планка. Для глобалки.",
+          "in_resume": true
+        }
+      ]
+    },
+    "removed": {
+      "description": "❌ Убраны из плана. Причины:",
+      "items": [
+        {
+          "name": "Microsoft AI for Beginners (GitHub)",
+          "reason": "Нет сертификата — только проекты. Для резюме не строчка."
+        },
+        {
+          "name": "OpenAI Academy badges",
+          "reason": "Не сертификация (Accredible badge). Нельзя называть 'сертификатом'."
+        },
+        {
+          "name": "Claude Certified Architect (CCA-F)",
+          "reason": "Недоступен без partner email организации-партнёра Anthropic."
+        },
+        {
+          "name": "Microsoft AI-900",
+          "reason": "Отменён 30.06.2026. Заменён на AI-901."
+        }
+      ]
     }
   },
   "unified_certificate_track": {
-    "description": "Единый трек сертификатов. Заменяет старый certificates_track (удалён — был дубль).",
-    "last_updated": "2026-10-04",
-    "total": 9,
+    "description": "Единый трек сертификатов. Только курсы с проверяемыми сертификатами.",
+    "last_updated": "2026-10-05",
+    "total": 12,
     "certificates": [
       {
         "order": 1,
-        "name": "Google AI Essentials",
-        "platform": "Google",
-        "url": "https://grow.google/certificates/",
-        "time_estimate": "1 час",
-        "deadline": "2026-10-06",
+        "name": "Elements of AI",
+        "platform": "University of Helsinki",
+        "level": "1 (free)",
+        "url": "https://www.elementsofai.com/",
+        "time_estimate": "30 часов",
+        "deadline": "2026-11-15",
         "priority": "critical",
         "status": "not_started",
-        "added_to_resume": false,
-        "why": "Самый быстрый, мгновенный сертификат для резюме."
+        "in_resume": true,
+        "why": "Университетский сертификат. Бесплатно."
       },
       {
         "order": 2,
-        "name": "GitHub Foundations Certification",
-        "platform": "GitHub",
-        "url": "https://education.github.com/",
-        "time_estimate": "2-3 часа",
-        "deadline": "2026-10-09",
+        "name": "Anthropic Academy: Claude 101",
+        "platform": "Anthropic (Skilljar)",
+        "level": "1 (free)",
+        "url": "https://anthropic.skilljar.com",
+        "time_estimate": "1 час",
+        "deadline": "2026-10-27",
         "priority": "critical",
         "status": "not_started",
-        "added_to_resume": false,
-        "why": "Закрывает tech-порог."
+        "in_resume": true,
+        "why": "Completion Certificate. Быстро."
       },
       {
         "order": 3,
-        "name": "OpenAI Academy: AI Foundations",
-        "platform": "OpenAI",
-        "url": "https://openai.com/",
-        "time_estimate": "2-4 недели",
-        "deadline": "2026-10-30",
+        "name": "Anthropic Academy: Claude Code 101",
+        "platform": "Anthropic (Skilljar)",
+        "level": "1 (free)",
+        "url": "https://anthropic.skilljar.com",
+        "time_estimate": "2 часа",
+        "deadline": "2026-10-29",
         "priority": "critical",
-        "status": "in_progress",
-        "added_to_resume": false,
-        "why": "Фундамент."
+        "status": "not_started",
+        "in_resume": true,
+        "why": "Completion Certificate. Claude Code для AI Ops."
       },
       {
         "order": 4,
-        "name": "OpenAI Academy: Applied AI Foundations",
-        "platform": "OpenAI",
-        "url": "https://openai.com/",
-        "time_estimate": "3-4 недели",
-        "deadline": "2027-01-22",
+        "name": "Anthropic Academy: Building with Claude API",
+        "platform": "Anthropic (Skilljar)",
+        "level": "1 (free)",
+        "url": "https://anthropic.skilljar.com",
+        "time_estimate": "3 часа",
+        "deadline": "2026-11-02",
         "priority": "high",
         "status": "not_started",
-        "added_to_resume": false,
-        "why": "От пользователя к архитектору."
+        "in_resume": true,
+        "why": "API-интеграция для AI Ops."
       },
       {
         "order": 5,
-        "name": "Anthropic Academy — Claude Certification Path",
-        "platform": "Anthropic (Skilljar)",
-        "url": "https://anthropic.skilljar.com",
-        "time_estimate": "20+ часов",
-        "deadline": "2027-03-15",
-        "priority": "high",
-        "status": "not_started",
-        "added_to_resume": false,
-        "why": "Путь к CCA-F."
-      },
-      {
-        "order": 6,
-        "name": "OpenAI Academy: Agents and Workflows",
-        "platform": "OpenAI",
-        "url": "https://openai.com/",
-        "time_estimate": "3-4 недели",
-        "deadline": "2027-04-05",
-        "priority": "medium",
-        "status": "not_started",
-        "added_to_resume": false,
-        "why": "Agentic Orchestration."
-      },
-      {
-        "order": 7,
-        "name": "Claude Certified Architect – Foundations (CCA-F)",
-        "platform": "Anthropic",
-        "url": "https://anthropic-partners.skilljar.com/",
-        "time_estimate": "Экзамен (~60 вопросов)",
+        "name": "Harvard CS50 AI",
+        "platform": "Harvard (edX)",
+        "level": "1 (free)",
+        "url": "https://cs50.harvard.edu/ai/",
+        "time_estimate": "70-210 часов",
         "deadline": "2027-03-31",
         "priority": "high",
         "status": "not_started",
-        "added_to_resume": false,
-        "exam_domains": [
-          "Agentic Architecture & Orchestration (27%)",
-          "Claude Code Configuration & Workflows (20%)",
-          "Prompt Engineering & Structured Output (20%)",
-          "Tool Design & MCP Integration (18%)",
-          "Context Management & Reliability (15%)"
-        ],
-        "why": "Самый сильный сертификат."
+        "in_resume": true,
+        "why": "Гарвард в резюме. Python + ML."
+      },
+      {
+        "order": 6,
+        "name": "Google AI Essentials",
+        "platform": "Coursera",
+        "level": "2 (paid)",
+        "url": "https://grow.google/certificates/",
+        "cost": "$49 / aid",
+        "time_estimate": "10 часов",
+        "priority": "high",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "Google бренд. Узнаваемый."
+      },
+      {
+        "order": 7,
+        "name": "GitHub Foundations",
+        "platform": "GitHub",
+        "level": "2 (paid)",
+        "url": "https://education.github.com/",
+        "cost": "$99",
+        "time_estimate": "20-30 часов",
+        "priority": "high",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "Tech-порог."
       },
       {
         "order": 8,
-        "name": "HubSpot Digital Marketing Certification",
-        "platform": "HubSpot",
-        "url": "https://academy.hubspot.com/",
-        "time_estimate": "5 часов",
-        "deadline": null,
-        "priority": "low",
+        "name": "Claude Certified Associate (CCAF)",
+        "platform": "Anthropic",
+        "level": "2 (paid)",
+        "url": "https://anthropic.skilljar.com",
+        "cost": "$99",
+        "time_estimate": "Экзамен",
+        "priority": "high",
         "status": "not_started",
-        "added_to_resume": false,
-        "why": "Для Growth-ролей. Не критично."
+        "in_resume": true,
+        "why": "Официальная сертификация Anthropic. Credly badge."
       },
       {
         "order": 9,
-        "name": "IBM SkillsBuild — Cybersecurity Track",
-        "platform": "IBM",
-        "url": "https://skillsbuild.org/",
-        "time_estimate": "10+ часов",
-        "deadline": null,
-        "priority": "low",
+        "name": "Microsoft AI-901",
+        "platform": "Microsoft",
+        "level": "2 (paid)",
+        "url": "https://learn.microsoft.com/credentials/",
+        "cost": "$50-99",
+        "time_estimate": "10 часов",
+        "priority": "medium",
         "status": "not_started",
-        "added_to_resume": false,
-        "why": "Расширение. Не критично."
+        "in_resume": true,
+        "why": "Замена AI-900 (отменён 30.06.2026)."
+      },
+      {
+        "order": 10,
+        "name": "Claude Certified Architect (CCAA)",
+        "platform": "Anthropic",
+        "level": "3 (pro)",
+        "url": "https://anthropic.skilljar.com",
+        "cost": "$125",
+        "time_estimate": "Экзамен",
+        "priority": "high",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "Pro-уровень. Credly badge."
+      },
+      {
+        "order": 11,
+        "name": "Azure AI Engineer (AI-102)",
+        "platform": "Microsoft",
+        "level": "3 (pro)",
+        "url": "https://learn.microsoft.com/credentials/",
+        "cost": "$165",
+        "time_estimate": "Экзамен",
+        "priority": "medium",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "Для международного рынка."
+      },
+      {
+        "order": 12,
+        "name": "Google Professional ML Engineer",
+        "platform": "Google Cloud",
+        "level": "3 (pro)",
+        "url": "https://cloud.google.com/certification/machine-learning-engineer",
+        "cost": "$200",
+        "time_estimate": "Экзамен",
+        "priority": "medium",
+        "status": "not_started",
+        "in_resume": true,
+        "why": "Высшая планка. Для глобалки."
       }
-    ],
-    "quick_wins": [
-      "Google AI Essentials — 1 час",
-      "GitHub Foundations — 2-3 часа"
     ]
   },
   "task_tracker": {
@@ -300,101 +379,135 @@
     "tasks": [
       {
         "id": "LRN-001",
-        "name": "Завершить OpenAI Academy: AI Foundations",
-        "status": "in_progress",
+        "name": "Elements of AI",
+        "status": "not_started",
         "priority": "critical",
-        "deadline": "2026-10-30",
-        "output": "Сертификат Credly"
+        "deadline": "2026-11-15",
+        "output": "Сертификат University of Helsinki",
+        "in_resume": true
       },
       {
         "id": "LRN-002",
-        "name": "Пройти Google AI Essentials",
+        "name": "Anthropic: Claude 101",
         "status": "not_started",
         "priority": "critical",
-        "deadline": "2026-10-06",
-        "output": "Сертификат Google"
+        "deadline": "2026-10-27",
+        "output": "Completion Certificate (verify.skilljar.com)",
+        "in_resume": true
       },
       {
         "id": "LRN-003",
-        "name": "Пройти GitHub Foundations",
+        "name": "Anthropic: Claude Code 101",
         "status": "not_started",
         "priority": "critical",
-        "deadline": "2026-10-09",
-        "output": "Сертификат GitHub"
+        "deadline": "2026-10-29",
+        "output": "Completion Certificate",
+        "in_resume": true
       },
       {
         "id": "LRN-004",
-        "name": "UML (YouTube + Habr)",
+        "name": "Anthropic: Building with Claude API",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2026-11-15",
-        "output": "Диаграммы"
+        "deadline": "2026-11-02",
+        "output": "Completion Certificate",
+        "in_resume": true
       },
       {
         "id": "LRN-005",
-        "name": "BPMN 2.0 (Stepik)",
+        "name": "Harvard CS50 AI",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2026-11-27",
-        "output": "Практика схем"
+        "deadline": "2027-03-31",
+        "output": "CS50 Certificate",
+        "in_resume": true
       },
       {
         "id": "LRN-006",
-        "name": "SQL для начинающих (Stepik)",
+        "name": "UML (YouTube + Habr)",
         "status": "not_started",
         "priority": "high",
-        "deadline": "2026-12-20",
-        "output": "Запросы"
+        "deadline": "2026-12-15",
+        "output": "Диаграммы",
+        "in_resume": false,
+        "note": "Навык для Track B. Без сертификата."
       },
       {
         "id": "LRN-007",
-        "name": "Swagger / OpenAPI",
+        "name": "BPMN 2.0 (Stepik)",
         "status": "not_started",
         "priority": "high",
         "deadline": "2026-12-27",
-        "output": "Спецификации"
+        "output": "Практика схем",
+        "in_resume": false
       },
       {
         "id": "LRN-008",
+        "name": "SQL для начинающих (Stepik)",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2027-01-20",
+        "output": "Запросы",
+        "in_resume": false
+      },
+      {
+        "id": "LRN-009",
+        "name": "Swagger / OpenAPI",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": "2027-01-27",
+        "output": "Спецификации",
+        "in_resume": false
+      },
+      {
+        "id": "LRN-010",
         "name": "English B2",
         "status": "not_started",
         "priority": "high",
         "deadline": "2027-03-31",
-        "output": "B2 certificate"
-      },
-      {
-        "id": "LRN-009",
-        "name": "OpenAI Applied AI Foundations",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-01-22",
-        "output": "Credly"
-      },
-      {
-        "id": "LRN-010",
-        "name": "Anthropic Academy Path",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-03-15",
-        "output": "Course certificates"
+        "output": "B2 certificate",
+        "in_resume": true
       },
       {
         "id": "LRN-011",
-        "name": "CCA-F экзамен",
-        "status": "not_started",
-        "priority": "high",
-        "deadline": "2027-03-31",
-        "output": "Official certification"
-      },
-      {
-        "id": "LRN-012",
         "name": "English C1",
         "status": "not_started",
         "priority": "high",
         "deadline": "2027-09-30",
-        "output": "C1 certificate"
+        "output": "C1 certificate",
+        "in_resume": true
+      },
+      {
+        "id": "LRN-012",
+        "name": "Google AI Essentials (paid)",
+        "status": "not_started",
+        "priority": "medium",
+        "deadline": null,
+        "output": "Google Certificate",
+        "in_resume": true,
+        "note": "После дохода."
+      },
+      {
+        "id": "LRN-013",
+        "name": "GitHub Foundations (paid)",
+        "status": "not_started",
+        "priority": "medium",
+        "deadline": null,
+        "output": "GitHub Certificate",
+        "in_resume": true,
+        "note": "После дохода."
+      },
+      {
+        "id": "LRN-014",
+        "name": "Claude Certified Associate (CCAF)",
+        "status": "not_started",
+        "priority": "high",
+        "deadline": null,
+        "output": "CCAF Credential",
+        "in_resume": true,
+        "note": "После дохода."
       }
     ]
   },
-  "last_updated": "2026-10-04"
+  "last_updated": "2026-10-05"
 }
