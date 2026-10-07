@@ -1,7 +1,7 @@
 {
   "meta": {
     "bundle_version": "v1.0.0",
-    "generated_at": "2026-10-07T17:16:24Z",
+    "generated_at": "2026-10-07T17:59:07Z",
     "source": "honeycombs/personal/kurtoch/",
     "generator": "scripts/build_bundle.py",
     "modules": [
@@ -1024,7 +1024,7 @@
     "identity": {
       "module_id": "KURTOCH-TASKBOARD-001",
       "name": "Kurtoch — Taskboard",
-      "version": "v2.5.8",
+      "version": "v2.5.9",
       "created": "2026-09-14",
       "updated": "2026-10-07",
       "layer": 2,
@@ -2202,19 +2202,19 @@
         {
           "id": "K-111",
           "title": "Перепечатать меню на Нижке (новое)",
-          "description": "Перепечатать меню на Нижке (Нижняя Дуброва) на новое.\n\nЧто выяснить:\n- Где макет старого меню (исходник)?\n- Кто разрабатывал?\n- Кто сможет редактировать?\n\nЦель — перепечатать в новом виде.",
+          "description": "Перепечатать меню на Нижке (Нижняя Дуброва) на новое.\n\nЧто выяснить:\n- Где макет старого меню (исходник)?\n- Кто разрабатывал?\n- Кто сможет редактировать?\n\nЦель — перепечатать в новом виде.\n\nQR в меню должен вести на регистрацию карты лояльности (не на соцсеть). Обновить макет перед перепечаткой.",
           "priority": "medium",
           "status": "todo",
           "horizon": "tactical",
           "phase": "phase_0",
-          "deadline": "2026-10-11",
+          "deadline": "2026-10-15",
           "reminder": null,
           "depends_on": [],
           "related_to": [
             "M-001"
           ],
           "created": "2026-10-02",
-          "updated": "2026-10-02",
+          "updated": "2026-10-07",
           "completed": null,
           "metadata": {
             "bot_group": "Работа",
@@ -2246,29 +2246,54 @@
             "notion_page_id": null,
             "column": "Операционка — Центр"
           }
+        },
+        {
+          "id": "K-123",
+          "title": "Перепечатать меню в Центре (новое + QR на карту лояльности)",
+          "description": "Перепечатать меню в Центре (ТЦ Гагаринский) на новое.\n\nПричина: QR в меню должен вести на регистрацию карты лояльности (не на соцсеть).\n\nЧто выяснить:\n- Где макет старого меню (исходник)?\n- Кто разрабатывал?\n- Кто сможет редактировать?\n\nЦель — перепечатать в новом виде с новым QR.\n\nСвязь: K-111 (аналогичная задача по Нижке), M-002 (Возрождение Центра).",
+          "priority": "medium",
+          "status": "todo",
+          "horizon": "tactical",
+          "phase": "phase_0",
+          "deadline": "2026-10-15",
+          "reminder": null,
+          "depends_on": [],
+          "related_to": [
+            "K-111",
+            "M-002"
+          ],
+          "created": "2026-10-07",
+          "updated": "2026-10-07",
+          "completed": null,
+          "metadata": {
+            "bot_group": "Работа",
+            "bot_task_id": null,
+            "notion_page_id": null,
+            "column": "Операционка — Центр"
+          }
         }
       ],
       "counters": {
-        "total": 45,
+        "total": 46,
         "by_status": {
-          "todo": 42,
+          "todo": 43,
           "in_progress": 2,
           "planning": 1
         },
         "by_priority": {
-          "medium": 15,
+          "medium": 16,
           "high": 28,
           "critical": 2
         },
         "by_column": {
           "Стратегические": 7,
           "Операционка — Общая": 9,
-          "Операционка — Центр": 8,
+          "Операционка — Центр": 9,
           "Операционка — Нижка": 18,
           "Крупные вехи": 3
         },
         "by_phase": {
-          "phase_0": 45
+          "phase_0": 46
         }
       },
       "notes": {
@@ -3993,7 +4018,7 @@
     "identity": {
       "module_id": "KURTOCH-TEAM-001",
       "name": "Kurtoch — Team Roster",
-      "version": "v1.5.0",
+      "version": "v1.5.1",
       "created": "2026-09-23",
       "updated": "2026-10-07",
       "layer": 2,
@@ -4287,11 +4312,11 @@
             "availability": null
           },
           "skills": {
-            "stage": "pechka_training",
-            "pechka": "training",
+            "stage": "pechka_done",
+            "pechka": "yes",
             "coffee": "no",
             "kassa": "no",
-            "notes": "Только начинает обучение на печку."
+            "notes": "Печка — сама. Кофе и касса — не умеет. Сотрудник на печку."
           },
           "nijka": {
             "attitude": null,
@@ -4305,7 +4330,7 @@
           },
           "status": "working",
           "risks": [],
-          "notes": "Продолжает работать — устроила. Зарплата выплачена как всем.",
+          "notes": "Продолжает работать, устроила. Сотрудник на печку.",
           "data_gaps": [
             "nijka.attitude"
           ],
@@ -4836,7 +4861,7 @@
             "подмена"
           ],
           "schedule": {
-            "notes": "по вызову, ассоциированный",
+            "notes": "по вызову, ассоциированный. Точка: Центр.",
             "preferences": null,
             "availability": null
           },
