@@ -4,7 +4,7 @@
     "name": "Kurtoch — Taskboard Archive",
     "version": "v1.3.0",
     "created": "2026-09-23",
-    "updated": "2026-10-06",
+    "updated": "2026-10-07",
     "type": "taskboard_archive",
     "parent": "taskboard.json",
     "description": "Архив завершённых задач (done + cancelled).",
@@ -1256,12 +1256,350 @@
           "column": "Стратегические"
         },
         "archived_at": "2026-10-06"
+      },
+      {
+        "id": "K-023",
+        "title": "Валики Нижка",
+        "description": "Сломаны валики для еды (Нижка). Прошлый способ (подклеить красным герметиком) НЕ ПОМОГ. Нужно придумать другой способ решения проблемы.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-17",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-033",
+        "title": "Касса Нижка: не заряжается",
+        "description": "Касса на Нижке плохо заряжается. Предположительно: проблема в самой кассе, либо в переходнике (через него идут провода), либо и то, и другое.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-034",
+        "title": "Туалет Нижка: пищит при сливе",
+        "description": "Гудит и плохо уходит вода. Мастер найден (Юля через бабушку — может дешевле). Вызвать, назовёт цену. Бюджет есть. Также: переделать/перенести туалет в соседнее помещение — там стояк ближе к толчку.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-037",
+        "title": "Лампочки бар Нижка",
+        "description": "Часть лампочек на баре не работает. Запасные на складе/балконе (2-3 шт). Если нет — купить в магазине напротив. Совпадение по температуре и мощности.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-038",
+        "title": "Генуборка Нижка (расширенная)",
+        "description": "Расширенная генуборка на Нишке. Юля — куратор точки. Включить разморозку холодильника под раскаточной зоной (оставить на ночь). Включить: химическая чистка мягкой мебели. Витя организует.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-21",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-057",
+        "title": "Зачистить угол окна (вытяжка)",
+        "description": "Зачистить угол окна в зоне вытяжки. Убрать загрязнения/отложения.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-09-22",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-087",
+        "title": "Колонки в зоне бариста (Нижка): перебои в работе",
+        "description": "Колонки в зоне бариста на Нижке плохо работают — отходят, играют с перебоями. Диагностировать, починить или заменить.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": null,
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001"
+        ],
+        "created": "2026-09-27",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-100",
+        "title": "Закупка с Крис (Центр + Нижка)",
+        "description": "Закупка с Крис. Провести в Центре и на Нижке (Нижняя Дуброва). Совместная закупка.",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-06",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001",
+          "M-002"
+        ],
+        "created": "2026-09-30",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-112",
+        "title": "Пометить мусорный бак на Нижке",
+        "description": "Пометить мусорный бак на Нижке (Нижняя Дуброва).",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-07",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "M-001"
+        ],
+        "created": "2026-10-02",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-113",
+        "title": "Выдать расчёт Саше",
+        "description": "Выдать расчёт Саше (EMP-006). Расстаёмся — «долго и слабо».\n\nОТМЕНЕНА (07.10.2026): Саша-стажёр (EMP-006) остаётся работать, расчёт не требуется. Зарплата выплачена как всем.",
+        "priority": "high",
+        "status": "cancelled",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-09",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-02",
+        "updated": "2026-10-07",
+        "completed": null,
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-118",
+        "title": "Генуборка на Нижке (среда, 16:00–22:00)",
+        "description": "Генуборка на Нижке (Нижняя Дуброва). Среда 07.10.2026, с 16:00 до 22:00.",
+        "priority": "critical",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-07",
+        "reminder": "16:00",
+        "depends_on": [],
+        "related_to": [
+          "M-001",
+          "K-038"
+        ],
+        "created": "2026-10-04",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Нижка"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-119",
+        "title": "Фильтр-кофе (батч-брю) для сотрудников (в выходной бесплатно)",
+        "description": "Сделать фильтр-кофе из батч-брю напитком для сотрудников — чтобы в выходной день они могли приходить и их могли бесплатно угостить этим напитком.\n\nШаги:\n1. Согласовать с Витей\n2. Скинуть бриф в чат ребятам\n3. Внедрить правило\n\nФормальный дедлайн — 12.10. Попробовать сделать сегодня (05.10).\n\nПримечание: пуровер — слишком заморочисто, не подходит. Используем батч-брю.\n\nИТОГ (07.10.2026): ответ пока отрицательный. Фильтр-кофе для сотрудников в выходной не согласован. Вопрос закрыт на текущий момент. Вернуться позже.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-12",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-104",
+          "K-116"
+        ],
+        "created": "2026-10-05",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-120",
+        "title": "Возмещение за доставку",
+        "description": "Возмещение за доставку. До среды 07.10.",
+        "priority": "medium",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-07",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [],
+        "created": "2026-10-05",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-07"
+      },
+      {
+        "id": "K-121",
+        "title": "Проговорить отпускные Катрин с Витей",
+        "description": "Проговорить отпускные Катрин с Витей. Обсудить:\n- Сколько (размер / длительность)\n- Когда (даты)\n- Детали (кто закрывает смены на её период)\n\nСвязь: K-084 (Запланировать отпуск Катрин), K-019 (инвентаризация на период её отпуска).",
+        "priority": "high",
+        "status": "done",
+        "horizon": "tactical",
+        "phase": "phase_0",
+        "deadline": "2026-10-07",
+        "reminder": null,
+        "depends_on": [],
+        "related_to": [
+          "K-084",
+          "K-019"
+        ],
+        "created": "2026-10-05",
+        "updated": "2026-10-07",
+        "completed": "2026-10-07",
+        "metadata": {
+          "bot_group": "Работа",
+          "bot_task_id": null,
+          "notion_page_id": null,
+          "column": "Операционка — Общая"
+        },
+        "archived_at": "2026-10-07"
       }
     ],
-    "total": 52,
+    "total": 66,
     "by_status": {
-      "done": 42,
-      "cancelled": 10
+      "done": 55,
+      "cancelled": 11
     }
   },
   "navigation": {
