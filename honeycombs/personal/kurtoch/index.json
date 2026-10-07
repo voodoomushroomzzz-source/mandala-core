@@ -2,9 +2,9 @@
   "identity": {
     "module_id": "PERSONAL-KURTOCH-INDEX-001",
     "name": "Kurtoch — Franchise & Operations Hub",
-    "version": "v2.5.5",
+    "version": "v2.5.6",
     "created": "2026-09-23",
-    "updated": "2026-10-05",
+    "updated": "2026-10-07",
     "layer": 2,
     "type": "personal_subhub_index",
     "description": "Хаб проекта 'Куртош' — кризис-менеджмент, операционная система, франшиза. Входная точка: контекст, инструкции, ссылки на модули. Данные разбиты: taskboard.json, team.json, knowledge_base.json.",
@@ -30,15 +30,15 @@
     "taskboard.json": {
       "description": "Активные задачи Куртош (todo, in_progress, planning, blocked) + крупные вехи M-001, M-002.",
       "purpose": "Задачи, milestones, синхронизация с Notion.",
-      "version": "v2.5.5",
-      "tasks_count": 61,
+      "version": "v2.5.9",
+      "tasks_count": 46,
       "note": "Архивные задачи вынесены в taskboard_archive.json."
     },
     "team.json": {
-      "description": "Картотека сотрудников.",
+      "description": "Картотека сотрудников. Графа vacation — история и планы отпусков.",
       "purpose": "Все 16 сотрудников: контакты, навыки, статусы.",
-      "version": "v1.3.1",
-      "total_employees": 17
+      "version": "v1.5.1",
+      "total_employees": 18
     },
     "knowledge_base.json": {
       "description": "База знаний: чек-листы, регламенты, техкарты, обучение, ЦУ.",
@@ -50,7 +50,7 @@
       "description": "Архив завершённых задач (done + cancelled).",
       "purpose": "Не увеличивать основной taskboard.json. Синхронизируется с Notion тем же скриптом.",
       "version": "v1.3.0",
-      "tasks_count": 31
+      "tasks_count": 66
     },
     "kurtoch_bundle.json": {
       "description": "Единый файл онбординга Куртош (автосборка).",
@@ -157,8 +157,8 @@
   },
   "health": {
     "status": "healthy",
-    "last_check": "2026-10-05",
-    "notes": "v2.5.5: K-024/K-109 done, K-108 dl=07.10, +K-122."
+    "last_check": "2026-10-07",
+    "notes": "v2.5.6: синхронизация счётчиков с реальностью. taskboard=46 активных, team=18 сотрудников, archive=66. Графа vacation у всех сотрудников. K-123 (меню Центр) добавлена. K-077 done, K-106 cancelled. Дедлайны K-013/K-101/K-027 → 15.10."
   },
   "snapshots": {
     "description": "Локальные выгрузки Notion. В репу НЕ коммитятся (в .gitignore).",
@@ -221,9 +221,9 @@
       "notion_is_visual_mirror": true,
       "rule": "Mandala (taskboard.json, team.json, knowledge_base.json) — эталон. Notion — визуальное зеркало. Если расхождение — правим Notion по Mandala, не наоборот.",
       "id_conventions": {
-        "tasks": "K-001..K-071 с пропусками (K-017, K-047..K-056, K-061). Следующий свободный — K-072.",
+        "tasks": "K-001..K-123 с пропусками (K-017, K-047..K-056, K-061). Следующий свободный — K-124.",
         "milestones": "M-001, M-002 — крупные вехи (Возрождение Нижки, Возрождение Центра)",
-        "next_task_id": "K-093",
+        "next_task_id": "K-124",
         "next_milestone_id": "M-004"
       }
     },
@@ -455,10 +455,10 @@
   },
   "current_status": {
     "phase": "phase_0",
-    "progress": 40,
-    "date": "2026-09-25",
-    "last_action": "25.09 патч: K-071->Нижка, K-072 done+archive, 6 merged в K-076, +K-076/077/078. Вероника+Влада left. revenue_target 2,2М. Косметика: counters, versions.",
-    "next_action": "Today 25.09: K-040 аттестация Юли. 26.09: K-072 расчёт Вероники (already done), K-074 Анна ключи+сигнализация. 28.09: K-021 ушла в K-076. 30.09: K-016 чистота. 01.10: K-031 дезинсекция, K-073 капинг Search Coffee. До 15.10: K-077 Крис-анализ. До 31.10: K-078 финансы+бюджеты, K-010 ушла в K-076. Notion full_sync — сегодня.",
+    "progress": 45,
+    "date": "2026-10-07",
+    "last_action": "2026-10-07: Массовое закрытие (12 done + K-119 + K-113 cancelled). K-123 (меню Центр + QR). team v1.5.1 (EMP-006 working, EMP-018 Дима Рыжков added). index v2.5.6 — синхронизация счётчиков. Notion full_sync выполнен.",
+    "next_action": "Фокус: K-078 (финансы/бюджеты, 15.10), K-105 (перераспределение Крис, 31.10), K-123/K-111 (меню + QR, 15.10), K-110 (фильтр воды, 11.10), K-108 (планёрка обучения, 07.10). Отпуск Катрин 17.10–24.10. Сессионные подменщики: Матвей, Арина, Маша, Дима Рыжков.",
     "blockers": [],
     "notes": [
       "Фокус: команда, документация, чистота, бот.",
@@ -884,13 +884,13 @@
     "description": "Модули данных проекта Куртош. Основной вход — index.json (этот файл).",
     "taskboard": {
       "file": "taskboard.json",
-      "purpose": "Активные задачи (51) + вехи M-001..M-003.",
+      "purpose": "Активные задачи (46) + вехи M-001..M-003.",
       "when_to_use": "Когда нужно работать с задачами, вехами, статусами, дедлайнами.",
       "sync": "Notion Taskboard (via scripts/push_taskboard.py)"
     },
     "team": {
       "file": "team.json",
-      "purpose": "Картотека сотрудников (17).",
+      "purpose": "Картотека сотрудников (18). Графа vacation.",
       "when_to_use": "Когда нужно посмотреть/обновить данные сотрудника: контакты, навыки, статус.",
       "sync": "Notion Team (будет создана)"
     },
@@ -902,7 +902,7 @@
     },
     "taskboard_archive": {
       "file": "taskboard_archive.json",
-      "purpose": "Архив завершённых задач (done + cancelled). 31 задача.",
+      "purpose": "Архив завершённых задач (done + cancelled). 66 задач.",
       "when_to_use": "Когда нужно посмотреть историю завершённых задач.",
       "sync": "Notion Taskboard (через scripts/push_taskboard.py — читает оба файла)"
     }
