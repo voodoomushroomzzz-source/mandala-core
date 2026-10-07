@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261007-070111-407",
+  "title": "Generalizable Robustness Testing of DNN-Based Robotic Navigation Systems via XAI-Guided Search",
+  "url": "https://arxiv.org/abs/2610.06862",
+  "description": "arXiv:2610.06862v1 Announce Type: new \nAbstract: **Context:** Deep Neural Networks (DNNs) increasingly control Cyber-Physical Systems (CPSs), yet small input perturbations can cause unsafe system-level behavior. Existing approaches often optimize perturbations for individual images and evaluate them only in simulation, limiting their generalizability and practical validity.\n  **Objectives:** This work aims to generate robustness tests that remain effective across operational observations and to ",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-07T07:01:11.774596",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

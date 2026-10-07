@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261007-070112-410",
+  "title": "Does a Learned Corrector Beat a Simple Retreat? Evidence from a Frozen VLA",
+  "url": "https://arxiv.org/abs/2610.06921",
+  "description": "arXiv:2610.06921v1 Announce Type: new \nAbstract: Before deploying runtime recovery for a frozen vision-language-action (VLA) policy, one must establish that an intervention improves success beyond ordinary run-to-run variation and that its complexity adds value over a simple action. We evaluate these questions on frozen $\\pi_{0.5}$ across four RoboTwin tasks. For each test seed, we pair rollouts with and without correction and include a same-seed base-policy re-run as a placebo. Seed-cluster int",
+  "source": "arXiv Robotics",
+  "collected_at": "2026-10-07T07:01:12.392788",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}

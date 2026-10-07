@@ -1,0 +1,32 @@
+{
+  "seed_id": "SEED-20261007-070111-405",
+  "title": "Anchor Divergence for Semantic Geometry in Contrastive Learning",
+  "url": "https://arxiv.org/abs/2610.06919",
+  "description": "arXiv:2610.06919v1 Announce Type: new \nAbstract: This paper concerns how semantic context determines geometry in learned vector representations. Similarity is typically measured using cosine similarity, which provides a single fixed geometry. Semantic similarity, however, is inherently context dependent: two images may be similar because they depict the same object, share a visual style, or are relevant to the same clinical finding. We show that contrastive representations naturally encompass a ",
+  "source": "arXiv AI",
+  "collected_at": "2026-10-07T07:01:11.248407",
+  "status": "raw",
+  "evaluation": {
+    "score_novelty": 0,
+    "score_feasibility": 0,
+    "score_relevance": 0,
+    "score_impact": 0,
+    "total_score": 0,
+    "mandala_relevance": "",
+    "reason_selected": "",
+    "action": "keep"
+  },
+  "promotion_notes": {
+    "promoted_at": "",
+    "promoted_by": "",
+    "work_created": ""
+  },
+  "work_analysis": {
+    "analysis_date": "",
+    "source_links": [],
+    "research_summary": "",
+    "key_insights": [],
+    "related_work": [],
+    "implementation_notes": ""
+  }
+}
