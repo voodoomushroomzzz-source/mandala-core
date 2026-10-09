@@ -9470,3 +9470,60 @@
 [2026-10-09 07:01:14] [INFO]   Total duplicates: 5
 [2026-10-09 07:01:14] [INFO]   Total removed (old): 0
 [2026-10-09 07:01:14] [INFO] ============================================================
+[2026-10-09 15:50:27] [INFO] ============================================================
+[2026-10-09 15:50:27] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-10-09 15:50:27] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-10-09 15:50:27] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-10-09 15:50:27] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-09 15:50:27] [INFO]   → Filtered to 5 relevant items
+[2026-10-09 15:50:27] [INFO]   ⏭️ Duplicate: An Explainable Header-Centric Framework for Large-...
+[2026-10-09 15:50:27] [INFO]   ⏭️ Duplicate: Synthesis Through Simulation: Generating Coherent ...
+[2026-10-09 15:50:27] [INFO]   ⏭️ Duplicate: Agent-Controlled Forgetting for Tool-Using Agents:...
+[2026-10-09 15:50:28] [INFO]   ⏭️ Duplicate: Verification and Self-Improvement in Agentic AI: F...
+[2026-10-09 15:50:28] [INFO]   ⏭️ Duplicate: The Harness as the Only Mutable Surface: Complianc...
+[2026-10-09 15:50:28] [INFO]   📊 arXiv AI: saved 0, duplicates 5
+[2026-10-09 15:50:28] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-10-09 15:50:28] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-10-09 15:50:28] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-09 15:50:28] [INFO]   → Filtered to 5 relevant items
+[2026-10-09 15:50:28] [INFO]   ⏭️ Duplicate: Does Dynamic-Point Filtering Help When Texture Is ...
+[2026-10-09 15:50:28] [INFO]   ⏭️ Duplicate: Teaching a Robot Dog New Tricks: Diverse Quadruped...
+[2026-10-09 15:50:28] [INFO]   ⏭️ Duplicate: TacHair: Tactile Contact-Distribution Guided Onlin...
+[2026-10-09 15:50:28] [INFO]   ⏭️ Duplicate: Masked Generative Motion Planning with Geometry-Gu...
+[2026-10-09 15:50:29] [INFO]   ⏭️ Duplicate: TAPNAV: Humanoid Navigation through Tactile Active...
+[2026-10-09 15:50:29] [INFO]   📊 arXiv Robotics: saved 0, duplicates 5
+[2026-10-09 15:50:29] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-10-09 15:50:29] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-10-09 15:50:29] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-10-09 15:50:29] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-10-09 15:50:29] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-10-09 15:50:29] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-10-09 15:50:30] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-09 15:50:30] [INFO]   → Filtered to 5 relevant items
+[2026-10-09 15:50:30] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-10-09 15:50:30] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-10-09 15:50:30] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-10-09 15:50:30] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-10-09 15:50:30] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-10-09 15:50:30] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-10-09 15:50:30] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-10-09 15:50:30] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-10-09 15:50:30] [INFO]   → Found 15 raw items, 2 recent
+[2026-10-09 15:50:30] [INFO]   → Filtered to 1 relevant items
+[2026-10-09 15:50:30] [INFO]   ✅ Saved: SEED-20261009-155030-432.json
+[2026-10-09 15:50:30] [INFO]   📊 TechCrunch AI: saved 1, duplicates 0
+[2026-10-09 15:50:30] [INFO]   🗑️ Cleaning old seeds (date <= 2026-10-09)...
+[2026-10-09 15:50:30] [INFO]   ✅ No old seeds to remove
+[2026-10-09 15:50:30] [INFO]   📝 Updated inbox/index.json with last_processed=2026-10-09
+[2026-10-09 15:50:30] [INFO] 
+============================================================
+[2026-10-09 15:50:30] [INFO] ✅ Scout Agent v2.2 finished
+[2026-10-09 15:50:30] [INFO]   Total saved: 1
+[2026-10-09 15:50:30] [INFO]   Total duplicates: 15
+[2026-10-09 15:50:30] [INFO]   Total removed (old): 0
+[2026-10-09 15:50:30] [INFO] ============================================================
