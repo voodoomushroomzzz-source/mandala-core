@@ -9578,3 +9578,54 @@
 [2026-10-10 07:01:13] [INFO]   Total duplicates: 5
 [2026-10-10 07:01:13] [INFO]   Total removed (old): 0
 [2026-10-10 07:01:13] [INFO] ============================================================
+[2026-10-10 15:03:53] [INFO] ============================================================
+[2026-10-10 15:03:53] [INFO] 🚀 Scout Agent v2.2 started (keyword filter, max 5 per source, auto-cleanup)
+[2026-10-10 15:03:53] [INFO] 
+📡 Processing: arXiv AI (type: rss)
+[2026-10-10 15:03:53] [INFO] Fetching RSS: arXiv AI (https://arxiv.org/rss/cs.AI)
+[2026-10-10 15:03:53] [INFO]   → Found 0 raw items, 0 recent
+[2026-10-10 15:03:53] [INFO]   → Filtered to 0 relevant items
+[2026-10-10 15:03:53] [INFO]   📊 arXiv AI: saved 0, duplicates 0
+[2026-10-10 15:03:53] [INFO] 
+📡 Processing: arXiv Robotics (type: rss)
+[2026-10-10 15:03:53] [INFO] Fetching RSS: arXiv Robotics (https://arxiv.org/rss/cs.RO)
+[2026-10-10 15:03:53] [INFO]   → Found 0 raw items, 0 recent
+[2026-10-10 15:03:53] [INFO]   → Filtered to 0 relevant items
+[2026-10-10 15:03:53] [INFO]   📊 arXiv Robotics: saved 0, duplicates 0
+[2026-10-10 15:03:53] [INFO] 
+📡 Processing: Hacker News (type: rss)
+[2026-10-10 15:03:53] [INFO] Fetching RSS: Hacker News (https://news.ycombinator.com/rss)
+[2026-10-10 15:03:53] [ERROR]   ❌ RSS error: 419 Client Error:  for url: https://news.ycombinator.com/rss
+[2026-10-10 15:03:53] [INFO]   📊 Hacker News: saved 0, duplicates 0
+[2026-10-10 15:03:53] [INFO] 
+📡 Processing: GitHub Trending Python (API) (type: api)
+[2026-10-10 15:03:53] [INFO] Fetching API: GitHub Trending Python (API) (https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc&per_page=15)
+[2026-10-10 15:03:54] [INFO]   → Found 15 raw items, 15 recent
+[2026-10-10 15:03:54] [INFO]   → Filtered to 5 relevant items
+[2026-10-10 15:03:54] [INFO]   ⏭️ Duplicate: public-apis...
+[2026-10-10 15:03:54] [INFO]   ⏭️ Duplicate: free-programming-books...
+[2026-10-10 15:03:54] [INFO]   ⏭️ Duplicate: system-design-primer...
+[2026-10-10 15:03:54] [INFO]   ⏭️ Duplicate: awesome-python...
+[2026-10-10 15:03:54] [INFO]   ⏭️ Duplicate: project-based-learning...
+[2026-10-10 15:03:54] [INFO]   📊 GitHub Trending Python (API): saved 0, duplicates 5
+[2026-10-10 15:03:54] [INFO] 
+📡 Processing: TechCrunch AI (type: rss)
+[2026-10-10 15:03:54] [INFO] Fetching RSS: TechCrunch AI (https://techcrunch.com/category/artificial-intelligence/feed/)
+[2026-10-10 15:03:54] [INFO]   → Found 15 raw items, 9 recent
+[2026-10-10 15:03:54] [INFO]   → Filtered to 5 relevant items
+[2026-10-10 15:03:55] [INFO]   ⏭️ Duplicate: Here are the top AI agents that can live in your t...
+[2026-10-10 15:03:55] [INFO]   ⏭️ Duplicate: Anthropic can’t reliably control its AI agents. It...
+[2026-10-10 15:03:55] [INFO]   ⏭️ Duplicate: The maker of non-text AI model Jev valued at $7.5B...
+[2026-10-10 15:03:55] [INFO]   ⏭️ Duplicate: An Anthropic AI model sent a false homicide tip to...
+[2026-10-10 15:03:55] [INFO]   ⏭️ Duplicate: Amazon and others are done keeping data center dea...
+[2026-10-10 15:03:55] [INFO]   📊 TechCrunch AI: saved 0, duplicates 5
+[2026-10-10 15:03:55] [INFO]   🗑️ Cleaning old seeds (date <= 2026-10-10)...
+[2026-10-10 15:03:55] [INFO]   ✅ No old seeds to remove
+[2026-10-10 15:03:55] [INFO]   📝 Updated inbox/index.json with last_processed=2026-10-10
+[2026-10-10 15:03:55] [INFO] 
+============================================================
+[2026-10-10 15:03:55] [INFO] ✅ Scout Agent v2.2 finished
+[2026-10-10 15:03:55] [INFO]   Total saved: 0
+[2026-10-10 15:03:55] [INFO]   Total duplicates: 10
+[2026-10-10 15:03:55] [INFO]   Total removed (old): 0
+[2026-10-10 15:03:55] [INFO] ============================================================
