@@ -1,5 +1,5 @@
 {
-  "last_scan": "2026-10-09T15:37:47.641990",
+  "last_scan": "2026-10-10T07:10:43.235393",
   "honeycomb_hashes": {
     "honeycombs/instructions": "d909b3a1a458adeef28878b83c33ad5b",
     "honeycombs/sessions": "2e8bb1ab17d0efe2b431d7a2cf64e97b",
@@ -8,7 +8,7 @@
     "honeycombs/fruits/gentle_companion": "5d860b16fb4681f57dc1d0f86decd8bb",
     "honeycombs/fruits/scout_agent": "1d2daeb2d7ad988c6cad5a0fba403bfc",
     "honeycombs/seeds": "06d0cb2a546f6edb8715aa4c6091b32c",
-    "honeycombs/seeds/inbox": "4d418c5c42cc4141c5da4bc9b7de2985",
+    "honeycombs/seeds/inbox": "187c46ee45ae9dfc2db3f6f84a8af867",
     "honeycombs/boot_online": "961ba07fe1675d01f99e4f40f98b2a46",
     "honeycombs/registry": "e7b3b4afb717f58647bd5bef578dd7b8",
     "honeycombs/rose_world": "668fabce934c3496726369c4b588c990",
@@ -36,25 +36,25 @@
     "invalid_v2": 6,
     "errors": 0,
     "warnings": 6,
-    "total_files": 1192,
-    "total_size_kb": 3828.05
+    "total_files": 1204,
+    "total_size_kb": 3841.09
   },
   "seeds_health": {
     "root_count": 21,
     "root_threshold": 10,
     "root_status": "warning",
-    "inbox_count": 431,
-    "inbox_total_files": 432,
+    "inbox_count": 437,
+    "inbox_total_files": 438,
     "inbox_threshold": 50,
     "inbox_status": "warning",
     "warnings": [
       "Корень seeds/: 21 файлов (порог 10)",
-      "Inbox: 431 новых файлов (порог 50)"
+      "Inbox: 437 новых файлов (порог 50)"
     ],
     "status": "warning"
   },
   "symbiosis_guard": {
-    "last_check": "2026-10-09T15:37:47.641998",
+    "last_check": "2026-10-10T07:10:43.235405",
     "errors_count": 18,
     "warnings_count": 9,
     "expired_tasks": 8,
@@ -64,49 +64,49 @@
         "work_id": "W-T-20260511-MANUS",
         "name": "Manus — Hands of Mandala (исполнительный слой v1)",
         "deadline": "2026-08-31",
-        "days_overdue": 39
+        "days_overdue": 40
       },
       {
         "work_id": "W-T-20260511-ENGCHAT",
         "name": "Engineer Chat — Core Integration Hub for Mandala Brain",
         "deadline": "2026-08-15",
-        "days_overdue": 55
+        "days_overdue": 56
       },
       {
         "work_id": "W-R-RM-012",
         "name": "First Living Products — Mandala MVPs",
         "deadline": "2026-09-01",
-        "days_overdue": 38
+        "days_overdue": 39
       },
       {
         "work_id": "W-T-20260728-AI-GATEWAY",
         "name": "AI Gateway Strategy — Mandala as Multi-Model Ecosystem",
         "deadline": "2026-09-30",
-        "days_overdue": 9
+        "days_overdue": 10
       },
       {
         "work_id": "W-T-20260511-ARCHBOT",
         "name": "Architect Bot — Personal Telegram Bot for the Architect with Deep Mandala Integration",
         "deadline": "2026-09-15",
-        "days_overdue": 24
+        "days_overdue": 25
       },
       {
         "work_id": "W-R-20260814-PERSONAL-MIGRATION",
         "name": "Перенос личных векторов в personal/ — Instagram, творчество, госзаказы",
         "deadline": "2026-08-31",
-        "days_overdue": 39
+        "days_overdue": 40
       },
       {
         "work_id": "W-T-20260408-1030",
         "name": "Telegram Bot SR Gentle Companion (Mandala Symbiosis)",
         "deadline": "2026-08-31",
-        "days_overdue": 39
+        "days_overdue": 40
       },
       {
         "work_id": "W-T-20260418-SYM",
         "name": "SYM Implementation — System for Measuring Mandala Growth",
         "deadline": "2026-10-01",
-        "days_overdue": 8
+        "days_overdue": 9
       }
     ],
     "upcoming_deadlines_list": [],
